@@ -6,6 +6,7 @@
 - **Phase:** Wave 1 — Step 3: Full Integrated Acceptance & Deliverable Consolidation
 - **Worktree:** `C:/Users/DAVID/Code/Razzia-worktrees/tomer`
 - **Integration Branch:** `agent/tomer/wave1`
+- **Integration Commit:** `a11f870`
 - **Base Commit:** `9b350d9`
 - **Integrated Commits Cherry-Picked:**
   - **Noam (Telephony):**
