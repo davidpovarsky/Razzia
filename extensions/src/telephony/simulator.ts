@@ -45,6 +45,7 @@ export class KeypadSimulatorCore {
       this.secret = options.provider.secret
     } else {
       const registered = ProviderRegistry.getInstance().get("mock")
+
       if (registered instanceof MockProvider) {
         this.mockProvider = registered
         this.secret = registered.secret
@@ -66,6 +67,7 @@ export class KeypadSimulatorCore {
   subscribe(listener: SimulatorDisplayListener): () => void {
     this.listeners.add(listener)
     listener(this.getState())
+
     return () => this.listeners.delete(listener)
   }
 
@@ -96,34 +98,55 @@ export class KeypadSimulatorCore {
     })
 
     const response = await this.bridge.handleWebhookRequest("mock", req)
-    const bodyData = JSON.parse(response.body)
+    let bodyData: Record<string, unknown> = {}
+
+    try {
+      const parsed: unknown = JSON.parse(response.body)
+
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        bodyData = parsed as Record<string, unknown>
+      }
+    } catch {
+      bodyData = {}
+    }
 
     if (response.statusCode >= 400) {
+      const errMsg =
+        typeof bodyData.error === "string"
+          ? bodyData.error
+          : `HTTP ${response.statusCode}`
       const directive: TelephonyDirective = {
         type: "play",
-        message: bodyData.error || `HTTP ${response.statusCode}`,
+        message: errMsg,
       }
       this.state.status = "disconnected"
       this.state.displayMessage = directive.message
       this.state.lastDirective = directive
       this.logHistory(`[ERROR] ${directive.message}`)
       this.notify()
+
       return directive
     }
 
-    const directive: TelephonyDirective = bodyData.directive ?? {
-      type: "play",
-      message: "Call connected",
-    }
+    const rawDirective = bodyData.directive
+    const directive: TelephonyDirective =
+      rawDirective && typeof rawDirective === "object"
+        ? (rawDirective as TelephonyDirective)
+        : {
+            type: "play",
+            message: "Call connected",
+          }
 
     this.state.status = "connected"
     this.state.lastDirective = directive
+
     if (directive.type === "read" || directive.type === "play") {
       this.state.displayMessage = directive.message
       this.logHistory(`[SYSTEM] ${directive.message}`)
     }
 
     this.notify()
+
     return directive
   }
 
@@ -134,6 +157,7 @@ export class KeypadSimulatorCore {
     if (this.state.status !== "connected") {
       this.state.displayMessage = "CALL NOT CONNECTED - Press CALL first"
       this.notify()
+
       return { type: "noop" }
     }
 
@@ -147,26 +171,46 @@ export class KeypadSimulatorCore {
     })
 
     const response = await this.bridge.handleWebhookRequest("mock", req)
-    const bodyData = JSON.parse(response.body)
+    let bodyData: Record<string, unknown> = {}
+
+    try {
+      const parsed: unknown = JSON.parse(response.body)
+
+      if (parsed && typeof parsed === "object" && !Array.isArray(parsed)) {
+        bodyData = parsed as Record<string, unknown>
+      }
+    } catch {
+      bodyData = {}
+    }
 
     if (response.statusCode >= 400) {
+      const errMsg =
+        typeof bodyData.error === "string"
+          ? bodyData.error
+          : `HTTP ${response.statusCode}`
       const directive: TelephonyDirective = {
         type: "play",
-        message: bodyData.error || `HTTP ${response.statusCode}`,
+        message: errMsg,
       }
       this.state.displayMessage = directive.message
       this.state.lastDirective = directive
       this.logHistory(`[ERROR] ${directive.message}`)
       this.notify()
+
       return directive
     }
 
-    const directive: TelephonyDirective = bodyData.directive ?? { type: "noop" }
+    const rawDirective = bodyData.directive
+    const directive: TelephonyDirective =
+      rawDirective && typeof rawDirective === "object"
+        ? (rawDirective as TelephonyDirective)
+        : { type: "noop" }
     this.state.lastDirective = directive
 
     if (directive.type === "read" || directive.type === "play") {
       this.state.displayMessage = directive.message
       this.logHistory(`[SYSTEM] ${directive.message}`)
+
       if (directive.type === "read") {
         this.state.enteredDigits = ""
       }
@@ -177,6 +221,7 @@ export class KeypadSimulatorCore {
     }
 
     this.notify()
+
     return directive
   }
 
@@ -184,11 +229,15 @@ export class KeypadSimulatorCore {
    * Helper to enter an entire string of digits (e.g. 6-digit game PIN).
    */
   async enterDigits(digits: string): Promise<TelephonyDirective> {
-    let lastDir: TelephonyDirective = { type: "noop" }
+    let chain: Promise<TelephonyDirective> = Promise.resolve(
+      this.state.lastDirective ?? { type: "noop" },
+    )
+
     for (const char of digits) {
-      lastDir = await this.pressKey(char)
+      chain = chain.then(() => this.pressKey(char))
     }
-    return lastDir
+
+    return await chain
   }
 
   /**

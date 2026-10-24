@@ -32,11 +32,13 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
     const unsubscribe = simulator.subscribe((s: SimulatorDisplayState) =>
       setState(s),
     )
+
     return unsubscribe
   }, [simulator])
 
   const handleCall = async () => {
     setLoading(true)
+
     try {
       await simulator.startCall()
     } finally {
@@ -46,6 +48,7 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
 
   const handleHangup = async () => {
     setLoading(true)
+
     try {
       await simulator.hangup()
     } finally {
@@ -54,8 +57,12 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
   }
 
   const handleKeyPress = async (key: string) => {
-    if (state.status !== "connected" || loading) return
+    if (state.status !== "connected" || loading) {
+      return
+    }
+
     setLoading(true)
+
     try {
       await simulator.pressKey(key)
     } finally {
@@ -64,6 +71,13 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
   }
 
   const isConnected = state.status === "connected"
+  let statusColorClass = "bg-neutral-600"
+
+  if (isConnected) {
+    statusColorClass = "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
+  } else if (state.status === "calling") {
+    statusColorClass = "animate-pulse bg-amber-400"
+  }
 
   return (
     <div
@@ -76,13 +90,7 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
         </h3>
         <div className="flex items-center gap-2">
           <span
-            className={`inline-block h-2.5 w-2.5 rounded-full ${
-              isConnected
-                ? "bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.8)]"
-                : state.status === "calling"
-                  ? "animate-pulse bg-amber-400"
-                  : "bg-neutral-600"
-            }`}
+            className={`inline-block h-2.5 w-2.5 rounded-full ${statusColorClass}`}
           />
           <span className="text-xs text-neutral-400 uppercase">
             {state.status}

@@ -55,12 +55,13 @@ export class YemotApiTranslator implements TelephonyProvider {
    * Parse inbound GET or POST callback from Yemot IVR.
    */
   parseCallback(req: InboundWebhookRequest): YemotCallbackData {
-    const params: Record<string, string> = {}
+    void this.id
+    const params: Record<string, string | undefined> = {}
 
     // Combine query parameters and body
     for (const [k, v] of Object.entries(req.query)) {
-      if (v !== undefined) {
-        params[k] = String(v)
+      if (typeof v === "string") {
+        params[k] = v
       }
     }
 
@@ -68,15 +69,19 @@ export class YemotApiTranslator implements TelephonyProvider {
       for (const [k, v] of Object.entries(
         req.body as Record<string, unknown>,
       )) {
-        if (v !== undefined) {
+        if (
+          typeof v === "string" ||
+          typeof v === "number" ||
+          typeof v === "boolean"
+        ) {
           params[k] = String(v)
         }
       }
     }
 
     const apiCallId =
-      params.ApiCallId || params.apicallid || params.callId || "unknown-call"
-    const rawPhone = params.ApiPhone || params.apiphone
+      params.ApiCallId ?? params.apicallid ?? params.callId ?? "unknown-call"
+    const rawPhone = params.ApiPhone ?? params.apiphone
     const apiPhoneMasked = redactPhoneNumber(rawPhone)
 
     const isHangup =
@@ -85,16 +90,8 @@ export class YemotApiTranslator implements TelephonyProvider {
       Boolean(params.ApiHangupExtension)
 
     // Detect digits collected from a previous `read` parameter (e.g. pin, ans, data)
-    let digits: string | undefined = undefined
-    if (params.pin) {
-      digits = params.pin
-    } else if (params.ans) {
-      digits = params.ans
-    } else if (params.data) {
-      digits = params.data
-    } else if (params.digits) {
-      digits = params.digits
-    }
+    const { pin, ans, data, digits: paramDigits } = params
+    const digits = pin ?? ans ?? data ?? paramDigits
 
     return {
       apiCallId,
@@ -106,7 +103,7 @@ export class YemotApiTranslator implements TelephonyProvider {
       isHangup,
       hangupExtension: params.ApiHangupExtension,
       digits,
-      rawParams: params,
+      rawParams: params as Record<string, string>,
     }
   }
 
@@ -126,6 +123,7 @@ export class YemotApiTranslator implements TelephonyProvider {
 
     // Inspect user agent as documented by vendor (yemot-core-api/1.0), but log security warning
     const ua = req.headers["user-agent"] ?? ""
+
     if (!ua.includes("yemot-core-api")) {
       telephonyLogger.warn(
         "Inbound Yemot request missing standard User-Agent header",
@@ -143,6 +141,7 @@ export class YemotApiTranslator implements TelephonyProvider {
    */
   parseRequest(req: InboundWebhookRequest): TelephonyEvent | null {
     const data = this.parseCallback(req)
+
     if (!data.apiCallId) {
       return null
     }
@@ -185,6 +184,7 @@ export class YemotApiTranslator implements TelephonyProvider {
     headers: Record<string, string>
     body: string
   } {
+    void this.id
     let body = ""
 
     switch (directive.type) {
@@ -192,18 +192,25 @@ export class YemotApiTranslator implements TelephonyProvider {
         // Format: read=t-Message=varName,,minDigits,maxDigits,Digits,yes
         const timeout = directive.timeoutSec ?? 10
         body = `read=t-${directive.message}=${directive.varName},,${directive.minDigits},${directive.maxDigits},Digits,yes,${timeout}`
+
         break
       }
+
       case "play": {
         body = `id_list_message=t-${directive.message}`
+
         break
       }
+
       case "hangup": {
         body = "hangup"
+
         break
       }
+
       case "noop": {
         body = ""
+
         break
       }
     }
@@ -221,12 +228,32 @@ export class YemotApiTranslator implements TelephonyProvider {
    * Formats a Yemot read directive string directly.
    */
   static formatReadPrompt(
-    message: string,
-    varName: string,
-    minDigits: number,
-    maxDigits: number,
-    timeoutSec = 10,
+    ...args:
+      | [
+          options: {
+            message: string
+            varName: string
+            minDigits: number
+            maxDigits: number
+            timeoutSec?: number
+          },
+        ]
+      | [
+          message: string,
+          varName: string,
+          minDigits: number,
+          maxDigits: number,
+          timeoutSec?: number,
+        ]
   ): string {
+    if (typeof args[0] === "object") {
+      const [{ message, varName, minDigits, maxDigits, timeoutSec = 10 }] = args
+
+      return `read=t-${message}=${varName},,${minDigits},${maxDigits},Digits,yes,${timeoutSec}`
+    }
+
+    const [message, varName, minDigits, maxDigits, timeoutSec = 10] = args
+
     return `read=t-${message}=${varName},,${minDigits},${maxDigits},Digits,yes,${timeoutSec}`
   }
 

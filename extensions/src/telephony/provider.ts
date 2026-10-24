@@ -54,9 +54,8 @@ export class ProviderRegistry {
   private providers = new Map<string, TelephonyProvider>()
 
   static getInstance(): ProviderRegistry {
-    if (!ProviderRegistry.instance) {
-      ProviderRegistry.instance = new ProviderRegistry()
-    }
+    ProviderRegistry.instance ??= new ProviderRegistry()
+
     return ProviderRegistry.instance
   }
 

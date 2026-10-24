@@ -1,11 +1,14 @@
-import { EVENTS, QUIZZ_MODES, QUESTION_TYPES } from "@razzia/common/constants"
+import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
+import { MockSocketConnection } from "./mock-socket-connection"
+
+export { MockSocketConnection }
 
 export interface HttpClient {
   fetch(url: string, init?: RequestInit): Promise<Response>
 }
 
-export type SocketEventHandler = (...args: any[]) => void
+export type SocketEventHandler = (...args: unknown[]) => void
 
 export interface SocketConnection {
   readonly id: string
@@ -91,6 +94,7 @@ export class MockRazziaTransport implements RazziaTransport {
         return g
       }
     }
+
     return undefined
   }
 
@@ -146,6 +150,7 @@ export class MockRazziaTransport implements RazziaTransport {
    */
   showResults(gameId: string): void {
     const state = this.questionStates.get(gameId)
+
     if (state) {
       state.acceptingAnswers = false
     }
@@ -167,13 +172,15 @@ export class MockRazziaTransport implements RazziaTransport {
   // --- HttpClient Implementation ---
   readonly http: HttpClient = {
     fetch: async (url: string, init?: RequestInit): Promise<Response> => {
+      await Promise.resolve()
       const parsedUrl = new URL(url, "http://localhost:3001")
-      const pathname = parsedUrl.pathname
-      const method = (init?.method || "GET").toUpperCase()
+      const { pathname } = parsedUrl
+      const method = (init?.method ?? "GET").toUpperCase()
 
       // 1. POST /api/auth/session
       if (pathname === "/api/auth/session" && method === "POST") {
-        const clientId = `client_${this.idCounter++}`
+        const clientId = `client_${this.idCounter}`
+        this.idCounter += 1
         const token = `token_${clientId}_${Date.now()}`
         const session = {
           token,
@@ -182,6 +189,7 @@ export class MockRazziaTransport implements RazziaTransport {
           expiresAt: Date.now() + 24 * 60 * 60 * 1000,
         }
         this.sessions.set(token, session)
+
         return new Response(JSON.stringify(session), {
           status: 200,
           headers: { "content-type": "application/json" },
@@ -193,12 +201,10 @@ export class MockRazziaTransport implements RazziaTransport {
         const authHeader =
           init?.headers instanceof Headers
             ? init.headers.get("Authorization")
-            : ((init?.headers as Record<string, string> | undefined)?.[
-                "Authorization"
-              ] ??
-              (init?.headers as Record<string, string> | undefined)?.[
-                "authorization"
-              ])
+            : ((init?.headers as Record<string, string> | undefined)
+                ?.Authorization ??
+              (init?.headers as Record<string, string> | undefined)
+                ?.authorization)
 
         const token = authHeader?.replace(/^Bearer\s+/, "")
         const session = token ? this.sessions.get(token) : undefined
@@ -210,8 +216,28 @@ export class MockRazziaTransport implements RazziaTransport {
           )
         }
 
-        const body = init?.body ? JSON.parse(init.body as string) : {}
-        const { inviteCode, username } = body
+        let bodyObj: Record<string, unknown> = {}
+
+        if (typeof init?.body === "string") {
+          try {
+            const parsed: unknown = JSON.parse(init.body)
+
+            if (
+              parsed &&
+              typeof parsed === "object" &&
+              !Array.isArray(parsed)
+            ) {
+              bodyObj = parsed as Record<string, unknown>
+            }
+          } catch {
+            bodyObj = {}
+          }
+        }
+
+        const inviteCode =
+          typeof bodyObj.inviteCode === "string" ? bodyObj.inviteCode : ""
+        const username =
+          typeof bodyObj.username === "string" ? bodyObj.username : undefined
 
         if (!inviteCode || !/^\d{6}$/.test(inviteCode)) {
           return new Response(
@@ -221,6 +247,7 @@ export class MockRazziaTransport implements RazziaTransport {
         }
 
         const game = this.games.get(inviteCode)
+
         if (!game) {
           return new Response(
             JSON.stringify({ error: "errors:game.notFound" }),
@@ -235,7 +262,7 @@ export class MockRazziaTransport implements RazziaTransport {
           })
         }
 
-        const effectiveUsername = username || `Player_${session.clientId}`
+        const effectiveUsername = username ?? `Player_${session.clientId}`
         const ticket = `ticket_${session.clientId}_${game.gameId}_${Date.now()}`
         this.tickets.set(ticket, {
           ticket,
@@ -266,7 +293,8 @@ export class MockRazziaTransport implements RazziaTransport {
     _url: string,
     options: { path: string; auth: { token: string } },
   ): SocketConnection => {
-    const socketId = `socket_${this.idCounter++}`
+    const socketId = `socket_${this.idCounter}`
+    this.idCounter += 1
     const session = this.sessions.get(options.auth.token)
 
     const socket = new MockSocketConnection(
@@ -275,6 +303,7 @@ export class MockRazziaTransport implements RazziaTransport {
       this,
     )
     this.activeSockets.set(socketId, socket)
+
     return socket
   }
 
@@ -284,23 +313,31 @@ export class MockRazziaTransport implements RazziaTransport {
   handleSocketEmit(
     socket: MockSocketConnection,
     event: string,
-    data: any,
+    data: unknown,
   ): void {
     if (event === EVENTS.PLAYER.LOGIN) {
-      const ticket = data?.ticket
-      const ticketRecord = this.tickets.get(ticket)
+      const loginData =
+        data && typeof data === "object"
+          ? (data as Record<string, unknown>)
+          : undefined
+      const ticket =
+        typeof loginData?.ticket === "string" ? loginData.ticket : undefined
+      const ticketRecord = ticket ? this.tickets.get(ticket) : undefined
 
       if (!ticketRecord || ticketRecord.clientId !== socket.clientId) {
         socket.triggerServerEvent(
           EVENTS.GAME.RESET,
           "errors:auth.joinTicketInvalid",
         )
+
         return
       }
 
       const game = this.getGameById(ticketRecord.gameId)
+
       if (!game) {
         socket.triggerServerEvent(EVENTS.GAME.RESET, "errors:game.notFound")
+
         return
       }
 
@@ -313,12 +350,24 @@ export class MockRazziaTransport implements RazziaTransport {
         username: ticketRecord.username,
         gameMode: game.gameMode ?? QUIZZ_MODES.QUIZ,
       })
+
       return
     }
 
     if (event === EVENTS.PLAYER.SELECTED_ANSWER) {
-      const { gameId, data: answerData } = data || {}
-      const answerKeys: number[] = answerData?.answerKeys ?? []
+      const selData =
+        data && typeof data === "object"
+          ? (data as Record<string, unknown>)
+          : undefined
+      const gameId = typeof selData?.gameId === "string" ? selData.gameId : ""
+      const answerData =
+        selData?.data && typeof selData.data === "object"
+          ? (selData.data as Record<string, unknown>)
+          : undefined
+      const rawKeys = answerData?.answerKeys
+      const answerKeys: number[] = Array.isArray(rawKeys)
+        ? rawKeys.filter((k): k is number => typeof k === "number")
+        : []
       const questionState = this.questionStates.get(gameId)
 
       // Only accept if currently accepting answers
@@ -352,12 +401,18 @@ export class MockRazziaTransport implements RazziaTransport {
       socket.triggerServerEvent(EVENTS.GAME.STATUS, STATUS.WAIT, {
         text: "game:waitingForAnswers",
       })
+
       return
     }
 
     if (event === EVENTS.PLAYER.RECONNECT) {
-      const gameId = data?.gameId
-      const game = this.getGameById(gameId)
+      const recData =
+        data && typeof data === "object"
+          ? (data as Record<string, unknown>)
+          : undefined
+      const gameId = typeof recData?.gameId === "string" ? recData.gameId : ""
+      const game = gameId ? this.getGameById(gameId) : undefined
+
       if (game) {
         socket.currentGameId = game.gameId
         socket.triggerServerEvent(EVENTS.PLAYER.SUCCESS_RECONNECT, {
@@ -372,60 +427,5 @@ export class MockRazziaTransport implements RazziaTransport {
 
   handleSocketDisconnect(socketId: string): void {
     this.activeSockets.delete(socketId)
-  }
-}
-
-/**
- * Mock Socket.IO connection object with event emitter capabilities.
- */
-export class MockSocketConnection implements SocketConnection {
-  readonly id: string
-  readonly clientId: string
-  connected = true
-  currentGameId: string | null = null
-  currentUsername: string | null = null
-
-  private readonly transport: MockRazziaTransport
-  private handlers = new Map<string, Set<SocketEventHandler>>()
-
-  constructor(id: string, clientId: string, transport: MockRazziaTransport) {
-    this.id = id
-    this.clientId = clientId
-    this.transport = transport
-  }
-
-  emit(event: string, ...args: unknown[]): void {
-    if (!this.connected) return
-    this.transport.handleSocketEmit(this, event, args[0])
-  }
-
-  on(event: string, handler: SocketEventHandler): void {
-    if (!this.handlers.has(event)) {
-      this.handlers.set(event, new Set())
-    }
-    this.handlers.get(event)!.add(handler)
-  }
-
-  off(event: string, handler: SocketEventHandler): void {
-    this.handlers.get(event)?.delete(handler)
-  }
-
-  disconnect(): void {
-    this.connected = false
-    this.transport.handleSocketDisconnect(this.id)
-    this.handlers.clear()
-  }
-
-  /**
-   * Triggers an inbound event from the mock server to this socket.
-   */
-  triggerServerEvent(event: string, ...args: unknown[]): void {
-    if (!this.connected) return
-    const set = this.handlers.get(event)
-    if (set) {
-      for (const handler of set) {
-        handler(...args)
-      }
-    }
   }
 }
