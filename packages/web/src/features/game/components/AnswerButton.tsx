@@ -1,3 +1,5 @@
+import type { AnswerVisual } from "@razzia/extensions/core"
+import { isValidAnswerVisual } from "@razzia/extensions/media"
 import clsx from "clsx"
 import { Check, X } from "lucide-react"
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react"
@@ -8,6 +10,7 @@ type Props = PropsWithChildren &
     correct?: boolean
     selected?: boolean
     large?: boolean
+    visual?: AnswerVisual
   }
 
 const AnswerButton = ({
@@ -17,9 +20,20 @@ const AnswerButton = ({
   correct,
   selected,
   large,
+  visual,
   ...otherProps
 }: Props) => {
   const CorrectIcon = correct ? Check : X
+
+  const hasValidVisual = visual && isValidAnswerVisual(visual)
+  const displayMode = hasValidVisual ? visual.display : "text"
+  const showImage =
+    hasValidVisual && (displayMode === "image" || displayMode === "both")
+  const showText = !showImage || displayMode === "both"
+
+  const accessibleLabel = showImage
+    ? `${label}: ${typeof children === "string" ? children : ""} (${visual.alt})`
+    : undefined
 
   return (
     <button
@@ -27,6 +41,7 @@ const AnswerButton = ({
         "relative flex rounded-2xl p-4 text-left sm:py-6",
         className,
       )}
+      aria-label={accessibleLabel}
       {...otherProps}
     >
       <div className="grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-3 gap-y-2 sm:content-center">
@@ -40,14 +55,37 @@ const AnswerButton = ({
         >
           {label}
         </span>
-        <p
+        <div
           className={clsx(
-            "col-span-3 row-start-2 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1",
-            large ? "text-lg md:text-2xl" : "text-sm md:text-lg",
+            "col-span-3 row-start-2 flex flex-col items-start gap-2 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1",
           )}
         >
-          {children}
-        </p>
+          {showImage && (
+            <div className="relative max-h-36 w-auto overflow-hidden rounded-lg bg-black/10">
+              <img
+                src={visual.url}
+                alt={visual.alt}
+                data-testid="answer-visual-image"
+                className="max-h-36 w-auto rounded-lg object-contain"
+                loading="lazy"
+              />
+            </div>
+          )}
+
+          {showText ? (
+            <p
+              className={clsx(
+                large ? "text-lg md:text-2xl" : "text-sm md:text-lg",
+              )}
+            >
+              {children}
+            </p>
+          ) : (
+            <span className="sr-only" data-testid="accessible-answer-text">
+              {children}
+            </span>
+          )}
+        </div>
         {correct !== undefined && (
           <CorrectIcon className="col-start-3 row-start-1 size-4 stroke-6 md:size-6" />
         )}

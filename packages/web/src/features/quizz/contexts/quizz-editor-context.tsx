@@ -10,8 +10,20 @@ import {
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
 import {
+  createDefaultQuizExtras,
+  generateQuestionId,
+  type QuizExtrasV1,
+} from "@razzia/extensions/core"
+import {
+  CompositeApiClient,
+  removeQuestionFromExtras,
+  reorderQuestionsInExtras,
+  synchronizeQuestionIds,
+} from "@razzia/extensions/editor"
+import {
   createContext,
   useContext,
+  useEffect,
   useState,
   type PropsWithChildren,
 } from "react"
@@ -39,6 +51,18 @@ interface QuizzEditorContextType {
   currentQuestion: Question
   currentQuestionId: string
   isRemoving: boolean
+  extras: QuizExtrasV1 | null
+  conflict: {
+    serverRevision?: number
+    expectedRevision?: number | null
+  } | null
+  setExtras: React.Dispatch<React.SetStateAction<QuizExtrasV1 | null>>
+  setConflict: React.Dispatch<
+    React.SetStateAction<{
+      serverRevision?: number
+      expectedRevision?: number | null
+    } | null>
+  >
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
   removeQuestion: (_index: number) => void
@@ -87,6 +111,27 @@ export const QuizzEditorProvider = ({
   })
   const [currentIndex, setCurrentIndex] = useState(0)
   const [removingFrom, setRemovingFrom] = useState<Question[] | null>(null)
+  const [extras, setExtras] = useState<QuizExtrasV1 | null>(null)
+  const [conflict, setConflict] = useState<{
+    serverRevision?: number
+    expectedRevision?: number | null
+  } | null>(null)
+
+  useEffect(() => {
+    if (!initialData?.id) {
+      return
+    }
+
+    const client = new CompositeApiClient()
+    client
+      .getQuizComposite(initialData.id)
+      .then((res) => {
+        if (res.exists && res.extras) {
+          setExtras(res.extras)
+        }
+      })
+      .catch(() => {})
+  }, [initialData?.id])
 
   const questions = useWatch({ control, name: "questions" })
   const gameMode = useWatch({ control, name: "gameMode" })
@@ -99,11 +144,22 @@ export const QuizzEditorProvider = ({
 
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
     setCurrentIndex(questions.length)
+
+    if (extras) {
+      setExtras({
+        ...extras,
+        questionIds: [...extras.questionIds, generateQuestionId()],
+      })
+    }
   }
 
   const removeQuestion = (index: number) => {
     flushSync(() => setRemovingFrom(questions))
     remove(index)
+
+    if (extras) {
+      setExtras(removeQuestionFromExtras(extras, index))
+    }
 
     setCurrentIndex((current) => {
       if (current < index) {
@@ -121,6 +177,10 @@ export const QuizzEditorProvider = ({
   const reorderQuestions = (from: number, to: number) => {
     move(from, to)
     setCurrentIndex(to)
+
+    if (extras) {
+      setExtras(reorderQuestionsInExtras(extras, from, to))
+    }
   }
 
   const questionPath = <K extends FieldPath<Question>>(field: K) =>
@@ -146,6 +206,10 @@ export const QuizzEditorProvider = ({
           currentQuestion,
           currentQuestionId: questionIds[safeIndex],
           isRemoving: removingFrom === questions,
+          extras,
+          conflict,
+          setExtras,
+          setConflict,
           setCurrentIndex,
           addQuestion,
           removeQuestion,

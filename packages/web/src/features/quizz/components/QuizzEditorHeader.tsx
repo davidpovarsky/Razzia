@@ -1,5 +1,10 @@
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
+import {
+  CompositeApiClient,
+  ConflictModal,
+  RevisionConflictError,
+} from "@razzia/extensions/editor"
 import Button from "@razzia/web/components/Button"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import Input from "@razzia/web/components/Input"
@@ -24,8 +29,9 @@ import { useTranslation } from "react-i18next"
 const QUIZZ_MODE_LIST = Object.values(QUIZZ_MODES)
 
 const QuizzEditorHeader = () => {
-  const { quizzId, setCurrentIndex } = useQuizzEditor()
-  const { handleSubmit, control } = useFormContext<
+  const { quizzId, setCurrentIndex, extras, setExtras, conflict, setConflict } =
+    useQuizzEditor()
+  const { handleSubmit, control, getValues } = useFormContext<
     QuizzFormValues,
     unknown,
     QuizzValidated
@@ -63,7 +69,33 @@ const QuizzEditorHeader = () => {
   })
 
   const handleSave = handleSubmit(
-    (values) => {
+    async (values) => {
+      if (extras && quizzId) {
+        try {
+          const client = new CompositeApiClient()
+          await client.saveQuizComposite(quizzId, {
+            expectedRevision: extras.revision,
+            quizz: values,
+            extras,
+          })
+          onSaved("quizz:quizzUpdated")
+
+          return
+        } catch (err: unknown) {
+          if (err instanceof RevisionConflictError) {
+            setConflict({
+              serverRevision: err.serverRevision,
+              expectedRevision: err.expectedRevision,
+            })
+
+            return
+          }
+          onError(err as Error)
+
+          return
+        }
+      }
+
       if (quizzId) {
         update({ id: quizzId, json: values })
 
@@ -84,6 +116,37 @@ const QuizzEditorHeader = () => {
       }
     },
   )
+
+  const handleReloadConflict = async () => {
+    if (!quizzId) return
+    try {
+      const client = new CompositeApiClient()
+      const res = await client.getQuizComposite(quizzId)
+      if (res.exists && res.extras) {
+        setExtras(res.extras)
+      }
+      setConflict(null)
+      toast.success("Loaded latest quiz from server")
+    } catch {
+      toast.error("Failed to reload quiz")
+    }
+  }
+
+  const handleForceOverwriteConflict = async () => {
+    if (!quizzId || !extras) return
+    try {
+      const client = new CompositeApiClient()
+      await client.saveQuizComposite(quizzId, {
+        expectedRevision: null, // Force overwrite
+        quizz: getValues(),
+        extras,
+      })
+      setConflict(null)
+      onSaved("quizz:quizzUpdated")
+    } catch (err: unknown) {
+      onError(err as Error)
+    }
+  }
 
   return (
     <header className="bg-background z-20 flex h-14 items-center justify-between gap-4 px-4 shadow-sm">
@@ -141,6 +204,15 @@ const QuizzEditorHeader = () => {
           {t("common:save")}
         </Button>
       </div>
+
+      <ConflictModal
+        open={Boolean(conflict)}
+        serverRevision={conflict?.serverRevision}
+        expectedRevision={conflict?.expectedRevision}
+        onReload={handleReloadConflict}
+        onOverwrite={handleForceOverwriteConflict}
+        onCancel={() => setConflict(null)}
+      />
     </header>
   )
 }

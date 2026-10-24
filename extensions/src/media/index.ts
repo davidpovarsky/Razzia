@@ -1,2 +1,3 @@
-// Placeholder entrypoint for Maya (media) - to be implemented by Maya
-export {}
+export * from "./rich-answer-card"
+
+export * from "./reveal-media"
