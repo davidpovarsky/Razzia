@@ -3,37 +3,36 @@
 // without requiring cross-package package.json edits.
 
 declare namespace JSX {
-  interface IntrinsicElements {
-    [elemName: string]: any
+  type IntrinsicElements = Record<string, unknown>
+
+  interface Element {
+    _brand?: unknown
   }
-  interface Element {}
 }
 
 declare namespace React {
-  export interface FC<P = {}> {
-    (props: P): any
-  }
+  export type FC<P = Record<string, unknown>> = (props: P) => unknown
+
   export function useState<T>(
     initialState: T | (() => T),
   ): [T, (newState: T | ((prev: T) => T)) => void]
+
   export function useEffect(
-    effect: () => void | (() => void),
-    deps?: readonly any[],
+    effect: () => (() => void) | undefined,
+    deps?: readonly unknown[],
   ): void
 }
 
 declare module "react" {
-  export interface FC<P = {}> {
-    (props: P): any
-  }
+  export type FC<P = Record<string, unknown>> = (props: P) => unknown
 
   export function useState<T>(
     initialState: T | (() => T),
   ): [T, (newState: T | ((prev: T) => T)) => void]
 
   export function useEffect(
-    effect: () => void | (() => void),
-    deps?: readonly any[],
+    effect: () => (() => void) | undefined,
+    deps?: readonly unknown[],
   ): void
 
   const React: {
@@ -46,7 +45,9 @@ declare module "react" {
 }
 
 declare module "react/jsx-runtime" {
-  export const jsx: any
-  export const jsxs: any
-  export const Fragment: any
+  export const jsx: (...args: unknown[]) => unknown
+
+  export const jsxs: (...args: unknown[]) => unknown
+
+  export const Fragment: unknown
 }

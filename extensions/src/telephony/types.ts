@@ -1,17 +1,19 @@
 import { z } from "zod"
 import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
-import { STATUS } from "@razzia/common/types/game/status"
 
 /**
  * Telephony configuration limits and constants.
  */
 export const TELEPHONY_CONSTANTS = {
   MAX_SESSIONS: 1000,
-  REPLAY_TTL_MS: 10 * 60 * 1000, // 10 minutes
+  // 10 minutes
+  REPLAY_TTL_MS: 10 * 60 * 1000,
   REPLAY_TTL_SEC: 10 * 60,
-  MAX_SKEW_MS: 120 * 1000, // 120 seconds
+  // 120 seconds
+  MAX_SKEW_MS: 120 * 1000,
   MAX_SKEW_SEC: 120,
-  DIGIT_RATE_LIMIT_PER_SEC: 10, // 10 digits/sec per call
+  // 10 digits/sec per call
+  DIGIT_RATE_LIMIT_PER_SEC: 10,
   PIN_LENGTH: 6,
   DEFAULT_CALLER_PREFIX: "Phone ",
   HMAC_HEADER: "x-razzia-signature",
@@ -53,10 +55,12 @@ export type TelephonyDirective =
     }
   | {
       type: "hangup"
+      message?: string
       reason?: string
     }
   | {
       type: "noop"
+      message?: string
     }
 
 /**
@@ -109,7 +113,8 @@ export interface TelephonyResult {
 export interface TelephonyCallSession {
   callId: string
   provider: string
-  callerId: string // Redacted / synthetic dummy caller identifier
+  // Redacted / synthetic dummy caller identifier
+  callerId: string
   gameId: string | null
   inviteCode: string | null
   username: string
@@ -134,11 +139,14 @@ export function redactPhoneNumber(phone?: string | null): string {
   if (!phone) {
     return "[ANONYMOUS]"
   }
+
   // Strip non-digits for check
   const digits = phone.replaceAll(/\D/g, "")
+
   if (digits.length <= 4) {
     return "[REDACTED_PHONE]"
   }
+
   // Mask all but last 4 digits
   return `***-***-${digits.slice(-4)}`
 }
@@ -150,18 +158,21 @@ export const telephonyLogger = {
   info: (msg: string, meta?: Record<string, unknown>) => {
     // Redact any phone fields in meta
     const sanitized = meta ? sanitizeMeta(meta) : undefined
+
     if (process.env.NODE_ENV !== "test") {
       console.log(`[Telephony] ${msg}`, sanitized ?? "")
     }
   },
   warn: (msg: string, meta?: Record<string, unknown>) => {
     const sanitized = meta ? sanitizeMeta(meta) : undefined
+
     if (process.env.NODE_ENV !== "test") {
       console.warn(`[Telephony WARN] ${msg}`, sanitized ?? "")
     }
   },
   error: (msg: string, meta?: Record<string, unknown>) => {
     const sanitized = meta ? sanitizeMeta(meta) : undefined
+
     if (process.env.NODE_ENV !== "test") {
       console.error(`[Telephony ERROR] ${msg}`, sanitized ?? "")
     }
@@ -181,6 +192,7 @@ function sanitizeMeta(meta: Record<string, unknown>): Record<string, unknown> {
       result[k] = v
     }
   }
+
   return result
 }
 
@@ -205,15 +217,19 @@ export function mapDtmfToAnswerIndex(digit: string): number | null {
     case "1": {
       return 0
     }
+
     case "2": {
       return 1
     }
+
     case "3": {
       return 2
     }
+
     case "4": {
       return 3
     }
+
     default: {
       return null
     }

@@ -6,14 +6,11 @@ import {
   telephonyLogger,
   TELEPHONY_CONSTANTS,
   type InboundWebhookRequest,
-  type SessionState,
   type TelephonyCallSession,
-  type TelephonyDirective,
   type TelephonyEvent,
   type TelephonyResult,
 } from "./types"
-import type { TelephonyProvider } from "./provider"
-import { ProviderRegistry } from "./provider"
+import { ProviderRegistry, type TelephonyProvider } from "./provider"
 import { RazziaSocketClient } from "./socket-client"
 import type { RazziaTransport } from "./transport"
 
@@ -95,6 +92,7 @@ export class TelephonyBridge {
     body: string
   }> {
     const provider = ProviderRegistry.getInstance().get(providerId)
+
     if (!provider) {
       return {
         statusCode: 404,
@@ -105,23 +103,26 @@ export class TelephonyBridge {
 
     // 1. Verify anti-tamper signature and replay protection
     const verification = await provider.verifyRequest(req)
+
     if (!verification.valid) {
       telephonyLogger.warn("Webhook verification failed", {
         provider: providerId,
         reason: verification.reason,
       })
       const isReplay = verification.reason?.includes("Replay")
+
       return {
         statusCode: isReplay ? 409 : 401,
         headers: { "content-type": "application/json" },
         body: JSON.stringify({
-          error: verification.reason || "Unauthorized",
+          error: verification.reason ?? "Unauthorized",
         }),
       }
     }
 
     // 2. Parse event
     const event = provider.parseRequest(req)
+
     if (!event) {
       return {
         statusCode: 400,
@@ -161,20 +162,10 @@ export class TelephonyBridge {
     }
 
     // Handle DTMF digits
-    if (event.type === "DTMF") {
-      return this.handleDtmf(event)
-    }
-
-    return {
-      success: false,
-      directive: { type: "noop" },
-      error: `Unknown event type: ${event.type}`,
-    }
+    return await this.handleDtmf(event)
   }
 
-  private async handleCallStart(
-    event: TelephonyEvent,
-  ): Promise<TelephonyResult> {
+  private handleCallStart(event: TelephonyEvent): TelephonyResult {
     const now = Date.now()
 
     // Enforce 1000 session cap
@@ -183,6 +174,7 @@ export class TelephonyBridge {
       this.sessions.size >= this.maxSessions
     ) {
       telephonyLogger.warn("Local telephony session limit exceeded (1000 cap)")
+
       return {
         success: false,
         directive: {
@@ -196,16 +188,18 @@ export class TelephonyBridge {
     }
 
     let session = this.sessions.get(event.callId)
+
     if (!session) {
       const callerId = event.callerId
         ? redactPhoneNumber(event.callerId)
         : `mock-caller-${event.callId}`
-      const numStr = String(this.participantCounter++).padStart(3, "0")
+      const numStr = String(this.participantCounter).padStart(3, "0")
+      this.participantCounter += 1
       const username = `${TELEPHONY_CONSTANTS.DEFAULT_CALLER_PREFIX}${numStr}`
 
       session = {
         callId: event.callId,
-        provider: event.provider || "mock",
+        provider: event.provider ?? "mock",
         callerId,
         gameId: null,
         inviteCode: null,
@@ -262,6 +256,7 @@ export class TelephonyBridge {
     }
 
     const digits = event.digit ?? ""
+
     if (!digits) {
       return { success: true, directive: { type: "noop" } }
     }
@@ -275,23 +270,26 @@ export class TelephonyBridge {
         telephonyLogger.warn("DTMF digit throttle exceeded for call", {
           callId: session.callId,
         })
+
         return {
           success: false,
           directive: { type: "noop" },
           error: "Digit rate limit exceeded (10 digits/sec)",
         }
       }
+
       session.digitCountInWindow += digits.length
     } else {
       session.digitWindowStart = now
       session.digitCountInWindow = digits.length
     }
+
     session.lastDigitAt = now
     session.updatedAt = now
 
     // State 1: PIN Collection
     if (session.state === "collecting_pin" || session.state === "idle") {
-      return this.processPinEntry(session, digits)
+      return await this.processPinEntry(session, digits)
     }
 
     // State 2: In-Game Answering
@@ -327,6 +325,7 @@ export class TelephonyBridge {
     // Strict 6-digit validation
     if (!isValidPin(pin)) {
       session.pinBuffer = ""
+
       return {
         success: false,
         directive: {
@@ -342,8 +341,10 @@ export class TelephonyBridge {
 
     // Attempt join
     session.state = "joining"
+
     try {
       let client = this.clients.get(session.callId)
+
       if (!client) {
         client = new RazziaSocketClient({
           baseUrl: this.baseUrl,
@@ -378,10 +379,10 @@ export class TelephonyBridge {
           continueCall: true,
         },
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       session.state = "collecting_pin"
       session.pinBuffer = ""
-      const errMsg = err?.message || "Join failed"
+      const errMsg = err instanceof Error ? err.message : "Join failed"
       telephonyLogger.warn("Failed to join game with PIN", {
         pin,
         error: errMsg,
@@ -402,11 +403,12 @@ export class TelephonyBridge {
     }
   }
 
-  private async processGameAnswer(
+  private processGameAnswer(
     session: TelephonyCallSession,
     digits: string,
-  ): Promise<TelephonyResult> {
+  ): TelephonyResult {
     const client = this.clients.get(session.callId)
+
     if (!client || !session.gameId) {
       return {
         success: false,
@@ -421,7 +423,7 @@ export class TelephonyBridge {
     const pstnSupport = isQuestionSupportedOnPstn(
       gameState.gameMode ?? "quiz",
       gameState.questionType ?? "single",
-      gameState.answersCount || 4,
+      gameState.answersCount,
     )
 
     if (!pstnSupport.supported) {
@@ -451,6 +453,7 @@ export class TelephonyBridge {
 
     // Map digit 1..4 -> index 0..3
     const answerIndex = mapDtmfToAnswerIndex(firstDigit)
+
     if (answerIndex === null) {
       return {
         success: false,
@@ -463,7 +466,7 @@ export class TelephonyBridge {
     }
 
     // Check if caller already answered for (callId, gameId, epoch)
-    const currentEpoch = gameState.currentEpoch
+    const { currentEpoch } = gameState
     const idempotencyKey = `${session.callId}:${session.gameId}:${currentEpoch}`
 
     if (
@@ -494,12 +497,13 @@ export class TelephonyBridge {
 
     // Submit answer to Razzia server (server receipt time is authoritative)
     const submitResult = client.selectAnswer(answerIndex)
+
     if (!submitResult.success) {
       return {
         success: false,
         directive: {
           type: "play",
-          message: submitResult.error || "Failed to record answer.",
+          message: submitResult.error ?? "Failed to record answer.",
         },
         error: submitResult.error,
       }

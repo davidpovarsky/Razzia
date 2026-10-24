@@ -18,13 +18,30 @@ export interface MockProviderOptions {
  * Computes HMAC-SHA256 signature for payload with timestamp and nonce.
  */
 export function computeMockHmac(
-  secret: string,
-  timestamp: number,
-  nonce: string,
-  rawBody: string,
+  ...args:
+    | [
+        params: {
+          secret: string
+          timestamp: number
+          nonce: string
+          rawBody: string
+        },
+      ]
+    | [secret: string, timestamp: number, nonce: string, rawBody: string]
 ): string {
-  const message = `${timestamp}:${nonce}:${rawBody}`
-  return createHmac("sha256", secret).update(message).digest("hex")
+  if (typeof args[0] === "object") {
+    const [{ secret, timestamp, nonce, rawBody }] = args
+
+    return createHmac("sha256", secret)
+      .update(`${timestamp}:${nonce}:${rawBody}`)
+      .digest("hex")
+  }
+
+  const [secret, timestamp, nonce, rawBody] = args
+
+  return createHmac("sha256", secret)
+    .update(`${timestamp}:${nonce}:${rawBody}`)
+    .digest("hex")
 }
 
 /**
@@ -34,9 +51,11 @@ export function safeCompareSignatures(a: string, b: string): boolean {
   try {
     const bufA = Buffer.from(a, "hex")
     const bufB = Buffer.from(b, "hex")
+
     if (bufA.length !== bufB.length) {
       return false
     }
+
     return timingSafeEqual(bufA, bufB)
   } catch {
     return false
@@ -85,7 +104,7 @@ export class MockProvider implements TelephonyProvider {
     this.purgeExpiredNonces(now)
 
     // Read headers (case-insensitive lookup)
-    const headers = req.headers
+    const { headers } = req
     const getHeader = (name: string): string | undefined => {
       const lower = name.toLowerCase()
       for (const [k, v] of Object.entries(headers)) {
@@ -93,6 +112,7 @@ export class MockProvider implements TelephonyProvider {
           return v
         }
       }
+
       return undefined
     }
 
@@ -115,13 +135,16 @@ export class MockProvider implements TelephonyProvider {
 
     // Parse timestamp (support both milliseconds or seconds)
     const rawTs = Number.parseInt(timestampHeader, 10)
+
     if (Number.isNaN(rawTs) || rawTs <= 0) {
       return { valid: false, reason: "Invalid timestamp header" }
     }
+
     const timestampMs = rawTs < 10_000_000_000 ? rawTs * 1000 : rawTs
 
     // 1. Verify timing skew <= 120 seconds
     const skew = Math.abs(now - timestampMs)
+
     if (skew > this.maxSkewMs) {
       return {
         valid: false,
@@ -174,25 +197,39 @@ export class MockProvider implements TelephonyProvider {
    */
   parseRequest(req: InboundWebhookRequest): TelephonyEvent | null {
     try {
-      const data =
-        typeof req.body === "string"
-          ? JSON.parse(req.body)
-          : (req.body as Record<string, unknown> | undefined)
+      const parsed: unknown =
+        typeof req.body === "string" ? JSON.parse(req.body) : req.body
 
-      if (!data || typeof data !== "object") {
+      if (!parsed || typeof parsed !== "object" || Array.isArray(parsed)) {
         return null
       }
 
-      const callId = String(data.callId || req.query.callId || "")
+      const data = parsed as Record<string, unknown>
+      const callIdVal = data.callId ?? req.query.callId
+      const callId =
+        typeof callIdVal === "string" || typeof callIdVal === "number"
+          ? String(callIdVal)
+          : ""
+
       if (!callId) {
         return null
       }
 
-      const type = (data.type as TelephonyEvent["type"]) || "CALL_START"
-      const digit = data.digit ? String(data.digit) : undefined
-      const callerId = data.callerId
-        ? String(data.callerId)
-        : `mock-caller-${callId}`
+      const rawType = data.type
+      const type: TelephonyEvent["type"] =
+        rawType === "DTMF" || rawType === "HANGUP" ? rawType : "CALL_START"
+
+      const rawDigit = data.digit
+      const digit =
+        typeof rawDigit === "string" || typeof rawDigit === "number"
+          ? String(rawDigit)
+          : undefined
+
+      const rawCaller = data.callerId
+      const callerId =
+        typeof rawCaller === "string" || typeof rawCaller === "number"
+          ? String(rawCaller)
+          : `mock-caller-${callId}`
 
       return {
         callId,
@@ -257,6 +294,7 @@ export class MockProvider implements TelephonyProvider {
     const rawBody = JSON.stringify(bodyObj)
 
     let signature = computeMockHmac(secret, timestamp, nonce, rawBody)
+
     if (options?.mutateSignature) {
       signature = options.mutateSignature(signature)
     }

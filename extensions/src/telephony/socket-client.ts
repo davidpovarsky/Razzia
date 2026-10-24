@@ -1,6 +1,10 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
-import type { RazziaTransport, SocketConnection } from "./transport"
+import type {
+  RazziaTransport,
+  SocketConnection,
+  SocketEventHandler,
+} from "./transport"
 import { isQuestionSupportedOnPstn, telephonyLogger } from "./types"
 
 export interface RazziaSocketClientConfig {
@@ -83,6 +87,7 @@ export class RazziaSocketClient {
 
   onStateChange(cb: StateChangeCallback): () => void {
     this.stateChangeListeners.add(cb)
+
     return () => this.stateChangeListeners.delete(cb)
   }
 
@@ -119,6 +124,7 @@ export class RazziaSocketClient {
     }
     this.token = data.token
     this.clientId = data.clientId
+
     return data.token
   }
 
@@ -175,7 +181,7 @@ export class RazziaSocketClient {
     // Connect Socket.IO
     this.socket = this.transport.createSocket(this.baseUrl, {
       path: this.wsPath,
-      auth: { token: this.token! },
+      auth: { token: this.token ?? "" },
     })
 
     this.attachSocketHandlers()
@@ -198,6 +204,7 @@ export class RazziaSocketClient {
     return new Promise((resolve, reject) => {
       if (!this.socket) {
         reject(new Error("Socket not initialized"))
+
         return
       }
 
@@ -206,11 +213,12 @@ export class RazziaSocketClient {
         reject(new Error("Timeout waiting for GAME.SUCCESS_JOIN"))
       }, 5000)
 
-      const onJoinSuccess = (payload: {
-        gameId: string
-        username: string
-        gameMode: string
-      }) => {
+      const onJoinSuccess: SocketEventHandler = (...args: unknown[]) => {
+        const payload = args[0] as {
+          gameId: string
+          username: string
+          gameMode: string
+        }
         cleanup()
         this.updateState({
           joined: true,
@@ -221,7 +229,8 @@ export class RazziaSocketClient {
         resolve()
       }
 
-      const onReset = (errorMsg: string) => {
+      const onReset: SocketEventHandler = (...args: unknown[]) => {
+        const errorMsg = typeof args[0] === "string" ? args[0] : "Game reset"
         cleanup()
         this.updateState({ error: errorMsg })
         reject(new Error(errorMsg))
@@ -244,18 +253,28 @@ export class RazziaSocketClient {
    * Listens for authoritative game status events from the server.
    */
   private attachSocketHandlers(): void {
-    if (!this.socket) return
+    if (!this.socket) {
+      return
+    }
 
-    this.socket.on(EVENTS.GAME.STATUS, (status: Status, data: any) => {
+    this.socket.on(EVENTS.GAME.STATUS, (...args: unknown[]) => {
+      const status = args[0] as Status
+      const data =
+        args[1] && typeof args[1] === "object"
+          ? (args[1] as Record<string, unknown>)
+          : undefined
       telephonyLogger.info(`Game status update: ${status}`)
 
       if (status === STATUS.SELECT_ANSWER) {
-        const answers = Array.isArray(data?.answers) ? data.answers : []
-        const qType = String(data?.questionType || "single")
+        const rawAnswers = data?.answers
+        const answersCount = Array.isArray(rawAnswers) ? rawAnswers.length : 0
+        const qType =
+          typeof data?.questionType === "string" ? data.questionType : "single"
+
         this.updateState({
           status,
           questionType: qType,
-          answersCount: answers.length,
+          answersCount,
           acceptingAnswers: true,
         })
       } else if (status === STATUS.SHOW_RESULT || status === STATUS.FINISHED) {
@@ -269,13 +288,19 @@ export class RazziaSocketClient {
     })
 
     // Listen to extension state envelope if emitted
-    this.socket.on("extensions:state", (envelope: any) => {
-      if (envelope && typeof envelope === "object") {
+    this.socket.on("extensions:state", (...args: unknown[]) => {
+      const envelope =
+        args[0] && typeof args[0] === "object"
+          ? (args[0] as Record<string, unknown>)
+          : undefined
+
+      if (envelope) {
         const epoch =
           typeof envelope.epoch === "number"
             ? envelope.epoch
             : this.state.currentEpoch
         const phase = typeof envelope.phase === "string" ? envelope.phase : null
+
         this.updateState({
           currentEpoch: epoch,
           phase,
@@ -283,15 +308,22 @@ export class RazziaSocketClient {
       }
     })
 
-    this.socket.on(EVENTS.PLAYER.SUCCESS_RECONNECT, (payload: any) => {
+    this.socket.on(EVENTS.PLAYER.SUCCESS_RECONNECT, (...args: unknown[]) => {
+      const payload =
+        args[0] && typeof args[0] === "object"
+          ? (args[0] as Record<string, unknown>)
+          : undefined
+
       this.updateState({
         joined: true,
-        gameId: payload.gameId,
-        username: payload.username,
+        gameId: typeof payload?.gameId === "string" ? payload.gameId : null,
+        username: typeof payload?.username === "string" ? payload.username : "",
       })
     })
 
-    this.socket.on(EVENTS.GAME.RESET, (errorMsg: string) => {
+    this.socket.on(EVENTS.GAME.RESET, (...args: unknown[]) => {
+      const errorMsg = typeof args[0] === "string" ? args[0] : "Game reset"
+
       this.updateState({
         joined: false,
         acceptingAnswers: false,
@@ -324,7 +356,7 @@ export class RazziaSocketClient {
     const support = isQuestionSupportedOnPstn(
       this.state.gameMode ?? "quiz",
       this.state.questionType ?? "single",
-      this.state.answersCount || 4,
+      this.state.answersCount,
     )
 
     if (!support.supported) {
@@ -349,7 +381,8 @@ export class RazziaSocketClient {
     this.updateState({
       lastSubmittedEpoch: this.state.currentEpoch,
       lastSubmittedAnswer: zeroBasedIndex,
-      acceptingAnswers: false, // Player can only submit once per question
+      // Player can only submit once per question
+      acceptingAnswers: false,
     })
 
     return { success: true }
@@ -374,6 +407,7 @@ export class RazziaSocketClient {
       if (this.state.gameId) {
         this.socket.emit(EVENTS.PLAYER.LEAVE, { gameId: this.state.gameId })
       }
+
       this.socket.disconnect()
       this.socket = null
     }
