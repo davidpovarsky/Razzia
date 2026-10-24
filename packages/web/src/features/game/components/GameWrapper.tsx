@@ -4,6 +4,17 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type CueId,
+  type ExtensionStateEnvelope,
+  type Interlude,
+  type TeamDefinition,
+} from "@razzia/extensions/core"
+import {
+  AudioCuePlayer,
+  InterludePresenter,
+} from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
@@ -53,8 +64,15 @@ const GameWrapper = ({
     seconds: number
     total: number
   } | null>(null)
+  const [extensionState, setExtensionState] =
+    useState<ExtensionStateEnvelope | null>(null)
+  const { socket } = useSocket()
   const next = statusName ? MANAGER_SKIP_BTN[statusName] : null
   const isDisabled = skippedStatus !== null && skippedStatus === status
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    setExtensionState(payload)
+  })
 
   useEvent(EVENTS.GAME.UPDATE_QUESTION, ({ current, total }) => {
     setQuestionStates({
@@ -146,7 +164,34 @@ const GameWrapper = ({
               )}
             </div>
 
-            {children}
+            {extensionState?.phase === "interlude" &&
+            extensionState.extras?.interlude ? (
+              <div className="flex flex-1 items-center justify-center p-6">
+                <InterludePresenter
+                  interlude={extensionState.extras.interlude as Interlude}
+                  serverStartedAt={extensionState.startedAt}
+                  isManager={Boolean(manager)}
+                  onSkip={() => {
+                    socket.emit(EXTENSION_EVENTS.COMMAND, {
+                      v: 1,
+                      gameId: extensionState.gameId,
+                      action: "SKIP_INTERLUDE",
+                      payload: {},
+                      requestId: `${Date.now()}`,
+                    })
+                  }}
+                />
+              </div>
+            ) : (
+              children
+            )}
+
+            {extensionState?.extras?.audioCue && (
+              <AudioCuePlayer
+                cueId={extensionState.extras.audioCue as CueId}
+                audioExtras={extensionState.extras.audio as any}
+              />
+            )}
 
             {manager ? (
               <div
@@ -202,7 +247,33 @@ const GameWrapper = ({
               </div>
             ) : (
               <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
-                <p className="text-gray-800">{player?.username}</p>
+                <div className="flex items-center gap-2">
+                  <p className="text-gray-800">{player?.username}</p>
+                  {(() => {
+                    const teamsData = extensionState?.extras?.teams as
+                      | {
+                          teams?: TeamDefinition[]
+                          assignments?: Record<string, string>
+                        }
+                      | undefined
+                    const assignedTeamId =
+                      teamsData?.assignments?.[player?.id ?? ""]
+                    const assignedTeam = teamsData?.teams?.find(
+                      (t) => t.id === assignedTeamId,
+                    )
+
+                    if (!assignedTeam) return null
+
+                    return (
+                      <span
+                        className="rounded-md px-2 py-0.5 text-xs font-bold text-white shadow-sm"
+                        style={{ backgroundColor: assignedTeam.color }}
+                      >
+                        {assignedTeam.name}
+                      </span>
+                    )
+                  })()}
+                </div>
                 {gameMode !== QUIZZ_MODES.SURVEY && (
                   <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
                     {player?.points}

@@ -1,6 +1,12 @@
 import { EVENTS } from "@razzia/common/constants"
 import type { Player } from "@razzia/common/types/game"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+  type TeamDefinition,
+} from "@razzia/extensions/core"
+import { LobbyTeamAssignment } from "@razzia/extensions/presentation"
 import PlayerConnectionStatus from "@razzia/web/features/game/components/PlayerConnectionStatus"
 import {
   useEvent,
@@ -25,10 +31,16 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
   const [playerList, setPlayerList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
+  const [extensionState, setExtensionState] =
+    useState<ExtensionStateEnvelope | null>(null)
   const qrContentRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
   useOnClickOutside({ ref: qrContentRef, handler: () => setQrOpen(false) })
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    setExtensionState(payload)
+  })
 
   useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) => {
     setPlayerList([...playerList, player])
@@ -50,6 +62,40 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
       )
     },
   )
+
+  const teamsData = extensionState?.extras?.teams as
+    | {
+        enabled?: boolean
+        teams?: TeamDefinition[]
+        assignments?: Record<string, string>
+      }
+    | undefined
+
+  const handleReassignTeam = ({
+    playerId,
+    teamId,
+  }: {
+    playerId: string
+    teamId: string
+  }) => {
+    if (!gameId) {
+      return
+    }
+
+    const player = playerList.find((p) => p.id === playerId)
+    const clientId = player?.clientId ?? playerId
+
+    socket.emit(EXTENSION_EVENTS.COMMAND, {
+      v: 1,
+      gameId,
+      action: "ASSIGN_TEAM",
+      payload: {
+        clientId,
+        teamId,
+      },
+      requestId: `${Date.now()}-${Math.random().toString(36).slice(2)}`,
+    })
+  }
 
   const handleKick = (playerId: string) => () => {
     if (!gameId) {
@@ -143,6 +189,17 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
       <h2 className="mb-6 text-4xl font-bold text-white drop-shadow-lg">
         {t(text)}
       </h2>
+
+      {teamsData?.enabled && teamsData.teams && (
+        <LobbyTeamAssignment
+          teams={teamsData.teams}
+          players={playerList}
+          teamAssignments={teamsData.assignments ?? {}}
+          isManager={true}
+          isLocked={locked}
+          onReassignTeam={handleReassignTeam}
+        />
+      )}
 
       <div className="flex flex-wrap gap-3">
         {playerList.map((player) => (

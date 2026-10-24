@@ -1,4 +1,6 @@
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
+import { isEnhancedBundle } from "@razzia/extensions/core"
+import { CompositeApiClient } from "@razzia/extensions/editor"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import { SkeletonRows } from "@razzia/web/components/Skeleton"
@@ -11,7 +13,7 @@ import {
 import { api, ApiError, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { Download, SquarePen, Trash2, Upload } from "lucide-react"
+import { Download, Sparkles, SquarePen, Trash2, Upload } from "lucide-react"
 import { type ChangeEvent, useRef } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
@@ -62,13 +64,24 @@ const ConfigManageQuizz = () => {
     onError: (error) => onError(error, "errors:quizz.failedToSave"),
   })
 
-  const handleExport = (id: string) => async () => {
+  const handleExportLegacy = (id: string) => async () => {
     try {
       const { id: _id, ...quizz } = await unwrap(
         api.quizz[":id"].$get({ param: { id } }),
       )
 
       downloadJson(quizz, `${quizz.subject}.json`)
+    } catch (error) {
+      onError(error as Error, "errors:quizz.notFound")
+    }
+  }
+
+  const handleExportEnhanced = (id: string) => async () => {
+    try {
+      const client = new CompositeApiClient()
+      const bundle = await client.exportQuizBundle(id)
+      downloadJson(bundle, `${bundle.quizz.subject}.bundle.json`)
+      toast.success(t("extensions:bundle.exportEnhanced"))
     } catch (error) {
       onError(error as Error, "errors:quizz.notFound")
     }
@@ -83,11 +96,20 @@ const ConfigManageQuizz = () => {
 
     const reader = new FileReader()
 
-    reader.onload = (event) => {
+    reader.onload = async (event) => {
       try {
-        importQuizz(
-          JSON.parse(event.target?.result as string) as QuizzValidated,
-        )
+        const parsed = JSON.parse(event.target?.result as string)
+
+        if (isEnhancedBundle(parsed)) {
+          const client = new CompositeApiClient()
+          await client.importQuizBundle(parsed)
+          invalidate()
+          toast.success(t("quizz:quizzSaved"))
+
+          return
+        }
+
+        importQuizz(parsed as QuizzValidated)
       } catch {
         toast.error("Invalid JSON file")
       }
@@ -148,8 +170,18 @@ const ConfigManageQuizz = () => {
 
               <button
                 className="text-accent-foreground hover:bg-accent-foreground/10 rounded-sm p-2"
-                onClick={() => handleExport(q.id)()}
+                onClick={() => handleExportEnhanced(q.id)()}
+                title={t("extensions:bundle.exportEnhanced")}
+                data-testid={`export-enhanced-${q.id}`}
+              >
+                <Sparkles className="size-4 text-amber-500" />
+              </button>
+
+              <button
+                className="text-accent-foreground hover:bg-accent-foreground/10 rounded-sm p-2"
+                onClick={() => handleExportLegacy(q.id)()}
                 title={t("manager:quizz.export")}
+                data-testid={`export-legacy-${q.id}`}
               >
                 <Download className="size-4" />
               </button>
