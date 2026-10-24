@@ -1,4 +1,4 @@
-# LOCKED IMPLEMENTATION ARCHITECTURE / WIRE CONTRACTS v2
+# LOCKED IMPLEMENTATION ARCHITECTURE / WIRE CONTRACTS v3 (V1 wire payloads unchanged; three-agent ownership)
 
 Implementation code is written by agents only. This doc is the controlling contract. Earlier CONTRACTS.md is superseded where conflicting.
 
@@ -8,9 +8,9 @@ Tomer FIRST adds 'extensions' to pnpm-workspace.yaml as one additional package, 
 Exports REQUIRED: @razzia/extensions/core, /gameplay, /media, /presentation, /telephony, /testkit, /editor, /locales, /server. Each exports through its own index.ts; NO importing /src deep paths between modules.
 Root pnpm build and pnpm test remain baseline-compatible; extensions tests via explicit pnpm --filter @razzia/extensions test. Root package does not implicitly run extension tests unless configured by Tomer after acceptance.
 Tomer supplies extensions/vitest.config.ts, and correct tsconfig paths/aliases for package typings. Do not manually edit other agents' package.json or root lockfile.
-Antigravity agents start module coding AFTER Tomer bootstrap commit is fast-forwarded into all clean worktrees. All shared scripts and docs remain integrator-owned.
+Maya and Noam start module coding AFTER Tomer bootstrap commit is fast-forwarded into their TWO clean worktrees. Tomer keeps sole ownership of shared scripts/manifests; Maya owns frontend hooks and Noam owns telephony. Roni is dormant.
 
-## Shared types (owned by Eitan extensions/src/core)
+## Shared types (owned by Tomer extensions/src/core)
 
 Export quizExtrasV1Schema via Zod with strict objects. Exact data:
 QuizExtrasV1 = {
@@ -23,7 +23,7 @@ perQuestion:Record<string,{answerVisuals?:Array<{answerIndex:number;display:'tex
 }
 Question IDs must be unique UUIDs and align with canonical Questions; perQuestion keys must refer to IDs in questionIds. Default missing sidecar creates in-memory defaults, writing only on explicit enhanced Save. Digest sha256(JSON.stringify(canonical validated quiz)) under deterministic key ordering; server and client should request digest, not recompute differently. If digest mismatch, HTTP 409 and preserve original. Media URLs must pass safe media ref validator (root-relative /media/... or allowed HTTPS URL), no javascript/data/file URL. Alt required when image display.
 
-## Composite REST API (Tomer HTTP hook, Eitan logic)
+## Composite REST API (Tomer owns HTTP hook and storage logic)
 
 Mount manager-authenticated Hono extension routes at /api/extensions with requireManager from packages/socket/src/api/middleware.ts. Exact paths:
 GET /api/extensions/quizzes/:id => 200 {quizId,exists,extras:QuizExtrasV1|null,baseDigest} or 404.
@@ -45,13 +45,13 @@ Tomer defines Zod strict validators and manager role/room auth in existing Socke
 
 ## Workstream interfaces
 
-Eitan exports extension storage adapters accepting injected getPath/updateQuizz/saveQuizz/deleteQuizz and pure ID/digest/journal utilities. Eitan not allowed to import packages/socket internal modules; Tomer wires injected functions in integration seam.
-Yael exports pure functions shouldShowLeaderboard(policy,query), projectTeamScores(teamAssignments,players), assignRoundRobin/assignManual validation; no socket/web coupling. Readonly player snapshots; no mutation.
-Dana exports pure interlude state machine and audio cue resolver and React AudioCuePlayer only in own module; server stage scheduling authority remains Tomer; no direct global SFX constant mutation.
+Tomer exports extension storage adapters accepting injected getPath/updateQuizz/saveQuizz/deleteQuizz and pure ID/digest/journal utilities; he wires injected functions in his own server integration seam.
+Tomer exports pure gameplay functions shouldShowLeaderboard(policy,query), projectTeamScores(teamAssignments,players), assignRoundRobin/assignManual validation; no UI coupling. Readonly player snapshots; no mutation.
+Maya exports pure interlude state machine and audio cue resolver and React AudioCuePlayer within extensions/src/presentation; server stage scheduling authority remains Tomer; no direct global SFX constant mutation.
 Maya exports EditorEnhancementPanel, RichAnswerCard, RevealMedia, TeamLeaderboardPanel, InterludePreview as React components accepting typed contracts and callbacks, not direct imports from game internals. External display data always sanitized.
 Noam exports MockProvider and YemotApiTranslator (documented read protocol), TelephonyBridge orchestrator with injected transport, authenticated Razzia SocketClient adapter; browser keypad simulator page consumed by Maya/Tomer integration through composition.
-Roni exports deterministic fixtures, tests, QA scripts, including E2E tests which Tomer integrates after root suite freeze.
-Tomer is SOLE upstream hook editor: web editor save/header/pages, server API mount/game lifecycle/RoundManager, common socket validators/status only if required by design, page game overlay/mount, i18n resource injection, sound callers and media renderer slots. Preserve original behaviour with flags off.
+Roni is OPTIONAL AFTER integrated code exists: independent deterministic fixtures, tests and QA scripts, no production code.
+Tomer exclusively edits upstream server/common hooks (API mount, game lifecycle/RoundManager, socket validation) and shared package manifests. Maya exclusively edits upstream web hooks (editor save/header/pages, game presenter/answer renderers, i18n resource injection, sound callers and media renderer slots). Both preserve original behaviour with flags off and record minimal changes in own handoff before editing.
 
 ## Security
 

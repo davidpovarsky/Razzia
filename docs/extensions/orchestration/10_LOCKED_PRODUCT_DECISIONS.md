@@ -51,7 +51,7 @@ UK-focused single-computer, free local-first live quiz platform retaining upstre
 
 ## Validation and release
 
-- Original 217 unit tests and 46 E2E were green at local baseline. Roni adds extension tests; Tomer runs exact build/lint/format + browser suite serially on Windows, after coordinating main dev server.
+- Original 217 unit tests and 46 E2E were green at local baseline. Each coding owner adds focused extension tests; optional Roni audits after integration; Tomer runs exact build/lint/format + browser suite serially on Windows, after coordinating main dev server.
 - One commit per deliverable; exclusive file ownership per 13_FILE_OWNERSHIP.md; no research tasks, no unclear 'choose architecture' steps.
 - Changes to upstream packages/** by Tomer only, minimal enumerated hooks with regression tests. No unrelated reformats/restructure.
 - Feature flags OFF by default, old Razzia unchanged without sidecar. Only final local green integration may be demonstrated to user.

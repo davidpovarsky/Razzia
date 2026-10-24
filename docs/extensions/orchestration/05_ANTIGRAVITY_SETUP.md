@@ -1,15 +1,14 @@
-# Antigravity setup — Windows
+# Antigravity setup on Windows — ACTIVE V3
 
-Detected installed/running: C:/Users/DAVID/AppData/Local/Programs/antigravity/Antigravity.exe (2.26.0.0). Another separate installation "Antigravity IDE" exists; use the currently running Google Antigravity, not unrelated copies.
-For EACH role:
-
-1. Open Antigravity Agent Manager or IDE and choose Open Folder / Open Workspace.
-2. Choose EXACT path C:/Users/DAVID/Code/Razzia-worktrees/<role>. Do not choose C:/Users/DAVID/Code/Razzia and do not let Antigravity create a SECOND worktree for this same role.
-3. Create a NEW conversation in that role workspace. Paste the full PROMPT_<ROLE>.md from this directory as first message. Keep one dedicated conversation per role; rename it "Razzia W1 - <Role>".
-4. Select your preferred available model/agent mode in Antigravity UI; model choices are not a dependency of this handbook. If terminal approval is requested, allow only task-scoped safe commands.
-5. At the end ask the agent to produce role-owned handoff + local commit and report hash; do NOT ask it to merge to main.
-6. Return to Tomer conversation only when all first-wave handoffs are ready. Tomer checks and coordinates integration after owner approval.
-   Rule-loading: root AGENTS.md and GEMINI.md are canonical project-local instructions. Do not rely on automatically loaded custom rules being identical across IDE versions. Explicitly include their paths in the first prompt. We do not modify global ~/.gemini/config/GEMINI.md, because it contains Maktabah/Swift instructions irrelevant to Razzia.
-   Check Git isolation: every agent MUST print pwd and git rev-parse --show-toplevel before editing. If path differs, stop.
-   Port rules: main local server stays on 3000/3001. Worktrees do not start competing servers by default. To preview UI, build standalone static prototypes or coordinate an exclusive preview port with Tomer.
-   Source references: Google Antigravity documentation https://antigravity.google/docs ; Git worktrees https://git-scm.com/docs/git-worktree . Read current UI labels as they may differ by release.
+- Installed Google Antigravity app has been seen on this PC. UI labels can vary. Use **Open Folder / Workspace** and open the pre-created folder for the agent. Where Antigravity asks about mode, choose **Local Mode** on that role's existing worktree. Never choose `New Worktree` for an already isolated role.
+- Never open `C:\Users\DAVID\Code\Razzia` as a coding agent workspace. It is the original sample game/control checkout and can have a running dev server.
+- Start **one** conversation named `Razzia - Tomer backend` in `C:\Users\DAVID\Code\Razzia-worktrees\tomer`; paste `PROMPT_TOMER_01_BOOTSTRAP.md` fully. Keep that conversation after bootstrap.
+- When Tomer confirms bootstrap commit, run the documented local `Sync-AgentBranches.ps1` (no Maya/Noam edits yet). Then paste `PROMPT_TOMER_02_BACKEND_AND_INTEGRATION.md` into the **same Tomer conversation**.
+- Start `Razzia - Maya frontend` with `PROMPT_MAYA_01_UI.md` in `...\maya`.
+- Start `Razzia - Noam telephony` with `PROMPT_NOAM_01_TELEPHONY.md` in `...\noam`.
+- Continue the SAME 3 conversations through fixes, delivery and integration; do not start new chats every phase.
+- Roni is optional **after** integrated code and tests, and uses his existing `...\roni` worktree only after `Prepare-QA.ps1` has synchronized it.
+- Agents must validate `git rev-parse --show-toplevel`, `git branch --show-current` and `git status --short` before edits. If wrong, STOP.
+- Root `AGENTS.md` and `GEMINI.md` reference the V3 canonical docs. The first prompt tells each agent to read them explicitly; do not rely on auto-loading or unrelated global Maktabah/Swift instructions.
+- Only scoped terminal permissions; never approve cleanup, force Git, public tunnel, system configuration changes or secrets disclosure. Node 24 is under `C:\Users\DAVID\.local\tools\node-v24.22.1-win-x64`.
+- If you are using multiple Antigravity windows: confirm the title/workspace folder before each paste. These are **three independent main conversations**, not subagents.

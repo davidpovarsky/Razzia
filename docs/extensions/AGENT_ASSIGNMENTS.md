@@ -1,24 +1,14 @@
-# Named agent roster and task ownership
+# Active Antigravity agent assignment — V3
 
-Discovered from C:/Users/DAVID/Code/Maktabah/.agents/roles and .agents/agents. Those role definitions are Maktabah-specific; do not import Maktabah's native iOS rules into this web project.
+This file supersedes the former seven-agent role roster. The old role names were adapted from Maktabah and MUST NOT bring native Swift/iOS rules into this web project.
 
-- Eitan / Architecture: owns contracts, upstream hook RFCs, extension boundaries, migrations.
-- Noam / Engineering: owns scoped implementation and unit tests; never edits upstream without approved hook.
-- Maya / UX: owns web editor, game/presenter visual integration, accessibility, Razzia design fidelity (NOT native iOS or tablet scope).
-- Roni / QA: independent test plans, acceptance evidence, regressions, adversarial tests.
-- Tomer / Integration: branches/worktrees, upstream sync checks, dependency management, merge readiness.
-- Yael / Research: official Yemot APIs, UK number accessibility, DTMF timing, provider alternatives, verified unknowns.
-- Dana / Security: webhook auth, room isolation, call privacy, abuse and replay protection.
+| Active role | Scope                                                                                                            | Original responsibilities consolidated |
+| ----------- | ---------------------------------------------------------------------------------------------------------------- | -------------------------------------- |
+| Tomer       | Backend, shared schemas, storage, gameplay, teams, leaderboard, API, integration, shared manifests               | Tomer + Eitan + Yael                   |
+| Maya        | All web/editor UI, media, reveal, presentation, audio, i18n and frontend hooks                                   | Maya + Dana                            |
+| Noam        | Provider-neutral telephony bridge, Yemot disabled adapter, local keypad simulator, security and phone load tests | Noam                                   |
+| Roni        | Optional independent QA, only after integrated product exists                                                    | Roni                                   |
 
-## Execution mode
+One persistent Antigravity conversation per active role, in the existing separate Git worktree. No new chat for each wave. Open Tomer alone first with PROMPT_TOMER_01_BOOTSTRAP.md. After bootstrap and coordinator Sync-AgentBranches.ps1, start Tomer step 2 and Maya/Noam concurrently. Roni optional after integration via Prepare-QA.ps1.
 
-NORMAL by default: main session handles tasks and can use role checklists. TEAM only when owner explicitly requests subagents. Planning role assignments does not activate TEAM.
-
-## Work partition
-
-Architecture: Eitan + Dana + Tomer review.
-UI/editor: Maya, Noam implementation, Roni verification.
-Game modes: Eitan contract, Noam implementation, Roni tests.
-Telephony: Yael provider research, Dana security, Eitan bridge contract, Noam implementation, Roni load/reconnect tests.
-Upstream: Tomer owns sync and conflict reporting; owner approves upstream hooks and merges.
-Use separate worktrees and handoffs. No concurrent edits to shared registries or configs.
+This is an IMPLEMENTATION plan. Research is complete in orchestration docs 10/11/12. Agents code, test, fix and commit; they do not re-research or choose architecture. Exact exclusive file ownership is in docs/extensions/orchestration/13_FILE_OWNERSHIP.md. No subagents unless user explicitly requests them; no Asana writes without request.

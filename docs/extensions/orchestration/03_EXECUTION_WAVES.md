@@ -1,39 +1,33 @@
-# Execution DAG and gates
+# Execution schedule — ACTIVE V3, three persistent chats
 
-## G0 — current setup
+## Gate A — Tomer only (PROMPT_TOMER_01_BOOTSTRAP.md)
 
-Verify 7 worktrees exist and are at same planning commit, correct branches and independent directories. Verify local Node 24/pnpm availability. Do not launch seven installs/servers simultaneously. Root manager game remains working.
+Implement `@razzia/extensions` workspace and public exports, working TS/Vitest tooling, strict V1 shared contract schemas and isolated contract tests under `extensions/src/core/**`; document integration API and deliver a bootstrap commit. Update pnpm manifests/lockfile with minimal changes. No upstream behavioural hooks yet. Run unit/build/lint/format. **STOP** and return bootstrap hash; this is the only required serial setup stage.
 
-## Wave 1 — independent in parallel, safe without upstream edits
+## Gate B — Coordinator sync (no agent coding concurrently)
 
-Eitan: freeze v1 extension registration/sidecar metadata/identity/timeline and adapter contracts with proofs and RFCs.
-Noam: local-only DTMF simulator as pure package/service with replay/dedupe/clock tests, no game-core coupling.
-Maya: editor/presenter/phone participant interaction prototypes in standalone extensions, matching Razzia tokens; eight locale key inventory; no upstream UI edits.
-Roni: independent acceptance matrix, deterministic test fixtures, failure injection, test runbook.
-Yael: official Yemot capabilities, UK number and DTMF unknowns, clearly label unverified; offline provider contract mock.
-Dana: authentication, signed webhook, nonce, replay, room isolation, privacy retention, security test vectors.
-Tomer: audit setup, prepare integration-only process, check drift and avoid changing any shared upstream file.
+Verify Maya/Noam worktrees clean. Run `Sync-AgentBranches.ps1` to fast-forward those two branches to Tomer's bootstrap hash. Check shared contract imports resolve. Do not sync unused dormant worktrees.
 
-## G1 — approval gate
+## Wave 1 — Three simultaneous conversations (same windows across all waves)
 
-Eitan reviews interface mismatches, Tomer records approved versioned contracts, Roni checks tests, owner approves unresolved product decisions. Noam/Maya/Dana may need to revise isolated code. Do not integrate before this gate.
+- **Tomer (PROMPT_TOMER_02_BACKEND_AND_INTEGRATION.md, existing chat):** persist question IDs/sidecar revision and bundle import/export; composite manager API; scoreboard cadence and team assignment/aggregation; authoritative game stages/interlude policy, versioned status events, manager authorization, reconnect; server integration tests and backward-compatibility.
+- **Maya (PROMPT_MAYA_01_UI.md, new chat):** entire web implementation—editor integrated save with extension API; image answer previews; media reveal effects; lobby teams/leaderboards; interlude views, sound controls and management; eight locales and accessible player/manager UI; web-focused tests.
+- **Noam (PROMPT_NOAM_01_TELEPHONY.md, new chat):** provider-neutral telephony event bridge, offline mock provider, Yemot read-loop response translator (live disabled), simulated keypad participant using authentic session/join-ticket/Socket.IO flow, replay/rate-limit security and simulated concurrency tests.
 
-## Wave 2 — integration spikes (serial for shared files)
+Agents commit working milestones to THEIR OWN branches. Do not stop work because another role's code isn't available; test via versioned types + injected mocks and document integration wiring needed.
 
-Tomer in integration worktree proves sidecar CRUD + stable IDs/reorder/import/export/duplicate/delete; version conflicts and crash safety. Proposed H02/H07/H08/H23 only after owner G2.
-Tomer proves round-manager default-equivalent policy seam (H10-H13); browser UI slot and 8-language loading seam (H01/H03/H15/H18/H19); mock telephone participant via real game auth/socket (H22). Run baseline after EACH seam.
-Feature agents continue exclusively within own extensions; all shared upstream changes integrated by Tomer only.
+## Wave 2 — Controlled integration
 
-## Wave 3 — product features in dependency order
+Maya and Noam finish code/tests and provide explicit hashes. Tomer reviews changed path allowlists, type/API compatibility and tests; cherry-picks their commits into the Tomer integration branch. Tomer owns backend + integration adapters; Maya/Noam fix their own module defects in same chats and provide follow-up commits. Tomer runs full baseline + extension tests, then one serialized E2E/browser play on local Windows, covering Wi-Fi iPhone/iPad and mock phone participants (when available).
 
-3a leaderboard cadence and team score projection; old quiz behavior and surveys unchanged.
-3b image answers, question image animated reveal and presenter/player parity.
-3c interludes, customizable sounds, editor preview and reconnection snapshot.
-3d phone bridge with Yemot adapter behind provider-neutral interface; local simulation first, no live account until owner explicitly approves.
-3e polished simple editor, media lifecycle, per-quiz settings and eight languages.
+## Gate C — Acceptance
 
-## G3/G4 — integration and acceptance
+Pass build/typecheck/lint/format, original 217 unit/46 Playwright baseline (counts can evolve), extension feature unit/integration/E2E, eight-language parity, auth/replay/race tests and simulated 100-phone sessions. Record actual results. Preserve user data and main workspace. All external cloud or real telephone requirements remain separate, unverified and unpaid.
 
-Roni independent test suite: original 217 unit + 46 E2E baseline (counts can change), new module tests, image/audio snapshot tests, browser multi-player E2E, offline DTMF 100 simulated concurrent calls, reconnection, security, privacy, localization, old quiz import/export.
-Tomer cherry-picks reviewed hashes into disposable integration worktree, checks no unwanted upstream modifications, builds and runs serialized E2E after coordinating main dev server. Owner approves final merge and any push.
-Not in scope: real paid UK number, public server, production deployment, native mobile app, Hebrew/RTL, wholesale UI redesign.
+## Gate D — Optional independent QA (Roni)
+
+Only if useful after Gate C: run `Prepare-QA.ps1` while Roni clean, open a **single temporary** Roni conversation with `PROMPT_RONI_OPTIONAL_QA.md`; examine integrated source, add independent regression/security/E2E tests in QA-owned files, return defects. Tomer/Maya/Noam fix in their original conversations; rerun. Do not launch Roni before integrated code exists.
+
+### Never
+
+No new chats per wave. No unrelated design/R&D. No seven-agent sprint. No new Razzia forks or extra worktrees. No conflicting test servers, default-branch merges, push, deployment, production phone line or paid subscription without owner approval.
