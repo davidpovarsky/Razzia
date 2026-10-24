@@ -15,14 +15,24 @@ export interface LobbyTeamAssignmentProps {
 const clsx = (...classes: unknown[]): string =>
   classes
     .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
+      if (!c) {
+        return []
+      }
+
+      if (typeof c === "string") {
+        return [c]
+      }
+
+      if (Array.isArray(c)) {
+        return [clsx(...(c as unknown[]))]
+      }
+
       if (typeof c === "object") {
         return Object.entries(c)
           .filter(([, v]) => Boolean(v))
           .map(([k]) => k)
       }
+
       return []
     })
     .join(" ")
@@ -65,13 +75,17 @@ export const LobbyTeamAssignment = ({
   })
 
   const handlePlayerClick = (playerId: string) => {
-    if (!isManager || isLocked) return
+    if (!isManager || isLocked) {
+      return
+    }
 
     setSelectedPlayerId((current) => (current === playerId ? null : playerId))
   }
 
   const handleAssignToTeam = (teamId: string) => {
-    if (!selectedPlayerId || !isManager || isLocked) return
+    if (!selectedPlayerId || !isManager || isLocked) {
+      return
+    }
 
     onReassignTeam?.({
       playerId: selectedPlayerId,

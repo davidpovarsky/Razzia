@@ -1,5 +1,4 @@
 import {
-  CUE_IDS,
   type AudioCueSetting,
   type AudioExtras,
   type CueId,
@@ -38,7 +37,7 @@ export const resolveAudioCue = (
   cueId: CueId,
   audioExtras?: AudioExtras,
 ): ResolvedAudioCue => {
-  const setting: AudioCueSetting | undefined = audioExtras?.cues?.[cueId]
+  const setting: AudioCueSetting | undefined = audioExtras?.cues[cueId]
 
   if (!setting) {
     return {
@@ -52,9 +51,8 @@ export const resolveAudioCue = (
   }
 
   const isCustom = setting.source === "media" && Boolean(setting.url)
-  const effectiveUrl = isCustom
-    ? (setting.url as string)
-    : DEFAULT_CUE_URLS[cueId]
+  const effectiveUrl =
+    isCustom && setting.url ? setting.url : DEFAULT_CUE_URLS[cueId]
   const isEnabled = setting.enabled && setting.volume > 0
 
   return {
@@ -144,7 +142,9 @@ export const AudioCuePlayer = ({
 
     // Safe error handling for missing/corrupt asset fallback (AUDIO01)
     audio.onerror = () => {
-      if (isCancelled) return
+      if (isCancelled) {
+        return
+      }
 
       // Fallback to default asset if custom media failed
       if (!resolved.isDefault) {

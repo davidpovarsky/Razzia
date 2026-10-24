@@ -17,14 +17,24 @@ export interface RevealMediaProps {
 const clsx = (...classes: unknown[]): string =>
   classes
     .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
+      if (!c) {
+        return []
+      }
+
+      if (typeof c === "string") {
+        return [c]
+      }
+
+      if (Array.isArray(c)) {
+        return [clsx(...(c as unknown[]))]
+      }
+
       if (typeof c === "object") {
         return Object.entries(c)
           .filter(([, v]) => Boolean(v))
           .map(([k]) => k)
       }
+
       return []
     })
     .join(" ")
@@ -86,15 +96,18 @@ export const RevealMedia = ({
   const [systemReducedMotion, setSystemReducedMotion] = useState(false)
 
   useEffect(() => {
-    if (typeof window !== "undefined" && window.matchMedia) {
+    if (typeof window !== "undefined" && "matchMedia" in window) {
       const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)")
       setSystemReducedMotion(mediaQuery.matches)
 
-      const handler = (e: MediaQueryListEvent) =>
+      const handler = (e: MediaQueryListEvent) => {
         setSystemReducedMotion(e.matches)
-      mediaQuery.addEventListener?.("change", handler)
+      }
+      mediaQuery.addEventListener("change", handler)
 
-      return () => mediaQuery.removeEventListener?.("change", handler)
+      return () => {
+        mediaQuery.removeEventListener("change", handler)
+      }
     }
   }, [])
 
@@ -153,7 +166,7 @@ export const RevealMedia = ({
 
     // Run animation loop until 100%
     const startTime = now - currentProgress * durationMs
-    let animationFrameId: number
+    let animationFrameId: number | null = null
 
     const tick = () => {
       const elapsed = Date.now() - startTime
@@ -188,7 +201,7 @@ export const RevealMedia = ({
   // Effect-specific style calculations based on progress (0 -> 1)
   const isFullyRevealed = progress >= 1.0
 
-  let containerStyle: React.CSSProperties = {}
+  const containerStyle: React.CSSProperties = {}
   let imageStyle: React.CSSProperties = {}
 
   if (!isFullyRevealed && effect !== "none") {
@@ -200,16 +213,20 @@ export const RevealMedia = ({
           transform: `scale(${1 + (1 - progress) * 0.05})`,
           transition: "filter 50ms linear, transform 50ms linear",
         }
+
         break
       }
+
       case "zoom": {
         const scale = 1 + (1 - progress) * 1.5
         imageStyle = {
           transform: `scale(${scale})`,
           transition: "transform 50ms linear",
         }
+
         break
       }
+
       case "pixelate": {
         const blurPx = Math.round((1 - progress) * 16)
         imageStyle = {
@@ -217,8 +234,10 @@ export const RevealMedia = ({
           imageRendering: "pixelated",
           transition: "filter 50ms linear",
         }
+
         break
       }
+
       case "tiles": {
         // Handled via grid overlay below
         break

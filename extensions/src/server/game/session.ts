@@ -141,9 +141,13 @@ export class ExtensionGameSession {
 
     const extrasPayload: Record<string, unknown> = {}
 
-    // Team scores
+    // Team scores and assignments
     if (this.extras?.teams.enabled) {
       extrasPayload.teamScores = this.getTeamScores(players)
+      extrasPayload.teams = {
+        teams: this.extras.teams.teams,
+        assignments: Object.fromEntries(this.teamAssignments),
+      }
     }
 
     // Audio cues

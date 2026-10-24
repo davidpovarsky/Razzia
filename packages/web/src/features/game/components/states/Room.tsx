@@ -63,7 +63,7 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
     },
   )
 
-  const teamsData = extensionState?.extras?.teams as
+  const teamsData = extensionState?.extras.teams as
     | {
         enabled?: boolean
         teams?: TeamDefinition[]

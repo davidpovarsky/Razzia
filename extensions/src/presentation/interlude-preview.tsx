@@ -13,18 +13,16 @@ export interface InterludePreviewProps {
 export const InterludePreview = ({
   interlude,
   className,
-}: InterludePreviewProps) => {
-  return (
-    <div
-      className="flex flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 p-4 dark:border-neutral-700"
-      data-testid="interlude-preview-container"
-    >
-      <InterludePresenter
-        interlude={interlude}
-        serverStartedAt={Date.now()}
-        isManager={false}
-        className={className}
-      />
-    </div>
-  )
-}
+}: InterludePreviewProps) => (
+  <div
+    className="flex flex-col items-center justify-center rounded-xl border border-dashed border-neutral-300 p-4 dark:border-neutral-700"
+    data-testid="interlude-preview-container"
+  >
+    <InterludePresenter
+      interlude={interlude}
+      serverStartedAt={Date.now()}
+      isManager={false}
+      className={className}
+    />
+  </div>
+)

@@ -78,7 +78,7 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
     }
   }, [oldLeaderboard, leaderboard])
 
-  const teamsData = extensionState?.extras?.teams as
+  const teamsData = extensionState?.extras.teams as
     | {
         enabled?: boolean
         teams?: TeamDefinition[]

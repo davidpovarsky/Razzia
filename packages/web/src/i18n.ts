@@ -26,7 +26,7 @@ const resources = Object.entries(modules).reduce<Resource>(
 const extensionResources = getExtensionResources()
 for (const [lang, nsMap] of Object.entries(extensionResources)) {
   resources[lang] ??= {}
-  resources[lang].extensions = nsMap.extensions as unknown as ResourceKey
+  resources[lang].extensions = nsMap.extensions
 }
 
 i18n

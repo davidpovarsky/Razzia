@@ -10,20 +10,15 @@ import {
   type AudioCueSetting,
   type CueId,
   type Interlude,
-  type LeaderboardMode,
-  type QuestionReveal,
   type QuizExtrasV1,
   type RevealEffect,
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
   Image,
-  Layers,
   Music,
   Play,
   Plus,
-  Radio,
-  Sliders,
   Square,
   Trash2,
   Trophy,
@@ -52,14 +47,24 @@ type EditorTab =
 const clsx = (...classes: unknown[]): string =>
   classes
     .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
+      if (!c) {
+        return []
+      }
+
+      if (typeof c === "string") {
+        return [c]
+      }
+
+      if (Array.isArray(c)) {
+        return [clsx(...(c as unknown[]))]
+      }
+
       if (typeof c === "object") {
         return Object.entries(c)
           .filter(([, v]) => Boolean(v))
           .map(([k]) => k)
       }
+
       return []
     })
     .join(" ")
@@ -116,17 +121,21 @@ export const EditorEnhancementPanel = ({
     }
 
     setTestingCue(cueId)
-    const audioUrl = url || `/sfx/${cueId}.mp3`
+    const audioUrl = url ?? `/sfx/${cueId}.mp3`
     const audio = new Audio(audioUrl)
-    audio.play().catch(() => {})
-    audio.onended = () => setTestingCue(null)
+    audio.play().catch(() => undefined)
+    audio.onended = () => {
+      setTestingCue(null)
+    }
   }
 
   // Helper for updating perQuestion items
   const updateCurrentQuestionItem = (
     updater: (_item: NonNullable<typeof currentPerQuestion>) => void,
   ) => {
-    if (!activeQuestionId) return
+    if (!activeQuestionId) {
+      return
+    }
 
     const item = { ...(extras.perQuestion[activeQuestionId] ?? {}) }
     updater(item)
@@ -400,19 +409,24 @@ export const EditorEnhancementPanel = ({
                             )
 
                             if (display === "text") {
-                              if (existingIdx >= 0)
+                              if (existingIdx >= 0) {
                                 visuals.splice(existingIdx, 1)
+                              }
                             } else {
                               const newVisual: AnswerVisual = {
                                 answerIndex,
                                 display,
                                 url: currentVisual?.url ?? "/media/answer.png",
                                 alt:
-                                  currentVisual?.alt ?? answerText ?? "Choice",
+                                  currentVisual?.alt ??
+                                  (answerText || "Choice"),
                               }
-                              if (existingIdx >= 0)
+
+                              if (existingIdx >= 0) {
                                 visuals[existingIdx] = newVisual
-                              else visuals.push(newVisual)
+                              } else {
+                                visuals.push(newVisual)
+                              }
                             }
 
                             item.answerVisuals = visuals
@@ -438,7 +452,10 @@ export const EditorEnhancementPanel = ({
                                 const target = item.answerVisuals?.find(
                                   (v) => v.answerIndex === answerIndex,
                                 )
-                                if (target) target.url = url
+
+                                if (target) {
+                                  target.url = url
+                                }
                               })
                             }}
                             className="flex-1 rounded-lg border border-neutral-300 bg-white p-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-800"
@@ -451,10 +468,15 @@ export const EditorEnhancementPanel = ({
                               onClick={() => {
                                 onOpenMediaPicker((selectedUrl) => {
                                   updateCurrentQuestionItem((item) => {
-                                    const target = item.answerVisuals?.find(
-                                      (v) => v.answerIndex === answerIndex,
-                                    )
-                                    if (target) target.url = selectedUrl
+                                    const list = item.answerVisuals ?? []
+
+                                    for (const target of list) {
+                                      if (target.answerIndex === answerIndex) {
+                                        target.url = selectedUrl
+
+                                        break
+                                      }
+                                    }
                                   })
                                 })
                               }}
@@ -474,7 +496,10 @@ export const EditorEnhancementPanel = ({
                                 const target = item.answerVisuals?.find(
                                   (v) => v.answerIndex === answerIndex,
                                 )
-                                if (target) target.alt = alt
+
+                                if (target) {
+                                  target.alt = alt
+                                }
                               })
                             }}
                             className="flex-1 rounded-lg border border-neutral-300 bg-white p-1.5 text-xs dark:border-neutral-700 dark:bg-neutral-800"
@@ -539,7 +564,9 @@ export const EditorEnhancementPanel = ({
                     onChange={(e) => {
                       const kind = e.target.value as Interlude["kind"]
                       updateCurrentQuestionItem((item) => {
-                        if (item.interlude) item.interlude.kind = kind
+                        if (item.interlude) {
+                          item.interlude.kind = kind
+                        }
                       })
                     }}
                     className="w-full rounded-lg border border-neutral-300 bg-white p-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
@@ -561,7 +588,9 @@ export const EditorEnhancementPanel = ({
                     onChange={(e) => {
                       const advance = e.target.value as "auto" | "manual"
                       updateCurrentQuestionItem((item) => {
-                        if (item.interlude) item.interlude.advance = advance
+                        if (item.interlude) {
+                          item.interlude.advance = advance
+                        }
                       })
                     }}
                     className="w-full rounded-lg border border-neutral-300 bg-white p-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
@@ -584,7 +613,9 @@ export const EditorEnhancementPanel = ({
                     onChange={(e) => {
                       const title = e.target.value
                       updateCurrentQuestionItem((item) => {
-                        if (item.interlude) item.interlude.title = title
+                        if (item.interlude) {
+                          item.interlude.title = title
+                        }
                       })
                     }}
                     className="w-full rounded-lg border border-neutral-300 bg-white p-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
@@ -605,8 +636,9 @@ export const EditorEnhancementPanel = ({
                     onChange={(e) => {
                       const durationMs = Number(e.target.value)
                       updateCurrentQuestionItem((item) => {
-                        if (item.interlude)
+                        if (item.interlude) {
                           item.interlude.durationMs = durationMs
+                        }
                       })
                     }}
                     className="w-full rounded-lg border border-neutral-300 bg-white p-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
@@ -626,7 +658,9 @@ export const EditorEnhancementPanel = ({
                         onChange={(e) => {
                           const url = e.target.value
                           updateCurrentQuestionItem((item) => {
-                            if (item.interlude) item.interlude.url = url
+                            if (item.interlude) {
+                              item.interlude.url = url
+                            }
                           })
                         }}
                         className="flex-1 rounded-lg border border-neutral-300 bg-white p-2 text-sm dark:border-neutral-700 dark:bg-neutral-800"
@@ -637,7 +671,9 @@ export const EditorEnhancementPanel = ({
                           onClick={() => {
                             onOpenMediaPicker((url) => {
                               updateCurrentQuestionItem((item) => {
-                                if (item.interlude) item.interlude.url = url
+                                if (item.interlude) {
+                                  item.interlude.url = url
+                                }
                               })
                             })
                           }}
@@ -913,12 +949,7 @@ export const EditorEnhancementPanel = ({
 
             <div className="grid grid-cols-1 gap-3">
               {CUE_IDS.map((cueId) => {
-                const setting: AudioCueSetting = extras.audio.cues[cueId] ?? {
-                  source: "default",
-                  volume: 0.8,
-                  enabled: true,
-                  loop: cueId === "answersMusic",
-                }
+                const setting: AudioCueSetting = extras.audio.cues[cueId]
 
                 return (
                   <div
@@ -1043,6 +1074,12 @@ export const EditorEnhancementPanel = ({
                   const visual = currentPerQuestion?.answerVisuals?.find(
                     (v) => v.answerIndex === idx,
                   )
+                  const choiceColors = [
+                    "bg-red-500",
+                    "bg-blue-500",
+                    "bg-amber-500",
+                    "bg-green-500",
+                  ]
 
                   return (
                     <RichAnswerCard
@@ -1050,15 +1087,7 @@ export const EditorEnhancementPanel = ({
                       label={String.fromCharCode(65 + idx)}
                       text={ans}
                       visual={visual}
-                      colorClass={
-                        idx === 0
-                          ? "bg-red-500"
-                          : idx === 1
-                            ? "bg-blue-500"
-                            : idx === 2
-                              ? "bg-amber-500"
-                              : "bg-green-500"
-                      }
+                      colorClass={choiceColors[idx % choiceColors.length]}
                     />
                   )
                 })}

@@ -80,7 +80,10 @@ const ConfigManageQuizz = () => {
     try {
       const client = new CompositeApiClient()
       const bundle = await client.exportQuizBundle(id)
-      downloadJson(bundle, `${bundle.quizz.subject}.bundle.json`)
+      const subject =
+        (bundle.quizz as { subject?: string } | null)?.subject ?? id
+
+      downloadJson(bundle, `${subject}.bundle.json`)
       toast.success(t("extensions:bundle.exportEnhanced"))
     } catch (error) {
       onError(error as Error, "errors:quizz.notFound")
@@ -98,7 +101,7 @@ const ConfigManageQuizz = () => {
 
     reader.onload = async (event) => {
       try {
-        const parsed = JSON.parse(event.target?.result as string)
+        const parsed: unknown = JSON.parse(event.target?.result as string)
 
         if (isEnhancedBundle(parsed)) {
           const client = new CompositeApiClient()

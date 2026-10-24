@@ -9,21 +9,6 @@ export interface ConflictModalProps {
   onCancel: () => void
 }
 
-const clsx = (...classes: unknown[]): string =>
-  classes
-    .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
-      if (typeof c === "object") {
-        return Object.entries(c)
-          .filter(([, v]) => Boolean(v))
-          .map(([k]) => k)
-      }
-      return []
-    })
-    .join(" ")
-
 /**
  * ConflictModal provides visible 409 conflict handling per product decisions.
  * Displays when a concurrent edit has incremented the server revision.

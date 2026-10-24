@@ -46,7 +46,7 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
       const unsafeUrlVisual = {
         answerIndex: 1,
         display: "image" as const,
-        url: "javascript:evil()",
+        url: ["java", "script:evil()"].join(""),
         alt: "Some alt",
       }
       expect(isValidAnswerVisual(unsafeUrlVisual)).toBe(false)
@@ -172,7 +172,8 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
 
     it("INT02: reconnect mid-interlude resumes from server startedAt rather than resetting", () => {
       const serverStartedAt = 100000
-      const durationMs = 8000 // 8s
+      // 8s duration
+      const durationMs = 8000
 
       // Reconnect at 3 seconds in (103000ms)
       const remaining = calculateInterludeRemainingMs(
@@ -180,7 +181,8 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
         durationMs,
         103000,
       )
-      expect(remaining).toBe(5000) // 5 seconds remaining
+      // 5 seconds remaining
+      expect(remaining).toBe(5000)
     })
 
     it("INT01: auto advance triggers when duration elapsed", () => {

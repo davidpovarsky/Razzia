@@ -214,7 +214,8 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
 
     it("INT02: reconnect mid-interlude resumes from server startedAt without resetting", () => {
       const startedAt = 100000
-      const durationMs = 10000 // 10 seconds total
+      // 10 seconds total
+      const durationMs = 10000
 
       // Client reconnects at 104000 (4 seconds elapsed)
       const reconnectTime = 104000
@@ -231,7 +232,8 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
     it("INT02: clamp remaining to 0 if reconnected after interlude ended", () => {
       const startedAt = 100000
       const durationMs = 5000
-      const lateReconnect = 110000 // 10s elapsed > 5s
+      // 10s elapsed > 5s
+      const lateReconnect = 110000
 
       expect(
         calculateInterludeRemainingMs(startedAt, durationMs, lateReconnect),
@@ -250,15 +252,19 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       const players = ["p1", "p2", "p3", "p4", "p5", "p6", "p7", "p8"]
       const assignments = assignRoundRobin(teams, players)
 
-      const redCount = Object.values(assignments).filter(
-        (t) => t === "team-red",
-      ).length
-      const blueCount = Object.values(assignments).filter(
-        (t) => t === "team-blue",
-      ).length
-      const greenCount = Object.values(assignments).filter(
-        (t) => t === "team-green",
-      ).length
+      let redCount = 0
+      let blueCount = 0
+      let greenCount = 0
+
+      for (const t of Object.values(assignments)) {
+        if (t === "team-red") {
+          redCount += 1
+        } else if (t === "team-blue") {
+          blueCount += 1
+        } else if (t === "team-green") {
+          greenCount += 1
+        }
+      }
 
       expect(redCount).toBe(3)
       expect(blueCount).toBe(3)
@@ -291,7 +297,8 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       expect(result[0].team.name).toBe("Alpha Team")
       expect(result[1].team.name).toBe("Bravo Team")
       expect(result[0].rank).toBe(1)
-      expect(result[1].rank).toBe(1) // Rank tie
+      // Rank tie
+      expect(result[1].rank).toBe(1)
     })
 
     it("TEAM02: stable assignment by clientId across socket reconnect", () => {
@@ -318,7 +325,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
         c2: "t1",
       }
 
-      // c1 is active (50 pts), c2 is disconnected (40 pts)
+      // C1 is active (50 pts), c2 is disconnected (40 pts)
       const players = [
         {
           id: "p1",

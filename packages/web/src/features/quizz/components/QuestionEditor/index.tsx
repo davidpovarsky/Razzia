@@ -12,7 +12,7 @@ import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/M
 import QuestionEditorNote from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorNote"
 import QuestionEditorTitle from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorTitle"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
-import { Sparkles, X } from "lucide-react"
+import { Sparkles } from "lucide-react"
 import { useState } from "react"
 
 const QuestionEditor = () => {
@@ -28,9 +28,6 @@ const QuestionEditor = () => {
   } = useQuizzEditor()
   const [showEnhancements, setShowEnhancements] = useState(false)
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
-  const [pendingMediaSelect, setPendingMediaSelect] = useState<
-    ((_url: string) => void) | null
-  >(null)
 
   const AnswersEditor =
     QUESTION_REGISTRY[currentQuestion.type].AnswersEditor ??
@@ -59,6 +56,7 @@ const QuestionEditor = () => {
               if (!extras) {
                 setExtras(activeExtras)
               }
+
               setShowEnhancements((prev) => !prev)
             }}
             className="flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-sm transition-all hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300"
@@ -78,8 +76,7 @@ const QuestionEditor = () => {
               currentQuestionTitle={currentQuestion.question}
               currentQuestionAnswers={currentQuestion.answers}
               onChange={(updated) => setExtras(updated)}
-              onOpenMediaPicker={(onSelect) => {
-                setPendingMediaSelect(() => onSelect)
+              onOpenMediaPicker={() => {
                 setMediaPickerOpen(true)
               }}
             />
@@ -99,7 +96,6 @@ const QuestionEditor = () => {
         open={mediaPickerOpen}
         onOpenChange={(open) => {
           setMediaPickerOpen(open)
-          if (!open) setPendingMediaSelect(null)
         }}
       />
     </div>

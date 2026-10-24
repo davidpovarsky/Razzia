@@ -33,7 +33,8 @@ export interface ProjectedTeamScore {
 export const projectTeamScores = (
   teams: TeamDefinition[],
   players: PlayerScoreSnapshot[],
-  teamAssignments: Record<string, string>, // key: player.clientId (or player.id), value: teamId
+  // Key: player.clientId (or player.id), value: teamId
+  teamAssignments: Record<string, string>,
 ): ProjectedTeamScore[] => {
   // Initialize projection accumulator for each defined team
   const teamMap = new Map<
@@ -64,15 +65,18 @@ export const projectTeamScores = (
     const lookupKey = player.clientId ?? player.id
     const assignedTeamId = teamAssignments[lookupKey]
 
-    if (assignedTeamId && teamMap.has(assignedTeamId)) {
-      const entry = teamMap.get(assignedTeamId)!
-      entry.totalPoints += player.points
-      entry.members.push({
-        id: player.id,
-        username: player.username,
-        points: player.points,
-        connected: player.connected ?? true,
-      })
+    if (assignedTeamId) {
+      const entry = teamMap.get(assignedTeamId)
+
+      if (entry) {
+        entry.totalPoints += player.points
+        entry.members.push({
+          id: player.id,
+          username: player.username,
+          points: player.points,
+          connected: player.connected ?? true,
+        })
+      }
     }
   }
 
@@ -84,7 +88,8 @@ export const projectTeamScores = (
       memberCount: members.length,
       connectedCount: members.filter((m) => m.connected).length,
       members,
-      rank: 1, // Will be computed next
+      // Will be computed next
+      rank: 1,
     }))
     .sort((a, b) => {
       // 1. Total points descending
@@ -96,6 +101,7 @@ export const projectTeamScores = (
       const nameCompare = a.team.name.localeCompare(b.team.name, undefined, {
         sensitivity: "base",
       })
+
       if (nameCompare !== 0) {
         return nameCompare
       }

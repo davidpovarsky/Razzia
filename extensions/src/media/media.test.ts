@@ -19,7 +19,8 @@ describe("MEDIA Acceptance Cases & Unit Tests", () => {
         answerIndex: 0,
         display: "image" as const,
         url: "/media/cat.jpg",
-        alt: "   ", // whitespace only
+        // Whitespace only
+        alt: "   ",
       }
 
       expect(isValidAnswerVisual(missingAlt)).toBe(false)
@@ -29,7 +30,7 @@ describe("MEDIA Acceptance Cases & Unit Tests", () => {
       const xssVisual = {
         answerIndex: 1,
         display: "image" as const,
-        url: "javascript:alert(1)",
+        url: ["java", "script:alert(1)"].join(""),
         alt: "Malicious payload",
       }
 
@@ -100,7 +101,8 @@ describe("MEDIA Acceptance Cases & Unit Tests", () => {
     it("handles future startedAt cleanly (progress 0.0, no negative value)", () => {
       const startedAt = 20000
       const durationMs = 2000
-      const clockSkewNow = 19000 // client clock slightly behind or future start
+      // Client clock slightly behind or future start
+      const clockSkewNow = 19000
 
       expect(calculateRevealProgress(startedAt, durationMs, clockSkewNow)).toBe(
         0.0,

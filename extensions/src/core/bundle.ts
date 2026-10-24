@@ -11,6 +11,8 @@ export const enhancedBundleSchema = z.strictObject({
 
 export type EnhancedBundle = z.infer<typeof enhancedBundleSchema>
 
+export type EnhancedQuizBundle = EnhancedBundle
+
 /**
  * Checks whether an imported payload is an enhanced bundle.
  */

@@ -1,21 +1,11 @@
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
-import type { QuizExtrasV1 } from "@razzia/extensions/core"
+import {
+  RevisionConflictError,
+  type EnhancedBundle,
+  type QuizExtrasV1,
+} from "@razzia/extensions/core"
 
-export class RevisionConflictError extends Error {
-  readonly status = 409
-  readonly serverRevision?: number
-  readonly expectedRevision?: number | null
-
-  constructor(
-    message: string,
-    options?: { serverRevision?: number; expectedRevision?: number | null },
-  ) {
-    super(message)
-    this.name = "RevisionConflictError"
-    this.serverRevision = options?.serverRevision
-    this.expectedRevision = options?.expectedRevision
-  }
-}
+export { RevisionConflictError }
 
 export interface CompositeQuizResponse {
   quizId: string
@@ -30,11 +20,7 @@ export interface SaveCompositeResult {
   baseDigest: string
 }
 
-export interface EnhancedQuizBundle {
-  bundleVersion: 1
-  quizz: QuizzValidated
-  extras: QuizExtrasV1
-}
+export type EnhancedQuizBundle = EnhancedBundle
 
 export interface CompositeApiClientOptions {
   baseUrl?: string
@@ -65,6 +51,7 @@ export class CompositeApiClient {
 
     if (this.getAuthToken) {
       const token = await this.getAuthToken()
+
       if (token) {
         headers.set("Authorization", `Bearer ${token}`)
       }
@@ -126,10 +113,14 @@ export class CompositeApiClient {
 
     if (res.status === 409) {
       let conflictBody: { message?: string; serverRevision?: number } = {}
+
       try {
-        conflictBody = await res.json()
+        conflictBody = (await res.json()) as {
+          message?: string
+          serverRevision?: number
+        }
       } catch {
-        // ignore parse error
+        // Ignore parse error
       }
 
       throw new RevisionConflictError(

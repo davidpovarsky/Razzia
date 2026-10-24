@@ -19,14 +19,24 @@ export interface TeamLeaderboardPanelProps {
 const clsx = (...classes: unknown[]): string =>
   classes
     .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
+      if (!c) {
+        return []
+      }
+
+      if (typeof c === "string") {
+        return [c]
+      }
+
+      if (Array.isArray(c)) {
+        return [clsx(...(c as unknown[]))]
+      }
+
       if (typeof c === "object") {
         return Object.entries(c)
           .filter(([, v]) => Boolean(v))
           .map(([k]) => k)
       }
+
       return []
     })
     .join(" ")

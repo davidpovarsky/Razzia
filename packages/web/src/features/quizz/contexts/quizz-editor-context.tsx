@@ -9,16 +9,11 @@ import {
   quizzValidator,
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
-import {
-  createDefaultQuizExtras,
-  generateQuestionId,
-  type QuizExtrasV1,
-} from "@razzia/extensions/core"
+import { generateQuestionId, type QuizExtrasV1 } from "@razzia/extensions/core"
 import {
   CompositeApiClient,
   removeQuestionFromExtras,
   reorderQuestionsInExtras,
-  synchronizeQuestionIds,
 } from "@razzia/extensions/editor"
 import {
   createContext,
@@ -130,7 +125,7 @@ export const QuizzEditorProvider = ({
           setExtras(res.extras)
         }
       })
-      .catch(() => {})
+      .catch(() => undefined)
   }, [initialData?.id])
 
   const questions = useWatch({ control, name: "questions" })

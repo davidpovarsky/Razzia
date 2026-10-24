@@ -239,7 +239,7 @@ export class RoundManager {
       subject: this.opts.quizz.subject,
     })
 
-    await sleep(3)
+    await sleep(Math.max(3, Math.ceil(1200 / SECOND_MS)))
 
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
     await this.opts.cooldown.start(3)

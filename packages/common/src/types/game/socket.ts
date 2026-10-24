@@ -96,7 +96,8 @@ export interface ServerToClientEvents {
   [EVENTS.MANAGER.LOCK_UPDATED]: (_locked: boolean) => void
 
   // Extension events
-  [EVENTS.EXTENSIONS.STATE]: (_data: unknown) => void
+  // oxlint-disable-next-line typescript/no-explicit-any
+  [EVENTS.EXTENSIONS.STATE]: (_data: any) => void
 }
 
 type ClientEventValidators = typeof clientEventValidators

@@ -9,6 +9,7 @@ import {
   type CueId,
   type ExtensionStateEnvelope,
   type Interlude,
+  type QuizExtrasV1,
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
@@ -165,7 +166,7 @@ const GameWrapper = ({
             </div>
 
             {extensionState?.phase === "interlude" &&
-            extensionState.extras?.interlude ? (
+            extensionState.extras.interlude ? (
               <div className="flex flex-1 items-center justify-center p-6">
                 <InterludePresenter
                   interlude={extensionState.extras.interlude as Interlude}
@@ -186,10 +187,13 @@ const GameWrapper = ({
               children
             )}
 
-            {extensionState?.extras?.audioCue && (
+            {extensionState?.extras.audioCue && (
               <AudioCuePlayer
                 cueId={extensionState.extras.audioCue as CueId}
-                audioExtras={extensionState.extras.audio as any}
+                audioExtras={
+                  extensionState.extras.audio as
+                    QuizExtrasV1["audio"] | undefined
+                }
               />
             )}
 
@@ -250,19 +254,25 @@ const GameWrapper = ({
                 <div className="flex items-center gap-2">
                   <p className="text-gray-800">{player?.username}</p>
                   {(() => {
-                    const teamsData = extensionState?.extras?.teams as
+                    const teamsData = extensionState?.extras.teams as
                       | {
                           teams?: TeamDefinition[]
                           assignments?: Record<string, string>
                         }
                       | undefined
                     const assignedTeamId =
-                      teamsData?.assignments?.[player?.id ?? ""]
+                      teamsData?.assignments?.[
+                        (player as { id?: string } | null)?.id ??
+                          player?.username ??
+                          ""
+                      ]
                     const assignedTeam = teamsData?.teams?.find(
-                      (t) => t.id === assignedTeamId,
+                      (team) => team.id === assignedTeamId,
                     )
 
-                    if (!assignedTeam) return null
+                    if (!assignedTeam) {
+                      return null
+                    }
 
                     return (
                       <span

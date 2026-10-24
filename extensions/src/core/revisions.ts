@@ -1,14 +1,40 @@
 export class RevisionConflictError extends Error {
   readonly currentRevision: number
   readonly expectedRevision: number | null
+  readonly status: number = 409
 
-  constructor(currentRevision: number, expectedRevision: number | null) {
-    super(
-      `Revision conflict: expected revision ${expectedRevision}, but current stored revision is ${currentRevision}`,
-    )
+  get serverRevision(): number {
+    return this.currentRevision
+  }
+
+  constructor(
+    currentOrMessage: number | string,
+    expectedOrDetails?:
+      | number
+      | null
+      | { serverRevision?: number; expectedRevision?: number | null },
+  ) {
+    if (typeof currentOrMessage === "number") {
+      const current = currentOrMessage
+      const expected = (expectedOrDetails as number | null | undefined) ?? null
+
+      super(
+        `Revision conflict: expected revision ${expected}, but current stored revision is ${current}`,
+      )
+      this.currentRevision = current
+      this.expectedRevision = expected
+    } else {
+      const message = currentOrMessage
+      const details = expectedOrDetails as
+        | { serverRevision?: number; expectedRevision?: number | null }
+        | undefined
+
+      super(message)
+      this.currentRevision = details?.serverRevision ?? 0
+      this.expectedRevision = details?.expectedRevision ?? null
+    }
+
     this.name = "RevisionConflictError"
-    this.currentRevision = currentRevision
-    this.expectedRevision = expectedRevision
   }
 }
 

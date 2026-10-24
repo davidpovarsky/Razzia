@@ -90,6 +90,7 @@ const QuizzEditorHeader = () => {
 
             return
           }
+
           onError(err as Error)
 
           return
@@ -118,13 +119,18 @@ const QuizzEditorHeader = () => {
   )
 
   const handleReloadConflict = async () => {
-    if (!quizzId) return
+    if (!quizzId) {
+      return
+    }
+
     try {
       const client = new CompositeApiClient()
       const res = await client.getQuizComposite(quizzId)
+
       if (res.exists && res.extras) {
         setExtras(res.extras)
       }
+
       setConflict(null)
       toast.success("Loaded latest quiz from server")
     } catch {
@@ -133,11 +139,15 @@ const QuizzEditorHeader = () => {
   }
 
   const handleForceOverwriteConflict = async () => {
-    if (!quizzId || !extras) return
+    if (!quizzId || !extras) {
+      return
+    }
+
     try {
       const client = new CompositeApiClient()
+      // Force overwrite
       await client.saveQuizComposite(quizzId, {
-        expectedRevision: null, // Force overwrite
+        expectedRevision: null,
         quizz: getValues(),
         extras,
       })
