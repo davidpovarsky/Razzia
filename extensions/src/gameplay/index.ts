@@ -1,2 +1,3 @@
-// Placeholder entrypoint for Tomer (gameplay) - to be implemented in Step 2
-export {}
+export * from "./leaderboard"
+
+export * from "./teams"

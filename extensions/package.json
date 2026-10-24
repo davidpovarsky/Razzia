@@ -20,7 +20,10 @@
     "./server": "./src/server/index.ts"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.9.1",
     "@razzia/common": "workspace:*",
+    "hono": "catalog:",
+    "http-status-codes": "catalog:",
     "uuid": "catalog:",
     "zod": "catalog:"
   },

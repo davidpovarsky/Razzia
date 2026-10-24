@@ -25,6 +25,7 @@ Created the additive `@razzia/extensions` workspace package under `extensions/` 
 - `@razzia/extensions/testkit` -> `./src/testkit/index.ts` (Roni placeholder)
 
 Workspace dependencies wired to:
+
 - `packages/web/package.json` (`@razzia/extensions: workspace:*`)
 - `packages/socket/package.json` (`@razzia/extensions: workspace:*`)
 - `pnpm-workspace.yaml` (added `"extensions"`)
@@ -87,6 +88,7 @@ Fully implemented shared schemas and utilities according to `12_IMPLEMENTATION_A
 All tests, builds, linting, formatting and dependency verification executed with Node 24 (`v24.22.1`) and pnpm `11.24.0`:
 
 ### A. Extension Tests
+
 ```
 $ pnpm --filter @razzia/extensions test
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tomer/extensions
@@ -101,6 +103,7 @@ Exit code: 0
 ```
 
 ### B. Root Vitest Suite (Baseline Compatibility)
+
 ```
 $ pnpm test
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tomer
@@ -112,6 +115,7 @@ Exit code: 0
 ```
 
 ### C. Workspace Build
+
 ```
 $ pnpm build
 Scope: 5 of 6 workspace projects
@@ -121,6 +125,7 @@ Exit code: 0
 ```
 
 ### D. Linting (Oxlint)
+
 ```
 $ pnpm lint
 $ oxlint
@@ -130,6 +135,7 @@ Exit code: 0
 ```
 
 ### E. Code Formatting (Prettier)
+
 ```
 $ pnpm format
 $ prettier --check . --log-level warn
@@ -137,6 +143,7 @@ Exit code: 0
 ```
 
 ### F. Frozen Lockfile Verification
+
 ```
 $ pnpm install --frozen-lockfile
 Scope: all 6 workspace projects
@@ -150,6 +157,7 @@ Exit code: 0
 ## 4. Modified & Added Files
 
 ### Shared / Package Files
+
 - `pnpm-workspace.yaml`
 - `packages/web/package.json`
 - `packages/socket/package.json`
@@ -158,6 +166,7 @@ Exit code: 0
 - `vitest.config.ts`
 
 ### Extensions Package (`extensions/`)
+
 - `extensions/.gitignore`
 - `extensions/package.json`
 - `extensions/tsconfig.json`
@@ -185,4 +194,5 @@ Exit code: 0
 - `extensions/src/testkit/index.ts`
 
 ### Documentation / Handoff
+
 - `docs/extensions/orchestration/handoffs/tomer/BOOTSTRAP.md`

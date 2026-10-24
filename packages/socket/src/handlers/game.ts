@@ -125,6 +125,12 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     withManagerGame(gameId, socket, (game) => game.advance()),
   )
 
+  socket.on(EVENTS.EXTENSIONS.COMMAND, (command) =>
+    withManagerGame(command.gameId, socket, (game) =>
+      game.handleExtensionCommand(command),
+    ),
+  )
+
   socket.on(EVENTS.MANAGER.LEAVE, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 

@@ -94,6 +94,9 @@ export interface ServerToClientEvents {
     timedOut: boolean
   }) => void
   [EVENTS.MANAGER.LOCK_UPDATED]: (_locked: boolean) => void
+
+  // Extension events
+  [EVENTS.EXTENSIONS.STATE]: (_data: unknown) => void
 }
 
 type ClientEventValidators = typeof clientEventValidators

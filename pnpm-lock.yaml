@@ -68,9 +68,18 @@ importers:
 
   extensions:
     dependencies:
+      '@hono/zod-validator':
+        specifier: ^0.9.1
+        version: 0.9.1(hono@4.13.13)(zod@4.6.6)
       '@razzia/common':
         specifier: workspace:*
         version: link:../packages/common
+      hono:
+        specifier: 'catalog:'
+        version: 4.13.13
+      http-status-codes:
+        specifier: 'catalog:'
+        version: 2.3.0
       lucide-react:
         specifier: ^1.55.0
         version: 1.55.0(@types/react@19.3.0)(react@19.3.0)

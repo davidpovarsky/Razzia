@@ -11,7 +11,13 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
-import { saveResult } from "@razzia/socket/services/config"
+import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
+import {
+  ExtensionGameSession,
+  readSidecar,
+  type PlayerScoreInfo,
+} from "@razzia/extensions/server"
+import { getPath, saveResult } from "@razzia/socket/services/config"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
@@ -43,6 +49,7 @@ class Game {
   private readonly playerManager: PlayerManager
   private readonly round: RoundManager
   private readonly cooldown: CooldownTimer
+  private readonly extensionSession: ExtensionGameSession | null
   private managerGraceTimer: NodeJS.Timeout | null = null
 
   private lastBroadcastStatus: {
@@ -69,6 +76,13 @@ class Game {
       connected: false,
     }
 
+    const quizzId = (quizz as { id?: string }).id
+    const sidecar = quizzId ? readSidecar(getPath, quizzId) : null
+
+    this.extensionSession = sidecar
+      ? new ExtensionGameSession(this.gameId, sidecar)
+      : null
+
     this.cooldown = new CooldownTimer(io, this.gameId)
 
     this.playerManager = new PlayerManager({
@@ -94,6 +108,35 @@ class Game {
       },
       onGameFinished: saveResult,
       getSettings: () => this._settings,
+      shouldShowLeaderboard: this.extensionSession
+        ? (params) => {
+            if (!this.extensionSession?.extras?.leaderboard) {
+              return false
+            }
+
+            const currentQId =
+              this.extensionSession.extras.questionIds[
+                params.currentQuestionIndex
+              ]
+            const nextQId =
+              this.extensionSession.extras.questionIds[
+                params.currentQuestionIndex + 1
+              ]
+
+            return shouldShowLeaderboard({
+              policy: this.extensionSession.extras.leaderboard,
+              gameMode: this.gameMode,
+              currentQuestionIndex: params.currentQuestionIndex,
+              totalQuestions: params.totalQuestions,
+              currentQuestionId: currentQId,
+              nextQuestionId: nextQId,
+              currentCategory: params.currentCategory,
+              nextCategory: params.nextCategory,
+              isManualRequested:
+                this.extensionSession.consumeManualLeaderboardRequest(),
+            })
+          }
+        : undefined,
     })
 
     console.log(
@@ -142,6 +185,89 @@ class Game {
     const statusData = { name: status, data }
     this.lastBroadcastStatus = statusData
     this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, statusData)
+
+    if (this.extensionSession) {
+      this.syncExtensionStatus(status)
+    }
+  }
+
+  private syncExtensionStatus(status: Status) {
+    if (!this.extensionSession) {
+      return
+    }
+
+    if (status === STATUS.SHOW_QUESTION) {
+      this.extensionSession.onQuestionStart(this.round.currentQuestionIndex)
+    } else {
+      const phaseMap: Partial<
+        Record<
+          Status,
+          | "lobby"
+          | "prepared"
+          | "question"
+          | "responses"
+          | "leaderboard"
+          | "finished"
+        >
+      > = {
+        [STATUS.SHOW_ROOM]: "lobby",
+        [STATUS.SHOW_START]: "prepared",
+        [STATUS.SHOW_PREPARED]: "prepared",
+        [STATUS.SELECT_ANSWER]: "question",
+        [STATUS.SHOW_RESULT]: "responses",
+        [STATUS.SHOW_RESPONSES]: "responses",
+        [STATUS.SHOW_LEADERBOARD]: "leaderboard",
+        [STATUS.FINISHED]: "finished",
+        [STATUS.SUMMARY]: "finished",
+      }
+
+      const phase = phaseMap[status]
+
+      if (phase) {
+        this.extensionSession.setPhase(phase)
+      }
+    }
+
+    this.broadcastExtensionState()
+  }
+
+  private broadcastExtensionState() {
+    if (!this.extensionSession) {
+      return
+    }
+
+    const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
+      clientId: p.clientId,
+      score: p.points,
+      isConnected: p.connected,
+    }))
+
+    if (this._manager.id) {
+      this.io
+        .to(this._manager.id)
+        .emit(
+          EVENTS.EXTENSIONS.STATE,
+          this.extensionSession.getStateSnapshot("manager", playerScores),
+        )
+    }
+
+    const playerSnapshot = this.extensionSession.getStateSnapshot(
+      "player",
+      playerScores,
+    )
+
+    for (const player of this.players) {
+      this.io.to(player.id).emit(EVENTS.EXTENSIONS.STATE, playerSnapshot)
+    }
+  }
+
+  handleExtensionCommand(command: unknown) {
+    if (!this.extensionSession) {
+      return
+    }
+
+    this.extensionSession.handleCommand(command, true)
+    this.broadcastExtensionState()
   }
 
   private sendStatus<T extends Status>(
@@ -169,15 +295,28 @@ class Game {
 
     if (this._settings.generatedUsernames) {
       const taken = this.playerManager.getAll().map((player) => player.username)
+      const error = this.playerManager.join(socket, createNickname(taken))
 
-      return this.playerManager.join(socket, createNickname(taken))
+      if (!error && this.extensionSession) {
+        this.extensionSession.onPlayerJoin(getClientId(socket))
+        this.broadcastExtensionState()
+      }
+
+      return error
     }
 
     if (!username) {
       return "errors:auth.usernameTooShort"
     }
 
-    return this.playerManager.join(socket, username)
+    const error = this.playerManager.join(socket, username)
+
+    if (!error && this.extensionSession) {
+      this.extensionSession.onPlayerJoin(getClientId(socket))
+      this.broadcastExtensionState()
+    }
+
+    return error
   }
 
   dispose() {
@@ -205,8 +344,15 @@ class Game {
   }
 
   kickPlayer(playerId: string) {
+    const player = this.playerManager.findById(playerId)
+
     if (this.playerManager.kick(playerId)) {
       this.playerStatus.delete(playerId)
+
+      if (this.extensionSession && player) {
+        this.extensionSession.onPlayerKicked(player.clientId)
+        this.broadcastExtensionState()
+      }
     }
   }
 
@@ -268,6 +414,19 @@ class Game {
     })
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
 
+    if (this.extensionSession) {
+      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
+        clientId: p.clientId,
+        score: p.points,
+        isConnected: p.connected,
+      }))
+
+      socket.emit(
+        EVENTS.EXTENSIONS.STATE,
+        this.extensionSession.getStateSnapshot("manager", playerScores),
+      )
+    }
+
     registry.reactivateGame(this.gameId)
     console.log(`Manager reconnected to game ${this.inviteCode}`)
   }
@@ -314,6 +473,19 @@ class Game {
       player: { username: player.username, points: player.points },
     })
     this.playerManager.broadcastCount()
+
+    if (this.extensionSession) {
+      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
+        clientId: p.clientId,
+        score: p.points,
+        isConnected: p.connected,
+      }))
+
+      socket.emit(
+        EVENTS.EXTENSIONS.STATE,
+        this.extensionSession.getStateSnapshot("player", playerScores),
+      )
+    }
 
     console.log(
       `Player ${player.username} reconnected to game ${this.inviteCode}`,

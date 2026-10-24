@@ -57,6 +57,12 @@ export interface RoundManagerOptions {
   onNewQuestion: () => void
   onGameFinished: (_result: GameResult) => void
   getSettings: () => GameSettings
+  shouldShowLeaderboard?: (params: {
+    currentQuestionIndex: number
+    currentCategory?: string
+    nextCategory?: string
+    totalQuestions: number
+  }) => boolean
 }
 
 interface RoundStep {
@@ -96,7 +102,26 @@ export class RoundManager {
       {
         name: "leaderboard",
         gameModes: [QUIZZ_MODES.QUIZ],
-        skip: () => this.isLastQuestion() || this.isSameCategoryNext(),
+        skip: () => {
+          if (this.opts.shouldShowLeaderboard) {
+            const currentCat = this.question.category?.trim()
+            const nextCat =
+              this.opts.quizz.questions[
+                this.currentQuestion + 1
+              ]?.category?.trim()
+
+            const show = this.opts.shouldShowLeaderboard({
+              currentQuestionIndex: this.currentQuestion,
+              currentCategory: currentCat,
+              nextCategory: nextCat,
+              totalQuestions: this.opts.quizz.questions.length,
+            })
+
+            return !show
+          }
+
+          return this.isLastQuestion() || this.isSameCategoryNext()
+        },
         enter: () => {
           this.showLeaderboard()
         },
@@ -111,6 +136,10 @@ export class RoundManager {
 
   isStarted(): boolean {
     return this.started
+  }
+
+  get currentQuestionIndex(): number {
+    return this.currentQuestion
   }
 
   private get question(): Question {

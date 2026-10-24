@@ -25,4 +25,16 @@ export const clientEventValidators = {
   [EVENTS.PLAYER.SELECTED_ANSWER]: gameMessageValidator.extend({
     data: z.object({ answerKeys: answerKeysValidator }),
   }),
+  [EVENTS.EXTENSIONS.COMMAND]: z.object({
+    v: z.literal(1),
+    gameId: z.string().min(1),
+    action: z.enum([
+      "SHOW_LEADERBOARD",
+      "SKIP_INTERLUDE",
+      "REVEAL_MEDIA",
+      "ASSIGN_TEAM",
+    ]),
+    payload: z.unknown().optional(),
+    requestId: z.string().min(1),
+  }),
 }

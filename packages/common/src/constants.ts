@@ -36,6 +36,10 @@ export const EVENTS = {
     SET_LOCK: "manager:setLock",
     LOCK_UPDATED: "manager:lockUpdated",
   },
+  EXTENSIONS: {
+    STATE: "extensions:state",
+    COMMAND: "extensions:command",
+  },
 } as const
 
 export const SESSION_ROLES = {
