@@ -15,6 +15,7 @@
     "@fontsource-variable/rubik": "^5.3.0",
     "@hookform/resolvers": "^5.9.1",
     "@razzia/common": "workspace:*",
+    "@razzia/extensions": "workspace:*",
     "@razzia/socket": "workspace:*",
     "@tailwindcss/vite": "^4.3.3",
     "@tanstack/react-query": "^5.104.1",

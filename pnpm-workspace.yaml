@@ -1,5 +1,6 @@
 packages:
   - "packages/*"
+  - "extensions"
 
 catalog:
   "@types/node": "^26.6.5"

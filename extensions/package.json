@@ -1,0 +1,53 @@
+{
+  "name": "@razzia/extensions",
+  "version": "4.0.1",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./core": "./src/core/index.ts",
+    "./gameplay": "./src/gameplay/index.ts",
+    "./media": "./src/media/index.ts",
+    "./presentation": "./src/presentation/index.ts",
+    "./telephony": "./src/telephony/index.ts",
+    "./testkit": "./src/testkit/index.ts",
+    "./editor": "./src/editor/index.ts",
+    "./locales": "./src/locales/index.ts",
+    "./server": "./src/server/index.ts"
+  },
+  "dependencies": {
+    "@razzia/common": "workspace:*",
+    "uuid": "catalog:",
+    "zod": "catalog:"
+  },
+  "peerDependencies": {
+    "lucide-react": "^1.55.0",
+    "motion": "^14.1.0",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
+  },
+  "peerDependenciesMeta": {
+    "lucide-react": {
+      "optional": true
+    },
+    "motion": {
+      "optional": true
+    },
+    "react": {
+      "optional": true
+    },
+    "react-dom": {
+      "optional": true
+    }
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "tsx": "^4.23.15",
+    "typescript": "catalog:",
+    "vitest": "^5.0.3"
+  }
+}
