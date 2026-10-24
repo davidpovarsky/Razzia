@@ -5,6 +5,7 @@
 - **Agent:** Tomer (Backend / Core / Integration)
 - **Phase:** Wave 1 — Step 2: Backend Storage, Composite REST API, Pure Gameplay & Upstream Server Hooks
 - **Branch:** `agent/tomer/wave1`
+- **Commit SHA:** `aee0d8f`
 - **Workspace:** `C:/Users/DAVID/Code/Razzia-worktrees/tomer`
 
 ---
