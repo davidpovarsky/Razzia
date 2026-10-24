@@ -1,29 +1,22 @@
-# PROMPT_NOAM — Razzia Wave 1
+# FINAL EXECUTION PROMPT V2 — NOAM
 
-ROLE: Engineering — Local Phone Simulator
-EXPECTED WORKTREE: C:/Users/DAVID/Code/Razzia-worktrees/noam
-EXPECTED BRANCH: agent/noam/wave1
-EXCLUSIVE OWNERSHIP: extensions/telephony/simulator/** and handoffs/noam/**
+ROLE: Real local DTMF gameplay simulator + Yemot translator
+WORKSPACE: C:/Users/DAVID/Code/Razzia-worktrees/noam
+BRANCH: agent/noam/wave1
 
-## Non-negotiable instructions
+MANDATORY: This is a CODING/TESTING/EXECUTION assignment, NOT a research/architecture assignment. The owner/ChatGPT has completed the research and frozen decisions in 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md. READ ALL FIVE fully, plus root AGENTS.md, GEMINI.md and 01_WORKTREE_PROTOCOL.md, before touching files. When these v2 docs conflict with older plans or PROMPTs, v2 prevails. Do not browse web, research vendors, compare alternatives, write an RFC instead of code, or redesign. If a detail is genuinely impossible, show failing repro/test and escalate to Tomer; implement all other tasks. Work exclusively in your precreated worktree and branch; verify path/branch/status first. Do not edit packages/**, pnpm-workspace.yaml, pnpm-lock.yaml, extension root package files, global settings, other roles' files, real .env, or shared planning docs. No push, merge, cherry-pick, rebase, git clean/reset or public network exposure. No Asana. Implement runnable code and unit tests with explicit commits and actual test evidence. Always maintain backward compatibility when extensions disabled. Handoff is role-owned WAVE1.md with tests, changed paths, hash, unresolved reproducible blockers. Do not stop after a plan; code and test.
+IMPORTANT STAGING: Tomer MUST complete the package/bootstrap commit first. If your worktree has not received that commit yet, do NOT install/edit shared config or guess paths. Ask user/Tomer to update your branch via coordinated fast-forward while your worktree is clean. Once updated, begin coding immediately.
 
-You are an INDEPENDENT main Antigravity conversation, NOT a subagent. Do the work in your OWN worktree, do not spawn subagents or switch workspaces. Owner explicitly wants parallel independent sessions, with zero concurrent edits to the same files.
-Before ANY change, read root AGENTS.md, GEMINI.md, docs/extensions/{WORKING_RULES,PRODUCT_SPEC,DESIGN_LANGUAGE,ARCHITECTURE,CODE_AUDIT,CONTRACTS,INTEGRATION_POINTS,REVIEW_DECISIONS,ACCEPTANCE_MATRIX,LOCAL_ENVIRONMENT_ACCEPTANCE_2026-10-24}.md, and docs/extensions/orchestration/{00_START_HERE,01_WORKTREE_PROTOCOL,02_OWNERSHIP_MATRIX,03_EXECUTION_WAVES,04_HANDOFF_AND_QA,05_ANTIGRAVITY_SETUP}.md. If a file is absent, stop and report; do not fabricate it.
-First run Get-Location; git rev-parse --show-toplevel; git branch --show-current; git status --short; git log -1 --oneline. Verify EXACT workspace path and branch for your role. Do not edit other worktrees, upstream packages/**, shared root docs/config, or any other agent-owned directory.
-The product is UK-first, built on upstream Razzia 4.0.1. Keep default game identical with extensions disabled, preserve all eight locales en/fr/de/es/it/ja/tr/vi, and never use Maktabah's Swift/Asana rules. Use Windows PowerShell. Node 24 is at C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64; prefer that in PATH if needed.
-Work offline/local, no provider subscriptions, no paid services, no production deployments, no public tunnel. Do not touch root .env or reveal credentials. No automatic push, PR, merge, rebase, cherry-pick, reset, git clean, branch switching, worktree creation, global config changes, or unrelated installs. If a required integration hook touches upstream, STOP and draft a precise RFC instead of editing it.
-Commit ONLY your owned files using explicit git add paths, with descriptive local commits. Handoff: docs/extensions/orchestration/handoffs/<role>/WAVE1.md, include changed paths, commit hash (can be referenced in final report if handoff committed in same commit), tests and actual results, unresolved decisions and review requests. Do not claim integration success or provider compatibility without evidence.
+## Exact coding assignment
 
-## Your concrete assignment
+IMPLEMENT extensions/src/telephony/**. Pure provider-neutral TelephonyBridge, synthetic HMAC-SHA256 MockProvider with replay TTL, 6-digit PIN, 1..4 to zero-based answerKeys, per-game/question epoch idempotency, duplicate/out-of-window rejection, 1000-session cap, redacted logs. Implement Yemot type=api GET/POST callback parser and response builder for documented read loop; NEVER claim actual carrier tested and keep real provider disabled. Implement browser/localhost keypad simulator UI or command harness inside owned module. Implement authenticated Socket.IO client using real /api/auth/session, /api/games/join and /ws login protocol, NO server-internal answer bypass. Do not connect to existing server automatically; mock fake transport in tests. Tests PHONE01-05, SEC02 and lifecycle reconnect, race, out-of-order, invalid PIN, unsupported multi/estimation/>4. Source details already in 11_RESEARCH_VERIFIED.md. Expose public index.ts. No vendor research, signup or paid numbers.
 
-Task W1-B: implement an isolated deterministic local-only phone keypad/DTMF simulation engine with no real telephone provider. Do not use production game auth or socket integration yet. Define fake inbound event shape (opaque call ID, opaque room ID, digit, provider timestamp vs local received timestamp, event ID), session states (dialed, room PIN, name/identity, answer window, disconnect, reconnect), digit buffering and per-question answer routing. Make replay/idempotency, late-answer rejection, duplicate event, out-of-order, concurrent callers, timeout and reset tests; no raw phone number persistence. Prefer pure TypeScript tests in your owned subtree; if root Vitest does not discover extensions, create an isolated test command without editing root config and record it. Contracts are provisional until Eitan G1 approval: keep spike code under extensions/telephony/simulator/spikes/ and do not expose a finalized game API. Provide reproducible mock payloads and CLI/test demonstration. DO NOT modify packages/socket or live .env, start 3000/3001, or claim real Yemot support.
+## Mandatory verification
 
-## Completion conditions
+1. Print git root, branch, baseline hash, status; verify exclusive ownership from 13_FILE_OWNERSHIP.md.
+2. Implement all owned deliverables as actual TypeScript/React/Node code and tests; no placeholders presented as finished.
+3. Run targeted test/typecheck/format/lint commands supported by bootstrap, fix errors until green. If E2E needs occupied ports, do not disrupt; report coordination needed.
+4. git diff --check; git status --short; git add ONLY owned paths; git commit with role prefix; no push.
+5. Write docs/extensions/orchestration/handoffs/noam/WAVE1.md with exact tests/exit codes, changed files, commit hash, concrete remaining integration needs and unresolved blockers. Finish with a concise Hebrew report to owner.
 
-1. Confirm correct worktree/branch and baseline commit before writing.
-2. Deliver tangible role-owned artifacts, actual tests, and a role-owned WAVE1.md handoff.
-3. No unapproved upstream/core/shared edits, no overlapping paths with another agent.
-4. Commit local changes explicitly. State what is READY, what is BLOCKED, and what needs owner/Tomer/Eitan review.
-5. Stop if an exact contract, file ownership or owner gate is unclear; do not improvise around a shared-file restriction.
-
-START NOW. Do not stop after merely restating this prompt. Inspect the real code and complete all safe, scoped Wave 1 deliverables.
+START CODING NOW once bootstrap is available. No research, no new architecture proposals, no subagents.

@@ -1,29 +1,22 @@
-# PROMPT_RONI — Razzia Wave 1
+# FINAL EXECUTION PROMPT V2 — RONI
 
-ROLE: QA — Independent Acceptance & Regression
-EXPECTED WORKTREE: C:/Users/DAVID/Code/Razzia-worktrees/roni
-EXPECTED BRANCH: agent/roni/wave1
-EXCLUSIVE OWNERSHIP: extensions/tests/** and handoffs/roni/**
+ROLE: Automated tests, fixtures, security and load runner
+WORKSPACE: C:/Users/DAVID/Code/Razzia-worktrees/roni
+BRANCH: agent/roni/wave1
 
-## Non-negotiable instructions
+MANDATORY: This is a CODING/TESTING/EXECUTION assignment, NOT a research/architecture assignment. The owner/ChatGPT has completed the research and frozen decisions in 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md. READ ALL FIVE fully, plus root AGENTS.md, GEMINI.md and 01_WORKTREE_PROTOCOL.md, before touching files. When these v2 docs conflict with older plans or PROMPTs, v2 prevails. Do not browse web, research vendors, compare alternatives, write an RFC instead of code, or redesign. If a detail is genuinely impossible, show failing repro/test and escalate to Tomer; implement all other tasks. Work exclusively in your precreated worktree and branch; verify path/branch/status first. Do not edit packages/**, pnpm-workspace.yaml, pnpm-lock.yaml, extension root package files, global settings, other roles' files, real .env, or shared planning docs. No push, merge, cherry-pick, rebase, git clean/reset or public network exposure. No Asana. Implement runnable code and unit tests with explicit commits and actual test evidence. Always maintain backward compatibility when extensions disabled. Handoff is role-owned WAVE1.md with tests, changed paths, hash, unresolved reproducible blockers. Do not stop after a plan; code and test.
+IMPORTANT STAGING: Tomer MUST complete the package/bootstrap commit first. If your worktree has not received that commit yet, do NOT install/edit shared config or guess paths. Ask user/Tomer to update your branch via coordinated fast-forward while your worktree is clean. Once updated, begin coding immediately.
 
-You are an INDEPENDENT main Antigravity conversation, NOT a subagent. Do the work in your OWN worktree, do not spawn subagents or switch workspaces. Owner explicitly wants parallel independent sessions, with zero concurrent edits to the same files.
-Before ANY change, read root AGENTS.md, GEMINI.md, docs/extensions/{WORKING_RULES,PRODUCT_SPEC,DESIGN_LANGUAGE,ARCHITECTURE,CODE_AUDIT,CONTRACTS,INTEGRATION_POINTS,REVIEW_DECISIONS,ACCEPTANCE_MATRIX,LOCAL_ENVIRONMENT_ACCEPTANCE_2026-10-24}.md, and docs/extensions/orchestration/{00_START_HERE,01_WORKTREE_PROTOCOL,02_OWNERSHIP_MATRIX,03_EXECUTION_WAVES,04_HANDOFF_AND_QA,05_ANTIGRAVITY_SETUP}.md. If a file is absent, stop and report; do not fabricate it.
-First run Get-Location; git rev-parse --show-toplevel; git branch --show-current; git status --short; git log -1 --oneline. Verify EXACT workspace path and branch for your role. Do not edit other worktrees, upstream packages/**, shared root docs/config, or any other agent-owned directory.
-The product is UK-first, built on upstream Razzia 4.0.1. Keep default game identical with extensions disabled, preserve all eight locales en/fr/de/es/it/ja/tr/vi, and never use Maktabah's Swift/Asana rules. Use Windows PowerShell. Node 24 is at C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64; prefer that in PATH if needed.
-Work offline/local, no provider subscriptions, no paid services, no production deployments, no public tunnel. Do not touch root .env or reveal credentials. No automatic push, PR, merge, rebase, cherry-pick, reset, git clean, branch switching, worktree creation, global config changes, or unrelated installs. If a required integration hook touches upstream, STOP and draft a precise RFC instead of editing it.
-Commit ONLY your owned files using explicit git add paths, with descriptive local commits. Handoff: docs/extensions/orchestration/handoffs/<role>/WAVE1.md, include changed paths, commit hash (can be referenced in final report if handoff committed in same commit), tests and actual results, unresolved decisions and review requests. Do not claim integration success or provider compatibility without evidence.
+## Exact coding assignment
 
-## Your concrete assignment
+IMPLEMENT extensions/src/testkit/** and extensions/qa/**. Build executable test suites for 14_ENGINEERING_ACCEPTANCE_CASES.md (not just written checklists), deterministic clock and fake socket/provider fixtures, auth/replay fuzz cases, 100 simulated phone clients with timing metrics p50/p95 and failure count, eight locale parity assertions, old quiz import/export and default-off regression fixtures. Create a Windows PowerShell QA runner that does NOT start/stop shared dev servers or touch port 3000/3001 unless explicit TOMER exclusive handoff. Write tests that can import public @razzia/extensions/{core,gameplay,media,presentation,telephony,editor}; if implementations absent, keep tests in testkit and label BLOCKED until merged, not PASS. Execute isolated available tests, report exact output; never change production code to force passing. Review contract adherence via assertions, not research.
 
-Task W1-D: independently audit all acceptance criteria, baseline test suite and source for edge cases. Build runnable deterministic QA fixtures/test utilities only under extensions/tests/**, plus a traceability matrix from product requirement -> H-ID -> fixture/test -> pass gate -> role owner. Include old quiz load/save/clone/reorder/delete; default leaderboard and surveys; team ties and score projection; media validation; audio mute/latency; localization in 8 languages; browser player reconnect; 100 simulated phone callers; race/replay/out-of-order, expired PIN, invalid room, cross-room isolation, provider failure, privacy. Mark unimplemented tests as PLANNED, not PASS. Do NOT modify production files or root test config, do NOT run Playwright against 3000/3001 while main game is in use. Run lightweight isolated tests if feasible; report commands/counts. Write actionable defect/RFC feedback to handoff for Tomer/Eitan.
+## Mandatory verification
 
-## Completion conditions
+1. Print git root, branch, baseline hash, status; verify exclusive ownership from 13_FILE_OWNERSHIP.md.
+2. Implement all owned deliverables as actual TypeScript/React/Node code and tests; no placeholders presented as finished.
+3. Run targeted test/typecheck/format/lint commands supported by bootstrap, fix errors until green. If E2E needs occupied ports, do not disrupt; report coordination needed.
+4. git diff --check; git status --short; git add ONLY owned paths; git commit with role prefix; no push.
+5. Write docs/extensions/orchestration/handoffs/roni/WAVE1.md with exact tests/exit codes, changed files, commit hash, concrete remaining integration needs and unresolved blockers. Finish with a concise Hebrew report to owner.
 
-1. Confirm correct worktree/branch and baseline commit before writing.
-2. Deliver tangible role-owned artifacts, actual tests, and a role-owned WAVE1.md handoff.
-3. No unapproved upstream/core/shared edits, no overlapping paths with another agent.
-4. Commit local changes explicitly. State what is READY, what is BLOCKED, and what needs owner/Tomer/Eitan review.
-5. Stop if an exact contract, file ownership or owner gate is unclear; do not improvise around a shared-file restriction.
-
-START NOW. Do not stop after merely restating this prompt. Inspect the real code and complete all safe, scoped Wave 1 deliverables.
+START CODING NOW once bootstrap is available. No research, no new architecture proposals, no subagents.

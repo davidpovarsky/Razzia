@@ -1,29 +1,22 @@
-# PROMPT_TOMER — Razzia Wave 1
+# FINAL EXECUTION PROMPT V2 — TOMER
 
-ROLE: Integration — Worktrees, Guardrails & Review
-EXPECTED WORKTREE: C:/Users/DAVID/Code/Razzia-worktrees/tomer
-EXPECTED BRANCH: agent/tomer/wave1
-EXCLUSIVE OWNERSHIP: scripts/orchestration/** and handoffs/tomer/**
+ROLE: Workspace bootstrap and only upstream integrator
+WORKSPACE: C:/Users/DAVID/Code/Razzia-worktrees/tomer
+BRANCH: agent/tomer/wave1
 
-## Non-negotiable instructions
+MANDATORY: This is a CODING/TESTING/EXECUTION assignment, NOT a research/architecture assignment. The owner/ChatGPT has completed the research and frozen decisions in 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md. READ ALL FIVE fully, plus root AGENTS.md, GEMINI.md and 01_WORKTREE_PROTOCOL.md, before touching files. When these v2 docs conflict with older plans or PROMPTs, v2 prevails. Do not browse web, research vendors, compare alternatives, write an RFC instead of code, or redesign. If a detail is genuinely impossible, show failing repro/test and escalate to Tomer; implement all other tasks. Work exclusively in your precreated worktree and branch; verify path/branch/status first. Do not edit packages/**, pnpm-workspace.yaml, pnpm-lock.yaml, extension root package files, global settings, other roles' files, real .env, or shared planning docs. No push, merge, cherry-pick, rebase, git clean/reset or public network exposure. No Asana. Implement runnable code and unit tests with explicit commits and actual test evidence. Always maintain backward compatibility when extensions disabled. Handoff is role-owned WAVE1.md with tests, changed paths, hash, unresolved reproducible blockers. Do not stop after a plan; code and test.
+IMPORTANT STAGING: Tomer MUST complete the package/bootstrap commit first. If your worktree has not received that commit yet, do NOT install/edit shared config or guess paths. Ask user/Tomer to update your branch via coordinated fast-forward while your worktree is clean. Once updated, begin coding immediately.
 
-You are an INDEPENDENT main Antigravity conversation, NOT a subagent. Do the work in your OWN worktree, do not spawn subagents or switch workspaces. Owner explicitly wants parallel independent sessions, with zero concurrent edits to the same files.
-Before ANY change, read root AGENTS.md, GEMINI.md, docs/extensions/{WORKING_RULES,PRODUCT_SPEC,DESIGN_LANGUAGE,ARCHITECTURE,CODE_AUDIT,CONTRACTS,INTEGRATION_POINTS,REVIEW_DECISIONS,ACCEPTANCE_MATRIX,LOCAL_ENVIRONMENT_ACCEPTANCE_2026-10-24}.md, and docs/extensions/orchestration/{00_START_HERE,01_WORKTREE_PROTOCOL,02_OWNERSHIP_MATRIX,03_EXECUTION_WAVES,04_HANDOFF_AND_QA,05_ANTIGRAVITY_SETUP}.md. If a file is absent, stop and report; do not fabricate it.
-First run Get-Location; git rev-parse --show-toplevel; git branch --show-current; git status --short; git log -1 --oneline. Verify EXACT workspace path and branch for your role. Do not edit other worktrees, upstream packages/**, shared root docs/config, or any other agent-owned directory.
-The product is UK-first, built on upstream Razzia 4.0.1. Keep default game identical with extensions disabled, preserve all eight locales en/fr/de/es/it/ja/tr/vi, and never use Maktabah's Swift/Asana rules. Use Windows PowerShell. Node 24 is at C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64; prefer that in PATH if needed.
-Work offline/local, no provider subscriptions, no paid services, no production deployments, no public tunnel. Do not touch root .env or reveal credentials. No automatic push, PR, merge, rebase, cherry-pick, reset, git clean, branch switching, worktree creation, global config changes, or unrelated installs. If a required integration hook touches upstream, STOP and draft a precise RFC instead of editing it.
-Commit ONLY your owned files using explicit git add paths, with descriptive local commits. Handoff: docs/extensions/orchestration/handoffs/<role>/WAVE1.md, include changed paths, commit hash (can be referenced in final report if handoff committed in same commit), tests and actual results, unresolved decisions and review requests. Do not claim integration success or provider compatibility without evidence.
+## Exact coding assignment
 
-## Your concrete assignment
+YOU EXECUTE IN TWO STAGES. STAGE 0 NOW: create @razzia/extensions package and exports exactly as 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md; add extensions workspace entry, package deps, tsconfig, vitest config, source module entrypoint placeholders with NO other agents' owned code. Update pnpm lockfile deterministically. Verify pnpm install --frozen-lockfile, pnpm test, pnpm build, pnpm lint, pnpm format; do not stop existing server or run E2E while it runs. Commit 'build(extensions): bootstrap typed workspace' locally, report hash and STOP before integration so other role branches can fast-forward cleanly. STAGE 1 AFTER ROLE HANDOFFS: cherry-pick vetted role commits into your integration worktree in dependency order; add minimal upstream hooks only YOU own: packages/socket/src/api/index.ts and game routes/handlers/RoundManager for extension metadata, event snapshots and manager commands; packages/web editor header/page, game presenter/answer renderer and i18n loading; package exports and route typing. Preserve existing base game unchanged when extras absent. Implement manager authenticated composite API, replay-safe provider bridge, team UI, audio/interludes, leaderboard policy, media reveal and editor persistence end-to-end. Run all 14_ENGINEERING_ACCEPTANCE_CASES.md plus 217+46 baseline after exclusive dev server window. Fix only your adapters and route defects; route role-owned bugs back to role. No push/deploy/real phone. In STAGE 0 do not invent new research or change product decisions. Coordinate worktree fast-forwards ONLY after all clean and user asks to proceed.
 
-Task W1-E: verify seven role worktrees and branch ownership, local-only safety, disk/RAM, repo-local LF config, root Git status, planning baseline and upstream remote. Implement safe READ-ONLY audit scripts under scripts/orchestration/** to check branch/path, allowed path changes, uncommitted work, cross-agent overlap, secret leaks by pattern (without printing values), unapproved upstream modifications, package-lock drift and test readiness. The scripts MUST NOT merge, cherry-pick, reset, delete, push, overwrite, install, alter firewall or stop dev server. Audit actual output, record per-agent status without modifying other worktrees. Create exact serial integration runbook, commit ownership handoff index, staged merge policy and hook approval checklist. Do NOT integrate or modify upstream in Wave 1. Confirm G0 only if each worktree exists and clean and baseline commit matches; report BLOCKED otherwise. Treat Eitan's RFCs as pending, not approval.
+## Mandatory verification
 
-## Completion conditions
+1. Print git root, branch, baseline hash, status; verify exclusive ownership from 13_FILE_OWNERSHIP.md.
+2. Implement all owned deliverables as actual TypeScript/React/Node code and tests; no placeholders presented as finished.
+3. Run targeted test/typecheck/format/lint commands supported by bootstrap, fix errors until green. If E2E needs occupied ports, do not disrupt; report coordination needed.
+4. git diff --check; git status --short; git add ONLY owned paths; git commit with role prefix; no push.
+5. Write docs/extensions/orchestration/handoffs/tomer/WAVE1.md with exact tests/exit codes, changed files, commit hash, concrete remaining integration needs and unresolved blockers. Finish with a concise Hebrew report to owner.
 
-1. Confirm correct worktree/branch and baseline commit before writing.
-2. Deliver tangible role-owned artifacts, actual tests, and a role-owned WAVE1.md handoff.
-3. No unapproved upstream/core/shared edits, no overlapping paths with another agent.
-4. Commit local changes explicitly. State what is READY, what is BLOCKED, and what needs owner/Tomer/Eitan review.
-5. Stop if an exact contract, file ownership or owner gate is unclear; do not improvise around a shared-file restriction.
-
-START NOW. Do not stop after merely restating this prompt. Inspect the real code and complete all safe, scoped Wave 1 deliverables.
+START CODING NOW once bootstrap is available. No research, no new architecture proposals, no subagents.

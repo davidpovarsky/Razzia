@@ -1,29 +1,22 @@
-# PROMPT_DANA — Razzia Wave 1
+# FINAL EXECUTION PROMPT V2 — DANA
 
-ROLE: Security & Privacy — Provider Boundary
-EXPECTED WORKTREE: C:/Users/DAVID/Code/Razzia-worktrees/dana
-EXPECTED BRANCH: agent/dana/wave1
-EXCLUSIVE OWNERSHIP: extensions/telephony/security/**, extensions/core/security/** and handoffs/dana/**
+ROLE: Interludes, animation timeline and custom audio
+WORKSPACE: C:/Users/DAVID/Code/Razzia-worktrees/dana
+BRANCH: agent/dana/wave1
 
-## Non-negotiable instructions
+MANDATORY: This is a CODING/TESTING/EXECUTION assignment, NOT a research/architecture assignment. The owner/ChatGPT has completed the research and frozen decisions in 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md. READ ALL FIVE fully, plus root AGENTS.md, GEMINI.md and 01_WORKTREE_PROTOCOL.md, before touching files. When these v2 docs conflict with older plans or PROMPTs, v2 prevails. Do not browse web, research vendors, compare alternatives, write an RFC instead of code, or redesign. If a detail is genuinely impossible, show failing repro/test and escalate to Tomer; implement all other tasks. Work exclusively in your precreated worktree and branch; verify path/branch/status first. Do not edit packages/**, pnpm-workspace.yaml, pnpm-lock.yaml, extension root package files, global settings, other roles' files, real .env, or shared planning docs. No push, merge, cherry-pick, rebase, git clean/reset or public network exposure. No Asana. Implement runnable code and unit tests with explicit commits and actual test evidence. Always maintain backward compatibility when extensions disabled. Handoff is role-owned WAVE1.md with tests, changed paths, hash, unresolved reproducible blockers. Do not stop after a plan; code and test.
+IMPORTANT STAGING: Tomer MUST complete the package/bootstrap commit first. If your worktree has not received that commit yet, do NOT install/edit shared config or guess paths. Ask user/Tomer to update your branch via coordinated fast-forward while your worktree is clean. Once updated, begin coding immediately.
 
-You are an INDEPENDENT main Antigravity conversation, NOT a subagent. Do the work in your OWN worktree, do not spawn subagents or switch workspaces. Owner explicitly wants parallel independent sessions, with zero concurrent edits to the same files.
-Before ANY change, read root AGENTS.md, GEMINI.md, docs/extensions/{WORKING_RULES,PRODUCT_SPEC,DESIGN_LANGUAGE,ARCHITECTURE,CODE_AUDIT,CONTRACTS,INTEGRATION_POINTS,REVIEW_DECISIONS,ACCEPTANCE_MATRIX,LOCAL_ENVIRONMENT_ACCEPTANCE_2026-10-24}.md, and docs/extensions/orchestration/{00_START_HERE,01_WORKTREE_PROTOCOL,02_OWNERSHIP_MATRIX,03_EXECUTION_WAVES,04_HANDOFF_AND_QA,05_ANTIGRAVITY_SETUP}.md. If a file is absent, stop and report; do not fabricate it.
-First run Get-Location; git rev-parse --show-toplevel; git branch --show-current; git status --short; git log -1 --oneline. Verify EXACT workspace path and branch for your role. Do not edit other worktrees, upstream packages/**, shared root docs/config, or any other agent-owned directory.
-The product is UK-first, built on upstream Razzia 4.0.1. Keep default game identical with extensions disabled, preserve all eight locales en/fr/de/es/it/ja/tr/vi, and never use Maktabah's Swift/Asana rules. Use Windows PowerShell. Node 24 is at C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64; prefer that in PATH if needed.
-Work offline/local, no provider subscriptions, no paid services, no production deployments, no public tunnel. Do not touch root .env or reveal credentials. No automatic push, PR, merge, rebase, cherry-pick, reset, git clean, branch switching, worktree creation, global config changes, or unrelated installs. If a required integration hook touches upstream, STOP and draft a precise RFC instead of editing it.
-Commit ONLY your owned files using explicit git add paths, with descriptive local commits. Handoff: docs/extensions/orchestration/handoffs/<role>/WAVE1.md, include changed paths, commit hash (can be referenced in final report if handoff committed in same commit), tests and actual results, unresolved decisions and review requests. Do not claim integration success or provider compatibility without evidence.
+## Exact coding assignment
 
-## Your concrete assignment
+IMPLEMENT extensions/src/presentation/**. Pure interlude state machine inserted after responses/optional leaderboard and before next question (never after last), stages title/image/video/countdown, auto duration 1..30 sec, manual advance, skip exactly once, snapshot resume by server startedAt and seq/epoch, cancellation on stage change. React presentation components for interlude and configurable audio cues; cue resolver maps upstream defaults to custom media, validates volume, mute, loop, autoplay restriction, missing file fallback, prevents music overlapping question audio/video. Implement SoundCueController and InterludePresenter with cleanup; no direct changes to upstream useSound calls (Tomer handles). Tests AUDIO01-02, INT01-02, pause/resume, race, duplicate command, stale seq, reduced motion, absent media, volume=0. No vendor research or speculative planning.
 
-Task W1-G: threat-model local and eventual production telephony bridge: spoofed webhook, unsigned provider timestamp, replay, nonce/idempotency, cross-room PIN abuse, identity collisions, fraudulent voting, unauthorized socket player, disconnect and late answer, DoS, secrets, raw caller number retention, UK privacy. Draft versioned verifier interface that is provider-neutral and fail-closed, with explicit UNKNOWN Yemot signing support. Create runnable pure unit test vectors for HMAC-style signed mock provider only (NOT claim Yemot supports HMAC), nonce expiry, constant-time comparison, replay cache and room isolation. Do not expose public routes or modify root .env, packages/socket, auth or firewall. Produce a privacy-by-design minimal data model and recommended local dev safeguards. RFC for future H08/H09/H22 integration, no implementation without G2.
+## Mandatory verification
 
-## Completion conditions
+1. Print git root, branch, baseline hash, status; verify exclusive ownership from 13_FILE_OWNERSHIP.md.
+2. Implement all owned deliverables as actual TypeScript/React/Node code and tests; no placeholders presented as finished.
+3. Run targeted test/typecheck/format/lint commands supported by bootstrap, fix errors until green. If E2E needs occupied ports, do not disrupt; report coordination needed.
+4. git diff --check; git status --short; git add ONLY owned paths; git commit with role prefix; no push.
+5. Write docs/extensions/orchestration/handoffs/dana/WAVE1.md with exact tests/exit codes, changed files, commit hash, concrete remaining integration needs and unresolved blockers. Finish with a concise Hebrew report to owner.
 
-1. Confirm correct worktree/branch and baseline commit before writing.
-2. Deliver tangible role-owned artifacts, actual tests, and a role-owned WAVE1.md handoff.
-3. No unapproved upstream/core/shared edits, no overlapping paths with another agent.
-4. Commit local changes explicitly. State what is READY, what is BLOCKED, and what needs owner/Tomer/Eitan review.
-5. Stop if an exact contract, file ownership or owner gate is unclear; do not improvise around a shared-file restriction.
-
-START NOW. Do not stop after merely restating this prompt. Inspect the real code and complete all safe, scoped Wave 1 deliverables.
+START CODING NOW once bootstrap is available. No research, no new architecture proposals, no subagents.

@@ -1,29 +1,22 @@
-# PROMPT_MAYA — Razzia Wave 1
+# FINAL EXECUTION PROMPT V2 — MAYA
 
-ROLE: UX — Editor, Presenter & Answer Prototypes
-EXPECTED WORKTREE: C:/Users/DAVID/Code/Razzia-worktrees/maya
-EXPECTED BRANCH: agent/maya/wave1
-EXCLUSIVE OWNERSHIP: extensions/editor/prototypes/**, extensions/design-system/**, extensions/image-answers/prototypes/** and handoffs/maya/**
+ROLE: Enhanced editor, image answers, reveals and UI
+WORKSPACE: C:/Users/DAVID/Code/Razzia-worktrees/maya
+BRANCH: agent/maya/wave1
 
-## Non-negotiable instructions
+MANDATORY: This is a CODING/TESTING/EXECUTION assignment, NOT a research/architecture assignment. The owner/ChatGPT has completed the research and frozen decisions in 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md. READ ALL FIVE fully, plus root AGENTS.md, GEMINI.md and 01_WORKTREE_PROTOCOL.md, before touching files. When these v2 docs conflict with older plans or PROMPTs, v2 prevails. Do not browse web, research vendors, compare alternatives, write an RFC instead of code, or redesign. If a detail is genuinely impossible, show failing repro/test and escalate to Tomer; implement all other tasks. Work exclusively in your precreated worktree and branch; verify path/branch/status first. Do not edit packages/**, pnpm-workspace.yaml, pnpm-lock.yaml, extension root package files, global settings, other roles' files, real .env, or shared planning docs. No push, merge, cherry-pick, rebase, git clean/reset or public network exposure. No Asana. Implement runnable code and unit tests with explicit commits and actual test evidence. Always maintain backward compatibility when extensions disabled. Handoff is role-owned WAVE1.md with tests, changed paths, hash, unresolved reproducible blockers. Do not stop after a plan; code and test.
+IMPORTANT STAGING: Tomer MUST complete the package/bootstrap commit first. If your worktree has not received that commit yet, do NOT install/edit shared config or guess paths. Ask user/Tomer to update your branch via coordinated fast-forward while your worktree is clean. Once updated, begin coding immediately.
 
-You are an INDEPENDENT main Antigravity conversation, NOT a subagent. Do the work in your OWN worktree, do not spawn subagents or switch workspaces. Owner explicitly wants parallel independent sessions, with zero concurrent edits to the same files.
-Before ANY change, read root AGENTS.md, GEMINI.md, docs/extensions/{WORKING_RULES,PRODUCT_SPEC,DESIGN_LANGUAGE,ARCHITECTURE,CODE_AUDIT,CONTRACTS,INTEGRATION_POINTS,REVIEW_DECISIONS,ACCEPTANCE_MATRIX,LOCAL_ENVIRONMENT_ACCEPTANCE_2026-10-24}.md, and docs/extensions/orchestration/{00_START_HERE,01_WORKTREE_PROTOCOL,02_OWNERSHIP_MATRIX,03_EXECUTION_WAVES,04_HANDOFF_AND_QA,05_ANTIGRAVITY_SETUP}.md. If a file is absent, stop and report; do not fabricate it.
-First run Get-Location; git rev-parse --show-toplevel; git branch --show-current; git status --short; git log -1 --oneline. Verify EXACT workspace path and branch for your role. Do not edit other worktrees, upstream packages/**, shared root docs/config, or any other agent-owned directory.
-The product is UK-first, built on upstream Razzia 4.0.1. Keep default game identical with extensions disabled, preserve all eight locales en/fr/de/es/it/ja/tr/vi, and never use Maktabah's Swift/Asana rules. Use Windows PowerShell. Node 24 is at C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64; prefer that in PATH if needed.
-Work offline/local, no provider subscriptions, no paid services, no production deployments, no public tunnel. Do not touch root .env or reveal credentials. No automatic push, PR, merge, rebase, cherry-pick, reset, git clean, branch switching, worktree creation, global config changes, or unrelated installs. If a required integration hook touches upstream, STOP and draft a precise RFC instead of editing it.
-Commit ONLY your owned files using explicit git add paths, with descriptive local commits. Handoff: docs/extensions/orchestration/handoffs/<role>/WAVE1.md, include changed paths, commit hash (can be referenced in final report if handoff committed in same commit), tests and actual results, unresolved decisions and review requests. Do not claim integration success or provider compatibility without evidence.
+## Exact coding assignment
 
-## Your concrete assignment
+IMPLEMENT extensions/src/editor/** and extensions/src/media/** using existing React, Tailwind v4, Rubik, Lucide and Motion. Typed EditorEnhancementPanel with quiz-level sections (leaderboard, teams, audio), per-question picture answers/reveal/interlude, media picker using callbacks from host existing /api/media, accessible preview and rich answer card, answer visual rendering with alt text, and RevealMedia with none/blur/pixelate/tiles/zoom and server epoch sync. Use props/callbacks and extension public APIs; no direct editing upstream forms or imports of another agent's deep path. Reuse 4 answer colours and existing UI tokens. Support all 8 locales via provided translation keys and i18next namespace; Tomer will register. Handle save errors/conflicts visibly; do not auto-overwrite sidecar. Tests MEDIA01-03, editor reorder association, reduced-motion and alt text, preview behaviour, invalid media URL. Provide exact component exports to Tomer for integration. No design research; code now.
 
-Task W1-C: inspect upstream Razzia UI and existing editor/answer/question/manager/game components and DESIGN_LANGUAGE.md. Produce a usable standalone extension-only web UX prototype or implementation-ready typed components (without editing packages/web), with user flows for simple editor, picture answers, animated question image reveals, leaderboard frequency, teams, interstitial animations, customizable SFX and telephone join. Preserve Razzia palette, Rubik, Tailwind conventions, accessibility, keyboard use, screen-reader labels and original player interactions. No native Swift/iPad-specific redesign. Write component slot contracts and exact H03/H04/H15/H16/H17/H18/H19/H20 RFCs for Tomer; do not apply hooks. Create an 8-locale key inventory and copy source, mark translation quality for review; do not modify upstream locales. Use a standalone preview that doesn't bind 3000/3001 or require installing a second UI framework. Document actual preview steps and screenshots only if really generated.
+## Mandatory verification
 
-## Completion conditions
+1. Print git root, branch, baseline hash, status; verify exclusive ownership from 13_FILE_OWNERSHIP.md.
+2. Implement all owned deliverables as actual TypeScript/React/Node code and tests; no placeholders presented as finished.
+3. Run targeted test/typecheck/format/lint commands supported by bootstrap, fix errors until green. If E2E needs occupied ports, do not disrupt; report coordination needed.
+4. git diff --check; git status --short; git add ONLY owned paths; git commit with role prefix; no push.
+5. Write docs/extensions/orchestration/handoffs/maya/WAVE1.md with exact tests/exit codes, changed files, commit hash, concrete remaining integration needs and unresolved blockers. Finish with a concise Hebrew report to owner.
 
-1. Confirm correct worktree/branch and baseline commit before writing.
-2. Deliver tangible role-owned artifacts, actual tests, and a role-owned WAVE1.md handoff.
-3. No unapproved upstream/core/shared edits, no overlapping paths with another agent.
-4. Commit local changes explicitly. State what is READY, what is BLOCKED, and what needs owner/Tomer/Eitan review.
-5. Stop if an exact contract, file ownership or owner gate is unclear; do not improvise around a shared-file restriction.
-
-START NOW. Do not stop after merely restating this prompt. Inspect the real code and complete all safe, scoped Wave 1 deliverables.
+START CODING NOW once bootstrap is available. No research, no new architecture proposals, no subagents.
