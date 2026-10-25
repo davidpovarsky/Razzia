@@ -277,9 +277,14 @@ describe("EDITOR & COMPOSITE API Acceptance Cases & Unit Tests", () => {
       })
 
       expect(postedUrl).toBe("http://localhost:3000/api/extensions/quizzes")
-      expect(postedBody?.extras.baseDigest).toHaveLength(64)
-      expect(postedBody?.extras.baseDigest).not.toBe("0".repeat(64))
-      expect(postedBody?.extras.quizId).toBe("temp-quiz")
+      const capturedExtras = (
+        postedBody as unknown as {
+          extras: { baseDigest: string; quizId: string }
+        }
+      ).extras
+      expect(capturedExtras.baseDigest).toHaveLength(64)
+      expect(capturedExtras.baseDigest).not.toBe("0".repeat(64))
+      expect(capturedExtras.quizId).toBe("temp-quiz")
       expect(result.quizId).toBe("new-minted-quiz-999")
       expect(result.revision).toBe(1)
     })

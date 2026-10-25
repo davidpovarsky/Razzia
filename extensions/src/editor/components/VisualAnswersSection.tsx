@@ -150,7 +150,7 @@ export const VisualAnswersSection = ({
                   onChange={(e) =>
                     handleModeSelect(
                       answerIndex,
-                      e.target.value as AnswerVisualDisplay,
+                      e.target.value as AnswerDisplay,
                       answerText,
                     )
                   }
