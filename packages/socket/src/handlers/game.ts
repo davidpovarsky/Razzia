@@ -126,9 +126,14 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   )
 
   socket.on(EVENTS.EXTENSIONS.COMMAND, (command) =>
-    withManagerGame(command.gameId, socket, (game) =>
-      game.handleExtensionCommand(command),
-    ),
+    withManagerGame(command.gameId, socket, (game) => {
+      try {
+        game.handleExtensionCommand(command)
+      } catch (err) {
+        const message = err instanceof Error ? err.message : String(err)
+        socket.emit(EVENTS.GAME.ERROR_MESSAGE, message)
+      }
+    }),
   )
 
   socket.on(EVENTS.MANAGER.LEAVE, ({ gameId }) => {

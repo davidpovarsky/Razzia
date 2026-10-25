@@ -24,6 +24,11 @@ import {
   STATUS,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
+import type {
+  RevealDistributionSnapshot,
+  RevealOptionDistribution,
+  EstimationDistribution,
+} from "@razzia/extensions/core"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import {
@@ -32,7 +37,7 @@ import {
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
 import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
-import sleep, { SECOND_MS } from "@razzia/socket/utils/sleep"
+import { SECOND_MS } from "@razzia/socket/utils/sleep"
 import { nanoid } from "nanoid"
 
 type BroadcastFn = <T extends Status>(
@@ -44,6 +49,14 @@ type SendFn = <T extends Status>(
   _status: T,
   _data: StatusDataMap[T],
 ) => void
+
+export interface QuestionCheckpoint {
+  questionIndex: number
+  players: Player[]
+  leaderboard: Player[]
+  tempOldLeaderboard: Player[] | null
+  questionsHistory: QuestionResult[]
+}
 
 export interface RoundManagerOptions {
   quizz: Quizz
@@ -63,6 +76,13 @@ export interface RoundManagerOptions {
     nextCategory?: string
     totalQuestions: number
   }) => boolean
+  hasInterlude?: (questionIndex: number) => boolean
+  getInterludeAdvance?: (questionIndex: number) => "auto" | "manual"
+  getInterludeDuration?: (questionIndex: number) => number
+  onInterlude?: (questionIndex: number) => void
+  getQuestionId?: (questionIndex: number) => string | undefined
+  onResultsCalculated?: (dist: RevealDistributionSnapshot) => void
+  onReplayCheckpoint?: (questionIndex: number) => void
 }
 
 interface RoundStep {
@@ -86,6 +106,11 @@ export class RoundManager {
   private tempOldLeaderboard: Player[] | null = null
   private questionsHistory: QuestionResult[] = []
   private autoAdvanceTimer: NodeJS.Timeout | null = null
+  private interludeTimer: NodeJS.Timeout | null = null
+  private generation = 0
+  private readonly activeTimeouts = new Set<NodeJS.Timeout>()
+  private readonly checkpoints = new Map<number, QuestionCheckpoint>()
+  private latestRevealDistribution: RevealDistributionSnapshot | null = null
 
   constructor(opts: RoundManagerOptions) {
     this.opts = opts
@@ -127,6 +152,25 @@ export class RoundManager {
         },
         delay: (settings) => settings.autoAdvance.leaderboardDelay,
       },
+      {
+        name: "interlude",
+        gameModes: [QUIZZ_MODES.QUIZ, QUIZZ_MODES.SURVEY],
+        skip: () => {
+          if (this.isLastQuestion()) {
+            return true
+          }
+
+          if (this.opts.hasInterlude) {
+            return !this.opts.hasInterlude(this.currentQuestion)
+          }
+
+          return true
+        },
+        enter: () => {
+          this.showInterlude()
+        },
+        delay: () => 0,
+      },
     ]
 
     this.steps = steps.filter((step) =>
@@ -140,6 +184,18 @@ export class RoundManager {
 
   get currentQuestionIndex(): number {
     return this.currentQuestion
+  }
+
+  get isCurrentlyAcceptingAnswers(): boolean {
+    return this.acceptingAnswers
+  }
+
+  get currentStepName(): string | null {
+    if (this.currentStep < 0 || this.currentStep >= this.steps.length) {
+      return null
+    }
+
+    return this.steps[this.currentStep].name
   }
 
   private get question(): Question {
@@ -165,6 +221,40 @@ export class RoundManager {
     return this.opts.quizz.gameMode === QUIZZ_MODES.SURVEY
   }
 
+  private getInterludeStepIndex(): number {
+    return this.steps.findIndex((s) => s.name === "interlude")
+  }
+
+  // ── Generation & Async Cancellation ─────────────────────────────────────
+
+  private cancellableSleep(sec: number, gen: number): Promise<boolean> {
+    if (sec <= 0) {
+      return Promise.resolve(this.generation === gen && this.started)
+    }
+
+    return new Promise((resolve) => {
+      let timeoutHandle: NodeJS.Timeout | null = null
+
+      timeoutHandle = setTimeout(() => {
+        if (timeoutHandle) {
+          this.activeTimeouts.delete(timeoutHandle)
+        }
+
+        resolve(this.generation === gen && this.started)
+      }, sec * SECOND_MS)
+
+      this.activeTimeouts.add(timeoutHandle)
+    })
+  }
+
+  private cancelPendingAsync(): void {
+    for (const timeoutHandle of this.activeTimeouts) {
+      clearTimeout(timeoutHandle)
+    }
+
+    this.activeTimeouts.clear()
+  }
+
   // ── Auto advance ─────────────────────────────────────────────────────────
 
   clearAutoAdvance(): void {
@@ -175,6 +265,13 @@ export class RoundManager {
     clearInterval(this.autoAdvanceTimer)
     this.autoAdvanceTimer = null
     this.emitAutoAdvance(null)
+  }
+
+  private clearInterludeTimer(): void {
+    if (this.interludeTimer) {
+      clearTimeout(this.interludeTimer)
+      this.interludeTimer = null
+    }
   }
 
   private emitAutoAdvance(state: { seconds: number; total: number } | null) {
@@ -208,6 +305,187 @@ export class RoundManager {
     }, SECOND_MS)
   }
 
+  // ── Checkpoint management ────────────────────────────────────────────────
+
+  private captureCheckpoint(index: number): void {
+    const playersSnapshot = this.opts.players.getAll().map((p) => ({ ...p }))
+    const leaderboardSnapshot = this.leaderboard.map((p) => ({ ...p }))
+    const tempOldLeaderboardSnapshot = this.tempOldLeaderboard
+      ? this.tempOldLeaderboard.map((p) => ({ ...p }))
+      : null
+
+    this.checkpoints.set(index, {
+      questionIndex: index,
+      players: playersSnapshot,
+      leaderboard: leaderboardSnapshot,
+      tempOldLeaderboard: tempOldLeaderboardSnapshot,
+      questionsHistory: structuredClone(this.questionsHistory),
+    })
+  }
+
+  getCheckpoints(): number[] {
+    return Array.from(this.checkpoints.keys()).sort((a, b) => a - b)
+  }
+
+  replayFromCheckpoint(targetIndex: number): boolean {
+    if (!this.started) {
+      return false
+    }
+
+    if (targetIndex < 0 || targetIndex > this.currentQuestion) {
+      return false
+    }
+
+    const cp = this.checkpoints.get(targetIndex)
+
+    if (!cp) {
+      return false
+    }
+
+    // Invalidate stale async operations
+    this.generation += 1
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.opts.cooldown.abort()
+    this.acceptingAnswers = false
+
+    // Restore players while preserving current socket IDs and connected state
+    const currentPlayers = this.opts.players.getAll()
+    const restoredPlayers = cp.players.map((saved) => {
+      const live = currentPlayers.find((p) => p.clientId === saved.clientId)
+
+      return {
+        ...saved,
+        id: live ? live.id : saved.id,
+        connected: live ? live.connected : saved.connected,
+      }
+    })
+
+    this.opts.players.replace(restoredPlayers)
+    this.leaderboard = cp.leaderboard.map((p) => ({ ...p }))
+    this.tempOldLeaderboard = cp.tempOldLeaderboard
+      ? cp.tempOldLeaderboard.map((p) => ({ ...p }))
+      : null
+    this.questionsHistory = structuredClone(cp.questionsHistory)
+    this.playersAnswers = []
+    this.latestRevealDistribution = null
+
+    // Prune later checkpoints
+    for (const k of Array.from(this.checkpoints.keys())) {
+      if (k > targetIndex) {
+        this.checkpoints.delete(k)
+      }
+    }
+
+    this.currentQuestion = targetIndex
+    this.opts.onReplayCheckpoint?.(targetIndex)
+
+    // Progress afresh into restored question
+    void this.newQuestion()
+
+    return true
+  }
+
+  getHistory(questionIndex?: number): QuestionResult[] | QuestionResult | null {
+    if (questionIndex !== undefined) {
+      return this.questionsHistory[questionIndex] ?? null
+    }
+
+    return this.questionsHistory
+  }
+
+  getRevealDistribution(): RevealDistributionSnapshot | null {
+    return this.latestRevealDistribution
+  }
+
+  // ── Authoritative Controls ──────────────────────────────────────────────
+
+  endTimer(): boolean {
+    if (!this.started || !this.acceptingAnswers) {
+      return false
+    }
+
+    this.acceptingAnswers = false
+    this.opts.cooldown.abort()
+
+    return true
+  }
+
+  nextScreen(): boolean {
+    if (!this.started) {
+      return false
+    }
+
+    // Do NOT silently skip scoring while accepting answers
+    if (this.isAskingQuestion()) {
+      return false
+    }
+
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.runStep(this.currentStep + 1)
+
+    return true
+  }
+
+  skipScreen(): boolean {
+    return this.nextScreen()
+  }
+
+  endOrSkipInterlude(): boolean {
+    if (!this.started) {
+      return false
+    }
+
+    const interludeIdx = this.getInterludeStepIndex()
+
+    if (this.currentStep !== interludeIdx) {
+      return false
+    }
+
+    this.clearInterludeTimer()
+    this.nextQuestion()
+
+    return true
+  }
+
+  skipQuestion(reason?: string): boolean {
+    if (!this.started) {
+      return false
+    }
+
+    // If question was already scored (currentStep >= 0), refuse as required by spec:
+    // refuse and request a separate Replay rollback
+    if (this.currentStep >= 0) {
+      return false
+    }
+
+    // Invalidate pending question operations
+    this.generation += 1
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.acceptingAnswers = false
+    this.opts.cooldown.abort()
+
+    // Record skipped question in history without awarding points or leaking solutions
+    this.questionsHistory.push({
+      ...this.question,
+      solutions: undefined,
+      playerAnswers: this.opts.players.getAll().map((player) => ({
+        playerName: player.username,
+        answerIds: null,
+      })),
+      ...(reason ? { note: `Skipped: ${reason}` } : {}),
+    })
+
+    this.playersAnswers = []
+    this.nextQuestion()
+
+    return true
+  }
+
   // ── Flow ─────────────────────────────────────────────────────────────────
 
   getReconnectInfo(): GameUpdateQuestion | null {
@@ -239,10 +517,21 @@ export class RoundManager {
       subject: this.opts.quizz.subject,
     })
 
-    await sleep(Math.max(3, Math.ceil(1200 / SECOND_MS)))
+    await this.cancellableSleep(
+      Math.max(3, Math.ceil(1200 / SECOND_MS)),
+      this.generation,
+    )
+
+    if (!this.started) {
+      return
+    }
 
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.START_COOLDOWN)
     await this.opts.cooldown.start(3)
+
+    if (!this.started) {
+      return
+    }
 
     void this.newQuestion()
   }
@@ -253,6 +542,7 @@ export class RoundManager {
     }
 
     this.clearAutoAdvance()
+    this.clearInterludeTimer()
 
     if (this.isAskingQuestion()) {
       this.acceptingAnswers = false
@@ -281,7 +571,12 @@ export class RoundManager {
 
     this.currentStep = index
     step.enter()
-    this.scheduleAutoAdvance(step.delay(this.opts.getSettings()))
+
+    const delay = step.delay(this.opts.getSettings())
+
+    if (delay > 0) {
+      this.scheduleAutoAdvance(delay)
+    }
   }
 
   private nextQuestion(): void {
@@ -300,7 +595,20 @@ export class RoundManager {
       return
     }
 
+    this.generation += 1
+    const gen = this.generation
+
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+
     this.currentStep = -1
+    this.acceptingAnswers = false
+    this.playersAnswers = []
+    this.latestRevealDistribution = null
+
+    // Capture pre-question checkpoint
+    this.captureCheckpoint(this.currentQuestion)
 
     this.opts.onNewQuestion()
 
@@ -315,9 +623,9 @@ export class RoundManager {
       questionType: this.question.type,
     })
 
-    await sleep(2)
+    const ok1 = await this.cancellableSleep(2, gen)
 
-    if (!this.started) {
+    if (!ok1 || this.generation !== gen || !this.started) {
       return
     }
 
@@ -335,9 +643,9 @@ export class RoundManager {
       cooldown: this.question.cooldown,
     })
 
-    await sleep(this.question.cooldown)
+    const ok2 = await this.cancellableSleep(this.question.cooldown, gen)
 
-    if (!this.started) {
+    if (!ok2 || this.generation !== gen || !this.started) {
       return
     }
 
@@ -359,7 +667,7 @@ export class RoundManager {
 
     this.acceptingAnswers = false
 
-    if (!this.started) {
+    if (this.generation !== gen || !this.started) {
       return
     }
 
@@ -391,6 +699,100 @@ export class RoundManager {
 
   private showResults(): void {
     const currentPlayers = this.opts.players.getAll()
+    const connectedPlayers = currentPlayers.filter((p) => p.connected)
+    const eligibleCount = connectedPlayers.length
+    const uniqueResponders = new Set(this.playersAnswers.map((a) => a.playerId))
+      .size
+
+    // Calculate reveal distribution data for cinematic reveal without withholding player results
+    let optionsDist: Record<number, RevealOptionDistribution> | undefined =
+      undefined
+    let estimationDist: EstimationDistribution | undefined = undefined
+
+    if (isEstimationOptions(this.question.options)) {
+      const guesses: number[] = []
+
+      for (const ans of this.playersAnswers) {
+        const val = ans.answerIds?.[0]
+
+        if (typeof val === "number" && Number.isFinite(val)) {
+          guesses.push(val)
+        }
+      }
+
+      guesses.sort((a, b) => a - b)
+      const target = this.question.solutions?.[0] ?? 0
+      let closestGuess: number | undefined = undefined
+
+      if (guesses.length > 0) {
+        closestGuess = guesses.reduce((prev, curr) =>
+          Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev,
+        )
+      }
+
+      const median =
+        guesses.length > 0 ? guesses[Math.floor(guesses.length / 2)] : undefined
+
+      estimationDist = {
+        min: this.question.options.min,
+        max: this.question.options.max,
+        target,
+        guessesCount: guesses.length,
+        closestGuess,
+        median,
+        guesses,
+      }
+    } else {
+      optionsDist = {}
+      const counts: Record<number, number> = {}
+
+      for (let i = 0; i < this.question.answers.length; i += 1) {
+        counts[i] = 0
+      }
+
+      for (const ans of this.playersAnswers) {
+        if (Array.isArray(ans.answerIds)) {
+          for (const id of ans.answerIds) {
+            if (typeof id === "number" && id in counts) {
+              counts[id] += 1
+            }
+          }
+        }
+      }
+
+      for (let i = 0; i < this.question.answers.length; i += 1) {
+        const count = counts[i]
+        const percentage =
+          uniqueResponders > 0
+            ? Math.round((count / uniqueResponders) * 100)
+            : 0
+        const isSolution = this.isSurvey()
+          ? undefined
+          : (this.question.solutions?.includes(i) ?? false)
+
+        optionsDist[i] = {
+          index: i,
+          count,
+          percentage,
+          isSolution,
+        }
+      }
+    }
+
+    this.latestRevealDistribution = {
+      questionId: this.opts.getQuestionId?.(this.currentQuestion),
+      questionIndex: this.currentQuestion,
+      questionType: this.question.type,
+      totalResponders: uniqueResponders,
+      eligiblePlayers: eligibleCount,
+      revealStartedAt: Date.now(),
+      options: optionsDist,
+      estimation: estimationDist,
+      solutions: this.isSurvey() ? undefined : this.question.solutions,
+    }
+
+    this.opts.onResultsCalculated?.(this.latestRevealDistribution)
+
     const answerCounts = countAnswers(this.playersAnswers)
 
     if (this.isSurvey()) {
@@ -428,6 +830,7 @@ export class RoundManager {
 
     this.opts.players.replace(sortedPlayers)
 
+    // Immediate personal result to each player (no delayed withholding for projector)
     sortedPlayers.forEach((player, index) => {
       const aheadPlayer = sortedPlayers[index - 1]
 
@@ -464,6 +867,35 @@ export class RoundManager {
     this.tempOldLeaderboard = null
   }
 
+  private showInterlude(): void {
+    this.clearInterludeTimer()
+    this.opts.onInterlude?.(this.currentQuestion)
+
+    const advanceMode =
+      this.opts.getInterludeAdvance?.(this.currentQuestion) ?? "manual"
+
+    if (advanceMode === "auto") {
+      const durationMs =
+        this.opts.getInterludeDuration?.(this.currentQuestion) ?? 5000
+      const gen = this.generation
+
+      this.interludeTimer = setTimeout(
+        () => {
+          this.interludeTimer = null
+
+          if (
+            this.generation === gen &&
+            this.started &&
+            this.currentStep === this.getInterludeStepIndex()
+          ) {
+            this.advance()
+          }
+        },
+        (durationMs / 1000) * SECOND_MS,
+      )
+    }
+  }
+
   private finishSurvey(): void {
     const players = this.opts.players.getAll()
 
@@ -483,6 +915,7 @@ export class RoundManager {
   private finish(): void {
     this.started = false
     this.clearAutoAdvance()
+    this.clearInterludeTimer()
 
     const finalPlayers = this.isSurvey()
       ? this.opts.players.getAll()
@@ -616,5 +1049,14 @@ export class RoundManager {
     if (connected.length > 0 && everyoneAnswered) {
       this.opts.cooldown.abort()
     }
+  }
+
+  dispose(): void {
+    this.started = false
+    this.generation += 1
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.opts.cooldown.abort()
   }
 }

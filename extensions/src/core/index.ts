@@ -12,6 +12,8 @@ export * from "./questions"
 
 export * from "./quiz-extras"
 
+export * from "./reveal"
+
 export * from "./revisions"
 
 export * from "./state"

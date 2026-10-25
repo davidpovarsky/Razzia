@@ -137,7 +137,43 @@ class Game {
             })
           }
         : undefined,
+      hasInterlude: (qIdx) =>
+        this.extensionSession?.hasInterlude(qIdx) ?? false,
+      getInterludeAdvance: (qIdx) =>
+        this.extensionSession?.getInterludeAdvance(qIdx) ?? "manual",
+      getInterludeDuration: (qIdx) =>
+        this.extensionSession?.getInterludeDuration(qIdx) ?? 5000,
+      onInterlude: (qIdx) => {
+        if (this.extensionSession) {
+          this.extensionSession.onInterludeStart(qIdx)
+          this.broadcastExtensionState()
+        }
+      },
+      getQuestionId: (qIdx) => this.extensionSession?.getQuestionId(qIdx),
+      onResultsCalculated: (dist) => {
+        if (this.extensionSession) {
+          this.extensionSession.setRevealDistribution(dist)
+          this.broadcastExtensionState()
+        }
+      },
+      onReplayCheckpoint: (qIdx) => {
+        if (this.extensionSession) {
+          this.extensionSession.onReplayCheckpoint(qIdx)
+          this.broadcastExtensionState()
+        }
+      },
     })
+
+    if (this.extensionSession) {
+      this.extensionSession.setDelegate({
+        endAnswerTimer: () => this.round.endTimer(),
+        nextScreen: () => this.round.nextScreen(),
+        skipQuestion: (reason) => this.round.skipQuestion(reason),
+        replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
+        endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
+        getHistory: (qIdx) => this.round.getHistory(qIdx),
+      })
+    }
 
     console.log(
       `New game created: ${this.inviteCode} subject: ${quizz.subject}`,
@@ -263,11 +299,13 @@ class Game {
 
   handleExtensionCommand(command: unknown) {
     if (!this.extensionSession) {
-      return
+      return { success: false }
     }
 
-    this.extensionSession.handleCommand(command, true)
+    const result = this.extensionSession.handleCommand(command, true)
     this.broadcastExtensionState()
+
+    return result
   }
 
   private sendStatus<T extends Status>(
@@ -328,8 +366,7 @@ class Game {
   }
 
   dispose() {
-    this.round.clearAutoAdvance()
-    this.cooldown.abort()
+    this.round.dispose()
     this.cancelManagerGrace()
   }
 

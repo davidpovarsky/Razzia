@@ -420,3 +420,110 @@ Commit `a11f870` touched 23 files within Maya's and Noam's ownership domains (`e
 | **Linter (Oxlint)**             | `pnpm lint`                                                       | 298 files (233 rules) | **0 warnings, 0 errors**       | **GREEN** |
 | **Code Formatter (Prettier)**   | `pnpm format`                                                     | All files             | **0 style issues**             | **GREEN** |
 | **Production Build**            | `pnpm build`                                                      | Socket + Web bundles  | **Built in 1.17s**             | **GREEN** |
+
+---
+
+# Wave 2 — Phase A: Authoritative Game Control, Interludes & Reveal Data
+
+## 1. Overview
+
+- **Agent:** Tomer (Backend / Core / Integration)
+- **Phase:** Wave 2 — Phase A: Server-Authoritative Gameplay, Interludes, Checkpoint Replay & Reveal Distribution
+- **Branch:** `agent/tomer/wave2`
+- **Worktree:** `C:/Users/DAVID/Code/Razzia-worktrees/tomer`
+- **Starting Baseline:** `c2c698a937aa17c7973b1ca975a8084ed9d53f55` (Wave 1 baseline)
+- **Status:** Complete, tested, fully green across all quality gates.
+
+---
+
+## 2. File Ownership & Touched Paths Audit
+
+Per `13_FILE_OWNERSHIP.md` and `01_SHARED_WAVE2_CONTRACT.md`, only Tomer-owned and authorized upstream hook paths were modified. **Zero** Maya-owned frontend files (`packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`) and **zero** telephony files (`extensions/src/telephony/**`) were touched.
+
+| File Path | Ownership | Action | Rationale |
+| :--- | :--- | :--- | :--- |
+| `extensions/src/core/constants.ts` | Tomer | Modified | Added Phase A command action constants (`END_ANSWER_TIMER`, `NEXT_SCREEN`, `SKIP_QUESTION`, `VIEW_HISTORY`, `REPLAY_FROM_CHECKPOINT`, `END_OR_SKIP_INTERLUDE`). |
+| `extensions/src/core/reveal.ts` | Tomer | Created | Zod schemas and TypeScript types for `RevealOptionDistribution`, `EstimationDistribution`, and `RevealDistributionSnapshot`. |
+| `extensions/src/core/commands.ts` | Tomer | Modified | Discriminated union schemas for Phase A commands with payload validation, optional `epoch`, and `requestId`. |
+| `extensions/src/core/index.ts` | Tomer | Modified | Re-exported `reveal.ts` schemas and types. |
+| `packages/common/src/validators/socket.ts` | Tomer (Hook) | Modified | Extended `EVENTS.EXTENSIONS.COMMAND` action enum validator to authorize Phase A manager commands over Socket.IO. |
+| `packages/socket/src/services/game/round-manager.ts` | Tomer (Hook) | Modified | Interlude step integration (4 kinds, auto/manual advance, skip, final-question suppression), pre-question checkpoints, atomic replay rollback, immediate player result dispatch alongside reveal distribution calculation, generation cancellation token, clean timer disposal. |
+| `packages/socket/src/services/game/index.ts` | Tomer (Hook) | Modified | Extension session delegation (`endAnswerTimer`, `nextScreen`, `skipQuestion`, `replayFromCheckpoint`, `endOrSkipInterlude`, `getHistory`), question ID resolution, reveal distribution callback, safe command handler. |
+| `packages/socket/src/handlers/game.ts` | Tomer (Hook) | Modified | Error boundary wrapping extension command handler emitting `EVENTS.GAME.ERROR_MESSAGE` on invalid phase/command. |
+| `extensions/src/server/game/session.ts` | Tomer | Modified | Interlude querying, epoch tracking, command handling with deduplication & phase enforcement, manager-only state snapshot injection (`revealDistribution`, `viewingHistory`, `interlude`). |
+| `extensions/src/server/storage/service.ts` | Tomer | Modified | Added validation throwing HTTP 400 when composite quiz `extras.questionIds.length !== baseQuiz.questions.length`. |
+| `extensions/src/server/gameplay-phase-a.test.ts` | Tomer | Created | Comprehensive 17-test suite verifying A1-A5 requirements, epoch security, idempotency, and 100 concurrent participants. |
+
+---
+
+## 3. Published Wire Formats & Contracts for Maya
+
+The following typed contracts and schemas are published in `@razzia/extensions/core` for Maya's frontend UI and projector implementation:
+
+### A. Reveal Distribution Snapshot (`RevealDistributionSnapshot`)
+```typescript
+interface RevealOptionDistribution {
+  index: number
+  count: number
+  percentage: number // 0..100
+  isSolution?: boolean
+}
+
+interface EstimationDistribution {
+  min: number
+  max: number
+  target: number
+  guessesCount: number
+  closestGuess?: number
+  median?: number
+  guesses?: number[]
+}
+
+interface RevealDistributionSnapshot {
+  questionId?: string
+  questionIndex: number
+  questionType: string
+  totalResponders: number
+  eligiblePlayers: number
+  revealStartedAt: number
+  options?: Record<number, RevealOptionDistribution>
+  estimation?: EstimationDistribution
+  solutions?: number[]
+}
+```
+
+- Accessible via `session.getStateSnapshot("manager", players).extras.revealDistribution`.
+- **Sanitized:** Never leaked to player state snapshots (`getStateSnapshot("player")`).
+- **Immediate player delivery:** Individual players receive their own `SHOW_RESULT` with score and correctness immediately upon question end, without waiting for manager projector animations.
+
+### B. Phase A Extension Commands (`extensionCommandSchema`)
+Dispatched by Manager via `EVENTS.EXTENSIONS.COMMAND` with `{ v: 1, gameId, action, payload, requestId }`:
+- `END_ANSWER_TIMER`: Manager forces early answer closure. Only valid during `SELECT_ANSWER`. Immediately ends answering and transitions to results.
+- `NEXT_SCREEN`: Advances through display phases (`SHOW_RESPONSES` -> `interlude` -> next question). Explicitly rejected during `SELECT_ANSWER` to protect active player answers.
+- `SKIP_QUESTION`: Unscored question skip without awarding or deducting points.
+- `VIEW_HISTORY`: Read-only snapshot of previous question results (`payload: { questionIndex }`). Never alters live game state. Returning to live: `payload: {}`.
+- `REPLAY_FROM_CHECKPOINT`: Atomic rollback to pre-question checkpoint (`payload: { questionIndex, confirmed: true }`). Rolls back scores and leaderboard, increments `epoch`, invalidates pending timers, and resumes question scoring cleanly.
+- `END_OR_SKIP_INTERLUDE`: Advances or skips interlude early (`payload: { reason: "manual" | "auto" | "ended" }`).
+
+### C. Server-Authoritative Interlude Integration
+- Interludes are integrated directly into `RoundManager` step progression between `SHOW_RESPONSES` and `nextQuestion`.
+- Suppressed after the final question per V1 specification rule.
+- Auto-advance interludes advance automatically when their configured duration elapses, or immediately via manager skip command.
+- Manual interludes wait indefinitely until manager advances.
+
+---
+
+## 4. Verification Evidence & Quality Gates
+
+All regression test suites and quality gates have passed cleanly:
+
+| Verification Gate | Command | Result | Status |
+| :--- | :--- | :--- | :---: |
+| **Phase A Gameplay Suite** | `pnpm --filter @razzia/extensions test src/server/gameplay-phase-a.test.ts` | **17 passed / 17 total (56ms)** | **GREEN** |
+| **Extensions Full Suite** | `pnpm --filter @razzia/extensions test` | **137 passed across 14 test files** (including 100-participant load test) | **GREEN** |
+| **Root Regression Suite** | `pnpm test` | **229 passed across 18 test files** (100% upstream compatibility) | **GREEN** |
+| **Real Telephony E2E Gate** | `src/server/real-telephony-e2e.test.ts` | **4 passed (Scenario 1-5, 6, 7, 10 all passed)** | **GREEN** |
+| **TypeScript Compilation** | `pnpm -r exec tsc --noEmit` | **0 errors across all workspaces** | **GREEN** |
+| **Linter (Oxlint)** | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm lint` | **0 warnings, 0 errors across 301 files** | **GREEN** |
+| **Code Formatting (Prettier)** | `pnpm format` | **0 issues** | **GREEN** |
+| **Production Build** | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm build` | **Clean build for socket & web** | **GREEN** |

@@ -108,6 +108,17 @@ export class CompositeStorageService {
       )
     }
 
+    const questionsCount = Array.isArray(quizz.questions)
+      ? quizz.questions.length
+      : 0
+
+    if (extras.questionIds.length !== questionsCount) {
+      throw new CompositeStorageError(
+        `Question IDs count mismatch: extras has ${extras.questionIds.length} IDs but base quiz has ${questionsCount} questions`,
+        StatusCodes.BAD_REQUEST,
+      )
+    }
+
     // 3. Verify base digest matches submitted quizz
     const actualBaseDigest = computeCanonicalBaseDigest(quizz)
 

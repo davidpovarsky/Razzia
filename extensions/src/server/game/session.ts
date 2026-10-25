@@ -4,6 +4,7 @@ import {
   type ExtensionPhase,
   type ExtensionStateEnvelope,
   type QuizExtrasV1,
+  type RevealDistributionSnapshot,
 } from "../../core/index"
 import {
   assignManual,
@@ -12,6 +13,15 @@ import {
   type PlayerScoreInfo,
   type TeamScoreProjection,
 } from "../../gameplay/index"
+
+export interface ExtensionSessionDelegate {
+  endAnswerTimer?: () => boolean
+  nextScreen?: () => boolean
+  skipQuestion?: (reason?: string) => boolean
+  replayFromCheckpoint?: (questionIndex: number) => boolean
+  endOrSkipInterlude?: (reason?: string) => boolean
+  getHistory?: (questionIndex?: number) => unknown
+}
 
 export class ExtensionGameSession {
   readonly gameId: string
@@ -23,13 +33,20 @@ export class ExtensionGameSession {
   private phase: ExtensionPhase = "lobby"
   private startedAt = Date.now()
   private teamAssignments = new Map<string, string>()
-  private revealedMedia = new Set<string>()
-  private processedRequestIds = new Set<string>()
+  private readonly revealedMedia = new Set<string>()
+  private readonly processedRequestIds = new Set<string>()
   private manualLeaderboardRequested = false
+  private latestRevealDistribution: RevealDistributionSnapshot | null = null
+  private viewingHistoryIndex: number | null = null
+  private delegate: ExtensionSessionDelegate | null = null
 
   constructor(gameId: string, extras: QuizExtrasV1 | null) {
     this.gameId = gameId
     this.extras = extras
+  }
+
+  setDelegate(delegate: ExtensionSessionDelegate | null): void {
+    this.delegate = delegate
   }
 
   get isEnabled(): boolean {
@@ -68,6 +85,59 @@ export class ExtensionGameSession {
     return this.extras.questionIds[this.currentQuestionIndex]
   }
 
+  getQuestionId(questionIndex: number): string | undefined {
+    return this.extras?.questionIds[questionIndex]
+  }
+
+  hasInterlude(questionIndex: number): boolean {
+    if (!this.extras?.questionIds) {
+      return false
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return false
+    }
+
+    return Boolean(this.extras.perQuestion[qId]?.interlude)
+  }
+
+  getInterludeAdvance(questionIndex: number): "auto" | "manual" {
+    if (!this.extras?.questionIds) {
+      return "manual"
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return "manual"
+    }
+
+    return this.extras.perQuestion[qId]?.interlude?.advance ?? "manual"
+  }
+
+  getInterludeDuration(questionIndex: number): number {
+    if (!this.extras?.questionIds) {
+      return 5000
+    }
+
+    const qId = this.extras.questionIds[questionIndex]
+
+    if (!qId) {
+      return 5000
+    }
+
+    return this.extras.perQuestion[qId]?.interlude?.durationMs ?? 5000
+  }
+
+  onInterludeStart(questionIndex: number): void {
+    this.currentQuestionIndex = questionIndex
+    this.phase = "interlude"
+    this.seq += 1
+    this.startedAt = Date.now()
+  }
+
   onPlayerJoin(clientId: string): void {
     if (!this.extras?.teams.enabled) {
       return
@@ -97,6 +167,23 @@ export class ExtensionGameSession {
     this.seq += 1
     this.startedAt = Date.now()
     this.manualLeaderboardRequested = false
+    this.viewingHistoryIndex = null
+  }
+
+  onReplayCheckpoint(questionIndex: number): void {
+    this.epoch += 1
+    this.seq += 1
+    this.currentQuestionIndex = questionIndex
+    this.phase = "prepared"
+    this.startedAt = Date.now()
+    this.manualLeaderboardRequested = false
+    this.latestRevealDistribution = null
+    this.viewingHistoryIndex = null
+  }
+
+  setRevealDistribution(dist: RevealDistributionSnapshot | null): void {
+    this.latestRevealDistribution = dist
+    this.seq += 1
   }
 
   setPhase(phase: ExtensionPhase): void {
@@ -185,6 +272,20 @@ export class ExtensionGameSession {
       }
     }
 
+    // Manager-only reveal distribution and history snapshot
+    if (forRole === "manager") {
+      if (this.latestRevealDistribution) {
+        extrasPayload.revealDistribution = this.latestRevealDistribution
+      }
+
+      if (this.viewingHistoryIndex !== null) {
+        extrasPayload.viewingHistory = {
+          index: this.viewingHistoryIndex,
+          data: this.delegate?.getHistory?.(this.viewingHistoryIndex) ?? null,
+        }
+      }
+    }
+
     return {
       v: 1,
       gameId: this.gameId,
@@ -204,7 +305,12 @@ export class ExtensionGameSession {
     rawCommand: unknown,
     isManager: boolean,
     isLobby = this.phase === "lobby",
-  ): { success: boolean; deduplicated?: boolean; action?: string } {
+  ): {
+    success: boolean
+    deduplicated?: boolean
+    action?: string
+    history?: unknown
+  } {
     if (!isManager) {
       throw new Error("errors:auth.unauthorized")
     }
@@ -221,6 +327,13 @@ export class ExtensionGameSession {
 
     if (command.gameId !== this.gameId) {
       throw new Error("errors:extensions.gameIdMismatch")
+    }
+
+    // Epoch validation if payload specifies epoch
+    const payloadEpoch = (command.payload as { epoch?: unknown }).epoch
+
+    if (typeof payloadEpoch === "number" && payloadEpoch !== this.epoch) {
+      throw new Error("errors:extensions.staleEpoch")
     }
 
     // Deduplication by requestId
@@ -271,9 +384,105 @@ export class ExtensionGameSession {
 
       case "SKIP_INTERLUDE": {
         if (this.phase === "interlude") {
-          // Will be advanced by caller
+          this.delegate?.endOrSkipInterlude?.("manual")
           this.seq += 1
         }
+
+        break
+      }
+
+      case "END_OR_SKIP_INTERLUDE": {
+        if (this.phase !== "interlude") {
+          return { success: true, deduplicated: true, action: command.action }
+        }
+
+        const ok =
+          this.delegate?.endOrSkipInterlude?.(command.payload.reason) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.interludeAdvanceFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "END_ANSWER_TIMER": {
+        if (this.phase !== "question") {
+          throw new Error("errors:extensions.cannotEndTimerOutsideAnswerPhase")
+        }
+
+        const ok = this.delegate?.endAnswerTimer?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.endTimerFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "NEXT_SCREEN": {
+        if (this.phase === "question") {
+          throw new Error("errors:extensions.cannotNextScreenDuringAnswers")
+        }
+
+        const ok = this.delegate?.nextScreen?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.nextScreenFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "SKIP_QUESTION": {
+        if (this.phase === "responses" || this.phase === "leaderboard") {
+          throw new Error("errors:extensions.cannotSkipScoredQuestion")
+        }
+
+        const ok =
+          this.delegate?.skipQuestion?.(command.payload.reason) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.skipQuestionFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "VIEW_HISTORY": {
+        this.viewingHistoryIndex = command.payload.questionIndex ?? null
+        this.seq += 1
+
+        const historyData = this.delegate?.getHistory?.(
+          command.payload.questionIndex,
+        )
+
+        return {
+          success: true,
+          action: command.action,
+          history: historyData,
+        }
+      }
+
+      case "REPLAY_FROM_CHECKPOINT": {
+        const ok =
+          this.delegate?.replayFromCheckpoint?.(
+            command.payload.questionIndex,
+          ) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.invalidCheckpoint")
+        }
+
+        this.seq += 1
 
         break
       }

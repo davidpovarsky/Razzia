@@ -74,6 +74,12 @@ export const COMMAND_ACTIONS = [
   "SKIP_INTERLUDE",
   "REVEAL_MEDIA",
   "ASSIGN_TEAM",
+  "END_ANSWER_TIMER",
+  "NEXT_SCREEN",
+  "SKIP_QUESTION",
+  "VIEW_HISTORY",
+  "REPLAY_FROM_CHECKPOINT",
+  "END_OR_SKIP_INTERLUDE",
 ] as const
 
 export type CommandAction = (typeof COMMAND_ACTIONS)[number]
