@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Var olmayan bir soruya ait üst veri tespit edildi",
     "orphanLeaderboardQuestionId": "Liderlik kuralı geçersiz bir soruyu işaret ediyor",
     "altRequiredForImage": "Resimli cevaplarda açıklama metni zorunludur"
+  },
+  "host": {
+    "endTimer": "Süreyi Bitir",
+    "nextScreen": "Sonraki Ekran",
+    "skipQuestion": "Soruyu Atla",
+    "skipQuestionConfirmTitle": "Bu soru atlansın mı?",
+    "skipQuestionConfirmDesc": "Cevaplar atılacak ve bu soru için puan verilmeyecektir.",
+    "previous": "Geçmiş",
+    "returnToLive": "Canlı Yayına Dön",
+    "replayFromHere": "Buradan Tekrar Oyna",
+    "replayConfirmTitle": "Kontrol noktasından tekrar oynatılsın mı?",
+    "replayConfirmDesc": "Uyarı: Puanlar ve lider tablosu bu soruya geri alınacaktır. Bu işlem geri alınamaz.",
+    "exit": "Çıkış",
+    "exitConfirmTitle": "Oyundan çıkılsın mı?",
+    "exitConfirmDesc": "Oyun oturumu sonlandırılacak ve tüm oyuncuların bağlantısı kesilecektir.",
+    "noHistoryAvailable": "Henüz geçmiş soru bulunmuyor.",
+    "questionNum": "Soru {{num}}",
+    "answersCount": "{{count}} cevap"
+  },
+  "reveal": {
+    "votes": "{{count}} oy",
+    "correct": "Doğru",
+    "incorrect": "Yanlış"
   }
 }

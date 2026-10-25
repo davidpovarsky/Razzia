@@ -11,6 +11,8 @@ type Props = PropsWithChildren &
     selected?: boolean
     large?: boolean
     visual?: AnswerVisual
+    percentage?: number
+    count?: number
   }
 
 const AnswerButton = ({
@@ -21,6 +23,8 @@ const AnswerButton = ({
   selected,
   large,
   visual,
+  percentage,
+  count,
   ...otherProps
 }: Props) => {
   const CorrectIcon = correct ? Check : X
@@ -38,13 +42,21 @@ const AnswerButton = ({
   return (
     <button
       className={clsx(
-        "relative flex rounded-2xl p-4 text-left sm:py-6",
+        "relative flex overflow-hidden rounded-2xl p-4 text-left sm:py-6",
         className,
       )}
       aria-label={accessibleLabel}
       {...otherProps}
     >
-      <div className="grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-3 gap-y-2 sm:content-center">
+      {percentage !== undefined && (
+        <span
+          className="pointer-events-none absolute inset-y-0 left-0 bg-white/20 transition-[width] duration-150 ease-out"
+          style={{ width: `${Math.min(100, Math.max(0, percentage))}%` }}
+          data-testid="answer-horizontal-bar"
+        />
+      )}
+
+      <div className="relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-3 gap-y-2 sm:content-center">
         <span
           className={clsx(
             "col-start-1 row-start-1 flex shrink-0 items-center justify-center bg-black/20 font-bold",
@@ -86,9 +98,26 @@ const AnswerButton = ({
             </span>
           )}
         </div>
-        {correct !== undefined && (
-          <CorrectIcon className="col-start-3 row-start-1 size-4 stroke-6 md:size-6" />
-        )}
+
+        <div className="col-start-3 row-start-1 flex items-center gap-2">
+          {percentage !== undefined && (
+            <div className="flex flex-col items-end text-right leading-tight">
+              <span className="text-base font-extrabold drop-shadow-md md:text-xl">
+                {percentage}%
+              </span>
+              {count !== undefined && (
+                <span className="text-xs font-medium text-white/80 drop-shadow-sm">
+                  {count}
+                </span>
+              )}
+            </div>
+          )}
+
+          {correct !== undefined && (
+            <CorrectIcon className="size-5 stroke-[3] md:size-7" />
+          )}
+        </div>
+
         {selected !== undefined && correct === undefined && (
           <span
             className={clsx(

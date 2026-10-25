@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Metadaten verweisen auf nicht vorhandene Frage",
     "orphanLeaderboardQuestionId": "Bestenlisten-Regel verweist auf ungültige Frage",
     "altRequiredForImage": "Alt-Text ist für Bildantworten erforderlich"
+  },
+  "host": {
+    "endTimer": "Timer beenden",
+    "nextScreen": "Nächster Bildschirm",
+    "skipQuestion": "Frage überspringen",
+    "skipQuestionConfirmTitle": "Diese Frage überspringen?",
+    "skipQuestionConfirmDesc": "Antworten werden verworfen und es werden keine Punkte vergeben.",
+    "previous": "Verlauf",
+    "returnToLive": "Zurück zum Live-Spiel",
+    "replayFromHere": "Ab hier wiederholen",
+    "replayConfirmTitle": "Ab Prüfpunkt wiederholen?",
+    "replayConfirmDesc": "Warnung: Punktestände und Rangliste werden auf diese Frage zurückgesetzt. Dies kann nicht rückgängig gemacht werden.",
+    "exit": "Beenden",
+    "exitConfirmTitle": "Spiel verlassen?",
+    "exitConfirmDesc": "Die Spielsitzung wird beendet und alle Spieler werden getrennt.",
+    "noHistoryAvailable": "Noch keine vergangenen Fragen verfügbar.",
+    "questionNum": "Frage {{num}}",
+    "answersCount": "{{count}} Antworten"
+  },
+  "reveal": {
+    "votes": "{{count}} Stimmen",
+    "correct": "Richtig",
+    "incorrect": "Falsch"
   }
 }

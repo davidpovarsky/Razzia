@@ -263,6 +263,123 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
       expect(removed.questionIds).toEqual([q1])
       expect(removed.perQuestion[newQuestionId]).toBeUndefined()
     })
+
+    it("A1: stable UUID mapping across async sidecar load preserves attachments without orphans", () => {
+      // Simulate persistent server sidecar with 2 questions and attachments
+      const serverQ1 = generateQuestionId()
+      const serverQ2 = generateQuestionId()
+      const serverExtras = createDefaultQuizExtras(
+        "q-async-1",
+        [serverQ1, serverQ2],
+        dummyDigest,
+      )
+      serverExtras.perQuestion[serverQ1] = {
+        answerVisuals: [
+          {
+            answerIndex: 0,
+            display: "image",
+            url: "/media/photo1.jpg",
+            alt: "Question 1 photo",
+          },
+        ],
+        reveal: {
+          effect: "blur",
+          durationMs: 2000,
+          trigger: "automatic",
+          audience: "all",
+        },
+      }
+      serverExtras.perQuestion[serverQ2] = {
+        interlude: {
+          kind: "title",
+          title: "Intermission",
+          durationMs: 4000,
+          advance: "auto",
+        },
+      }
+
+      // Initial transient state before sidecar arrives
+      const field0Id = "field-react-0"
+      const field1Id = "field-react-1"
+      const transientUuidMap = new Map<string, string>()
+
+      // Step 1: Before sidecar arrives, transient IDs might be minted
+      const initialIds: string[] = []
+      for (const fId of [field0Id, field1Id]) {
+        const temp = generateQuestionId()
+        transientUuidMap.set(fId, temp)
+        initialIds.push(temp)
+      }
+      expect(initialIds).toHaveLength(2)
+      expect(initialIds[0]).not.toBe(serverQ1)
+
+      // Step 2: Asynchronous sidecar arrives with serverExtras
+      // Authoritative sync: fields align to serverExtras.questionIds
+      const fields = [{ id: field0Id }, { id: field1Id }]
+      const resolvedIds: string[] = []
+      for (let idx = 0; idx < fields.length; idx += 1) {
+        const field = fields[idx]
+
+        if (serverExtras.questionIds[idx]) {
+          const persisted = serverExtras.questionIds[idx]
+          transientUuidMap.set(field.id, persisted)
+          resolvedIds.push(persisted)
+        } else {
+          resolvedIds.push(transientUuidMap.get(field.id) ?? "")
+        }
+      }
+
+      // Must now match server authoritative questionIds
+      expect(resolvedIds).toEqual([serverQ1, serverQ2])
+      expect(transientUuidMap.get(field0Id)).toBe(serverQ1)
+      expect(transientUuidMap.get(field1Id)).toBe(serverQ2)
+
+      // Step 3: Attachments correctly found under stable IDs
+      expect(
+        serverExtras.perQuestion[resolvedIds[0]].answerVisuals,
+      ).toBeDefined()
+      expect(serverExtras.perQuestion[resolvedIds[0]].reveal?.effect).toBe(
+        "blur",
+      )
+      expect(serverExtras.perQuestion[resolvedIds[1]].interlude?.title).toBe(
+        "Intermission",
+      )
+
+      // Step 4: Reorder question 1 to index 0 (swap)
+      const reorderedExtras = reorderQuestionsInExtras(serverExtras, 1, 0)
+      expect(reorderedExtras.questionIds).toEqual([serverQ2, serverQ1])
+
+      // Reordered fields simulate swap
+      const reorderedFields = [fields[1], fields[0]]
+      const reorderedIds: string[] = []
+      for (let idx = 0; idx < reorderedFields.length; idx += 1) {
+        reorderedIds.push(reorderedExtras.questionIds[idx])
+      }
+      expect(reorderedIds).toEqual([serverQ2, serverQ1])
+      expect(
+        reorderedExtras.perQuestion[reorderedIds[0]].interlude?.title,
+      ).toBe("Intermission")
+      expect(reorderedExtras.perQuestion[reorderedIds[1]].reveal?.effect).toBe(
+        "blur",
+      )
+
+      // Step 5: Duplicate question 0
+      const { extras: withDup, newQuestionId } = duplicateQuestionInExtras(
+        reorderedExtras,
+        0,
+      )
+      expect(withDup.questionIds).toHaveLength(3)
+      expect(withDup.questionIds[1]).toBe(newQuestionId)
+      // Cloned attachment preserved on duplicated question
+      expect(withDup.perQuestion[newQuestionId]?.interlude?.title).toBe(
+        "Intermission",
+      )
+
+      // Step 6: Delete duplicated question
+      const cleaned = removeQuestionFromExtras(withDup, 1)
+      expect(cleaned.questionIds).toEqual([serverQ2, serverQ1])
+      expect(cleaned.perQuestion[newQuestionId]).toBeUndefined()
+    })
   })
 
   describe("Feature-Off Regression & Team Scoring", () => {

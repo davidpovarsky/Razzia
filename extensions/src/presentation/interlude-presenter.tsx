@@ -1,5 +1,5 @@
 import type { Interlude } from "@razzia/extensions/core"
-import { useEffect, useMemo, useState } from "react"
+import { useEffect, useMemo, useRef, useState } from "react"
 import {
   calculateInterludeRemainingMs,
   processInterludeSkip,
@@ -43,9 +43,11 @@ const clsx = (...classes: unknown[]): string =>
 /**
  * InterludePresenter displays interlude slides between question results and the next question.
  * Supports title, image, video, and countdown screen kinds.
+ * - Full-screen cinematic presentation suitable for an event projection
  * - Resumes from server startedAt (snapshot resilience across reconnects)
  * - Auto advance vs manual manager trigger
  * - Manager skip action executed exactly once
+ * - Reliable unmount media disposal
  */
 export const InterludePresenter = ({
   interlude,
@@ -58,6 +60,8 @@ export const InterludePresenter = ({
   const [skipState, setSkipState] = useState<InterludeSkipState>({
     hasSkipped: false,
   })
+  const hasAdvancedRef = useRef(false)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
 
   // Calculate initial remaining ms
   const initialRemaining = useMemo(
@@ -76,7 +80,12 @@ export const InterludePresenter = ({
       )
       setRemainingMs(remaining)
 
-      if (remaining <= 0 && interlude.advance === "auto") {
+      if (
+        remaining <= 0 &&
+        interlude.advance === "auto" &&
+        !hasAdvancedRef.current
+      ) {
+        hasAdvancedRef.current = true
         clearInterval(interval)
         onAdvance?.()
       }
@@ -84,6 +93,19 @@ export const InterludePresenter = ({
 
     return () => clearInterval(interval)
   }, [serverStartedAt, interlude.durationMs, interlude.advance, onAdvance])
+
+  // Stop video media on unmount
+  useEffect(() => {
+    const videoEl = videoRef.current
+
+    return () => {
+      if (videoEl) {
+        videoEl.pause()
+        videoEl.removeAttribute("src")
+        videoEl.load()
+      }
+    }
+  }, [])
 
   const handleSkipClick = () => {
     const { state: nextState, shouldEmitSkip } = processInterludeSkip(skipState)
@@ -95,11 +117,15 @@ export const InterludePresenter = ({
   }
 
   const remainingSeconds = Math.max(0, Math.ceil(remainingMs / 1000))
+  const progressRatio = Math.max(
+    0,
+    Math.min(1, remainingMs / (interlude.durationMs || 1)),
+  )
 
   return (
     <div
       className={clsx(
-        "relative flex min-h-[400px] w-full max-w-4xl flex-col items-center justify-center rounded-2xl bg-black/40 p-8 text-center text-white backdrop-blur-md",
+        "relative flex min-h-[500px] w-full max-w-6xl flex-1 flex-col items-center justify-between rounded-3xl border border-white/10 bg-black/60 p-6 text-center text-white shadow-2xl backdrop-blur-xl sm:p-12",
         className,
       )}
       data-testid="interlude-presenter"
@@ -108,69 +134,87 @@ export const InterludePresenter = ({
     >
       {/* Title / Heading */}
       {interlude.title && (
-        <h2 className="mb-4 text-3xl font-extrabold drop-shadow-md sm:text-5xl">
+        <h2 className="mb-4 max-w-4xl text-3xl font-black tracking-tight drop-shadow-2xl sm:text-5xl md:text-6xl">
           {interlude.title}
         </h2>
       )}
 
       {/* Slide Content based on kind */}
-      <div className="my-6 flex flex-1 flex-col items-center justify-center">
+      <div className="my-6 flex w-full flex-1 flex-col items-center justify-center">
         {interlude.kind === "image" && interlude.url && (
-          <img
-            src={interlude.url}
-            alt={interlude.title ?? "Interlude slide"}
-            className="max-h-72 w-auto rounded-xl object-contain shadow-2xl"
-            data-testid="interlude-image"
-          />
+          <div className="relative max-h-[55vh] max-w-[85vw] overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
+            <img
+              src={interlude.url}
+              alt={interlude.title ?? "Interlude slide"}
+              className="max-h-[55vh] w-auto max-w-[85vw] rounded-2xl object-contain shadow-2xl"
+              data-testid="interlude-image"
+            />
+          </div>
         )}
 
         {interlude.kind === "video" && interlude.url && (
-          <video
-            src={interlude.url}
-            autoPlay
-            controls
-            playsInline
-            className="max-h-72 w-auto rounded-xl shadow-2xl"
-            data-testid="interlude-video"
-          />
+          <div className="relative max-h-[55vh] max-w-[85vw] overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
+            <video
+              ref={videoRef}
+              src={interlude.url}
+              autoPlay
+              controls
+              playsInline
+              className="max-h-[55vh] w-auto max-w-[85vw] rounded-2xl shadow-2xl"
+              data-testid="interlude-video"
+            />
+          </div>
         )}
 
         {interlude.kind === "countdown" && (
-          <div
-            className="flex size-32 items-center justify-center rounded-full bg-white/20 text-6xl font-black tabular-nums shadow-inner sm:size-44 sm:text-7xl"
-            data-testid="interlude-countdown-circle"
-          >
-            {remainingSeconds}
+          <div className="relative flex items-center justify-center">
+            <div
+              className="flex size-44 items-center justify-center rounded-full border-4 border-white/40 bg-black/40 text-7xl font-black tabular-nums shadow-2xl backdrop-blur-md transition-transform duration-200 sm:size-56 sm:border-8 sm:text-8xl md:size-64 md:text-9xl"
+              data-testid="interlude-countdown-circle"
+            >
+              {remainingSeconds}
+            </div>
           </div>
         )}
 
         {interlude.kind === "title" && !interlude.title && (
-          <p className="text-xl font-medium text-white/80">...</p>
+          <p className="text-2xl font-medium text-white/70">...</p>
         )}
       </div>
 
-      {/* Bottom Bar: Timer indicator & Manager Skip control */}
-      <div className="mt-4 flex w-full items-center justify-between border-t border-white/20 pt-4">
-        <span className="text-sm font-semibold tracking-wide text-white/70">
-          {interlude.advance === "auto"
-            ? `${remainingSeconds}s`
-            : "Awaiting Host"}
-        </span>
-
-        {isManager && (
-          <button
-            type="button"
-            onClick={handleSkipClick}
-            disabled={skipState.hasSkipped}
-            className={clsx(
-              "rounded-lg bg-white px-4 py-2 font-bold text-black transition-opacity hover:bg-white/90",
-              skipState.hasSkipped && "cursor-not-allowed opacity-50",
-            )}
-            data-testid="interlude-skip-button"
-          >
-            {skipState.hasSkipped ? "Skipped" : "Skip Interlude"}
-          </button>
+      {/* Bottom Bar: Timer indicator / Progress & Manager Skip control */}
+      <div className="mt-4 flex w-full flex-col gap-3 border-t border-white/20 pt-4">
+        {interlude.advance === "auto" && (
+          <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+            <div
+              className="h-full rounded-full bg-white transition-all duration-100 ease-linear"
+              style={{ width: `${progressRatio * 100}%` }}
+            />
+          </div>
         )}
+
+        <div className="flex w-full items-center justify-between">
+          <span className="text-sm font-semibold tracking-wide text-white/70">
+            {interlude.advance === "auto"
+              ? `${remainingSeconds}s remaining`
+              : "Awaiting Host to advance"}
+          </span>
+
+          {isManager && (
+            <button
+              type="button"
+              onClick={handleSkipClick}
+              disabled={skipState.hasSkipped}
+              className={clsx(
+                "rounded-lg bg-white px-5 py-2.5 font-bold text-black shadow-md transition-opacity hover:bg-white/90",
+                skipState.hasSkipped && "cursor-not-allowed opacity-50",
+              )}
+              data-testid="interlude-skip-button"
+            >
+              {skipState.hasSkipped ? "Skipped" : "Skip Interlude"}
+            </button>
+          )}
+        </div>
       </div>
     </div>
   )

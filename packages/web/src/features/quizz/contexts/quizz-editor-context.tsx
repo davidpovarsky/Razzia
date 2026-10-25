@@ -12,6 +12,7 @@ import {
 import { generateQuestionId, type QuizExtrasV1 } from "@razzia/extensions/core"
 import {
   CompositeApiClient,
+  duplicateQuestionInExtras,
   removeQuestionFromExtras,
   reorderQuestionsInExtras,
 } from "@razzia/extensions/editor"
@@ -62,6 +63,7 @@ interface QuizzEditorContextType {
   addQuestion: () => void
   removeQuestion: (_index: number) => void
   reorderQuestions: (_from: number, _to: number) => void
+  duplicateQuestion?: (_index: number) => void
   updateQuestion: (_index: number, _updates: Partial<Question>) => void
   questionPath: <K extends FieldPath<Question>>(
     _field: K,
@@ -100,7 +102,7 @@ export const QuizzEditorProvider = ({
   })
 
   const { control, getValues, setValue, formState } = form
-  const { fields, append, remove, move } = useFieldArray({
+  const { fields, append, remove, move, insert } = useFieldArray({
     control,
     name: "questions",
   })
@@ -135,11 +137,35 @@ export const QuizzEditorProvider = ({
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
   const [questionUuidMap] = useState(() => new Map<string, string>())
+
+  // Synchronize persisted question UUIDs from extras into questionUuidMap
+  useEffect(() => {
+    if (!extras?.questionIds) {
+      return
+    }
+
+    fields.forEach((field, idx) => {
+      const persistedUuid = extras.questionIds[idx]
+
+      if (persistedUuid) {
+        questionUuidMap.set(field.id, persistedUuid)
+      }
+    })
+  }, [extras?.questionIds, fields, questionUuidMap])
+
+  // Derive stable questionIds: priority to extras.questionIds[idx], then questionUuidMap, then minted UUID
   const questionIds = fields.map((field, idx) => {
+    if (extras?.questionIds[idx]) {
+      const persisted = extras.questionIds[idx]
+      questionUuidMap.set(field.id, persisted)
+
+      return persisted
+    }
+
     let uuid = questionUuidMap.get(field.id)
 
     if (!uuid) {
-      uuid = extras?.questionIds[idx] ?? generateQuestionId()
+      uuid = generateQuestionId()
       questionUuidMap.set(field.id, uuid)
     }
 
@@ -148,6 +174,7 @@ export const QuizzEditorProvider = ({
 
   const addQuestion = () => {
     const category = questions.at(-1)?.category
+    const newUuid = generateQuestionId()
 
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
     setCurrentIndex(questions.length)
@@ -155,12 +182,18 @@ export const QuizzEditorProvider = ({
     if (extras) {
       setExtras({
         ...extras,
-        questionIds: [...extras.questionIds, generateQuestionId()],
+        questionIds: [...extras.questionIds, newUuid],
       })
     }
   }
 
   const removeQuestion = (index: number) => {
+    const fieldId = fields[index]?.id
+
+    if (fieldId) {
+      questionUuidMap.delete(fieldId)
+    }
+
     flushSync(() => setRemovingFrom(questions))
     remove(index)
 
@@ -187,6 +220,18 @@ export const QuizzEditorProvider = ({
 
     if (extras) {
       setExtras(reorderQuestionsInExtras(extras, from, to))
+    }
+  }
+
+  const duplicateQuestion = (index: number) => {
+    const questionToClone = questions[index]
+    const cloned: Question = structuredClone(questionToClone)
+    insert(index + 1, cloned)
+    setCurrentIndex(index + 1)
+
+    if (extras) {
+      const { extras: newExtras } = duplicateQuestionInExtras(extras, index)
+      setExtras(newExtras)
     }
   }
 
@@ -221,6 +266,7 @@ export const QuizzEditorProvider = ({
           addQuestion,
           removeQuestion,
           reorderQuestions,
+          duplicateQuestion,
           updateQuestion,
           questionPath,
         }}

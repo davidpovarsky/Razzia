@@ -128,7 +128,7 @@ const ManagerGamePage = () => {
     <GameWrapper
       statusName={status.name}
       onNext={handleSkip}
-      onBack={status.name === STATUS.SHOW_ROOM ? handleBack : undefined}
+      onBack={handleBack}
       manager
     >
       {CurrentComponent && <CurrentComponent data={status.data as never} />}

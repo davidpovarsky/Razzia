@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Metadata references a question that no longer exists",
     "orphanLeaderboardQuestionId": "Leaderboard rule references a question that no longer exists",
     "altRequiredForImage": "Accessible alt text is required for image answer options"
+  },
+  "host": {
+    "endTimer": "End Timer",
+    "nextScreen": "Next Screen",
+    "skipQuestion": "Skip Question",
+    "skipQuestionConfirmTitle": "Skip this question?",
+    "skipQuestionConfirmDesc": "Answers will be discarded and no points will be awarded for this question.",
+    "previous": "History",
+    "returnToLive": "Return to Live",
+    "replayFromHere": "Replay From Here",
+    "replayConfirmTitle": "Replay from checkpoint?",
+    "replayConfirmDesc": "Warning: Scores and leaderboard will be rolled back to this question. This action is irreversible.",
+    "exit": "Exit",
+    "exitConfirmTitle": "Exit game?",
+    "exitConfirmDesc": "The game session will be terminated and all players will be disconnected.",
+    "noHistoryAvailable": "No past questions available yet.",
+    "questionNum": "Question {{num}}",
+    "answersCount": "{{count}} answers"
+  },
+  "reveal": {
+    "votes": "{{count}} votes",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
   }
 }

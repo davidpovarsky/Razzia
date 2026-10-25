@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Métadonnées associées à une question inexistante",
     "orphanLeaderboardQuestionId": "Règle de classement associée à une question inexistante",
     "altRequiredForImage": "Un texte alternatif est obligatoire pour les images"
+  },
+  "host": {
+    "endTimer": "Arrêter le chronomètre",
+    "nextScreen": "Écran suivant",
+    "skipQuestion": "Passer la question",
+    "skipQuestionConfirmTitle": "Passer cette question ?",
+    "skipQuestionConfirmDesc": "Les réponses seront ignorées et aucun point ne sera attribué.",
+    "previous": "Historique",
+    "returnToLive": "Retour au direct",
+    "replayFromHere": "Rejouer depuis ici",
+    "replayConfirmTitle": "Rejouer depuis ce point ?",
+    "replayConfirmDesc": "Attention : Les scores et le classement seront réinitialisés à cette question. Cette action est irréversible.",
+    "exit": "Quitter",
+    "exitConfirmTitle": "Quitter la partie ?",
+    "exitConfirmDesc": "La session de jeu sera terminée et tous les joueurs seront déconnectés.",
+    "noHistoryAvailable": "Aucune question précédente disponible pour l'instant.",
+    "questionNum": "Question {{num}}",
+    "answersCount": "{{count}} réponses"
+  },
+  "reveal": {
+    "votes": "{{count}} votes",
+    "correct": "Correct",
+    "incorrect": "Incorrect"
   }
 }

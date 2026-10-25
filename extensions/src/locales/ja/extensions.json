@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "存在しない問題を参照しているメタデータがあります",
     "orphanLeaderboardQuestionId": "無効な問題を参照しているリーダーボード設定があります",
     "altRequiredForImage": "画像選択肢には代替テキストが必要です"
+  },
+  "host": {
+    "endTimer": "タイマー終了",
+    "nextScreen": "次の画面",
+    "skipQuestion": "質問をスキップ",
+    "skipQuestionConfirmTitle": "この質問をスキップしますか？",
+    "skipQuestionConfirmDesc": "回答は破棄され、この質問には得点が付与されません。",
+    "previous": "履歴",
+    "returnToLive": "ライブに戻る",
+    "replayFromHere": "ここから再プレイ",
+    "replayConfirmTitle": "チェックポイントから再プレイしますか？",
+    "replayConfirmDesc": "警告：スコアと順位表がこの質問の状態にロールバックされます。この操作は元に戻せません。",
+    "exit": "退出",
+    "exitConfirmTitle": "ゲームを終了しますか？",
+    "exitConfirmDesc": "ゲームセッションは終了し、すべてのプレイヤーの接続が切断されます。",
+    "noHistoryAvailable": "過去の質問はまだありません。",
+    "questionNum": "第{{num}}問",
+    "answersCount": "{{count}}件の回答"
+  },
+  "reveal": {
+    "votes": "{{count}} 票",
+    "correct": "正解",
+    "incorrect": "不正解"
   }
 }

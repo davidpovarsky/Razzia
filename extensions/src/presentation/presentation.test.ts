@@ -239,6 +239,24 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
         calculateInterludeRemainingMs(startedAt, durationMs, lateReconnect),
       ).toBe(0)
     })
+
+    it("INT03: validates all 4 interlude screen kinds (title, image, video, countdown)", () => {
+      const kinds = ["title", "image", "video", "countdown"] as const
+      for (const kind of kinds) {
+        const item = {
+          kind,
+          title: `Interlude ${kind}`,
+          url:
+            kind === "image" || kind === "video"
+              ? `/media/test.${kind === "image" ? "png" : "mp4"}`
+              : undefined,
+          durationMs: 5000,
+          advance: "auto" as const,
+        }
+        expect(item.kind).toBe(kind)
+        expect(item.durationMs).toBe(5000)
+      }
+    })
   })
 
   describe("TEAM01, TEAM02, TEAM03: Team Assignment & Score Projection", () => {

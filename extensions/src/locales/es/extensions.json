@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Metadatos asociados a una pregunta inexistente",
     "orphanLeaderboardQuestionId": "Regla de clasificación apunta a pregunta no válida",
     "altRequiredForImage": "Se requiere texto alternativo para las imágenes"
+  },
+  "host": {
+    "endTimer": "Finalizar temporizador",
+    "nextScreen": "Siguiente pantalla",
+    "skipQuestion": "Saltar pregunta",
+    "skipQuestionConfirmTitle": "¿Saltar esta pregunta?",
+    "skipQuestionConfirmDesc": "Las respuestas se descartarán y no se otorgarán puntos.",
+    "previous": "Historial",
+    "returnToLive": "Volver al directo",
+    "replayFromHere": "Repetir desde aquí",
+    "replayConfirmTitle": "¿Repetir desde el punto de control?",
+    "replayConfirmDesc": "Advertencia: Las puntuaciones y la clasificación se revertirán a esta pregunta. Esta acción es irreversible.",
+    "exit": "Salir",
+    "exitConfirmTitle": "¿Salir del juego?",
+    "exitConfirmDesc": "La sesión de juego terminará y todos los jugadores serán desconectados.",
+    "noHistoryAvailable": "Aún no hay preguntas anteriores disponibles.",
+    "questionNum": "Pregunta {{num}}",
+    "answersCount": "{{count}} respuestas"
+  },
+  "reveal": {
+    "votes": "{{count}} votos",
+    "correct": "Correcto",
+    "incorrect": "Incorrecto"
   }
 }

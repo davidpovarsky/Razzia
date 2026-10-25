@@ -38,6 +38,7 @@ interface SortableItemProps {
   canDelete: boolean
   onClick: () => void
   onDelete: () => void
+  onDuplicate?: () => void
 }
 
 const SortableItem = ({
@@ -49,6 +50,7 @@ const SortableItem = ({
   canDelete,
   onClick,
   onDelete,
+  onDuplicate,
 }: SortableItemProps) => {
   const {
     attributes,
@@ -75,6 +77,7 @@ const SortableItem = ({
         canDelete={canDelete}
         onClick={onClick}
         onDelete={onDelete}
+        onDuplicate={onDuplicate}
       />
     </div>
   )
@@ -89,6 +92,7 @@ const QuizzEditorSidebar = () => {
     addQuestion,
     removeQuestion,
     reorderQuestions,
+    duplicateQuestion,
   } = useQuizzEditor()
   const {
     formState: { errors },
@@ -151,6 +155,9 @@ const QuizzEditorSidebar = () => {
                 canDelete={questions.length > 1}
                 onClick={handleSlideClick(index)}
                 onDelete={handleDelete(index)}
+                onDuplicate={
+                  duplicateQuestion ? () => duplicateQuestion(index) : undefined
+                }
               />
             ))}
           </div>

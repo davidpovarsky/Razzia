@@ -120,5 +120,28 @@
     "orphanQuestionExtra": "Dữ liệu mở rộng tham chiếu tới câu hỏi không tồn tại",
     "orphanLeaderboardQuestionId": "Quy tắc bảng xếp hạng trỏ tới câu hỏi không hợp lệ",
     "altRequiredForImage": "Bắt buộc có văn bản thay thế cho hình ảnh"
+  },
+  "host": {
+    "endTimer": "Dừng thời gian",
+    "nextScreen": "Màn hình tiếp theo",
+    "skipQuestion": "Bỏ qua câu hỏi",
+    "skipQuestionConfirmTitle": "Bỏ qua câu hỏi này?",
+    "skipQuestionConfirmDesc": "Câu trả lời sẽ bị hủy và không có điểm nào được trao cho câu hỏi này.",
+    "previous": "Lịch sử",
+    "returnToLive": "Quay lại trực tiếp",
+    "replayFromHere": "Phát lại từ đây",
+    "replayConfirmTitle": "Phát lại từ điểm kiểm tra?",
+    "replayConfirmDesc": "Cảnh báo: Điểm số và bảng xếp hạng sẽ được khôi phục về câu hỏi này. Hành động này không thể hoàn tác.",
+    "exit": "Thoát",
+    "exitConfirmTitle": "Thoát trò chơi?",
+    "exitConfirmDesc": "Phiên chơi sẽ kết thúc và tất cả người chơi sẽ bị ngắt kết nối.",
+    "noHistoryAvailable": "Chưa có câu hỏi nào trước đó.",
+    "questionNum": "Câu hỏi {{num}}",
+    "answersCount": "{{count}} câu trả lời"
+  },
+  "reveal": {
+    "votes": "{{count}} lượt bình chọn",
+    "correct": "Chính xác",
+    "incorrect": "Không chính xác"
   }
 }

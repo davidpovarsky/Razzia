@@ -11,3 +11,5 @@ export * from "./team-scoring"
 export * from "./team-leaderboard-panel"
 
 export * from "./lobby-team-assignment"
+
+export * from "./reveal-timeline"
