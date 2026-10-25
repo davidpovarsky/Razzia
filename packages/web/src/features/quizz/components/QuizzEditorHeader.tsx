@@ -3,7 +3,6 @@ import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import { computeCanonicalBaseDigest } from "@razzia/extensions/core"
 import {
   CompositeApiClient,
-  ConflictModal,
   RevisionConflictError,
 } from "@razzia/extensions/editor"
 import Button from "@razzia/web/components/Button"
@@ -13,8 +12,10 @@ import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import {
   createQuizz,
   quizzKeys,
+  quizzQuery,
   updateQuizz,
 } from "@razzia/web/features/manager/queries"
+import { ConflictDialog } from "@razzia/web/features/quizz/components/ConflictDialog"
 import {
   useQuizzEditor,
   type QuizzFormValues,
@@ -30,9 +31,16 @@ import { useTranslation } from "react-i18next"
 const QUIZZ_MODE_LIST = Object.values(QUIZZ_MODES)
 
 const QuizzEditorHeader = () => {
-  const { quizzId, setCurrentIndex, extras, setExtras, conflict, setConflict } =
-    useQuizzEditor()
-  const { handleSubmit, control, getValues } = useFormContext<
+  const {
+    quizzId,
+    questionIds,
+    setCurrentIndex,
+    extras,
+    setExtras,
+    conflict,
+    setConflict,
+  } = useQuizzEditor()
+  const { handleSubmit, control, getValues, reset } = useFormContext<
     QuizzFormValues,
     unknown,
     QuizzValidated
@@ -113,6 +121,35 @@ const QuizzEditorHeader = () => {
         }
       }
 
+      if (extras && !quizzId) {
+        try {
+          console.log("[COMPUTING DIGEST FOR NEW COMPOSITE QUIZ]...")
+          const baseDigest = computeCanonicalBaseDigest(values)
+          const client = new CompositeApiClient({
+            getAuthToken: () => localStorage.getItem("token"),
+          })
+          console.log("[CALLING CREATE COMPOSITE]...")
+          const res = await client.createQuizComposite({
+            quizz: values,
+            extras: {
+              ...extras,
+              quizId: extras.quizId || "temp-new",
+              baseDigest,
+              questionIds,
+            },
+          })
+          console.log("[CREATE COMPOSITE SUCCESS]", JSON.stringify(res))
+          onSaved("quizz:quizzSaved")
+
+          return
+        } catch (err: unknown) {
+          console.error("[CREATE COMPOSITE ERROR]", err)
+          onError(err as Error)
+
+          return
+        }
+      }
+
       if (quizzId) {
         console.log("[SAVING VANILLA UPDATE]", quizzId)
         update({ id: quizzId, json: values })
@@ -146,6 +183,15 @@ const QuizzEditorHeader = () => {
     try {
       const client = new CompositeApiClient()
       const res = await client.getQuizComposite(quizzId)
+      const latestQuizz = await queryClient.fetchQuery(quizzQuery(quizzId))
+
+      if (latestQuizz) {
+        reset({
+          gameMode: latestQuizz.gameMode,
+          subject: latestQuizz.subject,
+          questions: latestQuizz.questions,
+        })
+      }
 
       if (res.exists && res.extras) {
         setExtras(res.extras)
@@ -172,7 +218,7 @@ const QuizzEditorHeader = () => {
 
     try {
       const client = new CompositeApiClient()
-      // Force overwrite
+      // Force overwrite with expectedRevision: null
       await client.saveQuizComposite(quizzId, {
         expectedRevision: null,
         quizz: getValues(),
@@ -242,16 +288,13 @@ const QuizzEditorHeader = () => {
         </Button>
       </div>
 
-      <ConflictModal
+      <ConflictDialog
         open={Boolean(conflict)}
         serverRevision={conflict?.serverRevision}
         expectedRevision={conflict?.expectedRevision}
         onReload={handleReloadConflict}
         onOverwrite={handleForceOverwriteConflict}
         onCancel={() => setConflict(null)}
-        t={(key: string, fallback?: string) =>
-          t(key, { defaultValue: fallback })
-        }
       />
     </header>
   )

@@ -37,6 +37,7 @@ interface Props {
   view: MediaView
   onViewChange: (_view: MediaView) => void
   onUpload: (_files: File[]) => void
+  acceptType?: "image" | "video" | "audio" | "all"
 }
 
 const MediaLibraryToolbar = ({
@@ -47,14 +48,21 @@ const MediaLibraryToolbar = ({
   view,
   onViewChange,
   onUpload,
+  acceptType,
 }: Props) => {
   const { t } = useTranslation()
+
+  const isTypeLocked = Boolean(acceptType && acceptType !== "all")
 
   const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
     onSearchChange(e.target.value)
   }
 
   const handleFilterChange = (value: string) => {
+    if (isTypeLocked) {
+      return
+    }
+
     onFilterChange(value as MediaFilter)
   }
 
@@ -76,7 +84,11 @@ const MediaLibraryToolbar = ({
         />
       </div>
 
-      <Select value={filter} onValueChange={handleFilterChange}>
+      <Select
+        value={isTypeLocked ? (acceptType as MediaFilter) : filter}
+        onValueChange={handleFilterChange}
+        disabled={isTypeLocked}
+      >
         <SelectTrigger
           aria-label={t("quizz:media.filterByType")}
           className="h-10 w-40"
@@ -84,7 +96,9 @@ const MediaLibraryToolbar = ({
           <SelectValue />
         </SelectTrigger>
         <SelectContent>
-          {FILTERS.map(({ value, labelKey }) => (
+          {FILTERS.filter(
+            ({ value }) => !isTypeLocked || value === acceptType,
+          ).map(({ value, labelKey }) => (
             <SelectItem key={value} value={value}>
               {t(labelKey)}
             </SelectItem>

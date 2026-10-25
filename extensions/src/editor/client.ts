@@ -168,11 +168,25 @@ export class CompositeApiClient {
     quizz: QuizzValidated
     extras: QuizExtrasV1
   }): Promise<SaveCompositeResult> {
+    const baseDigest =
+      payload.extras.baseDigest && payload.extras.baseDigest !== "0".repeat(64)
+        ? payload.extras.baseDigest
+        : computeCanonicalBaseDigest(payload.quizz)
+
+    const normalizedPayload = {
+      ...payload,
+      extras: {
+        ...payload.extras,
+        quizId: payload.extras.quizId || "temp-new",
+        baseDigest,
+      },
+    }
+
     const headers = await this.getHeaders()
     const res = await this.fetchFn(`${this.baseUrl}/api/extensions/quizzes`, {
       method: "POST",
       headers,
-      body: JSON.stringify(payload),
+      body: JSON.stringify(normalizedPayload),
     })
 
     if (!res.ok) {

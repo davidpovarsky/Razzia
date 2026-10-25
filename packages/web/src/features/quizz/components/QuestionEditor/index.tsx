@@ -63,10 +63,7 @@ const QuestionEditor = () => {
       "0".repeat(64),
     )
 
-  const handleOpenMediaPicker = (
-    _onSelect?: (_url: string) => void,
-    options?: MediaPickerRequestOptions,
-  ) => {
+  const handleOpenMediaPicker = (options?: MediaPickerRequestOptions) => {
     if (options?.target) {
       setMediaPickerTarget({
         questionId: options.target.questionId,
@@ -103,6 +100,18 @@ const QuestionEditor = () => {
       return
     }
 
+    // Locate captured target question by stable questionId
+    const targetIdx = questionIds.indexOf(questionId)
+    if (targetIdx < 0 || !questions[targetIdx]) {
+      // Target question was deleted while picker was open; fail safely
+      setMediaPickerOpen(false)
+      setMediaPickerTarget(null)
+
+      return
+    }
+
+    const targetQuestion = questions[targetIdx]
+
     const baseExtras =
       extras ??
       createDefaultQuizExtras(
@@ -128,7 +137,7 @@ const QuestionEditor = () => {
           display: "image",
           url: item.url,
           alt:
-            currentQuestion.answers[answerIndex] || `Answer ${answerIndex + 1}`,
+            targetQuestion.answers[answerIndex] || `Answer ${answerIndex + 1}`,
         })
       }
 

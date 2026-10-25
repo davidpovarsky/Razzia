@@ -20,6 +20,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useRef,
   useState,
   type PropsWithChildren,
 } from "react"
@@ -114,31 +115,56 @@ export const QuizzEditorProvider = ({
     expectedRevision?: number | null
   } | null>(null)
 
+  const fieldUuidMapRef = useRef<Map<string, string>>(new Map())
+
   useEffect(() => {
     if (!initialData?.id) {
       return
     }
 
+    let isSubscribed = true
     const client = new CompositeApiClient({
       getAuthToken: () => localStorage.getItem("token"),
     })
     client
       .getQuizComposite(initialData.id)
       .then((res) => {
+        if (!isSubscribed) {
+          return
+        }
+
         if (res.exists && res.extras) {
-          setExtras(res.extras)
+          setExtras((prev) => {
+            // Guard: do not overwrite if user has already modified extras locally
+            if (prev) {
+              return prev
+            }
+
+            fields.forEach((field, idx) => {
+              const persistedUuid = res.extras?.questionIds[idx]
+
+              if (persistedUuid) {
+                fieldUuidMapRef.current.set(field.id, persistedUuid)
+              }
+            })
+
+            return res.extras
+          })
         }
       })
       .catch(() => undefined)
-  }, [initialData?.id])
+
+    return () => {
+      isSubscribed = false
+    }
+  }, [initialData?.id, fields])
 
   const questions = useWatch({ control, name: "questions" })
   const gameMode = useWatch({ control, name: "gameMode" })
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
-  const [questionUuidMap] = useState(() => new Map<string, string>())
 
-  // Synchronize persisted question UUIDs from extras into questionUuidMap
+  // Synchronize persisted question UUIDs from extras into fieldUuidMapRef
   useEffect(() => {
     if (!extras?.questionIds) {
       return
@@ -148,25 +174,25 @@ export const QuizzEditorProvider = ({
       const persistedUuid = extras.questionIds[idx]
 
       if (persistedUuid) {
-        questionUuidMap.set(field.id, persistedUuid)
+        fieldUuidMapRef.current.set(field.id, persistedUuid)
       }
     })
-  }, [extras?.questionIds, fields, questionUuidMap])
+  }, [extras?.questionIds, fields])
 
-  // Derive stable questionIds: priority to extras.questionIds[idx], then questionUuidMap, then minted UUID
+  // Derive stable questionIds: priority to extras.questionIds[idx], then fieldUuidMapRef, then minted UUID
   const questionIds = fields.map((field, idx) => {
-    if (extras?.questionIds[idx]) {
+    if (extras?.questionIds?.[idx]) {
       const persisted = extras.questionIds[idx]
-      questionUuidMap.set(field.id, persisted)
+      fieldUuidMapRef.current.set(field.id, persisted)
 
       return persisted
     }
 
-    let uuid = questionUuidMap.get(field.id)
+    let uuid = fieldUuidMapRef.current.get(field.id)
 
     if (!uuid) {
       uuid = generateQuestionId()
-      questionUuidMap.set(field.id, uuid)
+      fieldUuidMapRef.current.set(field.id, uuid)
     }
 
     return uuid
@@ -191,7 +217,7 @@ export const QuizzEditorProvider = ({
     const fieldId = fields[index]?.id
 
     if (fieldId) {
-      questionUuidMap.delete(fieldId)
+      fieldUuidMapRef.current.delete(fieldId)
     }
 
     flushSync(() => setRemovingFrom(questions))

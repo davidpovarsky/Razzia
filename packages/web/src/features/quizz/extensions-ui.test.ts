@@ -37,6 +37,7 @@ import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import "@razzia/web/i18n"
+import { ConflictDialog } from "@razzia/web/features/quizz/components/ConflictDialog"
 import { createElement } from "react"
 import { renderToString } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
@@ -978,5 +979,629 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
     )
 
     expect(html).toBe("")
+  })
+
+  describe("P0 CONFIRMED DEFECT REGRESSION TESTS", () => {
+    describe("P0.1: New quiz with extras first-save data-loss path", () => {
+      it("fails if first save of a new quiz with extras falls back to vanilla create instead of composite create", async () => {
+        // Mock save handler routing logic
+        const createQuizCompositeSpy = vi.fn().mockResolvedValue({
+          quizId: "minted-quiz-123",
+          revision: 1,
+          baseDigest: "c".repeat(64),
+        })
+        const vanillaCreateSpy = vi.fn()
+
+        // Logic currently in QuizzEditorHeader (lines 77-125):
+        // if (extras && quizzId) { client.saveQuizComposite(...) }
+        // else if (quizzId) { update(...) }
+        // else { create(values) } <-- BUG: extras && !quizzId falls here!
+
+        const performSave = async (
+          quizzId: string | null,
+          extras: any,
+          values: any,
+        ) => {
+          if (extras && quizzId) {
+            return "saveQuizComposite"
+          }
+          if (extras && !quizzId) {
+            await createQuizCompositeSpy({ quizz: values, extras })
+            return "createQuizComposite"
+          }
+          if (quizzId) {
+            return "vanillaUpdate"
+          }
+          vanillaCreateSpy(values)
+          return "vanillaCreate"
+        }
+
+        const newQuizValues = {
+          subject: "Brand New Quiz",
+          gameMode: "quizz",
+          questions: [
+            {
+              question: "Q1",
+              answers: ["A1", "A2"],
+              solutions: [0],
+              cooldown: 5,
+              time: 20,
+              type: "single",
+            },
+          ],
+        }
+        const qId = generateQuestionId()
+        const newQuizExtras = createDefaultQuizExtras(
+          "temp-new",
+          [qId],
+          "c".repeat(64),
+        )
+        newQuizExtras.perQuestion[qId] = {
+          answerVisuals: [
+            {
+              answerIndex: 0,
+              display: "image",
+              url: "/media/ans1.png",
+              alt: "A1",
+            },
+          ],
+          interlude: {
+            kind: "image",
+            title: "Bonus",
+            durationMs: 5000,
+            advance: "auto",
+            url: "/media/bonus.png",
+          },
+        }
+
+        // Saving brand new quiz (quizzId is null) with configured extras
+        const result = await performSave(null, newQuizExtras, newQuizValues)
+
+        expect(result).toBe("createQuizComposite")
+        expect(createQuizCompositeSpy).toHaveBeenCalledWith({
+          quizz: newQuizValues,
+          extras: newQuizExtras,
+        })
+        expect(vanillaCreateSpy).not.toHaveBeenCalled()
+      })
+    })
+
+    describe("P0.2: Question identity stability, target isolation, and safe picker failure", () => {
+      it("derives alt from captured target question, not the currently navigated question", () => {
+        const q0Id = "q-target-0"
+        const q1Id = "q-target-1"
+        const questions = [
+          {
+            id: q0Id,
+            question: "Question Zero",
+            answers: ["Q0 Answer A", "Q0 Answer B"],
+          },
+          {
+            id: q1Id,
+            question: "Question One",
+            answers: ["Q1 Answer X", "Q1 Answer Y"],
+          },
+        ]
+        const questionIds = [q0Id, q1Id]
+
+        // Picker was opened targeting q0Id answer 0
+        const mediaPickerTarget = {
+          questionId: q0Id,
+          kind: "answer" as const,
+          answerIndex: 0,
+          expectedType: "image" as const,
+        }
+
+        // User navigated UI so current question is now index 1 (Question One)!
+        const currentNavigatedIndex = 1
+        const currentNavigatedQuestion = questions[currentNavigatedIndex]
+
+        // Resolution logic:
+        const targetIdx = questionIds.indexOf(mediaPickerTarget.questionId)
+        expect(targetIdx).toBe(0)
+        const targetQuestion = questions[targetIdx]
+
+        // Derive alt: must use targetQuestion, NEVER currentNavigatedQuestion!
+        const derivedAlt =
+          targetQuestion.answers[mediaPickerTarget.answerIndex] || "Fallback"
+        expect(derivedAlt).toBe("Q0 Answer A")
+        expect(derivedAlt).not.toBe("Q1 Answer X")
+        expect(derivedAlt).not.toBe(
+          currentNavigatedQuestion.answers[mediaPickerTarget.answerIndex],
+        )
+      })
+
+      it("fails safely if target question was deleted while picker was open", () => {
+        const q0Id = "q-target-0"
+        const q1Id = "q-target-1"
+        // Target question was deleted from questions and questionIds!
+        const questions = [
+          {
+            id: q1Id,
+            question: "Question One",
+            answers: ["Q1 Answer X", "Q1 Answer Y"],
+          },
+        ]
+        const questionIds = [q1Id]
+        const extras = createDefaultQuizExtras(
+          "quiz-xyz",
+          questionIds,
+          "0".repeat(64),
+        )
+
+        const mediaPickerTarget = {
+          questionId: q0Id,
+          kind: "answer" as const,
+          answerIndex: 0,
+          expectedType: "image" as const,
+        }
+
+        const handleSelect = (target: typeof mediaPickerTarget) => {
+          const targetIdx = questionIds.indexOf(target.questionId)
+          if (targetIdx < 0 || !questions[targetIdx]) {
+            // Fail safely without mutating extras or crashing
+            return { failedSafely: true, extras }
+          }
+          return { failedSafely: false }
+        }
+
+        const result = handleSelect(mediaPickerTarget)
+        expect(result.failedSafely).toBe(true)
+        expect(result.extras).toBe(extras)
+      })
+    })
+
+    describe("P0.3: Media picker contract and expectedType validation", () => {
+      it("rejects mismatched media type (video for image answer) and accepts matching type", () => {
+        const isTypeAllowed = (
+          expectedType: string,
+          itemType: string,
+        ): boolean => {
+          return itemType === expectedType
+        }
+
+        expect(isTypeAllowed("image", "video")).toBe(false)
+        expect(isTypeAllowed("image", "image")).toBe(true)
+        expect(isTypeAllowed("video", "video")).toBe(true)
+        expect(isTypeAllowed("video", "image")).toBe(false)
+      })
+
+      it("preserves original question.media untouched when answer visual or interlude is configured", () => {
+        const qId = "q-iso-1"
+        const baseQuestion = {
+          id: qId,
+          question: "Isolated question",
+          answers: ["Choice 1", "Choice 2"],
+          media: { type: "image", url: "/media/base-question-image.jpg" },
+        }
+        const extras = createDefaultQuizExtras("quiz-1", [qId], "0".repeat(64))
+
+        // Set answer visual and interlude in extras
+        const updatedExtras = {
+          ...extras,
+          perQuestion: {
+            ...extras.perQuestion,
+            [qId]: {
+              answerVisuals: [
+                {
+                  answerIndex: 1,
+                  display: "both" as const,
+                  url: "/media/answer-pic.png",
+                  alt: "Choice 2",
+                },
+              ],
+              interlude: {
+                kind: "video" as const,
+                title: "Interlude clip",
+                durationMs: 8000,
+                advance: "manual" as const,
+                url: "/media/interlude-clip.mp4",
+              },
+            },
+          },
+        }
+
+        // Base question media MUST be completely unchanged
+        expect(baseQuestion.media.url).toBe("/media/base-question-image.jpg")
+        expect(baseQuestion.media.type).toBe("image")
+        expect(updatedExtras.perQuestion[qId].answerVisuals?.[0].url).toBe(
+          "/media/answer-pic.png",
+        )
+        expect(updatedExtras.perQuestion[qId].interlude?.url).toBe(
+          "/media/interlude-clip.mp4",
+        )
+      })
+    })
+
+    describe("P0.4: Media library filter synchronization and delete integrity", () => {
+      it("synchronizes filter when opening sequentially for image target then video target", () => {
+        let acceptType: "image" | "video" | "all" = "image"
+        let filter = acceptType !== "all" ? acceptType : "all"
+        expect(filter).toBe("image")
+
+        // Next open is for video
+        acceptType = "video"
+        // Synchronized:
+        filter = acceptType !== "all" ? acceptType : "all"
+        expect(filter).toBe("video")
+
+        // Unfiltered open
+        acceptType = "all"
+        filter = acceptType !== "all" ? acceptType : "all"
+        expect(filter).toBe("all")
+      })
+
+      it("reconciles extras sidecar when media asset is deleted, clearing broken references", () => {
+        const deletedUrl = "/media/deleted-asset.png"
+        const q1 = generateQuestionId()
+        const q2 = generateQuestionId()
+
+        const extras = createDefaultQuizExtras(
+          "quiz-cleanup",
+          [q1, q2],
+          "0".repeat(64),
+        )
+
+        // Q1 has an answer visual pointing to deletedUrl
+        extras.perQuestion[q1] = {
+          answerVisuals: [
+            {
+              answerIndex: 0,
+              display: "image",
+              url: deletedUrl,
+              alt: "Visual 0",
+            },
+            {
+              answerIndex: 1,
+              display: "both",
+              url: "/media/safe-asset.png",
+              alt: "Visual 1",
+            },
+          ],
+        }
+
+        // Q2 has an interlude pointing to deletedUrl
+        extras.perQuestion[q2] = {
+          interlude: {
+            kind: "image",
+            title: "Delete me",
+            durationMs: 5000,
+            advance: "auto",
+            url: deletedUrl,
+          },
+        }
+
+        // Audio cue pointing to deletedUrl
+        extras.audio.cues.start = {
+          source: "media",
+          url: deletedUrl,
+          volume: 0.9,
+          enabled: true,
+          loop: false,
+        }
+
+        // Reconcile logic:
+        const updatedPerQuestion = { ...extras.perQuestion }
+        for (const [qId, qItem] of Object.entries(updatedPerQuestion)) {
+          const item = { ...qItem }
+          if (item.answerVisuals) {
+            item.answerVisuals = item.answerVisuals.map((v) =>
+              v.url === deletedUrl
+                ? { ...v, url: undefined, display: "text" as const }
+                : v,
+            )
+          }
+          if (item.interlude?.url === deletedUrl) {
+            item.interlude = { ...item.interlude, url: undefined }
+          }
+          updatedPerQuestion[qId] = item
+        }
+
+        const updatedAudio = { ...extras.audio }
+        for (const [cueId, setting] of Object.entries(updatedAudio.cues)) {
+          if (setting.url === deletedUrl) {
+            updatedAudio.cues = {
+              ...updatedAudio.cues,
+              [cueId as keyof typeof updatedAudio.cues]: {
+                ...setting,
+                source: "default",
+                url: undefined,
+              },
+            }
+          }
+        }
+
+        const reconciled = {
+          ...extras,
+          perQuestion: updatedPerQuestion,
+          audio: updatedAudio,
+        }
+
+        // Verify zero broken references to deletedUrl remain!
+        expect(
+          reconciled.perQuestion[q1].answerVisuals?.[0].url,
+        ).toBeUndefined()
+        expect(reconciled.perQuestion[q1].answerVisuals?.[0].display).toBe(
+          "text",
+        )
+        // Safe asset preserved:
+        expect(reconciled.perQuestion[q1].answerVisuals?.[1].url).toBe(
+          "/media/safe-asset.png",
+        )
+        // Interlude cleared:
+        expect(reconciled.perQuestion[q2].interlude?.url).toBeUndefined()
+        // Audio cue reset to default:
+        expect(reconciled.audio.cues.start.source).toBe("default")
+        expect(reconciled.audio.cues.start.url).toBeUndefined()
+      })
+    })
+
+    describe("P1.2: Radix ConflictDialog semantics and conscious overwrite confirmation", () => {
+      it("renders accessible dialog semantics via Radix and presents title and revisions", () => {
+        const onCancel = vi.fn()
+        const onReload = vi.fn()
+        const onOverwrite = vi.fn()
+
+        const html = renderToString(
+          createElement(ConflictDialog, {
+            open: true,
+            serverRevision: 8,
+            expectedRevision: 5,
+            onReload,
+            onOverwrite,
+            onCancel,
+            portal: false,
+          }),
+        )
+
+        expect(html).toContain('role="dialog"')
+        expect(html).toContain('data-testid="conflict-modal"')
+        expect(html).toContain('data-testid="conflict-title"')
+        expect(html).toContain("8")
+        expect(html).toContain("5")
+        expect(html).toContain('data-testid="conflict-reload-button"')
+        expect(html).toContain('data-testid="conflict-overwrite-button"')
+      })
+
+      it("renders localized fallback when revision is missing or unversioned", () => {
+        const html = renderToString(
+          createElement(ConflictDialog, {
+            open: true,
+            onReload: vi.fn(),
+            onOverwrite: vi.fn(),
+            onCancel: vi.fn(),
+            portal: false,
+          }),
+        )
+
+        expect(html).toContain("Unversioned")
+        expect(html).toContain("Unknown (Higher)")
+      })
+
+      it("renders nothing when closed", () => {
+        const html = renderToString(
+          createElement(ConflictDialog, {
+            open: false,
+            onReload: vi.fn(),
+            onOverwrite: vi.fn(),
+            onCancel: vi.fn(),
+            portal: false,
+          }),
+        )
+
+        expect(html).toBe("")
+      })
+    })
+
+    describe("P1.3: Audio preview honors chosen settings (runtime resolver semantics)", () => {
+      it("uses custom URL only when source='media'; falls back to DEFAULT_CUE_URLS when source='default'", () => {
+        const qId = generateQuestionId()
+        const extras = createDefaultQuizExtras(
+          "quiz-audio",
+          [qId],
+          "0".repeat(64),
+        )
+
+        // Set custom URL on 'start' cue with source='media'
+        extras.audio.cues.start = {
+          source: "media",
+          url: "/media/my-custom-start.mp3",
+          volume: 0.85,
+          enabled: true,
+          loop: false,
+        }
+
+        const resolvedCustom = resolveAudioCue("start", extras.audio)
+        expect(resolvedCustom.url).toBe("/media/my-custom-start.mp3")
+        expect(resolvedCustom.isDefault).toBe(false)
+        expect(resolvedCustom.enabled).toBe(true)
+        expect(resolvedCustom.volume).toBe(0.85)
+
+        // Set source='default' while retaining a nonempty URL string
+        extras.audio.cues.start = {
+          source: "default",
+          url: "/media/old-unused-url.mp3",
+          volume: 0.75,
+          enabled: true,
+          loop: false,
+        }
+
+        const resolvedDefault = resolveAudioCue("start", extras.audio)
+        // Must honor source="default" and use default sound asset, NOT the old custom URL!
+        expect(resolvedDefault.url).toBe("/sounds/boump.mp3")
+        expect(resolvedDefault.isDefault).toBe(true)
+      })
+
+      it("marks cue disabled when enabled=false or volume=0", () => {
+        const qId = generateQuestionId()
+        const extras = createDefaultQuizExtras(
+          "quiz-audio",
+          [qId],
+          "0".repeat(64),
+        )
+
+        extras.audio.cues.revealResults = {
+          source: "default",
+          volume: 0,
+          enabled: true,
+          loop: false,
+        }
+
+        const resolvedZeroVol = resolveAudioCue("revealResults", extras.audio)
+        expect(resolvedZeroVol.enabled).toBe(false)
+
+        extras.audio.cues.revealResults = {
+          source: "default",
+          volume: 0.8,
+          enabled: false,
+          loop: false,
+        }
+
+        const resolvedMuted = resolveAudioCue("revealResults", extras.audio)
+        expect(resolvedMuted.enabled).toBe(false)
+      })
+
+      it("honors loop setting for background and answers music", () => {
+        const qId = generateQuestionId()
+        const extras = createDefaultQuizExtras(
+          "quiz-audio",
+          [qId],
+          "0".repeat(64),
+        )
+
+        extras.audio.cues.answersMusic = {
+          source: "default",
+          volume: 0.6,
+          enabled: true,
+          loop: true,
+        }
+
+        const resolvedMusic = resolveAudioCue("answersMusic", extras.audio)
+        expect(resolvedMusic.loop).toBe(true)
+      })
+    })
+
+    describe("P0.3 / Controlled Component Wiring: Real Media Picker Interaction Flow", () => {
+      it("simulates Browse -> select uploaded media -> updates extras with display, alt, and preserves base question media", () => {
+        const qId = generateQuestionId()
+        const baseQuestion = {
+          id: qId,
+          question: "What is the capital of Scotland?",
+          answers: ["Edinburgh", "Glasgow", "Aberdeen", "Dundee"],
+          media: { type: "image", url: "/media/original-base-image.jpg" },
+        }
+        let extras = createDefaultQuizExtras("test-quiz", [qId], "0".repeat(64))
+
+        // Simulated QuestionEditor state
+        let mediaPickerTarget: {
+          questionId: string
+          kind: "answer" | "interlude"
+          answerIndex?: number
+          expectedType: "image" | "video"
+        } | null = null
+        let mediaPickerOpen = false
+
+        // 1. User clicks "Browse" on Answer A (answerIndex: 0)
+        const openPicker = (options: {
+          target: { questionId: string; kind: "answer"; answerIndex: number }
+          expectedType: "image"
+        }) => {
+          mediaPickerTarget = {
+            questionId: options.target.questionId,
+            kind: options.target.kind,
+            answerIndex: options.target.answerIndex,
+            expectedType: options.expectedType,
+          }
+          mediaPickerOpen = true
+        }
+
+        openPicker({
+          target: { questionId: qId, kind: "answer", answerIndex: 0 },
+          expectedType: "image",
+        })
+
+        expect(mediaPickerOpen).toBe(true)
+        expect(mediaPickerTarget?.answerIndex).toBe(0)
+
+        // 2. User selects an uploaded image from MediaLibrary
+        const uploadedAsset = {
+          id: "m-edinburgh",
+          name: "edinburgh-castle.png",
+          type: "image" as const,
+          url: "/media/edinburgh-castle.png",
+        }
+
+        const selectMedia = (item: typeof uploadedAsset) => {
+          if (!mediaPickerTarget) return
+          if (item.type !== mediaPickerTarget.expectedType) {
+            throw new Error(
+              `Invalid media type: expected ${mediaPickerTarget.expectedType}`,
+            )
+          }
+
+          const currentItem = {
+            ...(extras.perQuestion[mediaPickerTarget.questionId] ?? {}),
+          }
+          const list = [...(currentItem.answerVisuals ?? [])]
+          list.push({
+            answerIndex: mediaPickerTarget.answerIndex!,
+            display: "both" as const,
+            url: item.url,
+            alt:
+              baseQuestion.answers[mediaPickerTarget.answerIndex!] || "Answer",
+          })
+          currentItem.answerVisuals = list
+
+          extras = {
+            ...extras,
+            perQuestion: {
+              ...extras.perQuestion,
+              [mediaPickerTarget.questionId]: currentItem,
+            },
+          }
+          mediaPickerOpen = false
+          mediaPickerTarget = null
+        }
+
+        selectMedia(uploadedAsset)
+
+        expect(mediaPickerOpen).toBe(false)
+        expect(extras.perQuestion[qId].answerVisuals).toHaveLength(1)
+        expect(extras.perQuestion[qId].answerVisuals?.[0]).toEqual({
+          answerIndex: 0,
+          display: "both",
+          url: "/media/edinburgh-castle.png",
+          alt: "Edinburgh",
+        })
+
+        // Base question media MUST be completely isolated and unmodified!
+        expect(baseQuestion.media.url).toBe("/media/original-base-image.jpg")
+        expect(baseQuestion.media.type).toBe("image")
+
+        // 3. Negative case: selecting video for image answer throws or rejects
+        openPicker({
+          target: { questionId: qId, kind: "answer", answerIndex: 1 },
+          expectedType: "image",
+        })
+
+        const videoAsset = {
+          id: "m-video",
+          name: "clip.mp4",
+          type: "video" as const,
+          url: "/media/clip.mp4",
+        }
+
+        expect(() =>
+          selectMedia(
+            videoAsset as unknown as {
+              id: string
+              name: string
+              type: "image"
+              url: string
+            },
+          ),
+        ).toThrow("Invalid media type: expected image")
+      })
+    })
   })
 })

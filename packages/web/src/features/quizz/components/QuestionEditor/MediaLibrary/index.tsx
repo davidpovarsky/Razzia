@@ -20,7 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import clsx from "clsx"
 import { X } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { type DragEvent, useState } from "react"
+import { type DragEvent, useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -34,7 +34,8 @@ interface Props {
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
 const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
-  const { questions, updateQuestion, currentIndex } = useQuizzEditor()
+  const { questions, updateQuestion, currentIndex, extras, setExtras } =
+    useQuizzEditor()
   const { data, isPending } = useQuery({ ...mediaListQuery(), enabled: open })
   const { upload, pendingCount } = useUploadMedia()
   const [search, setSearch] = useState("")
@@ -46,14 +47,82 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
   const queryClient = useQueryClient()
   const { t } = useTranslation()
 
+  // Synchronize filter whenever dialog opens or acceptType changes
+  useEffect(() => {
+    if (acceptType && acceptType !== "all") {
+      setFilter(acceptType)
+    } else {
+      setFilter("all")
+    }
+  }, [open, acceptType])
+
   const { mutate: remove } = useMutation({
     mutationFn: (item: UploadedMedia) => deleteMedia(item.name),
     onSuccess: (_, item) => {
+      // 1. Clear matching base question media
       questions.forEach((question, index) => {
         if (question.media?.url === item.url) {
           updateQuestion(index, { media: undefined })
         }
       })
+
+      // 2. Reconcile extras sidecar to avoid dangling broken media references
+      if (extras) {
+        let hasChanges = false
+        const updatedPerQuestion = { ...extras.perQuestion }
+
+        for (const [qId, qItem] of Object.entries(updatedPerQuestion)) {
+          const updatedItem = { ...qItem }
+          let itemChanged = false
+
+          if (updatedItem.answerVisuals?.some((v) => v.url === item.url)) {
+            itemChanged = true
+            updatedItem.answerVisuals = updatedItem.answerVisuals.map((v) =>
+              v.url === item.url
+                ? { ...v, url: undefined, display: "text" as const }
+                : v,
+            )
+          }
+
+          if (updatedItem.interlude?.url === item.url) {
+            itemChanged = true
+            updatedItem.interlude = {
+              ...updatedItem.interlude,
+              url: undefined,
+            }
+          }
+
+          if (itemChanged) {
+            hasChanges = true
+            updatedPerQuestion[qId] = updatedItem
+          }
+        }
+
+        const updatedAudio = { ...extras.audio }
+        let audioChanged = false
+        for (const [cueId, cueSetting] of Object.entries(updatedAudio.cues)) {
+          if (cueSetting.url === item.url) {
+            audioChanged = true
+            updatedAudio.cues = {
+              ...updatedAudio.cues,
+              [cueId as keyof typeof updatedAudio.cues]: {
+                ...cueSetting,
+                source: "default",
+                url: undefined,
+              },
+            }
+          }
+        }
+
+        if (hasChanges || audioChanged) {
+          setExtras({
+            ...extras,
+            perQuestion: updatedPerQuestion,
+            audio: updatedAudio,
+          })
+        }
+      }
+
       queryClient.invalidateQueries({ queryKey: mediaKeys.all })
     },
     onError: (error) =>
@@ -64,9 +133,11 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
 
   const media = data?.media ?? []
   const query = search.trim().toLowerCase()
+  const effectiveFilter: MediaFilter =
+    acceptType && acceptType !== "all" ? acceptType : filter
   const visibleMedia = media.filter(
     (item) =>
-      (filter === "all" || item.type === filter) &&
+      (effectiveFilter === "all" || item.type === effectiveFilter) &&
       item.name.toLowerCase().includes(query),
   )
 
@@ -150,11 +221,12 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
           <MediaLibraryToolbar
             search={search}
             onSearchChange={setSearch}
-            filter={filter}
+            filter={effectiveFilter}
             onFilterChange={setFilter}
             view={view}
             onViewChange={setView}
             onUpload={upload}
+            acceptType={acceptType}
           />
 
           <div className="relative min-h-0 flex-1">

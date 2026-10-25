@@ -205,5 +205,108 @@ describe("EDITOR & COMPOSITE API Acceptance Cases & Unit Tests", () => {
       expect(result.revision).toBe(5)
       expect(result.baseDigest).toBe(dummyDigest)
     })
+
+    it("P0.1: createQuizComposite normalizes baseDigest and posts to /api/extensions/quizzes", async () => {
+      let postedBody: {
+        extras: { baseDigest: string; quizId: string }
+      } | null = null
+      let postedUrl = ""
+      const mockFetch = vi
+        .fn()
+        .mockImplementation((url: unknown, init: { body: string }) => {
+          postedUrl = String(url)
+          postedBody = JSON.parse(init.body) as {
+            extras: { baseDigest: string; quizId: string }
+          }
+
+          return Promise.resolve({
+            status: 201,
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                quizId: "new-minted-quiz-999",
+                revision: 1,
+                baseDigest: postedBody?.extras.baseDigest,
+              }),
+          })
+        })
+
+      const client = new CompositeApiClient({
+        baseUrl: "http://localhost:3000",
+        fetchFn: mockFetch as unknown as typeof fetch,
+      })
+
+      const q1 = generateQuestionId()
+      const extras = createDefaultQuizExtras("temp-quiz", [q1], "0".repeat(64))
+      extras.perQuestion[q1] = {
+        answerVisuals: [
+          {
+            answerIndex: 0,
+            display: "image",
+            url: "/media/ans.png",
+            alt: "Alt text",
+          },
+        ],
+        interlude: {
+          kind: "image",
+          title: "Interlude",
+          durationMs: 4000,
+          advance: "auto",
+          url: "/media/slide.jpg",
+        },
+      }
+
+      const newQuiz = {
+        subject: "Brand New Quiz With Extras",
+        gameMode: "quizz",
+        questions: [
+          {
+            question: "Sample Q",
+            answers: ["Ans 1", "Ans 2"],
+            solutions: [0],
+            cooldown: 5,
+            time: 20,
+            type: "single",
+          },
+        ],
+      } as unknown as QuizzValidated
+
+      const result = await client.createQuizComposite({
+        quizz: newQuiz,
+        extras,
+      })
+
+      expect(postedUrl).toBe("http://localhost:3000/api/extensions/quizzes")
+      expect(postedBody?.extras.baseDigest).toHaveLength(64)
+      expect(postedBody?.extras.baseDigest).not.toBe("0".repeat(64))
+      expect(postedBody?.extras.quizId).toBe("temp-quiz")
+      expect(result.quizId).toBe("new-minted-quiz-999")
+      expect(result.revision).toBe(1)
+    })
+
+    it("P0.1: createQuizComposite throws on server failure", async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        status: 500,
+        ok: false,
+        json: () => Promise.resolve({ error: "Internal server error" }),
+      })
+
+      const client = new CompositeApiClient({
+        baseUrl: "http://localhost:3000",
+        fetchFn: mockFetch as unknown as typeof fetch,
+      })
+
+      const q1 = generateQuestionId()
+      const extras = createDefaultQuizExtras("temp-quiz", [q1], "0".repeat(64))
+      const dummyQuiz = {
+        subject: "Fail Quiz",
+        gameMode: "quizz",
+        questions: [],
+      } as unknown as QuizzValidated
+
+      await expect(
+        client.createQuizComposite({ quizz: dummyQuiz, extras }),
+      ).rejects.toThrow("Failed to create composite quiz: HTTP 500")
+    })
   })
 })
