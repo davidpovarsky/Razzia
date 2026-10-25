@@ -15,7 +15,11 @@ import {
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
-import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
+import {
+  ExtensionStateProvider,
+  getAuthoritativeEnvelope,
+  isNewerEnvelope,
+} from "@razzia/web/features/game/contexts/extension-state-context"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -29,7 +33,7 @@ import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
 import { Maximize, Minimize, Users } from "lucide-react"
-import { type PropsWithChildren, useState } from "react"
+import { type PropsWithChildren, useMemo, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -63,10 +67,29 @@ const GameWrapper = ({
     useState<ExtensionStateEnvelope | null>(null)
   const { socket, clientId } = useSocket()
 
-  const extensionState = localExtensionState ?? storeExtensionState
+  // Single authoritative state: resolve between store and local event state by epoch/seq
+  const extensionState = useMemo(() => {
+    if (manager) {
+      if (!storeExtensionState && !localExtensionState) {
+        return null
+      }
+
+      return getAuthoritativeEnvelope(localExtensionState, storeExtensionState)
+    }
+
+    return localExtensionState
+  }, [manager, storeExtensionState, localExtensionState])
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setLocalExtensionState(payload)
+    setLocalExtensionState((prev) => {
+      const current = getAuthoritativeEnvelope(prev, storeExtensionState)
+
+      if (isNewerEnvelope(payload, current)) {
+        return payload
+      }
+
+      return prev
+    })
   })
 
   useEvent(EVENTS.GAME.UPDATE_QUESTION, ({ current, total }) => {

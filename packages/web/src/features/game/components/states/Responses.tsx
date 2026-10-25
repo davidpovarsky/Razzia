@@ -1,9 +1,8 @@
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
-import {
-  EXTENSION_EVENTS,
-  type AnswerVisual,
-  type ExtensionStateEnvelope,
-  type RevealDistributionSnapshot,
+import type {
+  AnswerVisual,
+  ExtensionStateEnvelope,
+  RevealDistributionSnapshot,
 } from "@razzia/extensions/core"
 import {
   calculateAggregatePercentages,
@@ -11,8 +10,11 @@ import {
 } from "@razzia/extensions/presentation"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
-import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
-import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
+import {
+  isRevealValidForQuestion,
+  useExtensionState,
+} from "@razzia/web/features/game/contexts/extension-state-context"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
@@ -33,19 +35,15 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   const { question, answers, responses, solutions, type, note } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const contextExtensionState = useExtensionState()
-  const [localExtensionState, setLocalExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
+  const { questionStates } = useQuestionStore()
   const soundPlayedRef = useRef(false)
-  const [mountTime] = useState(() => Date.now())
   const { t } = useTranslation()
 
-  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setLocalExtensionState(payload)
-  })
-
-  // Authoritative extension state: prop > context/store snapshot (available immediately on mount) > local event
+  // Single authoritative extension state source: explicit prop (e.g. testing) or context/store
   const extensionState =
-    propExtensionState ?? localExtensionState ?? contextExtensionState
+    propExtensionState !== undefined
+      ? propExtensionState
+      : contextExtensionState
 
   const [sfxResults] = useSound(SFX.RESULTS_SOUND, {
     volume: 0.2,
@@ -60,11 +58,42 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
     return window.matchMedia("(prefers-reduced-motion: reduce)").matches
   }, [])
 
-  const revealDistribution = extensionState?.extras.revealDistribution as
+  // Current 0-indexed question number
+  const currentQuestionIndex = questionStates
+    ? questionStates.current - 1
+    : null
+
+  const rawRevealDistribution = extensionState?.extras.revealDistribution as
     RevealDistributionSnapshot | undefined
 
-  const answerVisuals = extensionState?.extras.answerVisuals as
+  // Ensure reveal state belongs to currently displayed question and current epoch
+  const isDistributionValid = useMemo(
+    () =>
+      isRevealValidForQuestion({
+        revealDistribution: rawRevealDistribution,
+        currentType: type,
+        currentQuestionIndex,
+        currentQuestionId: extensionState?.questionId,
+        answersCount: answers.length,
+      }),
+    [
+      rawRevealDistribution,
+      type,
+      currentQuestionIndex,
+      extensionState?.questionId,
+      answers.length,
+    ],
+  )
+
+  const revealDistribution = isDistributionValid
+    ? rawRevealDistribution
+    : undefined
+
+  const rawAnswerVisuals = extensionState?.extras.answerVisuals as
     AnswerVisual[] | undefined
+
+  const answerVisuals =
+    isDistributionValid || !rawRevealDistribution ? rawAnswerVisuals : undefined
 
   const isSurvey = !solutions || solutions.length === 0
   const optionsSnapshot = revealDistribution?.options
@@ -73,6 +102,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   const targetPercentages = useMemo(() => {
     if (optionsSnapshot) {
       const result: Record<number, number> = {}
+
       for (const [idx, opt] of Object.entries(optionsSnapshot)) {
         result[Number(idx)] = opt.percentage
       }
@@ -104,41 +134,69 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
     revealDistribution?.eligiblePlayers,
   ])
 
-  const revealStartedAt = revealDistribution?.revealStartedAt ?? mountTime
+  const currentQuestionKey = `${question}:${extensionState?.epoch ?? 0}`
   const timelineKey = `${question}:${extensionState?.epoch ?? 0}:${extensionState?.seq ?? 0}`
 
-  // Animation timeline state
-  const [timelineState, setTimelineState] = useState(() =>
-    calculateRevealState(
+  const clientStartedAtRef = useRef(0)
+  const [prevQuestionKey, setPrevQuestionKey] = useState(currentQuestionKey)
+  const [timelineState, setTimelineState] = useState(() => {
+    const startedAt = revealDistribution?.revealStartedAt ?? Date.now()
+
+    return calculateRevealState(
       {
         timelineKey,
         targetPercentages,
         barDurationMs: 800,
         pauseDurationMs: 250,
-        startedAt: revealStartedAt,
+        startedAt,
         reducedMotion: prefersReducedMotion,
         isSurvey,
       },
-      mountTime,
-    ),
-  )
+      startedAt,
+    )
+  })
+
+  // Clear old answer bars, coloring, and animation state immediately on question or epoch changes
+  if (prevQuestionKey !== currentQuestionKey) {
+    setPrevQuestionKey(currentQuestionKey)
+
+    setTimelineState(
+      calculateRevealState(
+        {
+          timelineKey,
+          targetPercentages,
+          barDurationMs: 800,
+          pauseDurationMs: 250,
+          startedAt: 0,
+          reducedMotion: prefersReducedMotion,
+          isSurvey,
+        },
+        0,
+      ),
+    )
+  }
 
   useEffect(() => {
     soundPlayedRef.current = false
-  }, [timelineKey])
+    clientStartedAtRef.current = Date.now()
+  }, [currentQuestionKey, timelineKey])
 
   useEffect(() => {
     let rafId = 0
 
     const tick = () => {
       const now = Date.now()
+      const startedAt =
+        revealDistribution?.revealStartedAt ??
+        (clientStartedAtRef.current || now)
+
       const nextState = calculateRevealState(
         {
           timelineKey,
           targetPercentages,
           barDurationMs: 800,
           pauseDurationMs: 250,
-          startedAt: revealStartedAt,
+          startedAt,
           reducedMotion: prefersReducedMotion,
           isSurvey,
         },
@@ -175,7 +233,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   }, [
     timelineKey,
     targetPercentages,
-    revealStartedAt,
+    revealDistribution?.revealStartedAt,
     prefersReducedMotion,
     isSurvey,
     sfxResults,

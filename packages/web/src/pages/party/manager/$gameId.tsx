@@ -5,6 +5,7 @@ import {
   type ExtensionStateEnvelope,
 } from "@razzia/extensions/core"
 import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
+import { isNewerEnvelope } from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   socketClient,
   useEvent,
@@ -40,7 +41,11 @@ const ManagerGamePage = () => {
   })
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    updateManager({ extensionState: payload })
+    const current = useManagerStore.getState().extensionState
+
+    if (isNewerEnvelope(payload, current)) {
+      updateManager({ extensionState: payload })
+    }
   })
 
   useEffect(() => {

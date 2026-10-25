@@ -158,10 +158,9 @@ $ vitest run "--project" "web"
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/maya
 
  ✓  web  packages/web/src/locales/ranks.test.ts (18 tests)
- ✓  web  packages/web/src/features/questions/questions.test.ts (9 tests)
  ✓  web  packages/web/src/lib/session.test.ts (5 tests)
+ ✓  web  packages/web/src/features/questions/questions.test.ts (9 tests)
  ✓  web  packages/web/src/locales/locales.test.ts (25 tests)
- ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (16 tests)
  ✓  web  packages/web/src/features/game/components/game-controls.test.ts (11 tests)
  ✓  web  packages/web/src/features/game/phase-a-flow.browser.test.ts (7 tests)
    ✓ GATE 3 / Phase A: Real Playwright Browser Integration Acceptance (7)
@@ -172,10 +171,11 @@ $ vitest run "--project" "web"
      ✓ 5. Replay from checkpoint confirmation dialog and action
      ✓ 6. Interlude auto and manual transitions (server authority & manager skip)
      ✓ 7. Keyboard shortcut interaction and focus exclusion
+ ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (22 tests)
 
  Test Files  7 passed (7)
-      Tests  91 passed (91)
-   Duration  3.97s
+      Tests  97 passed (97)
+   Duration  4.25s
 ```
 
 ### C. Workspace Vitest Suite (`pnpm test`)
@@ -199,18 +199,18 @@ $ vitest run
  ✓  web  packages/web/src/features/questions/questions.test.ts (9 tests)
  ✓  socket  packages/socket/src/utils/utils.test.ts (9 tests)
  ✓  socket  packages/socket/src/services/game/game.test.ts (32 tests)
- ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (16 tests)
+ ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (22 tests)
  ✓  socket  packages/socket/src/api/api.test.ts (23 tests)
  ✓  socket  packages/socket/src/handlers/game.test.ts (24 tests)
  ✓  web  packages/web/src/features/game/components/game-controls.test.ts (11 tests)
  ✓  web  packages/web/src/features/game/phase-a-flow.browser.test.ts (7 tests)
 
  Test Files  20 passed (20)
-      Tests  251 passed (251)
-   Duration  6.09s
+      Tests  257 passed (257)
+   Duration  6.57s
 ```
 
-**Total Vitest test count:** 251 (workspace) + 155 (extensions) = **406 passed**.
+**Total Vitest test count:** 257 (workspace) + 155 (extensions) = **412 passed**.
 
 ### D. TypeScript Validation (`pnpm -r exec tsc --noEmit`)
 
@@ -224,7 +224,7 @@ Exit code 0 — 0 type errors across all packages and workspaces.
 ```
 $ oxlint
 Found 0 warnings and 0 errors.
-Finished in 5.1s on 308 files with 233 rules using 12 threads.
+Finished in 4.6s on 308 files with 233 rules using 12 threads.
 ```
 
 ### F. Web Production Build (`$env:NODE_OPTIONS="--experimental-strip-types"; pnpm build`)
@@ -237,39 +237,40 @@ packages/web build:
 ✓ 2978 modules transformed.
 dist/index.html                                                0.58 kB │ gzip:   0.36 kB
 dist/assets/index-DWbPbGc3.css                                62.61 kB │ gzip:  11.84 kB
-dist/assets/index-CwObojJV.js                              1,298.25 kB │ gzip: 407.80 kB
-✓ built in 1.75s
+dist/assets/index-D_2pLOs7.js                              1,299.27 kB │ gzip: 408.17 kB
+✓ built in 1.31s
 ```
 
 ---
 
 ## 4. Acceptance Criteria Verification
 
-| ID        | Case                                                   | Observable Verification                                                                                               | Status                                                   |
-| --------- | ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
-| A1        | Stable Question IDs & Async Sidecar Lifecycle          | Stable UUID map synchronized on async sidecar load; reordering, duplication, deletion, and composite save 409 clean.  | PASS (`extensions-ui.test.ts`, `editor.test.ts`)         |
-| A2        | Polished Host Control Surface                          | Manager toolbar with End Timer, Next Screen, Skip Question (confirm), Previous (read-only history + replay), Exit.    | PASS (`game-controls.test.ts`)                           |
-| A3        | Fullscreen Interlude Presenter Event Projection        | Fullscreen projection, auto (`reason: "auto"`) and manual (`reason: "manual"`), reconnect resilience, clean disposal. | PASS (`presentation.test.ts`)                            |
-| A4        | Cinematic Percentage Reveal                            | 2D horizontal bars (0 -> % in 0.65-1.0s), 0.2-0.35s pause, then check/cross reveal; survey neutral; player immediate. | PASS (`reveal-timeline.test.ts`, `presentation.test.ts`) |
-| A5        | Verification, Types, Lint, Locales Parity              | 8 locales with 100% key parity, 406 tests green, 0 tsc errors, 0 lint errors, clean production build.                 | PASS (`locales.test.ts`, `pnpm test`, `oxlint`, `build`) |
-| MEDIA01   | Image-only answer with alt and picture                 | Underlying accessible answer string preserved via `aria-label` and `sr-only` span; alt validated.                     | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
-| MEDIA02   | Image answer missing alt or URL with `javascript:`     | Rejected by schema validator; image not rendered.                                                                     | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
-| MEDIA03   | Reveal blur/tiles/pixelate/zoom after manager trigger  | Synchronized stage calculation; no premature display; snap to 1.0 after duration elapsed on reconnect.                | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
-| AUDIO01   | Custom cue mute/volume=0 and default fallback          | Muted/zero-volume audio produces disabled cue; missing asset falls back safely without freezing.                      | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
-| AUDIO02   | Question audio/video and looped game music             | Background music ducks when competing question media has active sound.                                                | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
-| INT01     | Interlude title/image/video/countdown with auto/manual | Exact position after results; skip occurs exactly once.                                                               | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
-| INT02     | Disconnect/reconnect mid-interlude                     | Snapshot resilience: resumes from server `startedAt` without resetting or doubling timer.                             | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
-| TEAM01    | 3 teams, 8 players auto round-robin                    | Counts 3/3/2 by deterministic order.                                                                                  | PASS (`presentation.test.ts`)                            |
-| TEAM02    | Two teams 50 points tie; reconnect changes socket ID   | Stable team membership by clientId; tie broken by name then ID; no double count.                                      | PASS (`presentation.test.ts`)                            |
-| TEAM03    | Disconnected and kicked members                        | Disconnected keeps earned score; kicked removed before next projection.                                               | PASS (`presentation.test.ts`)                            |
-| CORE02    | Reorder questions in enriched quiz                     | Stable question UUIDs and perQuestion attachments follow questions without swap or loss.                              | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
-| CORE03    | Duplicate and remove questions                         | Fresh unique UUID minted on duplicate; attachments cleaned up on remove with zero orphans.                            | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
-| CORE04    | Revision conflict 409 handling                         | `RevisionConflictError` caught; `ConflictModal` presented with reload and overwrite choices.                          | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
-| L10N01    | 8 locales x extension namespaces                       | 100% key parity across all 8 dictionaries; registered in web i18next.                                                 | PASS (`locales.test.ts`)                                 |
-| REG01     | Extensions disabled / old Razzia                       | Default upstream UI and props rendered identically; all baseline tests + new tests pass.                              | PASS (`extensions-ui.test.ts`, `pnpm test`)              |
-| GIT01     | Maya commit touches only owned paths                   | Only `packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`, and handoff modified.            | PASS (`git status`)                                      |
-| CORR01    | Authoritative reveal snapshot on mount & reconnect     | Synchronous snapshot from `ExtensionStateContext`; unique-respondents denominator; immediate player results kept.     | PASS (`extensions-ui.test.ts`, `phase-a-flow.browser`)   |
-| CORR02    | Previous / History data contract normalization         | Backend `QuestionResult` normalized safely via `formatHistoryItem`; safe empty/null handling.                         | PASS (`presentation.test.ts`, `phase-a-flow.browser`)    |
-| CORR03    | Interlude auto-advance ownership                       | Server `RoundManager` is sole auto authority; frontend timer displays progress; manual skip idempotent with epochs.   | PASS (`presentation.test.ts`, `phase-a-flow.browser`)    |
-| CORR04    | Keyboard focus safety & 8-locale key completeness      | Space/Enter excluded on interactive elements & open dialogs; all new strings localized across 8 locales.              | PASS (`game-controls.test.ts`, `locales.test.ts`)        |
-| BROWSER01 | Real Playwright browser acceptance in Chromium         | Real browser exercising End Timer, immediate result, reveal, history modal, replay, interlude, and keyboard safety.   | PASS (`phase-a-flow.browser.test.ts`)                    |
+| ID                 | Case                                                   | Observable Verification                                                                                                | Status                                                   |
+| ------------------ | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| A1                 | Stable Question IDs & Async Sidecar Lifecycle          | Stable UUID map synchronized on async sidecar load; reordering, duplication, deletion, and composite save 409 clean.   | PASS (`extensions-ui.test.ts`, `editor.test.ts`)         |
+| A2                 | Polished Host Control Surface                          | Manager toolbar with End Timer, Next Screen, Skip Question (confirm), Previous (read-only history + replay), Exit.     | PASS (`game-controls.test.ts`)                           |
+| A3                 | Fullscreen Interlude Presenter Event Projection        | Fullscreen projection, auto (`reason: "auto"`) and manual (`reason: "manual"`), reconnect resilience, clean disposal.  | PASS (`presentation.test.ts`)                            |
+| A4                 | Cinematic Percentage Reveal                            | 2D horizontal bars (0 -> % in 0.65-1.0s), 0.2-0.35s pause, then check/cross reveal; survey neutral; player immediate.  | PASS (`reveal-timeline.test.ts`, `presentation.test.ts`) |
+| A5                 | Verification, Types, Lint, Locales Parity              | 8 locales with 100% key parity, 412 tests green, 0 tsc errors, 0 lint errors, clean production build.                  | PASS (`locales.test.ts`, `pnpm test`, `oxlint`, `build`) |
+| MEDIA01            | Image-only answer with alt and picture                 | Underlying accessible answer string preserved via `aria-label` and `sr-only` span; alt validated.                      | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
+| MEDIA02            | Image answer missing alt or URL with `javascript:`     | Rejected by schema validator; image not rendered.                                                                      | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
+| MEDIA03            | Reveal blur/tiles/pixelate/zoom after manager trigger  | Synchronized stage calculation; no premature display; snap to 1.0 after duration elapsed on reconnect.                 | PASS (`media.test.ts`, `extensions-ui.test.ts`)          |
+| AUDIO01            | Custom cue mute/volume=0 and default fallback          | Muted/zero-volume audio produces disabled cue; missing asset falls back safely without freezing.                       | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
+| AUDIO02            | Question audio/video and looped game music             | Background music ducks when competing question media has active sound.                                                 | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
+| INT01              | Interlude title/image/video/countdown with auto/manual | Exact position after results; skip occurs exactly once.                                                                | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
+| INT02              | Disconnect/reconnect mid-interlude                     | Snapshot resilience: resumes from server `startedAt` without resetting or doubling timer.                              | PASS (`presentation.test.ts`, `extensions-ui.test.ts`)   |
+| TEAM01             | 3 teams, 8 players auto round-robin                    | Counts 3/3/2 by deterministic order.                                                                                   | PASS (`presentation.test.ts`)                            |
+| TEAM02             | Two teams 50 points tie; reconnect changes socket ID   | Stable team membership by clientId; tie broken by name then ID; no double count.                                       | PASS (`presentation.test.ts`)                            |
+| TEAM03             | Disconnected and kicked members                        | Disconnected keeps earned score; kicked removed before next projection.                                                | PASS (`presentation.test.ts`)                            |
+| CORE02             | Reorder questions in enriched quiz                     | Stable question UUIDs and perQuestion attachments follow questions without swap or loss.                               | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
+| CORE03             | Duplicate and remove questions                         | Fresh unique UUID minted on duplicate; attachments cleaned up on remove with zero orphans.                             | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
+| CORE04             | Revision conflict 409 handling                         | `RevisionConflictError` caught; `ConflictModal` presented with reload and overwrite choices.                           | PASS (`editor.test.ts`, `extensions-ui.test.ts`)         |
+| L10N01             | 8 locales x extension namespaces                       | 100% key parity across all 8 dictionaries; registered in web i18next.                                                  | PASS (`locales.test.ts`)                                 |
+| REG01              | Extensions disabled / old Razzia                       | Default upstream UI and props rendered identically; all baseline tests + new tests pass.                               | PASS (`extensions-ui.test.ts`, `pnpm test`)              |
+| GIT01              | Maya commit touches only owned paths                   | Only `packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`, and handoff modified.             | PASS (`git status`)                                      |
+| CORR01             | Authoritative reveal snapshot on mount & reconnect     | Synchronous snapshot from `ExtensionStateContext`; unique-respondents denominator; immediate player results kept.      | PASS (`extensions-ui.test.ts`, `phase-a-flow.browser`)   |
+| CORR02             | Previous / History data contract normalization         | Backend `QuestionResult` normalized safely via `formatHistoryItem`; safe empty/null handling.                          | PASS (`presentation.test.ts`, `phase-a-flow.browser`)    |
+| CORR03             | Interlude auto-advance ownership                       | Server `RoundManager` is sole auto authority; frontend timer displays progress; manual skip idempotent with epochs.    | PASS (`presentation.test.ts`, `phase-a-flow.browser`)    |
+| CORR04             | Keyboard focus safety & 8-locale key completeness      | Space/Enter excluded on interactive elements & open dialogs; all new strings localized across 8 locales.               | PASS (`game-controls.test.ts`, `locales.test.ts`)        |
+| BROWSER01          | Real Playwright browser acceptance in Chromium         | Real browser exercising End Timer, immediate result, reveal, history modal, replay, interlude, and keyboard safety.    | PASS (`phase-a-flow.browser.test.ts`)                    |
+| DEFECT-MAYA-W2A-01 | Stale reveal state, question isolation & epoch order   | Single authoritative state in Responses; question index/type matching; instant render reset on question/replay change. | PASS (`extensions-ui.test.ts`, `Responses.tsx`)          |

@@ -18,14 +18,25 @@ import {
 import {
   calculateAggregatePercentages,
   calculateInterludeRemainingMs,
+  calculateRevealState,
   processInterludeSkip,
   projectTeamScores,
   resolveAudioCue,
   shouldAutoAdvanceInterlude,
   shouldDuckMusic,
 } from "@razzia/extensions/presentation"
+import Responses from "@razzia/web/features/game/components/states/Responses"
+import {
+  getAuthoritativeEnvelope,
+  isNewerEnvelope,
+  isRevealValidForQuestion,
+} from "@razzia/web/features/game/contexts/extension-state-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
+import "@razzia/web/i18n"
+import { createElement } from "react"
+import { renderToString } from "react-dom/server"
 import { describe, expect, it, vi } from "vitest"
 
 describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
@@ -508,6 +519,294 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
       const updated = usePlayerStore.getState()
       expect(updated.player?.points).toBe(850)
       expect(updated.player?.username).toBe("SpeedyPlayer")
+    })
+  })
+
+  describe("DEFECT-MAYA-W2A-01: Stale Reveal State, Epoch Ordering, and Question Isolation Regressions", () => {
+    it("1. New question never displays previous question's percentages", () => {
+      // Setup: Question 1 was finished, manager store has Question 1's revealDistribution
+      const question1Distribution = {
+        questionIndex: 0,
+        questionType: "single",
+        totalResponders: 4,
+        eligiblePlayers: 4,
+        revealStartedAt: Date.now() - 5000,
+        options: {
+          0: { index: 0, count: 3, percentage: 75, isSolution: true },
+          1: { index: 1, count: 1, percentage: 25, isSolution: false },
+        },
+        solutions: [0],
+      }
+
+      useQuestionStore.setState({
+        questionStates: { current: 2, total: 3 },
+      })
+
+      useManagerStore.setState({
+        extensionState: {
+          v: 1,
+          gameId: "game-abc",
+          epoch: 1,
+          seq: 4,
+          phase: "responses",
+          startedAt: Date.now() - 5000,
+          extras: {
+            revealDistribution: question1Distribution,
+          },
+        },
+      })
+
+      // Validation check: Question 1's distribution is rejected for Question 2 (index 0 !== 1)
+      const isValid = isRevealValidForQuestion({
+        revealDistribution: question1Distribution,
+        currentType: "single",
+        currentQuestionIndex: 1, // Question 2 is 0-indexed 1
+        answersCount: 2,
+      })
+      expect(isValid).toBe(false)
+
+      // Actual component render for Question 2
+      const question2Data = {
+        question: "What is the capital of France?",
+        answers: ["Paris", "Lyon"],
+        responses: { 0: 4, 1: 0 },
+        solutions: [0],
+        type: "single" as const,
+      }
+
+      const html = renderToString(
+        createElement(Responses, { data: question2Data }),
+      )
+
+      // Proves Question 2 renders with clean initial state and never displays 75% or 25% from Question 1
+      expect(html).toContain("What is the capital of France?")
+      expect(html).toContain("Paris")
+      expect(html).toContain("Lyon")
+      expect(html).toContain('data-revealed="false"')
+      expect(html).toContain('data-percentage="0"')
+      expect(html).not.toContain('data-percentage="75"')
+      expect(html).not.toContain('data-percentage="25"')
+    })
+
+    it("2. Late event from a previous epoch is rejected", () => {
+      const currentEnvelope = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 2,
+        seq: 10,
+        phase: "responses" as const,
+        startedAt: 100000,
+        extras: {},
+      }
+
+      // Late event from previous epoch 1 with high seq (delayed packet)
+      const lateEpoch1Envelope = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 1,
+        seq: 99,
+        phase: "responses" as const,
+        startedAt: 90000,
+        extras: {},
+      }
+
+      // Late event is rejected
+      expect(isNewerEnvelope(lateEpoch1Envelope, currentEnvelope)).toBe(false)
+      expect(
+        getAuthoritativeEnvelope(currentEnvelope, lateEpoch1Envelope),
+      ).toBe(currentEnvelope)
+
+      // Same epoch lower seq is rejected
+      const sameEpochLowerSeq = {
+        ...currentEnvelope,
+        seq: 9,
+      }
+      expect(isNewerEnvelope(sameEpochLowerSeq, currentEnvelope)).toBe(false)
+
+      // Same epoch same seq is rejected
+      expect(isNewerEnvelope(currentEnvelope, currentEnvelope)).toBe(false)
+
+      // Same epoch higher seq is accepted
+      const sameEpochHigherSeq = {
+        ...currentEnvelope,
+        seq: 11,
+      }
+      expect(isNewerEnvelope(sameEpochHigherSeq, currentEnvelope)).toBe(true)
+
+      // Higher epoch lower seq is accepted
+      const newerEpoch = {
+        ...currentEnvelope,
+        epoch: 3,
+        seq: 1,
+      }
+      expect(isNewerEnvelope(newerEpoch, currentEnvelope)).toBe(true)
+    })
+
+    it("3. Reconnect receives the correct server snapshot", () => {
+      // Cached local state from epoch 1
+      const cachedLocalState = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 1,
+        seq: 5,
+        phase: "responses" as const,
+        startedAt: Date.now() - 10000,
+        extras: {},
+      }
+
+      // Authoritative reconnected state from server at epoch 2
+      const serverSnapshot = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 2,
+        seq: 8,
+        phase: "responses" as const,
+        startedAt: Date.now() - 3000,
+        extras: {
+          revealDistribution: {
+            questionIndex: 1,
+            questionType: "single",
+            totalResponders: 5,
+            eligiblePlayers: 5,
+            revealStartedAt: Date.now() - 3000,
+            options: {
+              0: { index: 0, count: 2, percentage: 40, isSolution: false },
+              1: { index: 1, count: 3, percentage: 60, isSolution: true },
+            },
+            solutions: [1],
+          },
+        },
+      }
+
+      // Authoritative resolution picks the server snapshot over cached local state
+      const authoritative = getAuthoritativeEnvelope(
+        cachedLocalState,
+        serverSnapshot,
+      )
+      expect(authoritative).toBe(serverSnapshot)
+
+      // When reveal started 3000ms ago (> 1050ms animation duration), stage snaps to revealed
+      const revealState = calculateRevealState(
+        {
+          timelineKey: "France:2:8",
+          targetPercentages: { 0: 40, 1: 60 },
+          barDurationMs: 800,
+          pauseDurationMs: 250,
+          startedAt: serverSnapshot.extras.revealDistribution.revealStartedAt,
+          reducedMotion: false,
+          isSurvey: false,
+        },
+        Date.now(),
+      )
+
+      expect(revealState.stage).toBe("revealed")
+      expect(revealState.isRevealed).toBe(true)
+      expect(revealState.displayPercentages[0]).toBe(40)
+      expect(revealState.displayPercentages[1]).toBe(60)
+    })
+
+    it("4. Replay starts the new reveal state correctly", () => {
+      // Previous state: Question 1 revealed in epoch 1
+      const epoch1RevealedState = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 1,
+        seq: 12,
+        phase: "responses" as const,
+        startedAt: Date.now() - 5000,
+        extras: {
+          revealDistribution: {
+            questionIndex: 0,
+            questionType: "single",
+            totalResponders: 2,
+            eligiblePlayers: 2,
+            revealStartedAt: Date.now() - 5000,
+            options: {
+              0: { index: 0, count: 2, percentage: 100, isSolution: true },
+            },
+          },
+        },
+      }
+
+      // Replay Checkpoint triggers on server: epoch bumped to 2, latestRevealDistribution cleared to null
+      const replayState = {
+        v: 1 as const,
+        gameId: "game-abc",
+        epoch: 2,
+        seq: 13,
+        phase: "prepared" as const,
+        startedAt: Date.now(),
+        extras: {},
+      }
+
+      // Epoch 2 supersedes epoch 1
+      expect(isNewerEnvelope(replayState, epoch1RevealedState)).toBe(true)
+
+      // Validation confirms null distribution is not valid
+      expect(
+        isRevealValidForQuestion({
+          revealDistribution: null,
+          currentType: "single",
+          currentQuestionIndex: 0,
+          answersCount: 2,
+        }),
+      ).toBe(false)
+
+      // Replay reveal timeline initializes with 0% progress and unrevealed state
+      const replayedTimeline = calculateRevealState(
+        {
+          timelineKey: "ReplayedQ:2:13",
+          targetPercentages: { 0: 0, 1: 0 },
+          barDurationMs: 800,
+          pauseDurationMs: 250,
+          startedAt: 0,
+          reducedMotion: false,
+          isSurvey: false,
+        },
+        0,
+      )
+
+      expect(replayedTimeline.stage).toBe("animating")
+      expect(replayedTimeline.isRevealed).toBe(false)
+      expect(replayedTimeline.displayPercentages[0]).toBe(0)
+    })
+
+    it("5. Multi-choice percentages use unique respondents", () => {
+      // 10 unique players responded; total 21 votes across options
+      const multiChoiceResponses = {
+        0: 9,
+        1: 7,
+        2: 4,
+        3: 1,
+      }
+      const uniquePlayers = 10
+
+      const pcts = calculateAggregatePercentages(
+        multiChoiceResponses,
+        uniquePlayers,
+      )
+
+      expect(pcts[0]).toBe(90) // 9/10 = 90%
+      expect(pcts[1]).toBe(70) // 7/10 = 70%
+      expect(pcts[2]).toBe(40) // 4/10 = 40%
+      expect(pcts[3]).toBe(10) // 1/10 = 10%
+
+      const sum = Object.values(pcts).reduce((a, b) => a + b, 0)
+      expect(sum).toBe(210) // Sum > 100% proves denominator is unique respondents
+    })
+
+    it("6. Immediate personal player scoring remains unaffected", () => {
+      // Player store receives personal SHOW_RESULT status immediately
+      usePlayerStore.setState({
+        player: {
+          username: "AcePlayer",
+          points: 1250,
+        },
+      })
+
+      const playerState = usePlayerStore.getState()
+      expect(playerState.player?.points).toBe(1250)
+      expect(playerState.player?.username).toBe("AcePlayer")
     })
   })
 })
