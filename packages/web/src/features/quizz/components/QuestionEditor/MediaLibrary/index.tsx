@@ -27,16 +27,20 @@ import { useTranslation } from "react-i18next"
 interface Props {
   open: boolean
   onOpenChange: (_open: boolean) => void
+  onSelect?: (_item: UploadedMedia) => void
+  acceptType?: "image" | "video" | "audio" | "all"
 }
 
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
-const MediaLibrary = ({ open, onOpenChange }: Props) => {
+const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
   const { questions, updateQuestion, currentIndex } = useQuizzEditor()
   const { data, isPending } = useQuery({ ...mediaListQuery(), enabled: open })
   const { upload, pendingCount } = useUploadMedia()
   const [search, setSearch] = useState("")
-  const [filter, setFilter] = useState<MediaFilter>("all")
+  const [filter, setFilter] = useState<MediaFilter>(
+    acceptType && acceptType !== "all" ? acceptType : "all",
+  )
   const [view, setView] = useState<MediaView>("grid")
   const [isDragging, setIsDragging] = useState(false)
   const queryClient = useQueryClient()
@@ -67,7 +71,25 @@ const MediaLibrary = ({ open, onOpenChange }: Props) => {
   )
 
   const handleSelect = (item: UploadedMedia) => () => {
-    updateQuestion(currentIndex, { media: { type: item.type, url: item.url } })
+    if (acceptType && acceptType !== "all" && item.type !== acceptType) {
+      toast.error(
+        t("extensions:errors.invalidMediaType", {
+          expected: acceptType,
+          defaultValue: `Only ${acceptType} files are allowed here`,
+        }),
+      )
+
+      return
+    }
+
+    if (onSelect) {
+      onSelect(item)
+    } else {
+      updateQuestion(currentIndex, {
+        media: { type: item.type, url: item.url },
+      })
+    }
+
     onOpenChange(false)
   }
 

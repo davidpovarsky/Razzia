@@ -1,8 +1,14 @@
+import type { UploadedMedia } from "@razzia/common/types/game"
 import {
   createDefaultQuizExtras,
   generateQuestionId,
+  type QuizExtrasV1,
 } from "@razzia/extensions/core"
-import { EditorEnhancementPanel } from "@razzia/extensions/editor"
+import {
+  EditorEnhancementPanel,
+  type MediaPickerRequestOptions,
+} from "@razzia/extensions/editor"
+import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import QuestionEditorAnswers from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorAnswers"
@@ -14,7 +20,15 @@ import QuestionEditorTitle from "@razzia/web/features/quizz/components/QuestionE
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { Sparkles } from "lucide-react"
 import { useState } from "react"
+import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+
+interface MediaPickerTarget {
+  questionId: string
+  kind: "answer" | "interlude"
+  answerIndex?: number
+  expectedType: "image" | "video"
+}
 
 const QuestionEditor = () => {
   const { t } = useTranslation()
@@ -30,6 +44,8 @@ const QuestionEditor = () => {
   } = useQuizzEditor()
   const [showEnhancements, setShowEnhancements] = useState(false)
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
+  const [mediaPickerTarget, setMediaPickerTarget] =
+    useState<MediaPickerTarget | null>(null)
 
   const AnswersEditor =
     QUESTION_REGISTRY[currentQuestion.type].AnswersEditor ??
@@ -47,26 +63,121 @@ const QuestionEditor = () => {
       "0".repeat(64),
     )
 
+  const handleOpenMediaPicker = (
+    _onSelect?: (_url: string) => void,
+    options?: MediaPickerRequestOptions,
+  ) => {
+    if (options?.target) {
+      setMediaPickerTarget({
+        questionId: options.target.questionId,
+        kind: options.target.kind,
+        answerIndex: options.target.answerIndex,
+        expectedType: options.expectedType ?? "image",
+      })
+    } else {
+      setMediaPickerTarget({
+        questionId: currentQuestionId,
+        kind: "answer",
+        expectedType: "image",
+      })
+    }
+
+    setMediaPickerOpen(true)
+  }
+
+  const handleMediaSelect = (item: UploadedMedia) => {
+    if (!mediaPickerTarget) {
+      return
+    }
+
+    const { questionId, kind, answerIndex, expectedType } = mediaPickerTarget
+
+    if (item.type !== expectedType) {
+      toast.error(
+        t("extensions:errors.invalidMediaType", {
+          expected: expectedType,
+          defaultValue: `Only ${expectedType} files are allowed here`,
+        }),
+      )
+
+      return
+    }
+
+    const baseExtras =
+      extras ??
+      createDefaultQuizExtras(
+        quizzId ?? "temp-quiz",
+        questionIds.length > 0 ? questionIds : [questionId],
+        "0".repeat(64),
+      )
+
+    const currentItem = { ...(baseExtras.perQuestion[questionId] ?? {}) }
+
+    if (kind === "answer" && typeof answerIndex === "number") {
+      const list = [...(currentItem.answerVisuals ?? [])]
+      const existingIdx = list.findIndex((v) => v.answerIndex === answerIndex)
+
+      if (existingIdx >= 0) {
+        list[existingIdx] = {
+          ...list[existingIdx],
+          url: item.url,
+        }
+      } else {
+        list.push({
+          answerIndex,
+          display: "image",
+          url: item.url,
+          alt:
+            currentQuestion.answers[answerIndex] || `Answer ${answerIndex + 1}`,
+        })
+      }
+
+      currentItem.answerVisuals = list
+    } else if (kind === "interlude") {
+      currentItem.interlude = {
+        ...(currentItem.interlude ?? {
+          enabled: true,
+          kind: expectedType === "video" ? "video" : "image",
+          title: "",
+          durationMs: 5000,
+          advance: "auto",
+        }),
+        url: item.url,
+      }
+    }
+
+    const updatedExtras: QuizExtrasV1 = {
+      ...baseExtras,
+      perQuestion: {
+        ...baseExtras.perQuestion,
+        [questionId]: currentItem,
+      },
+    }
+
+    setExtras(updatedExtras)
+    setMediaPickerOpen(false)
+    setMediaPickerTarget(null)
+  }
+
   return (
     <div className="flex flex-1 overflow-hidden">
       <main className="mx-auto flex max-w-7xl flex-1 flex-col gap-4 overflow-y-auto p-6">
         <div className="flex items-center justify-between">
           <QuestionEditorTitle />
-          <button
+          <Button
             type="button"
+            size="sm"
             onClick={() => {
-              if (!extras) {
-                setExtras(activeExtras)
-              }
-
               setShowEnhancements((prev) => !prev)
             }}
-            className="flex items-center gap-1.5 rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-blue-700 shadow-sm transition-all hover:bg-blue-100 dark:border-blue-800 dark:bg-blue-950/40 dark:text-blue-300"
+            className="hover:bg-accent border-primary/30 bg-primary/10 text-primary flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold shadow-sm transition-all"
             data-testid="toggle-enhancements-button"
           >
             <Sparkles className="size-4" />
-            {showEnhancements ? "Close Enhancements" : "Quiz Enhancements"}
-          </button>
+            {showEnhancements
+              ? t("extensions:editor.toggleClose", "Close Enhancements")
+              : t("extensions:editor.toggle", "Quiz Enhancements")}
+          </Button>
         </div>
 
         {showEnhancements && (
@@ -78,9 +189,7 @@ const QuestionEditor = () => {
               currentQuestionTitle={currentQuestion.question}
               currentQuestionAnswers={currentQuestion.answers}
               onChange={(updated) => setExtras(updated)}
-              onOpenMediaPicker={() => {
-                setMediaPickerOpen(true)
-              }}
+              onOpenMediaPicker={handleOpenMediaPicker}
               t={(key: string, fallback?: string) =>
                 t(key, { defaultValue: fallback })
               }
@@ -101,7 +210,13 @@ const QuestionEditor = () => {
         open={mediaPickerOpen}
         onOpenChange={(open) => {
           setMediaPickerOpen(open)
+
+          if (!open) {
+            setMediaPickerTarget(null)
+          }
         }}
+        onSelect={handleMediaSelect}
+        acceptType={mediaPickerTarget?.expectedType ?? "all"}
       />
     </div>
   )
