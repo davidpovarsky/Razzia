@@ -5,3 +5,5 @@ export * from "./editor-state"
 export * from "./conflict-modal"
 
 export * from "./editor-enhancement-panel"
+
+export { CANONICAL_ANSWER_COLORS } from "./components/utils"

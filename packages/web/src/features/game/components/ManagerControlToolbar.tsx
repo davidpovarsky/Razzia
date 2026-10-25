@@ -7,16 +7,15 @@ import {
 import { formatHistoryItem } from "@razzia/extensions/presentation"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
+import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
 import clsx from "clsx"
 import {
-  ArrowLeft,
   ChevronRight,
   History,
   LogOut,
   Play,
-  RotateCcw,
   SkipForward,
   Timer,
 } from "lucide-react"
@@ -428,7 +427,7 @@ export const ManagerControlToolbar = ({
             onClick={handleEndTimer}
             disabled={isPending}
             className={clsx(
-              "flex items-center gap-2 rounded-lg bg-amber-500 px-5 py-2.5 text-base font-bold text-white shadow-lg transition-transform hover:bg-amber-600 active:scale-95",
+              "bg-primary flex items-center gap-2 rounded-lg px-5 py-2.5 text-base font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95",
               isPending && "pointer-events-none opacity-60",
             )}
           >
@@ -464,137 +463,15 @@ export const ManagerControlToolbar = ({
       </div>
 
       {/* History Viewer Modal */}
-      {historyOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="bg-background border-border relative flex max-h-[85vh] w-full max-w-2xl flex-col rounded-2xl border p-6 shadow-2xl">
-            <div className="mb-4 flex items-center justify-between border-b pb-3">
-              <div className="flex items-center gap-2">
-                <History className="text-primary size-5" />
-                <h3 className="text-foreground text-xl font-bold">
-                  {t("extensions:host.previous")}
-                </h3>
-              </div>
-              <Button
-                onClick={handleCloseHistory}
-                className="bg-accent text-accent-foreground rounded-lg px-3 py-1.5 text-sm font-semibold"
-              >
-                <ArrowLeft className="mr-1 inline size-4" />
-                {t("extensions:host.returnToLive")}
-              </Button>
-            </div>
-
-            {/* Questions navigation tabs */}
-            <div className="mb-4 flex gap-2 overflow-x-auto border-b pb-2">
-              {Array.from({ length: currentQuestionIdx }).map((_, idx) => (
-                <button
-                  key={idx}
-                  type="button"
-                  onClick={() => {
-                    handleSelectHistoryIndex(idx)
-                  }}
-                  className={clsx(
-                    "shrink-0 rounded-lg px-3 py-1.5 text-sm font-bold transition-colors",
-                    selectedHistoryIndex === idx
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "bg-accent/50 text-foreground hover:bg-accent",
-                  )}
-                >
-                  {t("extensions:host.questionNum", { num: idx + 1 })}
-                </button>
-              ))}
-            </div>
-
-            {/* Question History Details */}
-            <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-              {historyItem ? (
-                <div className="space-y-4">
-                  <div className="bg-accent/30 flex items-center justify-between rounded-xl p-4">
-                    <span className="text-foreground text-lg font-bold">
-                      {historyItem.questionText ||
-                        t("extensions:host.noHistoryAvailable")}
-                    </span>
-                    <span className="text-muted-foreground rounded bg-black/10 px-2 py-1 text-xs font-semibold uppercase">
-                      {historyItem.questionType}
-                    </span>
-                  </div>
-
-                  <div className="text-muted-foreground flex items-center gap-3 text-sm font-medium">
-                    <span>
-                      {t("extensions:host.answersCount", {
-                        count: historyItem.playerAnswersCount,
-                      })}
-                    </span>
-                    {historyItem.skipped && (
-                      <span className="font-bold text-amber-500">
-                        {t("extensions:host.skipped")}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Question Choices & Solution Badges if available */}
-                  {historyItem.answers && historyItem.answers.length > 0 && (
-                    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
-                      {historyItem.answers.map((ans, aIdx) => {
-                        const isCorrect = historyItem.solutions?.includes(aIdx)
-
-                        return (
-                          <div
-                            key={aIdx}
-                            className={clsx(
-                              "flex items-center justify-between rounded-lg border px-3 py-2 text-sm",
-                              isCorrect
-                                ? "border-emerald-500 bg-emerald-500/10 font-semibold text-emerald-400"
-                                : "border-white/10 bg-black/20 text-white/80",
-                            )}
-                          >
-                            <span>{ans}</span>
-                            {isCorrect && (
-                              <span className="text-xs font-bold text-emerald-400 uppercase">
-                                {t("extensions:reveal.correct")}
-                              </span>
-                            )}
-                          </div>
-                        )
-                      })}
-                    </div>
-                  )}
-                </div>
-              ) : (
-                <div className="text-muted-foreground flex flex-col items-center justify-center p-8 text-center">
-                  <p>{t("extensions:host.noHistoryAvailable")}</p>
-                </div>
-              )}
-            </div>
-
-            {/* Bottom Actions: Return to live and Replay from here */}
-            <div className="mt-4 flex items-center justify-between border-t pt-4">
-              <Button
-                onClick={handleCloseHistory}
-                className="bg-accent text-accent-foreground rounded-lg px-4 py-2 font-semibold"
-              >
-                {t("extensions:host.returnToLive")}
-              </Button>
-
-              {selectedHistoryIndex !== null && (
-                <AlertDialog
-                  trigger={
-                    <Button className="flex items-center gap-1.5 rounded-lg bg-red-600 px-4 py-2 font-bold text-white shadow-md hover:bg-red-700">
-                      <RotateCcw className="size-4" />
-                      {t("extensions:host.replayFromHere")}
-                    </Button>
-                  }
-                  title={t("extensions:host.replayConfirmTitle")}
-                  description={t("extensions:host.replayConfirmDesc")}
-                  confirmLabel={t("extensions:host.replayFromHere")}
-                  onConfirm={() => {
-                    handleReplayFromCheckpoint(selectedHistoryIndex)
-                  }}
-                />
-              )}
-            </div>
-          </div>
-        </div>
-      )}
+      <HistoryDialog
+        open={historyOpen}
+        onClose={handleCloseHistory}
+        currentQuestionIdx={currentQuestionIdx}
+        selectedHistoryIndex={selectedHistoryIndex}
+        onSelectHistoryIndex={handleSelectHistoryIndex}
+        historyItem={historyItem}
+        onReplayFromCheckpoint={handleReplayFromCheckpoint}
+      />
     </div>
   )
 }
