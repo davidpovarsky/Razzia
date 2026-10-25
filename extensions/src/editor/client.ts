@@ -109,10 +109,7 @@ export class CompositeApiClient {
       extras: QuizExtrasV1
     },
   ): Promise<SaveCompositeResult> {
-    const baseDigest =
-      payload.extras.baseDigest && payload.extras.baseDigest !== "0".repeat(64)
-        ? payload.extras.baseDigest
-        : computeCanonicalBaseDigest(payload.quizz)
+    const baseDigest = computeCanonicalBaseDigest(payload.quizz)
 
     const normalizedPayload = {
       ...payload,
@@ -133,23 +130,31 @@ export class CompositeApiClient {
     )
 
     if (res.status === 409) {
-      let conflictBody: { message?: string; serverRevision?: number } = {}
+      let conflictBody: {
+        error?: string
+        message?: string
+        currentRevision?: number
+        serverRevision?: number
+        expectedRevision?: number | null
+      } = {}
 
       try {
-        conflictBody = (await res.json()) as {
-          message?: string
-          serverRevision?: number
-        }
+        conflictBody = (await res.json()) as typeof conflictBody
       } catch {
         // Ignore parse error
       }
 
+      const effectiveServerRevision =
+        conflictBody.currentRevision ?? conflictBody.serverRevision
+
       throw new RevisionConflictError(
-        conflictBody.message ??
+        conflictBody.error ??
+          conflictBody.message ??
           "Revision conflict: quiz was modified by another session",
         {
-          serverRevision: conflictBody.serverRevision,
-          expectedRevision: payload.expectedRevision,
+          serverRevision: effectiveServerRevision,
+          expectedRevision:
+            conflictBody.expectedRevision ?? payload.expectedRevision,
         },
       )
     }
@@ -168,10 +173,7 @@ export class CompositeApiClient {
     quizz: QuizzValidated
     extras: QuizExtrasV1
   }): Promise<SaveCompositeResult> {
-    const baseDigest =
-      payload.extras.baseDigest && payload.extras.baseDigest !== "0".repeat(64)
-        ? payload.extras.baseDigest
-        : computeCanonicalBaseDigest(payload.quizz)
+    const baseDigest = computeCanonicalBaseDigest(payload.quizz)
 
     const normalizedPayload = {
       ...payload,

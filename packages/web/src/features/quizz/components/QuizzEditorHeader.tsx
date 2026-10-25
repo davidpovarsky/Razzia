@@ -79,36 +79,37 @@ const QuizzEditorHeader = () => {
 
   const handleSave = handleSubmit(
     async (values) => {
-      console.log("[FORM ON_VALID]", JSON.stringify(values))
-      console.log("[EXTRAS STATE]", Boolean(extras), "quizzId:", quizzId)
-
       if (extras && quizzId) {
         try {
-          console.log("[COMPUTING DIGEST]...")
           const baseDigest = computeCanonicalBaseDigest(values)
-          console.log("[DIGEST COMPUTED]", baseDigest)
           const client = new CompositeApiClient({
             getAuthToken: () => localStorage.getItem("token"),
           })
-          console.log("[CALLING SAVE COMPOSITE]...")
           const res = await client.saveQuizComposite(quizzId, {
             expectedRevision: extras.revision,
             quizz: values,
             extras: {
               ...extras,
               baseDigest,
+              questionIds,
             },
           })
-          console.log("[SAVE COMPOSITE SUCCESS]", JSON.stringify(res))
+          setExtras((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  revision: res.revision,
+                  baseDigest: res.baseDigest,
+                }
+              : null,
+          )
           onSaved("quizz:quizzUpdated")
 
           return
         } catch (err: unknown) {
-          console.error("[SAVE COMPOSITE ERROR]", err)
-
           if (err instanceof RevisionConflictError) {
             setConflict({
-              serverRevision: err.serverRevision,
+              serverRevision: err.currentRevision ?? err.serverRevision,
               expectedRevision: err.expectedRevision,
             })
 
@@ -123,12 +124,10 @@ const QuizzEditorHeader = () => {
 
       if (extras && !quizzId) {
         try {
-          console.log("[COMPUTING DIGEST FOR NEW COMPOSITE QUIZ]...")
           const baseDigest = computeCanonicalBaseDigest(values)
           const client = new CompositeApiClient({
             getAuthToken: () => localStorage.getItem("token"),
           })
-          console.log("[CALLING CREATE COMPOSITE]...")
           const res = await client.createQuizComposite({
             quizz: values,
             extras: {
@@ -138,12 +137,20 @@ const QuizzEditorHeader = () => {
               questionIds,
             },
           })
-          console.log("[CREATE COMPOSITE SUCCESS]", JSON.stringify(res))
+          setExtras((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  quizId: res.quizId,
+                  revision: res.revision,
+                  baseDigest: res.baseDigest,
+                }
+              : null,
+          )
           onSaved("quizz:quizzSaved")
 
           return
         } catch (err: unknown) {
-          console.error("[CREATE COMPOSITE ERROR]", err)
           onError(err as Error)
 
           return
@@ -151,18 +158,14 @@ const QuizzEditorHeader = () => {
       }
 
       if (quizzId) {
-        console.log("[SAVING VANILLA UPDATE]", quizzId)
         update({ id: quizzId, json: values })
 
         return
       }
 
-      console.log("[SAVING VANILLA CREATE]")
       create(values)
     },
     (invalid) => {
-      console.error("[FORM ON_INVALID]", JSON.stringify(invalid))
-
       if (!Array.isArray(invalid.questions)) {
         return
       }
@@ -217,13 +220,30 @@ const QuizzEditorHeader = () => {
     }
 
     try {
-      const client = new CompositeApiClient()
-      // Force overwrite with expectedRevision: null
-      await client.saveQuizComposite(quizzId, {
-        expectedRevision: null,
-        quizz: getValues(),
-        extras,
+      const currentValues = getValues()
+      const baseDigest = computeCanonicalBaseDigest(currentValues)
+      const client = new CompositeApiClient({
+        getAuthToken: () => localStorage.getItem("token"),
       })
+      // Force overwrite with expectedRevision: null and fresh baseDigest matching current form values
+      const res = await client.saveQuizComposite(quizzId, {
+        expectedRevision: null,
+        quizz: currentValues,
+        extras: {
+          ...extras,
+          baseDigest,
+          questionIds,
+        },
+      })
+      setExtras((prev) =>
+        prev
+          ? {
+              ...prev,
+              revision: res.revision,
+              baseDigest: res.baseDigest,
+            }
+          : null,
+      )
       setConflict(null)
       onSaved("quizz:quizzUpdated")
     } catch (err: unknown) {

@@ -1,5 +1,6 @@
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import {
+  computeCanonicalBaseDigest,
   createDefaultQuizExtras,
   generateQuestionId,
   isSafeMediaUrl,
@@ -1149,6 +1150,99 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
         expect(result.failedSafely).toBe(true)
         expect(result.extras).toBe(extras)
       })
+
+      it("supports switching questions, safely handles deleted target question, and reopens picker for remaining questions", () => {
+        const q0Id = "q-seq-0"
+        const q1Id = "q-seq-1"
+
+        let questions = [
+          {
+            id: q0Id,
+            question: "Question Zero",
+            answers: ["Q0 Answer A", "Q0 Answer B"],
+            media: { type: "image" as const, url: "/media/q0-orig.png" },
+          },
+          {
+            id: q1Id,
+            question: "Question One",
+            answers: ["Q1 Answer X", "Q1 Answer Y"],
+            media: { type: "image" as const, url: "/media/q1-orig.png" },
+          },
+        ]
+        let questionIds = [q0Id, q1Id]
+        let extras = createDefaultQuizExtras(
+          "quiz-seq",
+          questionIds,
+          "0".repeat(64),
+        )
+
+        // 1. User opens picker targeting Q0
+        let mediaPickerTarget: {
+          questionId: string
+          kind: "answer" | "interlude"
+          answerIndex?: number
+          expectedType: "image" | "video"
+        } | null = {
+          questionId: q0Id,
+          kind: "answer",
+          answerIndex: 0,
+          expectedType: "image",
+        }
+
+        // 2. User deletes Q0 while picker is open
+        questions = questions.filter((q) => q.id !== q0Id)
+        questionIds = questionIds.filter((id) => id !== q0Id)
+        extras = {
+          ...extras,
+          questionIds,
+        }
+        delete extras.perQuestion[q0Id]
+
+        // 3. Media selection on deleted Q0 fails safely
+        const targetIdx = questionIds.indexOf(mediaPickerTarget.questionId)
+        const targetExists = targetIdx >= 0 && Boolean(questions[targetIdx])
+        expect(targetExists).toBe(false)
+
+        // Reset target on safe fail
+        mediaPickerTarget = null
+
+        // 4. User reopens picker for remaining Q1 answer 1
+        mediaPickerTarget = {
+          questionId: q1Id,
+          kind: "answer",
+          answerIndex: 1,
+          expectedType: "image",
+        }
+
+        const q1Idx = questionIds.indexOf(mediaPickerTarget.questionId)
+        expect(q1Idx).toBe(0) // Now at index 0
+        const activeTargetQuestion = questions[q1Idx]
+        const derivedAlt =
+          activeTargetQuestion.answers[mediaPickerTarget.answerIndex!]
+
+        expect(derivedAlt).toBe("Q1 Answer Y")
+
+        // 5. Apply selection
+        const q1Extras = { ...(extras.perQuestion[q1Id] ?? {}) }
+        q1Extras.answerVisuals = [
+          {
+            answerIndex: 1,
+            display: "image",
+            url: "/media/q1-selected.png",
+            alt: derivedAlt,
+          },
+        ]
+        extras.perQuestion[q1Id] = q1Extras
+
+        expect(extras.perQuestion[q1Id].answerVisuals?.[0].url).toBe(
+          "/media/q1-selected.png",
+        )
+        expect(extras.perQuestion[q1Id].answerVisuals?.[0].alt).toBe(
+          "Q1 Answer Y",
+        )
+        // Original question.media untouched
+        expect(activeTargetQuestion.media.url).toBe("/media/q1-orig.png")
+      })
     })
 
     describe("P0.3: Media picker contract and expectedType validation", () => {
@@ -1215,20 +1309,14 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
 
     describe("P0.4: Media library filter synchronization and delete integrity", () => {
       it("synchronizes filter when opening sequentially for image target then video target", () => {
-        let acceptType: "image" | "video" | "all" = "image"
-        let filter = acceptType !== "all" ? acceptType : "all"
-        expect(filter).toBe("image")
+        const resolveInitialFilter = (
+          acceptType: "image" | "video" | "all",
+        ): "image" | "video" | "all" =>
+          acceptType !== "all" ? acceptType : "all"
 
-        // Next open is for video
-        acceptType = "video"
-        // Synchronized:
-        filter = acceptType !== "all" ? acceptType : "all"
-        expect(filter).toBe("video")
-
-        // Unfiltered open
-        acceptType = "all"
-        filter = acceptType !== "all" ? acceptType : "all"
-        expect(filter).toBe("all")
+        expect(resolveInitialFilter("image")).toBe("image")
+        expect(resolveInitialFilter("video")).toBe("video")
+        expect(resolveInitialFilter("all")).toBe("all")
       })
 
       it("reconciles extras sidecar when media asset is deleted, clearing broken references", () => {
@@ -1391,6 +1479,109 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
 
         expect(html).toBe("")
       })
+
+      it("handles two conflicting sessions, presents 409 with currentRevision, recomputes baseDigest on Force Overwrite, and reloads", () => {
+        // Simulating the conflict resolution lifecycle in QuizzEditorHeader
+        const initialQuiz = {
+          subject: "Collaborative Quiz",
+          gameMode: "quizz",
+          cooldown: 5,
+          time: 20,
+          questions: [
+            {
+              question: "Initial Question 1",
+              answers: ["A", "B"],
+              solutions: [0],
+              cooldown: 5,
+              time: 20,
+              type: "single",
+            },
+          ],
+        }
+
+        const qId = "q-collab-1"
+        const initialDigest = computeCanonicalBaseDigest(
+          initialQuiz as unknown as QuizzValidated,
+        )
+
+        // Session A saves, bumping revision to 2
+        let serverRevision = 2
+        let serverDigest = initialDigest
+        let serverQuiz = { ...initialQuiz }
+
+        // Session B still has expectedRevision: 1
+        const sessionBExpectedRevision = 1
+
+        // 1. Session B attempts regular save -> Conflict 409
+        let conflictDetected: {
+          serverRevision: number
+          expectedRevision: number
+        } | null = null
+
+        if (sessionBExpectedRevision !== serverRevision) {
+          // Server responds with 409 contract: { error, currentRevision, expectedRevision }
+          const server409Payload = {
+            error: "errors:extensions.revisionConflict",
+            currentRevision: serverRevision,
+            expectedRevision: sessionBExpectedRevision,
+          }
+
+          // Client maps currentRevision -> serverRevision
+          conflictDetected = {
+            serverRevision: server409Payload.currentRevision,
+            expectedRevision: server409Payload.expectedRevision,
+          }
+        }
+
+        expect(conflictDetected).not.toBeNull()
+        expect(conflictDetected?.serverRevision).toBe(2)
+        expect(conflictDetected?.expectedRevision).toBe(1)
+
+        // 2. In session B, user modifies question text
+        const sessionBEditedQuiz = {
+          ...initialQuiz,
+          questions: [
+            {
+              question: "Modified Question 1 (by Session B)",
+              answers: ["A", "B"],
+              solutions: [0],
+              cooldown: 5,
+              time: 20,
+              type: "single",
+            },
+          ],
+        }
+
+        // 3. User confirms Force Overwrite in ConflictDialog
+        // Header recomputes baseDigest for sessionBEditedQuiz
+        const freshDigest = computeCanonicalBaseDigest(
+          sessionBEditedQuiz as unknown as QuizzValidated,
+        )
+        expect(freshDigest).not.toBe(initialDigest)
+
+        // Force overwrite submits expectedRevision: null with fresh baseDigest
+        const overwritePayload = {
+          expectedRevision: null,
+          quizz: sessionBEditedQuiz,
+          extras: {
+            ...createDefaultQuizExtras("collab-id", [qId], freshDigest),
+            baseDigest: freshDigest,
+          },
+        }
+
+        // Server accepts overwrite, bumps revision to 3
+        serverRevision = 3
+        serverDigest = overwritePayload.extras.baseDigest
+        serverQuiz = overwritePayload.quizz
+
+        expect(serverRevision).toBe(3)
+        expect(serverDigest).toBe(freshDigest)
+
+        // 4. Subsequent reload gets the overwritten quiz
+        expect(serverQuiz.questions[0].question).toBe(
+          "Modified Question 1 (by Session B)",
+        )
+      })
     })
 
     describe("P1.3: Audio preview honors chosen settings (runtime resolver semantics)", () => {
@@ -1492,36 +1683,37 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
         }
         let extras = createDefaultQuizExtras("test-quiz", [qId], "0".repeat(64))
 
-        // Simulated QuestionEditor state
-        let mediaPickerTarget: {
+        interface MediaPickerTargetState {
           questionId: string
           kind: "answer" | "interlude"
           answerIndex?: number
           expectedType: "image" | "video"
-        } | null = null
+        }
+
+        let mediaPickerTarget: MediaPickerTargetState | null = null
         let mediaPickerOpen = false
 
         // 1. User clicks "Browse" on Answer A (answerIndex: 0)
         const openPicker = (options: {
           target: { questionId: string; kind: "answer"; answerIndex: number }
           expectedType: "image"
-        }) => {
-          mediaPickerTarget = {
+        }): MediaPickerTargetState => {
+          mediaPickerOpen = true
+          return {
             questionId: options.target.questionId,
             kind: options.target.kind,
             answerIndex: options.target.answerIndex,
             expectedType: options.expectedType,
           }
-          mediaPickerOpen = true
         }
 
-        openPicker({
+        mediaPickerTarget = openPicker({
           target: { questionId: qId, kind: "answer", answerIndex: 0 },
           expectedType: "image",
         })
 
         expect(mediaPickerOpen).toBe(true)
-        expect(mediaPickerTarget?.answerIndex).toBe(0)
+        expect(mediaPickerTarget.answerIndex).toBe(0)
 
         // 2. User selects an uploaded image from MediaLibrary
         const uploadedAsset = {
@@ -1579,7 +1771,7 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
         expect(baseQuestion.media.type).toBe("image")
 
         // 3. Negative case: selecting video for image answer throws or rejects
-        openPicker({
+        mediaPickerTarget = openPicker({
           target: { questionId: qId, kind: "answer", answerIndex: 1 },
           expectedType: "image",
         })

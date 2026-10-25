@@ -33,6 +33,7 @@ interface MediaPickerTarget {
 const QuestionEditor = () => {
   const { t } = useTranslation()
   const {
+    questions,
     currentQuestion,
     currentQuestionId,
     currentIndex,

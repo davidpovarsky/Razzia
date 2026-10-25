@@ -1,7 +1,9 @@
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import {
+  computeCanonicalBaseDigest,
   createDefaultQuizExtras,
   generateQuestionId,
+  type QuizExtrasV1,
 } from "@razzia/extensions/core"
 import { describe, expect, it, vi } from "vitest"
 import {
@@ -312,6 +314,251 @@ describe("EDITOR & COMPOSITE API Acceptance Cases & Unit Tests", () => {
       await expect(
         client.createQuizComposite({ quizz: dummyQuiz, extras }),
       ).rejects.toThrow("Failed to create composite quiz: HTTP 500")
+    })
+
+    it("P0: saveQuizComposite correctly parses currentRevision from real server 409 conflict payload", async () => {
+      const mockFetch = vi.fn().mockResolvedValue({
+        status: 409,
+        ok: false,
+        json: () =>
+          Promise.resolve({
+            error: "errors:extensions.revisionConflict",
+            currentRevision: 7,
+            expectedRevision: 4,
+          }),
+      })
+
+      const client = new CompositeApiClient({
+        baseUrl: "http://localhost:3000",
+        fetchFn: mockFetch as unknown as typeof fetch,
+      })
+
+      const qId = generateQuestionId()
+      const extras = createDefaultQuizExtras(
+        "quiz-conflict",
+        [qId],
+        "0".repeat(64),
+      )
+      const quiz = {
+        subject: "Conflict Quiz",
+        gameMode: "quizz",
+        questions: [],
+      } as unknown as QuizzValidated
+
+      try {
+        await client.saveQuizComposite("quiz-conflict", {
+          expectedRevision: 4,
+          quizz: quiz,
+          extras,
+        })
+        expect.unreachable("Should have thrown RevisionConflictError")
+      } catch (err) {
+        expect(err).toBeInstanceOf(RevisionConflictError)
+        const conflictErr = err as RevisionConflictError
+        expect(conflictErr.currentRevision).toBe(7)
+        expect(conflictErr.serverRevision).toBe(7)
+        expect(conflictErr.expectedRevision).toBe(4)
+      }
+    })
+
+    it("P0: saveQuizComposite recomputes baseDigest matching modified quiz questions on force overwrite", async () => {
+      let capturedBody: {
+        expectedRevision: number | null
+        quizz: QuizzValidated
+        extras: { baseDigest: string }
+      } | null = null
+
+      const mockFetch = vi
+        .fn()
+        .mockImplementation((_url: unknown, init: { body: string }) => {
+          capturedBody = JSON.parse(init.body) as typeof capturedBody
+          return Promise.resolve({
+            status: 200,
+            ok: true,
+            json: () =>
+              Promise.resolve({
+                quizId: "quiz-edit",
+                revision: 3,
+                baseDigest: capturedBody?.extras.baseDigest,
+              }),
+          })
+        })
+
+      const client = new CompositeApiClient({
+        fetchFn: mockFetch as unknown as typeof fetch,
+      })
+
+      const qId = generateQuestionId()
+      const extras = createDefaultQuizExtras("quiz-edit", [qId], "a".repeat(64))
+
+      const modifiedQuiz = {
+        subject: "Updated Quiz Subject",
+        gameMode: "quizz",
+        questions: [
+          {
+            question: "Updated Question Text Here",
+            answers: ["Ans A", "Ans B"],
+            solutions: [0],
+            cooldown: 5,
+            time: 20,
+            type: "single",
+          },
+        ],
+      } as unknown as QuizzValidated
+
+      const expectedFreshDigest = computeCanonicalBaseDigest(modifiedQuiz)
+
+      const result = await client.saveQuizComposite("quiz-edit", {
+        expectedRevision: null,
+        quizz: modifiedQuiz,
+        extras,
+      })
+
+      const finalBody = capturedBody as unknown as {
+        expectedRevision: number | null
+        extras: { baseDigest: string }
+      }
+      expect(finalBody.expectedRevision).toBeNull()
+      expect(finalBody.extras.baseDigest).toBe(expectedFreshDigest)
+      expect(finalBody.extras.baseDigest).not.toBe("a".repeat(64))
+      expect(result.baseDigest).toBe(expectedFreshDigest)
+    })
+
+    it("P0: creates new quiz composite with image and interlude, then reloads attachments intact", async () => {
+      const inMemoryDb = new Map<
+        string,
+        { quizz: QuizzValidated; extras: QuizExtrasV1 }
+      >()
+
+      const mockFetch = vi
+        .fn()
+        .mockImplementation(
+          (url: unknown, init: { method?: string; body?: string }) => {
+            const urlStr = String(url)
+            if (
+              init.method === "POST" &&
+              urlStr.endsWith("/api/extensions/quizzes")
+            ) {
+              const body = JSON.parse(String(init.body)) as {
+                quizz: QuizzValidated
+                extras: QuizExtrasV1
+              }
+              const mintedId =
+                "minted-" + Math.random().toString(36).slice(2, 8)
+              const savedExtras = {
+                ...body.extras,
+                quizId: mintedId,
+                revision: 1,
+              }
+              inMemoryDb.set(mintedId, {
+                quizz: body.quizz,
+                extras: savedExtras,
+              })
+              return Promise.resolve({
+                status: 201,
+                ok: true,
+                json: () =>
+                  Promise.resolve({
+                    quizId: mintedId,
+                    revision: 1,
+                    baseDigest: body.extras.baseDigest,
+                  }),
+              })
+            }
+            if (
+              init.method === "GET" &&
+              urlStr.includes("/api/extensions/quizzes/")
+            ) {
+              const id = urlStr.split("/").pop()!
+              const record = inMemoryDb.get(id)
+              if (!record) {
+                return Promise.resolve({
+                  status: 404,
+                  ok: false,
+                  json: () => Promise.resolve({}),
+                })
+              }
+              return Promise.resolve({
+                status: 200,
+                ok: true,
+                json: () =>
+                  Promise.resolve({
+                    quizId: id,
+                    exists: true,
+                    extras: record.extras,
+                    baseDigest: record.extras.baseDigest,
+                  }),
+              })
+            }
+            return Promise.reject(new Error(`Unhandled request to: ${urlStr}`))
+          },
+        )
+
+      const client = new CompositeApiClient({
+        fetchFn: mockFetch as unknown as typeof fetch,
+      })
+
+      const q0 = generateQuestionId()
+      const newQuiz = {
+        subject: "Full Round-Trip New Quiz",
+        gameMode: "quizz",
+        questions: [
+          {
+            question: "What is the capital of Scotland?",
+            answers: ["Edinburgh", "Glasgow", "Aberdeen", "Dundee"],
+            solutions: [0],
+            cooldown: 5,
+            time: 20,
+            type: "single",
+          },
+        ],
+      } as unknown as QuizzValidated
+
+      const extras = createDefaultQuizExtras("temp-id", [q0], "0".repeat(64))
+      extras.perQuestion[q0] = {
+        answerVisuals: [
+          {
+            answerIndex: 0,
+            display: "image",
+            url: "/media/edinburgh.png",
+            alt: "Edinburgh Castle",
+          },
+        ],
+        interlude: {
+          kind: "image",
+          title: "Halftime Break",
+          durationMs: 5000,
+          advance: "auto",
+          url: "/media/halftime.jpg",
+        },
+      }
+
+      // 1. Create new composite quiz
+      const created = await client.createQuizComposite({
+        quizz: newQuiz,
+        extras,
+      })
+      expect(created.quizId).toMatch(/^minted-/)
+      expect(created.revision).toBe(1)
+
+      // 2. Reload and assert attachments
+      const reloaded = await client.getQuizComposite(created.quizId)
+      expect(reloaded.exists).toBe(true)
+      expect(reloaded.extras).not.toBeNull()
+      expect(reloaded.extras?.quizId).toBe(created.quizId)
+      expect(reloaded.extras?.perQuestion[q0].answerVisuals?.[0].url).toBe(
+        "/media/edinburgh.png",
+      )
+      expect(reloaded.extras?.perQuestion[q0].answerVisuals?.[0].alt).toBe(
+        "Edinburgh Castle",
+      )
+      expect(reloaded.extras?.perQuestion[q0].interlude?.url).toBe(
+        "/media/halftime.jpg",
+      )
+      expect(reloaded.extras?.perQuestion[q0].interlude?.title).toBe(
+        "Halftime Break",
+      )
+      expect(reloaded.baseDigest).toBe(computeCanonicalBaseDigest(newQuiz))
     })
   })
 })

@@ -114,7 +114,7 @@ export const ConflictDialog = ({
             <div className="flex justify-end gap-2">
               <Button
                 type="button"
-                variant="sm"
+                size="sm"
                 className="bg-accent text-accent-foreground px-3 py-1.5 text-xs font-semibold"
                 onClick={() => setConfirmingOverwrite(false)}
               >
@@ -122,7 +122,7 @@ export const ConflictDialog = ({
               </Button>
               <Button
                 type="button"
-                variant="sm"
+                size="sm"
                 className="bg-red-600 px-3 py-1.5 text-xs font-bold text-white hover:bg-red-700"
                 onClick={onOverwrite}
                 data-testid="conflict-confirm-overwrite-button"
