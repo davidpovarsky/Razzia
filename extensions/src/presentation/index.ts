@@ -13,3 +13,5 @@ export * from "./team-leaderboard-panel"
 export * from "./lobby-team-assignment"
 
 export * from "./reveal-timeline"
+
+export * from "./history-helper"

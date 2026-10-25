@@ -94,7 +94,11 @@
     "advanceManual": "Manual Manager Advance",
     "skipInterlude": "Skip Interlude",
     "audioCue": "Accompanying Audio Cue",
-    "resuming": "Resuming interlude from authoritative server clock"
+    "resuming": "Resuming interlude from authoritative server clock",
+    "secondsRemaining": "{{seconds}}s remaining",
+    "awaitingHost": "Awaiting Host to advance",
+    "skipped": "Skipped",
+    "slideAlt": "Interlude slide"
   },
   "conflict": {
     "title": "Revision Conflict (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "The game session will be terminated and all players will be disconnected.",
     "noHistoryAvailable": "No past questions available yet.",
     "questionNum": "Question {{num}}",
-    "answersCount": "{{count}} answers"
+    "answersCount": "{{count}} answers",
+    "skipped": "(Skipped)"
   },
   "reveal": {
     "votes": "{{count}} votes",
     "correct": "Correct",
-    "incorrect": "Incorrect"
+    "incorrect": "Incorrect",
+    "answered": "answered",
+    "answeredRatio": "{{responders}} / {{eligible}} answered"
   }
 }

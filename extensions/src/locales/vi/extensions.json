@@ -94,7 +94,11 @@
     "advanceManual": "Thủ công chuyển",
     "skipInterlude": "Bỏ qua",
     "audioCue": "Hiệu ứng âm thanh",
-    "resuming": "Đang đồng bộ lại theo thời gian thực của máy chủ"
+    "resuming": "Đang đồng bộ lại theo thời gian thực của máy chủ",
+    "secondsRemaining": "còn {{seconds}}s",
+    "awaitingHost": "Đang đợi máy chủ chuyển tiếp",
+    "skipped": "Đã bỏ qua",
+    "slideAlt": "Slide nghỉ giữa giờ"
   },
   "conflict": {
     "title": "Xung đột phiên bản (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "Phiên chơi sẽ kết thúc và tất cả người chơi sẽ bị ngắt kết nối.",
     "noHistoryAvailable": "Chưa có câu hỏi nào trước đó.",
     "questionNum": "Câu hỏi {{num}}",
-    "answersCount": "{{count}} câu trả lời"
+    "answersCount": "{{count}} câu trả lời",
+    "skipped": "(Đã bỏ qua)"
   },
   "reveal": {
     "votes": "{{count}} lượt bình chọn",
     "correct": "Chính xác",
-    "incorrect": "Không chính xác"
+    "incorrect": "Không chính xác",
+    "answered": "đã trả lời",
+    "answeredRatio": "{{responders}} / {{eligible}} đã trả lời"
   }
 }

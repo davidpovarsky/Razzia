@@ -1,5 +1,6 @@
 import { STATUS } from "@razzia/common/types/game/status"
 import { describe, expect, it } from "vitest"
+import { shouldIgnoreKeyboardShortcut } from "./ManagerControlToolbar"
 
 describe("A2: Host Control Surface & Permissions Logic (Maya V3)", () => {
   const evaluatePermissions = (
@@ -71,5 +72,106 @@ describe("A2: Host Control Surface & Permissions Logic (Maya V3)", () => {
   it("question 2+ (idx=1+): read-only history viewer active with Replay option", () => {
     const perms = evaluatePermissions(STATUS.SELECT_ANSWER, 1)
     expect(perms.canViewHistory).toBe(true)
+  })
+
+  describe("A4: Keyboard shortcut focus & dialog isolation", () => {
+    it("ignores shortcut when modifier keys are held", () => {
+      const ctrlEvent = {
+        key: " ",
+        ctrlKey: true,
+        metaKey: false,
+        altKey: false,
+      } as unknown as KeyboardEvent
+      expect(shouldIgnoreKeyboardShortcut(ctrlEvent, false)).toBe(true)
+
+      const metaEvent = {
+        key: "Enter",
+        ctrlKey: false,
+        metaKey: true,
+        altKey: false,
+      } as unknown as KeyboardEvent
+      expect(shouldIgnoreKeyboardShortcut(metaEvent, false)).toBe(true)
+    })
+
+    it("ignores shortcut when history modal is already open", () => {
+      const event = {
+        key: " ",
+        ctrlKey: false,
+        metaKey: false,
+        altKey: false,
+      } as unknown as KeyboardEvent
+      expect(shouldIgnoreKeyboardShortcut(event, true)).toBe(true)
+    })
+
+    it("ignores shortcut when focus is on interactive controls (button, link, input, textarea)", () => {
+      const makeEventWithTarget = (tag: string, role?: string) =>
+        ({
+          key: " ",
+          ctrlKey: false,
+          metaKey: false,
+          altKey: false,
+          target: {
+            tagName: tag,
+            getAttribute: (attr: string) => (attr === "role" ? role : null),
+            isContentEditable: false,
+            closest: () => null,
+          },
+        }) as unknown as KeyboardEvent
+
+      expect(shouldIgnoreKeyboardShortcut(makeEventWithTarget("BUTTON"))).toBe(
+        true,
+      )
+      expect(shouldIgnoreKeyboardShortcut(makeEventWithTarget("A"))).toBe(true)
+      expect(shouldIgnoreKeyboardShortcut(makeEventWithTarget("INPUT"))).toBe(
+        true,
+      )
+      expect(
+        shouldIgnoreKeyboardShortcut(makeEventWithTarget("TEXTAREA")),
+      ).toBe(true)
+      expect(shouldIgnoreKeyboardShortcut(makeEventWithTarget("SELECT"))).toBe(
+        true,
+      )
+      expect(
+        shouldIgnoreKeyboardShortcut(makeEventWithTarget("DIV", "button")),
+      ).toBe(true)
+      expect(
+        shouldIgnoreKeyboardShortcut(makeEventWithTarget("SPAN", "link")),
+      ).toBe(true)
+    })
+
+    it("ignores shortcut when focused element is inside an open dialog or alertdialog", () => {
+      const eventInsideDialog = {
+        key: "Enter",
+        ctrlKey: false,
+        metaKey: false,
+        altKey: false,
+        target: {
+          tagName: "DIV",
+          getAttribute: () => null,
+          isContentEditable: false,
+          closest: (selector: string) =>
+            selector.includes("dialog") ? {} : null,
+        },
+      } as unknown as KeyboardEvent
+
+      expect(shouldIgnoreKeyboardShortcut(eventInsideDialog)).toBe(true)
+    })
+
+    it("allows shortcut when non-interactive element (e.g. background container) is focused", () => {
+      const eventOnBody = {
+        key: " ",
+        ctrlKey: false,
+        metaKey: false,
+        altKey: false,
+        target: {
+          tagName: "DIV",
+          getAttribute: () => null,
+          isContentEditable: false,
+          closest: () => null,
+        },
+      } as unknown as KeyboardEvent
+
+      expect(shouldIgnoreKeyboardShortcut(eventOnBody)).toBe(false)
+    })
   })
 })

@@ -6,12 +6,21 @@ import {
   type InterludeSkipState,
 } from "./interlude-state"
 
+export interface InterludePresenterLabels {
+  secondsRemaining?: (seconds: number) => string
+  awaitingHost?: string
+  skipInterlude?: string
+  skipped?: string
+  slideAlt?: string
+}
+
 export interface InterludePresenterProps {
   interlude: Interlude
   serverStartedAt?: number
   isManager?: boolean
   onAdvance?: () => void
   onSkip?: () => void
+  labels?: InterludePresenterLabels
   className?: string
 }
 
@@ -53,15 +62,20 @@ export const InterludePresenter = ({
   interlude,
   serverStartedAt,
   isManager = false,
-  onAdvance,
+  onAdvance: _onAdvance,
   onSkip,
+  labels,
   className,
 }: InterludePresenterProps) => {
   const [skipState, setSkipState] = useState<InterludeSkipState>({
     hasSkipped: false,
   })
-  const hasAdvancedRef = useRef(false)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  // Reset skip state on new interlude or server timestamp change
+  useEffect(() => {
+    setSkipState({ hasSkipped: false })
+  }, [serverStartedAt, interlude])
 
   // Calculate initial remaining ms
   const initialRemaining = useMemo(
@@ -73,26 +87,18 @@ export const InterludePresenter = ({
 
   useEffect(() => {
     // Tick every 100ms for smooth progress / countdown display
+    // The server is the sole authoritative driver of automatic phase transitions;
+    // the frontend timer provides smooth visual progress only.
     const interval = setInterval(() => {
       const remaining = calculateInterludeRemainingMs(
         serverStartedAt,
         interlude.durationMs,
       )
       setRemainingMs(remaining)
-
-      if (
-        remaining <= 0 &&
-        interlude.advance === "auto" &&
-        !hasAdvancedRef.current
-      ) {
-        hasAdvancedRef.current = true
-        clearInterval(interval)
-        onAdvance?.()
-      }
     }, 100)
 
     return () => clearInterval(interval)
-  }, [serverStartedAt, interlude.durationMs, interlude.advance, onAdvance])
+  }, [serverStartedAt, interlude.durationMs])
 
   // Stop video media on unmount
   useEffect(() => {
@@ -122,6 +128,13 @@ export const InterludePresenter = ({
     Math.min(1, remainingMs / (interlude.durationMs || 1)),
   )
 
+  const labelSecondsRemaining =
+    labels?.secondsRemaining ?? ((sec: number) => `${sec}s remaining`)
+  const labelAwaitingHost = labels?.awaitingHost ?? "Awaiting Host to advance"
+  const labelSkipInterlude = labels?.skipInterlude ?? "Skip Interlude"
+  const labelSkipped = labels?.skipped ?? "Skipped"
+  const labelSlideAlt = labels?.slideAlt ?? interlude.title ?? "Interlude slide"
+
   return (
     <div
       className={clsx(
@@ -145,7 +158,7 @@ export const InterludePresenter = ({
           <div className="relative max-h-[55vh] max-w-[85vw] overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
             <img
               src={interlude.url}
-              alt={interlude.title ?? "Interlude slide"}
+              alt={labelSlideAlt}
               className="max-h-[55vh] w-auto max-w-[85vw] rounded-2xl object-contain shadow-2xl"
               data-testid="interlude-image"
             />
@@ -196,8 +209,8 @@ export const InterludePresenter = ({
         <div className="flex w-full items-center justify-between">
           <span className="text-sm font-semibold tracking-wide text-white/70">
             {interlude.advance === "auto"
-              ? `${remainingSeconds}s remaining`
-              : "Awaiting Host to advance"}
+              ? labelSecondsRemaining(remainingSeconds)
+              : labelAwaitingHost}
           </span>
 
           {isManager && (
@@ -211,7 +224,7 @@ export const InterludePresenter = ({
               )}
               data-testid="interlude-skip-button"
             >
-              {skipState.hasSkipped ? "Skipped" : "Skip Interlude"}
+              {skipState.hasSkipped ? labelSkipped : labelSkipInterlude}
             </button>
           )}
         </div>

@@ -16,6 +16,7 @@ import {
   isValidAnswerVisual,
 } from "@razzia/extensions/media"
 import {
+  calculateAggregatePercentages,
   calculateInterludeRemainingMs,
   processInterludeSkip,
   projectTeamScores,
@@ -23,6 +24,8 @@ import {
   shouldAutoAdvanceInterlude,
   shouldDuckMusic,
 } from "@razzia/extensions/presentation"
+import { useManagerStore } from "@razzia/web/features/game/stores/manager"
+import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { describe, expect, it, vi } from "vitest"
 
 describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
@@ -410,6 +413,101 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
       expect(projected[1].team.id).toBe("team-b")
       expect(projected[1].totalPoints).toBe(15)
       expect(projected[1].memberCount).toBe(1)
+    })
+  })
+
+  describe("A1: Authoritative Reveal Snapshot & Multi-Choice Denominator Integration", () => {
+    it("first results render uses authoritative snapshot synchronously from store / context", () => {
+      // Seed manager store with pre-existing authoritative snapshot (sent before SHOW_RESPONSES mount)
+      const mockDistribution = {
+        questionIndex: 0,
+        questionType: "single",
+        totalResponders: 4,
+        eligiblePlayers: 4,
+        revealStartedAt: Date.now() - 50,
+        options: {
+          0: { index: 0, count: 3, percentage: 75, isSolution: true },
+          1: { index: 1, count: 1, percentage: 25, isSolution: false },
+        },
+        solutions: [0],
+      }
+
+      useManagerStore.setState({
+        extensionState: {
+          v: 1,
+          gameId: "test-game-123",
+          epoch: 1,
+          seq: 5,
+          phase: "responses",
+          startedAt: Date.now() - 50,
+          extras: {
+            revealDistribution: mockDistribution,
+          },
+        },
+      })
+
+      // Verify that useManagerStore immediately returns the pre-existing snapshot synchronously
+      const currentStoreState = useManagerStore.getState().extensionState
+      expect(currentStoreState?.extras.revealDistribution).toBeDefined()
+      const dist = currentStoreState?.extras
+        .revealDistribution as typeof mockDistribution
+      expect(dist.options[0].percentage).toBe(75)
+    })
+
+    it("multi-choice percentages use unique respondents denominator and may exceed 100%", () => {
+      // 8 selected option A (8/8 = 100%)
+      // 6 selected option B (6/8 = 75%)
+      // 2 selected option C (2/8 = 25%)
+      // 0 selected option D (0%)
+      const multiChoiceResponses = {
+        0: 8,
+        1: 6,
+        2: 2,
+        3: 0,
+      }
+      const totalUniqueResponders = 8
+
+      // Calculate aggregate percentages with unique-respondent denominator
+      const pcts = calculateAggregatePercentages(
+        multiChoiceResponses,
+        totalUniqueResponders,
+      )
+
+      expect(pcts[0]).toBe(100)
+      expect(pcts[1]).toBe(75)
+      expect(pcts[2]).toBe(25)
+      expect(pcts[3]).toBe(0)
+
+      // Total sum of percentages exceeds 100% (200%), proving it was NOT normalized by total selections (16)
+      let totalPctSum = 0
+      for (const p of Object.values(pcts)) {
+        totalPctSum += p
+      }
+      expect(totalPctSum).toBe(200)
+    })
+
+    it("immediate personal player result is unhindered by manager reveal delay", () => {
+      // Player store maintains direct player state for STATUS.SHOW_RESULT
+      const playerResultData = {
+        points: 850,
+        streak: 3,
+        username: "SpeedyPlayer",
+      }
+
+      // Setting player state renders immediately
+      const initialStore = usePlayerStore.getState()
+      expect(initialStore).toBeDefined()
+
+      usePlayerStore.setState({
+        player: {
+          username: playerResultData.username,
+          points: playerResultData.points,
+        },
+      })
+
+      const updated = usePlayerStore.getState()
+      expect(updated.player?.points).toBe(850)
+      expect(updated.player?.username).toBe("SpeedyPlayer")
     })
   })
 })

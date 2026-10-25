@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   assignRoundRobin,
   calculateInterludeRemainingMs,
+  formatHistoryItem,
   processInterludeSkip,
   projectTeamScores,
   resolveAudioCue,
@@ -380,6 +381,132 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       )
       expect(resultAfterKick[0].totalPoints).toBe(50)
       expect(resultAfterKick[0].memberCount).toBe(1)
+    })
+  })
+
+  describe("HIST01: formatHistoryItem Data Contract Robustness", () => {
+    it("safely handles null, undefined, primitives, or empty objects", () => {
+      expect(formatHistoryItem(null)).toBeNull()
+      expect(formatHistoryItem(undefined)).toBeNull()
+      expect(formatHistoryItem("invalid")).toBeNull()
+      expect(formatHistoryItem(42)).toBeNull()
+
+      const empty = formatHistoryItem({}, 2)
+      expect(empty).not.toBeNull()
+      expect(empty?.questionText).toBe("")
+      expect(empty?.questionType).toBe("single")
+      expect(empty?.playerAnswersCount).toBe(0)
+      expect(empty?.questionIndex).toBe(2)
+    })
+
+    it("formats raw backend QuestionResult (question, type, playerAnswers array)", () => {
+      const rawQuestionResult = {
+        question: "What is the capital of France?",
+        type: "single",
+        answers: ["Paris", "Lyon", "Marseille", "Toulouse"],
+        solutions: [0],
+        playerAnswers: [
+          { playerName: "Alice", answerIds: [0], correct: true, points: 100 },
+          { playerName: "Bob", answerIds: [1], correct: false, points: 0 },
+          { playerName: "Charlie", answerIds: [0], correct: true, points: 90 },
+        ],
+        skipped: false,
+      }
+
+      const formatted = formatHistoryItem(rawQuestionResult, 0)
+      expect(formatted).not.toBeNull()
+      expect(formatted?.questionText).toBe("What is the capital of France?")
+      expect(formatted?.questionType).toBe("single")
+      expect(formatted?.playerAnswersCount).toBe(3)
+      expect(formatted?.answers).toEqual([
+        "Paris",
+        "Lyon",
+        "Marseille",
+        "Toulouse",
+      ])
+      expect(formatted?.solutions).toEqual([0])
+      expect(formatted?.skipped).toBe(false)
+      expect(formatted?.playerAnswers).toHaveLength(3)
+    })
+
+    it("formats HistorySummaryItem contract (questionText, questionType, playerAnswersCount)", () => {
+      const summaryItem = {
+        questionIndex: 3,
+        questionText: "Which elements are noble gases?",
+        questionType: "multi",
+        playerAnswersCount: 8,
+        skipped: true,
+        skipReason: "host_skip",
+      }
+
+      const formatted = formatHistoryItem(summaryItem)
+      expect(formatted?.questionIndex).toBe(3)
+      expect(formatted?.questionText).toBe("Which elements are noble gases?")
+      expect(formatted?.questionType).toBe("multi")
+      expect(formatted?.playerAnswersCount).toBe(8)
+      expect(formatted?.skipped).toBe(true)
+      expect(formatted?.skipReason).toBe("host_skip")
+    })
+  })
+
+  describe("INT04: Interlude Drift, Reconnect, Double-Click & Epoch Resilience", () => {
+    it("handles clock drift: client clock ahead or behind server", () => {
+      const startedAt = 50000
+      const durationMs = 10000
+
+      // Client clock is behind server (now < startedAt) -> clamps to full duration
+      const behindNow = 48000
+      expect(
+        calculateInterludeRemainingMs(startedAt, durationMs, behindNow),
+      ).toBe(10000)
+
+      // Client clock is far ahead of server (now > startedAt + durationMs) -> clamps to 0
+      const aheadNow = 65000
+      expect(
+        calculateInterludeRemainingMs(startedAt, durationMs, aheadNow),
+      ).toBe(0)
+
+      // Normal mid-flight
+      const midNow = 54000
+      expect(calculateInterludeRemainingMs(startedAt, durationMs, midNow)).toBe(
+        6000,
+      )
+    })
+
+    it("double-click skip idempotency: emits skip action exactly once", () => {
+      const state = { hasSkipped: false }
+
+      // First click
+      const first = processInterludeSkip(state, 1000)
+      expect(first.shouldEmitSkip).toBe(true)
+      expect(first.state.hasSkipped).toBe(true)
+      const { state: updatedState } = first
+
+      // Second click (double click)
+      const second = processInterludeSkip(updatedState, 1050)
+      expect(second.shouldEmitSkip).toBe(false)
+      expect(second.state.hasSkipped).toBe(true)
+    })
+
+    it("manual skip near timeout: safe single invocation", () => {
+      const startedAt = 10000
+      const durationMs = 5000
+      // 50ms before expiry
+      const nearTimeout = 14950
+
+      const remaining = calculateInterludeRemainingMs(
+        startedAt,
+        durationMs,
+        nearTimeout,
+      )
+      expect(remaining).toBe(50)
+
+      const skipResult = processInterludeSkip(
+        { hasSkipped: false },
+        nearTimeout,
+      )
+      expect(skipResult.shouldEmitSkip).toBe(true)
+      expect(skipResult.state.hasSkipped).toBe(true)
     })
   })
 })

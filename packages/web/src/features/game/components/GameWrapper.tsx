@@ -15,6 +15,7 @@ import {
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
+import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -57,12 +58,15 @@ const GameWrapper = ({
     seconds: number
     total: number
   } | null>(null)
-  const [extensionState, setExtensionState] =
+  const storeExtensionState = useManagerStore((s) => s.extensionState)
+  const [localExtensionState, setLocalExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
   const { socket, clientId } = useSocket()
 
+  const extensionState = localExtensionState ?? storeExtensionState
+
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setExtensionState(payload)
+    setLocalExtensionState(payload)
   })
 
   useEvent(EVENTS.GAME.UPDATE_QUESTION, ({ current, total }) => {
@@ -136,19 +140,15 @@ const GameWrapper = ({
                   interlude={extensionState.extras.interlude as Interlude}
                   serverStartedAt={extensionState.startedAt}
                   isManager={Boolean(manager)}
-                  onAdvance={() => {
-                    if (manager && extensionState.gameId) {
-                      socket.emit(EXTENSION_EVENTS.COMMAND, {
-                        v: 1,
-                        gameId: extensionState.gameId,
-                        action: "END_OR_SKIP_INTERLUDE",
-                        payload: {
-                          reason: "auto",
-                          epoch: extensionState.epoch,
-                        },
-                        requestId: `advance-${Date.now()}`,
-                      })
-                    }
+                  labels={{
+                    secondsRemaining: (sec) =>
+                      t("extensions:interludes.secondsRemaining", {
+                        seconds: sec,
+                      }),
+                    awaitingHost: t("extensions:interludes.awaitingHost"),
+                    skipInterlude: t("extensions:interludes.skipInterlude"),
+                    skipped: t("extensions:interludes.skipped"),
+                    slideAlt: t("extensions:interludes.slideAlt"),
                   }}
                   onSkip={() => {
                     if (manager && extensionState.gameId) {
@@ -167,7 +167,9 @@ const GameWrapper = ({
                 />
               </div>
             ) : (
-              children
+              <ExtensionStateProvider value={extensionState}>
+                {children}
+              </ExtensionStateProvider>
             )}
 
             {extensionState?.extras.audioCue && (

@@ -4,6 +4,7 @@ import {
   type ExtensionCommand,
   type ExtensionStateEnvelope,
 } from "@razzia/extensions/core"
+import { formatHistoryItem } from "@razzia/extensions/presentation"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -19,8 +20,75 @@ import {
   SkipForward,
   Timer,
 } from "lucide-react"
-import { useCallback, useEffect, useState } from "react"
+import { useCallback, useEffect, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
+
+/**
+ * Determines whether a keyboard shortcut (Space / Enter) should be ignored
+ * to avoid hijacking interactive elements, open dialogs, or form controls.
+ */
+export function shouldIgnoreKeyboardShortcut(
+  e: KeyboardEvent,
+  isHistoryOpen = false,
+): boolean {
+  if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) {
+    return true
+  }
+
+  if (isHistoryOpen) {
+    return true
+  }
+
+  const active =
+    (e.target as HTMLElement | null) ??
+    (typeof document !== "undefined"
+      ? (document.activeElement as HTMLElement | null)
+      : null)
+
+  if (active) {
+    const tag = active.tagName ? active.tagName.toUpperCase() : ""
+
+    if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") {
+      return true
+    }
+
+    if (active.isContentEditable) {
+      return true
+    }
+
+    if (tag === "BUTTON" || tag === "A") {
+      return true
+    }
+
+    if (
+      active.getAttribute("role") === "button" ||
+      active.getAttribute("role") === "link"
+    ) {
+      return true
+    }
+
+    if (
+      typeof active.closest === "function" &&
+      active.closest(
+        "dialog, [role='dialog'], [role='alertdialog'], [data-state='open'], [data-radix-portal]",
+      )
+    ) {
+      return true
+    }
+  }
+
+  if (typeof document !== "undefined") {
+    const openDialogs = document.getElementsByTagName("dialog")
+
+    for (const dialog of openDialogs) {
+      if (dialog.hasAttribute("open")) {
+        return true
+      }
+    }
+  }
+
+  return false
+}
 
 interface Props {
   statusName: Status | null
@@ -203,16 +271,9 @@ export const ManagerControlToolbar = ({
     setSelectedHistoryIndex(null)
   }
 
-  // Primary action shortcut handler (Space / Enter)
+  // Primary action shortcut handler (Space / Enter) with robust focus & modal protection
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (
-        document.activeElement?.tagName === "INPUT" ||
-        document.activeElement?.tagName === "TEXTAREA"
-      ) {
-        return
-      }
-
       if (e.key === "Escape" && historyOpen) {
         setHistoryOpen(false)
 
@@ -220,7 +281,7 @@ export const ManagerControlToolbar = ({
       }
 
       if (e.key === " " || e.key === "Enter") {
-        if (historyOpen) {
+        if (shouldIgnoreKeyboardShortcut(e, historyOpen)) {
           return
         }
 
@@ -245,20 +306,24 @@ export const ManagerControlToolbar = ({
     }
   }, [historyOpen, statusName, isInterlude, handleEndTimer, handleNextScreen])
 
-  // Active viewing history snapshot
-  const viewingHistoryData = extensionState?.extras.viewingHistory as
+  // Active viewing history snapshot normalized from backend QuestionResult or HistorySummaryItem
+  const viewingHistoryEnvelope = extensionState?.extras.viewingHistory as
     | {
         index: number
-        data?: {
-          questionIndex: number
-          questionText: string
-          questionType: string
-          skipped?: boolean
-          playerAnswersCount: number
-          solutions?: number[]
-        }
+        data?: unknown
       }
     | undefined
+
+  const historyItem = useMemo(
+    () =>
+      viewingHistoryEnvelope?.data
+        ? formatHistoryItem(
+            viewingHistoryEnvelope.data,
+            selectedHistoryIndex ?? viewingHistoryEnvelope.index,
+          )
+        : null,
+    [viewingHistoryEnvelope, selectedHistoryIndex],
+  )
 
   const isLobby = statusName === STATUS.SHOW_ROOM
   const isFinished =
@@ -441,29 +506,58 @@ export const ManagerControlToolbar = ({
 
             {/* Question History Details */}
             <div className="flex-1 space-y-4 overflow-y-auto pr-1">
-              {viewingHistoryData?.data ? (
+              {historyItem ? (
                 <div className="space-y-4">
                   <div className="bg-accent/30 flex items-center justify-between rounded-xl p-4">
                     <span className="text-foreground text-lg font-bold">
-                      {viewingHistoryData.data.questionText}
+                      {historyItem.questionText ||
+                        t("extensions:host.noHistoryAvailable")}
                     </span>
                     <span className="text-muted-foreground rounded bg-black/10 px-2 py-1 text-xs font-semibold uppercase">
-                      {viewingHistoryData.data.questionType}
+                      {historyItem.questionType}
                     </span>
                   </div>
 
                   <div className="text-muted-foreground flex items-center gap-3 text-sm font-medium">
                     <span>
                       {t("extensions:host.answersCount", {
-                        count: viewingHistoryData.data.playerAnswersCount,
+                        count: historyItem.playerAnswersCount,
                       })}
                     </span>
-                    {viewingHistoryData.data.skipped && (
+                    {historyItem.skipped && (
                       <span className="font-bold text-amber-500">
-                        (Skipped)
+                        {t("extensions:host.skipped")}
                       </span>
                     )}
                   </div>
+
+                  {/* Question Choices & Solution Badges if available */}
+                  {historyItem.answers && historyItem.answers.length > 0 && (
+                    <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+                      {historyItem.answers.map((ans, aIdx) => {
+                        const isCorrect = historyItem.solutions?.includes(aIdx)
+
+                        return (
+                          <div
+                            key={aIdx}
+                            className={clsx(
+                              "flex items-center justify-between rounded-lg border px-3 py-2 text-sm",
+                              isCorrect
+                                ? "border-emerald-500 bg-emerald-500/10 font-semibold text-emerald-400"
+                                : "border-white/10 bg-black/20 text-white/80",
+                            )}
+                          >
+                            <span>{ans}</span>
+                            {isCorrect && (
+                              <span className="text-xs font-bold text-emerald-400 uppercase">
+                                {t("extensions:reveal.correct")}
+                              </span>
+                            )}
+                          </div>
+                        )
+                      })}
+                    </div>
+                  )}
                 </div>
               ) : (
                 <div className="text-muted-foreground flex flex-col items-center justify-center p-8 text-center">

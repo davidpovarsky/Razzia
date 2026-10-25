@@ -94,7 +94,11 @@
     "advanceManual": "手動で次へ",
     "skipInterlude": "スキップ",
     "audioCue": "サウンド効果",
-    "resuming": "サーバー時刻に基づいて再開中"
+    "resuming": "サーバー時刻に基づいて再開中",
+    "secondsRemaining": "残り {{seconds}}秒",
+    "awaitingHost": "ホストの進行を待機中",
+    "skipped": "スキップ済み",
+    "slideAlt": "幕間スライド"
   },
   "conflict": {
     "title": "バージョン競合 (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "ゲームセッションは終了し、すべてのプレイヤーの接続が切断されます。",
     "noHistoryAvailable": "過去の質問はまだありません。",
     "questionNum": "第{{num}}問",
-    "answersCount": "{{count}}件の回答"
+    "answersCount": "{{count}}件の回答",
+    "skipped": "(スキップ済み)"
   },
   "reveal": {
     "votes": "{{count}} 票",
     "correct": "正解",
-    "incorrect": "不正解"
+    "incorrect": "不正解",
+    "answered": "回答済み",
+    "answeredRatio": "{{responders}} / {{eligible}} 回答済み"
   }
 }

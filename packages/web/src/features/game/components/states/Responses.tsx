@@ -12,6 +12,7 @@ import {
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
+import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
@@ -20,23 +21,31 @@ import {
 import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import clsx from "clsx"
 import { useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 
 interface Props {
   data: ManagerStatusDataMap["SHOW_RESPONSES"]
+  extensionState?: ExtensionStateEnvelope | null
 }
 
-const Responses = ({ data }: Props) => {
+const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   const { question, answers, responses, solutions, type, note } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
-  const [extensionState, setExtensionState] =
+  const contextExtensionState = useExtensionState()
+  const [localExtensionState, setLocalExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
   const soundPlayedRef = useRef(false)
   const [mountTime] = useState(() => Date.now())
+  const { t } = useTranslation()
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setExtensionState(payload)
+    setLocalExtensionState(payload)
   })
+
+  // Authoritative extension state: prop > context/store snapshot (available immediately on mount) > local event
+  const extensionState =
+    propExtensionState ?? localExtensionState ?? contextExtensionState
 
   const [sfxResults] = useSound(SFX.RESULTS_SOUND, {
     volume: 0.2,
@@ -71,8 +80,29 @@ const Responses = ({ data }: Props) => {
       return result
     }
 
-    return calculateAggregatePercentages(responses)
-  }, [optionsSnapshot, responses])
+    // Never normalize multi-choice percentages by total selections;
+    // use the server's authoritative unique-respondent denominator.
+    let uniqueDenominator: number | undefined = undefined
+
+    if (
+      revealDistribution?.totalResponders &&
+      revealDistribution.totalResponders > 0
+    ) {
+      uniqueDenominator = revealDistribution.totalResponders
+    } else if (
+      revealDistribution?.eligiblePlayers &&
+      revealDistribution.eligiblePlayers > 0
+    ) {
+      uniqueDenominator = revealDistribution.eligiblePlayers
+    }
+
+    return calculateAggregatePercentages(responses, uniqueDenominator)
+  }, [
+    optionsSnapshot,
+    responses,
+    revealDistribution?.totalResponders,
+    revealDistribution?.eligiblePlayers,
+  ])
 
   const revealStartedAt = revealDistribution?.revealStartedAt ?? mountTime
   const timelineKey = `${question}:${extensionState?.epoch ?? 0}:${extensionState?.seq ?? 0}`
@@ -177,8 +207,10 @@ const Responses = ({ data }: Props) => {
         {revealDistribution && (
           <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-sm font-semibold text-white/90 shadow-md backdrop-blur-md">
             <span>
-              {revealDistribution.totalResponders} /{" "}
-              {revealDistribution.eligiblePlayers} answered
+              {t("extensions:reveal.answeredRatio", {
+                responders: revealDistribution.totalResponders,
+                eligible: revealDistribution.eligiblePlayers,
+              })}
             </span>
           </div>
         )}

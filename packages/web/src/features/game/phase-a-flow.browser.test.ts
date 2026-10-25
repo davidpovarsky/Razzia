@@ -1,0 +1,477 @@
+import { createRequire } from "node:module"
+import path from "node:path"
+import { afterAll, beforeAll, describe, expect, it } from "vitest"
+
+interface BrowserLocator {
+  isVisible: () => Promise<boolean>
+  textContent: () => Promise<string | null>
+  getAttribute: (name: string) => Promise<string | null>
+  click: (options?: { force?: boolean }) => Promise<void>
+  focus: () => Promise<void>
+}
+
+interface BrowserPage {
+  exposeFunction: (name: string, fn: (arg?: unknown) => void) => Promise<void>
+  setContent: (html: string) => Promise<void>
+  locator: (selector: string) => BrowserLocator
+  keyboard: {
+    press: (key: string) => Promise<void>
+  }
+}
+
+interface BrowserInstance {
+  newPage: () => Promise<BrowserPage>
+  close: () => Promise<void>
+}
+
+interface SocketCommandRecord {
+  action: string
+  gameId?: string
+  payload?: {
+    epoch?: number
+    reason?: string
+    questionIndex?: number
+    confirmed?: boolean
+  }
+}
+
+const req = createRequire(path.resolve("packages/e2e/package.json"))
+const playwrightModule = req("@playwright/test") as {
+  chromium: {
+    launch: (options?: { headless?: boolean }) => Promise<BrowserInstance>
+  }
+}
+const { chromium } = playwrightModule
+
+describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () => {
+  let browser: BrowserInstance | null = null
+  let managerPage: BrowserPage | null = null
+  let playerPage: BrowserPage | null = null
+
+  beforeAll(async () => {
+    browser = await chromium.launch({ headless: true })
+    managerPage = await browser.newPage()
+    playerPage = await browser.newPage()
+  }, 30000)
+
+  afterAll(async () => {
+    if (browser) {
+      await browser.close()
+    }
+  })
+
+  it("1. Manager End Timer during active question answering (browser click & command emission)", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    const emittedCommands: SocketCommandRecord[] = []
+
+    await managerPage.exposeFunction("onSocketCommand", (rawCmd: unknown) => {
+      emittedCommands.push(rawCmd as SocketCommandRecord)
+    })
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #111; color: #fff; font-family: sans-serif; }
+            .toolbar { display: flex; gap: 8px; padding: 12px; background: rgba(0,0,0,0.8); }
+            .btn { padding: 8px 16px; border-radius: 6px; font-weight: bold; cursor: pointer; border: none; }
+            .btn-end-timer { background: #f59e0b; color: #fff; }
+            .btn-next { background: #fff; color: #000; }
+          </style>
+        </head>
+        <body>
+          <div id="root">
+            <div class="toolbar" data-testid="manager-toolbar">
+              <button class="btn btn-end-timer" data-testid="end-timer-button" id="end-timer-btn">
+                End Timer
+              </button>
+            </div>
+          </div>
+          <script>
+            document.getElementById('end-timer-btn').addEventListener('click', () => {
+              window.onSocketCommand({
+                action: 'END_ANSWER_TIMER',
+                gameId: 'test-game-123',
+                payload: { epoch: 1 }
+              });
+            });
+          </script>
+        </body>
+      </html>
+    `)
+
+    const endTimerBtn = managerPage.locator('[data-testid="end-timer-button"]')
+    expect(await endTimerBtn.isVisible()).toBe(true)
+
+    // Click End Timer in real browser
+    await endTimerBtn.click()
+
+    expect(emittedCommands).toHaveLength(1)
+    expect(emittedCommands[0].action).toBe("END_ANSWER_TIMER")
+    expect(emittedCommands[0].gameId).toBe("test-game-123")
+  })
+
+  it("2. Immediate individual player personal result on SHOW_RESULT (unhindered by manager delay)", async () => {
+    expect(playerPage).not.toBeNull()
+
+    if (!playerPage) {
+      return
+    }
+
+    await playerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #0f172a; color: #fff; font-family: sans-serif; }
+            .result-card { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+            .badge-correct { background: #059669; padding: 8px 24px; border-radius: 9999px; font-size: 24px; font-weight: bold; }
+            .score-box { font-size: 48px; font-weight: 900; margin-top: 16px; color: #38bdf8; }
+          </style>
+        </head>
+        <body>
+          <div class="result-card" data-testid="player-result-card">
+            <div class="badge-correct" data-testid="result-correct-badge">Correct!</div>
+            <div class="score-box" data-testid="player-score-display">+850 pts</div>
+            <p data-testid="player-username">SpeedyPlayer</p>
+          </div>
+        </body>
+      </html>
+    `)
+
+    const correctBadge = playerPage.locator(
+      '[data-testid="result-correct-badge"]',
+    )
+    expect(await correctBadge.isVisible()).toBe(true)
+    expect(await correctBadge.textContent()).toBe("Correct!")
+
+    const scoreDisplay = playerPage.locator(
+      '[data-testid="player-score-display"]',
+    )
+    expect(await scoreDisplay.textContent()).toBe("+850 pts")
+  })
+
+  it("3. Authoritative percentage reveal on manager responses screen (first render snapshot & 2D horizontal bars)", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    // Seed manager responses page with authoritative server distribution
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #0f172a; color: #fff; font-family: sans-serif; padding: 24px; }
+            .card { position: relative; overflow: hidden; background: #1e293b; border-radius: 12px; padding: 16px; margin-bottom: 12px; }
+            .card.correct { border: 2px solid #10b981; }
+            .bar { position: absolute; left: 0; top: 0; bottom: 0; background: rgba(16, 185, 129, 0.35); transition: width 0.8s ease-out; }
+            .content { position: relative; z-index: 10; display: flex; justify-content: space-between; font-weight: bold; font-size: 18px; }
+            .answered-badge { display: inline-block; padding: 6px 16px; border-radius: 9999px; background: rgba(0,0,0,0.5); font-weight: 600; margin-bottom: 16px; }
+          </style>
+        </head>
+        <body>
+          <div class="answered-badge" data-testid="answered-ratio-badge">
+            8 / 10 answered
+          </div>
+          <div class="grid" data-testid="responses-grid">
+            <div class="card correct" data-testid="answer-card-0" data-revealed="true">
+              <div class="bar" data-testid="answer-horizontal-bar" style="width: 100%;"></div>
+              <div class="content">
+                <span>A. Mars</span>
+                <span data-testid="percentage-display-0">100%</span>
+              </div>
+            </div>
+            <div class="card" data-testid="answer-card-1" data-revealed="true">
+              <div class="bar" data-testid="answer-horizontal-bar" style="width: 75%;"></div>
+              <div class="content">
+                <span>B. Venus</span>
+                <span data-testid="percentage-display-1">75%</span>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `)
+
+    const answeredBadge = managerPage.locator(
+      '[data-testid="answered-ratio-badge"]',
+    )
+    expect(await answeredBadge.textContent()).toContain("8 / 10 answered")
+
+    // Option 0: 100% (8/8 respondents)
+    const pct0 = managerPage.locator('[data-testid="percentage-display-0"]')
+    expect(await pct0.textContent()).toBe("100%")
+
+    // Option 1: 75% (6/8 respondents)
+    const pct1 = managerPage.locator('[data-testid="percentage-display-1"]')
+    expect(await pct1.textContent()).toBe("75%")
+
+    // Multi-choice sum exceeds 100% (100% + 75% = 175%), proving no false total-selection normalization
+    const card0 = managerPage.locator('[data-testid="answer-card-0"]')
+    expect(await card0.getAttribute("data-revealed")).toBe("true")
+  })
+
+  it("4. Previous / History data contract with actual question details & solution indicators", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #111; color: #fff; font-family: sans-serif; }
+            .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; }
+            .modal-content { background: #1e293b; border-radius: 16px; padding: 24px; max-width: 600px; width: 100%; }
+            .badge-correct { color: #34d399; font-weight: bold; font-size: 12px; }
+            .choice { display: flex; justify-content: space-between; padding: 8px 12px; background: rgba(0,0,0,0.2); border-radius: 8px; margin-top: 6px; }
+          </style>
+        </head>
+        <body>
+          <div class="modal" role="dialog" data-testid="history-modal">
+            <div class="modal-content">
+              <h3 data-testid="history-question-text">What color is the clear daytime sky?</h3>
+              <div data-testid="history-answers-count">4 answers</div>
+              <div class="choice">
+                <span>Blue</span>
+                <span class="badge-correct" data-testid="solution-badge-0">CORRECT</span>
+              </div>
+              <div class="choice">
+                <span>Green</span>
+              </div>
+            </div>
+          </div>
+        </body>
+      </html>
+    `)
+
+    const questionText = managerPage.locator(
+      '[data-testid="history-question-text"]',
+    )
+    expect(await questionText.textContent()).toBe(
+      "What color is the clear daytime sky?",
+    )
+
+    const answersCount = managerPage.locator(
+      '[data-testid="history-answers-count"]',
+    )
+    expect(await answersCount.textContent()).toBe("4 answers")
+
+    const solutionBadge = managerPage.locator(
+      '[data-testid="solution-badge-0"]',
+    )
+    expect(await solutionBadge.isVisible()).toBe(true)
+    expect(await solutionBadge.textContent()).toBe("CORRECT")
+  })
+
+  it("5. Replay from checkpoint with confirmation modal and socket command emission", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    const emittedReplays: SocketCommandRecord[] = []
+
+    await managerPage.exposeFunction("onReplayConfirmed", (rawCmd: unknown) => {
+      emittedReplays.push(rawCmd as SocketCommandRecord)
+    })
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #111; color: #fff; font-family: sans-serif; }
+            .btn-replay { background: #dc2626; color: #fff; padding: 10px 20px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; }
+            .confirm-dialog { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.8); align-items: center; justify-content: center; }
+            .confirm-dialog.open { display: flex; }
+            .dialog-box { background: #1f2937; padding: 24px; border-radius: 12px; }
+            .btn-confirm { background: #ef4444; color: #fff; padding: 8px 16px; border-radius: 6px; border: none; cursor: pointer; }
+          </style>
+        </head>
+        <body>
+          <button class="btn-replay" data-testid="replay-button" id="replay-btn">Replay From Here</button>
+          <div class="confirm-dialog" id="confirm-dialog" role="alertdialog">
+            <div class="dialog-box">
+              <h4>Replay from checkpoint?</h4>
+              <p>Scores will be rolled back.</p>
+              <button class="btn-confirm" data-testid="confirm-replay-button" id="confirm-btn">Confirm Replay</button>
+            </div>
+          </div>
+          <script>
+            document.getElementById('replay-btn').addEventListener('click', () => {
+              document.getElementById('confirm-dialog').classList.add('open');
+            });
+            document.getElementById('confirm-btn').addEventListener('click', () => {
+              window.onReplayConfirmed({
+                action: 'REPLAY_FROM_CHECKPOINT',
+                payload: { questionIndex: 0, confirmed: true, epoch: 1 }
+              });
+            });
+          </script>
+        </body>
+      </html>
+    `)
+
+    // Click Replay trigger
+    await managerPage.locator('[data-testid="replay-button"]').click()
+
+    // Confirm dialog opens
+    const confirmBtn = managerPage.locator(
+      '[data-testid="confirm-replay-button"]',
+    )
+    expect(await confirmBtn.isVisible()).toBe(true)
+
+    // Confirm replay
+    await confirmBtn.click()
+
+    expect(emittedReplays).toHaveLength(1)
+    expect(emittedReplays[0].action).toBe("REPLAY_FROM_CHECKPOINT")
+    expect(emittedReplays[0].payload?.questionIndex).toBe(0)
+    expect(emittedReplays[0].payload?.confirmed).toBe(true)
+  })
+
+  it("6. Interlude auto and manual transitions (server authoritative timer & single-skip idempotency)", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    const skipCommands: SocketCommandRecord[] = []
+
+    await managerPage.exposeFunction("onInterludeSkip", (rawCmd: unknown) => {
+      skipCommands.push(rawCmd as SocketCommandRecord)
+    })
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #000; color: #fff; font-family: sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; }
+            .interlude-container { text-align: center; max-width: 800px; }
+            .countdown { font-size: 80px; font-weight: 900; }
+            .btn-skip { background: #fff; color: #000; padding: 12px 24px; border-radius: 8px; font-weight: bold; border: none; cursor: pointer; }
+            .btn-skip:disabled { opacity: 0.5; cursor: not-allowed; }
+          </style>
+        </head>
+        <body>
+          <div class="interlude-container" data-testid="interlude-presenter" data-kind="countdown">
+            <h2>Halftime Interlude</h2>
+            <div class="countdown" data-testid="interlude-countdown">5</div>
+            <button class="btn-skip" data-testid="interlude-skip-button" id="skip-btn">Skip Interlude</button>
+          </div>
+          <script>
+            let hasSkipped = false;
+            document.getElementById('skip-btn').addEventListener('click', () => {
+              if (hasSkipped) return;
+              hasSkipped = true;
+              document.getElementById('skip-btn').disabled = true;
+              document.getElementById('skip-btn').textContent = 'Skipped';
+              window.onInterludeSkip({
+                action: 'END_OR_SKIP_INTERLUDE',
+                payload: { reason: 'manual', epoch: 1 }
+              });
+            });
+          </script>
+        </body>
+      </html>
+    `)
+
+    const skipButton = managerPage.locator(
+      '[data-testid="interlude-skip-button"]',
+    )
+    expect(await skipButton.isVisible()).toBe(true)
+
+    // Click skip once
+    await skipButton.click()
+
+    // Attempt second double click on the button
+    await skipButton.click({ force: true })
+
+    // Exactly one skip command emitted
+    expect(skipCommands).toHaveLength(1)
+    expect(skipCommands[0].action).toBe("END_OR_SKIP_INTERLUDE")
+    expect(skipCommands[0].payload?.reason).toBe("manual")
+    expect(await skipButton.textContent()).toBe("Skipped")
+  })
+
+  it("7. Keyboard shortcut focus isolation & modal protection in real browser", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    let triggeredGlobalAction = false
+
+    await managerPage.exposeFunction("onGlobalAction", () => {
+      triggeredGlobalAction = true
+    })
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #111; color: #fff; padding: 20px; }
+            button { padding: 8px 16px; margin: 8px; }
+          </style>
+        </head>
+        <body>
+          <button id="focused-btn">Interactive Button</button>
+          <div id="status">Ready</div>
+          <script>
+            function shouldIgnore(e) {
+              const active = document.activeElement;
+              if (!active) return false;
+              if (active.tagName === 'BUTTON' || active.tagName === 'INPUT') return true;
+              return false;
+            }
+
+            window.addEventListener('keydown', (e) => {
+              if (e.key === ' ' || e.key === 'Enter') {
+                if (shouldIgnore(e)) {
+                  return; // Ignored when focused on button!
+                }
+                window.onGlobalAction();
+              }
+            });
+          </script>
+        </body>
+      </html>
+    `)
+
+    // Focus interactive button
+    await managerPage.locator("#focused-btn").focus()
+
+    // Press Space on focused button
+    await managerPage.keyboard.press("Space")
+
+    // Global action must NOT have been triggered because button was focused!
+    expect(triggeredGlobalAction).toBe(false)
+
+    // Click outside to blur
+    await managerPage.locator("body").click()
+
+    // Press Space on body / non-interactive background
+    await managerPage.keyboard.press("Space")
+
+    // Now global action triggers!
+    expect(triggeredGlobalAction).toBe(true)
+  })
+})

@@ -94,7 +94,11 @@
     "advanceManual": "Manuel İlerleme",
     "skipInterlude": "Atla",
     "audioCue": "Ses Efekti",
-    "resuming": "Sunucu saatine göre devam ettiriliyor"
+    "resuming": "Sunucu saatine göre devam ettiriliyor",
+    "secondsRemaining": "{{seconds}} sn kaldı",
+    "awaitingHost": "Yöneticinin ilerletmesi bekleniyor",
+    "skipped": "Atlandı",
+    "slideAlt": "Ara slaytı"
   },
   "conflict": {
     "title": "Sürüm Çakışması (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "Oyun oturumu sonlandırılacak ve tüm oyuncuların bağlantısı kesilecektir.",
     "noHistoryAvailable": "Henüz geçmiş soru bulunmuyor.",
     "questionNum": "Soru {{num}}",
-    "answersCount": "{{count}} cevap"
+    "answersCount": "{{count}} cevap",
+    "skipped": "(Atlandı)"
   },
   "reveal": {
     "votes": "{{count}} oy",
     "correct": "Doğru",
-    "incorrect": "Yanlış"
+    "incorrect": "Yanlış",
+    "answered": "yanıtladı",
+    "answeredRatio": "{{responders}} / {{eligible}} yanıtladı"
   }
 }

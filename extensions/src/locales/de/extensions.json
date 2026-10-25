@@ -94,7 +94,11 @@
     "advanceManual": "Manuell weiter",
     "skipInterlude": "Überspringen",
     "audioCue": "Audio-Cue",
-    "resuming": "Fortsetzung nach Server-Uhrzeit"
+    "resuming": "Fortsetzung nach Server-Uhrzeit",
+    "secondsRemaining": "noch {{seconds}}s",
+    "awaitingHost": "Warte auf Spielleiter",
+    "skipped": "Übersprungen",
+    "slideAlt": "Zwischenspiel-Folie"
   },
   "conflict": {
     "title": "Versionskonflikt (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "Die Spielsitzung wird beendet und alle Spieler werden getrennt.",
     "noHistoryAvailable": "Noch keine vergangenen Fragen verfügbar.",
     "questionNum": "Frage {{num}}",
-    "answersCount": "{{count}} Antworten"
+    "answersCount": "{{count}} Antworten",
+    "skipped": "(Übersprungen)"
   },
   "reveal": {
     "votes": "{{count}} Stimmen",
     "correct": "Richtig",
-    "incorrect": "Falsch"
+    "incorrect": "Falsch",
+    "answered": "geantwortet",
+    "answeredRatio": "{{responders}} / {{eligible}} geantwortet"
   }
 }

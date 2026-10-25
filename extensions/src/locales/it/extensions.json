@@ -94,7 +94,11 @@
     "advanceManual": "Avanzamento manuale",
     "skipInterlude": "Salta",
     "audioCue": "Effetto sonoro",
-    "resuming": "Ripresa secondo il tempo del server"
+    "resuming": "Ripresa secondo il tempo del server",
+    "secondsRemaining": "{{seconds}}s rimanenti",
+    "awaitingHost": "In attesa dell'host per avanzare",
+    "skipped": "Saltato",
+    "slideAlt": "Diapositiva dell'interludio"
   },
   "conflict": {
     "title": "Conflitto di revisione (HTTP 409)",
@@ -137,11 +141,14 @@
     "exitConfirmDesc": "La sessione di gioco verrà terminata e tutti i giocatori verranno disconnessi.",
     "noHistoryAvailable": "Nessuna domanda precedente ancora disponibile.",
     "questionNum": "Domanda {{num}}",
-    "answersCount": "{{count}} risposte"
+    "answersCount": "{{count}} risposte",
+    "skipped": "(Saltato)"
   },
   "reveal": {
     "votes": "{{count}} voti",
     "correct": "Corretto",
-    "incorrect": "Errato"
+    "incorrect": "Errato",
+    "answered": "hanno risposto",
+    "answeredRatio": "{{responders}} / {{eligible}} hanno risposto"
   }
 }
