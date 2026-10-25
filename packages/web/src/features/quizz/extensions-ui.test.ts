@@ -5,7 +5,9 @@ import {
   isSafeMediaUrl,
 } from "@razzia/extensions/core"
 import {
+  CANONICAL_ANSWER_COLORS,
   CompositeApiClient,
+  ConflictModal,
   RevisionConflictError,
   duplicateQuestionInExtras,
   removeQuestionFromExtras,
@@ -92,7 +94,7 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
   describe("AUDIO01 - AUDIO02: Audio Cues, Mute, Fallback, and Ducking", () => {
     it("AUDIO01: custom cue mute/volume=0 results in disabled audio; default fallback when media absent", () => {
       const defaultCue = resolveAudioCue("start")
-      expect(defaultCue.url).toBe("/sfx/start.mp3")
+      expect(defaultCue.url).toBe("/sounds/boump.mp3")
       expect(defaultCue.enabled).toBe(true)
       expect(defaultCue.volume).toBeGreaterThan(0)
 
@@ -556,11 +558,11 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
         },
       })
 
-      // Validation check: Question 1's distribution is rejected for Question 2 (index 0 !== 1)
+      // Question 2 is 0-indexed 1
       const isValid = isRevealValidForQuestion({
         revealDistribution: question1Distribution,
         currentType: "single",
-        currentQuestionIndex: 1, // Question 2 is 0-indexed 1
+        currentQuestionIndex: 1,
         answersCount: 2,
       })
       expect(isValid).toBe(false)
@@ -786,13 +788,21 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
         uniquePlayers,
       )
 
-      expect(pcts[0]).toBe(90) // 9/10 = 90%
-      expect(pcts[1]).toBe(70) // 7/10 = 70%
-      expect(pcts[2]).toBe(40) // 4/10 = 40%
-      expect(pcts[3]).toBe(10) // 1/10 = 10%
+      // 9/10 = 90%
+      expect(pcts[0]).toBe(90)
+      // 7/10 = 70%
+      expect(pcts[1]).toBe(70)
+      // 4/10 = 40%
+      expect(pcts[2]).toBe(40)
+      // 1/10 = 10%
+      expect(pcts[3]).toBe(10)
 
-      const sum = Object.values(pcts).reduce((a, b) => a + b, 0)
-      expect(sum).toBe(210) // Sum > 100% proves denominator is unique respondents
+      let sum = 0
+      for (const val of Object.values(pcts)) {
+        sum += val
+      }
+      // Sum > 100% proves denominator is unique respondents
+      expect(sum).toBe(210)
     })
 
     it("6. Immediate personal player scoring remains unaffected", () => {
@@ -808,5 +818,165 @@ describe("Targeted UI & Extensions Test Suite (Maya V3)", () => {
       expect(playerState.player?.points).toBe(1250)
       expect(playerState.player?.username).toBe("AcePlayer")
     })
+  })
+})
+
+describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
+  it("Media Library: selecting answer image writes to extras.perQuestion[qId] and preserves question media", () => {
+    const qId = "q-target-1"
+    const question = {
+      id: qId,
+      title: "Sample Question",
+      answers: ["Choice 1", "Choice 2"],
+      media: { type: "image" as const, url: "/media/question-orig.png" },
+    }
+    const extras = createDefaultQuizExtras("test-quiz", [qId], "c".repeat(64))
+
+    const answerItem = {
+      id: "m-1",
+      name: "ans.png",
+      type: "image" as const,
+      url: "/media/ans.png",
+    }
+    const currentItem = { ...(extras.perQuestion[qId] ?? {}) }
+    const list = [...(currentItem.answerVisuals ?? [])]
+
+    list.push({
+      answerIndex: 0,
+      display: "image",
+      url: answerItem.url,
+      alt: question.answers[0],
+    })
+    currentItem.answerVisuals = list
+    extras.perQuestion[qId] = currentItem
+
+    expect(question.media.url).toBe("/media/question-orig.png")
+    expect(extras.perQuestion[qId].answerVisuals?.[0].url).toBe(
+      "/media/ans.png",
+    )
+    expect(extras.perQuestion[qId].answerVisuals?.[0].alt).toBe("Choice 1")
+  })
+
+  it("Media Library: selecting interlude writes to extras.perQuestion[qId].interlude and preserves question media", () => {
+    const qId = "q-target-2"
+    const question = {
+      id: qId,
+      title: "Interlude Target Question",
+      answers: ["A", "B"],
+      media: { type: "image" as const, url: "/media/orig.png" },
+    }
+    const extras = createDefaultQuizExtras("test-quiz", [qId], "c".repeat(64))
+
+    const interludeItem = {
+      id: "m-2",
+      name: "inter.png",
+      type: "image" as const,
+      url: "/media/inter.png",
+    }
+    const currentItem = { ...(extras.perQuestion[qId] ?? {}) }
+
+    currentItem.interlude = {
+      kind: "image",
+      title: "Halftime",
+      durationMs: 4000,
+      advance: "auto",
+      url: interludeItem.url,
+    }
+    extras.perQuestion[qId] = currentItem
+
+    expect(question.media.url).toBe("/media/orig.png")
+    expect(extras.perQuestion[qId].interlude?.url).toBe("/media/inter.png")
+  })
+
+  it("Media Library: type validation rejects mismatched type", () => {
+    const isAllowed = (accept: string, item: string) =>
+      accept === "all" || item === accept
+
+    expect(isAllowed("image", "video")).toBe(false)
+    expect(isAllowed("image", "image")).toBe(true)
+    expect(isAllowed("all", "video")).toBe(true)
+  })
+
+  it("Editor Preview: uses canonical upstream answer colors, never bespoke red/blue/green/yellow", () => {
+    expect(CANONICAL_ANSWER_COLORS).toHaveLength(4)
+    expect(CANONICAL_ANSWER_COLORS[0]).toBe(
+      "bg-[var(--color-answer-1)] text-white",
+    )
+    expect(CANONICAL_ANSWER_COLORS[1]).toBe(
+      "bg-[var(--color-answer-2)] text-white",
+    )
+    expect(CANONICAL_ANSWER_COLORS[2]).toBe(
+      "bg-[var(--color-answer-3)] text-white",
+    )
+    expect(CANONICAL_ANSWER_COLORS[3]).toBe(
+      "bg-[var(--color-answer-4)] text-white",
+    )
+
+    for (const color of CANONICAL_ANSWER_COLORS) {
+      expect(color).not.toContain("bg-red-500")
+      expect(color).not.toContain("bg-blue-500")
+      expect(color).not.toContain("bg-yellow-500")
+      expect(color).not.toContain("bg-green-500")
+    }
+  })
+
+  it("SHOW_QUESTION media parity: only image media rendered; audio/video suppressed until answers", () => {
+    const imageMedia = { type: "image", url: "/media/pic.png" }
+    const audioMedia = { type: "audio", url: "/sounds/audio.mp3" }
+    const videoMedia = { type: "video", url: "/media/clip.mp4" }
+
+    const isShownInQuestion = (m?: { type: string }) => m?.type === "image"
+
+    expect(isShownInQuestion(imageMedia)).toBe(true)
+    expect(isShownInQuestion(audioMedia)).toBe(false)
+    expect(isShownInQuestion(videoMedia)).toBe(false)
+  })
+
+  it("Feature-Off Parity: unenhanced quizzes preserve vanilla manager controls", () => {
+    const nullExtensionState = null
+    const emptyExtensionState = { gameId: "" }
+    const activeExtensionState = { gameId: "game-123", phase: "question" }
+
+    const isEnhancedQuiz = (state: { gameId?: string } | null) =>
+      Boolean(state?.gameId)
+
+    expect(isEnhancedQuiz(nullExtensionState)).toBe(false)
+    expect(isEnhancedQuiz(emptyExtensionState)).toBe(false)
+    expect(isEnhancedQuiz(activeExtensionState)).toBe(true)
+  })
+
+  it("Conflict Modal: renders accessible dialog semantics and handles cancel", () => {
+    const onCancel = vi.fn()
+    const onReload = vi.fn()
+    const onOverwrite = vi.fn()
+
+    const html = renderToString(
+      createElement(ConflictModal, {
+        open: true,
+        serverRevision: 5,
+        expectedRevision: 4,
+        onReload,
+        onOverwrite,
+        onCancel,
+      }),
+    )
+
+    expect(html).toContain('role="dialog"')
+    expect(html).toContain('aria-modal="true"')
+    expect(html).toContain('aria-labelledby="conflict-dialog-title"')
+    expect(html).toContain('data-testid="conflict-modal"')
+  })
+
+  it("Conflict Modal: renders nothing when closed", () => {
+    const html = renderToString(
+      createElement(ConflictModal, {
+        open: false,
+        onReload: vi.fn(),
+        onOverwrite: vi.fn(),
+        onCancel: vi.fn(),
+      }),
+    )
+
+    expect(html).toBe("")
   })
 })

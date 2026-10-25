@@ -43,7 +43,16 @@ const playwrightModule = req("@playwright/test") as {
 }
 const { chromium } = playwrightModule
 
-describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () => {
+/**
+ * NOTE: This test file provides synthetic DOM verification of protocol events and command bindings.
+ * It uses Playwright with `page.setContent()` to simulate browser click/keyboard event flows without
+ * a running backend server or loaded React app bundle.
+ *
+ * IT IS NOT A FULL END-TO-END APPLICATION ACCEPTANCE TEST.
+ * Real-app E2E tests executing against a running backend and frontend dev server belong in
+ * `packages/e2e/**` (owned by Tomer and verified by Roni).
+ */
+describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2E / DOM Harness)", () => {
   let browser: BrowserInstance | null = null
   let managerPage: BrowserPage | null = null
   let playerPage: BrowserPage | null = null
@@ -60,7 +69,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     }
   })
 
-  it("1. Manager End Timer during active question answering (browser click & command emission)", async () => {
+  it("1. [Synthetic DOM Protocol] Manager End Timer command emission on click", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
@@ -117,7 +126,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(emittedCommands[0].gameId).toBe("test-game-123")
   })
 
-  it("2. Immediate individual player personal result on SHOW_RESULT (unhindered by manager delay)", async () => {
+  it("2. [Synthetic DOM Protocol] Immediate player personal result on SHOW_RESULT", async () => {
     expect(playerPage).not.toBeNull()
 
     if (!playerPage) {
@@ -157,7 +166,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(await scoreDisplay.textContent()).toBe("+850 pts")
   })
 
-  it("3. Authoritative percentage reveal on manager responses screen (first render snapshot & 2D horizontal bars)", async () => {
+  it("3. [Synthetic DOM Protocol] Authoritative percentage reveal on manager responses screen", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
@@ -220,7 +229,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(await card0.getAttribute("data-revealed")).toBe("true")
   })
 
-  it("4. Previous / History data contract with actual question details & solution indicators", async () => {
+  it("4. [Synthetic DOM Protocol] Previous / History data contract with question details", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
@@ -276,7 +285,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(await solutionBadge.textContent()).toBe("CORRECT")
   })
 
-  it("5. Replay from checkpoint with confirmation modal and socket command emission", async () => {
+  it("5. [Synthetic DOM Protocol] Replay checkpoint confirmation and socket command emission", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
@@ -344,7 +353,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(emittedReplays[0].payload?.confirmed).toBe(true)
   })
 
-  it("6. Interlude auto and manual transitions (server authoritative timer & single-skip idempotency)", async () => {
+  it("6. [Synthetic DOM Protocol] Interlude auto and manual transition handling", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
@@ -410,7 +419,7 @@ describe("GATE 3 / Phase A: Real Playwright Browser Integration Acceptance", () 
     expect(await skipButton.textContent()).toBe("Skipped")
   })
 
-  it("7. Keyboard shortcut focus isolation & modal protection in real browser", async () => {
+  it("7. [Synthetic DOM Protocol] Keyboard shortcut focus isolation & modal protection", async () => {
     expect(managerPage).not.toBeNull()
 
     if (!managerPage) {
