@@ -1,7 +1,14 @@
 import fs from "node:fs"
 import { join } from "node:path"
 import { BASIC_QUIZZ, CONFIG_PATH } from "@razzia/e2e/utils/constants"
-import { openQuizzTab, quizzRow, seedQuizz } from "@razzia/e2e/utils/editor"
+import {
+  addAnswer,
+  answerInput,
+  openQuizzTab,
+  quizzRow,
+  seedQuizz,
+  toggleSolution,
+} from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
@@ -20,7 +27,7 @@ import {
 import type { Page } from "@playwright/test"
 
 const ARTIFACT_DIR =
-  "C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b"
+  "C:/Users/DAVID/.gemini/antigravity/brain/6d40cc89-dc92-44aa-8a69-161ad5015706"
 const SCREENSHOT_DIR = join(import.meta.dirname, "../test-results/screenshots")
 
 const saveScreenshots = async (page: Page, filename: string) => {
@@ -38,51 +45,28 @@ const saveScreenshots = async (page: Page, filename: string) => {
 }
 
 test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
-  test("Scenario 1: Manager/Editor - enhancements, reveal, teams, interludes, audio, persistence & 409 conflict", async ({
+  test("Scenario 1: QuizzEditorProvider Lifecycle, Enhancements, First-Save Disk Persistence & Stable Asset Association", async ({
     page,
   }) => {
-    page.on("console", (msg) =>
-      console.log("[BROWSER CONSOLE]", msg.type(), msg.text()),
-    )
-    page.on("pageerror", (err) => console.log("[BROWSER PAGE ERROR]", err))
-    page.on("requestfailed", (req) =>
-      console.log("[REQ FAILED]", req.url(), req.failure()?.errorText),
-    )
-    page.on("response", async (res) => {
-      if (res.status() >= 400) {
-        console.log("[HTTP ERROR]", res.status(), res.url())
+    const subject = `Real App Lifecycle Quiz ${Date.now()}`
 
-        try {
-          console.log("[HTTP ERROR BODY]", await res.text())
-        } catch {
-          /* Ignore */
-        }
-      }
-    })
-
-    const subject = `Gate3 Acceptance Quizz ${Date.now()}`
-    const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
-
-    // 1. Seed base quiz in isolated e2e config
-    seedQuizz(subject, {
-      questions: [
-        {
-          type: "single",
-          question: "What color is the sky on a clear day?",
-          answers: ["Blue", "Green", "Red", "Yellow"],
-          solutions: [0],
-          cooldown: 3,
-          time: 15,
-        },
-      ],
-    })
-
-    // 2. Open quiz in editor
+    // 1. Open Quizz tab and click Create Quiz
     await openQuizzTab(page)
-    await quizzRow(page, subject)
-      .getByRole("button", { name: t("manager:quizz.edit") })
-      .click()
-    await expect(page).toHaveURL(new RegExp(`/manager/quizz/${quizzId}$`, "u"))
+    await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+    await expect(page).toHaveURL(/\/manager\/quizz$/u)
+
+    // 2. Fill Subject & Question 1
+    await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
+    await page
+      .getByPlaceholder(t("quizz:question.placeholder"))
+      .fill("What is the chemical symbol for Hydrogen?")
+    await answerInput(page, 0).fill("H")
+    await answerInput(page, 1).fill("He")
+    await addAnswer(page)
+    await answerInput(page, 2).fill("Li")
+    await addAnswer(page)
+    await answerInput(page, 3).fill("Be")
+    await toggleSolution(page, 0)
 
     // 3. Open Enhancements Panel
     const toggleBtn = page.locator('[data-testid="toggle-enhancements-button"]')
@@ -94,21 +78,30 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     )
     await expect(enhancementPanel).toBeVisible()
 
-    // 4. Configure Visuals Tab (Reveal animation & Answer image)
+    // 4. Configure Visuals Tab (Answer 0 Image, Answer 1 Both)
     const tabVisuals = page.locator('[data-testid="tab-visuals"]')
     await tabVisuals.click()
     await expect(page.locator('[data-testid="panel-visuals"]')).toBeVisible()
 
-    // Configure Answer 0 visual
     const displaySelect0 = page.locator('[data-testid="display-select-0"]')
+    await expect(displaySelect0).toBeVisible()
+    await displaySelect0.selectOption("image")
+    const mediaInput0 = page.locator('[data-testid="media-url-input-0"]')
+    await expect(mediaInput0).toBeVisible()
+    await mediaInput0.fill("/media/blue-sky.png")
+    const altInput0 = page.locator('[data-testid="alt-input-0"]')
+    await expect(altInput0).toBeVisible()
+    await altInput0.fill("Hydrogen gas cloud")
 
-    if (await displaySelect0.isVisible()) {
-      await displaySelect0.selectOption("image")
-      const mediaInput0 = page.locator('[data-testid="media-url-input-0"]')
-      await mediaInput0.fill("/media/blue-sky.png")
-      const altInput0 = page.locator('[data-testid="alt-input-0"]')
-      await altInput0.fill("Clear blue sky")
-    }
+    const displaySelect1 = page.locator('[data-testid="display-select-1"]')
+    await expect(displaySelect1).toBeVisible()
+    await displaySelect1.selectOption("both")
+    const mediaInput1 = page.locator('[data-testid="media-url-input-1"]')
+    await expect(mediaInput1).toBeVisible()
+    await mediaInput1.fill("/media/blue-sky.png")
+    const altInput1 = page.locator('[data-testid="alt-input-1"]')
+    await expect(altInput1).toBeVisible()
+    await altInput1.fill("Helium balloon")
 
     // 5. Configure Teams Tab
     const tabTeams = page.locator('[data-testid="tab-teams"]')
@@ -133,83 +126,433 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const everyNInput = page.locator('[data-testid="every-n-input"]')
     await everyNInput.fill("2")
 
-    // 7. Configure Interlude Tab
+    // 7. Configure Interlude Tab on Q1
     const tabInterlude = page.locator('[data-testid="tab-interlude"]')
     await tabInterlude.click()
     await expect(page.locator('[data-testid="panel-interlude"]')).toBeVisible()
     const toggleInterlude = page.locator('[data-testid="toggle-interlude"]')
     await toggleInterlude.click()
 
-    // 8. Verify Audio Tab
-    const tabAudio = page.locator('[data-testid="tab-audio"]')
-    await tabAudio.click()
-    await expect(page.locator('[data-testid="panel-audio"]')).toBeVisible()
-
-    // Save screenshot of configured enhancements panel
+    // Save screenshot of editor enhancements
     await saveScreenshots(page, "gate3-editor-enhancements.png")
 
-    // 9. Save quiz
-    const savePromise = page.waitForResponse((res) =>
-      res.url().includes("/quizz"),
+    // 8. Save brand new quiz for the first time via createQuizComposite
+    const savePromise = page.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        res.url().includes("/api/extensions/quizzes") &&
+        (res.status() === 200 || res.status() === 201),
     )
     const saveBtn = page.getByRole("button", { name: t("common:save") })
     await saveBtn.click()
     const saveRes = await savePromise
-    console.log("=== SAVE RESPONSE STATUS ===", saveRes.status())
-    console.log("=== SAVE RESPONSE BODY ===", await saveRes.text())
+    const saveJson = (await saveRes.json()) as { quizId: string; revision: number }
+    const actualQuizId = saveJson.quizId
     await expect(page).toHaveURL(/\/manager\/config$/u)
 
-    // 10. Reload and verify persistence
+    // 9. VERIFY ACTUAL SERVER DISK PERSISTENCE FOR FIRST-SAVE
+    const sidecarPath = join(
+      CONFIG_PATH,
+      "extensions",
+      "quizzes",
+      `${actualQuizId}.json`,
+    )
+    expect(fs.existsSync(sidecarPath)).toBe(true)
+
+    // Locate base quiz on disk by actualQuizId
+    const baseFiles = fs.readdirSync(join(CONFIG_PATH, "quizz"))
+    const baseQuizRecord = baseFiles
+      .map(
+        (file) =>
+          JSON.parse(
+            fs.readFileSync(join(CONFIG_PATH, "quizz", file), "utf-8"),
+          ) as { id: string; subject: string; questions: unknown[] },
+      )
+      .find((q) => q.id === actualQuizId)
+    expect(baseQuizRecord).toBeDefined()
+    expect(baseQuizRecord?.subject).toBe(subject)
+    expect(baseQuizRecord?.questions).toHaveLength(1)
+
+    const sidecarData = JSON.parse(fs.readFileSync(sidecarPath, "utf-8")) as {
+      revision?: number
+      teams?: { enabled: boolean }
+      leaderboard?: { mode: string; everyN?: number }
+      questionIds: string[]
+      perQuestion: Record<
+        string,
+        {
+          answerVisuals?: Array<{ alt: string }>
+          interlude?: { kind: string }
+        }
+      >
+    }
+    expect(sidecarData.revision).toBe(1)
+    expect(sidecarData.teams?.enabled).toBe(true)
+    expect(sidecarData.leaderboard?.mode).toBe("everyN")
+    expect(sidecarData.leaderboard?.everyN).toBe(2)
+    expect(sidecarData.questionIds).toHaveLength(1)
+    const [initialQ0Id] = sidecarData.questionIds
+    expect(
+      sidecarData.perQuestion[initialQ0Id]?.answerVisuals?.[0]?.alt,
+    ).toBe("Hydrogen gas cloud")
+    expect(sidecarData.perQuestion[initialQ0Id]?.interlude?.kind).toBe("title")
+
+    // 10. Reopen the quiz and test QuizzEditorProvider Lifecycle
+    await openQuizzTab(page)
+    await quizzRow(page, subject)
+      .getByRole("button", { name: t("manager:quizz.edit") })
+      .click()
+    await expect(
+      page,
+    ).toHaveURL(new RegExp(`/manager/quizz/${actualQuizId}$`, "u"))
+    await toggleBtn.click({ force: true })
+    await expect(enhancementPanel).toBeVisible()
+
+    // 11. Add Question 2
+    await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+    await page
+      .getByPlaceholder(t("quizz:question.placeholder"))
+      .fill("What is the boiling point of water?")
+    await answerInput(page, 0).fill("100 C")
+    await answerInput(page, 1).fill("0 C")
+    await toggleSolution(page, 0)
+
+    // 12. Duplicate Question 1
+    // Hover and click Duplicate on Question 1 in sidebar
+    const card1 = page.locator("aside").getByText("1").first()
+    await card1.click()
+    await expect(
+      page.getByPlaceholder(t("quizz:question.placeholder")),
+    ).toHaveValue("What is the chemical symbol for Hydrogen?")
+
+    await card1.hover()
+    const duplicateBtn = page.getByRole("button", {
+      name: t("quizz:question.duplicateQuestion", {
+        defaultValue: "Duplicate question",
+      }),
+      exact: true,
+    })
+    await duplicateBtn.click()
+
+    // Verify 3 questions now exist in sidebar
+    await expect(page.locator("aside").getByText("3")).toBeVisible()
+
+    // 13. Delete Question 3 (water question, which shifted to 3 after insertion at 1)
+    const card3 = page.locator("aside").getByText("3").first()
+    await card3.click()
+    await expect(
+      page.getByPlaceholder(t("quizz:question.placeholder")),
+    ).toHaveValue("What is the boiling point of water?")
+
+    await card3.hover()
+    const deleteBtn = page.getByRole("button", {
+      name: t("quizz:question.deleteQuestion"),
+      exact: true,
+    })
+    await deleteBtn.click()
+    const confirmDeleteBtn = page.getByRole("button", {
+      name: t("common:delete"),
+    })
+    await expect(confirmDeleteBtn).toBeVisible()
+    await confirmDeleteBtn.click()
+
+    // 14. Save the modified quiz
+    const savePromise2 = page.waitForResponse(
+      (res) =>
+        res.request().method() === "PUT" &&
+        res.url().includes(`/api/extensions/quizzes/${actualQuizId}`) &&
+        res.status() === 200,
+    )
+    await saveBtn.click()
+    await savePromise2
+    await expect(page).toHaveURL(/\/manager\/config$/u)
+
+    // 15. Verify disk persistence after lifecycle operations
+    const sidecarData2 = JSON.parse(
+      fs.readFileSync(sidecarPath, "utf-8"),
+    ) as typeof sidecarData
+    expect(sidecarData2.revision).toBe(2)
+    expect(sidecarData2.questionIds).toHaveLength(2)
+
+    const [finalQ0, finalQ1] = sidecarData2.questionIds
+    expect(finalQ0).toBe(initialQ0Id)
+    expect(
+      sidecarData2.perQuestion[finalQ0]?.answerVisuals?.[0]?.alt,
+    ).toBe("Hydrogen gas cloud")
+    expect(finalQ1).not.toBe(finalQ0)
+    expect(
+      sidecarData2.perQuestion[finalQ1]?.answerVisuals?.[0]?.alt,
+    ).toBe("Hydrogen gas cloud")
+    expect(Object.keys(sidecarData2.perQuestion)).toHaveLength(2)
+  })
+
+  test("Scenario 2: Asynchronous Sidecar-Loading Race Condition Handling", async ({
+    page,
+  }) => {
+    const subject = `Async Race Quizz ${Date.now()}`
+    const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
+
+    // 1. Seed quiz with extension sidecar on disk
+    seedQuizz(subject, {
+      questions: [
+        {
+          type: "single",
+          question: "Original Question One",
+          answers: ["Ans A", "Ans B"],
+          solutions: [0],
+          cooldown: 5,
+          time: 20,
+        },
+      ],
+    })
+
+    const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
+    fs.mkdirSync(sidecarDir, { recursive: true })
+    const qIds = [crypto.randomUUID()]
+    const extras = createDefaultQuizExtras(quizzId, qIds, "c".repeat(64))
+    extras.perQuestion[qIds[0]] = {
+      answerVisuals: [
+        {
+          answerIndex: 0,
+          display: "image",
+          url: "/media/blue-sky.png",
+          alt: "Sidecar Photo",
+        },
+      ],
+    }
+    fs.writeFileSync(
+      join(sidecarDir, `${quizzId}.json`),
+      JSON.stringify(extras, null, 2),
+      "utf-8",
+    )
+
+    // 2. Intercept composite API request and delay response by 1200ms
+    await page.route(`**/api/extensions/quizzes/${quizzId}`, async (route) => {
+      await new Promise<void>((resolve) => {
+        setTimeout(resolve, 1200)
+      })
+      await route.continue()
+    })
+
+    // 3. Open quiz in editor
     await openQuizzTab(page)
     await quizzRow(page, subject)
       .getByRole("button", { name: t("manager:quizz.edit") })
       .click()
     await expect(page).toHaveURL(new RegExp(`/manager/quizz/${quizzId}$`, "u"))
-    await toggleBtn.click({ force: true })
-    await expect(enhancementPanel).toBeVisible()
 
-    // Verify sidecar file exists on disk
-    const sidecarPath = join(
-      CONFIG_PATH,
-      "extensions",
-      "quizzes",
-      `${quizzId}.json`,
+    // 4. Begin typing/editing immediately before the 1200ms delay finishes
+    const questionInput = page.getByPlaceholder(t("quizz:question.placeholder"))
+    await questionInput.fill("Question Edited Before Sidecar Resolved")
+
+    // 5. Wait for the sidecar response to arrive and complete
+    await page.waitForResponse((res) =>
+      res.url().includes(`/api/extensions/quizzes/${quizzId}`),
     )
-    expect(fs.existsSync(sidecarPath)).toBe(true)
-    const sidecarData = JSON.parse(fs.readFileSync(sidecarPath, "utf-8")) as {
-      revision?: number
-      teams?: { enabled: boolean }
-      leaderboard?: { mode: string }
-    }
-    expect(sidecarData.teams?.enabled).toBe(true)
-    expect(sidecarData.leaderboard?.mode).toBe("everyN")
 
-    // 11. Test Revision Conflict Handling (409)
-    // Alter sidecar revision on disk to simulate a concurrent writer
-    sidecarData.revision = (sidecarData.revision ?? 1) + 5
-    fs.writeFileSync(sidecarPath, JSON.stringify(sidecarData, null, 2), "utf-8")
+    // 6. Assert user edits are NOT silently overwritten by delayed sidecar response
+    await expect(questionInput).toHaveValue(
+      "Question Edited Before Sidecar Resolved",
+    )
 
-    // Attempt to save again from current browser session (has older expectedRevision)
+    // 7. Verify the sidecar attachment is still associated with this question
+    const toggleBtn = page.locator('[data-testid="toggle-enhancements-button"]')
+    await toggleBtn.click({ force: true })
+    const tabVisuals = page.locator('[data-testid="tab-visuals"]')
+    await tabVisuals.click()
+    const altInput0 = page.locator('[data-testid="alt-input-0"]')
+    await expect(altInput0).toBeVisible()
+    await expect(altInput0).toHaveValue("Sidecar Photo")
+
+    // 8. Save and verify server persistence reflects both user edit and sidecar extras
+    const savePromise = page.waitForResponse(
+      (res) => res.url().includes("/quizz") && res.status() === 200,
+    )
+    const saveBtn = page.getByRole("button", { name: t("common:save") })
     await saveBtn.click()
+    await savePromise
+    await expect(page).toHaveURL(/\/manager\/config$/u)
 
-    // Conflict modal must appear!
-    const conflictModal = page.locator('[data-testid="conflict-modal"]')
-    await expect(conflictModal).toBeVisible({ timeout: 10000 })
-    const conflictTitle = page.locator('[data-testid="conflict-title"]')
-    await expect(conflictTitle).toBeVisible()
-
-    await saveScreenshots(page, "gate3-editor-conflict-modal.png")
-
-    // Click reload button in conflict modal
-    const reloadBtn = page.locator('[data-testid="conflict-reload-button"]')
-    await expect(reloadBtn).toBeVisible()
-    await reloadBtn.click()
-
-    // Conflict modal dismisses after reload
-    await expect(conflictModal).toBeHidden()
+    const savedBase = JSON.parse(
+      fs.readFileSync(join(CONFIG_PATH, "quizz", `${quizzId}.json`), "utf-8"),
+    ) as { questions: Array<{ question: string }> }
+    expect(savedBase.questions[0].question).toBe(
+      "Question Edited Before Sidecar Resolved",
+    )
   })
 
-  test("Scenario 2: Live Gameplay - Manager + 2 Web Players + Simulated Phone, Teams, Reveal & Reconnect", async ({
+  test("Scenario 3: HTTP 409 Conflict Handling with Two Real Editing Sessions (Cancel, Reload, and Confirmed Force Overwrite)", async ({
+    page: session1,
+    newPage,
+  }) => {
+    const subject = `Conflict 409 Quiz ${Date.now()}`
+    const quizzId = subject.toLowerCase().replace(/\W+/gu, "-")
+
+    // 1. Seed quiz with sidecar extras (revision 1)
+    seedQuizz(subject, {
+      questions: [
+        {
+          type: "single",
+          question: "Conflict Testing Question",
+          answers: ["Option 1", "Option 2"],
+          solutions: [0],
+          cooldown: 5,
+          time: 20,
+        },
+      ],
+    })
+
+    const sidecarDir = join(CONFIG_PATH, "extensions", "quizzes")
+    fs.mkdirSync(sidecarDir, { recursive: true })
+    const qIds = [crypto.randomUUID()]
+    const extras = createDefaultQuizExtras(quizzId, qIds, "d".repeat(64))
+    extras.leaderboard = { mode: "everyN", everyN: 1 }
+    fs.writeFileSync(
+      join(sidecarDir, `${quizzId}.json`),
+      JSON.stringify(extras, null, 2),
+      "utf-8",
+    )
+
+    // 2. Open Session 1 and Session 2 on the same quiz
+    await openQuizzTab(session1)
+    await quizzRow(session1, subject)
+      .getByRole("button", { name: t("manager:quizz.edit") })
+      .click()
+    await expect(session1).toHaveURL(
+      new RegExp(`/manager/quizz/${quizzId}$`, "u"),
+    )
+
+    const session2 = await newPage()
+    await openQuizzTab(session2)
+    await quizzRow(session2, subject)
+      .getByRole("button", { name: t("manager:quizz.edit") })
+      .click()
+    await expect(session2).toHaveURL(
+      new RegExp(`/manager/quizz/${quizzId}$`, "u"),
+    )
+
+    // 3. Session 1 modifies Leaderboard everyN to 5 and saves (revision becomes 2)
+    const toggle1 = session1.locator(
+      '[data-testid="toggle-enhancements-button"]',
+    )
+    await toggle1.click({ force: true })
+    await session1.locator('[data-testid="tab-leaderboard"]').click()
+    const everyN1 = session1.locator('[data-testid="every-n-input"]')
+    await expect(everyN1).toBeVisible()
+    await everyN1.fill("5")
+
+    const savePromise1 = session1.waitForResponse(
+      (res) => res.url().includes("/quizz") && res.status() === 200,
+    )
+    await session1.getByRole("button", { name: t("common:save") }).click()
+    await savePromise1
+    await expect(session1).toHaveURL(/\/manager\/config$/u)
+
+    // Verify disk revision advanced to 2
+    const diskSidecar1 = JSON.parse(
+      fs.readFileSync(join(sidecarDir, `${quizzId}.json`), "utf-8"),
+    ) as { revision: number; leaderboard?: { everyN?: number } }
+    expect(diskSidecar1.revision).toBe(2)
+    expect(diskSidecar1.leaderboard?.everyN).toBe(5)
+
+    // 4. Session 2 (has expectedRevision 1) modifies everyN to 3 and tries to save -> 409 Conflict
+    const toggle2 = session2.locator(
+      '[data-testid="toggle-enhancements-button"]',
+    )
+    await toggle2.click({ force: true })
+    await session2.locator('[data-testid="tab-leaderboard"]').click()
+    const everyN2 = session2.locator('[data-testid="every-n-input"]')
+    await expect(everyN2).toBeVisible()
+    await everyN2.fill("3")
+
+    const conflictPromise = session2.waitForResponse(
+      (res) =>
+        res.url().includes(`/api/extensions/quizzes/${quizzId}`) &&
+        res.status() === 409,
+    )
+    await session2.getByRole("button", { name: t("common:save") }).click()
+    await conflictPromise
+
+    // Conflict modal must appear
+    const conflictModal = session2.locator('[data-testid="conflict-modal"]')
+    await expect(conflictModal).toBeVisible()
+    await expect(
+      session2.locator('[data-testid="conflict-title"]'),
+    ).toBeVisible()
+
+    await saveScreenshots(session2, "gate3-editor-conflict-modal.png")
+
+    // 5. Step A: Test CANCEL in conflict modal
+    const cancelBtn = session2.locator('[data-testid="conflict-cancel-button"]')
+    await expect(cancelBtn).toBeVisible()
+    await cancelBtn.click()
+    await expect(conflictModal).toBeHidden()
+    // Verify user edits are preserved after cancel
+    await expect(everyN2).toHaveValue("3")
+
+    // 6. Step B: Test RELOAD in conflict modal
+    await session2.getByRole("button", { name: t("common:save") }).click()
+    await expect(conflictModal).toBeVisible()
+    const reloadBtn = session2.locator('[data-testid="conflict-reload-button"]')
+    await expect(reloadBtn).toBeVisible()
+    await reloadBtn.click()
+    await expect(conflictModal).toBeHidden()
+    // Verify latest server value (5) reloaded into form
+    await expect(everyN2).toHaveValue("5")
+
+    // 7. Step C: Test CONFIRMED FORCE OVERWRITE
+    // Session 1 makes another change and saves (revision becomes 3)
+    await openQuizzTab(session1)
+    await quizzRow(session1, subject)
+      .getByRole("button", { name: t("manager:quizz.edit") })
+      .click()
+    await toggle1.click({ force: true })
+    await session1.locator('[data-testid="tab-leaderboard"]').click()
+    await session1.locator('[data-testid="every-n-input"]').fill("9")
+    const savePromise3 = session1.waitForResponse(
+      (res) => res.url().includes("/quizz") && res.status() === 200,
+    )
+    await session1.getByRole("button", { name: t("common:save") }).click()
+    await savePromise3
+    await expect(session1).toHaveURL(/\/manager\/config$/u)
+
+    // Now Session 2 edits everyN to 7 (has expectedRevision 2, server is 3)
+    await everyN2.fill("7")
+    await session2.getByRole("button", { name: t("common:save") }).click()
+    await expect(conflictModal).toBeVisible()
+
+    // Click Force Overwrite -> Confirmation banner appears
+    const overwriteBtn = session2.locator(
+      '[data-testid="conflict-overwrite-button"]',
+    )
+    await expect(overwriteBtn).toBeVisible()
+    await overwriteBtn.click()
+
+    const confirmOverwriteBtn = session2.locator(
+      '[data-testid="conflict-confirm-overwrite-button"]',
+    )
+    await expect(confirmOverwriteBtn).toBeVisible()
+    await saveScreenshots(session2, "gate3-editor-conflict-overwrite.png")
+
+    // Confirm Force Overwrite -> Saves with expectedRevision: null
+    const overwritePromise = session2.waitForResponse(
+      (res) =>
+        res.url().includes(`/api/extensions/quizzes/${quizzId}`) &&
+        res.status() === 200,
+    )
+    await confirmOverwriteBtn.click()
+    await overwritePromise
+    await expect(session2).toHaveURL(/\/manager\/config$/u)
+
+    // Verify disk has overwritten value with incremented revision
+    const diskSidecarFinal = JSON.parse(
+      fs.readFileSync(join(sidecarDir, `${quizzId}.json`), "utf-8"),
+    ) as { revision: number; leaderboard?: { everyN?: number } }
+    expect(diskSidecarFinal.revision).toBe(4)
+    expect(diskSidecarFinal.leaderboard?.everyN).toBe(7)
+  })
+
+  test("Scenario 4: Live Gameplay - Manager + 2 Web Players + Simulated Phone, Teams, Reveal & Reconnect", async ({
     page: manager,
     newPage,
   }) => {
@@ -352,28 +695,28 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const dtmfDirective = await sim.pressKey("1")
     expect(dtmfDirective.message).toContain("submitted")
 
-    // 9. Player 1 (Alice) answers correctly ("Mars")
+    // 9. Player 1 (Alice) answers ("Mars")
     await answer(player1, "Mars")
+
+    // 10. Host ends timer early via host toolbar button (before natural countdown expires)
+    const endTimerBtn = manager.getByRole("button", {
+      name: t("extensions:host.endTimer"),
+    })
+    await expect(endTimerBtn).toBeVisible()
+    await endTimerBtn.click()
+
+    // 11. Results revealed immediately upon timer end
     await expect(player1.getByText(t("game:correct"))).toBeVisible()
     const player1Score = player1.locator("div.rounded-lg.bg-gray-800")
     await expect(player1Score).not.toHaveText("0")
 
-    // 10. Player 2 reconnect test (simulates connection drop & rejoin)
+    // 12. Player 2 reconnect test (simulates connection drop & rejoin during results)
     await player2.reload()
     expect(
       player2
         .getByText(t("game:reconnecting"))
         .or(player2.getByRole("button", { name: /^A /u })),
     ).toBeDefined()
-
-    // 11. End answering timer and advance to Leaderboard
-    const endTimerBtn = manager.getByRole("button", {
-      name: t("extensions:host.endTimer"),
-    })
-
-    if (await endTimerBtn.isVisible().catch(() => false)) {
-      await endTimerBtn.click()
-    }
 
     await next(manager)
     const teamLeaderboard = manager.locator(
@@ -398,12 +741,13 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     expect(bridge.getActiveSessionsCount()).toBe(0)
   })
 
-  test("Scenario 3: Backwards Compatibility & 8 Locales Verification", async ({
+  test("Scenario 5: Backwards Compatibility & 8 Locales Verification", async ({
     page,
   }) => {
     // 1. Vanilla quiz execution without extensions
     const vanillaPin = await createGame(page, BASIC_QUIZZ)
     expect(vanillaPin).toMatch(/^\d{6}$/u)
+    await saveScreenshots(page, "gate3-vanilla-feature-off.png")
 
     // Seed a quiz to test editor localization
     const locSubject = `Localized Quiz ${Date.now()}`
@@ -507,7 +851,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await saveScreenshots(page, "gate3-locales-verified.png")
   })
 
-  test("Scenario 4: Wave 2 Phase A Full Flow - Real Browser Acceptance (Host Controls, Multi-Choice Bar Distribution, Previous/History, Replay Checkpoint, Interlude & Keyboard Navigation)", async ({
+  test("Scenario 6: Wave 2 Phase A Full Flow - Real Browser Acceptance (Host Controls, Multi-Choice Bar Distribution, Previous/History, Replay Checkpoint, Interlude & Keyboard Navigation)", async ({
     page: manager,
     newPage,
   }) => {
@@ -647,11 +991,6 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(bob.getByText(t("game:correct"))).toBeVisible()
 
     // 11. Manager's response bars display authoritative multi-choice percentages (sum can exceed 100%)
-    // Option "2": 2/2 = 100%
-    // Option "3": 1/2 = 50%
-    // Option "5": 1/2 = 50%
-    // Option "4": 0/2 = 0%
-    // Sum = 100 + 50 + 50 = 200% > 100%
     await expect(manager.getByRole("button", { name: /^A 2/u })).toContainText(
       "100%",
     )
@@ -683,7 +1022,8 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       manager.getByText(t("extensions:host.answersCount", { count: 1 })),
     ).toBeVisible()
 
-    // 13. Keyboard modal focus protection: pressing Space/Enter while modal is open does NOT trigger live action
+    // 13. Keyboard modal focus protection: pressing Space while modal is open does NOT trigger live action
+    await manager.getByText("What is the capital of France?").click()
     await manager.keyboard.press("Space")
     await expect(
       manager.getByRole("heading", { name: t("extensions:host.previous") }),
@@ -700,7 +1040,6 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await expect(
       manager.getByRole("heading", { name: t("extensions:host.previous") }),
     ).toBeVisible()
-    // Await toolbar command debounce window
     await manager.waitForTimeout(900)
     const replayBtn = manager.getByRole("button", {
       name: t("extensions:host.replayFromHere"),

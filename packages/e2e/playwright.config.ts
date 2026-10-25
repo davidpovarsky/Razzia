@@ -46,10 +46,13 @@ export default defineConfig({
     },
     {
       command:
-        "node node_modules/vite/bin/vite.js build && node node_modules/vite/bin/vite.js preview --strictPort",
+        "node --experimental-strip-types node_modules/vite/bin/vite.js build && node node_modules/vite/bin/vite.js preview --strictPort",
       cwd: join(root, "packages/web"),
       url: "http://localhost:3000",
       reuseExistingServer: false,
+      env: {
+        NODE_OPTIONS: "--experimental-strip-types",
+      },
     },
   ],
 })

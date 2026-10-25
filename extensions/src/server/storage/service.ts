@@ -188,6 +188,8 @@ export class CompositeStorageService {
 
   /**
    * Creates a new composite quiz and writes both base and sidecar.
+   * Pre-validates extras before saving and implements atomic rollback
+   * if sidecar writing or validation fails.
    */
   createCompositeQuiz(params: {
     quizz: Record<string, unknown>
@@ -200,10 +202,6 @@ export class CompositeStorageService {
     const { quizz, extras } = params
     const baseDigest = computeCanonicalBaseDigest(quizz)
 
-    // Save base quiz first to mint ID
-    const saveResult = this.injections.saveQuizz(quizz)
-    const quizId = saveResult.id
-
     // Ensure question IDs are aligned
     const questionsCount = Array.isArray(quizz.questions)
       ? quizz.questions.length
@@ -213,22 +211,65 @@ export class CompositeStorageService {
       questionsCount,
     )
 
-    const initialExtras: QuizExtrasV1 = {
+    // Pre-validate extras payload structure before touching disk or saving base quiz
+    const preValidation = quizExtrasV1Schema.safeParse({
       ...extras,
-      quizId,
+      quizId: "00000000-0000-0000-0000-000000000000",
       baseDigest,
       revision: 1,
       questionIds: alignedQuestionIds,
+    })
+
+    if (!preValidation.success) {
+      throw new CompositeStorageError(
+        `Invalid extras payload: ${JSON.stringify(preValidation.error.issues)}`,
+        StatusCodes.BAD_REQUEST,
+      )
     }
 
-    const validatedExtras = quizExtrasV1Schema.parse(initialExtras)
+    // Save base quiz with atomic rollback recovery if sidecar write fails
+    let quizId = ""
 
-    writeSidecar(this.injections.getPath, quizId, validatedExtras)
+    try {
+      const saveResult = this.injections.saveQuizz(quizz)
+      quizId = saveResult.id
 
-    return {
-      quizId,
-      revision: 1,
-      baseDigest,
+      const initialExtras: QuizExtrasV1 = {
+        ...extras,
+        quizId,
+        baseDigest,
+        revision: 1,
+        questionIds: alignedQuestionIds,
+      }
+
+      const validatedExtras = quizExtrasV1Schema.parse(initialExtras)
+
+      writeSidecar(this.injections.getPath, quizId, validatedExtras)
+
+      return {
+        quizId,
+        revision: 1,
+        baseDigest,
+      }
+    } catch (writeError) {
+      // Safe rollback so an invalid sidecar or write failure cannot leave an unintended partial quiz
+      if (quizId) {
+        try {
+          this.injections.deleteQuizz(quizId)
+          deleteSidecar(this.injections.getPath, quizId)
+        } catch {
+          // Ignore secondary cleanup error
+        }
+      }
+
+      if (writeError instanceof CompositeStorageError) {
+        throw writeError
+      }
+
+      throw new CompositeStorageError(
+        `Failed to create composite quiz: ${writeError instanceof Error ? writeError.message : String(writeError)}`,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
     }
   }
 
@@ -269,7 +310,18 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
-    if (isEnhancedBundle(payload)) {
+    if (
+      typeof payload === "object" &&
+      payload !== null &&
+      "bundleVersion" in payload
+    ) {
+      if (!isEnhancedBundle(payload)) {
+        throw new CompositeStorageError(
+          "Invalid enhanced bundle format or extras schema",
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+
       const { quizz, extras } = payload
       const questionsCount =
         typeof quizz === "object" &&
@@ -286,29 +338,68 @@ export class CompositeStorageService {
         freshQuestionIds,
         questionsCount,
       )
-
-      // Mint new quiz ID by saving base quiz
-      const saveResult = this.injections.saveQuizz(quizz)
-      const newQuizId = saveResult.id
       const baseDigest = computeCanonicalBaseDigest(quizz)
 
-      const importedExtras: QuizExtrasV1 = {
+      // Pre-validate extras payload before touching disk or saving base quiz
+      const preValidation = quizExtrasV1Schema.safeParse({
         ...extras,
-        quizId: newQuizId,
-        revision: 1,
+        quizId: "00000000-0000-0000-0000-000000000000",
         baseDigest,
+        revision: 1,
         questionIds: ensuredFreshIds,
         perQuestion: freshPerQuestion,
+      })
+
+      if (!preValidation.success) {
+        throw new CompositeStorageError(
+          `Invalid extras payload in bundle: ${JSON.stringify(preValidation.error.issues)}`,
+          StatusCodes.BAD_REQUEST,
+        )
       }
 
-      const validated = quizExtrasV1Schema.parse(importedExtras)
+      // Mint new quiz ID by saving base quiz with atomic rollback recovery
+      let newQuizId = ""
 
-      writeSidecar(this.injections.getPath, newQuizId, validated)
+      try {
+        const saveResult = this.injections.saveQuizz(quizz)
+        newQuizId = saveResult.id
 
-      return {
-        quizId: newQuizId,
-        revision: 1,
-        baseDigest,
+        const importedExtras: QuizExtrasV1 = {
+          ...extras,
+          quizId: newQuizId,
+          revision: 1,
+          baseDigest,
+          questionIds: ensuredFreshIds,
+          perQuestion: freshPerQuestion,
+        }
+
+        const validated = quizExtrasV1Schema.parse(importedExtras)
+
+        writeSidecar(this.injections.getPath, newQuizId, validated)
+
+        return {
+          quizId: newQuizId,
+          revision: 1,
+          baseDigest,
+        }
+      } catch (writeError) {
+        if (newQuizId) {
+          try {
+            this.injections.deleteQuizz(newQuizId)
+            deleteSidecar(this.injections.getPath, newQuizId)
+          } catch {
+            // Ignore secondary cleanup error
+          }
+        }
+
+        if (writeError instanceof CompositeStorageError) {
+          throw writeError
+        }
+
+        throw new CompositeStorageError(
+          `Failed to import enhanced bundle: ${writeError instanceof Error ? writeError.message : String(writeError)}`,
+          StatusCodes.INTERNAL_SERVER_ERROR,
+        )
       }
     }
 

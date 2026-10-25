@@ -8,6 +8,7 @@ import {
   generateQuestionIds,
   reorderQuestionIds,
   RevisionConflictError,
+  type QuizExtrasV1,
 } from "../core/index"
 import { CompositeStorageError } from "./storage/error"
 import { createStagedJournal, recoverJournals } from "./storage/journal"
@@ -398,5 +399,107 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     expect(thrown).toBeInstanceOf(CompositeStorageError)
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
+  })
+
+  it("createCompositeQuiz: pre-validation prevents base quiz creation on invalid extras", () => {
+    const initialBaseCount = baseQuizzes.size
+    const qIds = generateQuestionIds(2)
+    const invalidExtras = {
+      ...createDefaultQuizExtras("temp", qIds, "dummy-digest"),
+      perQuestion: {
+        [qIds[0]]: {
+          answerVisuals: [
+            {
+              answerIndex: 0,
+              display: "image",
+              url: ["java", "script:", "alert(1)"].join(""),
+              alt: "bad",
+            },
+          ],
+        },
+      },
+    }
+
+    let thrown: unknown = null
+
+    try {
+      service.createCompositeQuiz({
+        quizz: sampleQuiz,
+        extras: invalidExtras as unknown as QuizExtrasV1,
+      })
+    } catch (err) {
+      thrown = err
+    }
+
+    expect(thrown).toBeInstanceOf(CompositeStorageError)
+    expect((thrown as CompositeStorageError).statusCode).toBe(400)
+    // Verify no base quiz was saved
+    expect(baseQuizzes.size).toBe(initialBaseCount)
+  })
+
+  it("createCompositeQuiz: rolls back base quiz if sidecar write throws", () => {
+    const initialBaseCount = baseQuizzes.size
+    const qIds = generateQuestionIds(2)
+    const validExtras = createDefaultQuizExtras("temp", qIds, "dummy")
+
+    // Create a service whose getPath returns an unwritable or throwing location
+    const throwingInjections: StorageInjections = {
+      ...injections,
+      getPath: () => {
+        throw new Error("Disk full or simulated write error")
+      },
+    }
+    const failingService = new CompositeStorageService(throwingInjections)
+
+    let thrown: unknown = null
+
+    try {
+      failingService.createCompositeQuiz({
+        quizz: sampleQuiz,
+        extras: validExtras,
+      })
+    } catch (err) {
+      thrown = err
+    }
+
+    expect(thrown).toBeInstanceOf(CompositeStorageError)
+    // Verify base quiz was rolled back
+    expect(baseQuizzes.size).toBe(initialBaseCount)
+  })
+
+  it("importEnhancedBundle: rolls back base quiz if bundle sidecar write fails", () => {
+    const initialBaseCount = baseQuizzes.size
+    const qIds = generateQuestionIds(2)
+    const invalidBundle = {
+      bundleVersion: 1,
+      quizz: sampleQuiz,
+      extras: {
+        ...createDefaultQuizExtras("temp", qIds, "dummy"),
+        perQuestion: {
+          [qIds[0]]: {
+            answerVisuals: [
+              {
+                answerIndex: 0,
+                display: "image",
+                url: "data:text/html,<script>bad</script>",
+                alt: "bad",
+              },
+            ],
+          },
+        },
+      },
+    }
+
+    let thrown: unknown = null
+
+    try {
+      service.importEnhancedBundle(invalidBundle)
+    } catch (err) {
+      thrown = err
+    }
+
+    expect(thrown).toBeInstanceOf(CompositeStorageError)
+    expect((thrown as CompositeStorageError).statusCode).toBe(400)
+    expect(baseQuizzes.size).toBe(initialBaseCount)
   })
 })
