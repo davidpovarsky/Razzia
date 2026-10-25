@@ -15,12 +15,23 @@ import fs from "fs"
 import { nanoid } from "nanoid"
 import { join, resolve } from "path"
 
-const inContainerPath = process.env.CONFIG_PATH
+export const getPath = (path = "") => {
+  const configPath = process.env.CONFIG_PATH
 
-export const getPath = (path = "") =>
-  inContainerPath
-    ? resolve(inContainerPath, path)
-    : resolve(process.cwd(), "../../config", path)
+  if (configPath) {
+    return resolve(configPath, path)
+  }
+
+  if (fs.existsSync(resolve(process.cwd(), "config"))) {
+    return resolve(process.cwd(), "config", path)
+  }
+
+  if (fs.existsSync(resolve(process.cwd(), "../config"))) {
+    return resolve(process.cwd(), "../config", path)
+  }
+
+  return resolve(process.cwd(), "../../config", path)
+}
 
 const readJson = (filePath: string): Record<string, unknown> | null => {
   try {

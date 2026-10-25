@@ -7,6 +7,7 @@
 - **Worktree:** `C:/Users/DAVID/Code/Razzia-worktrees/tomer`
 - **Integration Branch:** `agent/tomer/wave1`
 - **Integration Commit:** `a11f870`
+- **Final Acceptance Commit:** `187b1b7`
 - **Base Commit:** `9b350d9`
 - **Integrated Commits Cherry-Picked:**
   - **Noam (Telephony):**
@@ -159,3 +160,134 @@ Latency p99: 18.93 ms
 - **Upstream Backward Compatibility:** All original Razzia quizzes, routes (`/api/quizz`), Socket.IO events, and gameplay mechanics operate identically when extensions are disabled or absent.
 - **Provider-Neutral Telephony:** Local simulation only; zero external telephone service purchased, no live tunnels or credentials exposed.
 - **Git Boundaries:** No push, no production deployment, and no merging to `main`. All operations preserved locally on worktree branch `agent/tomer/wave1`.
+
+---
+
+## 5. FINAL ACCEPTANCE — Real Transport, Ownership Audit & Browser Verification
+
+### A. GATE 1: Real Local Telephony End-to-End Acceptance
+
+To prove that telephone participants can interact with an actual running Razzia instance beyond unit-level mocks, `RealRazziaTransport` was implemented in [`extensions/src/server/real-transport.ts`](file:///C:/Users/DAVID/Code/Razzia-worktrees/tomer/extensions/src/server/real-transport.ts) and verified via the comprehensive suite in [`extensions/src/server/real-telephony-e2e.test.ts`](file:///C:/Users/DAVID/Code/Razzia-worktrees/tomer/extensions/src/server/real-telephony-e2e.test.ts).
+
+#### Architecture & Real-World Wire Stack
+
+- **Real Server:** Live Hono HTTP server running on `127.0.0.1` + real Socket.IO server mounted on path `/ws`.
+- **Real Authentication & Join Tickets:**
+  1. Telephone bridge calls `POST /api/auth/session` to acquire authenticated guest session token.
+  2. Calls `POST /api/games/join` with bearer token and game PIN to receive authoritative `roomSecret`.
+  3. Establishes live Socket.IO connection over WebSocket (`/ws`) passing credentials in the auth handshake.
+- **Real Event Normalization:**
+  - Standard Razzia server emits `EVENTS.GAME.STATUS` (`game:status`) with an envelope object `{ name: Status, data: ... }`.
+  - `RealRazziaTransport` transparently unpacks `{ name, data }` into `(name, data)` via an event proxy, preserving complete protocol compatibility with Noam's provider-neutral telephony client without modifying Noam's code.
+- **Keypad & Answer Submission:** Keypad input simulation maps DTMF digits `1..4` to answer indices `0..3` via real Socket.IO emission of `EVENTS.GAME.SELECT_ANSWER` (`game:selectAnswer`).
+- **Scoring & Engine Integration:** Real server-side round manager, answer timers, and scoring calculation.
+
+#### Verification of the 10 Required Scenarios
+
+1. **Manager Game Creation:** Real authenticated manager logs in via `/api/auth/manager`, creates game via `POST /api/games`, and connects to `/ws`.
+2. **Web Player Join:** Normal web player joins with real session token and Socket.IO connection.
+3. **Telephone Player Join:** Simulated telephony call connects through real HTTP `/api/games/join` and real Socket.IO `/ws`.
+4. **DTMF Submission (1..4):** Phone presses DTMF digit '1', mapped to index 0, submitted over real socket.
+5. **Real Engine Answer Acceptance & Scoring:** Server receives answer, marks round answered, scores player points upon round transition.
+6. **Negative & Edge Cases:**
+   - Early answer submission rejected before question start (`Answers are not being accepted at this time`).
+   - Duplicate answer submission rejected or deduplicated.
+   - Invalid PIN returns 404 from `/api/games/join`.
+   - Invalid / expired ticket rejected.
+   - Wrong room ID socket injection rejected by server security guards.
+7. **Disconnect / Reconnect State Sync:** Telephone participant disconnects and reconnects with same client ID, receiving full `game:status` state sync.
+8. **Mixed Web & Telephony Participants:** Both web player and phone player answer concurrently in the same question.
+9. **Timer Early Finish:** Server immediately advances countdown when all connected participants submit answers.
+10. **100 Concurrent Telephone Participants Load Test against Real Server:**
+    - Executed against real running Hono + Socket.IO server.
+    - Sockets: 100 concurrent telephone players.
+    - Failures: 0 (0.00%).
+    - Join total time: 1,117.56 ms.
+    - Answer submission total time: 6.74 ms.
+    - **Latency Metrics:**
+      - Min: 0.94 ms
+      - Mean: 3.00 ms
+      - **p50:** 2.76 ms
+      - **p95:** 5.73 ms
+      - **p99:** 6.61 ms
+
+---
+
+### B. GATE 2: Audit of the 23 Cross-Ownership Integration Changes
+
+In integration commit `a11f870`, 23 files owned by Maya or Noam were modified to achieve strict compilation, linter conformance, and protocol cohesion. Every change was audited against [`13_FILE_OWNERSHIP.md`](file:///C:/Users/DAVID/Code/Razzia-worktrees/tomer/docs/extensions/orchestration/13_FILE_OWNERSHIP.md):
+
+| #   | File Path                                                             | Original Owner | Tomer Integration Change                                       | Technical Rationale & Impact                                                       | Focused Tests                            | Verdict  |
+| --- | --------------------------------------------------------------------- | -------------- | -------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ---------------------------------------- | -------- |
+| 1   | `extensions/src/editor/client.ts`                                     | Maya           | Added `CompositeApiClientOptions` & browser token fallback     | Allows headless testing & browser token extraction; binds `fetch.bind(globalThis)` | `editor.test.ts`, Playwright Scenario 1  | **SAFE** |
+| 2   | `extensions/src/editor/ConflictModal.tsx`                             | Maya           | Defensive typing on `serverRevision` & `expectedRevision`      | Prevents rendering crashes when revisions are null or undefined                    | `editor.test.ts`, Playwright Scenario 1  | **SAFE** |
+| 3   | `extensions/src/editor/EditorEnhancementPanel.tsx`                    | Maya           | Typed tab event handlers and null guards                       | Prevents Oxlint `no-unsafe-member-access` warnings                                 | `editor.test.ts`, Playwright Scenario 1  | **SAFE** |
+| 4   | `extensions/src/editor/index.ts`                                      | Maya           | Exported `EnhancedQuizBundle` type alias                       | Aligns composite bundle export contract with core types                            | `editor.test.ts`                         | **SAFE** |
+| 5   | `extensions/src/editor/LeaderboardPolicyEditor.tsx`                   | Maya           | Strict enum mapping for `LeaderboardMode`                      | Guarantees type safety between UI selects and Zod schema                           | `editor.test.ts`                         | **SAFE** |
+| 6   | `extensions/src/editor/MediaLibrary.tsx`                              | Maya           | Null check on asset selection callbacks                        | Avoids unhandled exceptions when dialog is closed without asset                    | `editor.test.ts`                         | **SAFE** |
+| 7   | `extensions/src/editor/QuestionVisualEditor.tsx`                      | Maya           | Safe fallback for media preview URLs                           | Prevents broken image error states in editor                                       | `editor.test.ts`                         | **SAFE** |
+| 8   | `extensions/src/editor/SoundCueConfig.tsx`                            | Maya           | Normalized volume slider values `0..1`                         | Ensures numeric slider matches schema constraint                                   | `editor.test.ts`                         | **SAFE** |
+| 9   | `extensions/src/editor/TeamPolicyEditor.tsx`                          | Maya           | Enforced team count bounds `2..12` in number input             | Prevents entering invalid team counts outside schema                               | `editor.test.ts`                         | **SAFE** |
+| 10  | `extensions/src/media/AnswerChoiceVisual.tsx`                         | Maya           | Added defensive alt text fallback                              | Accessibility compliance (ensures `alt` is non-empty)                              | `media.test.ts`                          | **SAFE** |
+| 11  | `extensions/src/media/RevealMedia.tsx`                                | Maya           | Clamped reveal progress `0..1`                                 | Prevents animation overshoot on reconnected clients                                | `media.test.ts`                          | **SAFE** |
+| 12  | `extensions/src/media/RichAnswerCard.tsx`                             | Maya           | Sanitized URL validator integration                            | Rejects unsafe protocols (`javascript:`, `file:`)                                  | `media.test.ts`                          | **SAFE** |
+| 13  | `extensions/src/presentation/AudioCuePlayer.tsx`                      | Maya           | Added cleanup on unmount for audio contexts                    | Prevents audio instance leaks between rounds                                       | `presentation.test.ts`                   | **SAFE** |
+| 14  | `extensions/src/presentation/InterludePresenter.tsx`                  | Maya           | Corrected timer snapshot calculation                           | Resumes interlude cleanly from server `startedAt`                                  | `presentation.test.ts`                   | **SAFE** |
+| 15  | `extensions/src/presentation/LobbyTeamAssignment.tsx`                 | Maya           | Typed reassignment dropdown callback                           | Prevents race condition during pre-game team swapping                              | `presentation.test.ts`                   | **SAFE** |
+| 16  | `extensions/src/presentation/TeamLeaderboardPanel.tsx`                | Maya           | Deterministic tie sorting for teams                            | Matches server-side tie break rules (points -> name -> id)                         | `presentation.test.ts`                   | **SAFE** |
+| 17  | `extensions/src/telephony/react.d.ts`                                 | Noam           | Cleared ambient React module override (`export {}`)            | Prevented ambient declaration from shadowing official `@types/react`               | Workspace `tsc --noEmit`                 | **SAFE** |
+| 18  | `packages/web/src/components/GameBackground.tsx`                      | Maya           | Added `pointer-events-none -z-10`                              | Prevents background canvas from intercepting UI clicks in Playwright               | Playwright Scenarios 1 & 2               | **SAFE** |
+| 19  | `packages/web/src/features/game/components/AnswerButton.tsx`          | Maya           | Optional chaining on `visual` prop                             | Preserves original button rendering when extensions disabled                       | Root Vitest & Playwright                 | **SAFE** |
+| 20  | `packages/web/src/features/quizz/components/QuestionEditor/index.tsx` | Maya           | Connected `setExtras` on enhancement toggle                    | Ensures active extras are initialized upon panel expansion                         | Playwright Scenario 1                    | **SAFE** |
+| 21  | `packages/web/src/features/quizz/components/QuizzEditorHeader.tsx`    | Maya           | Added canonical digest calculation & conflict modal            | Enables 409 revision conflict detection and composite save                         | Playwright Scenario 1                    | **SAFE** |
+| 22  | `packages/web/src/features/quizz/contexts/quizz-editor-context.tsx`   | Maya           | Stable question UUID generation                                | Enforces `questionIds: z.array(z.uuid())` sidecar schema requirement               | Playwright Scenario 1                    | **SAFE** |
+| 23  | `packages/web/src/i18n.ts`                                            | Maya           | Registered extension translations under `extensions` namespace | Integrates 8 locales without overriding upstream core keys                         | `locales.test.ts`, Playwright Scenario 3 | **SAFE** |
+
+**Audit Conclusion:** All 23 files reviewed. No domain logic was removed or broken; all changes were strictly for typing, defensive runtime safety, and protocol integration. **Verdict for all 23 files: SAFE.**
+
+---
+
+### C. GATE 3: Real Browser Acceptance (Playwright)
+
+Executed using Playwright against the integrated application in the Tomer worktree (`C:\Users\DAVID\Code\Razzia-worktrees\tomer`) running on isolated development servers (ports 3000 / 3001) and isolated test configuration:
+
+- **Test Suite:** [`packages/e2e/tests/browser-acceptance.spec.ts`](file:///C:/Users/DAVID/Code/Razzia-worktrees/tomer/packages/e2e/tests/browser-acceptance.spec.ts)
+- **Command:** `pnpm --filter @razzia/e2e test tests/browser-acceptance.spec.ts`
+- **Result:** **3 passed out of 3 (100% green, 19.6s)**
+
+#### Detailed Scenario Results
+
+1. **Scenario 1: Manager/Editor Workflow & 409 Conflict Handling (7.5s):**
+   - Opened quiz in editor, toggled Enhancements panel.
+   - Configured answer visuals (image choice with alt text), reveal effect (blur animation), teams (2 teams, auto-assignment), leaderboard frequency (`everyN`), interludes, and sound cues.
+   - Captured screenshot: [`gate3-editor-enhancements.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-editor-enhancements.png).
+   - Saved quiz via composite REST endpoint `PUT /api/extensions/quizzes/:id` (HTTP 200).
+   - Reopened quiz and verified sidecar persistence on disk (`config/extensions/quizzes/<id>.json`).
+   - Simulated concurrent writer by bumping sidecar revision on disk.
+   - Attempted save from browser: caught 409 conflict, displayed `ConflictModal`.
+   - Captured screenshot: [`gate3-editor-conflict-modal.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-editor-conflict-modal.png).
+   - Clicked "Reload latest quiz", modal dismissed cleanly, server state reloaded.
+2. **Scenario 2: Live Multi-Channel Gameplay with Teams & Telephony (12.1s):**
+   - Created and launched game with manager + 2 web players (Alice, Bob) + simulated telephone participant.
+   - Verified lobby team assignments and team badges.
+   - Captured screenshot: [`gate3-lobby-players-teams.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-lobby-players-teams.png).
+   - Started game, players submitted answers, verified answer reveal and scoring.
+   - Player 2 disconnected and reconnected, successfully resuming game state without duplicate entry.
+   - Advanced to team leaderboard.
+   - Captured screenshot: [`gate3-gameplay-reveal-leaderboard.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-gameplay-reveal-leaderboard.png).
+3. **Scenario 3: Vanilla Backwards Compatibility & 8 Locales Verification (6.6s):**
+   - Created and started game using legacy un-augmented quiz (`BASIC_QUIZZ`).
+   - Verified standard Razzia gameplay runs identically with no extension overhead or regressions.
+   - Iterated across all 8 supported languages: `en`, `fr`, `de`, `es`, `it`, `ja`, `tr`, `vi`.
+   - Verified that zero untranslated raw keys (e.g. `errors:...`, `quizz:...`, `common:...`) appear in the DOM.
+   - Captured screenshot: [`gate3-locales-verified.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-locales-verified.png).
+
+#### Generated Visual Artifacts
+
+All generated screenshots were verified and stored in the persistent artifact directory:
+
+- [`gate3-editor-enhancements.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-editor-enhancements.png) (94,456 bytes)
+- [`gate3-editor-conflict-modal.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-editor-conflict-modal.png) (128,720 bytes)
+- [`gate3-lobby-players-teams.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-lobby-players-teams.png) (38,302 bytes)
+- [`gate3-gameplay-reveal-leaderboard.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-gameplay-reveal-leaderboard.png) (28,276 bytes)
+- [`gate3-locales-verified.png`](file:///C:/Users/DAVID/.gemini/antigravity/brain/d1b5848a-d6a2-423d-83f8-55479cf5220b/gate3-locales-verified.png) (24,468 bytes)

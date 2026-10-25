@@ -1,6 +1,7 @@
 # Maya UI & Frontend Handoff (V3)
 
 ## Status & Overview
+
 - **Role:** Maya (Frontend / Native UX / Media / Presentation / Audio / Editor / Locales)
 - **Workspace:** `C:\Users\DAVID\Code\Razzia-worktrees\maya`
 - **Branch:** `agent/maya/wave1`
@@ -16,6 +17,7 @@
 Maya implements and exports the following modules from `@razzia/extensions`:
 
 ### A. `@razzia/extensions/locales` (`extensions/src/locales/index.ts`)
+
 - All 8 Razzia languages implemented: `en`, `fr`, `de`, `es`, `it`, `ja`, `tr`, `vi`.
 - Strict key-parity across all 8 dictionaries covering tabs, leaderboard, teams, audio, visuals, interludes, conflict 409, bundles, and errors.
 - Exports:
@@ -24,6 +26,7 @@ Maya implements and exports the following modules from `@razzia/extensions`:
   - `getExtensionResources()`: returns i18next-compatible resources object for registering the `extensions` namespace.
 
 ### B. `@razzia/extensions/media` (`extensions/src/media/index.ts`)
+
 - `RichAnswerCard`:
   - Supports answer choices with `text`, `image`, or `both`.
   - Enforces accessible alt text and validates against unsafe protocols (`javascript:`, `data:`, `file:`, `vbscript:`).
@@ -38,6 +41,7 @@ Maya implements and exports the following modules from `@razzia/extensions`:
 - Helper functions: `calculateRevealProgress`, `isValidAnswerVisual`.
 
 ### C. `@razzia/extensions/presentation` (`extensions/src/presentation/index.ts`)
+
 - `InterludePresenter`:
   - Renders interlude slides between question results and next question.
   - Supports kinds: `title`, `image`, `video`, `countdown`.
@@ -66,6 +70,7 @@ Maya implements and exports the following modules from `@razzia/extensions`:
   - Allows manager to reassign players between teams prior to game start; locked once game begins.
 
 ### D. `@razzia/extensions/editor` (`extensions/src/editor/index.ts`)
+
 - `EditorEnhancementPanel`:
   - Tabbed authoring panel for quiz-wide policies (leaderboard, teams, audio cues) and per-question enhancements (visual answers, reveal effects, interludes).
   - Integrated with existing authenticated `MediaLibrary` picker.
@@ -84,24 +89,25 @@ Maya implements and exports the following modules from `@razzia/extensions`:
 
 ## 2. Upstream Web Hooks Ledger (`packages/web/src/**`)
 
-| File | Touched Symbol | Reason / Change | Disabled / Feature-Off Test |
-| --- | --- | --- | --- |
-| `packages/web/src/i18n.ts` | `i18n.init` | Injected `getExtensionResources()` for all 8 languages under `extensions` namespace. | Existing 57 web tests pass; missing extension keys fallback gracefully. |
-| `packages/web/src/features/game/components/AnswerButton.tsx` | `AnswerButton` | Added optional `visual` prop (`RichAnswerCard` integration). Validates alt text/safe URL and displays image while preserving underlying accessible text. | When `visual` is undefined, button renders identical DOM and classes as original. |
-| `packages/web/src/components/QuestionMedia.tsx` | `QuestionMedia` | Added optional `reveal` prop. Renders `RevealMedia` with blur/pixelate/tiles/zoom when effect is configured. | When `reveal` is undefined or effect is 'none', renders original `img` element. |
-| `packages/web/src/features/game/components/states/Room.tsx` | `Room` | Listens to `extensions:state` event and renders `LobbyTeamAssignment` when `teams.enabled` is true. Manager can reassign teams before start. | When teams are not enabled or no extension state, original room view renders identically. |
-| `packages/web/src/features/game/components/states/Leaderboard.tsx` | `Leaderboard` | Listens to `extensions:state` event and renders `TeamLeaderboardPanel` with Individual/Teams toggle when teams are enabled. | When teams are not enabled, original individual leaderboard renders identically. |
-| `packages/web/src/features/game/components/GameWrapper.tsx` | `GameWrapper` | Mounts `AudioCuePlayer` for sound cues, renders `InterludePresenter` when phase is interlude, and displays team badge in player footer bar. | When extension state is absent, original game wrapper and participant bar render identically. |
-| `packages/web/src/features/quizz/components/QuizzEditorHeader.tsx` | `QuizzEditorHeader` | Performs composite save to `/api/extensions/quizzes/:id` when extras are present and mounts `ConflictModal` on 409 conflict. | When extras are null, legacy `createQuizz`/`updateQuizz` endpoints are used. |
-| `packages/web/src/features/quizz/components/QuestionEditor/index.tsx` | `QuestionEditor` | Mounts `EditorEnhancementPanel` and integrates with authenticated `MediaLibrary` picker. | When collapsed, standard `QuestionEditor` renders identically. |
-| `packages/web/src/features/quizz/contexts/quizz-editor-context.tsx` | `QuizzEditorProvider` | Maintains stable question UUID lifecycle during reorder, duplicate, and delete; manages `extras` and `conflict` state. | When no extras, standard form and fieldArray behavior unchanged. |
-| `packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx` | `handleExport` / `handleImport` | Added Enhanced Export (`.bundle.json`) alongside legacy export (`.json`); automatically detects versioned enhanced bundle on import. | Legacy `.json` export and import continue working unchanged. |
+| File                                                                                | Touched Symbol                  | Reason / Change                                                                                                                                          | Disabled / Feature-Off Test                                                                   |
+| ----------------------------------------------------------------------------------- | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| `packages/web/src/i18n.ts`                                                          | `i18n.init`                     | Injected `getExtensionResources()` for all 8 languages under `extensions` namespace.                                                                     | Existing 57 web tests pass; missing extension keys fallback gracefully.                       |
+| `packages/web/src/features/game/components/AnswerButton.tsx`                        | `AnswerButton`                  | Added optional `visual` prop (`RichAnswerCard` integration). Validates alt text/safe URL and displays image while preserving underlying accessible text. | When `visual` is undefined, button renders identical DOM and classes as original.             |
+| `packages/web/src/components/QuestionMedia.tsx`                                     | `QuestionMedia`                 | Added optional `reveal` prop. Renders `RevealMedia` with blur/pixelate/tiles/zoom when effect is configured.                                             | When `reveal` is undefined or effect is 'none', renders original `img` element.               |
+| `packages/web/src/features/game/components/states/Room.tsx`                         | `Room`                          | Listens to `extensions:state` event and renders `LobbyTeamAssignment` when `teams.enabled` is true. Manager can reassign teams before start.             | When teams are not enabled or no extension state, original room view renders identically.     |
+| `packages/web/src/features/game/components/states/Leaderboard.tsx`                  | `Leaderboard`                   | Listens to `extensions:state` event and renders `TeamLeaderboardPanel` with Individual/Teams toggle when teams are enabled.                              | When teams are not enabled, original individual leaderboard renders identically.              |
+| `packages/web/src/features/game/components/GameWrapper.tsx`                         | `GameWrapper`                   | Mounts `AudioCuePlayer` for sound cues, renders `InterludePresenter` when phase is interlude, and displays team badge in player footer bar.              | When extension state is absent, original game wrapper and participant bar render identically. |
+| `packages/web/src/features/quizz/components/QuizzEditorHeader.tsx`                  | `QuizzEditorHeader`             | Performs composite save to `/api/extensions/quizzes/:id` when extras are present and mounts `ConflictModal` on 409 conflict.                             | When extras are null, legacy `createQuizz`/`updateQuizz` endpoints are used.                  |
+| `packages/web/src/features/quizz/components/QuestionEditor/index.tsx`               | `QuestionEditor`                | Mounts `EditorEnhancementPanel` and integrates with authenticated `MediaLibrary` picker.                                                                 | When collapsed, standard `QuestionEditor` renders identically.                                |
+| `packages/web/src/features/quizz/contexts/quizz-editor-context.tsx`                 | `QuizzEditorProvider`           | Maintains stable question UUID lifecycle during reorder, duplicate, and delete; manages `extras` and `conflict` state.                                   | When no extras, standard form and fieldArray behavior unchanged.                              |
+| `packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx` | `handleExport` / `handleImport` | Added Enhanced Export (`.bundle.json`) alongside legacy export (`.json`); automatically detects versioned enhanced bundle on import.                     | Legacy `.json` export and import continue working unchanged.                                  |
 
 ---
 
 ## 3. Test Evidence
 
 ### A. Extension Tests (`pnpm --filter @razzia/extensions test`)
+
 ```
 $ vitest run
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/maya/extensions
@@ -119,6 +125,7 @@ $ vitest run
 ```
 
 ### B. Web Tests (`pnpm test -- --project web`)
+
 ```
 $ vitest run "--project" "web"
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/maya
@@ -135,6 +142,7 @@ $ vitest run "--project" "web"
 ```
 
 ### C. Workspace Vitest Suite (`pnpm test`)
+
 ```
 $ vitest run
  RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/maya
@@ -166,6 +174,7 @@ $ vitest run
 **Total Vitest test count:** 229 (workspace) + 64 (extensions) = **293 passed**.
 
 ### D. Web Production Build (`pnpm --filter @razzia/web build`)
+
 ```
 $ vite build
 vite v8.3.4 building client environment for production...
@@ -182,21 +191,21 @@ dist/assets/index-B1N7aVcA.js                              1,267.65 kB
 
 ## 4. Acceptance Criteria Verification
 
-| ID | Case | Observable Verification | Status |
-| --- | --- | --- | --- |
-| MEDIA01 | Image-only answer with alt and picture | Underlying accessible answer string preserved via `aria-label` and `sr-only` span; alt validated. | PASS (`media.test.ts`, `extensions-ui.test.ts`) |
-| MEDIA02 | Image answer missing alt or URL with `javascript:` | Rejected by schema validator; image not rendered. | PASS (`media.test.ts`, `extensions-ui.test.ts`) |
-| MEDIA03 | Reveal blur/tiles/pixelate/zoom after manager trigger | Synchronized stage calculation; no premature display; snap to 1.0 after duration elapsed on reconnect. | PASS (`media.test.ts`, `extensions-ui.test.ts`) |
-| AUDIO01 | Custom cue mute/volume=0 and default fallback | Muted/zero-volume audio produces disabled cue; missing asset falls back safely without freezing. | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
-| AUDIO02 | Question audio/video and looped game music | Background music ducks when competing question media has active sound. | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
-| INT01 | Interlude title/image/video/countdown with auto/manual | Exact position after results; skip occurs exactly once. | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
-| INT02 | Disconnect/reconnect mid-interlude | Snapshot resilience: resumes from server `startedAt` without resetting or doubling timer. | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
-| TEAM01 | 3 teams, 8 players auto round-robin | Counts 3/3/2 by deterministic order. | PASS (`presentation.test.ts`) |
-| TEAM02 | Two teams 50 points tie; reconnect changes socket ID | Stable team membership by clientId; tie broken by name then ID; no double count. | PASS (`presentation.test.ts`) |
-| TEAM03 | Disconnected and kicked members | Disconnected keeps earned score; kicked removed before next projection. | PASS (`presentation.test.ts`) |
-| CORE02 | Reorder questions in enriched quiz | Stable question UUIDs and perQuestion attachments follow questions without swap or loss. | PASS (`editor.test.ts`, `extensions-ui.test.ts`) |
-| CORE03 | Duplicate and remove questions | Fresh unique UUID minted on duplicate; attachments cleaned up on remove with zero orphans. | PASS (`editor.test.ts`, `extensions-ui.test.ts`) |
-| CORE04 | Revision conflict 409 handling | `RevisionConflictError` caught; `ConflictModal` presented with reload and overwrite choices. | PASS (`editor.test.ts`, `extensions-ui.test.ts`) |
-| L10N01 | 8 locales x extension namespaces | 100% key parity across all 8 dictionaries; registered in web i18next. | PASS (`locales.test.ts`) |
-| REG01 | Extensions disabled / old Razzia | Default upstream UI and props rendered identically; all 217 baseline tests + new tests pass. | PASS (`extensions-ui.test.ts`, `pnpm test`) |
-| GIT01 | Maya commit touches only owned paths | Only `packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`, and handoff modified. | PASS (`git status`) |
+| ID      | Case                                                   | Observable Verification                                                                                    | Status                                                 |
+| ------- | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------- | ------------------------------------------------------ |
+| MEDIA01 | Image-only answer with alt and picture                 | Underlying accessible answer string preserved via `aria-label` and `sr-only` span; alt validated.          | PASS (`media.test.ts`, `extensions-ui.test.ts`)        |
+| MEDIA02 | Image answer missing alt or URL with `javascript:`     | Rejected by schema validator; image not rendered.                                                          | PASS (`media.test.ts`, `extensions-ui.test.ts`)        |
+| MEDIA03 | Reveal blur/tiles/pixelate/zoom after manager trigger  | Synchronized stage calculation; no premature display; snap to 1.0 after duration elapsed on reconnect.     | PASS (`media.test.ts`, `extensions-ui.test.ts`)        |
+| AUDIO01 | Custom cue mute/volume=0 and default fallback          | Muted/zero-volume audio produces disabled cue; missing asset falls back safely without freezing.           | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
+| AUDIO02 | Question audio/video and looped game music             | Background music ducks when competing question media has active sound.                                     | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
+| INT01   | Interlude title/image/video/countdown with auto/manual | Exact position after results; skip occurs exactly once.                                                    | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
+| INT02   | Disconnect/reconnect mid-interlude                     | Snapshot resilience: resumes from server `startedAt` without resetting or doubling timer.                  | PASS (`presentation.test.ts`, `extensions-ui.test.ts`) |
+| TEAM01  | 3 teams, 8 players auto round-robin                    | Counts 3/3/2 by deterministic order.                                                                       | PASS (`presentation.test.ts`)                          |
+| TEAM02  | Two teams 50 points tie; reconnect changes socket ID   | Stable team membership by clientId; tie broken by name then ID; no double count.                           | PASS (`presentation.test.ts`)                          |
+| TEAM03  | Disconnected and kicked members                        | Disconnected keeps earned score; kicked removed before next projection.                                    | PASS (`presentation.test.ts`)                          |
+| CORE02  | Reorder questions in enriched quiz                     | Stable question UUIDs and perQuestion attachments follow questions without swap or loss.                   | PASS (`editor.test.ts`, `extensions-ui.test.ts`)       |
+| CORE03  | Duplicate and remove questions                         | Fresh unique UUID minted on duplicate; attachments cleaned up on remove with zero orphans.                 | PASS (`editor.test.ts`, `extensions-ui.test.ts`)       |
+| CORE04  | Revision conflict 409 handling                         | `RevisionConflictError` caught; `ConflictModal` presented with reload and overwrite choices.               | PASS (`editor.test.ts`, `extensions-ui.test.ts`)       |
+| L10N01  | 8 locales x extension namespaces                       | 100% key parity across all 8 dictionaries; registered in web i18next.                                      | PASS (`locales.test.ts`)                               |
+| REG01   | Extensions disabled / old Razzia                       | Default upstream UI and props rendered identically; all 217 baseline tests + new tests pass.               | PASS (`extensions-ui.test.ts`, `pnpm test`)            |
+| GIT01   | Maya commit touches only owned paths                   | Only `packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`, and handoff modified. | PASS (`git status`)                                    |

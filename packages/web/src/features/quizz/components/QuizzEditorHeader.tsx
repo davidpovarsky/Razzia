@@ -1,5 +1,6 @@
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
+import { computeCanonicalBaseDigest } from "@razzia/extensions/core"
 import {
   CompositeApiClient,
   ConflictModal,
@@ -70,18 +71,33 @@ const QuizzEditorHeader = () => {
 
   const handleSave = handleSubmit(
     async (values) => {
+      console.log("[FORM ON_VALID]", JSON.stringify(values))
+      console.log("[EXTRAS STATE]", Boolean(extras), "quizzId:", quizzId)
+
       if (extras && quizzId) {
         try {
-          const client = new CompositeApiClient()
-          await client.saveQuizComposite(quizzId, {
+          console.log("[COMPUTING DIGEST]...")
+          const baseDigest = computeCanonicalBaseDigest(values)
+          console.log("[DIGEST COMPUTED]", baseDigest)
+          const client = new CompositeApiClient({
+            getAuthToken: () => localStorage.getItem("token"),
+          })
+          console.log("[CALLING SAVE COMPOSITE]...")
+          const res = await client.saveQuizComposite(quizzId, {
             expectedRevision: extras.revision,
             quizz: values,
-            extras,
+            extras: {
+              ...extras,
+              baseDigest,
+            },
           })
+          console.log("[SAVE COMPOSITE SUCCESS]", JSON.stringify(res))
           onSaved("quizz:quizzUpdated")
 
           return
         } catch (err: unknown) {
+          console.error("[SAVE COMPOSITE ERROR]", err)
+
           if (err instanceof RevisionConflictError) {
             setConflict({
               serverRevision: err.serverRevision,
@@ -98,14 +114,18 @@ const QuizzEditorHeader = () => {
       }
 
       if (quizzId) {
+        console.log("[SAVING VANILLA UPDATE]", quizzId)
         update({ id: quizzId, json: values })
 
         return
       }
 
+      console.log("[SAVING VANILLA CREATE]")
       create(values)
     },
     (invalid) => {
+      console.error("[FORM ON_INVALID]", JSON.stringify(invalid))
+
       if (!Array.isArray(invalid.questions)) {
         return
       }

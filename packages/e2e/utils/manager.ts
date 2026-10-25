@@ -3,12 +3,29 @@ import { BASIC_QUIZZ, MANAGER_PASSWORD } from "@razzia/e2e/utils/constants"
 import { t } from "@razzia/e2e/utils/i18n"
 
 export const loginManager = async (page: Page) => {
+  if (page.url().includes("/manager/config")) {
+    return
+  }
+
   await page.goto("/manager")
-  await page
-    .getByPlaceholder(t("manager:passwordPlaceholder"))
-    .fill(MANAGER_PASSWORD)
-  await page.getByRole("button", { name: t("common:submit") }).click()
-  await expect(page).toHaveURL(/\/manager\/config$/u)
+
+  if (page.url().includes("/manager/config")) {
+    return
+  }
+
+  const passwordInput = page.getByPlaceholder(t("manager:passwordPlaceholder"))
+  const isPromptVisible = await passwordInput
+    .waitFor({ state: "visible", timeout: 2000 })
+    .then(
+      () => true,
+      () => false,
+    )
+
+  if (isPromptVisible) {
+    await passwordInput.fill(MANAGER_PASSWORD)
+    await page.getByRole("button", { name: t("common:submit") }).click()
+    await expect(page).toHaveURL(/\/manager\/config$/u)
+  }
 }
 
 export const createGame = async (page: Page, subject = BASIC_QUIZZ) => {

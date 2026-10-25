@@ -1,6 +1,7 @@
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import {
   RevisionConflictError,
+  computeCanonicalBaseDigest,
   type EnhancedBundle,
   type QuizExtrasV1,
 } from "@razzia/extensions/core"
@@ -39,7 +40,8 @@ export class CompositeApiClient {
 
   constructor(options: CompositeApiClientOptions = {}) {
     this.baseUrl = options.baseUrl ?? ""
-    this.fetchFn = options.fetchFn ?? globalThis.fetch
+    const rawFetch = options.fetchFn ?? globalThis.fetch
+    this.fetchFn = rawFetch.bind(globalThis)
     this.getAuthToken = options.getAuthToken
   }
 
@@ -51,6 +53,12 @@ export class CompositeApiClient {
 
     if (this.getAuthToken) {
       const token = await this.getAuthToken()
+
+      if (token) {
+        headers.set("Authorization", `Bearer ${token}`)
+      }
+    } else if (typeof window !== "undefined") {
+      const token = window.localStorage.getItem("token")
 
       if (token) {
         headers.set("Authorization", `Bearer ${token}`)
@@ -101,13 +109,26 @@ export class CompositeApiClient {
       extras: QuizExtrasV1
     },
   ): Promise<SaveCompositeResult> {
+    const baseDigest =
+      payload.extras.baseDigest && payload.extras.baseDigest !== "0".repeat(64)
+        ? payload.extras.baseDigest
+        : computeCanonicalBaseDigest(payload.quizz)
+
+    const normalizedPayload = {
+      ...payload,
+      extras: {
+        ...payload.extras,
+        baseDigest,
+      },
+    }
+
     const headers = await this.getHeaders()
     const res = await this.fetchFn(
       `${this.baseUrl}/api/extensions/quizzes/${id}`,
       {
         method: "PUT",
         headers,
-        body: JSON.stringify(payload),
+        body: JSON.stringify(normalizedPayload),
       },
     )
 

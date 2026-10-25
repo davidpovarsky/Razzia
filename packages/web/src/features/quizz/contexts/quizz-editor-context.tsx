@@ -132,7 +132,17 @@ export const QuizzEditorProvider = ({
   const gameMode = useWatch({ control, name: "gameMode" })
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
-  const questionIds = fields.map((field) => field.id)
+  const [questionUuidMap] = useState(() => new Map<string, string>())
+  const questionIds = fields.map((field, idx) => {
+    let uuid = questionUuidMap.get(field.id)
+
+    if (!uuid) {
+      uuid = extras?.questionIds[idx] ?? generateQuestionId()
+      questionUuidMap.set(field.id, uuid)
+    }
+
+    return uuid
+  })
 
   const addQuestion = () => {
     const category = questions.at(-1)?.category
