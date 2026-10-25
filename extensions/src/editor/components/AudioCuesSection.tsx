@@ -3,6 +3,7 @@ import type {
   CueId,
   QuizExtrasV1,
 } from "@razzia/extensions/core"
+import { resolveAudioCue } from "@razzia/extensions/presentation"
 import { Play, Square } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { clsx } from "./utils"
@@ -11,18 +12,6 @@ interface Props {
   extras: QuizExtrasV1
   onChange: (_updated: QuizExtrasV1) => void
   tr: (_key: string, _fallback: string) => string
-}
-
-const DEFAULT_SOUND_MAP: Record<CueId, string> = {
-  start: "/sounds/boump.mp3",
-  showQuestion: "/sounds/show.mp3",
-  answersMusic: "/sounds/answersMusic.mp3",
-  answerPressed: "/sounds/answersSound.mp3",
-  revealResults: "/sounds/results.mp3",
-  leaderboard: "/sounds/snearRoll.mp3",
-  podium1: "/sounds/first.mp3",
-  podium2: "/sounds/second.mp3",
-  podium3: "/sounds/three.mp3",
 }
 
 export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
@@ -41,7 +30,8 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
     [],
   )
 
-  const handleTestPlay = (cueId: CueId, customUrl?: string) => {
+  const handleTestPlay = (cueId: CueId) => {
+    // Stop currently playing cue if clicked again
     if (testingCue === cueId) {
       if (audioRef.current) {
         audioRef.current.pause()
@@ -54,18 +44,47 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
       return
     }
 
+    // Stop previous cue cleanly
     if (audioRef.current) {
       audioRef.current.pause()
       audioRef.current.currentTime = 0
+      audioRef.current = null
+    }
+
+    // Resolve audio cue according to runtime semantics (source, fallback URL, enabled, volume, loop)
+    const resolved = resolveAudioCue(cueId, audioExtras)
+
+    if (!resolved.enabled || resolved.volume <= 0) {
+      setTestingCue(null)
+
+      return
     }
 
     setTestingCue(cueId)
-    const audioUrl = customUrl ?? DEFAULT_SOUND_MAP[cueId]
-    const audio = new Audio(audioUrl)
-    audioRef.current = audio
 
-    audio.play().catch(() => undefined)
-    audio.onended = () => {
+    try {
+      const audio = new Audio(resolved.url)
+      audio.volume = Math.max(0, Math.min(1, resolved.volume))
+      audio.loop = resolved.loop
+      audioRef.current = audio
+
+      audio.onerror = () => {
+        setTestingCue(null)
+        audioRef.current = null
+      }
+
+      audio.onended = () => {
+        setTestingCue(null)
+        audioRef.current = null
+      }
+
+      const playPromise = audio.play()
+
+      void playPromise.catch(() => {
+        setTestingCue(null)
+        audioRef.current = null
+      })
+    } catch {
       setTestingCue(null)
       audioRef.current = null
     }
@@ -149,23 +168,23 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
       <div className="flex flex-col gap-3">
         {cues.map(({ id, labelKey, fallback }) => {
           const setting = audioExtras.cues[id]
-          const { enabled: isEnabled, volume, source, url, loop } = setting
+          const { enabled: isEnabled, volume, source, loop } = setting
           const isCustom = source === "media"
           const isPlaying = testingCue === id
 
           return (
             <div
               key={id}
-              className="flex flex-col gap-3 rounded-xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-800/40"
+              className="border-border bg-card/60 flex flex-col gap-3 rounded-xl border p-4"
               data-testid={`audio-cue-card-${id}`}
             >
               <div className="flex items-center justify-between">
-                <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+                <span className="text-foreground text-sm font-bold">
                   {tr(labelKey, fallback)}
                 </span>
                 <button
                   type="button"
-                  onClick={() => handleTestPlay(id, url)}
+                  onClick={() => handleTestPlay(id)}
                   className={clsx(
                     "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-bold transition-colors",
                     isPlaying
@@ -190,7 +209,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 <div className="flex items-center gap-2">
-                  <label className="text-xs font-semibold text-neutral-600 dark:text-neutral-400">
+                  <label className="text-muted-foreground text-xs font-semibold">
                     {tr("audio.source", "Source")}:
                   </label>
                   <select
@@ -200,7 +219,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                         source: e.target.value as "default" | "media",
                       })
                     }
-                    className="focus:ring-primary flex-1 rounded-lg border border-neutral-300 bg-white p-1.5 text-xs focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+                    className="focus:ring-primary border-accent bg-background text-foreground flex-1 rounded-lg border p-1.5 text-xs focus:ring-2 focus:outline-none"
                     data-testid={`audio-source-${id}`}
                   >
                     <option value="default">
@@ -242,13 +261,13 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                       handleUpdateCue(id, { url: e.target.value })
                     }
                     placeholder="/sounds/custom-cue.mp3"
-                    className="focus:ring-primary w-full rounded-lg border border-neutral-300 bg-white p-2 text-xs focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+                    className="focus:ring-primary border-accent bg-background text-foreground w-full rounded-lg border p-2 text-xs focus:ring-2 focus:outline-none"
                     data-testid={`audio-custom-url-${id}`}
                   />
                 </div>
               )}
 
-              <div className="flex items-center gap-4 border-t border-neutral-200/60 pt-2 text-xs dark:border-neutral-700/60">
+              <div className="border-border flex items-center gap-4 border-t pt-2 text-xs">
                 <label className="flex cursor-pointer items-center gap-2">
                   <input
                     type="checkbox"
@@ -258,7 +277,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                     }
                     className="accent-primary size-3.5 rounded"
                   />
-                  <span className="font-semibold text-neutral-700 dark:text-neutral-300">
+                  <span className="text-foreground font-semibold">
                     {tr("audio.enabled", "Sound Enabled")}
                   </span>
                 </label>

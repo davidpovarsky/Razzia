@@ -51,7 +51,11 @@
     "emptyTeam": "Équipe vide",
     "unassignedPrefix": "Non assigné :",
     "player": "joueur",
-    "players": "joueurs"
+    "players": "joueurs",
+    "redTeam": "Équipe Rouge",
+    "blueTeam": "Équipe Bleue",
+    "teamNumbered": "Équipe {{num}}",
+    "assignToTeam": "Assigner le joueur sélectionné à l'{{teamName}}"
   },
   "audio": {
     "cuesTitle": "Effets sonores et musique",
@@ -132,7 +136,11 @@
     "yourRevision": "Votre révision",
     "reload": "Recharger la version serveur",
     "overwrite": "Écraser la version serveur",
-    "cancel": "Annuler"
+    "cancel": "Annuler",
+    "unversioned": "Sans version",
+    "unknownHigher": "Inconnu (Plus récent)",
+    "overwriteConfirmTitle": "Écraser le quiz ?",
+    "overwriteConfirmDesc": "Attention : cela écrasera les modifications enregistrées par une autre session sur le serveur. Cette action est irréversible."
   },
   "bundle": {
     "exportEnhanced": "Exporter le quiz enrichi (.bundle.json)",

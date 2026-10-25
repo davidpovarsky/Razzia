@@ -51,7 +51,11 @@
     "emptyTeam": "Squadra vuota",
     "unassignedPrefix": "Non assegnato:",
     "player": "giocatore",
-    "players": "giocatori"
+    "players": "giocatori",
+    "redTeam": "Squadra Rossa",
+    "blueTeam": "Squadra Blu",
+    "teamNumbered": "Squadra {{num}}",
+    "assignToTeam": "Assegna giocatore selezionato a {{teamName}}"
   },
   "audio": {
     "cuesTitle": "Effetti audio e musica",
@@ -132,7 +136,11 @@
     "yourRevision": "La tua revisione",
     "reload": "Ricarica dal server",
     "overwrite": "Sovrascrivi",
-    "cancel": "Annulla"
+    "cancel": "Annulla",
+    "unversioned": "Senza versione",
+    "unknownHigher": "Sconosciuto (Superiore)",
+    "overwriteConfirmTitle": "Sovrascrivere il quiz?",
+    "overwriteConfirmDesc": "Attenzione: questo sovrascriverà le modifiche salvate da un'altra sessione sul server. Questa azione non può essere annullata."
   },
   "bundle": {
     "exportEnhanced": "Esporta quiz arricchito (.bundle.json)",

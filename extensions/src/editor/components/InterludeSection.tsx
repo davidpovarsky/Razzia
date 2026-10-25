@@ -12,10 +12,7 @@ interface Props {
   updateCurrentQuestionItem: (
     _updater: (_item: PerQuestionExtras) => void,
   ) => void
-  onOpenMediaPicker?: (
-    _onSelect: (_url: string) => void,
-    _options?: MediaPickerRequestOptions,
-  ) => void
+  onOpenMediaPicker?: (_options?: MediaPickerRequestOptions) => void
   tr: (_key: string, _fallback: string) => string
 }
 
@@ -42,7 +39,7 @@ export const InterludeSection = ({
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-800/40">
+      <div className="border-border bg-card/60 flex flex-col gap-4 rounded-xl border p-4">
         <label className="flex cursor-pointer items-center gap-3">
           <input
             type="checkbox"
@@ -65,9 +62,9 @@ export const InterludeSection = ({
               })
             }}
             className="accent-primary size-4 rounded"
-            data-testid="interlude-enabled-checkbox"
+            data-testid="toggle-interlude"
           />
-          <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+          <span className="text-foreground text-sm font-bold">
             {tr(
               "interludes.enableInterlude",
               "Show Interlude After Question Results",
@@ -76,9 +73,9 @@ export const InterludeSection = ({
         </label>
 
         {interlude && (
-          <div className="flex flex-col gap-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+          <div className="border-border flex flex-col gap-4 border-t pt-4">
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("editor.effect", "Slide Kind")}
               </label>
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
@@ -115,8 +112,8 @@ export const InterludeSection = ({
                     className={clsx(
                       "rounded-lg px-3 py-2 text-xs font-bold transition-colors",
                       interlude.kind === kind
-                        ? "bg-primary text-white shadow-sm"
-                        : "bg-white text-neutral-700 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-300",
+                        ? "bg-primary ring-primary text-white shadow-sm ring-1"
+                        : "border-accent bg-accent/40 text-foreground hover:bg-accent border",
                     )}
                     data-testid={`interlude-kind-${kind}`}
                   >
@@ -127,7 +124,7 @@ export const InterludeSection = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("interludes.slideHeading", "Slide Heading / Title")}
               </label>
               <input
@@ -142,14 +139,14 @@ export const InterludeSection = ({
                   })
                 }}
                 placeholder={tr("interludes.slideHeading", "Slide Heading")}
-                className="focus:ring-primary rounded-lg border border-neutral-300 bg-white p-2 text-sm focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+                className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-sm focus:ring-2 focus:outline-none"
                 data-testid="interlude-title-input"
               />
             </div>
 
             {(interlude.kind === "image" || interlude.kind === "video") && (
               <div className="flex flex-col gap-1.5">
-                <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+                <label className="text-foreground text-xs font-semibold">
                   {tr("interludes.mediaUrl", "Slide Media URL")}
                 </label>
                 <div className="flex items-center gap-2">
@@ -169,30 +166,21 @@ export const InterludeSection = ({
                         ? "/media/video.mp4"
                         : "/media/slide.jpg"
                     }
-                    className="focus:ring-primary flex-1 rounded-lg border border-neutral-300 bg-white p-2 text-xs focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+                    className="focus:ring-primary border-accent bg-background text-foreground flex-1 rounded-lg border p-2 text-xs focus:ring-2 focus:outline-none"
                     data-testid="interlude-media-url-input"
                   />
                   {onOpenMediaPicker && (
                     <button
                       type="button"
                       onClick={() => {
-                        onOpenMediaPicker(
-                          (selectedUrl) => {
-                            updateCurrentQuestionItem((item) => {
-                              if (item.interlude) {
-                                item.interlude.url = selectedUrl
-                              }
-                            })
+                        onOpenMediaPicker({
+                          target: {
+                            questionId: activeQuestionId ?? "",
+                            kind: "interlude",
                           },
-                          {
-                            target: {
-                              questionId: activeQuestionId ?? "",
-                              kind: "interlude",
-                            },
-                            expectedType:
-                              interlude.kind === "video" ? "video" : "image",
-                          },
-                        )
+                          expectedType:
+                            interlude.kind === "video" ? "video" : "image",
+                        })
                       }}
                       className="hover:bg-accent border-primary/30 bg-primary/10 text-primary flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs font-bold shadow-sm transition-all"
                     >
@@ -209,7 +197,7 @@ export const InterludeSection = ({
             )}
 
             <div className="flex flex-col gap-1.5">
-              <div className="flex justify-between text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <div className="text-foreground flex justify-between text-xs font-semibold">
                 <span>{tr("interludes.durationMs", "Duration")}</span>
                 <span className="text-primary font-mono font-bold">
                   {Math.round(interlude.durationMs / 1000)}s
@@ -235,7 +223,7 @@ export const InterludeSection = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("interludes.advanceMode", "Advance Behavior")}
               </label>
               <div className="flex gap-2">
@@ -253,8 +241,8 @@ export const InterludeSection = ({
                     className={clsx(
                       "flex-1 rounded-lg px-3 py-2 text-xs font-bold transition-colors",
                       interlude.advance === mode
-                        ? "bg-primary text-white shadow-sm"
-                        : "bg-white text-neutral-700 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-300",
+                        ? "bg-primary ring-primary text-white shadow-sm ring-1"
+                        : "border-accent bg-accent/40 text-foreground hover:bg-accent border",
                     )}
                     data-testid={`interlude-advance-${mode}`}
                   >
@@ -270,7 +258,7 @@ export const InterludeSection = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("interludes.audioCue", "Accompanying Audio Cue")}
               </label>
               <select
@@ -284,7 +272,7 @@ export const InterludeSection = ({
                     }
                   })
                 }}
-                className="focus:ring-primary rounded-lg border border-neutral-300 bg-white p-2 text-sm focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+                className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-sm focus:ring-2 focus:outline-none"
                 data-testid="interlude-audiocue-select"
               >
                 <option value="">{tr("common:none", "None (Silent)")}</option>

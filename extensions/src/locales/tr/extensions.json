@@ -51,7 +51,11 @@
     "emptyTeam": "Boş takım",
     "unassignedPrefix": "Atanmamış:",
     "player": "oyuncu",
-    "players": "oyuncular"
+    "players": "oyuncular",
+    "redTeam": "Kırmızı Takım",
+    "blueTeam": "Mavi Takım",
+    "teamNumbered": "Takım {{num}}",
+    "assignToTeam": "Seçilen oyuncuyu {{teamName}} takımına ata"
   },
   "audio": {
     "cuesTitle": "Ses Efektleri ve Müzik",
@@ -132,7 +136,11 @@
     "yourRevision": "Düzenlenen Sürüm",
     "reload": "Sunucudan Yeniden Yükle",
     "overwrite": "Zorla Üzerine Yaz",
-    "cancel": "İptal"
+    "cancel": "İptal",
+    "unversioned": "Sürümsüz",
+    "unknownHigher": "Bilinmeyen (Daha Yüksek)",
+    "overwriteConfirmTitle": "Testin Üzerine Yazılsın mı?",
+    "overwriteConfirmDesc": "Uyarı: Bu işlem sunucudaki başka bir oturum tarafından yapılan değişikliklerin üzerine yazacaktır. Bu işlem geri alınamaz."
   },
   "bundle": {
     "exportEnhanced": "Gelişmiş Testi Dışa Aktar (.bundle.json)",

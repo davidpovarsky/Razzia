@@ -151,7 +151,7 @@ export const ConflictModal = ({
               {tr("conflict.yourRevision", "Your working revision:")}
             </span>
             <span className="font-mono font-bold">
-              {expectedRevision ?? "Unversioned"}
+              {expectedRevision ?? tr("conflict.unversioned", "Unversioned")}
             </span>
           </div>
           <div className="flex justify-between border-t border-neutral-200 py-1 dark:border-neutral-700">
@@ -159,7 +159,8 @@ export const ConflictModal = ({
               {tr("conflict.serverRevision", "Latest server revision:")}
             </span>
             <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
-              {serverRevision ?? "Unknown (Higher)"}
+              {serverRevision ??
+                tr("conflict.unknownHigher", "Unknown (Higher)")}
             </span>
           </div>
         </div>

@@ -51,7 +51,11 @@
     "emptyTeam": "空のチーム",
     "unassignedPrefix": "未割り当て:",
     "player": "プレイヤー",
-    "players": "プレイヤー"
+    "players": "プレイヤー",
+    "redTeam": "レッドチーム",
+    "blueTeam": "ブルーチーム",
+    "teamNumbered": "チーム {{num}}",
+    "assignToTeam": "選択したプレイヤーを{{teamName}}に割り当て"
   },
   "audio": {
     "cuesTitle": "サウンド効果とBGM",
@@ -132,7 +136,11 @@
     "yourRevision": "あなたの編集リビジョン",
     "reload": "サーバーから再読み込み",
     "overwrite": "強制上書き保存",
-    "cancel": "キャンセル"
+    "cancel": "キャンセル",
+    "unversioned": "バージョンなし",
+    "unknownHigher": "不明 (上位)",
+    "overwriteConfirmTitle": "クイズを上書きしますか？",
+    "overwriteConfirmDesc": "警告: サーバー上の別のセッションによる変更が上書きされます。この操作は取り消せません。"
   },
   "bundle": {
     "exportEnhanced": "拡張クイズをエクスポート (.bundle.json)",

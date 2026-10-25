@@ -34,9 +34,9 @@ export const RevealSection = ({
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-800/40">
+      <div className="border-border bg-card/60 flex flex-col gap-4 rounded-xl border p-4">
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+          <label className="text-foreground text-xs font-semibold">
             {tr("editor.effect", "Effect")}
           </label>
           <select
@@ -52,7 +52,7 @@ export const RevealSection = ({
                 }
               })
             }}
-            className="focus:ring-primary rounded-lg border border-neutral-300 bg-white p-2 text-sm focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
+            className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-sm focus:ring-2 focus:outline-none"
             data-testid="reveal-effect-select"
           >
             <option value="none">
@@ -76,7 +76,7 @@ export const RevealSection = ({
         {reveal && reveal.effect !== "none" && (
           <>
             <div className="flex flex-col gap-1.5">
-              <div className="flex justify-between text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <div className="text-foreground flex justify-between text-xs font-semibold">
                 <span>{tr("visuals.durationMs", "Reveal Duration (ms)")}</span>
                 <span className="text-primary font-mono font-bold">
                   {reveal.durationMs}ms
@@ -102,7 +102,7 @@ export const RevealSection = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("visuals.triggerMode", "Trigger")}
               </label>
               <div className="flex gap-2">
@@ -122,7 +122,7 @@ export const RevealSection = ({
                         "flex-1 rounded-lg px-3 py-2 text-xs font-bold transition-colors",
                         reveal.trigger === mode
                           ? "bg-primary text-white shadow-sm"
-                          : "bg-white text-neutral-700 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-300",
+                          : "border-accent bg-accent/40 text-foreground hover:bg-accent border",
                       )}
                       data-testid={`reveal-trigger-${mode}`}
                     >
@@ -142,7 +142,7 @@ export const RevealSection = ({
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+              <label className="text-foreground text-xs font-semibold">
                 {tr("visuals.audience", "Audience")}
               </label>
               <div className="flex gap-2">
@@ -161,7 +161,7 @@ export const RevealSection = ({
                       "flex-1 rounded-lg px-3 py-2 text-xs font-bold transition-colors",
                       reveal.audience === aud
                         ? "bg-primary text-white shadow-sm"
-                        : "bg-white text-neutral-700 hover:bg-neutral-100 dark:bg-neutral-800 dark:text-neutral-300",
+                        : "border-accent bg-accent/40 text-foreground hover:bg-accent border",
                     )}
                     data-testid={`reveal-audience-${aud}`}
                   >

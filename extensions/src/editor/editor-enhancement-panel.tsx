@@ -36,10 +36,7 @@ export interface EditorEnhancementPanelProps {
   currentQuestionTitle?: string
   currentQuestionAnswers?: string[]
   onChange: (_updated: QuizExtrasV1) => void
-  onOpenMediaPicker?: (
-    _onSelect: (_url: string) => void,
-    _options?: MediaPickerRequestOptions,
-  ) => void
+  onOpenMediaPicker?: (_options?: MediaPickerRequestOptions) => void
   className?: string
   t?: (_key: string, _fallback?: string) => string
 }

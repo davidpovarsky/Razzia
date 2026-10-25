@@ -25,12 +25,12 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
             : [
                 {
                   id: "team-1",
-                  name: "Red Team",
+                  name: tr("teams.redTeam", "Red Team"),
                   color: DEFAULT_TEAM_PALETTE[0],
                 },
                 {
                   id: "team-2",
-                  name: "Blue Team",
+                  name: tr("teams.blueTeam", "Blue Team"),
                   color: DEFAULT_TEAM_PALETTE[1],
                 },
               ],
@@ -46,7 +46,10 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
     const nextIdx = teamsList.length + 1
     const newTeam: TeamDefinition = {
       id: `team-${Date.now()}-${nextIdx}`,
-      name: `Team ${nextIdx}`,
+      name: tr("teams.teamNumbered", `Team ${nextIdx}`).replace(
+        "{{num}}",
+        String(nextIdx),
+      ),
       color: DEFAULT_TEAM_PALETTE[(nextIdx - 1) % DEFAULT_TEAM_PALETTE.length],
     }
 
@@ -105,27 +108,27 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
         </p>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-xl border border-neutral-200 bg-neutral-50/60 p-4 dark:border-neutral-800 dark:bg-neutral-800/40">
+      <div className="border-border bg-card/60 flex flex-col gap-4 rounded-xl border p-4">
         <label className="flex cursor-pointer items-center gap-3">
           <input
             type="checkbox"
             checked={isEnabled}
             onChange={(e) => handleToggleTeams(e.target.checked)}
             className="accent-primary size-4 rounded"
-            data-testid="teams-enabled-checkbox"
+            data-testid="toggle-teams"
           />
-          <span className="text-sm font-bold text-neutral-800 dark:text-neutral-200">
+          <span className="text-foreground text-sm font-bold">
             {tr("teams.enableTeams", "Enable Team Mode")}
           </span>
         </label>
 
         {isEnabled && (
-          <div className="flex flex-col gap-4 border-t border-neutral-200 pt-4 dark:border-neutral-700">
+          <div className="border-border flex flex-col gap-4 border-t pt-4">
             <div className="flex flex-col gap-3">
               {teamsList.map((team, idx) => (
                 <div
                   key={team.id}
-                  className="flex items-center gap-3 rounded-lg border border-neutral-200 bg-white p-3 dark:border-neutral-700 dark:bg-neutral-800"
+                  className="border-border bg-background flex items-center gap-3 rounded-lg border p-3"
                   data-testid={`team-row-${team.id}`}
                 >
                   <input
@@ -134,7 +137,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                     onChange={(e) =>
                       handleUpdateTeam(team.id, { color: e.target.value })
                     }
-                    className="size-8 cursor-pointer rounded border border-neutral-300 dark:border-neutral-600"
+                    className="border-accent size-8 cursor-pointer rounded border"
                     title={tr("teams.teamColor", "Color")}
                   />
                   <input
@@ -143,8 +146,11 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                     onChange={(e) =>
                       handleUpdateTeam(team.id, { name: e.target.value })
                     }
-                    className="focus:ring-primary flex-1 rounded-lg border border-neutral-300 bg-white p-1.5 text-xs font-bold focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
-                    placeholder={`Team ${idx + 1}`}
+                    className="focus:ring-primary border-accent bg-background text-foreground flex-1 rounded-lg border p-1.5 text-xs font-bold focus:ring-2 focus:outline-none"
+                    placeholder={tr(
+                      "teams.teamNumbered",
+                      `Team ${idx + 1}`,
+                    ).replace("{{num}}", String(idx + 1))}
                   />
                   {teamsList.length > 2 && (
                     <button

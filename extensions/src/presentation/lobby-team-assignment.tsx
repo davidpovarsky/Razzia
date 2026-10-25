@@ -164,7 +164,11 @@ export const LobbyTeamAssignment = ({
               tabIndex={isTargetable ? 0 : undefined}
               aria-label={
                 isTargetable
-                  ? `Assign selected player to ${team.name}`
+                  ? tr(
+                      "teams.assignToTeam",
+                      { teamName: team.name },
+                      `Assign selected player to ${team.name}`,
+                    )
                   : undefined
               }
               onKeyDown={(e) => isTargetable && handleCardKeyDown(e, team.id)}

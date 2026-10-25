@@ -51,7 +51,11 @@
     "emptyTeam": "Đội trống",
     "unassignedPrefix": "Chưa phân công:",
     "player": "người chơi",
-    "players": "người chơi"
+    "players": "người chơi",
+    "redTeam": "Đội Đỏ",
+    "blueTeam": "Đội Xanh",
+    "teamNumbered": "Đội {{num}}",
+    "assignToTeam": "Gán người chơi đã chọn cho {{teamName}}"
   },
   "audio": {
     "cuesTitle": "Hiệu ứng âm thanh & Nhạc nền",
@@ -132,7 +136,11 @@
     "yourRevision": "Phiên bản hiện tại của bạn",
     "reload": "Tải lại từ máy chủ",
     "overwrite": "Ghi đè bắt buộc",
-    "cancel": "Hủy"
+    "cancel": "Hủy",
+    "unversioned": "Không có phiên bản",
+    "unknownHigher": "Không rõ (Cao hơn)",
+    "overwriteConfirmTitle": "Ghi đè bài kiểm tra?",
+    "overwriteConfirmDesc": "Cảnh báo: Thao tác này sẽ ghi đè các thay đổi từ một phiên khác trên máy chủ. Hành động này không thể hoàn tác."
   },
   "bundle": {
     "exportEnhanced": "Xuất bộ câu hỏi nâng cao (.bundle.json)",

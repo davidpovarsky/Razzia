@@ -114,7 +114,7 @@ export const LeaderboardSection = ({ extras, onChange, tr }: Props) => {
               "flex cursor-pointer items-start gap-3 rounded-xl border p-4 transition-all",
               currentMode === mode
                 ? "border-primary bg-primary/5 dark:bg-primary/10"
-                : "border-neutral-200 bg-white hover:border-neutral-300 dark:border-neutral-800 dark:bg-neutral-800/40",
+                : "border-border bg-card hover:border-accent text-foreground",
             )}
             data-testid={`leaderboard-mode-${mode}`}
           >
@@ -124,22 +124,19 @@ export const LeaderboardSection = ({ extras, onChange, tr }: Props) => {
               checked={currentMode === mode}
               onChange={() => handleModeChange(mode)}
               className="accent-primary mt-1 size-4"
+              data-testid={`mode-radio-${mode}`}
             />
             <div className="flex flex-col">
-              <span className="text-sm font-bold text-neutral-900 dark:text-neutral-100">
-                {title}
-              </span>
-              <span className="text-xs text-neutral-500 dark:text-neutral-400">
-                {desc}
-              </span>
+              <span className="text-foreground text-sm font-bold">{title}</span>
+              <span className="text-muted-foreground text-xs">{desc}</span>
             </div>
           </label>
         ))}
       </div>
 
       {currentMode === "everyN" && (
-        <div className="flex items-center gap-3 rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/40">
-          <label className="text-sm font-semibold text-neutral-700 dark:text-neutral-300">
+        <div className="border-border bg-card/60 flex items-center gap-3 rounded-xl border p-4">
+          <label className="text-foreground text-sm font-semibold">
             {tr("leaderboard.everyNLabel", "Show leaderboard every")}
           </label>
           <input
@@ -150,18 +147,18 @@ export const LeaderboardSection = ({ extras, onChange, tr }: Props) => {
             onChange={(e) =>
               handleEveryNChange(Math.max(1, Number(e.target.value)))
             }
-            className="focus:ring-primary w-20 rounded-lg border border-neutral-300 bg-white p-2 text-center text-sm font-bold focus:ring-2 focus:outline-none dark:border-neutral-700 dark:bg-neutral-800"
-            data-testid="leaderboard-everyn-input"
+            className="focus:ring-primary border-accent bg-background text-foreground w-20 rounded-lg border p-2 text-center text-sm font-bold focus:ring-2 focus:outline-none"
+            data-testid="every-n-input"
           />
-          <span className="text-sm text-neutral-600 dark:text-neutral-400">
+          <span className="text-muted-foreground text-sm">
             {tr("leaderboard.questionsSuffix", "questions")}
           </span>
         </div>
       )}
 
       {currentMode === "selected" && (
-        <div className="flex flex-col gap-2 rounded-xl border border-neutral-200 bg-neutral-50 p-4 dark:border-neutral-800 dark:bg-neutral-800/40">
-          <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">
+        <div className="border-border bg-card/60 flex flex-col gap-2 rounded-xl border p-4">
+          <span className="text-foreground text-xs font-semibold">
             {tr(
               "leaderboard.selectQuestions",
               "Select which questions show the leaderboard after results:",
@@ -171,7 +168,7 @@ export const LeaderboardSection = ({ extras, onChange, tr }: Props) => {
             {extras.questionIds.map((qId, idx) => (
               <label
                 key={qId}
-                className="flex cursor-pointer items-center gap-2.5 rounded-lg p-1.5 hover:bg-neutral-200/60 dark:hover:bg-neutral-700/40"
+                className="hover:bg-muted/60 flex cursor-pointer items-center gap-2.5 rounded-lg p-1.5"
               >
                 <input
                   type="checkbox"
@@ -180,7 +177,7 @@ export const LeaderboardSection = ({ extras, onChange, tr }: Props) => {
                   className="accent-primary size-4 rounded"
                   data-testid={`leaderboard-select-q-${idx}`}
                 />
-                <span className="text-xs font-bold text-neutral-800 dark:text-neutral-200">
+                <span className="text-foreground text-xs font-bold">
                   {tr("host.questionNum", "Question {{num}}").replace(
                     "{{num}}",
                     String(idx + 1),

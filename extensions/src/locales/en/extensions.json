@@ -51,7 +51,11 @@
     "emptyTeam": "Empty team",
     "unassignedPrefix": "Unassigned:",
     "player": "player",
-    "players": "players"
+    "players": "players",
+    "redTeam": "Red Team",
+    "blueTeam": "Blue Team",
+    "teamNumbered": "Team {{num}}",
+    "assignToTeam": "Assign selected player to {{teamName}}"
   },
   "audio": {
     "cuesTitle": "Sound Effects & Audio Cues",
@@ -132,7 +136,11 @@
     "yourRevision": "Your Working Revision",
     "reload": "Reload Server Version",
     "overwrite": "Force Overwrite",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "unversioned": "Unversioned",
+    "unknownHigher": "Unknown (Higher)",
+    "overwriteConfirmTitle": "Force Overwrite Quiz?",
+    "overwriteConfirmDesc": "Warning: This will overwrite changes made by another session on the server. This action cannot be undone."
   },
   "bundle": {
     "exportEnhanced": "Export Enhanced Quiz (.bundle.json)",
