@@ -160,6 +160,19 @@ export class ExtensionGameSession {
     this.teamAssignments.delete(clientId)
   }
 
+  rebindPlayerClientId(oldClientId: string, newClientId: string): void {
+    if (oldClientId === newClientId) {
+      return
+    }
+
+    const assignedTeam = this.teamAssignments.get(oldClientId)
+
+    if (assignedTeam !== undefined) {
+      this.teamAssignments.delete(oldClientId)
+      this.teamAssignments.set(newClientId, assignedTeam)
+    }
+  }
+
   onQuestionStart(questionIndex: number): void {
     this.epoch += 1
     this.currentQuestionIndex = questionIndex

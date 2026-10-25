@@ -21,6 +21,9 @@ export const joinTicketClaimsValidator = z.object({
   sub: z.string().min(1),
   gameId: z.string().min(1),
   username: usernameValidator.optional(),
+  rosterPlayerId: z.string().optional(),
+  phoneE164: z.string().optional(),
+  source: z.enum(["web", "phone"]).optional(),
   iat: z.number(),
   exp: z.number(),
 })

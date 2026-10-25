@@ -3,6 +3,7 @@ import {
   Eye,
   Image as ImageIcon,
   Music,
+  Phone,
   Trophy,
   Users,
   Video,
@@ -13,6 +14,7 @@ import { InterludeSection } from "./components/InterludeSection"
 import { LeaderboardSection } from "./components/LeaderboardSection"
 import { PreviewSection } from "./components/PreviewSection"
 import { RevealSection } from "./components/RevealSection"
+import { RosterSection } from "./components/RosterSection"
 import { TeamsSection } from "./components/TeamsSection"
 import {
   CANONICAL_ANSWER_COLORS,
@@ -42,7 +44,13 @@ export interface EditorEnhancementPanelProps {
 }
 
 type EditorTab =
-  "visuals" | "interlude" | "leaderboard" | "teams" | "audio" | "preview"
+  | "visuals"
+  | "interlude"
+  | "leaderboard"
+  | "teams"
+  | "roster"
+  | "audio"
+  | "preview"
 
 export const EditorEnhancementPanel = ({
   extras,
@@ -112,6 +120,12 @@ export const EditorEnhancementPanel = ({
       icon: Trophy,
     },
     { id: "teams", labelKey: "tabs.teams", fallback: "Teams", icon: Users },
+    {
+      id: "roster",
+      labelKey: "tabs.roster",
+      fallback: "Phone & Roster",
+      icon: Phone,
+    },
     {
       id: "audio",
       labelKey: "tabs.audio",
@@ -193,6 +207,10 @@ export const EditorEnhancementPanel = ({
 
         {activeTab === "teams" && (
           <TeamsSection extras={extras} onChange={onChange} tr={tr} />
+        )}
+
+        {activeTab === "roster" && (
+          <RosterSection extras={extras} onChange={onChange} tr={tr} />
         )}
 
         {activeTab === "audio" && (

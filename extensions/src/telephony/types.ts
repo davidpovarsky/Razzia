@@ -94,6 +94,8 @@ export interface TelephonyEvent {
   type: "CALL_START" | "DTMF" | "HANGUP"
   digit?: string
   callerId?: string
+  rawCallerId?: string
+  phoneE164?: string | null
   provider?: string
 }
 
@@ -115,6 +117,9 @@ export interface TelephonyCallSession {
   provider: string
   // Redacted / synthetic dummy caller identifier
   callerId: string
+  rawCallerId?: string
+  phoneE164?: string | null
+  rosterPlayerId?: string | null
   gameId: string | null
   inviteCode: string | null
   username: string

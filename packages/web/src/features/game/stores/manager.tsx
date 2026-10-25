@@ -1,7 +1,10 @@
 import { createDefaultGameSettings } from "@razzia/common/constants"
 import type { GameSettings, Player } from "@razzia/common/types/game"
 import type { StatusDataMap } from "@razzia/common/types/game/status"
-import type { ExtensionStateEnvelope } from "@razzia/extensions/core"
+import type {
+  ExtensionStateEnvelope,
+  HostPresenceSnapshot,
+} from "@razzia/extensions/core"
 import type { Status } from "@razzia/web/features/game/utils/createStatus"
 import { create } from "zustand"
 
@@ -13,6 +16,7 @@ interface ManagerState<T> {
   status: Status<T> | null
   players: Player[]
   extensionState: ExtensionStateEnvelope | null
+  hostPresence: HostPresenceSnapshot | null
 }
 
 type ManagerStore<T> = ManagerState<T> & {
@@ -28,6 +32,7 @@ const initialState: ManagerState<StatusDataMap> = {
   status: null,
   players: [],
   extensionState: null,
+  hostPresence: null,
 }
 
 export const useManagerStore = create<ManagerStore<StatusDataMap>>((set) => ({

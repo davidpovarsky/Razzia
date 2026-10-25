@@ -83,6 +83,9 @@ export interface RoundManagerOptions {
   getQuestionId?: (questionIndex: number) => string | undefined
   onResultsCalculated?: (dist: RevealDistributionSnapshot) => void
   onReplayCheckpoint?: (questionIndex: number) => void
+  onPresenceChange?: () => void
+  onAnswerSubmitted?: (playerId: string, answerIds: number[], points: number) => void
+  onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
 }
 
 interface RoundStep {
@@ -175,6 +178,21 @@ export class RoundManager {
 
     this.steps = steps.filter((step) =>
       step.gameModes.includes(opts.quizz.gameMode),
+    )
+  }
+
+  getAnsweredPlayerIds(): Set<string> {
+    return new Set(this.playersAnswers.map((a) => a.playerId))
+  }
+
+  hasPlayerAnswered(playerId: string): boolean {
+    return this.playersAnswers.some((a) => a.playerId === playerId)
+  }
+
+  getPlayerSubmittedAnswer(playerId: string): number[] | null {
+    return (
+      this.playersAnswers.find((a) => a.playerId === playerId)?.answerIds ??
+      null
     )
   }
 
@@ -833,6 +851,7 @@ export class RoundManager {
     )
 
     this.opts.players.replace(sortedPlayers)
+    this.opts.onQuestionScored?.(sortedPlayers)
 
     // Immediate personal result to each player (no delayed withholding for projector)
     sortedPlayers.forEach((player, index) => {
@@ -858,6 +877,7 @@ export class RoundManager {
     this.leaderboard = sortedPlayers
     this.tempOldLeaderboard ??= oldLeaderboard
     this.playersAnswers = []
+    this.opts.onPresenceChange?.()
   }
 
   private showLeaderboard(): void {
@@ -1031,6 +1051,8 @@ export class RoundManager {
       .to(this.opts.gameId)
       .emit(EVENTS.GAME.PLAYER_ANSWER, this.playersAnswers.length)
     this.opts.players.broadcastCount()
+    this.opts.onAnswerSubmitted?.(player.id, submitted, points)
+    this.opts.onPresenceChange?.()
     this.endIfEveryoneAnswered()
   }
 
@@ -1038,6 +1060,32 @@ export class RoundManager {
     this.playersAnswers = this.playersAnswers.map((answer) =>
       answer.playerId === oldId ? { ...answer, playerId: newId } : answer,
     )
+    this.leaderboard = this.leaderboard.map((p) =>
+      p.id === oldId ? { ...p, id: newId } : p,
+    )
+
+    if (this.tempOldLeaderboard) {
+      this.tempOldLeaderboard = this.tempOldLeaderboard.map((p) =>
+        p.id === oldId ? { ...p, id: newId } : p,
+      )
+    }
+  }
+
+  updateCheckpointClientId(oldClientId: string, newClientId: string): void {
+    for (const cp of this.checkpoints.values()) {
+      cp.players = cp.players.map((p) =>
+        p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
+      )
+      cp.leaderboard = cp.leaderboard.map((p) =>
+        p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
+      )
+
+      if (cp.tempOldLeaderboard) {
+        cp.tempOldLeaderboard = cp.tempOldLeaderboard.map((p) =>
+          p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
+        )
+      }
+    }
   }
 
   endIfEveryoneAnswered(): void {

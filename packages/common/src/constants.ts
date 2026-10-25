@@ -35,6 +35,7 @@ export const EVENTS = {
     AUTO_ADVANCE: "manager:autoAdvance",
     SET_LOCK: "manager:setLock",
     LOCK_UPDATED: "manager:lockUpdated",
+    HOST_PRESENCE: "manager:hostPresence",
   },
   EXTENSIONS: {
     STATE: "extensions:state",
@@ -54,6 +55,7 @@ export const AUTO_ADVANCE_DELAY = { MIN: 3, MAX: 600 } as const
 export const createDefaultGameSettings = (): GameSettings => ({
   generatedUsernames: false,
   answersOnly: false,
+  phoneInviteOnly: false,
   autoAdvance: {
     enable: false,
     responsesDelay: 10,

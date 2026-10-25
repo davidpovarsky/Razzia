@@ -92,7 +92,11 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
           return
         }
 
-        const error = game.join(socket, claims.username)
+        const error = game.join(socket, claims.username, {
+          rosterPlayerId: claims.rosterPlayerId,
+          phoneE164: claims.phoneE164,
+          source: claims.source,
+        })
 
         if (error) {
           socket.emit(EVENTS.GAME.RESET, error)

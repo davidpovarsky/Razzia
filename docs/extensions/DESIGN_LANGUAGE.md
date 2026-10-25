@@ -1,5 +1,7 @@
 # Source-grounded Razzia design language
 
+> **MANDATORY FOR CURRENT TOMER P0:** Read `orchestration/P0_ONE_AGENT_UI_FIDELITY_2026-10-26.md` and inspect the live source of original components, tokens and Rubik typography. Every new roster/player-status/import/settings UI must be visually indistinguishable from native Razzia, never a new design system. Verify with real-browser screenshots, not only logic tests.
+
 Baseline: upstream commit 5161eb7022144ee26d46a5f94cdbc714ec8b560d (v4.0.1).
 Primary sources: packages/web/src/index.css, branding.ts, main.tsx, components/, features/game/components/, features/quizz/components/.
 

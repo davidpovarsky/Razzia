@@ -94,6 +94,8 @@ export interface ServerToClientEvents {
     timedOut: boolean
   }) => void
   [EVENTS.MANAGER.LOCK_UPDATED]: (_locked: boolean) => void
+  // oxlint-disable-next-line typescript/no-explicit-any
+  [EVENTS.MANAGER.HOST_PRESENCE]: (_snapshot: any) => void
 
   // Extension events
   // oxlint-disable-next-line typescript/no-explicit-any

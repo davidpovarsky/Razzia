@@ -20,6 +20,9 @@ export interface JoinTicketClaims {
   sub: string
   gameId: string
   username?: string
+  rosterPlayerId?: string
+  phoneE164?: string
+  source?: "web" | "phone"
   iat: number
   exp: number
 }

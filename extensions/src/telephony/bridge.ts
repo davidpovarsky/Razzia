@@ -1,3 +1,4 @@
+import { normalizePhoneE164 } from "../core/phone-roster"
 import {
   isQuestionSupportedOnPstn,
   isValidPin,
@@ -22,6 +23,7 @@ export interface TelephonyBridgeOptions {
   maxSkewMs?: number
   digitRateLimitPerSec?: number
   baseUrl?: string
+  defaultPin?: string
 }
 
 /**
@@ -35,10 +37,11 @@ export class TelephonyBridge {
   private readonly replayTtlMs: number
   private readonly digitRateLimitPerSec: number
   private readonly baseUrl: string
+  private defaultPin: string | undefined
 
   private sessions = new Map<string, TelephonyCallSession>()
   private clients = new Map<string, RazziaSocketClient>()
-  // Processed answers idempotency set: `${callId}:${gameId}:${epoch}` -> expiresAt
+  // Processed answers idempotency set: `${stableIdentity}:${gameId}:${epoch}` -> expiresAt
   private processedAnswers = new Map<string, number>()
 
   private participantCounter = 1
@@ -51,10 +54,15 @@ export class TelephonyBridge {
       options.digitRateLimitPerSec ??
       TELEPHONY_CONSTANTS.DIGIT_RATE_LIMIT_PER_SEC
     this.baseUrl = options.baseUrl ?? "http://localhost:3001"
+    this.defaultPin = options.defaultPin
 
     if (options.provider) {
       ProviderRegistry.getInstance().register(options.provider)
     }
+  }
+
+  setDefaultPin(pin?: string): void {
+    this.defaultPin = pin
   }
 
   getActiveSessionsCount(): number {
@@ -158,14 +166,16 @@ export class TelephonyBridge {
 
     // Handle CALL_START
     if (event.type === "CALL_START") {
-      return this.handleCallStart(event)
+      return await this.handleCallStart(event)
     }
 
     // Handle DTMF digits
     return await this.handleDtmf(event)
   }
 
-  private handleCallStart(event: TelephonyEvent): TelephonyResult {
+  private async handleCallStart(
+    event: TelephonyEvent,
+  ): Promise<TelephonyResult> {
     const now = Date.now()
 
     // Enforce 1000 session cap
@@ -188,6 +198,9 @@ export class TelephonyBridge {
     }
 
     let session = this.sessions.get(event.callId)
+    const rawCallerId = event.rawCallerId ?? event.callerId
+    const phoneE164 =
+      event.phoneE164 ?? (rawCallerId ? normalizePhoneE164(rawCallerId) : null)
 
     if (!session) {
       const callerId = event.callerId
@@ -201,6 +214,9 @@ export class TelephonyBridge {
         callId: event.callId,
         provider: event.provider ?? "mock",
         callerId,
+        rawCallerId,
+        phoneE164,
+        rosterPlayerId: null,
         gameId: null,
         inviteCode: null,
         username,
@@ -217,6 +233,20 @@ export class TelephonyBridge {
         updatedAt: now,
       }
       this.sessions.set(event.callId, session)
+    } else {
+      if (rawCallerId && !session.rawCallerId) {
+        session.rawCallerId = rawCallerId
+      }
+
+      if (phoneE164 && !session.phoneE164) {
+        session.phoneE164 = phoneE164
+      }
+    }
+
+    if (this.defaultPin && isValidPin(this.defaultPin)) {
+      session.pinBuffer = ""
+
+      return await this.processPinEntry(session, this.defaultPin)
     }
 
     session.state = "collecting_pin"
@@ -357,11 +387,19 @@ export class TelephonyBridge {
       session.token = client.getToken()
       session.clientId = client.getClientId()
 
-      const { gameId, username } = await client.joinGame(pin, session.username)
+      const { gameId, username, rosterPlayerId } = await client.joinGame(
+        pin,
+        session.username,
+        {
+          phone: session.phoneE164 ?? session.rawCallerId ?? undefined,
+          source: "phone",
+        },
+      )
 
       session.gameId = gameId
       session.inviteCode = pin
       session.username = username
+      session.rosterPlayerId = rosterPlayerId
       session.state = "in_game"
 
       telephonyLogger.info("Phone participant successfully joined game", {
@@ -465,9 +503,11 @@ export class TelephonyBridge {
       }
     }
 
-    // Check if caller already answered for (callId, gameId, epoch)
+    // Check if caller already answered for (stablePlayerIdentity, gameId, epoch)
     const { currentEpoch } = gameState
-    const idempotencyKey = `${session.callId}:${session.gameId}:${currentEpoch}`
+    const stableKey =
+      session.rosterPlayerId ?? session.phoneE164 ?? session.callId
+    const idempotencyKey = `${stableKey}:${session.gameId}:${currentEpoch}`
 
     if (
       this.processedAnswers.has(idempotencyKey) ||

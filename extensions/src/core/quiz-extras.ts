@@ -12,6 +12,11 @@ import {
   isSafeMediaUrl,
   questionRevealSchema,
 } from "./media"
+import {
+  createDefaultRosterExtras,
+  rosterExtrasSchema,
+  type RosterExtras,
+} from "./phone-roster"
 
 export const leaderboardExtrasSchema = z
   .strictObject({
@@ -149,6 +154,7 @@ export const quizExtrasV1Schema = z
     teams: teamsExtrasSchema,
     audio: audioExtrasSchema,
     perQuestion: perQuestionExtrasSchema,
+    roster: rosterExtrasSchema.optional(),
   })
   .superRefine((extras, ctx) => {
     // 1. questionIds must be unique
@@ -232,4 +238,7 @@ export const createDefaultQuizExtras = (
   },
   audio: createDefaultAudioExtras(),
   perQuestion: {},
+  roster: createDefaultRosterExtras(),
 })
+
+export { createDefaultRosterExtras, rosterExtrasSchema, type RosterExtras }

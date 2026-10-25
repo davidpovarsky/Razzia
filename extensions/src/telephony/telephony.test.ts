@@ -60,7 +60,7 @@ describe("SEC02: Mock HMAC Verification, Timing Skew & Replay Protection", () =>
   it("rejects requests with tampered HMAC signature (401)", async () => {
     const req = mockProvider.createSignedRequest(
       { callId: "call_sec_02", type: "CALL_START" },
-      { mutateSignature: (sig) => sig.replace(/^./, "0") },
+      { mutateSignature: (sig) => (sig.startsWith("0") ? `1${sig.slice(1)}` : `0${sig.slice(1)}`) },
     )
 
     const verification = mockProvider.verifyRequest(req)

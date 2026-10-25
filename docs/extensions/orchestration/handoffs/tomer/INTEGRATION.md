@@ -684,3 +684,47 @@ All verification gates executed under Node 24 (`--experimental-strip-types` enab
 - **Backend & Integration Acceptance:** **PASS** (100% green, evidenced by full regression suites and real Playwright E2E browser tests).
 - **Frontend Acceptance:** **PASS with Documented Maya Follow-Up** (Real E2E browser flow is operational and passing; Maya should resolve `DEFECT-MAYA-W2A-01` in `Responses.tsx` line 48 regarding `localExtensionState` precedence over `contextExtensionState`).
 - **Phase B Status:** Phase B has **NOT** been started. Awaiting Maya's Phase A wrap-up.
+
+---
+
+# P0 ONE-AGENT COMPLETE TELEPHONY, ROSTER, XLSX IMPORT, LIVE HOST PLAYERS & REDIAL (26 Oct 2026)
+
+Per owner authorization (`TADA_ONE_AGENT_TOMER_COMPLETE_P0_2026-10-26.md` and `P0_ONE_AGENT_UI_FIDELITY_2026-10-26.md`), Tomer executed the complete P0 scope in `C:\Users\DAVID\Code\Razzia-worktrees\tomer` (`agent/tomer/wave2`) and `C:\Users\DAVID\Code\Tada-phone-pilot`.
+
+## 1. Summary of P0 Deliverables Implemented
+
+1. **Authoritative Yemot Pilot Gateway & Live Razzia Backend Integration:**
+   - Connected `C:\Users\DAVID\Code\Tada-phone-pilot\tada-pilot-gateway.cjs` (`127.0.0.1:38991`) and `tada-audio-logic.cjs` to `POST /api/games/pilot-phone` in `packages/socket/src/api/routes/games.ts`.
+   - Enforces minimal audio UX: `/9/000.wav` intro once per call, `/9/001.wav` join cue withheld until server confirms join (`joinedConfirmed: true`), `/9/002.wav` (correct) / `/9/003.wav` (wrong) only after authoritative verdict, `/9/004.wav` neutral / `/9/005.wav` silence for pending/invalid/duplicate answers, and delayed verdict cue delivery once question results are scored.
+   - Added dynamic `td1`, `td2`, ... (`td\d+`) step parsing and full raw caller ID (`apiPhoneRaw` + normalized `phoneE164`) preservation in `extensions/src/telephony/yemot-translator.ts`, `bridge.ts`, and `socket-client.ts`.
+
+2. **Stable Roster Identity (`rosterPlayerId`), Phone Normalization & Redial Rebinding:**
+   - Created `extensions/src/core/phone-roster.ts` with `generateRosterPlayerId()`, `normalizePhoneE164()` (`+972`, `+44`, `05X...`, `07X...`, `00...`), and `formatFullPhoneDisplay()`.
+   - Updated `Game`, `PlayerManager`, `RoundManager`, and `ExtensionGameSession` so phone callers and pre-registered participants have a stable `rosterPlayerId` across disconnects and redials with a brand-new `ApiCallId` / auth session—preserving display name, score, question epoch, and current-question answer state without creating duplicate players or allowing double-scoring.
+
+3. **Host-Only Roster with Full Unmasked Phone Numbers & `phoneInviteOnly`:**
+   - Added `phoneInviteOnly?: boolean` to `GameSettings` and `roster?: RosterExtras` to `QuizExtrasV1`.
+   - Added host-only REST endpoints (`GET/POST/DELETE /api/games/:gameId/roster`, `PATCH /api/games/:gameId/roster/settings`, `POST /api/games/:gameId/roster/import`, `PUT /api/games/:gameId/roster/commit`) and manager-only socket event `EVENTS.MANAGER.HOST_PRESENCE` (`manager:hostPresence`).
+   - Host views display FULL UNMASKED phone numbers (`+972501234567`, `+447911123456`, or `—`). Player/public broadcasts never include phone numbers.
+
+4. **Browser-Safe & Node-Safe `.xlsx` and `.csv` Import/Export with Preview:**
+   - Created `extensions/src/core/roster-import.ts` with pure TypeScript `Uint8Array` ZIP/RFC-1951 deflate `.xlsx` parser & generator (`parseXlsxCells`, `buildXlsxBuffer`, `generateRosterXlsxTemplate`) and RFC-4180 `.csv` parser & exporter.
+   - Preserves leading zeros and string cells, rejects formulas (`<f>` and `=`, `+`, `-`, `@`) and scientific notation (`9.72E+11`), detects duplicate phones in file or existing roster, and supports 100+ and 400+ rows.
+
+5. **Razzia-Fidelity UI (`RosterSection`, `HostPlayersModal`, `GameSettingsModal`, Truthful Bottom Counter):**
+   - Added `RosterSection.tsx` in the Quiz Editor Enhancements panel and wired `GameSettingsModal` + `HostPlayersModal.tsx` in `GameWrapper.tsx`.
+   - Bottom counter in `GameWrapper.tsx` displays truthful `connectedNow / registeredTotal` (`data-testid="host-connected-counter"`) for the host across all phases while keeping `EVENTS.GAME.TOTAL_PLAYERS` intact.
+
+## 2. P0 Verification Matrix
+
+| Suite / Check | Command | Result | Status |
+| :--- | :--- | :--- | :---: |
+| **Pilot Audio Logic** | `node --test C:\Users\DAVID\Code\Tada-phone-pilot\tada-audio-logic.test.cjs` | **11 passed / 0 failed (exit 0)** | **PASS** |
+| **Extensions Unit & E2E** | `pnpm --filter @razzia/extensions test` | **173 passed / 17 test files (exit 0)** | **PASS** |
+| **Workspace Unit Tests** | `pnpm test` | **282 passed / 20 test files (exit 0)** | **PASS** |
+| **TypeScript Typecheck** | `pnpm -r exec tsc --noEmit` | **0 errors (exit 0)** | **PASS** |
+| **Oxlint** | `NODE_OPTIONS="--experimental-strip-types" pnpm lint` | **0 warnings, 0 errors across 324 files (exit 0)** | **PASS** |
+| **Production Build** | `pnpm build` | **Socket + Web built cleanly (exit 0)** | **PASS** |
+| **Playwright Browser E2E** | `pnpm --filter @razzia/e2e test tests/browser-acceptance.spec.ts` | **7 passed / 7 tests (46.4s, exit 0)** | **PASS** |
+| **Git Diff Check** | `git diff --check` | **0 errors (exit 0)** | **PASS** |
+

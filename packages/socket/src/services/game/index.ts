@@ -11,6 +11,13 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
+import {
+  generateRosterPlayerId,
+  normalizePhoneE164,
+  type HostPlayerStatus,
+  type HostPresenceSnapshot,
+  type RosterParticipant,
+} from "@razzia/extensions/core"
 import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
 import {
   ExtensionGameSession,
@@ -64,6 +71,29 @@ class Game {
     string,
     { name: Status; data: StatusDataMap[Status] }
   >()
+  private presenceSeq = 0
+  private readonly rosterMap = new Map<
+    string,
+    {
+      rosterPlayerId: string
+      clientId: string | null
+      displayName: string
+      phoneE164: string | null
+      phoneRaw?: string
+      source: "web" | "phone"
+      status: "not_joined" | "connected" | "disconnected"
+      timedOut?: boolean
+      points: number
+      lastSeenAt?: number
+      preRegistered: boolean
+    }
+  >()
+  private readonly phoneIndex = new Map<string, string>()
+  private readonly clientRosterIndex = new Map<string, string>()
+  private readonly lastVerdictByRosterId = new Map<
+    string,
+    { epoch: number; correct: boolean; points: number }
+  >()
 
   constructor(io: Server, managerClientId: string, quizz: Quizz) {
     this.io = io
@@ -82,6 +112,33 @@ class Game {
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
+
+    if (sidecar?.roster) {
+      this._settings = {
+        ...this._settings,
+        phoneInviteOnly: sidecar.roster.phoneInviteOnly,
+      }
+      for (const item of sidecar.roster.participants) {
+        const normalized = item.phoneE164
+          ? normalizePhoneE164(item.phoneE164)
+          : null
+        this.rosterMap.set(item.rosterPlayerId, {
+          rosterPlayerId: item.rosterPlayerId,
+          clientId: null,
+          displayName: item.displayName,
+          phoneE164: normalized,
+          phoneRaw: item.phoneRaw,
+          source: normalized ? "phone" : "web",
+          status: "not_joined",
+          points: 0,
+          preRegistered: true,
+        })
+
+        if (normalized) {
+          this.phoneIndex.set(normalized, item.rosterPlayerId)
+        }
+      }
+    }
 
     this.cooldown = new CooldownTimer(io, this.gameId)
 
@@ -105,6 +162,7 @@ class Game {
       onNewQuestion: () => {
         this.playerStatus.clear()
         this.managerStatus = null
+        this.broadcastHostPresence()
       },
       onGameFinished: saveResult,
       getSettings: () => this._settings,
@@ -156,11 +214,39 @@ class Game {
           this.broadcastExtensionState()
         }
       },
+      onPresenceChange: () => {
+        this.broadcastHostPresence()
+      },
+      onQuestionScored: (scoredPlayers) => {
+        const epoch =
+          this.extensionSession?.currentEpoch ??
+          this.round.currentQuestionIndex + 1
+        for (const sp of scoredPlayers) {
+          const rId = this.clientRosterIndex.get(sp.clientId)
+
+          if (rId) {
+            const entry = this.rosterMap.get(rId)
+
+            if (entry) {
+              entry.points = sp.points
+            }
+
+            this.lastVerdictByRosterId.set(rId, {
+              epoch,
+              correct: sp.lastCorrect,
+              points: sp.lastPoints,
+            })
+          }
+        }
+      },
       onReplayCheckpoint: (qIdx) => {
         if (this.extensionSession) {
           this.extensionSession.onReplayCheckpoint(qIdx)
           this.broadcastExtensionState()
         }
+
+        this.syncRosterScoresFromPlayers()
+        this.broadcastHostPresence()
       },
     })
 
@@ -202,8 +288,464 @@ class Game {
     }
 
     this._settings = { ...this._settings, ...settings }
+    this.broadcastHostPresence()
 
     return true
+  }
+
+  get phoneInviteOnly(): boolean {
+    return Boolean(this._settings.phoneInviteOnly)
+  }
+
+  setPhoneInviteOnly(enabled: boolean): void {
+    this._settings = { ...this._settings, phoneInviteOnly: enabled }
+    this.broadcastHostPresence()
+  }
+
+  findRosterByPhone(rawOrE164: string): {
+    rosterPlayerId: string
+    displayName: string
+    phoneE164: string
+    clientId: string | null
+    status: "not_joined" | "connected" | "disconnected"
+    points: number
+  } | null {
+    const normalized = normalizePhoneE164(rawOrE164)
+
+    if (!normalized) {
+      return null
+    }
+
+    const rId = this.phoneIndex.get(normalized)
+
+    if (!rId) {
+      return null
+    }
+
+    const entry = this.rosterMap.get(rId)
+
+    if (!entry?.phoneE164) {
+      return null
+    }
+
+    return {
+      rosterPlayerId: entry.rosterPlayerId,
+      displayName: entry.displayName,
+      phoneE164: entry.phoneE164,
+      clientId: entry.clientId,
+      status: entry.status,
+      points: entry.points,
+    }
+  }
+
+  getRosterEntry(rosterPlayerId: string) {
+    return this.rosterMap.get(rosterPlayerId) ?? null
+  }
+
+  getQuestionStateForGateway(rosterPlayerId?: string) {
+    const epoch =
+      this.extensionSession?.currentEpoch ??
+      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+    const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
+    const player = entry?.clientId
+      ? this.playerManager.findByClientId(entry.clientId)
+      : undefined
+    const answered = player ? this.round.hasPlayerAnswered(player.id) : false
+    const verdict = rosterPlayerId
+      ? this.lastVerdictByRosterId.get(rosterPlayerId) ?? null
+      : null
+
+    return {
+      gameId: this.gameId,
+      inviteCode: this.inviteCode,
+      started: this.started,
+      gameMode: this.gameMode,
+      epoch,
+      questionIndex: this.round.currentQuestionIndex,
+      acceptingAnswers: this.round.isCurrentlyAcceptingAnswers,
+      answeredCurrentQuestion: answered,
+      points: player?.points ?? entry?.points ?? 0,
+      lastVerdict: verdict,
+    }
+  }
+
+  /**
+   * Direct server-side answer evaluation for authenticated gateway/telephony session.
+   * Returns immediate acceptance status and whether verdict is known now or delayed until reveal.
+   */
+  submitPhoneAnswerByRosterId(
+    rosterPlayerId: string,
+    zeroBasedAnswerIndex: number,
+  ): {
+    accepted: boolean
+    epoch: number
+    correct?: boolean
+    verdictPending?: boolean
+    reason?: string
+  } {
+    const epoch =
+      this.extensionSession?.currentEpoch ??
+      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+
+    if (!this.started || !this.round.isCurrentlyAcceptingAnswers) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "not_accepting_answers",
+      }
+    }
+
+    const entry = this.rosterMap.get(rosterPlayerId)
+
+    if (!entry?.clientId) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "player_not_joined",
+      }
+    }
+
+    const player = this.playerManager.findByClientId(entry.clientId)
+
+    if (!player) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "player_not_found",
+      }
+    }
+
+    if (this.round.hasPlayerAnswered(player.id)) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "duplicate_answer",
+      }
+    }
+
+    entry.lastSeenAt = Date.now()
+    // Construct a minimal Socket-compatible shim for RoundManager.selectAnswer
+    const fakeSocket = {
+      id: player.id,
+      data: { clientId: player.clientId, role: "player" },
+      to: (room: string) => this.io.to(room),
+      emit: (ev: string, payload: unknown) => {
+        ;(this.io.to(player.id) as unknown as { emit: (_e: string, _p: unknown) => void }).emit(
+          ev,
+          payload,
+        )
+      },
+    } as unknown as Socket
+
+    this.round.selectAnswer(fakeSocket, [zeroBasedAnswerIndex])
+
+    const nowAnswered = this.round.hasPlayerAnswered(player.id)
+    // Note: if this was the last connected player to answer, RoundManager immediately
+    // aborts cooldown and runs showResults() synchronously or right after!
+    const verdict = this.lastVerdictByRosterId.get(rosterPlayerId)
+
+    if (verdict?.epoch === epoch) {
+      return {
+        accepted: true,
+        epoch,
+        correct: verdict.correct,
+        verdictPending: false,
+      }
+    }
+
+    if (!nowAnswered) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "rejected_by_engine",
+      }
+    }
+
+    return {
+      accepted: true,
+      epoch,
+      verdictPending: true,
+    }
+  }
+
+  /**
+   * CRUD operations on game roster for the host.
+   */
+  upsertRosterParticipant(input: {
+    rosterPlayerId?: string
+    displayName: string
+    phone?: string | null
+  }): RosterParticipant {
+    const trimmedName = input.displayName.trim()
+
+    if (!trimmedName || trimmedName.length > 40) {
+      throw new Error("errors:auth.usernameTooShort")
+    }
+
+    let phoneE164: string | null = null
+
+    if (input.phone?.trim()) {
+      phoneE164 = normalizePhoneE164(input.phone)
+
+      if (!phoneE164) {
+        throw new Error("errors:invalidRequest")
+      }
+    }
+
+    // Check duplicate phone across other entries
+    if (phoneE164) {
+      const existingOwner = this.phoneIndex.get(phoneE164)
+
+      if (existingOwner && existingOwner !== input.rosterPlayerId) {
+        throw new Error("errors:game.playerAlreadyConnected")
+      }
+    }
+
+    const rId = input.rosterPlayerId ?? generateRosterPlayerId()
+    const existing = this.rosterMap.get(rId)
+
+    if (existing) {
+      if (existing.phoneE164 && existing.phoneE164 !== phoneE164) {
+        this.phoneIndex.delete(existing.phoneE164)
+      }
+
+      existing.displayName = trimmedName
+      existing.phoneE164 = phoneE164
+      existing.phoneRaw = input.phone ?? undefined
+
+      if (phoneE164) {
+        this.phoneIndex.set(phoneE164, rId)
+      }
+
+      // Also update live Player username if already joined
+      if (existing.clientId) {
+        const livePlayer = this.playerManager.findByClientId(existing.clientId)
+
+        if (livePlayer) {
+          livePlayer.username = trimmedName
+          this.notifyPlayerUpdated(livePlayer.id, livePlayer, false)
+        }
+      }
+    } else {
+      this.rosterMap.set(rId, {
+        rosterPlayerId: rId,
+        clientId: null,
+        displayName: trimmedName,
+        phoneE164,
+        phoneRaw: input.phone ?? undefined,
+        source: phoneE164 ? "phone" : "web",
+        status: "not_joined",
+        points: 0,
+        preRegistered: true,
+      })
+
+      if (phoneE164) {
+        this.phoneIndex.set(phoneE164, rId)
+      }
+    }
+
+    this.broadcastHostPresence()
+
+    return {
+      rosterPlayerId: rId,
+      displayName: trimmedName,
+      phoneE164,
+      phoneRaw: input.phone ?? undefined,
+    }
+  }
+
+  removeRosterParticipant(rosterPlayerId: string): boolean {
+    const existing = this.rosterMap.get(rosterPlayerId)
+
+    if (!existing) {
+      return false
+    }
+
+    if (existing.phoneE164) {
+      this.phoneIndex.delete(existing.phoneE164)
+    }
+
+    if (existing.clientId) {
+      this.clientRosterIndex.delete(existing.clientId)
+      const livePlayer = this.playerManager.findByClientId(existing.clientId)
+
+      if (livePlayer) {
+        this.kickPlayer(livePlayer.id)
+      }
+    }
+
+    this.rosterMap.delete(rosterPlayerId)
+    this.broadcastHostPresence()
+
+    return true
+  }
+
+  replaceRosterParticipants(
+    participants: RosterParticipant[],
+    phoneInviteOnly?: boolean,
+  ): void {
+    if (phoneInviteOnly !== undefined) {
+      this._settings = { ...this._settings, phoneInviteOnly }
+    }
+
+    // Keep currently connected/disconnected ad-hoc players, update/add imported pre-registered ones
+    for (const item of participants) {
+      const normalized = item.phoneE164
+        ? normalizePhoneE164(item.phoneE164)
+        : null
+      const existingByPhone = normalized
+        ? this.phoneIndex.get(normalized)
+        : undefined
+      const targetId = existingByPhone ?? item.rosterPlayerId
+      const current = this.rosterMap.get(targetId)
+
+      if (current) {
+        if (current.phoneE164 && current.phoneE164 !== normalized) {
+          this.phoneIndex.delete(current.phoneE164)
+        }
+
+        current.displayName = item.displayName
+        current.phoneE164 = normalized
+        current.phoneRaw = item.phoneRaw
+        current.preRegistered = true
+
+        if (normalized) {
+          this.phoneIndex.set(normalized, targetId)
+        }
+
+        if (current.clientId) {
+          const livePlayer = this.playerManager.findByClientId(current.clientId)
+
+          if (livePlayer) {
+            livePlayer.username = item.displayName
+          }
+        }
+      } else {
+        this.rosterMap.set(targetId, {
+          rosterPlayerId: targetId,
+          clientId: null,
+          displayName: item.displayName,
+          phoneE164: normalized,
+          phoneRaw: item.phoneRaw,
+          source: normalized ? "phone" : "web",
+          status: "not_joined",
+          points: 0,
+          preRegistered: true,
+        })
+
+        if (normalized) {
+          this.phoneIndex.set(normalized, targetId)
+        }
+      }
+    }
+
+    this.broadcastHostPresence()
+  }
+
+  private syncRosterScoresFromPlayers(): void {
+    for (const player of this.playerManager.getAll()) {
+      const rId = this.clientRosterIndex.get(player.clientId)
+
+      if (rId) {
+        const entry = this.rosterMap.get(rId)
+
+        if (entry) {
+          entry.points = player.points
+          entry.status = player.connected ? "connected" : "disconnected"
+        }
+      }
+    }
+  }
+
+  getHostPresenceSnapshot(): HostPresenceSnapshot {
+    this.syncRosterScoresFromPlayers()
+    const answeredIds = this.round.getAnsweredPlayerIds()
+    const playersList: HostPlayerStatus[] = []
+
+    // Ensure any player in playerManager that wasn't indexed yet is indexed
+    for (const p of this.playerManager.getAll()) {
+      let rId = this.clientRosterIndex.get(p.clientId)
+
+      if (!rId) {
+        rId = generateRosterPlayerId()
+        this.clientRosterIndex.set(p.clientId, rId)
+        this.rosterMap.set(rId, {
+          rosterPlayerId: rId,
+          clientId: p.clientId,
+          displayName: p.username,
+          phoneE164: null,
+          source: "web",
+          status: p.connected ? "connected" : "disconnected",
+          points: p.points,
+          lastSeenAt: Date.now(),
+          preRegistered: false,
+        })
+      }
+    }
+
+    let connectedNow = 0
+    let disconnectedNow = 0
+    let notJoinedNow = 0
+
+    for (const entry of this.rosterMap.values()) {
+      const livePlayer = entry.clientId
+        ? this.playerManager.findByClientId(entry.clientId)
+        : undefined
+      let status: "not_joined" | "connected" | "disconnected" = entry.status
+
+      if (livePlayer) {
+        status = livePlayer.connected ? "connected" : "disconnected"
+      }
+
+      const points = livePlayer ? livePlayer.points : entry.points
+      const answeredCurrentQuestion = livePlayer
+        ? answeredIds.has(livePlayer.id)
+        : false
+
+      if (status === "connected") {
+        connectedNow += 1
+      } else if (status === "disconnected") {
+        disconnectedNow += 1
+      } else {
+        notJoinedNow += 1
+      }
+
+      playersList.push({
+        rosterPlayerId: entry.rosterPlayerId,
+        clientId: entry.clientId,
+        displayName: livePlayer ? livePlayer.username : entry.displayName,
+        phoneE164: entry.phoneE164,
+        source: entry.source,
+        status,
+        timedOut: entry.timedOut,
+        points,
+        answeredCurrentQuestion,
+        lastSeenAt: entry.lastSeenAt,
+      })
+    }
+
+    return {
+      v: 1,
+      gameId: this.gameId,
+      seq: this.presenceSeq,
+      phoneInviteOnly: Boolean(this._settings.phoneInviteOnly),
+      registeredTotal: playersList.length,
+      connectedNow,
+      disconnectedNow,
+      notJoinedNow,
+      players: playersList,
+    }
+  }
+
+  broadcastHostPresence(): void {
+    this.presenceSeq += 1
+
+    if (!this._manager.id) {
+      return
+    }
+
+    const snapshot = this.getHostPresenceSnapshot()
+    this.io.to(this._manager.id).emit(EVENTS.MANAGER.HOST_PRESENCE, snapshot)
   }
 
   get locked(): boolean {
@@ -330,35 +872,389 @@ class Game {
 
   // Player actions
 
-  join(socket: Socket, username?: string): string | null {
-    if (this._locked) {
+  join(
+    socket: Socket,
+    username?: string,
+    claimsExtra?: {
+      rosterPlayerId?: string
+      phoneE164?: string
+      source?: "web" | "phone"
+    },
+  ): string | null {
+    const clientId = getClientId(socket)
+    const normalizedPhone = claimsExtra?.phoneE164
+      ? normalizePhoneE164(claimsExtra.phoneE164)
+      : null
+
+    // 1. Resolve matching roster entry by explicit rosterPlayerId or phoneE164
+    let rosterEntry = claimsExtra?.rosterPlayerId
+      ? this.rosterMap.get(claimsExtra.rosterPlayerId)
+      : undefined
+
+    if (!rosterEntry && normalizedPhone) {
+      const matchedId = this.phoneIndex.get(normalizedPhone)
+
+      if (matchedId) {
+        rosterEntry = this.rosterMap.get(matchedId)
+      }
+    }
+
+    // 2. Enforce phoneInviteOnly for unknown phone callers
+    if (
+      !rosterEntry &&
+      (claimsExtra?.source === "phone" || normalizedPhone) &&
+      this._settings.phoneInviteOnly
+    ) {
       return "errors:game.locked"
     }
 
-    if (this._settings.generatedUsernames) {
-      const taken = this.playerManager.getAll().map((player) => player.username)
-      const error = this.playerManager.join(socket, createNickname(taken))
+    // 3. If this roster entry already has an existing Player (e.g., redial with a new CallId/clientId/socket),
+    // rebind the existing Player row without creating a duplicate or losing score/epoch/answer state!
+    if (rosterEntry?.clientId) {
+      const existingPlayer = this.playerManager.findByClientId(
+        rosterEntry.clientId,
+      )
 
-      if (!error && this.extensionSession) {
-        this.extensionSession.onPlayerJoin(getClientId(socket))
+      if (existingPlayer) {
+        // If same clientId is already connected and not a phone redial, refuse duplicate join
+        if (
+          existingPlayer.clientId === clientId &&
+          existingPlayer.connected &&
+          claimsExtra?.source !== "phone" &&
+          !normalizedPhone
+        ) {
+          return "errors:game.playerAlreadyConnected"
+        }
+
+        const oldClientId = existingPlayer.clientId
+        const oldSocketId = existingPlayer.id
+        const replacesConnection =
+          existingPlayer.connected && oldSocketId !== socket.id
+
+        socket.join(this.gameId)
+
+        if (oldClientId !== clientId) {
+          this.clientRosterIndex.delete(oldClientId)
+          this.playerManager.updateClientId(oldSocketId, clientId)
+          this.round.updateCheckpointClientId(oldClientId, clientId)
+          this.extensionSession?.rebindPlayerClientId(oldClientId, clientId)
+        }
+
+        this.playerManager.updateSocketId(oldSocketId, socket.id)
+        this.round.updatePlayerId(oldSocketId, socket.id)
+        existingPlayer.connected = true
+        existingPlayer.username = rosterEntry.displayName || existingPlayer.username
+
+        rosterEntry.clientId = clientId
+        rosterEntry.status = "connected"
+        rosterEntry.timedOut = false
+        rosterEntry.lastSeenAt = Date.now()
+
+        if (claimsExtra?.source) {
+          rosterEntry.source = claimsExtra.source
+        } else if (normalizedPhone) {
+          rosterEntry.source = "phone"
+        }
+
+        this.clientRosterIndex.set(clientId, rosterEntry.rosterPlayerId)
+
+        this.notifyPlayerUpdated(oldSocketId, existingPlayer, false)
+
+        if (replacesConnection) {
+          this.io.in(oldSocketId).disconnectSockets(true)
+        }
+
+        const oldStatus = this.playerStatus.get(oldSocketId)
+
+        if (oldStatus) {
+          this.playerStatus.delete(oldSocketId)
+          this.playerStatus.set(socket.id, oldStatus)
+        }
+
+        const status = oldStatus ??
+          this.lastBroadcastStatus ?? {
+            name: STATUS.WAIT,
+            data: { text: "game:waitingForPlayers" },
+          }
+
+        socket.emit(EVENTS.GAME.SUCCESS_JOIN, {
+          gameId: this.gameId,
+          username: existingPlayer.username,
+          gameMode: this.gameMode,
+        })
+
+        if (this.started) {
+          socket.emit(EVENTS.PLAYER.SUCCESS_RECONNECT, {
+            gameId: this.gameId,
+            gameMode: this.gameMode,
+            currentQuestion: this.round.getReconnectInfo(),
+            status,
+            player: {
+              username: existingPlayer.username,
+              points: existingPlayer.points,
+            },
+          })
+        }
+
+        this.playerManager.broadcastCount()
         this.broadcastExtensionState()
-      }
+        this.broadcastHostPresence()
 
-      return error
+        return null
+      }
     }
 
-    if (!username) {
+    // 4. For brand-new joins (not rebinding an existing Player), check lock unless pre-registered in roster
+    if (this._locked && !rosterEntry) {
+      return "errors:game.locked"
+    }
+
+    let finalUsername = rosterEntry?.displayName ?? username
+
+    if (this._settings.generatedUsernames && !rosterEntry) {
+      const taken = this.playerManager.getAll().map((player) => player.username)
+      finalUsername = createNickname(taken)
+    }
+
+    if (!finalUsername) {
       return "errors:auth.usernameTooShort"
     }
 
-    const error = this.playerManager.join(socket, username)
+    const error = this.playerManager.join(socket, finalUsername)
 
-    if (!error && this.extensionSession) {
-      this.extensionSession.onPlayerJoin(getClientId(socket))
+    if (error) {
+      return error
+    }
+
+    const now = Date.now()
+
+    if (rosterEntry) {
+      rosterEntry.clientId = clientId
+      rosterEntry.displayName = finalUsername
+
+      if (normalizedPhone && !rosterEntry.phoneE164) {
+        rosterEntry.phoneE164 = normalizedPhone
+        this.phoneIndex.set(normalizedPhone, rosterEntry.rosterPlayerId)
+      }
+
+      rosterEntry.source =
+        claimsExtra?.source ?? (rosterEntry.phoneE164 ? "phone" : "web")
+      rosterEntry.status = "connected"
+      rosterEntry.timedOut = false
+      rosterEntry.lastSeenAt = now
+      this.clientRosterIndex.set(clientId, rosterEntry.rosterPlayerId)
+    } else {
+      const rId = claimsExtra?.rosterPlayerId ?? generateRosterPlayerId()
+      const source =
+        claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
+      this.rosterMap.set(rId, {
+        rosterPlayerId: rId,
+        clientId,
+        displayName: finalUsername,
+        phoneE164: normalizedPhone,
+        source,
+        status: "connected",
+        timedOut: false,
+        points: 0,
+        lastSeenAt: now,
+        preRegistered: false,
+      })
+      this.clientRosterIndex.set(clientId, rId)
+
+      if (normalizedPhone) {
+        this.phoneIndex.set(normalizedPhone, rId)
+      }
+    }
+
+    if (this.extensionSession) {
+      this.extensionSession.onPlayerJoin(clientId)
       this.broadcastExtensionState()
     }
 
-    return error
+    // If the game has already started when a phone/rostered participant joins, send current status
+    if (this.started && this.lastBroadcastStatus) {
+      socket.emit(EVENTS.GAME.STATUS, this.lastBroadcastStatus)
+    }
+
+    this.broadcastHostPresence()
+
+    return null
+  }
+
+  /**
+   * Direct server-side join/rebind for the authenticated local Yemot pilot gateway.
+   * Ensures phone callers appear in PlayerManager, host leaderboard, and HostPresenceSnapshot
+   * even without a browser WebSocket client.
+   */
+  joinOrRebindPhoneCaller(input: {
+    phoneRaw?: string | null
+    callId: string
+    fallbackName?: string
+  }): {
+    ok: boolean
+    error?: string
+    rosterPlayerId?: string
+    clientId?: string
+    displayName?: string
+    phoneE164?: string | null
+    reconnected?: boolean
+    points?: number
+  } {
+    const normalizedPhone = input.phoneRaw
+      ? normalizePhoneE164(input.phoneRaw)
+      : null
+
+    let rosterEntry = normalizedPhone
+      ? (() => {
+          const rId = this.phoneIndex.get(normalizedPhone)
+
+          return rId ? this.rosterMap.get(rId) : undefined
+        })()
+      : undefined
+
+    if (!rosterEntry && this._settings.phoneInviteOnly) {
+      return {
+        ok: false,
+        error: "errors:game.locked",
+      }
+    }
+
+    if (!rosterEntry && this._locked) {
+      return {
+        ok: false,
+        error: "errors:game.locked",
+      }
+    }
+
+    const now = Date.now()
+    const syntheticSocketId = `phone-sock-${input.callId}`
+
+    // Rebind if already in roster and has a Player
+    if (rosterEntry?.clientId) {
+      const existingPlayer = this.playerManager.findByClientId(
+        rosterEntry.clientId,
+      )
+
+      if (existingPlayer) {
+        const oldSocketId = existingPlayer.id
+        this.playerManager.updateSocketId(oldSocketId, syntheticSocketId)
+        this.round.updatePlayerId(oldSocketId, syntheticSocketId)
+        existingPlayer.connected = true
+        rosterEntry.status = "connected"
+        rosterEntry.timedOut = false
+        rosterEntry.lastSeenAt = now
+        rosterEntry.source = "phone"
+
+        this.notifyPlayerUpdated(oldSocketId, existingPlayer, false)
+        this.playerManager.broadcastCount()
+        this.broadcastExtensionState()
+        this.broadcastHostPresence()
+
+        return {
+          ok: true,
+          rosterPlayerId: rosterEntry.rosterPlayerId,
+          clientId: existingPlayer.clientId,
+          displayName: existingPlayer.username,
+          phoneE164: rosterEntry.phoneE164,
+          reconnected: true,
+          points: existingPlayer.points,
+        }
+      }
+    }
+
+    const rId = rosterEntry?.rosterPlayerId ?? generateRosterPlayerId()
+    const clientId = rosterEntry?.clientId ?? `phone-client-${rId}`
+    const suffix = normalizedPhone
+      ? normalizedPhone.slice(-4)
+      : input.callId.slice(-4).padStart(4, "0")
+    const displayName =
+      rosterEntry?.displayName ?? input.fallbackName ?? `Caller_${suffix}`
+
+    const fakeSocket = {
+      id: syntheticSocketId,
+      data: { clientId, role: "player" },
+      join: (_room: string) => undefined,
+      to: (room: string) => this.io.to(room),
+      emit: (_event: string) => false,
+    } as unknown as Socket
+
+    const joinErr = this.playerManager.join(fakeSocket, displayName)
+
+    if (joinErr) {
+      return { ok: false, error: joinErr }
+    }
+
+    if (rosterEntry) {
+      rosterEntry.clientId = clientId
+      rosterEntry.status = "connected"
+      rosterEntry.timedOut = false
+      rosterEntry.lastSeenAt = now
+      rosterEntry.source = "phone"
+    } else {
+      rosterEntry = {
+        rosterPlayerId: rId,
+        clientId,
+        displayName,
+        phoneE164: normalizedPhone,
+        phoneRaw: input.phoneRaw ?? undefined,
+        source: "phone",
+        status: "connected",
+        timedOut: false,
+        points: 0,
+        lastSeenAt: now,
+        preRegistered: false,
+      }
+      this.rosterMap.set(rId, rosterEntry)
+
+      if (normalizedPhone) {
+        this.phoneIndex.set(normalizedPhone, rId)
+      }
+    }
+
+    this.clientRosterIndex.set(clientId, rId)
+
+    if (this.extensionSession) {
+      this.extensionSession.onPlayerJoin(clientId)
+      this.broadcastExtensionState()
+    }
+
+    this.broadcastHostPresence()
+
+    return {
+      ok: true,
+      rosterPlayerId: rId,
+      clientId,
+      displayName,
+      phoneE164: normalizedPhone,
+      reconnected: false,
+      points: 0,
+    }
+  }
+
+  disconnectPhoneCallerByRosterId(rosterPlayerId: string, timedOut = false): boolean {
+    const entry = this.rosterMap.get(rosterPlayerId)
+
+    if (!entry) {
+      return false
+    }
+
+    entry.status = "disconnected"
+    entry.timedOut = timedOut
+    entry.lastSeenAt = Date.now()
+
+    if (entry.clientId) {
+      const player = this.playerManager.findByClientId(entry.clientId)
+
+      if (player) {
+        this.setPlayerDisconnected(player.id, timedOut)
+
+        return true
+      }
+    }
+
+    this.broadcastHostPresence()
+
+    return true
   }
 
   dispose() {
@@ -390,10 +1286,31 @@ class Game {
     if (this.playerManager.kick(playerId)) {
       this.playerStatus.delete(playerId)
 
+      if (player) {
+        const rId = this.clientRosterIndex.get(player.clientId)
+
+        if (rId) {
+          const entry = this.rosterMap.get(rId)
+
+          if (entry) {
+            if (entry.preRegistered || entry.phoneE164) {
+              entry.status = "not_joined"
+              entry.clientId = null
+            } else {
+              this.rosterMap.delete(rId)
+            }
+          }
+
+          this.clientRosterIndex.delete(player.clientId)
+        }
+      }
+
       if (this.extensionSession && player) {
         this.extensionSession.onPlayerKicked(player.clientId)
         this.broadcastExtensionState()
       }
+
+      this.broadcastHostPresence()
     }
   }
 
@@ -454,6 +1371,7 @@ class Game {
       players: this.playerManager.getAll(),
     })
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
+    socket.emit(EVENTS.MANAGER.HOST_PRESENCE, this.getHostPresenceSnapshot())
 
     if (this.extensionSession) {
       const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
@@ -487,6 +1405,19 @@ class Game {
     this.playerManager.updateSocketId(oldSocketId, socket.id)
     this.round.updatePlayerId(oldSocketId, socket.id)
     player.connected = true
+
+    const rId = this.clientRosterIndex.get(clientId)
+
+    if (rId) {
+      const entry = this.rosterMap.get(rId)
+
+      if (entry) {
+        entry.status = "connected"
+        entry.timedOut = false
+        entry.lastSeenAt = Date.now()
+      }
+    }
+
     this.notifyPlayerUpdated(oldSocketId, player)
 
     if (replacesConnection) {
@@ -514,6 +1445,7 @@ class Game {
       player: { username: player.username, points: player.points },
     })
     this.playerManager.broadcastCount()
+    this.broadcastHostPresence()
 
     if (this.extensionSession) {
       const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
@@ -540,11 +1472,32 @@ class Game {
   }
 
   removePlayer(socketId: string): Player | undefined {
+    const existingPlayer = this.playerManager.findById(socketId)
+
+    if (existingPlayer) {
+      const rId = this.clientRosterIndex.get(existingPlayer.clientId)
+
+      if (rId) {
+        const entry = this.rosterMap.get(rId)
+
+        if (entry && (entry.preRegistered || entry.phoneE164 || entry.source === "phone")) {
+          // Keep pre-registered / phone participants in the game as disconnected so they aren't lost in lobby
+          this.setPlayerDisconnected(socketId, false)
+
+          return existingPlayer
+        }
+
+        this.rosterMap.delete(rId)
+        this.clientRosterIndex.delete(existingPlayer.clientId)
+      }
+    }
+
     const player = this.playerManager.remove(socketId)
 
     if (player) {
       this.io.to(this._manager.id).emit(EVENTS.MANAGER.REMOVE_PLAYER, player.id)
       this.playerManager.broadcastCount()
+      this.broadcastHostPresence()
     }
 
     return player
@@ -558,8 +1511,23 @@ class Game {
     const player = this.playerManager.findById(socketId)
 
     if (player) {
+      const rId = this.clientRosterIndex.get(player.clientId)
+
+      if (rId) {
+        const entry = this.rosterMap.get(rId)
+
+        if (entry) {
+          entry.status = "disconnected"
+          entry.timedOut = timedOut
+          entry.lastSeenAt = Date.now()
+          entry.points = player.points
+        }
+      }
+
       this.notifyPlayerUpdated(socketId, player, timedOut)
     }
+
+    this.broadcastHostPresence()
   }
 
   private notifyPlayerUpdated(
@@ -583,11 +1551,18 @@ class Game {
       const away = this.playerManager.getAll().filter((p) => !p.connected)
 
       for (const player of away) {
-        this.removePlayer(player.id)
+        const rId = this.clientRosterIndex.get(player.clientId)
+        const entry = rId ? this.rosterMap.get(rId) : undefined
+
+        // Only remove ad-hoc web lobby leavers; keep pre-registered / phone participants
+        if (!entry || (!entry.preRegistered && !entry.phoneE164 && entry.source !== "phone")) {
+          this.removePlayer(player.id)
+        }
       }
     }
 
     await this.round.start(socket)
+    this.broadcastHostPresence()
   }
 
   selectAnswer(socket: Socket, answerIds: number[]) {

@@ -8,6 +8,7 @@ import {
   EXTENSION_EVENTS,
   type CueId,
   type ExtensionStateEnvelope,
+  type HostPresenceSnapshot,
   type Interlude,
   type QuizExtrasV1,
   type TeamDefinition,
@@ -26,6 +27,7 @@ import {
   isNewerEnvelope,
 } from "@razzia/web/features/game/contexts/extension-state-context"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
+import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import {
@@ -37,10 +39,11 @@ import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
 import type { Status as GameStatus } from "@razzia/web/features/game/utils/createStatus"
+import { fetchGameRoster } from "@razzia/web/features/manager/queries"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
-import { Maximize, Minimize, Users } from "lucide-react"
-import { type PropsWithChildren, useMemo, useState } from "react"
+import { Maximize, Minimize, PhoneCall, Users } from "lucide-react"
+import { type PropsWithChildren, useEffect, useMemo, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -60,13 +63,22 @@ const GameWrapper = ({
 }: Props) => {
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
-  const { players, inviteCode, locked, status } = useManagerStore()
+  const {
+    gameId,
+    players,
+    inviteCode,
+    locked,
+    status,
+    hostPresence,
+    updateManager,
+  } = useManagerStore()
   const { questionStates, setQuestionStates } = useQuestionStore()
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { t } = useTranslation()
   const [skippedStatus, setSkippedStatus] =
     useState<GameStatus<StatusDataMap> | null>(null)
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null)
+  const [playersModalOpen, setPlayersModalOpen] = useState(false)
   const [countdown, setCountdown] = useState<{
     seconds: number
     total: number
@@ -75,6 +87,16 @@ const GameWrapper = ({
   const [localExtensionState, setLocalExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
   const { socket, clientId } = useSocket()
+
+  useEffect(() => {
+    if (manager && gameId && !hostPresence) {
+      fetchGameRoster(gameId)
+        .then(({ presence }) => {
+          updateManager({ hostPresence: presence })
+        })
+        .catch(() => undefined)
+    }
+  }, [manager, gameId, hostPresence, updateManager])
 
   // Single authoritative state: resolve between store and local event state by epoch/seq
   const extensionState = useMemo(() => {
@@ -195,6 +217,15 @@ const GameWrapper = ({
     setTotalPlayers(total)
   })
 
+  useEvent(
+    EVENTS.MANAGER.HOST_PRESENCE,
+    (snapshot: HostPresenceSnapshot) => {
+      if (manager) {
+        updateManager({ hostPresence: snapshot })
+      }
+    },
+  )
+
   useEvent(EVENTS.MANAGER.AUTO_ADVANCE, (state) => {
     setCountdown((current) => {
       if (state === null) {
@@ -297,14 +328,58 @@ const GameWrapper = ({
                   </div>
                 )}
 
-                <Tooltip content={t("game:playersJoined")}>
-                  <div className="ml-auto flex items-center gap-2 rounded-lg bg-black/40 px-3 py-1.5 text-xl font-bold text-white drop-shadow-md">
+                <Tooltip
+                  content={t(
+                    "extensions:roster.liveModalTitle",
+                    "Players & Live Connection Status",
+                  )}
+                >
+                  <button
+                    type="button"
+                    onClick={() => setPlayersModalOpen(true)}
+                    data-testid="host-bottom-players-btn"
+                    className={clsx(
+                      "ml-auto flex items-center gap-2 rounded-lg bg-black/40 px-3 py-1.5 text-xl font-bold text-white drop-shadow-md transition-colors hover:bg-black/60",
+                      !isConnected && "opacity-60",
+                    )}
+                  >
                     <Users className="size-5" />
-                    {totalPlayers ?? players.length}
-                  </div>
+                    <span data-testid="host-connected-counter">
+                      {(() => {
+                        const connectedCount =
+                          hostPresence?.connectedNow ??
+                          players.filter((p) =>  p.connected).length
+                        const registeredCount =
+                          hostPresence?.registeredTotal ??
+                          totalPlayers ??
+                          players.length
+
+                        if (
+                          (registeredCount > 0 &&
+                            registeredCount !== connectedCount) ||
+                          hostPresence
+                        ) {
+                          return `${connectedCount} / ${registeredCount}`
+                        }
+
+                        return String(totalPlayers ?? players.length)
+                      })()}
+                    </span>
+                    <span className="ml-1 hidden rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex items-center gap-1">
+                      <PhoneCall className="size-3" />
+                      {t("extensions:roster.playersButton", "Players")}
+                    </span>
+                  </button>
                 </Tooltip>
 
-                {statusName === STATUS.SHOW_ROOM && <GameSettingsModal />}
+                <GameSettingsModal
+                  onOpenRoster={() => setPlayersModalOpen(true)}
+                />
+
+                <HostPlayersModal
+                  open={playersModalOpen}
+                  onOpenChange={setPlayersModalOpen}
+                />
 
                 <Tooltip
                   content={t(

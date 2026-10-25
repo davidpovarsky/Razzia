@@ -1,3 +1,4 @@
+import { normalizePhoneE164 } from "../core/phone-roster"
 import type { TelephonyProvider } from "./provider"
 import {
   redactPhoneNumber,
@@ -11,6 +12,8 @@ import {
 export interface YemotCallbackData {
   apiCallId: string
   apiPhoneMasked: string
+  apiPhoneRaw?: string
+  phoneE164: string | null
   apiDID?: string
   apiRealDID?: string
   apiExtension?: string
@@ -18,15 +21,40 @@ export interface YemotCallbackData {
   isHangup: boolean
   hangupExtension?: string
   digits?: string
+  tdStep?: number
   rawParams: Record<string, string>
 }
 
 export interface YemotTranslatorOptions {
   /**
-   * MUST remain false in this local release.
-   * Real Yemot provider authentication and UK routing remain unverified.
+   * MUST remain false in this local release unless explicitly enabled for the verified Israeli pilot.
    */
   allowUnverifiedCarrier?: boolean
+}
+
+function extractDynamicTdDigits(params: Record<string, string | undefined>): {
+  digits?: string
+  tdStep?: number
+} {
+  let maxStep = -1
+  let selectedValue: string | undefined = undefined
+
+  for (const [key, val] of Object.entries(params)) {
+    const match = /^td(\d+)$/i.exec(key)
+
+    if (match && val !== undefined) {
+      const step = Number.parseInt(match[1], 10)
+
+      if (step >= maxStep) {
+        maxStep = step
+        selectedValue = val
+      }
+    }
+  }
+
+  return maxStep >= 0
+    ? { digits: selectedValue, tdStep: maxStep }
+    : { digits: undefined, tdStep: undefined }
 }
 
 /**
@@ -83,19 +111,23 @@ export class YemotApiTranslator implements TelephonyProvider {
       params.ApiCallId ?? params.apicallid ?? params.callId ?? "unknown-call"
     const rawPhone = params.ApiPhone ?? params.apiphone
     const apiPhoneMasked = redactPhoneNumber(rawPhone)
+    const phoneE164 = rawPhone ? normalizePhoneE164(rawPhone) : null
 
     const isHangup =
       params.hangup === "yes" ||
       params.action === "hangup" ||
       Boolean(params.ApiHangupExtension)
 
-    // Detect digits collected from a previous `read` parameter (e.g. pin, ans, data)
+    // Detect digits collected from a previous `read` parameter (e.g. pin, ans, data, digits, or dynamic td1, td2...)
     const { pin, ans, data, digits: paramDigits } = params
-    const digits = pin ?? ans ?? data ?? paramDigits
+    const dynamicTd = extractDynamicTdDigits(params)
+    const digits = pin ?? ans ?? data ?? paramDigits ?? dynamicTd.digits
 
     return {
       apiCallId,
       apiPhoneMasked,
+      apiPhoneRaw: rawPhone,
+      phoneE164,
       apiDID: params.ApiDID,
       apiRealDID: params.ApiRealDID,
       apiExtension: params.ApiExtension,
@@ -103,6 +135,7 @@ export class YemotApiTranslator implements TelephonyProvider {
       isHangup,
       hangupExtension: params.ApiHangupExtension,
       digits,
+      tdStep: dynamicTd.tdStep,
       rawParams: params as Record<string, string>,
     }
   }
@@ -152,17 +185,25 @@ export class YemotApiTranslator implements TelephonyProvider {
         timestamp: Date.now(),
         type: "HANGUP",
         callerId: data.apiPhoneMasked,
+        rawCallerId: data.apiPhoneRaw,
+        phoneE164: data.phoneE164,
         provider: this.id,
       }
     }
 
-    if (data.digits !== undefined && data.digits !== "") {
+    if (
+      data.digits !== undefined &&
+      data.digits !== "" &&
+      data.digits !== "None"
+    ) {
       return {
         callId: data.apiCallId,
         timestamp: Date.now(),
         type: "DTMF",
         digit: data.digits,
         callerId: data.apiPhoneMasked,
+        rawCallerId: data.apiPhoneRaw,
+        phoneE164: data.phoneE164,
         provider: this.id,
       }
     }
@@ -172,6 +213,8 @@ export class YemotApiTranslator implements TelephonyProvider {
       timestamp: Date.now(),
       type: "CALL_START",
       callerId: data.apiPhoneMasked,
+      rawCallerId: data.apiPhoneRaw,
+      phoneE164: data.phoneE164,
       provider: this.id,
     }
   }

@@ -1,5 +1,7 @@
 # Razzia downstream extension rules — MANDATORY (V3)
 
+> **CURRENT P0 OVERRIDE (26 Oct 2026, Tomer one-agent):** The user's supplied `TADA_ONE_AGENT_TOMER_COMPLETE_P0_2026-10-26.md` is the active P0 execution instruction. BEFORE ANY P0 UI implementation, **MUST READ** `docs/extensions/orchestration/P0_ONE_AGENT_UI_FIDELITY_2026-10-26.md` and `docs/extensions/DESIGN_LANGUAGE.md`, then the actual current React components/CSS referenced there. All new interface components and typography must match original Razzia/Rubik/theme conventions. For this P0, the explicit single-agent and live private pilot instructions supersede older V3 three-agent/offline-only/ownership restrictions; preserve all other safety rules. Do not ask for Maya/Noam. This override applies only to the supplied P0 scope.
+
 ## Canonical instructions
 
 Read docs/extensions/orchestration/00_START_HERE.md, 01_WORKTREE_PROTOCOL.md, 10_LOCKED_PRODUCT_DECISIONS.md, 11_RESEARCH_VERIFIED.md, 12_IMPLEMENTATION_ARCHITECTURE_AND_WIRE.md, 13_FILE_OWNERSHIP.md, 14_ENGINEERING_ACCEPTANCE_CASES.md and your exact V3 PROMPT file before coding. Also consult docs/extensions/WORKING_RULES.md, PRODUCT_SPEC.md, ARCHITECTURE.md, DESIGN_LANGUAGE.md, CODE_AUDIT.md, CONTRACTS.md, INTEGRATION_POINTS.md, ACCEPTANCE_MATRIX.md, REVIEW_DECISIONS.md as historical reference. When role/ownership/process rules conflict, V3 orchestration controls; frozen V1 product/wire schemas remain binding.

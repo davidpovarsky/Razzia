@@ -13,7 +13,10 @@ import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
-import { createDefaultQuizExtras } from "@razzia/extensions/core"
+import {
+  buildXlsxBuffer,
+  createDefaultQuizExtras,
+} from "@razzia/extensions/core"
 import {
   EXTENSION_LOCALES,
   type SupportedExtensionLanguage,
@@ -1073,5 +1076,231 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
       "100%",
     )
     await saveScreenshots(manager, "gate3-phase-a-flow-replay.png")
+  })
+
+  test("Scenario 7 (P0): Phone Roster, XLSX/CSV Import Preview, Full Unmasked Host Phone Numbers, Live Players Modal, and Truthful Bottom Counter", async ({
+    page: manager,
+    newPage,
+  }) => {
+    const subject = `P0 Phone Roster Quiz ${Date.now()}`
+
+    // 1. Open Quiz Editor and configure Roster tab with manual entry + XLSX import preview
+    await openQuizzTab(manager)
+    await manager
+      .getByRole("button", { name: t("manager:quizz.create") })
+      .click()
+    await expect(manager).toHaveURL(/\/manager\/quizz$/u)
+
+    await manager
+      .getByPlaceholder(t("quizz:titleQuizzPlaceholder"))
+      .fill(subject)
+    await manager
+      .getByPlaceholder(t("quizz:question.placeholder"))
+      .fill("What is 3 + 3?")
+    await answerInput(manager, 0).fill("6")
+    await answerInput(manager, 1).fill("7")
+    await addAnswer(manager)
+    await answerInput(manager, 2).fill("8")
+    await addAnswer(manager)
+    await answerInput(manager, 3).fill("9")
+    await toggleSolution(manager, 0)
+
+    const toggleBtn = manager.locator(
+      '[data-testid="toggle-enhancements-button"]',
+    )
+    await toggleBtn.click({ force: true })
+    await expect(
+      manager.locator('[data-testid="editor-enhancement-panel"]'),
+    ).toBeVisible()
+
+    // Switch to Phone & Roster tab
+    await manager.locator('[data-testid="tab-roster"]').click()
+    await expect(manager.locator('[data-testid="panel-roster"]')).toBeVisible()
+
+    // Toggle Phone Invite Only ON
+    await manager.locator('[data-testid="toggle-phone-invite-only"]').check()
+
+    // Add manual participant with Israeli phone
+    await manager
+      .locator('[data-testid="roster-name-input"]')
+      .fill("Yossi Cohen")
+    await manager
+      .locator('[data-testid="roster-phone-input"]')
+      .fill("050-333-4455")
+    await manager.locator('[data-testid="roster-save-participant-btn"]').click()
+
+    // Verify full unmasked phone number is visible in editor table
+    await expect(
+      manager.locator('[data-testid="roster-participants-table"]'),
+    ).toContainText("Yossi Cohen")
+    await expect(
+      manager.locator('[data-testid="roster-participants-table"]'),
+    ).toContainText("+972503334455")
+
+    // Upload a real .xlsx file with 2 valid rows (+44 and +972) and 1 invalid row, verify preview, cancel first, then upload and approve
+    const xlsxBytes = buildXlsxBuffer([
+      ["name", "phone"],
+      ["Miriam UK", "+447911223344"],
+      ["Avi Israel", "052-888-9900"],
+      ["Bad Row", "not-a-phone"],
+    ])
+
+    await manager.locator('[data-testid="roster-file-input"]').setInputFiles({
+      name: "p0-participants.xlsx",
+      mimeType:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      buffer: Buffer.from(xlsxBytes),
+    })
+
+    const previewBox = manager.locator('[data-testid="roster-import-preview"]')
+    await expect(previewBox).toBeVisible()
+    await expect(previewBox).toContainText("Miriam UK")
+    await expect(previewBox).toContainText("+447911223344")
+    await expect(previewBox).toContainText("Invalid telephone number")
+
+    // Cancel import first -> ensure Miriam UK is NOT added
+    await manager.locator('[data-testid="roster-import-cancel-btn"]').click()
+    await expect(previewBox).not.toBeVisible()
+    await expect(
+      manager.locator('[data-testid="roster-participants-table"]'),
+    ).not.toContainText("Miriam UK")
+
+    // Re-upload and click Approve & Import
+    await manager.locator('[data-testid="roster-file-input"]').setInputFiles({
+      name: "p0-participants.xlsx",
+      mimeType:
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      buffer: Buffer.from(xlsxBytes),
+    })
+    await expect(previewBox).toBeVisible()
+    await manager.locator('[data-testid="roster-import-approve-btn"]').click()
+    await expect(previewBox).not.toBeVisible()
+
+    // Verify all 3 valid participants and their FULL unmasked numbers are in the table
+    const editorTable = manager.locator(
+      '[data-testid="roster-participants-table"]',
+    )
+    await expect(editorTable).toContainText("Yossi Cohen")
+    await expect(editorTable).toContainText("+972503334455")
+    await expect(editorTable).toContainText("Miriam UK")
+    await expect(editorTable).toContainText("+447911223344")
+    await expect(editorTable).toContainText("Avi Israel")
+    await expect(editorTable).toContainText("+972528889900")
+
+    // Save quiz
+    const savePromise = manager.waitForResponse(
+      (res) =>
+        res.request().method() === "POST" &&
+        res.url().includes("/api/extensions/quizzes") &&
+        (res.status() === 200 || res.status() === 201),
+    )
+    await manager.getByRole("button", { name: t("common:save") }).click()
+    await savePromise
+    await expect(manager).toHaveURL(/\/manager\/config$/u)
+
+    // 2. Start a live game from this quiz
+    const pin = await createGame(manager, subject)
+
+    // Verify bottom counter shows 0 / 3 initially (3 pre-registered in roster, 0 connected)
+    const bottomCounter = manager.locator(
+      '[data-testid="host-connected-counter"]',
+    )
+    await expect(bottomCounter).toHaveText("0 / 3")
+
+    // 3. Yossi Cohen dials in via pilot-phone endpoint
+    const yossiJoin = await manager.request.post("/api/games/pilot-phone", {
+      data: {
+        action: "join_or_poll",
+        inviteCode: pin,
+        callId: "yossi-live-call-1",
+        phone: "050-333-4455",
+      },
+    })
+    expect(yossiJoin.status()).toBe(200)
+
+    // Bottom counter updates to 1 / 3
+    await expect(bottomCounter).toHaveText("1 / 3")
+
+    // Miriam UK dials in
+    const miriamJoin = await manager.request.post("/api/games/pilot-phone", {
+      data: {
+        action: "join_or_poll",
+        inviteCode: pin,
+        callId: "miriam-live-call-1",
+        phone: "+447911223344",
+      },
+    })
+    expect(miriamJoin.status()).toBe(200)
+    await expect(bottomCounter).toHaveText("2 / 3")
+
+    // Web player joins (registeredTotal becomes 4, connectedNow becomes 3 -> 3 / 4)
+    const webPlayer = await newPage()
+    await joinGame(webPlayer, pin, "WebPlayerOne")
+    await expect(bottomCounter).toHaveText("3 / 4")
+
+    // 4. Start the game and open the Host Players / Status Modal during active question timer
+    await startGame(manager)
+    await expect(
+      manager.getByRole("button", { name: t("extensions:host.endTimer") }),
+    ).toBeVisible()
+
+    // Open Host Players Modal
+    await manager.locator('[data-testid="host-bottom-players-btn"]').click()
+    const hostModal = manager.locator('[data-testid="host-players-modal"]')
+    await expect(hostModal).toBeVisible()
+
+    // Verify full unmasked phone numbers are shown in the live host modal
+    const modalTable = manager.locator(
+      '[data-testid="host-modal-players-table"]',
+    )
+    await expect(modalTable).toContainText("Yossi Cohen")
+    await expect(modalTable).toContainText("+972503334455")
+    await expect(modalTable).toContainText("Miriam UK")
+    await expect(modalTable).toContainText("+447911223344")
+    await expect(modalTable).toContainText("Avi Israel")
+    await expect(modalTable).toContainText("+972528889900")
+    await expect(modalTable).toContainText("WebPlayerOne")
+
+    // Verify pressing Space while Host Players Modal is open does NOT end the question timer!
+    await manager.locator('[data-testid="host-modal-search-input"]').click()
+    await manager.keyboard.press("Space")
+    await manager.locator('[data-testid="host-modal-search-input"]').fill("")
+    await expect(
+      manager.locator("button", { hasText: t("extensions:host.endTimer") }),
+    ).toBeVisible()
+
+    // 5. Simulate Yossi hanging up -> status becomes Disconnected and bottom counter becomes 2 / 4
+    await manager.request.post("/api/games/pilot-phone", {
+      data: {
+        action: "hangup",
+        inviteCode: pin,
+        callId: "yossi-live-call-1",
+        phone: "+972503334455",
+      },
+    })
+    await expect(bottomCounter).toHaveText("2 / 4")
+    await expect(
+      manager.locator('[data-testid="kpi-disconnected"]'),
+    ).toContainText("1")
+
+    // 6. Yossi redials with a brand-new CallId -> status returns to Connected and bottom counter becomes 3 / 4
+    await manager.request.post("/api/games/pilot-phone", {
+      data: {
+        action: "join_or_poll",
+        inviteCode: pin,
+        callId: "yossi-redial-call-2",
+        phone: "050-333-4455",
+      },
+    })
+    await expect(bottomCounter).toHaveText("3 / 4")
+
+    // Verify webPlayer page DOM never contains any phone numbers
+    const playerHtml = await webPlayer.content()
+    expect(playerHtml).not.toContain("+972503334455")
+    expect(playerHtml).not.toContain("+447911223344")
+
+    await saveScreenshots(manager, "gate3-p0-host-players-modal.png")
+    await manager.locator('[data-testid="host-players-close-btn"]').click()
+    await expect(hostModal).not.toBeVisible()
   })
 })

@@ -117,6 +117,14 @@ export class PlayerManager {
     }
   }
 
+  updateClientId(socketId: string, newClientId: string): void {
+    const player = this.findById(socketId)
+
+    if (player) {
+      player.clientId = newClientId
+    }
+  }
+
   replace(players: Player[]): void {
     this.players = players
   }

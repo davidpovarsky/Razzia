@@ -18,6 +18,7 @@ export interface ClientGameState {
   gameId: string | null
   inviteCode: string | null
   username: string | null
+  rosterPlayerId: string | null
   gameMode: string | null
   status: Status | null
   phase: string | null
@@ -27,6 +28,12 @@ export interface ClientGameState {
   acceptingAnswers: boolean
   lastSubmittedEpoch: number | null
   lastSubmittedAnswer: number | null
+  lastResult: {
+    epoch: number
+    correct: boolean
+    points: number
+    myPoints: number
+  } | null
   error: string | null
 }
 
@@ -51,6 +58,7 @@ export class RazziaSocketClient {
     gameId: null,
     inviteCode: null,
     username: null,
+    rosterPlayerId: null,
     gameMode: null,
     status: null,
     phase: null,
@@ -60,6 +68,7 @@ export class RazziaSocketClient {
     acceptingAnswers: false,
     lastSubmittedEpoch: null,
     lastSubmittedAnswer: null,
+    lastResult: null,
     error: null,
   }
 
@@ -134,7 +143,15 @@ export class RazziaSocketClient {
   async joinGame(
     inviteCode: string,
     username: string,
-  ): Promise<{ gameId: string; username: string }> {
+    options?: {
+      phone?: string | null
+      source?: "web" | "phone"
+    },
+  ): Promise<{
+    gameId: string
+    username: string
+    rosterPlayerId: string | null
+  }> {
     if (!this.token) {
       await this.authenticateSession()
     }
@@ -148,7 +165,12 @@ export class RazziaSocketClient {
           "content-type": "application/json",
           Authorization: `Bearer ${this.token}`,
         },
-        body: JSON.stringify({ inviteCode, username }),
+        body: JSON.stringify({
+          inviteCode,
+          username,
+          ...(options?.phone ? { phone: options.phone } : {}),
+          ...(options?.source ? { source: options.source } : {}),
+        }),
       },
     )
 
@@ -165,16 +187,19 @@ export class RazziaSocketClient {
       gameId,
       ticket,
       username: joinedName,
+      rosterPlayerId = null,
     } = (await joinRes.json()) as {
       gameId: string
       ticket: string | null
       username: string
+      rosterPlayerId?: string | null
     }
 
     this.updateState({
       gameId,
       inviteCode,
       username: joinedName,
+      rosterPlayerId,
       error: null,
     })
 
@@ -194,7 +219,11 @@ export class RazziaSocketClient {
       this.socket.emit(EVENTS.PLAYER.RECONNECT, { gameId })
     }
 
-    return { gameId, username: joinedName }
+    return {
+      gameId,
+      username: this.state.username ?? joinedName,
+      rosterPlayerId,
+    }
   }
 
   /**
@@ -258,11 +287,28 @@ export class RazziaSocketClient {
     }
 
     this.socket.on(EVENTS.GAME.STATUS, (...args: unknown[]) => {
-      const status = args[0] as Status
-      const data =
-        args[1] && typeof args[1] === "object"
-          ? (args[1] as Record<string, unknown>)
-          : undefined
+      // Support both (status, data) and ({ name, data }) shapes
+      let status: Status = STATUS.WAIT
+      let data: Record<string, unknown> | undefined = undefined
+
+      if (
+        args[0] &&
+        typeof args[0] === "object" &&
+        "name" in (args[0] as Record<string, unknown>)
+      ) {
+        const envelope = args[0] as {
+          name: Status
+          data?: Record<string, unknown>
+        }
+        ;({ name: status, data } = envelope)
+      } else {
+        status = args[0] as Status
+        data =
+          args[1] && typeof args[1] === "object"
+            ? (args[1] as Record<string, unknown>)
+            : undefined
+      }
+
       telephonyLogger.info(`Game status update: ${status}`)
 
       if (status === STATUS.SELECT_ANSWER) {
@@ -277,7 +323,22 @@ export class RazziaSocketClient {
           answersCount,
           acceptingAnswers: true,
         })
-      } else if (status === STATUS.SHOW_RESULT || status === STATUS.FINISHED) {
+      } else if (status === STATUS.SHOW_RESULT) {
+        const correct = Boolean(data?.correct)
+        const points = typeof data?.points === "number" ? data.points : 0
+        const myPoints = typeof data?.myPoints === "number" ? data.myPoints : 0
+
+        this.updateState({
+          status,
+          acceptingAnswers: false,
+          lastResult: {
+            epoch: this.state.currentEpoch,
+            correct,
+            points,
+            myPoints,
+          },
+        })
+      } else if (status === STATUS.FINISHED) {
         this.updateState({
           status,
           acceptingAnswers: false,

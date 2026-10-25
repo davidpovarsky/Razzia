@@ -99,6 +99,7 @@ export interface AutoAdvanceSettings {
 export interface GameSettings {
   generatedUsernames: boolean
   answersOnly: boolean
+  phoneInviteOnly?: boolean
   autoAdvance: AutoAdvanceSettings
 }
 

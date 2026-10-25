@@ -51,15 +51,35 @@ export const verifyIgnoringExpiry = async (
 
 const JOIN_TICKET_TTL = 60 * 5
 
+export interface MintJoinTicketOptions {
+  username?: string
+  rosterPlayerId?: string
+  phoneE164?: string
+  source?: "web" | "phone"
+}
+
 export const mintJoinTicket = (
   sub: string,
   gameId: string,
-  username?: string,
+  usernameOrOptions?: string | MintJoinTicketOptions,
 ): Promise<string> => {
   const iat = Math.floor(Date.now() / 1000)
+  const opts: MintJoinTicketOptions =
+    typeof usernameOrOptions === "string"
+      ? { username: usernameOrOptions }
+      : (usernameOrOptions ?? {})
 
   return sign(
-    { sub, gameId, username, iat, exp: iat + JOIN_TICKET_TTL },
+    {
+      sub,
+      gameId,
+      username: opts.username,
+      ...(opts.rosterPlayerId ? { rosterPlayerId: opts.rosterPlayerId } : {}),
+      ...(opts.phoneE164 ? { phoneE164: opts.phoneE164 } : {}),
+      ...(opts.source ? { source: opts.source } : {}),
+      iat,
+      exp: iat + JOIN_TICKET_TTL,
+    },
     jwtSecret,
     ALGORITHM,
   )

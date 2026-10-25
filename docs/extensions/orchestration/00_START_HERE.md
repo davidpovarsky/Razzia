@@ -1,5 +1,7 @@
 # Razzia Antigravity execution — ACTIVE V3
 
+> **P0 OVERRIDE — 26 Oct 2026:** This file's three-agent start order is historical for the current one-agent Tomer P0. The user's exact `TADA_ONE_AGENT_TOMER_COMPLETE_P0_2026-10-26.md` takes precedence. REQUIRED: read `P0_ONE_AGENT_UI_FIDELITY_2026-10-26.md` and `../DESIGN_LANGUAGE.md` before writing any frontend code. Build new features only in original Razzia UI components/typography. Tomer handles all P0 code in his existing worktree without requesting Maya/Noam. Old offline-only restrictions are superseded solely for the specifically authorized private live pilot; unrelated safety prohibitions remain.
+
 **ACTIVE: three coding conversations.** The prior seven-agent V1/V2 task allocation is retired. The user wants research and design done in these documents, with agents doing **implementation, execution, debugging and tests**, not open-ended investigation or subagent orchestration.
 
 ## Start order

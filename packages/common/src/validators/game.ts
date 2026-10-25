@@ -16,6 +16,8 @@ export const checkGameValidator = z.object({
 export const joinGameValidator = z.object({
   inviteCode: inviteCodeValidator,
   username: usernameValidator.optional(),
+  phone: z.string().max(40).optional(),
+  source: z.enum(["web", "phone"]).optional(),
 })
 
 const delayValidator = z
@@ -27,6 +29,7 @@ const delayValidator = z
 export const gameSettingsSchema = z.object({
   generatedUsernames: z.boolean(),
   answersOnly: z.boolean(),
+  phoneInviteOnly: z.boolean().optional(),
   autoAdvance: z.object({
     enable: z.boolean(),
     responsesDelay: delayValidator,
