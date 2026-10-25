@@ -143,6 +143,12 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
           players={leaderboard}
           teamAssignments={teamsData.assignments ?? {}}
           individualView={individualLeaderboardView}
+          t={(key, opts, fb) =>
+            t(
+              key,
+              typeof opts === "object" ? opts : { defaultValue: fb ?? opts },
+            )
+          }
         />
       ) : (
         individualLeaderboardView

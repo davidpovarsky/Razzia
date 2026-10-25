@@ -1,5 +1,9 @@
 import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
-import { STATUS, type Status } from "@razzia/common/types/game/status"
+import {
+  STATUS,
+  type Status,
+  type StatusDataMap,
+} from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
   type CueId,
@@ -12,6 +16,7 @@ import {
   AudioCuePlayer,
   InterludePresenter,
 } from "@razzia/extensions/presentation"
+import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
@@ -30,6 +35,8 @@ import {
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
+import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
+import type { Status as GameStatus } from "@razzia/web/features/game/utils/createStatus"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
 import { Maximize, Minimize, Users } from "lucide-react"
@@ -53,10 +60,12 @@ const GameWrapper = ({
 }: Props) => {
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
-  const { players, inviteCode, locked } = useManagerStore()
+  const { players, inviteCode, locked, status } = useManagerStore()
   const { questionStates, setQuestionStates } = useQuestionStore()
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { t } = useTranslation()
+  const [skippedStatus, setSkippedStatus] =
+    useState<GameStatus<StatusDataMap> | null>(null)
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null)
   const [countdown, setCountdown] = useState<{
     seconds: number
@@ -79,6 +88,89 @@ const GameWrapper = ({
 
     return localExtensionState
   }, [manager, storeExtensionState, localExtensionState])
+
+  const isEnhancedQuiz = Boolean(extensionState?.gameId)
+  const next = statusName ? MANAGER_SKIP_BTN[statusName] : null
+  const isDisabled = skippedStatus !== null && skippedStatus === status
+
+  const handleNext = () => {
+    setSkippedStatus(status)
+    onNext?.()
+  }
+
+  const renderHeader = () => {
+    if (manager && !isEnhancedQuiz) {
+      return (
+        <div className="flex w-full justify-between p-4">
+          {questionStates && (
+            <div className="flex items-center rounded-md bg-white p-2 px-4 text-lg font-bold text-black">
+              {`${questionStates.current} / ${questionStates.total}`}
+            </div>
+          )}
+
+          {onBack && (
+            <Button
+              onClick={onBack}
+              className="hover:bg-accent bg-white px-4 text-black"
+            >
+              {t("common:exit")}
+            </Button>
+          )}
+
+          {next && (
+            <div className="ml-auto flex gap-2">
+              {statusName === STATUS.SHOW_ROOM && (
+                <RoomLockButton className="hover:bg-accent rounded-lg bg-white px-3 text-black" />
+              )}
+
+              <Button
+                className={clsx(
+                  "hover:bg-accent relative overflow-hidden bg-white px-4 text-black",
+                  { "pointer-events-none": isDisabled },
+                )}
+                onClick={handleNext}
+              >
+                {countdown && (
+                  <span
+                    className="bg-primary/40 absolute inset-y-0 left-0"
+                    style={{
+                      animation: `progressBar ${countdown.total}s linear forwards`,
+                    }}
+                  />
+                )}
+
+                <span className="relative">{t(next)}</span>
+              </Button>
+            </div>
+          )}
+        </div>
+      )
+    }
+
+    if (manager && isEnhancedQuiz) {
+      return (
+        <ManagerControlToolbar
+          statusName={statusName ?? null}
+          extensionState={extensionState}
+          questionStates={questionStates}
+          onExit={onBack ?? defaultExit}
+          onStartGame={statusName === STATUS.SHOW_ROOM ? onNext : undefined}
+          onAdvanceFallback={onNext}
+          countdown={countdown}
+        />
+      )
+    }
+
+    return (
+      <div className="flex w-full justify-between p-4">
+        {questionStates && (
+          <div className="flex items-center rounded-md bg-white p-2 px-4 text-lg font-bold text-black">
+            {`${questionStates.current} / ${questionStates.total}`}
+          </div>
+        )}
+      </div>
+    )
+  }
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
     setLocalExtensionState((prev) => {
@@ -116,6 +208,7 @@ const GameWrapper = ({
   useEvent(EVENTS.GAME.ERROR_MESSAGE, (message) => {
     toast.error(t(message))
     console.log(t(message))
+    setSkippedStatus(null)
   })
 
   const defaultExit = () => undefined
@@ -134,27 +227,7 @@ const GameWrapper = ({
           </div>
         ) : (
           <>
-            {manager ? (
-              <ManagerControlToolbar
-                statusName={statusName ?? null}
-                extensionState={extensionState}
-                questionStates={questionStates}
-                onExit={onBack ?? defaultExit}
-                onStartGame={
-                  statusName === STATUS.SHOW_ROOM ? onNext : undefined
-                }
-                onAdvanceFallback={onNext}
-                countdown={countdown}
-              />
-            ) : (
-              <div className="flex w-full justify-between p-4">
-                {questionStates && (
-                  <div className="flex items-center rounded-md bg-white p-2 px-4 text-lg font-bold text-black">
-                    {`${questionStates.current} / ${questionStates.total}`}
-                  </div>
-                )}
-              </div>
-            )}
+            {renderHeader()}
 
             {extensionState?.phase === "interlude" &&
             extensionState.extras.interlude ? (

@@ -204,6 +204,12 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
             isManager={true}
             isLocked={locked}
             onReassignTeam={handleReassignTeam}
+            t={(key, opts, fb) =>
+              t(
+                key,
+                typeof opts === "object" ? opts : { defaultValue: fb ?? opts },
+              )
+            }
           />
         )}
 

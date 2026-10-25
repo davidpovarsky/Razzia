@@ -152,9 +152,16 @@ const QuizzEditorHeader = () => {
       }
 
       setConflict(null)
-      toast.success("Loaded latest quiz from server")
+      toast.success(
+        t(
+          "extensions:errors.loadQuizSuccess",
+          "Loaded latest quiz from server",
+        ),
+      )
     } catch {
-      toast.error("Failed to reload quiz")
+      toast.error(
+        t("extensions:errors.loadQuizFailed", "Failed to reload quiz"),
+      )
     }
   }
 

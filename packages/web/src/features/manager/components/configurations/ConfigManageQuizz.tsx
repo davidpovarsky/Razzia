@@ -159,8 +159,9 @@ const ConfigManageQuizz = () => {
             <p className="text-foreground truncate font-medium">{q.subject}</p>
             <div className="flex gap-0.5">
               <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 rounded-sm p-2"
+                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
                 title={t("manager:quizz.edit")}
+                aria-label={t("manager:quizz.edit")}
                 onClick={() =>
                   navigate({
                     to: "/manager/quizz/$quizzId",
@@ -172,18 +173,20 @@ const ConfigManageQuizz = () => {
               </button>
 
               <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 rounded-sm p-2"
+                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
                 onClick={() => handleExportEnhanced(q.id)()}
                 title={t("extensions:bundle.exportEnhanced")}
+                aria-label={t("extensions:bundle.exportEnhanced")}
                 data-testid={`export-enhanced-${q.id}`}
               >
                 <Sparkles className="size-4 text-amber-500" />
               </button>
 
               <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 rounded-sm p-2"
+                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
                 onClick={() => handleExportLegacy(q.id)()}
                 title={t("manager:quizz.export")}
+                aria-label={t("manager:quizz.export")}
                 data-testid={`export-legacy-${q.id}`}
               >
                 <Download className="size-4" />
@@ -192,8 +195,9 @@ const ConfigManageQuizz = () => {
               <AlertDialog
                 trigger={
                   <button
-                    className="rounded-sm p-2 hover:bg-red-600/10"
+                    className="rounded-sm p-2 hover:bg-red-600/10 focus:ring-2 focus:ring-red-400 focus:outline-none"
                     title={t("manager:quizz.delete")}
+                    aria-label={t("manager:quizz.delete")}
                   >
                     <Trash2 className="size-4 stroke-red-500" />
                   </button>

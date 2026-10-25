@@ -1,3 +1,4 @@
+import { MEDIA_TYPES } from "@razzia/common/constants"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
@@ -34,7 +35,7 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
           {question}
         </h2>
 
-        {media && (
+        {media?.type === MEDIA_TYPES.IMAGE && (
           <QuestionMedia
             media={media}
             alt={question}

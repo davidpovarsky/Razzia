@@ -99,7 +99,7 @@ const QuizzEditorCard = ({
         </div>
       )}
 
-      <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-hover:flex">
+      <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
         {onDuplicate && (
           <button
             type="button"
@@ -107,8 +107,12 @@ const QuizzEditorCard = ({
               e.stopPropagation()
               onDuplicate()
             }}
-            aria-label="Duplicate question"
-            className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
+            title={t("quizz:question.duplicateQuestion", "Duplicate question")}
+            aria-label={t(
+              "quizz:question.duplicateQuestion",
+              "Duplicate question",
+            )}
+            className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground focus:ring-primary rounded-sm p-1 focus:ring-2 focus:outline-none"
           >
             <Copy className="size-3.5" />
           </button>
