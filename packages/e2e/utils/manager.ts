@@ -46,6 +46,18 @@ export const startGame = async (manager: Page) => {
     .click()
 }
 
+export const endTimer = async (manager: Page) => {
+  await manager
+    .getByRole("button", { name: t("extensions:host.endTimer") })
+    .click()
+}
+
 export const next = async (manager: Page) => {
-  await manager.getByRole("button", { name: t("common:next") }).click()
+  const btn = manager.getByRole("button", {
+    name: new RegExp(
+      `^(${t("common:next")}|${t("extensions:host.nextScreen")})$`,
+      "u",
+    ),
+  })
+  await btn.click()
 }

@@ -440,19 +440,19 @@ Commit `a11f870` touched 23 files within Maya's and Noam's ownership domains (`e
 
 Per `13_FILE_OWNERSHIP.md` and `01_SHARED_WAVE2_CONTRACT.md`, only Tomer-owned and authorized upstream hook paths were modified. **Zero** Maya-owned frontend files (`packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`) and **zero** telephony files (`extensions/src/telephony/**`) were touched.
 
-| File Path | Ownership | Action | Rationale |
-| :--- | :--- | :--- | :--- |
-| `extensions/src/core/constants.ts` | Tomer | Modified | Added Phase A command action constants (`END_ANSWER_TIMER`, `NEXT_SCREEN`, `SKIP_QUESTION`, `VIEW_HISTORY`, `REPLAY_FROM_CHECKPOINT`, `END_OR_SKIP_INTERLUDE`). |
-| `extensions/src/core/reveal.ts` | Tomer | Created | Zod schemas and TypeScript types for `RevealOptionDistribution`, `EstimationDistribution`, and `RevealDistributionSnapshot`. |
-| `extensions/src/core/commands.ts` | Tomer | Modified | Discriminated union schemas for Phase A commands with payload validation, optional `epoch`, and `requestId`. |
-| `extensions/src/core/index.ts` | Tomer | Modified | Re-exported `reveal.ts` schemas and types. |
-| `packages/common/src/validators/socket.ts` | Tomer (Hook) | Modified | Extended `EVENTS.EXTENSIONS.COMMAND` action enum validator to authorize Phase A manager commands over Socket.IO. |
+| File Path                                            | Ownership    | Action   | Rationale                                                                                                                                                                                                                                                                       |
+| :--------------------------------------------------- | :----------- | :------- | :------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `extensions/src/core/constants.ts`                   | Tomer        | Modified | Added Phase A command action constants (`END_ANSWER_TIMER`, `NEXT_SCREEN`, `SKIP_QUESTION`, `VIEW_HISTORY`, `REPLAY_FROM_CHECKPOINT`, `END_OR_SKIP_INTERLUDE`).                                                                                                                 |
+| `extensions/src/core/reveal.ts`                      | Tomer        | Created  | Zod schemas and TypeScript types for `RevealOptionDistribution`, `EstimationDistribution`, and `RevealDistributionSnapshot`.                                                                                                                                                    |
+| `extensions/src/core/commands.ts`                    | Tomer        | Modified | Discriminated union schemas for Phase A commands with payload validation, optional `epoch`, and `requestId`.                                                                                                                                                                    |
+| `extensions/src/core/index.ts`                       | Tomer        | Modified | Re-exported `reveal.ts` schemas and types.                                                                                                                                                                                                                                      |
+| `packages/common/src/validators/socket.ts`           | Tomer (Hook) | Modified | Extended `EVENTS.EXTENSIONS.COMMAND` action enum validator to authorize Phase A manager commands over Socket.IO.                                                                                                                                                                |
 | `packages/socket/src/services/game/round-manager.ts` | Tomer (Hook) | Modified | Interlude step integration (4 kinds, auto/manual advance, skip, final-question suppression), pre-question checkpoints, atomic replay rollback, immediate player result dispatch alongside reveal distribution calculation, generation cancellation token, clean timer disposal. |
-| `packages/socket/src/services/game/index.ts` | Tomer (Hook) | Modified | Extension session delegation (`endAnswerTimer`, `nextScreen`, `skipQuestion`, `replayFromCheckpoint`, `endOrSkipInterlude`, `getHistory`), question ID resolution, reveal distribution callback, safe command handler. |
-| `packages/socket/src/handlers/game.ts` | Tomer (Hook) | Modified | Error boundary wrapping extension command handler emitting `EVENTS.GAME.ERROR_MESSAGE` on invalid phase/command. |
-| `extensions/src/server/game/session.ts` | Tomer | Modified | Interlude querying, epoch tracking, command handling with deduplication & phase enforcement, manager-only state snapshot injection (`revealDistribution`, `viewingHistory`, `interlude`). |
-| `extensions/src/server/storage/service.ts` | Tomer | Modified | Added validation throwing HTTP 400 when composite quiz `extras.questionIds.length !== baseQuiz.questions.length`. |
-| `extensions/src/server/gameplay-phase-a.test.ts` | Tomer | Created | Comprehensive 17-test suite verifying A1-A5 requirements, epoch security, idempotency, and 100 concurrent participants. |
+| `packages/socket/src/services/game/index.ts`         | Tomer (Hook) | Modified | Extension session delegation (`endAnswerTimer`, `nextScreen`, `skipQuestion`, `replayFromCheckpoint`, `endOrSkipInterlude`, `getHistory`), question ID resolution, reveal distribution callback, safe command handler.                                                          |
+| `packages/socket/src/handlers/game.ts`               | Tomer (Hook) | Modified | Error boundary wrapping extension command handler emitting `EVENTS.GAME.ERROR_MESSAGE` on invalid phase/command.                                                                                                                                                                |
+| `extensions/src/server/game/session.ts`              | Tomer        | Modified | Interlude querying, epoch tracking, command handling with deduplication & phase enforcement, manager-only state snapshot injection (`revealDistribution`, `viewingHistory`, `interlude`).                                                                                       |
+| `extensions/src/server/storage/service.ts`           | Tomer        | Modified | Added validation throwing HTTP 400 when composite quiz `extras.questionIds.length !== baseQuiz.questions.length`.                                                                                                                                                               |
+| `extensions/src/server/gameplay-phase-a.test.ts`     | Tomer        | Created  | Comprehensive 17-test suite verifying A1-A5 requirements, epoch security, idempotency, and 100 concurrent participants.                                                                                                                                                         |
 
 ---
 
@@ -461,6 +461,7 @@ Per `13_FILE_OWNERSHIP.md` and `01_SHARED_WAVE2_CONTRACT.md`, only Tomer-owned a
 The following typed contracts and schemas are published in `@razzia/extensions/core` for Maya's frontend UI and projector implementation:
 
 ### A. Reveal Distribution Snapshot (`RevealDistributionSnapshot`)
+
 ```typescript
 interface RevealOptionDistribution {
   index: number
@@ -497,7 +498,9 @@ interface RevealDistributionSnapshot {
 - **Immediate player delivery:** Individual players receive their own `SHOW_RESULT` with score and correctness immediately upon question end, without waiting for manager projector animations.
 
 ### B. Phase A Extension Commands (`extensionCommandSchema`)
+
 Dispatched by Manager via `EVENTS.EXTENSIONS.COMMAND` with `{ v: 1, gameId, action, payload, requestId }`:
+
 - `END_ANSWER_TIMER`: Manager forces early answer closure. Only valid during `SELECT_ANSWER`. Immediately ends answering and transitions to results.
 - `NEXT_SCREEN`: Advances through display phases (`SHOW_RESPONSES` -> `interlude` -> next question). Explicitly rejected during `SELECT_ANSWER` to protect active player answers.
 - `SKIP_QUESTION`: Unscored question skip without awarding or deducting points.
@@ -506,6 +509,7 @@ Dispatched by Manager via `EVENTS.EXTENSIONS.COMMAND` with `{ v: 1, gameId, acti
 - `END_OR_SKIP_INTERLUDE`: Advances or skips interlude early (`payload: { reason: "manual" | "auto" | "ended" }`).
 
 ### C. Server-Authoritative Interlude Integration
+
 - Interludes are integrated directly into `RoundManager` step progression between `SHOW_RESPONSES` and `nextQuestion`.
 - Suppressed after the final question per V1 specification rule.
 - Auto-advance interludes advance automatically when their configured duration elapses, or immediately via manager skip command.
@@ -517,13 +521,166 @@ Dispatched by Manager via `EVENTS.EXTENSIONS.COMMAND` with `{ v: 1, gameId, acti
 
 All regression test suites and quality gates have passed cleanly:
 
-| Verification Gate | Command | Result | Status |
-| :--- | :--- | :--- | :---: |
-| **Phase A Gameplay Suite** | `pnpm --filter @razzia/extensions test src/server/gameplay-phase-a.test.ts` | **17 passed / 17 total (56ms)** | **GREEN** |
-| **Extensions Full Suite** | `pnpm --filter @razzia/extensions test` | **137 passed across 14 test files** (including 100-participant load test) | **GREEN** |
-| **Root Regression Suite** | `pnpm test` | **229 passed across 18 test files** (100% upstream compatibility) | **GREEN** |
-| **Real Telephony E2E Gate** | `src/server/real-telephony-e2e.test.ts` | **4 passed (Scenario 1-5, 6, 7, 10 all passed)** | **GREEN** |
-| **TypeScript Compilation** | `pnpm -r exec tsc --noEmit` | **0 errors across all workspaces** | **GREEN** |
-| **Linter (Oxlint)** | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm lint` | **0 warnings, 0 errors across 301 files** | **GREEN** |
-| **Code Formatting (Prettier)** | `pnpm format` | **0 issues** | **GREEN** |
-| **Production Build** | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm build` | **Clean build for socket & web** | **GREEN** |
+| Verification Gate              | Command                                                                     | Result                                                                    |  Status   |
+| :----------------------------- | :-------------------------------------------------------------------------- | :------------------------------------------------------------------------ | :-------: |
+| **Phase A Gameplay Suite**     | `pnpm --filter @razzia/extensions test src/server/gameplay-phase-a.test.ts` | **17 passed / 17 total (56ms)**                                           | **GREEN** |
+| **Extensions Full Suite**      | `pnpm --filter @razzia/extensions test`                                     | **137 passed across 14 test files** (including 100-participant load test) | **GREEN** |
+| **Root Regression Suite**      | `pnpm test`                                                                 | **229 passed across 18 test files** (100% upstream compatibility)         | **GREEN** |
+| **Real Telephony E2E Gate**    | `src/server/real-telephony-e2e.test.ts`                                     | **4 passed (Scenario 1-5, 6, 7, 10 all passed)**                          | **GREEN** |
+| **TypeScript Compilation**     | `pnpm -r exec tsc --noEmit`                                                 | **0 errors across all workspaces**                                        | **GREEN** |
+| **Linter (Oxlint)**            | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm lint`                 | **0 warnings, 0 errors across 301 files**                                 | **GREEN** |
+| **Code Formatting (Prettier)** | `pnpm format`                                                               | **0 issues**                                                              | **GREEN** |
+| **Production Build**           | `$env:NODE_OPTIONS="--experimental-strip-types"; pnpm build`                | **Clean build for socket & web**                                          | **GREEN** |
+
+---
+
+# Wave 2 — Phase A: Final Integration, Frontend Audit & Real Browser Acceptance Gate
+
+## 1. Overview & Git Lineage
+
+- **Integration Agent:** Tomer (Backend / Core / Integration)
+- **Execution Mode:** NORMAL (Direct session in local worktree; zero Antigravity subagents invoked)
+- **Worktree:** `C:/Users/DAVID/Code/Razzia-worktrees/tomer`
+- **Tomer Backend Baseline:** `cf824d79255a513f1b37944156bbc131ce822aba`
+- **Maya Completed Frontend Branch:** `agent/maya/wave2`
+- **Maya Completed Frontend Commit:** `1dd0d8a24658df8bacbcf7634993fe99b4f67dcd`
+- **Integration Action:** Fast-forward merge of `agent/maya/wave2` into `agent/tomer/wave2`.
+- **Lineage Verification:** Verified that `cf824d79255a513f1b37944156bbc131ce822aba` is a direct ancestor of `1dd0d8a24658df8bacbcf7634993fe99b4f67dcd`.
+- **Working Tree & Worktree Safety:** Clean merge, zero rewritten commits, zero modifications to Maya's worktree (`C:/Users/DAVID/Code/Razzia-worktrees/maya`), preserved `agent/tomer/wave1` and `main`. No push or deployment.
+
+---
+
+## 2. Frontend / Backend Live Command Path Contract Audit
+
+Audited the complete live execution path:
+`ManagerControlToolbar` / `GameWrapper` -> Socket.IO `extension:command` -> Manager Authorization & Schema Validation (`socket/src/handlers/game.ts`) -> `ExtensionGameSession.handleCommand` -> `RoundManager` -> Authoritative State Broadcast (`extension:state`) -> React Screens (`Responses.tsx`, `InterludePresenter.tsx`, `HistoryModal.tsx`, `GameWrapper.tsx`).
+
+| Contract Point                          | Audited Mechanism                                                                                                                                                                                                                                                        | Verification Result                                                                                                                                          |
+| :-------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **`END_ANSWER_TIMER`**                  | Validates phase is `question`. Calls `roundManager.endTimer()`, setting `acceptingAnswers = false` and aborting question timer cooldown. Immediately evaluates scores, sends `SHOW_RESULT` to each player, records history, and transitions manager to `SHOW_RESPONSES`. | **VERIFIED** — Closes answers and scores with zero delay or race condition.                                                                                  |
+| **`NEXT_SCREEN`**                       | Handled in `session.ts`. Explicitly rejected with `errors:extensions.cannotNextScreenDuringAnswers` if `phase === "question"`. Allowed during `responses`, `interlude`, or `leaderboard`.                                                                                | **VERIFIED** — Never bypasses active scoring phase. Fixed backend sync issue in `Game.sendStatus` to keep `session.phase` in sync when entering `responses`. |
+| **`SKIP_QUESTION`**                     | Handled in `roundManager.skipQuestion(reason)`. Marks `skipped: true`, `skipReason: reason`, clears `playersAnswers`, and appends to `questionsHistory` with `playerAnswersCount: 0` and `solutions: undefined`.                                                         | **VERIFIED** — Never awards or deducts points for any player.                                                                                                |
+| **`VIEW_HISTORY`**                      | Returns snapshot of previous question results via state broadcast or ack callback. Live round state, timers, and active step pointer are untouched.                                                                                                                      | **VERIFIED** — Strictly read-only inspection.                                                                                                                |
+| **`REPLAY_FROM_CHECKPOINT`**            | Requires `confirmed: true`. Restores players, leaderboard, and history from pre-question checkpoint. Invalidates pending timers, increments session `epoch` and `seq`, prunes subsequent checkpoints, and restarts question afresh while keeping live sockets connected. | **VERIFIED** — Restores scores, history, and advances epoch cleanly.                                                                                         |
+| **`END_OR_SKIP_INTERLUDE`**             | Validates current step is interlude. Disposes interlude timer, transitions immediately to next question step. Guarded against double execution.                                                                                                                          | **VERIFIED** — Advances exactly once.                                                                                                                        |
+| **Immediate `SHOW_RESULT`**             | In `RoundManager.endTimer()`, `SHOW_RESULT` is emitted directly to each player socket upon answer closure. Projector reveal animations only run on manager/projector screens and do not block player receipt.                                                            | **VERIFIED** — Player feedback is immediate.                                                                                                                 |
+| **Reveal Distribution Leak Protection** | `RevealDistributionSnapshot` is attached to `extras.revealDistribution` strictly when `forRole === "manager"`. `getStateSnapshot("player")` omits reveal distribution entirely.                                                                                          | **VERIFIED** — Solutions and answer breakdowns are never leaked to players.                                                                                  |
+
+---
+
+## 3. Frontend Risks Review & Documented Maya Follow-Ups
+
+Per integration instructions, audited the five observed frontend risks in Maya-owned files (`packages/web/src/**`, `extensions/src/{editor,media,presentation,locales}/**`). Respected exclusive file ownership: no frontend files were silently edited.
+
+### Risk A: Synthetic HTML Mocking in `phase-a-flow.browser.test.ts`
+
+- **Audit:** `packages/web/src/features/game/phase-a-flow.browser.test.ts` launched Chromium via Playwright, but loaded independently authored HTML/JS via `page.setContent()` rather than rendering the actual Tada React application (`ManagerControlToolbar`, `Responses.tsx`, `HistoryModal.tsx`).
+- **Disposition:** Disallowed as acceptance proof. Replaced with real Playwright browser acceptance in `packages/e2e/tests/browser-acceptance.spec.ts` (Scenario 4) running against the live Vite frontend and Socket.IO server.
+- **Maya Follow-Up:** Maya should keep `phase-a-flow.browser.test.ts` marked as a component/unit mock test or update it using `@testing-library/react` / Vite component testing rather than full-browser synthetic HTML.
+
+### Risk B: Local Event State Precedence in `Responses.tsx` (Confirmed Defect)
+
+- **Audit:** In `packages/web/src/features/game/Responses.tsx` (line 48):
+  ```typescript
+  const ext = propExtensionState ?? localExtensionState ?? contextExtensionState
+  ```
+  `localExtensionState` (populated via local socket listener) takes precedence over `contextExtensionState` (authoritative store from `GameWrapper`). When reconnecting or after question transitions, `localExtensionState` retains the previous question's snapshot and epoch, potentially displaying stale reveal bars until a new local socket event arrives.
+- **Maya Follow-Up Ticket (DEFECT-MAYA-W2A-01):**
+  - **File:** `packages/web/src/features/game/Responses.tsx`
+  - **Reproduction:** During question transition or upon player/manager reconnect, `localExtensionState` does not reset to null, leading to stale bar distribution or epoch mismatch.
+  - **Expected Behavior:** `contextExtensionState` should be the authoritative source of truth, or `localExtensionState` must be reset whenever `currentQuestionIndex` or `epoch` changes. Ensure `revealDistribution.questionIndex === currentQuestionIndex` before rendering bars.
+
+### Risk C: Respondent Count Metric in `history-helper.ts` (Resolved in Backend)
+
+- **Audit:** In `history-helper.ts`, `playerAnswersCount` fell back to `playerAnswers.length`, which counted all players in the room (including non-responders with `answerIds: null`).
+- **Resolution in Tomer Ownership:** Added `playerAnswersCount?: number` to `QuestionResult` in `packages/common/src/types/game/index.ts`. In `RoundManager.recordHistory()`, explicitly set `playerAnswersCount: this.playersAnswers.length` (the exact count of players who submitted non-null answers). In `skipQuestion()`, set `playerAnswersCount: 0`.
+- **Maya Follow-Up (INFO):** In `history-helper.ts`, `result.playerAnswersCount ?? result.playerAnswers.filter(a => a.answerIds !== null).length` can now safely rely on the authoritative backend count.
+
+### Risk D: InterludePresenter Reset & Timer Behavior
+
+- **Audit:** Inspected `InterludePresenter.tsx`. The component uses `serverStartedAt` and `durationMs` to render a visual SVG circular countdown and progress bar. Transition authority remains strictly on the server: `handleTimeout` emits `END_OR_SKIP_INTERLUDE` with reason `"auto"`, but the server's `RoundManager` timer guarantees advancement even if the client disconnects or halts animation.
+- **Status:** **PASS** — Verified that server is sole authority and client timer is visual/advisory.
+
+### Risk E: Manager Command Error Feedback & Confirmation Behavior
+
+- **Audit:** Inspected `GameWrapper.tsx` and `ManagerControlToolbar.tsx`. Confirmed that errors emitted by `socket/src/handlers/game.ts` (`EVENTS.GAME.ERROR_MESSAGE`) trigger toast notifications via `useToast`. Destructive actions (`REPLAY_FROM_CHECKPOINT`) enforce a modal confirmation dialog requiring explicit user confirmation before dispatching command.
+- **Status:** **PASS** — Verified in real UI flow during Playwright acceptance.
+
+---
+
+## 4. Tomer Integration Repairs & Upstream Hooks
+
+To achieve complete end-to-end integration without touching Maya-owned frontend files:
+
+1. **`packages/socket/src/services/game/index.ts`:**
+   - Fixed `sendStatus` to invoke `this.syncExtensionStatus(status)` whenever sending status updates to the manager. Previously, `SHOW_RESPONSES` left `extensionSession.phase` set to `"question"`, causing subsequent `NEXT_SCREEN` commands to be rejected.
+2. **`packages/common/src/types/game/index.ts`:**
+   - Extended `QuestionResult` with optional `playerAnswersCount?: number`, `skipped?: boolean`, and `skipReason?: string`.
+3. **`packages/socket/src/services/game/round-manager.ts`:**
+   - In `recordHistory()`, populated `playerAnswersCount: this.playersAnswers.length`.
+   - In `skipQuestion()`, recorded `skipped: true`, `skipReason: reason`, and `playerAnswersCount: 0`.
+4. **`packages/e2e/utils/i18n.ts`:**
+   - Loaded `@razzia/extensions/locales` into Playwright test i18n instance so that extension keys (`extensions:host.endTimer`, `extensions:host.nextScreen`, `extensions:host.replayFromHere`, etc.) resolve properly.
+5. **`packages/e2e/utils/manager.ts`:**
+   - Added `endTimer(manager)` helper and updated `next(manager)` to support both `common:next` and `extensions:host.nextScreen`.
+
+---
+
+## 5. Real Browser Acceptance Evidence (`packages/e2e`)
+
+Executed Playwright E2E suite (`packages/e2e/tests/browser-acceptance.spec.ts`) against real Vite web frontend and Socket.IO server:
+
+```
+$ playwright test "tests/browser-acceptance.spec.ts"
+Running 4 tests using 3 workers
+
+ok 3 [chromium] › tests/browser-acceptance.spec.ts:41:3 › Scenario 1: Manager/Editor - enhancements, reveal, teams, interludes, audio, persistence & 409 conflict (7.0s)
+ok 2 [chromium] › tests/browser-acceptance.spec.ts:401:3 › Scenario 3: Backwards Compatibility & 8 Locales Verification (19.7s)
+ok 1 [chromium] › tests/browser-acceptance.spec.ts:212:3 › Scenario 2: Live Gameplay - Manager + 2 Web Players + Simulated Phone, Teams, Reveal & Reconnect (19.7s)
+ok 4 [chromium] › tests/browser-acceptance.spec.ts:510:3 › Scenario 4: Wave 2 Phase A Full Flow - Real Browser Acceptance (Host Controls, Multi-Choice Bar Distribution, Previous/History, Replay Checkpoint, Interlude & Keyboard Navigation) (27.3s)
+
+4 passed (47.9s)
+```
+
+### 10 Mandatory Phase A Acceptance Criteria Verification:
+
+1. **Manager Starts Real Game:** Verified with authenticated manager and real PIN code in Scenario 4.
+2. **Two Browser Players Join:** Verified Alice and Bob join via real player web route `/play`.
+3. **Immediate Personal Scoring (`SHOW_RESULT`):** Alice answers "Paris" and receives immediate green "Correct!" feedback upon timer completion without waiting for manager animation.
+4. **End Timer Works via Manager Toolbar Button:** Manager clicks `host.endTimer`, terminating 60s timer at ~3s.
+5. **Manager Response Bars & Authoritative Percentages:** On multi-choice question, manager sees response bars summing to 200% (Alice answered 2 & 3, Bob answered 2 & 3; options 2 and 3 show 100% each, exceeding 100% total).
+6. **Previous / History Viewer:** Manager opens `Previous` modal; Question 1 details show 1 respondent (Alice, non-responder Bob omitted).
+7. **Keyboard Focus Protection:** Space inside history modal does not advance screen; Escape cleanly closes modal.
+8. **Replay Checkpoint Rollback:** Manager replays from Question 1; scores and history roll back to checkpoint, epoch increments, and question restarts cleanly.
+9. **Interlude Single Transition:** Interlude displays mid-quiz; manual skip advances exactly once without skipping subsequent questions.
+10. **Existing Wave 1 Scenarios Green:** Scenarios 1, 2, and 3 all remain green without regression.
+
+---
+
+## 6. Complete Quality Gates Summary
+
+All verification gates executed under Node 24 (`--experimental-strip-types` enabled):
+
+| Quality Gate                  | Command                                                           | Result                                             |  Status  |
+| :---------------------------- | :---------------------------------------------------------------- | :------------------------------------------------- | :------: |
+| **Extensions Suite**          | `pnpm --filter @razzia/extensions test`                           | **155 passed / 15 test files (17.42s)**            | **PASS** |
+| **Root Regression Suite**     | `pnpm test`                                                       | **251 passed / 20 test files (8.41s)**             | **PASS** |
+| **TypeScript Typecheck**      | `pnpm -r exec tsc --noEmit`                                       | **0 errors across all monorepo packages**          | **PASS** |
+| **Linter (Oxlint)**           | `pnpm lint`                                                       | **0 warnings, 0 errors across 308 files**          | **PASS** |
+| **Code Style (Prettier)**     | `pnpm prettier --check ...`                                       | **All files match Prettier code style**            | **PASS** |
+| **Git Diff Check**            | `git diff --check`                                                | **0 whitespace errors / markers**                  | **PASS** |
+| **Production Build**          | `pnpm build`                                                      | **Socket Rolldown + Web Vite build clean (1.78s)** | **PASS** |
+| **Playwright Real E2E Suite** | `pnpm --filter @razzia/e2e test tests/browser-acceptance.spec.ts` | **4 passed / 4 tests (47.9s)**                     | **PASS** |
+
+### Telephony & Mobile Testing Disclosure:
+
+- **Physical Mobile Devices:** Not tested on physical mobile hardware. Tested in real Chromium responsive viewport.
+- **External UK Telephony:** External UK PSTN provider was **NOT** connected (per project safety rule: provider-neutral local simulation only; zero real telephony accounts or numbers). Telephony was fully verified using the local provider-neutral simulator (`SimulatedTelephonyProvider`) with real concurrent DTMF/voice socket pipelines.
+
+---
+
+## 7. Acceptance Gate Verdict & Handoff
+
+- **Backend & Integration Acceptance:** **PASS** (100% green, evidenced by full regression suites and real Playwright E2E browser tests).
+- **Frontend Acceptance:** **PASS with Documented Maya Follow-Up** (Real E2E browser flow is operational and passing; Maya should resolve `DEFECT-MAYA-W2A-01` in `Responses.tsx` line 48 regarding `localExtensionState` precedence over `contextExtensionState`).
+- **Phase B Status:** Phase B has **NOT** been started. Awaiting Maya's Phase A wrap-up.

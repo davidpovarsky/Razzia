@@ -319,11 +319,7 @@ class Game {
       this.managerStatus = statusData
 
       if (this.extensionSession) {
-        if (status === STATUS.SHOW_LEADERBOARD) {
-          this.extensionSession.setPhase("leaderboard")
-        }
-
-        this.broadcastExtensionState()
+        this.syncExtensionStatus(status)
       }
     } else {
       this.playerStatus.set(target, statusData)

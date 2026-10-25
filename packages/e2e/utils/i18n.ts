@@ -1,4 +1,5 @@
 import fs from "fs"
+import { getExtensionResources } from "@razzia/extensions/locales"
 import i18next, { type Resource, type TOptions } from "i18next"
 import { join } from "path"
 
@@ -22,6 +23,12 @@ const resources: Resource = Object.fromEntries(
     .filter((entry) => entry.isDirectory())
     .map((entry) => [entry.name, readNamespaces(entry.name)]),
 )
+
+const extensionResources = getExtensionResources()
+for (const [lang, nsMap] of Object.entries(extensionResources)) {
+  resources[lang] ??= {}
+  resources[lang].extensions = nsMap.extensions
+}
 
 const i18n = i18next.createInstance()
 

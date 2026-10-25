@@ -473,6 +473,9 @@ export class RoundManager {
     this.questionsHistory.push({
       ...this.question,
       solutions: undefined,
+      skipped: true,
+      skipReason: reason,
+      playerAnswersCount: 0,
       playerAnswers: this.opts.players.getAll().map((player) => ({
         playerName: player.username,
         answerIds: null,
@@ -680,6 +683,7 @@ export class RoundManager {
     this.questionsHistory.push({
       ...this.question,
       solutions: this.isSurvey() ? undefined : this.question.solutions,
+      playerAnswersCount: this.playersAnswers.length,
       playerAnswers: players.map((player) => {
         const score = scored.find((s) => s.id === player.id)
 

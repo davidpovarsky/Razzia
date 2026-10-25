@@ -116,6 +116,9 @@ export interface PlayerAnswerRecord {
 
 export type QuestionResult = Question & {
   playerAnswers: PlayerAnswerRecord[]
+  playerAnswersCount?: number
+  skipped?: boolean
+  skipReason?: string
 }
 
 export interface GameResultPlayer {
