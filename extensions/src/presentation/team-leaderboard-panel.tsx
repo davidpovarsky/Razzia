@@ -14,6 +14,11 @@ export interface TeamLeaderboardPanelProps {
   myClientId?: string
   individualView?: React.ReactNode
   className?: string
+  t?: (
+    _key: string,
+    _optionsOrFallback?: Record<string, unknown> | string,
+    _fallback?: string,
+  ) => string
 }
 
 const clsx = (...classes: unknown[]): string =>
@@ -43,10 +48,9 @@ const clsx = (...classes: unknown[]): string =>
 
 /**
  * TeamLeaderboardPanel displays team standings with dynamic projection from individual scores.
- * Features:
- * - Individual / Teams toggle button
- * - Team rank, name, color swatch, members, and total score
- * - Non-blocking player team badge
+ * - Individual / Teams toggle button with keyboard accessibility
+ * - Localized text across all 8 languages via i18next
+ * - Preserves server-authoritative score calculation and ranking
  */
 export const TeamLeaderboardPanel = ({
   teams,
@@ -56,7 +60,28 @@ export const TeamLeaderboardPanel = ({
   myClientId,
   individualView,
   className,
+  t,
 }: TeamLeaderboardPanelProps) => {
+  const tr = (
+    key: string,
+    optionsOrFallback?: Record<string, unknown> | string,
+    fallback?: string,
+  ): string => {
+    if (!t) {
+      if (typeof optionsOrFallback === "string") {
+        return optionsOrFallback
+      }
+
+      return fallback ?? key
+    }
+
+    if (typeof optionsOrFallback === "string") {
+      return t(`extensions:${key}`, optionsOrFallback)
+    }
+
+    return t(`extensions:${key}`, optionsOrFallback, fallback)
+  }
+
   const [viewMode, setViewMode] = useState<"teams" | "individual">("teams")
 
   const projectedScores: ProjectedTeamScore[] = projectTeamScores(
@@ -65,7 +90,6 @@ export const TeamLeaderboardPanel = ({
     teamAssignments,
   )
 
-  // Find player's current team
   const myKey = myClientId ?? myPlayerId
   const myTeamId = myKey ? teamAssignments[myKey] : undefined
   const myTeamStanding = projectedScores.find((s) => s.team.id === myTeamId)
@@ -73,39 +97,47 @@ export const TeamLeaderboardPanel = ({
   return (
     <div
       className={clsx(
-        "relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4",
+        "relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 font-sans",
         className,
       )}
       data-testid="team-leaderboard-panel"
     >
       {/* View Toggle: Individual vs Teams */}
       {individualView && (
-        <div className="mb-6 flex rounded-xl bg-white/20 p-1 backdrop-blur-md">
+        <div
+          role="tablist"
+          aria-label={tr("tabs.leaderboard", "Leaderboard")}
+          className="mb-6 flex rounded-xl bg-white/20 p-1 backdrop-blur-md"
+        >
           <button
             type="button"
+            role="tab"
+            aria-selected={viewMode === "individual"}
             onClick={() => setViewMode("individual")}
             className={clsx(
-              "rounded-lg px-6 py-2 font-bold transition-colors",
+              "focus:ring-primary rounded-lg px-6 py-2 font-bold transition-all focus:ring-2 focus:outline-none",
               viewMode === "individual"
                 ? "bg-white text-black shadow-md"
                 : "text-white hover:text-white/80",
             )}
             data-testid="toggle-individual-view"
           >
-            Individual
+            {tr("leaderboard.toggleIndividual", "Individual")}
           </button>
           <button
             type="button"
+            role="tab"
+            aria-selected={viewMode === "teams"}
             onClick={() => setViewMode("teams")}
             className={clsx(
-              "rounded-lg px-6 py-2 font-bold transition-colors",
+              "focus:ring-primary rounded-lg px-6 py-2 font-bold transition-all focus:ring-2 focus:outline-none",
               viewMode === "teams"
                 ? "bg-white text-black shadow-md"
                 : "text-white hover:text-white/80",
             )}
             data-testid="toggle-teams-view"
           >
-            Teams
+            {tr("leaderboard.toggleTeams", "Teams")}
           </button>
         </div>
       )}
@@ -129,7 +161,7 @@ export const TeamLeaderboardPanel = ({
                 />
                 <div>
                   <span className="text-xs tracking-wider text-white/70 uppercase">
-                    Your Team
+                    {tr("leaderboard.yourTeam", "Your Team")}
                   </span>
                   <p className="text-xl font-extrabold">
                     {myTeamStanding.team.name}
@@ -138,10 +170,17 @@ export const TeamLeaderboardPanel = ({
               </div>
               <div className="text-right">
                 <span className="text-xs tracking-wider text-white/70 uppercase">
-                  Rank #{myTeamStanding.rank}
+                  {tr(
+                    "leaderboard.rank",
+                    { rank: myTeamStanding.rank },
+                    `Rank #${myTeamStanding.rank}`,
+                  )}
                 </span>
                 <p className="text-2xl font-black tabular-nums">
-                  {myTeamStanding.totalPoints} pts
+                  {myTeamStanding.totalPoints}{" "}
+                  <span className="text-base font-bold">
+                    {tr("leaderboard.pts", "pts")}
+                  </span>
                 </p>
               </div>
             </div>
@@ -167,7 +206,10 @@ export const TeamLeaderboardPanel = ({
                   <div>
                     <h3 className="text-xl font-bold">{team.name}</h3>
                     <span className="text-xs text-neutral-600">
-                      {memberCount} {memberCount === 1 ? "member" : "members"}
+                      {memberCount}{" "}
+                      {memberCount === 1
+                        ? tr("leaderboard.member", "member")
+                        : tr("leaderboard.members", "members")}
                     </span>
                   </div>
                 </div>
@@ -177,7 +219,7 @@ export const TeamLeaderboardPanel = ({
                     {totalPoints}
                   </span>
                   <span className="ml-1 text-sm font-bold text-neutral-600">
-                    pts
+                    {tr("leaderboard.pts", "pts")}
                   </span>
                 </div>
               </div>

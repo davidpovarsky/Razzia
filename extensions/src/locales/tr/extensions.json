@@ -18,7 +18,18 @@
     "selectQuestions": "Sonrasında liderlik tablosu gösterilecek soruları seçin",
     "manualNotice": "Sonuçlar ekranında 'Liderlik Tablosunu Göster' düğmesi çıkacak",
     "toggleIndividual": "Bireysel",
-    "toggleTeams": "Takımlar"
+    "toggleTeams": "Takımlar",
+    "yourTeam": "Takımınız",
+    "rank": "Sıra #{{rank}}",
+    "pts": "puan",
+    "member": "üye",
+    "members": "üyeler",
+    "description": "Canlı oyun sırasında puan tablosunun ne zaman görüntüleneceğini yapılandırın.",
+    "modeUpstreamDesc": "Standart Razzia davranışı (aynı kategorideki sonraki veya son soruda atla).",
+    "modeEveryNDesc": "Puan tablosunu belirlenen soru aralığında gösterin.",
+    "modeSelectedDesc": "Puan tablosunu yalnızca seçilen sorulardan sonra gösterin.",
+    "modeCategoryEndDesc": "Yalnızca kategori değiştiğinde gösterin.",
+    "modeManualDesc": "Yalnızca sunucu sonuçlar sırasında 'Puan Tablosunu Göster'e tıkladığında gösterin."
   },
   "teams": {
     "enableTeams": "Takım Modunu Etkinleştir",
@@ -34,7 +45,13 @@
     "teamStanding": "Takım Sıralaması",
     "teamPoints": "puan",
     "members": "üye",
-    "myTeam": "Takımınız"
+    "myTeam": "Takımınız",
+    "reassignHint": "Yeniden atamak için aşağıdan bir takım seçin",
+    "clickPlayerHint": "Takımı yeniden atamak için bir oyuncuya tıklayın",
+    "emptyTeam": "Boş takım",
+    "unassignedPrefix": "Atanmamış:",
+    "player": "oyuncu",
+    "players": "oyuncular"
   },
   "audio": {
     "cuesTitle": "Ses Efektleri ve Müzik",
@@ -54,7 +71,9 @@
     "loop": "Döngü",
     "testPlay": "Oynat",
     "testStop": "Durdur",
-    "url": "Medya Bağlantısı"
+    "url": "Medya Bağlantısı",
+    "cuesDesc": "Oyun etkinlikleri için arka plan müziğini ve ses ipuçlarını yapılandırın.",
+    "source": "Kaynak"
   },
   "visuals": {
     "answerVisualTitle": "Cevap Görselleri",
@@ -78,7 +97,11 @@
     "triggerButton": "Resmi Göster",
     "audienceManager": "Yalnızca Yönetici",
     "audienceAll": "Tüm Katılımcılar",
-    "revealed": "Resim Açıldı"
+    "revealed": "Resim Açıldı",
+    "answerVisualDesc": "Cevap seçenekleri için görselleri ve erişilebilirlik etiketlerini yapılandırın.",
+    "revealDesc": "Soru gösterimi sırasında soru görselinin açılmasını canlandırın.",
+    "triggerMode": "Tetikleyici",
+    "audience": "Hedef Kitle"
   },
   "interludes": {
     "interludeTitle": "Ara Ekran Slaytı",
@@ -98,7 +121,9 @@
     "secondsRemaining": "{{seconds}} sn kaldı",
     "awaitingHost": "Yöneticinin ilerletmesi bekleniyor",
     "skipped": "Atlandı",
-    "slideAlt": "Ara slaytı"
+    "slideAlt": "Ara slaytı",
+    "interludeDesc": "Sonraki soruya geçmeden önce bir başlık, medya slaytı veya geri sayım sunun.",
+    "advanceMode": "İlerleme Davranışı"
   },
   "conflict": {
     "title": "Sürüm Çakışması (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Sunucu Sürümü",
     "yourRevision": "Düzenlenen Sürüm",
     "reload": "Sunucudan Yeniden Yükle",
-    "overwrite": "Zorla Üzerine Yaz"
+    "overwrite": "Zorla Üzerine Yaz",
+    "cancel": "İptal"
   },
   "bundle": {
     "exportEnhanced": "Gelişmiş Testi Dışa Aktar (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Soru kimlikleri benzersiz olmalıdır",
     "orphanQuestionExtra": "Var olmayan bir soruya ait üst veri tespit edildi",
     "orphanLeaderboardQuestionId": "Liderlik kuralı geçersiz bir soruyu işaret ediyor",
-    "altRequiredForImage": "Resimli cevaplarda açıklama metni zorunludur"
+    "altRequiredForImage": "Resimli cevaplarda açıklama metni zorunludur",
+    "invalidMediaType": "Burada yalnızca {{expected}} dosyalarına izin verilir",
+    "onlyImageAllowed": "Cevap seçenekleri için yalnızca görsel dosyalarına izin verilir",
+    "loadQuizFailed": "Test yeniden yüklenemedi",
+    "loadQuizSuccess": "En son test sunucudan yüklendi"
   },
   "host": {
     "endTimer": "Süreyi Bitir",
@@ -150,5 +180,21 @@
     "incorrect": "Yanlış",
     "answered": "yanıtladı",
     "answeredRatio": "{{responders}} / {{eligible}} yanıtladı"
+  },
+  "editor": {
+    "toggle": "Test Geliştirmeleri",
+    "toggleClose": "Geliştirmeleri Kapat",
+    "browse": "Gözat",
+    "select": "Seç",
+    "choiceNum": "Seçenek {{num}}",
+    "seconds": "saniye",
+    "effect": "Efekt",
+    "duration": "Süre"
+  },
+  "preview": {
+    "badge": "Düzenleyici Önizlemesi",
+    "title": "Soru Önizlemesi",
+    "description": "Mevcut sorunun ve cevapların görsellerle nasıl göründüğünü önizleyin.",
+    "interludeTitle": "Ara Slaytı Önizlemesi"
   }
 }

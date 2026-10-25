@@ -18,7 +18,18 @@
     "selectQuestions": "Select which questions show the leaderboard after results",
     "manualNotice": "A 'Show Leaderboard' button will appear during results",
     "toggleIndividual": "Individual",
-    "toggleTeams": "Teams"
+    "toggleTeams": "Teams",
+    "yourTeam": "Your Team",
+    "rank": "Rank #{{rank}}",
+    "pts": "pts",
+    "member": "member",
+    "members": "members",
+    "description": "Configure when the score leaderboard displays during live gameplay.",
+    "modeUpstreamDesc": "Upstream Razzia behavior (skip on same-category next or final question).",
+    "modeEveryNDesc": "Show leaderboard every set number of questions.",
+    "modeSelectedDesc": "Display leaderboard only after chosen question checkpoints.",
+    "modeCategoryEndDesc": "Display only when category changes.",
+    "modeManualDesc": "Only display when host clicks 'Show Leaderboard' during results."
   },
   "teams": {
     "enableTeams": "Enable Team Mode",
@@ -34,7 +45,13 @@
     "teamStanding": "Team Standing",
     "teamPoints": "pts",
     "members": "members",
-    "myTeam": "Your Team"
+    "myTeam": "Your Team",
+    "reassignHint": "Select a team below to reassign",
+    "clickPlayerHint": "Click a player to reassign team",
+    "emptyTeam": "Empty team",
+    "unassignedPrefix": "Unassigned:",
+    "player": "player",
+    "players": "players"
   },
   "audio": {
     "cuesTitle": "Sound Effects & Audio Cues",
@@ -54,7 +71,9 @@
     "loop": "Loop Music",
     "testPlay": "Play",
     "testStop": "Stop",
-    "url": "Media URL"
+    "url": "Media URL",
+    "cuesDesc": "Configure background music and sound cues for game events.",
+    "source": "Source"
   },
   "visuals": {
     "answerVisualTitle": "Answer Visuals",
@@ -78,7 +97,11 @@
     "triggerButton": "Trigger Reveal",
     "audienceManager": "Presenter / Manager Only",
     "audienceAll": "All Participants",
-    "revealed": "Image Revealed"
+    "revealed": "Image Revealed",
+    "answerVisualDesc": "Configure images and accessibility labels for individual answer choices.",
+    "revealDesc": "Animate the presentation question image reveal during question display.",
+    "triggerMode": "Trigger",
+    "audience": "Audience"
   },
   "interludes": {
     "interludeTitle": "Interlude Slide",
@@ -98,7 +121,9 @@
     "secondsRemaining": "{{seconds}}s remaining",
     "awaitingHost": "Awaiting Host to advance",
     "skipped": "Skipped",
-    "slideAlt": "Interlude slide"
+    "slideAlt": "Interlude slide",
+    "interludeDesc": "Present a dramatic title, media slide, or countdown before transitioning to the next question.",
+    "advanceMode": "Advance Behavior"
   },
   "conflict": {
     "title": "Revision Conflict (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Server Revision",
     "yourRevision": "Your Working Revision",
     "reload": "Reload Server Version",
-    "overwrite": "Force Overwrite"
+    "overwrite": "Force Overwrite",
+    "cancel": "Cancel"
   },
   "bundle": {
     "exportEnhanced": "Export Enhanced Quiz (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Internal question IDs must be unique",
     "orphanQuestionExtra": "Metadata references a question that no longer exists",
     "orphanLeaderboardQuestionId": "Leaderboard rule references a question that no longer exists",
-    "altRequiredForImage": "Accessible alt text is required for image answer options"
+    "altRequiredForImage": "Accessible alt text is required for image answer options",
+    "invalidMediaType": "Only {{expected}} files are allowed here",
+    "onlyImageAllowed": "Only image files are allowed for answer choices",
+    "loadQuizFailed": "Failed to reload quiz",
+    "loadQuizSuccess": "Loaded latest quiz from server"
   },
   "host": {
     "endTimer": "End Timer",
@@ -150,5 +180,21 @@
     "incorrect": "Incorrect",
     "answered": "answered",
     "answeredRatio": "{{responders}} / {{eligible}} answered"
+  },
+  "editor": {
+    "toggle": "Quiz Enhancements",
+    "toggleClose": "Close Enhancements",
+    "browse": "Browse",
+    "select": "Select",
+    "choiceNum": "Choice {{num}}",
+    "seconds": "seconds",
+    "effect": "Effect",
+    "duration": "Duration"
+  },
+  "preview": {
+    "badge": "Editor Preview",
+    "title": "Question Preview",
+    "description": "Preview how the current question and answers render with visuals.",
+    "interludeTitle": "Interlude Slide Preview"
   }
 }

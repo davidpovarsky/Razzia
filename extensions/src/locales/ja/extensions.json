@@ -18,7 +18,18 @@
     "selectQuestions": "結果後にリーダーボードを表示する問題を選択",
     "manualNotice": "結果画面に「リーダーボード表示」ボタンが表示されます",
     "toggleIndividual": "個人",
-    "toggleTeams": "チーム"
+    "toggleTeams": "チーム",
+    "yourTeam": "あなたのチーム",
+    "rank": "順位 #{{rank}}",
+    "pts": "pt",
+    "member": "メンバー",
+    "members": "メンバー",
+    "description": "ゲーム中のスコアリーダーボードの表示タイミングを設定します。",
+    "modeUpstreamDesc": "標準のRazzia動作（同じカテゴリの次の質問または最終質問でスキップ）。",
+    "modeEveryNDesc": "設定した質問数ごとにリーダーボードを表示します。",
+    "modeSelectedDesc": "選択した質問のチェックポイント後のみリーダーボードを表示します。",
+    "modeCategoryEndDesc": "カテゴリが変わるときのみ表示します。",
+    "modeManualDesc": "ホストが結果発表中に「リーダーボードを表示」をクリックしたときのみ表示します。"
   },
   "teams": {
     "enableTeams": "チーム戦モードを有効化",
@@ -34,7 +45,13 @@
     "teamStanding": "チーム順位",
     "teamPoints": "点",
     "members": "人",
-    "myTeam": "あなたのチーム"
+    "myTeam": "あなたのチーム",
+    "reassignHint": "再割り当てするチームを以下から選択してください",
+    "clickPlayerHint": "プレイヤーをクリックしてチームを再割り当て",
+    "emptyTeam": "空のチーム",
+    "unassignedPrefix": "未割り当て:",
+    "player": "プレイヤー",
+    "players": "プレイヤー"
   },
   "audio": {
     "cuesTitle": "サウンド効果とBGM",
@@ -54,7 +71,9 @@
     "loop": "ループ再生",
     "testPlay": "再生",
     "testStop": "停止",
-    "url": "メディアURL"
+    "url": "メディアURL",
+    "cuesDesc": "ゲームイベント用のBGMと効果音を設定します。",
+    "source": "音源"
   },
   "visuals": {
     "answerVisualTitle": "選択肢の画像設定",
@@ -78,7 +97,11 @@
     "triggerButton": "画像を表示",
     "audienceManager": "ホストのみ",
     "audienceAll": "全員に表示",
-    "revealed": "画像表示完了"
+    "revealed": "画像表示完了",
+    "answerVisualDesc": "回答の選択肢ごとに画像とアクセシビリティラベルを設定します。",
+    "revealDesc": "質問表示中に質問画像の公開アニメーションを実行します。",
+    "triggerMode": "トリガー",
+    "audience": "対象者"
   },
   "interludes": {
     "interludeTitle": "幕間スライド",
@@ -98,7 +121,9 @@
     "secondsRemaining": "残り {{seconds}}秒",
     "awaitingHost": "ホストの進行を待機中",
     "skipped": "スキップ済み",
-    "slideAlt": "幕間スライド"
+    "slideAlt": "幕間スライド",
+    "interludeDesc": "次の質問に進む前にタイトルカード、メディアスライド、またはカウントダウンを表示します。",
+    "advanceMode": "進行方法"
   },
   "conflict": {
     "title": "バージョン競合 (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "サーバーのリビジョン",
     "yourRevision": "あなたの編集リビジョン",
     "reload": "サーバーから再読み込み",
-    "overwrite": "強制上書き保存"
+    "overwrite": "強制上書き保存",
+    "cancel": "キャンセル"
   },
   "bundle": {
     "exportEnhanced": "拡張クイズをエクスポート (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "問題IDが重複しています",
     "orphanQuestionExtra": "存在しない問題を参照しているメタデータがあります",
     "orphanLeaderboardQuestionId": "無効な問題を参照しているリーダーボード設定があります",
-    "altRequiredForImage": "画像選択肢には代替テキストが必要です"
+    "altRequiredForImage": "画像選択肢には代替テキストが必要です",
+    "invalidMediaType": "ここでは{{expected}}ファイルのみが許可されています",
+    "onlyImageAllowed": "回答の選択肢には画像ファイルのみ使用できます",
+    "loadQuizFailed": "クイズの再読み込みに失敗しました",
+    "loadQuizSuccess": "最新のクイズをサーバーから読み込みました"
   },
   "host": {
     "endTimer": "タイマー終了",
@@ -150,5 +180,21 @@
     "incorrect": "不正解",
     "answered": "回答済み",
     "answeredRatio": "{{responders}} / {{eligible}} 回答済み"
+  },
+  "editor": {
+    "toggle": "クイズの拡張機能",
+    "toggleClose": "拡張機能を閉じる",
+    "browse": "参照",
+    "select": "選択",
+    "choiceNum": "選択肢 {{num}}",
+    "seconds": "秒",
+    "effect": "エフェクト",
+    "duration": "再生時間"
+  },
+  "preview": {
+    "badge": "エディタープレビュー",
+    "title": "質問プレビュー",
+    "description": "ビジュアルを含む質問と回答の表示をプレビューします。",
+    "interludeTitle": "インターリュードスライドのプレビュー"
   }
 }

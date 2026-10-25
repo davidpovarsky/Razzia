@@ -18,7 +18,18 @@
     "selectQuestions": "Seleccionar preguntas con clasificación posterior",
     "manualNotice": "Aparecerá un botón 'Mostrar clasificación' en los resultados",
     "toggleIndividual": "Individual",
-    "toggleTeams": "Equipos"
+    "toggleTeams": "Equipos",
+    "yourTeam": "Tu equipo",
+    "rank": "Puesto #{{rank}}",
+    "pts": "pts",
+    "member": "miembro",
+    "members": "miembros",
+    "description": "Configura cuándo se muestra la tabla de clasificación durante la partida.",
+    "modeUpstreamDesc": "Comportamiento estándar de Razzia (omitir si la siguiente es de la misma categoría o final).",
+    "modeEveryNDesc": "Mostrar tabla de clasificación cada cierto número de preguntas.",
+    "modeSelectedDesc": "Mostrar tabla de clasificación solo tras las preguntas seleccionadas.",
+    "modeCategoryEndDesc": "Mostrar solo cuando cambie la categoría.",
+    "modeManualDesc": "Mostrar solo cuando el anfitrión haga clic en 'Mostrar clasificación'."
   },
   "teams": {
     "enableTeams": "Habilitar modo equipo",
@@ -34,7 +45,13 @@
     "teamStanding": "Posición del equipo",
     "teamPoints": "pts",
     "members": "miembros",
-    "myTeam": "Tu equipo"
+    "myTeam": "Tu equipo",
+    "reassignHint": "Selecciona un equipo a continuación para reasignar",
+    "clickPlayerHint": "Haz clic en un jugador para reasignar equipo",
+    "emptyTeam": "Equipo vacío",
+    "unassignedPrefix": "No asignado:",
+    "player": "jugador",
+    "players": "jugadores"
   },
   "audio": {
     "cuesTitle": "Efectos de sonido y música",
@@ -54,7 +71,9 @@
     "loop": "Bucle",
     "testPlay": "Reproducir",
     "testStop": "Detener",
-    "url": "URL del medio"
+    "url": "URL del medio",
+    "cuesDesc": "Configura música de fondo y efectos de sonido para eventos del juego.",
+    "source": "Fuente"
   },
   "visuals": {
     "answerVisualTitle": "Imágenes de respuestas",
@@ -78,7 +97,11 @@
     "triggerButton": "Revelar imagen",
     "audienceManager": "Solo anfitrión",
     "audienceAll": "Todos los participantes",
-    "revealed": "Imagen revelada"
+    "revealed": "Imagen revelada",
+    "answerVisualDesc": "Configura imágenes y etiquetas de accesibilidad para cada opción de respuesta.",
+    "revealDesc": "Anima la revelación de la imagen de la pregunta durante la presentación.",
+    "triggerMode": "Activación",
+    "audience": "Audiencia"
   },
   "interludes": {
     "interludeTitle": "Diapositiva de interludio",
@@ -98,7 +121,9 @@
     "secondsRemaining": "quedan {{seconds}}s",
     "awaitingHost": "Esperando al anfitrión para avanzar",
     "skipped": "Omitido",
-    "slideAlt": "Diapositiva de interludio"
+    "slideAlt": "Diapositiva de interludio",
+    "interludeDesc": "Presenta un título, diapositiva multimedia o cuenta regresiva antes de la siguiente pregunta.",
+    "advanceMode": "Comportamiento de avance"
   },
   "conflict": {
     "title": "Conflicto de revisión (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Revisión del servidor",
     "yourRevision": "Tu revisión actual",
     "reload": "Recargar versión del servidor",
-    "overwrite": "Sobrescribir servidor"
+    "overwrite": "Sobrescribir servidor",
+    "cancel": "Cancelar"
   },
   "bundle": {
     "exportEnhanced": "Exportar quiz mejorado (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Los identificadores de preguntas deben ser únicos",
     "orphanQuestionExtra": "Metadatos asociados a una pregunta inexistente",
     "orphanLeaderboardQuestionId": "Regla de clasificación apunta a pregunta no válida",
-    "altRequiredForImage": "Se requiere texto alternativo para las imágenes"
+    "altRequiredForImage": "Se requiere texto alternativo para las imágenes",
+    "invalidMediaType": "Aquí solo se permiten archivos de tipo {{expected}}",
+    "onlyImageAllowed": "Solo se permiten imágenes para las opciones de respuesta",
+    "loadQuizFailed": "Error al recargar el cuestionario",
+    "loadQuizSuccess": "Última versión del cuestionario cargada desde el servidor"
   },
   "host": {
     "endTimer": "Finalizar temporizador",
@@ -150,5 +180,21 @@
     "incorrect": "Incorrecto",
     "answered": "respondieron",
     "answeredRatio": "{{responders}} / {{eligible}} respondieron"
+  },
+  "editor": {
+    "toggle": "Mejoras del cuestionario",
+    "toggleClose": "Cerrar mejoras",
+    "browse": "Examinar",
+    "select": "Seleccionar",
+    "choiceNum": "Opción {{num}}",
+    "seconds": "segundos",
+    "effect": "Efecto",
+    "duration": "Duración"
+  },
+  "preview": {
+    "badge": "Vista previa del editor",
+    "title": "Vista previa de la pregunta",
+    "description": "Previsualiza cómo se muestran la pregunta y las respuestas con elementos visuales.",
+    "interludeTitle": "Vista previa de la diapositiva de interludio"
   }
 }

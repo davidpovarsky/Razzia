@@ -18,7 +18,18 @@
     "selectQuestions": "Seleziona le domande con classifica successiva",
     "manualNotice": "Apparirà un pulsante 'Mostra classifica' durante i risultati",
     "toggleIndividual": "Singoli",
-    "toggleTeams": "Squadre"
+    "toggleTeams": "Squadre",
+    "yourTeam": "La tua squadra",
+    "rank": "Posizione #{{rank}}",
+    "pts": "pt",
+    "member": "membro",
+    "members": "membri",
+    "description": "Configura quando mostrare la classifica durante il gioco.",
+    "modeUpstreamDesc": "Comportamento standard di Razzia (salta se la successiva è della stessa categoria o finale).",
+    "modeEveryNDesc": "Mostra la classifica ogni numero prestabilito di domande.",
+    "modeSelectedDesc": "Mostra la classifica solo dopo le domande selezionate.",
+    "modeCategoryEndDesc": "Mostra solo al cambio di categoria.",
+    "modeManualDesc": "Mostra solo quando l'host fa clic su 'Mostra classifica'."
   },
   "teams": {
     "enableTeams": "Abilita modalità a squadre",
@@ -34,7 +45,13 @@
     "teamStanding": "Posizione squadra",
     "teamPoints": "pt",
     "members": "membri",
-    "myTeam": "La tua squadra"
+    "myTeam": "La tua squadra",
+    "reassignHint": "Seleziona una squadra qui sotto da riassegnare",
+    "clickPlayerHint": "Fai clic su un giocatore per riassegnare la squadra",
+    "emptyTeam": "Squadra vuota",
+    "unassignedPrefix": "Non assegnato:",
+    "player": "giocatore",
+    "players": "giocatori"
   },
   "audio": {
     "cuesTitle": "Effetti audio e musica",
@@ -54,7 +71,9 @@
     "loop": "Loop",
     "testPlay": "Riproduci",
     "testStop": "Ferma",
-    "url": "URL file audio"
+    "url": "URL file audio",
+    "cuesDesc": "Configura musica di sottofondo ed effetti sonori per gli eventi di gioco.",
+    "source": "Sorgente"
   },
   "visuals": {
     "answerVisualTitle": "Immagini risposte",
@@ -78,7 +97,11 @@
     "triggerButton": "Rivela immagine",
     "audienceManager": "Solo gestore",
     "audienceAll": "Tutti i partecipanti",
-    "revealed": "Immagine rivelata"
+    "revealed": "Immagine rivelata",
+    "answerVisualDesc": "Configura immagini ed etichette di accessibilità per le opzioni di risposta.",
+    "revealDesc": "Anima la rivelazione dell'immagine della domanda durante la presentazione.",
+    "triggerMode": "Attivazione",
+    "audience": "Destinatari"
   },
   "interludes": {
     "interludeTitle": "Schermata intermezzo",
@@ -98,7 +121,9 @@
     "secondsRemaining": "{{seconds}}s rimanenti",
     "awaitingHost": "In attesa dell'host per avanzare",
     "skipped": "Saltato",
-    "slideAlt": "Diapositiva dell'interludio"
+    "slideAlt": "Diapositiva dell'interludio",
+    "interludeDesc": "Presenta un titolo, una diapositiva o un conto alla rovescia prima della prossima domanda.",
+    "advanceMode": "Modalità di avanzamento"
   },
   "conflict": {
     "title": "Conflitto di revisione (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Revisione server",
     "yourRevision": "La tua revisione",
     "reload": "Ricarica dal server",
-    "overwrite": "Sovrascrivi"
+    "overwrite": "Sovrascrivi",
+    "cancel": "Annulla"
   },
   "bundle": {
     "exportEnhanced": "Esporta quiz arricchito (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Gli ID delle domande devono essere univoci",
     "orphanQuestionExtra": "Metadati collegati a domanda inesistente",
     "orphanLeaderboardQuestionId": "Regola classifica fa riferimento a domanda non valida",
-    "altRequiredForImage": "Il testo alternativo è obbligatorio per le immagini"
+    "altRequiredForImage": "Il testo alternativo è obbligatorio per le immagini",
+    "invalidMediaType": "Qui sono consentiti solo file {{expected}}",
+    "onlyImageAllowed": "Sono consentite solo immagini per le opzioni di risposta",
+    "loadQuizFailed": "Impossibile ricaricare il quiz",
+    "loadQuizSuccess": "Caricata l'ultima versione del quiz dal server"
   },
   "host": {
     "endTimer": "Termina timer",
@@ -150,5 +180,21 @@
     "incorrect": "Errato",
     "answered": "hanno risposto",
     "answeredRatio": "{{responders}} / {{eligible}} hanno risposto"
+  },
+  "editor": {
+    "toggle": "Miglioramenti del quiz",
+    "toggleClose": "Chiudi miglioramenti",
+    "browse": "Sfoglia",
+    "select": "Seleziona",
+    "choiceNum": "Opzione {{num}}",
+    "seconds": "secondi",
+    "effect": "Effetto",
+    "duration": "Durata"
+  },
+  "preview": {
+    "badge": "Anteprima editor",
+    "title": "Anteprima domanda",
+    "description": "Visualizza in anteprima la domanda e le risposte con elementi visivi.",
+    "interludeTitle": "Anteprima diapositiva intermezzo"
   }
 }

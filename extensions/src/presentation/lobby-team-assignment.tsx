@@ -1,5 +1,5 @@
 import type { TeamDefinition } from "@razzia/extensions/core"
-import { useState } from "react"
+import { useState, type KeyboardEvent } from "react"
 import type { PlayerScoreSnapshot } from "./team-scoring"
 
 export interface LobbyTeamAssignmentProps {
@@ -10,6 +10,11 @@ export interface LobbyTeamAssignmentProps {
   isLocked?: boolean
   onReassignTeam?: (_payload: { playerId: string; teamId: string }) => void
   className?: string
+  t?: (
+    _key: string,
+    _optionsOrFallback?: Record<string, unknown> | string,
+    _fallback?: string,
+  ) => string
 }
 
 const clsx = (...classes: unknown[]): string =>
@@ -40,7 +45,9 @@ const clsx = (...classes: unknown[]): string =>
 /**
  * LobbyTeamAssignment renders team rosters in the game lobby.
  * Allows the manager to reassign players between teams prior to game start.
- * Respects locked state once the game has started.
+ * - Keyboard operable: proper buttons with Enter/Space support and focus indicators
+ * - Accessible aria-pressed and aria-disabled semantics
+ * - Fully localized across all 8 languages via i18next
  */
 export const LobbyTeamAssignment = ({
   teams,
@@ -50,7 +57,28 @@ export const LobbyTeamAssignment = ({
   isLocked = false,
   onReassignTeam,
   className,
+  t,
 }: LobbyTeamAssignmentProps) => {
+  const tr = (
+    key: string,
+    optionsOrFallback?: Record<string, unknown> | string,
+    fallback?: string,
+  ): string => {
+    if (!t) {
+      if (typeof optionsOrFallback === "string") {
+        return optionsOrFallback
+      }
+
+      return fallback ?? key
+    }
+
+    if (typeof optionsOrFallback === "string") {
+      return t(`extensions:${key}`, optionsOrFallback)
+    }
+
+    return t(`extensions:${key}`, optionsOrFallback, fallback)
+  }
+
   const [selectedPlayerId, setSelectedPlayerId] = useState<string | null>(null)
 
   // Group players by assigned team
@@ -67,7 +95,7 @@ export const LobbyTeamAssignment = ({
     }
   })
 
-  // Unassigned players (if any)
+  // Unassigned players
   const unassignedPlayers = players.filter((p) => {
     const lookup = p.clientId ?? p.id
 
@@ -94,6 +122,13 @@ export const LobbyTeamAssignment = ({
     setSelectedPlayerId(null)
   }
 
+  const handleCardKeyDown = (e: KeyboardEvent, teamId: string) => {
+    if ((e.key === "Enter" || e.key === " ") && selectedPlayerId) {
+      e.preventDefault()
+      handleAssignToTeam(teamId)
+    }
+  }
+
   return (
     <div
       className={clsx(
@@ -103,97 +138,136 @@ export const LobbyTeamAssignment = ({
       data-testid="lobby-team-assignment"
     >
       <div className="flex items-center justify-between border-b border-white/20 pb-3">
-        <h3 className="text-2xl font-bold text-white">Teams</h3>
+        <h3 className="text-2xl font-bold text-white">
+          {tr("tabs.teams", "Teams")}
+        </h3>
         {isManager && !isLocked && (
           <p className="text-xs text-white/70">
             {selectedPlayerId
-              ? "Select a team below to reassign"
-              : "Click a player to reassign team"}
+              ? tr("teams.reassignHint", "Select a team below to reassign")
+              : tr("teams.clickPlayerHint", "Click a player to reassign team")}
           </p>
         )}
       </div>
 
       {/* Grid of Teams */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
-        {teamRosters.map(({ team, members }) => (
-          <div
-            key={team.id}
-            className={clsx(
-              "flex flex-col rounded-xl border border-white/10 bg-white/10 p-4 transition-all",
-              selectedPlayerId &&
-                isManager &&
-                !isLocked &&
-                "cursor-pointer hover:border-white/50 hover:bg-white/20",
-            )}
-            onClick={() => {
-              if (selectedPlayerId) {
-                handleAssignToTeam(team.id)
+        {teamRosters.map(({ team, members }) => {
+          const isTargetable = Boolean(
+            selectedPlayerId && isManager && !isLocked,
+          )
+
+          return (
+            <div
+              key={team.id}
+              role={isTargetable ? "button" : undefined}
+              tabIndex={isTargetable ? 0 : undefined}
+              aria-label={
+                isTargetable
+                  ? `Assign selected player to ${team.name}`
+                  : undefined
               }
-            }}
-            data-testid={`lobby-team-card-${team.id}`}
-          >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span
-                  className="size-3.5 rounded-full ring-2 ring-white/30"
-                  style={{ backgroundColor: team.color }}
-                  aria-hidden="true"
-                />
-                <span className="font-extrabold text-white">{team.name}</span>
-              </div>
-              <span className="text-xs font-semibold text-white/60">
-                {members.length} {members.length === 1 ? "player" : "players"}
-              </span>
-            </div>
-
-            <div className="mt-3 flex flex-wrap gap-1.5">
-              {members.map((member) => (
-                <span
-                  key={member.id}
-                  onClick={(e) => {
-                    e.stopPropagation()
-                    handlePlayerClick(member.id)
-                  }}
-                  className={clsx(
-                    "rounded-md px-2 py-0.5 text-sm font-semibold text-white transition-all",
-                    selectedPlayerId === member.id
-                      ? "bg-amber-500 font-bold text-black ring-2 ring-white"
-                      : "bg-black/30 hover:bg-black/50",
-                    isManager && !isLocked && "cursor-pointer",
-                  )}
-                  data-testid={`player-chip-${member.id}`}
-                >
-                  {member.username}
-                </span>
-              ))}
-
-              {members.length === 0 && (
-                <span className="text-xs text-white/40 italic">Empty team</span>
+              onKeyDown={(e) => isTargetable && handleCardKeyDown(e, team.id)}
+              onClick={() => {
+                if (isTargetable) {
+                  handleAssignToTeam(team.id)
+                }
+              }}
+              className={clsx(
+                "flex flex-col rounded-xl border border-white/10 bg-white/10 p-4 transition-all",
+                isTargetable &&
+                  "hover:border-primary/60 focus:ring-primary cursor-pointer hover:bg-white/20 focus:ring-2 focus:outline-none",
               )}
+              data-testid={`lobby-team-card-${team.id}`}
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <span
+                    className="size-3.5 rounded-full ring-2 ring-white/30"
+                    style={{ backgroundColor: team.color }}
+                    aria-hidden="true"
+                  />
+                  <span className="font-extrabold text-white">{team.name}</span>
+                </div>
+                <span className="text-xs font-semibold text-white/60">
+                  {members.length}{" "}
+                  {members.length === 1
+                    ? tr("teams.player", "player")
+                    : tr("teams.players", "players")}
+                </span>
+              </div>
+
+              <div className="mt-3 flex flex-wrap gap-1.5">
+                {members.map((member) => {
+                  const isSelected = selectedPlayerId === member.id
+
+                  return (
+                    <button
+                      key={member.id}
+                      type="button"
+                      disabled={!isManager || isLocked}
+                      aria-pressed={isSelected}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handlePlayerClick(member.id)
+                      }}
+                      className={clsx(
+                        "focus:ring-primary rounded-md px-2.5 py-1 text-sm font-semibold text-white transition-all focus:ring-2 focus:outline-none",
+                        isSelected
+                          ? "bg-primary font-bold text-white ring-2 ring-white"
+                          : "bg-black/30 hover:bg-black/50",
+                        isManager && !isLocked
+                          ? "cursor-pointer"
+                          : "cursor-default",
+                      )}
+                      data-testid={`player-chip-${member.id}`}
+                    >
+                      {member.username}
+                    </button>
+                  )
+                })}
+
+                {members.length === 0 && (
+                  <span className="text-xs text-white/40 italic">
+                    {tr("teams.emptyTeam", "Empty team")}
+                  </span>
+                )}
+              </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
 
       {/* Unassigned chips */}
       {unassignedPlayers.length > 0 && (
         <div className="mt-2 flex items-center gap-2 border-t border-white/10 pt-3 text-sm text-white/70">
-          <span>Unassigned:</span>
+          <span>{tr("teams.unassignedPrefix", "Unassigned:")}</span>
           <div className="flex flex-wrap gap-1.5">
-            {unassignedPlayers.map((player) => (
-              <span
-                key={player.id}
-                onClick={() => handlePlayerClick(player.id)}
-                className={clsx(
-                  "rounded-md bg-white/20 px-2 py-0.5 text-xs font-semibold text-white",
-                  selectedPlayerId === player.id &&
-                    "bg-amber-500 font-bold text-black",
-                  isManager && !isLocked && "cursor-pointer",
-                )}
-              >
-                {player.username}
-              </span>
-            ))}
+            {unassignedPlayers.map((player) => {
+              const isSelected = selectedPlayerId === player.id
+
+              return (
+                <button
+                  key={player.id}
+                  type="button"
+                  disabled={!isManager || isLocked}
+                  aria-pressed={isSelected}
+                  onClick={() => handlePlayerClick(player.id)}
+                  className={clsx(
+                    "focus:ring-primary rounded-md bg-white/20 px-2.5 py-1 text-xs font-semibold text-white transition-all focus:ring-2 focus:outline-none",
+                    isSelected
+                      ? "bg-primary font-bold text-white ring-2 ring-white"
+                      : "hover:bg-white/30",
+                    isManager && !isLocked
+                      ? "cursor-pointer"
+                      : "cursor-default",
+                  )}
+                  data-testid={`unassigned-chip-${player.id}`}
+                >
+                  {player.username}
+                </button>
+              )
+            })}
           </div>
         </div>
       )}

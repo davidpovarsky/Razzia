@@ -14,7 +14,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
   describe("AUDIO01 & AUDIO02: Audio Cues & Ducking", () => {
     it("AUDIO01: resolveAudioCue uses default when no custom extras", () => {
       const cue = resolveAudioCue("start")
-      expect(cue.url).toBe("/sfx/start.mp3")
+      expect(cue.url).toBe("/sounds/boump.mp3")
       expect(cue.enabled).toBe(true)
       expect(cue.volume).toBe(0.8)
       expect(cue.isDefault).toBe(true)

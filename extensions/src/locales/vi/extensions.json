@@ -18,7 +18,18 @@
     "selectQuestions": "Chọn các câu hỏi sẽ hiển thị bảng xếp hạng sau khi có kết quả",
     "manualNotice": "Nút 'Hiện bảng xếp hạng' sẽ xuất hiện ở màn hình kết quả",
     "toggleIndividual": "Cá nhân",
-    "toggleTeams": "Đội thi"
+    "toggleTeams": "Đội thi",
+    "yourTeam": "Đội của bạn",
+    "rank": "Hạng #{{rank}}",
+    "pts": "điểm",
+    "member": "thành viên",
+    "members": "thành viên",
+    "description": "Cấu hình thời điểm hiển thị bảng xếp hạng điểm trong trò chơi trực tiếp.",
+    "modeUpstreamDesc": "Hành vi tiêu chuẩn của Razzia (bỏ qua ở câu hỏi tiếp theo cùng danh mục hoặc câu hỏi cuối).",
+    "modeEveryNDesc": "Hiển thị bảng xếp hạng sau mỗi số lượng câu hỏi đã định.",
+    "modeSelectedDesc": "Chỉ hiển thị bảng xếp hạng sau các mốc câu hỏi đã chọn.",
+    "modeCategoryEndDesc": "Chỉ hiển thị khi đổi danh mục.",
+    "modeManualDesc": "Chỉ hiển thị khi người chủ trì nhấp vào 'Hiển thị bảng xếp hạng' trong phần kết quả."
   },
   "teams": {
     "enableTeams": "Bật chế độ đội thi",
@@ -34,7 +45,13 @@
     "teamStanding": "Bảng xếp hạng đội",
     "teamPoints": "điểm",
     "members": "thành viên",
-    "myTeam": "Đội của bạn"
+    "myTeam": "Đội của bạn",
+    "reassignHint": "Chọn một đội bên dưới để phân công lại",
+    "clickPlayerHint": "Nhấp vào người chơi để phân công lại đội",
+    "emptyTeam": "Đội trống",
+    "unassignedPrefix": "Chưa phân công:",
+    "player": "người chơi",
+    "players": "người chơi"
   },
   "audio": {
     "cuesTitle": "Hiệu ứng âm thanh & Nhạc nền",
@@ -54,7 +71,9 @@
     "loop": "Lặp lại",
     "testPlay": "Phát thử",
     "testStop": "Dừng",
-    "url": "Đường dẫn âm thanh"
+    "url": "Đường dẫn âm thanh",
+    "cuesDesc": "Cấu hình nhạc nền và hiệu ứng âm thanh cho các sự kiện trong trò chơi.",
+    "source": "Nguồn"
   },
   "visuals": {
     "answerVisualTitle": "Hình ảnh câu trả lời",
@@ -78,7 +97,11 @@
     "triggerButton": "Mở hình ảnh",
     "audienceManager": "Chỉ quản trị viên",
     "audienceAll": "Tất cả người chơi",
-    "revealed": "Đã mở hình ảnh"
+    "revealed": "Đã mở hình ảnh",
+    "answerVisualDesc": "Cấu hình hình ảnh và nhãn trợ năng cho từng lựa chọn câu trả lời.",
+    "revealDesc": "Tạo hiệu ứng hé lộ hình ảnh câu hỏi trong khi hiển thị câu hỏi.",
+    "triggerMode": "Kích hoạt",
+    "audience": "Đối tượng xem"
   },
   "interludes": {
     "interludeTitle": "Màn hình chuyển tiếp",
@@ -98,7 +121,9 @@
     "secondsRemaining": "còn {{seconds}}s",
     "awaitingHost": "Đang đợi máy chủ chuyển tiếp",
     "skipped": "Đã bỏ qua",
-    "slideAlt": "Slide nghỉ giữa giờ"
+    "slideAlt": "Slide nghỉ giữa giờ",
+    "interludeDesc": "Hiển thị tiêu đề, trang chiếu đa phương tiện hoặc đếm ngược trước khi chuyển sang câu tiếp theo.",
+    "advanceMode": "Hành vi chuyển tiếp"
   },
   "conflict": {
     "title": "Xung đột phiên bản (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Phiên bản máy chủ",
     "yourRevision": "Phiên bản hiện tại của bạn",
     "reload": "Tải lại từ máy chủ",
-    "overwrite": "Ghi đè bắt buộc"
+    "overwrite": "Ghi đè bắt buộc",
+    "cancel": "Hủy"
   },
   "bundle": {
     "exportEnhanced": "Xuất bộ câu hỏi nâng cao (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Mã câu hỏi không được trùng nhau",
     "orphanQuestionExtra": "Dữ liệu mở rộng tham chiếu tới câu hỏi không tồn tại",
     "orphanLeaderboardQuestionId": "Quy tắc bảng xếp hạng trỏ tới câu hỏi không hợp lệ",
-    "altRequiredForImage": "Bắt buộc có văn bản thay thế cho hình ảnh"
+    "altRequiredForImage": "Bắt buộc có văn bản thay thế cho hình ảnh",
+    "invalidMediaType": "Chỉ cho phép tệp {{expected}} ở đây",
+    "onlyImageAllowed": "Chỉ cho phép tệp hình ảnh cho các lựa chọn câu trả lời",
+    "loadQuizFailed": "Không thể tải lại bài kiểm tra",
+    "loadQuizSuccess": "Đã tải bài kiểm tra mới nhất từ máy chủ"
   },
   "host": {
     "endTimer": "Dừng thời gian",
@@ -150,5 +180,21 @@
     "incorrect": "Không chính xác",
     "answered": "đã trả lời",
     "answeredRatio": "{{responders}} / {{eligible}} đã trả lời"
+  },
+  "editor": {
+    "toggle": "Tiện ích mở rộng bài kiểm tra",
+    "toggleClose": "Đóng tiện ích mở rộng",
+    "browse": "Duyệt",
+    "select": "Chọn",
+    "choiceNum": "Lựa chọn {{num}}",
+    "seconds": "giây",
+    "effect": "Hiệu ứng",
+    "duration": "Thời lượng"
+  },
+  "preview": {
+    "badge": "Xem trước trình chỉnh sửa",
+    "title": "Xem trước câu hỏi",
+    "description": "Xem trước cách câu hỏi và câu trả lời hiển thị kèm hình ảnh.",
+    "interludeTitle": "Xem trước trang chiếu chuyển tiếp"
   }
 }

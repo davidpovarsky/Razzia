@@ -10,15 +10,15 @@ import { useEffect, useRef } from "react"
  * In a web browser environment, these map to standard upstream sound assets or silent fallbacks.
  */
 export const DEFAULT_CUE_URLS: Record<CueId, string> = {
-  start: "/sfx/start.mp3",
-  showQuestion: "/sfx/show-question.mp3",
-  answersMusic: "/sfx/answers-music.mp3",
-  answerPressed: "/sfx/answer-pressed.mp3",
-  revealResults: "/sfx/reveal-results.mp3",
-  leaderboard: "/sfx/leaderboard.mp3",
-  podium1: "/sfx/podium1.mp3",
-  podium2: "/sfx/podium2.mp3",
-  podium3: "/sfx/podium3.mp3",
+  start: "/sounds/boump.mp3",
+  showQuestion: "/sounds/show.mp3",
+  answersMusic: "/sounds/answersMusic.mp3",
+  answerPressed: "/sounds/answersSound.mp3",
+  revealResults: "/sounds/results.mp3",
+  leaderboard: "/sounds/snearRoll.mp3",
+  podium1: "/sounds/first.mp3",
+  podium2: "/sounds/second.mp3",
+  podium3: "/sounds/three.mp3",
 }
 
 /**

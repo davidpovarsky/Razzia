@@ -18,7 +18,18 @@
     "selectQuestions": "Sélectionner les questions suivies d'un classement",
     "manualNotice": "Un bouton 'Afficher le classement' apparaîtra lors des résultats",
     "toggleIndividual": "Individuel",
-    "toggleTeams": "Équipes"
+    "toggleTeams": "Équipes",
+    "yourTeam": "Votre équipe",
+    "rank": "Rang n°{{rank}}",
+    "pts": "pts",
+    "member": "membre",
+    "members": "membres",
+    "description": "Configurez quand le classement des scores s'affiche pendant la partie.",
+    "modeUpstreamDesc": "Comportement Razzia standard (passe si la suivante est de même catégorie ou finale).",
+    "modeEveryNDesc": "Afficher le classement toutes les N questions définies.",
+    "modeSelectedDesc": "Afficher le classement uniquement après les questions sélectionnées.",
+    "modeCategoryEndDesc": "Afficher uniquement lors d'un changement de catégorie.",
+    "modeManualDesc": "Afficher uniquement si l'hôte clique sur 'Afficher le classement'."
   },
   "teams": {
     "enableTeams": "Activer le mode équipe",
@@ -34,7 +45,13 @@
     "teamStanding": "Classement des équipes",
     "teamPoints": "pts",
     "members": "membres",
-    "myTeam": "Votre équipe"
+    "myTeam": "Votre équipe",
+    "reassignHint": "Sélectionnez une équipe ci-dessous pour réassigner",
+    "clickPlayerHint": "Cliquez sur un joueur pour réassigner l'équipe",
+    "emptyTeam": "Équipe vide",
+    "unassignedPrefix": "Non assigné :",
+    "player": "joueur",
+    "players": "joueurs"
   },
   "audio": {
     "cuesTitle": "Effets sonores et musique",
@@ -54,7 +71,9 @@
     "loop": "Boucler la musique",
     "testPlay": "Lire",
     "testStop": "Arrêter",
-    "url": "URL du média"
+    "url": "URL du média",
+    "cuesDesc": "Configurez la musique de fond et les effets sonores des événements.",
+    "source": "Source"
   },
   "visuals": {
     "answerVisualTitle": "Visuels des réponses",
@@ -78,7 +97,11 @@
     "triggerButton": "Révéler l'image",
     "audienceManager": "Animateur uniquement",
     "audienceAll": "Tous les participants",
-    "revealed": "Image révélée"
+    "revealed": "Image révélée",
+    "answerVisualDesc": "Configurez les images et les libellés d'accessibilité pour les choix de réponse.",
+    "revealDesc": "Animez la révélation de l'image de la question lors de la présentation.",
+    "triggerMode": "Déclenchement",
+    "audience": "Audience"
   },
   "interludes": {
     "interludeTitle": "Diapositive d'intermède",
@@ -98,7 +121,9 @@
     "secondsRemaining": "{{seconds}}s restantes",
     "awaitingHost": "En attente de l'hôte pour continuer",
     "skipped": "Ignoré",
-    "slideAlt": "Diapositive d'intermède"
+    "slideAlt": "Diapositive d'intermède",
+    "interludeDesc": "Présentez un titre, une diapositive média ou un compte à rebours avant la question suivante.",
+    "advanceMode": "Comportement d'avancement"
   },
   "conflict": {
     "title": "Conflit de révision (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Révision serveur",
     "yourRevision": "Votre révision",
     "reload": "Recharger la version serveur",
-    "overwrite": "Écraser la version serveur"
+    "overwrite": "Écraser la version serveur",
+    "cancel": "Annuler"
   },
   "bundle": {
     "exportEnhanced": "Exporter le quiz enrichi (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Les identifiants de questions doivent être uniques",
     "orphanQuestionExtra": "Métadonnées associées à une question inexistante",
     "orphanLeaderboardQuestionId": "Règle de classement associée à une question inexistante",
-    "altRequiredForImage": "Un texte alternatif est obligatoire pour les images"
+    "altRequiredForImage": "Un texte alternatif est obligatoire pour les images",
+    "invalidMediaType": "Seuls les fichiers {{expected}} sont autorisés ici",
+    "onlyImageAllowed": "Seules les images sont autorisées pour les choix de réponse",
+    "loadQuizFailed": "Échec du rechargement du quiz",
+    "loadQuizSuccess": "Dernière version du quiz chargée depuis le serveur"
   },
   "host": {
     "endTimer": "Arrêter le chronomètre",
@@ -150,5 +180,21 @@
     "incorrect": "Incorrect",
     "answered": "ont répondu",
     "answeredRatio": "{{responders}} / {{eligible}} ont répondu"
+  },
+  "editor": {
+    "toggle": "Améliorations du quiz",
+    "toggleClose": "Fermer les améliorations",
+    "browse": "Parcourir",
+    "select": "Sélectionner",
+    "choiceNum": "Choix {{num}}",
+    "seconds": "secondes",
+    "effect": "Effet",
+    "duration": "Durée"
+  },
+  "preview": {
+    "badge": "Aperçu de l'éditeur",
+    "title": "Aperçu de la question",
+    "description": "Prévisualisez la question et les réponses avec leurs visuels.",
+    "interludeTitle": "Aperçu de la diapositive d'intermède"
   }
 }

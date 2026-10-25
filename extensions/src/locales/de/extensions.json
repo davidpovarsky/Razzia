@@ -18,7 +18,18 @@
     "selectQuestions": "Wählen Sie Fragen mit nachfolgender Bestenliste",
     "manualNotice": "Bei den Ergebnissen erscheint eine Schaltfläche",
     "toggleIndividual": "Einzeln",
-    "toggleTeams": "Teams"
+    "toggleTeams": "Teams",
+    "yourTeam": "Ihr Team",
+    "rank": "Rang #{{rank}}",
+    "pts": "Pkt.",
+    "member": "Mitglied",
+    "members": "Mitglieder",
+    "description": "Legen Sie fest, wann die Bestenliste während des Spiels angezeigt wird.",
+    "modeUpstreamDesc": "Standardverhalten von Razzia (überspringen bei gleicher Kategorie oder letzter Frage).",
+    "modeEveryNDesc": "Bestenliste alle festgelegten Fragen anzeigen.",
+    "modeSelectedDesc": "Bestenliste nur nach ausgewählten Fragen anzeigen.",
+    "modeCategoryEndDesc": "Nur bei Kategoriewechsel anzeigen.",
+    "modeManualDesc": "Nur anzeigen, wenn der Spielleiter während der Ergebnisse darauf klickt."
   },
   "teams": {
     "enableTeams": "Team-Modus aktivieren",
@@ -34,7 +45,13 @@
     "teamStanding": "Team-Rangliste",
     "teamPoints": "Pkt",
     "members": "Mitglieder",
-    "myTeam": "Dein Team"
+    "myTeam": "Dein Team",
+    "reassignHint": "Wählen Sie unten ein Team zur Neuzuweisung",
+    "clickPlayerHint": "Klicken Sie auf einen Spieler, um das Team neu zuzuweisen",
+    "emptyTeam": "Leeres Team",
+    "unassignedPrefix": "Nicht zugewiesen:",
+    "player": "Spieler",
+    "players": "Spieler"
   },
   "audio": {
     "cuesTitle": "Soundeffekte & Musik",
@@ -54,7 +71,9 @@
     "loop": "Schleife",
     "testPlay": "Abspielen",
     "testStop": "Stopp",
-    "url": "Medien-URL"
+    "url": "Medien-URL",
+    "cuesDesc": "Hintergrundmusik und Soundeffekte für Spielereignisse konfigurieren.",
+    "source": "Quelle"
   },
   "visuals": {
     "answerVisualTitle": "Antwort-Bilder",
@@ -78,7 +97,11 @@
     "triggerButton": "Bild enthüllen",
     "audienceManager": "Nur Spielleiter",
     "audienceAll": "Alle Teilnehmer",
-    "revealed": "Bild enthüllt"
+    "revealed": "Bild enthüllt",
+    "answerVisualDesc": "Bilder und Barrierefreiheitsbeschriftungen für Antwortoptionen konfigurieren.",
+    "revealDesc": "Animierte Aufdeckung des Fragenbildes während der Fragenanzeige.",
+    "triggerMode": "Auslöser",
+    "audience": "Zielgruppe"
   },
   "interludes": {
     "interludeTitle": "Zwischenspiel",
@@ -98,7 +121,9 @@
     "secondsRemaining": "noch {{seconds}}s",
     "awaitingHost": "Warte auf Spielleiter",
     "skipped": "Übersprungen",
-    "slideAlt": "Zwischenspiel-Folie"
+    "slideAlt": "Zwischenspiel-Folie",
+    "interludeDesc": "Präsentieren Sie einen Titel, eine Folie oder einen Countdown vor der nächsten Frage.",
+    "advanceMode": "Weiterleitungsverhalten"
   },
   "conflict": {
     "title": "Versionskonflikt (HTTP 409)",
@@ -106,7 +131,8 @@
     "serverRevision": "Server-Version",
     "yourRevision": "Ihre Arbeitsversion",
     "reload": "Server-Version laden",
-    "overwrite": "Erzwingen & Überschreiben"
+    "overwrite": "Erzwingen & Überschreiben",
+    "cancel": "Abbrechen"
   },
   "bundle": {
     "exportEnhanced": "Erweitertes Quiz exportieren (.bundle.json)",
@@ -123,7 +149,11 @@
     "duplicateQuestionIds": "Fragen-IDs müssen eindeutig sein",
     "orphanQuestionExtra": "Metadaten verweisen auf nicht vorhandene Frage",
     "orphanLeaderboardQuestionId": "Bestenlisten-Regel verweist auf ungültige Frage",
-    "altRequiredForImage": "Alt-Text ist für Bildantworten erforderlich"
+    "altRequiredForImage": "Alt-Text ist für Bildantworten erforderlich",
+    "invalidMediaType": "Hier sind nur {{expected}}-Dateien erlaubt",
+    "onlyImageAllowed": "Für Antwortoptionen sind nur Bilddateien erlaubt",
+    "loadQuizFailed": "Quiz konnte nicht neu geladen werden",
+    "loadQuizSuccess": "Neueste Quizversion vom Server geladen"
   },
   "host": {
     "endTimer": "Timer beenden",
@@ -150,5 +180,21 @@
     "incorrect": "Falsch",
     "answered": "geantwortet",
     "answeredRatio": "{{responders}} / {{eligible}} geantwortet"
+  },
+  "editor": {
+    "toggle": "Quiz-Erweiterungen",
+    "toggleClose": "Erweiterungen schließen",
+    "browse": "Durchsuchen",
+    "select": "Auswählen",
+    "choiceNum": "Option {{num}}",
+    "seconds": "Sekunden",
+    "effect": "Effekt",
+    "duration": "Dauer"
+  },
+  "preview": {
+    "badge": "Editor-Vorschau",
+    "title": "Fragen-Vorschau",
+    "description": "Vorschau der Frage und Antworten mit visuellen Elementen.",
+    "interludeTitle": "Vorschau der Zwischenfolie"
   }
 }
