@@ -1,6 +1,11 @@
 import { EVENTS, MEDIA_TYPES, NO_TIME_LIMIT } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+  type QuestionReveal,
+} from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import {
@@ -41,8 +46,14 @@ const Answers = ({
 
   const [cooldown, setCooldown] = useState(time)
   const [totalAnswer, setTotalAnswer] = useState(0)
+  const [extensionState, setExtensionState] =
+    useState<ExtensionStateEnvelope | null>(null)
   const { t } = useTranslation()
   const { width } = useScreenSize()
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    setExtensionState(payload)
+  })
 
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
   const isPopupMedia = popupMedia.includes(media?.type)
@@ -145,7 +156,22 @@ const Answers = ({
               )}
             </QuestionDialog>
           ) : (
-            <QuestionMedia media={media} alt={question} />
+            <QuestionMedia
+              media={media}
+              alt={question}
+              reveal={
+                extensionState?.extras.reveal as QuestionReveal | undefined
+              }
+              serverStartedAt={extensionState?.startedAt}
+              currentEpoch={extensionState?.epoch}
+              isManager={!player}
+              isManuallyRevealed={
+                (
+                  extensionState?.extras.reveal as
+                    { isRevealed?: boolean } | undefined
+                )?.isRevealed
+              }
+            />
           )}
         </div>
       )}

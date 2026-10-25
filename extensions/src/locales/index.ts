@@ -1,11 +1,11 @@
-import deExtensions from "./de/extensions.json"
-import enExtensions from "./en/extensions.json"
-import esExtensions from "./es/extensions.json"
-import frExtensions from "./fr/extensions.json"
-import itExtensions from "./it/extensions.json"
-import jaExtensions from "./ja/extensions.json"
-import trExtensions from "./tr/extensions.json"
-import viExtensions from "./vi/extensions.json"
+import deExtensions from "./de/extensions.json" with { type: "json" }
+import enExtensions from "./en/extensions.json" with { type: "json" }
+import esExtensions from "./es/extensions.json" with { type: "json" }
+import frExtensions from "./fr/extensions.json" with { type: "json" }
+import itExtensions from "./it/extensions.json" with { type: "json" }
+import jaExtensions from "./ja/extensions.json" with { type: "json" }
+import trExtensions from "./tr/extensions.json" with { type: "json" }
+import viExtensions from "./vi/extensions.json" with { type: "json" }
 
 export const EXTENSION_LOCALES = {
   de: deExtensions,

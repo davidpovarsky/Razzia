@@ -10,4 +10,6 @@ export * from "./storage/service"
 
 export * from "./storage/sidecar"
 
+export * from "./real-transport"
+
 export type { PlayerScoreInfo } from "../gameplay/index"

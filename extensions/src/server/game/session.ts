@@ -145,6 +145,7 @@ export class ExtensionGameSession {
     if (this.extras?.teams.enabled) {
       extrasPayload.teamScores = this.getTeamScores(players)
       extrasPayload.teams = {
+        enabled: true,
         teams: this.extras.teams.teams,
         assignments: Object.fromEntries(this.teamAssignments),
       }

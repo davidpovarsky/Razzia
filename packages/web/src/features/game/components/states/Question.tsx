@@ -1,7 +1,13 @@
-import { MEDIA_TYPES } from "@razzia/common/constants"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+  type QuestionReveal,
+} from "@razzia/extensions/core"
+import QuestionMedia from "@razzia/web/components/QuestionMedia"
+import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
 import { SFX } from "@razzia/web/features/game/utils/constants"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import useSound from "use-sound"
 
 interface Props {
@@ -10,6 +16,12 @@ interface Props {
 
 const Question = ({ data: { question, media, cooldown } }: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
+  const [extensionState, setExtensionState] =
+    useState<ExtensionStateEnvelope | null>(null)
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    setExtensionState(payload)
+  })
 
   useEffect(() => {
     sfxShow()
@@ -22,11 +34,20 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
           {question}
         </h2>
 
-        {media?.type === MEDIA_TYPES.IMAGE && (
-          <img
+        {media && (
+          <QuestionMedia
+            media={media}
             alt={question}
-            src={media.url}
-            className="max-h-60 w-auto rounded-md sm:max-h-100"
+            reveal={extensionState?.extras.reveal as QuestionReveal | undefined}
+            serverStartedAt={extensionState?.startedAt}
+            currentEpoch={extensionState?.epoch}
+            isManager={true}
+            isManuallyRevealed={
+              (
+                extensionState?.extras.reveal as
+                  { isRevealed?: boolean } | undefined
+              )?.isRevealed
+            }
           />
         )}
       </div>

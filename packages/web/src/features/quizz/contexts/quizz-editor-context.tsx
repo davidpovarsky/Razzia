@@ -117,7 +117,9 @@ export const QuizzEditorProvider = ({
       return
     }
 
-    const client = new CompositeApiClient()
+    const client = new CompositeApiClient({
+      getAuthToken: () => localStorage.getItem("token"),
+    })
     client
       .getQuizComposite(initialData.id)
       .then((res) => {

@@ -7,6 +7,16 @@ import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, joinGame } from "@razzia/e2e/utils/player"
 import { createDefaultQuizExtras } from "@razzia/extensions/core"
+import {
+  EXTENSION_LOCALES,
+  type SupportedExtensionLanguage,
+} from "@razzia/extensions/locales"
+import { RealRazziaTransport } from "@razzia/extensions/server"
+import {
+  KeypadSimulatorCore,
+  MockProvider,
+  TelephonyBridge,
+} from "@razzia/extensions/telephony"
 import type { Page } from "@playwright/test"
 
 const ARTIFACT_DIR =
@@ -214,8 +224,12 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           question: "Which planet is known as the Red Planet?",
           answers: ["Mars", "Venus", "Jupiter", "Saturn"],
           solutions: [0],
+          media: {
+            type: "image",
+            url: "/media/blue-sky.png",
+          },
           cooldown: 3,
-          time: 20,
+          time: 60,
         },
         {
           type: "single",
@@ -223,7 +237,7 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
           answers: ["20", "30", "40", "50"],
           solutions: [0],
           cooldown: 3,
-          time: 20,
+          time: 60,
         },
       ],
     })
@@ -233,6 +247,10 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     const qIds = [crypto.randomUUID(), crypto.randomUUID()]
     const extras = createDefaultQuizExtras(quizzId, qIds, "a".repeat(64))
+    extras.leaderboard = {
+      mode: "everyN",
+      everyN: 1,
+    }
     extras.teams = {
       enabled: true,
       autoAssign: "roundRobin",
@@ -240,6 +258,24 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
         { id: "team-alpha", name: "Alpha Falcons", color: "#3b82f6" },
         { id: "team-bravo", name: "Bravo Lions", color: "#ef4444" },
       ],
+    }
+    extras.perQuestion = {
+      [qIds[0]]: {
+        reveal: {
+          effect: "blur",
+          durationMs: 1500,
+          trigger: "automatic",
+          audience: "all",
+        },
+        answerVisuals: [
+          {
+            answerIndex: 0,
+            display: "both",
+            url: "/media/blue-sky.png",
+            alt: "Clear blue sky",
+          },
+        ],
+      },
     }
 
     fs.writeFileSync(
@@ -254,42 +290,75 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     // 3. Join Web Player 1 (Alice)
     const player1 = await newPage()
     await joinGame(player1, pin, "Alice")
-    await expect(manager.getByText("Alice")).toBeVisible()
+    await expect(manager.getByText("Alice").first()).toBeVisible()
 
     // 4. Join Web Player 2 (Bob)
     const player2 = await newPage()
     await joinGame(player2, pin, "Bob")
-    await expect(manager.getByText("Bob")).toBeVisible()
+    await expect(manager.getByText("Bob").first()).toBeVisible()
 
-    // 5. Join Simulated Phone Player via real HTTP session + join ticket
-    const sessRes = await fetch("http://localhost:3001/api/auth/session", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({}),
+    // 5. Connect Real Telephone Player via RealRazziaTransport + TelephonyBridge
+    const realTransport = new RealRazziaTransport()
+    const mockProvider = new MockProvider({
+      secret: "e2e-secret-that-is-at-least-32-characters",
     })
-    const { token } = (await sessRes.json()) as { token: string }
-
-    const joinRes = await fetch("http://localhost:3001/api/games/join", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ inviteCode: pin, username: "Phone 001" }),
+    const bridge = new TelephonyBridge({
+      transport: realTransport,
+      provider: mockProvider,
+      baseUrl: "http://localhost:3001",
     })
-    expect(joinRes.ok).toBe(true)
+    const sim = new KeypadSimulatorCore(bridge, { callId: "browser_phone_001" })
+    await sim.startCall("07700900101")
+    const joinDirective = await sim.enterDigits(pin)
+    expect(joinDirective.message).toContain("Connected as Phone")
+    expect(bridge.getActiveSessionsCount()).toBe(1)
 
-    // Verify manager room view with players
+    // Verify Lobby Team Assignment and Player badges
+    await expect(
+      manager.locator('[data-testid="lobby-team-assignment"]'),
+    ).toBeVisible()
+    await expect(
+      manager.locator('[data-testid="lobby-team-card-team-alpha"]'),
+    ).toBeVisible()
+    await expect(
+      manager.locator('[data-testid="lobby-team-card-team-bravo"]'),
+    ).toBeVisible()
+    await expect(manager.getByText(/Phone/u).first()).toBeVisible()
+    await expect(
+      manager.locator('[data-testid="lobby-team-card-team-alpha"]'),
+    ).toContainText("Alpha Falcons")
+    await expect(
+      manager.locator('[data-testid="lobby-team-card-team-bravo"]'),
+    ).toContainText("Bravo Lions")
+
     await saveScreenshots(manager, "gate3-lobby-players-teams.png")
 
     // 6. Start the Game
     await startGame(manager)
 
-    // 7. Player 1 answers
+    // 7. Verify Question 1 Reveal Media
+    const revealContainer = manager.locator(
+      '[data-testid="reveal-media-container"]',
+    )
+    await expect(revealContainer).toBeVisible()
+    expect(await revealContainer.getAttribute("data-effect")).toBe("blur")
+    const revealImg = manager.locator('[data-testid="reveal-media-image"]')
+    await expect(revealImg).toBeVisible()
+    await expect(revealContainer).toHaveAttribute("data-revealed", "true", {
+      timeout: 10000,
+    })
+
+    // 8. Phone player answers correctly via DTMF '1' ("Mars")
+    const dtmfDirective = await sim.pressKey("1")
+    expect(dtmfDirective.message).toContain("submitted")
+
+    // 9. Player 1 (Alice) answers correctly ("Mars")
     await answer(player1, "Mars")
     await expect(player1.getByText(t("game:correct"))).toBeVisible()
+    const player1Score = player1.locator("div.rounded-lg.bg-gray-800")
+    await expect(player1Score).not.toHaveText("0")
 
-    // 8. Player 2 reconnect test (simulates connection drop & rejoin)
+    // 10. Player 2 reconnect test (simulates connection drop & rejoin)
     await player2.reload()
     expect(
       player2
@@ -297,9 +366,28 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
         .or(player2.getByRole("button", { name: /^A /u })),
     ).toBeDefined()
 
-    // 9. Advance to next question / leaderboard
+    // 11. Advance to Leaderboard
     await next(manager)
+    const teamLeaderboard = manager.locator(
+      '[data-testid="team-leaderboard-panel"]',
+    )
+    await expect(teamLeaderboard).toBeVisible()
+    await expect(
+      manager.locator('[data-testid="team-score-row-team-alpha"]'),
+    ).toBeVisible()
+    await expect(
+      manager.locator('[data-testid="team-score-row-team-bravo"]'),
+    ).toBeVisible()
     await saveScreenshots(manager, "gate3-gameplay-reveal-leaderboard.png")
+
+    // 12. Advance to Question 2
+    await next(manager)
+    await expect(manager.getByText("2 / 2")).toBeVisible()
+    await expect(player1.getByText("2 / 2")).toBeVisible()
+
+    // Clean up telephone call
+    await sim.hangup()
+    expect(bridge.getActiveSessionsCount()).toBe(0)
   })
 
   test("Scenario 3: Backwards Compatibility & 8 Locales Verification", async ({
@@ -309,19 +397,100 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const vanillaPin = await createGame(page, BASIC_QUIZZ)
     expect(vanillaPin).toMatch(/^\d{6}$/u)
 
+    // Seed a quiz to test editor localization
+    const locSubject = `Localized Quiz ${Date.now()}`
+    const locQuizzId = locSubject.toLowerCase().replace(/\W+/gu, "-")
+    seedQuizz(locSubject, {
+      questions: [
+        {
+          type: "single",
+          question: "Translation test question",
+          answers: ["One", "Two"],
+          solutions: [0],
+          cooldown: 3,
+          time: 15,
+        },
+      ],
+    })
+
     // 2. Verify all 8 locales render without missing keys or crashes
-    const locales = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]
+    const locales: SupportedExtensionLanguage[] = [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "ja",
+      "tr",
+      "vi",
+    ]
 
     /* oxlint-disable eslint/no-await-in-loop */
     for (const loc of locales) {
+      // Check landing page
       await page.goto(`/?lng=${loc}`)
       await expect(page.locator("body")).toBeVisible()
 
-      // Verify no untranslated raw keys (e.g. 'errors:...' or 'quizz:...' as raw strings)
       const bodyText = (await page.locator("body").textContent()) ?? ""
       expect(bodyText).not.toContain("errors:")
       expect(bodyText).not.toContain("quizz:")
       expect(bodyText).not.toContain("common:")
+      expect(bodyText).not.toContain("extensions:")
+
+      // Open quiz editor in this locale directly
+      await page.goto(`/manager/quizz/${locQuizzId}?lng=${loc}`)
+      await expect(page).toHaveURL(
+        new RegExp(`/manager/quizz/${locQuizzId}`, "u"),
+      )
+
+      // Open enhancements panel
+      const toggleBtn = page.locator(
+        '[data-testid="toggle-enhancements-button"]',
+      )
+      await expect(toggleBtn).toBeVisible()
+      await toggleBtn.click({ force: true })
+
+      const enhancementPanel = page.locator(
+        '[data-testid="editor-enhancement-panel"]',
+      )
+      await expect(enhancementPanel).toBeVisible()
+
+      // Verify localized tab labels
+      const locData = EXTENSION_LOCALES[loc]
+      await expect(page.locator('[data-testid="tab-visuals"]')).toContainText(
+        locData.tabs.visuals,
+      )
+      await expect(page.locator('[data-testid="tab-interlude"]')).toContainText(
+        locData.tabs.interludes,
+      )
+      await expect(
+        page.locator('[data-testid="tab-leaderboard"]'),
+      ).toContainText(locData.tabs.leaderboard)
+      await expect(page.locator('[data-testid="tab-teams"]')).toContainText(
+        locData.tabs.teams,
+      )
+      await expect(page.locator('[data-testid="tab-audio"]')).toContainText(
+        locData.tabs.audio,
+      )
+
+      // Click Teams tab and verify localized elements
+      await page.locator('[data-testid="tab-teams"]').click()
+      await expect(page.locator('[data-testid="panel-teams"]')).toBeVisible()
+      await expect(page.locator('[data-testid="panel-teams"]')).toContainText(
+        locData.teams.enableTeams,
+      )
+
+      // Click Audio tab and verify localized elements
+      await page.locator('[data-testid="tab-audio"]').click()
+      await expect(page.locator('[data-testid="panel-audio"]')).toBeVisible()
+      await expect(page.locator('[data-testid="panel-audio"]')).toContainText(
+        locData.audio.cuesTitle,
+      )
+
+      // Verify no untranslated keys exist in panel
+      const panelContent = (await enhancementPanel.textContent()) ?? ""
+      expect(panelContent).not.toContain("extensions:")
+      expect(panelContent).not.toContain("errors:")
     }
     /* oxlint-enable eslint/no-await-in-loop */
 

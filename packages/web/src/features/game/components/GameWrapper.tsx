@@ -67,7 +67,7 @@ const GameWrapper = ({
   } | null>(null)
   const [extensionState, setExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
-  const { socket } = useSocket()
+  const { socket, clientId } = useSocket()
   const next = statusName ? MANAGER_SKIP_BTN[statusName] : null
   const isDisabled = skippedStatus !== null && skippedStatus === status
 
@@ -261,6 +261,9 @@ const GameWrapper = ({
                         }
                       | undefined
                     const assignedTeamId =
+                      (clientId
+                        ? teamsData?.assignments?.[clientId]
+                        : undefined) ??
                       teamsData?.assignments?.[
                         (player as { id?: string } | null)?.id ??
                           player?.username ??

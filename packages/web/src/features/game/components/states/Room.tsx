@@ -25,14 +25,19 @@ interface Props {
 }
 
 const Room = ({ data: { text, inviteCode } }: Props) => {
-  const { gameId, players, locked } = useManagerStore()
+  const {
+    gameId,
+    players,
+    locked,
+    extensionState: storeExtensionState,
+  } = useManagerStore()
   const { socket } = useSocket()
   const webUrl = window.location.origin
   const [playerList, setPlayerList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
   const [extensionState, setExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
+    useState<ExtensionStateEnvelope | null>(storeExtensionState)
   const qrContentRef = useRef<HTMLDivElement>(null)
   const { t } = useTranslation()
 
@@ -190,16 +195,17 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
         {t(text)}
       </h2>
 
-      {teamsData?.enabled && teamsData.teams && (
-        <LobbyTeamAssignment
-          teams={teamsData.teams}
-          players={playerList}
-          teamAssignments={teamsData.assignments ?? {}}
-          isManager={true}
-          isLocked={locked}
-          onReassignTeam={handleReassignTeam}
-        />
-      )}
+      {(teamsData?.enabled ?? Boolean(teamsData?.teams)) &&
+        teamsData?.teams && (
+          <LobbyTeamAssignment
+            teams={teamsData.teams}
+            players={playerList}
+            teamAssignments={teamsData.assignments ?? {}}
+            isManager={true}
+            isLocked={locked}
+            onReassignTeam={handleReassignTeam}
+          />
+        )}
 
       <div className="flex flex-wrap gap-3">
         {playerList.map((player) => (

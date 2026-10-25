@@ -7,6 +7,7 @@ export interface ConflictModalProps {
   onReload: () => void
   onOverwrite: () => void
   onCancel: () => void
+  t?: (_key: string, _fallback?: string) => string
 }
 
 /**
@@ -21,7 +22,11 @@ export const ConflictModal = ({
   onReload,
   onOverwrite,
   onCancel,
+  t,
 }: ConflictModalProps) => {
+  const tr = (key: string, fallback: string): string =>
+    t ? t(`extensions:${key}`, fallback) : fallback
+
   if (!open) {
     return null
   }
@@ -45,10 +50,13 @@ export const ConflictModal = ({
               className="text-xl font-bold"
               data-testid="conflict-title"
             >
-              Revision Conflict (HTTP 409)
+              {tr("conflict.title", "Revision Conflict (HTTP 409)")}
             </h2>
             <p className="text-sm text-neutral-500 dark:text-neutral-400">
-              Another session modified this quiz while you were editing.
+              {tr(
+                "conflict.description",
+                "Another session modified this quiz while you were editing.",
+              )}
             </p>
           </div>
         </div>
@@ -56,7 +64,7 @@ export const ConflictModal = ({
         <div className="my-5 rounded-xl bg-neutral-100 p-4 text-sm dark:bg-neutral-800/60">
           <div className="flex justify-between py-1">
             <span className="text-neutral-600 dark:text-neutral-400">
-              Your working revision:
+              {tr("conflict.yourRevision", "Your working revision:")}
             </span>
             <span className="font-mono font-bold">
               {expectedRevision ?? "Unversioned"}
@@ -64,7 +72,7 @@ export const ConflictModal = ({
           </div>
           <div className="flex justify-between border-t border-neutral-200 py-1 dark:border-neutral-700">
             <span className="text-neutral-600 dark:text-neutral-400">
-              Server current revision:
+              {tr("conflict.serverRevision", "Latest server revision:")}
             </span>
             <span className="font-mono font-bold text-amber-600 dark:text-amber-400">
               {serverRevision ?? "Unknown (Higher)"}
@@ -88,7 +96,7 @@ export const ConflictModal = ({
             data-testid="conflict-reload-button"
           >
             <RefreshCw className="size-4" />
-            Reload Latest Version
+            {tr("conflict.reload", "Reload Latest Version")}
           </button>
 
           <button
@@ -98,7 +106,7 @@ export const ConflictModal = ({
             data-testid="conflict-overwrite-button"
           >
             <Save className="size-4" />
-            Overwrite Server Copy
+            {tr("conflict.overwrite", "Overwrite Server Copy")}
           </button>
         </div>
       </div>

@@ -7,6 +7,7 @@ import {
 import { TeamLeaderboardPanel } from "@razzia/extensions/presentation"
 import Fire from "@razzia/web/features/game/components/icons/Fire"
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
+import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { AnimatePresence, motion, useSpring, useTransform } from "motion/react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -59,8 +60,9 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
   const [displayedLeaderboard, setDisplayedLeaderboard] =
     useState(oldLeaderboard)
   const [isAnimating, setIsAnimating] = useState(false)
+  const { extensionState: storeExtensionState } = useManagerStore()
   const [extensionState, setExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
+    useState<ExtensionStateEnvelope | null>(storeExtensionState)
   const { t } = useTranslation()
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {

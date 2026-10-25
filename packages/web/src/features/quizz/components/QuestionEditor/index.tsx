@@ -14,8 +14,10 @@ import QuestionEditorTitle from "@razzia/web/features/quizz/components/QuestionE
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { Sparkles } from "lucide-react"
 import { useState } from "react"
+import { useTranslation } from "react-i18next"
 
 const QuestionEditor = () => {
+  const { t } = useTranslation()
   const {
     currentQuestion,
     currentQuestionId,
@@ -79,6 +81,9 @@ const QuestionEditor = () => {
               onOpenMediaPicker={() => {
                 setMediaPickerOpen(true)
               }}
+              t={(key: string, fallback?: string) =>
+                t(key, { defaultValue: fallback })
+              }
             />
           </div>
         )}

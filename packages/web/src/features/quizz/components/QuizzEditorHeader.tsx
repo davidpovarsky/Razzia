@@ -242,6 +242,9 @@ const QuizzEditorHeader = () => {
         onReload={handleReloadConflict}
         onOverwrite={handleForceOverwriteConflict}
         onCancel={() => setConflict(null)}
+        t={(key: string, fallback?: string) =>
+          t(key, { defaultValue: fallback })
+        }
       />
     </header>
   )

@@ -39,6 +39,7 @@ export interface EditorEnhancementPanelProps {
   onChange: (_updated: QuizExtrasV1) => void
   onOpenMediaPicker?: (_onSelect: (_url: string) => void) => void
   className?: string
+  t?: (_key: string, _fallback?: string) => string
 }
 
 type EditorTab =
@@ -102,7 +103,11 @@ export const EditorEnhancementPanel = ({
   onChange,
   onOpenMediaPicker,
   className,
+  t,
 }: EditorEnhancementPanelProps) => {
+  const tr = (key: string, fallback: string): string =>
+    t ? t(`extensions:${key}`, fallback) : fallback
+
   const [activeTab, setActiveTab] = useState<EditorTab>("visuals")
   const [testingCue, setTestingCue] = useState<CueId | null>(null)
 
@@ -171,7 +176,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-visuals"
         >
           <Image className="size-4" />
-          Visuals & Reveal
+          {tr("tabs.visuals", "Visuals & Reveal")}
         </button>
 
         <button
@@ -186,7 +191,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-interlude"
         >
           <Video className="size-4" />
-          Interludes
+          {tr("tabs.interludes", "Interludes")}
         </button>
 
         <button
@@ -201,7 +206,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-leaderboard"
         >
           <Trophy className="size-4" />
-          Leaderboard Policy
+          {tr("tabs.leaderboard", "Leaderboard Policy")}
         </button>
 
         <button
@@ -216,7 +221,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-teams"
         >
           <Users className="size-4" />
-          Teams
+          {tr("tabs.teams", "Teams")}
         </button>
 
         <button
@@ -231,7 +236,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-audio"
         >
           <Music className="size-4" />
-          Sound Cues
+          {tr("tabs.audio", "Sound Cues")}
         </button>
 
         <button
@@ -246,7 +251,7 @@ export const EditorEnhancementPanel = ({
           data-testid="tab-preview"
         >
           <Play className="size-4" />
-          Preview
+          {tr("tabs.preview", "Preview")}
         </button>
       </div>
 
@@ -258,7 +263,7 @@ export const EditorEnhancementPanel = ({
             {/* Question Reveal Section */}
             <div className="rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
               <h3 className="mb-2 text-base font-bold text-neutral-900 dark:text-neutral-100">
-                Question Image Reveal Effect
+                {tr("visuals.revealTitle", "Question Image Reveal Effect")}
               </h3>
               <p className="mb-4 text-xs text-neutral-500">
                 Synchronized reveal on presenter/host screen. Safe alt text is
@@ -521,7 +526,10 @@ export const EditorEnhancementPanel = ({
             <div className="flex items-center justify-between rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
               <div>
                 <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                  Interlude After This Question
+                  {tr(
+                    "interludes.enableInterlude",
+                    "Interlude After This Question",
+                  )}
                 </h3>
                 <p className="text-xs text-neutral-500">
                   Inserts a title, image, video or countdown card before
@@ -695,7 +703,7 @@ export const EditorEnhancementPanel = ({
           <div className="flex flex-col gap-5" data-testid="panel-leaderboard">
             <div>
               <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                Leaderboard Presentation Policy
+                {tr("tabs.leaderboard", "Leaderboard Presentation Policy")}
               </h3>
               <p className="text-xs text-neutral-500">
                 Controls when scoring leaderboards appear during the quiz. Never
@@ -789,7 +797,7 @@ export const EditorEnhancementPanel = ({
             <div className="flex items-center justify-between rounded-xl border border-neutral-200 p-4 dark:border-neutral-800">
               <div>
                 <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                  Team Mode (2..12 Teams)
+                  {tr("teams.enableTeams", "Team Mode (2..12 Teams)")}
                 </h3>
                 <p className="text-xs text-neutral-500">
                   Projects team scores dynamically from individual points. Auto
@@ -864,7 +872,7 @@ export const EditorEnhancementPanel = ({
                       data-testid="add-team-button"
                     >
                       <Plus className="size-3.5" />
-                      Add Team
+                      {tr("teams.addTeam", "Add Team")}
                     </button>
                   )}
                 </div>
@@ -939,7 +947,7 @@ export const EditorEnhancementPanel = ({
           <div className="flex flex-col gap-4" data-testid="panel-audio">
             <div>
               <h3 className="text-base font-bold text-neutral-900 dark:text-neutral-100">
-                Audio Cues & Music
+                {tr("audio.cuesTitle", "Audio Cues & Music")}
               </h3>
               <p className="text-xs text-neutral-500">
                 Custom sound cues for quiz moments. Defaults are automatically

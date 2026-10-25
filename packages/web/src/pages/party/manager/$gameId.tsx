@@ -1,5 +1,9 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type ExtensionStateEnvelope,
+} from "@razzia/extensions/core"
 import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
 import {
   socketClient,
@@ -33,6 +37,10 @@ const ManagerGamePage = () => {
     if (name in GAME_STATE_COMPONENTS_MANAGER) {
       updateManager({ status: createStatus(name, data) })
     }
+  })
+
+  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
+    updateManager({ extensionState: payload })
   })
 
   useEffect(() => {
