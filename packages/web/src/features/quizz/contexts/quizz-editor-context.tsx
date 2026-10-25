@@ -59,6 +59,7 @@ interface QuizzEditorContextType {
       expectedRevision?: number | null
     } | null>
   >
+  setQuestionIds?: React.Dispatch<React.SetStateAction<string[]>>
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
   removeQuestion: (_index: number) => void
@@ -102,7 +103,7 @@ export const QuizzEditorProvider = ({
   })
 
   const { control, getValues, setValue, formState } = form
-  const { fields, append, remove, move, insert } = useFieldArray({
+  const { append, remove, move, insert } = useFieldArray({
     control,
     name: "questions",
   })
@@ -114,9 +115,11 @@ export const QuizzEditorProvider = ({
     expectedRevision?: number | null
   } | null>(null)
 
-  const [fieldUuidMap, setFieldUuidMap] = useState<Map<string, string>>(
-    () => new Map(),
-  )
+  const [questionIds, setQuestionIds] = useState<string[]>(() => {
+    const count = initialData?.questions.length ?? 1
+
+    return Array.from({ length: count }, () => generateQuestionId())
+  })
 
   useEffect(() => {
     if (!initialData?.id) {
@@ -143,6 +146,13 @@ export const QuizzEditorProvider = ({
 
             return res.extras
           })
+
+          if (
+            Array.isArray(res.extras.questionIds) &&
+            res.extras.questionIds.length > 0
+          ) {
+            setQuestionIds(res.extras.questionIds)
+          }
         }
       })
       .catch(() => undefined)
@@ -157,49 +167,18 @@ export const QuizzEditorProvider = ({
   const safeIndex = clampIndex(currentIndex, questions.length)
   const currentQuestion = questions[safeIndex]
 
-  // Synchronize field-to-UUID mappings purely via React state
-  useEffect(() => {
-    setFieldUuidMap((prevMap) => {
-      let changed = false
-      const nextMap = new Map(prevMap)
-
-      fields.forEach((field, idx) => {
-        const persisted = extras?.questionIds?.[idx]
-        if (persisted && nextMap.get(field.id) !== persisted) {
-          nextMap.set(field.id, persisted)
-          changed = true
-        } else if (!nextMap.has(field.id)) {
-          nextMap.set(field.id, generateQuestionId())
-          changed = true
-        }
-      })
-
-      const validFieldIds = new Set(fields.map((f) => f.id))
-      for (const id of nextMap.keys()) {
-        if (!validFieldIds.has(id)) {
-          nextMap.delete(id)
-          changed = true
-        }
-      }
-
-      return changed ? nextMap : prevMap
-    })
-  }, [fields, extras?.questionIds])
-
-  // Derive stable questionIds purely: priority to extras.questionIds[idx], then fieldUuidMap, then minted UUID
-  const questionIds = fields.map((field, idx) => {
-    return (
-      extras?.questionIds?.[idx] ??
-      fieldUuidMap.get(field.id) ??
-      generateQuestionId()
-    )
-  })
+  // Derive stable questionIds: priority to extras.questionIds when matching questions length, otherwise state
+  const effectiveQuestionIds =
+    extras?.questionIds && extras.questionIds.length === questions.length
+      ? extras.questionIds
+      : questionIds
 
   const addQuestion = () => {
     const category = questions.at(-1)?.category
     const newUuid = generateQuestionId()
 
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
+    setQuestionIds((prev) => [...prev, newUuid])
     setCurrentIndex(questions.length)
 
     if (extras) {
@@ -211,18 +190,10 @@ export const QuizzEditorProvider = ({
   }
 
   const removeQuestion = (index: number) => {
-    const fieldId = fields[index]?.id
-
-    if (fieldId) {
-      setFieldUuidMap((prev) => {
-        const next = new Map(prev)
-        next.delete(fieldId)
-        return next
-      })
-    }
-
     flushSync(() => setRemovingFrom(questions))
     remove(index)
+
+    setQuestionIds((prev) => prev.filter((_, i) => i !== index))
 
     if (extras) {
       setExtras(removeQuestionFromExtras(extras, index))
@@ -245,6 +216,17 @@ export const QuizzEditorProvider = ({
     move(from, to)
     setCurrentIndex(to)
 
+    setQuestionIds((prev) => {
+      const next = [...prev]
+      const [moved] = next.splice(from, 1)
+
+      if (moved) {
+        next.splice(to, 0, moved)
+      }
+
+      return next
+    })
+
     if (extras) {
       setExtras(reorderQuestionsInExtras(extras, from, to))
     }
@@ -257,8 +239,25 @@ export const QuizzEditorProvider = ({
     setCurrentIndex(index + 1)
 
     if (extras) {
-      const { extras: newExtras } = duplicateQuestionInExtras(extras, index)
+      const { extras: newExtras, newQuestionId } = duplicateQuestionInExtras(
+        extras,
+        index,
+      )
       setExtras(newExtras)
+      setQuestionIds((prev) => {
+        const next = [...prev]
+        next.splice(index + 1, 0, newQuestionId)
+
+        return next
+      })
+    } else {
+      const newUuid = generateQuestionId()
+      setQuestionIds((prev) => {
+        const next = [...prev]
+        next.splice(index + 1, 0, newUuid)
+
+        return next
+      })
     }
   }
 
@@ -280,15 +279,16 @@ export const QuizzEditorProvider = ({
           quizzId: initialData?.id ?? null,
           gameMode,
           questions,
-          questionIds,
+          questionIds: effectiveQuestionIds,
           currentIndex,
           currentQuestion,
-          currentQuestionId: questionIds[safeIndex],
+          currentQuestionId: effectiveQuestionIds[safeIndex] ?? "",
           isRemoving: removingFrom === questions,
           extras,
           conflict,
           setExtras,
           setConflict,
+          setQuestionIds,
           setCurrentIndex,
           addQuestion,
           removeQuestion,

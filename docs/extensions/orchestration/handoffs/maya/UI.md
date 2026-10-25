@@ -5,11 +5,11 @@
 - **Role:** Maya (Frontend / Native UX / Media / Presentation / Audio / Editor / Locales)
 - **Workspace:** `C:\Users\DAVID\Code\Razzia-worktrees\maya`
 - **Branch:** `agent/maya/wave2`
-- **Phase:** Wave 2 — Mandatory Final Corrections (P0 TypeScript resolutions, HTTP 409 `currentRevision` contract, Force Overwrite `baseDigest` integrity, pure React ID stability, console cleanup, 8-locale parity)
+- **Phase:** Wave 2 — Final Quality Gate Correction (Zero Oxlint errors/warnings, React UUID state lifecycle, QuizzEditorProvider regression tests, 442 Vitest tests, Production Build green)
 - **Starting Backend Baseline:** `cf824d7 feat(gameplay): wave 2 phase a backend game control, interludes and authoritative reveal` (Tomer Phase A)
-- **Previous Session Baseline:** `0138126` -> Current Audited Tip
+- **Previous Session Baseline:** `2ecffe4` -> Current Audited Tip
 - **Execution Mode:** NORMAL (Direct session execution, no subagents invoked)
-- **Status:** All Frontend P0/P1 defects corrected and verified. Real application TypeScript checks pass (`tsconfig.app.json` and `tsconfig.node.json` 0 errors). Gate 3 (full browser E2E) remains Tomer's responsibility.
+- **Status:** Gate 2 FULLY PASSED across all 7 verification gates (0 lint errors/warnings, 0 formatting issues, 0 TypeScript errors, 282/282 workspace tests passing, 160/160 extension tests passing, production build exit 0). Gate 3 (full browser E2E) remains Tomer's integration responsibility.
 
 ### Canonical Documents Read & Enforced
 
@@ -50,22 +50,44 @@
      - In both regular save and force overwrite, local `extras` state is updated with `res.revision` and `res.baseDigest`.
    - _Test Evidence:_ Added tests in `editor.test.ts` and `extensions-ui.test.ts` verifying Force Overwrite with modified question text derives fresh digest, confirms two conflicting sessions, and saves with `expectedRevision: null`.
 
-4. **Pure React Identity & Render Purity (`quizz-editor-context.tsx`):**
-   - _Problem:_ `fieldUuidMapRef.current` was mutated during render body (`fieldUuidMapRef.current.set(...)`), violating React purity and triggering linter warnings.
+4. **Pure React Identity & State Lifecycle (`quizz-editor-context.tsx`):**
+   - _Problem:_ Linter warning `react(set-state-in-effect)` on `fieldUuidMap` effect and impure UUID generation `?? generateQuestionId()` called during render.
    - _Fix:_
-     - Migrated mapping to pure React state: `const [fieldUuidMap, setFieldUuidMap] = useState<Map<string, string>>(() => new Map())`.
-     - Derived `questionIds` during render without any mutations: `extras?.questionIds?.[idx] ?? fieldUuidMap.get(field.id) ?? generateQuestionId()`.
-     - Synchronized mappings cleanly in `useEffect` when `fields` or `extras?.questionIds` change, pruning deleted field IDs.
-     - Zero ref access during render.
+     - Replaced `fieldUuidMap` and the synchronous effect with first-class state `const [questionIds, setQuestionIds] = useState<string[]>(() => ...)`.
+     - Zero calls to `generateQuestionId()` during render body; deterministic across all rerenders.
+     - `addQuestion`, `removeQuestion`, `reorderQuestions`, and `duplicateQuestion` update `questionIds` state and `extras` sidecar in lockstep.
+     - Asynchronous sidecar loading (`getQuizComposite`) syncs `setQuestionIds(res.extras.questionIds)` cleanly from promise resolution.
+     - `effectiveQuestionIds` prioritizes authoritative `extras.questionIds` when matching questions length, falling back to initialized state.
+   - _Test Evidence:_ Added `QuizzEditorProvider` component integration test (`P0.9`) proving question identity stability and attachment persistence across operations without orphan entries.
 
 5. **Console Logging Cleanup (`QuizzEditorHeader.tsx`):**
    - Removed all debug logging statements (`console.log("[FORM ON_VALID]", ...)`, `console.log("[EXTRAS STATE]", ...)`, `console.log("[COMPUTING DIGEST]", ...)`, `console.log("[CALLING SAVE COMPOSITE]", ...)`, `console.log("[SAVE COMPOSITE SUCCESS]", ...)`, `console.log("[SAVING VANILLA ...]")`, and `console.error("[FORM ON_INVALID]", ...)`).
+
+6. **Full Oxlint Linter Resolution (71 Errors & 2 Warnings -> 0 Errors, 0 Warnings):**
+   - Flattened nested `describe` blocks in `extensions-ui.test.ts` and `editor.test.ts` to satisfy `eslint(max-nested-callbacks)` (max depth 3).
+   - Removed unnecessary type assertions `as unknown as QuizzValidated` since `computeCanonicalBaseDigest` accepts `unknown`.
+   - Removed optional chaining on non-nullish visual/interlude attachments.
+   - Replaced dynamic `delete` with clean object rest destructuring.
+   - Replaced non-null assertions (`!`) with safe fallback indexing.
+   - Refactored `MediaLibrary/index.tsx` dialog open change handler to derive effective filter during render, eliminating `setFilter` inside `useEffect`.
+   - Replaced deprecated TanStack Query `fetchQuery` in conflict reload with direct Razzia API route `api.quizz[":id"].$get` and cache sync via `queryClient.setQueryData`.
+   - Formatted all files with Prettier (`pnpm format`).
 
 ---
 
 ## 2. Verification Evidence & Exact Command Outputs
 
-### A. TypeScript Verification
+### A. Linter Verification (`pnpm lint`)
+
+```bash
+$ pnpm lint
+$ oxlint
+Found 0 warnings and 0 errors.
+Finished in 4.4s on 318 files with 233 rules using 12 threads.
+Exit code: 0
+```
+
+### B. TypeScript Verification
 
 ```bash
 $ pnpm exec tsc -p packages/web/tsconfig.app.json --noEmit --pretty false
@@ -78,7 +100,7 @@ $ pnpm -r exec tsc --noEmit
 Exit code: 0 (0 errors across all 6 workspace packages)
 ```
 
-### B. Workspace Test Suite (`pnpm test`)
+### C. Workspace Test Suite (`pnpm test`)
 
 ```bash
 $ vitest run
@@ -103,15 +125,15 @@ $ vitest run
  ✓  socket  packages/socket/src/handlers/game.test.ts (24 tests)
  ✓  web  packages/web/src/features/game/components/game-controls.test.ts (11 tests)
  ✓  web  packages/web/src/features/game/phase-a-flow.browser.test.ts (7 tests)
- ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (46 tests)
+ ✓  web  packages/web/src/features/quizz/extensions-ui.test.ts (47 tests)
 
  Test Files  20 passed (20)
-      Tests  281 passed (281)
-   Duration  8.07s
+      Tests  282 passed (282)
+   Duration  6.59s
 Exit code: 0
 ```
 
-### C. Extensions Test Suite (`pnpm --filter @razzia/extensions test`)
+### D. Extensions Test Suite (`pnpm --filter @razzia/extensions test`)
 
 ```bash
 $ vitest run
@@ -135,20 +157,20 @@ $ vitest run
 
  Test Files  15 passed (15)
       Tests  160 passed (160)
-   Duration  16.00s
+   Duration  14.93s
 Exit code: 0
 ```
 
-**Total Vitest test count:** 281 (workspace) + 160 (extensions) = **441 tests passing (100%)**.
+**Total Vitest test count:** 282 (workspace) + 160 (extensions) = **442 tests passing (100%)**.
 
-### D. Code Formatting (`pnpm format`)
+### E. Code Formatting (`pnpm format`)
 
 ```bash
 $ prettier --check . --log-level warn
 Exit code: 0 (All files match Prettier standards)
 ```
 
-### E. Production Build (`pnpm -r run build`)
+### F. Production Build (`pnpm -r run build`)
 
 ```bash
 $ $env:NODE_OPTIONS="--experimental-strip-types"; pnpm -r run build
@@ -156,10 +178,10 @@ Scope: 5 of 6 workspace projects
 packages/socket build: Done (index.cjs: 673.96 kB)
 packages/web build:
 ✓ 2988 modules transformed.
-dist/index.html                                                0.58 kB │ gzip:   0.35 kB
+dist/index.html                                                0.58 kB │ gzip:   0.36 kB
 dist/assets/index-v__XpUTi.css                                66.67 kB │ gzip:  12.37 kB
-dist/assets/index-Chtyby-W.js                              1,337.12 kB │ gzip: 417.83 kB
-✓ built in 1.47s
+dist/assets/index-BQeDOSSN.js                              1,337.20 kB │ gzip: 417.85 kB
+✓ built in 1.13s
 Exit code: 0
 ```
 
@@ -168,5 +190,5 @@ Exit code: 0
 ## 3. Acceptance Gates Status
 
 - **Gate 1 (Telephony & Local Transport):** Verified via local tests (`real-telephony-e2e.test.ts`, Noam ownership).
-- **Gate 2 (Frontend & UI Conformance):** **PASSED (ALL DEFECTS RESOLVED)**. All TypeScript compiler errors resolved (0 errors in `tsconfig.app.json` and `tsconfig.node.json`), 441 unit/component tests green, 409 conflict handling verified with server `currentRevision` contract, Force Overwrite digest integrity verified, media picker contract and failure handling tested, console logging removed, and 8-locale key parity confirmed.
-- **Gate 3 / Gate 4 (Playwright Browser Integration & Whole-App Acceptance):** **PENDING TOMER/RONI RUN IN `packages/e2e/**`**. True end-to-end browser execution against live Socket/Hono servers belongs to Tomer/Roni. Gate 3 is NOT marked complete until Tomer executes his Playwright suite.
+- **Gate 2 (Frontend & UI Conformance):** **PASSED (ALL QUALITY GATES PASSED WITH EXIT CODE 0)**. Oxlint 0 errors/0 warnings, Prettier exit 0, TypeScript `tsconfig.app.json` and `tsconfig.node.json` 0 errors, 442 unit/component tests green, 409 conflict handling verified with server `currentRevision` contract, Force Overwrite digest integrity verified, media picker contract and failure handling tested, console logging removed, 8-locale key parity confirmed, and deterministic React UUID state lifecycle verified.
+- **Gate 3 / Gate 4 (Playwright Browser Integration & Whole-App Acceptance):** **PENDING TOMER RUN IN `packages/e2e/**`**. True end-to-end browser execution against live Socket/Hono servers belongs to Tomer. Gate 3 is NOT marked complete until Tomer executes his Playwright suite.

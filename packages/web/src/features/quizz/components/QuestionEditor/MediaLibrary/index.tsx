@@ -20,7 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import clsx from "clsx"
 import { X } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { type DragEvent, useEffect, useState } from "react"
+import { type DragEvent, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -46,15 +46,6 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
   const [isDragging, setIsDragging] = useState(false)
   const queryClient = useQueryClient()
   const { t } = useTranslation()
-
-  // Synchronize filter whenever dialog opens or acceptType changes
-  useEffect(() => {
-    if (acceptType && acceptType !== "all") {
-      setFilter(acceptType)
-    } else {
-      setFilter("all")
-    }
-  }, [open, acceptType])
 
   const { mutate: remove } = useMutation({
     mutationFn: (item: UploadedMedia) => deleteMedia(item.name),
@@ -193,8 +184,17 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
   const hasNoResults =
     !isPending && !isEmpty && pendingCount === 0 && visibleMedia.length === 0
 
+  const handleOpenChange = (nextOpen: boolean) => {
+    if (!nextOpen) {
+      setSearch("")
+      setFilter(acceptType && acceptType !== "all" ? acceptType : "all")
+    }
+
+    onOpenChange(nextOpen)
+  }
+
   return (
-    <Dialog.Root open={open} onOpenChange={onOpenChange}>
+    <Dialog.Root open={open} onOpenChange={handleOpenChange}>
       <Dialog.Portal>
         <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/40" />
 

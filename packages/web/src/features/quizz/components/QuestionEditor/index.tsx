@@ -103,6 +103,7 @@ const QuestionEditor = () => {
 
     // Locate captured target question by stable questionId
     const targetIdx = questionIds.indexOf(questionId)
+
     if (targetIdx < 0 || !questions[targetIdx]) {
       // Target question was deleted while picker was open; fail safely
       setMediaPickerOpen(false)

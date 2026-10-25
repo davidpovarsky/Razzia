@@ -12,7 +12,6 @@ import ToggleGroup from "@razzia/web/components/ToggleGroup"
 import {
   createQuizz,
   quizzKeys,
-  quizzQuery,
   updateQuizz,
 } from "@razzia/web/features/manager/queries"
 import { ConflictDialog } from "@razzia/web/features/quizz/components/ConflictDialog"
@@ -20,7 +19,7 @@ import {
   useQuizzEditor,
   type QuizzFormValues,
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
-import { ApiError } from "@razzia/web/lib/api"
+import { ApiError, api, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import clsx from "clsx"
@@ -109,7 +108,7 @@ const QuizzEditorHeader = () => {
         } catch (err: unknown) {
           if (err instanceof RevisionConflictError) {
             setConflict({
-              serverRevision: err.currentRevision ?? err.serverRevision,
+              serverRevision: err.currentRevision,
               expectedRevision: err.expectedRevision,
             })
 
@@ -186,15 +185,17 @@ const QuizzEditorHeader = () => {
     try {
       const client = new CompositeApiClient()
       const res = await client.getQuizComposite(quizzId)
-      const latestQuizz = await queryClient.fetchQuery(quizzQuery(quizzId))
+      const latestQuizz = await unwrap(
+        api.quizz[":id"].$get({ param: { id: quizzId } }),
+      )
 
-      if (latestQuizz) {
-        reset({
-          gameMode: latestQuizz.gameMode,
-          subject: latestQuizz.subject,
-          questions: latestQuizz.questions,
-        })
-      }
+      queryClient.setQueryData(quizzKeys.detail(quizzId), latestQuizz)
+
+      reset({
+        gameMode: latestQuizz.gameMode,
+        subject: latestQuizz.subject,
+        questions: latestQuizz.questions,
+      })
 
       if (res.exists && res.extras) {
         setExtras(res.extras)

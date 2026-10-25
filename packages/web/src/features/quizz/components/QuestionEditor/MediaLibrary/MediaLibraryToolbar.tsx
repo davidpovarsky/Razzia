@@ -85,7 +85,7 @@ const MediaLibraryToolbar = ({
       </div>
 
       <Select
-        value={isTypeLocked ? (acceptType as MediaFilter) : filter}
+        value={acceptType && isTypeLocked ? acceptType : filter}
         onValueChange={handleFilterChange}
         disabled={isTypeLocked}
       >
