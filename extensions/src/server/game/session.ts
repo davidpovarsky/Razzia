@@ -14,6 +14,7 @@ import {
   type PlayerScoreInfo,
   type TeamScoreProjection,
 } from "../../gameplay/index"
+import type { StudioShowCoordinator } from "./studio-show-coordinator"
 
 export interface ExtensionSessionDelegate {
   endAnswerTimer?: () => boolean
@@ -22,6 +23,8 @@ export interface ExtensionSessionDelegate {
   replayFromCheckpoint?: (questionIndex: number) => boolean
   endOrSkipInterlude?: (reason?: string) => boolean
   getHistory?: (questionIndex?: number) => unknown
+  advanceTimelineScene?: (sceneId?: string, epoch?: number) => boolean
+  skipTimelineScene?: (sceneId?: string, epoch?: number) => boolean
 }
 
 export class ExtensionGameSession {
@@ -40,6 +43,7 @@ export class ExtensionGameSession {
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
   private viewingHistoryIndex: number | null = null
   private delegate: ExtensionSessionDelegate | null = null
+  private showCoordinator: StudioShowCoordinator | null = null
 
   constructor(gameId: string, extras: AnyQuizExtras | null) {
     this.gameId = gameId
@@ -50,15 +54,27 @@ export class ExtensionGameSession {
     this.delegate = delegate
   }
 
+  setShowCoordinator(coordinator: StudioShowCoordinator | null): void {
+    this.showCoordinator = coordinator
+  }
+
+  get coordinator(): StudioShowCoordinator | null {
+    return this.showCoordinator
+  }
+
   get isEnabled(): boolean {
     return this.extras !== null
   }
 
   get currentSeq(): number {
-    return this.seq
+    return this.seq + (this.showCoordinator?.currentSeq ?? 0)
   }
 
   get currentEpoch(): number {
+    if (this.showCoordinator) {
+      return this.showCoordinator.currentEpoch
+    }
+
     return this.epoch
   }
 
@@ -288,9 +304,17 @@ export class ExtensionGameSession {
 
     // Studio V2 timeline & scene payload
     if (this.extras && isQuizExtrasV2(this.extras)) {
-      extrasPayload.timeline = this.extras.timeline
-      extrasPayload.scenes = this.extras.scenes
-      extrasPayload.defaults = this.extras.defaults
+      if (this.showCoordinator) {
+        extrasPayload.activeTimelineStep =
+          this.showCoordinator.getAuthoritativeStepEnvelope(forRole)
+        extrasPayload.currentScene = this.showCoordinator.currentScene
+      }
+
+      if (forRole === "manager") {
+        extrasPayload.timeline = this.extras.timeline
+        extrasPayload.scenes = this.extras.scenes
+        extrasPayload.defaults = this.extras.defaults
+      }
     }
 
     // Manager-only reveal distribution and history snapshot
@@ -307,13 +331,23 @@ export class ExtensionGameSession {
       }
     }
 
+    const effectivePhase = this.showCoordinator?.isSceneActive()
+      ? "scene"
+      : this.phase
+
+    const effectiveEpoch = this.showCoordinator
+      ? this.showCoordinator.currentEpoch
+      : this.epoch
+
+    const effectiveSeq = this.seq + (this.showCoordinator?.currentSeq ?? 0)
+
     return {
       v: 1,
       gameId: this.gameId,
-      seq: this.seq,
-      epoch: this.epoch,
-      questionId,
-      phase: this.phase,
+      seq: effectiveSeq,
+      epoch: effectiveEpoch,
+      questionId: this.showCoordinator?.isSceneActive() ? undefined : questionId,
+      phase: effectivePhase,
       startedAt: this.startedAt,
       extras: extrasPayload,
     }
@@ -353,7 +387,7 @@ export class ExtensionGameSession {
     // Epoch validation if payload specifies epoch
     const payloadEpoch = (command.payload as { epoch?: unknown }).epoch
 
-    if (typeof payloadEpoch === "number" && payloadEpoch !== this.epoch) {
+    if (typeof payloadEpoch === "number" && payloadEpoch !== this.currentEpoch) {
       throw new Error("errors:extensions.staleEpoch")
     }
 
@@ -450,10 +484,54 @@ export class ExtensionGameSession {
           throw new Error("errors:extensions.cannotNextScreenDuringAnswers")
         }
 
+        if (this.showCoordinator?.isSceneActive()) {
+          const ok = this.delegate?.advanceTimelineScene?.() ?? false
+
+          if (!ok) {
+            throw new Error("errors:extensions.sceneAdvanceFailed")
+          }
+
+          this.seq += 1
+
+          break
+        }
+
         const ok = this.delegate?.nextScreen?.() ?? false
 
         if (!ok) {
           throw new Error("errors:extensions.nextScreenFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "ADVANCE_TIMELINE_SCENE": {
+        const ok =
+          this.delegate?.advanceTimelineScene?.(
+            command.payload.sceneId,
+            command.payload.epoch,
+          ) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.sceneAdvanceFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "SKIP_TIMELINE_SCENE": {
+        const ok =
+          this.delegate?.skipTimelineScene?.(
+            command.payload.sceneId,
+            command.payload.epoch,
+          ) ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.sceneSkipFailed")
         }
 
         this.seq += 1

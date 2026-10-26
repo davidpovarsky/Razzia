@@ -282,11 +282,23 @@
       "settings": "Ayarlar",
       "launch": "Başlat"
     },
+    "participants": {
+      "subtitle": "Kayıtlı katılımcıları, telefon numaralarını, tablo içe aktarımlarını ve katılım politikalarını yönetin."
+    },
     "settings": {
       "globalTitle": "Stüdyo Ayarları ve Varsayılanlar",
+      "subtitle": "Zaman çizelgesi varsayılanlarını, kart oluşturma davranışlarını ve genel sunum politikalarını yapılandırın.",
       "newQuestionMode": "Yeni Kartlar için Varsayılan Mod",
+      "newCardsDescription": "Zaman çizelgesine eklenen yeni soru kartları otomatik olarak bu modu kullanır.",
       "applyAllQuestions": "Mevcut Tüm Sorulara Uygula",
       "applyAllConfirm": "Mevcut tüm soru kartları bu moda dönüştürülsün mü?",
+      "bulkDescription": "Bu gösterideki tüm soruları topluca {{mode}} moduna dönüştürür.",
+      "bulkConfirmDesc": "Bu işlem mevcut tüm soruları {{mode}} moduna ayarlayacaktır.",
+      "convertAll": "Tümünü Dönüştür",
+      "scoredRequired": "Puanlı, doğru cevap gerekli",
+      "unscoredOpinion": "Puansız, fikir dağılımı",
+      "autoAdvance": "Otomatik (süre dolduğunda)",
+      "manualAdvance": "Manuel (yönetici ilerletir)",
       "leaderboardPolicy": "Lider Tablosu İlkesi",
       "advanceMode": "İlerleme Modu",
       "bulkSuccess": "Mevcut tüm soru kartları güncellendi",
@@ -296,14 +308,28 @@
       "policyDisabled": "Devre dışı"
     },
     "launch": {
-      "readyTitle": "Gösteri Başlatılmaya Hazır",
+      "readyTitle": "Canlı Gösteriyi Başlat",
+      "subtitle": "Zaman çizelgesi hazırliğini ve katılımcı sayılarını inceleyin, canlı sunucu oturumunu başlatın.",
       "launchButton": "Canlı Gösteriyi Başlat",
-      "summary": "Gösteri Özeti",
+      "summary": "Başlamaya Hazır",
       "totalCards": "Zaman Çizelgesi Kartları",
       "totalQuestions": "Sorular ve Anketler",
       "totalParticipants": "Kayıtlı Katılımcılar",
       "missingMediaWarning": "Bazı medya kartlarında URL eksik",
-      "noQuestionsWarning": "Gösteri en az bir soru içermelidir"
+      "noQuestionsWarning": "Gösteri en az bir soru içermelidir",
+      "success": "Oyun başarıyla oluşturuldu!",
+      "saveFirst": "Canlı oturum başlatmadan önce lütfen testi kaydedin.",
+      "unsavedWarning": "Kaydedilmemiş değişiklikler tespit edildi. Başlatmadan önce kaydedin.",
+      "launching": "Başlatılıyor...",
+      "launchNotice": "Başlatma işlemi davet koduyla aktif bir oturum oluşturur ve sunucu arayüzünü açar.",
+      "unsavedTitle": "Kaydedilmemiş Değişiklikler",
+      "unsavedDesc": "Canlı gösterinin en güncel içeriğinizi yansıtması için lütfen testi kaydedin.",
+      "missingMediaTitle": "Eksik Medya Dosyaları"
+    },
+    "convert": {
+      "title": "Soru Sahneye Dönüştürülsün mü?",
+      "description": "Bu soruyu dönüştürmek, içeriğini seçilen sahneyle değiştirecektir. Bu işlem geri alınamaz.",
+      "confirm": "Sahneye Dönüştür"
     }
   }
 }

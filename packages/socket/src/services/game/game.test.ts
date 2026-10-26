@@ -668,3 +668,74 @@ describe("manager grace period", () => {
     expect(onTimeout).not.toHaveBeenCalled()
   })
 })
+
+describe("mixed quiz + survey gameplay and finish semantics", () => {
+  it("in a mixed show ending with a survey question, preserves quiz scoreboard and delivers STATUS.FINISHED podium", async () => {
+    const q1 = createQuestion({ solutions: [0], playMode: "quiz" })
+    // Last question is survey
+    const q2 = createQuestion({ solutions: [], playMode: "survey" })
+    const quizz = createQuizz([q1, q2], QUIZZ_MODES.QUIZ)
+
+    const { game, sockets, start, reachAnswers, lastStatus } = setup(
+      quizz,
+      ["Alice", "Bob"],
+    )
+    const [alice, bob] = sockets
+
+    // Start game -> reach Q1 answers
+    await start()
+    // Alice correct
+    game.selectAnswer(alice, [0])
+    // Bob wrong
+    game.selectAnswer(bob, [1])
+    // Reveal
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+    // Leaderboard
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    // Advance to Q2 (Survey)
+    game.advance()
+    await reachAnswers(q2, false)
+
+    // Alice and Bob answer survey
+    game.selectAnswer(alice, [0])
+    game.selectAnswer(bob, [1])
+    // Survey reveal
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    // Advance Q2 to finish
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    // Crucial assertion: Manager and Alice receive STATUS.FINISHED with podium, NOT STATUS.SUMMARY!
+    expect(lastStatus(MANAGER)?.name).toBe(STATUS.FINISHED)
+    expect(lastStatus("alice")?.name).toBe(STATUS.FINISHED)
+    const finishedData = lastStatus(MANAGER)?.data as {
+      top: Array<{ username: string; points: number }>
+    }
+    expect(finishedData.top[0].username).toBe("Alice")
+    expect(finishedData.top[0].points).toBeGreaterThan(0)
+  })
+
+  it("in a pure survey show, delivers STATUS.SUMMARY", async () => {
+    const q1 = createQuestion({ solutions: [], playMode: "survey" })
+    const quizz = createQuizz([q1], QUIZZ_MODES.SURVEY)
+
+    const { game, sockets, start, lastStatus } = setup(quizz, ["Alice"])
+    const [alice] = sockets
+
+    await start()
+    game.selectAnswer(alice, [0])
+    // Reveal
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+    // Finish
+    game.advance()
+    await vi.advanceTimersByTimeAsync(TICK_MS)
+
+    expect(lastStatus(MANAGER)?.name).toBe(STATUS.SUMMARY)
+  })
+})

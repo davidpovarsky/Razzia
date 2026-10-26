@@ -163,6 +163,44 @@ export type EndOrSkipInterludeCommand = z.infer<
   typeof endOrSkipInterludeCommandSchema
 >
 
+export const advanceTimelineSceneCommandSchema = z.strictObject({
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("ADVANCE_TIMELINE_SCENE"),
+  payload: z
+    .strictObject({
+      sceneId: z.string().optional(),
+      stepId: z.string().optional(),
+      epoch: z.number().int().optional(),
+    })
+    .optional()
+    .default({}),
+  requestId: z.string().min(1),
+})
+
+export type AdvanceTimelineSceneCommand = z.infer<
+  typeof advanceTimelineSceneCommandSchema
+>
+
+export const skipTimelineSceneCommandSchema = z.strictObject({
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("SKIP_TIMELINE_SCENE"),
+  payload: z
+    .strictObject({
+      sceneId: z.string().optional(),
+      stepId: z.string().optional(),
+      epoch: z.number().int().optional(),
+    })
+    .optional()
+    .default({}),
+  requestId: z.string().min(1),
+})
+
+export type SkipTimelineSceneCommand = z.infer<
+  typeof skipTimelineSceneCommandSchema
+>
+
 export const extensionCommandSchema = z.discriminatedUnion("action", [
   showLeaderboardCommandSchema,
   skipInterludeCommandSchema,
@@ -174,6 +212,8 @@ export const extensionCommandSchema = z.discriminatedUnion("action", [
   viewHistoryCommandSchema,
   replayFromCheckpointCommandSchema,
   endOrSkipInterludeCommandSchema,
+  advanceTimelineSceneCommandSchema,
+  skipTimelineSceneCommandSchema,
 ])
 
 export type ExtensionCommand = z.infer<typeof extensionCommandSchema>

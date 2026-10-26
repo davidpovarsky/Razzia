@@ -282,11 +282,23 @@
       "settings": "設定",
       "launch": "開始"
     },
+    "participants": {
+      "subtitle": "登録済み参加者、電話番号、スプレッドシートのインポート、参加ポリシーを管理します。"
+    },
     "settings": {
       "globalTitle": "スタジオ設定とデフォルト",
+      "subtitle": "タイムラインのデフォルト設定、カード作成時の挙動、全体プレゼンテーション方針を設定します。",
       "newQuestionMode": "新しいカードのデフォルトモード",
+      "newCardsDescription": "タイムラインに追加される新しい質問カードは自動的にこのモードになります。",
       "applyAllQuestions": "既存のすべての問題に適用",
       "applyAllConfirm": "既存のすべての問題カードをこのモードに変換しますか？",
+      "bulkDescription": "このショーのすべての質問を一括で{{mode}}モードに変換します。",
+      "bulkConfirmDesc": "既存のすべての質問が{{mode}}モードに設定されます。",
+      "convertAll": "すべて変換",
+      "scoredRequired": "スコアあり（正解必須）",
+      "unscoredOpinion": "スコアなし（アンケート集計）",
+      "autoAdvance": "自動進行（タイマー終了時）",
+      "manualAdvance": "手動進行（ホスト操作）",
       "leaderboardPolicy": "リーダーボード表示ポリシー",
       "advanceMode": "進行モード",
       "bulkSuccess": "既存の問題カードをすべて更新しました",
@@ -296,14 +308,28 @@
       "policyDisabled": "無効"
     },
     "launch": {
-      "readyTitle": "ショーの開始準備が整いました",
+      "readyTitle": "ライブショーを開始",
+      "subtitle": "タイムラインの準備状況と参加者数を確認し、ライブプレゼンターセッションを開始します。",
       "launchButton": "ライブショーを開始",
-      "summary": "ショー概要",
+      "summary": "開始準備完了",
       "totalCards": "タイムラインカード",
       "totalQuestions": "問題とアンケート",
       "totalParticipants": "登録済み参加者",
       "missingMediaWarning": "一部のメディアカードにURLが設定されていません",
-      "noQuestionsWarning": "ショーには少なくとも1つの問題が必要です"
+      "noQuestionsWarning": "ショーには少なくとも1つの問題が必要です",
+      "success": "ゲームが正常に作成されました！",
+      "saveFirst": "ライブセッションを開始する前にクイズを保存してください。",
+      "unsavedWarning": "未保存の変更があります。開始する前にクイズを保存してください。",
+      "launching": "起動中...",
+      "launchNotice": "起動すると招待コード付きのゲームセッションが作成され、ホスト画面が開きます。",
+      "unsavedTitle": "未保存の変更",
+      "unsavedDesc": "ライブショーに最新の変更を反映させるため、クイズを保存してください。",
+      "missingMediaTitle": "メディアファイルが不足しています"
+    },
+    "convert": {
+      "title": "質問をシーンに変換しますか？",
+      "description": "この質問を変換すると、内容が選択したシーンに置き換わります。この操作は自動で元に戻せません。",
+      "confirm": "シーンに変換"
     }
   }
 }

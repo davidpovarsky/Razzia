@@ -2,6 +2,8 @@ export * from "./api/routes"
 
 export * from "./game/session"
 
+export * from "./game/studio-show-coordinator"
+
 export * from "./storage/error"
 
 export * from "./storage/journal"

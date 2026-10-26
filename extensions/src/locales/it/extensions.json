@@ -282,11 +282,23 @@
       "settings": "Impostazioni",
       "launch": "Avvia"
     },
+    "participants": {
+      "subtitle": "Gestisci i partecipanti registrati, i numeri di telefono, le importazioni da foglio di calcolo e le regole di ammissione."
+    },
     "settings": {
       "globalTitle": "Impostazioni studio & predefiniti",
+      "subtitle": "Configura i valori predefiniti della scaletta, il comportamento delle carte e le politiche di presentazione globale.",
       "newQuestionMode": "Modalità predefinita per nuove carte",
+      "newCardsDescription": "Le nuove carte domanda aggiunte alla scaletta utilizzeranno automaticamente questa modalità.",
       "applyAllQuestions": "Applica a tutte le domande esistenti",
       "applyAllConfirm": "Convertire tutte le domande esistenti a questa modalità?",
+      "bulkDescription": "Converte tutte le domande di questo spettacolo in modalità {{mode}}.",
+      "bulkConfirmDesc": "Tutte le domande esistenti saranno impostate in modalità {{mode}}.",
+      "convertAll": "Converti tutto",
+      "scoredRequired": "Con punteggio, soluzione richiesta",
+      "unscoredOpinion": "Senza punteggio, distribuzione opinioni",
+      "autoAdvance": "Automatico (allo scadere del timer)",
+      "manualAdvance": "Manuale (avanza il conduttore)",
       "leaderboardPolicy": "Politica classifica",
       "advanceMode": "Avanzamento",
       "bulkSuccess": "Tutte le domande sono state aggiornate",
@@ -296,14 +308,28 @@
       "policyDisabled": "Disattivato"
     },
     "launch": {
-      "readyTitle": "Show pronto per l'avvio",
+      "readyTitle": "Avvia show dal vivo",
+      "subtitle": "Controlla la scaletta, il numero di partecipanti e avvia la sessione live del conduttore.",
       "launchButton": "Avvia show dal vivo",
-      "summary": "Riepilogo show",
+      "summary": "Pronto per l'avvio",
       "totalCards": "Carte sequenza",
       "totalQuestions": "Domande & sondaggi",
       "totalParticipants": "Partecipanti registrati",
       "missingMediaWarning": "Alcune carte media hanno URL vuoti",
-      "noQuestionsWarning": "Lo show deve contenere almeno una domanda"
+      "noQuestionsWarning": "Lo show deve contenere almeno una domanda",
+      "success": "Partita creata con successo!",
+      "saveFirst": "Salva il quiz prima di avviare una sessione live.",
+      "unsavedWarning": "Rilevate modifiche non salvate. Salva il quiz prima di avviare.",
+      "launching": "Avvio in corso...",
+      "launchNotice": "L'avvio crea una sessione con codice di invito e apre l'interfaccia per il conduttore.",
+      "unsavedTitle": "Modifiche non salvate",
+      "unsavedDesc": "Salva il tuo quiz per garantire che la sessione live mostri i contenuti più recenti.",
+      "missingMediaTitle": "File multimediali mancanti"
+    },
+    "convert": {
+      "title": "Convertire la domanda in scena?",
+      "description": "La conversione sostituirà il contenuto della domanda con la scena selezionata. Non può essere annullata.",
+      "confirm": "Converti in scena"
     }
   }
 }

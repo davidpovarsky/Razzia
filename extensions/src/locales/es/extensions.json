@@ -282,11 +282,23 @@
       "settings": "Ajustes",
       "launch": "Lanzar"
     },
+    "participants": {
+      "subtitle": "Administre los participantes registrados, números de teléfono, importaciones de hojas de cálculo y reglas de admisión."
+    },
     "settings": {
       "globalTitle": "Ajustes del estudio y valores predeterminados",
+      "subtitle": "Configure los valores predeterminados del espectáculo, la creación de tarjetas y las políticas de presentación global.",
       "newQuestionMode": "Modo predeterminado para nuevas tarjetas",
+      "newCardsDescription": "Las nuevas tarjetas de preguntas añadidas a la línea de tiempo usarán automáticamente este modo.",
       "applyAllQuestions": "Aplicar a todas las preguntas existentes",
       "applyAllConfirm": "¿Convertir todas las tarjetas de preguntas existentes a este modo?",
+      "bulkDescription": "Convierte todas las preguntas del espectáculo al modo {{mode}}.",
+      "bulkConfirmDesc": "Esto establecerá todas las preguntas existentes en modo {{mode}}.",
+      "convertAll": "Convertir todo",
+      "scoredRequired": "Con puntuación, solución requerida",
+      "unscoredOpinion": "Sin puntuación, distribución de opiniones",
+      "autoAdvance": "Automático (finalización del temporizador)",
+      "manualAdvance": "Manual (el anfitrión avanza)",
       "leaderboardPolicy": "Política de clasificación",
       "advanceMode": "Modo de avance",
       "bulkSuccess": "Todas las tarjetas de preguntas han sido actualizadas",
@@ -296,14 +308,28 @@
       "policyDisabled": "Desactivado"
     },
     "launch": {
-      "readyTitle": "Espectáculo listo para lanzar",
+      "readyTitle": "Iniciar espectáculo en vivo",
+      "subtitle": "Revise la preparación de la línea de tiempo, el conteo de participantes e inicie la sesión en vivo.",
       "launchButton": "Iniciar espectáculo en vivo",
-      "summary": "Resumen del espectáculo",
+      "summary": "Listo para iniciar",
       "totalCards": "Tarjetas en línea de tiempo",
       "totalQuestions": "Preguntas y encuestas",
       "totalParticipants": "Participantes registrados",
       "missingMediaWarning": "Algunas tarjetas multimedia tienen URLs vacías",
-      "noQuestionsWarning": "El espectáculo debe contener al menos una pregunta"
+      "noQuestionsWarning": "El espectáculo debe contener al menos una pregunta",
+      "success": "¡Partida creada con éxito!",
+      "saveFirst": "Por favor, guarde el cuestionario antes de iniciar una sesión en vivo.",
+      "unsavedWarning": "Se detectaron cambios sin guardar. Guarde el cuestionario antes de iniciar.",
+      "launching": "Iniciando...",
+      "launchNotice": "Iniciar crea una sesión activa con código de invitación y abre la interfaz del anfitrión.",
+      "unsavedTitle": "Cambios sin guardar",
+      "unsavedDesc": "Guarde su cuestionario para asegurarse de que el espectáculo en vivo refleje sus últimos cambios.",
+      "missingMediaTitle": "Archivos multimedia faltantes"
+    },
+    "convert": {
+      "title": "¿Convertir pregunta en escena?",
+      "description": "Al convertir esta pregunta, su contenido se reemplazará por la escena seleccionada. Esto no se puede deshacer.",
+      "confirm": "Convertir en escena"
     }
   }
 }

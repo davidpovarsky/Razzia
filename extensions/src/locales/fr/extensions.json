@@ -282,11 +282,23 @@
       "settings": "Paramètres",
       "launch": "Lancer"
     },
+    "participants": {
+      "subtitle": "Gérez les participants inscrits, les numéros de téléphone, les imports de feuilles de calcul et les règles d'accès."
+    },
     "settings": {
       "globalTitle": "Paramètres du studio & options par défaut",
+      "subtitle": "Configurez les paramètres par défaut de la chronologie, la création des cartes et les règles de présentation globale.",
       "newQuestionMode": "Mode par défaut pour les nouvelles cartes",
+      "newCardsDescription": "Les nouvelles cartes de questions ajoutées à la chronologie utiliseront automatiquement ce mode.",
       "applyAllQuestions": "Appliquer à toutes les questions existantes",
       "applyAllConfirm": "Convertir toutes les cartes de questions existantes vers ce mode ?",
+      "bulkDescription": "Convertit toutes les questions du spectacle en mode {{mode}}.",
+      "bulkConfirmDesc": "Toutes les questions existantes passeront en mode {{mode}}.",
+      "convertAll": "Tout convertir",
+      "scoredRequired": "Noté, réponse correcte requise",
+      "unscoredOpinion": "Non noté, sondage d'opinion",
+      "autoAdvance": "Automatique (fin du chronomètre)",
+      "manualAdvance": "Manuel (l'hôte avance)",
       "leaderboardPolicy": "Politique de classement",
       "advanceMode": "Mode d'avancement",
       "bulkSuccess": "Toutes les cartes de questions existantes ont été mises à jour",
@@ -296,14 +308,28 @@
       "policyDisabled": "Désactivé"
     },
     "launch": {
-      "readyTitle": "Spectacle prêt à être lancé",
+      "readyTitle": "Lancer le spectacle en direct",
+      "subtitle": "Vérifiez l'état de préparation de la chronologie, le nombre de participants et lancez la session en direct.",
       "launchButton": "Lancer le spectacle en direct",
-      "summary": "Résumé du spectacle",
+      "summary": "Prêt à démarrer",
       "totalCards": "Cartes de la timeline",
       "totalQuestions": "Questions & sondages",
       "totalParticipants": "Participants enregistrés",
       "missingMediaWarning": "Certaines cartes média ont des URLs vides",
-      "noQuestionsWarning": "Le spectacle doit contenir au moins une question"
+      "noQuestionsWarning": "Le spectacle doit contenir au moins une question",
+      "success": "Partie créée avec succès !",
+      "saveFirst": "Veuillez enregistrer le quiz avant de lancer une session en direct.",
+      "unsavedWarning": "Modifications non enregistrées détectées. Veuillez enregistrer le quiz avant de lancer.",
+      "launching": "Lancement en cours...",
+      "launchNotice": "Le lancement crée une session avec un code d'invitation et ouvre l'interface présentateur.",
+      "unsavedTitle": "Modifications non enregistrées",
+      "unsavedDesc": "Veuillez enregistrer votre quiz pour refléter le contenu le plus récent lors du spectacle en direct.",
+      "missingMediaTitle": "Fichiers multimédias manquants"
+    },
+    "convert": {
+      "title": "Convertir la question en scène ?",
+      "description": "La conversion remplacera le contenu de cette question par la scène sélectionnée. Cette action est irréversible.",
+      "confirm": "Convertir en scène"
     }
   }
 }

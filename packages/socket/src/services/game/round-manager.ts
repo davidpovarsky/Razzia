@@ -87,6 +87,8 @@ export interface RoundManagerOptions {
   onPresenceChange?: () => void
   onAnswerSubmitted?: (playerId: string, answerIds: number[], points: number) => void
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
+  onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
+  onShowStart?: (proceed: () => void) => void
 }
 
 interface RoundStep {
@@ -132,6 +134,10 @@ export class RoundManager {
         name: "leaderboard",
         gameModes: [QUIZZ_MODES.QUIZ],
         skip: () => {
+          if (this.isSurvey()) {
+            return true
+          }
+
           if (this.opts.shouldShowLeaderboard) {
             const currentCat = this.question.category?.trim()
             const nextCat =
@@ -177,9 +183,7 @@ export class RoundManager {
       },
     ]
 
-    this.steps = steps.filter((step) =>
-      step.gameModes.includes(opts.quizz.gameMode),
-    )
+    this.steps = steps
   }
 
   getAnsweredPlayerIds(): Set<string> {
@@ -557,6 +561,14 @@ export class RoundManager {
       return
     }
 
+    if (this.opts.onShowStart) {
+      this.opts.onShowStart(() => {
+        void this.newQuestion()
+      })
+
+      return
+    }
+
     void this.newQuestion()
   }
 
@@ -604,6 +616,21 @@ export class RoundManager {
   }
 
   private nextQuestion(): void {
+    if (this.opts.onQuestionCompleted) {
+      this.opts.onQuestionCompleted(this.currentQuestion, () => {
+        if (this.isLastQuestion()) {
+          this.finish()
+
+          return
+        }
+
+        this.currentQuestion += 1
+        void this.newQuestion()
+      })
+
+      return
+    }
+
     if (this.isLastQuestion()) {
       this.finish()
 
@@ -939,18 +966,22 @@ export class RoundManager {
     })
   }
 
-  private finish(): void {
+  finish(): void {
     this.started = false
     this.clearAutoAdvance()
     this.clearInterludeTimer()
 
-    const finalPlayers = this.isSurvey()
-      ? this.opts.players.getAll()
-      : this.leaderboard
+    const hasScoredQuestions = this.opts.quizz.questions.some(
+      (q) => resolveQuestionPlayMode(q, this.opts.quizz.gameMode) === "quiz",
+    )
+
+    const finalPlayers = hasScoredQuestions
+      ? this.leaderboard
+      : this.opts.players.getAll()
 
     this.opts.onGameFinished({
       id: `${Date.now()}-${nanoid(8)}`,
-      gameMode: this.opts.quizz.gameMode,
+      gameMode: hasScoredQuestions ? QUIZZ_MODES.QUIZ : QUIZZ_MODES.SURVEY,
       subject: this.opts.quizz.subject,
       date: new Date().toISOString(),
       players: finalPlayers.map((player, index) => ({
@@ -961,7 +992,7 @@ export class RoundManager {
       questions: this.questionsHistory,
     })
 
-    if (this.isSurvey()) {
+    if (!hasScoredQuestions) {
       this.finishSurvey()
 
       return
@@ -983,6 +1014,15 @@ export class RoundManager {
         rank: index + 1,
       })
     })
+  }
+
+  startQuestionAtIndex(index: number): void {
+    if (!this.started) {
+      this.started = true
+    }
+
+    this.currentQuestion = index
+    void this.newQuestion()
   }
 
   // ── Player actions ───────────────────────────────────────────────────────

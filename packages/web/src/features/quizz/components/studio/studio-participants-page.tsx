@@ -72,7 +72,10 @@ export const StudioParticipantsPage = () => {
                 {t("extensions:studio.tabs.participants", "Participants & Phone Roster")}
               </h1>
               <p className="text-sm text-muted-foreground">
-                Manage registered attendees, telephone numbers, spreadsheet imports, and admission policies.
+                {t(
+                  "extensions:studio.participants.subtitle",
+                  "Manage registered attendees, telephone numbers, spreadsheet imports, and admission policies.",
+                )}
               </p>
             </div>
           </div>

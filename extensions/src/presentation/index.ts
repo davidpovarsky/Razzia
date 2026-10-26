@@ -2,6 +2,8 @@ export * from "./interlude-state"
 
 export * from "./interlude-presenter"
 
+export * from "./scene-presenter"
+
 export * from "./interlude-preview"
 
 export * from "./audio-cue-player"

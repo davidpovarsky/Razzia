@@ -19,11 +19,11 @@ export const StudioSettingsPage = () => {
   const newQuestionModeItems = [
     {
       value: "quiz",
-      label: `${t("extensions:timeline.quiz", "Quiz")} — Scored, solution required`,
+      label: `${t("extensions:timeline.quiz", "Quiz")} — ${t("extensions:studio.settings.scoredRequired", "Scored, solution required")}`,
     },
     {
       value: "survey",
-      label: `${t("extensions:timeline.survey", "Survey")} — Unscored, opinion distribution`,
+      label: `${t("extensions:timeline.survey", "Survey")} — ${t("extensions:studio.settings.unscoredOpinion", "Unscored, opinion distribution")}`,
     },
   ]
 
@@ -47,8 +47,14 @@ export const StudioSettingsPage = () => {
   ]
 
   const advanceModeItems = [
-    { value: "auto", label: "Automatic (timer completion)" },
-    { value: "manual", label: "Manual (host advances)" },
+    {
+      value: "auto",
+      label: t("extensions:studio.settings.autoAdvance", "Automatic (timer completion)"),
+    },
+    {
+      value: "manual",
+      label: t("extensions:studio.settings.manualAdvance", "Manual (host advances)"),
+    },
   ]
 
   return (
@@ -63,7 +69,10 @@ export const StudioSettingsPage = () => {
               {t("extensions:studio.settings.globalTitle", "Studio Settings & Defaults")}
             </h1>
             <p className="text-sm text-muted-foreground">
-              Configure timeline show defaults, card creation behaviors, and global presentation policies.
+              {t(
+                "extensions:studio.settings.subtitle",
+                "Configure timeline show defaults, card creation behaviors, and global presentation policies.",
+              )}
             </p>
           </div>
         </div>
@@ -79,7 +88,10 @@ export const StudioSettingsPage = () => {
               )}
             />
             <ConfigField.Description>
-              New question cards added to the timeline will automatically use this mode.
+              {t(
+                "extensions:studio.settings.newCardsDescription",
+                "New question cards added to the timeline will automatically use this mode.",
+              )}
             </ConfigField.Description>
             <StudioSelect
               value={defaults.newQuestionMode}
@@ -100,7 +112,10 @@ export const StudioSettingsPage = () => {
                 )}
               </p>
               <p className="text-xs text-muted-foreground">
-                Bulk converts all questions in this show to {defaults.newQuestionMode}.
+                {t("extensions:studio.settings.bulkDescription", {
+                  mode: defaults.newQuestionMode,
+                  defaultValue: `Bulk converts all questions in this show to ${defaults.newQuestionMode}.`,
+                })}
               </p>
             </div>
             <AlertDialog
@@ -108,8 +123,11 @@ export const StudioSettingsPage = () => {
                 "extensions:studio.settings.applyAllConfirm",
                 "Convert all existing question cards to this mode?",
               )}
-              description={`This will set all existing questions to ${defaults.newQuestionMode} mode.`}
-              confirmLabel="Convert All"
+              description={t("extensions:studio.settings.bulkConfirmDesc", {
+                mode: defaults.newQuestionMode,
+                defaultValue: `This will set all existing questions to ${defaults.newQuestionMode} mode.`,
+              })}
+              confirmLabel={t("extensions:studio.settings.convertAll", "Convert All")}
               onConfirm={() => {
                 bulkApplyQuestionMode(defaults.newQuestionMode)
               }}
@@ -119,7 +137,7 @@ export const StudioSettingsPage = () => {
                   size="sm"
                   className="bg-accent text-accent-foreground font-semibold"
                 >
-                  Apply Mode to Existing
+                  {t("extensions:studio.settings.convertAll", "Convert All")}
                 </Button>
               }
             />

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtras,
+  createDefaultRosterExtras,
   generateQuestionIds,
 } from "../core/index"
 import { ExtensionGameSession } from "./game/session"
@@ -195,5 +196,88 @@ describe("ExtensionGameSession Lifecycle & State Authority (INT01-02, MEDIA03, S
 
     expect(reconnectSnap.phase).toBe("interlude")
     expect(reconnectSnap.seq).toBe(session.currentSeq)
+  })
+
+  it("V2 Studio: attaches StudioShowCoordinator, protects player snapshot, and routes ADVANCE_TIMELINE_SCENE", () => {
+    const v2Extras = {
+      ...extras,
+      schemaVersion: 2 as const,
+      timeline: [
+        { id: "s-open", kind: "opening" as const, sceneId: "scene-1" },
+        { id: "s-q1", kind: "question" as const, questionId: qIds[0] },
+      ],
+      scenes: {
+        "scene-1": {
+          id: "scene-1",
+          kind: "opening" as const,
+          title: "Opening Scene",
+          durationMs: 4000,
+          advance: "auto" as const,
+        },
+      },
+      defaults: {
+        newQuestionMode: "quiz" as const,
+        leaderboardPolicy: "cardOnly" as const,
+        advanceMode: "auto" as const,
+      },
+      roster: createDefaultRosterExtras(),
+    }
+
+    const session = new ExtensionGameSession("game-v2", v2Extras)
+    let advanced = false
+    let skipped = false
+
+    session.setDelegate({
+      advanceTimelineScene: () => {
+        advanced = true
+
+        return true
+      },
+      skipTimelineScene: () => {
+        skipped = true
+
+        return true
+      },
+    })
+
+    // Player snapshot: safe active step, NO full future timeline or scenes
+    const playerSnap = session.getStateSnapshot("player", [])
+    expect(playerSnap.extras.timeline).toBeUndefined()
+    expect(playerSnap.extras.scenes).toBeUndefined()
+
+    // Manager snapshot: has full timeline and scenes
+    const managerSnap = session.getStateSnapshot("manager", [])
+    expect(managerSnap.extras.timeline).toBeDefined()
+    expect(managerSnap.extras.scenes).toBeDefined()
+
+    // Command handling: ADVANCE_TIMELINE_SCENE
+    const advRes = session.handleCommand(
+      {
+        v: 1,
+        gameId: "game-v2",
+        action: "ADVANCE_TIMELINE_SCENE",
+        payload: { sceneId: "scene-1" },
+        requestId: "adv-1",
+      },
+      true,
+      false,
+    )
+    expect(advRes.success).toBe(true)
+    expect(advanced).toBe(true)
+
+    // Command handling: SKIP_TIMELINE_SCENE
+    const skipRes = session.handleCommand(
+      {
+        v: 1,
+        gameId: "game-v2",
+        action: "SKIP_TIMELINE_SCENE",
+        payload: { sceneId: "scene-1" },
+        requestId: "skip-1",
+      },
+      true,
+      false,
+    )
+    expect(skipRes.success).toBe(true)
+    expect(skipped).toBe(true)
   })
 })

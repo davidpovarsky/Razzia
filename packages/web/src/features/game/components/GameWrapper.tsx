@@ -16,6 +16,8 @@ import {
 import {
   AudioCuePlayer,
   InterludePresenter,
+  ScenePresenter,
+  type ScenePresenterProps,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
@@ -244,6 +246,109 @@ const GameWrapper = ({
 
   const defaultExit = () => undefined
 
+  const renderStageContent = () => {
+    if (!extensionState) {
+      return (
+        <ExtensionStateProvider value={extensionState}>
+          {children}
+        </ExtensionStateProvider>
+      )
+    }
+
+    if (
+      extensionState.phase === "scene" &&
+      (Boolean(extensionState.extras.currentScene) ||
+        (extensionState.extras.activeTimelineStep &&
+          (extensionState.extras.activeTimelineStep as { kind?: string }).kind !== "question"))
+    ) {
+      const activeStep = extensionState.extras.activeTimelineStep as
+        | ScenePresenterProps["step"]
+        | undefined
+      const currentScene = extensionState.extras.currentScene as
+        | ScenePresenterProps["scene"]
+        | undefined
+
+      return (
+        <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
+          <ScenePresenter
+            step={activeStep}
+            scene={currentScene}
+            serverStartedAt={extensionState.startedAt}
+            isManager={Boolean(manager)}
+            onAdvance={() => {
+              if (manager && extensionState.gameId) {
+                socket.emit(EXTENSION_EVENTS.COMMAND, {
+                  v: 1,
+                  gameId: extensionState.gameId,
+                  action: "ADVANCE_TIMELINE_SCENE",
+                  payload: {
+                    epoch: extensionState.epoch,
+                  },
+                  requestId: `adv-${Date.now()}`,
+                })
+              }
+            }}
+            onSkip={() => {
+              if (manager && extensionState.gameId) {
+                socket.emit(EXTENSION_EVENTS.COMMAND, {
+                  v: 1,
+                  gameId: extensionState.gameId,
+                  action: "SKIP_TIMELINE_SCENE",
+                  payload: {
+                    epoch: extensionState.epoch,
+                  },
+                  requestId: `skip-${Date.now()}`,
+                })
+              }
+            }}
+          />
+        </div>
+      )
+    }
+
+    if (extensionState.phase === "interlude" && extensionState.extras.interlude) {
+      return (
+        <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
+          <InterludePresenter
+            interlude={extensionState.extras.interlude as Interlude}
+            serverStartedAt={extensionState.startedAt}
+            isManager={Boolean(manager)}
+            labels={{
+              secondsRemaining: (sec) =>
+                t("extensions:interludes.secondsRemaining", {
+                  seconds: sec,
+                }),
+              awaitingHost: t("extensions:interludes.awaitingHost"),
+              skipInterlude: t("extensions:interludes.skipInterlude"),
+              skipped: t("extensions:interludes.skipped"),
+              slideAlt: t("extensions:interludes.slideAlt"),
+            }}
+            onSkip={() => {
+              if (manager && extensionState.gameId) {
+                socket.emit(EXTENSION_EVENTS.COMMAND, {
+                  v: 1,
+                  gameId: extensionState.gameId,
+                  action: "END_OR_SKIP_INTERLUDE",
+                  payload: {
+                    reason: "manual",
+                    epoch: extensionState.epoch,
+                  },
+                  requestId: `skip-${Date.now()}`,
+                })
+              }
+            }}
+          />
+        </div>
+      )
+    }
+
+    return (
+      <ExtensionStateProvider value={extensionState}>
+        {children}
+      </ExtensionStateProvider>
+    )
+  }
+
   return (
     <section className="relative flex min-h-dvh isolate">
       <GameBackground />
@@ -260,44 +365,7 @@ const GameWrapper = ({
           <>
             {renderHeader()}
 
-            {extensionState?.phase === "interlude" &&
-            extensionState.extras.interlude ? (
-              <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
-                <InterludePresenter
-                  interlude={extensionState.extras.interlude as Interlude}
-                  serverStartedAt={extensionState.startedAt}
-                  isManager={Boolean(manager)}
-                  labels={{
-                    secondsRemaining: (sec) =>
-                      t("extensions:interludes.secondsRemaining", {
-                        seconds: sec,
-                      }),
-                    awaitingHost: t("extensions:interludes.awaitingHost"),
-                    skipInterlude: t("extensions:interludes.skipInterlude"),
-                    skipped: t("extensions:interludes.skipped"),
-                    slideAlt: t("extensions:interludes.slideAlt"),
-                  }}
-                  onSkip={() => {
-                    if (manager && extensionState.gameId) {
-                      socket.emit(EXTENSION_EVENTS.COMMAND, {
-                        v: 1,
-                        gameId: extensionState.gameId,
-                        action: "END_OR_SKIP_INTERLUDE",
-                        payload: {
-                          reason: "manual",
-                          epoch: extensionState.epoch,
-                        },
-                        requestId: `skip-${Date.now()}`,
-                      })
-                    }
-                  }}
-                />
-              </div>
-            ) : (
-              <ExtensionStateProvider value={extensionState}>
-                {children}
-              </ExtensionStateProvider>
-            )}
+            {renderStageContent()}
 
             {extensionState?.extras.audioCue && (
               <AudioCuePlayer
@@ -443,7 +511,8 @@ const GameWrapper = ({
                     )
                   })()}
                 </div>
-                {gameMode !== QUIZZ_MODES.SURVEY && (
+                {(gameMode !== QUIZZ_MODES.SURVEY ||
+                  (player?.points !== undefined && player.points > 0)) && (
                   <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
                     {player?.points}
                   </div>

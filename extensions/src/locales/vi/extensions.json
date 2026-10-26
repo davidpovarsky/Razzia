@@ -282,11 +282,23 @@
       "settings": "Cài đặt",
       "launch": "Bắt đầu"
     },
+    "participants": {
+      "subtitle": "Quản lý người tham gia đã đăng ký, số điện thoại, nhập bảng tính và chính sách tham gia."
+    },
     "settings": {
       "globalTitle": "Cài đặt studio & mặc định",
+      "subtitle": "Cấu hình mặc định dòng thời gian, cách tạo thẻ và chính sách trình chiếu tổng thể.",
       "newQuestionMode": "Chế độ mặc định cho thẻ mới",
+      "newCardsDescription": "Các thẻ câu hỏi mới thêm vào dòng thời gian sẽ tự động sử dụng chế độ này.",
       "applyAllQuestions": "Áp dụng cho tất cả câu hỏi hiện có",
       "applyAllConfirm": "Chuyển tất cả thẻ câu hỏi hiện có sang chế độ này?",
+      "bulkDescription": "Chuyển đổi hàng loạt tất cả câu hỏi trong chương trình sang chế độ {{mode}}.",
+      "bulkConfirmDesc": "Thao tác này sẽ đặt tất cả câu hỏi hiện có sang chế độ {{mode}}.",
+      "convertAll": "Chuyển đổi tất cả",
+      "scoredRequired": "Tính điểm, yêu cầu đáp án đúng",
+      "unscoredOpinion": "Không tính điểm, khảo sát ý kiến",
+      "autoAdvance": "Tự động (hết thời gian)",
+      "manualAdvance": "Thủ công (người dẫn chương trình chuyển)",
       "leaderboardPolicy": "Chính sách bảng xếp hạng",
       "advanceMode": "Chế độ chuyển tiếp",
       "bulkSuccess": "Đã cập nhật tất cả thẻ câu hỏi",
@@ -296,14 +308,28 @@
       "policyDisabled": "Đã tắt"
     },
     "launch": {
-      "readyTitle": "Buổi biểu diễn đã sẵn sàng",
+      "readyTitle": "Bắt đầu buổi trực tiếp",
+      "subtitle": "Kiểm tra độ sẵn sàng của dòng thời gian, số lượng người tham gia và bắt đầu buổi trình chiếu trực tiếp.",
       "launchButton": "Bắt đầu buổi trực tiếp",
-      "summary": "Tóm tắt buổi biểu diễn",
+      "summary": "Sẵn sàng bắt đầu",
       "totalCards": "Thẻ dòng thời gian",
       "totalQuestions": "Câu hỏi & khảo sát",
       "totalParticipants": "Người tham gia đã đăng ký",
       "missingMediaWarning": "Một số thẻ phương tiện có URL trống",
-      "noQuestionsWarning": "Buổi biểu diễn phải có ít nhất một câu hỏi"
+      "noQuestionsWarning": "Buổi biểu diễn phải có ít nhất một câu hỏi",
+      "success": "Đã tạo trò chơi thành công!",
+      "saveFirst": "Vui lòng lưu bài kiểm tra trước khi khởi chạy phiên trực tiếp.",
+      "unsavedWarning": "Phát hiện thay đổi chưa lưu. Vui lòng lưu bài kiểm tra trước khi khởi chạy.",
+      "launching": "Đang khởi chạy...",
+      "launchNotice": "Khởi chạy sẽ tạo phiên hoạt động với mã mời và mở giao diện người dẫn chương trình.",
+      "unsavedTitle": "Thay đổi chưa lưu",
+      "unsavedDesc": "Vui lòng lưu bài kiểm tra để buổi trực tiếp hiển thị nội dung mới nhất của bạn.",
+      "missingMediaTitle": "Thiếu tệp đa phương tiện"
+    },
+    "convert": {
+      "title": "Chuyển đổi câu hỏi thành phân cảnh?",
+      "description": "Việc chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng phân cảnh đã chọn. Thao tác này không thể hoàn tác.",
+      "confirm": "Chuyển đổi thành phân cảnh"
     }
   }
 }

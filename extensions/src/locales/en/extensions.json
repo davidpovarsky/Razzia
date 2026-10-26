@@ -282,11 +282,23 @@
       "settings": "Settings",
       "launch": "Launch"
     },
+    "participants": {
+      "subtitle": "Manage registered attendees, telephone numbers, spreadsheet imports, and admission policies."
+    },
     "settings": {
       "globalTitle": "Studio Settings & Defaults",
+      "subtitle": "Configure timeline show defaults, card creation behaviors, and global presentation policies.",
       "newQuestionMode": "Default Mode for New Cards",
+      "newCardsDescription": "New question cards added to the timeline will automatically use this mode.",
       "applyAllQuestions": "Apply to All Existing Question Cards",
       "applyAllConfirm": "Convert all existing question cards to this mode?",
+      "bulkDescription": "Bulk converts all questions in this show to {{mode}}.",
+      "bulkConfirmDesc": "This will set all existing questions to {{mode}} mode.",
+      "convertAll": "Convert All",
+      "scoredRequired": "Scored, solution required",
+      "unscoredOpinion": "Unscored, opinion distribution",
+      "autoAdvance": "Automatic (timer completion)",
+      "manualAdvance": "Manual (host advances)",
       "leaderboardPolicy": "Leaderboard Policy",
       "advanceMode": "Advance Mode",
       "bulkSuccess": "Updated all existing question cards",
@@ -296,14 +308,28 @@
       "policyDisabled": "Disabled"
     },
     "launch": {
-      "readyTitle": "Show Ready to Launch",
+      "readyTitle": "Launch Live Show",
+      "subtitle": "Review timeline readiness, participant counts, and initiate the live presenter session.",
       "launchButton": "Launch Live Show",
-      "summary": "Show Summary",
+      "summary": "Ready to Start",
       "totalCards": "Timeline Cards",
       "totalQuestions": "Questions & Surveys",
       "totalParticipants": "Registered Participants",
       "missingMediaWarning": "Some media cards have empty URLs",
-      "noQuestionsWarning": "Show must contain at least one question"
+      "noQuestionsWarning": "Show must contain at least one question",
+      "success": "Game created successfully!",
+      "saveFirst": "Please save the quiz before launching a live session.",
+      "unsavedWarning": "Unsaved changes detected. Please save the quiz before launching.",
+      "launching": "Launching...",
+      "launchNotice": "Launching creates an active game session with an invite code and opens the host presenter interface.",
+      "unsavedTitle": "Unsaved Changes",
+      "unsavedDesc": "Please save your quiz to ensure the live show reflects your latest timeline and question content.",
+      "missingMediaTitle": "Missing Media Assets"
+    },
+    "convert": {
+      "title": "Convert Question to Scene?",
+      "description": "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
+      "confirm": "Convert to Scene"
     }
   }
 }

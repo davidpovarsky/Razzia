@@ -106,17 +106,13 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       if (extras.timeline.length > 0 && !selectedTimelineId) {
         setSelectedTimelineId(extras.timeline[0].id)
       }
-    } else {
-      // Migrate V1 or initial state to V2
+    } else if (extras && !isQuizExtrasV2(extras)) {
+      // Migrate V1 to V2
       const baseQuiz = { questions: getValues("questions") }
-      const upgraded = upgradeLegacyExtrasToV2(
-        baseQuiz,
-        extras && !isQuizExtrasV2(extras) ? extras : null,
-        {
-          quizId: quizzId ?? "temp-quiz",
-          baseDigest: extras?.baseDigest ?? "0".repeat(64),
-        },
-      )
+      const upgraded = upgradeLegacyExtrasToV2(baseQuiz, extras, {
+        quizId: quizzId ?? "temp-quiz",
+        baseDigest: extras.baseDigest,
+      })
       setTimeline(upgraded.timeline)
       setScenes(upgraded.scenes)
       setDefaults(upgraded.defaults)
@@ -126,6 +122,25 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       }
 
       setExtras(upgraded)
+    } else {
+      // Extras is null: either new unsaved quiz or sidecar is in-flight from server
+      const baseQuiz = { questions: getValues("questions") }
+      const upgraded = upgradeLegacyExtrasToV2(baseQuiz, null, {
+        quizId: quizzId ?? "temp-quiz",
+        baseDigest: "0".repeat(64),
+      })
+      setTimeline(upgraded.timeline)
+      setScenes(upgraded.scenes)
+      setDefaults(upgraded.defaults)
+
+      if (upgraded.timeline.length > 0 && !selectedTimelineId) {
+        setSelectedTimelineId(upgraded.timeline[0].id)
+      }
+
+      // Only set local extras when creating a brand new quiz with no server sidecar
+      if (!quizzId) {
+        setExtras(upgraded)
+      }
     }
   }, [extras, quizzId, getValues, selectedTimelineId, setExtras])
 
@@ -164,9 +179,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const qIndex = questionIds.findIndex(
         (id) => id === selectedTimelineItem.questionId,
       )
-      const q = questions[qIndex]
+      const q = qIndex >= 0 ? questions[qIndex] : undefined
 
-      if (q.playMode === "survey" || (!q.playMode && gameMode === QUIZZ_MODES.SURVEY)) {
+      if (q?.playMode === "survey" || (!q?.playMode && gameMode === QUIZZ_MODES.SURVEY)) {
         return "survey"
       }
 

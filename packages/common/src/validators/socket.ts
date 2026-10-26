@@ -39,6 +39,8 @@ export const clientEventValidators = {
       "VIEW_HISTORY",
       "REPLAY_FROM_CHECKPOINT",
       "END_OR_SKIP_INTERLUDE",
+      "ADVANCE_TIMELINE_SCENE",
+      "SKIP_TIMELINE_SCENE",
     ]),
     payload: z.unknown().optional(),
     requestId: z.string().min(1),

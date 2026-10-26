@@ -1,0 +1,313 @@
+import type {
+  TimelineItem,
+  SceneConfig,
+  StudioDefaults,
+} from "../../core/studio-timeline-schema"
+import { TimelineRunner, type TimelineStepState } from "../../gameplay/timeline-runner"
+
+export interface StudioCoordinatorCallbacks {
+  onStartQuestion: (questionIndex: number) => Promise<void> | void
+  onFinish: () => void
+  onBroadcastState: () => void
+}
+
+export interface StudioShowCoordinatorOptions {
+  timeline: TimelineItem[]
+  scenes: Record<string, SceneConfig>
+  questionIds: string[]
+  defaults: StudioDefaults
+  callbacks: StudioCoordinatorCallbacks
+}
+
+export interface AuthoritativeStepEnvelope {
+  id: string
+  kind: string
+  questionId?: string
+  sceneId?: string
+  questionOrdinal: number
+  stepIndex: number
+  totalSteps: number
+  advance: "auto" | "manual"
+  startedAt: number
+  durationMs: number
+  epoch: number
+  seq: number
+  scene?: SceneConfig
+}
+
+/**
+ * Server show coordinator owning TimelineRunner for V2 Studio shows.
+ * Enforces:
+ * - Monotonic step ID and epoch progression
+ * - Non-question scenes (transition, animation, media, leaderboard, interimResults, countdown, opening, closing)
+ *   strictly block answer acceptance on the server
+ * - Auto-advance timer management with cancel-on-skip and race prevention
+ * - Full multi-scene sequencing before, between, and after questions
+ */
+export class StudioShowCoordinator {
+  private readonly runner: TimelineRunner
+  private readonly questionIds: string[]
+  private readonly defaults: StudioDefaults
+  private readonly callbacks: StudioCoordinatorCallbacks
+
+  private phase: "lobby" | "scene" | "question" | "finished" = "lobby"
+  private epoch = 0
+  private seq = 0
+  private startedAt = 0
+  private currentStepId: string | null = null
+  private timer: NodeJS.Timeout | null = null
+  private readonly processedRequestIds = new Set<string>()
+
+  constructor(options: StudioShowCoordinatorOptions) {
+    this.runner = new TimelineRunner(options.timeline, options.scenes)
+    this.questionIds = options.questionIds
+    this.defaults = options.defaults
+    this.callbacks = options.callbacks
+  }
+
+  get currentEpoch(): number {
+    return this.epoch
+  }
+
+  get currentSeq(): number {
+    return this.seq
+  }
+
+  get currentPhase(): "lobby" | "scene" | "question" | "finished" {
+    return this.phase
+  }
+
+  get currentScene(): SceneConfig | undefined {
+    if (this.phase !== "scene") {
+      return undefined
+    }
+
+    return this.runner.currentScene
+  }
+
+  get totalSteps(): number {
+    return this.runner.length
+  }
+
+  get currentIndex(): number {
+    return this.runner.index
+  }
+
+  get currentStep(): TimelineStepState | null {
+    return this.runner.getCurrentStep()
+  }
+
+  isSceneActive(): boolean {
+    return this.phase === "scene"
+  }
+
+  canAcceptAnswers(): boolean {
+    return this.phase === "question"
+  }
+
+  getQuestionOrdinal(): number {
+    return this.runner.getQuestionOrdinal()
+  }
+
+  private getQuestionIndex(questionId: string): number {
+    const idx = this.questionIds.indexOf(questionId)
+
+    return idx >= 0 ? idx : 0
+  }
+
+  private clearTimer(): void {
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+    }
+  }
+
+  private scheduleAutoAdvance(durationMs: number, expectedEpoch: number): void {
+    this.clearTimer()
+    this.timer = setTimeout(() => {
+      this.timer = null
+
+      if (this.epoch === expectedEpoch && this.phase === "scene") {
+        this.advanceScene()
+      }
+    }, durationMs)
+  }
+
+  /**
+   * Starts timeline execution from step 0.
+   */
+  start(): void {
+    if (this.phase !== "lobby") {
+      return
+    }
+
+    const step = this.runner.getCurrentStep()
+
+    if (!step) {
+      this.phase = "finished"
+      this.callbacks.onFinish()
+
+      return
+    }
+
+    this.epoch += 1
+    this.seq += 1
+    this.startedAt = Date.now()
+    this.currentStepId = step.item.id
+
+    if (step.item.kind === "question") {
+      this.phase = "question"
+      const qIdx = this.getQuestionIndex(step.item.questionId)
+      void this.callbacks.onStartQuestion(qIdx)
+    } else {
+      this.phase = "scene"
+
+      if (step.advanceMode === "auto") {
+        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+      }
+
+      this.callbacks.onBroadcastState()
+    }
+  }
+
+  /**
+   * Advances the current non-question scene.
+   * Cancels any pending auto-advance timer to prevent double advances.
+   */
+  advanceScene(sceneId?: string, epoch?: number): boolean {
+    if (this.phase !== "scene") {
+      return false
+    }
+
+    if (epoch !== undefined && epoch !== this.epoch) {
+      return false
+    }
+
+    if (sceneId && this.currentScene?.id && sceneId !== this.currentScene.id) {
+      return false
+    }
+
+    this.clearTimer()
+
+    const { step, done } = this.runner.advance()
+
+    if (done || !step) {
+      this.phase = "finished"
+      this.epoch += 1
+      this.seq += 1
+      this.callbacks.onFinish()
+
+      return true
+    }
+
+    this.epoch += 1
+    this.seq += 1
+    this.startedAt = Date.now()
+    this.currentStepId = step.item.id
+
+    if (step.item.kind === "question") {
+      this.phase = "question"
+      const qIdx = this.getQuestionIndex(step.item.questionId)
+      void this.callbacks.onStartQuestion(qIdx)
+    } else {
+      this.phase = "scene"
+
+      if (step.advanceMode === "auto") {
+        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+      }
+
+      this.callbacks.onBroadcastState()
+    }
+
+    return true
+  }
+
+  /**
+   * Skips exactly one active scene.
+   */
+  skipScene(sceneId?: string, epoch?: number): boolean {
+    return this.advanceScene(sceneId, epoch)
+  }
+
+  /**
+   * Called by RoundManager when a question completes its reveal/leaderboard cycles.
+   * Advances the timeline runner to the next item (scene or next question).
+   */
+  onQuestionCompleted(_currentQuestionIndex: number): void {
+    if (this.phase !== "question") {
+      return
+    }
+
+    this.clearTimer()
+
+    const { step, done } = this.runner.advance()
+
+    if (done || !step) {
+      this.phase = "finished"
+      this.epoch += 1
+      this.seq += 1
+      this.callbacks.onFinish()
+
+      return
+    }
+
+    this.epoch += 1
+    this.seq += 1
+    this.startedAt = Date.now()
+    this.currentStepId = step.item.id
+
+    if (step.item.kind === "question") {
+      this.phase = "question"
+      const nextQIdx = this.getQuestionIndex(step.item.questionId)
+      void this.callbacks.onStartQuestion(nextQIdx)
+    } else {
+      this.phase = "scene"
+
+      if (step.advanceMode === "auto") {
+        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+      }
+
+      this.callbacks.onBroadcastState()
+    }
+  }
+
+  /**
+   * Returns authoritative step envelope.
+   * For players, returns safe active-scene payload only (no future timeline or private details).
+   */
+  getAuthoritativeStepEnvelope(
+    _forRole: "manager" | "player" = "player",
+  ): AuthoritativeStepEnvelope | null {
+    if (this.phase === "lobby" || this.phase === "finished") {
+      return null
+    }
+
+    const step = this.runner.getCurrentStep()
+
+    if (!step) {
+      return null
+    }
+
+    return {
+      id: step.item.id,
+      kind: step.item.kind,
+      questionId:
+        step.item.kind === "question" ? step.item.questionId : undefined,
+      sceneId: step.item.kind !== "question" ? step.item.sceneId : undefined,
+      questionOrdinal: this.runner.getQuestionOrdinal(),
+      stepIndex: step.index,
+      totalSteps: step.total,
+      advance: step.advanceMode,
+      startedAt: this.startedAt,
+      durationMs: step.durationMs,
+      epoch: this.epoch,
+      seq: this.seq,
+      scene: step.scene,
+    }
+  }
+
+  dispose(): void {
+    this.clearTimer()
+    this.phase = "finished"
+  }
+}

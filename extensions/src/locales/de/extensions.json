@@ -282,11 +282,23 @@
       "settings": "Einstellungen",
       "launch": "Starten"
     },
+    "participants": {
+      "subtitle": "Registrierte Teilnehmer, Telefonnummern, Tabellenimporte und Einlassregeln verwalten."
+    },
     "settings": {
       "globalTitle": "Studio-Einstellungen & Standardwerte",
+      "subtitle": "Standardwerte für die Show, Kartenerstellung und globale Präsentationsregeln anpassen.",
       "newQuestionMode": "Standardmodus für neue Karten",
+      "newCardsDescription": "Neue Fragenkarten auf der Zeitleiste verwenden automatisch diesen Modus.",
       "applyAllQuestions": "Auf alle bestehenden Fragen anwenden",
       "applyAllConfirm": "Möchten Sie alle Fragen auf diesen Modus umstellen?",
+      "bulkDescription": "Konvertiert alle Fragen in dieser Show auf {{mode}}.",
+      "bulkConfirmDesc": "Dadurch werden alle vorhandenen Fragen auf den Modus {{mode}} umgestellt.",
+      "convertAll": "Alle umwandeln",
+      "scoredRequired": "Gewertet, Lösung erforderlich",
+      "unscoredOpinion": "Ungewertet, Meinungsverteilung",
+      "autoAdvance": "Automatisch (nach Zeitablauf)",
+      "manualAdvance": "Manuell (Moderator schaltet weiter)",
       "leaderboardPolicy": "Ranglisten-Richtlinie",
       "advanceMode": "Weiterschaltmodus",
       "bulkSuccess": "Alle bestehenden Fragen wurden aktualisiert",
@@ -296,14 +308,28 @@
       "policyDisabled": "Deaktiviert"
     },
     "launch": {
-      "readyTitle": "Show bereit zum Start",
+      "readyTitle": "Live-Show starten",
+      "subtitle": "Prüfen Sie die Show-Bereitschaft, Teilnehmerzahlen und starten Sie die Präsentation.",
       "launchButton": "Live-Show starten",
-      "summary": "Show-Zusammenfassung",
+      "summary": "Bereit zum Start",
       "totalCards": "Zeitleisten-Karten",
       "totalQuestions": "Fragen & Umfragen",
       "totalParticipants": "Registrierte Teilnehmer",
       "missingMediaWarning": "Einige Medienkarten haben leere URLs",
-      "noQuestionsWarning": "Die Show muss mindestens eine Frage enthalten"
+      "noQuestionsWarning": "Die Show muss mindestens eine Frage enthalten",
+      "success": "Spiel erfolgreich erstellt!",
+      "saveFirst": "Bitte speichern Sie das Quiz vor dem Starten einer Live-Sitzung.",
+      "unsavedWarning": "Ungespeicherte Änderungen erkannt. Bitte vor dem Start speichern.",
+      "launching": "Wird gestartet...",
+      "launchNotice": "Beim Start wird eine Spielsitzung mit Einladungscode erstellt und die Moderationsansicht geöffnet.",
+      "unsavedTitle": "Ungespeicherte Änderungen",
+      "unsavedDesc": "Bitte speichern Sie das Quiz, damit die Live-Show Ihre neuesten Änderungen enthält.",
+      "missingMediaTitle": "Fehlende Mediendateien"
+    },
+    "convert": {
+      "title": "Frage in Szene umwandeln?",
+      "description": "Das Umwandeln dieser Frage ersetzt ihren Inhalt durch die gewählte Szene. Dies kann nicht rückgängig gemacht werden.",
+      "confirm": "In Szene umwandeln"
     }
   }
 }

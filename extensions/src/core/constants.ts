@@ -64,6 +64,7 @@ export const EXTENSION_PHASES = [
   "responses",
   "leaderboard",
   "interlude",
+  "scene",
   "finished",
 ] as const
 
@@ -80,6 +81,8 @@ export const COMMAND_ACTIONS = [
   "VIEW_HISTORY",
   "REPLAY_FROM_CHECKPOINT",
   "END_OR_SKIP_INTERLUDE",
+  "ADVANCE_TIMELINE_SCENE",
+  "SKIP_TIMELINE_SCENE",
 ] as const
 
 export type CommandAction = (typeof COMMAND_ACTIONS)[number]

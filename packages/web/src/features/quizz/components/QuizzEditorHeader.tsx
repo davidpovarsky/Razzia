@@ -422,7 +422,10 @@ const QuizzEditorHeader = () => {
           "extensions:timeline.deleteConfirmDesc",
           "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
         )}
-        confirmLabel="Convert to Scene"
+        confirmLabel={t(
+          "extensions:studio.convert.confirm",
+          "Convert to Scene",
+        )}
         onConfirm={confirmPendingConversion}
       />
     </header>

@@ -23,6 +23,7 @@ import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
 import {
   ExtensionGameSession,
   readSidecar,
+  StudioShowCoordinator,
   type PlayerScoreInfo,
 } from "@razzia/extensions/server"
 import { getPath, saveResult } from "@razzia/socket/services/config"
@@ -58,6 +59,7 @@ class Game {
   private readonly round: RoundManager
   private readonly cooldown: CooldownTimer
   private readonly extensionSession: ExtensionGameSession | null
+  private readonly showCoordinator: StudioShowCoordinator | null = null
   private managerGraceTimer: NodeJS.Timeout | null = null
 
   private lastBroadcastStatus: {
@@ -114,6 +116,27 @@ class Game {
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
+
+    if (sidecar && isQuizExtrasV2(sidecar)) {
+      this.showCoordinator = new StudioShowCoordinator({
+        timeline: sidecar.timeline,
+        scenes: sidecar.scenes,
+        questionIds: sidecar.questionIds,
+        defaults: sidecar.defaults,
+        callbacks: {
+          onStartQuestion: (qIdx) => {
+            this.round.startQuestionAtIndex(qIdx)
+          },
+          onFinish: () => {
+            this.round.finish()
+          },
+          onBroadcastState: () => {
+            this.broadcastExtensionState()
+          },
+        },
+      })
+      this.extensionSession?.setShowCoordinator(this.showCoordinator)
+    }
 
     if (sidecar?.roster) {
       this._settings = {
@@ -285,6 +308,16 @@ class Game {
         this.syncRosterScoresFromPlayers()
         this.broadcastHostPresence()
       },
+      onShowStart: this.showCoordinator
+        ? () => {
+            this.showCoordinator?.start()
+          }
+        : undefined,
+      onQuestionCompleted: this.showCoordinator
+        ? (qIdx) => {
+            this.showCoordinator?.onQuestionCompleted(qIdx)
+          }
+        : undefined,
     })
 
     if (this.extensionSession) {
@@ -295,6 +328,10 @@ class Game {
         replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
         getHistory: (qIdx) => this.round.getHistory(qIdx),
+        advanceTimelineScene: (sceneId, epoch) =>
+          this.showCoordinator?.advanceScene(sceneId, epoch) ?? false,
+        skipTimelineScene: (sceneId, epoch) =>
+          this.showCoordinator?.skipScene(sceneId, epoch) ?? false,
       })
     }
 
@@ -380,6 +417,29 @@ class Game {
   }
 
   getQuestionStateForGateway(rosterPlayerId?: string) {
+    if (this.showCoordinator?.isSceneActive()) {
+      const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
+      const player = entry?.clientId
+        ? this.playerManager.findByClientId(entry.clientId)
+        : undefined
+      const verdict = rosterPlayerId
+        ? this.lastVerdictByRosterId.get(rosterPlayerId) ?? null
+        : null
+
+      return {
+        gameId: this.gameId,
+        inviteCode: this.inviteCode,
+        started: this.started,
+        gameMode: this.gameMode,
+        epoch: this.showCoordinator.currentEpoch,
+        questionIndex: this.round.currentQuestionIndex,
+        acceptingAnswers: false,
+        answeredCurrentQuestion: true,
+        points: player?.points ?? entry?.points ?? 0,
+        lastVerdict: verdict,
+      }
+    }
+
     const epoch =
       this.extensionSession?.currentEpoch ??
       (this.started ? this.round.currentQuestionIndex + 1 : 0)
@@ -422,6 +482,14 @@ class Game {
     isSurvey?: boolean
     reason?: string
   } {
+    if (this.showCoordinator?.isSceneActive()) {
+      return {
+        accepted: false,
+        epoch: this.showCoordinator.currentEpoch,
+        reason: "scene_active",
+      }
+    }
+
     const epoch =
       this.extensionSession?.currentEpoch ??
       (this.started ? this.round.currentQuestionIndex + 1 : 0)
@@ -1635,10 +1703,20 @@ class Game {
   }
 
   selectAnswer(socket: Socket, answerIds: number[]) {
+    if (this.showCoordinator?.isSceneActive()) {
+      return
+    }
+
     this.round.selectAnswer(socket, answerIds)
   }
 
   advance() {
+    if (this.showCoordinator?.isSceneActive()) {
+      this.showCoordinator.advanceScene()
+
+      return
+    }
+
     this.round.advance()
   }
 }

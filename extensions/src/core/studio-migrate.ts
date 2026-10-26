@@ -1,5 +1,5 @@
 import {
-  type QuestionExtras,
+  type PerQuestionItem,
   type QuizExtrasV1,
   createDefaultQuizExtras,
 } from "./quiz-extras"
@@ -77,7 +77,7 @@ export const upgradeLegacyExtrasToV2 = (
     })
 
     // 2. Migrate perQuestion interlude if present and not last question (CORE/MIGRATE requirement)
-    const perQ = v1.perQuestion[qId] as QuestionExtras | undefined
+    const perQ = v1.perQuestion[qId] as PerQuestionItem | undefined
 
     if (
       perQ?.interlude &&
