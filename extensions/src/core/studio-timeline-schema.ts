@@ -120,7 +120,7 @@ export const mediaSceneSchema = z
   .strictObject({
     id: z.uuid(),
     kind: z.literal("media"),
-    mediaUrl: z.string().min(1),
+    mediaUrl: z.string().default(""),
     mediaType: z.enum(["image", "video"]).default("image"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
@@ -212,6 +212,32 @@ export const sceneConfigSchema = z.discriminatedUnion("kind", [
 ])
 
 export type SceneConfig = z.infer<typeof sceneConfigSchema>
+
+// ── Authoritative Active Scene Data (Role-Safe Public Projections) ──────────
+
+export interface PublicRankEntry {
+  rank: number
+  displayName: string
+  points: number
+}
+
+export interface PublicInterimOption {
+  label: string
+  count: number
+  percentage: number
+}
+
+export interface PublicInterimResults {
+  sourceQuestionId: string | null
+  questionText: string
+  totalResponders: number
+  options: PublicInterimOption[]
+}
+
+export interface ActiveSceneData {
+  leaderboard?: { entries: PublicRankEntry[] }
+  interimResults?: PublicInterimResults | null
+}
 
 // ── Studio Defaults Schema ────────────────────────────────────────────────
 

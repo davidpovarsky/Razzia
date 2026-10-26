@@ -17,7 +17,7 @@ if (!process.env.TEST_WORKER_INDEX) {
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: /wave1-completion\.spec\.ts$/,
+  testMatch: /wave1-.*\.spec\.ts$/,
   outputDir: "test-results/wave1-completion",
   timeout: 90_000,
   expect: { timeout: 20_000 },

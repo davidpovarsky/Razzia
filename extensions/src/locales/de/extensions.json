@@ -305,7 +305,9 @@
       "policyCardOnly": "Nur Zeitleisten-Karten",
       "policyUpstream": "Standard Razzia-Regel",
       "policyEveryN": "Alle N Fragen",
-      "policyDisabled": "Deaktiviert"
+      "policyDisabled": "Deaktiviert",
+      "leaderboardPolicyDesc": "Steuern Sie, wann Ranglisten während des Live-Spiels angezeigt werden.",
+      "advanceModeDesc": "Standardauslöser für den Wechsel zwischen Szenen auf der Zeitleiste."
     },
     "launch": {
       "readyTitle": "Live-Show starten",
@@ -330,6 +332,47 @@
       "title": "Frage in Szene umwandeln?",
       "description": "Das Umwandeln dieser Frage ersetzt ihren Inhalt durch die gewählte Szene. Dies kann nicht rückgängig gemacht werden.",
       "confirm": "In Szene umwandeln"
+    },
+    "cardKindLabel": "Kartentyp",
+    "scene": {
+      "rankLabel": "Rang",
+      "scoreLabel": "Pkt.",
+      "noRankingsYet": "Noch keine Spielstände vorhanden.",
+      "noResponsesYet": "Noch keine Antworten erfasst.",
+      "votesSuffix": "Stimmen",
+      "advanceButtonLabel": "Weiter →",
+      "intermissionDefaultTitle": "Kurze Pause",
+      "intermissionDefaultSubtitle": "Die nächste Frage beginnt in Kürze...",
+      "leaderboardDefaultTitle": "Bestenliste",
+      "leaderboardDefaultSubtitle": "Aktuelle Spitzenreiter",
+      "interimResultsDefaultTitle": "Zwischenergebnisse",
+      "interimResultsDefaultSubtitle": "Ergebnisse der letzten Frage",
+      "previewSampleBadge": "Beispieldaten für Vorschau",
+      "samplePlayer1": "Spieler 1",
+      "samplePlayer2": "Spieler 2",
+      "samplePlayer3": "Spieler 3",
+      "interimResultsDesc": "Zeigt die Antwortverteilung der zuletzt abgeschlossenen Frage an",
+      "loading": "Szenen-Editor wird geladen...",
+      "noMedia": "Noch kein Medium ausgewählt",
+      "kindSettings": "{{kind}}-Einstellungen",
+      "titleLabel": "Titel",
+      "titlePlaceholder": "Kartentitel...",
+      "subtitleLabel": "Untertitel",
+      "descriptionLabel": "Beschreibung",
+      "subtitlePlaceholder": "Kartenbeschreibung oder Untertitel...",
+      "mediaAsset": "Mediendatei",
+      "mediaPlaceholder": "/media/image.png oder https://...",
+      "mediaLibraryTitle": "Aus Medienbibliothek wählen",
+      "animationPreset": "Animationsvorlage",
+      "countdownSeconds": "Countdown-Sekunden (3–120)",
+      "durationSeconds": "Dauer in Sekunden (1–60)",
+      "advance": "Weiterschalten",
+      "advanceAuto": "Automatisch (nach Zeitablauf)",
+      "advanceManual": "Manuell (Klick durch Moderator)",
+      "presetSpotlight": "Spotlight",
+      "presetConfetti": "Konfetti",
+      "presetBounce": "Hüpfen",
+      "presetPulse": "Pulsieren"
     }
   }
 }

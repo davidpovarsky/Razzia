@@ -19,17 +19,46 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import type { SceneConfig } from "@razzia/extensions/core"
 
-const PRESETS = [
-  { value: "spotlight", label: "Spotlight" },
-  { value: "confetti", label: "Confetti" },
-  { value: "bounce", label: "Bounce" },
-  { value: "pulse", label: "Pulse" },
-]
-
 export const StudioSceneEditor = () => {
   const { t } = useTranslation()
   const { selectedTimelineItem, scenes, updateSceneConfig } = useStudioEditor()
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
+
+  const presetItems = [
+    {
+      value: "spotlight",
+      label: t("extensions:studio.scene.presetSpotlight", "Spotlight"),
+    },
+    {
+      value: "confetti",
+      label: t("extensions:studio.scene.presetConfetti", "Confetti"),
+    },
+    {
+      value: "bounce",
+      label: t("extensions:studio.scene.presetBounce", "Bounce"),
+    },
+    {
+      value: "pulse",
+      label: t("extensions:studio.scene.presetPulse", "Pulse"),
+    },
+  ]
+
+  const advanceItems = [
+    {
+      value: "auto",
+      label: t(
+        "extensions:studio.scene.advanceAuto",
+        "Automatic (on timer end)",
+      ),
+    },
+    {
+      value: "manual",
+      label: t(
+        "extensions:studio.scene.advanceManual",
+        "Manual (wait for host click)",
+      ),
+    },
+  ]
 
   if (!selectedTimelineItem || selectedTimelineItem.kind === "question") {
     return null
@@ -41,7 +70,7 @@ export const StudioSceneEditor = () => {
   if (!scene) {
     return (
       <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground">
-        Loading scene editor...
+        {t("extensions:studio.scene.loading", "Loading scene editor...")}
       </div>
     )
   }
@@ -122,7 +151,12 @@ export const StudioSceneEditor = () => {
               {!scene.mediaUrl && (
                 <div className="flex flex-col items-center gap-2 text-white/60">
                   <ImageIcon className="size-16" />
-                  <p className="text-sm">No media selected yet</p>
+                  <p className="text-sm">
+                    {t(
+                      "extensions:studio.scene.noMedia",
+                      "No media selected yet",
+                    )}
+                  </p>
                 </div>
               )}
               {scene.title && <p className="text-lg font-bold">{scene.title}</p>}
@@ -138,16 +172,22 @@ export const StudioSceneEditor = () => {
                 {scene.title ?? t("extensions:timeline.leaderboard")}
               </h2>
               <div className="w-64 rounded-lg bg-black/40 p-4 text-left text-sm font-semibold">
+                <div className="mb-2 text-center text-xs font-normal text-white/50">
+                  [{t(
+                    "extensions:studio.scene.previewSampleBadge",
+                    "Editor Preview Sample Data",
+                  )}]
+                </div>
                 <div className="flex justify-between py-1 border-b border-white/20">
-                  <span>1. Player 1</span>
+                  <span>1. {t("extensions:studio.scene.samplePlayer1", "Player 1")}</span>
                   <span className="text-primary font-bold">1200 pts</span>
                 </div>
                 <div className="flex justify-between py-1 border-b border-white/20">
-                  <span>2. Player 2</span>
+                  <span>2. {t("extensions:studio.scene.samplePlayer2", "Player 2")}</span>
                   <span className="text-primary font-bold">950 pts</span>
                 </div>
                 <div className="flex justify-between py-1">
-                  <span>3. Player 3</span>
+                  <span>3. {t("extensions:studio.scene.samplePlayer3", "Player 3")}</span>
                   <span className="text-primary font-bold">800 pts</span>
                 </div>
               </div>
@@ -163,8 +203,17 @@ export const StudioSceneEditor = () => {
                 {scene.title ?? t("extensions:timeline.interimResults")}
               </h2>
               <p className="text-sm text-white/70">
-                Displays live response distribution of the most recent completed question
+                {t(
+                  "extensions:studio.scene.interimResultsDesc",
+                  "Displays live response distribution of the most recent completed question",
+                )}
               </p>
+              <div className="text-xs font-normal text-white/50">
+                [{t(
+                  "extensions:studio.scene.previewSampleBadge",
+                  "Editor Preview Sample Data",
+                )}]
+              </div>
             </div>
           )}
 
@@ -224,19 +273,27 @@ export const StudioSceneEditor = () => {
       <aside className="bg-background z-10 m-3 flex w-80 shrink-0 flex-col gap-4 overflow-auto rounded-xl p-4 shadow-sm">
         <div className="flex items-center gap-2 border-b border-accent pb-3">
           <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            {scene.kind} Settings
+            {t("extensions:studio.scene.kindSettings", {
+              kind: scene.kind,
+              defaultValue: `${scene.kind} Settings`,
+            })}
           </span>
         </div>
 
         {/* Title Field */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-foreground">Title</label>
+          <label className="text-xs font-bold text-foreground">
+            {t("extensions:studio.scene.titleLabel", "Title")}
+          </label>
           <Input
             value={scene.title ?? ""}
             onChange={(e) =>
               updateSceneConfig(sceneId, { title: e.target.value })
             }
-            placeholder="Card title..."
+            placeholder={t(
+              "extensions:studio.scene.titlePlaceholder",
+              "Card title...",
+            )}
             variant="sm"
           />
         </div>
@@ -245,7 +302,9 @@ export const StudioSceneEditor = () => {
         {("subtitle" in scene || "description" in scene) && (
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-foreground">
-              {"subtitle" in scene ? "Subtitle" : "Description"}
+              {"subtitle" in scene
+                ? t("extensions:studio.scene.subtitleLabel", "Subtitle")
+                : t("extensions:studio.scene.descriptionLabel", "Description")}
             </label>
             <Input
               value={subtitleOrDesc}
@@ -256,7 +315,10 @@ export const StudioSceneEditor = () => {
                   updateSceneConfig(sceneId, { description: e.target.value })
                 }
               }}
-              placeholder="Card description or subtitle..."
+              placeholder={t(
+                "extensions:studio.scene.subtitlePlaceholder",
+                "Card description or subtitle...",
+              )}
               variant="sm"
             />
           </div>
@@ -265,14 +327,19 @@ export const StudioSceneEditor = () => {
         {/* Media Selection for Media & Opening/Closing */}
         {"mediaUrl" in scene && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">Media Asset</label>
+            <label className="text-xs font-bold text-foreground">
+              {t("extensions:studio.scene.mediaAsset", "Media Asset")}
+            </label>
             <div className="flex gap-2">
               <Input
                 value={mediaUrl}
                 onChange={(e) =>
                   updateSceneConfig(sceneId, { mediaUrl: e.target.value })
                 }
-                placeholder="/media/image.png or https://..."
+                placeholder={t(
+                  "extensions:studio.scene.mediaPlaceholder",
+                  "/media/image.png or https://...",
+                )}
                 variant="sm"
                 className="flex-1"
               />
@@ -281,7 +348,10 @@ export const StudioSceneEditor = () => {
                 size="sm"
                 onClick={() => setMediaPickerOpen(true)}
                 className="bg-accent text-accent-foreground px-2"
-                title="Select from Media Library"
+                title={t(
+                  "extensions:studio.scene.mediaLibraryTitle",
+                  "Select from Media Library",
+                )}
               >
                 <Upload className="size-4" />
               </Button>
@@ -292,13 +362,18 @@ export const StudioSceneEditor = () => {
         {/* Animation Preset */}
         {scene.kind === "animation" && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">Animation Preset</label>
+            <label className="text-xs font-bold text-foreground">
+              {t(
+                "extensions:studio.scene.animationPreset",
+                "Animation Preset",
+              )}
+            </label>
             <StudioSelect
               value={animationPreset}
               onChange={(val: string) =>
                 updateSceneConfig(sceneId, { preset: val })
               }
-              items={PRESETS}
+              items={presetItems}
             />
           </div>
         )}
@@ -307,7 +382,10 @@ export const StudioSceneEditor = () => {
         {isCountdown ? (
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-foreground">
-              Countdown Seconds (3–120)
+              {t(
+                "extensions:studio.scene.countdownSeconds",
+                "Countdown Seconds (3–120)",
+              )}
             </label>
             <Input
               type="number"
@@ -328,7 +406,10 @@ export const StudioSceneEditor = () => {
         ) : (
           <div className="flex flex-col gap-1.5">
             <label className="text-xs font-bold text-foreground">
-              Duration Seconds (1–60)
+              {t(
+                "extensions:studio.scene.durationSeconds",
+                "Duration Seconds (1–60)",
+              )}
             </label>
             <Input
               type="number"
@@ -350,7 +431,9 @@ export const StudioSceneEditor = () => {
 
         {/* Advance Mode */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-foreground">Advance</label>
+          <label className="text-xs font-bold text-foreground">
+            {t("extensions:studio.scene.advance", "Advance")}
+          </label>
           <StudioSelect
             value={advanceMode}
             onChange={(val: string) =>
@@ -358,10 +441,7 @@ export const StudioSceneEditor = () => {
                 advance: val as "auto" | "manual",
               })
             }
-            items={[
-              { value: "auto", label: "Automatic (on timer end)" },
-              { value: "manual", label: "Manual (wait for host click)" },
-            ]}
+            items={advanceItems}
           />
         </div>
       </aside>

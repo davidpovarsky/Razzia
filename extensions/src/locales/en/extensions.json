@@ -305,7 +305,9 @@
       "policyCardOnly": "Timeline cards only",
       "policyUpstream": "Standard Razzia rule",
       "policyEveryN": "Every N questions",
-      "policyDisabled": "Disabled"
+      "policyDisabled": "Disabled",
+      "leaderboardPolicyDesc": "Control when ranking leaderboards are displayed during live gameplay.",
+      "advanceModeDesc": "Default advance trigger when transitioning across timeline scenes."
     },
     "launch": {
       "readyTitle": "Launch Live Show",
@@ -330,6 +332,47 @@
       "title": "Convert Question to Scene?",
       "description": "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
       "confirm": "Convert to Scene"
+    },
+    "cardKindLabel": "Card Type",
+    "scene": {
+      "rankLabel": "Rank",
+      "scoreLabel": "pts",
+      "noRankingsYet": "No player scores yet.",
+      "noResponsesYet": "No responses recorded yet.",
+      "votesSuffix": "votes",
+      "advanceButtonLabel": "Next →",
+      "intermissionDefaultTitle": "Take a Breather",
+      "intermissionDefaultSubtitle": "The next question will begin shortly...",
+      "leaderboardDefaultTitle": "Leaderboard",
+      "leaderboardDefaultSubtitle": "Top scorers right now",
+      "interimResultsDefaultTitle": "Interim Results",
+      "interimResultsDefaultSubtitle": "Latest question breakdown",
+      "previewSampleBadge": "Editor Preview Sample Data",
+      "samplePlayer1": "Player 1",
+      "samplePlayer2": "Player 2",
+      "samplePlayer3": "Player 3",
+      "interimResultsDesc": "Displays live response distribution of the most recent completed question",
+      "loading": "Loading scene editor...",
+      "noMedia": "No media selected yet",
+      "kindSettings": "{{kind}} Settings",
+      "titleLabel": "Title",
+      "titlePlaceholder": "Card title...",
+      "subtitleLabel": "Subtitle",
+      "descriptionLabel": "Description",
+      "subtitlePlaceholder": "Card description or subtitle...",
+      "mediaAsset": "Media Asset",
+      "mediaPlaceholder": "/media/image.png or https://...",
+      "mediaLibraryTitle": "Select from Media Library",
+      "animationPreset": "Animation Preset",
+      "countdownSeconds": "Countdown Seconds (3–120)",
+      "durationSeconds": "Duration Seconds (1–60)",
+      "advance": "Advance",
+      "advanceAuto": "Automatic (on timer end)",
+      "advanceManual": "Manual (wait for host click)",
+      "presetSpotlight": "Spotlight",
+      "presetConfetti": "Confetti",
+      "presetBounce": "Bounce",
+      "presetPulse": "Pulse"
     }
   }
 }

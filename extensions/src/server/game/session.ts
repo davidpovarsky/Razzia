@@ -1,9 +1,12 @@
 import {
   extensionCommandSchema,
+  type ActiveSceneData,
   type AnyQuizExtras,
   type ExtensionCommand,
   type ExtensionPhase,
   type ExtensionStateEnvelope,
+  type PublicInterimResults,
+  type PublicRankEntry,
   type RevealDistributionSnapshot,
   isQuizExtrasV2,
 } from "../../core/index"
@@ -25,6 +28,8 @@ export interface ExtensionSessionDelegate {
   getHistory?: (questionIndex?: number) => unknown
   advanceTimelineScene?: (sceneId?: string, epoch?: number) => boolean
   skipTimelineScene?: (sceneId?: string, epoch?: number) => boolean
+  getLeaderboard?: () => Array<{ displayName: string; points: number }>
+  getLastCompletedQuestionSummary?: () => PublicInterimResults | null
 }
 
 export class ExtensionGameSession {
@@ -308,6 +313,32 @@ export class ExtensionGameSession {
         extrasPayload.activeTimelineStep =
           this.showCoordinator.getAuthoritativeStepEnvelope(forRole)
         extrasPayload.currentScene = this.showCoordinator.currentScene
+
+        if (this.showCoordinator.isSceneActive()) {
+          const stepKind = this.showCoordinator.currentStep?.item.kind
+
+          if (stepKind === "leaderboard") {
+            const rawEntries = this.delegate?.getLeaderboard?.() ?? []
+            const sorted = [...rawEntries].sort((a, b) => b.points - a.points)
+            const entries: PublicRankEntry[] = sorted.slice(0, 10).map((e, idx) => ({
+              rank: idx + 1,
+              displayName: e.displayName,
+              points: e.points,
+            }))
+            const activeSceneData: ActiveSceneData = {
+              leaderboard: { entries },
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          } else if (stepKind === "interimResults") {
+            const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const activeSceneData: ActiveSceneData = {
+              interimResults: summary,
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          }
+        }
       }
 
       if (forRole === "manager") {

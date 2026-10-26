@@ -305,7 +305,9 @@
       "policyCardOnly": "Solo carte della sequenza",
       "policyUpstream": "Regola standard Razzia",
       "policyEveryN": "Ogni N domande",
-      "policyDisabled": "Disattivato"
+      "policyDisabled": "Disattivato",
+      "leaderboardPolicyDesc": "Controlla quando mostrare le classifiche durante la partita dal vivo.",
+      "advanceModeDesc": "Trigger di avanzamento predefinito durante la transizione tra le scene."
     },
     "launch": {
       "readyTitle": "Avvia show dal vivo",
@@ -330,6 +332,47 @@
       "title": "Convertire la domanda in scena?",
       "description": "La conversione sostituirà il contenuto della domanda con la scena selezionata. Non può essere annullata.",
       "confirm": "Converti in scena"
+    },
+    "cardKindLabel": "Tipo di scheda",
+    "scene": {
+      "rankLabel": "Posizione",
+      "scoreLabel": "pt",
+      "noRankingsYet": "Nessun punteggio registrato al momento.",
+      "noResponsesYet": "Nessuna risposta registrata al momento.",
+      "votesSuffix": "voti",
+      "advanceButtonLabel": "Avanti →",
+      "intermissionDefaultTitle": "Fai una pausa",
+      "intermissionDefaultSubtitle": "La prossima domanda inizierà a breve...",
+      "leaderboardDefaultTitle": "Classifica",
+      "leaderboardDefaultSubtitle": "Migliori punteggi attuali",
+      "interimResultsDefaultTitle": "Risultati parziali",
+      "interimResultsDefaultSubtitle": "Dettaglio dell'ultima domanda",
+      "previewSampleBadge": "Dati di esempio dell'anteprima",
+      "samplePlayer1": "Giocatore 1",
+      "samplePlayer2": "Giocatore 2",
+      "samplePlayer3": "Giocatore 3",
+      "interimResultsDesc": "Mostra la distribuzione delle risposte dell'ultima domanda completata",
+      "loading": "Caricamento editor scena...",
+      "noMedia": "Nessun elemento multimediale selezionato",
+      "kindSettings": "Impostazioni {{kind}}",
+      "titleLabel": "Titolo",
+      "titlePlaceholder": "Titolo della scheda...",
+      "subtitleLabel": "Sottotitolo",
+      "descriptionLabel": "Descrizione",
+      "subtitlePlaceholder": "Descrizione o sottotitolo della scheda...",
+      "mediaAsset": "Elemento multimediale",
+      "mediaPlaceholder": "/media/image.png o https://...",
+      "mediaLibraryTitle": "Seleziona dalla libreria multimediale",
+      "animationPreset": "Predefinito animazione",
+      "countdownSeconds": "Secondi conto alla rovescia (3–120)",
+      "durationSeconds": "Secondi di durata (1–60)",
+      "advance": "Avanzamento",
+      "advanceAuto": "Automatico (al termine del timer)",
+      "advanceManual": "Manuale (attendi clic del conduttore)",
+      "presetSpotlight": "Riflettore",
+      "presetConfetti": "Coriandoli",
+      "presetBounce": "Rimbalzo",
+      "presetPulse": "Pulsazione"
     }
   }
 }

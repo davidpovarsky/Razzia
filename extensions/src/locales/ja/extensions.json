@@ -305,7 +305,9 @@
       "policyCardOnly": "タイムラインカードのみ",
       "policyUpstream": "標準のRazziaルール",
       "policyEveryN": "N問ごと",
-      "policyDisabled": "無効"
+      "policyDisabled": "無効",
+      "leaderboardPolicyDesc": "ライブ進行中にリーダーボードを表示するタイミングを制御します。",
+      "advanceModeDesc": "タイムラインシーン間の標準の進行トリガー。"
     },
     "launch": {
       "readyTitle": "ライブショーを開始",
@@ -330,6 +332,47 @@
       "title": "質問をシーンに変換しますか？",
       "description": "この質問を変換すると、内容が選択したシーンに置き換わります。この操作は自動で元に戻せません。",
       "confirm": "シーンに変換"
+    },
+    "cardKindLabel": "カードの種類",
+    "scene": {
+      "rankLabel": "順位",
+      "scoreLabel": "pt",
+      "noRankingsYet": "スコアはまだありません。",
+      "noResponsesYet": "まだ回答が記録されていません。",
+      "votesSuffix": "票",
+      "advanceButtonLabel": "次へ →",
+      "intermissionDefaultTitle": "ひと息つきましょう",
+      "intermissionDefaultSubtitle": "まもなく次の問題が始まります...",
+      "leaderboardDefaultTitle": "リーダーボード",
+      "leaderboardDefaultSubtitle": "現在のトップスコア",
+      "interimResultsDefaultTitle": "中間結果",
+      "interimResultsDefaultSubtitle": "直前の問題の回答内訳",
+      "previewSampleBadge": "エディタプレビュー用サンプルデータ",
+      "samplePlayer1": "プレイヤー 1",
+      "samplePlayer2": "プレイヤー 2",
+      "samplePlayer3": "プレイヤー 3",
+      "interimResultsDesc": "直前に完了した問題のリアルタイム回答分布を表示します",
+      "loading": "シーンエディタを読み込み中...",
+      "noMedia": "メディアがまだ選択されていません",
+      "kindSettings": "{{kind}} の設定",
+      "titleLabel": "タイトル",
+      "titlePlaceholder": "カードのタイトル...",
+      "subtitleLabel": "サブタイトル",
+      "descriptionLabel": "説明",
+      "subtitlePlaceholder": "カードの説明またはサブタイトル...",
+      "mediaAsset": "メディア素材",
+      "mediaPlaceholder": "/media/image.png または https://...",
+      "mediaLibraryTitle": "メディアライブラリから選択",
+      "animationPreset": "アニメーションプリセット",
+      "countdownSeconds": "カウントダウン秒数 (3–120)",
+      "durationSeconds": "再生秒数 (1–60)",
+      "advance": "進行モード",
+      "advanceAuto": "自動（タイマー終了時）",
+      "advanceManual": "手動（ホストのクリック待ち）",
+      "presetSpotlight": "スポットライト",
+      "presetConfetti": "紙吹雪",
+      "presetBounce": "バウンス",
+      "presetPulse": "パルス"
     }
   }
 }

@@ -305,7 +305,9 @@
       "policyCardOnly": "Solo tarjetas de la línea de tiempo",
       "policyUpstream": "Regla estándar de Razzia",
       "policyEveryN": "Cada N preguntas",
-      "policyDisabled": "Desactivado"
+      "policyDisabled": "Desactivado",
+      "leaderboardPolicyDesc": "Controla cuándo se muestran las tablas de clasificación durante la partida en vivo.",
+      "advanceModeDesc": "Disparador de avance predeterminado al cambiar entre escenas de la línea de tiempo."
     },
     "launch": {
       "readyTitle": "Iniciar espectáculo en vivo",
@@ -330,6 +332,47 @@
       "title": "¿Convertir pregunta en escena?",
       "description": "Al convertir esta pregunta, su contenido se reemplazará por la escena seleccionada. Esto no se puede deshacer.",
       "confirm": "Convertir en escena"
+    },
+    "cardKindLabel": "Tipo de tarjeta",
+    "scene": {
+      "rankLabel": "Puesto",
+      "scoreLabel": "pts",
+      "noRankingsYet": "Aún no hay puntuaciones.",
+      "noResponsesYet": "Aún no se han registrado respuestas.",
+      "votesSuffix": "votos",
+      "advanceButtonLabel": "Siguiente →",
+      "intermissionDefaultTitle": "Tómate un respiro",
+      "intermissionDefaultSubtitle": "La siguiente pregunta comenzará en breve...",
+      "leaderboardDefaultTitle": "Clasificación",
+      "leaderboardDefaultSubtitle": "Mejores puntuaciones ahora mismo",
+      "interimResultsDefaultTitle": "Resultados parciales",
+      "interimResultsDefaultSubtitle": "Desglose de la última pregunta",
+      "previewSampleBadge": "Datos de muestra para vista previa",
+      "samplePlayer1": "Jugador 1",
+      "samplePlayer2": "Jugador 2",
+      "samplePlayer3": "Jugador 3",
+      "interimResultsDesc": "Muestra la distribución de respuestas de la última pregunta completada",
+      "loading": "Cargando editor de escena...",
+      "noMedia": "Ningún medio seleccionado aún",
+      "kindSettings": "Configuración de {{kind}}",
+      "titleLabel": "Título",
+      "titlePlaceholder": "Título de la tarjeta...",
+      "subtitleLabel": "Subtítulo",
+      "descriptionLabel": "Descripción",
+      "subtitlePlaceholder": "Descripción o subtítulo de la tarjeta...",
+      "mediaAsset": "Recurso multimedia",
+      "mediaPlaceholder": "/media/image.png o https://...",
+      "mediaLibraryTitle": "Seleccionar de la biblioteca multimedia",
+      "animationPreset": "Ajuste de animación",
+      "countdownSeconds": "Segundos de cuenta atrás (3–120)",
+      "durationSeconds": "Segundos de duración (1–60)",
+      "advance": "Avance",
+      "advanceAuto": "Automático (al terminar el tiempo)",
+      "advanceManual": "Manual (clic del anfitrión)",
+      "presetSpotlight": "Foco",
+      "presetConfetti": "Confeti",
+      "presetBounce": "Rebote",
+      "presetPulse": "Pulso"
     }
   }
 }

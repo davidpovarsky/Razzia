@@ -43,6 +43,7 @@ const ToggleGroup = <T extends string>({
       <RadixToggleGroup.Item
         key={itemValue}
         value={itemValue}
+        data-testid={`toggle-kind-${itemValue}`}
         aria-label={iconOnly ? label : undefined}
         className={clsx(
           "text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground focus-visible:outline-primary flex h-full cursor-pointer items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-2",

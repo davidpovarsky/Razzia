@@ -305,7 +305,9 @@
       "policyCardOnly": "Cartes de la timeline uniquement",
       "policyUpstream": "Règle standard Razzia",
       "policyEveryN": "Toutes les N questions",
-      "policyDisabled": "Désactivé"
+      "policyDisabled": "Désactivé",
+      "leaderboardPolicyDesc": "Contrôlez quand afficher les classements pendant la session en direct.",
+      "advanceModeDesc": "Déclencheur d'avancement par défaut lors des transitions entre scènes."
     },
     "launch": {
       "readyTitle": "Lancer le spectacle en direct",
@@ -330,6 +332,47 @@
       "title": "Convertir la question en scène ?",
       "description": "La conversion remplacera le contenu de cette question par la scène sélectionnée. Cette action est irréversible.",
       "confirm": "Convertir en scène"
+    },
+    "cardKindLabel": "Type de carte",
+    "scene": {
+      "rankLabel": "Rang",
+      "scoreLabel": "pts",
+      "noRankingsYet": "Aucun score de joueur pour le moment.",
+      "noResponsesYet": "Aucune réponse enregistrée pour le moment.",
+      "votesSuffix": "votes",
+      "advanceButtonLabel": "Suivant →",
+      "intermissionDefaultTitle": "Petite pause",
+      "intermissionDefaultSubtitle": "La question suivante commencera dans un instant...",
+      "leaderboardDefaultTitle": "Classement",
+      "leaderboardDefaultSubtitle": "Meilleurs scores actuels",
+      "interimResultsDefaultTitle": "Résultats intermédiaires",
+      "interimResultsDefaultSubtitle": "Répartition de la dernière question",
+      "previewSampleBadge": "Données d'exemple d'aperçu",
+      "samplePlayer1": "Joueur 1",
+      "samplePlayer2": "Joueur 2",
+      "samplePlayer3": "Joueur 3",
+      "interimResultsDesc": "Affiche la répartition des réponses de la dernière question terminée",
+      "loading": "Chargement de l'éditeur de scène...",
+      "noMedia": "Aucun média sélectionné pour l'instant",
+      "kindSettings": "Paramètres {{kind}}",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Titre de la carte...",
+      "subtitleLabel": "Sous-titre",
+      "descriptionLabel": "Description",
+      "subtitlePlaceholder": "Description ou sous-titre de la carte...",
+      "mediaAsset": "Fichier média",
+      "mediaPlaceholder": "/media/image.png ou https://...",
+      "mediaLibraryTitle": "Choisir dans la médiathèque",
+      "animationPreset": "Modèle d'animation",
+      "countdownSeconds": "Secondes du compte à rebours (3–120)",
+      "durationSeconds": "Durée en secondes (1–60)",
+      "advance": "Avancement",
+      "advanceAuto": "Automatique (à la fin du chrono)",
+      "advanceManual": "Manuel (clic de l'animateur)",
+      "presetSpotlight": "Projecteur",
+      "presetConfetti": "Confettis",
+      "presetBounce": "Rebond",
+      "presetPulse": "Pulsation"
     }
   }
 }

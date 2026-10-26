@@ -77,7 +77,7 @@ export const StudioSettingsPage = () => {
           </div>
         </div>
 
-        <Card className="flex flex-col gap-6 p-6">
+        <Card className="w-full max-w-none flex flex-col gap-6 p-6 md:p-8">
           {/* Default Question Mode */}
           <ConfigField>
             <ConfigField.Label
@@ -155,7 +155,10 @@ export const StudioSettingsPage = () => {
               )}
             />
             <ConfigField.Description>
-              Control when ranking leaderboards are displayed during live gameplay.
+              {t(
+                "extensions:studio.settings.leaderboardPolicyDesc",
+                "Control when ranking leaderboards are displayed during live gameplay.",
+              )}
             </ConfigField.Description>
             <StudioSelect
               value={defaults.leaderboardPolicy}
@@ -184,7 +187,10 @@ export const StudioSettingsPage = () => {
               )}
             />
             <ConfigField.Description>
-              Default advance trigger when transitioning across timeline scenes.
+              {t(
+                "extensions:studio.settings.advanceModeDesc",
+                "Default advance trigger when transitioning across timeline scenes.",
+              )}
             </ConfigField.Description>
             <StudioSelect
               value={defaults.advanceMode}

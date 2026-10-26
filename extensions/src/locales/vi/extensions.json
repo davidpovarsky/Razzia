@@ -305,7 +305,9 @@
       "policyCardOnly": "Chỉ các thẻ dòng thời gian",
       "policyUpstream": "Quy tắc Razzia tiêu chuẩn",
       "policyEveryN": "Mỗi N câu hỏi",
-      "policyDisabled": "Đã tắt"
+      "policyDisabled": "Đã tắt",
+      "leaderboardPolicyDesc": "Kiểm soát thời điểm hiển thị bảng xếp hạng trong lúc phát trực tiếp.",
+      "advanceModeDesc": "Điều kiện chuyển tiếp mặc định qua các phân cảnh dòng thời gian."
     },
     "launch": {
       "readyTitle": "Bắt đầu buổi trực tiếp",
@@ -330,6 +332,47 @@
       "title": "Chuyển đổi câu hỏi thành phân cảnh?",
       "description": "Việc chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng phân cảnh đã chọn. Thao tác này không thể hoàn tác.",
       "confirm": "Chuyển đổi thành phân cảnh"
+    },
+    "cardKindLabel": "Loại thẻ",
+    "scene": {
+      "rankLabel": "Hạng",
+      "scoreLabel": "điểm",
+      "noRankingsYet": "Chưa có điểm người chơi.",
+      "noResponsesYet": "Chưa ghi nhận câu trả lời nào.",
+      "votesSuffix": "bình chọn",
+      "advanceButtonLabel": "Tiếp theo →",
+      "intermissionDefaultTitle": "Nghỉ ngơi đôi chút",
+      "intermissionDefaultSubtitle": "Câu hỏi tiếp theo sẽ bắt đầu ngay...",
+      "leaderboardDefaultTitle": "Bảng xếp hạng",
+      "leaderboardDefaultSubtitle": "Điểm số cao nhất hiện tại",
+      "interimResultsDefaultTitle": "Kết quả tạm thời",
+      "interimResultsDefaultSubtitle": "Phân tích câu hỏi gần nhất",
+      "previewSampleBadge": "Dữ liệu mẫu xem trước",
+      "samplePlayer1": "Người chơi 1",
+      "samplePlayer2": "Người chơi 2",
+      "samplePlayer3": "Người chơi 3",
+      "interimResultsDesc": "Hiển thị phân bổ phản hồi trực tiếp của câu hỏi vừa hoàn thành",
+      "loading": "Đang tải trình chỉnh sửa cảnh...",
+      "noMedia": "Chưa chọn tệp phương tiện",
+      "kindSettings": "Cài đặt {{kind}}",
+      "titleLabel": "Tiêu đề",
+      "titlePlaceholder": "Tiêu đề thẻ...",
+      "subtitleLabel": "Phụ đề",
+      "descriptionLabel": "Mô tả",
+      "subtitlePlaceholder": "Mô tả hoặc phụ đề thẻ...",
+      "mediaAsset": "Tệp phương tiện",
+      "mediaPlaceholder": "/media/image.png hoặc https://...",
+      "mediaLibraryTitle": "Chọn từ thư viện phương tiện",
+      "animationPreset": "Mẫu hiệu ứng",
+      "countdownSeconds": "Số giây đếm ngược (3–120)",
+      "durationSeconds": "Thời lượng giây (1–60)",
+      "advance": "Chuyển tiếp",
+      "advanceAuto": "Tự động (khi hết giờ)",
+      "advanceManual": "Thủ công (chờ người chủ trì nhấp)",
+      "presetSpotlight": "Đèn rọi",
+      "presetConfetti": "Pháo hoa giấy",
+      "presetBounce": "Nảy",
+      "presetPulse": "Nhịp đập"
     }
   }
 }

@@ -1,4 +1,7 @@
-import type { SceneConfig } from "../core/studio-timeline-schema"
+import type {
+  ActiveSceneData,
+  SceneConfig,
+} from "../core/studio-timeline-schema"
 import type { AuthoritativeStepEnvelope } from "../server/game/studio-show-coordinator"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
@@ -17,9 +20,55 @@ import {
   Trophy,
 } from "lucide-react"
 
+export interface ScenePresenterLabels {
+  kinds?: Partial<Record<string, string>>
+  autoProgression?: string
+  awaitingHost?: string
+  advanceScene?: string
+  skipped?: string
+  videoError?: string
+  imageError?: string
+  noMedia?: string
+  points?: string
+  noScores?: string
+  noInterimResults?: string
+  totalResponders?: (count: number) => string
+  sampleDataNotice?: string
+  rankLabel?: string
+  scoreLabel?: string
+  noRankingsYet?: string
+  noResponsesYet?: string
+  votesSuffix?: string
+  advanceButtonLabel?: string
+  intermissionDefaultTitle?: string
+  intermissionDefaultSubtitle?: string
+  leaderboardDefaultTitle?: string
+  leaderboardDefaultSubtitle?: string
+  interimResultsDefaultTitle?: string
+  interimResultsDefaultSubtitle?: string
+}
+
+const getRankBadgeClass = (rank: number): string => {
+  if (rank === 1) {
+    return "bg-amber-400 text-black"
+  }
+
+  if (rank === 2) {
+    return "bg-slate-300 text-black"
+  }
+
+  if (rank === 3) {
+    return "bg-amber-700 text-white"
+  }
+
+  return "bg-white/10 text-white/80"
+}
+
 export interface ScenePresenterProps {
   step?: AuthoritativeStepEnvelope | null
   scene?: SceneConfig
+  activeSceneData?: ActiveSceneData | null
+  labels?: ScenePresenterLabels
   serverStartedAt?: number
   isManager?: boolean
   onAdvance?: () => void
@@ -61,6 +110,8 @@ const clsx = (...classes: unknown[]): string =>
 export const ScenePresenter = ({
   step,
   scene,
+  activeSceneData,
+  labels,
   serverStartedAt,
   isManager = false,
   onAdvance: _onAdvance,
@@ -135,6 +186,12 @@ export const ScenePresenter = ({
   const progressRatio = Math.max(0, Math.min(1, remainingMs / (durationMs || 1)))
   const advanceMode = (activeScene && "advance" in activeScene ? activeScene.advance : step?.advance) ?? "auto"
 
+  const leaderboardEntries = activeSceneData?.leaderboard?.entries ?? []
+  const interimResults = activeSceneData?.interimResults
+
+  const getKindLabel = (k: string, defaultLabel: string): string =>
+    labels?.kinds?.[k] ?? defaultLabel
+
   return (
     <div
       className={clsx(
@@ -149,9 +206,9 @@ export const ScenePresenter = ({
       <div className="w-full">
         {kind === "opening" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-sm font-bold text-primary">
-              <Sparkles className="size-4" />
-              <span>Show Opening</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Sparkles className="size-4 text-primary" />
+              <span>{getKindLabel("opening", "Show Opening")}</span>
             </div>
             <h1 className="mt-2 text-4xl font-black tracking-tight text-white drop-shadow-2xl sm:text-6xl">
               {"title" in (activeScene ?? {}) ? (activeScene as { title: string }).title : "Welcome to the Show"}
@@ -166,9 +223,9 @@ export const ScenePresenter = ({
 
         {kind === "closing" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-primary/20 px-4 py-1.5 text-sm font-bold text-primary">
-              <Award className="size-4" />
-              <span>Show Closing</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Award className="size-4 text-primary" />
+              <span>{getKindLabel("closing", "Show Closing")}</span>
             </div>
             <h1 className="mt-2 text-4xl font-black tracking-tight text-white drop-shadow-2xl sm:text-6xl">
               {"title" in (activeScene ?? {}) ? (activeScene as { title: string }).title : "Thank You For Playing"}
@@ -183,9 +240,9 @@ export const ScenePresenter = ({
 
         {kind === "transition" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-blue-500/20 px-4 py-1.5 text-sm font-bold text-blue-400">
-              <Layers className="size-4" />
-              <span>Transition</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Layers className="size-4 text-primary" />
+              <span>{getKindLabel("transition", "Transition")}</span>
             </div>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
               {"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Next Up" : "Next Up"}
@@ -200,9 +257,9 @@ export const ScenePresenter = ({
 
         {kind === "leaderboard" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-yellow-500/20 px-4 py-1.5 text-sm font-bold text-yellow-400">
-              <Trophy className="size-4" />
-              <span>Leaderboard</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Trophy className="size-4 text-primary" />
+              <span>{getKindLabel("leaderboard", "Leaderboard")}</span>
             </div>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
               {"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Leaderboard Standings" : "Leaderboard Standings"}
@@ -212,21 +269,21 @@ export const ScenePresenter = ({
 
         {kind === "interimResults" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-purple-500/20 px-4 py-1.5 text-sm font-bold text-purple-400">
-              <BarChart3 className="size-4" />
-              <span>Interim Standings</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <BarChart3 className="size-4 text-primary" />
+              <span>{getKindLabel("interimResults", "Interim Results")}</span>
             </div>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
-              {"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Current Progress" : "Current Progress"}
+              {"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Audience Poll Results" : "Audience Poll Results"}
             </h2>
           </div>
         )}
 
         {kind === "animation" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-indigo-500/20 px-4 py-1.5 text-sm font-bold text-indigo-400">
-              <Sparkles className="size-4" />
-              <span>Animation</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Sparkles className="size-4 text-primary" />
+              <span>{getKindLabel("animation", "Animation")}</span>
             </div>
             <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
               {"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Get Ready" : "Get Ready"}
@@ -236,9 +293,9 @@ export const ScenePresenter = ({
 
         {kind === "media" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-emerald-500/20 px-4 py-1.5 text-sm font-bold text-emerald-400">
-              <Film className="size-4" />
-              <span>Media Spotlight</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Film className="size-4 text-primary" />
+              <span>{getKindLabel("media", "Media Spotlight")}</span>
             </div>
             {"title" in (activeScene ?? {}) && (activeScene as { title?: string }).title && (
               <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
@@ -250,9 +307,9 @@ export const ScenePresenter = ({
 
         {kind === "countdown" && (
           <div className="flex flex-col items-center gap-2">
-            <div className="flex items-center gap-2 rounded-full bg-red-500/20 px-4 py-1.5 text-sm font-bold text-red-400">
-              <Clock className="size-4" />
-              <span>Countdown</span>
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Clock className="size-4 text-primary" />
+              <span>{getKindLabel("countdown", "Countdown")}</span>
             </div>
             {"title" in (activeScene ?? {}) && (activeScene as { title?: string }).title && (
               <h2 className="mt-2 text-3xl font-black tracking-tight text-white drop-shadow-2xl sm:text-5xl">
@@ -265,10 +322,16 @@ export const ScenePresenter = ({
 
       {/* 2. Central Visual Body */}
       <div className="my-6 flex w-full flex-1 flex-col items-center justify-center">
+        {labels?.sampleDataNotice && (
+          <span className="mb-3 rounded-full border border-primary/40 bg-primary/20 px-3 py-0.5 text-xs font-semibold text-primary">
+            {labels.sampleDataNotice}
+          </span>
+        )}
+
         {kind === "countdown" && (
           <div className="relative flex items-center justify-center">
             <div
-              className="flex size-48 items-center justify-center rounded-full border-8 border-red-500/60 bg-black/60 text-8xl font-black tabular-nums text-white shadow-2xl backdrop-blur-md transition-transform duration-200 sm:size-64 sm:text-9xl"
+              className="flex size-48 items-center justify-center rounded-full border-8 border-primary/60 bg-black/60 text-8xl font-black tabular-nums text-white shadow-2xl backdrop-blur-md transition-transform duration-200 sm:size-64 sm:text-9xl"
               data-testid="scene-countdown-circle"
             >
               {remainingSeconds}
@@ -277,26 +340,96 @@ export const ScenePresenter = ({
         )}
 
         {kind === "animation" && (
-          <div className="relative flex size-44 items-center justify-center rounded-full border-4 border-indigo-400/40 bg-indigo-500/20 p-8 shadow-2xl backdrop-blur-md sm:size-56">
-            <Sparkles className="size-24 animate-pulse text-indigo-300 drop-shadow-2xl" />
+          <div className="relative flex size-44 items-center justify-center rounded-full border-4 border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-md sm:size-56">
+            <Sparkles className="size-24 animate-pulse text-primary drop-shadow-2xl" />
           </div>
         )}
 
+        {/* Real Live Leaderboard */}
         {kind === "leaderboard" && (
-          <div className="relative flex flex-col items-center justify-center gap-4">
-            <div className="flex size-40 items-center justify-center rounded-full border-4 border-yellow-400/40 bg-yellow-500/20 p-8 shadow-2xl backdrop-blur-md">
-              <Trophy className="size-24 text-yellow-300 drop-shadow-2xl" />
-            </div>
-            <p className="text-xl font-bold text-white/90">Authoritative Leaderboard Break</p>
+          <div className="flex w-full max-w-xl flex-col items-center gap-4">
+            {leaderboardEntries.length > 0 ? (
+              <div className="w-full rounded-2xl border border-white/10 bg-black/50 p-4 shadow-2xl backdrop-blur-md">
+                <ol className="divide-y divide-white/10">
+                  {leaderboardEntries.map((entry) => (
+                    <li
+                      key={entry.displayName}
+                      className="flex items-center justify-between py-3 px-3"
+                      data-testid="leaderboard-scene-row"
+                    >
+                      <div className="flex items-center gap-3">
+                        <span
+                          className={clsx(
+                            "flex size-7 items-center justify-center rounded-full text-xs font-black",
+                            getRankBadgeClass(entry.rank),
+                          )}
+                        >
+                          {entry.rank}
+                        </span>
+                        <span className="text-base font-bold text-white">
+                          {entry.displayName}
+                        </span>
+                      </div>
+                      <span className="font-mono text-base font-extrabold text-primary">
+                        {entry.points} {labels?.points ?? "pts"}
+                      </span>
+                    </li>
+                  ))}
+                </ol>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
+                {labels?.noScores ?? "No scores recorded yet."}
+              </div>
+            )}
           </div>
         )}
 
+        {/* Real Live Interim Results */}
         {kind === "interimResults" && (
-          <div className="relative flex flex-col items-center justify-center gap-4">
-            <div className="flex size-40 items-center justify-center rounded-full border-4 border-purple-400/40 bg-purple-500/20 p-8 shadow-2xl backdrop-blur-md">
-              <BarChart3 className="size-24 text-purple-300 drop-shadow-2xl" />
-            </div>
-            <p className="text-xl font-bold text-white/90">Audience Poll & Response Overview</p>
+          <div className="flex w-full max-w-xl flex-col items-center gap-4">
+            {interimResults ? (
+              <div className="w-full rounded-2xl border border-white/10 bg-black/50 p-6 shadow-2xl backdrop-blur-md">
+                <p className="mb-4 text-left text-lg font-bold text-white">
+                  {interimResults.questionText}
+                </p>
+                <div className="flex flex-col gap-3">
+                  {interimResults.options.map((opt, i) => (
+                    <div
+                      key={opt.label || i}
+                      className="flex flex-col gap-1 text-left"
+                      data-testid="interim-option-row"
+                    >
+                      <div className="flex items-center justify-between text-sm font-semibold text-white/90">
+                        <span>{opt.label}</span>
+                        <span className="font-mono font-bold text-primary">
+                          {opt.count} ({opt.percentage}%)
+                        </span>
+                      </div>
+                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+                        <div
+                          className="h-full rounded-full bg-primary transition-all duration-500"
+                          style={{
+                            width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  ))}
+                </div>
+                <div className="mt-4 flex justify-between border-t border-white/10 pt-3 text-xs text-white/60">
+                  <span>
+                    {labels?.totalResponders
+                      ? labels.totalResponders(interimResults.totalResponders)
+                      : `Total votes: ${interimResults.totalResponders}`}
+                  </span>
+                </div>
+              </div>
+            ) : (
+              <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
+                {labels?.noInterimResults ?? "No completed results yet."}
+              </div>
+            )}
           </div>
         )}
 
@@ -316,7 +449,9 @@ export const ScenePresenter = ({
                 >
                   <AlertTriangle className="size-16 text-yellow-400" />
                   <p className="mt-3 text-lg font-semibold text-white/80">
-                    {mediaError ? "Failed to load media asset" : "No media asset configured"}
+                    {mediaError
+                      ? labels?.imageError ?? "Failed to load media asset"
+                      : labels?.noMedia ?? "No media asset configured"}
                   </p>
                 </div>
               )
@@ -354,8 +489,8 @@ export const ScenePresenter = ({
         )}
 
         {kind === "transition" && !("mediaUrl" in (activeScene ?? {})) && (
-          <div className="flex size-40 items-center justify-center rounded-full border-4 border-blue-400/40 bg-blue-500/20 p-8 shadow-2xl backdrop-blur-md">
-            <Layers className="size-20 text-blue-300 drop-shadow-2xl" />
+          <div className="flex size-40 items-center justify-center rounded-full border-4 border-white/20 bg-white/10 p-8 shadow-2xl backdrop-blur-md">
+            <Layers className="size-20 text-primary drop-shadow-2xl" />
           </div>
         )}
       </div>
@@ -365,7 +500,7 @@ export const ScenePresenter = ({
         {advanceMode === "auto" && (
           <div className="flex flex-col gap-1.5">
             <div className="flex items-center justify-between text-xs font-semibold text-white/70">
-              <span>{remainingSeconds}s remaining</span>
+              <span>{remainingSeconds}s</span>
               <span>{Math.round(progressRatio * 100)}%</span>
             </div>
             <div className="h-2 w-full overflow-hidden rounded-full bg-white/20">
@@ -380,7 +515,9 @@ export const ScenePresenter = ({
 
         <div className="flex items-center justify-between">
           <p className="text-xs font-medium text-white/60">
-            {advanceMode === "auto" ? "Automatic progression" : "Awaiting host to advance"}
+            {advanceMode === "auto"
+              ? labels?.autoProgression ?? "Automatic progression"
+              : labels?.awaitingHost ?? "Awaiting host to advance"}
           </p>
 
           {isManager && (
@@ -396,7 +533,9 @@ export const ScenePresenter = ({
               )}
               data-testid="scene-skip-button"
             >
-              {skipState.hasSkipped ? "Skipped" : "Advance Scene"}
+              {skipState.hasSkipped
+                ? labels?.skipped ?? "Skipped"
+                : labels?.advanceScene ?? "Advance Scene"}
             </button>
           )}
         </div>

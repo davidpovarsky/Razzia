@@ -213,6 +213,10 @@ export class RoundManager {
     return this.acceptingAnswers
   }
 
+  get currentLeaderboard(): readonly Player[] {
+    return this.leaderboard
+  }
+
   get currentStepName(): string | null {
     if (this.currentStep < 0 || this.currentStep >= this.steps.length) {
       return null

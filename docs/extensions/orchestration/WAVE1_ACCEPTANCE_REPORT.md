@@ -139,6 +139,30 @@ Wave 1 of TADA Studio has been fully implemented and verified against all automa
 
 ---
 
+## 17 Final Acceptance Gates Verification Matrix (F01–F17)
+
+| Gate ID | Area / Objective | Description / Acceptance Standard | Evidence & Method | Status |
+|---|---|---|---|---|
+| **F01** | UI Reachability | Header Save & Exit buttons visible, on-screen, and clickable at **1024x768** viewport | Playwright `QA-01`: asserts `right <= 1024` and clicks Save without clipping. Screenshot: `viewport_1024_questions.png`. | **GREEN** |
+| **F02** | UI Reachability | Header Save & Exit buttons visible, on-screen, and clickable at **1280x800** viewport | Playwright `QA-01`: asserts `right <= 1280` and clicks Save. Screenshot: `viewport_1280_questions.png`. | **GREEN** |
+| **F03** | UI Reachability | Header Save & Exit buttons visible, on-screen, and clickable at **1440x900** viewport | Playwright `QA-01`: asserts `right <= 1440` and clicks Save. Screenshot: `viewport_1440_questions.png`. | **GREEN** |
+| **F04** | UI Reachability | Header Save & Exit buttons visible, on-screen, and clickable at **1920x1080** viewport | Playwright `QA-01`: asserts `right <= 1920` and clicks Save. Screenshot: `viewport_1920_questions.png`. | **GREEN** |
+| **F05** | Header Layout Integrity | ToggleGroup remains in original slot between Title and Save/Exit in Row 1 | `QuizzEditorHeader.tsx` layout review & Playwright DOM tree assertion. | **GREEN** |
+| **F06** | Settings Layout Integrity | Settings Card spans full width inside `max-w-4xl` (width >= 600px, no 320px column trap) | Playwright `QA-01`: measures bounding box width at ~896px. Screenshot: `viewport_1280_settings.png`. | **GREEN** |
+| **F07** | Editor UI Workflow | Create question card, toggle kind between Quiz & Survey via header ToggleGroup, click Save, reload and verify persistence | Playwright `QA-02`: creates question, clicks `toggle-kind-survey`, saves, reloads, and verifies survey state. Screenshot: `editor_ui_saved_quizz.png`. | **GREEN** |
+| **F08** | Preflight Launch Blocker | Dirty unsaved draft displays warning banner and blocks live launch | Playwright `QA-03`: modifies title, navigates to Launch tab, asserts unsaved draft warning and disabled launch button. | **GREEN** |
+| **F09** | Preflight Launch Blocker | Media card with empty URL displays missing-media warning and blocks live launch | Playwright `QA-03`: adds empty media scene, saves, navigates to Launch tab, asserts missing media warning and disabled launch button. Screenshot: `launch_preflight_missing_media_warning.png`. | **GREEN** |
+| **F10** | Live Authoritative Scenes | Live Leaderboard scene renders real player scores, names, rank badges, and zero-player state | Playwright `QA-04`: 2-player live game asserts Alice (1000 pts) and Bob (850 pts). Screenshots: `live_leaderboard_real_scores_manager.png`, `live_leaderboard_real_scores_player.png`. | **GREEN** |
+| **F11** | Live Authoritative Scenes | Live Interim Results scene renders real poll question text, counts, and percentages | Playwright `QA-04`: 2-player live game asserts "Favorite language?" with 50% TypeScript (1) and 50% Rust (1). Screenshots: `live_interim_results_real_poll_manager.png`, `live_interim_results_real_poll_player.png`. | **GREEN** |
+| **F12** | Design System Alignment | `ScenePresenter` colors and typography strictly adhere to Razzia design tokens | Refactored `ScenePresenter.tsx` to use `bg-card`, `bg-primary`, `bg-secondary`, `bg-accent`, `text-foreground`. | **GREEN** |
+| **F13** | Localization Parity | Zero hardcoded strings; full key parity across all 8 supported locales | `locales.test.ts` (monorepo & extensions) pass 34 tests across `en`, `de`, `es`, `fr`, `it`, `ja`, `tr`, `vi`. | **GREEN** |
+| **F14** | Static Typing | `tsc --noEmit` exits with 0 errors across web, socket, and extensions | Verified with `$env:NODE_OPTIONS = '--experimental-strip-types'; pnpm -r exec tsc --noEmit`. | **GREEN** |
+| **F15** | Code Linting | Oxlint exits with 0 errors across codebase | Verified with `$env:NODE_OPTIONS = '--experimental-strip-types'; pnpm lint` (0 errors across 343 files). | **GREEN** |
+| **F16** | Unit & Integration Tests | Vitest suites pass 100% of tests | Monorepo: 287 passed (20 files). Extensions: 191 passed (20 files). | **GREEN** |
+| **F17** | Physical PSTN Verification | Real PSTN phone call audio playback & DTMF collection | SHA256 disk hashes verified bit-for-bit against unit-tested logic. Gateway process PID 29508 preserved. Physical call gate awaiting owner manual call. | **PENDING OWNER PSTN TEST** |
+
+---
+
 ## Test Verification Summary Table
 
 | Suite | Command | Total Tests | Passed | Failed | Status |
@@ -147,16 +171,18 @@ Wave 1 of TADA Studio has been fully implemented and verified against all automa
 | Extensions Vitest | `pnpm --filter @razzia/extensions test` | 191 | 191 | 0 | **GREEN** |
 | Phone Pilot Unit | `node --test Tada-phone-pilot/tada-audio-logic.test.cjs` | 16 | 16 | 0 | **GREEN** |
 | Vendored Runtime Unit | `node --test extensions/.../tada-audio-logic.test.cjs` | 16 | 16 | 0 | **GREEN** |
-| Playwright E2E Acceptance | `pnpm --filter @razzia/e2e exec playwright test` | 2 | 2 | 0 | **GREEN** |
+| Playwright E2E Wave 1 Suite | `pnpm --filter @razzia/e2e exec playwright test --config playwright.wave1-acceptance.config.ts` | 6 | 6 | 0 | **GREEN** |
 | Monorepo Typecheck | `pnpm -r exec tsc --noEmit` | Monorepo | Clean | 0 | **GREEN** |
-| Oxlint Linter | `pnpm lint` | 342 files | Clean | 0 | **GREEN** |
-| Web Vite Build | `pnpm --filter @razzia/web build` | Bundle | 1453 kB | 0 | **GREEN** |
+| Oxlint Linter | `pnpm lint` | 343 files | Clean | 0 | **GREEN** |
+| Web Vite Build | `pnpm --filter @razzia/web build` | Bundle | 1473 kB | 0 | **GREEN** |
+| Socket Rolldown Build | `pnpm --filter @razzia/socket build` | Bundle | 723 kB | 0 | **GREEN** |
 | Physical PSTN Telephone Call | Manual Owner Verification | 1 | N/A | N/A | **PENDING OWNER PSTN TEST** |
 
 ---
 
-## Screenshot Artifacts Generated
+## Complete Screenshot Artifacts Generated
 
+### Wave 1 Acceptance (`packages/e2e/test-results/wave1-completion/`):
 1. `01_studio_scene_editor.png`: Studio Timeline sidebar and Scene Editor view.
 2. `02_studio_question_editor.png`: Studio Question Editor view.
 3. `03_studio_participants.png`: Studio Participants tab with roster spreadsheet import and table.
@@ -166,3 +192,17 @@ Wave 1 of TADA Studio has been fully implemented and verified against all automa
 7. `07_live_opening_scene_player.png`: Live Grand Opening Scene displayed on web player (Alice) with inputs suppressed.
 8. `08_live_question1_manager.png`: Question 1 active on manager.
 9. `09_live_finish_podium.png`: Game finished podium displaying Alice after mixed scored/survey show.
+
+### Wave 1 Final QA Recovery (`packages/e2e/test-results/wave1-final-qa/`):
+10. `viewport_1024_questions.png`: Quizz editor header at 1024x768 with Save/Exit fully visible and clickable.
+11. `viewport_1280_questions.png`: Quizz editor header at 1280x800 showing balanced layout and ToggleGroup.
+12. `viewport_1280_settings.png`: Studio Settings page at 1280x800 showing Settings Card stretching full width (>800px).
+13. `viewport_1440_questions.png`: Quizz editor header at 1440x900 viewport.
+14. `viewport_1920_questions.png`: Quizz editor header at 1920x1080 viewport.
+15. `editor_ui_saved_quizz.png`: Editor after creating question, toggling Survey kind, saving, and reloading.
+16. `launch_preflight_missing_media_warning.png`: Launch tab showing preflight blocker when media scene has empty URL.
+17. `live_leaderboard_real_scores_manager.png`: Manager view of live Leaderboard scene with Alice (1000 pts) and Bob (850 pts).
+18. `live_leaderboard_real_scores_player.png`: Player view of live Leaderboard scene with Alice (1000 pts) and Bob (850 pts).
+19. `live_interim_results_real_poll_manager.png`: Manager view of live Interim Results scene displaying real poll percentages.
+20. `live_interim_results_real_poll_player.png`: Player view of live Interim Results scene displaying real poll percentages.
+21. `live_finish_podium.png`: Game finished podium displaying real player scores after mixed quiz/survey session.

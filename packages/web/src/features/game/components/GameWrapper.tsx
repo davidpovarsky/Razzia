@@ -267,12 +267,59 @@ const GameWrapper = ({
       const currentScene = extensionState.extras.currentScene as
         | ScenePresenterProps["scene"]
         | undefined
+      const activeSceneData = extensionState.extras.activeSceneData as
+        | ScenePresenterProps["activeSceneData"]
+        | undefined
+
+      const scenePresenterLabels: ScenePresenterProps["labels"] = {
+        rankLabel: t("extensions:studio.scene.rankLabel", "Rank"),
+        scoreLabel: t("extensions:studio.scene.scoreLabel", "pts"),
+        noRankingsYet: t(
+          "extensions:studio.scene.noRankingsYet",
+          "No player scores yet.",
+        ),
+        noResponsesYet: t(
+          "extensions:studio.scene.noResponsesYet",
+          "No responses recorded yet.",
+        ),
+        votesSuffix: t("extensions:studio.scene.votesSuffix", "votes"),
+        advanceButtonLabel: t(
+          "extensions:studio.scene.advanceButtonLabel",
+          "Next →",
+        ),
+        intermissionDefaultTitle: t(
+          "extensions:studio.scene.intermissionDefaultTitle",
+          "Take a Breather",
+        ),
+        intermissionDefaultSubtitle: t(
+          "extensions:studio.scene.intermissionDefaultSubtitle",
+          "The next question will begin shortly...",
+        ),
+        leaderboardDefaultTitle: t(
+          "extensions:studio.scene.leaderboardDefaultTitle",
+          "Leaderboard",
+        ),
+        leaderboardDefaultSubtitle: t(
+          "extensions:studio.scene.leaderboardDefaultSubtitle",
+          "Top scorers right now",
+        ),
+        interimResultsDefaultTitle: t(
+          "extensions:studio.scene.interimResultsDefaultTitle",
+          "Interim Results",
+        ),
+        interimResultsDefaultSubtitle: t(
+          "extensions:studio.scene.interimResultsDefaultSubtitle",
+          "Latest question breakdown",
+        ),
+      }
 
       return (
         <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
           <ScenePresenter
             step={activeStep}
             scene={currentScene}
+            activeSceneData={activeSceneData}
+            labels={scenePresenterLabels}
             serverStartedAt={extensionState.startedAt}
             isManager={Boolean(manager)}
             onAdvance={() => {

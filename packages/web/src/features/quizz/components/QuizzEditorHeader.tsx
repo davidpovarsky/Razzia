@@ -293,49 +293,71 @@ const QuizzEditorHeader = () => {
   ]
 
   return (
-    <header className="bg-background z-20 flex h-14 items-center justify-between gap-4 px-4 shadow-sm">
-      <div className="flex items-center gap-4">
-        <Controller
-          control={control}
-          name="subject"
-          render={({ field, fieldState }) => (
-            <div className="flex items-center gap-6">
-              <Input
-                {...field}
-                variant="sm"
-                aria-invalid={fieldState.invalid}
-                aria-describedby={
-                  fieldState.invalid ? `${field.name}-error` : undefined
-                }
-                className={clsx(
-                  "w-56 shrink-0",
-                  fieldState.invalid && "ring-2 ring-red-500",
-                )}
-                placeholder={t("quizz:titleQuizzPlaceholder")}
-              />
-              <FieldError
-                id={`${field.name}-error`}
-                errors={[fieldState.error]}
-              />
-            </div>
-          )}
-        />
+    <header className="bg-background z-20 flex flex-col border-b border-border shadow-sm">
+      <div className="flex h-14 w-full items-center justify-between gap-4 px-4">
+        <div className="flex shrink-0 items-center gap-4">
+          <Controller
+            control={control}
+            name="subject"
+            render={({ field, fieldState }) => (
+              <div className="flex items-center gap-4">
+                <Input
+                  {...field}
+                  variant="sm"
+                  aria-invalid={fieldState.invalid}
+                  aria-describedby={
+                    fieldState.invalid ? `${field.name}-error` : undefined
+                  }
+                  className={clsx(
+                    "w-48 sm:w-56 shrink-0",
+                    fieldState.invalid && "ring-2 ring-red-500",
+                  )}
+                  placeholder={t("quizz:titleQuizzPlaceholder")}
+                />
+                <FieldError
+                  id={`${field.name}-error`}
+                  errors={[fieldState.error]}
+                />
+              </div>
+            )}
+          />
+        </div>
 
-        {/* ORIGINAL ToggleGroup remains in EXACT position, now controlling selected card kind */}
-        <div className="scrollbar-none max-w-[calc(100vw-540px)] overflow-x-auto py-1">
+        {/* ORIGINAL ToggleGroup remains in EXACT position between title and Save/Exit, now controlling selected card kind */}
+        <div className="scrollbar-none min-w-0 flex-1 overflow-x-auto py-1">
           <ToggleGroup
             value={selectedKind}
             onChange={(next) => changeSelectedCardKind(next as TimelineItemKind)}
             items={timelineKinds}
           />
         </div>
+
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            type="button"
+            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
+            onClick={handleExit}
+            data-testid="editor-exit-btn"
+          >
+            {t("common:exit")}
+          </Button>
+          <Button
+            type="button"
+            className="bg-primary text-md px-4 py-2"
+            onClick={handleSave}
+            data-testid="editor-save-btn"
+          >
+            {t("common:save")}
+          </Button>
+        </div>
       </div>
 
-      <div className="flex items-center gap-3">
-        {/* Studio Screen Navigation Tabs */}
-        <div className="bg-accent flex h-9 items-center rounded-lg p-0.5">
+      {/* Row 2: Studio Screen Navigation Tabs */}
+      <div className="bg-muted/30 flex h-10 w-full items-center justify-between border-t border-border/30 px-4">
+        <div className="bg-accent/80 flex h-8 items-center rounded-lg p-0.5">
           <button
             type="button"
+            data-testid="studio-tab-questions"
             onClick={() => setActiveTab("questions")}
             className={clsx(
               "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
@@ -348,6 +370,7 @@ const QuizzEditorHeader = () => {
           </button>
           <button
             type="button"
+            data-testid="studio-tab-participants"
             onClick={() => setActiveTab("participants")}
             className={clsx(
               "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
@@ -361,6 +384,7 @@ const QuizzEditorHeader = () => {
           </button>
           <button
             type="button"
+            data-testid="studio-tab-settings"
             onClick={() => setActiveTab("settings")}
             className={clsx(
               "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
@@ -374,6 +398,7 @@ const QuizzEditorHeader = () => {
           </button>
           <button
             type="button"
+            data-testid="studio-tab-launch"
             onClick={() => setActiveTab("launch")}
             className={clsx(
               "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
@@ -387,16 +412,12 @@ const QuizzEditorHeader = () => {
           </button>
         </div>
 
-        <div className="flex gap-2">
-          <Button
-            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
-            onClick={handleExit}
-          >
-            {t("common:exit")}
-          </Button>
-          <Button className="bg-primary text-md px-4 py-2" onClick={handleSave}>
-            {t("common:save")}
-          </Button>
+        <div className="text-xs text-muted-foreground hidden sm:flex items-center gap-2">
+          {activeTab === "questions" && (
+            <span className="font-medium">
+              {t("extensions:studio.cardKindLabel", "Card Type")}: <span className="capitalize text-foreground font-semibold">{selectedKind}</span>
+            </span>
+          )}
         </div>
       </div>
 

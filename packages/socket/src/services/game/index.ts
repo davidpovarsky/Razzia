@@ -17,6 +17,7 @@ import {
   normalizePhoneE164,
   type HostPlayerStatus,
   type HostPresenceSnapshot,
+  type RevealDistributionSnapshot,
   type RosterParticipant,
 } from "@razzia/extensions/core"
 import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
@@ -57,9 +58,11 @@ class Game {
   }
   private readonly playerManager: PlayerManager
   private readonly round: RoundManager
+  private readonly quizz: Quizz
   private readonly cooldown: CooldownTimer
   private readonly extensionSession: ExtensionGameSession | null
   private readonly showCoordinator: StudioShowCoordinator | null = null
+  private lastCompletedDistribution: RevealDistributionSnapshot | null = null
   private managerGraceTimer: NodeJS.Timeout | null = null
 
   private lastBroadcastStatus: {
@@ -101,6 +104,7 @@ class Game {
 
   constructor(io: Server, managerClientId: string, quizz: Quizz) {
     this.io = io
+    this.quizz = quizz
     this.gameId = uuid()
     this.inviteCode = createInviteCode()
     this.gameMode = quizz.gameMode
@@ -269,6 +273,8 @@ class Game {
       },
       getQuestionId: (qIdx) => this.extensionSession?.getQuestionId(qIdx),
       onResultsCalculated: (dist) => {
+        this.lastCompletedDistribution = dist
+
         if (this.extensionSession) {
           this.extensionSession.setRevealDistribution(dist)
           this.broadcastExtensionState()
@@ -300,6 +306,8 @@ class Game {
         }
       },
       onReplayCheckpoint: (qIdx) => {
+        this.lastCompletedDistribution = null
+
         if (this.extensionSession) {
           this.extensionSession.onReplayCheckpoint(qIdx)
           this.broadcastExtensionState()
@@ -332,6 +340,43 @@ class Game {
           this.showCoordinator?.advanceScene(sceneId, epoch) ?? false,
         skipTimelineScene: (sceneId, epoch) =>
           this.showCoordinator?.skipScene(sceneId, epoch) ?? false,
+        getLeaderboard: () => {
+          const currentLb = this.round.currentLeaderboard
+          const source = currentLb.length > 0 ? currentLb : this.players
+
+          return source.map((p) => ({
+            displayName: p.username,
+            points: p.points,
+          }))
+        },
+        getLastCompletedQuestionSummary: () => {
+          const dist =
+            this.lastCompletedDistribution ??
+            this.round.getRevealDistribution()
+
+          if (
+            !dist ||
+            dist.questionIndex < 0 ||
+            dist.questionIndex >= this.quizz.questions.length
+          ) {
+            return null
+          }
+
+          const q = this.quizz.questions[dist.questionIndex]
+
+          const options = q.answers.map((label: string, idx: number) => ({
+            label,
+            count: dist.options?.[idx]?.count ?? 0,
+            percentage: dist.options?.[idx]?.percentage ?? 0,
+          }))
+
+          return {
+            sourceQuestionId: dist.questionId ?? null,
+            questionText: q.question,
+            totalResponders: dist.totalResponders,
+            options,
+          }
+        },
       })
     }
 

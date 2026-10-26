@@ -305,7 +305,9 @@
       "policyCardOnly": "Yalnızca zaman çizelgesi kartları",
       "policyUpstream": "Standart Razzia kuralı",
       "policyEveryN": "Her N soruda bir",
-      "policyDisabled": "Devre dışı"
+      "policyDisabled": "Devre dışı",
+      "leaderboardPolicyDesc": "Canlı oyun sırasında liderlik tablolarının ne zaman gösterileceğini kontrol edin.",
+      "advanceModeDesc": "Zaman çizelgesi sahneleri arasındaki varsayılan ilerleme tetikleyicisi."
     },
     "launch": {
       "readyTitle": "Canlı Gösteriyi Başlat",
@@ -330,6 +332,47 @@
       "title": "Soru Sahneye Dönüştürülsün mü?",
       "description": "Bu soruyu dönüştürmek, içeriğini seçilen sahneyle değiştirecektir. Bu işlem geri alınamaz.",
       "confirm": "Sahneye Dönüştür"
+    },
+    "cardKindLabel": "Kart Türü",
+    "scene": {
+      "rankLabel": "Sıra",
+      "scoreLabel": "puan",
+      "noRankingsYet": "Henüz oyuncu puanı yok.",
+      "noResponsesYet": "Henüz yanıt kaydedilmedi.",
+      "votesSuffix": "oy",
+      "advanceButtonLabel": "İleri →",
+      "intermissionDefaultTitle": "Kısa Bir Mola",
+      "intermissionDefaultSubtitle": "Bir sonraki soru birazdan başlayacak...",
+      "leaderboardDefaultTitle": "Liderlik Tablosu",
+      "leaderboardDefaultSubtitle": "Şu anki en yüksek puanlar",
+      "interimResultsDefaultTitle": "Ara Sonuçlar",
+      "interimResultsDefaultSubtitle": "En son soru yanıt dağılımı",
+      "previewSampleBadge": "Düzenleyici Önizleme Örnek Verisi",
+      "samplePlayer1": "Oyuncu 1",
+      "samplePlayer2": "Oyuncu 2",
+      "samplePlayer3": "Oyuncu 3",
+      "interimResultsDesc": "En son tamamlanan sorunun canlı yanıt dağılımını gösterir",
+      "loading": "Sahne düzenleyici yükleniyor...",
+      "noMedia": "Henüz medya seçilmedi",
+      "kindSettings": "{{kind}} Ayarları",
+      "titleLabel": "Başlık",
+      "titlePlaceholder": "Kart başlığı...",
+      "subtitleLabel": "Alt Başlık",
+      "descriptionLabel": "Açıklama",
+      "subtitlePlaceholder": "Kart açıklaması veya alt başlığı...",
+      "mediaAsset": "Medya Öğesi",
+      "mediaPlaceholder": "/media/image.png veya https://...",
+      "mediaLibraryTitle": "Medya Kitaplığından Seç",
+      "animationPreset": "Animasyon Önayarı",
+      "countdownSeconds": "Geri Sayım Saniyesi (3–120)",
+      "durationSeconds": "Süre Saniyesi (1–60)",
+      "advance": "İlerleme",
+      "advanceAuto": "Otomatik (zamanlayıcı bitince)",
+      "advanceManual": "Manuel (sunucu tıklamasıyla)",
+      "presetSpotlight": "Spot Işığı",
+      "presetConfetti": "Konfeti",
+      "presetBounce": "Zıplama",
+      "presetPulse": "Nabız"
     }
   }
 }
