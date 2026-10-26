@@ -259,5 +259,51 @@
     "answeredYes": "Beantwortet",
     "answeredNo": "Wartet",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Quiz",
+    "survey": "Umfrage",
+    "transition": "Übergang",
+    "animation": "Animation",
+    "media": "Medien",
+    "leaderboard": "Rangliste",
+    "interimResults": "Zwischenergebnis",
+    "countdown": "Countdown",
+    "opening": "Eröffnung",
+    "closing": "Abschluss",
+    "deleteConfirmTitle": "Frage in Szene umwandeln?",
+    "deleteConfirmDesc": "Das Umwandeln dieser Frage ersetzt ihren Inhalt durch die gewählte Szene. Dies kann nicht rückgängig gemacht werden.",
+    "cannotDeleteLastQuestion": "Die Show muss mindestens eine Frage oder Umfrage enthalten."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Fragen",
+      "participants": "Teilnehmer",
+      "settings": "Einstellungen",
+      "launch": "Starten"
+    },
+    "settings": {
+      "globalTitle": "Studio-Einstellungen & Standardwerte",
+      "newQuestionMode": "Standardmodus für neue Karten",
+      "applyAllQuestions": "Auf alle bestehenden Fragen anwenden",
+      "applyAllConfirm": "Möchten Sie alle Fragen auf diesen Modus umstellen?",
+      "leaderboardPolicy": "Ranglisten-Richtlinie",
+      "advanceMode": "Weiterschaltmodus",
+      "bulkSuccess": "Alle bestehenden Fragen wurden aktualisiert",
+      "policyCardOnly": "Nur Zeitleisten-Karten",
+      "policyUpstream": "Standard Razzia-Regel",
+      "policyEveryN": "Alle N Fragen",
+      "policyDisabled": "Deaktiviert"
+    },
+    "launch": {
+      "readyTitle": "Show bereit zum Start",
+      "launchButton": "Live-Show starten",
+      "summary": "Show-Zusammenfassung",
+      "totalCards": "Zeitleisten-Karten",
+      "totalQuestions": "Fragen & Umfragen",
+      "totalParticipants": "Registrierte Teilnehmer",
+      "missingMediaWarning": "Einige Medienkarten haben leere URLs",
+      "noQuestionsWarning": "Die Show muss mindestens eine Frage enthalten"
+    }
   }
 }

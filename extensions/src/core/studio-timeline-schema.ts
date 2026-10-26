@@ -1,0 +1,387 @@
+import { z } from "zod"
+import {
+  audioExtrasSchema,
+  createDefaultAudioExtras,
+  leaderboardExtrasSchema,
+  perQuestionExtrasSchema,
+  teamsExtrasSchema,
+} from "./quiz-extras"
+import {
+  createDefaultRosterExtras,
+  rosterExtrasSchema,
+} from "./phone-roster"
+import { isSafeMediaUrl } from "./media"
+
+export const TIMELINE_ITEM_KINDS = [
+  "quiz",
+  "survey",
+  "transition",
+  "animation",
+  "media",
+  "leaderboard",
+  "interimResults",
+  "countdown",
+  "opening",
+  "closing",
+] as const
+
+export type TimelineItemKind = (typeof TIMELINE_ITEM_KINDS)[number]
+
+export const timelineQuestionItemSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("question"),
+  questionId: z.uuid(),
+})
+
+export type TimelineQuestionItem = z.infer<typeof timelineQuestionItemSchema>
+
+export const timelineItemKindNonQuestionSchema = z.enum([
+  "transition",
+  "animation",
+  "media",
+  "leaderboard",
+  "interimResults",
+  "countdown",
+  "opening",
+  "closing",
+])
+
+export type TimelineItemKindNonQuestion = z.infer<
+  typeof timelineItemKindNonQuestionSchema
+>
+
+export const timelineItemSchema = z.discriminatedUnion("kind", [
+  timelineQuestionItemSchema,
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("transition"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("animation"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("media"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("leaderboard"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("interimResults"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("countdown"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("opening"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("closing"),
+    sceneId: z.uuid(),
+  }),
+])
+
+export type TimelineItem = z.infer<typeof timelineItemSchema>
+
+// ── Scene Config Schemas ──────────────────────────────────────────────────
+
+export const transitionSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("transition"),
+  title: z.string().max(120).optional(),
+  description: z.string().max(500).optional(),
+  durationMs: z.number().int().min(500).max(60000).default(5000),
+  advance: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export const animationSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("animation"),
+  preset: z.string().max(64).default("spotlight"),
+  title: z.string().max(120).optional(),
+  durationMs: z.number().int().min(500).max(60000).default(3000),
+  advance: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export const mediaSceneSchema = z
+  .strictObject({
+    id: z.uuid(),
+    kind: z.literal("media"),
+    mediaUrl: z.string().min(1),
+    mediaType: z.enum(["image", "video"]).default("image"),
+    title: z.string().max(120).optional(),
+    durationMs: z.number().int().min(500).max(300000).default(5000),
+    advance: z.enum(["auto", "manual"]).default("auto"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mediaUrl"],
+        message: "errors:extensions.invalidMediaUrl",
+      })
+    }
+  })
+
+export const leaderboardSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("leaderboard"),
+  title: z.string().max(120).optional(),
+  durationMs: z.number().int().min(500).max(60000).default(5000),
+  advance: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export const interimResultsSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("interimResults"),
+  title: z.string().max(120).optional(),
+  durationMs: z.number().int().min(500).max(60000).default(5000),
+  advance: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export const countdownSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("countdown"),
+  durationSeconds: z.number().int().min(3).max(120).default(10),
+  title: z.string().max(120).optional(),
+  advance: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export const openingSceneSchema = z
+  .strictObject({
+    id: z.uuid(),
+    kind: z.literal("opening"),
+    title: z.string().min(1).max(120),
+    subtitle: z.string().max(200).optional(),
+    mediaUrl: z.string().optional(),
+    durationMs: z.number().int().min(500).max(60000).default(5000),
+    advance: z.enum(["auto", "manual"]).default("auto"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mediaUrl"],
+        message: "errors:extensions.invalidMediaUrl",
+      })
+    }
+  })
+
+export const closingSceneSchema = z
+  .strictObject({
+    id: z.uuid(),
+    kind: z.literal("closing"),
+    title: z.string().min(1).max(120),
+    subtitle: z.string().max(200).optional(),
+    mediaUrl: z.string().optional(),
+    durationMs: z.number().int().min(500).max(60000).default(5000),
+    advance: z.enum(["auto", "manual"]).default("auto"),
+  })
+  .superRefine((data, ctx) => {
+    if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["mediaUrl"],
+        message: "errors:extensions.invalidMediaUrl",
+      })
+    }
+  })
+
+export const sceneConfigSchema = z.discriminatedUnion("kind", [
+  transitionSceneSchema,
+  animationSceneSchema,
+  mediaSceneSchema,
+  leaderboardSceneSchema,
+  interimResultsSceneSchema,
+  countdownSceneSchema,
+  openingSceneSchema,
+  closingSceneSchema,
+])
+
+export type SceneConfig = z.infer<typeof sceneConfigSchema>
+
+// ── Studio Defaults Schema ────────────────────────────────────────────────
+
+export const studioDefaultsSchema = z.strictObject({
+  newQuestionMode: z.enum(["quiz", "survey"]).default("quiz"),
+  leaderboardPolicy: z
+    .enum(["upstream", "everyN", "cardOnly", "disabled"])
+    .default("cardOnly"),
+  advanceMode: z.enum(["auto", "manual"]).default("auto"),
+})
+
+export type StudioDefaults = z.infer<typeof studioDefaultsSchema>
+
+// ── QuizExtrasV2 Schema ───────────────────────────────────────────────────
+
+export const quizExtrasV2Schema = z
+  .strictObject({
+    schemaVersion: z.literal(2),
+    revision: z.number().int().positive(),
+    quizId: z.string().min(1),
+    baseDigest: z.string().length(64),
+    questionIds: z.array(z.uuid()),
+    timeline: z.array(timelineItemSchema),
+    scenes: z.record(z.uuid(), sceneConfigSchema),
+    defaults: studioDefaultsSchema,
+    leaderboard: leaderboardExtrasSchema.optional(),
+    teams: teamsExtrasSchema.default({
+      enabled: false,
+      teams: [],
+      autoAssign: "roundRobin",
+    }),
+    audio: audioExtrasSchema.default(createDefaultAudioExtras()),
+    perQuestion: perQuestionExtrasSchema.default({}),
+    roster: rosterExtrasSchema.default(createDefaultRosterExtras()),
+  })
+  .superRefine((extras, ctx) => {
+    // 1. questionIds must be unique
+    const qIdSet = new Set(extras.questionIds)
+
+    if (qIdSet.size !== extras.questionIds.length) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["questionIds"],
+        message: "errors:extensions.duplicateQuestionIds",
+      })
+    }
+
+    // 2. Timeline item IDs must be unique
+    const timelineIdSet = new Set<string>()
+    for (let i = 0; i < extras.timeline.length; i += 1) {
+      const item = extras.timeline[i]
+
+      if (timelineIdSet.has(item.id)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["timeline", i, "id"],
+          message: "errors:extensions.duplicateTimelineItemId",
+        })
+      }
+
+      timelineIdSet.add(item.id)
+    }
+
+    // 3. Question item validation
+    const seenQuestionIdsInTimeline = new Set<string>()
+    let questionItemCount = 0
+
+    for (let i = 0; i < extras.timeline.length; i += 1) {
+      const item = extras.timeline[i]
+
+      if (item.kind === "question") {
+        questionItemCount += 1
+
+        if (!qIdSet.has(item.questionId)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["timeline", i, "questionId"],
+            message: `errors:extensions.orphanTimelineQuestionId:${item.questionId}`,
+          })
+        }
+
+        if (seenQuestionIdsInTimeline.has(item.questionId)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["timeline", i, "questionId"],
+            message: `errors:extensions.duplicateTimelineQuestionRef:${item.questionId}`,
+          })
+        }
+
+        seenQuestionIdsInTimeline.add(item.questionId)
+      } else if (!(item.sceneId in extras.scenes)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["timeline", i, "sceneId"],
+          message: `errors:extensions.orphanTimelineSceneId:${item.sceneId}`,
+        })
+      } else if (extras.scenes[item.sceneId].kind !== item.kind) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["timeline", i, "kind"],
+          message: `errors:extensions.timelineSceneKindMismatch:${item.kind}`,
+        })
+      }
+    }
+
+    // 4. Must contain at least one question item
+    if (questionItemCount < 1) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["timeline"],
+        message: "errors:extensions.noQuestionsInTimeline",
+      })
+    }
+
+    // 5. Every questionId in questionIds must be present in timeline
+    for (const qId of extras.questionIds) {
+      if (!seenQuestionIdsInTimeline.has(qId)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["questionIds"],
+          message: `errors:extensions.missingQuestionInTimeline:${qId}`,
+        })
+      }
+    }
+
+    // 6. perQuestion keys must be in questionIds
+    for (const qId of Object.keys(extras.perQuestion)) {
+      if (!qIdSet.has(qId)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["perQuestion", qId],
+          message: `errors:extensions.orphanQuestionExtra:${qId}`,
+        })
+      }
+    }
+  })
+
+export type QuizExtrasV2 = z.infer<typeof quizExtrasV2Schema>
+
+export const createDefaultQuizExtrasV2 = (
+  quizId: string,
+  questionIds: string[],
+  baseDigest: string,
+): QuizExtrasV2 => {
+  const timeline: TimelineItem[] = questionIds.map((qId) => ({
+    id: crypto.randomUUID(),
+    kind: "question",
+    questionId: qId,
+  }))
+
+  return {
+    schemaVersion: 2,
+    revision: 1,
+    quizId,
+    baseDigest,
+    questionIds,
+    timeline,
+    scenes: {},
+    defaults: {
+      newQuestionMode: "quiz",
+      leaderboardPolicy: "cardOnly",
+      advanceMode: "auto",
+    },
+    audio: createDefaultAudioExtras(),
+    teams: {
+      enabled: false,
+      teams: [],
+      autoAssign: "roundRobin",
+    },
+    roster: createDefaultRosterExtras(),
+    perQuestion: {},
+  }
+}

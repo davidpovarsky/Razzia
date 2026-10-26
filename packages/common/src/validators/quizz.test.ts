@@ -189,4 +189,39 @@ describe("normalizeLegacyQuizz", () => {
   it("returns unknown data as is", () => {
     expect(normalizeLegacyQuizz("not a quizz")).toBe("not a quizz")
   })
+
+  describe("per-question playMode refinement", () => {
+    it("allows a question with playMode='survey' without solutions in a quiz", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      q.playMode = "survey"
+      const result = quizzValidator.safeParse(quizz([q]))
+      expect(result.success).toBe(true)
+    })
+
+    it("rejects a question with playMode='quiz' without solutions even if quizz.gameMode='survey'", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      q.playMode = "quiz"
+      const surveyQuizz = {
+        ...quizz([q]),
+        gameMode: QUIZZ_MODES.SURVEY,
+      }
+      const result = quizzValidator.safeParse(surveyQuizz)
+      expect(result.success).toBe(false)
+      expect(result.error?.issues[0].message).toBe("errors:quizz.noSolution")
+    })
+
+    it("falls back to quizz.gameMode when question.playMode is undefined", () => {
+      const q = choiceQuestion()
+      delete q.solutions
+      expect(quizzValidator.safeParse(quizz([q])).success).toBe(false)
+      expect(
+        quizzValidator.safeParse({
+          ...quizz([q]),
+          gameMode: QUIZZ_MODES.SURVEY,
+        }).success,
+      ).toBe(true)
+    })
+  })
 })

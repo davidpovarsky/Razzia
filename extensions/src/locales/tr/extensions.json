@@ -259,5 +259,51 @@
     "answeredYes": "Yanıtladı",
     "answeredNo": "Bekliyor",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Test",
+    "survey": "Anket",
+    "transition": "Geçiş",
+    "animation": "Animasyon",
+    "media": "Medya",
+    "leaderboard": "Lider Tablosu",
+    "interimResults": "Ara Sonuçlar",
+    "countdown": "Geri Sayım",
+    "opening": "Açılış",
+    "closing": "Kapanış",
+    "deleteConfirmTitle": "Soru sahneye dönüştürülsün mü?",
+    "deleteConfirmDesc": "Bu soruyu dönüştürmek, soru içeriğini seçilen sahneyle değiştirecektir. Bu işlem otomatik olarak geri alınamaz.",
+    "cannotDeleteLastQuestion": "Gösteri en az bir soru veya anket içermelidir."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Sorular",
+      "participants": "Katılımcılar",
+      "settings": "Ayarlar",
+      "launch": "Başlat"
+    },
+    "settings": {
+      "globalTitle": "Stüdyo Ayarları ve Varsayılanlar",
+      "newQuestionMode": "Yeni Kartlar için Varsayılan Mod",
+      "applyAllQuestions": "Mevcut Tüm Sorulara Uygula",
+      "applyAllConfirm": "Mevcut tüm soru kartları bu moda dönüştürülsün mü?",
+      "leaderboardPolicy": "Lider Tablosu İlkesi",
+      "advanceMode": "İlerleme Modu",
+      "bulkSuccess": "Mevcut tüm soru kartları güncellendi",
+      "policyCardOnly": "Yalnızca zaman çizelgesi kartları",
+      "policyUpstream": "Standart Razzia kuralı",
+      "policyEveryN": "Her N soruda bir",
+      "policyDisabled": "Devre dışı"
+    },
+    "launch": {
+      "readyTitle": "Gösteri Başlatılmaya Hazır",
+      "launchButton": "Canlı Gösteriyi Başlat",
+      "summary": "Gösteri Özeti",
+      "totalCards": "Zaman Çizelgesi Kartları",
+      "totalQuestions": "Sorular ve Anketler",
+      "totalParticipants": "Kayıtlı Katılımcılar",
+      "missingMediaWarning": "Bazı medya kartlarında URL eksik",
+      "noQuestionsWarning": "Gösteri en az bir soru içermelidir"
+    }
   }
 }

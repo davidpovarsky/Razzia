@@ -62,8 +62,11 @@ export interface UploadedMedia {
   type: UploadedMediaType
 }
 
+export type QuestionPlayMode = "quiz" | "survey"
+
 export interface Question {
   type: QuestionType
+  playMode?: QuestionPlayMode
   question: string
   category?: string
   note?: string
@@ -75,6 +78,17 @@ export interface Question {
   maxPoints?: number
   penalty?: number
   options?: QuestionOptions
+}
+
+export const resolveQuestionPlayMode = (
+  question: { playMode?: QuestionPlayMode } | null | undefined,
+  fallbackQuizzMode?: QuizzMode,
+): QuestionPlayMode => {
+  if (question?.playMode === "quiz" || question?.playMode === "survey") {
+    return question.playMode
+  }
+
+  return fallbackQuizzMode === "survey" ? "survey" : "quiz"
 }
 
 export interface Quizz {

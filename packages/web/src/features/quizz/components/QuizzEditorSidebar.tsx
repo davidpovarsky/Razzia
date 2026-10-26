@@ -16,18 +16,147 @@ import {
   verticalListSortingStrategy,
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
+import type { Question } from "@razzia/common/types/game"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio"
+import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import QuizzEditorCard from "@razzia/web/features/quizz/components/QuizzEditorCard"
-import type { Question } from "@razzia/common/types/game"
 import {
   useQuizzEditor,
   type QuizzFormValues,
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import clsx from "clsx"
-import { Plus } from "lucide-react"
+import {
+  BarChart2,
+  Copy,
+  DoorOpen,
+  Flag,
+  Image as ImageIcon,
+  Layers,
+  Plus,
+  Sparkles,
+  Timer,
+  Trash2,
+  Trophy,
+} from "lucide-react"
 import { useRef } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
+import { twMerge } from "tailwind-merge"
+
+interface TimelineSceneCardProps {
+  kind: string
+  title?: string
+  durationText: string
+  isActive: boolean
+  onClick: () => void
+  onDelete: () => void
+  onDuplicate: () => void
+}
+
+const getSceneIcon = (kind: string) => {
+  switch (kind) {
+    case "transition":
+      return <Layers className="size-5 text-primary" />
+
+    case "animation":
+      return <Sparkles className="size-5 text-primary" />
+
+    case "media":
+      return <ImageIcon className="size-5 text-primary" />
+
+    case "leaderboard":
+      return <Trophy className="size-5 text-primary" />
+
+    case "interimResults":
+      return <BarChart2 className="size-5 text-primary" />
+
+    case "countdown":
+      return <Timer className="size-5 text-primary" />
+
+    case "opening":
+      return <DoorOpen className="size-5 text-primary" />
+
+    case "closing":
+      return <Flag className="size-5 text-primary" />
+
+    default:
+      return <Layers className="size-5 text-primary" />
+  }
+}
+
+const TimelineSceneCard = ({
+  kind,
+  title,
+  durationText,
+  isActive,
+  onClick,
+  onDelete,
+  onDuplicate,
+}: TimelineSceneCardProps) => {
+  const { t } = useTranslation()
+
+  return (
+    <div
+      onClick={onClick}
+      className={twMerge(
+        clsx(
+          "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
+          {
+            "border-primary shadow-sm": isActive,
+          },
+        ),
+      )}
+    >
+      <div className="absolute top-2 left-2 flex items-center gap-1.5">
+        <span className="rounded bg-accent/40 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+          {kind}
+        </span>
+      </div>
+
+      <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
+        {getSceneIcon(kind)}
+        <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
+          {title ?? t(`extensions:timeline.${kind}`, kind)}
+        </p>
+      </div>
+
+      <div className="flex items-center justify-between border-t border-accent/40 pt-1 text-[11px] text-muted-foreground">
+        <span>{durationText}</span>
+      </div>
+
+      <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation()
+            onDuplicate()
+          }}
+          title="Duplicate card"
+          className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
+        >
+          <Copy className="size-3.5" />
+        </button>
+
+        <AlertDialog
+          trigger={
+            <button
+              type="button"
+              onClick={(e) => e.stopPropagation()}
+              className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
+            >
+              <Trash2 className="size-3.5" />
+            </button>
+          }
+          title="Delete Scene Card"
+          description="Are you sure you want to delete this scene card from the timeline?"
+          confirmLabel={t("common:delete")}
+          onConfirm={onDelete}
+        />
+      </div>
+    </div>
+  )
+}
 
 interface SortableItemProps {
   id: string
@@ -83,6 +212,57 @@ const SortableItem = ({
   )
 }
 
+interface SortableSceneItemProps {
+  id: string
+  kind: string
+  title?: string
+  durationText: string
+  isActive: boolean
+  onClick: () => void
+  onDelete: () => void
+  onDuplicate: () => void
+}
+
+const SortableSceneItem = ({
+  id,
+  kind,
+  title,
+  durationText,
+  isActive,
+  onClick,
+  onDelete,
+  onDuplicate,
+}: SortableSceneItemProps) => {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging,
+  } = useSortable({ id })
+
+  return (
+    <div
+      ref={setNodeRef}
+      style={{ transform: CSS.Transform.toString(transform), transition }}
+      {...attributes}
+      {...listeners}
+      className={clsx(isDragging && "shadow-lg")}
+    >
+      <TimelineSceneCard
+        kind={kind}
+        title={title}
+        durationText={durationText}
+        isActive={isActive}
+        onClick={onClick}
+        onDelete={onDelete}
+        onDuplicate={onDuplicate}
+      />
+    </div>
+  )
+}
+
 const QuizzEditorSidebar = () => {
   const {
     questions,
@@ -94,6 +274,18 @@ const QuizzEditorSidebar = () => {
     reorderQuestions,
     duplicateQuestion,
   } = useQuizzEditor()
+
+  const {
+    timeline,
+    selectedTimelineId,
+    selectTimelineItem,
+    addTimelineCard,
+    removeTimelineCard,
+    duplicateTimelineCard,
+    reorderTimelineCards,
+    scenes,
+  } = useStudioEditor()
+
   const {
     formState: { errors },
   } = useFormContext<QuizzFormValues>()
@@ -105,16 +297,6 @@ const QuizzEditorSidebar = () => {
     useSensor(PointerSensor, { activationConstraint: { distance: 5 } }),
   )
 
-  const handleSlideClick = (index: number) => () => {
-    if (!isDragging.current) {
-      setCurrentIndex(index)
-    }
-  }
-
-  const handleDelete = (index: number) => () => {
-    removeQuestion(index)
-  }
-
   const handleDragEnd = (event: DragEndEvent) => {
     isDragging.current = false
     const { active, over } = event
@@ -123,10 +305,24 @@ const QuizzEditorSidebar = () => {
       return
     }
 
+    if (timeline.length > 0) {
+      const from = timeline.findIndex((item) => item.id === active.id)
+      const to = timeline.findIndex((item) => item.id === over.id)
+
+      if (from >= 0 && to >= 0) {
+        reorderTimelineCards(from, to)
+      }
+
+      return
+    }
+
     const from = questionIds.findIndex((id) => id === active.id)
     const to = questionIds.findIndex((id) => id === over.id)
     reorderQuestions(from, to)
   }
+
+  const sortableIds =
+    timeline.length > 0 ? timeline.map((item) => item.id) : questionIds
 
   return (
     <aside className="bg-background z-10 m-3 flex w-72 shrink-0 flex-col gap-2 overflow-auto rounded-xl p-3 shadow-sm">
@@ -140,32 +336,115 @@ const QuizzEditorSidebar = () => {
         onDragEnd={handleDragEnd}
       >
         <SortableContext
-          items={questionIds}
+          items={sortableIds}
           strategy={verticalListSortingStrategy}
         >
           <div className="flex flex-col gap-2">
-            {questions.map((question, index) => (
-              <SortableItem
-                key={questionIds[index]}
-                id={questionIds[index]}
-                question={question}
-                index={index}
-                isActive={currentIndex === index}
-                isInvalid={Boolean(errors.questions?.[index])}
-                canDelete={questions.length > 1}
-                onClick={handleSlideClick(index)}
-                onDelete={handleDelete(index)}
-                onDuplicate={
-                  duplicateQuestion ? () => duplicateQuestion(index) : undefined
-                }
-              />
-            ))}
+            {timeline.length > 0
+              ? timeline.map((item, index) => {
+                  if (item.kind === "question") {
+                    const qIndex = questionIds.findIndex(
+                      (id) => id === item.questionId,
+                    )
+
+                    if (qIndex < 0) {
+                      return null
+                    }
+
+                    const question = questions[qIndex]
+
+                    const questionOrdinal = timeline
+                      .slice(0, index + 1)
+                      .filter((tlItem) => tlItem.kind === "question").length
+
+                    return (
+                      <SortableItem
+                        key={item.id}
+                        id={item.id}
+                        question={question}
+                        index={questionOrdinal - 1}
+                        isActive={selectedTimelineId === item.id}
+                        isInvalid={Boolean(errors.questions?.[qIndex])}
+                        canDelete={questions.length > 1}
+                        onClick={() => {
+                          if (!isDragging.current) {
+                            selectTimelineItem(item.id)
+                          }
+                        }}
+                        onDelete={() => removeTimelineCard(index)}
+                        onDuplicate={() => duplicateTimelineCard(index)}
+                      />
+                    )
+                  }
+
+                  const scene = scenes[item.sceneId] as
+                    | {
+                        title?: string
+                        durationMs?: number
+                        durationSeconds?: number
+                      }
+                    | undefined
+
+                  let durationText = "5s"
+
+                  if (scene?.durationSeconds) {
+                    durationText = `${scene.durationSeconds}s`
+                  } else if (scene?.durationMs) {
+                    durationText = `${Math.round(scene.durationMs / 1000)}s`
+                  }
+
+                  return (
+                    <SortableSceneItem
+                      key={item.id}
+                      id={item.id}
+                      kind={item.kind}
+                      title={scene?.title}
+                      durationText={durationText}
+                      isActive={selectedTimelineId === item.id}
+                      onClick={() => {
+                        if (!isDragging.current) {
+                          selectTimelineItem(item.id)
+                        }
+                      }}
+                      onDelete={() => removeTimelineCard(index)}
+                      onDuplicate={() => duplicateTimelineCard(index)}
+                    />
+                  )
+                })
+              : questions.map((question, index) => (
+                  <SortableItem
+                    key={questionIds[index]}
+                    id={questionIds[index]}
+                    question={question}
+                    index={index}
+                    isActive={currentIndex === index}
+                    isInvalid={Boolean(errors.questions?.[index])}
+                    canDelete={questions.length > 1}
+                    onClick={() => {
+                      if (!isDragging.current) {
+                        setCurrentIndex(index)
+                      }
+                    }}
+                    onDelete={() => removeQuestion(index)}
+                    onDuplicate={
+                      duplicateQuestion
+                        ? () => duplicateQuestion(index)
+                        : undefined
+                    }
+                  />
+                ))}
           </div>
         </SortableContext>
       </DndContext>
 
       <Button
-        onClick={addQuestion}
+        onClick={() => {
+          if (timeline.length > 0) {
+            addTimelineCard()
+          } else {
+            addQuestion()
+          }
+        }}
         className="bg text-md bg-accent text-accent-foreground mt-1 mb-8 flex items-center justify-center gap-1"
       >
         <Plus className="size-6" />

@@ -13,6 +13,7 @@ import {
 } from "@razzia/common/types/game/status"
 import {
   generateRosterPlayerId,
+  isQuizExtrasV2,
   normalizePhoneE164,
   type HostPlayerStatus,
   type HostPresenceSnapshot,
@@ -86,6 +87,7 @@ class Game {
       points: number
       lastSeenAt?: number
       preRegistered: boolean
+      activeCallId?: string
     }
   >()
   private readonly phoneIndex = new Map<string, string>()
@@ -168,21 +170,48 @@ class Game {
       getSettings: () => this._settings,
       shouldShowLeaderboard: this.extensionSession
         ? (params) => {
-            if (!this.extensionSession?.extras?.leaderboard) {
+            const extras = this.extensionSession?.extras
+
+            if (!extras) {
               return false
             }
 
-            const currentQId =
-              this.extensionSession.extras.questionIds[
-                params.currentQuestionIndex
-              ]
-            const nextQId =
-              this.extensionSession.extras.questionIds[
-                params.currentQuestionIndex + 1
-              ]
+            if (isQuizExtrasV2(extras)) {
+              if (
+                extras.defaults.leaderboardPolicy === "cardOnly" ||
+                extras.defaults.leaderboardPolicy === "disabled"
+              ) {
+                return false
+              }
+
+              if (extras.leaderboard) {
+                const currentQId =
+                  extras.questionIds[params.currentQuestionIndex]
+                const nextQId =
+                  extras.questionIds[params.currentQuestionIndex + 1]
+
+                return shouldShowLeaderboard({
+                  policy: extras.leaderboard,
+                  gameMode: this.gameMode,
+                  currentQuestionIndex: params.currentQuestionIndex,
+                  totalQuestions: params.totalQuestions,
+                  currentQuestionId: currentQId,
+                  nextQuestionId: nextQId,
+                  currentCategory: params.currentCategory,
+                  nextCategory: params.nextCategory,
+                  isManualRequested:
+                    this.extensionSession.consumeManualLeaderboardRequest(),
+                })
+              }
+
+              return false
+            }
+
+            const currentQId = extras.questionIds[params.currentQuestionIndex]
+            const nextQId = extras.questionIds[params.currentQuestionIndex + 1]
 
             return shouldShowLeaderboard({
-              policy: this.extensionSession.extras.leaderboard,
+              policy: extras.leaderboard,
               gameMode: this.gameMode,
               currentQuestionIndex: params.currentQuestionIndex,
               totalQuestions: params.totalQuestions,
@@ -195,8 +224,16 @@ class Game {
             })
           }
         : undefined,
-      hasInterlude: (qIdx) =>
-        this.extensionSession?.hasInterlude(qIdx) ?? false,
+      hasInterlude: (qIdx) => {
+        if (
+          this.extensionSession?.extras &&
+          isQuizExtrasV2(this.extensionSession.extras)
+        ) {
+          return false
+        }
+
+        return this.extensionSession?.hasInterlude(qIdx) ?? false
+      },
       getInterludeAdvance: (qIdx) =>
         this.extensionSession?.getInterludeAdvance(qIdx) ?? "manual",
       getInterludeDuration: (qIdx) =>
@@ -376,11 +413,13 @@ class Game {
   submitPhoneAnswerByRosterId(
     rosterPlayerId: string,
     zeroBasedAnswerIndex: number,
+    callId?: string,
   ): {
     accepted: boolean
     epoch: number
     correct?: boolean
     verdictPending?: boolean
+    isSurvey?: boolean
     reason?: string
   } {
     const epoch =
@@ -402,6 +441,14 @@ class Game {
         accepted: false,
         epoch,
         reason: "player_not_joined",
+      }
+    }
+
+    if (callId && entry.activeCallId && entry.activeCallId !== callId) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "stale_call",
       }
     }
 
@@ -440,6 +487,24 @@ class Game {
     this.round.selectAnswer(fakeSocket, [zeroBasedAnswerIndex])
 
     const nowAnswered = this.round.hasPlayerAnswered(player.id)
+
+    if (!nowAnswered) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "rejected_by_engine",
+      }
+    }
+
+    if (this.round.isSurvey()) {
+      return {
+        accepted: true,
+        epoch,
+        isSurvey: true,
+        verdictPending: false,
+      }
+    }
+
     // Note: if this was the last connected player to answer, RoundManager immediately
     // aborts cooldown and runs showResults() synchronously or right after!
     const verdict = this.lastVerdictByRosterId.get(rosterPlayerId)
@@ -450,14 +515,6 @@ class Game {
         epoch,
         correct: verdict.correct,
         verdictPending: false,
-      }
-    }
-
-    if (!nowAnswered) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "rejected_by_engine",
       }
     }
 
@@ -1144,6 +1201,7 @@ class Game {
         rosterEntry.timedOut = false
         rosterEntry.lastSeenAt = now
         rosterEntry.source = "phone"
+        rosterEntry.activeCallId = input.callId
 
         this.notifyPlayerUpdated(oldSocketId, existingPlayer, false)
         this.playerManager.broadcastCount()
@@ -1190,6 +1248,7 @@ class Game {
       rosterEntry.timedOut = false
       rosterEntry.lastSeenAt = now
       rosterEntry.source = "phone"
+      rosterEntry.activeCallId = input.callId
     } else {
       rosterEntry = {
         rosterPlayerId: rId,
@@ -1203,6 +1262,7 @@ class Game {
         points: 0,
         lastSeenAt: now,
         preRegistered: false,
+        activeCallId: input.callId,
       }
       this.rosterMap.set(rId, rosterEntry)
 
@@ -1231,10 +1291,19 @@ class Game {
     }
   }
 
-  disconnectPhoneCallerByRosterId(rosterPlayerId: string, timedOut = false): boolean {
+  disconnectPhoneCallerByRosterId(
+    rosterPlayerId: string,
+    timedOut = false,
+    callId?: string,
+  ): boolean {
     const entry = this.rosterMap.get(rosterPlayerId)
 
     if (!entry) {
+      return false
+    }
+
+    // If a callId was provided and does not match the currently bound callId, this hangup is stale!
+    if (callId && entry.activeCallId && entry.activeCallId !== callId) {
       return false
     }
 

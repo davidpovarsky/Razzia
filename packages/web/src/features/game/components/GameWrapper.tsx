@@ -245,7 +245,7 @@ const GameWrapper = ({
   const defaultExit = () => undefined
 
   return (
-    <section className="relative flex min-h-dvh">
+    <section className="relative flex min-h-dvh isolate">
       <GameBackground />
 
       <div className="z-10 flex w-full flex-1 flex-col justify-between">

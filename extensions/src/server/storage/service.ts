@@ -5,11 +5,12 @@ import {
   isEnhancedBundle,
   nextRevision,
   quizExtrasV1Schema,
+  quizExtrasV2Schema,
   remapQuestionIds,
   RevisionConflictError,
   validateRevision,
+  type AnyQuizExtras,
   type EnhancedBundle,
-  type QuizExtrasV1,
 } from "../../core/index"
 import { CompositeStorageError } from "./error"
 import { createStagedJournal, removeJournal } from "./journal"
@@ -36,7 +37,7 @@ export class CompositeStorageService {
     quizId: string
     exists: boolean
     quizz: Record<string, unknown>
-    extras: QuizExtrasV1 | null
+    extras: AnyQuizExtras | null
     baseDigest: string
     digestMatches: boolean
   } {
@@ -78,7 +79,7 @@ export class CompositeStorageService {
     quizId: string
     expectedRevision: number | null
     quizz: Record<string, unknown>
-    extras: QuizExtrasV1
+    extras: AnyQuizExtras
   }): {
     quizId: string
     revision: number
@@ -98,8 +99,11 @@ export class CompositeStorageService {
       )
     }
 
-    // 2. Validate extras schema
-    const extrasValidation = quizExtrasV1Schema.safeParse(extras)
+    // 2. Validate extras schema (V1 or V2)
+    const extrasValidation =
+      extras.schemaVersion === 2
+        ? quizExtrasV2Schema.safeParse(extras)
+        : quizExtrasV1Schema.safeParse(extras)
 
     if (!extrasValidation.success) {
       throw new CompositeStorageError(
@@ -151,7 +155,7 @@ export class CompositeStorageService {
       throw new RevisionConflictError(1, expectedRevision)
     }
 
-    const updatedExtras: QuizExtrasV1 = {
+    const updatedExtras: AnyQuizExtras = {
       ...extras,
       quizId,
       baseDigest: actualBaseDigest,
@@ -193,7 +197,7 @@ export class CompositeStorageService {
    */
   createCompositeQuiz(params: {
     quizz: Record<string, unknown>
-    extras: QuizExtrasV1
+    extras: AnyQuizExtras
   }): {
     quizId: string
     revision: number
@@ -211,8 +215,11 @@ export class CompositeStorageService {
       questionsCount,
     )
 
+    const schemaToUse =
+      extras.schemaVersion === 2 ? quizExtrasV2Schema : quizExtrasV1Schema
+
     // Pre-validate extras payload structure before touching disk or saving base quiz
-    const preValidation = quizExtrasV1Schema.safeParse({
+    const preValidation = schemaToUse.safeParse({
       ...extras,
       quizId: "00000000-0000-0000-0000-000000000000",
       baseDigest,
@@ -234,7 +241,7 @@ export class CompositeStorageService {
       const saveResult = this.injections.saveQuizz(quizz)
       quizId = saveResult.id
 
-      const initialExtras: QuizExtrasV1 = {
+      const initialExtras: AnyQuizExtras = {
         ...extras,
         quizId,
         baseDigest,
@@ -242,7 +249,7 @@ export class CompositeStorageService {
         questionIds: alignedQuestionIds,
       }
 
-      const validatedExtras = quizExtrasV1Schema.parse(initialExtras)
+      const validatedExtras = schemaToUse.parse(initialExtras)
 
       writeSidecar(this.injections.getPath, quizId, validatedExtras)
 
@@ -340,14 +347,40 @@ export class CompositeStorageService {
       )
       const baseDigest = computeCanonicalBaseDigest(quizz)
 
+      const idMap = new Map<string, string>()
+      for (let i = 0; i < extras.questionIds.length; i += 1) {
+        if (freshQuestionIds[i]) {
+          idMap.set(extras.questionIds[i], freshQuestionIds[i])
+        }
+      }
+
+      const freshTimeline =
+        extras.schemaVersion === 2
+          ? extras.timeline.map((item) => {
+              if (item.kind === "question") {
+                const freshId = idMap.get(item.questionId)
+
+                if (freshId) {
+                  return { ...item, questionId: freshId }
+                }
+              }
+
+              return item
+            })
+          : undefined
+
+      const schemaToUse =
+        extras.schemaVersion === 2 ? quizExtrasV2Schema : quizExtrasV1Schema
+
       // Pre-validate extras payload before touching disk or saving base quiz
-      const preValidation = quizExtrasV1Schema.safeParse({
+      const preValidation = schemaToUse.safeParse({
         ...extras,
         quizId: "00000000-0000-0000-0000-000000000000",
         baseDigest,
         revision: 1,
         questionIds: ensuredFreshIds,
         perQuestion: freshPerQuestion,
+        ...(freshTimeline ? { timeline: freshTimeline } : {}),
       })
 
       if (!preValidation.success) {
@@ -364,16 +397,17 @@ export class CompositeStorageService {
         const saveResult = this.injections.saveQuizz(quizz)
         newQuizId = saveResult.id
 
-        const importedExtras: QuizExtrasV1 = {
+        const importedExtras: AnyQuizExtras = {
           ...extras,
           quizId: newQuizId,
           revision: 1,
           baseDigest,
           questionIds: ensuredFreshIds,
           perQuestion: freshPerQuestion,
+          ...(freshTimeline ? { timeline: freshTimeline } : {}),
         }
 
-        const validated = quizExtrasV1Schema.parse(importedExtras)
+        const validated = schemaToUse.parse(importedExtras)
 
         writeSidecar(this.injections.getPath, newQuizId, validated)
 

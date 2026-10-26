@@ -2,8 +2,8 @@ import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import {
   RevisionConflictError,
   computeCanonicalBaseDigest,
+  type AnyQuizExtras,
   type EnhancedBundle,
-  type QuizExtrasV1,
 } from "@razzia/extensions/core"
 
 export { RevisionConflictError }
@@ -11,7 +11,7 @@ export { RevisionConflictError }
 export interface CompositeQuizResponse {
   quizId: string
   exists: boolean
-  extras: QuizExtrasV1 | null
+  extras: AnyQuizExtras | null
   baseDigest: string
 }
 
@@ -106,7 +106,7 @@ export class CompositeApiClient {
     payload: {
       expectedRevision: number | null
       quizz: QuizzValidated
-      extras: QuizExtrasV1
+      extras: AnyQuizExtras
     },
   ): Promise<SaveCompositeResult> {
     const baseDigest = computeCanonicalBaseDigest(payload.quizz)
@@ -171,7 +171,7 @@ export class CompositeApiClient {
    */
   async createQuizComposite(payload: {
     quizz: QuizzValidated
-    extras: QuizExtrasV1
+    extras: AnyQuizExtras
   }): Promise<SaveCompositeResult> {
     const baseDigest = computeCanonicalBaseDigest(payload.quizz)
 

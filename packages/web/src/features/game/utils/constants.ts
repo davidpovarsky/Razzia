@@ -20,7 +20,7 @@ export const ANSWERS_COLORS = [
   "bg-[var(--color-answer-4)] text-white",
 ]
 
-export const ANSWERS_LABELS = ["A", "B", "C", "D"]
+export const ANSWERS_LABELS = ["1", "2", "3", "4"]
 
 export const GAME_STATES = {
   status: {

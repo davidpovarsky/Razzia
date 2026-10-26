@@ -259,5 +259,51 @@
     "answeredYes": "Risposto",
     "answeredNo": "In attesa",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Quiz",
+    "survey": "Sondaggio",
+    "transition": "Transizione",
+    "animation": "Animazione",
+    "media": "Media",
+    "leaderboard": "Classifica",
+    "interimResults": "Risultati parziali",
+    "countdown": "Conto alla rovescia",
+    "opening": "Apertura",
+    "closing": "Chiusura",
+    "deleteConfirmTitle": "Convertire la domanda in scena?",
+    "deleteConfirmDesc": "Convertendo questa domanda il contenuto verrà sostituito dalla scena selezionata. L'operazione non può essere annullata automaticamente.",
+    "cannotDeleteLastQuestion": "Lo show deve contenere almeno una domanda o sondaggio."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Domande",
+      "participants": "Partecipanti",
+      "settings": "Impostazioni",
+      "launch": "Avvia"
+    },
+    "settings": {
+      "globalTitle": "Impostazioni studio & predefiniti",
+      "newQuestionMode": "Modalità predefinita per nuove carte",
+      "applyAllQuestions": "Applica a tutte le domande esistenti",
+      "applyAllConfirm": "Convertire tutte le domande esistenti a questa modalità?",
+      "leaderboardPolicy": "Politica classifica",
+      "advanceMode": "Avanzamento",
+      "bulkSuccess": "Tutte le domande sono state aggiornate",
+      "policyCardOnly": "Solo carte della sequenza",
+      "policyUpstream": "Regola standard Razzia",
+      "policyEveryN": "Ogni N domande",
+      "policyDisabled": "Disattivato"
+    },
+    "launch": {
+      "readyTitle": "Show pronto per l'avvio",
+      "launchButton": "Avvia show dal vivo",
+      "summary": "Riepilogo show",
+      "totalCards": "Carte sequenza",
+      "totalQuestions": "Domande & sondaggi",
+      "totalParticipants": "Partecipanti registrati",
+      "missingMediaWarning": "Alcune carte media hanno URL vuoti",
+      "noQuestionsWarning": "Lo show deve contenere almeno una domanda"
+    }
   }
 }

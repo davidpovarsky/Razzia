@@ -9,7 +9,11 @@ import {
   quizzValidator,
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
-import { generateQuestionId, type QuizExtrasV1 } from "@razzia/extensions/core"
+import {
+  generateQuestionId,
+  isQuizExtrasV2,
+  type AnyQuizExtras,
+} from "@razzia/extensions/core"
 import {
   CompositeApiClient,
   duplicateQuestionInExtras,
@@ -47,12 +51,12 @@ interface QuizzEditorContextType {
   currentQuestion: Question
   currentQuestionId: string
   isRemoving: boolean
-  extras: QuizExtrasV1 | null
+  extras: AnyQuizExtras | null
   conflict: {
     serverRevision?: number
     expectedRevision?: number | null
   } | null
-  setExtras: React.Dispatch<React.SetStateAction<QuizExtrasV1 | null>>
+  setExtras: React.Dispatch<React.SetStateAction<AnyQuizExtras | null>>
   setConflict: React.Dispatch<
     React.SetStateAction<{
       serverRevision?: number
@@ -109,7 +113,7 @@ export const QuizzEditorProvider = ({
   })
   const [currentIndex, setCurrentIndex] = useState(0)
   const [removingFrom, setRemovingFrom] = useState<Question[] | null>(null)
-  const [extras, setExtras] = useState<QuizExtrasV1 | null>(null)
+  const [extras, setExtras] = useState<AnyQuizExtras | null>(null)
   const [conflict, setConflict] = useState<{
     serverRevision?: number
     expectedRevision?: number | null
@@ -195,7 +199,7 @@ export const QuizzEditorProvider = ({
 
     setQuestionIds((prev) => prev.filter((_, i) => i !== index))
 
-    if (extras) {
+    if (extras && !isQuizExtrasV2(extras)) {
       setExtras(removeQuestionFromExtras(extras, index))
     }
 
@@ -227,7 +231,7 @@ export const QuizzEditorProvider = ({
       return next
     })
 
-    if (extras) {
+    if (extras && !isQuizExtrasV2(extras)) {
       setExtras(reorderQuestionsInExtras(extras, from, to))
     }
   }
@@ -238,7 +242,7 @@ export const QuizzEditorProvider = ({
     insert(index + 1, cloned)
     setCurrentIndex(index + 1)
 
-    if (extras) {
+    if (extras && !isQuizExtrasV2(extras)) {
       const { extras: newExtras, newQuestionId } = duplicateQuestionInExtras(
         extras,
         index,

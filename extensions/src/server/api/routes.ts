@@ -4,20 +4,26 @@ import { Hono, type MiddlewareHandler } from "hono"
 import type { ContentfulStatusCode } from "hono/utils/http-status"
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
-import { quizExtrasV1Schema, RevisionConflictError } from "../../core/index"
+import {
+  quizExtrasV1Schema,
+  quizExtrasV2Schema,
+  RevisionConflictError,
+} from "../../core/index"
 import { CompositeStorageService } from "../storage/service"
 import { CompositeStorageError } from "../storage/error"
 import type { StorageInjections } from "../storage/sidecar"
 
+const anyQuizExtrasSchema = z.union([quizExtrasV1Schema, quizExtrasV2Schema])
+
 const saveCompositeBodySchema = z.strictObject({
   expectedRevision: z.number().int().positive().nullable(),
   quizz: quizzValidator,
-  extras: quizExtrasV1Schema,
+  extras: anyQuizExtrasSchema,
 })
 
 const createCompositeBodySchema = z.strictObject({
   quizz: quizzValidator,
-  extras: quizExtrasV1Schema,
+  extras: anyQuizExtrasSchema,
 })
 
 export const createExtensionRoutes = (

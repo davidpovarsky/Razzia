@@ -1,10 +1,12 @@
 import {
   MAX_POINTS,
   NO_TIME_LIMIT,
-  QUIZZ_MODES,
 } from "@razzia/common/constants"
+import {
+  resolveQuestionPlayMode,
+  type ScoringMode,
+} from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
-import type { ScoringMode } from "@razzia/common/types/game"
 import {
   Select,
   SelectContent,
@@ -57,7 +59,7 @@ const BaseConfig = () => {
 
   return (
     <>
-      {gameMode !== QUIZZ_MODES.SURVEY && (
+      {resolveQuestionPlayMode(currentQuestion, gameMode) !== "survey" && (
         <ConfigSection title={t("quizz:question.config.scoring")}>
           <ConfigField>
             <ConfigField.Label

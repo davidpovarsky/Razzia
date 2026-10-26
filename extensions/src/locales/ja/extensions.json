@@ -259,5 +259,51 @@
     "answeredYes": "回答済",
     "answeredNo": "待機中",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "クイズ",
+    "survey": "アンケート",
+    "transition": "トランジション",
+    "animation": "アニメーション",
+    "media": "メディア",
+    "leaderboard": "リーダーボード",
+    "interimResults": "中間結果",
+    "countdown": "カウントダウン",
+    "opening": "オープニング",
+    "closing": "エンディング",
+    "deleteConfirmTitle": "問題をシーンに変換しますか？",
+    "deleteConfirmDesc": "この問題を変換すると、問題の内容が選択したシーンに置き換わります。この操作は自動で元に戻せません。",
+    "cannotDeleteLastQuestion": "ショーには少なくとも1つの問題またはアンケートが必要です。"
+  },
+  "studio": {
+    "tabs": {
+      "questions": "問題",
+      "participants": "参加者",
+      "settings": "設定",
+      "launch": "開始"
+    },
+    "settings": {
+      "globalTitle": "スタジオ設定とデフォルト",
+      "newQuestionMode": "新しいカードのデフォルトモード",
+      "applyAllQuestions": "既存のすべての問題に適用",
+      "applyAllConfirm": "既存のすべての問題カードをこのモードに変換しますか？",
+      "leaderboardPolicy": "リーダーボード表示ポリシー",
+      "advanceMode": "進行モード",
+      "bulkSuccess": "既存の問題カードをすべて更新しました",
+      "policyCardOnly": "タイムラインカードのみ",
+      "policyUpstream": "標準のRazziaルール",
+      "policyEveryN": "N問ごと",
+      "policyDisabled": "無効"
+    },
+    "launch": {
+      "readyTitle": "ショーの開始準備が整いました",
+      "launchButton": "ライブショーを開始",
+      "summary": "ショー概要",
+      "totalCards": "タイムラインカード",
+      "totalQuestions": "問題とアンケート",
+      "totalParticipants": "登録済み参加者",
+      "missingMediaWarning": "一部のメディアカードにURLが設定されていません",
+      "noQuestionsWarning": "ショーには少なくとも1つの問題が必要です"
+    }
   }
 }

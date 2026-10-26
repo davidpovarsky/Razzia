@@ -15,6 +15,7 @@
   },
   "game": {
     "alreadyStarted": "Oyun zaten başladı",
+    "ambiguousTargetGame": "Birden fazla aktif oyun bulundu; gameId veya inviteCode belirtin",
     "expired": "Oyunun süresi doldu",
     "invalidAutoAdvanceDelay": "Gecikme süresi 3 ile 600 saniye arasında olmalıdır",
     "kickedByManager": "Yönetici tarafından oyundan atıldınız",

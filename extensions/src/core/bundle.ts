@@ -1,15 +1,21 @@
 import { z } from "zod"
-import { quizExtrasV1Schema, type QuizExtrasV1 } from "./quiz-extras"
+import { quizExtrasV1Schema } from "./quiz-extras"
+import { quizExtrasV2Schema } from "./studio-timeline-schema"
+import type { AnyQuizExtras } from "./studio-migrate"
 
 export const ENHANCED_BUNDLE_VERSION = 1 as const
 
 export const enhancedBundleSchema = z.strictObject({
   bundleVersion: z.literal(ENHANCED_BUNDLE_VERSION),
   quizz: z.unknown(),
-  extras: quizExtrasV1Schema,
+  extras: z.union([quizExtrasV1Schema, quizExtrasV2Schema]),
 })
 
-export type EnhancedBundle = z.infer<typeof enhancedBundleSchema>
+export interface EnhancedBundle {
+  bundleVersion: typeof ENHANCED_BUNDLE_VERSION
+  quizz: unknown
+  extras: AnyQuizExtras
+}
 
 export type EnhancedQuizBundle = EnhancedBundle
 
@@ -24,7 +30,7 @@ export const isEnhancedBundle = (data: unknown): data is EnhancedBundle =>
  */
 export const createEnhancedBundle = (
   quizz: unknown,
-  extras: QuizExtrasV1,
+  extras: AnyQuizExtras,
 ): EnhancedBundle => ({
   bundleVersion: ENHANCED_BUNDLE_VERSION,
   quizz,

@@ -1,6 +1,10 @@
 import fs from "node:fs"
 import path from "node:path"
-import { quizExtrasV1Schema, type QuizExtrasV1 } from "../../core/index"
+import {
+  quizExtrasV1Schema,
+  quizExtrasV2Schema,
+  type AnyQuizExtras,
+} from "../../core/index"
 
 export interface StorageInjections {
   getPath: (subPath?: string) => string
@@ -44,7 +48,7 @@ export const sidecarExists = (
 export const readSidecar = (
   getPath: (subPath?: string) => string,
   quizId: string,
-): QuizExtrasV1 | null => {
+): AnyQuizExtras | null => {
   const filePath = getSidecarFilePath(getPath, quizId)
 
   if (!fs.existsSync(filePath)) {
@@ -54,6 +58,26 @@ export const readSidecar = (
   try {
     const raw = fs.readFileSync(filePath, "utf-8")
     const parsed = JSON.parse(raw) as unknown
+
+    if (
+      typeof parsed === "object" &&
+      parsed !== null &&
+      (parsed as Record<string, unknown>).schemaVersion === 2
+    ) {
+      const v2 = quizExtrasV2Schema.safeParse(parsed)
+
+      if (v2.success) {
+        return v2.data
+      }
+
+      console.warn(
+        `[Sidecar] Warning: invalid V2 sidecar at ${filePath}:`,
+        v2.error.issues,
+      )
+
+      return null
+    }
+
     const validated = quizExtrasV1Schema.safeParse(parsed)
 
     if (!validated.success) {
@@ -76,7 +100,7 @@ export const readSidecar = (
 export const writeSidecar = (
   getPath: (subPath?: string) => string,
   quizId: string,
-  extras: QuizExtrasV1,
+  extras: AnyQuizExtras,
 ): void => {
   const filePath = getSidecarFilePath(getPath, quizId)
   const content = JSON.stringify(extras, null, 2)

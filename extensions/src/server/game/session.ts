@@ -1,10 +1,11 @@
 import {
   extensionCommandSchema,
+  type AnyQuizExtras,
   type ExtensionCommand,
   type ExtensionPhase,
   type ExtensionStateEnvelope,
-  type QuizExtrasV1,
   type RevealDistributionSnapshot,
+  isQuizExtrasV2,
 } from "../../core/index"
 import {
   assignManual,
@@ -25,7 +26,7 @@ export interface ExtensionSessionDelegate {
 
 export class ExtensionGameSession {
   readonly gameId: string
-  readonly extras: QuizExtrasV1 | null
+  readonly extras: AnyQuizExtras | null
 
   private seq = 0
   private epoch = 0
@@ -40,7 +41,7 @@ export class ExtensionGameSession {
   private viewingHistoryIndex: number | null = null
   private delegate: ExtensionSessionDelegate | null = null
 
-  constructor(gameId: string, extras: QuizExtrasV1 | null) {
+  constructor(gameId: string, extras: AnyQuizExtras | null) {
     this.gameId = gameId
     this.extras = extras
   }
@@ -283,6 +284,13 @@ export class ExtensionGameSession {
       if (this.phase === "interlude" && questionExtras.interlude) {
         extrasPayload.interlude = questionExtras.interlude
       }
+    }
+
+    // Studio V2 timeline & scene payload
+    if (this.extras && isQuizExtrasV2(this.extras)) {
+      extrasPayload.timeline = this.extras.timeline
+      extrasPayload.scenes = this.extras.scenes
+      extrasPayload.defaults = this.extras.defaults
     }
 
     // Manager-only reveal distribution and history snapshot

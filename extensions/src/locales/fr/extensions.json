@@ -259,5 +259,51 @@
     "answeredYes": "Répondu",
     "answeredNo": "En attente",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Quiz",
+    "survey": "Sondage",
+    "transition": "Transition",
+    "animation": "Animation",
+    "media": "Média",
+    "leaderboard": "Classement",
+    "interimResults": "Résultats intermédiaires",
+    "countdown": "Compte à rebours",
+    "opening": "Ouverture",
+    "closing": "Clôture",
+    "deleteConfirmTitle": "Convertir la question en scène ?",
+    "deleteConfirmDesc": "La conversion de cette question remplacera son contenu par la scène sélectionnée. Cela ne peut pas être annulé automatiquement.",
+    "cannotDeleteLastQuestion": "Le spectacle doit contenir au moins une question ou un sondage."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Questions",
+      "participants": "Participants",
+      "settings": "Paramètres",
+      "launch": "Lancer"
+    },
+    "settings": {
+      "globalTitle": "Paramètres du studio & options par défaut",
+      "newQuestionMode": "Mode par défaut pour les nouvelles cartes",
+      "applyAllQuestions": "Appliquer à toutes les questions existantes",
+      "applyAllConfirm": "Convertir toutes les cartes de questions existantes vers ce mode ?",
+      "leaderboardPolicy": "Politique de classement",
+      "advanceMode": "Mode d'avancement",
+      "bulkSuccess": "Toutes les cartes de questions existantes ont été mises à jour",
+      "policyCardOnly": "Cartes de la timeline uniquement",
+      "policyUpstream": "Règle standard Razzia",
+      "policyEveryN": "Toutes les N questions",
+      "policyDisabled": "Désactivé"
+    },
+    "launch": {
+      "readyTitle": "Spectacle prêt à être lancé",
+      "launchButton": "Lancer le spectacle en direct",
+      "summary": "Résumé du spectacle",
+      "totalCards": "Cartes de la timeline",
+      "totalQuestions": "Questions & sondages",
+      "totalParticipants": "Participants enregistrés",
+      "missingMediaWarning": "Certaines cartes média ont des URLs vides",
+      "noQuestionsWarning": "Le spectacle doit contenir au moins une question"
+    }
   }
 }

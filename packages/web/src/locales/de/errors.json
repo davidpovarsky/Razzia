@@ -15,6 +15,7 @@
   },
   "game": {
     "alreadyStarted": "Spiel bereits gestartet",
+    "ambiguousTargetGame": "Mehrere aktive Spiele gefunden; gameId oder inviteCode angeben",
     "expired": "Spiel abgelaufen",
     "invalidAutoAdvanceDelay": "Verzögerung muss zwischen 3 und 600 Sekunden liegen",
     "kickedByManager": "Du wurdest vom Manager entfernt",

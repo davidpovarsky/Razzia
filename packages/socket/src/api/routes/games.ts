@@ -54,14 +54,17 @@ function resolvePilotTargetGame(
   gameId?: string,
   inviteCode?: string,
 ): { game: Game | null; error?: string } {
-  if (gameId) {
-    const byId = registry.getGameById(gameId)
+  const targetGameId = gameId ?? process.env.TADA_ACTIVE_GAME_ID
+  const targetInviteCode = inviteCode ?? process.env.TADA_ACTIVE_INVITE_CODE
+
+  if (targetGameId) {
+    const byId = registry.getGameById(targetGameId)
 
     return byId ? { game: byId } : { game: null, error: "errors:game.notFound" }
   }
 
-  if (inviteCode) {
-    const byCode = registry.getGameByInviteCode(inviteCode)
+  if (targetInviteCode) {
+    const byCode = registry.getGameByInviteCode(targetInviteCode)
 
     return byCode
       ? { game: byCode }
@@ -78,14 +81,8 @@ function resolvePilotTargetGame(
     return { game: allGames[0] }
   }
 
-  // If multiple games exist, prefer the single game whose manager is currently connected
-  const managerConnected = allGames.filter((g) => g.manager.connected)
-
-  if (managerConnected.length === 1) {
-    return { game: managerConnected[0] }
-  }
-
-  return { game: null, error: "errors:game.notFound" }
+  // If multiple games exist and no explicit gameId or inviteCode provided: fail closed!
+  return { game: null, error: "errors:game.ambiguousTargetGame" }
 }
 
 const routes = apiFactory
@@ -497,6 +494,7 @@ const routes = apiFactory
         const outcome = game.submitPhoneAnswerByRosterId(
           rosterId,
           body.answerIndex,
+          body.callId,
         )
 
         return c.json({
@@ -515,7 +513,7 @@ const routes = apiFactory
       }
 
       if (rosterId) {
-        game.disconnectPhoneCallerByRosterId(rosterId, false)
+        game.disconnectPhoneCallerByRosterId(rosterId, false, body.callId)
       }
 
       return c.json({

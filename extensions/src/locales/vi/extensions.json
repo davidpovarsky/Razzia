@@ -259,5 +259,51 @@
     "answeredYes": "Đã trả lời",
     "answeredNo": "Đang chờ",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Câu đố",
+    "survey": "Khảo sát",
+    "transition": "Chuyển cảnh",
+    "animation": "Hoạt ảnh",
+    "media": "Phương tiện",
+    "leaderboard": "Bảng xếp hạng",
+    "interimResults": "Kết quả tạm thời",
+    "countdown": "Đếm ngược",
+    "opening": "Mở đầu",
+    "closing": "Kết thúc",
+    "deleteConfirmTitle": "Chuyển câu hỏi thành cảnh?",
+    "deleteConfirmDesc": "Chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng cảnh đã chọn. Thao tác này không thể hoàn tác tự động.",
+    "cannotDeleteLastQuestion": "Buổi biểu diễn phải có ít nhất một câu hỏi hoặc khảo sát."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Câu hỏi",
+      "participants": "Người tham gia",
+      "settings": "Cài đặt",
+      "launch": "Bắt đầu"
+    },
+    "settings": {
+      "globalTitle": "Cài đặt studio & mặc định",
+      "newQuestionMode": "Chế độ mặc định cho thẻ mới",
+      "applyAllQuestions": "Áp dụng cho tất cả câu hỏi hiện có",
+      "applyAllConfirm": "Chuyển tất cả thẻ câu hỏi hiện có sang chế độ này?",
+      "leaderboardPolicy": "Chính sách bảng xếp hạng",
+      "advanceMode": "Chế độ chuyển tiếp",
+      "bulkSuccess": "Đã cập nhật tất cả thẻ câu hỏi",
+      "policyCardOnly": "Chỉ các thẻ dòng thời gian",
+      "policyUpstream": "Quy tắc Razzia tiêu chuẩn",
+      "policyEveryN": "Mỗi N câu hỏi",
+      "policyDisabled": "Đã tắt"
+    },
+    "launch": {
+      "readyTitle": "Buổi biểu diễn đã sẵn sàng",
+      "launchButton": "Bắt đầu buổi trực tiếp",
+      "summary": "Tóm tắt buổi biểu diễn",
+      "totalCards": "Thẻ dòng thời gian",
+      "totalQuestions": "Câu hỏi & khảo sát",
+      "totalParticipants": "Người tham gia đã đăng ký",
+      "missingMediaWarning": "Một số thẻ phương tiện có URL trống",
+      "noQuestionsWarning": "Buổi biểu diễn phải có ít nhất một câu hỏi"
+    }
   }
 }

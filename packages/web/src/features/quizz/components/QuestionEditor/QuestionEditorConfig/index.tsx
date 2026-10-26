@@ -1,5 +1,4 @@
-import { QUIZZ_MODES } from "@razzia/common/constants"
-import type { QuestionType } from "@razzia/common/types/game"
+import { resolveQuestionPlayMode, type QuestionType } from "@razzia/common/types/game"
 import {
   Select,
   SelectContent,
@@ -66,7 +65,7 @@ const QuestionEditorConfig = () => {
         </Select>
       </ConfigField>
 
-      {gameMode === QUIZZ_MODES.QUIZ && <CategoryField />}
+      {resolveQuestionPlayMode(currentQuestion, gameMode) === "quiz" && <CategoryField />}
 
       <ConfigComponent key={currentQuestionId} />
     </aside>

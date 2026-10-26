@@ -16,6 +16,10 @@ export * from "./questions"
 
 export * from "./quiz-extras"
 
+export * from "./studio-timeline-schema"
+
+export * from "./studio-migrate"
+
 export * from "./reveal"
 
 export * from "./revisions"

@@ -7,16 +7,17 @@ import {
   QUIZZ_MODES,
 } from "@razzia/common/constants"
 import { isEstimationOptions } from "@razzia/common/questions/options"
-import type {
-  Answer,
-  GameResult,
-  GameSettings,
-  GameUpdateQuestion,
-  Player,
-  Question,
-  QuestionResult,
-  Quizz,
-  QuizzMode,
+import {
+  resolveQuestionPlayMode,
+  type Answer,
+  type GameResult,
+  type GameSettings,
+  type GameUpdateQuestion,
+  type Player,
+  type Question,
+  type QuestionResult,
+  type Quizz,
+  type QuizzMode,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
@@ -235,8 +236,10 @@ export class RoundManager {
     return Boolean(category) && next?.category?.trim() === category
   }
 
-  private isSurvey(): boolean {
-    return this.opts.quizz.gameMode === QUIZZ_MODES.SURVEY
+  isSurvey(): boolean {
+    const q = this.question
+
+    return resolveQuestionPlayMode(q, this.opts.quizz.gameMode) === "survey"
   }
 
   private getInterludeStepIndex(): number {

@@ -1,10 +1,14 @@
-import { QUIZZ_MODES } from "@razzia/common/constants"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
-import { computeCanonicalBaseDigest } from "@razzia/extensions/core"
+import {
+  computeCanonicalBaseDigest,
+  type TimelineItemKind,
+} from "@razzia/extensions/core"
 import {
   CompositeApiClient,
   RevisionConflictError,
 } from "@razzia/extensions/editor"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio"
+import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import Input from "@razzia/web/components/Input"
@@ -23,11 +27,24 @@ import { ApiError, api, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import clsx from "clsx"
+import {
+  BarChart2,
+  DoorOpen,
+  Flag,
+  HelpCircle,
+  Image as ImageIcon,
+  Layers,
+  Play,
+  Rocket,
+  Settings,
+  Sparkles,
+  Timer,
+  Trophy,
+  Users,
+} from "lucide-react"
 import { Controller, useFormContext } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
-
-const QUIZZ_MODE_LIST = Object.values(QUIZZ_MODES)
 
 const QuizzEditorHeader = () => {
   const {
@@ -39,6 +56,16 @@ const QuizzEditorHeader = () => {
     conflict,
     setConflict,
   } = useQuizzEditor()
+
+  const {
+    activeTab,
+    setActiveTab,
+    selectedKind,
+    changeSelectedCardKind,
+    pendingConversion,
+    confirmPendingConversion,
+    cancelPendingConversion,
+  } = useStudioEditor()
   const { handleSubmit, control, getValues, reset } = useFormContext<
     QuizzFormValues,
     unknown,
@@ -252,6 +279,19 @@ const QuizzEditorHeader = () => {
     }
   }
 
+  const timelineKinds = [
+    { value: "quiz", label: t("extensions:timeline.quiz", "Quiz"), icon: Play },
+    { value: "survey", label: t("extensions:timeline.survey", "Survey"), icon: HelpCircle },
+    { value: "transition", label: t("extensions:timeline.transition", "Transition"), icon: Layers },
+    { value: "animation", label: t("extensions:timeline.animation", "Animation"), icon: Sparkles },
+    { value: "media", label: t("extensions:timeline.media", "Media"), icon: ImageIcon },
+    { value: "leaderboard", label: t("extensions:timeline.leaderboard", "Leaderboard"), icon: Trophy },
+    { value: "interimResults", label: t("extensions:timeline.interimResults", "Interim Results"), icon: BarChart2 },
+    { value: "countdown", label: t("extensions:timeline.countdown", "Countdown"), icon: Timer },
+    { value: "opening", label: t("extensions:timeline.opening", "Opening"), icon: DoorOpen },
+    { value: "closing", label: t("extensions:timeline.closing", "Closing"), icon: Flag },
+  ]
+
   return (
     <header className="bg-background z-20 flex h-14 items-center justify-between gap-4 px-4 shadow-sm">
       <div className="flex items-center gap-4">
@@ -268,7 +308,7 @@ const QuizzEditorHeader = () => {
                   fieldState.invalid ? `${field.name}-error` : undefined
                 }
                 className={clsx(
-                  "w-64",
+                  "w-56 shrink-0",
                   fieldState.invalid && "ring-2 ring-red-500",
                 )}
                 placeholder={t("quizz:titleQuizzPlaceholder")}
@@ -281,32 +321,83 @@ const QuizzEditorHeader = () => {
           )}
         />
 
-        <Controller
-          control={control}
-          name="gameMode"
-          render={({ field }) => (
-            <ToggleGroup
-              value={field.value}
-              onChange={field.onChange}
-              items={QUIZZ_MODE_LIST.map((gameMode) => ({
-                value: gameMode,
-                label: t(`quizz:gameMode.${gameMode}`),
-              }))}
-            />
-          )}
-        />
+        {/* ORIGINAL ToggleGroup remains in EXACT position, now controlling selected card kind */}
+        <div className="scrollbar-none max-w-[calc(100vw-540px)] overflow-x-auto py-1">
+          <ToggleGroup
+            value={selectedKind}
+            onChange={(next) => changeSelectedCardKind(next as TimelineItemKind)}
+            items={timelineKinds}
+          />
+        </div>
       </div>
 
-      <div className="flex gap-2">
-        <Button
-          className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
-          onClick={handleExit}
-        >
-          {t("common:exit")}
-        </Button>
-        <Button className="bg-primary text-md px-4 py-2" onClick={handleSave}>
-          {t("common:save")}
-        </Button>
+      <div className="flex items-center gap-3">
+        {/* Studio Screen Navigation Tabs */}
+        <div className="bg-accent flex h-9 items-center rounded-lg p-0.5">
+          <button
+            type="button"
+            onClick={() => setActiveTab("questions")}
+            className={clsx(
+              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              activeTab === "questions"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            {t("extensions:studio.tabs.questions", "Questions")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("participants")}
+            className={clsx(
+              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              activeTab === "participants"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Users className="size-3.5" />
+            {t("extensions:studio.tabs.participants", "Participants")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("settings")}
+            className={clsx(
+              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              activeTab === "settings"
+                ? "bg-background text-foreground shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Settings className="size-3.5" />
+            {t("extensions:studio.tabs.settings", "Settings")}
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab("launch")}
+            className={clsx(
+              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              activeTab === "launch"
+                ? "bg-primary text-white shadow-xs"
+                : "text-muted-foreground hover:text-foreground",
+            )}
+          >
+            <Rocket className="size-3.5" />
+            {t("extensions:studio.tabs.launch", "Launch")}
+          </button>
+        </div>
+
+        <div className="flex gap-2">
+          <Button
+            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
+            onClick={handleExit}
+          >
+            {t("common:exit")}
+          </Button>
+          <Button className="bg-primary text-md px-4 py-2" onClick={handleSave}>
+            {t("common:save")}
+          </Button>
+        </div>
       </div>
 
       <ConflictDialog
@@ -316,6 +407,23 @@ const QuizzEditorHeader = () => {
         onReload={handleReloadConflict}
         onOverwrite={handleForceOverwriteConflict}
         onCancel={() => setConflict(null)}
+      />
+
+      <AlertDialog
+        open={Boolean(pendingConversion)}
+        onOpenChange={(open: boolean) => {
+          if (!open) {cancelPendingConversion()}
+        }}
+        title={t(
+          "extensions:timeline.deleteConfirmTitle",
+          "Convert Question to Scene?",
+        )}
+        description={t(
+          "extensions:timeline.deleteConfirmDesc",
+          "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
+        )}
+        confirmLabel="Convert to Scene"
+        onConfirm={confirmPendingConversion}
       />
     </header>
   )

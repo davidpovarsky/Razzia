@@ -1,4 +1,5 @@
-import { MAX_ANSWERS, MIN_ANSWERS, QUIZZ_MODES } from "@razzia/common/constants"
+import { MAX_ANSWERS, MIN_ANSWERS } from "@razzia/common/constants"
+import { resolveQuestionPlayMode } from "@razzia/common/types/game"
 import FieldError from "@razzia/web/components/forms/FieldError"
 import {
   ANSWERS_COLORS,
@@ -111,7 +112,7 @@ const QuestionEditorAnswers = () => {
                         className="w-full bg-transparent font-semibold text-white placeholder-white/70 outline-none"
                         placeholder={t("quizz:addAnswerPlaceholder")}
                       />
-                      {gameMode !== QUIZZ_MODES.SURVEY && SolutionPicker && (
+                      {resolveQuestionPlayMode(currentQuestion, gameMode) !== "survey" && SolutionPicker && (
                         <SolutionPicker index={i} isSelected={isSelected} />
                       )}
                     </div>

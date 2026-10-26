@@ -259,5 +259,51 @@
     "answeredYes": "Answered",
     "answeredNo": "Waiting",
     "noPhone": "—"
+  },
+  "timeline": {
+    "quiz": "Quiz",
+    "survey": "Survey",
+    "transition": "Transition",
+    "animation": "Animation",
+    "media": "Media",
+    "leaderboard": "Leaderboard",
+    "interimResults": "Interim Results",
+    "countdown": "Countdown",
+    "opening": "Opening",
+    "closing": "Closing",
+    "deleteConfirmTitle": "Convert Question to Scene?",
+    "deleteConfirmDesc": "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
+    "cannotDeleteLastQuestion": "The show must contain at least one question or survey."
+  },
+  "studio": {
+    "tabs": {
+      "questions": "Questions",
+      "participants": "Participants",
+      "settings": "Settings",
+      "launch": "Launch"
+    },
+    "settings": {
+      "globalTitle": "Studio Settings & Defaults",
+      "newQuestionMode": "Default Mode for New Cards",
+      "applyAllQuestions": "Apply to All Existing Question Cards",
+      "applyAllConfirm": "Convert all existing question cards to this mode?",
+      "leaderboardPolicy": "Leaderboard Policy",
+      "advanceMode": "Advance Mode",
+      "bulkSuccess": "Updated all existing question cards",
+      "policyCardOnly": "Timeline cards only",
+      "policyUpstream": "Standard Razzia rule",
+      "policyEveryN": "Every N questions",
+      "policyDisabled": "Disabled"
+    },
+    "launch": {
+      "readyTitle": "Show Ready to Launch",
+      "launchButton": "Launch Live Show",
+      "summary": "Show Summary",
+      "totalCards": "Timeline Cards",
+      "totalQuestions": "Questions & Surveys",
+      "totalParticipants": "Registered Participants",
+      "missingMediaWarning": "Some media cards have empty URLs",
+      "noQuestionsWarning": "Show must contain at least one question"
+    }
   }
 }
