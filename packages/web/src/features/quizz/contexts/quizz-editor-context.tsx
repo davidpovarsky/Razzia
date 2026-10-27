@@ -64,6 +64,8 @@ interface QuizzEditorContextType {
     } | null>
   >
   setQuestionIds?: React.Dispatch<React.SetStateAction<string[]>>
+  replaceQuestions?: (_newQuestions: Question[], _newIds: string[]) => void
+  hasCurrentQuestion?: boolean
   setCurrentIndex: (_index: number) => void
   addQuestion: () => void
   removeQuestion: (_index: number) => void
@@ -107,7 +109,7 @@ export const QuizzEditorProvider = ({
   })
 
   const { control, getValues, setValue, formState } = form
-  const { append, remove, move, insert } = useFieldArray({
+  const { append, remove, move, insert, replace } = useFieldArray({
     control,
     name: "questions",
   })
@@ -168,8 +170,24 @@ export const QuizzEditorProvider = ({
 
   const questions = useWatch({ control, name: "questions" })
   const gameMode = useWatch({ control, name: "gameMode" })
-  const safeIndex = clampIndex(currentIndex, questions.length)
-  const currentQuestion = questions[safeIndex]
+  const hasCurrentQuestion =
+    Array.isArray(questions) &&
+    questions.length > 0 &&
+    currentIndex >= 0 &&
+    currentIndex < questions.length
+  const safeIndex =
+    Array.isArray(questions) && questions.length > 0
+      ? clampIndex(currentIndex, questions.length)
+      : 0
+  const currentQuestion =
+    Array.isArray(questions) && questions.length > 0
+      ? (questions[safeIndex] ?? defaultQuestion())
+      : defaultQuestion()
+
+  const replaceQuestions = (newQuestions: Question[], newIds: string[]) => {
+    replace(newQuestions)
+    setQuestionIds(newIds)
+  }
 
   // Derive stable questionIds: priority to extras.questionIds when matching questions length, otherwise state
   const effectiveQuestionIds =
@@ -293,6 +311,8 @@ export const QuizzEditorProvider = ({
           setExtras,
           setConflict,
           setQuestionIds,
+          replaceQuestions,
+          hasCurrentQuestion,
           setCurrentIndex,
           addQuestion,
           removeQuestion,

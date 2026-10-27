@@ -28,21 +28,22 @@ const QuestionEditorAnswers = () => {
 
   const questionType = currentQuestion.type
   const { SolutionPicker } = QUESTION_REGISTRY[questionType]
+  const { answers } = currentQuestion
 
   const addAnswer = () => {
-    if (currentQuestion.answers.length >= MAX_ANSWERS) {
+    if (answers.length >= MAX_ANSWERS) {
       return
     }
 
-    updateQuestion(currentIndex, { answers: [...currentQuestion.answers, ""] })
+    updateQuestion(currentIndex, { answers: [...answers, ""] })
   }
 
   const removeAnswer = () => {
-    if (currentQuestion.answers.length <= MIN_ANSWERS) {
+    if (answers.length <= MIN_ANSWERS) {
       return
     }
 
-    const next = currentQuestion.answers.slice(0, -1)
+    const next = answers.slice(0, -1)
     const maxIndex = next.length - 1
     const nextSolution = (currentQuestion.solutions ?? []).filter(
       (s) => s <= maxIndex,
@@ -58,14 +59,14 @@ const QuestionEditorAnswers = () => {
     <div className="z-10 flex flex-col gap-3">
       <div className="flex items-center justify-between px-1">
         <div className="text-muted-foreground bg-background rounded-lg px-2 py-1 text-sm font-semibold">
-          {currentQuestion.answers.length}
+          {answers.length}
           {t("quizz:answersCountSuffix")}
         </div>
         <div className="flex gap-2">
           <button
             onClick={removeAnswer}
             aria-label={t("quizz:removeAnswer")}
-            disabled={currentQuestion.answers.length <= MIN_ANSWERS}
+            disabled={answers.length <= MIN_ANSWERS}
             className="bg-accent text-accent-foreground hover:bg-accent flex size-7 items-center justify-center rounded-lg disabled:opacity-40"
           >
             <Minus className="size-4" />
@@ -73,7 +74,7 @@ const QuestionEditorAnswers = () => {
           <button
             onClick={addAnswer}
             aria-label={t("quizz:addAnswer")}
-            disabled={currentQuestion.answers.length >= MAX_ANSWERS}
+            disabled={answers.length >= MAX_ANSWERS}
             className="bg-accent text-accent-foreground hover:bg-accent flex size-7 items-center justify-center rounded-lg disabled:opacity-40"
           >
             <Plus className="size-4" />
@@ -82,7 +83,7 @@ const QuestionEditorAnswers = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-3">
-        {currentQuestion.answers.map((_, i) => {
+        {answers.map((_, i) => {
           const isSelected = currentQuestion.solutions?.includes(i) ?? false
 
           return (

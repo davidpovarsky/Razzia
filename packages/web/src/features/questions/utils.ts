@@ -3,8 +3,14 @@ import { estimationAccuracy } from "@razzia/common/questions/estimation"
 import { isEstimationOptions } from "@razzia/common/questions/options"
 import type { Question } from "@razzia/common/types/game"
 
-export const choiceInitialValues = (question: Question): Partial<Question> => {
-  if (question.answers.length >= MIN_ANSWERS) {
+export const choiceInitialValues = (
+  question?: Partial<Question> | null,
+): Partial<Question> => {
+  if (
+    question?.answers &&
+    Array.isArray(question.answers) &&
+    question.answers.length >= MIN_ANSWERS
+  ) {
     return {}
   }
 

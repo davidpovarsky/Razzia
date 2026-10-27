@@ -17,9 +17,17 @@ import {
 } from "@dnd-kit/sortable"
 import { CSS } from "@dnd-kit/utilities"
 import type { Question } from "@razzia/common/types/game"
+import type { TimelineItemKind } from "@razzia/extensions/core"
 import { useStudioEditor } from "@razzia/web/features/quizz/components/studio"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@razzia/web/components/Select"
 import QuizzEditorCard from "@razzia/web/features/quizz/components/QuizzEditorCard"
 import {
   useQuizzEditor,
@@ -39,7 +47,7 @@ import {
   Trash2,
   Trophy,
 } from "lucide-react"
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
 import { twMerge } from "tailwind-merge"
@@ -284,12 +292,30 @@ const QuizzEditorSidebar = () => {
     duplicateTimelineCard,
     reorderTimelineCards,
     scenes,
+    defaults,
   } = useStudioEditor()
 
   const {
     formState: { errors },
   } = useFormContext<QuizzFormValues>()
   const { t } = useTranslation()
+
+  const [cardKindToAdd, setCardKindToAdd] = useState<TimelineItemKind>(
+    defaults.newQuestionMode,
+  )
+
+  const timelineKinds: Array<{ value: TimelineItemKind; label: string }> = [
+    { value: "quiz", label: t("extensions:timeline.quiz", "Quiz") },
+    { value: "survey", label: t("extensions:timeline.survey", "Survey") },
+    { value: "transition", label: t("extensions:timeline.transition", "Transition") },
+    { value: "animation", label: t("extensions:timeline.animation", "Animation") },
+    { value: "media", label: t("extensions:timeline.media", "Media") },
+    { value: "leaderboard", label: t("extensions:timeline.leaderboard", "Leaderboard") },
+    { value: "interimResults", label: t("extensions:timeline.interimResults", "Interim Results") },
+    { value: "countdown", label: t("extensions:timeline.countdown", "Countdown") },
+    { value: "opening", label: t("extensions:timeline.opening", "Opening") },
+    { value: "closing", label: t("extensions:timeline.closing", "Closing") },
+  ]
 
   const isDragging = useRef(false)
 
@@ -343,11 +369,26 @@ const QuizzEditorSidebar = () => {
             {timeline.length > 0
               ? timeline.map((item, index) => {
                   if (item.kind === "question") {
-                    const qIndex = questionIds.findIndex(
+                    let qIndex = questionIds.findIndex(
                       (id) => id === item.questionId,
                     )
 
                     if (qIndex < 0) {
+                      const questionOrdinal =
+                        timeline
+                          .slice(0, index + 1)
+                          .filter((tlItem) => tlItem.kind === "question")
+                          .length - 1
+
+                      if (
+                        questionOrdinal >= 0 &&
+                        questionOrdinal < questions.length
+                      ) {
+                        qIndex = questionOrdinal
+                      }
+                    }
+
+                    if (qIndex < 0 || qIndex >= questions.length) {
                       return null
                     }
 
@@ -437,19 +478,54 @@ const QuizzEditorSidebar = () => {
         </SortableContext>
       </DndContext>
 
-      <Button
-        onClick={() => {
-          if (timeline.length > 0) {
-            addTimelineCard()
-          } else {
-            addQuestion()
-          }
-        }}
-        className="bg text-md bg-accent text-accent-foreground mt-1 mb-8 flex items-center justify-center gap-1"
-      >
-        <Plus className="size-6" />
-        {t("quizz:addQuestion")}
-      </Button>
+      <div className="mt-1 mb-8 flex flex-col gap-2">
+        <div className="flex items-center gap-1.5">
+          <div className="min-w-0 flex-1">
+            <Select
+              value={cardKindToAdd}
+              onValueChange={(val) => setCardKindToAdd(val as TimelineItemKind)}
+            >
+              <SelectTrigger
+                className="h-10 text-xs font-medium"
+                data-testid="studio-card-kind-select"
+              >
+                <SelectValue
+                  placeholder={t(
+                    "extensions:studio.cardKindLabel",
+                    "Card Type",
+                  )}
+                />
+              </SelectTrigger>
+              <SelectContent>
+                {timelineKinds.map((item) => (
+                  <SelectItem
+                    key={item.value}
+                    value={item.value}
+                    className="text-xs"
+                  >
+                    {item.label}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+          <Button
+            type="button"
+            data-testid="studio-add-card-btn"
+            onClick={() => {
+              if (timeline.length > 0) {
+                addTimelineCard(cardKindToAdd)
+              } else {
+                addQuestion()
+              }
+            }}
+            className="bg-accent text-accent-foreground flex h-10 shrink-0 items-center justify-center gap-1 px-3 text-xs font-semibold"
+          >
+            <Plus className="size-4" />
+            {t("extensions:studio.addCard", "Add card")}
+          </Button>
+        </div>
+      </div>
     </aside>
   )
 }

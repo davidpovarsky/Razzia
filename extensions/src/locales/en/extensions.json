@@ -334,6 +334,7 @@
       "confirm": "Convert to Scene"
     },
     "cardKindLabel": "Card Type",
+    "addCard": "Add card",
     "scene": {
       "rankLabel": "Rank",
       "scoreLabel": "pts",

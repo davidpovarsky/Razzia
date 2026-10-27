@@ -334,6 +334,7 @@
       "confirm": "In Szene umwandeln"
     },
     "cardKindLabel": "Kartentyp",
+    "addCard": "Karte hinzufügen",
     "scene": {
       "rankLabel": "Rang",
       "scoreLabel": "Pkt.",

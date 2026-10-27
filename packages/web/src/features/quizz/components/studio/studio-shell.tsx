@@ -23,12 +23,23 @@ const StudioContent = () => {
   }
 
   // ActiveTab === "questions"
-  const isQuestion = !selectedTimelineItem || selectedTimelineItem.kind === "question"
+  if (!selectedTimelineItem) {
+    return (
+      <div className="flex flex-1 overflow-hidden">
+        <QuizzEditorSidebar />
+        <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground text-sm font-medium" />
+      </div>
+    )
+  }
 
   return (
     <div className="flex flex-1 overflow-hidden">
       <QuizzEditorSidebar />
-      {isQuestion ? <QuestionEditor /> : <StudioSceneEditor />}
+      {selectedTimelineItem.kind === "question" ? (
+        <QuestionEditor />
+      ) : (
+        <StudioSceneEditor />
+      )}
     </div>
   )
 }

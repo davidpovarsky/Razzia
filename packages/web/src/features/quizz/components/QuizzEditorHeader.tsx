@@ -294,7 +294,9 @@ const QuizzEditorHeader = () => {
 
   return (
     <header className="bg-background z-20 flex flex-col border-b border-border shadow-sm">
+      {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
       <div className="flex h-14 w-full items-center justify-between gap-4 px-4">
+        {/* Title input */}
         <div className="flex shrink-0 items-center gap-4">
           <Controller
             control={control}
@@ -309,7 +311,7 @@ const QuizzEditorHeader = () => {
                     fieldState.invalid ? `${field.name}-error` : undefined
                   }
                   className={clsx(
-                    "w-48 sm:w-56 shrink-0",
+                    "w-44 sm:w-56 shrink-0",
                     fieldState.invalid && "ring-2 ring-red-500",
                   )}
                   placeholder={t("quizz:titleQuizzPlaceholder")}
@@ -323,38 +325,8 @@ const QuizzEditorHeader = () => {
           />
         </div>
 
-        {/* ORIGINAL ToggleGroup remains in EXACT position between title and Save/Exit, now controlling selected card kind */}
-        <div className="scrollbar-none min-w-0 flex-1 overflow-x-auto py-1">
-          <ToggleGroup
-            value={selectedKind}
-            onChange={(next) => changeSelectedCardKind(next as TimelineItemKind)}
-            items={timelineKinds}
-          />
-        </div>
-
-        <div className="flex shrink-0 items-center gap-2">
-          <Button
-            type="button"
-            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
-            onClick={handleExit}
-            data-testid="editor-exit-btn"
-          >
-            {t("common:exit")}
-          </Button>
-          <Button
-            type="button"
-            className="bg-primary text-md px-4 py-2"
-            onClick={handleSave}
-            data-testid="editor-save-btn"
-          >
-            {t("common:save")}
-          </Button>
-        </div>
-      </div>
-
-      {/* Row 2: Studio Screen Navigation Tabs */}
-      <div className="bg-muted/30 flex h-10 w-full items-center justify-between border-t border-border/30 px-4">
-        <div className="bg-accent/80 flex h-8 items-center rounded-lg p-0.5">
+        {/* Center: Studio Screen Navigation Tabs */}
+        <div className="bg-accent/80 flex h-8 items-center rounded-lg p-0.5 shrink-0">
           <button
             type="button"
             data-testid="studio-tab-questions"
@@ -412,14 +384,53 @@ const QuizzEditorHeader = () => {
           </button>
         </div>
 
-        <div className="text-xs text-muted-foreground hidden sm:flex items-center gap-2">
-          {activeTab === "questions" && (
-            <span className="font-medium">
-              {t("extensions:studio.cardKindLabel", "Card Type")}: <span className="capitalize text-foreground font-semibold">{selectedKind}</span>
-            </span>
-          )}
+        {/* Right: Exit and Save Buttons (pinned, shrink-0, always visible across 1024-1920 viewports) */}
+        <div className="flex shrink-0 items-center gap-2">
+          <Button
+            type="button"
+            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
+            onClick={handleExit}
+            data-testid="editor-exit-btn"
+          >
+            {t("common:exit")}
+          </Button>
+          <Button
+            type="button"
+            className="bg-primary text-md px-4 py-2"
+            onClick={handleSave}
+            data-testid="editor-save-btn"
+          >
+            {t("common:save")}
+          </Button>
         </div>
       </div>
+
+      {/* Row 2 / Directly below: contextual card-type ToggleGroup (Questions screen only) */}
+      {activeTab === "questions" && (
+        <div
+          data-testid="studio-card-type-bar"
+          className="bg-muted/30 flex h-11 w-full items-center justify-between border-t border-border/40 px-4"
+        >
+          <div className="scrollbar-none min-w-0 flex-1 overflow-x-auto py-1">
+            <ToggleGroup
+              value={selectedKind}
+              onChange={(next) =>
+                changeSelectedCardKind(next as TimelineItemKind)
+              }
+              items={timelineKinds}
+            />
+          </div>
+
+          <div className="text-xs text-muted-foreground hidden sm:flex items-center gap-1.5 shrink-0 pl-3">
+            <span className="font-medium">
+              {t("extensions:studio.cardKindLabel", "Card Type")}:
+            </span>
+            <span className="capitalize text-foreground font-semibold">
+              {selectedKind}
+            </span>
+          </div>
+        </div>
+      )}
 
       <ConflictDialog
         open={Boolean(conflict)}

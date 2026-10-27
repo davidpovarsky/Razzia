@@ -8,15 +8,16 @@ import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 
 const QuestionEditor = () => {
-  const { currentQuestion, currentQuestionId, isRemoving } = useQuizzEditor()
+  const { currentQuestion, currentQuestionId, isRemoving, hasCurrentQuestion } =
+    useQuizzEditor()
+
+  if (isRemoving || !hasCurrentQuestion) {
+    return null
+  }
 
   const AnswersEditor =
     QUESTION_REGISTRY[currentQuestion.type].AnswersEditor ??
     QuestionEditorAnswers
-
-  if (isRemoving) {
-    return null
-  }
 
   return (
     <div className="flex flex-1 overflow-hidden">

@@ -334,6 +334,7 @@
       "confirm": "シーンに変換"
     },
     "cardKindLabel": "カードの種類",
+    "addCard": "カードを追加",
     "scene": {
       "rankLabel": "順位",
       "scoreLabel": "pt",
