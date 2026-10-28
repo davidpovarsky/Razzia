@@ -25,3 +25,12 @@ export * from "./reveal"
 export * from "./revisions"
 
 export * from "./state"
+
+export * from "./show-authoring-schema"
+
+export * from "./show-authoring-convert"
+
+export * from "./show-workbook"
+
+export * from "./show-import-preflight"
+

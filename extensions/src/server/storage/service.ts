@@ -1,5 +1,6 @@
 import { StatusCodes } from "http-status-codes"
 import {
+  authoredShowToNativeBundleDraft,
   computeCanonicalBaseDigest,
   ensureQuestionIds,
   isEnhancedBundle,
@@ -8,6 +9,7 @@ import {
   quizExtrasV2Schema,
   remapQuestionIds,
   RevisionConflictError,
+  upgradeLegacyExtrasToV2,
   validateRevision,
   type AnyQuizExtras,
   type EnhancedBundle,
@@ -292,19 +294,16 @@ export class CompositeStorageService {
    * Exports an enhanced bundle { bundleVersion: 1, quizz, extras } (CORE06).
    */
   exportEnhancedBundle(quizId: string): EnhancedBundle {
-    const { quizz, extras } = this.getCompositeQuiz(quizId)
+    const { quizz, extras, baseDigest } = this.getCompositeQuiz(quizId)
 
-    if (!extras) {
-      throw new CompositeStorageError(
-        `Quiz ${quizId} does not have enhanced extras`,
-        StatusCodes.NOT_FOUND,
-      )
-    }
+    const effectiveExtras =
+      extras ??
+      upgradeLegacyExtrasToV2(quizz, null, { quizId, baseDigest })
 
     return {
       bundleVersion: 1,
       quizz,
-      extras,
+      extras: effectiveExtras,
     }
   }
 
@@ -317,19 +316,42 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
+    let effectivePayload = payload
+
+    // Accept friendly Tada Show format and normalize to enhanced bundle
     if (
       typeof payload === "object" &&
       payload !== null &&
-      "bundleVersion" in payload
+      "format" in payload &&
+      (payload as { format?: unknown }).format === "tada-show"
     ) {
-      if (!isEnhancedBundle(payload)) {
+      const converted = authoredShowToNativeBundleDraft(payload)
+      if (!converted.ok || !converted.bundleDraft) {
+        throw new CompositeStorageError(
+          `Invalid authored show: ${converted.diagnostics.map((d) => d.message).join(", ")}`,
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+      effectivePayload = {
+        bundleVersion: 1,
+        quizz: converted.bundleDraft.quizz,
+        extras: converted.bundleDraft.extras,
+      }
+    }
+
+    if (
+      typeof effectivePayload === "object" &&
+      effectivePayload !== null &&
+      "bundleVersion" in effectivePayload
+    ) {
+      if (!isEnhancedBundle(effectivePayload)) {
         throw new CompositeStorageError(
           "Invalid enhanced bundle format or extras schema",
           StatusCodes.BAD_REQUEST,
         )
       }
 
-      const { quizz, extras } = payload
+      const { quizz, extras } = effectivePayload
       const questionsCount =
         typeof quizz === "object" &&
         quizz !== null &&
@@ -354,18 +376,32 @@ export class CompositeStorageService {
         }
       }
 
+      const freshLeaderboard = extras.leaderboard
+        ? {
+            ...extras.leaderboard,
+            afterQuestionIds: extras.leaderboard.afterQuestionIds?.map(
+              (oldId) => idMap.get(oldId) ?? oldId,
+            ),
+          }
+        : undefined
+
       const freshTimeline =
         extras.schemaVersion === 2
           ? extras.timeline.map((item) => {
+              const freshTimelineItemId = crypto.randomUUID()
               if (item.kind === "question") {
                 const freshId = idMap.get(item.questionId)
 
                 if (freshId) {
-                  return { ...item, questionId: freshId }
+                  return {
+                    ...item,
+                    id: freshTimelineItemId,
+                    questionId: freshId,
+                  }
                 }
               }
 
-              return item
+              return { ...item, id: freshTimelineItemId }
             })
           : undefined
 
@@ -380,6 +416,7 @@ export class CompositeStorageService {
         revision: 1,
         questionIds: ensuredFreshIds,
         perQuestion: freshPerQuestion,
+        ...(freshLeaderboard ? { leaderboard: freshLeaderboard } : {}),
         ...(freshTimeline ? { timeline: freshTimeline } : {}),
       })
 
@@ -404,8 +441,9 @@ export class CompositeStorageService {
           baseDigest,
           questionIds: ensuredFreshIds,
           perQuestion: freshPerQuestion,
+          ...(freshLeaderboard ? { leaderboard: freshLeaderboard } : {}),
           ...(freshTimeline ? { timeline: freshTimeline } : {}),
-        }
+        } as AnyQuizExtras
 
         const validated = schemaToUse.parse(importedExtras)
 

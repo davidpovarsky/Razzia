@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtras,
+  createDefaultRosterExtras,
   generateQuestionIds,
   reorderQuestionIds,
   RevisionConflictError,
@@ -501,5 +502,115 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(thrown).toBeInstanceOf(CompositeStorageError)
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
     expect(baseQuizzes.size).toBe(initialBaseCount)
+  })
+
+  it("importEnhancedBundle: remaps leaderboard.afterQuestionIds and imports V2 bundle cleanly", () => {
+    const qIds = generateQuestionIds(2)
+    const baseQuiz = {
+      ...sampleQuiz,
+      questions: [
+        { ...sampleQuiz.questions[0] },
+        { ...sampleQuiz.questions[1] },
+      ],
+    }
+    const baseDigest = computeCanonicalBaseDigest(baseQuiz)
+
+    const bundle = {
+      bundleVersion: 1,
+      quizz: baseQuiz,
+      extras: {
+        schemaVersion: 2,
+        revision: 1,
+        quizId: "temp-id",
+        baseDigest,
+        questionIds: qIds,
+        timeline: [
+          { id: crypto.randomUUID(), kind: "question", questionId: qIds[0] },
+          { id: crypto.randomUUID(), kind: "question", questionId: qIds[1] },
+        ],
+        scenes: {},
+        defaults: {
+          newQuestionMode: "quiz",
+          leaderboardPolicy: "cardOnly",
+          advanceMode: "auto",
+        },
+        leaderboard: {
+          mode: "selected",
+          afterQuestionIds: [qIds[0]], // reference to old questionId!
+        },
+        teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
+        audio: {
+          cues: {
+            start: { source: "default", volume: 0.8, enabled: true, loop: false },
+            showQuestion: { source: "default", volume: 0.8, enabled: true, loop: false },
+            answersMusic: { source: "default", volume: 0.8, enabled: true, loop: true },
+            answerPressed: { source: "default", volume: 0.8, enabled: true, loop: false },
+            revealResults: { source: "default", volume: 0.8, enabled: true, loop: false },
+            leaderboard: { source: "default", volume: 0.8, enabled: true, loop: false },
+            podium1: { source: "default", volume: 0.8, enabled: true, loop: false },
+            podium2: { source: "default", volume: 0.8, enabled: true, loop: false },
+            podium3: { source: "default", volume: 0.8, enabled: true, loop: false },
+          },
+        },
+        perQuestion: {},
+        roster: createDefaultRosterExtras(),
+      },
+    }
+
+    const { quizId } = service.importEnhancedBundle(bundle)
+    expect(quizId).toBeDefined()
+    expect(quizId).not.toBe("temp-id")
+
+    const imported = service.getCompositeQuiz(quizId)
+    expect(imported.exists).toBe(true)
+    expect(imported.extras?.schemaVersion).toBe(2)
+
+    // Verify afterQuestionIds was remapped to the fresh questionId!
+    const freshQ0 = imported.extras?.questionIds[0]
+    expect(imported.extras?.leaderboard?.afterQuestionIds).toEqual([freshQ0])
+  })
+
+  it("importEnhancedBundle: directly imports friendly authored Tada show payload", () => {
+    const authoredShow = {
+      format: "tada-show",
+      version: 1,
+      title: "Authored Show Storage Test",
+      baseGameMode: "quiz",
+      cards: [
+        {
+          key: "INTRO",
+          kind: "opening",
+          title: "Welcome!",
+          durationMs: 3000,
+          advance: "auto",
+        },
+        {
+          key: "Q1",
+          kind: "quiz",
+          questionType: "single",
+          question: "What is 10 x 10?",
+          answers: [
+            { text: "100", display: "both", imageUrl: "https://example.com/100.png", alt: "100" },
+            { text: "1000", display: "text" },
+          ],
+          correctAnswers: [1],
+          timeSeconds: 15,
+          cooldownSeconds: 3,
+        },
+      ],
+      settings: [],
+    }
+
+    const { quizId } = service.importEnhancedBundle(authoredShow)
+    expect(quizId).toBeDefined()
+
+    const imported = service.getCompositeQuiz(quizId)
+    expect(imported.exists).toBe(true)
+    expect(imported.quizz.subject).toBe("Authored Show Storage Test")
+    expect(imported.extras?.schemaVersion).toBe(2)
+    const extrasV2 = imported.extras as any
+    expect(extrasV2?.timeline.length).toBe(2)
+    expect(extrasV2?.timeline[0].kind).toBe("opening")
+    expect(extrasV2?.timeline[1].kind).toBe("question")
   })
 })

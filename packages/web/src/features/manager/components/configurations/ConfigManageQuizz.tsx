@@ -1,5 +1,9 @@
-import type { QuizzValidated } from "@razzia/common/validators/quizz"
-import { isEnhancedBundle } from "@razzia/extensions/core"
+import {
+  exportTadaShowWorkbook,
+  generateTadaShowWorkbookTemplate,
+  preflightShowImport,
+  type ShowPreflightResult,
+} from "@razzia/extensions/core"
 import { CompositeApiClient } from "@razzia/extensions/editor"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
@@ -13,23 +17,47 @@ import {
 import { api, ApiError, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { Download, Sparkles, SquarePen, Trash2, Upload } from "lucide-react"
-import { type ChangeEvent, useRef } from "react"
+import {
+  Download,
+  FileDown,
+  FileSpreadsheet,
+  Sparkles,
+  SquarePen,
+  Trash2,
+  Upload,
+} from "lucide-react"
+import { type ChangeEvent, useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
+import { ShowImportModal } from "./ShowImportModal"
 
-const downloadJson = (data: unknown, filename: string) => {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  })
+const downloadBlob = (blob: Blob, filename: string) => {
   const url = URL.createObjectURL(blob)
   const a = document.createElement("a")
 
   a.href = url
   a.download = filename
+  document.body.appendChild(a)
   a.click()
+  a.remove()
 
-  URL.revokeObjectURL(url)
+  setTimeout(() => URL.revokeObjectURL(url), 1000)
+}
+
+const downloadJson = (data: unknown, filename: string) => {
+  const blob = new Blob([JSON.stringify(data, null, 2)], {
+    type: "application/json",
+  })
+  downloadBlob(blob, filename)
+}
+
+const downloadBuffer = (
+  bytes: Uint8Array,
+  filename: string,
+  mimeType: string,
+) => {
+  const blob = new Blob([bytes as any], { type: mimeType })
+  downloadBlob(blob, filename)
 }
 
 const ConfigManageQuizz = () => {
@@ -38,6 +66,11 @@ const ConfigManageQuizz = () => {
   const navigate = useNavigate()
   const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
+
+  const [preflightData, setPreflightData] =
+    useState<ShowPreflightResult | null>(null)
+  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
+  const [isImporting, setIsImporting] = useState(false)
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: quizzKeys.all })
@@ -57,9 +90,17 @@ const ConfigManageQuizz = () => {
 
   const { mutate: importQuizz } = useMutation({
     mutationFn: createQuizz,
-    onSuccess: () => {
+    onSuccess: (res) => {
       invalidate()
+      setIsImportModalOpen(false)
+      setPreflightData(null)
       toast.success(t("quizz:quizzSaved"))
+      if (res && typeof res === "object" && "id" in res && typeof res.id === "string") {
+        navigate({
+          to: "/manager/quizz/$quizzId",
+          params: { quizzId: res.id },
+        })
+      }
     },
     onError: (error) => onError(error, "errors:quizz.failedToSave"),
   })
@@ -90,36 +131,103 @@ const ConfigManageQuizz = () => {
     }
   }
 
-  const handleImport = (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+  const handleExportXlsx = (id: string, defaultSubject: string) => async () => {
+    try {
+      const client = new CompositeApiClient()
+      const bundle = await client.exportQuizBundle(id)
+      const subject =
+        (bundle.quizz as { subject?: string } | null)?.subject ??
+        defaultSubject ??
+        id
+      const xlsxBytes = exportTadaShowWorkbook(bundle)
 
+      downloadBuffer(
+        xlsxBytes,
+        `${subject}.xlsx`,
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      )
+      toast.success(t("extensions:showImport.exportTadaXlsx"))
+    } catch (error) {
+      onError(error as Error, "errors:quizz.notFound")
+    }
+  }
+
+  const handleDownloadTemplate = () => {
+    try {
+      const templateBytes = generateTadaShowWorkbookTemplate()
+      downloadBuffer(
+        templateBytes,
+        "TADA_Show_Template_v1.xlsx",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      )
+    } catch (error) {
+      onError(error as Error, "errors:api.serverError")
+    }
+  }
+
+  const handleImportFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
     if (!file) {
       return
     }
 
-    const reader = new FileReader()
+    try {
+      const arrayBuffer = await file.arrayBuffer()
+      const preflight = preflightShowImport(
+        new Uint8Array(arrayBuffer),
+        file.name,
+      )
 
-    reader.onload = async (event) => {
-      try {
-        const parsed: unknown = JSON.parse(event.target?.result as string)
+      setPreflightData(preflight)
+      setIsImportModalOpen(true)
+    } catch {
+      toast.error(t("errors:invalidRequest"))
+    } finally {
+      e.target.value = ""
+    }
+  }
 
-        if (isEnhancedBundle(parsed)) {
-          const client = new CompositeApiClient()
-          await client.importQuizBundle(parsed)
-          invalidate()
-          toast.success(t("quizz:quizzSaved"))
-
-          return
-        }
-
-        importQuizz(parsed as QuizzValidated)
-      } catch {
-        toast.error("Invalid JSON file")
-      }
+  const handleCommitImport = async () => {
+    if (!preflightData || !preflightData.ok) {
+      return
     }
 
-    reader.readAsText(file)
-    e.target.value = ""
+    setIsImporting(true)
+
+    try {
+      if (preflightData.normalizedBundleDraft) {
+        const client = new CompositeApiClient()
+        const result = await client.importQuizBundle(
+          preflightData.normalizedBundleDraft,
+        )
+
+        invalidate()
+        setIsImportModalOpen(false)
+        setPreflightData(null)
+        toast.success(t("extensions:showImport.successToast"))
+
+        if (result.quizId) {
+          navigate({
+            to: "/manager/quizz/$quizzId",
+            params: { quizzId: result.quizId },
+          })
+        }
+
+        return
+      }
+
+      if (preflightData.legacyQuizzDraft) {
+        importQuizz(preflightData.legacyQuizzDraft)
+
+        return
+      }
+    } catch (err: unknown) {
+      toast.error(
+        err instanceof Error ? err.message : t("errors:quizz.failedToSave"),
+      )
+    } finally {
+      setIsImporting(false)
+    }
   }
 
   const quizz = data?.quizz ?? []
@@ -133,21 +241,37 @@ const ConfigManageQuizz = () => {
         >
           {t("manager:quizz.create")}
         </Button>
+
         <Button
           className="bg-accent text-accent-foreground aspect-square px-3"
           onClick={() => fileInputRef.current?.click()}
-          title={t("manager:quizz.import")}
+          title={t("extensions:showImport.importShowPrompt")}
+          aria-label={t("extensions:showImport.importShowPrompt")}
+          data-testid="import-show-button"
         >
           <Upload className="size-4" />
         </Button>
+
+        <Button
+          className="bg-accent text-accent-foreground aspect-square px-3"
+          onClick={handleDownloadTemplate}
+          title={t("extensions:showImport.downloadTemplate")}
+          aria-label={t("extensions:showImport.downloadTemplate")}
+          data-testid="download-template-xlsx"
+        >
+          <FileDown className="size-4" />
+        </Button>
+
         <input
           ref={fileInputRef}
           type="file"
-          accept=".json"
+          accept=".json,.xlsx"
           className="hidden"
-          onChange={handleImport}
+          onChange={handleImportFileSelect}
+          data-testid="import-file-input"
         />
       </div>
+
       <div className="min-h-0 flex-1 space-y-2 overflow-auto p-0.5">
         {isPending && <SkeletonRows className="h-12" />}
 
@@ -180,6 +304,16 @@ const ConfigManageQuizz = () => {
                 data-testid={`export-enhanced-${q.id}`}
               >
                 <Sparkles className="size-4 text-amber-500" />
+              </button>
+
+              <button
+                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
+                onClick={() => handleExportXlsx(q.id, q.subject)()}
+                title={t("extensions:showImport.exportTadaXlsx")}
+                aria-label={t("extensions:showImport.exportTadaXlsx")}
+                data-testid={`export-xlsx-${q.id}`}
+              >
+                <FileSpreadsheet className="size-4 text-emerald-600 dark:text-emerald-400" />
               </button>
 
               <button
@@ -218,6 +352,14 @@ const ConfigManageQuizz = () => {
           </p>
         )}
       </div>
+
+      <ShowImportModal
+        open={isImportModalOpen}
+        onOpenChange={setIsImportModalOpen}
+        preflight={preflightData}
+        isImporting={isImporting}
+        onConfirm={handleCommitImport}
+      />
     </div>
   )
 }

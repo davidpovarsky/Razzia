@@ -1,0 +1,159 @@
+{
+  "format": "tada-show",
+  "version": 1,
+  "title": "Tada Interactive Studio Showcase",
+  "note": "Official sample show illustrating all 10 card kinds, media, answer images, and timing",
+  "baseGameMode": "quiz",
+  "defaults": {
+    "newQuestionMode": "quiz",
+    "leaderboardPolicy": "cardOnly",
+    "advanceMode": "auto"
+  },
+  "cards": [
+    {
+      "key": "INTRO",
+      "kind": "opening",
+      "title": "Welcome to Tada Studio Live!",
+      "subtitle": "Grab your buzzers and get ready to play",
+      "durationMs": 4000,
+      "advance": "auto"
+    },
+    {
+      "key": "COUNT1",
+      "kind": "countdown",
+      "title": "Round 1 Starts In...",
+      "durationSeconds": 5,
+      "advance": "auto"
+    },
+    {
+      "key": "Q01",
+      "kind": "quiz",
+      "questionType": "single",
+      "question": "Which world-famous tower is located in Paris?",
+      "category": "Geography",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 1000,
+      "penalty": 0,
+      "media": {
+        "type": "image",
+        "url": "https://example.com/media/paris-map.jpg"
+      },
+      "answers": [
+        {
+          "text": "Eiffel Tower",
+          "display": "both",
+          "imageUrl": "https://example.com/media/eiffel-tower.jpg",
+          "alt": "Eiffel Tower illuminated in Paris"
+        },
+        {
+          "text": "Big Ben",
+          "display": "text"
+        },
+        {
+          "text": "Leaning Tower of Pisa",
+          "display": "text"
+        },
+        {
+          "text": "Tokyo Skytree",
+          "display": "text"
+        }
+      ],
+      "correctAnswers": [1],
+      "reveal": {
+        "effect": "blur",
+        "durationMs": 2000,
+        "trigger": "automatic",
+        "audience": "all"
+      }
+    },
+    {
+      "key": "TRANS1",
+      "kind": "transition",
+      "title": "Quick Audience Pulse",
+      "description": "Vote on your mobile devices — there are no incorrect answers!",
+      "durationMs": 3000,
+      "advance": "auto"
+    },
+    {
+      "key": "POLL01",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Which streaming category do you watch the most?",
+      "category": "Entertainment",
+      "timeSeconds": 15,
+      "cooldownSeconds": 3,
+      "answers": [
+        { "text": "Action & Adventure" },
+        { "text": "Documentaries & Science" },
+        { "text": "Comedy & Stand-up" },
+        { "text": "Drama & Mystery" }
+      ]
+    },
+    {
+      "key": "RESULTS1",
+      "kind": "interimResults",
+      "title": "Live Streaming Survey Breakdown",
+      "durationMs": 5000,
+      "advance": "auto"
+    },
+    {
+      "key": "ANIM1",
+      "kind": "animation",
+      "preset": "confetti",
+      "title": "Lightning Round!",
+      "durationMs": 2500,
+      "advance": "auto"
+    },
+    {
+      "key": "Q02",
+      "kind": "quiz",
+      "questionType": "single",
+      "question": "What is the primary gas in the atmosphere of Earth?",
+      "category": "Science",
+      "timeSeconds": 15,
+      "cooldownSeconds": 3,
+      "maxPoints": 1000,
+      "penalty": 0,
+      "answers": [
+        { "text": "Oxygen" },
+        { "text": "Nitrogen" },
+        { "text": "Carbon Dioxide" },
+        { "text": "Hydrogen" }
+      ],
+      "correctAnswers": [2]
+    },
+    {
+      "key": "MEDIA1",
+      "kind": "media",
+      "mediaUrl": "https://example.com/media/highlights.mp4",
+      "mediaType": "video",
+      "title": "Season Highlights",
+      "durationMs": 8000,
+      "advance": "manual"
+    },
+    {
+      "key": "LEADER1",
+      "kind": "leaderboard",
+      "title": "Top Contestant Standings",
+      "durationMs": 6000,
+      "advance": "manual"
+    },
+    {
+      "key": "OUTRO",
+      "kind": "closing",
+      "title": "Congratulations to Our Winners!",
+      "subtitle": "Thank you for playing Tada Studio Live",
+      "durationMs": 5000,
+      "advance": "auto"
+    }
+  ],
+  "settings": [
+    {
+      "scope": "leaderboard",
+      "targetKey": "show",
+      "property": "mode",
+      "valueJson": "selected"
+    }
+  ]
+}
