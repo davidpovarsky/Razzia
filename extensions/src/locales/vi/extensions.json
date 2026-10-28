@@ -413,6 +413,7 @@
     "successToast": "Đã nhập chương trình thành công!",
     "openEditorAction": "Mở trong Studio",
     "downloadTemplate": "Tải mẫu chương trình (.xlsx)",
+    "exportTadaJson": "Xuất dưới dạng Tada JSON (.tada.json)",
     "exportTadaXlsx": "Xuất dưới dạng Excel Tada (.xlsx)",
     "importShowPrompt": "Nhập chương trình (.json, .xlsx)"
   }

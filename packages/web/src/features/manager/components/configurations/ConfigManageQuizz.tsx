@@ -1,6 +1,7 @@
 import {
   exportTadaShowWorkbook,
-  generateTadaShowWorkbookTemplate,
+  generateTadaShowWorkbookBlankTemplate,
+  nativeBundleToAuthoredShow,
   preflightShowImport,
   type ShowPreflightResult,
 } from "@razzia/extensions/core"
@@ -19,6 +20,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import {
   Download,
+  FileCode,
   FileDown,
   FileSpreadsheet,
   Sparkles,
@@ -152,9 +154,28 @@ const ConfigManageQuizz = () => {
     }
   }
 
+  const handleExportTadaJson = (id: string, defaultSubject: string) => async () => {
+    try {
+      const client = new CompositeApiClient()
+      const bundle = await client.exportQuizBundle(id)
+      const subject =
+        (bundle.quizz as { subject?: string } | null)?.subject ??
+        defaultSubject ??
+        id
+      const authoredShow = nativeBundleToAuthoredShow(bundle as any, {
+        includePrivateRoster: false,
+      })
+
+      downloadJson(authoredShow, `${subject}.tada.json`)
+      toast.success(t("extensions:showImport.exportTadaJson"))
+    } catch (error) {
+      onError(error as Error, "errors:quizz.notFound")
+    }
+  }
+
   const handleDownloadTemplate = () => {
     try {
-      const templateBytes = generateTadaShowWorkbookTemplate()
+      const templateBytes = generateTadaShowWorkbookBlankTemplate()
       downloadBuffer(
         templateBytes,
         "TADA_Show_Template_v1.xlsx",
@@ -314,6 +335,16 @@ const ConfigManageQuizz = () => {
                 data-testid={`export-xlsx-${q.id}`}
               >
                 <FileSpreadsheet className="size-4 text-emerald-600 dark:text-emerald-400" />
+              </button>
+
+              <button
+                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
+                onClick={() => handleExportTadaJson(q.id, q.subject)()}
+                title={t("extensions:showImport.exportTadaJson")}
+                aria-label={t("extensions:showImport.exportTadaJson")}
+                data-testid={`export-tada-json-${q.id}`}
+              >
+                <FileCode className="size-4 text-sky-500" />
               </button>
 
               <button

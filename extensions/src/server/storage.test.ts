@@ -613,4 +613,58 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(extrasV2?.timeline[0].kind).toBe("opening")
     expect(extrasV2?.timeline[1].kind).toBe("question")
   })
+
+  it("importEnhancedBundle: strictly rejects legacy quiz payload containing unsafe media URL", () => {
+    const initialBaseCount = baseQuizzes.size
+    const unsafeLegacy = {
+      gameMode: "quiz",
+      subject: "Unsafe Legacy",
+      questions: [
+        {
+          type: "single",
+          question: "Bad question?",
+          answers: ["A", "B"],
+          solutions: [0],
+          time: 20,
+          cooldown: 3,
+          media: {
+            type: "image",
+            url: "http://insecure.example.com/bad.png",
+          },
+        },
+      ],
+    }
+
+    let thrown: unknown = null
+    try {
+      service.importEnhancedBundle(unsafeLegacy)
+    } catch (err) {
+      thrown = err
+    }
+
+    expect(thrown).toBeInstanceOf(CompositeStorageError)
+    expect((thrown as CompositeStorageError).statusCode).toBe(400)
+    expect((thrown as CompositeStorageError).message).toContain("errors:extensions.invalidMediaUrl")
+    expect(baseQuizzes.size).toBe(initialBaseCount)
+  })
+
+  it("exportEnhancedBundle: synthesizes valid V2 extras on-the-fly without sidecar on disk", () => {
+    // Save raw legacy quiz directly without writing any sidecar
+    const saveResult = injections.saveQuizz(sampleQuiz)
+    const legacyId = saveResult.id
+    const sidecarFile = getSidecarFilePath(injections.getPath, legacyId)
+    expect(fs.existsSync(sidecarFile)).toBe(false)
+
+    // Export enhanced bundle
+    const exportedBundle = service.exportEnhancedBundle(legacyId)
+    expect(exportedBundle.bundleVersion).toBe(1)
+    expect(exportedBundle.quizz).toBeDefined()
+    expect(exportedBundle.extras.schemaVersion).toBe(2)
+    const extrasV2 = exportedBundle.extras as any
+    expect(extrasV2.quizId).toBe(legacyId)
+    expect(extrasV2.timeline.length).toBe(sampleQuiz.questions.length)
+
+    // Verify sidecar was NOT written to disk merely by exporting!
+    expect(fs.existsSync(sidecarFile)).toBe(false)
+  })
 })

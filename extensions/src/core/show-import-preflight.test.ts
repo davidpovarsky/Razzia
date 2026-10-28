@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest"
 import { preflightShowImport } from "./show-import-preflight"
 import { generateTadaShowWorkbookTemplate } from "./show-workbook"
+import { authoredShowToNativeBundleDraft } from "./show-authoring-convert"
 import type { TadaShowV1 } from "./show-authoring-schema"
 
 describe("Show Import Preflight & Format Detection", () => {
@@ -128,5 +129,136 @@ describe("Show Import Preflight & Format Detection", () => {
     )
     expect(badXlsx.ok).toBe(false)
     expect(badXlsx.issues[0].code).toBe("WORKBOOK_PARSE_ERROR")
+  })
+
+  it("strictly rejects unsafe media URLs across tada-json, legacy-json, and enhanced-bundle", () => {
+    // 1. tada-json with javascript: url
+    const badTadaJson = {
+      format: "tada-show",
+      version: 1,
+      title: "Unsafe Media Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Dangerous question?",
+          media: {
+            type: "image",
+            url: "javascript:alert(1)",
+          },
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+    }
+    const tadaResult = preflightShowImport(
+      JSON.stringify(badTadaJson),
+      "unsafe.tada.json",
+    )
+    expect(tadaResult.ok).toBe(false)
+    expect(
+      tadaResult.issues.some((i) =>
+        i.messageKey.includes("errors:extensions.invalidMediaUrl"),
+      ),
+    ).toBe(true)
+
+    // 2. legacy-json with unsafe media url
+    const badLegacyJson = {
+      subject: "Unsafe Legacy",
+      gameMode: "quiz",
+      questions: [
+        {
+          type: "single",
+          question: "Question?",
+          answers: ["A", "B"],
+          solutions: [0],
+          time: 20,
+          cooldown: 3,
+          media: {
+            type: "image",
+            url: "http://insecure.example.com/pic.png",
+          },
+        },
+      ],
+    }
+    const legacyResult = preflightShowImport(
+      JSON.stringify(badLegacyJson),
+      "unsafe-legacy.json",
+    )
+    expect(legacyResult.ok).toBe(false)
+    expect(
+      legacyResult.issues.some(
+        (i) =>
+          i.code === "UNSAFE_MEDIA_URL" &&
+          i.messageKey === "errors:extensions.invalidMediaUrl",
+      ),
+    ).toBe(true)
+
+    // 3. enhanced-bundle with unsafe question media
+    const validShow: TadaShowV1 = {
+      format: "tada-show",
+      version: 1,
+      title: "Valid Bundle Source",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [],
+    }
+    const validDraft = authoredShowToNativeBundleDraft(validShow).bundleDraft!
+    const badBundle = {
+      bundleVersion: 1,
+      quizz: {
+        ...validDraft.quizz,
+        questions: [
+          {
+            ...validDraft.quizz.questions[0],
+            media: {
+              type: "image",
+              url: "javascript:alert('pwn')",
+            },
+          },
+        ],
+      },
+      extras: validDraft.extras,
+    }
+    const bundleResult = preflightShowImport(
+      JSON.stringify(badBundle),
+      "unsafe.bundle.json",
+    )
+    expect(bundleResult.ok).toBe(false)
+    expect(
+      bundleResult.issues.some((i) => i.code === "UNSAFE_MEDIA_URL"),
+    ).toBe(true)
+  })
+
+  it("normalizes pre-modern legacy quiz missing gameMode cleanly", () => {
+    const preModernLegacy = {
+      subject: "Pre-modern Quiz",
+      questions: [
+        {
+          type: "single",
+          question: "Legacy question?",
+          answers: ["A", "B"],
+          solutions: [0],
+          time: 20,
+          cooldown: 3,
+        },
+      ],
+    }
+    const result = preflightShowImport(
+      JSON.stringify(preModernLegacy),
+      "old-quiz.json",
+    )
+    expect(result.ok).toBe(true)
+    expect(result.format).toBe("legacy-json")
+    expect(result.legacyQuizzDraft?.gameMode).toBe("quiz")
   })
 })

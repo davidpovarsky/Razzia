@@ -413,6 +413,7 @@
     "successToast": "Show erfolgreich importiert!",
     "openEditorAction": "Im Studio öffnen",
     "downloadTemplate": "Show-Vorlage herunterladen (.xlsx)",
+    "exportTadaJson": "Als Tada-JSON exportieren (.tada.json)",
     "exportTadaXlsx": "Als Tada-Excel exportieren (.xlsx)",
     "importShowPrompt": "Show importieren (.json, .xlsx)"
   }

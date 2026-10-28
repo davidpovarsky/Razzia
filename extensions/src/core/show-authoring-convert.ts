@@ -273,7 +273,8 @@ export function authoredShowToNativeBundleDraft(
   let rosterExtras: QuizExtrasV2["roster"] = createDefaultRosterExtras()
 
   if (show.settings && show.settings.length > 0) {
-    for (const s of show.settings) {
+    for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
+      const s = show.settings[sIdx]
       if (s.scope === "leaderboard") {
         if (s.property === "mode" && typeof s.valueJson === "string") {
           leaderboardExtras = {
@@ -293,22 +294,49 @@ export function authoredShowToNativeBundleDraft(
           s.property === "afterQuestionIds" &&
           Array.isArray(s.valueJson)
         ) {
-          // Map card keys to question UUIDs if string keys were given
-          const mappedIds = s.valueJson.map(
-            (k) => keyToQuestionId.get(String(k)) ?? String(k),
-          )
+          const mappedIds: string[] = []
+          for (let kIdx = 0; kIdx < s.valueJson.length; kIdx += 1) {
+            const k = String(s.valueJson[kIdx])
+            const resolvedQId = keyToQuestionId.get(k)
+            if (!resolvedQId) {
+              diagnostics.push({
+                path: ["settings", String(sIdx), "valueJson", String(kIdx)],
+                message: `errors:extensions.unknownQuestionKeyRef:${k}`,
+                severity: "error",
+              })
+            } else {
+              mappedIds.push(resolvedQId)
+            }
+          }
           leaderboardExtras = {
             mode: leaderboardExtras?.mode ?? "selected",
             ...leaderboardExtras,
             afterQuestionIds: mappedIds,
           }
+        } else {
+          diagnostics.push({
+            path: ["settings", String(sIdx), "property"],
+            message: `errors:extensions.unsupportedSettingProperty:${s.scope}.${s.property}`,
+            severity: "error",
+          })
         }
       } else if (s.scope === "team" && s.property === "config") {
         teamsExtras = s.valueJson as any
       } else if (s.scope === "audio" && s.property === "cues") {
-        audioExtras = { cues: s.valueJson as any }
+        audioExtras = {
+          cues: {
+            ...createDefaultAudioExtras().cues,
+            ...(s.valueJson as any),
+          },
+        }
       } else if (s.scope === "roster" && s.property === "config") {
         rosterExtras = s.valueJson as any
+      } else {
+        diagnostics.push({
+          path: ["settings", String(sIdx)],
+          message: `errors:extensions.unsupportedSettingProperty:${s.scope}.${s.property}`,
+          severity: "error",
+        })
       }
     }
   }
@@ -355,10 +383,15 @@ export function authoredShowToNativeBundleDraft(
 /**
  * Converts a native bundle or composite quiz into a friendly authored show (`TadaShowV1`).
  */
-export function nativeBundleToAuthoredShow(bundle: {
-  quizz: unknown
-  extras: AnyQuizExtras
-}): TadaShowV1 {
+export function nativeBundleToAuthoredShow(
+  bundle: {
+    quizz: unknown
+    extras: AnyQuizExtras
+  },
+  options?: {
+    includePrivateRoster?: boolean
+  },
+): TadaShowV1 {
   const quizz = bundle.quizz as Record<string, unknown>
   const questions = (
     Array.isArray(quizz.questions) ? quizz.questions : []
@@ -378,6 +411,7 @@ export function nativeBundleToAuthoredShow(bundle: {
 
   const cards: AuthoredCard[] = []
   const questionMap = new Map<string, Record<string, unknown>>()
+  const questionIdToCardKey = new Map<string, string>()
 
   for (let i = 0; i < extrasV2.questionIds.length; i += 1) {
     const qId = extrasV2.questionIds[i]
@@ -396,6 +430,7 @@ export function nativeBundleToAuthoredShow(bundle: {
       qCount += 1
       const q = questionMap.get(item.questionId)
       const qKey = `Q${String(qCount).padStart(2, "0")}`
+      questionIdToCardKey.set(item.questionId, qKey)
 
       if (!q) {
         continue
@@ -555,7 +590,7 @@ export function nativeBundleToAuthoredShow(bundle: {
     }
   }
 
-  // Preserve any non-default audio, teams, or leaderboard in settings
+  // Preserve any non-default audio, teams, leaderboard, or roster in settings
   const settings: AuthoredSetting[] = []
   if (extrasV2.leaderboard) {
     if (extrasV2.leaderboard.mode) {
@@ -574,22 +609,64 @@ export function nativeBundleToAuthoredShow(bundle: {
         valueJson: extrasV2.leaderboard.everyN,
       })
     }
-    if (extrasV2.leaderboard.afterQuestionIds) {
-      settings.push({
-        scope: "leaderboard",
-        targetKey: "show",
-        property: "afterQuestionIds",
-        valueJson: extrasV2.leaderboard.afterQuestionIds,
-      })
+    if (
+      extrasV2.leaderboard.afterQuestionIds &&
+      extrasV2.leaderboard.afterQuestionIds.length > 0
+    ) {
+      const mappedKeys = extrasV2.leaderboard.afterQuestionIds
+        .map((qId) => questionIdToCardKey.get(qId))
+        .filter((k): k is string => Boolean(k))
+      if (mappedKeys.length > 0) {
+        settings.push({
+          scope: "leaderboard",
+          targetKey: "show",
+          property: "afterQuestionIds",
+          valueJson: mappedKeys,
+        })
+      }
     }
   }
 
-  if (extrasV2.teams && extrasV2.teams.enabled) {
+  // Preserve teams even if enabled is false as long as definitions exist
+  if (
+    extrasV2.teams &&
+    (extrasV2.teams.enabled || extrasV2.teams.teams.length > 0)
+  ) {
     settings.push({
       scope: "team",
       targetKey: "show",
       property: "config",
       valueJson: extrasV2.teams,
+    })
+  }
+
+  // Preserve audio cues losslessly
+  if (extrasV2.audio?.cues) {
+    settings.push({
+      scope: "audio",
+      targetKey: "show",
+      property: "cues",
+      valueJson: extrasV2.audio.cues,
+    })
+  }
+
+  // Preserve roster configuration (Gate D02: omit participant PII by default unless explicitly requested)
+  if (
+    extrasV2.roster &&
+    (extrasV2.roster.phoneInviteOnly || (extrasV2.roster.participants && extrasV2.roster.participants.length > 0))
+  ) {
+    const shouldIncludeParticipants = Boolean(options?.includePrivateRoster)
+    const exportRoster = {
+      phoneInviteOnly: extrasV2.roster.phoneInviteOnly ?? false,
+      participants: shouldIncludeParticipants
+        ? extrasV2.roster.participants
+        : [],
+    }
+    settings.push({
+      scope: "roster",
+      targetKey: "show",
+      property: "config",
+      valueJson: exportRoster,
     })
   }
 

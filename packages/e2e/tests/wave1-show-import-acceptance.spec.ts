@@ -181,7 +181,7 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
 
     const sampleXlsxPath = join(
       import.meta.dirname,
-      "../../../docs/extensions/show-import/TADA_Show_Template_v1.xlsx",
+      "../../../docs/extensions/show-import/SAMPLE.xlsx",
     )
 
     // Select XLSX
@@ -218,6 +218,90 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await exportXlsxBtn.click()
     const download = await downloadPromise
     expect(download.suggestedFilename()).toMatch(/\.xlsx$/)
+
+    telemetry.assertClean()
+  })
+
+  test("IMPORT04: Export as Friendly Tada JSON (.tada.json) and verify unsafe URL error blocking", async ({
+    page,
+  }) => {
+    const telemetry = setupTelemetry(page)
+    await page.setViewportSize({ width: 1280, height: 800 })
+    await openManageQuizzTab(page)
+
+    // Test Export as Tada JSON
+    const exportTadaJsonBtn = page
+      .locator("[data-testid^='export-tada-json-']")
+      .first()
+    await expect(exportTadaJsonBtn).toBeVisible()
+
+    const downloadPromise = page.waitForEvent("download")
+    await exportTadaJsonBtn.click()
+    const download = await downloadPromise
+    expect(download.suggestedFilename()).toMatch(/\.tada\.json$/)
+
+    const downloadStream = await download.createReadStream()
+    if (downloadStream) {
+      const chunks: Buffer[] = []
+      for await (const chunk of downloadStream) {
+        chunks.push(Buffer.from(chunk))
+      }
+      const downloadedContent = Buffer.concat(chunks).toString("utf-8")
+      const parsedJson = JSON.parse(downloadedContent)
+      expect(parsedJson.format).toBe("tada-show")
+      expect(parsedJson.version).toBe(1)
+      expect(Array.isArray(parsedJson.cards)).toBe(true)
+
+      // Verify shareable mode: if roster setting exists, participants must be empty []
+      const rosterSetting = parsedJson.settings?.find(
+        (s: any) => s.scope === "roster" && s.property === "config",
+      )
+      if (rosterSetting) {
+        expect(rosterSetting.valueJson?.participants).toEqual([])
+      }
+    }
+
+    // Test Unsafe URL error blocking:
+    const unsafeJson = {
+      format: "tada-show",
+      version: 1,
+      title: "Malicious Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Payload question?",
+          media: {
+            type: "image",
+            url: "javascript:alert(document.cookie)",
+          },
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [],
+    }
+
+    const tmpUnsafeFile = join(SCREENSHOT_DIR, "temp_unsafe.tada.json")
+    fs.writeFileSync(tmpUnsafeFile, JSON.stringify(unsafeJson, null, 2))
+
+    const fileInput = page.getByTestId("import-file-input")
+    await fileInput.setInputFiles(tmpUnsafeFile)
+
+    // Dialog must show error banner and commit must be disabled
+    const dialog = page.getByTestId("show-import-dialog")
+    await expect(dialog).toBeVisible()
+    await expect(page.getByTestId("show-import-errors")).toBeVisible()
+    await expect(page.getByTestId("show-import-commit")).toBeDisabled()
+
+    await saveScreenshot(page, "07_unsafe_media_rejection_dialog.png")
+
+    // Cancel safely
+    await page.getByTestId("show-import-cancel").click()
+    await expect(dialog).not.toBeVisible()
+
+    fs.rmSync(tmpUnsafeFile, { force: true })
 
     telemetry.assertClean()
   })

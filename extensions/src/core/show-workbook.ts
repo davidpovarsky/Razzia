@@ -312,7 +312,7 @@ function inflateRawBytes(
   return out.subarray(0, outPos)
 }
 
-function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
+export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
   if (zipBuf.byteLength < 22) {
     throw new Error("errors:extensions.corruptXlsxFile")
   }
@@ -440,7 +440,7 @@ function crc32(buf: Uint8Array): number {
   return (crc ^ 0xffffffff) >>> 0
 }
 
-function createZipArchive(
+export function createZipArchive(
   files: Array<{ name: string; data: Uint8Array }>,
 ): Uint8Array {
   const localParts: Uint8Array[] = []
@@ -591,9 +591,12 @@ function parseSheetRows(
       }
 
       // Check for formula injection indicators at cell start or strip safety escape apostrophe
-      if (cellValue.startsWith("'") && /^[=+\-@]/u.test(cellValue.slice(1))) {
+      if (cellValue.startsWith("'") && /^[=+\-@\t\r]/u.test(cellValue.slice(1))) {
         cellValue = cellValue.slice(1)
-      } else if (/^=[A-Z0-9_]+\(/i.test(cellValue)) {
+      } else if (
+        /^[=+\-@\t\r]/u.test(cellValue) &&
+        !/^[+\-]?\d+(\.\d+)?$/u.test(cellValue)
+      ) {
         throw new Error(
           `errors:extensions.formulaCellForbidden:${sheetName}!${indexToColLetters(colIdx)}${cellRowStr}`,
         )
@@ -750,8 +753,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // ── Sheet: Questions ─────────────────────────────────────────────────────
   const questionRows = loadSheet("Questions")
-  if (questionRows.length < 2) {
-    throw new Error("errors:extensions.missingQuestions")
+  if (questionRows.length === 0) {
+    throw new Error("errors:extensions.missingSheet:Questions")
   }
 
   const qHeaders = questionRows[0].map((c) => c.value.trim().toLowerCase())
@@ -902,7 +905,10 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // ── Sheet: Answers ───────────────────────────────────────────────────────
   const answerRows = loadSheet("Answers")
-  if (answerRows.length < 2) {
+  if (answerRows.length === 0) {
+    throw new Error("errors:extensions.missingSheet:Answers")
+  }
+  if (questionsByKey.size > 0 && answerRows.length < 2) {
     throw new Error("errors:extensions.missingAnswers")
   }
 
@@ -977,7 +983,10 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // ── Sheet: Timeline ──────────────────────────────────────────────────────
   const timelineRows = loadSheet("Timeline")
-  if (timelineRows.length < 2) {
+  if (timelineRows.length === 0) {
+    throw new Error("errors:extensions.missingSheet:Timeline")
+  }
+  if (questionsByKey.size > 0 && timelineRows.length < 2) {
     throw new Error("errors:extensions.missingTimeline")
   }
 
@@ -1020,6 +1029,15 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   }
 
   intermediateCards.sort((a, b) => a.order - b.order)
+
+  if (
+    intermediateCards.some(
+      (c) => c.kind === "quiz" || c.kind === "survey",
+    ) &&
+    questionRows.length < 2
+  ) {
+    throw new Error("errors:extensions.missingQuestions")
+  }
 
   const cards: AuthoredCard[] = []
 
@@ -1286,9 +1304,9 @@ function buildWorksheetXml(rows: string[][]): string {
       const val = row[c] ?? ""
       const ref = `${indexToColLetters(c)}${r + 1}`
 
-      // Formula injection defense: escape prefixes =, +, -, @ if text
+      // Formula injection defense: escape prefixes =, +, -, @, \t, \r if text
       const isFormulaPrefix =
-        /^[=+\-@]/u.test(val) && !/^[+\-]?\d+(\.\d+)?$/u.test(val)
+        /^[=+\-@\t\r]/u.test(val) && !/^[+\-]?\d+(\.\d+)?$/u.test(val)
       const safeVal = isFormulaPrefix ? `'${val}` : val
 
       cellXmls.push(
@@ -1644,6 +1662,29 @@ export function exportTadaShowWorkbook(
     },
     { name: "xl/worksheets/sheet6.xml", data: utf8Encoder.encode(sheetHelpXml) },
   ])
+}
+
+/**
+ * Generates the official blank downloadable `TADA_Show_Template_v1.xlsx` buffer.
+ * Contains 6 sheets with standard headers, validation notes, and 0 questions/cards.
+ */
+export function generateTadaShowWorkbookBlankTemplate(): Uint8Array {
+  const blankShow: TadaShowV1 = {
+    format: "tada-show",
+    version: 1,
+    title: "New Tada Show",
+    note: "Official multi-sheet blank template for Tada Studio",
+    baseGameMode: "quiz",
+    defaults: {
+      newQuestionMode: "quiz",
+      leaderboardPolicy: "cardOnly",
+      advanceMode: "auto",
+    },
+    cards: [],
+    settings: [],
+  }
+
+  return exportTadaShowWorkbook(blankShow)
 }
 
 /**

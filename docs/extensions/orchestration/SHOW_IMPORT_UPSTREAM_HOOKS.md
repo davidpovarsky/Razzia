@@ -23,10 +23,10 @@ Per project governance rules (`GEMINI.md`, `AGENTS.md`, and `docs/extensions/orc
 
 | Metric / Aspect | Details |
 |---|---|
-| **Symbols Touched** | `ConfigManageQuizz`, `handleImportFileSelect`, `handleCommitImport`, `handleExportXlsx`, `handleDownloadTemplate`, `downloadBlob`, `downloadBuffer` |
-| **Rationale** | Connects the Manager Quizz management tab to the multi-sheet Excel generator/template, authoring preflight validator modal, and `.xlsx` row export action. |
+| **Symbols Touched** | `ConfigManageQuizz`, `handleImportFileSelect`, `handleCommitImport`, `handleExportXlsx`, `handleExportTadaJson`, `handleDownloadTemplate`, `downloadBlob`, `downloadBuffer` |
+| **Rationale** | Connects the Manager Quizz management tab to the blank multi-sheet Excel generator/template (`generateTadaShowWorkbookBlankTemplate`), authoring preflight validator modal, `.xlsx` row export action, and Friendly Tada JSON (`.tada.json`) export action with shareable privacy mode (`includePrivateRoster: false`). |
 | **Default-Off & Non-Breaking** | When no import is initiated, vanilla quiz management remains 100% identical. Legacy JSON export (`handleExportLegacy`) and legacy import (`importQuizz`) remain fully operational. |
-| **Design Language Fidelity** | Reuses original Razzia `Button`, `AlertDialog`, `SkeletonRows`, Lucide icons (`FileDown`, `FileSpreadsheet`, `Upload`), and Rubik font tokens. Does NOT alter any question editor toggle group or navigation structure. |
+| **Design Language Fidelity** | Reuses original Razzia `Button`, `AlertDialog`, `SkeletonRows`, Lucide icons (`FileCode`, `FileDown`, `FileSpreadsheet`, `Upload`), and Rubik font tokens. Does NOT alter any question editor toggle group or navigation structure. |
 
 ### 2.2 `packages/web/src/features/manager/components/configurations/ShowImportModal.tsx` (New Component)
 

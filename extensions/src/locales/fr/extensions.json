@@ -413,6 +413,7 @@
     "successToast": "Spectacle importé avec succès !",
     "openEditorAction": "Ouvrir dans Studio",
     "downloadTemplate": "Télécharger le modèle de spectacle (.xlsx)",
+    "exportTadaJson": "Exporter en JSON Tada (.tada.json)",
     "exportTadaXlsx": "Exporter en Excel Tada (.xlsx)",
     "importShowPrompt": "Importer un spectacle (.json, .xlsx)"
   }

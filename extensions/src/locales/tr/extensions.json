@@ -413,6 +413,7 @@
     "successToast": "Gösteri başarıyla içe aktarıldı!",
     "openEditorAction": "Studio'da Aç",
     "downloadTemplate": "Gösteri Şablonunu İndir (.xlsx)",
+    "exportTadaJson": "Tada JSON Olarak Dışa Aktar (.tada.json)",
     "exportTadaXlsx": "Tada Excel Olarak Dışa Aktar (.xlsx)",
     "importShowPrompt": "Gösteri İçe Aktar (.json, .xlsx)"
   }

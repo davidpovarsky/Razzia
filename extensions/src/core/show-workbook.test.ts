@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest"
-import fs from "node:fs"
-import path from "node:path"
 import {
+  createZipArchive,
   exportTadaShowWorkbook,
+  extractZipEntries,
+  generateTadaShowWorkbookBlankTemplate,
   generateTadaShowWorkbookTemplate,
   parseTadaShowWorkbook,
 } from "./show-workbook"
@@ -13,16 +14,23 @@ import {
 import type { TadaShowV1 } from "./show-authoring-schema"
 
 describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
+  it("generates distinct blank template and sample workbook buffers", () => {
+    const blankBytes = generateTadaShowWorkbookBlankTemplate()
+    const sampleBytes = generateTadaShowWorkbookTemplate()
+
+    expect(blankBytes.byteLength).toBeGreaterThan(500)
+    expect(sampleBytes.byteLength).toBeGreaterThan(blankBytes.byteLength)
+
+    // A blank template has 0 questions, so parsing it as a complete show throws errors:quizz.noQuestions
+    expect(() => parseTadaShowWorkbook(blankBytes)).toThrow("errors:quizz.noQuestions")
+
+    const parsedSample = parseTadaShowWorkbook(sampleBytes)
+    expect(parsedSample.cards.length).toBeGreaterThan(5)
+  })
+
   it("generates and parses canonical template containing all 10 card kinds", () => {
     const templateBytes = generateTadaShowWorkbookTemplate()
     expect(templateBytes.byteLength).toBeGreaterThan(1000)
-
-    // Save physical templates for documentation and delivery
-    const outDir = path.resolve(__dirname, "../../../docs/extensions/show-import")
-    if (fs.existsSync(outDir)) {
-      fs.writeFileSync(path.join(outDir, "TADA_Show_Template_v1.xlsx"), templateBytes)
-      fs.writeFileSync(path.join(outDir, "SAMPLE.xlsx"), templateBytes)
-    }
 
     const parsed = parseTadaShowWorkbook(templateBytes)
     expect(parsed.format).toBe("tada-show")
@@ -212,7 +220,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     })
 
     it("rejects XML containing unescaped formula cell <f>", () => {
-      // Modify a valid workbook zip entry to include an unescaped <f>SUM(A1:A10)</f>
       const validShow: TadaShowV1 = {
         format: "tada-show",
         version: 1,
@@ -229,23 +236,59 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         ],
       }
       const buffer = exportTadaShowWorkbook(validShow)
-      // Find a cell in the buffer and replace with <f> tag
-      const utf8 = new TextDecoder("utf-8").decode(buffer)
-      // Replace an inlineStr cell with a formula cell in sheet1
-      const injected = utf8.replace(
+      const entries = extractZipEntries(buffer)
+      const sheet1Bytes = entries.get("xl/worksheets/sheet1.xml")!
+      const sheet1Xml = new TextDecoder("utf-8").decode(sheet1Bytes)
+      const injectedXml = sheet1Xml.replace(
         /<c r="B4"[^>]*>[\s\S]*?<\/c>/u,
         '<c r="B4"><f>SUM(A1:A10)</f><v>0</v></c>',
       )
-      const injectedBuf = new TextEncoder().encode(injected)
-
-      // Even if ZIP CRC/length altered or if parsed directly, formula cell is detected and blocked
-      try {
-        parseTadaShowWorkbook(injectedBuf)
-      } catch (err: any) {
-        expect(err.message).toMatch(
-          /errors:extensions\.(formulaCellForbidden|corruptXlsxFile)/,
-        )
+      entries.set("xl/worksheets/sheet1.xml", new TextEncoder().encode(injectedXml))
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
       }
+      const injectedZip = createZipArchive(files)
+
+      expect(() => parseTadaShowWorkbook(injectedZip)).toThrow(
+        "errors:extensions.formulaCellForbidden:Show!B4",
+      )
+    })
+
+    it("rejects raw unescaped formula strings with exact sheet and cell coordinate", () => {
+      const validShow: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Formula Injection Test",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            questionType: "single",
+            question: "Normal question?",
+            answers: [{ text: "Ans1" }, { text: "Ans2" }],
+            correctAnswers: [1],
+          },
+        ],
+      }
+      const buffer = exportTadaShowWorkbook(validShow)
+      const entries = extractZipEntries(buffer)
+      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
+      const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
+      const injectedXml = sheet3Xml.replace(
+        '<c r="D2" t="inlineStr"><is><t>Normal question?</t></is></c>',
+        '<c r="D2" t="inlineStr"><is><t>=CMD|\' /C calc\'!A0</t></is></c>',
+      )
+      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(injectedXml))
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
+      }
+      const injectedZip = createZipArchive(files)
+
+      expect(() => parseTadaShowWorkbook(injectedZip)).toThrow(
+        "errors:extensions.formulaCellForbidden:Questions!D2",
+      )
     })
 
     it("rejects non-consecutive answer numbering in Answers sheet", () => {

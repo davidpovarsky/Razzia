@@ -413,6 +413,7 @@
     "successToast": "ショーが正常にインポートされました！",
     "openEditorAction": "Studioで開く",
     "downloadTemplate": "ショーのテンプレートをダウンロード (.xlsx)",
+    "exportTadaJson": "Tada JSONとしてエクスポート (.tada.json)",
     "exportTadaXlsx": "Tada Excelとしてエクスポート (.xlsx)",
     "importShowPrompt": "ショーをインポート (.json, .xlsx)"
   }

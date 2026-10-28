@@ -344,4 +344,300 @@ describe("Show Authoring Schema & Converters", () => {
     expect(roundtripQ1.answers[0].imageUrl).toBe("https://example.com/paris.png")
     expect(roundtripQ1.answers[0].alt).toBe("Eiffel tower")
   })
+
+  it("losslessly roundtrips audio cues including non-default volume (0.37)", () => {
+    const showWithAudio: TadaShowV1 = {
+      format: "tada-show",
+      version: 1,
+      title: "Audio Cue Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Test Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [
+        {
+          scope: "audio",
+          targetKey: "show",
+          property: "cues",
+          valueJson: {
+            start: {
+              source: "media",
+              url: "https://example.com/start.mp3",
+              volume: 0.37,
+              enabled: true,
+              loop: false,
+            },
+          },
+        },
+      ],
+    }
+
+    const conversion = authoredShowToNativeBundleDraft(showWithAudio)
+    expect(conversion.ok).toBe(true)
+    expect(conversion.bundleDraft?.extras.audio?.cues?.start.volume).toBe(0.37)
+    expect(conversion.bundleDraft?.extras.audio?.cues?.start.url).toBe(
+      "https://example.com/start.mp3",
+    )
+
+    const backToAuthored = nativeBundleToAuthoredShow(conversion.bundleDraft!)
+    const audioSetting = backToAuthored.settings?.find(
+      (s) => s.scope === "audio" && s.property === "cues",
+    )
+    expect(audioSetting).toBeDefined()
+    expect((audioSetting?.valueJson as any)?.start?.volume).toBe(0.37)
+    expect((audioSetting?.valueJson as any)?.start?.url).toBe(
+      "https://example.com/start.mp3",
+    )
+  })
+
+  it("losslessly preserves teams configuration even when enabled is false", () => {
+    const showWithTeams: TadaShowV1 = {
+      format: "tada-show",
+      version: 1,
+      title: "Disabled Teams Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Test Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [
+        {
+          scope: "team",
+          targetKey: "show",
+          property: "config",
+          valueJson: {
+            enabled: false,
+            autoAssign: "roundRobin",
+            teams: [
+              { id: "t1", name: "Red Team", color: "#FF0000" },
+              { id: "t2", name: "Blue Team", color: "#0000FF" },
+            ],
+          },
+        },
+      ],
+    }
+
+    const conversion = authoredShowToNativeBundleDraft(showWithTeams)
+    expect(conversion.ok).toBe(true)
+    expect(conversion.bundleDraft?.extras.teams?.enabled).toBe(false)
+    expect(conversion.bundleDraft?.extras.teams?.teams).toHaveLength(2)
+
+    const backToAuthored = nativeBundleToAuthoredShow(conversion.bundleDraft!)
+    const teamSetting = backToAuthored.settings?.find(
+      (s) => s.scope === "team" && s.property === "config",
+    )
+    expect(teamSetting).toBeDefined()
+    expect((teamSetting?.valueJson as any)?.enabled).toBe(false)
+    expect((teamSetting?.valueJson as any)?.teams).toHaveLength(2)
+  })
+
+  it("bidirectionally remaps leaderboard afterQuestionIds between card keys and native UUIDs", () => {
+    const showWithLeaderboard: TadaShowV1 = {
+      format: "tada-show",
+      version: 1,
+      title: "Leaderboard Key Remapping",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question 1?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+        {
+          key: "Q02",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question 2?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [2],
+        },
+      ],
+      settings: [
+        {
+          scope: "leaderboard",
+          targetKey: "show",
+          property: "afterQuestionIds",
+          valueJson: ["Q01", "Q02"],
+        },
+      ],
+    }
+
+    const conversion = authoredShowToNativeBundleDraft(showWithLeaderboard)
+    expect(conversion.ok).toBe(true)
+    const { extras } = conversion.bundleDraft!
+
+    // Verify native extras uses generated question UUIDs, NOT raw authoring keys "Q01", "Q02"
+    expect(extras.leaderboard?.afterQuestionIds).toEqual(extras.questionIds)
+    expect(extras.leaderboard?.afterQuestionIds).not.toContain("Q01")
+
+    // Verify converting back to authored show maps UUIDs back to card keys "Q01", "Q02"
+    const backToAuthored = nativeBundleToAuthoredShow(conversion.bundleDraft!)
+    const lbSetting = backToAuthored.settings?.find(
+      (s) => s.scope === "leaderboard" && s.property === "afterQuestionIds",
+    )
+    expect(lbSetting?.valueJson).toEqual(["Q01", "Q02"])
+  })
+
+  it("strictly rejects unknown setting scopes and properties during preflight validation", () => {
+    const unknownScopeShow = {
+      format: "tada-show",
+      version: 1,
+      title: "Unknown Scope Test",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [
+        {
+          scope: "maliciousOrTypo",
+          targetKey: "show",
+          property: "hack",
+          valueJson: "payload",
+        },
+      ],
+    }
+
+    const parseResult = tadaShowV1Schema.safeParse(unknownScopeShow)
+    expect(parseResult.success).toBe(false)
+    if (!parseResult.success) {
+      expect(
+        parseResult.error.issues.some((i) =>
+          i.message.includes("unsupportedSettingScope:maliciousOrTypo"),
+        ),
+      ).toBe(true)
+    }
+
+    const unknownPropShow = {
+      ...unknownScopeShow,
+      settings: [
+        {
+          scope: "leaderboard",
+          targetKey: "show",
+          property: "nonExistentSetting",
+          valueJson: 42,
+        },
+      ],
+    }
+    const parseResult2 = tadaShowV1Schema.safeParse(unknownPropShow)
+    expect(parseResult2.success).toBe(false)
+    if (!parseResult2.success) {
+      expect(
+        parseResult2.error.issues.some((i) =>
+          i.message.includes(
+            "unsupportedSettingProperty:leaderboard.nonExistentSetting",
+          ),
+        ),
+      ).toBe(true)
+    }
+  })
+
+  it("strictly rejects non-empty extraJson on authored cards", () => {
+    const showWithExtraJson = {
+      format: "tada-show",
+      version: 1,
+      title: "ExtraJson Rejection Test",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+          extraJson: { untypedPayload: 123 },
+        },
+      ],
+    }
+
+    const parseResult = tadaShowV1Schema.safeParse(showWithExtraJson)
+    expect(parseResult.success).toBe(false)
+    if (!parseResult.success) {
+      expect(
+        parseResult.error.issues.some((i) =>
+          i.message.includes("unsupportedExtraJson"),
+        ),
+      ).toBe(true)
+    }
+  })
+
+  it("strips private roster PII by default during shareable export", () => {
+    const bundleWithRoster = {
+      quizz: {
+        gameMode: "quiz" as const,
+        subject: "Roster Test",
+        questions: [
+          {
+            type: "single" as const,
+            question: "Question?",
+            answers: ["Ans1", "Ans2"],
+            solutions: [0],
+            cooldown: 3,
+            time: 20,
+          },
+        ],
+      },
+      extras: {
+        schemaVersion: 2 as const,
+        quizId: "00000000-0000-0000-0000-000000000001",
+        baseDigest: "dummy",
+        revision: 1,
+        questionIds: ["00000000-0000-0000-0000-000000000002"],
+        timeline: [
+          {
+            id: "00000000-0000-0000-0000-000000000003",
+            kind: "question" as const,
+            questionId: "00000000-0000-0000-0000-000000000002",
+          },
+        ],
+        perQuestion: {},
+        roster: {
+          enabled: true,
+          participants: [
+            { id: "p1", name: "Alice Secret", phone: "+1234567890" },
+          ],
+        },
+      },
+    }
+
+    // Default export: shareable mode -> roster PII stripped
+    const shareableShow = nativeBundleToAuthoredShow(bundleWithRoster as any)
+    const shareableRosterSetting = shareableShow.settings?.find(
+      (s) => s.scope === "roster" && s.property === "config",
+    )
+    expect(shareableRosterSetting).toBeDefined()
+    expect((shareableRosterSetting?.valueJson as any)?.participants).toEqual([])
+
+    // Explicit opt-in export: private mode -> includes participants
+    const privateShow = nativeBundleToAuthoredShow(bundleWithRoster as any, {
+      includePrivateRoster: true,
+    })
+    const privateRosterSetting = privateShow.settings?.find(
+      (s) => s.scope === "roster" && s.property === "config",
+    )
+    expect((privateRosterSetting?.valueJson as any)?.participants).toHaveLength(
+      1,
+    )
+    expect((privateRosterSetting?.valueJson as any)?.participants[0].name).toBe(
+      "Alice Secret",
+    )
+  })
 })

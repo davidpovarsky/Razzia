@@ -373,6 +373,21 @@ export const quizExtrasV2Schema = z
         })
       }
     }
+
+    // 7. leaderboard.afterQuestionIds (if present) must be in questionIds
+    if (extras.leaderboard?.afterQuestionIds) {
+      for (let i = 0; i < extras.leaderboard.afterQuestionIds.length; i += 1) {
+        const qId = extras.leaderboard.afterQuestionIds[i]
+
+        if (!qIdSet.has(qId)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["leaderboard", "afterQuestionIds", i],
+            message: `errors:extensions.orphanLeaderboardQuestionId:${qId}`,
+          })
+        }
+      }
+    }
   })
 
 export type QuizExtrasV2 = z.infer<typeof quizExtrasV2Schema>

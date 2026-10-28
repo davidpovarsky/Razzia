@@ -8,13 +8,12 @@ import {
   REVEAL_TRIGGERS,
 } from "./constants"
 
-const UNSAFE_PROTOCOL_PATTERN = /^(javascript|data|file|vbscript):/i
-
 /**
  * Validates that a media reference is safe:
- * 1. Root-relative starting with `/media/` (and no directory traversal `..`)
+ * 1. Root-relative starting with `/media/` (and no directory traversal `..` or backslashes)
  * 2. Or an explicit allowed HTTPS URL.
- * Rejects javascript:, data:, file:, vbscript: and relative paths outside /media/.
+ * Rejects javascript:, data:, file:, vbscript:, ftp:, plain http:, protocol-relative (//),
+ * whitespace/control characters, backslashes, and encoded path traversal (%2e).
  */
 export const isSafeMediaUrl = (url: unknown): url is string => {
   if (typeof url !== "string") {
@@ -27,18 +26,40 @@ export const isSafeMediaUrl = (url: unknown): url is string => {
     return false
   }
 
-  if (UNSAFE_PROTOCOL_PATTERN.test(trimmed)) {
+  // Reject protocol-relative URLs (starts with //)
+  if (trimmed.startsWith("//")) {
     return false
   }
 
+  // Reject backslashes or encoded path traversal (%2e)
+  if (trimmed.includes("\\") || /%2e/i.test(trimmed)) {
+    return false
+  }
+
+  // Reject whitespace or control characters inside URL
+  if (/[\s\0\r\n\t]/u.test(trimmed)) {
+    return false
+  }
+
+  // Root-relative /media/ path
   if (trimmed.startsWith("/media/")) {
+    // Must not contain directory traversal
     return !trimmed.includes("..")
   }
 
+  // Absolute URL: strictly https: scheme only
   try {
     const parsed = new URL(trimmed)
 
-    return parsed.protocol === "https:"
+    if (parsed.protocol !== "https:") {
+      return false
+    }
+
+    if (!parsed.hostname || parsed.hostname.length === 0) {
+      return false
+    }
+
+    return true
   } catch {
     return false
   }
@@ -112,3 +133,102 @@ export const interludeSchema = z
   })
 
 export type Interlude = z.infer<typeof interludeSchema>
+
+/**
+ * Validates that all media references in a quiz bundle (base quiz questions,
+ * answer visuals, interludes, scenes, audio cues) are strictly safe URLs.
+ */
+export function validateBundleMedia(bundle: {
+  quizz: unknown
+  extras: unknown
+}): { ok: boolean; path?: string } {
+  const quizz = bundle.quizz as Record<string, unknown> | null | undefined
+  if (quizz && Array.isArray(quizz.questions)) {
+    for (let qIdx = 0; qIdx < quizz.questions.length; qIdx += 1) {
+      const q = quizz.questions[qIdx] as Record<string, unknown>
+      if (q && typeof q === "object") {
+        const media = q.media as { url?: unknown } | undefined
+        if (
+          media &&
+          typeof media.url === "string" &&
+          !isSafeMediaUrl(media.url)
+        ) {
+          return { ok: false, path: `quizz.questions[${qIdx}].media.url` }
+        }
+      }
+    }
+  }
+
+  const extras = bundle.extras as Record<string, unknown> | null | undefined
+  if (extras && typeof extras === "object") {
+    // 1. perQuestion answerVisuals & interludes
+    if (extras.perQuestion && typeof extras.perQuestion === "object") {
+      for (const [qId, item] of Object.entries(
+        extras.perQuestion as Record<string, Record<string, unknown>>,
+      )) {
+        if (item && Array.isArray(item.answerVisuals)) {
+          for (let vIdx = 0; vIdx < item.answerVisuals.length; vIdx += 1) {
+            const v = item.answerVisuals[vIdx]
+            if (v && typeof v.url === "string" && !isSafeMediaUrl(v.url)) {
+              return {
+                ok: false,
+                path: `extras.perQuestion[${qId}].answerVisuals[${vIdx}].url`,
+              }
+            }
+          }
+        }
+        if (
+          item &&
+          item.interlude &&
+          typeof (item.interlude as Record<string, unknown>).url === "string"
+        ) {
+          const interludeUrl = (item.interlude as Record<string, unknown>)
+            .url as string
+          if (!isSafeMediaUrl(interludeUrl)) {
+            return {
+              ok: false,
+              path: `extras.perQuestion[${qId}].interlude.url`,
+            }
+          }
+        }
+      }
+    }
+
+    // 2. scenes
+    if (extras.scenes && typeof extras.scenes === "object") {
+      for (const [sId, scene] of Object.entries(
+        extras.scenes as Record<string, Record<string, unknown>>,
+      )) {
+        if (
+          scene &&
+          typeof scene.mediaUrl === "string" &&
+          scene.mediaUrl &&
+          !isSafeMediaUrl(scene.mediaUrl)
+        ) {
+          return { ok: false, path: `extras.scenes[${sId}].mediaUrl` }
+        }
+      }
+    }
+
+    // 3. audio cues
+    if (extras.audio && typeof extras.audio === "object") {
+      const cues = (
+        extras.audio as { cues?: Record<string, { url?: unknown }> }
+      ).cues
+      if (cues && typeof cues === "object") {
+        for (const [cueId, cue] of Object.entries(cues)) {
+          if (
+            cue &&
+            typeof cue.url === "string" &&
+            cue.url &&
+            !isSafeMediaUrl(cue.url)
+          ) {
+            return { ok: false, path: `extras.audio.cues[${cueId}].url` }
+          }
+        }
+      }
+    }
+  }
+
+  return { ok: true }
+}

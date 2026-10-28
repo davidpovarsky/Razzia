@@ -1,7 +1,9 @@
 import {
+  normalizeLegacyQuizz,
   quizzValidator,
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
+import { isSafeMediaUrl, validateBundleMedia } from "./media"
 import {
   isEnhancedBundle,
   type EnhancedBundle,
@@ -114,10 +116,15 @@ export function preflightShowImport(
     try {
       parsedShow = parseTadaShowWorkbook(uint8Buf)
     } catch (err: any) {
+      const errMsg = err?.message || "errors:extensions.corruptXlsxFile"
+      const coordMatch = /:([A-Za-z]+)!([A-Z]+)(\d+)/u.exec(errMsg)
       issues.push({
         severity: "error",
         code: "WORKBOOK_PARSE_ERROR",
-        messageKey: err?.message || "errors:extensions.corruptXlsxFile",
+        messageKey: errMsg,
+        sheet: coordMatch ? coordMatch[1] : undefined,
+        column: coordMatch ? coordMatch[2] : undefined,
+        row: coordMatch ? Number.parseInt(coordMatch[3], 10) : undefined,
       })
 
       return { ok: false, format: "tada-xlsx", issues }
@@ -249,6 +256,18 @@ export function preflightShowImport(
   // Check 2B: Native Enhanced Bundle (`bundleVersion: 1`)
   if (isEnhancedBundle(parsedJson)) {
     const bundle = parsedJson as EnhancedBundle
+    const mediaCheck = validateBundleMedia(bundle)
+    if (!mediaCheck.ok) {
+      issues.push({
+        severity: "error",
+        code: "UNSAFE_MEDIA_URL",
+        messageKey: "errors:extensions.invalidMediaUrl",
+        path: mediaCheck.path,
+      })
+
+      return { ok: false, format: "enhanced-bundle", issues }
+    }
+
     const authored = nativeBundleToAuthoredShow(bundle)
     const summary = buildSummaryFromAuthored("enhanced-bundle", authored)
     collectMediaWarnings(authored, issues)
@@ -278,9 +297,28 @@ export function preflightShowImport(
   }
 
   // Check 2D: Legacy Quizz (`questions` array, subject/title)
-  const legacyParse = quizzValidator.safeParse(parsedJson)
+  const normalizedLegacy = normalizeLegacyQuizz(parsedJson)
+  const legacyParse = quizzValidator.safeParse(normalizedLegacy)
   if (legacyParse.success) {
     const quizz = legacyParse.data
+    const unsafeIssues: ShowImportIssue[] = []
+    for (let qIdx = 0; qIdx < quizz.questions.length; qIdx += 1) {
+      const q = quizz.questions[qIdx]
+      if (q.media?.url && !isSafeMediaUrl(q.media.url)) {
+        unsafeIssues.push({
+          severity: "error",
+          code: "UNSAFE_MEDIA_URL",
+          messageKey: "errors:extensions.invalidMediaUrl",
+          path: `questions.${qIdx}.media.url`,
+        })
+      }
+    }
+    if (unsafeIssues.length > 0) {
+      issues.push(...unsafeIssues)
+
+      return { ok: false, format: "legacy-json", issues }
+    }
+
     const previewItems: ShowTimelinePreviewItem[] = quizz.questions.map(
       (q, idx) => ({
         order: idx + 1,

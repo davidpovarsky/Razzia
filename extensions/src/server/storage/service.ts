@@ -1,15 +1,21 @@
 import { StatusCodes } from "http-status-codes"
 import {
+  normalizeLegacyQuizz,
+  quizzValidator,
+} from "@razzia/common/validators/quizz"
+import {
   authoredShowToNativeBundleDraft,
   computeCanonicalBaseDigest,
   ensureQuestionIds,
   isEnhancedBundle,
+  isSafeMediaUrl,
   nextRevision,
   quizExtrasV1Schema,
   quizExtrasV2Schema,
   remapQuestionIds,
   RevisionConflictError,
   upgradeLegacyExtrasToV2,
+  validateBundleMedia,
   validateRevision,
   type AnyQuizExtras,
   type EnhancedBundle,
@@ -351,7 +357,23 @@ export class CompositeStorageService {
         )
       }
 
+      const mediaCheck = validateBundleMedia(effectivePayload)
+      if (!mediaCheck.ok) {
+        throw new CompositeStorageError(
+          `errors:extensions.invalidMediaUrl: ${mediaCheck.path}`,
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+
       const { quizz, extras } = effectivePayload
+      const quizzValidation = quizzValidator.safeParse(quizz)
+      if (!quizzValidation.success) {
+        throw new CompositeStorageError(
+          `Invalid base quizz in bundle: ${quizzValidation.error.issues.map((i) => i.message).join(", ")}`,
+          StatusCodes.BAD_REQUEST,
+        )
+      }
+      const validatedQuizz = quizzValidation.data
       const questionsCount =
         typeof quizz === "object" &&
         quizz !== null &&
@@ -476,8 +498,32 @@ export class CompositeStorageService {
     }
 
     // Legacy quiz format
-    const saveResult = this.injections.saveQuizz(payload)
-    const baseDigest = computeCanonicalBaseDigest(payload)
+    const normalized = normalizeLegacyQuizz(payload)
+    const quizzValidation = quizzValidator.safeParse(normalized)
+    if (!quizzValidation.success) {
+      throw new CompositeStorageError(
+        `Invalid legacy quiz format: ${quizzValidation.error.issues.map((i) => i.message).join(", ")}`,
+        StatusCodes.BAD_REQUEST,
+      )
+    }
+
+    const validatedQuizz = quizzValidation.data
+    if (Array.isArray(validatedQuizz.questions)) {
+      for (let i = 0; i < validatedQuizz.questions.length; i += 1) {
+        const q = validatedQuizz.questions[i]
+        if (q && typeof q === "object" && "media" in q && (q as { media?: { url?: string } }).media?.url) {
+          if (!isSafeMediaUrl((q as { media: { url: string } }).media.url)) {
+            throw new CompositeStorageError(
+              `errors:extensions.invalidMediaUrl: questions[${i}].media`,
+              StatusCodes.BAD_REQUEST,
+            )
+          }
+        }
+      }
+    }
+
+    const saveResult = this.injections.saveQuizz(validatedQuizz)
+    const baseDigest = computeCanonicalBaseDigest(validatedQuizz)
 
     return {
       quizId: saveResult.id,
