@@ -6,6 +6,7 @@ import {
   type TadaShowV1,
 } from "./show-authoring-schema"
 import { nativeBundleToAuthoredShow } from "./show-authoring-convert"
+import { interludeSchema, type Interlude } from "./media"
 import type { AnyQuizExtras } from "./index"
 
 const MAX_WORKBOOK_BYTES = 5 * 1024 * 1024 // 5 MB
@@ -718,7 +719,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   for (const row of showRows) {
     if (row.length >= 2) {
       const key = row[0].value.trim()
-      const val = row[1].value.trim()
+      const val = key === "note" ? row[1].value : row[1].value.trim()
       if (key) {
         showMap.set(key, val)
       }
@@ -742,7 +743,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const baseGameMode = (showMap.get("baseGameMode") ?? "quiz") as
     | "quiz"
     | "survey"
-  const note = showMap.get("note") || undefined
+  const note = showMap.has("note") ? showMap.get("note") || undefined : undefined
 
   if (format !== "tada-show" || version !== 1) {
     throw new Error("errors:extensions.unsupportedShowFormat")
@@ -787,6 +788,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     correctAnswerNumbers: number[]
     options?: any
     reveal?: any
+    interlude?: Interlude
     extraJson?: Record<string, unknown>
     answers: AuthoredAnswer[]
   }
@@ -823,6 +825,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     const revealTrigger = getQVal(row, "revealTrigger").toLowerCase()
     const revealAudience = getQVal(row, "revealAudience").toLowerCase()
     const extraJsonStr = getQVal(row, "extraJson")
+    const interludeJsonStr = getQVal(row, "interludeJson")
 
     const correctAnsNums = correctAnsStr
       ? correctAnsStr
@@ -874,6 +877,23 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
+    let interludeObj: Interlude | undefined
+    if (interludeJsonStr) {
+      try {
+        const rawInterlude = JSON.parse(interludeJsonStr)
+        const parsed = interludeSchema.safeParse(rawInterlude)
+        if (!parsed.success) {
+          throw new Error(`errors:extensions.invalidInterludeJson:Questions!T${r + 1}`)
+        }
+        interludeObj = parsed.data
+      } catch (err: any) {
+        if (err.message && err.message.startsWith("errors:extensions.invalidInterludeJson:Questions!T")) {
+          throw err
+        }
+        throw new Error(`errors:extensions.invalidInterludeJson:Questions!T${r + 1}`)
+      }
+    }
+
     const parseNumOrDefault = (str: string, fallback: number): number => {
       if (!str) return fallback
       const parsed = Number.parseInt(str, 10)
@@ -898,6 +918,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       correctAnswerNumbers: correctAnsNums,
       options: optionsObj,
       reveal: revealObj,
+      interlude: interludeObj,
       extraJson: extraJsonObj,
       answers: [],
     })
@@ -1089,6 +1110,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           answers: qData.answers,
           options: qData.options,
           reveal: qData.reveal,
+          interlude: qData.interlude,
           extraJson,
         })
       } else {
@@ -1111,6 +1133,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
               : [1],
           options: qData.options,
           reveal: qData.reveal,
+          interlude: qData.interlude,
           extraJson,
         })
       }
@@ -1246,12 +1269,23 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       return row[idx].value.trim()
     }
 
+    const seenSettings = new Set<string>()
     for (let r = 1; r < settingsRows.length; r += 1) {
       const row = settingsRows[r]
       const scope = getSVal(row, "scope").toLowerCase()
       const targetKey = getSVal(row, "targetKey")
       const property = getSVal(row, "property")
       const valueJsonStr = getSVal(row, "valueJson")
+
+      if (!scope && !targetKey && !property && !valueJsonStr) {
+        continue
+      }
+
+      if (targetKey !== "show") {
+        throw new Error(
+          `errors:extensions.invalidSettingTargetKey:Settings!B${r + 1}`,
+        )
+      }
 
       if (!scope || !property || !valueJsonStr) {
         continue
@@ -1266,9 +1300,17 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         )
       }
 
+      const settingKey = `${scope}::${property}::${targetKey}`
+      if (seenSettings.has(settingKey)) {
+        throw new Error(
+          `errors:extensions.duplicateSetting:Settings!A${r + 1}`,
+        )
+      }
+      seenSettings.add(settingKey)
+
       settings.push({
         scope: scope as any,
-        targetKey: targetKey || "show",
+        targetKey,
         property,
         valueJson: parsedVal,
       })
@@ -1389,6 +1431,7 @@ export function exportTadaShowWorkbook(
       "revealTrigger",
       "revealAudience",
       "extraJson",
+      "interludeJson",
     ],
   ]
 
@@ -1456,6 +1499,7 @@ export function exportTadaShowWorkbook(
         card.reveal?.trigger ?? "",
         card.reveal?.audience ?? "",
         card.extraJson ? JSON.stringify(card.extraJson) : "",
+        card.interlude ? JSON.stringify(card.interlude) : "",
       ])
 
       for (let a = 0; a < card.answers.length; a += 1) {
@@ -1573,8 +1617,8 @@ export function exportTadaShowWorkbook(
     ],
     [
       "Questions",
-      "Question text, timer, scoring, and media. For quiz, correctAnswers uses 1-based answer numbers (e.g. 2 or 1;3). Survey questions have no correct answers.",
-      "שאלות, טיימר, ניקוד ומדיה. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-4 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
+      "Question text, timer, scoring, media, and optional column T (interludeJson) for per-question interludes. For quiz, correctAnswers uses 1-based answer numbers (e.g. 2 or 1;3). Survey questions have no correct answers.",
+      "שאלות, טיימר, ניקוד, מדיה, ועמודה T אופציונלית (interludeJson) למעברון בין שאלות. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-4 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
     ],
     [
       "Answers",

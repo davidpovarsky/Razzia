@@ -260,6 +260,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           roster: prev.roster ?? createDefaultRosterExtras(),
           perQuestion: prev.perQuestion,
           leaderboard: prev.leaderboard,
+          authoring: (prev as QuizExtrasV2).authoring,
         }
 
         return v2

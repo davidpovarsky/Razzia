@@ -391,5 +391,266 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       const showIdx = validBytes.indexOf(0x53) // 'S'
       expect(validBytes.length).toBeGreaterThan(0)
     })
+
+    it("Gate C01 & C05: exports and imports Questions Column T (interludeJson) losslessly", () => {
+      const interludeObj = {
+        kind: "video" as const,
+        title: "Interlude Clip",
+        url: "https://example.com/media/clip.mp4",
+        durationMs: 7500,
+        advance: "auto" as const,
+        audioCue: "cues.applause",
+      }
+
+      const showWithInterlude: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Interlude XLSX Show",
+        note: "Testing column T persistence",
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Sample Question with Interlude?",
+            answers: [{ text: "Ans1" }, { text: "Ans2" }],
+            correctAnswers: [1],
+            interlude: interludeObj,
+          },
+        ],
+        settings: [],
+      }
+
+      const xlsxBuffer = exportTadaShowWorkbook(showWithInterlude)
+      expect(xlsxBuffer.byteLength).toBeGreaterThan(1000)
+
+      const parsedShow = parseTadaShowWorkbook(xlsxBuffer)
+      expect(parsedShow.cards).toHaveLength(1)
+      const qCard = parsedShow.cards[0] as any
+      expect(qCard.interlude).toBeDefined()
+      expect(qCard.interlude).toEqual(interludeObj)
+    })
+
+    it("Gate C04 & C05: backwards compatibility with older workbook having only A:S columns (no Column T)", () => {
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Legacy 19-Column Show",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Legacy question without column T?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [],
+      }
+
+      const buffer = exportTadaShowWorkbook(show)
+      const entries = extractZipEntries(buffer)
+      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
+      const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
+
+      // Strip column T from header row in sheet3: replace T1 cell if present
+      const strippedXml = sheet3Xml.replace(
+        /<c r="T1"[^>]*>[\s\S]*?<\/c>/u,
+        "",
+      )
+      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(strippedXml))
+
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
+      }
+      const legacyZip = createZipArchive(files)
+
+      const parsed = parseTadaShowWorkbook(legacyZip)
+      expect(parsed.cards).toHaveLength(1)
+      const q = parsed.cards[0] as any
+      expect(q.interlude).toBeUndefined()
+    })
+
+    it("Gate C01 & C05: accepts blank Column T, and rejects malformed interludeJson with Questions!T{row}", () => {
+      const validShow: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Malformed Interlude Test",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [],
+      }
+
+      const buffer = exportTadaShowWorkbook(validShow)
+      const entries = extractZipEntries(buffer)
+      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
+      const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
+
+      // Inject malformed JSON into Questions!T2
+      const injectedXml = sheet3Xml.replace(
+        /<c r="T2"[^>]*>[\s\S]*?<\/c>/u,
+        '<c r="T2" t="inlineStr"><is><t>{notValidJson</t></is></c>',
+      )
+      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(injectedXml))
+
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
+      }
+      const malformedZip = createZipArchive(files)
+
+      expect(() => parseTadaShowWorkbook(malformedZip)).toThrow(
+        "errors:extensions.invalidInterludeJson:Questions!T2",
+      )
+    })
+
+    it("Gate C03 & C05: rejects invalid targetKey in Settings column B with Settings!B{row}", () => {
+      const validShow: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Invalid Settings Target Test",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [
+          {
+            scope: "leaderboard",
+            targetKey: "show",
+            property: "mode",
+            valueJson: "manual",
+          },
+        ],
+      }
+
+      const buffer = exportTadaShowWorkbook(validShow)
+      const entries = extractZipEntries(buffer)
+      const sheet5Bytes = entries.get("xl/worksheets/sheet5.xml")!
+      const sheet5Xml = new TextDecoder("utf-8").decode(sheet5Bytes)
+
+      // Corrupt targetKey cell B2 from 'show' to 'NOT_THE_SHOW'
+      const corruptedXml = sheet5Xml.replace(
+        /<c r="B2"[^>]*>[\s\S]*?<\/c>/u,
+        '<c r="B2" t="inlineStr"><is><t>NOT_THE_SHOW</t></is></c>',
+      )
+      entries.set("xl/worksheets/sheet5.xml", new TextEncoder().encode(corruptedXml))
+
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
+      }
+      const corruptedZip = createZipArchive(files)
+
+      expect(() => parseTadaShowWorkbook(corruptedZip)).toThrow(
+        "errors:extensions.invalidSettingTargetKey:Settings!B2",
+      )
+    })
+
+    it("Gate C01, C02, C05: round-trips Excel -> Native -> Excel -> Native with note, interlude, audio volume, and answer visuals", () => {
+      const interludeObj = {
+        kind: "title" as const,
+        title: "Mid-Game Interlude",
+        durationMs: 3500,
+        advance: "auto" as const,
+      }
+
+      const originalShow: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Complete Roundtrip Show",
+        note: "הערת עורך רשמית\nעם שורה שנייה ומירכאות \"חשוב\"",
+        baseGameMode: "quiz",
+        defaults: {
+          newQuestionMode: "quiz",
+          leaderboardPolicy: "cardOnly",
+          advanceMode: "auto",
+        },
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "What is Paris famous for?",
+            answers: [
+              {
+                text: "Eiffel Tower",
+                display: "both",
+                imageUrl: "https://example.com/media/eiffel.jpg",
+                alt: "Eiffel Tower",
+              },
+              { text: "Louvre", display: "text" },
+            ],
+            correctAnswers: [1],
+            interlude: interludeObj,
+          },
+        ],
+        settings: [
+          {
+            scope: "audio",
+            targetKey: "show",
+            property: "cues",
+            valueJson: {
+              start: {
+                source: "media",
+                url: "https://example.com/media/start.mp3",
+                volume: 0.37,
+                enabled: true,
+                loop: false,
+              },
+            },
+          },
+        ],
+      }
+
+      // 1. Export to Excel
+      const xlsxBytes1 = exportTadaShowWorkbook(originalShow)
+
+      // 2. Parse from Excel
+      const parsedShow1 = parseTadaShowWorkbook(xlsxBytes1)
+      expect(parsedShow1.title).toBe(originalShow.title)
+      expect(parsedShow1.note).toBe(originalShow.note)
+      expect((parsedShow1.cards[0] as any).interlude).toEqual(interludeObj)
+
+      // 3. Authored -> Native Bundle Draft
+      const nativeDraft = authoredShowToNativeBundleDraft(parsedShow1)
+      expect(nativeDraft.ok).toBe(true)
+      const { quizz, extras } = nativeDraft.bundleDraft!
+
+      expect(extras.authoring?.showNote).toBe(originalShow.note)
+      const qId = extras.questionIds[0]
+      expect(extras.perQuestion[qId]?.interlude).toEqual(interludeObj)
+      expect(extras.perQuestion[qId]?.answerVisuals).toBeDefined()
+      expect(extras.audio.cues.start.volume).toBe(0.37)
+
+      // 4. Native -> Excel export
+      const xlsxBytes2 = exportTadaShowWorkbook({ quizz, extras })
+
+      // 5. Parse again from Excel
+      const parsedShow2 = parseTadaShowWorkbook(xlsxBytes2)
+      expect(parsedShow2.title).toBe(originalShow.title)
+      expect(parsedShow2.note).toBe(originalShow.note)
+      expect((parsedShow2.cards[0] as any).interlude).toEqual(interludeObj)
+      expect((parsedShow2.cards[0] as any).answers[0].imageUrl).toBe("https://example.com/media/eiffel.jpg")
+
+      const audioSetting = parsedShow2.settings?.find((s) => s.scope === "audio")
+      expect((audioSetting?.valueJson as any)?.start?.volume).toBe(0.37)
+    })
   })
 })

@@ -7,7 +7,12 @@ import {
   REVEAL_EFFECTS,
   REVEAL_TRIGGERS,
 } from "./constants"
-import { isSafeMediaUrl, questionRevealSchema } from "./media"
+import {
+  interludeSchema,
+  isSafeMediaUrl,
+  questionRevealSchema,
+  type Interlude,
+} from "./media"
 import { studioDefaultsSchema } from "./studio-timeline-schema"
 import { audioExtrasSchema, teamsExtrasSchema } from "./quiz-extras"
 import { rosterExtrasSchema } from "./phone-roster"
@@ -73,6 +78,7 @@ export const authoredQuizCardSchema = z
       .union([multiOptionsValidator, estimationOptionsValidator])
       .optional(),
     reveal: questionRevealSchema.optional(),
+    interlude: interludeSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -122,6 +128,7 @@ export const authoredSurveyCardSchema = z
       .union([multiOptionsValidator, estimationOptionsValidator])
       .optional(),
     reveal: questionRevealSchema.optional(),
+    interlude: interludeSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -363,11 +370,18 @@ export type AuthoredCardOutput = z.infer<typeof authoredCardSchema>
 export const authoredSettingSchema = z
   .strictObject({
     scope: z.string().min(1),
-    targetKey: z.string().min(1),
+    targetKey: z.string(),
     property: z.string().min(1),
     valueJson: z.unknown(),
   })
   .superRefine((setting, ctx) => {
+    if (setting.targetKey !== "show") {
+      ctx.addIssue({
+        code: "custom",
+        path: ["targetKey"],
+        message: `errors:extensions.unsupportedSettingTargetKey:${setting.scope}.${setting.targetKey}`,
+      })
+    }
     if (setting.scope === "leaderboard") {
       if (setting.property === "mode") {
         const parsed = z.enum(LEADERBOARD_MODES).safeParse(setting.valueJson)
@@ -514,9 +528,20 @@ export const tadaShowV1Schema = z
       })
     }
 
-    // Validate that leaderboard afterQuestionIds in settings reference existing question keys
+    // Validate settings uniqueness and leaderboard references
+    const seenSettings = new Set<string>()
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
       const s = show.settings[sIdx]
+      const settingId = `${s.scope}::${s.property}::${s.targetKey}`
+      if (seenSettings.has(settingId)) {
+        ctx.addIssue({
+          code: "custom",
+          path: ["settings", sIdx],
+          message: `errors:extensions.duplicateSetting:${s.scope}.${s.property}`,
+        })
+      }
+      seenSettings.add(settingId)
+
       if (
         s.scope === "leaderboard" &&
         s.property === "afterQuestionIds" &&

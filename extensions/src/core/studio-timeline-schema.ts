@@ -251,6 +251,12 @@ export const studioDefaultsSchema = z.strictObject({
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>
 
+export const authoringMetadataSchema = z.strictObject({
+  showNote: z.string().max(2000).optional(),
+})
+
+export type AuthoringMetadata = z.infer<typeof authoringMetadataSchema>
+
 // ── QuizExtrasV2 Schema ───────────────────────────────────────────────────
 
 export const quizExtrasV2Schema = z
@@ -272,6 +278,7 @@ export const quizExtrasV2Schema = z
     audio: audioExtrasSchema.default(createDefaultAudioExtras()),
     perQuestion: perQuestionExtrasSchema.default({}),
     roster: rosterExtrasSchema.default(createDefaultRosterExtras()),
+    authoring: authoringMetadataSchema.optional(),
   })
   .superRefine((extras, ctx) => {
     // 1. questionIds must be unique

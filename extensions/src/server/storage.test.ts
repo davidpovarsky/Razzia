@@ -667,4 +667,120 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Verify sidecar was NOT written to disk merely by exporting!
     expect(fs.existsSync(sidecarFile)).toBe(false)
   })
+
+  it("Gate C01, C02, C05: imports friendly show with note and interlude, preserves metadata through reload and revision increment", () => {
+    const interludeConfig = {
+      kind: "title" as const,
+      title: "Interlude Break",
+      durationMs: 3500,
+      advance: "manual" as const,
+      audioCue: "start",
+    }
+    const noteText = "הערת עורך לשעשועון חי\nLine 2 with quotes \"tested\""
+
+    const authoredShow = {
+      format: "tada-show",
+      version: 1,
+      title: "Friendly Note & Interlude Show",
+      note: noteText,
+      baseGameMode: "quiz",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "First Question?",
+          answers: [{ text: "Ans1" }, { text: "Ans2" }],
+          correctAnswers: [1],
+          interlude: interludeConfig,
+        },
+      ],
+      settings: [],
+    }
+
+    // 1. Import friendly show via service
+    const { quizId, revision, baseDigest } = service.importEnhancedBundle(authoredShow)
+    expect(quizId).toBeDefined()
+    expect(revision).toBe(1)
+
+    // 2. Reload composite quiz from storage
+    const loaded = service.getCompositeQuiz(quizId)
+    expect(loaded.exists).toBe(true)
+    expect(loaded.extras?.schemaVersion).toBe(2)
+    const extrasV2 = loaded.extras as any
+
+    expect(extrasV2.authoring?.showNote).toBe(noteText)
+    expect(extrasV2.questionIds).toHaveLength(1)
+    const freshQId = extrasV2.questionIds[0]
+    expect(extrasV2.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
+
+    // 3. Export enhanced bundle & verify metadata presence
+    const exportedBundle = service.exportEnhancedBundle(quizId)
+    const exportedExtras = exportedBundle.extras as any
+    expect(exportedExtras.authoring?.showNote).toBe(noteText)
+    expect(exportedExtras.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
+
+    // 4. Save another editor change (revision increment)
+    const updatedExtras = {
+      ...extrasV2,
+      baseDigest: computeCanonicalBaseDigest(loaded.quizz),
+      defaults: {
+        ...extrasV2.defaults,
+        advanceMode: "manual" as const,
+      },
+    }
+    const saveResult = service.saveCompositeQuiz({
+      quizId,
+      quizz: loaded.quizz,
+      extras: updatedExtras,
+      expectedRevision: loaded.extras!.revision,
+    })
+    expect(saveResult.revision).toBe(2)
+
+    // 5. Reopen and verify note and interlude are still intact
+    const reloaded = service.getCompositeQuiz(quizId)
+    const reloadedExtras = reloaded.extras as any
+    expect(reloadedExtras.authoring?.showNote).toBe(noteText)
+    expect(reloadedExtras.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
+    expect(reloadedExtras.defaults.advanceMode).toBe("manual")
+  })
+
+  it("Gate C03 & C05: invalid targetKey direct server import returns 400 and performs zero writes", () => {
+    const initialBaseCount = baseQuizzes.size
+    const authoredWithInvalidTarget = {
+      format: "tada-show",
+      version: 1,
+      title: "Invalid Target Key Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [
+        {
+          scope: "audio",
+          targetKey: "INVALID_TARGET_KEY",
+          property: "cues",
+          valueJson: {},
+        },
+      ],
+    }
+
+    let thrown: unknown = null
+    try {
+      service.importEnhancedBundle(authoredWithInvalidTarget)
+    } catch (err) {
+      thrown = err
+    }
+
+    expect(thrown).toBeInstanceOf(CompositeStorageError)
+    expect((thrown as CompositeStorageError).statusCode).toBe(400)
+    expect((thrown as CompositeStorageError).message).toContain("unsupportedSettingTargetKey")
+    expect(baseQuizzes.size).toBe(initialBaseCount)
+  })
 })

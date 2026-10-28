@@ -124,6 +124,9 @@ export function authoredShowToNativeBundleDraft(
       if (card.reveal) {
         qExtras.reveal = card.reveal
       }
+      if (card.interlude) {
+        qExtras.interlude = card.interlude
+      }
 
       if (Object.keys(qExtras).length > 0) {
         perQuestion[qId] = qExtras
@@ -275,6 +278,13 @@ export function authoredShowToNativeBundleDraft(
   if (show.settings && show.settings.length > 0) {
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
       const s = show.settings[sIdx]
+      if (s.targetKey !== "show") {
+        diagnostics.push({
+          path: ["settings", String(sIdx), "targetKey"],
+          message: `errors:extensions.unsupportedSettingTargetKey:${s.scope}.${s.targetKey}`,
+          severity: "error",
+        })
+      }
       if (s.scope === "leaderboard") {
         if (s.property === "mode" && typeof s.valueJson === "string") {
           leaderboardExtras = {
@@ -355,6 +365,8 @@ export function authoredShowToNativeBundleDraft(
     audio: audioExtras,
     perQuestion,
     roster: rosterExtras,
+    authoring:
+      show.note !== undefined ? { showNote: show.note } : undefined,
   }
 
   const extrasParse = quizExtrasV2Schema.safeParse(extrasCandidate)
@@ -475,6 +487,7 @@ export function nativeBundleToAuthoredShow(
           answers: authoredAnswers,
           options: q.options as any,
           reveal: perQ?.reveal,
+          interlude: perQ?.interlude,
         })
       } else {
         const correctAnswers = rawSolutions.map((solIdx) => solIdx + 1)
@@ -494,6 +507,7 @@ export function nativeBundleToAuthoredShow(
           correctAnswers: correctAnswers.length > 0 ? correctAnswers : [1],
           options: q.options as any,
           reveal: perQ?.reveal,
+          interlude: perQ?.interlude,
         })
       }
     } else {
@@ -670,10 +684,18 @@ export function nativeBundleToAuthoredShow(
     })
   }
 
+  const showNote =
+    extrasV2.authoring?.showNote !== undefined
+      ? extrasV2.authoring.showNote
+      : typeof (quizz as any).note === "string"
+        ? (quizz as any).note
+        : undefined
+
   return {
     format: "tada-show",
     version: 1,
     title: String(quizz.subject ?? "Untitled Show"),
+    note: showNote,
     baseGameMode: (quizz.gameMode as "quiz" | "survey") ?? "quiz",
     defaults: extrasV2.defaults,
     cards,

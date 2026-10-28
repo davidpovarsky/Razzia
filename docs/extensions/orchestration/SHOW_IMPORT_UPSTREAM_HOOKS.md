@@ -37,12 +37,21 @@ Per project governance rules (`GEMINI.md`, `AGENTS.md`, and `docs/extensions/orc
 | **Default-Off & Non-Breaking** | Modal only renders when opened by a user file upload event. If user clicks "Cancel", zero mutations occur on server or local storage. |
 | **Design Language Fidelity** | Built with Radix `AlertDialog` and Razzia `Button` primitives, matching theme colors (`bg-card`, `border-border`, `text-foreground`, `bg-accent`), rounded radii, and Rubik typography. Fully responsive at 1024px and 1280px viewports. |
 
-### 2.3 `packages/e2e/tests/wave1-show-import-acceptance.spec.ts` (New E2E Test Suite)
+### 2.3 `packages/web/src/features/quizz/components/studio/studio-editor-context.tsx`
 
 | Metric / Aspect | Details |
 |---|---|
-| **Symbols Touched** | Acceptance test suite `TADA Studio Show Import/Export Acceptance (JSON + Excel)` |
-| **Rationale** | Verifies end-to-end functionality across manager viewport rendering (1024/1280), template download, JSON and Excel preflight dialogs, zero writes on cancel, and editor redirection. |
+| **Symbols Touched** | `syncToExtras` |
+| **Rationale** | Preserves show-level authoring metadata (`authoring?: { showNote?: string }`) across in-memory Studio state transitions, card additions/deletions/reorders, and editor saves. Prevents show-level notes from being dropped when saving edits in Studio. |
+| **Default-Off & Non-Breaking** | If `(prev as QuizExtrasV2).authoring` is undefined (e.g. legacy quizzes), `authoring` remains undefined. Base `quizz.subject` remains unaltered. |
+| **Design Language Fidelity** | Pure non-visual context state synchronization hook. |
+
+### 2.4 `packages/e2e/tests/wave1-show-import-acceptance.spec.ts` (E2E Test Suite)
+
+| Metric / Aspect | Details |
+|---|---|
+| **Symbols Touched** | Acceptance test suite `TADA Studio Show Import/Export Acceptance (JSON + Excel)` (tests `IMPORT01` through `IMPORT06`) |
+| **Rationale** | Verifies end-to-end functionality across manager viewport rendering (1024/1280), template download, JSON and Excel preflight dialogs, zero writes on cancel, editor redirection, Hebrew note persistence across save/reload, per-question interlude roundtrip, and rejection of invalid `targetKey` / malformed `interludeJson`. |
 | **Default-Off & Non-Breaking** | Isolated E2E test file run under `playwright.wave1-acceptance.config.ts`. No interference with vanilla tests. |
 
 ---

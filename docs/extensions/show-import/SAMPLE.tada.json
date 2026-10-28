@@ -65,6 +65,12 @@
         "durationMs": 2000,
         "trigger": "automatic",
         "audience": "all"
+      },
+      "interlude": {
+        "kind": "title",
+        "title": "Get ready for the answer reveal!",
+        "durationMs": 2000,
+        "advance": "auto"
       }
     },
     {

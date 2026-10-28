@@ -95,6 +95,12 @@ Both formats represent a **complete, ordered show timeline** containing:
         "durationMs": 2000,
         "trigger": "automatic",
         "audience": "all"
+      },
+      "interlude": {
+        "kind": "title",
+        "title": "Get ready for the answer reveal!",
+        "durationMs": 2000,
+        "advance": "auto"
       }
     },
     {
@@ -182,8 +188,8 @@ Exact headers:
   - `extraJson`: Optional strict JSON object for advanced scene properties.
 
 ### 4.3 Sheet `Questions` (One row per question)
-Exact headers:
-`questionKey`, `questionType`, `playMode`, `question`, `category`, `note`, `timeSeconds`, `cooldownSeconds`, `maxPoints`, `penalty`, `mediaType`, `mediaUrl`, `correctAnswers`, `optionsJson`, `revealEffect`, `revealDurationMs`, `revealTrigger`, `revealAudience`, `extraJson`
+Exact headers (Columns A through T):
+`questionKey`, `questionType`, `playMode`, `question`, `category`, `note`, `timeSeconds`, `cooldownSeconds`, `maxPoints`, `penalty`, `mediaType`, `mediaUrl`, `correctAnswers`, `optionsJson`, `revealEffect`, `revealDurationMs`, `revealTrigger`, `revealAudience`, `extraJson`, `interludeJson`
 
 - `questionKey`: Unique identifier referenced by `Timeline` rows.
 - `questionType`: `single`, `multi`, `estimation`.
@@ -198,6 +204,8 @@ Exact headers:
 - `revealDurationMs`: 250 to 15000.
 - `revealTrigger`: `automatic`, `manual`.
 - `revealAudience`: `manager`, `all`.
+- `extraJson`: Optional strict JSON object for advanced question properties.
+- `interludeJson` (Column T): Optional strict JSON object adhering to `interludeSchema`, defining a per-question interlude transition (e.g. `{"kind":"title","title":"Get ready!","durationMs":2000,"advance":"auto"}`). Malformed JSON or schema violations reject import with coordinate `errors:extensions.invalidInterludeJson:Questions!T{row}`.
 
 ### 4.4 Sheet `Answers` (One row per answer)
 Exact headers:
@@ -214,10 +222,11 @@ Exact headers:
 Exact headers:
 `scope`, `targetKey`, `property`, `valueJson`
 
-- `scope`: `show`, `question`, `scene`, `leaderboard`, `audio`, `team`, `roster`.
-- `targetKey`: Card key, question key, or `show`.
-- `property`: Name of the property (validated against allowlist).
+- `scope`: `leaderboard`, `team`, `audio`, `roster`.
+- `targetKey`: For all show-level scopes (`leaderboard`, `team`, `audio`, `roster`), `targetKey` must strictly be `"show"`. Any unknown targetKey, cardKey reference, or non-"show" value is rejected immediately with exact coordinate `errors:extensions.invalidSettingTargetKey:Settings!B{row}`.
+- `property`: Name of the property (validated against allowlist per scope, e.g. `audio.volume`, `leaderboard.mode`).
 - `valueJson`: Strict JSON literal (e.g. `true`, `42`, `{"volume": 0.5}`).
+- **Duplicate Protection:** Multiple rows with identical `scope` and `property` are rejected with `errors:extensions.duplicateSetting:Settings!A{row}`.
 
 ### 4.6 Sheet `Help`
 Informational user documentation in English and Hebrew explaining:
@@ -225,6 +234,7 @@ Informational user documentation in English and Hebrew explaining:
 - 1-based answer numbering.
 - URL security policies (HTTPS and `/media/` only).
 - Formula protection rules (formulas are rejected for safety).
+- Column T (`interludeJson`) schema and usage.
 
 ---
 
@@ -232,7 +242,8 @@ Informational user documentation in English and Hebrew explaining:
 
 1. **Strict Reject on Formulas:** Any spreadsheet cell containing formula tags `<f>` or text values starting with `=`, `+`, `-`, `@`, `\t`, or `\r` (unless escaped with a leading single quote `'`) is strictly rejected with the exact sheet and cell coordinate, e.g. `errors:extensions.formulaCellForbidden:Questions!D2` or `errors:extensions.formulaCellForbidden:Show!B4`. Formulas are never evaluated or executed.
 2. **Hardened Safe Media URLs:** Only `https://` URLs and root-relative `/media/` paths without directory traversal (`..`, `%2e`) or Windows backslashes (`\`) or protocol-relative schemes (`//`) are permitted. Insecure or dangerous schemes (`javascript:`, `data:`, `file:`, `ftp:`, plain `http:`) are rejected immediately across all cards, answers, scenes, audio cues, and legacy quizzes.
-3. **Template & Sample Integrity:** The downloadable `TADA_Show_Template_v1.xlsx` file is a purely blank multi-sheet template containing exact column headers, validation rules, and notes with zero cards. `SAMPLE.xlsx` and `SAMPLE.tada.json` provide full 10-card playable demonstrations. Their SHA-256 hashes are strictly distinct.
-4. **Deterministic ID Generation & Bidirectional Remapping:** During import, human-readable keys (`cardKey`, `questionKey`) are mapped to fresh UUIDs while preserving all relational attachments. Specifically, settings referencing `leaderboard.afterQuestionIds` remap human card keys to generated native question UUIDs on import and restore human keys on export.
-5. **Privacy by Default (Shareable Export):** Exporting shows into human-editable authoring formats (`.tada.json`, `.xlsx`) defaults to shareable mode, omitting telephone roster participant PII (`participants: []`) while retaining invite-only configuration.
-6. **Zero Silent Drops:** Any unknown setting scope, unrecognized setting property, or non-empty `extraJson` payload fails validation with actionable path information. Legacy quizzes without modern fields are cleanly normalized on import without disk writes on export.
+3. **Template & Sample Integrity:** The downloadable `TADA_Show_Template_v1.xlsx` file is a purely blank multi-sheet template containing exact column headers (including Column T `interludeJson`), validation rules, and notes with zero cards. `SAMPLE.xlsx` and `SAMPLE.tada.json` provide full 11-card playable demonstrations across 10 distinct card kinds (2 quiz cards + 1 each of opening, countdown, transition, survey, interimResults, animation, media, leaderboard, closing). Their SHA-256 hashes are strictly distinct.
+4. **Show Note Persistence & Lifecycle:** Show-level authoring notes defined in `Show!B{row}` or JSON `note` are preserved in `extras.authoring.showNote`. They survive editing in Tada Studio without polluting the base `quizz.subject`, and roundtrip losslessly back to `.tada.json` and `.xlsx`.
+5. **Deterministic ID Generation & Bidirectional Remapping:** During import, human-readable keys (`cardKey`, `questionKey`) are mapped to fresh UUIDs while preserving all relational attachments. Specifically, settings referencing `leaderboard.afterQuestionIds` remap human card keys to generated native question UUIDs on import and restore human keys on export.
+6. **Privacy by Default (Shareable Export):** Exporting shows into human-editable authoring formats (`.tada.json`, `.xlsx`) defaults to shareable mode, omitting telephone roster participant PII (`participants: []`) while retaining invite-only configuration.
+7. **Zero Silent Drops:** Any unknown setting scope, unrecognized setting property, invalid targetKey, or non-empty `extraJson` payload fails validation with actionable path or coordinate information. Legacy quizzes without modern fields are cleanly normalized on import without disk writes on export.

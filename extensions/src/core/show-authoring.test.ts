@@ -640,4 +640,335 @@ describe("Show Authoring Schema & Converters", () => {
       "Alice Secret",
     )
   })
+
+  it("Gate C01: preserves quiz and survey perQuestion.interlude across native -> authored -> native", () => {
+    const q1Id = "11111111-1111-1111-1111-111111111111"
+    const q2Id = "22222222-2222-2222-2222-222222222222"
+    const quizInterlude = {
+      kind: "title" as const,
+      title: "Get Ready for the Bonus!",
+      durationMs: 4000,
+      advance: "manual" as const,
+      audioCue: "cues.applause",
+    }
+    const surveyInterlude = {
+      kind: "video" as const,
+      title: "Watch this clip",
+      url: "https://example.com/media/survey-intro.mp4",
+      durationMs: 8000,
+      advance: "auto" as const,
+      audioCue: "cues.countdown",
+    }
+
+    const nativeBundle = {
+      quizz: {
+        gameMode: "quiz" as const,
+        subject: "Interlude Acceptance Quiz",
+        questions: [
+          {
+            type: "single" as const,
+            playMode: "quiz" as const,
+            question: "Quiz Question?",
+            answers: ["Ans A", "Ans B"],
+            solutions: [0],
+            cooldown: 3,
+            time: 20,
+          },
+          {
+            type: "single" as const,
+            playMode: "survey" as const,
+            question: "Survey Question?",
+            answers: ["Yes", "No"],
+            cooldown: 3,
+            time: 15,
+          },
+        ],
+      },
+      extras: {
+        schemaVersion: 2 as const,
+        revision: 1,
+        quizId: "33333333-3333-3333-3333-333333333333",
+        baseDigest: "dummy-digest",
+        questionIds: [q1Id, q2Id],
+        timeline: [
+          { id: "44444444-4444-4444-4444-444444444444", kind: "question" as const, questionId: q1Id },
+          { id: "55555555-5555-5555-5555-555555555555", kind: "question" as const, questionId: q2Id },
+        ],
+        scenes: {},
+        defaults: { newQuestionMode: "quiz" as const, leaderboardPolicy: "cardOnly" as const, advanceMode: "auto" as const },
+        perQuestion: {
+          [q1Id]: { interlude: quizInterlude },
+          [q2Id]: { interlude: surveyInterlude },
+        },
+      },
+    }
+
+    // 1. Native -> Authored
+    const authored = nativeBundleToAuthoredShow(nativeBundle as any)
+    expect(authored.cards).toHaveLength(2)
+
+    const authoredQ1 = authored.cards[0] as any
+    expect(authoredQ1.kind).toBe("quiz")
+    expect(authoredQ1.interlude).toEqual(quizInterlude)
+
+    const authoredQ2 = authored.cards[1] as any
+    expect(authoredQ2.kind).toBe("survey")
+    expect(authoredQ2.interlude).toEqual(surveyInterlude)
+
+    // 2. Authored -> Native Draft
+    const converted = authoredShowToNativeBundleDraft(authored)
+    expect(converted.ok).toBe(true)
+    expect(converted.bundleDraft).toBeDefined()
+
+    const { extras: roundtripExtras, quizz: roundtripQuizz } = converted.bundleDraft!
+    expect(roundtripExtras.questionIds).toHaveLength(2)
+    const newQ1Id = roundtripExtras.questionIds[0]
+    const newQ2Id = roundtripExtras.questionIds[1]
+
+    expect(roundtripExtras.perQuestion[newQ1Id]?.interlude).toEqual(quizInterlude)
+    expect(roundtripExtras.perQuestion[newQ2Id]?.interlude).toEqual(surveyInterlude)
+
+    // Ensure no spurious timeline scenes were injected
+    expect(roundtripExtras.timeline).toHaveLength(2)
+    expect(roundtripExtras.timeline.every((t) => t.kind === "question")).toBe(true)
+  })
+
+  it("Gate C01: preserves answerVisuals, reveal, and interlude simultaneously without collision", () => {
+    const qId = "11111111-2222-3333-4444-555555555555"
+    const interludeConfig = {
+      kind: "image" as const,
+      title: "Next Question Visual",
+      url: "https://example.com/media/preview.png",
+      durationMs: 5000,
+      advance: "auto" as const,
+    }
+    const revealConfig = {
+      effect: "blur" as const,
+      durationMs: 3000,
+      trigger: "automatic" as const,
+      audience: "all" as const,
+    }
+    const visualsConfig = [
+      {
+        answerIndex: 0,
+        display: "image" as const,
+        url: "https://example.com/media/ans1.png",
+        alt: "Answer 1 Visual",
+      },
+    ]
+
+    const nativeBundle = {
+      quizz: {
+        gameMode: "quiz" as const,
+        subject: "Triple Combination Quiz",
+        questions: [
+          {
+            type: "single" as const,
+            playMode: "quiz" as const,
+            question: "Full feature test?",
+            answers: ["Choice A", "Choice B"],
+            solutions: [0],
+            cooldown: 3,
+            time: 20,
+          },
+        ],
+      },
+      extras: {
+        schemaVersion: 2 as const,
+        revision: 1,
+        quizId: "66666666-6666-6666-6666-666666666666",
+        baseDigest: "dummy-digest",
+        questionIds: [qId],
+        timeline: [{ id: "77777777-7777-7777-7777-777777777777", kind: "question" as const, questionId: qId }],
+        scenes: {},
+        defaults: { newQuestionMode: "quiz" as const, leaderboardPolicy: "cardOnly" as const, advanceMode: "auto" as const },
+        perQuestion: {
+          [qId]: {
+            answerVisuals: visualsConfig,
+            reveal: revealConfig,
+            interlude: interludeConfig,
+          },
+        },
+      },
+    }
+
+    const authored = nativeBundleToAuthoredShow(nativeBundle as any)
+    const card = authored.cards[0] as any
+    expect(card.answers[0].imageUrl).toBe("https://example.com/media/ans1.png")
+    expect(card.reveal).toEqual(revealConfig)
+    expect(card.interlude).toEqual(interludeConfig)
+
+    const roundtrip = authoredShowToNativeBundleDraft(authored)
+    expect(roundtrip.ok).toBe(true)
+    const newQId = roundtrip.bundleDraft!.extras.questionIds[0]
+    const roundtripItem = roundtrip.bundleDraft!.extras.perQuestion[newQId]
+
+    expect(roundtripItem.answerVisuals).toEqual(visualsConfig)
+    expect(roundtripItem.reveal).toEqual(revealConfig)
+    expect(roundtripItem.interlude).toEqual(interludeConfig)
+  })
+
+  it("Gate C02: persists show-level note across friendly -> native -> friendly (Hebrew, newlines, empty, absent)", () => {
+    const testCases: Array<{ name: string; note: string | undefined; expectedNote: string | undefined }> = [
+      {
+        name: "Hebrew note with punctuation and emojis",
+        note: "הערת מפיק ראשית: נא לוודא סאונד במיקרופונים! 🎤✨",
+        expectedNote: "הערת מפיק ראשית: נא לוודא סאונד במיקרופונים! 🎤✨",
+      },
+      {
+        name: "Multiline note with quotes and newlines",
+        note: "Line 1: Special briefing\nLine 2: \"Do not reveal answer before cue 3\"\nLine 3: Final notes.",
+        expectedNote: "Line 1: Special briefing\nLine 2: \"Do not reveal answer before cue 3\"\nLine 3: Final notes.",
+      },
+      {
+        name: "Absent note",
+        note: undefined,
+        expectedNote: undefined,
+      },
+    ]
+
+    for (const tc of testCases) {
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: `Show with ${tc.name}`,
+        note: tc.note,
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [],
+      }
+
+      // Friendly -> Native Draft
+      const converted = authoredShowToNativeBundleDraft(show)
+      expect(converted.ok).toBe(true)
+      const { extras } = converted.bundleDraft!
+
+      if (tc.expectedNote !== undefined) {
+        expect(extras.authoring?.showNote).toBe(tc.expectedNote)
+      } else {
+        expect(extras.authoring).toBeUndefined()
+      }
+
+      // Native Draft -> Friendly
+      const backToAuthored = nativeBundleToAuthoredShow(converted.bundleDraft!)
+      expect(backToAuthored.note).toBe(tc.expectedNote)
+    }
+  })
+
+  it("Gate C03: strictly rejects invalid or non-'show' targetKey for all supported scopes", () => {
+    const invalidTargetCases = [
+      {
+        scope: "audio",
+        targetKey: "NOT_THE_SHOW",
+        property: "cues",
+        valueJson: {},
+      },
+      {
+        scope: "team",
+        targetKey: "Q01",
+        property: "config",
+        valueJson: { enabled: false, teams: [], autoAssign: "roundRobin" },
+      },
+      {
+        scope: "leaderboard",
+        targetKey: "random-uuid-1234",
+        property: "mode",
+        valueJson: "manual",
+      },
+      {
+        scope: "roster",
+        targetKey: "",
+        property: "config",
+        valueJson: { phoneInviteOnly: false, participants: [] },
+      },
+    ]
+
+    for (const invalidSetting of invalidTargetCases) {
+      const showWithInvalidSetting = {
+        format: "tada-show",
+        version: 1,
+        title: "Invalid Setting Show",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question text?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [invalidSetting],
+      }
+
+      const parseResult = tadaShowV1Schema.safeParse(showWithInvalidSetting)
+      expect(parseResult.success).toBe(false)
+      if (!parseResult.success) {
+        const issue = parseResult.error.issues.find(
+          (i) => i.path.join(".") === "settings.0.targetKey",
+        )
+        expect(issue).toBeDefined()
+        expect(issue!.message).toContain("unsupportedSettingTargetKey")
+      }
+
+      // Direct converter also rejects
+      const convertResult = authoredShowToNativeBundleDraft(showWithInvalidSetting)
+      expect(convertResult.ok).toBe(false)
+      const diag = convertResult.diagnostics.find(
+        (d) => d.path.join(".") === "settings.0.targetKey",
+      )
+      expect(diag).toBeDefined()
+    }
+  })
+
+  it("Gate C03: rejects duplicate settings definitions deterministically", () => {
+    const showWithDuplicates = {
+      format: "tada-show",
+      version: 1,
+      title: "Duplicate Setting Show",
+      cards: [
+        {
+          key: "Q01",
+          kind: "quiz",
+          questionType: "single",
+          question: "Question text?",
+          answers: [{ text: "A" }, { text: "B" }],
+          correctAnswers: [1],
+        },
+      ],
+      settings: [
+        {
+          scope: "leaderboard",
+          targetKey: "show",
+          property: "mode",
+          valueJson: "manual",
+        },
+        {
+          scope: "leaderboard",
+          targetKey: "show",
+          property: "mode",
+          valueJson: "everyN",
+        },
+      ],
+    }
+
+    const parseResult = tadaShowV1Schema.safeParse(showWithDuplicates)
+    expect(parseResult.success).toBe(false)
+    if (!parseResult.success) {
+      const issue = parseResult.error.issues.find((i) =>
+        i.message.includes("duplicateSetting:leaderboard.mode"),
+      )
+      expect(issue).toBeDefined()
+      expect(issue!.path).toEqual(["settings", 1])
+    }
+  })
 })
