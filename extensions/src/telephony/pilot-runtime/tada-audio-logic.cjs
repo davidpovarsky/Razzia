@@ -132,7 +132,7 @@ function event(s, keyValue, current, options = {}) {
   }
   s.handled.add(previous);
 
-  const valid = isDigit(value) && /^[1-4]$/.test(value);
+  const valid = isDigit(value) && /^[1-5]$/.test(value);
   if (!valid) {
     return {
       cue: CUES.neutral,

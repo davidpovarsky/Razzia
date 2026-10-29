@@ -716,6 +716,7 @@ export class RoundManager {
       questionType: this.question.type,
       options: this.question.options,
       answersOnly: this.opts.getSettings().answersOnly,
+      playMode: this.isSurvey() ? "survey" : "quiz",
     })
 
     await this.opts.cooldown.start(this.question.time)

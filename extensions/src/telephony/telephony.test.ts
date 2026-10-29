@@ -292,12 +292,13 @@ describe("PHONE02: Digit 1..4 Accepted During SELECT_ANSWER Only", () => {
     expect(recorded[0].serverReceivedAt).toBeGreaterThan(0)
   })
 
-  it("maps digits 1, 2, 3, 4 correctly to indices 0, 1, 2, 3", () => {
+  it("maps digits 1, 2, 3, 4, 5 correctly to indices 0, 1, 2, 3, 4", () => {
     expect(mapDtmfToAnswerIndex("1")).toBe(0)
     expect(mapDtmfToAnswerIndex("2")).toBe(1)
     expect(mapDtmfToAnswerIndex("3")).toBe(2)
     expect(mapDtmfToAnswerIndex("4")).toBe(3)
-    expect(mapDtmfToAnswerIndex("5")).toBeNull()
+    expect(mapDtmfToAnswerIndex("5")).toBe(4)
+    expect(mapDtmfToAnswerIndex("6")).toBeNull()
     expect(mapDtmfToAnswerIndex("0")).toBeNull()
     expect(mapDtmfToAnswerIndex("*")).toBeNull()
     expect(mapDtmfToAnswerIndex("#")).toBeNull()
@@ -399,24 +400,33 @@ describe("PHONE04: Unsupported Question Types Handling", () => {
     expect(check.reason).toContain("Estimation")
   })
 
-  it("rejects survey questions with informative phone prompt", () => {
+  it("supports single-choice survey questions with <= 5 answer options", () => {
     const check = isQuestionSupportedOnPstn(
       QUIZZ_MODES.SURVEY,
       QUESTION_TYPES.SINGLE,
+      5,
+    )
+    expect(check.supported).toBe(true)
+  })
+
+  it("rejects multi-choice survey questions with informative phone prompt", () => {
+    const check = isQuestionSupportedOnPstn(
+      QUIZZ_MODES.SURVEY,
+      QUESTION_TYPES.MULTI,
       4,
     )
     expect(check.supported).toBe(false)
-    expect(check.reason).toContain("Survey")
+    expect(check.reason).toContain("Only single-choice survey questions are supported")
   })
 
-  it("rejects questions with >4 answer options", () => {
+  it("rejects questions with >5 answer options", () => {
     const check = isQuestionSupportedOnPstn(
       QUIZZ_MODES.QUIZ,
       QUESTION_TYPES.SINGLE,
-      5,
+      6,
     )
     expect(check.supported).toBe(false)
-    expect(check.reason).toContain("exceed telephone keypad limit of 4")
+    expect(check.reason).toContain("exceed telephone keypad limit of 5")
   })
 
   it("delivers informative prompt to caller without affecting web clients", async () => {

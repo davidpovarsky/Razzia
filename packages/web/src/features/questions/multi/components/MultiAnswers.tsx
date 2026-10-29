@@ -49,7 +49,10 @@ const MultiAnswers = ({
           return (
             <AnswerButton
               key={key}
-              className={ANSWERS_COLORS[key]}
+              className={clsx(
+                ANSWERS_COLORS[key],
+                answers.length === 5 && key === 4 && "col-span-1 sm:col-span-2",
+              )}
               label={ANSWERS_LABELS[key]}
               onClick={() => toggle(key)}
               selected={readOnly ? undefined : isSelected}

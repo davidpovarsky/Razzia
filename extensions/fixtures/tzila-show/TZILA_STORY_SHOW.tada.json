@@ -1,0 +1,559 @@
+{
+  "format": "tada-show",
+  "version": 1,
+  "title": "Build Our Story — Tzila · Two-Round Audience Vote",
+  "note": "SOURCE: email forwarded from Tzila Phirer by Goldy on 29 Oct 2026. 2 rounds x 5 polls, each 5 options and 20 s. Category 3 and 5 are reused in both rounds. Round 2 main character asset is mislabelled Category 2 in its original filename; assigned as Category 1 by visual content. Await code upgrade: 5-option survey / PSTN 1–5 / winner reveal / uploaded media. Not importable on current 4-choice code.",
+  "baseGameMode": "survey",
+  "defaults": {
+    "newQuestionMode": "survey",
+    "leaderboardPolicy": "cardOnly",
+    "advanceMode": "manual"
+  },
+  "cards": [
+    {
+      "key": "OPENING",
+      "kind": "opening",
+      "title": "Build Our Story!",
+      "subtitle": "Two rounds. Five choices per question. You decide what happens.",
+      "durationMs": 5000,
+      "advance": "manual"
+    },
+    {
+      "key": "R1C1",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 1 · Who is the main character?",
+      "category": "Round 1 / Main Character",
+      "note": "Vote by pressing 1–5. Source: Category 1 - Main Character.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Mechaneches",
+          "display": "both",
+          "imageUrl": "/media/tzila-c1-option-01-aKzAuuKO.png",
+          "alt": "Mechaneches — Main Character, round 1, choice 1"
+        },
+        {
+          "text": "Working Girl",
+          "display": "both",
+          "imageUrl": "/media/tzila-c1-option-02-tbBgtsxU.png",
+          "alt": "Working Girl — Main Character, round 1, choice 2"
+        },
+        {
+          "text": "Beloved Grandma",
+          "display": "both",
+          "imageUrl": "/media/tzila-c1-option-03-cVzifRWu.png",
+          "alt": "Beloved Grandma — Main Character, round 1, choice 3"
+        },
+        {
+          "text": "Businessman",
+          "display": "both",
+          "imageUrl": "/media/tzila-c1-option-04-2sUH-rlz.png",
+          "alt": "Businessman — Main Character, round 1, choice 4"
+        },
+        {
+          "text": "Doctor",
+          "display": "both",
+          "imageUrl": "/media/tzila-c1-option-05-i6ikqHvD.png",
+          "alt": "Doctor — Main Character, round 1, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R1C1_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R1C2",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 1 · Who is the second character?",
+      "category": "Round 1 / Second Character",
+      "note": "Vote by pressing 1–5. Source: Category 2 - Second Character.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Nun",
+          "display": "both",
+          "imageUrl": "/media/tzila-c2-option-01-Oz5PlexV.png",
+          "alt": "Nun — Second Character, round 1, choice 1"
+        },
+        {
+          "text": "Chassid from the Shtetl",
+          "display": "both",
+          "imageUrl": "/media/tzila-c2-option-02-aH1kojxK.png",
+          "alt": "Chassid from the Shtetl — Second Character, round 1, choice 2"
+        },
+        {
+          "text": "Queen Elizabeth",
+          "display": "both",
+          "imageUrl": "/media/tzila-c2-option-03-9DPde3-t.png",
+          "alt": "Queen Elizabeth — Second Character, round 1, choice 3"
+        },
+        {
+          "text": "Mysterious Stranger",
+          "display": "both",
+          "imageUrl": "/media/tzila-c2-option-04-1OlBTRLF.png",
+          "alt": "Mysterious Stranger — Second Character, round 1, choice 4"
+        },
+        {
+          "text": "Street Urchin",
+          "display": "both",
+          "imageUrl": "/media/tzila-c2-option-05-wjOPWuFv.png",
+          "alt": "Street Urchin — Second Character, round 1, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R1C2_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R1C3",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 1 · In which era does the story take place?",
+      "category": "Round 1 / Era",
+      "note": "Vote by pressing 1–5. Source: Category 3 - Era.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "BCE",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-01-rjP9THoP.png",
+          "alt": "BCE — Era, round 1, choice 1"
+        },
+        {
+          "text": "Victorian Era",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-02-uikxcKKC.png",
+          "alt": "Victorian Era — Era, round 1, choice 2"
+        },
+        {
+          "text": "WWII",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-03-bKcSx-fi.png",
+          "alt": "WWII — Era, round 1, choice 3"
+        },
+        {
+          "text": "2020",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-04-Nnv4hxK4.png",
+          "alt": "2020 — Era, round 1, choice 4"
+        },
+        {
+          "text": "2080",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-05-IpX-zLuX.png",
+          "alt": "2080 — Era, round 1, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R1C3_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R1C4",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 1 · What is the crisis?",
+      "category": "Round 1 / Crisis",
+      "note": "Vote by pressing 1–5. Source: Category 4 Crisis.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "A Family Feud",
+          "display": "both",
+          "imageUrl": "/media/tzila-c4-option-01-P6XVaYUa.png",
+          "alt": "A Family Feud — Crisis, round 1, choice 1"
+        },
+        {
+          "text": "A Shocking Confession",
+          "display": "both",
+          "imageUrl": "/media/tzila-c4-option-02-DkSY2ja0.png",
+          "alt": "A Shocking Confession — Crisis, round 1, choice 2"
+        },
+        {
+          "text": "The Ultimate Betrayal",
+          "display": "both",
+          "imageUrl": "/media/tzila-c4-option-03-kgxoIvc1.png",
+          "alt": "The Ultimate Betrayal — Crisis, round 1, choice 3"
+        },
+        {
+          "text": "An Impossible Choice",
+          "display": "both",
+          "imageUrl": "/media/tzila-c4-option-04-6zze7JXB.png",
+          "alt": "An Impossible Choice — Crisis, round 1, choice 4"
+        },
+        {
+          "text": "A Broken Promise",
+          "display": "both",
+          "imageUrl": "/media/tzila-c4-option-05-2auhpNg4.png",
+          "alt": "A Broken Promise — Crisis, round 1, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R1C4_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R1C5",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 1 · How should the story end?",
+      "category": "Round 1 / How Should It End?",
+      "note": "Vote by pressing 1–5. Source: Category 5 How should it end.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Cliffhanger",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-01-aBX8s-q1.png",
+          "alt": "Cliffhanger — How Should It End?, round 1, choice 1"
+        },
+        {
+          "text": "Wrapped in a Bow",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-02-lhL9nJoc.png",
+          "alt": "Wrapped in a Bow — How Should It End?, round 1, choice 2"
+        },
+        {
+          "text": "Unexpected Twist",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-03-T31DO49G.png",
+          "alt": "Unexpected Twist — How Should It End?, round 1, choice 3"
+        },
+        {
+          "text": "The Ultimate Betrayal",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-04-D0dwnb4x.png",
+          "alt": "The Ultimate Betrayal — How Should It End?, round 1, choice 4"
+        },
+        {
+          "text": "Happily Ever After",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-05-MY6cvQFb.png",
+          "alt": "Happily Ever After — How Should It End?, round 1, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R1C5_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "ROUND_2",
+      "kind": "transition",
+      "title": "Round 2",
+      "description": "A new story begins — vote again!",
+      "durationMs": 4000,
+      "advance": "manual"
+    },
+    {
+      "key": "R2C1",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 2 · Who is the main character?",
+      "category": "Round 2 / Main Character",
+      "note": "Vote by pressing 1–5. Source: Round 2 - Category 2 - Main Character.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Rosh Yeshiva",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c1-option-01-YeROLlPH.png",
+          "alt": "Rosh Yeshiva — Main Character, round 2, choice 1"
+        },
+        {
+          "text": "Troubled Teenager",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c1-option-02-rfx2AXpd.png",
+          "alt": "Troubled Teenager — Main Character, round 2, choice 2"
+        },
+        {
+          "text": "Little Munchkin",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c1-option-03-Eqxr-lEd.png",
+          "alt": "Little Munchkin — Main Character, round 2, choice 3"
+        },
+        {
+          "text": "Yenta",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c1-option-04-vpIZzglB.png",
+          "alt": "Yenta — Main Character, round 2, choice 4"
+        },
+        {
+          "text": "Cashier",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c1-option-05-kc3zoXbM.png",
+          "alt": "Cashier — Main Character, round 2, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R2C1_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R2C2",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 2 · Who is the second character?",
+      "category": "Round 2 / Second Character",
+      "note": "Vote by pressing 1–5. Source: Round 2 - Category 2 - Second Character.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Lamplighter",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c2-option-01-8G4pJZ9r.png",
+          "alt": "Lamplighter — Second Character, round 2, choice 1"
+        },
+        {
+          "text": "Therapist",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c2-option-02-VJHNxBda.png",
+          "alt": "Therapist — Second Character, round 2, choice 2"
+        },
+        {
+          "text": "Faithful Dog",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c2-option-03-PPZRcF6Y.png",
+          "alt": "Faithful Dog — Second Character, round 2, choice 3"
+        },
+        {
+          "text": "Shadchan",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c2-option-04-rI5EujuM.png",
+          "alt": "Shadchan — Second Character, round 2, choice 4"
+        },
+        {
+          "text": "Pirate",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c2-option-05-CTr4YBsl.png",
+          "alt": "Pirate — Second Character, round 2, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R2C2_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R2C3",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 2 · In which era does the story take place?",
+      "category": "Round 2 / Era",
+      "note": "Vote by pressing 1–5. Source: Category 3 - Era.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "BCE",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-01-rjP9THoP.png",
+          "alt": "BCE — Era, round 2, choice 1"
+        },
+        {
+          "text": "Victorian Era",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-02-uikxcKKC.png",
+          "alt": "Victorian Era — Era, round 2, choice 2"
+        },
+        {
+          "text": "WWII",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-03-bKcSx-fi.png",
+          "alt": "WWII — Era, round 2, choice 3"
+        },
+        {
+          "text": "2020",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-04-Nnv4hxK4.png",
+          "alt": "2020 — Era, round 2, choice 4"
+        },
+        {
+          "text": "2080",
+          "display": "both",
+          "imageUrl": "/media/tzila-c3-option-05-IpX-zLuX.png",
+          "alt": "2080 — Era, round 2, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R2C3_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R2C4",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 2 · What is the crisis?",
+      "category": "Round 2 / Crisis",
+      "note": "Vote by pressing 1–5. Source: Round 2. Category 4 - Crisis.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "A Misunderstanding",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c4-option-01-_oBnRwvM.png",
+          "alt": "A Misunderstanding — Crisis, round 2, choice 1"
+        },
+        {
+          "text": "Double Life",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c4-option-02-CxaL_2X-.png",
+          "alt": "Double Life — Crisis, round 2, choice 2"
+        },
+        {
+          "text": "A Secret Exposed",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c4-option-03-PpWK0DUB.png",
+          "alt": "A Secret Exposed — Crisis, round 2, choice 3"
+        },
+        {
+          "text": "Shattered Dreams",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c4-option-04-_UfebHTh.png",
+          "alt": "Shattered Dreams — Crisis, round 2, choice 4"
+        },
+        {
+          "text": "A Test of Loyalty",
+          "display": "both",
+          "imageUrl": "/media/tzila-r2c4-option-05-40sguyO8.png",
+          "alt": "A Test of Loyalty — Crisis, round 2, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R2C4_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "R2C5",
+      "kind": "survey",
+      "questionType": "single",
+      "question": "Round 2 · How should the story end?",
+      "category": "Round 2 / How Should It End?",
+      "note": "Vote by pressing 1–5. Source: Category 5 How should it end.png. 20-second answer timer. No correct answer and no scoring.",
+      "timeSeconds": 20,
+      "cooldownSeconds": 3,
+      "maxPoints": 0,
+      "penalty": 0,
+      "answers": [
+        {
+          "text": "Cliffhanger",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-01-aBX8s-q1.png",
+          "alt": "Cliffhanger — How Should It End?, round 2, choice 1"
+        },
+        {
+          "text": "Wrapped in a Bow",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-02-lhL9nJoc.png",
+          "alt": "Wrapped in a Bow — How Should It End?, round 2, choice 2"
+        },
+        {
+          "text": "Unexpected Twist",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-03-T31DO49G.png",
+          "alt": "Unexpected Twist — How Should It End?, round 2, choice 3"
+        },
+        {
+          "text": "The Ultimate Betrayal",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-04-D0dwnb4x.png",
+          "alt": "The Ultimate Betrayal — How Should It End?, round 2, choice 4"
+        },
+        {
+          "text": "Happily Ever After",
+          "display": "both",
+          "imageUrl": "/media/tzila-c5-option-05-MY6cvQFb.png",
+          "alt": "Happily Ever After — How Should It End?, round 2, choice 5"
+        }
+      ],
+      "correctAnswers": []
+    },
+    {
+      "key": "R2C5_RESULTS",
+      "kind": "interimResults",
+      "title": "The audience has decided!",
+      "durationMs": 10000,
+      "advance": "manual"
+    },
+    {
+      "key": "FINALE",
+      "kind": "closing",
+      "title": "Our Story Is Complete!",
+      "subtitle": "Thank you for voting!",
+      "durationMs": 5000,
+      "advance": "manual"
+    }
+  ],
+  "settings": []
+}

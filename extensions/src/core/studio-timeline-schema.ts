@@ -222,9 +222,12 @@ export interface PublicRankEntry {
 }
 
 export interface PublicInterimOption {
+  answerIndex?: number
   label: string
   count: number
   percentage: number
+  imageUrl?: string
+  alt?: string
 }
 
 export interface PublicInterimResults {
@@ -232,6 +235,8 @@ export interface PublicInterimResults {
   questionText: string
   totalResponders: number
   options: PublicInterimOption[]
+  winners?: number[]
+  isTie?: boolean
 }
 
 export interface ActiveSceneData {

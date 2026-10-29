@@ -19,6 +19,7 @@ import { rosterExtrasSchema } from "./phone-roster"
 import { questionMediaValidator } from "@razzia/common/validators/quizz"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
 import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
+import { MAX_ANSWERS } from "@razzia/common/constants"
 
 export const TADA_SHOW_FORMAT = "tada-show" as const
 export const TADA_SHOW_VERSION = 1 as const
@@ -72,8 +73,8 @@ export const authoredQuizCardSchema = z
     maxPoints: z.number().int().min(0).default(1000),
     penalty: z.number().int().min(0).default(0),
     media: questionMediaValidator.optional(),
-    answers: z.array(authoredAnswerSchema).min(2).max(4),
-    correctAnswers: z.array(z.number().int().min(1).max(4)).min(1),
+    answers: z.array(authoredAnswerSchema).min(2).max(MAX_ANSWERS),
+    correctAnswers: z.array(z.number().int().min(1).max(MAX_ANSWERS)).min(1),
     options: z
       .union([multiOptionsValidator, estimationOptionsValidator])
       .optional(),
@@ -122,7 +123,7 @@ export const authoredSurveyCardSchema = z
     maxPoints: z.number().int().min(0).default(0),
     penalty: z.number().int().min(0).default(0),
     media: questionMediaValidator.optional(),
-    answers: z.array(authoredAnswerSchema).min(2).max(4),
+    answers: z.array(authoredAnswerSchema).min(2).max(MAX_ANSWERS),
     correctAnswers: z.array(z.number().int()).max(0).optional(),
     options: z
       .union([multiOptionsValidator, estimationOptionsValidator])

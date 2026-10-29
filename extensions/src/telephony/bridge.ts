@@ -1,3 +1,4 @@
+import { QUIZZ_MODES } from "@razzia/common/constants"
 import { normalizePhoneE164 } from "../core/phone-roster"
 import {
   isQuestionSupportedOnPstn,
@@ -462,6 +463,7 @@ export class TelephonyBridge {
       gameState.gameMode ?? "quiz",
       gameState.questionType ?? "single",
       gameState.answersCount,
+      gameState.playMode,
     )
 
     if (!pstnSupport.supported) {
@@ -489,7 +491,8 @@ export class TelephonyBridge {
       }
     }
 
-    // Map digit 1..4 -> index 0..3
+
+    // Map digit 1..5 -> index 0..4
     const answerIndex = mapDtmfToAnswerIndex(firstDigit)
 
     if (answerIndex === null) {
@@ -497,7 +500,7 @@ export class TelephonyBridge {
         success: false,
         directive: {
           type: "play",
-          message: "Please press a number between 1 and 4 for your answer.",
+          message: "Please press a number between 1 and 5 for your answer.",
         },
         error: "Invalid answer digit",
       }
@@ -535,6 +538,20 @@ export class TelephonyBridge {
       }
     }
 
+    // Check bounds against active question
+    if (answerIndex >= gameState.answersCount) {
+      const maxAns = Math.min(gameState.answersCount || 5, 5)
+      return {
+        success: false,
+        directive: {
+          type: "play",
+          message: `Please press a number between 1 and ${maxAns} for your answer.`,
+        },
+        error: "Invalid answer digit",
+      }
+    }
+
+
     // Submit answer to Razzia server (server receipt time is authoritative)
     const submitResult = client.selectAnswer(answerIndex)
 
@@ -554,11 +571,19 @@ export class TelephonyBridge {
     session.lastEpochAnswered = currentEpoch
     session.updatedAt = Date.now()
 
+    const isSurvey =
+      gameState.playMode === "survey" ||
+      (!gameState.playMode && gameState.gameMode === QUIZZ_MODES.SURVEY)
+
+    const message = isSurvey
+      ? "Thank you. Your answer has been recorded."
+      : `Answer ${firstDigit} submitted. Waiting for results.`
+
     return {
       success: true,
       directive: {
         type: "play",
-        message: `Answer ${firstDigit} submitted. Waiting for results.`,
+        message,
         continueCall: true,
       },
     }

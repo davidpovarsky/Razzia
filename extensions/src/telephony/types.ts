@@ -235,6 +235,10 @@ export function mapDtmfToAnswerIndex(digit: string): number | null {
       return 3
     }
 
+    case "5": {
+      return 4
+    }
+
     default: {
       return null
     }
@@ -243,40 +247,47 @@ export function mapDtmfToAnswerIndex(digit: string): number | null {
 
 /**
  * Checks if a game question is supported over telephone keypad.
- * Telephone PSTN v1 only supports single-choice questions with <= 4 options.
- * Multi-choice, estimation, survey, or >4 options are explicitly unsupported.
+ * Telephone PSTN supports single-choice questions (quiz or survey) with <= 5 options.
+ * Multi-choice, estimation, or >5 options are explicitly unsupported.
  */
 export function isQuestionSupportedOnPstn(
   gameMode: string,
   questionType: string,
   answersCount: number,
+  playMode?: string | null,
 ): { supported: boolean; reason?: string } {
-  if (gameMode === QUIZZ_MODES.SURVEY) {
-    return {
-      supported: false,
-      reason: "Survey questions are not supported via telephone keypad.",
+  const isSurvey =
+    playMode === "survey" || (!playMode && gameMode === QUIZZ_MODES.SURVEY)
+
+  if (isSurvey) {
+    if (questionType !== QUESTION_TYPES.SINGLE) {
+      return {
+        supported: false,
+        reason:
+          "Only single-choice survey questions are supported via telephone keypad.",
+      }
+    }
+  } else {
+    if (questionType === QUESTION_TYPES.MULTI) {
+      return {
+        supported: false,
+        reason:
+          "Multiple-selection questions are not supported via telephone keypad.",
+      }
+    }
+
+    if (questionType === QUESTION_TYPES.ESTIMATION) {
+      return {
+        supported: false,
+        reason: "Estimation questions are not supported via telephone keypad.",
+      }
     }
   }
 
-  if (questionType === QUESTION_TYPES.MULTI) {
+  if (answersCount > 5) {
     return {
       supported: false,
-      reason:
-        "Multiple-selection questions are not supported via telephone keypad.",
-    }
-  }
-
-  if (questionType === QUESTION_TYPES.ESTIMATION) {
-    return {
-      supported: false,
-      reason: "Estimation questions are not supported via telephone keypad.",
-    }
-  }
-
-  if (answersCount > 4) {
-    return {
-      supported: false,
-      reason: `Questions with ${answersCount} answers exceed telephone keypad limit of 4.`,
+      reason: `Questions with ${answersCount} answers exceed telephone keypad limit of 5.`,
     }
   }
 

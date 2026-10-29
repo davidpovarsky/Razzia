@@ -14,6 +14,7 @@ export const CANONICAL_ANSWER_COLORS = [
   "bg-[var(--color-answer-2)] text-white",
   "bg-[var(--color-answer-3)] text-white",
   "bg-[var(--color-answer-4)] text-white",
+  "bg-[var(--color-answer-5)] text-white",
 ]
 
 export const DEFAULT_TEAM_PALETTE = [

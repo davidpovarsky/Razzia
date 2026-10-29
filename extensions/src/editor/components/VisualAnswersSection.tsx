@@ -114,7 +114,10 @@ export const VisualAnswersSection = ({
                   <span
                     className={clsx(
                       "flex size-6 items-center justify-center rounded-md text-xs font-black shadow-xs",
-                      CANONICAL_ANSWER_COLORS[answerIndex % 4],
+                      CANONICAL_ANSWER_COLORS[answerIndex] ??
+                        CANONICAL_ANSWER_COLORS[
+                          answerIndex % CANONICAL_ANSWER_COLORS.length
+                        ],
                     )}
                   >
                     {String.fromCharCode(65 + answerIndex)}

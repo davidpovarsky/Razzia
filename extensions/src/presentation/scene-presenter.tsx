@@ -387,44 +387,148 @@ export const ScenePresenter = ({
 
         {/* Real Live Interim Results */}
         {kind === "interimResults" && (
-          <div className="flex w-full max-w-xl flex-col items-center gap-4">
+          <div className="flex w-full max-w-2xl flex-col items-center gap-4">
             {interimResults ? (
-              <div className="w-full rounded-2xl border border-white/10 bg-black/50 p-6 shadow-2xl backdrop-blur-md">
-                <p className="mb-4 text-left text-lg font-bold text-white">
-                  {interimResults.questionText}
-                </p>
-                <div className="flex flex-col gap-3">
-                  {interimResults.options.map((opt, i) => (
-                    <div
-                      key={opt.label || i}
-                      className="flex flex-col gap-1 text-left"
-                      data-testid="interim-option-row"
-                    >
-                      <div className="flex items-center justify-between text-sm font-semibold text-white/90">
-                        <span>{opt.label}</span>
-                        <span className="font-mono font-bold text-primary">
-                          {opt.count} ({opt.percentage}%)
+              (() => {
+                const winnerIndices = interimResults.winners ?? []
+                const winnerOptions = winnerIndices
+                  .map((idx) => interimResults.options[idx])
+                  .filter(Boolean)
+                const isZeroVotes =
+                  interimResults.totalResponders === 0 ||
+                  winnerOptions.length === 0
+                const isTie =
+                  !isZeroVotes &&
+                  (interimResults.isTie ?? winnerOptions.length > 1)
+
+                return (
+                  <div className="w-full rounded-2xl border border-white/10 bg-black/60 p-6 shadow-2xl backdrop-blur-md">
+                    <p className="mb-4 text-center text-xl font-black text-white md:text-2xl">
+                      {interimResults.questionText}
+                    </p>
+
+                    {/* Winner / Tie / No Votes Spotlight */}
+                    {isZeroVotes ? (
+                      <div
+                        data-testid="no-votes-message"
+                        className="my-4 rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-center text-sm font-semibold text-white/70"
+                      >
+                        No votes yet
+                      </div>
+                    ) : isTie ? (
+                      <div
+                        data-testid="spotlight-tie"
+                        className="my-4 flex flex-col items-center gap-3 rounded-2xl border-2 border-primary/40 bg-primary/10 p-4"
+                      >
+                        <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
+                          Tie / Co-leaders
+                        </span>
+                        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
+                          {winnerOptions.map((opt, wIdx) => (
+                            <div
+                              key={wIdx}
+                              className="flex flex-col items-center gap-2 rounded-xl bg-black/30 p-3"
+                              data-testid="tied-winner-item"
+                            >
+                              {opt.imageUrl && (
+                                <img
+                                  src={opt.imageUrl}
+                                  alt={opt.alt || opt.label}
+                                  data-testid="winner-image"
+                                  className="max-h-40 w-auto rounded-lg object-contain shadow-md"
+                                  loading="lazy"
+                                />
+                              )}
+                              <span
+                                data-testid="winner-caption"
+                                className="text-center font-bold text-white text-base"
+                              >
+                                {opt.label}
+                              </span>
+                              <span className="font-mono text-sm font-bold text-primary">
+                                {opt.count} votes ({opt.percentage}%)
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        data-testid="spotlight-winner"
+                        className="my-4 flex flex-col items-center gap-3 rounded-2xl border-2 border-primary/50 bg-primary/10 p-5 shadow-lg"
+                      >
+                        <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-wider text-primary">
+                          Leading Choice
+                        </span>
+                        {winnerOptions[0]?.imageUrl && (
+                          <img
+                            src={winnerOptions[0].imageUrl}
+                            alt={
+                              winnerOptions[0].alt || winnerOptions[0].label
+                            }
+                            data-testid="winner-image"
+                            className="max-h-52 w-auto rounded-xl object-contain shadow-lg border border-white/20"
+                            loading="lazy"
+                          />
+                        )}
+                        <span
+                          data-testid="winner-caption"
+                          className="text-center text-xl font-black text-white"
+                        >
+                          {winnerOptions[0]?.label}
+                        </span>
+                        <span className="font-mono text-sm font-bold text-primary">
+                          {winnerOptions[0]?.count} votes (
+                          {winnerOptions[0]?.percentage}%)
                         </span>
                       </div>
-                      <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+                    )}
+
+                    {/* Breakdown by option */}
+                    <div className="mt-4 flex flex-col gap-3">
+                      {interimResults.options.map((opt, i) => (
                         <div
-                          className="h-full rounded-full bg-primary transition-all duration-500"
-                          style={{
-                            width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
-                          }}
-                        />
-                      </div>
+                          key={opt.label || i}
+                          className="flex flex-col gap-1 text-left"
+                          data-testid="interim-option-row"
+                        >
+                          <div className="flex items-center justify-between text-sm font-semibold text-white/90">
+                            <span className="flex items-center gap-2">
+                              {opt.imageUrl && (
+                                <img
+                                  src={opt.imageUrl}
+                                  alt=""
+                                  className="size-5 rounded object-cover"
+                                />
+                              )}
+                              <span>{opt.label}</span>
+                            </span>
+                            <span className="font-mono font-bold text-primary">
+                              {opt.count} ({opt.percentage}%)
+                            </span>
+                          </div>
+                          <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
+                            <div
+                              className="h-full rounded-full bg-primary transition-all duration-500"
+                              style={{
+                                width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
+                              }}
+                            />
+                          </div>
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-                <div className="mt-4 flex justify-between border-t border-white/10 pt-3 text-xs text-white/60">
-                  <span>
-                    {labels?.totalResponders
-                      ? labels.totalResponders(interimResults.totalResponders)
-                      : `Total votes: ${interimResults.totalResponders}`}
-                  </span>
-                </div>
-              </div>
+
+                    <div className="mt-4 flex justify-between border-t border-white/10 pt-3 text-xs text-white/60">
+                      <span data-testid="total-votes">
+                        {labels?.totalResponders
+                          ? labels.totalResponders(interimResults.totalResponders)
+                          : `Total votes: ${interimResults.totalResponders}`}
+                      </span>
+                    </div>
+                  </div>
+                )
+              })()
             ) : (
               <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
                 {labels?.noInterimResults ?? "No completed results yet."}

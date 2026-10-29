@@ -155,7 +155,7 @@ const server = http.createServer((req, res) => {
         prevKey &&
         !s.handled.has(prevKey) &&
         enteredDigit &&
-        /^[1-4]$/.test(enteredDigit)
+        /^[1-5]$/.test(enteredDigit)
       ) {
         const zeroIdx = Number.parseInt(enteredDigit, 10) - 1;
         const ansRes = await callRazziaBackend({

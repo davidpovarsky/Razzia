@@ -896,7 +896,7 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
   })
 
   it("Editor Preview: uses canonical upstream answer colors, never bespoke red/blue/green/yellow", () => {
-    expect(CANONICAL_ANSWER_COLORS).toHaveLength(4)
+    expect(CANONICAL_ANSWER_COLORS).toHaveLength(5)
     expect(CANONICAL_ANSWER_COLORS[0]).toBe(
       "bg-[var(--color-answer-1)] text-white",
     )
@@ -908,6 +908,9 @@ describe("MAYA WAVE 2: Conformance Acceptance & Regression Suite", () => {
     )
     expect(CANONICAL_ANSWER_COLORS[3]).toBe(
       "bg-[var(--color-answer-4)] text-white",
+    )
+    expect(CANONICAL_ANSWER_COLORS[4]).toBe(
+      "bg-[var(--color-answer-5)] text-white",
     )
 
     for (const color of CANONICAL_ANSWER_COLORS) {

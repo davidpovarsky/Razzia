@@ -42,6 +42,7 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
     options?: QuestionOptions
     answersOnly: boolean
+    playMode?: "quiz" | "survey"
   }
   SHOW_RESULT: {
     correct: boolean

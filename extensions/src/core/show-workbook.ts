@@ -8,6 +8,7 @@ import {
 import { nativeBundleToAuthoredShow } from "./show-authoring-convert"
 import { interludeSchema, type Interlude } from "./media"
 import type { AnyQuizExtras } from "./index"
+import { MAX_ANSWERS } from "@razzia/common/constants"
 
 const MAX_WORKBOOK_BYTES = 5 * 1024 * 1024 // 5 MB
 const MAX_INFLATED_BYTES = 25 * 1024 * 1024 // 25 MB
@@ -967,7 +968,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const ansNum = Number.parseInt(ansNumStr, 10)
-    if (Number.isNaN(ansNum) || ansNum < 1 || ansNum > 4) {
+    if (Number.isNaN(ansNum) || ansNum < 1 || ansNum > MAX_ANSWERS) {
       throw new Error(`errors:extensions.invalidAnswerNumber:${qKey}#${ansNumStr}`)
     }
 
@@ -1618,12 +1619,12 @@ export function exportTadaShowWorkbook(
     [
       "Questions",
       "Question text, timer, scoring, media, and optional column T (interludeJson) for per-question interludes. For quiz, correctAnswers uses 1-based answer numbers (e.g. 2 or 1;3). Survey questions have no correct answers.",
-      "שאלות, טיימר, ניקוד, מדיה, ועמודה T אופציונלית (interludeJson) למעברון בין שאלות. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-4 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
+      "שאלות, טיימר, ניקוד, מדיה, ועמודה T אופציונלית (interludeJson) למעברון בין שאלות. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-5 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
     ],
     [
       "Answers",
-      "2-4 answer options per question. Display can be text, image, or both. For image or both, safe HTTPS or /media/ imageUrl and alt are mandatory.",
-      "2 עד 4 תשובות לכל שאלה. תצוגה: text, image או both. בתמונות יש לספק קישור מאובטח וטקסט חלופי alt חובה.",
+      "2-5 answer options per question. Display can be text, image, or both. For image or both, safe HTTPS or /media/ imageUrl and alt are mandatory.",
+      "2 עד 5 תשובות לכל שאלה. תצוגה: text, image או both. בתמונות יש לספק קישור מאובטח וטקסט חלופי alt חובה.",
     ],
     [
       "Settings",

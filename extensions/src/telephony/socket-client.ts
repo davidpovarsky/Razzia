@@ -20,6 +20,7 @@ export interface ClientGameState {
   username: string | null
   rosterPlayerId: string | null
   gameMode: string | null
+  playMode?: "quiz" | "survey" | null
   status: Status | null
   phase: string | null
   currentEpoch: number
@@ -60,6 +61,7 @@ export class RazziaSocketClient {
     username: null,
     rosterPlayerId: null,
     gameMode: null,
+    playMode: null,
     status: null,
     phase: null,
     currentEpoch: 0,
@@ -316,10 +318,15 @@ export class RazziaSocketClient {
         const answersCount = Array.isArray(rawAnswers) ? rawAnswers.length : 0
         const qType =
           typeof data?.questionType === "string" ? data.questionType : "single"
+        const playMode =
+          data?.playMode === "survey" || data?.playMode === "quiz"
+            ? data.playMode
+            : null
 
         this.updateState({
           status,
           questionType: qType,
+          playMode,
           answersCount,
           acceptingAnswers: true,
         })
@@ -418,16 +425,20 @@ export class RazziaSocketClient {
       this.state.gameMode ?? "quiz",
       this.state.questionType ?? "single",
       this.state.answersCount,
+      this.state.playMode,
     )
 
     if (!support.supported) {
       return { success: false, error: support.reason }
     }
 
-    if (zeroBasedIndex < 0 || zeroBasedIndex > 3) {
+    const maxAllowedIndex =
+      this.state.answersCount > 0 ? this.state.answersCount - 1 : 4
+
+    if (zeroBasedIndex < 0 || zeroBasedIndex > maxAllowedIndex) {
       return {
         success: false,
-        error: `Answer index ${zeroBasedIndex} out of range [0..3]`,
+        error: `Answer index ${zeroBasedIndex} out of range [0..${maxAllowedIndex}]`,
       }
     }
 

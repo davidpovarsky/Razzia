@@ -303,6 +303,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
                 className={clsx(
                   "text-white transition-all duration-300",
                   cardColorClass,
+                  answers.length === 5 && key === 4 && "md:col-span-2",
                 )}
                 percentage={pct}
                 count={count}
