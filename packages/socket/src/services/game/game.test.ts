@@ -738,4 +738,115 @@ describe("mixed quiz + survey gameplay and finish semantics", () => {
 
     expect(lastStatus(MANAGER)?.name).toBe(STATUS.SUMMARY)
   })
+
+  describe("P0: True Revote and Rescoring via Previous Screen", () => {
+    it("reopens question for fresh vote, resets initial votes to 0, restarts timer, and recomputes scores", async () => {
+      const q0 = createQuestion({
+        time: 20,
+        solutions: [0],
+        answers: ["Option A", "Option B", "Option C", "Option D", "Option E"],
+      })
+      const q1 = createQuestion({
+        time: 15,
+        solutions: [1],
+        answers: ["Option 1", "Option 2"],
+      })
+      const quizz = createQuizz([q0, q1])
+
+      const { game, sockets, start, reachAnswers, lastStatus } = setup(
+        quizz,
+        ["Alice", "Bob"],
+      )
+      const [alice, bob] = sockets
+
+      await start()
+      expect(game.roundManager.currentQuestionIndex).toBe(0)
+      expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+
+      // Q0 Initial Play: Alice correct (opt 0), Bob wrong (opt 1)
+      game.selectAnswer(alice, [0])
+      game.selectAnswer(bob, [1])
+      expect(game.roundManager.getAnswerCount()).toBe(2)
+
+      // Advance to reveal
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      expect(game.roundManager.currentStepName).toBe("reveal")
+
+      // Test 1: Navigating back from reveal reopens the current question (Q0) for fresh vote!
+      const canPrevReveal = game.roundManager.canPrevious()
+      expect(canPrevReveal.can).toBe(true)
+      expect(canPrevReveal.willReopenQuestion).toBe(true)
+
+      const reopenedReveal = game.roundManager.previousScreen()
+      expect(reopenedReveal).toBe(true)
+
+      // Q0 is now reopened for fresh vote!
+      await reachAnswers(q0, false)
+      expect(game.roundManager.currentQuestionIndex).toBe(0)
+      expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+      expect(game.roundManager.getAnswerCount()).toBe(0)
+
+      // Alice and Bob revote on Q0: Alice wrong, Bob correct
+      game.selectAnswer(bob, [0])
+      game.selectAnswer(alice, [1])
+      expect(game.roundManager.getAnswerCount()).toBe(2)
+
+      // Advance Q0 reveal and leaderboard
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      expect(game.roundManager.currentStepName).toBe("reveal")
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      expect(game.roundManager.currentStepName).toBe("leaderboard")
+
+      const bobScoreAfterQ0Revote =
+        game.players.find((p) => p.username === "Bob")?.points ?? 0
+      expect(bobScoreAfterQ0Revote).toBeGreaterThan(0)
+
+      // Advance to Q1
+      game.advance()
+      await reachAnswers(q1, false)
+      expect(game.roundManager.currentQuestionIndex).toBe(1)
+      expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+
+      // Q1 Play: Alice votes
+      game.selectAnswer(alice, [1])
+      expect(game.roundManager.getAnswerCount()).toBe(1)
+
+      // Test 2: Navigating back during active Q1 voting cancels Q1 vote and reopens Q0!
+      const canPrevActive = game.roundManager.canPrevious()
+      expect(canPrevActive.can).toBe(true)
+      expect(canPrevActive.willReopenQuestion).toBe(true)
+      expect(canPrevActive.answersReceived).toBe(1)
+
+      const reopenedFromActive = game.roundManager.previousScreen()
+      expect(reopenedFromActive).toBe(true)
+
+      // Q0 is reopened again!
+      await reachAnswers(q0, false)
+      expect(game.roundManager.currentQuestionIndex).toBe(0)
+      expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+      expect(game.roundManager.getAnswerCount()).toBe(0)
+
+      // Bob's score for Q0 was reset during reopen
+      const bobScoreDuringReopen =
+        game.players.find((p) => p.username === "Bob")?.points ?? 0
+      expect(bobScoreDuringReopen).toBe(0)
+
+      // Final Revote on Q0: Both Alice and Bob correct
+      game.selectAnswer(alice, [0])
+      game.selectAnswer(bob, [0])
+      expect(game.roundManager.getAnswerCount()).toBe(2)
+
+      // Advance to reveal
+      game.advance()
+      await vi.advanceTimersByTimeAsync(TICK_MS)
+      expect(game.roundManager.currentStepName).toBe("reveal")
+
+      // Both now have points
+      expect(game.players.find((p) => p.username === "Alice")?.points).toBeGreaterThan(0)
+      expect(game.players.find((p) => p.username === "Bob")?.points).toBeGreaterThan(0)
+    })
+  })
 })

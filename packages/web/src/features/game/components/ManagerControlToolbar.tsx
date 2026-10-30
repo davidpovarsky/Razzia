@@ -220,11 +220,17 @@ export const ManagerControlToolbar = ({
   }, [gameId, onAdvanceFallback, isInterlude, epoch, phase, sendCommand])
 
   // 2b. Previous Screen action (authoritative one-step back)
+  const [reopenConfirmOpen, setReopenConfirmOpen] = useState(false)
+
+  const willReopenQuestion =
+    Boolean(extensionState?.extras?.willReopenQuestion) ||
+    statusName === STATUS.SELECT_ANSWER ||
+    statusName === STATUS.SHOW_RESPONSES
+
   const canPreviousAuthoritative =
     typeof extensionState?.extras?.canPrevious === "boolean"
       ? (extensionState.extras.canPrevious as boolean)
       : currentQuestionIdx > 0 &&
-        statusName !== STATUS.SELECT_ANSWER &&
         statusName !== STATUS.SHOW_ROOM &&
         statusName !== STATUS.FINISHED &&
         statusName !== STATUS.SUMMARY
@@ -236,28 +242,39 @@ export const ManagerControlToolbar = ({
 
   const previousReason =
     (extensionState?.extras?.previousReason as string | undefined) ??
-    (statusName === STATUS.SELECT_ANSWER
-      ? t(
-          "extensions:host.cannotPreviousDuringAnswers",
-          "Cannot navigate back during active voting",
-        )
-      : isLobby
-        ? t("extensions:host.cannotPreviousLobby", "At start of show")
-        : undefined)
+    (isLobby
+      ? t("extensions:host.cannotPreviousLobby", "At start of show")
+      : undefined)
+
+  const executePreviousScreen = useCallback(
+    (confirmed = false) => {
+      if (!gameId || isPending || !canPrevious) {
+        return
+      }
+
+      sendCommand({
+        action: "PREVIOUS_SCREEN",
+        payload: {
+          phase,
+          epoch,
+          confirmed,
+        },
+      })
+    },
+    [gameId, isPending, canPrevious, phase, epoch, sendCommand],
+  )
 
   const handlePreviousScreen = useCallback(() => {
     if (!gameId || isPending || !canPrevious) {
       return
     }
 
-    sendCommand({
-      action: "PREVIOUS_SCREEN",
-      payload: {
-        phase,
-        epoch,
-      },
-    })
-  }, [gameId, isPending, canPrevious, phase, epoch, sendCommand])
+    if (willReopenQuestion) {
+      setReopenConfirmOpen(true)
+    } else {
+      executePreviousScreen(false)
+    }
+  }, [gameId, isPending, canPrevious, willReopenQuestion, executePreviousScreen])
 
   // 3. Skip Question action
   const handleSkipQuestion = () => {
@@ -480,31 +497,66 @@ export const ManagerControlToolbar = ({
 
         {/* Previous Screen Button (authoritative one-click step back, permanently at upper LEFT) */}
         {!isLobby && (
-          <Button
-            onClick={handlePreviousScreen}
-            disabled={!canPrevious || isPending}
-            title={
-              !canPrevious
-                ? previousReason ||
-                  t(
-                    "extensions:host.cannotPrevious",
-                    "Cannot navigate to previous screen",
-                  )
-                : t("extensions:host.previousScreen", "Previous Screen")
-            }
-            className={clsx(
-              "relative flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold shadow-md transition-all active:scale-95",
-              canPrevious && !isPending
-                ? "bg-white text-black hover:bg-white/90"
-                : "pointer-events-none opacity-40 bg-white/10 text-white/40 border border-white/10",
-            )}
-            data-testid="host-previous-screen-btn"
-          >
-            <ChevronLeft className="size-5" />
-            <span className="hidden sm:inline">
-              {t("extensions:host.previousScreen", "Previous Screen")}
-            </span>
-          </Button>
+          <>
+            <Button
+              onClick={handlePreviousScreen}
+              disabled={!canPrevious || isPending}
+              title={
+                !canPrevious
+                  ? previousReason ||
+                    t(
+                      "extensions:host.cannotPrevious",
+                      "Cannot navigate to previous screen",
+                    )
+                  : t("extensions:host.previousScreen", "Previous Screen")
+              }
+              className={clsx(
+                "relative flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold shadow-md transition-all active:scale-95",
+                canPrevious && !isPending
+                  ? "bg-white text-black hover:bg-white/90"
+                  : "pointer-events-none opacity-40 bg-white/10 text-white/40 border border-white/10",
+              )}
+              data-testid="host-previous-screen-btn"
+            >
+              <ChevronLeft className="size-5" />
+              <span className="hidden sm:inline">
+                {t("extensions:host.previousScreen", "Previous Screen")}
+              </span>
+            </Button>
+
+            <AlertDialog
+              open={reopenConfirmOpen}
+              onOpenChange={setReopenConfirmOpen}
+              title={
+                statusName === STATUS.SELECT_ANSWER
+                  ? t(
+                      "extensions:host.cancelActiveVoteConfirmTitle",
+                      "Cancel Active Vote",
+                    )
+                  : t("extensions:host.reopenConfirmTitle", "Reopen Question")
+              }
+              description={
+                statusName === STATUS.SELECT_ANSWER
+                  ? t(
+                      "extensions:host.cancelActiveVoteConfirmDesc",
+                      "Navigating back will cancel the current voting round and discard submitted answers. Continue?",
+                    )
+                  : t(
+                      "extensions:host.reopenConfirmDesc",
+                      "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
+                    )
+              }
+              confirmLabel={t(
+                "extensions:host.reopenConfirmButton",
+                "Continue",
+              )}
+              confirmTestId="confirm-reopen-question-btn"
+              onConfirm={() => {
+                setReopenConfirmOpen(false)
+                executePreviousScreen(true)
+              }}
+            />
+          </>
         )}
       </div>
 

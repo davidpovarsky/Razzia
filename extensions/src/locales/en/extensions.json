@@ -425,7 +425,12 @@
     "history": "History",
     "cannotPrevious": "Cannot navigate to previous screen",
     "cannotPreviousAnswers": "Cannot go back while answers are being accepted",
-    "cannotPreviousStart": "At the beginning of show"
+    "cannotPreviousStart": "At the beginning of show",
+    "reopenConfirmTitle": "Reopen Question",
+    "reopenConfirmDesc": "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
+    "reopenConfirmButton": "Continue",
+    "cancelActiveVoteConfirmTitle": "Cancel Active Vote",
+    "cancelActiveVoteConfirmDesc": "Navigating back will cancel the current voting round and discard submitted answers. Continue?"
   },
   "entrance": {
     "title": "Entrance Animation",

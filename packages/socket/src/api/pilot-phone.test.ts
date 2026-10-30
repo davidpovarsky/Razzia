@@ -397,4 +397,130 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       delete process.env.TADA_PILOT_SECRET
     }
   })
+
+  it("allows telephone participant to revote after Previous Screen reopens question in new epoch", async () => {
+    const q1 = createQuestion({
+      answers: ["A", "B", "C", "D", "E"],
+      solutions: [0],
+      cooldown: 3,
+      time: 15,
+    })
+    const quizz = createQuizz([q1])
+    const { id: quizzId } = saveQuizz(quizz)
+
+    const createRes = await request("/games", {
+      method: "POST",
+      token: managerToken,
+      body: { quizzId },
+    })
+    const { gameId, inviteCode } = await json<{ gameId: string; inviteCode: string }>(createRes)
+    const game = Registry.getInstance().getGameById(gameId)!
+
+    // Join phone participant
+    const joinRes = await request("/games/pilot-phone", {
+      method: "POST",
+      body: { action: "join_or_poll", inviteCode, phone: "+972509998888", callId: "call-revote-1" },
+    })
+    const { rosterPlayerId } = await json<{ rosterPlayerId: string }>(joinRes)
+
+    // Start game
+    const manager = createFakeIo().createSocket("manager")
+    game.reconnect(manager)
+    void game.start(manager)
+
+    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + 3000)
+    expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+    const initialEpoch = game.getCurrentQuestionPstnSupport().epoch
+
+    // 1. Initial vote: DTMF 2 (answerIndex 1 - wrong)
+    const vote1 = await request("/games/pilot-phone", {
+      method: "POST",
+      body: {
+        action: "answer",
+        gameId,
+        rosterPlayerId,
+        callId: "call-revote-1",
+        answerIndex: 1,
+        epoch: initialEpoch,
+      },
+    })
+    const vote1Data = await json<{ ok: boolean; accepted: boolean }>(vote1)
+    expect(vote1Data.accepted).toBe(true)
+
+    // Advance to reveal
+    game.advance()
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(game.roundManager.currentStepName).toBe("reveal")
+
+    // 2. Host clicks Previous Screen to reopen question for fresh vote
+    const canPrev = game.roundManager.canPrevious()
+    expect(canPrev.can).toBe(true)
+    expect(canPrev.willReopenQuestion).toBe(true)
+    const reopened = game.roundManager.previousScreen()
+    expect(reopened).toBe(true)
+
+    // Wait cooldown for reopened question (NEXT_QUESTION_DELAY_MS + cooldown)
+    await vi.advanceTimersByTimeAsync(NEXT_QUESTION_DELAY_MS + 3000)
+    expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
+    expect(game.roundManager.getAnswerCount()).toBe(0)
+
+    const newEpoch = game.getCurrentQuestionPstnSupport().epoch
+    expect(newEpoch).toBeGreaterThan(initialEpoch)
+
+    // 3. Stale epoch vote is rejected
+    const staleVote = await request("/games/pilot-phone", {
+      method: "POST",
+      body: {
+        action: "answer",
+        gameId,
+        rosterPlayerId,
+        callId: "call-revote-1",
+        answerIndex: 0,
+        epoch: initialEpoch, // stale!
+      },
+    })
+    const staleData = await json<{ ok: boolean; accepted: boolean; reason: string }>(staleVote)
+    expect(staleData.accepted).toBe(false)
+    expect(staleData.reason).toBe("stale_question_epoch")
+
+    // 4. Fresh revote with new epoch: DTMF 1 (answerIndex 0 - correct!)
+    const revote = await request("/games/pilot-phone", {
+      method: "POST",
+      body: {
+        action: "answer",
+        gameId,
+        rosterPlayerId,
+        callId: "call-revote-1",
+        answerIndex: 0,
+        epoch: newEpoch,
+      },
+    })
+    const revoteData = await json<{ ok: boolean; accepted: boolean }>(revote)
+    expect(revoteData.accepted).toBe(true)
+    expect(game.roundManager.getAnswerCount()).toBe(1)
+
+    // 5. Duplicate vote in SAME epoch is rejected
+    const dupVote = await request("/games/pilot-phone", {
+      method: "POST",
+      body: {
+        action: "answer",
+        gameId,
+        rosterPlayerId,
+        callId: "call-revote-1",
+        answerIndex: 4,
+        epoch: newEpoch,
+      },
+    })
+    const dupData = await json<{ ok: boolean; accepted: boolean; reason: string }>(dupVote)
+    expect(dupData.accepted).toBe(false)
+    expect(dupData.reason).toBe("duplicate_answer")
+
+    // Advance to reveal: Option 0 has 1 count, Option 1 has 0 count
+    game.advance()
+    await vi.advanceTimersByTimeAsync(1000)
+    expect(game.roundManager.currentStepName).toBe("reveal")
+    const revealDist = game.roundManager.getRevealDistribution()
+    expect(revealDist?.options?.[0].count).toBe(1)
+    expect(revealDist?.options?.[1].count).toBe(0)
+  })
 })

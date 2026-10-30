@@ -218,6 +218,9 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
         endAnswerTimer: () => round.endTimer(),
         nextScreen: () => round.nextScreen(),
         previousScreen: () => round.previousScreen(),
+        cancelActiveVote: () => round.cancelActiveVote(),
+        reopenQuestion: (qIdx) => round.reopenQuestion(qIdx),
+        getAnswersCount: () => round.getAnswerCount(),
         canPrevious: () => round.canPrevious(),
         isAcceptingAnswers: () => round.isCurrentlyAcceptingAnswers,
         skipQuestion: (reason) => round.skipQuestion(reason),
@@ -1031,15 +1034,29 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
 
   // ── P1: Authoritative Previous Screen Navigation Tests ─────────────────────
   describe("P1: Authoritative Previous Screen Navigation", () => {
-    it("refuses PREVIOUS_SCREEN during active answering (SELECT_ANSWER) and exposes canPrevious=false", async () => {
-      const { round, session, start } = setupGame()
+    it("requires confirmation when PREVIOUS_SCREEN is requested during active answering with submitted answers", async () => {
+      const { round, session, p1Socket, p2Socket, reachAnswers, start } = setupGame()
       await start()
 
+      // Complete Q0 and advance to Q1
+      round.selectAnswer(p1Socket, [0])
+      round.selectAnswer(p2Socket, [1])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.currentStepName).toBe("reveal")
+      round.nextScreen()
+      round.endOrSkipInterlude()
+      await reachAnswers()
+
+      expect(round.currentQuestionIndex).toBe(1)
       expect(round.isCurrentlyAcceptingAnswers).toBe(true)
 
+      // Submit an answer on Q1
+      round.selectAnswer(p1Socket, [0, 1, 3])
+
       const state = session?.getStateSnapshot("manager", [])
-      expect(state?.extras.canPrevious).toBe(false)
-      expect(state?.extras.previousReason).toContain("active voting")
+      expect(state?.extras.canPrevious).toBe(true)
+      expect(state?.extras.willReopenQuestion).toBe(true)
+      expect(state?.extras.answersReceived).toBe(1)
 
       let thrown: unknown = null
       try {
@@ -1060,8 +1077,24 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
 
       expect(thrown).toBeDefined()
       expect((thrown as Error).message).toContain(
-        "cannotPreviousScreenDuringAnswers",
+        "previousScreenConfirmationRequired",
       )
+
+      // With confirmed: true, active vote is cancelled and previous screen is reached
+      const confirmedRes = session?.handleCommand(
+        {
+          v: 1,
+          gameId: "game-1",
+          action: "PREVIOUS_SCREEN",
+          payload: { confirmed: true },
+          requestId: "req-prev-confirmed-during-answers",
+        },
+        true,
+        false,
+      )
+
+      expect(confirmedRes?.success).toBe(true)
+      expect(round.currentQuestionIndex).toBe(0)
     })
 
     it("rejects non-manager attempts to send PREVIOUS_SCREEN", async () => {
@@ -1123,12 +1156,12 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       expect(round.currentStepName).toBe("reveal")
     })
 
-    it("preserves player scores and vote counts immutably when stepping back to previously scored question", async () => {
+    it("reopens question for fresh vote, removes old question contribution, and preserves other questions", async () => {
       const { round, session, playerManager, p1Socket, p2Socket, reachAnswers, start } =
         setupGame()
       await start()
 
-      // Q0: Alice scores 1000 points (solution is [0])
+      // Q0: Alice scores 1000 points (solution is [0]), Bob scores 0
       round.selectAnswer(p1Socket, [0])
       round.selectAnswer(p2Socket, [1]) // Bob wrong
       await vi.advanceTimersByTimeAsync(SECOND_MS)
@@ -1145,37 +1178,39 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       await reachAnswers()
       expect(round.currentQuestionIndex).toBe(1)
 
-      // Q1 solutions are [0, 1, 3]
+      // Q1 solutions are [0, 1, 3] (Alice gets 1000, Bob gets 1000)
       round.selectAnswer(p1Socket, [0, 1, 3])
       round.selectAnswer(p2Socket, [0, 1, 3])
       await vi.advanceTimersByTimeAsync(SECOND_MS)
       expect(round.currentStepName).toBe("reveal")
       expect(round.currentQuestionIndex).toBe(1)
 
-      // Step back from Q1 reveal to Q0 completed results
-      const prevRes = session?.handleCommand(
-        {
-          v: 1,
-          gameId: "game-1",
-          action: "PREVIOUS_SCREEN",
-          payload: {},
-          requestId: "req-back-to-q0",
-        },
-        true,
-        false,
-      )
-
-      expect(prevRes?.success).toBe(true)
-      expect(round.currentQuestionIndex).toBe(0)
-      expect(round.currentStepName).toBe("reveal")
-
-      // Alice's score must still be exactly her score, never doubled or erased
+      // Total before stepping back: Alice 2000, Bob 1000
       expect(playerManager.findById("p1")?.points).toBe(2000)
       expect(playerManager.findById("p2")?.points).toBe(1000)
 
-      // History for Q0 remains intact
-      const q0Hist = round.getHistory(0) as { playerAnswersCount: number }
-      expect(q0Hist.playerAnswersCount).toBe(2)
+      // Step back from Q1 reveal: reaches Q1 question card, step back again to Q0
+      // Calling previousScreen reopens Q0 for a fresh vote!
+      round.reopenQuestion(0)
+      await reachAnswers()
+
+      expect(round.currentQuestionIndex).toBe(0)
+      expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+      expect(round.getAnswerCount()).toBe(0)
+
+      // During reopened Q0: Q0's old points are removed, Q1 points are preserved!
+      // Alice has 1000 (from Q1), Bob has 1000 (from Q1)
+      expect(playerManager.findById("p1")?.points).toBe(1000)
+      expect(playerManager.findById("p2")?.points).toBe(1000)
+
+      // Both players answer Q0 afresh! Both answer correctly ([0])
+      round.selectAnswer(p1Socket, [0])
+      round.selectAnswer(p2Socket, [0])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+
+      // Results revealed: newly computed total is new Q0 (1000 each) + original Q1 (1000 each) = 2000 each
+      expect(playerManager.findById("p1")?.points).toBe(2000)
+      expect(playerManager.findById("p2")?.points).toBe(2000)
     })
   })
 })

@@ -267,6 +267,7 @@ describe("StudioShowCoordinator", () => {
 
   it("P1: supports safe backward navigation with previousScene()", () => {
     const startedQuestions: number[] = []
+    const reopenedQuestions: number[] = []
     const completedResultsShown: number[] = []
     let broadcasts = 0
 
@@ -282,6 +283,9 @@ describe("StudioShowCoordinator", () => {
       callbacks: {
         onStartQuestion: (qIdx) => {
           startedQuestions.push(qIdx)
+        },
+        onReopenQuestion: (qIdx) => {
+          reopenedQuestions.push(qIdx)
         },
         onShowCompletedQuestionResults: (qIdx) => {
           completedResultsShown.push(qIdx)
@@ -314,11 +318,11 @@ describe("StudioShowCoordinator", () => {
     expect(coordinator.isSceneActive()).toBe(true)
     expect(coordinator.canPrevious().can).toBe(true)
 
-    // Previous from Step 2 (transition) -> Step 1 (Q1 results)
+    // Previous from Step 2 (transition) -> Step 1 (reopens Q1 fresh)
     const backToQ1 = coordinator.previousScene()
     expect(backToQ1).toBe(true)
     expect(coordinator.currentIndex).toBe(1)
-    expect(completedResultsShown).toEqual([0]) // Displayed completed question results read-only!
+    expect(reopenedQuestions).toEqual([0]) // Reopens question for fresh voting!
 
     // Previous from Step 1 (Q1) -> Step 0 (opening)
     const backToOpen = coordinator.previousScene()

@@ -7,6 +7,7 @@ import { TimelineRunner, type TimelineStepState } from "../../gameplay/timeline-
 
 export interface StudioCoordinatorCallbacks {
   onStartQuestion: (questionIndex: number) => Promise<void> | void
+  onReopenQuestion?: (questionIndex: number) => Promise<void> | void
   onShowCompletedQuestionResults?: (questionIndex: number) => void
   onFinish: () => void
   onBroadcastState: () => void
@@ -230,7 +231,12 @@ export class StudioShowCoordinator {
     return this.advanceScene(sceneId, epoch)
   }
 
-  canPrevious(): { can: boolean; reason?: string } {
+  canPrevious(): {
+    can: boolean
+    reason?: string
+    willReopenQuestion?: boolean
+    answersReceived?: number
+  } {
     if (this.phase === "lobby" || this.phase === "finished") {
       return { can: false, reason: "Show not in active timeline" }
     }
@@ -239,13 +245,16 @@ export class StudioShowCoordinator {
       return { can: false, reason: "At start of show" }
     }
 
-    return { can: true }
+    const prev = this.runner.peekPrevious()
+    const willReopenQuestion = prev?.item.kind === "question"
+
+    return { can: true, willReopenQuestion }
   }
 
   /**
    * Safely navigates to the immediately preceding timeline step.
    * If the previous step is a scene, activates it.
-   * If the previous step is a question, displays its completed results read-only.
+   * If the previous step is a question, reopens it for a fresh voting round.
    */
   previousScene(): boolean {
     if (!this.canPrevious().can) {
@@ -254,6 +263,7 @@ export class StudioShowCoordinator {
 
     this.clearTimer()
 
+    const oldIndex = this.runner.index
     const { step, done } = this.runner.previous()
 
     if (done || !step) {
@@ -268,10 +278,15 @@ export class StudioShowCoordinator {
     if (step.item.kind === "question") {
       this.phase = "question"
       const qIdx = this.getQuestionIndex(step.item.questionId)
-      if (this.callbacks.onShowCompletedQuestionResults) {
-        this.callbacks.onShowCompletedQuestionResults(qIdx)
-      } else {
-        void this.callbacks.onStartQuestion(qIdx)
+      try {
+        if (this.callbacks.onReopenQuestion) {
+          void this.callbacks.onReopenQuestion(qIdx)
+        } else if (this.callbacks.onStartQuestion) {
+          void this.callbacks.onStartQuestion(qIdx)
+        }
+      } catch {
+        this.runner.jumpTo(oldIndex)
+        return false
       }
     } else {
       this.phase = "scene"

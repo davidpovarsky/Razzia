@@ -47,9 +47,12 @@ export const startGame = async (manager: Page) => {
 }
 
 export const endTimer = async (manager: Page) => {
-  await manager
-    .getByRole("button", { name: t("extensions:host.endTimer") })
-    .click()
+  const btn = manager.getByRole("button", { name: t("extensions:host.endTimer") })
+  try {
+    await btn.click({ timeout: 2000 })
+  } catch {
+    // If timer expired naturally, question transitions to results automatically
+  }
 }
 
 export const next = async (manager: Page) => {

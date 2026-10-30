@@ -425,7 +425,12 @@
     "history": "Verlauf",
     "cannotPrevious": "Zurückgehen nicht möglich",
     "cannotPreviousAnswers": "Zurückgehen während der Antwortphase nicht möglich",
-    "cannotPreviousStart": "Am Anfang der Show"
+    "cannotPreviousStart": "Am Anfang der Show",
+    "reopenConfirmTitle": "Frage erneut öffnen",
+    "reopenConfirmDesc": "Wenn Sie zurückgehen, wird diese Frage erneut geöffnet, die vorherigen Stimmen verworfen und die Punktzahl ersetzt. Fortfahren?",
+    "reopenConfirmButton": "Fortfahren",
+    "cancelActiveVoteConfirmTitle": "Aktive Abstimmung abbrechen",
+    "cancelActiveVoteConfirmDesc": "Wenn Sie zurückgehen, wird die aktuelle Abstimmungsrunde abgebrochen und die abgegebenen Antworten werden verworfen. Fortfahren?"
   },
   "entrance": {
     "title": "Eingangsanimation",

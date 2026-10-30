@@ -32,9 +32,12 @@ import type {
 } from "@razzia/extensions/core"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
+import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
 import {
   countAnswers,
   scoreQuestion,
+  recomputeScoresFromLedger,
+  type LedgerQuestionEntry,
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
 import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
@@ -57,6 +60,7 @@ export interface QuestionCheckpoint {
   leaderboard: Player[]
   tempOldLeaderboard: Player[] | null
   questionsHistory: QuestionResult[]
+  questionLedger?: Map<number, LedgerQuestionEntry>
 }
 
 export interface RoundManagerOptions {
@@ -89,7 +93,7 @@ export interface RoundManagerOptions {
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
   onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
   onShowStart?: (proceed: () => void) => void
-  canPreviousTimelineStep?: () => { can: boolean; reason?: string }
+  canPreviousTimelineStep?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean }
   onPreviousTimelineStep?: () => boolean
 }
 
@@ -118,6 +122,7 @@ export class RoundManager {
   private generation = 0
   private readonly activeTimeouts = new Set<NodeJS.Timeout>()
   private readonly checkpoints = new Map<number, QuestionCheckpoint>()
+  private readonly questionLedger = new Map<number, LedgerQuestionEntry>()
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
 
   constructor(opts: RoundManagerOptions) {
@@ -246,6 +251,10 @@ export class RoundManager {
     return Boolean(category) && next?.category?.trim() === category
   }
 
+  get currentEpoch(): number {
+    return this.generation
+  }
+
   isSurvey(): boolean {
     const q = this.question
 
@@ -351,6 +360,7 @@ export class RoundManager {
       leaderboard: leaderboardSnapshot,
       tempOldLeaderboard: tempOldLeaderboardSnapshot,
       questionsHistory: structuredClone(this.questionsHistory),
+      questionLedger: new Map(this.questionLedger),
     })
   }
 
@@ -399,6 +409,12 @@ export class RoundManager {
       ? cp.tempOldLeaderboard.map((p) => ({ ...p }))
       : null
     this.questionsHistory = structuredClone(cp.questionsHistory)
+    if (cp.questionLedger) {
+      this.questionLedger.clear()
+      for (const [k, v] of cp.questionLedger.entries()) {
+        this.questionLedger.set(k, { ...v, answers: [...v.answers] })
+      }
+    }
     this.playersAnswers = []
     this.latestRevealDistribution = null
 
@@ -464,21 +480,46 @@ export class RoundManager {
     return this.nextScreen()
   }
 
-  canPrevious(): { can: boolean; reason?: string } {
+  canPrevious(): {
+    can: boolean
+    reason?: string
+    willReopenQuestion?: boolean
+    answersReceived?: number
+  } {
     if (!this.started) {
       return { can: false, reason: "Game not started" }
     }
 
     if (this.acceptingAnswers) {
-      return { can: false, reason: "Cannot navigate back during active voting" }
+      const answersReceived = this.playersAnswers.length
+      if (this.opts.canPreviousTimelineStep) {
+        const timelineCheck = this.opts.canPreviousTimelineStep()
+        if (timelineCheck.can) {
+          return {
+            can: true,
+            willReopenQuestion: timelineCheck.willReopenQuestion ?? true,
+            answersReceived,
+          }
+        }
+      }
+      if (this.currentQuestion > 0) {
+        return { can: true, willReopenQuestion: true, answersReceived }
+      }
+      return { can: false, reason: "At start of show" }
     }
 
     if (this.currentStep < 0) {
       return { can: false, reason: "Question starting" }
     }
 
+    // Step 0: reveal/results. Moving back reopens this question!
+    if (this.currentStep === 0) {
+      return { can: true, willReopenQuestion: true, answersReceived: 0 }
+    }
+
+    // Step 1: leaderboard, Step 2: interlude. Navigates back within question
     if (this.currentStep > 0) {
-      return { can: true }
+      return { can: true, willReopenQuestion: false, answersReceived: 0 }
     }
 
     if (this.opts.canPreviousTimelineStep) {
@@ -486,10 +527,71 @@ export class RoundManager {
     }
 
     if (this.currentQuestion > 0) {
-      return { can: true }
+      return { can: true, willReopenQuestion: true, answersReceived: 0 }
     }
 
     return { can: false, reason: "At start of show" }
+  }
+
+  cancelActiveVote(): boolean {
+    if (!this.started) {
+      return false
+    }
+
+    this.generation += 1
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.acceptingAnswers = false
+    this.opts.cooldown.abort()
+    this.playersAnswers = []
+    this.latestRevealDistribution = null
+
+    return true
+  }
+
+  getAnswerCount(): number {
+    return this.playersAnswers.length
+  }
+
+  reopenQuestion(targetIndex: number): boolean {
+    if (!this.started) {
+      this.started = true
+    }
+
+    if (targetIndex < 0 || targetIndex >= this.opts.quizz.questions.length) {
+      return false
+    }
+
+    this.generation += 1
+    this.cancelPendingAsync()
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.acceptingAnswers = false
+    this.opts.cooldown.abort()
+    this.playersAnswers = []
+    this.latestRevealDistribution = null
+
+    // Invalidate old attempt in ledger and questionsHistory
+    this.questionLedger.delete(targetIndex)
+    delete (this.questionsHistory as Record<number, QuestionResult | undefined>)[
+      targetIndex
+    ]
+
+    // Recompute player scores and streaks from remaining active ledger
+    const recomputed = recomputeScoresFromLedger(
+      this.opts.players.getAll(),
+      Array.from(this.questionLedger.values()),
+    )
+    this.opts.players.replace(recomputed)
+    this.leaderboard = recomputed
+    this.tempOldLeaderboard = null
+    this.opts.onQuestionScored?.(recomputed)
+
+    this.currentQuestion = targetIndex
+    void this.newQuestion()
+
+    return true
   }
 
   showCompletedQuestionResults(targetQuestionIndex: number): boolean {
@@ -545,12 +647,27 @@ export class RoundManager {
   }
 
   previousScreen(): boolean {
-    if (!this.started || this.acceptingAnswers || this.currentStep < 0) {
+    if (!this.started) {
       return false
     }
 
     this.clearAutoAdvance()
     this.clearInterludeTimer()
+
+    // 0. Active voting or question in progress before reveal
+    if (this.acceptingAnswers || this.currentStep < 0) {
+      this.cancelActiveVote()
+
+      if (this.opts.onPreviousTimelineStep) {
+        return this.opts.onPreviousTimelineStep()
+      }
+
+      if (this.currentQuestion > 0) {
+        return this.reopenQuestion(this.currentQuestion - 1)
+      }
+
+      return false
+    }
 
     // 1. If at interlude (step 2) or later:
     if (this.currentStep > 1) {
@@ -570,19 +687,27 @@ export class RoundManager {
     if (this.currentStep === 1) {
       this.currentStep = 0
 
-      return this.showCompletedQuestionResults(this.currentQuestion)
+      const targetQ = this.opts.quizz.questions[this.currentQuestion]
+      const ledgerEntry = this.questionLedger.get(this.currentQuestion)
+      const counts = countAnswers(ledgerEntry?.answers ?? [])
+
+      this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
+        ...targetQ,
+        solutions: this.isSurvey() ? undefined : targetQ.solutions,
+        responses: counts,
+      })
+
+      this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.UPDATE_QUESTION, {
+        current: this.currentQuestion + 1,
+        total: this.opts.quizz.questions.length,
+      })
+
+      return true
     }
 
     // 3. If at reveal (step 0):
-    if (this.opts.onPreviousTimelineStep) {
-      return this.opts.onPreviousTimelineStep()
-    }
-
-    if (this.currentQuestion > 0) {
-      return this.showCompletedQuestionResults(this.currentQuestion - 1)
-    }
-
-    return false
+    // Navigating back from reveal reopens this question for a fresh vote!
+    return this.reopenQuestion(this.currentQuestion)
   }
 
   endOrSkipInterlude(): boolean {
@@ -621,8 +746,15 @@ export class RoundManager {
     this.acceptingAnswers = false
     this.opts.cooldown.abort()
 
-    // Record skipped question in history without awarding points or leaking solutions
-    this.questionsHistory.push({
+    // Record skipped question in ledger and history without awarding points or leaking solutions
+    this.questionLedger.set(this.currentQuestion, {
+      questionIndex: this.currentQuestion,
+      question: this.question,
+      answers: [],
+      skipped: true,
+    })
+
+    this.questionsHistory[this.currentQuestion] = {
       ...this.question,
       solutions: undefined,
       skipped: true,
@@ -633,7 +765,7 @@ export class RoundManager {
         answerIds: null,
       })),
       ...(reason ? { note: `Skipped: ${reason}` } : {}),
-    })
+    }
 
     this.playersAnswers = []
     this.nextQuestion()
@@ -856,7 +988,7 @@ export class RoundManager {
   // ── Steps ────────────────────────────────────────────────────────────────
 
   private recordHistory(players: Player[], scored: ScoredPlayer[] = []): void {
-    this.questionsHistory.push({
+    const historyItem: QuestionResult = {
       ...this.question,
       solutions: this.isSurvey() ? undefined : this.question.solutions,
       playerAnswersCount: this.playersAnswers.length,
@@ -874,7 +1006,9 @@ export class RoundManager {
           }),
         }
       }),
-    })
+    }
+
+    this.questionsHistory[this.currentQuestion] = historyItem
   }
 
   private showResults(): void {
@@ -975,6 +1109,14 @@ export class RoundManager {
 
     const answerCounts = countAnswers(this.playersAnswers)
 
+    const currentEntry: LedgerQuestionEntry = {
+      questionIndex: this.currentQuestion,
+      question: this.question,
+      answers: [...this.playersAnswers],
+      skipped: false,
+    }
+    this.questionLedger.set(this.currentQuestion, currentEntry)
+
     if (this.isSurvey()) {
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...this.question,
@@ -1002,23 +1144,36 @@ export class RoundManager {
       return this.leaderboard.map((p) => ({ ...p }))
     })()
 
-    const sortedPlayers = scoreQuestion(
-      this.question,
+    const sortedPlayers = recomputeScoresFromLedger(
       currentPlayers,
-      this.playersAnswers,
+      Array.from(this.questionLedger.values()),
     )
 
     this.opts.players.replace(sortedPlayers)
     this.opts.onQuestionScored?.(sortedPlayers)
 
-    // Immediate personal result to each player (no delayed withholding for projector)
+    const scoring = QUESTION_SCORING[this.question.type]
+
+    // Immediate personal result to each player based on THIS question's contribution
     sortedPlayers.forEach((player, index) => {
       const aheadPlayer = sortedPlayers[index - 1]
+      const playerAnswer = this.playersAnswers.find(
+        (a) => a.playerId === player.id,
+      )
+      const multiplier =
+        playerAnswer && scoring
+          ? scoring(this.question, playerAnswer.answerIds)
+          : 0
+      const earned = Math.round((playerAnswer?.points ?? 0) * multiplier)
+      const correct = multiplier > 0
+      const penalty =
+        !correct && playerAnswer ? (this.question.penalty ?? 0) : 0
+      const delta = correct ? earned : -penalty
 
       this.opts.send(player.id, STATUS.SHOW_RESULT, {
-        correct: player.lastCorrect,
-        message: player.lastCorrect ? "game:correct" : "game:wrong",
-        points: player.lastPoints,
+        correct,
+        message: correct ? "game:correct" : "game:wrong",
+        points: delta,
         myPoints: player.points,
         rank: index + 1,
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,

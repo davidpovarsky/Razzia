@@ -47,6 +47,7 @@ const pilotPhoneBodySchema = z.object({
   gameId: z.string().max(64).optional(),
   rosterPlayerId: z.string().max(64).optional(),
   answerIndex: z.number().int().min(0).max(9).optional(),
+  epoch: z.number().int().nonnegative().optional(),
 })
 
 function resolvePilotTargetGame(
@@ -478,6 +479,16 @@ const routes = apiFactory
         }
 
         const pstn = game.getCurrentQuestionPstnSupport()
+
+        if (typeof body.epoch === "number" && body.epoch !== pstn.epoch) {
+          return c.json({
+            ok: true,
+            accepted: false,
+            reason: "stale_question_epoch",
+            rosterPlayerId: rosterId,
+            state: game.getQuestionStateForGateway(rosterId),
+          })
+        }
 
         if (!pstn.supported) {
           return c.json({

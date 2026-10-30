@@ -425,7 +425,12 @@
     "history": "Historique",
     "cannotPrevious": "Impossible de revenir à l'écran précédent",
     "cannotPreviousAnswers": "Impossible de revenir en arrière pendant la saisie des réponses",
-    "cannotPreviousStart": "Au début du spectacle"
+    "cannotPreviousStart": "Au début du spectacle",
+    "reopenConfirmTitle": "Rouvrir la question",
+    "reopenConfirmDesc": "Revenir en arrière rouvrira cette question, annulera ses votes précédents et remplacera son score. Continuer ?",
+    "reopenConfirmButton": "Continuer",
+    "cancelActiveVoteConfirmTitle": "Annuler le vote actif",
+    "cancelActiveVoteConfirmDesc": "Revenir en arrière annulera le tour de vote en cours et ignorera les réponses envoyées. Continuer ?"
   },
   "entrance": {
     "title": "Animation d'entrée",

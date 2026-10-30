@@ -50,3 +50,86 @@ export const scoreQuestion = (
 
   return scored.sort((a, b) => b.points - a.points)
 }
+
+export interface LedgerQuestionEntry {
+  questionIndex: number
+  question: Question
+  answers: Answer[]
+  skipped?: boolean
+}
+
+export const recomputeScoresFromLedger = (
+  players: Player[],
+  ledgerEntries: LedgerQuestionEntry[],
+): ScoredPlayer[] => {
+  const sortedEntries = [...ledgerEntries].sort(
+    (a, b) => a.questionIndex - b.questionIndex,
+  )
+
+  const playerStates = new Map<
+    string,
+    {
+      player: Player
+      points: number
+      streak: number
+      lastCorrect: boolean
+      lastPoints: number
+    }
+  >()
+
+  for (const player of players) {
+    playerStates.set(player.id, {
+      player: { ...player },
+      points: 0,
+      streak: 0,
+      lastCorrect: false,
+      lastPoints: 0,
+    })
+  }
+
+  for (const entry of sortedEntries) {
+    if (entry.skipped) {
+      continue
+    }
+
+    const scoring = QUESTION_SCORING[entry.question.type]
+
+    for (const [, state] of playerStates) {
+      const playerAnswer = entry.answers.find(
+        (a) => a.playerId === state.player.id,
+      )
+
+      const scoreMultiplier = (() => {
+        if (!playerAnswer) {
+          return 0
+        }
+
+        return scoring ? scoring(entry.question, playerAnswer.answerIds) : 0
+      })()
+
+      const points = Math.round((playerAnswer?.points ?? 0) * scoreMultiplier)
+      const isCorrect = scoreMultiplier > 0
+      const penalty =
+        !isCorrect && playerAnswer ? (entry.question.penalty ?? 0) : 0
+
+      state.points = Math.max(0, state.points + points - penalty)
+      state.streak = isCorrect ? state.streak + 1 : 0
+      state.lastCorrect = isCorrect
+      state.lastPoints = isCorrect ? points : -penalty
+    }
+  }
+
+  const scored: ScoredPlayer[] = []
+
+  for (const [, state] of playerStates) {
+    state.player.points = state.points
+    state.player.streak = state.streak
+    scored.push({
+      ...state.player,
+      lastCorrect: state.lastCorrect,
+      lastPoints: state.lastPoints,
+    })
+  }
+
+  return scored.sort((a, b) => b.points - a.points)
+}

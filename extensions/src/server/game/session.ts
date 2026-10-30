@@ -23,6 +23,8 @@ export interface ExtensionSessionDelegate {
   endAnswerTimer?: () => boolean
   nextScreen?: () => boolean
   previousScreen?: () => boolean
+  cancelActiveVote?: () => boolean
+  reopenQuestion?: (questionIndex: number) => boolean
   skipQuestion?: (reason?: string) => boolean
   replayFromCheckpoint?: (questionIndex: number) => boolean
   endOrSkipInterlude?: (reason?: string) => boolean
@@ -32,8 +34,9 @@ export interface ExtensionSessionDelegate {
   skipTimelineScene?: (sceneId?: string, epoch?: number) => boolean
   getLeaderboard?: () => Array<{ displayName: string; points: number }>
   getLastCompletedQuestionSummary?: () => PublicInterimResults | null
-  canPrevious?: () => { can: boolean; reason?: string }
+  canPrevious?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean; answersReceived?: number }
   isAcceptingAnswers?: () => boolean
+  getAnswersCount?: () => number
 }
 
 export class ExtensionGameSession {
@@ -380,6 +383,12 @@ export class ExtensionGameSession {
       if (prevCheck.reason) {
         extrasPayload.previousReason = prevCheck.reason
       }
+      if (typeof prevCheck.willReopenQuestion === "boolean") {
+        extrasPayload.willReopenQuestion = prevCheck.willReopenQuestion
+      }
+      if (typeof prevCheck.answersReceived === "number") {
+        extrasPayload.answersReceived = prevCheck.answersReceived
+      }
     }
 
     const effectivePhase = this.showCoordinator?.isSceneActive()
@@ -559,8 +568,18 @@ export class ExtensionGameSession {
       }
 
       case "PREVIOUS_SCREEN": {
-        if (this.phase === "question" && this.delegate?.isAcceptingAnswers?.()) {
-          throw new Error("errors:extensions.cannotPreviousScreenDuringAnswers")
+        const isAccepting = this.delegate?.isAcceptingAnswers?.() ?? false
+        const answersCount = this.delegate?.getAnswersCount?.() ?? 0
+        const confirmed = Boolean(
+          (command.payload as { confirmed?: boolean })?.confirmed,
+        )
+
+        if (isAccepting && answersCount > 0 && !confirmed) {
+          throw new Error("errors:extensions.previousScreenConfirmationRequired")
+        }
+
+        if (isAccepting) {
+          this.delegate?.cancelActiveVote?.()
         }
 
         if (this.showCoordinator?.isSceneActive()) {

@@ -425,7 +425,12 @@
     "history": "Lịch sử",
     "cannotPrevious": "Không thể quay lại màn hình trước",
     "cannotPreviousAnswers": "Không thể quay lại khi đang nhận câu trả lời",
-    "cannotPreviousStart": "Ở đầu buổi diễn"
+    "cannotPreviousStart": "Ở đầu buổi diễn",
+    "reopenConfirmTitle": "Mở lại câu hỏi",
+    "reopenConfirmDesc": "Quay lại sẽ mở lại câu hỏi này, hủy các phiếu bầu trước đó và thay thế điểm số của câu hỏi. Tiếp tục?",
+    "reopenConfirmButton": "Tiếp tục",
+    "cancelActiveVoteConfirmTitle": "Hủy bỏ bình chọn đang diễn ra",
+    "cancelActiveVoteConfirmDesc": "Quay lại sẽ hủy vòng bình chọn hiện tại và loại bỏ các câu trả lời đã gửi. Tiếp tục?"
   },
   "entrance": {
     "title": "Hiệu ứng xuất hiện",

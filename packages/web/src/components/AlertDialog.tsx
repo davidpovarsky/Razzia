@@ -10,6 +10,7 @@ interface Props {
   title: string
   description: string
   confirmLabel?: string
+  confirmTestId?: string
   onConfirm: () => void
 }
 
@@ -20,6 +21,7 @@ const AlertDialog = ({
   title,
   description,
   confirmLabel,
+  confirmTestId,
   onConfirm,
 }: Props) => {
   const { t } = useTranslation()
@@ -54,6 +56,7 @@ const AlertDialog = ({
               <Button
                 className="bg-red-500 px-4 py-2 text-sm font-semibold text-white hover:brightness-95 active:brightness-90"
                 onClick={onConfirm}
+                data-testid={confirmTestId}
               >
                 {confirmLabel ?? t("common:confirm")}
               </Button>

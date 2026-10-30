@@ -60,6 +60,43 @@ export class TimelineRunner {
     return this.currentItem?.kind === "question"
   }
 
+  getItem(index: number): TimelineItem | undefined {
+    return this.timeline[index]
+  }
+
+  peekPrevious(): TimelineStepState | null {
+    if (this.currentIndex <= 0) {
+      return null
+    }
+
+    const prevIndex = this.currentIndex - 1
+    const item = this.timeline[prevIndex]
+
+    if (!item) {
+      return null
+    }
+
+    const scene = item.kind === "question" ? undefined : this.scenes[item.sceneId]
+    const advanceMode =
+      scene && "advance" in scene
+        ? ((scene as { advance?: "auto" | "manual" }).advance ?? "manual")
+        : "manual"
+    const durationMs =
+      scene && "durationMs" in scene
+        ? ((scene as { durationMs?: number }).durationMs ?? 5000)
+        : 5000
+
+    return {
+      index: prevIndex,
+      total: this.timeline.length,
+      item,
+      scene,
+      canAcceptAnswers: item.kind === "question",
+      advanceMode,
+      durationMs,
+    }
+  }
+
   get canAcceptAnswers(): boolean {
     return this.isQuestion
   }

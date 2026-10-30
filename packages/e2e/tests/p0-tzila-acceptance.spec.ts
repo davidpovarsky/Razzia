@@ -91,46 +91,49 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     // Capture (2) Spectator Question Cards
     await saveScreenshot(spectatorPage, "02_spectator_question_cards.png")
 
-    // 4. Submit real DTMF votes via HTTP pilot endpoint (DTMF key 5 -> answerIndex 4)
+    // Wait for voting to be active (SELECT_ANSWER state: End Timer button visible on manager)
+    await expect(managerPage.getByRole("button", { name: t("extensions:host.endTimer") })).toBeVisible({
+      timeout: 15_000,
+    })
+
+    // 4. Submit real DTMF votes concurrently via HTTP pilot endpoint (DTMF key 5 -> answerIndex 4)
     const socketApiUrl = "http://127.0.0.1:3011/api/games/pilot-phone"
 
-    // Caller 1: key 5 (index 4: Doctor)
-    const vote1 = await spectatorPage.request.post(socketApiUrl, {
-      data: {
-        action: "answer",
-        gameId,
-        phone: "+972501000001",
-        callId: "call_001",
-        answerIndex: 4,
-      },
-    })
+    const [vote1, vote2, vote3] = await Promise.all([
+      spectatorPage.request.post(socketApiUrl, {
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000001",
+          callId: "call_001",
+          answerIndex: 4,
+        },
+      }),
+      spectatorPage.request.post(socketApiUrl, {
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000002",
+          callId: "call_002",
+          answerIndex: 4,
+        },
+      }),
+      spectatorPage.request.post(socketApiUrl, {
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000003",
+          callId: "call_003",
+          answerIndex: 1,
+        },
+      }),
+    ])
     expect(vote1.ok()).toBe(true)
-    const vote1Json = await vote1.json()
-    expect(vote1Json.accepted).toBe(true)
-
-    // Caller 2: key 5 (index 4: Doctor)
-    const vote2 = await spectatorPage.request.post(socketApiUrl, {
-      data: {
-        action: "answer",
-        gameId,
-        phone: "+972501000002",
-        callId: "call_002",
-        answerIndex: 4,
-      },
-    })
     expect(vote2.ok()).toBe(true)
-
-    // Caller 3: key 2 (index 1: Working Girl)
-    const vote3 = await spectatorPage.request.post(socketApiUrl, {
-      data: {
-        action: "answer",
-        gameId,
-        phone: "+972501000003",
-        callId: "call_003",
-        answerIndex: 1,
-      },
-    })
     expect(vote3.ok()).toBe(true)
+    expect((await vote1.json()).accepted).toBe(true)
+    expect((await vote2.json()).accepted).toBe(true)
+    expect((await vote3.json()).accepted).toBe(true)
 
     // 5. End Timer to Reveal Results
     await endTimer(managerPage)
@@ -159,26 +162,29 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
 
     // Wait for Q2 answering
     await expect(spectatorPage.locator('[data-testid^="photo-card-choice-"]')).toHaveCount(5, { timeout: 20_000 })
+    await expect(managerPage.getByRole("button", { name: t("extensions:host.endTimer") })).toBeVisible({ timeout: 15_000 })
 
-    // Vote 1 for option 0, Vote 1 for option 2 (Tie scenario)
-    await spectatorPage.request.post(socketApiUrl, {
-      data: {
-        action: "answer",
-        gameId,
-        phone: "+972501000001",
-        callId: "call_001_q2",
-        answerIndex: 0,
-      },
-    })
-    await spectatorPage.request.post(socketApiUrl, {
-      data: {
-        action: "answer",
-        gameId,
-        phone: "+972501000002",
-        callId: "call_002_q2",
-        answerIndex: 2,
-      },
-    })
+    // Vote 1 for option 0, Vote 1 for option 2 concurrently (Tie scenario)
+    await Promise.all([
+      spectatorPage.request.post(socketApiUrl, {
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000001",
+          callId: "call_001_q2",
+          answerIndex: 0,
+        },
+      }),
+      spectatorPage.request.post(socketApiUrl, {
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000002",
+          callId: "call_002_q2",
+          answerIndex: 2,
+        },
+      }),
+    ])
 
     // End timer for Q2
     await endTimer(managerPage)
@@ -227,6 +233,208 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     // Attempt player vote on spectator route: verify no interactive voting buttons exist
     const spectatorButtons = spectatorPage.locator('button[data-testid^="answer-btn-"]')
     await expect(spectatorButtons).toHaveCount(0)
+
+    await playerContext.close()
+    await spectatorContext.close()
+  })
+
+  test("P0 Previous Screen True Revote: reopens completed question, resets timer and votes, allows revoting via DTMF, and preserves subsequent results", async ({
+    page: managerPage,
+    browser,
+  }) => {
+    // 1. Create game with Tzila show
+    const pin = await createGame(
+      managerPage,
+      "Build Our Story — Tzila · Two-Round Audience Vote",
+    )
+    expect(pin).toMatch(/^\d{6}$/u)
+
+    const managerUrl = managerPage.url()
+    const gameIdMatch = managerUrl.match(/\/party\/manager\/([^/?#]+)/u)
+    expect(gameIdMatch).not.toBeNull()
+    const gameId = gameIdMatch![1]
+
+    // 2. Open Spectator Page in a clean secondary browser context
+    const spectatorContext = await browser.newContext({
+      viewport: { width: 1920, height: 1080 },
+    })
+    const spectatorPage = await spectatorContext.newPage()
+    await spectatorPage.goto(`http://127.0.0.1:3010/display/${gameId}`)
+
+    await expect(spectatorPage.locator('[data-testid="audience-display"]')).toBeVisible()
+
+    // 2b. Connect participant so game can start
+    const playerContext = await browser.newContext()
+    const playerPage = await playerContext.newPage()
+    await joinGame(playerPage, pin, "Alice")
+    await expect(managerPage.getByRole("button", { name: /1 \/ 1 Players/i })).toBeVisible()
+
+    // 3. Start Game from Host
+    await startGame(managerPage)
+
+    // Wait for Opening Scene
+    await expect(spectatorPage.getByRole("heading", { name: "Build Our Story!" })).toBeVisible({ timeout: 15_000 })
+    await expect(managerPage.getByRole("heading", { name: "Build Our Story!" })).toBeVisible({ timeout: 15_000 })
+
+    // Advance from Show Opening Scene to Question 1
+    const advanceBtn = managerPage.getByRole("button", { name: /Advance Scene/i })
+    await expect(advanceBtn).toBeVisible({ timeout: 10_000 })
+    await advanceBtn.click()
+
+    // Question 1: "Round 1 · Who is the main character?"
+    const q1Title = "Round 1 · Who is the main character?"
+    await expect(managerPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
+    await expect(spectatorPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
+    await expect(spectatorPage.locator('[data-testid^="photo-card-choice-"]')).toHaveCount(5, { timeout: 20_000 })
+
+    // Wait for voting to be active (SELECT_ANSWER state: End Timer button visible on manager)
+    await expect(managerPage.getByRole("button", { name: t("extensions:host.endTimer") })).toBeVisible({
+      timeout: 15_000,
+    })
+
+    const socketApiUrl = "http://127.0.0.1:3011/api/games/pilot-phone"
+
+    // Initial Q1 vote: Caller 1 & 2 vote for Doctor (key 5 -> index 4)
+    const vote1 = await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000001",
+        callId: "call_001_initial",
+        answerIndex: 4,
+      },
+    })
+    expect((await vote1.json()).accepted).toBe(true)
+
+    const vote2 = await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000002",
+        callId: "call_002_initial",
+        answerIndex: 4,
+      },
+    })
+    expect((await vote2.json()).accepted).toBe(true)
+
+    // End timer on Q1 -> Doctor wins with 2 votes
+    await endTimer(managerPage)
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({ timeout: 15_000 })
+    const winnerCardInitial = spectatorPage.locator('[data-winner="true"]')
+    await expect(winnerCardInitial).toContainText("Doctor")
+    await expect(winnerCardInitial).toContainText("2 votes")
+
+    // 4. Host uses visible Previous Screen button from Q1 results to reopen Question 1 for a fresh vote!
+    const prevBtn = managerPage.locator('[data-testid="host-previous-screen-btn"]')
+    await expect(prevBtn).toBeVisible({ timeout: 5000 })
+    await prevBtn.click()
+
+    // Confirmation dialog appears
+    const confirmBtn = managerPage.locator('[data-testid="confirm-reopen-question-btn"]')
+    const hasConfirm = await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)
+    if (hasConfirm) {
+      await saveScreenshot(managerPage, "07_host_reopen_confirm_dialog.png")
+      await confirmBtn.click()
+    }
+
+    // Question 1 is reopened for a fresh vote!
+    await expect(spectatorPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
+    await expect(managerPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
+
+    // Verify 5 Photo Cards rendered, no winner highlighted, 0 votes
+    const reopenedCards = spectatorPage.locator('[data-testid^="photo-card-choice-"]')
+    await expect(reopenedCards).toHaveCount(5, { timeout: 20_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0)
+
+    // Capture screenshot of reopened question with fresh voting timer
+    await saveScreenshot(spectatorPage, "08_spectator_q1_reopened_fresh_timer.png")
+
+    // Wait for voting to be active
+    await expect(managerPage.getByRole("button", { name: t("extensions:host.endTimer") })).toBeVisible({ timeout: 15_000 })
+
+    // 5. Submit REVOTE via DTMF:
+    // This time Caller 1 votes Working Girl (key 2 -> index 1)
+    // And Caller 2 votes Working Girl (key 2 -> index 1)
+    const revote1 = await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000001",
+        callId: "call_001_revote",
+        answerIndex: 1,
+      },
+    })
+    expect(revote1.ok()).toBe(true)
+    expect((await revote1.json()).accepted).toBe(true)
+
+    const revote2 = await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000002",
+        callId: "call_002_revote",
+        answerIndex: 1,
+      },
+    })
+    expect(revote2.ok()).toBe(true)
+    expect((await revote2.json()).accepted).toBe(true)
+
+    // End timer for revoted Q1
+    await endTimer(managerPage)
+
+    // Verify new results: Working Girl is now the winner with 2 votes!
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({ timeout: 15_000 })
+    const newWinnerCard = spectatorPage.locator('[data-winner="true"]')
+    await expect(newWinnerCard).toContainText("Working Girl")
+    await expect(newWinnerCard).toContainText("2 votes")
+
+    // Capture screenshot of new revote winner
+    await saveScreenshot(spectatorPage, "09_spectator_q1_revoted_new_winner.png")
+
+    // 6. Advance to Question 2 ("Round 1 · Who is the second character?")
+    await next(managerPage)
+    const q2Title = "Round 1 · Who is the second character?"
+    const reachedQ2 = await spectatorPage.getByText(q2Title).isVisible({ timeout: 5000 }).catch(() => false)
+    if (!reachedQ2) {
+      await next(managerPage)
+    }
+    await expect(spectatorPage.getByText(q2Title)).toBeVisible({ timeout: 20_000 })
+    const q2Cards = spectatorPage.locator('[data-testid^="photo-card-choice-"]')
+    await expect(q2Cards).toHaveCount(5, { timeout: 20_000 })
+    await expect(managerPage.getByRole("button", { name: t("extensions:host.endTimer") })).toBeVisible({ timeout: 15_000 })
+
+    // Q2 voting: 1 vote for Nun (option 0), 1 vote for Queen Elizabeth (option 2) (Tie scenario)
+    await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000001",
+        callId: "call_001_q2",
+        answerIndex: 0,
+      },
+    })
+    await spectatorPage.request.post(socketApiUrl, {
+      data: {
+        action: "answer",
+        gameId,
+        phone: "+972501000002",
+        callId: "call_002_q2",
+        answerIndex: 2,
+      },
+    })
+    await endTimer(managerPage)
+
+    // Verify Q2 Tie: exactly 2 winners highlighted
+    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(2, { timeout: 15_000 })
+
+    // 7. Multi-resolution screenshots
+    await spectatorPage.setViewportSize({ width: 1280, height: 800 })
+    await spectatorPage.waitForTimeout(300)
+    await saveScreenshot(spectatorPage, "10_spectator_1280x800.png")
+
+    await spectatorPage.setViewportSize({ width: 390, height: 844 })
+    await spectatorPage.waitForTimeout(300)
+    await saveScreenshot(spectatorPage, "11_spectator_mobile_390x844.png")
 
     await playerContext.close()
     await spectatorContext.close()

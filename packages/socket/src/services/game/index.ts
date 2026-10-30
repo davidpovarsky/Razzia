@@ -134,6 +134,13 @@ class Game {
           onStartQuestion: (qIdx) => {
             this.round.startQuestionAtIndex(qIdx)
           },
+          onReopenQuestion: (qIdx) => {
+            this.clearQuestionVerdicts(qIdx)
+            this.round.reopenQuestion(qIdx)
+            this.syncRosterScoresFromPlayers()
+            this.broadcastHostPresence()
+            this.broadcastExtensionState()
+          },
           onShowCompletedQuestionResults: (qIdx) => {
             this.round.showCompletedQuestionResults(qIdx)
             this.syncExtensionStatus(STATUS.SHOW_RESPONSES)
@@ -354,10 +361,31 @@ class Game {
         previousScreen: () => {
           const ok = this.round.previousScreen()
           if (ok) {
+            this.syncRosterScoresFromPlayers()
+            this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
           return ok
         },
+        cancelActiveVote: () => {
+          const ok = this.round.cancelActiveVote()
+          if (ok) {
+            this.broadcastHostPresence()
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
+        reopenQuestion: (qIdx) => {
+          this.clearQuestionVerdicts(qIdx)
+          const ok = this.round.reopenQuestion(qIdx)
+          if (ok) {
+            this.syncRosterScoresFromPlayers()
+            this.broadcastHostPresence()
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
+        getAnswersCount: () => this.round.getAnswerCount(),
         skipQuestion: (reason) => this.round.skipQuestion(reason),
         replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
@@ -367,6 +395,8 @@ class Game {
         previousTimelineScene: () => {
           const ok = this.showCoordinator?.previousScene() ?? false
           if (ok) {
+            this.syncRosterScoresFromPlayers()
+            this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
           return ok
@@ -467,6 +497,10 @@ class Game {
     return this._manager
   }
 
+  get roundManager(): RoundManager {
+    return this.round
+  }
+
   get players(): Player[] {
     return this.playerManager.getAll()
   }
@@ -549,7 +583,7 @@ class Game {
   } {
     const epoch =
       this.extensionSession?.currentEpoch ??
-      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+      (this.started ? this.round.currentEpoch : 0)
 
     if (!this.started || this.showCoordinator?.isSceneActive()) {
       return {
@@ -625,7 +659,7 @@ class Game {
 
     const epoch =
       this.extensionSession?.currentEpoch ??
-      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+      (this.started ? this.round.currentEpoch : 0)
     const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
     const player = entry?.clientId
       ? this.playerManager.findByClientId(entry.clientId)
@@ -972,6 +1006,10 @@ class Game {
     }
 
     this.broadcastHostPresence()
+  }
+
+  private clearQuestionVerdicts(_qIdx?: number): void {
+    this.lastVerdictByRosterId.clear()
   }
 
   private syncRosterScoresFromPlayers(): void {

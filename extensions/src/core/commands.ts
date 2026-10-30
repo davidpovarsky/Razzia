@@ -103,6 +103,7 @@ export const previousScreenCommandSchema = z.strictObject({
     .strictObject({
       phase: z.string().optional(),
       epoch: z.number().int().optional(),
+      confirmed: z.boolean().optional(),
     })
     .optional()
     .default({}),
