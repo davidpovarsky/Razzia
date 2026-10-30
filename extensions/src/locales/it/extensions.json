@@ -419,5 +419,30 @@
     "exportTadaJson": "Esporta come JSON Tada (.tada.json)",
     "exportTadaXlsx": "Esporta come Excel Tada (.xlsx)",
     "importShowPrompt": "Importa spettacolo (.json, .xlsx)"
+  },
+  "host": {
+    "previousScreen": "Schermata precedente",
+    "history": "Cronologia",
+    "cannotPrevious": "Impossibile tornare alla schermata precedente",
+    "cannotPreviousAnswers": "Impossibile tornare indietro mentre si accettano risposte",
+    "cannotPreviousStart": "All'inizio dello spettacolo"
+  },
+  "entrance": {
+    "title": "Animazione di ingresso",
+    "description": "Riproduci una transizione quando appare questa domanda.",
+    "preset": "Preset animazione",
+    "duration": "Durata (ms)",
+    "preview": "Anteprima",
+    "replay": "Rigioca",
+    "none": "Normale / Nessuna",
+    "fade": "Dissolvenza",
+    "slideUp": "Scorrimento verso l'alto",
+    "slideSide": "Scorrimento laterale",
+    "zoomSoft": "Zoom morbido",
+    "spotlight": "Faretto",
+    "curtain": "Sipario",
+    "previewQuestion": "Anteprima domanda",
+    "previewOptionA": "Opzione A",
+    "previewOptionB": "Opzione B"
   }
 }

@@ -971,4 +971,168 @@ describe("Show Authoring Schema & Converters", () => {
       expect(issue!.path).toEqual(["settings", 1])
     }
   })
+
+  // ── P1 Question Entrance Tests ───────────────────────────────────────────
+  describe("P1: Per-Question Entrance Animations", () => {
+    it("validates questionEntrance schema on quiz and survey cards", () => {
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Entrance Show",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Question 1",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "fade", durationMs: 600 },
+          },
+          {
+            key: "S1",
+            kind: "survey",
+            question: "Survey 1",
+            answers: [{ text: "Yes" }, { text: "No" }],
+            questionEntrance: { preset: "spotlight", durationMs: 1200 },
+          },
+        ],
+        settings: [],
+      }
+
+      const parsed = tadaShowV1Schema.safeParse(show)
+      expect(parsed.success).toBe(true)
+    })
+
+    it("rejects unknown entrance presets", () => {
+      const invalidShow = {
+        format: "tada-show",
+        version: 1,
+        title: "Invalid Entrance",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Question 1",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "3d-flip-explode", durationMs: 800 },
+          },
+        ],
+        settings: [],
+      }
+
+      const parsed = tadaShowV1Schema.safeParse(invalidShow)
+      expect(parsed.success).toBe(false)
+      if (!parsed.success) {
+        expect(
+          parsed.error.issues.some((i) =>
+            i.path.join(".").includes("cards.0.questionEntrance.preset"),
+          ),
+        ).toBe(true)
+      }
+    })
+
+    it("rejects entrance duration out of bounds (< 250ms or > 2500ms)", () => {
+      const tooShort = {
+        format: "tada-show",
+        version: 1,
+        title: "Too Short",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Question 1",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "fade", durationMs: 100 },
+          },
+        ],
+        settings: [],
+      }
+      expect(tadaShowV1Schema.safeParse(tooShort).success).toBe(false)
+
+      const tooLong = {
+        format: "tada-show",
+        version: 1,
+        title: "Too Long",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Question 1",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "fade", durationMs: 5000 },
+          },
+        ],
+        settings: [],
+      }
+      expect(tadaShowV1Schema.safeParse(tooLong).success).toBe(false)
+    })
+
+    it("two-way conversion roundtrips questionEntrance for both quiz and survey", () => {
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Roundtrip Entrance",
+        cards: [
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Animated Quiz",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "slide-up", durationMs: 750 },
+          },
+          {
+            key: "S1",
+            kind: "survey",
+            question: "Spotlight Survey",
+            answers: [{ text: "A" }, { text: "B" }],
+            questionEntrance: { preset: "spotlight", durationMs: 1000 },
+          },
+          {
+            key: "Q2",
+            kind: "quiz",
+            question: "Regular Quiz",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "none", durationMs: 800 },
+          },
+        ],
+        settings: [],
+      }
+
+      const bundleDraft = authoredShowToNativeBundleDraft(show)
+      expect(bundleDraft.ok).toBe(true)
+      const bundle = bundleDraft.bundleDraft!
+      const qIds = bundle.extras.questionIds
+      expect(bundle.extras.perQuestion[qIds[0]].questionEntrance).toEqual({
+        preset: "slide-up",
+        durationMs: 750,
+      })
+      expect(bundle.extras.perQuestion[qIds[1]].questionEntrance).toEqual({
+        preset: "spotlight",
+        durationMs: 1000,
+      })
+      // preset: 'none' is omitted or normalized in extras
+      expect(bundle.extras.perQuestion[qIds[2]]?.questionEntrance).toBeUndefined()
+
+      // Convert back to authored show
+      const restored = nativeBundleToAuthoredShow(bundle)
+      const restoredQ1 = restored.cards[0] as any
+      const restoredS1 = restored.cards[1] as any
+      const restoredQ2 = restored.cards[2] as any
+
+      expect(restoredQ1.questionEntrance).toEqual({
+        preset: "slide-up",
+        durationMs: 750,
+      })
+      expect(restoredS1.questionEntrance).toEqual({
+        preset: "spotlight",
+        durationMs: 1000,
+      })
+      expect(restoredQ2.questionEntrance).toBeUndefined()
+    })
+  })
 })

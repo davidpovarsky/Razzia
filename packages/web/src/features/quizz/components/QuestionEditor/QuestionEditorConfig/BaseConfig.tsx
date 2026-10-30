@@ -19,6 +19,7 @@ import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import ConfigNumberInput from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigNumberInput"
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
+import QuestionEntranceConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { ArrowBigDownDash, Clock, ListChecks, Star, Timer } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -180,6 +181,8 @@ const BaseConfig = () => {
           </ConfigField.Description>
         </ConfigField>
       </ConfigSection>
+
+      <QuestionEntranceConfig />
     </>
   )
 }

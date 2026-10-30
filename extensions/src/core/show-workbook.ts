@@ -7,6 +7,7 @@ import {
 } from "./show-authoring-schema"
 import { nativeBundleToAuthoredShow } from "./show-authoring-convert"
 import { interludeSchema, type Interlude } from "./media"
+import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
 import type { AnyQuizExtras } from "./index"
 import { MAX_ANSWERS } from "@razzia/common/constants"
 
@@ -790,6 +791,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     options?: any
     reveal?: any
     interlude?: Interlude
+    questionEntrance?: QuestionEntrance
     extraJson?: Record<string, unknown>
     answers: AuthoredAnswer[]
   }
@@ -895,6 +897,24 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
+    const entrancePresetRaw = getQVal(row, "entrancePreset").toLowerCase()
+    const entranceDurationRaw = getQVal(row, "entranceDurationMs")
+    let questionEntranceObj: QuestionEntrance | undefined
+
+    if (entrancePresetRaw && entrancePresetRaw !== "none") {
+      const durationParsed = entranceDurationRaw
+        ? Number.parseInt(entranceDurationRaw, 10)
+        : 800
+      const parsedEntrance = questionEntranceSchema.safeParse({
+        preset: entrancePresetRaw,
+        durationMs: Number.isNaN(durationParsed) ? 800 : durationParsed,
+      })
+      if (!parsedEntrance.success) {
+        throw new Error(`errors:extensions.invalidEntrancePreset:Questions!U${r + 1}`)
+      }
+      questionEntranceObj = parsedEntrance.data
+    }
+
     const parseNumOrDefault = (str: string, fallback: number): number => {
       if (!str) return fallback
       const parsed = Number.parseInt(str, 10)
@@ -920,6 +940,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       options: optionsObj,
       reveal: revealObj,
       interlude: interludeObj,
+      questionEntrance: questionEntranceObj,
       extraJson: extraJsonObj,
       answers: [],
     })
@@ -1112,6 +1133,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           options: qData.options,
           reveal: qData.reveal,
           interlude: qData.interlude,
+          questionEntrance: qData.questionEntrance,
           extraJson,
         })
       } else {
@@ -1135,6 +1157,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           options: qData.options,
           reveal: qData.reveal,
           interlude: qData.interlude,
+          questionEntrance: qData.questionEntrance,
           extraJson,
         })
       }
@@ -1433,6 +1456,8 @@ export function exportTadaShowWorkbook(
       "revealAudience",
       "extraJson",
       "interludeJson",
+      "entrancePreset",
+      "entranceDurationMs",
     ],
   ]
 
@@ -1501,6 +1526,10 @@ export function exportTadaShowWorkbook(
         card.reveal?.audience ?? "",
         card.extraJson ? JSON.stringify(card.extraJson) : "",
         card.interlude ? JSON.stringify(card.interlude) : "",
+        card.questionEntrance?.preset ?? "",
+        card.questionEntrance?.durationMs
+          ? String(card.questionEntrance.durationMs)
+          : "",
       ])
 
       for (let a = 0; a < card.answers.length; a += 1) {
@@ -1618,8 +1647,8 @@ export function exportTadaShowWorkbook(
     ],
     [
       "Questions",
-      "Question text, timer, scoring, media, and optional column T (interludeJson) for per-question interludes. For quiz, correctAnswers uses 1-based answer numbers (e.g. 2 or 1;3). Survey questions have no correct answers.",
-      "שאלות, טיימר, ניקוד, מדיה, ועמודה T אופציונלית (interludeJson) למעברון בין שאלות. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-5 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
+      "Question text, timer, scoring, media, optional column T (interludeJson) for per-question interludes, and optional columns U (entrancePreset: none|fade|slide-up|slide-side|zoom-soft|spotlight|curtain) and V (entranceDurationMs) for question stage entrance effects. For quiz, correctAnswers uses 1-based answer numbers (e.g. 2 or 1;3). Survey questions have no correct answers.",
+      "שאלות, טיימר, ניקוד, מדיה, עמודה T למעברון בין שאלות, ועמודות U (אפקט כניסה) ו-V (משך אנימציה במילישניות) עבור אפקט כניסת השאלה לבמה. בשאלות טריוויה מציינים תשובות נכונות במספרים 1-5 (למשל 2 או 1;3). בסקר עמודת התשובות הנכונות ריקה.",
     ],
     [
       "Answers",

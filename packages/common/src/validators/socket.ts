@@ -37,6 +37,7 @@ export const clientEventValidators = {
       "ASSIGN_TEAM",
       "END_ANSWER_TIMER",
       "NEXT_SCREEN",
+      "PREVIOUS_SCREEN",
       "SKIP_QUESTION",
       "VIEW_HISTORY",
       "REPLAY_FROM_CHECKPOINT",

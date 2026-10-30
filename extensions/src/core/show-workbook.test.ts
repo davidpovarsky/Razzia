@@ -652,5 +652,102 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       const audioSetting = parsedShow2.settings?.find((s) => s.scope === "audio")
       expect((audioSetting?.valueJson as any)?.start?.volume).toBe(0.37)
     })
+
+    it("P1: round-trips question entrance presets through Excel without data loss", () => {
+      const showWithEntrance: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Excel Entrance Test Show",
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question with Curtain Entrance",
+            answers: [{ text: "Yes" }, { text: "No" }],
+            correctAnswers: [1],
+            questionEntrance: { preset: "curtain", durationMs: 1200 },
+          },
+          {
+            key: "S01",
+            kind: "survey",
+            questionType: "single",
+            question: "Survey with Spotlight Entrance",
+            answers: [{ text: "Choice 1" }, { text: "Choice 2" }],
+            questionEntrance: { preset: "spotlight", durationMs: 950 },
+          },
+          {
+            key: "Q02",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question with None/Default",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [2],
+            questionEntrance: { preset: "none", durationMs: 800 },
+          },
+        ],
+        settings: [],
+      }
+
+      const buffer = exportTadaShowWorkbook(showWithEntrance)
+      const parsed = parseTadaShowWorkbook(buffer)
+
+      const cardQ1 = parsed.cards.find((c) => c.key === "Q01") as any
+      const cardS1 = parsed.cards.find((c) => c.key === "S01") as any
+      const cardQ2 = parsed.cards.find((c) => c.key === "Q02") as any
+
+      expect(cardQ1.questionEntrance).toEqual({
+        preset: "curtain",
+        durationMs: 1200,
+      })
+      expect(cardS1.questionEntrance).toEqual({
+        preset: "spotlight",
+        durationMs: 950,
+      })
+      expect(cardQ2.questionEntrance).toBeUndefined()
+    })
+
+    it("P1: rejects invalid entrance preset in Excel with actionable row coordinate", () => {
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Invalid Entrance In Excel",
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Valid Question",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [],
+      }
+
+      const buffer = exportTadaShowWorkbook(show)
+      const entries = extractZipEntries(buffer)
+      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")! // Questions sheet
+      const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
+
+      // Corrupt entrancePreset in cell U2
+      const modifiedXml = sheet3Xml.replace(
+        /<c r="U2"[^>]*>[\s\S]*?<\/c>/u,
+        '<c r="U2" t="inlineStr"><is><t>not-a-valid-preset</t></is></c>',
+      )
+      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(modifiedXml))
+
+      const files: Array<{ name: string; data: Uint8Array }> = []
+      for (const [name, data] of entries.entries()) {
+        files.push({ name, data })
+      }
+      const corruptedZip = createZipArchive(files)
+
+      expect(() => parseTadaShowWorkbook(corruptedZip)).toThrow(
+        "errors:extensions.invalidEntrancePreset:Questions!U2",
+      )
+    })
   })
 })

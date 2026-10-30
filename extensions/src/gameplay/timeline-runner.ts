@@ -112,6 +112,20 @@ export class TimelineRunner {
     return { step: this.getCurrentStep(), done: false }
   }
 
+  canPrevious(): boolean {
+    return this.currentIndex > 0
+  }
+
+  previous(): { step: TimelineStepState | null; done: boolean } {
+    if (this.currentIndex <= 0) {
+      return { step: null, done: true }
+    }
+
+    this.currentIndex -= 1
+
+    return { step: this.getCurrentStep(), done: false }
+  }
+
   jumpTo(index: number): TimelineStepState | null {
     if (index < 0 || index >= this.timeline.length) {
       return null

@@ -9,7 +9,9 @@ import {
 import { ScenePresenter } from "@razzia/extensions/presentation"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
+import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
+import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
 import {
   ExtensionStateProvider,
   getAuthoritativeEnvelope,
@@ -198,7 +200,15 @@ const AudienceDisplayPage = () => {
           ) : status?.name === STATUS.SELECT_ANSWER ||
             status?.name === STATUS.SHOW_QUESTION ? (
             /* 2. Live Question / Voting Stage */
-            <div className="flex h-full w-full flex-1 flex-col items-center justify-between gap-4">
+            <QuestionEntrance
+              entrance={
+                extensionState?.extras?.questionEntrance as
+                  | any
+                  | undefined
+              }
+              epoch={extensionState?.epoch}
+              className="flex h-full w-full flex-1 flex-col items-center justify-between gap-4"
+            >
               {/* Question Header & Timer */}
               <div className="flex w-full max-w-5xl flex-col items-center gap-3 text-center">
                 <h1
@@ -210,15 +220,15 @@ const AudienceDisplayPage = () => {
 
                 {/* Cooldown Timer */}
                 {cooldown !== null && cooldown !== NO_TIME_LIMIT && (
-                  <div
-                    data-testid="audience-cooldown"
-                    className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-5 py-1.5 font-mono text-lg font-bold text-white shadow-lg backdrop-blur-md"
-                  >
-                    <span className="text-xs uppercase tracking-wider text-white/70">
-                      {t("game:hud.time", "Time")}
-                    </span>
-                    <span className="text-xl text-primary font-black">{cooldown}s</span>
-                  </div>
+                  <AnswerCountdown
+                    seconds={cooldown}
+                    totalSeconds={
+                      typeof status.data?.time === "number"
+                        ? status.data.time
+                        : undefined
+                    }
+                    variant="display"
+                  />
                 )}
               </div>
 
@@ -231,7 +241,7 @@ const AudienceDisplayPage = () => {
                   isSurvey={true}
                 />
               </div>
-            </div>
+            </QuestionEntrance>
           ) : status?.name === STATUS.SHOW_RESPONSES ? (
             /* 3. Authoritative Result / Reveal Stage */
             (() => {

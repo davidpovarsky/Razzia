@@ -95,6 +95,22 @@ export const nextScreenCommandSchema = z.strictObject({
 
 export type NextScreenCommand = z.infer<typeof nextScreenCommandSchema>
 
+export const previousScreenCommandSchema = z.strictObject({
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("PREVIOUS_SCREEN"),
+  payload: z
+    .strictObject({
+      phase: z.string().optional(),
+      epoch: z.number().int().optional(),
+    })
+    .optional()
+    .default({}),
+  requestId: z.string().min(1),
+})
+
+export type PreviousScreenCommand = z.infer<typeof previousScreenCommandSchema>
+
 export const skipQuestionCommandSchema = z.strictObject({
   v: z.literal(1),
   gameId: z.string().min(1),
@@ -208,6 +224,7 @@ export const extensionCommandSchema = z.discriminatedUnion("action", [
   assignTeamCommandSchema,
   endAnswerTimerCommandSchema,
   nextScreenCommandSchema,
+  previousScreenCommandSchema,
   skipQuestionCommandSchema,
   viewHistoryCommandSchema,
   replayFromCheckpointCommandSchema,

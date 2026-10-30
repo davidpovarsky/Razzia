@@ -14,6 +14,7 @@ import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import clsx from "clsx"
 import {
   Check,
+  ChevronLeft,
   ChevronRight,
   Copy,
   History,
@@ -33,8 +34,9 @@ import { useTranslation } from "react-i18next"
 export function shouldIgnoreKeyboardShortcut(
   e: KeyboardEvent,
   isHistoryOpen = false,
+  allowAlt = false,
 ): boolean {
-  if (e.ctrlKey || e.metaKey || e.altKey || e.defaultPrevented) {
+  if (e.ctrlKey || e.metaKey || (!allowAlt && e.altKey) || e.defaultPrevented) {
     return true
   }
 
@@ -217,6 +219,46 @@ export const ManagerControlToolbar = ({
     }
   }, [gameId, onAdvanceFallback, isInterlude, epoch, phase, sendCommand])
 
+  // 2b. Previous Screen action (authoritative one-step back)
+  const canPreviousAuthoritative =
+    typeof extensionState?.extras?.canPrevious === "boolean"
+      ? (extensionState.extras.canPrevious as boolean)
+      : currentQuestionIdx > 0 &&
+        statusName !== STATUS.SELECT_ANSWER &&
+        statusName !== STATUS.SHOW_ROOM &&
+        statusName !== STATUS.FINISHED &&
+        statusName !== STATUS.SUMMARY
+
+  const isLobby = statusName === STATUS.SHOW_ROOM
+  const isFinished =
+    statusName === STATUS.FINISHED || statusName === STATUS.SUMMARY
+  const canPrevious = canPreviousAuthoritative && !isLobby && !isFinished
+
+  const previousReason =
+    (extensionState?.extras?.previousReason as string | undefined) ??
+    (statusName === STATUS.SELECT_ANSWER
+      ? t(
+          "extensions:host.cannotPreviousDuringAnswers",
+          "Cannot navigate back during active voting",
+        )
+      : isLobby
+        ? t("extensions:host.cannotPreviousLobby", "At start of show")
+        : undefined)
+
+  const handlePreviousScreen = useCallback(() => {
+    if (!gameId || isPending || !canPrevious) {
+      return
+    }
+
+    sendCommand({
+      action: "PREVIOUS_SCREEN",
+      payload: {
+        phase,
+        epoch,
+      },
+    })
+  }, [gameId, isPending, canPrevious, phase, epoch, sendCommand])
+
   // 3. Skip Question action
   const handleSkipQuestion = () => {
     if (!gameId) {
@@ -320,6 +362,13 @@ export const ManagerControlToolbar = ({
           handleNextScreen()
         }
       }
+
+      if (e.altKey && e.key === "ArrowLeft") {
+        if (!shouldIgnoreKeyboardShortcut(e, historyOpen, true) && canPrevious) {
+          e.preventDefault()
+          handlePreviousScreen()
+        }
+      }
     }
 
     window.addEventListener("keydown", handleKeyDown)
@@ -327,7 +376,15 @@ export const ManagerControlToolbar = ({
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [historyOpen, statusName, isInterlude, handleEndTimer, handleNextScreen])
+  }, [
+    historyOpen,
+    statusName,
+    isInterlude,
+    canPrevious,
+    handleEndTimer,
+    handleNextScreen,
+    handlePreviousScreen,
+  ])
 
   // Active viewing history snapshot normalized from backend QuestionResult or HistorySummaryItem
   const viewingHistoryEnvelope = extensionState?.extras.viewingHistory as
@@ -348,9 +405,6 @@ export const ManagerControlToolbar = ({
     [viewingHistoryEnvelope, selectedHistoryIndex],
   )
 
-  const isLobby = statusName === STATUS.SHOW_ROOM
-  const isFinished =
-    statusName === STATUS.FINISHED || statusName === STATUS.SUMMARY
   const canSkipQuestion =
     statusName === STATUS.SHOW_PREPARED ||
     statusName === STATUS.SHOW_QUESTION ||
@@ -423,6 +477,35 @@ export const ManagerControlToolbar = ({
             onConfirm={onExit}
           />
         )}
+
+        {/* Previous Screen Button (authoritative one-click step back, permanently at upper LEFT) */}
+        {!isLobby && (
+          <Button
+            onClick={handlePreviousScreen}
+            disabled={!canPrevious || isPending}
+            title={
+              !canPrevious
+                ? previousReason ||
+                  t(
+                    "extensions:host.cannotPrevious",
+                    "Cannot navigate to previous screen",
+                  )
+                : t("extensions:host.previousScreen", "Previous Screen")
+            }
+            className={clsx(
+              "relative flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold shadow-md transition-all active:scale-95",
+              canPrevious && !isPending
+                ? "bg-white text-black hover:bg-white/90"
+                : "pointer-events-none opacity-40 bg-white/10 text-white/40 border border-white/10",
+            )}
+            data-testid="host-previous-screen-btn"
+          >
+            <ChevronLeft className="size-5" />
+            <span className="hidden sm:inline">
+              {t("extensions:host.previousScreen", "Previous Screen")}
+            </span>
+          </Button>
+        )}
       </div>
 
       {/* Right section: Control buttons */}
@@ -438,15 +521,16 @@ export const ManagerControlToolbar = ({
           </Button>
         )}
 
-        {/* Previous / History button */}
+        {/* History button (retained separately on the right) */}
         {canViewHistory && (
           <Button
             onClick={handleOpenHistory}
             disabled={isPending}
             className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3.5 py-2 font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+            data-testid="host-history-btn"
           >
             <History className="size-4" />
-            <span>{t("extensions:host.previous")}</span>
+            <span>{t("extensions:host.history", "History")}</span>
           </Button>
         )}
 

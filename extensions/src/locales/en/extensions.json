@@ -419,5 +419,30 @@
     "exportTadaJson": "Export as Tada JSON (.tada.json)",
     "exportTadaXlsx": "Export as Tada Excel (.xlsx)",
     "importShowPrompt": "Import Show (.json, .xlsx)"
+  },
+  "host": {
+    "previousScreen": "Previous Screen",
+    "history": "History",
+    "cannotPrevious": "Cannot navigate to previous screen",
+    "cannotPreviousAnswers": "Cannot go back while answers are being accepted",
+    "cannotPreviousStart": "At the beginning of show"
+  },
+  "entrance": {
+    "title": "Entrance Animation",
+    "description": "Play an entrance transition when this question appears.",
+    "preset": "Animation Preset",
+    "duration": "Duration (ms)",
+    "preview": "Preview",
+    "replay": "Replay",
+    "none": "Regular / None",
+    "fade": "Fade In",
+    "slideUp": "Slide Up",
+    "slideSide": "Slide Side",
+    "zoomSoft": "Soft Zoom",
+    "spotlight": "Spotlight",
+    "curtain": "Curtain",
+    "previewQuestion": "Question Preview",
+    "previewOptionA": "Option A",
+    "previewOptionB": "Option B"
   }
 }

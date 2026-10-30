@@ -419,5 +419,30 @@
     "exportTadaJson": "Tada JSON Olarak Dışa Aktar (.tada.json)",
     "exportTadaXlsx": "Tada Excel Olarak Dışa Aktar (.xlsx)",
     "importShowPrompt": "Gösteri İçe Aktar (.json, .xlsx)"
+  },
+  "host": {
+    "previousScreen": "Önceki Ekran",
+    "history": "Geçmiş",
+    "cannotPrevious": "Önceki ekrana dönülemiyor",
+    "cannotPreviousAnswers": "Cevaplar alınırken geri dönülemez",
+    "cannotPreviousStart": "Gösterinin başlangıcında"
+  },
+  "entrance": {
+    "title": "Giriş Animasyonu",
+    "description": "Bu soru göründüğünde bir giriş geçişi oynatın.",
+    "preset": "Animasyon Önayarı",
+    "duration": "Süre (ms)",
+    "preview": "Önizleme",
+    "replay": "Tekrar Oynat",
+    "none": "Normal / Yok",
+    "fade": "Belirme",
+    "slideUp": "Yukarı Kayma",
+    "slideSide": "Yana Kayma",
+    "zoomSoft": "Yumuşak Yakınlaşma",
+    "spotlight": "Spot Işığı",
+    "curtain": "Perde",
+    "previewQuestion": "Soru Önizlemesi",
+    "previewOptionA": "Seçenek A",
+    "previewOptionB": "Seçenek B"
   }
 }

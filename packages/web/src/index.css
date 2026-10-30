@@ -277,3 +277,105 @@ button:not(:disabled),
     transform: scale(1);
   }
 }
+
+/* ── Tada Question Entrance Animations ────────────────────────────────────── */
+
+@keyframes tadaEntranceFade {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes tadaEntranceSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes tadaEntranceSlideSide {
+  0% {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes tadaEntranceZoomSoft {
+  0% {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes tadaEntranceSpotlight {
+  0% {
+    opacity: 0;
+    filter: brightness(1.7) contrast(1.1);
+    transform: scale(0.96);
+  }
+  100% {
+    opacity: 1;
+    filter: brightness(1) contrast(1);
+    transform: scale(1);
+  }
+}
+
+@keyframes tadaEntranceCurtain {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 50% 0 50%);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+.tada-entrance-fade {
+  animation: tadaEntranceFade ease-out both;
+}
+
+.tada-entrance-slide-up {
+  animation: tadaEntranceSlideUp cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tada-entrance-slide-side {
+  animation: tadaEntranceSlideSide cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tada-entrance-zoom-soft {
+  animation: tadaEntranceZoomSoft cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tada-entrance-spotlight {
+  animation: tadaEntranceSpotlight cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tada-entrance-curtain {
+  animation: tadaEntranceCurtain cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-tada-entrance] {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    filter: none !important;
+  }
+}

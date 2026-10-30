@@ -7,6 +7,7 @@ import { TimelineRunner, type TimelineStepState } from "../../gameplay/timeline-
 
 export interface StudioCoordinatorCallbacks {
   onStartQuestion: (questionIndex: number) => Promise<void> | void
+  onShowCompletedQuestionResults?: (questionIndex: number) => void
   onFinish: () => void
   onBroadcastState: () => void
 }
@@ -227,6 +228,62 @@ export class StudioShowCoordinator {
    */
   skipScene(sceneId?: string, epoch?: number): boolean {
     return this.advanceScene(sceneId, epoch)
+  }
+
+  canPrevious(): { can: boolean; reason?: string } {
+    if (this.phase === "lobby" || this.phase === "finished") {
+      return { can: false, reason: "Show not in active timeline" }
+    }
+
+    if (this.runner.index <= 0) {
+      return { can: false, reason: "At start of show" }
+    }
+
+    return { can: true }
+  }
+
+  /**
+   * Safely navigates to the immediately preceding timeline step.
+   * If the previous step is a scene, activates it.
+   * If the previous step is a question, displays its completed results read-only.
+   */
+  previousScene(): boolean {
+    if (!this.canPrevious().can) {
+      return false
+    }
+
+    this.clearTimer()
+
+    const { step, done } = this.runner.previous()
+
+    if (done || !step) {
+      return false
+    }
+
+    this.epoch += 1
+    this.seq += 1
+    this.startedAt = Date.now()
+    this.currentStepId = step.item.id
+
+    if (step.item.kind === "question") {
+      this.phase = "question"
+      const qIdx = this.getQuestionIndex(step.item.questionId)
+      if (this.callbacks.onShowCompletedQuestionResults) {
+        this.callbacks.onShowCompletedQuestionResults(qIdx)
+      } else {
+        void this.callbacks.onStartQuestion(qIdx)
+      }
+    } else {
+      this.phase = "scene"
+
+      if (step.advanceMode === "auto") {
+        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+      }
+
+      this.callbacks.onBroadcastState()
+    }
+
+    return true
   }
 
   /**

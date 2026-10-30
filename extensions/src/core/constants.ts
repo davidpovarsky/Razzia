@@ -70,6 +70,18 @@ export const EXTENSION_PHASES = [
 
 export type ExtensionPhase = (typeof EXTENSION_PHASES)[number]
 
+export const QUESTION_ENTRANCE_PRESETS = [
+  "none",
+  "fade",
+  "slide-up",
+  "slide-side",
+  "zoom-soft",
+  "spotlight",
+  "curtain",
+] as const
+
+export type QuestionEntrancePreset = (typeof QUESTION_ENTRANCE_PRESETS)[number]
+
 export const COMMAND_ACTIONS = [
   "SHOW_LEADERBOARD",
   "SKIP_INTERLUDE",
@@ -77,6 +89,7 @@ export const COMMAND_ACTIONS = [
   "ASSIGN_TEAM",
   "END_ANSWER_TIMER",
   "NEXT_SCREEN",
+  "PREVIOUS_SCREEN",
   "SKIP_QUESTION",
   "VIEW_HISTORY",
   "REPLAY_FROM_CHECKPOINT",

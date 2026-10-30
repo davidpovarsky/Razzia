@@ -14,7 +14,12 @@ import {
   type Interlude,
 } from "./media"
 import { studioDefaultsSchema } from "./studio-timeline-schema"
-import { audioExtrasSchema, teamsExtrasSchema } from "./quiz-extras"
+import {
+  audioExtrasSchema,
+  questionEntranceSchema,
+  teamsExtrasSchema,
+  type QuestionEntrance,
+} from "./quiz-extras"
 import { rosterExtrasSchema } from "./phone-roster"
 import { questionMediaValidator } from "@razzia/common/validators/quizz"
 import { multiOptionsValidator } from "@razzia/common/validators/questions/choice"
@@ -80,6 +85,7 @@ export const authoredQuizCardSchema = z
       .optional(),
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
+    questionEntrance: questionEntranceSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -130,6 +136,7 @@ export const authoredSurveyCardSchema = z
       .optional(),
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
+    questionEntrance: questionEntranceSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {

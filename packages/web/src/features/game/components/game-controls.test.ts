@@ -173,5 +173,64 @@ describe("A2: Host Control Surface & Permissions Logic (Maya V3)", () => {
 
       expect(shouldIgnoreKeyboardShortcut(eventOnBody)).toBe(false)
     })
+
+    it("permits Alt key modifier when allowAlt is true (for Alt+ArrowLeft Previous Screen)", () => {
+      const altEvent = {
+        key: "ArrowLeft",
+        ctrlKey: false,
+        metaKey: false,
+        altKey: true,
+        target: {
+          tagName: "DIV",
+          getAttribute: () => null,
+          isContentEditable: false,
+          closest: () => null,
+        },
+      } as unknown as KeyboardEvent
+
+      expect(shouldIgnoreKeyboardShortcut(altEvent, false, true)).toBe(false)
+      expect(shouldIgnoreKeyboardShortcut(altEvent, false, false)).toBe(true)
+    })
+  })
+
+  describe("P1: Previous Screen Toolbar Permissions", () => {
+    const evaluatePreviousPermission = (
+      statusName: string,
+      canPrevious: boolean,
+    ) => {
+      const isAnswering = statusName === STATUS.SELECT_ANSWER
+      const isAllowed = canPrevious && !isAnswering
+      let reason: string | null = null
+      if (isAnswering) {
+        reason = "Cannot go back while answers are being accepted"
+      } else if (!canPrevious) {
+        reason = "At the beginning of show"
+      }
+      return { isAllowed, reason }
+    }
+
+    it("disallows Previous Screen during active answering even if canPrevious is true", () => {
+      const res = evaluatePreviousPermission(STATUS.SELECT_ANSWER, true)
+      expect(res.isAllowed).toBe(false)
+      expect(res.reason).toContain("Cannot go back while answers are being accepted")
+    })
+
+    it("disallows Previous Screen when at start of show (canPrevious is false)", () => {
+      const res = evaluatePreviousPermission(STATUS.SHOW_PREPARED, false)
+      expect(res.isAllowed).toBe(false)
+      expect(res.reason).toContain("At the beginning of show")
+    })
+
+    it("allows Previous Screen during results when canPrevious is true", () => {
+      const res = evaluatePreviousPermission(STATUS.SHOW_RESPONSES, true)
+      expect(res.isAllowed).toBe(true)
+      expect(res.reason).toBeNull()
+    })
+
+    it("allows Previous Screen during leaderboard when canPrevious is true", () => {
+      const res = evaluatePreviousPermission(STATUS.SHOW_LEADERBOARD, true)
+      expect(res.isAllowed).toBe(true)
+      expect(res.reason).toBeNull()
+    })
   })
 })

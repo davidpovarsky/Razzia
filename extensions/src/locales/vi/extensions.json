@@ -419,5 +419,30 @@
     "exportTadaJson": "Xuất dưới dạng Tada JSON (.tada.json)",
     "exportTadaXlsx": "Xuất dưới dạng Excel Tada (.xlsx)",
     "importShowPrompt": "Nhập chương trình (.json, .xlsx)"
+  },
+  "host": {
+    "previousScreen": "Màn hình trước",
+    "history": "Lịch sử",
+    "cannotPrevious": "Không thể quay lại màn hình trước",
+    "cannotPreviousAnswers": "Không thể quay lại khi đang nhận câu trả lời",
+    "cannotPreviousStart": "Ở đầu buổi diễn"
+  },
+  "entrance": {
+    "title": "Hiệu ứng xuất hiện",
+    "description": "Phát hiệu ứng chuyển cảnh khi câu hỏi này xuất hiện.",
+    "preset": "Mẫu hiệu ứng",
+    "duration": "Thời lượng (ms)",
+    "preview": "Xem trước",
+    "replay": "Phát lại",
+    "none": "Bình thường / Không có",
+    "fade": "Mờ dần",
+    "slideUp": "Trượt lên",
+    "slideSide": "Trượt từ cạnh",
+    "zoomSoft": "Phóng to nhẹ",
+    "spotlight": "Đèn rọi",
+    "curtain": "Màn kéo",
+    "previewQuestion": "Xem trước câu hỏi",
+    "previewOptionA": "Lựa chọn A",
+    "previewOptionB": "Lựa chọn B"
   }
 }

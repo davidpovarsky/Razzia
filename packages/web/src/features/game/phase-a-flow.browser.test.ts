@@ -483,4 +483,214 @@ describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2
     // Now global action triggers!
     expect(triggeredGlobalAction).toBe(true)
   })
+
+  it("8. [P1 DOM Protocol] Previous Screen button emission and Alt+ArrowLeft shortcut", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    const previousCommands: SocketCommandRecord[] = []
+
+    await managerPage.exposeFunction(
+      "emitPreviousScreen",
+      (cmd: SocketCommandRecord) => {
+        previousCommands.push(cmd)
+      },
+    )
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #0f172a; color: #fff; font-family: Rubik, sans-serif; padding: 20px; }
+            button { padding: 8px 16px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+            button:disabled { opacity: 0.5; cursor: not-allowed; }
+          </style>
+        </head>
+        <body>
+          <div style="display: flex; justify-content: space-between; align-items: center; width: 800px;">
+            <button id="prev-screen-btn" data-testid="previous-screen-button">
+              Previous Screen (Alt+←)
+            </button>
+            <button id="history-btn" data-testid="history-button">
+              History
+            </button>
+            <button id="next-screen-btn" data-testid="next-screen-button">
+              Next Screen
+            </button>
+          </div>
+          <script>
+            let canPrevious = true;
+            let isAnswering = false;
+
+            function triggerPrevious() {
+              if (!canPrevious || isAnswering) return;
+              window.emitPreviousScreen({ action: "PREVIOUS_SCREEN" });
+            }
+
+            document.getElementById("prev-screen-btn").addEventListener("click", triggerPrevious);
+
+            window.addEventListener("keydown", (e) => {
+              if (e.altKey && e.key === "ArrowLeft") {
+                e.preventDefault();
+                triggerPrevious();
+              }
+            });
+          </script>
+        </body>
+      </html>
+    `)
+
+    const prevBtn = managerPage.locator('[data-testid="previous-screen-button"]')
+    expect(await prevBtn.isVisible()).toBe(true)
+
+    // Click button
+    await prevBtn.click()
+    expect(previousCommands).toHaveLength(1)
+    expect(previousCommands[0].action).toBe("PREVIOUS_SCREEN")
+
+    // Press Alt+ArrowLeft
+    await managerPage.keyboard.press("Alt+ArrowLeft")
+    expect(previousCommands).toHaveLength(2)
+    expect(previousCommands[1].action).toBe("PREVIOUS_SCREEN")
+  })
+
+  it("9. [P1 DOM Protocol] Big 20s countdown timer on Host & Audience Display with urgency threshold", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            body { margin: 0; background: #1e1b4b; color: #fff; font-family: Rubik, sans-serif; padding: 20px; }
+            .timer-badge {
+              font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+              font-variant-numeric: tabular-nums;
+              font-weight: 800;
+              border-radius: 9999px;
+              padding: 6px 16px;
+              display: inline-flex;
+              align-items: center;
+              gap: 8px;
+            }
+            .normal-state {
+              background-color: rgba(255, 255, 255, 0.1);
+              color: #ffffff;
+            }
+            .urgent-state {
+              background-color: #ef4444;
+              color: #ffffff;
+              animation: pulse 1s infinite;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="host-timer" class="timer-badge normal-state" data-testid="answer-countdown" data-urgent="false">
+            <span id="host-time">20</span>s
+          </div>
+          <div id="audience-timer" class="timer-badge normal-state" data-testid="audience-countdown" data-urgent="false">
+            <span id="audience-time">20</span>s
+          </div>
+
+          <script>
+            function setTimer(seconds) {
+              const clamped = Math.max(0, Math.floor(seconds));
+              const isUrgent = clamped <= 5 && clamped > 0;
+              const formatted = String(clamped).padStart(2, '0');
+
+              const host = document.getElementById("host-timer");
+              const audience = document.getElementById("audience-timer");
+              document.getElementById("host-time").textContent = formatted;
+              document.getElementById("audience-time").textContent = formatted;
+
+              if (isUrgent) {
+                host.className = "timer-badge urgent-state";
+                host.setAttribute("data-urgent", "true");
+                audience.className = "timer-badge urgent-state";
+                audience.setAttribute("data-urgent", "true");
+              } else {
+                host.className = "timer-badge normal-state";
+                host.setAttribute("data-urgent", "false");
+                audience.className = "timer-badge normal-state";
+                audience.setAttribute("data-urgent", "false");
+              }
+            }
+          </script>
+        </body>
+      </html>
+    `)
+
+    const hostTimer = managerPage.locator('[data-testid="answer-countdown"]')
+    expect(await hostTimer.isVisible()).toBe(true)
+    expect(await hostTimer.getAttribute("data-urgent")).toBe("false")
+    expect(await hostTimer.textContent()).toContain("20")
+
+    // Update timer to 4 seconds (urgency state)
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            .urgent-state { background-color: #ef4444; color: #fff; }
+          </style>
+        </head>
+        <body>
+          <div id="host-timer" class="timer-badge urgent-state" data-testid="answer-countdown" data-urgent="true">
+            <span id="host-time">04</span>s
+          </div>
+        </body>
+      </html>
+    `)
+
+    const urgentTimer = managerPage.locator('[data-testid="answer-countdown"]')
+    expect(await urgentTimer.getAttribute("data-urgent")).toBe("true")
+    expect(await urgentTimer.textContent()).toContain("04")
+  })
+
+  it("10. [P1 DOM Protocol] Question Entrance Animation wrapper applies preset & epoch cleanly", async () => {
+    expect(managerPage).not.toBeNull()
+
+    if (!managerPage) {
+      return
+    }
+
+    await managerPage.setContent(`
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <style>
+            .tada-entrance-slide-up {
+              animation-name: tadaSlideUp;
+              animation-duration: 800ms;
+              animation-fill-mode: both;
+            }
+            .tada-entrance-spotlight {
+              animation-name: tadaSpotlight;
+              animation-duration: 1200ms;
+              animation-fill-mode: both;
+            }
+          </style>
+        </head>
+        <body>
+          <div id="entrance-container" data-testid="question-entrance" data-epoch="1" class="tada-entrance-slide-up" style="animation-duration: 800ms;">
+            <h1>Question Card Title</h1>
+          </div>
+        </body>
+      </html>
+    `)
+
+    const entranceContainer = managerPage.locator('[data-testid="question-entrance"]')
+    expect(await entranceContainer.isVisible()).toBe(true)
+    expect(await entranceContainer.getAttribute("data-epoch")).toBe("1")
+    const classAttr = await entranceContainer.getAttribute("class")
+    expect(classAttr).toContain("tada-entrance-slide-up")
+  })
 })

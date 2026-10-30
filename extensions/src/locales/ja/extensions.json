@@ -419,5 +419,30 @@
     "exportTadaJson": "Tada JSONとしてエクスポート (.tada.json)",
     "exportTadaXlsx": "Tada Excelとしてエクスポート (.xlsx)",
     "importShowPrompt": "ショーをインポート (.json, .xlsx)"
+  },
+  "host": {
+    "previousScreen": "前の画面",
+    "history": "履歴",
+    "cannotPrevious": "前の画面に戻れません",
+    "cannotPreviousAnswers": "回答受付中は戻れません",
+    "cannotPreviousStart": "ショーの開始地点です"
+  },
+  "entrance": {
+    "title": "登場アニメーション",
+    "description": "この問題が表示されるときにアニメーションを再生します。",
+    "preset": "アニメーション設定",
+    "duration": "所要時間 (ミリ秒)",
+    "preview": "プレビュー",
+    "replay": "再生",
+    "none": "標準 / なし",
+    "fade": "フェードイン",
+    "slideUp": "スライドアップ",
+    "slideSide": "スライドサイド",
+    "zoomSoft": "ソフトズーム",
+    "spotlight": "スポットライト",
+    "curtain": "カーテン",
+    "previewQuestion": "問題プレビュー",
+    "previewOptionA": "選択肢 A",
+    "previewOptionB": "選択肢 B"
   }
 }

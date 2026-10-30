@@ -4,6 +4,8 @@ import {
   type CueId,
   DEFAULT_REVISION,
   LEADERBOARD_MODES,
+  QUESTION_ENTRANCE_PRESETS,
+  type QuestionEntrancePreset,
   SCHEMA_VERSION,
 } from "./constants"
 import {
@@ -117,11 +119,19 @@ export const audioExtrasSchema = z.strictObject({
 
 export type AudioExtras = z.infer<typeof audioExtrasSchema>
 
+export const questionEntranceSchema = z.strictObject({
+  preset: z.enum(QUESTION_ENTRANCE_PRESETS),
+  durationMs: z.number().int().min(250).max(2500).default(800),
+})
+
+export type QuestionEntrance = z.infer<typeof questionEntranceSchema>
+
 export const perQuestionItemSchema = z
   .strictObject({
     answerVisuals: z.array(answerVisualSchema).optional(),
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
+    questionEntrance: questionEntranceSchema.optional(),
   })
   .superRefine((item, ctx) => {
     if (item.answerVisuals) {

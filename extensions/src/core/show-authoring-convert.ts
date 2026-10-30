@@ -127,6 +127,9 @@ export function authoredShowToNativeBundleDraft(
       if (card.interlude) {
         qExtras.interlude = card.interlude
       }
+      if (card.questionEntrance && card.questionEntrance.preset !== "none") {
+        qExtras.questionEntrance = card.questionEntrance
+      }
 
       if (Object.keys(qExtras).length > 0) {
         perQuestion[qId] = qExtras
@@ -488,6 +491,7 @@ export function nativeBundleToAuthoredShow(
           options: q.options as any,
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
+          questionEntrance: perQ?.questionEntrance,
         })
       } else {
         const correctAnswers = rawSolutions.map((solIdx) => solIdx + 1)
@@ -508,6 +512,7 @@ export function nativeBundleToAuthoredShow(
           options: q.options as any,
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
+          questionEntrance: perQ?.questionEntrance,
         })
       }
     } else {

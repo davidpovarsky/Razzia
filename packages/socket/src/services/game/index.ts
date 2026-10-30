@@ -134,6 +134,10 @@ class Game {
           onStartQuestion: (qIdx) => {
             this.round.startQuestionAtIndex(qIdx)
           },
+          onShowCompletedQuestionResults: (qIdx) => {
+            this.round.showCompletedQuestionResults(qIdx)
+            this.syncExtensionStatus(STATUS.SHOW_RESPONSES)
+          },
           onFinish: () => {
             this.round.finish()
           },
@@ -329,20 +333,53 @@ class Game {
             this.showCoordinator?.onQuestionCompleted(qIdx)
           }
         : undefined,
+      canPreviousTimelineStep: this.showCoordinator
+        ? () => this.showCoordinator?.canPrevious() ?? { can: false }
+        : undefined,
+      onPreviousTimelineStep: this.showCoordinator
+        ? () => {
+            const ok = this.showCoordinator?.previousScene() ?? false
+            if (ok) {
+              this.broadcastExtensionState()
+            }
+            return ok
+          }
+        : undefined,
     })
 
     if (this.extensionSession) {
       this.extensionSession.setDelegate({
         endAnswerTimer: () => this.round.endTimer(),
         nextScreen: () => this.round.nextScreen(),
+        previousScreen: () => {
+          const ok = this.round.previousScreen()
+          if (ok) {
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
         skipQuestion: (reason) => this.round.skipQuestion(reason),
         replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
         getHistory: (qIdx) => this.round.getHistory(qIdx),
         advanceTimelineScene: (sceneId, epoch) =>
           this.showCoordinator?.advanceScene(sceneId, epoch) ?? false,
+        previousTimelineScene: () => {
+          const ok = this.showCoordinator?.previousScene() ?? false
+          if (ok) {
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
         skipTimelineScene: (sceneId, epoch) =>
           this.showCoordinator?.skipScene(sceneId, epoch) ?? false,
+        canPrevious: () => {
+          if (this.showCoordinator?.isSceneActive()) {
+            return this.showCoordinator.canPrevious()
+          }
+          return this.round.canPrevious()
+        },
+        isAcceptingAnswers: () => this.round.isCurrentlyAcceptingAnswers,
         getLeaderboard: () => {
           const currentLb = this.round.currentLeaderboard
           const source = currentLb.length > 0 ? currentLb : this.players

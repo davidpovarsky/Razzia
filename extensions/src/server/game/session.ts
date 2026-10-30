@@ -22,14 +22,18 @@ import type { StudioShowCoordinator } from "./studio-show-coordinator"
 export interface ExtensionSessionDelegate {
   endAnswerTimer?: () => boolean
   nextScreen?: () => boolean
+  previousScreen?: () => boolean
   skipQuestion?: (reason?: string) => boolean
   replayFromCheckpoint?: (questionIndex: number) => boolean
   endOrSkipInterlude?: (reason?: string) => boolean
   getHistory?: (questionIndex?: number) => unknown
   advanceTimelineScene?: (sceneId?: string, epoch?: number) => boolean
+  previousTimelineScene?: () => boolean
   skipTimelineScene?: (sceneId?: string, epoch?: number) => boolean
   getLeaderboard?: () => Array<{ displayName: string; points: number }>
   getLastCompletedQuestionSummary?: () => PublicInterimResults | null
+  canPrevious?: () => { can: boolean; reason?: string }
+  isAcceptingAnswers?: () => boolean
 }
 
 export class ExtensionGameSession {
@@ -301,6 +305,11 @@ export class ExtensionGameSession {
         extrasPayload.answerVisuals = questionExtras.answerVisuals
       }
 
+      // Question stage entrance animation
+      if (questionExtras.questionEntrance) {
+        extrasPayload.questionEntrance = questionExtras.questionEntrance
+      }
+
       // Interlude
       if (this.phase === "interlude" && questionExtras.interlude) {
         extrasPayload.interlude = questionExtras.interlude
@@ -359,6 +368,17 @@ export class ExtensionGameSession {
           index: this.viewingHistoryIndex,
           data: this.delegate?.getHistory?.(this.viewingHistoryIndex) ?? null,
         }
+      }
+
+      const prevCheck = this.delegate?.canPrevious
+        ? this.delegate.canPrevious()
+        : this.showCoordinator
+          ? this.showCoordinator.canPrevious()
+          : { can: false }
+
+      extrasPayload.canPrevious = prevCheck.can
+      if (prevCheck.reason) {
+        extrasPayload.previousReason = prevCheck.reason
       }
     }
 
@@ -531,6 +551,34 @@ export class ExtensionGameSession {
 
         if (!ok) {
           throw new Error("errors:extensions.nextScreenFailed")
+        }
+
+        this.seq += 1
+
+        break
+      }
+
+      case "PREVIOUS_SCREEN": {
+        if (this.phase === "question" && this.delegate?.isAcceptingAnswers?.()) {
+          throw new Error("errors:extensions.cannotPreviousScreenDuringAnswers")
+        }
+
+        if (this.showCoordinator?.isSceneActive()) {
+          const ok = this.delegate?.previousTimelineScene?.() ?? false
+
+          if (!ok) {
+            throw new Error("errors:extensions.scenePreviousFailed")
+          }
+
+          this.seq += 1
+
+          break
+        }
+
+        const ok = this.delegate?.previousScreen?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.previousScreenFailed")
         }
 
         this.seq += 1

@@ -233,6 +233,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       options?: {
         defaults?: StudioDefaults
         targetQuestionIds?: string[]
+        targetPerQuestion?: QuizExtrasV2["perQuestion"]
       },
     ) => {
       setExtras((prev: AnyQuizExtras | null) => {
@@ -258,7 +259,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           audio: prev.audio,
           teams: prev.teams,
           roster: prev.roster ?? createDefaultRosterExtras(),
-          perQuestion: prev.perQuestion,
+          perQuestion: options?.targetPerQuestion ?? prev.perQuestion,
           leaderboard: prev.leaderboard,
           authoring: (prev as QuizExtrasV2).authoring,
         }
@@ -404,6 +405,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     nextScenes: Record<string, SceneConfig>
     nextSelectedId: string
     nextCurrentIndex: number
+    nextPerQuestion?: QuizExtrasV2["perQuestion"]
   }
 
   const applyStudioMutation = useCallback(
@@ -429,6 +431,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       syncToExtras(result.nextTimeline, result.nextScenes, {
         defaults,
         targetQuestionIds: result.nextQuestionIds,
+        targetPerQuestion: result.nextPerQuestion,
       })
     },
     [
@@ -753,6 +756,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
       const currentScenes = { ...scenes }
+      const nextPerQuestion = extras?.perQuestion ? { ...extras.perQuestion } : undefined
 
       let nextQuestions = currentQuestions
       let nextQIds = currentQIds
@@ -774,6 +778,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         if (qIndex >= 0) {
           nextQuestions = currentQuestions.filter((_, idx) => idx !== qIndex)
           nextQIds = currentQIds.filter((_, idx) => idx !== qIndex)
+          if (nextPerQuestion && item.questionId in nextPerQuestion) {
+            delete nextPerQuestion[item.questionId]
+          }
         }
       } else if ("sceneId" in item) {
         nextScenes = Object.fromEntries(
@@ -808,6 +815,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         nextScenes,
         nextSelectedId,
         nextCurrentIndex,
+        nextPerQuestion,
       })
     },
     [
@@ -815,6 +823,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       getValues,
       questionIds,
       scenes,
+      extras,
       t,
       currentIndex,
       applyStudioMutation,
@@ -833,6 +842,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
       const currentScenes = { ...scenes }
+      const nextPerQuestion = extras?.perQuestion ? { ...extras.perQuestion } : undefined
 
       if (item.kind === "question") {
         const qIndex = currentQIds.findIndex((id) => id === item.questionId)
@@ -865,6 +875,10 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             ...currentTimeline.slice(index + 1),
           ]
 
+          if (nextPerQuestion && item.questionId in nextPerQuestion) {
+            nextPerQuestion[newQId] = structuredClone(nextPerQuestion[item.questionId])
+          }
+
           applyStudioMutation({
             nextQuestions,
             nextQuestionIds: nextQIds,
@@ -872,6 +886,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             nextScenes: currentScenes,
             nextSelectedId: newItem.id,
             nextCurrentIndex: qIndex + 1,
+            nextPerQuestion,
           })
         }
       } else if ("sceneId" in item) {
@@ -914,6 +929,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       getValues,
       questionIds,
       scenes,
+      extras,
       currentIndex,
       applyStudioMutation,
     ],

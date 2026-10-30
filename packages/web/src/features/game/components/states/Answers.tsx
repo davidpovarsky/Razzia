@@ -8,7 +8,9 @@ import {
   type QuestionReveal,
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
+import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
+import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
 import {
   getAuthoritativeEnvelope,
   useExtensionState,
@@ -137,8 +139,16 @@ const Answers = ({
 
   const MediaIcon = media?.type === MEDIA_TYPES.VIDEO ? Video : Image
 
+  const questionEntrance = effectiveExtensionState?.extras?.questionEntrance as
+    | any
+    | undefined
+
   return (
-    <div className="flex h-full flex-1 flex-col justify-between">
+    <QuestionEntrance
+      entrance={questionEntrance}
+      epoch={effectiveExtensionState?.epoch}
+      className="flex h-full flex-1 flex-col justify-between"
+    >
       {showAnswersOnly ? (
         <>
           <QuestionDialog
@@ -198,22 +208,23 @@ const Answers = ({
       )}
 
       <div className={clsx({ "flex flex-1 flex-col": showAnswersOnly })}>
-        <div className="mx-auto mb-4 flex w-full max-w-7xl justify-between gap-1 px-2 text-lg font-bold text-white md:text-xl">
+        <div className="mx-auto mb-3 flex w-full max-w-7xl items-center justify-between gap-2 px-2">
           {time !== NO_TIME_LIMIT && (
-            <div className="flex flex-col items-center rounded-lg bg-black/40 px-4 text-lg font-bold">
-              <span className="translate-y-1 text-sm">
-                {t("game:hud.time")}
-              </span>
-              <span>{cooldown}</span>
-            </div>
+            <AnswerCountdown
+              seconds={cooldown}
+              totalSeconds={time}
+              variant="host"
+            />
           )}
-          <div className="flex flex-col items-center rounded-lg bg-black/40 px-4 text-lg font-bold">
-            <span className="translate-y-1 text-sm">
-              {t("game:hud.answers")}
-            </span>
-            <span>
-              {totalAnswer}/{totalPlayer}
-            </span>
+          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 px-4 py-1.5 shadow-lg backdrop-blur-md">
+            <div className="flex flex-col items-center leading-none">
+              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-white/60">
+                {t("game:hud.answers")}
+              </span>
+              <span className="text-2xl sm:text-3xl font-mono font-black text-white tabular-nums">
+                {totalAnswer}/{totalPlayer}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -226,7 +237,7 @@ const Answers = ({
           visuals={currentVisuals}
         />
       </div>
-    </div>
+    </QuestionEntrance>
   )
 }
 

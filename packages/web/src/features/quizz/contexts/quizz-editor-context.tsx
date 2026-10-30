@@ -217,8 +217,21 @@ export const QuizzEditorProvider = ({
 
     setQuestionIds((prev) => prev.filter((_, i) => i !== index))
 
-    if (extras && !isQuizExtrasV2(extras)) {
-      setExtras(removeQuestionFromExtras(extras, index))
+    if (extras) {
+      if (isQuizExtrasV2(extras)) {
+        const removedQId = effectiveQuestionIds[index]
+        const nextPerQuestion = extras.perQuestion ? { ...extras.perQuestion } : {}
+        if (removedQId && removedQId in nextPerQuestion) {
+          delete nextPerQuestion[removedQId]
+        }
+        setExtras({
+          ...extras,
+          questionIds: effectiveQuestionIds.filter((_, i) => i !== index),
+          perQuestion: nextPerQuestion,
+        })
+      } else {
+        setExtras(removeQuestionFromExtras(extras, index))
+      }
     }
 
     setCurrentIndex((current) => {
@@ -249,8 +262,20 @@ export const QuizzEditorProvider = ({
       return next
     })
 
-    if (extras && !isQuizExtrasV2(extras)) {
-      setExtras(reorderQuestionsInExtras(extras, from, to))
+    if (extras) {
+      if (isQuizExtrasV2(extras)) {
+        const nextQIds = [...effectiveQuestionIds]
+        const [moved] = nextQIds.splice(from, 1)
+        if (moved) {
+          nextQIds.splice(to, 0, moved)
+        }
+        setExtras({
+          ...extras,
+          questionIds: nextQIds,
+        })
+      } else {
+        setExtras(reorderQuestionsInExtras(extras, from, to))
+      }
     }
   }
 
@@ -260,18 +285,42 @@ export const QuizzEditorProvider = ({
     insert(index + 1, cloned)
     setCurrentIndex(index + 1)
 
-    if (extras && !isQuizExtrasV2(extras)) {
-      const { extras: newExtras, newQuestionId } = duplicateQuestionInExtras(
-        extras,
-        index,
-      )
-      setExtras(newExtras)
-      setQuestionIds((prev) => {
-        const next = [...prev]
-        next.splice(index + 1, 0, newQuestionId)
+    if (extras) {
+      if (isQuizExtrasV2(extras)) {
+        const sourceQId = effectiveQuestionIds[index]
+        const newUuid = generateQuestionId()
+        const nextPerQuestion = extras.perQuestion ? { ...extras.perQuestion } : {}
+        if (sourceQId && sourceQId in nextPerQuestion) {
+          nextPerQuestion[newUuid] = structuredClone(nextPerQuestion[sourceQId])
+        }
+        setExtras({
+          ...extras,
+          questionIds: [
+            ...effectiveQuestionIds.slice(0, index + 1),
+            newUuid,
+            ...effectiveQuestionIds.slice(index + 1),
+          ],
+          perQuestion: nextPerQuestion,
+        })
+        setQuestionIds((prev) => {
+          const next = [...prev]
+          next.splice(index + 1, 0, newUuid)
 
-        return next
-      })
+          return next
+        })
+      } else {
+        const { extras: newExtras, newQuestionId } = duplicateQuestionInExtras(
+          extras,
+          index,
+        )
+        setExtras(newExtras)
+        setQuestionIds((prev) => {
+          const next = [...prev]
+          next.splice(index + 1, 0, newQuestionId)
+
+          return next
+        })
+      }
     } else {
       const newUuid = generateQuestionId()
       setQuestionIds((prev) => {

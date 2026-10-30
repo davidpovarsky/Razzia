@@ -264,4 +264,71 @@ describe("StudioShowCoordinator", () => {
     expect(env?.seq).toBe(1)
     expect(env?.totalSteps).toBe(2)
   })
+
+  it("P1: supports safe backward navigation with previousScene()", () => {
+    const startedQuestions: number[] = []
+    const completedResultsShown: number[] = []
+    let broadcasts = 0
+
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        { id: "s-open", kind: "opening", sceneId: openId },
+        { id: "s-q1", kind: "question", questionId: q1Id },
+        { id: "s-trans", kind: "transition", sceneId: transId },
+      ],
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
+        onShowCompletedQuestionResults: (qIdx) => {
+          completedResultsShown.push(qIdx)
+        },
+        onFinish: vi.fn(),
+        onBroadcastState: () => {
+          broadcasts += 1
+        },
+      },
+    })
+
+    // At lobby
+    expect(coordinator.canPrevious().can).toBe(false)
+
+    // Step 0: opening
+    coordinator.start()
+    expect(coordinator.currentIndex).toBe(0)
+    expect(coordinator.canPrevious().can).toBe(false) // At start of show
+
+    // Advance to Step 1: Q1 (question)
+    coordinator.advanceScene(openId)
+    expect(coordinator.currentIndex).toBe(1)
+    expect(coordinator.canPrevious().can).toBe(true)
+    expect(startedQuestions).toEqual([0])
+
+    // Advance to Step 2: Transition (manual)
+    coordinator.onQuestionCompleted(0)
+    expect(coordinator.currentIndex).toBe(2)
+    expect(coordinator.currentStep?.item.kind).toBe("transition")
+    expect(coordinator.isSceneActive()).toBe(true)
+    expect(coordinator.canPrevious().can).toBe(true)
+
+    // Previous from Step 2 (transition) -> Step 1 (Q1 results)
+    const backToQ1 = coordinator.previousScene()
+    expect(backToQ1).toBe(true)
+    expect(coordinator.currentIndex).toBe(1)
+    expect(completedResultsShown).toEqual([0]) // Displayed completed question results read-only!
+
+    // Previous from Step 1 (Q1) -> Step 0 (opening)
+    const backToOpen = coordinator.previousScene()
+    expect(backToOpen).toBe(true)
+    expect(coordinator.currentIndex).toBe(0)
+    expect(coordinator.currentStep?.item.kind).toBe("opening")
+    expect(coordinator.isSceneActive()).toBe(true)
+
+    // At Step 0, cannot go back further
+    expect(coordinator.canPrevious().can).toBe(false)
+    expect(coordinator.previousScene()).toBe(false)
+  })
 })

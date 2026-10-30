@@ -89,6 +89,8 @@ export interface RoundManagerOptions {
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
   onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
   onShowStart?: (proceed: () => void) => void
+  canPreviousTimelineStep?: () => { can: boolean; reason?: string }
+  onPreviousTimelineStep?: () => boolean
 }
 
 interface RoundStep {
@@ -460,6 +462,127 @@ export class RoundManager {
 
   skipScreen(): boolean {
     return this.nextScreen()
+  }
+
+  canPrevious(): { can: boolean; reason?: string } {
+    if (!this.started) {
+      return { can: false, reason: "Game not started" }
+    }
+
+    if (this.acceptingAnswers) {
+      return { can: false, reason: "Cannot navigate back during active voting" }
+    }
+
+    if (this.currentStep < 0) {
+      return { can: false, reason: "Question starting" }
+    }
+
+    if (this.currentStep > 0) {
+      return { can: true }
+    }
+
+    if (this.opts.canPreviousTimelineStep) {
+      return this.opts.canPreviousTimelineStep()
+    }
+
+    if (this.currentQuestion > 0) {
+      return { can: true }
+    }
+
+    return { can: false, reason: "At start of show" }
+  }
+
+  showCompletedQuestionResults(targetQuestionIndex: number): boolean {
+    if (
+      targetQuestionIndex < 0 ||
+      targetQuestionIndex >= this.questionsHistory.length
+    ) {
+      return false
+    }
+
+    const historyItem = this.questionsHistory[targetQuestionIndex]
+
+    if (!historyItem) {
+      return false
+    }
+
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+    this.acceptingAnswers = false
+    this.currentQuestion = targetQuestionIndex
+    this.currentStep = 0
+
+    const counts: Record<number, number> = {}
+
+    for (let i = 0; i < historyItem.answers.length; i += 1) {
+      counts[i] = 0
+    }
+
+    for (const pa of historyItem.playerAnswers) {
+      if (Array.isArray(pa.answerIds)) {
+        for (const id of pa.answerIds) {
+          if (typeof id === "number" && id in counts) {
+            counts[id] += 1
+          }
+        }
+      }
+    }
+
+    const targetQ = this.opts.quizz.questions[targetQuestionIndex]
+
+    this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
+      ...targetQ,
+      solutions: this.isSurvey() ? undefined : targetQ.solutions,
+      responses: counts,
+    })
+
+    this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.UPDATE_QUESTION, {
+      current: targetQuestionIndex + 1,
+      total: this.opts.quizz.questions.length,
+    })
+
+    return true
+  }
+
+  previousScreen(): boolean {
+    if (!this.started || this.acceptingAnswers || this.currentStep < 0) {
+      return false
+    }
+
+    this.clearAutoAdvance()
+    this.clearInterludeTimer()
+
+    // 1. If at interlude (step 2) or later:
+    if (this.currentStep > 1) {
+      let target = this.currentStep - 1
+
+      while (target > 0 && this.steps[target]?.skip?.()) {
+        target -= 1
+      }
+
+      this.currentStep = target
+      this.steps[target].enter()
+
+      return true
+    }
+
+    // 2. If at leaderboard (step 1):
+    if (this.currentStep === 1) {
+      this.currentStep = 0
+
+      return this.showCompletedQuestionResults(this.currentQuestion)
+    }
+
+    // 3. If at reveal (step 0):
+    if (this.opts.onPreviousTimelineStep) {
+      return this.opts.onPreviousTimelineStep()
+    }
+
+    if (this.currentQuestion > 0) {
+      return this.showCompletedQuestionResults(this.currentQuestion - 1)
+    }
+
+    return false
   }
 
   endOrSkipInterlude(): boolean {

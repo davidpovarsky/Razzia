@@ -114,7 +114,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
   // Setup helper for RoundManager and ExtensionGameSession
   const setupGame = (
     quizz = createSampleQuiz(),
-    options: { withExtras?: boolean } = {},
+    options: { withExtras?: boolean; showLeaderboard?: boolean } = {},
   ) => {
     const fake = createFakeIo()
     const qIds = generateQuestionIds(quizz.questions.length)
@@ -199,7 +199,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
         generatedUsernames: false,
         autoAdvance: { enable: false, responsesDelay: 5, leaderboardDelay: 5 },
       }),
-      shouldShowLeaderboard: () => false,
+      shouldShowLeaderboard: () => options.showLeaderboard ?? false,
       hasInterlude: (qIdx) => session?.hasInterlude(qIdx) ?? false,
       getInterludeAdvance: (qIdx) =>
         session?.getInterludeAdvance(qIdx) ?? "manual",
@@ -217,6 +217,9 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       session.setDelegate({
         endAnswerTimer: () => round.endTimer(),
         nextScreen: () => round.nextScreen(),
+        previousScreen: () => round.previousScreen(),
+        canPrevious: () => round.canPrevious(),
+        isAcceptingAnswers: () => round.isCurrentlyAcceptingAnswers,
         skipQuestion: (reason) => round.skipQuestion(reason),
         replayFromCheckpoint: (qIdx) => round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => round.endOrSkipInterlude(),
@@ -1023,6 +1026,156 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       expect(thrown).toBeDefined()
       expect((thrown as CompositeStorageError).statusCode).toBe(400)
       expect((thrown as Error).message).toContain("Question IDs count mismatch")
+    })
+  })
+
+  // ── P1: Authoritative Previous Screen Navigation Tests ─────────────────────
+  describe("P1: Authoritative Previous Screen Navigation", () => {
+    it("refuses PREVIOUS_SCREEN during active answering (SELECT_ANSWER) and exposes canPrevious=false", async () => {
+      const { round, session, start } = setupGame()
+      await start()
+
+      expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+
+      const state = session?.getStateSnapshot("manager", [])
+      expect(state?.extras.canPrevious).toBe(false)
+      expect(state?.extras.previousReason).toContain("active voting")
+
+      let thrown: unknown = null
+      try {
+        session?.handleCommand(
+          {
+            v: 1,
+            gameId: "game-1",
+            action: "PREVIOUS_SCREEN",
+            payload: {},
+            requestId: "req-prev-during-answers",
+          },
+          true,
+          false,
+        )
+      } catch (err) {
+        thrown = err
+      }
+
+      expect(thrown).toBeDefined()
+      expect((thrown as Error).message).toContain(
+        "cannotPreviousScreenDuringAnswers",
+      )
+    })
+
+    it("rejects non-manager attempts to send PREVIOUS_SCREEN", async () => {
+      const { session, start } = setupGame()
+      await start()
+
+      let thrown: unknown = null
+      try {
+        session?.handleCommand(
+          {
+            v: 1,
+            gameId: "game-1",
+            action: "PREVIOUS_SCREEN",
+            payload: {},
+            requestId: "req-malicious-viewer-prev",
+          },
+          false, // Not manager
+          false,
+        )
+      } catch (err) {
+        thrown = err
+      }
+
+      expect(thrown).toBeDefined()
+      expect((thrown as Error).message).toContain("unauthorized")
+    })
+
+    it("navigates back from leaderboard to reveal within the same question", async () => {
+      const { round, session, p1Socket, p2Socket, start } = setupGame(
+        undefined,
+        { showLeaderboard: true },
+      )
+      await start()
+
+      // Answer Q0: 0 is Paris (solution)
+      round.selectAnswer(p1Socket, [0])
+      round.selectAnswer(p2Socket, [0])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.currentStepName).toBe("reveal")
+
+      // Advance to leaderboard
+      round.nextScreen()
+      expect(round.currentStepName).toBe("leaderboard")
+
+      // Send PREVIOUS_SCREEN via session
+      const prevRes = session?.handleCommand(
+        {
+          v: 1,
+          gameId: "game-1",
+          action: "PREVIOUS_SCREEN",
+          payload: {},
+          requestId: "req-prev-to-reveal",
+        },
+        true,
+        false,
+      )
+
+      expect(prevRes?.success).toBe(true)
+      expect(round.currentStepName).toBe("reveal")
+    })
+
+    it("preserves player scores and vote counts immutably when stepping back to previously scored question", async () => {
+      const { round, session, playerManager, p1Socket, p2Socket, reachAnswers, start } =
+        setupGame()
+      await start()
+
+      // Q0: Alice scores 1000 points (solution is [0])
+      round.selectAnswer(p1Socket, [0])
+      round.selectAnswer(p2Socket, [1]) // Bob wrong
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.currentStepName).toBe("reveal")
+
+      const alice = playerManager.findById("p1")
+      const bob = playerManager.findById("p2")
+      expect(alice?.points).toBe(1000)
+      expect(bob?.points).toBe(0)
+
+      // Advance to Q1
+      round.nextScreen() // to interlude
+      round.endOrSkipInterlude()
+      await reachAnswers()
+      expect(round.currentQuestionIndex).toBe(1)
+
+      // Q1 solutions are [0, 1, 3]
+      round.selectAnswer(p1Socket, [0, 1, 3])
+      round.selectAnswer(p2Socket, [0, 1, 3])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.currentStepName).toBe("reveal")
+      expect(round.currentQuestionIndex).toBe(1)
+
+      // Step back from Q1 reveal to Q0 completed results
+      const prevRes = session?.handleCommand(
+        {
+          v: 1,
+          gameId: "game-1",
+          action: "PREVIOUS_SCREEN",
+          payload: {},
+          requestId: "req-back-to-q0",
+        },
+        true,
+        false,
+      )
+
+      expect(prevRes?.success).toBe(true)
+      expect(round.currentQuestionIndex).toBe(0)
+      expect(round.currentStepName).toBe("reveal")
+
+      // Alice's score must still be exactly her score, never doubled or erased
+      expect(playerManager.findById("p1")?.points).toBe(2000)
+      expect(playerManager.findById("p2")?.points).toBe(1000)
+
+      // History for Q0 remains intact
+      const q0Hist = round.getHistory(0) as { playerAnswersCount: number }
+      expect(q0Hist.playerAnswersCount).toBe(2)
     })
   })
 })
