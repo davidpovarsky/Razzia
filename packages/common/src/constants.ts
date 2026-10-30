@@ -37,6 +37,11 @@ export const EVENTS = {
     LOCK_UPDATED: "manager:lockUpdated",
     HOST_PRESENCE: "manager:hostPresence",
   },
+  SPECTATOR: {
+    JOIN: "spectator:join",
+    LEAVE: "spectator:leave",
+    SUCCESS_JOIN: "spectator:successJoin",
+  },
   EXTENSIONS: {
     STATE: "extensions:state",
     COMMAND: "extensions:command",
@@ -46,6 +51,7 @@ export const EVENTS = {
 export const SESSION_ROLES = {
   PLAYER: "player",
   MANAGER: "manager",
+  SPECTATOR: "spectator",
 } as const
 
 export const NO_TIME_LIMIT = -1

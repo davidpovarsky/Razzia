@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Exit game?",
     "exitConfirmDesc": "The game session will be terminated and all players will be disconnected.",
     "noHistoryAvailable": "No past questions available yet.",
+    "openDisplay": "Audience Display",
+    "copyDisplayUrl": "Copy Audience Link",
+    "displayUrlCopied": "Audience link copied",
     "questionNum": "Question {{num}}",
     "answersCount": "{{count}} answers",
     "skipped": "(Skipped)"

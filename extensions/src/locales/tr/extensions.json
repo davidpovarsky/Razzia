@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Oyundan çıkılsın mı?",
     "exitConfirmDesc": "Oyun oturumu sonlandırılacak ve tüm oyuncuların bağlantısı kesilecektir.",
     "noHistoryAvailable": "Henüz geçmiş soru bulunmuyor.",
+    "openDisplay": "Seyirci Ekranı",
+    "copyDisplayUrl": "Seyirci Bağlantısını Kopyala",
+    "displayUrlCopied": "Seyirci bağlantısı kopyalandı",
     "questionNum": "Soru {{num}}",
     "answersCount": "{{count}} cevap",
     "skipped": "(Atlandı)"

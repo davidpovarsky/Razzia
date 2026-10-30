@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Thoát trò chơi?",
     "exitConfirmDesc": "Phiên chơi sẽ kết thúc và tất cả người chơi sẽ bị ngắt kết nối.",
     "noHistoryAvailable": "Chưa có câu hỏi nào trước đó.",
+    "openDisplay": "Màn hình khán giả",
+    "copyDisplayUrl": "Sao chép liên kết khán giả",
+    "displayUrlCopied": "Đã sao chép liên kết khán giả",
     "questionNum": "Câu hỏi {{num}}",
     "answersCount": "{{count}} câu trả lời",
     "skipped": "(Đã bỏ qua)"

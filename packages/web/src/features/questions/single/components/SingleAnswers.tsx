@@ -1,4 +1,5 @@
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
+import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
 import {
   ANSWERS_COLORS,
   ANSWERS_LABELS,
@@ -11,8 +12,26 @@ const SingleAnswers = ({
   onSubmit,
   readOnly,
   fill,
+  visuals,
 }: AnswerComponentProps) => {
   const handleSubmit = (key: number) => onSubmit([key])
+
+  const hasVisuals = Boolean(
+    visuals && visuals.length > 0 && visuals.some((v) => Boolean(v.url)),
+  )
+
+  if (hasVisuals) {
+    return (
+      <div className="w-full">
+        <PhotoCardGrid
+          answers={answers}
+          visuals={visuals}
+          onSubmit={handleSubmit}
+          readOnly={readOnly}
+        />
+      </div>
+    )
+  }
 
   return (
     <div

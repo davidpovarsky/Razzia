@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Quitter la partie ?",
     "exitConfirmDesc": "La session de jeu sera terminée et tous les joueurs seront déconnectés.",
     "noHistoryAvailable": "Aucune question précédente disponible pour l'instant.",
+    "openDisplay": "Écran public",
+    "copyDisplayUrl": "Copier le lien public",
+    "displayUrlCopied": "Lien public copié",
     "questionNum": "Question {{num}}",
     "answersCount": "{{count}} réponses",
     "skipped": "(Ignoré)"

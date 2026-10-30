@@ -179,6 +179,9 @@
     "exitConfirmTitle": "ゲームを終了しますか？",
     "exitConfirmDesc": "ゲームセッションは終了し、すべてのプレイヤーの接続が切断されます。",
     "noHistoryAvailable": "過去の質問はまだありません。",
+    "openDisplay": "観客用画面",
+    "copyDisplayUrl": "観客用リンクをコピー",
+    "displayUrlCopied": "観客用リンクをコピーしました",
     "questionNum": "第{{num}}問",
     "answersCount": "{{count}}件の回答",
     "skipped": "(スキップ済み)"

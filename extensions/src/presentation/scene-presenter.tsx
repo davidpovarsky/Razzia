@@ -387,7 +387,7 @@ export const ScenePresenter = ({
 
         {/* Real Live Interim Results */}
         {kind === "interimResults" && (
-          <div className="flex w-full max-w-2xl flex-col items-center gap-4">
+          <div className="flex w-full max-w-5xl flex-col items-center gap-4">
             {interimResults ? (
               (() => {
                 const winnerIndices = interimResults.winners ?? []
@@ -402,124 +402,128 @@ export const ScenePresenter = ({
                   (interimResults.isTie ?? winnerOptions.length > 1)
 
                 return (
-                  <div className="w-full rounded-2xl border border-white/10 bg-black/60 p-6 shadow-2xl backdrop-blur-md">
-                    <p className="mb-4 text-center text-xl font-black text-white md:text-2xl">
+                  <div className="w-full rounded-2xl border border-white/10 bg-black/60 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
+                    <p className="mb-3 text-center text-xl font-black text-white md:text-2xl lg:text-3xl">
                       {interimResults.questionText}
                     </p>
 
-                    {/* Winner / Tie / No Votes Spotlight */}
+                    {/* Winner / Tie / No Votes Status Banner */}
                     {isZeroVotes ? (
                       <div
                         data-testid="no-votes-message"
-                        className="my-4 rounded-xl border border-white/10 bg-black/40 px-4 py-3 text-center text-sm font-semibold text-white/70"
+                        className="my-3 rounded-xl border border-white/10 bg-black/40 px-4 py-2.5 text-center text-sm font-semibold text-white/70"
                       >
                         No votes yet
                       </div>
                     ) : isTie ? (
                       <div
                         data-testid="spotlight-tie"
-                        className="my-4 flex flex-col items-center gap-3 rounded-2xl border-2 border-primary/40 bg-primary/10 p-4"
+                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-4 py-2"
                       >
                         <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
-                          Tie / Co-leaders
+                          Tie / Co-leaders ({winnerOptions.map((o) => o.label).join(", ")})
                         </span>
-                        <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-                          {winnerOptions.map((opt, wIdx) => (
-                            <div
-                              key={wIdx}
-                              className="flex flex-col items-center gap-2 rounded-xl bg-black/30 p-3"
-                              data-testid="tied-winner-item"
-                            >
-                              {opt.imageUrl && (
-                                <img
-                                  src={opt.imageUrl}
-                                  alt={opt.alt || opt.label}
-                                  data-testid="winner-image"
-                                  className="max-h-40 w-auto rounded-lg object-contain shadow-md"
-                                  loading="lazy"
-                                />
-                              )}
-                              <span
-                                data-testid="winner-caption"
-                                className="text-center font-bold text-white text-base"
-                              >
-                                {opt.label}
-                              </span>
-                              <span className="font-mono text-sm font-bold text-primary">
-                                {opt.count} votes ({opt.percentage}%)
-                              </span>
-                            </div>
-                          ))}
-                        </div>
                       </div>
                     ) : (
                       <div
                         data-testid="spotlight-winner"
-                        className="my-4 flex flex-col items-center gap-3 rounded-2xl border-2 border-primary/50 bg-primary/10 p-5 shadow-lg"
+                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-primary/50 bg-primary/10 px-4 py-2"
                       >
                         <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-wider text-primary">
-                          Leading Choice
-                        </span>
-                        {winnerOptions[0]?.imageUrl && (
-                          <img
-                            src={winnerOptions[0].imageUrl}
-                            alt={
-                              winnerOptions[0].alt || winnerOptions[0].label
-                            }
-                            data-testid="winner-image"
-                            className="max-h-52 w-auto rounded-xl object-contain shadow-lg border border-white/20"
-                            loading="lazy"
-                          />
-                        )}
-                        <span
-                          data-testid="winner-caption"
-                          className="text-center text-xl font-black text-white"
-                        >
-                          {winnerOptions[0]?.label}
-                        </span>
-                        <span className="font-mono text-sm font-bold text-primary">
-                          {winnerOptions[0]?.count} votes (
-                          {winnerOptions[0]?.percentage}%)
+                          Leading Choice: {winnerOptions[0]?.label}
                         </span>
                       </div>
                     )}
 
-                    {/* Breakdown by option */}
-                    <div className="mt-4 flex flex-col gap-3">
-                      {interimResults.options.map((opt, i) => (
-                        <div
-                          key={opt.label || i}
-                          className="flex flex-col gap-1 text-left"
-                          data-testid="interim-option-row"
-                        >
-                          <div className="flex items-center justify-between text-sm font-semibold text-white/90">
-                            <span className="flex items-center gap-2">
+                    {/* Cohesive 5-Card Adaptive Visual Grid */}
+                    <div className="grid w-full grid-cols-6 gap-3 sm:gap-4 my-4">
+                      {interimResults.options.map((opt, i) => {
+                        const isThisWinner =
+                          !isZeroVotes && winnerIndices.includes(i)
+                        const count = interimResults.options.length
+                        let colClass = "col-span-6 sm:col-span-3"
+                        if (count === 5) {
+                          if (i === 0) colClass = "col-span-6 sm:col-span-2 sm:col-start-1"
+                          else if (i === 1) colClass = "col-span-6 sm:col-span-2 sm:col-start-3"
+                          else if (i === 2) colClass = "col-span-6 sm:col-span-2 sm:col-start-5"
+                          else if (i === 3) colClass = "col-span-6 sm:col-span-2 sm:col-start-2"
+                          else if (i === 4) colClass = "col-span-6 sm:col-span-2 sm:col-start-4"
+                        } else if (count === 3) {
+                          colClass = "col-span-6 sm:col-span-2"
+                        }
+
+                        return (
+                          <div
+                            key={opt.label || i}
+                            data-testid="interim-option-row"
+                            data-winner={isThisWinner}
+                            className={clsx(
+                              "flex flex-col items-center justify-between rounded-xl border p-3 text-center transition-all duration-300",
+                              colClass,
+                              isThisWinner
+                                ? "ring-4 ring-amber-400 bg-amber-950/40 border-amber-300 shadow-xl shadow-amber-500/20 scale-[1.05] z-10"
+                                : "border-white/10 bg-black/40 opacity-90",
+                            )}
+                          >
+                            <div className="flex w-full items-center justify-between mb-1.5">
+                              <span className="flex size-6 items-center justify-center rounded-md bg-white/20 text-xs font-black text-white">
+                                {i + 1}
+                              </span>
+                              {isThisWinner && (
+                                <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black uppercase text-black">
+                                  {isTie ? "Co-leader" : "Leader"}
+                                </span>
+                              )}
+                            </div>
+
+                            <div className="relative flex aspect-square w-full max-h-32 sm:max-h-40 md:max-h-48 items-center justify-center overflow-hidden rounded-lg bg-black/30 border border-white/10">
                               {opt.imageUrl && (
                                 <img
                                   src={opt.imageUrl}
-                                  alt=""
-                                  className="size-5 rounded object-cover"
+                                  alt={opt.alt || opt.label}
+                                  data-testid={isThisWinner ? "winner-image" : undefined}
+                                  className="h-full w-full object-contain p-1 rounded-lg"
+                                  loading="lazy"
                                 />
                               )}
-                              <span>{opt.label}</span>
+                            </div>
+
+                            <span
+                              data-testid={isThisWinner ? "winner-caption" : undefined}
+                              className={clsx(
+                                "mt-2 w-full text-center font-bold line-clamp-2",
+                                isThisWinner
+                                  ? "text-amber-200 text-sm sm:text-base"
+                                  : "text-white text-xs sm:text-sm",
+                              )}
+                            >
+                              {opt.label}
                             </span>
-                            <span className="font-mono font-bold text-primary">
-                              {opt.count} ({opt.percentage}%)
-                            </span>
+
+                            <div className="mt-1 flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-primary">
+                              <span>
+                                {opt.count} {opt.count === 1 ? "vote" : "votes"}
+                              </span>
+                              <span>({opt.percentage}%)</span>
+                            </div>
+
+                            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
+                              <div
+                                className={clsx(
+                                  "h-full rounded-full transition-all duration-500",
+                                  isThisWinner ? "bg-amber-400" : "bg-primary",
+                                )}
+                                style={{
+                                  width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
+                                }}
+                              />
+                            </div>
                           </div>
-                          <div className="h-2.5 w-full overflow-hidden rounded-full bg-white/10">
-                            <div
-                              className="h-full rounded-full bg-primary transition-all duration-500"
-                              style={{
-                                width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
-                              }}
-                            />
-                          </div>
-                        </div>
-                      ))}
+                        )
+                      })}
                     </div>
 
-                    <div className="mt-4 flex justify-between border-t border-white/10 pt-3 text-xs text-white/60">
+                    <div className="mt-3 flex justify-between border-t border-white/10 pt-2 text-xs text-white/60">
                       <span data-testid="total-votes">
                         {labels?.totalResponders
                           ? labels.totalResponders(interimResults.totalResponders)

@@ -9,7 +9,7 @@ import {
   calculateRevealState,
 } from "@razzia/extensions/presentation"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
-import AnswerNote from "@razzia/web/features/game/components/AnswerNote"
+import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
 import {
   isRevealValidForQuestion,
   useExtensionState,
@@ -247,12 +247,31 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
           {question}
         </h2>
         <ResponsesComponent data={data} />
-        <AnswerNote note={note} />
       </div>
     )
   }
 
   const { isRevealed } = timelineState
+
+  const hasVisuals = Boolean(
+    answerVisuals &&
+      answerVisuals.length > 0 &&
+      answerVisuals.some((v) => Boolean(v.url)),
+  )
+
+  const winnerIndices = (() => {
+    let max = 0
+    for (const count of Object.values(responses)) {
+      const num = Number(count) || 0
+      if (num > max) max = num
+    }
+    if (max === 0) return []
+    return answers
+      .map((_, i) => i)
+      .filter((i) => (Number(responses[i]) || 0) === max)
+  })()
+
+  const isTie = winnerIndices.length > 1
 
   return (
     <div className="flex h-full flex-1 flex-col justify-between p-4">
@@ -273,55 +292,67 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
           </div>
         )}
 
-        {/* Answer Cards with Integrated 2D Horizontal Progress Bars & Reveal Animation */}
-        <div className="mt-4 grid w-full max-w-5xl grid-cols-1 gap-4 md:grid-cols-2">
-          {answers.map((answer, key) => {
-            const pct = timelineState.displayPercentages[key] ?? 0
-            const count = responses[key] ?? 0
-            const isSolution = solutions?.includes(key)
-            const visual = answerVisuals?.find((v) => v.answerIndex === key)
+        {/* Answer Cards: PhotoCardGrid when visuals present; original AnswerButton grid otherwise */}
+        {hasVisuals ? (
+          <div className="w-full">
+            <PhotoCardGrid
+              answers={answers}
+              visuals={answerVisuals}
+              responses={responses}
+              percentages={timelineState.displayPercentages}
+              winners={winnerIndices}
+              isTie={isTie}
+              isRevealed={isRevealed}
+              isSurvey={isSurvey}
+              readOnly
+            />
+          </div>
+        ) : (
+          <div className="mt-4 grid w-full max-w-5xl grid-cols-1 gap-4 md:grid-cols-2">
+            {answers.map((answer, key) => {
+              const pct = timelineState.displayPercentages[key] ?? 0
+              const count = responses[key] ?? 0
+              const isSolution = solutions?.includes(key)
+              const visual = answerVisuals?.find((v) => v.answerIndex === key)
 
-            // Reveal coloring
-            let cardColorClass = ANSWERS_COLORS[key]
-            let isCorrectForButton: boolean | undefined = undefined
+              // Reveal coloring
+              let cardColorClass = ANSWERS_COLORS[key]
+              let isCorrectForButton: boolean | undefined = undefined
 
-            if (isRevealed && !isSurvey) {
-              if (isSolution) {
-                cardColorClass =
-                  "bg-emerald-600 ring-4 ring-emerald-400 text-white shadow-xl"
-                isCorrectForButton = true
-              } else {
-                cardColorClass = "bg-red-700/80 opacity-65 text-white/90"
-                isCorrectForButton = false
+              if (isRevealed && !isSurvey) {
+                if (isSolution) {
+                  cardColorClass =
+                    "bg-emerald-600 ring-4 ring-emerald-400 text-white shadow-xl"
+                  isCorrectForButton = true
+                } else {
+                  cardColorClass = "bg-red-700/80 opacity-65 text-white/90"
+                  isCorrectForButton = false
+                }
               }
-            }
 
-            return (
-              <AnswerButton
-                key={key}
-                label={ANSWERS_LABELS[key]}
-                className={clsx(
-                  "text-white transition-all duration-300",
-                  cardColorClass,
-                  answers.length === 5 && key === 4 && "md:col-span-2",
-                )}
-                percentage={pct}
-                count={count}
-                correct={isCorrectForButton}
-                visual={visual}
-                data-testid={`answer-card-${key}`}
-                data-percentage={pct}
-                data-revealed={isRevealed}
-              >
-                {answer}
-              </AnswerButton>
-            )
-          })}
-        </div>
-      </div>
-
-      <div className="flex flex-col gap-4">
-        <AnswerNote note={note} />
+              return (
+                <AnswerButton
+                  key={key}
+                  label={ANSWERS_LABELS[key]}
+                  className={clsx(
+                    "text-white transition-all duration-300",
+                    cardColorClass,
+                    answers.length === 5 && key === 4 && "md:col-span-2",
+                  )}
+                  percentage={pct}
+                  count={count}
+                  correct={isCorrectForButton}
+                  visual={visual}
+                  data-testid={`answer-card-${key}`}
+                  data-percentage={pct}
+                  data-revealed={isRevealed}
+                >
+                  {answer}
+                </AnswerButton>
+              )
+            })}
+          </div>
+        )}
       </div>
     </div>
   )

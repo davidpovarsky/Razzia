@@ -511,8 +511,8 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     await expect(
       manager.getByText("What is your favorite color?"),
     ).toBeVisible()
-    await expect(manager.getByText("Red")).toBeVisible()
-    await expect(manager.getByText("Blue")).toBeVisible()
+    await expect(manager.getByText("Red", { exact: true })).toBeVisible()
+    await expect(manager.getByText("Blue", { exact: true })).toBeVisible()
 
     await saveScreenshot(manager, "live_interim_results_real_poll_manager.png")
     await saveScreenshot(alice, "live_interim_results_real_poll_player.png")

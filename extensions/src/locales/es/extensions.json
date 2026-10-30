@@ -179,6 +179,9 @@
     "exitConfirmTitle": "¿Salir del juego?",
     "exitConfirmDesc": "La sesión de juego terminará y todos los jugadores serán desconectados.",
     "noHistoryAvailable": "Aún no hay preguntas anteriores disponibles.",
+    "openDisplay": "Pantalla de audiencia",
+    "copyDisplayUrl": "Copiar enlace de audiencia",
+    "displayUrlCopied": "Enlace de audiencia copiado",
     "questionNum": "Pregunta {{num}}",
     "answersCount": "{{count}} respuestas",
     "skipped": "(Omitido)"

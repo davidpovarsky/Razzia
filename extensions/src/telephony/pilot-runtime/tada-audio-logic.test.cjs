@@ -172,3 +172,61 @@ test('answer accepted as window closes: authoritative wrong outcome delivers 003
   assert.equal(r.cue, '003');
   assert.equal(s.answered, true);
 });
+
+test('5-option single-choice survey accepts key 5 and emits neutral 004 cue', () => {
+  const s = createSession();
+  event(s, null, new URLSearchParams(), { joinedConfirmed: true });
+  syncServerState(s, {
+    state: {
+      epoch: 1,
+      acceptingAnswers: true,
+      answeredCurrentQuestion: false,
+      answersCount: 5,
+    },
+  });
+
+  let submittedKey = null;
+  const r = event(
+    s,
+    (key) => {
+      submittedKey = key;
+      return { accepted: true, isSurvey: true };
+    },
+    new URLSearchParams('td1=5'),
+    { joinedConfirmed: true },
+  );
+
+  assert.equal(submittedKey, '5');
+  assert.equal(r.event, 'survey_answer');
+  assert.equal(r.cue, '004');
+  assert.equal(s.answered, true);
+});
+
+test('4-option question rejects key 5 as invalid_key and does not call judge', () => {
+  const s = createSession();
+  event(s, null, new URLSearchParams(), { joinedConfirmed: true });
+  syncServerState(s, {
+    state: {
+      epoch: 1,
+      acceptingAnswers: true,
+      answeredCurrentQuestion: false,
+      answersCount: 4,
+    },
+  });
+
+  let called = false;
+  const r = event(
+    s,
+    () => {
+      called = true;
+      return { accepted: true };
+    },
+    new URLSearchParams('td1=5'),
+    { joinedConfirmed: true },
+  );
+
+  assert.equal(called, false);
+  assert.equal(r.event, 'invalid_key');
+  assert.equal(r.cue, '004');
+  assert.equal(s.answered, false);
+});

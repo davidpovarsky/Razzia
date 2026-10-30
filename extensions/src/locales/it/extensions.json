@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Uscire dal gioco?",
     "exitConfirmDesc": "La sessione di gioco verrà terminata e tutti i giocatori verranno disconnessi.",
     "noHistoryAvailable": "Nessuna domanda precedente ancora disponibile.",
+    "openDisplay": "Schermo pubblico",
+    "copyDisplayUrl": "Copia link pubblico",
+    "displayUrlCopied": "Link pubblico copiato",
     "questionNum": "Domanda {{num}}",
     "answersCount": "{{count}} risposte",
     "skipped": "(Saltato)"

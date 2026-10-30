@@ -18,6 +18,7 @@ import type { z } from "zod"
 export interface SocketData {
   clientId: string
   role: SessionRole
+  gameId?: string
 }
 
 export type Server = ServerIO<
@@ -100,6 +101,13 @@ export interface ServerToClientEvents {
   // Extension events
   // oxlint-disable-next-line typescript/no-explicit-any
   [EVENTS.EXTENSIONS.STATE]: (_data: any) => void
+
+  // Spectator events
+  [EVENTS.SPECTATOR.SUCCESS_JOIN]: (_data: {
+    gameId: string
+    inviteCode: string
+    gameMode: QuizzMode
+  }) => void
 }
 
 type ClientEventValidators = typeof clientEventValidators

@@ -25,6 +25,8 @@ export const clientEventValidators = {
   [EVENTS.PLAYER.SELECTED_ANSWER]: gameMessageValidator.extend({
     data: z.object({ answerKeys: answerKeysValidator }),
   }),
+  [EVENTS.SPECTATOR.JOIN]: gameMessageValidator,
+  [EVENTS.SPECTATOR.LEAVE]: gameMessageValidator,
   [EVENTS.EXTENSIONS.COMMAND]: z.object({
     v: z.literal(1),
     gameId: z.string().min(1),

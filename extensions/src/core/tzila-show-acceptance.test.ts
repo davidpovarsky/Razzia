@@ -77,7 +77,7 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
     expect(preflight.summary?.answerImageCount).toBe(50)
     expect(preflight.normalizedBundleDraft).toBeDefined()
 
-    const bundle = preflight.normalizedBundleDraft!
+    const bundle = preflight.normalizedBundleDraft as any
     expect(bundle.quizz.questions.length).toBe(10)
     for (const q of bundle.quizz.questions) {
       expect(q.answers.length).toBe(5)
@@ -293,7 +293,6 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
       question: "Who is the main character?",
       answers: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
       questionType: "single",
-      acceptingAnswers: true,
     })
 
     // Press DTMF 5

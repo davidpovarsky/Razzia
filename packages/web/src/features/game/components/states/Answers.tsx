@@ -3,11 +3,16 @@ import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  type AnswerVisual,
   type ExtensionStateEnvelope,
   type QuestionReveal,
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
+import {
+  getAuthoritativeEnvelope,
+  useExtensionState,
+} from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   useEvent,
   useSocket,
@@ -48,12 +53,28 @@ const Answers = ({
   const [totalAnswer, setTotalAnswer] = useState(0)
   const [extensionState, setExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
+  const contextExtensionState = useExtensionState()
+  const effectiveExtensionState = getAuthoritativeEnvelope(
+    extensionState,
+    contextExtensionState,
+  )
   const { t } = useTranslation()
   const { width } = useScreenSize()
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
     setExtensionState(payload)
   })
+
+  const rawAnswerVisuals = effectiveExtensionState?.extras.answerVisuals as
+    | AnswerVisual[]
+    | undefined
+
+  const currentVisuals =
+    rawAnswerVisuals &&
+    rawAnswerVisuals.length === answers.length &&
+    rawAnswerVisuals.some((v) => Boolean(v.url))
+      ? rawAnswerVisuals
+      : undefined
 
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
   const isPopupMedia = popupMedia.includes(media?.type)
@@ -202,6 +223,7 @@ const Answers = ({
           onSubmit={handleSubmit}
           readOnly={!player}
           fill={showAnswersOnly}
+          visuals={currentVisuals}
         />
       </div>
     </div>

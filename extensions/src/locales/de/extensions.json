@@ -179,6 +179,9 @@
     "exitConfirmTitle": "Spiel verlassen?",
     "exitConfirmDesc": "Die Spielsitzung wird beendet und alle Spieler werden getrennt.",
     "noHistoryAvailable": "Noch keine vergangenen Fragen verfügbar.",
+    "openDisplay": "Zuschauerbildschirm",
+    "copyDisplayUrl": "Zuschauer-Link kopieren",
+    "displayUrlCopied": "Zuschauer-Link kopiert",
     "questionNum": "Frage {{num}}",
     "answersCount": "{{count}} Antworten",
     "skipped": "(Übersprungen)"

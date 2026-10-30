@@ -150,12 +150,18 @@ const server = http.createServer((req, res) => {
       const enteredDigit = prevKey && params.has(prevKey) ? params.get(prevKey) : undefined;
       let answerOutcome = null;
 
+      const allowedAnswersCount =
+        serverData && serverData.state && typeof serverData.state.answersCount === 'number'
+          ? serverData.state.answersCount
+          : 5;
+
       if (
         joinedConfirmed &&
         prevKey &&
         !s.handled.has(prevKey) &&
         enteredDigit &&
-        /^[1-5]$/.test(enteredDigit)
+        /^[1-5]$/.test(enteredDigit) &&
+        Number.parseInt(enteredDigit, 10) <= allowedAnswersCount
       ) {
         const zeroIdx = Number.parseInt(enteredDigit, 10) - 1;
         const ansRes = await callRazziaBackend({

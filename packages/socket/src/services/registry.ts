@@ -58,6 +58,10 @@ class Registry {
     return this.games.find((g) => g.players.some((p) => p.id === socketId))
   }
 
+  getGameBySpectatorSocketId(socketId: string): Game | undefined {
+    return this.games.find((g) => g.hasSpectatorSocket(socketId))
+  }
+
   markGameAsEmpty(game: Game): void {
     const alreadyEmpty = this.emptyGames.find(
       (g) => g.game.gameId === game.gameId,

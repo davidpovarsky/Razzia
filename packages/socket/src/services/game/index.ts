@@ -1,9 +1,10 @@
-import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
-import type {
-  GameSettings,
-  Player,
-  Quizz,
-  QuizzMode,
+import { createDefaultGameSettings, EVENTS, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  resolveQuestionPlayMode,
+  type GameSettings,
+  type Player,
+  type Quizz,
+  type QuizzMode,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
@@ -27,6 +28,7 @@ import {
   StudioShowCoordinator,
   type PlayerScoreInfo,
 } from "@razzia/extensions/server"
+import { isQuestionSupportedOnPstn } from "@razzia/extensions/telephony"
 import { getPath, saveResult } from "@razzia/socket/services/config"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
@@ -77,6 +79,7 @@ class Game {
     string,
     { name: Status; data: StatusDataMap[Status] }
   >()
+  private readonly spectatorSocketIds = new Set<string>()
   private presenceSeq = 0
   private readonly rosterMap = new Map<
     string,
@@ -499,7 +502,63 @@ class Game {
     return this.rosterMap.get(rosterPlayerId) ?? null
   }
 
+  getCurrentQuestionPstnSupport(): {
+    supported: boolean
+    reason?: string
+    answersCount: number
+    maxAnswerIndex: number
+    isSurvey: boolean
+    epoch: number
+  } {
+    const epoch =
+      this.extensionSession?.currentEpoch ??
+      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+
+    if (!this.started || this.showCoordinator?.isSceneActive()) {
+      return {
+        supported: false,
+        reason: "no_active_question",
+        answersCount: 0,
+        maxAnswerIndex: -1,
+        isSurvey: false,
+        epoch,
+      }
+    }
+
+    const currentQ = this.quizz.questions[this.round.currentQuestionIndex]
+    if (!currentQ) {
+      return {
+        supported: false,
+        reason: "no_active_question",
+        answersCount: 0,
+        maxAnswerIndex: -1,
+        isSurvey: false,
+        epoch,
+      }
+    }
+
+    const answersCount = currentQ.answers?.length ?? 0
+    const playMode = resolveQuestionPlayMode(currentQ, this.gameMode)
+    const check = isQuestionSupportedOnPstn(
+      this.gameMode,
+      currentQ.type,
+      answersCount,
+      playMode,
+    )
+
+    return {
+      supported: check.supported,
+      reason: check.reason,
+      answersCount,
+      maxAnswerIndex: answersCount - 1,
+      isSurvey: this.round.isSurvey(),
+      epoch,
+    }
+  }
+
   getQuestionStateForGateway(rosterPlayerId?: string) {
+    const pstn = this.getCurrentQuestionPstnSupport()
+
     if (this.showCoordinator?.isSceneActive()) {
       const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
       const player = entry?.clientId
@@ -520,6 +579,10 @@ class Game {
         answeredCurrentQuestion: true,
         points: player?.points ?? entry?.points ?? 0,
         lastVerdict: verdict,
+        answersCount: pstn.answersCount,
+        maxAnswerIndex: pstn.maxAnswerIndex,
+        isSurvey: pstn.isSurvey,
+        isSupportedOnPstn: pstn.supported,
       }
     }
 
@@ -546,6 +609,10 @@ class Game {
       answeredCurrentQuestion: answered,
       points: player?.points ?? entry?.points ?? 0,
       lastVerdict: verdict,
+      answersCount: pstn.answersCount,
+      maxAnswerIndex: pstn.maxAnswerIndex,
+      isSurvey: pstn.isSurvey,
+      isSupportedOnPstn: pstn.supported,
     }
   }
 
@@ -565,17 +632,37 @@ class Game {
     isSurvey?: boolean
     reason?: string
   } {
+    const pstn = this.getCurrentQuestionPstnSupport()
+    const epoch = pstn.epoch
+
     if (this.showCoordinator?.isSceneActive()) {
       return {
         accepted: false,
-        epoch: this.showCoordinator.currentEpoch,
+        epoch,
         reason: "scene_active",
       }
     }
 
-    const epoch =
-      this.extensionSession?.currentEpoch ??
-      (this.started ? this.round.currentQuestionIndex + 1 : 0)
+    if (!pstn.supported) {
+      return {
+        accepted: false,
+        epoch,
+        reason: pstn.reason ?? "unsupported_question_type",
+      }
+    }
+
+    if (
+      typeof zeroBasedAnswerIndex !== "number" ||
+      !Number.isInteger(zeroBasedAnswerIndex) ||
+      zeroBasedAnswerIndex < 0 ||
+      zeroBasedAnswerIndex > pstn.maxAnswerIndex
+    ) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "invalid_answer_index",
+      }
+    }
 
     if (!this.started || !this.round.isCurrentlyAcceptingAnswers) {
       return {
@@ -965,12 +1052,101 @@ class Game {
     this.io.to(this._manager.id).emit(EVENTS.MANAGER.LOCK_UPDATED, locked)
   }
 
+  // ── Spectator / Audience Projector ──────────────────────────────────────────
+
+  hasSpectatorSocket(socketId: string): boolean {
+    return this.spectatorSocketIds.has(socketId)
+  }
+
+  getSpectatorCount(): number {
+    return this.spectatorSocketIds.size
+  }
+
+  joinSpectator(socket: Socket) {
+    socket.join(this.gameId)
+    this.spectatorSocketIds.add(socket.id)
+    socket.data = {
+      clientId: getClientId(socket),
+      role: SESSION_ROLES.SPECTATOR,
+      gameId: this.gameId,
+    }
+
+    socket.emit(EVENTS.SPECTATOR.SUCCESS_JOIN, {
+      gameId: this.gameId,
+      inviteCode: this.inviteCode,
+      gameMode: this.gameMode,
+    })
+
+    const currentStatus = this.managerStatus ?? this.lastBroadcastStatus
+    if (currentStatus) {
+      socket.emit(
+        EVENTS.GAME.STATUS,
+        this.sanitizeStatusForAudience(currentStatus),
+      )
+    }
+
+    if (this.extensionSession) {
+      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
+        clientId: p.clientId,
+        score: p.points,
+        isConnected: p.connected,
+      }))
+      const specSnapshot = this.extensionSession.getStateSnapshot(
+        "player",
+        playerScores,
+      )
+      socket.emit(EVENTS.EXTENSIONS.STATE, specSnapshot)
+    }
+  }
+
+  leaveSpectator(socket: Socket) {
+    socket.leave(this.gameId)
+    this.spectatorSocketIds.delete(socket.id)
+  }
+
+  public sanitizeStatusForAudience<T extends Status>(statusData: {
+    name: T
+    data: StatusDataMap[T]
+  }): { name: T; data: StatusDataMap[T] } {
+    if (!statusData || typeof statusData !== "object" || !statusData.data) {
+      return statusData
+    }
+
+    const cleanData = { ...statusData.data } as Record<string, unknown>
+
+    // Policy: Never expose editorial/backstage note to audience or players
+    if ("note" in cleanData) {
+      delete cleanData.note
+    }
+
+    // In SELECT_ANSWER: never leak solutions
+    if (
+      statusData.name === STATUS.SELECT_ANSWER ||
+      statusData.name === STATUS.SHOW_QUESTION
+    ) {
+      if ("solutions" in cleanData) {
+        delete cleanData.solutions
+      }
+    }
+
+    // For survey questions: solutions must be undefined
+    if (this.round.isSurvey() && "solutions" in cleanData) {
+      delete cleanData.solutions
+    }
+
+    return {
+      name: statusData.name,
+      data: cleanData as StatusDataMap[T],
+    }
+  }
+
   // ── Status broadcasting ──────────────────────────────────────────────────
 
   private broadcastStatus<T extends Status>(status: T, data: StatusDataMap[T]) {
     const statusData = { name: status, data }
     this.lastBroadcastStatus = statusData
-    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, statusData)
+    const publicStatus = this.sanitizeStatusForAudience(statusData)
+    this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, publicStatus)
 
     if (this.extensionSession) {
       this.syncExtensionStatus(status)
@@ -1045,6 +1221,10 @@ class Game {
     for (const player of this.players) {
       this.io.to(player.id).emit(EVENTS.EXTENSIONS.STATE, playerSnapshot)
     }
+
+    for (const specId of this.spectatorSocketIds) {
+      this.io.to(specId).emit(EVENTS.EXTENSIONS.STATE, playerSnapshot)
+    }
   }
 
   handleExtensionCommand(command: unknown) {
@@ -1070,6 +1250,12 @@ class Game {
 
       if (this.extensionSession) {
         this.syncExtensionStatus(status)
+      }
+
+      // Also forward sanitized status to all audience spectators
+      const publicStatus = this.sanitizeStatusForAudience(statusData)
+      for (const specId of this.spectatorSocketIds) {
+        this.io.to(specId).emit(EVENTS.GAME.STATUS, publicStatus)
       }
     } else {
       this.playerStatus.set(target, statusData)

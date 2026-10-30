@@ -2,9 +2,15 @@ import { Lightbulb } from "lucide-react"
 
 interface Props {
   note?: string
+  isManager?: boolean
 }
 
-const AnswerNote = ({ note }: Props) => {
+const AnswerNote = ({ note, isManager }: Props) => {
+  // Policy: editorial notes visible only to manager/editor metadata, never on audience/player screens
+  if (!isManager) {
+    return null
+  }
+
   const text = note?.trim()
 
   if (!text) {

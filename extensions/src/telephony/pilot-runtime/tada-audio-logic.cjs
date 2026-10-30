@@ -26,6 +26,7 @@ function createSession(meta = {}) {
     answered: false,
     questionEpoch: null,
     acceptingAnswers: false,
+    answersCount: 5,
     lastDeliveredVerdictEpoch: 0,
     pendingVerdictCue: null,
     seq: 0,
@@ -58,6 +59,9 @@ function syncServerState(s, serverState) {
   }
   if (typeof st.acceptingAnswers === 'boolean') {
     s.acceptingAnswers = st.acceptingAnswers;
+  }
+  if (typeof st.answersCount === 'number' && st.answersCount >= 2 && st.answersCount <= 5) {
+    s.answersCount = st.answersCount;
   }
   if (
     st.lastVerdict &&
@@ -132,7 +136,11 @@ function event(s, keyValue, current, options = {}) {
   }
   s.handled.add(previous);
 
-  const valid = isDigit(value) && /^[1-5]$/.test(value);
+  const maxAnswers = s.answersCount || 5;
+  const valid =
+    isDigit(value) &&
+    /^[1-5]$/.test(value) &&
+    Number.parseInt(value, 10) <= maxAnswers;
   if (!valid) {
     return {
       cue: CUES.neutral,

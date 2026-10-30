@@ -149,6 +149,32 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     }
   })
 
+  socket.on(EVENTS.SPECTATOR.JOIN, ({ gameId, inviteCode }: { gameId?: string; inviteCode?: string }) => {
+    let game: Game | undefined
+    if (gameId) {
+      game = registry.getGameById(gameId)
+    } else if (inviteCode) {
+      game = registry.getGameByInviteCode(inviteCode)
+    }
+
+    if (!game) {
+      socket.emit(EVENTS.GAME.RESET, "errors:game.notFound")
+      return
+    }
+
+    game.joinSpectator(socket)
+  })
+
+  socket.on(EVENTS.SPECTATOR.LEAVE, ({ gameId }: { gameId?: string }) => {
+    const game = gameId
+      ? registry.getGameById(gameId)
+      : registry.getGameBySpectatorSocketId(socket.id)
+
+    if (game) {
+      game.leaveSpectator(socket)
+    }
+  })
+
   socket.on(EVENTS.PLAYER.LEAVE, ({ gameId }) => {
     const game = registry.getPlayerGame(gameId, clientId)
 
@@ -173,6 +199,13 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
 
     if (playerGame) {
       playerGame.setPlayerDisconnected(socket.id, reason === "ping timeout")
+      return
+    }
+
+    const spectatorGame = registry.getGameBySpectatorSocketId(socket.id)
+
+    if (spectatorGame) {
+      spectatorGame.leaveSpectator(socket)
     }
   })
 }

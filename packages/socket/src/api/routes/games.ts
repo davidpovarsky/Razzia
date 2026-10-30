@@ -477,10 +477,23 @@ const routes = apiFactory
           rosterId = joinRes.rosterPlayerId
         }
 
+        const pstn = game.getCurrentQuestionPstnSupport()
+
+        if (!pstn.supported) {
+          return c.json({
+            ok: true,
+            accepted: false,
+            reason: pstn.reason ?? "unsupported_question_type",
+            rosterPlayerId: rosterId,
+            state: game.getQuestionStateForGateway(rosterId),
+          })
+        }
+
         if (
           typeof body.answerIndex !== "number" ||
+          !Number.isInteger(body.answerIndex) ||
           body.answerIndex < 0 ||
-          body.answerIndex > 3
+          body.answerIndex > pstn.maxAnswerIndex
         ) {
           return c.json({
             ok: true,

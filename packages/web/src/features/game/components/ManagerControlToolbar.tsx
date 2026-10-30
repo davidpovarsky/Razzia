@@ -10,11 +10,15 @@ import Button from "@razzia/web/components/Button"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import clsx from "clsx"
 import {
+  Check,
   ChevronRight,
+  Copy,
   History,
   LogOut,
+  Monitor,
   Play,
   SkipForward,
   Timer,
@@ -119,7 +123,27 @@ export const ManagerControlToolbar = ({
     number | null
   >(null)
 
-  const gameId = extensionState?.gameId
+  const storeGameId = useQuestionStore((s) => s.gameId)
+  const gameId = extensionState?.gameId || storeGameId
+  const [copiedDisplay, setCopiedDisplay] = useState(false)
+
+  const handleOpenDisplay = useCallback(() => {
+    if (!gameId || typeof window === "undefined") return
+    window.open(`/display/${gameId}`, "_blank")
+  }, [gameId])
+
+  const handleCopyDisplayUrl = useCallback(async () => {
+    if (!gameId || typeof window === "undefined") return
+    const url = `${window.location.origin}/display/${gameId}`
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopiedDisplay(true)
+      setTimeout(() => setCopiedDisplay(false), 2000)
+    } catch {
+      // fallback
+    }
+  }, [gameId])
+
   const currentQuestionIdx = Math.max(0, (questionStates?.current ?? 1) - 1)
   const isInterlude = extensionState?.phase === "interlude"
   const epoch = extensionState?.epoch
@@ -350,6 +374,30 @@ export const ManagerControlToolbar = ({
 
         {isLobby && (
           <RoomLockButton className="hover:bg-accent rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
+        )}
+
+        {gameId && (
+          <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
+            <Button
+              onClick={handleOpenDisplay}
+              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/20"
+              title={t("extensions:host.openDisplay")}
+            >
+              <Monitor className="size-4" />
+              <span>{t("extensions:host.openDisplay")}</span>
+            </Button>
+            <Button
+              onClick={handleCopyDisplayUrl}
+              className="flex items-center rounded-md p-1.5 text-white hover:bg-white/20"
+              title={t("extensions:host.copyDisplayUrl")}
+            >
+              {copiedDisplay ? (
+                <Check className="size-4 text-emerald-400" />
+              ) : (
+                <Copy className="size-4" />
+              )}
+            </Button>
+          </div>
         )}
 
         {/* Exit Button with confirmation when game in progress */}
