@@ -95,6 +95,7 @@ export interface RoundManagerOptions {
   onShowStart?: (proceed: () => void) => void
   canPreviousTimelineStep?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean }
   onPreviousTimelineStep?: () => boolean
+  hasAuthoredResultsScene?: (questionIndex: number) => boolean
 }
 
 interface RoundStep {
@@ -135,7 +136,12 @@ export class RoundManager {
         enter: () => {
           this.showResults()
         },
-        delay: (settings) => settings.autoAdvance.responsesDelay,
+        delay: (settings) => {
+          if (this.opts.hasAuthoredResultsScene?.(this.currentQuestion)) {
+            return 0
+          }
+          return settings.autoAdvance.responsesDelay
+        },
       },
       {
         name: "leaderboard",
@@ -218,6 +224,18 @@ export class RoundManager {
 
   get isCurrentlyAcceptingAnswers(): boolean {
     return this.acceptingAnswers
+  }
+
+  getRemainingSeconds(): number {
+    if (!this.acceptingAnswers || this.question.time === NO_TIME_LIMIT) {
+      return 0
+    }
+    const timerRemaining = this.opts.cooldown.remaining
+    if (timerRemaining !== null) {
+      return timerRemaining
+    }
+    const elapsed = (Date.now() - this.startTime) / 1000
+    return Math.max(0, Math.ceil(this.question.time - elapsed))
   }
 
   get currentLeaderboard(): readonly Player[] {
@@ -1117,13 +1135,10 @@ export class RoundManager {
     }
     this.questionLedger.set(this.currentQuestion, currentEntry)
 
-    if (this.isSurvey()) {
-      this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
-        ...this.question,
-        solutions: undefined,
-        responses: answerCounts,
-      })
+    const hasAuthoredScene =
+      this.opts.hasAuthoredResultsScene?.(this.currentQuestion) ?? false
 
+    if (this.isSurvey()) {
       currentPlayers.forEach((player) => {
         this.opts.send(player.id, STATUS.WAIT, {
           text: "game:answerNoted",
@@ -1132,6 +1147,19 @@ export class RoundManager {
 
       this.recordHistory(currentPlayers)
       this.playersAnswers = []
+
+      if (!hasAuthoredScene) {
+        this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
+          ...this.question,
+          solutions: undefined,
+          responses: answerCounts,
+        })
+      } else {
+        // Authoritative: the immediately following interimResults timeline scene
+        // owns the result presentation. Collapse standard results view and advance
+        // straight to the authored scene!
+        this.nextQuestion()
+      }
 
       return
     }
@@ -1180,10 +1208,14 @@ export class RoundManager {
       })
     })
 
-    this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
-      ...this.question,
-      responses: answerCounts,
-    })
+    if (!hasAuthoredScene) {
+      this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
+        ...this.question,
+        responses: answerCounts,
+      })
+    } else {
+      this.nextQuestion()
+    }
 
     this.recordHistory(currentPlayers, sortedPlayers)
 

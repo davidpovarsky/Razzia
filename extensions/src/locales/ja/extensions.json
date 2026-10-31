@@ -184,7 +184,19 @@
     "displayUrlCopied": "観客用リンクをコピーしました",
     "questionNum": "第{{num}}問",
     "answersCount": "{{count}}件の回答",
-    "skipped": "(スキップ済み)"
+    "skipped": "(スキップ済み)",
+
+    "previousScreen": "前の画面",
+    "history": "履歴",
+    "cannotPrevious": "前の画面に戻れません",
+    "cannotPreviousAnswers": "回答受付中は戻れません",
+    "cannotPreviousStart": "ショーの開始地点です",
+    "reopenConfirmTitle": "問題を再開する",
+    "reopenConfirmDesc": "戻るとこの問題が再開され、前回の投票は破棄されてスコアが置き換えられます。続行しますか？",
+    "reopenConfirmButton": "続行",
+    "cancelActiveVoteConfirmTitle": "進行中の投票をキャンセル",
+    "cancelActiveVoteConfirmDesc": "戻ると現在の投票ラウンドがキャンセルされ、送信された回答は破棄されます。続行しますか？",
+    "cannotPreviousLobby": "ショーの開始地点です"
   },
   "reveal": {
     "votes": "{{count}} 票",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Tada Excelとしてエクスポート (.xlsx)",
     "importShowPrompt": "ショーをインポート (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "前の画面",
-    "history": "履歴",
-    "cannotPrevious": "前の画面に戻れません",
-    "cannotPreviousAnswers": "回答受付中は戻れません",
-    "cannotPreviousStart": "ショーの開始地点です",
-    "reopenConfirmTitle": "問題を再開する",
-    "reopenConfirmDesc": "戻るとこの問題が再開され、前回の投票は破棄されてスコアが置き換えられます。続行しますか？",
-    "reopenConfirmButton": "続行",
-    "cancelActiveVoteConfirmTitle": "進行中の投票をキャンセル",
-    "cancelActiveVoteConfirmDesc": "戻ると現在の投票ラウンドがキャンセルされ、送信された回答は破棄されます。続行しますか？"
-  },
+  
   "entrance": {
     "title": "登場アニメーション",
     "description": "この問題が表示されるときにアニメーションを再生します。",

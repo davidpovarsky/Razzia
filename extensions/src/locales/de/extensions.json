@@ -184,7 +184,19 @@
     "displayUrlCopied": "Zuschauer-Link kopiert",
     "questionNum": "Frage {{num}}",
     "answersCount": "{{count}} Antworten",
-    "skipped": "(Übersprungen)"
+    "skipped": "(Übersprungen)",
+
+    "previousScreen": "Vorheriger Bildschirm",
+    "history": "Verlauf",
+    "cannotPrevious": "Zurückgehen nicht möglich",
+    "cannotPreviousAnswers": "Zurückgehen während der Antwortphase nicht möglich",
+    "cannotPreviousStart": "Am Anfang der Show",
+    "reopenConfirmTitle": "Frage erneut öffnen",
+    "reopenConfirmDesc": "Wenn Sie zurückgehen, wird diese Frage erneut geöffnet, die vorherigen Stimmen verworfen und die Punktzahl ersetzt. Fortfahren?",
+    "reopenConfirmButton": "Fortfahren",
+    "cancelActiveVoteConfirmTitle": "Aktive Abstimmung abbrechen",
+    "cancelActiveVoteConfirmDesc": "Wenn Sie zurückgehen, wird die aktuelle Abstimmungsrunde abgebrochen und die abgegebenen Antworten werden verworfen. Fortfahren?",
+    "cannotPreviousLobby": "Am Anfang der Show"
   },
   "reveal": {
     "votes": "{{count}} Stimmen",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Als Tada-Excel exportieren (.xlsx)",
     "importShowPrompt": "Show importieren (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Vorheriger Bildschirm",
-    "history": "Verlauf",
-    "cannotPrevious": "Zurückgehen nicht möglich",
-    "cannotPreviousAnswers": "Zurückgehen während der Antwortphase nicht möglich",
-    "cannotPreviousStart": "Am Anfang der Show",
-    "reopenConfirmTitle": "Frage erneut öffnen",
-    "reopenConfirmDesc": "Wenn Sie zurückgehen, wird diese Frage erneut geöffnet, die vorherigen Stimmen verworfen und die Punktzahl ersetzt. Fortfahren?",
-    "reopenConfirmButton": "Fortfahren",
-    "cancelActiveVoteConfirmTitle": "Aktive Abstimmung abbrechen",
-    "cancelActiveVoteConfirmDesc": "Wenn Sie zurückgehen, wird die aktuelle Abstimmungsrunde abgebrochen und die abgegebenen Antworten werden verworfen. Fortfahren?"
-  },
+  
   "entrance": {
     "title": "Eingangsanimation",
     "description": "Eingangsübergang anzeigen, wenn diese Frage erscheint.",

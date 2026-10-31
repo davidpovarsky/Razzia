@@ -184,7 +184,19 @@
     "displayUrlCopied": "Audience link copied",
     "questionNum": "Question {{num}}",
     "answersCount": "{{count}} answers",
-    "skipped": "(Skipped)"
+    "skipped": "(Skipped)",
+
+    "previousScreen": "Previous Screen",
+    "history": "History",
+    "cannotPrevious": "Cannot navigate to previous screen",
+    "cannotPreviousAnswers": "Cannot go back while answers are being accepted",
+    "cannotPreviousStart": "At the beginning of show",
+    "reopenConfirmTitle": "Reopen Question",
+    "reopenConfirmDesc": "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
+    "reopenConfirmButton": "Continue",
+    "cancelActiveVoteConfirmTitle": "Cancel Active Vote",
+    "cancelActiveVoteConfirmDesc": "Navigating back will cancel the current voting round and discard submitted answers. Continue?",
+    "cannotPreviousLobby": "At start of show"
   },
   "reveal": {
     "votes": "{{count}} votes",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Export as Tada Excel (.xlsx)",
     "importShowPrompt": "Import Show (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Previous Screen",
-    "history": "History",
-    "cannotPrevious": "Cannot navigate to previous screen",
-    "cannotPreviousAnswers": "Cannot go back while answers are being accepted",
-    "cannotPreviousStart": "At the beginning of show",
-    "reopenConfirmTitle": "Reopen Question",
-    "reopenConfirmDesc": "Going back will reopen this question, discard its previous votes, and replace its score. Continue?",
-    "reopenConfirmButton": "Continue",
-    "cancelActiveVoteConfirmTitle": "Cancel Active Vote",
-    "cancelActiveVoteConfirmDesc": "Navigating back will cancel the current voting round and discard submitted answers. Continue?"
-  },
+  
   "entrance": {
     "title": "Entrance Animation",
     "description": "Play an entrance transition when this question appears.",

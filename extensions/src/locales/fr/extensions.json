@@ -184,7 +184,19 @@
     "displayUrlCopied": "Lien public copié",
     "questionNum": "Question {{num}}",
     "answersCount": "{{count}} réponses",
-    "skipped": "(Ignoré)"
+    "skipped": "(Ignoré)",
+
+    "previousScreen": "Écran précédent",
+    "history": "Historique",
+    "cannotPrevious": "Impossible de revenir à l'écran précédent",
+    "cannotPreviousAnswers": "Impossible de revenir en arrière pendant la saisie des réponses",
+    "cannotPreviousStart": "Au début du spectacle",
+    "reopenConfirmTitle": "Rouvrir la question",
+    "reopenConfirmDesc": "Revenir en arrière rouvrira cette question, annulera ses votes précédents et remplacera son score. Continuer ?",
+    "reopenConfirmButton": "Continuer",
+    "cancelActiveVoteConfirmTitle": "Annuler le vote actif",
+    "cancelActiveVoteConfirmDesc": "Revenir en arrière annulera le tour de vote en cours et ignorera les réponses envoyées. Continuer ?",
+    "cannotPreviousLobby": "Au début du spectacle"
   },
   "reveal": {
     "votes": "{{count}} votes",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Exporter en Excel Tada (.xlsx)",
     "importShowPrompt": "Importer un spectacle (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Écran précédent",
-    "history": "Historique",
-    "cannotPrevious": "Impossible de revenir à l'écran précédent",
-    "cannotPreviousAnswers": "Impossible de revenir en arrière pendant la saisie des réponses",
-    "cannotPreviousStart": "Au début du spectacle",
-    "reopenConfirmTitle": "Rouvrir la question",
-    "reopenConfirmDesc": "Revenir en arrière rouvrira cette question, annulera ses votes précédents et remplacera son score. Continuer ?",
-    "reopenConfirmButton": "Continuer",
-    "cancelActiveVoteConfirmTitle": "Annuler le vote actif",
-    "cancelActiveVoteConfirmDesc": "Revenir en arrière annulera le tour de vote en cours et ignorera les réponses envoyées. Continuer ?"
-  },
+  
   "entrance": {
     "title": "Animation d'entrée",
     "description": "Jouer une transition d'entrée lorsque cette question apparaît.",

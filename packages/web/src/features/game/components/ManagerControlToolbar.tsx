@@ -373,7 +373,8 @@ export const ManagerControlToolbar = ({
         } else if (
           statusName === STATUS.SHOW_RESPONSES ||
           statusName === STATUS.SHOW_LEADERBOARD ||
-          isInterlude
+          isInterlude ||
+          isScene
         ) {
           e.preventDefault()
           handleNextScreen()
@@ -422,6 +423,14 @@ export const ManagerControlToolbar = ({
     [viewingHistoryEnvelope, selectedHistoryIndex],
   )
 
+  const isScene =
+    extensionState?.phase === "scene" ||
+    Boolean(
+      extensionState?.extras?.activeTimelineStep &&
+        (extensionState.extras.activeTimelineStep as { kind?: string }).kind !==
+          "question",
+    )
+
   const canSkipQuestion =
     statusName === STATUS.SHOW_PREPARED ||
     statusName === STATUS.SHOW_QUESTION ||
@@ -430,42 +439,51 @@ export const ManagerControlToolbar = ({
   const canNextScreen =
     statusName === STATUS.SHOW_RESPONSES ||
     statusName === STATUS.SHOW_LEADERBOARD ||
-    isInterlude
+    isInterlude ||
+    isScene
   const canViewHistory = currentQuestionIdx > 0 && !isLobby && !isFinished
 
   return (
-    <div className="flex w-full items-center justify-between gap-3 p-4">
+    <div
+      className="flex w-full flex-wrap items-center justify-between gap-2 p-2 sm:gap-3 sm:p-4 max-w-full box-border"
+      data-testid="manager-control-toolbar"
+    >
       {/* Left section: Progress / Question Counter & Room Lock */}
-      <div className="flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
         {questionStates && !isLobby && !isFinished && (
-          <div className="flex items-center rounded-lg border border-white/10 bg-black/50 px-4 py-2 text-lg font-bold text-white shadow-md backdrop-blur-md">
+          <div
+            className="flex shrink-0 items-center rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base md:text-lg font-bold text-white shadow-md backdrop-blur-md"
+            data-testid="host-question-counter"
+          >
             {`${questionStates.current} / ${questionStates.total}`}
           </div>
         )}
 
         {isLobby && (
-          <RoomLockButton className="hover:bg-accent rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
+          <RoomLockButton className="hover:bg-accent shrink-0 rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
         )}
 
         {gameId && (
-          <div className="flex items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
+          <div className="flex shrink-0 items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
             <Button
               onClick={handleOpenDisplay}
-              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold text-white hover:bg-white/20"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/20"
               title={t("extensions:host.openDisplay")}
+              data-testid="host-open-display-btn"
             >
-              <Monitor className="size-4" />
+              <Monitor className="size-4 shrink-0" />
               <span>{t("extensions:host.openDisplay")}</span>
             </Button>
             <Button
               onClick={handleCopyDisplayUrl}
               className="flex items-center rounded-md p-1.5 text-white hover:bg-white/20"
               title={t("extensions:host.copyDisplayUrl")}
+              data-testid="host-copy-display-btn"
             >
               {copiedDisplay ? (
-                <Check className="size-4 text-emerald-400" />
+                <Check className="size-4 text-emerald-400 shrink-0" />
               ) : (
-                <Copy className="size-4" />
+                <Copy className="size-4 shrink-0" />
               )}
             </Button>
           </div>
@@ -475,17 +493,21 @@ export const ManagerControlToolbar = ({
         {isLobby || isFinished ? (
           <Button
             onClick={onExit}
-            className="hover:bg-accent flex items-center gap-1.5 rounded-lg bg-white px-4 py-2 font-bold text-black shadow-md"
+            className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold text-black shadow-md"
+            data-testid="host-exit-btn"
           >
-            <LogOut className="size-4" />
-            {t("common:exit")}
+            <LogOut className="size-4 shrink-0" />
+            <span>{t("common:exit")}</span>
           </Button>
         ) : (
           <AlertDialog
             trigger={
-              <Button className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-4 py-2 font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40">
-                <LogOut className="size-4" />
-                {t("common:exit")}
+              <Button
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40"
+                data-testid="host-exit-btn"
+              >
+                <LogOut className="size-4 shrink-0" />
+                <span>{t("common:exit")}</span>
               </Button>
             }
             title={t("extensions:host.exitConfirmTitle")}
@@ -511,15 +533,15 @@ export const ManagerControlToolbar = ({
                   : t("extensions:host.previousScreen", "Previous Screen")
               }
               className={clsx(
-                "relative flex items-center gap-1.5 rounded-lg px-4 py-2 font-bold shadow-md transition-all active:scale-95",
+                "relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold shadow-md transition-all active:scale-95",
                 canPrevious && !isPending
                   ? "bg-white text-black hover:bg-white/90"
                   : "pointer-events-none opacity-40 bg-white/10 text-white/40 border border-white/10",
               )}
               data-testid="host-previous-screen-btn"
             >
-              <ChevronLeft className="size-5" />
-              <span className="hidden sm:inline">
+              <ChevronLeft className="size-5 shrink-0" />
+              <span>
                 {t("extensions:host.previousScreen", "Previous Screen")}
               </span>
             </Button>
@@ -561,15 +583,15 @@ export const ManagerControlToolbar = ({
       </div>
 
       {/* Right section: Control buttons */}
-      <div className="ml-auto flex items-center gap-2">
+      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 sm:ml-auto min-w-0">
         {/* Lobby Start Game */}
         {isLobby && onStartGame && (
           <Button
             onClick={onStartGame}
-            className="hover:bg-accent flex items-center gap-2 rounded-lg bg-white px-6 py-2.5 text-lg font-bold text-black shadow-lg"
+            className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 sm:px-6 sm:py-2.5 text-base sm:text-lg font-bold text-black shadow-lg"
           >
-            <Play className="size-5 fill-black" />
-            {t("game:startGame")}
+            <Play className="size-5 fill-black shrink-0" />
+            <span>{t("game:startGame")}</span>
           </Button>
         )}
 
@@ -578,10 +600,10 @@ export const ManagerControlToolbar = ({
           <Button
             onClick={handleOpenHistory}
             disabled={isPending}
-            className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3.5 py-2 font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
             data-testid="host-history-btn"
           >
-            <History className="size-4" />
+            <History className="size-4 shrink-0" />
             <span>{t("extensions:host.history", "History")}</span>
           </Button>
         )}
@@ -592,9 +614,10 @@ export const ManagerControlToolbar = ({
             trigger={
               <Button
                 disabled={isPending}
-                className="flex items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3.5 py-2 font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+                data-testid="host-skip-question-btn"
               >
-                <SkipForward className="size-4" />
+                <SkipForward className="size-4 shrink-0" />
                 <span>{t("extensions:host.skipQuestion")}</span>
               </Button>
             }
@@ -611,11 +634,12 @@ export const ManagerControlToolbar = ({
             onClick={handleEndTimer}
             disabled={isPending}
             className={clsx(
-              "bg-primary flex items-center gap-2 rounded-lg px-5 py-2.5 text-base font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95",
+              "bg-primary flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95",
               isPending && "pointer-events-none opacity-60",
             )}
+            data-testid="host-end-timer-btn"
           >
-            <Timer className="size-5" />
+            <Timer className="size-5 shrink-0" />
             <span>{t("extensions:host.endTimer")}</span>
           </Button>
         )}
@@ -626,9 +650,10 @@ export const ManagerControlToolbar = ({
             onClick={handleNextScreen}
             disabled={isPending}
             className={clsx(
-              "hover:bg-accent relative flex items-center gap-2 overflow-hidden rounded-lg bg-white px-6 py-2.5 text-base font-bold text-black shadow-lg active:scale-95",
+              "hover:bg-accent relative flex shrink-0 items-center gap-2 overflow-hidden rounded-lg bg-white px-5 py-2 sm:px-6 sm:py-2.5 text-sm sm:text-base font-bold text-black shadow-lg active:scale-95",
               isPending && "pointer-events-none opacity-60",
             )}
+            data-testid="host-next-screen-btn"
           >
             {countdown && (
               <span
@@ -640,7 +665,7 @@ export const ManagerControlToolbar = ({
             )}
             <span className="relative flex items-center gap-1.5">
               <span>{t("extensions:host.nextScreen")}</span>
-              <ChevronRight className="size-5" />
+              <ChevronRight className="size-5 shrink-0" />
             </span>
           </Button>
         )}

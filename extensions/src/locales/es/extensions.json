@@ -184,7 +184,19 @@
     "displayUrlCopied": "Enlace de audiencia copiado",
     "questionNum": "Pregunta {{num}}",
     "answersCount": "{{count}} respuestas",
-    "skipped": "(Omitido)"
+    "skipped": "(Omitido)",
+
+    "previousScreen": "Pantalla anterior",
+    "history": "Historial",
+    "cannotPrevious": "No se puede navegar a la pantalla anterior",
+    "cannotPreviousAnswers": "No se puede retroceder mientras se aceptan respuestas",
+    "cannotPreviousStart": "Al inicio del programa",
+    "reopenConfirmTitle": "Reabrir pregunta",
+    "reopenConfirmDesc": "Volver atrás reabrirá esta pregunta, descartará sus votos anteriores y reemplazará su puntuación. ¿Continuar?",
+    "reopenConfirmButton": "Continuar",
+    "cancelActiveVoteConfirmTitle": "Cancelar votación activa",
+    "cancelActiveVoteConfirmDesc": "Volver atrás cancelará la ronda de votación actual y descartará las respuestas enviadas. ¿Continuar?",
+    "cannotPreviousLobby": "Al inicio del programa"
   },
   "reveal": {
     "votes": "{{count}} votos",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Exportar como Excel de Tada (.xlsx)",
     "importShowPrompt": "Importar espectáculo (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Pantalla anterior",
-    "history": "Historial",
-    "cannotPrevious": "No se puede navegar a la pantalla anterior",
-    "cannotPreviousAnswers": "No se puede retroceder mientras se aceptan respuestas",
-    "cannotPreviousStart": "Al inicio del programa",
-    "reopenConfirmTitle": "Reabrir pregunta",
-    "reopenConfirmDesc": "Volver atrás reabrirá esta pregunta, descartará sus votos anteriores y reemplazará su puntuación. ¿Continuar?",
-    "reopenConfirmButton": "Continuar",
-    "cancelActiveVoteConfirmTitle": "Cancelar votación activa",
-    "cancelActiveVoteConfirmDesc": "Volver atrás cancelará la ronda de votación actual y descartará las respuestas enviadas. ¿Continuar?"
-  },
+  
   "entrance": {
     "title": "Animación de entrada",
     "description": "Reproducir una transición de entrada cuando aparezca esta pregunta.",

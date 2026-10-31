@@ -397,10 +397,10 @@ const GameWrapper = ({
   }
 
   return (
-    <section className="relative flex min-h-dvh isolate">
+    <section className="relative flex min-h-dvh isolate overflow-x-hidden w-full max-w-full">
       <GameBackground />
 
-      <div className="z-10 flex w-full flex-1 flex-col justify-between">
+      <div className="z-10 flex w-full flex-1 flex-col justify-between max-w-full overflow-x-hidden">
         {!isConnected && !statusName ? (
           <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
             <Loader className="h-30" />
@@ -426,16 +426,21 @@ const GameWrapper = ({
 
             {manager ? (
               <div
-                className={clsx("z-50 flex items-stretch gap-3 p-4", {
-                  "absolute inset-x-0 bottom-0": statusName === STATUS.FINISHED,
-                })}
+                className={clsx(
+                  "z-50 flex flex-wrap items-center gap-2 sm:gap-3 p-2 sm:p-4 max-w-full box-border",
+                  {
+                    "absolute inset-x-0 bottom-0": statusName === STATUS.FINISHED,
+                  },
+                )}
               >
                 {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                  <div className="flex items-center gap-3 rounded-lg bg-black/40 px-3 py-1.5 text-xl font-bold text-white drop-shadow-md">
+                  <div className="flex shrink-0 items-center gap-2 sm:gap-3 rounded-lg bg-black/40 px-2.5 py-1 sm:px-3 sm:py-1.5 text-sm sm:text-base md:text-xl font-bold text-white drop-shadow-md">
                     {!locked && (
                       <>
-                        <span>{window.location.host}</span>
-                        <span className="h-5 w-px bg-white/40" />
+                        <span className="truncate max-w-[120px] sm:max-w-none">
+                          {window.location.host}
+                        </span>
+                        <span className="h-4 sm:h-5 w-px bg-white/40" />
                         <span>{inviteCode}</span>
                       </>
                     )}
@@ -454,7 +459,7 @@ const GameWrapper = ({
                     onClick={() => setPlayersModalOpen(true)}
                     data-testid="host-bottom-players-btn"
                     className={clsx(
-                      "ml-auto flex items-center gap-2 rounded-lg bg-black/40 px-3 py-1.5 text-xl font-bold text-white drop-shadow-md transition-colors hover:bg-black/60",
+                      "ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-black/40 px-2.5 py-1 sm:px-3 sm:py-1.5 text-sm sm:text-base md:text-xl font-bold text-white drop-shadow-md transition-colors hover:bg-black/60",
                       !isConnected && "opacity-60",
                     )}
                   >

@@ -82,8 +82,13 @@ const AudienceDisplayPage = () => {
     EVENTS.GAME.STATUS,
     ({ name, data }: { name: Status; data: Record<string, unknown> }) => {
       setStatus({ name, data })
-      if (name === STATUS.SELECT_ANSWER && typeof data.time === "number") {
-        setCooldown(data.time)
+      if (name === STATUS.SELECT_ANSWER) {
+        if (typeof data.time === "number") {
+          setCooldown(data.time)
+        }
+      } else {
+        // Authoritative: Never retain a voting countdown in SHOW_QUESTION, SHOW_RESPONSES, or lobby
+        setCooldown(null)
       }
     },
   )
@@ -197,9 +202,36 @@ const AudienceDisplayPage = () => {
                 isManager={false}
               />
             </div>
-          ) : status?.name === STATUS.SELECT_ANSWER ||
-            status?.name === STATUS.SHOW_QUESTION ? (
-            /* 2. Live Question / Voting Stage */
+          ) : status?.name === STATUS.SHOW_QUESTION ? (
+            /* 2a. Pre-Question Intro / Title Stage */
+            <QuestionEntrance
+              entrance={
+                extensionState?.extras?.questionEntrance as
+                  | any
+                  | undefined
+              }
+              epoch={extensionState?.epoch}
+              className="flex h-full w-full flex-1 flex-col items-center justify-center gap-6"
+            >
+              <div className="flex w-full max-w-5xl flex-col items-center gap-6 text-center">
+                <h1
+                  className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-black tracking-tight text-white drop-shadow-2xl"
+                  data-testid="audience-question-title"
+                >
+                  {String(status.data.question ?? "")}
+                </h1>
+                {typeof status.data?.cooldown === "number" && status.data.cooldown > 0 && (
+                  <div
+                    className="bg-primary h-3 w-48 sm:w-64 max-w-md rounded-full shadow-lg"
+                    style={{
+                      animation: `progressBar ${status.data.cooldown}s linear forwards`,
+                    }}
+                  />
+                )}
+              </div>
+            </QuestionEntrance>
+          ) : status?.name === STATUS.SELECT_ANSWER ? (
+            /* 2b. Live Question & Voting Stage (Read-Only Spectator) */
             <QuestionEntrance
               entrance={
                 extensionState?.extras?.questionEntrance as

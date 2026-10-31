@@ -107,6 +107,39 @@ export class StudioShowCoordinator {
     return this.phase === "question"
   }
 
+  /**
+   * Returns true if the current active question is immediately followed in the timeline
+   * by an authored results scene (interimResults). When true, that scene owns the public
+   * result reveal, allowing the server to collapse the standard intermediate SHOW_RESPONSES.
+   */
+  hasNextSceneResultsForQuestion(questionIndex: number): boolean {
+    if (this.phase !== "question") {
+      return false
+    }
+
+    const currentStep = this.runner.getCurrentStep()
+    if (!currentStep || currentStep.item.kind !== "question") {
+      return false
+    }
+
+    const currentQIdx = this.getQuestionIndex(currentStep.item.questionId)
+    if (currentQIdx !== questionIndex) {
+      return false
+    }
+
+    const nextIndex = this.runner.index + 1
+    if (nextIndex >= this.runner.length) {
+      return false
+    }
+
+    const nextItem = this.runner.getItem(nextIndex)
+    if (!nextItem) {
+      return false
+    }
+
+    return nextItem.kind === "interimResults"
+  }
+
   getQuestionOrdinal(): number {
     return this.runner.getQuestionOrdinal()
   }

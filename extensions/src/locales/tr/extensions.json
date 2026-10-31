@@ -184,7 +184,19 @@
     "displayUrlCopied": "Seyirci bağlantısı kopyalandı",
     "questionNum": "Soru {{num}}",
     "answersCount": "{{count}} cevap",
-    "skipped": "(Atlandı)"
+    "skipped": "(Atlandı)",
+
+    "previousScreen": "Önceki Ekran",
+    "history": "Geçmiş",
+    "cannotPrevious": "Önceki ekrana dönülemiyor",
+    "cannotPreviousAnswers": "Cevaplar alınırken geri dönülemez",
+    "cannotPreviousStart": "Gösterinin başlangıcında",
+    "reopenConfirmTitle": "Soruyu Yeniden Aç",
+    "reopenConfirmDesc": "Geri dönmek bu soruyu yeniden açacak, önceki oyları iptal edecek ve puanını güncelleyecektir. Devam edilsin mi?",
+    "reopenConfirmButton": "Devam Et",
+    "cancelActiveVoteConfirmTitle": "Aktif Oylamayı İptal Et",
+    "cancelActiveVoteConfirmDesc": "Geri dönmek mevcut oylama turunu iptal edecek ve gönderilen yanıtları yok sayacaktır. Devam edilsin mi?",
+    "cannotPreviousLobby": "Gösterinin başlangıcında"
   },
   "reveal": {
     "votes": "{{count}} oy",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Tada Excel Olarak Dışa Aktar (.xlsx)",
     "importShowPrompt": "Gösteri İçe Aktar (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Önceki Ekran",
-    "history": "Geçmiş",
-    "cannotPrevious": "Önceki ekrana dönülemiyor",
-    "cannotPreviousAnswers": "Cevaplar alınırken geri dönülemez",
-    "cannotPreviousStart": "Gösterinin başlangıcında",
-    "reopenConfirmTitle": "Soruyu Yeniden Aç",
-    "reopenConfirmDesc": "Geri dönmek bu soruyu yeniden açacak, önceki oyları iptal edecek ve puanını güncelleyecektir. Devam edilsin mi?",
-    "reopenConfirmButton": "Devam Et",
-    "cancelActiveVoteConfirmTitle": "Aktif Oylamayı İptal Et",
-    "cancelActiveVoteConfirmDesc": "Geri dönmek mevcut oylama turunu iptal edecek ve gönderilen yanıtları yok sayacaktır. Devam edilsin mi?"
-  },
+  
   "entrance": {
     "title": "Giriş Animasyonu",
     "description": "Bu soru göründüğünde bir giriş geçişi oynatın.",

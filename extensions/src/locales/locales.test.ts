@@ -38,6 +38,12 @@ describe("extensions/locales parity", () => {
     expect(referenceKeys).toContain("interludes.interludeTitle")
     expect(referenceKeys).toContain("conflict.title")
     expect(referenceKeys).toContain("errors.everyNRequired")
+    expect(referenceKeys).toContain("host.openDisplay")
+    expect(referenceKeys).toContain("host.nextScreen")
+    expect(referenceKeys).toContain("host.previousScreen")
+    expect(referenceKeys).toContain("host.history")
+    expect(referenceKeys).toContain("host.endTimer")
+    expect(referenceKeys).toContain("host.skipQuestion")
   })
 
   for (const lang of SUPPORTED_EXTENSION_LANGUAGES) {

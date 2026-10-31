@@ -184,7 +184,19 @@
     "displayUrlCopied": "Link pubblico copiato",
     "questionNum": "Domanda {{num}}",
     "answersCount": "{{count}} risposte",
-    "skipped": "(Saltato)"
+    "skipped": "(Saltato)",
+
+    "previousScreen": "Schermata precedente",
+    "history": "Cronologia",
+    "cannotPrevious": "Impossibile tornare alla schermata precedente",
+    "cannotPreviousAnswers": "Impossibile tornare indietro mentre si accettano risposte",
+    "cannotPreviousStart": "All'inizio dello spettacolo",
+    "reopenConfirmTitle": "Riapri domanda",
+    "reopenConfirmDesc": "Tornando indietro questa domanda verrà riaperta, i voti precedenti saranno eliminati e il punteggio sostituito. Continuare?",
+    "reopenConfirmButton": "Continua",
+    "cancelActiveVoteConfirmTitle": "Annulla votazione attiva",
+    "cancelActiveVoteConfirmDesc": "Tornando indietro la sessione di voto corrente verrà annullata e le risposte inviate saranno eliminate. Continuare?",
+    "cannotPreviousLobby": "All'inizio dello spettacolo"
   },
   "reveal": {
     "votes": "{{count}} voti",
@@ -420,18 +432,7 @@
     "exportTadaXlsx": "Esporta come Excel Tada (.xlsx)",
     "importShowPrompt": "Importa spettacolo (.json, .xlsx)"
   },
-  "host": {
-    "previousScreen": "Schermata precedente",
-    "history": "Cronologia",
-    "cannotPrevious": "Impossibile tornare alla schermata precedente",
-    "cannotPreviousAnswers": "Impossibile tornare indietro mentre si accettano risposte",
-    "cannotPreviousStart": "All'inizio dello spettacolo",
-    "reopenConfirmTitle": "Riapri domanda",
-    "reopenConfirmDesc": "Tornando indietro questa domanda verrà riaperta, i voti precedenti saranno eliminati e il punteggio sostituito. Continuare?",
-    "reopenConfirmButton": "Continua",
-    "cancelActiveVoteConfirmTitle": "Annulla votazione attiva",
-    "cancelActiveVoteConfirmDesc": "Tornando indietro la sessione di voto corrente verrà annullata e le risposte inviate saranno eliminate. Continuare?"
-  },
+  
   "entrance": {
     "title": "Animazione di ingresso",
     "description": "Riproduci una transizione quando appare questa domanda.",

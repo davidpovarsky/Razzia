@@ -352,6 +352,10 @@ class Game {
             return ok
           }
         : undefined,
+      hasAuthoredResultsScene: this.showCoordinator
+        ? (qIdx) =>
+            this.showCoordinator?.hasNextSceneResultsForQuestion(qIdx) ?? false
+        : undefined,
     })
 
     if (this.extensionSession) {
@@ -1160,6 +1164,10 @@ class Game {
       )
     }
 
+    if (this.round.isCurrentlyAcceptingAnswers) {
+      socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
+    }
+
     if (this.extensionSession) {
       const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
         clientId: p.clientId,
@@ -1854,6 +1862,10 @@ class Game {
     socket.emit(EVENTS.GAME.TOTAL_PLAYERS, this.playerManager.joinedCount())
     socket.emit(EVENTS.MANAGER.HOST_PRESENCE, this.getHostPresenceSnapshot())
 
+    if (this.round.isCurrentlyAcceptingAnswers) {
+      socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
+    }
+
     if (this.extensionSession) {
       const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
         clientId: p.clientId,
@@ -1927,6 +1939,10 @@ class Game {
     })
     this.playerManager.broadcastCount()
     this.broadcastHostPresence()
+
+    if (this.round.isCurrentlyAcceptingAnswers) {
+      socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
+    }
 
     if (this.extensionSession) {
       const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({

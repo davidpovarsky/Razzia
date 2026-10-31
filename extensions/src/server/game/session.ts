@@ -540,7 +540,11 @@ export class ExtensionGameSession {
       }
 
       case "NEXT_SCREEN": {
-        if (this.phase === "question") {
+        const currentPhase = this.showCoordinator?.isSceneActive()
+          ? "scene"
+          : this.phase
+
+        if (currentPhase === "question") {
           throw new Error("errors:extensions.cannotNextScreenDuringAnswers")
         }
 

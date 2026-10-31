@@ -285,65 +285,10 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(scrollHeight1024).toBeLessThanOrEqual(clientHeight1024 + 10)
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
-    // 5. End Timer to Reveal Results
+    // 5. End Timer to Reveal Results directly on the authored interimResults scene (Single Reveal)
     await endTimer(managerPage)
 
-    // Wait for Spectator Results: Option 5 (Doctor) should be leader
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toBeVisible({ timeout: 15_000 })
-    const winnerCard = spectatorPage.locator('[data-winner="true"]')
-    await expect(winnerCard).toContainText("Doctor")
-    await expect(winnerCard).toContainText("2 votes")
-
-    // FIX B verification: Winner Hero is visibly larger and centered at top
-    const winnerBox = await winnerCard.boundingBox()
-    expect(winnerBox).not.toBeNull()
-
-    // Assert the 4 losers appear below and are smaller (area ratio > 1.8x)
-    for (const loserIndex of [0, 1, 2, 3]) {
-      const loserCard = spectatorPage.locator(
-        `[data-testid="photo-card-choice-${loserIndex}"]`,
-      )
-      await expect(loserCard).toHaveAttribute("data-winner", "false")
-      const loserBox = await loserCard.boundingBox()
-      expect(loserBox).not.toBeNull()
-      expect(winnerBox!.width * winnerBox!.height).toBeGreaterThan(
-        1.8 * loserBox!.width * loserBox!.height,
-      )
-      expect(loserBox!.y).toBeGreaterThanOrEqual(
-        winnerBox!.y + winnerBox!.height - 30,
-      )
-    }
-
-    // Assert descending vote-count order among runners-up:
-    // Option 1 (Working Girl) has 1 vote; Options 0, 2, 3 have 0 votes
-    const runnersUpCards = spectatorPage.locator(
-      '[data-testid="results-runners-up-section"] [data-testid^="photo-card-choice-"]',
-    )
-    await expect(runnersUpCards).toHaveCount(4)
-    await expect(runnersUpCards.nth(0)).toHaveAttribute(
-      "data-answer-index",
-      "1",
-    )
-
-    // Capture (6) Manager Results Hero Plus Ranked (1280)
-    await managerPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      managerPage,
-      "06_manager_results_hero_plus_ranked_1280.png",
-    )
-
-    // Capture (7) Spectator Results Hero Plus Ranked (1920)
-    await saveScreenshot(
-      spectatorPage,
-      "07_spectator_results_hero_plus_ranked_1920.png",
-    )
-
-    // 6. Advance to subsequent interimResults timeline scene
-    await next(managerPage)
-
-    // Verify interimResults scene on Spectator
+    // Verify interimResults scene on Spectator immediately after voting ends (Gate B: exactly one reveal)
     const interimOptionRows = spectatorPage.locator(
       '[data-testid="interim-option-row"]',
     )
@@ -355,6 +300,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     )
     await expect(interimWinner).toBeVisible()
     await expect(interimWinner).toContainText("Doctor")
+    await expect(interimWinner).toContainText("2 votes")
     const interimWinnerBox = await interimWinner.boundingBox()
     expect(interimWinnerBox).not.toBeNull()
 
@@ -373,6 +319,19 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       interimWinnerBox!.y + interimWinnerBox!.height - 30,
     )
 
+    // Capture (6) Manager Results Hero Plus Ranked (1280)
+    await managerPage.setViewportSize({ width: 1280, height: 800 })
+    await saveScreenshot(
+      managerPage,
+      "06_manager_results_hero_plus_ranked_1280.png",
+    )
+
+    // Capture (7) Spectator Results Hero Plus Ranked (1920)
+    await saveScreenshot(
+      spectatorPage,
+      "07_spectator_results_hero_plus_ranked_1920.png",
+    )
+
     // Capture (8) Interim Results Hero Plus Ranked (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
     await saveScreenshot(
@@ -381,7 +340,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     )
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
-    // 7. Advance to Question 2 (Tie Scenario)
+    // 6. Single Advance Click moves directly to Question 2 (Tie Scenario)
     await next(managerPage)
     const q2Title = "Round 1 · Who is the second character?"
     await expect(spectatorPage.getByText(q2Title)).toBeVisible({
@@ -418,21 +377,14 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       }),
     ])
 
-    // End timer for Q2
+    // End timer for Q2 -> transitions immediately to interimResults scene with tie
     await endTimer(managerPage)
 
-    // Verify Tie: exactly 2 winners highlighted
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toHaveCount(2, { timeout: 15_000 })
-
-    // Advance to Question 2's interimResults scene to verify tie handling in interim scene
-    await next(managerPage)
+    // Verify Tie in interimResults scene: spotlight tie and exactly 2 co-winners
     await expect(
       spectatorPage.locator('[data-testid="spotlight-tie"]'),
     ).toBeVisible({ timeout: 15_000 })
 
-    // Verify exactly 2 co-winners at equal emphasized size in interimResults
     await expect(
       spectatorPage.locator(
         '[data-testid="interim-option-row"][data-winner="true"]',
@@ -447,7 +399,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     )
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
-    // 8. Advance to Question 3 (Zero Votes Scenario)
+    // 7. Single Advance Click moves directly to Question 3 (Zero Votes Scenario)
     await next(managerPage)
     const q3Title = "Round 1 · In which era does the story take place?"
     await expect(spectatorPage.getByText(q3Title)).toBeVisible({

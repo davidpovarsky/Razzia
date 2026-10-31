@@ -6,10 +6,15 @@ export class CooldownTimer {
   private readonly io: Server
   private readonly gameId: string
   private active = false
+  private currentRemaining: number | null = null
 
   constructor(io: Server, gameId: string) {
     this.io = io
     this.gameId = gameId
+  }
+
+  get remaining(): number | null {
+    return this.active ? this.currentRemaining : null
   }
 
   start(seconds: number): Promise<void> {
@@ -18,12 +23,14 @@ export class CooldownTimer {
     }
 
     this.active = true
+    this.currentRemaining = seconds
 
     if (seconds === NO_TIME_LIMIT) {
       return new Promise<void>((resolve) => {
         const interval = setInterval(() => {
           if (!this.active) {
             clearInterval(interval)
+            this.currentRemaining = null
             resolve()
           }
         }, SECOND_MS)
@@ -36,12 +43,14 @@ export class CooldownTimer {
       const interval = setInterval(() => {
         if (!this.active || count <= 0) {
           this.active = false
+          this.currentRemaining = null
           clearInterval(interval)
           resolve()
 
           return
         }
 
+        this.currentRemaining = count
         this.io.to(this.gameId).emit(EVENTS.GAME.COOLDOWN, count)
         count -= 1
       }, SECOND_MS)
@@ -49,6 +58,7 @@ export class CooldownTimer {
   }
 
   abort() {
-    this.active &&= false
+    this.active = false
+    this.currentRemaining = null
   }
 }
