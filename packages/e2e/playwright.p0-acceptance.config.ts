@@ -45,7 +45,7 @@ export default defineConfig({
   testDir: "tests",
   testMatch: /p0-tzila-acceptance\.spec\.ts$/,
   outputDir: "test-results/p0-acceptance",
-  timeout: 90_000,
+  timeout: 150_000,
   expect: { timeout: 20_000 },
   fullyParallel: false,
   workers: 1,
@@ -68,7 +68,7 @@ export default defineConfig({
         MANAGER_PASSWORD,
         SOCKET_PORT: "3011",
         JWT_SECRET: "e2e-p0-tzila-secret-at-least-32-chars",
-        GAME_SPEED: "10",
+        GAME_SPEED: "1",
       },
     },
     {

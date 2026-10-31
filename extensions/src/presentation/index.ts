@@ -17,3 +17,5 @@ export * from "./lobby-team-assignment"
 export * from "./reveal-timeline"
 
 export * from "./history-helper"
+
+export * from "./poll-ranking"

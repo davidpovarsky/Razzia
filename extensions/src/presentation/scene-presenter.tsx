@@ -5,6 +5,11 @@ import type {
 import type { AuthoritativeStepEnvelope } from "../server/game/studio-show-coordinator"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
+  CANONICAL_ANSWER_COLORS,
+  computePollRanking,
+  type PollOptionItem,
+} from "./poll-ranking"
+import {
   calculateInterludeRemainingMs,
   processInterludeSkip,
   type InterludeSkipState,
@@ -390,16 +395,24 @@ export const ScenePresenter = ({
           <div className="flex w-full max-w-5xl flex-col items-center gap-4">
             {interimResults ? (
               (() => {
-                const winnerIndices = interimResults.winners ?? []
-                const winnerOptions = winnerIndices
-                  .map((idx) => interimResults.options[idx])
-                  .filter(Boolean)
-                const isZeroVotes =
-                  interimResults.totalResponders === 0 ||
-                  winnerOptions.length === 0
-                const isTie =
-                  !isZeroVotes &&
-                  (interimResults.isTie ?? winnerOptions.length > 1)
+                const pollOptions: PollOptionItem[] = interimResults.options.map(
+                  (opt, i) => ({
+                    answerIndex:
+                      opt.answerIndex !== undefined ? opt.answerIndex : i,
+                    label: opt.label,
+                    count: opt.count ?? 0,
+                    percentage: opt.percentage ?? 0,
+                    imageUrl: opt.imageUrl,
+                    alt: opt.alt,
+                  }),
+                )
+
+                const ranking = computePollRanking(pollOptions)
+                const { isZeroVotes, isTie, winners, runnersUp, allSorted } =
+                  ranking
+
+                const getCardColor = (idx: number) =>
+                  CANONICAL_ANSWER_COLORS[idx] ?? "#334155"
 
                 return (
                   <div className="w-full rounded-2xl border border-white/10 bg-black/60 p-4 sm:p-6 shadow-2xl backdrop-blur-md">
@@ -418,110 +431,242 @@ export const ScenePresenter = ({
                     ) : isTie ? (
                       <div
                         data-testid="spotlight-tie"
-                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-primary/40 bg-primary/10 px-4 py-2"
+                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-2"
                       >
-                        <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-primary">
-                          Tie / Co-leaders ({winnerOptions.map((o) => o.label).join(", ")})
+                        <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-bold uppercase tracking-wider text-amber-300">
+                          Tie / Co-leaders ({winners.map((o) => o.label).join(", ")})
                         </span>
                       </div>
                     ) : (
                       <div
                         data-testid="spotlight-winner"
-                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-primary/50 bg-primary/10 px-4 py-2"
+                        className="my-3 flex items-center justify-center gap-2 rounded-xl border border-amber-400/50 bg-amber-400/10 px-4 py-2"
                       >
-                        <span className="rounded-full bg-primary/20 px-3 py-1 text-xs font-black uppercase tracking-wider text-primary">
-                          Leading Choice: {winnerOptions[0]?.label}
+                        <span className="rounded-full bg-amber-400/20 px-3 py-1 text-xs font-black uppercase tracking-wider text-amber-300">
+                          Leading Choice: {winners[0]?.label}
                         </span>
                       </div>
                     )}
 
-                    {/* Cohesive 5-Card Adaptive Visual Grid */}
-                    <div className="grid w-full grid-cols-6 gap-3 sm:gap-4 my-4">
-                      {interimResults.options.map((opt, i) => {
-                        const isThisWinner =
-                          !isZeroVotes && winnerIndices.includes(i)
-                        const count = interimResults.options.length
-                        let colClass = "col-span-6 sm:col-span-3"
-                        if (count === 5) {
-                          if (i === 0) colClass = "col-span-6 sm:col-span-2 sm:col-start-1"
-                          else if (i === 1) colClass = "col-span-6 sm:col-span-2 sm:col-start-3"
-                          else if (i === 2) colClass = "col-span-6 sm:col-span-2 sm:col-start-5"
-                          else if (i === 3) colClass = "col-span-6 sm:col-span-2 sm:col-start-2"
-                          else if (i === 4) colClass = "col-span-6 sm:col-span-2 sm:col-start-4"
-                        } else if (count === 3) {
-                          colClass = "col-span-6 sm:col-span-2"
-                        }
+                    {/* Results Composition: Dominant Hero + Ranked Runners-up */}
+                    {!isZeroVotes ? (
+                      <div className="flex flex-col items-center w-full my-4">
+                        {/* Dominant Centered Hero Winner(s) */}
+                        <div
+                          data-testid="results-hero-section"
+                          className="flex flex-wrap items-center justify-center gap-4 sm:gap-6 w-full max-w-4xl mb-4 sm:mb-6"
+                        >
+                          {winners.map((winner) => {
+                            const index = winner.answerIndex
+                            const cardBg = getCardColor(index)
 
-                        return (
-                          <div
-                            key={opt.label || i}
-                            data-testid="interim-option-row"
-                            data-winner={isThisWinner}
-                            className={clsx(
-                              "flex flex-col items-center justify-between rounded-xl border p-3 text-center transition-all duration-300",
-                              colClass,
-                              isThisWinner
-                                ? "ring-4 ring-amber-400 bg-amber-950/40 border-amber-300 shadow-xl shadow-amber-500/20 scale-[1.05] z-10"
-                                : "border-white/10 bg-black/40 opacity-90",
-                            )}
-                          >
-                            <div className="flex w-full items-center justify-between mb-1.5">
-                              <span className="flex size-6 items-center justify-center rounded-md bg-white/20 text-xs font-black text-white">
-                                {i + 1}
-                              </span>
-                              {isThisWinner && (
-                                <span className="rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black uppercase text-black">
-                                  {isTie ? "Co-leader" : "Leader"}
+                            return (
+                              <div
+                                key={`interim-winner-${index}`}
+                                data-testid="interim-option-row"
+                                data-winner="true"
+                                style={{ backgroundColor: cardBg }}
+                                className={clsx(
+                                  "relative flex flex-col items-center justify-between overflow-hidden rounded-2xl sm:rounded-3xl border-2 border-amber-300 ring-4 sm:ring-8 ring-amber-400 p-3 sm:p-5 text-center shadow-2xl shadow-amber-500/30 transition-all duration-500",
+                                  winners.length === 1
+                                    ? "w-full max-w-sm sm:max-w-md md:max-w-lg"
+                                    : "w-full sm:w-[calc(50%-1rem)] max-w-md",
+                                )}
+                              >
+                                <div className="flex w-full items-center justify-between gap-2 mb-2 z-10">
+                                  <span className="flex size-7 sm:size-9 shrink-0 items-center justify-center rounded-xl bg-black/35 text-white font-black text-sm sm:text-lg border border-white/25 shadow-md">
+                                    {index + 1}
+                                  </span>
+
+                                  <span className="flex items-center gap-1.5 rounded-full bg-amber-400 px-3 sm:px-4 py-1 text-xs sm:text-sm font-black uppercase tracking-wider text-black shadow-lg">
+                                    <Trophy className="size-4 sm:size-5 fill-black" />
+                                    <span>{isTie ? "Co-leader" : "Leader"}</span>
+                                  </span>
+
+                                  <div className="flex items-center gap-1 rounded-full bg-black/35 px-2.5 sm:px-3 py-0.5 sm:py-1 text-xs sm:text-sm font-mono font-bold text-white shadow-md">
+                                    <span>{winner.percentage}%</span>
+                                    <span className="text-white/80">
+                                      ({winner.count} {winner.count === 1 ? "vote" : "votes"})
+                                    </span>
+                                  </div>
+                                </div>
+
+                                <div
+                                  className="relative flex aspect-square w-full max-h-48 sm:max-h-64 md:max-h-72 items-center justify-center overflow-hidden rounded-xl sm:rounded-2xl border border-black/20 shadow-inner"
+                                  style={{ backgroundColor: cardBg }}
+                                >
+                                  {winner.imageUrl && (
+                                    <img
+                                      src={winner.imageUrl}
+                                      alt={winner.alt || winner.label}
+                                      data-testid="winner-image"
+                                      className="h-full w-full object-contain p-2 rounded-xl"
+                                      loading="lazy"
+                                    />
+                                  )}
+
+                                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-2 text-center">
+                                    <div className="flex items-baseline justify-center gap-2 text-white">
+                                      <span className="text-xl sm:text-2xl md:text-3xl font-black drop-shadow-md">
+                                        {winner.percentage}%
+                                      </span>
+                                      <span className="text-xs sm:text-sm font-semibold text-white/90">
+                                        ({winner.count} {winner.count === 1 ? "vote" : "votes"})
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <span
+                                  data-testid="winner-caption"
+                                  className="mt-2.5 w-full text-center font-black text-white text-base sm:text-xl line-clamp-2 drop-shadow-md"
+                                >
+                                  {winner.label}
                                 </span>
-                              )}
-                            </div>
 
-                            <div className="relative flex aspect-square w-full max-h-32 sm:max-h-40 md:max-h-48 items-center justify-center overflow-hidden rounded-lg bg-black/30 border border-white/10">
-                              {opt.imageUrl && (
-                                <img
-                                  src={opt.imageUrl}
-                                  alt={opt.alt || opt.label}
-                                  data-testid={isThisWinner ? "winner-image" : undefined}
-                                  className="h-full w-full object-contain p-1 rounded-lg"
-                                  loading="lazy"
-                                />
-                              )}
-                            </div>
+                                <div className="mt-2.5 h-2.5 w-full overflow-hidden rounded-full bg-white/25">
+                                  <div
+                                    className="h-full rounded-full bg-amber-400 transition-all duration-700 ease-out"
+                                    style={{
+                                      width: `${Math.min(100, Math.max(0, winner.percentage))}%`,
+                                    }}
+                                  />
+                                </div>
+                              </div>
+                            )
+                          })}
+                        </div>
 
-                            <span
-                              data-testid={isThisWinner ? "winner-caption" : undefined}
+                        {/* Runners-up below sorted descending */}
+                        {runnersUp.length > 0 && (
+                          <div
+                            data-testid="results-runners-up-section"
+                            className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-3.5 md:gap-4 w-full max-w-4xl"
+                          >
+                            {runnersUp.map((runner) => {
+                              const index = runner.answerIndex
+                              const cardBg = getCardColor(index)
+
+                              return (
+                                <div
+                                  key={`interim-runner-${index}`}
+                                  data-testid="interim-option-row"
+                                  data-winner="false"
+                                  style={{ backgroundColor: cardBg }}
+                                  className="relative flex flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-black/20 p-2 sm:p-2.5 text-center shadow-lg opacity-95 transition-all duration-300"
+                                >
+                                  <div className="flex w-full items-center justify-between gap-1 mb-1 z-10">
+                                    <span className="flex size-6 sm:size-7 shrink-0 items-center justify-center rounded-lg bg-black/35 text-white font-black text-xs sm:text-sm border border-white/20 shadow-md">
+                                      {index + 1}
+                                    </span>
+                                    <span className="text-[10px] sm:text-xs font-mono font-bold text-white bg-black/35 px-2 py-0.5 rounded-full">
+                                      {runner.count} {runner.count === 1 ? "vote" : "votes"}
+                                    </span>
+                                  </div>
+
+                                  <div
+                                    className="relative flex aspect-square w-full max-h-24 sm:max-h-28 md:max-h-32 items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/15 shadow-inner"
+                                    style={{ backgroundColor: cardBg }}
+                                  >
+                                    {runner.imageUrl && (
+                                      <img
+                                        src={runner.imageUrl}
+                                        alt={runner.alt || runner.label}
+                                        className="h-full w-full object-contain p-1 rounded-lg"
+                                        loading="lazy"
+                                      />
+                                    )}
+                                    <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-1 text-center">
+                                      <span className="text-sm sm:text-base font-black text-white drop-shadow-md">
+                                        {runner.percentage}%
+                                      </span>
+                                    </div>
+                                  </div>
+
+                                  <span className="mt-1.5 w-full text-center font-bold text-white text-xs sm:text-sm wrap-break-word drop-shadow-md line-clamp-2">
+                                    {runner.label}
+                                  </span>
+
+                                  <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                                    <div
+                                      className="h-full rounded-full bg-white transition-all duration-700 ease-out"
+                                      style={{
+                                        width: `${Math.min(100, Math.max(0, runner.percentage))}%`,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        )}
+                      </div>
+                    ) : (
+                      /* Zero votes unranked peer grid */
+                      <div className="grid w-full grid-cols-6 gap-3 sm:gap-4 my-4">
+                        {allSorted.map((opt, i) => {
+                          const index = opt.answerIndex
+                          const count = allSorted.length
+                          let colClass = "col-span-6 sm:col-span-3"
+                          if (count === 5) {
+                            if (i === 0) colClass = "col-span-6 sm:col-span-2 sm:col-start-1"
+                            else if (i === 1) colClass = "col-span-6 sm:col-span-2 sm:col-start-3"
+                            else if (i === 2) colClass = "col-span-6 sm:col-span-2 sm:col-start-5"
+                            else if (i === 3) colClass = "col-span-6 sm:col-span-2 sm:col-start-2"
+                            else if (i === 4) colClass = "col-span-6 sm:col-span-2 sm:col-start-4"
+                          } else if (count === 3) {
+                            colClass = "col-span-6 sm:col-span-2"
+                          }
+                          const cardBg = getCardColor(index)
+
+                          return (
+                            <div
+                              key={opt.label || i}
+                              data-testid="interim-option-row"
+                              data-winner="false"
+                              style={{ backgroundColor: cardBg }}
                               className={clsx(
-                                "mt-2 w-full text-center font-bold line-clamp-2",
-                                isThisWinner
-                                  ? "text-amber-200 text-sm sm:text-base"
-                                  : "text-white text-xs sm:text-sm",
+                                "flex flex-col items-center justify-between rounded-xl border border-black/20 p-3 text-center shadow-lg transition-all duration-300",
+                                colClass,
                               )}
                             >
-                              {opt.label}
-                            </span>
+                              <div className="flex w-full items-center justify-between mb-1.5">
+                                <span className="flex size-6 items-center justify-center rounded-md bg-black/35 text-xs font-black text-white border border-white/20">
+                                  {index + 1}
+                                </span>
+                              </div>
 
-                            <div className="mt-1 flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-primary">
-                              <span>
-                                {opt.count} {opt.count === 1 ? "vote" : "votes"}
-                              </span>
-                              <span>({opt.percentage}%)</span>
-                            </div>
-
-                            <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/10">
                               <div
-                                className={clsx(
-                                  "h-full rounded-full transition-all duration-500",
-                                  isThisWinner ? "bg-amber-400" : "bg-primary",
+                                className="relative flex aspect-square w-full max-h-32 sm:max-h-40 md:max-h-48 items-center justify-center overflow-hidden rounded-lg border border-black/15 shadow-inner"
+                                style={{ backgroundColor: cardBg }}
+                              >
+                                {opt.imageUrl && (
+                                  <img
+                                    src={opt.imageUrl}
+                                    alt={opt.alt || opt.label}
+                                    className="h-full w-full object-contain p-1 rounded-lg"
+                                    loading="lazy"
+                                  />
                                 )}
-                                style={{
-                                  width: `${Math.min(100, Math.max(0, opt.percentage))}%`,
-                                }}
-                              />
+                              </div>
+
+                              <span className="mt-2 w-full text-center font-bold text-white text-xs sm:text-sm line-clamp-2 drop-shadow-md">
+                                {opt.label}
+                              </span>
+
+                              <div className="mt-1 flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-white/90">
+                                <span>0 votes</span>
+                                <span>(0%)</span>
+                              </div>
+
+                              <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                                <div className="h-full rounded-full bg-white" style={{ width: "0%" }} />
+                              </div>
                             </div>
-                          </div>
-                        )
-                      })}
-                    </div>
+                          )
+                        })}
+                      </div>
+                    )}
 
                     <div className="mt-3 flex justify-between border-t border-white/10 pt-2 text-xs text-white/60">
                       <span data-testid="total-votes">

@@ -6,7 +6,7 @@ import { useTranslation } from "react-i18next"
 export interface AnswerCountdownProps {
   seconds: number | null
   totalSeconds?: number
-  variant?: "host" | "display"
+  variant?: "host" | "display" | "player"
   className?: string
   "data-testid"?: string
 }
@@ -32,6 +32,7 @@ export const AnswerCountdown = ({
   const isExpired = safeSeconds === 0
 
   const isDisplay = variant === "display"
+  const isPlayer = variant === "player"
 
   return (
     <div
@@ -47,7 +48,9 @@ export const AnswerCountdown = ({
         // Container styling depending on variant
         isDisplay
           ? "gap-2.5 rounded-2xl border px-6 py-2 shadow-2xl backdrop-blur-md"
-          : "gap-2 rounded-xl border px-4 py-1.5 shadow-lg backdrop-blur-md",
+          : isPlayer
+            ? "gap-2 sm:gap-2.5 rounded-xl sm:rounded-2xl border px-3.5 sm:px-5 py-1 sm:py-1.5 shadow-xl backdrop-blur-md"
+            : "gap-2 rounded-xl border px-4 py-1.5 shadow-lg backdrop-blur-md",
         // Color states: normal vs urgent (<= 5s) vs expired (0s)
         isExpired
           ? "border-red-500/50 bg-red-950/60 text-red-300 shadow-[0_0_20px_rgba(239,68,68,0.25)]"
@@ -60,7 +63,11 @@ export const AnswerCountdown = ({
       <Timer
         className={clsx(
           "shrink-0 transition-transform",
-          isDisplay ? "size-6 sm:size-7" : "size-4 sm:size-5",
+          isDisplay
+            ? "size-6 sm:size-7"
+            : isPlayer
+              ? "size-5 sm:size-6"
+              : "size-4 sm:size-5",
           isUrgent && "text-amber-400",
           isExpired && "text-red-400",
           !isUrgent && !isExpired && "text-white/60",
@@ -72,7 +79,11 @@ export const AnswerCountdown = ({
         <span
           className={clsx(
             "uppercase font-bold tracking-wider text-white/60",
-            isDisplay ? "text-[10px] sm:text-xs" : "text-[9px] sm:text-[10px]",
+            isDisplay
+              ? "text-[10px] sm:text-xs"
+              : isPlayer
+                ? "text-[10px] sm:text-xs"
+                : "text-[9px] sm:text-[10px]",
           )}
         >
           {t("game:hud.time", "Time")}
@@ -84,14 +95,20 @@ export const AnswerCountdown = ({
             "font-mono font-black tabular-nums transition-transform",
             isDisplay
               ? "text-3xl sm:text-4xl md:text-5xl lg:text-6xl"
-              : "text-2xl sm:text-3xl md:text-4xl",
+              : isPlayer
+                ? "text-3xl sm:text-4xl md:text-5xl"
+                : "text-2xl sm:text-3xl md:text-4xl",
             isUrgent && "text-amber-300 scale-105",
             isExpired && "text-red-400",
             !isUrgent && !isExpired && "text-primary",
           )}
         >
           {safeSeconds}
-          {isDisplay && <span className="text-sm sm:text-base font-bold text-white/60 ml-0.5">s</span>}
+          {(isDisplay || isPlayer) && (
+            <span className="text-sm sm:text-base font-bold text-white/60 ml-0.5">
+              s
+            </span>
+          )}
         </span>
       </div>
 
