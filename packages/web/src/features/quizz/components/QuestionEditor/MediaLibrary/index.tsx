@@ -1,5 +1,5 @@
 import type { UploadedMedia } from "@razzia/common/types/game"
-import { isQuizExtrasV2 } from "@razzia/extensions/core"
+import { BUILT_IN_SOUNDS_LIST, isQuizExtrasV2 } from "@razzia/extensions/core"
 import Loader from "@razzia/web/components/Loader"
 import MediaCard from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard"
 import MediaDropOverlay from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaDropOverlay"
@@ -34,62 +34,7 @@ interface Props {
 
 type MediaScopeTab = "all" | "show" | "builtin"
 
-const BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> = [
-  {
-    name: "showQuestion.mp3",
-    label: "Question Intro",
-    url: "/sounds/showQuestion.mp3",
-    type: "audio",
-  },
-  {
-    name: "answersMusic.mp3",
-    label: "Voting Music Loop",
-    url: "/sounds/answersMusic.mp3",
-    type: "audio",
-  },
-  {
-    name: "results.mp3",
-    label: "Results Reveal",
-    url: "/sounds/results.mp3",
-    type: "audio",
-  },
-  {
-    name: "answersSound.mp3",
-    label: "Show Answers Pop",
-    url: "/sounds/answersSound.mp3",
-    type: "audio",
-  },
-  {
-    name: "snearRoll.mp3",
-    label: "Drum Roll",
-    url: "/sounds/snearRoll.mp3",
-    type: "audio",
-  },
-  {
-    name: "podiumFirst.mp3",
-    label: "Podium 1st Place",
-    url: "/sounds/podiumFirst.mp3",
-    type: "audio",
-  },
-  {
-    name: "podiumSecond.mp3",
-    label: "Podium 2nd Place",
-    url: "/sounds/podiumSecond.mp3",
-    type: "audio",
-  },
-  {
-    name: "podiumThird.mp3",
-    label: "Podium 3rd Place",
-    url: "/sounds/podiumThird.mp3",
-    type: "audio",
-  },
-  {
-    name: "pop.mp3",
-    label: "Pop Sound",
-    url: "/sounds/pop.mp3",
-    type: "audio",
-  },
-]
+const BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> = BUILT_IN_SOUNDS_LIST
 
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
@@ -638,6 +583,7 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
                     <div className="flex min-w-0 items-center gap-2.5">
                       <button
                         type="button"
+                        data-testid={`builtin-sound-preview-${sound.name}`}
                         onClick={() => toggleBuiltinPreview(sound.url)}
                         aria-label={`Preview ${sound.label}`}
                         className="bg-primary/15 text-primary hover:bg-primary/25 flex size-9 shrink-0 items-center justify-center rounded-lg transition"
