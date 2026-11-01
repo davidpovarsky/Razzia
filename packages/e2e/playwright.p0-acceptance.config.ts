@@ -45,7 +45,7 @@ export default defineConfig({
   testDir: "tests",
   testMatch: /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance)\.spec\.ts$/,
   outputDir: "test-results/p0-acceptance",
-  timeout: 150_000,
+  timeout: 240_000,
   expect: { timeout: 20_000 },
   fullyParallel: false,
   workers: 1,

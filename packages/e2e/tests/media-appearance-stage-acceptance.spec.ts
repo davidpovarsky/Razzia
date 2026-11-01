@@ -1,5 +1,6 @@
 import fs from "node:fs"
 import { join } from "node:path"
+import zlib from "node:zlib"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import {
@@ -27,6 +28,67 @@ const TINY_PNG_BUFFER = Buffer.from(
   "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==",
   "base64",
 )
+
+// Dynamic multi-aspect ratio PNG generator for varied, realistic image fixtures
+const CRC_TABLE = new Int32Array(256)
+for (let n = 0; n < 256; n++) {
+  let c = n
+  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+  CRC_TABLE[n] = c
+}
+function crc32(buf: Buffer): number {
+  let crc = -1
+  for (let i = 0; i < buf.length; i++) {
+    crc = (crc >>> 8) ^ CRC_TABLE[(crc ^ buf[i]) & 0xff]
+  }
+  return crc ^ -1
+}
+function makeChunk(type: string, data: Buffer): Buffer {
+  const len = Buffer.alloc(4)
+  len.writeUInt32BE(data.length, 0)
+  const typeBuf = Buffer.from(type, "ascii")
+  const crc = Buffer.alloc(4)
+  crc.writeInt32BE(crc32(Buffer.concat([typeBuf, data])), 0)
+  return Buffer.concat([len, typeBuf, data, crc])
+}
+function createPngBuffer(
+  width: number,
+  height: number,
+  color = { r: 59, g: 130, b: 246 },
+): Buffer {
+  const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
+  const ihdr = Buffer.alloc(13)
+  ihdr.writeUInt32BE(width, 0)
+  ihdr.writeUInt32BE(height, 4)
+  ihdr[8] = 8
+  ihdr[9] = 2
+  ihdr[10] = 0
+  ihdr[11] = 0
+  ihdr[12] = 0
+  const scanlineLength = 1 + width * 3
+  const raw = Buffer.alloc(scanlineLength * height)
+  for (let y = 0; y < height; y++) {
+    const offset = y * scanlineLength
+    raw[offset] = 0
+    for (let x = 0; x < width; x++) {
+      const px = offset + 1 + x * 3
+      raw[px] = (color.r + (x * 40) / width) % 256
+      raw[px + 1] = (color.g + (y * 40) / height) % 256
+      raw[px + 2] = color.b
+    }
+  }
+  const idat = makeChunk("IDAT", zlib.deflateSync(raw))
+  return Buffer.concat([
+    sig,
+    makeChunk("IHDR", ihdr),
+    idat,
+    makeChunk("IEND", Buffer.alloc(0)),
+  ])
+}
+
+const LANDSCAPE_PNG_BUFFER = createPngBuffer(1600, 900, { r: 234, g: 88, b: 12 })
+const PORTRAIT_PNG_BUFFER = createPngBuffer(1200, 1600, { r: 16, g: 185, b: 129 })
+const SQUARE_PNG_BUFFER = createPngBuffer(1024, 1024, { r: 139, g: 92, b: 246 })
 
 const assertZeroStageScroll = async (page: Page, label: string) => {
   const metrics = await page.evaluate(() => {
@@ -73,20 +135,21 @@ const assertZeroStageScroll = async (page: Page, label: string) => {
 }
 
 /**
- * P0-4: Visual containment proof:
+ * P0-4: Visual containment & text completeness proof:
  * Inspects computed bounding boxes against viewport AND all clipping ancestors
  * (overflow !== visible), ensuring the element is visible, non-zero, within the viewport,
- * and NOT truncated by any overflow:hidden container.
+ * NOT truncated by any overflow:hidden container, and that no CSS line-clamp or overflow
+ * hides essential text.
  */
 const assertVisualContainment = async (
   page: Page,
   selector: string,
   label: string,
-  options?: { checkImageLoaded?: boolean },
+  options?: { checkImageLoaded?: boolean; checkTextCompleteness?: boolean },
 ) => {
   await expect(async () => {
     const result = await page.evaluate(
-      ({ sel, checkImg }) => {
+      ({ sel, checkImg, checkText }) => {
         const el = document.querySelector(sel)
         if (!el) {
           return { ok: false, error: `Element not found in DOM: ${sel}` }
@@ -168,6 +231,26 @@ const assertVisualContainment = async (
           }
         }
 
+        // 4. Text completeness check: detect CSS line-clamp or overflow ellipsis cuts
+        if (checkText !== false) {
+          const text = (el.textContent || "").trim()
+          if (text.length > 0) {
+            const clamp = style.webkitLineClamp
+            if (clamp && clamp !== "none") {
+              return {
+                ok: false,
+                error: `Element has -webkit-line-clamp: ${clamp} applied to text: "${text.slice(0, 30)}..."`,
+              }
+            }
+            if (el.scrollHeight > el.clientHeight + 1.5) {
+              return {
+                ok: false,
+                error: `Element text overflows vertically: scrollHeight (${el.scrollHeight}) > clientHeight (${el.clientHeight}) for text: "${text.slice(0, 40)}..."`,
+              }
+            }
+          }
+        }
+
         return {
           ok: true,
           bounds: {
@@ -180,7 +263,11 @@ const assertVisualContainment = async (
           },
         }
       },
-      { sel: selector, checkImg: options?.checkImageLoaded },
+      {
+        sel: selector,
+        checkImg: options?.checkImageLoaded,
+        checkText: options?.checkTextCompleteness ?? true,
+      },
     )
 
     expect(result.ok, `${label}: ${result.error}`).toBe(true)
@@ -189,19 +276,27 @@ const assertVisualContainment = async (
 
 /**
  * P0-4: Asserts that an upper stage element does not vertically overlap a lower element.
+ * Fail-closed: missing required selectors FAIL the test unless explicitly marked optional.
  */
 const assertNoVerticalOverlap = async (
   page: Page,
   topSelector: string,
   bottomSelector: string,
   label: string,
+  options?: { optional?: boolean },
 ) => {
   const result = await page.evaluate(
-    ({ topSel, bottomSel }) => {
+    ({ topSel, bottomSel, isOptional }) => {
       const topEl = document.querySelector(topSel)
       const bottomEl = document.querySelector(bottomSel)
       if (!topEl || !bottomEl) {
-        return { ok: true }
+        if (isOptional) {
+          return { ok: true }
+        }
+        return {
+          ok: false,
+          error: `Missing required element for overlap check: topEl(${topSel})=${Boolean(topEl)}, bottomEl(${bottomSel})=${Boolean(bottomEl)}`,
+        }
       }
       const topRect = topEl.getBoundingClientRect()
       const bottomRect = bottomEl.getBoundingClientRect()
@@ -214,11 +309,15 @@ const assertNoVerticalOverlap = async (
         bottomTop: bottomRect.top,
       }
     },
-    { topSel: topSelector, bottomSel: bottomSelector },
+    {
+      topSel: topSelector,
+      bottomSel: bottomSelector,
+      isOptional: options?.optional ?? false,
+    },
   )
   expect(
     result.ok,
-    `${label}: upper element bottom (${result.topBottom?.toFixed(1)}) overlaps lower element top (${result.bottomTop?.toFixed(1)})`,
+    `${label}: ${result.error || `upper element bottom (${result.topBottom?.toFixed(1)}) overlaps lower element top (${result.bottomTop?.toFixed(1)})`}`,
   ).toBe(true)
 }
 
@@ -386,11 +485,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
     await loginManager(managerPage)
 
-    // Upload a real background PNG via API so we can reference it in a composite show
+    // Upload real diverse aspect-ratio image fixtures via API (1600x900 landscape, 1200x1600 portrait, 1024x1024 square)
     const token = await managerPage.evaluate(() =>
       localStorage.getItem("token"),
     )
-    const uploadRes = await managerPage.request.post(
+    const uploadLandscapeRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/media`,
       {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
@@ -398,13 +497,53 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
           file: {
             name: "custom-card-bg.png",
             mimeType: "image/png",
-            buffer: TINY_PNG_BUFFER,
+            buffer: LANDSCAPE_PNG_BUFFER,
           },
         },
       },
     )
-    expect(uploadRes.status()).toBe(201)
-    const uploadedBg = (await uploadRes.json()) as {
+    expect(uploadLandscapeRes.status()).toBe(201)
+    const uploadedBg = (await uploadLandscapeRes.json()) as {
+      name: string
+      url: string
+      type: string
+    }
+
+    const uploadPortraitRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/media`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        multipart: {
+          file: {
+            name: "fixture-portrait.png",
+            mimeType: "image/png",
+            buffer: PORTRAIT_PNG_BUFFER,
+          },
+        },
+      },
+    )
+    expect(uploadPortraitRes.status()).toBe(201)
+    const uploadedPortrait = (await uploadPortraitRes.json()) as {
+      name: string
+      url: string
+      type: string
+    }
+
+    const uploadSquareRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/media`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        multipart: {
+          file: {
+            name: "fixture-square.png",
+            mimeType: "image/png",
+            buffer: SQUARE_PNG_BUFFER,
+          },
+        },
+      },
+    )
+    expect(uploadSquareRes.status()).toBe(201)
+    const uploadedSquare = (await uploadSquareRes.json()) as {
       name: string
       url: string
       type: string
@@ -442,7 +581,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
                 ],
                 solutions: [],
                 cooldown: 5,
-                time: 60,
+                time: 180,
               },
               {
                 type: "single",
@@ -451,7 +590,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
                 answers: ["North", "South", "East", "West"],
                 solutions: [],
                 cooldown: 5,
-                time: 60,
+                time: 180,
               },
             ],
           },
@@ -619,31 +758,31 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
                     answerIndex: 0,
                     display: "both",
                     url: uploadedBg.url,
-                    alt: "Alpha Visual",
+                    alt: "Alpha Landscape Visual",
                   },
                   {
                     answerIndex: 1,
                     display: "both",
-                    url: uploadedBg.url,
-                    alt: "Beta Visual",
+                    url: uploadedPortrait.url,
+                    alt: "Beta Portrait Visual",
                   },
                   {
                     answerIndex: 2,
                     display: "both",
-                    url: uploadedBg.url,
-                    alt: "Gamma Visual",
+                    url: uploadedSquare.url,
+                    alt: "Gamma Square Visual",
                   },
                   {
                     answerIndex: 3,
                     display: "both",
                     url: uploadedBg.url,
-                    alt: "Delta Visual",
+                    alt: "Delta Landscape Visual",
                   },
                   {
                     answerIndex: 4,
                     display: "both",
-                    url: uploadedBg.url,
-                    alt: "Epsilon Visual",
+                    url: uploadedSquare.url,
+                    alt: "Epsilon Square Visual",
                   },
                 ],
               },
@@ -892,7 +1031,29 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         `Q1 Interim Reveal @ ${vp.name}`,
       )
 
-      // P0-4: Assert true visual containment on reveal stage elements:
+      // P0-4: Assert true visual containment & text completeness on reveal stage elements:
+      // 1. Question text: fully visible, unclamped, not ellipsized
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="scene-question-text"]',
+        `Reveal Question Text @ ${vp.name}`,
+        { checkTextCompleteness: true },
+      )
+      const qText = (await spectatorPage.locator('[data-testid="scene-question-text"]').textContent()) ?? ""
+      expect(qText).toContain("Question 1 with Custom Background")
+      expect(qText).not.toContain("...")
+
+      // 2. Bottom awaiting host line: fully visible, not cut off by screen bottom edge
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="scene-awaiting-host"]',
+        `Reveal Awaiting Host Line @ ${vp.name}`,
+        { checkTextCompleteness: true },
+      )
+      const hostText = (await spectatorPage.locator('[data-testid="scene-awaiting-host"]').textContent()) ?? ""
+      expect(hostText.toLowerCase()).toContain("awaiting host")
+
+      // 3. Dominant hero winner and runners up
       await assertVisualContainment(
         spectatorPage,
         '[data-testid="results-hero-section"]',
@@ -907,6 +1068,20 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         '[data-testid="results-runners-up-section"]',
         `Reveal Runners Up @ ${vp.name}`,
+      )
+
+      // 4. No vertical overlap between question text and hero section, or between hero section and awaiting host footer
+      await assertNoVerticalOverlap(
+        spectatorPage,
+        '[data-testid="scene-question-text"]',
+        '[data-testid="results-hero-section"]',
+        `Reveal Question / Hero Overlap @ ${vp.name}`,
+      )
+      await assertNoVerticalOverlap(
+        spectatorPage,
+        '[data-testid="results-hero-section"]',
+        '[data-testid="scene-awaiting-host"]',
+        `Reveal Hero / Awaiting Host Overlap @ ${vp.name}`,
       )
 
       if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "320x568") {
