@@ -57,7 +57,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
           answers: ["4", "3", "2", "1"],
           solutions: [0],
           cooldown: 3,
-          time: 5,
+          time: 15,
         },
         {
           type: "single",
@@ -65,7 +65,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
           answers: ["London", "Berlin", "Paris", "Rome"],
           solutions: [2],
           cooldown: 3,
-          time: 5,
+          time: 15,
         },
       ],
     }

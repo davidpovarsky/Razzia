@@ -308,9 +308,22 @@ export class ExtensionGameSession {
         extrasPayload.answerVisuals = questionExtras.answerVisuals
       }
 
-      // Question stage entrance animation
+      // Question stage entrance animation & 4-slot stage animations
       if (questionExtras.questionEntrance) {
         extrasPayload.questionEntrance = questionExtras.questionEntrance
+      }
+
+      if (questionExtras.stageAnimations) {
+        extrasPayload.stageAnimations = questionExtras.stageAnimations
+      }
+
+      // Per-card background & audio cues
+      if (questionExtras.background) {
+        extrasPayload.cardBackground = questionExtras.background
+      }
+
+      if (questionExtras.audioCues) {
+        extrasPayload.cardAudioCues = questionExtras.audioCues
       }
 
       // Interlude
@@ -327,6 +340,27 @@ export class ExtensionGameSession {
         extrasPayload.currentScene = this.showCoordinator.currentScene
 
         if (this.showCoordinator.isSceneActive()) {
+          const activeScene = this.showCoordinator.currentScene
+
+          if (activeScene) {
+            if ("background" in activeScene && activeScene.background) {
+              extrasPayload.cardBackground = activeScene.background
+            } else {
+              delete extrasPayload.cardBackground
+            }
+
+            if ("audio" in activeScene && activeScene.audio) {
+              extrasPayload.sceneAudio = activeScene.audio
+            }
+
+            if ("stageAnimations" in activeScene && activeScene.stageAnimations) {
+              extrasPayload.stageAnimations = activeScene.stageAnimations
+            } else {
+              delete extrasPayload.stageAnimations
+              delete extrasPayload.questionEntrance
+            }
+          }
+
           const stepKind = this.showCoordinator.currentStep?.item.kind
 
           if (stepKind === "leaderboard") {

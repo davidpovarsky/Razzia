@@ -1,4 +1,5 @@
 export * from "./api/routes"
+export * from "./media-library"
 
 export * from "./game/session"
 

@@ -12,6 +12,7 @@ import {
   saveQuizz,
   updateQuizz,
 } from "@razzia/socket/services/config"
+import { listMedia } from "@razzia/socket/services/media"
 import { Hono } from "hono"
 
 const extensionRoutes = createExtensionRoutes(
@@ -21,6 +22,7 @@ const extensionRoutes = createExtensionRoutes(
     updateQuizz,
     saveQuizz,
     deleteQuizz,
+    listMedia,
   },
   requireManager,
 )

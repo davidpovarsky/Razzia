@@ -6,12 +6,15 @@ import {
   type AnyQuizExtras,
 } from "../../core/index"
 
+import type { UploadedMedia } from "@razzia/common/types/game"
+
 export interface StorageInjections {
   getPath: (subPath?: string) => string
   getQuizzById: (id: string) => unknown
   saveQuizz: (data: unknown) => { id: string }
   updateQuizz: (id: string, data: unknown) => { id: string }
   deleteQuizz: (id: string) => void
+  listMedia?: () => UploadedMedia[]
 }
 
 export const getSidecarDirectory = (

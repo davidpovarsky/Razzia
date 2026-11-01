@@ -1,9 +1,11 @@
 import { zValidator } from "@hono/zod-validator"
 import { MAX_MEDIA_SIZE } from "@razzia/common/constants"
 import { mediaUploadValidator } from "@razzia/common/validators/quizz"
+import { checkMediaDeleteSafety } from "@razzia/extensions/server"
 import { apiFactory } from "@razzia/socket/api/factory"
 import { requireManager } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
+import { getPath } from "@razzia/socket/services/config"
 import {
   deleteMedia,
   listMedia,
@@ -33,7 +35,21 @@ const routes = apiFactory
       c.json(await saveMedia(c.req.valid("form").file), StatusCodes.CREATED),
   )
   .delete("/:name", (c) => {
-    deleteMedia(c.req.param("name"))
+    const name = c.req.param("name")
+    const detach = c.req.query("detach") === "true"
+    const safety = checkMediaDeleteSafety(getPath, name, { detach })
+
+    if (!safety.allowed) {
+      return c.json(
+        {
+          error: "extensions:mediaLibrary.deleteBlockedDesc",
+          references: safety.references,
+        },
+        StatusCodes.CONFLICT,
+      )
+    }
+
+    deleteMedia(name)
 
     return c.body(null, StatusCodes.NO_CONTENT)
   })

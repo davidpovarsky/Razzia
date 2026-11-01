@@ -8,7 +8,12 @@ import {
   quizExtrasV1Schema,
   quizExtrasV2Schema,
   RevisionConflictError,
+  showMediaCatalogItemSchema,
 } from "../../core/index"
+import {
+  associateMediaWithShow,
+  buildMediaCatalogResponse,
+} from "../media-library"
 import { CompositeStorageService } from "../storage/service"
 import { CompositeStorageError } from "../storage/error"
 import type { StorageInjections } from "../storage/sidecar"
@@ -24,6 +29,11 @@ const saveCompositeBodySchema = z.strictObject({
 const createCompositeBodySchema = z.strictObject({
   quizz: quizzValidator,
   extras: anyQuizExtrasSchema,
+})
+
+const associateMediaBodySchema = z.strictObject({
+  quizId: z.string().min(1),
+  item: showMediaCatalogItemSchema,
 })
 
 export const createExtensionRoutes = (
@@ -206,6 +216,35 @@ export const createExtensionRoutes = (
       )
     }
   })
+
+  // GET /media/catalog -> 200 { media, builtInSounds, showMediaCatalog }
+  app.get("/media/catalog", (c) => {
+    const quizId = c.req.query("quizId") || undefined
+    const uploaded = injections.listMedia ? injections.listMedia() : []
+    const catalog = buildMediaCatalogResponse(
+      injections.getPath,
+      uploaded,
+      quizId,
+    )
+
+    return c.json(catalog, StatusCodes.OK)
+  })
+
+  // POST /media/associate -> 200 { showMediaCatalog }
+  app.post(
+    "/media/associate",
+    zValidator("json", associateMediaBodySchema),
+    (c) => {
+      const body = c.req.valid("json")
+      const showMediaCatalog = associateMediaWithShow(
+        injections.getPath,
+        body.quizId,
+        body.item,
+      )
+
+      return c.json({ showMediaCatalog }, StatusCodes.OK)
+    },
+  )
 
   return app
 }
