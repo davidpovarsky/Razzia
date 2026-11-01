@@ -43,7 +43,7 @@ if (!process.env.TEST_WORKER_INDEX) {
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen)\.spec\.ts$/,
+  testMatch: /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance)\.spec\.ts$/,
   outputDir: "test-results/p0-acceptance",
   timeout: 150_000,
   expect: { timeout: 20_000 },
@@ -63,6 +63,7 @@ export default defineConfig({
       cwd: join(root, "packages/socket"),
       url: "http://127.0.0.1:3011/api/health",
       reuseExistingServer: false,
+      timeout: 120_000,
       env: {
         CONFIG_PATH,
         MANAGER_PASSWORD,
@@ -76,7 +77,9 @@ export default defineConfig({
       cwd: join(root, "packages/web"),
       url: "http://127.0.0.1:3010",
       reuseExistingServer: false,
+      timeout: 120_000,
       env: {
+        CONFIG_PATH,
         NODE_OPTIONS: "--experimental-strip-types",
         WEB_PORT: "3010",
         SOCKET_PORT: "3011",

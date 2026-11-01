@@ -196,29 +196,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       "04_player_vs_spectator_timers.png",
     )
 
-    // Capture (01) Spectator Live Question (1920)
-    await saveScreenshot(
-      spectatorPage,
-      "01_spectator_live_question_1920.png",
-    )
-
-    // Capture (02) Spectator Live Question at 1024x768 (check no scroll overflow)
-    await spectatorPage.setViewportSize({ width: 1024, height: 768 })
-    await spectatorPage.waitForTimeout(200)
-    await saveScreenshot(
-      spectatorPage,
-      "02_spectator_live_question_1024.png",
-    )
-    const scrollHeight1024 = await spectatorPage.evaluate(
-      () => document.documentElement.scrollHeight,
-    )
-    const clientHeight1024 = await spectatorPage.evaluate(
-      () => document.documentElement.clientHeight,
-    )
-    expect(scrollHeight1024).toBeLessThanOrEqual(clientHeight1024 + 10)
-    await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
-
-    // Capture (03) Spectator Join Mid-Voting (Gate A mid-voting join)
+    // Capture (03) Spectator Join Mid-Voting (Gate A mid-voting join while voting window is fresh)
     const lateSpectatorContext = await browser.newContext({
       viewport: { width: 1280, height: 800 },
     })
@@ -243,6 +221,28 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       "03_spectator_join_mid_voting.png",
     )
     await lateSpectatorContext.close()
+
+    // Capture (01) Spectator Live Question (1920)
+    await saveScreenshot(
+      spectatorPage,
+      "01_spectator_live_question_1920.png",
+    )
+
+    // Capture (02) Spectator Live Question at 1024x768 (check no scroll overflow)
+    await spectatorPage.setViewportSize({ width: 1024, height: 768 })
+    await spectatorPage.waitForTimeout(200)
+    await saveScreenshot(
+      spectatorPage,
+      "02_spectator_live_question_1024.png",
+    )
+    const scrollHeight1024 = await spectatorPage.evaluate(
+      () => document.documentElement.scrollHeight,
+    )
+    const clientHeight1024 = await spectatorPage.evaluate(
+      () => document.documentElement.clientHeight,
+    )
+    expect(scrollHeight1024).toBeLessThanOrEqual(clientHeight1024 + 10)
+    await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
     // 6. Gate B Verification: Single Poll Reveal
     // Host clicks End Timer -> transitions directly to interimResults scene (SINGLE REVEAL)
