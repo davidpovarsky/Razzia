@@ -12,6 +12,7 @@ export type MediaReferenceField =
   | "scene.background"
   | "scene.audio"
   | "show.audioCue"
+  | "show.mediaCatalog"
 
 export interface CardMediaReference {
   quizId: string
@@ -283,6 +284,21 @@ export const collectQuizMediaReferences = (
           `Global Cue: ${cueKey}`,
           "show.audioCue",
           cueCfg.url,
+        )
+      }
+    }
+  }
+
+  // 4. Show media catalog associations
+  if (Array.isArray(show.extras?.mediaCatalog)) {
+    for (const cat of show.extras.mediaCatalog) {
+      if (cat?.url) {
+        addRef(
+          `catalog_${cat.name}`,
+          "global",
+          `Show Catalog: ${cat.name}`,
+          "show.mediaCatalog",
+          cat.url,
         )
       }
     }

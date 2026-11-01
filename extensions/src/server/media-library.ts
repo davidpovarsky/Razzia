@@ -2,6 +2,8 @@ import fs from "node:fs"
 import path from "node:path"
 import type { UploadedMedia } from "@razzia/common/types/game"
 import {
+  BUILT_IN_SOUNDS_LIST,
+  type BuiltInSoundItem,
   collectQuizMediaReferences,
   detachMediaFromShowData,
   extractMediaNameFromUrl,
@@ -11,158 +13,201 @@ import {
   type InspectableQuizShow,
   type ShowMediaCatalogItem,
 } from "../core/index"
-import { readSidecar, writeSidecar } from "./storage/sidecar"
+import {
+  deleteSidecar,
+  getSidecarDirectory,
+  getSidecarFilePath,
+  readSidecar,
+  sidecarExists,
+  writeSidecar,
+} from "./storage/sidecar"
+import {
+  createStagedJournal,
+  getJournalDirectory,
+  removeJournal,
+  type JournalEntry,
+} from "./storage/journal"
 
-export interface BuiltInSoundItem {
-  name: string
-  label: string
-  url: string
-  type: "audio"
-  builtIn: true
-  defaultLoop: boolean
-}
-
-export const BUILT_IN_SOUNDS: BuiltInSoundItem[] = [
-  {
-    name: "showQuestion.mp3",
-    label: "Question Intro",
-    url: "/sounds/showQuestion.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "answersMusic.mp3",
-    label: "Voting Music Loop",
-    url: "/sounds/answersMusic.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: true,
-  },
-  {
-    name: "results.mp3",
-    label: "Results Reveal",
-    url: "/sounds/results.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "answersSound.mp3",
-    label: "Show Answers Pop",
-    url: "/sounds/answersSound.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "snearRoll.mp3",
-    label: "Drum Roll",
-    url: "/sounds/snearRoll.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "podiumFirst.mp3",
-    label: "Podium 1st Place",
-    url: "/sounds/podiumFirst.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "podiumSecond.mp3",
-    label: "Podium 2nd Place",
-    url: "/sounds/podiumSecond.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "podiumThird.mp3",
-    label: "Podium 3rd Place",
-    url: "/sounds/podiumThird.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-  {
-    name: "pop.mp3",
-    label: "Pop Sound",
-    url: "/sounds/pop.mp3",
-    type: "audio",
-    builtIn: true,
-    defaultLoop: false,
-  },
-]
+export { type BuiltInSoundItem }
+export const BUILT_IN_SOUNDS: BuiltInSoundItem[] = BUILT_IN_SOUNDS_LIST
 
 export interface LoadedShowRecord extends InspectableQuizShow {
   filePath: string
+  mtimeMs?: number
+}
+
+export interface ShowHealthReport {
+  records: LoadedShowRecord[]
+  unreadableFiles: string[]
+}
+
+/**
+ * Loads all quiz shows and their sidecars from disk, capturing any malformed or unreadable files.
+ * Fail-closed guarantee: any syntax/parse failure is recorded in `unreadableFiles`.
+ */
+export function loadAllShowsHealth(
+  getPath: (subPath?: string) => string,
+): ShowHealthReport {
+  const quizzDir = getPath("quizz")
+  const records: LoadedShowRecord[] = []
+  const unreadableFiles: string[] = []
+
+  if (fs.existsSync(quizzDir)) {
+    let files: string[] = []
+    try {
+      files = fs.readdirSync(quizzDir).filter((f) => f.endsWith(".json"))
+    } catch (err) {
+      unreadableFiles.push(`quizz: ${(err as Error).message}`)
+    }
+
+    for (const file of files) {
+      const filePath = path.join(quizzDir, file)
+      try {
+        const stat = fs.lstatSync(filePath)
+        if (!stat.isFile()) {
+          continue
+        }
+        const raw = fs.readFileSync(filePath, "utf-8")
+        let parsed: unknown
+        try {
+          parsed = JSON.parse(raw)
+        } catch (jsonErr) {
+          unreadableFiles.push(`quizz/${file}: invalid JSON (${(jsonErr as Error).message})`)
+          continue
+        }
+
+        if (!parsed || typeof parsed !== "object") {
+          unreadableFiles.push(`quizz/${file}: not a valid JSON object`)
+          continue
+        }
+
+        const quizObj = parsed as LoadedShowRecord["quizz"] & { id?: string }
+        const quizId =
+          typeof quizObj.id === "string" && quizObj.id.trim().length > 0
+            ? quizObj.id
+            : file.replace(/\.json$/iu, "")
+
+        let extras: AnyQuizExtras | null = null
+        if (sidecarExists(getPath, quizId)) {
+          extras = readSidecar(getPath, quizId)
+          if (!extras) {
+            unreadableFiles.push(
+              `extensions/quizzes/${quizId}.json: unreadable or invalid sidecar`,
+            )
+          }
+        }
+
+        records.push({
+          id: quizId,
+          filePath,
+          quizz: quizObj,
+          extras,
+          mtimeMs: stat.mtimeMs,
+        })
+      } catch (err) {
+        unreadableFiles.push(`quizz/${file}: ${(err as Error).message}`)
+      }
+    }
+  }
+
+  // Also inspect extensions/quizzes for any orphaned or unreadable sidecar files
+  const sidecarDir = getSidecarDirectory(getPath)
+  if (fs.existsSync(sidecarDir)) {
+    let sidecarFiles: string[] = []
+    try {
+      sidecarFiles = fs.readdirSync(sidecarDir).filter((f) => f.endsWith(".json"))
+    } catch {
+      // directory read failure
+    }
+
+    for (const sf of sidecarFiles) {
+      const cleanQuizId = sf.replace(/\.json$/iu, "")
+      const alreadyLoaded = records.some((r) => r.id === cleanQuizId)
+      if (!alreadyLoaded) {
+        const sPath = path.join(sidecarDir, sf)
+        try {
+          const raw = fs.readFileSync(sPath, "utf-8")
+          JSON.parse(raw)
+          const extras = readSidecar(getPath, cleanQuizId)
+          if (!extras) {
+            unreadableFiles.push(`extensions/quizzes/${sf}: invalid sidecar schema`)
+          } else {
+            records.push({
+              id: cleanQuizId,
+              filePath: sPath,
+              quizz: { subject: cleanQuizId, questions: [] },
+              extras,
+            })
+          }
+        } catch (err) {
+          unreadableFiles.push(`extensions/quizzes/${sf}: ${(err as Error).message}`)
+        }
+      }
+    }
+  }
+
+  return { records, unreadableFiles }
 }
 
 export function loadAllShowsFromDisk(
   getPath: (subPath?: string) => string,
 ): LoadedShowRecord[] {
-  const quizzDir = getPath("quizz")
-  if (!fs.existsSync(quizzDir)) {
-    return []
-  }
-
-  const records: LoadedShowRecord[] = []
-  const files = fs.readdirSync(quizzDir).filter((f) => f.endsWith(".json"))
-
-  for (const file of files) {
-    const filePath = path.join(quizzDir, file)
-    try {
-      if (!fs.lstatSync(filePath).isFile()) {
-        continue
-      }
-      const raw = fs.readFileSync(filePath, "utf-8")
-      const parsed = JSON.parse(raw) as LoadedShowRecord["quizz"] & {
-        id?: string
-      }
-      if (!parsed || typeof parsed !== "object") {
-        continue
-      }
-      const quizId =
-        typeof parsed.id === "string" && parsed.id.trim().length > 0
-          ? parsed.id
-          : file.replace(/\.json$/iu, "")
-      const extras = readSidecar(getPath, quizId)
-      records.push({
-        id: quizId,
-        filePath,
-        quizz: parsed,
-        extras,
-      })
-    } catch {
-      // Ignore malformed file
-    }
-  }
-
-  return records
+  return loadAllShowsHealth(getPath).records
 }
 
 export interface MediaDeleteSafetyResult {
   allowed: boolean
   references: CardMediaReference[]
   detachedFromShows: string[]
+  unreadableFiles?: string[]
+  error?: string
 }
 
 /**
  * Checks whether a media file can be safely deleted from the shared media store.
- * - If referenced by any show/card and `detach !== true`, returns `allowed: false` with full reference list.
- * - If `detach === true`, removes references from affected shows/sidecars on disk before returning `allowed: true`.
+ * - Fail-closed: If ANY show or sidecar on disk is unreadable or malformed, deletion is blocked.
+ * - If referenced by any show/card/catalog and `detach !== true`, returns `allowed: false` with full reference list.
+ * - If `detach === true`, performs an atomic two-phase detachment with staged journal and rollback on ANY failure.
  */
 export function checkMediaDeleteSafety(
   getPath: (subPath?: string) => string,
   mediaNameOrUrl: string,
   options?: {
     detach?: boolean
+    baselineShows?: LoadedShowRecord[]
   },
 ): MediaDeleteSafetyResult {
-  const shows = loadAllShowsFromDisk(getPath)
+  // If baseline shows provided from previous inspection, verify no file has changed in the interim
+  if (options?.baselineShows) {
+    for (const b of options.baselineShows) {
+      if (b.mtimeMs !== undefined && fs.existsSync(b.filePath)) {
+        const currentMtime = fs.statSync(b.filePath).mtimeMs
+        if (Math.abs(currentMtime - b.mtimeMs) > 1) {
+          return {
+            allowed: false,
+            references: [],
+            detachedFromShows: [],
+            error: `Concurrent modification detected on show file ${b.filePath}`,
+          }
+        }
+      }
+    }
+  }
+
+  const health = loadAllShowsHealth(getPath)
+
+  // Fail-closed invariant: an unreadable file or sidecar prevents verifying reference safety
+  if (health.unreadableFiles.length > 0) {
+    return {
+      allowed: false,
+      references: [],
+      detachedFromShows: [],
+      unreadableFiles: health.unreadableFiles,
+      error: `Cannot safely delete media while one or more show files are unreadable: ${health.unreadableFiles.join("; ")}`,
+    }
+  }
+
+  const shows = health.records
   const references = findMediaReferencesAcrossShows(mediaNameOrUrl, shows)
 
   if (references.length > 0 && !options?.detach) {
@@ -173,49 +218,193 @@ export function checkMediaDeleteSafety(
     }
   }
 
+  if (references.length === 0) {
+    return {
+      allowed: true,
+      references: [],
+      detachedFromShows: [],
+    }
+  }
+
+  // Explicit detach: execute atomic two-phase write with rollback on any failure
+  const affectedShows = shows.filter((show) =>
+    references.some((r) => r.quizId === show.id),
+  )
+
+  const backups: Array<{
+    show: LoadedShowRecord
+    originalBaseRaw: string | null
+    originalSidecarRaw: string | null
+    sidecarPath: string
+  }> = []
+
+  // 1. Stage in-memory and on-disk journal backups before mutating any file
+  for (const show of affectedShows) {
+    const originalBaseRaw = fs.existsSync(show.filePath)
+      ? fs.readFileSync(show.filePath, "utf-8")
+      : null
+    const sidecarPath = getSidecarFilePath(getPath, show.id)
+    const originalSidecarRaw = fs.existsSync(sidecarPath)
+      ? fs.readFileSync(sidecarPath, "utf-8")
+      : null
+
+    backups.push({
+      show,
+      originalBaseRaw,
+      originalSidecarRaw,
+      sidecarPath,
+    })
+
+    createStagedJournal(getPath, {
+      quizId: show.id,
+      backupBase: originalBaseRaw ? JSON.parse(originalBaseRaw) : null,
+      backupExtras: originalSidecarRaw ? JSON.parse(originalSidecarRaw) : null,
+      targetBase: null,
+      targetExtras: null,
+    })
+  }
+
   const detachedFromShows: string[] = []
-  const targetMediaName = extractMediaNameFromUrl(mediaNameOrUrl)
+  const rollback = () => {
+    for (const b of backups) {
+      try {
+        if (b.originalBaseRaw !== null) {
+          fs.writeFileSync(b.show.filePath, b.originalBaseRaw, "utf-8")
+        }
+        if (b.originalSidecarRaw !== null) {
+          fs.writeFileSync(b.sidecarPath, b.originalSidecarRaw, "utf-8")
+        } else if (fs.existsSync(b.sidecarPath)) {
+          fs.unlinkSync(b.sidecarPath)
+        }
+      } catch {
+        // Suppress secondary rollback errors
+      }
+      try {
+        removeJournal(getPath, b.show.id)
+      } catch {
+        // Suppress journal cleanup error
+      }
+    }
+  }
 
-  for (const show of shows) {
-    const showRefs = findMediaReferencesAcrossShows(mediaNameOrUrl, [show])
-    const hasCatalogEntry = Boolean(
-      show.extras?.mediaCatalog?.some(
-        (item) =>
-          item.url === mediaNameOrUrl ||
-          item.name === mediaNameOrUrl ||
-          (targetMediaName && item.name === targetMediaName),
-      ),
-    )
+  try {
+    for (const show of affectedShows) {
+      // Concurrency check: verify mtime hasn't changed since initial load
+      if (show.mtimeMs !== undefined && fs.existsSync(show.filePath)) {
+        const currentMtime = fs.statSync(show.filePath).mtimeMs
+        if (Math.abs(currentMtime - show.mtimeMs) > 1) {
+          throw new Error(
+            `Concurrent modification detected on show file ${show.filePath}`,
+          )
+        }
+      }
 
-    if (showRefs.length > 0 || hasCatalogEntry) {
       const detached = detachMediaFromShowData(
         mediaNameOrUrl,
         show.quizz,
         show.extras,
       )
-      if (detached.modified) {
-        detachedFromShows.push(show.id)
-        try {
+
+      if (fs.existsSync(show.filePath)) {
+        const tmpBase = `${show.filePath}.tmp.${Date.now()}`
+        fs.writeFileSync(
+          tmpBase,
+          JSON.stringify(detached.quizz, null, 2),
+          "utf-8",
+        )
+        fs.renameSync(tmpBase, show.filePath)
+      }
+
+      if (detached.extras) {
+        writeSidecar(getPath, show.id, detached.extras as AnyQuizExtras)
+      }
+
+      detachedFromShows.push(show.id)
+    }
+
+    // Post-commit re-scan verification: verify zero references survive before allowing delete
+    const postHealth = loadAllShowsHealth(getPath)
+    const postRefs = findMediaReferencesAcrossShows(
+      mediaNameOrUrl,
+      postHealth.records,
+    )
+    if (postRefs.length > 0) {
+      throw new Error(
+        `Active references (${postRefs.length}) survived detach operation`,
+      )
+    }
+
+    // Success: remove staged journals
+    for (const show of affectedShows) {
+      removeJournal(getPath, show.id)
+    }
+
+    return {
+      allowed: true,
+      references,
+      detachedFromShows,
+    }
+  } catch (error) {
+    rollback()
+    return {
+      allowed: false,
+      references,
+      detachedFromShows: [],
+      error: `Detach failed and was safely rolled back: ${(error as Error).message}`,
+    }
+  }
+}
+
+/**
+ * Recovers from incomplete media detach journals (e.g. simulated server restart).
+ */
+export function recoverMediaDeleteJournals(
+  getPath: (subPath?: string) => string,
+): { recoveredCount: number; recoveredQuizIds: string[] } {
+  const journalDir = getJournalDirectory(getPath)
+  if (!fs.existsSync(journalDir)) {
+    return { recoveredCount: 0, recoveredQuizIds: [] }
+  }
+
+  const files = fs
+    .readdirSync(journalDir)
+    .filter((f) => f.endsWith(".journal.json"))
+  const recoveredQuizIds: string[] = []
+
+  for (const file of files) {
+    const journalPath = path.join(journalDir, file)
+    try {
+      const raw = fs.readFileSync(journalPath, "utf-8")
+      const entry = JSON.parse(raw) as JournalEntry
+      if (entry.status === "staged") {
+        if (entry.backupBase !== null && entry.backupBase !== undefined) {
+          const quizFile = path.join(getPath("quizz"), `${entry.quizId}.json`)
           fs.writeFileSync(
-            show.filePath,
-            JSON.stringify(detached.quizz, null, 2),
+            quizFile,
+            JSON.stringify(entry.backupBase, null, 2),
             "utf-8",
           )
-        } catch {
-          // Ignore write error if quiz file was read-only
         }
-
-        if (detached.extras) {
-          writeSidecar(getPath, show.id, detached.extras as AnyQuizExtras)
+        if (entry.backupExtras !== null && entry.backupExtras !== undefined) {
+          writeSidecar(
+            getPath,
+            entry.quizId,
+            entry.backupExtras as AnyQuizExtras,
+          )
+        } else {
+          deleteSidecar(getPath, entry.quizId)
         }
+        recoveredQuizIds.push(entry.quizId)
       }
+      fs.unlinkSync(journalPath)
+    } catch (err) {
+      console.warn(`[MediaJournal] Failed to recover journal ${file}:`, err)
     }
   }
 
   return {
-    allowed: true,
-    references,
-    detachedFromShows,
+    recoveredCount: recoveredQuizIds.length,
+    recoveredQuizIds,
   }
 }
 
