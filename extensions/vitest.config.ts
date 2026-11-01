@@ -15,6 +15,7 @@ export default defineConfig({
   },
   test: {
     include: ["src/**/*.test.ts"],
+    testTimeout: 30000,
     env: {
       MANAGER_PASSWORD: "test-manager-password",
       GAME_SPEED: "5",

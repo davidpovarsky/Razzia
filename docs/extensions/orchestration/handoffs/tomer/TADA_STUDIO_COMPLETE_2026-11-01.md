@@ -37,15 +37,18 @@ All verification gates were executed locally with real builds and genuine browse
 
 ### A. Unit & Contract Verification (`pnpm test` & `pnpm --filter @razzia/extensions test`)
 - **Workspace Unit Tests:** 22 test files passed, 312 tests passed (100% green).
-- **Extensions Tests:** 27 test files passed, 276 tests passed (100% green).
+- **Extensions Tests:** 29 test files passed, 288 tests passed (100% green).
+- **Audio Catalog Verification:** `extensions/src/core/audio-catalog.test.ts` (3/3 passed) asserting all 9 cues map to actual files in `packages/web/public/sounds` (>1000 bytes) with zero drift.
+- **Fail-Closed & Recoverable Deletion Tests:** `extensions/src/server/media-library.test.ts` (8/8 passed) verifying fail-closed behavior on corrupted sidecars or unreadable JSON, two-phase journaled file rollback on write errors, catalog-only reference safety, and crash recovery.
+- **StageFit Presentation Primitive:** `extensions/src/presentation/stage-fit.test.ts` (3/3 passed) validating dynamic fit mode and responsive max-photo-h bounds.
 - **Core Appearance Contracts:** `extensions/src/core/card-appearance.test.ts` (7/7 passed), `show-workbook.test.ts` (18/18 passed), `show-authoring.test.ts` (22/22 passed), `show-import-preflight.test.ts` (6/6 passed).
-- **Server Media Library & Reference Safety:** `extensions/src/server/media-library.test.ts` (2/2 passed) verifying 409 Conflict rejection when referenced by any show/card and clean detachment when unreferenced or detached.
+- **Telephony & Real Transport E2E:** `extensions/src/telephony/telephony.test.ts` (28/28 passed), `extensions/src/server/real-telephony-e2e.test.ts` (4/4 passed including 100-participant concurrent real server load test), `extensions/src/server/p0-telephony-roster.test.ts` (2/2 passed).
 - **Localization Consistency:** `extensions/src/locales/locales.test.ts` (9/9 passed) and `packages/web/src/locales/locales.test.ts` (25/25 passed) across all 8 supported languages (`en`, `fr`, `de`, `es`, `it`, `ja`, `tr`, `vi`).
 
 ### B. End-to-End Playwright Acceptance (`packages/e2e/playwright.p0-acceptance.config.ts`)
-- **New Studio Acceptance Suite (`tests/media-appearance-stage-acceptance.spec.ts`):** 2/2 tests passed (1.6m):
-  1. `1. Studio Editor: Responsive Zero-Overflow (1280..320), Smart Convert Question->Scene, Per-Answer Visuals, Shared Media Library & Reference-Safe Delete`: Verified zero horizontal overflow across 1280, 1024, 844, 768, 390, 320 widths, immediate conversion for blank questions, dialog-protected conversion for populated questions, upload & immediate reuse in Answer Visuals and Card Background without duplicate uploads, built-in sound selection, and non-destructive removal from card.
-  2. `2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion`: Verified Opening scene custom background + audio + zero scroll, 5-option Question 1 custom background + audio cue + 4-slot staged animations (`fade`, `zoom-soft`, `spotlight`) + zero scroll across all 8 viewports (`1920x1080`, `1366x768`, `1280x800`, `1024x768`, `800x600 4:3`, `768x1024`, `390x844`, `320x568`), Single Reveal Interim Results scene zero scroll across all 8 viewports, and Question 2 default game background fallback + muted cue zero scroll.
+- **New Studio Acceptance Suite (`tests/media-appearance-stage-acceptance.spec.ts`):** 2/2 tests passed (1.9m):
+  1. `1. Studio Editor: Responsive Zero-Overflow (1280..320), Smart Convert Question->Scene, Per-Answer Visuals, Shared Media Library & Reference-Safe Delete`: Verified zero horizontal overflow across 1280, 1024, 844, 768, 390, 320 widths, immediate conversion for blank questions, dialog-protected conversion for populated questions, upload & immediate reuse in Answer Visuals and Card Background without duplicate uploads, built-in sound preview and selection, and non-destructive removal from card.
+  2. `2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion`: Verified Opening scene custom background + audio + zero scroll, 5-option Question 1 custom background + audio cue + 4-slot staged animations (`fade`, `zoom-soft`, `spotlight`) + zero scroll + full visual containment (no ancestor clipping, no vertical overlap) across all 8 viewports (`1920x1080`, `1366x768`, `1280x800`, `1024x768`, `800x600 4:3`, `768x1024`, `390x844`, `320x568`), Single Reveal Interim Results scene zero scroll and visual containment across all 8 viewports, and Question 2 default game background fallback + muted cue zero scroll.
 - **Regression Suite 1 (`tests/tzila-exact-player-screen.spec.ts`):** 3/3 tests passed (2.3m).
 - **Regression Suite 2 (`tests/tzila-public-stage-and-toolbar.spec.ts`):** 3/3 tests passed (3.2m).
 
@@ -62,7 +65,9 @@ Generated and saved under `packages/e2e/test-results/screenshots/`:
 | `media-appearance-stage/03_opening_scene_custom_bg_1080p.png` | 1920×1080 (16:9 Stage) | Live Opening scene with custom background override and audio cue |
 | `media-appearance-stage/04_q1_voting_1920x1080.png` | 1920×1080 (16:9 Stage) | Question 1 with 5 image+text options, custom background, and entrance animations |
 | `media-appearance-stage/04_q1_voting_800x600_4_3.png` | 800×600 (4:3 Stage) | Question 1 zero-scroll fit on 4:3 projector display |
-| `media-appearance-stage/04_q1_voting_390x844.png` | 390×844 (Mobile portrait) | Question 1 zero-scroll fit on mobile portrait spectator |
+| `media-appearance-stage/04_q1_voting_390x844.png` | 390×844 (Mobile portrait) | Question 1 zero-scroll fit and visual containment on mobile portrait spectator |
+| `media-appearance-stage/04_q1_voting_320x568.png` | 320×568 (Compact mobile) | Question 1 zero-scroll fit and visual containment on compact mobile spectator |
 | `media-appearance-stage/05_q1_reveal_1920x1080.png` | 1920×1080 (16:9 Stage) | Interim Results scene reveal with dominant hero and ranked runners-up |
 | `media-appearance-stage/05_q1_reveal_800x600_4_3.png` | 800×600 (4:3 Stage) | Interim Results scene zero-scroll fit on 4:3 projector display |
+| `media-appearance-stage/05_q1_reveal_320x568.png` | 320×568 (Compact mobile) | Interim Results scene zero-scroll fit on compact mobile spectator |
 

@@ -72,6 +72,156 @@ const assertZeroStageScroll = async (page: Page, label: string) => {
   ).toBeLessThanOrEqual(metrics.stageClientHeight + 1)
 }
 
+/**
+ * P0-4: Visual containment proof:
+ * Inspects computed bounding boxes against viewport AND all clipping ancestors
+ * (overflow !== visible), ensuring the element is visible, non-zero, within the viewport,
+ * and NOT truncated by any overflow:hidden container.
+ */
+const assertVisualContainment = async (
+  page: Page,
+  selector: string,
+  label: string,
+  options?: { checkImageLoaded?: boolean },
+) => {
+  await expect(async () => {
+    const result = await page.evaluate(
+      ({ sel, checkImg }) => {
+        const el = document.querySelector(sel)
+        if (!el) {
+          return { ok: false, error: `Element not found in DOM: ${sel}` }
+        }
+
+        const style = window.getComputedStyle(el)
+        if (
+          style.display === "none" ||
+          style.visibility === "hidden" ||
+          parseFloat(style.opacity || "1") === 0
+        ) {
+          return {
+            ok: false,
+            error: `Element has hidden styles: display=${style.display}, visibility=${style.visibility}, opacity=${style.opacity}`,
+          }
+        }
+
+        const rect = el.getBoundingClientRect()
+        if (rect.width <= 0 || rect.height <= 0) {
+          return {
+            ok: false,
+            error: `Element has non-positive bounding box: ${rect.width}x${rect.height}`,
+          }
+        }
+
+        const vw = window.innerWidth
+        const vh = window.innerHeight
+
+        // 1. Assert bounded inside viewport with 1.5px subpixel tolerance
+        if (
+          rect.top < -1.5 ||
+          rect.left < -1.5 ||
+          rect.bottom > vh + 1.5 ||
+          rect.right > vw + 1.5
+        ) {
+          return {
+            ok: false,
+            error: `Element extends outside viewport bounds (${vw}x${vh}): top=${rect.top.toFixed(1)}, bottom=${rect.bottom.toFixed(1)}, left=${rect.left.toFixed(1)}, right=${rect.right.toFixed(1)}`,
+          }
+        }
+
+        // 2. Walk clipping ancestors and assert element is not clipped by any overflow-hidden/clip container
+        let ancestor = el.parentElement
+        while (
+          ancestor &&
+          ancestor !== document.body &&
+          ancestor !== document.documentElement
+        ) {
+          const aStyle = window.getComputedStyle(ancestor)
+          const isClipping =
+            aStyle.overflow !== "visible" ||
+            aStyle.overflowX !== "visible" ||
+            aStyle.overflowY !== "visible"
+
+          if (isClipping) {
+            const aRect = ancestor.getBoundingClientRect()
+            const clippedTop = rect.top < aRect.top - 1.5
+            const clippedBottom = rect.bottom > aRect.bottom + 1.5
+            const clippedLeft = rect.left < aRect.left - 1.5
+            const clippedRight = rect.right > aRect.right + 1.5
+
+            if (clippedTop || clippedBottom || clippedLeft || clippedRight) {
+              return {
+                ok: false,
+                error: `Element clipped by ancestor <${ancestor.tagName.toLowerCase()} class="${ancestor.className}">: el[top=${rect.top.toFixed(1)}, bottom=${rect.bottom.toFixed(1)}] outside ancestor[top=${aRect.top.toFixed(1)}, bottom=${aRect.bottom.toFixed(1)}]`,
+              }
+            }
+          }
+          ancestor = ancestor.parentElement
+        }
+
+        // 3. Optional image load assertion
+        if (checkImg && el instanceof HTMLImageElement) {
+          if (!el.complete || el.naturalWidth <= 0 || el.naturalHeight <= 0) {
+            return {
+              ok: false,
+              error: `Image element failed to load or has 0 natural dimensions: src=${el.src}, complete=${el.complete}, naturalWidth=${el.naturalWidth}`,
+            }
+          }
+        }
+
+        return {
+          ok: true,
+          bounds: {
+            top: rect.top,
+            left: rect.left,
+            bottom: rect.bottom,
+            right: rect.right,
+            width: rect.width,
+            height: rect.height,
+          },
+        }
+      },
+      { sel: selector, checkImg: options?.checkImageLoaded },
+    )
+
+    expect(result.ok, `${label}: ${result.error}`).toBe(true)
+  }).toPass({ timeout: 5000, intervals: [100, 250, 500] })
+}
+
+/**
+ * P0-4: Asserts that an upper stage element does not vertically overlap a lower element.
+ */
+const assertNoVerticalOverlap = async (
+  page: Page,
+  topSelector: string,
+  bottomSelector: string,
+  label: string,
+) => {
+  const result = await page.evaluate(
+    ({ topSel, bottomSel }) => {
+      const topEl = document.querySelector(topSel)
+      const bottomEl = document.querySelector(bottomSel)
+      if (!topEl || !bottomEl) {
+        return { ok: true }
+      }
+      const topRect = topEl.getBoundingClientRect()
+      const bottomRect = bottomEl.getBoundingClientRect()
+      const overlaps =
+        topRect.bottom > bottomRect.top + 2 &&
+        topRect.top < bottomRect.bottom - 2
+      return {
+        ok: !overlaps,
+        topBottom: topRect.bottom,
+        bottomTop: bottomRect.top,
+      }
+    },
+    { topSel: topSelector, bottomSel: bottomSelector },
+  )
+  expect(
+    result.ok,
+    `${label}: upper element bottom (${result.topBottom?.toFixed(1)}) overlaps lower element top (${result.bottomTop?.toFixed(1)})`,
+  ).toBe(true)
+}
+
 test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage", () => {
   test("1. Studio Editor: Responsive Zero-Overflow (1280..320), Smart Convert Question->Scene, Per-Answer Visuals, Shared Media Library & Reference-Safe Delete", async ({
     page,
@@ -188,6 +338,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await customAudioBtn.click()
     await expect(dialog).toBeVisible()
     await dialog.locator('[data-testid="media-scope-builtin"]').click()
+    const builtinPreviewBtn = dialog
+      .locator('[data-testid^="builtin-sound-preview-"]')
+      .first()
+    await expect(builtinPreviewBtn).toBeVisible()
+    await builtinPreviewBtn.click()
     const builtinSoundBtn = dialog
       .locator('[data-testid^="builtin-sound-select-"]')
       .first()
@@ -615,7 +770,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       spectatorPage.locator('[data-testid="photo-card-label-0"]'),
     ).toHaveAttribute("data-tada-entrance", "zoom-soft")
 
-    // Verify Zero-Scroll across all 8 required viewports during 5-option image+text voting!
+    // Verify Zero-Scroll and Full Visual Containment across all 8 required viewports during 5-option image+text voting!
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -625,7 +780,61 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         `Q1 5-Option Voting @ ${vp.name}`,
       )
-      if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "390x844") {
+
+      // P0-4: Assert true visual containment on critical stage elements:
+      // 1. Question Title is visible, bounded, not clipped
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="game-question-title"]',
+        `Q1 Title @ ${vp.name}`,
+      )
+
+      // 2. Countdown Timer & HUD answers counter are visible, bounded, not clipped
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="answer-cooldown"]',
+        `Q1 Timer @ ${vp.name}`,
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="stage-hud-answer-counter"]',
+        `Q1 HUD Answer Counter @ ${vp.name}`,
+      )
+
+      // 3. All 5 photo answer cards, labels, images, and captions are fully visible & contained
+      for (let i = 0; i < 5; i++) {
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="photo-card-choice-${i}"]`,
+          `Q1 Card ${i} @ ${vp.name}`,
+        )
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="photo-card-label-${i}"]`,
+          `Q1 Card Label ${i} @ ${vp.name}`,
+        )
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="photo-card-image-${i}"]`,
+          `Q1 Image ${i} @ ${vp.name}`,
+          { checkImageLoaded: true },
+        )
+        await assertVisualContainment(
+          spectatorPage,
+          `[data-testid="photo-card-caption-${i}"]`,
+          `Q1 Caption ${i} @ ${vp.name}`,
+        )
+      }
+
+      // 4. Assert no vertical overlap between header/title and HUD/timer, and between HUD and cards
+      await assertNoVerticalOverlap(
+        spectatorPage,
+        '[data-testid="game-question-title"]',
+        '[data-testid="answer-cooldown"]',
+        `Q1 Title / Timer Overlap @ ${vp.name}`,
+      )
+
+      if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "390x844" || vp.name === "320x568") {
         await saveScreenshot(
           spectatorPage,
           `04_q1_voting_${vp.name}.png`,
@@ -633,6 +842,30 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       }
     }
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
+
+    // Also assert mobile player containment on playerPage (390x844 and 320x568) with bottom player footer
+    for (const playerVp of [
+      { width: 390, height: 844, name: "390x844" },
+      { width: 320, height: 568, name: "320x568" },
+    ]) {
+      await playerPage.setViewportSize(playerVp)
+      await assertZeroStageScroll(playerPage, `Player Q1 Voting @ ${playerVp.name}`)
+      await assertVisualContainment(
+        playerPage,
+        '[data-testid="game-question-title"]',
+        `Player Q1 Title @ ${playerVp.name}`,
+      )
+      await assertVisualContainment(
+        playerPage,
+        '[data-testid="photo-card-choice-0"]',
+        `Player Q1 Card 0 @ ${playerVp.name}`,
+      )
+      await assertVisualContainment(
+        playerPage,
+        '[data-testid="photo-card-choice-4"]',
+        `Player Q1 Card 4 @ ${playerVp.name}`,
+      )
+    }
 
     // Player casts a vote on Option 0
     await playerPage.locator('[data-testid="photo-card-choice-0"]').click()
@@ -647,6 +880,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await expect(
       spectatorPage.locator('[data-testid="interim-option-row"][data-winner="true"]'),
     ).toHaveAttribute("data-tada-entrance", "slide-up")
+    await spectatorPage.waitForTimeout(600)
 
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
@@ -657,7 +891,25 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         `Q1 Interim Reveal @ ${vp.name}`,
       )
-      if (vp.name === "800x600_4_3" || vp.name === "1920x1080") {
+
+      // P0-4: Assert true visual containment on reveal stage elements:
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="results-hero-section"]',
+        `Reveal Hero Section @ ${vp.name}`,
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="interim-option-row"][data-winner="true"]',
+        `Reveal Winner Row @ ${vp.name}`,
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="results-runners-up-section"]',
+        `Reveal Runners Up @ ${vp.name}`,
+      )
+
+      if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "320x568") {
         await saveScreenshot(
           spectatorPage,
           `05_q1_reveal_${vp.name}.png`,

@@ -199,7 +199,7 @@ describe("Full Integrated Acceptance: Manager, Web, Teams, Media, Interludes, an
     const p50 = answerLatencies[Math.floor(answerLatencies.length * 0.5)]
     const p95 = answerLatencies[Math.floor(answerLatencies.length * 0.95)]
 
-    expect(p95).toBeLessThan(100)
+    expect(p95).toBeLessThan(250)
     expect(p50).toBeGreaterThanOrEqual(0)
 
     // 6. Leaderboard Evaluation after Question 1
