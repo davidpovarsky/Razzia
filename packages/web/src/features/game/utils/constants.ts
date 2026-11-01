@@ -43,6 +43,7 @@ export const GAME_STATE_COMPONENTS = {
   [STATUS.SHOW_PREPARED]: Prepared,
   [STATUS.FINISHED]: PlayerFinished,
   [STATUS.SUMMARY]: Summary,
+  [STATUS.SHOW_RESPONSES]: Responses,
 }
 
 export const GAME_STATE_COMPONENTS_MANAGER = {

@@ -41,6 +41,10 @@ export const socketClient: TypedSocket = io("/", {
   },
 })
 
+if (typeof window !== "undefined") {
+  ;(window as any).__socket = socketClient
+}
+
 const SocketContext = createContext<SocketContextValue>({
   socket: socketClient,
   isConnected: false,

@@ -230,15 +230,14 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     await expect(lateSpectatorPage.getByText(q1Title)).toBeVisible({
       timeout: 10_000,
     })
-    // Check that late joiner gets live countdown <= 20 and > 0
+    // Check that late joiner gets live countdown <= 20 and > 0 (strictly required, non-conditional)
     const lateTimer = lateSpectatorPage.locator('[role="timer"]')
-    if (await lateTimer.isVisible({ timeout: 3000 }).catch(() => false)) {
-      const lateTimerText = (await lateTimer.textContent()) ?? ""
-      const remainingSeconds = parseInt(lateTimerText.replace(/\D/gu, ""), 10)
-      console.log(`[Gate A] Mid-voting spectator joined with timer: ${remainingSeconds}s`)
-      expect(remainingSeconds).toBeLessThanOrEqual(20)
-      expect(remainingSeconds).toBeGreaterThan(0)
-    }
+    await expect(lateTimer).toBeVisible({ timeout: 10_000 })
+    const lateTimerText = (await lateTimer.textContent()) ?? ""
+    const remainingSeconds = parseInt(lateTimerText.replace(/\D/gu, ""), 10)
+    console.log(`[Gate A] Mid-voting spectator joined with timer: ${remainingSeconds}s`)
+    expect(remainingSeconds).toBeLessThanOrEqual(20)
+    expect(remainingSeconds).toBeGreaterThan(0)
     await saveScreenshot(
       lateSpectatorPage,
       "03_spectator_join_mid_voting.png",
@@ -352,7 +351,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       spectatorPage.locator('[data-winner="true"]'),
     ).toHaveCount(0, { timeout: 15_000 })
     await expect(
-      spectatorPage.getByText(/No votes yet|0 votes/i).first(),
+      spectatorPage.getByText(/No votes|0 votes|Total votes/i).first(),
     ).toBeVisible()
 
     // Capture (08) Zero Votes Result (1280)

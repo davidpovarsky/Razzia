@@ -1,6 +1,6 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
-import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
+import PlayerGameView from "@razzia/web/features/game/components/PlayerGameView"
 import {
   socketClient,
   useEvent,
@@ -105,20 +105,7 @@ const PlayerGamePage = () => {
     return null
   }
 
-  const CurrentComponent =
-    status && isKeyOf(GAME_STATE_COMPONENTS, status.name)
-      ? GAME_STATE_COMPONENTS[status.name]
-      : null
-
-  if (!status) {
-    return null
-  }
-
-  return (
-    <GameWrapper statusName={status.name}>
-      {CurrentComponent && <CurrentComponent data={status.data as never} />}
-    </GameWrapper>
-  )
+  return <PlayerGameView status={status} viewRole="player" />
 }
 
 export const Route = createFileRoute("/party/$gameId")({

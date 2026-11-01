@@ -47,6 +47,10 @@ import clsx from "clsx"
 import { Maximize, Minimize, PhoneCall, Users } from "lucide-react"
 import { type PropsWithChildren, useEffect, useMemo, useState } from "react"
 import toast from "react-hot-toast"
+import {
+  ViewRoleContext,
+  type ViewRole,
+} from "@razzia/web/features/game/contexts/view-role-context"
 import { useTranslation } from "react-i18next"
 
 type Props = PropsWithChildren & {
@@ -54,6 +58,7 @@ type Props = PropsWithChildren & {
   onNext?: () => void
   onBack?: () => void
   manager?: boolean
+  viewRole?: ViewRole
 }
 
 const GameWrapper = ({
@@ -62,7 +67,9 @@ const GameWrapper = ({
   onNext,
   onBack,
   manager,
+  viewRole,
 }: Props) => {
+  const effectiveRole: ViewRole = manager ? "manager" : (viewRole ?? "player")
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
   const {
@@ -250,7 +257,9 @@ const GameWrapper = ({
     if (!extensionState) {
       return (
         <ExtensionStateProvider value={extensionState}>
-          {children}
+          <ViewRoleContext.Provider value={effectiveRole}>
+            {children}
+          </ViewRoleContext.Provider>
         </ExtensionStateProvider>
       )
     }
@@ -391,7 +400,9 @@ const GameWrapper = ({
 
     return (
       <ExtensionStateProvider value={extensionState}>
-        {children}
+        <ViewRoleContext.Provider value={effectiveRole}>
+          {children}
+        </ViewRoleContext.Provider>
       </ExtensionStateProvider>
     )
   }
@@ -525,7 +536,7 @@ const GameWrapper = ({
                   </button>
                 </Tooltip>
               </div>
-            ) : (
+            ) : effectiveRole === "spectator" ? null : (
               <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-800">{player?.username}</p>

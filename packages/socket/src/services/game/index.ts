@@ -1156,12 +1156,35 @@ class Game {
       gameMode: this.gameMode,
     })
 
-    const currentStatus = this.managerStatus ?? this.lastBroadcastStatus
+    const currentStatus =
+      this.managerStatus ??
+      this.lastBroadcastStatus ??
+      (!this.started
+        ? {
+            name: STATUS.WAIT,
+            data: { text: "game:waitingForPlayers" },
+          }
+        : null)
     if (currentStatus) {
+      const sanitized = this.sanitizeStatusForAudience(currentStatus)
+      if (
+        sanitized.name === STATUS.SELECT_ANSWER &&
+        this.round.isCurrentlyAcceptingAnswers
+      ) {
+        const remaining = this.round.getRemainingSeconds()
+        if (remaining !== null && remaining !== undefined) {
+          ;(sanitized.data as Record<string, unknown>).remainingTime = remaining
+        }
+      }
       socket.emit(
         EVENTS.GAME.STATUS,
-        this.sanitizeStatusForAudience(currentStatus),
+        sanitized,
       )
+    }
+
+    const reconnectInfo = this.round.getReconnectInfo()
+    if (reconnectInfo) {
+      socket.emit(EVENTS.GAME.UPDATE_QUESTION, reconnectInfo)
     }
 
     if (this.round.isCurrentlyAcceptingAnswers) {
@@ -1922,6 +1945,16 @@ class Game {
         name: STATUS.WAIT,
         data: { text: "game:waitingForPlayers" },
       }
+
+    if (
+      status.name === STATUS.SELECT_ANSWER &&
+      this.round.isCurrentlyAcceptingAnswers
+    ) {
+      const remaining = this.round.getRemainingSeconds()
+      if (remaining !== null && remaining !== undefined) {
+        ;(status.data as Record<string, unknown>).remainingTime = remaining
+      }
+    }
 
     const oldStatus = this.playerStatus.get(oldSocketId)
 

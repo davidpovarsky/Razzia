@@ -15,6 +15,7 @@ import {
   getAuthoritativeEnvelope,
   useExtensionState,
 } from "@razzia/web/features/game/contexts/extension-state-context"
+import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import {
   useEvent,
   useSocket,
@@ -47,11 +48,20 @@ const Answers = ({
     options,
     answersOnly,
   },
-}: Props) => {
+  data,
+}: Props & { data?: { remainingTime?: number } }) => {
   const { socket } = useSocket()
   const { player, gameId } = usePlayerStore()
+  const viewRole = useViewRole()
+  const isSpectator = viewRole === "spectator"
+  const isVisualPlayerMode = Boolean(player) || isSpectator
+  const canSubmit = Boolean(player) && !isSpectator
 
-  const [cooldown, setCooldown] = useState(time)
+  const initialCooldown =
+    typeof (data as any)?.remainingTime === "number"
+      ? (data as any).remainingTime
+      : time
+  const [cooldown, setCooldown] = useState(initialCooldown)
   const [totalAnswer, setTotalAnswer] = useState(0)
   const [extensionState, setExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
@@ -80,9 +90,9 @@ const Answers = ({
 
   const popupMedia: QuestionMediaType[] = [MEDIA_TYPES.IMAGE, MEDIA_TYPES.VIDEO]
   const isPopupMedia = popupMedia.includes(media?.type)
-  const showAnswersOnly = Boolean(player) && answersOnly
+  const showAnswersOnly = isVisualPlayerMode && answersOnly
   const showMediaInPopup =
-    Boolean(player) && width < MOBILE_BREAKPOINT && isPopupMedia
+    isVisualPlayerMode && width < MOBILE_BREAKPOINT && isPopupMedia
 
   const [sfxPop] = useSound(SFX.ANSWERS.SOUND, {
     volume: 0.1,
@@ -95,7 +105,7 @@ const Answers = ({
   })
 
   const handleSubmit = (answerKeys: number[]) => {
-    if (!player || !gameId) {
+    if (!canSubmit || !gameId) {
       return
     }
 
@@ -211,11 +221,11 @@ const Answers = ({
                   extensionState?.extras.reveal as QuestionReveal | undefined
                 }
                 serverStartedAt={extensionState?.startedAt}
-                currentEpoch={extensionState?.epoch}
-                isManager={!player}
+                currentEpoch={effectiveExtensionState?.epoch}
+                isManager={!isVisualPlayerMode}
                 isManuallyRevealed={
                   (
-                    extensionState?.extras.reveal as
+                    effectiveExtensionState?.extras.reveal as
                       { isRevealed?: boolean } | undefined
                   )?.isRevealed
                 }
@@ -231,7 +241,7 @@ const Answers = ({
             <AnswerCountdown
               seconds={cooldown}
               totalSeconds={time}
-              variant={player ? "player" : "host"}
+              variant={isVisualPlayerMode ? "player" : "host"}
             />
           )}
           <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 px-4 py-1.5 shadow-lg backdrop-blur-md">
@@ -250,7 +260,7 @@ const Answers = ({
           answers={answers}
           options={options}
           onSubmit={handleSubmit}
-          readOnly={!player}
+          readOnly={!canSubmit}
           fill={showAnswersOnly}
           visuals={currentVisuals}
         />
