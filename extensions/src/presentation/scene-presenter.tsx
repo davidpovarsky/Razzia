@@ -563,8 +563,12 @@ export const ScenePresenter = ({
                                 </div>
 
                                 <div
-                                  className="relative flex aspect-square w-full max-h-[12vh] sm:max-h-[16vh] md:max-h-[20vh] items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
-                                  style={{ backgroundColor: cardBg }}
+                                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
+                                  style={{
+                                    backgroundColor: cardBg,
+                                    height: "clamp(48px, 14vh, 140px)",
+                                    maxHeight: "clamp(48px, 14vh, 140px)",
+                                  }}
                                 >
                                   {winner.imageUrl && (
                                     <img
@@ -655,8 +659,12 @@ export const ScenePresenter = ({
                                   </div>
 
                                   <div
-                                    className="relative flex aspect-square w-full max-h-[8vh] sm:max-h-[10vh] md:max-h-[12vh] items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
-                                    style={{ backgroundColor: cardBg }}
+                                    className="relative flex w-full items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
+                                    style={{
+                                      backgroundColor: cardBg,
+                                      height: "clamp(36px, 9vh, 80px)",
+                                      maxHeight: "clamp(36px, 9vh, 80px)",
+                                    }}
                                   >
                                     {runner.imageUrl && (
                                       <img

@@ -1,5 +1,6 @@
 import { MEDIA_TYPES } from "@razzia/common/constants"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
+import clsx from "clsx"
 import {
   EXTENSION_EVENTS,
   resolveCardStageAnimations,
@@ -10,6 +11,7 @@ import {
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
+import { useStageFit } from "@razzia/extensions/presentation"
 import {
   getAuthoritativeEnvelope,
   useExtensionState,
@@ -55,23 +57,40 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
   })
 
   const activeKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-show`
+  const { isUltraCompact, isCompact } = useStageFit()
 
   return (
-    <section className="relative mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-3 sm:px-4 py-2">
+    <section className="relative mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-2 sm:px-4 py-1 sm:py-2">
       <QuestionEntrance
         entrance={stageAnimations.questionEntrance}
         epoch={activeKey}
-        className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-3 sm:gap-5 overflow-hidden"
+        className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden"
       >
         <h2
           data-testid="show-question-title"
-          className="anim-show max-w-5xl text-center text-2xl font-bold text-white drop-shadow-lg sm:text-3xl md:text-4xl lg:text-5xl line-clamp-4"
+          className={clsx(
+            "anim-show max-w-5xl text-center font-bold text-white drop-shadow-lg line-clamp-3 sm:line-clamp-4",
+            isUltraCompact
+              ? "text-lg sm:text-xl"
+              : isCompact
+                ? "text-xl sm:text-2xl md:text-3xl"
+                : "text-2xl sm:text-3xl md:text-4xl lg:text-5xl",
+          )}
         >
           {question}
         </h2>
 
         {media?.type === MEDIA_TYPES.IMAGE && (
-          <div className="flex min-h-0 max-h-[45vh] w-full items-center justify-center overflow-hidden">
+          <div
+            className={clsx(
+              "flex min-h-0 w-full items-center justify-center overflow-hidden",
+              isUltraCompact
+                ? "max-h-[30vh]"
+                : isCompact
+                  ? "max-h-[38vh]"
+                  : "max-h-[45vh]",
+            )}
+          >
             <QuestionMedia
               media={media}
               alt={question}

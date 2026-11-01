@@ -14,6 +14,7 @@ import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
+import { useStageFit } from "@razzia/extensions/presentation"
 import {
   getAuthoritativeEnvelope,
   useExtensionState,
@@ -75,6 +76,7 @@ const Answers = ({
   )
   const { t } = useTranslation()
   const { width } = useScreenSize()
+  const { isUltraCompact, isCompact } = useStageFit()
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
     setExtensionState(payload)
@@ -187,9 +189,11 @@ const Answers = ({
           data-testid="game-question-title"
           className={clsx(
             "text-center font-bold text-white drop-shadow-lg",
-            showAnswersOnly || currentVisuals
-              ? "text-lg sm:text-2xl md:text-3xl line-clamp-2"
-              : "text-xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-3",
+            isUltraCompact
+              ? "text-base sm:text-lg line-clamp-2"
+              : showAnswersOnly || currentVisuals
+                ? "text-lg sm:text-2xl md:text-3xl line-clamp-2"
+                : "text-xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-3",
           )}
         >
           {question}
@@ -259,7 +263,12 @@ const Answers = ({
           "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
         })}
       >
-        <div className="mx-auto mb-1.5 sm:mb-2.5 flex w-full max-w-7xl shrink-0 items-center justify-between gap-2 px-2">
+        <div
+          className={clsx(
+            "mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between gap-2 px-2",
+            isUltraCompact ? "mb-0.5" : "mb-1.5 sm:mb-2.5",
+          )}
+        >
           {time !== NO_TIME_LIMIT && (
             <AnswerCountdown
               seconds={cooldown}
@@ -267,12 +276,25 @@ const Answers = ({
               variant={isVisualPlayerMode ? "player" : "host"}
             />
           )}
-          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 px-3 py-1 sm:px-4 sm:py-1.5 shadow-lg backdrop-blur-md">
+          <div
+            className={clsx(
+              "flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 shadow-lg backdrop-blur-md",
+              isUltraCompact ? "px-2 py-0.5" : "px-3 py-1 sm:px-4 sm:py-1.5",
+            )}
+          >
             <div className="flex flex-col items-center leading-none">
               <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-white/60">
                 {t("game:hud.answers")}
               </span>
-              <span className="text-xl sm:text-2xl md:text-3xl font-mono font-black text-white tabular-nums">
+              <span
+                data-testid="stage-hud-answer-counter"
+                className={clsx(
+                  "font-mono font-black text-white tabular-nums",
+                  isUltraCompact
+                    ? "text-lg sm:text-xl"
+                    : "text-xl sm:text-2xl md:text-3xl",
+                )}
+              >
                 {totalAnswer}/{totalPlayer}
               </span>
             </div>

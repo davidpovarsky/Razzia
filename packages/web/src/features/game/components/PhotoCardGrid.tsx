@@ -3,6 +3,7 @@ import { isValidAnswerVisual } from "@razzia/extensions/media"
 import {
   CANONICAL_ANSWER_COLORS,
   computePollRanking,
+  useStageFit,
   type PollOptionItem,
 } from "@razzia/extensions/presentation"
 import {
@@ -65,6 +66,14 @@ export const PhotoCardGrid = ({
   animationEpochKey = "static",
 }: PhotoCardGridProps) => {
   const [imageErrors, setImageErrors] = useState<Record<number, boolean>>({})
+  const {
+    isUltraCompact,
+    isCompact,
+    isNarrowMobile,
+    isPortrait,
+    maxPhotoHeightPx,
+    availableHeight,
+  } = useStageFit()
 
   // Reset image errors when question or media changes
   useEffect(() => {
@@ -81,6 +90,26 @@ export const PhotoCardGrid = ({
       }
     }
   }, [visuals])
+
+  const heroPhotoHeightPx = isUltraCompact
+    ? Math.min(80, Math.max(50, Math.floor(availableHeight * 0.14)))
+    : isCompact || isPortrait || isNarrowMobile
+      ? Math.min(120, Math.max(70, Math.floor(availableHeight * 0.18)))
+      : 180
+
+  const runnerPhotoHeightPx = isUltraCompact
+    ? Math.min(48, Math.max(36, Math.floor(availableHeight * 0.08)))
+    : isCompact || isPortrait || isNarrowMobile
+      ? Math.min(68, Math.max(44, Math.floor(availableHeight * 0.10)))
+      : 96
+
+  const votingPhotoHeightPx = isUltraCompact
+    ? Math.min(56, Math.max(40, Math.floor(availableHeight * 0.09)))
+    : isNarrowMobile || isPortrait
+      ? Math.min(84, Math.max(50, Math.floor(availableHeight * 0.11)))
+      : isCompact
+        ? Math.min(110, Math.max(64, Math.floor(availableHeight * 0.16)))
+        : 160
 
   const totalVotes = responses
     ? Object.values(responses).reduce(
@@ -145,7 +174,7 @@ export const PhotoCardGrid = ({
     return (
       <div
         className={clsx(
-          "flex min-h-0 flex-col items-center justify-center w-full px-1.5 sm:px-2 py-0.5 overflow-hidden",
+          "flex min-h-0 flex-1 flex-col items-center justify-center w-full px-1.5 sm:px-2 py-0.5",
           className,
         )}
         data-testid="photo-card-grid"
@@ -220,8 +249,12 @@ export const PhotoCardGrid = ({
 
                 {/* Photo frame inside Hero */}
                 <div
-                  className="relative flex aspect-square w-full max-h-[16vh] sm:max-h-[22vh] md:max-h-[26vh] items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
-                  style={{ backgroundColor: cardBg }}
+                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
+                  style={{
+                    backgroundColor: cardBg,
+                    height: `${heroPhotoHeightPx}px`,
+                    maxHeight: `${heroPhotoHeightPx}px`,
+                  }}
                 >
                   {showImage && !hasError && winner.imageUrl ? (
                     <img
@@ -343,8 +376,12 @@ export const PhotoCardGrid = ({
 
                   {/* Photo Frame */}
                   <div
-                    className="relative flex aspect-square w-full max-h-[10vh] sm:max-h-[12vh] md:max-h-[14vh] items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
-                    style={{ backgroundColor: cardBg }}
+                    className="relative flex w-full items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
+                    style={{
+                      backgroundColor: cardBg,
+                      height: `${runnerPhotoHeightPx}px`,
+                      maxHeight: `${runnerPhotoHeightPx}px`,
+                    }}
                   >
                     {showImage && !hasError && runner.imageUrl ? (
                       <img
@@ -417,7 +454,7 @@ export const PhotoCardGrid = ({
     : "max-h-[18vh] sm:max-h-[26vh] md:max-h-[32vh]"
 
   return (
-    <div className="flex min-h-0 flex-col items-center justify-center w-full overflow-hidden">
+    <div className="flex min-h-0 flex-1 flex-col items-center justify-center w-full">
       {isRevealed && hasZeroVotes && (
         <div
           data-testid="zero-votes-notice"
@@ -471,7 +508,8 @@ export const PhotoCardGrid = ({
                 data-tada-entrance={cardPreset !== "none" ? cardPreset : undefined}
                 style={buildSlotStyle(activeCardSlot, index, { backgroundColor: cardBg })}
                 className={clsx(
-                  "group relative flex h-full flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-black/20 p-1.5 sm:p-2.5 text-center transition-all duration-300 ease-out shadow-lg",
+                  "group relative flex h-full flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-black/20 text-center transition-all duration-300 ease-out shadow-lg",
+                  isUltraCompact ? "p-1" : "p-1.5 sm:p-2.5",
                   cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   !readOnly &&
                     "cursor-pointer hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-4 focus-visible:ring-white",
@@ -502,11 +540,12 @@ export const PhotoCardGrid = ({
 
                 {/* Photo Frame */}
                 <div
-                  className={clsx(
-                    "relative flex aspect-square w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/15 shadow-inner",
-                    frameHeightClass,
-                  )}
-                  style={{ backgroundColor: cardBg }}
+                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/15 shadow-inner"
+                  style={{
+                    backgroundColor: cardBg,
+                    height: `${votingPhotoHeightPx}px`,
+                    maxHeight: `${votingPhotoHeightPx}px`,
+                  }}
                 >
                   {showImage && !hasError && visual?.url ? (
                     <img

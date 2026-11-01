@@ -39,7 +39,11 @@ export const QuestionEntrance = ({
   const animationKey = useMemo(() => `${preset}-${epoch ?? "static"}`, [preset, epoch])
 
   if (!preset || preset === "none") {
-    return <div className={clsx("w-full h-full flex flex-col", className)}>{children}</div>
+    return (
+      <div className={clsx("w-full h-full min-h-0 flex flex-col", className)}>
+        {children}
+      </div>
+    )
   }
 
   const animationClass = `tada-entrance-${preset}`
@@ -48,7 +52,11 @@ export const QuestionEntrance = ({
     <div
       key={animationKey}
       data-tada-entrance={preset}
-      className={clsx("w-full h-full flex flex-col", animationClass, className)}
+      className={clsx(
+        "w-full h-full min-h-0 flex flex-col",
+        animationClass,
+        className,
+      )}
       style={{
         animationDuration: `${durationMs}ms`,
         animationFillMode: "both",

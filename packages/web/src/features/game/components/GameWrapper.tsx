@@ -20,6 +20,7 @@ import {
   AudioCuePlayer,
   InterludePresenter,
   ScenePresenter,
+  StageFitContainer,
   type ScenePresenterProps,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
@@ -486,9 +487,9 @@ const GameWrapper = ({
     return (
       <ExtensionStateProvider value={extensionState}>
         <ViewRoleContext.Provider value={effectiveRole}>
-          <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+          <StageFitContainer className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
             {children}
-          </div>
+          </StageFitContainer>
         </ViewRoleContext.Provider>
       </ExtensionStateProvider>
     )
