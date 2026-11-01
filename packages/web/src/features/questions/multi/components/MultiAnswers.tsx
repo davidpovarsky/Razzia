@@ -14,6 +14,9 @@ const MultiAnswers = ({
   onSubmit,
   readOnly,
   fill,
+  visuals,
+  stageAnimations,
+  animationEpochKey,
 }: AnswerComponentProps) => {
   const [selected, setSelected] = useState<number[]>([])
   const { t } = useTranslation()
@@ -29,7 +32,7 @@ const MultiAnswers = ({
   return (
     <div
       className={clsx(
-        "mx-auto mb-4 flex w-full max-w-7xl flex-col gap-2 px-2",
+        "mx-auto mb-2 sm:mb-4 flex w-full max-w-7xl flex-col gap-2 px-2",
         {
           "flex-1": fill,
         },
@@ -37,7 +40,7 @@ const MultiAnswers = ({
     >
       <div
         className={clsx(
-          "grid gap-1 text-lg font-bold text-white md:text-xl",
+          "grid gap-1.5 sm:gap-2 text-base font-bold text-white sm:text-lg md:text-xl",
           fill
             ? "flex-1 auto-rows-fr grid-cols-1 sm:grid-cols-2"
             : "grid-cols-2",
@@ -45,13 +48,19 @@ const MultiAnswers = ({
       >
         {answers.map((answer, key) => {
           const isSelected = selected.includes(key)
+          const visual = visuals?.find((v) => v.answerIndex === key)
 
           return (
             <AnswerButton
-              key={key}
+              key={`${animationEpochKey ?? "static"}-${key}`}
+              answerIndex={key}
+              visual={visual}
+              cardEntrance={stageAnimations?.answerEntrance}
+              badgeEntrance={stageAnimations?.answerBadgeEntrance}
+              animationEpochKey={animationEpochKey}
               className={clsx(
                 ANSWERS_COLORS[key],
-                answers.length === 5 && key === 4 && "col-span-1 sm:col-span-2",
+                answers.length === 5 && key === 4 && "col-span-2",
               )}
               label={ANSWERS_LABELS[key]}
               onClick={() => toggle(key)}

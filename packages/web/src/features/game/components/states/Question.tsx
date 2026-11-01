@@ -2,10 +2,18 @@ import { MEDIA_TYPES } from "@razzia/common/constants"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  resolveCardStageAnimations,
+  type CardStageAnimations,
   type ExtensionStateEnvelope,
+  type QuestionEntrance as QuestionEntranceConfig,
   type QuestionReveal,
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
+import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
+import {
+  getAuthoritativeEnvelope,
+  useExtensionState,
+} from "@razzia/web/features/game/contexts/extension-state-context"
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
 import { SFX } from "@razzia/web/features/game/utils/constants"
 import { useEffect, useState } from "react"
@@ -19,41 +27,75 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
   const [extensionState, setExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
+  const contextExtensionState = useExtensionState()
+  const effectiveExtensionState = getAuthoritativeEnvelope(
+    extensionState,
+    contextExtensionState,
+  )
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
     setExtensionState(payload)
   })
 
   useEffect(() => {
+    // When extensionState is present, GameWrapper's unified AudioCuePlayer manages phase audio
+    if (effectiveExtensionState?.gameId) {
+      return
+    }
     sfxShow()
-  }, [sfxShow])
+  }, [sfxShow, effectiveExtensionState?.gameId])
+
+  const stageAnimations = resolveCardStageAnimations({
+    questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
+      | QuestionEntranceConfig
+      | undefined,
+    stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
+      | CardStageAnimations
+      | undefined,
+  })
+
+  const activeKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-show`
 
   return (
-    <section className="relative mx-auto flex h-full w-full max-w-7xl flex-1 flex-col items-center px-4">
-      <div className="flex flex-1 flex-col items-center justify-center gap-5">
-        <h2 className="anim-show text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+    <section className="relative mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-3 sm:px-4 py-2">
+      <QuestionEntrance
+        entrance={stageAnimations.questionEntrance}
+        epoch={activeKey}
+        className="flex min-h-0 w-full flex-1 flex-col items-center justify-center gap-3 sm:gap-5 overflow-hidden"
+      >
+        <h2
+          data-testid="show-question-title"
+          className="anim-show max-w-5xl text-center text-2xl font-bold text-white drop-shadow-lg sm:text-3xl md:text-4xl lg:text-5xl line-clamp-4"
+        >
           {question}
         </h2>
 
         {media?.type === MEDIA_TYPES.IMAGE && (
-          <QuestionMedia
-            media={media}
-            alt={question}
-            reveal={extensionState?.extras.reveal as QuestionReveal | undefined}
-            serverStartedAt={extensionState?.startedAt}
-            currentEpoch={extensionState?.epoch}
-            isManager={true}
-            isManuallyRevealed={
-              (
-                extensionState?.extras.reveal as
-                  { isRevealed?: boolean } | undefined
-              )?.isRevealed
-            }
-          />
+          <div className="flex min-h-0 max-h-[45vh] w-full items-center justify-center overflow-hidden">
+            <QuestionMedia
+              media={media}
+              alt={question}
+              reveal={
+                effectiveExtensionState?.extras.reveal as
+                  | QuestionReveal
+                  | undefined
+              }
+              serverStartedAt={effectiveExtensionState?.startedAt}
+              currentEpoch={effectiveExtensionState?.epoch}
+              isManager={true}
+              isManuallyRevealed={
+                (
+                  effectiveExtensionState?.extras.reveal as
+                    | { isRevealed?: boolean }
+                    | undefined
+                )?.isRevealed
+              }
+            />
+          </div>
         )}
-      </div>
+      </QuestionEntrance>
       <div
-        className="bg-primary mb-20 h-4 self-start justify-self-end rounded-full"
+        className="bg-primary mb-2 sm:mb-6 h-3 sm:h-4 shrink-0 self-start justify-self-end rounded-full"
         style={{ animation: `progressBar ${cooldown}s linear forwards` }}
       ></div>
     </section>

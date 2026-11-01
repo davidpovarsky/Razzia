@@ -109,18 +109,18 @@ const Podium = ({ data: { subject, top } }: Props) => {
       )}
 
       {hasSuspense && apparition >= SUSPENSE_SPOTLIGHT_STEP && (
-        <div className="pointer-events-none absolute min-h-dvh w-full overflow-hidden">
+        <div className="pointer-events-none absolute inset-0 w-full overflow-hidden">
           <div className="spotlight"></div>
         </div>
       )}
-      <section className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-between">
-        <h2 className="anim-show text-center text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl">
+      <section className="relative mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-2">
+        <h2 className="anim-show text-center text-2xl sm:text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl line-clamp-2">
           {subject}
         </h2>
 
         <div
           style={{ gridTemplateColumns: `repeat(${top.length}, 1fr)` }}
-          className={`grid w-full max-w-200 flex-1 items-end justify-center justify-self-end overflow-x-visible overflow-y-hidden`}
+          className={`grid min-h-0 w-full max-w-200 flex-1 items-end justify-center justify-self-end overflow-hidden`}
         >
           {top[1] && (
             <div

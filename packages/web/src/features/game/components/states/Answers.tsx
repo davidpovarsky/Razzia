@@ -3,8 +3,11 @@ import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  resolveCardStageAnimations,
   type AnswerVisual,
+  type CardStageAnimations,
   type ExtensionStateEnvelope,
+  type QuestionEntrance as QuestionEntranceConfig,
   type QuestionReveal,
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
@@ -119,6 +122,12 @@ const Answers = ({
   }
 
   useEffect(() => {
+    // When extensionState is present, GameWrapper's unified AudioCuePlayer manages answersMusic
+    if (effectiveExtensionState?.gameId) {
+      stopMusic()
+      return
+    }
+
     const disabledMusicMedia: QuestionMediaType[] = [
       MEDIA_TYPES.AUDIO,
       MEDIA_TYPES.VIDEO,
@@ -134,7 +143,7 @@ const Answers = ({
       stopMusic()
     }
     // oxlint-disable-next-line
-  }, [playMusic])
+  }, [playMusic, effectiveExtensionState?.gameId])
 
   useEvent(EVENTS.GAME.COOLDOWN, (sec) => {
     setCooldown(sec)
@@ -149,31 +158,38 @@ const Answers = ({
 
   const MediaIcon = media?.type === MEDIA_TYPES.VIDEO ? Video : Image
 
-  const questionEntrance = effectiveExtensionState?.extras?.questionEntrance as
-    | any
-    | undefined
+  const stageAnimations = resolveCardStageAnimations({
+    questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
+      | QuestionEntranceConfig
+      | undefined,
+    stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
+      | CardStageAnimations
+      | undefined,
+  })
+
+  const animationEpochKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-answers`
 
   return (
     <QuestionEntrance
-      entrance={questionEntrance}
-      epoch={effectiveExtensionState?.epoch}
-      className="flex h-full flex-1 flex-col justify-between"
+      entrance={stageAnimations.questionEntrance}
+      epoch={animationEpochKey}
+      className="flex min-h-0 h-full w-full flex-1 flex-col justify-between overflow-hidden"
     >
       {/* Question Header & Media Area */}
       <div
         className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {
-          "pt-2 sm:pt-3 pb-1": showAnswersOnly,
-          "inline-flex h-full min-h-0 flex-1 flex-col items-center justify-center gap-5":
-            !showAnswersOnly,
+          "pt-1 sm:pt-2 pb-1 shrink-0": showAnswersOnly || Boolean(currentVisuals),
+          "inline-flex min-h-0 flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden":
+            !showAnswersOnly && !currentVisuals,
         })}
       >
         <h2
           data-testid="game-question-title"
           className={clsx(
             "text-center font-bold text-white drop-shadow-lg",
-            showAnswersOnly
-              ? "text-xl sm:text-2xl md:text-3xl line-clamp-3"
-              : "text-2xl md:text-4xl lg:text-5xl",
+            showAnswersOnly || currentVisuals
+              ? "text-lg sm:text-2xl md:text-3xl line-clamp-2"
+              : "text-xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-3",
           )}
         >
           {question}
@@ -193,7 +209,7 @@ const Answers = ({
             )}
 
             {media?.type === MEDIA_TYPES.AUDIO && (
-              <div className="mt-2 flex justify-center">
+              <div className="mt-1 flex justify-center">
                 <QuestionMedia media={media} alt={question} />
               </div>
             )}
@@ -218,15 +234,18 @@ const Answers = ({
                 media={media}
                 alt={question}
                 reveal={
-                  extensionState?.extras.reveal as QuestionReveal | undefined
+                  effectiveExtensionState?.extras.reveal as
+                    | QuestionReveal
+                    | undefined
                 }
-                serverStartedAt={extensionState?.startedAt}
+                serverStartedAt={effectiveExtensionState?.startedAt}
                 currentEpoch={effectiveExtensionState?.epoch}
                 isManager={!isVisualPlayerMode}
                 isManuallyRevealed={
                   (
                     effectiveExtensionState?.extras.reveal as
-                      { isRevealed?: boolean } | undefined
+                      | { isRevealed?: boolean }
+                      | undefined
                   )?.isRevealed
                 }
               />
@@ -235,8 +254,12 @@ const Answers = ({
         )}
       </div>
 
-      <div className={clsx({ "flex flex-1 flex-col": showAnswersOnly })}>
-        <div className="mx-auto mb-3 flex w-full max-w-7xl items-center justify-between gap-2 px-2">
+      <div
+        className={clsx("flex min-h-0 flex-col overflow-hidden", {
+          "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
+        })}
+      >
+        <div className="mx-auto mb-1.5 sm:mb-2.5 flex w-full max-w-7xl shrink-0 items-center justify-between gap-2 px-2">
           {time !== NO_TIME_LIMIT && (
             <AnswerCountdown
               seconds={cooldown}
@@ -244,12 +267,12 @@ const Answers = ({
               variant={isVisualPlayerMode ? "player" : "host"}
             />
           )}
-          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 px-4 py-1.5 shadow-lg backdrop-blur-md">
+          <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 px-3 py-1 sm:px-4 sm:py-1.5 shadow-lg backdrop-blur-md">
             <div className="flex flex-col items-center leading-none">
               <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-white/60">
                 {t("game:hud.answers")}
               </span>
-              <span className="text-2xl sm:text-3xl font-mono font-black text-white tabular-nums">
+              <span className="text-xl sm:text-2xl md:text-3xl font-mono font-black text-white tabular-nums">
                 {totalAnswer}/{totalPlayer}
               </span>
             </div>
@@ -263,6 +286,8 @@ const Answers = ({
           readOnly={!canSubmit}
           fill={showAnswersOnly}
           visuals={currentVisuals}
+          stageAnimations={stageAnimations}
+          animationEpochKey={animationEpochKey}
         />
       </div>
     </QuestionEntrance>

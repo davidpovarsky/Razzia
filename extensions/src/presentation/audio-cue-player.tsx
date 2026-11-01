@@ -1,6 +1,9 @@
 import {
+  resolveEffectiveAudioCue,
   type AudioCueSetting,
   type AudioExtras,
+  type CardAudioMode,
+  type CardAudioOverrides,
   type CueId,
 } from "@razzia/extensions/core"
 import { useEffect, useRef } from "react"
@@ -84,6 +87,18 @@ export const shouldDuckMusic = (
 export interface AudioCuePlayerProps {
   cueId?: CueId
   audioExtras?: AudioExtras
+  cardAudioCues?: CardAudioOverrides | null
+  sceneAudio?: {
+    mode?: CardAudioMode
+    cueId?: CueId
+    url?: string
+    volume?: number
+    loop?: boolean
+  } | null
+  gameId?: string | null
+  activeCardKey?: string | null
+  phase?: string | null
+  epoch?: number | string | null
   hasCompetingMedia?: boolean
   autoPlay?: boolean
   onEnded?: () => void
@@ -92,53 +107,83 @@ export interface AudioCuePlayerProps {
 
 /**
  * AudioCuePlayer manages sound effect and music playback for the quiz lifecycle.
- * - Respects custom uploaded audio files or falls back safely to upstream defaults.
- * - Handles mute and volume bounds (0..1).
- * - Implements audio ducking vs question media (video/audio).
- * - Catches browser autoplay restrictions (NotAllowedError) without uncaught exceptions.
- * - Recovers from missing or corrupt media assets gracefully without freezing the game.
- * - Cleans up active audio instances on unmount.
+ * - Precedence: card-level override > global show audio > built-in default.
+ * - Deduplicates playback by (gameId, activeCardKey, phase, epoch, cueId) so timer ticks
+ *   or vote count updates never restart active audio.
+ * - Stops loops immediately on phase exit, Next/Previous, revote, or competing media.
  */
 export const AudioCuePlayer = ({
   cueId,
   audioExtras,
+  cardAudioCues,
+  sceneAudio,
+  gameId,
+  activeCardKey,
+  phase,
+  epoch,
   hasCompetingMedia = false,
   autoPlay = true,
   onEnded,
   onError,
 }: AudioCuePlayerProps) => {
   const audioRef = useRef<HTMLAudioElement | null>(null)
+  const lastPlaybackKeyRef = useRef<string | null>(null)
+
+  const effectiveCueId: CueId | undefined =
+    cueId ?? sceneAudio?.cueId ?? (sceneAudio?.url ? "start" : undefined)
+
+  const resolved = effectiveCueId
+    ? resolveEffectiveAudioCue({
+        cueId: effectiveCueId,
+        cardAudioCues,
+        sceneAudio,
+        globalAudio: audioExtras,
+        defaultUrl: DEFAULT_CUE_URLS[effectiveCueId],
+        defaultVolume: effectiveCueId === "answersMusic" ? 0.35 : 0.7,
+        defaultLoop: effectiveCueId === "answersMusic",
+        hasCompetingMediaAudio: hasCompetingMedia,
+      })
+    : null
+
+  const playbackIdentity = effectiveCueId
+    ? `${gameId ?? "g"}:${activeCardKey ?? "card"}:${phase ?? "phase"}:${epoch ?? 0}:${effectiveCueId}:${resolved?.url ?? "none"}:${resolved?.shouldPlay ? "play" : "mute"}:${resolved?.loop ? "loop" : "once"}`
+    : null
 
   useEffect(() => {
-    if (!cueId) {
+    const stopActiveAudio = () => {
+      if (audioRef.current) {
+        try {
+          audioRef.current.pause()
+          audioRef.current.currentTime = 0
+        } catch {
+          // Ignore cleanup errors
+        }
+        audioRef.current = null
+      }
+    }
+
+    if (!effectiveCueId || !resolved || !resolved.shouldPlay || !resolved.url) {
+      stopActiveAudio()
+      lastPlaybackKeyRef.current = null
       return
     }
 
-    const resolved = resolveAudioCue(cueId, audioExtras)
-
-    // Check mute / disabled
-    if (!resolved.enabled) {
-      return
-    }
-
-    // Check ducking against competing question video/audio
-    const isDucked = shouldDuckMusic(hasCompetingMedia, cueId)
-
-    if (isDucked) {
-      return
-    }
-
-    // Create safe audio instance if in browser environment
     if (typeof Audio === "undefined") {
       return
     }
+
+    // Stop any previous audio instance before starting the new phase/card cue
+    stopActiveAudio()
+    lastPlaybackKeyRef.current = playbackIdentity
 
     let isCancelled = false
     const audio = new Audio(resolved.url)
     audioRef.current = audio
 
-    audio.volume = resolved.volume
+    audio.volume = Math.min(1, Math.max(0, resolved.volume))
     audio.loop = resolved.loop
+
+    const isDefaultUrl = resolved.url === DEFAULT_CUE_URLS[effectiveCueId]
 
     // Safe error handling for missing/corrupt asset fallback (AUDIO01)
     audio.onerror = () => {
@@ -146,21 +191,22 @@ export const AudioCuePlayer = ({
         return
       }
 
-      // Fallback to default asset if custom media failed
-      if (!resolved.isDefault) {
-        const defaultUrl = DEFAULT_CUE_URLS[cueId]
+      if (!isDefaultUrl) {
+        const defaultUrl = DEFAULT_CUE_URLS[effectiveCueId]
         const fallbackAudio = new Audio(defaultUrl)
         audioRef.current = fallbackAudio
-        fallbackAudio.volume = resolved.volume
+        fallbackAudio.volume = Math.min(1, Math.max(0, resolved.volume))
         fallbackAudio.loop = resolved.loop
 
         fallbackAudio.play().catch(() => {
-          // Silent fallback if browser restricts autoplay or default is absent
+          // Silent fallback if browser restricts autoplay
         })
       }
 
       onError?.(
-        new Error(`Failed to load audio cue ${cueId} from ${resolved.url}`),
+        new Error(
+          `Failed to load audio cue ${effectiveCueId} from ${resolved.url}`,
+        ),
       )
     }
 
@@ -171,24 +217,36 @@ export const AudioCuePlayer = ({
     }
 
     if (autoPlay) {
-      // Safe play call catching browser autoplay policy restrictions
       audio.play().catch((error: unknown) => {
-        // Autoplay restrictions are expected on un-interacted mobile/browsers; do not crash
         onError?.(error)
       })
     }
 
-    // Cleanup on unmount or cue change (AUDIO02)
     return () => {
       isCancelled = true
-
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current.currentTime = 0
-        audioRef.current = null
-      }
+      stopActiveAudio()
     }
-  }, [cueId, audioExtras, hasCompetingMedia, autoPlay, onEnded, onError])
+    // Depend on playbackIdentity + volume so timer ticks / vote re-renders never restart playback
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [playbackIdentity, autoPlay])
 
-  return null
+  // Update volume dynamically if slider/props change while playing
+  useEffect(() => {
+    if (audioRef.current && resolved) {
+      audioRef.current.volume = Math.min(1, Math.max(0, resolved.volume))
+    }
+  }, [resolved?.volume])
+
+  return (
+    <span
+      className="sr-only"
+      data-testid="audio-cue-player-state"
+      data-cue-id={effectiveCueId ?? "none"}
+      data-should-play={resolved?.shouldPlay ? "true" : "false"}
+      data-muted-by-override={resolved?.mutedByOverride ? "true" : "false"}
+      data-audio-url={resolved?.url ?? ""}
+      data-audio-loop={resolved?.loop ? "true" : "false"}
+      data-playback-key={playbackIdentity ?? ""}
+    />
+  )
 }

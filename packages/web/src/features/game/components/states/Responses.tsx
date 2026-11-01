@@ -1,8 +1,11 @@
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
-import type {
-  AnswerVisual,
-  ExtensionStateEnvelope,
-  RevealDistributionSnapshot,
+import {
+  resolveCardStageAnimations,
+  type AnswerVisual,
+  type CardStageAnimations,
+  type ExtensionStateEnvelope,
+  type QuestionEntrance as QuestionEntranceConfig,
+  type RevealDistributionSnapshot,
 } from "@razzia/extensions/core"
 import {
   calculateAggregatePercentages,
@@ -205,11 +208,12 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
       setTimelineState(nextState)
 
-      // Trigger SFX on transition into revealed stage
+      // Trigger SFX on transition into revealed stage (only when not managed by GameWrapper's AudioCuePlayer)
       if (
         nextState.isRevealed &&
         !soundPlayedRef.current &&
-        !prefersReducedMotion
+        !prefersReducedMotion &&
+        !extensionState?.gameId
       ) {
         soundPlayedRef.current = true
 
@@ -273,16 +277,27 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
   const isTie = winnerIndices.length > 1
 
+  const stageAnimations = resolveCardStageAnimations({
+    questionEntrance: extensionState?.extras?.questionEntrance as
+      | QuestionEntranceConfig
+      | undefined,
+    stageAnimations: extensionState?.extras?.stageAnimations as
+      | CardStageAnimations
+      | undefined,
+  })
+
+  const animationEpochKey = `${extensionState?.questionId ?? question}-${extensionState?.epoch ?? 0}-responses`
+
   return (
-    <div className="flex h-full flex-1 flex-col justify-between p-4">
-      <div className="mx-auto flex h-full w-full max-w-7xl flex-1 flex-col items-center justify-center gap-6">
-        <h2 className="max-w-4xl text-center text-2xl font-black tracking-tight text-white drop-shadow-2xl md:text-4xl lg:text-5xl">
+    <div className="flex min-h-0 h-full w-full flex-1 flex-col justify-between overflow-hidden px-3 py-2 sm:p-4">
+      <div className="mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden">
+        <h2 className="max-w-4xl shrink-0 text-center text-xl font-black tracking-tight text-white drop-shadow-2xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-2">
           {question}
         </h2>
 
         {/* Responders count badge */}
         {revealDistribution && (
-          <div className="flex items-center gap-2 rounded-full border border-white/10 bg-black/40 px-4 py-1.5 text-sm font-semibold text-white/90 shadow-md backdrop-blur-md">
+          <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-semibold text-white/90 shadow-md backdrop-blur-md">
             <span>
               {t("extensions:reveal.answeredRatio", {
                 responders: revealDistribution.totalResponders,
@@ -294,7 +309,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
         {/* Answer Cards: PhotoCardGrid when visuals present; original AnswerButton grid otherwise */}
         {hasVisuals ? (
-          <div className="w-full">
+          <div className="min-h-0 w-full flex-1 flex flex-col justify-center overflow-hidden">
             <PhotoCardGrid
               answers={answers}
               visuals={answerVisuals}
@@ -305,10 +320,12 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
               isRevealed={isRevealed}
               isSurvey={isSurvey}
               readOnly
+              stageAnimations={stageAnimations}
+              animationEpochKey={animationEpochKey}
             />
           </div>
         ) : (
-          <div className="mt-4 grid w-full max-w-5xl grid-cols-1 gap-4 md:grid-cols-2">
+          <div className="mt-1 sm:mt-2 grid w-full max-w-5xl grid-cols-1 gap-2 sm:gap-3 md:grid-cols-2">
             {answers.map((answer, key) => {
               const pct = timelineState.displayPercentages[key] ?? 0
               const count = responses[key] ?? 0
@@ -332,7 +349,11 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
               return (
                 <AnswerButton
-                  key={key}
+                  key={`${animationEpochKey}-${key}`}
+                  answerIndex={key}
+                  cardEntrance={stageAnimations.resultsRevealEntrance}
+                  badgeEntrance={stageAnimations.answerBadgeEntrance}
+                  animationEpochKey={animationEpochKey}
                   label={ANSWERS_LABELS[key]}
                   className={clsx(
                     "text-white transition-all duration-300",

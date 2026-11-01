@@ -1,4 +1,4 @@
-import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
+import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import {
   STATUS,
   type Status,
@@ -6,6 +6,9 @@ import {
 } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  resolveEffectiveCardBackground,
+  type CardAudioOverrides,
+  type CardBackgroundOverride,
   type CueId,
   type ExtensionStateEnvelope,
   type HostPresenceSnapshot,
@@ -253,12 +256,93 @@ const GameWrapper = ({
 
   const defaultExit = () => undefined
 
+  const playerStatus = usePlayerStore((s) => s.status)
+  const activeStatus = status ?? playerStatus
+  const activeStatusMediaType = (
+    activeStatus?.data as { media?: { type?: string } } | undefined
+  )?.media?.type
+
+  const currentSceneObj = extensionState?.extras.currentScene as
+    | {
+        id?: string
+        mediaType?: string
+        mediaUrl?: string
+        background?: CardBackgroundOverride
+        audio?: {
+          mode?: "inherit" | "mute" | "custom"
+          cueId?: CueId
+          url?: string
+          volume?: number
+          loop?: boolean
+        }
+      }
+    | undefined
+
+  const rawCardBackground =
+    (extensionState?.extras.cardBackground as
+      | CardBackgroundOverride
+      | undefined) ?? currentSceneObj?.background
+
+  const effectiveBackground = useMemo(
+    () => resolveEffectiveCardBackground(rawCardBackground),
+    [rawCardBackground],
+  )
+
+  const [cardBgErrorUrl, setCardBgErrorUrl] = useState<string | null>(null)
+  const showCustomCardBackground =
+    effectiveBackground.mode === "card" &&
+    Boolean(effectiveBackground.url) &&
+    cardBgErrorUrl !== effectiveBackground.url
+
+  const activePhaseCueId: CueId | undefined = useMemo(() => {
+    if (!extensionState) {
+      return undefined
+    }
+    if (extensionState.extras.audioCue) {
+      return extensionState.extras.audioCue as CueId
+    }
+    if (extensionState.phase === "scene") {
+      return (
+        currentSceneObj?.audio?.cueId ??
+        (currentSceneObj?.audio?.url ? "start" : undefined)
+      )
+    }
+    if (statusName === STATUS.SHOW_QUESTION) {
+      return "showQuestion"
+    }
+    if (statusName === STATUS.SELECT_ANSWER) {
+      return "answersMusic"
+    }
+    if (statusName === STATUS.SHOW_RESPONSES) {
+      return "revealResults"
+    }
+    if (statusName === STATUS.SHOW_LEADERBOARD) {
+      return "leaderboard"
+    }
+    return undefined
+  }, [extensionState, statusName, currentSceneObj])
+
+  const hasCompetingMediaAudio = Boolean(
+    activeStatusMediaType === MEDIA_TYPES.VIDEO ||
+      activeStatusMediaType === MEDIA_TYPES.AUDIO ||
+      (extensionState?.phase === "scene" &&
+        currentSceneObj?.mediaType === "video" &&
+        Boolean(currentSceneObj?.mediaUrl)),
+  )
+
+  const activeCardKey =
+    extensionState?.phase === "scene"
+      ? (currentSceneObj?.id ?? "scene")
+      : (extensionState?.questionId ?? "question")
+
   const renderStageContent = () => {
     if (!extensionState) {
       return (
         <ExtensionStateProvider value={extensionState}>
           <ViewRoleContext.Provider value={effectiveRole}>
-            {children}
+            <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+              {children}
+            </div>
           </ViewRoleContext.Provider>
         </ExtensionStateProvider>
       )
@@ -323,13 +407,14 @@ const GameWrapper = ({
       }
 
       return (
-        <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
+        <div className="flex min-h-0 h-full w-full flex-1 items-center justify-center overflow-hidden p-2 sm:p-4 md:p-6">
           <ScenePresenter
             step={activeStep}
             scene={currentScene}
             activeSceneData={activeSceneData}
             labels={scenePresenterLabels}
             serverStartedAt={extensionState.startedAt}
+            epoch={extensionState.epoch}
             isManager={Boolean(manager)}
             onAdvance={() => {
               if (manager && extensionState.gameId) {
@@ -364,7 +449,7 @@ const GameWrapper = ({
 
     if (extensionState.phase === "interlude" && extensionState.extras.interlude) {
       return (
-        <div className="flex h-full w-full flex-1 items-center justify-center p-4 sm:p-8">
+        <div className="flex min-h-0 h-full w-full flex-1 items-center justify-center overflow-hidden p-2 sm:p-4 md:p-6">
           <InterludePresenter
             interlude={extensionState.extras.interlude as Interlude}
             serverStartedAt={extensionState.startedAt}
@@ -401,17 +486,53 @@ const GameWrapper = ({
     return (
       <ExtensionStateProvider value={extensionState}>
         <ViewRoleContext.Provider value={effectiveRole}>
-          {children}
+          <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+            {children}
+          </div>
         </ViewRoleContext.Provider>
       </ExtensionStateProvider>
     )
   }
 
   return (
-    <section className="relative flex min-h-dvh isolate overflow-x-hidden w-full max-w-full">
+    <section className="relative flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden isolate">
       <GameBackground />
 
-      <div className="z-10 flex w-full flex-1 flex-col justify-between max-w-full overflow-x-hidden">
+      {showCustomCardBackground && effectiveBackground.url && (
+        <div
+          data-testid="stage-card-background"
+          data-bg-url={effectiveBackground.url}
+          data-bg-fit={effectiveBackground.fit}
+          data-bg-position={effectiveBackground.position}
+          className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+        >
+          <img
+            src={effectiveBackground.url}
+            alt=""
+            onError={() => setCardBgErrorUrl(effectiveBackground.url ?? null)}
+            className={clsx(
+              "pointer-events-none h-full w-full select-none",
+              effectiveBackground.fit === "contain"
+                ? "object-contain"
+                : "object-cover",
+              effectiveBackground.position === "top" && "object-top",
+              effectiveBackground.position === "bottom" && "object-bottom",
+              effectiveBackground.position === "left" && "object-left",
+              effectiveBackground.position === "right" && "object-right",
+              effectiveBackground.position === "center" && "object-center",
+            )}
+          />
+          {effectiveBackground.overlayOpacity > 0 && (
+            <div
+              data-testid="stage-card-background-overlay"
+              className="pointer-events-none absolute inset-0 bg-black"
+              style={{ opacity: effectiveBackground.overlayOpacity }}
+            />
+          )}
+        </div>
+      )}
+
+      <div className="z-10 flex min-h-0 h-full w-full flex-1 flex-col justify-between max-w-full overflow-hidden">
         {!isConnected && !statusName ? (
           <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
             <Loader className="h-30" />
@@ -425,13 +546,39 @@ const GameWrapper = ({
 
             {renderStageContent()}
 
-            {extensionState?.extras.audioCue && (
+            {extensionState && (
               <AudioCuePlayer
-                cueId={extensionState.extras.audioCue as CueId}
+                cueId={activePhaseCueId}
                 audioExtras={
                   extensionState.extras.audio as
-                    QuizExtrasV1["audio"] | undefined
+                    | QuizExtrasV1["audio"]
+                    | undefined
                 }
+                cardAudioCues={
+                  extensionState.extras.cardAudioCues as
+                    | CardAudioOverrides
+                    | undefined
+                }
+                sceneAudio={
+                  (extensionState.extras.sceneAudio as
+                    | {
+                        mode?: "inherit" | "mute" | "custom"
+                        cueId?: CueId
+                        url?: string
+                        volume?: number
+                        loop?: boolean
+                      }
+                    | undefined) ?? currentSceneObj?.audio
+                }
+                gameId={extensionState.gameId}
+                activeCardKey={activeCardKey}
+                phase={
+                  extensionState.phase === "scene"
+                    ? "scene"
+                    : (statusName ?? extensionState.phase)
+                }
+                epoch={extensionState.epoch}
+                hasCompetingMedia={hasCompetingMediaAudio}
               />
             )}
 
