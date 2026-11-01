@@ -45,7 +45,7 @@ const QuestionEditorConfig = () => {
   }))
 
   return (
-    <aside className="bg-background z-10 m-3 flex max-h-[calc(100%-1.5rem)] w-68 shrink-0 flex-col gap-3 self-start overflow-y-auto rounded-xl p-4 shadow-sm">
+    <aside className="bg-background z-10 m-2 flex w-[calc(100%-1rem)] shrink-0 flex-col gap-3 rounded-xl p-3 shadow-sm lg:m-3 lg:max-h-[calc(100%-1.5rem)] lg:w-64 xl:w-68 lg:self-start lg:overflow-y-auto lg:p-4">
       <ConfigField>
         <ConfigField.Label
           icon={<LayoutList className="size-4" />}

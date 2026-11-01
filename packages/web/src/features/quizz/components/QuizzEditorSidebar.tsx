@@ -351,7 +351,7 @@ const QuizzEditorSidebar = () => {
     timeline.length > 0 ? timeline.map((item) => item.id) : questionIds
 
   return (
-    <aside className="bg-background z-10 m-3 flex w-72 shrink-0 flex-col gap-2 overflow-auto rounded-xl p-3 shadow-sm">
+    <aside className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 xl:w-72 lg:p-3">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}

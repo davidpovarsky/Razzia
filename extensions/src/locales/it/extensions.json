@@ -185,7 +185,6 @@
     "questionNum": "Domanda {{num}}",
     "answersCount": "{{count}} risposte",
     "skipped": "(Saltato)",
-
     "previousScreen": "Schermata precedente",
     "history": "Cronologia",
     "cannotPrevious": "Impossibile tornare alla schermata precedente",
@@ -287,7 +286,7 @@
     "opening": "Apertura",
     "closing": "Chiusura",
     "deleteConfirmTitle": "Convertire la domanda in scena?",
-    "deleteConfirmDesc": "Convertendo questa domanda il contenuto verrà sostituito dalla scena selezionata. L'operazione non può essere annullata automaticamente.",
+    "deleteConfirmDesc": "Convertendo questa domanda il suo contenuto verrà sostituito con la scena selezionata.",
     "cannotDeleteLastQuestion": "Lo show deve contenere almeno una domanda o sondaggio."
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "Convertire la domanda in scena?",
-      "description": "La conversione sostituirà il contenuto della domanda con la scena selezionata. Non può essere annullata.",
+      "description": "Convertendo questa domanda il suo contenuto verrà sostituito con la scena selezionata.",
       "confirm": "Converti in scena"
     },
     "cardKindLabel": "Tipo di scheda",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Esporta come Excel Tada (.xlsx)",
     "importShowPrompt": "Importa spettacolo (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "Animazione di ingresso",
     "description": "Riproduci una transizione quando appare questa domanda.",
@@ -450,5 +448,54 @@
     "previewQuestion": "Anteprima domanda",
     "previewOptionA": "Opzione A",
     "previewOptionB": "Opzione B"
+  },
+  "cardBackground": {
+    "title": "Sfondo scheda",
+    "useGameDefault": "Predefinito gioco",
+    "useCustom": "Immagine personalizzata",
+    "chooseImage": "Scegli sfondo",
+    "removeFromCard": "Rimuovi dalla scheda",
+    "fitLabel": "Adattamento",
+    "fitCover": "Copri",
+    "fitContain": "Contieni",
+    "overlayLabel": "Contrasto"
+  },
+  "cardAudio": {
+    "title": "Audio scheda",
+    "sceneTitle": "Audio scena",
+    "modeInherit": "Eredita",
+    "modeMute": "Muto",
+    "modeCustom": "Personalizzato",
+    "chooseAudio": "Scegli suono",
+    "removeFromCard": "Rimuovi dalla scheda",
+    "loop": "Ripeti",
+    "volume": "Volume",
+    "previewPlay": "Riproduci",
+    "previewStop": "Ferma"
+  },
+  "stageMotion": {
+    "title": "Animazioni di scena",
+    "slotQuestion": "Titolo e media",
+    "slotAnswers": "Schede risposta",
+    "slotBadges": "Badge tasti (1-5)",
+    "slotResults": "Rivelazione risultati",
+    "timingLabel": "Tempistica",
+    "simultaneous": "Insieme",
+    "sequential": "Uno alla volta",
+    "staggerLabel": "Scarto (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "Tutti i caricati",
+    "inThisShow": "In questo show",
+    "builtInSounds": "Suoni integrati",
+    "inUseWarning": "\"{{name}}\" è usato in una o più schede. Scollegarlo e cancellarlo definitivamente?",
+    "detachAndDelete": "Scollega ed elimina"
+  },
+  "stageFit": {
+    "warningTitle": "Avviso adattamento palco",
+    "questionTooLong": "Il testo della domanda ({{current}}/{{max}} car.) potrebbe apparire compatto su schermi 4:3.",
+    "answerTooLong": "La risposta #{{index}} ({{current}}/{{max}} car.) potrebbe andare a capo.",
+    "sceneTitleTooLong": "Il titolo ({{current}}/{{max}} car.) supera la lunghezza consigliata.",
+    "sceneSubtitleTooLong": "Il sottotitolo ({{current}}/{{max}} car.) supera la lunghezza consigliata."
   }
 }

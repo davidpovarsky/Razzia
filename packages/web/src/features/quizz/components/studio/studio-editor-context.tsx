@@ -3,6 +3,7 @@ import type { Question } from "@razzia/common/types/game"
 import {
   createDefaultRosterExtras,
   createDefaultQuizExtrasV2,
+  isQuestionCardBlankForConversion,
   type AnyQuizExtras,
   type QuizExtrasV2,
   type SceneConfig,
@@ -262,6 +263,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           perQuestion: options?.targetPerQuestion ?? prev.perQuestion,
           leaderboard: prev.leaderboard,
           authoring: (prev as QuizExtrasV2).authoring,
+          ...(prev.mediaCatalog ? { mediaCatalog: prev.mediaCatalog } : {}),
         }
 
         return v2
@@ -527,6 +529,12 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           0,
           Math.min(qIndex, nextQuestions.length - 1),
         )
+        const nextPerQuestion = extras?.perQuestion
+          ? { ...extras.perQuestion }
+          : undefined
+        if (nextPerQuestion && item.questionId in nextPerQuestion) {
+          delete nextPerQuestion[item.questionId]
+        }
 
         applyStudioMutation({
           nextQuestions,
@@ -535,6 +543,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           nextScenes,
           nextSelectedId: item.id,
           nextCurrentIndex,
+          nextPerQuestion,
         })
 
         return
@@ -646,12 +655,32 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         return
       }
 
-      // If converting a question to a scene, prompt confirmation dialog
+      // If converting a question to a scene, check if blank or populated
       if (
         selectedTimelineItem.kind === "question" &&
         newKind !== "quiz" &&
         newKind !== "survey"
       ) {
+        const questionCount = timeline.filter(
+          (entry) => entry.kind === "question",
+        ).length
+        if (questionCount <= 1) {
+          toast.error(t("extensions:timeline.cannotDeleteLastQuestion"))
+          return
+        }
+
+        const currentQuestions = getValues("questions")
+        const qIndex = questionIds.findIndex(
+          (id) => id === selectedTimelineItem.questionId,
+        )
+        const currentQ = qIndex >= 0 ? currentQuestions[qIndex] : undefined
+        const perQ = extras?.perQuestion?.[selectedTimelineItem.questionId]
+
+        if (isQuestionCardBlankForConversion(currentQ, perQ)) {
+          executeConversion(selectedTimelineItem, newKind)
+          return
+        }
+
         setPendingConversion({ from: selectedTimelineItem, toKind: newKind })
 
         return
@@ -659,7 +688,16 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
 
       executeConversion(selectedTimelineItem, newKind)
     },
-    [selectedTimelineItem, selectedKind, executeConversion],
+    [
+      selectedTimelineItem,
+      selectedKind,
+      timeline,
+      t,
+      getValues,
+      questionIds,
+      extras,
+      executeConversion,
+    ],
   )
 
   const confirmPendingConversion = useCallback(() => {

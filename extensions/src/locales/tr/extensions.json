@@ -185,7 +185,6 @@
     "questionNum": "Soru {{num}}",
     "answersCount": "{{count}} cevap",
     "skipped": "(Atlandı)",
-
     "previousScreen": "Önceki Ekran",
     "history": "Geçmiş",
     "cannotPrevious": "Önceki ekrana dönülemiyor",
@@ -287,7 +286,7 @@
     "opening": "Açılış",
     "closing": "Kapanış",
     "deleteConfirmTitle": "Soru sahneye dönüştürülsün mü?",
-    "deleteConfirmDesc": "Bu soruyu dönüştürmek, soru içeriğini seçilen sahneyle değiştirecektir. Bu işlem otomatik olarak geri alınamaz.",
+    "deleteConfirmDesc": "Bu soruyu dönüştürmek, soru içeriğini seçilen sahneyle değiştirecektir.",
     "cannotDeleteLastQuestion": "Gösteri en az bir soru veya anket içermelidir."
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "Soru Sahneye Dönüştürülsün mü?",
-      "description": "Bu soruyu dönüştürmek, içeriğini seçilen sahneyle değiştirecektir. Bu işlem geri alınamaz.",
+      "description": "Bu soruyu dönüştürmek, soru içeriğini seçilen sahneyle değiştirecektir.",
       "confirm": "Sahneye Dönüştür"
     },
     "cardKindLabel": "Kart Türü",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Tada Excel Olarak Dışa Aktar (.xlsx)",
     "importShowPrompt": "Gösteri İçe Aktar (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "Giriş Animasyonu",
     "description": "Bu soru göründüğünde bir giriş geçişi oynatın.",
@@ -450,5 +448,54 @@
     "previewQuestion": "Soru Önizlemesi",
     "previewOptionA": "Seçenek A",
     "previewOptionB": "Seçenek B"
+  },
+  "cardBackground": {
+    "title": "Kart Arka Planı",
+    "useGameDefault": "Oyun Varsayılanı",
+    "useCustom": "Özel Görsel",
+    "chooseImage": "Arka Plan Seç",
+    "removeFromCard": "Karttan Kaldır",
+    "fitLabel": "Görsel Sığdırma",
+    "fitCover": "Kapla",
+    "fitContain": "Sığdır",
+    "overlayLabel": "Kontrast Katmanı"
+  },
+  "cardAudio": {
+    "title": "Kart Ses Efektleri",
+    "sceneTitle": "Kart Sesi",
+    "modeInherit": "Varsayılan",
+    "modeMute": "Sessiz",
+    "modeCustom": "Özel",
+    "chooseAudio": "Ses Seç",
+    "removeFromCard": "Karttan Kaldır",
+    "loop": "Döngü",
+    "volume": "Ses Düzeyi",
+    "previewPlay": "Oynat",
+    "previewStop": "Durdur"
+  },
+  "stageMotion": {
+    "title": "Sahne Animasyonları",
+    "slotQuestion": "Soru Başlığı ve Medya",
+    "slotAnswers": "Yanıt Kartları",
+    "slotBadges": "Tuş Rozetleri (1-5)",
+    "slotResults": "Sonuç Gösterimi",
+    "timingLabel": "Zamanlama",
+    "simultaneous": "Hep Birlikte",
+    "sequential": "Sırayla",
+    "staggerLabel": "Gecikme (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "Tüm Yüklenenler",
+    "inThisShow": "Bu Şovda",
+    "builtInSounds": "Hazır Sesler",
+    "inUseWarning": "\"{{name}}\" bir veya daha fazla kartta kullanılıyor. Kartlardan ayırıp kalıcı olarak silinsin mi?",
+    "detachAndDelete": "Ayır ve Sil"
+  },
+  "stageFit": {
+    "warningTitle": "Sahne Sığdırma Uyarısı",
+    "questionTooLong": "Soru metni ({{current}}/{{max}} krk.) 4:3 ekranlarda sıkışık görünebilir.",
+    "answerTooLong": "Yanıt #{{index}} ({{current}}/{{max}} krk.) küçük ekranlarda alt satıra geçebilir.",
+    "sceneTitleTooLong": "Sahne başlığı ({{current}}/{{max}} krk.) önerilen uzunluğu aşıyor.",
+    "sceneSubtitleTooLong": "Alt başlık ({{current}}/{{max}} krk.) önerilen uzunluğu aşıyor."
   }
 }

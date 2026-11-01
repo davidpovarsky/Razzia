@@ -185,7 +185,6 @@
     "questionNum": "Câu hỏi {{num}}",
     "answersCount": "{{count}} câu trả lời",
     "skipped": "(Đã bỏ qua)",
-
     "previousScreen": "Màn hình trước",
     "history": "Lịch sử",
     "cannotPrevious": "Không thể quay lại màn hình trước",
@@ -287,7 +286,7 @@
     "opening": "Mở đầu",
     "closing": "Kết thúc",
     "deleteConfirmTitle": "Chuyển câu hỏi thành cảnh?",
-    "deleteConfirmDesc": "Chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng cảnh đã chọn. Thao tác này không thể hoàn tác tự động.",
+    "deleteConfirmDesc": "Chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng cảnh đã chọn.",
     "cannotDeleteLastQuestion": "Buổi biểu diễn phải có ít nhất một câu hỏi hoặc khảo sát."
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "Chuyển đổi câu hỏi thành phân cảnh?",
-      "description": "Việc chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng phân cảnh đã chọn. Thao tác này không thể hoàn tác.",
+      "description": "Chuyển đổi câu hỏi này sẽ thay thế nội dung câu hỏi bằng cảnh đã chọn.",
       "confirm": "Chuyển đổi thành phân cảnh"
     },
     "cardKindLabel": "Loại thẻ",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Xuất dưới dạng Excel Tada (.xlsx)",
     "importShowPrompt": "Nhập chương trình (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "Hiệu ứng xuất hiện",
     "description": "Phát hiệu ứng chuyển cảnh khi câu hỏi này xuất hiện.",
@@ -450,5 +448,54 @@
     "previewQuestion": "Xem trước câu hỏi",
     "previewOptionA": "Lựa chọn A",
     "previewOptionB": "Lựa chọn B"
+  },
+  "cardBackground": {
+    "title": "Hình nền thẻ",
+    "useGameDefault": "Mặc định trò chơi",
+    "useCustom": "Ảnh tùy chỉnh",
+    "chooseImage": "Chọn hình nền",
+    "removeFromCard": "Gỡ khỏi thẻ",
+    "fitLabel": "Kiểu hiển thị",
+    "fitCover": "Phủ kín",
+    "fitContain": "Vừa khung",
+    "overlayLabel": "Lớp phủ tương phản"
+  },
+  "cardAudio": {
+    "title": "Âm thanh thẻ",
+    "sceneTitle": "Âm thanh cảnh",
+    "modeInherit": "Kế thừa",
+    "modeMute": "Tắt tiếng",
+    "modeCustom": "Tùy chỉnh",
+    "chooseAudio": "Chọn âm thanh",
+    "removeFromCard": "Gỡ khỏi thẻ",
+    "loop": "Lặp lại",
+    "volume": "Âm lượng",
+    "previewPlay": "Phát",
+    "previewStop": "Dừng"
+  },
+  "stageMotion": {
+    "title": "Hiệu ứng sân khấu",
+    "slotQuestion": "Tiêu đề & phương tiện",
+    "slotAnswers": "Thẻ đáp án",
+    "slotBadges": "Nhãn phím (1-5)",
+    "slotResults": "Công bố kết quả",
+    "timingLabel": "Thời gian",
+    "simultaneous": "Đồng thời",
+    "sequential": "Lần lượt",
+    "staggerLabel": "Độ trễ (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "Tất cả đã tải lên",
+    "inThisShow": "Trong chương trình này",
+    "builtInSounds": "Âm thanh có sẵn",
+    "inUseWarning": "\"{{name}}\" đang được sử dụng. Gỡ khỏi tất cả thẻ và xóa vĩnh viễn?",
+    "detachAndDelete": "Gỡ & Xóa"
+  },
+  "stageFit": {
+    "warningTitle": "Lưu ý hiển thị sân khấu",
+    "questionTooLong": "Nội dung câu hỏi ({{current}}/{{max}} ký tự) có thể hiển thị nhỏ trên màn hình 4:3.",
+    "answerTooLong": "Đáp án #{{index}} ({{current}}/{{max}} ký tự) có thể xuống dòng trên màn hình nhỏ.",
+    "sceneTitleTooLong": "Tiêu đề cảnh ({{current}}/{{max}} ký tự) vượt quá độ dài khuyến nghị.",
+    "sceneSubtitleTooLong": "Phụ đề cảnh ({{current}}/{{max}} ký tự) vượt quá độ dài khuyến nghị."
   }
 }

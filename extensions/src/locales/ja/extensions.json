@@ -185,7 +185,6 @@
     "questionNum": "第{{num}}問",
     "answersCount": "{{count}}件の回答",
     "skipped": "(スキップ済み)",
-
     "previousScreen": "前の画面",
     "history": "履歴",
     "cannotPrevious": "前の画面に戻れません",
@@ -287,7 +286,7 @@
     "opening": "オープニング",
     "closing": "エンディング",
     "deleteConfirmTitle": "問題をシーンに変換しますか？",
-    "deleteConfirmDesc": "この問題を変換すると、問題の内容が選択したシーンに置き換わります。この操作は自動で元に戻せません。",
+    "deleteConfirmDesc": "この質問を変換すると、質問内容が選択したシーンに置き換わります。",
     "cannotDeleteLastQuestion": "ショーには少なくとも1つの問題またはアンケートが必要です。"
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "質問をシーンに変換しますか？",
-      "description": "この質問を変換すると、内容が選択したシーンに置き換わります。この操作は自動で元に戻せません。",
+      "description": "この質問を変換すると、質問内容が選択したシーンに置き換わります。",
       "confirm": "シーンに変換"
     },
     "cardKindLabel": "カードの種類",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Tada Excelとしてエクスポート (.xlsx)",
     "importShowPrompt": "ショーをインポート (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "登場アニメーション",
     "description": "この問題が表示されるときにアニメーションを再生します。",
@@ -450,5 +448,54 @@
     "previewQuestion": "問題プレビュー",
     "previewOptionA": "選択肢 A",
     "previewOptionB": "選択肢 B"
+  },
+  "cardBackground": {
+    "title": "カード背景",
+    "useGameDefault": "ゲームのデフォルト",
+    "useCustom": "カスタム画像",
+    "chooseImage": "背景を選択",
+    "removeFromCard": "カードから削除",
+    "fitLabel": "表示モード",
+    "fitCover": "カバー",
+    "fitContain": "全体表示",
+    "overlayLabel": "コントラスト調整"
+  },
+  "cardAudio": {
+    "title": "カード効果音・BGM",
+    "sceneTitle": "シーン音声",
+    "modeInherit": "継承",
+    "modeMute": "ミュート",
+    "modeCustom": "カスタム",
+    "chooseAudio": "サウンドを選択",
+    "removeFromCard": "カードから削除",
+    "loop": "ループ",
+    "volume": "音量",
+    "previewPlay": "再生",
+    "previewStop": "停止"
+  },
+  "stageMotion": {
+    "title": "ステージアニメーション",
+    "slotQuestion": "質問タイトルとメディア",
+    "slotAnswers": "回答カード",
+    "slotBadges": "番号バッジ (1-5)",
+    "slotResults": "結果発表",
+    "timingLabel": "タイミング",
+    "simultaneous": "同時",
+    "sequential": "順番に表示",
+    "staggerLabel": "間隔 (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "アップロード済み",
+    "inThisShow": "このショーで使用",
+    "builtInSounds": "内蔵サウンド",
+    "inUseWarning": "\"{{name}}\" はカードで使用中です。すべてのカードから解除して完全に削除しますか？",
+    "detachAndDelete": "解除して削除"
+  },
+  "stageFit": {
+    "warningTitle": "ステージ表示に関する注意",
+    "questionTooLong": "質問文 ({{current}}/{{max}}文字) が4:3画面で小さく表示される可能性があります。",
+    "answerTooLong": "回答 #{{index}} ({{current}}/{{max}}文字) が折り返される可能性があります。",
+    "sceneTitleTooLong": "タイトル ({{current}}/{{max}}文字) が推奨文字数を超えています。",
+    "sceneSubtitleTooLong": "サブタイトル ({{current}}/{{max}}文字) が推奨文字数を超えています。"
   }
 }

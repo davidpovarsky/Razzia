@@ -293,16 +293,16 @@ const QuizzEditorHeader = () => {
   ]
 
   return (
-    <header className="bg-background z-20 flex flex-col border-b border-border shadow-sm">
+    <header className="bg-background z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b border-border shadow-sm">
       {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
-      <div className="flex h-14 w-full items-center justify-between gap-4 px-4">
+      <div className="flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
         {/* Title input */}
-        <div className="flex shrink-0 items-center gap-4">
+        <div className="flex min-w-0 shrink-0 items-center gap-2 sm:gap-4">
           <Controller
             control={control}
             name="subject"
             render={({ field, fieldState }) => (
-              <div className="flex items-center gap-4">
+              <div className="flex min-w-0 items-center gap-2 sm:gap-4">
                 <Input
                   {...field}
                   variant="sm"
@@ -311,7 +311,7 @@ const QuizzEditorHeader = () => {
                     fieldState.invalid ? `${field.name}-error` : undefined
                   }
                   className={clsx(
-                    "w-44 sm:w-56 shrink-0",
+                    "w-32 sm:w-48 md:w-56 shrink-0",
                     fieldState.invalid && "ring-2 ring-red-500",
                   )}
                   placeholder={t("quizz:titleQuizzPlaceholder")}
@@ -326,13 +326,13 @@ const QuizzEditorHeader = () => {
         </div>
 
         {/* Center: Studio Screen Navigation Tabs */}
-        <div className="bg-accent/80 flex h-8 items-center rounded-lg p-0.5 shrink-0">
+        <div className="bg-accent/80 scrollbar-none flex h-8 max-w-full shrink-0 items-center overflow-x-auto rounded-lg p-0.5">
           <button
             type="button"
             data-testid="studio-tab-questions"
             onClick={() => setActiveTab("questions")}
             className={clsx(
-              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              "flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
               activeTab === "questions"
                 ? "bg-background text-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
@@ -345,7 +345,7 @@ const QuizzEditorHeader = () => {
             data-testid="studio-tab-participants"
             onClick={() => setActiveTab("participants")}
             className={clsx(
-              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              "flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
               activeTab === "participants"
                 ? "bg-background text-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
@@ -359,7 +359,7 @@ const QuizzEditorHeader = () => {
             data-testid="studio-tab-settings"
             onClick={() => setActiveTab("settings")}
             className={clsx(
-              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              "flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
               activeTab === "settings"
                 ? "bg-background text-foreground shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
@@ -373,7 +373,7 @@ const QuizzEditorHeader = () => {
             data-testid="studio-tab-launch"
             onClick={() => setActiveTab("launch")}
             className={clsx(
-              "flex h-full items-center gap-1.5 rounded-md px-3 text-xs font-semibold transition-colors",
+              "flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
               activeTab === "launch"
                 ? "bg-primary text-white shadow-xs"
                 : "text-muted-foreground hover:text-foreground",
@@ -384,11 +384,11 @@ const QuizzEditorHeader = () => {
           </button>
         </div>
 
-        {/* Right: Exit and Save Buttons (pinned, shrink-0, always visible across 1024-1920 viewports) */}
-        <div className="flex shrink-0 items-center gap-2">
+        {/* Right: Exit and Save Buttons */}
+        <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Button
             type="button"
-            className="text-md bg-accent text-accent-foreground px-4 py-2 font-semibold"
+            className="bg-accent text-accent-foreground px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2 sm:text-md"
             onClick={handleExit}
             data-testid="editor-exit-btn"
           >
@@ -396,7 +396,7 @@ const QuizzEditorHeader = () => {
           </Button>
           <Button
             type="button"
-            className="bg-primary text-md px-4 py-2"
+            className="bg-primary px-2.5 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-md"
             onClick={handleSave}
             data-testid="editor-save-btn"
           >

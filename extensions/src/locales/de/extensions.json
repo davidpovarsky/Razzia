@@ -185,7 +185,6 @@
     "questionNum": "Frage {{num}}",
     "answersCount": "{{count}} Antworten",
     "skipped": "(Übersprungen)",
-
     "previousScreen": "Vorheriger Bildschirm",
     "history": "Verlauf",
     "cannotPrevious": "Zurückgehen nicht möglich",
@@ -287,7 +286,7 @@
     "opening": "Eröffnung",
     "closing": "Abschluss",
     "deleteConfirmTitle": "Frage in Szene umwandeln?",
-    "deleteConfirmDesc": "Das Umwandeln dieser Frage ersetzt ihren Inhalt durch die gewählte Szene. Dies kann nicht rückgängig gemacht werden.",
+    "deleteConfirmDesc": "Durch das Umwandeln dieser Frage wird ihr Inhalt durch die gewählte Szene ersetzt.",
     "cannotDeleteLastQuestion": "Die Show muss mindestens eine Frage oder Umfrage enthalten."
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "Frage in Szene umwandeln?",
-      "description": "Das Umwandeln dieser Frage ersetzt ihren Inhalt durch die gewählte Szene. Dies kann nicht rückgängig gemacht werden.",
+      "description": "Durch das Umwandeln dieser Frage wird ihr Inhalt durch die gewählte Szene ersetzt.",
       "confirm": "In Szene umwandeln"
     },
     "cardKindLabel": "Kartentyp",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Als Tada-Excel exportieren (.xlsx)",
     "importShowPrompt": "Show importieren (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "Eingangsanimation",
     "description": "Eingangsübergang anzeigen, wenn diese Frage erscheint.",
@@ -450,5 +448,54 @@
     "previewQuestion": "Fragenvorschau",
     "previewOptionA": "Option A",
     "previewOptionB": "Option B"
+  },
+  "cardBackground": {
+    "title": "Kartenhintergrund",
+    "useGameDefault": "Spielstandard",
+    "useCustom": "Eigenes Bild",
+    "chooseImage": "Hintergrund wählen",
+    "removeFromCard": "Von Karte entfernen",
+    "fitLabel": "Bildanpassung",
+    "fitCover": "Füllen",
+    "fitContain": "Einpassen",
+    "overlayLabel": "Kontrast-Overlay"
+  },
+  "cardAudio": {
+    "title": "Karten-Audio",
+    "sceneTitle": "Szenen-Audio",
+    "modeInherit": "Standard",
+    "modeMute": "Stumm",
+    "modeCustom": "Eigener Ton",
+    "chooseAudio": "Ton wählen",
+    "removeFromCard": "Von Karte entfernen",
+    "loop": "Schleife",
+    "volume": "Lautstärke",
+    "previewPlay": "Abspielen",
+    "previewStop": "Stopp"
+  },
+  "stageMotion": {
+    "title": "Bühnenanimationen",
+    "slotQuestion": "Fragetitel & Medien",
+    "slotAnswers": "Antwortkarten",
+    "slotBadges": "Tasten-Badges (1-5)",
+    "slotResults": "Ergebnisanzeige",
+    "timingLabel": "Timing",
+    "simultaneous": "Gleichzeitig",
+    "sequential": "Nacheinander",
+    "staggerLabel": "Verzögerung (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "Alle Uploads",
+    "inThisShow": "In dieser Show",
+    "builtInSounds": "Standardtöne",
+    "inUseWarning": "\"{{name}}\" wird von Karten oder Shows verwendet. Überall trennen und endgültig löschen?",
+    "detachAndDelete": "Trennen & Löschen"
+  },
+  "stageFit": {
+    "warningTitle": "Bühnen-Hinweis",
+    "questionTooLong": "Fragetext ({{current}}/{{max}} Zeichen) wird auf 4:3-Bildschirmen kompakter dargestellt.",
+    "answerTooLong": "Antwort #{{index}} ({{current}}/{{max}} Zeichen) bricht auf kleinen Bildschirmen um.",
+    "sceneTitleTooLong": "Szenentitel ({{current}}/{{max}} Zeichen) überschreitet die empfohlene Länge.",
+    "sceneSubtitleTooLong": "Untertitel ({{current}}/{{max}} Zeichen) überschreitet die empfohlene Länge."
   }
 }

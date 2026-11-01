@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@razzia/web/components/Select"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
-import { UPLOAD_ACCEPT } from "@razzia/web/features/quizz/hooks/useUploadMedia"
+import { getUploadAccept } from "@razzia/web/features/quizz/hooks/useUploadMedia"
 import { LayoutGrid, List, Search, Upload } from "lucide-react"
 import type { ChangeEvent } from "react"
 import { useTranslation } from "react-i18next"
@@ -123,7 +123,7 @@ const MediaLibraryToolbar = ({
         <input
           type="file"
           multiple
-          accept={UPLOAD_ACCEPT}
+          accept={getUploadAccept(acceptType)}
           className="hidden"
           onChange={handleUpload}
         />

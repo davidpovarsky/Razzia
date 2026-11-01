@@ -185,7 +185,6 @@
     "questionNum": "Question {{num}}",
     "answersCount": "{{count}} answers",
     "skipped": "(Skipped)",
-
     "previousScreen": "Previous Screen",
     "history": "History",
     "cannotPrevious": "Cannot navigate to previous screen",
@@ -287,7 +286,7 @@
     "opening": "Opening",
     "closing": "Closing",
     "deleteConfirmTitle": "Convert Question to Scene?",
-    "deleteConfirmDesc": "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
+    "deleteConfirmDesc": "Converting this question will replace its question content with the selected scene.",
     "cannotDeleteLastQuestion": "The show must contain at least one question or survey."
   },
   "studio": {
@@ -345,7 +344,7 @@
     },
     "convert": {
       "title": "Convert Question to Scene?",
-      "description": "Converting this question will replace its question content with the selected scene. This cannot be undone automatically.",
+      "description": "Converting this question will replace its question content with the selected scene.",
       "confirm": "Convert to Scene"
     },
     "cardKindLabel": "Card Type",
@@ -432,7 +431,6 @@
     "exportTadaXlsx": "Export as Tada Excel (.xlsx)",
     "importShowPrompt": "Import Show (.json, .xlsx)"
   },
-  
   "entrance": {
     "title": "Entrance Animation",
     "description": "Play an entrance transition when this question appears.",
@@ -450,5 +448,54 @@
     "previewQuestion": "Question Preview",
     "previewOptionA": "Option A",
     "previewOptionB": "Option B"
+  },
+  "cardBackground": {
+    "title": "Card Background",
+    "useGameDefault": "Game Default",
+    "useCustom": "Custom Image",
+    "chooseImage": "Choose Background",
+    "removeFromCard": "Remove from Card",
+    "fitLabel": "Image Fit",
+    "fitCover": "Cover",
+    "fitContain": "Contain",
+    "overlayLabel": "Contrast Overlay"
+  },
+  "cardAudio": {
+    "title": "Card Audio Cues",
+    "sceneTitle": "Card Audio",
+    "modeInherit": "Inherit",
+    "modeMute": "Mute",
+    "modeCustom": "Custom",
+    "chooseAudio": "Choose Sound",
+    "removeFromCard": "Remove from Card",
+    "loop": "Loop",
+    "volume": "Volume",
+    "previewPlay": "Play",
+    "previewStop": "Stop"
+  },
+  "stageMotion": {
+    "title": "Stage Animations",
+    "slotQuestion": "Question Title & Media",
+    "slotAnswers": "Answer Cards",
+    "slotBadges": "Key Badges (1-5)",
+    "slotResults": "Results Reveal",
+    "timingLabel": "Timing",
+    "simultaneous": "All Together",
+    "sequential": "One by One",
+    "staggerLabel": "Stagger (ms)"
+  },
+  "mediaLibrary": {
+    "allUploaded": "All Uploaded",
+    "inThisShow": "In This Show",
+    "builtInSounds": "Built-in Sounds",
+    "inUseWarning": "\"{{name}}\" is currently used by one or more cards or shows. Detach it from all cards and delete permanently?",
+    "detachAndDelete": "Detach & Delete"
+  },
+  "stageFit": {
+    "warningTitle": "Stage Fit Notice",
+    "questionTooLong": "Question text ({{current}}/{{max}} chars) may appear compact on 4:3 displays.",
+    "answerTooLong": "Answer #{{index}} ({{current}}/{{max}} chars) may wrap on compact screens.",
+    "sceneTitleTooLong": "Scene title ({{current}}/{{max}} chars) exceeds recommended stage length.",
+    "sceneSubtitleTooLong": "Scene subtitle ({{current}}/{{max}} chars) exceeds recommended stage length."
   }
 }

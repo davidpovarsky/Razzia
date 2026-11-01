@@ -25,7 +25,7 @@ const StudioContent = () => {
   // ActiveTab === "questions"
   if (!selectedTimelineItem) {
     return (
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden lg:flex-row lg:overflow-hidden">
         <QuizzEditorSidebar />
         <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground text-sm font-medium" />
       </div>
@@ -33,7 +33,7 @@ const StudioContent = () => {
   }
 
   return (
-    <div className="flex flex-1 overflow-hidden">
+    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden lg:flex-row lg:overflow-hidden">
       <QuizzEditorSidebar />
       {selectedTimelineItem.kind === "question" ? (
         <QuestionEditor />
@@ -46,7 +46,7 @@ const StudioContent = () => {
 
 export const StudioShell = () => (
   <StudioEditorProvider>
-    <div className="bg-muted relative flex h-svh flex-col">
+    <div className="bg-muted relative flex h-svh max-w-full flex-col overflow-x-hidden">
       <QuizzEditorHeader />
       <StudioContent />
     </div>

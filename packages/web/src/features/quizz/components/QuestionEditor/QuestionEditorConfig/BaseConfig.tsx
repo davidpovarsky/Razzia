@@ -19,6 +19,8 @@ import { QUESTION_REGISTRY } from "@razzia/web/features/questions"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import ConfigNumberInput from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigNumberInput"
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
+import CardAudioConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig"
+import CardBackgroundConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig"
 import QuestionEntranceConfig from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { ArrowBigDownDash, Clock, ListChecks, Star, Timer } from "lucide-react"
@@ -182,7 +184,11 @@ const BaseConfig = () => {
         </ConfigField>
       </ConfigSection>
 
-      <QuestionEntranceConfig />
+      <CardBackgroundConfig />
+
+      <CardAudioConfig kind="question" />
+
+      <QuestionEntranceConfig kind="question" />
     </>
   )
 }
