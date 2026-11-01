@@ -291,7 +291,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   return (
     <div className="flex min-h-0 h-full w-full flex-1 flex-col justify-between overflow-hidden px-3 py-2 sm:p-4">
       <div className="mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden">
-        <h2 className="max-w-4xl shrink-0 text-center text-xl font-black tracking-tight text-white drop-shadow-2xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-2">
+        <h2 className="max-w-4xl shrink-0 text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-2xl break-words leading-tight">
           {question}
         </h2>
 

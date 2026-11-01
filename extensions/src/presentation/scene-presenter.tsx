@@ -19,6 +19,7 @@ import {
   processInterludeSkip,
   type InterludeSkipState,
 } from "./interlude-state"
+import { useStageFit } from "./stage-fit"
 import {
   AlertTriangle,
   Award,
@@ -228,6 +229,8 @@ export const ScenePresenter = ({
     }
   }
 
+  const { isCompact, isUltraCompact, isNarrowMobile, isPortrait, availableHeight } = useStageFit()
+
   const remainingSeconds = Math.max(0, Math.ceil(remainingMs / 1000))
   const progressRatio = Math.max(0, Math.min(1, remainingMs / (durationMs || 1)))
   const advanceMode = (activeScene && "advance" in activeScene ? activeScene.advance : step?.advance) ?? "auto"
@@ -242,7 +245,12 @@ export const ScenePresenter = ({
     <div
       key={sceneAnimationKey}
       className={clsx(
-        "relative flex min-h-0 max-h-full w-full max-w-6xl flex-1 flex-col items-center justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-black/60 p-3 sm:p-6 md:p-8 text-center text-white shadow-2xl backdrop-blur-xl",
+        "relative flex min-h-0 max-h-full w-full max-w-6xl flex-1 flex-col items-center justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-black/60 text-center text-white shadow-2xl backdrop-blur-xl",
+        isUltraCompact || availableHeight <= 600
+          ? "p-1.5 sm:p-2.5"
+          : isCompact || availableHeight <= 750
+            ? "p-2.5 sm:p-4"
+            : "p-3 sm:p-6 md:p-8",
         containerPreset !== "none" && `tada-entrance-${containerPreset}`,
         className,
       )}
@@ -470,8 +478,25 @@ export const ScenePresenter = ({
                   CANONICAL_ANSWER_COLORS[idx] ?? "#334155"
 
                 return (
-                  <div className="flex min-h-0 w-full flex-col justify-between overflow-hidden rounded-2xl border border-white/10 bg-black/60 p-2.5 sm:p-4 shadow-2xl backdrop-blur-md">
-                    <p className="mb-1 sm:mb-2 text-center text-base font-black text-white sm:text-xl md:text-2xl line-clamp-1">
+                  <div
+                    className={clsx(
+                      "flex min-h-0 w-full flex-col justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-md",
+                      isUltraCompact || availableHeight <= 600
+                        ? "p-1.5 sm:p-2"
+                        : "p-2.5 sm:p-4",
+                    )}
+                  >
+                    <p
+                      data-testid="scene-question-text"
+                      className={clsx(
+                        "text-center font-black text-white break-words leading-snug",
+                        isUltraCompact || isNarrowMobile
+                          ? "text-xs sm:text-sm mb-0.5"
+                          : isCompact || availableHeight <= 600
+                            ? "text-sm sm:text-base mb-1"
+                            : "text-base sm:text-xl md:text-2xl mb-1 sm:mb-2",
+                      )}
+                    >
                       {interimResults.questionText}
                     </p>
 
@@ -479,25 +504,40 @@ export const ScenePresenter = ({
                     {isZeroVotes ? (
                       <div
                         data-testid="no-votes-message"
-                        className="my-1 rounded-xl border border-white/10 bg-black/40 px-3 py-1.5 text-center text-xs sm:text-sm font-semibold text-white/70"
+                        className={clsx(
+                          "rounded-xl border border-white/10 bg-black/40 text-center font-semibold text-white/70",
+                          isUltraCompact || availableHeight <= 600
+                            ? "my-0.5 px-2 py-0.5 text-[10px] sm:text-xs"
+                            : "my-1 px-3 py-1.5 text-xs sm:text-sm",
+                        )}
                       >
                         No votes yet
                       </div>
                     ) : isTie ? (
                       <div
                         data-testid="spotlight-tie"
-                        className="my-1 flex items-center justify-center gap-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-1"
+                        className={clsx(
+                          "flex items-center justify-center gap-1.5 rounded-xl border border-amber-400/40 bg-amber-400/10",
+                          isUltraCompact || availableHeight <= 600
+                            ? "my-0.5 px-2 py-0.5"
+                            : "my-1 px-3 py-1",
+                        )}
                       >
-                        <span className="rounded-full bg-amber-400/20 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wider text-amber-300 truncate">
+                        <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[10px] sm:text-[11px] font-bold uppercase tracking-wider text-amber-300 break-words">
                           Tie / Co-leaders ({winners.map((o) => o.label).join(", ")})
                         </span>
                       </div>
                     ) : (
                       <div
                         data-testid="spotlight-winner"
-                        className="my-1 flex items-center justify-center gap-2 rounded-xl border border-amber-400/50 bg-amber-400/10 px-3 py-1"
+                        className={clsx(
+                          "flex items-center justify-center gap-1.5 rounded-xl border border-amber-400/50 bg-amber-400/10",
+                          isUltraCompact || availableHeight <= 600
+                            ? "my-0.5 px-2 py-0.5"
+                            : "my-1 px-3 py-1",
+                        )}
                       >
-                        <span className="rounded-full bg-amber-400/20 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-amber-300 truncate">
+                        <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[10px] sm:text-[11px] font-black uppercase tracking-wider text-amber-300 break-words">
                           Leading Choice: {winners[0]?.label}
                         </span>
                       </div>
@@ -505,11 +545,23 @@ export const ScenePresenter = ({
 
                     {/* Results Composition: Dominant Hero + Ranked Runners-up */}
                     {!isZeroVotes ? (
-                      <div className="flex min-h-0 flex-col items-center justify-center w-full my-1.5 overflow-hidden">
+                      <div
+                        className={clsx(
+                          "flex min-h-0 flex-col items-center justify-center w-full overflow-hidden",
+                          isUltraCompact || availableHeight <= 600
+                            ? "my-0.5"
+                            : "my-1.5",
+                        )}
+                      >
                         {/* Dominant Centered Hero Winner(s) */}
                         <div
                           data-testid="results-hero-section"
-                          className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full max-w-4xl mb-2"
+                          className={clsx(
+                            "flex flex-wrap items-center justify-center w-full max-w-4xl",
+                            isUltraCompact || availableHeight <= 600
+                              ? "gap-1.5 mb-1"
+                              : "gap-2 sm:gap-4 mb-2",
+                          )}
                         >
                           {winners.map((winner, wIdx) => {
                             const index = winner.answerIndex
@@ -529,7 +581,10 @@ export const ScenePresenter = ({
                                   backgroundColor: cardBg,
                                 })}
                                 className={clsx(
-                                  "relative flex flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border-2 border-amber-300 ring-2 sm:ring-4 ring-amber-400 p-2 sm:p-3 text-center shadow-2xl shadow-amber-500/30 transition-all duration-500",
+                                  "relative flex flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border-2 border-amber-300 ring-2 ring-amber-400 text-center shadow-2xl shadow-amber-500/30 transition-all duration-500",
+                                  isUltraCompact || availableHeight <= 600
+                                    ? "p-1 sm:p-1.5"
+                                    : "p-2 sm:p-3 sm:ring-4",
                                   resultsSlot.preset !== "none" &&
                                     `tada-entrance-${resultsSlot.preset}`,
                                   winners.length === 1
@@ -537,10 +592,13 @@ export const ScenePresenter = ({
                                     : "w-[calc(50%-0.5rem)] max-w-xs sm:max-w-sm",
                                 )}
                               >
-                                <div className="flex w-full items-center justify-between gap-1.5 mb-1 z-10">
+                                <div className="flex w-full items-center justify-between gap-1 mb-0.5 z-10">
                                   <span
                                     className={clsx(
-                                      "flex size-6 sm:size-7 shrink-0 items-center justify-center rounded-lg bg-black/35 text-white font-black text-xs sm:text-sm border border-white/25 shadow-md",
+                                      "flex shrink-0 items-center justify-center rounded-lg bg-black/35 text-white font-black border border-white/25 shadow-md",
+                                      isUltraCompact || availableHeight <= 600
+                                        ? "size-5 text-[10px]"
+                                        : "size-6 sm:size-7 text-xs sm:text-sm",
                                       badgeSlot.preset !== "none" &&
                                         `tada-entrance-${badgeSlot.preset}`,
                                     )}
@@ -549,12 +607,12 @@ export const ScenePresenter = ({
                                     {index + 1}
                                   </span>
 
-                                  <span className="flex items-center gap-1 rounded-full bg-amber-400 px-2 sm:px-3 py-0.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-black shadow-lg">
-                                    <Trophy className="size-3.5 sm:size-4 fill-black" />
+                                  <span className="flex items-center gap-1 rounded-full bg-amber-400 px-1.5 sm:px-2.5 py-0.5 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-black shadow-lg">
+                                    <Trophy className="size-3 sm:size-3.5 fill-black" />
                                     <span>{isTie ? "Co-leader" : "Leader"}</span>
                                   </span>
 
-                                  <div className="flex items-center gap-1 rounded-full bg-black/35 px-2 py-0.5 text-[10px] sm:text-xs font-mono font-bold text-white shadow-md">
+                                  <div className="flex items-center gap-1 rounded-full bg-black/35 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-mono font-bold text-white shadow-md">
                                     <span>{winner.percentage}%</span>
                                     <span className="text-white/80">
                                       ({winner.count} {winner.count === 1 ? "vote" : "votes"})
@@ -566,8 +624,16 @@ export const ScenePresenter = ({
                                   className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
                                   style={{
                                     backgroundColor: cardBg,
-                                    height: "clamp(48px, 14vh, 140px)",
-                                    maxHeight: "clamp(48px, 14vh, 140px)",
+                                    height: isUltraCompact
+                                      ? "clamp(28px, 6vh, 44px)"
+                                      : isCompact || availableHeight <= 650
+                                        ? "clamp(34px, 8vh, 56px)"
+                                        : "clamp(48px, 14vh, 140px)",
+                                    maxHeight: isUltraCompact
+                                      ? "clamp(28px, 6vh, 44px)"
+                                      : isCompact || availableHeight <= 650
+                                        ? "clamp(34px, 8vh, 56px)"
+                                        : "clamp(48px, 14vh, 140px)",
                                   }}
                                 >
                                   {winner.imageUrl && (
@@ -575,17 +641,17 @@ export const ScenePresenter = ({
                                       src={winner.imageUrl}
                                       alt={winner.alt || winner.label}
                                       data-testid="winner-image"
-                                      className="h-full w-full object-contain p-1 rounded-lg"
+                                      className="h-full w-full object-contain p-0.5 sm:p-1 rounded-lg"
                                       loading="lazy"
                                     />
                                   )}
 
-                                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-1 text-center">
-                                    <div className="flex items-baseline justify-center gap-1.5 text-white">
-                                      <span className="text-base sm:text-xl font-black drop-shadow-md">
+                                  <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-0.5 sm:p-1 text-center">
+                                    <div className="flex items-baseline justify-center gap-1 text-white">
+                                      <span className="text-sm sm:text-base md:text-xl font-black drop-shadow-md">
                                         {winner.percentage}%
                                       </span>
-                                      <span className="text-[10px] sm:text-xs font-semibold text-white/90">
+                                      <span className="text-[9px] sm:text-[10px] font-semibold text-white/90">
                                         ({winner.count} {winner.count === 1 ? "vote" : "votes"})
                                       </span>
                                     </div>
@@ -594,12 +660,17 @@ export const ScenePresenter = ({
 
                                 <span
                                   data-testid="winner-caption"
-                                  className="mt-1 w-full text-center font-black text-white text-xs sm:text-sm md:text-base line-clamp-1 drop-shadow-md"
+                                  className={clsx(
+                                    "mt-0.5 w-full text-center font-black text-white break-words leading-tight drop-shadow-md",
+                                    isUltraCompact || availableHeight <= 600
+                                      ? "text-[10px] sm:text-xs"
+                                      : "text-xs sm:text-sm md:text-base",
+                                  )}
                                 >
                                   {winner.label}
                                 </span>
 
-                                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25">
+                                <div className="mt-0.5 h-1 sm:h-1.5 w-full overflow-hidden rounded-full bg-white/25">
                                   <div
                                     className="h-full rounded-full bg-amber-400 transition-all duration-700 ease-out"
                                     style={{
@@ -616,7 +687,12 @@ export const ScenePresenter = ({
                         {runnersUp.length > 0 && (
                           <div
                             data-testid="results-runners-up-section"
-                            className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2.5 w-full max-w-4xl"
+                            className={clsx(
+                              "grid grid-cols-2 sm:grid-cols-4 w-full max-w-4xl",
+                              isUltraCompact || availableHeight <= 600
+                                ? "gap-1"
+                                : "gap-1.5 sm:gap-2.5",
+                            )}
                           >
                             {runnersUp.map((runner, rIdx) => {
                               const index = runner.answerIndex
@@ -637,7 +713,10 @@ export const ScenePresenter = ({
                                     backgroundColor: cardBg,
                                   })}
                                   className={clsx(
-                                    "relative flex flex-col items-center justify-between overflow-hidden rounded-lg sm:rounded-xl border border-black/20 p-1.5 sm:p-2 text-center shadow-lg opacity-95 transition-all duration-300",
+                                    "relative flex flex-col items-center justify-between overflow-hidden rounded-lg sm:rounded-xl border border-black/20 text-center shadow-lg opacity-95 transition-all duration-300",
+                                    isUltraCompact || availableHeight <= 600
+                                      ? "p-1"
+                                      : "p-1.5 sm:p-2",
                                     resultsSlot.preset !== "none" &&
                                       `tada-entrance-${resultsSlot.preset}`,
                                   )}
@@ -645,7 +724,10 @@ export const ScenePresenter = ({
                                   <div className="flex w-full items-center justify-between gap-1 mb-0.5 z-10">
                                     <span
                                       className={clsx(
-                                        "flex size-5 sm:size-6 shrink-0 items-center justify-center rounded-md bg-black/35 text-white font-black text-[10px] sm:text-xs border border-white/20 shadow-md",
+                                        "flex shrink-0 items-center justify-center rounded-md bg-black/35 text-white font-black border border-white/20 shadow-md",
+                                        isUltraCompact || availableHeight <= 600
+                                          ? "size-4 text-[9px]"
+                                          : "size-5 sm:size-6 text-[10px] sm:text-xs",
                                         badgeSlot.preset !== "none" &&
                                           `tada-entrance-${badgeSlot.preset}`,
                                       )}
@@ -653,7 +735,7 @@ export const ScenePresenter = ({
                                     >
                                       {index + 1}
                                     </span>
-                                    <span className="text-[10px] font-mono font-bold text-white bg-black/35 px-1.5 py-0.5 rounded-full">
+                                    <span className="text-[9px] sm:text-[10px] font-mono font-bold text-white bg-black/35 px-1 py-0.5 rounded-full">
                                       {runner.count} {runner.count === 1 ? "vote" : "votes"}
                                     </span>
                                   </div>
@@ -662,8 +744,16 @@ export const ScenePresenter = ({
                                     className="relative flex w-full items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
                                     style={{
                                       backgroundColor: cardBg,
-                                      height: "clamp(36px, 9vh, 80px)",
-                                      maxHeight: "clamp(36px, 9vh, 80px)",
+                                      height: isUltraCompact
+                                        ? "clamp(18px, 4.5vh, 28px)"
+                                        : isCompact || availableHeight <= 650
+                                          ? "clamp(22px, 5.5vh, 36px)"
+                                          : "clamp(36px, 9vh, 80px)",
+                                      maxHeight: isUltraCompact
+                                        ? "clamp(18px, 4.5vh, 28px)"
+                                        : isCompact || availableHeight <= 650
+                                          ? "clamp(22px, 5.5vh, 36px)"
+                                          : "clamp(36px, 9vh, 80px)",
                                     }}
                                   >
                                     {runner.imageUrl && (
@@ -675,17 +765,17 @@ export const ScenePresenter = ({
                                       />
                                     )}
                                     <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-0.5 text-center">
-                                      <span className="text-xs sm:text-sm font-black text-white drop-shadow-md">
+                                      <span className="text-[10px] sm:text-xs font-black text-white drop-shadow-md">
                                         {runner.percentage}%
                                       </span>
                                     </div>
                                   </div>
 
-                                  <span className="mt-1 w-full text-center font-bold text-white text-[11px] sm:text-xs wrap-break-word drop-shadow-md line-clamp-1">
+                                  <span className="mt-0.5 w-full text-center font-bold text-white text-[10px] sm:text-[11px] break-words leading-tight drop-shadow-md">
                                     {runner.label}
                                   </span>
 
-                                  <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-white/20">
+                                  <div className="mt-0.5 h-1 w-full overflow-hidden rounded-full bg-white/20">
                                     <div
                                       className="h-full rounded-full bg-white transition-all duration-700 ease-out"
                                       style={{
@@ -856,14 +946,21 @@ export const ScenePresenter = ({
       </div>
 
       {/* 3. Bottom Controls & Progress */}
-      <div className="mt-2 flex w-full shrink-0 flex-col gap-2 border-t border-white/20 pt-2.5 sm:pt-3">
+      <div
+        className={clsx(
+          "flex w-full shrink-0 flex-col border-t border-white/20",
+          isUltraCompact || availableHeight <= 600
+            ? "mt-1 gap-1 pt-1"
+            : "mt-2 gap-2 pt-2.5 sm:pt-3",
+        )}
+      >
         {advanceMode === "auto" && (
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center justify-between text-xs font-semibold text-white/70">
+          <div className="flex flex-col gap-0.5 sm:gap-1">
+            <div className="flex items-center justify-between text-[10px] sm:text-xs font-semibold text-white/70">
               <span>{remainingSeconds}s</span>
               <span>{Math.round(progressRatio * 100)}%</span>
             </div>
-            <div className="h-1.5 sm:h-2 w-full overflow-hidden rounded-full bg-white/20">
+            <div className="h-1 sm:h-1.5 w-full overflow-hidden rounded-full bg-white/20">
               <div
                 className="h-full bg-primary transition-all duration-100 ease-linear"
                 style={{ width: `${progressRatio * 100}%` }}
@@ -874,7 +971,10 @@ export const ScenePresenter = ({
         )}
 
         <div className="flex items-center justify-between">
-          <p className="text-xs font-medium text-white/60">
+          <p
+            data-testid="scene-awaiting-host"
+            className="text-[11px] sm:text-xs font-medium text-white/60"
+          >
             {advanceMode === "auto"
               ? labels?.autoProgression ?? "Automatic progression"
               : labels?.awaitingHost ?? "Awaiting host to advance"}
@@ -886,7 +986,10 @@ export const ScenePresenter = ({
               onClick={handleSkipClick}
               disabled={skipState.hasSkipped}
               className={clsx(
-                "rounded-xl px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm font-bold shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                "rounded-lg sm:rounded-xl font-bold shadow-lg transition-all focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2",
+                isUltraCompact || availableHeight <= 600
+                  ? "px-2.5 py-1 text-[10px] sm:text-xs"
+                  : "px-4 py-1.5 sm:px-5 sm:py-2 text-xs sm:text-sm",
                 skipState.hasSkipped
                   ? "cursor-not-allowed bg-white/10 text-white/40"
                   : "bg-primary text-white hover:opacity-90 active:scale-95",

@@ -132,7 +132,7 @@ const AnswerButton = ({
           {showText ? (
             <p
               className={clsx(
-                "line-clamp-2",
+                "break-words leading-tight",
                 large ? "text-sm sm:text-lg md:text-xl" : "text-xs sm:text-sm md:text-lg",
               )}
             >

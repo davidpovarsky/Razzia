@@ -270,7 +270,7 @@ export const PhotoCardGrid = ({
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-1 p-2 text-white/80">
                       <ImageOff className="size-6 sm:size-8" />
-                      <span className="text-xs font-semibold line-clamp-1">
+                      <span className="text-xs font-semibold break-words leading-tight">
                         {winner.alt || winner.label}
                       </span>
                     </div>
@@ -296,7 +296,7 @@ export const PhotoCardGrid = ({
                 {showText ? (
                   <div className="mt-1 sm:mt-1.5 flex w-full flex-col items-center justify-center px-1">
                     <p
-                      className="w-full text-center font-black text-white text-xs sm:text-sm md:text-base wrap-break-word drop-shadow-md line-clamp-1"
+                      className="w-full text-center font-black text-white text-[11px] sm:text-xs md:text-sm break-words leading-tight drop-shadow-md"
                       data-testid={`photo-card-caption-${index}`}
                     >
                       {winner.label}
@@ -397,7 +397,7 @@ export const PhotoCardGrid = ({
                     ) : (
                       <div className="flex flex-col items-center justify-center gap-0.5 p-1 text-white/80">
                         <ImageOff className="size-4 sm:size-5" />
-                        <span className="text-[10px] font-semibold line-clamp-1">
+                        <span className="text-[10px] font-semibold break-words leading-tight">
                           {runner.alt || runner.label}
                         </span>
                       </div>
@@ -418,7 +418,7 @@ export const PhotoCardGrid = ({
                   {showText ? (
                     <div className="mt-1 flex w-full flex-col items-center justify-center px-0.5">
                       <p
-                        className="w-full text-center font-bold text-white text-[11px] sm:text-xs wrap-break-word drop-shadow-md line-clamp-1"
+                        className="w-full text-center font-bold text-white text-[10px] sm:text-xs break-words leading-tight drop-shadow-md"
                         data-testid={`photo-card-caption-${index}`}
                       >
                         {runner.label}
@@ -591,7 +591,7 @@ export const PhotoCardGrid = ({
                 {showText ? (
                   <div className="mt-1 sm:mt-1.5 flex w-full flex-col items-center justify-center px-0.5">
                     <p
-                      className="w-full text-center font-bold text-white wrap-break-word drop-shadow-md line-clamp-1 text-[11px] sm:text-xs md:text-sm"
+                      className="w-full text-center font-bold text-white break-words leading-tight drop-shadow-md text-[11px] sm:text-xs md:text-sm"
                       data-testid={`photo-card-caption-${index}`}
                     >
                       {answer}

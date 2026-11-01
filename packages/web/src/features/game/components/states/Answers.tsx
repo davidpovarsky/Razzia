@@ -188,12 +188,12 @@ const Answers = ({
         <h2
           data-testid="game-question-title"
           className={clsx(
-            "text-center font-bold text-white drop-shadow-lg",
+            "text-center font-bold text-white drop-shadow-lg break-words leading-tight",
             isUltraCompact
-              ? "text-base sm:text-lg line-clamp-2"
+              ? "text-sm sm:text-base"
               : showAnswersOnly || currentVisuals
-                ? "text-lg sm:text-2xl md:text-3xl line-clamp-2"
-                : "text-xl sm:text-2xl md:text-3xl lg:text-4xl line-clamp-3",
+                ? "text-base sm:text-xl md:text-2xl"
+                : "text-lg sm:text-2xl md:text-3xl lg:text-4xl",
           )}
         >
           {question}

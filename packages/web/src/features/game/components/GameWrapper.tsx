@@ -408,79 +408,87 @@ const GameWrapper = ({
       }
 
       return (
-        <div className="flex min-h-0 h-full w-full flex-1 items-center justify-center overflow-hidden p-2 sm:p-4 md:p-6">
-          <ScenePresenter
-            step={activeStep}
-            scene={currentScene}
-            activeSceneData={activeSceneData}
-            labels={scenePresenterLabels}
-            serverStartedAt={extensionState.startedAt}
-            epoch={extensionState.epoch}
-            isManager={Boolean(manager)}
-            onAdvance={() => {
-              if (manager && extensionState.gameId) {
-                socket.emit(EXTENSION_EVENTS.COMMAND, {
-                  v: 1,
-                  gameId: extensionState.gameId,
-                  action: "ADVANCE_TIMELINE_SCENE",
-                  payload: {
-                    epoch: extensionState.epoch,
-                  },
-                  requestId: `adv-${Date.now()}`,
-                })
-              }
-            }}
-            onSkip={() => {
-              if (manager && extensionState.gameId) {
-                socket.emit(EXTENSION_EVENTS.COMMAND, {
-                  v: 1,
-                  gameId: extensionState.gameId,
-                  action: "SKIP_TIMELINE_SCENE",
-                  payload: {
-                    epoch: extensionState.epoch,
-                  },
-                  requestId: `skip-${Date.now()}`,
-                })
-              }
-            }}
-          />
-        </div>
+        <ExtensionStateProvider value={extensionState}>
+          <ViewRoleContext.Provider value={effectiveRole}>
+            <StageFitContainer className="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden p-1 sm:p-2 md:p-4">
+              <ScenePresenter
+                step={activeStep}
+                scene={currentScene}
+                activeSceneData={activeSceneData}
+                labels={scenePresenterLabels}
+                serverStartedAt={extensionState.startedAt}
+                epoch={extensionState.epoch}
+                isManager={Boolean(manager)}
+                onAdvance={() => {
+                  if (manager && extensionState.gameId) {
+                    socket.emit(EXTENSION_EVENTS.COMMAND, {
+                      v: 1,
+                      gameId: extensionState.gameId,
+                      action: "ADVANCE_TIMELINE_SCENE",
+                      payload: {
+                        epoch: extensionState.epoch,
+                      },
+                      requestId: `adv-${Date.now()}`,
+                    })
+                  }
+                }}
+                onSkip={() => {
+                  if (manager && extensionState.gameId) {
+                    socket.emit(EXTENSION_EVENTS.COMMAND, {
+                      v: 1,
+                      gameId: extensionState.gameId,
+                      action: "SKIP_TIMELINE_SCENE",
+                      payload: {
+                        epoch: extensionState.epoch,
+                      },
+                      requestId: `skip-${Date.now()}`,
+                    })
+                  }
+                }}
+              />
+            </StageFitContainer>
+          </ViewRoleContext.Provider>
+        </ExtensionStateProvider>
       )
     }
 
     if (extensionState.phase === "interlude" && extensionState.extras.interlude) {
       return (
-        <div className="flex min-h-0 h-full w-full flex-1 items-center justify-center overflow-hidden p-2 sm:p-4 md:p-6">
-          <InterludePresenter
-            interlude={extensionState.extras.interlude as Interlude}
-            serverStartedAt={extensionState.startedAt}
-            isManager={Boolean(manager)}
-            labels={{
-              secondsRemaining: (sec) =>
-                t("extensions:interludes.secondsRemaining", {
-                  seconds: sec,
-                }),
-              awaitingHost: t("extensions:interludes.awaitingHost"),
-              skipInterlude: t("extensions:interludes.skipInterlude"),
-              skipped: t("extensions:interludes.skipped"),
-              slideAlt: t("extensions:interludes.slideAlt"),
-            }}
-            onSkip={() => {
-              if (manager && extensionState.gameId) {
-                socket.emit(EXTENSION_EVENTS.COMMAND, {
-                  v: 1,
-                  gameId: extensionState.gameId,
-                  action: "END_OR_SKIP_INTERLUDE",
-                  payload: {
-                    reason: "manual",
-                    epoch: extensionState.epoch,
-                  },
-                  requestId: `skip-${Date.now()}`,
-                })
-              }
-            }}
-          />
-        </div>
+        <ExtensionStateProvider value={extensionState}>
+          <ViewRoleContext.Provider value={effectiveRole}>
+            <StageFitContainer className="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden p-1 sm:p-2 md:p-4">
+              <InterludePresenter
+                interlude={extensionState.extras.interlude as Interlude}
+                serverStartedAt={extensionState.startedAt}
+                isManager={Boolean(manager)}
+                labels={{
+                  secondsRemaining: (sec) =>
+                    t("extensions:interludes.secondsRemaining", {
+                      seconds: sec,
+                    }),
+                  awaitingHost: t("extensions:interludes.awaitingHost"),
+                  skipInterlude: t("extensions:interludes.skipInterlude"),
+                  skipped: t("extensions:interludes.skipped"),
+                  slideAlt: t("extensions:interludes.slideAlt"),
+                }}
+                onSkip={() => {
+                  if (manager && extensionState.gameId) {
+                    socket.emit(EXTENSION_EVENTS.COMMAND, {
+                      v: 1,
+                      gameId: extensionState.gameId,
+                      action: "END_OR_SKIP_INTERLUDE",
+                      payload: {
+                        reason: "manual",
+                        epoch: extensionState.epoch,
+                      },
+                      requestId: `skip-${Date.now()}`,
+                    })
+                  }
+                }}
+              />
+            </StageFitContainer>
+          </ViewRoleContext.Provider>
+        </ExtensionStateProvider>
       )
     }
 

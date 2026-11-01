@@ -69,7 +69,7 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
         <h2
           data-testid="show-question-title"
           className={clsx(
-            "anim-show max-w-5xl text-center font-bold text-white drop-shadow-lg line-clamp-3 sm:line-clamp-4",
+            "anim-show max-w-5xl text-center font-bold text-white drop-shadow-lg break-words leading-tight",
             isUltraCompact
               ? "text-lg sm:text-xl"
               : isCompact
