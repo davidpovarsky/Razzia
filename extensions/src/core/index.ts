@@ -1,4 +1,6 @@
 export * from "./bundle"
+export * from "./card-appearance"
+export * from "./card-media-references"
 
 export * from "./commands"
 

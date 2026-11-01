@@ -1,5 +1,11 @@
 import { z } from "zod"
 import {
+  cardAudioOverridesSchema,
+  cardBackgroundOverrideSchema,
+  cardStageAnimationsSchema,
+  showMediaCatalogItemSchema,
+} from "./card-appearance"
+import {
   ANSWER_DISPLAYS,
   CUE_IDS,
   LEADERBOARD_MODES,
@@ -13,7 +19,10 @@ import {
   questionRevealSchema,
   type Interlude,
 } from "./media"
-import { studioDefaultsSchema } from "./studio-timeline-schema"
+import {
+  sceneAudioSchema,
+  studioDefaultsSchema,
+} from "./studio-timeline-schema"
 import {
   audioExtrasSchema,
   questionEntranceSchema,
@@ -86,6 +95,9 @@ export const authoredQuizCardSchema = z
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
     questionEntrance: questionEntranceSchema.optional(),
+    background: cardBackgroundOverrideSchema.optional(),
+    audioCues: cardAudioOverridesSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -137,6 +149,9 @@ export const authoredSurveyCardSchema = z
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
     questionEntrance: questionEntranceSchema.optional(),
+    background: cardBackgroundOverrideSchema.optional(),
+    audioCues: cardAudioOverridesSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -166,6 +181,9 @@ export const authoredTransitionCardSchema = z
     description: z.string().max(500).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -188,6 +206,9 @@ export const authoredAnimationCardSchema = z
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(3000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -211,6 +232,9 @@ export const authoredMediaCardSchema = z
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -239,6 +263,9 @@ export const authoredLeaderboardCardSchema = z
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -262,6 +289,9 @@ export const authoredInterimResultsCardSchema = z
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -285,6 +315,9 @@ export const authoredCountdownCardSchema = z
     durationSeconds: z.number().int().min(3).max(120).default(10),
     title: z.string().max(120).optional(),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -308,6 +341,9 @@ export const authoredOpeningCardSchema = z
     mediaUrl: z.string().optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -338,6 +374,9 @@ export const authoredClosingCardSchema = z
     mediaUrl: z.string().optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -473,6 +512,26 @@ export const authoredSettingSchema = z
             code: "custom",
             path: ["valueJson"],
             message: "errors:extensions.invalidSettingValue:roster.config",
+          })
+        }
+      } else {
+        ctx.addIssue({
+          code: "custom",
+          path: ["property"],
+          message: `errors:extensions.unsupportedSettingProperty:${setting.scope}.${setting.property}`,
+        })
+      }
+    } else if (setting.scope === "media") {
+      if (setting.property === "catalog") {
+        const parsed = z
+          .array(showMediaCatalogItemSchema)
+          .max(500)
+          .safeParse(setting.valueJson)
+        if (!parsed.success) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["valueJson"],
+            message: "errors:extensions.invalidSettingValue:media.catalog",
           })
         }
       } else {

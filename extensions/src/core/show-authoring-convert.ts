@@ -130,6 +130,15 @@ export function authoredShowToNativeBundleDraft(
       if (card.questionEntrance && card.questionEntrance.preset !== "none") {
         qExtras.questionEntrance = card.questionEntrance
       }
+      if (card.background) {
+        qExtras.background = card.background
+      }
+      if (card.audioCues) {
+        qExtras.audioCues = card.audioCues
+      }
+      if (card.stageAnimations) {
+        qExtras.stageAnimations = card.stageAnimations
+      }
 
       if (Object.keys(qExtras).length > 0) {
         perQuestion[qId] = qExtras
@@ -144,6 +153,14 @@ export function authoredShowToNativeBundleDraft(
       const sceneId = crypto.randomUUID()
       const timelineItemId = crypto.randomUUID()
 
+      const sceneAppearance = {
+        ...(card.background ? { background: card.background } : {}),
+        ...(card.audio ? { audio: card.audio } : {}),
+        ...(card.stageAnimations
+          ? { stageAnimations: card.stageAnimations }
+          : {}),
+      }
+
       let sceneConfig: SceneConfig
 
       switch (card.kind) {
@@ -155,6 +172,7 @@ export function authoredShowToNativeBundleDraft(
             description: card.description,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "animation":
@@ -165,6 +183,7 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "media":
@@ -176,6 +195,7 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "leaderboard":
@@ -185,6 +205,7 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "interimResults":
@@ -194,6 +215,7 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "countdown":
@@ -203,6 +225,7 @@ export function authoredShowToNativeBundleDraft(
             durationSeconds: card.durationSeconds,
             title: card.title,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "opening":
@@ -214,6 +237,7 @@ export function authoredShowToNativeBundleDraft(
             mediaUrl: card.mediaUrl,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
         case "closing":
@@ -225,6 +249,7 @@ export function authoredShowToNativeBundleDraft(
             mediaUrl: card.mediaUrl,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...sceneAppearance,
           }
           break
       }
@@ -277,6 +302,7 @@ export function authoredShowToNativeBundleDraft(
   }
   let audioExtras: QuizExtrasV2["audio"] = createDefaultAudioExtras()
   let rosterExtras: QuizExtrasV2["roster"] = createDefaultRosterExtras()
+  let mediaCatalogExtras: QuizExtrasV2["mediaCatalog"]
 
   if (show.settings && show.settings.length > 0) {
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
@@ -344,6 +370,8 @@ export function authoredShowToNativeBundleDraft(
         }
       } else if (s.scope === "roster" && s.property === "config") {
         rosterExtras = s.valueJson as any
+      } else if (s.scope === "media" && s.property === "catalog") {
+        mediaCatalogExtras = s.valueJson as any
       } else {
         diagnostics.push({
           path: ["settings", String(sIdx)],
@@ -370,6 +398,7 @@ export function authoredShowToNativeBundleDraft(
     roster: rosterExtras,
     authoring:
       show.note !== undefined ? { showNote: show.note } : undefined,
+    ...(mediaCatalogExtras ? { mediaCatalog: mediaCatalogExtras } : {}),
   }
 
   const extrasParse = quizExtrasV2Schema.safeParse(extrasCandidate)
@@ -492,6 +521,9 @@ export function nativeBundleToAuthoredShow(
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
           questionEntrance: perQ?.questionEntrance,
+          background: perQ?.background,
+          audioCues: perQ?.audioCues,
+          stageAnimations: perQ?.stageAnimations,
         })
       } else {
         const correctAnswers = rawSolutions.map((solIdx) => solIdx + 1)
@@ -513,6 +545,9 @@ export function nativeBundleToAuthoredShow(
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
           questionEntrance: perQ?.questionEntrance,
+          background: perQ?.background,
+          audioCues: perQ?.audioCues,
+          stageAnimations: perQ?.stageAnimations,
         })
       }
     } else {
@@ -524,6 +559,14 @@ export function nativeBundleToAuthoredShow(
         continue
       }
 
+      const sceneAppearance = {
+        ...(scene.background ? { background: scene.background } : {}),
+        ...(scene.audio ? { audio: scene.audio } : {}),
+        ...(scene.stageAnimations
+          ? { stageAnimations: scene.stageAnimations }
+          : {}),
+      }
+
       switch (scene.kind) {
         case "transition":
           cards.push({
@@ -533,6 +576,7 @@ export function nativeBundleToAuthoredShow(
             description: scene.description,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "animation":
@@ -543,6 +587,7 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "media":
@@ -554,6 +599,7 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "leaderboard":
@@ -563,6 +609,7 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "interimResults":
@@ -572,6 +619,7 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "countdown":
@@ -581,6 +629,7 @@ export function nativeBundleToAuthoredShow(
             durationSeconds: scene.durationSeconds,
             title: scene.title,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "opening":
@@ -592,6 +641,7 @@ export function nativeBundleToAuthoredShow(
             mediaUrl: scene.mediaUrl,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
         case "closing":
@@ -603,6 +653,7 @@ export function nativeBundleToAuthoredShow(
             mediaUrl: scene.mediaUrl,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...sceneAppearance,
           })
           break
       }
@@ -686,6 +737,15 @@ export function nativeBundleToAuthoredShow(
       targetKey: "show",
       property: "config",
       valueJson: exportRoster,
+    })
+  }
+
+  if (extrasV2.mediaCatalog && extrasV2.mediaCatalog.length > 0) {
+    settings.push({
+      scope: "media",
+      targetKey: "show",
+      property: "catalog",
+      valueJson: extrasV2.mediaCatalog,
     })
   }
 

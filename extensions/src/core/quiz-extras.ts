@@ -1,5 +1,11 @@
 import { z } from "zod"
 import {
+  cardAudioOverridesSchema,
+  cardBackgroundOverrideSchema,
+  cardStageAnimationsSchema,
+  showMediaCatalogItemSchema,
+} from "./card-appearance"
+import {
   CUE_IDS,
   type CueId,
   DEFAULT_REVISION,
@@ -132,6 +138,9 @@ export const perQuestionItemSchema = z
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),
     questionEntrance: questionEntranceSchema.optional(),
+    background: cardBackgroundOverrideSchema.optional(),
+    audioCues: cardAudioOverridesSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
   })
   .superRefine((item, ctx) => {
     if (item.answerVisuals) {
@@ -165,6 +174,7 @@ export const quizExtrasV1Schema = z
     audio: audioExtrasSchema,
     perQuestion: perQuestionExtrasSchema,
     roster: rosterExtrasSchema.optional(),
+    mediaCatalog: z.array(showMediaCatalogItemSchema).max(500).optional(),
   })
   .superRefine((extras, ctx) => {
     // 1. questionIds must be unique

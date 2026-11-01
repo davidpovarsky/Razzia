@@ -41,8 +41,8 @@ export const isSafeMediaUrl = (url: unknown): url is string => {
     return false
   }
 
-  // Root-relative /media/ path
-  if (trimmed.startsWith("/media/")) {
+  // Root-relative /media/ or /sounds/ path
+  if (trimmed.startsWith("/media/") || trimmed.startsWith("/sounds/")) {
     // Must not contain directory traversal
     return !trimmed.includes("..")
   }
@@ -191,6 +191,41 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
+        if (
+          item &&
+          item.background &&
+          typeof (item.background as Record<string, unknown>).url === "string"
+        ) {
+          const bgUrl = (item.background as Record<string, unknown>)
+            .url as string
+          if (!isSafeMediaUrl(bgUrl)) {
+            return {
+              ok: false,
+              path: `extras.perQuestion[${qId}].background.url`,
+            }
+          }
+        }
+        if (
+          item &&
+          item.audioCues &&
+          typeof item.audioCues === "object"
+        ) {
+          for (const [cueKey, cueVal] of Object.entries(
+            item.audioCues as Record<string, { url?: unknown }>,
+          )) {
+            if (
+              cueVal &&
+              typeof cueVal.url === "string" &&
+              cueVal.url &&
+              !isSafeMediaUrl(cueVal.url)
+            ) {
+              return {
+                ok: false,
+                path: `extras.perQuestion[${qId}].audioCues.${cueKey}.url`,
+              }
+            }
+          }
+        }
       }
     }
 
@@ -206,6 +241,28 @@ export function validateBundleMedia(bundle: {
           !isSafeMediaUrl(scene.mediaUrl)
         ) {
           return { ok: false, path: `extras.scenes[${sId}].mediaUrl` }
+        }
+        if (
+          scene &&
+          scene.background &&
+          typeof (scene.background as Record<string, unknown>).url === "string"
+        ) {
+          const bgUrl = (scene.background as Record<string, unknown>)
+            .url as string
+          if (!isSafeMediaUrl(bgUrl)) {
+            return { ok: false, path: `extras.scenes[${sId}].background.url` }
+          }
+        }
+        if (
+          scene &&
+          scene.audio &&
+          typeof (scene.audio as Record<string, unknown>).url === "string"
+        ) {
+          const audioUrl = (scene.audio as Record<string, unknown>)
+            .url as string
+          if (audioUrl && !isSafeMediaUrl(audioUrl)) {
+            return { ok: false, path: `extras.scenes[${sId}].audio.url` }
+          }
         }
       }
     }

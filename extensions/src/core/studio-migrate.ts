@@ -141,6 +141,7 @@ export const upgradeLegacyExtrasToV2 = (
     audio: v1.audio,
     perQuestion: v1.perQuestion,
     roster: v1.roster ?? createDefaultRosterExtras(),
+    ...(v1.mediaCatalog ? { mediaCatalog: v1.mediaCatalog } : {}),
   }
 }
 
@@ -162,5 +163,6 @@ export const projectLegacyCompat = (v2: QuizExtrasV2): QuizExtrasV1 => {
     roster: v2.roster,
     perQuestion: v2.perQuestion,
     leaderboard: v2.leaderboard ?? baseV1.leaderboard,
+    ...(v2.mediaCatalog ? { mediaCatalog: v2.mediaCatalog } : {}),
   }
 }

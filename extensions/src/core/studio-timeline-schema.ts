@@ -1,5 +1,11 @@
 import { z } from "zod"
 import {
+  cardAudioModeSchema,
+  cardBackgroundOverrideSchema,
+  cardStageAnimationsSchema,
+  showMediaCatalogItemSchema,
+} from "./card-appearance"
+import {
   audioExtrasSchema,
   createDefaultAudioExtras,
   leaderboardExtrasSchema,
@@ -10,7 +16,7 @@ import {
   createDefaultRosterExtras,
   rosterExtrasSchema,
 } from "./phone-roster"
-import { isSafeMediaUrl } from "./media"
+import { isSafeMediaUrl, safeMediaUrlSchema } from "./media"
 
 export const TIMELINE_ITEM_KINDS = [
   "quiz",
@@ -98,6 +104,21 @@ export type TimelineItem = z.infer<typeof timelineItemSchema>
 
 // ── Scene Config Schemas ──────────────────────────────────────────────────
 
+export const sceneAudioSchema = z.strictObject({
+  mode: cardAudioModeSchema.default("inherit"),
+  url: safeMediaUrlSchema.optional(),
+  volume: z.number().min(0).max(1).default(0.8),
+  loop: z.boolean().default(false),
+})
+
+export type SceneAudio = z.infer<typeof sceneAudioSchema>
+
+const sceneAppearanceFields = {
+  background: cardBackgroundOverrideSchema.optional(),
+  audio: sceneAudioSchema.optional(),
+  stageAnimations: cardStageAnimationsSchema.optional(),
+}
+
 export const transitionSceneSchema = z.strictObject({
   id: z.uuid(),
   kind: z.literal("transition"),
@@ -105,6 +126,7 @@ export const transitionSceneSchema = z.strictObject({
   description: z.string().max(500).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
   advance: z.enum(["auto", "manual"]).default("auto"),
+  ...sceneAppearanceFields,
 })
 
 export const animationSceneSchema = z.strictObject({
@@ -114,6 +136,7 @@ export const animationSceneSchema = z.strictObject({
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(3000),
   advance: z.enum(["auto", "manual"]).default("auto"),
+  ...sceneAppearanceFields,
 })
 
 export const mediaSceneSchema = z
@@ -125,6 +148,7 @@ export const mediaSceneSchema = z
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
     if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
@@ -142,6 +166,7 @@ export const leaderboardSceneSchema = z.strictObject({
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
   advance: z.enum(["auto", "manual"]).default("auto"),
+  ...sceneAppearanceFields,
 })
 
 export const interimResultsSceneSchema = z.strictObject({
@@ -150,6 +175,7 @@ export const interimResultsSceneSchema = z.strictObject({
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
   advance: z.enum(["auto", "manual"]).default("auto"),
+  ...sceneAppearanceFields,
 })
 
 export const countdownSceneSchema = z.strictObject({
@@ -158,6 +184,7 @@ export const countdownSceneSchema = z.strictObject({
   durationSeconds: z.number().int().min(3).max(120).default(10),
   title: z.string().max(120).optional(),
   advance: z.enum(["auto", "manual"]).default("auto"),
+  ...sceneAppearanceFields,
 })
 
 export const openingSceneSchema = z
@@ -169,6 +196,7 @@ export const openingSceneSchema = z
     mediaUrl: z.string().optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
     if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
@@ -189,6 +217,7 @@ export const closingSceneSchema = z
     mediaUrl: z.string().optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
     advance: z.enum(["auto", "manual"]).default("auto"),
+    ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
     if (data.mediaUrl && !isSafeMediaUrl(data.mediaUrl)) {
@@ -284,6 +313,7 @@ export const quizExtrasV2Schema = z
     perQuestion: perQuestionExtrasSchema.default({}),
     roster: rosterExtrasSchema.default(createDefaultRosterExtras()),
     authoring: authoringMetadataSchema.optional(),
+    mediaCatalog: z.array(showMediaCatalogItemSchema).max(500).optional(),
   })
   .superRefine((extras, ctx) => {
     // 1. questionIds must be unique

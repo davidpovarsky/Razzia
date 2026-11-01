@@ -391,7 +391,8 @@ function buildSummaryFromAuthored(
 
     if (card.kind === "quiz") {
       quizCount += 1
-      if (card.media?.url) {
+      const hasMedia = Boolean(card.media?.url || card.background?.url)
+      if (hasMedia) {
         mediaCount += 1
       }
       const imgAnswers = card.answers.filter(
@@ -405,13 +406,14 @@ function buildSummaryFromAuthored(
         kind: "quiz",
         questionText: card.question,
         playMode: "quiz",
-        hasMedia: Boolean(card.media?.url),
+        hasMedia,
         answerCount: card.answers.length,
         answerImageCount: imgAnswers,
       })
     } else if (card.kind === "survey") {
       surveyCount += 1
-      if (card.media?.url) {
+      const hasMedia = Boolean(card.media?.url || card.background?.url)
+      if (hasMedia) {
         mediaCount += 1
       }
       const imgAnswers = card.answers.filter(
@@ -425,14 +427,14 @@ function buildSummaryFromAuthored(
         kind: "survey",
         questionText: card.question,
         playMode: "survey",
-        hasMedia: Boolean(card.media?.url),
+        hasMedia,
         answerCount: card.answers.length,
         answerImageCount: imgAnswers,
       })
     } else {
       sceneCount += 1
       const hasMedia = Boolean(
-        (card as any).mediaUrl || (card as any).media?.url,
+        (card as any).mediaUrl || (card as any).media?.url || card.background?.url,
       )
       if (hasMedia) {
         mediaCount += 1
@@ -467,6 +469,16 @@ function collectMediaWarnings(show: TadaShowV1, issues: ShowImportIssue[]): void
   for (let idx = 0; idx < show.cards.length; idx += 1) {
     const card = show.cards[idx]
 
+    if (card.background?.url && card.background.url.startsWith("https://")) {
+      issues.push({
+        severity: "warning",
+        code: "REMOTE_MEDIA_URL",
+        messageKey: "extensions:showImport.warningRemoteMedia",
+        cardKey: card.key,
+        path: `cards[${idx}].background.url`,
+      })
+    }
+
     if (card.kind === "quiz" || card.kind === "survey") {
       if (card.media?.url && card.media.url.startsWith("https://")) {
         issues.push({
@@ -476,6 +488,21 @@ function collectMediaWarnings(show: TadaShowV1, issues: ShowImportIssue[]): void
           cardKey: card.key,
           path: `cards[${idx}].media.url`,
         })
+      }
+
+      if (card.audioCues) {
+        for (const cueKey of ["showQuestion", "answersMusic", "revealResults"] as const) {
+          const cue = card.audioCues[cueKey]
+          if (cue?.url && cue.url.startsWith("https://")) {
+            issues.push({
+              severity: "warning",
+              code: "REMOTE_MEDIA_URL",
+              messageKey: "extensions:showImport.warningRemoteMedia",
+              cardKey: card.key,
+              path: `cards[${idx}].audioCues.${cueKey}.url`,
+            })
+          }
+        }
       }
 
       for (let aIdx = 0; aIdx < card.answers.length; aIdx += 1) {
@@ -490,17 +517,29 @@ function collectMediaWarnings(show: TadaShowV1, issues: ShowImportIssue[]): void
           })
         }
       }
-    } else if (
-      (card as any).mediaUrl &&
-      (card as any).mediaUrl.startsWith("https://")
-    ) {
-      issues.push({
-        severity: "warning",
-        code: "REMOTE_MEDIA_URL",
-        messageKey: "extensions:showImport.warningRemoteMedia",
-        cardKey: card.key,
-        path: `cards[${idx}].mediaUrl`,
-      })
+    } else {
+      if (
+        (card as any).mediaUrl &&
+        (card as any).mediaUrl.startsWith("https://")
+      ) {
+        issues.push({
+          severity: "warning",
+          code: "REMOTE_MEDIA_URL",
+          messageKey: "extensions:showImport.warningRemoteMedia",
+          cardKey: card.key,
+          path: `cards[${idx}].mediaUrl`,
+        })
+      }
+
+      if (card.audio?.url && card.audio.url.startsWith("https://")) {
+        issues.push({
+          severity: "warning",
+          code: "REMOTE_MEDIA_URL",
+          messageKey: "extensions:showImport.warningRemoteMedia",
+          cardKey: card.key,
+          path: `cards[${idx}].audio.url`,
+        })
+      }
     }
   }
 }
