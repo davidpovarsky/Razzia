@@ -71,3 +71,61 @@ Generated and saved under `packages/e2e/test-results/screenshots/`:
 | `media-appearance-stage/05_q1_reveal_800x600_4_3.png` | 800×600 (4:3 Stage) | Interim Results scene zero-scroll fit on 4:3 projector display |
 | `media-appearance-stage/05_q1_reveal_320x568.png` | 320×568 (Compact mobile) | Interim Results scene zero-scroll fit on compact mobile spectator |
 
+---
+
+## 5. Final P0 Recovery & Unclipped-Stage Validation (2026-11-01 / 2026-11-02)
+
+Following review of initial Stage-Fit and Media Deletion implementations, prompt `TADA_TOMER_FINAL_P0_RECOVERY_AND_UNCLIPPED_STAGE_2026-11-01.md` was executed in its entirety across Gates A, B, C, and D.
+
+### Gate A: Durable & Isolated Media-Delete Journal Recovery + Real Startup Integration
+- **Isolated Journal Directory:** Created `.journal/media-delete/` for media deletion transactions, leaving `.journal/` exclusively for show-authoring pairing journals. Corrupted binary or unrecoverable entries are moved to `.journal/media-delete/quarantine/`.
+- **Discriminated Journal Schema:** Defined `MediaDeleteJournalEntry` with `version: 1` and `kind: "media-delete"`. Updated `recoverJournals()` in `extensions/src/server/storage/journal.ts` to strictly ignore `kind: "media-delete"`.
+- **Two-Phase Atomic Execution & Fail-Closed Rollback:**
+  - `executeMediaDeleteTransaction`: Snapshot all target shows and sidecars -> write journal to `.journal/media-delete/` -> update show files -> update sidecars -> delete physical media via `deleteMediaFn` -> delete journal file on clean finish.
+  - Windows file system safety: In `performRollback` and `recoverMediaDeleteJournals`, calls `fs.chmodSync(path, 0o666)` prior to atomic file rename. If rollback fails, the journal is preserved for crash recovery rather than silently dropped.
+- **Server Startup Integration:**
+  - Implemented `recoverStartupJournals({ getPath, updateQuizz, deleteQuizz })` in `extensions/src/server/media-library.ts`.
+  - Wired into `packages/socket/src/index.ts` immediately after `initConfig()`, recovering both show-authoring paired journals and uncommitted media-delete transactions before any HTTP or WebSocket requests are accepted.
+- **REST Route Integration:**
+  - `packages/socket/src/api/routes/media.ts` wires `executeMediaDeleteTransaction` passing `deleteMediaFn: () => deleteMedia(name)`.
+- **Verification:** 12 unit tests in `extensions/src/server/media-library.test.ts` (100% green), verifying reference guards, detach behavior, write-failure rollback, fault-injection preservation, crash restart recovery, and directory isolation.
+- **Commit SHA:** `a8682cf` (`feat(media): implement isolated media-delete journal and real startup recovery (Gate A)`).
+
+### Gate B: Stage Presentation Fidelity & Zero Text Clamping
+- **Eliminated Artificial Text Clamping:**
+  - Removed `line-clamp-*`, `truncate`, and CSS ellipsis from primary question titles, answer cards, reveal results, and interim scene components (`Question.tsx`, `Answers.tsx`, `Responses.tsx`, `PhotoCardGrid.tsx`, `AnswerButton.tsx`, `scene-presenter.tsx`). Replaced with responsive typography (`text-base sm:text-xl md:text-2xl`) and wrapping `break-words leading-tight`.
+- **ScenePresenter StageFit Integration:**
+  - Connected `useStageFit()` into `ScenePresenter`.
+  - Dynamically calculates hero section height (`heroHeight` from 110px on short viewports <=600px to 260px on full desktop) and runners-up card heights.
+  - Added explicit test IDs: `data-testid="scene-question-text"` and `data-testid="scene-awaiting-host"`.
+  - Compacted bottom controls and footer on screens `<= 600px` (`py-1 text-xs`) ensuring unclipped visibility.
+- **StageFitContainer in GameWrapper:**
+  - In `packages/web/src/features/game/components/GameWrapper.tsx`, wrapped `renderStageContent` for scenes and interludes with `ExtensionStateProvider`, `ViewRoleContext.Provider`, and `StageFitContainer` with responsive padding `p-1 sm:p-2 md:p-4`.
+- **Build Verification:** `pnpm --filter @razzia/web build` passed with zero errors in 11.63s.
+- **Commit SHA:** `cbbb388` (`feat(presentation): eliminate line-clamp truncation and guarantee unclipped stage footer (Gate B)`).
+
+### Gate C: Strengthened Playwright Acceptance Tests & Adversarial Viewport Matrix
+- **Varied Multi-Aspect Image Fixtures:**
+  - Replaced 1x1 base64 GIF with dynamic pure Node.js PNG generator (`LANDSCAPE_PNG_BUFFER` 1600x900, `PORTRAIT_PNG_BUFFER` 1200x1600, `SQUARE_PNG_BUFFER` 1024x1024) to realistically test layout fit and aspect-ratio containment.
+- **Strict Visual Containment & Text Completeness:**
+  - Enhanced `assertVisualContainment()` to assert `scrollHeight <= clientHeight + 1.5`, detect `-webkit-line-clamp !== "none"`, and reject CSS ellipsis cuts.
+  - Fail-closed `assertNoVerticalOverlap()` throwing on missing elements or invalid bounding boxes.
+  - Added explicit containment and text-completeness checks for `[data-testid="scene-question-text"]` (unclamped, complete) and `[data-testid="scene-awaiting-host"]` (unclipped, fully visible above bottom viewport edge).
+- **Adversarial 8-Viewport Matrix Verification:**
+  - Verified zero-scroll (`scrollHeight <= clientHeight + 1`), true visual containment, and zero vertical overlap across: `1920x1080` (16:9), `1366x768`, `1280x800` (16:10), `1024x768` (4:3), `800x600` (4:3 projector), `768x1024` (tablet portrait), `390x844` (mobile portrait), `320x568` (iPhone SE).
+  - Increased test question time to 180s and Playwright timeout to 240_000ms.
+- **Acceptance Test Execution:**
+  - `packages/e2e/tests/media-appearance-stage-acceptance.spec.ts`: 2/2 passed (2.9m).
+- **Commit SHA:** `7b26585` (`test(e2e): strengthen text completeness assertions and adversarial viewport matrix (Gate C)`).
+
+### Gate D: Regression Suite, Unit Test & Build Verification
+- **E2E Regressions:**
+  - `pnpm --filter @razzia/e2e exec playwright test tests/tzila-exact-player-screen.spec.ts --config=playwright.p0-acceptance.config.ts`: 3/3 passed (3.5m).
+  - `pnpm --filter @razzia/e2e exec playwright test tests/tzila-public-stage-and-toolbar.spec.ts --config=playwright.p0-acceptance.config.ts`: 3/3 passed (3.7m).
+- **Unit & Integration Suite:**
+  - `pnpm --filter @razzia/extensions test`: 29 test files passed, 292 tests passed (100% green).
+  - `pnpm --filter @razzia/socket build`: Built cleanly in 1.27s.
+  - `pnpm --filter @razzia/web build`: Built cleanly in 10.59s.
+- **Cleanliness:** `git status` clean, `git diff --check` clean.
+
+
