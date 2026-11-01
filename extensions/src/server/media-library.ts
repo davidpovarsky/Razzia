@@ -1,5 +1,6 @@
 import fs from "node:fs"
 import path from "node:path"
+import { v7 as uuidv7 } from "uuid"
 import type { UploadedMedia } from "@razzia/common/types/game"
 import {
   BUILT_IN_SOUNDS_LIST,
@@ -20,12 +21,15 @@ import {
   readSidecar,
   sidecarExists,
   writeSidecar,
+  type StorageInjections,
 } from "./storage/sidecar"
 import {
   createStagedJournal,
   getJournalDirectory,
+  recoverJournals,
   removeJournal,
   type JournalEntry,
+  type RecoveryReport,
 } from "./storage/journal"
 
 export { type BuiltInSoundItem }
@@ -161,23 +165,86 @@ export interface MediaDeleteSafetyResult {
   detachedFromShows: string[]
   unreadableFiles?: string[]
   error?: string
+  journalId?: string
+}
+
+export const getMediaDeleteJournalDirectory = (
+  getPath: (subPath?: string) => string,
+): string => {
+  const dir = path.join(getSidecarDirectory(getPath), ".journal", "media-delete")
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+  return dir
+}
+
+export const getMediaQuarantineDirectory = (
+  getPath: (subPath?: string) => string,
+): string => {
+  const dir = path.join(getMediaDeleteJournalDirectory(getPath), "quarantine")
+  if (!fs.existsSync(dir)) {
+    fs.mkdirSync(dir, { recursive: true })
+  }
+  return dir
+}
+
+export interface MediaDeleteJournalEntry {
+  version: 1
+  kind: "media-delete"
+  id: string
+  mediaNameOrUrl: string
+  cleanMediaName: string
+  mediaFilePath?: string | null
+  quarantinePath?: string | null
+  createdAt: number
+  status: "staged" | "committed"
+  shows: Array<{
+    quizId: string
+    filePath: string
+    sidecarPath: string
+    originalBaseRaw: string | null
+    originalSidecarRaw: string | null
+  }>
+}
+
+export interface ExecuteMediaDeleteOptions {
+  detach?: boolean
+  baselineShows?: LoadedShowRecord[]
+  deleteMediaFn?: () => void
+  faultInjection?: {
+    failBeforeShowWrite?: boolean
+    failAfterFirstShowWrite?: boolean
+    failBeforeDeleteMedia?: boolean
+    failDuringRollback?: boolean
+  }
 }
 
 /**
- * Checks whether a media file can be safely deleted from the shared media store.
- * - Fail-closed: If ANY show or sidecar on disk is unreadable or malformed, deletion is blocked.
- * - If referenced by any show/card/catalog and `detach !== true`, returns `allowed: false` with full reference list.
- * - If `detach === true`, performs an atomic two-phase detachment with staged journal and rollback on ANY failure.
+ * Executes a durable, atomic media delete transaction.
+ * - Fail-closed: If ANY show or sidecar on disk is unreadable, operation is blocked.
+ * - If media is referenced and `detach !== true`, returns `allowed: false` with references.
+ * - If `detach === true`, performs a staged two-phase commit:
+ *   1. Quarantines media binary before touching any file.
+ *   2. Stages isolated media-delete journal with exact original show & sidecar bytes.
+ *   3. Detaches references via atomic temp-file + rename.
+ *   4. Verifies post-condition: zero surviving references and zero unreadable files.
+ *   5. Calls `deleteMediaFn()` if provided, ensuring physical binary deletion.
+ *   6. Cleans up quarantine and journal ONLY on durable success.
+ *   7. On failure: rolls back all changes, restores binary from quarantine, and preserves journal if rollback fails.
  */
-export function checkMediaDeleteSafety(
+export function executeMediaDeleteTransaction(
   getPath: (subPath?: string) => string,
   mediaNameOrUrl: string,
-  options?: {
-    detach?: boolean
-    baselineShows?: LoadedShowRecord[]
-  },
+  options?: ExecuteMediaDeleteOptions,
 ): MediaDeleteSafetyResult {
-  // If baseline shows provided from previous inspection, verify no file has changed in the interim
+  const rawMediaName =
+    extractMediaNameFromUrl(mediaNameOrUrl) ||
+    mediaNameOrUrl.replace(/^\/?media\//iu, "")
+  const cleanMediaName = path.basename(rawMediaName)
+  const mediaFilePath = path.join(getPath("media"), cleanMediaName)
+  const mediaExists = fs.existsSync(mediaFilePath)
+
+  // Verify concurrent modification against baseline if supplied
   if (options?.baselineShows) {
     for (const b of options.baselineShows) {
       if (b.mtimeMs !== undefined && fs.existsSync(b.filePath)) {
@@ -219,6 +286,18 @@ export function checkMediaDeleteSafety(
   }
 
   if (references.length === 0) {
+    if (options?.deleteMediaFn) {
+      try {
+        options.deleteMediaFn()
+      } catch (delErr) {
+        return {
+          allowed: false,
+          references: [],
+          detachedFromShows: [],
+          error: `Failed to delete physical media file: ${(delErr as Error).message}`,
+        }
+      }
+    }
     return {
       allowed: true,
       references: [],
@@ -226,20 +305,33 @@ export function checkMediaDeleteSafety(
     }
   }
 
-  // Explicit detach: execute atomic two-phase write with rollback on any failure
+  // Explicit detach requested with active references: execute staged transaction
   const affectedShows = shows.filter((show) =>
     references.some((r) => r.quizId === show.id),
   )
 
-  const backups: Array<{
-    show: LoadedShowRecord
-    originalBaseRaw: string | null
-    originalSidecarRaw: string | null
-    sidecarPath: string
-  }> = []
+  const journalId = uuidv7()
+  const quarantineDir = getMediaQuarantineDirectory(getPath)
+  const quarantinePath = mediaExists
+    ? path.join(quarantineDir, `${journalId}-${cleanMediaName}`)
+    : null
 
-  // 1. Stage in-memory and on-disk journal backups before mutating any file
-  for (const show of affectedShows) {
+  // 1. Quarantine media binary if it exists
+  if (mediaExists && quarantinePath) {
+    try {
+      fs.copyFileSync(mediaFilePath, quarantinePath)
+    } catch (qErr) {
+      return {
+        allowed: false,
+        references,
+        detachedFromShows: [],
+        error: `Failed to quarantine media binary: ${(qErr as Error).message}`,
+      }
+    }
+  }
+
+  // 2. Stage durable journal entry
+  const journalShows = affectedShows.map((show) => {
     const originalBaseRaw = fs.existsSync(show.filePath)
       ? fs.readFileSync(show.filePath, "utf-8")
       : null
@@ -248,48 +340,125 @@ export function checkMediaDeleteSafety(
       ? fs.readFileSync(sidecarPath, "utf-8")
       : null
 
-    backups.push({
-      show,
+    return {
+      quizId: show.id,
+      filePath: show.filePath,
+      sidecarPath,
       originalBaseRaw,
       originalSidecarRaw,
-      sidecarPath,
-    })
+    }
+  })
 
-    createStagedJournal(getPath, {
-      quizId: show.id,
-      backupBase: originalBaseRaw ? JSON.parse(originalBaseRaw) : null,
-      backupExtras: originalSidecarRaw ? JSON.parse(originalSidecarRaw) : null,
-      targetBase: null,
-      targetExtras: null,
-    })
+  const journalEntry: MediaDeleteJournalEntry = {
+    version: 1,
+    kind: "media-delete",
+    id: journalId,
+    mediaNameOrUrl,
+    cleanMediaName,
+    mediaFilePath: mediaExists ? mediaFilePath : null,
+    quarantinePath,
+    createdAt: Date.now(),
+    status: "staged",
+    shows: journalShows,
   }
 
-  const detachedFromShows: string[] = []
-  const rollback = () => {
-    for (const b of backups) {
+  const journalDir = getMediaDeleteJournalDirectory(getPath)
+  const journalFilePath = path.join(
+    journalDir,
+    `media-${cleanMediaName}-${journalId}.media-journal.json`,
+  )
+
+  const tmpJournal = `${journalFilePath}.tmp.${Date.now()}`
+  fs.writeFileSync(tmpJournal, JSON.stringify(journalEntry, null, 2), "utf-8")
+  fs.renameSync(tmpJournal, journalFilePath)
+
+  const rollback = (): boolean => {
+    let allSucceeded = true
+
+    for (const b of journalShows) {
       try {
         if (b.originalBaseRaw !== null) {
-          fs.writeFileSync(b.show.filePath, b.originalBaseRaw, "utf-8")
+          try {
+            if (fs.existsSync(b.filePath)) {
+              fs.chmodSync(b.filePath, 0o666)
+            }
+          } catch {
+            // ignore
+          }
+          const tmpBase = `${b.filePath}.tmp.${Date.now()}`
+          fs.writeFileSync(tmpBase, b.originalBaseRaw, "utf-8")
+          fs.renameSync(tmpBase, b.filePath)
         }
         if (b.originalSidecarRaw !== null) {
-          fs.writeFileSync(b.sidecarPath, b.originalSidecarRaw, "utf-8")
+          try {
+            if (fs.existsSync(b.sidecarPath)) {
+              fs.chmodSync(b.sidecarPath, 0o666)
+            }
+          } catch {
+            // ignore
+          }
+          const tmpSidecar = `${b.sidecarPath}.tmp.${Date.now()}`
+          fs.writeFileSync(tmpSidecar, b.originalSidecarRaw, "utf-8")
+          fs.renameSync(tmpSidecar, b.sidecarPath)
         } else if (fs.existsSync(b.sidecarPath)) {
           fs.unlinkSync(b.sidecarPath)
         }
-      } catch {
-        // Suppress secondary rollback errors
-      }
-      try {
-        removeJournal(getPath, b.show.id)
-      } catch {
-        // Suppress journal cleanup error
+      } catch (rbErr) {
+        allSucceeded = false
+        console.error(
+          `[MediaRollback] Failed to restore show ${b.quizId}:`,
+          rbErr,
+        )
       }
     }
+
+    if (mediaExists && quarantinePath && fs.existsSync(quarantinePath)) {
+      try {
+        if (!fs.existsSync(mediaFilePath)) {
+          fs.copyFileSync(quarantinePath, mediaFilePath)
+        }
+      } catch (qErr) {
+        allSucceeded = false
+        console.error(
+          `[MediaRollback] Failed to restore media from quarantine:`,
+          qErr,
+        )
+      }
+    }
+
+    if (options?.faultInjection?.failDuringRollback) {
+      allSucceeded = false
+    }
+
+    if (allSucceeded) {
+      try {
+        if (quarantinePath && fs.existsSync(quarantinePath)) {
+          fs.unlinkSync(quarantinePath)
+        }
+        if (fs.existsSync(journalFilePath)) {
+          fs.unlinkSync(journalFilePath)
+        }
+      } catch {
+        // ignore
+      }
+    } else {
+      console.warn(
+        `[MediaRollback] Rollback failed or was partial; PRESERVING journal ${journalFilePath} for crash recovery`,
+      )
+    }
+
+    return allSucceeded
   }
 
+  const detachedFromShows: string[] = []
+
   try {
+    if (options?.faultInjection?.failBeforeShowWrite) {
+      throw new Error("Simulated failure before writing detached show")
+    }
+
+    let writeCount = 0
     for (const show of affectedShows) {
-      // Concurrency check: verify mtime hasn't changed since initial load
       if (show.mtimeMs !== undefined && fs.existsSync(show.filePath)) {
         const currentMtime = fs.statSync(show.filePath).mtimeMs
         if (Math.abs(currentMtime - show.mtimeMs) > 1) {
@@ -320,10 +489,21 @@ export function checkMediaDeleteSafety(
       }
 
       detachedFromShows.push(show.id)
+      writeCount++
+
+      if (options?.faultInjection?.failAfterFirstShowWrite && writeCount === 1) {
+        throw new Error("Simulated failure after writing first detached show")
+      }
     }
 
     // Post-commit re-scan verification: verify zero references survive before allowing delete
     const postHealth = loadAllShowsHealth(getPath)
+    if (postHealth.unreadableFiles.length > 0) {
+      throw new Error(
+        `Unreadable files detected after detach: ${postHealth.unreadableFiles.join("; ")}`,
+      )
+    }
+
     const postRefs = findMediaReferencesAcrossShows(
       mediaNameOrUrl,
       postHealth.records,
@@ -334,9 +514,29 @@ export function checkMediaDeleteSafety(
       )
     }
 
-    // Success: remove staged journals
-    for (const show of affectedShows) {
-      removeJournal(getPath, show.id)
+    // Physical deletion of media binary if hook provided
+    if (options?.deleteMediaFn) {
+      if (options?.faultInjection?.failBeforeDeleteMedia) {
+        throw new Error("Simulated failure before deleting media binary")
+      }
+      options.deleteMediaFn()
+
+      if (fs.existsSync(mediaFilePath)) {
+        throw new Error("Physical media file was not removed after delete call")
+      }
+    }
+
+    // Durable success reached: clean up quarantine and journal
+    if (quarantinePath && fs.existsSync(quarantinePath)) {
+      try {
+        fs.unlinkSync(quarantinePath)
+      } catch {
+        // ignore
+      }
+    }
+
+    if (fs.existsSync(journalFilePath)) {
+      fs.unlinkSync(journalFilePath)
     }
 
     return {
@@ -345,67 +545,236 @@ export function checkMediaDeleteSafety(
       detachedFromShows,
     }
   } catch (error) {
-    rollback()
+    const rollbackSuccess = rollback()
+    if (rollbackSuccess) {
+      return {
+        allowed: false,
+        references,
+        detachedFromShows: [],
+        error: `Detach failed and was safely rolled back: ${(error as Error).message}`,
+      }
+    }
+
     return {
       allowed: false,
       references,
       detachedFromShows: [],
-      error: `Detach failed and was safely rolled back: ${(error as Error).message}`,
+      error: `Detach failed and rollback encountered errors. Journal preserved for recovery: ${(error as Error).message}`,
+      journalId,
     }
   }
 }
 
 /**
+ * Checks whether a media file can be safely deleted from the shared media store.
+ * Delegates to executeMediaDeleteTransaction for consistent fail-closed transactional guarantees.
+ */
+export function checkMediaDeleteSafety(
+  getPath: (subPath?: string) => string,
+  mediaNameOrUrl: string,
+  options?: ExecuteMediaDeleteOptions,
+): MediaDeleteSafetyResult {
+  return executeMediaDeleteTransaction(getPath, mediaNameOrUrl, options)
+}
+
+/**
  * Recovers from incomplete media detach journals (e.g. simulated server restart).
+ * Examines dedicated .journal/media-delete directory and restores shows & quarantined media.
  */
 export function recoverMediaDeleteJournals(
   getPath: (subPath?: string) => string,
-): { recoveredCount: number; recoveredQuizIds: string[] } {
-  const journalDir = getJournalDirectory(getPath)
+): {
+  recoveredCount: number
+  recoveredQuizIds: string[]
+  restoredMediaNames: string[]
+} {
+  const journalDir = getMediaDeleteJournalDirectory(getPath)
   if (!fs.existsSync(journalDir)) {
-    return { recoveredCount: 0, recoveredQuizIds: [] }
+    return { recoveredCount: 0, recoveredQuizIds: [], restoredMediaNames: [] }
   }
 
-  const files = fs
-    .readdirSync(journalDir)
-    .filter((f) => f.endsWith(".journal.json"))
+  let files: string[] = []
+  try {
+    files = fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))
+  } catch {
+    return { recoveredCount: 0, recoveredQuizIds: [], restoredMediaNames: [] }
+  }
+
   const recoveredQuizIds: string[] = []
+  const restoredMediaNames: string[] = []
 
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
     try {
-      const raw = fs.readFileSync(journalPath, "utf-8")
-      const entry = JSON.parse(raw) as JournalEntry
-      if (entry.status === "staged") {
-        if (entry.backupBase !== null && entry.backupBase !== undefined) {
-          const quizFile = path.join(getPath("quizz"), `${entry.quizId}.json`)
-          fs.writeFileSync(
-            quizFile,
-            JSON.stringify(entry.backupBase, null, 2),
-            "utf-8",
-          )
-        }
-        if (entry.backupExtras !== null && entry.backupExtras !== undefined) {
-          writeSidecar(
-            getPath,
-            entry.quizId,
-            entry.backupExtras as AnyQuizExtras,
-          )
-        } else {
-          deleteSidecar(getPath, entry.quizId)
-        }
-        recoveredQuizIds.push(entry.quizId)
+      if (!fs.statSync(journalPath).isFile()) {
+        continue
       }
-      fs.unlinkSync(journalPath)
+
+      const raw = fs.readFileSync(journalPath, "utf-8")
+      const entry = JSON.parse(raw) as Partial<MediaDeleteJournalEntry>
+
+      // Fail-closed invariant: ignore/preserve unknown or incompatible journals
+      if (entry.kind !== "media-delete" || entry.version !== 1) {
+        console.warn(
+          `[MediaJournal] Unknown or incompatible journal ${file}, preserving for manual inspection`,
+        )
+        continue
+      }
+
+      if (entry.status === "staged" && Array.isArray(entry.shows)) {
+        let allRestored = true
+
+        for (const s of entry.shows) {
+          try {
+            if (s.originalBaseRaw !== null && s.filePath) {
+              try {
+                if (fs.existsSync(s.filePath)) {
+                  fs.chmodSync(s.filePath, 0o666)
+                }
+              } catch {
+                // ignore
+              }
+              const tmpBase = `${s.filePath}.tmp.${Date.now()}`
+              fs.writeFileSync(tmpBase, s.originalBaseRaw, "utf-8")
+              fs.renameSync(tmpBase, s.filePath)
+            }
+            if (s.originalSidecarRaw !== null && s.sidecarPath) {
+              try {
+                if (fs.existsSync(s.sidecarPath)) {
+                  fs.chmodSync(s.sidecarPath, 0o666)
+                }
+              } catch {
+                // ignore
+              }
+              const tmpSidecar = `${s.sidecarPath}.tmp.${Date.now()}`
+              fs.writeFileSync(tmpSidecar, s.originalSidecarRaw, "utf-8")
+              fs.renameSync(tmpSidecar, s.sidecarPath)
+            } else if (s.sidecarPath && fs.existsSync(s.sidecarPath)) {
+              fs.unlinkSync(s.sidecarPath)
+            }
+            if (!recoveredQuizIds.includes(s.quizId)) {
+              recoveredQuizIds.push(s.quizId)
+            }
+          } catch (showErr) {
+            allRestored = false
+            console.error(
+              `[MediaJournal] Failed to restore show ${s.quizId}:`,
+              showErr,
+            )
+          }
+        }
+
+        // Restore media binary if quarantined and missing from media dir
+        if (entry.quarantinePath && fs.existsSync(entry.quarantinePath)) {
+          try {
+            if (entry.mediaFilePath && !fs.existsSync(entry.mediaFilePath)) {
+              fs.copyFileSync(entry.quarantinePath, entry.mediaFilePath)
+              if (
+                entry.cleanMediaName &&
+                !restoredMediaNames.includes(entry.cleanMediaName)
+              ) {
+                restoredMediaNames.push(entry.cleanMediaName)
+              }
+            }
+            // Cleanup quarantine once binary is safely in place or verified
+            fs.unlinkSync(entry.quarantinePath)
+          } catch (qErr) {
+            allRestored = false
+            console.error(
+              `[MediaJournal] Failed to restore quarantined media ${entry.cleanMediaName}:`,
+              qErr,
+            )
+          }
+        }
+
+        if (allRestored) {
+          fs.unlinkSync(journalPath)
+        } else {
+          console.warn(
+            `[MediaJournal] Partial recovery for journal ${file}, preserving for retry`,
+          )
+        }
+      }
     } catch (err) {
-      console.warn(`[MediaJournal] Failed to recover journal ${file}:`, err)
+      console.warn(`[MediaJournal] Failed reading journal ${file}:`, err)
     }
   }
 
   return {
     recoveredCount: recoveredQuizIds.length,
     recoveredQuizIds,
+    restoredMediaNames,
   }
+}
+
+export interface StartupRecoveryOptions {
+  getPath: (subPath?: string) => string
+  updateQuizz?: (id: string, quizz: unknown) => void
+  deleteQuizz?: (id: string) => void
+}
+
+/**
+ * Orchestrates startup journal recovery across both composite quiz-save and media-delete families.
+ * Invoked on process initialization before accepting HTTP/WebSocket connections.
+ */
+export function recoverStartupJournals(
+  optionsOrGetPath: StartupRecoveryOptions | ((subPath?: string) => string),
+): {
+  quizRecovery: RecoveryReport
+  mediaRecovery: {
+    recoveredCount: number
+    recoveredQuizIds: string[]
+    restoredMediaNames: string[]
+  }
+} {
+  const getPath =
+    typeof optionsOrGetPath === "function"
+      ? optionsOrGetPath
+      : optionsOrGetPath.getPath
+
+  const updateQuizz =
+    typeof optionsOrGetPath === "function"
+      ? undefined
+      : optionsOrGetPath.updateQuizz
+
+  const deleteQuizz =
+    typeof optionsOrGetPath === "function"
+      ? undefined
+      : optionsOrGetPath.deleteQuizz
+
+  const injections: StorageInjections = {
+    getPath,
+    getQuizzById: () => undefined,
+    saveQuizz: () => ({ id: "" }),
+    updateQuizz:
+      updateQuizz ??
+      ((id: string, data: unknown) => {
+        const quizzDir = getPath("quizz")
+        const filePath = path.join(quizzDir, `${id}.json`)
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
+        return { id }
+      }),
+    deleteQuizz:
+      deleteQuizz ??
+      ((id: string) => {
+        const quizzDir = getPath("quizz")
+        const filePath = path.join(quizzDir, `${id}.json`)
+        if (fs.existsSync(filePath)) {
+          fs.unlinkSync(filePath)
+        }
+      }),
+  }
+
+  const quizRecovery = recoverJournals(injections)
+  const mediaRecovery = recoverMediaDeleteJournals(getPath)
+
+  if (quizRecovery.recoveredCount > 0 || mediaRecovery.recoveredCount > 0) {
+    console.info(
+      `[StartupRecovery] Recovered ${quizRecovery.recoveredCount} quiz journals and ${mediaRecovery.recoveredCount} media delete journals`,
+    )
+  }
+
+  return { quizRecovery, mediaRecovery }
 }
 
 export interface EnrichedMediaCatalogItem extends UploadedMedia {

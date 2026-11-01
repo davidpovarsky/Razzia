@@ -8,9 +8,14 @@ import {
   associateMediaWithShow,
   buildMediaCatalogResponse,
   checkMediaDeleteSafety,
+  executeMediaDeleteTransaction,
+  getMediaDeleteJournalDirectory,
+  getMediaQuarantineDirectory,
   loadAllShowsHealth,
   recoverMediaDeleteJournals,
+  recoverStartupJournals,
 } from "./media-library"
+import { createStagedJournal, recoverJournals } from "./storage/journal"
 import { writeSidecar } from "./storage/sidecar"
 
 const Q1_ID = "00000000-0000-4000-8000-000000000001"
@@ -458,7 +463,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     expect(result.error).toContain("Concurrent modification detected")
   })
 
-  it("restart recovery: recovers staged journals across simulated crash", () => {
+  it("restart recovery: recovers staged journals across simulated crash in isolated namespace", () => {
     const quizId = "crashed-show"
     const originalShow = {
       id: quizId,
@@ -486,28 +491,41 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       JSON.stringify(corruptedBase),
     )
 
-    // Create staged journal representing backup before the crash
-    const journalDir = path.join(tempDir, "extensions", "quizzes", ".journal")
-    fs.mkdirSync(journalDir, { recursive: true })
+    // Stage quarantined binary and staged media-delete journal
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    const quarantineDir = getMediaQuarantineDirectory(getPath)
+    const quarantinePath = path.join(quarantineDir, "quarantine-crash-media.png")
+    fs.writeFileSync(quarantinePath, "RESTORED_BINARY_BYTES", "utf-8")
+
     const journalEntry = {
+      version: 1,
+      kind: "media-delete",
       id: "journal-crash-1",
-      quizId,
+      mediaNameOrUrl: "/media/crash-media.png",
+      cleanMediaName: "crash-media.png",
+      mediaFilePath: path.join(getPath("media"), "crash-media.png"),
+      quarantinePath,
       createdAt: Date.now(),
       status: "staged",
-      backupBase: originalShow,
-      backupExtras: null,
-      targetBase: null,
-      targetExtras: null,
+      shows: [
+        {
+          quizId,
+          filePath: path.join(getPath("quizz"), `${quizId}.json`),
+          sidecarPath: path.join(tempDir, "extensions", "quizzes", `${quizId}.json`),
+          originalBaseRaw: JSON.stringify(originalShow, null, 2),
+          originalSidecarRaw: null,
+        },
+      ],
     }
-    fs.writeFileSync(
-      path.join(journalDir, `${quizId}.journal.json`),
-      JSON.stringify(journalEntry),
-    )
+
+    const journalPath = path.join(journalDir, "media-crash-media-journal-crash-1.media-journal.json")
+    fs.writeFileSync(journalPath, JSON.stringify(journalEntry, null, 2), "utf-8")
 
     // Execute journal recovery
     const recovery = recoverMediaDeleteJournals(getPath)
     expect(recovery.recoveredCount).toBe(1)
     expect(recovery.recoveredQuizIds).toContain(quizId)
+    expect(recovery.restoredMediaNames).toContain("crash-media.png")
 
     // Verify base quiz file was restored to originalShow
     const restoredRaw = fs.readFileSync(
@@ -518,9 +536,208 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     expect(restored.subject).toBe("Original Show Subject")
     expect(restored.questions[0].media.url).toBe("/media/crash-media.png")
 
-    // Staged journal file is removed
-    expect(
-      fs.existsSync(path.join(journalDir, `${quizId}.journal.json`)),
-    ).toBe(false)
+    // Verify media binary was restored from quarantine
+    const restoredBinary = fs.readFileSync(path.join(getPath("media"), "crash-media.png"), "utf-8")
+    expect(restoredBinary).toBe("RESTORED_BINARY_BYTES")
+
+    // Staged journal and quarantine files are removed
+    expect(fs.existsSync(journalPath)).toBe(false)
+    expect(fs.existsSync(quarantinePath)).toBe(false)
+  })
+
+  it("Gate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure", () => {
+    const quizId = "delete-media-atomic"
+    const mediaName = "atomic-target.png"
+    const mediaPath = path.join(getPath("media"), mediaName)
+    fs.writeFileSync(mediaPath, "ORIGINAL_MEDIA_CONTENT", "utf-8")
+
+    const show = {
+      id: quizId,
+      subject: "Atomic Delete Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          media: { type: "image", url: `/media/${mediaName}` },
+          answers: ["1", "2"],
+          solutions: [0],
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${quizId}.json`),
+      JSON.stringify(show, null, 2),
+    )
+
+    // 1A. With detach: false -> returns 409 references without touching media
+    const blockedResult = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: false,
+      deleteMediaFn: () => fs.unlinkSync(mediaPath),
+    })
+    expect(blockedResult.allowed).toBe(false)
+    expect(blockedResult.references).toHaveLength(1)
+    expect(fs.existsSync(mediaPath)).toBe(true)
+
+    // 1B. Failure in deleteMediaFn -> rolls back detached show and restores media binary
+    const failDeleteResult = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      deleteMediaFn: () => {
+        throw new Error("EPERM: disk error during physical delete")
+      },
+    })
+    expect(failDeleteResult.allowed).toBe(false)
+    expect(failDeleteResult.error).toContain("EPERM")
+    // Show still has reference
+    const showAfterFailRaw = fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf-8")
+    expect(showAfterFailRaw).toContain(mediaName)
+    // Media binary preserved
+    expect(fs.readFileSync(mediaPath, "utf-8")).toBe("ORIGINAL_MEDIA_CONTENT")
+
+    // 1C. Success: removes references and deletes binary atomically
+    const successResult = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      deleteMediaFn: () => fs.unlinkSync(mediaPath),
+    })
+    expect(successResult.allowed).toBe(true)
+    expect(fs.existsSync(mediaPath)).toBe(false)
+    const showFinalRaw = fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf-8")
+    expect(showFinalRaw).not.toContain(mediaName)
+  })
+
+  it("Gate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation", () => {
+    const quizId = "fault-injection-show"
+    const mediaName = "fault-target.png"
+    const mediaPath = path.join(getPath("media"), mediaName)
+    fs.writeFileSync(mediaPath, "FAULT_TARGET_BYTES", "utf-8")
+
+    const show = {
+      id: quizId,
+      subject: "Fault Injection Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          media: { type: "image", url: `/media/${mediaName}` },
+          answers: ["A", "B"],
+          solutions: [0],
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${quizId}.json`),
+      JSON.stringify(show, null, 2),
+    )
+
+    // 4A. Fault injection before show write -> safely rolled back, no corruption
+    const failBeforeWrite = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      faultInjection: { failBeforeShowWrite: true },
+    })
+    expect(failBeforeWrite.allowed).toBe(false)
+    expect(failBeforeWrite.error).toContain("Simulated failure before writing detached show")
+
+    // 5A. Fault injection DURING rollback -> rollback fails, JOURNAL SURVIVES for crash recovery
+    const failDuringRollback = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      faultInjection: {
+        failAfterFirstShowWrite: true,
+        failDuringRollback: true,
+      },
+    })
+    expect(failDuringRollback.allowed).toBe(false)
+    expect(failDuringRollback.error).toContain("Journal preserved for recovery")
+
+    // Verify journal file exists in media-delete directory
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    const journalFiles = fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))
+    expect(journalFiles.length).toBeGreaterThan(0)
+
+    // Now simulated restart / startup recovery recovers the preserved journal
+    const recovery = recoverMediaDeleteJournals(getPath)
+    expect(recovery.recoveredCount).toBeGreaterThan(0)
+    expect(recovery.recoveredQuizIds).toContain(quizId)
+
+    // And after recovery, journal is cleaned up
+    const remainingJournals = fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))
+    expect(remainingJournals).toHaveLength(0)
+  })
+
+  it("Gate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other", () => {
+    const quizSaveId = "save-journal-show"
+    const mediaDeleteId = "media-journal-show"
+
+    // 1. Create a composite-save journal in .journal/
+    createStagedJournal(getPath, {
+      quizId: quizSaveId,
+      backupBase: { id: quizSaveId, subject: "Restored Save Base" },
+      backupExtras: null,
+      targetBase: null,
+      targetExtras: null,
+    })
+
+    // 2. Create a media-delete journal in .journal/media-delete/
+    const mediaJournalDir = getMediaDeleteJournalDirectory(getPath)
+    const mediaJournalEntry = {
+      version: 1,
+      kind: "media-delete",
+      id: "media-delete-uuid",
+      mediaNameOrUrl: "/media/coexist.png",
+      cleanMediaName: "coexist.png",
+      createdAt: Date.now(),
+      status: "staged",
+      shows: [
+        {
+          quizId: mediaDeleteId,
+          filePath: path.join(getPath("quizz"), `${mediaDeleteId}.json`),
+          sidecarPath: path.join(tempDir, "extensions", "quizzes", `${mediaDeleteId}.json`),
+          originalBaseRaw: JSON.stringify({ id: mediaDeleteId, subject: "Restored Media Base" }),
+          originalSidecarRaw: null,
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(mediaJournalDir, "media-coexist-media-delete-uuid.media-journal.json"),
+      JSON.stringify(mediaJournalEntry, null, 2),
+      "utf-8",
+    )
+
+    // Execute recoverJournals (composite-save only)
+    const quizReport = recoverJournals({
+      getPath,
+      getQuizzById: () => undefined,
+      saveQuizz: () => ({ id: "" }),
+      updateQuizz: (id, q) => {
+        fs.writeFileSync(path.join(getPath("quizz"), `${id}.json`), JSON.stringify(q))
+        return { id }
+      },
+      deleteQuizz: () => undefined,
+    })
+    expect(quizReport.recoveredQuizIds).toContain(quizSaveId)
+    expect(quizReport.recoveredQuizIds).not.toContain(mediaDeleteId)
+
+    // Media delete journal MUST still exist untouched!
+    expect(fs.readdirSync(mediaJournalDir).filter((f) => f.endsWith(".json"))).toHaveLength(1)
+
+    // Now execute recoverMediaDeleteJournals
+    const mediaReport = recoverMediaDeleteJournals(getPath)
+    expect(mediaReport.recoveredQuizIds).toContain(mediaDeleteId)
+    expect(mediaReport.recoveredQuizIds).not.toContain(quizSaveId)
+
+    // Media journal is now recovered
+    expect(fs.readdirSync(mediaJournalDir).filter((f) => f.endsWith(".json"))).toHaveLength(0)
+  })
+
+  it("Gate A4 (10): recoverStartupJournals is idempotent across multiple calls", () => {
+    // Calling startup recovery on a clean directory produces zero recovered
+    const report1 = recoverStartupJournals(getPath)
+    expect(report1.quizRecovery.recoveredCount).toBe(0)
+    expect(report1.mediaRecovery.recoveredCount).toBe(0)
+
+    // Second call produces zero recovered
+    const report2 = recoverStartupJournals(getPath)
+    expect(report2.quizRecovery.recoveredCount).toBe(0)
+    expect(report2.mediaRecovery.recoveredCount).toBe(0)
   })
 })

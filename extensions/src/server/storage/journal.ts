@@ -10,6 +10,8 @@ import {
 import { quizExtrasV1Schema } from "../../core/index"
 
 export interface JournalEntry {
+  version?: 1
+  kind?: "quiz-save"
   id: string
   quizId: string
   createdAt: number
@@ -54,6 +56,8 @@ export const createStagedJournal = (
   },
 ): JournalEntry => {
   const entry: JournalEntry = {
+    version: 1,
+    kind: "quiz-save",
     id: uuidv7(),
     quizId: params.quizId,
     createdAt: Date.now(),
@@ -66,7 +70,9 @@ export const createStagedJournal = (
 
   const filePath = getJournalFilePath(getPath, params.quizId)
 
-  fs.writeFileSync(filePath, JSON.stringify(entry, null, 2), "utf-8")
+  const tmpPath = `${filePath}.tmp.${Date.now()}`
+  fs.writeFileSync(tmpPath, JSON.stringify(entry, null, 2), "utf-8")
+  fs.renameSync(tmpPath, filePath)
 
   return entry
 }
@@ -110,8 +116,17 @@ export const recoverJournals = (
     const journalPath = path.join(journalDir, file)
 
     try {
+      if (!fs.statSync(journalPath).isFile()) {
+        continue
+      }
+
       const raw = fs.readFileSync(journalPath, "utf-8")
       const entry = JSON.parse(raw) as JournalEntry
+
+      // Skip media-delete entries; they are exclusively recovered by recoverMediaDeleteJournals
+      if (entry.kind === "media-delete") {
+        continue
+      }
 
       if (entry.status === "staged") {
         // Roll back base quiz to backupBase

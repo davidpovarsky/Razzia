@@ -1,11 +1,24 @@
 import { createAdaptorServer } from "@hono/node-server"
+import { recoverStartupJournals } from "@razzia/extensions/server"
 import { app, createSocketServer } from "@razzia/socket/app"
-import { initConfig } from "@razzia/socket/services/config"
+import {
+  deleteQuizz,
+  getPath,
+  initConfig,
+  updateQuizz,
+} from "@razzia/socket/services/config"
 import Registry from "@razzia/socket/services/registry"
 
 const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
 
 initConfig()
+
+// Startup journal recovery: recover pending composite-save and media-delete transactions before accepting requests
+recoverStartupJournals({
+  getPath,
+  updateQuizz,
+  deleteQuizz,
+})
 
 process.on("uncaughtException", (error) => {
   console.error("Uncaught exception:", error)

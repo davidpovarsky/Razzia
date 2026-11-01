@@ -37,19 +37,22 @@ const routes = apiFactory
   .delete("/:name", (c) => {
     const name = c.req.param("name")
     const detach = c.req.query("detach") === "true"
-    const safety = checkMediaDeleteSafety(getPath, name, { detach })
+    const safety = checkMediaDeleteSafety(getPath, name, {
+      detach,
+      deleteMediaFn: () => deleteMedia(name),
+    })
 
     if (!safety.allowed) {
       return c.json(
         {
-          error: "extensions:mediaLibrary.deleteBlockedDesc",
+          error: safety.error || "extensions:mediaLibrary.deleteBlockedDesc",
           references: safety.references,
         },
-        StatusCodes.CONFLICT,
+        safety.unreadableFiles && safety.unreadableFiles.length > 0
+          ? StatusCodes.INTERNAL_SERVER_ERROR
+          : StatusCodes.CONFLICT,
       )
     }
-
-    deleteMedia(name)
 
     return c.body(null, StatusCodes.NO_CONTENT)
   })
