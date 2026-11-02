@@ -138,4 +138,49 @@ The composite quiz-save journal (`.journal/<quizId>.journal.json`) enforces a st
 ### B. Media-Delete State Machine & Durable Commit Order (Bug B)
 Media deletion transitions across three durable states: `staged` -> `committed` -> `cleaned`. In `staged`, the media binary is safeguarded in `.journal/media-delete/quarantine/` before any show or sidecar file is modified; a crash or error during show detachment or binary deletion triggers a complete rollback restoring both the binary and show references. The point-of-no-return occurs only after references are detached, zero active references are verified, and `deleteMediaFn()` removes the physical file: an atomic transition writes `status: "committed"` to the journal before the quarantine binary is unlinked. If a crash occurs post-deletion, restart recovery recognizes `committed` status and proceeds forward with quarantine and journal unlinking without rolling back to dangling references. If recovery encounters unreadable shows or permission failures, all recovery artifacts are preserved and reported as unresolved to prevent silent unsafe server readiness.
 
+---
+
+## 7. Execution Record & Gate Audit (Gates 1–4)
+
+### Gate 1: Quiz-Save Journal V2 Restoration & Fail-Closed Integrity (Bug A)
+- **Defect Identified:** `recoverJournals()` parsed `backupExtras` strictly with `quizExtrasV1Schema`. On valid V2 sidecars, parsing failed, triggering `deleteSidecar()` and unlinking the journal, thereby permanently destroying V2 sidecars during crash recovery. Restore errors in `updateQuizz`/`deleteQuizz` were swallowed.
+- **Implementation:**
+  - Implemented version-discriminated parsing in `extensions/src/server/storage/journal.ts`: non-null `backupExtras` parses against `quizExtrasV2Schema` first and `quizExtrasV1Schema` second.
+  - Fail-closed guard: Non-null backup parsing failure strictly preserves the existing sidecar and journal, logging errors and registering `unresolvedQuizIds`.
+  - Added path traversal and sanity check on `quizId` preventing arbitrary directory writes.
+  - Added concurrent modification guard: skips rollback if current sidecar revision is newer than the journal target revision.
+  - Verified restore state (base and sidecar verification) before unlinking journal.
+- **Pre-Fix Failure Evidence:** `AssertionError: expected null not to be null` in `extensions/src/server/storage.test.ts`.
+- **Post-Fix Verification:** All 22 tests in `extensions/src/server/storage.test.ts` passed 100%.
+- **Commit SHA:** `b9e6995` (`fix(storage): discriminate V1/V2 extras and verify restored states in quiz-save journal recovery (Gate 1)`).
+
+### Gate 2: Media-Delete Durable State Machine & Point-of-No-Return Ordering (Bug B)
+- **Defect Identified:** `executeMediaDeleteTransaction()` in `extensions/src/server/media-library.ts` unlinked the quarantine binary before unlinking the staged journal file. A crash in this window left a `staged` journal with no quarantine binary; recovery attempted to restore shows pointing to the missing binary while removing the journal.
+- **Implementation:**
+  - Designed an explicit durable state machine: `staged` -> `committed` -> `cleaned`.
+  - Staged phase: Media binary is preserved in quarantine. If rollback is needed, both shows and binary are restored and verified before quarantine release.
+  - Point-of-no-return: Once shows are detached and binary is physically removed via `deleteMediaFn()`, `status: "committed"` is atomically written to the journal before the quarantine file is unlinked.
+  - Committed recovery: Recognizes `status: "committed"`, verifies no active references, unlinks quarantine and journal forward without rolling back to broken references.
+  - Safety check in `recoverMediaDeleteJournals`: If a staged journal is found with missing quarantine and missing media binary, rollback is blocked to prevent dangling references, preserving the journal and reporting unresolved status.
+  - Preserved upstream route integration: `deleteMediaFn()` errors in no-references branch propagate as `DomainError` (400/404) rather than being swallowed into 409 Conflict.
+- **Pre-Fix Failure Evidence:** `AssertionError: expected '...Show...' not to contain 'lost-media.png'` in `extensions/src/server/media-library.test.ts`.
+- **Post-Fix Verification:** All 17 tests in `extensions/src/server/media-library.test.ts` and 23 tests in `packages/socket/src/api/api.test.ts` passed 100%.
+- **Commit SHA:** `1d0a839` (`fix(media): implement point-of-no-return durable state machine and safe recovery (Gate 2)`).
+
+### Gate 3: Concurrent Cross-Family Recovery & Startup Safety
+- **Cross-Family Test:** Created end-to-end crash scenario with concurrently staged V2 quiz-save journal and media-delete journal. Verified deterministic recovery of both families without data loss.
+- **Startup Protection:** `recoverStartupJournals()` returns structured `{ status: "clean" | "recovered" | "failed", unresolvedCount, ... }` and halts server startup (`throw Error`) when critical journals fail, preventing silent unsafe operation.
+- **Suite Verification:**
+  - `pnpm --filter @razzia/extensions test`: 29 test files, 304 tests passed (100% green).
+  - `pnpm exec vitest run packages/socket`: 11 test files, 144 tests passed (100% green).
+  - `pnpm test`: 22 test files, 312 tests passed (100% green).
+  - `pnpm build`: Both `@razzia/socket` and `@razzia/web` built cleanly in 13.6s.
+- **Commit SHA:** `a80126e` (`test(recovery): add cross-family concurrent recovery suite and format codebase (Gate 3)`).
+
+### Gate 4: Cleanliness & Upstream Guardrail Audit
+- **Upstream Files Touched:** ZERO (`0`) files touched in `packages/**`. All modifications are strictly contained within `extensions/**`.
+- **Formatting & Style:** Prettier check passed cleanly across all modified files. `git diff --check` clean.
+- **Branch & HEAD:** `agent/tomer/wave2`, working tree clean.
+
+
 
