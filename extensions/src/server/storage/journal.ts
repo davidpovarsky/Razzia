@@ -247,7 +247,9 @@ export const recoverJournals = (
             if (v1.success) {
               parsedExtras = v1.data
             } else {
-              const v2Fallback = quizExtrasV2Schema.safeParse(entry.backupExtras)
+              const v2Fallback = quizExtrasV2Schema.safeParse(
+                entry.backupExtras,
+              )
               if (v2Fallback.success) {
                 parsedExtras = v2Fallback.data
               }

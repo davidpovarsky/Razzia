@@ -76,7 +76,9 @@ export function loadAllShowsHealth(
         try {
           parsed = JSON.parse(raw)
         } catch (jsonErr) {
-          unreadableFiles.push(`quizz/${file}: invalid JSON (${(jsonErr as Error).message})`)
+          unreadableFiles.push(
+            `quizz/${file}: invalid JSON (${(jsonErr as Error).message})`,
+          )
           continue
         }
 
@@ -119,7 +121,9 @@ export function loadAllShowsHealth(
   if (fs.existsSync(sidecarDir)) {
     let sidecarFiles: string[] = []
     try {
-      sidecarFiles = fs.readdirSync(sidecarDir).filter((f) => f.endsWith(".json"))
+      sidecarFiles = fs
+        .readdirSync(sidecarDir)
+        .filter((f) => f.endsWith(".json"))
     } catch {
       // directory read failure
     }
@@ -134,7 +138,9 @@ export function loadAllShowsHealth(
           JSON.parse(raw)
           const extras = readSidecar(getPath, cleanQuizId)
           if (!extras) {
-            unreadableFiles.push(`extensions/quizzes/${sf}: invalid sidecar schema`)
+            unreadableFiles.push(
+              `extensions/quizzes/${sf}: invalid sidecar schema`,
+            )
           } else {
             records.push({
               id: cleanQuizId,
@@ -144,7 +150,9 @@ export function loadAllShowsHealth(
             })
           }
         } catch (err) {
-          unreadableFiles.push(`extensions/quizzes/${sf}: ${(err as Error).message}`)
+          unreadableFiles.push(
+            `extensions/quizzes/${sf}: ${(err as Error).message}`,
+          )
         }
       }
     }
@@ -171,7 +179,11 @@ export interface MediaDeleteSafetyResult {
 export const getMediaDeleteJournalDirectory = (
   getPath: (subPath?: string) => string,
 ): string => {
-  const dir = path.join(getSidecarDirectory(getPath), ".journal", "media-delete")
+  const dir = path.join(
+    getSidecarDirectory(getPath),
+    ".journal",
+    "media-delete",
+  )
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
@@ -487,7 +499,10 @@ export function executeMediaDeleteTransaction(
       detachedFromShows.push(show.id)
       writeCount++
 
-      if (options?.faultInjection?.failAfterFirstShowWrite && writeCount === 1) {
+      if (
+        options?.faultInjection?.failAfterFirstShowWrite &&
+        writeCount === 1
+      ) {
         throw new Error("Simulated failure after writing first detached show")
       }
     }
@@ -680,7 +695,10 @@ export function recoverMediaDeleteJournals(
       try {
         raw = fs.readFileSync(journalPath, "utf-8")
       } catch (readErr) {
-        console.error(`[MediaJournal] Unreadable journal file ${file}:`, readErr)
+        console.error(
+          `[MediaJournal] Unreadable journal file ${file}:`,
+          readErr,
+        )
         unresolvedJournals.push(file)
         continue
       }
@@ -728,7 +746,10 @@ export function recoverMediaDeleteJournals(
       let targetQuarantinePath: string | null = null
       if (entry.quarantinePath) {
         const quarantineBase = path.basename(entry.quarantinePath)
-        targetQuarantinePath = path.join(authorizedQuarantineDir, quarantineBase)
+        targetQuarantinePath = path.join(
+          authorizedQuarantineDir,
+          quarantineBase,
+        )
         if (
           entry.quarantinePath.includes("..") ||
           !quarantineBase.includes(cleanMediaName)
@@ -859,7 +880,10 @@ export function recoverMediaDeleteJournals(
           }
         }
 
-        if (!allRestored || (hadBinaryQuarantined && !fs.existsSync(targetMediaFilePath))) {
+        if (
+          !allRestored ||
+          (hadBinaryQuarantined && !fs.existsSync(targetMediaFilePath))
+        ) {
           unresolvedJournals.push(file)
           continue
         }
@@ -1083,9 +1107,7 @@ export function buildMediaCatalogResponse(
     : undefined
   const showMediaCatalog: ShowMediaCatalogItem[] =
     currentShow?.extras?.mediaCatalog ?? []
-  const currentCatalogNames = new Set(
-    showMediaCatalog.map((item) => item.name),
-  )
+  const currentCatalogNames = new Set(showMediaCatalog.map((item) => item.name))
   const currentCatalogUrls = new Set(showMediaCatalog.map((item) => item.url))
 
   const enriched: EnrichedMediaCatalogItem[] = uploadedMedia.map((item) => {
@@ -1094,9 +1116,9 @@ export function buildMediaCatalogResponse(
     )
     const usedInCurrentShow = Boolean(
       currentQuizId &&
-        (itemRefs.some((r) => r.quizId === currentQuizId) ||
-          currentCatalogNames.has(item.name) ||
-          currentCatalogUrls.has(item.url)),
+      (itemRefs.some((r) => r.quizId === currentQuizId) ||
+        currentCatalogNames.has(item.name) ||
+        currentCatalogUrls.has(item.url)),
     )
 
     return {

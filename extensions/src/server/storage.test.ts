@@ -366,15 +366,61 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
       audio: {
         cues: {
-          start: { source: "media", url: "/media/start.mp3", volume: 0.9, enabled: true, loop: false },
-          showQuestion: { source: "default", volume: 0.8, enabled: true, loop: false },
-          answersMusic: { source: "default", volume: 0.8, enabled: true, loop: true },
-          answerPressed: { source: "default", volume: 0.8, enabled: true, loop: false },
-          revealResults: { source: "default", volume: 0.8, enabled: true, loop: false },
-          leaderboard: { source: "default", volume: 0.8, enabled: true, loop: false },
-          podium1: { source: "default", volume: 0.8, enabled: true, loop: false },
-          podium2: { source: "default", volume: 0.8, enabled: true, loop: false },
-          podium3: { source: "default", volume: 0.8, enabled: true, loop: false },
+          start: {
+            source: "media",
+            url: "/media/start.mp3",
+            volume: 0.9,
+            enabled: true,
+            loop: false,
+          },
+          showQuestion: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          answersMusic: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: true,
+          },
+          answerPressed: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          revealResults: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          leaderboard: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          podium1: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          podium2: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
+          podium3: {
+            source: "default",
+            volume: 0.8,
+            enabled: true,
+            loop: false,
+          },
         },
       },
       perQuestion: {
@@ -414,7 +460,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Simulate crash after base update and before sidecar write:
     // Staged journal has backupBase + backupExtras (our rich V2 extras)
-    const modifiedBase = { ...initialBase, subject: "Modified Subject During Crash" }
+    const modifiedBase = {
+      ...initialBase,
+      subject: "Modified Subject During Crash",
+    }
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
@@ -425,7 +474,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Mutate base quiz to the partially written target state
     injections.updateQuizz(quizId, modifiedBase)
-    expect(baseQuizzes.get(quizId)?.subject).toBe("Modified Subject During Crash")
+    expect(baseQuizzes.get(quizId)?.subject).toBe(
+      "Modified Subject During Crash",
+    )
 
     // Run recovery
     const report = recoverJournals(injections)
@@ -445,11 +496,20 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(v2Restored.timeline.length).toBe(3)
     expect(v2Restored.timeline[0].kind).toBe("opening")
     expect(v2Restored.scenes[sceneId]?.title).toBe("Welcome Scene")
-    expect(v2Restored.scenes[sceneId]?.background?.url).toBe("/media/welcome-bg.png")
+    expect(v2Restored.scenes[sceneId]?.background?.url).toBe(
+      "/media/welcome-bg.png",
+    )
     expect(v2Restored.audio.cues.start.source).toBe("media")
-    expect(v2Restored.perQuestion[qIds[0]]?.background?.url).toBe("/media/q1-bg.png")
-    expect(v2Restored.perQuestion[qIds[0]]?.stageAnimations?.questionEntrance?.preset).toBe("curtain")
-    expect(v2Restored.authoring?.showNote).toBe("P0 Authoring Note for V2 Journal Recovery")
+    expect(v2Restored.perQuestion[qIds[0]]?.background?.url).toBe(
+      "/media/q1-bg.png",
+    )
+    expect(
+      v2Restored.perQuestion[qIds[0]]?.stageAnimations?.questionEntrance
+        ?.preset,
+    ).toBe("curtain")
+    expect(v2Restored.authoring?.showNote).toBe(
+      "P0 Authoring Note for V2 Journal Recovery",
+    )
     expect(v2Restored.mediaCatalog?.[0]?.name).toBe("welcome-bg.png")
 
     // Journal must be removed after successful verified restoration
@@ -509,7 +569,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const v2Extras = createDefaultQuizExtras(quizId, qIds, initialBaseDigest)
     writeSidecar(injections.getPath, quizId, v2Extras)
 
-    const updatedBase = { ...initialBase, subject: "Updated Subject Both Written" }
+    const updatedBase = {
+      ...initialBase,
+      subject: "Updated Subject Both Written",
+    }
     const updatedExtras = {
       ...v2Extras,
       revision: 2,
@@ -601,7 +664,11 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
     const qIds = generateQuestionIds(2)
-    const v2Extras = createDefaultQuizExtras(quizId, qIds, computeCanonicalBaseDigest(initialBase))
+    const v2Extras = createDefaultQuizExtras(
+      quizId,
+      qIds,
+      computeCanonicalBaseDigest(initialBase),
+    )
     writeSidecar(injections.getPath, quizId, v2Extras)
 
     createStagedJournal(injections.getPath, {
@@ -634,7 +701,11 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
     const qIds = generateQuestionIds(2)
-    const v2Extras = createDefaultQuizExtras(quizId, qIds, computeCanonicalBaseDigest(initialBase))
+    const v2Extras = createDefaultQuizExtras(
+      quizId,
+      qIds,
+      computeCanonicalBaseDigest(initialBase),
+    )
 
     // Journal was created for revision 1 -> target revision 2
     createStagedJournal(injections.getPath, {
@@ -649,9 +720,15 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const newerRevision3 = {
       ...v2Extras,
       revision: 3,
-      baseDigest: computeCanonicalBaseDigest({ ...initialBase, subject: "Concurrent New Subject Rev 3" }),
+      baseDigest: computeCanonicalBaseDigest({
+        ...initialBase,
+        subject: "Concurrent New Subject Rev 3",
+      }),
     }
-    injections.updateQuizz(quizId, { ...initialBase, subject: "Concurrent New Subject Rev 3" })
+    injections.updateQuizz(quizId, {
+      ...initialBase,
+      subject: "Concurrent New Subject Rev 3",
+    })
     writeSidecar(injections.getPath, quizId, newerRevision3)
 
     const journalPath = getJournalFilePath(injections.getPath, quizId)
@@ -664,7 +741,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // The newer revision 3 must remain intact
     const currentSidecar = readSidecar(injections.getPath, quizId)
     expect(currentSidecar?.revision).toBe(3)
-    expect(baseQuizzes.get(quizId)?.subject).toBe("Concurrent New Subject Rev 3")
+    expect(baseQuizzes.get(quizId)?.subject).toBe(
+      "Concurrent New Subject Rev 3",
+    )
   })
 
   it("CORE06: enhanced bundle import/export remaps question IDs and preserves metadata", () => {
@@ -902,15 +981,60 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
         audio: {
           cues: {
-            start: { source: "default", volume: 0.8, enabled: true, loop: false },
-            showQuestion: { source: "default", volume: 0.8, enabled: true, loop: false },
-            answersMusic: { source: "default", volume: 0.8, enabled: true, loop: true },
-            answerPressed: { source: "default", volume: 0.8, enabled: true, loop: false },
-            revealResults: { source: "default", volume: 0.8, enabled: true, loop: false },
-            leaderboard: { source: "default", volume: 0.8, enabled: true, loop: false },
-            podium1: { source: "default", volume: 0.8, enabled: true, loop: false },
-            podium2: { source: "default", volume: 0.8, enabled: true, loop: false },
-            podium3: { source: "default", volume: 0.8, enabled: true, loop: false },
+            start: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            showQuestion: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            answersMusic: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: true,
+            },
+            answerPressed: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            revealResults: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            leaderboard: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            podium1: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            podium2: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
+            podium3: {
+              source: "default",
+              volume: 0.8,
+              enabled: true,
+              loop: false,
+            },
           },
         },
         perQuestion: {},
@@ -951,7 +1075,12 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
           questionType: "single",
           question: "What is 10 x 10?",
           answers: [
-            { text: "100", display: "both", imageUrl: "https://example.com/100.png", alt: "100" },
+            {
+              text: "100",
+              display: "both",
+              imageUrl: "https://example.com/100.png",
+              alt: "100",
+            },
             { text: "1000", display: "text" },
           ],
           correctAnswers: [1],
@@ -1005,7 +1134,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     expect(thrown).toBeInstanceOf(CompositeStorageError)
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
-    expect((thrown as CompositeStorageError).message).toContain("errors:extensions.invalidMediaUrl")
+    expect((thrown as CompositeStorageError).message).toContain(
+      "errors:extensions.invalidMediaUrl",
+    )
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
 
@@ -1037,7 +1168,7 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       advance: "manual" as const,
       audioCue: "start",
     }
-    const noteText = "הערת עורך לשעשועון חי\nLine 2 with quotes \"tested\""
+    const noteText = 'הערת עורך לשעשועון חי\nLine 2 with quotes "tested"'
 
     const authoredShow = {
       format: "tada-show",
@@ -1060,7 +1191,8 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     }
 
     // 1. Import friendly show via service
-    const { quizId, revision, baseDigest } = service.importEnhancedBundle(authoredShow)
+    const { quizId, revision, baseDigest } =
+      service.importEnhancedBundle(authoredShow)
     expect(quizId).toBeDefined()
     expect(revision).toBe(1)
 
@@ -1079,7 +1211,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const exportedBundle = service.exportEnhancedBundle(quizId)
     const exportedExtras = exportedBundle.extras as any
     expect(exportedExtras.authoring?.showNote).toBe(noteText)
-    expect(exportedExtras.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
+    expect(exportedExtras.perQuestion[freshQId]?.interlude).toEqual(
+      interludeConfig,
+    )
 
     // 4. Save another editor change (revision increment)
     const updatedExtras = {
@@ -1102,7 +1236,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const reloaded = service.getCompositeQuiz(quizId)
     const reloadedExtras = reloaded.extras as any
     expect(reloadedExtras.authoring?.showNote).toBe(noteText)
-    expect(reloadedExtras.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
+    expect(reloadedExtras.perQuestion[freshQId]?.interlude).toEqual(
+      interludeConfig,
+    )
     expect(reloadedExtras.defaults.advanceMode).toBe("manual")
   })
 
@@ -1141,7 +1277,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     expect(thrown).toBeInstanceOf(CompositeStorageError)
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
-    expect((thrown as CompositeStorageError).message).toContain("unsupportedSettingTargetKey")
+    expect((thrown as CompositeStorageError).message).toContain(
+      "unsupportedSettingTargetKey",
+    )
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
 })
