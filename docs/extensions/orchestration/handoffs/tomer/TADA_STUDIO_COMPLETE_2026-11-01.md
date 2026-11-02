@@ -128,4 +128,14 @@ Following review of initial Stage-Fit and Media Deletion implementations, prompt
   - `pnpm --filter @razzia/web build`: Built cleanly in 10.59s.
 - **Cleanliness:** `git status` clean, `git diff --check` clean.
 
+---
+
+## 6. P0 Data Integrity & Crash Recovery Repairs (Gate 0 Decision Note — 2026-11-02)
+
+### A. Quiz-Save Journal State & Restoration Invariants (Bug A)
+The composite quiz-save journal (`.journal/<quizId>.journal.json`) enforces a strict two-phase commit between base quiz storage and extension sidecars (`extensions/quizzes/<quizId>.json`). To eliminate the defect where V2 sidecars were stripped during recovery, `recoverJournals` implements schema-version discrimination: non-null backup extras are parsed against `quizExtrasV2Schema` first and `quizExtrasV1Schema` second, preserving all V2 timeline, scenes, defaults, audio, and appearance data without regression. A corrupt or unrecognized non-null backup triggers a fail-closed response: it is never treated as null, `deleteSidecar` is strictly forbidden, and the journal is preserved for forensic inspection rather than deleted. State restoration requires atomic base updates and sidecar writes, verifying on-disk integrity before the journal is unlinked.
+
+### B. Media-Delete State Machine & Durable Commit Order (Bug B)
+Media deletion transitions across three durable states: `staged` -> `committed` -> `cleaned`. In `staged`, the media binary is safeguarded in `.journal/media-delete/quarantine/` before any show or sidecar file is modified; a crash or error during show detachment or binary deletion triggers a complete rollback restoring both the binary and show references. The point-of-no-return occurs only after references are detached, zero active references are verified, and `deleteMediaFn()` removes the physical file: an atomic transition writes `status: "committed"` to the journal before the quarantine binary is unlinked. If a crash occurs post-deletion, restart recovery recognizes `committed` status and proceeds forward with quarantine and journal unlinking without rolling back to dangling references. If recovery encounters unreadable shows or permission failures, all recovery artifacts are preserved and reported as unresolved to prevent silent unsafe server readiness.
+
 

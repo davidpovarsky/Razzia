@@ -10,13 +10,21 @@ import {
   reorderQuestionIds,
   RevisionConflictError,
   type QuizExtrasV1,
+  type QuizExtrasV2,
 } from "../core/index"
 import { CompositeStorageError } from "./storage/error"
-import { createStagedJournal, recoverJournals } from "./storage/journal"
+import {
+  createStagedJournal,
+  getJournalDirectory,
+  getJournalFilePath,
+  recoverJournals,
+} from "./storage/journal"
 import { CompositeStorageService } from "./storage/service"
 import {
+  deleteSidecar,
   getSidecarFilePath,
   readSidecar,
+  sidecarExists,
   writeSidecar,
   type StorageInjections,
 } from "./storage/sidecar"
@@ -304,6 +312,359 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const recoveredExtras = readSidecar(injections.getPath, quizId)
 
     expect(recoveredExtras?.revision).toBe(1)
+  })
+
+  it("Bug A: recovers valid V2 extras from staged journal without stripping timeline, scenes, audio, backgrounds, authoring, and media catalog", () => {
+    const { id: quizId } = injections.saveQuizz(sampleQuiz)
+    const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
+    const qIds = generateQuestionIds(2)
+    const initialBaseDigest = computeCanonicalBaseDigest(initialBase)
+
+    const sceneId = crypto.randomUUID()
+    const tItemSceneId = crypto.randomUUID()
+    const tItemQ1Id = crypto.randomUUID()
+    const tItemQ2Id = crypto.randomUUID()
+
+    const v2Extras: QuizExtrasV2 = {
+      schemaVersion: 2,
+      revision: 1,
+      quizId,
+      baseDigest: initialBaseDigest,
+      questionIds: qIds,
+      timeline: [
+        { id: tItemSceneId, kind: "opening", sceneId },
+        { id: tItemQ1Id, kind: "question", questionId: qIds[0] },
+        { id: tItemQ2Id, kind: "question", questionId: qIds[1] },
+      ],
+      scenes: {
+        [sceneId]: {
+          id: sceneId,
+          kind: "opening",
+          title: "Welcome Scene",
+          subtitle: "Let's begin",
+          durationMs: 4000,
+          advance: "auto",
+          background: {
+            url: "/media/welcome-bg.png",
+            fit: "cover",
+            position: "center",
+            overlayOpacity: 0.3,
+          },
+          audio: {
+            mode: "custom",
+            url: "/media/start.mp3",
+            volume: 0.9,
+            loop: false,
+          },
+        },
+      },
+      defaults: {
+        newQuestionMode: "quiz",
+        leaderboardPolicy: "cardOnly",
+        advanceMode: "auto",
+      },
+      teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
+      audio: {
+        cues: {
+          start: { source: "media", url: "/media/start.mp3", volume: 0.9, enabled: true, loop: false },
+          showQuestion: { source: "default", volume: 0.8, enabled: true, loop: false },
+          answersMusic: { source: "default", volume: 0.8, enabled: true, loop: true },
+          answerPressed: { source: "default", volume: 0.8, enabled: true, loop: false },
+          revealResults: { source: "default", volume: 0.8, enabled: true, loop: false },
+          leaderboard: { source: "default", volume: 0.8, enabled: true, loop: false },
+          podium1: { source: "default", volume: 0.8, enabled: true, loop: false },
+          podium2: { source: "default", volume: 0.8, enabled: true, loop: false },
+          podium3: { source: "default", volume: 0.8, enabled: true, loop: false },
+        },
+      },
+      perQuestion: {
+        [qIds[0]]: {
+          background: {
+            url: "/media/q1-bg.png",
+            fit: "contain",
+            position: "center",
+            overlayOpacity: 0.2,
+          },
+          stageAnimations: {
+            questionEntrance: {
+              preset: "curtain",
+              timing: "simultaneous",
+              staggerMs: 50,
+              durationMs: 500,
+            },
+          },
+        },
+      },
+      roster: createDefaultRosterExtras(),
+      authoring: {
+        showNote: "P0 Authoring Note for V2 Journal Recovery",
+      },
+      mediaCatalog: [
+        {
+          name: "welcome-bg.png",
+          url: "/media/welcome-bg.png",
+          type: "image",
+          addedAt: Date.now(),
+        },
+      ],
+    }
+
+    // Write initial V2 sidecar to disk
+    writeSidecar(injections.getPath, quizId, v2Extras)
+
+    // Simulate crash after base update and before sidecar write:
+    // Staged journal has backupBase + backupExtras (our rich V2 extras)
+    const modifiedBase = { ...initialBase, subject: "Modified Subject During Crash" }
+    createStagedJournal(injections.getPath, {
+      quizId,
+      backupBase: initialBase,
+      backupExtras: v2Extras,
+      targetBase: modifiedBase,
+      targetExtras: { ...v2Extras, revision: 2 },
+    })
+
+    // Mutate base quiz to the partially written target state
+    injections.updateQuizz(quizId, modifiedBase)
+    expect(baseQuizzes.get(quizId)?.subject).toBe("Modified Subject During Crash")
+
+    // Run recovery
+    const report = recoverJournals(injections)
+
+    expect(report.recoveredCount).toBe(1)
+    expect(report.recoveredQuizIds).toContain(quizId)
+
+    // Base quiz must be rolled back to initialBase
+    expect(baseQuizzes.get(quizId)?.subject).toBe("British History")
+
+    // Sidecar must NOT be deleted or stripped! It must be restored as V2 with all fields!
+    const restoredSidecar = readSidecar(injections.getPath, quizId)
+    expect(restoredSidecar).not.toBeNull()
+    expect(restoredSidecar?.schemaVersion).toBe(2)
+    const v2Restored = restoredSidecar as QuizExtrasV2
+    expect(v2Restored.revision).toBe(1)
+    expect(v2Restored.timeline.length).toBe(3)
+    expect(v2Restored.timeline[0].kind).toBe("opening")
+    expect(v2Restored.scenes[sceneId]?.title).toBe("Welcome Scene")
+    expect(v2Restored.scenes[sceneId]?.background?.url).toBe("/media/welcome-bg.png")
+    expect(v2Restored.audio.cues.start.source).toBe("media")
+    expect(v2Restored.perQuestion[qIds[0]]?.background?.url).toBe("/media/q1-bg.png")
+    expect(v2Restored.perQuestion[qIds[0]]?.stageAnimations?.questionEntrance?.preset).toBe("curtain")
+    expect(v2Restored.authoring?.showNote).toBe("P0 Authoring Note for V2 Journal Recovery")
+    expect(v2Restored.mediaCatalog?.[0]?.name).toBe("welcome-bg.png")
+
+    // Journal must be removed after successful verified restoration
+    const journalPath = getJournalFilePath(injections.getPath, quizId)
+    expect(fs.existsSync(journalPath)).toBe(false)
+  })
+
+  it("Bug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure", () => {
+    const { id: quizId } = injections.saveQuizz(sampleQuiz)
+    const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
+    const qIds = generateQuestionIds(2)
+    const initialBaseDigest = computeCanonicalBaseDigest(initialBase)
+    const v2Extras = createDefaultQuizExtras(quizId, qIds, initialBaseDigest)
+
+    // Valid sidecar exists on disk
+    writeSidecar(injections.getPath, quizId, v2Extras)
+    expect(readSidecar(injections.getPath, quizId)).not.toBeNull()
+
+    // Create staged journal with corrupt non-null backupExtras (invalid schema)
+    const corruptBackupExtras = {
+      schemaVersion: "INVALID_VERSION",
+      totallyBroken: true,
+    }
+
+    createStagedJournal(injections.getPath, {
+      quizId,
+      backupBase: initialBase,
+      backupExtras: corruptBackupExtras,
+      targetBase: { ...initialBase, subject: "Crash Write" },
+      targetExtras: { ...v2Extras, revision: 2 },
+    })
+
+    const journalPath = getJournalFilePath(injections.getPath, quizId)
+    expect(fs.existsSync(journalPath)).toBe(true)
+
+    // Run recovery
+    const report = recoverJournals(injections)
+
+    // FAIL CLOSED: Must NOT count as recovered, and must preserve journal and original sidecar!
+    expect(report.recoveredQuizIds).not.toContain(quizId)
+    expect(report.unresolvedCount ?? 1).toBeGreaterThanOrEqual(1)
+
+    // Original sidecar must still exist on disk! It must NOT have been deleted!
+    const sidecarAfter = readSidecar(injections.getPath, quizId)
+    expect(sidecarAfter).not.toBeNull()
+    expect(sidecarAfter?.revision).toBe(1)
+
+    // Journal MUST remain on disk as evidence for forensic recovery
+    expect(fs.existsSync(journalPath)).toBe(true)
+  })
+
+  it("Bug A: crash after sidecar write before cleanup is idempotent and preserves consistent state", () => {
+    const { id: quizId } = injections.saveQuizz(sampleQuiz)
+    const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
+    const qIds = generateQuestionIds(2)
+    const initialBaseDigest = computeCanonicalBaseDigest(initialBase)
+    const v2Extras = createDefaultQuizExtras(quizId, qIds, initialBaseDigest)
+    writeSidecar(injections.getPath, quizId, v2Extras)
+
+    const updatedBase = { ...initialBase, subject: "Updated Subject Both Written" }
+    const updatedExtras = {
+      ...v2Extras,
+      revision: 2,
+      baseDigest: computeCanonicalBaseDigest(updatedBase),
+    }
+
+    createStagedJournal(injections.getPath, {
+      quizId,
+      backupBase: initialBase,
+      backupExtras: v2Extras,
+      targetBase: updatedBase,
+      targetExtras: updatedExtras,
+    })
+
+    // Simulate crash after BOTH base update and sidecar write, but BEFORE removeJournal
+    injections.updateQuizz(quizId, updatedBase)
+    writeSidecar(injections.getPath, quizId, updatedExtras)
+
+    const journalPath = getJournalFilePath(injections.getPath, quizId)
+    expect(fs.existsSync(journalPath)).toBe(true)
+
+    // Recovery runs
+    const report = recoverJournals(injections)
+    expect(report.recoveredCount).toBe(1)
+    expect(report.recoveredQuizIds).toContain(quizId)
+
+    // State is rolled back to consistent backup state
+    expect(baseQuizzes.get(quizId)?.subject).toBe("British History")
+    const restoredSidecar = readSidecar(injections.getPath, quizId)
+    expect(restoredSidecar?.revision).toBe(1)
+
+    // Journal removed
+    expect(fs.existsSync(journalPath)).toBe(false)
+
+    // Second recovery is a clean no-op
+    const report2 = recoverJournals(injections)
+    expect(report2.recoveredCount).toBe(0)
+    expect(report2.recoveredQuizIds).toHaveLength(0)
+    expect(baseQuizzes.get(quizId)?.subject).toBe("British History")
+  })
+
+  it("Bug A: rejects bogus kind/version and path traversal quizIds without deleting files", () => {
+    const journalDir = getJournalDirectory(injections.getPath)
+
+    // 1. Bogus kind journal
+    const bogusKindFile = path.join(journalDir, "bogus-kind.journal.json")
+    fs.writeFileSync(
+      bogusKindFile,
+      JSON.stringify({
+        version: 1,
+        kind: "unknown-alien-kind",
+        id: "bogus-id",
+        quizId: "some-quiz",
+        createdAt: Date.now(),
+        status: "staged",
+        backupBase: null,
+        backupExtras: null,
+      }),
+      "utf-8",
+    )
+
+    // 2. Path traversal quizId journal
+    const traversalFile = path.join(journalDir, "traversal.journal.json")
+    fs.writeFileSync(
+      traversalFile,
+      JSON.stringify({
+        version: 1,
+        kind: "quiz-save",
+        id: "traversal-id",
+        quizId: "../../etc/passwd",
+        createdAt: Date.now(),
+        status: "staged",
+        backupBase: null,
+        backupExtras: null,
+      }),
+      "utf-8",
+    )
+
+    const report = recoverJournals(injections)
+    expect(report.recoveredCount).toBe(0)
+    expect(report.unresolvedCount ?? 2).toBeGreaterThanOrEqual(1)
+
+    // Journals must NOT be removed
+    expect(fs.existsSync(bogusKindFile)).toBe(true)
+    expect(fs.existsSync(traversalFile)).toBe(true)
+  })
+
+  it("Bug A: failed base restore preserves journal and reports failure", () => {
+    const { id: quizId } = injections.saveQuizz(sampleQuiz)
+    const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
+    const qIds = generateQuestionIds(2)
+    const v2Extras = createDefaultQuizExtras(quizId, qIds, computeCanonicalBaseDigest(initialBase))
+    writeSidecar(injections.getPath, quizId, v2Extras)
+
+    createStagedJournal(injections.getPath, {
+      quizId,
+      backupBase: initialBase,
+      backupExtras: v2Extras,
+      targetBase: { ...initialBase, subject: "Crash" },
+      targetExtras: { ...v2Extras, revision: 2 },
+    })
+
+    const journalPath = getJournalFilePath(injections.getPath, quizId)
+
+    // Create broken injections where updateQuizz throws
+    const brokenInjections: StorageInjections = {
+      ...injections,
+      updateQuizz: () => {
+        throw new Error("Disk full or permission denied on base quiz update")
+      },
+    }
+
+    const report = recoverJournals(brokenInjections)
+    expect(report.recoveredQuizIds).not.toContain(quizId)
+    expect(report.unresolvedCount ?? 1).toBeGreaterThanOrEqual(1)
+
+    // Journal must be preserved!
+    expect(fs.existsSync(journalPath)).toBe(true)
+  })
+
+  it("Bug A: does not blindly restore over a newer concurrent revision", () => {
+    const { id: quizId } = injections.saveQuizz(sampleQuiz)
+    const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
+    const qIds = generateQuestionIds(2)
+    const v2Extras = createDefaultQuizExtras(quizId, qIds, computeCanonicalBaseDigest(initialBase))
+
+    // Journal was created for revision 1 -> target revision 2
+    createStagedJournal(injections.getPath, {
+      quizId,
+      backupBase: initialBase,
+      backupExtras: v2Extras, // revision 1
+      targetBase: { ...initialBase, subject: "Target Revision 2" },
+      targetExtras: { ...v2Extras, revision: 2 },
+    })
+
+    // But meanwhile, a concurrent transaction succeeded and reached revision 3!
+    const newerRevision3 = {
+      ...v2Extras,
+      revision: 3,
+      baseDigest: computeCanonicalBaseDigest({ ...initialBase, subject: "Concurrent New Subject Rev 3" }),
+    }
+    injections.updateQuizz(quizId, { ...initialBase, subject: "Concurrent New Subject Rev 3" })
+    writeSidecar(injections.getPath, quizId, newerRevision3)
+
+    const journalPath = getJournalFilePath(injections.getPath, quizId)
+    expect(fs.existsSync(journalPath)).toBe(true)
+
+    // Recovery runs: must NOT roll back over the newer revision 3!
+    const report = recoverJournals(injections)
+    expect(report.recoveredQuizIds).not.toContain(quizId)
+
+    // The newer revision 3 must remain intact
+    const currentSidecar = readSidecar(injections.getPath, quizId)
+    expect(currentSidecar?.revision).toBe(3)
+    expect(baseQuizzes.get(quizId)?.subject).toBe("Concurrent New Subject Rev 3")
   })
 
   it("CORE06: enhanced bundle import/export remaps question IDs and preserves metadata", () => {
