@@ -216,6 +216,11 @@ export interface ExecuteMediaDeleteOptions {
     failAfterFirstShowWrite?: boolean
     failBeforeDeleteMedia?: boolean
     failDuringRollback?: boolean
+    failBeforeCommittedWrite?: boolean
+    failAfterCommittedWrite?: boolean
+    failBeforeQuarantineUnlink?: boolean
+    failAfterQuarantineUnlink?: boolean
+    failJournalUnlink?: boolean
   }
 }
 
@@ -287,16 +292,7 @@ export function executeMediaDeleteTransaction(
 
   if (references.length === 0) {
     if (options?.deleteMediaFn) {
-      try {
-        options.deleteMediaFn()
-      } catch (delErr) {
-        return {
-          allowed: false,
-          references: [],
-          detachedFromShows: [],
-          error: `Failed to delete physical media file: ${(delErr as Error).message}`,
-        }
-      }
+      options.deleteMediaFn()
     }
     return {
       allowed: true,
@@ -526,13 +522,44 @@ export function executeMediaDeleteTransaction(
       }
     }
 
-    // Durable success reached: clean up quarantine and journal
+    // POINT OF NO RETURN:
+    // Update journal status to "committed" BEFORE releasing quarantine!
+    if (options?.faultInjection?.failBeforeCommittedWrite) {
+      throw new Error("Simulated failure before committed marker write")
+    }
+
+    journalEntry.status = "committed"
+    const tmpCommitted = `${journalFilePath}.tmp.${Date.now()}`
+    fs.writeFileSync(
+      tmpCommitted,
+      JSON.stringify(journalEntry, null, 2),
+      "utf-8",
+    )
+    fs.renameSync(tmpCommitted, journalFilePath)
+
+    if (options?.faultInjection?.failAfterCommittedWrite) {
+      throw new Error("Simulated failure after committed marker write")
+    }
+
+    // Now durable committed status is written. Clean up quarantine and journal.
+    if (options?.faultInjection?.failBeforeQuarantineUnlink) {
+      throw new Error("Simulated failure before quarantine unlink")
+    }
+
     if (quarantinePath && fs.existsSync(quarantinePath)) {
       try {
         fs.unlinkSync(quarantinePath)
       } catch {
         // ignore
       }
+    }
+
+    if (options?.faultInjection?.failAfterQuarantineUnlink) {
+      throw new Error("Simulated failure after quarantine unlink")
+    }
+
+    if (options?.faultInjection?.failJournalUnlink) {
+      throw new Error("Simulated failure unlinking journal")
     }
 
     if (fs.existsSync(journalFilePath)) {
@@ -545,6 +572,24 @@ export function executeMediaDeleteTransaction(
       detachedFromShows,
     }
   } catch (error) {
+    if (journalEntry.status === "committed") {
+      // Point of no return already reached. Do NOT roll back to old references!
+      if (quarantinePath && fs.existsSync(quarantinePath)) {
+        try {
+          fs.unlinkSync(quarantinePath)
+        } catch {
+          // ignore
+        }
+      }
+      return {
+        allowed: true,
+        references: [],
+        detachedFromShows,
+        error: `Committed delete completed but cleanup had warning: ${(error as Error).message}`,
+        journalId,
+      }
+    }
+
     const rollbackSuccess = rollback()
     if (rollbackSuccess) {
       return {
@@ -587,21 +632,42 @@ export function recoverMediaDeleteJournals(
   recoveredCount: number
   recoveredQuizIds: string[]
   restoredMediaNames: string[]
+  unresolvedCount?: number
+  unresolvedJournals?: string[]
 } {
   const journalDir = getMediaDeleteJournalDirectory(getPath)
   if (!fs.existsSync(journalDir)) {
-    return { recoveredCount: 0, recoveredQuizIds: [], restoredMediaNames: [] }
+    return {
+      recoveredCount: 0,
+      recoveredQuizIds: [],
+      restoredMediaNames: [],
+      unresolvedCount: 0,
+      unresolvedJournals: [],
+    }
   }
 
   let files: string[] = []
   try {
     files = fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))
-  } catch {
-    return { recoveredCount: 0, recoveredQuizIds: [], restoredMediaNames: [] }
+  } catch (err) {
+    console.error("[MediaJournal] Failed reading journal directory:", err)
+    return {
+      recoveredCount: 0,
+      recoveredQuizIds: [],
+      restoredMediaNames: [],
+      unresolvedCount: 1,
+      unresolvedJournals: [],
+    }
   }
 
   const recoveredQuizIds: string[] = []
   const restoredMediaNames: string[] = []
+  const unresolvedJournals: string[] = []
+  let recoveredCount = 0
+
+  const authorizedMediaDir = getPath("media")
+  const authorizedQuarantineDir = getMediaQuarantineDirectory(getPath)
+  const authorizedQuizzDir = getPath("quizz")
 
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
@@ -610,48 +676,218 @@ export function recoverMediaDeleteJournals(
         continue
       }
 
-      const raw = fs.readFileSync(journalPath, "utf-8")
-      const entry = JSON.parse(raw) as Partial<MediaDeleteJournalEntry>
+      let raw: string
+      try {
+        raw = fs.readFileSync(journalPath, "utf-8")
+      } catch (readErr) {
+        console.error(`[MediaJournal] Unreadable journal file ${file}:`, readErr)
+        unresolvedJournals.push(file)
+        continue
+      }
 
-      // Fail-closed invariant: ignore/preserve unknown or incompatible journals
+      let entry: Partial<MediaDeleteJournalEntry>
+      try {
+        entry = JSON.parse(raw) as Partial<MediaDeleteJournalEntry>
+      } catch (parseErr) {
+        console.error(
+          `[MediaJournal] Malformed JSON in journal ${file}:`,
+          parseErr,
+        )
+        unresolvedJournals.push(file)
+        continue
+      }
+
+      // 1. Fail-closed invariant: ignore/preserve unknown or incompatible journals
       if (entry.kind !== "media-delete" || entry.version !== 1) {
         console.warn(
           `[MediaJournal] Unknown or incompatible journal ${file}, preserving for manual inspection`,
         )
+        unresolvedJournals.push(file)
         continue
       }
 
-      if (entry.status === "staged" && Array.isArray(entry.shows)) {
+      // 2. Validate cleanMediaName & path traversal
+      const rawCleanName = entry.cleanMediaName
+      if (
+        typeof rawCleanName !== "string" ||
+        !rawCleanName.trim() ||
+        rawCleanName.includes("..") ||
+        rawCleanName.includes("/") ||
+        rawCleanName.includes("\\")
+      ) {
+        console.error(
+          `[MediaJournal] Invalid or unsafe cleanMediaName in journal ${file}: "${rawCleanName}", preserving`,
+        )
+        unresolvedJournals.push(file)
+        continue
+      }
+      const cleanMediaName = path.basename(rawCleanName)
+      const targetMediaFilePath = path.join(authorizedMediaDir, cleanMediaName)
+
+      // Validate quarantinePath: must be located within authorizedQuarantineDir
+      let targetQuarantinePath: string | null = null
+      if (entry.quarantinePath) {
+        const quarantineBase = path.basename(entry.quarantinePath)
+        targetQuarantinePath = path.join(authorizedQuarantineDir, quarantineBase)
+        if (
+          entry.quarantinePath.includes("..") ||
+          !quarantineBase.includes(cleanMediaName)
+        ) {
+          console.error(
+            `[MediaJournal] Invalid or unsafe quarantinePath in journal ${file}: "${entry.quarantinePath}", preserving`,
+          )
+          unresolvedJournals.push(file)
+          continue
+        }
+      }
+
+      // Validate show IDs & paths
+      let showsValid = true
+      const validatedShows: Array<{
+        quizId: string
+        filePath: string
+        sidecarPath: string
+        originalBaseRaw: string | null
+        originalSidecarRaw: string | null
+      }> = []
+
+      if (Array.isArray(entry.shows)) {
+        for (const s of entry.shows) {
+          if (
+            typeof s.quizId !== "string" ||
+            !s.quizId.trim() ||
+            s.quizId.includes("..") ||
+            s.quizId.includes("/") ||
+            s.quizId.includes("\\")
+          ) {
+            showsValid = false
+            break
+          }
+          const cleanQuizId = path.basename(s.quizId).replace(/\.json$/i, "")
+          const filePath = path.join(authorizedQuizzDir, `${cleanQuizId}.json`)
+          const sidecarPath = getSidecarFilePath(getPath, cleanQuizId)
+          validatedShows.push({
+            quizId: cleanQuizId,
+            filePath,
+            sidecarPath,
+            originalBaseRaw: s.originalBaseRaw ?? null,
+            originalSidecarRaw: s.originalSidecarRaw ?? null,
+          })
+        }
+      } else {
+        showsValid = false
+      }
+
+      if (!showsValid) {
+        console.error(
+          `[MediaJournal] Invalid shows configuration or path traversal in journal ${file}, preserving`,
+        )
+        unresolvedJournals.push(file)
+        continue
+      }
+
+      // CASE 1: COMMITTED (Point of no return already crossed)
+      if (entry.status === "committed") {
+        // Forward cleanup: verify no references survive and binary is deleted
+        const health = loadAllShowsHealth(getPath)
+        const activeRefs = findMediaReferencesAcrossShows(
+          cleanMediaName,
+          health.records,
+        )
+        if (activeRefs.length > 0) {
+          console.error(
+            `[MediaJournal] Committed delete in journal ${file} still has ${activeRefs.length} active references; preserving journal`,
+          )
+          unresolvedJournals.push(file)
+          continue
+        }
+
+        // Unlink quarantine binary if still present
+        if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
+          try {
+            fs.unlinkSync(targetQuarantinePath)
+          } catch (qUnlinkErr) {
+            console.warn(
+              `[MediaJournal] Could not unlink quarantine binary:`,
+              qUnlinkErr,
+            )
+          }
+        }
+
+        // Unlink journal
+        if (fs.existsSync(journalPath)) {
+          fs.unlinkSync(journalPath)
+        }
+        recoveredCount++
+        continue
+      }
+
+      // CASE 2: STAGED (Rollback to original references & binary)
+      if (entry.status === "staged") {
+        // INVARIANT CHECK: Can original binary be restored?
+        const hadBinaryQuarantined = Boolean(entry.quarantinePath)
+        const mediaExists = fs.existsSync(targetMediaFilePath)
+        const quarantineExists = targetQuarantinePath
+          ? fs.existsSync(targetQuarantinePath)
+          : false
+
+        if (hadBinaryQuarantined && !mediaExists && !quarantineExists) {
+          // Point-of-no-return violation: binary was quarantined, but is now gone from both media and quarantine!
+          // NEVER roll back shows to point to a missing binary!
+          console.error(
+            `[MediaJournal] Critical data integrity failure in ${file}: media "${cleanMediaName}" was quarantined but is missing from both media directory and quarantine! Rollback blocked to prevent dangling references.`,
+          )
+          unresolvedJournals.push(file)
+          continue
+        }
+
         let allRestored = true
 
-        for (const s of entry.shows) {
+        // 1. Restore media binary from quarantine if missing
+        if (!mediaExists && quarantineExists && targetQuarantinePath) {
           try {
-            if (s.originalBaseRaw !== null && s.filePath) {
-              try {
-                if (fs.existsSync(s.filePath)) {
-                  fs.chmodSync(s.filePath, 0o666)
-                }
-              } catch {
-                // ignore
-              }
+            fs.copyFileSync(targetQuarantinePath, targetMediaFilePath)
+            if (!restoredMediaNames.includes(cleanMediaName)) {
+              restoredMediaNames.push(cleanMediaName)
+            }
+          } catch (copyErr) {
+            allRestored = false
+            console.error(
+              `[MediaJournal] Failed restoring media binary from quarantine:`,
+              copyErr,
+            )
+          }
+        }
+
+        if (!allRestored || (hadBinaryQuarantined && !fs.existsSync(targetMediaFilePath))) {
+          unresolvedJournals.push(file)
+          continue
+        }
+
+        // 2. Restore shows and sidecars
+        for (const s of validatedShows) {
+          try {
+            if (s.originalBaseRaw !== null) {
               const tmpBase = `${s.filePath}.tmp.${Date.now()}`
               fs.writeFileSync(tmpBase, s.originalBaseRaw, "utf-8")
               fs.renameSync(tmpBase, s.filePath)
             }
-            if (s.originalSidecarRaw !== null && s.sidecarPath) {
-              try {
-                if (fs.existsSync(s.sidecarPath)) {
-                  fs.chmodSync(s.sidecarPath, 0o666)
-                }
-              } catch {
-                // ignore
-              }
+            if (s.originalSidecarRaw !== null) {
               const tmpSidecar = `${s.sidecarPath}.tmp.${Date.now()}`
               fs.writeFileSync(tmpSidecar, s.originalSidecarRaw, "utf-8")
               fs.renameSync(tmpSidecar, s.sidecarPath)
-            } else if (s.sidecarPath && fs.existsSync(s.sidecarPath)) {
+            } else if (fs.existsSync(s.sidecarPath)) {
               fs.unlinkSync(s.sidecarPath)
             }
+
+            // Verify restored show and sidecar
+            if (s.originalBaseRaw !== null) {
+              JSON.parse(fs.readFileSync(s.filePath, "utf-8"))
+            }
+            if (s.originalSidecarRaw !== null) {
+              readSidecar(getPath, s.quizId)
+            }
+
             if (!recoveredQuizIds.includes(s.quizId)) {
               recoveredQuizIds.push(s.quizId)
             }
@@ -664,46 +900,47 @@ export function recoverMediaDeleteJournals(
           }
         }
 
-        // Restore media binary if quarantined and missing from media dir
-        if (entry.quarantinePath && fs.existsSync(entry.quarantinePath)) {
-          try {
-            if (entry.mediaFilePath && !fs.existsSync(entry.mediaFilePath)) {
-              fs.copyFileSync(entry.quarantinePath, entry.mediaFilePath)
-              if (
-                entry.cleanMediaName &&
-                !restoredMediaNames.includes(entry.cleanMediaName)
-              ) {
-                restoredMediaNames.push(entry.cleanMediaName)
-              }
-            }
-            // Cleanup quarantine once binary is safely in place or verified
-            fs.unlinkSync(entry.quarantinePath)
-          } catch (qErr) {
-            allRestored = false
-            console.error(
-              `[MediaJournal] Failed to restore quarantined media ${entry.cleanMediaName}:`,
-              qErr,
-            )
-          }
-        }
-
-        if (allRestored) {
-          fs.unlinkSync(journalPath)
-        } else {
+        if (!allRestored) {
           console.warn(
             `[MediaJournal] Partial recovery for journal ${file}, preserving for retry`,
           )
+          unresolvedJournals.push(file)
+          continue
         }
+
+        // 3. Unlink quarantine and journal ONLY after verified rollback
+        if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
+          try {
+            fs.unlinkSync(targetQuarantinePath)
+          } catch (qErr) {
+            console.warn(`[MediaJournal] Failed unlinking quarantine:`, qErr)
+          }
+        }
+
+        if (fs.existsSync(journalPath)) {
+          fs.unlinkSync(journalPath)
+        }
+        recoveredCount++
+        continue
       }
+
+      // CASE 3: Unknown status -> fail closed
+      console.warn(
+        `[MediaJournal] Unknown status "${entry.status}" in ${file}, preserving`,
+      )
+      unresolvedJournals.push(file)
     } catch (err) {
       console.warn(`[MediaJournal] Failed reading journal ${file}:`, err)
+      unresolvedJournals.push(file)
     }
   }
 
   return {
-    recoveredCount: recoveredQuizIds.length,
+    recoveredCount,
     recoveredQuizIds,
     restoredMediaNames,
+    unresolvedCount: unresolvedJournals.length,
+    unresolvedJournals,
   }
 }
 
@@ -711,6 +948,20 @@ export interface StartupRecoveryOptions {
   getPath: (subPath?: string) => string
   updateQuizz?: (id: string, quizz: unknown) => void
   deleteQuizz?: (id: string) => void
+  throwOnUnresolved?: boolean
+}
+
+export interface StartupRecoveryResult {
+  status: "clean" | "recovered" | "failed"
+  unresolvedCount: number
+  quizRecovery: RecoveryReport
+  mediaRecovery: {
+    recoveredCount: number
+    recoveredQuizIds: string[]
+    restoredMediaNames: string[]
+    unresolvedCount?: number
+    unresolvedJournals?: string[]
+  }
 }
 
 /**
@@ -719,14 +970,7 @@ export interface StartupRecoveryOptions {
  */
 export function recoverStartupJournals(
   optionsOrGetPath: StartupRecoveryOptions | ((subPath?: string) => string),
-): {
-  quizRecovery: RecoveryReport
-  mediaRecovery: {
-    recoveredCount: number
-    recoveredQuizIds: string[]
-    restoredMediaNames: string[]
-  }
-} {
+): StartupRecoveryResult {
   const getPath =
     typeof optionsOrGetPath === "function"
       ? optionsOrGetPath
@@ -742,9 +986,21 @@ export function recoverStartupJournals(
       ? undefined
       : optionsOrGetPath.deleteQuizz
 
+  const throwOnUnresolved =
+    typeof optionsOrGetPath === "function"
+      ? false
+      : (optionsOrGetPath.throwOnUnresolved ?? true)
+
   const injections: StorageInjections = {
     getPath,
-    getQuizzById: () => undefined,
+    getQuizzById: (id: string) => {
+      const quizzDir = getPath("quizz")
+      const filePath = path.join(quizzDir, `${id}.json`)
+      if (!fs.existsSync(filePath)) {
+        throw new Error("errors:quizz.notFound")
+      }
+      return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+    },
     saveQuizz: () => ({ id: "" }),
     updateQuizz:
       updateQuizz ??
@@ -768,13 +1024,34 @@ export function recoverStartupJournals(
   const quizRecovery = recoverJournals(injections)
   const mediaRecovery = recoverMediaDeleteJournals(getPath)
 
+  const totalUnresolved =
+    (quizRecovery.unresolvedCount ?? 0) + (mediaRecovery.unresolvedCount ?? 0)
+
+  const status: "clean" | "recovered" | "failed" =
+    totalUnresolved > 0
+      ? "failed"
+      : quizRecovery.recoveredCount > 0 || mediaRecovery.recoveredCount > 0
+        ? "recovered"
+        : "clean"
+
+  if (status === "failed" && throwOnUnresolved) {
+    const errorMsg = `[StartupRecovery] Server startup blocked: ${totalUnresolved} critical journal(s) unresolved. Check journal files in .journal/`
+    console.error(errorMsg)
+    throw new Error(errorMsg)
+  }
+
   if (quizRecovery.recoveredCount > 0 || mediaRecovery.recoveredCount > 0) {
     console.info(
       `[StartupRecovery] Recovered ${quizRecovery.recoveredCount} quiz journals and ${mediaRecovery.recoveredCount} media delete journals`,
     )
   }
 
-  return { quizRecovery, mediaRecovery }
+  return {
+    status,
+    unresolvedCount: totalUnresolved,
+    quizRecovery,
+    mediaRecovery,
+  }
 }
 
 export interface EnrichedMediaCatalogItem extends UploadedMedia {

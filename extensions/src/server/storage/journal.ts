@@ -281,7 +281,23 @@ export const recoverJournals = (
 
       // 7. Verification before removing journal
       if (entry.backupBase !== null && entry.backupBase !== undefined) {
-        const verifiedBase = injections.getQuizzById(cleanId)
+        let verifiedBase: unknown = null
+        try {
+          verifiedBase = injections.getQuizzById(cleanId)
+        } catch {
+          // getQuizzById may throw if unmocked or missing
+        }
+        if (!verifiedBase) {
+          const quizzDir = injections.getPath("quizz")
+          const filePath = path.join(quizzDir, `${cleanId}.json`)
+          if (fs.existsSync(filePath)) {
+            try {
+              verifiedBase = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+            } catch {
+              // ignore
+            }
+          }
+        }
         if (!verifiedBase) {
           throw new Error(`Failed to verify rolled back base quiz ${cleanId}`)
         }

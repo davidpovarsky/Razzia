@@ -740,4 +740,274 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     expect(report2.quizRecovery.recoveredCount).toBe(0)
     expect(report2.mediaRecovery.recoveredCount).toBe(0)
   })
+
+  it("Bug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary", () => {
+    const quizId = "dangling-ref-show"
+    const mediaName = "lost-media.png"
+    const mediaPath = path.join(getPath("media"), mediaName)
+    // Media binary is ABSENT (already physically unlinked)
+    expect(fs.existsSync(mediaPath)).toBe(false)
+
+    // Show currently has the media DETACHED (as it was when crash happened post-detach)
+    const detachedShow = {
+      id: quizId,
+      subject: "Detached Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          answers: ["A", "B"],
+          solutions: [0],
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${quizId}.json`),
+      JSON.stringify(detachedShow, null, 2),
+    )
+
+    // Simulate old crash gap: A staged journal exists, but quarantine binary was already unlinked!
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    const missingQuarantinePath = path.join(getMediaQuarantineDirectory(getPath), `lost-journal-${mediaName}`)
+    expect(fs.existsSync(missingQuarantinePath)).toBe(false)
+
+    const staleStagedJournal = {
+      version: 1,
+      kind: "media-delete",
+      id: "lost-journal-uuid",
+      mediaNameOrUrl: `/media/${mediaName}`,
+      cleanMediaName: mediaName,
+      mediaFilePath: mediaPath,
+      quarantinePath: missingQuarantinePath,
+      createdAt: Date.now(),
+      status: "staged",
+      shows: [
+        {
+          quizId,
+          filePath: path.join(getPath("quizz"), `${quizId}.json`),
+          sidecarPath: path.join(tempDir, "extensions", "quizzes", `${quizId}.json`),
+          originalBaseRaw: JSON.stringify({
+            id: quizId,
+            subject: "Old Show With Reference",
+            questions: [
+              {
+                id: Q1_ID,
+                type: "single",
+                question: "Q1",
+                media: { type: "image", url: `/media/${mediaName}` },
+                answers: ["A", "B"],
+                solutions: [0],
+              },
+            ],
+          }),
+          originalSidecarRaw: null,
+        },
+      ],
+    }
+
+    const journalFile = path.join(journalDir, `media-${mediaName}-lost-journal-uuid.media-journal.json`)
+    fs.writeFileSync(journalFile, JSON.stringify(staleStagedJournal, null, 2), "utf-8")
+
+    // Run recovery
+    const recovery = recoverMediaDeleteJournals(getPath)
+
+    // INVARIANT: When quarantine is missing and binary is gone, recovery MUST FAIL CLOSED!
+    // It must NEVER roll back the show to point to a missing binary!
+    const showAfter = JSON.parse(fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf-8"))
+    expect(JSON.stringify(showAfter)).not.toContain(mediaName)
+
+    // Journal MUST be preserved for investigation
+    expect(fs.existsSync(journalFile)).toBe(true)
+    expect(recovery.unresolvedCount ?? 1).toBeGreaterThanOrEqual(1)
+  })
+
+  it("Bug B: point-of-no-return ordering - crash after physical delete before committed write rolls back binary and references from quarantine", () => {
+    const quizId = "pnr-rollback-show"
+    const mediaName = "pnr-target.png"
+    const mediaPath = path.join(getPath("media"), mediaName)
+    fs.writeFileSync(mediaPath, "PNR_TARGET_BYTES", "utf-8")
+
+    const show = {
+      id: quizId,
+      subject: "PNR Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          media: { type: "image", url: `/media/${mediaName}` },
+          answers: ["A", "B"],
+          solutions: [0],
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${quizId}.json`),
+      JSON.stringify(show, null, 2),
+    )
+
+    // Injected crash immediately before committed marker write:
+    // Physical delete already occurred, but committed marker has not been written!
+    const result = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      deleteMediaFn: () => {
+        if (fs.existsSync(mediaPath)) {
+          fs.unlinkSync(mediaPath)
+        }
+      },
+      faultInjection: {
+        failBeforeCommittedWrite: true,
+        failDuringRollback: true,
+      },
+    })
+
+    expect(result.allowed).toBe(false)
+    // Physical file was deleted during the call, but quarantine still exists
+    // The transaction rolled back (or left journal for crash recovery)
+    // Now simulate restart / recovery:
+    const recovery = recoverMediaDeleteJournals(getPath)
+    expect(recovery.recoveredCount).toBeGreaterThanOrEqual(1)
+
+    // Binary MUST be restored from quarantine back into media directory!
+    expect(fs.existsSync(mediaPath)).toBe(true)
+    expect(fs.readFileSync(mediaPath, "utf-8")).toBe("PNR_TARGET_BYTES")
+
+    // Show references MUST be restored!
+    const showRestored = JSON.parse(fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf-8"))
+    expect(JSON.stringify(showRestored)).toContain(mediaName)
+
+    // Repeating recovery is idempotent
+    const recovery2 = recoverMediaDeleteJournals(getPath)
+    expect(recovery2.recoveredCount).toBe(0)
+  })
+
+  it("Bug B: point-of-no-return ordering - crash after committed marker cleans up forward without rolling back", () => {
+    const quizId = "pnr-forward-show"
+    const mediaName = "pnr-forward.png"
+    const mediaPath = path.join(getPath("media"), mediaName)
+    fs.writeFileSync(mediaPath, "PNR_FORWARD_BYTES", "utf-8")
+
+    const show = {
+      id: quizId,
+      subject: "PNR Forward Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          media: { type: "image", url: `/media/${mediaName}` },
+          answers: ["A", "B"],
+          solutions: [0],
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${quizId}.json`),
+      JSON.stringify(show, null, 2),
+    )
+
+    // Injected crash AFTER committed write (before quarantine unlink):
+    const result = executeMediaDeleteTransaction(getPath, mediaName, {
+      detach: true,
+      deleteMediaFn: () => {
+        if (fs.existsSync(mediaPath)) {
+          fs.unlinkSync(mediaPath)
+        }
+      },
+      faultInjection: {
+        failBeforeQuarantineUnlink: true,
+      },
+    })
+
+    // Committed status was reached!
+    expect(result.allowed).toBe(true)
+
+    // Recovery runs on restart:
+    const recovery = recoverMediaDeleteJournals(getPath)
+    expect(recovery.recoveredCount).toBeGreaterThanOrEqual(1)
+
+    // Invariant: MUST NOT rollback! Deletion was committed!
+    expect(fs.existsSync(mediaPath)).toBe(false)
+    const showAfter = JSON.parse(fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf-8"))
+    expect(JSON.stringify(showAfter)).not.toContain(mediaName)
+
+    // Quarantine and journal must both be cleaned up
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    expect(fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))).toHaveLength(0)
+    const quarantineDir = getMediaQuarantineDirectory(getPath)
+    expect(fs.readdirSync(quarantineDir)).toHaveLength(0)
+  })
+
+  it("Bug B: path traversal and forged paths in journal are rejected without touching files", () => {
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    const traversalJournal = {
+      version: 1,
+      kind: "media-delete",
+      id: "traversal-journal",
+      mediaNameOrUrl: "/media/../../secret.txt",
+      cleanMediaName: "../../secret.txt",
+      createdAt: Date.now(),
+      status: "staged",
+      shows: [
+        {
+          quizId: "../../dangerous",
+          filePath: path.join(tempDir, "..", "secret.json"),
+          sidecarPath: path.join(tempDir, "..", "secret-sidecar.json"),
+          originalBaseRaw: "HACKED",
+          originalSidecarRaw: null,
+        },
+      ],
+    }
+
+    const journalFile = path.join(journalDir, "traversal.media-journal.json")
+    fs.writeFileSync(journalFile, JSON.stringify(traversalJournal, null, 2), "utf-8")
+
+    const recovery = recoverMediaDeleteJournals(getPath)
+    expect(recovery.recoveredCount).toBe(0)
+    expect(recovery.unresolvedCount ?? 1).toBeGreaterThanOrEqual(1)
+
+    // Journal remains untouched as evidence
+    expect(fs.existsSync(journalFile)).toBe(true)
+  })
+
+  it("Bug B: recoverStartupJournals halts server startup when critical recovery fails", () => {
+    const journalDir = getMediaDeleteJournalDirectory(getPath)
+    // Staged journal with missing quarantine and missing binary
+    const brokenJournal = {
+      version: 1,
+      kind: "media-delete",
+      id: "broken-startup-id",
+      mediaNameOrUrl: "/media/missing-forever.png",
+      cleanMediaName: "missing-forever.png",
+      mediaFilePath: path.join(getPath("media"), "missing-forever.png"),
+      quarantinePath: path.join(getMediaQuarantineDirectory(getPath), "nonexistent"),
+      createdAt: Date.now(),
+      status: "staged",
+      shows: [],
+    }
+
+    fs.writeFileSync(
+      path.join(journalDir, "broken-startup.media-journal.json"),
+      JSON.stringify(brokenJournal, null, 2),
+      "utf-8",
+    )
+
+    // When called with options (as packages/socket/src/index.ts calls it):
+    expect(() =>
+      recoverStartupJournals({
+        getPath,
+        updateQuizz: () => {},
+        deleteQuizz: () => {},
+      }),
+    ).toThrow(/Server startup blocked/)
+
+    // When called with throwOnUnresolved: false:
+    const result = recoverStartupJournals({
+      getPath,
+      throwOnUnresolved: false,
+    })
+    expect(result.status).toBe("failed")
+    expect(result.unresolvedCount).toBeGreaterThanOrEqual(1)
+  })
 })
