@@ -4,14 +4,16 @@ import clsx from "clsx"
 import {
   EXTENSION_EVENTS,
   resolveCardStageAnimations,
+  resolveQuestionDecoration,
   type CardStageAnimations,
   type ExtensionStateEnvelope,
+  type QuestionDecoration,
   type QuestionEntrance as QuestionEntranceConfig,
   type QuestionReveal,
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
-import { useStageFit } from "@razzia/extensions/presentation"
+import { LottiePlayer, useStageFit } from "@razzia/extensions/presentation"
 import {
   getAuthoritativeEnvelope,
   useExtensionState,
@@ -47,6 +49,13 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
     sfxShow()
   }, [sfxShow, effectiveExtensionState?.gameId])
 
+  const defaultsObj = effectiveExtensionState?.extras?.defaults as
+    | {
+        stageAnimations?: CardStageAnimations
+        questionDecoration?: QuestionDecoration
+      }
+    | undefined
+
   const stageAnimations = resolveCardStageAnimations({
     questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
       | QuestionEntranceConfig
@@ -54,6 +63,14 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
     stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
       | CardStageAnimations
       | undefined,
+    globalStageAnimations: defaultsObj?.stageAnimations,
+  })
+
+  const questionDecoration = resolveQuestionDecoration({
+    questionDecoration: effectiveExtensionState?.extras?.questionDecoration as
+      | QuestionDecoration
+      | undefined,
+    globalDecoration: defaultsObj?.questionDecoration,
   })
 
   const activeKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-show`
@@ -79,6 +96,31 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
         >
           {question}
         </h2>
+
+        {questionDecoration.enabled && questionDecoration.preset !== "none" && (
+          <div
+            data-testid="question-decoration-underline"
+            data-tada-underline={questionDecoration.preset}
+            className="flex w-48 sm:w-64 items-center justify-center"
+          >
+            {questionDecoration.preset === "custom-lottie" &&
+            questionDecoration.lottieUrl ? (
+              <LottiePlayer
+                src={questionDecoration.lottieUrl}
+                loop={true}
+                className="h-5 w-full"
+                dataTestId="question-decoration-lottie"
+              />
+            ) : (
+              <div
+                className={clsx(
+                  "w-full",
+                  `tada-underline-${questionDecoration.preset}`,
+                )}
+              />
+            )}
+          </div>
+        )}
 
         {media?.type === MEDIA_TYPES.IMAGE && (
           <div

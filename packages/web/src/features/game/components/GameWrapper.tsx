@@ -268,6 +268,7 @@ const GameWrapper = ({
         id?: string
         mediaType?: string
         mediaUrl?: string
+        muted?: boolean
         background?: CardBackgroundOverride
         audio?: {
           mode?: "inherit" | "mute" | "custom"
@@ -327,7 +328,9 @@ const GameWrapper = ({
     activeStatusMediaType === MEDIA_TYPES.VIDEO ||
       activeStatusMediaType === MEDIA_TYPES.AUDIO ||
       (extensionState?.phase === "scene" &&
-        currentSceneObj?.mediaType === "video" &&
+        (currentSceneObj?.mediaType === "video" ||
+          currentSceneObj?.mediaType === "audio") &&
+        !currentSceneObj?.muted &&
         Boolean(currentSceneObj?.mediaUrl)),
   )
 
@@ -364,6 +367,11 @@ const GameWrapper = ({
       const activeSceneData = extensionState.extras.activeSceneData as
         | ScenePresenterProps["activeSceneData"]
         | undefined
+      const globalStageAnimations = (
+        extensionState.extras.defaults as
+          | { stageAnimations?: ScenePresenterProps["globalStageAnimations"] }
+          | undefined
+      )?.stageAnimations
 
       const scenePresenterLabels: ScenePresenterProps["labels"] = {
         rankLabel: t("extensions:studio.scene.rankLabel", "Rank"),
@@ -415,10 +423,27 @@ const GameWrapper = ({
                 step={activeStep}
                 scene={currentScene}
                 activeSceneData={activeSceneData}
+                globalStageAnimations={globalStageAnimations}
                 labels={scenePresenterLabels}
                 serverStartedAt={extensionState.startedAt}
                 epoch={extensionState.epoch}
                 isManager={Boolean(manager)}
+                onMediaEnded={() => {
+                  if (manager && extensionState.gameId) {
+                    socket.emit(EXTENSION_EVENTS.COMMAND, {
+                      v: 1,
+                      gameId: extensionState.gameId,
+                      action: "ADVANCE_TIMELINE_SCENE",
+                      payload: {
+                        epoch: extensionState.epoch,
+                        sceneId: activeStep?.sceneId ?? currentScene?.id,
+                        timelineStepIndex: activeStep?.stepIndex,
+                        reason: "mediaEnded",
+                      },
+                      requestId: `media-end-${extensionState.epoch}-${activeStep?.stepIndex ?? 0}`,
+                    })
+                  }
+                }}
                 onAdvance={() => {
                   if (manager && extensionState.gameId) {
                     socket.emit(EXTENSION_EVENTS.COMMAND, {

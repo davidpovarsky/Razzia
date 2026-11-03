@@ -20,13 +20,18 @@ import {
   type InterludeSkipState,
 } from "./interlude-state"
 import { useStageFit } from "./stage-fit"
+import { LottiePlayer } from "./lottie-player"
 import {
   AlertTriangle,
   Award,
   BarChart3,
+  ChevronLeft,
+  ChevronRight,
   Clock,
   Film,
   Layers,
+  ListChecks,
+  Music,
   Sparkles,
   Trophy,
 } from "lucide-react"
@@ -79,12 +84,14 @@ export interface ScenePresenterProps {
   step?: AuthoritativeStepEnvelope | null
   scene?: SceneConfig
   activeSceneData?: ActiveSceneData | null
+  globalStageAnimations?: CardStageAnimations
   labels?: ScenePresenterLabels
   serverStartedAt?: number
   epoch?: number | string
   isManager?: boolean
   onAdvance?: () => void
   onSkip?: () => void
+  onMediaEnded?: () => void
   className?: string
 }
 
@@ -141,12 +148,14 @@ export const ScenePresenter = ({
   step,
   scene,
   activeSceneData,
+  globalStageAnimations,
   labels,
   serverStartedAt,
   epoch,
   isManager = false,
   onAdvance: _onAdvance,
   onSkip,
+  onMediaEnded,
   className,
 }: ScenePresenterProps) => {
   const activeScene = scene ?? step?.scene
@@ -159,8 +168,9 @@ export const ScenePresenter = ({
           activeScene && "stageAnimations" in activeScene
             ? (activeScene.stageAnimations as CardStageAnimations | undefined)
             : undefined,
+        globalStageAnimations,
       }),
-    [activeScene],
+    [activeScene, globalStageAnimations],
   )
 
   const sceneAnimationKey = `${activeScene?.id ?? kind}-${epoch ?? serverStartedAt ?? "static"}`
@@ -184,12 +194,19 @@ export const ScenePresenter = ({
     hasSkipped: false,
   })
   const [mediaError, setMediaError] = useState(false)
+  const [mediaFinished, setMediaFinished] = useState(false)
+  const [recapPage, setRecapPage] = useState(0)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const audioRef = useRef<HTMLAudioElement | null>(null)
+  const mediaEndFiredRef = useRef(false)
 
   useEffect(() => {
     setSkipState({ hasSkipped: false })
     setMediaError(false)
-  }, [serverStartedAt, activeScene?.id])
+    setMediaFinished(false)
+    setRecapPage(0)
+    mediaEndFiredRef.current = false
+  }, [serverStartedAt, activeScene?.id, epoch])
 
   const initialRemaining = useMemo(
     () => calculateInterludeRemainingMs(serverStartedAt, durationMs),
@@ -207,9 +224,10 @@ export const ScenePresenter = ({
     return () => clearInterval(interval)
   }, [serverStartedAt, durationMs])
 
-  // Stop video media on unmount
+  // Stop video/audio media on unmount
   useEffect(() => {
     const videoEl = videoRef.current
+    const audioEl = audioRef.current
 
     return () => {
       if (videoEl) {
@@ -217,8 +235,27 @@ export const ScenePresenter = ({
         videoEl.removeAttribute("src")
         videoEl.load()
       }
+      if (audioEl) {
+        audioEl.pause()
+        audioEl.removeAttribute("src")
+        audioEl.load()
+      }
     }
   }, [])
+
+  // Sync volume on foreground video/audio element
+  useEffect(() => {
+    const vol =
+      activeScene && "volume" in activeScene && typeof activeScene.volume === "number"
+        ? Math.max(0, Math.min(1, activeScene.volume))
+        : 1
+    if (videoRef.current) {
+      videoRef.current.volume = vol
+    }
+    if (audioRef.current) {
+      audioRef.current.volume = vol
+    }
+  }, [activeScene])
 
   const handleSkipClick = () => {
     const { state: nextState, shouldEmitSkip } = processInterludeSkip(skipState)
@@ -237,9 +274,82 @@ export const ScenePresenter = ({
 
   const leaderboardEntries = activeSceneData?.leaderboard?.entries ?? []
   const interimResults = activeSceneData?.interimResults
+  const answerRecap = activeSceneData?.answerRecap
+
+  const isCinemaScene =
+    (kind === "opening" || kind === "closing") &&
+    ((activeScene as { stageLayout?: "cinema" | "card" } | undefined)
+      ?.stageLayout ?? "cinema") === "cinema"
+
+  const endBehavior =
+    (activeScene as { endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle" } | undefined)
+      ?.endBehavior ?? "holdFrame"
+
+  const handleForegroundMediaEnded = () => {
+    setMediaFinished(true)
+    if (
+      (advanceMode === "onMediaEnd" || endBehavior === "advanceNext") &&
+      !mediaEndFiredRef.current
+    ) {
+      mediaEndFiredRef.current = true
+      onMediaEnded?.()
+    }
+  }
+
+  // Pagination for answerRecap
+  const recapItems = answerRecap?.items ?? []
+  const configuredPerPage =
+    answerRecap?.maxItemsPerPage ??
+    ((activeScene as { maxItemsPerPage?: number } | undefined)?.maxItemsPerPage ??
+      4)
+  const effectivePerPage = Math.max(
+    1,
+    Math.min(
+      configuredPerPage,
+      isUltraCompact || availableHeight <= 580
+        ? Math.min(configuredPerPage, 2)
+        : isCompact || isPortrait || availableHeight <= 740
+          ? Math.min(configuredPerPage, 4)
+          : configuredPerPage,
+    ),
+  )
+  const totalRecapPages = Math.max(
+    1,
+    Math.ceil(recapItems.length / effectivePerPage),
+  )
+  const clampedRecapPage = Math.min(recapPage, totalRecapPages - 1)
+  const visibleRecapItems = recapItems.slice(
+    clampedRecapPage * effectivePerPage,
+    (clampedRecapPage + 1) * effectivePerPage,
+  )
+
+  useEffect(() => {
+    if (kind !== "answerRecap" || totalRecapPages <= 1) {
+      return
+    }
+    const pageDuration = Math.max(
+      2000,
+      Math.floor(durationMs / totalRecapPages),
+    )
+    const timer = setInterval(() => {
+      setRecapPage((prev) => (prev + 1) % totalRecapPages)
+    }, pageDuration)
+    return () => clearInterval(timer)
+  }, [kind, totalRecapPages, durationMs])
 
   const getKindLabel = (k: string, defaultLabel: string): string =>
     labels?.kinds?.[k] ?? defaultLabel
+
+  const showHeaderOverlay =
+    kind !== "opening" && kind !== "closing"
+      ? true
+      : ((activeScene as { textOverlay?: boolean } | undefined)?.textOverlay ??
+          true) ||
+        (mediaFinished && endBehavior === "fadeToTitle")
+
+  const logoPosition =
+    (activeScene as { logoPosition?: "top" | "center" | "bottom" | "hidden" } | undefined)
+      ?.logoPosition ?? "center"
 
   return (
     <div
@@ -258,16 +368,84 @@ export const ScenePresenter = ({
       data-tada-entrance={containerPreset !== "none" ? containerPreset : undefined}
       data-testid="studio-scene-presenter"
       data-kind={kind}
+      data-layout={
+        kind === "opening" || kind === "closing"
+          ? isCinemaScene
+            ? "cinema"
+            : "card"
+          : undefined
+      }
       data-remaining={remainingSeconds}
     >
+      {/* Full-Stage Cinema Backdrop for Opening / Closing */}
+      {isCinemaScene &&
+        activeScene &&
+        "mediaUrl" in activeScene &&
+        activeScene.mediaUrl &&
+        activeScene.mediaType !== "audio" &&
+        !mediaError && (
+          <div
+            data-testid="scene-cinema-backdrop"
+            className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
+          >
+            {activeScene.mediaType === "video" ? (
+              <video
+                ref={videoRef}
+                src={activeScene.mediaUrl}
+                autoPlay
+                playsInline
+                loop={activeScene.loop ?? false}
+                muted={activeScene.muted ?? false}
+                controls={activeScene.showControls ?? false}
+                onEnded={handleForegroundMediaEnded}
+                onError={() => setMediaError(true)}
+                data-testid="scene-video"
+                className={clsx(
+                  "h-full w-full",
+                  (activeScene.mediaFit ?? "cover") === "contain"
+                    ? "object-contain"
+                    : "object-cover",
+                )}
+              />
+            ) : (
+              <img
+                src={activeScene.mediaUrl}
+                alt={activeScene.title ?? "Cinema backdrop"}
+                onError={() => setMediaError(true)}
+                data-testid="scene-image"
+                className={clsx(
+                  "h-full w-full",
+                  (activeScene.mediaFit ?? "cover") === "contain"
+                    ? "object-contain"
+                    : "object-cover",
+                )}
+              />
+            )}
+            <div
+              className={clsx(
+                "absolute inset-0 bg-black transition-opacity duration-500",
+                mediaFinished && endBehavior === "fadeToTitle"
+                  ? "opacity-75"
+                  : "opacity-45",
+              )}
+            />
+          </div>
+        )}
+
       {/* 1. Header / Title */}
-      <div className="w-full shrink-0">
-        {kind === "opening" && (
-          <div className="flex flex-col items-center gap-1 sm:gap-2">
-            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
-              <Sparkles className="size-3.5 sm:size-4 text-primary" />
-              <span>{getKindLabel("opening", "Show Opening")}</span>
-            </div>
+      <div className="relative z-10 w-full shrink-0">
+        {kind === "opening" && showHeaderOverlay && (
+          <div
+            data-testid="scene-opening-overlay"
+            data-logo-position={logoPosition}
+            className="flex flex-col items-center gap-1 sm:gap-2"
+          >
+            {logoPosition !== "hidden" && (
+              <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+                <Sparkles className="size-3.5 sm:size-4 text-primary" />
+                <span>{getKindLabel("opening", "Show Opening")}</span>
+              </div>
+            )}
             <h1 className="mt-1 sm:mt-2 text-2xl font-black tracking-tight text-white drop-shadow-2xl sm:text-4xl md:text-5xl line-clamp-2">
               {"title" in (activeScene ?? {}) ? (activeScene as { title: string }).title : "Welcome to the Show"}
             </h1>
@@ -279,18 +457,48 @@ export const ScenePresenter = ({
           </div>
         )}
 
-        {kind === "closing" && (
-          <div className="flex flex-col items-center gap-1 sm:gap-2">
-            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
-              <Award className="size-3.5 sm:size-4 text-primary" />
-              <span>{getKindLabel("closing", "Show Closing")}</span>
-            </div>
+        {kind === "closing" && showHeaderOverlay && (
+          <div
+            data-testid="scene-closing-overlay"
+            data-logo-position={logoPosition}
+            className="flex flex-col items-center gap-1 sm:gap-2"
+          >
+            {logoPosition !== "hidden" && (
+              <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+                <Award className="size-3.5 sm:size-4 text-primary" />
+                <span>{getKindLabel("closing", "Show Closing")}</span>
+              </div>
+            )}
             <h1 className="mt-1 sm:mt-2 text-2xl font-black tracking-tight text-white drop-shadow-2xl sm:text-4xl md:text-5xl line-clamp-2">
               {"title" in (activeScene ?? {}) ? (activeScene as { title: string }).title : "Thank You For Playing"}
             </h1>
             {"subtitle" in (activeScene ?? {}) && (activeScene as { subtitle?: string }).subtitle && (
               <p className="max-w-2xl text-sm sm:text-lg font-medium text-white/80 line-clamp-2">
                 {(activeScene as { subtitle?: string }).subtitle}
+              </p>
+            )}
+          </div>
+        )}
+
+        {kind === "answerRecap" && (
+          <div className="flex flex-col items-center gap-1">
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-0.5 sm:px-4 sm:py-1 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <ListChecks className="size-3.5 sm:size-4 text-primary" />
+              <span>{getKindLabel("answerRecap", "Answer Recap")}</span>
+            </div>
+            <h2 className="mt-0.5 sm:mt-1 text-lg font-black tracking-tight text-white drop-shadow-2xl sm:text-2xl md:text-3xl line-clamp-1">
+              {answerRecap?.title ??
+                ("title" in (activeScene ?? {})
+                  ? (activeScene as { title?: string }).title
+                  : undefined) ??
+                "Cumulative Answer Recap"}
+            </h2>
+            {(answerRecap?.subtitle ||
+              ("subtitle" in (activeScene ?? {}) &&
+                (activeScene as { subtitle?: string }).subtitle)) && (
+              <p className="max-w-2xl text-xs sm:text-sm font-medium text-white/75 line-clamp-1">
+                {answerRecap?.subtitle ??
+                  (activeScene as { subtitle?: string }).subtitle}
               </p>
             )}
           </div>
@@ -379,7 +587,7 @@ export const ScenePresenter = ({
       </div>
 
       {/* 2. Central Visual Body */}
-      <div className="my-2 sm:my-3 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden">
+      <div className="relative z-10 my-2 sm:my-3 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden">
         {labels?.sampleDataNotice && (
           <span className="mb-1.5 shrink-0 rounded-full border border-primary/40 bg-primary/20 px-3 py-0.5 text-xs font-semibold text-primary">
             {labels.sampleDataNotice}
@@ -397,9 +605,69 @@ export const ScenePresenter = ({
           </div>
         )}
 
+        {/* User-supplied Lottie on opening / closing */}
+        {(kind === "opening" || kind === "closing") &&
+          activeScene &&
+          "lottieUrl" in activeScene &&
+          activeScene.lottieUrl && (
+            <div className="my-2 flex items-center justify-center">
+              <LottiePlayer
+                src={activeScene.lottieUrl}
+                loop={activeScene.lottieLoop ?? true}
+                speed={activeScene.lottieSpeed ?? 1}
+                fit={activeScene.lottieFit ?? "contain"}
+                onComplete={handleForegroundMediaEnded}
+                className="h-36 w-56 sm:h-48 sm:w-72"
+                dataTestId="scene-lottie-player"
+              />
+            </div>
+          )}
+
         {kind === "animation" && (
-          <div className="relative flex size-32 sm:size-40 md:size-48 items-center justify-center rounded-full border-4 border-white/20 bg-white/10 p-6 shadow-2xl backdrop-blur-md">
-            <Sparkles className="size-16 sm:size-20 animate-pulse text-primary drop-shadow-2xl" />
+          <div
+            data-testid={`scene-animation-preset-${
+              activeScene && "preset" in activeScene
+                ? activeScene.preset
+                : "spotlight"
+            }`}
+            className="relative flex flex-col items-center justify-center gap-3"
+          >
+            {activeScene && "lottieUrl" in activeScene && activeScene.lottieUrl ? (
+              <LottiePlayer
+                src={activeScene.lottieUrl}
+                loop={activeScene.lottieLoop ?? true}
+                speed={activeScene.lottieSpeed ?? 1}
+                fit={activeScene.lottieFit ?? "contain"}
+                onComplete={handleForegroundMediaEnded}
+                className="h-40 w-64 sm:h-52 sm:w-80"
+                dataTestId="scene-lottie-player"
+              />
+            ) : (
+              (() => {
+                const preset =
+                  activeScene && "preset" in activeScene
+                    ? activeScene.preset
+                    : "spotlight"
+                return (
+                  <div
+                    data-tada-scene-anim={preset}
+                    className={clsx(
+                      "relative flex size-32 sm:size-40 md:size-48 items-center justify-center rounded-full border-4 p-6 shadow-2xl backdrop-blur-md",
+                      preset === "spotlight" &&
+                        "tada-scene-anim-spotlight border-amber-300/60 bg-amber-400/20 shadow-[0_0_60px_rgba(251,191,36,0.45)]",
+                      preset === "confetti" &&
+                        "tada-scene-anim-confetti border-pink-400/60 bg-pink-500/20 shadow-[0_0_50px_rgba(236,72,153,0.4)]",
+                      preset === "bounce" &&
+                        "tada-scene-anim-bounce border-primary/60 bg-primary/20",
+                      preset === "pulse" &&
+                        "tada-scene-anim-pulse border-emerald-400/60 bg-emerald-500/20",
+                    )}
+                  >
+                    <Sparkles className="size-16 sm:size-20 text-primary drop-shadow-2xl" />
+                  </div>
+                )
+              })()
+            )}
           </div>
         )}
 
@@ -883,12 +1151,220 @@ export const ScenePresenter = ({
           </div>
         )}
 
-        {/* Media or Optional Media in Opening/Closing */}
-        {(kind === "media" || (activeScene && "mediaUrl" in activeScene && (activeScene as { mediaUrl?: string }).mediaUrl)) && (
+        {/* Cumulative Answer Recap */}
+        {kind === "answerRecap" && (
+          <div
+            data-testid="scene-answer-recap"
+            className="flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-2 overflow-hidden"
+          >
+            {visibleRecapItems.length > 0 ? (
+              <div className="flex min-h-0 w-full flex-1 flex-col justify-between gap-2 overflow-hidden">
+                <div
+                  className={clsx(
+                    "grid min-h-0 w-full flex-1 gap-2 sm:gap-3 content-center",
+                    visibleRecapItems.length === 1
+                      ? "grid-cols-1 max-w-2xl mx-auto"
+                      : "grid-cols-1 sm:grid-cols-2",
+                  )}
+                >
+                  {visibleRecapItems.map((item, idx) => {
+                    const showCounts = answerRecap?.showCounts ?? true
+                    const showPercentages =
+                      answerRecap?.showPercentages ?? true
+                    const badgeLabel =
+                      item.badgeType === "correctAnswer"
+                        ? "Correct Answer"
+                        : item.badgeType === "tiedMostSelected"
+                          ? "Tied Most Selected"
+                          : item.badgeType === "noResponses"
+                            ? "No Responses"
+                            : "Most Selected"
+
+                    return (
+                      <div
+                        key={item.questionId}
+                        data-testid="recap-question-card"
+                        data-question-id={item.questionId}
+                        data-badge-type={item.badgeType}
+                        data-tada-entrance={
+                          resultsSlot.preset !== "none"
+                            ? resultsSlot.preset
+                            : undefined
+                        }
+                        style={buildSceneSlotStyle(resultsSlot, idx)}
+                        className={clsx(
+                          "flex flex-col justify-between rounded-xl sm:rounded-2xl border border-white/15 bg-black/55 text-left shadow-xl backdrop-blur-md",
+                          isUltraCompact || availableHeight <= 600
+                            ? "p-2 gap-1"
+                            : "p-2.5 sm:p-3.5 gap-1.5 sm:gap-2",
+                          resultsSlot.preset !== "none" &&
+                            `tada-entrance-${resultsSlot.preset}`,
+                        )}
+                      >
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="rounded-md bg-white/15 px-2 py-0.5 text-[10px] sm:text-xs font-black text-white">
+                            Q{item.questionNumber}
+                          </span>
+                          <span
+                            data-testid="recap-item-badge"
+                            className={clsx(
+                              "rounded-full px-2.5 py-0.5 text-[10px] sm:text-xs font-extrabold uppercase tracking-wider",
+                              item.badgeType === "correctAnswer" &&
+                                "bg-emerald-500/25 text-emerald-300 border border-emerald-400/40",
+                              item.badgeType === "mostSelected" &&
+                                "bg-amber-400/25 text-amber-300 border border-amber-400/40",
+                              item.badgeType === "tiedMostSelected" &&
+                                "bg-sky-400/25 text-sky-300 border border-sky-400/40",
+                              item.badgeType === "noResponses" &&
+                                "bg-white/10 text-white/60 border border-white/20",
+                            )}
+                          >
+                            {badgeLabel}
+                          </span>
+                        </div>
+
+                        <p
+                          data-testid="recap-question-text"
+                          className={clsx(
+                            "font-bold text-white line-clamp-2 leading-snug",
+                            isUltraCompact || isNarrowMobile
+                              ? "text-xs sm:text-sm"
+                              : "text-sm sm:text-base",
+                          )}
+                        >
+                          {item.questionText}
+                        </p>
+
+                        {item.winningOptions.length > 0 ? (
+                          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                            {item.winningOptions.map((opt) => {
+                              const optBg =
+                                CANONICAL_ANSWER_COLORS[opt.answerIndex] ??
+                                "#334155"
+                              return (
+                                <div
+                                  key={opt.answerIndex}
+                                  data-testid="recap-winning-option"
+                                  style={{ backgroundColor: optBg }}
+                                  className="flex flex-1 min-w-[120px] items-center justify-between gap-2 rounded-lg border border-white/20 px-2.5 py-1.5 text-white shadow-md"
+                                >
+                                  <div className="flex items-center gap-2 min-w-0">
+                                    {opt.imageUrl && (
+                                      <img
+                                        src={opt.imageUrl}
+                                        alt={opt.alt || opt.label}
+                                        data-testid="recap-option-image"
+                                        className="size-7 sm:size-8 shrink-0 rounded object-contain bg-black/25"
+                                      />
+                                    )}
+                                    <span
+                                      data-testid="recap-option-label"
+                                      className="truncate text-xs sm:text-sm font-black"
+                                    >
+                                      {opt.label}
+                                    </span>
+                                  </div>
+                                  {(showCounts || showPercentages) && (
+                                    <span
+                                      data-testid="recap-option-stats"
+                                      className="shrink-0 rounded bg-black/35 px-1.5 py-0.5 font-mono text-[10px] sm:text-xs font-bold"
+                                    >
+                                      {showPercentages
+                                        ? `${opt.percentage}%`
+                                        : ""}
+                                      {showPercentages && showCounts ? " " : ""}
+                                      {showCounts ? `(${opt.count})` : ""}
+                                    </span>
+                                  )}
+                                </div>
+                              )
+                            })}
+                          </div>
+                        ) : (
+                          <div
+                            data-testid="recap-no-responses-row"
+                            className="rounded-lg border border-white/10 bg-black/30 px-2.5 py-1 text-xs text-white/60"
+                          >
+                            {labels?.noResponsesYet ??
+                              "No responses recorded for this question."}
+                          </div>
+                        )}
+                      </div>
+                    )
+                  })}
+                </div>
+
+                {totalRecapPages > 1 && (
+                  <div
+                    data-testid="recap-pagination-bar"
+                    className="flex shrink-0 items-center justify-center gap-3 pt-1"
+                  >
+                    <button
+                      type="button"
+                      data-testid="recap-prev-page"
+                      onClick={() =>
+                        setRecapPage(
+                          (prev) =>
+                            (prev - 1 + totalRecapPages) % totalRecapPages,
+                        )
+                      }
+                      className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
+                    >
+                      <ChevronLeft className="size-4" />
+                    </button>
+                    <span
+                      data-testid="recap-page-indicator"
+                      className="text-xs font-bold text-white/80"
+                    >
+                      Page {clampedRecapPage + 1} of {totalRecapPages}
+                    </span>
+                    <button
+                      type="button"
+                      data-testid="recap-next-page"
+                      onClick={() =>
+                        setRecapPage((prev) => (prev + 1) % totalRecapPages)
+                      }
+                      className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
+                    >
+                      <ChevronRight className="size-4" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <div
+                data-testid="recap-empty-state"
+                className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70"
+              >
+                {labels?.noInterimResults ?? "No completed questions to recap yet."}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Media or Optional Media in Opening/Closing (Card mode or Audio) */}
+        {(kind === "media" ||
+          (activeScene &&
+            "mediaUrl" in activeScene &&
+            (activeScene as { mediaUrl?: string }).mediaUrl &&
+            (!isCinemaScene ||
+              (activeScene as { mediaType?: string }).mediaType === "audio" ||
+              mediaError))) && (
           (() => {
-            const { mediaUrl, mediaType = "image" } = (activeScene ?? {}) as {
+            const {
+              mediaUrl,
+              mediaType = "image",
+              mediaFit = "contain",
+              loop = false,
+              muted = false,
+              showControls = true,
+            } = (activeScene ?? {}) as {
               mediaUrl?: string
-              mediaType?: "image" | "video"
+              mediaType?: "image" | "video" | "audio"
+              mediaFit?: "cover" | "contain"
+              loop?: boolean
+              muted?: boolean
+              showControls?: boolean
             }
 
             if (!mediaUrl || mediaError) {
@@ -907,6 +1383,31 @@ export const ScenePresenter = ({
               )
             }
 
+            if (mediaType === "audio") {
+              return (
+                <div
+                  data-testid="scene-audio-container"
+                  className="flex flex-col items-center justify-center gap-4 rounded-2xl border border-white/20 bg-black/50 px-8 py-6 shadow-2xl backdrop-blur-md"
+                >
+                  <div className="flex size-20 sm:size-24 items-center justify-center rounded-full bg-primary/25 text-primary shadow-inner">
+                    <Music className="size-10 sm:size-12 animate-pulse" />
+                  </div>
+                  <audio
+                    ref={audioRef}
+                    src={mediaUrl}
+                    autoPlay
+                    loop={loop}
+                    muted={muted}
+                    controls={showControls}
+                    onEnded={handleForegroundMediaEnded}
+                    onError={() => setMediaError(true)}
+                    data-testid="scene-audio"
+                    className="w-64 sm:w-80 max-w-full"
+                  />
+                </div>
+              )
+            }
+
             if (mediaType === "video") {
               return (
                 <div className="relative max-h-[38vh] sm:max-h-[45vh] max-w-[85vw] overflow-hidden rounded-2xl border border-white/20 shadow-2xl">
@@ -914,10 +1415,16 @@ export const ScenePresenter = ({
                     ref={videoRef}
                     src={mediaUrl}
                     autoPlay
-                    controls
+                    loop={loop}
+                    muted={muted}
+                    controls={showControls}
                     playsInline
+                    onEnded={handleForegroundMediaEnded}
                     onError={() => setMediaError(true)}
-                    className="max-h-[38vh] sm:max-h-[45vh] w-auto max-w-[85vw] rounded-2xl shadow-2xl"
+                    className={clsx(
+                      "max-h-[38vh] sm:max-h-[45vh] w-auto max-w-[85vw] rounded-2xl shadow-2xl",
+                      mediaFit === "cover" ? "object-cover" : "object-contain",
+                    )}
                     data-testid="scene-video"
                   />
                 </div>
@@ -930,7 +1437,10 @@ export const ScenePresenter = ({
                   src={mediaUrl}
                   alt={"title" in (activeScene ?? {}) ? (activeScene as { title?: string }).title ?? "Scene media" : "Scene media"}
                   onError={() => setMediaError(true)}
-                  className="max-h-[38vh] sm:max-h-[45vh] w-auto max-w-[85vw] rounded-2xl object-contain shadow-2xl"
+                  className={clsx(
+                    "max-h-[38vh] sm:max-h-[45vh] w-auto max-w-[85vw] rounded-2xl shadow-2xl",
+                    mediaFit === "cover" ? "object-cover" : "object-contain",
+                  )}
                   data-testid="scene-image"
                 />
               </div>

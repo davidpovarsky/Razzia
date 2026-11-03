@@ -1,3 +1,5 @@
+import fs from "node:fs"
+import path from "node:path"
 import { zValidator } from "@hono/zod-validator"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 import { Hono, type MiddlewareHandler } from "hono"
@@ -9,6 +11,7 @@ import {
   quizExtrasV2Schema,
   RevisionConflictError,
   showMediaCatalogItemSchema,
+  validateLottieJson,
 } from "../../core/index"
 import {
   associateMediaWithShow,
@@ -34,6 +37,12 @@ const createCompositeBodySchema = z.strictObject({
 const associateMediaBodySchema = z.strictObject({
   quizId: z.string().min(1),
   item: showMediaCatalogItemSchema,
+})
+
+const uploadLottieBodySchema = z.strictObject({
+  name: z.string().min(1).max(160),
+  content: z.union([z.string(), z.record(z.string(), z.unknown())]),
+  quizId: z.string().min(1).optional(),
 })
 
 export const createExtensionRoutes = (
@@ -245,6 +254,71 @@ export const createExtensionRoutes = (
       return c.json({ showMediaCatalog }, StatusCodes.OK)
     },
   )
+
+  // POST /lottie -> 201 { name, url, type: "lottie", lottieMeta }
+  app.post("/lottie", zValidator("json", uploadLottieBodySchema), (c) => {
+    const body = c.req.valid("json")
+    const validation = validateLottieJson(body.content)
+    if (!validation.valid) {
+      return c.json(
+        { error: validation.error, code: validation.code },
+        StatusCodes.BAD_REQUEST,
+      )
+    }
+
+    const rawBaseName = body.name
+      .replace(/\.json$/iu, "")
+      .replace(/[^a-zA-Z0-9_-]/gu, "-")
+      .replace(/-+/gu, "-")
+      .replace(/^-|-$/gu, "")
+      .slice(0, 80)
+    const safeName = `${rawBaseName || "lottie"}-${Date.now().toString(36)}.json`
+    const mediaDir = injections.getPath("media")
+    fs.mkdirSync(mediaDir, { recursive: true })
+    const filePath = path.join(mediaDir, safeName)
+    const serialized =
+      typeof body.content === "string"
+        ? JSON.stringify(JSON.parse(body.content))
+        : JSON.stringify(body.content)
+    fs.writeFileSync(filePath, serialized, "utf-8")
+
+    const url = `/media/${safeName}`
+    const item = {
+      name: safeName,
+      url,
+      type: "lottie" as const,
+      size: Buffer.byteLength(serialized, "utf-8"),
+      addedAt: Date.now(),
+      lottieMeta: validation.meta,
+    }
+
+    if (body.quizId) {
+      associateMediaWithShow(injections.getPath, body.quizId, item)
+    }
+
+    return c.json(item, StatusCodes.CREATED)
+  })
+
+  // GET /lottie/:name -> 200 JSON
+  app.get("/lottie/:name", (c) => {
+    const name = c.req.param("name")
+    if (!/^[a-zA-Z0-9_.-]+\.json$/u.test(name) || name.includes("..")) {
+      return c.json({ error: "errors:media.invalidName" }, StatusCodes.BAD_REQUEST)
+    }
+    const mediaDir = injections.getPath("media")
+    const filePath = path.join(mediaDir, name)
+    if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
+      return c.json({ error: "errors:media.notFound" }, StatusCodes.NOT_FOUND)
+    }
+    const raw = fs.readFileSync(filePath, "utf-8")
+    const validation = validateLottieJson(raw)
+    if (!validation.valid) {
+      return c.json({ error: validation.error }, StatusCodes.BAD_REQUEST)
+    }
+    return c.body(raw, StatusCodes.OK, {
+      "Content-Type": "application/json; charset=utf-8",
+    })
+  })
 
   return app
 }

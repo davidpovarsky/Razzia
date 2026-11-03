@@ -1,11 +1,15 @@
+import React from "react"
+import { renderToStaticMarkup } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import {
   assignRoundRobin,
   calculateInterludeRemainingMs,
   formatHistoryItem,
+  LottiePlayer,
   processInterludeSkip,
   projectTeamScores,
   resolveAudioCue,
+  ScenePresenter,
   shouldAutoAdvanceInterlude,
   shouldDuckMusic,
 } from "./index"
@@ -507,6 +511,166 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       )
       expect(skipResult.shouldEmitSkip).toBe(true)
       expect(skipResult.state.hasSkipped).toBe(true)
+    })
+  })
+
+  describe("STUDIO01: ScenePresenter & LottiePlayer Rendering", () => {
+    it("renders Cumulative Answer Recap scene with winning options, badges, and pagination", () => {
+      const html = renderToStaticMarkup(
+        React.createElement(ScenePresenter, {
+          scene: {
+            kind: "answerRecap",
+            title: "Round 1 Recap",
+            subtitle: "Top community answers",
+            mode: "mostSelected",
+            maxItemsPerPage: 2,
+            showCounts: true,
+            showPercentages: true,
+            durationMs: 8000,
+            advance: "auto",
+          },
+          activeSceneData: {
+            answerRecap: {
+              title: "Round 1 Recap",
+              subtitle: "Top community answers",
+              startQuestionId: "11111111-1111-4111-8111-111111111111",
+              endQuestionId: "33333333-3333-4333-8333-333333333333",
+              mode: "mostSelected",
+              maxItemsPerPage: 2,
+              showCounts: true,
+              showPercentages: true,
+              items: [
+                {
+                  questionId: "11111111-1111-4111-8111-111111111111",
+                  questionNumber: 1,
+                  questionText: "Best snack?",
+                  playMode: "survey",
+                  badgeType: "mostSelected",
+                  totalResponders: 10,
+                  isTie: false,
+                  winningOptions: [
+                    {
+                      answerIndex: 0,
+                      label: "Popcorn",
+                      count: 7,
+                      percentage: 70,
+                    },
+                  ],
+                },
+                {
+                  questionId: "22222222-2222-4222-8222-222222222222",
+                  questionNumber: 2,
+                  questionText: "2 + 2?",
+                  playMode: "quiz",
+                  badgeType: "correctAnswer",
+                  totalResponders: 10,
+                  isTie: false,
+                  winningOptions: [
+                    {
+                      answerIndex: 1,
+                      label: "4",
+                      count: 9,
+                      percentage: 90,
+                    },
+                  ],
+                },
+                {
+                  questionId: "33333333-3333-4333-8333-333333333333",
+                  questionNumber: 3,
+                  questionText: "Unanswered question?",
+                  playMode: "survey",
+                  badgeType: "noResponses",
+                  totalResponders: 0,
+                  isTie: false,
+                  winningOptions: [],
+                },
+              ],
+            },
+          },
+        }),
+      )
+
+      expect(html).toContain('data-testid="scene-answer-recap"')
+      expect(html).toContain('data-testid="recap-question-card"')
+      expect(html).toContain("Best snack?")
+      expect(html).toContain("Popcorn")
+      expect(html).toContain("70% (7)")
+      expect(html).toContain("Correct Answer")
+      expect(html).toContain('data-testid="recap-pagination-bar"')
+      expect(html).toContain("Page 1 of 2")
+    })
+
+    it("renders audio media scene and full-stage cinema opening scene", () => {
+      const audioHtml = renderToStaticMarkup(
+        React.createElement(ScenePresenter, {
+          scene: {
+            kind: "media",
+            title: "Mystery Sound Clip",
+            mediaUrl: "/media/fanfare.mp3",
+            mediaType: "audio",
+            durationMs: 6000,
+            advance: "onMediaEnd",
+          },
+        }),
+      )
+      expect(audioHtml).toContain('data-testid="scene-audio"')
+      expect(audioHtml).toContain("/media/fanfare.mp3")
+
+      const cinemaHtml = renderToStaticMarkup(
+        React.createElement(ScenePresenter, {
+          scene: {
+            kind: "opening",
+            title: "Grand Finale",
+            subtitle: "Welcome Everyone",
+            mediaUrl: "/media/intro.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            mediaFit: "cover",
+            logoPosition: "top",
+            textOverlay: true,
+            durationMs: 8000,
+            advance: "onMediaEnd",
+          },
+        }),
+      )
+      expect(cinemaHtml).toContain('data-layout="cinema"')
+      expect(cinemaHtml).toContain('data-testid="scene-cinema-backdrop"')
+      expect(cinemaHtml).toContain('data-logo-position="top"')
+    })
+
+    it("renders LottiePlayer with valid inline JSON and neutral empty state when omitted", () => {
+      const emptyHtml = renderToStaticMarkup(
+        React.createElement(LottiePlayer, {
+          emptyLabel: "Upload a Lottie JSON file",
+        }),
+      )
+      expect(emptyHtml).toContain('data-testid="lottie-player-empty"')
+      expect(emptyHtml).toContain("Upload a Lottie JSON file")
+
+      const validHtml = renderToStaticMarkup(
+        React.createElement(LottiePlayer, {
+          data: {
+            v: "5.7.4",
+            fr: 30,
+            ip: 0,
+            op: 60,
+            w: 200,
+            h: 200,
+            layers: [
+              {
+                ty: 4,
+                nm: "Dot",
+                ks: {},
+                shapes: [
+                  { ty: "el", s: { a: 0, k: [80, 80] } },
+                  { ty: "fl", c: { a: 0, k: [1, 0.5, 0, 1] } },
+                ],
+              },
+            ],
+          },
+        }),
+      )
+      expect(validHtml).toContain('data-testid="lottie-player-svg"')
     })
   })
 })

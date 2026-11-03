@@ -3,13 +3,16 @@ import { validateLottieJson, type LottieFitMode, type LottieMeta } from "../core
 
 export interface LottiePlayerProps {
   src?: string
+  data?: Record<string, unknown> | string
   animationData?: Record<string, unknown> | string
   loop?: boolean
   speed?: number
   fit?: LottieFitMode
   autoplay?: boolean
+  emptyLabel?: string
   className?: string
   testId?: string
+  dataTestId?: string
   onComplete?: () => void
   onError?: (error: string) => void
 }
@@ -134,16 +137,21 @@ const extractColorCss = (prop: unknown): string => {
  */
 export const LottiePlayer = ({
   src,
+  data,
   animationData,
   loop = true,
   speed = 1,
   fit = "contain",
   autoplay = true,
+  emptyLabel,
   className = "",
-  testId = "tada-lottie-player",
+  testId,
+  dataTestId,
   onComplete,
   onError,
 }: LottiePlayerProps) => {
+  const effectiveTestId = dataTestId ?? testId ?? "tada-lottie-player"
+  const inlineData = data ?? animationData
   const [fetchedText, setFetchedText] = useState<string | null>(null)
   const [fetchError, setFetchError] = useState<string | null>(null)
   const [frame, setFrame] = useState<number>(0)
@@ -160,13 +168,27 @@ export const LottiePlayer = ({
     completedRef.current = false
     setFetchError(null)
 
-    if (animationData) {
+    if (inlineData) {
       setFetchedText(null)
       return
     }
 
     if (!src) {
       setFetchedText(null)
+      return
+    }
+
+    if (src.startsWith("data:application/json;base64,")) {
+      try {
+        const b64 = src.slice("data:application/json;base64,".length)
+        const decoded =
+          typeof atob === "function"
+            ? decodeURIComponent(escape(atob(b64)))
+            : Buffer.from(b64, "base64").toString("utf-8")
+        setFetchedText(decoded)
+      } catch {
+        setFetchError("Invalid data URL")
+      }
       return
     }
 
@@ -195,15 +217,15 @@ export const LottiePlayer = ({
     return () => {
       cancelled = true
     }
-  }, [src, animationData, onError])
+  }, [src, inlineData, onError])
 
   const parsed = useMemo<ParsedBodymovin | null>(() => {
-    const sourceInput = animationData ?? fetchedText
+    const sourceInput = inlineData ?? fetchedText
     if (!sourceInput) {
       return null
     }
     const validation = validateLottieJson(sourceInput)
-    if (!validation.ok || !validation.meta) {
+    if (!validation.valid) {
       const errMsg = validation.error ?? "Invalid Lottie JSON"
       onError?.(errMsg)
       return null
@@ -216,13 +238,13 @@ export const LottiePlayer = ({
       meta: validation.meta,
       raw: rawObj,
     }
-  }, [animationData, fetchedText, onError])
+  }, [inlineData, fetchedText, onError])
 
   useEffect(() => {
     if (!parsed) {
       return
     }
-    const { inPoint, outPoint, frameRate } = parsed.meta
+    const { ip: inPoint, op: outPoint, fr: frameRate } = parsed.meta
     const totalFrames = Math.max(1, outPoint - inPoint)
 
     if (prefersReducedMotion || !autoplay) {
@@ -261,10 +283,10 @@ export const LottiePlayer = ({
     }
   }, [parsed, loop, speed, autoplay, prefersReducedMotion, onComplete])
 
-  if (fetchError || (!parsed && (src || animationData) && fetchedText !== null)) {
+  if (fetchError || (!parsed && (src || inlineData) && fetchedText !== null)) {
     return (
       <div
-        data-testid={`${testId}-error`}
+        data-testid={`${effectiveTestId}-error`}
         className={`flex items-center justify-center rounded-xl border border-white/15 bg-black/30 p-4 text-xs text-white/70 ${className}`}
       >
         Unable to render Lottie animation
@@ -273,10 +295,20 @@ export const LottiePlayer = ({
   }
 
   if (!parsed) {
+    if (emptyLabel) {
+      return (
+        <div
+          data-testid="lottie-player-empty"
+          className={`flex items-center justify-center rounded-xl border border-white/15 bg-black/25 p-3 text-xs text-white/60 ${className}`}
+        >
+          {emptyLabel}
+        </div>
+      )
+    }
     return null
   }
 
-  const { width, height } = parsed.meta
+  const { w: width, h: height } = parsed.meta
   const layers = Array.isArray(parsed.raw.layers)
     ? (parsed.raw.layers as Array<Record<string, unknown>>)
     : []
@@ -286,23 +318,24 @@ export const LottiePlayer = ({
 
   return (
     <div
-      data-testid={testId}
+      data-testid={effectiveTestId}
       data-fit={fit}
       data-loop={String(loop)}
       className={`relative flex items-center justify-center overflow-hidden ${className}`}
     >
       <svg
+        data-testid="lottie-player-svg"
         viewBox={`0 0 ${width} ${height}`}
         preserveAspectRatio={preserveAspectRatio}
         className="h-full w-full"
-        aria-label={parsed.meta.name || "Lottie animation"}
+        aria-label="Lottie animation"
       >
         {layers
           .slice()
           .reverse()
           .map((layer, idx) => {
-            const ip = typeof layer.ip === "number" ? layer.ip : parsed.meta.inPoint
-            const op = typeof layer.op === "number" ? layer.op : parsed.meta.outPoint
+            const ip = typeof layer.ip === "number" ? layer.ip : parsed.meta.ip
+            const op = typeof layer.op === "number" ? layer.op : parsed.meta.op
             if (frame < ip || frame > op) {
               return null
             }

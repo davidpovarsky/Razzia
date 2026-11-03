@@ -370,8 +370,238 @@ button:not(:disabled),
   animation: tadaEntranceCurtain cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+@keyframes tadaEntrancePopBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.75) translateY(18px);
+  }
+  58% {
+    opacity: 1;
+    transform: scale(1.06) translateY(-6px);
+  }
+  80% {
+    transform: scale(0.97) translateY(2px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes tadaEntranceWobbleSettle {
+  0% {
+    opacity: 0;
+    transform: rotate(-5deg) scale(0.92);
+  }
+  40% {
+    opacity: 1;
+    transform: rotate(3.2deg) scale(1.03);
+  }
+  70% {
+    transform: rotate(-1.5deg) scale(0.99);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(0deg) scale(1);
+  }
+}
+
+@keyframes tadaEntranceCascade {
+  0% {
+    opacity: 0;
+    transform: translateY(-28px) scale(0.94);
+  }
+  65% {
+    opacity: 1;
+    transform: translateY(4px) scale(1.02);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes tadaEntranceFanFlip {
+  0% {
+    opacity: 0;
+    transform: perspective(900px) rotateX(-48deg) translateY(20px);
+  }
+  70% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(6deg) translateY(-2px);
+  }
+  100% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg) translateY(0);
+  }
+}
+
+@keyframes tadaEntranceWipeRipple {
+  0% {
+    opacity: 0;
+    clip-path: inset(0 100% 0 0);
+    transform: translateX(-14px);
+  }
+  70% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(3px);
+  }
+  100% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+    transform: translateX(0);
+  }
+}
+
+.tada-entrance-pop-bounce {
+  animation: tadaEntrancePopBounce cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tada-entrance-wobble-settle {
+  animation: tadaEntranceWobbleSettle cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tada-entrance-cascade {
+  animation: tadaEntranceCascade cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.tada-entrance-fan-flip {
+  animation: tadaEntranceFanFlip cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.tada-entrance-wipe-ripple {
+  animation: tadaEntranceWipeRipple cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Tada Decorative Question Underline Effects ───────────────────────────── */
+
+@keyframes tadaUnderlinePulse {
+  0%,
+  100% {
+    opacity: 0.72;
+    transform: scaleX(0.88);
+  }
+  50% {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+
+@keyframes tadaUnderlineShimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes tadaUnderlineGlow {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 4px var(--color-primary));
+    transform: scaleX(0.92);
+  }
+  50% {
+    filter: drop-shadow(0 0 12px var(--color-primary));
+    transform: scaleX(1.03);
+  }
+}
+
+.tada-underline-pulse-bar {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: var(--color-primary);
+  animation: tadaUnderlinePulse 2.2s ease-in-out infinite;
+}
+
+.tada-underline-shimmer-line {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    rgb(255 255 255 / 0.25) 0%,
+    var(--color-primary) 50%,
+    rgb(255 255 255 / 0.25) 100%
+  );
+  background-size: 200% 100%;
+  animation: tadaUnderlineShimmer 2.6s linear infinite;
+}
+
+.tada-underline-wave-dots {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background-image: radial-gradient(
+    circle,
+    var(--color-primary) 45%,
+    transparent 48%
+  );
+  background-size: 14px 6px;
+  animation: tadaUnderlinePulse 1.8s ease-in-out infinite;
+}
+
+.tada-underline-glow-sweep {
+  height: 0.375rem;
+  border-radius: 9999px;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary),
+    rgb(255 255 255 / 0.85),
+    var(--color-primary)
+  );
+  animation: tadaUnderlineGlow 2.4s ease-in-out infinite;
+}
+
+/* ── Standalone Animation Scene Keyframes ─────────────────────────────────── */
+
+@keyframes tadaSceneSpotlightSweep {
+  0%,
+  100% {
+    transform: rotate(-12deg) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: rotate(12deg) scale(1.08);
+    opacity: 1;
+  }
+}
+
+@keyframes tadaSceneConfettiFall {
+  0% {
+    transform: translateY(-18px) rotate(0deg);
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateY(10px) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-18px) rotate(360deg);
+    opacity: 0.9;
+  }
+}
+
+.tada-scene-anim-spotlight {
+  animation: tadaSceneSpotlightSweep 3.2s ease-in-out infinite;
+}
+
+.tada-scene-anim-confetti {
+  animation: tadaSceneConfettiFall 2.4s ease-in-out infinite;
+}
+
+.tada-scene-anim-bounce {
+  animation: tadaEntrancePopBounce 1.6s ease-in-out infinite;
+}
+
+.tada-scene-anim-pulse {
+  animation: tadaUnderlineGlow 2s ease-in-out infinite;
+}
+
 @media (prefers-reduced-motion: reduce) {
-  [data-tada-entrance] {
+  [data-tada-entrance],
+  [data-tada-underline],
+  [data-tada-scene-anim] {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

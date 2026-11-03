@@ -1,5 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
 import { StudioShowCoordinator } from "./studio-show-coordinator"
+import { ExtensionGameSession } from "./session"
+import { createDefaultQuizExtrasV2 } from "../../core/studio-timeline-schema"
 import type { TimelineItem, SceneConfig } from "../../core/studio-timeline-schema"
 
 describe("StudioShowCoordinator", () => {
@@ -334,5 +336,167 @@ describe("StudioShowCoordinator", () => {
     // At Step 0, cannot go back further
     expect(coordinator.canPrevious().can).toBe(false)
     expect(coordinator.previousScene()).toBe(false)
+  })
+
+  it("hasAuthoredOpeningAtStart returns true only when timeline[0] is an opening scene", () => {
+    const withOpening = new StudioShowCoordinator({
+      timeline,
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    expect(withOpening.hasAuthoredOpeningAtStart()).toBe(true)
+
+    const withoutOpening = new StudioShowCoordinator({
+      timeline: [{ id: "s-q1", kind: "question", questionId: q1Id }],
+      scenes: {},
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+    expect(withoutOpening.hasAuthoredOpeningAtStart()).toBe(false)
+  })
+
+  it("supports advance: onMediaEnd with immediate manager mediaEnded signal and safety timer fallback", () => {
+    const startedQuestions: number[] = []
+    const onMediaEndSceneId = "99999999-9999-4999-8999-999999999999"
+
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        { id: "s-intro-vid", kind: "opening", sceneId: onMediaEndSceneId },
+        { id: "s-q1", kind: "question", questionId: q1Id },
+      ],
+      scenes: {
+        [onMediaEndSceneId]: {
+          id: onMediaEndSceneId,
+          kind: "opening",
+          title: "Cinema Intro",
+          mediaUrl: "/media/intro.mp4",
+          mediaType: "video",
+          stageLayout: "cinema",
+          mediaFit: "cover",
+          durationMs: 12000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+
+    coordinator.start()
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.advanceMode).toBe("onMediaEnd")
+
+    // Video finishes after 3500ms -> manager sends advanceScene(sceneId, epoch, stepIndex)
+    vi.advanceTimersByTime(3500)
+    const epochAtOpen = coordinator.currentEpoch
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(true)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+
+    // Duplicate/late mediaEnded signal for step 0 is rejected idempotently
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(false)
+  })
+
+  it("populates activeSceneData.answerRecap in ExtensionGameSession for manager and player snapshots", () => {
+    const recapSceneId = "77777777-7777-4777-8777-777777777777"
+    const extras = createDefaultQuizExtrasV2(
+      "quiz-recap",
+      [q1Id, q2Id],
+      "a".repeat(64),
+    )
+    extras.timeline = [
+      { id: "s-q1", kind: "question", questionId: q1Id },
+      { id: "s-q2", kind: "question", questionId: q2Id },
+      { id: "s-recap", kind: "answerRecap", sceneId: recapSceneId },
+    ]
+    extras.scenes[recapSceneId] = {
+      id: recapSceneId,
+      kind: "answerRecap",
+      title: "Round 1 Recap",
+      startQuestionId: q1Id,
+      mode: "mostSelected",
+      maxItemsPerPage: 4,
+      showCounts: true,
+      showPercentages: true,
+      durationMs: 8000,
+      advance: "manual",
+    }
+
+    const coordinator = new StudioShowCoordinator({
+      timeline: extras.timeline,
+      scenes: extras.scenes,
+      questionIds: [q1Id, q2Id],
+      defaults: extras.defaults,
+      callbacks: {
+        onStartQuestion: vi.fn(),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+
+    const session = new ExtensionGameSession("game-1", extras)
+    session.setShowCoordinator(coordinator)
+    session.setDelegate({
+      advanceTimelineScene: (sceneId, epoch, stepIdx) =>
+        coordinator.advanceScene(sceneId, epoch, stepIdx),
+      getAnswerRecapSummary: (scene, stepIdx) => ({
+        title: "title" in scene ? scene.title : "Recap",
+        startQuestionId: q1Id,
+        endQuestionId: q2Id,
+        mode: "mostSelected",
+        maxItemsPerPage: 4,
+        showCounts: true,
+        showPercentages: true,
+        items: [
+          {
+            questionId: q1Id,
+            questionNumber: 1,
+            questionText: "Favorite color?",
+            playMode: "survey",
+            badgeType: "mostSelected",
+            totalResponders: 5,
+            isTie: false,
+            winningOptions: [
+              {
+                answerIndex: 0,
+                label: "Blue",
+                count: 4,
+                percentage: 80,
+              },
+            ],
+          },
+        ],
+      }),
+    })
+
+    coordinator.start() // Q1
+    coordinator.onQuestionCompleted(0) // Q2
+    coordinator.onQuestionCompleted(1) // answerRecap scene at stepIndex 2
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(coordinator.currentStep?.item.kind).toBe("answerRecap")
+
+    const playerSnap = session.getStateSnapshot("player", [])
+    const activeData = playerSnap.extras.activeSceneData as {
+      answerRecap?: { items: Array<{ questionText: string }> }
+    }
+    expect(activeData?.answerRecap?.items).toHaveLength(1)
+    expect(activeData?.answerRecap?.items[0].questionText).toBe(
+      "Favorite color?",
+    )
   })
 })

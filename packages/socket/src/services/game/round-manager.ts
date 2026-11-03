@@ -93,6 +93,7 @@ export interface RoundManagerOptions {
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
   onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
   onShowStart?: (proceed: () => void) => void
+  skipShowStartCountdown?: () => boolean
   canPreviousTimelineStep?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean }
   onPreviousTimelineStep?: () => boolean
   hasAuthoredResultsScene?: (questionIndex: number) => boolean
@@ -460,6 +461,10 @@ export class RoundManager {
     return this.questionsHistory
   }
 
+  getQuestionLedgerEntry(questionIndex: number): LedgerQuestionEntry | undefined {
+    return this.questionLedger.get(questionIndex)
+  }
+
   getRevealDistribution(): RevealDistributionSnapshot | null {
     return this.latestRevealDistribution
   }
@@ -816,6 +821,14 @@ export class RoundManager {
     }
 
     this.started = true
+
+    if (this.opts.skipShowStartCountdown?.() && this.opts.onShowStart) {
+      this.opts.onShowStart(() => {
+        void this.newQuestion()
+      })
+
+      return
+    }
 
     this.opts.broadcast(STATUS.SHOW_START, {
       time: 3,
@@ -1208,6 +1221,8 @@ export class RoundManager {
       })
     })
 
+    this.recordHistory(currentPlayers, sortedPlayers)
+
     if (!hasAuthoredScene) {
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...this.question,
@@ -1216,8 +1231,6 @@ export class RoundManager {
     } else {
       this.nextQuestion()
     }
-
-    this.recordHistory(currentPlayers, sortedPlayers)
 
     this.leaderboard = sortedPlayers
     this.tempOldLeaderboard ??= oldLeaderboard

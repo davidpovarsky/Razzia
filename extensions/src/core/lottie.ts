@@ -46,13 +46,16 @@ export type LottiePlayerConfig = z.infer<typeof lottiePlayerConfigSchema>
 export type LottieValidationResult =
   | {
       ok: true
+      valid: true
       meta: LottieMeta
       data: Record<string, unknown>
       sanitizedJson: string
     }
   | {
       ok: false
+      valid: false
       error: string
+      code?: string
       reason: string
     }
 
@@ -157,6 +160,27 @@ const scanLottieNodeSafety = (
 export const validateLottieJson = (
   rawInput: string | Uint8Array | unknown,
 ): LottieValidationResult => {
+  const result = validateLottieJsonInternal(rawInput)
+  if (result.ok) {
+    return { ...result, valid: true }
+  }
+  return { ...result, valid: false, code: result.error }
+}
+
+const validateLottieJsonInternal = (
+  rawInput: string | Uint8Array | unknown,
+):
+  | {
+      ok: true
+      meta: LottieMeta
+      data: Record<string, unknown>
+      sanitizedJson: string
+    }
+  | {
+      ok: false
+      error: string
+      reason: string
+    } => {
   let rawString: string | undefined
   let parsed: unknown
 

@@ -9,7 +9,7 @@ export interface TimelineStepState {
   item: TimelineItem
   scene?: SceneConfig
   canAcceptAnswers: boolean
-  advanceMode: "auto" | "manual"
+  advanceMode: "auto" | "manual" | "onMediaEnd"
   durationMs: number
 }
 
@@ -79,7 +79,8 @@ export class TimelineRunner {
     const scene = item.kind === "question" ? undefined : this.scenes[item.sceneId]
     const advanceMode =
       scene && "advance" in scene
-        ? ((scene as { advance?: "auto" | "manual" }).advance ?? "manual")
+        ? ((scene as { advance?: "auto" | "manual" | "onMediaEnd" }).advance ??
+          "manual")
         : "manual"
     const durationMs =
       scene && "durationMs" in scene
@@ -101,11 +102,14 @@ export class TimelineRunner {
     return this.isQuestion
   }
 
-  getAdvanceMode(): "auto" | "manual" {
+  getAdvanceMode(): "auto" | "manual" | "onMediaEnd" {
     const scene = this.currentScene
 
     if (scene && "advance" in scene) {
-      return (scene as { advance?: "auto" | "manual" }).advance ?? "manual"
+      return (
+        (scene as { advance?: "auto" | "manual" | "onMediaEnd" }).advance ??
+        "manual"
+      )
     }
 
     return "manual"

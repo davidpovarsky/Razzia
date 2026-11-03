@@ -5,9 +5,11 @@ import {
   type ExtensionCommand,
   type ExtensionPhase,
   type ExtensionStateEnvelope,
+  type PublicAnswerRecap,
   type PublicInterimResults,
   type PublicRankEntry,
   type RevealDistributionSnapshot,
+  type SceneConfig,
   isQuizExtrasV2,
 } from "../../core/index"
 import {
@@ -29,11 +31,23 @@ export interface ExtensionSessionDelegate {
   replayFromCheckpoint?: (questionIndex: number) => boolean
   endOrSkipInterlude?: (reason?: string) => boolean
   getHistory?: (questionIndex?: number) => unknown
-  advanceTimelineScene?: (sceneId?: string, epoch?: number) => boolean
+  advanceTimelineScene?: (
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ) => boolean
   previousTimelineScene?: () => boolean
-  skipTimelineScene?: (sceneId?: string, epoch?: number) => boolean
+  skipTimelineScene?: (
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ) => boolean
   getLeaderboard?: () => Array<{ displayName: string; points: number }>
   getLastCompletedQuestionSummary?: () => PublicInterimResults | null
+  getAnswerRecapSummary?: (
+    scene: SceneConfig,
+    timelineStepIndex: number,
+  ) => PublicAnswerRecap | null
   canPrevious?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean; answersReceived?: number }
   isAcceptingAnswers?: () => boolean
   getAnswersCount?: () => number
@@ -317,6 +331,10 @@ export class ExtensionGameSession {
         extrasPayload.stageAnimations = questionExtras.stageAnimations
       }
 
+      if (questionExtras.questionDecoration) {
+        extrasPayload.questionDecoration = questionExtras.questionDecoration
+      }
+
       // Per-card background & audio cues
       if (questionExtras.background) {
         extrasPayload.cardBackground = questionExtras.background
@@ -334,6 +352,8 @@ export class ExtensionGameSession {
 
     // Studio V2 timeline & scene payload
     if (this.extras && isQuizExtrasV2(this.extras)) {
+      extrasPayload.defaults = this.extras.defaults
+
       if (this.showCoordinator) {
         extrasPayload.activeTimelineStep =
           this.showCoordinator.getAuthoritativeStepEnvelope(forRole)
@@ -361,7 +381,8 @@ export class ExtensionGameSession {
             }
           }
 
-          const stepKind = this.showCoordinator.currentStep?.item.kind
+          const currentStep = this.showCoordinator.currentStep
+          const stepKind = currentStep?.item.kind
 
           if (stepKind === "leaderboard") {
             const rawEntries = this.delegate?.getLeaderboard?.() ?? []
@@ -380,6 +401,17 @@ export class ExtensionGameSession {
             const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
             const activeSceneData: ActiveSceneData = {
               interimResults: summary,
+            }
+
+            extrasPayload.activeSceneData = activeSceneData
+          } else if (stepKind === "answerRecap" && activeScene) {
+            const recap =
+              this.delegate?.getAnswerRecapSummary?.(
+                activeScene,
+                currentStep?.index ?? 0,
+              ) ?? null
+            const activeSceneData: ActiveSceneData = {
+              answerRecap: recap,
             }
 
             extrasPayload.activeSceneData = activeSceneData
@@ -648,9 +680,13 @@ export class ExtensionGameSession {
           this.delegate?.advanceTimelineScene?.(
             command.payload.sceneId,
             command.payload.epoch,
+            command.payload.timelineStepIndex,
           ) ?? false
 
         if (!ok) {
+          if (command.payload.reason === "mediaEnded") {
+            return { success: true, deduplicated: true, action: command.action }
+          }
           throw new Error("errors:extensions.sceneAdvanceFailed")
         }
 
@@ -664,9 +700,13 @@ export class ExtensionGameSession {
           this.delegate?.skipTimelineScene?.(
             command.payload.sceneId,
             command.payload.epoch,
+            command.payload.timelineStepIndex,
           ) ?? false
 
         if (!ok) {
+          if (command.payload.reason === "mediaEnded") {
+            return { success: true, deduplicated: true, action: command.action }
+          }
           throw new Error("errors:extensions.sceneSkipFailed")
         }
 

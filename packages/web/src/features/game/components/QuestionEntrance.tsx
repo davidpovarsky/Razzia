@@ -24,6 +24,11 @@ export const QUESTION_ENTRANCE_PRESET_OPTIONS: Array<{
   { value: "zoom-soft", labelKey: "extensions:entrance.zoomSoft", defaultDurationMs: 800 },
   { value: "spotlight", labelKey: "extensions:entrance.spotlight", defaultDurationMs: 1000 },
   { value: "curtain", labelKey: "extensions:entrance.curtain", defaultDurationMs: 1000 },
+  { value: "pop-bounce", labelKey: "extensions:entrance.popBounce", defaultDurationMs: 850 },
+  { value: "wobble-settle", labelKey: "extensions:entrance.wobbleSettle", defaultDurationMs: 900 },
+  { value: "cascade", labelKey: "extensions:entrance.cascade", defaultDurationMs: 850 },
+  { value: "fan-flip", labelKey: "extensions:entrance.fanFlip", defaultDurationMs: 900 },
+  { value: "wipe-ripple", labelKey: "extensions:entrance.wipeRipple", defaultDurationMs: 900 },
 ]
 
 export const QuestionEntrance = ({

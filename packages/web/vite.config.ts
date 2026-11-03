@@ -28,9 +28,12 @@ const brandingMimeTypes: Record<string, string> = {
   ".woff2": "font/woff2",
 }
 
-const mediaMimeTypes: Record<string, string> = Object.fromEntries(
-  Object.entries(ACCEPTED_MEDIA_TYPES).map(([mime, { ext }]) => [ext, mime]),
-)
+const mediaMimeTypes: Record<string, string> = {
+  ...Object.fromEntries(
+    Object.entries(ACCEPTED_MEDIA_TYPES).map(([mime, { ext }]) => [ext, mime]),
+  ),
+  ".json": "application/json; charset=utf-8",
+}
 
 const serveDir =
   (prefix: string, dir: string, mimeTypes: Record<string, string>) =>

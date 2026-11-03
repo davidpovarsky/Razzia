@@ -277,6 +277,10 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
   const isTie = winnerIndices.length > 1
 
+  const defaultsObj = extensionState?.extras?.defaults as
+    | { stageAnimations?: CardStageAnimations }
+    | undefined
+
   const stageAnimations = resolveCardStageAnimations({
     questionEntrance: extensionState?.extras?.questionEntrance as
       | QuestionEntranceConfig
@@ -284,6 +288,7 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
     stageAnimations: extensionState?.extras?.stageAnimations as
       | CardStageAnimations
       | undefined,
+    globalStageAnimations: defaultsObj?.stageAnimations,
   })
 
   const animationEpochKey = `${extensionState?.questionId ?? question}-${extensionState?.epoch ?? 0}-responses`

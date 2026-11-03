@@ -335,6 +335,9 @@ class Game {
             this.showCoordinator?.start()
           }
         : undefined,
+      skipShowStartCountdown: this.showCoordinator
+        ? () => this.showCoordinator?.hasAuthoredOpeningAtStart() ?? false
+        : undefined,
       onQuestionCompleted: this.showCoordinator
         ? (qIdx) => {
             this.showCoordinator?.onQuestionCompleted(qIdx)
@@ -394,8 +397,12 @@ class Game {
         replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
         getHistory: (qIdx) => this.round.getHistory(qIdx),
-        advanceTimelineScene: (sceneId, epoch) =>
-          this.showCoordinator?.advanceScene(sceneId, epoch) ?? false,
+        advanceTimelineScene: (sceneId, epoch, timelineStepIndex) =>
+          this.showCoordinator?.advanceScene(
+            sceneId,
+            epoch,
+            timelineStepIndex,
+          ) ?? false,
         previousTimelineScene: () => {
           const ok = this.showCoordinator?.previousScene() ?? false
           if (ok) {
@@ -405,8 +412,9 @@ class Game {
           }
           return ok
         },
-        skipTimelineScene: (sceneId, epoch) =>
-          this.showCoordinator?.skipScene(sceneId, epoch) ?? false,
+        skipTimelineScene: (sceneId, epoch, timelineStepIndex) =>
+          this.showCoordinator?.skipScene(sceneId, epoch, timelineStepIndex) ??
+          false,
         canPrevious: () => {
           if (this.showCoordinator?.isSceneActive()) {
             return this.showCoordinator.canPrevious()
@@ -487,6 +495,190 @@ class Game {
             options,
             winners,
             isTie,
+          }
+        },
+        getAnswerRecapSummary: (scene, timelineStepIndex) => {
+          if (scene.kind !== "answerRecap") {
+            return null
+          }
+
+          const extras = this.extensionSession?.extras
+          if (!extras || !isQuizExtrasV2(extras)) {
+            return null
+          }
+
+          const timeline = extras.timeline
+          const boundIndex = Math.min(timelineStepIndex, timeline.length)
+
+          const precedingQuestions: Array<{
+            questionId: string
+            questionIndex: number
+            questionNumber: number
+          }> = []
+
+          let qOrdinal = 0
+          for (let i = 0; i < boundIndex; i += 1) {
+            const item = timeline[i]
+            if (item?.kind === "question") {
+              qOrdinal += 1
+              const qIdx = extras.questionIds.indexOf(item.questionId)
+              if (qIdx >= 0 && qIdx < this.quizz.questions.length) {
+                precedingQuestions.push({
+                  questionId: item.questionId,
+                  questionIndex: qIdx,
+                  questionNumber: qOrdinal,
+                })
+              }
+            }
+          }
+
+          let startPos = 0
+          if (scene.startQuestionId) {
+            const foundPos = precedingQuestions.findIndex(
+              (pq) => pq.questionId === scene.startQuestionId,
+            )
+            if (foundPos >= 0) {
+              startPos = foundPos
+            }
+          }
+
+          const selectedRange = precedingQuestions.slice(startPos)
+          const historyAll = (this.round.getHistory() ?? []) as QuestionResult[]
+
+          const items = []
+          for (const pq of selectedRange) {
+            const q = this.quizz.questions[pq.questionIndex]
+            const hist = historyAll[pq.questionIndex]
+            const ledger = this.round.getQuestionLedgerEntry(pq.questionIndex)
+
+            if (!q) continue
+            // Skip questions that were skipped or not yet completed
+            if (hist?.skipped || ledger?.skipped) {
+              continue
+            }
+            if (!hist && !ledger) {
+              continue
+            }
+
+            const qExtras = extras.perQuestion?.[pq.questionId]
+            const answerVisuals = qExtras?.answerVisuals ?? []
+            const playMode = resolveQuestionPlayMode(q, this.quizz.gameMode)
+
+            // Tally votes per option index from authoritative ledger or history
+            const optionCounts = new Array<number>(q.answers.length).fill(0)
+            let totalResponders = 0
+
+            if (ledger && !ledger.skipped) {
+              totalResponders = ledger.answers.length
+              for (const ans of ledger.answers) {
+                for (const aid of ans.answerIds) {
+                  if (aid >= 0 && aid < optionCounts.length) {
+                    optionCounts[aid] += 1
+                  }
+                }
+              }
+            } else if (hist) {
+              const answeredPlayers = (hist.playerAnswers ?? []).filter(
+                (pa) => Array.isArray(pa.answerIds) && pa.answerIds.length > 0,
+              )
+              totalResponders =
+                typeof hist.playerAnswersCount === "number"
+                  ? hist.playerAnswersCount
+                  : answeredPlayers.length
+              for (const pa of answeredPlayers) {
+                for (const aid of pa.answerIds ?? []) {
+                  if (aid >= 0 && aid < optionCounts.length) {
+                    optionCounts[aid] += 1
+                  }
+                }
+              }
+            }
+
+            let maxCount = 0
+            for (const c of optionCounts) {
+              if (c > maxCount) maxCount = c
+            }
+
+            const useCorrectAnswer =
+              scene.mode === "correctAnswer" &&
+              playMode === "quiz" &&
+              Array.isArray(q.solutions) &&
+              q.solutions.length > 0
+
+            let winningIdxList: number[] = []
+            let badgeType:
+              | "mostSelected"
+              | "correctAnswer"
+              | "tiedMostSelected"
+              | "noResponses" = "mostSelected"
+            let isTie = false
+
+            if (useCorrectAnswer) {
+              winningIdxList = (q.solutions ?? []).filter(
+                (idx) => idx >= 0 && idx < q.answers.length,
+              )
+              badgeType = "correctAnswer"
+              isTie = winningIdxList.length > 1
+            } else if (totalResponders === 0 || maxCount === 0) {
+              winningIdxList = []
+              badgeType = "noResponses"
+              isTie = false
+            } else {
+              for (let idx = 0; idx < optionCounts.length; idx += 1) {
+                if (optionCounts[idx] === maxCount) {
+                  winningIdxList.push(idx)
+                }
+              }
+              isTie = winningIdxList.length > 1
+              badgeType = isTie ? "tiedMostSelected" : "mostSelected"
+            }
+
+            const winningOptions = winningIdxList.map((idx) => {
+              const count = optionCounts[idx] ?? 0
+              const percentage =
+                totalResponders > 0
+                  ? Math.round((count / totalResponders) * 100)
+                  : 0
+              const visual = answerVisuals.find(
+                (v: any) => v.answerIndex === idx,
+              )
+              return {
+                answerIndex: idx,
+                label: q.answers[idx] ?? `Option ${idx + 1}`,
+                count,
+                percentage,
+                imageUrl: visual?.url,
+                alt: visual?.alt,
+              }
+            })
+
+            items.push({
+              questionId: pq.questionId,
+              questionNumber: pq.questionNumber,
+              questionText: q.question,
+              questionImageUrl: q.image,
+              playMode,
+              badgeType,
+              totalResponders,
+              isTie,
+              winningOptions,
+            })
+          }
+
+          return {
+            title: scene.title,
+            subtitle: scene.subtitle,
+            startQuestionId:
+              scene.startQuestionId ??
+              selectedRange[0]?.questionId ??
+              null,
+            endQuestionId:
+              selectedRange[selectedRange.length - 1]?.questionId ?? null,
+            mode: scene.mode ?? "mostSelected",
+            maxItemsPerPage: scene.maxItemsPerPage ?? 4,
+            showCounts: scene.showCounts ?? true,
+            showPercentages: scene.showPercentages ?? true,
+            items,
           }
         },
       })

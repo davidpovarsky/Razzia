@@ -29,7 +29,7 @@ export interface AuthoritativeStepEnvelope {
   questionOrdinal: number
   stepIndex: number
   totalSteps: number
-  advance: "auto" | "manual"
+  advance: "auto" | "manual" | "onMediaEnd"
   startedAt: number
   durationMs: number
   epoch: number
@@ -105,6 +105,16 @@ export class StudioShowCoordinator {
 
   canAcceptAnswers(): boolean {
     return this.phase === "question"
+  }
+
+  /**
+   * Returns true when step 0 of the timeline is an authored `opening` scene.
+   * Used by RoundManager to avoid broadcasting a duplicate 6-second SHOW_START countdown
+   * right before an authored opening scene.
+   */
+  hasAuthoredOpeningAtStart(): boolean {
+    const first = this.runner.getItem(0)
+    return first?.kind === "opening"
   }
 
   /**
@@ -197,7 +207,7 @@ export class StudioShowCoordinator {
     } else {
       this.phase = "scene"
 
-      if (step.advanceMode === "auto") {
+      if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
         this.scheduleAutoAdvance(step.durationMs, this.epoch)
       }
 
@@ -209,7 +219,11 @@ export class StudioShowCoordinator {
    * Advances the current non-question scene.
    * Cancels any pending auto-advance timer to prevent double advances.
    */
-  advanceScene(sceneId?: string, epoch?: number): boolean {
+  advanceScene(
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ): boolean {
     if (this.phase !== "scene") {
       return false
     }
@@ -218,7 +232,23 @@ export class StudioShowCoordinator {
       return false
     }
 
-    if (sceneId && this.currentScene?.id && sceneId !== this.currentScene.id) {
+    if (
+      timelineStepIndex !== undefined &&
+      timelineStepIndex !== this.runner.index
+    ) {
+      return false
+    }
+
+    const activeStep = this.runner.getCurrentStep()
+    const activeSceneId =
+      activeStep?.item.kind !== "question" ? activeStep?.item.sceneId : undefined
+
+    if (
+      sceneId &&
+      activeSceneId &&
+      sceneId !== activeSceneId &&
+      sceneId !== activeStep?.item.id
+    ) {
       return false
     }
 
@@ -247,7 +277,7 @@ export class StudioShowCoordinator {
     } else {
       this.phase = "scene"
 
-      if (step.advanceMode === "auto") {
+      if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
         this.scheduleAutoAdvance(step.durationMs, this.epoch)
       }
 
@@ -260,8 +290,12 @@ export class StudioShowCoordinator {
   /**
    * Skips exactly one active scene.
    */
-  skipScene(sceneId?: string, epoch?: number): boolean {
-    return this.advanceScene(sceneId, epoch)
+  skipScene(
+    sceneId?: string,
+    epoch?: number,
+    timelineStepIndex?: number,
+  ): boolean {
+    return this.advanceScene(sceneId, epoch, timelineStepIndex)
   }
 
   canPrevious(): {
@@ -324,7 +358,7 @@ export class StudioShowCoordinator {
     } else {
       this.phase = "scene"
 
-      if (step.advanceMode === "auto") {
+      if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
         this.scheduleAutoAdvance(step.durationMs, this.epoch)
       }
 
@@ -368,7 +402,7 @@ export class StudioShowCoordinator {
     } else {
       this.phase = "scene"
 
-      if (step.advanceMode === "auto") {
+      if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
         this.scheduleAutoAdvance(step.durationMs, this.epoch)
       }
 
