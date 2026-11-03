@@ -3,6 +3,7 @@ import {
   cardAudioOverridesSchema,
   cardBackgroundOverrideSchema,
   cardStageAnimationsSchema,
+  questionDecorationSchema,
   showMediaCatalogItemSchema,
 } from "./card-appearance"
 import {
@@ -141,6 +142,7 @@ export const perQuestionItemSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audioCues: cardAudioOverridesSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    questionDecoration: questionDecorationSchema.optional(),
   })
   .superRefine((item, ctx) => {
     if (item.answerVisuals) {

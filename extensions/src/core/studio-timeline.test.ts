@@ -182,4 +182,68 @@ describe("Studio Timeline V2 Schema & Migration", () => {
     expect(isQuizExtrasV1(projected)).toBe(true)
     expect(projected.questionIds).toEqual([qId1, qId2])
   })
+
+  it("validates answerRecap scene with preceding startQuestionId and rejects forward or orphan startQuestionId", () => {
+    const recapId = crypto.randomUUID()
+    const validV2: QuizExtrasV2 = {
+      ...createDefaultQuizExtrasV2(quizId, [qId1, qId2], baseDigest),
+      timeline: [
+        { id: crypto.randomUUID(), kind: "question", questionId: qId1 },
+        { id: crypto.randomUUID(), kind: "answerRecap", sceneId: recapId },
+        { id: crypto.randomUUID(), kind: "question", questionId: qId2 },
+      ],
+      scenes: {
+        [recapId]: {
+          id: recapId,
+          kind: "answerRecap",
+          title: "Mid-Show Answer Recap",
+          startQuestionId: qId1,
+          mode: "mostSelected",
+          maxItemsPerPage: 4,
+          showCounts: true,
+          showPercentages: true,
+          durationMs: 8000,
+          advance: "manual",
+        },
+      },
+    }
+
+    expect(quizExtrasV2Schema.safeParse(validV2).success).toBe(true)
+
+    // Forward reference (qId2 appears AFTER recapId in timeline) must be rejected
+    const forwardRefV2: QuizExtrasV2 = {
+      ...validV2,
+      scenes: {
+        [recapId]: {
+          ...(validV2.scenes[recapId] as any),
+          startQuestionId: qId2,
+        },
+      },
+    }
+    const forwardParse = quizExtrasV2Schema.safeParse(forwardRefV2)
+    expect(forwardParse.success).toBe(false)
+    expect(
+      forwardParse.error?.issues.some((i) =>
+        i.message.includes("recapStartAfterRecap"),
+      ),
+    ).toBe(true)
+
+    // Orphan startQuestionId must be rejected
+    const orphanRefV2: QuizExtrasV2 = {
+      ...validV2,
+      scenes: {
+        [recapId]: {
+          ...(validV2.scenes[recapId] as any),
+          startQuestionId: crypto.randomUUID(),
+        },
+      },
+    }
+    const orphanParse = quizExtrasV2Schema.safeParse(orphanRefV2)
+    expect(orphanParse.success).toBe(false)
+    expect(
+      orphanParse.error?.issues.some((i) =>
+        i.message.includes("invalidRecapStartQuestion"),
+      ),
+    ).toBe(true)
+  })
 })

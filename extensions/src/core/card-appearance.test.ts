@@ -16,6 +16,7 @@ import {
   resolveCardStageAnimations,
   resolveEffectiveAudioCue,
   resolveEffectiveCardBackground,
+  resolveQuestionDecoration,
   validateBundleMedia,
 } from "./index"
 
@@ -560,5 +561,268 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       answers: ["Short", "Y".repeat(90)],
     })
     expect(warnings.map((w) => w.field)).toEqual(["question", "answer"])
+  })
+
+  it("inherits global stage animations when card slot is undefined and respects explicit none and new motion presets", () => {
+    const globalStageAnimations = {
+      questionEntrance: {
+        preset: "pop-bounce" as const,
+        timing: "simultaneous" as const,
+        staggerMs: 0,
+        durationMs: 700,
+      },
+      answerEntrance: {
+        preset: "cascade" as const,
+        timing: "sequential" as const,
+        staggerMs: 110,
+        durationMs: 650,
+      },
+      answerBadgeEntrance: {
+        preset: "wobble-settle" as const,
+        timing: "sequential" as const,
+        staggerMs: 80,
+        durationMs: 500,
+      },
+      resultsRevealEntrance: {
+        preset: "wipe-ripple" as const,
+        timing: "simultaneous" as const,
+        staggerMs: 90,
+        durationMs: 850,
+      },
+    }
+
+    const resolved = resolveCardStageAnimations({
+      globalStageAnimations,
+      stageAnimations: {
+        // questionEntrance is omitted -> inherits global "pop-bounce"
+        answerEntrance: {
+          // explicit none overrides global "cascade"
+          preset: "none",
+          timing: "simultaneous",
+          staggerMs: 90,
+          durationMs: 600,
+        },
+        answerBadgeEntrance: {
+          // custom card override "fan-flip"
+          preset: "fan-flip",
+          timing: "sequential",
+          staggerMs: 100,
+          durationMs: 550,
+        },
+      },
+    })
+
+    expect(resolved.questionEntrance.preset).toBe("pop-bounce")
+    expect(resolved.questionEntrance.durationMs).toBe(700)
+    expect(resolved.answerEntrance.preset).toBe("none")
+    expect(resolved.answerBadgeEntrance.preset).toBe("fan-flip")
+    expect(resolved.resultsRevealEntrance.preset).toBe("wipe-ripple")
+  })
+
+  it("resolves decorative question underline with global fallback and explicit none override", () => {
+    const globalDecoration = {
+      preset: "shimmer-line" as const,
+      color: "#ff9900",
+    }
+
+    // Inherit global
+    expect(
+      resolveQuestionDecoration({ globalDecoration }).preset,
+    ).toBe("shimmer-line")
+
+    // Explicit card none overrides global
+    expect(
+      resolveQuestionDecoration({
+        cardDecoration: { preset: "none" },
+        globalDecoration,
+      }).preset,
+    ).toBe("none")
+
+    // Custom Lottie underline
+    expect(
+      resolveQuestionDecoration({
+        cardDecoration: {
+          preset: "lottie",
+          lottieUrl: "/media/underline.json",
+        },
+        globalDecoration,
+      }),
+    ).toEqual({
+      enabled: true,
+      preset: "lottie",
+      lottieUrl: "/media/underline.json",
+    })
+  })
+
+  it("roundtrips cinematic opening, audio media scene, answerRecap, Lottie, global stage defaults, and questionDecoration across JSON, Native, and XLSX", () => {
+    const show = {
+      format: "tada-show" as const,
+      version: 1 as const,
+      title: "Studio Wave 2 Complete Roundtrip",
+      defaults: {
+        newQuestionMode: "quiz" as const,
+        leaderboardPolicy: "cardOnly" as const,
+        advanceMode: "auto" as const,
+        stageAnimations: {
+          questionEntrance: {
+            preset: "pop-bounce" as const,
+            timing: "simultaneous" as const,
+            staggerMs: 0,
+            durationMs: 700,
+          },
+          answerEntrance: {
+            preset: "cascade" as const,
+            timing: "sequential" as const,
+            staggerMs: 100,
+            durationMs: 600,
+          },
+        },
+        questionDecoration: {
+          enabled: true,
+          preset: "pulse-bar" as const,
+          color: "#38bdf8",
+        },
+      },
+      cards: [
+        {
+          key: "OPEN_CINEMA",
+          kind: "opening" as const,
+          title: "Grand Opening",
+          subtitle: "Live Tonight",
+          mediaUrl: "/media/intro.mp4",
+          mediaType: "video" as const,
+          stageLayout: "cinema" as const,
+          mediaFit: "cover" as const,
+          logoPosition: "top" as const,
+          textOverlay: true,
+          endBehavior: "advanceNext" as const,
+          volume: 0.9,
+          loop: false,
+          muted: false,
+          showControls: false,
+          lottieUrl: "/media/intro-badge.json",
+          lottieFit: "contain" as const,
+          lottieLoop: true,
+          lottieSpeed: 1.25,
+          durationMs: 15000,
+          advance: "onMediaEnd" as const,
+        },
+        {
+          key: "Q1",
+          kind: "quiz" as const,
+          questionType: "single" as const,
+          question: "First Question?",
+          answers: [{ text: "Alpha" }, { text: "Beta" }],
+          correctAnswers: [1],
+          questionDecoration: {
+            enabled: true,
+            preset: "glow-sweep" as const,
+            color: "#fbbf24",
+          },
+          stageAnimations: {
+            answerEntrance: {
+              preset: "fan-flip" as const,
+              timing: "sequential" as const,
+              staggerMs: 120,
+              durationMs: 550,
+            },
+          },
+        },
+        {
+          key: "AUDIO_INTERLUDE",
+          kind: "media" as const,
+          mediaUrl: "/media/jingle.mp3",
+          mediaType: "audio" as const,
+          title: "Mystery Sound",
+          volume: 0.85,
+          loop: false,
+          muted: false,
+          showControls: true,
+          mediaFit: "contain" as const,
+          durationMs: 12000,
+          advance: "onMediaEnd" as const,
+        },
+        {
+          key: "ANIM_LOTTIE",
+          kind: "animation" as const,
+          preset: "spotlight" as const,
+          title: "Dramatic Reveal",
+          lottieUrl: "/media/custom-anim.json",
+          lottieFit: "contain" as const,
+          lottieLoop: false,
+          lottieSpeed: 1,
+          durationMs: 4000,
+          advance: "onMediaEnd" as const,
+        },
+        {
+          key: "S1",
+          kind: "survey" as const,
+          questionType: "single" as const,
+          question: "Audience Poll?",
+          answers: [{ text: "Option 1" }, { text: "Option 2" }],
+        },
+        {
+          key: "RECAP_1",
+          kind: "answerRecap" as const,
+          title: "Answers So Far",
+          startQuestionKey: "Q1",
+          mode: "mostSelected" as const,
+          maxItemsPerPage: 4,
+          showCounts: true,
+          showPercentages: true,
+          durationMs: 9000,
+          advance: "manual" as const,
+        },
+      ],
+    }
+
+    const draftRes = authoredShowToNativeBundleDraft(show)
+    expect(draftRes.ok).toBe(true)
+    const bundle = {
+      bundleVersion: 1 as const,
+      quizz: draftRes.bundleDraft!.quizz,
+      extras: draftRes.bundleDraft!.extras,
+    }
+
+    expect(validateBundleMedia(bundle).ok).toBe(true)
+    const exportedJson = nativeBundleToAuthoredShow(bundle)
+    const xlsxBytes = exportTadaShowWorkbook(exportedJson)
+    const parsedFromXlsx = parseTadaShowWorkbook(xlsxBytes)
+
+    expect(parsedFromXlsx.defaults?.stageAnimations).toEqual(
+      show.defaults.stageAnimations,
+    )
+    expect(parsedFromXlsx.defaults?.questionDecoration).toEqual(
+      show.defaults.questionDecoration,
+    )
+
+    const openCard = parsedFromXlsx.cards.find((c) => c.kind === "opening") as any
+    expect(openCard.mediaType).toBe("video")
+    expect(openCard.stageLayout).toBe("cinema")
+    expect(openCard.logoPosition).toBe("top")
+    expect(openCard.textOverlay).toBe(true)
+    expect(openCard.endBehavior).toBe("advanceNext")
+    expect(openCard.advance).toBe("onMediaEnd")
+    expect(openCard.lottieUrl).toBe("/media/intro-badge.json")
+
+    const q1Card = parsedFromXlsx.cards.find((c) => c.kind === "quiz") as any
+    expect(q1Card.questionDecoration).toEqual({
+      enabled: true,
+      preset: "glow-sweep",
+      color: "#fbbf24",
+    })
+    expect(q1Card.stageAnimations?.answerEntrance?.preset).toBe("fan-flip")
+
+    const mediaCard = parsedFromXlsx.cards.find((c) => c.kind === "media") as any
+    expect(mediaCard.mediaType).toBe("audio")
+    expect(mediaCard.volume).toBe(0.85)
+    expect(mediaCard.showControls).toBe(true)
+    expect(mediaCard.advance).toBe("onMediaEnd")
+
+    const recapCard = parsedFromXlsx.cards.find((c) => c.kind === "answerRecap") as any
+    expect(recapCard.kind).toBe("answerRecap")
+    expect(recapCard.startQuestionKey).toBe("Q01")
+    expect(recapCard.mode).toBe("mostSelected")
+    expect(recapCard.maxItemsPerPage).toBe(4)
   })
 })

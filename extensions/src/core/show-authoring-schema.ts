@@ -3,6 +3,7 @@ import {
   cardAudioOverridesSchema,
   cardBackgroundOverrideSchema,
   cardStageAnimationsSchema,
+  questionDecorationSchema,
   showMediaCatalogItemSchema,
 } from "./card-appearance"
 import {
@@ -17,9 +18,12 @@ import {
   interludeSchema,
   isSafeMediaUrl,
   questionRevealSchema,
+  safeMediaUrlSchema,
   type Interlude,
 } from "./media"
 import {
+  ANSWER_RECAP_MODES,
+  SCENE_ADVANCE_MODES,
   sceneAudioSchema,
   studioDefaultsSchema,
 } from "./studio-timeline-schema"
@@ -98,6 +102,7 @@ export const authoredQuizCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audioCues: cardAudioOverridesSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    questionDecoration: questionDecorationSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -152,6 +157,7 @@ export const authoredSurveyCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audioCues: cardAudioOverridesSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    questionDecoration: questionDecorationSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -180,7 +186,7 @@ export const authoredTransitionCardSchema = z
     title: z.string().max(120).optional(),
     description: z.string().max(500).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -205,7 +211,11 @@ export const authoredAnimationCardSchema = z
     preset: z.string().max(64).default("spotlight"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(3000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    lottieUrl: safeMediaUrlSchema.optional(),
+    lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
+    lottieLoop: z.boolean().default(true).optional(),
+    lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -228,10 +238,15 @@ export const authoredMediaCardSchema = z
     key: z.string().min(1),
     kind: z.literal("media"),
     mediaUrl: z.string().default(""),
-    mediaType: z.enum(["image", "video"]).default("image"),
+    mediaType: z.enum(["image", "video", "audio"]).default("image"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    volume: z.number().min(0).max(1).default(0.8).optional(),
+    loop: z.boolean().default(false).optional(),
+    muted: z.boolean().default(false).optional(),
+    showControls: z.boolean().default(false).optional(),
+    mediaFit: z.enum(["contain", "cover"]).default("contain").optional(),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -262,7 +277,7 @@ export const authoredLeaderboardCardSchema = z
     kind: z.literal("leaderboard"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -288,7 +303,7 @@ export const authoredInterimResultsCardSchema = z
     kind: z.literal("interimResults"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -308,13 +323,44 @@ export type AuthoredInterimResultsCard = z.infer<
   typeof authoredInterimResultsCardSchema
 >
 
+export const authoredAnswerRecapCardSchema = z
+  .strictObject({
+    key: z.string().min(1),
+    kind: z.literal("answerRecap"),
+    title: z.string().max(120).optional(),
+    startQuestionKey: z.string().min(1).optional(),
+    mode: z.enum(ANSWER_RECAP_MODES).default("mostSelected"),
+    maxItemsPerPage: z.number().int().min(1).max(8).default(4).optional(),
+    showCounts: z.boolean().default(true).optional(),
+    showPercentages: z.boolean().default(true).optional(),
+    durationMs: z.number().int().min(500).max(120000).default(8000),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    background: cardBackgroundOverrideSchema.optional(),
+    audio: sceneAudioSchema.optional(),
+    stageAnimations: cardStageAnimationsSchema.optional(),
+    extraJson: z.record(z.string(), z.unknown()).optional(),
+  })
+  .superRefine((card, ctx) => {
+    if (card.extraJson && Object.keys(card.extraJson).length > 0) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["extraJson"],
+        message: "errors:extensions.unsupportedExtraJson",
+      })
+    }
+  })
+
+export type AuthoredAnswerRecapCard = z.infer<
+  typeof authoredAnswerRecapCardSchema
+>
+
 export const authoredCountdownCardSchema = z
   .strictObject({
     key: z.string().min(1),
     kind: z.literal("countdown"),
     durationSeconds: z.number().int().min(3).max(120).default(10),
     title: z.string().max(120).optional(),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -332,6 +378,29 @@ export const authoredCountdownCardSchema = z
 
 export type AuthoredCountdownCard = z.infer<typeof authoredCountdownCardSchema>
 
+const authoredBookendExtraFields = {
+  mediaType: z.enum(["image", "video", "audio"]).optional(),
+  stageLayout: z.enum(["card", "cinema"]).default("cinema").optional(),
+  mediaFit: z.enum(["contain", "cover"]).default("cover").optional(),
+  logoPosition: z
+    .enum(["top", "center", "bottom", "hidden"])
+    .default("center")
+    .optional(),
+  textOverlay: z.boolean().default(true).optional(),
+  endBehavior: z
+    .enum(["holdFrame", "advanceNext", "fadeToTitle"])
+    .default("holdFrame")
+    .optional(),
+  volume: z.number().min(0).max(1).default(0.8).optional(),
+  loop: z.boolean().default(false).optional(),
+  muted: z.boolean().default(false).optional(),
+  showControls: z.boolean().default(false).optional(),
+  lottieUrl: safeMediaUrlSchema.optional(),
+  lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
+  lottieLoop: z.boolean().default(true).optional(),
+  lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
+}
+
 export const authoredOpeningCardSchema = z
   .strictObject({
     key: z.string().min(1),
@@ -339,8 +408,9 @@ export const authoredOpeningCardSchema = z
     title: z.string().min(1).max(120),
     subtitle: z.string().max(200).optional(),
     mediaUrl: z.string().optional(),
-    durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    durationMs: z.number().int().min(500).max(300000).default(5000),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    ...authoredBookendExtraFields,
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -372,8 +442,9 @@ export const authoredClosingCardSchema = z
     title: z.string().min(1).max(120),
     subtitle: z.string().max(200).optional(),
     mediaUrl: z.string().optional(),
-    durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    durationMs: z.number().int().min(500).max(300000).default(5000),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    ...authoredBookendExtraFields,
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -406,6 +477,7 @@ export const authoredCardSchema = z.discriminatedUnion("kind", [
   authoredMediaCardSchema,
   authoredLeaderboardCardSchema,
   authoredInterimResultsCardSchema,
+  authoredAnswerRecapCardSchema,
   authoredCountdownCardSchema,
   authoredOpeningCardSchema,
   authoredClosingCardSchema,
@@ -584,6 +656,29 @@ export const tadaShowV1Schema = z
       if (card.kind === "quiz" || card.kind === "survey") {
         questionCount += 1
         questionKeys.add(card.key)
+      }
+    }
+
+    // Validate answerRecap startQuestionKey references an existing preceding question card
+    const seenQuestionKeysBeforeRecap = new Set<string>()
+    for (let i = 0; i < show.cards.length; i += 1) {
+      const card = show.cards[i]
+      if (card.kind === "quiz" || card.kind === "survey") {
+        seenQuestionKeysBeforeRecap.add(card.key)
+      } else if (card.kind === "answerRecap" && card.startQuestionKey) {
+        if (!questionKeys.has(card.startQuestionKey)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["cards", i, "startQuestionKey"],
+            message: `errors:extensions.unknownQuestionKeyRef:${card.startQuestionKey}`,
+          })
+        } else if (!seenQuestionKeysBeforeRecap.has(card.startQuestionKey)) {
+          ctx.addIssue({
+            code: "custom",
+            path: ["cards", i, "startQuestionKey"],
+            message: `errors:extensions.recapStartAfterRecap:${card.startQuestionKey}`,
+          })
+        }
       }
     }
 

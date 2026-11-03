@@ -139,6 +139,9 @@ export function authoredShowToNativeBundleDraft(
       if (card.stageAnimations) {
         qExtras.stageAnimations = card.stageAnimations
       }
+      if (card.questionDecoration) {
+        qExtras.questionDecoration = card.questionDecoration
+      }
 
       if (Object.keys(qExtras).length > 0) {
         perQuestion[qId] = qExtras
@@ -183,6 +186,14 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
+            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieLoop !== undefined
+              ? { lottieLoop: card.lottieLoop }
+              : {}),
+            ...(card.lottieSpeed !== undefined
+              ? { lottieSpeed: card.lottieSpeed }
+              : {}),
             ...sceneAppearance,
           }
           break
@@ -195,6 +206,13 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
+            ...(card.volume !== undefined ? { volume: card.volume } : {}),
+            ...(card.loop !== undefined ? { loop: card.loop } : {}),
+            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.showControls !== undefined
+              ? { showControls: card.showControls }
+              : {}),
+            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
             ...sceneAppearance,
           }
           break
@@ -218,6 +236,31 @@ export function authoredShowToNativeBundleDraft(
             ...sceneAppearance,
           }
           break
+        case "answerRecap": {
+          const resolvedStartQId = card.startQuestionKey
+            ? keyToQuestionId.get(card.startQuestionKey)
+            : questionIds[0]
+          sceneConfig = {
+            id: sceneId,
+            kind: "answerRecap",
+            title: card.title,
+            ...(resolvedStartQId ? { startQuestionId: resolvedStartQId } : {}),
+            mode: card.mode ?? "mostSelected",
+            ...(card.maxItemsPerPage !== undefined
+              ? { maxItemsPerPage: card.maxItemsPerPage }
+              : {}),
+            ...(card.showCounts !== undefined
+              ? { showCounts: card.showCounts }
+              : {}),
+            ...(card.showPercentages !== undefined
+              ? { showPercentages: card.showPercentages }
+              : {}),
+            durationMs: card.durationMs,
+            advance: card.advance,
+            ...sceneAppearance,
+          }
+          break
+        }
         case "countdown":
           sceneConfig = {
             id: sceneId,
@@ -235,6 +278,28 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             subtitle: card.subtitle,
             mediaUrl: card.mediaUrl,
+            ...(card.mediaType ? { mediaType: card.mediaType } : {}),
+            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.textOverlay !== undefined
+              ? { textOverlay: card.textOverlay }
+              : {}),
+            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.volume !== undefined ? { volume: card.volume } : {}),
+            ...(card.loop !== undefined ? { loop: card.loop } : {}),
+            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.showControls !== undefined
+              ? { showControls: card.showControls }
+              : {}),
+            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
+            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieLoop !== undefined
+              ? { lottieLoop: card.lottieLoop }
+              : {}),
+            ...(card.lottieSpeed !== undefined
+              ? { lottieSpeed: card.lottieSpeed }
+              : {}),
             durationMs: card.durationMs,
             advance: card.advance,
             ...sceneAppearance,
@@ -247,6 +312,28 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             subtitle: card.subtitle,
             mediaUrl: card.mediaUrl,
+            ...(card.mediaType ? { mediaType: card.mediaType } : {}),
+            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.textOverlay !== undefined
+              ? { textOverlay: card.textOverlay }
+              : {}),
+            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.volume !== undefined ? { volume: card.volume } : {}),
+            ...(card.loop !== undefined ? { loop: card.loop } : {}),
+            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.showControls !== undefined
+              ? { showControls: card.showControls }
+              : {}),
+            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
+            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieLoop !== undefined
+              ? { lottieLoop: card.lottieLoop }
+              : {}),
+            ...(card.lottieSpeed !== undefined
+              ? { lottieSpeed: card.lottieSpeed }
+              : {}),
             durationMs: card.durationMs,
             advance: card.advance,
             ...sceneAppearance,
@@ -287,10 +374,16 @@ export function authoredShowToNativeBundleDraft(
 
   const baseDigest = computeCanonicalBaseDigest(quizz)
 
-  const defaults = {
+  const defaults: QuizExtrasV2["defaults"] = {
     newQuestionMode: show.defaults?.newQuestionMode ?? "quiz",
     leaderboardPolicy: show.defaults?.leaderboardPolicy ?? "cardOnly",
     advanceMode: show.defaults?.advanceMode ?? "auto",
+    ...(show.defaults?.stageAnimations
+      ? { stageAnimations: show.defaults.stageAnimations }
+      : {}),
+    ...(show.defaults?.questionDecoration
+      ? { questionDecoration: show.defaults.questionDecoration }
+      : {}),
   }
 
   // Apply settings channel overrides if present
@@ -524,6 +617,7 @@ export function nativeBundleToAuthoredShow(
           background: perQ?.background,
           audioCues: perQ?.audioCues,
           stageAnimations: perQ?.stageAnimations,
+          questionDecoration: perQ?.questionDecoration,
         })
       } else {
         const correctAnswers = rawSolutions.map((solIdx) => solIdx + 1)
@@ -548,6 +642,7 @@ export function nativeBundleToAuthoredShow(
           background: perQ?.background,
           audioCues: perQ?.audioCues,
           stageAnimations: perQ?.stageAnimations,
+          questionDecoration: perQ?.questionDecoration,
         })
       }
     } else {
@@ -587,6 +682,14 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
+            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieLoop !== undefined
+              ? { lottieLoop: scene.lottieLoop }
+              : {}),
+            ...(scene.lottieSpeed !== undefined
+              ? { lottieSpeed: scene.lottieSpeed }
+              : {}),
             ...sceneAppearance,
           })
           break
@@ -599,6 +702,13 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
+            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
+            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
+            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
+            ...(scene.showControls !== undefined
+              ? { showControls: scene.showControls }
+              : {}),
+            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
             ...sceneAppearance,
           })
           break
@@ -622,6 +732,31 @@ export function nativeBundleToAuthoredShow(
             ...sceneAppearance,
           })
           break
+        case "answerRecap": {
+          const startQuestionKey = scene.startQuestionId
+            ? questionIdToCardKey.get(scene.startQuestionId)
+            : undefined
+          cards.push({
+            key: sKey,
+            kind: "answerRecap",
+            title: scene.title,
+            ...(startQuestionKey ? { startQuestionKey } : {}),
+            mode: scene.mode ?? "mostSelected",
+            ...(scene.maxItemsPerPage !== undefined
+              ? { maxItemsPerPage: scene.maxItemsPerPage }
+              : {}),
+            ...(scene.showCounts !== undefined
+              ? { showCounts: scene.showCounts }
+              : {}),
+            ...(scene.showPercentages !== undefined
+              ? { showPercentages: scene.showPercentages }
+              : {}),
+            durationMs: scene.durationMs,
+            advance: scene.advance,
+            ...sceneAppearance,
+          })
+          break
+        }
         case "countdown":
           cards.push({
             key: sKey,
@@ -639,6 +774,28 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             subtitle: scene.subtitle,
             mediaUrl: scene.mediaUrl,
+            ...(scene.mediaType ? { mediaType: scene.mediaType } : {}),
+            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
+            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
+            ...(scene.logoPosition ? { logoPosition: scene.logoPosition } : {}),
+            ...(scene.textOverlay !== undefined
+              ? { textOverlay: scene.textOverlay }
+              : {}),
+            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
+            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
+            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
+            ...(scene.showControls !== undefined
+              ? { showControls: scene.showControls }
+              : {}),
+            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
+            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieLoop !== undefined
+              ? { lottieLoop: scene.lottieLoop }
+              : {}),
+            ...(scene.lottieSpeed !== undefined
+              ? { lottieSpeed: scene.lottieSpeed }
+              : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
             ...sceneAppearance,
@@ -651,6 +808,28 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             subtitle: scene.subtitle,
             mediaUrl: scene.mediaUrl,
+            ...(scene.mediaType ? { mediaType: scene.mediaType } : {}),
+            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
+            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
+            ...(scene.logoPosition ? { logoPosition: scene.logoPosition } : {}),
+            ...(scene.textOverlay !== undefined
+              ? { textOverlay: scene.textOverlay }
+              : {}),
+            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
+            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
+            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
+            ...(scene.showControls !== undefined
+              ? { showControls: scene.showControls }
+              : {}),
+            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
+            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieLoop !== undefined
+              ? { lottieLoop: scene.lottieLoop }
+              : {}),
+            ...(scene.lottieSpeed !== undefined
+              ? { lottieSpeed: scene.lottieSpeed }
+              : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
             ...sceneAppearance,

@@ -78,6 +78,11 @@ export const QUESTION_ENTRANCE_PRESETS = [
   "zoom-soft",
   "spotlight",
   "curtain",
+  "pop-bounce",
+  "wobble-settle",
+  "cascade",
+  "fan-flip",
+  "wipe-ripple",
 ] as const
 
 export type QuestionEntrancePreset = (typeof QUESTION_ENTRANCE_PRESETS)[number]

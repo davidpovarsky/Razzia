@@ -10,13 +10,20 @@ import {
   cardAudioOverridesSchema,
   cardBackgroundOverrideSchema,
   cardStageAnimationsSchema,
+  questionDecorationSchema,
   type CardAudioOverrides,
   type CardBackgroundOverride,
   type CardStageAnimations,
+  type QuestionDecoration,
 } from "./card-appearance"
 import { interludeSchema, type Interlude } from "./media"
 import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
-import { sceneAudioSchema, type SceneAudio } from "./studio-timeline-schema"
+import {
+  sceneAudioSchema,
+  type AnswerRecapMode,
+  type SceneAdvanceMode,
+  type SceneAudio,
+} from "./studio-timeline-schema"
 import type { AnyQuizExtras } from "./index"
 import { MAX_ANSWERS } from "@razzia/common/constants"
 
@@ -525,6 +532,13 @@ function normalizeKind(rawKind: string): string {
   if (lower === "interimresults" || lower === "interim_results") {
     return "interimResults"
   }
+  if (
+    lower === "answerrecap" ||
+    lower === "answer_recap" ||
+    lower === "recap"
+  ) {
+    return "answerRecap"
+  }
 
   return lower
 }
@@ -756,6 +770,32 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     | "survey"
   const note = showMap.has("note") ? showMap.get("note") || undefined : undefined
 
+  let defaultStageAnimations: CardStageAnimations | undefined
+  const defaultStageAnimationsStr = showMap.get("defaultStageAnimationsJson")
+  if (defaultStageAnimationsStr) {
+    try {
+      defaultStageAnimations = cardStageAnimationsSchema.parse(
+        JSON.parse(defaultStageAnimationsStr),
+      )
+    } catch {
+      throw new Error("errors:extensions.invalidDefaultStageAnimationsJson")
+    }
+  }
+
+  let defaultQuestionDecoration: QuestionDecoration | undefined
+  const defaultQuestionDecorationStr = showMap.get(
+    "defaultQuestionDecorationJson",
+  )
+  if (defaultQuestionDecorationStr) {
+    try {
+      defaultQuestionDecoration = questionDecorationSchema.parse(
+        JSON.parse(defaultQuestionDecorationStr),
+      )
+    } catch {
+      throw new Error("errors:extensions.invalidDefaultQuestionDecorationJson")
+    }
+  }
+
   if (format !== "tada-show" || version !== 1) {
     throw new Error("errors:extensions.unsupportedShowFormat")
   }
@@ -804,6 +844,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     background?: CardBackgroundOverride
     audioCues?: CardAudioOverrides
     stageAnimations?: CardStageAnimations
+    questionDecoration?: QuestionDecoration
     extraJson?: Record<string, unknown>
     answers: AuthoredAnswer[]
   }
@@ -969,6 +1010,20 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
+    const questionDecorationJsonStr = getQVal(row, "questionDecorationJson")
+    let questionDecorationObj: QuestionDecoration | undefined
+    if (questionDecorationJsonStr) {
+      try {
+        questionDecorationObj = questionDecorationSchema.parse(
+          JSON.parse(questionDecorationJsonStr),
+        )
+      } catch {
+        throw new Error(
+          `errors:extensions.invalidQuestionDecorationJson:Questions!Z${r + 1}`,
+        )
+      }
+    }
+
     const parseNumOrDefault = (str: string, fallback: number): number => {
       if (!str) return fallback
       const parsed = Number.parseInt(str, 10)
@@ -998,6 +1053,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       background: backgroundObj,
       audioCues: audioCuesObj,
       stageAnimations: stageAnimationsObj,
+      questionDecoration: questionDecorationObj,
       extraJson: extraJsonObj,
       answers: [],
     })
@@ -1149,13 +1205,42 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     const playModeVal = getTVal(row, "playMode").toLowerCase()
     const durationMsVal = getTVal(row, "durationMs")
     const durationSecondsVal = getTVal(row, "durationSeconds")
-    const advanceVal =
+    const advanceRaw =
       getTVal(row, "advance").toLowerCase() || defaultAdvance || "auto"
+    const advanceVal: SceneAdvanceMode =
+      advanceRaw === "manual"
+        ? "manual"
+        : advanceRaw === "onmediaend" ||
+            advanceRaw === "on_media_end" ||
+            advanceRaw === "on-media-end"
+          ? "onMediaEnd"
+          : "auto"
     const presetVal = getTVal(row, "preset") || "spotlight"
-    const mediaTypeVal = getTVal(row, "mediaType").toLowerCase() || "image"
+    const rawMediaTypeVal = getTVal(row, "mediaType").toLowerCase()
+    const mediaTypeVal: "image" | "video" | "audio" =
+      rawMediaTypeVal === "video"
+        ? "video"
+        : rawMediaTypeVal === "audio"
+          ? "audio"
+          : "image"
     const mediaUrlVal = getTVal(row, "mediaUrl")
     const subtitleVal = getTVal(row, "subtitle")
     const extraJsonStr = getTVal(row, "extraJson")
+    const sceneConfigJsonStr = getTVal(row, "sceneConfigJson")
+
+    let sceneConfigExtras: Record<string, any> | undefined
+    if (sceneConfigJsonStr) {
+      try {
+        const parsed = JSON.parse(sceneConfigJsonStr)
+        if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+          sceneConfigExtras = parsed
+        } else {
+          throw new Error("not-object")
+        }
+      } catch {
+        throw new Error(`errors:extensions.invalidSceneConfigJson:${cardKey}`)
+      }
+    }
 
     let extraJson: Record<string, unknown> | undefined
     if (extraJsonStr) {
@@ -1236,6 +1321,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           background: qData.background ?? tBackground,
           audioCues: qData.audioCues,
           stageAnimations: qData.stageAnimations ?? tStageAnimations,
+          questionDecoration: qData.questionDecoration,
           extraJson,
         })
       } else {
@@ -1263,6 +1349,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           background: qData.background ?? tBackground,
           audioCues: qData.audioCues,
           stageAnimations: qData.stageAnimations ?? tStageAnimations,
+          questionDecoration: qData.questionDecoration,
           extraJson,
         })
       }
@@ -1277,7 +1364,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
@@ -1291,7 +1378,19 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 3000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
+            ...(sceneConfigExtras?.lottieUrl
+              ? { lottieUrl: sceneConfigExtras.lottieUrl }
+              : {}),
+            ...(sceneConfigExtras?.lottieFit
+              ? { lottieFit: sceneConfigExtras.lottieFit }
+              : {}),
+            ...(sceneConfigExtras?.lottieLoop !== undefined
+              ? { lottieLoop: sceneConfigExtras.lottieLoop }
+              : {}),
+            ...(sceneConfigExtras?.lottieSpeed !== undefined
+              ? { lottieSpeed: sceneConfigExtras.lottieSpeed }
+              : {}),
             ...sceneAppearance,
             extraJson,
           })
@@ -1301,12 +1400,27 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             key: cardKey,
             kind: "media",
             mediaUrl: mediaUrlVal,
-            mediaType: mediaTypeVal === "video" ? "video" : "image",
+            mediaType: mediaTypeVal,
             title: titleVal || undefined,
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
+            ...(sceneConfigExtras?.volume !== undefined
+              ? { volume: sceneConfigExtras.volume }
+              : {}),
+            ...(sceneConfigExtras?.loop !== undefined
+              ? { loop: sceneConfigExtras.loop }
+              : {}),
+            ...(sceneConfigExtras?.muted !== undefined
+              ? { muted: sceneConfigExtras.muted }
+              : {}),
+            ...(sceneConfigExtras?.showControls !== undefined
+              ? { showControls: sceneConfigExtras.showControls }
+              : {}),
+            ...(sceneConfigExtras?.mediaFit
+              ? { mediaFit: sceneConfigExtras.mediaFit }
+              : {}),
             ...sceneAppearance,
             extraJson,
           })
@@ -1319,7 +1433,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
@@ -1332,11 +1446,49 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
           break
+        case "answerRecap": {
+          const rawRecapMode =
+            getTVal(row, "preset") ||
+            playModeVal ||
+            sceneConfigExtras?.mode ||
+            "mostSelected"
+          const recapMode: AnswerRecapMode =
+            rawRecapMode === "correctanswer" ||
+            rawRecapMode === "correct_answer" ||
+            rawRecapMode === "correctAnswer"
+              ? "correctAnswer"
+              : "mostSelected"
+          const startQKey =
+            questionKeyVal || sceneConfigExtras?.startQuestionKey || undefined
+          cards.push({
+            key: cardKey,
+            kind: "answerRecap",
+            title: titleVal || undefined,
+            ...(startQKey ? { startQuestionKey: startQKey } : {}),
+            mode: recapMode,
+            ...(sceneConfigExtras?.maxItemsPerPage !== undefined
+              ? { maxItemsPerPage: sceneConfigExtras.maxItemsPerPage }
+              : {}),
+            ...(sceneConfigExtras?.showCounts !== undefined
+              ? { showCounts: sceneConfigExtras.showCounts }
+              : {}),
+            ...(sceneConfigExtras?.showPercentages !== undefined
+              ? { showPercentages: sceneConfigExtras.showPercentages }
+              : {}),
+            durationMs: durationMsVal
+              ? Number.parseInt(durationMsVal, 10)
+              : 8000,
+            advance: advanceVal,
+            ...sceneAppearance,
+            extraJson,
+          })
+          break
+        }
         case "countdown":
           cards.push({
             key: cardKey,
@@ -1345,7 +1497,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
               ? Number.parseInt(durationSecondsVal, 10)
               : 10,
             title: titleVal || undefined,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
@@ -1357,10 +1509,12 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             title: titleVal || "Welcome",
             subtitle: subtitleVal || undefined,
             mediaUrl: mediaUrlVal || undefined,
+            ...(rawMediaTypeVal ? { mediaType: mediaTypeVal } : {}),
+            ...(sceneConfigExtras ?? {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
@@ -1372,10 +1526,12 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             title: titleVal || "Thank you!",
             subtitle: subtitleVal || undefined,
             mediaUrl: mediaUrlVal || undefined,
+            ...(rawMediaTypeVal ? { mediaType: mediaTypeVal } : {}),
+            ...(sceneConfigExtras ?? {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
-            advance: advanceVal === "manual" ? "manual" : "auto",
+            advance: advanceVal,
             ...sceneAppearance,
             extraJson,
           })
@@ -1464,6 +1620,12 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       newQuestionMode: defaultQuestionMode,
       leaderboardPolicy,
       advanceMode: defaultAdvance,
+      ...(defaultStageAnimations
+        ? { stageAnimations: defaultStageAnimations }
+        : {}),
+      ...(defaultQuestionDecoration
+        ? { questionDecoration: defaultQuestionDecoration }
+        : {}),
     },
     cards,
     settings,
@@ -1524,6 +1686,18 @@ export function exportTadaShowWorkbook(
     ["baseGameMode", show.baseGameMode ?? "quiz"],
     ["note", show.note ?? ""],
   ]
+  if (show.defaults?.stageAnimations) {
+    showData.push([
+      "defaultStageAnimationsJson",
+      JSON.stringify(show.defaults.stageAnimations),
+    ])
+  }
+  if (show.defaults?.questionDecoration) {
+    showData.push([
+      "defaultQuestionDecorationJson",
+      JSON.stringify(show.defaults.questionDecoration),
+    ])
+  }
 
   // 2. Sheet: Timeline
   const timelineData: string[][] = [
@@ -1546,6 +1720,7 @@ export function exportTadaShowWorkbook(
       "backgroundJson",
       "audioJson",
       "stageAnimationsJson",
+      "sceneConfigJson",
     ],
   ]
 
@@ -1577,6 +1752,7 @@ export function exportTadaShowWorkbook(
       "backgroundJson",
       "audioCuesJson",
       "stageAnimationsJson",
+      "questionDecorationJson",
     ],
   ]
 
@@ -1613,6 +1789,7 @@ export function exportTadaShowWorkbook(
         "",
         "",
         card.extraJson ? JSON.stringify(card.extraJson) : "",
+        "",
         "",
         "",
         "",
@@ -1655,6 +1832,7 @@ export function exportTadaShowWorkbook(
         card.background ? JSON.stringify(card.background) : "",
         card.audioCues ? JSON.stringify(card.audioCues) : "",
         card.stageAnimations ? JSON.stringify(card.stageAnimations) : "",
+        card.questionDecoration ? JSON.stringify(card.questionDecoration) : "",
       ])
 
       for (let a = 0; a < card.answers.length; a += 1) {
@@ -1671,6 +1849,7 @@ export function exportTadaShowWorkbook(
     } else {
       let title = ""
       let desc = ""
+      let questionKeyCol = ""
       let durationMs = ""
       let durationSeconds = ""
       let advance = card.advance ?? "auto"
@@ -1678,6 +1857,7 @@ export function exportTadaShowWorkbook(
       let mediaType = ""
       let mediaUrl = ""
       let subtitle = ""
+      let sceneConfigObj: Record<string, unknown> | undefined
 
       switch (card.kind) {
         case "transition":
@@ -1689,12 +1869,46 @@ export function exportTadaShowWorkbook(
           title = card.title ?? ""
           preset = card.preset ?? "spotlight"
           durationMs = String(card.durationMs ?? 3000)
+          if (
+            card.lottieUrl ||
+            card.lottieFit ||
+            card.lottieLoop !== undefined ||
+            card.lottieSpeed !== undefined
+          ) {
+            sceneConfigObj = {
+              ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
+              ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+              ...(card.lottieLoop !== undefined
+                ? { lottieLoop: card.lottieLoop }
+                : {}),
+              ...(card.lottieSpeed !== undefined
+                ? { lottieSpeed: card.lottieSpeed }
+                : {}),
+            }
+          }
           break
         case "media":
           title = card.title ?? ""
           mediaUrl = card.mediaUrl ?? ""
           mediaType = card.mediaType ?? "image"
           durationMs = String(card.durationMs ?? 5000)
+          if (
+            card.volume !== undefined ||
+            card.loop !== undefined ||
+            card.muted !== undefined ||
+            card.showControls !== undefined ||
+            card.mediaFit !== undefined
+          ) {
+            sceneConfigObj = {
+              ...(card.volume !== undefined ? { volume: card.volume } : {}),
+              ...(card.loop !== undefined ? { loop: card.loop } : {}),
+              ...(card.muted !== undefined ? { muted: card.muted } : {}),
+              ...(card.showControls !== undefined
+                ? { showControls: card.showControls }
+                : {}),
+              ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            }
+          }
           break
         case "leaderboard":
           title = card.title ?? ""
@@ -1704,22 +1918,68 @@ export function exportTadaShowWorkbook(
           title = card.title ?? ""
           durationMs = String(card.durationMs ?? 5000)
           break
+        case "answerRecap":
+          title = card.title ?? ""
+          questionKeyCol = card.startQuestionKey ?? ""
+          preset = card.mode ?? "mostSelected"
+          durationMs = String(card.durationMs ?? 8000)
+          if (
+            card.maxItemsPerPage !== undefined ||
+            card.showCounts !== undefined ||
+            card.showPercentages !== undefined
+          ) {
+            sceneConfigObj = {
+              ...(card.maxItemsPerPage !== undefined
+                ? { maxItemsPerPage: card.maxItemsPerPage }
+                : {}),
+              ...(card.showCounts !== undefined
+                ? { showCounts: card.showCounts }
+                : {}),
+              ...(card.showPercentages !== undefined
+                ? { showPercentages: card.showPercentages }
+                : {}),
+            }
+          }
+          break
         case "countdown":
           title = card.title ?? ""
           durationSeconds = String(card.durationSeconds ?? 10)
           break
         case "opening":
+        case "closing": {
           title = card.title
           subtitle = card.subtitle ?? ""
           mediaUrl = card.mediaUrl ?? ""
+          mediaType = card.mediaType ?? ""
           durationMs = String(card.durationMs ?? 5000)
+          const bookendCfg: Record<string, unknown> = {
+            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.textOverlay !== undefined
+              ? { textOverlay: card.textOverlay }
+              : {}),
+            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.volume !== undefined ? { volume: card.volume } : {}),
+            ...(card.loop !== undefined ? { loop: card.loop } : {}),
+            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.showControls !== undefined
+              ? { showControls: card.showControls }
+              : {}),
+            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
+            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieLoop !== undefined
+              ? { lottieLoop: card.lottieLoop }
+              : {}),
+            ...(card.lottieSpeed !== undefined
+              ? { lottieSpeed: card.lottieSpeed }
+              : {}),
+          }
+          if (Object.keys(bookendCfg).length > 0) {
+            sceneConfigObj = bookendCfg
+          }
           break
-        case "closing":
-          title = card.title
-          subtitle = card.subtitle ?? ""
-          mediaUrl = card.mediaUrl ?? ""
-          durationMs = String(card.durationMs ?? 5000)
-          break
+        }
       }
 
       timelineData.push([
@@ -1728,7 +1988,7 @@ export function exportTadaShowWorkbook(
         card.kind,
         title,
         desc,
-        "",
+        questionKeyCol,
         "",
         durationMs,
         durationSeconds,
@@ -1741,6 +2001,7 @@ export function exportTadaShowWorkbook(
         card.background ? JSON.stringify(card.background) : "",
         card.audio ? JSON.stringify(card.audio) : "",
         card.stageAnimations ? JSON.stringify(card.stageAnimations) : "",
+        sceneConfigObj ? JSON.stringify(sceneConfigObj) : "",
       ])
     }
   }

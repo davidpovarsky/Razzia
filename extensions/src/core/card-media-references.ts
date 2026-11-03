@@ -8,10 +8,13 @@ export type MediaReferenceField =
   | "question.audio.answersMusic"
   | "question.audio.revealResults"
   | "question.interlude.media"
+  | "question.decoration.lottie"
   | "scene.media"
+  | "scene.lottie"
   | "scene.background"
   | "scene.audio"
   | "show.audioCue"
+  | "show.decoration.lottie"
   | "show.mediaCatalog"
 
 export interface CardMediaReference {
@@ -179,6 +182,15 @@ export const collectQuizMediaReferences = (
           interludeUrl,
         )
       }
+      if (pq.questionDecoration?.lottieUrl) {
+        addRef(
+          qId,
+          "question",
+          qLabel,
+          "question.decoration.lottie",
+          pq.questionDecoration.lottieUrl,
+        )
+      }
     }
   })
 
@@ -245,6 +257,15 @@ export const collectQuizMediaReferences = (
           interludeUrl,
         )
       }
+      if (pq.questionDecoration?.lottieUrl) {
+        addRef(
+          qId,
+          "question",
+          qLabel,
+          "question.decoration.lottie",
+          pq.questionDecoration.lottieUrl,
+        )
+      }
     }
   }
 
@@ -257,6 +278,9 @@ export const collectQuizMediaReferences = (
       const sLabel = scene.title?.trim() || `${scene.kind} (${sceneId})`
       if ("mediaUrl" in scene && typeof scene.mediaUrl === "string") {
         addRef(sceneId, "scene", sLabel, "scene.media", scene.mediaUrl)
+      }
+      if ("lottieUrl" in scene && typeof scene.lottieUrl === "string") {
+        addRef(sceneId, "scene", sLabel, "scene.lottie", scene.lottieUrl)
       }
       if (scene.background?.url) {
         addRef(
@@ -271,6 +295,17 @@ export const collectQuizMediaReferences = (
         addRef(sceneId, "scene", sLabel, "scene.audio", scene.audio.url)
       }
     }
+  }
+
+  // 2b. Global show decoration Lottie
+  if (show.extras?.defaults?.questionDecoration?.lottieUrl) {
+    addRef(
+      "defaults_decoration",
+      "global",
+      "Global Question Decoration",
+      "show.decoration.lottie",
+      show.extras.defaults.questionDecoration.lottieUrl,
+    )
   }
 
   // 3. Global show audio cues
@@ -426,7 +461,30 @@ export const detachMediaFromShowData = <
           modified = true
         }
       }
+      if (
+        pq.questionDecoration?.lottieUrl &&
+        matchesTarget(pq.questionDecoration.lottieUrl)
+      ) {
+        delete pq.questionDecoration.lottieUrl
+        if (pq.questionDecoration.preset === "lottie") {
+          pq.questionDecoration.preset = "none"
+          pq.questionDecoration.enabled = false
+        }
+        modified = true
+      }
     }
+  }
+
+  if (
+    nextExtras.defaults?.questionDecoration?.lottieUrl &&
+    matchesTarget(nextExtras.defaults.questionDecoration.lottieUrl)
+  ) {
+    delete nextExtras.defaults.questionDecoration.lottieUrl
+    if (nextExtras.defaults.questionDecoration.preset === "lottie") {
+      nextExtras.defaults.questionDecoration.preset = "none"
+      nextExtras.defaults.questionDecoration.enabled = false
+    }
+    modified = true
   }
 
   if (nextExtras.scenes) {
@@ -440,6 +498,14 @@ export const detachMediaFromShowData = <
         matchesTarget(scene.mediaUrl)
       ) {
         delete (scene as { mediaUrl?: string }).mediaUrl
+        modified = true
+      }
+      if (
+        "lottieUrl" in scene &&
+        typeof scene.lottieUrl === "string" &&
+        matchesTarget(scene.lottieUrl)
+      ) {
+        delete (scene as { lottieUrl?: string }).lottieUrl
         modified = true
       }
       if (scene.background?.url && matchesTarget(scene.background.url)) {

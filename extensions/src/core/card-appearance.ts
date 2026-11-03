@@ -1,5 +1,6 @@
 import { z } from "zod"
 import { CUE_IDS, type CueId } from "./constants.js"
+import { lottieMetaSchema } from "./lottie.js"
 import { isSafeMediaUrl, safeMediaUrlSchema } from "./media.js"
 
 // ── 1. Per-Card Background Override ─────────────────────────────────────────
@@ -293,6 +294,11 @@ export const STAGE_ANIMATION_PRESETS = [
   "zoom-soft",
   "spotlight",
   "curtain",
+  "pop-bounce",
+  "wobble-settle",
+  "cascade",
+  "fan-flip",
+  "wipe-ripple",
 ] as const
 
 export type StageAnimationPreset = (typeof STAGE_ANIMATION_PRESETS)[number]
@@ -350,7 +356,9 @@ export const clampAnimationStaggerMs = (ms?: number): number => {
 
 /**
  * Resolves all 4 independent stage animation slots for a question or scene,
- * preserving backward compatibility with legacy `questionEntrance`.
+ * preserving backward compatibility with legacy `questionEntrance` and
+ * falling back to `globalStageAnimations` when a per-card slot is omitted (`undefined`),
+ * while honoring an explicit `{ preset: "none" }` override on the card.
  */
 export const resolveCardStageAnimations = (input?: {
   questionEntrance?: {
@@ -358,20 +366,34 @@ export const resolveCardStageAnimations = (input?: {
     durationMs?: number
   } | null
   stageAnimations?: CardStageAnimations | null
+  globalStageAnimations?: CardStageAnimations | null
 } | null): ResolvedCardStageAnimations => {
   const sa = input?.stageAnimations
   const legacyQe = input?.questionEntrance
+  const globalSa = input?.globalStageAnimations
 
-  const qSlot = sa?.questionEntrance ?? (legacyQe
-    ? {
-        preset: legacyQe.preset ?? "none",
-        durationMs: clampAnimationDurationMs(legacyQe.durationMs),
-        timing: "simultaneous" as const,
-        staggerMs: 90,
-      }
-    : DEFAULT_SLOT)
+  const qSlot =
+    sa?.questionEntrance ??
+    (legacyQe && legacyQe.preset && legacyQe.preset !== "none"
+      ? {
+          preset: legacyQe.preset,
+          durationMs: clampAnimationDurationMs(legacyQe.durationMs),
+          timing: "simultaneous" as const,
+          staggerMs: 90,
+        }
+      : (globalSa?.questionEntrance ??
+        (legacyQe
+          ? {
+              preset: legacyQe.preset ?? "none",
+              durationMs: clampAnimationDurationMs(legacyQe.durationMs),
+              timing: "simultaneous" as const,
+              staggerMs: 90,
+            }
+          : DEFAULT_SLOT)))
 
-  const normalizeSlot = (slot?: Partial<StageAnimationSlot> | null): StageAnimationSlot => {
+  const normalizeSlot = (
+    slot?: Partial<StageAnimationSlot> | null,
+  ): StageAnimationSlot => {
     if (!slot) {
       return { ...DEFAULT_SLOT }
     }
@@ -382,17 +404,80 @@ export const resolveCardStageAnimations = (input?: {
         ? (slot.preset as StageAnimationPreset)
         : "none",
       durationMs: clampAnimationDurationMs(slot.durationMs),
-      timing:
-        slot.timing === "sequential" ? "sequential" : "simultaneous",
+      timing: slot.timing === "sequential" ? "sequential" : "simultaneous",
       staggerMs: clampAnimationStaggerMs(slot.staggerMs),
     }
   }
 
   return {
     questionEntrance: normalizeSlot(qSlot),
-    answerEntrance: normalizeSlot(sa?.answerEntrance),
-    answerBadgeEntrance: normalizeSlot(sa?.answerBadgeEntrance),
-    resultsRevealEntrance: normalizeSlot(sa?.resultsRevealEntrance),
+    answerEntrance: normalizeSlot(sa?.answerEntrance ?? globalSa?.answerEntrance),
+    answerBadgeEntrance: normalizeSlot(
+      sa?.answerBadgeEntrance ?? globalSa?.answerBadgeEntrance,
+    ),
+    resultsRevealEntrance: normalizeSlot(
+      sa?.resultsRevealEntrance ?? globalSa?.resultsRevealEntrance,
+    ),
+  }
+}
+
+// ── 3b. Decorative Question Underline / Header Effect ───────────────────────
+
+export const QUESTION_DECORATION_PRESETS = [
+  "none",
+  "pulse-bar",
+  "shimmer-line",
+  "wave-dots",
+  "glow-sweep",
+  "lottie",
+] as const
+
+export type QuestionDecorationPreset =
+  (typeof QUESTION_DECORATION_PRESETS)[number]
+
+export const questionDecorationPresetSchema = z.enum(
+  QUESTION_DECORATION_PRESETS,
+)
+
+export const questionDecorationSchema = z.strictObject({
+  enabled: z.boolean().default(false),
+  preset: questionDecorationPresetSchema.default("none"),
+  lottieUrl: safeMediaUrlSchema.optional(),
+  color: z
+    .string()
+    .regex(/^#[0-9A-Fa-f]{6}$/u)
+    .optional(),
+})
+
+export type QuestionDecoration = z.infer<typeof questionDecorationSchema>
+
+/**
+ * Resolves the effective decorative underline for a question card.
+ * Precedence: explicit card decoration (`enabled: false` or custom preset) > global default > disabled.
+ */
+export const resolveQuestionDecoration = (input?: {
+  cardDecoration?: Partial<QuestionDecoration> | null
+  globalDecoration?: Partial<QuestionDecoration> | null
+} | null): QuestionDecoration => {
+  const source = input?.cardDecoration ?? input?.globalDecoration
+  if (
+    !source ||
+    source.enabled === false ||
+    !source.preset ||
+    source.preset === "none"
+  ) {
+    return {
+      enabled: false,
+      preset: "none",
+    }
+  }
+  return {
+    enabled: true,
+    preset: QUESTION_DECORATION_PRESETS.includes(source.preset)
+      ? source.preset
+      : "none",
+    ...(source.lottieUrl ? { lottieUrl: source.lottieUrl } : {}),
+    ...(source.color ? { color: source.color } : {}),
   }
 }
 
@@ -401,8 +486,9 @@ export const resolveCardStageAnimations = (input?: {
 export const showMediaCatalogItemSchema = z.strictObject({
   name: z.string().min(1).max(260),
   url: safeMediaUrlSchema,
-  type: z.enum(["image", "audio", "video"]),
+  type: z.enum(["image", "audio", "video", "lottie"]),
   addedAt: z.number().int().nonnegative().optional(),
+  lottieMeta: lottieMetaSchema.optional(),
 })
 
 export type ShowMediaCatalogItem = z.infer<typeof showMediaCatalogItemSchema>
@@ -435,6 +521,7 @@ export const isQuestionCardBlankForConversion = (
       answerBadgeEntrance?: { preset?: string }
       resultsRevealEntrance?: { preset?: string }
     }
+    questionDecoration?: { enabled?: boolean; preset?: string }
   } | null,
 ): boolean => {
   if (!question) {
@@ -510,6 +597,14 @@ export const isQuestionCardBlankForConversion = (
         sa.answerBadgeEntrance.preset !== "none") ||
       (sa.resultsRevealEntrance?.preset &&
         sa.resultsRevealEntrance.preset !== "none"))
+  ) {
+    return false
+  }
+
+  if (
+    perQuestionExtra.questionDecoration?.enabled &&
+    perQuestionExtra.questionDecoration.preset &&
+    perQuestionExtra.questionDecoration.preset !== "none"
   ) {
     return false
   }

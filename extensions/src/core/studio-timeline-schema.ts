@@ -3,6 +3,7 @@ import {
   cardAudioModeSchema,
   cardBackgroundOverrideSchema,
   cardStageAnimationsSchema,
+  questionDecorationSchema,
   showMediaCatalogItemSchema,
 } from "./card-appearance"
 import {
@@ -26,12 +27,19 @@ export const TIMELINE_ITEM_KINDS = [
   "media",
   "leaderboard",
   "interimResults",
+  "answerRecap",
   "countdown",
   "opening",
   "closing",
 ] as const
 
 export type TimelineItemKind = (typeof TIMELINE_ITEM_KINDS)[number]
+
+export const SCENE_ADVANCE_MODES = ["auto", "manual", "onMediaEnd"] as const
+export type SceneAdvanceMode = (typeof SCENE_ADVANCE_MODES)[number]
+
+export const ANSWER_RECAP_MODES = ["mostSelected", "correctAnswer"] as const
+export type AnswerRecapMode = (typeof ANSWER_RECAP_MODES)[number]
 
 export const timelineQuestionItemSchema = z.strictObject({
   id: z.uuid(),
@@ -47,6 +55,7 @@ export const timelineItemKindNonQuestionSchema = z.enum([
   "media",
   "leaderboard",
   "interimResults",
+  "answerRecap",
   "countdown",
   "opening",
   "closing",
@@ -81,6 +90,11 @@ export const timelineItemSchema = z.discriminatedUnion("kind", [
   z.strictObject({
     id: z.uuid(),
     kind: z.literal("interimResults"),
+    sceneId: z.uuid(),
+  }),
+  z.strictObject({
+    id: z.uuid(),
+    kind: z.literal("answerRecap"),
     sceneId: z.uuid(),
   }),
   z.strictObject({
@@ -125,7 +139,7 @@ export const transitionSceneSchema = z.strictObject({
   title: z.string().max(120).optional(),
   description: z.string().max(500).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
-  advance: z.enum(["auto", "manual"]).default("auto"),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
   ...sceneAppearanceFields,
 })
 
@@ -135,7 +149,11 @@ export const animationSceneSchema = z.strictObject({
   preset: z.string().max(64).default("spotlight"),
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(3000),
-  advance: z.enum(["auto", "manual"]).default("auto"),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+  lottieUrl: safeMediaUrlSchema.optional(),
+  lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
+  lottieLoop: z.boolean().default(true).optional(),
+  lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
   ...sceneAppearanceFields,
 })
 
@@ -144,10 +162,15 @@ export const mediaSceneSchema = z
     id: z.uuid(),
     kind: z.literal("media"),
     mediaUrl: z.string().default(""),
-    mediaType: z.enum(["image", "video"]).default("image"),
+    mediaType: z.enum(["image", "video", "audio"]).default("image"),
     title: z.string().max(120).optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    volume: z.number().min(0).max(1).default(0.8).optional(),
+    loop: z.boolean().default(false).optional(),
+    muted: z.boolean().default(false).optional(),
+    showControls: z.boolean().default(false).optional(),
+    mediaFit: z.enum(["contain", "cover"]).default("contain").optional(),
     ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
@@ -165,7 +188,7 @@ export const leaderboardSceneSchema = z.strictObject({
   kind: z.literal("leaderboard"),
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
-  advance: z.enum(["auto", "manual"]).default("auto"),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
   ...sceneAppearanceFields,
 })
 
@@ -174,7 +197,21 @@ export const interimResultsSceneSchema = z.strictObject({
   kind: z.literal("interimResults"),
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(5000),
-  advance: z.enum(["auto", "manual"]).default("auto"),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+  ...sceneAppearanceFields,
+})
+
+export const answerRecapSceneSchema = z.strictObject({
+  id: z.uuid(),
+  kind: z.literal("answerRecap"),
+  title: z.string().max(120).optional(),
+  startQuestionId: z.uuid().optional(),
+  mode: z.enum(ANSWER_RECAP_MODES).default("mostSelected"),
+  maxItemsPerPage: z.number().int().min(1).max(8).default(4).optional(),
+  showCounts: z.boolean().default(true).optional(),
+  showPercentages: z.boolean().default(true).optional(),
+  durationMs: z.number().int().min(500).max(120000).default(8000),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
   ...sceneAppearanceFields,
 })
 
@@ -183,9 +220,32 @@ export const countdownSceneSchema = z.strictObject({
   kind: z.literal("countdown"),
   durationSeconds: z.number().int().min(3).max(120).default(10),
   title: z.string().max(120).optional(),
-  advance: z.enum(["auto", "manual"]).default("auto"),
+  advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
   ...sceneAppearanceFields,
 })
+
+const cinematicBookendFields = {
+  mediaType: z.enum(["image", "video", "audio"]).optional(),
+  stageLayout: z.enum(["card", "cinema"]).default("cinema").optional(),
+  mediaFit: z.enum(["contain", "cover"]).default("cover").optional(),
+  logoPosition: z
+    .enum(["top", "center", "bottom", "hidden"])
+    .default("center")
+    .optional(),
+  textOverlay: z.boolean().default(true).optional(),
+  endBehavior: z
+    .enum(["holdFrame", "advanceNext", "fadeToTitle"])
+    .default("holdFrame")
+    .optional(),
+  volume: z.number().min(0).max(1).default(0.8).optional(),
+  loop: z.boolean().default(false).optional(),
+  muted: z.boolean().default(false).optional(),
+  showControls: z.boolean().default(false).optional(),
+  lottieUrl: safeMediaUrlSchema.optional(),
+  lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
+  lottieLoop: z.boolean().default(true).optional(),
+  lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
+}
 
 export const openingSceneSchema = z
   .strictObject({
@@ -194,8 +254,9 @@ export const openingSceneSchema = z
     title: z.string().min(1).max(120),
     subtitle: z.string().max(200).optional(),
     mediaUrl: z.string().optional(),
-    durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    durationMs: z.number().int().min(500).max(300000).default(5000),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    ...cinematicBookendFields,
     ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
@@ -215,8 +276,9 @@ export const closingSceneSchema = z
     title: z.string().min(1).max(120),
     subtitle: z.string().max(200).optional(),
     mediaUrl: z.string().optional(),
-    durationMs: z.number().int().min(500).max(60000).default(5000),
-    advance: z.enum(["auto", "manual"]).default("auto"),
+    durationMs: z.number().int().min(500).max(300000).default(5000),
+    advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
+    ...cinematicBookendFields,
     ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
@@ -235,6 +297,7 @@ export const sceneConfigSchema = z.discriminatedUnion("kind", [
   mediaSceneSchema,
   leaderboardSceneSchema,
   interimResultsSceneSchema,
+  answerRecapSceneSchema,
   countdownSceneSchema,
   openingSceneSchema,
   closingSceneSchema,
@@ -268,9 +331,51 @@ export interface PublicInterimResults {
   isTie?: boolean
 }
 
+export type PublicAnswerRecapBadge =
+  | "mostSelected"
+  | "correctAnswer"
+  | "tiedMostSelected"
+  | "noResponses"
+
+export interface PublicAnswerRecapWinnerOption {
+  answerIndex: number
+  label: string
+  count: number
+  percentage: number
+  imageUrl?: string
+  alt?: string
+  isCorrect?: boolean
+}
+
+export interface PublicAnswerRecapQuestionItem {
+  questionId: string
+  questionNumber: number
+  questionText: string
+  questionType: "single" | "multi" | "estimation"
+  playMode: "quiz" | "survey"
+  totalResponders: number
+  badge: PublicAnswerRecapBadge
+  winningOptions: PublicAnswerRecapWinnerOption[]
+  correctOptions?: PublicAnswerRecapWinnerOption[]
+}
+
+export interface PublicAnswerRecap {
+  startQuestionId?: string
+  fromQuestionNumber?: number
+  toQuestionNumber?: number
+  totalQuestionsInRange: number
+  completedQuestionsCount: number
+  mode: AnswerRecapMode
+  maxItemsPerPage: number
+  showCounts: boolean
+  showPercentages: boolean
+  items: PublicAnswerRecapQuestionItem[]
+}
+
 export interface ActiveSceneData {
   leaderboard?: { entries: PublicRankEntry[] }
   interimResults?: PublicInterimResults | null
+  answerRecap?: PublicAnswerRecap | null
 }
 
 // ── Studio Defaults Schema ────────────────────────────────────────────────
@@ -281,6 +386,8 @@ export const studioDefaultsSchema = z.strictObject({
     .enum(["upstream", "everyN", "cardOnly", "disabled"])
     .default("cardOnly"),
   advanceMode: z.enum(["auto", "manual"]).default("auto"),
+  stageAnimations: cardStageAnimationsSchema.optional(),
+  questionDecoration: questionDecorationSchema.optional(),
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>
@@ -382,6 +489,27 @@ export const quizExtrasV2Schema = z
           path: ["timeline", i, "kind"],
           message: `errors:extensions.timelineSceneKindMismatch:${item.kind}`,
         })
+      } else if (item.kind === "answerRecap") {
+        const recapScene = extras.scenes[item.sceneId]
+        if (
+          recapScene.kind === "answerRecap" &&
+          recapScene.startQuestionId !== undefined
+        ) {
+          if (!qIdSet.has(recapScene.startQuestionId)) {
+            ctx.addIssue({
+              code: "custom",
+              path: ["scenes", item.sceneId, "startQuestionId"],
+              message: `errors:extensions.invalidRecapStartQuestion:${recapScene.startQuestionId}`,
+            })
+          } else if (!seenQuestionIdsInTimeline.has(recapScene.startQuestionId)) {
+            // startQuestionId exists in the show, but has not appeared before this answerRecap item!
+            ctx.addIssue({
+              code: "custom",
+              path: ["scenes", item.sceneId, "startQuestionId"],
+              message: `errors:extensions.recapStartAfterRecap:${recapScene.startQuestionId}`,
+            })
+          }
+        }
       }
     }
 

@@ -188,6 +188,8 @@ export const advanceTimelineSceneCommandSchema = z.strictObject({
     .strictObject({
       sceneId: z.string().optional(),
       stepId: z.string().optional(),
+      timelineStepIndex: z.number().int().nonnegative().optional(),
+      reason: z.enum(["manual", "auto", "mediaEnded"]).optional(),
       epoch: z.number().int().optional(),
     })
     .optional()
@@ -207,6 +209,8 @@ export const skipTimelineSceneCommandSchema = z.strictObject({
     .strictObject({
       sceneId: z.string().optional(),
       stepId: z.string().optional(),
+      timelineStepIndex: z.number().int().nonnegative().optional(),
+      reason: z.enum(["manual", "auto", "mediaEnded"]).optional(),
       epoch: z.number().int().optional(),
     })
     .optional()

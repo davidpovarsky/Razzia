@@ -9,6 +9,8 @@ export * from "./constants"
 
 export * from "./digest"
 
+export * from "./lottie"
+
 export * from "./media"
 
 export * from "./phone-roster"

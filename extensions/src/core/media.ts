@@ -226,6 +226,43 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
+        if (
+          item &&
+          item.questionDecoration &&
+          typeof (item.questionDecoration as Record<string, unknown>)
+            .lottieUrl === "string"
+        ) {
+          const lottieUrl = (item.questionDecoration as Record<string, unknown>)
+            .lottieUrl as string
+          if (lottieUrl && !isSafeMediaUrl(lottieUrl)) {
+            return {
+              ok: false,
+              path: `extras.perQuestion[${qId}].questionDecoration.lottieUrl`,
+            }
+          }
+        }
+      }
+    }
+
+    // 1b. defaults questionDecoration
+    if (
+      extras.defaults &&
+      typeof extras.defaults === "object" &&
+      (extras.defaults as Record<string, unknown>).questionDecoration &&
+      typeof (
+        (extras.defaults as Record<string, unknown>)
+          .questionDecoration as Record<string, unknown>
+      ).lottieUrl === "string"
+    ) {
+      const lottieUrl = (
+        (extras.defaults as Record<string, unknown>)
+          .questionDecoration as Record<string, unknown>
+      ).lottieUrl as string
+      if (lottieUrl && !isSafeMediaUrl(lottieUrl)) {
+        return {
+          ok: false,
+          path: "extras.defaults.questionDecoration.lottieUrl",
+        }
       }
     }
 
@@ -241,6 +278,14 @@ export function validateBundleMedia(bundle: {
           !isSafeMediaUrl(scene.mediaUrl)
         ) {
           return { ok: false, path: `extras.scenes[${sId}].mediaUrl` }
+        }
+        if (
+          scene &&
+          typeof scene.lottieUrl === "string" &&
+          scene.lottieUrl &&
+          !isSafeMediaUrl(scene.lottieUrl)
+        ) {
+          return { ok: false, path: `extras.scenes[${sId}].lottieUrl` }
         }
         if (
           scene &&
