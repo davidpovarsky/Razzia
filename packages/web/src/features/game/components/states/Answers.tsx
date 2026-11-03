@@ -222,7 +222,8 @@ const Answers = ({
             data-tada-underline={questionDecoration.preset}
             className="mx-auto mt-1 flex w-40 sm:w-56 items-center justify-center"
           >
-            {questionDecoration.preset === "custom-lottie" &&
+            {(questionDecoration.preset === "lottie" ||
+              (questionDecoration.preset as string) === "custom-lottie") &&
             questionDecoration.lottieUrl ? (
               <LottiePlayer
                 src={questionDecoration.lottieUrl}

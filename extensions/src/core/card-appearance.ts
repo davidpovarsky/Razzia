@@ -457,9 +457,11 @@ export type QuestionDecoration = z.infer<typeof questionDecorationSchema>
  */
 export const resolveQuestionDecoration = (input?: {
   cardDecoration?: Partial<QuestionDecoration> | null
+  questionDecoration?: Partial<QuestionDecoration> | null
   globalDecoration?: Partial<QuestionDecoration> | null
 } | null): QuestionDecoration => {
-  const source = input?.cardDecoration ?? input?.globalDecoration
+  const source =
+    input?.cardDecoration ?? input?.questionDecoration ?? input?.globalDecoration
   if (
     !source ||
     source.enabled === false ||

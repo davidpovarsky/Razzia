@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "tailwindcss-animated";
+@source "../../../extensions/src";
 
 @theme {
   --color-primary: #ff9900;

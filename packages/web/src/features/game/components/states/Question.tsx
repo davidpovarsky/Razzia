@@ -103,7 +103,8 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
             data-tada-underline={questionDecoration.preset}
             className="flex w-48 sm:w-64 items-center justify-center"
           >
-            {questionDecoration.preset === "custom-lottie" &&
+            {(questionDecoration.preset === "lottie" ||
+              (questionDecoration.preset as string) === "custom-lottie") &&
             questionDecoration.lottieUrl ? (
               <LottiePlayer
                 src={questionDecoration.lottieUrl}

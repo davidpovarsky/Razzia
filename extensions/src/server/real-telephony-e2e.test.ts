@@ -922,7 +922,11 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     // Verify duplicate answer rejection on caller 0
     await simulators[0].pressKey("1")
     // Remains strictly 100
-    expect(internalGame?.round.playersAnswers.length).toBe(PARTICIPANTS)
+    const recordedCount =
+      internalGame?.round.questionsHistory?.[0]?.playerAnswers?.length ||
+      internalGame?.round.playersAnswers.length ||
+      0
+    expect(recordedCount).toBe(PARTICIPANTS)
 
     // Phase 5: Advance round and verify Authoritative Server-Side Scoring
     // Wait until countdown ends or advance triggers step transition to SHOW_RESULT / SHOW_LEADERBOARD

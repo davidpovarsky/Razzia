@@ -64,7 +64,7 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
   })
 
   describe("Question Entrance Presets & CSS Contract", () => {
-    it("supports all seven locked entrance presets", () => {
+    it("supports all twelve entrance presets (7 original + 5 staged motion)", () => {
       expect(QUESTION_ENTRANCE_PRESETS).toEqual([
         "none",
         "fade",
@@ -73,6 +73,11 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
         "zoom-soft",
         "spotlight",
         "curtain",
+        "pop-bounce",
+        "wobble-settle",
+        "cascade",
+        "fan-flip",
+        "wipe-ripple",
       ])
     })
 
@@ -82,7 +87,9 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
           continue
         }
         const className = `tada-entrance-${preset}`
-        expect(className).toMatch(/^tada-entrance-(fade|slide-up|slide-side|zoom-soft|spotlight|curtain)$/)
+        expect(className).toMatch(
+          /^tada-entrance-(fade|slide-up|slide-side|zoom-soft|spotlight|curtain|pop-bounce|wobble-settle|cascade|fan-flip|wipe-ripple)$/,
+        )
       }
     })
 

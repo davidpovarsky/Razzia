@@ -422,12 +422,11 @@ export const ScenePresenter = ({
               />
             )}
             <div
-              className={clsx(
-                "absolute inset-0 bg-black transition-opacity duration-500",
-                mediaFinished && endBehavior === "fadeToTitle"
-                  ? "opacity-75"
-                  : "opacity-45",
-              )}
+              className="absolute inset-0 bg-black transition-opacity duration-500"
+              style={{
+                opacity:
+                  mediaFinished && endBehavior === "fadeToTitle" ? 0.75 : 0.35,
+              }}
             />
           </div>
         )}

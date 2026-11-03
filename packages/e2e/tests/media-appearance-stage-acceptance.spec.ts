@@ -448,7 +448,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await expect(builtinSoundBtn).toBeVisible()
     await builtinSoundBtn.click()
 
-    // Configure Staged Animation slots
+    // Configure Staged Animation slots & Question Underline Decoration
     await expect(
       page.locator('[data-testid="staged-animation-section"]'),
     ).toBeVisible()
@@ -460,6 +460,16 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     ).toBeVisible()
     await expect(
       page.locator('[data-testid="stage-anim-slot-resultsRevealEntrance"]'),
+    ).toBeVisible()
+    await expect(
+      page.locator('[data-testid="question-decoration-preset"]'),
+    ).toBeVisible()
+
+    // Verify grouped card chooser exposes Answer Recap
+    await expect(
+      page
+        .locator('[data-testid="studio-card-type-bar"]')
+        .getByRole("radio", { name: /Answer Recap/i }),
     ).toBeVisible()
 
     await saveScreenshot(page, "02_editor_card_appearance_configured.png")
@@ -1112,6 +1122,433 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         height: vp.height,
       })
       await assertZeroStageScroll(spectatorPage, `Q2 Default BG @ ${vp.name}`)
+    }
+
+    await spectatorContext.close()
+    await playerContext.close()
+  })
+
+  test("3. Wave 2 Complete: Cinema Opening, Media Audio, Standalone Animation + Lottie Fixture, Question Decoration, and Cumulative Answer Recap across 8 Viewports", async ({
+    page: managerPage,
+    browser,
+  }) => {
+    const SOCKET_ORIGIN = "http://127.0.0.1:3011"
+    await loginManager(managerPage)
+
+    const token = await managerPage.evaluate(() =>
+      localStorage.getItem("token"),
+    )
+
+    // 3A. Verify Lottie upload validator rejects malicious/external script payloads and accepts harmless engineering fixture
+    const badLottieRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/extensions/lottie`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        data: {
+          name: "malicious.json",
+          content: JSON.stringify({
+            v: "5.7.4",
+            fr: 30,
+            ip: 0,
+            op: 60,
+            w: 200,
+            h: 200,
+            layers: [{ nm: "<script>alert(1)</script>" }],
+          }),
+        },
+      },
+    )
+    expect(badLottieRes.status()).toBe(400)
+
+    const validLottieFixture = JSON.stringify({
+      v: "5.7.4",
+      fr: 30,
+      ip: 0,
+      op: 60,
+      w: 240,
+      h: 240,
+      nm: "test-lottie-fixture",
+      layers: [{ ty: 4, nm: "shape-layer", ip: 0, op: 60, st: 0 }],
+    })
+    const goodLottieRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/extensions/lottie`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        data: {
+          name: "engineering-fixture.json",
+          content: validLottieFixture,
+        },
+      },
+    )
+    expect(goodLottieRes.status()).toBe(201)
+    const uploadedLottie = (await goodLottieRes.json()) as {
+      name: string
+      url: string
+      type: string
+    }
+    expect(uploadedLottie.type).toBe("lottie")
+
+    // Upload image fixture for cinema opening
+    const uploadOpeningRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/media`,
+      {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        multipart: {
+          file: {
+            name: "cinema-opening.png",
+            mimeType: "image/png",
+            buffer: LANDSCAPE_PNG_BUFFER,
+          },
+        },
+      },
+    )
+    expect(uploadOpeningRes.status()).toBe(201)
+    const openingAsset = (await uploadOpeningRes.json()) as {
+      name: string
+      url: string
+    }
+
+    // 3B. Create a Wave 2 show covering:
+    // - Cinema Opening (index 0 -> skips legacy 6s countdown)
+    // - Q1 (Survey, pop-bounce + cascade + glow-bar question underline decoration)
+    // - Media Audio card (audio scene with controls, no image broken tag)
+    // - Standalone Animation card (confetti preset + harmless Lottie engineering fixture)
+    // - Q2 (Quiz with correct answer index 1, pulse-line question decoration)
+    // - Cumulative Answer Recap card (startQuestionId = Q1, dynamically recapping Q1..Q2)
+    const createRes = await managerPage.request.post(
+      `${SOCKET_ORIGIN}/api/extensions/quizzes`,
+      {
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        data: {
+          quizz: {
+            subject: "Wave 2 Cinema, Audio, Motion & Answer Recap Show",
+            gameMode: "quiz",
+            questions: [
+              {
+                type: "single",
+                playMode: "survey",
+                question: "Wave 2 Survey Q1: Which visual theme do you prefer?",
+                answers: ["Solar Flare", "Ocean Deep", "Forest Canopy"],
+                solutions: [],
+                cooldown: 4,
+                time: 180,
+              },
+              {
+                type: "single",
+                playMode: "quiz",
+                question: "Wave 2 Quiz Q2: Which planet is known as the Red Planet?",
+                answers: ["Venus", "Mars", "Jupiter"],
+                solutions: [1],
+                cooldown: 4,
+                time: 180,
+              },
+            ],
+          },
+          extras: {
+            schemaVersion: 2,
+            revision: 1,
+            quizId: "temp-e2e-wave2",
+            baseDigest:
+              "0000000000000000000000000000000000000000000000000000000000000000",
+            questionIds: [
+              "00000000-0000-4000-8000-000000000101",
+              "00000000-0000-4000-8000-000000000102",
+            ],
+            timeline: [
+              {
+                id: "00000000-0000-4000-8000-000000000201",
+                kind: "opening",
+                sceneId: "00000000-0000-4000-8000-000000000301",
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000202",
+                kind: "question",
+                questionId: "00000000-0000-4000-8000-000000000101",
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000203",
+                kind: "media",
+                sceneId: "00000000-0000-4000-8000-000000000302",
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000204",
+                kind: "animation",
+                sceneId: "00000000-0000-4000-8000-000000000303",
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000205",
+                kind: "question",
+                questionId: "00000000-0000-4000-8000-000000000102",
+              },
+              {
+                id: "00000000-0000-4000-8000-000000000206",
+                kind: "answerRecap",
+                sceneId: "00000000-0000-4000-8000-000000000304",
+              },
+            ],
+            scenes: {
+              "00000000-0000-4000-8000-000000000301": {
+                id: "00000000-0000-4000-8000-000000000301",
+                kind: "opening",
+                title: "Cinema Premiere Opening",
+                subtitle: "Full-Stage Coverage Without Legacy Countdown",
+                mediaUrl: openingAsset.url,
+                mediaType: "image",
+                stageLayout: "cinema",
+                mediaFit: "cover",
+                logoPosition: "top",
+                textOverlay: true,
+                endBehavior: "holdFrame",
+                durationMs: 30000,
+                advance: "manual",
+              },
+              "00000000-0000-4000-8000-000000000302": {
+                id: "00000000-0000-4000-8000-000000000302",
+                kind: "media",
+                title: "Musical Intermission Audio Scene",
+                mediaUrl: "/sounds/answersMusic.mp3",
+                mediaType: "audio",
+                showControls: true,
+                volume: 0.7,
+                loop: false,
+                durationMs: 30000,
+                advance: "manual",
+              },
+              "00000000-0000-4000-8000-000000000303": {
+                id: "00000000-0000-4000-8000-000000000303",
+                kind: "animation",
+                title: "Celebration Stage Effect",
+                preset: "confetti",
+                lottieUrl: uploadedLottie.url,
+                lottieLoop: true,
+                durationMs: 30000,
+                advance: "manual",
+              },
+              "00000000-0000-4000-8000-000000000304": {
+                id: "00000000-0000-4000-8000-000000000304",
+                kind: "answerRecap",
+                title: "Cumulative Show Answer Recap",
+                startQuestionId: "00000000-0000-4000-8000-000000000101",
+                mode: "correctAnswer",
+                durationMs: 30000,
+                advance: "manual",
+              },
+            },
+            defaults: {
+              newQuestionMode: "quiz",
+              leaderboardPolicy: "cardOnly",
+              advanceMode: "manual",
+              stageAnimations: {
+                questionEntrance: {
+                  preset: "pop-bounce",
+                  durationMs: 700,
+                  timing: "simultaneous",
+                  staggerMs: 90,
+                },
+                answerEntrance: {
+                  preset: "cascade",
+                  durationMs: 650,
+                  timing: "sequential",
+                  staggerMs: 80,
+                },
+                answerBadgeEntrance: {
+                  preset: "fan-flip",
+                  durationMs: 550,
+                  timing: "sequential",
+                  staggerMs: 80,
+                },
+                resultsRevealEntrance: {
+                  preset: "wipe-ripple",
+                  durationMs: 700,
+                  timing: "sequential",
+                  staggerMs: 90,
+                },
+              },
+            },
+            perQuestion: {
+              "00000000-0000-4000-8000-000000000101": {
+                questionDecoration: {
+                  preset: "glow-sweep",
+                  enabled: true,
+                },
+              },
+              "00000000-0000-4000-8000-000000000102": {
+                questionDecoration: {
+                  preset: "pulse-bar",
+                  enabled: true,
+                },
+              },
+            },
+          },
+        },
+      },
+    )
+    expect(createRes.status()).toBe(201)
+
+    await managerPage.reload()
+    const pin = await createGame(
+      managerPage,
+      "Wave 2 Cinema, Audio, Motion & Answer Recap Show",
+    )
+    expect(pin).toMatch(/^\d{6}$/u)
+
+    const gameIdMatch = managerPage.url().match(/\/party\/manager\/([^/?#]+)/u)
+    expect(gameIdMatch).not.toBeNull()
+    const gameId = gameIdMatch![1]
+
+    const spectatorContext = await browser.newContext({
+      viewport: { width: 1920, height: 1080 },
+    })
+    const spectatorPage = await spectatorContext.newPage()
+    await spectatorPage.goto(`/display/${gameId}`)
+    await expect(
+      spectatorPage.locator('[data-testid="audience-display"]'),
+    ).toBeVisible({ timeout: 15_000 })
+
+    const playerContext = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+    })
+    const playerPage = await playerContext.newPage()
+    await joinGame(playerPage, pin, "RecapTester")
+
+    await expect(
+      managerPage.getByRole("button", { name: /1 \/ 1 Players/i }),
+    ).toBeVisible({ timeout: 10_000 })
+
+    await startGame(managerPage)
+
+    // 1. Cinema Opening Scene renders immediately without legacy 6s countdown
+    await expect(
+      spectatorPage.locator('[data-testid="scene-cinema-backdrop"]'),
+    ).toBeVisible({ timeout: 8_000 })
+    await expect(
+      spectatorPage.getByRole("heading", { name: "Cinema Premiere Opening" }),
+    ).toBeVisible()
+    await spectatorPage.waitForTimeout(800)
+    await assertZeroStageScroll(spectatorPage, "Cinema Opening @ 1920x1080")
+    await saveScreenshot(spectatorPage, "06_wave2_cinema_opening_1080p.png")
+
+    // 2. Advance to Q1: verify decorative underline (`glow-sweep`) and inherited global stage motion (`pop-bounce` / `cascade`)
+    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await expect(
+      spectatorPage.locator('[data-testid="question-decoration-underline"]'),
+    ).toHaveAttribute("data-tada-underline", "glow-sweep", { timeout: 10_000 })
+
+    // Wait for SELECT_ANSWER on Q1 and let 700ms entrance animation settle
+    await expect(
+      spectatorPage.getByRole("button", { name: /Solar Flare/i }),
+    ).toBeVisible({ timeout: 15_000 })
+    await spectatorPage.waitForTimeout(850)
+    await saveScreenshot(spectatorPage, "07_wave2_q1_decoration_and_motion.png")
+
+    // Player selects Option 0 ("Solar Flare") on Survey Q1
+    await playerPage.getByRole("button", { name: /Solar Flare/i }).click()
+    await endTimer(managerPage)
+
+    // Advance from Q1 SHOW_RESPONSES to Media Audio Scene
+    await next(managerPage)
+    await expect(
+      spectatorPage.locator('[data-testid="scene-audio-container"]'),
+    ).toBeVisible({ timeout: 15_000 })
+    await expect(
+      spectatorPage.locator('[data-testid="scene-audio"]'),
+    ).toBeVisible()
+    await assertZeroStageScroll(spectatorPage, "Media Audio Scene @ 1920x1080")
+    await saveScreenshot(spectatorPage, "08_wave2_media_audio_scene.png")
+
+    // Advance from Media Audio Scene to Standalone Animation + Lottie Fixture Scene
+    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await expect(
+      spectatorPage.locator('[data-testid="scene-animation-preset-confetti"]'),
+    ).toBeVisible({ timeout: 15_000 })
+    await expect(
+      spectatorPage.locator('[data-testid="scene-lottie-player"]'),
+    ).toBeVisible()
+    await assertZeroStageScroll(
+      spectatorPage,
+      "Animation + Lottie Fixture Scene @ 1920x1080",
+    )
+    await saveScreenshot(spectatorPage, "09_wave2_animation_lottie_scene.png")
+
+    // Advance to Quiz Q2
+    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await expect(
+      spectatorPage.getByRole("button", { name: /Mars/i }),
+    ).toBeVisible({ timeout: 15_000 })
+
+    // Player votes for Option 1 ("Mars", the correct answer)
+    await playerPage.getByRole("button", { name: /Mars/i }).click()
+    await endTimer(managerPage)
+
+    // Advance from Q2 SHOW_RESPONSES to Cumulative Answer Recap Scene!
+    await next(managerPage)
+    await expect(
+      spectatorPage.locator('[data-testid="scene-answer-recap"]'),
+    ).toBeVisible({ timeout: 15_000 })
+    await expect(
+      spectatorPage.locator('[data-testid="recap-question-card"]'),
+    ).toHaveCount(2)
+
+    // Verify Q1 (survey) and Q2 (quiz) answers appear in the cumulative recap without exposing player names/phones
+    const recapText =
+      (await spectatorPage
+        .locator('[data-testid="scene-answer-recap"]')
+        .textContent()) ?? ""
+    expect(recapText).toContain("Solar Flare")
+    expect(recapText).toContain("Mars")
+    expect(recapText).not.toContain("RecapTester")
+
+    const stageViewports = [
+      { width: 1920, height: 1080, name: "1920x1080" },
+      { width: 1366, height: 768, name: "1366x768" },
+      { width: 1280, height: 800, name: "1280x800" },
+      { width: 1024, height: 768, name: "1024x768" },
+      { width: 800, height: 600, name: "800x600_4_3" },
+      { width: 768, height: 1024, name: "768x1024" },
+      { width: 390, height: 844, name: "390x844" },
+      { width: 320, height: 568, name: "320x568" },
+    ]
+
+    for (const vp of stageViewports) {
+      await spectatorPage.setViewportSize({
+        width: vp.width,
+        height: vp.height,
+      })
+      await assertZeroStageScroll(
+        spectatorPage,
+        `Cumulative Answer Recap @ ${vp.name}`,
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="scene-answer-recap"]',
+        `Answer Recap Container @ ${vp.name}`,
+        { checkTextCompleteness: false },
+      )
+      await assertVisualContainment(
+        spectatorPage,
+        '[data-testid="scene-awaiting-host"]',
+        `Answer Recap Awaiting Host @ ${vp.name}`,
+      )
+      if (
+        vp.name === "1920x1080" ||
+        vp.name === "800x600_4_3" ||
+        vp.name === "390x844" ||
+        vp.name === "320x568"
+      ) {
+        await saveScreenshot(
+          spectatorPage,
+          `10_wave2_answer_recap_${vp.name}.png`,
+        )
+      }
     }
 
     await spectatorContext.close()
