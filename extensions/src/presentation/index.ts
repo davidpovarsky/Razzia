@@ -20,3 +20,4 @@ export * from "./history-helper"
 
 export * from "./poll-ranking"
 export * from "./stage-fit"
+export * from "./lottie-player"

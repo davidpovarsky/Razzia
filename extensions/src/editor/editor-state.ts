@@ -9,7 +9,9 @@ import {
   type LeaderboardExtras,
   type QuestionReveal,
   type QuizExtrasV1,
+  type SceneConfig,
   type TeamsExtras,
+  type TimelineItem,
 } from "@razzia/extensions/core"
 
 /**
@@ -184,4 +186,46 @@ export const updateQuestionInterlude = (
       },
     },
   }
+}
+
+/**
+ * Normalizes `answerRecap` scenes' `startQuestionId` so that after question deletion or timeline
+ * reordering, every `answerRecap` points to a valid question that precedes it in the timeline
+ * (or `undefined` if no questions precede it).
+ */
+export const normalizeTimelineRecapReferences = (
+  timeline: TimelineItem[],
+  scenes: Record<string, SceneConfig>,
+): Record<string, SceneConfig> => {
+  const nextScenes: Record<string, SceneConfig> = { ...scenes }
+  const seenQuestionIds: string[] = []
+
+  for (const item of timeline) {
+    if (item.kind === "question") {
+      seenQuestionIds.push(item.questionId)
+      continue
+    }
+
+    const scene = nextScenes[item.sceneId]
+    if (scene?.kind === "answerRecap") {
+      if (seenQuestionIds.length === 0) {
+        if (scene.startQuestionId !== undefined) {
+          nextScenes[item.sceneId] = {
+            ...scene,
+            startQuestionId: undefined,
+          }
+        }
+      } else if (
+        !scene.startQuestionId ||
+        !seenQuestionIds.includes(scene.startQuestionId)
+      ) {
+        nextScenes[item.sceneId] = {
+          ...scene,
+          startQuestionId: seenQuestionIds[0],
+        }
+      }
+    }
+  }
+
+  return nextScenes
 }

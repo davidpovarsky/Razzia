@@ -19,3 +19,26 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Tests and compatibility evidence:** `extensions/src/server/media-library.test.ts`, `packages/socket/src/api/api.test.ts`.
 - **Merge risk:** Very low. Preserves 409 Conflict contract and 204 No Content success semantics.
 - **Owner approval:** Approved per P0 Final Targeted Repair specification (Gate A3).
+
+### Touch 3: `packages/socket/src/services/game/round-manager.ts` & `packages/socket/src/services/game/index.ts` (Skip Duplicate `SHOW_START` When Authored Opening Scene Exists & Cumulative Answer Recap Aggregation)
+- **File and exact insertion point:** `packages/socket/src/services/game/round-manager.ts` (`RoundManagerOptions.skipShowStartCountdown` and `RoundManager.start()`) and `packages/socket/src/services/game/index.ts` (`Game.buildActiveSceneData()`, `Game.getAnswerRecapSummary()`, and `RoundManager` options).
+- **Required capability:**
+  1. When a Studio show defines an authored `opening` scene at timeline index 0, skip the legacy 6-second `SHOW_START` countdown so the audience is not shown two consecutive start screens; when no authored `opening` scene is at step 0, preserve legacy `SHOW_START` countdown unchanged.
+  2. Aggregate completed question history (`RoundManager.getHistory()` + `questionLedger`) up to the active `answerRecap` timeline step into a role-safe `PublicAnswerRecap` summary in `ActiveSceneData`.
+- **Tests and compatibility evidence:** `extensions/src/server/studio-coordinator.test.ts`, `packages/socket` game tests.
+- **Merge risk:** Low. Default-off when `skipShowStartCountdown` returns false or is omitted.
+
+### Touch 4: `packages/web/vite.config.ts` (Serve `.json` Lottie Assets in Dev Media Middleware)
+- **File and exact insertion point:** `packages/web/vite.config.ts` (`mediaMimeTypes`).
+- **Required capability:** Add `".json": "application/json; charset=utf-8"` so user-uploaded `.json` Lottie files in `media/` are served with proper MIME type during local dev/E2E runs.
+- **Tests and compatibility evidence:** `extensions/src/presentation/presentation.test.ts`, Playwright E2E suite.
+
+### Touch 5: `packages/web/src/components/ToggleGroup.tsx`, `packages/web/src/features/quizz/components/QuizzEditorHeader.tsx`, `QuizzEditorSidebar.tsx`, `studio-editor-context.tsx`, `studio-scene-editor.tsx`, `QuestionEntranceConfig.tsx`, `studio-settings-page.tsx`, `MediaLibrary.tsx` (Studio Editor Grouping, Audio/Cinema Scenes, Motion Presets, Lottie Picker, Answer Recap)
+- **File and exact insertion point:** Studio editor components under `packages/web/src/features/quizz/components/**` and optional `group` divider support in `ToggleGroup.tsx`.
+- **Required capability:** Grouped contextual card-kind chooser in `QuizzEditorHeader.tsx` (preserving exact placement and `data-testid="toggle-kind-<kind>"`), `answerRecap` timeline support, audio/video/cinema scene authoring, 5 new stage motion presets + global inheritance + decorative question underline, and user-supplied Lottie upload/selection.
+- **Tests and compatibility evidence:** `extensions/src/editor/editor.test.ts`, Playwright E2E suite.
+
+### Touch 6: `packages/web/src/index.css`, `QuestionEntrance.tsx`, `AnswerButton.tsx`, `PhotoCardGrid.tsx`, `Question.tsx`, `GameWrapper.tsx` (Stage Motion Keyframes, Decorative Question Underline, Audio Ducking, Global Stage Animation Inheritance)
+- **File and exact insertion point:** Stage presentation components under `packages/web/src/features/game/components/**` and CSS keyframes in `packages/web/src/index.css`.
+- **Required capability:** Render the 5 new motion presets (`pop-bounce`, `wobble-settle`, `cascade`, `fan-flip`, `wipe-ripple`), inherit global stage animation defaults when card slot is `undefined`, render optional decorative question underline below the question title without affecting the authoritative cooldown/round timer, and suppress background loop audio when `media`/`opening`/`closing` scenes play foreground `video` or `audio`.
+- **Tests and compatibility evidence:** `extensions/src/presentation/presentation.test.ts`, Playwright 8-viewport matrix.

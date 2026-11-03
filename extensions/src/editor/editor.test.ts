@@ -9,6 +9,7 @@ import { describe, expect, it, vi } from "vitest"
 import {
   CompositeApiClient,
   duplicateQuestionInExtras,
+  normalizeTimelineRecapReferences,
   removeQuestionFromExtras,
   reorderQuestionsInExtras,
   RevisionConflictError,
@@ -557,5 +558,65 @@ describe("CORE04: Revision Conflict 409 Handling in CompositeApiClient", () => {
       "Halftime Break",
     )
     expect(reloaded.baseDigest).toBe(computeCanonicalBaseDigest(newQuiz))
+  })
+
+  it("normalizeTimelineRecapReferences updates startQuestionId when referenced question is deleted or moved after recap", () => {
+    const q1 = generateQuestionId()
+    const q2 = generateQuestionId()
+    const recapId = generateQuestionId()
+
+    const scenes = {
+      [recapId]: {
+        kind: "answerRecap" as const,
+        title: "Mid-Show Recap",
+        startQuestionId: q1,
+        mode: "mostSelected" as const,
+        maxItemsPerPage: 4,
+        showCounts: true,
+        showPercentages: true,
+        durationMs: 8000,
+        advance: "auto" as const,
+      },
+    }
+
+    // Case 1: q1 is deleted, leaving only q2 before the recap card
+    const afterDelete = normalizeTimelineRecapReferences(
+      [
+        { id: "tl-q2", kind: "question", questionId: q2 },
+        { id: "tl-recap", kind: "answerRecap", sceneId: recapId },
+      ],
+      scenes,
+    )
+    expect(
+      afterDelete[recapId].kind === "answerRecap" &&
+        afterDelete[recapId].startQuestionId,
+    ).toBe(q2)
+
+    // Case 2: q1 is reordered AFTER the recap card, leaving only q2 before it
+    const afterReorder = normalizeTimelineRecapReferences(
+      [
+        { id: "tl-q2", kind: "question", questionId: q2 },
+        { id: "tl-recap", kind: "answerRecap", sceneId: recapId },
+        { id: "tl-q1", kind: "question", questionId: q1 },
+      ],
+      scenes,
+    )
+    expect(
+      afterReorder[recapId].kind === "answerRecap" &&
+        afterReorder[recapId].startQuestionId,
+    ).toBe(q2)
+
+    // Case 3: recap is moved to the very beginning (no preceding questions)
+    const atBeginning = normalizeTimelineRecapReferences(
+      [
+        { id: "tl-recap", kind: "answerRecap", sceneId: recapId },
+        { id: "tl-q1", kind: "question", questionId: q1 },
+      ],
+      scenes,
+    )
+    expect(
+      atBeginning[recapId].kind === "answerRecap" &&
+        atBeginning[recapId].startQuestionId,
+    ).toBeUndefined()
   })
 })

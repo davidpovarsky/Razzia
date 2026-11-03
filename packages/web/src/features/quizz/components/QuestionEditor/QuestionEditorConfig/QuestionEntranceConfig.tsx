@@ -1,8 +1,14 @@
 import {
+  QUESTION_DECORATION_PRESETS,
   QUESTION_ENTRANCE_PRESETS,
   resolveCardStageAnimations,
+  resolveQuestionDecoration,
+  validateLottieJson,
   type CardStageAnimations,
+  type QuestionDecoration,
+  type QuestionDecorationPreset,
   type QuestionEntrancePreset,
+  type QuizExtrasV2,
   type StageAnimationSlot,
   type StageAnimationTiming,
 } from "@razzia/extensions/core"
@@ -19,8 +25,9 @@ import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/Qu
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import clsx from "clsx"
-import { Play, RotateCcw, Sparkles } from "lucide-react"
-import { useState } from "react"
+import { Play, RotateCcw, Sparkles, Upload } from "lucide-react"
+import { useRef, useState } from "react"
+import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
 const DEFAULT_DURATION_MS = 800
@@ -43,32 +50,77 @@ const QuestionEntranceConfig = ({
   const { currentQuestionId, extras, setExtras } = useQuizzEditor()
   const { t } = useTranslation()
   const [previewEpoch, setPreviewEpoch] = useState(0)
+  const lottieInputRef = useRef<HTMLInputElement | null>(null)
+
+  const v2Defaults =
+    extras && "defaults" in extras ? (extras as QuizExtrasV2).defaults : undefined
+  const globalStageAnimations = v2Defaults?.stageAnimations
+  const globalQuestionDecoration = v2Defaults?.questionDecoration
 
   const currentItem =
     currentQuestionId && extras?.perQuestion
       ? extras.perQuestion[currentQuestionId]
       : undefined
 
+  const cardStageAnimations =
+    kind === "scene" ? sceneStageAnimations : currentItem?.stageAnimations
+
   const resolved = resolveCardStageAnimations(
     kind === "scene"
-      ? { stageAnimations: sceneStageAnimations }
+      ? {
+          stageAnimations: sceneStageAnimations,
+          globalStageAnimations,
+        }
       : {
           questionEntrance: currentItem?.questionEntrance,
           stageAnimations: currentItem?.stageAnimations,
+          globalStageAnimations,
         },
   )
+
+  const resolvedDecoration = resolveQuestionDecoration({
+    cardDecoration: currentItem?.questionDecoration,
+    globalDecoration: globalQuestionDecoration,
+  })
 
   const preset: QuestionEntrancePreset = resolved.questionEntrance.preset
   const durationMs: number =
     resolved.questionEntrance.durationMs ?? DEFAULT_DURATION_MS
 
-  const updateSlot = (slotKey: SlotKey, nextSlot: StageAnimationSlot) => {
+  const getSlotSelectValue = (slotKey: SlotKey): string => {
+    const explicitSlot = cardStageAnimations?.[slotKey]
+    if (explicitSlot) {
+      return explicitSlot.preset
+    }
+    if (
+      slotKey === "questionEntrance" &&
+      kind === "question" &&
+      currentItem?.questionEntrance?.preset
+    ) {
+      return currentItem.questionEntrance.preset
+    }
+    if (
+      globalStageAnimations?.[slotKey]?.preset &&
+      globalStageAnimations[slotKey]!.preset !== "none"
+    ) {
+      return "__inherit__"
+    }
+    return resolved[slotKey].preset
+  }
+
+  const updateSlot = (slotKey: SlotKey, nextSlot: StageAnimationSlot | undefined) => {
     if (kind === "scene") {
       const nextMap: CardStageAnimations = {
         ...(sceneStageAnimations ?? {}),
-        [slotKey]: nextSlot,
       }
-      onSceneStageAnimationsChange?.(nextMap)
+      if (nextSlot === undefined) {
+        delete nextMap[slotKey]
+      } else {
+        nextMap[slotKey] = nextSlot
+      }
+      onSceneStageAnimationsChange?.(
+        Object.keys(nextMap).length > 0 ? nextMap : undefined,
+      )
       setPreviewEpoch((p) => p + 1)
       return
     }
@@ -86,27 +138,39 @@ const QuestionEntranceConfig = ({
       const existingItem = existingPerQ[currentQuestionId] ?? {}
       const nextStageAnimations: CardStageAnimations = {
         ...(existingItem.stageAnimations ?? {}),
-        [slotKey]: nextSlot,
+      }
+      if (nextSlot === undefined) {
+        delete nextStageAnimations[slotKey]
+      } else {
+        nextStageAnimations[slotKey] = nextSlot
+      }
+
+      const nextPerQItem = {
+        ...existingItem,
+        stageAnimations:
+          Object.keys(nextStageAnimations).length > 0
+            ? nextStageAnimations
+            : undefined,
+      }
+
+      if (slotKey === "questionEntrance") {
+        if (nextSlot === undefined) {
+          delete nextPerQItem.questionEntrance
+        } else {
+          nextPerQItem.questionEntrance = {
+            preset: nextSlot.preset,
+            ...(nextSlot.preset !== "none"
+              ? { durationMs: nextSlot.durationMs }
+              : {}),
+          }
+        }
       }
 
       return {
         ...prev,
         perQuestion: {
           ...existingPerQ,
-          [currentQuestionId]: {
-            ...existingItem,
-            ...(slotKey === "questionEntrance"
-              ? {
-                  questionEntrance: {
-                    preset: nextSlot.preset,
-                    ...(nextSlot.preset !== "none"
-                      ? { durationMs: nextSlot.durationMs }
-                      : {}),
-                  },
-                }
-              : {}),
-            stageAnimations: nextStageAnimations,
-          },
+          [currentQuestionId]: nextPerQItem,
         },
       }
     })
@@ -114,12 +178,89 @@ const QuestionEntranceConfig = ({
     setPreviewEpoch((p) => p + 1)
   }
 
-  const handlePresetChange = (newPreset: QuestionEntrancePreset) => {
+  const handlePresetChange = (val: string) => {
+    if (val === "__inherit__") {
+      updateSlot("questionEntrance", undefined)
+      return
+    }
+    const newPreset = val as QuestionEntrancePreset
     updateSlot("questionEntrance", {
       ...resolved.questionEntrance,
       preset: newPreset,
       durationMs,
     })
+  }
+
+  const updateQuestionDecoration = (nextDec: QuestionDecoration | undefined) => {
+    if (!currentQuestionId) {
+      return
+    }
+    setExtras((prev) => {
+      if (!prev) {
+        return prev
+      }
+      const existingPerQ = prev.perQuestion ?? {}
+      const existingItem = existingPerQ[currentQuestionId] ?? {}
+      const updatedItem = { ...existingItem }
+      if (nextDec === undefined) {
+        delete updatedItem.questionDecoration
+      } else {
+        updatedItem.questionDecoration = nextDec
+      }
+      return {
+        ...prev,
+        perQuestion: {
+          ...existingPerQ,
+          [currentQuestionId]: updatedItem,
+        },
+      }
+    })
+    setPreviewEpoch((p) => p + 1)
+  }
+
+  const handleLottieDecorationUpload = async (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    const file = e.target.files?.[0]
+    e.target.value = ""
+    if (!file) {
+      return
+    }
+    try {
+      const rawText = await file.text()
+      const validation = validateLottieJson(rawText)
+      if (!validation.ok) {
+        toast.error(validation.error ?? "Invalid Lottie JSON file")
+        return
+      }
+      const token = localStorage.getItem("token")
+      const res = await fetch("/api/extensions/lottie", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        },
+        body: JSON.stringify({
+          name: file.name,
+          content: rawText,
+          role: "questionUnderline",
+        }),
+      })
+      if (!res.ok) {
+        toast.error("Failed to upload Lottie file")
+        return
+      }
+      const data = (await res.json()) as { url: string }
+      updateQuestionDecoration({
+        enabled: true,
+        preset: "lottie",
+        lottieUrl: data.url,
+        color: currentItem?.questionDecoration?.color,
+      })
+      toast.success("Lottie animation uploaded")
+    } catch {
+      toast.error("Failed to upload Lottie file")
+    }
   }
 
   const handleDurationChange = (raw: string) => {
@@ -139,24 +280,64 @@ const QuestionEntranceConfig = ({
     setPreviewEpoch((p) => p + 1)
   }
 
-  const renderPresetItems = () =>
-    QUESTION_ENTRANCE_PRESETS.map((p) => (
-      <SelectItem key={p} value={p}>
-        {p === "none" && t("extensions:entrance.none", "Regular / None")}
-        {p === "fade" && t("extensions:entrance.fade", "Fade In")}
-        {p === "slide-up" && t("extensions:entrance.slideUp", "Slide Up")}
-        {p === "slide-side" && t("extensions:entrance.slideSide", "Slide Side")}
-        {p === "zoom-soft" && t("extensions:entrance.zoomSoft", "Soft Zoom")}
-        {p === "spotlight" && t("extensions:entrance.spotlight", "Spotlight")}
-        {p === "curtain" && t("extensions:entrance.curtain", "Curtain")}
-      </SelectItem>
-    ))
+  const getPresetLabel = (p: QuestionEntrancePreset) => {
+    switch (p) {
+      case "none":
+        return t("extensions:entrance.none", "Regular / None")
+      case "fade":
+        return t("extensions:entrance.fade", "Fade In")
+      case "slide-up":
+        return t("extensions:entrance.slideUp", "Slide Up")
+      case "slide-side":
+        return t("extensions:entrance.slideSide", "Slide Side")
+      case "zoom-soft":
+        return t("extensions:entrance.zoomSoft", "Soft Zoom")
+      case "spotlight":
+        return t("extensions:entrance.spotlight", "Spotlight")
+      case "curtain":
+        return t("extensions:entrance.curtain", "Curtain")
+      case "pop-bounce":
+        return t("extensions:entrance.popBounce", "Pop Bounce")
+      case "wobble-settle":
+        return t("extensions:entrance.wobbleSettle", "Wobble Settle")
+      case "cascade":
+        return t("extensions:entrance.cascade", "Cascade")
+      case "fan-flip":
+        return t("extensions:entrance.fanFlip", "Fan Flip")
+      case "wipe-ripple":
+        return t("extensions:entrance.wipeRipple", "Wipe Ripple")
+      default:
+        return p
+    }
+  }
+
+  const renderPresetItems = (slotKey: SlotKey) => {
+    const globalSlotPreset = globalStageAnimations?.[slotKey]?.preset
+    const hasGlobalSlot = Boolean(globalSlotPreset && globalSlotPreset !== "none")
+
+    return (
+      <>
+        {hasGlobalSlot && (
+          <SelectItem value="__inherit__">
+            {t("extensions:entrance.inheritGlobal", "Inherit Global Default")} (
+            {getPresetLabel(globalSlotPreset!)})
+          </SelectItem>
+        )}
+        {QUESTION_ENTRANCE_PRESETS.map((p) => (
+          <SelectItem key={p} value={p}>
+            {getPresetLabel(p)}
+          </SelectItem>
+        ))}
+      </>
+    )
+  }
 
   const renderAdditionalSlot = (
     slotKey: "answerEntrance" | "answerBadgeEntrance" | "resultsRevealEntrance",
     label: string,
   ) => {
     const slotCfg = resolved[slotKey]
+    const selectVal = getSlotSelectValue(slotKey)
     return (
       <div
         key={slotKey}
@@ -166,13 +347,17 @@ const QuestionEntranceConfig = ({
         <span className="text-foreground text-xs font-bold">{label}</span>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           <Select
-            value={slotCfg.preset}
-            onValueChange={(val) =>
+            value={selectVal}
+            onValueChange={(val) => {
+              if (val === "__inherit__") {
+                updateSlot(slotKey, undefined)
+                return
+              }
               updateSlot(slotKey, {
                 ...slotCfg,
                 preset: val as QuestionEntrancePreset,
               })
-            }
+            }}
           >
             <SelectTrigger
               data-testid={`stage-anim-preset-${slotKey}`}
@@ -180,7 +365,7 @@ const QuestionEntranceConfig = ({
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>{renderPresetItems()}</SelectContent>
+            <SelectContent>{renderPresetItems(slotKey)}</SelectContent>
           </Select>
 
           {slotCfg.preset !== "none" && (
@@ -218,11 +403,27 @@ const QuestionEntranceConfig = ({
     )
   }
 
+  const decorationSelectValue = (() => {
+    if (currentItem?.questionDecoration) {
+      return currentItem.questionDecoration.enabled === false
+        ? "none"
+        : currentItem.questionDecoration.preset
+    }
+    if (
+      globalQuestionDecoration?.enabled &&
+      globalQuestionDecoration.preset !== "none"
+    ) {
+      return "__inherit__"
+    }
+    return "none"
+  })()
+
   const anyPresetActive =
     preset !== "none" ||
     resolved.answerEntrance.preset !== "none" ||
     resolved.answerBadgeEntrance.preset !== "none" ||
-    resolved.resultsRevealEntrance.preset !== "none"
+    resolved.resultsRevealEntrance.preset !== "none" ||
+    resolvedDecoration.enabled
 
   return (
     <ConfigSection
@@ -241,10 +442,8 @@ const QuestionEntranceConfig = ({
             )}
           />
           <Select
-            value={preset}
-            onValueChange={(val) =>
-              handlePresetChange(val as QuestionEntrancePreset)
-            }
+            value={getSlotSelectValue("questionEntrance")}
+            onValueChange={handlePresetChange}
           >
             <SelectTrigger
               data-testid="stage-anim-preset-questionEntrance"
@@ -252,7 +451,7 @@ const QuestionEntranceConfig = ({
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>{renderPresetItems()}</SelectContent>
+            <SelectContent>{renderPresetItems("questionEntrance")}</SelectContent>
           </Select>
           <ConfigField.Description>
             {t(
@@ -283,20 +482,159 @@ const QuestionEntranceConfig = ({
         )}
 
         {kind === "question" && (
-          <div className="flex flex-col gap-2">
-            {renderAdditionalSlot(
-              "answerEntrance",
-              t("extensions:stageMotion.slotAnswers", "Answer Cards"),
-            )}
-            {renderAdditionalSlot(
-              "answerBadgeEntrance",
-              t("extensions:stageMotion.slotBadges", "Key Badges (1-5)"),
-            )}
-            {renderAdditionalSlot(
-              "resultsRevealEntrance",
-              t("extensions:stageMotion.slotResults", "Results Reveal"),
-            )}
-          </div>
+          <>
+            <div className="flex flex-col gap-2">
+              {renderAdditionalSlot(
+                "answerEntrance",
+                t("extensions:stageMotion.slotAnswers", "Answer Cards"),
+              )}
+              {renderAdditionalSlot(
+                "answerBadgeEntrance",
+                t("extensions:stageMotion.slotBadges", "Key Badges (1-5)"),
+              )}
+              {renderAdditionalSlot(
+                "resultsRevealEntrance",
+                t("extensions:stageMotion.slotResults", "Results Reveal"),
+              )}
+            </div>
+
+            {/* Decorative Question Underline */}
+            <div
+              data-testid="question-decoration-section"
+              className="border-accent/60 bg-muted/30 flex flex-col gap-2 rounded-xl border p-2.5"
+            >
+              <span className="text-foreground text-xs font-bold">
+                {t(
+                  "extensions:stageMotion.decorationTitle",
+                  "Question Underline Effect",
+                )}
+              </span>
+              <Select
+                value={decorationSelectValue}
+                onValueChange={(val) => {
+                  if (val === "__inherit__") {
+                    updateQuestionDecoration(undefined)
+                    return
+                  }
+                  if (val === "none") {
+                    updateQuestionDecoration({
+                      enabled: false,
+                      preset: "none",
+                    })
+                    return
+                  }
+                  updateQuestionDecoration({
+                    enabled: true,
+                    preset: val as QuestionDecorationPreset,
+                    color: currentItem?.questionDecoration?.color,
+                    lottieUrl: currentItem?.questionDecoration?.lottieUrl,
+                  })
+                }}
+              >
+                <SelectTrigger
+                  data-testid="question-decoration-preset"
+                  aria-label={t(
+                    "extensions:stageMotion.decorationTitle",
+                    "Question Underline Effect",
+                  )}
+                >
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  {globalQuestionDecoration?.enabled &&
+                    globalQuestionDecoration.preset !== "none" && (
+                      <SelectItem value="__inherit__">
+                        {t(
+                          "extensions:stageMotion.decorationInherit",
+                          "Inherit Global Default",
+                        )}
+                      </SelectItem>
+                    )}
+                  {QUESTION_DECORATION_PRESETS.map((dp) => (
+                    <SelectItem key={dp} value={dp}>
+                      {dp === "none" &&
+                        t("extensions:stageMotion.decorationNone", "None")}
+                      {dp === "pulse-bar" &&
+                        t(
+                          "extensions:stageMotion.decorationPulseBar",
+                          "Pulse Bar",
+                        )}
+                      {dp === "shimmer-line" &&
+                        t(
+                          "extensions:stageMotion.decorationShimmerLine",
+                          "Shimmer Line",
+                        )}
+                      {dp === "wave-dots" &&
+                        t(
+                          "extensions:stageMotion.decorationWaveDots",
+                          "Wave Dots",
+                        )}
+                      {dp === "glow-sweep" &&
+                        t(
+                          "extensions:stageMotion.decorationGlowSweep",
+                          "Glow Sweep",
+                        )}
+                      {dp === "lottie" &&
+                        t(
+                          "extensions:stageMotion.decorationLottie",
+                          "Custom Lottie",
+                        )}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
+              {resolvedDecoration.enabled &&
+                resolvedDecoration.preset === "lottie" && (
+                  <div className="flex flex-col gap-1.5">
+                    <div className="flex items-center gap-2">
+                      <Input
+                        variant="sm"
+                        data-testid="question-decoration-lottie-url"
+                        value={resolvedDecoration.lottieUrl ?? ""}
+                        onChange={(e) =>
+                          updateQuestionDecoration({
+                            enabled: true,
+                            preset: "lottie",
+                            lottieUrl: e.target.value,
+                            color: resolvedDecoration.color,
+                          })
+                        }
+                        placeholder="/media/underline.json"
+                        className="flex-1 text-xs"
+                      />
+                      <input
+                        ref={lottieInputRef}
+                        type="file"
+                        accept=".json,application/json"
+                        className="hidden"
+                        onChange={handleLottieDecorationUpload}
+                      />
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="sm"
+                        className="h-8 shrink-0 px-2.5 text-xs"
+                        onClick={() => lottieInputRef.current?.click()}
+                      >
+                        <Upload className="mr-1 size-3.5" />
+                        {t(
+                          "extensions:studio.scene.lottieUploadButton",
+                          "Upload Lottie (.json)",
+                        )}
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+              <p className="text-muted-foreground text-[11px]">
+                {t(
+                  "extensions:stageMotion.decorationDesc",
+                  "Optional decorative visual accent under the question title (never replaces the authoritative round timer).",
+                )}
+              </p>
+            </div>
+          </>
         )}
 
         {anyPresetActive && (
@@ -332,11 +670,29 @@ const QuestionEntranceConfig = ({
                 animationFillMode: "both",
               }}
             >
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                <Play className="size-3 text-primary shrink-0" />
-                <span className="truncate">
-                  {t("extensions:entrance.previewQuestion", "Question Preview")}
-                </span>
+              <div className="flex flex-col gap-1.5">
+                <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+                  <Play className="size-3 text-primary shrink-0" />
+                  <span className="truncate">
+                    {t("extensions:entrance.previewQuestion", "Question Preview")}
+                  </span>
+                </div>
+                {kind === "question" &&
+                  resolvedDecoration.enabled &&
+                  resolvedDecoration.preset !== "none" && (
+                    <div
+                      data-testid="question-decoration-preview"
+                      className={clsx(
+                        "h-1.5 w-full rounded-full",
+                        `tada-underline-${resolvedDecoration.preset}`,
+                      )}
+                      style={
+                        resolvedDecoration.color
+                          ? { backgroundColor: resolvedDecoration.color }
+                          : undefined
+                      }
+                    />
+                  )}
               </div>
               {kind === "question" && (
                 <div className="mt-2 grid grid-cols-2 gap-1.5">

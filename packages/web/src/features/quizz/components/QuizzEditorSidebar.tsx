@@ -41,6 +41,7 @@ import {
   Flag,
   Image as ImageIcon,
   Layers,
+  ListChecks,
   Plus,
   Sparkles,
   Timer,
@@ -78,6 +79,9 @@ const getSceneIcon = (kind: string) => {
 
     case "interimResults":
       return <BarChart2 className="size-5 text-primary" />
+
+    case "answerRecap":
+      return <ListChecks className="size-5 text-primary" />
 
     case "countdown":
       return <Timer className="size-5 text-primary" />
@@ -307,14 +311,15 @@ const QuizzEditorSidebar = () => {
   const timelineKinds: Array<{ value: TimelineItemKind; label: string }> = [
     { value: "quiz", label: t("extensions:timeline.quiz", "Quiz") },
     { value: "survey", label: t("extensions:timeline.survey", "Survey") },
-    { value: "transition", label: t("extensions:timeline.transition", "Transition") },
-    { value: "animation", label: t("extensions:timeline.animation", "Animation") },
     { value: "media", label: t("extensions:timeline.media", "Media") },
-    { value: "leaderboard", label: t("extensions:timeline.leaderboard", "Leaderboard") },
-    { value: "interimResults", label: t("extensions:timeline.interimResults", "Interim Results") },
-    { value: "countdown", label: t("extensions:timeline.countdown", "Countdown") },
+    { value: "animation", label: t("extensions:timeline.animation", "Animation") },
+    { value: "transition", label: t("extensions:timeline.transition", "Transition") },
     { value: "opening", label: t("extensions:timeline.opening", "Opening") },
     { value: "closing", label: t("extensions:timeline.closing", "Closing") },
+    { value: "countdown", label: t("extensions:timeline.countdown", "Countdown") },
+    { value: "leaderboard", label: t("extensions:timeline.leaderboard", "Leaderboard") },
+    { value: "interimResults", label: t("extensions:timeline.interimResults", "Interim Results") },
+    { value: "answerRecap", label: t("extensions:timeline.answerRecap", "Answer Recap") },
   ]
 
   const isDragging = useRef(false)

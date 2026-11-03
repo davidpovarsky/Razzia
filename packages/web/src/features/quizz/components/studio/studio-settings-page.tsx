@@ -1,3 +1,13 @@
+import {
+  QUESTION_DECORATION_PRESETS,
+  QUESTION_ENTRANCE_PRESETS,
+  resolveCardStageAnimations,
+  resolveQuestionDecoration,
+  type CardStageAnimations,
+  type QuestionDecorationPreset,
+  type QuestionEntrancePreset,
+  type StageAnimationTiming,
+} from "@razzia/extensions/core"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import Card from "@razzia/web/components/Card"
@@ -5,6 +15,7 @@ import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/Qu
 import {
   PlaySquare,
   Settings as SettingsIcon,
+  Sparkles,
   Timer,
   Trophy,
 } from "lucide-react"
@@ -56,6 +67,74 @@ export const StudioSettingsPage = () => {
       label: t("extensions:studio.settings.manualAdvance", "Manual (host advances)"),
     },
   ]
+
+  const stagePresetItems = QUESTION_ENTRANCE_PRESETS.map((p) => ({
+    value: p,
+    label:
+      p === "none"
+        ? t("extensions:entrance.none", "Regular / None")
+        : p === "fade"
+          ? t("extensions:entrance.fade", "Fade In")
+          : p === "slide-up"
+            ? t("extensions:entrance.slideUp", "Slide Up")
+            : p === "slide-side"
+              ? t("extensions:entrance.slideSide", "Slide Side")
+              : p === "zoom-soft"
+                ? t("extensions:entrance.zoomSoft", "Soft Zoom")
+                : p === "spotlight"
+                  ? t("extensions:entrance.spotlight", "Spotlight")
+                  : p === "curtain"
+                    ? t("extensions:entrance.curtain", "Curtain")
+                    : p === "pop-bounce"
+                      ? t("extensions:entrance.popBounce", "Pop Bounce")
+                      : p === "wobble-settle"
+                        ? t("extensions:entrance.wobbleSettle", "Wobble Settle")
+                        : p === "cascade"
+                          ? t("extensions:entrance.cascade", "Cascade")
+                          : p === "fan-flip"
+                            ? t("extensions:entrance.fanFlip", "Fan Flip")
+                            : t("extensions:entrance.wipeRipple", "Wipe Ripple"),
+  }))
+
+  const decorationPresetItems = QUESTION_DECORATION_PRESETS.map((dp) => ({
+    value: dp,
+    label:
+      dp === "none"
+        ? t("extensions:stageMotion.decorationNone", "None")
+        : dp === "pulse-bar"
+          ? t("extensions:stageMotion.decorationPulseBar", "Pulse Bar")
+          : dp === "shimmer-line"
+            ? t("extensions:stageMotion.decorationShimmerLine", "Shimmer Line")
+            : dp === "wave-dots"
+              ? t("extensions:stageMotion.decorationWaveDots", "Wave Dots")
+              : dp === "glow-sweep"
+                ? t("extensions:stageMotion.decorationGlowSweep", "Glow Sweep")
+                : t("extensions:stageMotion.decorationLottie", "Custom Lottie"),
+  }))
+
+  const resolvedGlobalStage = resolveCardStageAnimations({
+    stageAnimations: defaults.stageAnimations,
+  })
+  const resolvedGlobalDecoration = resolveQuestionDecoration({
+    globalDecoration: defaults.questionDecoration,
+  })
+
+  const updateGlobalStageSlot = (
+    slotKey: keyof CardStageAnimations,
+    preset: QuestionEntrancePreset,
+    timing?: StageAnimationTiming,
+  ) => {
+    const currentSlot = resolvedGlobalStage[slotKey]
+    const nextStageAnimations: CardStageAnimations = {
+      ...(defaults.stageAnimations ?? {}),
+      [slotKey]: {
+        ...currentSlot,
+        preset,
+        timing: timing ?? currentSlot.timing,
+      },
+    }
+    updateDefaults({ stageAnimations: nextStageAnimations })
+  }
 
   return (
     <div className="flex flex-1 flex-col overflow-y-auto bg-muted/40 p-6 md:p-10">
@@ -198,6 +277,109 @@ export const StudioSettingsPage = () => {
                 updateDefaults({ advanceMode: val as "auto" | "manual" })
               }
               items={advanceModeItems}
+            />
+          </ConfigField>
+
+          <hr className="border-accent" />
+
+          {/* Global Stage Animation Defaults */}
+          <ConfigField>
+            <ConfigField.Label
+              icon={<Sparkles className="size-4 text-primary" />}
+              label={t(
+                "extensions:stageMotion.globalDefaultsTitle",
+                "Global Stage Animation Defaults",
+              )}
+            />
+            <ConfigField.Description>
+              {t(
+                "extensions:stageMotion.globalDefaultsDesc",
+                "Default stage animations inherited by question and scene cards unless overridden per card.",
+              )}
+            </ConfigField.Description>
+
+            <div
+              data-testid="global-stage-animations-grid"
+              className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2"
+            >
+              {(
+                [
+                  [
+                    "questionEntrance",
+                    t(
+                      "extensions:stageMotion.slotQuestion",
+                      "Question Title & Media",
+                    ),
+                  ],
+                  [
+                    "answerEntrance",
+                    t("extensions:stageMotion.slotAnswers", "Answer Cards"),
+                  ],
+                  [
+                    "answerBadgeEntrance",
+                    t("extensions:stageMotion.slotBadges", "Key Badges (1-5)"),
+                  ],
+                  [
+                    "resultsRevealEntrance",
+                    t("extensions:stageMotion.slotResults", "Results Reveal"),
+                  ],
+                ] as const
+              ).map(([slotKey, slotLabel]) => (
+                <div
+                  key={slotKey}
+                  data-testid={`global-stage-slot-${slotKey}`}
+                  className="border-accent bg-muted/20 flex flex-col gap-1.5 rounded-lg border p-3"
+                >
+                  <span className="text-foreground text-xs font-semibold">
+                    {slotLabel}
+                  </span>
+                  <StudioSelect
+                    value={resolvedGlobalStage[slotKey].preset}
+                    onChange={(val: string) =>
+                      updateGlobalStageSlot(
+                        slotKey,
+                        val as QuestionEntrancePreset,
+                      )
+                    }
+                    items={stagePresetItems}
+                  />
+                </div>
+              ))}
+            </div>
+          </ConfigField>
+
+          <hr className="border-accent" />
+
+          {/* Global Question Decorative Underline */}
+          <ConfigField>
+            <ConfigField.Label
+              icon={<Sparkles className="size-4 text-primary" />}
+              label={t(
+                "extensions:stageMotion.decorationTitle",
+                "Question Underline Effect",
+              )}
+            />
+            <ConfigField.Description>
+              {t(
+                "extensions:stageMotion.decorationDesc",
+                "Optional decorative visual accent under the question title (never replaces the authoritative round timer).",
+              )}
+            </ConfigField.Description>
+            <StudioSelect
+              value={
+                resolvedGlobalDecoration.enabled
+                  ? resolvedGlobalDecoration.preset
+                  : "none"
+              }
+              onChange={(val: string) =>
+                updateDefaults({
+                  questionDecoration: {
+                    enabled: val !== "none",
+                    preset: val as QuestionDecorationPreset,
+                  },
+                })
+              }
+              items={decorationPresetItems}
             />
           </ConfigField>
         </Card>

@@ -358,6 +358,20 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             advance: "auto",
           }
 
+        case "answerRecap":
+          return {
+            id: sceneId,
+            kind: "answerRecap",
+            title: "",
+            ...(questionIds[0] ? { startQuestionId: questionIds[0] } : {}),
+            mode: "mostSelected",
+            maxItemsPerPage: 4,
+            showCounts: true,
+            showPercentages: true,
+            durationMs: 8000,
+            advance: "auto",
+          }
+
         case "countdown":
           return {
             id: sceneId,
@@ -397,7 +411,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           }
       }
     },
-    [getValues],
+    [getValues, questionIds],
   )
 
   interface StudioMutationResult {
@@ -410,8 +424,52 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     nextPerQuestion?: QuizExtrasV2["perQuestion"]
   }
 
+  const normalizeRecapSceneStartRefs = useCallback(
+    (
+      nextTimeline: TimelineItem[],
+      nextScenes: Record<string, SceneConfig>,
+      nextQuestionIds: string[],
+    ): Record<string, SceneConfig> => {
+      const validQIds = new Set(nextQuestionIds)
+      const seenBefore: string[] = []
+      let mutated = false
+      const normalized = { ...nextScenes }
+
+      for (const item of nextTimeline) {
+        if (item.kind === "question") {
+          if (validQIds.has(item.questionId)) {
+            seenBefore.push(item.questionId)
+          }
+        } else if (item.kind === "answerRecap") {
+          const existing = normalized[item.sceneId]
+          if (existing && existing.kind === "answerRecap") {
+            const currentStart = existing.startQuestionId
+            const isValidPreceding =
+              currentStart !== undefined && seenBefore.includes(currentStart)
+            if (!isValidPreceding) {
+              const fallbackStart = seenBefore[0]
+              normalized[item.sceneId] = {
+                ...existing,
+                startQuestionId: fallbackStart,
+              }
+              mutated = true
+            }
+          }
+        }
+      }
+
+      return mutated ? normalized : nextScenes
+    },
+    [],
+  )
+
   const applyStudioMutation = useCallback(
     (result: StudioMutationResult) => {
+      const normalizedScenes = normalizeRecapSceneStartRefs(
+        result.nextTimeline,
+        result.nextScenes,
+        result.nextQuestionIds,
+      )
       if (replaceQuestions) {
         replaceQuestions(result.nextQuestions, result.nextQuestionIds)
       } else {
@@ -423,20 +481,21 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       }
 
       setTimeline(result.nextTimeline)
-      setScenes(result.nextScenes)
+      setScenes(normalizedScenes)
       setSelectedTimelineId(result.nextSelectedId)
 
       if (result.nextCurrentIndex >= 0) {
         setCurrentIndex(result.nextCurrentIndex)
       }
 
-      syncToExtras(result.nextTimeline, result.nextScenes, {
+      syncToExtras(result.nextTimeline, normalizedScenes, {
         defaults,
         targetQuestionIds: result.nextQuestionIds,
         targetPerQuestion: result.nextPerQuestion,
       })
     },
     [
+      normalizeRecapSceneStartRefs,
       replaceQuestions,
       setValue,
       setQuestionIds,
