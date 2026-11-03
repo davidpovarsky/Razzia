@@ -37,16 +37,20 @@
 | **PerQuestion**| `reveal.trigger` | `cards[].reveal.trigger` | `Questions!Q{row}` | Lossless enum: `"automatic" \| "manual"` | Public | T03 | Verified |
 | **PerQuestion**| `reveal.audience` | `cards[].reveal.audience` | `Questions!R{row}` | Lossless enum: `"manager" \| "all"` | Public | T03 | Verified |
 | **PerQuestion**| `perQuestion[id].interlude` | `cards[].interlude` | `Questions!T{row}` | Lossless object adhering to `interludeSchema` (`kind`, `title`, `url`, `durationMs`, `advance`, `audioCue`) | Public | C01 | Verified |
-| **Timeline** | (10 card kinds) | `cards[].kind` | `Timeline!C{row}` | Ordered: `opening`, `countdown`, `quiz`, `survey`, `transition`, `animation`, `media`, `interimResults`, `leaderboard`, `closing` | Public | T01 | Verified |
+| **PerQuestion**| `perQuestion[id].stageAnimations` | `cards[].stageAnimations` | `Questions!S{row}` (`extraJson`) | 4-slot stage motion presets (including `pop-bounce`, `wobble-settle`, `cascade`, `fan-flip`, `wipe-ripple`) | Public | T03 | Verified |
+| **PerQuestion**| `perQuestion[id].questionDecoration` | `cards[].questionDecoration` | `Questions!S{row}` (`extraJson`) | Decorative question underline (`pulse-bar`, `shimmer-line`, `wave-dots`, `glow-sweep`, `custom-lottie`) | Public | T03 | Verified |
+| **Defaults** | `defaults.stageAnimations` / `defaults.questionDecoration` | `defaults.stageAnimations` / `defaults.questionDecoration` | `Settings!{row}` (`scope: defaults`) | Global stage animation & question underline defaults | Public | T01 | Verified |
+| **Timeline** | (11 card kinds) | `cards[].kind` | `Timeline!C{row}` | Ordered: `opening`, `countdown`, `quiz`, `survey`, `transition`, `animation`, `media`, `interimResults`, `answerRecap`, `leaderboard`, `closing` | Public | T01 | Verified |
 | **Scenes** | `scenes[].title` | `cards[].title` | `Timeline!D{row}` | Lossless string | Public | T01 | Verified |
 | **Scenes** | `scenes[].description` | `cards[].description` | `Timeline!E{row}` | Transition description | Public | T01 | Verified |
 | **Scenes** | `scenes[].durationMs` | `cards[].durationMs` | `Timeline!H{row}` | Duration in milliseconds | Public | T01 | Verified |
 | **Scenes** | `scenes[].durationSeconds`| `cards[].durationSeconds` | `Timeline!I{row}` | Countdown duration in seconds | Public | T01 | Verified |
-| **Scenes** | `scenes[].advance` | `cards[].advance` | `Timeline!J{row}` | Lossless enum: `"auto" \| "manual"` | Public | T01 | Verified |
-| **Scenes** | `scenes[].preset` | `cards[].preset` | `Timeline!K{row}` | Animation preset string | Public | T01 | Verified |
-| **Scenes** | `scenes[].mediaType` | `cards[].mediaType` | `Timeline!L{row}` | Lossless enum: `"image" \| "video"` | Public | T01 | Verified |
+| **Scenes** | `scenes[].advance` | `cards[].advance` | `Timeline!J{row}` | Lossless enum: `"auto" \| "manual" \| "onMediaEnd"` | Public | T01 | Verified |
+| **Scenes** | `scenes[].preset` | `cards[].preset` | `Timeline!K{row}` | Animation preset (`spotlight`, `confetti`, `bounce`, `pulse`) | Public | T01 | Verified |
+| **Scenes** | `scenes[].mediaType` | `cards[].mediaType` | `Timeline!L{row}` | Lossless enum: `"image" \| "video" \| "audio"` | Public | T01 | Verified |
 | **Scenes** | `scenes[].mediaUrl` | `cards[].mediaUrl` | `Timeline!M{row}` | Safe HTTPS or `/media/` only | Public | T08 | Verified |
-| **Scenes** | `scenes[].subtitle` | `cards[].subtitle` | `Timeline!N{row}` | Opening / closing subtitle | Public | T01 | Verified |
+| **Scenes** | `scenes[].subtitle` | `cards[].subtitle` | `Timeline!N{row}` | Opening / closing / answerRecap subtitle | Public | T01 | Verified |
+| **Scenes** | `answerRecap` / `cinema` / `lottie` / `audio` fields | `cards[]` | `Timeline!O{row}` (`extraJson`) | Lossless schema-validated `startQuestionKey`, `mode`, `maxItemsPerPage`, `showCounts`, `showPercentages`, `stageLayout`, `mediaFit`, `logoPosition`, `textOverlay`, `endBehavior`, `lottieUrl`, `volume`, `loop`, `muted`, `showControls` | Public | T01 | Verified |
 | **Leaderboard**| `leaderboard.mode` | `settings` (scope: leaderboard, prop: mode, targetKey: "show") | `Settings!{row}` | Lossless enum (targetKey must strictly be `"show"`) | Public | T05 | Verified |
 | **Leaderboard**| `leaderboard.everyN` | `settings` (scope: leaderboard, prop: everyN, targetKey: "show") | `Settings!{row}` | Lossless integer (targetKey must strictly be `"show"`) | Public | T05 | Verified |
 | **Leaderboard**| `leaderboard.afterQuestionIds` | `settings` (scope: leaderboard, prop: afterQuestionIds, targetKey: "show") | `Settings!{row}` | **Remapped to card keys (e.g. `["Q01", "Q03"]`) on export; resolved to fresh UUIDs on import** | Public | T05 | Verified |

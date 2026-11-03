@@ -14,11 +14,11 @@ Tada Studio provides two human-authorable show definitions that map 1:1 to nativ
 2. **Multi-Sheet Excel Workbook (`.xlsx`):** Designed for content creators, educators, and event producers using Microsoft Excel, Google Sheets, or LibreOffice.
 
 Both formats represent a **complete, ordered show timeline** containing:
-- All 10 Tada card kinds in exact presentation order (opening, countdown, quiz, survey, transition, animation, media, interim results, leaderboard, closing).
-- Per-question parameters (question type, category, scoring, timer, cooldown, media attachments).
+- All 11 Tada card kinds in exact presentation order (opening, countdown, quiz, survey, transition, animation, media, interim results, cumulative answer recap, leaderboard, closing).
+- Per-question parameters (question type, category, scoring, timer, cooldown, media attachments, stage motion presets, decorative question underline).
 - Per-answer image URLs, display modes (`text`, `image`, `both`), and required accessibility `alt` text.
 - Human 1-based answer indices (1, 2, 3, 4) mapped automatically to native 0-based indices.
-- Studio defaults, leaderboard policies, audio cues, teams, and optional phone roster configuration.
+- Studio defaults (including global stage animation defaults and decorative question underline), leaderboard policies, audio cues, teams, and optional phone roster configuration.
 
 ---
 
@@ -26,16 +26,17 @@ Both formats represent a **complete, ordered show timeline** containing:
 
 | Card Kind | Type | Native Mapping | Key Config Properties |
 |---|---|---|---|
-| `opening` | Scene | `SceneConfig (opening)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
+| `opening` | Scene | `SceneConfig (opening)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `lottieUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 | `countdown` | Scene | `SceneConfig (countdown)` | `durationSeconds` (3–120s, default 10), `title`, `advance` (`auto` \| `manual`) |
-| `quiz` | Question | `question` + `playMode: "quiz"` | `questionType`, `question`, `answers` (2–4), `correctAnswers` (1–4), `timeSeconds`, `cooldownSeconds`, `maxPoints`, `penalty`, `media`, `reveal` |
-| `survey` | Question | `question` + `playMode: "survey"` | `questionType`, `question`, `answers` (2–4), no correct answers, `timeSeconds`, `cooldownSeconds`, `media`, `reveal` |
+| `quiz` | Question | `question` + `playMode: "quiz"` | `questionType`, `question`, `answers` (2–4), `correctAnswers` (1–4), `timeSeconds`, `cooldownSeconds`, `maxPoints`, `penalty`, `media`, `reveal`, `stageAnimations`, `questionDecoration` |
+| `survey` | Question | `question` + `playMode: "survey"` | `questionType`, `question`, `answers` (2–4), no correct answers, `timeSeconds`, `cooldownSeconds`, `media`, `reveal`, `stageAnimations`, `questionDecoration` |
 | `transition` | Scene | `SceneConfig (transition)` | `title`, `description`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
-| `animation` | Scene | `SceneConfig (animation)` | `preset` (e.g. `spotlight`, `confetti`, `curtain`, max 64 chars), `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
-| `media` | Scene | `SceneConfig (media)` | `mediaUrl` (safe HTTPS or `/media/`), `mediaType` (`image` \| `video`), `title`, `durationMs` (500–300000), `advance` (`auto` \| `manual`) |
+| `animation` | Scene | `SceneConfig (animation)` | `preset` (`spotlight`, `confetti`, `bounce`, `pulse`), `lottieUrl`, `lottieLoop`, `lottieSpeed`, `lottieFit`, `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
+| `media` | Scene | `SceneConfig (media)` | `mediaUrl` (safe HTTPS or `/media/`), `mediaType` (`image` \| `video` \| `audio`), `mediaFit` (`cover` \| `contain`), `volume`, `loop`, `muted`, `showControls`, `title`, `durationMs` (500–300000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 | `interimResults` | Scene | `SceneConfig (interimResults)` | `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
+| `answerRecap` | Scene | `SceneConfig (answerRecap)` | `title`, `subtitle`, `startQuestionKey` (preceding question key), `mode` (`mostSelected` \| `correctAnswer`), `maxItemsPerPage` (1–8), `showCounts`, `showPercentages`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
 | `leaderboard` | Scene | `SceneConfig (leaderboard)` | `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
-| `closing` | Scene | `SceneConfig (closing)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
+| `closing` | Scene | `SceneConfig (closing)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `lottieUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 
 ---
 
