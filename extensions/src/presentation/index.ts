@@ -25,3 +25,8 @@ export * from "./cinematic-clock"
 export * from "./cinematic-geometry"
 export * from "./cinematic-overlay"
 export * from "./cinematic-layer-stack"
+
+export * from "./tadazz-backdrop"
+export * from "./tadazz-answer-cards"
+export * from "./tadazz-leaderboard"
+export * from "./tadazz-zz-transition"

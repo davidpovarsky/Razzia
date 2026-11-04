@@ -26,6 +26,9 @@ import {
 import { useStageFit } from "./stage-fit"
 import { LottiePlayer } from "./lottie-player"
 import { CinematicLayerStack } from "./cinematic-layer-stack"
+import { TadazzSurveyCards, TadazzQuestionFrame } from "./tadazz-answer-cards"
+import { TadazzLeaderboard } from "./tadazz-leaderboard"
+import { TadazzZZTransition } from "./tadazz-zz-transition"
 import {
   AlertTriangle,
   Award,
@@ -90,6 +93,8 @@ export interface ScenePresenterProps {
   scene?: SceneConfig
   activeSceneData?: ActiveSceneData | null
   globalStageAnimations?: CardStageAnimations
+  /** Explicit opt-in; older Studio shows retain the unchanged Razzia scene layout. */
+  tadazzThemeEnabled?: boolean
   labels?: ScenePresenterLabels
   serverStartedAt?: number
   epoch?: number | string
@@ -164,6 +169,7 @@ export const ScenePresenter = ({
   scene,
   activeSceneData,
   globalStageAnimations,
+  tadazzThemeEnabled = false,
   labels,
   serverStartedAt,
   epoch,
@@ -301,6 +307,8 @@ export const ScenePresenter = ({
   const leaderboardEntries = activeSceneData?.leaderboard?.entries ?? []
   const interimResults = activeSceneData?.interimResults
   const answerRecap = activeSceneData?.answerRecap
+  const hasTadazzSurvey = tadazzThemeEnabled && kind === "interimResults" &&
+    interimResults?.options.length === 5 && interimResults.options.every((item) => Boolean(item.imageUrl))
 
   const isCinemaScene =
     ((kind === "opening" || kind === "closing") &&
@@ -815,7 +823,13 @@ export const ScenePresenter = ({
             ) : null,
           )}
 
-        {kind === "animation" && (
+        {kind === "animation" && activeScene && "preset" in activeScene &&
+          activeScene.preset === "tadazz-zz" && !("lottieUrl" in activeScene && activeScene.lottieUrl) && (
+            <TadazzZZTransition durationMs={durationMs} />
+          )}
+
+        {kind === "animation" && !(activeScene && "preset" in activeScene &&
+          activeScene.preset === "tadazz-zz" && !("lottieUrl" in activeScene && activeScene.lottieUrl)) && (
           <div
             data-testid={`scene-animation-preset-${
               activeScene && "preset" in activeScene
@@ -863,8 +877,19 @@ export const ScenePresenter = ({
           </div>
         )}
 
+        {/* Tadazz motion layer: real server-authoritative leaderboard, default Razzia editor untouched. */}
+        {kind === "leaderboard" && tadazzThemeEnabled && leaderboardEntries.length > 0 && (
+          <div className="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden">
+            <TadazzLeaderboard
+              entries={leaderboardEntries}
+              epochKey={sceneAnimationKey}
+              pointsLabel={labels?.points}
+              emptyLabel={labels?.noScores}
+            />
+          </div>
+        )}
         {/* Real Live Leaderboard */}
-        {kind === "leaderboard" && (
+        {kind === "leaderboard" && (!tadazzThemeEnabled || leaderboardEntries.length === 0) && (
           <div className="flex min-h-0 w-full max-w-xl flex-col items-center justify-center gap-2 overflow-hidden">
             {leaderboardEntries.length > 0 ? (
               <div className="w-full rounded-2xl border border-white/10 bg-black/50 p-2.5 sm:p-4 shadow-2xl backdrop-blur-md">
@@ -913,8 +938,36 @@ export const ScenePresenter = ({
           </div>
         )}
 
+        {/* Five equal-size image choices remain in their positions during the percentage reveal. */}
+        {hasTadazzSurvey && interimResults && (
+          <TadazzQuestionFrame question={interimResults.questionText}>
+            <TadazzSurveyCards
+              answers={interimResults.options.map((option) => option.label)}
+              visuals={interimResults.options.map((option, index) => ({
+                answerIndex: option.answerIndex ?? index,
+                url: option.imageUrl ?? "",
+                alt: option.alt ?? option.label,
+                display: "both" as const,
+              }))}
+              responses={Object.fromEntries(interimResults.options.map((option, index) => [
+                option.answerIndex ?? index, option.count ?? 0,
+              ]))}
+              percentages={Object.fromEntries(interimResults.options.map((option, index) => [
+                option.answerIndex ?? index, option.percentage ?? 0,
+              ]))}
+              resultStage
+              serverRevealStartedAt={effectiveServerStartedAt}
+              epochKey={sceneAnimationKey}
+              readOnly
+              animations={stageAnimations}
+              isSurvey
+              leaderLabel="★"
+              coLeaderLabel="★"
+            />
+          </TadazzQuestionFrame>
+        )}
         {/* Real Live Interim Results */}
-        {kind === "interimResults" && (
+        {kind === "interimResults" && !hasTadazzSurvey && (
           <div className="flex min-h-0 w-full max-w-5xl flex-1 flex-col items-center justify-center gap-2 overflow-hidden">
             {interimResults ? (
               (() => {

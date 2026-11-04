@@ -17,6 +17,7 @@ import {
   type QuestionDecoration,
 } from "./card-appearance"
 import { interludeSchema, type Interlude } from "./media"
+import { tadazzShowBackgroundSchema, type TadazzShowBackground } from "./tadazz-appearance"
 import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
 import {
   sceneAudioSchema,
@@ -794,6 +795,18 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       )
     } catch {
       throw new Error("errors:extensions.invalidDefaultQuestionDecorationJson")
+    }
+  }
+
+  let defaultTadazzBackground: TadazzShowBackground | undefined
+  const defaultTadazzBackgroundStr = showMap.get("tadazzBackgroundJson")
+  if (defaultTadazzBackgroundStr) {
+    try {
+      defaultTadazzBackground = tadazzShowBackgroundSchema.parse(
+        JSON.parse(defaultTadazzBackgroundStr),
+      )
+    } catch {
+      throw new Error("errors:extensions.invalidTadazzBackgroundJson")
     }
   }
 
@@ -1648,6 +1661,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       ...(defaultQuestionDecoration
         ? { questionDecoration: defaultQuestionDecoration }
         : {}),
+      ...(defaultTadazzBackground
+        ? { tadazzBackground: defaultTadazzBackground }
+        : {}),
     },
     cards,
     settings,
@@ -1718,6 +1734,13 @@ export function exportTadaShowWorkbook(
     showData.push([
       "defaultQuestionDecorationJson",
       JSON.stringify(show.defaults.questionDecoration),
+    ])
+  }
+
+  if (show.defaults?.tadazzBackground) {
+    showData.push([
+      "tadazzBackgroundJson",
+      JSON.stringify(show.defaults.tadazzBackground),
     ])
   }
 
