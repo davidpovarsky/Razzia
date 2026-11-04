@@ -10,6 +10,12 @@ import {
   sessionClaimsValidator,
 } from "@razzia/common/validators/auth"
 import { jwtSecret } from "@razzia/socket/env"
+import { accountsEnabled } from "@razzia/socket/services/account-scope"
+import {
+  activeAccount,
+  createAccountSession,
+  isAccountSessionValid,
+} from "@razzia/socket/services/account-auth"
 import { sign, verify } from "hono/jwt"
 import { v7 as uuid } from "uuid"
 
@@ -36,13 +42,34 @@ export const mintToken = async (
   const iat = Math.floor(Date.now() / 1000)
   const exp = iat + (role === SESSION_ROLES.MANAGER ? MANAGER_TTL : PLAYER_TTL)
 
-  const token = await sign({ sub, role, iat, exp }, jwtSecret, ALGORITHM)
+  const sid =
+    accountsEnabled() && role === SESSION_ROLES.MANAGER
+      ? activeAccount(sub)
+        ? createAccountSession(sub, exp)
+        : (() => {
+            throw new Error("Account inactive")
+          })()
+      : undefined
+  const token = await sign(
+    { sub, role, iat, exp, ...(sid ? { sid } : {}) },
+    jwtSecret,
+    ALGORITHM,
+  )
 
   return { token, clientId: sub, role, expiresAt: exp }
 }
 
-export const verifyToken = async (token: string): Promise<SessionClaims> =>
-  parseClaims(await verify(token, jwtSecret, ALGORITHM))
+export const verifyToken = async (token: string): Promise<SessionClaims> => {
+  const claims = parseClaims(await verify(token, jwtSecret, ALGORITHM))
+  if (
+    accountsEnabled() &&
+    claims.role === SESSION_ROLES.MANAGER &&
+    !isAccountSessionValid(claims.sub, claims.sid)
+  ) {
+    throw new Error("Manager session revoked or invalid")
+  }
+  return claims
+}
 
 export const verifyIgnoringExpiry = async (
   token: string,

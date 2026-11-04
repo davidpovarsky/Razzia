@@ -14,6 +14,7 @@ import { apiFactory } from "@razzia/socket/api/factory"
 import { requireManager, requireSession } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { mintJoinTicket } from "@razzia/socket/services/auth"
+import { grantMediaForGuest } from "@razzia/socket/services/media-access"
 import { getQuizz } from "@razzia/socket/services/config"
 import Game from "@razzia/socket/services/game"
 import { getIo } from "@razzia/socket/services/io"
@@ -133,20 +134,25 @@ const routes = apiFactory
       return c.json({ settings: game.settings })
     },
   )
-  .post("/check", zValidator("json", checkGameValidator, i18nHook), (c) => {
-    const { inviteCode } = c.req.valid("json")
-    const game = Registry.getInstance().getGameByInviteCode(inviteCode)
+  .post(
+    "/check",
+    zValidator("json", checkGameValidator, i18nHook),
+    async (c) => {
+      const { inviteCode } = c.req.valid("json")
+      const game = Registry.getInstance().getGameByInviteCode(inviteCode)
 
-    if (!game) {
-      return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
-    }
+      if (!game) {
+        return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
+      }
 
-    if (game.locked) {
-      return c.json({ error: "errors:game.locked" }, StatusCodes.FORBIDDEN)
-    }
+      if (game.locked) {
+        return c.json({ error: "errors:game.locked" }, StatusCodes.FORBIDDEN)
+      }
 
-    return c.json({ generatedUsernames: game.settings.generatedUsernames })
-  })
+      await grantMediaForGuest(c, game.gameId)
+      return c.json({ generatedUsernames: game.settings.generatedUsernames })
+    },
+  )
   .post(
     "/join",
     requireSession,
@@ -177,6 +183,7 @@ const routes = apiFactory
       const existing = game.players.find((p) => p.clientId === sub)
 
       if (existing && !rosterMatch) {
+        await grantMediaForGuest(c, game.gameId)
         return c.json({
           gameId: game.gameId,
           ticket: null,
@@ -184,7 +191,11 @@ const routes = apiFactory
         })
       }
 
-      if ((source === "phone" || normalizedPhone) && !rosterMatch && game.phoneInviteOnly) {
+      if (
+        (source === "phone" || normalizedPhone) &&
+        !rosterMatch &&
+        game.phoneInviteOnly
+      ) {
         return c.json(
           { error: "errors:game.locked", reason: "phone_invite_only" },
           StatusCodes.FORBIDDEN,
@@ -209,6 +220,7 @@ const routes = apiFactory
           ? undefined
           : resolvedName
 
+      await grantMediaForGuest(c, game.gameId)
       return c.json({
         gameId: game.gameId,
         ticket: await mintJoinTicket(sub, game.gameId, {
@@ -222,6 +234,14 @@ const routes = apiFactory
       })
     },
   )
+  // Public projector displays use an unguessable live game ID, never account credentials.
+  .get("/:gameId/display-media", async (c) => {
+    const game = Registry.getInstance().getGameById(c.req.param("gameId"))
+    if (!game)
+      return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
+    await grantMediaForGuest(c, game.gameId)
+    return c.json({ status: "ready" })
+  })
   .get("/:gameId/roster", requireManager, (c) => {
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
@@ -234,11 +254,7 @@ const routes = apiFactory
   .patch(
     "/:gameId/roster/settings",
     requireManager,
-    zValidator(
-      "json",
-      z.object({ phoneInviteOnly: z.boolean() }),
-      i18nHook,
-    ),
+    zValidator("json", z.object({ phoneInviteOnly: z.boolean() }), i18nHook),
     (c) => {
       const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
@@ -273,9 +289,7 @@ const routes = apiFactory
         return c.json(
           {
             error:
-              error instanceof Error
-                ? error.message
-                : "errors:invalidRequest",
+              error instanceof Error ? error.message : "errors:invalidRequest",
           },
           StatusCodes.BAD_REQUEST,
         )
@@ -401,7 +415,7 @@ const routes = apiFactory
         )
       }
 
-      const {game} = resolved
+      const { game } = resolved
 
       if (body.action === "join_or_poll") {
         let rosterId = body.rosterPlayerId

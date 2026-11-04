@@ -1,5 +1,6 @@
 import { createExtensionRoutes } from "@razzia/extensions/server"
 import { auth } from "@razzia/socket/api/routes/auth"
+import { accounts } from "@razzia/socket/api/routes/accounts"
 import { games } from "@razzia/socket/api/routes/games"
 import { media } from "@razzia/socket/api/routes/media"
 import { quizz } from "@razzia/socket/api/routes/quizz"
@@ -30,6 +31,7 @@ const extensionRoutes = createExtensionRoutes(
 const routes = new Hono()
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/auth", auth)
+  .route("/accounts", accounts)
   .route("/quizz", quizz)
   .route("/results", results)
   .route("/games", games)

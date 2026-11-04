@@ -1,4 +1,8 @@
-import { createDefaultGameSettings, EVENTS, SESSION_ROLES } from "@razzia/common/constants"
+import {
+  createDefaultGameSettings,
+  EVENTS,
+  SESSION_ROLES,
+} from "@razzia/common/constants"
 import {
   resolveQuestionPlayMode,
   type GameSettings,
@@ -30,6 +34,10 @@ import {
 } from "@razzia/extensions/server"
 import { isQuestionSupportedOnPstn } from "@razzia/extensions/telephony"
 import { getPath, saveResult } from "@razzia/socket/services/config"
+import {
+  accountsEnabled,
+  withAccount,
+} from "@razzia/socket/services/account-scope"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
@@ -207,7 +215,13 @@ class Game {
         this.managerStatus = null
         this.broadcastHostPresence()
       },
-      onGameFinished: saveResult,
+      onGameFinished: (result) => {
+        if (accountsEnabled()) {
+          void withAccount(managerClientId, () => saveResult(result))
+        } else {
+          saveResult(result)
+        }
+      },
       getSettings: () => this._settings,
       shouldShowLeaderboard: this.extensionSession
         ? (params) => {
@@ -433,8 +447,7 @@ class Game {
         },
         getLastCompletedQuestionSummary: () => {
           const dist =
-            this.lastCompletedDistribution ??
-            this.round.getRevealDistribution()
+            this.lastCompletedDistribution ?? this.round.getRevealDistribution()
 
           if (
             !dist ||
@@ -475,9 +488,7 @@ class Game {
           const isTie = winners.length > 1
 
           const options = q.answers.map((label: string, idx: number) => {
-            const visual = answerVisuals.find(
-              (v: any) => v.answerIndex === idx,
-            )
+            const visual = answerVisuals.find((v: any) => v.answerIndex === idx)
             return {
               answerIndex: idx,
               label,
@@ -669,9 +680,7 @@ class Game {
             title: scene.title,
             subtitle: scene.subtitle,
             startQuestionId:
-              scene.startQuestionId ??
-              selectedRange[0]?.questionId ??
-              null,
+              scene.startQuestionId ?? selectedRange[0]?.questionId ?? null,
             endQuestionId:
               selectedRange[selectedRange.length - 1]?.questionId ?? null,
             mode: scene.mode ?? "mostSelected",
@@ -691,6 +700,21 @@ class Game {
 
   get manager() {
     return this._manager
+  }
+
+  /** Public-room images only; never reveal media belonging to a different account. */
+  canViewMedia(name: string): boolean {
+    const content = JSON.stringify([
+      this.quizz,
+      this.extensionSession?.extras ?? {},
+    ])
+    const referenced = new Set(
+      Array.from(
+        content.matchAll(new RegExp("/media/([A-Za-z0-9_.-]+)", "g")),
+        (match) => match[1],
+      ),
+    )
+    return referenced.has(name)
   }
 
   get roundManager(): RoundManager {
@@ -832,7 +856,7 @@ class Game {
         ? this.playerManager.findByClientId(entry.clientId)
         : undefined
       const verdict = rosterPlayerId
-        ? this.lastVerdictByRosterId.get(rosterPlayerId) ?? null
+        ? (this.lastVerdictByRosterId.get(rosterPlayerId) ?? null)
         : null
 
       return {
@@ -862,7 +886,7 @@ class Game {
       : undefined
     const answered = player ? this.round.hasPlayerAnswered(player.id) : false
     const verdict = rosterPlayerId
-      ? this.lastVerdictByRosterId.get(rosterPlayerId) ?? null
+      ? (this.lastVerdictByRosterId.get(rosterPlayerId) ?? null)
       : null
 
     return {
@@ -982,10 +1006,11 @@ class Game {
       data: { clientId: player.clientId, role: "player" },
       to: (room: string) => this.io.to(room),
       emit: (ev: string, payload: unknown) => {
-        ;(this.io.to(player.id) as unknown as { emit: (_e: string, _p: unknown) => void }).emit(
-          ev,
-          payload,
-        )
+        ;(
+          this.io.to(player.id) as unknown as {
+            emit: (_e: string, _p: unknown) => void
+          }
+        ).emit(ev, payload)
       },
     } as unknown as Socket
 
@@ -1368,10 +1393,7 @@ class Game {
           ;(sanitized.data as Record<string, unknown>).remainingTime = remaining
         }
       }
-      socket.emit(
-        EVENTS.GAME.STATUS,
-        sanitized,
-      )
+      socket.emit(EVENTS.GAME.STATUS, sanitized)
     }
 
     const reconnectInfo = this.round.getReconnectInfo()
@@ -1635,7 +1657,8 @@ class Game {
         this.playerManager.updateSocketId(oldSocketId, socket.id)
         this.round.updatePlayerId(oldSocketId, socket.id)
         existingPlayer.connected = true
-        existingPlayer.username = rosterEntry.displayName || existingPlayer.username
+        existingPlayer.username =
+          rosterEntry.displayName || existingPlayer.username
 
         rosterEntry.clientId = clientId
         rosterEntry.status = "connected"
@@ -1737,8 +1760,7 @@ class Game {
       this.clientRosterIndex.set(clientId, rosterEntry.rosterPlayerId)
     } else {
       const rId = claimsExtra?.rosterPlayerId ?? generateRosterPlayerId()
-      const source =
-        claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
+      const source = claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
       this.rosterMap.set(rId, {
         rosterPlayerId: rId,
         clientId,
@@ -2202,7 +2224,10 @@ class Game {
       if (rId) {
         const entry = this.rosterMap.get(rId)
 
-        if (entry && (entry.preRegistered || entry.phoneE164 || entry.source === "phone")) {
+        if (
+          entry &&
+          (entry.preRegistered || entry.phoneE164 || entry.source === "phone")
+        ) {
           // Keep pre-registered / phone participants in the game as disconnected so they aren't lost in lobby
           this.setPlayerDisconnected(socketId, false)
 
@@ -2277,7 +2302,10 @@ class Game {
         const entry = rId ? this.rosterMap.get(rId) : undefined
 
         // Only remove ad-hoc web lobby leavers; keep pre-registered / phone participants
-        if (!entry || (!entry.preRegistered && !entry.phoneE164 && entry.source !== "phone")) {
+        if (
+          !entry ||
+          (!entry.preRegistered && !entry.phoneE164 && entry.source !== "phone")
+        ) {
           this.removePlayer(player.id)
         }
       }

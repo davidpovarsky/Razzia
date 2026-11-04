@@ -7,6 +7,7 @@ export interface SessionClaims {
   role: SessionRole
   iat: number
   exp: number
+  sid?: string
 }
 
 export interface SessionResponse {

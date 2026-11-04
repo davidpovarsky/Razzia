@@ -11,6 +11,7 @@ COPY packages/common/package.json ./packages/common/
 COPY packages/web/package.json ./packages/web/
 COPY packages/socket/package.json ./packages/socket/
 COPY packages/e2e/package.json ./packages/e2e/
+COPY extensions/package.json ./extensions/
 
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 

@@ -8,10 +8,12 @@ import {
   updateQuizz,
 } from "@razzia/socket/services/config"
 import Registry from "@razzia/socket/services/registry"
+import { checkAccountConfiguration } from "@razzia/socket/services/account-db"
 
 const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
 
 initConfig()
+checkAccountConfiguration()
 
 // Startup journal recovery: recover pending composite-save and media-delete transactions before accepting requests
 recoverStartupJournals({

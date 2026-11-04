@@ -40,21 +40,38 @@ const AudienceDisplayPage = () => {
     if (syncedRef.current) return
     syncedRef.current = true
 
-    socket.emit(EVENTS.SPECTATOR.JOIN, { gameId })
+    // Obtain temporary room-media authorization before joining the public display.
+    // This uses the active room ID and never requires a manager account.
+    let disposed = false
+    void fetch(`/api/games/${encodeURIComponent(gameId)}/display-media`, {
+      credentials: "same-origin",
+      cache: "no-store",
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error("Room no longer exists")
+        if (!disposed) socket.emit(EVENTS.SPECTATOR.JOIN, { gameId })
+      })
+      .catch(() => {
+        if (!disposed) {
+          syncedRef.current = false
+          setResetMessage("errors:game.notFound")
+        }
+      })
+    return () => {
+      disposed = true
+    }
   }, [isConnected, gameId, socket])
 
-  useEvent(
-    EVENTS.SPECTATOR.SUCCESS_JOIN,
-    () => {
-      setJoined(true)
-      setStatus((prev) =>
+  useEvent(EVENTS.SPECTATOR.SUCCESS_JOIN, () => {
+    setJoined(true)
+    setStatus(
+      (prev) =>
         prev ?? {
           name: STATUS.WAIT as Status,
           data: { text: "game:waitingForPlayers" },
         },
-      )
-    },
-  )
+    )
+  })
 
   useEvent(
     EVENTS.GAME.STATUS,
@@ -71,12 +88,12 @@ const AudienceDisplayPage = () => {
     return (
       <main className="relative flex h-screen w-full items-center justify-center p-4">
         <GameBackground />
-        <div className="z-10 flex max-w-md flex-col items-center gap-4 rounded-2xl border border-white/10 bg-black/70 p-8 text-center text-white backdrop-blur-md shadow-2xl">
+        <div className="z-10 flex max-w-md flex-col items-center gap-4 rounded-2xl border border-white/10 bg-black/70 p-8 text-center text-white shadow-2xl backdrop-blur-md">
           <Tv className="size-16 text-white/50" />
-          <h1 className="text-2xl font-black">{t(resetMessage, "Show Concluded")}</h1>
-          <p className="text-sm text-white/70">
-            {t("game:summary.title")}
-          </p>
+          <h1 className="text-2xl font-black">
+            {t(resetMessage, "Show Concluded")}
+          </h1>
+          <p className="text-sm text-white/70">{t("game:summary.title")}</p>
         </div>
       </main>
     )

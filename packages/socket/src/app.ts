@@ -1,11 +1,12 @@
 import type { ServerType } from "@hono/node-server"
-import { EVENTS } from "@razzia/common/constants"
+import { EVENTS, SESSION_ROLES } from "@razzia/common/constants"
 import type { Server } from "@razzia/common/types/game/socket"
 import { clientEventValidators } from "@razzia/common/validators/socket"
 import { api } from "@razzia/socket/api"
 import { gameSocketHandlers } from "@razzia/socket/handlers/game"
 import type { SocketHandler } from "@razzia/socket/handlers/types"
 import { verifyToken } from "@razzia/socket/services/auth"
+import { accountsEnabled } from "@razzia/socket/services/account-scope"
 import { DomainError } from "@razzia/socket/services/errors"
 import { setIo } from "@razzia/socket/services/io"
 import { Hono } from "hono"
@@ -104,7 +105,16 @@ export const createSocketServer = (server: ServerType): Server => {
       `A user connected: socketId: ${socket.id}, clientId: ${socket.data.clientId}`,
     )
 
-    socket.use((packet, next) => {
+    socket.use(async (packet, next) => {
+      // A revoked manager must not retain privileged controls through an open websocket.
+      if (accountsEnabled() && socket.data.role === SESSION_ROLES.MANAGER) {
+        try {
+          await verifyToken(String(socket.handshake.auth.token ?? ""))
+        } catch {
+          socket.disconnect(true)
+          return
+        }
+      }
       const validator = eventValidators[packet[0]]
 
       if (!validator) {

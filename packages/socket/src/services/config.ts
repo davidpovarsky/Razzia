@@ -11,6 +11,7 @@ import {
 } from "@razzia/common/validators/quizz"
 import { invalidInput, notFound } from "@razzia/socket/services/errors"
 import { normalizeFilename } from "@razzia/socket/utils/file"
+import { resolveTenantFile } from "@razzia/socket/services/account-scope"
 import fs from "fs"
 import { nanoid } from "nanoid"
 import { join, resolve } from "path"
@@ -19,18 +20,18 @@ export const getPath = (path = "") => {
   const configPath = process.env.CONFIG_PATH
 
   if (configPath) {
-    return resolve(configPath, path)
+    return resolveTenantFile(resolve(configPath), path)
   }
 
   if (fs.existsSync(resolve(process.cwd(), "config"))) {
-    return resolve(process.cwd(), "config", path)
+    return resolveTenantFile(resolve(process.cwd(), "config"), path)
   }
 
   if (fs.existsSync(resolve(process.cwd(), "../config"))) {
-    return resolve(process.cwd(), "../config", path)
+    return resolveTenantFile(resolve(process.cwd(), "../config"), path)
   }
 
-  return resolve(process.cwd(), "../../config", path)
+  return resolveTenantFile(resolve(process.cwd(), "../../config"), path)
 }
 
 const readJson = (filePath: string): Record<string, unknown> | null => {

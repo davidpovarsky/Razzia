@@ -364,7 +364,7 @@ const Answers = ({
               onSubmit={(index) => handleSubmit([index])}
               readOnly={!canSubmit}
               animations={stageAnimations}
-              choicesAriaLabel={t("game:question.answers", "Answer choices")}
+              choicesAriaLabel={t("game:hud.answers", "Answer choices")}
             />
           </div>
         ) : (

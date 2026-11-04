@@ -8,12 +8,15 @@ import {
 import { readClaims } from "@razzia/socket/api/middleware"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { managerPassword } from "@razzia/socket/env"
+import { accountsEnabled } from "@razzia/socket/services/account-scope"
+import { revokeAccountSession } from "@razzia/socket/services/account-auth"
 import {
   mintToken,
   newClientId,
   verifyIgnoringExpiry,
   verifyToken,
 } from "@razzia/socket/services/auth"
+import { deleteCookie } from "hono/cookie"
 import { Hono, type Context } from "hono"
 import { JwtTokenExpired } from "hono/utils/jwt/types"
 import { StatusCodes } from "http-status-codes"
@@ -21,16 +24,11 @@ import { StatusCodes } from "http-status-codes"
 const readRequestToken = async (c: Context): Promise<string | undefined> => {
   try {
     const result = sessionRequestValidator.safeParse(await c.req.json())
-
-    if (result.success && result.data.token) {
-      return result.data.token
-    }
+    if (result.success && result.data.token) return result.data.token
   } catch {
-    /* Empty */
+    /* No session token in body */
   }
-
   const header = c.req.header("Authorization")
-
   return header?.startsWith("Bearer ")
     ? header.slice("Bearer ".length)
     : undefined
@@ -40,16 +38,12 @@ const freshPlayerSession = (): Promise<SessionResponse> =>
   mintToken(newClientId(), SESSION_ROLES.PLAYER)
 
 const routes = new Hono()
+  .get("/mode", (c) => c.json({ accountsEnabled: accountsEnabled() }))
   .post("/session", async (c) => {
     const token = await readRequestToken(c)
-
-    if (!token) {
-      return c.json(await freshPlayerSession())
-    }
-
+    if (!token) return c.json(await freshPlayerSession())
     try {
       const claims = await verifyToken(token)
-
       return c.json({
         token,
         clientId: claims.sub,
@@ -60,13 +54,14 @@ const routes = new Hono()
       if (error instanceof JwtTokenExpired) {
         try {
           const claims = await verifyIgnoringExpiry(token)
-
-          return c.json(await mintToken(claims.sub, SESSION_ROLES.PLAYER))
+          if (claims.role === SESSION_ROLES.PLAYER || !accountsEnabled())
+            return c.json(await mintToken(claims.sub, SESSION_ROLES.PLAYER))
+          if (claims.sid) revokeAccountSession(claims.sid)
         } catch {
-          /* Empty */
+          /* Bad signature: new anonymous player session */
         }
       }
-
+      deleteCookie(c, "tdz_media_auth", { path: "/media" })
       return c.json(await freshPlayerSession())
     }
   })
@@ -74,24 +69,18 @@ const routes = new Hono()
     "/manager",
     zValidator("json", managerLoginValidator, i18nHook),
     async (c) => {
-      const { password } = c.req.valid("json")
-
-      if (!managerPassword) {
+      if (accountsEnabled() || !managerPassword)
         return c.json(
           { error: "errors:manager.passwordNotConfigured" },
           StatusCodes.FORBIDDEN,
         )
-      }
-
-      if (password !== managerPassword) {
+      const { password } = c.req.valid("json")
+      if (password !== managerPassword)
         return c.json(
           { error: "errors:manager.invalidPassword" },
           StatusCodes.FORBIDDEN,
         )
-      }
-
       const claims = await readClaims(c)
-
       return c.json(
         await mintToken(claims?.sub ?? newClientId(), SESSION_ROLES.MANAGER),
       )
@@ -99,15 +88,23 @@ const routes = new Hono()
   )
   .post("/logout", async (c) => {
     const claims = await readClaims(c)
-
-    if (!claims) {
+    if (!claims)
       return c.json(
         { error: "errors:auth.unauthorized" },
         StatusCodes.UNAUTHORIZED,
       )
-    }
-
-    return c.json(await mintToken(claims.sub, SESSION_ROLES.PLAYER))
+    if (
+      accountsEnabled() &&
+      claims.role === SESSION_ROLES.MANAGER &&
+      claims.sid
+    )
+      revokeAccountSession(claims.sid)
+    deleteCookie(c, "tdz_media_auth", { path: "/media" })
+    return c.json(
+      await (accountsEnabled()
+        ? freshPlayerSession()
+        : mintToken(claims.sub, SESSION_ROLES.PLAYER)),
+    )
   })
 
 export const auth = routes
