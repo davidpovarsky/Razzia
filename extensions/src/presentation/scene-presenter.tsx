@@ -26,6 +26,7 @@ import {
 import { useStageFit } from "./stage-fit"
 import { LottiePlayer } from "./lottie-player"
 import { CinematicLayerStack } from "./cinematic-layer-stack"
+import { TadazzLeaderboard } from "./tadazz-leaderboard"
 import {
   AlertTriangle,
   Award,
@@ -90,6 +91,7 @@ export interface ScenePresenterProps {
   scene?: SceneConfig
   activeSceneData?: ActiveSceneData | null
   globalStageAnimations?: CardStageAnimations
+  tadazzEnabled?: boolean
   labels?: ScenePresenterLabels
   serverStartedAt?: number
   epoch?: number | string
@@ -164,6 +166,7 @@ export const ScenePresenter = ({
   scene,
   activeSceneData,
   globalStageAnimations,
+  tadazzEnabled = false,
   labels,
   serverStartedAt,
   epoch,
@@ -867,6 +870,14 @@ export const ScenePresenter = ({
         {kind === "leaderboard" && (
           <div className="flex min-h-0 w-full max-w-xl flex-col items-center justify-center gap-2 overflow-hidden">
             {leaderboardEntries.length > 0 ? (
+              tadazzEnabled ? (
+                <TadazzLeaderboard
+                  entries={leaderboardEntries}
+                  epochKey={sceneAnimationKey}
+                  pointsLabel={labels?.points ?? "pts"}
+                  emptyLabel={labels?.noScores ?? "No scores recorded yet."}
+                />
+              ) : (
               <div className="w-full rounded-2xl border border-white/10 bg-black/50 p-2.5 sm:p-4 shadow-2xl backdrop-blur-md">
                 <ol className="divide-y divide-white/10">
                   {leaderboardEntries.slice(0, 6).map((entry, idx) => (
@@ -905,6 +916,7 @@ export const ScenePresenter = ({
                   ))}
                 </ol>
               </div>
+              )
             ) : (
               <div className="rounded-xl border border-white/10 bg-black/40 px-6 py-4 text-sm text-white/70">
                 {labels?.noScores ?? "No scores recorded yet."}

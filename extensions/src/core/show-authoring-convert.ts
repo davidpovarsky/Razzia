@@ -408,6 +408,9 @@ export function authoredShowToNativeBundleDraft(
     ...(show.defaults?.questionDecoration
       ? { questionDecoration: show.defaults.questionDecoration }
       : {}),
+    ...(show.defaults?.tadazzBackground
+      ? { tadazzBackground: show.defaults.tadazzBackground }
+      : {}),
   }
 
   // Apply settings channel overrides if present

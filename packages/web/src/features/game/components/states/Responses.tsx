@@ -10,6 +10,7 @@ import {
 import {
   calculateAggregatePercentages,
   calculateRevealState,
+  TadazzSurveyCards,
 } from "@razzia/extensions/presentation"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
@@ -259,8 +260,8 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
   const hasVisuals = Boolean(
     answerVisuals &&
-      answerVisuals.length > 0 &&
-      answerVisuals.some((v) => Boolean(v.url)),
+    answerVisuals.length > 0 &&
+    answerVisuals.some((v) => Boolean(v.url)),
   )
 
   const winnerIndices = (() => {
@@ -278,31 +279,41 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
   const isTie = winnerIndices.length > 1
 
   const defaultsObj = extensionState?.extras?.defaults as
-    | { stageAnimations?: CardStageAnimations }
+    | {
+        stageAnimations?: CardStageAnimations
+        tadazzBackground?: { mode: "original" | "animated" | "static" }
+      }
     | undefined
 
   const stageAnimations = resolveCardStageAnimations({
     questionEntrance: extensionState?.extras?.questionEntrance as
-      | QuestionEntranceConfig
-      | undefined,
+      QuestionEntranceConfig | undefined,
     stageAnimations: extensionState?.extras?.stageAnimations as
-      | CardStageAnimations
-      | undefined,
+      CardStageAnimations | undefined,
     globalStageAnimations: defaultsObj?.stageAnimations,
   })
 
   const animationEpochKey = `${extensionState?.questionId ?? question}-${extensionState?.epoch ?? 0}-responses`
 
+  const showTadazzCards =
+    defaultsObj?.tadazzBackground?.mode !== undefined &&
+    defaultsObj.tadazzBackground.mode !== "original" &&
+    type === "single" &&
+    isSurvey &&
+    hasVisuals &&
+    answers.length >= 2 &&
+    answers.length <= 5
+
   return (
-    <div className="flex min-h-0 h-full w-full flex-1 flex-col justify-between overflow-hidden px-3 py-2 sm:p-4">
-      <div className="mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden">
-        <h2 className="max-w-4xl shrink-0 text-center text-lg sm:text-2xl md:text-3xl lg:text-4xl font-black tracking-tight text-white drop-shadow-2xl break-words leading-tight">
+    <div className="flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden px-3 py-2 sm:p-4">
+      <div className="mx-auto flex h-full min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4">
+        <h2 className="max-w-4xl shrink-0 text-center text-lg leading-tight font-black tracking-tight break-words text-white drop-shadow-2xl sm:text-2xl md:text-3xl lg:text-4xl">
           {question}
         </h2>
 
         {/* Responders count badge */}
         {revealDistribution && (
-          <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-semibold text-white/90 shadow-md backdrop-blur-md">
+          <div className="flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-1 text-xs font-semibold text-white/90 shadow-md backdrop-blur-md sm:px-4 sm:py-1.5 sm:text-sm">
             <span>
               {t("extensions:reveal.answeredRatio", {
                 responders: revealDistribution.totalResponders,
@@ -314,23 +325,50 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
 
         {/* Answer Cards: PhotoCardGrid when visuals present; original AnswerButton grid otherwise */}
         {hasVisuals ? (
-          <div className="min-h-0 w-full flex-1 flex flex-col justify-center overflow-hidden">
-            <PhotoCardGrid
-              answers={answers}
-              visuals={answerVisuals}
-              responses={responses}
-              percentages={timelineState.displayPercentages}
-              winners={winnerIndices}
-              isTie={isTie}
-              isRevealed={isRevealed}
-              isSurvey={isSurvey}
-              readOnly
-              stageAnimations={stageAnimations}
-              animationEpochKey={animationEpochKey}
-            />
+          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden">
+            {showTadazzCards ? (
+              <TadazzSurveyCards
+                key={animationEpochKey}
+                answers={answers}
+                visuals={answerVisuals}
+                responses={responses}
+                percentages={targetPercentages}
+                resultStage
+                serverRevealStartedAt={revealDistribution?.revealStartedAt}
+                epochKey={animationEpochKey}
+                animations={stageAnimations}
+                readOnly
+                leaderLabel={t("extensions:reveal.leader", "Most selected")}
+                coLeaderLabel={t(
+                  "extensions:reveal.coLeader",
+                  "Joint favourite",
+                )}
+                votesLabel={() =>
+                  t("extensions:studio.scene.votesSuffix", "votes")
+                }
+                resultsAriaLabel={t(
+                  "extensions:studio.scene.interimResultsDefaultTitle",
+                  "Survey results",
+                )}
+              />
+            ) : (
+              <PhotoCardGrid
+                answers={answers}
+                visuals={answerVisuals}
+                responses={responses}
+                percentages={timelineState.displayPercentages}
+                winners={winnerIndices}
+                isTie={isTie}
+                isRevealed={isRevealed}
+                isSurvey={isSurvey}
+                readOnly
+                stageAnimations={stageAnimations}
+                animationEpochKey={animationEpochKey}
+              />
+            )}
           </div>
         ) : (
-          <div className="mt-1 sm:mt-2 grid w-full max-w-5xl grid-cols-1 gap-2 sm:gap-3 md:grid-cols-2">
+          <div className="mt-1 grid w-full max-w-5xl grid-cols-1 gap-2 sm:mt-2 sm:gap-3 md:grid-cols-2">
             {answers.map((answer, key) => {
               const pct = timelineState.displayPercentages[key] ?? 0
               const count = responses[key] ?? 0

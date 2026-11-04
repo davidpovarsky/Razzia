@@ -7,6 +7,8 @@ import {
 import {
   EXTENSION_EVENTS,
   resolveEffectiveCardBackground,
+  resolveTadazzStageBackground,
+  type TadazzShowBackground,
   type CardAudioOverrides,
   type CardBackgroundOverride,
   type CueId,
@@ -18,6 +20,8 @@ import {
 } from "@razzia/extensions/core"
 import {
   AudioCuePlayer,
+  TADAZZ_IMAGE_URL,
+  TadazzAnimatedBackdrop,
   InterludePresenter,
   ScenePresenter,
   StageFitContainer,
@@ -230,14 +234,11 @@ const GameWrapper = ({
     setTotalPlayers(total)
   })
 
-  useEvent(
-    EVENTS.MANAGER.HOST_PRESENCE,
-    (snapshot: HostPresenceSnapshot) => {
-      if (manager) {
-        updateManager({ hostPresence: snapshot })
-      }
-    },
-  )
+  useEvent(EVENTS.MANAGER.HOST_PRESENCE, (snapshot: HostPresenceSnapshot) => {
+    if (manager) {
+      updateManager({ hostPresence: snapshot })
+    }
+  })
 
   useEvent(EVENTS.MANAGER.AUTO_ADVANCE, (state) => {
     setCountdown((current) => {
@@ -282,8 +283,7 @@ const GameWrapper = ({
 
   const rawCardBackground =
     (extensionState?.extras.cardBackground as
-      | CardBackgroundOverride
-      | undefined) ?? currentSceneObj?.background
+      CardBackgroundOverride | undefined) ?? currentSceneObj?.background
 
   const effectiveBackground = useMemo(
     () => resolveEffectiveCardBackground(rawCardBackground),
@@ -295,6 +295,23 @@ const GameWrapper = ({
     effectiveBackground.mode === "card" &&
     Boolean(effectiveBackground.url) &&
     cardBgErrorUrl !== effectiveBackground.url
+
+  const [tadazzImageUnavailable, setTadazzImageUnavailable] = useState(false)
+  const tadazzSettings = (
+    extensionState?.extras.defaults as
+      { tadazzBackground?: TadazzShowBackground } | undefined
+  )?.tadazzBackground
+  // Video scenes and card-specific art always override the show backdrop.
+  const tadazzBackdrop = resolveTadazzStageBackground({
+    settings: tadazzSettings,
+    cardBackground: showCustomCardBackground ? rawCardBackground : undefined,
+    fullScreenVideo:
+      (extensionState?.phase === "scene" &&
+        currentSceneObj?.mediaType === "video") ||
+      activeStatusMediaType === MEDIA_TYPES.VIDEO,
+    imageReady: !tadazzImageUnavailable,
+    tadazzImageUrl: TADAZZ_IMAGE_URL,
+  })
 
   const activePhaseCueId: CueId | undefined = useMemo(() => {
     if (!extensionState) {
@@ -326,12 +343,12 @@ const GameWrapper = ({
 
   const hasCompetingMediaAudio = Boolean(
     activeStatusMediaType === MEDIA_TYPES.VIDEO ||
-      activeStatusMediaType === MEDIA_TYPES.AUDIO ||
-      (extensionState?.phase === "scene" &&
-        (currentSceneObj?.mediaType === "video" ||
-          currentSceneObj?.mediaType === "audio") &&
-        !currentSceneObj?.muted &&
-        Boolean(currentSceneObj?.mediaUrl)),
+    activeStatusMediaType === MEDIA_TYPES.AUDIO ||
+    (extensionState?.phase === "scene" &&
+      (currentSceneObj?.mediaType === "video" ||
+        currentSceneObj?.mediaType === "audio") &&
+      !currentSceneObj?.muted &&
+      Boolean(currentSceneObj?.mediaUrl)),
   )
 
   const activeCardKey =
@@ -356,17 +373,15 @@ const GameWrapper = ({
       extensionState.phase === "scene" &&
       (Boolean(extensionState.extras.currentScene) ||
         (extensionState.extras.activeTimelineStep &&
-          (extensionState.extras.activeTimelineStep as { kind?: string }).kind !== "question"))
+          (extensionState.extras.activeTimelineStep as { kind?: string })
+            .kind !== "question"))
     ) {
       const activeStep = extensionState.extras.activeTimelineStep as
-        | ScenePresenterProps["step"]
-        | undefined
+        ScenePresenterProps["step"] | undefined
       const currentScene = extensionState.extras.currentScene as
-        | ScenePresenterProps["scene"]
-        | undefined
+        ScenePresenterProps["scene"] | undefined
       const activeSceneData = extensionState.extras.activeSceneData as
-        | ScenePresenterProps["activeSceneData"]
-        | undefined
+        ScenePresenterProps["activeSceneData"] | undefined
       const globalStageAnimations = (
         extensionState.extras.defaults as
           | { stageAnimations?: ScenePresenterProps["globalStageAnimations"] }
@@ -424,6 +439,10 @@ const GameWrapper = ({
                 scene={currentScene}
                 activeSceneData={activeSceneData}
                 globalStageAnimations={globalStageAnimations}
+                tadazzEnabled={
+                  tadazzBackdrop.source === "tadazz" ||
+                  tadazzBackdrop.source === "static"
+                }
                 labels={scenePresenterLabels}
                 serverStartedAt={extensionState.startedAt}
                 epoch={extensionState.epoch}
@@ -477,7 +496,10 @@ const GameWrapper = ({
       )
     }
 
-    if (extensionState.phase === "interlude" && extensionState.extras.interlude) {
+    if (
+      extensionState.phase === "interlude" &&
+      extensionState.extras.interlude
+    ) {
       return (
         <ExtensionStateProvider value={extensionState}>
           <ViewRoleContext.Provider value={effectiveRole}>
@@ -529,8 +551,18 @@ const GameWrapper = ({
   }
 
   return (
-    <section className="relative flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden isolate">
+    <section className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden">
       <GameBackground />
+
+      {(tadazzBackdrop.source === "tadazz" ||
+        tadazzBackdrop.source === "static") && (
+        <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
+          <TadazzAnimatedBackdrop
+            state={tadazzBackdrop}
+            onImageFailure={() => setTadazzImageUnavailable(true)}
+          />
+        </div>
+      )}
 
       {showCustomCardBackground && effectiveBackground.url && (
         <div
@@ -566,7 +598,7 @@ const GameWrapper = ({
         </div>
       )}
 
-      <div className="z-10 flex min-h-0 h-full w-full flex-1 flex-col justify-between max-w-full overflow-hidden">
+      <div className="z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
         {!isConnected && !statusName ? (
           <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
             <Loader className="h-30" />
@@ -585,13 +617,11 @@ const GameWrapper = ({
                 cueId={activePhaseCueId}
                 audioExtras={
                   extensionState.extras.audio as
-                    | QuizExtrasV1["audio"]
-                    | undefined
+                    QuizExtrasV1["audio"] | undefined
                 }
                 cardAudioCues={
                   extensionState.extras.cardAudioCues as
-                    | CardAudioOverrides
-                    | undefined
+                    CardAudioOverrides | undefined
                 }
                 sceneAudio={
                   (extensionState.extras.sceneAudio as
@@ -619,20 +649,21 @@ const GameWrapper = ({
             {manager ? (
               <div
                 className={clsx(
-                  "z-50 flex flex-wrap items-center gap-2 sm:gap-3 p-2 sm:p-4 max-w-full box-border",
+                  "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
                   {
-                    "absolute inset-x-0 bottom-0": statusName === STATUS.FINISHED,
+                    "absolute inset-x-0 bottom-0":
+                      statusName === STATUS.FINISHED,
                   },
                 )}
               >
                 {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                  <div className="flex shrink-0 items-center gap-2 sm:gap-3 rounded-lg bg-black/40 px-2.5 py-1 sm:px-3 sm:py-1.5 text-sm sm:text-base md:text-xl font-bold text-white drop-shadow-md">
+                  <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
                     {!locked && (
                       <>
-                        <span className="truncate max-w-[120px] sm:max-w-none">
+                        <span className="max-w-[120px] truncate sm:max-w-none">
                           {window.location.host}
                         </span>
-                        <span className="h-4 sm:h-5 w-px bg-white/40" />
+                        <span className="h-4 w-px bg-white/40 sm:h-5" />
                         <span>{inviteCode}</span>
                       </>
                     )}
@@ -651,7 +682,7 @@ const GameWrapper = ({
                     onClick={() => setPlayersModalOpen(true)}
                     data-testid="host-bottom-players-btn"
                     className={clsx(
-                      "ml-auto flex shrink-0 items-center gap-1.5 sm:gap-2 rounded-lg bg-black/40 px-2.5 py-1 sm:px-3 sm:py-1.5 text-sm sm:text-base md:text-xl font-bold text-white drop-shadow-md transition-colors hover:bg-black/60",
+                      "ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl",
                       !isConnected && "opacity-60",
                     )}
                   >
@@ -660,7 +691,7 @@ const GameWrapper = ({
                       {(() => {
                         const connectedCount =
                           hostPresence?.connectedNow ??
-                          players.filter((p) =>  p.connected).length
+                          players.filter((p) => p.connected).length
                         const registeredCount =
                           hostPresence?.registeredTotal ??
                           totalPlayers ??
@@ -677,7 +708,7 @@ const GameWrapper = ({
                         return String(totalPlayers ?? players.length)
                       })()}
                     </span>
-                    <span className="ml-1 hidden rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex items-center gap-1">
+                    <span className="ml-1 hidden items-center gap-1 rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex">
                       <PhoneCall className="size-3" />
                       {t("extensions:roster.playersButton", "Players")}
                     </span>

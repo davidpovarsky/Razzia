@@ -7,6 +7,7 @@ import {
   showMediaCatalogItemSchema,
 } from "./card-appearance"
 import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
+import { tadazzShowBackgroundSchema } from "./tadazz-appearance"
 import {
   audioExtrasSchema,
   createDefaultAudioExtras,
@@ -400,6 +401,7 @@ export const studioDefaultsSchema = z.strictObject({
   advanceMode: z.enum(["auto", "manual"]).default("auto"),
   stageAnimations: cardStageAnimationsSchema.optional(),
   questionDecoration: questionDecorationSchema.optional(),
+  tadazzBackground: tadazzShowBackgroundSchema.optional(),
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>

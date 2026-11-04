@@ -3,6 +3,9 @@ import {
   QUESTION_ENTRANCE_PRESETS,
   resolveCardStageAnimations,
   resolveQuestionDecoration,
+  resolveTadazzStageBackground,
+  tadazzShowBackgroundSchema,
+  type TadazzShowBackground,
   type CardStageAnimations,
   type QuestionDecorationPreset,
   type QuestionEntrancePreset,
@@ -11,6 +14,11 @@ import {
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import Card from "@razzia/web/components/Card"
+import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
+import {
+  TADAZZ_IMAGE_URL,
+  TadazzAnimatedBackdrop,
+} from "@razzia/extensions/presentation"
 import ConfigField from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField"
 import {
   PlaySquare,
@@ -20,12 +28,24 @@ import {
   Trophy,
 } from "lucide-react"
 import { useTranslation } from "react-i18next"
+import { useState } from "react"
 import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 
 export const StudioSettingsPage = () => {
   const { t } = useTranslation()
   const { defaults, updateDefaults, bulkApplyQuestionMode } = useStudioEditor()
+  const [tadazzMediaPickerOpen, setTadazzMediaPickerOpen] = useState(false)
+  const tadazzBackground =
+    defaults.tadazzBackground ?? tadazzShowBackgroundSchema.parse({})
+  const updateTadazzBackground = (updates: Partial<TadazzShowBackground>) => {
+    updateDefaults({
+      tadazzBackground: tadazzShowBackgroundSchema.parse({
+        ...tadazzBackground,
+        ...updates,
+      }),
+    })
+  }
 
   const newQuestionModeItems = [
     {
@@ -41,11 +61,17 @@ export const StudioSettingsPage = () => {
   const leaderboardPolicyItems = [
     {
       value: "cardOnly",
-      label: t("extensions:studio.settings.policyCardOnly", "Timeline cards only"),
+      label: t(
+        "extensions:studio.settings.policyCardOnly",
+        "Timeline cards only",
+      ),
     },
     {
       value: "upstream",
-      label: t("extensions:studio.settings.policyUpstream", "Standard Razzia rule"),
+      label: t(
+        "extensions:studio.settings.policyUpstream",
+        "Standard Razzia rule",
+      ),
     },
     {
       value: "everyN",
@@ -60,11 +86,17 @@ export const StudioSettingsPage = () => {
   const advanceModeItems = [
     {
       value: "auto",
-      label: t("extensions:studio.settings.autoAdvance", "Automatic (timer completion)"),
+      label: t(
+        "extensions:studio.settings.autoAdvance",
+        "Automatic (timer completion)",
+      ),
     },
     {
       value: "manual",
-      label: t("extensions:studio.settings.manualAdvance", "Manual (host advances)"),
+      label: t(
+        "extensions:studio.settings.manualAdvance",
+        "Manual (host advances)",
+      ),
     },
   ]
 
@@ -93,7 +125,10 @@ export const StudioSettingsPage = () => {
                           ? t("extensions:entrance.cascade", "Cascade")
                           : p === "fan-flip"
                             ? t("extensions:entrance.fanFlip", "Fan Flip")
-                            : t("extensions:entrance.wipeRipple", "Wipe Ripple"),
+                            : t(
+                                "extensions:entrance.wipeRipple",
+                                "Wipe Ripple",
+                              ),
   }))
 
   const decorationPresetItems = QUESTION_DECORATION_PRESETS.map((dp) => ({
@@ -137,17 +172,20 @@ export const StudioSettingsPage = () => {
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-muted/40 p-6 md:p-10">
+    <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
-        <div className="flex items-center gap-3 border-b border-accent pb-4">
-          <div className="rounded-lg bg-primary/10 p-2 text-primary">
+        <div className="border-accent flex items-center gap-3 border-b pb-4">
+          <div className="bg-primary/10 text-primary rounded-lg p-2">
             <SettingsIcon className="size-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
-              {t("extensions:studio.settings.globalTitle", "Studio Settings & Defaults")}
+            <h1 className="text-foreground text-2xl font-bold tracking-tight">
+              {t(
+                "extensions:studio.settings.globalTitle",
+                "Studio Settings & Defaults",
+              )}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t(
                 "extensions:studio.settings.subtitle",
                 "Configure timeline show defaults, card creation behaviors, and global presentation policies.",
@@ -156,11 +194,11 @@ export const StudioSettingsPage = () => {
           </div>
         </div>
 
-        <Card className="w-full max-w-none flex flex-col gap-6 p-6 md:p-8">
+        <Card className="flex w-full max-w-none flex-col gap-6 p-6 md:p-8">
           {/* Default Question Mode */}
           <ConfigField>
             <ConfigField.Label
-              icon={<PlaySquare className="size-4 text-primary" />}
+              icon={<PlaySquare className="text-primary size-4" />}
               label={t(
                 "extensions:studio.settings.newQuestionMode",
                 "Default Mode for New Cards",
@@ -182,15 +220,15 @@ export const StudioSettingsPage = () => {
           </ConfigField>
 
           {/* Bulk Action */}
-          <div className="rounded-lg border border-accent bg-accent/20 p-4 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div className="border-accent bg-accent/20 flex flex-col items-start justify-between gap-4 rounded-lg border p-4 sm:flex-row sm:items-center">
             <div>
-              <p className="text-sm font-bold text-foreground">
+              <p className="text-foreground text-sm font-bold">
                 {t(
                   "extensions:studio.settings.applyAllQuestions",
                   "Apply to All Existing Question Cards",
                 )}
               </p>
-              <p className="text-xs text-muted-foreground">
+              <p className="text-muted-foreground text-xs">
                 {t("extensions:studio.settings.bulkDescription", {
                   mode: defaults.newQuestionMode,
                   defaultValue: `Bulk converts all questions in this show to ${defaults.newQuestionMode}.`,
@@ -206,7 +244,10 @@ export const StudioSettingsPage = () => {
                 mode: defaults.newQuestionMode,
                 defaultValue: `This will set all existing questions to ${defaults.newQuestionMode} mode.`,
               })}
-              confirmLabel={t("extensions:studio.settings.convertAll", "Convert All")}
+              confirmLabel={t(
+                "extensions:studio.settings.convertAll",
+                "Convert All",
+              )}
               onConfirm={() => {
                 bulkApplyQuestionMode(defaults.newQuestionMode)
               }}
@@ -227,7 +268,7 @@ export const StudioSettingsPage = () => {
           {/* Leaderboard Policy */}
           <ConfigField>
             <ConfigField.Label
-              icon={<Trophy className="size-4 text-primary" />}
+              icon={<Trophy className="text-primary size-4" />}
               label={t(
                 "extensions:studio.settings.leaderboardPolicy",
                 "Leaderboard Policy",
@@ -244,10 +285,7 @@ export const StudioSettingsPage = () => {
               onChange={(val: string) =>
                 updateDefaults({
                   leaderboardPolicy: val as
-                    | "upstream"
-                    | "everyN"
-                    | "cardOnly"
-                    | "disabled",
+                    "upstream" | "everyN" | "cardOnly" | "disabled",
                 })
               }
               items={leaderboardPolicyItems}
@@ -259,7 +297,7 @@ export const StudioSettingsPage = () => {
           {/* Advance Mode */}
           <ConfigField>
             <ConfigField.Label
-              icon={<Timer className="size-4 text-primary" />}
+              icon={<Timer className="text-primary size-4" />}
               label={t(
                 "extensions:studio.settings.advanceMode",
                 "Advance Mode",
@@ -282,10 +320,161 @@ export const StudioSettingsPage = () => {
 
           <hr className="border-accent" />
 
+          {/* Opt-in brand stage background. Original Razzia shows remain unchanged. */}
+          <ConfigField>
+            <ConfigField.Label
+              icon={<Sparkles className="text-primary size-4" />}
+              label={t(
+                "extensions:studio.settings.tadazzBackground",
+                "Tadazz Show Background",
+              )}
+            />
+            <ConfigField.Description>
+              {t(
+                "extensions:studio.settings.tadazzBackgroundDesc",
+                "The show-wide background is automatically overridden by a card-specific image or full-screen video.",
+              )}
+            </ConfigField.Description>
+            <StudioSelect
+              value={tadazzBackground.mode}
+              onChange={(mode: string) => {
+                if (mode === "static" && !tadazzBackground.staticUrl) {
+                  setTadazzMediaPickerOpen(true)
+                  return
+                }
+                updateTadazzBackground({
+                  mode: mode as TadazzShowBackground["mode"],
+                })
+              }}
+              items={[
+                {
+                  value: "original",
+                  label: t(
+                    "extensions:studio.settings.originalBg",
+                    "Original Razzia",
+                  ),
+                },
+                {
+                  value: "animated",
+                  label: t(
+                    "extensions:studio.settings.tadazzAnimated",
+                    "Tadazz Animated",
+                  ),
+                },
+                {
+                  value: "static",
+                  label: t(
+                    "extensions:studio.settings.staticBg",
+                    "Custom Still Image",
+                  ),
+                },
+              ]}
+            />
+            {tadazzBackground.mode === "animated" && (
+              <div
+                className="flex flex-wrap items-center gap-4"
+                data-testid="tadazz-background-motion-controls"
+              >
+                <label className="text-foreground flex flex-1 flex-col gap-1 text-sm font-medium">
+                  {t(
+                    "extensions:studio.settings.motionIntensity",
+                    "Motion Intensity",
+                  )}
+                  : {tadazzBackground.intensity.toFixed(2)}
+                  <input
+                    aria-label={t(
+                      "extensions:studio.settings.motionIntensity",
+                      "Motion Intensity",
+                    )}
+                    type="range"
+                    min={0}
+                    max={1.5}
+                    step={0.05}
+                    value={tadazzBackground.intensity}
+                    onChange={(event) =>
+                      updateTadazzBackground({
+                        intensity: Number(event.currentTarget.value),
+                      })
+                    }
+                  />
+                </label>
+                <label className="text-foreground flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    checked={tadazzBackground.paused}
+                    onChange={(event) =>
+                      updateTadazzBackground({
+                        paused: event.currentTarget.checked,
+                      })
+                    }
+                  />
+                  {t(
+                    "extensions:studio.settings.pauseMotion",
+                    "Pause Animation",
+                  )}
+                </label>
+              </div>
+            )}
+            {tadazzBackground.mode === "static" && (
+              <Button
+                type="button"
+                size="sm"
+                variant="secondary"
+                onClick={() => setTadazzMediaPickerOpen(true)}
+              >
+                {t(
+                  "extensions:studio.settings.changeBackground",
+                  "Choose Image From Library",
+                )}
+              </Button>
+            )}
+            {tadazzBackground.mode !== "original" && (
+              <>
+                <StudioSelect
+                  value={tadazzBackground.fit}
+                  onChange={(value: string) =>
+                    updateTadazzBackground({
+                      fit: value as "cover" | "contain",
+                    })
+                  }
+                  items={[
+                    {
+                      value: "cover",
+                      label: t(
+                        "extensions:studio.settings.coverBg",
+                        "Fill Screen (Crop Edges)",
+                      ),
+                    },
+                    {
+                      value: "contain",
+                      label: t(
+                        "extensions:studio.settings.containBg",
+                        "Fit Entire Image",
+                      ),
+                    },
+                  ]}
+                />
+                <div
+                  className="border-accent relative aspect-video w-full max-w-lg overflow-hidden rounded-xl border bg-[#090119]"
+                  data-testid="tadazz-settings-preview"
+                >
+                  <TadazzAnimatedBackdrop
+                    state={resolveTadazzStageBackground({
+                      settings: tadazzBackground,
+                      tadazzImageUrl: TADAZZ_IMAGE_URL,
+                    })}
+                  />
+                </div>
+              </>
+            )}
+          </ConfigField>
+
+          <hr className="border-accent" />
+
           {/* Global Stage Animation Defaults */}
           <ConfigField>
             <ConfigField.Label
-              icon={<Sparkles className="size-4 text-primary" />}
+              icon={<Sparkles className="text-primary size-4" />}
               label={t(
                 "extensions:stageMotion.globalDefaultsTitle",
                 "Global Stage Animation Defaults",
@@ -353,7 +542,7 @@ export const StudioSettingsPage = () => {
           {/* Global Question Decorative Underline */}
           <ConfigField>
             <ConfigField.Label
-              icon={<Sparkles className="size-4 text-primary" />}
+              icon={<Sparkles className="text-primary size-4" />}
               label={t(
                 "extensions:stageMotion.decorationTitle",
                 "Question Underline Effect",
@@ -383,6 +572,17 @@ export const StudioSettingsPage = () => {
             />
           </ConfigField>
         </Card>
+        <MediaLibrary
+          open={tadazzMediaPickerOpen}
+          onOpenChange={setTadazzMediaPickerOpen}
+          acceptType="image"
+          onSelect={(item) => {
+            if (item.type === "image") {
+              updateTadazzBackground({ mode: "static", staticUrl: item.url })
+              setTadazzMediaPickerOpen(false)
+            }
+          }}
+        />
       </div>
     </div>
   )

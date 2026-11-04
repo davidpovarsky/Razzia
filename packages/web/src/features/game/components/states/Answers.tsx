@@ -16,7 +16,11 @@ import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
-import { LottiePlayer, useStageFit } from "@razzia/extensions/presentation"
+import {
+  LottiePlayer,
+  TadazzSurveyCards,
+  useStageFit,
+} from "@razzia/extensions/presentation"
 import {
   getAuthoritativeEnvelope,
   useExtensionState,
@@ -53,6 +57,7 @@ const Answers = ({
     questionType,
     options,
     answersOnly,
+    playMode,
   },
   data,
 }: Props & { data?: { remainingTime?: number } }) => {
@@ -85,8 +90,7 @@ const Answers = ({
   })
 
   const rawAnswerVisuals = effectiveExtensionState?.extras.answerVisuals as
-    | AnswerVisual[]
-    | undefined
+    AnswerVisual[] | undefined
 
   const currentVisuals =
     rawAnswerVisuals &&
@@ -166,46 +170,54 @@ const Answers = ({
     | {
         stageAnimations?: CardStageAnimations
         questionDecoration?: QuestionDecoration
+        tadazzBackground?: { mode: "original" | "animated" | "static" }
       }
     | undefined
 
   const stageAnimations = resolveCardStageAnimations({
     questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
-      | QuestionEntranceConfig
-      | undefined,
+      QuestionEntranceConfig | undefined,
     stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
-      | CardStageAnimations
-      | undefined,
+      CardStageAnimations | undefined,
     globalStageAnimations: defaultsObj?.stageAnimations,
   })
 
   const questionDecoration = resolveQuestionDecoration({
     questionDecoration: effectiveExtensionState?.extras?.questionDecoration as
-      | QuestionDecoration
-      | undefined,
+      QuestionDecoration | undefined,
     globalDecoration: defaultsObj?.questionDecoration,
   })
 
   const animationEpochKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-answers`
 
+  const showTadazzCards =
+    defaultsObj?.tadazzBackground?.mode !== undefined &&
+    defaultsObj.tadazzBackground.mode !== "original" &&
+    playMode === "survey" &&
+    questionType === "single" &&
+    answers.length >= 2 &&
+    answers.length <= 5 &&
+    Boolean(currentVisuals)
+
   return (
     <QuestionEntrance
       entrance={stageAnimations.questionEntrance}
       epoch={animationEpochKey}
-      className="flex min-h-0 h-full w-full flex-1 flex-col justify-between overflow-hidden"
+      className="flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
     >
       {/* Question Header & Media Area */}
       <div
         className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {
-          "pt-1 sm:pt-2 pb-1 shrink-0": showAnswersOnly || Boolean(currentVisuals),
-          "inline-flex min-h-0 flex-1 flex-col items-center justify-center gap-2 sm:gap-4 overflow-hidden":
+          "shrink-0 pt-1 pb-1 sm:pt-2":
+            showAnswersOnly || Boolean(currentVisuals),
+          "inline-flex min-h-0 flex-1 flex-col items-center justify-center gap-2 overflow-hidden sm:gap-4":
             !showAnswersOnly && !currentVisuals,
         })}
       >
         <h2
           data-testid="game-question-title"
           className={clsx(
-            "text-center font-bold text-white drop-shadow-lg break-words leading-tight",
+            "text-center leading-tight font-bold break-words text-white drop-shadow-lg",
             isUltraCompact
               ? "text-sm sm:text-base"
               : showAnswersOnly || currentVisuals
@@ -220,7 +232,7 @@ const Answers = ({
           <div
             data-testid="question-decoration-underline"
             data-tada-underline={questionDecoration.preset}
-            className="mx-auto mt-1 flex w-40 sm:w-56 items-center justify-center"
+            className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
           >
             {(questionDecoration.preset === "lottie" ||
               (questionDecoration.preset as string) === "custom-lottie") &&
@@ -282,8 +294,7 @@ const Answers = ({
                 alt={question}
                 reveal={
                   effectiveExtensionState?.extras.reveal as
-                    | QuestionReveal
-                    | undefined
+                    QuestionReveal | undefined
                 }
                 serverStartedAt={effectiveExtensionState?.startedAt}
                 currentEpoch={effectiveExtensionState?.epoch}
@@ -291,8 +302,7 @@ const Answers = ({
                 isManuallyRevealed={
                   (
                     effectiveExtensionState?.extras.reveal as
-                      | { isRevealed?: boolean }
-                      | undefined
+                      { isRevealed?: boolean } | undefined
                   )?.isRevealed
                 }
               />
@@ -326,7 +336,7 @@ const Answers = ({
             )}
           >
             <div className="flex flex-col items-center leading-none">
-              <span className="text-[9px] sm:text-[10px] uppercase font-bold tracking-wider text-white/60">
+              <span className="text-[9px] font-bold tracking-wider text-white/60 uppercase sm:text-[10px]">
                 {t("game:hud.answers")}
               </span>
               <span
@@ -344,16 +354,31 @@ const Answers = ({
           </div>
         </div>
 
-        <AnswerComponent
-          answers={answers}
-          options={options}
-          onSubmit={handleSubmit}
-          readOnly={!canSubmit}
-          fill={showAnswersOnly}
-          visuals={currentVisuals}
-          stageAnimations={stageAnimations}
-          animationEpochKey={animationEpochKey}
-        />
+        {showTadazzCards ? (
+          <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden px-2">
+            <TadazzSurveyCards
+              key={animationEpochKey}
+              answers={answers}
+              visuals={currentVisuals}
+              epochKey={animationEpochKey}
+              onSubmit={(index) => handleSubmit([index])}
+              readOnly={!canSubmit}
+              animations={stageAnimations}
+              choicesAriaLabel={t("game:question.answers", "Answer choices")}
+            />
+          </div>
+        ) : (
+          <AnswerComponent
+            answers={answers}
+            options={options}
+            onSubmit={handleSubmit}
+            readOnly={!canSubmit}
+            fill={showAnswersOnly}
+            visuals={currentVisuals}
+            stageAnimations={stageAnimations}
+            animationEpochKey={animationEpochKey}
+          />
+        )}
       </div>
     </QuestionEntrance>
   )
