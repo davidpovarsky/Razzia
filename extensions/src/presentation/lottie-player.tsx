@@ -1,141 +1,187 @@
-import { useEffect, useMemo, useRef, useState } from "react"
-import { validateLottieJson, type LottieFitMode, type LottieMeta } from "../core/lottie"
+import {
+  DotLottieReact,
+  setWasmUrl,
+  type DotLottie,
+} from "@lottiefiles/dotlottie-react"
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { validateLottieJson, type LottieFitMode } from "../core/lottie"
+
+let wasmConfigured = false
+
+export function ensureDotLottieWasmConfigured(
+  customUrl = "/api/extensions/lottie-wasm",
+): void {
+  if (wasmConfigured) {
+    return
+  }
+  try {
+    setWasmUrl(customUrl)
+    wasmConfigured = true
+  } catch {
+    // Ignore in environments where setWasmUrl is a no-op
+  }
+}
+
+if (typeof window !== "undefined") {
+  ensureDotLottieWasmConfigured()
+}
 
 export interface LottiePlayerProps {
+  /** URL to a validated `/media/*.json` or `/media/*.lottie` asset */
   src?: string
+  /** Pre-parsed or JSON string Lottie payload (for instant preview / tests) */
   data?: Record<string, unknown> | string
+  /** Alias for `data` */
   animationData?: Record<string, unknown> | string
   loop?: boolean
   speed?: number
   fit?: LottieFitMode
   autoplay?: boolean
+  /** Pause playback while keeping current frame visible */
+  paused?: boolean
+  /**
+   * Controlled local elapsed time in milliseconds (>= 0).
+   * When provided, LottiePlayer deterministically seeks to the corresponding frame
+   * instead of running an independent wall-clock loop.
+   */
+  seekTimeMs?: number
+  /** Behavior when a non-looping animation reaches its end frame */
+  finish?: "hide" | "holdLastFrame"
   emptyLabel?: string
   className?: string
   testId?: string
   dataTestId?: string
+  onReady?: (info: { durationMs: number; totalFrames: number }) => void
   onComplete?: () => void
   onError?: (error: string) => void
 }
 
-interface ParsedBodymovin {
-  meta: LottieMeta
-  raw: Record<string, unknown>
-}
+/**
+ * Extracts a lightweight static SVG poster from inline JSON data so SSR (`renderToStaticMarkup`),
+ * initial pre-WASM paint, and `prefers-reduced-motion` environments always render a valid
+ * transparent vector preview immediately before the DotLottie WASM canvas takes over.
+ */
+function extractStaticPosterShapes(data: Record<string, unknown>): {
+  w: number
+  h: number
+  fr: number
+  ip: number
+  op: number
+  elements: Array<{
+    key: string
+    kind: "ellipse" | "rect" | "solid"
+    cx?: number
+    cy?: number
+    rx?: number
+    ry?: number
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    fill: string
+    opacity: number
+  }>
+} {
+  const w = typeof data.w === "number" && data.w > 0 ? data.w : 400
+  const h = typeof data.h === "number" && data.h > 0 ? data.h : 400
+  const fr = typeof data.fr === "number" && data.fr > 0 ? data.fr : 60
+  const ip = typeof data.ip === "number" && data.ip >= 0 ? data.ip : 0
+  const op = typeof data.op === "number" && data.op > ip ? data.op : ip + 60
+  const layers = Array.isArray(data.layers) ? data.layers : []
+  const elements: Array<{
+    key: string
+    kind: "ellipse" | "rect" | "solid"
+    cx?: number
+    cy?: number
+    rx?: number
+    ry?: number
+    x?: number
+    y?: number
+    width?: number
+    height?: number
+    fill: string
+    opacity: number
+  }> = []
 
-const interpolateNumber = (
-  prop: unknown,
-  frame: number,
-  defaultVal: number,
-): number => {
-  if (!prop || typeof prop !== "object") {
-    return defaultVal
-  }
-  const obj = prop as Record<string, unknown>
-  const k = obj.k
-  if (typeof k === "number") {
-    return k
-  }
-  if (Array.isArray(k)) {
-    if (typeof k[0] === "number") {
-      return k[0]
+  const toRgb = (arr: unknown): string => {
+    if (!Array.isArray(arr) || arr.length < 3) {
+      return "rgb(250, 204, 21)"
     }
-    // Keyframe array
-    for (let i = 0; i < k.length; i += 1) {
-      const kf = k[i] as Record<string, unknown> | undefined
-      const nextKf = k[i + 1] as Record<string, unknown> | undefined
-      if (!kf || typeof kf.t !== "number") {
-        continue
-      }
-      const startVal = Array.isArray(kf.s)
-        ? Number(kf.s[0] ?? defaultVal)
-        : defaultVal
-      if (!nextKf || typeof nextKf.t !== "number" || frame <= kf.t) {
-        return startVal
-      }
-      if (frame >= kf.t && frame <= nextKf.t) {
-        const endArr = Array.isArray(kf.e)
-          ? kf.e
-          : Array.isArray(nextKf.s)
-            ? nextKf.s
-            : [startVal]
-        const endVal = Number(endArr[0] ?? startVal)
-        const span = Math.max(1e-5, nextKf.t - kf.t)
-        const ratio = Math.min(1, Math.max(0, (frame - kf.t) / span))
-        return startVal + (endVal - startVal) * ratio
-      }
-    }
-  }
-  return defaultVal
-}
-
-const interpolateVec2 = (
-  prop: unknown,
-  frame: number,
-  defaultVec: [number, number],
-): [number, number] => {
-  if (!prop || typeof prop !== "object") {
-    return defaultVec
-  }
-  const obj = prop as Record<string, unknown>
-  const k = obj.k
-  if (Array.isArray(k)) {
-    if (typeof k[0] === "number") {
-      return [
-        Number(k[0] ?? defaultVec[0]),
-        Number(k[1] ?? k[0] ?? defaultVec[1]),
-      ]
-    }
-    for (let i = 0; i < k.length; i += 1) {
-      const kf = k[i] as Record<string, unknown> | undefined
-      const nextKf = k[i + 1] as Record<string, unknown> | undefined
-      if (!kf || typeof kf.t !== "number") {
-        continue
-      }
-      const sArr = Array.isArray(kf.s) ? kf.s : defaultVec
-      const s0 = Number(sArr[0] ?? defaultVec[0])
-      const s1 = Number(sArr[1] ?? s0)
-      if (!nextKf || typeof nextKf.t !== "number" || frame <= kf.t) {
-        return [s0, s1]
-      }
-      if (frame >= kf.t && frame <= nextKf.t) {
-        const eArr = Array.isArray(kf.e)
-          ? kf.e
-          : Array.isArray(nextKf.s)
-            ? nextKf.s
-            : [s0, s1]
-        const e0 = Number(eArr[0] ?? s0)
-        const e1 = Number(eArr[1] ?? s1)
-        const span = Math.max(1e-5, nextKf.t - kf.t)
-        const ratio = Math.min(1, Math.max(0, (frame - kf.t) / span))
-        return [s0 + (e0 - s0) * ratio, s1 + (e1 - s1) * ratio]
-      }
-    }
-  }
-  return defaultVec
-}
-
-const extractColorCss = (prop: unknown): string => {
-  if (!prop || typeof prop !== "object") {
-    return "#38bdf8"
-  }
-  const obj = prop as Record<string, unknown>
-  const k = obj.k
-  if (Array.isArray(k) && typeof k[0] === "number") {
-    const r = Number(k[0] ?? 0)
-    const g = Number(k[1] ?? 0)
-    const b = Number(k[2] ?? 0)
+    const r = Number(arr[0]) || 0
+    const g = Number(arr[1]) || 0
+    const b = Number(arr[2]) || 0
     const scale = r <= 1 && g <= 1 && b <= 1 ? 255 : 1
     return `rgb(${Math.round(r * scale)}, ${Math.round(g * scale)}, ${Math.round(b * scale)})`
   }
-  return "#38bdf8"
+
+  layers.forEach((rawLayer, idx) => {
+    if (typeof rawLayer !== "object" || rawLayer === null) return
+    const layer = rawLayer as Record<string, unknown>
+    if (layer.ty === 1 && typeof layer.sc === "string") {
+      // Do not draw full-canvas background solids in transparent overlay poster
+      const sw = typeof layer.sw === "number" ? layer.sw : w
+      const sh = typeof layer.sh === "number" ? layer.sh : h
+      if (sw < w * 0.95 || sh < h * 0.95) {
+        elements.push({
+          key: `solid-${idx}`,
+          kind: "solid",
+          x: 0,
+          y: 0,
+          width: sw,
+          height: sh,
+          fill: layer.sc,
+          opacity: 0.85,
+        })
+      }
+      return
+    }
+    const shapes = Array.isArray(layer.shapes) ? layer.shapes : []
+    let fill = "rgb(250, 204, 21)"
+    const walk = (items: unknown[]) => {
+      for (const item of items) {
+        if (typeof item !== "object" || item === null) continue
+        const s = item as Record<string, unknown>
+        if (s.ty === "fl" && typeof s.c === "object" && s.c !== null) {
+          fill = toRgb((s.c as Record<string, unknown>).k)
+        } else if (s.ty === "gr" && Array.isArray(s.it)) {
+          walk(s.it)
+        }
+      }
+    }
+    walk(shapes)
+    elements.push({
+      key: `shape-${idx}`,
+      kind: idx % 2 === 0 ? "ellipse" : "rect",
+      cx: w / 2,
+      cy: h / 2,
+      rx: Math.min(w, h) * 0.28,
+      ry: Math.min(w, h) * 0.28,
+      x: w * 0.22,
+      y: h * 0.22,
+      width: w * 0.56,
+      height: h * 0.56,
+      fill,
+      opacity: 0.9,
+    })
+  })
+
+  if (elements.length === 0) {
+    elements.push({
+      key: "fallback-0",
+      kind: "ellipse",
+      cx: w / 2,
+      cy: h / 2,
+      rx: Math.min(w, h) * 0.25,
+      ry: Math.min(w, h) * 0.25,
+      fill: "rgb(250, 204, 21)",
+      opacity: 0.9,
+    })
+  }
+
+  return { w, h, fr, ip, op, elements }
 }
 
-/**
- * Safe, expression-free Bodymovin SVG player for user-supplied Lottie JSON files.
- * Validates all input through `validateLottieJson`, respects `prefers-reduced-motion`,
- * and triggers `onComplete` deterministically when non-looping playback finishes.
- */
-export const LottiePlayer = ({
+export const LottiePlayer: React.FC<LottiePlayerProps> = ({
   src,
   data,
   animationData,
@@ -143,302 +189,372 @@ export const LottiePlayer = ({
   speed = 1,
   fit = "contain",
   autoplay = true,
+  paused = false,
+  seekTimeMs,
+  finish = "holdLastFrame",
   emptyLabel,
-  className = "",
+  className,
   testId,
   dataTestId,
+  onReady,
   onComplete,
   onError,
-}: LottiePlayerProps) => {
-  const effectiveTestId = dataTestId ?? testId ?? "tada-lottie-player"
-  const inlineData = data ?? animationData
-  const [fetchedText, setFetchedText] = useState<string | null>(null)
-  const [fetchError, setFetchError] = useState<string | null>(null)
-  const [frame, setFrame] = useState<number>(0)
-  const completedRef = useRef(false)
+}) => {
+  const effectiveData = data ?? animationData
+  const resolvedTestId = dataTestId ?? testId ?? "lottie-player"
+  const clampedSpeed = Math.max(0.25, Math.min(3, speed))
 
-  const prefersReducedMotion = useMemo(() => {
-    if (typeof window === "undefined" || typeof window.matchMedia !== "function") {
-      return false
+  const [dotLottie, setDotLottie] = useState<DotLottie | null>(null)
+  const [isEngineReady, setIsEngineReady] = useState(false)
+  const [currentFrame, setCurrentFrame] = useState(0)
+  const [totalFrames, setTotalFrames] = useState(0)
+  const [durationMs, setDurationMs] = useState(0)
+  const [hasCompletedOnce, setHasCompletedOnce] = useState(false)
+  const [runtimeError, setRuntimeError] = useState<string | null>(null)
+  const [prefersReducedMotion, setPrefersReducedMotion] = useState(false)
+
+  const onCompleteRef = useRef(onComplete)
+  onCompleteRef.current = onComplete
+  const onErrorRef = useRef(onError)
+  onErrorRef.current = onError
+  const onReadyRef = useRef(onReady)
+  onReadyRef.current = onReady
+
+  useEffect(() => {
+    ensureDotLottieWasmConfigured()
+    if (
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function"
+    ) {
+      const mq = window.matchMedia("(prefers-reduced-motion: reduce)")
+      setPrefersReducedMotion(mq.matches)
+      const listener = (e: MediaQueryListEvent) =>
+        setPrefersReducedMotion(e.matches)
+      mq.addEventListener?.("change", listener)
+      return () => mq.removeEventListener?.("change", listener)
     }
-    return window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    return undefined
   }, [])
 
+  // Validate inline JSON data synchronously when provided
+  const inlineValidation = useMemo(() => {
+    if (effectiveData === undefined) {
+      return null
+    }
+    return validateLottieJson(effectiveData)
+  }, [effectiveData])
+
   useEffect(() => {
-    completedRef.current = false
-    setFetchError(null)
+    if (inlineValidation && !inlineValidation.ok) {
+      setRuntimeError(inlineValidation.error)
+      onErrorRef.current?.(inlineValidation.error)
+    } else {
+      setRuntimeError(null)
+    }
+  }, [inlineValidation])
 
-    if (inlineData) {
-      setFetchedText(null)
-      return
+  // Reset completion state when source or inline data changes
+  useEffect(() => {
+    setHasCompletedOnce(false)
+    setCurrentFrame(0)
+    setIsEngineReady(false)
+  }, [src, effectiveData])
+
+  const dotLottieRefCallback = useCallback((instance: DotLottie | null) => {
+    setDotLottie(instance)
+  }, [])
+
+  // Attach DotLottie lifecycle listeners and clean up on unmount
+  useEffect(() => {
+    if (!dotLottie) {
+      return undefined
     }
 
-    if (!src) {
-      setFetchedText(null)
-      return
-    }
+    const handleLoad = () => {
+      const frames = Math.max(1, dotLottie.totalFrames || 60)
+      const durSec = dotLottie.duration || frames / 60
+      const durMs = Math.max(100, Math.round(durSec * 1000))
+      setTotalFrames(frames)
+      setDurationMs(durMs)
+      setIsEngineReady(true)
+      setRuntimeError(null)
+      onReadyRef.current?.({ durationMs: durMs, totalFrames: frames })
 
-    if (src.startsWith("data:application/json;base64,")) {
-      try {
-        const b64 = src.slice("data:application/json;base64,".length)
-        const decoded =
-          typeof atob === "function"
-            ? decodeURIComponent(escape(atob(b64)))
-            : Buffer.from(b64, "base64").toString("utf-8")
-        setFetchedText(decoded)
-      } catch {
-        setFetchError("Invalid data URL")
+      if (prefersReducedMotion) {
+        dotLottie.pause()
+        const midFrame = Math.floor(frames * 0.5)
+        dotLottie.setFrame(midFrame)
+        setCurrentFrame(midFrame)
+      } else if (seekTimeMs !== undefined) {
+        dotLottie.pause()
+      } else if (paused || !autoplay) {
+        dotLottie.pause()
       }
-      return
     }
 
-    let cancelled = false
-    fetch(src)
-      .then(async (res) => {
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`)
-        }
-        return res.text()
-      })
-      .then((txt) => {
-        if (!cancelled) {
-          setFetchedText(txt)
-        }
-      })
-      .catch((err: unknown) => {
-        if (!cancelled) {
-          const msg =
-            err instanceof Error ? err.message : "Failed to load Lottie JSON"
-          setFetchError(msg)
-          onError?.(msg)
-        }
-      })
+    const handleFrame = (evt: { currentFrame: number }) => {
+      setCurrentFrame(Math.round(evt.currentFrame))
+    }
+
+    const handleComplete = () => {
+      setHasCompletedOnce(true)
+      onCompleteRef.current?.()
+    }
+
+    const handleLoadError = (evt: { error?: Error }) => {
+      const msg = evt?.error?.message || "errors:extensions.invalidLottieJson"
+      setRuntimeError(msg)
+      onErrorRef.current?.(msg)
+    }
+
+    dotLottie.addEventListener("load", handleLoad)
+    dotLottie.addEventListener("frame", handleFrame)
+    dotLottie.addEventListener("complete", handleComplete)
+    dotLottie.addEventListener("loadError", handleLoadError)
+    dotLottie.addEventListener("renderError", handleLoadError)
+
+    if (dotLottie.isLoaded) {
+      handleLoad()
+    }
 
     return () => {
-      cancelled = true
+      dotLottie.removeEventListener("load", handleLoad)
+      dotLottie.removeEventListener("frame", handleFrame)
+      dotLottie.removeEventListener("complete", handleComplete)
+      dotLottie.removeEventListener("loadError", handleLoadError)
+      dotLottie.removeEventListener("renderError", handleLoadError)
     }
-  }, [src, inlineData, onError])
+  }, [dotLottie, prefersReducedMotion, autoplay, paused, seekTimeMs])
 
-  const parsed = useMemo<ParsedBodymovin | null>(() => {
-    const sourceInput = inlineData ?? fetchedText
-    if (!sourceInput) {
-      return null
-    }
-    const validation = validateLottieJson(sourceInput)
-    if (!validation.valid) {
-      const errMsg = validation.error ?? "Invalid Lottie JSON"
-      onError?.(errMsg)
-      return null
-    }
-    const rawObj =
-      typeof sourceInput === "string"
-        ? (JSON.parse(sourceInput) as Record<string, unknown>)
-        : sourceInput
-    return {
-      meta: validation.meta,
-      raw: rawObj,
-    }
-  }, [inlineData, fetchedText, onError])
-
+  // Synchronize controlled seekTimeMs or play/pause state with DotLottie instance
   useEffect(() => {
-    if (!parsed) {
-      return
-    }
-    const { ip: inPoint, op: outPoint, fr: frameRate } = parsed.meta
-    const totalFrames = Math.max(1, outPoint - inPoint)
-
-    if (prefersReducedMotion || !autoplay) {
-      setFrame(inPoint + totalFrames * 0.5)
+    if (!dotLottie || !isEngineReady) {
       return
     }
 
-    setFrame(inPoint)
-    completedRef.current = false
+    const frames = Math.max(1, dotLottie.totalFrames || totalFrames || 60)
+    const durMs = Math.max(
+      100,
+      durationMs || Math.round((dotLottie.duration || 1) * 1000),
+    )
 
-    const effectiveSpeed = Math.max(0.25, Math.min(3, speed || 1))
-    const durationMs = (totalFrames / frameRate) * 1000 / effectiveSpeed
-    const startTime = performance.now()
-    let rafId = 0
+    if (prefersReducedMotion) {
+      if (dotLottie.isPlaying) {
+        dotLottie.pause()
+      }
+      const representativeFrame = Math.floor(frames * 0.5)
+      dotLottie.setFrame(representativeFrame)
+      setCurrentFrame(representativeFrame)
+      return
+    }
 
-    const tick = (now: number) => {
-      const elapsed = Math.max(0, now - startTime)
-      if (!loop && elapsed >= durationMs) {
-        setFrame(outPoint)
-        if (!completedRef.current) {
-          completedRef.current = true
-          onComplete?.()
+    if (seekTimeMs !== undefined) {
+      if (dotLottie.isPlaying) {
+        dotLottie.pause()
+      }
+      const effectiveElapsedMs = Math.max(0, seekTimeMs) * clampedSpeed
+      if (!loop && effectiveElapsedMs >= durMs) {
+        const lastFrame = Math.max(0, frames - 1)
+        if (Math.abs(dotLottie.currentFrame - lastFrame) >= 0.5) {
+          dotLottie.setFrame(lastFrame)
+        }
+        setCurrentFrame(lastFrame)
+        if (!hasCompletedOnce) {
+          setHasCompletedOnce(true)
+          onCompleteRef.current?.()
         }
         return
       }
-      const progress = (elapsed % durationMs) / durationMs
-      setFrame(inPoint + progress * totalFrames)
-      rafId = requestAnimationFrame(tick)
-    }
 
-    rafId = requestAnimationFrame(tick)
-    return () => {
-      if (rafId) {
-        cancelAnimationFrame(rafId)
+      if (hasCompletedOnce && effectiveElapsedMs < durMs) {
+        setHasCompletedOnce(false)
       }
-    }
-  }, [parsed, loop, speed, autoplay, prefersReducedMotion, onComplete])
 
-  if (fetchError || (!parsed && (src || inlineData) && fetchedText !== null)) {
+      const cycleMs = loop
+        ? effectiveElapsedMs % durMs
+        : Math.min(durMs, effectiveElapsedMs)
+      const targetFrame = Math.min(
+        frames - 1,
+        Math.max(0, (cycleMs / durMs) * Math.max(1, frames - 1)),
+      )
+      if (Math.abs(dotLottie.currentFrame - targetFrame) >= 0.25) {
+        dotLottie.setFrame(targetFrame)
+        setCurrentFrame(Math.round(targetFrame))
+      }
+      return
+    }
+
+    if (paused || !autoplay) {
+      if (dotLottie.isPlaying) {
+        dotLottie.pause()
+      }
+    } else if (!dotLottie.isPlaying && (loop || !hasCompletedOnce)) {
+      dotLottie.play()
+    }
+  }, [
+    dotLottie,
+    isEngineReady,
+    seekTimeMs,
+    clampedSpeed,
+    loop,
+    paused,
+    autoplay,
+    prefersReducedMotion,
+    totalFrames,
+    durationMs,
+    hasCompletedOnce,
+  ])
+
+  const trimmedSrc = src?.trim() ?? ""
+  if (!trimmedSrc && effectiveData === undefined) {
+    if (!emptyLabel) {
+      return null
+    }
     return (
       <div
-        data-testid={`${effectiveTestId}-error`}
-        className={`flex items-center justify-center rounded-xl border border-white/15 bg-black/30 p-4 text-xs text-white/70 ${className}`}
+        data-testid={`${resolvedTestId}-empty`}
+        className={
+          className ??
+          "flex items-center justify-center rounded-xl border border-dashed border-white/15 bg-black/20 p-4 text-xs text-white/60"
+        }
       >
-        Unable to render Lottie animation
+        {emptyLabel}
       </div>
     )
   }
 
-  if (!parsed) {
-    if (emptyLabel) {
-      return (
-        <div
-          data-testid="lottie-player-empty"
-          className={`flex items-center justify-center rounded-xl border border-white/15 bg-black/25 p-3 text-xs text-white/60 ${className}`}
-        >
-          {emptyLabel}
-        </div>
-      )
-    }
-    return null
+  if (runtimeError || (inlineValidation && !inlineValidation.ok)) {
+    return (
+      <div
+        data-testid={`${resolvedTestId}-error`}
+        data-lottie-error={runtimeError ?? inlineValidation?.error ?? "invalid"}
+        className={
+          className ??
+          "flex items-center justify-center rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-200"
+        }
+      >
+        Lottie preview unavailable
+      </div>
+    )
   }
 
-  const { w: width, h: height } = parsed.meta
-  const layers = Array.isArray(parsed.raw.layers)
-    ? (parsed.raw.layers as Array<Record<string, unknown>>)
-    : []
+  const shouldHideAfterFinish =
+    !loop && finish === "hide" && hasCompletedOnce && !prefersReducedMotion
 
-  const preserveAspectRatio =
-    fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"
+  const staticPoster = useMemo(() => {
+    if (inlineValidation && inlineValidation.ok) {
+      return extractStaticPosterShapes(inlineValidation.data)
+    }
+    return null
+  }, [inlineValidation])
+
+  // Calculate deterministic fallback frame when WASM hasn't initialized yet (e.g. SSR or fast seek test)
+  const effectiveFrame = useMemo(() => {
+    if (isEngineReady) {
+      return currentFrame
+    }
+    const posterFr = staticPoster?.fr ?? 60
+    const posterIp = staticPoster?.ip ?? 0
+    const posterOp = staticPoster?.op ?? 120
+    const span = Math.max(1, posterOp - posterIp)
+    if (seekTimeMs !== undefined) {
+      const elapsedFrames = (Math.max(0, seekTimeMs) / 1000) * posterFr * clampedSpeed
+      const rawFrame = loop
+        ? posterIp + (elapsedFrames % span)
+        : Math.min(posterOp, posterIp + elapsedFrames)
+      return Math.round(rawFrame)
+    }
+    return posterIp
+  }, [isEngineReady, currentFrame, staticPoster, seekTimeMs, clampedSpeed, loop])
 
   return (
     <div
-      data-testid={effectiveTestId}
-      data-fit={fit}
-      data-loop={String(loop)}
-      className={`relative flex items-center justify-center overflow-hidden ${className}`}
+      data-testid={resolvedTestId}
+      data-lottie-engine="dotlottie-web"
+      data-lottie-ready={isEngineReady ? "true" : "false"}
+      data-lottie-fit={fit}
+      data-lottie-loop={loop ? "true" : "false"}
+      data-lottie-speed={String(clampedSpeed)}
+      data-lottie-reduced-motion={prefersReducedMotion ? "true" : "false"}
+      data-lottie-frame={String(effectiveFrame)}
+      data-lottie-hidden={shouldHideAfterFinish ? "true" : "false"}
+      aria-hidden="true"
+      className={`pointer-events-none select-none overflow-hidden ${className ?? "relative flex h-full w-full items-center justify-center"}`}
+      style={{
+        opacity: shouldHideAfterFinish ? 0 : 1,
+        backgroundColor: "transparent",
+      }}
     >
-      <svg
-        data-testid="lottie-player-svg"
-        viewBox={`0 0 ${width} ${height}`}
-        preserveAspectRatio={preserveAspectRatio}
-        className="h-full w-full"
-        aria-label="Lottie animation"
-      >
-        {layers
-          .slice()
-          .reverse()
-          .map((layer, idx) => {
-            const ip = typeof layer.ip === "number" ? layer.ip : parsed.meta.ip
-            const op = typeof layer.op === "number" ? layer.op : parsed.meta.op
-            if (frame < ip || frame > op) {
-              return null
-            }
-
-            const ks = (layer.ks ?? {}) as Record<string, unknown>
-            const pos = interpolateVec2(ks.p, frame, [width / 2, height / 2])
-            const anchor = interpolateVec2(ks.a, frame, [0, 0])
-            const scale = interpolateVec2(ks.s, frame, [100, 100])
-            const rot = interpolateNumber(ks.r, frame, 0)
-            const opacity = Math.min(
-              1,
-              Math.max(0, interpolateNumber(ks.o, frame, 100) / 100),
-            )
-
-            const transformStr = `translate(${pos[0]}, ${pos[1]}) rotate(${rot}) scale(${scale[0] / 100}, ${scale[1] / 100}) translate(${-anchor[0]}, ${-anchor[1]})`
-
-            // Solid layer (ty === 1)
-            if (layer.ty === 1 && typeof layer.sc === "string") {
-              const sw = typeof layer.sw === "number" ? layer.sw : width
-              const sh = typeof layer.sh === "number" ? layer.sh : height
-              return (
-                <g key={idx} transform={transformStr} opacity={opacity}>
-                  <rect width={sw} height={sh} fill={layer.sc} />
-                </g>
-              )
-            }
-
-            // Shape layer (ty === 4)
-            const shapes = Array.isArray(layer.shapes)
-              ? (layer.shapes as Array<Record<string, unknown>>)
-              : []
-
-            // Flatten 1 level of groups ("gr")
-            const items: Array<Record<string, unknown>> = []
-            for (const item of shapes) {
-              if (item.ty === "gr" && Array.isArray(item.it)) {
-                items.push(...(item.it as Array<Record<string, unknown>>))
-              } else {
-                items.push(item)
-              }
-            }
-
-            const fillItem = items.find((it) => it.ty === "fl")
-            const strokeItem = items.find((it) => it.ty === "st")
-            const fillColor = fillItem ? extractColorCss(fillItem.c) : "#38bdf8"
-            const strokeColor = strokeItem
-              ? extractColorCss(strokeItem.c)
-              : undefined
-            const strokeWidth = strokeItem
-              ? interpolateNumber(strokeItem.w, frame, 2)
-              : 0
-
-            return (
-              <g key={idx} transform={transformStr} opacity={opacity}>
-                {items.map((it, sIdx) => {
-                  if (it.ty === "el") {
-                    const sz = interpolateVec2(it.s, frame, [80, 80])
-                    const p = interpolateVec2(it.p, frame, [0, 0])
-                    return (
-                      <ellipse
-                        key={sIdx}
-                        cx={p[0]}
-                        cy={p[1]}
-                        rx={Math.abs(sz[0]) / 2}
-                        ry={Math.abs(sz[1]) / 2}
-                        fill={fillItem ? fillColor : "none"}
-                        stroke={strokeColor}
-                        strokeWidth={strokeWidth}
-                      />
-                    )
-                  }
-                  if (it.ty === "rc") {
-                    const sz = interpolateVec2(it.s, frame, [100, 40])
-                    const p = interpolateVec2(it.p, frame, [0, 0])
-                    const r = interpolateNumber(it.r, frame, 8)
-                    return (
-                      <rect
-                        key={sIdx}
-                        x={p[0] - Math.abs(sz[0]) / 2}
-                        y={p[1] - Math.abs(sz[1]) / 2}
-                        width={Math.abs(sz[0])}
-                        height={Math.abs(sz[1])}
-                        rx={r}
-                        fill={fillItem ? fillColor : "none"}
-                        stroke={strokeColor}
-                        strokeWidth={strokeWidth}
-                      />
-                    )
-                  }
-                  return null
-                })}
-                {items.length === 0 && (
-                  <circle
-                    cx={0}
-                    cy={0}
-                    r={Math.min(width, height) * 0.18}
-                    fill={fillColor}
-                  />
-                )}
-              </g>
-            )
-          })}
-      </svg>
+      <DotLottieReact
+        src={trimmedSrc || undefined}
+        data={
+          !trimmedSrc && inlineValidation && inlineValidation.ok
+            ? inlineValidation.sanitizedJson
+            : undefined
+        }
+        loop={loop}
+        speed={clampedSpeed}
+        autoplay={
+          autoplay &&
+          !paused &&
+          !prefersReducedMotion &&
+          seekTimeMs === undefined
+        }
+        layout={{
+          fit: fit === "cover" ? "cover" : "contain",
+          align: [0.5, 0.5],
+        }}
+        stateMachineConfig={{
+          openUrlPolicy: {
+            requireUserInteraction: true,
+            whitelist: [],
+          },
+        }}
+        dotLottieRefCallback={dotLottieRefCallback}
+        className="pointer-events-none h-full w-full"
+        style={{
+          width: "100%",
+          height: "100%",
+          backgroundColor: "transparent",
+          pointerEvents: "none",
+        }}
+      />
+      {staticPoster && !isEngineReady && (
+        <svg
+          data-testid={`${resolvedTestId}-svg`}
+          viewBox={`0 0 ${staticPoster.w} ${staticPoster.h}`}
+          preserveAspectRatio={
+            fit === "cover" ? "xMidYMid slice" : "xMidYMid meet"
+          }
+          className="pointer-events-none absolute inset-0 h-full w-full"
+          aria-hidden="true"
+        >
+          {staticPoster.elements.map((el) =>
+            el.kind === "ellipse" ? (
+              <ellipse
+                key={el.key}
+                cx={el.cx}
+                cy={el.cy}
+                rx={el.rx}
+                ry={el.ry}
+                fill={el.fill}
+                opacity={el.opacity}
+              />
+            ) : (
+              <rect
+                key={el.key}
+                x={el.x}
+                y={el.y}
+                width={el.width}
+                height={el.height}
+                rx={8}
+                fill={el.fill}
+                opacity={el.opacity}
+              />
+            ),
+          )}
+        </svg>
+      )}
     </div>
   )
 }

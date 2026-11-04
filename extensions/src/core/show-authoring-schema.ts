@@ -27,6 +27,7 @@ import {
   sceneAudioSchema,
   studioDefaultsSchema,
 } from "./studio-timeline-schema"
+import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import {
   audioExtrasSchema,
   questionEntranceSchema,
@@ -240,13 +241,22 @@ export const authoredMediaCardSchema = z
     mediaUrl: z.string().default(""),
     mediaType: z.enum(["image", "video", "audio"]).default("image"),
     title: z.string().max(120).optional(),
+    subtitle: z.string().max(200).optional(),
+    stageLayout: z.enum(["card", "cinema"]).default("card").optional(),
+    textOverlay: z.boolean().default(true).optional(),
+    endBehavior: z
+      .enum(["holdFrame", "advanceNext", "fadeToTitle"])
+      .default("holdFrame")
+      .optional(),
     durationMs: z.number().int().min(500).max(300000).default(5000),
+    mediaEndFallbackMs: z.number().int().min(500).max(300000).optional(),
     advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
     volume: z.number().min(0).max(1).default(0.8).optional(),
     loop: z.boolean().default(false).optional(),
     muted: z.boolean().default(false).optional(),
     showControls: z.boolean().default(false).optional(),
     mediaFit: z.enum(["contain", "cover"]).default("contain").optional(),
+    overlayAnimations: cinematicOverlayAnimationsArraySchema.optional(),
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
@@ -391,6 +401,7 @@ const authoredBookendExtraFields = {
     .enum(["holdFrame", "advanceNext", "fadeToTitle"])
     .default("holdFrame")
     .optional(),
+  mediaEndFallbackMs: z.number().int().min(500).max(300000).optional(),
   volume: z.number().min(0).max(1).default(0.8).optional(),
   loop: z.boolean().default(false).optional(),
   muted: z.boolean().default(false).optional(),
@@ -399,6 +410,7 @@ const authoredBookendExtraFields = {
   lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
   lottieLoop: z.boolean().default(true).optional(),
   lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
+  overlayAnimations: cinematicOverlayAnimationsArraySchema.optional(),
 }
 
 export const authoredOpeningCardSchema = z

@@ -24,6 +24,7 @@ import {
   type SceneAdvanceMode,
   type SceneAudio,
 } from "./studio-timeline-schema"
+import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import type { AnyQuizExtras } from "./index"
 import { MAX_ANSWERS } from "@razzia/common/constants"
 
@@ -1233,6 +1234,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       try {
         const parsed = JSON.parse(sceneConfigJsonStr)
         if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+          if (parsed.overlayAnimations !== undefined) {
+            parsed.overlayAnimations = cinematicOverlayAnimationsArraySchema.parse(
+              parsed.overlayAnimations,
+            )
+          }
           sceneConfigExtras = parsed
         } else {
           throw new Error("not-object")
@@ -1402,9 +1408,22 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             mediaUrl: mediaUrlVal,
             mediaType: mediaTypeVal,
             title: titleVal || undefined,
+            ...(subtitleVal ? { subtitle: subtitleVal } : {}),
+            ...(sceneConfigExtras?.stageLayout
+              ? { stageLayout: sceneConfigExtras.stageLayout }
+              : {}),
+            ...(sceneConfigExtras?.textOverlay !== undefined
+              ? { textOverlay: sceneConfigExtras.textOverlay }
+              : {}),
+            ...(sceneConfigExtras?.endBehavior
+              ? { endBehavior: sceneConfigExtras.endBehavior }
+              : {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
+            ...(sceneConfigExtras?.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: sceneConfigExtras.mediaEndFallbackMs }
+              : {}),
             advance: advanceVal,
             ...(sceneConfigExtras?.volume !== undefined
               ? { volume: sceneConfigExtras.volume }
@@ -1420,6 +1439,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
               : {}),
             ...(sceneConfigExtras?.mediaFit
               ? { mediaFit: sceneConfigExtras.mediaFit }
+              : {}),
+            ...(sceneConfigExtras?.overlayAnimations
+              ? { overlayAnimations: sceneConfigExtras.overlayAnimations }
               : {}),
             ...sceneAppearance,
             extraJson,
@@ -1889,17 +1911,31 @@ export function exportTadaShowWorkbook(
           break
         case "media":
           title = card.title ?? ""
+          subtitle = card.subtitle ?? ""
           mediaUrl = card.mediaUrl ?? ""
           mediaType = card.mediaType ?? "image"
           durationMs = String(card.durationMs ?? 5000)
           if (
+            card.stageLayout !== undefined ||
+            card.textOverlay !== undefined ||
+            card.endBehavior !== undefined ||
+            card.mediaEndFallbackMs !== undefined ||
             card.volume !== undefined ||
             card.loop !== undefined ||
             card.muted !== undefined ||
             card.showControls !== undefined ||
-            card.mediaFit !== undefined
+            card.mediaFit !== undefined ||
+            card.overlayAnimations !== undefined
           ) {
             sceneConfigObj = {
+              ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+              ...(card.textOverlay !== undefined
+                ? { textOverlay: card.textOverlay }
+                : {}),
+              ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+              ...(card.mediaEndFallbackMs !== undefined
+                ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+                : {}),
               ...(card.volume !== undefined ? { volume: card.volume } : {}),
               ...(card.loop !== undefined ? { loop: card.loop } : {}),
               ...(card.muted !== undefined ? { muted: card.muted } : {}),
@@ -1907,6 +1943,9 @@ export function exportTadaShowWorkbook(
                 ? { showControls: card.showControls }
                 : {}),
               ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+              ...(card.overlayAnimations
+                ? { overlayAnimations: card.overlayAnimations }
+                : {}),
             }
           }
           break
@@ -1960,6 +1999,9 @@ export function exportTadaShowWorkbook(
               ? { textOverlay: card.textOverlay }
               : {}),
             ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              : {}),
             ...(card.volume !== undefined ? { volume: card.volume } : {}),
             ...(card.loop !== undefined ? { loop: card.loop } : {}),
             ...(card.muted !== undefined ? { muted: card.muted } : {}),
@@ -1973,6 +2015,9 @@ export function exportTadaShowWorkbook(
               : {}),
             ...(card.lottieSpeed !== undefined
               ? { lottieSpeed: card.lottieSpeed }
+              : {}),
+            ...(card.overlayAnimations
+              ? { overlayAnimations: card.overlayAnimations }
               : {}),
           }
           if (Object.keys(bookendCfg).length > 0) {

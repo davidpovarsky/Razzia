@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",
+    "@lottiefiles/dotlottie-react": "0.17.1",
     "@razzia/common": "workspace:*",
     "hono": "catalog:",
     "http-status-codes": "catalog:",

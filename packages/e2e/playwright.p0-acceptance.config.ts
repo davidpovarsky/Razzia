@@ -43,7 +43,7 @@ if (!process.env.TEST_WORKER_INDEX) {
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance)\.spec\.ts$/,
+  testMatch: /(p0-tzila-acceptance|tzila-public-stage-and-toolbar|tzila-exact-player-screen|media-appearance-stage-acceptance|cinematic-video-overlays)\.spec\.ts$/,
   outputDir: "test-results/p0-acceptance",
   timeout: 240_000,
   expect: { timeout: 20_000 },

@@ -5,6 +5,7 @@ import { afterEach, beforeEach, describe, expect, it } from "vitest"
 import {
   createDefaultAudioExtras,
   createDefaultRosterExtras,
+  createDotLottieArchive,
 } from "../core/index"
 import { createExtensionRoutes } from "./api/routes"
 import {
@@ -1273,5 +1274,224 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       ),
     )
     expect(JSON.stringify(restoredMediaShow)).toContain(mediaName)
+  })
+
+  it("Gate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations", async () => {
+    const showId = "cinematic-lottie-show"
+    const sceneId = "11111111-1111-4111-8111-111111111199"
+    const show = {
+      id: showId,
+      subject: "Cinematic Lottie Show",
+      questions: [
+        {
+          id: Q1_ID,
+          type: "single",
+          question: "Q1",
+          answers: ["A", "B"],
+          solutions: [0],
+          cooldown: 3,
+          time: 15,
+        },
+      ],
+    }
+    fs.writeFileSync(
+      path.join(getPath("quizz"), `${showId}.json`),
+      JSON.stringify(show, null, 2),
+      "utf-8",
+    )
+
+    const app = createExtensionRoutes({
+      getPath,
+      getQuizzById: () => show,
+      saveQuizz: () => ({ id: showId }),
+      updateQuizz: () => ({ id: showId }),
+      deleteQuizz: () => {},
+      listMedia: () => [],
+    })
+
+    // 1. Public self-hosted WASM endpoint works offline without auth
+    const wasmRes = await app.request("/lottie-wasm")
+    expect(wasmRes.status).toBe(200)
+    expect(wasmRes.headers.get("content-type")).toBe("application/wasm")
+    const wasmBytes = new Uint8Array(await wasmRes.arrayBuffer())
+    expect(wasmBytes.byteLength).toBeGreaterThan(1000)
+
+    // 2. Upload binary .lottie archive via POST /lottie
+    const sampleLottieObj = {
+      v: "5.7.4",
+      fr: 30,
+      ip: 0,
+      op: 60,
+      w: 400,
+      h: 400,
+      layers: [
+        {
+          ty: 4,
+          nm: "Ring",
+          ks: {},
+          shapes: [],
+        },
+      ],
+    }
+    const dotLottieBytes = createDotLottieArchive([
+      {
+        name: "manifest.json",
+        data: JSON.stringify({
+          version: "1.0",
+          animations: [{ id: "emblem", speed: 1, loop: true }],
+        }),
+      },
+      {
+        name: "animations/emblem.json",
+        data: JSON.stringify(sampleLottieObj),
+      },
+    ])
+    const uploadRes = await app.request("/lottie", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: "shared-emblem.lottie",
+        contentBase64: Buffer.from(dotLottieBytes).toString("base64"),
+      }),
+    })
+    expect(uploadRes.status).toBe(201)
+    const uploadBody = await uploadRes.json()
+    expect(uploadBody.format).toBe("dotlottie")
+    expect(uploadBody.url).toMatch(/^\/media\/shared-emblem-.*\.lottie$/)
+    const uploadedName = uploadBody.name as string
+    const uploadedUrl = uploadBody.url as string
+
+    // 3. Reference the uploaded .lottie in Two scenes via overlayAnimations
+    const closingSceneId = "22222222-2222-4222-8222-222222222299"
+    writeSidecar(getPath, showId, {
+      schemaVersion: 2,
+      revision: 1,
+      quizId: showId,
+      baseDigest: VALID_DIGEST,
+      defaults: {
+        newQuestionMode: "quiz",
+        leaderboardPolicy: "cardOnly",
+        advanceMode: "auto",
+      },
+      timeline: [
+        {
+          id: "00000000-0000-4000-8000-000000000071",
+          kind: "opening",
+          sceneId,
+        },
+        {
+          id: "00000000-0000-4000-8000-000000000072",
+          kind: "question",
+          questionId: Q1_ID,
+        },
+        {
+          id: "00000000-0000-4000-8000-000000000073",
+          kind: "closing",
+          sceneId: closingSceneId,
+        },
+      ],
+      scenes: {
+        [sceneId]: {
+          id: sceneId,
+          kind: "opening",
+          title: "Opening Act",
+          durationMs: 8000,
+          advance: "onMediaEnd",
+          overlayAnimations: [
+            {
+              id: "layer-open-1",
+              label: "Opening Emblem",
+              enabled: true,
+              assetUrl: uploadedUrl,
+              order: 0,
+              layer: "aboveTitle",
+              timeBase: "video",
+              startMs: 1000,
+              durationMs: 3000,
+              loop: false,
+              speed: 1,
+              finish: "holdLastFrame",
+              position: { x: 0.5, y: 0.25 },
+              anchor: "center",
+              widthPct: 30,
+              fit: "contain",
+              opacity: 1,
+              rotationDeg: 0,
+              fadeInMs: 0,
+              fadeOutMs: 0,
+            },
+          ],
+        },
+        [closingSceneId]: {
+          id: closingSceneId,
+          kind: "closing",
+          title: "Closing Act",
+          durationMs: 8000,
+          advance: "auto",
+          overlayAnimations: [
+            {
+              id: "layer-close-1",
+              label: "Closing Emblem",
+              enabled: true,
+              assetUrl: uploadedUrl,
+              order: 0,
+              layer: "behindTitle",
+              timeBase: "scene",
+              startMs: 0,
+              durationMs: 5000,
+              loop: true,
+              speed: 1,
+              finish: "hide",
+              position: { x: 0.5, y: 0.5 },
+              anchor: "center",
+              widthPct: 35,
+              fit: "contain",
+              opacity: 1,
+              rotationDeg: 0,
+              fadeInMs: 0,
+              fadeOutMs: 0,
+            },
+          ],
+        },
+      },
+      questionIds: [Q1_ID],
+      perQuestion: {},
+      teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
+      audio: createDefaultAudioExtras(),
+      roster: createDefaultRosterExtras(),
+    })
+
+    // 4. Media catalog lists lottieAssets with referenceCount = 2
+    const catalogRes = await app.request(`/media/catalog?quizId=${showId}`)
+    expect(catalogRes.status).toBe(200)
+    const catalogBody = await catalogRes.json()
+    const lottieEntry = catalogBody.lottieAssets.find(
+      (a: any) => a.name === uploadedName,
+    )
+    expect(lottieEntry).toBeDefined()
+    expect(lottieEntry.referenceCount).toBe(2)
+    expect(lottieEntry.usedInCurrentShow).toBe(true)
+
+    // 5. Deleting referenced Lottie asset without detach returns 409 Conflict
+    const deleteBlockedRes = await app.request(`/lottie/${uploadedName}`, {
+      method: "DELETE",
+    })
+    expect(deleteBlockedRes.status).toBe(409)
+    const blockedBody = await deleteBlockedRes.json()
+    expect(blockedBody.references).toHaveLength(2)
+
+    // 6. Deleting with ?detach=true removes overlay references and deletes file
+    const deleteDetachedRes = await app.request(
+      `/lottie/${uploadedName}?detach=true`,
+      {
+        method: "DELETE",
+      },
+    )
+    expect(deleteDetachedRes.status).toBe(204)
+    const updatedSidecar = readSidecar(getPath, showId) as any
+    expect(updatedSidecar.scenes[sceneId].overlayAnimations).toEqual([])
+    expect(
+      updatedSidecar.scenes[closingSceneId].overlayAnimations,
+    ).toEqual([])
   })
 })

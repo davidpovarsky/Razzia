@@ -7,6 +7,10 @@ import {
   type CardStageAnimations,
   type StageAnimationSlot,
 } from "../core/card-appearance"
+import {
+  resolveSceneOverlayAnimations,
+  type CinematicOverlayAnimation,
+} from "../core/cinematic-overlays"
 import type { AuthoritativeStepEnvelope } from "../server/game/studio-show-coordinator"
 import { type CSSProperties, useEffect, useMemo, useRef, useState } from "react"
 import {
@@ -21,6 +25,7 @@ import {
 } from "./interlude-state"
 import { useStageFit } from "./stage-fit"
 import { LottiePlayer } from "./lottie-player"
+import { CinematicLayerStack } from "./cinematic-layer-stack"
 import {
   AlertTriangle,
   Award,
@@ -92,6 +97,16 @@ export interface ScenePresenterProps {
   onAdvance?: () => void
   onSkip?: () => void
   onMediaEnded?: () => void
+  onOverlayCompleted?: (overlayId: string) => void
+  inlineLottieMap?: Record<string, Record<string, unknown> | string>
+  interactiveEditorMode?: boolean
+  controlledTimeMs?: number
+  controlledPaused?: boolean
+  selectedOverlayId?: string | null
+  onSelectOverlay?: (id: string | null) => void
+  onUpdateOverlayPosition?: (id: string, pos: { x: number; y: number }) => void
+  onVideoDurationDetected?: (durationMs: number) => void
+  onClockTick?: (timeMs: number) => void
   className?: string
 }
 
@@ -156,6 +171,16 @@ export const ScenePresenter = ({
   onAdvance: _onAdvance,
   onSkip,
   onMediaEnded,
+  onOverlayCompleted,
+  inlineLottieMap,
+  interactiveEditorMode = false,
+  controlledTimeMs,
+  controlledPaused,
+  selectedOverlayId,
+  onSelectOverlay,
+  onUpdateOverlayPosition,
+  onVideoDurationDetected,
+  onClockTick,
   className,
 }: ScenePresenterProps) => {
   const activeScene = scene ?? step?.scene
@@ -173,7 +198,8 @@ export const ScenePresenter = ({
     [activeScene, globalStageAnimations],
   )
 
-  const sceneAnimationKey = `${activeScene?.id ?? kind}-${epoch ?? serverStartedAt ?? "static"}`
+  const effectiveServerStartedAt = step?.startedAt ?? serverStartedAt
+  const sceneAnimationKey = `${activeScene?.id ?? kind}-${epoch ?? effectiveServerStartedAt ?? "static"}`
   const containerPreset = stageAnimations.questionEntrance.preset
   const resultsSlot = stageAnimations.resultsRevealEntrance
   const badgeSlot = stageAnimations.answerBadgeEntrance
@@ -206,23 +232,23 @@ export const ScenePresenter = ({
     setMediaFinished(false)
     setRecapPage(0)
     mediaEndFiredRef.current = false
-  }, [serverStartedAt, activeScene?.id, epoch])
+  }, [effectiveServerStartedAt, activeScene?.id, epoch])
 
   const initialRemaining = useMemo(
-    () => calculateInterludeRemainingMs(serverStartedAt, durationMs),
-    [serverStartedAt, durationMs],
+    () => calculateInterludeRemainingMs(effectiveServerStartedAt, durationMs),
+    [effectiveServerStartedAt, durationMs],
   )
 
   const [remainingMs, setRemainingMs] = useState(initialRemaining)
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const remaining = calculateInterludeRemainingMs(serverStartedAt, durationMs)
+      const remaining = calculateInterludeRemainingMs(effectiveServerStartedAt, durationMs)
       setRemainingMs(remaining)
     }, 100)
 
     return () => clearInterval(interval)
-  }, [serverStartedAt, durationMs])
+  }, [effectiveServerStartedAt, durationMs])
 
   // Stop video/audio media on unmount
   useEffect(() => {
@@ -277,20 +303,29 @@ export const ScenePresenter = ({
   const answerRecap = activeSceneData?.answerRecap
 
   const isCinemaScene =
-    (kind === "opening" || kind === "closing") &&
-    ((activeScene as { stageLayout?: "cinema" | "card" } | undefined)
-      ?.stageLayout ?? "cinema") === "cinema"
+    ((kind === "opening" || kind === "closing") &&
+      ((activeScene as { stageLayout?: "cinema" | "card" } | undefined)
+        ?.stageLayout ?? "cinema") === "cinema") ||
+    (kind === "media" &&
+      (activeScene as { stageLayout?: "cinema" | "card" } | undefined)
+        ?.stageLayout === "cinema")
 
   const endBehavior =
     (activeScene as { endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle" } | undefined)
       ?.endBehavior ?? "holdFrame"
 
+  const isLoopingMedia = Boolean(
+    activeScene &&
+      "loop" in activeScene &&
+      (activeScene as { loop?: boolean }).loop === true,
+  )
+
   const handleForegroundMediaEnded = () => {
     setMediaFinished(true)
-    if (
-      (advanceMode === "onMediaEnd" || endBehavior === "advanceNext") &&
-      !mediaEndFiredRef.current
-    ) {
+    const shouldAdvanceOnEnd =
+      advanceMode === "onMediaEnd" ||
+      (advanceMode !== "manual" && endBehavior === "advanceNext")
+    if (shouldAdvanceOnEnd && !isLoopingMedia && !mediaEndFiredRef.current) {
       mediaEndFiredRef.current = true
       onMediaEnded?.()
     }
@@ -341,7 +376,7 @@ export const ScenePresenter = ({
     labels?.kinds?.[k] ?? defaultLabel
 
   const showHeaderOverlay =
-    kind !== "opening" && kind !== "closing"
+    kind !== "opening" && kind !== "closing" && !(kind === "media" && isCinemaScene)
       ? true
       : ((activeScene as { textOverlay?: boolean } | undefined)?.textOverlay ??
           true) ||
@@ -351,16 +386,123 @@ export const ScenePresenter = ({
     (activeScene as { logoPosition?: "top" | "center" | "bottom" | "hidden" } | undefined)
       ?.logoPosition ?? "center"
 
+  const renderCinemaNativeTitleSlot = () => {
+    if (!showHeaderOverlay) {
+      return null
+    }
+    const positionAlignClass =
+      logoPosition === "top"
+        ? "justify-start pt-4 sm:pt-8"
+        : logoPosition === "bottom"
+          ? "justify-end pb-4 sm:pb-8"
+          : "justify-center"
+
+    if (kind === "opening") {
+      return (
+        <div
+          data-testid="scene-opening-overlay"
+          data-logo-position={logoPosition}
+          className={clsx(
+            "flex h-full w-full flex-col items-center gap-1 sm:gap-2",
+            positionAlignClass,
+          )}
+        >
+          {logoPosition !== "hidden" && (
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Sparkles className="size-3.5 sm:size-4 text-primary" />
+              <span>{getKindLabel("opening", "Show Opening")}</span>
+            </div>
+          )}
+          <h1 className="mt-1 sm:mt-2 text-2xl font-black tracking-tight text-white drop-shadow-2xl sm:text-4xl md:text-5xl line-clamp-2">
+            {"title" in (activeScene ?? {})
+              ? (activeScene as { title: string }).title
+              : "Welcome to the Show"}
+          </h1>
+          {"subtitle" in (activeScene ?? {}) &&
+            (activeScene as { subtitle?: string }).subtitle && (
+              <p className="max-w-2xl text-sm sm:text-lg font-medium text-white/80 line-clamp-2">
+                {(activeScene as { subtitle?: string }).subtitle}
+              </p>
+            )}
+        </div>
+      )
+    }
+
+    if (kind === "closing") {
+      return (
+        <div
+          data-testid="scene-closing-overlay"
+          data-logo-position={logoPosition}
+          className={clsx(
+            "flex h-full w-full flex-col items-center gap-1 sm:gap-2",
+            positionAlignClass,
+          )}
+        >
+          {logoPosition !== "hidden" && (
+            <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+              <Award className="size-3.5 sm:size-4 text-primary" />
+              <span>{getKindLabel("closing", "Show Closing")}</span>
+            </div>
+          )}
+          <h1 className="mt-1 sm:mt-2 text-2xl font-black tracking-tight text-white drop-shadow-2xl sm:text-4xl md:text-5xl line-clamp-2">
+            {"title" in (activeScene ?? {})
+              ? (activeScene as { title: string }).title
+              : "Thank You For Playing"}
+          </h1>
+          {"subtitle" in (activeScene ?? {}) &&
+            (activeScene as { subtitle?: string }).subtitle && (
+              <p className="max-w-2xl text-sm sm:text-lg font-medium text-white/80 line-clamp-2">
+                {(activeScene as { subtitle?: string }).subtitle}
+              </p>
+            )}
+        </div>
+      )
+    }
+
+    if (kind === "media") {
+      return (
+        <div
+          data-testid="scene-media-cinema-overlay"
+          className="flex flex-col items-center gap-1 sm:gap-2"
+        >
+          <div className="flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3 py-1 sm:px-4 sm:py-1.5 text-xs sm:text-sm font-bold text-white shadow-xs backdrop-blur-md">
+            <Film className="size-3.5 sm:size-4 text-primary" />
+            <span>{getKindLabel("media", "Media Spotlight")}</span>
+          </div>
+          {"title" in (activeScene ?? {}) &&
+            (activeScene as { title?: string }).title && (
+              <h2 className="mt-1 sm:mt-2 text-xl font-black tracking-tight text-white drop-shadow-2xl sm:text-3xl md:text-4xl line-clamp-2">
+                {(activeScene as { title?: string }).title}
+              </h2>
+            )}
+          {"subtitle" in (activeScene ?? {}) &&
+            (activeScene as { subtitle?: string }).subtitle && (
+              <p className="max-w-2xl text-sm sm:text-lg font-medium text-white/80 line-clamp-2">
+                {(activeScene as { subtitle?: string }).subtitle}
+              </p>
+            )}
+        </div>
+      )
+    }
+
+    return null
+  }
+
   return (
     <div
       key={sceneAnimationKey}
       className={clsx(
-        "relative flex min-h-0 max-h-full w-full max-w-6xl flex-1 flex-col items-center justify-between overflow-hidden rounded-2xl sm:rounded-3xl border border-white/10 bg-black/60 text-center text-white shadow-2xl backdrop-blur-xl",
+        "relative flex min-h-0 max-h-full w-full flex-1 flex-col items-center justify-between overflow-hidden text-center text-white",
+        isCinemaScene
+          ? "h-full max-w-none rounded-xl border border-white/5 bg-black/85 shadow-2xl"
+          : "max-w-6xl rounded-2xl sm:rounded-3xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-xl",
         isUltraCompact || availableHeight <= 600
           ? "p-1.5 sm:p-2.5"
           : isCompact || availableHeight <= 750
             ? "p-2.5 sm:p-4"
-            : "p-3 sm:p-6 md:p-8",
+            : isCinemaScene
+              ? "p-2 sm:p-4"
+              : "p-3 sm:p-6 md:p-8",
         containerPreset !== "none" && `tada-entrance-${containerPreset}`,
         className,
       )}
@@ -369,7 +511,7 @@ export const ScenePresenter = ({
       data-testid="studio-scene-presenter"
       data-kind={kind}
       data-layout={
-        kind === "opening" || kind === "closing"
+        kind === "opening" || kind === "closing" || kind === "media"
           ? isCinemaScene
             ? "cinema"
             : "card"
@@ -377,61 +519,102 @@ export const ScenePresenter = ({
       }
       data-remaining={remainingSeconds}
     >
-      {/* Full-Stage Cinema Backdrop for Opening / Closing */}
+      {/* Unified 6-Layer Stage Compositor for Cinema Mode (Opening, Closing, or Opt-in Media) */}
       {isCinemaScene &&
-        activeScene &&
-        "mediaUrl" in activeScene &&
-        activeScene.mediaUrl &&
-        activeScene.mediaType !== "audio" &&
-        !mediaError && (
-          <div
-            data-testid="scene-cinema-backdrop"
-            className="pointer-events-none absolute inset-0 z-0 overflow-hidden"
-          >
-            {activeScene.mediaType === "video" ? (
-              <video
-                ref={videoRef}
-                src={activeScene.mediaUrl}
-                autoPlay
-                playsInline
-                loop={activeScene.loop ?? false}
-                muted={activeScene.muted ?? false}
-                controls={activeScene.showControls ?? false}
-                onEnded={handleForegroundMediaEnded}
-                onError={() => setMediaError(true)}
-                data-testid="scene-video"
-                className={clsx(
-                  "h-full w-full",
-                  (activeScene.mediaFit ?? "cover") === "contain"
-                    ? "object-contain"
-                    : "object-cover",
-                )}
-              />
-            ) : (
-              <img
-                src={activeScene.mediaUrl}
-                alt={activeScene.title ?? "Cinema backdrop"}
-                onError={() => setMediaError(true)}
-                data-testid="scene-image"
-                className={clsx(
-                  "h-full w-full",
-                  (activeScene.mediaFit ?? "cover") === "contain"
-                    ? "object-contain"
-                    : "object-cover",
-                )}
-              />
-            )}
-            <div
-              className="absolute inset-0 bg-black transition-opacity duration-500"
-              style={{
-                opacity:
-                  mediaFinished && endBehavior === "fadeToTitle" ? 0.75 : 0.35,
-              }}
+        (kind === "opening" || kind === "closing" || kind === "media") && (
+          <div className="relative flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden rounded-lg">
+            <CinematicLayerStack
+              sceneId={activeScene?.id ?? step?.sceneId ?? step?.id ?? kind}
+              sceneKind={kind}
+              epoch={
+                typeof epoch === "number"
+                  ? epoch
+                  : typeof step?.epoch === "number"
+                    ? step.epoch
+                    : 0
+              }
+              serverStartedAt={effectiveServerStartedAt}
+              mediaUrl={
+                activeScene && "mediaUrl" in activeScene
+                  ? activeScene.mediaUrl
+                  : undefined
+              }
+              mediaType={
+                activeScene && "mediaType" in activeScene
+                  ? activeScene.mediaType
+                  : undefined
+              }
+              mediaFit={
+                activeScene && "mediaFit" in activeScene
+                  ? activeScene.mediaFit
+                  : "cover"
+              }
+              volume={
+                activeScene && "volume" in activeScene
+                  ? activeScene.volume
+                  : 0.8
+              }
+              loop={
+                activeScene && "loop" in activeScene
+                  ? activeScene.loop
+                  : false
+              }
+              muted={
+                activeScene && "muted" in activeScene
+                  ? activeScene.muted
+                  : false
+              }
+              showControls={
+                activeScene && "showControls" in activeScene
+                  ? activeScene.showControls
+                  : false
+              }
+              endBehavior={endBehavior}
+              lottieUrl={
+                activeScene && "lottieUrl" in activeScene
+                  ? activeScene.lottieUrl
+                  : undefined
+              }
+              lottieFit={
+                activeScene && "lottieFit" in activeScene
+                  ? activeScene.lottieFit
+                  : undefined
+              }
+              lottieLoop={
+                activeScene && "lottieLoop" in activeScene
+                  ? activeScene.lottieLoop
+                  : undefined
+              }
+              lottieSpeed={
+                activeScene && "lottieSpeed" in activeScene
+                  ? activeScene.lottieSpeed
+                  : undefined
+              }
+              overlayAnimations={
+                activeScene && "overlayAnimations" in activeScene
+                  ? (activeScene as {
+                      overlayAnimations?: CinematicOverlayAnimation[]
+                    }).overlayAnimations
+                  : undefined
+              }
+              inlineLottieMap={inlineLottieMap}
+              titleSlot={renderCinemaNativeTitleSlot()}
+              onForegroundMediaEnded={handleForegroundMediaEnded}
+              onOverlayCompleted={onOverlayCompleted}
+              interactiveEditorMode={interactiveEditorMode}
+              controlledTimeMs={controlledTimeMs}
+              controlledPaused={controlledPaused}
+              selectedOverlayId={selectedOverlayId}
+              onSelectOverlay={onSelectOverlay}
+              onUpdateOverlayPosition={onUpdateOverlayPosition}
+              onVideoDurationDetected={onVideoDurationDetected}
+              onClockTick={onClockTick}
             />
           </div>
         )}
 
-      {/* 1. Header / Title */}
+      {/* 1. Header / Title (for non-cinema card mode) */}
+      {!isCinemaScene && (
       <div className="relative z-10 w-full shrink-0">
         {kind === "opening" && showHeaderOverlay && (
           <div
@@ -584,8 +767,13 @@ export const ScenePresenter = ({
           </div>
         )}
       </div>
+      )}
 
-      {/* 2. Central Visual Body */}
+      {/* 2. Central Visual Body (for non-cinema card mode, or audio card inside cinema) */}
+      {(!isCinemaScene ||
+        (activeScene &&
+          "mediaType" in activeScene &&
+          activeScene.mediaType === "audio")) && (
       <div className="relative z-10 my-2 sm:my-3 flex min-h-0 w-full flex-1 flex-col items-center justify-center overflow-hidden">
         {labels?.sampleDataNotice && (
           <span className="mb-1.5 shrink-0 rounded-full border border-primary/40 bg-primary/20 px-3 py-0.5 text-xs font-semibold text-primary">
@@ -604,22 +792,27 @@ export const ScenePresenter = ({
           </div>
         )}
 
-        {/* User-supplied Lottie on opening / closing */}
-        {(kind === "opening" || kind === "closing") &&
+        {/* User-supplied Lottie on opening / closing in non-cinema card mode (NEVER calls handleForegroundMediaEnded) */}
+        {!isCinemaScene &&
+          (kind === "opening" || kind === "closing") &&
           activeScene &&
-          "lottieUrl" in activeScene &&
-          activeScene.lottieUrl && (
-            <div className="my-2 flex items-center justify-center">
-              <LottiePlayer
-                src={activeScene.lottieUrl}
-                loop={activeScene.lottieLoop ?? true}
-                speed={activeScene.lottieSpeed ?? 1}
-                fit={activeScene.lottieFit ?? "contain"}
-                onComplete={handleForegroundMediaEnded}
-                className="h-36 w-56 sm:h-48 sm:w-72"
-                dataTestId="scene-lottie-player"
-              />
-            </div>
+          resolveSceneOverlayAnimations(activeScene).map((ov, ovIdx) =>
+            ov.enabled ? (
+              <div key={ov.id} className="my-2 flex items-center justify-center">
+                <LottiePlayer
+                  src={ov.assetUrl}
+                  loop={ov.loop}
+                  speed={ov.speed}
+                  fit={ov.fit}
+                  finish={ov.finish}
+                  onComplete={() => onOverlayCompleted?.(ov.id)}
+                  className="h-36 w-56 sm:h-48 sm:w-72"
+                  dataTestId={
+                    ovIdx === 0 ? "scene-lottie-player" : `scene-lottie-player-${ov.id}`
+                  }
+                />
+              </div>
+            ) : null,
           )}
 
         {kind === "animation" && (
@@ -637,7 +830,7 @@ export const ScenePresenter = ({
                 loop={activeScene.lottieLoop ?? true}
                 speed={activeScene.lottieSpeed ?? 1}
                 fit={activeScene.lottieFit ?? "contain"}
-                onComplete={handleForegroundMediaEnded}
+                onComplete={() => onOverlayCompleted?.("animation-lottie")}
                 className="h-40 w-64 sm:h-52 sm:w-80"
                 dataTestId="scene-lottie-player"
               />
@@ -1453,6 +1646,7 @@ export const ScenePresenter = ({
           </div>
         )}
       </div>
+      )}
 
       {/* 3. Bottom Controls & Progress */}
       <div

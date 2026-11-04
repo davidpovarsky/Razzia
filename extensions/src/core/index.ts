@@ -2,6 +2,7 @@ export * from "./audio-catalog"
 export * from "./bundle"
 export * from "./card-appearance"
 export * from "./card-media-references"
+export * from "./cinematic-overlays"
 
 export * from "./commands"
 

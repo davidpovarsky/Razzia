@@ -208,7 +208,10 @@ export class StudioShowCoordinator {
       this.phase = "scene"
 
       if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
-        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+        this.scheduleAutoAdvance(
+          step.safetyTimeoutMs ?? step.durationMs,
+          this.epoch,
+        )
       }
 
       this.callbacks.onBroadcastState()
@@ -278,7 +281,10 @@ export class StudioShowCoordinator {
       this.phase = "scene"
 
       if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
-        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+        this.scheduleAutoAdvance(
+          step.safetyTimeoutMs ?? step.durationMs,
+          this.epoch,
+        )
       }
 
       this.callbacks.onBroadcastState()
@@ -359,7 +365,10 @@ export class StudioShowCoordinator {
       this.phase = "scene"
 
       if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
-        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+        this.scheduleAutoAdvance(
+          step.safetyTimeoutMs ?? step.durationMs,
+          this.epoch,
+        )
       }
 
       this.callbacks.onBroadcastState()
@@ -403,7 +412,10 @@ export class StudioShowCoordinator {
       this.phase = "scene"
 
       if (step.advanceMode === "auto" || step.advanceMode === "onMediaEnd") {
-        this.scheduleAutoAdvance(step.durationMs, this.epoch)
+        this.scheduleAutoAdvance(
+          step.safetyTimeoutMs ?? step.durationMs,
+          this.epoch,
+        )
       }
 
       this.callbacks.onBroadcastState()

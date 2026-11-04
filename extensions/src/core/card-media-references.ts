@@ -11,6 +11,7 @@ export type MediaReferenceField =
   | "question.decoration.lottie"
   | "scene.media"
   | "scene.lottie"
+  | "scene.overlayAnimation"
   | "scene.background"
   | "scene.audio"
   | "show.audioCue"
@@ -282,6 +283,22 @@ export const collectQuizMediaReferences = (
       if ("lottieUrl" in scene && typeof scene.lottieUrl === "string") {
         addRef(sceneId, "scene", sLabel, "scene.lottie", scene.lottieUrl)
       }
+      if (
+        "overlayAnimations" in scene &&
+        Array.isArray(scene.overlayAnimations)
+      ) {
+        for (const overlay of scene.overlayAnimations) {
+          if (overlay && typeof overlay.assetUrl === "string") {
+            addRef(
+              sceneId,
+              "scene",
+              sLabel,
+              "scene.overlayAnimation",
+              overlay.assetUrl,
+            )
+          }
+        }
+      }
       if (scene.background?.url) {
         addRef(
           sceneId,
@@ -507,6 +524,24 @@ export const detachMediaFromShowData = <
       ) {
         delete (scene as { lottieUrl?: string }).lottieUrl
         modified = true
+      }
+      if (
+        "overlayAnimations" in scene &&
+        Array.isArray(scene.overlayAnimations)
+      ) {
+        const beforeLen = scene.overlayAnimations.length
+        const filtered = scene.overlayAnimations
+          .filter((overlay) => !matchesTarget(overlay?.assetUrl))
+          .map((overlay, idx) => ({
+            ...overlay,
+            order: idx,
+          }))
+        if (filtered.length !== beforeLen) {
+          ;(
+            scene as { overlayAnimations?: typeof filtered }
+          ).overlayAnimations = filtered
+          modified = true
+        }
       }
       if (scene.background?.url && matchesTarget(scene.background.url)) {
         delete scene.background

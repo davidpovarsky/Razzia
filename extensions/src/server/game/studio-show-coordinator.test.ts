@@ -412,6 +412,113 @@ describe("StudioShowCoordinator", () => {
     expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(false)
   })
 
+  it("does NOT prematurely cut an 8s or 20s video at default durationMs=5000 when advance is onMediaEnd", () => {
+    const startedQuestions: number[] = []
+    const videoSceneId = "98888888-8888-4888-8888-888888888888"
+
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        { id: "s-intro-vid", kind: "opening", sceneId: videoSceneId },
+        { id: "s-q1", kind: "question", questionId: q1Id },
+      ],
+      scenes: {
+        [videoSceneId]: {
+          id: videoSceneId,
+          kind: "opening",
+          title: "8s Cinema Intro with 5s Default Duration",
+          mediaUrl: "/media/intro-8s.mp4",
+          mediaType: "video",
+          stageLayout: "cinema",
+          mediaFit: "cover",
+          durationMs: 5000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+
+    coordinator.start()
+    const epochAtOpen = coordinator.currentEpoch
+    expect(coordinator.currentPhase).toBe("scene")
+
+    // At 5000ms (legacy default durationMs) and 7500ms, the video MUST still be playing!
+    vi.advanceTimersByTime(5000)
+    expect(coordinator.currentPhase).toBe("scene")
+    expect(startedQuestions).toEqual([])
+
+    vi.advanceTimersByTime(2500)
+    expect(coordinator.currentPhase).toBe("scene")
+
+    // At 8000ms, genuine foreground video ends -> manager sends advanceScene once
+    vi.advanceTimersByTime(500)
+    expect(coordinator.advanceScene(videoSceneId, epochAtOpen, 0)).toBe(true)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+  })
+
+  it("honors explicit mediaEndFallbackMs when video ended event is blocked and resolves loop:true + onMediaEnd safely", () => {
+    const startedQuestions: number[] = []
+    const fallbackSceneId = "97777777-7777-4777-8777-777777777777"
+    const loopConflictSceneId = "96666666-6666-4666-8666-666666666666"
+
+    const coordinator = new StudioShowCoordinator({
+      timeline: [
+        { id: "s-fb", kind: "opening", sceneId: fallbackSceneId },
+        { id: "s-loop", kind: "media", sceneId: loopConflictSceneId },
+        { id: "s-q1", kind: "question", questionId: q1Id },
+      ],
+      scenes: {
+        [fallbackSceneId]: {
+          id: fallbackSceneId,
+          kind: "opening",
+          title: "Fallback Test",
+          mediaUrl: "/media/intro.mp4",
+          mediaType: "video",
+          durationMs: 5000,
+          mediaEndFallbackMs: 11000,
+          advance: "onMediaEnd",
+        },
+        [loopConflictSceneId]: {
+          id: loopConflictSceneId,
+          kind: "media",
+          title: "Loop Conflict",
+          mediaUrl: "/media/loop.mp4",
+          mediaType: "video",
+          loop: true,
+          durationMs: 4000,
+          advance: "onMediaEnd",
+        },
+      },
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onFinish: vi.fn(),
+        onBroadcastState: vi.fn(),
+      },
+    })
+
+    coordinator.start()
+    expect(coordinator.currentIndex).toBe(0)
+
+    // Does not advance at 5000ms; advances at explicit mediaEndFallbackMs (11000ms)
+    vi.advanceTimersByTime(10900)
+    expect(coordinator.currentIndex).toBe(0)
+    vi.advanceTimersByTime(200)
+    expect(coordinator.currentIndex).toBe(1)
+
+    // Step 1 has loop:true + onMediaEnd -> safely falls back to durationMs (4000ms) instead of hanging forever
+    vi.advanceTimersByTime(4000)
+    expect(coordinator.currentPhase).toBe("question")
+    expect(startedQuestions).toEqual([0])
+  })
+
   it("populates activeSceneData.answerRecap in ExtensionGameSession for manager and player snapshots", () => {
     const recapSceneId = "77777777-7777-4777-8777-777777777777"
     const extras = createDefaultQuizExtrasV2(

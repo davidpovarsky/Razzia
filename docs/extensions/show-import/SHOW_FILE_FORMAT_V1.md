@@ -26,17 +26,17 @@ Both formats represent a **complete, ordered show timeline** containing:
 
 | Card Kind | Type | Native Mapping | Key Config Properties |
 |---|---|---|---|
-| `opening` | Scene | `SceneConfig (opening)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `lottieUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
+| `opening` | Scene | `SceneConfig (opening)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `mediaEndFallbackMs` (500–300000), `overlayAnimations` (up to 10 timed Lottie layers), `lottieUrl` (legacy), `durationMs` (500–300000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 | `countdown` | Scene | `SceneConfig (countdown)` | `durationSeconds` (3–120s, default 10), `title`, `advance` (`auto` \| `manual`) |
 | `quiz` | Question | `question` + `playMode: "quiz"` | `questionType`, `question`, `answers` (2–4), `correctAnswers` (1–4), `timeSeconds`, `cooldownSeconds`, `maxPoints`, `penalty`, `media`, `reveal`, `stageAnimations`, `questionDecoration` |
 | `survey` | Question | `question` + `playMode: "survey"` | `questionType`, `question`, `answers` (2–4), no correct answers, `timeSeconds`, `cooldownSeconds`, `media`, `reveal`, `stageAnimations`, `questionDecoration` |
 | `transition` | Scene | `SceneConfig (transition)` | `title`, `description`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
 | `animation` | Scene | `SceneConfig (animation)` | `preset` (`spotlight`, `confetti`, `bounce`, `pulse`), `lottieUrl`, `lottieLoop`, `lottieSpeed`, `lottieFit`, `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
-| `media` | Scene | `SceneConfig (media)` | `mediaUrl` (safe HTTPS or `/media/`), `mediaType` (`image` \| `video` \| `audio`), `mediaFit` (`cover` \| `contain`), `volume`, `loop`, `muted`, `showControls`, `title`, `durationMs` (500–300000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
+| `media` | Scene | `SceneConfig (media)` | `mediaUrl` (safe HTTPS or `/media/`), `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`card` \| `cinema`), `mediaFit` (`cover` \| `contain`), `subtitle`, `textOverlay`, `endBehavior`, `mediaEndFallbackMs`, `overlayAnimations`, `volume`, `loop`, `muted`, `showControls`, `title`, `durationMs` (500–300000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 | `interimResults` | Scene | `SceneConfig (interimResults)` | `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
 | `answerRecap` | Scene | `SceneConfig (answerRecap)` | `title`, `subtitle`, `startQuestionKey` (preceding question key), `mode` (`mostSelected` \| `correctAnswer`), `maxItemsPerPage` (1–8), `showCounts`, `showPercentages`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
 | `leaderboard` | Scene | `SceneConfig (leaderboard)` | `title`, `durationMs` (500–60000), `advance` (`auto` \| `manual`) |
-| `closing` | Scene | `SceneConfig (closing)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `lottieUrl`, `durationMs` (500–60000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
+| `closing` | Scene | `SceneConfig (closing)` | `title` (1–120 chars, req), `subtitle`, `mediaUrl`, `mediaType` (`image` \| `video` \| `audio`), `stageLayout` (`cinema` \| `card`), `mediaFit` (`cover` \| `contain`), `logoPosition`, `textOverlay`, `endBehavior`, `mediaEndFallbackMs` (500–300000), `overlayAnimations` (up to 10 timed Lottie layers), `lottieUrl` (legacy), `durationMs` (500–300000), `advance` (`auto` \| `manual` \| `onMediaEnd`) |
 
 ---
 
@@ -176,16 +176,17 @@ An official Tada Show workbook has five data sheets plus an informational help s
 
 ### 4.2 Sheet `Timeline` (One row per card)
 Exact headers:
-`order`, `cardKey`, `kind`, `title`, `description`, `questionKey`, `playMode`, `durationMs`, `durationSeconds`, `advance`, `preset`, `mediaType`, `mediaUrl`, `subtitle`, `extraJson`
+`order`, `cardKey`, `kind`, `title`, `description`, `questionKey`, `playMode`, `durationMs`, `durationSeconds`, `advance`, `preset`, `mediaType`, `mediaUrl`, `subtitle`, `extraJson`, `backgroundJson`, `audioJson`, `stageAnimationsJson`, `sceneConfigJson`
 
 - `order`: Integer specifying card presentation order (e.g. 1, 2, 3...). Cards are sorted ascending by `order`.
 - `cardKey`: Unique identifier for this card within the show (e.g. `INTRO`, `Q01`, `T01`).
-- `kind`: One of `quiz`, `survey`, `transition`, `animation`, `media`, `leaderboard`, `interimResults`, `countdown`, `opening`, `closing`.
+- `kind`: One of `quiz`, `survey`, `transition`, `animation`, `media`, `leaderboard`, `interimResults`, `answerRecap`, `countdown`, `opening`, `closing`.
 - For `quiz` and `survey`:
   - `questionKey` must refer to a valid `questionKey` in the `Questions` sheet.
   - `playMode` must match the card kind (`quiz` or `survey`).
 - For scene kinds:
   - Fill relevant columns (`title`, `description`, `durationMs`, `durationSeconds`, `advance`, `preset`, `mediaType`, `mediaUrl`, `subtitle`).
+  - `sceneConfigJson`: Optional strict JSON object for scene-specific parameters (`stageLayout`, `mediaFit`, `logoPosition`, `textOverlay`, `endBehavior`, `mediaEndFallbackMs`, `overlayAnimations`, `lottieUrl`, `volume`, `loop`, `muted`, `showControls`, `maxItemsPerPage`, `showCounts`, `showPercentages`). Malformed JSON or invalid `overlayAnimations` rejects import with `errors:extensions.invalidSceneConfigJson:<cardKey>`.
   - `extraJson`: Optional strict JSON object for advanced scene properties.
 
 ### 4.3 Sheet `Questions` (One row per question)

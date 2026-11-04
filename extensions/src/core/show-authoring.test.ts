@@ -1135,4 +1135,152 @@ describe("Show Authoring Schema & Converters", () => {
       expect(restoredQ2.questionEntrance).toBeUndefined()
     })
   })
+
+  describe("Gate 6: Cinematic Video & Multi-Layer Lottie Overlays Roundtrip", () => {
+    it("roundtrips opening, closing, and cinema media scenes with overlayAnimations and mediaEndFallbackMs across .tada.json <-> native V2 bundle", () => {
+      const sampleOverlays = [
+        {
+          id: "emblem-1",
+          label: "Emblem Hold",
+          enabled: true,
+          assetUrl: "/media/emblem.json",
+          order: 0,
+          layer: "aboveTitle" as const,
+          timeBase: "video" as const,
+          startMs: 2500,
+          loop: false,
+          speed: 1,
+          finish: "holdLastFrame" as const,
+          position: { x: 0.5, y: 0.22 },
+          anchor: "center" as const,
+          widthPct: 28,
+          fit: "contain" as const,
+          opacity: 0.95,
+          rotationDeg: 0,
+          fadeInMs: 150,
+          fadeOutMs: 0,
+        },
+        {
+          id: "frame-2",
+          label: "Corner Frame",
+          enabled: true,
+          assetUrl: "/media/frame.lottie",
+          order: 1,
+          layer: "behindTitle" as const,
+          timeBase: "video" as const,
+          startMs: 0,
+          durationMs: 8000,
+          loop: true,
+          speed: 1.25,
+          finish: "hide" as const,
+          position: { x: 0.5, y: 0.5 },
+          anchor: "center" as const,
+          widthPct: 82,
+          fit: "contain" as const,
+          opacity: 1,
+          rotationDeg: 15,
+          fadeInMs: 0,
+          fadeOutMs: 200,
+        },
+      ]
+
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Cinematic Multi-Overlay Roundtrip Show",
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "OPEN_1",
+            kind: "opening",
+            title: "Grand Opening",
+            subtitle: "Live Broadcast",
+            mediaUrl: "/media/intro.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            mediaFit: "cover",
+            logoPosition: "center",
+            textOverlay: true,
+            endBehavior: "holdFrame",
+            durationMs: 8000,
+            mediaEndFallbackMs: 24000,
+            advance: "onMediaEnd",
+            overlayAnimations: sampleOverlays,
+          },
+          {
+            key: "Q1",
+            kind: "quiz",
+            question: "Ready?",
+            answers: [{ text: "Yes" }, { text: "Absolutely" }],
+            correctAnswers: [1],
+          },
+          {
+            key: "MEDIA_CINEMA",
+            kind: "media",
+            title: "Halftime Show",
+            subtitle: "Special Feature",
+            mediaUrl: "/media/halftime.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            mediaFit: "cover",
+            textOverlay: true,
+            endBehavior: "fadeToTitle",
+            durationMs: 12000,
+            mediaEndFallbackMs: 20000,
+            advance: "onMediaEnd",
+            overlayAnimations: [sampleOverlays[0]],
+          },
+          {
+            key: "CLOSE_1",
+            kind: "closing",
+            title: "Goodnight!",
+            subtitle: "See you next week",
+            mediaUrl: "/media/outro.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            durationMs: 8000,
+            mediaEndFallbackMs: 18000,
+            advance: "onMediaEnd",
+            overlayAnimations: [sampleOverlays[1]],
+          },
+        ],
+        settings: [],
+      }
+
+      const converted = authoredShowToNativeBundleDraft(show)
+      expect(converted.ok).toBe(true)
+      const bundle = converted.bundleDraft!
+
+      const scenesList = Object.values(bundle.extras.scenes)
+      const openScene = scenesList.find((s) => s.kind === "opening") as any
+      const mediaScene = scenesList.find((s) => s.kind === "media") as any
+      const closeScene = scenesList.find((s) => s.kind === "closing") as any
+
+      expect(openScene.mediaEndFallbackMs).toBe(24000)
+      expect(openScene.overlayAnimations).toEqual(sampleOverlays)
+      expect(mediaScene.stageLayout).toBe("cinema")
+      expect(mediaScene.subtitle).toBe("Special Feature")
+      expect(mediaScene.endBehavior).toBe("fadeToTitle")
+      expect(mediaScene.mediaEndFallbackMs).toBe(20000)
+      expect(mediaScene.overlayAnimations).toEqual([sampleOverlays[0]])
+      expect(closeScene.mediaEndFallbackMs).toBe(18000)
+      expect(closeScene.overlayAnimations).toEqual([sampleOverlays[1]])
+
+      // Convert back to authored TadaShowV1
+      const restored = nativeBundleToAuthoredShow(bundle)
+      const restoredOpen = restored.cards[0] as any
+      const restoredMedia = restored.cards[2] as any
+      const restoredClose = restored.cards[3] as any
+
+      expect(restoredOpen.mediaEndFallbackMs).toBe(24000)
+      expect(restoredOpen.overlayAnimations).toEqual(sampleOverlays)
+      expect(restoredMedia.stageLayout).toBe("cinema")
+      expect(restoredMedia.subtitle).toBe("Special Feature")
+      expect(restoredMedia.endBehavior).toBe("fadeToTitle")
+      expect(restoredMedia.mediaEndFallbackMs).toBe(20000)
+      expect(restoredMedia.overlayAnimations).toEqual([sampleOverlays[0]])
+      expect(restoredClose.mediaEndFallbackMs).toBe(18000)
+      expect(restoredClose.overlayAnimations).toEqual([sampleOverlays[1]])
+    })
+  })
 })

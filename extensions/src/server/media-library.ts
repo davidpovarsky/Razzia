@@ -1084,11 +1084,23 @@ export interface EnrichedMediaCatalogItem extends UploadedMedia {
   references: CardMediaReference[]
 }
 
+export interface EnrichedLottieCatalogItem {
+  name: string
+  url: string
+  type: "lottie"
+  usedInCurrentShow: boolean
+  referenceCount: number
+  references: CardMediaReference[]
+}
+
 export interface MediaCatalogResponse {
   media: EnrichedMediaCatalogItem[]
   builtInSounds: BuiltInSoundItem[]
   showMediaCatalog: ShowMediaCatalogItem[]
+  lottieAssets: EnrichedLottieCatalogItem[]
 }
+
+const LOTTIE_FILENAME_PATTERN = /^[A-Za-z0-9_-]+\.(json|lottie)$/u
 
 export function buildMediaCatalogResponse(
   getPath: (subPath?: string) => string,
@@ -1129,10 +1141,63 @@ export function buildMediaCatalogResponse(
     }
   })
 
+  // Discover uploaded .json and .lottie assets in media/ directory + show catalogs
+  const mediaDir = getPath("media")
+  const lottieNames = new Map<string, number>()
+  if (fs.existsSync(mediaDir)) {
+    try {
+      for (const file of fs.readdirSync(mediaDir)) {
+        if (!LOTTIE_FILENAME_PATTERN.test(file)) {
+          continue
+        }
+        const fullPath = path.join(mediaDir, file)
+        try {
+          const stat = fs.lstatSync(fullPath)
+          if (stat.isFile()) {
+            lottieNames.set(file, stat.mtimeMs)
+          }
+        } catch {
+          // ignore unreadable entry
+        }
+      }
+    } catch {
+      // ignore directory read error
+    }
+  }
+  for (const catItem of showMediaCatalog) {
+    if (catItem.type === "lottie" && !lottieNames.has(catItem.name)) {
+      lottieNames.set(catItem.name, catItem.addedAt ?? 0)
+    }
+  }
+
+  const lottieAssets: EnrichedLottieCatalogItem[] = [...lottieNames.entries()]
+    .sort((a, b) => b[1] - a[1])
+    .map(([name]) => {
+      const url = `/media/${name}`
+      const itemRefs = allRefs.filter(
+        (r) => r.mediaName === name || r.url === url,
+      )
+      const usedInCurrentShow = Boolean(
+        currentQuizId &&
+        (itemRefs.some((r) => r.quizId === currentQuizId) ||
+          currentCatalogNames.has(name) ||
+          currentCatalogUrls.has(url)),
+      )
+      return {
+        name,
+        url,
+        type: "lottie" as const,
+        usedInCurrentShow,
+        referenceCount: itemRefs.length,
+        references: itemRefs,
+      }
+    })
+
   return {
     media: enriched,
     builtInSounds: BUILT_IN_SOUNDS,
     showMediaCatalog,
+    lottieAssets,
   }
 }
 

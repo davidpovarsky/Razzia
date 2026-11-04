@@ -749,5 +749,71 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         "errors:extensions.invalidEntrancePreset:Questions!U2",
       )
     })
+
+    it("Gate 6: round-trips overlayAnimations and mediaEndFallbackMs in Timeline.sceneConfigJson through Excel (.xlsx)", () => {
+      const sampleOverlays = [
+        {
+          id: "xlsx-overlay-1",
+          label: "Excel Emblem",
+          enabled: true,
+          assetUrl: "/media/excel-emblem.lottie",
+          order: 0,
+          layer: "aboveTitle" as const,
+          timeBase: "video" as const,
+          startMs: 1200,
+          durationMs: 4000,
+          loop: false,
+          speed: 1,
+          finish: "holdLastFrame" as const,
+          position: { x: 0.48, y: 0.25 },
+          anchor: "center" as const,
+          widthPct: 30,
+          fit: "contain" as const,
+          opacity: 1,
+          rotationDeg: 0,
+          fadeInMs: 100,
+          fadeOutMs: 100,
+        },
+      ]
+
+      const show: TadaShowV1 = {
+        format: "tada-show",
+        version: 1,
+        title: "Excel Cinematic Overlays Show",
+        baseGameMode: "quiz",
+        cards: [
+          {
+            key: "INTRO_CINEMA",
+            kind: "opening",
+            title: "Welcome",
+            subtitle: "With Lottie Overlays",
+            mediaUrl: "/media/intro.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            durationMs: 8000,
+            mediaEndFallbackMs: 25000,
+            advance: "onMediaEnd",
+            overlayAnimations: sampleOverlays,
+          },
+          {
+            key: "Q01",
+            kind: "quiz",
+            questionType: "single",
+            question: "Question 1?",
+            answers: [{ text: "A" }, { text: "B" }],
+            correctAnswers: [1],
+          },
+        ],
+        settings: [],
+      }
+
+      const xlsxBuf = exportTadaShowWorkbook(show)
+      const parsed = parseTadaShowWorkbook(xlsxBuf)
+
+      const introCard = parsed.cards[0] as any
+      expect(introCard.kind).toBe("opening")
+      expect(introCard.mediaEndFallbackMs).toBe(25000)
+      expect(introCard.overlayAnimations).toEqual(sampleOverlays)
+    })
   })
 })

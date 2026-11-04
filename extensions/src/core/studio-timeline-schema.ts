@@ -6,6 +6,7 @@ import {
   questionDecorationSchema,
   showMediaCatalogItemSchema,
 } from "./card-appearance"
+import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import {
   audioExtrasSchema,
   createDefaultAudioExtras,
@@ -171,6 +172,15 @@ export const mediaSceneSchema = z
     muted: z.boolean().default(false).optional(),
     showControls: z.boolean().default(false).optional(),
     mediaFit: z.enum(["contain", "cover"]).default("contain").optional(),
+    stageLayout: z.enum(["card", "cinema"]).default("card").optional(),
+    subtitle: z.string().max(200).optional(),
+    textOverlay: z.boolean().default(true).optional(),
+    endBehavior: z
+      .enum(["holdFrame", "advanceNext", "fadeToTitle"])
+      .default("holdFrame")
+      .optional(),
+    mediaEndFallbackMs: z.number().int().min(500).max(600000).optional(),
+    overlayAnimations: cinematicOverlayAnimationsArraySchema.optional(),
     ...sceneAppearanceFields,
   })
   .superRefine((data, ctx) => {
@@ -245,6 +255,8 @@ const cinematicBookendFields = {
   lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
   lottieLoop: z.boolean().default(true).optional(),
   lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
+  mediaEndFallbackMs: z.number().int().min(500).max(600000).optional(),
+  overlayAnimations: cinematicOverlayAnimationsArraySchema.optional(),
 }
 
 export const openingSceneSchema = z

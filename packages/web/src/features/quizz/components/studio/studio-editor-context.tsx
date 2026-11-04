@@ -993,10 +993,24 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         const newSceneId = crypto.randomUUID()
         const sourceTitle =
           sourceScene && "title" in sourceScene ? sourceScene.title : undefined
+        const clonedSource = sourceScene
+          ? structuredClone(sourceScene)
+          : undefined
+        const clonedOverlays =
+          clonedSource &&
+          "overlayAnimations" in clonedSource &&
+          Array.isArray(clonedSource.overlayAnimations)
+            ? clonedSource.overlayAnimations.map((ov, idx) => ({
+                ...ov,
+                id: crypto.randomUUID(),
+                order: idx,
+              }))
+            : undefined
         const newScene: SceneConfig = {
-          ...sourceScene,
+          ...clonedSource,
           id: newSceneId,
           ...(sourceTitle ? { title: `${sourceTitle} (Copy)` } : {}),
+          ...(clonedOverlays ? { overlayAnimations: clonedOverlays } : {}),
         } as SceneConfig
 
         const nextScenes = { ...currentScenes, [newSceneId]: newScene }

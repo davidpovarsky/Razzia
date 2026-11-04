@@ -355,11 +355,15 @@ export class ExtensionGameSession {
       extrasPayload.defaults = this.extras.defaults
 
       if (this.showCoordinator) {
-        extrasPayload.activeTimelineStep =
+        const activeStepEnvelope =
           this.showCoordinator.getAuthoritativeStepEnvelope(forRole)
+        extrasPayload.activeTimelineStep = activeStepEnvelope
         extrasPayload.currentScene = this.showCoordinator.currentScene
 
         if (this.showCoordinator.isSceneActive()) {
+          if (activeStepEnvelope?.startedAt) {
+            this.startedAt = activeStepEnvelope.startedAt
+          }
           const activeScene = this.showCoordinator.currentScene
 
           if (activeScene) {

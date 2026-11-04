@@ -4,6 +4,11 @@ import { describe, expect, it } from "vitest"
 import {
   assignRoundRobin,
   calculateInterludeRemainingMs,
+  CinematicLayerStack,
+  clampNormalizedStagePoint,
+  computeLateJoinVideoSeekSeconds,
+  computeOverlayStageStyle,
+  evaluateOverlayPlaybackState,
   formatHistoryItem,
   LottiePlayer,
   processInterludeSkip,
@@ -671,6 +676,223 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
         }),
       )
       expect(validHtml).toContain('data-testid="lottie-player-svg"')
+    })
+  })
+
+  describe("GATE 1, 2, 4: Cinematic Clock, Geometry & Multi-Layer Compositor", () => {
+    const overlayA = {
+      id: "overlay-a",
+      label: "Emblem Hold",
+      enabled: true,
+      assetUrl: "/media/emblem.json",
+      order: 0,
+      layer: "aboveTitle" as const,
+      timeBase: "video" as const,
+      startMs: 2500,
+      loop: false,
+      speed: 1,
+      finish: "holdLastFrame" as const,
+      position: { x: 0.5, y: 0.22 },
+      anchor: "center" as const,
+      widthPct: 28,
+      fit: "contain" as const,
+      opacity: 1,
+      rotationDeg: 0,
+      fadeInMs: 0,
+      fadeOutMs: 0,
+    }
+
+    const overlayB = {
+      id: "overlay-b",
+      label: "Corner Frame",
+      enabled: true,
+      assetUrl: "/media/frame.json",
+      order: 1,
+      layer: "behindTitle" as const,
+      timeBase: "video" as const,
+      startMs: 0,
+      durationMs: 8000,
+      loop: true,
+      speed: 1,
+      finish: "hide" as const,
+      position: { x: 0.5, y: 0.5 },
+      anchor: "center" as const,
+      widthPct: 82,
+      fit: "contain" as const,
+      opacity: 1,
+      rotationDeg: 0,
+      fadeInMs: 0,
+      fadeOutMs: 0,
+    }
+
+    const overlayC = {
+      id: "overlay-c",
+      label: "Banner Reveal",
+      enabled: true,
+      assetUrl: "/media/banner.json",
+      order: 2,
+      layer: "aboveTitle" as const,
+      timeBase: "video" as const,
+      startMs: 6000,
+      durationMs: 2000,
+      loop: false,
+      speed: 1,
+      finish: "hide" as const,
+      position: { x: 0.5, y: 0.78 },
+      anchor: "center" as const,
+      widthPct: 40,
+      fit: "contain" as const,
+      opacity: 1,
+      rotationDeg: 0,
+      fadeInMs: 200,
+      fadeOutMs: 200,
+    }
+
+    const makeClock = (videoTimeMs: number) => ({
+      hasVideoBackdrop: true,
+      videoTimeMs,
+      isVideoPaused: false,
+      sceneTimeMs: videoTimeMs,
+    })
+
+    it("evaluates Overlay A, B, and C visibility, holdLastFrame, loop, and fade at 0s, 1.5s, 3s, 5.8s, 6.5s, 8s", () => {
+      // 0.0s (0ms): B visible, A and C hidden
+      const a0 = evaluateOverlayPlaybackState(overlayA, makeClock(0), 3000)
+      const b0 = evaluateOverlayPlaybackState(overlayB, makeClock(0), 2000)
+      const c0 = evaluateOverlayPlaybackState(overlayC, makeClock(0), 2000)
+      expect(a0.visible).toBe(false)
+      expect(b0.visible).toBe(true)
+      expect(b0.localElapsedMs).toBe(0)
+      expect(c0.visible).toBe(false)
+
+      // 1.5s (1500ms): B visible, A and C hidden
+      expect(
+        evaluateOverlayPlaybackState(overlayA, makeClock(1500), 3000).visible,
+      ).toBe(false)
+      expect(
+        evaluateOverlayPlaybackState(overlayB, makeClock(1500), 2000).visible,
+      ).toBe(true)
+      expect(
+        evaluateOverlayPlaybackState(overlayC, makeClock(1500), 2000).visible,
+      ).toBe(false)
+
+      // 3.0s (3000ms): A and B visible, C hidden
+      const a3 = evaluateOverlayPlaybackState(overlayA, makeClock(3000), 3000)
+      expect(a3.visible).toBe(true)
+      expect(a3.phase).toBe("playing")
+      expect(a3.localElapsedMs).toBe(500)
+      expect(
+        evaluateOverlayPlaybackState(overlayB, makeClock(3000), 2000).visible,
+      ).toBe(true)
+      expect(
+        evaluateOverlayPlaybackState(overlayC, makeClock(3000), 2000).visible,
+      ).toBe(false)
+
+      // 5.8s (5800ms): A visible and holding last frame (5800 >= 2500 + 3000), B visible, C hidden
+      const a58 = evaluateOverlayPlaybackState(overlayA, makeClock(5800), 3000)
+      expect(a58.visible).toBe(true)
+      expect(a58.phase).toBe("holdingLastFrame")
+      expect(a58.seekTimeMs).toBe(3000)
+      expect(
+        evaluateOverlayPlaybackState(overlayB, makeClock(5800), 2000).visible,
+      ).toBe(true)
+      expect(
+        evaluateOverlayPlaybackState(overlayC, makeClock(5800), 2000).visible,
+      ).toBe(false)
+
+      // 6.5s (6500ms): A visible (held), B visible, C visible (6500 in 6000..8000)
+      expect(
+        evaluateOverlayPlaybackState(overlayA, makeClock(6500), 3000).visible,
+      ).toBe(true)
+      expect(
+        evaluateOverlayPlaybackState(overlayA, makeClock(6500), 3000).phase,
+      ).toBe("holdingLastFrame")
+      expect(
+        evaluateOverlayPlaybackState(overlayB, makeClock(6500), 2000).visible,
+      ).toBe(true)
+      const c65 = evaluateOverlayPlaybackState(overlayC, makeClock(6500), 2000)
+      expect(c65.visible).toBe(true)
+      expect(c65.localElapsedMs).toBe(500)
+      expect(c65.effectiveOpacity).toBeCloseTo(1, 3)
+
+      // 8.0s (8000ms): A still held (no durationMs cutoff), B and C hidden (durationMs window ended)
+      expect(
+        evaluateOverlayPlaybackState(overlayA, makeClock(8000), 3000).visible,
+      ).toBe(true)
+      expect(
+        evaluateOverlayPlaybackState(overlayB, makeClock(8000), 2000).visible,
+      ).toBe(false)
+      expect(
+        evaluateOverlayPlaybackState(overlayC, makeClock(8000), 2000).visible,
+      ).toBe(false)
+    })
+
+    it("computes late-join / reconnect video seek position deterministically", () => {
+      const seekSec = computeLateJoinVideoSeekSeconds({
+        serverStartedAt: 100000,
+        nowMs: 103500,
+        videoDurationSeconds: 8,
+        loop: false,
+      })
+      expect(seekSec).toBeCloseTo(3.5, 3)
+
+      const loopedSeek = computeLateJoinVideoSeekSeconds({
+        serverStartedAt: 100000,
+        nowMs: 110500,
+        videoDurationSeconds: 8,
+        loop: true,
+      })
+      expect(loopedSeek).toBeCloseTo(2.5, 3)
+    })
+
+    it("computes aspect-preserving stage style and clamps normalized dragging safely", () => {
+      const styleA = computeOverlayStageStyle(overlayA, 0.9)
+      expect(styleA.left).toBe("50.00%")
+      expect(styleA.top).toBe("22.00%")
+      expect(styleA.width).toBe("28.00%")
+      expect(styleA.opacity).toBe(0.9)
+      expect(styleA.transform).toContain("translate(-50%, -50%)")
+
+      const clamped = clampNormalizedStagePoint(-0.2, 1.5)
+      expect(clamped.x).toBe(0)
+      expect(clamped.y).toBe(1)
+    })
+
+    it("renders CinematicLayerStack and ScenePresenter with all 6 composited layers and never links Lottie completion to onMediaEnded", () => {
+      const html = renderToStaticMarkup(
+        React.createElement(ScenePresenter, {
+          scene: {
+            kind: "opening",
+            title: "Grand Showdown",
+            subtitle: "Live Broadcast",
+            mediaUrl: "/media/intro.mp4",
+            mediaType: "video",
+            stageLayout: "cinema",
+            mediaFit: "cover",
+            logoPosition: "center",
+            textOverlay: true,
+            durationMs: 5000,
+            advance: "onMediaEnd",
+            overlayAnimations: [overlayA, overlayB, overlayC],
+          },
+          controlledTimeMs: 3000,
+        }),
+      )
+
+      expect(html).toContain('data-testid="cinematic-layer-stack-opening"')
+      expect(html).toContain('data-testid="scene-cinema-backdrop"')
+      expect(html).toContain('data-testid="cinematic-layer-tint-opening"')
+      expect(html).toContain('data-testid="cinematic-layer-behind-title"')
+      expect(html).toContain('data-testid="cinematic-layer-native-title"')
+      expect(html).toContain('data-testid="cinematic-layer-above-title"')
+      expect(html).toContain('data-testid="cinematic-layer-interactive"')
+      expect(html).toContain('data-testid="cinematic-overlay-overlay-a"')
+      expect(html).toContain('data-testid="cinematic-overlay-overlay-b"')
+      expect(html).toContain('data-testid="cinematic-overlay-overlay-c"')
+      // Overlay A and B are visible at 3000ms, Overlay C is hidden at 3000ms
+      expect(html).toContain('data-overlay-id="overlay-a"')
+      expect(html).toContain('data-overlay-visible="true"')
+      expect(html).toContain('data-overlay-visible="false"')
     })
   })
 })

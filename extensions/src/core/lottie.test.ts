@@ -1,6 +1,11 @@
 import { describe, expect, it } from "vitest"
 import { showMediaCatalogItemSchema } from "./card-appearance"
-import { MAX_LOTTIE_JSON_BYTES, validateLottieJson } from "./lottie"
+import {
+  createDotLottieArchive,
+  MAX_LOTTIE_JSON_BYTES,
+  validateDotLottieContainer,
+  validateLottieJson,
+} from "./lottie"
 
 export const MINIMAL_VALID_LOTTIE_FIXTURE = {
   v: "5.7.4",
@@ -191,5 +196,140 @@ describe("Lottie JSON Security & Schema Validator", () => {
     }
     const parsed = showMediaCatalogItemSchema.safeParse(item)
     expect(parsed.success).toBe(true)
+  })
+
+  it("detects baked full-frame solid backgrounds and warns without rejecting", () => {
+    const withBakedBg = {
+      ...MINIMAL_VALID_LOTTIE_FIXTURE,
+      layers: [
+        ...MINIMAL_VALID_LOTTIE_FIXTURE.layers,
+        {
+          ddd: 0,
+          ind: 99,
+          ty: 1,
+          nm: "Solid BG",
+          sw: 400,
+          sh: 400,
+          sc: "#000000",
+          ip: 0,
+          op: 120,
+          st: 0,
+        },
+      ],
+    }
+    const res = validateLottieJson(withBakedBg)
+    expect(res.ok).toBe(true)
+    if (res.ok) {
+      expect(res.meta.hasBakedBackground).toBe(true)
+      expect(res.meta.warnings).toContain(
+        "warnings:extensions.lottieBakedBackground",
+      )
+    }
+  })
+
+  it("validates a self-contained .lottie ZIP container with manifest and internal PNG image", () => {
+    const png1x1 = Uint8Array.from(
+      Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+        "base64",
+      ),
+    )
+    const animWithArchiveImage = {
+      ...MINIMAL_VALID_LOTTIE_FIXTURE,
+      assets: [{ id: "img_0", w: 1, h: 1, u: "images/", p: "dot.png", e: 0 }],
+    }
+    const archive = createDotLottieArchive([
+      {
+        name: "manifest.json",
+        data: JSON.stringify({
+          version: "1.0",
+          animations: [{ id: "intro", loop: false, speed: 1 }],
+        }),
+      },
+      {
+        name: "animations/intro.json",
+        data: JSON.stringify(animWithArchiveImage),
+      },
+      { name: "images/dot.png", data: png1x1 },
+    ])
+
+    const res = validateDotLottieContainer(archive)
+    expect(res.ok).toBe(true)
+    if (res.ok) {
+      expect(res.animationIds).toEqual(["intro"])
+      expect(res.convertedFromBodymovinZip).toBe(false)
+      expect(res.meta.durationMs).toBe(2000)
+    }
+  })
+
+  it("safely packages a clean Bodymovin ZIP (data.json + images/) into a canonical .lottie container", () => {
+    const png1x1 = Uint8Array.from(
+      Buffer.from(
+        "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=",
+        "base64",
+      ),
+    )
+    const rawBodymovinZip = createDotLottieArchive([
+      {
+        name: "data.json",
+        data: JSON.stringify({
+          ...MINIMAL_VALID_LOTTIE_FIXTURE,
+          assets: [
+            { id: "img_0", w: 1, h: 1, u: "images/", p: "dot.png", e: 0 },
+          ],
+        }),
+      },
+      { name: "images/dot.png", data: png1x1 },
+    ])
+
+    const res = validateDotLottieContainer(rawBodymovinZip)
+    expect(res.ok).toBe(true)
+    if (res.ok) {
+      expect(res.convertedFromBodymovinZip).toBe(true)
+      expect(res.animationIds).toEqual(["default"])
+      // Resulting packaged archive must pass strict .lottie validation with conversion disabled
+      const revalidated = validateDotLottieContainer(res.archiveBytes, {
+        allowBodymovinZipConversion: false,
+      })
+      expect(revalidated.ok).toBe(true)
+    }
+  })
+
+  it("rejects Zip Slip path traversal, nested ZIPs, bad image magic bytes, and scripts inside .lottie", () => {
+    const traversalZip = createDotLottieArchive([
+      {
+        name: "../evil.json",
+        data: JSON.stringify(MINIMAL_VALID_LOTTIE_FIXTURE),
+      },
+    ])
+    expect(validateDotLottieContainer(traversalZip).ok).toBe(false)
+
+    const nestedZip = createDotLottieArchive([
+      {
+        name: "manifest.json",
+        data: JSON.stringify({ animations: [{ id: "a" }] }),
+      },
+      {
+        name: "animations/a.json",
+        data: JSON.stringify(MINIMAL_VALID_LOTTIE_FIXTURE),
+      },
+      { name: "images/fake.png", data: traversalZip },
+    ])
+    expect(validateDotLottieContainer(nestedZip).ok).toBe(false)
+
+    const scriptManifestZip = createDotLottieArchive([
+      {
+        name: "manifest.json",
+        data: JSON.stringify({
+          generator: "<script>alert(1)</script>",
+          animations: [{ id: "a" }],
+        }),
+      },
+      {
+        name: "animations/a.json",
+        data: JSON.stringify(MINIMAL_VALID_LOTTIE_FIXTURE),
+      },
+    ])
+    expect(validateDotLottieContainer(scriptManifestZip).ok).toBe(false)
   })
 })

@@ -204,7 +204,16 @@ export function authoredShowToNativeBundleDraft(
             mediaUrl: card.mediaUrl,
             mediaType: card.mediaType,
             title: card.title,
+            ...(card.subtitle !== undefined ? { subtitle: card.subtitle } : {}),
+            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+            ...(card.textOverlay !== undefined
+              ? { textOverlay: card.textOverlay }
+              : {}),
+            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
             durationMs: card.durationMs,
+            ...(card.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              : {}),
             advance: card.advance,
             ...(card.volume !== undefined ? { volume: card.volume } : {}),
             ...(card.loop !== undefined ? { loop: card.loop } : {}),
@@ -213,6 +222,9 @@ export function authoredShowToNativeBundleDraft(
               ? { showControls: card.showControls }
               : {}),
             ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            ...(card.overlayAnimations
+              ? { overlayAnimations: card.overlayAnimations }
+              : {}),
             ...sceneAppearance,
           }
           break
@@ -286,6 +298,9 @@ export function authoredShowToNativeBundleDraft(
               ? { textOverlay: card.textOverlay }
               : {}),
             ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              : {}),
             ...(card.volume !== undefined ? { volume: card.volume } : {}),
             ...(card.loop !== undefined ? { loop: card.loop } : {}),
             ...(card.muted !== undefined ? { muted: card.muted } : {}),
@@ -299,6 +314,9 @@ export function authoredShowToNativeBundleDraft(
               : {}),
             ...(card.lottieSpeed !== undefined
               ? { lottieSpeed: card.lottieSpeed }
+              : {}),
+            ...(card.overlayAnimations
+              ? { overlayAnimations: card.overlayAnimations }
               : {}),
             durationMs: card.durationMs,
             advance: card.advance,
@@ -320,6 +338,9 @@ export function authoredShowToNativeBundleDraft(
               ? { textOverlay: card.textOverlay }
               : {}),
             ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              : {}),
             ...(card.volume !== undefined ? { volume: card.volume } : {}),
             ...(card.loop !== undefined ? { loop: card.loop } : {}),
             ...(card.muted !== undefined ? { muted: card.muted } : {}),
@@ -333,6 +354,9 @@ export function authoredShowToNativeBundleDraft(
               : {}),
             ...(card.lottieSpeed !== undefined
               ? { lottieSpeed: card.lottieSpeed }
+              : {}),
+            ...(card.overlayAnimations
+              ? { overlayAnimations: card.overlayAnimations }
               : {}),
             durationMs: card.durationMs,
             advance: card.advance,
@@ -700,7 +724,16 @@ export function nativeBundleToAuthoredShow(
             mediaUrl: scene.mediaUrl,
             mediaType: scene.mediaType,
             title: scene.title,
+            ...(scene.subtitle !== undefined ? { subtitle: scene.subtitle } : {}),
+            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
+            ...(scene.textOverlay !== undefined
+              ? { textOverlay: scene.textOverlay }
+              : {}),
+            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
             durationMs: scene.durationMs,
+            ...(scene.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              : {}),
             advance: scene.advance,
             ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
             ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
@@ -709,6 +742,9 @@ export function nativeBundleToAuthoredShow(
               ? { showControls: scene.showControls }
               : {}),
             ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
+            ...(scene.overlayAnimations
+              ? { overlayAnimations: scene.overlayAnimations }
+              : {}),
             ...sceneAppearance,
           })
           break
@@ -782,6 +818,9 @@ export function nativeBundleToAuthoredShow(
               ? { textOverlay: scene.textOverlay }
               : {}),
             ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              : {}),
             ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
             ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
             ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
@@ -795,6 +834,9 @@ export function nativeBundleToAuthoredShow(
               : {}),
             ...(scene.lottieSpeed !== undefined
               ? { lottieSpeed: scene.lottieSpeed }
+              : {}),
+            ...(scene.overlayAnimations
+              ? { overlayAnimations: scene.overlayAnimations }
               : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
@@ -816,6 +858,9 @@ export function nativeBundleToAuthoredShow(
               ? { textOverlay: scene.textOverlay }
               : {}),
             ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.mediaEndFallbackMs !== undefined
+              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              : {}),
             ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
             ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
             ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
@@ -829,6 +874,9 @@ export function nativeBundleToAuthoredShow(
               : {}),
             ...(scene.lottieSpeed !== undefined
               ? { lottieSpeed: scene.lottieSpeed }
+              : {}),
+            ...(scene.overlayAnimations
+              ? { overlayAnimations: scene.overlayAnimations }
               : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
