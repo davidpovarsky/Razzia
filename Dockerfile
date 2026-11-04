@@ -13,11 +13,11 @@ COPY packages/socket/package.json ./packages/socket/
 COPY packages/e2e/package.json ./packages/e2e/
 COPY extensions/package.json ./extensions/
 
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm build
+RUN pnpm --filter @razzia/socket build && pnpm --filter @razzia/web build
 
 # ---- RUNNER ----
 FROM alpine:3.24.2 AS runner
