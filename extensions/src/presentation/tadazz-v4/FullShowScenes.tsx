@@ -2,14 +2,28 @@ import type { ReactNode } from "react"
 import type { TadazzV4Data, TadazzV4Answer } from "./types"
 
 export const FULL_SHOW_SCENES = [
-  "company-opening", "grand-opening", "representative-directory", "phone-instructions",
-  "connection-readiness", "round-one", "story-progress", "tie-break",
-  "story-assembly", "story-live", "round-two", "grand-finale",
+  "company-opening",
+  "grand-opening",
+  "representative-directory",
+  "phone-instructions",
+  "connection-readiness",
+  "round-one",
+  "story-progress",
+  "tie-break",
+  "story-assembly",
+  "story-live",
+  "round-two",
+  "grand-finale",
 ] as const
 export type FullShowScene = (typeof FULL_SHOW_SCENES)[number]
 export const isFullShowScene = (value: string): value is FullShowScene =>
   (FULL_SHOW_SCENES as readonly string[]).includes(value)
-export interface FullShowPerson { table: number; name: string }
+
+export interface FullShowPerson {
+  table: number
+  name: string
+}
+
 export interface FullShowInput extends TadazzV4Data {
   representatives?: FullShowPerson[]
   dialNumber?: string
@@ -23,89 +37,448 @@ export interface FullShowInput extends TadazzV4Data {
   eventArtworkUrl?: string
   curtainLeftUrl?: string
   curtainRightUrl?: string
+  groupPage?: number
 }
-const roles = ["Main Character", "Second Character", "Era", "Crisis", "Ending"]
-const num = (n: number) => String(n).padStart(2, "0")
-const picture = (a: TadazzV4Answer | undefined, fallback: number) => a?.imageUrl
-  ? <img className="full-picture" src={a.imageUrl} alt={a.alt || a.title || ""} />
-  : <div className="full-picture full-picture-empty">{num(fallback+1)}</div>
-function Head({title,chip}: {title?:string;chip?:string}) {
-  return <div className="full-headbar"><strong className="full-head-logo">TADA<span>ZZ!</span></strong><div className="full-head-center">{title}</div><span className="full-chip">{chip}</span></div>
+
+const DEFAULT_STORY_ROLES = [
+  "Main Character",
+  "Second Character",
+  "Era",
+  "Crisis",
+  "Ending",
+]
+const BRAND_LOGO_SRC = "/tadazz-show/v4/tadazz-brand-logo.png"
+const num = (n: number) => String(Math.max(1, n)).padStart(2, "0")
+
+export function BrandLogo({ className }: { className?: string }) {
+  return (
+    <span className={`full-brand-badge ${className || ""}`.trim()}>
+      <img
+        src={BRAND_LOGO_SRC}
+        alt="TADAZZ!"
+        className="full-brand-img"
+        onError={(e) => {
+          e.currentTarget.style.display = "none"
+        }}
+      />
+      <strong className="full-brand-text">
+        TADA<span>ZZ!</span>
+      </strong>
+    </span>
+  )
 }
-function StoryCards({data,progress=false,live=false}: {data:FullShowInput;progress?:boolean;live?:boolean}) {
-  const winners=data.winners ?? []
-  const count=Math.min(5,Math.max(0,data.completed ?? 0))
-  return <div className={`full-story-cards${live?" full-story-hold":""}`}>
-    {roles.map((role,i)=>{
-      const a=winners[i]
-      const ready=!progress || i<count
-      return <article key={role} className={`full-story-piece${ready?"":" pending"}`} style={{animationDelay:`${i*180}ms`}}>
-        <div className="full-story-role">{data.storyRoles?.[i] || role}</div>
-        {ready ? picture(a,i) : <div className="full-picture full-picture-empty">?</div>}
-        <div className="full-story-title">{ready ? (a?.title || `Choice ${i+1}`) : "AWAITING THE VOTE"}</div>
-      </article>
-    })}
-  </div>
-}
-function Directory({data}:{data:FullShowInput}) {
-  const reps=data.representatives || []
-  const connected=new Set(data.connectedTables || [])
-  return <><Head title="FIND YOUR TABLE REPRESENTATIVE" chip="PHONE VOTING"/>
-    <div className="full-phone-banner"><small>CALL TO JOIN</small><strong>{data.dialNumber || "NUMBER TO BE ADDED"}</strong></div>
-    <div className="full-directory" data-testid="tadazz-full-directory">{Array.from({length:40},(_,i)=>{
-      const table=i+1,person=reps.find(r=>r.table===table)
-      return <div key={table} data-table={table} className={`full-rep-row${connected.has(table)?" connected":""}`}>
-        <b>{num(table)}</b><span>{person?.name || "Name to be supplied"}</span><i aria-label={connected.has(table)?"Connected":"Waiting"}/>
-      </div>
-    })}</div>
-  </>
-}
-function PhoneInstructions({data}:{data:FullShowInput}) {
-  return <><Head title="JUST DIAL. THEN CHOOSE." chip="KEYPAD VOTING"/>
-    <div className="full-phone-instructions">
-      <div className="full-phone-device"><div className="full-phone-speaker"/><div className="full-phone-screen"><small>TADAZZ! IS READY</small><strong>{data.dialNumber || "DIAL IN"}</strong></div><div className="full-phone-keys">{["1","2","3","4","5","6","7","8","9","*","0","#"].map((n,i)=><span key={n} style={{animationDelay:`${i*100}ms`}}>{n}</span>)}</div></div>
-      <div className="full-phone-steps">{[["01","DIAL THE EVENT NUMBER","The host will display or announce the number."],["02","LISTEN FOR THE QUESTION","Discuss your choice with your table."],["03","PRESS 1, 2, 3, 4 OR 5","One vote per table, using the phone keypad."]].map(([n,t,d])=><div key={n}><b>{n}</b><strong>{t}</strong><p>{d}</p></div>)}</div>
+
+const picture = (a: TadazzV4Answer | undefined, fallback: number) =>
+  a?.imageUrl ? (
+    <img
+      className="full-picture"
+      src={a.imageUrl}
+      alt={a.alt || a.title || ""}
+    />
+  ) : (
+    <div className="full-picture full-picture-empty">{num(fallback + 1)}</div>
+  )
+
+function Head({ title, chip }: { title?: string; chip?: string }) {
+  return (
+    <div className="full-headbar">
+      <BrandLogo className="full-head-logo" />
+      <div className="full-head-center">{title}</div>
+      <span className="full-chip">{chip}</span>
     </div>
-  </>
+  )
 }
-function Readiness({data}:{data:FullShowInput}) {
-  const connected=new Set(data.connectedTables || [])
-  return <><Head title="THE TABLES ARE LIGHTING UP" chip="LIVE CONNECTIONS"/>
-    <h2 className="full-subhead">THE ROOM IS COMING ONLINE</h2>
-    <div className="full-light-grid">{Array.from({length:40},(_,i)=>{
-      const n=i+1
-      return <div data-table={n} key={n} className={`full-light${connected.has(n)?" connected":""}`} style={{animationDelay:`${(i%10)*60+Math.floor(i/10)*75}ms`}}><small>TABLE</small><b>{num(n)}</b><i/></div>
-    })}</div>
-    <div className="full-light-status"><b>{connected.size} / 40 TABLES CONNECTED</b><div><i style={{width:`${Math.min(100,connected.size/40*100)}%`}}/></div><small>{data.isLive?"CONNECTED TABLES":"PREVIEW DATA — NOT LIVE"}</small></div>
-  </>
+
+export function StoryCards({
+  data,
+  progress = false,
+  live = false,
+}: {
+  data: FullShowInput
+  progress?: boolean
+  live?: boolean
+}) {
+  const winners = data.winners ?? []
+  const count = Math.min(5, Math.max(0, data.completed ?? 0))
+  const roles =
+    data.storyRoles && data.storyRoles.length === 5
+      ? data.storyRoles
+      : DEFAULT_STORY_ROLES
+  return (
+    <div className={`full-story-cards${live ? "full-story-hold" : ""}`}>
+      {roles.map((role, i) => {
+        const a = winners[i]
+        const ready = !progress || i < count
+        const displayTitle = ready
+          ? a?.title || a?.alt || `Choice ${i + 1}`
+          : "AWAITING THE VOTE"
+        return (
+          <article
+            key={role}
+            className={["full-story-piece", !ready && "pending"]
+              .filter(Boolean)
+              .join(" ")}
+            style={{ animationDelay: `${i * 180}ms` }}
+            data-role-index={i}
+            data-ready={ready ? "true" : "false"}
+          >
+            <div className="full-story-role">{role}</div>
+            {ready ? (
+              picture(a, i)
+            ) : (
+              <div className="full-picture full-picture-empty">?</div>
+            )}
+            <div className="full-story-index">{num(i + 1)}</div>
+            <div className="full-story-title">{displayTitle}</div>
+          </article>
+        )
+      })}
+    </div>
+  )
 }
-function Tie({data}:{data:FullShowInput}) {
-  const picks=data.contestants || data.winners?.slice(0,2) || []
-  return <><Head title="THE AUDIENCE IS SPLIT" chip={`ROUND ${num(data.round || 1)}`}/>
-    <div className="full-tie-wrap">{[0,1].map(i=><article key={i} className={`full-tie-card ${data.resolvedIndex===i?"chosen":data.resolvedIndex!=null?"muted":""}`} style={{animationDelay:`${i*190}ms`}}>
-      {picture(picks[i],i)}<h2>{picks[i]?.title || `Choice ${i+1}`}</h2><b>{data.voteCount==null?"EQUAL VOTES":`${data.voteCount} VOTES`}</b>
-    </article>)}<strong className="full-equals">=</strong></div>
-    <p className="full-tie-instruction">{data.resolvedIndex==null?"Host, choose which picture goes into the story.":"CHOICE SELECTED"}</p>
-  </>
+
+export function Directory({ data }: { data: FullShowInput }) {
+  const reps = data.representatives || []
+  const connected = new Set(data.connectedTables || [])
+  const group =
+    typeof data.groupPage === "number" &&
+    data.groupPage >= 1 &&
+    data.groupPage <= 4
+      ? data.groupPage
+      : 0
+  const startTable = group > 0 ? (group - 1) * 10 + 1 : 1
+  const endTable = group > 0 ? group * 10 : 40
+  const tableCount = endTable - startTable + 1
+  const chipText =
+    group > 0
+      ? `GROUP ${group} · TABLES ${num(startTable)}–${num(endTable)}`
+      : "PHONE VOTING"
+
+  return (
+    <>
+      <Head title="FIND YOUR TABLE REPRESENTATIVE" chip={chipText} />
+      <div className="full-phone-banner">
+        <small>CALL TO JOIN</small>
+        <strong>{data.dialNumber || "NUMBER TO BE ADDED"}</strong>
+      </div>
+      <div
+        className={`full-directory${group > 0 ? "full-directory-focused" : ""}`}
+        data-testid="tadazz-full-directory"
+        data-group-page={group}
+      >
+        {Array.from({ length: tableCount }, (_, idx) => {
+          const table = startTable + idx
+          const person = reps.find((r) => r.table === table)
+          const isConnected = connected.has(table)
+          return (
+            <div
+              key={table}
+              data-table={table}
+              className={[
+                "full-rep-row",
+                isConnected && "connected full-join-pulse",
+              ]
+                .filter(Boolean)
+                .join(" ")}
+              style={{ animationDelay: `${(idx % 10) * 65}ms` }}
+            >
+              <b>{num(table)}</b>
+              <span>{person?.name || `Table ${table} Representative`}</span>
+              <i aria-label={isConnected ? "Connected" : "Waiting"} />
+            </div>
+          )
+        })}
+      </div>
+    </>
+  )
 }
-function Finale({data}:{data:FullShowInput}) {
-  return <div className="full-grand-finale"><div className="full-finale-rings"/><div className="full-finale-z left">Z</div><div className="full-finale-z right">Z</div><div className="full-final-center"><strong>TADA<span>ZZ!</span></strong></div>
-    <div className="full-curtain left" style={data.curtainLeftUrl?{backgroundImage:`url("${data.curtainLeftUrl}")`}:undefined}/>
-    <div className="full-curtain right" style={data.curtainRightUrl?{backgroundImage:`url("${data.curtainRightUrl}")`}:undefined}/>
-  </div>
+
+export function PhoneInstructions({ data }: { data: FullShowInput }) {
+  return (
+    <>
+      <Head title="JUST DIAL. THEN CHOOSE." chip="KEYPAD VOTING" />
+      <div className="full-phone-instructions">
+        <div className="full-phone-device">
+          <div className="full-phone-speaker" />
+          <div className="full-phone-screen">
+            <small>TADAZZ! IS READY</small>
+            <strong>{data.dialNumber || "DIAL IN"}</strong>
+          </div>
+          <div className="full-phone-keys">
+            {["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"].map(
+              (n, i) => (
+                <span key={n} style={{ animationDelay: `${i * 100}ms` }}>
+                  {n}
+                </span>
+              ),
+            )}
+          </div>
+        </div>
+        <div className="full-phone-steps">
+          {[
+            [
+              "01",
+              "DIAL THE EVENT NUMBER",
+              "The host will display or announce the number.",
+            ],
+            [
+              "02",
+              "LISTEN FOR THE QUESTION",
+              "Discuss your choice with your table.",
+            ],
+            [
+              "03",
+              "PRESS 1, 2, 3, 4 OR 5",
+              "One vote per table, using the phone keypad.",
+            ],
+          ].map(([n, t, d]) => (
+            <div key={n}>
+              <b>{n}</b>
+              <strong>{t}</strong>
+              <p>{d}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
+  )
 }
-export function FullShowSceneView({scene,data}: {scene:FullShowScene;data:FullShowInput}):ReactNode {
-  switch(scene) {
-    case "company-opening": return <div className="full-company"><div className="full-company-event" style={data.eventArtworkUrl?{backgroundImage:`url("${data.eventArtworkUrl}")`}:undefined}/><div className="full-company-brand">TADA<span>ZZ!</span></div></div>
-    case "grand-opening": return <div className="full-grand-opening"><div className="full-portal"/><strong>TADA<span>ZZ!</span></strong><h2>THE STORY STARTS WITH YOU</h2><p>A LIVE AUDIENCE-CREATED EXPERIENCE</p></div>
-    case "representative-directory": return <Directory data={data}/>
-    case "phone-instructions": return <PhoneInstructions data={data}/>
-    case "connection-readiness": return <Readiness data={data}/>
-    case "round-one": case "round-two": return <div className="full-round-launch"><div className="full-portal"/><small>{scene==="round-one"?"THE FIRST STORY":"A WHOLE NEW WORLD"}</small><strong>ROUND {num(scene==="round-one"?1:2)}</strong><div className="full-launch-rule"/></div>
-    case "story-progress": return <><Head title="YOUR WORLD IS TAKING SHAPE" chip={`ROUND ${num(data.round||1)}`}/><h3 className="full-story-status">{Math.max(0,Math.min(5,data.completed||0))} OF 5 STORY PIECES COLLECTED</h3><StoryCards data={data} progress/><div className="full-story-bridge"/></>
-    case "tie-break": return <Tie data={data}/>
-    case "story-assembly": return <><Head title="THE WORLD YOU CREATED" chip={`ROUND ${num(data.round||1)}`}/><StoryCards data={data}/><div className="full-story-bridge"/><div className="full-story-ending">LET THE STORY BEGIN…</div></>
-    case "story-live": return <><Head title="THE WORLD YOU CREATED" chip={`ROUND ${num(data.round||1)}`}/><StoryCards data={data} live/><div className="full-story-live-note">STORY {data.round||1} · HOST IS TELLING YOUR STORY</div></>
-    case "grand-finale": return <Finale data={data}/>
+
+export function Readiness({ data }: { data: FullShowInput }) {
+  const connected = new Set(data.connectedTables || [])
+  return (
+    <>
+      <Head title="THE TABLES ARE LIGHTING UP" chip="LIVE CONNECTIONS" />
+      <h2 className="full-subhead">THE ROOM IS COMING ONLINE</h2>
+      <div className="full-light-grid">
+        {Array.from({ length: 40 }, (_, i) => {
+          const n = i + 1
+          const isConnected = connected.has(n)
+          return (
+            <div
+              data-table={n}
+              key={n}
+              className={`full-light${isConnected ? "connected" : ""}`}
+              style={{
+                animationDelay: `${(i % 10) * 60 + Math.floor(i / 10) * 75}ms`,
+              }}
+            >
+              <small>TABLE</small>
+              <b>{num(n)}</b>
+              <i />
+            </div>
+          )
+        })}
+      </div>
+      <div className="full-light-status">
+        <b>{connected.size} / 40 TABLES CONNECTED</b>
+        <div>
+          <i
+            style={{ width: `${Math.min(100, (connected.size / 40) * 100)}%` }}
+          />
+        </div>
+        <small>
+          {data.isLive ? "CONNECTED TABLES" : "PREVIEW DATA — NOT LIVE"}
+        </small>
+      </div>
+    </>
+  )
+}
+
+export function Tie({ data }: { data: FullShowInput }) {
+  const picks = data.contestants || data.winners?.slice(0, 2) || []
+  const isResolved = data.resolvedIndex != null
+  const chosenPick =
+    isResolved && data.resolvedIndex != null ? picks[data.resolvedIndex] : null
+  const chosenTitle =
+    chosenPick?.title || chosenPick?.alt
+      ? ` · ${chosenPick.title || chosenPick.alt}`
+      : ""
+  return (
+    <>
+      <Head
+        title="THE AUDIENCE IS SPLIT"
+        chip={`ROUND ${num(data.round || 1)}`}
+      />
+      <div className="full-tie-wrap">
+        {[0, 1].map((i) => {
+          const pick = picks[i]
+          const isChosen = data.resolvedIndex === i
+          const isMuted = isResolved && !isChosen
+          const displayTitle = pick?.title || pick?.alt || `Choice ${i + 1}`
+          return (
+            <article
+              key={i}
+              className={`full-tie-card ${isChosen ? "chosen" : isMuted ? "muted" : ""}`}
+              style={{ animationDelay: `${i * 190}ms` }}
+              data-tie-index={i}
+              data-chosen={isChosen ? "true" : undefined}
+            >
+              {picture(pick, i)}
+              <div className="full-tie-index">{num(i + 1)}</div>
+              <h2>{displayTitle}</h2>
+              <b>
+                {data.voteCount == null
+                  ? "EQUAL VOTES"
+                  : `${data.voteCount} VOTES`}
+              </b>
+            </article>
+          )
+        })}
+        <strong className="full-equals">=</strong>
+      </div>
+      <p className="full-tie-instruction">
+        {data.resolvedIndex == null
+          ? "Host, choose which picture goes into the story."
+          : `CHOICE SELECTED${chosenTitle}`}
+      </p>
+    </>
+  )
+}
+
+export function Finale({ data }: { data: FullShowInput }) {
+  const leftCurtain =
+    data.curtainLeftUrl || "/tadazz-show/second-library/curtain-left.png"
+  const rightCurtain =
+    data.curtainRightUrl || "/tadazz-show/second-library/curtain-right.png"
+  return (
+    <div className="full-grand-finale">
+      <div className="full-finale-rings" />
+      <div className="full-finale-z left">Z</div>
+      <div className="full-finale-z right">Z</div>
+      <div className="full-final-center">
+        <BrandLogo className="full-finale-logo" />
+      </div>
+      <div
+        className="full-curtain left"
+        style={{ backgroundImage: `url("${leftCurtain}")` }}
+      />
+      <div
+        className="full-curtain right"
+        style={{ backgroundImage: `url("${rightCurtain}")` }}
+      />
+    </div>
+  )
+}
+
+export function CompanyOpening({ data }: { data: FullShowInput }) {
+  const artwork =
+    data.eventArtworkUrl ||
+    "/tadazz-show/second-library/creating-worlds-intro.png"
+  return (
+    <div className="full-company">
+      <div
+        className="full-company-event"
+        style={{ backgroundImage: `url("${artwork}")` }}
+      />
+      <div className="full-company-brand">
+        <BrandLogo className="full-company-logo" />
+      </div>
+    </div>
+  )
+}
+
+export function GrandOpening({ data }: { data: FullShowInput }) {
+  return (
+    <div className="full-grand-opening">
+      <div className="full-portal" />
+      <BrandLogo className="full-opening-logo" />
+      <h2>{data.title || "THE STORY STARTS WITH YOU"}</h2>
+      <p>{data.subtitle || "A LIVE AUDIENCE-CREATED EXPERIENCE"}</p>
+    </div>
+  )
+}
+
+export function RoundLaunch({
+  scene,
+  data,
+}: {
+  scene: "round-one" | "round-two"
+  data: FullShowInput
+}) {
+  const isRoundOne = scene === "round-one"
+  return (
+    <div className="full-round-launch">
+      <div className="full-portal" />
+      <small>{isRoundOne ? "THE FIRST STORY" : "A WHOLE NEW WORLD"}</small>
+      <strong>ROUND {num(isRoundOne ? 1 : 2)}</strong>
+      <div className="full-launch-rule" />
+    </div>
+  )
+}
+
+export function FullShowSceneView({
+  scene,
+  data,
+}: {
+  scene: FullShowScene
+  data: FullShowInput
+}): ReactNode {
+  switch (scene) {
+    case "company-opening":
+      return <CompanyOpening data={data} />
+    case "grand-opening":
+      return <GrandOpening data={data} />
+    case "representative-directory":
+      return <Directory data={data} />
+    case "phone-instructions":
+      return <PhoneInstructions data={data} />
+    case "connection-readiness":
+      return <Readiness data={data} />
+    case "round-one":
+    case "round-two":
+      return <RoundLaunch scene={scene} data={data} />
+    case "story-progress":
+      return (
+        <>
+          <Head
+            title="YOUR WORLD IS TAKING SHAPE"
+            chip={`ROUND ${num(data.round || 1)}`}
+          />
+          <h3 className="full-story-status">
+            {Math.max(0, Math.min(5, data.completed || 0))} OF 5 STORY PIECES
+            COLLECTED
+          </h3>
+          <StoryCards data={data} progress />
+          <div className="full-story-bridge" />
+        </>
+      )
+    case "tie-break":
+      return <Tie data={data} />
+    case "story-assembly":
+      return (
+        <>
+          <Head
+            title="THE WORLD YOU CREATED"
+            chip={`ROUND ${num(data.round || 1)}`}
+          />
+          <StoryCards data={data} />
+          <div className="full-story-bridge" />
+          <div className="full-story-ending">LET THE STORY BEGIN…</div>
+        </>
+      )
+    case "story-live":
+      return (
+        <>
+          <Head
+            title="THE WORLD YOU CREATED"
+            chip={`ROUND ${num(data.round || 1)}`}
+          />
+          <StoryCards data={data} live />
+          <div className="full-story-live-note">
+            STORY {data.round || 1} · HOST IS TELLING YOUR STORY
+          </div>
+        </>
+      )
+    case "grand-finale":
+      return <Finale data={data} />
   }
+}
+
+export function renderFullShowScene(
+  scene: FullShowScene,
+  data: FullShowInput,
+): ReactNode {
+  if (!isFullShowScene(scene)) return null
+  return <FullShowSceneView scene={scene} data={data} />
 }

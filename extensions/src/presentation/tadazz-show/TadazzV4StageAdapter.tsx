@@ -53,8 +53,8 @@ function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
 function isPhotoQuestion(q: StageQuestion): boolean {
   return Boolean(
     q.questionImage &&
-      q.options.length === 4 &&
-      q.options.every((opt) => !opt.image),
+    q.options.length === 4 &&
+    q.options.every((opt) => !opt.image),
   )
 }
 
@@ -174,7 +174,14 @@ export const TadazzV4StageAdapter = forwardRef<
       backgroundFit: backdropFit,
       labels: v4Labels,
     })
-  }, [interactive, multiSelect, onSelectOption, backdropUrl, backdropFit, v4Labels])
+  }, [
+    interactive,
+    multiSelect,
+    onSelectOption,
+    backdropUrl,
+    backdropFit,
+    v4Labels,
+  ])
 
   const buildQuestionData = useCallback(
     (q: StageQuestion, over: Partial<TadazzV4Data> = {}): TadazzV4Data => {
@@ -297,10 +304,7 @@ export const TadazzV4StageAdapter = forwardRef<
             ? Math.max(0, (deadlineMs - Date.now()) / 1000)
             : seconds
         const timed =
-          seconds !== null &&
-          seconds > 0 &&
-          remaining !== null &&
-          remaining > 0
+          seconds !== null && seconds > 0 && remaining !== null && remaining > 0
         if (isPhotoQuestion(q)) {
           if (alreadyOnStage) {
             v4Ref.current?.patchData(
@@ -337,7 +341,8 @@ export const TadazzV4StageAdapter = forwardRef<
       async lockVoting() {
         const q = questionRef.current
         if (!q || modeRef.current === "locked") return
-        if (modeRef.current !== "voting" && modeRef.current !== "question") return
+        if (modeRef.current !== "voting" && modeRef.current !== "question")
+          return
         setScreenMode("none")
         setMode("locked")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
@@ -368,7 +373,9 @@ export const TadazzV4StageAdapter = forwardRef<
         )
       },
 
-      async revealResults(input: StageRevealInput): Promise<StageRevealResult | null> {
+      async revealResults(
+        input: StageRevealInput,
+      ): Promise<StageRevealResult | null> {
         const q = questionRef.current
         if (!q) return null
         setScreenMode("none")
@@ -508,6 +515,10 @@ export const TadazzV4StageAdapter = forwardRef<
         })
       },
 
+      updateFullShowData(patch) {
+        v4Ref.current?.patchData(patch)
+      },
+
       async showTopPick({ question, counts, topIndex, emptyMessage }) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null
@@ -600,7 +611,7 @@ export const TadazzV4StageAdapter = forwardRef<
   const customSlot: ReactNode = (
     <>
       <div
-        className={`tz-screen${screenMode === "intro" ? " is-visible" : ""}`}
+        className={`tz-screen${screenMode === "intro" ? "is-visible" : ""}`}
         data-testid="tadazz-intro-screen"
       >
         <div className="tz-screen-inner">
@@ -616,7 +627,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen${screenMode === "win" ? " is-visible" : ""}`}
+        className={`tz-screen${screenMode === "win" ? "is-visible" : ""}`}
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
@@ -664,7 +675,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen tz-custom-screen${screenMode === "custom" ? " is-visible" : ""}`}
+        className={`tz-screen tz-custom-screen${screenMode === "custom" ? "is-visible" : ""}`}
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">

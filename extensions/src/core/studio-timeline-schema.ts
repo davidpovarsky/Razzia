@@ -153,6 +153,38 @@ export const animationSceneSchema = z.strictObject({
   lottieFit: z.enum(["contain", "cover"]).default("contain").optional(),
   lottieLoop: z.boolean().default(true).optional(),
   lottieSpeed: z.number().min(0.25).max(3).default(1).optional(),
+  round: z.number().int().min(1).max(10).optional(),
+  completed: z.number().int().min(0).max(10).optional(),
+  dialNumber: z.string().max(32).optional(),
+  connectedTables: z.array(z.number().int().min(1).max(100)).optional(),
+  representatives: z
+    .array(z.object({ table: z.number().int(), name: z.string() }))
+    .optional(),
+  winners: z
+    .array(
+      z.object({
+        title: z.string(),
+        imageUrl: safeMediaUrlSchema.optional(),
+        alt: z.string().optional(),
+      }),
+    )
+    .optional(),
+  contestants: z
+    .array(
+      z.object({
+        title: z.string(),
+        imageUrl: safeMediaUrlSchema.optional(),
+        alt: z.string().optional(),
+      }),
+    )
+    .optional(),
+  voteCount: z.number().int().min(0).optional(),
+  resolvedIndex: z.number().int().min(0).max(10).nullable().optional(),
+  eventArtworkUrl: safeMediaUrlSchema.optional(),
+  curtainLeftUrl: safeMediaUrlSchema.optional(),
+  curtainRightUrl: safeMediaUrlSchema.optional(),
+  groupPage: z.number().int().min(0).max(4).optional(),
+  storyRoles: z.array(z.string()).optional(),
   ...sceneAppearanceFields,
 })
 
@@ -382,10 +414,23 @@ export interface PublicAnswerRecap {
   items: PublicAnswerRecapQuestionItem[]
 }
 
+export interface PublicFullShowData {
+  connectedTables?: number[]
+  dialNumber?: string
+  representatives?: Array<{ table: number; name: string }>
+  isLive?: boolean
+  tieCandidates?: PublicInterimOption[]
+  tieResolvedIndex?: number | null
+  round?: number
+  completed?: number
+  groupPage?: number
+}
+
 export interface ActiveSceneData {
   leaderboard?: { entries: PublicRankEntry[] }
   interimResults?: PublicInterimResults | null
   answerRecap?: PublicAnswerRecap | null
+  fullShow?: PublicFullShowData | null
 }
 
 // ── Studio Defaults Schema ────────────────────────────────────────────────

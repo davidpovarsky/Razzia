@@ -108,7 +108,13 @@ export type StageMode =
 
 /** Imperative API: the ten reference animation methods plus host-safe utilities. */
 export interface TadazzStageHandle {
-  showFullShowScene?(scene: import("../tadazz-v4/FullShowScenes").FullShowScene, data: import("../tadazz-v4/FullShowScenes").FullShowInput): Promise<void>
+  showFullShowScene?(
+    scene: import("../tadazz-v4/FullShowScenes").FullShowScene,
+    data: import("../tadazz-v4/FullShowScenes").FullShowInput,
+  ): Promise<void>
+  updateFullShowData?(
+    patch: Partial<import("../tadazz-v4/FullShowScenes").FullShowInput>,
+  ): void
   showIntro(): Promise<void>
   showQuestion(data: StageQuestion): Promise<void>
   /** Adds/updates option cards for the question already on stage (SHOW_QUESTION → SELECT_ANSWER). */
@@ -123,8 +129,17 @@ export interface TadazzStageHandle {
   showFinale(winner: StageWinner | null): Promise<void>
   showCustomScreen(): Promise<void>
   /** V4 extensions: spotlight single top-pick winner, round story recap, and round interlude. */
-  showTopPick?(data: { question?: StageQuestion; counts?: number[]; topIndex?: number | null; emptyMessage?: string }): Promise<void>
-  showRoundRecap?(data: { winners: StageOption[]; round?: number | null; subtitle?: string }): Promise<void>
+  showTopPick?(data: {
+    question?: StageQuestion
+    counts?: number[]
+    topIndex?: number | null
+    emptyMessage?: string
+  }): Promise<void>
+  showRoundRecap?(data: {
+    winners: StageOption[]
+    round?: number | null
+    subtitle?: string
+  }): Promise<void>
   showInterlude?(data: { title: string; subtitle?: string }): Promise<void>
   showChosen?(selectedIndices: number[]): Promise<void>
   pauseAnimations?(): void
@@ -183,7 +198,10 @@ export interface TadazzStageProps {
   onModeChange?: (mode: StageMode) => void
 }
 
-const emptyModel = (labels: TadazzStageLabels, hasCustom = false): StageModel => ({
+const emptyModel = (
+  labels: TadazzStageLabels,
+  hasCustom = false,
+): StageModel => ({
   version: 0,
   question: null,
   stageState: "",
@@ -242,7 +260,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
     if (!engineRef.current) engineRef.current = new MotionEngine()
     const engine = engineRef.current
 
-    const [model, setModel] = useState<StageModel>(() => emptyModel(labels, Boolean(customScreen)))
+    const [model, setModel] = useState<StageModel>(() =>
+      emptyModel(labels, Boolean(customScreen)),
+    )
     const modelRef = useRef(model)
     modelRef.current = model
     const versionRef = useRef(0)
@@ -289,7 +309,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
 
     /** setState and resolve once the DOM for that version is committed. */
     const commit = useCallback(
-      (patch: Partial<StageModel> | ((m: StageModel) => Partial<StageModel>)) => {
+      (
+        patch: Partial<StageModel> | ((m: StageModel) => Partial<StageModel>),
+      ) => {
         versionRef.current += 1
         const v = versionRef.current
         return new Promise<void>((resolve) => {
@@ -330,7 +352,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             : Infinity,
         )
         const scale = Math.min(vw / STAGE_WIDTH, vh / STAGE_HEIGHT)
-        stage.style.setProperty("--screen-scale", String(scale > 0 ? scale : 0.0001))
+        stage.style.setProperty(
+          "--screen-scale",
+          String(scale > 0 ? scale : 0.0001),
+        )
       }
       fit()
       const observer =
@@ -365,7 +390,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
     const scale = () =>
       parseFloat(
         stageRef.current
-          ? getComputedStyle(stageRef.current).getPropertyValue("--screen-scale")
+          ? getComputedStyle(stageRef.current).getPropertyValue(
+              "--screen-scale",
+            )
           : "1",
       ) || 1
 
@@ -389,7 +416,12 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           winnerTag: labelsRef.current.audienceFavourite,
         })
         if (panelRef.current) panelRef.current.style.cssText = ""
-        for (const n of [cardsRowRef.current, panelRef.current, statusbarRef.current, footerRef.current]) {
+        for (const n of [
+          cardsRowRef.current,
+          panelRef.current,
+          statusbarRef.current,
+          footerRef.current,
+        ]) {
           if (n) n.style.opacity = "1"
         }
         setMode("question")
@@ -411,7 +443,11 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
 
     const enterQuestion = useCallback(async () => {
       const tasks = [
-        engine.animate(panelRef.current, QUESTION_PANEL_ENTER.frames, QUESTION_PANEL_ENTER.timing),
+        engine.animate(
+          panelRef.current,
+          QUESTION_PANEL_ENTER.frames,
+          QUESTION_PANEL_ENTER.timing,
+        ),
         ...enterCards(),
       ]
       await Promise.all(tasks)
@@ -422,21 +458,41 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
       async (onCovered?: () => void | Promise<void>) => {
         await commit({ wipeVisible: true })
         if (wipeRef.current) wipeRef.current.style.opacity = "1"
-        if (blueRef.current) blueRef.current.style.transform = "translateX(-130%)"
-        if (citronRef.current) citronRef.current.style.transform = "translateX(130%)"
+        if (blueRef.current)
+          blueRef.current.style.transform = "translateX(-130%)"
+        if (citronRef.current)
+          citronRef.current.style.transform = "translateX(130%)"
         if (wordRef.current) wordRef.current.style.opacity = "0"
         await Promise.all([
-          engine.animate(blueRef.current, WIPE.blueIn, { duration: WIPE.approachDuration, easing: WIPE.approachEasing }),
-          engine.animate(citronRef.current, WIPE.citronIn, { duration: WIPE.approachDuration, easing: WIPE.approachEasing }),
+          engine.animate(blueRef.current, WIPE.blueIn, {
+            duration: WIPE.approachDuration,
+            easing: WIPE.approachEasing,
+          }),
+          engine.animate(citronRef.current, WIPE.citronIn, {
+            duration: WIPE.approachDuration,
+            easing: WIPE.approachEasing,
+          }),
         ])
-        await engine.animate(wordRef.current, WIPE.word, { duration: WIPE.wordDuration })
-        await engine.animate(flashRef.current, WIPE.flash, { duration: WIPE.flashDuration })
+        await engine.animate(wordRef.current, WIPE.word, {
+          duration: WIPE.wordDuration,
+        })
+        await engine.animate(flashRef.current, WIPE.flash, {
+          duration: WIPE.flashDuration,
+        })
         if (onCovered) await onCovered()
         await engine.wait(engine.reducedMotion ? 0 : WIPE.coveredHoldMs)
         await Promise.all([
-          engine.animate(blueRef.current, WIPE.blueOut, { duration: WIPE.exitDuration, easing: WIPE.exitEasing }),
-          engine.animate(citronRef.current, WIPE.citronOut, { duration: WIPE.exitDuration, easing: WIPE.exitEasing }),
-          engine.animate(wordRef.current, WIPE.wordOut, { duration: WIPE.wordOutDuration }),
+          engine.animate(blueRef.current, WIPE.blueOut, {
+            duration: WIPE.exitDuration,
+            easing: WIPE.exitEasing,
+          }),
+          engine.animate(citronRef.current, WIPE.citronOut, {
+            duration: WIPE.exitDuration,
+            easing: WIPE.exitEasing,
+          }),
+          engine.animate(wordRef.current, WIPE.wordOut, {
+            duration: WIPE.wordOutDuration,
+          }),
         ])
         await commit({ wipeVisible: false })
       },
@@ -454,7 +510,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
         for (const entry of next) {
           const node = scoreRefs.current.get(entry.id)
           if (node) {
-            node.textContent = (teamScores.current.get(entry.id) ?? 0).toLocaleString("en-US")
+            node.textContent = (
+              teamScores.current.get(entry.id) ?? 0
+            ).toLocaleString("en-US")
           }
         }
         return next
@@ -472,7 +530,8 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
     const api = useMemo<TadazzStageHandle>(() => {
       const lockVoting = async () => {
         if (!modelRef.current.question || modeRef.current === "locked") return
-        if (modeRef.current !== "voting" && modeRef.current !== "question") return
+        if (modeRef.current !== "voting" && modeRef.current !== "question")
+          return
         stopTimer()
         setMode("locked")
         await commit((m) => ({
@@ -485,7 +544,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
         }))
         await Promise.all(
           cardRefs.current.map((c, i) =>
-            engine.animate(c, CARD_LOCK.frames, { duration: CARD_LOCK.duration, delay: CARD_LOCK.delay(i) }),
+            engine.animate(c, CARD_LOCK.frames, {
+              duration: CARD_LOCK.duration,
+              delay: CARD_LOCK.delay(i),
+            }),
           ),
         )
       }
@@ -509,7 +571,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             logo.style.transform = INTRO.logoInitial.transform
           }
           await Promise.all([
-            engine.animate(logo, INTRO.logo, { duration: INTRO.logoDuration, easing: "cubic-bezier(.17,1.13,.3,1)" }),
+            engine.animate(logo, INTRO.logo, {
+              duration: INTRO.logoDuration,
+              easing: "cubic-bezier(.17,1.13,.3,1)",
+            }),
             engine.animate(shockRef.current, INTRO.shock, {
               duration: INTRO.shockDuration,
               delay: INTRO.shockDelay,
@@ -537,25 +602,37 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             before === data.options.length &&
             current.question === data.question &&
             current.options.every(
-              (o, i) => o.label === data.options[i]?.label && o.image === data.options[i]?.image,
+              (o, i) =>
+                o.label === data.options[i]?.label &&
+                o.image === data.options[i]?.image,
             )
           if (sameOptions) {
-            if (modelRef.current.screen !== "none") await commit({ screen: "none" })
+            if (modelRef.current.screen !== "none")
+              await commit({ screen: "none" })
             return
           }
           await commit((m) => ({
             screen: "none",
             question: data,
             flags: data.options.map(
-              (_, i) => m.flags[i] ?? (modeRef.current === "voting" ? { open: true } : {}),
+              (_, i) =>
+                m.flags[i] ??
+                (modeRef.current === "voting" ? { open: true } : {}),
             ),
           }))
           if (cardsRowRef.current) cardsRowRef.current.style.opacity = "1"
-          await Promise.all(enterCards(before > 0 && before === data.options.length ? data.options.length : 0))
+          await Promise.all(
+            enterCards(
+              before > 0 && before === data.options.length
+                ? data.options.length
+                : 0,
+            ),
+          )
         },
 
         async openVoting(seconds, deadlineMs) {
-          if (!modelRef.current.question || modeRef.current === "results") return
+          if (!modelRef.current.question || modeRef.current === "results")
+            return
           stopTimer()
           setMode("voting")
           const timed = seconds !== null && seconds > 0
@@ -572,7 +649,8 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             })),
           }))
           if (!timed) {
-            if (progressRef.current) progressRef.current.style.transform = "scaleX(1)"
+            if (progressRef.current)
+              progressRef.current.style.transform = "scaleX(1)"
             return
           }
           const duration = Math.max(1, Number(seconds) || 30)
@@ -594,13 +672,20 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           engine.reset()
           setMode("results")
           const n = q.options.length
-          const values = Array.from({ length: n }, (_, i) => Math.max(0, Number(input.counts[i]) || 0))
+          const values = Array.from({ length: n }, (_, i) =>
+            Math.max(0, Number(input.counts[i]) || 0),
+          )
           const total = values.reduce((a, b) => a + b, 0)
           const percentages = Array.from({ length: n }, (_, i) => {
             const p = input.percentages?.[i]
-            return typeof p === "number" && Number.isFinite(p) ? Math.max(0, Math.min(100, p)) : total ? (100 * values[i]) / total : 0
+            return typeof p === "number" && Number.isFinite(p)
+              ? Math.max(0, Math.min(100, p))
+              : total
+                ? (100 * values[i]) / total
+                : 0
           })
-          const isQuiz = input.mode === "quiz" && (input.solutions?.length ?? 0) > 0
+          const isQuiz =
+            input.mode === "quiz" && (input.solutions?.length ?? 0) > 0
           const max = Math.max(0, ...values)
           const top = isQuiz
             ? (input.solutions ?? []).filter((i) => i >= 0 && i < n)
@@ -608,7 +693,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           const ties = !isQuiz && top.length > 1
           await commit((m) => ({
             screen: "none",
-            question: m.question && input.note ? { ...m.question, note: input.note } : m.question,
+            question:
+              m.question && input.note
+                ? { ...m.question, note: input.note }
+                : m.question,
             stageState: "",
             timerDisplay: "none",
             statusText: labelsRef.current.audienceResults,
@@ -639,14 +727,24 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
               }),
             )
             tasks.push(
-              engine.animate(fill, [{ width: "0%" }, { width: `${percentages[i].toFixed(1)}%` }], {
-                duration: RESULT_FILL.duration,
-                delay: RESULT_FILL.delay(i),
-                easing: RESULT_FILL.easing,
-              }),
+              engine.animate(
+                fill,
+                [{ width: "0%" }, { width: `${percentages[i].toFixed(1)}%` }],
+                {
+                  duration: RESULT_FILL.duration,
+                  delay: RESULT_FILL.delay(i),
+                  easing: RESULT_FILL.easing,
+                },
+              ),
             )
             tasks.push(
-              engine.countPercent(result, 0, Math.round(percentages[i]), RESULT_COUNT.duration, RESULT_COUNT.delay(i)),
+              engine.countPercent(
+                result,
+                0,
+                Math.round(percentages[i]),
+                RESULT_COUNT.duration,
+                RESULT_COUNT.delay(i),
+              ),
             )
           })
           await Promise.all(tasks)
@@ -686,20 +784,30 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
               }),
             )
             tasks.push(
-              engine.countNumber(scoreRefs.current.get(entry.id), 0, Number(entry.score) || 0, LEADER_SCORE_ENTER.duration, LEADER_SCORE_ENTER.delay(i)),
+              engine.countNumber(
+                scoreRefs.current.get(entry.id),
+                0,
+                Number(entry.score) || 0,
+                LEADER_SCORE_ENTER.duration,
+                LEADER_SCORE_ENTER.delay(i),
+              ),
             )
           })
           await Promise.all(tasks)
-          for (const x of data) teamScores.current.set(x.id, Number(x.score) || 0)
+          for (const x of data)
+            teamScores.current.set(x.id, Number(x.score) || 0)
           return data
         },
 
         async updateLeaderboard(entries) {
           if (!entries.length) return []
-          if (modeRef.current !== "leaderboard") return this.showLeaderboard(entries)
+          if (modeRef.current !== "leaderboard")
+            return this.showLeaderboard(entries)
           engine.reset()
           const before = new Map<string, DOMRect>()
-          rowRefs.current.forEach((node, id) => before.set(id, node.getBoundingClientRect()))
+          rowRefs.current.forEach((node, id) =>
+            before.set(id, node.getBoundingClientRect()),
+          )
           const prevScores = new Map(teamScores.current)
           const next = await renderRows(entries)
           const s = scale()
@@ -709,7 +817,9 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             if (!row) return
             const old = before.get(entry.id)
             const now = row.getBoundingClientRect()
-            const diff = old ? (old.top - now.top) / s : LEADER_ROW_MOVE.newRowOffset
+            const diff = old
+              ? (old.top - now.top) / s
+              : LEADER_ROW_MOVE.newRowOffset
             tasks.push(
               engine.animate(row, LEADER_ROW_MOVE.frames(diff, Boolean(old)), {
                 duration: LEADER_ROW_MOVE.duration,
@@ -718,11 +828,18 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
               }),
             )
             tasks.push(
-              engine.countNumber(scoreRefs.current.get(entry.id), prevScores.get(entry.id) ?? 0, entry.score, LEADER_SCORE_MOVE.duration, LEADER_SCORE_MOVE.delay(i)),
+              engine.countNumber(
+                scoreRefs.current.get(entry.id),
+                prevScores.get(entry.id) ?? 0,
+                entry.score,
+                LEADER_SCORE_MOVE.duration,
+                LEADER_SCORE_MOVE.delay(i),
+              ),
             )
           })
           await Promise.all(tasks)
-          for (const x of next) teamScores.current.set(x.id, Number(x.score) || 0)
+          for (const x of next)
+            teamScores.current.set(x.id, Number(x.score) || 0)
           return next
         },
 
@@ -742,17 +859,40 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           stopTimer()
           engine.reset()
           setMode("finale")
-          await commit((m) => ({ screen: "win", winner, confettiKey: m.confettiKey + 1 }))
+          await commit((m) => ({
+            screen: "win",
+            winner,
+            confettiKey: m.confettiKey + 1,
+          }))
           const tasks: Array<Promise<void>> = [
-            engine.animate(winLogoRef.current, FINALE.logo, { duration: FINALE.logoDuration, easing: "cubic-bezier(.17,1.13,.3,1)" }),
-            engine.animate(winHeadlineRef.current, FINALE.headline, { duration: FINALE.headlineDuration, delay: FINALE.headlineDelay }),
-            engine.animate(winNameRef.current, FINALE.name, { duration: FINALE.nameDuration, delay: FINALE.nameDelay, easing: "cubic-bezier(.17,1.13,.3,1)" }),
-            engine.animate(winScoreRef.current, FINALE.score, { duration: FINALE.scoreDuration, delay: FINALE.scoreDelay }),
+            engine.animate(winLogoRef.current, FINALE.logo, {
+              duration: FINALE.logoDuration,
+              easing: "cubic-bezier(.17,1.13,.3,1)",
+            }),
+            engine.animate(winHeadlineRef.current, FINALE.headline, {
+              duration: FINALE.headlineDuration,
+              delay: FINALE.headlineDelay,
+            }),
+            engine.animate(winNameRef.current, FINALE.name, {
+              duration: FINALE.nameDuration,
+              delay: FINALE.nameDelay,
+              easing: "cubic-bezier(.17,1.13,.3,1)",
+            }),
+            engine.animate(winScoreRef.current, FINALE.score, {
+              duration: FINALE.scoreDuration,
+              delay: FINALE.scoreDelay,
+            }),
           ]
           if (!engine.reducedMotion) {
             confettiRefs.current.forEach((bit, i) => {
               const spec = confettiBit(i)
-              tasks.push(engine.animate(bit, spec.frames, { duration: spec.duration, delay: spec.delay, easing: spec.easing }))
+              tasks.push(
+                engine.animate(bit, spec.frames, {
+                  duration: spec.duration,
+                  delay: spec.delay,
+                  easing: spec.easing,
+                }),
+              )
             })
           }
           await Promise.all(tasks)
@@ -778,7 +918,18 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           setSelected(indexes)
         },
       }
-    }, [commit, engine, enterCards, enterQuestion, playWipe, renderQuestion, renderRows, setMode, stopTimer, updateTimer])
+    }, [
+      commit,
+      engine,
+      enterCards,
+      enterQuestion,
+      playWipe,
+      renderQuestion,
+      renderRows,
+      setMode,
+      stopTimer,
+      updateTimer,
+    ])
 
     useImperativeHandle(ref, () => api, [api])
 
@@ -806,7 +957,11 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
       : undefined
 
     return (
-      <div ref={viewportRef} className={`tz-viewport ${className ?? ""}`} data-testid="tadazz-stage-viewport">
+      <div
+        ref={viewportRef}
+        className={`tz-viewport ${className ?? ""}`}
+        data-testid="tadazz-stage-viewport"
+      >
         <section
           ref={stageRef}
           className={`tz-stage ${model.stageState}`.trim()}
@@ -815,9 +970,16 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           data-stage-mode={modeRef.current}
           data-question-key={q?.key ?? ""}
         >
-          <div className="tz-backdrop" style={backdropStyle} data-testid="tadazz-backdrop" />
+          <div
+            className="tz-backdrop"
+            style={backdropStyle}
+            data-testid="tadazz-backdrop"
+          />
           {underlay}
-          <div className="tz-ambient" style={{ display: model.ambient ? "block" : "none" }}>
+          <div
+            className="tz-ambient"
+            style={{ display: model.ambient ? "block" : "none" }}
+          >
             <div className="beam a" />
             <div className="beam b" />
             <div className="beam c" />
@@ -833,17 +995,33 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
           </div>
           {q && (
             <>
-              <div ref={panelRef} className="tz-question-panel" data-testid="tadazz-question-panel">
-                <div className="tz-question-text" style={{ fontSize: questionFontSize(q.question) }}>
+              <div
+                ref={panelRef}
+                className="tz-question-panel"
+                data-testid="tadazz-question-panel"
+              >
+                <div
+                  className="tz-question-text"
+                  style={{ fontSize: questionFontSize(q.question) }}
+                >
                   {q.question}
                 </div>
                 {q.note && model.statusMode === "results" && (
-                  <div className="tz-question-note" data-testid="tadazz-question-note">
+                  <div
+                    className="tz-question-note"
+                    data-testid="tadazz-question-note"
+                  >
                     {q.note}
                   </div>
                 )}
               </div>
-              <div ref={cardsRowRef} className="tz-cards" style={cardsStyle} role={canSelect ? "group" : undefined} aria-label={canSelect ? labels.answerChoices : undefined}>
+              <div
+                ref={cardsRowRef}
+                className="tz-cards"
+                style={cardsStyle}
+                role={canSelect ? "group" : undefined}
+                aria-label={canSelect ? labels.answerChoices : undefined}
+              >
                 {q.options.map((opt, i) => {
                   const f = model.flags[i] ?? {}
                   const isSelected = selected.includes(i)
@@ -872,8 +1050,14 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                       role={canSelect ? "button" : undefined}
                       tabIndex={canSelect ? 0 : undefined}
                       aria-pressed={canSelect ? isSelected : undefined}
-                      aria-label={canSelect ? `${String.fromCharCode(65 + i)} ${opt.label}` : undefined}
-                      onClick={canSelect ? () => onSelectOption?.(i) : undefined}
+                      aria-label={
+                        canSelect
+                          ? `${String.fromCharCode(65 + i)} ${opt.label}`
+                          : undefined
+                      }
+                      onClick={
+                        canSelect ? () => onSelectOption?.(i) : undefined
+                      }
                       onKeyDown={
                         canSelect
                           ? (e) => {
@@ -886,11 +1070,21 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                       }
                       data-multi={multiSelect ? "true" : undefined}
                     >
-                      <div className={`tz-photo-frame${opt.image ? "" : " tz-photo-empty"}`}>
+                      <div
+                        className={`tz-photo-frame${opt.image ? "" : "tz-photo-empty"}`}
+                      >
                         {opt.image ? (
-                          <img src={opt.image} alt={opt.alt || opt.label || labels.answerOption} loading="eager" decoding="async" />
+                          <img
+                            src={opt.image}
+                            alt={opt.alt || opt.label || labels.answerOption}
+                            loading="eager"
+                            decoding="async"
+                          />
                         ) : (
-                          <span className="tz-photo-monogram" aria-hidden="true">
+                          <span
+                            className="tz-photo-monogram"
+                            aria-hidden="true"
+                          >
                             {i + 1}
                           </span>
                         )}
@@ -924,14 +1118,26 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                 })}
               </div>
               <div ref={statusbarRef} className="tz-statusbar">
-                <div className={`tz-indicator${model.statusMode ? ` ${model.statusMode}` : ""}`} data-testid="tadazz-status">
+                <div
+                  className={`tz-indicator${model.statusMode ? ` ${model.statusMode}` : ""}`}
+                  data-testid="tadazz-status"
+                >
                   <i className="tz-statusdot" />
                   <span>{model.statusText}</span>
                 </div>
                 <div className="tz-vote-bar">
                   <span ref={progressRef} />
                 </div>
-                <span ref={timerRef} className="tz-timer" style={model.timerDisplay ? { display: model.timerDisplay } : undefined} data-testid="tadazz-timer" />
+                <span
+                  ref={timerRef}
+                  className="tz-timer"
+                  style={
+                    model.timerDisplay
+                      ? { display: model.timerDisplay }
+                      : undefined
+                  }
+                  data-testid="tadazz-timer"
+                />
               </div>
             </>
           )}
@@ -939,9 +1145,14 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             {labels.footer}
           </div>
 
-          <div className={`tz-screen${model.screen === "leader" ? " is-visible" : ""}`} data-testid="tadazz-leaderboard-screen">
+          <div
+            className={`tz-screen${model.screen === "leader" ? "is-visible" : ""}`}
+            data-testid="tadazz-leaderboard-screen"
+          >
             <div className="tz-screen-inner">
-              <div className="tz-screen-eyebrow">{labels.leaderboardEyebrow}</div>
+              <div className="tz-screen-eyebrow">
+                {labels.leaderboardEyebrow}
+              </div>
               <div className="tz-leader-title">
                 {labels.leaderboardTitlePrefix}
                 <span>{labels.leaderboardTitleAccent}</span>
@@ -951,7 +1162,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                 {model.rows.map((row, index) => (
                   <div
                     key={row.id}
-                    className={`tz-leader-row${index === 0 ? " champion" : ""}`}
+                    className={`tz-leader-row${index === 0 ? "champion" : ""}`}
                     data-id={row.id}
                     ref={(node) => {
                       if (node) rowRefs.current.set(row.id, node)
@@ -962,7 +1173,11 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                     <div className="tz-team-name">
                       {row.name}
                       {row.streak && row.streak >= 2 ? (
-                        <span role="img" aria-label={labels.streak} className="tz-streak-badge">
+                        <span
+                          role="img"
+                          aria-label={labels.streak}
+                          className="tz-streak-badge"
+                        >
                           🔥
                         </span>
                       ) : null}
@@ -980,7 +1195,10 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             </div>
           </div>
 
-          <div className={`tz-screen${model.screen === "win" ? " is-visible" : ""}`} data-testid="tadazz-finale-screen">
+          <div
+            className={`tz-screen${model.screen === "win" ? "is-visible" : ""}`}
+            data-testid="tadazz-finale-screen"
+          >
             <div className="tz-screen-inner">
               <div className="tz-confetti">
                 {model.confettiKey > 0 &&
@@ -990,7 +1208,12 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                       <span
                         key={`${model.confettiKey}:${i}`}
                         className="tz-confetti-bit"
-                        style={{ background: spec.background, left: spec.left, width: spec.width, height: spec.height }}
+                        style={{
+                          background: spec.background,
+                          left: spec.left,
+                          width: spec.width,
+                          height: spec.height,
+                        }}
                         ref={(node) => {
                           confettiRefs.current[i] = node
                         }}
@@ -998,11 +1221,20 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                     )
                   })}
               </div>
-              <img ref={winLogoRef} className="tz-win-logo" src={TADAZZ_LOGO_URL} alt="TADAZZ!" />
+              <img
+                ref={winLogoRef}
+                className="tz-win-logo"
+                src={TADAZZ_LOGO_URL}
+                alt="TADAZZ!"
+              />
               <div ref={winHeadlineRef} className="tz-win-headline">
                 {model.winner ? labels.champion : labels.finaleNoWinner}
               </div>
-              <div ref={winNameRef} className="tz-win-name" data-testid="tadazz-winner-name">
+              <div
+                ref={winNameRef}
+                className="tz-win-name"
+                data-testid="tadazz-winner-name"
+              >
                 {model.winner?.name ?? ""}
               </div>
               <div ref={winScoreRef} className="tz-win-score">
@@ -1011,21 +1243,38 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
             </div>
           </div>
 
-          <div className={`tz-screen${model.screen === "intro" ? " is-visible" : ""}`} data-testid="tadazz-intro-screen">
+          <div
+            className={`tz-screen${model.screen === "intro" ? "is-visible" : ""}`}
+            data-testid="tadazz-intro-screen"
+          >
             <div className="tz-screen-inner">
               <div ref={shockRef} className="tz-shock" />
-              <img ref={introLogoRef} className="tz-intro-logo" src={TADAZZ_LOGO_URL} alt="TADAZZ!" />
+              <img
+                ref={introLogoRef}
+                className="tz-intro-logo"
+                src={TADAZZ_LOGO_URL}
+                alt="TADAZZ!"
+              />
               <div className="tz-intro-caption">{labels.introCaption}</div>
             </div>
           </div>
 
-          <div className={`tz-screen tz-custom-screen${model.screen === "custom" ? " is-visible" : ""}`} data-testid="tadazz-custom-screen">
-            <div className="tz-screen-inner">{model.screen === "custom" ? customScreen : null}</div>
+          <div
+            className={`tz-screen tz-custom-screen${model.screen === "custom" ? "is-visible" : ""}`}
+            data-testid="tadazz-custom-screen"
+          >
+            <div className="tz-screen-inner">
+              {model.screen === "custom" ? customScreen : null}
+            </div>
           </div>
 
           {overlay}
 
-          <div ref={wipeRef} className={`tz-wipe${model.wipeVisible ? " is-visible" : ""}`} aria-hidden="true">
+          <div
+            ref={wipeRef}
+            className={`tz-wipe${model.wipeVisible ? "is-visible" : ""}`}
+            aria-hidden="true"
+          >
             <div ref={blueRef} className="tz-wipe-piece blue" />
             <div ref={citronRef} className="tz-wipe-piece citron" />
             <div ref={flashRef} className="tz-wipe-flash" />

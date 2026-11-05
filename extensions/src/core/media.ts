@@ -41,8 +41,12 @@ export const isSafeMediaUrl = (url: unknown): url is string => {
     return false
   }
 
-  // Root-relative /media/ or /sounds/ path
-  if (trimmed.startsWith("/media/") || trimmed.startsWith("/sounds/")) {
+  // Root-relative /media/, /sounds/, or /tadazz-show/ path
+  if (
+    trimmed.startsWith("/media/") ||
+    trimmed.startsWith("/sounds/") ||
+    trimmed.startsWith("/tadazz-show/")
+  ) {
     // Must not contain directory traversal
     return !trimmed.includes("..")
   }
@@ -205,11 +209,7 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
-        if (
-          item &&
-          item.audioCues &&
-          typeof item.audioCues === "object"
-        ) {
+        if (item && item.audioCues && typeof item.audioCues === "object") {
           for (const [cueKey, cueVal] of Object.entries(
             item.audioCues as Record<string, { url?: unknown }>,
           )) {
