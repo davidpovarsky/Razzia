@@ -242,13 +242,16 @@ const routes = apiFactory
     await grantMediaForGuest(c, game.gameId)
     return c.json({ status: "ready" })
   })
-  .get("/:gameId/roster", requireManager, (c) => {
+  .get("/:gameId/roster", requireManager, async (c) => {
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
 
     if (!game || game.manager.clientId !== c.get("claims").sub) {
       return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
     }
 
+    // A manager may have a valid Bearer session but no /media cookie after
+    // reopening a previously created room. Refresh the room-bound ticket.
+    await grantMediaForGuest(c, game.gameId)
     return c.json({ presence: game.getHostPresenceSnapshot() })
   })
   .patch(

@@ -190,6 +190,17 @@ describe("Tadazz HTTP tenant separation", () => {
       tokenB,
     )
     expect(otherManager.status).toBe(404)
+    const ownerRoster = await req(
+      "/games/" + room.gameId + "/roster",
+      "GET",
+      undefined,
+      tokenA,
+    )
+    expect(ownerRoster.status).toBe(200)
+    // Opening the manager room repairs a missing media cookie without
+    // granting access to a different manager or unrelated tenant.
+    expect(ownerRoster.headers.get("set-cookie")).toContain("tdz_room=")
+    expect(ownerRoster.headers.get("set-cookie")).toContain("Path=/media")
     const guest = await req("/auth/session", "POST", {})
     const playerToken = ((await guest.json()) as { token: string }).token
     const check = await req("/games/check", "POST", {

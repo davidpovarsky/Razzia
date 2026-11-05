@@ -100,6 +100,7 @@ const GameWrapper = ({
     useState<GameStatus<StatusDataMap> | null>(null)
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null)
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
+  const [roomMediaReady, setRoomMediaReady] = useState(false)
   const [countdown, setCountdown] = useState<{
     seconds: number
     total: number
@@ -118,6 +119,26 @@ const GameWrapper = ({
         .catch(() => undefined)
     }
   }, [manager, gameId, hostPresence, updateManager])
+
+  // Browser <img>/<audio> elements cannot attach the manager's Bearer token.
+  // Refresh the short-lived room media cookie whenever a host opens a room.
+  // Remount the stage once authorized so images retried after an initial 401.
+  useEffect(() => {
+    if (!manager || !gameId) return
+    let alive = true
+    setRoomMediaReady(false)
+    void fetch(`/api/games/${encodeURIComponent(gameId)}/display-media`, {
+      credentials: "same-origin",
+      cache: "no-store",
+    })
+      .then((response) => {
+        if (alive && response.ok) setRoomMediaReady(true)
+      })
+      .catch(() => undefined)
+    return () => {
+      alive = false
+    }
+  }, [manager, gameId])
 
   // Single authoritative state: resolve between store and local event state by epoch/seq
   const extensionState = useMemo(() => {
@@ -428,6 +449,22 @@ const GameWrapper = ({
       : null
 
   const renderStageContent = () => {
+    // The Goldy Motion Kit paints the whole branded opening. Do not mount
+    // the legacy black cinema card underneath while its iframe initializes.
+    // The manager's independent Next Screen control remains available.
+    if (motionEnabled && sceneKind === "opening" && motionScene) {
+      return (
+        <ExtensionStateProvider value={extensionState}>
+          <ViewRoleContext.Provider value={effectiveRole}>
+            <div
+              data-testid="tadazz-opening-background"
+              className="flex min-h-0 w-full flex-1"
+            />
+          </ViewRoleContext.Provider>
+        </ExtensionStateProvider>
+      )
+    }
+
     if (!extensionState) {
       return (
         <ExtensionStateProvider value={extensionState}>
@@ -682,11 +719,20 @@ const GameWrapper = ({
             {renderHeader()}
 
             <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-              {renderStageContent()}
+              <div
+                key={
+                  manager && roomMediaReady
+                    ? "media-authorized"
+                    : "media-pending"
+                }
+                className="flex h-full min-h-0 w-full flex-1 flex-col"
+              >
+                {renderStageContent()}
+              </div>
               {motionScene && <TadazzMotionStage scene={motionScene} />}
             </div>
 
-            {extensionState && (
+            {extensionState && (!manager || roomMediaReady) && (
               <AudioCuePlayer
                 cueId={activePhaseCueId}
                 audioExtras={
