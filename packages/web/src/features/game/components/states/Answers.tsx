@@ -14,6 +14,8 @@ import {
 } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
+import { TadazzMotionStage } from "@razzia/web/features/game/components/TadazzMotionStage"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
 import {
@@ -63,6 +65,7 @@ const Answers = ({
 }: Props & { data?: { remainingTime?: number } }) => {
   const { socket } = useSocket()
   const { player, gameId } = usePlayerStore()
+  const { questionStates } = useQuestionStore()
   const viewRole = useViewRole()
   const isSpectator = viewRole === "spectator"
   const isVisualPlayerMode = Boolean(player) || isSpectator
@@ -171,6 +174,7 @@ const Answers = ({
         stageAnimations?: CardStageAnimations
         questionDecoration?: QuestionDecoration
         tadazzBackground?: { mode: "original" | "animated" | "static" }
+        motionKit?: "goldy-20261105"
       }
     | undefined
 
@@ -203,8 +207,35 @@ const Answers = ({
     <QuestionEntrance
       entrance={stageAnimations.questionEntrance}
       epoch={animationEpochKey}
-      className="flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
+      className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
     >
+      {showTadazzCards &&
+        defaultsObj?.motionKit === "goldy-20261105" &&
+        (viewRole === "manager" || isSpectator) &&
+        currentVisuals?.length === 5 && (
+          <TadazzMotionStage
+            scene={{
+              key:
+                String(effectiveExtensionState?.gameId ?? gameId ?? "") +
+                ":" +
+                animationEpochKey,
+              mode: "vote",
+              question: {
+                question,
+                round: (questionStates?.current ?? 1) <= 5 ? 1 : 2,
+                number: questionStates?.current ?? 1,
+                totalQuestions: questionStates?.total ?? 10,
+                options: answers.map((label, index) => ({
+                  label,
+                  image:
+                    currentVisuals.find((v) => v.answerIndex === index)?.url ??
+                    "",
+                })),
+              },
+              seconds: time,
+            }}
+          />
+        )}
       {/* Question Header & Media Area */}
       <div
         className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {

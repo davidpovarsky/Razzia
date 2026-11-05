@@ -15,10 +15,7 @@ import {
   perQuestionExtrasSchema,
   teamsExtrasSchema,
 } from "./quiz-extras"
-import {
-  createDefaultRosterExtras,
-  rosterExtrasSchema,
-} from "./phone-roster"
+import { createDefaultRosterExtras, rosterExtrasSchema } from "./phone-roster"
 import { isSafeMediaUrl, safeMediaUrlSchema } from "./media"
 
 export const TIMELINE_ITEM_KINDS = [
@@ -345,10 +342,7 @@ export interface PublicInterimResults {
 }
 
 export type PublicAnswerRecapBadge =
-  | "mostSelected"
-  | "correctAnswer"
-  | "tiedMostSelected"
-  | "noResponses"
+  "mostSelected" | "correctAnswer" | "tiedMostSelected" | "noResponses"
 
 export interface PublicAnswerRecapWinnerOption {
   answerIndex: number
@@ -402,6 +396,8 @@ export const studioDefaultsSchema = z.strictObject({
   stageAnimations: cardStageAnimationsSchema.optional(),
   questionDecoration: questionDecorationSchema.optional(),
   tadazzBackground: tadazzShowBackgroundSchema.optional(),
+  /** Opt-in stage overlay backed by the owner's original Motion Kit assets. */
+  motionKit: z.enum(["goldy-20261105"]).optional(),
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>
@@ -515,7 +511,9 @@ export const quizExtrasV2Schema = z
               path: ["scenes", item.sceneId, "startQuestionId"],
               message: `errors:extensions.invalidRecapStartQuestion:${recapScene.startQuestionId}`,
             })
-          } else if (!seenQuestionIdsInTimeline.has(recapScene.startQuestionId)) {
+          } else if (
+            !seenQuestionIdsInTimeline.has(recapScene.startQuestionId)
+          ) {
             // startQuestionId exists in the show, but has not appeared before this answerRecap item!
             ctx.addIssue({
               code: "custom",

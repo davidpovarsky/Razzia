@@ -37,6 +37,10 @@ import {
   isNewerEnvelope,
 } from "@razzia/web/features/game/contexts/extension-state-context"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
+import {
+  TadazzMotionStage,
+  type TadazzMotionScene,
+} from "@razzia/web/features/game/components/TadazzMotionStage"
 import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -356,6 +360,73 @@ const GameWrapper = ({
       ? (currentSceneObj?.id ?? "scene")
       : (extensionState?.questionId ?? "question")
 
+  // Goldy's original Motion Kit is an explicitly opt-in visual presentation layer.
+  // The underlying Razzia manager/player logic remains the source of truth.
+  const motionEnabled =
+    (manager || effectiveRole === "spectator") &&
+    (extensionState?.extras.defaults as { motionKit?: string } | undefined)
+      ?.motionKit === "goldy-20261105"
+  const sceneKind = (
+    extensionState?.extras.currentScene as { kind?: string } | undefined
+  )?.kind
+  const activeSceneData = extensionState?.extras.activeSceneData as
+    | {
+        interimResults?: {
+          questionText: string
+          options: Array<{
+            answerIndex?: number
+            label: string
+            imageUrl?: string
+            count?: number
+          }>
+        }
+      }
+    | undefined
+  const motionResults = activeSceneData?.interimResults
+  const motionQuestionIndex = questionStates?.current ?? 1
+  const motionQuestion =
+    motionResults?.options?.length === 5 && sceneKind === "interimResults"
+      ? {
+          question: motionResults.questionText,
+          round: motionQuestionIndex <= 5 ? 1 : 2,
+          number: motionQuestionIndex,
+          totalQuestions: questionStates?.total ?? 10,
+          options: motionResults.options.map((opt) => ({
+            label: opt.label,
+            image: opt.imageUrl ?? "",
+          })),
+        }
+      : undefined
+  const motionMode =
+    sceneKind === "opening"
+      ? "intro"
+      : sceneKind === "transition"
+        ? "transition"
+        : sceneKind === "interimResults"
+          ? "results"
+          : null
+  const motionScene: TadazzMotionScene | null =
+    motionEnabled &&
+    motionMode &&
+    (motionMode === "intro" ||
+      motionMode === "transition" ||
+      (motionQuestion?.question &&
+        motionQuestion.options.every((option) => Boolean(option.image))))
+      ? {
+          key: [
+            extensionState?.gameId ?? "",
+            motionMode,
+            motionQuestionIndex,
+            extensionState?.epoch ?? 0,
+            extensionState?.questionId ?? "",
+            sceneKind ?? "",
+          ].join(":"),
+          mode: motionMode,
+          question: motionQuestion,
+          counts: motionResults?.options.map((opt) => opt.count ?? 0),
+        }
+      : null
+
   const renderStageContent = () => {
     if (!extensionState) {
       return (
@@ -598,7 +669,7 @@ const GameWrapper = ({
         </div>
       )}
 
-      <div className="z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
+      <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
         {!isConnected && !statusName ? (
           <div className="flex h-full w-full flex-1 flex-col items-center justify-center">
             <Loader className="h-30" />
@@ -610,7 +681,10 @@ const GameWrapper = ({
           <>
             {renderHeader()}
 
-            {renderStageContent()}
+            <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+              {renderStageContent()}
+              {motionScene && <TadazzMotionStage scene={motionScene} />}
+            </div>
 
             {extensionState && (
               <AudioCuePlayer

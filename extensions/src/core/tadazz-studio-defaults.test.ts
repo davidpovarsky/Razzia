@@ -5,12 +5,14 @@ describe("Tadazz show-level settings persistence", () => {
   it("leaves existing Razzia shows unchanged", () => {
     const legacy = studioDefaultsSchema.parse({})
     expect(legacy.tadazzBackground).toBeUndefined()
+    expect(legacy.motionKit).toBeUndefined()
     expect(legacy.newQuestionMode).toBe("quiz")
     expect(legacy.leaderboardPolicy).toBe("cardOnly")
   })
   it("survives JSON round-trip and keeps unrelated settings", () => {
     const defaults = studioDefaultsSchema.parse({
       newQuestionMode: "survey",
+      motionKit: "goldy-20261105",
       stageAnimations: {
         answerEntrance: {
           preset: "cascade",
