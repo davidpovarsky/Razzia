@@ -11,9 +11,21 @@ export function getAccountDb(): DatabaseSync {
   const base = process.env.CONFIG_PATH ?? resolve(process.cwd(), "config")
   const path = resolve(base, "tadazz-accounts.sqlite")
   mkdirSync(dirname(path), { recursive: true })
-  db = new DatabaseSync(path, { timeout: 3000 })
-  db.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
-  db.exec(`
+  // Restrict SQLite sidecar creation without changing uploaded media permissions.
+  const priorUmask = process.platform === "win32" ? null : process.umask(0o077)
+  try {
+    db = new DatabaseSync(path, { timeout: 3000 })
+    db.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
+    if (process.platform !== "win32") {
+      for (const filename of [path, path + "-wal", path + "-shm"]) {
+        try {
+          chmodSync(filename, 0o600)
+        } catch {
+          /* sidecar may not yet exist */
+        }
+      }
+    }
+    db.exec(`
     CREATE TABLE IF NOT EXISTS accounts (
       id TEXT PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
@@ -43,6 +55,9 @@ export function getAccountDb(): DatabaseSync {
       attempts INTEGER NOT NULL
     );
   `)
+  } finally {
+    if (priorUmask !== null) process.umask(priorUmask)
+  }
   if (process.platform !== "win32") {
     try {
       chmodSync(path, 0o600)

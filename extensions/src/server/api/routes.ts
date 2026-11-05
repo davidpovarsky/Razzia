@@ -30,6 +30,14 @@ function loadSelfHostedDotLottieWasm(): Uint8Array | null {
   if (cachedDotLottieWasmBytes) {
     return cachedDotLottieWasmBytes
   }
+  // The tiny production runner contains the socket bundle, not pnpm node_modules.
+  // The official WASM binary is copied into this fixed runtime path by Docker.
+  const productionWasm = process.env.TADAZZ_DOTLOTTIE_WASM_PATH ??
+    "/app/runtime/dotlottie-player.wasm"
+  if (fs.existsSync(productionWasm)) {
+    cachedDotLottieWasmBytes = new Uint8Array(fs.readFileSync(productionWasm))
+    return cachedDotLottieWasmBytes
+  }
   try {
     const req = createRequire(import.meta.url)
     const reactEntry = req.resolve("@lottiefiles/dotlottie-react")

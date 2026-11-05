@@ -19,6 +19,12 @@ COPY . .
 
 RUN pnpm --filter @razzia/socket build && pnpm --filter @razzia/web build
 
+# Preserve the dotLottie WASM engine in the slim Alpine runner.
+RUN mkdir -p /app/runtime && \
+    find /app/node_modules -type f -name dotlottie-player.wasm -print -quit | \
+      xargs -r -I {} cp {} /app/runtime/dotlottie-player.wasm && \
+    test -s /app/runtime/dotlottie-player.wasm
+
 # ---- RUNNER ----
 FROM alpine:3.24.2 AS runner
 
@@ -29,6 +35,7 @@ COPY docker/supervisord.conf /etc/supervisord.conf
 
 COPY --from=builder /app/packages/web/dist /app/web
 COPY --from=builder /app/packages/socket/dist/index.cjs /app/socket/index.cjs
+COPY --from=builder /app/runtime/dotlottie-player.wasm /app/runtime/dotlottie-player.wasm
 
 EXPOSE 3000
 
