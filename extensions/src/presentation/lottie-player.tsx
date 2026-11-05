@@ -405,6 +405,44 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     hasCompletedOnce,
   ])
 
+  const shouldHideAfterFinish =
+    !loop && finish === "hide" && hasCompletedOnce && !prefersReducedMotion
+
+  const staticPoster = useMemo(() => {
+    if (inlineValidation && inlineValidation.ok) {
+      return extractStaticPosterShapes(inlineValidation.data)
+    }
+    return null
+  }, [inlineValidation])
+
+  // Calculate deterministic fallback frame when WASM hasn't initialized yet (e.g. SSR or fast seek test)
+  const effectiveFrame = useMemo(() => {
+    if (isEngineReady) {
+      return currentFrame
+    }
+    const posterFr = staticPoster?.fr ?? 60
+    const posterIp = staticPoster?.ip ?? 0
+    const posterOp = staticPoster?.op ?? 120
+    const span = Math.max(1, posterOp - posterIp)
+    if (seekTimeMs !== undefined) {
+      const elapsedFrames =
+        (Math.max(0, seekTimeMs) / 1000) * posterFr * clampedSpeed
+      const rawFrame = loop
+        ? posterIp + (elapsedFrames % span)
+        : Math.min(posterOp, posterIp + elapsedFrames)
+      return Math.round(rawFrame)
+    }
+    return posterIp
+  }, [
+    isEngineReady,
+    currentFrame,
+    staticPoster,
+    seekTimeMs,
+    clampedSpeed,
+    loop,
+  ])
+
+  // All Hooks must run before an empty/invalid source can return early.
   const trimmedSrc = src?.trim() ?? ""
   if (!trimmedSrc && effectiveData === undefined) {
     if (!emptyLabel) {
@@ -438,35 +476,6 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     )
   }
 
-  const shouldHideAfterFinish =
-    !loop && finish === "hide" && hasCompletedOnce && !prefersReducedMotion
-
-  const staticPoster = useMemo(() => {
-    if (inlineValidation && inlineValidation.ok) {
-      return extractStaticPosterShapes(inlineValidation.data)
-    }
-    return null
-  }, [inlineValidation])
-
-  // Calculate deterministic fallback frame when WASM hasn't initialized yet (e.g. SSR or fast seek test)
-  const effectiveFrame = useMemo(() => {
-    if (isEngineReady) {
-      return currentFrame
-    }
-    const posterFr = staticPoster?.fr ?? 60
-    const posterIp = staticPoster?.ip ?? 0
-    const posterOp = staticPoster?.op ?? 120
-    const span = Math.max(1, posterOp - posterIp)
-    if (seekTimeMs !== undefined) {
-      const elapsedFrames = (Math.max(0, seekTimeMs) / 1000) * posterFr * clampedSpeed
-      const rawFrame = loop
-        ? posterIp + (elapsedFrames % span)
-        : Math.min(posterOp, posterIp + elapsedFrames)
-      return Math.round(rawFrame)
-    }
-    return posterIp
-  }, [isEngineReady, currentFrame, staticPoster, seekTimeMs, clampedSpeed, loop])
-
   return (
     <div
       data-testid={resolvedTestId}
@@ -479,7 +488,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       data-lottie-frame={String(effectiveFrame)}
       data-lottie-hidden={shouldHideAfterFinish ? "true" : "false"}
       aria-hidden="true"
-      className={`pointer-events-none select-none overflow-hidden ${className ?? "relative flex h-full w-full items-center justify-center"}`}
+      className={`pointer-events-none overflow-hidden select-none ${className ?? "relative flex h-full w-full items-center justify-center"}`}
       style={{
         opacity: shouldHideAfterFinish ? 0 : 1,
         backgroundColor: "transparent",
