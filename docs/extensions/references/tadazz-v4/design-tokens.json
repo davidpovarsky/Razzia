@@ -1,0 +1,63 @@
+{
+  "stage": {
+    "width": 1920,
+    "height": 1080
+  },
+  "fontStack": "Inter, ui-sans-serif, system-ui, -apple-system, Segoe UI, Arial, sans-serif",
+  "palette": {
+    "night": "#08001d",
+    "purple": "#34056f",
+    "violet": "#8b20f4",
+    "pink": "#ef48df",
+    "blue": "#00baff",
+    "royal": "#2e70ff",
+    "lime": "#e5ff37",
+    "gold": "#ffbe53",
+    "cream": "#fff5db",
+    "ink": "#130423"
+  },
+  "typography": {
+    "question": "62px / 900 / -0.038em",
+    "answerTitle": "31px / 900 / -0.022em",
+    "choiceNumber": "60px / 1000 / -0.045em",
+    "countdown": "76px / 1000",
+    "roundRecapFinale": "75px / 1000",
+    "interlude": "166px / 1000"
+  },
+  "geometry": {
+    "questionFrame": {
+      "top": 137,
+      "left": 260,
+      "right": 260,
+      "height": 171
+    },
+    "answers": {
+      "left": 77,
+      "right": 77,
+      "top": 353,
+      "gap": 19
+    },
+    "answerCard": {
+      "height": 462,
+      "radius": 32
+    },
+    "number": {
+      "width": 112,
+      "height": 76
+    },
+    "timer": {
+      "left": 1694,
+      "top": 154,
+      "size": 181
+    },
+    "recap": {
+      "top": 266,
+      "left": 81,
+      "right": 81
+    }
+  },
+  "easing": {
+    "default": "cubic-bezier(.16,.9,.23,1)",
+    "dramatic": "cubic-bezier(.15,.82,.22,1.02)"
+  }
+}
