@@ -2,9 +2,9 @@ import { describe, expect, it } from "vitest"
 import { TADAZZ_V4_SCENES, TADAZZ_V4_LABELS, normalizeData, percentagesFor, topIndicesFor } from "./types"
 
 describe("TADAZZ v4 extracted presentation kit", () => {
-  it("exposes the complete 13-scene motion vocabulary", () => {
-    expect(TADAZZ_V4_SCENES).toHaveLength(13)
-    expect(new Set(TADAZZ_V4_SCENES).size).toBe(13)
+  it("exposes core and second-library full-show motion vocabulary", () => {
+    expect(TADAZZ_V4_SCENES).toHaveLength(25)
+    expect(new Set(TADAZZ_V4_SCENES).size).toBe(25)
   })
   it("does not invent winner when zero votes are received", () => {
     expect(topIndicesFor({counts:[0,0,0,0,0]}, 5)).toEqual([])
@@ -20,7 +20,7 @@ describe("TADAZZ v4 extracted presentation kit", () => {
   })
   it("preserves source-derived copy and the source scene ordering", () => {
     expect(TADAZZ_V4_SCENES.slice(0,5)).toEqual(["question","picture-answers","voting-open","countdown","vote-locked"])
-    expect(TADAZZ_V4_LABELS.storyBegin).toBe("LET THE STORY BEGIN…")
+    expect(TADAZZ_V4_LABELS.storyBegin).toBe("LET THE STORY BEGINâ€¦")
     expect(TADAZZ_V4_LABELS.leaderboard).toBe("LEADERBOARD")
     expect(TADAZZ_V4_LABELS.teamLeaderboard).toBe("TEAM LEADERBOARD")
   })

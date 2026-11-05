@@ -445,6 +445,10 @@ export class TadazzV4Motion {
       case 'round-recap': this.recap(); break
       case 'interlude': this.interlude(); break
       case 'z-wipe': this.zWipe(); break
+      case 'company-opening': case 'grand-opening': case 'representative-directory':
+      case 'phone-instructions': case 'connection-readiness': case 'round-one':
+      case 'story-progress': case 'tie-break': case 'story-assembly':
+      case 'story-live': case 'round-two': case 'grand-finale': break
     }
     return Promise.allSettled(this.active.map(a => a.finished)).then(() => token === this.token)
   }

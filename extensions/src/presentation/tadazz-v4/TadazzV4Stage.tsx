@@ -4,6 +4,7 @@ import { StageAmbientV4, StageBackdropV4, StageSceneV4, ZWipeV4 } from "./compon
 import { TadazzV4Motion } from "./motion"
 import { normalizeData, TADAZZ_V4_ASSET_BASE, TADAZZ_V4_SHOW_SCENES, type TadazzV4Data, type TadazzV4Scene, type TadazzV4StageHandle, type TadazzV4StageProps } from "./types"
 import "./tadazz-v4.css"
+import "./full-show.css"
 
 interface CurrentScene { scene: TadazzV4Scene; data: TadazzV4Data; revision: number }
 

@@ -108,6 +108,7 @@ export type StageMode =
 
 /** Imperative API: the ten reference animation methods plus host-safe utilities. */
 export interface TadazzStageHandle {
+  showFullShowScene?(scene: import("../tadazz-v4/FullShowScenes").FullShowScene, data: import("../tadazz-v4/FullShowScenes").FullShowInput): Promise<void>
   showIntro(): Promise<void>
   showQuestion(data: StageQuestion): Promise<void>
   /** Adds/updates option cards for the question already on stage (SHOW_QUESTION → SELECT_ANSWER). */

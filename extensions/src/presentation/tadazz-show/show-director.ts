@@ -1,4 +1,5 @@
 import type { ShowScene } from "./presentation-scene"
+import { isFullShowScene, type FullShowScene, type FullShowInput } from "../tadazz-v4/FullShowScenes"
 import type {
   StageLeaderEntry,
   StageMode,
@@ -21,6 +22,7 @@ export type StageStep =
   | { op: "updateLeaderboard"; entries: StageLeaderEntry[] }
   | { op: "playZZWipe"; thenCustom: boolean; interlude?: { title: string; subtitle?: string } }
   | { op: "showFinale"; winner: StageWinner | null }
+  | { op: "showFullShowScene"; scene: FullShowScene; data: FullShowInput }
   | { op: "showTopPick"; question?: StageQuestion; counts?: number[]; topIndex?: number | null; emptyMessage?: string }
   | { op: "showRoundRecap"; winners: Array<{ label: string; image?: string; alt?: string }>; round?: number | null; subtitle?: string }
   | { op: "showInterlude"; title: string; subtitle?: string }
@@ -201,6 +203,31 @@ function planScene(prev: ShowScene | null, next: Extract<ShowScene, { kind: "sce
       ]
     case "animation": {
       const preset = (scene as { preset?: string }).preset
+      if (preset && isFullShowScene(preset)) {
+        const authored = scene as typeof scene & {
+          round?:number; completed?:number; dialNumber?:string; connectedTables?:number[]
+          representatives?:Array<{table:number;name:string}>
+          winners?:Array<{title:string;imageUrl?:string}>
+          contestants?:Array<{title:string;imageUrl?:string}>
+          voteCount?:number; resolvedIndex?:number|null
+          eventArtworkUrl?:string; curtainLeftUrl?:string; curtainRightUrl?:string
+        }
+        const recap = activeSceneData?.answerRecap
+        const winners = recap?.items?.flatMap(item => {
+          const option = item.winningOptions?.[0]
+          return option ? [{ title:option.label, imageUrl:option.imageUrl }] : []
+        })
+        return [{ op:"showFullShowScene", scene:preset, data: {
+          title:scene.title,subtitle:scene.subtitle,round:authored.round,
+          completed:authored.completed ?? recap?.completedQuestionsCount,
+          dialNumber:authored.dialNumber, connectedTables:authored.connectedTables,
+          representatives:authored.representatives, winners:authored.winners ?? winners,
+          contestants:authored.contestants, voteCount:authored.voteCount,
+          resolvedIndex:authored.resolvedIndex, eventArtworkUrl:authored.eventArtworkUrl,
+          curtainLeftUrl:authored.curtainLeftUrl, curtainRightUrl:authored.curtainRightUrl,
+          isLive:false
+        }}]
+      }
       const r = activeSceneData?.interimResults
       if (preset === "top-pick" || preset === "most-chosen" || preset === "spotlight") {
         const prevQ = prev && "question" in prev ? prev.question : undefined
@@ -326,6 +353,10 @@ export async function runSteps(
       }
       case "showFinale":
         await handle.showFinale(step.winner)
+        break
+      case "showFullShowScene":
+        if (handle.showFullShowScene) await handle.showFullShowScene(step.scene, step.data)
+        else await handle.showCustomScreen()
         break
       case "showTopPick":
         if (handle.showTopPick) await handle.showTopPick(step)

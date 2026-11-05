@@ -495,6 +495,19 @@ export const TadazzV4StageAdapter = forwardRef<
         await Promise.all(tasks)
       },
 
+      async showFullShowScene(scene, data) {
+        setScreenMode("none")
+        cardsOnStageKeyRef.current = null
+        setMode("custom")
+        const p = interactivePropsRef.current
+        await v4Ref.current?.play(scene, {
+          ...data,
+          backgroundUrl: data.backgroundUrl ?? p.backdropUrl,
+          backgroundFit: data.backgroundFit ?? p.backdropFit,
+          labels: v4LabelsRef.current,
+        })
+      },
+
       async showTopPick({ question, counts, topIndex, emptyMessage }) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null

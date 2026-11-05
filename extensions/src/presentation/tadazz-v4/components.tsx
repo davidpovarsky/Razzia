@@ -1,3 +1,4 @@
+import { FullShowSceneView, isFullShowScene, type FullShowInput } from "./FullShowScenes"
 import type { CSSProperties } from "react"
 import {
   TADAZZ_V4_ASSET_BASE, TADAZZ_V4_LABELS, TADAZZ_V4_SHOW_SCENES,
@@ -12,7 +13,7 @@ export function StageIdentityV4({ data, scene, assetBase }: { data: TadazzV4Data
   if (scene === "z-wipe" || scene === "interlude") return null
   const number = Math.max(1, data.number ?? 1)
   const round = Math.max(1, data.round ?? 1)
-  const detail = data.showQuestionNumber === false ? "" : ` · QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
+  const detail = data.showQuestionNumber === false ? "" : ` Â· QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
   return <>
     <div className="stage-identity"><img className="stage-brand-logo" src={asset(assetBase, "tadazz-brand-logo.png")} alt="TADAZZ!" /></div>
     <div className="stage-round-pill">ROUND {id2(round)}{detail}</div>
@@ -156,7 +157,7 @@ export function VoteStatusV4({ data, locked, chosen = false }: { data: TadazzV4D
   const left = data.remainingSeconds
   const time = !locked && !chosen && left != null && Number.isFinite(left) ? `${id2(Math.floor(left / 60))}:${id2(Math.max(0, Math.ceil(left) % 60))}` : null
   return <div className={`vote-status${locked ? " locked-status" : ""}`} data-v4="vote-status" data-testid="tadazz-status">
-    <i className="vote-dot" aria-hidden="true"/><strong>{text}</strong>{time && <span data-testid="tadazz-timer">• {time}</span>}
+    <i className="vote-dot" aria-hidden="true"/><strong>{text}</strong>{time && <span data-testid="tadazz-timer">â€¢ {time}</span>}
   </div>
 }
 export function CountdownFloaterV4({ data }: { data: TadazzV4Data }) {
@@ -228,7 +229,7 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
             data.onSelectOption?.(i)
           }
         } : undefined}
-      >{`${String.fromCharCode(65+i)}  ·  ${title}`}</div>
+      >{`${String.fromCharCode(65+i)}  Â·  ${title}`}</div>
     })}</div>
   </div>
 }
@@ -271,6 +272,7 @@ export function InterludeV4({ data }: { data: TadazzV4Data }) {
 }
 export function ZWipeV4() { return <><div className="wipe"/><div className="wipe second"/></> }
 export function StageSceneV4({ scene, data, assetBase }: {scene:TadazzV4Scene; data:TadazzV4Data;assetBase:string}) {
+  if (isFullShowScene(scene)) return <div className="full-show-root" data-full-show-scene={scene}><FullShowSceneView scene={scene} data={data as FullShowInput}/></div>
   const tx = labelsFor(data)
   const hasCards = ["picture-answers", "voting-open", "countdown", "vote-locked", "chosen", "survey-results"].includes(scene)
   const showFrame = ["question", ...["picture-answers", "voting-open", "countdown", "vote-locked", "chosen", "survey-results"]].includes(scene)

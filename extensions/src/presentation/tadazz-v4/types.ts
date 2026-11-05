@@ -3,9 +3,12 @@ export const TADAZZ_V4_SCENES = [
   "question", "picture-answers", "voting-open", "countdown", "vote-locked",
   "chosen", "survey-results", "top-pick", "question-image", "leaderboard",
   "round-recap", "interlude", "z-wipe",
+  "company-opening", "grand-opening", "representative-directory", "phone-instructions",
+  "connection-readiness", "round-one", "story-progress", "tie-break",
+  "story-assembly", "story-live", "round-two", "grand-finale",
 ] as const
 export type TadazzV4Scene = (typeof TADAZZ_V4_SCENES)[number]
-export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>(["top-pick", "round-recap", "interlude", "z-wipe"])
+export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>(["top-pick", "round-recap", "interlude", "z-wipe", "company-opening", "grand-opening", "round-one", "round-two", "story-assembly", "story-live", "grand-finale"])
 export const TADAZZ_V4_ASSET_BASE = "/tadazz-show/v4/"
 
 export interface TadazzV4Answer {
@@ -115,7 +118,7 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   teamLeaderboard: "TEAM LEADERBOARD",
   leaderboard: "LEADERBOARD",
   roundRecap: "ROUND RECAP",
-  storyBegin: "LET THE STORY BEGIN…",
+  storyBegin: "LET THE STORY BEGINâ€¦",
   upNext: "UP NEXT",
   lookClosely: "LOOK CLOSELY",
   noVotes: "NO VOTES YET",
