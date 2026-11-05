@@ -1,6 +1,8 @@
 import {
   DEFAULT_TADAZZ_STAGE_LABELS,
+  TADAZZ_V4_LABELS,
   type TadazzStageLabels,
+  type TadazzV4Labels,
 } from "@razzia/extensions/presentation"
 import { useMemo } from "react"
 import { useTranslation } from "react-i18next"
@@ -55,4 +57,32 @@ export function useTadazzShellText() {
   const { t } = useTranslation()
   return (key: string, fallback: string, vars?: Record<string, unknown>) =>
     t(`${K}.${key}`, { defaultValue: fallback, ...vars })
+}
+
+/** i18next labels for the TADAZZ v4 stage kit (English defaults = canonical v4 strings). */
+export function useTadazzV4Labels(): Partial<TadazzV4Labels> {
+  const { t, i18n } = useTranslation()
+  return useMemo(() => {
+    const d = TADAZZ_V4_LABELS
+    const tx = (key: keyof TadazzV4Labels) => t(`${K}.v4.${key}`, d[key])
+    return {
+      nextQuestion: tx("nextQuestion"),
+      focus: tx("focus"),
+      chooseOne: tx("chooseOne"),
+      votesLocked: tx("votesLocked"),
+      choiceSelected: tx("choiceSelected"),
+      timeLeft: tx("timeLeft"),
+      mostChosenAnswer: tx("mostChosenAnswer"),
+      liveStandings: tx("liveStandings"),
+      teamLeaderboard: tx("teamLeaderboard"),
+      leaderboard: tx("leaderboard"),
+      roundRecap: tx("roundRecap"),
+      storyBegin: tx("storyBegin"),
+      upNext: tx("upNext"),
+      lookClosely: tx("lookClosely"),
+      noVotes: tx("noVotes"),
+      points: tx("points"),
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [t, i18n.language])
 }

@@ -663,6 +663,24 @@
     "submit": "送信",
     "skipOpening": "スキップ",
     "enableSound": "音声をオン",
-    "next": "次へ"
+    "next": "次へ",
+    "v4": {
+      "nextQuestion": "次の問題",
+      "focus": "注目",
+      "chooseOne": "ひとつ選んでください",
+      "votesLocked": "投票終了",
+      "choiceSelected": "選択完了",
+      "timeLeft": "残り時間",
+      "mostChosenAnswer": "最多得票の回答",
+      "liveStandings": "現在の順位",
+      "teamLeaderboard": "チームリーダーボード",
+      "leaderboard": "リーダーボード",
+      "roundRecap": "ラウンドの振り返り",
+      "storyBegin": "物語を始めましょう…",
+      "upNext": "次はコチラ",
+      "lookClosely": "よく見てください",
+      "noVotes": "まだ投票がありません",
+      "points": "PT"
+    }
   }
 }

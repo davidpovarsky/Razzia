@@ -663,6 +663,24 @@
     "submit": "GÖNDER",
     "skipOpening": "Atla",
     "enableSound": "Sesi aç",
-    "next": "SONRAKİ"
+    "next": "SONRAKİ",
+    "v4": {
+      "nextQuestion": "SIRADAKİ SORU",
+      "focus": "DİKKAT",
+      "chooseOne": "BİRİNİ SEÇİN",
+      "votesLocked": "OYLAMA KAPANDI",
+      "choiceSelected": "SEÇİM YAPILDI",
+      "timeLeft": "KALAN SÜRE",
+      "mostChosenAnswer": "EN ÇOK SEÇİLEN CEVAP",
+      "liveStandings": "CANLI SIRALAMA",
+      "teamLeaderboard": "TAKIM SIRALAMASI",
+      "leaderboard": "LİDER TABLOSU",
+      "roundRecap": "TUR ÖZETİ",
+      "storyBegin": "HİKÂYE BAŞLASIN…",
+      "upNext": "SIRADA",
+      "lookClosely": "YAKINDAN BAKIN",
+      "noVotes": "HENÜZ OY YOK",
+      "points": "PUAN"
+    }
   }
 }

@@ -3,6 +3,7 @@ import {
   buildReveal,
   computeShowScene,
   isTadazzShowActive,
+  isTadazzV4Active,
   leaderboardEntries,
   resolveStageBackdrop,
   resolveWinner,
@@ -236,5 +237,49 @@ describe("planTransition — the ten reference methods are driven by real events
     ])
     expect(ops(collapsed)).toEqual(["showQuestion", "showLeaderboard"])
     expect(collapsed[1]).toMatchObject({ entries: [{ id: "a", score: 2 }] })
+  })
+
+  it("isTadazzV4Active defaults to true and respects legacy/goldy rollback", () => {
+    expect(isTadazzV4Active(null)).toBe(true)
+    expect(isTadazzV4Active(envelope())).toBe(true)
+    expect(isTadazzV4Active(envelope({ defaults: { motionKit: "tadazz-v4" } }))).toBe(true)
+    expect(isTadazzV4Active(envelope({ defaults: { motionKit: "legacy" } }))).toBe(false)
+    expect(isTadazzV4Active(envelope({ defaults: { motionKit: "goldy-20261105" } }))).toBe(false)
+  })
+
+  it("planTransition maps v4 timeline scenes: answerRecap, interlude, top-pick", () => {
+    const recapStep = planTransition(null, {
+      kind: "scene",
+      key: "recap-key",
+      scene: {
+        kind: "answerRecap",
+        roundNumber: 2,
+        subtitle: "Recap Subtitle",
+        recapItems: [{ label: "Choice A", image: "/imgA.png" }],
+      },
+    }, { questionKey: null, mode: "idle" })
+    expect(ops(recapStep)).toEqual(["showRoundRecap"])
+
+    const interludeStep = planTransition(null, {
+      kind: "scene",
+      key: "interlude-key",
+      scene: {
+        kind: "interlude",
+        title: "Interlude Title",
+        subtitle: "Interlude Sub",
+      },
+    }, { questionKey: null, mode: "idle" })
+    expect(ops(interludeStep)).toEqual(["showInterlude"])
+
+    const topPickStep = planTransition(null, {
+      kind: "scene",
+      key: "top-pick-key",
+      scene: {
+        kind: "animation",
+        preset: "top-pick",
+        title: "Top Pick Title",
+      },
+    }, { questionKey: null, mode: "idle" })
+    expect(ops(topPickStep)).toEqual(["showTopPick"])
   })
 })

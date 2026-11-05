@@ -663,6 +663,24 @@
     "submit": "ABSENDEN",
     "skipOpening": "Überspringen",
     "enableSound": "Ton aktivieren",
-    "next": "WEITER"
+    "next": "WEITER",
+    "v4": {
+      "nextQuestion": "NÄCHSTE FRAGE",
+      "focus": "AUFGEPASST",
+      "chooseOne": "WÄHLE EINE ANTWORT",
+      "votesLocked": "VOTING GESCHLOSSEN",
+      "choiceSelected": "AUSWAHL GETROFFEN",
+      "timeLeft": "VERBLEIBENDE ZEIT",
+      "mostChosenAnswer": "MEISTGEWÄHLTE ANTWORT",
+      "liveStandings": "LIVE-TABELLE",
+      "teamLeaderboard": "TEAM-RANGLISTE",
+      "leaderboard": "RANGLISTE",
+      "roundRecap": "RUNDEN-RÜCKBLICK",
+      "storyBegin": "LASS DIE GESCHICHTE BEGINNEN…",
+      "upNext": "ALS NÄCHSTES",
+      "lookClosely": "GENAU HINSCHAUEN",
+      "noVotes": "NOCH KEINE STIMMEN",
+      "points": "PKT"
+    }
   }
 }

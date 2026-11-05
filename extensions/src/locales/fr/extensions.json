@@ -663,6 +663,24 @@
     "submit": "VALIDER",
     "skipOpening": "Passer",
     "enableSound": "Activer le son",
-    "next": "SUIVANT"
+    "next": "SUIVANT",
+    "v4": {
+      "nextQuestion": "QUESTION SUIVANTE",
+      "focus": "ATTENTION",
+      "chooseOne": "CHOISISSEZ UNE RÉPONSE",
+      "votesLocked": "VOTES CLOS",
+      "choiceSelected": "CHOIX SÉLECTIONNÉ",
+      "timeLeft": "TEMPS RESTANT",
+      "mostChosenAnswer": "RÉPONSE LA PLUS CHOISIE",
+      "liveStandings": "CLASSEMENT EN DIRECT",
+      "teamLeaderboard": "CLASSEMENT DES ÉQUIPES",
+      "leaderboard": "CLASSEMENT",
+      "roundRecap": "RÉCAPITULATIF DE LA MANCHE",
+      "storyBegin": "QUE L'HISTOIRE COMMENCE…",
+      "upNext": "À SUIVRE",
+      "lookClosely": "REGARDEZ BIEN",
+      "noVotes": "AUCUN VOTE POUR L'INSTANT",
+      "points": "PTS"
+    }
   }
 }

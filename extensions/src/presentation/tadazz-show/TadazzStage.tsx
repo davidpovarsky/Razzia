@@ -58,6 +58,9 @@ export interface StageQuestion {
   round?: number | null
   options: StageOption[]
   note?: string
+  /** Optional question image URL for question-image (photo-question) layout when options are text-only. */
+  questionImage?: string
+  photoAlt?: string
 }
 
 export interface StageLeaderEntry {
@@ -82,6 +85,8 @@ export interface StageRevealInput {
   solutions?: number[]
   /** Optional explanation note shown on the question panel when results are revealed. */
   note?: string
+  /** Whether to show percentage labels (defaults to true). */
+  showPercentages?: boolean
 }
 
 export interface StageRevealResult {
@@ -116,6 +121,14 @@ export interface TadazzStageHandle {
   playZZWipe(onCovered?: () => void | Promise<void>): Promise<void>
   showFinale(winner: StageWinner | null): Promise<void>
   showCustomScreen(): Promise<void>
+  /** V4 extensions: spotlight single top-pick winner, round story recap, and round interlude. */
+  showTopPick?(data: { question?: StageQuestion; counts?: number[]; topIndex?: number | null; emptyMessage?: string }): Promise<void>
+  showRoundRecap?(data: { winners: StageOption[]; round?: number | null; subtitle?: string }): Promise<void>
+  showInterlude?(data: { title: string; subtitle?: string }): Promise<void>
+  showChosen?(selectedIndices: number[]): Promise<void>
+  pauseAnimations?(): void
+  resumeAnimations?(): void
+  setPercentagesVisible?(visible: boolean): void
   finishAnimations(): void
   setAmbientEnabled(on: boolean): void
   setReducedMotion(on: boolean): void

@@ -21,5 +21,18 @@ describe("TADAZZ v4 extracted presentation kit", () => {
   it("preserves source-derived copy and the source scene ordering", () => {
     expect(TADAZZ_V4_SCENES.slice(0,5)).toEqual(["question","picture-answers","voting-open","countdown","vote-locked"])
     expect(TADAZZ_V4_LABELS.storyBegin).toBe("LET THE STORY BEGIN…")
+    expect(TADAZZ_V4_LABELS.leaderboard).toBe("LEADERBOARD")
+    expect(TADAZZ_V4_LABELS.teamLeaderboard).toBe("TEAM LEADERBOARD")
+  })
+  it("resolves winners based on solutions when mode is quiz", () => {
+    expect(topIndicesFor({ mode: "quiz", solutions: [1] }, 4)).toEqual([1])
+    expect(topIndicesFor({ mode: "quiz", solutions: [0, 3] }, 4)).toEqual([0, 3])
+  })
+  it("preserves full array of answers and teams without truncation", () => {
+    const eightAnswers = Array.from({ length: 8 }, (_, i) => ({ title: `A${i}` }))
+    const tenTeams = Array.from({ length: 10 }, (_, i) => ({ name: `Team ${i}`, score: i * 10 }))
+    const normalized = normalizeData({ answers: eightAnswers, teams: tenTeams })
+    expect(normalized.answers).toHaveLength(8)
+    expect(normalized.teams).toHaveLength(10)
   })
 })
