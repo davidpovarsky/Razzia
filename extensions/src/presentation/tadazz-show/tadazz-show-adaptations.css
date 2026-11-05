@@ -1,0 +1,195 @@
+/*
+ * TADAZZ show — project adaptations of the canonical Motion Kit.
+ * Everything here is ADDITIVE to tadazz-motion-kit.css (which stays a verbatim
+ * port). Each rule reuses the reference palette, typography and geometry:
+ *   panel gradient  linear-gradient(150deg,rgba(63,13,119,.92),rgba(37,6,82,.93) 72%)
+ *   card border     #ac62f2 / favourite #eaff52, citron #efff42, text #fff8ec
+ *   eyebrow         26px / .38em / 900 / #d1b1ff
+ */
+
+/* Host container: plays the role of the reference #viewport. */
+.tz-viewport {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #08011a;
+}
+.tz-stage,
+.tz-stage *,
+.tz-stage *::before,
+.tz-stage *::after {
+  box-sizing: border-box;
+}
+
+/* Player interaction (reference is projection-only). */
+.tz-card.is-selectable { cursor: pointer; }
+.tz-card.is-selectable:focus-visible { outline: 3px solid #efff51; outline-offset: 4px; }
+.tz-card.is-selected {
+  border-color: #eaff52;
+  box-shadow: 0 22px 46px #08001898, 0 0 0 3px #e9ff5688, 0 0 30px #e9ff5680, inset 0 2px 0 #ffffff77;
+}
+/* Quiz reveal: correct cards use the favourite treatment; others recede. */
+.tz-card.is-incorrect { opacity: .62; }
+
+/* Option without an image: branded monogram instead of a fake photo. */
+.tz-photo-frame.tz-photo-empty {
+  display: grid;
+  place-items: center;
+  background: linear-gradient(150deg, rgba(63,13,119,.92), rgba(37,6,82,.93) 72%);
+}
+.tz-photo-monogram {
+  font-size: 150px;
+  font-weight: 950;
+  letter-spacing: -.04em;
+  color: #efff42;
+  text-shadow: 0 0 28px #eaff5755, 0 6px 18px #13072e9c;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Shared custom screens (lobby, waiting, countdown, scene titles…) ── */
+.tz-custom-screen .tz-screen-inner { color: #fff8ec; }
+.tz-x-fill { position: absolute; inset: 0; }
+.tz-x-eyebrow {
+  position: absolute; top: 120px; left: 0; right: 0; text-align: center;
+  font-size: 26px; letter-spacing: .38em; font-weight: 900; color: #d1b1ff; text-transform: uppercase;
+}
+.tz-x-title {
+  position: absolute; top: 160px; left: 120px; right: 120px; text-align: center;
+  font-size: 84px; letter-spacing: -.035em; color: #fff0de; text-shadow: 0 0 25px #a947ff78; font-weight: 950;
+  line-height: 1.05; text-wrap: balance;
+}
+.tz-x-title span { color: #f0ff50; }
+.tz-x-underline {
+  position: absolute; top: 268px; left: 36%; right: 36%; height: 4px; border-radius: 50px;
+  background: linear-gradient(90deg, transparent, #f4ff40, #ff8fdf, transparent); box-shadow: 0 0 24px #efb7ff;
+}
+.tz-x-center {
+  position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 28px;
+  text-align: center; padding: 0 160px;
+}
+.tz-x-big {
+  font-size: 220px; font-weight: 1000; line-height: 1; color: #efff42; text-shadow: 0 0 40px #eaff5766, 0 8px 24px #13072e9c;
+  font-variant-numeric: tabular-nums;
+}
+.tz-x-headline {
+  font-size: 86px; font-weight: 1000; color: #fff8ec; letter-spacing: -.035em; line-height: 1.08;
+  text-shadow: 0 0 28px #a947ff66; text-wrap: balance;
+}
+.tz-x-sub { font-size: 34px; letter-spacing: .24em; font-weight: 900; color: #d7b7ff; text-transform: uppercase; }
+.tz-x-panel {
+  border: 2px solid rgba(225,151,255,.72); border-radius: 44px;
+  background: linear-gradient(150deg, rgba(63,13,119,.92), rgba(37,6,82,.93) 72%);
+  box-shadow: 0 16px 44px #0e062b66, inset 0 2px 0 #ffffff29, 0 0 0 4px #6e2ba824, 0 0 28px #c25cff22;
+}
+.tz-x-pill {
+  padding: 13px 26px; border-radius: 100px; background: rgba(41,13,89,.57); border: 1px solid #aa75ff6d;
+  box-shadow: 0 0 22px #c768ff12; font-size: 24px; font-weight: 800; letter-spacing: .12em; color: #fff4e2;
+}
+.tz-x-pill.is-lost { opacity: .5; text-decoration: line-through; }
+.tz-x-logo { width: 620px; filter: drop-shadow(0 0 50px #cb6fff38); }
+
+/* Lobby */
+.tz-lobby-join {
+  position: absolute; top: 330px; left: 260px; right: 260px; height: 330px;
+  display: grid; grid-template-columns: 1fr 1px 1fr 300px; align-items: center; gap: 48px; padding: 0 54px;
+}
+.tz-lobby-join .tz-lobby-divider { height: 220px; background: linear-gradient(#ffffff00, #f2ab6c88, #ffffff00); }
+.tz-lobby-label { font-size: 24px; font-weight: 900; letter-spacing: .26em; color: #d1b1ff; text-transform: uppercase; }
+.tz-lobby-url { margin-top: 14px; font-size: 36px; font-weight: 850; letter-spacing: -.02em; color: #fff8ec; white-space: nowrap; line-height: 1.1; }
+.tz-lobby-pin { margin-top: 6px; font-size: 128px; font-weight: 1000; letter-spacing: .02em; color: #efff42; text-shadow: 0 0 28px #eaff5755; font-variant-numeric: tabular-nums; line-height: 1; }
+.tz-lobby-qr {
+  width: 300px; height: 300px; padding: 18px; border-radius: 23px; background: #fff;
+  border: 2px solid #ffbc7199; box-shadow: 0 0 0 4px #2b0d65, 0 0 18px #ffc36a20;
+}
+.tz-lobby-qr svg { width: 100%; height: 100%; display: block; }
+.tz-lobby-lock { display: grid; place-items: center; width: 300px; height: 300px; font-size: 120px; color: #efff42; }
+.tz-lobby-players {
+  position: absolute; top: 720px; left: 200px; right: 200px; bottom: 150px;
+  display: flex; flex-wrap: wrap; align-content: flex-start; justify-content: center; gap: 14px; overflow: hidden;
+}
+.tz-lobby-count { position: absolute; top: 676px; left: 0; right: 0; text-align: center; font-size: 22px; font-weight: 900; letter-spacing: .3em; color: #cabde0; }
+button.tz-x-pill { cursor: pointer; font: inherit; font-size: 24px; font-weight: 800; }
+button.tz-x-pill:hover { border-color: #eaff52; }
+
+/* Answer recap rows reuse the leaderboard row skin. */
+.tz-recap-rows { position: absolute; left: 200px; right: 200px; top: 330px; display: flex; flex-direction: column; gap: 14px; }
+.tz-recap-row { height: auto; min-height: 96px; padding: 14px 30px; }
+.tz-recap-row .tz-team-name { font-size: 30px; }
+.tz-recap-row .tz-team-score { font-size: 32px; color: #efff42; }
+.tz-recap-row img { width: 68px; height: 68px; border-radius: 14px; object-fit: cover; border: 2px solid #ffbc7199; }
+
+/* Personal result (player) */
+.tz-result-badge {
+  display: inline-grid; place-items: center; width: 260px; height: 260px; border-radius: 50%;
+  font-size: 150px; font-weight: 1000; color: #251035; background: #efff46; box-shadow: 0 0 60px #ecff4578;
+}
+.tz-result-badge.is-wrong { background: #3f1c6a; color: #fff4f2; border: 4px solid #ad75ff; box-shadow: 0 0 40px #a846e743; }
+
+/* Player answer pad (outside the 16:9 stage on portrait phones). */
+.tz-pad {
+  display: flex; flex-direction: column; gap: 10px; padding: 12px; background: #08011a;
+  font-family: Inter, 'Arial', system-ui, sans-serif; color: #fff6e9;
+}
+.tz-pad-option {
+  display: flex; align-items: center; gap: 12px; width: 100%; padding: 8px; text-align: start;
+  border: 2px solid #ac62f2; border-radius: 18px;
+  background: linear-gradient(168deg, rgba(107,35,172,.92), rgba(35,4,80,.97) 42%, rgba(45,5,100,.95));
+  box-shadow: 0 10px 20px #08001897, 0 0 0 2px #4b198a4d, inset 0 1px 0 #ffffff3f, 0 0 12px #a846e743;
+  color: #fff4f2; font-size: 20px; font-weight: 850; letter-spacing: -.02em; cursor: pointer;
+}
+.tz-pad-option:disabled { cursor: default; filter: saturate(.83) brightness(.9); }
+.tz-pad-option.is-selected { border-color: #eaff52; box-shadow: 0 0 0 3px #e9ff5688, 0 0 22px #e9ff5680; }
+.tz-pad-option:focus-visible { outline: 3px solid #efff51; outline-offset: 2px; }
+.tz-pad-thumb {
+  flex: none; width: 64px; height: 64px; border-radius: 12px; overflow: hidden; display: grid; place-items: center;
+  border: 2px solid #ffbc7199; background: linear-gradient(150deg, rgba(63,13,119,.92), rgba(37,6,82,.93) 72%);
+  color: #efff42; font-size: 30px; font-weight: 950;
+}
+.tz-pad-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.tz-pad-submit {
+  margin-top: 4px; padding: 14px 20px; border-radius: 50px; border: 1px solid #f2ff9a; background: #e5f84c; color: #251044;
+  font-size: 18px; font-weight: 900; letter-spacing: .16em; text-transform: uppercase; cursor: pointer;
+}
+.tz-pad-submit:disabled { opacity: .5; cursor: default; }
+.tz-pad-status {
+  align-self: center; padding: 10px 18px; border-radius: 50px; background: #32115ba8; border: 1px solid #a977ef85;
+  letter-spacing: .18em; font-size: 14px; font-weight: 850; text-transform: uppercase;
+}
+.tz-pad-range { width: 100%; accent-color: #efff42; }
+.tz-pad-range-value { text-align: center; font-size: 44px; font-weight: 950; color: #efff42; font-variant-numeric: tabular-nums; }
+
+/* Branded player footer (replaces the white Razzia footer in the show). */
+.tz-player-bar {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 8px 14px;
+  background: linear-gradient(100deg, #3f1c6af0, #211345f5); border-top: 1px solid #ad75ff88;
+  font-family: Inter, 'Arial', system-ui, sans-serif; color: #fff4e9; font-weight: 850;
+}
+.tz-player-bar .tz-player-score {
+  padding: 4px 14px; border-radius: 50px; background: #eaff57; color: #200d4c; font-weight: 950; font-variant-numeric: tabular-nums;
+}
+.tz-player-bar .tz-player-team { padding: 2px 10px; border-radius: 8px; font-size: 12px; color: #fff; }
+
+/* Opening compositor: MP4 underlay + transparent Lottie overlay. */
+.tz-opening { position: absolute; inset: 0; z-index: 20; overflow: hidden; background: #08011a; pointer-events: none; }
+.tz-opening video, .tz-opening .tz-opening-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.tz-opening .tz-opening-lottie { position: absolute; inset: 0; transition: opacity .25s linear; }
+.tz-opening .tz-opening-skip {
+  position: absolute; right: 18px; bottom: 18px; z-index: 3; padding: 10px 18px; border-radius: 50px;
+  border: 1px solid #a977ef85; background: #32115bd0; color: #fff4e7; font: 800 14px Inter, Arial, system-ui, sans-serif;
+  letter-spacing: .16em; text-transform: uppercase; cursor: pointer; pointer-events: auto;
+}
+.tz-opening .tz-opening-sound { left: 18px; right: auto; }
+.tz-question-note { margin-top: 8px; color: #d1b1ff; font: 700 22px/1.25 Inter, Arial, system-ui, sans-serif; text-shadow: 0 2px 8px #00000090; }
+.tz-streak-badge { display: inline-flex; align-items: center; margin-left: 10px; font-size: 28px; vertical-align: middle; }
+
+/* Scene media inside the stage (video/image scenes, authored card backgrounds). */
+.tz-scene-media { position: absolute; inset: 0; z-index: 1; }
+.tz-scene-media video, .tz-scene-media img { width: 100%; height: 100%; display: block; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tz-card.is-vote-open { animation: none; }
+}

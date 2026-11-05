@@ -397,7 +397,7 @@ export const studioDefaultsSchema = z.strictObject({
   questionDecoration: questionDecorationSchema.optional(),
   tadazzBackground: tadazzShowBackgroundSchema.optional(),
   /** Opt-in stage overlay backed by the owner's original Motion Kit assets. */
-  motionKit: z.enum(["goldy-20261105"]).optional(),
+  motionKit: z.enum(["goldy-20261105", "legacy"]).optional(),
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>

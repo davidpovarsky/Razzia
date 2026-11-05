@@ -1,6 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
-import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import PlayerGameView from "@razzia/web/features/game/components/PlayerGameView"
 import {
@@ -85,15 +84,20 @@ const AudienceDisplayPage = () => {
   })
 
   if (resetMessage) {
+    // TADAZZ show: the concluded/unknown-room screen stays in the show brand
+    // (canonical #viewport colour) instead of the legacy Razzia background.
     return (
-      <main className="relative flex h-screen w-full items-center justify-center p-4">
-        <GameBackground />
-        <div className="z-10 flex max-w-md flex-col items-center gap-4 rounded-2xl border border-white/10 bg-black/70 p-8 text-center text-white shadow-2xl backdrop-blur-md">
-          <Tv className="size-16 text-white/50" />
+      <main
+        className="relative flex h-screen w-full items-center justify-center p-4"
+        style={{ background: "#08011a" }}
+        data-testid="audience-display-ended"
+      >
+        <div className="z-10 flex max-w-md flex-col items-center gap-4 rounded-[44px] border-2 border-[rgba(225,151,255,.72)] bg-[linear-gradient(150deg,rgba(63,13,119,.92),rgba(37,6,82,.93)_72%)] p-8 text-center text-[#fff8ec] shadow-2xl">
+          <Tv className="size-16 text-[#d1b1ff]" />
           <h1 className="text-2xl font-black">
             {t(resetMessage, "Show Concluded")}
           </h1>
-          <p className="text-sm text-white/70">{t("game:summary.title")}</p>
+          <p className="text-sm text-[#d1b1ff]">{t("game:summary.title")}</p>
         </div>
       </main>
     )

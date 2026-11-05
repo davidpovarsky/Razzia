@@ -1,0 +1,663 @@
+import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import { STATUS, type Status } from "@razzia/common/types/game/status"
+import {
+  EXTENSION_EVENTS,
+  type CardAudioOverrides,
+  type CueId,
+  type ExtensionStateEnvelope,
+  type QuizExtrasV1,
+  type TeamDefinition,
+} from "@razzia/extensions/core"
+import {
+  AudioCuePlayer,
+  CinematicLayerStack,
+  TadazzOpening,
+  TadazzStage,
+  collapseForResume,
+  computeShowScene,
+  planTransition,
+  preloadOpeningAssets,
+  resolveStageBackdrop,
+  runSteps,
+  type CinematicLayerStackProps,
+  type SceneDescriptor,
+  type ShowScene,
+  type StageStep,
+  type TadazzStageHandle,
+} from "@razzia/extensions/presentation"
+import Tooltip from "@razzia/web/components/Tooltip"
+import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
+import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
+import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
+import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
+import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
+import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
+import { useEvent, useSocket } from "@razzia/web/features/game/contexts/socket-context"
+import { ViewRoleContext, type ViewRole } from "@razzia/web/features/game/contexts/view-role-context"
+import { useManagerStore } from "@razzia/web/features/game/stores/manager"
+import { usePlayerStore } from "@razzia/web/features/game/stores/player"
+import { useQuestionStore } from "@razzia/web/features/game/stores/question"
+import { MANAGER_SKIP_BTN, SFX } from "@razzia/web/features/game/utils/constants"
+import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
+import { CircleQuestionMark, Image, LogOut, Maximize, Minimize, PhoneCall, SkipForward, Users, Video } from "lucide-react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import { useTranslation } from "react-i18next"
+import useSound from "use-sound"
+import { useTadazzRawStatus } from "./raw-status-context"
+import { TadazzAnswerPad } from "./TadazzAnswerPad"
+import {
+  TadazzConnectingScreen,
+  TadazzCountdownScreen,
+  TadazzEstimationResultScreen,
+  TadazzInterludeScreen,
+  TadazzLobbyScreen,
+  TadazzMessageScreen,
+  TadazzPlayerFinishedScreen,
+  TadazzPlayerResultScreen,
+  TadazzPreparedScreen,
+  TadazzRecapScreen,
+  TadazzSceneTitleScreen,
+  TadazzStartScreen,
+  TadazzSummaryScreen,
+  TadazzWaitScreen,
+} from "./TadazzScreens"
+import { useTadazzShellText, useTadazzStageLabels } from "./useTadazzLabels"
+
+export interface TadazzShowViewProps {
+  manager: boolean
+  role: ViewRole
+  statusName: Status | undefined
+  extensionState: ExtensionStateEnvelope | null
+  onNext?: () => void
+  onBack?: () => void
+  countdown: { seconds: number; total: number } | null
+  totalPlayers: number | null
+  roomMediaReady: boolean
+  audioCueId?: CueId
+  hasCompetingMediaAudio: boolean
+  activeCardKey: string
+  sceneAudio?: unknown
+}
+
+const OPENING_SEEN_KEY = (gameId: string) => `tadazz:opening-seen:${gameId}`
+
+function openingSeen(gameId: string): boolean {
+  try {
+    return window.sessionStorage.getItem(OPENING_SEEN_KEY(gameId)) === "1"
+  } catch {
+    return false
+  }
+}
+
+function markOpeningSeen(gameId: string) {
+  try {
+    window.sessionStorage.setItem(OPENING_SEEN_KEY(gameId), "1")
+  } catch {
+    /* private mode */
+  }
+}
+
+const prefersReducedMotion = () =>
+  typeof window !== "undefined" && typeof window.matchMedia === "function" && window.matchMedia("(prefers-reduced-motion: reduce)").matches
+
+const CINEMATIC_SCENE_KINDS = new Set(["opening", "closing", "media", "animation"])
+
+function isCinematicScene(scene: SceneDescriptor): boolean {
+  if (!CINEMATIC_SCENE_KINDS.has(scene.kind)) return false
+  return Boolean(scene.mediaUrl?.trim() || scene.lottieUrl || (scene.overlayAnimations?.length ?? 0) > 0)
+}
+
+/**
+ * The TADAZZ show shell. It owns the whole game screen when the show is active
+ * (Razzia's GameBackground and state components are never mounted), renders
+ * the ported Motion Kit stage for manager, player and projector from the same
+ * authoritative state, and keeps every host/player capability.
+ */
+export function TadazzShowView(props: TadazzShowViewProps) {
+  const { manager, role, extensionState, onNext, onBack, countdown, totalPlayers, roomMediaReady } = props
+  const { t } = useTranslation()
+  const tx = useTadazzShellText()
+  const labels = useTadazzStageLabels()
+  const { socket, isConnected, clientId } = useSocket()
+  const rawStatus = useTadazzRawStatus()
+  const managerState = useManagerStore()
+  const { player, gameId: playerGameId, gameMode, updatePlayer } = usePlayerStore()
+  const playerStatus = usePlayerStore((s) => s.status)
+  const { questionStates } = useQuestionStore()
+  const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
+  const [playersModalOpen, setPlayersModalOpen] = useState(false)
+  const reduced = useMemo(prefersReducedMotion, [])
+
+  const status = useMemo(() => {
+    if (manager && managerState.status) return { name: managerState.status.name, data: managerState.status.data as Record<string, unknown> }
+    if (rawStatus) return rawStatus
+    if (playerStatus) return { name: playerStatus.name, data: playerStatus.data as Record<string, unknown> }
+    return null
+  }, [manager, managerState.status, rawStatus, playerStatus])
+
+  const scene = useMemo(
+    () =>
+      computeShowScene({
+        role,
+        isConnected,
+        status,
+        envelope: extensionState,
+        questionStates,
+      }),
+    [role, isConnected, status, extensionState, questionStates],
+  )
+  const sceneIdentity = useMemo(() => JSON.stringify(scene), [scene])
+
+  const showGameId = managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
+  const backdrop = resolveStageBackdrop(extensionState)
+
+  if (typeof document !== "undefined") {
+    document.documentElement.style.background = "#08011a"
+    document.body.style.background = "#08011a"
+  }
+  useEffect(() => {
+    return () => {
+      document.documentElement.style.background = ""
+      document.body.style.background = ""
+    }
+  }, [])
+
+  // ── Opening (MP4 + Lottie) before the join screen ─────────────────────
+  useEffect(() => {
+    preloadOpeningAssets()
+  }, [])
+  const [openingActive, setOpeningActive] = useState(
+    () => role !== "player" && !reduced && !openingSeen(showGameId),
+  )
+  const openingEligible =
+    role !== "player" &&
+    (scene.kind === "lobby" ||
+      ((scene.kind === "connecting" || scene.kind === "wait") && !questionStates))
+  const stageRef = useRef<TadazzStageHandle>(null)
+  const finishOpening = useCallback(() => {
+    markOpeningSeen(showGameId)
+    const handle = stageRef.current
+    if (!handle) {
+      setOpeningActive(false)
+      return
+    }
+    void handle.playZZWipe(() => setOpeningActive(false))
+  }, [showGameId])
+  // Leaving the lobby (host started) ends any opening still on screen.
+  useEffect(() => {
+    if (openingActive && scene.kind !== "lobby" && scene.kind !== "connecting" && scene.kind !== "wait") {
+      markOpeningSeen(showGameId)
+      setOpeningActive(false)
+    }
+  }, [openingActive, scene.kind, showGameId])
+
+  // ── Director: authoritative scene → reference animation methods ────────
+  const prevSceneRef = useRef<ShowScene | null>(null)
+  const pendingRef = useRef<ShowScene | null>(null)
+  const busyRef = useRef(false)
+  const resumeRef = useRef(true)
+  const tokenRef = useRef(0)
+  const roleRef = useRef(role)
+  roleRef.current = role
+
+  const pump = useCallback(async () => {
+    if (busyRef.current) {
+      stageRef.current?.setReducedMotion(true)
+      stageRef.current?.finishAnimations()
+      return
+    }
+    busyRef.current = true
+    try {
+      while (pendingRef.current) {
+        const next = pendingRef.current
+        pendingRef.current = null
+        const handle = stageRef.current
+        if (!handle) break
+        handle.setReducedMotion(reduced)
+        let steps: StageStep[] = planTransition(prevSceneRef.current, next, {
+          questionKey: handle.questionKey,
+          mode: handle.mode,
+        })
+        if (next.kind === "results" && next.question.options.length === 0) steps = [{ op: "custom" }]
+        if (next.kind === "finale" && roleRef.current === "player") steps = [{ op: "custom" }]
+        if (next.kind === "results" && next.questionType === "estimation") steps = [{ op: "custom" }]
+        if (next.kind === "scene" && isCinematicScene(next.scene)) steps = [{ op: "custom" }]
+        const resume = resumeRef.current
+        resumeRef.current = false
+        if (resume) {
+          steps = collapseForResume(steps)
+          handle.setReducedMotion(true)
+        }
+        prevSceneRef.current = next
+        const token = ++tokenRef.current
+        try {
+          await runSteps(handle, steps, () => token === tokenRef.current && pendingRef.current === null)
+        } catch (error) {
+          console.warn("TADAZZ stage step failed", error)
+        }
+        handle.setReducedMotion(reduced)
+      }
+    } finally {
+      busyRef.current = false
+    }
+  }, [reduced])
+
+  useEffect(() => {
+    pendingRef.current = scene
+    void pump()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [sceneIdentity, pump])
+
+  // Server cooldown ticks keep the visual timer authoritative after drift/late join.
+  const deadlineRef = useRef<number | null>(null)
+  useEvent(EVENTS.GAME.COOLDOWN, (sec: number) => {
+    if (scene.kind !== "voting" || typeof sec !== "number") return
+    const deadline = Date.now() + sec * 1000
+    const handle = stageRef.current
+    if (handle && handle.mode === "voting" && (deadlineRef.current === null || Math.abs(deadline - deadlineRef.current) > 1200)) {
+      deadlineRef.current = deadline
+      void handle.openVoting(scene.seconds, deadline)
+    }
+  })
+  useEffect(() => {
+    deadlineRef.current = null
+  }, [scene.key])
+
+  // ── Player answering (same socket contract as the registry components) ──
+  const isPlayer = role === "player" && Boolean(player)
+  const [selected, setSelected] = useState<number[]>([])
+  const [submitted, setSubmitted] = useState(false)
+  const [sfxPop] = useSound(SFX.ANSWERS.SOUND, { volume: 0.1 })
+  const [sfxResults] = useSound(SFX.RESULTS_SOUND, { volume: 0.2 })
+  useEffect(() => {
+    setSelected([])
+    setSubmitted(false)
+    stageRef.current?.setSelectedOptions([])
+  }, [scene.key])
+  const submit = useCallback(
+    (answerKeys: number[]) => {
+      if (!isPlayer || !playerGameId || submitted || scene.kind !== "voting") return
+      socket.emit(EVENTS.PLAYER.SELECTED_ANSWER, { gameId: playerGameId, data: { answerKeys } })
+      sfxPop()
+      setSubmitted(true)
+      setSelected(answerKeys)
+      stageRef.current?.setSelectedOptions(answerKeys)
+    },
+    [isPlayer, playerGameId, submitted, scene.kind, socket, sfxPop],
+  )
+  const toggle = useCallback(
+    (index: number) => {
+      setSelected((prev) => {
+        const next = prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+        stageRef.current?.setSelectedOptions(next)
+        return next
+      })
+    },
+    [],
+  )
+  const onSelectOption = useCallback(
+    (index: number) => {
+      if (scene.kind !== "voting") return
+      if (scene.questionType === "multi") toggle(index)
+      else submit([index])
+    },
+    [scene, submit, toggle],
+  )
+
+  // Legacy Result screen side effect: personal score + results sound.
+  useEffect(() => {
+    if (scene.kind !== "player-result") return
+    updatePlayer(({ player: p }) => ({ player: p ? { ...p, points: scene.myPoints } : p }))
+    sfxResults()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [scene.key])
+
+  // ── Custom screen content per scene ─────────────────────────────────────
+  const isSurveyGame = gameMode === QUIZZ_MODES.SURVEY
+  const customScreen = (() => {
+    switch (scene.kind) {
+      case "connecting":
+        return <TadazzConnectingScreen />
+      case "lobby":
+        return <TadazzLobbyScreen inviteCode={scene.inviteCode ?? managerState.inviteCode ?? undefined} isManager={manager} text={scene.text} />
+      case "wait":
+        return <TadazzWaitScreen text={scene.text} playerName={role === "player" ? player?.username : undefined} />
+      case "start":
+        return <TadazzStartScreen subject={scene.subject} time={scene.time} />
+      case "prepared":
+        return <TadazzPreparedScreen questionNumber={scene.questionNumber} total={questionStates?.total ?? null} />
+      case "summary":
+        return <TadazzSummaryScreen subject={scene.subject} totalPlayers={scene.totalPlayers} totalQuestions={scene.totalQuestions} />
+      case "player-result":
+        return <TadazzPlayerResultScreen correct={scene.correct} message={scene.message} points={scene.points} rank={scene.rank} aheadOfMe={scene.aheadOfMe} survey={isSurveyGame} />
+      case "finale":
+        return role === "player" ? <TadazzPlayerFinishedScreen rank={scene.rank} subject={scene.subject} points={player?.points ?? 0} /> : null
+      case "results":
+        return scene.questionType === "estimation" ? <TadazzEstimationResultScreen question={scene.question.question} estimation={scene.estimation} /> : null
+      case "interlude":
+        return <TadazzInterludeScreen interlude={scene.interlude} startedAt={scene.startedAt} />
+      case "scene": {
+        const s = scene.scene
+        if (s.kind === "countdown") return <TadazzCountdownScreen title={s.title} startedAt={scene.startedAt} seconds={s.durationSeconds ?? 10} />
+        if (s.kind === "answerRecap" && scene.activeSceneData?.answerRecap) return <TadazzRecapScreen title={s.title} recap={scene.activeSceneData.answerRecap} />
+        if (s.kind === "interimResults" || s.kind === "leaderboard")
+          return <TadazzMessageScreen headline={s.title} sub={tx("noResponses", "No responses recorded yet.")} />
+        return <TadazzSceneTitleScreen scene={s} />
+      }
+      default:
+        return null
+    }
+  })()
+
+
+  // ── Cinematic overlay: opening compositor, media/opening/closing scenes ──
+  const emitTimeline = useCallback(
+    (action: "ADVANCE_TIMELINE_SCENE", reason: string) => {
+      if (!manager || !extensionState?.gameId || scene.kind !== "scene") return
+      socket.emit(EXTENSION_EVENTS.COMMAND, {
+        v: 1,
+        gameId: extensionState.gameId,
+        action,
+        payload: { epoch: extensionState.epoch, sceneId: scene.scene.id, timelineStepIndex: scene.stepIndex, reason },
+        requestId: `tadazz-${reason}-${extensionState.epoch}-${scene.stepIndex ?? 0}`,
+      })
+    },
+    [manager, extensionState, scene, socket],
+  )
+
+  let overlay: React.ReactNode = null
+  if (openingActive && openingEligible) {
+    overlay = (
+      <TadazzOpening
+        onFinished={finishOpening}
+        canSkip={manager}
+        labels={{ skip: tx("skipOpening", "Skip"), enableSound: tx("enableSound", "Enable sound") }}
+      />
+    )
+  } else if (scene.kind === "scene" && isCinematicScene(scene.scene)) {
+    const s = scene.scene
+    const kind: CinematicLayerStackProps["sceneKind"] = s.kind === "opening" || s.kind === "closing" ? s.kind : "media"
+    overlay = (
+      <div className="tz-scene-media" style={{ zIndex: 20 }} data-testid="tadazz-cinematic-scene">
+        <CinematicLayerStack
+          sceneId={s.id ?? s.kind}
+          sceneKind={kind}
+          epoch={extensionState?.epoch}
+          serverStartedAt={scene.startedAt}
+          mediaUrl={s.mediaUrl}
+          mediaType={s.mediaType}
+          mediaFit={s.mediaFit}
+          volume={s.volume}
+          loop={s.loop}
+          muted={s.muted}
+          endBehavior={s.endBehavior}
+          contrastOverlayOpacity={0}
+          lottieUrl={s.lottieUrl}
+          lottieFit={s.lottieFit}
+          lottieLoop={s.lottieLoop}
+          lottieSpeed={s.lottieSpeed}
+          overlayAnimations={s.overlayAnimations as CinematicLayerStackProps["overlayAnimations"]}
+          activateAudioLabel={tx("enableSound", "Enable sound")}
+          onForegroundMediaEnded={() => emitTimeline("ADVANCE_TIMELINE_SCENE", "mediaEnded")}
+        />
+      </div>
+    )
+  } else if (scene.kind === "interlude" && scene.interlude.url && (scene.interlude.kind === "image" || scene.interlude.kind === "video")) {
+    overlay = (
+      <div className="tz-scene-media" style={{ zIndex: 20 }} data-testid="tadazz-interlude-media">
+        <CinematicLayerStack
+          sceneId={`interlude-${extensionState?.epoch ?? 0}`}
+          sceneKind="media"
+          epoch={extensionState?.epoch}
+          serverStartedAt={scene.startedAt}
+          mediaUrl={scene.interlude.url}
+          mediaType={scene.interlude.kind}
+          mediaFit="contain"
+          contrastOverlayOpacity={0}
+        />
+      </div>
+    )
+  }
+
+  // ── Layout ──────────────────────────────────────────────────────────────
+  const [viewportSize, setViewportSize] = useState(() => ({
+    w: typeof window !== "undefined" ? window.innerWidth : 1920,
+    h: typeof window !== "undefined" ? window.innerHeight : 1080,
+  }))
+  useEffect(() => {
+    const onResize = () => setViewportSize({ w: window.innerWidth, h: window.innerHeight })
+    window.addEventListener("resize", onResize)
+    return () => window.removeEventListener("resize", onResize)
+  }, [])
+  const portrait = viewportSize.h > viewportSize.w
+  const isMobilePhone = viewportSize.w < 640
+  const showPad = isPlayer && scene.kind === "voting" && (portrait || scene.questionType === "estimation")
+  const playerAnswersOnly = Boolean(isPlayer && scene.kind === "voting" && scene.answersOnly)
+
+  // Question media (image/video) is shown inside the stage under the panel (except on mobile player popup / answersOnly).
+  const questionMedia = (scene.kind === "question" || scene.kind === "voting") && scene.media ? scene.media : null
+  const isPopupMedia = Boolean(questionMedia && (questionMedia.type === MEDIA_TYPES.IMAGE || questionMedia.type === MEDIA_TYPES.VIDEO))
+  const showMediaInPopup = isPlayer && isMobilePhone && isPopupMedia && !playerAnswersOnly
+  const underlay =
+    isPopupMedia && questionMedia && !playerAnswersOnly && !showMediaInPopup ? (
+      <div className="tz-scene-media" data-testid="tadazz-question-media">
+        {questionMedia.type === MEDIA_TYPES.VIDEO ? (
+          <video src={questionMedia.url} autoPlay playsInline muted={scene.kind === "voting"} style={{ objectFit: "contain" }} />
+        ) : (
+          <img src={questionMedia.url} alt={scene.kind === "question" || scene.kind === "voting" ? scene.question.question : ""} style={{ objectFit: "contain" }} />
+        )}
+      </div>
+    ) : null
+  const questionAudio = questionMedia && questionMedia.type === MEDIA_TYPES.AUDIO ? questionMedia.url : null
+  const hostNextKey = props.statusName ? MANAGER_SKIP_BTN[props.statusName] : null
+
+  const teamsData = extensionState?.extras.teams as { teams?: TeamDefinition[]; assignments?: Record<string, string> } | undefined
+  const assignedTeam = (() => {
+    const id = (clientId ? teamsData?.assignments?.[clientId] : undefined) ?? teamsData?.assignments?.[(player as { id?: string } | null)?.id ?? player?.username ?? ""]
+    return teamsData?.teams?.find((team) => team.id === id)
+  })()
+
+  const isEnhanced = Boolean(extensionState?.gameId)
+  const connectedCount = managerState.hostPresence?.connectedNow ?? managerState.players.filter((p) => p.connected).length
+  const registeredCount = managerState.hostPresence?.registeredTotal ?? totalPlayers ?? managerState.players.length
+
+  return (
+    <ExtensionStateProvider value={extensionState}>
+      <ViewRoleContext.Provider value={role}>
+        <section
+          className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden"
+          style={{
+            background: "#08011a",
+            width: "100vw",
+            maxWidth: "100vw",
+            height: "100dvh",
+            maxHeight: "100dvh",
+            overflow: "hidden",
+          }}
+          data-testid="tadazz-show"
+          data-show-scene={scene.kind}
+          data-role={role}
+        >
+          {manager &&
+            (isEnhanced ? (
+              <ManagerControlToolbar
+                statusName={props.statusName ?? null}
+                extensionState={extensionState}
+                questionStates={questionStates}
+                onExit={onBack ?? (() => undefined)}
+                onStartGame={props.statusName === STATUS.SHOW_ROOM ? onNext : undefined}
+                onAdvanceFallback={onNext}
+                countdown={countdown}
+              />
+            ) : (
+              <div className="tz-player-bar" data-testid="tadazz-host-bar">
+                <button type="button" className="tz-x-pill" style={{ fontSize: 14, padding: "6px 14px" }} onClick={onBack}>
+                  <LogOut className="inline size-4" /> {t("common:exit")}
+                </button>
+                {questionStates && <span>{`${questionStates.current} / ${questionStates.total ?? "?"}`}</span>}
+                {onNext && hostNextKey && (
+                  <button type="button" className="tz-pad-submit" style={{ marginTop: 0, padding: "8px 18px" }} onClick={onNext} data-testid="tadazz-host-next">
+                    <SkipForward className="inline size-4" /> {t(hostNextKey)}
+                  </button>
+                )}
+              </div>
+            ))}
+
+          <div
+            className="relative min-h-0 min-w-0 w-full flex-1 overflow-hidden"
+            style={{
+              position: "relative",
+              flex: "1 1 0%",
+              minWidth: 0,
+              minHeight: 0,
+              width: "100%",
+              overflow: "hidden",
+            }}
+          >
+            <TadazzStage
+              ref={stageRef}
+              labels={labels}
+              backdropUrl={backdrop?.url}
+              backdropFit={backdrop?.fit}
+              interactive={isPlayer && scene.kind === "voting" && !submitted && !showPad}
+              multiSelect={scene.kind === "voting" && scene.questionType === "multi"}
+              onSelectOption={onSelectOption}
+              customScreen={customScreen}
+              underlay={underlay}
+              overlay={overlay}
+              reducedMotion={reduced}
+            />
+            {playerAnswersOnly && scene.kind === "voting" && (
+              <QuestionDialog
+                question={scene.fullQuestion ?? ""}
+                media={questionMedia as never}
+                showQuestion
+                label={t("game:question.show")}
+                className="tz-x-pill absolute top-3 right-3 z-30 flex items-center justify-center"
+              >
+                <CircleQuestionMark className="size-5" />
+              </QuestionDialog>
+            )}
+            {showMediaInPopup && scene.kind === "voting" && questionMedia && (
+              <QuestionDialog
+                question={scene.question.question}
+                media={questionMedia as never}
+                className="tz-x-pill absolute top-3 right-3 z-30 flex items-center gap-1.5"
+              >
+                {questionMedia.type === MEDIA_TYPES.VIDEO ? <Video className="size-4" /> : <Image className="size-4" />}
+                {t(questionMedia.type === MEDIA_TYPES.VIDEO ? "game:media.showVideo" : "game:media.showImage")}
+              </QuestionDialog>
+            )}
+            {questionAudio && (
+              <audio
+                src={questionAudio}
+                autoPlay
+                controls
+                className="absolute bottom-3 left-1/2 z-30 w-full max-w-md -translate-x-1/2 rounded-md"
+                data-testid="tadazz-question-audio"
+              />
+            )}
+          </div>
+
+          {showPad && scene.kind === "voting" && (
+            <TadazzAnswerPad
+              question={scene.question}
+              questionType={scene.questionType}
+              options={scene.options}
+              selected={selected}
+              submitted={submitted}
+              disabled={!isPlayer}
+              onToggle={toggle}
+              onSubmit={submit}
+            />
+          )}
+          {!showPad && isPlayer && scene.kind === "voting" && scene.questionType === "multi" && !submitted && (
+            <div className="tz-pad">
+              <button type="button" className="tz-pad-submit" disabled={selected.length === 0} onClick={() => submit([...selected].sort((a, b) => a - b))}>
+                {t("game:confirm")}
+              </button>
+            </div>
+          )}
+
+          {extensionState && (!manager || roomMediaReady) && (
+            <AudioCuePlayer
+              cueId={props.audioCueId}
+              audioExtras={extensionState.extras.audio as QuizExtrasV1["audio"] | undefined}
+              cardAudioCues={extensionState.extras.cardAudioCues as CardAudioOverrides | undefined}
+              sceneAudio={props.sceneAudio as never}
+              gameId={extensionState.gameId}
+              activeCardKey={props.activeCardKey}
+              phase={extensionState.phase === "scene" ? "scene" : (props.statusName ?? extensionState.phase)}
+              epoch={extensionState.epoch}
+              hasCompetingMedia={props.hasCompetingMediaAudio}
+            />
+          )}
+
+          {manager ? (
+            <div className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3" style={{ background: "#08011a" }} data-testid="tadazz-host-controls">
+              {managerState.inviteCode && props.statusName !== STATUS.SHOW_ROOM && (
+                <div className="tz-x-pill flex shrink-0 items-center gap-2" style={{ fontSize: 16, padding: "6px 14px" }}>
+                  {!managerState.locked && (
+                    <>
+                      <span className="max-w-[160px] truncate sm:max-w-none">{window.location.host}</span>
+                      <span className="h-4 w-px bg-white/40" />
+                      <span>{managerState.inviteCode}</span>
+                    </>
+                  )}
+                  <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                </div>
+              )}
+              {props.statusName === STATUS.SHOW_ROOM && <RoomLockButton className="tz-x-pill" />}
+              <Tooltip content={t("extensions:roster.liveModalTitle", "Players & Live Connection Status")}>
+                <button
+                  type="button"
+                  onClick={() => setPlayersModalOpen(true)}
+                  data-testid="host-bottom-players-btn"
+                  className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
+                  style={{ fontSize: 16, padding: "6px 14px", opacity: isConnected ? 1 : 0.6 }}
+                >
+                  <Users className="size-5" />
+                  <span data-testid="host-connected-counter">
+                    {registeredCount > 0 && (registeredCount !== connectedCount || managerState.hostPresence)
+                      ? `${connectedCount} / ${registeredCount}`
+                      : String(totalPlayers ?? managerState.players.length)}
+                  </span>
+                  <PhoneCall className="size-3" />
+                </button>
+              </Tooltip>
+              <GameSettingsModal onOpenRoster={() => setPlayersModalOpen(true)} />
+              <HostPlayersModal open={playersModalOpen} onOpenChange={setPlayersModalOpen} />
+              <Tooltip content={t(isFullscreen ? "common:exitFullscreen" : "common:fullscreen")}>
+                <button
+                  type="button"
+                  onClick={toggleFullscreen}
+                  aria-label={t(isFullscreen ? "common:exitFullscreen" : "common:fullscreen")}
+                  className="tz-x-pill flex items-center justify-center"
+                  style={{ padding: "6px 12px" }}
+                >
+                  {isFullscreen ? <Minimize className="size-5" /> : <Maximize className="size-5" />}
+                </button>
+              </Tooltip>
+            </div>
+          ) : role === "spectator" ? null : (
+            <div className="tz-player-bar" data-testid="tadazz-player-bar">
+              <div className="flex items-center gap-2">
+                <span>{player?.username}</span>
+                {assignedTeam && (
+                  <span className="tz-player-team" style={{ backgroundColor: assignedTeam.color }}>
+                    {assignedTeam.name}
+                  </span>
+                )}
+              </div>
+              {(gameMode !== QUIZZ_MODES.SURVEY || (player?.points !== undefined && player.points > 0)) && (
+                <span className="tz-player-score">{player?.points ?? 0}</span>
+              )}
+            </div>
+          )}
+        </section>
+      </ViewRoleContext.Provider>
+    </ExtensionStateProvider>
+  )
+}
+
+export default TadazzShowView

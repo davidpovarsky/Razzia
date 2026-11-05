@@ -63,6 +63,8 @@ import {
   ViewRoleContext,
   type ViewRole,
 } from "@razzia/web/features/game/contexts/view-role-context"
+import { isTadazzShowActive } from "@razzia/extensions/presentation"
+import { TadazzShowView } from "@razzia/web/features/game/components/tadazz-show/TadazzShowView"
 import { useTranslation } from "react-i18next"
 
 type Props = PropsWithChildren & {
@@ -655,6 +657,21 @@ const GameWrapper = ({
           </StageFitContainer>
         </ViewRoleContext.Provider>
       </ExtensionStateProvider>
+    )
+  }
+
+  // TADAZZ show (UPSTREAM_TOUCHES 2026-11-05 T1): own the whole stage so the
+  // legacy background/state components are never mounted, not even for a frame.
+  if (isTadazzShowActive(extensionState)) {
+    return (
+      <TadazzShowView
+        manager={Boolean(manager)} role={effectiveRole} statusName={statusName}
+        extensionState={extensionState} onNext={onNext} onBack={onBack}
+        countdown={countdown} totalPlayers={totalPlayers} roomMediaReady={roomMediaReady}
+        audioCueId={activePhaseCueId} hasCompetingMediaAudio={hasCompetingMediaAudio}
+        activeCardKey={activeCardKey}
+        sceneAudio={extensionState?.extras.sceneAudio ?? currentSceneObj?.audio}
+      />
     )
   }
 
