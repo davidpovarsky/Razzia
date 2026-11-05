@@ -663,6 +663,24 @@
     "submit": "SUBMIT",
     "skipOpening": "Skip",
     "enableSound": "Enable sound",
-    "next": "NEXT"
+    "next": "NEXT",
+    "v4": {
+      "nextQuestion": "NEXT QUESTION",
+      "focus": "FOCUS",
+      "chooseOne": "CHOOSE ONE",
+      "votesLocked": "VOTES LOCKED",
+      "choiceSelected": "CHOICE SELECTED",
+      "timeLeft": "TIME LEFT",
+      "mostChosenAnswer": "MOST CHOSEN ANSWER",
+      "liveStandings": "LIVE STANDINGS",
+      "teamLeaderboard": "TEAM LEADERBOARD",
+      "leaderboard": "LEADERBOARD",
+      "roundRecap": "ROUND RECAP",
+      "storyBegin": "LET THE STORY BEGIN…",
+      "upNext": "UP NEXT",
+      "lookClosely": "LOOK CLOSELY",
+      "noVotes": "NO VOTES YET",
+      "points": "PTS"
+    }
   }
 }

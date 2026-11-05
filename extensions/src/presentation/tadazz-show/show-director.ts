@@ -19,8 +19,11 @@ export type StageStep =
   | { op: "revealResults"; reveal: StageRevealInput }
   | { op: "showLeaderboard"; entries: StageLeaderEntry[] }
   | { op: "updateLeaderboard"; entries: StageLeaderEntry[] }
-  | { op: "playZZWipe"; thenCustom: boolean }
+  | { op: "playZZWipe"; thenCustom: boolean; interlude?: { title: string; subtitle?: string } }
   | { op: "showFinale"; winner: StageWinner | null }
+  | { op: "showTopPick"; question?: StageQuestion; counts?: number[]; topIndex?: number | null; emptyMessage?: string }
+  | { op: "showRoundRecap"; winners: Array<{ label: string; image?: string; alt?: string }>; round?: number | null; subtitle?: string }
+  | { op: "showInterlude"; title: string; subtitle?: string }
   | { op: "custom" }
   | { op: "hold"; ms: number }
 
@@ -106,8 +109,19 @@ export function planTransition(
       return isQuestionScene(prev) || prev?.kind === "leaderboard" || prev?.kind === "player-result"
         ? [{ op: "playZZWipe", thenCustom: true }]
         : [{ op: "custom" }]
+    case "interlude": {
+      if (next.interlude.kind === "title" && next.interlude.title) {
+        return [{ op: "showInterlude", title: next.interlude.title }]
+      }
+      return [{ op: "custom" }]
+    }
     case "scene":
       return planScene(prev, next, stage)
+    case "wait":
+      if (isQuestionScene(prev) || stage.mode === "voting" || stage.mode === "question" || Boolean(stage.questionKey)) {
+        return []
+      }
+      return [{ op: "custom" }]
     default:
       return stage.mode === "custom" ? [{ op: "custom" }] : [{ op: "custom" }]
   }
@@ -145,18 +159,68 @@ function planScene(prev: ShowScene | null, next: Extract<ShowScene, { kind: "sce
         steps.push({ op: "presentOptions", question })
         if (stage.mode === "voting" || stage.mode === "question") steps.push({ op: "lockVoting" })
       }
+      const showPercentages = (scene as { showPercentages?: boolean }).showPercentages
       steps.push({
         op: "revealResults",
         reveal: {
           counts: r.options.map((o) => o.count),
           percentages: r.options.map((o) => o.percentage),
           mode: "survey",
+          ...(typeof showPercentages === "boolean" ? { showPercentages } : {}),
         },
       })
       return steps
     }
+    case "answerRecap": {
+      const recap = activeSceneData?.answerRecap
+      const fallbackItems = (scene as { recapItems?: Array<{ label?: string; image?: string; alt?: string }> }).recapItems
+      if ((!recap || recap.items.length === 0) && (!fallbackItems || fallbackItems.length === 0)) return [{ op: "custom" }]
+      const winners = recap && recap.items.length > 0
+        ? recap.items.map((item) => {
+            const option = (recap.mode === "correctAnswer" ? item.correctOptions?.[0] : undefined) ?? item.winningOptions[0]
+            return {
+              label: option ? option.label : item.questionText,
+              image: option?.imageUrl,
+              alt: option?.alt || option?.label || item.questionText,
+            }
+          })
+        : (fallbackItems ?? []).map((fi) => ({
+            label: fi.label ?? "",
+            image: fi.image,
+            alt: fi.alt ?? fi.label,
+          }))
+      return [{ op: "showRoundRecap", winners, subtitle: scene.subtitle }]
+    }
+    case "interlude":
+      return [{ op: "showInterlude", title: scene.title ?? "INTERLUDE", subtitle: scene.subtitle ?? scene.description }]
     case "transition":
-      return [{ op: "playZZWipe", thenCustom: true }]
+      return [
+        scene.title
+          ? { op: "playZZWipe", thenCustom: true, interlude: { title: scene.title, subtitle: scene.subtitle ?? scene.description } }
+          : { op: "playZZWipe", thenCustom: true },
+      ]
+    case "animation": {
+      const preset = (scene as { preset?: string }).preset
+      const r = activeSceneData?.interimResults
+      if (preset === "top-pick" || preset === "most-chosen" || preset === "spotlight") {
+        const prevQ = prev && "question" in prev ? prev.question : undefined
+        const question: StageQuestion | undefined = r
+          ? {
+              key: prevQ?.key ?? `${r.questionText}#0`,
+              question: r.questionText,
+              number: prevQ?.number ?? 1,
+              totalQuestions: prevQ?.totalQuestions ?? null,
+              options: r.options.map((o) => ({ label: o.label, image: o.imageUrl, alt: o.alt || o.label })),
+            }
+          : prevQ
+        const counts = r ? r.options.map((o) => o.count) : undefined
+        return [{ op: "showTopPick", question, counts, emptyMessage: scene.subtitle ?? scene.description }]
+      }
+      if (scene.title) {
+        return [{ op: "showInterlude", title: scene.title, subtitle: scene.subtitle ?? scene.description }]
+      }
+      return [{ op: "custom" }]
+    }
     case "opening":
     case "closing":
     case "media":
@@ -186,7 +250,8 @@ function topWinner(entries: Array<{ displayName: string; points: number }> | und
  */
 export function collapseForResume(steps: StageStep[]): StageStep[] {
   const out: StageStep[] = []
-  for (const step of steps) {
+  for (let i = 0; i < steps.length; i++) {
+    const step = steps[i]
     if (step.op === "hold" || step.op === "lockVoting") continue
     if (step.op === "updateLeaderboard" && out.length > 0) {
       const last = out[out.length - 1]
@@ -200,7 +265,10 @@ export function collapseForResume(steps: StageStep[]): StageStep[] {
       continue
     }
     if (step.op === "playZZWipe") {
-      out.push(step.thenCustom ? { op: "custom" } : step)
+      const hasFollowUp = i + 1 < steps.length
+      if (!hasFollowUp) {
+        out.push(step.interlude ? { op: "showInterlude", ...step.interlude } : step.thenCustom ? { op: "custom" } : step)
+      }
       continue
     }
     out.push(step)
@@ -244,11 +312,32 @@ export async function runSteps(
       case "updateLeaderboard":
         await handle.updateLeaderboard(step.entries)
         break
-      case "playZZWipe":
-        await handle.playZZWipe(step.thenCustom ? () => handle.showCustomScreen() : undefined)
+      case "playZZWipe": {
+        const interlude = step.interlude
+        if (interlude && handle.showInterlude) {
+          const showInterlude = handle.showInterlude.bind(handle)
+          await handle.playZZWipe(() => {
+            void showInterlude(interlude)
+          })
+        } else {
+          await handle.playZZWipe(step.thenCustom ? () => handle.showCustomScreen() : undefined)
+        }
         break
+      }
       case "showFinale":
         await handle.showFinale(step.winner)
+        break
+      case "showTopPick":
+        if (handle.showTopPick) await handle.showTopPick(step)
+        else await handle.showCustomScreen()
+        break
+      case "showRoundRecap":
+        if (handle.showRoundRecap) await handle.showRoundRecap(step)
+        else await handle.showCustomScreen()
+        break
+      case "showInterlude":
+        if (handle.showInterlude) await handle.showInterlude(step)
+        else await handle.showCustomScreen()
         break
       case "custom":
         await handle.showCustomScreen()

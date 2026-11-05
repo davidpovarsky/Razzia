@@ -663,6 +663,24 @@
     "submit": "INVIA",
     "skipOpening": "Salta",
     "enableSound": "Attiva audio",
-    "next": "AVANTI"
+    "next": "AVANTI",
+    "v4": {
+      "nextQuestion": "PROSSIMA DOMANDA",
+      "focus": "ATTENZIONE",
+      "chooseOne": "SCEGLI UNA RISPOSTA",
+      "votesLocked": "VOTAZIONI CHIUSE",
+      "choiceSelected": "SCELTA SELEZIONATA",
+      "timeLeft": "TEMPO RIMASTO",
+      "mostChosenAnswer": "RISPOSTA PIÙ VOTATA",
+      "liveStandings": "CLASSIFICA IN DIRETTA",
+      "teamLeaderboard": "CLASSIFICA A SQUADRE",
+      "leaderboard": "CLASSIFICA",
+      "roundRecap": "RIEPILOGO DEL ROUND",
+      "storyBegin": "CHE LA STORIA ABBIA INIZIO…",
+      "upNext": "PROSSIMAMENTE",
+      "lookClosely": "GUARDA ATTENTAMENTE",
+      "noVotes": "ANCORA NESSUN VOTO",
+      "points": "PT"
+    }
   }
 }

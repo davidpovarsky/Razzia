@@ -663,6 +663,24 @@
     "submit": "GỬI",
     "skipOpening": "Bỏ qua",
     "enableSound": "Bật âm thanh",
-    "next": "TIẾP"
+    "next": "TIẾP",
+    "v4": {
+      "nextQuestion": "CÂU HỎI TIẾP THEO",
+      "focus": "CHÚ Ý",
+      "chooseOne": "CHỌN MỘT ĐÁP ÁN",
+      "votesLocked": "ĐÃ KHÓA BÌNH CHỌN",
+      "choiceSelected": "ĐÃ CHỌN ĐÁP ÁN",
+      "timeLeft": "THỜI GIAN CÒN LẠI",
+      "mostChosenAnswer": "CÂU TRẢ LỜI ĐƯỢC CHỌN NHIỀU NHẤT",
+      "liveStandings": "BẢNG XẾP HẠNG TRỰC TIẾP",
+      "teamLeaderboard": "BẢNG XẾP HẠNG ĐỘI",
+      "leaderboard": "BẢNG XẾP HẠNG",
+      "roundRecap": "TỔNG KẾT VÒNG",
+      "storyBegin": "CÂU CHUYỆN BẮT ĐẦU…",
+      "upNext": "TIẾP THEO",
+      "lookClosely": "QUAN SÁT KỸ",
+      "noVotes": "CHƯA CÓ PHIẾU BẦU",
+      "points": "ĐIỂM"
+    }
   }
 }

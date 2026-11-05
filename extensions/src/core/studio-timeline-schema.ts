@@ -358,10 +358,13 @@ export interface PublicAnswerRecapQuestionItem {
   questionId: string
   questionNumber: number
   questionText: string
-  questionType: "single" | "multi" | "estimation"
+  questionImageUrl?: string
+  questionType?: "single" | "multi" | "estimation"
   playMode: "quiz" | "survey"
   totalResponders: number
-  badge: PublicAnswerRecapBadge
+  badge?: PublicAnswerRecapBadge
+  badgeType?: PublicAnswerRecapBadge
+  isTie?: boolean
   winningOptions: PublicAnswerRecapWinnerOption[]
   correctOptions?: PublicAnswerRecapWinnerOption[]
 }
@@ -397,7 +400,7 @@ export const studioDefaultsSchema = z.strictObject({
   questionDecoration: questionDecorationSchema.optional(),
   tadazzBackground: tadazzShowBackgroundSchema.optional(),
   /** Opt-in stage overlay backed by the owner's original Motion Kit assets. */
-  motionKit: z.enum(["goldy-20261105", "legacy"]).optional(),
+  motionKit: z.enum(["tadazz-v4", "goldy-20261105", "legacy"]).optional(),
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>

@@ -138,16 +138,21 @@ export function buildStageQuestion(input: {
   questionId?: string | null
   questionStates: ShowInput["questionStates"]
   note?: string
+  questionImage?: string
+  photoAlt?: string
 }): StageQuestion {
-  const { text, keyText, answers, visuals, questionStates, note } = input
+  const { text, keyText, answers, visuals, questionStates, note, questionImage, photoAlt } = input
   const number = questionStates?.current ?? 1
+  const roundMatch = (keyText ?? text).match(/^Round\s+(\d+)\b/i)
+  const round = roundMatch ? Number(roundMatch[1]) : null
   return {
     key: `${keyText ?? text}#${number}`,
     question: text,
     number,
     totalQuestions: questionStates?.total ?? null,
-    round: null,
+    round,
     ...(note ? { note } : {}),
+    ...(questionImage ? { questionImage, photoAlt: photoAlt || text } : {}),
     options: answers.map((label, index) => {
       const visual = visuals?.find((v) => v.answerIndex === index)
       const showImage =
@@ -346,16 +351,22 @@ export function computeShowScene(input: ShowInput): ShowScene {
       const answers = Array.isArray(data.answers) ? (data.answers as string[]) : []
       const fullQuestion = String(data.question ?? "")
       const answersOnly = Boolean(data.answersOnly)
+      const media = asRecord(data.media)
+      const mediaRef = typeof media.url === "string" ? { type: String(media.type ?? ""), url: media.url } : undefined
+      const visuals = currentAnswerVisuals(envelope, answers.length)
+      const hasAnswerImages = Boolean(visuals?.some((v) => v.url && (v.display === "image" || v.display === "both")))
+      const isPhotoQuestion = Boolean(mediaRef && mediaRef.type.toLowerCase() === "image" && !hasAnswerImages && answers.length === 4)
       const question = buildStageQuestion({
         text: role === "player" && answersOnly ? "" : fullQuestion,
         keyText: fullQuestion,
         answers,
-        visuals: currentAnswerVisuals(envelope, answers.length),
+        visuals,
         questionId: envelope?.questionId,
         questionStates,
+        questionImage: isPhotoQuestion ? mediaRef?.url : undefined,
+        photoAlt: fullQuestion,
       })
       const time = Number(data.time)
-      const media = asRecord(data.media)
       return {
         kind: "voting",
         key: `voting:${question.key}`,
@@ -366,7 +377,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
         totalPlayers: Number(data.totalPlayer) || 0,
         answers,
         options: data.options,
-        media: typeof media.url === "string" ? { type: String(media.type ?? ""), url: media.url } : undefined,
+        media: mediaRef,
         answersOnly,
         fullQuestion,
       }
@@ -459,4 +470,10 @@ export function resolveStageBackdrop(envelope: ShowEnvelope | null): { url: stri
 export function isTadazzShowActive(envelope: ShowEnvelope | null | undefined): boolean {
   const defaults = envelope?.extras?.defaults as { motionKit?: string } | undefined
   return defaults?.motionKit !== "legacy"
+}
+
+/** Whether the active show stage uses the v4 design kit (default: true unless goldy-20261105 or legacy). */
+export function isTadazzV4Active(envelope: ShowEnvelope | null | undefined): boolean {
+  const defaults = envelope?.extras?.defaults as { motionKit?: string } | undefined
+  return defaults?.motionKit !== "legacy" && defaults?.motionKit !== "goldy-20261105"
 }

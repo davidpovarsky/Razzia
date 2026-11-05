@@ -13,8 +13,10 @@ import {
   CinematicLayerStack,
   TadazzOpening,
   TadazzStage,
+  TadazzV4StageAdapter,
   collapseForResume,
   computeShowScene,
+  isTadazzV4Active,
   planTransition,
   preloadOpeningAssets,
   resolveStageBackdrop,
@@ -61,7 +63,7 @@ import {
   TadazzSummaryScreen,
   TadazzWaitScreen,
 } from "./TadazzScreens"
-import { useTadazzShellText, useTadazzStageLabels } from "./useTadazzLabels"
+import { useTadazzShellText, useTadazzStageLabels, useTadazzV4Labels } from "./useTadazzLabels"
 
 export interface TadazzShowViewProps {
   manager: boolean
@@ -150,6 +152,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
   const showGameId = managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
   const backdrop = resolveStageBackdrop(extensionState)
+  // TADAZZ v4 design kit is the default stage; goldy-20261105 / legacy stay available as rollback.
+  const useV4 = isTadazzV4Active(extensionState)
+  const v4Labels = useTadazzV4Labels()
 
   if (typeof document !== "undefined") {
     document.documentElement.style.background = "#08011a"
@@ -269,11 +274,13 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const [submitted, setSubmitted] = useState(false)
   const [sfxPop] = useSound(SFX.ANSWERS.SOUND, { volume: 0.1 })
   const [sfxResults] = useSound(SFX.RESULTS_SOUND, { volume: 0.2 })
+  const questionKey = "question" in scene ? scene.question.key : null
   useEffect(() => {
+    if (scene.kind === "wait") return
     setSelected([])
     setSubmitted(false)
     stageRef.current?.setSelectedOptions([])
-  }, [scene.key])
+  }, [questionKey, scene.kind])
   const submit = useCallback(
     (answerKeys: number[]) => {
       if (!isPlayer || !playerGameId || submitted || scene.kind !== "voting") return
@@ -282,8 +289,12 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       setSubmitted(true)
       setSelected(answerKeys)
       stageRef.current?.setSelectedOptions(answerKeys)
+      // v4 "chosen": private choice spotlight on THIS player's own screen only (never broadcast).
+      if (role === "player" && scene.kind === "voting" && scene.questionType !== "estimation") {
+        void stageRef.current?.showChosen?.(answerKeys)
+      }
     },
-    [isPlayer, playerGameId, submitted, scene.kind, socket, sfxPop],
+    [isPlayer, playerGameId, submitted, scene, socket, sfxPop, role],
   )
   const toggle = useCallback(
     (index: number) => {
@@ -321,6 +332,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       case "lobby":
         return <TadazzLobbyScreen inviteCode={scene.inviteCode ?? managerState.inviteCode ?? undefined} isManager={manager} text={scene.text} />
       case "wait":
+        if (submitted || Boolean(stageRef.current?.questionKey)) return null
         return <TadazzWaitScreen text={scene.text} playerName={role === "player" ? player?.username : undefined} />
       case "start":
         return <TadazzStartScreen subject={scene.subject} time={scene.time} />
@@ -438,8 +450,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const questionMedia = (scene.kind === "question" || scene.kind === "voting") && scene.media ? scene.media : null
   const isPopupMedia = Boolean(questionMedia && (questionMedia.type === MEDIA_TYPES.IMAGE || questionMedia.type === MEDIA_TYPES.VIDEO))
   const showMediaInPopup = isPlayer && isMobilePhone && isPopupMedia && !playerAnswersOnly
+  // v4 question-image layout paints the question photo itself (left panel), so no full-stage underlay.
+  const v4PhotoQuestion = useV4 && scene.kind === "voting" && Boolean(scene.question.questionImage)
   const underlay =
-    isPopupMedia && questionMedia && !playerAnswersOnly && !showMediaInPopup ? (
+    isPopupMedia && questionMedia && !playerAnswersOnly && !showMediaInPopup && !v4PhotoQuestion ? (
       <div className="tz-scene-media" data-testid="tadazz-question-media">
         {questionMedia.type === MEDIA_TYPES.VIDEO ? (
           <video src={questionMedia.url} autoPlay playsInline muted={scene.kind === "voting"} style={{ objectFit: "contain" }} />
@@ -514,19 +528,36 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               overflow: "hidden",
             }}
           >
-            <TadazzStage
-              ref={stageRef}
-              labels={labels}
-              backdropUrl={backdrop?.url}
-              backdropFit={backdrop?.fit}
-              interactive={isPlayer && scene.kind === "voting" && !submitted && !showPad}
-              multiSelect={scene.kind === "voting" && scene.questionType === "multi"}
-              onSelectOption={onSelectOption}
-              customScreen={customScreen}
-              underlay={underlay}
-              overlay={overlay}
-              reducedMotion={reduced}
-            />
+            {useV4 ? (
+              <TadazzV4StageAdapter
+                ref={stageRef}
+                labels={labels}
+                v4Labels={v4Labels}
+                backdropUrl={backdrop?.url}
+                backdropFit={backdrop?.fit}
+                interactive={isPlayer && scene.kind === "voting" && !submitted && !showPad}
+                multiSelect={scene.kind === "voting" && scene.questionType === "multi"}
+                onSelectOption={onSelectOption}
+                customScreen={customScreen}
+                underlay={underlay}
+                overlay={overlay}
+                reducedMotion={reduced}
+              />
+            ) : (
+              <TadazzStage
+                ref={stageRef}
+                labels={labels}
+                backdropUrl={backdrop?.url}
+                backdropFit={backdrop?.fit}
+                interactive={isPlayer && scene.kind === "voting" && !submitted && !showPad}
+                multiSelect={scene.kind === "voting" && scene.questionType === "multi"}
+                onSelectOption={onSelectOption}
+                customScreen={customScreen}
+                underlay={underlay}
+                overlay={overlay}
+                reducedMotion={reduced}
+              />
+            )}
             {playerAnswersOnly && scene.kind === "voting" && (
               <QuestionDialog
                 question={scene.fullQuestion ?? ""}

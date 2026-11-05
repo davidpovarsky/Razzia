@@ -27,6 +27,7 @@ function all<T extends Element = HTMLElement>(root: Element, selector: string): 
 export class TadazzV4Motion {
   private active: Animation[] = []
   private tickerFrames: number[] = []
+  private finalizers: Array<() => void> = []
   private token = 0
   private scene: TadazzV4Scene = "question"
   constructor(private stage: HTMLElement, private config: MotionConfig = {}) {}
@@ -36,6 +37,7 @@ export class TadazzV4Motion {
     ++this.token
     for (const animation of this.active) { try { animation.cancel() } catch { /* a stale WAAPI timeline */ } }
     this.active = []
+    this.finalizers = []
     for (const id of this.tickerFrames) cancelAnimationFrame(id)
     this.tickerFrames = []
     const fx = this.fx()
@@ -43,9 +45,17 @@ export class TadazzV4Motion {
     const flash = this.flash()
     if (flash) flash.style.opacity = "0"
   }
-  pause() { this.active.forEach(a => a.pause()) }
+  pause() { this.active.forEach(a => { try { a.pause() } catch { /* stale */ } }) }
   resume() { this.active.forEach(a => { try { a.play() } catch { /* stale */ } }) }
-  finishAll() { for (const a of this.active) { try { a.finish() } catch { /* infinite or disposed */ } } }
+  setReducedMotion(on: boolean) { this.config.reducedMotion = on }
+  finishAll() {
+    for (const id of this.tickerFrames) cancelAnimationFrame(id)
+    this.tickerFrames = []
+    for (const a of this.active) { try { a.finish() } catch { /* infinite or disposed */ } }
+    const fin = [...this.finalizers]
+    this.finalizers = []
+    for (const fn of fin) { try { fn() } catch { /* ignore */ } }
+  }
   private motionMs(ms: number) { return this.config.reducedMotion ? 1 : Math.max(1, Math.round(ms / Math.max(.2, this.config.motionScale ?? 1))) }
   private animate(node: Element | null, frames: Keyframe[], options: AnimOptions = {}): Animation | null {
     if (!node || !('animate' in node)) return null
@@ -151,28 +161,34 @@ export class TadazzV4Motion {
       ], { duration: 700 + random() * 630, delay: delay + random() * 150, easing: 'cubic-bezier(.2,.48,.48,1)' })
     }
   }
-  private voting(locked: boolean) {
-    this.questionMotion(40)
-    this.cardsMotion(230)
+  private voting(locked: boolean, data: TadazzV4Data = {}) {
+    const keepCards = Boolean(data.cardsAlreadyOnStage)
+    if (!keepCards) {
+      this.questionMotion(40)
+      this.cardsMotion(230)
+    }
     const status = query(this.root(), '.vote-status')
     this.animate(status, [
       { opacity: 0, transform: 'translate(-50%,65px) scale(.72)' },
       { opacity: 1, transform: 'translate(-50%,0) scale(1)' },
-    ], { duration: 980, delay: locked ? 950 : 1300 })
+    ], { duration: 980, delay: keepCards ? (locked ? 80 : 120) : (locked ? 950 : 1300) })
     if (locked) {
       all(this.root(), '.choice-slot').forEach((slot, i) => {
         this.animate(slot, [
           { opacity: 1, transform: 'translate3d(0,0,0) scale(1)' },
           { opacity: .75, transform: 'translate3d(0,0,0) scale(.974)' },
           { opacity: .84, transform: 'translate3d(0,0,0) scale(.98)' },
-        ], { duration: 730, delay: 960 + i * 42 })
+        ], { duration: 730, delay: (keepCards ? 90 : 960) + i * 42 })
       })
-      this.impact(1030, 'small')
+      this.impact(keepCards ? 160 : 1030, 'small')
     }
   }
   private countdown(data: TadazzV4Data) {
-    this.questionMotion(0)
-    this.cardsMotion(75)
+    const keepCards = Boolean(data.cardsAlreadyOnStage)
+    if (!keepCards) {
+      this.questionMotion(0)
+      this.cardsMotion(75)
+    }
     const wrap = query(this.root(), '.countdown-floater')
     const label = query(this.root(), '.countdown-label')
     const ring = query<SVGCircleElement>(this.root(), '.countdown-ring .timer-progress')
@@ -189,9 +205,16 @@ export class TadazzV4Motion {
       { opacity: 1, transform: 'translate3d(0,0,0) scale(1)', offset: 1 },
     ], { duration: 1120, easing: 'cubic-bezier(.15,.78,.24,1)' })
     this.animate(label, [{ opacity: 0 }, { opacity: 1 }], { duration: 550, delay: 720 })
-    const totalSeconds = Math.max(0, Number(data.remainingSeconds ?? data.seconds ?? 0))
+    const rawSeconds = data.remainingSeconds ?? data.seconds ?? 0
+    const totalSeconds = Math.max(0, Number(rawSeconds) || 0)
     const duration = Math.max(1, totalSeconds * 1000)
     const sweep = this.animate(ring, [{ strokeDashoffset: 0 }, { strokeDashoffset: circumference }], { duration, easing: 'linear' })
+    if (value) {
+      this.finalizers.push(() => {
+        value.textContent = '00'
+        value.classList.add('timer-low')
+      })
+    }
     const token = this.token
     const tick = () => {
       if (token !== this.token || !value || !sweep) return
@@ -206,66 +229,91 @@ export class TadazzV4Motion {
     this.cue('countdown-ended', duration)
   }
   private chosen(data: TadazzV4Data) {
-    this.questionMotion(40)
-    this.cardsMotion(230)
+    const keepCards = Boolean(data.cardsAlreadyOnStage)
+    if (!keepCards) {
+      this.questionMotion(40)
+      this.cardsMotion(230)
+    }
     const status = query(this.root(), '.vote-status')
     this.animate(status, [
       { opacity: 0, transform: 'translate(-50%,70px) scale(.84)' },
       { opacity: 1, transform: 'translate(-50%,0) scale(1)' },
-    ], { duration: 760, delay: 1480 })
-    const chosenIndex = data.selectedIndex ?? -1
+    ], { duration: 760, delay: keepCards ? 180 : 1480 })
+    const chosenSet = new Set<number>(
+      Array.isArray(data.selectedIndices) && data.selectedIndices.length > 0
+        ? data.selectedIndices
+        : typeof data.selectedIndex === 'number' && data.selectedIndex >= 0
+          ? [data.selectedIndex]
+          : [],
+    )
     all(this.root(), '.choice-slot').forEach((slot, i) => {
-      if (i === chosenIndex) {
+      if (chosenSet.has(i)) {
         slot.classList.add('is-selected')
         this.animate(slot, [
           { transform: 'translate3d(0,0,0) scale(1)' },
           { transform: 'translate3d(0,-42px,0) scale(1.115)', offset: .65 },
           { transform: 'translate3d(0,-32px,0) scale(1.09)' },
-        ], { duration: 890, delay: 1380 })
+        ], { duration: 890, delay: keepCards ? 80 : 1380 })
       } else {
         this.animate(slot, [
           { opacity: 1, transform: 'translate3d(0,0,0) scale(1)' },
           { opacity: .38, transform: 'translate3d(0,13px,0) scale(.94)' },
-        ], { duration: 850, delay: 1350 })
+        ], { duration: 850, delay: keepCards ? 50 : 1350 })
       }
     })
-    if (chosenIndex >= 0) this.impact(1570, 'small')
+    if (chosenSet.size > 0) this.impact(keepCards ? 270 : 1570, 'small')
   }
   private results(data: TadazzV4Data) {
-    this.questionMotion(40)
-    this.cardsMotion(185)
+    const keepCards = Boolean(data.cardsAlreadyOnStage)
+    if (!keepCards) {
+      this.questionMotion(40)
+      this.cardsMotion(185)
+    }
     const cards = all(this.root(), '.choice-slot')
     const percentages = percentagesFor(data, cards.length)
     const winners = topIndicesFor(data, cards.length)
     const showPercentages = data.showPercentages !== false
     const animated: Array<{ node: HTMLElement; target: number; animation: Animation }> = []
+    const baseDelay = keepCards ? 150 : 1400
+    const winnerTagDelay = keepCards ? 1400 : 2650
+    const winnerLiftDelay = keepCards ? 1310 : 2560
     cards.forEach((slot, i) => {
+      if (keepCards) {
+        this.animate(slot, [
+          { opacity: .84, transform: 'translate3d(0,0,0) scale(.98)' },
+          { opacity: 1, transform: 'translate3d(0,0,0) scale(1)' },
+        ], { duration: 320, delay: 0 })
+      }
       const number = query<HTMLElement>(slot, '.result-percentage')
       const track = query(slot, '.result-track')
       const fill = query(slot, '.result-track-fill')
       if (number) { number.textContent = '0%'; number.style.visibility = showPercentages ? 'visible' : 'hidden' }
-      const delay = 1400 + i * 80
+      const delay = baseDelay + i * 80
       this.animate(number, [
         { opacity: 0, transform: 'translate3d(0,24px,0) scale(.8)' },
         { opacity: 1, transform: 'translate3d(0,0,0) scale(1)' },
       ], { duration: 560, delay })
-      this.animate(track, [{ opacity: 0 }, { opacity: 1 }], { duration: 480, delay: delay - 100 })
+      this.animate(track, [{ opacity: 0 }, { opacity: 1 }], { duration: 480, delay: Math.max(0, delay - 100) })
       const fillAnimation = this.animate(fill, [
         { transform: 'scaleX(0)' },
         { transform: `scaleX(${Math.max(.003, percentages[i] / 100)})` },
       ], { duration: 1070, delay: delay + 80, easing: 'cubic-bezier(.2,.85,.18,1)' })
-      if (showPercentages && number && fillAnimation) animated.push({ node: number, target: Math.round(percentages[i]), animation: fillAnimation })
+      if (showPercentages && number && fillAnimation) {
+        const target = Math.round(percentages[i])
+        animated.push({ node: number, target, animation: fillAnimation })
+        this.finalizers.push(() => { number.textContent = `${target}%` })
+      }
       if (winners.includes(i)) {
         slot.classList.add('is-favourite')
         this.animate(query(slot, '.winner-tag'), [
           { opacity: 0, transform: 'translateY(-14px) scale(.9)' },
           { opacity: 1, transform: 'none' },
-        ], { duration: 680, delay: 2650 })
+        ], { duration: 680, delay: winnerTagDelay })
         this.animate(slot, [
           { transform: 'translate3d(0,0,0) scale(1)' },
           { transform: 'translate3d(0,-17px,0) scale(1.027)', offset: .68 },
           { transform: 'translate3d(0,-9px,0) scale(1.016)' },
-        ], { duration: 730, delay: 2560, easing: V4_EASE_DRAMATIC })
+        ], { duration: 730, delay: winnerLiftDelay, easing: V4_EASE_DRAMATIC })
       }
     })
     const token = this.token
@@ -280,7 +328,7 @@ export class TadazzV4Motion {
       if (running) this.tick(tick)
     }
     if (animated.length) tick()
-    this.cue('survey-reveal', 1450)
+    this.cue('survey-reveal', keepCards ? 200 : 1450)
   }
   private topPick(data: TadazzV4Data) {
     const root = this.root()
@@ -386,9 +434,9 @@ export class TadazzV4Motion {
         this.animate(query(root, '.hud-focus'), [{opacity:0,transform:'translateY(30px)'},{opacity:1,transform:'none'}], {duration:850,delay:820})
         break
       case 'picture-answers': this.questionMotion(70); this.cardsMotion(370); break
-      case 'voting-open': this.voting(false); break
+      case 'voting-open': this.voting(false, data); break
       case 'countdown': this.countdown(data); break
-      case 'vote-locked': this.voting(true); break
+      case 'vote-locked': this.voting(true, data); break
       case 'chosen': this.chosen(data); break
       case 'survey-results': this.results(data); break
       case 'top-pick': this.topPick(data); break

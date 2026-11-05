@@ -663,6 +663,24 @@
     "submit": "ENVIAR",
     "skipOpening": "Saltar",
     "enableSound": "Activar sonido",
-    "next": "SIGUIENTE"
+    "next": "SIGUIENTE",
+    "v4": {
+      "nextQuestion": "SIGUIENTE PREGUNTA",
+      "focus": "ATENCIÓN",
+      "chooseOne": "ELIGE UNA OPCIÓN",
+      "votesLocked": "VOTACIÓN CERRADA",
+      "choiceSelected": "OPCIÓN SELECCIONADA",
+      "timeLeft": "TIEMPO RESTANTE",
+      "mostChosenAnswer": "RESPUESTA MÁS ELEGIDA",
+      "liveStandings": "CLASIFICACIÓN EN VIVO",
+      "teamLeaderboard": "CLASIFICACIÓN DE EQUIPOS",
+      "leaderboard": "CLASIFICACIÓN",
+      "roundRecap": "RESUMEN DE LA RONDA",
+      "storyBegin": "QUE EMPIECE LA HISTORIA…",
+      "upNext": "A CONTINUACIÓN",
+      "lookClosely": "MIRA CON ATENCIÓN",
+      "noVotes": "SIN VOTOS TODAVÍA",
+      "points": "PTS"
+    }
   }
 }

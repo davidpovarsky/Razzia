@@ -32,3 +32,4 @@ export * from "./tadazz-leaderboard"
 export * from "./tadazz-zz-transition"
 
 export * from "./tadazz-show"
+export * from "./tadazz-v4"
