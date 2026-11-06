@@ -39,4 +39,12 @@ Candidate image: `tadazz:next-20261106`, derived from the currently deployed run
 
 Previous container and a config backup are retained under `/opt/tadazz-releases/next-20261106/`; activation rolls back automatically if the health check fails. The existing show is preserved; a separate Next show can be created from its ten questions and original media.
 
-Final expanded acceptance and production activation: PENDING.
+Final expanded acceptance: PASS — Chromium, real server, four mobile voting clients, ten questions, 75/25 results, 50/50 tie with manager choice and spectator refresh, both rounds and curtain finale. Duration 3.8 minutes (4.0 minutes including server startup). All asset-response checks passed. Videos and paired host/display screenshots were saved under `work/next-live-evidence`, `work/next-videos` and `work/next-acceptance-results`.
+
+The final extension run passed 473/473 tests in 45 files (including the new authorization/retry/snapshot test). The common Socket command allowlist was also extended for the new command; the transport-level browser test caught this missing hook before activation.
+
+Production activation: SUCCESS on 2026-11-06 at approximately 04:00 Asia/Hebron. Active image `tadazz:next-20261106` (`35965f149ddf`), previous image `tadazz:a6a3937`. Loopback health, exact Web index and 13 static asset hashes verified after activation. Previous stopped container `tadazz-before-next-20261106` and the protected config archive are retained. No production load test or PSTN call was made.
+
+Added a separate saved show `TADAZZ Next - Creating Worlds`, based on the original ten questions/media, with the native opening, directory, instructions, readiness, round banners, story assemblies, held storytelling and finale. Original show and media remain present. The cloned show was schema/digest validated before its production copy was created.
+
+Code commits: `e6b9caf`, `4c1c124`. Untracked historical phone QA artifacts and original screenshot evidence were preserved. This is a verified functional release for user inspection; it is not a claim that every scene is pixel-identical to the HTML reference.
