@@ -3,6 +3,7 @@ import {
   EXTENSION_EVENTS,
   type ExtensionCommand,
   type ExtensionStateEnvelope,
+  type ActiveSceneData,
 } from "@razzia/extensions/core"
 import { formatHistoryItem } from "@razzia/extensions/presentation"
 import AlertDialog from "@razzia/web/components/AlertDialog"
@@ -448,6 +449,9 @@ export const ManagerControlToolbar = ({
       className="flex w-full flex-wrap items-center justify-between gap-2 p-2 sm:gap-3 sm:p-4 max-w-full box-border"
       data-testid="manager-control-toolbar"
     >
+      {(extensionState?.extras.activeSceneData as ActiveSceneData | undefined)?.fullShow?.tieCandidates?.map(option => (
+        <Button key={option.answerIndex} data-testid={`host-resolve-tie-${option.answerIndex}`} disabled={isPending} onClick={() => sendCommand({action: "RESOLVE_STORY_TIE", payload: {answerIndex: option.answerIndex, epoch: extensionState!.epoch}})}>{option.label}</Button>
+      ))}
       {/* Left section: Progress / Question Counter & Room Lock */}
       <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
         {questionStates && !isLobby && !isFinished && (

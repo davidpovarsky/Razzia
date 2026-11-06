@@ -8,6 +8,7 @@ import {
   type PublicAnswerRecap,
   type PublicInterimResults,
   type PublicRankEntry,
+  type PublicFullShowData,
   type RevealDistributionSnapshot,
   type SceneConfig,
   isQuizExtrasV2,
@@ -22,6 +23,7 @@ import {
 import type { StudioShowCoordinator } from "./studio-show-coordinator"
 
 export interface ExtensionSessionDelegate {
+  getFullShowData?: () => PublicFullShowData
   endAnswerTimer?: () => boolean
   nextScreen?: () => boolean
   previousScreen?: () => boolean
@@ -68,6 +70,7 @@ export class ExtensionGameSession {
   private manualLeaderboardRequested = false
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
   private viewingHistoryIndex: number | null = null
+  private readonly storyTieChoices = new Map<string, number>()
   private delegate: ExtensionSessionDelegate | null = null
   private showCoordinator: StudioShowCoordinator | null = null
 
@@ -403,19 +406,33 @@ export class ExtensionGameSession {
             extrasPayload.activeSceneData = activeSceneData
           } else if (stepKind === "interimResults") {
             const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie ? summary.options.filter(option => summary.winners.includes(option.answerIndex)) : []
+            const chosen = summary?.sourceQuestionId ? this.storyTieChoices.get(summary.sourceQuestionId) : undefined
             const activeSceneData: ActiveSceneData = {
               interimResults: summary,
+              fullShow: { isLive: true, tieCandidates: candidates, tieResolvedIndex: chosen === undefined ? null : candidates.findIndex(option => option.answerIndex === chosen) },
             }
 
             extrasPayload.activeSceneData = activeSceneData
-          } else if (stepKind === "answerRecap" && activeScene) {
+          } else if ((stepKind === "answerRecap" || stepKind === "animation") && activeScene) {
             const recap =
               this.delegate?.getAnswerRecapSummary?.(
                 activeScene,
                 currentStep?.index ?? 0,
               ) ?? null
+            if (recap) for (const item of recap.items) {
+              const chosen = this.storyTieChoices.get(item.questionId)
+              if (chosen !== undefined) item.winningOptions = item.winningOptions.filter(option => option.answerIndex === chosen)
+            }
+            const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie ? summary.options.filter(option => summary.winners.includes(option.answerIndex)) : []
+            const tieChoice = summary?.sourceQuestionId ? this.storyTieChoices.get(summary.sourceQuestionId) : undefined
             const activeSceneData: ActiveSceneData = {
               answerRecap: recap,
+              ...(stepKind === "animation" ? {
+                interimResults: this.delegate?.getLastCompletedQuestionSummary?.() ?? null,
+                fullShow: { ...this.delegate?.getFullShowData?.(), isLive: true, tieCandidates: candidates, tieResolvedIndex: tieChoice === undefined ? null : candidates.findIndex(option => option.answerIndex === tieChoice) },
+              } : {}),
             }
 
             extrasPayload.activeSceneData = activeSceneData
@@ -529,6 +546,14 @@ export class ExtensionGameSession {
     this.processedRequestIds.add(command.requestId)
 
     switch (command.action) {
+      case "RESOLVE_STORY_TIE": {
+        const scene = this.showCoordinator?.currentScene
+        const summary = this.delegate?.getLastCompletedQuestionSummary?.()
+        if (!(scene?.kind === "interimResults" || (scene?.kind === "animation" && scene.preset === "tie-break")) || !summary?.isTie || !summary.sourceQuestionId || !summary.winners.includes(command.payload.answerIndex)) throw new Error("errors:extensions.invalidCommand")
+        this.storyTieChoices.set(summary.sourceQuestionId, command.payload.answerIndex)
+        this.seq += 1
+        break
+      }
       case "ASSIGN_TEAM": {
         if (!isLobby) {
           throw new Error("errors:extensions.teamAssignmentOnlyInLobby")

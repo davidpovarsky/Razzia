@@ -1,4 +1,5 @@
 export { TadazzV4Stage } from "./TadazzV4Stage"
+export { isFullShowScene, FULL_SHOW_SCENES } from "./FullShowScenes"
 export { TadazzV4Motion, V4_EASE, V4_EASE_DRAMATIC, V4_FRAME_SIZE, V4_FX_COLORS } from "./motion"
 export {
   StageSceneV4, StageIdentityV4, StageAmbientV4, StageBackdropV4,

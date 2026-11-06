@@ -113,6 +113,7 @@ export const TadazzV4StageAdapter = forwardRef<
   const reducedMotionRef = useRef(reducedMotion)
   reducedMotionRef.current = reducedMotion
   const showPercentagesRef = useRef(true)
+  const lastRevealInputRef = useRef<StageRevealInput | null>(null)
 
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
@@ -191,7 +192,7 @@ export const TadazzV4StageAdapter = forwardRef<
         question: q.question,
         note: q.note,
         number: q.number,
-        round: q.round ?? 1,
+        round: q.round ?? (q.totalQuestions === 10 && q.number ? Math.floor((q.number - 1) / 5) + 1 : 1),
         totalQuestions: q.totalQuestions,
         answers: toV4Answers(q.options),
         questionImage: q.questionImage,
@@ -251,6 +252,7 @@ export const TadazzV4StageAdapter = forwardRef<
         auxEngine.reset()
         questionRef.current = data
         selectedRef.current = []
+        lastRevealInputRef.current = null
         setScreenMode("none")
         setMode("question")
         const hasOptions = data.options.length > 0
@@ -362,6 +364,7 @@ export const TadazzV4StageAdapter = forwardRef<
         selectedRef.current = selectedIndices
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key
+        const lastReveal = lastRevealInputRef.current
         await v4Ref.current?.play(
           "chosen",
           buildQuestionData(q, {
@@ -369,6 +372,10 @@ export const TadazzV4StageAdapter = forwardRef<
             selectedIndices,
             selectedIndex: selectedIndices[0] ?? null,
             cardsAlreadyOnStage: alreadyOnStage,
+            counts: lastReveal?.counts,
+            percentages: lastReveal?.percentages,
+            solutions: lastReveal?.solutions,
+            mode: lastReveal?.mode,
           }),
         )
       },
@@ -378,6 +385,7 @@ export const TadazzV4StageAdapter = forwardRef<
       ): Promise<StageRevealResult | null> {
         const q = questionRef.current
         if (!q) return null
+        lastRevealInputRef.current = input
         setScreenMode("none")
         setMode("results")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
@@ -434,6 +442,7 @@ export const TadazzV4StageAdapter = forwardRef<
       async nextQuestion(data: StageQuestion) {
         questionRef.current = data
         selectedRef.current = []
+        lastRevealInputRef.current = null
         cardsOnStageKeyRef.current = null
         const box: { entered?: Promise<void> } = {}
         // Swap to the next question exactly under the Z-wipe cover (wipe-covered cue).
@@ -611,7 +620,7 @@ export const TadazzV4StageAdapter = forwardRef<
   const customSlot: ReactNode = (
     <>
       <div
-        className={`tz-screen${screenMode === "intro" ? "is-visible" : ""}`}
+        className={`tz-screen${screenMode === "intro" ? " is-visible" : ""}`}
         data-testid="tadazz-intro-screen"
       >
         <div className="tz-screen-inner">
@@ -627,7 +636,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen${screenMode === "win" ? "is-visible" : ""}`}
+        className={`tz-screen${screenMode === "win" ? " is-visible" : ""}`}
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
@@ -675,7 +684,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen tz-custom-screen${screenMode === "custom" ? "is-visible" : ""}`}
+        className={`tz-screen tz-custom-screen${screenMode === "custom" ? " is-visible" : ""}`}
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">

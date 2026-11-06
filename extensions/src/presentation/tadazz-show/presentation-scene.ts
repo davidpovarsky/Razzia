@@ -155,12 +155,16 @@ export function buildStageQuestion(input: {
     ...(questionImage ? { questionImage, photoAlt: photoAlt || text } : {}),
     options: answers.map((label, index) => {
       const visual = visuals?.find((v) => v.answerIndex === index)
-      const showImage =
-        visual?.url && (visual.display === "image" || visual.display === "both")
+      const showImage = Boolean(
+        visual?.url &&
+          (visual.display === undefined ||
+            visual.display === "image" ||
+            visual.display === "both"),
+      )
       return {
         label,
         image: showImage ? visual.url : undefined,
-        alt: visual?.alt || label,
+        alt: visual?.alt || label || `Choice ${index + 1}`,
       }
     }),
   }

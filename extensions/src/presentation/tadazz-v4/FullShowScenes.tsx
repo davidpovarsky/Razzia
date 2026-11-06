@@ -59,6 +59,7 @@ export function BrandLogo({ className }: { className?: string }) {
         className="full-brand-img"
         onError={(e) => {
           e.currentTarget.style.display = "none"
+          e.currentTarget.parentElement?.classList.add("full-logo-error")
         }}
       />
       <strong className="full-brand-text">
@@ -71,12 +72,12 @@ export function BrandLogo({ className }: { className?: string }) {
 const picture = (a: TadazzV4Answer | undefined, fallback: number) =>
   a?.imageUrl ? (
     <img
-      className="full-picture"
+      className="full-picture full-story-image"
       src={a.imageUrl}
       alt={a.alt || a.title || ""}
     />
   ) : (
-    <div className="full-picture full-picture-empty">{num(fallback + 1)}</div>
+    <div className="full-picture full-picture-empty full-story-image">{num(fallback + 1)}</div>
   )
 
 function Head({ title, chip }: { title?: string; chip?: string }) {
@@ -105,7 +106,9 @@ export function StoryCards({
       ? data.storyRoles
       : DEFAULT_STORY_ROLES
   return (
-    <div className={`full-story-cards${live ? "full-story-hold" : ""}`}>
+    <div
+      className={`full-story-cards full-story-deck${live ? " full-story-hold holding" : ""}`}
+    >
       {roles.map((role, i) => {
         const a = winners[i]
         const ready = !progress || i < count
@@ -115,7 +118,11 @@ export function StoryCards({
         return (
           <article
             key={role}
-            className={["full-story-piece", !ready && "pending"]
+            className={[
+              "full-story-piece",
+              "full-story-card",
+              !ready && "pending",
+            ]
               .filter(Boolean)
               .join(" ")}
             style={{ animationDelay: `${i * 180}ms` }}
@@ -123,13 +130,17 @@ export function StoryCards({
             data-ready={ready ? "true" : "false"}
           >
             <div className="full-story-role">{role}</div>
-            {ready ? (
-              picture(a, i)
-            ) : (
-              <div className="full-picture full-picture-empty">?</div>
-            )}
-            <div className="full-story-index">{num(i + 1)}</div>
-            <div className="full-story-title">{displayTitle}</div>
+            <div className="full-story-image-box">
+              {ready ? (
+                picture(a, i)
+              ) : (
+                <div className="full-picture full-picture-empty">?</div>
+              )}
+              <div className="full-story-index full-story-num">{num(i + 1)}</div>
+            </div>
+            <div className="full-story-title full-story-label" dir="auto">
+              {displayTitle}
+            </div>
           </article>
         )
       })}
@@ -162,7 +173,7 @@ export function Directory({ data }: { data: FullShowInput }) {
         <strong>{data.dialNumber || "NUMBER TO BE ADDED"}</strong>
       </div>
       <div
-        className={`full-directory${group > 0 ? "full-directory-focused" : ""}`}
+        className={`full-directory${group > 0 ? " full-directory-focused" : ""}`}
         data-testid="tadazz-full-directory"
         data-group-page={group}
       >
@@ -258,7 +269,7 @@ export function Readiness({ data }: { data: FullShowInput }) {
             <div
               data-table={n}
               key={n}
-              className={`full-light${isConnected ? "connected" : ""}`}
+              className={`full-light${isConnected ? " connected" : ""}`}
               style={{
                 animationDelay: `${(i % 10) * 60 + Math.floor(i / 10) * 75}ms`,
               }}
@@ -343,20 +354,49 @@ export function Finale({ data }: { data: FullShowInput }) {
     data.curtainRightUrl || "/tadazz-show/second-library/curtain-right.png"
   return (
     <div className="full-grand-finale">
-      <div className="full-finale-rings" />
-      <div className="full-finale-z left">Z</div>
-      <div className="full-finale-z right">Z</div>
+      <div className="full-final-bloom" />
+      <div className="full-final-rings full-finale-rings" />
+      <div className="full-final-arc" />
+      <div className="full-finale-z full-wing-z left">Z</div>
+      <div className="full-finale-z full-wing-z right">Z</div>
+      <svg
+        viewBox="0 0 1920 1080"
+        className="full-final-zigzags"
+        aria-hidden="true"
+      >
+        <path
+          className="full-zig blue"
+          d="M-90 340 L620 420 L300 680 L1060 560"
+        />
+        <path
+          className="full-zig lime"
+          d="M2010 340 L1300 420 L1620 680 L860 560"
+        />
+      </svg>
+      <div className="full-final-tunnel">
+        {Array.from({ length: 9 }, (_, i) => (
+          <div
+            key={i}
+            className="full-final-ray"
+            style={{ "--ray-rot": `${(i - 4) * 13}deg` } as React.CSSProperties}
+          />
+        ))}
+      </div>
+      <div className="full-final-sparks" />
       <div className="full-final-center">
         <BrandLogo className="full-finale-logo" />
       </div>
-      <div
+      <img
+        src={leftCurtain}
+        alt="Curtain Left"
         className="full-curtain left"
-        style={{ backgroundImage: `url("${leftCurtain}")` }}
       />
-      <div
+      <img
+        src={rightCurtain}
+        alt="Curtain Right"
         className="full-curtain right"
-        style={{ backgroundImage: `url("${rightCurtain}")` }}
       />
+      <div className="full-curtain-seam" />
     </div>
   )
 }
@@ -367,10 +407,12 @@ export function CompanyOpening({ data }: { data: FullShowInput }) {
     "/tadazz-show/second-library/creating-worlds-intro.png"
   return (
     <div className="full-company">
-      <div
+      <img
+        src={artwork}
+        alt="Creating Worlds"
         className="full-company-event"
-        style={{ backgroundImage: `url("${artwork}")` }}
       />
+      <div className="full-company-glow" />
       <div className="full-company-brand">
         <BrandLogo className="full-company-logo" />
       </div>
@@ -379,12 +421,27 @@ export function CompanyOpening({ data }: { data: FullShowInput }) {
 }
 
 export function GrandOpening({ data }: { data: FullShowInput }) {
+  const teaserSrc =
+    data.eventArtworkUrl ||
+    "/tadazz-show/second-library/teaser-screen-source.jpg"
   return (
     <div className="full-grand-opening">
-      <div className="full-portal" />
+      <img
+        src={teaserSrc}
+        alt="Grand Opening Teaser"
+        className="full-opening-event"
+      />
+      <div className="full-opening-warm-veil" />
+      <div className="full-portal full-opening-portal" />
+      <div className="full-portal full-opening-portal portal-two" />
+      <div className="full-opening-shock" />
       <BrandLogo className="full-opening-logo" />
-      <h2>{data.title || "THE STORY STARTS WITH YOU"}</h2>
-      <p>{data.subtitle || "A LIVE AUDIENCE-CREATED EXPERIENCE"}</p>
+      <h2 className="full-opening-tag">
+        {data.title || "THE STORY STARTS WITH YOU"}
+      </h2>
+      <p className="full-opening-footnote">
+        {data.subtitle || "A LIVE AUDIENCE-CREATED EXPERIENCE"}
+      </p>
     </div>
   )
 }
@@ -399,10 +456,19 @@ export function RoundLaunch({
   const isRoundOne = scene === "round-one"
   return (
     <div className="full-round-launch">
-      <div className="full-portal" />
-      <small>{isRoundOne ? "THE FIRST STORY" : "A WHOLE NEW WORLD"}</small>
-      <strong>ROUND {num(isRoundOne ? 1 : 2)}</strong>
-      <div className="full-launch-rule" />
+      <Head title="" chip={`ROUND ${num(isRoundOne ? 1 : 2)}`} />
+      <div className="full-launch-glow" />
+      <div className="full-wing-z left">Z</div>
+      <div className="full-wing-z right">Z</div>
+      <div className="full-round-plaque">
+        <small className="full-round-mini">
+          {isRoundOne ? "THE FIRST STORY" : "A WHOLE NEW WORLD"}
+        </small>
+        <strong className="full-round-number">
+          ROUND {num(isRoundOne ? 1 : 2)}
+        </strong>
+      </div>
+      <div className="full-launch-rule full-round-underline" />
     </div>
   )
 }
@@ -440,7 +506,7 @@ export function FullShowSceneView({
             COLLECTED
           </h3>
           <StoryCards data={data} progress />
-          <div className="full-story-bridge" />
+          <div className="full-story-bridge full-story-ribbon" />
         </>
       )
     case "tie-break":
@@ -453,8 +519,10 @@ export function FullShowSceneView({
             chip={`ROUND ${num(data.round || 1)}`}
           />
           <StoryCards data={data} />
-          <div className="full-story-bridge" />
-          <div className="full-story-ending">LET THE STORY BEGIN…</div>
+          <div className="full-story-bridge full-story-ribbon" />
+          <div className="full-story-ending full-story-begin">
+            LET THE STORY BEGIN…
+          </div>
         </>
       )
     case "story-live":
@@ -464,9 +532,14 @@ export function FullShowSceneView({
             title="THE WORLD YOU CREATED"
             chip={`ROUND ${num(data.round || 1)}`}
           />
+          <h3 className="full-story-status">
+            STORYTELLING MODE · All five choices remain visible while the host
+            tells the story.
+          </h3>
           <StoryCards data={data} live />
-          <div className="full-story-live-note">
-            STORY {data.round || 1} · HOST IS TELLING YOUR STORY
+          <div className="full-story-live-note full-live-footer">
+            <span className="full-live-dot" />
+            <span>STORY {data.round || 1} · HOST IS TELLING YOUR STORY</span>
           </div>
         </>
       )

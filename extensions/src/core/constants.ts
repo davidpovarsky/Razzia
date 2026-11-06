@@ -88,6 +88,7 @@ export const QUESTION_ENTRANCE_PRESETS = [
 export type QuestionEntrancePreset = (typeof QUESTION_ENTRANCE_PRESETS)[number]
 
 export const COMMAND_ACTIONS = [
+  "RESOLVE_STORY_TIE",
   "SHOW_LEADERBOARD",
   "SKIP_INTERLUDE",
   "REVEAL_MEDIA",

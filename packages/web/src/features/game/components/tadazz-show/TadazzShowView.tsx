@@ -17,6 +17,7 @@ import {
   collapseForResume,
   computeShowScene,
   isTadazzV4Active,
+  isFullShowScene,
   planTransition,
   preloadOpeningAssets,
   resolveStageBackdrop,
@@ -148,7 +149,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       }),
     [role, isConnected, status, extensionState, questionStates],
   )
-  const sceneIdentity = useMemo(() => JSON.stringify(scene), [scene])
+  const sceneIdentity = useMemo(() => scene.kind === "scene" && scene.scene.kind === "animation" && isFullShowScene((scene.scene as {preset?: string}).preset ?? "") ? scene.key : JSON.stringify(scene), [scene])
 
   const showGameId = managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
   const backdrop = resolveStageBackdrop(extensionState)
@@ -253,6 +254,12 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sceneIdentity, pump])
 
+  useEffect(() => {
+    if (scene.kind !== "scene" || scene.scene.kind !== "animation") return
+    const step = planTransition(null, scene, {questionKey: stageRef.current?.questionKey ?? null, mode: stageRef.current?.mode ?? "idle"}).find(step => step.op === "showFullShowScene")
+    if (step?.op === "showFullShowScene") stageRef.current?.updateFullShowData?.(step.data)
+  }, [extensionState?.seq])
+
   // Server cooldown ticks keep the visual timer authoritative after drift/late join.
   const deadlineRef = useRef<number | null>(null)
   useEvent(EVENTS.GAME.COOLDOWN, (sec: number) => {
@@ -350,6 +357,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         return <TadazzInterludeScreen interlude={scene.interlude} startedAt={scene.startedAt} />
       case "scene": {
         const s = scene.scene
+        if (s.kind === "animation" && isFullShowScene((s as { preset?: string }).preset ?? "")) return null
         if (s.kind === "countdown") return <TadazzCountdownScreen title={s.title} startedAt={scene.startedAt} seconds={s.durationSeconds ?? 10} />
         if (s.kind === "answerRecap" && scene.activeSceneData?.answerRecap) return <TadazzRecapScreen title={s.title} recap={scene.activeSceneData.answerRecap} />
         if (s.kind === "interimResults" || s.kind === "leaderboard")

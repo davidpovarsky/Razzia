@@ -222,7 +222,13 @@ export type SkipTimelineSceneCommand = z.infer<
   typeof skipTimelineSceneCommandSchema
 >
 
+export const resolveStoryTieCommandSchema = z.strictObject({
+  v: z.literal(1), gameId: z.string().min(1), action: z.literal("RESOLVE_STORY_TIE"),
+  payload: z.strictObject({ answerIndex: z.number().int().min(0), epoch: z.number().int() }),
+  requestId: z.string().min(1),
+})
 export const extensionCommandSchema = z.discriminatedUnion("action", [
+  resolveStoryTieCommandSchema,
   showLeaderboardCommandSchema,
   skipInterludeCommandSchema,
   revealMediaCommandSchema,

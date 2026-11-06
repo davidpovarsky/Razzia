@@ -9,6 +9,7 @@ import {
   type Player,
   type Quizz,
   type QuizzMode,
+  type QuestionResult,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
@@ -508,7 +509,22 @@ class Game {
             isTie,
           }
         },
-        getAnswerRecapSummary: (scene, timelineStepIndex) => {
+        getFullShowData: () => ({
+          isLive: true,
+          connectedTables: [...this.rosterMap.values()].flatMap((entry, index) => entry.status === "connected" ? [index + 1] : []),
+          representatives: [...this.rosterMap.values()].map((entry, index) => ({ table: index + 1, name: entry.displayName })),
+        }),
+        getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
+          const scene = inputScene.kind === "animation" ? {
+            id: inputScene.id,
+            kind: "answerRecap" as const,
+            title: inputScene.title,
+            mode: "mostSelected" as const,
+            startQuestionId: this.extensionSession?.getQuestionId(((inputScene.round ?? 1) - 1) * 5),
+            maxItemsPerPage: 5,
+            showCounts: true,
+            showPercentages: true,
+          } : inputScene
           if (scene.kind !== "answerRecap") {
             return null
           }
@@ -678,7 +694,8 @@ class Game {
 
           return {
             title: scene.title,
-            subtitle: scene.subtitle,
+            totalQuestionsInRange: selectedRange.length,
+            completedQuestionsCount: items.length,
             startQuestionId:
               scene.startQuestionId ?? selectedRange[0]?.questionId ?? null,
             endQuestionId:

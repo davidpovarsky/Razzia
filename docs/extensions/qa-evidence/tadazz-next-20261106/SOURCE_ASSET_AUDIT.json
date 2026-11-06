@@ -1,0 +1,172 @@
+{
+  "auditDate": "2026-11-06T02:10:00Z",
+  "zipFile": {
+    "path": "C:\\Users\\DAVID\\Downloads\\tadazz_second_library_source_and_assets.zip",
+    "sizeBytes": 19601205,
+    "sha256": "D500710CA8E9EB05A5787AC3DAA06E5E8FF9FC158E44F7137823C3CB5A9624C3"
+  },
+  "sourceHtmls": [
+    {
+      "filename": "second library.html",
+      "role": "PRIMARY AUTHORITY",
+      "sizeBytes": 12933137,
+      "sha256": "a9328b7d2931dcaee7ae3efa00389fe49130acab71fe8621cb35d97d69d220fa",
+      "embeddedAssetsCount": 12,
+      "embeddedAssetsMatchDisk": true
+    },
+    {
+      "filename": "animation library iwth thier logo.html",
+      "role": "SECONDARY AUTHORITY (Survey Motion Kit v6)",
+      "sizeBytes": 3533424,
+      "sha256": "1c072312e139c6cdf36ab5f7cf6cb2767b40a0da300c6f1946d2a256a204c103",
+      "embeddedAssetsCount": 9,
+      "embeddedAssetsMatchDisk": true
+    }
+  ],
+  "assets": [
+    {
+      "assetName": "show-stage.webp",
+      "mime": "image/webp",
+      "sourceSizeBytes": 261066,
+      "sourceSha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/show-stage.webp",
+        "/tadazz-show/v4/show-stage.webp"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "tadazz-brand-logo.png",
+      "mime": "image/png",
+      "sourceSizeBytes": 1976726,
+      "sourceSha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/tadazz-brand-logo.png",
+        "/tadazz-show/v4/tadazz-brand-logo.png"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "curtain-left.png",
+      "mime": "image/png",
+      "sourceSizeBytes": 1132717,
+      "sourceSha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/curtain-left.png",
+        "/tadazz-show/v4/curtain-left.png"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "curtain-right.png",
+      "mime": "image/png",
+      "sourceSizeBytes": 1132143,
+      "sourceSha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/curtain-right.png",
+        "/tadazz-show/v4/curtain-right.png"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "question-bg.webp",
+      "mime": "image/webp",
+      "sourceSizeBytes": 87904,
+      "sourceSha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/question-bg.webp",
+        "/tadazz-show/v4/question-bg.webp"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "creating-worlds-intro.png",
+      "mime": "image/png",
+      "sourceSizeBytes": 2410686,
+      "sourceSha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/creating-worlds-intro.png",
+        "/tadazz-show/v4/creating-worlds-intro.png"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "teaser-screen.jpg",
+      "mime": "image/jpeg",
+      "sourceSizeBytes": 266631,
+      "sourceSha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/teaser-screen-source.jpg",
+        "/tadazz-show/v4/teaser-screen-source.jpg"
+      ],
+      "conflictResolution": "Stored byte-identical source as teaser-screen-source.jpg alongside existing 3.78MB 4K teaser-screen.jpg"
+    },
+    {
+      "assetName": "cards/lamplighter.svg",
+      "mime": "image/svg+xml",
+      "sourceSizeBytes": 2039,
+      "sourceSha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/cards/lamplighter.svg",
+        "/tadazz-show/v4/cards/lamplighter.svg"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "cards/pirate.svg",
+      "mime": "image/svg+xml",
+      "sourceSizeBytes": 1923,
+      "sourceSha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/cards/pirate.svg",
+        "/tadazz-show/v4/cards/pirate.svg"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "cards/dog.svg",
+      "mime": "image/svg+xml",
+      "sourceSizeBytes": 1962,
+      "sourceSha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/cards/dog.svg",
+        "/tadazz-show/v4/cards/dog.svg"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "cards/shadchan.svg",
+      "mime": "image/svg+xml",
+      "sourceSizeBytes": 1932,
+      "sourceSha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/cards/shadchan.svg",
+        "/tadazz-show/v4/cards/shadchan.svg"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    },
+    {
+      "assetName": "cards/therapist.svg",
+      "mime": "image/svg+xml",
+      "sourceSizeBytes": 1847,
+      "sourceSha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+      "matchesManifest": true,
+      "runtimeUrls": [
+        "/tadazz-show/second-library/cards/therapist.svg",
+        "/tadazz-show/v4/cards/therapist.svg"
+      ],
+      "conflictResolution": "Exact byte-identical installation"
+    }
+  ]
+}

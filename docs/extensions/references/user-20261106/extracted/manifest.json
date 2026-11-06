@@ -1,0 +1,74 @@
+[
+  {
+    "name": "assets/cards/dog.svg",
+    "size": 1962,
+    "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+    "mime": "image/svg+xml"
+  },
+  {
+    "name": "assets/cards/lamplighter.svg",
+    "size": 2039,
+    "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+    "mime": "image/svg+xml"
+  },
+  {
+    "name": "assets/cards/pirate.svg",
+    "size": 1923,
+    "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+    "mime": "image/svg+xml"
+  },
+  {
+    "name": "assets/cards/shadchan.svg",
+    "size": 1932,
+    "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+    "mime": "image/svg+xml"
+  },
+  {
+    "name": "assets/cards/therapist.svg",
+    "size": 1847,
+    "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+    "mime": "image/svg+xml"
+  },
+  {
+    "name": "assets/creating-worlds-intro.png",
+    "size": 2410686,
+    "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+    "mime": "image/png"
+  },
+  {
+    "name": "assets/curtain-left.png",
+    "size": 1132717,
+    "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+    "mime": "image/png"
+  },
+  {
+    "name": "assets/curtain-right.png",
+    "size": 1132143,
+    "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+    "mime": "image/png"
+  },
+  {
+    "name": "assets/question-bg.webp",
+    "size": 87904,
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+    "mime": "image/webp"
+  },
+  {
+    "name": "assets/show-stage.webp",
+    "size": 261066,
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+    "mime": "image/webp"
+  },
+  {
+    "name": "assets/tadazz-brand-logo.png",
+    "size": 1976726,
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+    "mime": "image/png"
+  },
+  {
+    "name": "assets/teaser-screen.jpg",
+    "size": 266631,
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+    "mime": "image/jpeg"
+  }
+]

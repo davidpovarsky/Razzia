@@ -82,6 +82,9 @@ export class TadazzV4Motion {
     if (flash) flash.style.opacity = "0"
   }
   pause() {
+    for (const a of this.root().getAnimations?.({ subtree: true }) ?? []) {
+      if (!this.active.includes(a)) this.active.push(a)
+    }
     this.active.forEach((a) => {
       try {
         a.pause()
@@ -107,7 +110,8 @@ export class TadazzV4Motion {
     this.tickerFrames = []
     for (const a of this.active) {
       try {
-        a.finish()
+        if (a.effect?.getTiming().iterations === Infinity) a.cancel()
+        else a.finish()
       } catch {
         /* infinite or disposed */
       }
@@ -478,6 +482,31 @@ export class TadazzV4Motion {
       }
     })
     if (chosenSet.size > 0) this.impact(keepCards ? 270 : 1570, "small")
+    const hasResults = Boolean(
+      (data.percentages && data.percentages.length > 0) ||
+        (data.counts && data.counts.length > 0),
+    )
+    if (hasResults) {
+      const cards = all(this.root(), ".choice-slot")
+      const percentages = percentagesFor(data, cards.length)
+      const showPercentages = data.showPercentages !== false
+      cards.forEach((slot, i) => {
+        const number = query<HTMLElement>(slot, ".result-percentage")
+        const track = query<HTMLElement>(slot, ".result-track")
+        const fill = query<HTMLElement>(slot, ".result-track-fill")
+        const target = Math.round(percentages[i] || 0)
+        if (number) {
+          number.textContent = `${target}%`
+          number.style.visibility = showPercentages ? "visible" : "hidden"
+          number.style.opacity = showPercentages ? "1" : "0"
+        }
+        if (track) track.style.opacity = "1"
+        if (fill) {
+          fill.style.transform = `scaleX(${Math.max(0.003, (percentages[i] || 0) / 100)})`
+          fill.style.transformOrigin = "left center"
+        }
+      })
+    }
   }
   private results(data: TadazzV4Data) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
@@ -545,6 +574,13 @@ export class TadazzV4Motion {
         animated.push({ node: number, target, animation: fillAnimation })
         this.finalizers.push(() => {
           number.textContent = `${target}%`
+          number.style.opacity = "1"
+          number.style.visibility = "visible"
+          if (track) (track as HTMLElement).style.opacity = "1"
+          if (fill) {
+            ;(fill as HTMLElement).style.transform = `scaleX(${Math.max(0.003, percentages[i] / 100)})`
+            ;(fill as HTMLElement).style.transformOrigin = "left center"
+          }
         })
       }
       if (winners.includes(i)) {
@@ -910,6 +946,13 @@ export class TadazzV4Motion {
         break
       case "round-one":
       case "round-two":
+        for (const [side, distance] of [["left", -340], ["right", 340]] as const) {
+          this.animate(query(root, `.full-wing-z.${side}`), [{ opacity: 0, transform: `translate3d(${distance}px,0,0) scale(.86)` }, { opacity: 1, transform: "none" }], { duration: 1120, delay: 40, easing: "cubic-bezier(.28,.85,.15,1)" })
+        }
+        this.animate(query(root, ".full-launch-glow"), [{ opacity: 0, transform: "translate(-50%,-50%) scale(.5)" }, { opacity: 1, transform: "translate(-50%,-50%) scale(1.15)" }], { duration: 1800 })
+        this.animate(query(root, ".full-round-plaque"), [{ opacity: 0, transform: "translate3d(0,150px,0) scale(.76)" }, { opacity: 1, transform: "none" }], { delay: 390, duration: 1250 })
+        this.animate(query(root, ".full-round-underline"), [{ opacity: 0, transform: "scaleX(.01)" }, { opacity: 1, transform: "scaleX(1)" }], { delay: 1200, duration: 970 })
+        this.impact(700, "small")
         this.cue("round-launch", 1600)
         this.holdScene(authoredDuration ?? 2500)
         break
@@ -933,13 +976,22 @@ export class TadazzV4Motion {
         break
       case "story-live":
         this.cue("story-live-hold", 900)
-        this.holdScene(authoredDuration ?? 900)
+        // Hold indefinitely without auto-advance clock unless explicitly authored.
+        if (authoredDuration) {
+          this.holdScene(authoredDuration)
+        } else {
+          // A cue ending must not report completion for a host-held scene.
+          this.animate(this.fx(), [{ opacity: 1 }, { opacity: 1 }], { duration: 1000, iterations: Infinity })
+        }
         break
       case "grand-finale":
         this.cue("finale-impact", 3920)
         this.cue("curtains-closed", 8680)
         this.holdScene(authoredDuration ?? 9200)
         break
+    }
+    for (const a of root.getAnimations?.({ subtree: true }) ?? []) {
+      if (!this.active.includes(a) && a.effect?.getTiming().iterations !== Infinity) this.active.push(a)
     }
     return Promise.allSettled(this.active.map((a) => a.finished)).then(
       () => token === this.token,

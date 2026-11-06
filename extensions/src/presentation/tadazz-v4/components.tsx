@@ -38,7 +38,7 @@ export function StageIdentityV4({
   const detail =
     data.showQuestionNumber === false
       ? ""
-      : ` Â· QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
+      : ` · QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
   return (
     <>
       <div className="stage-identity">
@@ -143,6 +143,9 @@ export function AnswerSlotV4({
     : tie
       ? tx.jointAudienceFavourite
       : tx.audienceFavourite
+  const roundedPct = Math.round(percentage)
+  const isResultActive = Boolean(result && showPercentages)
+  const pctText = isResultActive ? `${roundedPct}%` : ""
   return (
     <div
       className={slotClasses}
@@ -171,29 +174,46 @@ export function AnswerSlotV4({
       }
     >
       <article className="answer-card">
-        <figure className="tz-photo-frame">
-          {answer.imageUrl ? (
-            <img
-              className="answer-image"
-              src={answer.imageUrl}
-              alt={answer.alt ?? displayTitle}
-              loading="eager"
-              decoding="async"
-            />
-          ) : (
+        <figure className="answer-figure">
+          <div
+            className={`tz-photo-frame${answer.imageUrl ? "" : " tz-photo-empty"}`}
+          >
+            {answer.imageUrl ? (
+              <img
+                className="answer-image"
+                src={answer.imageUrl}
+                alt={answer.alt ?? displayTitle}
+                loading="eager"
+                decoding="async"
+              />
+            ) : (
+              <div
+                className="answer-image answer-image-empty"
+                aria-label={answer.alt ?? displayTitle}
+              >
+                <span className="answer-monogram" aria-hidden="true">
+                  {index + 1}
+                </span>
+              </div>
+            )}
             <div
-              className="answer-image answer-image-empty"
-              aria-label={answer.alt ?? displayTitle}
+              className="corner answer-card-badge"
+              aria-label={`Option ${id2(index + 1)}`}
             >
-              <span className="answer-monogram" aria-hidden="true">
-                {index + 1}
-              </span>
+              {id2(index + 1)}
             </div>
-          )}
+          </div>
           <figcaption
             className="answer-title"
-            style={displayTitle.length > 16 ? { fontSize: 25 } : undefined}
+            style={
+              displayTitle.length > 28
+                ? { fontSize: 21 }
+                : displayTitle.length > 16
+                  ? { fontSize: 25 }
+                  : undefined
+            }
             data-has-caption={displayTitle ? "true" : "false"}
+            dir="auto"
           >
             {displayTitle || (
               <span className="answer-title-empty" aria-hidden="true">
@@ -204,16 +224,33 @@ export function AnswerSlotV4({
         </figure>
         <div
           className="result-percentage tz-result-number"
-          data-target-percentage={percentage}
+          data-target-percentage={roundedPct}
           style={{
-            visibility: result && showPercentages ? "visible" : "hidden",
+            visibility: isResultActive ? "visible" : "hidden",
+            opacity: isResultActive ? 1 : 0,
           }}
         >
-          {result ? "0%" : ""}
+          {pctText}
         </div>
-        <div className="winner-tag tz-winner-tag">{tagText}</div>
-        <div className="result-track tz-result-track">
-          <div className="result-track-fill tz-result-fill" />
+        <div
+          className="winner-tag tz-winner-tag"
+          style={favourite ? { opacity: 1 } : undefined}
+        >
+          {tagText}
+        </div>
+        <div
+          className="result-track tz-result-track"
+          style={{ opacity: result ? 1 : 0 }}
+        >
+          <div
+            className="result-track-fill tz-result-fill"
+            style={{
+              transform: result
+                ? `scaleX(${Math.max(0.003, percentage / 100)})`
+                : "scaleX(0)",
+              transformOrigin: "left center",
+            }}
+          />
         </div>
       </article>
       <div className="answer-index">{id2(index + 1)}</div>
@@ -268,7 +305,7 @@ export function FivePictureAnswersV4({
   )
   return (
     <div
-      className={`answers${recap ? "recap-answers" : ""}`}
+      className={`answers${recap ? " recap-answers" : ""}`}
       style={recap && answers.length === 5 ? undefined : dynamicStyle}
       data-v4="answer-cards"
       role={canSelect ? "group" : undefined}
@@ -321,13 +358,13 @@ export function VoteStatusV4({
       : null
   return (
     <div
-      className={`vote-status${locked ? "locked-status" : ""}`}
+      className={`vote-status${locked ? " locked-status" : ""}`}
       data-v4="vote-status"
       data-testid="tadazz-status"
     >
       <i className="vote-dot" aria-hidden="true" />
       <strong>{text}</strong>
-      {time && <span data-testid="tadazz-timer">â€¢ {time}</span>}
+      {time && <span data-testid="tadazz-timer">• {time}</span>}
     </div>
   )
 }
@@ -453,7 +490,7 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
                     }
                   : undefined
               }
-            >{`${String.fromCharCode(65 + i)}  Â·  ${title}`}</div>
+            >{`${String.fromCharCode(65 + i)}  ·  ${title}`}</div>
           )
         })}
       </div>
@@ -589,12 +626,23 @@ export function StageSceneV4({
         assetBase={assetBase}
       />
       {showFrame && (
-        <QuestionFrameV4 data={data} results={scene === "survey-results"} />
+        <QuestionFrameV4
+          data={data}
+          results={
+            scene === "survey-results" ||
+            scene === "chosen" ||
+            Boolean(data.percentages?.length || data.counts?.length)
+          }
+        />
       )}
       {hasCards && (
         <FivePictureAnswersV4
           data={data}
-          results={scene === "survey-results"}
+          results={
+            scene === "survey-results" ||
+            scene === "chosen" ||
+            Boolean(data.percentages?.length || data.counts?.length)
+          }
         />
       )}
       {scene === "question" && (

@@ -348,7 +348,7 @@ function planScene(
         }
         const recap = activeSceneData?.answerRecap
         const winners = recap?.items?.flatMap((item) => {
-          const option = item.winningOptions?.[0]
+          const option = item.winningOptions?.length === 1 ? item.winningOptions[0] : undefined
           return option
             ? [
                 {
@@ -373,7 +373,7 @@ function planScene(
               round: fullShowAuth?.round ?? authored.round,
               completed:
                 authored.completed ??
-                recap?.completedQuestionsCount ??
+                recap?.items?.length ??
                 fullShowAuth?.completed,
               dialNumber: fullShowAuth?.dialNumber ?? authored.dialNumber,
               connectedTables:
@@ -381,8 +381,8 @@ function planScene(
               representatives:
                 fullShowAuth?.representatives ?? authored.representatives,
               winners: authored.winners ?? winners,
-              contestants: authored.contestants,
-              voteCount: authored.voteCount,
+              contestants: fullShowAuth?.tieCandidates?.map(option => ({ title: option.label, imageUrl: option.imageUrl, alt: option.alt })) ?? activeSceneData?.interimResults?.options.filter(option => activeSceneData.interimResults!.winners.includes(option.answerIndex)).map(option => ({ title: option.label, imageUrl: option.imageUrl, alt: option.alt })) ?? authored.contestants,
+              voteCount: activeSceneData?.interimResults?.options.find(option => activeSceneData.interimResults!.winners.includes(option.answerIndex))?.count ?? authored.voteCount,
               resolvedIndex:
                 fullShowAuth?.tieResolvedIndex !== undefined
                   ? fullShowAuth.tieResolvedIndex

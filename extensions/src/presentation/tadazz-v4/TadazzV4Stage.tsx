@@ -227,7 +227,7 @@ export const TadazzV4Stage = forwardRef<TadazzV4StageHandle, TadazzV4StageProps>
       <div className="veil"/>
       {underlay as ReactNode}
       <StageAmbientV4/>
-      <div className="tzv4-scene-root">{view ? <StageSceneV4 scene={view.scene} data={{...data,showPercentages:data.showPercentages ?? showPercentagesRef.current}} assetBase={assetBase}/> : null}</div>
+      <div className="tzv4-scene-root" key={view?.revision}>{view ? <StageSceneV4 scene={view.scene} data={{...data,showPercentages:data.showPercentages ?? showPercentagesRef.current}} assetBase={assetBase}/> : null}</div>
       {customScreen ? <div className="tzv4-custom-root">{customScreen as ReactNode}</div> : null}
       {overlay as ReactNode}
       <div className="tzv4-fx-root" aria-hidden="true"/>
