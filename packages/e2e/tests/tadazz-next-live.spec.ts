@@ -70,6 +70,7 @@ test('server timeline: host/display round banners, ten photo votes, results, sto
   await full('company-opening'); await next(host); await full('round-one'); await next(host)
   for(let i=0;i<10;i++) {
     console.log('VOTE',i+1)
+    await expect(host.locator('.tzv4-stage .q-text')).toContainText(`Story question ${i+1}`)
     for(const pg of [host,display]) {
       await expect(pg.locator('.tzv4-stage .answer-card')).toHaveCount(5)
       await expect.poll(()=>pg.locator('.tzv4-stage .answer-image').evaluateAll(imgs=>imgs.every(img=>(img as HTMLImageElement).naturalWidth>0))).toBe(true)
@@ -78,10 +79,8 @@ test('server timeline: host/display round banners, ten photo votes, results, sto
     for(const [n, voter] of [player,...otherPlayers].entries()) {
       const index = i===1 ? (n<2?1:0) : n===3 ? (i+1)%5 : i%5
       const pad=voter.getByTestId(`tadazz-pad-option-${index}`)
-      if(await pad.isVisible()) { await pad.click(); continue }
-      const choice=voter.getByTestId(`tadazz-card-${index}`)
-      await expect(choice).toHaveClass(/is-selectable/)
-      await choice.evaluate((el:HTMLElement)=>el.click())
+      await expect(pad).toBeVisible()
+      await pad.click()
     }
     await endTimer(host)
     for(const pg of [host,display]) {

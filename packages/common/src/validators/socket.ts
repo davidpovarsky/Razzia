@@ -31,6 +31,7 @@ export const clientEventValidators = {
     v: z.literal(1),
     gameId: z.string().min(1),
     action: z.enum([
+      "RESOLVE_STORY_TIE",
       "SHOW_LEADERBOARD",
       "SKIP_INTERLUDE",
       "REVEAL_MEDIA",
