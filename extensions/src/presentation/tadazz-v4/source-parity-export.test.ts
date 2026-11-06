@@ -17,7 +17,8 @@ import {
   BrandLogo,
 } from "./FullShowScenes"
 import { AnswerSlotV4, FivePictureAnswersV4, QuestionFrameV4 } from "./components"
-import type { FullShowInput, TadazzV4Answer, TadazzV4Data } from "./types"
+import type { TadazzV4Answer, TadazzV4Data } from "./types"
+import type { FullShowInput } from "./FullShowScenes"
 
 const EVIDENCE_DIR = join(
   __dirname,
@@ -26,38 +27,28 @@ const EVIDENCE_DIR = join(
 
 const sampleAnswers: TadazzV4Answer[] = [
   {
-    index: 0,
     title: "The Brave Adventurer Exploring Ancient Crypts",
     imageUrl: "/tadazz-show/second-library/cards/pirate.svg",
-    badge: "01",
     alt: "Choice 01",
   },
   {
-    index: 1,
     title: "Cybernetic Hacker Breaking Digital Fortresses",
     imageUrl: "/tadazz-show/second-library/cards/shadchan.svg",
-    badge: "02",
     alt: "Choice 02",
   },
   {
-    index: 2,
     title: "Galactic Navigator Charting Unknown Stars",
     imageUrl: "/tadazz-show/second-library/cards/dog.svg",
-    badge: "03",
     alt: "Choice 03",
   },
   {
-    index: 3,
     title: "Cunning Merchant Trading Across Dangerous Lands",
     imageUrl: "/tadazz-show/second-library/cards/therapist.svg",
-    badge: "04",
     alt: "Choice 04",
   },
   {
-    index: 4,
     title: "Shadow Assassin Striking Silently In Night",
     imageUrl: "/tadazz-show/second-library/cards/lamplighter.svg",
-    badge: "05",
     alt: "Choice 05",
   },
 ]

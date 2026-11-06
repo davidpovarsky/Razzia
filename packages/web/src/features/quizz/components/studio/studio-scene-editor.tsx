@@ -1,13 +1,14 @@
 import type { UploadedMedia } from "@razzia/common/types/game"
 import {
+  type LottieMeta,
   MAX_CINEMATIC_OVERLAY_ANIMATIONS,
+  CREATING_WORLDS_PRESETS,
   createDefaultOverlayAnimation,
   evaluateCardStageFitWarnings,
   getCinematicSceneWarnings,
   resolveSceneOverlayAnimations,
   validateLottieJson,
   type CinematicOverlayAnimation,
-  type LottieValidationMeta,
   type SceneConfig,
 } from "@razzia/extensions/core"
 import {
@@ -66,7 +67,7 @@ interface CatalogLottieAsset {
   addedAt?: number
   usedInCurrentShow?: boolean
   referenceCount?: number
-  lottieMeta?: LottieValidationMeta
+  lottieMeta?: LottieMeta
 }
 
 interface PendingLottieDeleteConflict {
@@ -88,6 +89,7 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
     const slice = bytes.subarray(i, i + chunkSize)
     binary += String.fromCharCode(...slice)
   }
+
   return btoa(binary)
 }
 
@@ -96,6 +98,7 @@ function formatMsReadout(ms: number): string {
   const totalSec = clamped / 1000
   const mins = Math.floor(totalSec / 60)
   const secs = (totalSec % 60).toFixed(1).padStart(4, "0")
+
   return `${String(mins).padStart(2, "0")}:${secs}`
 }
 
@@ -104,6 +107,7 @@ function getManagerAuthHeaders(
 ): Record<string, string> {
   const token =
     typeof window !== "undefined" ? window.localStorage.getItem("token") : null
+
   return {
     ...(token ? { Authorization: `Bearer ${token}` } : {}),
     ...extra,
@@ -161,10 +165,14 @@ export const StudioSceneEditor = () => {
       const res = await fetch(`/api/extensions/media/catalog${query}`, {
         headers: getManagerAuthHeaders(),
       })
-      if (!res.ok) return
+
+      if (!res.ok) {
+        return
+      }
       const data = (await res.json()) as {
         lottieAssets?: CatalogLottieAsset[]
       }
+
       if (Array.isArray(data.lottieAssets)) {
         setLottieCatalog(data.lottieAssets)
       }
@@ -191,7 +199,9 @@ export const StudioSceneEditor = () => {
     selectedTimelineItem && selectedTimelineItem.kind !== "question"
       ? selectedTimelineItem.sceneId
       : ""
-  const scene = sceneId ? (scenes[sceneId] as SceneConfig | undefined) : undefined
+  const scene = sceneId
+    ? (scenes[sceneId] as SceneConfig | undefined)
+    : undefined
 
   const isCinemaCapableScene =
     scene?.kind === "opening" ||
@@ -205,10 +215,10 @@ export const StudioSceneEditor = () => {
 
   const hasForegroundVideo = Boolean(
     scene &&
-      "mediaUrl" in scene &&
-      scene.mediaUrl &&
-      (scene.mediaType === "video" ||
-        /\.(mp4|webm|mov|m4v)$/iu.test(scene.mediaUrl)),
+    "mediaUrl" in scene &&
+    scene.mediaUrl &&
+    (scene.mediaType === "video" ||
+      /\.(mp4|webm|mov|m4v)$/iu.test(scene.mediaUrl)),
   )
 
   const configuredDurationMs =
@@ -222,6 +232,7 @@ export const StudioSceneEditor = () => {
     ) {
       return detectedVideoDurationMs
     }
+
     return Math.max(1000, configuredDurationMs)
   }, [hasForegroundVideo, detectedVideoDurationMs, configuredDurationMs])
 
@@ -230,6 +241,7 @@ export const StudioSceneEditor = () => {
     if (!isPreviewPlaying || hasForegroundVideo) {
       return undefined
     }
+
     let rafId = 0
     let lastTs = performance.now()
 
@@ -238,18 +250,24 @@ export const StudioSceneEditor = () => {
       lastTs = now
       setPreviewTimeMs((prev) => {
         const next = prev + dt
+
         if (next >= effectivePreviewDurationMs) {
           setIsPreviewPlaying(false)
+
           return effectivePreviewDurationMs
         }
+
         return next
       })
       rafId = requestAnimationFrame(step)
     }
 
     rafId = requestAnimationFrame(step)
+
     return () => {
-      if (rafId) cancelAnimationFrame(rafId)
+      if (rafId) {
+        cancelAnimationFrame(rafId)
+      }
     }
   }, [isPreviewPlaying, hasForegroundVideo, effectivePreviewDurationMs])
 
@@ -257,47 +275,18 @@ export const StudioSceneEditor = () => {
     if (!scene || !isCinemaCapableScene) {
       return []
     }
-    return resolveSceneOverlayAnimations(
-      scene as {
-        id?: string
-        mediaType?: "image" | "video" | "audio"
-        mediaUrl?: string
-        lottieUrl?: string
-        lottieFit?: "contain" | "cover"
-        lottieLoop?: boolean
-        lottieSpeed?: number
-        overlayAnimations?: CinematicOverlayAnimation[]
-      },
-    )
-  }, [scene, isCinemaCapableScene])
 
-  const lottieMetaByUrl = useMemo(() => {
-    const map: Record<string, LottieValidationMeta | undefined> = {}
-    for (const item of lottieCatalog) {
-      if (item.url && item.lottieMeta) {
-        map[item.url] = item.lottieMeta
-      }
-    }
-    return map
-  }, [lottieCatalog])
+    return resolveSceneOverlayAnimations(scene)
+  }, [scene, isCinemaCapableScene])
 
   const cinematicWarnings = useMemo(() => {
     if (!scene || !isCinemaMode) {
       return []
     }
-    const flags = getCinematicSceneWarnings(
-      scene as {
-        mediaType?: "image" | "video" | "audio"
-        mediaUrl?: string
-        loop?: boolean
-        muted?: boolean
-        advance?: "auto" | "manual" | "onMediaEnd"
-        endBehavior?: "holdFrame" | "advanceNext" | "fadeToTitle"
-        lottieUrl?: string
-        overlayAnimations?: CinematicOverlayAnimation[]
-      },
-    )
+
+    const flags = getCinematicSceneWarnings(scene)
     const warnings: Array<{ code: string; message: string }> = []
+
     if (flags.loopAndOnMediaEndConflict) {
       warnings.push({
         code: "loopAndOnMediaEndConflict",
@@ -307,6 +296,7 @@ export const StudioSceneEditor = () => {
         ),
       })
     }
+
     if (flags.heavyOverlayCount) {
       warnings.push({
         code: "heavyOverlayCount",
@@ -316,6 +306,7 @@ export const StudioSceneEditor = () => {
         ),
       })
     }
+
     if (flags.mutedVideoAudio) {
       warnings.push({
         code: "mutedVideoAudio",
@@ -325,6 +316,7 @@ export const StudioSceneEditor = () => {
         ),
       })
     }
+
     if (flags.cropNotices.length > 0) {
       warnings.push({
         code: "cropNotice",
@@ -334,19 +326,22 @@ export const StudioSceneEditor = () => {
         ),
       })
     }
+
     return warnings
   }, [scene, isCinemaMode, t])
 
   const commitOverlays = useCallback(
     (nextOverlays: CinematicOverlayAnimation[]) => {
-      if (!sceneId) return
+      if (!sceneId) {
+        return
+      }
       const normalized = nextOverlays.map((ov, idx) => ({
         ...ov,
         order: idx,
       }))
       updateSceneConfig(sceneId, {
         overlayAnimations: normalized,
-      } as Partial<SceneConfig>)
+      })
     },
     [sceneId, updateSceneConfig],
   )
@@ -375,13 +370,17 @@ export const StudioSceneEditor = () => {
 
   if (!scene) {
     return (
-      <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground">
+      <div className="text-muted-foreground flex flex-1 items-center justify-center p-8">
         {t("extensions:studio.scene.loading", "Loading scene editor...")}
       </div>
     )
   }
 
   const presetItems = [
+    ...CREATING_WORLDS_PRESETS.map((value) => ({
+      value,
+      label: `TADAZZ · ${value.replaceAll("-", " ")}`,
+    })),
     {
       value: "spotlight",
       label: t("extensions:studio.scene.presetSpotlight", "Spotlight"),
@@ -452,7 +451,10 @@ export const StudioSceneEditor = () => {
   const stageLayoutItems = [
     {
       value: "cinema",
-      label: t("extensions:studio.scene.stageLayoutCinema", "Full-Stage Cinema"),
+      label: t(
+        "extensions:studio.scene.stageLayoutCinema",
+        "Full-Stage Cinema",
+      ),
     },
     {
       value: "card",
@@ -549,6 +551,7 @@ export const StudioSceneEditor = () => {
     file: File,
   ): Promise<{ url: string; name: string } | null> => {
     setLottieUploadError(null)
+
     try {
       const lowerName = file.name.toLowerCase()
       const buffer = await file.arrayBuffer()
@@ -560,7 +563,11 @@ export const StudioSceneEditor = () => {
         header[2] === 0x03 &&
         header[3] === 0x04
 
-      if (lowerName.endsWith(".lottie") || lowerName.endsWith(".zip") || isZipMagic) {
+      if (
+        lowerName.endsWith(".lottie") ||
+        lowerName.endsWith(".zip") ||
+        isZipMagic
+      ) {
         const format = lowerName.endsWith(".zip") ? "zip" : "dotlottie"
         const contentBase64 = arrayBufferToBase64(buffer)
         const response = await fetch("/api/extensions/lottie", {
@@ -590,6 +597,7 @@ export const StudioSceneEditor = () => {
             )
           setLottieUploadError(msg)
           toast.error(msg)
+
           return null
         }
 
@@ -598,18 +606,22 @@ export const StudioSceneEditor = () => {
           name?: string
         }
         await refreshLottieCatalog()
+
         if (uploaded.url) {
           return { url: uploaded.url, name: uploaded.name ?? file.name }
         }
+
         return null
       }
 
       const rawText = new TextDecoder("utf-8").decode(buffer)
       const validation = validateLottieJson(rawText)
+
       if (!validation.valid) {
         const msg = validation.reason || validation.error
         setLottieUploadError(msg)
         toast.error(msg)
+
         return null
       }
 
@@ -640,6 +652,7 @@ export const StudioSceneEditor = () => {
           )
         setLottieUploadError(msg)
         toast.error(msg)
+
         return null
       }
 
@@ -648,9 +661,11 @@ export const StudioSceneEditor = () => {
         name?: string
       }
       await refreshLottieCatalog()
+
       if (uploaded.url) {
         return { url: uploaded.url, name: uploaded.name ?? file.name }
       }
+
       return null
     } catch {
       const msg = t(
@@ -659,6 +674,7 @@ export const StudioSceneEditor = () => {
       )
       setLottieUploadError(msg)
       toast.error(msg)
+
       return null
     }
   }
@@ -668,9 +684,13 @@ export const StudioSceneEditor = () => {
   ) => {
     const file = event.target.files?.[0]
     event.target.value = ""
-    if (!file) return
+
+    if (!file) {
+      return
+    }
 
     const uploaded = await uploadLottieFileToServer(file)
+
     if (uploaded?.url) {
       updateSceneConfig(sceneId, { lottieUrl: uploaded.url })
     }
@@ -681,8 +701,10 @@ export const StudioSceneEditor = () => {
       toast.error(
         `Maximum of ${MAX_CINEMATIC_OVERLAY_ANIMATIONS} overlay animations reached.`,
       )
+
       return
     }
+
     const targetUrl =
       assetUrl ?? lottieCatalog[0]?.url ?? "/media/overlay-animation.json"
     const nextIndex = resolvedOverlays.length
@@ -712,10 +734,16 @@ export const StudioSceneEditor = () => {
     event.target.value = ""
     const targetOverlayId = uploadTargetOverlayIdRef.current
     uploadTargetOverlayIdRef.current = null
-    if (!file) return
+
+    if (!file) {
+      return
+    }
 
     const uploaded = await uploadLottieFileToServer(file)
-    if (!uploaded) return
+
+    if (!uploaded) {
+      return
+    }
 
     if (targetOverlayId) {
       const next = resolvedOverlays.map((ov) =>
@@ -742,9 +770,15 @@ export const StudioSceneEditor = () => {
 
   const handleMoveOverlay = (overlayId: string, delta: -1 | 1) => {
     const idx = resolvedOverlays.findIndex((ov) => ov.id === overlayId)
-    if (idx < 0) return
+
+    if (idx < 0) {
+      return
+    }
     const targetIdx = idx + delta
-    if (targetIdx < 0 || targetIdx >= resolvedOverlays.length) return
+
+    if (targetIdx < 0 || targetIdx >= resolvedOverlays.length) {
+      return
+    }
     const copy = [...resolvedOverlays]
     const [moved] = copy.splice(idx, 1)
     copy.splice(targetIdx, 0, moved)
@@ -756,10 +790,15 @@ export const StudioSceneEditor = () => {
       toast.error(
         `Maximum of ${MAX_CINEMATIC_OVERLAY_ANIMATIONS} overlay animations reached.`,
       )
+
       return
     }
+
     const idx = resolvedOverlays.findIndex((ov) => ov.id === overlayId)
-    if (idx < 0) return
+
+    if (idx < 0) {
+      return
+    }
     const source = resolvedOverlays[idx]
     const cloned: CinematicOverlayAnimation = {
       ...structuredClone(source),
@@ -780,9 +819,11 @@ export const StudioSceneEditor = () => {
   const handleRemoveOverlay = (overlayId: string) => {
     const next = resolvedOverlays.filter((ov) => ov.id !== overlayId)
     commitOverlays(next)
+
     if (selectedOverlayId === overlayId) {
       setSelectedOverlayId(null)
     }
+
     if (expandedOverlayId === overlayId) {
       setExpandedOverlayId(null)
     }
@@ -799,6 +840,7 @@ export const StudioSceneEditor = () => {
         }`,
         { method: "DELETE", headers: getManagerAuthHeaders() },
       )
+
       if (res.status === 409) {
         const conflictBody = (await res.json()) as {
           error?: string
@@ -819,18 +861,23 @@ export const StudioSceneEditor = () => {
             ),
           references: conflictBody.references ?? [],
         })
+
         return
       }
+
       if (res.ok || res.status === 204) {
         setPendingDeleteConflict(null)
+
         if (detach) {
           const remaining = resolvedOverlays.filter(
             (ov) => ov.assetUrl !== asset.url,
           )
+
           if (remaining.length !== resolvedOverlays.length) {
             commitOverlays(remaining)
           }
         }
+
         await refreshLottieCatalog()
       }
     } catch {
@@ -848,8 +895,11 @@ export const StudioSceneEditor = () => {
   if (scene.kind === "answerRecap") {
     let qCounter = 0
     for (let i = 0; i < timeline.length; i += 1) {
-      if (i >= selectedTimelineIndex && selectedTimelineIndex >= 0) break
+      if (i >= selectedTimelineIndex && selectedTimelineIndex >= 0) {
+        break
+      }
       const item = timeline[i]
+
       if (item.kind === "question") {
         qCounter += 1
         const qIdx = questionIds.indexOf(item.questionId)
@@ -934,7 +984,7 @@ export const StudioSceneEditor = () => {
         {isCinemaCapableScene && (
           <div
             data-testid="studio-preview-toolbar"
-            className="flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border border-accent bg-background/90 px-3 py-1.5 text-xs shadow-xs"
+            className="border-accent bg-background/90 flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs shadow-xs"
           >
             <div className="flex items-center gap-1.5">
               <button
@@ -980,9 +1030,10 @@ export const StudioSceneEditor = () => {
                     ) {
                       setPreviewTimeMs(0)
                     }
+
                     setIsPreviewPlaying((prev) => !prev)
                   }}
-                  className="inline-flex items-center gap-1 rounded-md bg-primary px-2.5 py-1 font-bold text-primary-foreground shadow-xs transition hover:opacity-90"
+                  className="bg-primary text-primary-foreground inline-flex items-center gap-1 rounded-md px-2.5 py-1 font-bold shadow-xs transition hover:opacity-90"
                 >
                   {isPreviewPlaying ? (
                     <>
@@ -1011,13 +1062,13 @@ export const StudioSceneEditor = () => {
                     "extensions:studio.scene.overlays.replay",
                     "Replay from 0:00",
                   )}
-                  className="inline-flex items-center gap-1 rounded-md bg-accent px-2 py-1 font-semibold text-accent-foreground transition hover:opacity-85"
+                  className="bg-accent text-accent-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold transition hover:opacity-85"
                 >
                   <RotateCcw className="size-3.5" />
                 </button>
                 <span
                   data-testid="studio-preview-time-readout"
-                  className="font-mono text-[11px] font-bold text-muted-foreground"
+                  className="text-muted-foreground font-mono text-[11px] font-bold"
                 >
                   {formatMsReadout(previewTimeMs)} /{" "}
                   {formatMsReadout(effectivePreviewDurationMs)}
@@ -1070,7 +1121,7 @@ export const StudioSceneEditor = () => {
             >
               <CinematicLayerStack
                 sceneId={scene.id}
-                sceneKind={scene.kind as "opening" | "closing" | "media"}
+                sceneKind={scene.kind}
                 mediaUrl={"mediaUrl" in scene ? scene.mediaUrl : undefined}
                 mediaType={"mediaType" in scene ? scene.mediaType : undefined}
                 mediaFit={
@@ -1115,6 +1166,7 @@ export const StudioSceneEditor = () => {
                 selectedOverlayId={selectedOverlayId}
                 onSelectOverlay={(id) => {
                   setSelectedOverlayId(id)
+
                   if (id) {
                     setExpandedOverlayId(id)
                     setOverlaysSectionOpen(true)
@@ -1138,7 +1190,7 @@ export const StudioSceneEditor = () => {
                   >
                     {(scene.kind === "opening" || scene.kind === "closing") &&
                       (scene.logoPosition ?? "center") !== "hidden" && (
-                        <div className="rounded-full bg-primary/20 p-4 text-primary">
+                        <div className="bg-primary/20 text-primary rounded-full p-4">
                           {scene.kind === "opening" ? (
                             <DoorOpen className="size-10 sm:size-12" />
                           ) : (
@@ -1181,7 +1233,7 @@ export const StudioSceneEditor = () => {
             <div className="relative z-10 flex h-full w-full flex-col items-center justify-center">
               {scene.kind === "transition" && (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="rounded-full bg-primary/20 p-4 text-primary">
+                  <div className="bg-primary/20 text-primary rounded-full p-4">
                     <Layers className="size-12" />
                   </div>
                   <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
@@ -1212,15 +1264,15 @@ export const StudioSceneEditor = () => {
                   ) : (
                     <div
                       className={clsx(
-                        "rounded-full p-5 text-primary transition-all",
+                        "text-primary rounded-full p-5 transition-all",
                         scene.preset === "spotlight" &&
-                          "bg-amber-400/25 ring-4 ring-amber-300/40 shadow-[0_0_40px_rgba(251,191,36,0.45)]",
+                          "bg-amber-400/25 shadow-[0_0_40px_rgba(251,191,36,0.45)] ring-4 ring-amber-300/40",
                         scene.preset === "confetti" &&
-                          "bg-pink-500/25 ring-4 ring-pink-400/40 animate-bounce",
+                          "animate-bounce bg-pink-500/25 ring-4 ring-pink-400/40",
                         scene.preset === "bounce" &&
                           "bg-primary/20 animate-bounce",
                         scene.preset === "pulse" &&
-                          "bg-emerald-500/25 ring-4 ring-emerald-400/40 animate-pulse",
+                          "animate-pulse bg-emerald-500/25 ring-4 ring-emerald-400/40",
                       )}
                     >
                       <Sparkles className="size-16" />
@@ -1229,7 +1281,7 @@ export const StudioSceneEditor = () => {
                   <h2 className="text-2xl font-bold sm:text-3xl">
                     {scene.title ?? `Animation: ${scene.preset}`}
                   </h2>
-                  <span className="rounded-full bg-white/20 px-4 py-1 text-sm font-semibold uppercase tracking-wider text-primary">
+                  <span className="text-primary rounded-full bg-white/20 px-4 py-1 text-sm font-semibold tracking-wider uppercase">
                     {scene.preset}
                   </span>
                 </div>
@@ -1257,7 +1309,7 @@ export const StudioSceneEditor = () => {
                       data-testid="scene-preview-audio"
                       className="flex flex-col items-center gap-3 rounded-2xl bg-black/35 px-6 py-5"
                     >
-                      <div className="rounded-full bg-primary/25 p-4 text-primary">
+                      <div className="bg-primary/25 text-primary rounded-full p-4">
                         <Music className="size-12" />
                       </div>
                       <audio
@@ -1309,7 +1361,7 @@ export const StudioSceneEditor = () => {
 
               {scene.kind === "leaderboard" && (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="rounded-full bg-primary/20 p-4 text-primary">
+                  <div className="bg-primary/20 text-primary rounded-full p-4">
                     <Trophy className="size-14" />
                   </div>
                   <h2 className="text-2xl font-bold sm:text-3xl">
@@ -1329,21 +1381,21 @@ export const StudioSceneEditor = () => {
                         1.{" "}
                         {t("extensions:studio.scene.samplePlayer1", "Player 1")}
                       </span>
-                      <span className="font-bold text-primary">1200 pts</span>
+                      <span className="text-primary font-bold">1200 pts</span>
                     </div>
                     <div className="flex justify-between border-b border-white/20 py-1">
                       <span>
                         2.{" "}
                         {t("extensions:studio.scene.samplePlayer2", "Player 2")}
                       </span>
-                      <span className="font-bold text-primary">950 pts</span>
+                      <span className="text-primary font-bold">950 pts</span>
                     </div>
                     <div className="flex justify-between py-1">
                       <span>
                         3.{" "}
                         {t("extensions:studio.scene.samplePlayer3", "Player 3")}
                       </span>
-                      <span className="font-bold text-primary">800 pts</span>
+                      <span className="text-primary font-bold">800 pts</span>
                     </div>
                   </div>
                 </div>
@@ -1351,7 +1403,7 @@ export const StudioSceneEditor = () => {
 
               {scene.kind === "interimResults" && (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="rounded-full bg-primary/20 p-4 text-primary">
+                  <div className="bg-primary/20 text-primary rounded-full p-4">
                     <BarChart2 className="size-14" />
                   </div>
                   <h2 className="text-2xl font-bold sm:text-3xl">
@@ -1380,7 +1432,7 @@ export const StudioSceneEditor = () => {
                   className="flex h-full w-full flex-col items-center justify-center gap-3 px-2"
                 >
                   <div className="flex items-center gap-2">
-                    <div className="rounded-full bg-primary/20 p-2.5 text-primary">
+                    <div className="bg-primary/20 text-primary rounded-full p-2.5">
                       <ListChecks className="size-6" />
                     </div>
                     <h2 className="text-xl font-bold sm:text-2xl">
@@ -1417,7 +1469,7 @@ export const StudioSceneEditor = () => {
                           >
                             <div className="flex items-center justify-between gap-2 text-[11px] font-semibold text-white/70">
                               <span>Q{q.questionNumber}</span>
-                              <span className="rounded bg-primary/30 px-1.5 py-0.5 text-[10px] text-primary">
+                              <span className="bg-primary/30 text-primary rounded px-1.5 py-0.5 text-[10px]">
                                 {scene.mode === "correctAnswer"
                                   ? t(
                                       "extensions:studio.scene.recapBadgeCorrectAnswer",
@@ -1441,7 +1493,7 @@ export const StudioSceneEditor = () => {
 
               {scene.kind === "countdown" && (
                 <div className="flex flex-col items-center gap-4">
-                  <div className="relative flex size-24 items-center justify-center rounded-full border-4 border-primary text-4xl font-black text-primary sm:size-28 sm:text-5xl">
+                  <div className="border-primary text-primary relative flex size-24 items-center justify-center rounded-full border-4 text-4xl font-black sm:size-28 sm:text-5xl">
                     {scene.durationSeconds}
                   </div>
                   <h2 className="text-xl font-bold sm:text-2xl">
@@ -1468,10 +1520,10 @@ export const StudioSceneEditor = () => {
         {isCinemaMode && (
           <div
             data-testid="studio-preview-scrub-bar"
-            className="flex w-full max-w-3xl flex-col gap-1.5 rounded-xl border border-accent bg-background/90 px-3 py-2 shadow-xs"
+            className="border-accent bg-background/90 flex w-full max-w-3xl flex-col gap-1.5 rounded-xl border px-3 py-2 shadow-xs"
           >
             <div className="flex items-center gap-2">
-              <span className="text-[11px] font-bold text-muted-foreground">
+              <span className="text-muted-foreground text-[11px] font-bold">
                 {t(
                   "extensions:studio.scene.overlays.scrubTimeline",
                   "Timeline Scrub",
@@ -1525,7 +1577,7 @@ export const StudioSceneEditor = () => {
                         setExpandedOverlayId(ov.id)
                         setOverlaysSectionOpen(true)
                       }}
-                      className="relative h-4 w-full cursor-pointer overflow-hidden rounded bg-accent/50"
+                      className="bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded"
                       title={`${ov.label || `Overlay ${idx + 1}`}: ${(
                         ov.startMs / 1000
                       ).toFixed(1)}s – ${(endMs / 1000).toFixed(1)}s`}
@@ -1536,7 +1588,7 @@ export const StudioSceneEditor = () => {
                           colorCls,
                           !ov.enabled && "opacity-35",
                           selectedOverlayId === ov.id &&
-                            "ring-2 ring-primary ring-offset-1",
+                            "ring-primary ring-2 ring-offset-1",
                         )}
                         style={{
                           left: `${startPct}%`,
@@ -1550,7 +1602,7 @@ export const StudioSceneEditor = () => {
                     </div>
                   )
                 })}
-                <p className="text-[10px] text-muted-foreground">
+                <p className="text-muted-foreground text-[10px]">
                   {t(
                     "extensions:studio.scene.overlays.dragHint",
                     "Tip: Click or drag any overlay directly on the stage preview (Arrow keys nudge 1%, Shift+Arrow 5%).",
@@ -1563,9 +1615,9 @@ export const StudioSceneEditor = () => {
       </main>
 
       {/* Right Config Aside */}
-      <aside className="bg-background z-10 m-2 flex w-[calc(100%-1rem)] shrink-0 flex-col gap-4 rounded-xl p-3 shadow-sm lg:m-3 lg:w-80 xl:w-96 lg:overflow-y-auto lg:p-4">
-        <div className="flex items-center gap-2 border-b border-accent pb-3">
-          <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+      <aside className="bg-background z-10 m-2 flex w-[calc(100%-1rem)] shrink-0 flex-col gap-4 rounded-xl p-3 shadow-sm lg:m-3 lg:w-80 lg:overflow-y-auto lg:p-4 xl:w-96">
+        <div className="border-accent flex items-center gap-2 border-b pb-3">
+          <span className="text-muted-foreground text-sm font-bold tracking-wider uppercase">
             {t("extensions:studio.scene.kindSettings", {
               kind: scene.kind,
               defaultValue: `${scene.kind} Settings`,
@@ -1575,7 +1627,7 @@ export const StudioSceneEditor = () => {
 
         {/* Title Field */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-foreground">
+          <label className="text-foreground text-xs font-bold">
             {t("extensions:studio.scene.titleLabel", "Title")}
           </label>
           <Input
@@ -1594,7 +1646,7 @@ export const StudioSceneEditor = () => {
         {/* Subtitle / Description */}
         {("subtitle" in scene || "description" in scene) && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">
+            <label className="text-foreground text-xs font-bold">
               {"subtitle" in scene
                 ? t("extensions:studio.scene.subtitleLabel", "Subtitle")
                 : t("extensions:studio.scene.descriptionLabel", "Description")}
@@ -1621,10 +1673,10 @@ export const StudioSceneEditor = () => {
         {scene.kind === "answerRecap" && (
           <div
             data-testid="answer-recap-settings"
-            className="flex flex-col gap-3 rounded-lg border border-accent p-2.5"
+            className="border-accent flex flex-col gap-3 rounded-lg border p-2.5"
           >
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t(
                   "extensions:studio.scene.recapStartQuestionLabel",
                   "Start From Question",
@@ -1663,7 +1715,7 @@ export const StudioSceneEditor = () => {
               {recapQuestionRange.length > 0 && (
                 <p
                   data-testid="recap-range-helper"
-                  className="text-[11px] text-muted-foreground"
+                  className="text-muted-foreground text-[11px]"
                 >
                   {t("extensions:studio.scene.recapRangeSummary", {
                     start: recapQuestionRange[0].questionNumber,
@@ -1675,7 +1727,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t("extensions:studio.scene.recapModeLabel", "Highlight Mode")}
               </label>
               <StudioSelect
@@ -1705,7 +1757,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex flex-col gap-1.5">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t(
                   "extensions:studio.scene.recapMaxItemsPerPage",
                   "Questions Per Page (1–8)",
@@ -1730,7 +1782,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex items-center gap-4 pt-1">
-              <label className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+              <label className="text-foreground flex items-center gap-1.5 text-xs font-medium">
                 <input
                   type="checkbox"
                   checked={scene.showCounts ?? true}
@@ -1743,7 +1795,7 @@ export const StudioSceneEditor = () => {
                   "Show Vote Counts",
                 )}
               </label>
-              <label className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+              <label className="text-foreground flex items-center gap-1.5 text-xs font-medium">
                 <input
                   type="checkbox"
                   checked={scene.showPercentages ?? true}
@@ -1764,9 +1816,9 @@ export const StudioSceneEditor = () => {
 
         {/* Media Type & Asset Selection for Media & Opening/Closing */}
         {"mediaUrl" in scene && (
-          <div className="flex flex-col gap-2.5 rounded-lg border border-accent p-2.5">
+          <div className="border-accent flex flex-col gap-2.5 rounded-lg border p-2.5">
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t("extensions:studio.scene.mediaTypeLabel", "Media Type")}
               </label>
               <StudioSelect
@@ -1781,7 +1833,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t("extensions:studio.scene.mediaAsset", "Media Asset")}
               </label>
               <div className="flex gap-2">
@@ -1815,7 +1867,7 @@ export const StudioSceneEditor = () => {
 
             {scene.mediaType !== "audio" && (
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-bold text-foreground">
+                <label className="text-foreground text-xs font-bold">
                   {t("extensions:studio.scene.mediaFitLabel", "Media Fit")}
                 </label>
                 <StudioSelect
@@ -1832,7 +1884,7 @@ export const StudioSceneEditor = () => {
 
             {scene.kind === "media" && (
               <div className="flex flex-col gap-1">
-                <label className="text-xs font-bold text-foreground">
+                <label className="text-foreground text-xs font-bold">
                   {t(
                     "extensions:studio.scene.stageLayoutLabel",
                     "Stage Layout",
@@ -1853,7 +1905,7 @@ export const StudioSceneEditor = () => {
             {(scene.mediaType === "video" || scene.mediaType === "audio") && (
               <div className="flex flex-col gap-2 pt-1">
                 <div className="flex items-center justify-between text-xs">
-                  <span className="font-semibold text-foreground">
+                  <span className="text-foreground font-semibold">
                     {t("extensions:audio.volume", "Volume")}
                   </span>
                   <span className="text-muted-foreground">
@@ -1882,7 +1934,10 @@ export const StudioSceneEditor = () => {
                         updateSceneConfig(sceneId, { loop: e.target.checked })
                       }
                     />
-                    {t("extensions:studio.scene.lottieLoopLabel", "Loop playback")}
+                    {t(
+                      "extensions:studio.scene.lottieLoopLabel",
+                      "Loop playback",
+                    )}
                   </label>
                   <label className="flex items-center gap-1 text-xs">
                     <input
@@ -1919,10 +1974,10 @@ export const StudioSceneEditor = () => {
         {(scene.kind === "opening" || scene.kind === "closing") && (
           <div
             data-testid="cinema-scene-controls"
-            className="flex flex-col gap-2.5 rounded-lg border border-accent p-2.5"
+            className="border-accent flex flex-col gap-2.5 rounded-lg border p-2.5"
           >
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t("extensions:studio.scene.stageLayoutLabel", "Stage Layout")}
               </label>
               <StudioSelect
@@ -1937,7 +1992,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t(
                   "extensions:studio.scene.logoPositionLabel",
                   "Brand Logo Position",
@@ -1955,7 +2010,7 @@ export const StudioSceneEditor = () => {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label className="text-xs font-bold text-foreground">
+              <label className="text-foreground text-xs font-bold">
                 {t(
                   "extensions:studio.scene.endBehaviorLabel",
                   "When Media Ends",
@@ -1966,16 +2021,14 @@ export const StudioSceneEditor = () => {
                 onChange={(val: string) =>
                   updateSceneConfig(sceneId, {
                     endBehavior: val as
-                      | "holdFrame"
-                      | "advanceNext"
-                      | "fadeToTitle",
+                      "holdFrame" | "advanceNext" | "fadeToTitle",
                   })
                 }
                 items={endBehaviorItems}
               />
             </div>
 
-            <label className="flex items-center gap-1.5 text-xs font-medium text-foreground">
+            <label className="text-foreground flex items-center gap-1.5 text-xs font-medium">
               <input
                 type="checkbox"
                 checked={scene.textOverlay ?? true}
@@ -1995,28 +2048,28 @@ export const StudioSceneEditor = () => {
         {isCinemaMode && (
           <div
             data-testid="studio-overlay-animations-section"
-            className="flex flex-col gap-2.5 rounded-lg border border-accent p-2.5"
+            className="border-accent flex flex-col gap-2.5 rounded-lg border p-2.5"
           >
             <div className="flex items-center justify-between gap-2">
               <button
                 type="button"
                 data-testid="studio-overlay-section-toggle"
                 onClick={() => setOverlaysSectionOpen((prev) => !prev)}
-                className="flex items-center gap-1.5 text-left text-xs font-bold text-foreground"
+                className="text-foreground flex items-center gap-1.5 text-left text-xs font-bold"
               >
                 {overlaysSectionOpen ? (
-                  <ChevronDown className="size-4 text-muted-foreground" />
+                  <ChevronDown className="text-muted-foreground size-4" />
                 ) : (
-                  <ChevronRight className="size-4 text-muted-foreground" />
+                  <ChevronRight className="text-muted-foreground size-4" />
                 )}
-                <Sparkles className="size-3.5 text-primary" />
+                <Sparkles className="text-primary size-3.5" />
                 <span>
                   {t(
                     "extensions:studio.scene.overlays.sectionTitle",
                     "Overlay Animations",
                   )}
                 </span>
-                <span className="rounded-full bg-accent px-1.5 py-0.5 text-[10px] font-bold text-muted-foreground">
+                <span className="bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-bold">
                   {resolvedOverlays.length}/{MAX_CINEMATIC_OVERLAY_ANIMATIONS}
                 </span>
               </button>
@@ -2096,10 +2149,10 @@ export const StudioSceneEditor = () => {
             {lottieCatalogOpen && (
               <div
                 data-testid="studio-lottie-catalog-panel"
-                className="flex flex-col gap-2 rounded-md border border-accent bg-accent/30 p-2"
+                className="border-accent bg-accent/30 flex flex-col gap-2 rounded-md border p-2"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-foreground">
+                  <span className="text-foreground text-[11px] font-bold">
                     {t(
                       "extensions:studio.scene.overlays.chooseCatalog",
                       "Choose from Library",
@@ -2126,7 +2179,7 @@ export const StudioSceneEditor = () => {
                 </div>
 
                 {lottieCatalog.length === 0 ? (
-                  <p className="text-[11px] text-muted-foreground">
+                  <p className="text-muted-foreground text-[11px]">
                     No Lottie animations in library yet. Upload a .json or
                     .lottie file.
                   </p>
@@ -2136,7 +2189,7 @@ export const StudioSceneEditor = () => {
                       <div
                         key={item.name}
                         data-testid={`studio-lottie-catalog-item-${item.name}`}
-                        className="flex items-center justify-between gap-2 rounded bg-background px-2 py-1 text-[11px]"
+                        className="bg-background flex items-center justify-between gap-2 rounded px-2 py-1 text-[11px]"
                       >
                         <button
                           type="button"
@@ -2153,15 +2206,16 @@ export const StudioSceneEditor = () => {
                               )
                               handleAddOverlayLayer(item.url, cleanLabel)
                             }
+
                             setLottieCatalogOpen(false)
                             setCatalogTargetOverlayId(null)
                           }}
-                          className="min-w-0 flex-1 truncate text-left font-semibold text-foreground hover:text-primary"
+                          className="text-foreground hover:text-primary min-w-0 flex-1 truncate text-left font-semibold"
                         >
                           {item.name}
                           {typeof item.referenceCount === "number" &&
                             item.referenceCount > 0 && (
-                              <span className="ml-1.5 text-[10px] font-normal text-muted-foreground">
+                              <span className="text-muted-foreground ml-1.5 text-[10px] font-normal">
                                 ({item.referenceCount} in use)
                               </span>
                             )}
@@ -2217,7 +2271,7 @@ export const StudioSceneEditor = () => {
                             true,
                           )
                         }
-                        className="bg-red-600 text-white px-2 py-0.5 text-[10px] font-bold"
+                        className="bg-red-600 px-2 py-0.5 text-[10px] font-bold text-white"
                       >
                         {t(
                           "extensions:mediaLibrary.detachAndDelete",
@@ -2235,7 +2289,7 @@ export const StudioSceneEditor = () => {
                 {resolvedOverlays.length === 0 ? (
                   <p
                     data-testid="studio-overlay-empty-state"
-                    className="text-[11px] text-muted-foreground"
+                    className="text-muted-foreground text-[11px]"
                   >
                     {t(
                       "extensions:studio.scene.overlays.emptyState",
@@ -2282,12 +2336,12 @@ export const StudioSceneEditor = () => {
                                 setSelectedOverlayId(ov.id)
                                 setExpandedOverlayId(isExpanded ? null : ov.id)
                               }}
-                              className="flex min-w-0 flex-1 items-center gap-1 text-left text-xs font-bold text-foreground"
+                              className="text-foreground flex min-w-0 flex-1 items-center gap-1 text-left text-xs font-bold"
                             >
                               {isExpanded ? (
-                                <ChevronDown className="size-3.5 shrink-0 text-muted-foreground" />
+                                <ChevronDown className="text-muted-foreground size-3.5 shrink-0" />
                               ) : (
-                                <ChevronRight className="size-3.5 shrink-0 text-muted-foreground" />
+                                <ChevronRight className="text-muted-foreground size-3.5 shrink-0" />
                               )}
                               <span className="truncate">
                                 {ov.label ||
@@ -2303,7 +2357,7 @@ export const StudioSceneEditor = () => {
                           </div>
 
                           <div className="flex shrink-0 items-center gap-1">
-                            <span className="rounded bg-accent px-1.5 py-0.5 text-[10px] font-semibold text-muted-foreground">
+                            <span className="bg-accent text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-semibold">
                               {(ov.startMs / 1000).toFixed(1)}s
                             </span>
                             <button
@@ -2315,7 +2369,7 @@ export const StudioSceneEditor = () => {
                                 "extensions:studio.scene.overlays.moveUp",
                                 "Move Up",
                               )}
-                              className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30"
+                              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1 disabled:opacity-30"
                             >
                               <ArrowUp className="size-3.5" />
                             </button>
@@ -2328,7 +2382,7 @@ export const StudioSceneEditor = () => {
                                 "extensions:studio.scene.overlays.moveDown",
                                 "Move Down",
                               )}
-                              className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground disabled:opacity-30"
+                              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1 disabled:opacity-30"
                             >
                               <ArrowDown className="size-3.5" />
                             </button>
@@ -2340,7 +2394,7 @@ export const StudioSceneEditor = () => {
                                 "extensions:studio.scene.overlays.duplicate",
                                 "Duplicate Layer",
                               )}
-                              className="rounded p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
+                              className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1"
                             >
                               <Copy className="size-3.5" />
                             </button>
@@ -2352,7 +2406,7 @@ export const StudioSceneEditor = () => {
                                 "extensions:studio.scene.overlays.removeLayer",
                                 "Remove from Scene",
                               )}
-                              className="rounded p-1 text-muted-foreground hover:bg-red-500/15 hover:text-red-500"
+                              className="text-muted-foreground rounded p-1 hover:bg-red-500/15 hover:text-red-500"
                             >
                               <Trash2 className="size-3.5" />
                             </button>
@@ -2363,11 +2417,11 @@ export const StudioSceneEditor = () => {
                         {isExpanded && (
                           <div
                             data-testid={`studio-overlay-inspector-${ov.id}`}
-                            className="flex flex-col gap-2.5 border-t border-accent pt-2 text-xs"
+                            className="border-accent flex flex-col gap-2.5 border-t pt-2 text-xs"
                           >
                             {/* Layer Label */}
                             <div className="flex flex-col gap-1">
-                              <label className="text-[11px] font-bold text-foreground">
+                              <label className="text-foreground text-[11px] font-bold">
                                 {t(
                                   "extensions:studio.scene.overlays.label",
                                   "Layer Label",
@@ -2391,7 +2445,7 @@ export const StudioSceneEditor = () => {
 
                             {/* Lottie Asset URL + Upload / Library */}
                             <div className="flex flex-col gap-1">
-                              <label className="text-[11px] font-bold text-foreground">
+                              <label className="text-foreground text-[11px] font-bold">
                                 {t(
                                   "extensions:studio.scene.overlays.asset",
                                   "Lottie Asset",
@@ -2448,7 +2502,7 @@ export const StudioSceneEditor = () => {
 
                             {/* Stage Z-Order (behindTitle vs aboveTitle) */}
                             <div className="flex flex-col gap-1">
-                              <label className="text-[11px] font-bold text-foreground">
+                              <label className="text-foreground text-[11px] font-bold">
                                 {t(
                                   "extensions:studio.scene.overlays.layerOrder",
                                   "Stage Z-Order",
@@ -2460,8 +2514,7 @@ export const StudioSceneEditor = () => {
                                 onChange={(e) =>
                                   handleUpdateOverlay(ov.id, {
                                     layer: e.target.value as
-                                      | "behindTitle"
-                                      | "aboveTitle",
+                                      "behindTitle" | "aboveTitle",
                                   })
                                 }
                                 className="bg-background border-input text-foreground rounded-md border px-2 py-1 text-xs font-medium"
@@ -2484,7 +2537,7 @@ export const StudioSceneEditor = () => {
                             {/* Position X/Y (%) & Width (%) */}
                             <div className="grid grid-cols-3 gap-2">
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.positionX",
                                     "X (%)",
@@ -2500,7 +2553,10 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) => {
                                     const pct = Math.max(
                                       0,
-                                      Math.min(100, Number(e.target.value) || 0),
+                                      Math.min(
+                                        100,
+                                        Number(e.target.value) || 0,
+                                      ),
                                     )
                                     handleUpdateOverlay(ov.id, {
                                       position: {
@@ -2513,7 +2569,7 @@ export const StudioSceneEditor = () => {
                                 />
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.positionY",
                                     "Y (%)",
@@ -2529,7 +2585,10 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) => {
                                     const pct = Math.max(
                                       0,
-                                      Math.min(100, Number(e.target.value) || 0),
+                                      Math.min(
+                                        100,
+                                        Number(e.target.value) || 0,
+                                      ),
                                     )
                                     handleUpdateOverlay(ov.id, {
                                       position: {
@@ -2542,7 +2601,7 @@ export const StudioSceneEditor = () => {
                                 />
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.widthPct",
                                     "Width (%)",
@@ -2558,7 +2617,10 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) => {
                                     const w = Math.max(
                                       1,
-                                      Math.min(100, Number(e.target.value) || 28),
+                                      Math.min(
+                                        100,
+                                        Number(e.target.value) || 28,
+                                      ),
                                     )
                                     handleUpdateOverlay(ov.id, { widthPct: w })
                                   }}
@@ -2575,7 +2637,7 @@ export const StudioSceneEditor = () => {
                                 onClick={() =>
                                   handleUpdateOverlay(ov.id, { widthPct: 20 })
                                 }
-                                className="rounded bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground hover:opacity-85"
+                                className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
                                 {t(
                                   "extensions:studio.scene.overlays.sizeSmall",
@@ -2588,7 +2650,7 @@ export const StudioSceneEditor = () => {
                                 onClick={() =>
                                   handleUpdateOverlay(ov.id, { widthPct: 35 })
                                 }
-                                className="rounded bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground hover:opacity-85"
+                                className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
                                 {t(
                                   "extensions:studio.scene.overlays.sizeMedium",
@@ -2601,7 +2663,7 @@ export const StudioSceneEditor = () => {
                                 onClick={() =>
                                   handleUpdateOverlay(ov.id, { widthPct: 55 })
                                 }
-                                className="rounded bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground hover:opacity-85"
+                                className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
                                 {t(
                                   "extensions:studio.scene.overlays.sizeLarge",
@@ -2617,7 +2679,7 @@ export const StudioSceneEditor = () => {
                                     rotationDeg: 0,
                                   })
                                 }
-                                className="ml-auto rounded bg-accent px-2 py-0.5 text-[10px] font-semibold text-accent-foreground hover:opacity-85"
+                                className="bg-accent text-accent-foreground ml-auto rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
                                 {t(
                                   "extensions:studio.scene.overlays.resetCenter",
@@ -2629,7 +2691,7 @@ export const StudioSceneEditor = () => {
                             {/* Fit, Opacity, Rotation */}
                             <div className="grid grid-cols-3 gap-2">
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.fit",
                                     "Fit",
@@ -2641,8 +2703,7 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) =>
                                     handleUpdateOverlay(ov.id, {
                                       fit: e.target.value as
-                                        | "contain"
-                                        | "cover",
+                                        "contain" | "cover",
                                     })
                                   }
                                   className="bg-background border-input text-foreground rounded-md border px-1.5 py-1 text-xs"
@@ -2662,7 +2723,7 @@ export const StudioSceneEditor = () => {
                                 </select>
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.opacity",
                                     "Opacity (%)",
@@ -2691,7 +2752,7 @@ export const StudioSceneEditor = () => {
                                 />
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.rotation",
                                     "Rotation (°)",
@@ -2707,7 +2768,10 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) => {
                                     const deg = Math.max(
                                       -180,
-                                      Math.min(180, Number(e.target.value) || 0),
+                                      Math.min(
+                                        180,
+                                        Number(e.target.value) || 0,
+                                      ),
                                     )
                                     handleUpdateOverlay(ov.id, {
                                       rotationDeg: deg,
@@ -2721,7 +2785,7 @@ export const StudioSceneEditor = () => {
                             {/* Timing Controls: TimeBase, Start (s), Duration (s) */}
                             <div className="grid grid-cols-3 gap-2">
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.timeBase",
                                     "Timing Clock",
@@ -2733,8 +2797,7 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) =>
                                     handleUpdateOverlay(ov.id, {
                                       timeBase: e.target.value as
-                                        | "video"
-                                        | "scene",
+                                        "video" | "scene",
                                     })
                                   }
                                   className="bg-background border-input text-foreground rounded-md border px-1.5 py-1 text-xs"
@@ -2754,7 +2817,7 @@ export const StudioSceneEditor = () => {
                                 </select>
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.startSec",
                                     "Start (s)",
@@ -2770,7 +2833,10 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) => {
                                     const sec = Math.max(
                                       0,
-                                      Math.min(300, Number(e.target.value) || 0),
+                                      Math.min(
+                                        300,
+                                        Number(e.target.value) || 0,
+                                      ),
                                     )
                                     handleUpdateOverlay(ov.id, {
                                       startMs: Math.round(sec * 1000),
@@ -2780,7 +2846,7 @@ export const StudioSceneEditor = () => {
                                 />
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.durationSec",
                                     "Duration (s)",
@@ -2802,12 +2868,15 @@ export const StudioSceneEditor = () => {
                                   placeholder="Auto"
                                   onChange={(e) => {
                                     const raw = e.target.value.trim()
+
                                     if (!raw) {
                                       handleUpdateOverlay(ov.id, {
                                         durationMs: undefined,
                                       })
+
                                       return
                                     }
+
                                     const sec = Math.max(
                                       0.1,
                                       Math.min(300, Number(raw) || 1),
@@ -2824,7 +2893,7 @@ export const StudioSceneEditor = () => {
                             {/* Speed, Finish Mode, Loop */}
                             <div className="grid grid-cols-3 items-end gap-2">
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.speed",
                                     "Speed",
@@ -2848,7 +2917,7 @@ export const StudioSceneEditor = () => {
                                 />
                               </div>
                               <div className="flex flex-col gap-1">
-                                <label className="text-[10px] font-bold text-muted-foreground">
+                                <label className="text-muted-foreground text-[10px] font-bold">
                                   {t(
                                     "extensions:studio.scene.overlays.finishMode",
                                     "When Done",
@@ -2860,8 +2929,7 @@ export const StudioSceneEditor = () => {
                                   onChange={(e) =>
                                     handleUpdateOverlay(ov.id, {
                                       finish: e.target.value as
-                                        | "hide"
-                                        | "holdLastFrame",
+                                        "hide" | "holdLastFrame",
                                     })
                                   }
                                   className="bg-background border-input text-foreground rounded-md border px-1.5 py-1 text-xs"
@@ -2880,7 +2948,7 @@ export const StudioSceneEditor = () => {
                                   </option>
                                 </select>
                               </div>
-                              <label className="flex items-center gap-1.5 pb-1.5 text-xs font-medium text-foreground">
+                              <label className="text-foreground flex items-center gap-1.5 pb-1.5 text-xs font-medium">
                                 <input
                                   type="checkbox"
                                   data-testid={`studio-overlay-loop-${ov.id}`}
@@ -2911,11 +2979,8 @@ export const StudioSceneEditor = () => {
         {/* Animation Preset (for standalone Animation scene) */}
         {scene.kind === "animation" && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">
-              {t(
-                "extensions:studio.scene.animationPreset",
-                "Animation Preset",
-              )}
+            <label className="text-foreground text-xs font-bold">
+              {t("extensions:studio.scene.animationPreset", "Animation Preset")}
             </label>
             <StudioSelect
               value={animationPreset}
@@ -2931,9 +2996,9 @@ export const StudioSceneEditor = () => {
         {scene.kind === "animation" && (
           <div
             data-testid="scene-lottie-config"
-            className="flex flex-col gap-2 rounded-lg border border-accent p-2.5"
+            className="border-accent flex flex-col gap-2 rounded-lg border p-2.5"
           >
-            <label className="text-xs font-bold text-foreground">
+            <label className="text-foreground text-xs font-bold">
               {t(
                 "extensions:studio.scene.lottieTitle",
                 "Custom Lottie Animation (Optional)",
@@ -2976,7 +3041,7 @@ export const StudioSceneEditor = () => {
             {!scene.lottieUrl ? (
               <p
                 data-testid="scene-lottie-empty-state"
-                className="text-[11px] text-muted-foreground"
+                className="text-muted-foreground text-[11px]"
               >
                 {t(
                   "extensions:studio.scene.lottieEmptyState",
@@ -3008,7 +3073,10 @@ export const StudioSceneEditor = () => {
                   }
                   className="bg-accent text-accent-foreground px-2 py-0.5 text-[11px]"
                 >
-                  {t("extensions:studio.scene.lottieClearButton", "Remove Lottie")}
+                  {t(
+                    "extensions:studio.scene.lottieClearButton",
+                    "Remove Lottie",
+                  )}
                 </Button>
               </div>
             )}
@@ -3018,7 +3086,7 @@ export const StudioSceneEditor = () => {
         {/* Duration */}
         {isCountdown ? (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">
+            <label className="text-foreground text-xs font-bold">
               {t(
                 "extensions:studio.scene.countdownSeconds",
                 "Countdown Seconds (3–120)",
@@ -3042,7 +3110,7 @@ export const StudioSceneEditor = () => {
           </div>
         ) : (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">
+            <label className="text-foreground text-xs font-bold">
               {t(
                 "extensions:studio.scene.durationSeconds",
                 "Duration Seconds (1–60)",
@@ -3069,7 +3137,7 @@ export const StudioSceneEditor = () => {
 
         {/* Advance Mode */}
         <div className="flex flex-col gap-1.5">
-          <label className="text-xs font-bold text-foreground">
+          <label className="text-foreground text-xs font-bold">
             {t("extensions:studio.scene.advance", "Advance")}
           </label>
           <StudioSelect
@@ -3086,7 +3154,7 @@ export const StudioSceneEditor = () => {
         {/* Media End Safety Fallback Timeout (when advance === "onMediaEnd") */}
         {advanceMode === "onMediaEnd" && isCinemaCapableScene && (
           <div className="flex flex-col gap-1.5">
-            <label className="text-xs font-bold text-foreground">
+            <label className="text-foreground text-xs font-bold">
               {t(
                 "extensions:studio.scene.mediaEndFallbackSeconds",
                 "Media End Safety Timeout (5–300s)",
@@ -3106,16 +3174,19 @@ export const StudioSceneEditor = () => {
               placeholder="30"
               onChange={(e) => {
                 const raw = e.target.value.trim()
+
                 if (!raw) {
                   updateSceneConfig(sceneId, {
                     mediaEndFallbackMs: undefined,
-                  } as Partial<SceneConfig>)
+                  })
+
                   return
                 }
+
                 const sec = Math.max(5, Math.min(300, Number(raw) || 30))
                 updateSceneConfig(sceneId, {
                   mediaEndFallbackMs: Math.round(sec * 1000),
-                } as Partial<SceneConfig>)
+                })
               }}
               variant="sm"
             />

@@ -7,9 +7,9 @@ import {
   resolveQuestionPlayMode,
   type GameSettings,
   type Player,
+  type QuestionResult,
   type Quizz,
   type QuizzMode,
-  type QuestionResult,
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
@@ -34,11 +34,11 @@ import {
   type PlayerScoreInfo,
 } from "@razzia/extensions/server"
 import { isQuestionSupportedOnPstn } from "@razzia/extensions/telephony"
-import { getPath, saveResult } from "@razzia/socket/services/config"
 import {
   accountsEnabled,
   withAccount,
 } from "@razzia/socket/services/account-scope"
+import { getPath, saveResult } from "@razzia/socket/services/config"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
@@ -158,6 +158,18 @@ class Game {
             this.round.finish()
           },
           onBroadcastState: () => {
+            const scene = this.showCoordinator?.currentScene
+
+            if (
+              scene?.kind === "animation" &&
+              scene.preset === "tie-break" &&
+              !this.extensionSession?.hasUnresolvedStoryTie()
+            ) {
+              this.showCoordinator?.advanceScene()
+
+              return
+            }
+
             this.broadcastExtensionState()
           },
         },
@@ -364,9 +376,11 @@ class Game {
       onPreviousTimelineStep: this.showCoordinator
         ? () => {
             const ok = this.showCoordinator?.previousScene() ?? false
+
             if (ok) {
               this.broadcastExtensionState()
             }
+
             return ok
           }
         : undefined,
@@ -379,32 +393,44 @@ class Game {
     if (this.extensionSession) {
       this.extensionSession.setDelegate({
         endAnswerTimer: () => this.round.endTimer(),
-        nextScreen: () => this.round.nextScreen(),
+        nextScreen: () => {
+          if (this.started) return this.round.nextScreen()
+          const hostSocket = this.io.sockets.sockets.get(this.manager.id)
+          if (!hostSocket || this.playerManager.count() === 0) return false
+          void this.start(hostSocket)
+          return this.started
+        },
         previousScreen: () => {
           const ok = this.round.previousScreen()
+
           if (ok) {
             this.syncRosterScoresFromPlayers()
             this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
+
           return ok
         },
         cancelActiveVote: () => {
           const ok = this.round.cancelActiveVote()
+
           if (ok) {
             this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
+
           return ok
         },
         reopenQuestion: (qIdx) => {
           this.clearQuestionVerdicts(qIdx)
           const ok = this.round.reopenQuestion(qIdx)
+
           if (ok) {
             this.syncRosterScoresFromPlayers()
             this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
+
           return ok
         },
         getAnswersCount: () => this.round.getAnswerCount(),
@@ -420,11 +446,13 @@ class Game {
           ) ?? false,
         previousTimelineScene: () => {
           const ok = this.showCoordinator?.previousScene() ?? false
+
           if (ok) {
             this.syncRosterScoresFromPlayers()
             this.broadcastHostPresence()
             this.broadcastExtensionState()
           }
+
           return ok
         },
         skipTimelineScene: (sceneId, epoch, timelineStepIndex) =>
@@ -434,9 +462,34 @@ class Game {
           if (this.showCoordinator?.isSceneActive()) {
             return this.showCoordinator.canPrevious()
           }
+
           return this.round.canPrevious()
         },
         isAcceptingAnswers: () => this.round.isCurrentlyAcceptingAnswers,
+        pauseGame: () => {
+          const ok = this.showCoordinator?.isSceneActive()
+            ? this.showCoordinator.pauseGame()
+            : this.round.pauseGame()
+
+          if (ok) {
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
+        resumeGame: () => {
+          const ok = this.showCoordinator?.isSceneActive()
+            ? this.showCoordinator.resumeGame()
+            : this.round.resumeGame()
+
+          if (ok) {
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
+        getPauseSnapshot: () =>
+          this.showCoordinator?.isSceneActive()
+            ? this.showCoordinator.getPauseSnapshot()
+            : this.round.getPauseSnapshot(),
         getLeaderboard: () => {
           const currentLb = this.round.currentLeaderboard
           const source = currentLb.length > 0 ? currentLb : this.players
@@ -471,15 +524,18 @@ class Game {
           let maxCount = 0
           for (let i = 0; i < q.answers.length; i += 1) {
             const count = dist.options?.[i]?.count ?? 0
+
             if (count > maxCount) {
               maxCount = count
             }
           }
 
           const winners: number[] = []
+
           if (maxCount > 0) {
             for (let i = 0; i < q.answers.length; i += 1) {
               const count = dist.options?.[i]?.count ?? 0
+
               if (count === maxCount) {
                 winners.push(i)
               }
@@ -490,6 +546,7 @@ class Game {
 
           const options = q.answers.map((label: string, idx: number) => {
             const visual = answerVisuals.find((v: any) => v.answerIndex === idx)
+
             return {
               answerIndex: idx,
               label,
@@ -511,30 +568,42 @@ class Game {
         },
         getFullShowData: () => ({
           isLive: true,
-          connectedTables: [...this.rosterMap.values()].flatMap((entry, index) => entry.status === "connected" ? [index + 1] : []),
-          representatives: [...this.rosterMap.values()].map((entry, index) => ({ table: index + 1, name: entry.displayName })),
+          connectedTables: [...this.rosterMap.values()].flatMap(
+            (entry, index) => (entry.status === "connected" ? [index + 1] : []),
+          ),
+          representatives: [...this.rosterMap.values()].map((entry, index) => ({
+            table: index + 1,
+            name: entry.displayName,
+          })),
         }),
         getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
-          const scene = inputScene.kind === "animation" ? {
-            id: inputScene.id,
-            kind: "answerRecap" as const,
-            title: inputScene.title,
-            mode: "mostSelected" as const,
-            startQuestionId: this.extensionSession?.getQuestionId(((inputScene.round ?? 1) - 1) * 5),
-            maxItemsPerPage: 5,
-            showCounts: true,
-            showPercentages: true,
-          } : inputScene
+          const scene =
+            inputScene.kind === "animation"
+              ? {
+                  id: inputScene.id,
+                  kind: "answerRecap" as const,
+                  title: inputScene.title,
+                  mode: "mostSelected" as const,
+                  startQuestionId: this.extensionSession?.getQuestionId(
+                    ((inputScene.round ?? 1) - 1) * 5,
+                  ),
+                  maxItemsPerPage: 5,
+                  showCounts: true,
+                  showPercentages: true,
+                }
+              : inputScene
+
           if (scene.kind !== "answerRecap") {
             return null
           }
 
           const extras = this.extensionSession?.extras
+
           if (!extras || !isQuizExtrasV2(extras)) {
             return null
           }
 
-          const timeline = extras.timeline
+          const { timeline } = extras
           const boundIndex = Math.min(timelineStepIndex, timeline.length)
 
           const precedingQuestions: Array<{
@@ -546,9 +615,11 @@ class Game {
           let qOrdinal = 0
           for (let i = 0; i < boundIndex; i += 1) {
             const item = timeline[i]
+
             if (item?.kind === "question") {
               qOrdinal += 1
               const qIdx = extras.questionIds.indexOf(item.questionId)
+
               if (qIdx >= 0 && qIdx < this.quizz.questions.length) {
                 precedingQuestions.push({
                   questionId: item.questionId,
@@ -560,10 +631,12 @@ class Game {
           }
 
           let startPos = 0
+
           if (scene.startQuestionId) {
             const foundPos = precedingQuestions.findIndex(
               (pq) => pq.questionId === scene.startQuestionId,
             )
+
             if (foundPos >= 0) {
               startPos = foundPos
             }
@@ -578,11 +651,14 @@ class Game {
             const hist = historyAll[pq.questionIndex]
             const ledger = this.round.getQuestionLedgerEntry(pq.questionIndex)
 
-            if (!q) continue
+            if (!q) {
+              continue
+            }
             // Skip questions that were skipped or not yet completed
             if (hist?.skipped || ledger?.skipped) {
               continue
             }
+
             if (!hist && !ledger) {
               continue
             }
@@ -623,7 +699,9 @@ class Game {
 
             let maxCount = 0
             for (const c of optionCounts) {
-              if (c > maxCount) maxCount = c
+              if (c > maxCount) {
+                maxCount = c
+              }
             }
 
             const useCorrectAnswer =
@@ -669,6 +747,7 @@ class Game {
               const visual = answerVisuals.find(
                 (v: any) => v.answerIndex === idx,
               )
+
               return {
                 answerIndex: idx,
                 label: q.answers[idx] ?? `Option ${idx + 1}`,
@@ -683,7 +762,8 @@ class Game {
               questionId: pq.questionId,
               questionNumber: pq.questionNumber,
               questionText: q.question,
-              questionImageUrl: q.image,
+              questionImageUrl:
+                q.media?.type === "image" ? q.media.url : undefined,
               playMode,
               badgeType,
               totalResponders,
@@ -694,6 +774,7 @@ class Game {
 
           return {
             title: scene.title,
+            subtitle: "subtitle" in scene ? scene.subtitle : undefined,
             totalQuestionsInRange: selectedRange.length,
             completedQuestionsCount: items.length,
             startQuestionId:
@@ -731,6 +812,7 @@ class Game {
         (match) => match[1],
       ),
     )
+
     return referenced.has(name)
   }
 
@@ -834,6 +916,7 @@ class Game {
     }
 
     const currentQ = this.quizz.questions[this.round.currentQuestionIndex]
+
     if (!currentQ) {
       return {
         supported: false,
@@ -941,13 +1024,21 @@ class Game {
     reason?: string
   } {
     const pstn = this.getCurrentQuestionPstnSupport()
-    const epoch = pstn.epoch
+    const { epoch } = pstn
 
     if (this.showCoordinator?.isSceneActive()) {
       return {
         accepted: false,
         epoch,
         reason: "scene_active",
+      }
+    }
+
+    if (this.round.isPaused) {
+      return {
+        accepted: false,
+        epoch,
+        reason: "game_paused",
       }
     }
 
@@ -1347,6 +1438,10 @@ class Game {
 
   broadcastHostPresence(): void {
     this.presenceSeq += 1
+    // Displays receive the live roster through the extension envelope as well.
+    // Give presence changes a new sequence so clients accept the update.
+    this.extensionSession?.onPresenceChanged()
+    this.broadcastExtensionState()
 
     if (!this._manager.id) {
       return
@@ -1395,25 +1490,33 @@ class Game {
       this.lastBroadcastStatus ??
       (!this.started
         ? {
-            name: STATUS.WAIT,
-            data: { text: "game:waitingForPlayers" },
+            name: STATUS.SHOW_ROOM,
+            data: {
+              text: "game:waitingForPlayers",
+              inviteCode: this.inviteCode,
+            },
           }
         : null)
+
     if (currentStatus) {
       const sanitized = this.sanitizeStatusForAudience(currentStatus)
+
       if (
         sanitized.name === STATUS.SELECT_ANSWER &&
         this.round.isCurrentlyAcceptingAnswers
       ) {
         const remaining = this.round.getRemainingSeconds()
+
         if (remaining !== null && remaining !== undefined) {
           ;(sanitized.data as Record<string, unknown>).remainingTime = remaining
         }
       }
+
       socket.emit(EVENTS.GAME.STATUS, sanitized)
     }
 
     const reconnectInfo = this.round.getReconnectInfo()
+
     if (reconnectInfo) {
       socket.emit(EVENTS.GAME.UPDATE_QUESTION, reconnectInfo)
     }
@@ -1818,6 +1921,7 @@ class Game {
    * even without a browser WebSocket client.
    */
   joinOrRebindPhoneCaller(input: {
+    rosterPlayerId?: string
     phoneRaw?: string | null
     callId: string
     fallbackName?: string
@@ -1835,13 +1939,15 @@ class Game {
       ? normalizePhoneE164(input.phoneRaw)
       : null
 
-    let rosterEntry = normalizedPhone
-      ? (() => {
-          const rId = this.phoneIndex.get(normalizedPhone)
+    let rosterEntry = input.rosterPlayerId
+      ? this.rosterMap.get(input.rosterPlayerId)
+      : normalizedPhone
+        ? (() => {
+            const rId = this.phoneIndex.get(normalizedPhone)
 
-          return rId ? this.rosterMap.get(rId) : undefined
-        })()
-      : undefined
+            return rId ? this.rosterMap.get(rId) : undefined
+          })()
+        : undefined
 
     if (!rosterEntry && this._settings.phoneInviteOnly) {
       return {
@@ -2182,6 +2288,7 @@ class Game {
       this.round.isCurrentlyAcceptingAnswers
     ) {
       const remaining = this.round.getRemainingSeconds()
+
       if (remaining !== null && remaining !== undefined) {
         ;(status.data as Record<string, unknown>).remainingTime = remaining
       }
@@ -2334,10 +2441,10 @@ class Game {
 
   selectAnswer(socket: Socket, answerIds: number[]) {
     if (this.showCoordinator?.isSceneActive()) {
-      return
+      return { accepted: false, reason: "scene_active" as const }
     }
 
-    this.round.selectAnswer(socket, answerIds)
+    return this.round.selectAnswer(socket, answerIds)
   }
 
   advance() {

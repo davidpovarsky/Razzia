@@ -8,7 +8,6 @@ import {
   EXTENSION_EVENTS,
   resolveEffectiveCardBackground,
   resolveTadazzStageBackground,
-  type TadazzShowBackground,
   type CardAudioOverrides,
   type CardBackgroundOverride,
   type CueId,
@@ -16,38 +15,49 @@ import {
   type HostPresenceSnapshot,
   type Interlude,
   type QuizExtrasV1,
+  type TadazzShowBackground,
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
   AudioCuePlayer,
-  TADAZZ_IMAGE_URL,
-  TadazzAnimatedBackdrop,
   InterludePresenter,
+  isTadazzShowActive,
   ScenePresenter,
   StageFitContainer,
+  TADAZZ_IMAGE_URL,
+  TadazzAnimatedBackdrop,
   type ScenePresenterProps,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
+import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
+import {
+  useHostPresentation,
+  useHostPresentationCommands,
+} from "@razzia/web/features/game/components/host-presentation-controller"
+import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
+import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
+import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
+import { TadazzShowView } from "@razzia/web/features/game/components/tadazz-show/TadazzShowView"
+import {
+  TadazzMotionStage,
+  type TadazzMotionScene,
+} from "@razzia/web/features/game/components/TadazzMotionStage"
 import {
   ExtensionStateProvider,
   getAuthoritativeEnvelope,
   isNewerEnvelope,
 } from "@razzia/web/features/game/contexts/extension-state-context"
-import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
-import {
-  TadazzMotionStage,
-  type TadazzMotionScene,
-} from "@razzia/web/features/game/components/TadazzMotionStage"
-import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
-import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
-import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import {
   useEvent,
   useSocket,
 } from "@razzia/web/features/game/contexts/socket-context"
+import {
+  ViewRoleContext,
+  type ViewRole,
+} from "@razzia/web/features/game/contexts/view-role-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
@@ -57,14 +67,14 @@ import { fetchGameRoster } from "@razzia/web/features/manager/queries"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
 import { Maximize, Minimize, PhoneCall, Users } from "lucide-react"
-import { type PropsWithChildren, useEffect, useMemo, useState } from "react"
-import toast from "react-hot-toast"
 import {
-  ViewRoleContext,
-  type ViewRole,
-} from "@razzia/web/features/game/contexts/view-role-context"
-import { isTadazzShowActive } from "@razzia/extensions/presentation"
-import { TadazzShowView } from "@razzia/web/features/game/components/tadazz-show/TadazzShowView"
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type PropsWithChildren,
+} from "react"
+import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
 type Props = PropsWithChildren & {
@@ -111,6 +121,7 @@ const GameWrapper = ({
   const [localExtensionState, setLocalExtensionState] =
     useState<ExtensionStateEnvelope | null>(null)
   const { socket, clientId } = useSocket()
+  const presentationRootRef = useRef<HTMLElement | null>(null)
 
   useEffect(() => {
     if (manager && gameId && !hostPresence) {
@@ -126,7 +137,9 @@ const GameWrapper = ({
   // Refresh the short-lived room media cookie whenever a host opens a room.
   // Remount the stage once authorized so images retried after an initial 401.
   useEffect(() => {
-    if (!manager || !gameId) return
+    if (!manager || !gameId) {
+      return
+    }
     let alive = true
     setRoomMediaReady(false)
     void fetch(`/api/games/${encodeURIComponent(gameId)}/display-media`, {
@@ -134,9 +147,12 @@ const GameWrapper = ({
       cache: "no-store",
     })
       .then((response) => {
-        if (alive && response.ok) setRoomMediaReady(true)
+        if (alive && response.ok) {
+          setRoomMediaReady(true)
+        }
       })
       .catch(() => undefined)
+
     return () => {
       alive = false
     }
@@ -156,6 +172,46 @@ const GameWrapper = ({
   }, [manager, storeExtensionState, localExtensionState])
 
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
+  const {
+    isPresenting: isHostPresentingConfirmed,
+    isPending: isHostPresentationPending,
+    error: presentationError,
+    enter: enterHostPresentation,
+    exit: exitHostPresentation,
+  } = useHostPresentation(Boolean(manager && isEnhancedQuiz))
+  const isHostPresenting =
+    isHostPresentingConfirmed || isHostPresentationPending
+
+  useHostPresentationCommands({
+    enabled: Boolean(manager && isHostPresenting),
+    statusName,
+    extensionState,
+    currentQuestion: questionStates?.current ?? 0,
+    onExit: exitHostPresentation,
+    onAdvanceFallback: onNext,
+  })
+
+  useEffect(() => {
+    if (isHostPresenting) {
+      setPlayersModalOpen(false)
+    }
+  }, [isHostPresenting])
+
+  useEffect(() => {
+    if (presentationError) {
+      toast.error(
+        t(
+          "extensions:host.presentationFullscreenError",
+          "Fullscreen presentation could not be started.",
+        ),
+      )
+    }
+  }, [presentationError, t])
+
+  const beginHostPresentation = () => {
+    void enterHostPresentation(presentationRootRef.current)
+  }
+
   const next = statusName ? MANAGER_SKIP_BTN[statusName] : null
   const isDisabled = skippedStatus !== null && skippedStatus === status
 
@@ -222,6 +278,7 @@ const GameWrapper = ({
           onExit={onBack ?? defaultExit}
           onStartGame={statusName === STATUS.SHOW_ROOM ? onNext : undefined}
           onAdvanceFallback={onNext}
+          onPresent={beginHostPresentation}
           countdown={countdown}
         />
       )
@@ -344,27 +401,34 @@ const GameWrapper = ({
     if (!extensionState) {
       return undefined
     }
+
     if (extensionState.extras.audioCue) {
       return extensionState.extras.audioCue as CueId
     }
+
     if (extensionState.phase === "scene") {
       return (
         currentSceneObj?.audio?.cueId ??
         (currentSceneObj?.audio?.url ? "start" : undefined)
       )
     }
+
     if (statusName === STATUS.SHOW_QUESTION) {
       return "showQuestion"
     }
+
     if (statusName === STATUS.SELECT_ANSWER) {
       return "answersMusic"
     }
+
     if (statusName === STATUS.SHOW_RESPONSES) {
       return "revealResults"
     }
+
     if (statusName === STATUS.SHOW_LEADERBOARD) {
       return "leaderboard"
     }
+
     return undefined
   }, [extensionState, statusName, currentSceneObj])
 
@@ -556,7 +620,8 @@ const GameWrapper = ({
                 labels={scenePresenterLabels}
                 serverStartedAt={extensionState.startedAt}
                 epoch={extensionState.epoch}
-                isManager={Boolean(manager)}
+                controlledPaused={extensionState.pause?.paused}
+                isManager={Boolean(manager && !isHostPresenting)}
                 onMediaEnded={() => {
                   if (manager && extensionState.gameId) {
                     socket.emit(EXTENSION_EVENTS.COMMAND, {
@@ -617,7 +682,7 @@ const GameWrapper = ({
               <InterludePresenter
                 interlude={extensionState.extras.interlude as Interlude}
                 serverStartedAt={extensionState.startedAt}
-                isManager={Boolean(manager)}
+                isManager={Boolean(manager && !isHostPresenting)}
                 labels={{
                   secondsRemaining: (sec) =>
                     t("extensions:interludes.secondsRemaining", {
@@ -665,18 +730,37 @@ const GameWrapper = ({
   if (isTadazzShowActive(extensionState)) {
     return (
       <TadazzShowView
-        manager={Boolean(manager)} role={effectiveRole} statusName={statusName}
-        extensionState={extensionState} onNext={onNext} onBack={onBack}
-        countdown={countdown} totalPlayers={totalPlayers} roomMediaReady={roomMediaReady}
-        audioCueId={activePhaseCueId} hasCompetingMediaAudio={hasCompetingMediaAudio}
+        manager={Boolean(manager)}
+        role={effectiveRole}
+        statusName={statusName}
+        extensionState={extensionState}
+        onNext={onNext}
+        onBack={onBack}
+        countdown={countdown}
+        totalPlayers={totalPlayers}
+        roomMediaReady={roomMediaReady}
+        audioCueId={activePhaseCueId}
+        hasCompetingMediaAudio={hasCompetingMediaAudio}
         activeCardKey={activeCardKey}
         sceneAudio={extensionState?.extras.sceneAudio ?? currentSceneObj?.audio}
+        isHostPresenting={isHostPresenting}
+        onPresent={beginHostPresentation}
+        onExitPresentation={exitHostPresentation}
+        presentationRootRef={(node) => {
+          presentationRootRef.current = node
+        }}
       />
     )
   }
 
   return (
-    <section className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden">
+    <section
+      ref={(node) => {
+        presentationRootRef.current = node
+      }}
+      data-host-presenting={isHostPresenting ? "true" : "false"}
+      className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden"
+    >
       <GameBackground />
 
       {(tadazzBackdrop.source === "tadazz" ||
@@ -733,7 +817,7 @@ const GameWrapper = ({
           </div>
         ) : (
           <>
-            {renderHeader()}
+            {!isHostPresenting && renderHeader()}
 
             <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden">
               <div
@@ -749,142 +833,177 @@ const GameWrapper = ({
               {motionScene && <TadazzMotionStage scene={motionScene} />}
             </div>
 
-            {extensionState && (!manager || roomMediaReady) && (
-              <AudioCuePlayer
-                cueId={activePhaseCueId}
-                audioExtras={
-                  extensionState.extras.audio as
-                    QuizExtrasV1["audio"] | undefined
-                }
-                cardAudioCues={
-                  extensionState.extras.cardAudioCues as
-                    CardAudioOverrides | undefined
-                }
-                sceneAudio={
-                  (extensionState.extras.sceneAudio as
-                    | {
-                        mode?: "inherit" | "mute" | "custom"
-                        cueId?: CueId
-                        url?: string
-                        volume?: number
-                        loop?: boolean
-                      }
-                    | undefined) ?? currentSceneObj?.audio
-                }
-                gameId={extensionState.gameId}
-                activeCardKey={activeCardKey}
-                phase={
-                  extensionState.phase === "scene"
-                    ? "scene"
-                    : (statusName ?? extensionState.phase)
-                }
-                epoch={extensionState.epoch}
-                hasCompetingMedia={hasCompetingMediaAudio}
-              />
-            )}
+            {extensionState &&
+              effectiveRole !== "player" &&
+              (!manager || roomMediaReady) && (
+                <AudioCuePlayer
+                  cueId={activePhaseCueId}
+                  audioExtras={
+                    extensionState.extras.audio as
+                      QuizExtrasV1["audio"] | undefined
+                  }
+                  cardAudioCues={
+                    extensionState.extras.cardAudioCues as
+                      CardAudioOverrides | undefined
+                  }
+                  sceneAudio={
+                    (extensionState.extras.sceneAudio as
+                      | {
+                          mode?: "inherit" | "mute" | "custom"
+                          cueId?: CueId
+                          url?: string
+                          volume?: number
+                          loop?: boolean
+                        }
+                      | undefined) ?? currentSceneObj?.audio
+                  }
+                  gameId={extensionState.gameId}
+                  activeCardKey={activeCardKey}
+                  phase={
+                    extensionState.phase === "scene"
+                      ? "scene"
+                      : (statusName ?? extensionState.phase)
+                  }
+                  epoch={extensionState.epoch}
+                  paused={extensionState.pause?.paused}
+                  showControls={Boolean(manager && !isHostPresenting)}
+                  controlLabels={{
+                    enable: t("extensions:audio.enableSound", "Enable sound"),
+                    mute: t("extensions:audio.mute", "Mute"),
+                    unmute: t("extensions:audio.unmute", "Unmute"),
+                    pause: t("extensions:audio.pauseAudio", "Pause audio"),
+                    play: t("extensions:audio.playAudio", "Play audio"),
+                    track: t("extensions:audio.track", "Track"),
+                    followShow: t("extensions:audio.followShow", "Follow show"),
+                  }}
+                  soundtrackLabels={{
+                    openingIntro: t(
+                      "extensions:audio.slotOpeningIntro",
+                      "Opening intro",
+                    ),
+                    lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
+                    roundStart: t(
+                      "extensions:audio.slotRoundStart",
+                      "Round start",
+                    ),
+                    question: t("extensions:audio.slotQuestion", "Question"),
+                    voting: t("extensions:audio.slotVoting", "Voting"),
+                    results: t("extensions:audio.slotResults", "Results"),
+                    leaderboard: t(
+                      "extensions:audio.slotLeaderboard",
+                      "Leaderboard",
+                    ),
+                    recap: t("extensions:audio.slotRecap", "Recap"),
+                    finale: t("extensions:audio.slotFinale", "Finale"),
+                  }}
+                  hasCompetingMedia={hasCompetingMediaAudio}
+                />
+              )}
 
             {manager ? (
-              <div
-                className={clsx(
-                  "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
-                  {
-                    "absolute inset-x-0 bottom-0":
-                      statusName === STATUS.FINISHED,
-                  },
-                )}
-              >
-                {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                  <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
-                    {!locked && (
-                      <>
-                        <span className="max-w-[120px] truncate sm:max-w-none">
-                          {window.location.host}
-                        </span>
-                        <span className="h-4 w-px bg-white/40 sm:h-5" />
-                        <span>{inviteCode}</span>
-                      </>
-                    )}
-                    <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
-                  </div>
-                )}
-
-                <Tooltip
-                  content={t(
-                    "extensions:roster.liveModalTitle",
-                    "Players & Live Connection Status",
+              isHostPresenting ? null : (
+                <div
+                  className={clsx(
+                    "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
+                    {
+                      "absolute inset-x-0 bottom-0":
+                        statusName === STATUS.FINISHED,
+                    },
                   )}
                 >
-                  <button
-                    type="button"
-                    onClick={() => setPlayersModalOpen(true)}
-                    data-testid="host-bottom-players-btn"
-                    className={clsx(
-                      "ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl",
-                      !isConnected && "opacity-60",
+                  {inviteCode && statusName !== STATUS.SHOW_ROOM && (
+                    <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
+                      {!locked && (
+                        <>
+                          <span className="max-w-[120px] truncate sm:max-w-none">
+                            {window.location.host}
+                          </span>
+                          <span className="h-4 w-px bg-white/40 sm:h-5" />
+                          <span>{inviteCode}</span>
+                        </>
+                      )}
+                      <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                    </div>
+                  )}
+
+                  <Tooltip
+                    content={t(
+                      "extensions:roster.liveModalTitle",
+                      "Players & Live Connection Status",
                     )}
                   >
-                    <Users className="size-5" />
-                    <span data-testid="host-connected-counter">
-                      {(() => {
-                        const connectedCount =
-                          hostPresence?.connectedNow ??
-                          players.filter((p) => p.connected).length
-                        const registeredCount =
-                          hostPresence?.registeredTotal ??
-                          totalPlayers ??
-                          players.length
+                    <button
+                      type="button"
+                      onClick={() => setPlayersModalOpen(true)}
+                      data-testid="host-bottom-players-btn"
+                      className={clsx(
+                        "ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl",
+                        !isConnected && "opacity-60",
+                      )}
+                    >
+                      <Users className="size-5" />
+                      <span data-testid="host-connected-counter">
+                        {(() => {
+                          const connectedCount =
+                            hostPresence?.connectedNow ??
+                            players.filter((p) => p.connected).length
+                          const registeredCount =
+                            hostPresence?.registeredTotal ??
+                            totalPlayers ??
+                            players.length
 
-                        if (
-                          (registeredCount > 0 &&
-                            registeredCount !== connectedCount) ||
-                          hostPresence
-                        ) {
-                          return `${connectedCount} / ${registeredCount}`
-                        }
+                          if (
+                            (registeredCount > 0 &&
+                              registeredCount !== connectedCount) ||
+                            hostPresence
+                          ) {
+                            return `${connectedCount} / ${registeredCount}`
+                          }
 
-                        return String(totalPlayers ?? players.length)
-                      })()}
-                    </span>
-                    <span className="ml-1 hidden items-center gap-1 rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex">
-                      <PhoneCall className="size-3" />
-                      {t("extensions:roster.playersButton", "Players")}
-                    </span>
-                  </button>
-                </Tooltip>
+                          return String(totalPlayers ?? players.length)
+                        })()}
+                      </span>
+                      <span className="ml-1 hidden items-center gap-1 rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex">
+                        <PhoneCall className="size-3" />
+                        {t("extensions:roster.playersButton", "Players")}
+                      </span>
+                    </button>
+                  </Tooltip>
 
-                <GameSettingsModal
-                  onOpenRoster={() => setPlayersModalOpen(true)}
-                />
+                  <GameSettingsModal
+                    onOpenRoster={() => setPlayersModalOpen(true)}
+                  />
 
-                <HostPlayersModal
-                  open={playersModalOpen}
-                  onOpenChange={setPlayersModalOpen}
-                />
+                  <HostPlayersModal
+                    open={playersModalOpen}
+                    onOpenChange={setPlayersModalOpen}
+                  />
 
-                <Tooltip
-                  content={t(
-                    isFullscreen
-                      ? "common:exitFullscreen"
-                      : "common:fullscreen",
-                  )}
-                >
-                  <button
-                    onClick={toggleFullscreen}
-                    aria-label={t(
+                  <Tooltip
+                    content={t(
                       isFullscreen
                         ? "common:exitFullscreen"
                         : "common:fullscreen",
                     )}
-                    className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
                   >
-                    {isFullscreen ? (
-                      <Minimize className="size-5" />
-                    ) : (
-                      <Maximize className="size-5" />
-                    )}
-                  </button>
-                </Tooltip>
-              </div>
+                    <button
+                      onClick={toggleFullscreen}
+                      aria-label={t(
+                        isFullscreen
+                          ? "common:exitFullscreen"
+                          : "common:fullscreen",
+                      )}
+                      className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
+                    >
+                      {isFullscreen ? (
+                        <Minimize className="size-5" />
+                      ) : (
+                        <Maximize className="size-5" />
+                      )}
+                    </button>
+                  </Tooltip>
+                </div>
+              )
             ) : effectiveRole === "spectator" ? null : (
               <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
                 <div className="flex items-center gap-2">

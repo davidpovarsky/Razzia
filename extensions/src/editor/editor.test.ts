@@ -567,6 +567,7 @@ describe("CORE04: Revision Conflict 409 Handling in CompositeApiClient", () => {
 
     const scenes = {
       [recapId]: {
+        id: recapId,
         kind: "answerRecap" as const,
         title: "Mid-Show Recap",
         startQuestionId: q1,

@@ -8,9 +8,7 @@ import {
   type QuestionDecoration,
   type QuestionDecorationPreset,
   type QuestionEntrancePreset,
-  type QuizExtrasV2,
   type StageAnimationSlot,
-  type StageAnimationTiming,
 } from "@razzia/extensions/core"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
@@ -53,7 +51,7 @@ const QuestionEntranceConfig = ({
   const lottieInputRef = useRef<HTMLInputElement | null>(null)
 
   const v2Defaults =
-    extras && "defaults" in extras ? (extras as QuizExtrasV2).defaults : undefined
+    extras && "defaults" in extras ? extras.defaults : undefined
   const globalStageAnimations = v2Defaults?.stageAnimations
   const globalQuestionDecoration = v2Defaults?.questionDecoration
 
@@ -89,9 +87,11 @@ const QuestionEntranceConfig = ({
 
   const getSlotSelectValue = (slotKey: SlotKey): string => {
     const explicitSlot = cardStageAnimations?.[slotKey]
+
     if (explicitSlot) {
       return explicitSlot.preset
     }
+
     if (
       slotKey === "questionEntrance" &&
       kind === "question" &&
@@ -99,29 +99,37 @@ const QuestionEntranceConfig = ({
     ) {
       return currentItem.questionEntrance.preset
     }
+
     if (
       globalStageAnimations?.[slotKey]?.preset &&
-      globalStageAnimations[slotKey]!.preset !== "none"
+      globalStageAnimations[slotKey].preset !== "none"
     ) {
       return "__inherit__"
     }
+
     return resolved[slotKey].preset
   }
 
-  const updateSlot = (slotKey: SlotKey, nextSlot: StageAnimationSlot | undefined) => {
+  const updateSlot = (
+    slotKey: SlotKey,
+    nextSlot: StageAnimationSlot | undefined,
+  ) => {
     if (kind === "scene") {
       const nextMap: CardStageAnimations = {
         ...(sceneStageAnimations ?? {}),
       }
+
       if (nextSlot === undefined) {
         delete nextMap[slotKey]
       } else {
         nextMap[slotKey] = nextSlot
       }
+
       onSceneStageAnimationsChange?.(
         Object.keys(nextMap).length > 0 ? nextMap : undefined,
       )
       setPreviewEpoch((p) => p + 1)
+
       return
     }
 
@@ -139,6 +147,7 @@ const QuestionEntranceConfig = ({
       const nextStageAnimations: CardStageAnimations = {
         ...(existingItem.stageAnimations ?? {}),
       }
+
       if (nextSlot === undefined) {
         delete nextStageAnimations[slotKey]
       } else {
@@ -159,9 +168,7 @@ const QuestionEntranceConfig = ({
         } else {
           nextPerQItem.questionEntrance = {
             preset: nextSlot.preset,
-            ...(nextSlot.preset !== "none"
-              ? { durationMs: nextSlot.durationMs }
-              : {}),
+            durationMs: nextSlot.durationMs,
           }
         }
       }
@@ -181,8 +188,10 @@ const QuestionEntranceConfig = ({
   const handlePresetChange = (val: string) => {
     if (val === "__inherit__") {
       updateSlot("questionEntrance", undefined)
+
       return
     }
+
     const newPreset = val as QuestionEntrancePreset
     updateSlot("questionEntrance", {
       ...resolved.questionEntrance,
@@ -191,22 +200,28 @@ const QuestionEntranceConfig = ({
     })
   }
 
-  const updateQuestionDecoration = (nextDec: QuestionDecoration | undefined) => {
+  const updateQuestionDecoration = (
+    nextDec: QuestionDecoration | undefined,
+  ) => {
     if (!currentQuestionId) {
       return
     }
+
     setExtras((prev) => {
       if (!prev) {
         return prev
       }
+
       const existingPerQ = prev.perQuestion ?? {}
       const existingItem = existingPerQ[currentQuestionId] ?? {}
       const updatedItem = { ...existingItem }
+
       if (nextDec === undefined) {
         delete updatedItem.questionDecoration
       } else {
         updatedItem.questionDecoration = nextDec
       }
+
       return {
         ...prev,
         perQuestion: {
@@ -223,16 +238,21 @@ const QuestionEntranceConfig = ({
   ) => {
     const file = e.target.files?.[0]
     e.target.value = ""
+
     if (!file) {
       return
     }
+
     try {
       const rawText = await file.text()
       const validation = validateLottieJson(rawText)
+
       if (!validation.ok) {
         toast.error(validation.error ?? "Invalid Lottie JSON file")
+
         return
       }
+
       const token = localStorage.getItem("token")
       const res = await fetch("/api/extensions/lottie", {
         method: "POST",
@@ -246,10 +266,13 @@ const QuestionEntranceConfig = ({
           role: "questionUnderline",
         }),
       })
+
       if (!res.ok) {
         toast.error("Failed to upload Lottie file")
+
         return
       }
+
       const data = (await res.json()) as { url: string }
       updateQuestionDecoration({
         enabled: true,
@@ -265,9 +288,11 @@ const QuestionEntranceConfig = ({
 
   const handleDurationChange = (raw: string) => {
     const num = Number(raw)
+
     if (Number.isNaN(num)) {
       return
     }
+
     const clamped = Math.min(MAX_DURATION_MS, Math.max(MIN_DURATION_MS, num))
     updateSlot("questionEntrance", {
       ...resolved.questionEntrance,
@@ -284,28 +309,40 @@ const QuestionEntranceConfig = ({
     switch (p) {
       case "none":
         return t("extensions:entrance.none", "Regular / None")
+
       case "fade":
         return t("extensions:entrance.fade", "Fade In")
+
       case "slide-up":
         return t("extensions:entrance.slideUp", "Slide Up")
+
       case "slide-side":
         return t("extensions:entrance.slideSide", "Slide Side")
+
       case "zoom-soft":
         return t("extensions:entrance.zoomSoft", "Soft Zoom")
+
       case "spotlight":
         return t("extensions:entrance.spotlight", "Spotlight")
+
       case "curtain":
         return t("extensions:entrance.curtain", "Curtain")
+
       case "pop-bounce":
         return t("extensions:entrance.popBounce", "Pop Bounce")
+
       case "wobble-settle":
         return t("extensions:entrance.wobbleSettle", "Wobble Settle")
+
       case "cascade":
         return t("extensions:entrance.cascade", "Cascade")
+
       case "fan-flip":
         return t("extensions:entrance.fanFlip", "Fan Flip")
+
       case "wipe-ripple":
         return t("extensions:entrance.wipeRipple", "Wipe Ripple")
+
       default:
         return p
     }
@@ -313,7 +350,9 @@ const QuestionEntranceConfig = ({
 
   const renderPresetItems = (slotKey: SlotKey) => {
     const globalSlotPreset = globalStageAnimations?.[slotKey]?.preset
-    const hasGlobalSlot = Boolean(globalSlotPreset && globalSlotPreset !== "none")
+    const hasGlobalSlot = Boolean(
+      globalSlotPreset && globalSlotPreset !== "none",
+    )
 
     return (
       <>
@@ -338,6 +377,7 @@ const QuestionEntranceConfig = ({
   ) => {
     const slotCfg = resolved[slotKey]
     const selectVal = getSlotSelectValue(slotKey)
+
     return (
       <div
         key={slotKey}
@@ -351,8 +391,10 @@ const QuestionEntranceConfig = ({
             onValueChange={(val) => {
               if (val === "__inherit__") {
                 updateSlot(slotKey, undefined)
+
                 return
               }
+
               updateSlot(slotKey, {
                 ...slotCfg,
                 preset: val as QuestionEntrancePreset,
@@ -371,7 +413,7 @@ const QuestionEntranceConfig = ({
           {slotCfg.preset !== "none" && (
             <div
               data-testid={`stage-anim-timing-${slotKey}`}
-              className="flex items-center gap-1 rounded-lg bg-muted p-0.5"
+              className="bg-muted flex items-center gap-1 rounded-lg p-0.5"
             >
               {(["simultaneous", "sequential"] as const).map((tm) => (
                 <button
@@ -381,7 +423,7 @@ const QuestionEntranceConfig = ({
                   onClick={() =>
                     updateSlot(slotKey, {
                       ...slotCfg,
-                      timing: tm as StageAnimationTiming,
+                      timing: tm,
                     })
                   }
                   className={clsx(
@@ -405,16 +447,18 @@ const QuestionEntranceConfig = ({
 
   const decorationSelectValue = (() => {
     if (currentItem?.questionDecoration) {
-      return currentItem.questionDecoration.enabled === false
+      return !currentItem.questionDecoration.enabled
         ? "none"
         : currentItem.questionDecoration.preset
     }
+
     if (
       globalQuestionDecoration?.enabled &&
       globalQuestionDecoration.preset !== "none"
     ) {
       return "__inherit__"
     }
+
     return "none"
   })()
 
@@ -426,9 +470,7 @@ const QuestionEntranceConfig = ({
     resolvedDecoration.enabled
 
   return (
-    <ConfigSection
-      title={t("extensions:entrance.title", "Entrance Animation")}
-    >
+    <ConfigSection title={t("extensions:entrance.title", "Entrance Animation")}>
       <div
         data-testid="staged-animation-section"
         className="flex flex-col gap-3"
@@ -451,7 +493,9 @@ const QuestionEntranceConfig = ({
             >
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>{renderPresetItems("questionEntrance")}</SelectContent>
+            <SelectContent>
+              {renderPresetItems("questionEntrance")}
+            </SelectContent>
           </Select>
           <ConfigField.Description>
             {t(
@@ -469,7 +513,6 @@ const QuestionEntranceConfig = ({
             />
             <Input
               type="number"
-              variant="sm"
               min={MIN_DURATION_MS}
               max={MAX_DURATION_MS}
               step={50}
@@ -514,15 +557,19 @@ const QuestionEntranceConfig = ({
                 onValueChange={(val) => {
                   if (val === "__inherit__") {
                     updateQuestionDecoration(undefined)
+
                     return
                   }
+
                   if (val === "none") {
                     updateQuestionDecoration({
                       enabled: false,
                       preset: "none",
                     })
+
                     return
                   }
+
                   updateQuestionDecoration({
                     enabled: true,
                     preset: val as QuestionDecorationPreset,
@@ -589,7 +636,6 @@ const QuestionEntranceConfig = ({
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-2">
                       <Input
-                        variant="sm"
                         data-testid="question-decoration-lottie-url"
                         value={resolvedDecoration.lottieUrl ?? ""}
                         onChange={(e) =>
@@ -613,7 +659,6 @@ const QuestionEntranceConfig = ({
                       <Button
                         type="button"
                         size="sm"
-                        variant="sm"
                         className="h-8 shrink-0 px-2.5 text-xs"
                         onClick={() => lottieInputRef.current?.click()}
                       >
@@ -640,21 +685,20 @@ const QuestionEntranceConfig = ({
         {anyPresetActive && (
           <div
             data-testid="stage-anim-preview-box"
-            className="flex flex-col gap-2 rounded-lg border border-border/40 bg-muted/20 p-2.5"
+            className="border-border/40 bg-muted/20 flex flex-col gap-2 rounded-lg border p-2.5"
           >
             <div className="flex items-center justify-between">
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider">
+              <span className="text-muted-foreground text-xs font-medium tracking-wider uppercase">
                 {t("extensions:entrance.preview", "Preview")}
               </span>
               <Button
                 size="sm"
-                variant="sm"
                 type="button"
                 className="h-7 px-2.5 text-xs"
                 onClick={handleTriggerPreview}
                 aria-label={t("extensions:entrance.replay", "Replay")}
               >
-                <RotateCcw className="size-3 mr-1" />
+                <RotateCcw className="mr-1 size-3" />
                 {t("extensions:entrance.replay", "Replay")}
               </Button>
             </div>
@@ -662,7 +706,7 @@ const QuestionEntranceConfig = ({
             <div
               key={previewEpoch}
               className={clsx(
-                "relative overflow-hidden rounded-md border border-primary/30 bg-background/80 p-3 shadow-sm",
+                "border-primary/30 bg-background/80 relative overflow-hidden rounded-md border p-3 shadow-sm",
                 preset !== "none" && `tada-entrance-${preset}`,
               )}
               style={{
@@ -671,10 +715,13 @@ const QuestionEntranceConfig = ({
               }}
             >
               <div className="flex flex-col gap-1.5">
-                <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
-                  <Play className="size-3 text-primary shrink-0" />
+                <div className="text-foreground flex items-center gap-1.5 text-xs font-semibold">
+                  <Play className="text-primary size-3 shrink-0" />
                   <span className="truncate">
-                    {t("extensions:entrance.previewQuestion", "Question Preview")}
+                    {t(
+                      "extensions:entrance.previewQuestion",
+                      "Question Preview",
+                    )}
                   </span>
                 </div>
                 {kind === "question" &&
@@ -703,7 +750,7 @@ const QuestionEntranceConfig = ({
                     <div
                       key={idx}
                       className={clsx(
-                        "flex items-center gap-1.5 rounded bg-primary/10 px-2 py-1 text-[10px] font-medium text-primary",
+                        "bg-primary/10 text-primary flex items-center gap-1.5 rounded px-2 py-1 text-[10px] font-medium",
                         resolved.answerEntrance.preset !== "none" &&
                           `tada-entrance-${resolved.answerEntrance.preset}`,
                       )}
@@ -718,7 +765,7 @@ const QuestionEntranceConfig = ({
                     >
                       <span
                         className={clsx(
-                          "inline-flex size-4 items-center justify-center rounded bg-primary text-[9px] font-bold text-white",
+                          "bg-primary inline-flex size-4 items-center justify-center rounded text-[9px] font-bold text-white",
                           resolved.answerBadgeEntrance.preset !== "none" &&
                             `tada-entrance-${resolved.answerBadgeEntrance.preset}`,
                         )}

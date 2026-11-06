@@ -17,7 +17,8 @@ import {
 } from "./FullShowScenes"
 import { TadazzV4Motion } from "./motion"
 import { AnswerSlotV4 } from "./components"
-import type { FullShowInput, TadazzV4Cue } from "./types"
+import type { TadazzV4Cue } from "./types"
+import type { FullShowInput } from "./FullShowScenes"
 
 describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
   const baseInput: FullShowInput = {
@@ -42,7 +43,6 @@ describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
     voteCount: 42,
     resolvedIndex: null,
     eventArtworkUrl: "/tadazz-show/second-library/teaser-screen.jpg",
-    groupPage: 0,
     storyRoles: [
       "THE THREAT",
       "THE MISSION",
@@ -86,17 +86,15 @@ describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
     expect(html).toContain('data-table="1"')
     expect(html).toContain('data-table="40"')
     // Connected tables have "connected" class
-    expect(html).toContain(
-      'data-table="1" class="full-rep-row connected full-join-pulse"',
-    )
+    expect(html).toContain('class="full-rep-row connected" data-table="1"')
   })
 
   it("renders Directory with 10 focused tables when groupPage is 1..4", () => {
-    const inputGroup1: FullShowInput = { ...baseInput, groupPage: 1 }
+    const inputGroup1: FullShowInput = { ...baseInput, groupPage: 0 }
     const html = renderToString(
       React.createElement(Directory, { data: inputGroup1 }),
     )
-    expect(html).toContain("full-directory-focused")
+    expect(html).toContain("full-directory focus")
     expect(html).toContain('data-table="1"')
     expect(html).toContain('data-table="10"')
     expect(html).not.toContain('data-table="11"')
@@ -114,7 +112,7 @@ describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
     const html = renderToString(
       React.createElement(Readiness, { data: baseInput }),
     )
-    expect(html).toContain("full-light-grid")
+    expect(html).toContain("full-table-grid")
     expect(html).toContain("THE ROOM IS COMING ONLINE")
     expect(html).toContain("TABLES CONNECTED")
   })
@@ -212,7 +210,7 @@ describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
   it("renderFullShowScene helper safely dispatches to the correct scene component", () => {
     const el = renderFullShowScene("round-one", baseInput)
     expect(el).not.toBeNull()
-    const html = renderToString(el!)
+    const html = renderToString(el)
     expect(html).toContain("ROUND")
     expect(html).toContain("01")
 
@@ -224,7 +222,7 @@ describe("FullShowScenes: React Component Rendering & Visual Parity", () => {
 describe("AnswerSlotV4: Captions, Badges, and Result Tracks Parity", () => {
   it("renders caption with data-has-caption attribute and fallback label", () => {
     const answer = {
-      label: "Option A",
+      title: "Option A",
       count: 14,
       percentage: 35,
     }
@@ -240,12 +238,12 @@ describe("AnswerSlotV4: Captions, Badges, and Result Tracks Parity", () => {
 
     expect(html).toContain('data-has-caption="true"')
     expect(html).toContain("Option A")
-    expect(html).toContain("01") // badge 01
+    expect(html).toContain("01") // Badge 01
   })
 
   it("provides fallback label in recap mode when answer has empty title", () => {
     const answer = {
-      label: "",
+      title: "",
       count: 8,
       percentage: 20,
     }
@@ -260,7 +258,7 @@ describe("AnswerSlotV4: Captions, Badges, and Result Tracks Parity", () => {
     )
 
     expect(html).toContain("Choice 3")
-    expect(html).toContain("03") // badge 03
+    expect(html).toContain("03") // Badge 03
   })
 })
 

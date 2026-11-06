@@ -16,6 +16,21 @@ export const CUE_IDS = [
 
 export type CueId = (typeof CUE_IDS)[number]
 
+/** Long-form presenter soundtrack slots. URLs are tenant-authorized media, never bundled candidates. */
+export const SOUNDTRACK_SLOT_IDS = [
+  "openingIntro",
+  "lobby",
+  "roundStart",
+  "question",
+  "voting",
+  "results",
+  "leaderboard",
+  "recap",
+  "finale",
+] as const
+
+export type SoundtrackSlotId = (typeof SOUNDTRACK_SLOT_IDS)[number]
+
 export const LEADERBOARD_MODES = [
   "upstream",
   "everyN",
@@ -94,6 +109,8 @@ export const COMMAND_ACTIONS = [
   "REVEAL_MEDIA",
   "ASSIGN_TEAM",
   "END_ANSWER_TIMER",
+  "PAUSE_GAME",
+  "RESUME_GAME",
   "NEXT_SCREEN",
   "PREVIOUS_SCREEN",
   "SKIP_QUESTION",

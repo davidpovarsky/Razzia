@@ -524,6 +524,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       const html = renderToStaticMarkup(
         React.createElement(ScenePresenter, {
           scene: {
+            id: "11111111-1111-4111-8111-111111111111",
             kind: "answerRecap",
             title: "Round 1 Recap",
             subtitle: "Top community answers",
@@ -536,6 +537,8 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
           },
           activeSceneData: {
             answerRecap: {
+              totalQuestionsInRange: 3,
+              completedQuestionsCount: 3,
               title: "Round 1 Recap",
               subtitle: "Top community answers",
               startQuestionId: "11111111-1111-4111-8111-111111111111",
@@ -609,6 +612,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       const audioHtml = renderToStaticMarkup(
         React.createElement(ScenePresenter, {
           scene: {
+            id: "11111111-1111-4111-8111-111111111111",
             kind: "media",
             title: "Mystery Sound Clip",
             mediaUrl: "/media/fanfare.mp3",
@@ -624,6 +628,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       const cinemaHtml = renderToStaticMarkup(
         React.createElement(ScenePresenter, {
           scene: {
+            id: "11111111-1111-4111-8111-111111111111",
             kind: "opening",
             title: "Grand Finale",
             subtitle: "Welcome Everyone",
@@ -862,6 +867,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
       const html = renderToStaticMarkup(
         React.createElement(ScenePresenter, {
           scene: {
+            id: "11111111-1111-4111-8111-111111111111",
             kind: "opening",
             title: "Grand Showdown",
             subtitle: "Live Broadcast",

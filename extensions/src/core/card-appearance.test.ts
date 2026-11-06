@@ -482,7 +482,8 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
             id: "s1",
             kind: "opening" as const,
             title: "Welcome",
-            advance: "host" as const,
+            advance: "manual" as const,
+            durationMs: 5000,
             background: {
               url: "/media/shared.png",
               fit: "cover" as const,

@@ -57,6 +57,7 @@ export interface CinematicLayerStackProps {
   onClockTick?: (timeMs: number) => void
   onEditorMediaEnded?: () => void
   activateAudioLabel?: string
+  showAutoplayControl?: boolean
 }
 
 export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
@@ -93,6 +94,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   onClockTick,
   onEditorMediaEnded,
   activateAudioLabel = "Enable Sound",
+  showAutoplayControl = true,
 }) => {
   const stageRef = useRef<HTMLDivElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
@@ -107,15 +109,19 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       if (!trimmedMediaUrl) {
         return undefined
       }
+
       if (mediaType) {
         return mediaType
       }
+
       if (/\.(mp4|webm|mov|m4v)$/iu.test(trimmedMediaUrl)) {
         return "video"
       }
+
       if (/\.(mp3|wav|ogg|m4a|aac)$/iu.test(trimmedMediaUrl)) {
         return "audio"
       }
+
       return "image"
     }, [trimmedMediaUrl, mediaType])
 
@@ -153,19 +159,23 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   useEffect(() => {
     if (controlledTimeMs !== undefined) {
       setSceneTimeMs(controlledTimeMs)
+
       return undefined
     }
+
     const originMs =
       serverStartedAt && serverStartedAt > 0 ? serverStartedAt : Date.now()
     const updateSceneClock = () => {
       const nextMs = Math.max(0, Date.now() - originMs)
       setSceneTimeMs(nextMs)
+
       if (!hasVideoBackdrop) {
         onClockTick?.(nextMs)
       }
     }
     updateSceneClock()
     const interval = setInterval(updateSceneClock, 50)
+
     return () => clearInterval(interval)
   }, [
     stageIdentityKey,
@@ -178,20 +188,24 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   // Sync video volume and controlled editor play/pause/seek
   useEffect(() => {
     const vid = videoRef.current
+
     if (!vid) {
       return
     }
+
     vid.volume = Math.max(0, Math.min(1, volume))
   }, [volume, trimmedMediaUrl])
 
   useEffect(() => {
     const vid = videoRef.current
+
     if (!vid || !hasVideoBackdrop) {
       return
     }
 
     if (controlledTimeMs !== undefined) {
       const targetSec = Math.max(0, controlledTimeMs / 1000)
+
       if (Math.abs(vid.currentTime - targetSec) > 0.08) {
         try {
           vid.currentTime = targetSec
@@ -199,6 +213,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
           // Ignore seek before metadata ready
         }
       }
+
       setVideoTimeMs(controlledTimeMs)
     }
 
@@ -207,10 +222,12 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         if (!vid.paused) {
           vid.pause()
         }
+
         setIsVideoPaused(true)
       } else {
         setIsVideoPaused(false)
         const playPromise = vid.play()
+
         if (playPromise && typeof playPromise.catch === "function") {
           playPromise.catch(() => {
             setIsVideoPaused(true)
@@ -223,12 +240,15 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   // Attempt live video playback and handle browser autoplay-with-sound policies gracefully
   useEffect(() => {
     const vid = videoRef.current
+
     if (!vid || !hasVideoBackdrop || interactiveEditorMode) {
       return
     }
+
     vid.volume = Math.max(0, Math.min(1, volume))
     vid.muted = muted
     const playPromise = vid.play()
+
     if (playPromise && typeof playPromise.catch === "function") {
       playPromise.catch(() => {
         // Browser blocked unmuted autoplay -> fallback to muted playback so visual stage never stalls
@@ -250,23 +270,28 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     if (!hasVideoBackdrop || controlledTimeMs !== undefined) {
       return undefined
     }
+
     let rafId = 0
     let lastReportedMs = -1
 
     const tick = () => {
       const vid = videoRef.current
+
       if (vid && !vid.paused && !vid.ended) {
         const nowMs = Math.round(vid.currentTime * 1000)
+
         if (Math.abs(nowMs - lastReportedMs) >= 33) {
           lastReportedMs = nowMs
           setVideoTimeMs(nowMs)
           onClockTick?.(nowMs)
         }
       }
+
       rafId = requestAnimationFrame(tick)
     }
 
     rafId = requestAnimationFrame(tick)
+
     return () => {
       if (rafId) {
         cancelAnimationFrame(rafId)
@@ -277,6 +302,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   const handleVideoLoadedMetadata = useCallback(
     (e: React.SyntheticEvent<HTMLVideoElement>) => {
       const vid = e.currentTarget
+
       if (Number.isFinite(vid.duration) && vid.duration > 0) {
         onVideoDurationDetected?.(Math.round(vid.duration * 1000))
       }
@@ -289,12 +315,14 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         lateSeekAppliedKeyRef.current = stageIdentityKey
         const mountedAfterSceneStartMs =
           mountTimestampRef.current - serverStartedAt
+
         if (mountedAfterSceneStartMs >= 1200) {
           const seekSec = computeLateJoinVideoSeekSeconds({
             serverStartedAt,
             videoDurationSeconds: vid.duration,
             loop,
           })
+
           if (seekSec > 0) {
             try {
               vid.currentTime = seekSec
@@ -320,6 +348,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       if (controlledTimeMs !== undefined) {
         return
       }
+
       const nextMs = Math.round(e.currentTarget.currentTime * 1000)
       setVideoTimeMs(nextMs)
       onClockTick?.(nextMs)
@@ -331,26 +360,33 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     setMediaEndedVisual(true)
     setIsVideoPaused(true)
     const vid = videoRef.current
+
     if (vid && Number.isFinite(vid.duration) && vid.duration > 0) {
       setVideoTimeMs(Math.round(vid.duration * 1000))
     }
+
     if (interactiveEditorMode) {
       onEditorMediaEnded?.()
+
       return
     }
+
     // Strict one-shot de-duplication per (sceneId, epoch, mediaUrl)
     if (endedKeyRef.current === stageIdentityKey) {
       return
     }
+
     endedKeyRef.current = stageIdentityKey
     onForegroundMediaEnded?.()
   }, [interactiveEditorMode, onForegroundMediaEnded, stageIdentityKey])
 
   const handleActivateAudio = useCallback(() => {
     const vid = videoRef.current
+
     if (!vid) {
       return
     }
+
     vid.muted = false
     vid.volume = Math.max(0, Math.min(1, volume))
     setAutoplayAudioBlocked(false)
@@ -420,6 +456,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       if (!interactiveEditorMode || !onUpdateOverlayPosition) {
         return
       }
+
       draggingOverlayIdRef.current = id
       e.currentTarget.setPointerCapture?.(e.pointerId)
     },
@@ -429,13 +466,17 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   const handleStagePointerMove = useCallback(
     (e: React.PointerEvent<HTMLDivElement>) => {
       const dragId = draggingOverlayIdRef.current
+
       if (!dragId || !interactiveEditorMode || !onUpdateOverlayPosition) {
         return
       }
+
       const rect = stageRef.current?.getBoundingClientRect()
+
       if (!rect || rect.width <= 0 || rect.height <= 0) {
         return
       }
+
       const norm = clampNormalizedStagePoint(
         (e.clientX - rect.left) / rect.width,
         (e.clientY - rect.top) / rect.height,
@@ -454,23 +495,33 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       if (!interactiveEditorMode || !onUpdateOverlayPosition) {
         return
       }
+
       const target = resolvedOverlays.find((o) => o.id === id)
+
       if (!target) {
         return
       }
+
       const step = e.shiftKey ? 0.05 : 0.01
       let dx = 0
       let dy = 0
-      if (e.key === "ArrowLeft") dx = -step
-      else if (e.key === "ArrowRight") dx = step
-      else if (e.key === "ArrowUp") dy = -step
-      else if (e.key === "ArrowDown") dy = step
-      else if (e.key === "Escape") {
+
+      if (e.key === "ArrowLeft") {
+        dx = -step
+      } else if (e.key === "ArrowRight") {
+        dx = step
+      } else if (e.key === "ArrowUp") {
+        dy = -step
+      } else if (e.key === "ArrowDown") {
+        dy = step
+      } else if (e.key === "Escape") {
         onSelectOverlay?.(null)
+
         return
       } else {
         return
       }
+
       e.preventDefault()
       e.stopPropagation()
       onUpdateOverlayPosition(
@@ -549,7 +600,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
                 onEnded={handleForegroundVideoEnded}
                 onError={() => setMediaError(true)}
                 className={`pointer-events-none h-full w-full transition-opacity duration-500 ${
-                  mediaFit === "Contain" || mediaFit === "contain"
+                  mediaFit === "contain"
                     ? "bg-black object-contain"
                     : "object-cover"
                 } ${
@@ -656,17 +707,19 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         data-testid="cinematic-layer-interactive"
         className="relative z-50 flex w-full flex-col items-center justify-center"
       >
-        {autoplayAudioBlocked && !interactiveEditorMode && (
-          <button
-            type="button"
-            data-testid="cinematic-activate-audio"
-            onClick={handleActivateAudio}
-            className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-400/50 bg-slate-950/85 px-4 py-1.5 text-xs font-bold text-amber-300 shadow-lg backdrop-blur-md transition hover:bg-slate-900"
-          >
-            <span>🔊</span>
-            <span>{activateAudioLabel}</span>
-          </button>
-        )}
+        {showAutoplayControl &&
+          autoplayAudioBlocked &&
+          !interactiveEditorMode && (
+            <button
+              type="button"
+              data-testid="cinematic-activate-audio"
+              onClick={handleActivateAudio}
+              className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-400/50 bg-slate-950/85 px-4 py-1.5 text-xs font-bold text-amber-300 shadow-lg backdrop-blur-md transition hover:bg-slate-900"
+            >
+              <span>🔊</span>
+              <span>{activateAudioLabel}</span>
+            </button>
+          )}
         {interactiveSlot}
       </div>
     </div>

@@ -6,20 +6,12 @@ import {
   questionDecorationSchema,
   showMediaCatalogItemSchema,
 } from "./card-appearance"
-import {
-  ANSWER_DISPLAYS,
-  CUE_IDS,
-  LEADERBOARD_MODES,
-  REVEAL_AUDIENCES,
-  REVEAL_EFFECTS,
-  REVEAL_TRIGGERS,
-} from "./constants"
+import { ANSWER_DISPLAYS, LEADERBOARD_MODES } from "./constants"
 import {
   interludeSchema,
   isSafeMediaUrl,
   questionRevealSchema,
   safeMediaUrlSchema,
-  type Interlude,
 } from "./media"
 import {
   ANSWER_RECAP_MODES,
@@ -32,7 +24,6 @@ import {
   audioExtrasSchema,
   questionEntranceSchema,
   teamsExtrasSchema,
-  type QuestionEntrance,
 } from "./quiz-extras"
 import { rosterExtrasSchema } from "./phone-roster"
 import { questionMediaValidator } from "@razzia/common/validators/quizz"
@@ -41,6 +32,7 @@ import { estimationOptionsValidator } from "@razzia/common/validators/questions/
 import { MAX_ANSWERS } from "@razzia/common/constants"
 
 export const TADA_SHOW_FORMAT = "tada-show" as const
+
 export const TADA_SHOW_VERSION = 1 as const
 
 export const authoredAnswerSchema = z
@@ -77,6 +69,7 @@ export const authoredAnswerSchema = z
   })
 
 export type AuthoredAnswer = z.input<typeof authoredAnswerSchema>
+
 export type AuthoredAnswerOutput = z.infer<typeof authoredAnswerSchema>
 
 export const authoredQuizCardSchema = z
@@ -114,6 +107,7 @@ export const authoredQuizCardSchema = z
         message: "errors:extensions.invalidMediaUrl",
       })
     }
+
     if (card.extraJson && Object.keys(card.extraJson).length > 0) {
       ctx.addIssue({
         code: "custom",
@@ -121,6 +115,7 @@ export const authoredQuizCardSchema = z
         message: "errors:extensions.unsupportedExtraJson",
       })
     }
+
     for (const ansNum of card.correctAnswers) {
       if (ansNum > card.answers.length) {
         ctx.addIssue({
@@ -169,6 +164,7 @@ export const authoredSurveyCardSchema = z
         message: "errors:extensions.invalidMediaUrl",
       })
     }
+
     if (card.extraJson && Object.keys(card.extraJson).length > 0) {
       ctx.addIssue({
         code: "custom",
@@ -203,7 +199,9 @@ export const authoredTransitionCardSchema = z
     }
   })
 
-export type AuthoredTransitionCard = z.infer<typeof authoredTransitionCardSchema>
+export type AuthoredTransitionCard = z.infer<
+  typeof authoredTransitionCardSchema
+>
 
 export const authoredAnimationCardSchema = z
   .strictObject({
@@ -270,6 +268,7 @@ export const authoredMediaCardSchema = z
         message: "errors:extensions.invalidMediaUrl",
       })
     }
+
     if (data.extraJson && Object.keys(data.extraJson).length > 0) {
       ctx.addIssue({
         code: "custom",
@@ -436,6 +435,7 @@ export const authoredOpeningCardSchema = z
         message: "errors:extensions.invalidMediaUrl",
       })
     }
+
     if (data.extraJson && Object.keys(data.extraJson).length > 0) {
       ctx.addIssue({
         code: "custom",
@@ -470,6 +470,7 @@ export const authoredClosingCardSchema = z
         message: "errors:extensions.invalidMediaUrl",
       })
     }
+
     if (data.extraJson && Object.keys(data.extraJson).length > 0) {
       ctx.addIssue({
         code: "custom",
@@ -496,6 +497,7 @@ export const authoredCardSchema = z.discriminatedUnion("kind", [
 ])
 
 export type AuthoredCard = z.input<typeof authoredCardSchema>
+
 export type AuthoredCardOutput = z.infer<typeof authoredCardSchema>
 
 export const authoredSettingSchema = z
@@ -513,9 +515,11 @@ export const authoredSettingSchema = z
         message: `errors:extensions.unsupportedSettingTargetKey:${setting.scope}.${setting.targetKey}`,
       })
     }
+
     if (setting.scope === "leaderboard") {
       if (setting.property === "mode") {
         const parsed = z.enum(LEADERBOARD_MODES).safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -530,6 +534,7 @@ export const authoredSettingSchema = z
           .min(1)
           .max(100)
           .safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -539,6 +544,7 @@ export const authoredSettingSchema = z
         }
       } else if (setting.property === "afterQuestionIds") {
         const parsed = z.array(z.string().min(1)).safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -557,6 +563,7 @@ export const authoredSettingSchema = z
     } else if (setting.scope === "team") {
       if (setting.property === "config") {
         const parsed = teamsExtrasSchema.safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -573,7 +580,10 @@ export const authoredSettingSchema = z
       }
     } else if (setting.scope === "audio") {
       if (setting.property === "cues") {
-        const parsed = audioExtrasSchema.shape.cues.partial().safeParse(setting.valueJson)
+        const parsed = audioExtrasSchema.shape.cues
+          .partial()
+          .safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -591,6 +601,7 @@ export const authoredSettingSchema = z
     } else if (setting.scope === "roster") {
       if (setting.property === "config") {
         const parsed = rosterExtrasSchema.safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -611,6 +622,7 @@ export const authoredSettingSchema = z
           .array(showMediaCatalogItemSchema)
           .max(500)
           .safeParse(setting.valueJson)
+
         if (!parsed.success) {
           ctx.addIssue({
             code: "custom",
@@ -675,6 +687,7 @@ export const tadaShowV1Schema = z
     const seenQuestionKeysBeforeRecap = new Set<string>()
     for (let i = 0; i < show.cards.length; i += 1) {
       const card = show.cards[i]
+
       if (card.kind === "quiz" || card.kind === "survey") {
         seenQuestionKeysBeforeRecap.add(card.key)
       } else if (card.kind === "answerRecap" && card.startQuestionKey) {
@@ -707,6 +720,7 @@ export const tadaShowV1Schema = z
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
       const s = show.settings[sIdx]
       const settingId = `${s.scope}::${s.property}::${s.targetKey}`
+
       if (seenSettings.has(settingId)) {
         ctx.addIssue({
           code: "custom",
@@ -714,6 +728,7 @@ export const tadaShowV1Schema = z
           message: `errors:extensions.duplicateSetting:${s.scope}.${s.property}`,
         })
       }
+
       seenSettings.add(settingId)
 
       if (
@@ -723,6 +738,7 @@ export const tadaShowV1Schema = z
       ) {
         for (let kIdx = 0; kIdx < s.valueJson.length; kIdx += 1) {
           const k = String(s.valueJson[kIdx])
+
           if (!questionKeys.has(k)) {
             ctx.addIssue({
               code: "custom",
@@ -736,6 +752,7 @@ export const tadaShowV1Schema = z
   })
 
 export type TadaShowV1 = z.input<typeof tadaShowV1Schema>
+
 export type TadaShowV1Output = z.infer<typeof tadaShowV1Schema>
 
 export const isTadaShowV1 = (data: unknown): data is TadaShowV1 =>

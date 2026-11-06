@@ -13,6 +13,15 @@ export const extensionStateEnvelopeSchema = z.strictObject({
   questionId: z.uuid().optional(),
   phase: z.enum(EXTENSION_PHASES),
   startedAt: z.number().int().positive(),
+  pause: z
+    .strictObject({
+      paused: z.boolean(),
+      remainingMs: z.number().int().nonnegative().nullable(),
+      deadline: z.number().int().positive().nullable(),
+      phase: z.enum(EXTENSION_PHASES),
+      epoch: z.number().int().nonnegative(),
+    })
+    .optional(),
   extras: z.record(z.string(), z.unknown()),
 })
 

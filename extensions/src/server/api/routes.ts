@@ -30,27 +30,35 @@ function loadSelfHostedDotLottieWasm(): Uint8Array | null {
   if (cachedDotLottieWasmBytes) {
     return cachedDotLottieWasmBytes
   }
+
   // The tiny production runner contains the socket bundle, not pnpm node_modules.
   // The official WASM binary is copied into this fixed runtime path by Docker.
-  const productionWasm = process.env.TADAZZ_DOTLOTTIE_WASM_PATH ??
+  const productionWasm =
+    process.env.TADAZZ_DOTLOTTIE_WASM_PATH ??
     "/app/runtime/dotlottie-player.wasm"
+
   if (fs.existsSync(productionWasm)) {
     cachedDotLottieWasmBytes = new Uint8Array(fs.readFileSync(productionWasm))
+
     return cachedDotLottieWasmBytes
   }
+
   try {
     const req = createRequire(import.meta.url)
     const reactEntry = req.resolve("@lottiefiles/dotlottie-react")
     const reactReq = createRequire(reactEntry)
     const webEntry = reactReq.resolve("@lottiefiles/dotlottie-web")
     const wasmPath = path.join(path.dirname(webEntry), "dotlottie-player.wasm")
+
     if (fs.existsSync(wasmPath)) {
       cachedDotLottieWasmBytes = new Uint8Array(fs.readFileSync(wasmPath))
+
       return cachedDotLottieWasmBytes
     }
   } catch {
     // Fallback below if resolution path differs
   }
+
   return null
 }
 
@@ -76,7 +84,9 @@ const uploadLottieBodySchema = z
   .strictObject({
     name: z.string().min(1).max(160),
     format: z.enum(["json", "dotlottie", "zip"]).optional(),
-    content: z.union([z.string(), z.record(z.string(), z.unknown())]).optional(),
+    content: z
+      .union([z.string(), z.record(z.string(), z.unknown())])
+      .optional(),
     contentBase64: z.string().min(1).optional(),
     quizId: z.string().min(1).optional(),
   })
@@ -101,12 +111,14 @@ export const createExtensionRoutes = (
   // load the official dotLottie runtime strictly offline with zero CDN calls.
   app.get("/lottie-wasm", (c) => {
     const wasmBytes = loadSelfHostedDotLottieWasm()
+
     if (!wasmBytes) {
       return c.json(
         { error: "errors:server.internal" },
         StatusCodes.INTERNAL_SERVER_ERROR,
       )
     }
+
     return c.body(wasmBytes as unknown as ArrayBuffer, StatusCodes.OK, {
       "Content-Type": "application/wasm",
       "Cache-Control": "public, max-age=86400",
@@ -331,12 +343,12 @@ export const createExtensionRoutes = (
     fs.mkdirSync(mediaDir, { recursive: true })
 
     const isBinaryRequest = Boolean(
-      body.contentBase64 ||
-      /\.(lottie|zip)$/iu.test(body.name.trim()),
+      body.contentBase64 || /\.(lottie|zip)$/iu.test(body.name.trim()),
     )
 
     if (isBinaryRequest) {
       let rawBytes: Uint8Array
+
       try {
         if (body.contentBase64) {
           const cleanB64 = body.contentBase64.replace(
@@ -366,6 +378,7 @@ export const createExtensionRoutes = (
       }
 
       const archiveValidation = validateDotLottieContainer(rawBytes)
+
       if (!archiveValidation.valid) {
         return c.json(
           {
@@ -400,7 +413,6 @@ export const createExtensionRoutes = (
           name: item.name,
           url: item.url,
           type: item.type,
-          size: item.size,
           addedAt: item.addedAt,
           lottieMeta: item.lottieMeta,
         })
@@ -410,6 +422,7 @@ export const createExtensionRoutes = (
     }
 
     const validation = validateLottieJson(body.content)
+
     if (!validation.valid) {
       return c.json(
         {
@@ -449,17 +462,17 @@ export const createExtensionRoutes = (
   // GET /lottie/:name -> 200 JSON or .lottie binary
   app.get("/lottie/:name", (c) => {
     const name = c.req.param("name")
-    if (
-      !/^[a-zA-Z0-9_-]+\.(json|lottie)$/u.test(name) ||
-      name.includes("..")
-    ) {
+
+    if (!/^[a-zA-Z0-9_-]+\.(json|lottie)$/u.test(name) || name.includes("..")) {
       return c.json(
         { error: "errors:media.invalidName" },
         StatusCodes.BAD_REQUEST,
       )
     }
+
     const mediaDir = injections.getPath("media")
     const filePath = path.join(mediaDir, name)
+
     if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
       return c.json({ error: "errors:media.notFound" }, StatusCodes.NOT_FOUND)
     }
@@ -469,9 +482,11 @@ export const createExtensionRoutes = (
       const validation = validateDotLottieContainer(rawBytes, {
         allowBodymovinZipConversion: false,
       })
+
       if (!validation.valid) {
         return c.json({ error: validation.error }, StatusCodes.BAD_REQUEST)
       }
+
       return c.body(rawBytes as unknown as ArrayBuffer, StatusCodes.OK, {
         "Content-Type": "application/zip",
       })
@@ -479,9 +494,11 @@ export const createExtensionRoutes = (
 
     const raw = fs.readFileSync(filePath, "utf-8")
     const validation = validateLottieJson(raw)
+
     if (!validation.valid) {
       return c.json({ error: validation.error }, StatusCodes.BAD_REQUEST)
     }
+
     return c.body(raw, StatusCodes.OK, {
       "Content-Type": "application/json; charset=utf-8",
     })
@@ -490,18 +507,18 @@ export const createExtensionRoutes = (
   // DELETE /lottie/:name -> 204 or 409 Conflict when referenced
   app.delete("/lottie/:name", (c) => {
     const name = c.req.param("name")
-    if (
-      !/^[a-zA-Z0-9_-]+\.(json|lottie)$/u.test(name) ||
-      name.includes("..")
-    ) {
+
+    if (!/^[a-zA-Z0-9_-]+\.(json|lottie)$/u.test(name) || name.includes("..")) {
       return c.json(
         { error: "errors:media.invalidName" },
         StatusCodes.BAD_REQUEST,
       )
     }
+
     const detach = c.req.query("detach") === "true"
     const mediaDir = injections.getPath("media")
     const filePath = path.join(mediaDir, name)
+
     if (!fs.existsSync(filePath) || !fs.statSync(filePath).isFile()) {
       return c.json({ error: "errors:media.notFound" }, StatusCodes.NOT_FOUND)
     }

@@ -12,8 +12,9 @@ import {
   DEFAULT_REVISION,
   LEADERBOARD_MODES,
   QUESTION_ENTRANCE_PRESETS,
-  type QuestionEntrancePreset,
   SCHEMA_VERSION,
+  SOUNDTRACK_SLOT_IDS,
+  type SoundtrackSlotId,
 } from "./constants"
 import {
   answerVisualSchema,
@@ -23,8 +24,8 @@ import {
 } from "./media"
 import {
   createDefaultRosterExtras,
-  rosterExtrasSchema,
   type RosterExtras,
+  rosterExtrasSchema,
 } from "./phone-roster"
 
 export const leaderboardExtrasSchema = z
@@ -111,6 +112,48 @@ export const audioCueSettingSchema = z
 
 export type AudioCueSetting = z.infer<typeof audioCueSettingSchema>
 
+export const soundtrackSettingSchema = z
+  .strictObject({
+    mode: z.enum(["inherit", "mute", "media"]),
+    url: z.string().optional(),
+    volume: z.number().min(0).max(1).default(0.35),
+    loop: z.boolean().default(false),
+    fadeMs: z.number().int().min(0).max(5000).default(700),
+    startOffsetSeconds: z.number().min(0).max(3600).default(0),
+    maxDurationMs: z.number().int().min(250).max(600000).optional(),
+  })
+  .superRefine((data, ctx) => {
+    if (data.mode === "media" && (!data.url || !isSafeMediaUrl(data.url))) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["url"],
+        message: "errors:extensions.invalidMediaUrl",
+      })
+    }
+
+    if (data.url && !isSafeMediaUrl(data.url)) {
+      ctx.addIssue({
+        code: "custom",
+        path: ["url"],
+        message: "errors:extensions.invalidMediaUrl",
+      })
+    }
+  })
+
+export type SoundtrackSetting = z.infer<typeof soundtrackSettingSchema>
+
+const soundtrackSchemaMap = SOUNDTRACK_SLOT_IDS.reduce(
+  (acc, slot) => {
+    acc[slot] = soundtrackSettingSchema.optional()
+
+    return acc
+  },
+  {} as Record<
+    SoundtrackSlotId,
+    ReturnType<typeof soundtrackSettingSchema.optional>
+  >,
+)
+
 const cuesSchemaMap = CUE_IDS.reduce(
   (acc, cueId) => {
     acc[cueId] = audioCueSettingSchema
@@ -122,6 +165,7 @@ const cuesSchemaMap = CUE_IDS.reduce(
 
 export const audioExtrasSchema = z.strictObject({
   cues: z.strictObject(cuesSchemaMap),
+  soundtrack: z.strictObject(soundtrackSchemaMap).optional(),
 })
 
 export type AudioExtras = z.infer<typeof audioExtrasSchema>

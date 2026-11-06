@@ -86,7 +86,7 @@ const Answers = ({
   )
   const { t } = useTranslation()
   const { width } = useScreenSize()
-  const { isUltraCompact, isCompact } = useStageFit()
+  const { isUltraCompact } = useStageFit()
 
   useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
     setExtensionState(payload)
@@ -136,6 +136,7 @@ const Answers = ({
     // When extensionState is present, GameWrapper's unified AudioCuePlayer manages answersMusic
     if (effectiveExtensionState?.gameId) {
       stopMusic()
+
       return
     }
 
@@ -215,10 +216,9 @@ const Answers = ({
         currentVisuals?.length === 5 && (
           <TadazzMotionStage
             scene={{
-              key:
-                String(effectiveExtensionState?.gameId ?? gameId ?? "") +
-                ":" +
-                animationEpochKey,
+              key: `${String(
+                effectiveExtensionState?.gameId ?? gameId ?? "",
+              )}:${animationEpochKey}`,
               mode: "vote",
               question: {
                 question,

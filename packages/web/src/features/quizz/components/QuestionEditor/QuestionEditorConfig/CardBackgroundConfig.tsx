@@ -45,22 +45,28 @@ const CardBackgroundConfig = ({
   const updateBackground = (next: CardBackgroundOverride | undefined) => {
     if (onBackgroundChange) {
       onBackgroundChange(next)
+
       return
     }
+
     if (!currentQuestionId) {
       return
     }
+
     setExtras((prev) => {
       if (!prev) {
         return prev
       }
+
       const existingPerQ = prev.perQuestion ?? {}
       const existingItem = { ...(existingPerQ[currentQuestionId] ?? {}) }
+
       if (next) {
         existingItem.background = next
       } else {
         delete existingItem.background
       }
+
       return {
         ...prev,
         perQuestion: {
@@ -82,7 +88,9 @@ const CardBackgroundConfig = ({
   }
 
   const handleFitChange = (fit: BackgroundFit) => {
-    if (!activeBackground) return
+    if (!activeBackground) {
+      return
+    }
     updateBackground({
       ...activeBackground,
       fit,
@@ -90,7 +98,9 @@ const CardBackgroundConfig = ({
   }
 
   const handleOverlayChange = (raw: string) => {
-    if (!activeBackground) return
+    if (!activeBackground) {
+      return
+    }
     const num = Math.max(0, Math.min(0.85, Number(raw) || 0))
     updateBackground({
       ...activeBackground,
@@ -108,7 +118,7 @@ const CardBackgroundConfig = ({
         data-testid="card-background-section"
         className="flex flex-col gap-3"
       >
-        <div className="flex items-center gap-1.5 rounded-lg bg-muted p-1">
+        <div className="bg-muted flex items-center gap-1.5 rounded-lg p-1">
           <button
             type="button"
             data-testid="card-bg-mode-default"
@@ -145,17 +155,13 @@ const CardBackgroundConfig = ({
           <Button
             type="button"
             size="sm"
-            variant="sm"
             data-testid="card-bg-choose-btn"
             onClick={() => setLibraryOpen(true)}
             className="bg-accent text-accent-foreground flex flex-1 items-center justify-center gap-1.5 text-xs font-semibold"
           >
             <ImageIcon className="size-3.5" />
             <span>
-              {t(
-                "extensions:cardBackground.chooseImage",
-                "Choose Background",
-              )}
+              {t("extensions:cardBackground.chooseImage", "Choose Background")}
             </span>
           </Button>
           {hasCustom && (
@@ -167,7 +173,7 @@ const CardBackgroundConfig = ({
                 "extensions:cardBackground.removeFromCard",
                 "Remove from Card",
               )}
-              className="bg-accent text-muted-foreground hover:text-red-500 flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold transition"
+              className="bg-accent text-muted-foreground flex h-8 items-center gap-1 rounded-lg px-2.5 text-xs font-semibold transition hover:text-red-500"
             >
               <Trash2 className="size-3.5" />
               <span>

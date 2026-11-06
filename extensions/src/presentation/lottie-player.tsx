@@ -14,6 +14,7 @@ export function ensureDotLottieWasmConfigured(
   if (wasmConfigured) {
     return
   }
+
   try {
     setWasmUrl(customUrl)
     wasmConfigured = true
@@ -107,20 +108,26 @@ function extractStaticPosterShapes(data: Record<string, unknown>): {
     if (!Array.isArray(arr) || arr.length < 3) {
       return "rgb(250, 204, 21)"
     }
+
     const r = Number(arr[0]) || 0
     const g = Number(arr[1]) || 0
     const b = Number(arr[2]) || 0
     const scale = r <= 1 && g <= 1 && b <= 1 ? 255 : 1
+
     return `rgb(${Math.round(r * scale)}, ${Math.round(g * scale)}, ${Math.round(b * scale)})`
   }
 
   layers.forEach((rawLayer, idx) => {
-    if (typeof rawLayer !== "object" || rawLayer === null) return
+    if (typeof rawLayer !== "object" || rawLayer === null) {
+      return
+    }
     const layer = rawLayer as Record<string, unknown>
+
     if (layer.ty === 1 && typeof layer.sc === "string") {
       // Do not draw full-canvas background solids in transparent overlay poster
       const sw = typeof layer.sw === "number" ? layer.sw : w
       const sh = typeof layer.sh === "number" ? layer.sh : h
+
       if (sw < w * 0.95 || sh < h * 0.95) {
         elements.push({
           key: `solid-${idx}`,
@@ -133,14 +140,19 @@ function extractStaticPosterShapes(data: Record<string, unknown>): {
           opacity: 0.85,
         })
       }
+
       return
     }
+
     const shapes = Array.isArray(layer.shapes) ? layer.shapes : []
     let fill = "rgb(250, 204, 21)"
     const walk = (items: unknown[]) => {
       for (const item of items) {
-        if (typeof item !== "object" || item === null) continue
+        if (typeof item !== "object" || item === null) {
+          continue
+        }
         const s = item as Record<string, unknown>
+
         if (s.ty === "fl" && typeof s.c === "object" && s.c !== null) {
           fill = toRgb((s.c as Record<string, unknown>).k)
         } else if (s.ty === "gr" && Array.isArray(s.it)) {
@@ -222,6 +234,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
 
   useEffect(() => {
     ensureDotLottieWasmConfigured()
+
     if (
       typeof window !== "undefined" &&
       typeof window.matchMedia === "function"
@@ -231,8 +244,10 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       const listener = (e: MediaQueryListEvent) =>
         setPrefersReducedMotion(e.matches)
       mq.addEventListener?.("change", listener)
+
       return () => mq.removeEventListener?.("change", listener)
     }
+
     return undefined
   }, [])
 
@@ -241,6 +256,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     if (effectiveData === undefined) {
       return null
     }
+
     return validateLottieJson(effectiveData)
   }, [effectiveData])
 
@@ -342,9 +358,11 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       if (dotLottie.isPlaying) {
         dotLottie.pause()
       }
+
       const representativeFrame = Math.floor(frames * 0.5)
       dotLottie.setFrame(representativeFrame)
       setCurrentFrame(representativeFrame)
+
       return
     }
 
@@ -352,17 +370,23 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       if (dotLottie.isPlaying) {
         dotLottie.pause()
       }
+
       const effectiveElapsedMs = Math.max(0, seekTimeMs) * clampedSpeed
+
       if (!loop && effectiveElapsedMs >= durMs) {
         const lastFrame = Math.max(0, frames - 1)
+
         if (Math.abs(dotLottie.currentFrame - lastFrame) >= 0.5) {
           dotLottie.setFrame(lastFrame)
         }
+
         setCurrentFrame(lastFrame)
+
         if (!hasCompletedOnce) {
           setHasCompletedOnce(true)
           onCompleteRef.current?.()
         }
+
         return
       }
 
@@ -377,10 +401,12 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
         frames - 1,
         Math.max(0, (cycleMs / durMs) * Math.max(1, frames - 1)),
       )
+
       if (Math.abs(dotLottie.currentFrame - targetFrame) >= 0.25) {
         dotLottie.setFrame(targetFrame)
         setCurrentFrame(Math.round(targetFrame))
       }
+
       return
     }
 
@@ -412,6 +438,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     if (inlineValidation && inlineValidation.ok) {
       return extractStaticPosterShapes(inlineValidation.data)
     }
+
     return null
   }, [inlineValidation])
 
@@ -420,18 +447,22 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     if (isEngineReady) {
       return currentFrame
     }
+
     const posterFr = staticPoster?.fr ?? 60
     const posterIp = staticPoster?.ip ?? 0
     const posterOp = staticPoster?.op ?? 120
     const span = Math.max(1, posterOp - posterIp)
+
     if (seekTimeMs !== undefined) {
       const elapsedFrames =
         (Math.max(0, seekTimeMs) / 1000) * posterFr * clampedSpeed
       const rawFrame = loop
         ? posterIp + (elapsedFrames % span)
         : Math.min(posterOp, posterIp + elapsedFrames)
+
       return Math.round(rawFrame)
     }
+
     return posterIp
   }, [
     isEngineReady,
@@ -444,10 +475,12 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
 
   // All Hooks must run before an empty/invalid source can return early.
   const trimmedSrc = src?.trim() ?? ""
+
   if (!trimmedSrc && effectiveData === undefined) {
     if (!emptyLabel) {
       return null
     }
+
     return (
       <div
         data-testid={`${resolvedTestId}-empty`}
@@ -465,7 +498,12 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     return (
       <div
         data-testid={`${resolvedTestId}-error`}
-        data-lottie-error={runtimeError ?? inlineValidation?.error ?? "invalid"}
+        data-lottie-error={
+          runtimeError ??
+          (inlineValidation && !inlineValidation.ok
+            ? inlineValidation.error
+            : "invalid")
+        }
         className={
           className ??
           "flex items-center justify-center rounded-xl border border-amber-400/30 bg-amber-500/10 p-3 text-xs text-amber-200"

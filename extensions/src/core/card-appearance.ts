@@ -1,12 +1,14 @@
 import { z } from "zod"
-import { CUE_IDS, type CueId } from "./constants.js"
+import { type CueId } from "./constants.js"
 import { lottieMetaSchema } from "./lottie.js"
 import { isSafeMediaUrl, safeMediaUrlSchema } from "./media.js"
 
 // ── 1. Per-Card Background Override ─────────────────────────────────────────
 
 export const BACKGROUND_FITS = ["cover", "contain"] as const
+
 export type BackgroundFit = (typeof BACKGROUND_FITS)[number]
+
 export const backgroundFitSchema = z.enum(BACKGROUND_FITS)
 
 export const BACKGROUND_POSITIONS = [
@@ -16,7 +18,9 @@ export const BACKGROUND_POSITIONS = [
   "left",
   "right",
 ] as const
+
 export type BackgroundPosition = (typeof BACKGROUND_POSITIONS)[number]
+
 export const backgroundPositionSchema = z.enum(BACKGROUND_POSITIONS)
 
 export const cardBackgroundOverrideSchema = z.strictObject({
@@ -71,7 +75,9 @@ export const resolveEffectiveCardBackground = (
 // ── 2. Per-Card Audio Cue Overrides ─────────────────────────────────────────
 
 export const CARD_AUDIO_MODES = ["inherit", "mute", "custom"] as const
+
 export type CardAudioMode = (typeof CARD_AUDIO_MODES)[number]
+
 export const cardAudioModeSchema = z.enum(CARD_AUDIO_MODES)
 
 export const cardAudioCueOverrideSchema = z
@@ -98,6 +104,7 @@ export const QUESTION_AUDIO_CUE_KEYS = [
   "answersMusic",
   "revealResults",
 ] as const
+
 export type QuestionAudioCueKey = (typeof QUESTION_AUDIO_CUE_KEYS)[number]
 
 export const cardAudioOverridesSchema = z.strictObject({
@@ -180,7 +187,8 @@ export const resolveEffectiveAudioCue = (params: {
   // 1. Check scene-level audio override if provided
   if (sceneAudio) {
     const mode =
-      sceneAudio.mode ?? (sceneAudio.url || sceneAudio.cueId ? "custom" : "inherit")
+      sceneAudio.mode ??
+      (sceneAudio.url || sceneAudio.cueId ? "custom" : "inherit")
 
     if (mode === "mute") {
       return {
@@ -243,6 +251,7 @@ export const resolveEffectiveAudioCue = (params: {
 
   // 3. Check global show-level audio cue configuration
   const globalCue = globalAudio?.cues?.[cueId]
+
   if (globalCue) {
     if (globalCue.enabled === false) {
       return {
@@ -302,10 +311,13 @@ export const STAGE_ANIMATION_PRESETS = [
 ] as const
 
 export type StageAnimationPreset = (typeof STAGE_ANIMATION_PRESETS)[number]
+
 export const stageAnimationPresetSchema = z.enum(STAGE_ANIMATION_PRESETS)
 
 export const STAGE_ANIMATION_TIMINGS = ["simultaneous", "sequential"] as const
+
 export type StageAnimationTiming = (typeof STAGE_ANIMATION_TIMINGS)[number]
+
 export const stageAnimationTimingSchema = z.enum(STAGE_ANIMATION_TIMINGS)
 
 export const stageAnimationSlotSchema = z.strictObject({
@@ -344,6 +356,7 @@ export const clampAnimationDurationMs = (ms?: number): number => {
   if (typeof ms !== "number" || !Number.isFinite(ms)) {
     return 800
   }
+
   return Math.min(2500, Math.max(250, Math.round(ms)))
 }
 
@@ -351,6 +364,7 @@ export const clampAnimationStaggerMs = (ms?: number): number => {
   if (typeof ms !== "number" || !Number.isFinite(ms)) {
     return 90
   }
+
   return Math.min(300, Math.max(0, Math.round(ms)))
 }
 
@@ -360,14 +374,16 @@ export const clampAnimationStaggerMs = (ms?: number): number => {
  * falling back to `globalStageAnimations` when a per-card slot is omitted (`undefined`),
  * while honoring an explicit `{ preset: "none" }` override on the card.
  */
-export const resolveCardStageAnimations = (input?: {
-  questionEntrance?: {
-    preset?: StageAnimationPreset
-    durationMs?: number
-  } | null
-  stageAnimations?: CardStageAnimations | null
-  globalStageAnimations?: CardStageAnimations | null
-} | null): ResolvedCardStageAnimations => {
+export const resolveCardStageAnimations = (
+  input?: {
+    questionEntrance?: {
+      preset?: StageAnimationPreset
+      durationMs?: number
+    } | null
+    stageAnimations?: CardStageAnimations | null
+    globalStageAnimations?: CardStageAnimations | null
+  } | null,
+): ResolvedCardStageAnimations => {
   const sa = input?.stageAnimations
   const legacyQe = input?.questionEntrance
   const globalSa = input?.globalStageAnimations
@@ -397,6 +413,7 @@ export const resolveCardStageAnimations = (input?: {
     if (!slot) {
       return { ...DEFAULT_SLOT }
     }
+
     return {
       preset: STAGE_ANIMATION_PRESETS.includes(
         slot.preset as StageAnimationPreset,
@@ -411,7 +428,9 @@ export const resolveCardStageAnimations = (input?: {
 
   return {
     questionEntrance: normalizeSlot(qSlot),
-    answerEntrance: normalizeSlot(sa?.answerEntrance ?? globalSa?.answerEntrance),
+    answerEntrance: normalizeSlot(
+      sa?.answerEntrance ?? globalSa?.answerEntrance,
+    ),
     answerBadgeEntrance: normalizeSlot(
       sa?.answerBadgeEntrance ?? globalSa?.answerBadgeEntrance,
     ),
@@ -455,13 +474,18 @@ export type QuestionDecoration = z.infer<typeof questionDecorationSchema>
  * Resolves the effective decorative underline for a question card.
  * Precedence: explicit card decoration (`enabled: false` or custom preset) > global default > disabled.
  */
-export const resolveQuestionDecoration = (input?: {
-  cardDecoration?: Partial<QuestionDecoration> | null
-  questionDecoration?: Partial<QuestionDecoration> | null
-  globalDecoration?: Partial<QuestionDecoration> | null
-} | null): QuestionDecoration => {
+export const resolveQuestionDecoration = (
+  input?: {
+    cardDecoration?: Partial<QuestionDecoration> | null
+    questionDecoration?: Partial<QuestionDecoration> | null
+    globalDecoration?: Partial<QuestionDecoration> | null
+  } | null,
+): QuestionDecoration => {
   const source =
-    input?.cardDecoration ?? input?.questionDecoration ?? input?.globalDecoration
+    input?.cardDecoration ??
+    input?.questionDecoration ??
+    input?.globalDecoration
+
   if (
     !source ||
     source.enabled === false ||
@@ -473,6 +497,7 @@ export const resolveQuestionDecoration = (input?: {
       preset: "none",
     }
   }
+
   return {
     enabled: true,
     preset: QUESTION_DECORATION_PRESETS.includes(source.preset)
@@ -566,6 +591,7 @@ export const isQuestionCardBlankForConversion = (
   }
 
   const cues = perQuestionExtra.audioCues
+
   if (
     cues &&
     ((cues.showQuestion && cues.showQuestion.mode !== "inherit") ||
@@ -591,6 +617,7 @@ export const isQuestionCardBlankForConversion = (
   }
 
   const sa = perQuestionExtra.stageAnimations
+
   if (
     sa &&
     ((sa.questionEntrance?.preset && sa.questionEntrance.preset !== "none") ||
@@ -644,6 +671,7 @@ export const evaluateCardStageFitWarnings = (params: {
   const warnings: StageFitWarning[] = []
 
   const qLen = (params.question ?? "").trim().length
+
   if (qLen > STAGE_RECOMMENDED_LIMITS.questionTitle) {
     warnings.push({
       field: "question",
@@ -656,6 +684,7 @@ export const evaluateCardStageFitWarnings = (params: {
   if (Array.isArray(params.answers)) {
     params.answers.forEach((ans, idx) => {
       const aLen = (ans ?? "").trim().length
+
       if (aLen > STAGE_RECOMMENDED_LIMITS.answerText) {
         warnings.push({
           field: "answer",
@@ -669,6 +698,7 @@ export const evaluateCardStageFitWarnings = (params: {
   }
 
   const stLen = (params.sceneTitle ?? "").trim().length
+
   if (stLen > STAGE_RECOMMENDED_LIMITS.sceneTitle) {
     warnings.push({
       field: "sceneTitle",
@@ -679,6 +709,7 @@ export const evaluateCardStageFitWarnings = (params: {
   }
 
   const ssLen = (params.sceneSubtitle ?? "").trim().length
+
   if (ssLen > STAGE_RECOMMENDED_LIMITS.sceneSubtitle) {
     warnings.push({
       field: "sceneSubtitle",

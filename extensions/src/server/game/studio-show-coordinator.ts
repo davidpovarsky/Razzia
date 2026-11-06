@@ -1,9 +1,12 @@
 import type {
-  TimelineItem,
   SceneConfig,
   StudioDefaults,
+  TimelineItem,
 } from "../../core/studio-timeline-schema"
-import { TimelineRunner, type TimelineStepState } from "../../gameplay/timeline-runner"
+import {
+  TimelineRunner,
+  type TimelineStepState,
+} from "../../gameplay/timeline-runner"
 
 export interface StudioCoordinatorCallbacks {
   onStartQuestion: (questionIndex: number) => Promise<void> | void
@@ -49,21 +52,21 @@ export interface AuthoritativeStepEnvelope {
 export class StudioShowCoordinator {
   private readonly runner: TimelineRunner
   private readonly questionIds: string[]
-  private readonly defaults: StudioDefaults
   private readonly callbacks: StudioCoordinatorCallbacks
 
   private phase: "lobby" | "scene" | "question" | "finished" = "lobby"
   private epoch = 0
   private seq = 0
   private startedAt = 0
-  private currentStepId: string | null = null
   private timer: NodeJS.Timeout | null = null
-  private readonly processedRequestIds = new Set<string>()
+  private timerDeadline: number | null = null
+  private timerRemainingMs: number | null = null
+  private paused = false
+  private pausedAt: number | null = null
 
   constructor(options: StudioShowCoordinatorOptions) {
     this.runner = new TimelineRunner(options.timeline, options.scenes)
     this.questionIds = options.questionIds
-    this.defaults = options.defaults
     this.callbacks = options.callbacks
   }
 
@@ -104,7 +107,28 @@ export class StudioShowCoordinator {
   }
 
   canAcceptAnswers(): boolean {
-    return this.phase === "question"
+    return this.phase === "question" && !this.paused
+  }
+
+  get isPaused(): boolean {
+    return this.paused
+  }
+
+  getPauseSnapshot(): {
+    paused: boolean
+    remainingMs: number | null
+    deadline: number | null
+  } {
+    const remainingMs = this.timer
+      ? Math.max(0, (this.timerDeadline ?? Date.now()) - Date.now())
+      : this.timerRemainingMs
+
+    return {
+      paused: this.paused,
+      remainingMs,
+      deadline:
+        !this.paused && remainingMs !== null ? Date.now() + remainingMs : null,
+    }
   }
 
   /**
@@ -114,6 +138,7 @@ export class StudioShowCoordinator {
    */
   hasAuthoredOpeningAtStart(): boolean {
     const first = this.runner.getItem(0)
+
     return first?.kind === "opening"
   }
 
@@ -128,21 +153,25 @@ export class StudioShowCoordinator {
     }
 
     const currentStep = this.runner.getCurrentStep()
-    if (!currentStep || currentStep.item.kind !== "question") {
+
+    if (currentStep?.item.kind !== "question") {
       return false
     }
 
     const currentQIdx = this.getQuestionIndex(currentStep.item.questionId)
+
     if (currentQIdx !== questionIndex) {
       return false
     }
 
     const nextIndex = this.runner.index + 1
+
     if (nextIndex >= this.runner.length) {
       return false
     }
 
     const nextItem = this.runner.getItem(nextIndex)
+
     if (!nextItem) {
       return false
     }
@@ -165,17 +194,80 @@ export class StudioShowCoordinator {
       clearTimeout(this.timer)
       this.timer = null
     }
+
+    this.timerDeadline = null
+    this.timerRemainingMs = null
   }
 
   private scheduleAutoAdvance(durationMs: number, expectedEpoch: number): void {
     this.clearTimer()
+    this.timerRemainingMs = durationMs
+
+    if (this.paused) {
+      return
+    }
+
+    this.timerDeadline = Date.now() + durationMs
     this.timer = setTimeout(() => {
       this.timer = null
+      this.timerDeadline = null
+      this.timerRemainingMs = null
 
-      if (this.epoch === expectedEpoch && this.phase === "scene") {
+      if (
+        !this.paused &&
+        this.epoch === expectedEpoch &&
+        this.phase === "scene"
+      ) {
         this.advanceScene()
       }
     }, durationMs)
+  }
+
+  pauseGame(): boolean {
+    if (this.paused || (this.phase !== "scene" && this.phase !== "question")) {
+      return false
+    }
+
+    this.paused = true
+    this.pausedAt = Date.now()
+
+    if (this.timer) {
+      clearTimeout(this.timer)
+      this.timer = null
+      this.timerRemainingMs = Math.max(
+        0,
+        (this.timerDeadline ?? Date.now()) - Date.now(),
+      )
+      this.timerDeadline = null
+    }
+
+    this.seq += 1
+    this.callbacks.onBroadcastState()
+
+    return true
+  }
+
+  resumeGame(): boolean {
+    if (!this.paused) {
+      return false
+    }
+
+    const pausedFor = this.pausedAt === null ? 0 : Date.now() - this.pausedAt
+    this.paused = false
+    this.pausedAt = null
+    this.startedAt += pausedFor
+    this.seq += 1
+
+    if (this.timerRemainingMs !== null) {
+      const remaining = this.timerRemainingMs
+      const expectedEpoch = this.epoch
+      this.timerRemainingMs = null
+      this.scheduleAutoAdvance(remaining, expectedEpoch)
+    }
+
+    this.callbacks.onBroadcastState()
+
+    return true
   }
 
   /**
@@ -198,7 +290,6 @@ export class StudioShowCoordinator {
     this.epoch += 1
     this.seq += 1
     this.startedAt = Date.now()
-    this.currentStepId = step.item.id
 
     if (step.item.kind === "question") {
       this.phase = "question"
@@ -227,7 +318,7 @@ export class StudioShowCoordinator {
     epoch?: number,
     timelineStepIndex?: number,
   ): boolean {
-    if (this.phase !== "scene") {
+    if (this.phase !== "scene" || this.paused) {
       return false
     }
 
@@ -244,7 +335,9 @@ export class StudioShowCoordinator {
 
     const activeStep = this.runner.getCurrentStep()
     const activeSceneId =
-      activeStep?.item.kind !== "question" ? activeStep?.item.sceneId : undefined
+      activeStep?.item.kind !== "question"
+        ? activeStep?.item.sceneId
+        : undefined
 
     if (
       sceneId &&
@@ -271,7 +364,6 @@ export class StudioShowCoordinator {
     this.epoch += 1
     this.seq += 1
     this.startedAt = Date.now()
-    this.currentStepId = step.item.id
 
     if (step.item.kind === "question") {
       this.phase = "question"
@@ -330,7 +422,7 @@ export class StudioShowCoordinator {
    * If the previous step is a question, reopens it for a fresh voting round.
    */
   previousScene(): boolean {
-    if (!this.canPrevious().can) {
+    if (this.paused || !this.canPrevious().can) {
       return false
     }
 
@@ -346,11 +438,11 @@ export class StudioShowCoordinator {
     this.epoch += 1
     this.seq += 1
     this.startedAt = Date.now()
-    this.currentStepId = step.item.id
 
     if (step.item.kind === "question") {
       this.phase = "question"
       const qIdx = this.getQuestionIndex(step.item.questionId)
+
       try {
         if (this.callbacks.onReopenQuestion) {
           void this.callbacks.onReopenQuestion(qIdx)
@@ -359,6 +451,7 @@ export class StudioShowCoordinator {
         }
       } catch {
         this.runner.jumpTo(oldIndex)
+
         return false
       }
     } else {
@@ -382,7 +475,7 @@ export class StudioShowCoordinator {
    * Advances the timeline runner to the next item (scene or next question).
    */
   onQuestionCompleted(_currentQuestionIndex: number): void {
-    if (this.phase !== "question") {
+    if (this.phase !== "question" || this.paused) {
       return
     }
 
@@ -402,7 +495,6 @@ export class StudioShowCoordinator {
     this.epoch += 1
     this.seq += 1
     this.startedAt = Date.now()
-    this.currentStepId = step.item.id
 
     if (step.item.kind === "question") {
       this.phase = "question"

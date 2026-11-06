@@ -8,7 +8,6 @@ import {
   createDefaultRosterExtras,
   quizExtrasV2Schema,
   type AnyQuizExtras,
-  type EnhancedBundle,
   type QuizExtrasV2,
   type SceneConfig,
   type TimelineItem,
@@ -49,6 +48,7 @@ export function authoredShowToNativeBundleDraft(
   const diagnostics: ConversionDiagnostic[] = []
 
   const parseResult = tadaShowV1Schema.safeParse(showInput)
+
   if (!parseResult.success) {
     for (const issue of parseResult.error.issues) {
       diagnostics.push({
@@ -107,6 +107,7 @@ export function authoredShowToNativeBundleDraft(
       const answerVisuals: NonNullable<PerQuestionItem["answerVisuals"]> = []
       for (let aIdx = 0; aIdx < card.answers.length; aIdx += 1) {
         const ans = card.answers[aIdx]
+
         if (ans.display !== "text" || ans.imageUrl) {
           answerVisuals.push({
             answerIndex: aIdx,
@@ -118,27 +119,35 @@ export function authoredShowToNativeBundleDraft(
       }
 
       const qExtras: PerQuestionItem = {}
+
       if (answerVisuals.length > 0) {
         qExtras.answerVisuals = answerVisuals
       }
+
       if (card.reveal) {
         qExtras.reveal = card.reveal
       }
+
       if (card.interlude) {
         qExtras.interlude = card.interlude
       }
+
       if (card.questionEntrance && card.questionEntrance.preset !== "none") {
         qExtras.questionEntrance = card.questionEntrance
       }
+
       if (card.background) {
         qExtras.background = card.background
       }
+
       if (card.audioCues) {
         qExtras.audioCues = card.audioCues
       }
+
       if (card.stageAnimations) {
         qExtras.stageAnimations = card.stageAnimations
       }
+
       if (card.questionDecoration) {
         qExtras.questionDecoration = card.questionDecoration
       }
@@ -177,7 +186,9 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
+
         case "animation":
           sceneConfig = {
             id: sceneId,
@@ -196,7 +207,9 @@ export function authoredShowToNativeBundleDraft(
               : {}),
             ...sceneAppearance,
           }
+
           break
+
         case "media":
           sceneConfig = {
             id: sceneId,
@@ -227,7 +240,9 @@ export function authoredShowToNativeBundleDraft(
               : {}),
             ...sceneAppearance,
           }
+
           break
+
         case "leaderboard":
           sceneConfig = {
             id: sceneId,
@@ -237,7 +252,9 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
+
         case "interimResults":
           sceneConfig = {
             id: sceneId,
@@ -247,7 +264,9 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
+
         case "answerRecap": {
           const resolvedStartQId = card.startQuestionKey
             ? keyToQuestionId.get(card.startQuestionKey)
@@ -271,8 +290,10 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
         }
+
         case "countdown":
           sceneConfig = {
             id: sceneId,
@@ -282,7 +303,9 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
+
         case "opening":
           sceneConfig = {
             id: sceneId,
@@ -322,7 +345,9 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
+
         case "closing":
           sceneConfig = {
             id: sceneId,
@@ -362,6 +387,7 @@ export function authoredShowToNativeBundleDraft(
             advance: card.advance,
             ...sceneAppearance,
           }
+
           break
       }
 
@@ -383,6 +409,7 @@ export function authoredShowToNativeBundleDraft(
   }
 
   const baseParse = quizzValidator.safeParse(baseQuizzCandidate)
+
   if (!baseParse.success) {
     for (const issue of baseParse.error.issues) {
       diagnostics.push({
@@ -394,6 +421,7 @@ export function authoredShowToNativeBundleDraft(
 
     return { ok: false, diagnostics }
   }
+
   const quizz = baseParse.data
 
   const baseDigest = computeCanonicalBaseDigest(quizz)
@@ -427,6 +455,7 @@ export function authoredShowToNativeBundleDraft(
   if (show.settings && show.settings.length > 0) {
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
       const s = show.settings[sIdx]
+
       if (s.targetKey !== "show") {
         diagnostics.push({
           path: ["settings", String(sIdx), "targetKey"],
@@ -434,16 +463,14 @@ export function authoredShowToNativeBundleDraft(
           severity: "error",
         })
       }
+
       if (s.scope === "leaderboard") {
         if (s.property === "mode" && typeof s.valueJson === "string") {
           leaderboardExtras = {
             mode: s.valueJson as any,
             ...leaderboardExtras,
           }
-        } else if (
-          s.property === "everyN" &&
-          typeof s.valueJson === "number"
-        ) {
+        } else if (s.property === "everyN" && typeof s.valueJson === "number") {
           leaderboardExtras = {
             mode: leaderboardExtras?.mode ?? "everyN",
             ...leaderboardExtras,
@@ -457,6 +484,7 @@ export function authoredShowToNativeBundleDraft(
           for (let kIdx = 0; kIdx < s.valueJson.length; kIdx += 1) {
             const k = String(s.valueJson[kIdx])
             const resolvedQId = keyToQuestionId.get(k)
+
             if (!resolvedQId) {
               diagnostics.push({
                 path: ["settings", String(sIdx), "valueJson", String(kIdx)],
@@ -516,12 +544,12 @@ export function authoredShowToNativeBundleDraft(
     audio: audioExtras,
     perQuestion,
     roster: rosterExtras,
-    authoring:
-      show.note !== undefined ? { showNote: show.note } : undefined,
+    authoring: show.note !== undefined ? { showNote: show.note } : undefined,
     ...(mediaCatalogExtras ? { mediaCatalog: mediaCatalogExtras } : {}),
   }
 
   const extrasParse = quizExtrasV2Schema.safeParse(extrasCandidate)
+
   if (!extrasParse.success) {
     for (const issue of extrasParse.error.issues) {
       diagnostics.push({
@@ -564,14 +592,10 @@ export function nativeBundleToAuthoredShow(
   // Ensure V2 extras for timeline processing
   const extrasV2: QuizExtrasV2 = isQuizExtrasV2(bundle.extras)
     ? bundle.extras
-    : upgradeLegacyExtrasToV2(
-        quizz,
-        bundle.extras,
-        {
-          quizId: bundle.extras.quizId,
-          baseDigest: bundle.extras.baseDigest,
-        },
-      )
+    : upgradeLegacyExtrasToV2(quizz, bundle.extras, {
+        quizId: bundle.extras.quizId,
+        baseDigest: bundle.extras.baseDigest,
+      })
 
   const cards: AuthoredCard[] = []
   const questionMap = new Map<string, Record<string, unknown>>()
@@ -579,6 +603,7 @@ export function nativeBundleToAuthoredShow(
 
   for (let i = 0; i < extrasV2.questionIds.length; i += 1) {
     const qId = extrasV2.questionIds[i]
+
     if (questions[i]) {
       questionMap.set(qId, questions[i])
     }
@@ -600,9 +625,7 @@ export function nativeBundleToAuthoredShow(
         continue
       }
 
-      const rawAnswers = (
-        Array.isArray(q.answers) ? q.answers : []
-      ) as string[]
+      const rawAnswers = (Array.isArray(q.answers) ? q.answers : []) as string[]
       const rawSolutions = (
         Array.isArray(q.solutions) ? q.solutions : []
       ) as number[]
@@ -700,7 +723,9 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
+
         case "animation":
           cards.push({
             key: sKey,
@@ -719,7 +744,9 @@ export function nativeBundleToAuthoredShow(
               : {}),
             ...sceneAppearance,
           })
+
           break
+
         case "media":
           cards.push({
             key: sKey,
@@ -727,7 +754,9 @@ export function nativeBundleToAuthoredShow(
             mediaUrl: scene.mediaUrl,
             mediaType: scene.mediaType,
             title: scene.title,
-            ...(scene.subtitle !== undefined ? { subtitle: scene.subtitle } : {}),
+            ...(scene.subtitle !== undefined
+              ? { subtitle: scene.subtitle }
+              : {}),
             ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
             ...(scene.textOverlay !== undefined
               ? { textOverlay: scene.textOverlay }
@@ -750,7 +779,9 @@ export function nativeBundleToAuthoredShow(
               : {}),
             ...sceneAppearance,
           })
+
           break
+
         case "leaderboard":
           cards.push({
             key: sKey,
@@ -760,7 +791,9 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
+
         case "interimResults":
           cards.push({
             key: sKey,
@@ -770,7 +803,9 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
+
         case "answerRecap": {
           const startQuestionKey = scene.startQuestionId
             ? questionIdToCardKey.get(scene.startQuestionId)
@@ -794,8 +829,10 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
         }
+
         case "countdown":
           cards.push({
             key: sKey,
@@ -805,7 +842,9 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
+
         case "opening":
           cards.push({
             key: sKey,
@@ -845,7 +884,9 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
+
         case "closing":
           cards.push({
             key: sKey,
@@ -885,6 +926,7 @@ export function nativeBundleToAuthoredShow(
             advance: scene.advance,
             ...sceneAppearance,
           })
+
           break
       }
     }
@@ -892,6 +934,7 @@ export function nativeBundleToAuthoredShow(
 
   // Preserve any non-default audio, teams, leaderboard, or roster in settings
   const settings: AuthoredSetting[] = []
+
   if (extrasV2.leaderboard) {
     if (extrasV2.leaderboard.mode) {
       settings.push({
@@ -901,6 +944,7 @@ export function nativeBundleToAuthoredShow(
         valueJson: extrasV2.leaderboard.mode,
       })
     }
+
     if (extrasV2.leaderboard.everyN !== undefined) {
       settings.push({
         scope: "leaderboard",
@@ -909,6 +953,7 @@ export function nativeBundleToAuthoredShow(
         valueJson: extrasV2.leaderboard.everyN,
       })
     }
+
     if (
       extrasV2.leaderboard.afterQuestionIds &&
       extrasV2.leaderboard.afterQuestionIds.length > 0
@@ -916,6 +961,7 @@ export function nativeBundleToAuthoredShow(
       const mappedKeys = extrasV2.leaderboard.afterQuestionIds
         .map((qId) => questionIdToCardKey.get(qId))
         .filter((k): k is string => Boolean(k))
+
       if (mappedKeys.length > 0) {
         settings.push({
           scope: "leaderboard",
@@ -953,7 +999,8 @@ export function nativeBundleToAuthoredShow(
   // Preserve roster configuration (Gate D02: omit participant PII by default unless explicitly requested)
   if (
     extrasV2.roster &&
-    (extrasV2.roster.phoneInviteOnly || (extrasV2.roster.participants && extrasV2.roster.participants.length > 0))
+    (extrasV2.roster.phoneInviteOnly ||
+      (extrasV2.roster.participants && extrasV2.roster.participants.length > 0))
   ) {
     const shouldIncludeParticipants = Boolean(options?.includePrivateRoster)
     const exportRoster = {

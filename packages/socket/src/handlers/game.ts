@@ -119,22 +119,29 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     withManagerGame(gameId, socket, (game) => game.start(socket)),
   )
 
-  socket.on(EVENTS.PLAYER.SELECTED_ANSWER, ({ gameId, data }) =>
-    withPlayerGame(gameId, socket, (game) =>
-      game.selectAnswer(socket, data.answerKeys),
-    ),
-  )
+  socket.on(EVENTS.PLAYER.SELECTED_ANSWER, ({ gameId, data }, ack) => {
+    let result: { accepted: boolean; reason?: string } = {
+      accepted: false,
+      reason: "unauthorized",
+    }
+    withPlayerGame(gameId, socket, (game) => {
+      result = game.selectAnswer(socket, data.answerKeys)
+    })
+    ack?.(result)
+  })
 
   socket.on(EVENTS.MANAGER.ADVANCE, ({ gameId }) =>
     withManagerGame(gameId, socket, (game) => game.advance()),
   )
 
-  socket.on(EVENTS.EXTENSIONS.COMMAND, (command) =>
+  socket.on(EVENTS.EXTENSIONS.COMMAND, (command, ack) =>
     withManagerGame(command.gameId, socket, (game) => {
       try {
-        game.handleExtensionCommand(command)
+        const result = game.handleExtensionCommand(command)
+        ack?.(result)
       } catch (err) {
         const message = err instanceof Error ? err.message : String(err)
+        ack?.({ success: false, error: message })
         socket.emit(EVENTS.GAME.ERROR_MESSAGE, message)
       }
     }),
@@ -149,21 +156,26 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     }
   })
 
-  socket.on(EVENTS.SPECTATOR.JOIN, ({ gameId, inviteCode }: { gameId?: string; inviteCode?: string }) => {
-    let game: Game | undefined
-    if (gameId) {
-      game = registry.getGameById(gameId)
-    } else if (inviteCode) {
-      game = registry.getGameByInviteCode(inviteCode)
-    }
+  socket.on(
+    EVENTS.SPECTATOR.JOIN,
+    ({ gameId, inviteCode }: { gameId?: string; inviteCode?: string }) => {
+      let game: Game | undefined
 
-    if (!game) {
-      socket.emit(EVENTS.GAME.RESET, "errors:game.notFound")
-      return
-    }
+      if (gameId) {
+        game = registry.getGameById(gameId)
+      } else if (inviteCode) {
+        game = registry.getGameByInviteCode(inviteCode)
+      }
 
-    game.joinSpectator(socket)
-  })
+      if (!game) {
+        socket.emit(EVENTS.GAME.RESET, "errors:game.notFound")
+
+        return
+      }
+
+      game.joinSpectator(socket)
+    },
+  )
 
   socket.on(EVENTS.SPECTATOR.LEAVE, ({ gameId }: { gameId?: string }) => {
     const game = gameId
@@ -199,6 +211,7 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
 
     if (playerGame) {
       playerGame.setPlayerDisconnected(socket.id, reason === "ping timeout")
+
       return
     }
 

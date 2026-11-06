@@ -493,12 +493,11 @@ describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2
 
     const previousCommands: SocketCommandRecord[] = []
 
-    await managerPage.exposeFunction(
-      "emitPreviousScreen",
-      (cmd: SocketCommandRecord) => {
-        previousCommands.push(cmd)
-      },
-    )
+    await managerPage.exposeFunction("emitPreviousScreen", (cmd?: unknown) => {
+      if (cmd && typeof cmd === "object" && "action" in cmd) {
+        previousCommands.push(cmd as SocketCommandRecord)
+      }
+    })
 
     await managerPage.setContent(`
       <!DOCTYPE html>
@@ -544,7 +543,9 @@ describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2
       </html>
     `)
 
-    const prevBtn = managerPage.locator('[data-testid="previous-screen-button"]')
+    const prevBtn = managerPage.locator(
+      '[data-testid="previous-screen-button"]',
+    )
     expect(await prevBtn.isVisible()).toBe(true)
 
     // Click button
@@ -687,7 +688,9 @@ describe("PROTOCOL / SPEC: Synthetic DOM Event & Command Flow Simulation (Non-E2
       </html>
     `)
 
-    const entranceContainer = managerPage.locator('[data-testid="question-entrance"]')
+    const entranceContainer = managerPage.locator(
+      '[data-testid="question-entrance"]',
+    )
     expect(await entranceContainer.isVisible()).toBe(true)
     expect(await entranceContainer.getAttribute("data-epoch")).toBe("1")
     const classAttr = await entranceContainer.getAttribute("class")

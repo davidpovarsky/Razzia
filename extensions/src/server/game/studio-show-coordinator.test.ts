@@ -1,8 +1,11 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from "vitest"
-import { StudioShowCoordinator } from "./studio-show-coordinator"
-import { ExtensionGameSession } from "./session"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
+import type {
+  SceneConfig,
+  TimelineItem,
+} from "../../core/studio-timeline-schema"
 import { createDefaultQuizExtrasV2 } from "../../core/studio-timeline-schema"
-import type { TimelineItem, SceneConfig } from "../../core/studio-timeline-schema"
+import { ExtensionGameSession } from "./session"
+import { StudioShowCoordinator } from "./studio-show-coordinator"
 
 describe("StudioShowCoordinator", () => {
   beforeEach(() => {
@@ -33,14 +36,62 @@ describe("StudioShowCoordinator", () => {
   const closeId = "34343434-3434-4434-8434-343434343434"
 
   const scenes: Record<string, SceneConfig> = {
-    [openId]: { id: openId, kind: "opening", title: "Show Intro", durationMs: 4000, advance: "auto" },
-    [transId]: { id: transId, kind: "transition", title: "Moving On", durationMs: 3000, advance: "manual" },
-    [mediaId]: { id: mediaId, kind: "media", mediaUrl: "https://example.com/clip.mp4", mediaType: "video", durationMs: 5000, advance: "auto" },
-    [animId]: { id: animId, kind: "animation", preset: "spotlight", durationMs: 2000, advance: "auto" },
-    [lbId]: { id: lbId, kind: "leaderboard", title: "Top Scores", durationMs: 4000, advance: "manual" },
-    [interimId]: { id: interimId, kind: "interimResults", title: "Interim Standings", durationMs: 3000, advance: "auto" },
-    [cdId]: { id: cdId, kind: "countdown", durationSeconds: 5, advance: "auto" },
-    [closeId]: { id: closeId, kind: "closing", title: "Goodnight", durationMs: 5000, advance: "auto" },
+    [openId]: {
+      id: openId,
+      kind: "opening",
+      title: "Show Intro",
+      durationMs: 4000,
+      advance: "auto",
+    },
+    [transId]: {
+      id: transId,
+      kind: "transition",
+      title: "Moving On",
+      durationMs: 3000,
+      advance: "manual",
+    },
+    [mediaId]: {
+      id: mediaId,
+      kind: "media",
+      mediaUrl: "https://example.com/clip.mp4",
+      mediaType: "video",
+      durationMs: 5000,
+      advance: "auto",
+    },
+    [animId]: {
+      id: animId,
+      kind: "animation",
+      preset: "spotlight",
+      durationMs: 2000,
+      advance: "auto",
+    },
+    [lbId]: {
+      id: lbId,
+      kind: "leaderboard",
+      title: "Top Scores",
+      durationMs: 4000,
+      advance: "manual",
+    },
+    [interimId]: {
+      id: interimId,
+      kind: "interimResults",
+      title: "Interim Standings",
+      durationMs: 3000,
+      advance: "auto",
+    },
+    [cdId]: {
+      id: cdId,
+      kind: "countdown",
+      durationSeconds: 5,
+      advance: "auto",
+    },
+    [closeId]: {
+      id: closeId,
+      kind: "closing",
+      title: "Goodnight",
+      durationMs: 5000,
+      advance: "auto",
+    },
   }
 
   const timeline: TimelineItem[] = [
@@ -229,7 +280,10 @@ describe("StudioShowCoordinator", () => {
     expect(coordinator.currentIndex).toBe(0)
 
     // Wrong sceneId rejected
-    const rejectedWrongId = coordinator.advanceScene("wrong-scene-id", currentEpoch)
+    const rejectedWrongId = coordinator.advanceScene(
+      "wrong-scene-id",
+      currentEpoch,
+    )
     expect(rejectedWrongId).toBe(false)
     expect(coordinator.currentIndex).toBe(0)
 
@@ -391,7 +445,9 @@ describe("StudioShowCoordinator", () => {
       questionIds,
       defaults: dummyDefaults,
       callbacks: {
-        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
         onFinish: vi.fn(),
         onBroadcastState: vi.fn(),
       },
@@ -404,12 +460,16 @@ describe("StudioShowCoordinator", () => {
     // Video finishes after 3500ms -> manager sends advanceScene(sceneId, epoch, stepIndex)
     vi.advanceTimersByTime(3500)
     const epochAtOpen = coordinator.currentEpoch
-    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(true)
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(
+      true,
+    )
     expect(coordinator.currentPhase).toBe("question")
     expect(startedQuestions).toEqual([0])
 
     // Duplicate/late mediaEnded signal for step 0 is rejected idempotently
-    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(false)
+    expect(coordinator.advanceScene(onMediaEndSceneId, epochAtOpen, 0)).toBe(
+      false,
+    )
   })
 
   it("does NOT prematurely cut an 8s or 20s video at default durationMs=5000 when advance is onMediaEnd", () => {
@@ -437,7 +497,9 @@ describe("StudioShowCoordinator", () => {
       questionIds,
       defaults: dummyDefaults,
       callbacks: {
-        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
         onFinish: vi.fn(),
         onBroadcastState: vi.fn(),
       },
@@ -498,7 +560,9 @@ describe("StudioShowCoordinator", () => {
       questionIds,
       defaults: dummyDefaults,
       callbacks: {
-        onStartQuestion: (qIdx) => startedQuestions.push(qIdx),
+        onStartQuestion: (qIdx) => {
+          startedQuestions.push(qIdx)
+        },
         onFinish: vi.fn(),
         onBroadcastState: vi.fn(),
       },
@@ -565,6 +629,8 @@ describe("StudioShowCoordinator", () => {
         title: "title" in scene ? scene.title : "Recap",
         startQuestionId: q1Id,
         endQuestionId: q2Id,
+        totalQuestionsInRange: 2,
+        completedQuestionsCount: 1,
         mode: "mostSelected",
         maxItemsPerPage: 4,
         showCounts: true,
@@ -593,7 +659,7 @@ describe("StudioShowCoordinator", () => {
 
     coordinator.start() // Q1
     coordinator.onQuestionCompleted(0) // Q2
-    coordinator.onQuestionCompleted(1) // answerRecap scene at stepIndex 2
+    coordinator.onQuestionCompleted(1) // AnswerRecap scene at stepIndex 2
     expect(coordinator.currentPhase).toBe("scene")
     expect(coordinator.currentStep?.item.kind).toBe("answerRecap")
 
@@ -605,5 +671,54 @@ describe("StudioShowCoordinator", () => {
     expect(activeData?.answerRecap?.items[0].questionText).toBe(
       "Favorite color?",
     )
+  })
+})
+
+describe("P0 authoritative scene pause", () => {
+  beforeEach(() => vi.useFakeTimers())
+  afterEach(() => vi.useRealTimers())
+
+  it("preserves an authored scene deadline and rejects stale media advance while paused", () => {
+    const sceneId = "71111111-1111-4111-8111-111111111111"
+    let finished = false
+    const coordinator = new StudioShowCoordinator({
+      timeline: [{ id: "opening", kind: "opening", sceneId }],
+      scenes: {
+        [sceneId]: {
+          id: sceneId,
+          kind: "opening",
+          title: "Opening",
+          durationMs: 5000,
+          advance: "auto",
+        },
+      },
+      questionIds: [],
+      defaults: createDefaultQuizExtrasV2("quiz", [], "0".repeat(64)).defaults,
+      callbacks: {
+        onStartQuestion: () => undefined,
+        onFinish: () => {
+          finished = true
+        },
+        onBroadcastState: () => undefined,
+      },
+    })
+
+    coordinator.start()
+    vi.advanceTimersByTime(2000)
+    expect(coordinator.pauseGame()).toBe(true)
+    const remaining = coordinator.getPauseSnapshot().remainingMs
+    expect(remaining).toBe(3000)
+    expect(coordinator.advanceScene(sceneId, coordinator.currentEpoch, 0)).toBe(
+      false,
+    )
+    vi.advanceTimersByTime(10000)
+    expect(finished).toBe(false)
+    expect(coordinator.getPauseSnapshot().remainingMs).toBe(remaining)
+
+    expect(coordinator.resumeGame()).toBe(true)
+    vi.advanceTimersByTime(2999)
+    expect(finished).toBe(false)
+    vi.advanceTimersByTime(1)
+    expect(finished).toBe(true)
   })
 })

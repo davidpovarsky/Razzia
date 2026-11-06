@@ -1,25 +1,25 @@
+import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
+import type { Quizz } from "@razzia/common/types/game"
+import { STATUS } from "@razzia/common/types/game/status"
+import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
+import { PlayerManager } from "@razzia/socket/services/game/player-manager"
+import { RoundManager } from "@razzia/socket/services/game/round-manager"
+import { createFakeIo } from "@razzia/socket/test/fake-io"
+import { SECOND_MS } from "@razzia/socket/utils/sleep"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtras,
   duplicateQuestion,
   generateQuestionIds,
+  remapQuestionIds,
   removeQuestion,
   reorderQuestionIds,
-  remapQuestionIds,
   type QuizExtrasV1,
 } from "../core/index"
 import { ExtensionGameSession } from "./game/session"
-import { CompositeStorageService } from "./storage/service"
 import { CompositeStorageError } from "./storage/error"
-import { RoundManager } from "@razzia/socket/services/game/round-manager"
-import { PlayerManager } from "@razzia/socket/services/game/player-manager"
-import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
-import { QUIZZ_MODES, EVENTS } from "@razzia/common/constants"
-import { STATUS } from "@razzia/common/types/game/status"
-import type { Quizz } from "@razzia/common/types/game"
-import { createFakeIo } from "@razzia/socket/test/fake-io"
-import { SECOND_MS } from "@razzia/socket/utils/sleep"
+import { CompositeStorageService } from "./storage/service"
 
 describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data", () => {
   beforeEach(() => {
@@ -223,6 +223,9 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
         getAnswersCount: () => round.getAnswerCount(),
         canPrevious: () => round.canPrevious(),
         isAcceptingAnswers: () => round.isCurrentlyAcceptingAnswers,
+        pauseGame: () => round.pauseGame(),
+        resumeGame: () => round.resumeGame(),
+        getPauseSnapshot: () => round.getPauseSnapshot(),
         skipQuestion: (reason) => round.skipQuestion(reason),
         replayFromCheckpoint: (qIdx) => round.replayFromCheckpoint(qIdx),
         endOrSkipInterlude: () => round.endOrSkipInterlude(),
@@ -1035,7 +1038,8 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
   // ── P1: Authoritative Previous Screen Navigation Tests ─────────────────────
   describe("P1: Authoritative Previous Screen Navigation", () => {
     it("requires confirmation when PREVIOUS_SCREEN is requested during active answering with submitted answers", async () => {
-      const { round, session, p1Socket, p2Socket, reachAnswers, start } = setupGame()
+      const { round, session, p1Socket, p2Socket, reachAnswers, start } =
+        setupGame()
       await start()
 
       // Complete Q0 and advance to Q1
@@ -1059,6 +1063,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       expect(state?.extras.answersReceived).toBe(1)
 
       let thrown: unknown = null
+
       try {
         session?.handleCommand(
           {
@@ -1102,6 +1107,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       await start()
 
       let thrown: unknown = null
+
       try {
         session?.handleCommand(
           {
@@ -1157,8 +1163,15 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
     })
 
     it("reopens question for fresh vote, removes old question contribution, and preserves other questions", async () => {
-      const { round, session, playerManager, p1Socket, p2Socket, reachAnswers, start } =
-        setupGame()
+      const {
+        round,
+        session,
+        playerManager,
+        p1Socket,
+        p2Socket,
+        reachAnswers,
+        start,
+      } = setupGame()
       await start()
 
       // Q0: Alice scores 1000 points (solution is [0]), Bob scores 0
@@ -1173,7 +1186,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       expect(bob?.points).toBe(0)
 
       // Advance to Q1
-      round.nextScreen() // to interlude
+      round.nextScreen() // To interlude
       round.endOrSkipInterlude()
       await reachAnswers()
       expect(round.currentQuestionIndex).toBe(1)
@@ -1211,6 +1224,78 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       // Results revealed: newly computed total is new Q0 (1000 each) + original Q1 (1000 each) = 2000 each
       expect(playerManager.findById("p1")?.points).toBe(2000)
       expect(playerManager.findById("p2")?.points).toBe(2000)
+    })
+  })
+
+  describe("P0 authoritative pause/resume", () => {
+    it("freezes the vote deadline, rejects paused votes, and resumes once", async () => {
+      const { round, session, p1Socket, p2Socket, playerResults, start } =
+        setupGame()
+      await start()
+      round.selectAnswer(p1Socket, [0])
+      const before = round.getPauseSnapshot().remainingMs
+
+      const paused = session?.handleCommand(
+        {
+          v: 1,
+          gameId: "game-1",
+          action: "PAUSE_GAME",
+          payload: { epoch: session.currentEpoch },
+          requestId: "pause-q1",
+        },
+        true,
+      )
+      expect(paused?.success).toBe(true)
+      expect(round.isPaused).toBe(true)
+      expect(session?.getStateSnapshot("manager", []).pause?.paused).toBe(true)
+
+      round.selectAnswer(p2Socket, [1])
+      expect(round.getAnswerCount()).toBe(1)
+      await vi.advanceTimersByTimeAsync(20 * SECOND_MS)
+      expect(round.currentStepName).toBeNull()
+      expect(round.getPauseSnapshot().remainingMs).toBe(before)
+
+      const resumed = session?.handleCommand(
+        {
+          v: 1,
+          gameId: "game-1",
+          action: "RESUME_GAME",
+          payload: { epoch: session.currentEpoch },
+          requestId: "resume-q1",
+        },
+        true,
+      )
+      expect(resumed?.success).toBe(true)
+      expect(round.isPaused).toBe(false)
+
+      round.selectAnswer(p2Socket, [1])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.currentStepName).toBe("reveal")
+      expect(playerResults).toHaveLength(2)
+    })
+
+    it("freezes and resumes an automatic interlude without stale advancement", async () => {
+      const { round, session, p1Socket, p2Socket, start, reachAnswers } =
+        setupGame()
+      await start()
+      round.selectAnswer(p1Socket, [0])
+      round.selectAnswer(p2Socket, [1])
+      await vi.advanceTimersByTimeAsync(SECOND_MS)
+      expect(round.nextScreen()).toBe(true)
+      expect(round.currentStepName).toBe("interlude")
+
+      expect(round.pauseGame()).toBe(true)
+      const remaining = round.getPauseSnapshot().remainingMs
+      expect(remaining).toBe(3000)
+      await vi.advanceTimersByTimeAsync(10000)
+      expect(round.currentQuestionIndex).toBe(0)
+      expect(round.currentStepName).toBe("interlude")
+
+      expect(round.resumeGame()).toBe(true)
+      await vi.advanceTimersByTimeAsync(remaining ?? 0)
+      await reachAnswers()
+      expect(round.currentQuestionIndex).toBe(1)
+      expect(session?.currentPhase).toBe("question")
     })
   })
 })

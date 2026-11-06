@@ -112,10 +112,32 @@ export interface ServerToClientEvents {
 
 type ClientEventValidators = typeof clientEventValidators
 
+export interface AnswerSubmissionAck {
+  accepted: boolean
+  reason?: string
+}
+
+export interface ExtensionCommandAck {
+  success: boolean
+  deduplicated?: boolean
+  action?: string
+  error?: string
+}
+
 export type ClientToServerEvents = {
-  [E in keyof ClientEventValidators]: (
-    _message: z.infer<ClientEventValidators[E]>,
-  ) => void
+  [
+    E in keyof ClientEventValidators
+  ]: E extends typeof EVENTS.PLAYER.SELECTED_ANSWER
+    ? (
+        _message: z.infer<ClientEventValidators[E]>,
+        _ack?: (_result: AnswerSubmissionAck) => void,
+      ) => void
+    : E extends typeof EVENTS.EXTENSIONS.COMMAND
+      ? (
+          _message: z.infer<ClientEventValidators[E]>,
+          _ack?: (_result: ExtensionCommandAck) => void,
+        ) => void
+      : (_message: z.infer<ClientEventValidators[E]>) => void
 } & {
   disconnect: () => void
 }

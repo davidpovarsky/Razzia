@@ -36,7 +36,7 @@ interface Props {
 }
 
 const Responses = ({ data, extensionState: propExtensionState }: Props) => {
-  const { question, answers, responses, solutions, type, note } = data
+  const { question, answers, responses, solutions, type } = data
   const { ResponsesComponent } = QUESTION_REGISTRY[type]
   const contextExtensionState = useExtensionState()
   const { questionStates } = useQuestionStore()
@@ -268,9 +268,15 @@ const Responses = ({ data, extensionState: propExtensionState }: Props) => {
     let max = 0
     for (const count of Object.values(responses)) {
       const num = Number(count) || 0
-      if (num > max) max = num
+
+      if (num > max) {
+        max = num
+      }
     }
-    if (max === 0) return []
+
+    if (max === 0) {
+      return []
+    }
     return answers
       .map((_, i) => i)
       .filter((i) => (Number(responses[i]) || 0) === max)

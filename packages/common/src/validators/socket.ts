@@ -37,6 +37,8 @@ export const clientEventValidators = {
       "REVEAL_MEDIA",
       "ASSIGN_TEAM",
       "END_ANSWER_TIMER",
+      "PAUSE_GAME",
+      "RESUME_GAME",
       "NEXT_SCREEN",
       "PREVIOUS_SCREEN",
       "SKIP_QUESTION",

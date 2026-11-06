@@ -303,8 +303,7 @@ export class CompositeStorageService {
     const { quizz, extras, baseDigest } = this.getCompositeQuiz(quizId)
 
     const effectiveExtras =
-      extras ??
-      upgradeLegacyExtrasToV2(quizz, null, { quizId, baseDigest })
+      extras ?? upgradeLegacyExtrasToV2(quizz, null, { quizId, baseDigest })
 
     return {
       bundleVersion: 1,
@@ -332,12 +331,14 @@ export class CompositeStorageService {
       (payload as { format?: unknown }).format === "tada-show"
     ) {
       const converted = authoredShowToNativeBundleDraft(payload)
+
       if (!converted.ok || !converted.bundleDraft) {
         throw new CompositeStorageError(
           `Invalid authored show: ${converted.diagnostics.map((d) => d.message).join(", ")}`,
           StatusCodes.BAD_REQUEST,
         )
       }
+
       effectivePayload = {
         bundleVersion: 1,
         quizz: converted.bundleDraft.quizz,
@@ -358,6 +359,7 @@ export class CompositeStorageService {
       }
 
       const mediaCheck = validateBundleMedia(effectivePayload)
+
       if (!mediaCheck.ok) {
         throw new CompositeStorageError(
           `errors:extensions.invalidMediaUrl: ${mediaCheck.path}`,
@@ -367,13 +369,14 @@ export class CompositeStorageService {
 
       const { quizz, extras } = effectivePayload
       const quizzValidation = quizzValidator.safeParse(quizz)
+
       if (!quizzValidation.success) {
         throw new CompositeStorageError(
           `Invalid base quizz in bundle: ${quizzValidation.error.issues.map((i) => i.message).join(", ")}`,
           StatusCodes.BAD_REQUEST,
         )
       }
-      const validatedQuizz = quizzValidation.data
+
       const questionsCount =
         typeof quizz === "object" &&
         quizz !== null &&
@@ -411,6 +414,7 @@ export class CompositeStorageService {
         extras.schemaVersion === 2
           ? extras.timeline.map((item) => {
               const freshTimelineItemId = crypto.randomUUID()
+
               if (item.kind === "question") {
                 const freshId = idMap.get(item.questionId)
 
@@ -465,7 +469,7 @@ export class CompositeStorageService {
           perQuestion: freshPerQuestion,
           ...(freshLeaderboard ? { leaderboard: freshLeaderboard } : {}),
           ...(freshTimeline ? { timeline: freshTimeline } : {}),
-        } as AnyQuizExtras
+        }
 
         const validated = schemaToUse.parse(importedExtras)
 
@@ -500,6 +504,7 @@ export class CompositeStorageService {
     // Legacy quiz format
     const normalized = normalizeLegacyQuizz(payload)
     const quizzValidation = quizzValidator.safeParse(normalized)
+
     if (!quizzValidation.success) {
       throw new CompositeStorageError(
         `Invalid legacy quiz format: ${quizzValidation.error.issues.map((i) => i.message).join(", ")}`,
@@ -508,10 +513,17 @@ export class CompositeStorageService {
     }
 
     const validatedQuizz = quizzValidation.data
+
     if (Array.isArray(validatedQuizz.questions)) {
       for (let i = 0; i < validatedQuizz.questions.length; i += 1) {
         const q = validatedQuizz.questions[i]
-        if (q && typeof q === "object" && "media" in q && (q as { media?: { url?: string } }).media?.url) {
+
+        if (
+          q &&
+          typeof q === "object" &&
+          "media" in q &&
+          (q as { media?: { url?: string } }).media?.url
+        ) {
           if (!isSafeMediaUrl((q as { media: { url: string } }).media.url)) {
             throw new CompositeStorageError(
               `errors:extensions.invalidMediaUrl: questions[${i}].media`,

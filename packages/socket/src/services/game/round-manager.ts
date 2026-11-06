@@ -21,21 +21,20 @@ import {
 } from "@razzia/common/types/game"
 import type { Server, Socket } from "@razzia/common/types/game/socket"
 import {
-  type Status,
   STATUS,
+  type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
 import type {
+  EstimationDistribution,
   RevealDistributionSnapshot,
   RevealOptionDistribution,
-  EstimationDistribution,
 } from "@razzia/extensions/core"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
 import {
   countAnswers,
-  scoreQuestion,
   recomputeScoresFromLedger,
   type LedgerQuestionEntry,
   type ScoredPlayer,
@@ -89,12 +88,20 @@ export interface RoundManagerOptions {
   onResultsCalculated?: (dist: RevealDistributionSnapshot) => void
   onReplayCheckpoint?: (questionIndex: number) => void
   onPresenceChange?: () => void
-  onAnswerSubmitted?: (playerId: string, answerIds: number[], points: number) => void
+  onAnswerSubmitted?: (
+    playerId: string,
+    answerIds: number[],
+    points: number,
+  ) => void
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
   onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
   onShowStart?: (proceed: () => void) => void
   skipShowStartCountdown?: () => boolean
-  canPreviousTimelineStep?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean }
+  canPreviousTimelineStep?: () => {
+    can: boolean
+    reason?: string
+    willReopenQuestion?: boolean
+  }
   onPreviousTimelineStep?: () => boolean
   hasAuthoredResultsScene?: (questionIndex: number) => boolean
 }
@@ -105,6 +112,30 @@ interface RoundStep {
   skip?: () => boolean
   enter: () => void
   delay: (_settings: GameSettings) => number
+}
+
+interface PendingDelay {
+  timer: NodeJS.Timeout | null
+  deadline: number
+  remainingMs: number
+  generation: number
+  resolve: (_completed: boolean) => void
+}
+
+export interface GamePauseSnapshot {
+  paused: boolean
+  remainingMs: number | null
+  deadline: number | null
+}
+
+export interface AnswerSubmissionResult {
+  accepted: boolean
+  reason?:
+    | "player_not_found"
+    | "not_accepting_answers"
+    | "game_paused"
+    | "duplicate_answer"
+    | "invalid_answer"
 }
 
 export class RoundManager {
@@ -120,9 +151,16 @@ export class RoundManager {
   private tempOldLeaderboard: Player[] | null = null
   private questionsHistory: QuestionResult[] = []
   private autoAdvanceTimer: NodeJS.Timeout | null = null
+  private autoAdvanceDeadline: number | null = null
+  private autoAdvanceRemainingMs: number | null = null
+  private autoAdvanceTotalSeconds: number | null = null
   private interludeTimer: NodeJS.Timeout | null = null
+  private interludeDeadline: number | null = null
+  private interludeRemainingMs: number | null = null
+  private paused = false
+  private pausedAt: number | null = null
   private generation = 0
-  private readonly activeTimeouts = new Set<NodeJS.Timeout>()
+  private readonly pendingDelays = new Set<PendingDelay>()
   private readonly checkpoints = new Map<number, QuestionCheckpoint>()
   private readonly questionLedger = new Map<number, LedgerQuestionEntry>()
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
@@ -141,6 +179,7 @@ export class RoundManager {
           if (this.opts.hasAuthoredResultsScene?.(this.currentQuestion)) {
             return 0
           }
+
           return settings.autoAdvance.responsesDelay
         },
       },
@@ -224,18 +263,51 @@ export class RoundManager {
   }
 
   get isCurrentlyAcceptingAnswers(): boolean {
-    return this.acceptingAnswers
+    return this.acceptingAnswers && !this.paused
+  }
+
+  get isPaused(): boolean {
+    return this.paused
+  }
+
+  getPauseSnapshot(): GamePauseSnapshot {
+    const candidates = [
+      this.opts.cooldown.remainingMs,
+      ...Array.from(this.pendingDelays, (delay) =>
+        delay.timer
+          ? Math.max(0, delay.deadline - Date.now())
+          : delay.remainingMs,
+      ),
+      this.autoAdvanceTimer
+        ? Math.max(0, (this.autoAdvanceDeadline ?? Date.now()) - Date.now())
+        : this.autoAdvanceRemainingMs,
+      this.interludeTimer
+        ? Math.max(0, (this.interludeDeadline ?? Date.now()) - Date.now())
+        : this.interludeRemainingMs,
+    ].filter((value): value is number => value !== null)
+    const remainingMs = candidates.length > 0 ? Math.min(...candidates) : null
+
+    return {
+      paused: this.paused,
+      remainingMs,
+      deadline:
+        !this.paused && remainingMs !== null ? Date.now() + remainingMs : null,
+    }
   }
 
   getRemainingSeconds(): number {
     if (!this.acceptingAnswers || this.question.time === NO_TIME_LIMIT) {
       return 0
     }
+
     const timerRemaining = this.opts.cooldown.remaining
+
     if (timerRemaining !== null) {
       return timerRemaining
     }
+
     const elapsed = (Date.now() - this.startTime) / 1000
+
     return Math.max(0, Math.ceil(this.question.time - elapsed))
   }
 
@@ -286,44 +358,71 @@ export class RoundManager {
 
   // ── Generation & Async Cancellation ─────────────────────────────────────
 
+  private armDelay(delay: PendingDelay): void {
+    if (this.paused || delay.remainingMs <= 0) {
+      if (!this.paused) {
+        this.pendingDelays.delete(delay)
+        delay.resolve(this.generation === delay.generation && this.started)
+      }
+
+      return
+    }
+
+    delay.deadline = Date.now() + delay.remainingMs
+    delay.timer = setTimeout(() => {
+      delay.timer = null
+      delay.remainingMs = 0
+      this.pendingDelays.delete(delay)
+      delay.resolve(this.generation === delay.generation && this.started)
+    }, delay.remainingMs)
+  }
+
   private cancellableSleep(sec: number, gen: number): Promise<boolean> {
     if (sec <= 0) {
       return Promise.resolve(this.generation === gen && this.started)
     }
 
     return new Promise((resolve) => {
-      let timeoutHandle: NodeJS.Timeout | null = null
-
-      timeoutHandle = setTimeout(() => {
-        if (timeoutHandle) {
-          this.activeTimeouts.delete(timeoutHandle)
-        }
-
-        resolve(this.generation === gen && this.started)
-      }, sec * SECOND_MS)
-
-      this.activeTimeouts.add(timeoutHandle)
+      const delay: PendingDelay = {
+        timer: null,
+        deadline: Date.now() + sec * SECOND_MS,
+        remainingMs: sec * SECOND_MS,
+        generation: gen,
+        resolve,
+      }
+      this.pendingDelays.add(delay)
+      this.armDelay(delay)
     })
   }
 
   private cancelPendingAsync(): void {
-    for (const timeoutHandle of this.activeTimeouts) {
-      clearTimeout(timeoutHandle)
+    for (const delay of this.pendingDelays) {
+      if (delay.timer) {
+        clearTimeout(delay.timer)
+      }
+      delay.resolve(false)
     }
 
-    this.activeTimeouts.clear()
+    this.pendingDelays.clear()
   }
 
   // ── Auto advance ─────────────────────────────────────────────────────────
 
   clearAutoAdvance(): void {
-    if (!this.autoAdvanceTimer) {
-      return
+    if (this.autoAdvanceTimer) {
+      clearTimeout(this.autoAdvanceTimer)
+      this.autoAdvanceTimer = null
     }
 
-    clearInterval(this.autoAdvanceTimer)
-    this.autoAdvanceTimer = null
-    this.emitAutoAdvance(null)
+    const hadTimer =
+      this.autoAdvanceDeadline !== null || this.autoAdvanceRemainingMs !== null
+    this.autoAdvanceDeadline = null
+    this.autoAdvanceRemainingMs = null
+    this.autoAdvanceTotalSeconds = null
+
+    if (hadTimer) {
+      this.emitAutoAdvance(null)
+    }
   }
 
   private clearInterludeTimer(): void {
@@ -331,12 +430,60 @@ export class RoundManager {
       clearTimeout(this.interludeTimer)
       this.interludeTimer = null
     }
+
+    this.interludeDeadline = null
+    this.interludeRemainingMs = null
   }
 
   private emitAutoAdvance(state: { seconds: number; total: number } | null) {
     this.opts.io
       .to(this.opts.getManagerId())
       .emit(EVENTS.MANAGER.AUTO_ADVANCE, state)
+  }
+
+  private armAutoAdvance(): void {
+    if (
+      this.paused ||
+      this.autoAdvanceRemainingMs === null ||
+      this.autoAdvanceTotalSeconds === null
+    ) {
+      return
+    }
+
+    this.autoAdvanceDeadline = Date.now() + this.autoAdvanceRemainingMs
+    const tick = () => {
+      this.autoAdvanceTimer = null
+
+      if (this.paused || this.autoAdvanceDeadline === null) {
+        return
+      }
+      this.autoAdvanceRemainingMs = Math.max(
+        0,
+        this.autoAdvanceDeadline - Date.now(),
+      )
+      const seconds = Math.ceil(this.autoAdvanceRemainingMs / SECOND_MS)
+
+      if (seconds > 0) {
+        this.emitAutoAdvance({
+          seconds,
+          total: this.autoAdvanceTotalSeconds ?? seconds,
+        })
+        const delay = Math.max(
+          1,
+          Math.min(SECOND_MS, this.autoAdvanceRemainingMs),
+        )
+        this.autoAdvanceTimer = setTimeout(tick, delay)
+
+        return
+      }
+
+      this.clearAutoAdvance()
+      this.advance()
+    }
+    this.autoAdvanceTimer = setTimeout(
+      tick,
+      Math.max(1, Math.min(SECOND_MS, this.autoAdvanceRemainingMs)),
+    )
   }
 
   private scheduleAutoAdvance(delay: number): void {
@@ -346,22 +493,10 @@ export class RoundManager {
       return
     }
 
-    let remaining = delay
-
-    this.emitAutoAdvance({ seconds: remaining, total: delay })
-
-    this.autoAdvanceTimer = setInterval(() => {
-      remaining -= 1
-
-      if (remaining > 0) {
-        this.emitAutoAdvance({ seconds: remaining, total: delay })
-
-        return
-      }
-
-      this.clearAutoAdvance()
-      this.advance()
-    }, SECOND_MS)
+    this.autoAdvanceRemainingMs = delay * SECOND_MS
+    this.autoAdvanceTotalSeconds = delay
+    this.emitAutoAdvance({ seconds: delay, total: delay })
+    this.armAutoAdvance()
   }
 
   // ── Checkpoint management ────────────────────────────────────────────────
@@ -428,12 +563,14 @@ export class RoundManager {
       ? cp.tempOldLeaderboard.map((p) => ({ ...p }))
       : null
     this.questionsHistory = structuredClone(cp.questionsHistory)
+
     if (cp.questionLedger) {
       this.questionLedger.clear()
       for (const [k, v] of cp.questionLedger.entries()) {
         this.questionLedger.set(k, { ...v, answers: [...v.answers] })
       }
     }
+
     this.playersAnswers = []
     this.latestRevealDistribution = null
 
@@ -461,7 +598,9 @@ export class RoundManager {
     return this.questionsHistory
   }
 
-  getQuestionLedgerEntry(questionIndex: number): LedgerQuestionEntry | undefined {
+  getQuestionLedgerEntry(
+    questionIndex: number,
+  ): LedgerQuestionEntry | undefined {
     return this.questionLedger.get(questionIndex)
   }
 
@@ -471,8 +610,72 @@ export class RoundManager {
 
   // ── Authoritative Controls ──────────────────────────────────────────────
 
+  pauseGame(): boolean {
+    if (!this.started || this.paused) {
+      return false
+    }
+
+    this.paused = true
+    this.pausedAt = Date.now()
+    this.opts.cooldown.pause()
+
+    for (const delay of this.pendingDelays) {
+      if (!delay.timer) {
+        continue
+      }
+      clearTimeout(delay.timer)
+      delay.timer = null
+      delay.remainingMs = Math.max(0, delay.deadline - Date.now())
+    }
+
+    if (this.autoAdvanceTimer) {
+      clearTimeout(this.autoAdvanceTimer)
+      this.autoAdvanceTimer = null
+      this.autoAdvanceRemainingMs = Math.max(
+        0,
+        (this.autoAdvanceDeadline ?? Date.now()) - Date.now(),
+      )
+      this.autoAdvanceDeadline = null
+    }
+
+    if (this.interludeTimer) {
+      clearTimeout(this.interludeTimer)
+      this.interludeTimer = null
+      this.interludeRemainingMs = Math.max(
+        0,
+        (this.interludeDeadline ?? Date.now()) - Date.now(),
+      )
+      this.interludeDeadline = null
+    }
+
+    return true
+  }
+
+  resumeGame(): boolean {
+    if (!this.started || !this.paused) {
+      return false
+    }
+
+    const pausedFor = this.pausedAt === null ? 0 : Date.now() - this.pausedAt
+    this.paused = false
+    this.pausedAt = null
+
+    if (this.acceptingAnswers) {
+      this.startTime += pausedFor
+    }
+    this.opts.cooldown.resume()
+
+    for (const delay of this.pendingDelays) {
+      this.armDelay(delay)
+    }
+    this.armAutoAdvance()
+    this.armInterludeTimer()
+
+    return true
+  }
+
   endTimer(): boolean {
-    if (!this.started || !this.acceptingAnswers) {
+    if (!this.started || !this.acceptingAnswers || this.paused) {
       return false
     }
 
@@ -515,8 +718,10 @@ export class RoundManager {
 
     if (this.acceptingAnswers) {
       const answersReceived = this.playersAnswers.length
+
       if (this.opts.canPreviousTimelineStep) {
         const timelineCheck = this.opts.canPreviousTimelineStep()
+
         if (timelineCheck.can) {
           return {
             can: true,
@@ -525,9 +730,11 @@ export class RoundManager {
           }
         }
       }
+
       if (this.currentQuestion > 0) {
         return { can: true, willReopenQuestion: true, answersReceived }
       }
+
       return { can: false, reason: "At start of show" }
     }
 
@@ -597,9 +804,9 @@ export class RoundManager {
 
     // Invalidate old attempt in ledger and questionsHistory
     this.questionLedger.delete(targetIndex)
-    delete (this.questionsHistory as Record<number, QuestionResult | undefined>)[
-      targetIndex
-    ]
+    delete (
+      this.questionsHistory as Record<number, QuestionResult | undefined>
+    )[targetIndex]
 
     // Recompute player scores and streaks from remaining active ledger
     const recomputed = recomputeScoresFromLedger(
@@ -821,6 +1028,8 @@ export class RoundManager {
     }
 
     this.started = true
+    this.paused = false
+    this.pausedAt = null
 
     if (this.opts.skipShowStartCountdown?.() && this.opts.onShowStart) {
       this.opts.onShowStart(() => {
@@ -863,7 +1072,7 @@ export class RoundManager {
   }
 
   advance(): void {
-    if (!this.started) {
+    if (!this.started || this.paused) {
       return
     }
 
@@ -1249,6 +1458,33 @@ export class RoundManager {
     this.tempOldLeaderboard = null
   }
 
+  private armInterludeTimer(): void {
+    if (
+      this.paused ||
+      this.interludeRemainingMs === null ||
+      this.currentStep !== this.getInterludeStepIndex()
+    ) {
+      return
+    }
+
+    const gen = this.generation
+    this.interludeDeadline = Date.now() + this.interludeRemainingMs
+    this.interludeTimer = setTimeout(() => {
+      this.interludeTimer = null
+      this.interludeRemainingMs = null
+      this.interludeDeadline = null
+
+      if (
+        !this.paused &&
+        this.generation === gen &&
+        this.started &&
+        this.currentStep === this.getInterludeStepIndex()
+      ) {
+        this.advance()
+      }
+    }, this.interludeRemainingMs)
+  }
+
   private showInterlude(): void {
     this.clearInterludeTimer()
     this.opts.onInterlude?.(this.currentQuestion)
@@ -1257,24 +1493,9 @@ export class RoundManager {
       this.opts.getInterludeAdvance?.(this.currentQuestion) ?? "manual"
 
     if (advanceMode === "auto") {
-      const durationMs =
+      this.interludeRemainingMs =
         this.opts.getInterludeDuration?.(this.currentQuestion) ?? 5000
-      const gen = this.generation
-
-      this.interludeTimer = setTimeout(
-        () => {
-          this.interludeTimer = null
-
-          if (
-            this.generation === gen &&
-            this.started &&
-            this.currentStep === this.getInterludeStepIndex()
-          ) {
-            this.advance()
-          }
-        },
-        (durationMs / 1000) * SECOND_MS,
-      )
+      this.armInterludeTimer()
     }
   }
 
@@ -1296,6 +1517,8 @@ export class RoundManager {
 
   finish(): void {
     this.started = false
+    this.paused = false
+    this.pausedAt = null
     this.clearAutoAdvance()
     this.clearInterludeTimer()
 
@@ -1375,21 +1598,27 @@ export class RoundManager {
     return [Math.min(options.max, Math.max(options.min, value))]
   }
 
-  selectAnswer(socket: Socket, answerIds: number[]): void {
+  selectAnswer(socket: Socket, answerIds: number[]): AnswerSubmissionResult {
     const player = this.opts.players.findById(socket.id)
 
-    if (!player || !this.acceptingAnswers) {
-      return
+    if (!player) {
+      return { accepted: false, reason: "player_not_found" }
+    }
+    if (this.paused) {
+      return { accepted: false, reason: "game_paused" }
+    }
+    if (!this.acceptingAnswers) {
+      return { accepted: false, reason: "not_accepting_answers" }
     }
 
     if (this.playersAnswers.find((a) => a.playerId === socket.id)) {
-      return
+      return { accepted: false, reason: "duplicate_answer" }
     }
 
     const submitted = this.normalizeAnswer(answerIds)
 
     if (!submitted) {
-      return
+      return { accepted: false, reason: "invalid_answer" }
     }
 
     const points = (() => {
@@ -1425,6 +1654,8 @@ export class RoundManager {
     this.opts.onAnswerSubmitted?.(player.id, submitted, points)
     this.opts.onPresenceChange?.()
     this.endIfEveryoneAnswered()
+
+    return { accepted: true }
   }
 
   updatePlayerId(oldId: string, newId: string): void {
@@ -1476,6 +1707,8 @@ export class RoundManager {
 
   dispose(): void {
     this.started = false
+    this.paused = false
+    this.pausedAt = null
     this.generation += 1
     this.cancelPendingAsync()
     this.clearAutoAdvance()

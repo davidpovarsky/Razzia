@@ -15,7 +15,6 @@ import {
   type ShowMediaCatalogItem,
 } from "../core/index"
 import {
-  deleteSidecar,
   getSidecarDirectory,
   getSidecarFilePath,
   readSidecar,
@@ -23,16 +22,10 @@ import {
   writeSidecar,
   type StorageInjections,
 } from "./storage/sidecar"
-import {
-  createStagedJournal,
-  getJournalDirectory,
-  recoverJournals,
-  removeJournal,
-  type JournalEntry,
-  type RecoveryReport,
-} from "./storage/journal"
+import { recoverJournals, type RecoveryReport } from "./storage/journal"
 
 export { type BuiltInSoundItem }
+
 export const BUILT_IN_SOUNDS: BuiltInSoundItem[] = BUILT_IN_SOUNDS_LIST
 
 export interface LoadedShowRecord extends InspectableQuizShow {
@@ -58,6 +51,7 @@ export function loadAllShowsHealth(
 
   if (fs.existsSync(quizzDir)) {
     let files: string[] = []
+
     try {
       files = fs.readdirSync(quizzDir).filter((f) => f.endsWith(".json"))
     } catch (err) {
@@ -66,24 +60,30 @@ export function loadAllShowsHealth(
 
     for (const file of files) {
       const filePath = path.join(quizzDir, file)
+
       try {
         const stat = fs.lstatSync(filePath)
+
         if (!stat.isFile()) {
           continue
         }
+
         const raw = fs.readFileSync(filePath, "utf-8")
         let parsed: unknown
+
         try {
           parsed = JSON.parse(raw)
         } catch (jsonErr) {
           unreadableFiles.push(
             `quizz/${file}: invalid JSON (${(jsonErr as Error).message})`,
           )
+
           continue
         }
 
         if (!parsed || typeof parsed !== "object") {
           unreadableFiles.push(`quizz/${file}: not a valid JSON object`)
+
           continue
         }
 
@@ -94,8 +94,10 @@ export function loadAllShowsHealth(
             : file.replace(/\.json$/iu, "")
 
         let extras: AnyQuizExtras | null = null
+
         if (sidecarExists(getPath, quizId)) {
           extras = readSidecar(getPath, quizId)
+
           if (!extras) {
             unreadableFiles.push(
               `extensions/quizzes/${quizId}.json: unreadable or invalid sidecar`,
@@ -118,25 +120,30 @@ export function loadAllShowsHealth(
 
   // Also inspect extensions/quizzes for any orphaned or unreadable sidecar files
   const sidecarDir = getSidecarDirectory(getPath)
+
   if (fs.existsSync(sidecarDir)) {
     let sidecarFiles: string[] = []
+
     try {
       sidecarFiles = fs
         .readdirSync(sidecarDir)
         .filter((f) => f.endsWith(".json"))
     } catch {
-      // directory read failure
+      // Directory read failure
     }
 
     for (const sf of sidecarFiles) {
       const cleanQuizId = sf.replace(/\.json$/iu, "")
       const alreadyLoaded = records.some((r) => r.id === cleanQuizId)
+
       if (!alreadyLoaded) {
         const sPath = path.join(sidecarDir, sf)
+
         try {
           const raw = fs.readFileSync(sPath, "utf-8")
           JSON.parse(raw)
           const extras = readSidecar(getPath, cleanQuizId)
+
           if (!extras) {
             unreadableFiles.push(
               `extensions/quizzes/${sf}: invalid sidecar schema`,
@@ -184,9 +191,11 @@ export const getMediaDeleteJournalDirectory = (
     ".journal",
     "media-delete",
   )
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
+
   return dir
 }
 
@@ -194,9 +203,11 @@ export const getMediaQuarantineDirectory = (
   getPath: (subPath?: string) => string,
 ): string => {
   const dir = path.join(getMediaDeleteJournalDirectory(getPath), "quarantine")
+
   if (!fs.existsSync(dir)) {
     fs.mkdirSync(dir, { recursive: true })
   }
+
   return dir
 }
 
@@ -266,6 +277,7 @@ export function executeMediaDeleteTransaction(
     for (const b of options.baselineShows) {
       if (b.mtimeMs !== undefined && fs.existsSync(b.filePath)) {
         const currentMtime = fs.statSync(b.filePath).mtimeMs
+
         if (Math.abs(currentMtime - b.mtimeMs) > 1) {
           return {
             allowed: false,
@@ -306,6 +318,7 @@ export function executeMediaDeleteTransaction(
     if (options?.deleteMediaFn) {
       options.deleteMediaFn()
     }
+
     return {
       allowed: true,
       references: [],
@@ -391,20 +404,23 @@ export function executeMediaDeleteTransaction(
               fs.chmodSync(b.filePath, 0o666)
             }
           } catch {
-            // ignore
+            // Ignore
           }
+
           const tmpBase = `${b.filePath}.tmp.${Date.now()}`
           fs.writeFileSync(tmpBase, b.originalBaseRaw, "utf-8")
           fs.renameSync(tmpBase, b.filePath)
         }
+
         if (b.originalSidecarRaw !== null) {
           try {
             if (fs.existsSync(b.sidecarPath)) {
               fs.chmodSync(b.sidecarPath, 0o666)
             }
           } catch {
-            // ignore
+            // Ignore
           }
+
           const tmpSidecar = `${b.sidecarPath}.tmp.${Date.now()}`
           fs.writeFileSync(tmpSidecar, b.originalSidecarRaw, "utf-8")
           fs.renameSync(tmpSidecar, b.sidecarPath)
@@ -443,11 +459,12 @@ export function executeMediaDeleteTransaction(
         if (quarantinePath && fs.existsSync(quarantinePath)) {
           fs.unlinkSync(quarantinePath)
         }
+
         if (fs.existsSync(journalFilePath)) {
           fs.unlinkSync(journalFilePath)
         }
       } catch {
-        // ignore
+        // Ignore
       }
     } else {
       console.warn(
@@ -469,6 +486,7 @@ export function executeMediaDeleteTransaction(
     for (const show of affectedShows) {
       if (show.mtimeMs !== undefined && fs.existsSync(show.filePath)) {
         const currentMtime = fs.statSync(show.filePath).mtimeMs
+
         if (Math.abs(currentMtime - show.mtimeMs) > 1) {
           throw new Error(
             `Concurrent modification detected on show file ${show.filePath}`,
@@ -509,6 +527,7 @@ export function executeMediaDeleteTransaction(
 
     // Post-commit re-scan verification: verify zero references survive before allowing delete
     const postHealth = loadAllShowsHealth(getPath)
+
     if (postHealth.unreadableFiles.length > 0) {
       throw new Error(
         `Unreadable files detected after detach: ${postHealth.unreadableFiles.join("; ")}`,
@@ -519,6 +538,7 @@ export function executeMediaDeleteTransaction(
       mediaNameOrUrl,
       postHealth.records,
     )
+
     if (postRefs.length > 0) {
       throw new Error(
         `Active references (${postRefs.length}) survived detach operation`,
@@ -530,6 +550,7 @@ export function executeMediaDeleteTransaction(
       if (options?.faultInjection?.failBeforeDeleteMedia) {
         throw new Error("Simulated failure before deleting media binary")
       }
+
       options.deleteMediaFn()
 
       if (fs.existsSync(mediaFilePath)) {
@@ -565,7 +586,7 @@ export function executeMediaDeleteTransaction(
       try {
         fs.unlinkSync(quarantinePath)
       } catch {
-        // ignore
+        // Ignore
       }
     }
 
@@ -593,9 +614,10 @@ export function executeMediaDeleteTransaction(
         try {
           fs.unlinkSync(quarantinePath)
         } catch {
-          // ignore
+          // Ignore
         }
       }
+
       return {
         allowed: true,
         references: [],
@@ -606,6 +628,7 @@ export function executeMediaDeleteTransaction(
     }
 
     const rollbackSuccess = rollback()
+
     if (rollbackSuccess) {
       return {
         allowed: false,
@@ -651,6 +674,7 @@ export function recoverMediaDeleteJournals(
   unresolvedJournals?: string[]
 } {
   const journalDir = getMediaDeleteJournalDirectory(getPath)
+
   if (!fs.existsSync(journalDir)) {
     return {
       recoveredCount: 0,
@@ -662,10 +686,12 @@ export function recoverMediaDeleteJournals(
   }
 
   let files: string[] = []
+
   try {
     files = fs.readdirSync(journalDir).filter((f) => f.endsWith(".json"))
   } catch (err) {
     console.error("[MediaJournal] Failed reading journal directory:", err)
+
     return {
       recoveredCount: 0,
       recoveredQuizIds: [],
@@ -686,12 +712,14 @@ export function recoverMediaDeleteJournals(
 
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
+
     try {
       if (!fs.statSync(journalPath).isFile()) {
         continue
       }
 
       let raw: string
+
       try {
         raw = fs.readFileSync(journalPath, "utf-8")
       } catch (readErr) {
@@ -700,10 +728,12 @@ export function recoverMediaDeleteJournals(
           readErr,
         )
         unresolvedJournals.push(file)
+
         continue
       }
 
       let entry: Partial<MediaDeleteJournalEntry>
+
       try {
         entry = JSON.parse(raw) as Partial<MediaDeleteJournalEntry>
       } catch (parseErr) {
@@ -712,6 +742,7 @@ export function recoverMediaDeleteJournals(
           parseErr,
         )
         unresolvedJournals.push(file)
+
         continue
       }
 
@@ -721,11 +752,13 @@ export function recoverMediaDeleteJournals(
           `[MediaJournal] Unknown or incompatible journal ${file}, preserving for manual inspection`,
         )
         unresolvedJournals.push(file)
+
         continue
       }
 
       // 2. Validate cleanMediaName & path traversal
       const rawCleanName = entry.cleanMediaName
+
       if (
         typeof rawCleanName !== "string" ||
         !rawCleanName.trim() ||
@@ -737,19 +770,23 @@ export function recoverMediaDeleteJournals(
           `[MediaJournal] Invalid or unsafe cleanMediaName in journal ${file}: "${rawCleanName}", preserving`,
         )
         unresolvedJournals.push(file)
+
         continue
       }
+
       const cleanMediaName = path.basename(rawCleanName)
       const targetMediaFilePath = path.join(authorizedMediaDir, cleanMediaName)
 
       // Validate quarantinePath: must be located within authorizedQuarantineDir
       let targetQuarantinePath: string | null = null
+
       if (entry.quarantinePath) {
         const quarantineBase = path.basename(entry.quarantinePath)
         targetQuarantinePath = path.join(
           authorizedQuarantineDir,
           quarantineBase,
         )
+
         if (
           entry.quarantinePath.includes("..") ||
           !quarantineBase.includes(cleanMediaName)
@@ -758,6 +795,7 @@ export function recoverMediaDeleteJournals(
             `[MediaJournal] Invalid or unsafe quarantinePath in journal ${file}: "${entry.quarantinePath}", preserving`,
           )
           unresolvedJournals.push(file)
+
           continue
         }
       }
@@ -782,8 +820,10 @@ export function recoverMediaDeleteJournals(
             s.quizId.includes("\\")
           ) {
             showsValid = false
+
             break
           }
+
           const cleanQuizId = path.basename(s.quizId).replace(/\.json$/i, "")
           const filePath = path.join(authorizedQuizzDir, `${cleanQuizId}.json`)
           const sidecarPath = getSidecarFilePath(getPath, cleanQuizId)
@@ -804,6 +844,7 @@ export function recoverMediaDeleteJournals(
           `[MediaJournal] Invalid shows configuration or path traversal in journal ${file}, preserving`,
         )
         unresolvedJournals.push(file)
+
         continue
       }
 
@@ -815,11 +856,13 @@ export function recoverMediaDeleteJournals(
           cleanMediaName,
           health.records,
         )
+
         if (activeRefs.length > 0) {
           console.error(
             `[MediaJournal] Committed delete in journal ${file} still has ${activeRefs.length} active references; preserving journal`,
           )
           unresolvedJournals.push(file)
+
           continue
         }
 
@@ -839,7 +882,9 @@ export function recoverMediaDeleteJournals(
         if (fs.existsSync(journalPath)) {
           fs.unlinkSync(journalPath)
         }
+
         recoveredCount++
+
         continue
       }
 
@@ -859,6 +904,7 @@ export function recoverMediaDeleteJournals(
             `[MediaJournal] Critical data integrity failure in ${file}: media "${cleanMediaName}" was quarantined but is missing from both media directory and quarantine! Rollback blocked to prevent dangling references.`,
           )
           unresolvedJournals.push(file)
+
           continue
         }
 
@@ -868,6 +914,7 @@ export function recoverMediaDeleteJournals(
         if (!mediaExists && quarantineExists && targetQuarantinePath) {
           try {
             fs.copyFileSync(targetQuarantinePath, targetMediaFilePath)
+
             if (!restoredMediaNames.includes(cleanMediaName)) {
               restoredMediaNames.push(cleanMediaName)
             }
@@ -885,6 +932,7 @@ export function recoverMediaDeleteJournals(
           (hadBinaryQuarantined && !fs.existsSync(targetMediaFilePath))
         ) {
           unresolvedJournals.push(file)
+
           continue
         }
 
@@ -896,6 +944,7 @@ export function recoverMediaDeleteJournals(
               fs.writeFileSync(tmpBase, s.originalBaseRaw, "utf-8")
               fs.renameSync(tmpBase, s.filePath)
             }
+
             if (s.originalSidecarRaw !== null) {
               const tmpSidecar = `${s.sidecarPath}.tmp.${Date.now()}`
               fs.writeFileSync(tmpSidecar, s.originalSidecarRaw, "utf-8")
@@ -908,6 +957,7 @@ export function recoverMediaDeleteJournals(
             if (s.originalBaseRaw !== null) {
               JSON.parse(fs.readFileSync(s.filePath, "utf-8"))
             }
+
             if (s.originalSidecarRaw !== null) {
               readSidecar(getPath, s.quizId)
             }
@@ -929,6 +979,7 @@ export function recoverMediaDeleteJournals(
             `[MediaJournal] Partial recovery for journal ${file}, preserving for retry`,
           )
           unresolvedJournals.push(file)
+
           continue
         }
 
@@ -944,7 +995,9 @@ export function recoverMediaDeleteJournals(
         if (fs.existsSync(journalPath)) {
           fs.unlinkSync(journalPath)
         }
+
         recoveredCount++
+
         continue
       }
 
@@ -1020,25 +1073,33 @@ export function recoverStartupJournals(
     getQuizzById: (id: string) => {
       const quizzDir = getPath("quizz")
       const filePath = path.join(quizzDir, `${id}.json`)
+
       if (!fs.existsSync(filePath)) {
         throw new Error("errors:quizz.notFound")
       }
+
       return JSON.parse(fs.readFileSync(filePath, "utf-8"))
     },
     saveQuizz: () => ({ id: "" }),
-    updateQuizz:
-      updateQuizz ??
-      ((id: string, data: unknown) => {
-        const quizzDir = getPath("quizz")
-        const filePath = path.join(quizzDir, `${id}.json`)
-        fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
+    updateQuizz: (id: string, data: unknown) => {
+      if (updateQuizz) {
+        updateQuizz(id, data)
+
         return { id }
-      }),
+      }
+
+      const quizzDir = getPath("quizz")
+      const filePath = path.join(quizzDir, `${id}.json`)
+      fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
+
+      return { id }
+    },
     deleteQuizz:
       deleteQuizz ??
       ((id: string) => {
         const quizzDir = getPath("quizz")
         const filePath = path.join(quizzDir, `${id}.json`)
+
         if (fs.existsSync(filePath)) {
           fs.unlinkSync(filePath)
         }
@@ -1144,26 +1205,31 @@ export function buildMediaCatalogResponse(
   // Discover uploaded .json and .lottie assets in media/ directory + show catalogs
   const mediaDir = getPath("media")
   const lottieNames = new Map<string, number>()
+
   if (fs.existsSync(mediaDir)) {
     try {
       for (const file of fs.readdirSync(mediaDir)) {
         if (!LOTTIE_FILENAME_PATTERN.test(file)) {
           continue
         }
+
         const fullPath = path.join(mediaDir, file)
+
         try {
           const stat = fs.lstatSync(fullPath)
+
           if (stat.isFile()) {
             lottieNames.set(file, stat.mtimeMs)
           }
         } catch {
-          // ignore unreadable entry
+          // Ignore unreadable entry
         }
       }
     } catch {
-      // ignore directory read error
+      // Ignore directory read error
     }
   }
+
   for (const catItem of showMediaCatalog) {
     if (catItem.type === "lottie" && !lottieNames.has(catItem.name)) {
       lottieNames.set(catItem.name, catItem.addedAt ?? 0)
@@ -1183,6 +1249,7 @@ export function buildMediaCatalogResponse(
           currentCatalogNames.has(name) ||
           currentCatalogUrls.has(url)),
       )
+
       return {
         name,
         url,
@@ -1207,6 +1274,7 @@ export function associateMediaWithShow(
   item: ShowMediaCatalogItem,
 ): ShowMediaCatalogItem[] {
   const existing = readSidecar(getPath, quizId)
+
   if (!existing) {
     return [item]
   }
@@ -1215,6 +1283,7 @@ export function associateMediaWithShow(
   const alreadyPresent = currentCatalog.some(
     (entry) => entry.url === item.url || entry.name === item.name,
   )
+
   if (!alreadyPresent) {
     currentCatalog.unshift({
       ...item,
@@ -1227,5 +1296,6 @@ export function associateMediaWithShow(
     mediaCatalog: currentCatalog,
   }
   writeSidecar(getPath, quizId, updated)
+
   return currentCatalog
 }

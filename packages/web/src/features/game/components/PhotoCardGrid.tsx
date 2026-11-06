@@ -1,4 +1,8 @@
-import type { AnswerVisual, ResolvedCardStageAnimations, StageAnimationSlot } from "@razzia/extensions/core"
+import type {
+  AnswerVisual,
+  ResolvedCardStageAnimations,
+  StageAnimationSlot,
+} from "@razzia/extensions/core"
 import { isValidAnswerVisual } from "@razzia/extensions/media"
 import {
   CANONICAL_ANSWER_COLORS,
@@ -6,9 +10,7 @@ import {
   useStageFit,
   type PollOptionItem,
 } from "@razzia/extensions/presentation"
-import {
-  ANSWERS_LABELS,
-} from "@razzia/web/features/game/utils/constants"
+import { ANSWERS_LABELS } from "@razzia/web/features/game/utils/constants"
 import clsx from "clsx"
 import { Check, ImageOff, Trophy, Users } from "lucide-react"
 import { type CSSProperties, useEffect, useState } from "react"
@@ -39,8 +41,10 @@ const buildSlotStyle = (
   if (!slot || slot.preset === "none") {
     return extra ?? {}
   }
+
   const delayMs =
     slot.timing === "sequential" ? index * (slot.staggerMs ?? 90) : 0
+
   return {
     ...extra,
     animationDuration: `${slot.durationMs ?? 800}ms`,
@@ -71,7 +75,6 @@ export const PhotoCardGrid = ({
     isCompact,
     isNarrowMobile,
     isPortrait,
-    maxPhotoHeightPx,
     availableHeight,
   } = useStageFit()
 
@@ -82,7 +85,9 @@ export const PhotoCardGrid = ({
 
   // Preload images into browser cache
   useEffect(() => {
-    if (!visuals) return
+    if (!visuals) {
+      return
+    }
     for (const v of visuals) {
       if (v?.url) {
         const img = new Image()
@@ -100,7 +105,7 @@ export const PhotoCardGrid = ({
   const runnerPhotoHeightPx = isUltraCompact
     ? Math.min(48, Math.max(36, Math.floor(availableHeight * 0.08)))
     : isCompact || isPortrait || isNarrowMobile
-      ? Math.min(68, Math.max(44, Math.floor(availableHeight * 0.10)))
+      ? Math.min(68, Math.max(44, Math.floor(availableHeight * 0.1)))
       : 96
 
   const votingPhotoHeightPx = isUltraCompact
@@ -126,11 +131,21 @@ export const PhotoCardGrid = ({
   // Layout classes for voting state (5 options: 3 on top row, 2 centered below; 2 columns on mobile too so zero-scroll holds on 390x844 and 320x568)
   const getCardColumnClass = (count: number, index: number) => {
     if (count === 5) {
-      if (index === 0) return "col-span-3 sm:col-span-2 sm:col-start-1"
-      if (index === 1) return "col-span-3 sm:col-span-2 sm:col-start-3"
-      if (index === 2) return "col-span-3 sm:col-span-2 sm:col-start-5"
-      if (index === 3) return "col-span-3 sm:col-span-2 sm:col-start-2"
-      if (index === 4) return "col-span-6 sm:col-span-2 sm:col-start-4"
+      if (index === 0) {
+        return "col-span-3 sm:col-span-2 sm:col-start-1"
+      }
+      if (index === 1) {
+        return "col-span-3 sm:col-span-2 sm:col-start-3"
+      }
+      if (index === 2) {
+        return "col-span-3 sm:col-span-2 sm:col-start-5"
+      }
+      if (index === 3) {
+        return "col-span-3 sm:col-span-2 sm:col-start-2"
+      }
+      if (index === 4) {
+        return "col-span-6 sm:col-span-2 sm:col-start-4"
+      }
     }
 
     if (count === 4) {
@@ -138,7 +153,9 @@ export const PhotoCardGrid = ({
     }
 
     if (count === 3) {
-      if (index === 2) return "col-span-6 sm:col-span-2"
+      if (index === 2) {
+        return "col-span-6 sm:col-span-2"
+      }
       return "col-span-3 sm:col-span-2"
     }
 
@@ -155,9 +172,11 @@ export const PhotoCardGrid = ({
     const optionItems: PollOptionItem[] = answers.map((answer, index) => {
       const visual = visuals?.find((v) => v.answerIndex === index)
       const count = responses
-        ? (Array.isArray(responses) ? responses[index] : responses[index]) ?? 0
+        ? ((Array.isArray(responses) ? responses[index] : responses[index]) ??
+          0)
         : 0
-      const percentage = percentages ? percentages[index] ?? 0 : 0
+      const percentage = percentages ? (percentages[index] ?? 0) : 0
+
       return {
         answerIndex: index,
         label: answer,
@@ -174,7 +193,7 @@ export const PhotoCardGrid = ({
     return (
       <div
         className={clsx(
-          "flex min-h-0 flex-1 flex-col items-center justify-center w-full px-1.5 sm:px-2 py-0.5",
+          "flex min-h-0 w-full flex-1 flex-col items-center justify-center px-1.5 py-0.5 sm:px-2",
           className,
         )}
         data-testid="photo-card-grid"
@@ -184,7 +203,7 @@ export const PhotoCardGrid = ({
         {/* Top Dominant Hero Section */}
         <div
           data-testid="results-hero-section"
-          className="flex flex-wrap items-center justify-center gap-2 sm:gap-4 w-full max-w-5xl mb-2 sm:mb-3"
+          className="mb-2 flex w-full max-w-5xl flex-wrap items-center justify-center gap-2 sm:mb-3 sm:gap-4"
         >
           {rankedWinners.map((winner, wIdx) => {
             const index = winner.answerIndex
@@ -207,10 +226,14 @@ export const PhotoCardGrid = ({
                 data-testid={`photo-card-choice-${index}`}
                 data-answer-index={index}
                 data-winner="true"
-                data-tada-entrance={cardPreset !== "none" ? cardPreset : undefined}
-                style={buildSlotStyle(activeCardSlot, wIdx, { backgroundColor: cardBg })}
+                data-tada-entrance={
+                  cardPreset !== "none" ? cardPreset : undefined
+                }
+                style={buildSlotStyle(activeCardSlot, wIdx, {
+                  backgroundColor: cardBg,
+                })}
                 className={clsx(
-                  "relative flex flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border-2 border-amber-300 ring-2 sm:ring-4 ring-amber-400 p-2 sm:p-3 text-center shadow-2xl shadow-amber-500/30 transition-all duration-500",
+                  "relative flex flex-col items-center justify-between overflow-hidden rounded-xl border-2 border-amber-300 p-2 text-center shadow-2xl ring-2 shadow-amber-500/30 ring-amber-400 transition-all duration-500 sm:rounded-2xl sm:p-3 sm:ring-4",
                   cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   rankedWinners.length === 1
                     ? "w-full max-w-xs sm:max-w-sm md:max-w-md"
@@ -218,14 +241,16 @@ export const PhotoCardGrid = ({
                 )}
               >
                 {/* Top bar inside Hero */}
-                <div className="flex w-full items-center justify-between gap-1.5 mb-1 z-10">
+                <div className="z-10 mb-1 flex w-full items-center justify-between gap-1.5">
                   <span
                     className={clsx(
-                      "flex size-6 sm:size-7 shrink-0 items-center justify-center rounded-lg bg-black/35 text-white font-black text-xs sm:text-sm border border-white/25 shadow-md",
+                      "flex size-6 shrink-0 items-center justify-center rounded-lg border border-white/25 bg-black/35 text-xs font-black text-white shadow-md sm:size-7 sm:text-sm",
                       badgePreset !== "none" && `tada-entrance-${badgePreset}`,
                     )}
                     style={buildSlotStyle(activeBadgeSlot, wIdx)}
-                    data-tada-entrance={badgePreset !== "none" ? badgePreset : undefined}
+                    data-tada-entrance={
+                      badgePreset !== "none" ? badgePreset : undefined
+                    }
                     data-testid={`photo-card-label-${index}`}
                   >
                     {label}
@@ -233,13 +258,13 @@ export const PhotoCardGrid = ({
 
                   <span
                     data-testid="card-winner-badge"
-                    className="flex items-center gap-1 rounded-full bg-amber-400 px-2 sm:px-3 py-0.5 text-[10px] sm:text-xs font-black uppercase tracking-wider text-black shadow-lg"
+                    className="flex items-center gap-1 rounded-full bg-amber-400 px-2 py-0.5 text-[10px] font-black tracking-wider text-black uppercase shadow-lg sm:px-3 sm:text-xs"
                   >
-                    <Trophy className="size-3.5 sm:size-4 fill-black" />
+                    <Trophy className="size-3.5 fill-black sm:size-4" />
                     <span>{rankingTie ? "Co-leader" : "Leader"}</span>
                   </span>
 
-                  <div className="flex items-center gap-1 rounded-full bg-black/35 px-2 py-0.5 text-[10px] sm:text-xs font-mono font-bold text-white shadow-md">
+                  <div className="flex items-center gap-1 rounded-full bg-black/35 px-2 py-0.5 font-mono text-[10px] font-bold text-white shadow-md sm:text-xs">
                     <span>{winner.percentage}%</span>
                     <span className="text-white/80">
                       ({winner.count} {winner.count === 1 ? "vote" : "votes"})
@@ -249,7 +274,7 @@ export const PhotoCardGrid = ({
 
                 {/* Photo frame inside Hero */}
                 <div
-                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/20 shadow-inner"
+                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/20 shadow-inner sm:rounded-xl"
                   style={{
                     backgroundColor: cardBg,
                     height: `${heroPhotoHeightPx}px`,
@@ -265,12 +290,12 @@ export const PhotoCardGrid = ({
                       onError={() =>
                         setImageErrors((prev) => ({ ...prev, [index]: true }))
                       }
-                      className="h-full w-full object-contain p-1 rounded-lg transition-transform duration-300"
+                      className="h-full w-full rounded-lg object-contain p-1 transition-transform duration-300"
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-1 p-2 text-white/80">
                       <ImageOff className="size-6 sm:size-8" />
-                      <span className="text-xs font-semibold break-words leading-tight">
+                      <span className="text-xs leading-tight font-semibold break-words">
                         {winner.alt || winner.label}
                       </span>
                     </div>
@@ -278,14 +303,14 @@ export const PhotoCardGrid = ({
 
                   {/* Overlay percentage */}
                   <div
-                    className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-1 sm:p-1.5 text-center"
+                    className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-1 text-center sm:p-1.5"
                     data-testid={`photo-card-overlay-${index}`}
                   >
                     <div className="flex items-baseline justify-center gap-1.5 text-white">
-                      <span className="text-base sm:text-xl md:text-2xl font-black drop-shadow-md">
+                      <span className="text-base font-black drop-shadow-md sm:text-xl md:text-2xl">
                         {winner.percentage}%
                       </span>
-                      <span className="text-[10px] sm:text-xs font-semibold text-white/90">
+                      <span className="text-[10px] font-semibold text-white/90 sm:text-xs">
                         ({winner.count} {winner.count === 1 ? "vote" : "votes"})
                       </span>
                     </div>
@@ -294,9 +319,9 @@ export const PhotoCardGrid = ({
 
                 {/* Caption text */}
                 {showText ? (
-                  <div className="mt-1 sm:mt-1.5 flex w-full flex-col items-center justify-center px-1">
+                  <div className="mt-1 flex w-full flex-col items-center justify-center px-1 sm:mt-1.5">
                     <p
-                      className="w-full text-center font-black text-white text-[11px] sm:text-xs md:text-sm break-words leading-tight drop-shadow-md"
+                      className="w-full text-center text-[11px] leading-tight font-black break-words text-white drop-shadow-md sm:text-xs md:text-sm"
                       data-testid={`photo-card-caption-${index}`}
                     >
                       {winner.label}
@@ -307,7 +332,7 @@ export const PhotoCardGrid = ({
                 )}
 
                 {/* Bottom vote bar */}
-                <div className="mt-1 sm:mt-1.5 h-1.5 sm:h-2 w-full overflow-hidden rounded-full bg-white/25">
+                <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/25 sm:mt-1.5 sm:h-2">
                   <div
                     className="h-full rounded-full bg-amber-400 transition-all duration-700 ease-out"
                     style={{
@@ -325,7 +350,7 @@ export const PhotoCardGrid = ({
         {runnersUp.length > 0 && (
           <div
             data-testid="results-runners-up-section"
-            className="grid grid-cols-2 sm:grid-cols-4 gap-1.5 sm:gap-2.5 w-full max-w-5xl"
+            className="grid w-full max-w-5xl grid-cols-2 gap-1.5 sm:grid-cols-4 sm:gap-2.5"
           >
             {runnersUp.map((runner, rIdx) => {
               const index = runner.answerIndex
@@ -349,34 +374,41 @@ export const PhotoCardGrid = ({
                   data-testid={`photo-card-choice-${index}`}
                   data-answer-index={index}
                   data-winner="false"
-                  data-tada-entrance={cardPreset !== "none" ? cardPreset : undefined}
-                  style={buildSlotStyle(activeCardSlot, orderIdx, { backgroundColor: cardBg })}
+                  data-tada-entrance={
+                    cardPreset !== "none" ? cardPreset : undefined
+                  }
+                  style={buildSlotStyle(activeCardSlot, orderIdx, {
+                    backgroundColor: cardBg,
+                  })}
                   className={clsx(
-                    "relative flex flex-col items-center justify-between overflow-hidden rounded-lg sm:rounded-xl border border-black/20 p-1.5 sm:p-2 text-center shadow-lg opacity-95 transition-all duration-300",
+                    "relative flex flex-col items-center justify-between overflow-hidden rounded-lg border border-black/20 p-1.5 text-center opacity-95 shadow-lg transition-all duration-300 sm:rounded-xl sm:p-2",
                     cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   )}
                 >
                   {/* Top Bar */}
-                  <div className="flex w-full items-center justify-between gap-1 mb-0.5 z-10">
+                  <div className="z-10 mb-0.5 flex w-full items-center justify-between gap-1">
                     <span
                       className={clsx(
-                        "flex size-5 sm:size-6 shrink-0 items-center justify-center rounded-md bg-black/35 text-white font-black text-[10px] sm:text-xs border border-white/20 shadow-md",
-                        badgePreset !== "none" && `tada-entrance-${badgePreset}`,
+                        "flex size-5 shrink-0 items-center justify-center rounded-md border border-white/20 bg-black/35 text-[10px] font-black text-white shadow-md sm:size-6 sm:text-xs",
+                        badgePreset !== "none" &&
+                          `tada-entrance-${badgePreset}`,
                       )}
                       style={buildSlotStyle(activeBadgeSlot, orderIdx)}
-                      data-tada-entrance={badgePreset !== "none" ? badgePreset : undefined}
+                      data-tada-entrance={
+                        badgePreset !== "none" ? badgePreset : undefined
+                      }
                       data-testid={`photo-card-label-${index}`}
                     >
                       {label}
                     </span>
-                    <span className="text-[10px] font-mono font-bold text-white bg-black/35 px-1.5 py-0.5 rounded-full">
+                    <span className="rounded-full bg-black/35 px-1.5 py-0.5 font-mono text-[10px] font-bold text-white">
                       {runner.count} {runner.count === 1 ? "vote" : "votes"}
                     </span>
                   </div>
 
                   {/* Photo Frame */}
                   <div
-                    className="relative flex w-full items-center justify-center overflow-hidden rounded-md sm:rounded-lg border border-black/15 shadow-inner"
+                    className="relative flex w-full items-center justify-center overflow-hidden rounded-md border border-black/15 shadow-inner sm:rounded-lg"
                     style={{
                       backgroundColor: cardBg,
                       height: `${runnerPhotoHeightPx}px`,
@@ -392,12 +424,12 @@ export const PhotoCardGrid = ({
                         onError={() =>
                           setImageErrors((prev) => ({ ...prev, [index]: true }))
                         }
-                        className="h-full w-full object-contain p-0.5 rounded-md transition-transform duration-300"
+                        className="h-full w-full rounded-md object-contain p-0.5 transition-transform duration-300"
                       />
                     ) : (
                       <div className="flex flex-col items-center justify-center gap-0.5 p-1 text-white/80">
                         <ImageOff className="size-4 sm:size-5" />
-                        <span className="text-[10px] font-semibold break-words leading-tight">
+                        <span className="text-[10px] leading-tight font-semibold break-words">
                           {runner.alt || runner.label}
                         </span>
                       </div>
@@ -408,7 +440,7 @@ export const PhotoCardGrid = ({
                       className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-0.5 text-center"
                       data-testid={`photo-card-overlay-${index}`}
                     >
-                      <span className="text-xs sm:text-sm font-black text-white drop-shadow-md">
+                      <span className="text-xs font-black text-white drop-shadow-md sm:text-sm">
                         {runner.percentage}%
                       </span>
                     </div>
@@ -418,7 +450,7 @@ export const PhotoCardGrid = ({
                   {showText ? (
                     <div className="mt-1 flex w-full flex-col items-center justify-center px-0.5">
                       <p
-                        className="w-full text-center font-bold text-white text-[10px] sm:text-xs break-words leading-tight drop-shadow-md"
+                        className="w-full text-center text-[10px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-xs"
                         data-testid={`photo-card-caption-${index}`}
                       >
                         {runner.label}
@@ -429,7 +461,7 @@ export const PhotoCardGrid = ({
                   )}
 
                   {/* Vote bar */}
-                  <div className="mt-1 h-1 sm:h-1.5 w-full overflow-hidden rounded-full bg-white/20">
+                  <div className="mt-1 h-1 w-full overflow-hidden rounded-full bg-white/20 sm:h-1.5">
                     <div
                       className="h-full rounded-full bg-white transition-all duration-700 ease-out"
                       style={{
@@ -448,17 +480,13 @@ export const PhotoCardGrid = ({
   }
 
   // Voting stage or Zero Votes state
-  const isFiveOrMore = answers.length >= 4
-  const frameHeightClass = isFiveOrMore
-    ? "max-h-[13vh] sm:max-h-[18vh] md:max-h-[22vh]"
-    : "max-h-[18vh] sm:max-h-[26vh] md:max-h-[32vh]"
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col items-center justify-center w-full">
+    <div className="flex min-h-0 w-full flex-1 flex-col items-center justify-center">
       {isRevealed && hasZeroVotes && (
         <div
           data-testid="zero-votes-notice"
-          className="mb-1.5 flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-0.5 text-xs sm:text-sm font-semibold text-white/70 backdrop-blur-md"
+          className="mb-1.5 flex shrink-0 items-center gap-2 rounded-full border border-white/10 bg-black/40 px-3 py-0.5 text-xs font-semibold text-white/70 backdrop-blur-md sm:text-sm"
         >
           <Users className="size-3.5 text-white/50" />
           <span>No votes yet</span>
@@ -466,7 +494,7 @@ export const PhotoCardGrid = ({
       )}
       <div
         className={clsx(
-          "mx-auto grid w-full max-w-6xl grid-cols-6 gap-1.5 sm:gap-2.5 md:gap-3.5 px-1.5 sm:px-2 py-0.5 content-center items-stretch",
+          "mx-auto grid w-full max-w-6xl grid-cols-6 content-center items-stretch gap-1.5 px-1.5 py-0.5 sm:gap-2.5 sm:px-2 md:gap-3.5",
           className,
         )}
         data-testid="photo-card-grid"
@@ -482,9 +510,11 @@ export const PhotoCardGrid = ({
           const showText = !showImage || displayMode === "both"
           const isSelected = selectedKey === index
           const count = responses
-            ? (Array.isArray(responses) ? responses[index] : responses[index]) ?? 0
+            ? ((Array.isArray(responses)
+                ? responses[index]
+                : responses[index]) ?? 0)
             : undefined
-          const pct = percentages ? percentages[index] ?? 0 : undefined
+          const pct = percentages ? (percentages[index] ?? 0) : undefined
           const label = ANSWERS_LABELS[index] ?? String(index + 1)
           const hasError = imageErrors[index]
           const colClass = getCardColumnClass(answers.length, index)
@@ -495,7 +525,7 @@ export const PhotoCardGrid = ({
           return (
             <div
               key={`${animationEpochKey}-vote-${index}`}
-              className={clsx("flex flex-col min-h-0", colClass)}
+              className={clsx("flex min-h-0 flex-col", colClass)}
             >
               <button
                 type="button"
@@ -505,42 +535,48 @@ export const PhotoCardGrid = ({
                 data-testid={`photo-card-choice-${index}`}
                 data-answer-index={index}
                 data-winner="false"
-                data-tada-entrance={cardPreset !== "none" ? cardPreset : undefined}
-                style={buildSlotStyle(activeCardSlot, index, { backgroundColor: cardBg })}
+                data-tada-entrance={
+                  cardPreset !== "none" ? cardPreset : undefined
+                }
+                style={buildSlotStyle(activeCardSlot, index, {
+                  backgroundColor: cardBg,
+                })}
                 className={clsx(
-                  "group relative flex h-full flex-col items-center justify-between overflow-hidden rounded-xl sm:rounded-2xl border border-black/20 text-center transition-all duration-300 ease-out shadow-lg",
+                  "group relative flex h-full flex-col items-center justify-between overflow-hidden rounded-xl border border-black/20 text-center shadow-lg transition-all duration-300 ease-out sm:rounded-2xl",
                   isUltraCompact ? "p-1" : "p-1.5 sm:p-2.5",
                   cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   !readOnly &&
-                    "cursor-pointer hover:scale-[1.01] active:scale-[0.98] focus-visible:ring-4 focus-visible:ring-white",
+                    "cursor-pointer hover:scale-[1.01] focus-visible:ring-4 focus-visible:ring-white active:scale-[0.98]",
                   readOnly && "cursor-default",
-                  isSelected && "ring-4 ring-white shadow-2xl scale-[1.01]",
+                  isSelected && "scale-[1.01] shadow-2xl ring-4 ring-white",
                 )}
               >
                 {/* Top bar inside Card */}
-                <div className="flex w-full items-center justify-between gap-1 mb-1 z-10">
+                <div className="z-10 mb-1 flex w-full items-center justify-between gap-1">
                   <span
                     className={clsx(
-                      "flex size-5 sm:size-6 md:size-7 shrink-0 items-center justify-center rounded-md sm:rounded-lg bg-black/35 text-white font-black text-xs sm:text-sm md:text-base border border-white/20 shadow-md",
+                      "flex size-5 shrink-0 items-center justify-center rounded-md border border-white/20 bg-black/35 text-xs font-black text-white shadow-md sm:size-6 sm:rounded-lg sm:text-sm md:size-7 md:text-base",
                       badgePreset !== "none" && `tada-entrance-${badgePreset}`,
                     )}
                     style={buildSlotStyle(activeBadgeSlot, index)}
-                    data-tada-entrance={badgePreset !== "none" ? badgePreset : undefined}
+                    data-tada-entrance={
+                      badgePreset !== "none" ? badgePreset : undefined
+                    }
                     data-testid={`photo-card-label-${index}`}
                   >
                     {label}
                   </span>
 
                   {isSelected && !isRevealed && (
-                    <span className="flex size-5 sm:size-6 items-center justify-center rounded-full bg-white text-black shadow-md">
-                      <Check className="size-3.5 sm:size-4 stroke-[3]" />
+                    <span className="flex size-5 items-center justify-center rounded-full bg-white text-black shadow-md sm:size-6">
+                      <Check className="size-3.5 stroke-[3] sm:size-4" />
                     </span>
                   )}
                 </div>
 
                 {/* Photo Frame */}
                 <div
-                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg sm:rounded-xl border border-black/15 shadow-inner"
+                  className="relative flex w-full items-center justify-center overflow-hidden rounded-lg border border-black/15 shadow-inner sm:rounded-xl"
                   style={{
                     backgroundColor: cardBg,
                     height: `${votingPhotoHeightPx}px`,
@@ -556,12 +592,12 @@ export const PhotoCardGrid = ({
                       onError={() =>
                         setImageErrors((prev) => ({ ...prev, [index]: true }))
                       }
-                      className="h-full w-full object-contain p-0.5 sm:p-1 rounded-lg transition-transform duration-300 group-hover:scale-105"
+                      className="h-full w-full rounded-lg object-contain p-0.5 transition-transform duration-300 group-hover:scale-105 sm:p-1"
                     />
                   ) : (
                     <div className="flex flex-col items-center justify-center gap-1 p-1.5 text-white/80">
                       <ImageOff className="size-5 sm:size-7" />
-                      <span className="text-[10px] sm:text-xs font-semibold line-clamp-1">
+                      <span className="line-clamp-1 text-[10px] font-semibold sm:text-xs">
                         {visual?.alt || answer}
                       </span>
                     </div>
@@ -570,15 +606,15 @@ export const PhotoCardGrid = ({
                   {/* Percentage progress overlay inside photo frame when revealed in zero-votes state */}
                   {isRevealed && pct !== undefined && (
                     <div
-                      className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-1 sm:p-1.5 text-center"
+                      className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent p-1 text-center sm:p-1.5"
                       data-testid={`photo-card-overlay-${index}`}
                     >
                       <div className="flex items-baseline justify-center gap-1 text-white">
-                        <span className="text-sm sm:text-lg md:text-xl font-black drop-shadow-md">
+                        <span className="text-sm font-black drop-shadow-md sm:text-lg md:text-xl">
                           {pct}%
                         </span>
                         {count !== undefined && (
-                          <span className="text-[10px] sm:text-xs font-semibold text-white/80">
+                          <span className="text-[10px] font-semibold text-white/80 sm:text-xs">
                             ({count} {count === 1 ? "vote" : "votes"})
                           </span>
                         )}
@@ -589,9 +625,9 @@ export const PhotoCardGrid = ({
 
                 {/* Caption / Label Text */}
                 {showText ? (
-                  <div className="mt-1 sm:mt-1.5 flex w-full flex-col items-center justify-center px-0.5">
+                  <div className="mt-1 flex w-full flex-col items-center justify-center px-0.5 sm:mt-1.5">
                     <p
-                      className="w-full text-center font-bold text-white break-words leading-tight drop-shadow-md text-[11px] sm:text-xs md:text-sm"
+                      className="w-full text-center text-[11px] leading-tight font-bold break-words text-white drop-shadow-md sm:text-xs md:text-sm"
                       data-testid={`photo-card-caption-${index}`}
                     >
                       {answer}

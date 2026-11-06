@@ -59,14 +59,15 @@ const CardAudioConfig = ({
   const previewAudioRef = useRef<HTMLAudioElement | null>(null)
   const [playingSlot, setPlayingSlot] = useState<string | null>(null)
 
-  useEffect(() => {
-    return () => {
+  useEffect(
+    () => () => {
       if (previewAudioRef.current) {
         previewAudioRef.current.pause()
         previewAudioRef.current = null
       }
-    }
-  }, [currentQuestionId])
+    },
+    [currentQuestionId],
+  )
 
   const stopPreview = () => {
     if (previewAudioRef.current) {
@@ -74,16 +75,22 @@ const CardAudioConfig = ({
       previewAudioRef.current.currentTime = 0
       previewAudioRef.current = null
     }
+
     setPlayingSlot(null)
   }
 
   const togglePreview = (slotKey: string, url?: string, volume = 0.8) => {
     if (playingSlot === slotKey) {
       stopPreview()
+
       return
     }
+
     stopPreview()
-    if (!url) return
+
+    if (!url) {
+      return
+    }
     try {
       const audio = new Audio(url)
       audio.volume = Math.max(0, Math.min(1, volume))
@@ -106,12 +113,17 @@ const CardAudioConfig = ({
     slot: QuestionAudioCueKey,
     next: CardAudioCueOverride | undefined,
   ) => {
-    if (!currentQuestionId) return
+    if (!currentQuestionId) {
+      return
+    }
     setExtras((prev) => {
-      if (!prev) return prev
+      if (!prev) {
+        return prev
+      }
       const existingPerQ = prev.perQuestion ?? {}
       const existingItem = { ...(existingPerQ[currentQuestionId] ?? {}) }
       const nextCues: CardAudioOverrides = { ...(existingItem.audioCues ?? {}) }
+
       if (!next || next.mode === "inherit") {
         delete nextCues[slot]
       } else {
@@ -135,7 +147,9 @@ const CardAudioConfig = ({
   }
 
   const handleSelectAudio = (item: UploadedMedia) => {
-    if (!pickingSlot) return
+    if (!pickingSlot) {
+      return
+    }
     if (pickingSlot === "scene") {
       onSceneAudioChange?.({
         mode: "custom",
@@ -153,6 +167,7 @@ const CardAudioConfig = ({
         loop: prev?.loop ?? slotMeta?.defaultLoop ?? false,
       })
     }
+
     setPickingSlot(null)
   }
 
@@ -188,7 +203,7 @@ const CardAudioConfig = ({
           </span>
           <div
             data-testid={`card-audio-mode-${slotId}`}
-            className="flex items-center gap-0.5 rounded-lg bg-muted p-0.5"
+            className="bg-muted flex items-center gap-0.5 rounded-lg p-0.5"
           >
             {(["inherit", "mute", "custom"] as const).map((m) => (
               <button
@@ -197,6 +212,7 @@ const CardAudioConfig = ({
                 data-testid={`card-audio-mode-${slotId}-${m}`}
                 onClick={() => {
                   stopPreview()
+
                   if (m === "inherit") {
                     onChange(undefined)
                   } else if (m === "mute") {
@@ -225,7 +241,7 @@ const CardAudioConfig = ({
         </div>
 
         {mode === "custom" && (
-          <div className="flex flex-col gap-2 border-t border-border/40 pt-2">
+          <div className="border-border/40 flex flex-col gap-2 border-t pt-2">
             <div className="flex items-center justify-between gap-1.5">
               <button
                 type="button"
@@ -233,7 +249,7 @@ const CardAudioConfig = ({
                 onClick={() => setPickingSlot(slotId)}
                 className="bg-accent text-accent-foreground flex min-w-0 flex-1 items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-left text-xs font-semibold"
               >
-                <Music className="size-3.5 shrink-0 text-primary" />
+                <Music className="text-primary size-3.5 shrink-0" />
                 <span className="truncate">
                   {url
                     ? url.split("/").pop()
@@ -270,7 +286,7 @@ const CardAudioConfig = ({
                       "extensions:cardAudio.removeFromCard",
                       "Remove from Card",
                     )}
-                    className="bg-accent text-muted-foreground hover:text-red-500 flex size-7 shrink-0 items-center justify-center rounded-lg"
+                    className="bg-accent text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-lg hover:text-red-500"
                   >
                     <Trash2 className="size-3.5" />
                   </button>
@@ -280,7 +296,7 @@ const CardAudioConfig = ({
 
             {url && (
               <div className="flex items-center justify-between gap-3 text-[11px]">
-                <label className="flex items-center gap-1.5 font-semibold text-muted-foreground">
+                <label className="text-muted-foreground flex items-center gap-1.5 font-semibold">
                   <input
                     type="checkbox"
                     data-testid={`card-audio-loop-${slotId}`}
@@ -349,7 +365,7 @@ const CardAudioConfig = ({
                         mode: next.mode,
                         url: next.url,
                         volume: next.volume,
-                        loop: next.loop,
+                        loop: next.loop ?? false,
                       }
                     : undefined,
                 ),

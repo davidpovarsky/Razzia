@@ -35,9 +35,11 @@ export const TIMELINE_ITEM_KINDS = [
 export type TimelineItemKind = (typeof TIMELINE_ITEM_KINDS)[number]
 
 export const SCENE_ADVANCE_MODES = ["auto", "manual", "onMediaEnd"] as const
+
 export type SceneAdvanceMode = (typeof SCENE_ADVANCE_MODES)[number]
 
 export const ANSWER_RECAP_MODES = ["mostSelected", "correctAnswer"] as const
+
 export type AnswerRecapMode = (typeof ANSWER_RECAP_MODES)[number]
 
 export const timelineQuestionItemSchema = z.strictObject({
@@ -146,6 +148,7 @@ export const animationSceneSchema = z.strictObject({
   id: z.uuid(),
   kind: z.literal("animation"),
   preset: z.string().max(64).default("spotlight"),
+  subtitle: z.string().max(200).optional(),
   title: z.string().max(120).optional(),
   durationMs: z.number().int().min(500).max(60000).default(3000),
   advance: z.enum(SCENE_ADVANCE_MODES).default("auto"),
@@ -245,6 +248,7 @@ export const answerRecapSceneSchema = z.strictObject({
   id: z.uuid(),
   kind: z.literal("answerRecap"),
   title: z.string().max(120).optional(),
+  subtitle: z.string().max(300).optional(),
   startQuestionId: z.uuid().optional(),
   mode: z.enum(ANSWER_RECAP_MODES).default("mostSelected"),
   maxItemsPerPage: z.number().int().min(1).max(8).default(4).optional(),
@@ -402,7 +406,10 @@ export interface PublicAnswerRecapQuestionItem {
 }
 
 export interface PublicAnswerRecap {
-  startQuestionId?: string
+  title?: string
+  subtitle?: string
+  startQuestionId?: string | null
+  endQuestionId?: string | null
   fromQuestionNumber?: number
   toQuestionNumber?: number
   totalQuestionsInRange: number
@@ -415,6 +422,14 @@ export interface PublicAnswerRecap {
 }
 
 export interface PublicFullShowData {
+  winners?: Array<{ title: string; imageUrl?: string | null; alt?: string }>
+  contestants?: Array<{ title: string; imageUrl?: string | null; alt?: string }>
+  voteCount?: number
+  resolvedIndex?: number | null
+  eventArtworkUrl?: string
+  curtainLeftUrl?: string
+  curtainRightUrl?: string
+  storyRoles?: string[]
   connectedTables?: number[]
   dialNumber?: string
   representatives?: Array<{ table: number; name: string }>
@@ -549,6 +564,7 @@ export const quizExtrasV2Schema = z
         })
       } else if (item.kind === "answerRecap") {
         const recapScene = extras.scenes[item.sceneId]
+
         if (
           recapScene.kind === "answerRecap" &&
           recapScene.startQuestionId !== undefined
@@ -562,7 +578,7 @@ export const quizExtrasV2Schema = z
           } else if (
             !seenQuestionIdsInTimeline.has(recapScene.startQuestionId)
           ) {
-            // startQuestionId exists in the show, but has not appeared before this answerRecap item!
+            // StartQuestionId exists in the show, but has not appeared before this answerRecap item!
             ctx.addIssue({
               code: "custom",
               path: ["scenes", item.sceneId, "startQuestionId"],

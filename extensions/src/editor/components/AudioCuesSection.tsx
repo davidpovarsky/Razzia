@@ -2,6 +2,8 @@ import type {
   AudioCueSetting,
   CueId,
   QuizExtrasV1,
+  SoundtrackSetting,
+  SoundtrackSlotId,
 } from "@razzia/extensions/core"
 import { resolveAudioCue } from "@razzia/extensions/presentation"
 import { Play, Square } from "lucide-react"
@@ -96,6 +98,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
     onChange({
       ...extras,
       audio: {
+        ...audioExtras,
         cues: {
           ...audioExtras.cues,
           [cueId]: {
@@ -150,6 +153,73 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
       fallback: "3rd Place Fanfare",
     },
   ]
+
+  const soundtrackSlots: Array<{
+    id: SoundtrackSlotId
+    labelKey: string
+    fallback: string
+  }> = [
+    {
+      id: "openingIntro",
+      labelKey: "audio.slotOpeningIntro",
+      fallback: "Opening intro (12 seconds)",
+    },
+    { id: "lobby", labelKey: "audio.slotLobby", fallback: "Lobby / QR" },
+    {
+      id: "roundStart",
+      labelKey: "audio.slotRoundStart",
+      fallback: "Round start",
+    },
+    {
+      id: "question",
+      labelKey: "audio.slotQuestion",
+      fallback: "Question before choices",
+    },
+    {
+      id: "voting",
+      labelKey: "audio.slotVoting",
+      fallback: "Voting (answersMusic remains authoritative)",
+    },
+    {
+      id: "results",
+      labelKey: "audio.slotResults",
+      fallback: "Results / interim results",
+    },
+    {
+      id: "leaderboard",
+      labelKey: "audio.slotLeaderboard",
+      fallback: "Leaderboard / tie",
+    },
+    {
+      id: "recap",
+      labelKey: "audio.slotRecap",
+      fallback: "Round recap / story",
+    },
+    { id: "finale", labelKey: "audio.slotFinale", fallback: "Finale" },
+  ]
+
+  const updateSoundtrack = (
+    slot: SoundtrackSlotId,
+    updates: Partial<SoundtrackSetting>,
+  ) => {
+    const existing: SoundtrackSetting = audioExtras.soundtrack?.[slot] ?? {
+      mode: "inherit",
+      volume: 0.35,
+      loop: slot === "lobby" || slot === "voting",
+      fadeMs: 700,
+      startOffsetSeconds: 0,
+    }
+    onChange({
+      ...extras,
+      audio: {
+        ...audioExtras,
+        soundtrack: {
+          ...audioExtras.soundtrack,
+          [slot]: { ...existing, ...updates },
+        },
+      },
+    })
+  }
 
   return (
     <div className="flex flex-col gap-6" data-testid="panel-audio">
@@ -297,6 +367,119 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                     </span>
                   </label>
                 )}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+
+      <div className="flex flex-col gap-3" data-testid="soundtrack-slots">
+        <div>
+          <h3 className="text-foreground text-base font-bold">
+            {tr("audio.soundtrackTitle", "Presenter soundtrack")}
+          </h3>
+          <p className="text-muted-foreground text-xs">
+            {tr(
+              "audio.soundtrackDesc",
+              "Use only cleared tenant media URLs. Candidate source files are not bundled.",
+            )}
+          </p>
+        </div>
+        {soundtrackSlots.map(({ id, labelKey, fallback }) => {
+          const setting = audioExtras.soundtrack?.[id] ?? {
+            mode: "inherit" as const,
+            volume: 0.35,
+            loop: id === "lobby" || id === "voting",
+            fadeMs: 700,
+            startOffsetSeconds: 0,
+          }
+
+          return (
+            <div
+              key={id}
+              className="border-border bg-card/60 grid gap-3 rounded-xl border p-4"
+              data-testid={`soundtrack-slot-${id}`}
+            >
+              <span className="text-foreground text-sm font-bold">
+                {tr(labelKey, fallback)}
+              </span>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <select
+                  value={setting.mode}
+                  onChange={(event) =>
+                    updateSoundtrack(id, {
+                      mode: event.target.value as SoundtrackSetting["mode"],
+                    })
+                  }
+                  className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-xs focus:ring-2 focus:outline-none"
+                >
+                  <option value="inherit">
+                    {tr("audio.inherit", "Use cue / inherit")}
+                  </option>
+                  <option value="mute">
+                    {tr("audio.none", "No background music")}
+                  </option>
+                  <option value="media">
+                    {tr("audio.sourceCustom", "Authorized media")}
+                  </option>
+                </select>
+                <label className="text-muted-foreground flex items-center gap-2 text-xs font-semibold">
+                  {tr("audio.volume", "Volume")}
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.01"
+                    value={setting.volume}
+                    onChange={(event) =>
+                      updateSoundtrack(id, {
+                        volume: Number(event.target.value),
+                      })
+                    }
+                    className="accent-primary flex-1"
+                  />
+                </label>
+              </div>
+              {setting.mode === "media" && (
+                <input
+                  type="text"
+                  value={setting.url ?? ""}
+                  onChange={(event) =>
+                    updateSoundtrack(id, { url: event.target.value })
+                  }
+                  placeholder="/media/cleared-track.ext"
+                  className="focus:ring-primary border-accent bg-background text-foreground rounded-lg border p-2 text-xs focus:ring-2 focus:outline-none"
+                  data-testid={`soundtrack-url-${id}`}
+                />
+              )}
+              <div className="flex flex-wrap items-center gap-4 text-xs">
+                <label className="text-foreground flex items-center gap-2 font-semibold">
+                  <input
+                    type="checkbox"
+                    checked={setting.loop}
+                    onChange={(event) =>
+                      updateSoundtrack(id, { loop: event.target.checked })
+                    }
+                    className="accent-primary"
+                  />
+                  {tr("audio.loop", "Loop")}
+                </label>
+                <label className="text-muted-foreground flex items-center gap-2 font-semibold">
+                  {tr("audio.fade", "Fade ms")}
+                  <input
+                    type="number"
+                    min="0"
+                    max="5000"
+                    step="50"
+                    value={setting.fadeMs}
+                    onChange={(event) =>
+                      updateSoundtrack(id, {
+                        fadeMs: Number(event.target.value),
+                      })
+                    }
+                    className="border-accent bg-background text-foreground w-24 rounded-lg border p-1.5"
+                  />
+                </label>
               </div>
             </div>
           )

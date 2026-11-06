@@ -1,6 +1,5 @@
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import GameWrapper from "@razzia/web/features/game/components/GameWrapper"
-import Wait from "@razzia/web/features/game/components/states/Wait"
 import { TadazzRawStatusContext } from "@razzia/web/features/game/components/tadazz-show/raw-status-context"
 import type { ViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import {

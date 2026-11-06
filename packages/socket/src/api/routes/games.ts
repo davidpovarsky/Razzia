@@ -150,6 +150,7 @@ const routes = apiFactory
       }
 
       await grantMediaForGuest(c, game.gameId)
+
       return c.json({ generatedUsernames: game.settings.generatedUsernames })
     },
   )
@@ -184,6 +185,7 @@ const routes = apiFactory
 
       if (existing && !rosterMatch) {
         await grantMediaForGuest(c, game.gameId)
+
         return c.json({
           gameId: game.gameId,
           ticket: null,
@@ -221,6 +223,7 @@ const routes = apiFactory
           : resolvedName
 
       await grantMediaForGuest(c, game.gameId)
+
       return c.json({
         gameId: game.gameId,
         ticket: await mintJoinTicket(sub, game.gameId, {
@@ -237,9 +240,12 @@ const routes = apiFactory
   // Public projector displays use an unguessable live game ID, never account credentials.
   .get("/:gameId/display-media", async (c) => {
     const game = Registry.getInstance().getGameById(c.req.param("gameId"))
-    if (!game)
+
+    if (!game) {
       return c.json({ error: "errors:game.notFound" }, StatusCodes.NOT_FOUND)
+    }
     await grantMediaForGuest(c, game.gameId)
+
     return c.json({ status: "ready" })
   })
   .get("/:gameId/roster", requireManager, async (c) => {
@@ -252,6 +258,7 @@ const routes = apiFactory
     // A manager may have a valid Bearer session but no /media cookie after
     // reopening a previously created room. Refresh the room-bound ticket.
     await grantMediaForGuest(c, game.gameId)
+
     return c.json({ presence: game.getHostPresenceSnapshot() })
   })
   .patch(
@@ -452,6 +459,7 @@ const routes = apiFactory
             joinRes = game.joinOrRebindPhoneCaller({
               phoneRaw: body.phone ?? existingEntry.phoneE164,
               callId: body.callId,
+              rosterPlayerId: rosterId,
             })
           }
         }

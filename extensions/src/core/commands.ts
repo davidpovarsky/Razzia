@@ -79,6 +79,33 @@ export const endAnswerTimerCommandSchema = z.strictObject({
 
 export type EndAnswerTimerCommand = z.infer<typeof endAnswerTimerCommandSchema>
 
+const pauseResumePayloadSchema = z
+  .strictObject({
+    epoch: z.number().int().optional(),
+  })
+  .optional()
+  .default({})
+
+export const pauseGameCommandSchema = z.strictObject({
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("PAUSE_GAME"),
+  payload: pauseResumePayloadSchema,
+  requestId: z.string().min(1),
+})
+
+export const resumeGameCommandSchema = z.strictObject({
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("RESUME_GAME"),
+  payload: pauseResumePayloadSchema,
+  requestId: z.string().min(1),
+})
+
+export type PauseGameCommand = z.infer<typeof pauseGameCommandSchema>
+
+export type ResumeGameCommand = z.infer<typeof resumeGameCommandSchema>
+
 export const nextScreenCommandSchema = z.strictObject({
   v: z.literal(1),
   gameId: z.string().min(1),
@@ -223,10 +250,16 @@ export type SkipTimelineSceneCommand = z.infer<
 >
 
 export const resolveStoryTieCommandSchema = z.strictObject({
-  v: z.literal(1), gameId: z.string().min(1), action: z.literal("RESOLVE_STORY_TIE"),
-  payload: z.strictObject({ answerIndex: z.number().int().min(0), epoch: z.number().int() }),
+  v: z.literal(1),
+  gameId: z.string().min(1),
+  action: z.literal("RESOLVE_STORY_TIE"),
+  payload: z.strictObject({
+    answerIndex: z.number().int().min(0),
+    epoch: z.number().int(),
+  }),
   requestId: z.string().min(1),
 })
+
 export const extensionCommandSchema = z.discriminatedUnion("action", [
   resolveStoryTieCommandSchema,
   showLeaderboardCommandSchema,
@@ -234,6 +267,8 @@ export const extensionCommandSchema = z.discriminatedUnion("action", [
   revealMediaCommandSchema,
   assignTeamCommandSchema,
   endAnswerTimerCommandSchema,
+  pauseGameCommandSchema,
+  resumeGameCommandSchema,
   nextScreenCommandSchema,
   previousScreenCommandSchema,
   skipQuestionCommandSchema,

@@ -340,8 +340,10 @@ export const StudioSettingsPage = () => {
               onChange={(mode: string) => {
                 if (mode === "static" && !tadazzBackground.staticUrl) {
                   setTadazzMediaPickerOpen(true)
+
                   return
                 }
+
                 updateTadazzBackground({
                   mode: mode as TadazzShowBackground["mode"],
                 })
@@ -419,7 +421,6 @@ export const StudioSettingsPage = () => {
               <Button
                 type="button"
                 size="sm"
-                variant="secondary"
                 onClick={() => setTadazzMediaPickerOpen(true)}
               >
                 {t(

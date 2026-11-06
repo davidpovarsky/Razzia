@@ -41,6 +41,10 @@ export interface ShowInput {
 }
 
 export interface SceneDescriptor {
+  preset?: string
+  round?: number
+  roundNumber?: number
+  recapItems?: Array<{ label: string; image?: string; alt?: string }>
   id?: string
   kind: string
   title?: string
@@ -70,8 +74,18 @@ export type ShowScene =
   | { kind: "lobby"; key: string; inviteCode?: string; text?: string }
   | { kind: "wait"; key: string; text: string }
   | { kind: "start"; key: string; subject: string; time: number }
-  | { kind: "prepared"; key: string; questionNumber: number; totalAnswers: number }
-  | { kind: "question"; key: string; question: StageQuestion; media?: QuestionMediaRef }
+  | {
+      kind: "prepared"
+      key: string
+      questionNumber: number
+      totalAnswers: number
+    }
+  | {
+      kind: "question"
+      key: string
+      question: StageQuestion
+      media?: QuestionMediaRef
+    }
   | {
       kind: "voting"
       key: string
@@ -106,9 +120,26 @@ export type ShowScene =
       rank: number
       aheadOfMe: string | null
     }
-  | { kind: "leaderboard"; key: string; previous: StageLeaderEntry[]; entries: StageLeaderEntry[] }
-  | { kind: "finale"; key: string; winner: StageWinner | null; rank?: number; subject?: string }
-  | { kind: "summary"; key: string; subject: string; totalPlayers: number; totalQuestions: number }
+  | {
+      kind: "leaderboard"
+      key: string
+      previous: StageLeaderEntry[]
+      entries: StageLeaderEntry[]
+    }
+  | {
+      kind: "finale"
+      key: string
+      winner: StageWinner | null
+      rank?: number
+      subject?: string
+    }
+  | {
+      kind: "summary"
+      key: string
+      subject: string
+      totalPlayers: number
+      totalQuestions: number
+    }
   | {
       kind: "scene"
       key: string
@@ -141,10 +172,20 @@ export function buildStageQuestion(input: {
   questionImage?: string
   photoAlt?: string
 }): StageQuestion {
-  const { text, keyText, answers, visuals, questionStates, note, questionImage, photoAlt } = input
+  const {
+    text,
+    keyText,
+    answers,
+    visuals,
+    questionStates,
+    note,
+    questionImage,
+    photoAlt,
+  } = input
   const number = questionStates?.current ?? 1
-  const roundMatch = (keyText ?? text).match(/^Round\s+(\d+)\b/i)
+  const roundMatch = /^Round\s+(\d+)\b/i.exec(keyText ?? text)
   const round = roundMatch ? Number(roundMatch[1]) : null
+
   return {
     key: `${keyText ?? text}#${number}`,
     question: text,
@@ -157,13 +198,14 @@ export function buildStageQuestion(input: {
       const visual = visuals?.find((v) => v.answerIndex === index)
       const showImage = Boolean(
         visual?.url &&
-          (visual.display === undefined ||
-            visual.display === "image" ||
-            visual.display === "both"),
+        (visual.display === undefined ||
+          visual.display === "image" ||
+          visual.display === "both"),
       )
+
       return {
         label,
-        image: showImage ? visual.url : undefined,
+        image: showImage ? visual?.url : undefined,
         alt: visual?.alt || label || `Choice ${index + 1}`,
       }
     }),
@@ -176,8 +218,13 @@ export function currentAnswerVisuals(
   answersCount: number,
 ): AnswerVisual[] | undefined {
   const raw = envelope?.extras.answerVisuals as AnswerVisual[] | undefined
-  if (!Array.isArray(raw) || raw.length === 0) return undefined
-  if (raw.some((v) => v.answerIndex >= answersCount)) return undefined
+
+  if (!Array.isArray(raw) || raw.length === 0) {
+    return undefined
+  }
+  if (raw.some((v) => v.answerIndex >= answersCount)) {
+    return undefined
+  }
   return raw
 }
 
@@ -192,11 +239,15 @@ export function buildReveal(input: {
   const { answersCount, responses, solutions, snapshot, note } = input
   const counts = Array.from({ length: answersCount }, (_, i) => {
     const fromSnapshot = snapshot?.options?.[i]?.count
+
     return Math.max(0, Number(fromSnapshot ?? responses[i] ?? 0) || 0)
   })
   let percentages: number[]
+
   if (snapshot?.options) {
-    percentages = counts.map((_, i) => Number(snapshot.options?.[i]?.percentage ?? 0))
+    percentages = counts.map((_, i) =>
+      Number(snapshot.options?.[i]?.percentage ?? 0),
+    )
   } else {
     const denominator =
       snapshot && snapshot.totalResponders > 0
@@ -207,8 +258,10 @@ export function buildReveal(input: {
     const map = calculateAggregatePercentages(responses, denominator)
     percentages = counts.map((_, i) => Number(map[i] ?? 0))
   }
+
   const sol = solutions ?? snapshot?.solutions
   const isQuiz = Array.isArray(sol) && sol.length > 0
+
   return {
     counts,
     percentages,
@@ -239,12 +292,15 @@ export function leaderboardEntries(
   teams: TeamsExtras | undefined,
 ): StageLeaderEntry[] {
   if (teams?.enabled && teams.teams && teams.teams.length >= 2) {
-    return projectTeamScores(teams.teams, players, teams.assignments ?? {}).map((t) => ({
-      id: `team:${t.team.id}`,
-      name: t.team.name,
-      score: t.totalPoints,
-    }))
+    return projectTeamScores(teams.teams, players, teams.assignments ?? {}).map(
+      (t) => ({
+        id: `team:${t.team.id}`,
+        name: t.team.name,
+        score: t.totalPoints,
+      }),
+    )
   }
+
   return players.map((p) => ({
     id: p.id,
     name: p.username,
@@ -253,16 +309,28 @@ export function leaderboardEntries(
   }))
 }
 
-export function sceneRankEntries(entries: PublicRankEntry[] | undefined): StageLeaderEntry[] {
-  return (entries ?? []).map((e) => ({ id: `rank:${e.displayName}`, name: e.displayName, score: e.points }))
+export function sceneRankEntries(
+  entries: PublicRankEntry[] | undefined,
+): StageLeaderEntry[] {
+  return (entries ?? []).map((e) => ({
+    id: `rank:${e.displayName}`,
+    name: e.displayName,
+    score: e.points,
+  }))
 }
 
 /** Winner (or joint winners) from ranked entries; null when nobody scored. */
-export function resolveWinner(ranked: Array<{ name: string; score: number }>): StageWinner | null {
+export function resolveWinner(
+  ranked: Array<{ name: string; score: number }>,
+): StageWinner | null {
   const sorted = [...ranked].sort((a, b) => b.score - a.score)
   const best = sorted[0]
-  if (!best || !(best.score > 0)) return null
+
+  if (!best || !(best.score > 0)) {
+    return null
+  }
   const joint = sorted.filter((e) => e.score === best.score).map((e) => e.name)
+
   return { name: joint.join(" & "), score: best.score }
 }
 
@@ -282,12 +350,21 @@ export function computeShowScene(input: ShowInput): ShowScene {
 
   if (envelope?.phase === "scene") {
     const scene = extras.currentScene as SceneDescriptor | undefined
-    const step = extras.activeTimelineStep as { kind?: string; stepIndex?: number; sceneId?: string } | undefined
+    const step = extras.activeTimelineStep as
+      { kind?: string; stepIndex?: number; sceneId?: string } | undefined
+
     if (scene || (step && step.kind !== "question")) {
-      const descriptor: SceneDescriptor = scene ?? { kind: step?.kind ?? "transition", id: step?.sceneId }
+      const descriptor: SceneDescriptor = scene ?? {
+        kind: step?.kind ?? "transition",
+        id: step?.sceneId,
+      }
+
       return {
         kind: "scene",
-        key: sceneKey(envelope, `scene:${descriptor.id ?? descriptor.kind}:${step?.stepIndex ?? ""}`),
+        key: sceneKey(
+          envelope,
+          `scene:${descriptor.id ?? descriptor.kind}:${step?.stepIndex ?? ""}`,
+        ),
         scene: descriptor,
         activeSceneData: extras.activeSceneData as ActiveSceneData | undefined,
         startedAt: envelope.startedAt,
@@ -317,18 +394,39 @@ export function computeShowScene(input: ShowInput): ShowScene {
   switch (status.name) {
     case "SHOW_ROOM":
       if (role === "player") {
-        return { kind: "wait", key: "wait:room", text: typeof data.text === "string" ? data.text : "game:waitingForPlayers" }
+        return {
+          kind: "wait",
+          key: "wait:room",
+          text:
+            typeof data.text === "string"
+              ? data.text
+              : "game:waitingForPlayers",
+        }
       }
+
       return {
         kind: "lobby",
         key: "lobby",
-        inviteCode: typeof data.inviteCode === "string" ? data.inviteCode : undefined,
+        inviteCode:
+          typeof data.inviteCode === "string" ? data.inviteCode : undefined,
         text: typeof data.text === "string" ? data.text : undefined,
       }
+
     case "WAIT":
-      return { kind: "wait", key: `wait:${String(data.text ?? "")}:${qNumber}`, text: String(data.text ?? "") }
+      return {
+        kind: "wait",
+        key: `wait:${String(data.text ?? "")}:${qNumber}`,
+        text: String(data.text ?? ""),
+      }
+
     case "SHOW_START":
-      return { kind: "start", key: "start", subject: String(data.subject ?? ""), time: Number(data.time) || 0 }
+      return {
+        kind: "start",
+        key: "start",
+        subject: String(data.subject ?? ""),
+        time: Number(data.time) || 0,
+      }
+
     case "SHOW_PREPARED":
       return {
         kind: "prepared",
@@ -336,6 +434,7 @@ export function computeShowScene(input: ShowInput): ShowScene {
         questionNumber: Number(data.questionNumber) || qNumber,
         totalAnswers: Number(data.totalAnswers) || 0,
       }
+
     case "SHOW_QUESTION": {
       const question = buildStageQuestion({
         text: String(data.question ?? ""),
@@ -344,22 +443,40 @@ export function computeShowScene(input: ShowInput): ShowScene {
         questionStates,
       })
       const media = asRecord(data.media)
+
       return {
         kind: "question",
         key: `question:${question.key}`,
         question,
-        media: typeof media.url === "string" ? { type: String(media.type ?? ""), url: media.url } : undefined,
+        media:
+          typeof media.url === "string"
+            ? { type: String(media.type ?? ""), url: media.url }
+            : undefined,
       }
     }
+
     case "SELECT_ANSWER": {
-      const answers = Array.isArray(data.answers) ? (data.answers as string[]) : []
+      const answers = Array.isArray(data.answers)
+        ? (data.answers as string[])
+        : []
       const fullQuestion = String(data.question ?? "")
       const answersOnly = Boolean(data.answersOnly)
       const media = asRecord(data.media)
-      const mediaRef = typeof media.url === "string" ? { type: String(media.type ?? ""), url: media.url } : undefined
+      const mediaRef =
+        typeof media.url === "string"
+          ? { type: String(media.type ?? ""), url: media.url }
+          : undefined
       const visuals = currentAnswerVisuals(envelope, answers.length)
-      const hasAnswerImages = Boolean(visuals?.some((v) => v.url && (v.display === "image" || v.display === "both")))
-      const isPhotoQuestion = Boolean(mediaRef && mediaRef.type.toLowerCase() === "image" && !hasAnswerImages && answers.length === 4)
+      const hasAnswerImages = Boolean(
+        visuals?.some(
+          (v) => v.url && (v.display === "image" || v.display === "both"),
+        ),
+      )
+      const isPhotoQuestion = Boolean(
+        mediaRef?.type.toLowerCase() === "image" &&
+        !hasAnswerImages &&
+        answers.length === 4,
+      )
       const question = buildStageQuestion({
         text: role === "player" && answersOnly ? "" : fullQuestion,
         keyText: fullQuestion,
@@ -371,13 +488,18 @@ export function computeShowScene(input: ShowInput): ShowScene {
         photoAlt: fullQuestion,
       })
       const time = Number(data.time)
+
       return {
         kind: "voting",
         key: `voting:${question.key}`,
         question,
         questionType: String(data.questionType ?? "single"),
-        seconds: Number.isFinite(time) && time !== NO_TIME_LIMIT && time > 0 ? time : null,
-        remainingSeconds: typeof data.remainingTime === "number" ? data.remainingTime : null,
+        seconds:
+          Number.isFinite(time) && time !== NO_TIME_LIMIT && time > 0
+            ? time
+            : null,
+        remainingSeconds:
+          typeof data.remainingTime === "number" ? data.remainingTime : null,
         totalPlayers: Number(data.totalPlayer) || 0,
         answers,
         options: data.options,
@@ -386,8 +508,11 @@ export function computeShowScene(input: ShowInput): ShowScene {
         fullQuestion,
       }
     }
+
     case "SHOW_RESPONSES": {
-      const answers = Array.isArray(data.answers) ? (data.answers as string[]) : []
+      const answers = Array.isArray(data.answers)
+        ? (data.answers as string[])
+        : []
       const note = typeof data.note === "string" ? data.note : undefined
       const question = buildStageQuestion({
         text: String(data.question ?? ""),
@@ -397,12 +522,18 @@ export function computeShowScene(input: ShowInput): ShowScene {
         questionStates,
         note,
       })
-      const rawSnapshot = extras.revealDistribution as RevealDistributionSnapshot | undefined
+      const rawSnapshot = extras.revealDistribution as
+        RevealDistributionSnapshot | undefined
       const snapshotValid =
         rawSnapshot &&
-        (questionStates ? rawSnapshot.questionIndex === questionStates.current - 1 : true) &&
-        (!rawSnapshot.questionId || !envelope?.questionId || rawSnapshot.questionId === envelope.questionId)
+        (questionStates
+          ? rawSnapshot.questionIndex === questionStates.current - 1
+          : true) &&
+        (!rawSnapshot.questionId ||
+          !envelope?.questionId ||
+          rawSnapshot.questionId === envelope.questionId)
       const snapshot = snapshotValid ? rawSnapshot : undefined
+
       return {
         kind: "results",
         key: `results:${question.key}`,
@@ -411,15 +542,23 @@ export function computeShowScene(input: ShowInput): ShowScene {
         reveal: buildReveal({
           answersCount: answers.length,
           responses: asRecord(data.responses) as Record<number, number>,
-          solutions: Array.isArray(data.solutions) ? (data.solutions as number[]) : undefined,
+          solutions: Array.isArray(data.solutions)
+            ? (data.solutions as number[])
+            : undefined,
           snapshot,
           note,
         }),
         estimation: snapshot?.estimation,
-        responders: snapshot ? { responders: snapshot.totalResponders, eligible: snapshot.eligiblePlayers } : undefined,
+        responders: snapshot
+          ? {
+              responders: snapshot.totalResponders,
+              eligible: snapshot.eligiblePlayers,
+            }
+          : undefined,
         note,
       }
     }
+
     case "SHOW_RESULT":
       return {
         kind: "player-result",
@@ -431,22 +570,45 @@ export function computeShowScene(input: ShowInput): ShowScene {
         rank: Number(data.rank) || 0,
         aheadOfMe: typeof data.aheadOfMe === "string" ? data.aheadOfMe : null,
       }
+
     case "SHOW_LEADERBOARD": {
       const teams = extras.teams as TeamsExtras | undefined
-      const previous = leaderboardEntries((data.oldLeaderboard as PlayerLike[]) ?? [], teams)
-      const entries = leaderboardEntries((data.leaderboard as PlayerLike[]) ?? [], teams)
-      return { kind: "leaderboard", key: `leaderboard:${qNumber}`, previous, entries }
+      const previous = leaderboardEntries(
+        (data.oldLeaderboard as PlayerLike[]) ?? [],
+        teams,
+      )
+      const entries = leaderboardEntries(
+        (data.leaderboard as PlayerLike[]) ?? [],
+        teams,
+      )
+
+      return {
+        kind: "leaderboard",
+        key: `leaderboard:${qNumber}`,
+        previous,
+        entries,
+      }
     }
+
     case "FINISHED": {
-      const top = Array.isArray(data.top) ? (data.top as Array<{ username: string; points: number }>) : []
+      const top = Array.isArray(data.top)
+        ? (data.top as Array<{ username: string; points: number }>)
+        : []
+
       return {
         kind: "finale",
         key: "finale",
-        winner: resolveWinner(top.map((p) => ({ name: p.username, score: Number(p.points) || 0 }))),
-        rank: role === "player" && typeof data.rank === "number" ? data.rank : undefined,
+        winner: resolveWinner(
+          top.map((p) => ({ name: p.username, score: Number(p.points) || 0 })),
+        ),
+        rank:
+          role === "player" && typeof data.rank === "number"
+            ? data.rank
+            : undefined,
         subject: typeof data.subject === "string" ? data.subject : undefined,
       }
     }
+
     case "SUMMARY":
       return {
         kind: "summary",
@@ -455,29 +617,54 @@ export function computeShowScene(input: ShowInput): ShowScene {
         totalPlayers: Number(data.totalPlayers) || 0,
         totalQuestions: Number(data.totalQuestions) || 0,
       }
+
     default:
-      return { kind: "wait", key: `wait:unknown:${String(status.name)}`, text: "" }
+      return {
+        kind: "wait",
+        key: `wait:unknown:${String(status.name)}`,
+        text: "",
+      }
   }
 }
 
 /** Per-card / per-scene authored background (card mode) overrides the show backdrop. */
-export function resolveStageBackdrop(envelope: ShowEnvelope | null): { url: string; fit: "cover" | "contain" } | null {
+export function resolveStageBackdrop(
+  envelope: ShowEnvelope | null,
+): { url: string; fit: "cover" | "contain" } | null {
   const extras = envelope?.extras ?? {}
   const scene = extras.currentScene as SceneDescriptor | undefined
-  const raw = (extras.cardBackground as CardBackgroundOverride | undefined) ?? (scene?.background as CardBackgroundOverride | undefined)
+  const raw =
+    (extras.cardBackground as CardBackgroundOverride | undefined) ??
+    (scene?.background as CardBackgroundOverride | undefined)
   const effective = resolveEffectiveCardBackground(raw)
-  if (effective.mode !== "card" || !effective.url) return null
-  return { url: effective.url, fit: effective.fit === "contain" ? "contain" : "cover" }
+
+  if (effective.mode !== "card" || !effective.url) {
+    return null
+  }
+  return {
+    url: effective.url,
+    fit: effective.fit === "contain" ? "contain" : "cover",
+  }
 }
 
 /** Global show activation: on for every game unless the show opts back to legacy. */
-export function isTadazzShowActive(envelope: ShowEnvelope | null | undefined): boolean {
-  const defaults = envelope?.extras?.defaults as { motionKit?: string } | undefined
+export function isTadazzShowActive(
+  envelope: ShowEnvelope | null | undefined,
+): boolean {
+  const defaults = envelope?.extras?.defaults as
+    { motionKit?: string } | undefined
+
   return defaults?.motionKit !== "legacy"
 }
 
 /** Whether the active show stage uses the v4 design kit (default: true unless goldy-20261105 or legacy). */
-export function isTadazzV4Active(envelope: ShowEnvelope | null | undefined): boolean {
-  const defaults = envelope?.extras?.defaults as { motionKit?: string } | undefined
-  return defaults?.motionKit !== "legacy" && defaults?.motionKit !== "goldy-20261105"
+export function isTadazzV4Active(
+  envelope: ShowEnvelope | null | undefined,
+): boolean {
+  const defaults = envelope?.extras?.defaults as
+    { motionKit?: string } | undefined
+
+  return (
+    defaults?.motionKit !== "legacy" && defaults?.motionKit !== "goldy-20261105"
+  )
 }

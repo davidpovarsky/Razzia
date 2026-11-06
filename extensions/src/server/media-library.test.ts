@@ -323,6 +323,10 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       schemaVersion: 2,
       revision: 1,
       quizId: "catalog-only-show",
+      leaderboard: {mode: "upstream"},
+      teams: {enabled: false, teams: [], autoAssign: "roundRobin"},
+      audio: createDefaultAudioExtras(),
+      roster: {phoneInviteOnly: false, participants: []},
       baseDigest: VALID_DIGEST,
       defaults: {
         newQuestionMode: "quiz",

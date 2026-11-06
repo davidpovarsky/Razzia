@@ -15,7 +15,9 @@ export const FULL_SHOW_SCENES = [
   "round-two",
   "grand-finale",
 ] as const
+
 export type FullShowScene = (typeof FULL_SHOW_SCENES)[number]
+
 export const isFullShowScene = (value: string): value is FullShowScene =>
   (FULL_SHOW_SCENES as readonly string[]).includes(value)
 
@@ -77,16 +79,34 @@ const picture = (a: TadazzV4Answer | undefined, fallback: number) =>
       alt={a.alt || a.title || ""}
     />
   ) : (
-    <div className="full-picture full-picture-empty full-story-image">{num(fallback + 1)}</div>
+    <div className="full-picture full-picture-empty full-story-image">
+      {num(fallback + 1)}
+    </div>
   )
 
-function Head({ title, chip }: { title?: string; chip?: string }) {
+function Head({
+  title,
+  chip,
+  eyebrow,
+  subtitle,
+}: {
+  title?: string
+  chip?: string
+  eyebrow?: string
+  subtitle?: string
+}) {
   return (
-    <div className="full-headbar">
-      <BrandLogo className="full-head-logo" />
-      <div className="full-head-center">{title}</div>
-      <span className="full-chip">{chip}</span>
-    </div>
+    <>
+      <img className="full-corner-logo" src={BRAND_LOGO_SRC} alt="TADAZZ!" />
+      <div className="full-status-pill">{chip}</div>
+      {title && (
+        <div className="full-head">
+          {eyebrow && <div className="full-eyebrow">{eyebrow}</div>}
+          <h2 className="full-title">{title}</h2>
+          {subtitle && <p className="full-subtitle">{subtitle}</p>}
+        </div>
+      )}
+    </>
   )
 }
 
@@ -102,19 +122,20 @@ export function StoryCards({
   const winners = data.winners ?? []
   const count = Math.min(5, Math.max(0, data.completed ?? 0))
   const roles =
-    data.storyRoles && data.storyRoles.length === 5
-      ? data.storyRoles
-      : DEFAULT_STORY_ROLES
+    data.storyRoles?.length === 5 ? data.storyRoles : DEFAULT_STORY_ROLES
+
   return (
     <div
       className={`full-story-cards full-story-deck${live ? " full-story-hold holding" : ""}`}
     >
       {roles.map((role, i) => {
         const a = winners[i]
-        const ready = !progress || i < count
+        const ready =
+          Boolean(a?.title || a?.alt || a?.imageUrl) && (!progress || i < count)
         const displayTitle = ready
           ? a?.title || a?.alt || `Choice ${i + 1}`
           : "AWAITING THE VOTE"
+
         return (
           <article
             key={role}
@@ -136,7 +157,9 @@ export function StoryCards({
               ) : (
                 <div className="full-picture full-picture-empty">?</div>
               )}
-              <div className="full-story-index full-story-num">{num(i + 1)}</div>
+              <div className="full-story-index full-story-num">
+                {num(i + 1)}
+              </div>
             </div>
             <div className="full-story-title full-story-label" dir="auto">
               {displayTitle}
@@ -149,53 +172,62 @@ export function StoryCards({
 }
 
 export function Directory({ data }: { data: FullShowInput }) {
-  const reps = data.representatives || []
   const connected = new Set(data.connectedTables || [])
-  const group =
-    typeof data.groupPage === "number" &&
-    data.groupPage >= 1 &&
-    data.groupPage <= 4
-      ? data.groupPage
-      : 0
-  const startTable = group > 0 ? (group - 1) * 10 + 1 : 1
-  const endTable = group > 0 ? group * 10 : 40
-  const tableCount = endTable - startTable + 1
-  const chipText =
-    group > 0
-      ? `GROUP ${group} · TABLES ${num(startTable)}–${num(endTable)}`
-      : "PHONE VOTING"
+  const focused =
+    Number.isInteger(data.groupPage) &&
+    data.groupPage! >= 0 &&
+    data.groupPage! < 4
+  const start = focused ? data.groupPage! * 10 : 0
+  const columns = focused ? 2 : 4
+  const size = focused ? 5 : 10
 
   return (
     <>
-      <Head title="FIND YOUR TABLE REPRESENTATIVE" chip={chipText} />
-      <div className="full-phone-banner">
-        <small>CALL TO JOIN</small>
-        <strong>{data.dialNumber || "NUMBER TO BE ADDED"}</strong>
+      <Head title="FIND YOUR TABLE REPRESENTATIVE" chip="PHONE VOTING" />
+      <div className="full-directory-dial">
+        <span className="full-directory-dial-label">CALL TO JOIN</span>
+        <span className="full-directory-dial-number">
+          {data.dialNumber?.trim() || "NUMBER TO BE ADDED"}
+        </span>
       </div>
       <div
-        className={`full-directory${group > 0 ? " full-directory-focused" : ""}`}
+        className={`full-directory${focused ? " focus" : ""}`}
         data-testid="tadazz-full-directory"
-        data-group-page={group}
+        data-group-page={data.groupPage}
       >
-        {Array.from({ length: tableCount }, (_, idx) => {
-          const table = startTable + idx
-          const person = reps.find((r) => r.table === table)
-          const isConnected = connected.has(table)
+        {Array.from({ length: columns }, (_, column) => {
+          const first = start + column * size + 1
+
           return (
-            <div
-              key={table}
-              data-table={table}
-              className={[
-                "full-rep-row",
-                isConnected && "connected full-join-pulse",
-              ]
-                .filter(Boolean)
-                .join(" ")}
-              style={{ animationDelay: `${(idx % 10) * 65}ms` }}
-            >
-              <b>{num(table)}</b>
-              <span>{person?.name || `Table ${table} Representative`}</span>
-              <i aria-label={isConnected ? "Connected" : "Waiting"} />
+            <div className="full-directory-col" key={column}>
+              <div className="full-col-title">
+                TABLES {num(first)}–{num(first + size - 1)}
+              </div>
+              {Array.from({ length: size }, (_, i) => {
+                const table = first + i
+                const name =
+                  data.representatives?.find((rep) => rep.table === table)
+                    ?.name || "Name to be supplied"
+                const joined = connected.has(table)
+
+                return (
+                  <div
+                    key={table}
+                    className={`full-rep-row${joined ? " connected" : ""}`}
+                    data-table={table}
+                    aria-label={`Table ${table}: ${name}, ${joined ? "connected" : "waiting"}`}
+                  >
+                    <span className="full-table-number">{num(table)}</span>
+                    <span className="full-rep-name" dir="auto">
+                      {name}
+                    </span>
+                    <span
+                      className="full-rep-joined"
+                      aria-label={joined ? "Connected" : "Waiting"}
+                    />
+                  </div>
+                )
+              })}
             </div>
           )
         })}
@@ -207,90 +239,162 @@ export function Directory({ data }: { data: FullShowInput }) {
 export function PhoneInstructions({ data }: { data: FullShowInput }) {
   return (
     <>
-      <Head title="JUST DIAL. THEN CHOOSE." chip="KEYPAD VOTING" />
-      <div className="full-phone-instructions">
+      <Head
+        title="JUST DIAL. THEN CHOOSE."
+        chip="KEYPAD VOTING"
+        eyebrow="NO APPS. NO SMARTPHONES."
+        subtitle="Your table representative votes on an ordinary telephone keypad."
+      />
+      <div className="full-phone">
         <div className="full-phone-device">
           <div className="full-phone-speaker" />
-          <div className="full-phone-screen">
-            <small>TADAZZ! IS READY</small>
-            <strong>{data.dialNumber || "DIAL IN"}</strong>
+          <div className="full-phone-display">
+            <div className="full-phone-display-small">TADAZZ! IS READY</div>
+            <div className="full-phone-display-number">
+              {data.dialNumber || "DIAL IN"}
+            </div>
           </div>
           <div className="full-phone-keys">
             {["1", "2", "3", "4", "5", "6", "7", "8", "9", "*", "0", "#"].map(
-              (n, i) => (
-                <span key={n} style={{ animationDelay: `${i * 100}ms` }}>
-                  {n}
-                </span>
+              (key, i) => (
+                <div
+                  key={key}
+                  className={`full-phone-key${i < 5 ? " full-number-key" : ""}`}
+                >
+                  {key}
+                </div>
               ),
             )}
           </div>
+          <div className="full-phone-chin" />
         </div>
-        <div className="full-phone-steps">
-          {[
-            [
-              "01",
-              "DIAL THE EVENT NUMBER",
-              "The host will display or announce the number.",
-            ],
-            [
-              "02",
-              "LISTEN FOR THE QUESTION",
-              "Discuss your choice with your table.",
-            ],
-            [
-              "03",
-              "PRESS 1, 2, 3, 4 OR 5",
-              "One vote per table, using the phone keypad.",
-            ],
-          ].map(([n, t, d]) => (
-            <div key={n}>
-              <b>{n}</b>
-              <strong>{t}</strong>
-              <p>{d}</p>
+      </div>
+      <div className="full-phone-steps">
+        {[
+          [
+            "01",
+            "DIAL THE EVENT NUMBER",
+            "The host will display or announce the number.",
+          ],
+          [
+            "02",
+            "LISTEN FOR THE QUESTION",
+            "Discuss your choice with your table.",
+          ],
+          [
+            "03",
+            "PRESS 1, 2, 3, 4 OR 5",
+            "One vote per table, using the phone keypad.",
+          ],
+        ].map(([n, title, text]) => (
+          <div className="full-step" key={n}>
+            <span className="full-step-num">{n}</span>
+            <div className="full-step-info">
+              <div className="full-step-head">{title}</div>
+              <div className="full-step-text">{text}</div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </>
   )
 }
 
 export function Readiness({ data }: { data: FullShowInput }) {
-  const connected = new Set(data.connectedTables || [])
+  const connected = new Set(
+    (data.connectedTables || []).filter((n) => n >= 1 && n <= 40),
+  )
+
   return (
     <>
-      <Head title="THE TABLES ARE LIGHTING UP" chip="LIVE CONNECTIONS" />
-      <h2 className="full-subhead">THE ROOM IS COMING ONLINE</h2>
-      <div className="full-light-grid">
-        {Array.from({ length: 40 }, (_, i) => {
-          const n = i + 1
-          const isConnected = connected.has(n)
+      <Head
+        title="THE TABLES ARE LIGHTING UP"
+        chip="LIVE CONNECTIONS"
+        eyebrow="THE ROOM IS COMING ONLINE"
+        subtitle="A light appears for each connected table representative."
+      />
+      <div className="full-readiness-tray">
+        <div className="full-table-grid">
+          {Array.from({ length: 40 }, (_, i) => (
+            <div
+              key={i + 1}
+              data-table={i + 1}
+              className={`full-table-led${connected.has(i + 1) ? " connected" : ""}`}
+            >
+              <span className="full-led-label">TABLE</span>
+              <span className="full-led-number">{num(i + 1)}</span>
+              <span className="full-led-pip" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <div className="full-connection-status">
+        <div className="full-connected-count">
+          {connected.size} / 40 TABLES CONNECTED
+        </div>
+        <div className="full-connection-track">
+          <div
+            className="full-connection-fill"
+            style={{ transform: `scaleX(${connected.size / 40})` }}
+          />
+        </div>
+        <div className="full-connection-legend">
+          {data.isLive ? "CONNECTED TABLES" : "PREVIEW DATA — NOT LIVE"}
+        </div>
+      </div>
+    </>
+  )
+}
+
+export function StoryProgress({ data }: { data: FullShowInput }) {
+  const completed = Math.max(0, Math.min(5, data.completed || 0))
+  const roles =
+    data.storyRoles?.length === 5 ? data.storyRoles : DEFAULT_STORY_ROLES
+
+  return (
+    <>
+      <Head
+        title="YOUR WORLD IS TAKING SHAPE"
+        chip={`ROUND ${num(data.round || 1)}`}
+        eyebrow={`${completed} OF 5 STORY PIECES COLLECTED`}
+        subtitle="Every chosen picture becomes part of the story."
+      />
+      <div className="full-progress-bridge" />
+      <div className="full-progress-cards">
+        {roles.map((role, i) => {
+          const answer = data.winners?.[i]
+          const ready =
+            i < completed &&
+            Boolean(answer?.title || answer?.alt || answer?.imageUrl)
+
           return (
             <div
-              data-table={n}
-              key={n}
-              className={`full-light${isConnected ? " connected" : ""}`}
-              style={{
-                animationDelay: `${(i % 10) * 60 + Math.floor(i / 10) * 75}ms`,
-              }}
+              key={role}
+              className={`full-progress-piece${ready ? " is-filled" : ""}`}
             >
-              <small>TABLE</small>
-              <b>{num(n)}</b>
-              <i />
+              <div className="full-progress-cap">{role}</div>
+              <div className="full-progress-frame">
+                {ready && answer?.imageUrl ? (
+                  <img
+                    src={answer.imageUrl}
+                    alt={answer.alt || answer.title}
+                    className="full-progress-image"
+                  />
+                ) : (
+                  <div className="full-progress-placeholder">?</div>
+                )}
+              </div>
+              <div className="full-progress-name" dir="auto">
+                {ready ? answer?.title || answer?.alt : "AWAITING THE VOTE"}
+              </div>
+              <div className="full-progress-index">{num(i + 1)}</div>
             </div>
           )
         })}
       </div>
-      <div className="full-light-status">
-        <b>{connected.size} / 40 TABLES CONNECTED</b>
-        <div>
-          <i
-            style={{ width: `${Math.min(100, (connected.size / 40) * 100)}%` }}
-          />
-        </div>
-        <small>
-          {data.isLive ? "CONNECTED TABLES" : "PREVIEW DATA — NOT LIVE"}
-        </small>
+      <div className="full-progress-bottom">
+        <span>{completed} / 5</span>
+        <span>STORY PIECES READY</span>
       </div>
     </>
   )
@@ -305,6 +409,7 @@ export function Tie({ data }: { data: FullShowInput }) {
     chosenPick?.title || chosenPick?.alt
       ? ` · ${chosenPick.title || chosenPick.alt}`
       : ""
+
   return (
     <>
       <Head
@@ -317,6 +422,7 @@ export function Tie({ data }: { data: FullShowInput }) {
           const isChosen = data.resolvedIndex === i
           const isMuted = isResolved && !isChosen
           const displayTitle = pick?.title || pick?.alt || `Choice ${i + 1}`
+
           return (
             <article
               key={i}
@@ -352,6 +458,7 @@ export function Finale({ data }: { data: FullShowInput }) {
     data.curtainLeftUrl || "/tadazz-show/second-library/curtain-left.png"
   const rightCurtain =
     data.curtainRightUrl || "/tadazz-show/second-library/curtain-right.png"
+
   return (
     <div className="full-grand-finale">
       <div className="full-final-bloom" />
@@ -386,11 +493,7 @@ export function Finale({ data }: { data: FullShowInput }) {
       <div className="full-final-center">
         <BrandLogo className="full-finale-logo" />
       </div>
-      <img
-        src={leftCurtain}
-        alt="Curtain Left"
-        className="full-curtain left"
-      />
+      <img src={leftCurtain} alt="Curtain Left" className="full-curtain left" />
       <img
         src={rightCurtain}
         alt="Curtain Right"
@@ -405,13 +508,10 @@ export function CompanyOpening({ data }: { data: FullShowInput }) {
   const artwork =
     data.eventArtworkUrl ||
     "/tadazz-show/second-library/creating-worlds-intro.png"
+
   return (
     <div className="full-company">
-      <img
-        src={artwork}
-        alt="Creating Worlds"
-        className="full-company-event"
-      />
+      <img src={artwork} alt="Creating Worlds" className="full-company-event" />
       <div className="full-company-glow" />
       <div className="full-company-brand">
         <BrandLogo className="full-company-logo" />
@@ -424,6 +524,7 @@ export function GrandOpening({ data }: { data: FullShowInput }) {
   const teaserSrc =
     data.eventArtworkUrl ||
     "/tadazz-show/second-library/teaser-screen-source.jpg"
+
   return (
     <div className="full-grand-opening">
       <img
@@ -448,12 +549,12 @@ export function GrandOpening({ data }: { data: FullShowInput }) {
 
 export function RoundLaunch({
   scene,
-  data,
 }: {
   scene: "round-one" | "round-two"
   data: FullShowInput
 }) {
   const isRoundOne = scene === "round-one"
+
   return (
     <div className="full-round-launch">
       <Head title="" chip={`ROUND ${num(isRoundOne ? 1 : 2)}`} />
@@ -483,34 +584,30 @@ export function FullShowSceneView({
   switch (scene) {
     case "company-opening":
       return <CompanyOpening data={data} />
+
     case "grand-opening":
       return <GrandOpening data={data} />
+
     case "representative-directory":
       return <Directory data={data} />
+
     case "phone-instructions":
       return <PhoneInstructions data={data} />
+
     case "connection-readiness":
       return <Readiness data={data} />
+
     case "round-one":
+
     case "round-two":
       return <RoundLaunch scene={scene} data={data} />
+
     case "story-progress":
-      return (
-        <>
-          <Head
-            title="YOUR WORLD IS TAKING SHAPE"
-            chip={`ROUND ${num(data.round || 1)}`}
-          />
-          <h3 className="full-story-status">
-            {Math.max(0, Math.min(5, data.completed || 0))} OF 5 STORY PIECES
-            COLLECTED
-          </h3>
-          <StoryCards data={data} progress />
-          <div className="full-story-bridge full-story-ribbon" />
-        </>
-      )
+      return <StoryProgress data={data} />
+
     case "tie-break":
       return <Tie data={data} />
+
     case "story-assembly":
       return (
         <>
@@ -525,17 +622,16 @@ export function FullShowSceneView({
           </div>
         </>
       )
+
     case "story-live":
       return (
         <>
           <Head
             title="THE WORLD YOU CREATED"
             chip={`ROUND ${num(data.round || 1)}`}
+            eyebrow="STORYTELLING MODE"
+            subtitle="All five choices remain visible while the host tells the story."
           />
-          <h3 className="full-story-status">
-            STORYTELLING MODE · All five choices remain visible while the host
-            tells the story.
-          </h3>
           <StoryCards data={data} live />
           <div className="full-story-live-note full-live-footer">
             <span className="full-live-dot" />
@@ -543,6 +639,7 @@ export function FullShowSceneView({
           </div>
         </>
       )
+
     case "grand-finale":
       return <Finale data={data} />
   }
@@ -552,6 +649,8 @@ export function renderFullShowScene(
   scene: FullShowScene,
   data: FullShowInput,
 ): ReactNode {
-  if (!isFullShowScene(scene)) return null
+  if (!isFullShowScene(scene)) {
+    return null
+  }
   return <FullShowSceneView scene={scene} data={data} />
 }

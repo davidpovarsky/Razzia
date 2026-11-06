@@ -1,4 +1,10 @@
-import type { QuizExtrasV1, QuizExtrasV2 } from "./quiz-extras.js"
+import type { QuizExtrasV2 } from "./studio-timeline-schema"
+
+// V1 and V2 share these media fields; intersecting their literal schema versions
+// would reduce the entire object to never.
+type MediaExtras = Partial<
+  Omit<QuizExtrasV2, "schemaVersion"> & { schemaVersion: 1 | 2 }
+>
 
 export type MediaReferenceField =
   | "question.media"
@@ -15,6 +21,7 @@ export type MediaReferenceField =
   | "scene.background"
   | "scene.audio"
   | "show.audioCue"
+  | "show.soundtrack"
   | "show.decoration.lottie"
   | "show.mediaCatalog"
 
@@ -34,9 +41,11 @@ export interface CardMediaReference {
  */
 export const extractMediaNameFromUrl = (url: string): string => {
   const trimmed = url.trim()
+
   if (trimmed.startsWith("/media/")) {
     return trimmed.slice("/media/".length)
   }
+
   return trimmed
 }
 
@@ -47,12 +56,14 @@ export const normalizeMediaTarget = (
   urlOrName: string,
 ): { url: string; name: string } => {
   const trimmed = urlOrName.trim()
+
   if (trimmed.startsWith("/media/")) {
     return {
       url: trimmed,
       name: trimmed.slice("/media/".length),
     }
   }
+
   return {
     url: `/media/${trimmed}`,
     name: trimmed,
@@ -69,7 +80,7 @@ export interface InspectableQuizShow {
       media?: { type?: string; url?: string } | null
     }>
   }
-  extras?: Partial<QuizExtrasV1 & QuizExtrasV2> | null
+  extras?: MediaExtras | null
 }
 
 /**
@@ -98,10 +109,13 @@ export const collectQuizMediaReferences = (
     if (!url || typeof url !== "string") {
       return
     }
+
     const trimmed = url.trim()
+
     if (!trimmed) {
       return
     }
+
     refs.push({
       quizId,
       quizTitle,
@@ -124,6 +138,7 @@ export const collectQuizMediaReferences = (
     }
 
     const pq = show.extras?.perQuestion?.[qId]
+
     if (pq) {
       if (Array.isArray(pq.answerVisuals)) {
         for (const av of pq.answerVisuals) {
@@ -174,6 +189,7 @@ export const collectQuizMediaReferences = (
       const interludeUrl =
         pq.interlude?.url ??
         (pq.interlude as { mediaUrl?: string } | undefined)?.mediaUrl
+
       if (interludeUrl) {
         addRef(
           qId,
@@ -183,6 +199,7 @@ export const collectQuizMediaReferences = (
           interludeUrl,
         )
       }
+
       if (pq.questionDecoration?.lottieUrl) {
         addRef(
           qId,
@@ -199,17 +216,21 @@ export const collectQuizMediaReferences = (
   const visitedQIds = new Set(
     questions.map((q, idx) => q.id || questionIds[idx] || `q_${idx + 1}`),
   )
+
   if (show.extras?.perQuestion) {
     for (const [qId, pq] of Object.entries(show.extras.perQuestion)) {
       if (visitedQIds.has(qId) || !pq) {
         continue
       }
+
       const qLabel = `Question (${qId})`
+
       if (Array.isArray(pq.answerVisuals)) {
         for (const av of pq.answerVisuals) {
           addRef(qId, "question", qLabel, "question.answerVisual", av.url)
         }
       }
+
       if (pq.background?.url) {
         addRef(
           qId,
@@ -219,6 +240,7 @@ export const collectQuizMediaReferences = (
           pq.background.url,
         )
       }
+
       if (pq.audioCues?.showQuestion?.mode === "custom") {
         addRef(
           qId,
@@ -228,6 +250,7 @@ export const collectQuizMediaReferences = (
           pq.audioCues.showQuestion.url,
         )
       }
+
       if (pq.audioCues?.answersMusic?.mode === "custom") {
         addRef(
           qId,
@@ -237,6 +260,7 @@ export const collectQuizMediaReferences = (
           pq.audioCues.answersMusic.url,
         )
       }
+
       if (pq.audioCues?.revealResults?.mode === "custom") {
         addRef(
           qId,
@@ -246,9 +270,11 @@ export const collectQuizMediaReferences = (
           pq.audioCues.revealResults.url,
         )
       }
+
       const interludeUrl =
         pq.interlude?.url ??
         (pq.interlude as { mediaUrl?: string } | undefined)?.mediaUrl
+
       if (interludeUrl) {
         addRef(
           qId,
@@ -258,6 +284,7 @@ export const collectQuizMediaReferences = (
           interludeUrl,
         )
       }
+
       if (pq.questionDecoration?.lottieUrl) {
         addRef(
           qId,
@@ -276,13 +303,17 @@ export const collectQuizMediaReferences = (
       if (!scene) {
         continue
       }
+
       const sLabel = scene.title?.trim() || `${scene.kind} (${sceneId})`
+
       if ("mediaUrl" in scene && typeof scene.mediaUrl === "string") {
         addRef(sceneId, "scene", sLabel, "scene.media", scene.mediaUrl)
       }
+
       if ("lottieUrl" in scene && typeof scene.lottieUrl === "string") {
         addRef(sceneId, "scene", sLabel, "scene.lottie", scene.lottieUrl)
       }
+
       if (
         "overlayAnimations" in scene &&
         Array.isArray(scene.overlayAnimations)
@@ -299,6 +330,7 @@ export const collectQuizMediaReferences = (
           }
         }
       }
+
       if (scene.background?.url) {
         addRef(
           sceneId,
@@ -308,6 +340,7 @@ export const collectQuizMediaReferences = (
           scene.background.url,
         )
       }
+
       if (scene.audio?.url && scene.audio.mode !== "mute") {
         addRef(sceneId, "scene", sLabel, "scene.audio", scene.audio.url)
       }
@@ -329,6 +362,7 @@ export const collectQuizMediaReferences = (
   if (show.extras?.audio?.cues) {
     for (const [cueKey, cueCfg] of Object.entries(show.extras.audio.cues)) {
       const source = (cueCfg as { source?: string } | undefined)?.source
+
       if ((source === "media" || source === "custom") && cueCfg?.url) {
         addRef(
           `audio_${cueKey}`,
@@ -338,6 +372,20 @@ export const collectQuizMediaReferences = (
           cueCfg.url,
         )
       }
+    }
+  }
+
+  for (const [slot, setting] of Object.entries(
+    show.extras?.audio?.soundtrack ?? {},
+  )) {
+    if (setting.mode === "media" && setting.url) {
+      addRef(
+        `soundtrack_${slot}`,
+        "global",
+        `Soundtrack: ${slot}`,
+        "show.soundtrack",
+        setting.url,
+      )
     }
   }
 
@@ -392,7 +440,7 @@ export const detachMediaFromShowData = <
       media?: { type?: string; url?: string } | null
     }>
   },
-  TExtras extends Partial<QuizExtrasV1 & QuizExtrasV2>,
+  TExtras extends MediaExtras,
 >(
   urlOrName: string,
   quizz: TQuizz,
@@ -405,21 +453,26 @@ export const detachMediaFromShowData = <
     if (!u) {
       return false
     }
+
     const trimmed = u.trim()
+
     return (
       trimmed === target.url || extractMediaNameFromUrl(trimmed) === target.name
     )
   }
 
   const nextQuizz = structuredClone(quizz)
+
   if (Array.isArray(nextQuizz.questions)) {
     nextQuizz.questions = nextQuizz.questions.map((q) => {
       if (q.media?.url && matchesTarget(q.media.url)) {
         modified = true
         const nextQ = { ...q }
         delete nextQ.media
+
         return nextQ
       }
+
       return q
     })
   }
@@ -435,19 +488,23 @@ export const detachMediaFromShowData = <
       if (!pq) {
         continue
       }
+
       if (Array.isArray(pq.answerVisuals)) {
         const beforeLen = pq.answerVisuals.length
         pq.answerVisuals = pq.answerVisuals.filter(
           (av) => !matchesTarget(av.url),
         )
+
         if (pq.answerVisuals.length !== beforeLen) {
           modified = true
         }
       }
+
       if (pq.background?.url && matchesTarget(pq.background.url)) {
         delete pq.background
         modified = true
       }
+
       if (pq.audioCues) {
         for (const key of [
           "showQuestion",
@@ -455,6 +512,7 @@ export const detachMediaFromShowData = <
           "revealResults",
         ] as const) {
           const cue = pq.audioCues[key]
+
           if (cue?.url && matchesTarget(cue.url)) {
             pq.audioCues[key] = {
               mode: "inherit",
@@ -464,29 +522,35 @@ export const detachMediaFromShowData = <
           }
         }
       }
+
       if (pq.interlude) {
         const interludeObj = pq.interlude as {
           url?: string
           mediaUrl?: string
         }
+
         if (interludeObj.url && matchesTarget(interludeObj.url)) {
           delete interludeObj.url
           modified = true
         }
+
         if (interludeObj.mediaUrl && matchesTarget(interludeObj.mediaUrl)) {
           delete interludeObj.mediaUrl
           modified = true
         }
       }
+
       if (
         pq.questionDecoration?.lottieUrl &&
         matchesTarget(pq.questionDecoration.lottieUrl)
       ) {
         delete pq.questionDecoration.lottieUrl
+
         if (pq.questionDecoration.preset === "lottie") {
           pq.questionDecoration.preset = "none"
           pq.questionDecoration.enabled = false
         }
+
         modified = true
       }
     }
@@ -497,10 +561,12 @@ export const detachMediaFromShowData = <
     matchesTarget(nextExtras.defaults.questionDecoration.lottieUrl)
   ) {
     delete nextExtras.defaults.questionDecoration.lottieUrl
+
     if (nextExtras.defaults.questionDecoration.preset === "lottie") {
       nextExtras.defaults.questionDecoration.preset = "none"
       nextExtras.defaults.questionDecoration.enabled = false
     }
+
     modified = true
   }
 
@@ -509,6 +575,7 @@ export const detachMediaFromShowData = <
       if (!scene) {
         continue
       }
+
       if (
         "mediaUrl" in scene &&
         typeof scene.mediaUrl === "string" &&
@@ -517,6 +584,7 @@ export const detachMediaFromShowData = <
         delete (scene as { mediaUrl?: string }).mediaUrl
         modified = true
       }
+
       if (
         "lottieUrl" in scene &&
         typeof scene.lottieUrl === "string" &&
@@ -525,6 +593,7 @@ export const detachMediaFromShowData = <
         delete (scene as { lottieUrl?: string }).lottieUrl
         modified = true
       }
+
       if (
         "overlayAnimations" in scene &&
         Array.isArray(scene.overlayAnimations)
@@ -536,6 +605,7 @@ export const detachMediaFromShowData = <
             ...overlay,
             order: idx,
           }))
+
         if (filtered.length !== beforeLen) {
           ;(
             scene as { overlayAnimations?: typeof filtered }
@@ -543,10 +613,12 @@ export const detachMediaFromShowData = <
           modified = true
         }
       }
+
       if (scene.background?.url && matchesTarget(scene.background.url)) {
         delete scene.background
         modified = true
       }
+
       if (scene.audio?.url && matchesTarget(scene.audio.url)) {
         delete scene.audio
         modified = true
@@ -564,11 +636,20 @@ export const detachMediaFromShowData = <
     }
   }
 
+  for (const setting of Object.values(nextExtras.audio?.soundtrack ?? {})) {
+    if (setting.url && matchesTarget(setting.url)) {
+      setting.mode = "mute"
+      delete setting.url
+      modified = true
+    }
+  }
+
   if (Array.isArray(nextExtras.mediaCatalog)) {
     const before = nextExtras.mediaCatalog.length
     nextExtras.mediaCatalog = nextExtras.mediaCatalog.filter(
       (item) => !matchesTarget(item.url) && item.name !== target.name,
     )
+
     if (nextExtras.mediaCatalog.length !== before) {
       modified = true
     }

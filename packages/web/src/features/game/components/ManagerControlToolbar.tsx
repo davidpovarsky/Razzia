@@ -1,9 +1,9 @@
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
+  type ActiveSceneData,
   type ExtensionCommand,
   type ExtensionStateEnvelope,
-  type ActiveSceneData,
 } from "@razzia/extensions/core"
 import { formatHistoryItem } from "@razzia/extensions/presentation"
 import AlertDialog from "@razzia/web/components/AlertDialog"
@@ -11,7 +11,6 @@ import Button from "@razzia/web/components/Button"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
-import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import clsx from "clsx"
 import {
   Check,
@@ -21,6 +20,7 @@ import {
   History,
   LogOut,
   Monitor,
+  Pause,
   Play,
   SkipForward,
   Timer,
@@ -103,6 +103,7 @@ interface Props {
   onExit: () => void
   onStartGame?: () => void
   onAdvanceFallback?: () => void
+  onPresent?: () => void
   countdown?: { seconds: number; total: number } | null
 }
 
@@ -116,6 +117,7 @@ export const ManagerControlToolbar = ({
   onExit,
   onStartGame,
   onAdvanceFallback,
+  onPresent,
   countdown,
 }: Props) => {
   const { t } = useTranslation()
@@ -126,24 +128,28 @@ export const ManagerControlToolbar = ({
     number | null
   >(null)
 
-  const storeGameId = useQuestionStore((s) => s.gameId)
-  const gameId = extensionState?.gameId || storeGameId
+  const gameId = extensionState?.gameId
   const [copiedDisplay, setCopiedDisplay] = useState(false)
 
   const handleOpenDisplay = useCallback(() => {
-    if (!gameId || typeof window === "undefined") return
+    if (!gameId || typeof window === "undefined") {
+      return
+    }
     window.open(`/display/${gameId}`, "_blank")
   }, [gameId])
 
   const handleCopyDisplayUrl = useCallback(async () => {
-    if (!gameId || typeof window === "undefined") return
+    if (!gameId || typeof window === "undefined") {
+      return
+    }
     const url = `${window.location.origin}/display/${gameId}`
+
     try {
       await navigator.clipboard.writeText(url)
       setCopiedDisplay(true)
       setTimeout(() => setCopiedDisplay(false), 2000)
     } catch {
-      // fallback
+      // Fallback
     }
   }, [gameId])
 
@@ -151,6 +157,7 @@ export const ManagerControlToolbar = ({
   const isInterlude = extensionState?.phase === "interlude"
   const epoch = extensionState?.epoch
   const phase = extensionState?.phase
+  const isPaused = Boolean(extensionState?.pause?.paused)
 
   const sendCommand = useCallback(
     (
@@ -194,6 +201,16 @@ export const ManagerControlToolbar = ({
   }, [gameId, currentQuestionIdx, epoch, sendCommand])
 
   // 2. Next Screen action
+  const handlePauseToggle = useCallback(() => {
+    if (!gameId) {
+      return
+    }
+    sendCommand({
+      action: isPaused ? "RESUME_GAME" : "PAUSE_GAME",
+      payload: { epoch },
+    })
+  }, [epoch, gameId, isPaused, sendCommand])
+
   const handleNextScreen = useCallback(() => {
     if (!gameId) {
       onAdvanceFallback?.()
@@ -230,7 +247,7 @@ export const ManagerControlToolbar = ({
 
   const canPreviousAuthoritative =
     typeof extensionState?.extras?.canPrevious === "boolean"
-      ? (extensionState.extras.canPrevious as boolean)
+      ? extensionState.extras.canPrevious
       : currentQuestionIdx > 0 &&
         statusName !== STATUS.SHOW_ROOM &&
         statusName !== STATUS.FINISHED &&
@@ -275,7 +292,13 @@ export const ManagerControlToolbar = ({
     } else {
       executePreviousScreen(false)
     }
-  }, [gameId, isPending, canPrevious, willReopenQuestion, executePreviousScreen])
+  }, [
+    gameId,
+    isPending,
+    canPrevious,
+    willReopenQuestion,
+    executePreviousScreen,
+  ])
 
   // 3. Skip Question action
   const handleSkipQuestion = () => {
@@ -304,7 +327,7 @@ export const ManagerControlToolbar = ({
         action: "VIEW_HISTORY",
         payload: {
           questionIndex: targetIdx,
-          epoch: extensionState.epoch,
+          epoch,
         },
       })
     }
@@ -318,7 +341,7 @@ export const ManagerControlToolbar = ({
         action: "VIEW_HISTORY",
         payload: {
           questionIndex: idx,
-          epoch: extensionState.epoch,
+          epoch,
         },
       })
     }
@@ -355,6 +378,14 @@ export const ManagerControlToolbar = ({
   }
 
   // Primary action shortcut handler (Space / Enter) with robust focus & modal protection
+  const isScene =
+    extensionState?.phase === "scene" ||
+    Boolean(
+      extensionState?.extras?.activeTimelineStep &&
+      (extensionState.extras.activeTimelineStep as { kind?: string }).kind !==
+        "question",
+    )
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape" && historyOpen) {
@@ -383,7 +414,10 @@ export const ManagerControlToolbar = ({
       }
 
       if (e.altKey && e.key === "ArrowLeft") {
-        if (!shouldIgnoreKeyboardShortcut(e, historyOpen, true) && canPrevious) {
+        if (
+          !shouldIgnoreKeyboardShortcut(e, historyOpen, true) &&
+          canPrevious
+        ) {
           e.preventDefault()
           handlePreviousScreen()
         }
@@ -399,6 +433,7 @@ export const ManagerControlToolbar = ({
     historyOpen,
     statusName,
     isInterlude,
+    isScene,
     canPrevious,
     handleEndTimer,
     handleNextScreen,
@@ -424,14 +459,6 @@ export const ManagerControlToolbar = ({
     [viewingHistoryEnvelope, selectedHistoryIndex],
   )
 
-  const isScene =
-    extensionState?.phase === "scene" ||
-    Boolean(
-      extensionState?.extras?.activeTimelineStep &&
-        (extensionState.extras.activeTimelineStep as { kind?: string }).kind !==
-          "question",
-    )
-
   const canSkipQuestion =
     statusName === STATUS.SHOW_PREPARED ||
     statusName === STATUS.SHOW_QUESTION ||
@@ -446,17 +473,34 @@ export const ManagerControlToolbar = ({
 
   return (
     <div
-      className="flex w-full flex-wrap items-center justify-between gap-2 p-2 sm:gap-3 sm:p-4 max-w-full box-border"
+      className="box-border flex w-full max-w-full flex-wrap items-center justify-between gap-2 p-2 sm:gap-3 sm:p-4"
       data-testid="manager-control-toolbar"
     >
-      {(extensionState?.extras.activeSceneData as ActiveSceneData | undefined)?.fullShow?.tieCandidates?.map(option => (
-        <Button key={option.answerIndex} data-testid={`host-resolve-tie-${option.answerIndex}`} disabled={isPending} onClick={() => sendCommand({action: "RESOLVE_STORY_TIE", payload: {answerIndex: option.answerIndex, epoch: extensionState!.epoch}})}>{option.label}</Button>
+      {(
+        extensionState?.extras.activeSceneData as ActiveSceneData | undefined
+      )?.fullShow?.tieCandidates?.map((option) => (
+        <Button
+          key={option.answerIndex}
+          data-testid={`host-resolve-tie-${option.answerIndex}`}
+          disabled={isPending}
+          onClick={() =>
+            sendCommand({
+              action: "RESOLVE_STORY_TIE",
+              payload: {
+                answerIndex: option.answerIndex,
+                epoch: extensionState!.epoch,
+              },
+            })
+          }
+        >
+          {option.label}
+        </Button>
       ))}
       {/* Left section: Progress / Question Counter & Room Lock */}
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 min-w-0">
+      <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:gap-2">
         {questionStates && !isLobby && !isFinished && (
           <div
-            className="flex shrink-0 items-center rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base md:text-lg font-bold text-white shadow-md backdrop-blur-md"
+            className="flex shrink-0 items-center rounded-lg border border-white/10 bg-black/50 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md sm:px-4 sm:py-2 sm:text-base md:text-lg"
             data-testid="host-question-counter"
           >
             {`${questionStates.current} / ${questionStates.total}`}
@@ -471,7 +515,7 @@ export const ManagerControlToolbar = ({
           <div className="flex shrink-0 items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
             <Button
               onClick={handleOpenDisplay}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 sm:px-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/20"
+              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/20 sm:px-3 sm:text-sm"
               title={t("extensions:host.openDisplay")}
               data-testid="host-open-display-btn"
             >
@@ -485,7 +529,7 @@ export const ManagerControlToolbar = ({
               data-testid="host-copy-display-btn"
             >
               {copiedDisplay ? (
-                <Check className="size-4 text-emerald-400 shrink-0" />
+                <Check className="size-4 shrink-0 text-emerald-400" />
               ) : (
                 <Copy className="size-4 shrink-0" />
               )}
@@ -493,11 +537,24 @@ export const ManagerControlToolbar = ({
           </div>
         )}
 
+        {onPresent && (
+          <Button
+            onClick={onPresent}
+            className="bg-primary flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold text-white shadow-lg hover:brightness-105 sm:px-4 sm:py-2 sm:text-base"
+            data-testid="host-present-from-host-btn"
+          >
+            <Monitor className="size-5 shrink-0" />
+            <span>
+              {t("extensions:host.presentFromHost", "Present from Host")}
+            </span>
+          </Button>
+        )}
+
         {/* Exit Button with confirmation when game in progress */}
         {isLobby || isFinished ? (
           <Button
             onClick={onExit}
-            className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold text-black shadow-md"
+            className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-sm font-bold text-black shadow-md sm:px-4 sm:py-2 sm:text-base"
             data-testid="host-exit-btn"
           >
             <LogOut className="size-4 shrink-0" />
@@ -507,7 +564,7 @@ export const ManagerControlToolbar = ({
           <AlertDialog
             trigger={
               <Button
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40"
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40 sm:px-4 sm:py-2 sm:text-base"
                 data-testid="host-exit-btn"
               >
                 <LogOut className="size-4 shrink-0" />
@@ -537,10 +594,10 @@ export const ManagerControlToolbar = ({
                   : t("extensions:host.previousScreen", "Previous Screen")
               }
               className={clsx(
-                "relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-bold shadow-md transition-all active:scale-95",
+                "relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold shadow-md transition-all active:scale-95 sm:px-4 sm:py-2 sm:text-base",
                 canPrevious && !isPending
                   ? "bg-white text-black hover:bg-white/90"
-                  : "pointer-events-none opacity-40 bg-white/10 text-white/40 border border-white/10",
+                  : "pointer-events-none border border-white/10 bg-white/10 text-white/40 opacity-40",
               )}
               data-testid="host-previous-screen-btn"
             >
@@ -587,14 +644,14 @@ export const ManagerControlToolbar = ({
       </div>
 
       {/* Right section: Control buttons */}
-      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 sm:ml-auto min-w-0">
+      <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:ml-auto sm:gap-2">
         {/* Lobby Start Game */}
         {isLobby && onStartGame && (
           <Button
             onClick={onStartGame}
-            className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 sm:px-6 sm:py-2.5 text-base sm:text-lg font-bold text-black shadow-lg"
+            className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 text-base font-bold text-black shadow-lg sm:px-6 sm:py-2.5 sm:text-lg"
           >
-            <Play className="size-5 fill-black shrink-0" />
+            <Play className="size-5 shrink-0 fill-black" />
             <span>{t("game:startGame")}</span>
           </Button>
         )}
@@ -604,7 +661,7 @@ export const ManagerControlToolbar = ({
           <Button
             onClick={handleOpenHistory}
             disabled={isPending}
-            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
             data-testid="host-history-btn"
           >
             <History className="size-4 shrink-0" />
@@ -618,7 +675,7 @@ export const ManagerControlToolbar = ({
             trigger={
               <Button
                 disabled={isPending}
-                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30"
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
                 data-testid="host-skip-question-btn"
               >
                 <SkipForward className="size-4 shrink-0" />
@@ -632,13 +689,33 @@ export const ManagerControlToolbar = ({
           />
         )}
 
+        {!isLobby && !isFinished && (
+          <Button
+            onClick={handlePauseToggle}
+            disabled={isPending}
+            className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white shadow-md hover:bg-white/30 sm:px-4 sm:py-2"
+            data-testid="host-pause-resume-btn"
+          >
+            {isPaused ? (
+              <Play className="size-4" />
+            ) : (
+              <Pause className="size-4" />
+            )}
+            <span>
+              {isPaused
+                ? t("extensions:host.resumeGame", "Resume")
+                : t("extensions:host.pauseGame", "Pause")}
+            </span>
+          </Button>
+        )}
+
         {/* End Timer button during answering */}
         {canEndTimer && (
           <Button
             onClick={handleEndTimer}
             disabled={isPending}
             className={clsx(
-              "bg-primary flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 sm:px-5 sm:py-2.5 text-sm sm:text-base font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95",
+              "bg-primary flex shrink-0 items-center gap-2 rounded-lg px-4 py-2 text-sm font-bold text-white shadow-lg transition-transform hover:brightness-105 active:scale-95 sm:px-5 sm:py-2.5 sm:text-base",
               isPending && "pointer-events-none opacity-60",
             )}
             data-testid="host-end-timer-btn"
@@ -654,7 +731,7 @@ export const ManagerControlToolbar = ({
             onClick={handleNextScreen}
             disabled={isPending}
             className={clsx(
-              "hover:bg-accent relative flex shrink-0 items-center gap-2 overflow-hidden rounded-lg bg-white px-5 py-2 sm:px-6 sm:py-2.5 text-sm sm:text-base font-bold text-black shadow-lg active:scale-95",
+              "hover:bg-accent relative flex shrink-0 items-center gap-2 overflow-hidden rounded-lg bg-white px-5 py-2 text-sm font-bold text-black shadow-lg active:scale-95 sm:px-6 sm:py-2.5 sm:text-base",
               isPending && "pointer-events-none opacity-60",
             )}
             data-testid="host-next-screen-btn"

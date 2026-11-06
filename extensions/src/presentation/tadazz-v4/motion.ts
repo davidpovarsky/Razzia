@@ -6,11 +6,13 @@ import {
   type TadazzV4Scene,
 } from "./types"
 
-/** Native WAAPI choreography. Frame coordinates, keyframes, easings, and timings are
- * transcribed from animation library set.html, TadazzStageKit v4, not approximated.
- * No demo imagery/data, no iframe, and no HTML interpreter. */
+// Native WAAPI choreography. Frame coordinates, keyframes, easings, and timings are
+// transcribed from animation library set.html, TadazzStageKit v4, not approximated.
+// No demo imagery/data, no iframe, and no HTML interpreter.
 export const V4_EASE = "cubic-bezier(.16,.9,.23,1)"
+
 export const V4_EASE_DRAMATIC = "cubic-bezier(.15,.82,.22,1.02)"
+
 export const V4_FX_COLORS = [
   "#eaff59",
   "#26c9ff",
@@ -18,6 +20,7 @@ export const V4_FX_COLORS = [
   "#ffd071",
   "#508dff",
 ] as const
+
 export const V4_FRAME_SIZE = { width: 1920, height: 1080 } as const
 
 export interface MotionConfig {
@@ -26,6 +29,7 @@ export interface MotionConfig {
   onCue?: (cue: TadazzV4Cue) => void
   onWipeCovered?: () => void
 }
+
 interface AnimOptions {
   duration?: number
   delay?: number
@@ -36,6 +40,7 @@ const raf = (cb: FrameRequestCallback) => requestAnimationFrame(cb)
 const ease = (p: number) => Math.max(0, Math.min(1, p))
 const seededRandom = (seed: number) => () => {
   seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0
+
   return seed / 4294967296
 }
 function query<T extends Element = HTMLElement>(
@@ -57,10 +62,12 @@ export class TadazzV4Motion {
   private finalizers: Array<() => void> = []
   private token = 0
   private scene: TadazzV4Scene = "question"
-  constructor(
-    private stage: HTMLElement,
-    private config: MotionConfig = {},
-  ) {}
+  private stage: HTMLElement
+  private config: MotionConfig
+  constructor(stage: HTMLElement, config: MotionConfig = {}) {
+    this.stage = stage
+    this.config = config
+  }
 
   /** Stop only effects owned by this kit. Never mutate the Razzia/host timeline. */
   stop() {
@@ -69,27 +76,37 @@ export class TadazzV4Motion {
       try {
         animation.cancel()
       } catch {
-        /* a stale WAAPI timeline */
+        /* A stale WAAPI timeline */
       }
     }
     this.active = []
     this.finalizers = []
-    for (const id of this.tickerFrames) cancelAnimationFrame(id)
+    for (const id of this.tickerFrames) {
+      cancelAnimationFrame(id)
+    }
     this.tickerFrames = []
     const fx = this.fx()
-    if (fx) fx.replaceChildren()
+
+    if (fx) {
+      fx.replaceChildren()
+    }
     const flash = this.flash()
-    if (flash) flash.style.opacity = "0"
+
+    if (flash) {
+      flash.style.opacity = "0"
+    }
   }
   pause() {
     for (const a of this.root().getAnimations?.({ subtree: true }) ?? []) {
-      if (!this.active.includes(a)) this.active.push(a)
+      if (!this.active.includes(a)) {
+        this.active.push(a)
+      }
     }
     this.active.forEach((a) => {
       try {
         a.pause()
       } catch {
-        /* stale */
+        /* Stale */
       }
     })
   }
@@ -98,7 +115,7 @@ export class TadazzV4Motion {
       try {
         a.play()
       } catch {
-        /* stale */
+        /* Stale */
       }
     })
   }
@@ -106,14 +123,19 @@ export class TadazzV4Motion {
     this.config.reducedMotion = on
   }
   finishAll() {
-    for (const id of this.tickerFrames) cancelAnimationFrame(id)
+    for (const id of this.tickerFrames) {
+      cancelAnimationFrame(id)
+    }
     this.tickerFrames = []
     for (const a of this.active) {
       try {
-        if (a.effect?.getTiming().iterations === Infinity) a.cancel()
-        else a.finish()
+        if (a.effect?.getTiming().iterations === Infinity) {
+          a.cancel()
+        } else {
+          a.finish()
+        }
       } catch {
-        /* infinite or disposed */
+        /* Infinite or disposed */
       }
     }
     const fin = [...this.finalizers]
@@ -122,7 +144,7 @@ export class TadazzV4Motion {
       try {
         fn()
       } catch {
-        /* ignore */
+        /* Ignore */
       }
     }
   }
@@ -139,7 +161,9 @@ export class TadazzV4Motion {
     frames: Keyframe[],
     options: AnimOptions = {},
   ): Animation | null {
-    if (!node || !("animate" in node)) return null
+    if (!node || !("animate" in node)) {
+      return null
+    }
     const a = node.animate(frames, {
       duration: this.motionMs(options.duration || 650),
       delay: this.config.reducedMotion
@@ -153,6 +177,7 @@ export class TadazzV4Motion {
     })
     this.active.push(a)
     void a.finished.catch(() => undefined)
+
     return a
   }
   private fx(): HTMLElement | null {
@@ -162,21 +187,29 @@ export class TadazzV4Motion {
     return query(this.stage, ".tzv4-screen-flash")
   }
   private root(): HTMLElement {
-    return query<HTMLElement>(this.stage, ".tzv4-scene-root") ?? this.stage
+    return query(this.stage, ".tzv4-scene-root") ?? this.stage
   }
   private cue(name: string, delay = 0, callback?: () => void) {
-    const token = this.token
+    const { token } = this
     const fire = () => {
-      if (token !== this.token) return
+      if (token !== this.token) {
+        return
+      }
       callback?.()
       this.config.onCue?.({ name, scene: this.scene })
     }
+
     if (delay <= 0 || this.config.reducedMotion) {
       fire()
+
       return
     }
+
     const owner = this.fx()
-    if (!owner) return
+
+    if (!owner) {
+      return
+    }
     const clock = document.createElement("span")
     clock.setAttribute("aria-hidden", "true")
     clock.style.cssText =
@@ -191,6 +224,7 @@ export class TadazzV4Motion {
   private tick(callback: FrameRequestCallback) {
     const id = raf(callback)
     this.tickerFrames.push(id)
+
     return id
   }
   private questionMotion(delay = 80) {
@@ -248,13 +282,17 @@ export class TadazzV4Motion {
   }
   private impact(delay = 0, style: "big" | "small" = "big") {
     const fx = this.fx()
-    if (!fx) return
+
+    if (!fx) {
+      return
+    }
     this.cue("impact", delay + 65)
     const full = style === "big"
     const add = (cls: string) => {
       const el = document.createElement("div")
       el.className = cls
       fx.appendChild(el)
+
       return el
     }
     const ring = add("blast")
@@ -334,10 +372,12 @@ export class TadazzV4Motion {
   }
   private voting(locked: boolean, data: TadazzV4Data = {}) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
+
     if (!keepCards) {
       this.questionMotion(40)
       this.cardsMotion(230)
     }
+
     const status = query(this.root(), ".vote-status")
     this.animate(
       status,
@@ -350,6 +390,7 @@ export class TadazzV4Motion {
         delay: keepCards ? (locked ? 80 : 120) : locked ? 950 : 1300,
       },
     )
+
     if (locked) {
       all(this.root(), ".choice-slot").forEach((slot, i) => {
         this.animate(
@@ -367,10 +408,12 @@ export class TadazzV4Motion {
   }
   private countdown(data: TadazzV4Data) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
+
     if (!keepCards) {
       this.questionMotion(0)
       this.cardsMotion(75)
     }
+
     const wrap = query(this.root(), ".countdown-floater")
     const label = query(this.root(), ".countdown-label")
     const ring = query<SVGCircleElement>(
@@ -379,10 +422,12 @@ export class TadazzV4Motion {
     )
     const value = query(this.root(), ".countdown-value")
     const circumference = 2 * Math.PI * 73
+
     if (ring) {
       ring.style.strokeDasharray = String(circumference)
       ring.style.strokeDashoffset = "0"
     }
+
     this.animate(
       wrap,
       [
@@ -417,31 +462,40 @@ export class TadazzV4Motion {
       [{ strokeDashoffset: 0 }, { strokeDashoffset: circumference }],
       { duration, easing: "linear" },
     )
+
     if (value) {
       this.finalizers.push(() => {
         value.textContent = "00"
         value.classList.add("timer-low")
       })
     }
-    const token = this.token
+
+    const { token } = this
     const tick = () => {
-      if (token !== this.token || !value || !sweep) return
+      if (token !== this.token || !value || !sweep) {
+        return
+      }
       // Use WAAPI as one pause-safe time source; no divergent setInterval stopwatch.
       const progress = Number(sweep.effect?.getComputedTiming().progress ?? 0)
       const left = Math.max(0, Math.ceil(totalSeconds * (1 - progress)))
       value.textContent = String(left).padStart(2, "0")
       value.classList.toggle("timer-low", left <= 3)
-      if (sweep.playState !== "finished") this.tick(tick)
+
+      if (sweep.playState !== "finished") {
+        this.tick(tick)
+      }
     }
     tick()
     this.cue("countdown-ended", duration)
   }
   private chosen(data: TadazzV4Data) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
+
     if (!keepCards) {
       this.questionMotion(40)
       this.cardsMotion(230)
     }
+
     const status = query(this.root(), ".vote-status")
     this.animate(
       status,
@@ -481,26 +535,34 @@ export class TadazzV4Motion {
         )
       }
     })
-    if (chosenSet.size > 0) this.impact(keepCards ? 270 : 1570, "small")
+
+    if (chosenSet.size > 0) {
+      this.impact(keepCards ? 270 : 1570, "small")
+    }
     const hasResults = Boolean(
       (data.percentages && data.percentages.length > 0) ||
-        (data.counts && data.counts.length > 0),
+      (data.counts && data.counts.length > 0),
     )
+
     if (hasResults) {
       const cards = all(this.root(), ".choice-slot")
       const percentages = percentagesFor(data, cards.length)
       const showPercentages = data.showPercentages !== false
       cards.forEach((slot, i) => {
-        const number = query<HTMLElement>(slot, ".result-percentage")
-        const track = query<HTMLElement>(slot, ".result-track")
-        const fill = query<HTMLElement>(slot, ".result-track-fill")
+        const number = query(slot, ".result-percentage")
+        const track = query(slot, ".result-track")
+        const fill = query(slot, ".result-track-fill")
         const target = Math.round(percentages[i] || 0)
+
         if (number) {
           number.textContent = `${target}%`
           number.style.visibility = showPercentages ? "visible" : "hidden"
           number.style.opacity = showPercentages ? "1" : "0"
         }
-        if (track) track.style.opacity = "1"
+
+        if (track) {
+          track.style.opacity = "1"
+        }
         if (fill) {
           fill.style.transform = `scaleX(${Math.max(0.003, (percentages[i] || 0) / 100)})`
           fill.style.transformOrigin = "left center"
@@ -510,10 +572,12 @@ export class TadazzV4Motion {
   }
   private results(data: TadazzV4Data) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)
+
     if (!keepCards) {
       this.questionMotion(40)
       this.cardsMotion(185)
     }
+
     const cards = all(this.root(), ".choice-slot")
     const percentages = percentagesFor(data, cards.length)
     const winners = topIndicesFor(data, cards.length)
@@ -537,13 +601,16 @@ export class TadazzV4Motion {
           { duration: 320, delay: 0 },
         )
       }
-      const number = query<HTMLElement>(slot, ".result-percentage")
+
+      const number = query(slot, ".result-percentage")
       const track = query(slot, ".result-track")
       const fill = query(slot, ".result-track-fill")
+
       if (number) {
         number.textContent = "0%"
         number.style.visibility = showPercentages ? "visible" : "hidden"
       }
+
       const delay = baseDelay + i * 80
       this.animate(
         number,
@@ -569,6 +636,7 @@ export class TadazzV4Motion {
           easing: "cubic-bezier(.2,.85,.18,1)",
         },
       )
+
       if (showPercentages && number && fillAnimation) {
         const target = Math.round(percentages[i])
         animated.push({ node: number, target, animation: fillAnimation })
@@ -576,13 +644,17 @@ export class TadazzV4Motion {
           number.textContent = `${target}%`
           number.style.opacity = "1"
           number.style.visibility = "visible"
-          if (track) (track as HTMLElement).style.opacity = "1"
+
+          if (track) {
+            track.style.opacity = "1"
+          }
           if (fill) {
-            ;(fill as HTMLElement).style.transform = `scaleX(${Math.max(0.003, percentages[i] / 100)})`
-            ;(fill as HTMLElement).style.transformOrigin = "left center"
+            fill.style.transform = `scaleX(${Math.max(0.003, percentages[i] / 100)})`
+            fill.style.transformOrigin = "left center"
           }
         })
       }
+
       if (winners.includes(i)) {
         slot.classList.add("is-favourite")
         this.animate(
@@ -604,20 +676,31 @@ export class TadazzV4Motion {
         )
       }
     })
-    const token = this.token
+    const { token } = this
     const tick = () => {
-      if (token !== this.token) return
+      if (token !== this.token) {
+        return
+      }
       let running = false
       for (const item of animated) {
         const progress = ease(
           Number(item.animation.effect?.getComputedTiming().progress ?? 0),
         )
         item.node.textContent = `${Math.round(item.target * progress)}%`
-        if (item.animation.playState !== "finished") running = true
+
+        if (item.animation.playState !== "finished") {
+          running = true
+        }
       }
-      if (running) this.tick(tick)
+
+      if (running) {
+        this.tick(tick)
+      }
     }
-    if (animated.length) tick()
+
+    if (animated.length) {
+      tick()
+    }
     this.cue("survey-reveal", keepCards ? 200 : 1450)
   }
   private topPick(data: TadazzV4Data) {
@@ -662,7 +745,10 @@ export class TadazzV4Motion {
     const hasWinner =
       data.topIndex != null ||
       topIndicesFor(data, data.answers?.length ?? 0).length === 1
-    if (hasWinner) this.impact(690, "big")
+
+    if (hasWinner) {
+      this.impact(690, "big")
+    }
   }
   private questionImage() {
     const root = this.root()
@@ -833,9 +919,14 @@ export class TadazzV4Motion {
     this.cue("wipe-covered", 720, () => this.config.onWipeCovered?.())
   }
   private holdScene(durationMs: number) {
-    if (typeof document === "undefined") return
+    if (typeof document === "undefined") {
+      return
+    }
     const owner = this.fx() || this.root()
-    if (!owner || typeof owner.appendChild !== "function") return
+
+    if (!owner || typeof owner.appendChild !== "function") {
+      return
+    }
     const clock = document.createElement("span")
     clock.setAttribute("aria-hidden", "true")
     clock.style.cssText =
@@ -845,18 +936,18 @@ export class TadazzV4Motion {
       try {
         clock.remove()
       } catch {
-        /* ignore */
+        /* Ignore */
       }
     })
     this.animate(clock, [{ opacity: 0 }, { opacity: 0 }], {
       duration: durationMs,
     })
   }
-  play(scene: TadazzV4Scene, data?: TadazzV4Data): Promise<boolean> {
+  play(scene: TadazzV4Scene, data: TadazzV4Data = {}): Promise<boolean> {
     this.stop()
     this.scene = scene
     this.cue(`scene:${scene}`)
-    const token = this.token
+    const { token } = this
     const root = this.root()
     const safeData = data || {}
     const authoredDuration =
@@ -864,6 +955,24 @@ export class TadazzV4Motion {
       (safeData as { durationMs?: number }).durationMs! > 0
         ? (safeData as { durationMs?: number }).durationMs!
         : undefined
+
+    const fade = (
+      selector: string,
+      delay = 100,
+      duration = 880,
+      from = "translate3d(0,38px,0) scale(.97)",
+    ) =>
+      this.animate(
+        query(root, selector),
+        [
+          { opacity: 0, transform: from },
+          { opacity: 1, transform: "none" },
+        ],
+        { delay, duration },
+      )
+    fade(".full-head", 100, 900)
+    fade(".full-corner-logo", 70, 670, "translate3d(-32px,0,0) scale(.94)")
+    fade(".full-status-pill", 160, 660, "translate3d(24px,0,0) scale(.96)")
 
     switch (scene) {
       case "question":
@@ -884,82 +993,256 @@ export class TadazzV4Motion {
           ],
           { duration: 850, delay: 820 },
         )
+
         break
+
       case "picture-answers":
         this.questionMotion(70)
         this.cardsMotion(370)
+
         break
+
       case "voting-open":
         this.voting(false, data)
+
         break
+
       case "countdown":
         this.countdown(data)
+
         break
+
       case "vote-locked":
         this.voting(true, data)
+
         break
+
       case "chosen":
         this.chosen(data)
+
         break
+
       case "survey-results":
         this.results(data)
+
         break
+
       case "top-pick":
         this.topPick(data)
+
         break
+
       case "question-image":
         this.questionImage()
+
         break
+
       case "leaderboard":
         this.leaderboard()
+
         break
+
       case "round-recap":
         this.recap()
+
         break
+
       case "interlude":
         this.interlude()
+
         break
+
       case "z-wipe":
         this.zWipe()
+
         break
+
       case "company-opening":
         this.cue("company-ident", 0)
         this.cue("tadazz-welcome", 2070)
         this.holdScene(authoredDuration ?? 2940)
+
         break
+
       case "grand-opening":
         this.cue("opening-portal", 1600)
         this.cue("opening-logo", 2650)
         this.holdScene(authoredDuration ?? 4360)
+
         break
+
       case "representative-directory":
+        fade(
+          ".full-directory-dial",
+          170,
+          760,
+          "translate3d(0,18px,0) scale(.96)",
+        )
+        all(root, ".full-directory-col").forEach((column, col) => {
+          this.animate(
+            column,
+            [
+              { opacity: 0, transform: "translate3d(0,18px,0) scale(.98)" },
+              { opacity: 1, transform: "none" },
+            ],
+            { delay: 140 + col * 90, duration: 700 },
+          )
+          all(column, ".full-rep-row").forEach((row, i) =>
+            this.animate(
+              row,
+              [
+                { opacity: 0, transform: "translate3d(0,27px,0)" },
+                { opacity: 1, transform: "none" },
+              ],
+              { delay: 300 + i * 45 + col * 65, duration: 650 },
+            ),
+          )
+        })
         this.cue("directory-loaded", 650)
         this.holdScene(authoredDuration ?? 1500)
+
         break
+
       case "phone-instructions":
+        fade(
+          ".full-phone",
+          190,
+          1300,
+          "translate3d(-100px,110px,0) rotate(-8deg) scale(.80)",
+        )
+        all(root, ".full-step").forEach((step, i) =>
+          this.animate(
+            step,
+            [
+              { opacity: 0, transform: "translate3d(85px,0,0) scale(.96)" },
+              { opacity: 1, transform: "none" },
+            ],
+            { delay: 450 + i * 320, duration: 850 },
+          ),
+        )
+        all(root, ".full-number-key").forEach((key, i) =>
+          this.animate(
+            key,
+            [
+              { backgroundColor: "#35125e", transform: "scale(1)" },
+              {
+                backgroundColor: i % 2 ? "#31a7dc" : "#dbff51",
+                transform: "scale(1.13)",
+                offset: 0.5,
+              },
+              { backgroundColor: "#35125e", transform: "scale(1)" },
+            ],
+            { duration: 590, delay: 1150 + i * 180 },
+          ),
+        )
         this.cue("phone-ready", 1490)
         this.holdScene(authoredDuration ?? 2000)
+
         break
+
       case "connection-readiness":
+        all(root, ".full-table-led").forEach((tile, i) =>
+          this.animate(
+            tile,
+            [
+              { opacity: 0, transform: "translate3d(0,35px,0) scale(.84)" },
+              { opacity: 1, transform: "none" },
+            ],
+            {
+              duration: 540,
+              delay: 300 + ((i + 1) % 10) * 62 + Math.floor(i / 10) * 80,
+            },
+          ),
+        )
+        fade(".full-connection-status", 1200, 750)
         this.cue("readiness-grid", 600)
         this.holdScene(authoredDuration ?? 1500)
+
         break
+
       case "round-one":
+
       case "round-two":
-        for (const [side, distance] of [["left", -340], ["right", 340]] as const) {
-          this.animate(query(root, `.full-wing-z.${side}`), [{ opacity: 0, transform: `translate3d(${distance}px,0,0) scale(.86)` }, { opacity: 1, transform: "none" }], { duration: 1120, delay: 40, easing: "cubic-bezier(.28,.85,.15,1)" })
+        for (const [side, distance] of [
+          ["left", -340],
+          ["right", 340],
+        ] as const) {
+          this.animate(
+            query(root, `.full-wing-z.${side}`),
+            [
+              {
+                opacity: 0,
+                transform: `translate3d(${distance}px,0,0) scale(.86)`,
+              },
+              { opacity: 1, transform: "none" },
+            ],
+            {
+              duration: 1120,
+              delay: 40,
+              easing: "cubic-bezier(.28,.85,.15,1)",
+            },
+          )
         }
-        this.animate(query(root, ".full-launch-glow"), [{ opacity: 0, transform: "translate(-50%,-50%) scale(.5)" }, { opacity: 1, transform: "translate(-50%,-50%) scale(1.15)" }], { duration: 1800 })
-        this.animate(query(root, ".full-round-plaque"), [{ opacity: 0, transform: "translate3d(0,150px,0) scale(.76)" }, { opacity: 1, transform: "none" }], { delay: 390, duration: 1250 })
-        this.animate(query(root, ".full-round-underline"), [{ opacity: 0, transform: "scaleX(.01)" }, { opacity: 1, transform: "scaleX(1)" }], { delay: 1200, duration: 970 })
+        this.animate(
+          query(root, ".full-launch-glow"),
+          [
+            { opacity: 0, transform: "translate(-50%,-50%) scale(.5)" },
+            { opacity: 1, transform: "translate(-50%,-50%) scale(1.15)" },
+          ],
+          { duration: 1800 },
+        )
+        this.animate(
+          query(root, ".full-round-plaque"),
+          [
+            { opacity: 0, transform: "translate3d(0,150px,0) scale(.76)" },
+            { opacity: 1, transform: "none" },
+          ],
+          { delay: 390, duration: 1250 },
+        )
+        this.animate(
+          query(root, ".full-round-underline"),
+          [
+            { opacity: 0, transform: "scaleX(.01)" },
+            { opacity: 1, transform: "scaleX(1)" },
+          ],
+          { delay: 1200, duration: 970 },
+        )
         this.impact(700, "small")
         this.cue("round-launch", 1600)
         this.holdScene(authoredDuration ?? 2500)
+
         break
+
       case "story-progress":
+        all(root, ".full-progress-piece").forEach((card, i) =>
+          this.animate(
+            card,
+            [
+              { opacity: 0, transform: "translate3d(0,105px,0) scale(.77)" },
+              {
+                opacity: 1,
+                transform: "translate3d(0,-10px,0) scale(1.03)",
+                offset: 0.84,
+              },
+              { opacity: 1, transform: "none" },
+            ],
+            { duration: 1090, delay: 220 + i * 135, easing: V4_EASE_DRAMATIC },
+          ),
+        )
+        fade(".full-progress-bottom", 1300, 740)
+        this.animate(
+          query(root, ".full-progress-bridge"),
+          [
+            { opacity: 0, transform: "scaleX(.03)" },
+            { opacity: 0.9, transform: "scaleX(1)" },
+          ],
+          { delay: 950, duration: 1350 },
+        )
         this.cue("story-progress-update", 1280)
         this.holdScene(authoredDuration ?? 2200)
+
         break
+
       case "tie-break": {
         const hasResolved =
           (data as { resolvedIndex?: number | null }).resolvedIndex != null
@@ -968,31 +1251,49 @@ export class TadazzV4Motion {
           hasResolved ? 1810 : 1510,
         )
         this.holdScene(authoredDuration ?? 2500)
+
         break
       }
+
       case "story-assembly":
         this.cue("story-assembled", 2400)
         this.holdScene(authoredDuration ?? 3040)
+
         break
+
       case "story-live":
         this.cue("story-live-hold", 900)
+
         // Hold indefinitely without auto-advance clock unless explicitly authored.
         if (authoredDuration) {
           this.holdScene(authoredDuration)
         } else {
           // A cue ending must not report completion for a host-held scene.
-          this.animate(this.fx(), [{ opacity: 1 }, { opacity: 1 }], { duration: 1000, iterations: Infinity })
+          this.animate(this.fx(), [{ opacity: 1 }, { opacity: 1 }], {
+            duration: 1000,
+            iterations: Infinity,
+          })
         }
+
         break
+
       case "grand-finale":
         this.cue("finale-impact", 3920)
         this.cue("curtains-closed", 8680)
         this.holdScene(authoredDuration ?? 9200)
+
         break
     }
+
     for (const a of root.getAnimations?.({ subtree: true }) ?? []) {
-      if (!this.active.includes(a) && a.effect?.getTiming().iterations !== Infinity) this.active.push(a)
+      if (
+        !this.active.includes(a) &&
+        a.effect?.getTiming().iterations !== Infinity
+      ) {
+        this.active.push(a)
+      }
     }
+
     return Promise.allSettled(this.active.map((a) => a.finished)).then(
       () => token === this.token,
     )

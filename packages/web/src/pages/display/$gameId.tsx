@@ -1,6 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
-import Loader from "@razzia/web/components/Loader"
 import PlayerGameView from "@razzia/web/features/game/components/PlayerGameView"
 import {
   socketClient,
@@ -23,7 +22,7 @@ const AudienceDisplayPage = () => {
   const { socket, isConnected } = useSocket()
   const { t } = useTranslation()
 
-  const [joined, setJoined] = useState(false)
+  const [, setJoined] = useState(false)
   const [status, setStatus] = useState<StatusState | null>(null)
   const [resetMessage, setResetMessage] = useState<string | null>(null)
   const syncedRef = useRef(false)
@@ -33,10 +32,13 @@ const AudienceDisplayPage = () => {
   useEffect(() => {
     if (!isConnected || !gameId) {
       syncedRef.current = false
+
       return
     }
 
-    if (syncedRef.current) return
+    if (syncedRef.current) {
+      return
+    }
     syncedRef.current = true
 
     // Obtain temporary room-media authorization before joining the public display.
@@ -47,8 +49,12 @@ const AudienceDisplayPage = () => {
       cache: "no-store",
     })
       .then((response) => {
-        if (!response.ok) throw new Error("Room no longer exists")
-        if (!disposed) socket.emit(EVENTS.SPECTATOR.JOIN, { gameId })
+        if (!response.ok) {
+          throw new Error("Room no longer exists")
+        }
+        if (!disposed) {
+          socket.emit(EVENTS.SPECTATOR.JOIN, { gameId })
+        }
       })
       .catch(() => {
         if (!disposed) {
@@ -56,18 +62,19 @@ const AudienceDisplayPage = () => {
           setResetMessage("errors:game.notFound")
         }
       })
+
     return () => {
       disposed = true
     }
   }, [isConnected, gameId, socket])
 
-  useEvent(EVENTS.SPECTATOR.SUCCESS_JOIN, () => {
+  useEvent(EVENTS.SPECTATOR.SUCCESS_JOIN, ({ inviteCode }) => {
     setJoined(true)
     setStatus(
       (prev) =>
         prev ?? {
-          name: STATUS.WAIT as Status,
-          data: { text: "game:waitingForPlayers" },
+          name: STATUS.SHOW_ROOM as Status,
+          data: { text: "game:waitingForPlayers", inviteCode },
         },
     )
   })

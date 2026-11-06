@@ -119,12 +119,14 @@ export const recoverJournals = (
   }
 
   let files: string[] = []
+
   try {
     files = fs
       .readdirSync(journalDir)
       .filter((f) => f.endsWith(".journal.json"))
   } catch (err) {
     console.error("[Journal] Failed to read journal directory:", err)
+
     return {
       recoveredCount: 0,
       recoveredQuizIds: [],
@@ -145,20 +147,27 @@ export const recoverJournals = (
       }
 
       let raw: string
+
       try {
         raw = fs.readFileSync(journalPath, "utf-8")
       } catch (readErr) {
         console.error(`[Journal] Unreadable journal file ${file}:`, readErr)
         unresolvedQuizIds.push(file)
+
         continue
       }
 
-      let entry: JournalEntry
+      let entry: Omit<JournalEntry, "kind" | "version"> & {
+        kind?: string
+        version?: number
+      }
+
       try {
         entry = JSON.parse(raw) as JournalEntry
       } catch (parseErr) {
         console.error(`[Journal] Malformed JSON in journal ${file}:`, parseErr)
         unresolvedQuizIds.push(file)
+
         continue
       }
 
@@ -173,13 +182,16 @@ export const recoverJournals = (
           `[Journal] Incompatible journal kind "${entry.kind}" in ${file}, preserving`,
         )
         unresolvedQuizIds.push(file)
+
         continue
       }
+
       if (entry.version !== undefined && entry.version !== 1) {
         console.warn(
           `[Journal] Incompatible journal version "${entry.version}" in ${file}, preserving`,
         )
         unresolvedQuizIds.push(file)
+
         continue
       }
 
@@ -195,13 +207,16 @@ export const recoverJournals = (
           `[Journal] Invalid or unsafe quizId in journal ${file}: "${entry.quizId}", preserving`,
         )
         unresolvedQuizIds.push(file)
+
         continue
       }
 
       const cleanId = path.basename(entry.quizId).replace(/\.json$/i, "")
+
       if (!cleanId) {
         console.error(`[Journal] Empty cleanId for quiz in ${file}, preserving`)
         unresolvedQuizIds.push(file)
+
         continue
       }
 
@@ -211,6 +226,7 @@ export const recoverJournals = (
           `[Journal] Non-staged or unknown status "${entry.status}" in ${file}, preserving`,
         )
         unresolvedQuizIds.push(cleanId)
+
         continue
       }
 
@@ -220,6 +236,7 @@ export const recoverJournals = (
         typeof entry.targetExtras === "object" && entry.targetExtras !== null
           ? (entry.targetExtras as Record<string, unknown>).revision
           : undefined
+
       if (
         currentSidecar &&
         typeof targetRevision === "number" &&
@@ -229,27 +246,33 @@ export const recoverJournals = (
           `[Journal] Quiz ${cleanId} has current sidecar revision ${currentSidecar.revision} > target revision ${targetRevision}; skipping rollback to prevent overwriting newer revision`,
         )
         unresolvedQuizIds.push(cleanId)
+
         continue
       }
 
       // 4. Version-discriminate backup extras using public schema exports
       let parsedExtras: AnyQuizExtras | null = null
+
       if (entry.backupExtras !== null && entry.backupExtras !== undefined) {
         if (typeof entry.backupExtras === "object") {
           const obj = entry.backupExtras as Record<string, unknown>
+
           if (obj.schemaVersion === 2) {
             const v2 = quizExtrasV2Schema.safeParse(entry.backupExtras)
+
             if (v2.success) {
               parsedExtras = v2.data
             }
           } else {
             const v1 = quizExtrasV1Schema.safeParse(entry.backupExtras)
+
             if (v1.success) {
               parsedExtras = v1.data
             } else {
               const v2Fallback = quizExtrasV2Schema.safeParse(
                 entry.backupExtras,
               )
+
               if (v2Fallback.success) {
                 parsedExtras = v2Fallback.data
               }
@@ -263,6 +286,7 @@ export const recoverJournals = (
             `[Journal] Non-null backupExtras for quiz ${cleanId} failed schema parsing; preserving sidecar and journal for manual recovery`,
           )
           unresolvedQuizIds.push(cleanId)
+
           continue
         }
       }
@@ -284,28 +308,34 @@ export const recoverJournals = (
       // 7. Verification before removing journal
       if (entry.backupBase !== null && entry.backupBase !== undefined) {
         let verifiedBase: unknown = null
+
         try {
           verifiedBase = injections.getQuizzById(cleanId)
         } catch {
-          // getQuizzById may throw if unmocked or missing
+          // GetQuizzById may throw if unmocked or missing
         }
+
         if (!verifiedBase) {
           const quizzDir = injections.getPath("quizz")
           const filePath = path.join(quizzDir, `${cleanId}.json`)
+
           if (fs.existsSync(filePath)) {
             try {
               verifiedBase = JSON.parse(fs.readFileSync(filePath, "utf-8"))
             } catch {
-              // ignore
+              // Ignore
             }
           }
         }
+
         if (!verifiedBase) {
           throw new Error(`Failed to verify rolled back base quiz ${cleanId}`)
         }
       }
+
       if (parsedExtras) {
         const verifiedSidecar = readSidecar(injections.getPath, cleanId)
+
         if (
           !verifiedSidecar ||
           verifiedSidecar.revision !== parsedExtras.revision
@@ -314,6 +344,7 @@ export const recoverJournals = (
         }
       } else {
         const verifiedSidecar = readSidecar(injections.getPath, cleanId)
+
         if (verifiedSidecar !== null) {
           throw new Error(
             `Expected null sidecar after delete for ${cleanId}, but sidecar exists`,
@@ -325,6 +356,7 @@ export const recoverJournals = (
       if (fs.existsSync(journalPath)) {
         fs.unlinkSync(journalPath)
       }
+
       recoveredQuizIds.push(cleanId)
     } catch (error) {
       console.warn(`[Journal] Failed to recover journal ${file}:`, error)

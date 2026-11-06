@@ -1,17 +1,17 @@
 import {
   extensionCommandSchema,
+  isQuizExtrasV2,
   type ActiveSceneData,
   type AnyQuizExtras,
   type ExtensionCommand,
   type ExtensionPhase,
   type ExtensionStateEnvelope,
   type PublicAnswerRecap,
+  type PublicFullShowData,
   type PublicInterimResults,
   type PublicRankEntry,
-  type PublicFullShowData,
   type RevealDistributionSnapshot,
   type SceneConfig,
-  isQuizExtrasV2,
 } from "../../core/index"
 import {
   assignManual,
@@ -50,9 +50,21 @@ export interface ExtensionSessionDelegate {
     scene: SceneConfig,
     timelineStepIndex: number,
   ) => PublicAnswerRecap | null
-  canPrevious?: () => { can: boolean; reason?: string; willReopenQuestion?: boolean; answersReceived?: number }
+  canPrevious?: () => {
+    can: boolean
+    reason?: string
+    willReopenQuestion?: boolean
+    answersReceived?: number
+  }
   isAcceptingAnswers?: () => boolean
   getAnswersCount?: () => number
+  pauseGame?: () => boolean
+  resumeGame?: () => boolean
+  getPauseSnapshot?: () => {
+    paused: boolean
+    remainingMs: number | null
+    deadline: number | null
+  }
 }
 
 export class ExtensionGameSession {
@@ -93,6 +105,12 @@ export class ExtensionGameSession {
 
   get isEnabled(): boolean {
     return this.extras !== null
+  }
+
+  hasUnresolvedStoryTie(): boolean {
+    const summary = this.delegate?.getLastCompletedQuestionSummary?.()
+
+    return Boolean(summary?.isTie && (summary.winners?.length ?? 0) > 1)
   }
 
   get currentSeq(): number {
@@ -182,6 +200,10 @@ export class ExtensionGameSession {
     this.phase = "interlude"
     this.seq += 1
     this.startedAt = Date.now()
+  }
+
+  onPresenceChanged(): void {
+    this.seq += 1
   }
 
   onPlayerJoin(clientId: string): void {
@@ -367,6 +389,7 @@ export class ExtensionGameSession {
           if (activeStepEnvelope?.startedAt) {
             this.startedAt = activeStepEnvelope.startedAt
           }
+
           const activeScene = this.showCoordinator.currentScene
 
           if (activeScene) {
@@ -380,7 +403,10 @@ export class ExtensionGameSession {
               extrasPayload.sceneAudio = activeScene.audio
             }
 
-            if ("stageAnimations" in activeScene && activeScene.stageAnimations) {
+            if (
+              "stageAnimations" in activeScene &&
+              activeScene.stageAnimations
+            ) {
               extrasPayload.stageAnimations = activeScene.stageAnimations
             } else {
               delete extrasPayload.stageAnimations
@@ -388,51 +414,99 @@ export class ExtensionGameSession {
             }
           }
 
-          const currentStep = this.showCoordinator.currentStep
+          const { currentStep } = this.showCoordinator
           const stepKind = currentStep?.item.kind
 
           if (stepKind === "leaderboard") {
             const rawEntries = this.delegate?.getLeaderboard?.() ?? []
             const sorted = [...rawEntries].sort((a, b) => b.points - a.points)
-            const entries: PublicRankEntry[] = sorted.slice(0, 10).map((e, idx) => ({
-              rank: idx + 1,
-              displayName: e.displayName,
-              points: e.points,
-            }))
+            const entries: PublicRankEntry[] = sorted
+              .slice(0, 10)
+              .map((e, idx) => ({
+                rank: idx + 1,
+                displayName: e.displayName,
+                points: e.points,
+              }))
             const activeSceneData: ActiveSceneData = {
               leaderboard: { entries },
             }
 
             extrasPayload.activeSceneData = activeSceneData
           } else if (stepKind === "interimResults") {
-            const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
-            const candidates = summary?.isTie ? summary.options.filter(option => summary.winners.includes(option.answerIndex)) : []
-            const chosen = summary?.sourceQuestionId ? this.storyTieChoices.get(summary.sourceQuestionId) : undefined
+            const summary =
+              this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie
+              ? summary.options.filter((option) =>
+                  (summary.winners ?? []).includes(option.answerIndex ?? -1),
+                )
+              : []
+            const chosen = summary?.sourceQuestionId
+              ? this.storyTieChoices.get(summary.sourceQuestionId)
+              : undefined
             const activeSceneData: ActiveSceneData = {
               interimResults: summary,
-              fullShow: { isLive: true, tieCandidates: candidates, tieResolvedIndex: chosen === undefined ? null : candidates.findIndex(option => option.answerIndex === chosen) },
+              fullShow: {
+                isLive: true,
+                tieCandidates: candidates,
+                tieResolvedIndex:
+                  chosen === undefined
+                    ? null
+                    : candidates.findIndex(
+                        (option) => option.answerIndex === chosen,
+                      ),
+              },
             }
 
             extrasPayload.activeSceneData = activeSceneData
-          } else if ((stepKind === "answerRecap" || stepKind === "animation") && activeScene) {
+          } else if (
+            (stepKind === "answerRecap" || stepKind === "animation") &&
+            activeScene
+          ) {
             const recap =
               this.delegate?.getAnswerRecapSummary?.(
                 activeScene,
                 currentStep?.index ?? 0,
               ) ?? null
-            if (recap) for (const item of recap.items) {
-              const chosen = this.storyTieChoices.get(item.questionId)
-              if (chosen !== undefined) item.winningOptions = item.winningOptions.filter(option => option.answerIndex === chosen)
+
+            if (recap) {
+              for (const item of recap.items) {
+                const chosen = this.storyTieChoices.get(item.questionId)
+                if (chosen !== undefined)
+                  item.winningOptions = item.winningOptions.filter(
+                    (option) => option.answerIndex === chosen,
+                  )
+              }
             }
-            const summary = this.delegate?.getLastCompletedQuestionSummary?.() ?? null
-            const candidates = summary?.isTie ? summary.options.filter(option => summary.winners.includes(option.answerIndex)) : []
-            const tieChoice = summary?.sourceQuestionId ? this.storyTieChoices.get(summary.sourceQuestionId) : undefined
+            const summary =
+              this.delegate?.getLastCompletedQuestionSummary?.() ?? null
+            const candidates = summary?.isTie
+              ? summary.options.filter((option) =>
+                  (summary.winners ?? []).includes(option.answerIndex ?? -1),
+                )
+              : []
+            const tieChoice = summary?.sourceQuestionId
+              ? this.storyTieChoices.get(summary.sourceQuestionId)
+              : undefined
             const activeSceneData: ActiveSceneData = {
               answerRecap: recap,
-              ...(stepKind === "animation" ? {
-                interimResults: this.delegate?.getLastCompletedQuestionSummary?.() ?? null,
-                fullShow: { ...this.delegate?.getFullShowData?.(), isLive: true, tieCandidates: candidates, tieResolvedIndex: tieChoice === undefined ? null : candidates.findIndex(option => option.answerIndex === tieChoice) },
-              } : {}),
+              ...(stepKind === "animation"
+                ? {
+                    interimResults:
+                      this.delegate?.getLastCompletedQuestionSummary?.() ??
+                      null,
+                    fullShow: {
+                      ...this.delegate?.getFullShowData?.(),
+                      isLive: true,
+                      tieCandidates: candidates,
+                      tieResolvedIndex:
+                        tieChoice === undefined
+                          ? null
+                          : candidates.findIndex(
+                              (option) => option.answerIndex === tieChoice,
+                            ),
+                    },
+                  }
+                : {}),
             }
 
             extrasPayload.activeSceneData = activeSceneData
@@ -467,12 +541,15 @@ export class ExtensionGameSession {
           : { can: false }
 
       extrasPayload.canPrevious = prevCheck.can
+
       if (prevCheck.reason) {
         extrasPayload.previousReason = prevCheck.reason
       }
+
       if (typeof prevCheck.willReopenQuestion === "boolean") {
         extrasPayload.willReopenQuestion = prevCheck.willReopenQuestion
       }
+
       if (typeof prevCheck.answersReceived === "number") {
         extrasPayload.answersReceived = prevCheck.answersReceived
       }
@@ -487,15 +564,29 @@ export class ExtensionGameSession {
       : this.epoch
 
     const effectiveSeq = this.seq + (this.showCoordinator?.currentSeq ?? 0)
+    const pauseState = this.showCoordinator?.isSceneActive()
+      ? this.showCoordinator.getPauseSnapshot()
+      : (this.delegate?.getPauseSnapshot?.() ?? {
+          paused: false,
+          remainingMs: null,
+          deadline: null,
+        })
 
     return {
       v: 1,
       gameId: this.gameId,
       seq: effectiveSeq,
       epoch: effectiveEpoch,
-      questionId: this.showCoordinator?.isSceneActive() ? undefined : questionId,
+      questionId: this.showCoordinator?.isSceneActive()
+        ? undefined
+        : questionId,
       phase: effectivePhase,
       startedAt: this.startedAt,
+      pause: {
+        ...pauseState,
+        phase: effectivePhase,
+        epoch: effectiveEpoch,
+      },
       extras: extrasPayload,
     }
   }
@@ -534,7 +625,10 @@ export class ExtensionGameSession {
     // Epoch validation if payload specifies epoch
     const payloadEpoch = (command.payload as { epoch?: unknown }).epoch
 
-    if (typeof payloadEpoch === "number" && payloadEpoch !== this.currentEpoch) {
+    if (
+      typeof payloadEpoch === "number" &&
+      payloadEpoch !== this.currentEpoch
+    ) {
       throw new Error("errors:extensions.staleEpoch")
     }
 
@@ -543,17 +637,61 @@ export class ExtensionGameSession {
       return { success: true, deduplicated: true, action: command.action }
     }
 
-    this.processedRequestIds.add(command.requestId)
+    const pauseState = this.showCoordinator?.isSceneActive()
+      ? this.showCoordinator.getPauseSnapshot()
+      : this.delegate?.getPauseSnapshot?.()
+
+    if (pauseState?.paused && command.action !== "RESUME_GAME") {
+      throw new Error("errors:extensions.gamePaused")
+    }
 
     switch (command.action) {
+      case "PAUSE_GAME": {
+        const ok = this.delegate?.pauseGame?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.pauseFailed")
+        }
+        this.seq += 1
+
+        break
+      }
+
+      case "RESUME_GAME": {
+        const ok = this.delegate?.resumeGame?.() ?? false
+
+        if (!ok) {
+          throw new Error("errors:extensions.resumeFailed")
+        }
+        this.seq += 1
+
+        break
+      }
+
       case "RESOLVE_STORY_TIE": {
         const scene = this.showCoordinator?.currentScene
         const summary = this.delegate?.getLastCompletedQuestionSummary?.()
-        if (!(scene?.kind === "interimResults" || (scene?.kind === "animation" && scene.preset === "tie-break")) || !summary?.isTie || !summary.sourceQuestionId || !summary.winners.includes(command.payload.answerIndex)) throw new Error("errors:extensions.invalidCommand")
-        this.storyTieChoices.set(summary.sourceQuestionId, command.payload.answerIndex)
+
+        if (
+          !(
+            scene?.kind === "interimResults" ||
+            (scene?.kind === "animation" && scene.preset === "tie-break")
+          ) ||
+          !summary?.isTie ||
+          !summary.sourceQuestionId ||
+          !(summary.winners ?? []).includes(command.payload.answerIndex)
+        ) {
+          throw new Error("errors:extensions.invalidCommand")
+        }
+        this.storyTieChoices.set(
+          summary.sourceQuestionId,
+          command.payload.answerIndex,
+        )
         this.seq += 1
+
         break
       }
+
       case "ASSIGN_TEAM": {
         if (!isLobby) {
           throw new Error("errors:extensions.teamAssignmentOnlyInLobby")
@@ -674,7 +812,9 @@ export class ExtensionGameSession {
         )
 
         if (isAccepting && answersCount > 0 && !confirmed) {
-          throw new Error("errors:extensions.previousScreenConfirmationRequired")
+          throw new Error(
+            "errors:extensions.previousScreenConfirmationRequired",
+          )
         }
 
         if (isAccepting) {
@@ -716,6 +856,7 @@ export class ExtensionGameSession {
           if (command.payload.reason === "mediaEnded") {
             return { success: true, deduplicated: true, action: command.action }
           }
+
           throw new Error("errors:extensions.sceneAdvanceFailed")
         }
 
@@ -736,6 +877,7 @@ export class ExtensionGameSession {
           if (command.payload.reason === "mediaEnded") {
             return { success: true, deduplicated: true, action: command.action }
           }
+
           throw new Error("errors:extensions.sceneSkipFailed")
         }
 
@@ -769,6 +911,8 @@ export class ExtensionGameSession {
           command.payload.questionIndex,
         )
 
+        this.processedRequestIds.add(command.requestId)
+
         return {
           success: true,
           action: command.action,
@@ -791,6 +935,8 @@ export class ExtensionGameSession {
         break
       }
     }
+
+    this.processedRequestIds.add(command.requestId)
 
     return { success: true, action: command.action }
   }

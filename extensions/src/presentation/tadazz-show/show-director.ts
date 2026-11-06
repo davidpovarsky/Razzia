@@ -101,27 +101,32 @@ export function planTransition(
       if (
         stage.questionKey === next.question.key &&
         (stage.mode === "question" || stage.mode === "voting")
-      )
+      ) {
         return []
+      }
       return [
         leavingQuestion && stage.mode !== "custom"
           ? { op: "nextQuestion", question: next.question }
           : { op: "showQuestion", question: next.question },
       ]
     }
+
     case "voting": {
       const steps: StageStep[] = []
       const onStage =
         stage.questionKey === next.question.key &&
         stage.mode !== "custom" &&
         stage.mode !== "leaderboard"
-      if (onStage) steps.push({ op: "presentOptions", question: next.question })
-      else
+
+      if (onStage) {
+        steps.push({ op: "presentOptions", question: next.question })
+      } else {
         steps.push(
           leavingQuestion && stage.mode !== "custom"
             ? { op: "nextQuestion", question: next.question }
             : { op: "showQuestion", question: next.question },
         )
+      }
       const remaining = next.remainingSeconds ?? next.seconds
       steps.push({
         op: "openVoting",
@@ -131,8 +136,10 @@ export function planTransition(
             ? now + remaining * 1000
             : undefined,
       })
+
       return steps
     }
+
     case "results": {
       const steps: StageStep[] = []
       const onStage =
@@ -141,17 +148,23 @@ export function planTransition(
           stage.mode === "question" ||
           stage.mode === "locked" ||
           stage.mode === "results")
+
       if (!onStage) {
         steps.push({ op: "showQuestion", question: next.question })
       } else {
         steps.push({ op: "presentOptions", question: next.question })
-        if (stage.mode === "voting" || stage.mode === "question")
+
+        if (stage.mode === "voting" || stage.mode === "question") {
           steps.push({ op: "lockVoting" })
+        }
       }
-      if (next.question.options.length > 0)
+
+      if (next.question.options.length > 0) {
         steps.push({ op: "revealResults", reveal: next.reveal })
+      }
       return steps
     }
+
     case "leaderboard": {
       const steps: StageStep[] = []
       const start = next.previous.length > 0 ? next.previous : next.entries
@@ -160,6 +173,7 @@ export function planTransition(
           ? { op: "updateLeaderboard", entries: start }
           : { op: "showLeaderboard", entries: start },
       )
+
       if (
         next.previous.length > 0 &&
         !sameEntries(next.previous, next.entries)
@@ -167,24 +181,31 @@ export function planTransition(
         steps.push({ op: "hold", ms: LEADERBOARD_UPDATE_DELAY_MS })
         steps.push({ op: "updateLeaderboard", entries: next.entries })
       }
+
       return steps
     }
+
     case "finale":
       return [{ op: "showFinale", winner: next.winner }]
+
     case "prepared":
       return isQuestionScene(prev) ||
         prev?.kind === "leaderboard" ||
         prev?.kind === "player-result"
         ? [{ op: "playZZWipe", thenCustom: true }]
         : [{ op: "custom" }]
+
     case "interlude": {
       if (next.interlude.kind === "title" && next.interlude.title) {
         return [{ op: "showInterlude", title: next.interlude.title }]
       }
+
       return [{ op: "custom" }]
     }
+
     case "scene":
       return planScene(prev, next, stage)
+
     case "wait":
       if (
         isQuestionScene(prev) ||
@@ -194,7 +215,9 @@ export function planTransition(
       ) {
         return []
       }
+
       return [{ op: "custom" }]
+
     default:
       return stage.mode === "custom" ? [{ op: "custom" }] : [{ op: "custom" }]
   }
@@ -206,6 +229,7 @@ function planScene(
   stage: StageSnapshot,
 ): StageStep[] {
   const { scene, activeSceneData } = next
+
   switch (scene.kind) {
     case "leaderboard": {
       const entries = (activeSceneData?.leaderboard?.entries ?? []).map(
@@ -215,15 +239,20 @@ function planScene(
           score: e.points,
         }),
       )
+
       return [
         stage.mode === "leaderboard"
           ? { op: "updateLeaderboard", entries }
           : { op: "showLeaderboard", entries },
       ]
     }
+
     case "interimResults": {
       const r = activeSceneData?.interimResults
-      if (!r || r.options.length === 0) return [{ op: "custom" }]
+
+      if (!r || r.options.length === 0) {
+        return [{ op: "custom" }]
+      }
       const prevQ =
         prev && "question" in prev && prev.question.question === r.questionText
           ? prev.question
@@ -250,15 +279,18 @@ function planScene(
         })),
       }
       const steps: StageStep[] = []
+
       if (!onStage) {
         steps.push({ op: "showQuestion", question })
       } else {
         steps.push({ op: "presentOptions", question })
-        if (stage.mode === "voting" || stage.mode === "question")
+
+        if (stage.mode === "voting" || stage.mode === "question") {
           steps.push({ op: "lockVoting" })
+        }
       }
-      const showPercentages = (scene as { showPercentages?: boolean })
-        .showPercentages
+
+      const { showPercentages } = scene as { showPercentages?: boolean }
       steps.push({
         op: "revealResults",
         reveal: {
@@ -268,8 +300,10 @@ function planScene(
           ...(typeof showPercentages === "boolean" ? { showPercentages } : {}),
         },
       })
+
       return steps
     }
+
     case "answerRecap": {
       const recap = activeSceneData?.answerRecap
       const fallbackItems = (
@@ -277,11 +311,13 @@ function planScene(
           recapItems?: Array<{ label?: string; image?: string; alt?: string }>
         }
       ).recapItems
+
       if (
         (!recap || recap.items.length === 0) &&
         (!fallbackItems || fallbackItems.length === 0)
-      )
+      ) {
         return [{ op: "custom" }]
+      }
       const winners =
         recap && recap.items.length > 0
           ? recap.items.map((item) => {
@@ -289,6 +325,7 @@ function planScene(
                 (recap.mode === "correctAnswer"
                   ? item.correctOptions?.[0]
                   : undefined) ?? item.winningOptions[0]
+
               return {
                 label: option ? option.label : item.questionText,
                 image: option?.imageUrl,
@@ -300,8 +337,10 @@ function planScene(
               image: fi.image,
               alt: fi.alt ?? fi.label,
             }))
+
       return [{ op: "showRoundRecap", winners, subtitle: scene.subtitle }]
     }
+
     case "interlude":
       return [
         {
@@ -310,6 +349,7 @@ function planScene(
           subtitle: scene.subtitle ?? scene.description,
         },
       ]
+
     case "transition":
       return [
         scene.title
@@ -323,8 +363,9 @@ function planScene(
             }
           : { op: "playZZWipe", thenCustom: true },
       ]
+
     case "animation": {
-      const preset = (scene as { preset?: string }).preset
+      const { preset } = scene as { preset?: string }
       if (preset && isFullShowScene(preset)) {
         const authored = scene as typeof scene & {
           round?: number
@@ -347,22 +388,25 @@ function planScene(
           storyRoles?: string[]
         }
         const recap = activeSceneData?.answerRecap
-        const winners = recap?.items?.flatMap((item) => {
-          const option = item.winningOptions?.length === 1 ? item.winningOptions[0] : undefined
+        const winners = recap?.items?.slice(0, 5).map((item) => {
+          const option =
+            item.winningOptions?.length === 1
+              ? item.winningOptions[0]
+              : undefined
+
           return option
-            ? [
-                {
-                  title: option.label,
-                  imageUrl: option.imageUrl,
-                  alt: option.alt,
-                },
-              ]
-            : []
+            ? {
+                title: option.label,
+                imageUrl: option.imageUrl,
+                alt: option.alt,
+              }
+            : { title: "" }
         })
         const fullShowAuth = activeSceneData?.fullShow
         const isLive =
           fullShowAuth?.isLive ??
           Boolean(activeSceneData?.interimResults || recap)
+
         return [
           {
             op: "showFullShowScene",
@@ -381,8 +425,30 @@ function planScene(
               representatives:
                 fullShowAuth?.representatives ?? authored.representatives,
               winners: authored.winners ?? winners,
-              contestants: fullShowAuth?.tieCandidates?.map(option => ({ title: option.label, imageUrl: option.imageUrl, alt: option.alt })) ?? activeSceneData?.interimResults?.options.filter(option => activeSceneData.interimResults!.winners.includes(option.answerIndex)).map(option => ({ title: option.label, imageUrl: option.imageUrl, alt: option.alt })) ?? authored.contestants,
-              voteCount: activeSceneData?.interimResults?.options.find(option => activeSceneData.interimResults!.winners.includes(option.answerIndex))?.count ?? authored.voteCount,
+              contestants:
+                fullShowAuth?.tieCandidates?.map((option) => ({
+                  title: option.label,
+                  imageUrl: option.imageUrl,
+                  alt: option.alt,
+                })) ??
+                activeSceneData?.interimResults?.options
+                  .filter((option) =>
+                    (activeSceneData.interimResults?.winners ?? []).includes(
+                      option.answerIndex ?? -1,
+                    ),
+                  )
+                  .map((option) => ({
+                    title: option.label,
+                    imageUrl: option.imageUrl,
+                    alt: option.alt,
+                  })) ??
+                authored.contestants,
+              voteCount:
+                activeSceneData?.interimResults?.options.find((option) =>
+                  (activeSceneData.interimResults?.winners ?? []).includes(
+                    option.answerIndex ?? -1,
+                  ),
+                )?.count ?? authored.voteCount,
               resolvedIndex:
                 fullShowAuth?.tieResolvedIndex !== undefined
                   ? fullShowAuth.tieResolvedIndex
@@ -397,7 +463,42 @@ function planScene(
           },
         ]
       }
+
       const r = activeSceneData?.interimResults
+
+      if (preset === "round-recap") {
+        return [
+          {
+            op: "showRoundRecap",
+            round: (scene as { round?: number }).round,
+            winners: (activeSceneData?.answerRecap?.items ?? [])
+              .slice(0, 5)
+              .flatMap((item) =>
+                item.winningOptions.length === 1
+                  ? [
+                      {
+                        label: item.winningOptions[0].label,
+                        image: item.winningOptions[0].imageUrl,
+                        alt: item.winningOptions[0].alt,
+                      },
+                    ]
+                  : [],
+              ),
+          },
+        ]
+      }
+      if (preset === "interlude") {
+        return [
+          {
+            op: "showInterlude",
+            title: scene.title || "A WHOLE NEW WORLD",
+            subtitle: scene.subtitle,
+          },
+        ]
+      }
+      if (preset === "z-wipe") {
+        return [{ op: "playZZWipe", thenCustom: false }]
+      }
       if (
         preset === "top-pick" ||
         preset === "most-chosen" ||
@@ -418,6 +519,7 @@ function planScene(
             }
           : prevQ
         const counts = r ? r.options.map((o) => o.count) : undefined
+
         return [
           {
             op: "showTopPick",
@@ -427,6 +529,7 @@ function planScene(
           },
         ]
       }
+
       if (scene.title) {
         return [
           {
@@ -436,23 +539,33 @@ function planScene(
           },
         ]
       }
+
       return [{ op: "custom" }]
     }
+
     case "opening":
+
     case "closing":
+
     case "media":
       if (
         scene.mediaUrl ||
         scene.lottieUrl ||
         (scene.overlayAnimations?.length ?? 0) > 0
-      )
+      ) {
         return [{ op: "custom" }]
-      if (scene.kind === "opening") return [{ op: "showIntro" }]
+      }
+      if (scene.kind === "opening") {
+        return [{ op: "showIntro" }]
+      }
       if (scene.kind === "closing") {
         const winner = topWinner(activeSceneData?.leaderboard?.entries)
+
         return [{ op: "showFinale", winner }]
       }
+
       return [{ op: "custom" }]
+
     default:
       return prev?.kind === "voting" || prev?.kind === "results"
         ? [{ op: "playZZWipe", thenCustom: true }]
@@ -465,7 +578,10 @@ function topWinner(
 ): StageWinner | null {
   const sorted = [...(entries ?? [])].sort((a, b) => b.points - a.points)
   const best = sorted[0]
-  if (!best || !(best.points > 0)) return null
+
+  if (!best || !(best.points > 0)) {
+    return null
+  }
   return {
     name: sorted
       .filter((e) => e.points === best.points)
@@ -484,20 +600,29 @@ export function collapseForResume(steps: StageStep[]): StageStep[] {
   const out: StageStep[] = []
   for (let i = 0; i < steps.length; i++) {
     const step = steps[i]
-    if (step.op === "hold" || step.op === "lockVoting") continue
+
+    if (step.op === "hold" || step.op === "lockVoting") {
+      continue
+    }
     if (step.op === "updateLeaderboard" && out.length > 0) {
       const last = out[out.length - 1]
+
       if (last.op === "showLeaderboard" || last.op === "updateLeaderboard") {
         out[out.length - 1] = { op: last.op, entries: step.entries }
+
         continue
       }
     }
+
     if (step.op === "nextQuestion") {
       out.push({ op: "showQuestion", question: step.question })
+
       continue
     }
+
     if (step.op === "playZZWipe") {
       const hasFollowUp = i + 1 < steps.length
+
       if (!hasFollowUp) {
         out.push(
           step.interlude
@@ -507,10 +632,13 @@ export function collapseForResume(steps: StageStep[]): StageStep[] {
               : step,
         )
       }
+
       continue
     }
+
     out.push(step)
   }
+
   return out
 }
 
@@ -521,37 +649,57 @@ export async function runSteps(
   isCurrent: () => boolean,
 ): Promise<boolean> {
   for (const step of steps) {
-    if (!isCurrent()) return false
+    if (!isCurrent()) {
+      return false
+    }
     switch (step.op) {
       case "showIntro":
         await handle.showIntro()
+
         break
+
       case "showQuestion":
         await handle.showQuestion(step.question)
+
         break
+
       case "presentOptions":
         await handle.presentOptions(step.question)
+
         break
+
       case "nextQuestion":
         await handle.nextQuestion(step.question)
+
         break
+
       case "openVoting":
         await handle.openVoting(step.seconds, step.deadlineMs)
+
         break
+
       case "lockVoting":
         await handle.lockVoting()
+
         break
+
       case "revealResults":
         await handle.revealResults(step.reveal)
+
         break
+
       case "showLeaderboard":
         await handle.showLeaderboard(step.entries)
+
         break
+
       case "updateLeaderboard":
         await handle.updateLeaderboard(step.entries)
+
         break
+
       case "playZZWipe": {
-        const interlude = step.interlude
+        const { interlude } = step
         if (interlude && handle.showInterlude) {
           const showInterlude = handle.showInterlude.bind(handle)
           await handle.playZZWipe(() => {
@@ -562,35 +710,58 @@ export async function runSteps(
             step.thenCustom ? () => handle.showCustomScreen() : undefined,
           )
         }
+
         break
       }
+
       case "showFinale":
         await handle.showFinale(step.winner)
+
         break
+
       case "showFullShowScene":
-        if (handle.showFullShowScene)
+        if (handle.showFullShowScene) {
           await handle.showFullShowScene(step.scene, step.data)
-        else await handle.showCustomScreen()
+        } else {
+          await handle.showCustomScreen()
+        }
         break
+
       case "showTopPick":
-        if (handle.showTopPick) await handle.showTopPick(step)
-        else await handle.showCustomScreen()
+        if (handle.showTopPick) {
+          await handle.showTopPick(step)
+        } else {
+          await handle.showCustomScreen()
+        }
         break
+
       case "showRoundRecap":
-        if (handle.showRoundRecap) await handle.showRoundRecap(step)
-        else await handle.showCustomScreen()
+        if (handle.showRoundRecap) {
+          await handle.showRoundRecap(step)
+        } else {
+          await handle.showCustomScreen()
+        }
         break
+
       case "showInterlude":
-        if (handle.showInterlude) await handle.showInterlude(step)
-        else await handle.showCustomScreen()
+        if (handle.showInterlude) {
+          await handle.showInterlude(step)
+        } else {
+          await handle.showCustomScreen()
+        }
         break
+
       case "custom":
         await handle.showCustomScreen()
+
         break
+
       case "hold":
         await new Promise((r) => setTimeout(r, step.ms))
+
         break
     }
   }
+
   return isCurrent()
 }
