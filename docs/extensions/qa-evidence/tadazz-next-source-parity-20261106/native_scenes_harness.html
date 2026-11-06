@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Native React TADAZZ Show Parity Harness</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+    html, body { margin: 0; padding: 0; background: #08001d; overflow: hidden; width: 1920px; height: 1080px; font-family: 'Rubik', sans-serif; }
+    /* TADAZZ V4 — declaration values extracted from the supplied HTML. */
+/* DOM/UI rooted under .tzv4-stage; old game/editor styling is untouched. */
+.tzv4-stage {
+  --night: #08001d;
+  --purple: #34056f;
+  --violet: #8b20f4;
+  --pink: #ef48df;
+  --blue: #00baff;
+  --royal: #2e70ff;
+  --lime: #e5ff37;
+  --gold: #ffbe53;
+  --cream: #fff5db;
+  --ink: #130423;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  color-scheme: dark;
+}
+.tzv4-stage { width:1920px; height:1080px; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(var(--scale,1)); transform-origin:center; overflow:hidden; isolation:isolate; color:var(--cream); user-select:none; background:#0f002c; pointer-events:none; }
+.tzv4-stage * { box-sizing:border-box; }
+.tzv4-stage .stage-bg { position:absolute; inset:0; background:center/cover no-repeat url("/tadazz-show/v4/question-bg.webp"); opacity:1; z-index:0; }
+.tzv4-stage.stage-show .stage-bg { background-image:url("/tadazz-show/v4/show-stage.webp"); }
+.tzv4-stage .veil { position:absolute;inset:0;background:linear-gradient(90deg,#11002a40, transparent 23%, transparent 78%,#11002247),radial-gradient(ellipse at center 42%,#12002f50 4%,transparent 65%);z-index:1; }
+.tzv4-stage.stage-show .veil { background:radial-gradient(ellipse at center 46%,#09001b60 0%,#10002e38 65%,#07001470 100%); }
+.tzv4-stage .ambient { z-index:2;position:absolute;inset:0;overflow:hidden;opacity:1; }
+.tzv4-stage .ambient-beam { position:absolute;top:-260px;width:390px;height:1000px;transform-origin:50% 0%;opacity:.14;clip-path:polygon(48% 0,52% 0,100% 100%,0 100%);mix-blend-mode:screen;will-change:transform;background:linear-gradient(180deg,transparent, #1bbefc9c 38%,transparent 98%);animation:tzv4-sweepBeam 9s ease-in-out infinite alternate; }
+.tzv4-stage .ambient-beam:nth-child(1) {left:145px;--angle1:-24deg;--angle2:12deg;animation-duration:8.8s}
+.tzv4-stage .ambient-beam:nth-child(2) {left:565px;--angle1:18deg;--angle2:-12deg;animation-duration:10.5s;background:linear-gradient(180deg,transparent,#e145f485 38%,transparent 99%)}
+.tzv4-stage .ambient-beam:nth-child(3) {left:1070px;--angle1:-17deg;--angle2:12deg;animation-duration:11.5s;background:linear-gradient(180deg,transparent,#f9c66a70 38%,transparent 99%)}
+.tzv4-stage .ambient-beam:nth-child(4) {left:1370px;--angle1:25deg;--angle2:-12deg;animation-duration:9.7s;background:linear-gradient(180deg,transparent,#1cbefc9c 38%,transparent 99%)}
+@keyframes tzv4-sweepBeam {from{transform:rotate(var(--angle1))}to{transform:rotate(var(--angle2))}}
+.tzv4-stage .ambient-bulbs { position:absolute;left:450px;right:450px;top:55px;height:38px;display:flex;justify-content:space-between;align-items:center; }
+.tzv4-stage .ambient-bulbs i {display:block;width:17px;height:17px;border-radius:50%;background:#ffc56d;box-shadow:0 0 6px #ffc56b,0 0 15px #ff923c;opacity:.43;animation:tzv4-bulbChase 2.6s ease-in-out infinite; }
+@keyframes tzv4-bulbChase {0%,45%,100%{opacity:.36;transform:scale(.92)}58%{opacity:1;transform:scale(1.27)}}
+.tzv4-stage .ambient-floor { position:absolute;left:380px;right:380px;bottom:68px;height:190px;border-radius:50%;background:radial-gradient(ellipse,#f45af72e,transparent 72%);transform:scaleX(1);animation:tzv4-floorBreathe 6s ease-in-out infinite; }
+@keyframes tzv4-floorBreathe {0%,100%{opacity:.35;transform:scaleX(.94)}50%{opacity:.9;transform:scaleX(1.08)}}
+.tzv4-stage .tzv4-scene-root {position:absolute;z-index:5;inset:0;will-change:opacity; }
+.tzv4-stage .tzv4-fx-root {position:absolute;z-index:20;inset:0;overflow:hidden;pointer-events:none; }
+.tzv4-stage .stage-identity {position:absolute;left:98px;top:63px;display:flex;align-items:center;gap:15px;font-weight:950;color:#fff2d9;font-size:25px;letter-spacing:.13em;opacity:.84}
+.tzv4-stage .stage-identity .tiny-z { width:34px;height:34px;background:linear-gradient(135deg,#46dcff,#2459ff);clip-path:polygon(0 0,100% 0,100% 23%,44% 78%,100% 78%,100% 100%,0 100%,0 75%,57% 22%,0 22%);filter:drop-shadow(0 0 10px #39afff)}
+.tzv4-stage .stage-breadcrumb {position:absolute;right:101px;top:68px;text-transform:uppercase;color:#ddcbff;font-size:17px;letter-spacing:.22em;font-weight:800;}
+.tzv4-stage .eyebrow {font-size:20px;font-weight:850;letter-spacing:.20em;text-transform:uppercase;color:#e5ff5a;text-shadow:0 0 19px #baff65a0;}
+.tzv4-stage .scene-kicker {font-size:18px;letter-spacing:.24em;text-transform:uppercase;color:#f0cdfc;font-weight:800}
+.tzv4-stage .q-frame {position:absolute;left:255px;right:255px;top:143px;height:179px;border:2px solid #c06aff8c;border-radius:39px;background:linear-gradient(120deg,#2d0d669a,#27085baf 63%,#2b0b65b3);box-shadow:0 21px 57px #0700137f,inset 0 2px 0 #ffffff31,0 0 46px #a72cff3b;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:13px;padding:15px 34px;overflow:hidden; }
+.tzv4-stage .q-frame::before {content:"";position:absolute;left:3%;right:3%;top:0;height:2px;background:linear-gradient(90deg,transparent,#54daff,#fb91fa,#ffe16b,transparent);opacity:.76; }
+.tzv4-stage .q-frame::after {content:"";position:absolute;left:20%;right:20%;bottom:0;height:4px;background:linear-gradient(90deg,transparent,#ffc45a,#fd7efe,transparent);box-shadow:0 0 17px #ff9dfb; }
+.tzv4-stage .q-text {font-size:66px;line-height:1.09;text-align:center;letter-spacing:-.038em;font-weight:900;color:#fff6e7;text-shadow:0 7px 20px #0008;text-wrap:balance;}
+.tzv4-stage .answers {position:absolute;left:233px;top:405px;width:1454px;display:flex;align-items:flex-start;gap:23px;justify-content:center;perspective:1400px;}
+.tzv4-stage .answer-card {position:relative;flex:none;width:272px;height:373px;border:2px solid #974bd6;border-radius:25px;padding:9px;background:linear-gradient(145deg,#522398d1,#1d064ded 60%,#41137adb);box-shadow:0 24px 34px #07001599,inset 0 2px 0 #ffffff28,0 0 13px #b63cf33d;transform-origin:50% 85%;will-change:transform,opacity;overflow:hidden; }
+.tzv4-stage .answer-card::after {content:"";position:absolute;inset:2px;border-radius:23px;pointer-events:none;border:1px solid #fff2;}
+.tzv4-stage .answer-card figure {margin:0;display:flex;flex-direction:column;gap:0;}
+.tzv4-stage .answer-card .answer-image {height:250px;width:250px;border-radius:16px;object-fit:cover;background:#301460;box-shadow:inset 0 0 0 2px #ffffff30;display:block; }
+.tzv4-stage .answer-card .answer-title {font-size:25px;font-weight:900;text-align:center;color:#fff6e8;text-wrap:balance;display:flex;height:95px;align-items:center;justify-content:center;line-height:1.13;padding:0 8px;text-shadow:0 3px 12px #0008;}
+.tzv4-stage .answer-card .corner {position:absolute;top:13px;left:13px;border-radius:8px;background:#19042fcc;color:#ecdbfb;border:1px solid #fff3;padding:6px 10px;font-size:15px;font-weight:950;letter-spacing:.06em;}
+.tzv4-stage .answer-card.is-selected {border-color:#f5ff51;box-shadow:0 21px 54px #050010cc,0 0 0 5px #f6ff5661,0 0 70px #e9ff5b62;}
+.tzv4-stage .answer-card.is-muted {opacity:.32;}
+.tzv4-stage .stage-footer {position:absolute;left:330px;right:330px;top:850px;display:flex;align-items:center;justify-content:center;gap:20px;}
+.tzv4-stage .footer-orbit {height:3px;width:170px;background:linear-gradient(90deg,transparent,#c96cf9,#ffe25e);border-radius:20px;box-shadow:0 0 10px #ed63fa88;}
+.tzv4-stage .footer-orbit:last-child {transform:scaleX(-1)}
+.tzv4-stage .footer-caption {font-size:21px;letter-spacing:.22em;font-weight:900;color:#f7def9;text-shadow:0 0 15px #ad36e4}
+.tzv4-stage .vote-status {position:absolute;left:50%;transform:translateX(-50%);top:855px;width:610px;min-height:88px;display:flex;align-items:center;justify-content:center;gap:17px;border:2px solid #e0ff6c9c;border-radius:70px;background:linear-gradient(125deg,#280a56ee,#4f167ee0);box-shadow:0 0 45px #c7f65f3a,inset 0 2px 0 #ffffff38;}
+.tzv4-stage .vote-dot {height:15px;width:15px;border-radius:50%;background:#e9ff54;box-shadow:0 0 17px #e8ff56,0 0 36px #f6ff5680;animation:tzv4-voteDot 1.7s ease-in-out infinite}
+@keyframes tzv4-voteDot {0%,100%{transform:scale(.8);opacity:.62}50%{transform:scale(1.18);opacity:1}}
+.tzv4-stage .vote-status strong {font-size:33px;color:#f8ffb6;letter-spacing:.07em;}
+.tzv4-stage .vote-status span {font-size:30px;font-weight:950;color:#fff2dc;}
+.tzv4-stage .locked-status {border-color:#ffc269;box-shadow:0 0 30px #ffae4b53;}
+.tzv4-stage .locked-status .vote-dot {background:#ffc15c;box-shadow:0 0 25px #ffae4b;animation:none;}
+.tzv4-stage .timer-scene {position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column;}
+.tzv4-stage .timer-head {position:absolute;top:190px;font-size:26px;font-weight:900;letter-spacing:.26em;color:#f0d7ff;text-transform:uppercase;}
+.tzv4-stage .timer-halo {position:absolute;left:645px;top:279px;width:630px;height:630px;border-radius:50%;background:radial-gradient(circle,#8420dc48 0,#390e6b7a 53%,transparent 71%);box-shadow:0 0 90px #b42fff39;}
+.tzv4-stage .timer-ring {position:absolute;left:740px;top:304px;width:440px;height:440px;border-radius:50%;border:6px solid #c45cf973;box-shadow:0 0 29px #ad3dff6c,inset 0 0 45px #7e24ca45;}
+.tzv4-stage .timer-ring::before {content:"";position:absolute;inset:-18px;border-radius:50%;border:2px dashed #f5db84b3;animation:tzv4-timerSpin 15s linear infinite;}
+.tzv4-stage .timer-ring::after {content:"";position:absolute;inset:23px;border-radius:50%;border:5px solid #00bfff62;box-shadow:0 0 38px #4dcaff4d;}
+@keyframes tzv4-timerSpin {to{transform:rotate(360deg)}}
+.tzv4-stage .timer-value {position:absolute;top:387px;left:0;right:0;text-align:center;font-size:206px;font-weight:1000;font-variant-numeric:tabular-nums;letter-spacing:-.08em;color:#fff7e9;text-shadow:0 9px 26px #000b,0 0 50px #ffdd7a90;}
+.tzv4-stage .timer-low {color:#edff64;text-shadow:0 0 70px #edff73c7;}
+.tzv4-stage .timer-tip {position:absolute;top:820px;font-size:26px;font-weight:900;letter-spacing:.14em;color:#f7dfef;}
+.tzv4-stage .results-head {position:absolute;top:126px;left:360px;right:360px;text-align:center;}
+.tzv4-stage .results-head h2, .tzv4-stage .leader-head h2 {margin:10px 0 0;font-size:75px;letter-spacing:-.033em;color:#fff6df;text-shadow:0 7px 25px #050008aa;font-weight:950;}
+.tzv4-stage .results-board {position:absolute;left:306px;top:300px;width:1308px;display:flex;flex-direction:column;gap:15px;}
+.tzv4-stage .result-row {height:116px;position:relative;display:flex;align-items:center;padding:13px 28px;gap:20px;border-radius:20px;border:1px solid #8f54c58f;background:linear-gradient(100deg,#310c6cde,#180341e0);box-shadow:0 12px 30px #08000f83,inset 0 1px 0 #fff3;will-change:opacity,transform;overflow:hidden}
+.tzv4-stage .result-row.first {border-color:#e7ff5c;box-shadow:0 12px 35px #08001395,0 0 26px #dfff4a4a;background:linear-gradient(110deg,#3b136f,#22164adf)}
+.tzv4-stage .result-row .rank-badge {display:grid;place-items:center;flex:none;width:65px;height:65px;border-radius:19px;background:linear-gradient(145deg,#5d268e,#240a54);color:#f7e6fb;border:1px solid #9962c0;font-size:28px;font-weight:950;}
+.tzv4-stage .result-row.first .rank-badge {background:linear-gradient(145deg,#ffeb79,#d9ff43);color:#24063c;border-color:#ffffbf;}
+.tzv4-stage .result-row .result-thumb {width:86px;height:86px;flex:none;object-fit:cover;border-radius:12px;border:2px solid #d5b7fb5a;}
+.tzv4-stage .result-row .result-info {flex:1;min-width:0;display:flex;flex-direction:column;gap:13px;}
+.tzv4-stage .result-row .result-label {font-size:28px;font-weight:900;color:#fff6e6;}
+.tzv4-stage .result-row .result-bar {height:13px;border-radius:10px;background:#0a0620a6;overflow:hidden;box-shadow:inset 0 1px 6px #040015;}
+.tzv4-stage .result-row .result-bar-fill {height:100%;background:linear-gradient(90deg,#188fff,#45d8ff,#c761ff);transform-origin:left;transform:scaleX(0);border-radius:10px;box-shadow:0 0 20px #00bafd86;}
+.tzv4-stage .result-row.first .result-bar-fill {background:linear-gradient(90deg,#1fbbff,#e6ff4f);box-shadow:0 0 24px #d8ff57bd;}
+.tzv4-stage .result-row .result-value {width:100px;flex:none;font-variant-numeric:tabular-nums;text-align:right;font-weight:1000;font-size:39px;color:#f6ebff;}
+.tzv4-stage .result-row.first .result-value {color:#eaff5a;}
+.tzv4-stage .result-row .result-value.hidden {visibility:hidden;}
+.tzv4-stage .spotlight-plate {position:absolute;left:560px;top:224px;width:800px;height:600px;border-radius:50%;background:radial-gradient(ellipse,#e9ff5d20,transparent 67%);filter:blur(12px)}
+.tzv4-stage .spotlight-portrait {position:absolute;left:755px;top:258px;width:410px;height:410px;border-radius:47px;border:5px solid #e3ff5d;background:#3c0e70;box-shadow:0 0 0 14px #4a2671,0 0 0 22px #f8bf5a82,0 0 72px #e7ff536d,0 28px 60px #0009;object-fit:cover;}
+.tzv4-stage .spotlight-name {position:absolute;left:270px;right:270px;top:722px;text-align:center;color:#fff4d9;font-size:78px;font-weight:950;text-shadow:0 0 21px #b646e8cc;}
+.tzv4-stage .spotlight-top {position:absolute;top:155px;left:0;right:0;text-align:center;font-size:26px;font-weight:900;letter-spacing:.25em;color:#edff74;}
+.tzv4-stage .leader-head {position:absolute;top:129px;left:0;right:0;text-align:center;}
+.tzv4-stage .leader-board {position:absolute;top:307px;left:312px;width:1296px;display:flex;flex-direction:column;gap:20px;}
+.tzv4-stage .team-row {position:relative;height:132px;display:flex;align-items:center;border-radius:26px;border:1px solid #ba80f08a;background:linear-gradient(100deg,#3b136cf0,#1d074be9);padding:23px 36px;box-shadow:0 11px 30px #080014a2;gap:31px;will-change:transform,opacity;}
+.tzv4-stage .team-row:first-child {background:linear-gradient(110deg,#533478,#2c134d);border-color:#ffe477b9;box-shadow:0 0 31px #ffd36a3a,0 10px 30px #080014a2;}
+.tzv4-stage .team-rank {font-size:45px;color:#f9e2ff;font-weight:1000;width:90px;flex:none;}
+.tzv4-stage .team-icon {width:80px;height:80px;border-radius:20px;display:grid;place-items:center;background:linear-gradient(120deg,#31baff,#8e53ff);box-shadow:0 0 26px #348dff4b;color:#fff;font-size:35px;font-weight:1000;}
+.tzv4-stage .team-name {flex:1;font-size:39px;font-weight:900;letter-spacing:-.02em;}
+.tzv4-stage .team-score {font-size:48px;font-weight:1000;color:#edff67;letter-spacing:.03em;font-variant-numeric:tabular-nums;}
+.tzv4-stage .team-score small {font-size:17px;letter-spacing:.15em;color:#e0c7ef;margin-left:13px;}
+.tzv4-stage .interlude-panel {position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:15px;}
+.tzv4-stage .interlude-mini {font-size:32px;font-weight:850;letter-spacing:.34em;color:#eaff63;text-shadow:0 0 30px #e1ff6380;}
+.tzv4-stage .interlude-title {font-size:167px;font-weight:1000;letter-spacing:-.085em;line-height:1;color:#fff2cf;text-shadow:0 16px 40px #080016c2,0 0 65px #ffbd6265;}
+.tzv4-stage .interlude-rule {width:470px;height:7px;margin:32px 0;border-radius:50px;background:linear-gradient(90deg,#259cf9,#ca40fb,#eaff57);box-shadow:0 0 29px #ce5afc9d;}
+.tzv4-stage .interlude-sub {font-size:30px;font-weight:800;letter-spacing:.15em;color:#e9c6ff;}
+.tzv4-stage .interlude-ray {position:absolute;left:50%;top:50%;width:1100px;height:710px;border-radius:50%;transform:translate(-50%,-50%);background:radial-gradient(circle,#f45dff48,#773bff29 42%,transparent 67%);pointer-events:none;}
+.tzv4-stage .wipe {position:absolute;top:-300px;width:650px;height:1600px;transform:translateX(-2000px) skewX(-22deg);background:linear-gradient(90deg,transparent,#18b4ff26 8%,#0da9fce5 17%,#9628eb 43%,#e8ff49e8 87%,transparent);box-shadow:0 0 55px #00bdfc88;clip-path:polygon(0 0,100% 0,100% 22%,40% 68%,100% 68%,100% 100%,0 100%,0 75%,60% 24%,0 24%);z-index:19;}
+.tzv4-stage .wipe.second {width:430px;transform:translateX(2300px) skewX(21deg);background:linear-gradient(90deg,transparent,#edff57b7,#f15ae7,#11c7facc,transparent);}
+.tzv4-stage .photo-question {position:absolute;inset:0;}
+.tzv4-stage .photo-question-img {position:absolute;left:243px;top:260px;width:550px;height:550px;border-radius:48px;object-fit:cover;border:7px solid #7ddfff;box-shadow:0 0 0 11px #521e8a,0 0 70px #00bafc64,0 29px 50px #0009;}
+.tzv4-stage .photo-question-panel {position:absolute;left:855px;top:235px;width:790px;min-height:350px;padding:50px;background:linear-gradient(130deg,#35106bd9,#1b0649e8);border-radius:38px;border:2px solid #ce79ed99;box-shadow:0 17px 70px #0007;display:flex;flex-direction:column;gap:22px;justify-content:center;}
+.tzv4-stage .photo-question-head {font-size:64px;font-weight:900;line-height:1.13;letter-spacing:-.035em;}
+.tzv4-stage .photo-options {position:absolute;left:850px;top:640px;width:800px;display:grid;grid-template-columns:repeat(2,1fr);gap:18px;}
+.tzv4-stage .photo-option {border-radius:19px;background:linear-gradient(130deg,#381273,#29145c);border:1px solid #c76af18c;padding:20px 25px;font-size:28px;font-weight:850;box-shadow:0 12px 25px #0007;}
+.tzv4-stage .rail {position:absolute;height:7px;border-radius:20px;background:linear-gradient(90deg,transparent,#39ccff,#f1a7ff,#ffe16b,transparent);box-shadow:0 0 23px #8e2bff;}
+.tzv4-stage .rail.top {top:370px;left:330px;width:1260px;}
+.tzv4-stage .rail.bottom {top:915px;left:450px;width:1020px;}
+.tzv4-stage .hud-focus {position:absolute;top:870px;left:300px;right:300px;font-size:24px;letter-spacing:.17em;text-align:center;color:#f0dcfc;font-weight:850;}
+.tzv4-stage .spark {position:absolute;left:50%;top:50%;height:4px;width:46px;border-radius:100px;transform-origin:left center;background:#fff0ba;box-shadow:0 0 18px currentColor;opacity:0;will-change:transform,opacity;}
+.tzv4-stage .blast {position:absolute;left:50%;top:49%;width:440px;height:440px;margin:-220px;border-radius:50%;border:8px solid #fff29c;box-shadow:0 0 58px #ffce80,inset 0 0 47px #ff78ef;opacity:0;will-change:transform,opacity;}
+.tzv4-stage .light-saber {position:absolute;left:50%;top:51%;width:1200px;height:9px;border-radius:99px;margin-left:-600px;transform:rotate(-22deg) scaleX(.3);background:linear-gradient(90deg,transparent,#2ed0ff,#faf6da,#dfff50,transparent);box-shadow:0 0 25px #f2c5f8;opacity:0;}
+@media (prefers-reduced-motion: reduce) {
+.tzv4-stage .ambient-beam, .tzv4-stage .ambient-bulbs i, .tzv4-stage .ambient-floor, .tzv4-stage .vote-dot, .tzv4-stage .timer-ring::before {animation:none!important;}
+}
+.tzv4-stage .stage-identity {left:110px;top:43px;opacity:1;letter-spacing:.07em}
+.tzv4-stage .stage-identity .stage-brand-logo {display:block;width:210px;height:auto;max-width:none;object-fit:contain;}
+.tzv4-stage .stage-round-pill {
+  position:absolute;right:94px;top:61px;z-index:8;
+  padding:15px 27px;border-radius:999px;
+  background:rgba(43,14,91,.78);border:1px solid rgba(196,128,255,.65);
+  font-size:21px;line-height:1.2;font-weight:900;letter-spacing:.08em;
+  color:#f4e9ff;text-transform:uppercase;
+  box-shadow:0 0 24px #c368ff24,inset 0 2px 0 #ffffff18;
+}
+.tzv4-stage .q-frame {left:260px;right:260px;top:137px;height:171px;gap:8px;
+  border-color:#d087ffba;background:linear-gradient(150deg,rgba(59,12,119,.92),rgba(30,6,79,.92));}
+.tzv4-stage .q-text {font-size:62px}
+.tzv4-stage .answers {
+  left:77px;right:77px;top:353px;width:auto;
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:19px;align-items:start;justify-content:stretch;
+  perspective:1600px;z-index:3;
+}
+.tzv4-stage .choice-slot {width:100%;min-width:0;display:flex;flex-direction:column;align-items:center;
+  transform-origin:50% 74%;will-change:transform,opacity;position:relative;
+  height:auto;overflow:visible;padding:0;border:0;background:none;box-shadow:none;}
+.tzv4-stage .answer-card {
+  width:100%;height:462px;border:2px solid rgba(184,91,255,.88);
+  border-radius:32px;padding:10px;overflow:hidden;
+  background:linear-gradient(165deg,rgba(100,29,166,.94),rgba(34,7,85,.98) 49%,rgba(60,15,117,.97));
+  box-shadow:0 22px 46px #060015a8,0 0 0 3px #692ba64a,0 0 29px #ba47ff3f,inset 0 2px 0 #fff3;
+  transform:none;
+}
+.tzv4-stage .answer-card::after {border-radius:29px}
+.tzv4-stage .answer-card::before {content:"";position:absolute;z-index:4;top:0;left:6%;right:6%;height:4px;
+  background:linear-gradient(90deg,transparent,#ffdb75,#fb7bfa,#79d5ff,transparent);opacity:.85;}
+.tzv4-stage .answer-card figure,
+.tzv4-stage .answer-card figure.answer-figure {
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  width: 100%;
+}
+.tzv4-stage .answer-card .tz-photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1/1;
+  border-radius: 20px;
+  overflow: hidden;
+  border: 2px solid #ffc17599;
+  background: #301460;
+  box-shadow: 0 0 0 3px #240752, 0 0 24px rgba(255,177,72,.14);
+}
+.tzv4-stage .answer-card .answer-image,
+.tzv4-stage .answer-card .tz-photo-frame img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  display: block;
+}
+.tzv4-stage .answer-card .corner.answer-card-badge {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 6;
+  font-size: 18px;
+  font-weight: 1000;
+  padding: 4px 10px;
+  border-radius: 10px;
+  background: rgba(22, 5, 45, 0.88);
+  color: #ecdbfb;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+}
+.tzv4-stage .answer-card .answer-title {
+  height: 103px;
+  font-size: 31px;
+  padding: 10px 4px 4px;
+  line-height: 1.1;
+  letter-spacing: -0.022em;
+  font-weight: 900;
+  color: #fff5e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-wrap: balance;
+  word-break: break-word;
+  overflow: hidden;
+}
+.tzv4-stage .choice-slot.is-selected .corner.answer-card-badge {
+  color: #eaff59;
+  border-color: #eaff59;
+}
+.tzv4-stage .choice-slot.is-favourite .corner.answer-card-badge {
+  color: #edff5c;
+  border-color: #e9ff68;
+}
+.tzv4-stage .answer-index {
+  display:flex;align-items:center;justify-content:center;margin-top:10px;
+  font-size:60px;line-height:1.0;font-weight:1000;letter-spacing:-.045em;
+  font-variant-numeric:tabular-nums;color:#fff2d5;
+  text-shadow:0 5px 22px #070010,0 0 25px #ef73f59e;
+  width:112px;height:76px;border-radius:20px;
+  background:linear-gradient(160deg,rgba(86,24,146,.90),rgba(28,8,66,.88));
+  border:2px solid rgba(199,114,255,.74);box-shadow:0 11px 24px #0800148b,inset 0 2px 0 rgba(255,255,255,.12);
+}
+.tzv4-stage .choice-slot.is-selected {z-index:5}
+.tzv4-stage .choice-slot.is-selected .answer-card {border-color:#eaff59;box-shadow:0 22px 46px #050012cc,0 0 0 4px #edff5677,0 0 50px #ecff55a0;}
+.tzv4-stage .choice-slot.is-selected .answer-index {color:#eaff59;border-color:#eaff59}
+.tzv4-stage .result-percentage {position:absolute;z-index:5;right:16px;top:240px;min-width:105px;
+  text-align:center;padding:5px 8px;border-radius:13px;
+  font-size:43px;font-weight:1000;font-variant-numeric:tabular-nums;
+  color:#fff5d9;background:linear-gradient(120deg,rgba(17,2,56,.90),rgba(32,5,67,.75));
+  border:1px solid rgba(255,255,255,.24);box-shadow:0 5px 24px #0009,0 0 19px #a75dff33;
+  opacity:0;text-shadow:0 2px 14px #000a;
+}
+.tzv4-stage .result-track {position:absolute;left:27px;right:27px;bottom:11px;height:10px;
+  border-radius:40px;background:#11052e;overflow:hidden;
+  border:1px solid #a161d55e;box-shadow:inset 0 1px 5px #0009;opacity:0;
+}
+.tzv4-stage .result-track-fill {height:100%;width:100%;transform-origin:left center;transform:scaleX(0);
+  background:linear-gradient(90deg,#209aff,#6ad3ff,#c76fff);
+  border-radius:40px;box-shadow:0 0 13px #b753ff;
+}
+.tzv4-stage .winner-tag {position:absolute;z-index:6;top:24px;left:16px;right:16px;
+  background:#edff5d;color:#24103d;padding:11px 6px;border-radius:100px;
+  text-align:center;font-size:16px;font-weight:1000;letter-spacing:.08em;
+  box-shadow:0 6px 28px #eaff5670;opacity:0;
+}
+.tzv4-stage .choice-slot.is-favourite {z-index:5}
+.tzv4-stage .choice-slot.is-favourite .answer-card {border-color:#eaff58;box-shadow:0 22px 42px #050011c2,0 0 0 3px #eaff58a0,0 0 35px #eaff588c,inset 0 2px 0 #fff8}
+.tzv4-stage .choice-slot.is-favourite .result-track-fill {background:linear-gradient(90deg,#59baff,#eeff50)}
+.tzv4-stage .choice-slot.is-favourite .result-percentage {color:#eeff65}
+.tzv4-stage .choice-slot .answer-card-badge { z-index: 8; }
+.tzv4-stage .choice-slot .winner-tag { left: 66px; font-size: 12px; }
+.tzv4-stage .choice-slot.is-favourite .answer-index {color:#edff5c;border-color:#e9ff68}
+.tzv4-stage .countdown-floater {position:absolute;left:1694px;top:154px;width:181px;height:181px;
+  z-index:11;display:grid;place-items:center;transform-origin:50% 50%;
+  border-radius:50%;background:radial-gradient(circle at 42% 40%,#4d157ec9,#23074fe9 65%,#13032def);
+  border:2px solid #db9effb4;box-shadow:0 0 0 8px #50208b79,0 0 38px #b346ffa8,inset 0 0 23px #7d31d9d1,0 16px 34px #0008;
+}
+.tzv4-stage .countdown-label {position:absolute;top:39px;left:0;right:0;text-align:center;
+  color:#efccff;font-size:12px;letter-spacing:.15em;font-weight:1000;}
+.tzv4-stage .countdown-ring {position:absolute;inset:-2px;pointer-events:none}
+.tzv4-stage .countdown-ring svg {width:100%;height:100%;overflow:visible}
+.tzv4-stage .countdown-ring circle {fill:none;stroke-width:7;transform:rotate(-90deg);transform-origin:50% 50%;}
+.tzv4-stage .countdown-ring .timer-track {stroke:#7d45aa75}
+.tzv4-stage .countdown-ring .timer-progress {stroke:#eaff59;stroke-linecap:round;filter:drop-shadow(0 0 5px #e5ff6c88)}
+.tzv4-stage .countdown-value {position:absolute;top:56px;left:0;right:0;text-align:center;
+  font-size:76px;font-weight:1000;letter-spacing:-.05em;font-variant-numeric:tabular-nums;
+  color:#fff6e5;text-shadow:0 4px 19px #14002db0;}
+.tzv4-stage .countdown-value.timer-low {color:#efff5e;text-shadow:0 0 22px #edff58ab}
+.tzv4-stage .answers.recap-answers {top:266px;left:81px;right:81px;gap:18px;z-index:4}
+.tzv4-stage .recap-answers .answer-card {height:437px}
+.tzv4-stage .recap-answers .answer-card .answer-title {height:82px;font-size:28px}
+.tzv4-stage .recap-answers .answer-index {margin-top:12px;font-size:55px;height:70px}
+.tzv4-stage .story-connection {position:absolute;left:120px;right:120px;top:800px;height:8px;z-index:1;
+  transform-origin:center center;border-radius:100px;
+  background:linear-gradient(90deg,transparent,#2cc8ff,#af4fff,#eaff59,#ffbd59,transparent);
+  box-shadow:0 0 22px #c34bff9e,0 0 50px #54baff80;opacity:0;
+}
+.tzv4-stage .story-finale {
+  position:absolute;top:876px;left:0;right:0;z-index:6;text-align:center;
+  isolation:isolate;
+  font-size:75px;line-height:1.12;font-weight:1000;letter-spacing:-.035em;text-transform:uppercase;
+  color:#fff9e9;
+  -webkit-text-stroke:1px #1b0636;
+  text-shadow:0 3px 1px #140027,0 7px 22px #010008,0 0 24px #ffe6b865;
+}
+.tzv4-stage .story-finale::before {
+  content:"";position:absolute;z-index:-1;left:266px;right:266px;top:-20px;bottom:-20px;
+  border-radius:120px;
+  background:linear-gradient(90deg,transparent 0%,#0a0324ed 16%,#18033df5 50%,#0a0324ed 84%,transparent 100%);
+  box-shadow:0 15px 40px #050013a6,inset 0 1px 0 #b94eff35;
+  pointer-events:none;
+}
+.tzv4-stage .story-finale::after {content:"";position:absolute;left:32%;right:32%;bottom:-26px;height:4px;
+  border-radius:100px;background:linear-gradient(90deg,transparent,#46c3ff,#db69ff,#ebff57,transparent);
+  box-shadow:0 0 18px #bb6aff90}
+.tzv4-stage .interlude-panel {gap:9px}
+.tzv4-stage .interlude-title {font-size:166px}
+@media (prefers-reduced-motion:reduce) {
+.tzv4-stage .countdown-floater, .tzv4-stage .choice-slot {transition:none}
+}
+
+/* Scoped root and defaults. This replaces document-level HTML resets from the standalone preview. */
+.tzv4-viewport{position:relative;width:100%;height:100%;min-height:1px;overflow:hidden;background:#080015;isolation:isolate;}
+.tzv4-stage{font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;line-height:normal;}
+.tzv4-stage *{box-sizing:border-box;}
+.tzv4-stage .tzv4-scene-root{position:absolute;z-index:5;inset:0;will-change:opacity;}
+.tzv4-stage .tzv4-custom-root{position:absolute;z-index:6;inset:0;pointer-events:none;}
+.tzv4-stage .tzv4-custom-root .tz-screen.is-visible{pointer-events:auto;}
+.tzv4-stage .tz-scene-media{pointer-events:auto;}
+.tzv4-stage .tz-opening-skip{pointer-events:auto;}
+.tzv4-stage .tzv4-wipe-layer{position:absolute;inset:0;z-index:40;overflow:hidden;pointer-events:none;}
+.tzv4-stage .tzv4-fx-root{position:absolute;z-index:20;inset:0;overflow:hidden;pointer-events:none;}
+.tzv4-stage .tzv4-screen-flash{position:absolute;z-index:30;inset:0;opacity:0;background:radial-gradient(ellipse at 50% 52%,#ffffffd8 0,#fff8d9d8 6%,#ef59eab4 19%,#00a7ff35 37%,transparent 70%);mix-blend-mode:screen;pointer-events:none;}
+.tzv4-stage .answer-image-empty{display:grid;place-items:center;color:#e2cfff;background:linear-gradient(150deg,rgba(63,13,119,.92),rgba(37,6,82,.93) 72%);}
+.tzv4-stage .answer-monogram{font-size:150px;font-weight:950;letter-spacing:-.04em;color:#efff42;text-shadow:0 0 28px #eaff5755,0 6px 18px #13072e9c;font-variant-numeric:tabular-nums;}
+.tzv4-stage .choice-slot.is-selectable,
+.tzv4-stage .photo-option.is-selectable{pointer-events:auto;cursor:pointer;}
+.tzv4-stage .choice-slot.is-selectable:focus-visible .answer-card,
+.tzv4-stage .photo-option.is-selectable:focus-visible{outline:3px solid #efff51;outline-offset:4px;}
+.tzv4-stage .photo-option.is-selected{border-color:#eaff59;box-shadow:0 12px 25px #0007,0 0 0 3px #edff5677,0 0 32px #ecff55a0;}
+.tzv4-stage .choice-slot.is-incorrect{opacity:.62;}
+.tzv4-stage .q-note{margin-top:4px;color:#d1b1ff;font:700 21px/1.22 Inter,Arial,system-ui,sans-serif;text-shadow:0 2px 8px #00000090;}
+.tzv4-stage .tzv4-sr-status{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;}
+.tzv4-stage[data-reduced-motion="true"] .ambient-beam,
+.tzv4-stage[data-reduced-motion="true"] .ambient-bulbs i,
+.tzv4-stage[data-reduced-motion="true"] .ambient-floor,
+.tzv4-stage[data-reduced-motion="true"] .vote-dot{animation:none!important;}
+
+    /* Second Library: native React show-only scenes. No editor/demo overrides. */
+.tzv4-stage .full-show-root {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  overflow: hidden;
+  pointer-events: none;
+  color: #fff5db;
+  font-family: inherit;
+}
+.tzv4-stage .full-show-root * {
+  box-sizing: border-box;
+}
+.tzv4-stage .full-brand-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  vertical-align: middle;
+}
+.tzv4-stage .full-brand-img {
+  height: 80px;
+  width: auto;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 0 16px #a137ff);
+}
+.tzv4-stage .full-brand-text { display: none !important; }
+.tzv4-stage .full-logo-error .full-brand-text { display: block !important; font-size: 34px; }
+.tzv4-stage .full-headbar {
+  position: absolute;
+  z-index: 8;
+  left: 90px;
+  right: 90px;
+  top: 54px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 22px;
+  min-height: 70px;
+}
+.tzv4-stage .full-head-logo {
+  font-size: 34px;
+  font-weight: 1000;
+  font-style: italic;
+  color: #fff3d9;
+  text-shadow: 0 0 15px #c360ff;
+}
+.tzv4-stage .full-head-logo span,
+.tzv4-stage .full-grand-opening strong span,
+.tzv4-stage .full-company-brand span,
+.tzv4-stage .full-final-center span {
+  color: #eaff53;
+}
+.tzv4-stage .full-head-center {
+  font-size: 35px;
+  font-weight: 1000;
+  letter-spacing: -0.02em;
+  text-align: center;
+}
+.tzv4-stage .full-chip {
+  font-size: 19px;
+  white-space: nowrap;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  padding: 14px 24px;
+  border: 1px solid #b16bfb;
+  border-radius: 60px;
+  background: #260a52d9;
+  color: #e9d9fb;
+}
+.tzv4-stage .full-company,
+.tzv4-stage .full-grand-opening,
+.tzv4-stage .full-round-launch,
+.tzv4-stage .full-grand-finale {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  overflow: hidden;
+}
+.tzv4-stage .full-company-event {
+  position: absolute;
+  inset: 0;
+  background-position: center;
+  background-size: cover;
+  background-image: linear-gradient(120deg, #280a67, #13042f 50%, #300b64);
+  animation: full-company-event 2850ms linear both;
+}
+.tzv4-stage .full-company-brand {
+  position: relative;
+  z-index: 2;
+  font-size: 180px;
+  font-weight: 1000;
+  font-style: italic;
+  text-shadow:
+    0 20px 70px #060012,
+    0 0 45px #a137ff;
+  animation: full-company-brand 980ms 1960ms cubic-bezier(0.22, 0.75, 0.22, 1)
+    both;
+}
+.tzv4-stage .full-company-logo .full-brand-img {
+  height: 150px;
+}
+@keyframes full-company-event {
+  0%,
+  70.17% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.025);
+  }
+}
+@keyframes full-company-brand {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-grand-opening .full-opening-event {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  will-change: transform, opacity;
+  animation: full-opening-event-anim 2880ms 0ms ease both;
+}
+@keyframes full-opening-event-anim {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  58% {
+    opacity: 1;
+    transform: scale(1.055);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.1);
+  }
+}
+.tzv4-stage .full-grand-opening .full-opening-warm-veil {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 51% 55%,
+    transparent 30%,
+    rgba(255, 244, 222, 0.41) 75%,
+    rgba(253, 231, 202, 0.6)
+  );
+  pointer-events: none;
+  animation: full-veil-anim 2700ms 0ms ease both;
+}
+@keyframes full-veil-anim {
+  0% {
+    opacity: 0.1;
+  }
+  48% {
+    opacity: 0.34;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+.tzv4-stage .full-opening-portal,
+.tzv4-stage .full-portal {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 49%;
+  width: 690px;
+  height: 690px;
+  transform: translate(-50%, -50%) scale(0.1);
+  border: 33px solid #56baff;
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 15px rgba(170, 54, 235, 0.49),
+    0 0 120px rgba(35, 184, 255, 0.66),
+    inset 0 0 80px rgba(217, 91, 250, 0.71);
+  opacity: 0;
+  will-change: transform, opacity;
+  pointer-events: none;
+  animation: full-portal-open 2400ms 900ms cubic-bezier(0.23, 0.62, 0.23, 1) both;
+}
+.tzv4-stage .full-opening-portal.portal-two {
+  width: 810px;
+  height: 810px;
+  border-color: #eaff46;
+  box-shadow:
+    0 0 0 10px rgba(255, 172, 69, 0.65),
+    0 0 140px rgba(234, 255, 111, 0.69),
+    inset 0 0 70px rgba(240, 68, 255, 0.63);
+  z-index: 4;
+  animation: full-portal-two-anim 2150ms 1140ms ease both;
+}
+@keyframes full-portal-two-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.25) rotate(-26deg);
+  }
+  42% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(0.75) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3) rotate(23deg);
+  }
+}
+.tzv4-stage .full-opening-shock {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 49%;
+  width: 1800px;
+  height: 1000px;
+  border: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse at center,
+    #fffaf2 0,
+    #fff7ce 8%,
+    rgba(240, 197, 88, 0.87) 14%,
+    rgba(201, 56, 249, 0.62) 25%,
+    rgba(40, 189, 255, 0.48) 40%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+  animation: full-shock-anim 790ms 2420ms ease both;
+}
+@keyframes full-shock-anim {
+  0% {
+    opacity: 0;
+  }
+  18% {
+    opacity: 0.96;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes full-portal-open {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.1);
+  }
+  55% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.74);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(3.4);
+  }
+}
+.tzv4-stage .full-grand-opening strong {
+  z-index: 6;
+  font-size: 160px;
+  font-weight: 1000;
+  font-style: italic;
+  animation: full-logo-enter 1670ms 2350ms cubic-bezier(0.15, 0.87, 0.2, 1.05)
+    both;
+}
+.tzv4-stage .full-opening-logo {
+  z-index: 6;
+}
+.tzv4-stage .full-opening-logo .full-brand-img {
+  height: 140px;
+}
+.tzv4-stage .full-grand-opening h2,
+.tzv4-stage .full-grand-opening .full-opening-tag {
+  z-index: 6;
+  font-size: 53px;
+  margin: 30px 0 0;
+  letter-spacing: 0.09em;
+  color: #fff4d9;
+  text-shadow:
+    0 9px 30px #0d001c,
+    0 0 34px rgba(188, 67, 246, 0.6);
+  animation: full-fade-up 1000ms 3300ms both;
+}
+.tzv4-stage .full-grand-opening p,
+.tzv4-stage .full-grand-opening .full-opening-footnote {
+  z-index: 6;
+  font-size: 25px;
+  letter-spacing: 0.16em;
+  color: #eaff6b;
+  animation: full-fade-up 800ms 3560ms both;
+}
+@keyframes full-logo-enter {
+  from {
+    opacity: 0;
+    transform: translate(-50px, 160px) scale(0.6);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-12px) scale(1.035);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes full-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(40px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-phone-banner {
+  position: absolute;
+  left: 400px;
+  right: 400px;
+  top: 148px;
+  padding: 15px 35px;
+  min-height: 93px;
+  display: flex;
+  justify-content: center;
+  gap: 34px;
+  align-items: center;
+  border: 2px solid #e4ff6790;
+  border-radius: 28px;
+  background: #270951e0;
+  box-shadow: 0 0 42px #c8ff5035;
+  animation: full-fade-up 760ms 170ms both;
+}
+.tzv4-stage .full-phone-banner small {
+  font-size: 25px;
+  color: #eaff6a;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+}
+.tzv4-stage .full-phone-banner strong {
+  font-size: 43px;
+  font-weight: 1000;
+  letter-spacing: 0.07em;
+  font-variant-numeric: tabular-nums;
+}
+.tzv4-stage .full-directory {
+  position: absolute;
+  left: 85px;
+  right: 85px;
+  top: 279px;
+  bottom: 80px;
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-rows: repeat(10, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 11px 17px;
+}
+.tzv4-stage .full-directory.full-directory-focused {
+  grid-auto-flow: row;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 20px 32px;
+  font-size: 26px;
+}
+.tzv4-stage .full-directory.full-directory-focused .full-rep-row {
+  padding: 14px 28px;
+}
+.tzv4-stage .full-directory.full-directory-focused .full-rep-row b {
+  font-size: 32px;
+}
+.tzv4-stage .full-rep-row {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  padding: 6px 17px;
+  min-width: 0;
+  border: 1px solid #8a43d999;
+  border-radius: 13px;
+  background: linear-gradient(120deg, #3b1269dd, #19043ce8);
+  font-size: 21px;
+  animation: full-fade-up 650ms both;
+}
+.tzv4-stage .full-rep-row b {
+  font-size: 23px;
+  color: #d7b0ff;
+}
+.tzv4-stage .full-rep-row span {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+}
+.tzv4-stage .full-rep-row i {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  border-radius: 50%;
+  background: #775183;
+}
+.tzv4-stage .full-rep-row.connected {
+  border-color: #eaff559e;
+  background: linear-gradient(120deg, #404576eb, #263451e8);
+  box-shadow: 0 0 17px #dfff3d33;
+}
+.tzv4-stage .full-rep-row.connected i {
+  background: #eaff53;
+  box-shadow: 0 0 14px #eaff53;
+  animation: full-join-pulse 790ms ease-out;
+}
+@keyframes full-join-pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 #eaff53e0;
+  }
+  50% {
+    transform: scale(1.4);
+    box-shadow: 0 0 20px 8px #eaff53f0;
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 14px #eaff53;
+  }
+}
+.tzv4-stage .full-phone-instructions {
+  position: absolute;
+  top: 220px;
+  left: 280px;
+  right: 240px;
+  bottom: 100px;
+  display: flex;
+  gap: 140px;
+  align-items: center;
+}
+.tzv4-stage .full-phone-device {
+  height: 670px;
+  width: 380px;
+  flex: none;
+  background: linear-gradient(145deg, #54308c, #190b3f);
+  border: 8px solid #a87df6;
+  border-radius: 65px;
+  box-shadow:
+    0 25px 65px #0009,
+    0 0 38px #a850ee59;
+  padding: 25px 30px;
+  animation: full-phone-entrance 1300ms 190ms both;
+}
+@keyframes full-phone-entrance {
+  from {
+    opacity: 0;
+    transform: translate(-100px, 110px) rotate(-8deg) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-phone-speaker {
+  width: 75px;
+  height: 8px;
+  border-radius: 10px;
+  background: #131026;
+  margin: 0 auto 24px;
+}
+.tzv4-stage .full-phone-screen {
+  height: 190px;
+  border-radius: 20px;
+  background: #12092a;
+  border: 2px solid #7139a5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+}
+.tzv4-stage .full-phone-screen small {
+  font-size: 18px;
+  color: #eaff5c;
+  font-weight: 900;
+}
+.tzv4-stage .full-phone-screen strong {
+  font-size: 30px;
+  word-break: break-word;
+  text-align: center;
+}
+.tzv4-stage .full-phone-keys {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+  margin-top: 29px;
+}
+.tzv4-stage .full-phone-keys span {
+  height: 72px;
+  border: 1px solid #8d57c1;
+  background: #361360;
+  border-radius: 18px;
+  display: grid;
+  place-items: center;
+  font-size: 29px;
+  font-weight: 900;
+  animation: full-key-pulse 750ms 800ms both;
+}
+@keyframes full-key-pulse {
+  0%,
+  100% {
+    background: #35125e;
+  }
+  50% {
+    background: #79a4e4;
+    transform: scale(1.08);
+  }
+}
+.tzv4-stage .full-phone-steps {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+.tzv4-stage .full-phone-steps > div {
+  position: relative;
+  padding-left: 110px;
+  animation: full-fade-up 800ms 500ms both;
+}
+.tzv4-stage .full-phone-steps b {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 63px;
+  color: #eaff5a;
+}
+.tzv4-stage .full-phone-steps strong {
+  font-size: 31px;
+  font-weight: 900;
+}
+.tzv4-stage .full-phone-steps p {
+  font-size: 22px;
+  color: #e5c8f9;
+  margin: 10px 0;
+}
+.tzv4-stage .full-subhead {
+  text-align: center;
+  position: absolute;
+  top: 160px;
+  left: 0;
+  right: 0;
+  font-size: 38px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+}
+.tzv4-stage .full-light-grid {
+  position: absolute;
+  left: 170px;
+  right: 170px;
+  top: 265px;
+  bottom: 268px;
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  grid-template-rows: repeat(4, 1fr);
+  gap: 17px;
+}
+.tzv4-stage .full-light {
+  background: linear-gradient(160deg, #371060, #190632);
+  border: 2px solid #66328e;
+  border-radius: 19px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 5px;
+  animation: full-light-enter 540ms both;
+  position: relative;
+}
+.tzv4-stage .full-light small {
+  font-size: 13px;
+  font-weight: 900;
+  letter-spacing: 0.17em;
+  color: #bda4d2;
+}
+.tzv4-stage .full-light b {
+  font-size: 42px;
+  font-variant-numeric: tabular-nums;
+}
+.tzv4-stage .full-light i {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background: #5b3e68;
+}
+.tzv4-stage .full-light.connected {
+  background: linear-gradient(150deg, #414a78, #26464b);
+  border-color: #eaff5c;
+  box-shadow: 0 0 25px #dfff4777;
+}
+.tzv4-stage .full-light.connected i {
+  background: #eaff5c;
+  box-shadow: 0 0 20px #eaff5c;
+  animation: full-join-pulse 790ms ease-out;
+}
+@keyframes full-light-enter {
+  from {
+    opacity: 0;
+    transform: translateY(35px) scale(0.84);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-light-status {
+  position: absolute;
+  bottom: 85px;
+  left: 440px;
+  right: 440px;
+  text-align: center;
+}
+.tzv4-stage .full-light-status b {
+  font-size: 34px;
+}
+.tzv4-stage .full-light-status > div {
+  height: 19px;
+  background: #170b38;
+  border-radius: 20px;
+  overflow: hidden;
+  margin: 22px 0;
+}
+.tzv4-stage .full-light-status > div > i {
+  height: 100%;
+  display: block;
+  background: linear-gradient(90deg, #259cfa, #ca40fb, #eaff57);
+  border-radius: 20px;
+  transition: width 0.5s;
+}
+.tzv4-stage .full-light-status small {
+  font-size: 18px;
+  color: #dbcbf5;
+}
+.tzv4-stage .full-wing-z {
+  position: absolute; z-index: 6; top: 270px; width: 620px; height: 460px;
+  opacity: .83; font-size: 0; will-change: transform, opacity;
+  clip-path: polygon(0% 0%,100% 0%,100% 17%,40% 75%,100% 75%,100% 100%,0% 100%,0% 82%,62% 19%,0 19%);
+}
+.tzv4-stage .full-wing-z.left { left: -190px; background: linear-gradient(150deg,#4be6ff,#276bff 40%,#7a27e1 85%); box-shadow: inset 0 0 40px #f9dfff; }
+.tzv4-stage .full-wing-z.right { right: -190px; transform: scaleX(-1); background: linear-gradient(150deg,#eeff47,#edb53d 42%,#b72ae1); }
+.tzv4-stage .full-launch-glow { position: absolute; z-index: 5; left: 50%; top: 50%; width: 1340px; height: 750px; transform: translate(-50%,-50%); border-radius: 50%; background: radial-gradient(ellipse,#d14ffe48,#7134ff26 35%,transparent 70%); }
+.tzv4-stage .full-round-plaque { position: absolute; z-index: 8; top: 320px; left: 220px; right: 220px; text-align: center; }
+.tzv4-stage .full-round-launch strong {
+  display: block;
+  position: relative;
+  font-size: 178px;
+  line-height: 1.22;
+  letter-spacing: -.08em;
+  font-weight: 1000;
+  text-shadow:
+    0 0 45px #b13ffe,
+    0 12px 40px #070016;
+  animation: none;
+}
+.tzv4-stage .full-round-launch small {
+  display: block;
+  position: relative;
+  font-size: 40px;
+  font-weight: 950;
+  letter-spacing: 0.25em;
+  color: #eaff62;
+  animation: none;
+}
+.tzv4-stage .full-launch-rule {
+  position: absolute;
+  z-index: 6;
+  top: 666px;
+  left: 500px;
+  right: 500px;
+  height: 7px;
+  width: auto;
+  border-radius: 10px;
+  background: linear-gradient(90deg, #34b9ff, #f15be6, #eaff5c);
+  margin-top: 0;
+  animation: none;
+}
+@keyframes full-rule {
+  from {
+    opacity: 0;
+    transform: scaleX(0.01);
+  }
+  to {
+    opacity: 1;
+    transform: scaleX(1);
+  }
+}
+.tzv4-stage .full-story-cards {
+  position: absolute;
+  left: 88px;
+  right: 88px;
+  top: 290px;
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 18px;
+}
+.tzv4-stage .full-story-piece {
+  border: 2px solid #ba6aff;
+  border-radius: 30px;
+  padding: 14px;
+  height: 488px;
+  min-width: 0;
+  background: linear-gradient(145deg, #562091eb, #20064deb);
+  box-shadow: 0 17px 45px #0007;
+  animation: full-story-enter 1280ms cubic-bezier(0.15, 0.87, 0.2, 1.05) both;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+@keyframes full-story-enter {
+  from {
+    opacity: 0;
+    transform: translateY(240px) rotate(-8deg) scale(0.64);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-14px) scale(1.026);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-story-role {
+  text-align: center;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  color: #eaff60;
+  font-size: 16px;
+  text-transform: uppercase;
+  height: 34px;
+  white-space: nowrap;
+}
+.tzv4-stage .full-picture {
+  width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  border-radius: 19px;
+  border: 2px solid #ffbd74a8;
+}
+.tzv4-stage .full-picture-empty {
+  background: linear-gradient(155deg, #4d2587, #1d0743);
+  display: grid;
+  place-items: center;
+  font-size: 106px;
+  color: #eaff6b;
+  font-weight: 1000;
+}
+.tzv4-stage .full-story-image-box {
+  position: relative;
+  height: 306px;
+  overflow: hidden;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 220, 144, 0.66);
+  background: #1e0a4b;
+}
+.tzv4-stage .full-story-image-box .full-story-image,
+.tzv4-stage .full-story-image-box .full-picture {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.tzv4-stage .full-story-num {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: grid;
+  place-items: center;
+  width: 66px;
+  height: 38px;
+  border-radius: 12px;
+  border: 1px solid #a667e6;
+  background: rgba(64, 26, 124, 0.92);
+  font-size: 20px;
+  font-weight: 1000;
+  color: #fff0dd;
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6);
+  z-index: 3;
+}
+.tzv4-stage .full-story-label {
+  font-size: 26px;
+  min-height: 72px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 950;
+  color: #fff4de;
+  line-height: 1.15;
+  text-wrap: balance;
+  padding: 8px 4px 2px;
+}
+.tzv4-stage .full-story-index {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 900;
+  color: #edff5c;
+  margin: 6px 0 2px;
+}
+.tzv4-stage .full-story-title {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 950;
+  padding: 6px 4px;
+  line-height: 1.15;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tzv4-stage .full-story-piece.pending {
+  border-color: #5e4380;
+  background: #291047c7;
+}
+.tzv4-stage .full-story-piece.pending .full-story-title {
+  font-size: 19px;
+  color: #b4a2cc;
+}
+.tzv4-stage .full-story-status {
+  position: absolute;
+  top: 165px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  color: #eaff62;
+  font-size: 30px;
+  letter-spacing: 0.12em;
+}
+.tzv4-stage .full-story-bridge,
+.tzv4-stage .full-story-ribbon {
+  position: absolute;
+  left: 100px;
+  right: 100px;
+  top: 797px;
+  height: 10px;
+  border-radius: 99px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #46baff,
+    #ee78fb,
+    #eaff63,
+    #ffba62,
+    transparent
+  );
+  box-shadow:
+    0 0 24px #b642fd,
+    0 0 47px rgba(73, 159, 255, 0.56);
+  animation: full-rule 1640ms 930ms both;
+}
+.tzv4-stage .full-story-ending,
+.tzv4-stage .full-story-begin {
+  position: absolute;
+  left: 240px;
+  right: 240px;
+  top: 874px;
+  text-align: center;
+  font-size: 80px;
+  font-weight: 1000;
+  letter-spacing: -0.045em;
+  color: #fff9eb;
+  text-shadow:
+    0 7px 30px #03000f,
+    0 0 27px rgba(239, 209, 136, 0.48);
+  isolation: isolate;
+  animation: full-fade-up 1210ms 1830ms both;
+}
+.tzv4-stage .full-story-live-note,
+.tzv4-stage .full-live-footer {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  font-size: 27px;
+  font-weight: 900;
+  letter-spacing: 0.14em;
+  color: #eaff63;
+}
+.tzv4-stage .full-live-dot {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #eaff63;
+  box-shadow:
+    0 0 16px #eaff63,
+    0 0 32px rgba(234, 255, 99, 0.6);
+  animation: tzv4-voteDot 1.7s ease-in-out infinite;
+}
+.tzv4-stage .full-tie-wrap {
+  position: absolute;
+  left: 315px;
+  right: 315px;
+  top: 240px;
+  display: flex;
+  gap: 140px;
+  justify-content: center;
+}
+.tzv4-stage .full-tie-card {
+  width: 460px;
+  height: 575px;
+  padding: 18px;
+  background: #2a0a5c;
+  border: 3px solid #b567fd;
+  border-radius: 38px;
+  text-align: center;
+  box-shadow: 0 20px 54px #0009;
+  animation: full-tie-enter 1250ms cubic-bezier(0.15, 0.87, 0.2, 1.05) both;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+@keyframes full-tie-enter {
+  from {
+    opacity: 0;
+    transform: translateY(90px) rotate(12deg) scale(0.77);
+  }
+  85% {
+    opacity: 1;
+    transform: translateY(-13px) scale(1.03);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tzv4-stage .full-tie-card .full-picture {
+  height: 345px;
+  aspect-ratio: auto;
+  width: 100%;
+}
+.tzv4-stage .full-tie-index {
+  font-size: 18px;
+  font-weight: 900;
+  color: #edff5c;
+  margin-top: 6px;
+}
+.tzv4-stage .full-tie-card h2 {
+  font-size: 33px;
+  margin: 10px 0 8px;
+}
+.tzv4-stage .full-tie-card b {
+  font-size: 27px;
+  color: #eaff63;
+}
+.tzv4-stage .full-tie-card.chosen {
+  border-color: #eaff52;
+  box-shadow: 0 0 40px #eaff5280;
+}
+.tzv4-stage .full-tie-card.muted {
+  opacity: 0.35;
+}
+.tzv4-stage .full-equals {
+  position: absolute;
+  left: 50%;
+  top: 200px;
+  transform: translateX(-50%);
+  font-size: 150px;
+  font-weight: 1000;
+  color: #efff60;
+  animation: full-logo-enter 900ms 700ms both;
+}
+.tzv4-stage .full-tie-instruction {
+  position: absolute;
+  top: 860px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 29px;
+  color: #fff3dd;
+  font-weight: 900;
+  animation: full-fade-up 800ms 1340ms both;
+}
+.tzv4-stage .full-finale-rings {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 940px;
+  height: 940px;
+  border: 35px double #a63fff;
+  border-radius: 50%;
+  box-shadow: 0 0 130px #c04aff8a;
+  animation: full-finale-ring 3400ms 500ms both;
+}
+@keyframes full-finale-ring {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.58) rotate(-15deg);
+  }
+  70% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.02) rotate(2deg);
+  }
+}
+.tzv4-stage .full-finale-z {
+  position: absolute;
+  font-size: 950px;
+  font-weight: 1000;
+  font-style: italic;
+  line-height: 1;
+  top: 65px;
+  opacity: 0.7;
+}
+.tzv4-stage .full-finale-z.left {
+  left: -180px;
+  color: #1bc8ff;
+  animation: full-z-left 2800ms 700ms both;
+}
+.tzv4-stage .full-finale-z.right {
+  right: -100px;
+  color: #eaff53;
+  animation: full-z-right 2800ms 800ms both;
+}
+@keyframes full-z-left {
+  from {
+    opacity: 0;
+    transform: translateX(-700px);
+  }
+  to {
+    opacity: 0.7;
+    transform: none;
+  }
+}
+@keyframes full-z-right {
+  from {
+    opacity: 0;
+    transform: translateX(700px);
+  }
+  to {
+    opacity: 0.7;
+    transform: none;
+  }
+}
+.tzv4-stage .full-final-bloom {
+  position: absolute;
+  z-index: 7;
+  left: 50%;
+  top: 52%;
+  width: 1350px;
+  height: 910px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    rgba(255, 247, 213, 0.73) 0,
+    rgba(243, 214, 111, 0.6) 12%,
+    rgba(225, 61, 255, 0.65) 23%,
+    rgba(38, 90, 255, 0.39) 40%,
+    transparent 74%
+  );
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: full-bloom-anim 2900ms 2500ms ease both;
+}
+@keyframes full-bloom-anim {
+  0% {
+    opacity: 0.18;
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  70% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1.32);
+  }
+  100% {
+    opacity: 0.36;
+    transform: translate(-50%, -50%) scale(1.8);
+  }
+}
+.tzv4-stage .full-final-rings {
+  position: absolute;
+  z-index: 5;
+  left: 50%;
+  top: 45%;
+  width: 1390px;
+  height: 610px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 18px solid rgba(199, 66, 248, 0.76);
+  box-shadow:
+    0 0 0 5px rgba(236, 255, 86, 0.67),
+    0 0 50px rgba(194, 72, 255, 0.68),
+    inset 0 0 35px rgba(52, 197, 255, 0.63);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: full-rings-anim 3400ms 500ms ease both;
+}
+@keyframes full-rings-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.58) rotate(-15deg);
+  }
+  68% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0.85;
+    transform: translate(-50%, -50%) scale(1.02) rotate(2deg);
+  }
+}
+.tzv4-stage .full-final-arc {
+  position: absolute;
+  z-index: 6;
+  left: 50%;
+  top: 47%;
+  width: 1520px;
+  height: 730px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border-top: 12px solid #47d7ff;
+  border-bottom: 14px solid #ffb751;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  box-shadow: 0 0 29px rgba(216, 112, 255, 0.46);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: full-arc-anim 3300ms 690ms ease both;
+}
+@keyframes full-arc-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) rotate(-15deg) scale(0.35);
+  }
+  72% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) rotate(10deg) scale(1);
+  }
+  100% {
+    opacity: 0.72;
+    transform: translate(-50%, -50%) rotate(14deg) scale(1.1);
+  }
+}
+.tzv4-stage .full-final-zigzags {
+  position: absolute;
+  z-index: 9;
+  inset: 0;
+  width: 1920px;
+  height: 1080px;
+  opacity: 0;
+  overflow: visible;
+  pointer-events: none;
+  will-change: transform, opacity;
+  animation: full-zig-wrap-anim 2900ms 700ms ease both;
+}
+@keyframes full-zig-wrap-anim {
+  0% {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  40% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0.94;
+    transform: scale(1);
+  }
+}
+.tzv4-stage .full-final-zigzags .full-zig {
+  fill: none;
+  stroke-width: 19;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1700;
+  stroke-dashoffset: 1700;
+  animation: full-zig-stroke 3000ms 650ms cubic-bezier(0.5, 0.01, 0.16, 1) both;
+}
+.tzv4-stage .full-final-zigzags .blue {
+  stroke: #39d5ff;
+  filter: drop-shadow(0 0 12px #27baff);
+}
+.tzv4-stage .full-final-zigzags .lime {
+  stroke: #eaff51;
+  filter: drop-shadow(0 0 12px #eaff51);
+  animation-delay: 725ms;
+}
+@keyframes full-zig-stroke {
+  0% {
+    stroke-dashoffset: 1700;
+    opacity: 0;
+  }
+  80% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.5;
+  }
+}
+.tzv4-stage .full-final-tunnel {
+  position: absolute;
+  z-index: 4;
+  inset: 0;
+}
+.tzv4-stage .full-final-ray {
+  position: absolute;
+  top: 550px;
+  left: 928px;
+  width: 65px;
+  height: 520px;
+  background: linear-gradient(0deg, transparent, rgba(224, 73, 255, 0.47), rgba(255, 233, 172, 0.62));
+  clip-path: polygon(50% 0, 100% 100%, 0 100%);
+  transform-origin: 50% 0;
+  opacity: 0;
+  animation: full-ray-anim 1600ms 3450ms ease both;
+}
+@keyframes full-ray-anim {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--ray-rot, 0deg)) scaleY(0.55);
+  }
+  58% {
+    opacity: 0.55;
+    transform: rotate(var(--ray-rot, 0deg)) scaleY(1.08);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--ray-rot, 0deg)) scaleY(1.25);
+  }
+}
+.tzv4-stage .full-final-sparks {
+  position: absolute;
+  z-index: 10;
+  left: 50%;
+  top: 52%;
+  width: 430px;
+  height: 430px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  border: 16px solid #fff4c6;
+  box-shadow:
+    0 0 80px #ffe999,
+    0 0 150px rgba(207, 62, 251, 0.71);
+  opacity: 0;
+  mix-blend-mode: screen;
+  animation: full-sparks-anim 1680ms 3830ms ease both;
+}
+@keyframes full-sparks-anim {
+  0% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.2);
+  }
+  25% {
+    opacity: 0.95;
+    transform: translate(-50%, -50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.5);
+  }
+}
+.tzv4-stage .full-final-center {
+  font-size: 150px;
+  font-weight: 1000;
+  font-style: italic;
+  z-index: 12;
+  text-shadow: 0 0 80px #f85af0;
+  animation: full-logo-enter 1800ms 2200ms both;
+}
+.tzv4-stage .full-finale-logo .full-brand-img {
+  height: 140px;
+}
+.tzv4-stage .full-curtain {
+  position: absolute;
+  z-index: 24;
+  top: -15px;
+  height: 1110px;
+  width: 1010px;
+  max-width: none;
+  object-fit: cover;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  will-change: transform;
+}
+.tzv4-stage .full-curtain.left {
+  left: 0;
+  animation: full-curtain-left 2180ms 6500ms cubic-bezier(0.62, 0.02, 0.13, 1)
+    both;
+}
+.tzv4-stage .full-curtain.right {
+  right: 0;
+  animation: full-curtain-right 2180ms 6500ms cubic-bezier(0.62, 0.02, 0.13, 1)
+    both;
+}
+.tzv4-stage .full-curtain-seam {
+  position: absolute;
+  z-index: 25;
+  top: 0;
+  bottom: 0;
+  left: calc(50% - 27px);
+  width: 54px;
+  opacity: 0;
+  background: radial-gradient(
+    ellipse,
+    #fff6be,
+    rgba(255, 163, 248, 0.63) 27%,
+    transparent 65%
+  );
+  filter: blur(12px);
+  animation: full-curtain-seam-anim 2180ms 6500ms ease both;
+}
+@keyframes full-curtain-seam-anim {
+  0%,
+  55% {
+    opacity: 0;
+  }
+  88% {
+    opacity: 0.95;
+  }
+  100% {
+    opacity: 0.5;
+  }
+}
+@keyframes full-curtain-left {
+  from {
+    transform: translateX(-1040px);
+  }
+  to {
+    transform: none;
+  }
+}
+@keyframes full-curtain-right {
+  from {
+    transform: translateX(1040px);
+  }
+  to {
+    transform: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tzv4-stage .tzv4-scene-root *,
+  .tzv4-stage .tzv4-scene-root *:before,
+  .tzv4-stage .tzv4-scene-root *:after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0ms !important;
+  }
+}
+
+    /*
+ * AUTO-PORTED from the canonical TADAZZ Motion Kit stylesheet
+ * (source SHA-256 1eea4698bc97080c7fc82f5c0376a6ac8c6efb25a8223a178062628fa14a8669).
+ * Values are byte-identical to the reference; do not hand-edit — rerun
+ * scripts/tadazz/extract-motion-assets.mjs. Project adaptations live in
+ * tadazz-show-adaptations.css.
+ */
+/* TADAZZ Motion Kit v1 - broadcast-sized compositions, no runtime dependency */
+.tz-stage { position:absolute; top:50%; left:50%; width:1920px; height:1080px; transform-origin:center; transform:translate(-50%,-50%) scale(var(--screen-scale, .6)); overflow:hidden; isolation:isolate; font-family: Inter, 'Arial', system-ui, sans-serif; background:#140834; color:#fff6e9; user-select:none; }
+.tz-backdrop { position:absolute; inset:0; background: center/cover no-repeat url(/tadazz-show/motion/backdrop.webp); }
+.tz-backdrop::after { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(180deg, rgba(4,2,20,.14), transparent 26%, rgba(6,1,22,.12) 70%, rgba(4,1,19,.15)); }
+.tz-ambient { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+.tz-ambient .beam { position:absolute; width:380px; top:-95px; height:500px; filter: blur(22px); opacity:.32; transform-origin:50% 0; mix-blend-mode:screen; clip-path:polygon(45% 0,55% 0,100% 100%,0 100%); animation-duration:12s; animation-iteration-count:infinite; animation-timing-function:ease-in-out; }
+.tz-ambient .beam.a { left:210px; background:linear-gradient(#89d8ff94, #6e58ff14); animation-name:beam-a; }
+.tz-ambient .beam.b { left:680px; background:linear-gradient(#e39bff5c, #a36cff08); animation-name:beam-b; animation-duration:15s; }
+.tz-ambient .beam.c { left:1290px; background:linear-gradient(#63c7ff69,#bd4fff0b); animation-name:beam-c; animation-duration:13s; }
+.tz-ambient .edge-blue { position:absolute; left:-50px; top:150px; width:500px; height:620px; border-radius:50%; background:radial-gradient(circle,#00caff29,transparent 66%); mix-blend-mode:screen; animation:ambient-glow 8s ease-in-out infinite; }
+.tz-ambient .edge-citron { position:absolute; right:-50px; top:170px; width:500px; height:620px; border-radius:50%; background:radial-gradient(circle,#e9f82e22,transparent 66%); mix-blend-mode:screen; animation:ambient-glow 9s ease-in-out infinite reverse; }
+.tz-ambient .floorline { position:absolute; bottom:88px; left:0; right:0; height:195px; background:linear-gradient(105deg,transparent 20%,#0bbff012 32%,transparent 48%,#f38cff20 56%,transparent 70%,#faef5418 86%,transparent); mix-blend-mode:screen; animation:floor-glow 12s ease-in-out infinite; }
+@keyframes beam-a {0%,100%{transform:rotate(10deg);opacity:.21}50%{transform:rotate(-7deg);opacity:.38}}
+@keyframes beam-b {0%,100%{transform:rotate(-7deg);opacity:.17}50%{transform:rotate(9deg);opacity:.30}}
+@keyframes beam-c {0%,100%{transform:rotate(-11deg);opacity:.17}50%{transform:rotate(10deg);opacity:.36}}
+@keyframes ambient-glow {0%,100%{opacity:.40;transform:scale(.95)}50%{opacity:.82;transform:scale(1.08)}}
+@keyframes floor-glow {0%,100%{opacity:.3;transform:translateX(-40px)}50%{opacity:.75;transform:translateX(40px)}}
+.tz-topline { position:absolute; top:52px; left:144px; right:144px; display:flex; justify-content:space-between; align-items:center; z-index:3; color:#d6cbef; text-transform:uppercase; font-size:18px; letter-spacing:.22em; font-weight:800; }
+.tz-micro-brand { color:#fff4e2; text-shadow:0 0 14px #c360ffad; font-style:italic; letter-spacing:-.02em; font-size:24px; }
+.tz-micro-brand span { color:#edfa3b; }
+.tz-round { background:rgba(41,13,89,.57); border:1px solid #aa75ff6d; border-radius:100px; padding:13px 26px; box-shadow:0 0 22px #c768ff12; }
+.tz-question-panel { position:absolute; left:260px; right:260px; top:137px; min-height:158px; z-index:3; display:flex; align-items:center; justify-content:center; padding:26px 54px; border:2px solid rgba(225,151,255,.72); border-radius:44px; background:linear-gradient(150deg,rgba(63,13,119,.92),rgba(37,6,82,.93) 72%); box-shadow:0 16px 44px #0e062b66, inset 0 2px 0 #ffffff29, 0 0 0 4px #6e2ba824, 0 0 28px #c25cff22; }
+.tz-question-panel::before { position:absolute; content:""; inset:8px; border-radius:35px; border:1px solid #f2ab6c2d; pointer-events:none; }
+.tz-question-panel::after { position:absolute; content:""; left:30%; right:30%; bottom:-2px; height:4px; background:linear-gradient(90deg,transparent,#ffba58,#ff81e9,transparent); border-radius:100%; box-shadow:0 0 19px #f68dffb0; }
+.tz-question-text { font-size:61px; font-weight:850; letter-spacing:-.038em; line-height:1.12; text-align:center; text-wrap:balance; color:#fff8ec; text-shadow:0 4px 16px #13072e9c; }
+.tz-cards { position:absolute; left:123px; right:123px; top:355px; height:460px; z-index:4; display:grid; grid-template-columns:repeat(5,minmax(0,1fr)); gap:24px; align-items:start; perspective:1400px; }
+.tz-card { position:relative; width:100%; height:432px; padding:12px 12px 0; border:2px solid #ac62f2; border-radius:35px; background:linear-gradient(168deg,rgba(107,35,172,.92),rgba(35,4,80,.97) 42%,rgba(45,5,100,.95)); box-shadow:0 21px 41px #08001897,0 0 0 3px #4b198a4d,inset 0 2px 0 #ffffff3f,0 0 22px #a846e743; transform-origin:50% 85%; overflow:hidden; will-change:transform,opacity; }
+.tz-card:before {content:"";position:absolute;left:-10%;right:-10%;top:-3px;height:5px;background:linear-gradient(90deg,transparent,#ffe18a,#fa74ff,#b8d9ff,transparent);box-shadow:0 0 18px #c257ff70; z-index:2}
+.tz-photo-frame { position:relative; width:100%; aspect-ratio:1/1; height:auto; border:2px solid #ffbc7199; border-radius:23px; overflow:hidden; background:#2b1643; box-shadow:0 0 0 4px #2b0d65,0 0 18px #ffc36a20; }
+.tz-photo-frame img { width:100%;height:100%;object-fit:cover;display:block;pointer-events:none; }
+.tz-photo-frame .tz-photo-sheen { content:""; position:absolute; inset:0; pointer-events:none; background:linear-gradient(130deg,#ffffff16,transparent 38%,#00000006 68%,#00000019); }
+.tz-card-caption { min-height:110px; display:flex; justify-content:center; align-items:center; flex-direction:column; gap:9px; padding:9px 0 5px; }
+.tz-card-label { font-size:29px; font-weight:850; letter-spacing:-.035em; line-height:1.1; text-align:center; white-space:nowrap; color:#fff4f2; text-shadow:0 2px 10px #07001894; }
+.tz-card.long .tz-card-label {font-size:26px;}
+.tz-result-track {position:relative;width:85%;height:10px;opacity:0;border-radius:40px;overflow:hidden;background:#150e3d;box-shadow:inset 0 1px 3px #0005;}
+.tz-result-fill {height:100%; width:0; background:linear-gradient(90deg,#6b89ff,#c473ff); border-radius:40px; box-shadow:0 0 9px #be77ff94;}
+.tz-result-number { position:absolute; right:13px; bottom:136px; font-size:48px; font-weight:900; font-variant-numeric:tabular-nums; text-shadow:0 3px 16px #140527,0 0 19px #0a0030; opacity:0; padding:3px 9px; border-radius:12px; background:linear-gradient(90deg,rgba(27,7,54,.76),rgba(27,7,54,.2)); }
+.tz-card .tz-winner-tag {position:absolute;z-index:4;top:23px;left:20px;right:20px; padding:9px 8px; font-size:17px;font-weight:1000;letter-spacing:.14em;white-space:nowrap;text-align:center;color:#251035;background:#efff46; border-radius:60px; box-shadow:0 5px 22px #ecff4578; opacity:0;}
+.tz-card.is-favourite {border-color:#eaff52;box-shadow:0 22px 46px #08001898,0 0 0 3px #e9ff5688,0 0 30px #e9ff5680,inset 0 2px 0 #ffffff77;}
+.tz-card.is-favourite .tz-result-fill {background:linear-gradient(90deg,#89caff,#efff3b);}
+.tz-card.is-favourite .tz-result-number {color:#f0ff50;}
+.tz-card.is-favourite .tz-winner-tag {opacity:1;}
+.tz-card.is-vote-locked {filter:saturate(.83);}
+.tz-card.is-vote-open { animation:vote-on 1.2s ease-out 1;}
+@keyframes vote-on { 0% { box-shadow:0 21px 41px #08001897,0 0 0 4px #eaff56dd,0 0 44px #ecff58ad; } 100% { box-shadow:0 21px 41px #08001897,0 0 0 3px #4b198a4d,inset 0 2px 0 #ffffff3f,0 0 22px #a846e743;} }
+.tz-statusbar {position:absolute;left:153px;right:153px;bottom:131px;z-index:4;display:flex;align-items:center;justify-content:space-between; color:#fff4e7; gap:32px;}
+.tz-indicator {padding:13px 21px;border-radius:50px;background:#32115ba8;border:1px solid #a977ef85;letter-spacing:.18em;font-size:21px;font-weight:850;display:flex;gap:13px;align-items:center;}
+.tz-statusdot {width:12px;height:12px;border-radius:50%;background:#bb8ef8;box-shadow:0 0 12px #d89dff;}
+.tz-indicator.voting .tz-statusdot {background:#ecff56; box-shadow:0 0 17px #ecff56;animation:dot-pulse 1.5s ease-in-out infinite;}
+.tz-indicator.locked .tz-statusdot {background:#ffbf61;box-shadow:0 0 15px #ffbf61;}
+.tz-indicator.results .tz-statusdot {background:#70c5ff;box-shadow:0 0 15px #6ab9ff;}
+@keyframes dot-pulse {0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.75)}}
+.tz-vote-bar { height:12px;width:400px;max-width:100%;background:#31175c;border-radius:99px; border:1px solid #b98beb66; overflow:hidden; display:none;}
+.tz-vote-bar>span {display:block;width:100%;height:100%;background:linear-gradient(90deg,#67bafe,#db5aff,#edff56);transform-origin:left;}
+.tz-timer {font-size:44px;font-weight:900;font-variant-numeric:tabular-nums;letter-spacing:.025em;color:#fff9ef;text-shadow:0 0 19px #bd68ff88;display:none;}
+.tz-stage.tz-voting .tz-vote-bar,.tz-stage.tz-voting .tz-timer {display:block;}
+.tz-stage.tz-locked .tz-vote-bar {display:block;}
+.tz-footer-note {position:absolute;bottom:59px;left:0;right:0;text-align:center;font-weight:750;letter-spacing:.2em;text-transform:uppercase;font-size:16px;color:#cabde0a5;z-index:1;}
+/* Fullscreen presentation states */
+.tz-screen { position:absolute; inset:0; z-index:15; display:none; padding:0; overflow:hidden; }
+.tz-screen.is-visible { display:block; }
+.tz-screen::before { position:absolute;inset:0;content:"";background:radial-gradient(circle at 50% 50%,#2b0b67d1,#0a0224f4 65%,#070120f9);backdrop-filter:blur(5px); }
+.tz-screen-inner {position:relative;width:100%;height:100%;z-index:1;}
+.tz-screen-eyebrow {position:absolute;top:120px;left:0;right:0;text-align:center;font-size:26px;letter-spacing:.38em;font-weight:900;color:#d1b1ff;}
+.tz-leader-title {position:absolute;top:160px;left:0;right:0;text-align:center;font-size:84px;letter-spacing:-.035em;color:#fff0de;text-shadow:0 0 25px #a947ff78; font-weight:950;}
+.tz-leader-title span{color:#f0ff50;}
+.tz-leader-underline {position:absolute;top:268px;left:36%;right:36%;height:4px;border-radius:50px;background:linear-gradient(90deg,transparent,#f4ff40,#ff8fdf,transparent);box-shadow:0 0 24px #efb7ff;}
+.tz-leader-rows {position:absolute;left:270px;right:270px;top:337px;height:590px;display:flex;flex-direction:column;gap:12px;}
+.tz-leader-row {height:85px;display:flex;align-items:center;gap:32px;padding:0 30px;border:1px solid #ad75ff88;border-radius:20px;background:linear-gradient(100deg,#3f1c6af0,#211345f5);box-shadow:inset 0 1px 0 #ffffff1c,0 9px 22px #08012255;will-change:transform,opacity;}
+.tz-leader-row.champion {border-color:#ebff52d6;background:linear-gradient(100deg,#47316aed,#433248dc);box-shadow:0 0 19px #efff4e35;}
+.tz-rank {display:grid;place-items:center;width:57px;height:57px;flex:none;border-radius:50%;background:#8d58dc66;color:#fff4e9;font-weight:950;font-size:30px;}
+.tz-leader-row.champion .tz-rank {background:#eaff57;color:#200d4c;}
+.tz-team-name {font-size:34px;font-weight:850;flex:1;}
+.tz-team-score {font-size:38px;font-variant-numeric:tabular-nums;font-weight:950;color:#fff1d9;}
+.tz-leader-row.champion .tz-team-score {color:#eaff57;}
+.tz-win-logo {position:absolute;left:50%;top:220px;width:770px;transform:translateX(-50%);filter:drop-shadow(0 0 50px #cb6fff38);}
+.tz-win-headline {position:absolute;top:680px;left:0;right:0;text-align:center;font-size:34px;letter-spacing:.24em;font-weight:900;color:#d7b7ff;}
+.tz-win-name {position:absolute;top:740px;left:0;right:0;text-align:center;font-size:86px;font-weight:1000;color:#efff42;text-shadow:0 0 28px #eaff5755;}
+.tz-win-score {position:absolute;top:859px;left:0;right:0;text-align:center;font-size:35px;font-weight:800;color:#fff3e0;}
+.tz-intro-logo {position:absolute;width:1100px;left:410px;top:360px;filter:drop-shadow(0 0 50px #c53bff77);transform-origin:55% 56%; }
+.tz-intro-caption {position:absolute;bottom:163px;left:0;right:0;text-align:center;letter-spacing:.32em;font-size:27px;font-weight:900;color:#fff0cc;}
+.tz-shock {position:absolute;left:50%;top:50%;width:900px;height:380px;border:8px solid #f9f49a;border-radius:50%;transform:translate(-50%,-50%) scale(.24);opacity:0;box-shadow:0 0 52px #fff6ad;pointer-events:none;}
+.tz-wipe {position:absolute;inset:0;z-index:30;display:none;pointer-events:none;overflow:hidden;}
+.tz-wipe.is-visible {display:block;}
+.tz-wipe-piece {position:absolute;top:-15%;width:68%;height:130%;filter:drop-shadow(0 0 30px #ab66fe);will-change:transform;}
+.tz-wipe-piece.blue {left:-10%; background:linear-gradient(125deg,#0460e0,#39caff 43%,#6b48f7 68%,#1a0b64);clip-path:polygon(0 0,100% 0,72% 27%,100% 50%,72% 78%,100% 100%,0 100%);transform:translateX(-130%);}
+.tz-wipe-piece.citron {right:-10%;background:linear-gradient(230deg,#edff26,#f6fc47 39%,#f8b84f 68%,#6f1db7);clip-path:polygon(0 0,100% 0,100% 100%,0 100%,28% 76%,0 49%,28% 23%);transform:translateX(130%);}
+.tz-wipe-flash {position:absolute;inset:0;background:#fff5cd;opacity:0;}
+.tz-wipe-word {position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-4deg) scale(.8);font-size:140px;font-weight:1000;letter-spacing:-.06em;opacity:0;color:#fff9db;text-shadow:0 7px #160947,0 0 45px #e4baff;}
+.tz-collision-bloom {position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 50% 50%,#fff3c5,rgba(230,110,255,.45) 13%,transparent 50%);opacity:0;}
+.tz-confetti {position:absolute;inset:0;z-index:2;pointer-events:none;overflow:hidden;}
+.tz-confetti-bit {position:absolute;top:-90px;width:14px;height:24px;background:#f5e75e;border-radius:2px;opacity:0;}
+@media (prefers-reduced-motion:reduce) { .tz-ambient * {animation:none !important;} }
+
+.tz-card.very-long .tz-card-label {font-size:22px;white-space:normal;line-height:1.08;padding:0 6px;text-wrap:balance;}
+
+    .scene-container { display: none; width: 1920px; height: 1080px; position: relative; }
+    .scene-container.active { display: block; }
+  </style>
+</head>
+<body>
+  <div id="scene-01_company_opening" class="scene-container" data-scene-id="01_company_opening"><link rel="preload" as="image" href="/tadazz-show/second-library/creating-worlds-intro.png"/><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="company-opening"><div class="full-company"><img src="/tadazz-show/second-library/creating-worlds-intro.png" alt="Creating Worlds" class="full-company-event"/><div class="full-company-glow"></div><div class="full-company-brand"><span class="full-brand-badge full-company-logo"><img src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!" class="full-brand-img"/><strong class="full-brand-text">TADA<span>ZZ!</span></strong></span></div></div></div></div>
+<div id="scene-02_grand_opening" class="scene-container" data-scene-id="02_grand_opening"><link rel="preload" as="image" href="/tadazz-show/second-library/teaser-screen-source.jpg"/><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="grand-opening"><div class="full-grand-opening"><img src="/tadazz-show/second-library/teaser-screen-source.jpg" alt="Grand Opening Teaser" class="full-opening-event"/><div class="full-opening-warm-veil"></div><div class="full-portal full-opening-portal"></div><div class="full-portal full-opening-portal portal-two"></div><div class="full-opening-shock"></div><span class="full-brand-badge full-opening-logo"><img src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!" class="full-brand-img"/><strong class="full-brand-text">TADA<span>ZZ!</span></strong></span><h2 class="full-opening-tag">Creating Worlds</h2><p class="full-opening-footnote">Interactive Live Audience Experience</p></div></div></div>
+<div id="scene-03_representative_directory" class="scene-container" data-scene-id="03_representative_directory"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="representative-directory"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">PHONE VOTING</div><div class="full-head"><h2 class="full-title">FIND YOUR TABLE REPRESENTATIVE</h2></div><div class="full-directory-dial"><span class="full-directory-dial-label">CALL TO JOIN</span><span class="full-directory-dial-number">079-999-9999</span></div><div class="full-directory focus" data-testid="tadazz-full-directory" data-group-page="0"><div class="full-directory-col"><div class="full-col-title">TABLES <!-- -->01<!-- -->–<!-- -->05</div><div class="full-rep-row connected" data-table="1" aria-label="Table 1: Sarah, connected"><span class="full-table-number">01</span><span class="full-rep-name" dir="auto">Sarah</span><span class="full-rep-joined" aria-label="Connected"></span></div><div class="full-rep-row connected" data-table="2" aria-label="Table 2: David, connected"><span class="full-table-number">02</span><span class="full-rep-name" dir="auto">David</span><span class="full-rep-joined" aria-label="Connected"></span></div><div class="full-rep-row connected" data-table="3" aria-label="Table 3: Elena, connected"><span class="full-table-number">03</span><span class="full-rep-name" dir="auto">Elena</span><span class="full-rep-joined" aria-label="Connected"></span></div><div class="full-rep-row" data-table="4" aria-label="Table 4: Name to be supplied, waiting"><span class="full-table-number">04</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Waiting"></span></div><div class="full-rep-row connected" data-table="5" aria-label="Table 5: Michael, connected"><span class="full-table-number">05</span><span class="full-rep-name" dir="auto">Michael</span><span class="full-rep-joined" aria-label="Connected"></span></div></div><div class="full-directory-col"><div class="full-col-title">TABLES <!-- -->06<!-- -->–<!-- -->10</div><div class="full-rep-row" data-table="6" aria-label="Table 6: Name to be supplied, waiting"><span class="full-table-number">06</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Waiting"></span></div><div class="full-rep-row" data-table="7" aria-label="Table 7: Name to be supplied, waiting"><span class="full-table-number">07</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Waiting"></span></div><div class="full-rep-row connected" data-table="8" aria-label="Table 8: Name to be supplied, connected"><span class="full-table-number">08</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Connected"></span></div><div class="full-rep-row" data-table="9" aria-label="Table 9: Name to be supplied, waiting"><span class="full-table-number">09</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Waiting"></span></div><div class="full-rep-row" data-table="10" aria-label="Table 10: Name to be supplied, waiting"><span class="full-table-number">10</span><span class="full-rep-name" dir="auto">Name to be supplied</span><span class="full-rep-joined" aria-label="Waiting"></span></div></div></div></div></div>
+<div id="scene-04_phone_instructions" class="scene-container" data-scene-id="04_phone_instructions"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="phone-instructions"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">KEYPAD VOTING</div><div class="full-head"><div class="full-eyebrow">NO APPS. NO SMARTPHONES.</div><h2 class="full-title">JUST DIAL. THEN CHOOSE.</h2><p class="full-subtitle">Your table representative votes on an ordinary telephone keypad.</p></div><div class="full-phone"><div class="full-phone-device"><div class="full-phone-speaker"></div><div class="full-phone-display"><div class="full-phone-display-small">TADAZZ! IS READY</div><div class="full-phone-display-number">079-999-9999</div></div><div class="full-phone-keys"><div class="full-phone-key full-number-key">1</div><div class="full-phone-key full-number-key">2</div><div class="full-phone-key full-number-key">3</div><div class="full-phone-key full-number-key">4</div><div class="full-phone-key full-number-key">5</div><div class="full-phone-key">6</div><div class="full-phone-key">7</div><div class="full-phone-key">8</div><div class="full-phone-key">9</div><div class="full-phone-key">*</div><div class="full-phone-key">0</div><div class="full-phone-key">#</div></div><div class="full-phone-chin"></div></div></div><div class="full-phone-steps"><div class="full-step"><span class="full-step-num">01</span><div class="full-step-info"><div class="full-step-head">DIAL THE EVENT NUMBER</div><div class="full-step-text">The host will display or announce the number.</div></div></div><div class="full-step"><span class="full-step-num">02</span><div class="full-step-info"><div class="full-step-head">LISTEN FOR THE QUESTION</div><div class="full-step-text">Discuss your choice with your table.</div></div></div><div class="full-step"><span class="full-step-num">03</span><div class="full-step-info"><div class="full-step-head">PRESS 1, 2, 3, 4 OR 5</div><div class="full-step-text">One vote per table, using the phone keypad.</div></div></div></div></div></div>
+<div id="scene-05_connection_readiness" class="scene-container" data-scene-id="05_connection_readiness"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="connection-readiness"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">LIVE CONNECTIONS</div><div class="full-head"><div class="full-eyebrow">THE ROOM IS COMING ONLINE</div><h2 class="full-title">THE TABLES ARE LIGHTING UP</h2><p class="full-subtitle">A light appears for each connected table representative.</p></div><div class="full-readiness-tray"><div class="full-table-grid"><div data-table="1" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">01</span><span class="full-led-pip"></span></div><div data-table="2" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">02</span><span class="full-led-pip"></span></div><div data-table="3" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">03</span><span class="full-led-pip"></span></div><div data-table="4" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">04</span><span class="full-led-pip"></span></div><div data-table="5" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">05</span><span class="full-led-pip"></span></div><div data-table="6" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">06</span><span class="full-led-pip"></span></div><div data-table="7" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">07</span><span class="full-led-pip"></span></div><div data-table="8" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">08</span><span class="full-led-pip"></span></div><div data-table="9" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">09</span><span class="full-led-pip"></span></div><div data-table="10" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">10</span><span class="full-led-pip"></span></div><div data-table="11" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">11</span><span class="full-led-pip"></span></div><div data-table="12" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">12</span><span class="full-led-pip"></span></div><div data-table="13" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">13</span><span class="full-led-pip"></span></div><div data-table="14" class="full-table-led connected"><span class="full-led-label">TABLE</span><span class="full-led-number">14</span><span class="full-led-pip"></span></div><div data-table="15" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">15</span><span class="full-led-pip"></span></div><div data-table="16" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">16</span><span class="full-led-pip"></span></div><div data-table="17" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">17</span><span class="full-led-pip"></span></div><div data-table="18" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">18</span><span class="full-led-pip"></span></div><div data-table="19" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">19</span><span class="full-led-pip"></span></div><div data-table="20" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">20</span><span class="full-led-pip"></span></div><div data-table="21" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">21</span><span class="full-led-pip"></span></div><div data-table="22" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">22</span><span class="full-led-pip"></span></div><div data-table="23" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">23</span><span class="full-led-pip"></span></div><div data-table="24" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">24</span><span class="full-led-pip"></span></div><div data-table="25" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">25</span><span class="full-led-pip"></span></div><div data-table="26" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">26</span><span class="full-led-pip"></span></div><div data-table="27" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">27</span><span class="full-led-pip"></span></div><div data-table="28" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">28</span><span class="full-led-pip"></span></div><div data-table="29" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">29</span><span class="full-led-pip"></span></div><div data-table="30" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">30</span><span class="full-led-pip"></span></div><div data-table="31" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">31</span><span class="full-led-pip"></span></div><div data-table="32" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">32</span><span class="full-led-pip"></span></div><div data-table="33" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">33</span><span class="full-led-pip"></span></div><div data-table="34" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">34</span><span class="full-led-pip"></span></div><div data-table="35" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">35</span><span class="full-led-pip"></span></div><div data-table="36" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">36</span><span class="full-led-pip"></span></div><div data-table="37" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">37</span><span class="full-led-pip"></span></div><div data-table="38" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">38</span><span class="full-led-pip"></span></div><div data-table="39" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">39</span><span class="full-led-pip"></span></div><div data-table="40" class="full-table-led"><span class="full-led-label">TABLE</span><span class="full-led-number">40</span><span class="full-led-pip"></span></div></div></div><div class="full-connection-status"><div class="full-connected-count">7<!-- --> / 40 TABLES CONNECTED</div><div class="full-connection-track"><div class="full-connection-fill" style="transform:scaleX(0.175)"></div></div><div class="full-connection-legend">PREVIEW DATA — NOT LIVE</div></div></div></div>
+<div id="scene-06_round_one" class="scene-container" data-scene-id="06_round_one"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="round-one"><div class="full-round-launch"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 01</div><div class="full-launch-glow"></div><div class="full-wing-z left">Z</div><div class="full-wing-z right">Z</div><div class="full-round-plaque"><small class="full-round-mini">THE FIRST STORY</small><strong class="full-round-number">ROUND <!-- -->01</strong></div><div class="full-launch-rule full-round-underline"></div></div></div></div>
+<div id="scene-07_picture_answers_cards" class="scene-container" data-scene-id="07_picture_answers_cards"><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage" data-scene="picture-answers"><div class="q-frame"><div class="eyebrow">ROUND 01 · QUESTION 01</div><div class="q-text">Who is our main protagonist?</div></div><div class="answers" data-v4="answer-cards"><div class="choice-slot tz-card is-vote-open" data-v4-choice="0" data-index="0" data-testid="tadazz-card-0"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 01">01</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">The Brave Adventurer Exploring Ancient Crypts</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">01</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="1" data-index="1" data-testid="tadazz-card-1"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 02">02</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">02</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="2" data-index="2" data-testid="tadazz-card-2"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 03">03</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Galactic Navigator Charting Unknown Stars</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">03</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="3" data-index="3" data-testid="tadazz-card-3"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 04">04</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cunning Merchant Trading Across Dangerous Lands</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">04</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="4" data-index="4" data-testid="tadazz-card-4"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 05">05</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Shadow Assassin Striking Silently In Night</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">05</div></div></div></div></div>
+<div id="scene-08_voting_open" class="scene-container" data-scene-id="08_voting_open"><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage" data-scene="voting-open"><div class="q-frame"><div class="eyebrow">VOTING OPEN · CAST YOUR CHOICE</div><div class="q-text">Who is our main protagonist?</div></div><div class="answers" data-v4="answer-cards"><div class="choice-slot tz-card is-vote-open" data-v4-choice="0" data-index="0" data-testid="tadazz-card-0"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 01">01</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">The Brave Adventurer Exploring Ancient Crypts</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">01</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="1" data-index="1" data-testid="tadazz-card-1"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 02">02</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">02</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="2" data-index="2" data-testid="tadazz-card-2"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 03">03</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Galactic Navigator Charting Unknown Stars</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">03</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="3" data-index="3" data-testid="tadazz-card-3"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 04">04</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cunning Merchant Trading Across Dangerous Lands</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">04</div></div><div class="choice-slot tz-card is-vote-open" data-v4-choice="4" data-index="4" data-testid="tadazz-card-4"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 05">05</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Shadow Assassin Striking Silently In Night</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:hidden;opacity:0"></div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:0"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0);transform-origin:left center"></div></div></article><div class="answer-index">05</div></div></div></div></div>
+<div id="scene-09_chosen_highlight" class="scene-container" data-scene-id="09_chosen_highlight"><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage" data-scene="chosen"><div class="q-frame"><div class="eyebrow">CHOICE SELECTED · 75% AUDIENCE FAVOURITE</div><div class="q-text">Who is our main protagonist?</div></div><div class="answers" data-v4="answer-cards"><div class="choice-slot tz-card" data-v4-choice="0" data-index="0" data-testid="tadazz-card-0"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 01">01</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">The Brave Adventurer Exploring Ancient Crypts</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="25" style="visibility:visible;opacity:1">25%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.25);transform-origin:left center"></div></div></article><div class="answer-index">01</div></div><div class="choice-slot tz-card" data-v4-choice="1" data-index="1" data-testid="tadazz-card-1"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 02">02</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">02</div></div><div class="choice-slot tz-card" data-v4-choice="2" data-index="2" data-testid="tadazz-card-2"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 03">03</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Galactic Navigator Charting Unknown Stars</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">03</div></div><div class="choice-slot tz-card is-favourite is-selected" data-v4-choice="3" data-index="3" data-testid="tadazz-card-3"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 04">04</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cunning Merchant Trading Across Dangerous Lands</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="75" style="visibility:visible;opacity:1">75%</div><div class="winner-tag tz-winner-tag" style="opacity:1">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.75);transform-origin:left center"></div></div></article><div class="answer-index">04</div></div><div class="choice-slot tz-card" data-v4-choice="4" data-index="4" data-testid="tadazz-card-4"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 05">05</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Shadow Assassin Striking Silently In Night</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">05</div></div></div></div></div>
+<div id="scene-10_survey_results_tracks" class="scene-container" data-scene-id="10_survey_results_tracks"><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage" data-scene="survey-results"><div class="q-frame"><div class="eyebrow">AUDIENCE RESULTS</div><div class="q-text">Who is our main protagonist?</div></div><div class="answers" data-v4="answer-cards"><div class="choice-slot tz-card" data-v4-choice="0" data-index="0" data-testid="tadazz-card-0"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 01">01</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">The Brave Adventurer Exploring Ancient Crypts</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="25" style="visibility:visible;opacity:1">25%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.25);transform-origin:left center"></div></div></article><div class="answer-index">01</div></div><div class="choice-slot tz-card" data-v4-choice="1" data-index="1" data-testid="tadazz-card-1"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 02">02</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">02</div></div><div class="choice-slot tz-card" data-v4-choice="2" data-index="2" data-testid="tadazz-card-2"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 03">03</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Galactic Navigator Charting Unknown Stars</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">03</div></div><div class="choice-slot tz-card is-favourite" data-v4-choice="3" data-index="3" data-testid="tadazz-card-3"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 04">04</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Cunning Merchant Trading Across Dangerous Lands</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="75" style="visibility:visible;opacity:1">75%</div><div class="winner-tag tz-winner-tag" style="opacity:1">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.75);transform-origin:left center"></div></div></article><div class="answer-index">04</div></div><div class="choice-slot tz-card" data-v4-choice="4" data-index="4" data-testid="tadazz-card-4"><article class="answer-card"><figure class="answer-figure"><div class="tz-photo-frame"><img class="answer-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05" loading="eager" decoding="async"/><div class="corner answer-card-badge" aria-label="Option 05">05</div></div><figcaption class="answer-title" style="font-size:21px" data-has-caption="true" dir="auto">Shadow Assassin Striking Silently In Night</figcaption></figure><div class="result-percentage tz-result-number" data-target-percentage="0" style="visibility:visible;opacity:1">0%</div><div class="winner-tag tz-winner-tag">AUDIENCE FAVOURITE</div><div class="result-track tz-result-track" style="opacity:1"><div class="result-track-fill tz-result-fill" style="transform:scaleX(0.003);transform-origin:left center"></div></div></article><div class="answer-index">05</div></div></div></div></div>
+<div id="scene-11_story_progress" class="scene-container" data-scene-id="11_story_progress"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><div class="tzv4-stage stage-show" data-scene="story-progress"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 01</div><div class="full-head"><div class="full-eyebrow">2 OF 5 STORY PIECES COLLECTED</div><h2 class="full-title">YOUR WORLD IS TAKING SHAPE</h2><p class="full-subtitle">Every chosen picture becomes part of the story.</p></div><div class="full-progress-bridge"></div><div class="full-progress-cards"><div class="full-progress-piece is-filled"><div class="full-progress-cap">THE HERO</div><div class="full-progress-frame"><img src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01" class="full-progress-image"/></div><div class="full-progress-name" dir="auto">The Brave Adventurer Exploring Ancient Crypts</div><div class="full-progress-index">01</div></div><div class="full-progress-piece is-filled"><div class="full-progress-cap">THE ALLY</div><div class="full-progress-frame"><img src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02" class="full-progress-image"/></div><div class="full-progress-name" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</div><div class="full-progress-index">02</div></div><div class="full-progress-piece"><div class="full-progress-cap">THE CRISIS</div><div class="full-progress-frame"><div class="full-progress-placeholder">?</div></div><div class="full-progress-name" dir="auto">AWAITING THE VOTE</div><div class="full-progress-index">03</div></div><div class="full-progress-piece"><div class="full-progress-cap">THE CLIMAX</div><div class="full-progress-frame"><div class="full-progress-placeholder">?</div></div><div class="full-progress-name" dir="auto">AWAITING THE VOTE</div><div class="full-progress-index">04</div></div><div class="full-progress-piece"><div class="full-progress-cap">THE RESOLUTION</div><div class="full-progress-frame"><div class="full-progress-placeholder">?</div></div><div class="full-progress-name" dir="auto">AWAITING THE VOTE</div><div class="full-progress-index">05</div></div></div><div class="full-progress-bottom"><span>2<!-- --> / 5</span><span>STORY PIECES READY</span></div></div></div>
+<div id="scene-12_tie_break" class="scene-container" data-scene-id="12_tie_break"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><div class="tzv4-stage stage-show" data-scene="tie-break"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 01</div><div class="full-head"><h2 class="full-title">THE AUDIENCE IS SPLIT</h2></div><div class="full-tie-wrap"><article class="full-tie-card " style="animation-delay:0ms" data-tie-index="0"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01"/><div class="full-tie-index">01</div><h2>The Brave Adventurer Exploring Ancient Crypts</h2><b>42 VOTES</b></article><article class="full-tie-card " style="animation-delay:190ms" data-tie-index="1"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02"/><div class="full-tie-index">02</div><h2>Cybernetic Hacker Breaking Digital Fortresses</h2><b>42 VOTES</b></article><strong class="full-equals">=</strong></div><p class="full-tie-instruction">Host, choose which picture goes into the story.</p></div></div>
+<div id="scene-13_story_assembly" class="scene-container" data-scene-id="13_story_assembly"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage stage-show" data-scene="story-assembly"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 01</div><div class="full-head"><h2 class="full-title">THE WORLD YOU CREATED</h2></div><div class="full-story-cards full-story-deck"><article class="full-story-piece full-story-card" style="animation-delay:0ms" data-role-index="0" data-ready="true"><div class="full-story-role">THE HERO</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01"/><div class="full-story-index full-story-num">01</div></div><div class="full-story-title full-story-label" dir="auto">The Brave Adventurer Exploring Ancient Crypts</div></article><article class="full-story-piece full-story-card" style="animation-delay:180ms" data-role-index="1" data-ready="true"><div class="full-story-role">THE ALLY</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02"/><div class="full-story-index full-story-num">02</div></div><div class="full-story-title full-story-label" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</div></article><article class="full-story-piece full-story-card" style="animation-delay:360ms" data-role-index="2" data-ready="true"><div class="full-story-role">THE CRISIS</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03"/><div class="full-story-index full-story-num">03</div></div><div class="full-story-title full-story-label" dir="auto">Galactic Navigator Charting Unknown Stars</div></article><article class="full-story-piece full-story-card" style="animation-delay:540ms" data-role-index="3" data-ready="true"><div class="full-story-role">THE CLIMAX</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04"/><div class="full-story-index full-story-num">04</div></div><div class="full-story-title full-story-label" dir="auto">Cunning Merchant Trading Across Dangerous Lands</div></article><article class="full-story-piece full-story-card" style="animation-delay:720ms" data-role-index="4" data-ready="true"><div class="full-story-role">THE RESOLUTION</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05"/><div class="full-story-index full-story-num">05</div></div><div class="full-story-title full-story-label" dir="auto">Shadow Assassin Striking Silently In Night</div></article></div><div class="full-story-bridge full-story-ribbon"></div><div class="full-story-ending full-story-begin">LET THE STORY BEGIN…</div></div></div>
+<div id="scene-14_story_live" class="scene-container" data-scene-id="14_story_live"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/pirate.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/shadchan.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/dog.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/therapist.svg"/><link rel="preload" as="image" href="/tadazz-show/second-library/cards/lamplighter.svg"/><div class="tzv4-stage stage-show" data-scene="story-live"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 01</div><div class="full-head"><div class="full-eyebrow">STORYTELLING MODE</div><h2 class="full-title">THE WORLD YOU CREATED</h2><p class="full-subtitle">All five choices remain visible while the host tells the story.</p></div><div class="full-story-cards full-story-deck full-story-hold holding"><article class="full-story-piece full-story-card" style="animation-delay:0ms" data-role-index="0" data-ready="true"><div class="full-story-role">THE HERO</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/pirate.svg" alt="Choice 01"/><div class="full-story-index full-story-num">01</div></div><div class="full-story-title full-story-label" dir="auto">The Brave Adventurer Exploring Ancient Crypts</div></article><article class="full-story-piece full-story-card" style="animation-delay:180ms" data-role-index="1" data-ready="true"><div class="full-story-role">THE ALLY</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/shadchan.svg" alt="Choice 02"/><div class="full-story-index full-story-num">02</div></div><div class="full-story-title full-story-label" dir="auto">Cybernetic Hacker Breaking Digital Fortresses</div></article><article class="full-story-piece full-story-card" style="animation-delay:360ms" data-role-index="2" data-ready="true"><div class="full-story-role">THE CRISIS</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/dog.svg" alt="Choice 03"/><div class="full-story-index full-story-num">03</div></div><div class="full-story-title full-story-label" dir="auto">Galactic Navigator Charting Unknown Stars</div></article><article class="full-story-piece full-story-card" style="animation-delay:540ms" data-role-index="3" data-ready="true"><div class="full-story-role">THE CLIMAX</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/therapist.svg" alt="Choice 04"/><div class="full-story-index full-story-num">04</div></div><div class="full-story-title full-story-label" dir="auto">Cunning Merchant Trading Across Dangerous Lands</div></article><article class="full-story-piece full-story-card" style="animation-delay:720ms" data-role-index="4" data-ready="true"><div class="full-story-role">THE RESOLUTION</div><div class="full-story-image-box"><img class="full-picture full-story-image" src="/tadazz-show/second-library/cards/lamplighter.svg" alt="Choice 05"/><div class="full-story-index full-story-num">05</div></div><div class="full-story-title full-story-label" dir="auto">Shadow Assassin Striking Silently In Night</div></article></div><div class="full-story-live-note full-live-footer"><span class="full-live-dot"></span><span>STORY <!-- -->1<!-- --> · HOST IS TELLING YOUR STORY</span></div></div></div>
+<div id="scene-15_round_two" class="scene-container" data-scene-id="15_round_two"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><div class="tzv4-stage stage-show" data-scene="round-two"><div class="full-round-launch"><img class="full-corner-logo" src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!"/><div class="full-status-pill">ROUND 02</div><div class="full-launch-glow"></div><div class="full-wing-z left">Z</div><div class="full-wing-z right">Z</div><div class="full-round-plaque"><small class="full-round-mini">A WHOLE NEW WORLD</small><strong class="full-round-number">ROUND <!-- -->02</strong></div><div class="full-launch-rule full-round-underline"></div></div></div></div>
+<div id="scene-16_grand_finale_curtains" class="scene-container" data-scene-id="16_grand_finale_curtains"><link rel="preload" as="image" href="/tadazz-show/v4/tadazz-brand-logo.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/curtain-left.png"/><link rel="preload" as="image" href="/tadazz-show/second-library/curtain-right.png"/><div class="tzv4-stage stage-show" data-scene="grand-finale"><div class="full-grand-finale"><div class="full-final-bloom"></div><div class="full-final-rings full-finale-rings"></div><div class="full-final-arc"></div><div class="full-finale-z full-wing-z left">Z</div><div class="full-finale-z full-wing-z right">Z</div><svg viewBox="0 0 1920 1080" class="full-final-zigzags" aria-hidden="true"><path class="full-zig blue" d="M-90 340 L620 420 L300 680 L1060 560"></path><path class="full-zig lime" d="M2010 340 L1300 420 L1620 680 L860 560"></path></svg><div class="full-final-tunnel"><div class="full-final-ray" style="--ray-rot:-52deg"></div><div class="full-final-ray" style="--ray-rot:-39deg"></div><div class="full-final-ray" style="--ray-rot:-26deg"></div><div class="full-final-ray" style="--ray-rot:-13deg"></div><div class="full-final-ray" style="--ray-rot:0deg"></div><div class="full-final-ray" style="--ray-rot:13deg"></div><div class="full-final-ray" style="--ray-rot:26deg"></div><div class="full-final-ray" style="--ray-rot:39deg"></div><div class="full-final-ray" style="--ray-rot:52deg"></div></div><div class="full-final-sparks"></div><div class="full-final-center"><span class="full-brand-badge full-finale-logo"><img src="/tadazz-show/v4/tadazz-brand-logo.png" alt="TADAZZ!" class="full-brand-img"/><strong class="full-brand-text">TADA<span>ZZ!</span></strong></span></div><img src="/tadazz-show/second-library/curtain-left.png" alt="Curtain Left" class="full-curtain left"/><img src="/tadazz-show/second-library/curtain-right.png" alt="Curtain Right" class="full-curtain right"/><div class="full-curtain-seam"></div></div></div></div>
+  <script>
+    window.showScene = function(key) {
+      document.querySelectorAll('.scene-container').forEach(el => el.classList.remove('active'));
+      const target = document.getElementById('scene-' + key);
+      if (target) target.classList.add('active');
+    };
+  </script>
+</body>
+</html>

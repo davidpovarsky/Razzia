@@ -1,0 +1,398 @@
+{
+  "07_picture_answers_cards": [
+    {
+      "index": 0,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "01",
+      "bottomBadgeText": null,
+      "pctText": "",
+      "trackVisible": true
+    },
+    {
+      "index": 1,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "02",
+      "bottomBadgeText": null,
+      "pctText": "",
+      "trackVisible": true
+    },
+    {
+      "index": 2,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "03",
+      "bottomBadgeText": null,
+      "pctText": "",
+      "trackVisible": true
+    },
+    {
+      "index": 3,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "04",
+      "bottomBadgeText": null,
+      "pctText": "",
+      "trackVisible": true
+    },
+    {
+      "index": 4,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "05",
+      "bottomBadgeText": null,
+      "pctText": "",
+      "trackVisible": true
+    }
+  ],
+  "09_chosen_highlight": [
+    {
+      "index": 0,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "01",
+      "bottomBadgeText": null,
+      "pctText": "25%",
+      "trackVisible": true
+    },
+    {
+      "index": 1,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "02",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    },
+    {
+      "index": 2,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "03",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    },
+    {
+      "index": 3,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "04",
+      "bottomBadgeText": null,
+      "pctText": "75%",
+      "trackVisible": true
+    },
+    {
+      "index": 4,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "05",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    }
+  ],
+  "10_survey_results_tracks": [
+    {
+      "index": 0,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "01",
+      "bottomBadgeText": null,
+      "pctText": "25%",
+      "trackVisible": true
+    },
+    {
+      "index": 1,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "02",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    },
+    {
+      "index": 2,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "03",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    },
+    {
+      "index": 3,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "04",
+      "bottomBadgeText": null,
+      "pctText": "75%",
+      "trackVisible": true
+    },
+    {
+      "index": 4,
+      "cardRect": {
+        "top": 367,
+        "bottom": 829,
+        "width": 310,
+        "height": 462
+      },
+      "photoRect": {
+        "top": 379,
+        "bottom": 665,
+        "width": 286,
+        "height": 286
+      },
+      "titleRect": {
+        "top": 665,
+        "bottom": 768,
+        "width": 286,
+        "height": 103
+      },
+      "captionBelowPhoto": true,
+      "cornerBadgeText": "05",
+      "bottomBadgeText": null,
+      "pctText": "0%",
+      "trackVisible": true
+    }
+  ]
+}
