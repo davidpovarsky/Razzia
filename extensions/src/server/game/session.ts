@@ -309,16 +309,40 @@ export class ExtensionGameSession {
 
     const extrasPayload: Record<string, unknown> = {}
 
-    // The public Creating Worlds join lobby shows the SAME authoritative 40
-    // representatives/connection states as the stage, before the show starts.
-    if (
-      this.extras &&
-      isQuizExtrasV2(this.extras) &&
-      this.showCoordinator?.currentPhase === "lobby"
-    ) {
-      const lobbyData = this.delegate?.getFullShowData?.()
-      if (lobbyData?.representatives?.length === 40) {
-        extrasPayload.lobbyFullShow = lobbyData
+    // Authored event seating explicitly maps each name to its table.
+    // Preserve the legacy 40-representative directory for other shows.
+    if (this.extras && isQuizExtrasV2(this.extras)) {
+      const directory = Object.values(this.extras.scenes).find(
+        (scene) =>
+          scene.kind === "animation" &&
+          scene.preset === "representative-directory",
+      )
+      const authoredSeats =
+        directory?.kind === "animation" ? directory.representatives ?? [] : []
+      const fallbackSeats =
+        this.extras.roster.participants.length === 40
+          ? this.extras.roster.participants.map((rep, index) => ({
+              table: index + 1,
+              name: rep.displayName,
+            }))
+          : []
+      if (directory && (authoredSeats.length > 0 || fallbackSeats.length === 40)) {
+        const live = this.delegate?.getFullShowData?.()
+        extrasPayload.lobbyFullShow = {
+          isLive: live?.isLive ?? false,
+          seatingPlan:
+            directory.kind === "animation" && directory.seatingPlan === true,
+          representatives:
+            authoredSeats.length > 0
+              ? authoredSeats
+              : live?.representatives?.length === 40
+                ? live.representatives
+                : fallbackSeats,
+          connectedTables: live?.connectedTables ?? [],
+          dialNumber:
+            live?.dialNumber ??
+            (directory.kind === "animation" ? directory.dialNumber : undefined),
+        }
       }
     }
 

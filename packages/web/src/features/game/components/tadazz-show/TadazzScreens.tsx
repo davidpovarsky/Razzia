@@ -16,6 +16,7 @@ import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 import { useTadazzShellText } from "./useTadazzLabels"
+import { TadazzSeatingPlan } from "./TadazzSeatingPlan"
 
 /* All screens render inside the canonical `.tz-screen` slot of the 1920×1080
  * stage and only use canonical tokens (see tadazz-show-adaptations.css). */
@@ -40,6 +41,7 @@ export function TadazzLobbyScreen({
   isManager: boolean
   fullShowData?: {
     dialNumber?: string
+    seatingPlan?: boolean
     representatives?: Array<{ table: number; name: string }>
     connectedTables?: number[]
   }
@@ -81,6 +83,18 @@ export function TadazzLobbyScreen({
   // Creating Worlds is a hosted table show: show join code AND the full live
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
+  if (fullShowData?.seatingPlan && representatives?.length) {
+    return (
+      <TadazzSeatingPlan
+        representatives={representatives}
+        connectedTables={fullShowData.connectedTables}
+        dialNumber={fullShowData.dialNumber}
+        inviteCode={inviteCode}
+        locked={isLocked}
+        joinOrigin={webUrl}
+      />
+    )
+  }
   if (representatives?.length === 40) {
     const sorted = [...representatives].sort((a, b) => a.table - b.table)
     const connected = new Set(fullShowData?.connectedTables ?? [])

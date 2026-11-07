@@ -1,0 +1,162 @@
+{
+  "event": "Tzila / SBS",
+  "scenePreset": "representative-directory",
+  "seatingPlan": true,
+  "representatives": [
+    {
+      "table": 1,
+      "name": "Chaya Davis"
+    },
+    {
+      "table": 1,
+      "name": "Freidy Matyas"
+    },
+    {
+      "table": 2,
+      "name": "Esti Hoffman"
+    },
+    {
+      "table": 3,
+      "name": "Esti Englander"
+    },
+    {
+      "table": 4,
+      "name": "Perele Reiger"
+    },
+    {
+      "table": 5,
+      "name": "Malky Landau"
+    },
+    {
+      "table": 6,
+      "name": "Michal Miller"
+    },
+    {
+      "table": 7,
+      "name": "Chavi Kruman"
+    },
+    {
+      "table": 7,
+      "name": "Tzila Damen"
+    },
+    {
+      "table": 8,
+      "name": "Miriam Josovic"
+    },
+    {
+      "table": 9,
+      "name": "Rifky Langberg"
+    },
+    {
+      "table": 10,
+      "name": "Devora Glausiusz"
+    },
+    {
+      "table": 11,
+      "name": "Hindi Schlesinger"
+    },
+    {
+      "table": 11,
+      "name": "Ruty Erblich"
+    },
+    {
+      "table": 12,
+      "name": "Tammy Englard"
+    },
+    {
+      "table": 13,
+      "name": "Riki Dreyfuss"
+    },
+    {
+      "table": 14,
+      "name": "Draisy Schreiber"
+    },
+    {
+      "table": 15,
+      "name": "Rifki Brim"
+    },
+    {
+      "table": 16,
+      "name": "Chayla Rand"
+    },
+    {
+      "table": 17,
+      "name": "Feigy Schisha"
+    },
+    {
+      "table": 18,
+      "name": "Hadassa Stern"
+    },
+    {
+      "table": 19,
+      "name": "Rochelle Eisenbach"
+    },
+    {
+      "table": 20,
+      "name": "Goldy Lenes"
+    },
+    {
+      "table": 21,
+      "name": "Chani Davidowitz"
+    },
+    {
+      "table": 22,
+      "name": "Esti Neiderman"
+    },
+    {
+      "table": 22,
+      "name": "Simi Stockhammer"
+    },
+    {
+      "table": 23,
+      "name": "Toby Waltzer"
+    },
+    {
+      "table": 24,
+      "name": "Rachi Wiznitzer"
+    },
+    {
+      "table": 25,
+      "name": "Chani Freidman"
+    },
+    {
+      "table": 26,
+      "name": "Bruchi Rubinfeld"
+    },
+    {
+      "table": 26,
+      "name": "Miri Gelb"
+    },
+    {
+      "table": 27,
+      "name": "Suri Gansz"
+    },
+    {
+      "table": 28,
+      "name": "Goldy Junger"
+    },
+    {
+      "table": 29,
+      "name": "Rikfkelle Eichenstein"
+    },
+    {
+      "table": 30,
+      "name": "Itti Glausiusz"
+    },
+    {
+      "table": 31,
+      "name": "Ruchi Koppenheim"
+    },
+    {
+      "table": 31,
+      "name": "Ruchi Margulious"
+    }
+  ],
+  "configurationNotes": [
+    "This is a template, not an automatically activated production config.",
+    "Set the verified event dialNumber (not currently supplied) in the same directory scene.",
+    "Import name/phone roster separately. Name normalization links joined players to their tables.",
+    "QR and PIN are derived at runtime from the real game room.",
+    "Seat 28 Goldy Junger follows the user's later correction, pending event check."
+  ]
+}

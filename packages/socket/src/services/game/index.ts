@@ -584,26 +584,53 @@ class Game {
             isTie,
           }
         },
-        getFullShowData: () => ({
-          isLive: true,
-          dialNumber:
+        getFullShowData: () => {
+          const directory =
             sidecar && isQuizExtrasV2(sidecar)
-              ? (
-                  Object.values(sidecar.scenes).find(
-                    (scene) =>
-                      scene.kind === "animation" &&
-                      scene.preset === "representative-directory",
-                  ) as { dialNumber?: string } | undefined
-                )?.dialNumber
-              : undefined,
-          connectedTables: [...this.rosterMap.values()].flatMap(
-            (entry, index) => (entry.status === "connected" ? [index + 1] : []),
-          ),
-          representatives: [...this.rosterMap.values()].map((entry, index) => ({
-            table: index + 1,
-            name: entry.displayName,
-          })),
-        }),
+              ? Object.values(sidecar.scenes).find(
+                  (scene) =>
+                    scene.kind === "animation" &&
+                    scene.preset === "representative-directory",
+                )
+              : undefined
+          const seats =
+            directory?.kind === "animation"
+              ? directory.representatives ?? []
+              : []
+          const entries = [...this.rosterMap.values()]
+          const normalizeName = (name: string) =>
+            name.trim().replace(/\s+/g, " ").toLocaleLowerCase("en-GB")
+          const connectedNames = new Set(
+            entries
+              .filter((entry) => entry.status === "connected")
+              .map((entry) => normalizeName(entry.displayName)),
+          )
+          const connectedTables =
+            seats.length > 0
+              ? [
+                  ...new Set(
+                    seats
+                      .filter((rep) => connectedNames.has(normalizeName(rep.name)))
+                      .map((rep) => rep.table),
+                  ),
+                ]
+              : entries.flatMap((entry, index) =>
+                  entry.status === "connected" ? [index + 1] : [],
+                )
+          return {
+            isLive: true,
+            dialNumber:
+              directory?.kind === "animation" ? directory.dialNumber : undefined,
+            connectedTables,
+            representatives:
+              seats.length > 0
+                ? seats
+                : entries.map((entry, index) => ({
+                    table: index + 1,
+                    name: entry.displayName,
+                  })),
+          }
+        },
         getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
           const scene =
             inputScene.kind === "animation"

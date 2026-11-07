@@ -579,6 +579,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               extensionState?.extras.lobbyFullShow as
                 | {
                     dialNumber?: string
+                    seatingPlan?: boolean
                     representatives?: Array<{ table: number; name: string }>
                     connectedTables?: number[]
                   }
