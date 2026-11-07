@@ -11,6 +11,12 @@ describe("P0 Tadazz soundtrack policy", () => {
     const interim = resolveTadazzAudioPolicy({ sceneKind: "interimResults" })
     expect(results).toEqual({ slot: "results", continuityKey: "result-reveal" })
     expect(interim).toEqual(results)
+    expect(
+      resolveTadazzAudioPolicy({
+        statusName: "SELECT_ANSWER",
+        extensionPhase: "responses",
+      }),
+    ).toEqual(results)
   })
 
   it("maps lobby, voting, leaderboard/tie, recap and finale deterministically", () => {

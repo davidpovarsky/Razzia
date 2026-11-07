@@ -276,7 +276,10 @@ export function useHostPresentationCommands({
       }
 
       if (shortcut === "next") {
-        if (current.statusName === STATUS.SELECT_ANSWER) {
+        if (
+          current.statusName === STATUS.SELECT_ANSWER &&
+          state.phase !== "responses"
+        ) {
           return
         }
         if (isInterlude) {
@@ -287,6 +290,7 @@ export function useHostPresentationCommands({
           )
         } else if (
           isScene ||
+          state.phase === "responses" ||
           current.statusName === STATUS.SHOW_ROOM ||
           current.statusName === STATUS.SHOW_RESPONSES ||
           current.statusName === STATUS.SHOW_LEADERBOARD

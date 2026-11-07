@@ -62,10 +62,6 @@ export function resolveTadazzAudioPolicy({
     return { slot: "roundStart", continuityKey: "round-launch" }
   }
 
-  if (statusName === "SELECT_ANSWER" || extensionPhase === "answers") {
-    return { slot: "voting", continuityKey: "voting" }
-  }
-
   if (
     statusName === "SHOW_RESPONSES" ||
     statusName === "SHOW_RESULT" ||
@@ -73,6 +69,10 @@ export function resolveTadazzAudioPolicy({
     extensionPhase === "responses"
   ) {
     return { slot: "results", continuityKey: "result-reveal" }
+  }
+
+  if (statusName === "SELECT_ANSWER" || extensionPhase === "answers") {
+    return { slot: "voting", continuityKey: "voting" }
   }
 
   if (statusName === "SHOW_QUESTION" || extensionPhase === "question") {
