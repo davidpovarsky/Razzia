@@ -28,6 +28,17 @@ it("adds every source show preset to the original ten questions, preserving auth
   expect(
     complete.timeline.filter((item) => item.kind === "question"),
   ).toHaveLength(10)
+  const directorySteps = complete.timeline.filter((item) =>
+    item.kind === "animation" &&
+    (complete.scenes[item.sceneId] as { preset?: string }).preset ===
+      "representative-directory",
+  )
+  // The full 40-representative directory must be shown just once.
+  expect(directorySteps).toHaveLength(1)
+  expect(complete.timeline).toHaveLength(66)
+  expect(
+    (complete.scenes[(directorySteps[0] as { sceneId: string }).sceneId] as { groupPage?: number }).groupPage,
+  ).toBeUndefined()
   const original = {
     rosterPlayerId: "real",
     displayName: "Existing representative",

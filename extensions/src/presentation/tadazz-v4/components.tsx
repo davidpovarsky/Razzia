@@ -196,12 +196,6 @@ export function AnswerSlotV4({
                 </span>
               </div>
             )}
-            <div
-              className="corner answer-card-badge"
-              aria-label={`Option ${id2(index + 1)}`}
-            >
-              {id2(index + 1)}
-            </div>
           </div>
           <figcaption
             className="answer-title"

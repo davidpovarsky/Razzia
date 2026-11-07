@@ -53,10 +53,8 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
   }
   scene("company-opening")
   scene("grand-opening")
+  // The complete 40-table directory is presented once; do not repeat it in four groups.
   scene("representative-directory")
-  for (let page = 0; page < 4; page++) {
-    scene("representative-directory", 1, { groupPage: page })
-  }
   scene("phone-instructions")
   scene("connection-readiness")
   scene("round-one")

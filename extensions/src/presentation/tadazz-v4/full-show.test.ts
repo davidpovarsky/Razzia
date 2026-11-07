@@ -238,7 +238,8 @@ describe("AnswerSlotV4: Captions, Badges, and Result Tracks Parity", () => {
 
     expect(html).toContain('data-has-caption="true"')
     expect(html).toContain("Option A")
-    expect(html).toContain("01") // Badge 01
+    expect(html).toContain('class="answer-index">01</div>')
+    expect(html).not.toContain("answer-card-badge")
   })
 
   it("provides fallback label in recap mode when answer has empty title", () => {
@@ -258,7 +259,8 @@ describe("AnswerSlotV4: Captions, Badges, and Result Tracks Parity", () => {
     )
 
     expect(html).toContain("Choice 3")
-    expect(html).toContain("03") // Badge 03
+    expect(html).toContain('class="answer-index">03</div>')
+    expect(html).not.toContain("answer-card-badge")
   })
 })
 

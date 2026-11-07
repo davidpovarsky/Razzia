@@ -141,14 +141,7 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   await expect(host.locator(".full-rep-row")).toHaveCount(40)
   await expect(host.locator(".full-rep-row.connected")).toHaveCount(0)
   await host.screenshot({ path: join(evidence, "02-directory-40.png") })
-  for (let group = 0; group < 4; group += 1) {
-    await advance()
-    await scene("representative-directory")
-    await expect(host.locator(".full-rep-row")).toHaveCount(10)
-    await expect(host.locator(".full-table-number").first()).toHaveText(
-      String(group * 10 + 1).padStart(2, "0"),
-    )
-  }
+  // Advance directly from the full directory. The four 10-table duplicates were removed.
   await advance()
   await scene("phone-instructions")
   await expect(host.locator(".full-phone-key")).toHaveCount(12)

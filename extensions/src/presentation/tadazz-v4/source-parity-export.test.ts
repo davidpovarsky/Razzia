@@ -305,8 +305,8 @@ describe("Native React Show Source Parity & Visual Evidence Capture", () => {
     // 1. FivePictureAnswersV4 contains figure.answer-figure and figcaption.answer-title
     expect(scenes["07_picture_answers_cards"]).toContain("figure class=\"answer-figure\"")
     expect(scenes["07_picture_answers_cards"]).toContain("figcaption class=\"answer-title\"")
-    expect(scenes["07_picture_answers_cards"]).toContain("corner answer-card-badge")
-    expect(scenes["07_picture_answers_cards"]).toContain("01")
+    expect(scenes["07_picture_answers_cards"]).not.toContain("corner answer-card-badge")
+    expect(scenes["07_picture_answers_cards"]).toContain('class="answer-index">01</div>')
 
     // 2. Results scene contains percentage tracks and numbers
     expect(scenes["10_survey_results_tracks"]).toContain("result-percentage")

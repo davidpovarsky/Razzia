@@ -211,9 +211,14 @@ export const AudioCuePlayer = ({
   const [muted, setMuted] = useState(false)
   const [masterVolume, setMasterVolume] = useState(1)
   const [userPaused, setUserPaused] = useState(false)
-  const [liveSlotOverride, setLiveSlotOverride] =
-    useState<SoundtrackSlotId | null>(null)
-
+  // Manual track previews apply only to the current show phase. On the next
+  // scene transition, automatically resume the soundtrack chosen by the show.
+  const [manualTrack, setManualTrack] = useState<{
+    slot: SoundtrackSlotId
+    stageKey: string
+  } | null>(null)
+  const stageKey = `${soundtrackSlot ?? ""}:${continuityKey ?? ""}`
+  const liveSlotOverride = manualTrack?.stageKey === stageKey ? manualTrack.slot : null
   const selectedSoundtrackSlot = liveSlotOverride ?? soundtrackSlot
   const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter(
     (slot) => audioExtras?.soundtrack?.[slot]?.mode === "media",
@@ -264,13 +269,13 @@ export const AudioCuePlayer = ({
         identity: `${gameId ?? "g"}:soundtrack:${continuityKey ?? selectedSoundtrackSlot}:${soundtrack.url}`,
         url: soundtrack.url,
         volume: soundtrack.volume,
-        loop: soundtrack.loop,
+        // Continuous stage beds must repeat until the show changes phase.
+        // The deliberately timed 12-second opening ident is the only exception.
+        loop: selectedSoundtrackSlot === "openingIntro" ? soundtrack.loop : true,
         fadeMs: soundtrack.fadeMs,
         startOffsetSeconds: soundtrack.startOffsetSeconds,
         maxDurationMs:
-          selectedSoundtrackSlot === "openingIntro"
-            ? 12000
-            : soundtrack.maxDurationMs,
+          selectedSoundtrackSlot === "openingIntro" ? 12000 : undefined,
       }
     }
 
@@ -748,8 +753,10 @@ export const AudioCuePlayer = ({
               <select
                 value={liveSlotOverride ?? ""}
                 onChange={(event) =>
-                  setLiveSlotOverride(
-                    (event.target.value || null) as SoundtrackSlotId | null,
+                  setManualTrack(
+                    event.target.value
+                      ? { slot: event.target.value as SoundtrackSlotId, stageKey }
+                      : null,
                   )
                 }
                 className="rounded bg-black/30 px-2 py-1 text-white"
