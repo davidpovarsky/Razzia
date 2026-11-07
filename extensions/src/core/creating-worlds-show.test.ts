@@ -30,6 +30,10 @@ it("adds every source show preset to the original ten questions, preserving auth
         "representative-directory",
         "phone-instructions",
         "connection-readiness",
+        "story-progress",
+        "story-assembly",
+        "story-live",
+        "interlude",
       ].includes(preset)
     ) {
       expect(presets).not.toContain(preset)
@@ -53,7 +57,9 @@ it("adds every source show preset to the original ten questions, preserving auth
       (s) => s.kind === "animation" && s.preset === "representative-directory",
     ),
   ).toHaveLength(1)
-  expect(complete.timeline).toHaveLength(51)
+  expect(complete.timeline).toHaveLength(36)
+  expect(presets.filter((preset) => preset === "top-pick")).toHaveLength(10)
+  expect(presets.filter((preset) => preset === "round-recap")).toHaveLength(2)
   expect(complete.timeline.some((item) => item.kind === "interimResults")).toBe(
     false,
   )

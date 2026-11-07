@@ -1,4 +1,5 @@
 import { SESSION_ROLES } from "@razzia/common/constants"
+import Card from "@razzia/web/components/Card"
 import AccountLogin from "@razzia/web/features/manager/components/AccountLogin"
 import ManagerPassword from "@razzia/web/features/manager/components/ManagerPassword"
 import { managerLogin } from "@razzia/web/features/manager/queries"
@@ -57,18 +58,22 @@ const ManagerAuthPage = () => {
 
   if (mode === "loading")
     return (
-      <p role="status" className="text-foreground p-6">
-        {t("common:loading", "Loading...")}
-      </p>
+      <Card className="max-w-md p-6 shadow-xl sm:p-8">
+        <p role="status" className="text-foreground text-center">
+          {t("common:loading", "Loading...")}
+        </p>
+      </Card>
     )
   if (mode === "error")
     return (
-      <p role="alert" className="p-6 text-red-500">
-        {t(
-          "errors:auth.sessionFailed",
-          "Unable to load authentication. Please retry.",
-        )}
-      </p>
+      <Card className="max-w-md p-6 shadow-xl sm:p-8">
+        <p role="alert" className="text-center text-red-500">
+          {t(
+            "errors:auth.sessionFailed",
+            "Unable to load authentication. Please retry.",
+          )}
+        </p>
+      </Card>
     )
   return mode === "accounts" ? (
     <AccountLogin onAuthenticated={onAuthenticated} />

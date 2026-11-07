@@ -116,11 +116,8 @@ export default function AccountLogin({ onAuthenticated }: Props) {
     reset: label("reset", "Reset password"),
   }
   return (
-    <Card>
-      <div
-        className="w-full max-w-md space-y-4"
-        data-testid="tadazz-account-auth"
-      >
+    <Card className="max-w-md p-6 shadow-xl sm:p-8">
+      <div className="w-full space-y-4" data-testid="tadazz-account-auth">
         <h1 className="text-foreground text-center text-2xl font-bold">
           {heading[step]}
         </h1>

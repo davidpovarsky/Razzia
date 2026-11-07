@@ -52,6 +52,7 @@ export interface AuthoritativeStepEnvelope {
 export class StudioShowCoordinator {
   private readonly runner: TimelineRunner
   private readonly questionIds: string[]
+  private readonly questionSteps = new Map<string, number>()
   private readonly callbacks: StudioCoordinatorCallbacks
 
   private phase: "lobby" | "scene" | "question" | "finished" = "lobby"
@@ -67,11 +68,29 @@ export class StudioShowCoordinator {
   constructor(options: StudioShowCoordinatorOptions) {
     this.runner = new TimelineRunner(options.timeline, options.scenes)
     this.questionIds = options.questionIds
+    options.timeline.forEach((item, index) => {
+      if (item.kind === "question")
+        this.questionSteps.set(item.questionId, index)
+    })
     this.callbacks = options.callbacks
   }
 
   get currentEpoch(): number {
     return this.epoch
+  }
+
+  /** Align the authored cursor with a checkpoint restored by RoundManager. */
+  restoreQuestionPosition(questionIndex: number): boolean {
+    const questionId = this.questionIds[questionIndex]
+    const stepIndex = this.questionSteps.get(questionId)
+    if (stepIndex === undefined) return false
+    this.clearTimer()
+    this.runner.jumpTo(stepIndex)
+    this.phase = "question"
+    this.epoch += 1
+    this.seq += 1
+    this.startedAt = Date.now()
+    return true
   }
 
   get currentSeq(): number {
@@ -474,6 +493,60 @@ export class StudioShowCoordinator {
     }
 
     return true
+  }
+
+  /**
+   * Skips the active question and all of its authored result/story scenes.
+   * The first following question becomes authoritative in one transition.
+   */
+  skipQuestionSequence(): boolean {
+    if (this.phase !== "question" || this.paused) {
+      return false
+    }
+
+    this.clearTimer()
+
+    while (true) {
+      const { step, done } = this.runner.advance()
+
+      if (done || !step) {
+        this.phase = "finished"
+        this.epoch += 1
+        this.seq += 1
+        this.startedAt = Date.now()
+        this.callbacks.onFinish()
+
+        return true
+      }
+
+      if (step.item.kind !== "question") {
+        // Round summaries and the finale are show boundaries, not scenes owned
+        // by the skipped vote. Keep them even if Q5/Q10 was skipped.
+        if (
+          step.scene?.kind === "animation" &&
+          ["round-recap", "grand-finale"].includes(step.scene.preset)
+        ) {
+          this.phase = "scene"
+          this.epoch += 1
+          this.seq += 1
+          this.startedAt = Date.now()
+          if (step.advanceMode === "auto")
+            this.scheduleAutoAdvance(step.durationMs, this.epoch)
+          this.callbacks.onBroadcastState()
+          return true
+        }
+        continue
+      }
+
+      this.phase = "question"
+      this.epoch += 1
+      this.seq += 1
+      this.startedAt = Date.now()
+      const nextQIdx = this.getQuestionIndex(step.item.questionId)
+      void this.callbacks.onStartQuestion(nextQIdx)
+
+      return true
+    }
   }
 
   /**

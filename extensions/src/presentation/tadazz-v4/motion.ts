@@ -62,6 +62,8 @@ export class TadazzV4Motion {
   private finalizers: Array<() => void> = []
   private token = 0
   private scene: TadazzV4Scene = "question"
+  private countdownSweep: Animation | null = null
+  private countdownTotal = 0
   private stage: HTMLElement
   private config: MotionConfig
   constructor(stage: HTMLElement, config: MotionConfig = {}) {
@@ -80,6 +82,7 @@ export class TadazzV4Motion {
       }
     }
     this.active = []
+    this.countdownSweep = null
     this.finalizers = []
     for (const id of this.tickerFrames) {
       cancelAnimationFrame(id)
@@ -121,6 +124,19 @@ export class TadazzV4Motion {
   }
   setReducedMotion(on: boolean) {
     this.config.reducedMotion = on
+  }
+  /** Update only the clock. Choreography and real seconds are independent. */
+  syncCountdown(data: TadazzV4Data) {
+    const sweep = this.countdownSweep
+    if (!sweep || data.deadlineMs === undefined || !this.countdownTotal) return
+    const now = Date.now()
+    const opensAt = data.deadlineMs - this.countdownTotal * 1000
+    sweep.effect?.updateTiming({
+      duration: this.countdownTotal * 1000,
+      delay: Math.max(0, opensAt - now),
+      fill: "both",
+    })
+    sweep.currentTime = Math.max(0, now - opensAt)
   }
   finishAll() {
     for (const id of this.tickerFrames) {
@@ -454,14 +470,22 @@ export class TadazzV4Motion {
       duration: 550,
       delay: 720,
     })
-    const rawSeconds = data.remainingSeconds ?? data.seconds ?? 0
+    const rawSeconds = data.seconds ?? data.remainingSeconds ?? 0
     const totalSeconds = Math.max(0, Number(rawSeconds) || 0)
     const duration = Math.max(1, totalSeconds * 1000)
-    const sweep = this.animate(
-      ring,
-      [{ strokeDashoffset: 0 }, { strokeDashoffset: circumference }],
-      { duration, easing: "linear" },
-    )
+    // Clock duration must never be scaled by reduced motion or show speed.
+    const sweep =
+      ring?.animate(
+        [{ strokeDashoffset: 0 }, { strokeDashoffset: circumference }],
+        { duration, easing: "linear", fill: "both" },
+      ) ?? null
+    this.countdownSweep = sweep
+    this.countdownTotal = totalSeconds
+    if (sweep) {
+      this.active.push(sweep)
+      void sweep.finished.catch(() => undefined)
+      this.syncCountdown(data)
+    }
 
     if (value) {
       this.finalizers.push(() => {
@@ -486,7 +510,9 @@ export class TadazzV4Motion {
       }
     }
     tick()
-    this.cue("countdown-ended", duration)
+    void sweep?.finished
+      .then(() => this.cue("countdown-ended"))
+      .catch(() => undefined)
   }
   private chosen(data: TadazzV4Data) {
     const keepCards = Boolean(data.cardsAlreadyOnStage)

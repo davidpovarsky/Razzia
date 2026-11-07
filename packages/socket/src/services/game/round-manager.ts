@@ -95,6 +95,8 @@ export interface RoundManagerOptions {
   ) => void
   onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
   onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
+  /** Skip every authored scene belonging to this question and open the next. */
+  onQuestionSkipped?: (questionIndex: number) => void
   onShowStart?: (proceed: () => void) => void
   skipShowStartCountdown?: () => boolean
   canPreviousTimelineStep?: () => {
@@ -108,6 +110,7 @@ export interface RoundManagerOptions {
   skipQuestionPreview?: () => boolean
   /** Automatically hold one normal results reveal before the next scene (seconds). */
   quickResultsHoldSeconds?: () => number | null
+  votingEntranceMs?: () => number
 }
 
 interface RoundStep {
@@ -150,6 +153,8 @@ export class RoundManager {
   private currentStep = -1
   private playersAnswers: Answer[] = []
   private startTime = 0
+  private votingStartsAt: number | null = null
+  private votingEndsAt: number | null = null
   private acceptingAnswers = false
   private leaderboard: Player[] = []
   private tempOldLeaderboard: Player[] | null = null
@@ -678,6 +683,12 @@ export class RoundManager {
     this.armAutoAdvance()
     this.armInterludeTimer()
 
+    if (this.votingStartsAt !== null && this.currentStep < 0) {
+      this.votingStartsAt += pausedFor
+      if (this.votingEndsAt !== null) this.votingEndsAt += pausedFor
+      this.broadcastVotingQuestion()
+    }
+
     return true
   }
 
@@ -826,6 +837,7 @@ export class RoundManager {
     this.opts.onQuestionScored?.(recomputed)
 
     this.currentQuestion = targetIndex
+    this.opts.onReplayCheckpoint?.(targetIndex)
     void this.newQuestion()
 
     return true
@@ -1005,7 +1017,12 @@ export class RoundManager {
     }
 
     this.playersAnswers = []
-    this.nextQuestion()
+
+    if (this.opts.onQuestionSkipped) {
+      this.opts.onQuestionSkipped(this.currentQuestion)
+    } else {
+      this.nextQuestion()
+    }
 
     return true
   }
@@ -1164,6 +1181,8 @@ export class RoundManager {
     this.currentStep = -1
     this.acceptingAnswers = false
     this.playersAnswers = []
+    this.votingStartsAt = null
+    this.votingEndsAt = null
     this.latestRevealDistribution = null
 
     // Capture pre-question checkpoint
@@ -1203,9 +1222,39 @@ export class RoundManager {
       if (!ok2 || this.generation !== gen || !this.started) return
     }
 
+    const entranceMs = this.opts.votingEntranceMs?.() ?? 0
+    if (entranceMs > 0) {
+      this.votingStartsAt = Date.now() + entranceMs
+      this.votingEndsAt =
+        this.question.time === NO_TIME_LIMIT
+          ? null
+          : this.votingStartsAt + this.question.time * SECOND_MS
+      this.broadcastVotingQuestion()
+      const ready = await this.cancellableSleep(entranceMs / SECOND_MS, gen)
+      if (!ready || this.generation !== gen || !this.started) return
+    }
     this.startTime = Date.now()
     this.acceptingAnswers = true
+    if (entranceMs > 0) {
+      this.votingStartsAt = this.startTime
+      this.votingEndsAt =
+        this.question.time === NO_TIME_LIMIT
+          ? null
+          : this.startTime + this.question.time * SECOND_MS
+    }
+    this.broadcastVotingQuestion()
+    await this.opts.cooldown.start(this.question.time)
 
+    this.acceptingAnswers = false
+
+    if (this.generation !== gen || !this.started) {
+      return
+    }
+
+    this.runStep(0)
+  }
+
+  private broadcastVotingQuestion(): void {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       question: this.question.question,
       answers: this.question.answers,
@@ -1216,17 +1265,15 @@ export class RoundManager {
       options: this.question.options,
       answersOnly: this.opts.getSettings().answersOnly,
       playMode: this.isSurvey() ? "survey" : "quiz",
+      ...(this.votingStartsAt !== null
+        ? {
+            votingStartsAt: this.votingStartsAt,
+            ...(this.votingEndsAt !== null
+              ? { votingEndsAt: this.votingEndsAt }
+              : {}),
+          }
+        : {}),
     })
-
-    await this.opts.cooldown.start(this.question.time)
-
-    this.acceptingAnswers = false
-
-    if (this.generation !== gen || !this.started) {
-      return
-    }
-
-    this.runStep(0)
   }
 
   // ── Steps ────────────────────────────────────────────────────────────────
@@ -1695,6 +1742,11 @@ export class RoundManager {
   }
 
   endIfEveryoneAnswered(): void {
+    if (
+      (this.opts.votingEntranceMs?.() ?? 0) > 0 &&
+      this.question.time !== NO_TIME_LIMIT
+    )
+      return
     if (!this.acceptingAnswers) {
       return
     }

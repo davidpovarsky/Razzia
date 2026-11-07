@@ -252,6 +252,10 @@ export class ExtensionGameSession {
   }
 
   onReplayCheckpoint(questionIndex: number): void {
+    for (const questionId of this.extras?.questionIds.slice(questionIndex) ??
+      []) {
+      this.storyTieChoices.delete(questionId)
+    }
     this.epoch += 1
     this.seq += 1
     this.currentQuestionIndex = questionIndex
@@ -309,19 +313,38 @@ export class ExtensionGameSession {
 
     const extrasPayload: Record<string, unknown> = {}
 
-    // The public Creating Worlds join lobby shows the SAME authoritative 40
-    // representatives/connection states as the stage, before the show starts.
+    // Public directory contains names and table assignments, never phone data.
+    // No connected players are required to render the names.
     if (
       this.extras &&
       isQuizExtrasV2(this.extras) &&
-      this.showCoordinator?.currentPhase === "lobby"
+      this.extras.questionIds.length === 10 &&
+      this.extras.roster.participants.length > 0 &&
+      Object.values(this.extras.scenes).some(
+        (s) =>
+          s.kind === "animation" && s.preset === "representative-directory",
+      )
     ) {
-      const lobbyData = this.delegate?.getFullShowData?.()
-      if (lobbyData?.representatives?.length === 40) {
-        extrasPayload.lobbyFullShow = lobbyData
+      const live = this.delegate?.getFullShowData?.()
+      const names = this.extras.roster.participants.map((rep, index) => ({
+        table: rep.tableNumber ?? index + 1,
+        name: rep.displayName,
+      }))
+      const directory = Object.values(this.extras.scenes).find(
+        (s) =>
+          s.kind === "animation" && s.preset === "representative-directory",
+      )
+      extrasPayload.lobbyFullShow = {
+        isLive: live?.isLive ?? false,
+        representatives: live?.representatives?.length
+          ? live.representatives
+          : names,
+        connectedTables: live?.connectedTables ?? [],
+        dialNumber:
+          live?.dialNumber ??
+          (directory?.kind === "animation" ? directory.dialNumber : undefined),
       }
     }
-
     // Team scores and assignments
     if (this.extras?.teams.enabled) {
       extrasPayload.teamScores = this.getTeamScores(players)

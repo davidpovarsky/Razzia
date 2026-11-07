@@ -4,6 +4,7 @@ import type {
   TimelineItem,
 } from "../../core/studio-timeline-schema"
 import { createDefaultQuizExtrasV2 } from "../../core/studio-timeline-schema"
+import { completeCreatingWorldsShow } from "../../core/creating-worlds-show"
 import { ExtensionGameSession } from "./session"
 import { StudioShowCoordinator } from "./studio-show-coordinator"
 
@@ -109,6 +110,48 @@ describe("StudioShowCoordinator", () => {
   ]
 
   const questionIds = [q1Id, q2Id, q3Id]
+
+  it("skips every authored scene owned by a skipped question", () => {
+    const startedQuestions: number[] = []
+    let finished = false
+    const coordinator = new StudioShowCoordinator({
+      timeline,
+      scenes,
+      questionIds,
+      defaults: dummyDefaults,
+      callbacks: {
+        onStartQuestion: (questionIndex) => {
+          startedQuestions.push(questionIndex)
+        },
+        onFinish: () => {
+          finished = true
+        },
+        onBroadcastState: () => undefined,
+      },
+    })
+
+    coordinator.start()
+    vi.advanceTimersByTime(4000)
+    expect(startedQuestions).toEqual([0])
+
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentStep?.item).toMatchObject({
+      kind: "question",
+      questionId: q2Id,
+    })
+    expect(startedQuestions).toEqual([0, 1])
+
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentStep?.item).toMatchObject({
+      kind: "question",
+      questionId: q3Id,
+    })
+    expect(startedQuestions).toEqual([0, 1, 2])
+
+    expect(coordinator.skipQuestionSequence()).toBe(true)
+    expect(coordinator.currentPhase).toBe("finished")
+    expect(finished).toBe(true)
+  })
 
   it("advances through full 10-kind timeline: opening -> Q1 -> transition -> Q2 -> media -> animation -> leaderboard -> interimResults -> countdown -> Q3 -> closing -> FINISHED", () => {
     const startedQuestions: number[] = []
@@ -721,4 +764,51 @@ describe("P0 authoritative scene pause", () => {
     vi.advanceTimersByTime(1)
     expect(finished).toBe(true)
   })
+})
+
+it("keeps both five-position round boundaries when all ten questions are skipped", () => {
+  const ids = Array.from({ length: 10 }, () => crypto.randomUUID())
+  const extras = completeCreatingWorldsShow(
+    createDefaultQuizExtrasV2("quiz", ids, "a".repeat(64)),
+  )
+  const coordinator = new StudioShowCoordinator({
+    timeline: extras.timeline,
+    scenes: extras.scenes,
+    questionIds: ids,
+    defaults: extras.defaults,
+    callbacks: {
+      onStartQuestion: () => {},
+      onFinish: () => {},
+      onBroadcastState: () => {},
+    },
+  })
+  coordinator.start()
+  coordinator.advanceScene()
+  coordinator.skipQuestionSequence()
+  expect(coordinator.currentStep?.item).toMatchObject({ questionId: ids[1] })
+  expect(coordinator.restoreQuestionPosition(0)).toBe(true)
+  coordinator.skipQuestionSequence()
+  expect(coordinator.currentStep?.item).toMatchObject({ questionId: ids[1] })
+  coordinator.restoreQuestionPosition(0)
+  for (let index = 0; index < 5; index++) coordinator.skipQuestionSequence()
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "round-recap",
+    round: 1,
+  })
+  coordinator.advanceScene() // wipe
+  coordinator.advanceScene() // round two
+  coordinator.advanceScene() // Q6
+  for (let index = 0; index < 5; index++) coordinator.skipQuestionSequence()
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "round-recap",
+    round: 2,
+  })
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({
+    kind: "animation",
+    preset: "grand-finale",
+  })
+  coordinator.dispose()
 })

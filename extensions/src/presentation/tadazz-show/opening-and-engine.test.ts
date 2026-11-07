@@ -5,6 +5,7 @@ import { describe, expect, it } from "vitest"
 import { stripLottieBackgroundPlate } from "./lottie-plate"
 import { MotionEngine } from "./motion-engine"
 import {
+  TADAZZ_EVENT_ARTWORK_DURATION_MS,
   TADAZZ_OPENING_SOUNDTRACK_DURATION_MS,
   TADAZZ_OPENING_VIDEO_DURATION_MS,
 } from "./TadazzOpening"
@@ -19,9 +20,21 @@ const load = (name: string) =>
   ) as Record<string, unknown>
 
 describe("opening Lottie overlay", () => {
-  it("uses the verified 7.933 second visual boundary and independent 12 second music boundary", () => {
+  it("shows the event artwork first, then preserves the complete brand and music timings", () => {
+    expect(TADAZZ_EVENT_ARTWORK_DURATION_MS).toBe(2200)
     expect(TADAZZ_OPENING_VIDEO_DURATION_MS).toBe(7933)
     expect(TADAZZ_OPENING_SOUNDTRACK_DURATION_MS).toBe(12000)
+
+    const source = readFileSync(
+      resolve(dirname(fileURLToPath(import.meta.url)), "TadazzOpening.tsx"),
+      "utf8",
+    )
+    expect(source).toContain(
+      'data-opening-phase={eventArtworkActive ? "event-artwork" : "brand"}',
+    )
+    expect(source).toContain("Boolean(eventArtworkUrl) || eventArtworkPending")
+    expect(source).toContain("{brandTransitionActive && (")
+    expect(source).toContain("{eventArtworkActive && eventArtworkUrl && (")
   })
 
   it("keeps the source MP4 audio permanently muted in the opening component", () => {

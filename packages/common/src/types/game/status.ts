@@ -43,6 +43,9 @@ export interface CommonStatusDataMap {
     options?: QuestionOptions
     answersOnly: boolean
     playMode?: "quiz" | "survey"
+    /** Opt-in show entrance; the server accepts votes only after this instant. */
+    votingStartsAt?: number
+    votingEndsAt?: number
   }
   SHOW_RESULT: {
     correct: boolean

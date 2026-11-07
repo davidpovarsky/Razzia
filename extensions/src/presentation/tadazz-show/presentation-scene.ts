@@ -93,6 +93,8 @@ export type ShowScene =
       questionType: string
       seconds: number | null
       remainingSeconds: number | null
+      votingStartsAt?: number
+      votingEndsAt?: number
       totalPlayers: number
       answers: string[]
       options?: unknown
@@ -500,6 +502,12 @@ export function computeShowScene(input: ShowInput): ShowScene {
             : null,
         remainingSeconds:
           typeof data.remainingTime === "number" ? data.remainingTime : null,
+        votingStartsAt:
+          typeof data.votingStartsAt === "number"
+            ? data.votingStartsAt
+            : undefined,
+        votingEndsAt:
+          typeof data.votingEndsAt === "number" ? data.votingEndsAt : undefined,
         totalPlayers: Number(data.totalPlayer) || 0,
         answers,
         options: data.options,

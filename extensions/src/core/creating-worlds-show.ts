@@ -72,19 +72,12 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
     // The server skips this step before broadcast when there is no genuine tie.
     scene("tie-break", round)
     scene("top-pick", round)
-    scene("story-progress", round)
 
     if (i === 4 || i === 9) {
       scene("round-recap", round)
-      scene("story-assembly", round)
-      scene("story-live", round)
 
       if (i === 4) {
-        scene("interlude", 2, {
-          title: "A WHOLE NEW WORLD",
-          subtitle: "ROUND 02",
-        })
-        scene("z-wipe", 2)
+        scene("z-wipe", 2, { advance: "auto", durationMs: 1800 })
         scene("round-two", 2)
       }
     }

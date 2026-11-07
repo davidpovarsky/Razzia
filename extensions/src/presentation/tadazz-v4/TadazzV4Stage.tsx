@@ -1,3 +1,4 @@
+import type { CSSProperties, ReactNode } from "react"
 import {
   forwardRef,
   useCallback,
@@ -7,14 +8,16 @@ import {
   useRef,
   useState,
 } from "react"
-import type { CSSProperties, ReactNode } from "react"
 import {
   StageAmbientV4,
   StageBackdropV4,
   StageSceneV4,
   ZWipeV4,
 } from "./components"
+import "./full-show.css"
 import { TadazzV4Motion } from "./motion"
+import "./source-layout.css"
+import "./tadazz-v4.css"
 import {
   normalizeData,
   TADAZZ_V4_ASSET_BASE,
@@ -24,9 +27,6 @@ import {
   type TadazzV4StageHandle,
   type TadazzV4StageProps,
 } from "./types"
-import "./tadazz-v4.css"
-import "./full-show.css"
-import "./source-layout.css"
 
 interface CurrentScene {
   scene: TadazzV4Scene
@@ -50,6 +50,7 @@ export const TadazzV4Stage = forwardRef<
     motionScale = 1,
     showPercentages = true,
     reducedMotion = false,
+    fitRevision = 0,
     className,
     underlay,
     overlay,
@@ -118,7 +119,7 @@ export const TadazzV4Stage = forwardRef<
       observer?.disconnect()
       window.removeEventListener("resize", fit)
     }
-  }, [])
+  }, [fitRevision])
 
   const start = useCallback(
     (scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean> => {
@@ -234,6 +235,7 @@ export const TadazzV4Stage = forwardRef<
       clear,
       wipe,
       patchData: (patch) => {
+        engineRef.current?.syncCountdown(patch)
         setView((prev) =>
           prev
             ? { ...prev, data: normalizeData({ ...prev.data, ...patch }) }
@@ -353,7 +355,9 @@ export const TadazzV4Stage = forwardRef<
     >
       <div
         ref={stageRef}
-        className={`tzv4-stage${isShow ? " stage-show" : ""}`}
+        className={["tzv4-stage", isShow && "stage-show"]
+          .filter(Boolean)
+          .join(" ")}
         data-v4-scene={view?.scene ?? "idle"}
         data-stage-mode={view?.scene ?? (customScreen ? "custom" : "idle")}
         data-question-key={data.questionKey ?? ""}

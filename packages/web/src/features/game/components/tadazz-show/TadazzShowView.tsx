@@ -67,6 +67,7 @@ import {
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
+import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTadazzRawStatus } from "./raw-status-context"
 import { TadazzAnswerPad } from "./TadazzAnswerPad"
 import {
@@ -189,6 +190,31 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
   const reduced = useMemo(prefersReducedMotion, [])
+  const [serverClockOffset, setServerClockOffset] = useState(0)
+  useEffect(() => {
+    if (!isConnected) return
+    let alive = true
+    let bestRtt = Infinity
+    const sample = () => {
+      const sent = Date.now()
+      socket.emit("extensions:clock", (serverNow) => {
+        const received = Date.now()
+        const rtt = received - sent
+        if (alive && Number.isFinite(serverNow) && rtt < bestRtt) {
+          bestRtt = rtt
+          setServerClockOffset(serverNow - (sent + received) / 2)
+        }
+      })
+    }
+    sample()
+    const second = setTimeout(sample, 250)
+    const third = setTimeout(sample, 750)
+    return () => {
+      alive = false
+      clearTimeout(second)
+      clearTimeout(third)
+    }
+  }, [isConnected, socket])
 
   const status = useMemo(() => {
     if (manager && managerState.status) {
@@ -209,22 +235,35 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     return null
   }, [manager, managerState.status, rawStatus, playerStatus])
 
-  const scene = useMemo(
-    () =>
-      computeShowScene({
-        role,
-        isConnected,
-        status,
-        envelope: extensionState,
-        questionStates,
-      }),
-    [role, isConnected, status, extensionState, questionStates],
-  )
+  const scene = useMemo(() => {
+    const next = computeShowScene({
+      role,
+      isConnected,
+      status,
+      envelope: extensionState,
+      questionStates,
+    })
+    if (next.kind === "voting") {
+      if (next.votingStartsAt !== undefined)
+        next.votingStartsAt -= serverClockOffset
+      if (next.votingEndsAt !== undefined)
+        next.votingEndsAt -= serverClockOffset
+    }
+    return next
+  }, [
+    role,
+    isConnected,
+    status,
+    extensionState,
+    questionStates,
+    serverClockOffset,
+  ])
   const sceneIdentity = useMemo(
     () =>
-      scene.kind === "scene" &&
-      scene.scene.kind === "animation" &&
-      isFullShowScene((scene.scene as { preset?: string }).preset ?? "")
+      scene.kind === "voting" ||
+      (scene.kind === "scene" &&
+        scene.scene.kind === "animation" &&
+        isFullShowScene((scene.scene as { preset?: string }).preset ?? ""))
         ? scene.key
         : JSON.stringify(scene),
     [scene],
@@ -302,6 +341,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
+  const votingStartsAt =
+    scene.kind === "voting" ? scene.votingStartsAt : undefined
+  const votingEndsAt = scene.kind === "voting" ? scene.votingEndsAt : undefined
+  const [votingOpen, setVotingOpen] = useState(false)
+  useEffect(() => {
+    const delay = Math.max(0, (votingStartsAt ?? 0) - Date.now())
+    setVotingOpen(scene.kind === "voting" && delay === 0)
+    if (scene.kind !== "voting" || delay === 0 || isPaused) return
+    const timer = setTimeout(() => setVotingOpen(true), delay)
+    return () => clearTimeout(timer)
+  }, [scene.kind, votingStartsAt, isPaused])
   useEffect(() => {
     const stage = stageRef.current
     const media = showRootRef.current?.querySelectorAll("video, audio") ?? []
@@ -434,27 +484,39 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     }
   }, [extensionState?.seq])
 
-  // Server cooldown ticks keep the visual timer authoritative after drift/late join.
+  // Server cooldown ticks patch the active voting clock. They never start the
+  // voting scene themselves, and delayed ticks can only shorten the deadline.
+  // This prevents a second entrance while the director is still opening cards.
   const deadlineRef = useRef<number | null>(null)
   useEvent(EVENTS.GAME.COOLDOWN, (sec: number) => {
     if (scene.kind !== "voting" || typeof sec !== "number") {
       return
     }
-    const deadline = Date.now() + sec * 1000
+    const deadline = resolveMonotonicCooldownDeadline(
+      deadlineRef.current,
+      votingEndsAt ?? Date.now() + sec * 1000,
+    )
+    deadlineRef.current = deadline
     const handle = stageRef.current
 
-    if (
-      handle?.mode === "voting" &&
-      (deadlineRef.current === null ||
-        Math.abs(deadline - deadlineRef.current) > 1200)
-    ) {
-      deadlineRef.current = deadline
+    if (handle?.mode === "voting") {
       void handle.openVoting(scene.seconds, deadline)
     }
   })
   useEffect(() => {
     deadlineRef.current = null
   }, [scene.key])
+  useEffect(() => {
+    if (isPaused) {
+      deadlineRef.current = null
+    }
+  }, [isPaused])
+  useEffect(() => {
+    if (scene.kind !== "voting" || votingEndsAt === undefined) return
+    deadlineRef.current = votingEndsAt
+    if (stageRef.current?.mode === "voting")
+      void stageRef.current.openVoting(scene.seconds, votingEndsAt)
+  }, [votingEndsAt])
 
   // ── Player answering (same socket contract as the registry components) ──
   const isPlayer = role === "player" && Boolean(player)
@@ -481,6 +543,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         submitted ||
         answerPending ||
         isPaused ||
+        !votingOpen ||
         scene.kind !== "voting"
       ) {
         return
@@ -516,6 +579,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     [
       answerPending,
       isPaused,
+      votingOpen,
       isPlayer,
       playerGameId,
       submitted,
@@ -576,7 +640,23 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             }
             isManager={manager && !isHostPresenting}
             fullShowData={
-              extensionState?.extras.lobbyFullShow as
+              (extensionState?.extras.lobbyFullShow ??
+                (managerState.hostPresence?.players.length
+                  ? {
+                      representatives: managerState.hostPresence.players.map(
+                        (p, i) => ({
+                          table: p.tableNumber ?? i + 1,
+                          name: p.displayName,
+                        }),
+                      ),
+                      connectedTables:
+                        managerState.hostPresence.players.flatMap((p, i) =>
+                          p.status === "connected"
+                            ? [p.tableNumber ?? i + 1]
+                            : [],
+                        ),
+                    }
+                  : undefined)) as
                 | {
                     dialNumber?: string
                     representatives?: Array<{ table: number; name: string }>
@@ -756,8 +836,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   if (openingActive && openingEligible) {
     overlay = (
       <TadazzOpening
+        eventArtworkPending={!extensionState}
         eventArtworkUrl={
-          extensionState?.extras.lobbyFullShow
+          extensionState?.extras.lobbyFullShow ||
+          Boolean(managerState.hostPresence?.players.length)
             ? "/tadazz-show/second-library/creating-worlds-intro.png"
             : undefined
         }
@@ -954,6 +1036,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
           data-role={role}
           data-host-presenting={isHostPresenting ? "true" : "false"}
           data-game-paused={isPaused ? "true" : "false"}
+          data-voting-open={votingOpen && !isPaused ? "true" : "false"}
+          data-voting-starts-at={votingStartsAt}
+          data-voting-ends-at={votingEndsAt}
           aria-label={isHostPresenting ? "Public game presentation" : undefined}
         >
           {manager &&
@@ -1033,6 +1118,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 underlay={underlay}
                 overlay={overlay}
                 reducedMotion={reduced}
+                fitRevision={isHostPresenting ? 1 : 0}
               />
             ) : (
               <TadazzStage
@@ -1105,7 +1191,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               options={scene.options}
               selected={selected}
               submitted={submitted}
-              disabled={!isPlayer || isPaused || answerPending}
+              disabled={!isPlayer || isPaused || !votingOpen || answerPending}
               onToggle={toggle}
               onSubmit={submit}
             />
@@ -1119,7 +1205,12 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 <button
                   type="button"
                   className="tz-pad-submit"
-                  disabled={selected.length === 0 || isPaused || answerPending}
+                  disabled={
+                    selected.length === 0 ||
+                    isPaused ||
+                    !votingOpen ||
+                    answerPending
+                  }
                   onClick={() => submit([...selected].sort((a, b) => a - b))}
                 >
                   {t("game:confirm")}

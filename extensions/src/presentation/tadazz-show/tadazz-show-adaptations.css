@@ -725,9 +725,14 @@ button.tz-x-pill:hover {
   min-width: 0;
   font-size: 19px;
   font-weight: 800;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.15;
+}
+.tz-lobby-show-rep em {
+  display: block;
+  font-style: normal;
+  font-size: 18px;
 }
 .tz-lobby-show-rep i {
   width: 13px;

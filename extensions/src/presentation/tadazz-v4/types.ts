@@ -1,14 +1,45 @@
 /** Presentation-only TADAZZ V4 contracts. Does not import game or socket state. */
 export const TADAZZ_V4_SCENES = [
-  "question", "picture-answers", "voting-open", "countdown", "vote-locked",
-  "chosen", "survey-results", "top-pick", "question-image", "leaderboard",
-  "round-recap", "interlude", "z-wipe",
-  "company-opening", "grand-opening", "representative-directory", "phone-instructions",
-  "connection-readiness", "round-one", "story-progress", "tie-break",
-  "story-assembly", "story-live", "round-two", "grand-finale",
+  "question",
+  "picture-answers",
+  "voting-open",
+  "countdown",
+  "vote-locked",
+  "chosen",
+  "survey-results",
+  "top-pick",
+  "question-image",
+  "leaderboard",
+  "round-recap",
+  "interlude",
+  "z-wipe",
+  "company-opening",
+  "grand-opening",
+  "representative-directory",
+  "phone-instructions",
+  "connection-readiness",
+  "round-one",
+  "story-progress",
+  "tie-break",
+  "story-assembly",
+  "story-live",
+  "round-two",
+  "grand-finale",
 ] as const
 export type TadazzV4Scene = (typeof TADAZZ_V4_SCENES)[number]
-export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>(["top-pick", "round-recap", "interlude", "z-wipe", "company-opening", "grand-opening", "round-one", "round-two", "story-assembly", "story-live", "grand-finale"])
+export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>([
+  "top-pick",
+  "round-recap",
+  "interlude",
+  "z-wipe",
+  "company-opening",
+  "grand-opening",
+  "round-one",
+  "round-two",
+  "story-assembly",
+  "story-live",
+  "grand-finale",
+])
 export const TADAZZ_V4_ASSET_BASE = "/tadazz-show/v4/"
 
 export interface TadazzV4Answer {
@@ -124,7 +155,10 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   noVotes: "NO VOTES YET",
   points: "PTS",
 }
-export interface TadazzV4Cue { name: string; scene: TadazzV4Scene }
+export interface TadazzV4Cue {
+  name: string
+  scene: TadazzV4Scene
+}
 export interface TadazzV4StageHandle {
   play(scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean>
   /** Clear the active v4 scene so a custom/overlay screen is shown on the v4 stage backdrop. */
@@ -147,6 +181,8 @@ export interface TadazzV4StageProps {
   motionScale?: number
   showPercentages?: boolean
   reducedMotion?: boolean
+  /** Recompute the 1920×1080 fit after host chrome/fullscreen changes. */
+  fitRevision?: number
   className?: string
   underlay?: unknown
   overlay?: unknown
@@ -156,23 +192,38 @@ export interface TadazzV4StageProps {
 }
 
 export function percentagesFor(data: TadazzV4Data, length: number): number[] {
-  const counts = Array.from({ length }, (_, i) => Math.max(0, Number(data.counts?.[i]) || 0))
+  const counts = Array.from({ length }, (_, i) =>
+    Math.max(0, Number(data.counts?.[i]) || 0),
+  )
   const total = counts.reduce((a, b) => a + b, 0)
   return counts.map((count, i) => {
     const fromServer = data.percentages?.[i]
     return typeof fromServer === "number" && Number.isFinite(fromServer)
       ? Math.max(0, Math.min(100, fromServer))
-      : total > 0 ? (100 * count) / total : 0
+      : total > 0
+        ? (100 * count) / total
+        : 0
   })
 }
 export function topIndicesFor(data: TadazzV4Data, length: number): number[] {
-  if (data.mode === "quiz" && Array.isArray(data.solutions) && data.solutions.length > 0) {
-    return data.solutions.filter((x) => Number.isInteger(x) && x >= 0 && x < length)
+  if (
+    data.mode === "quiz" &&
+    Array.isArray(data.solutions) &&
+    data.solutions.length > 0
+  ) {
+    return data.solutions.filter(
+      (x) => Number.isInteger(x) && x >= 0 && x < length,
+    )
   }
-  if (data.winnerIndices) return data.winnerIndices.filter((x) => Number.isInteger(x) && x >= 0 && x < length)
-  const counts = Array.from({ length }, (_, i) => Math.max(0, Number(data.counts?.[i]) || 0))
+  if (data.winnerIndices)
+    return data.winnerIndices.filter(
+      (x) => Number.isInteger(x) && x >= 0 && x < length,
+    )
+  const counts = Array.from({ length }, (_, i) =>
+    Math.max(0, Number(data.counts?.[i]) || 0),
+  )
   const max = Math.max(0, ...counts)
-  return max > 0 ? counts.flatMap((v, i) => v === max ? [i] : []) : []
+  return max > 0 ? counts.flatMap((v, i) => (v === max ? [i] : [])) : []
 }
 export function normalizeData(data: TadazzV4Data): TadazzV4Data {
   return {

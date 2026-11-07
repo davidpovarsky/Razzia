@@ -364,6 +364,7 @@ export function useHostPresentation(enabled: boolean) {
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const targetRef = useRef<HTMLElement | null>(null)
+  const exitPromiseRef = useRef<Promise<void> | null>(null)
 
   const exit = useCallback(() => {
     setIsPending(false)
@@ -371,7 +372,29 @@ export function useHostPresentation(enabled: boolean) {
     setError(null)
 
     if (document.fullscreenElement) {
-      void document.exitFullscreen().catch(() => undefined)
+      // Chrome may paint the restored toolbar before the native exit event.
+      // A new enter must wait for that event or the old exit cancels it later.
+      const exiting = new Promise<void>((resolve) => {
+        const complete = () => {
+          if (document.fullscreenElement) return
+          document.removeEventListener("fullscreenchange", complete)
+          resolve()
+        }
+        document.addEventListener("fullscreenchange", complete)
+        void document
+          .exitFullscreen()
+          .then(() => {
+            if (!document.fullscreenElement) requestAnimationFrame(complete)
+          })
+          .catch(() => {
+            document.removeEventListener("fullscreenchange", complete)
+            resolve()
+          })
+      })
+      exitPromiseRef.current = exiting
+      void exiting.then(() => {
+        if (exitPromiseRef.current === exiting) exitPromiseRef.current = null
+      })
     }
   }, [])
 
@@ -384,11 +407,12 @@ export function useHostPresentation(enabled: boolean) {
         return false
       }
 
-      targetRef.current = target
       setError(null)
       setIsPending(true)
 
       try {
+        await exitPromiseRef.current
+        targetRef.current = target
         await target.requestFullscreen()
 
         if (document.fullscreenElement !== target) {
@@ -422,6 +446,16 @@ export function useHostPresentation(enabled: boolean) {
       )
       setIsPending(false)
       setIsPresenting(active)
+
+      if (active) {
+        // Host chrome disappears after the fullscreen event. Refit the 16:9
+        // stage on the following painted frame, once its viewport has expanded.
+        requestAnimationFrame(() =>
+          requestAnimationFrame(() =>
+            window.dispatchEvent(new Event("resize")),
+          ),
+        )
+      }
 
       if (!active) {
         targetRef.current = null

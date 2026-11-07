@@ -99,6 +99,8 @@ class Game {
       displayName: string
       phoneE164: string | null
       phoneRaw?: string
+      tableNumber?: number
+      phoneNeedsReview?: boolean
       source: "web" | "phone"
       status: "not_joined" | "connected" | "disconnected"
       timedOut?: boolean
@@ -134,11 +136,10 @@ class Game {
       sidecar &&
       isQuizExtrasV2(sidecar) &&
       sidecar.questionIds.length === 10 &&
-      ["round-one", "top-pick", "story-progress", "grand-finale"].every(
-        (preset) =>
-          Object.values(sidecar.scenes).some(
-            (scene) => scene.kind === "animation" && scene.preset === preset,
-          ),
+      ["round-one", "top-pick", "round-recap", "grand-finale"].every((preset) =>
+        Object.values(sidecar.scenes).some(
+          (scene) => scene.kind === "animation" && scene.preset === preset,
+        ),
       ),
     )
 
@@ -206,6 +207,8 @@ class Game {
           displayName: item.displayName,
           phoneE164: normalized,
           phoneRaw: item.phoneRaw,
+          tableNumber: item.tableNumber,
+          phoneNeedsReview: item.phoneNeedsReview,
           source: normalized ? "phone" : "web",
           status: "not_joined",
           points: 0,
@@ -362,6 +365,7 @@ class Game {
       },
       onReplayCheckpoint: (qIdx) => {
         this.lastCompletedDistribution = null
+        this.showCoordinator?.restoreQuestionPosition(qIdx)
 
         if (this.extensionSession) {
           this.extensionSession.onReplayCheckpoint(qIdx)
@@ -386,6 +390,11 @@ class Game {
             this.showCoordinator?.onQuestionCompleted(qIdx)
           }
         : undefined,
+      onQuestionSkipped: this.showCoordinator
+        ? () => {
+            this.showCoordinator?.skipQuestionSequence()
+          }
+        : undefined,
       canPreviousTimelineStep: this.showCoordinator
         ? () => this.showCoordinator?.canPrevious() ?? { can: false }
         : undefined,
@@ -405,7 +414,11 @@ class Game {
             this.showCoordinator?.hasNextSceneResultsForQuestion(qIdx) ?? false
         : undefined,
       skipQuestionPreview: () => isCreatingWorlds,
-      quickResultsHoldSeconds: () => (isCreatingWorlds ? 5 : null),
+      // Five answer cards (~2s), then the existing 1.12s clock entrance.
+      votingEntranceMs: () => (isCreatingWorlds ? 4000 : 0),
+      // The server hold includes up to ~2 seconds of queued card/result
+      // choreography, leaving the completed percentages readable for ~5 seconds.
+      quickResultsHoldSeconds: () => (isCreatingWorlds ? 7 : null),
     })
 
     if (this.extensionSession) {
@@ -596,11 +609,17 @@ class Game {
                   ) as { dialNumber?: string } | undefined
                 )?.dialNumber
               : undefined,
-          connectedTables: [...this.rosterMap.values()].flatMap(
-            (entry, index) => (entry.status === "connected" ? [index + 1] : []),
-          ),
+          connectedTables: [
+            ...new Set(
+              [...this.rosterMap.values()].flatMap((entry, index) =>
+                entry.status === "connected"
+                  ? [entry.tableNumber ?? index + 1]
+                  : [],
+              ),
+            ),
+          ],
           representatives: [...this.rosterMap.values()].map((entry, index) => ({
-            table: index + 1,
+            table: entry.tableNumber ?? index + 1,
             name: entry.displayName,
           })),
         }),
@@ -682,12 +701,12 @@ class Game {
             if (!q) {
               continue
             }
-            // Skip questions that were skipped or not yet completed
-            if (hist?.skipped || ledger?.skipped) {
-              continue
-            }
-
-            if (!hist && !ledger) {
+            // Authored round recaps retain every question's position, even a
+            // skipped or empty vote. Other recap cards keep their legacy range.
+            if (
+              inputScene.kind !== "animation" &&
+              (hist?.skipped || ledger?.skipped || (!hist && !ledger))
+            ) {
               continue
             }
 
@@ -1311,7 +1330,23 @@ class Game {
       this._settings = { ...this._settings, phoneInviteOnly }
     }
 
-    // Keep currently connected/disconnected ad-hoc players, update/add imported pre-registered ones
+    // A replacement removes omitted pre-registrations and their stale indices.
+    // Ad-hoc players are retained; callers must explicitly kick those if wanted.
+    const incomingIds = new Set(participants.map((item) => item.rosterPlayerId))
+    const incomingPhones = new Set(
+      participants.flatMap((item) =>
+        item.phoneE164 ? [normalizePhoneE164(item.phoneE164)] : [],
+      ),
+    )
+    for (const entry of [...this.rosterMap.values()]) {
+      if (
+        entry.preRegistered &&
+        !incomingIds.has(entry.rosterPlayerId) &&
+        !incomingPhones.has(entry.phoneE164)
+      ) {
+        this.removeRosterParticipant(entry.rosterPlayerId)
+      }
+    }
     for (const item of participants) {
       const normalized = item.phoneE164
         ? normalizePhoneE164(item.phoneE164)
@@ -1330,6 +1365,8 @@ class Game {
         current.displayName = item.displayName
         current.phoneE164 = normalized
         current.phoneRaw = item.phoneRaw
+        current.tableNumber = item.tableNumber
+        current.phoneNeedsReview = item.phoneNeedsReview
         current.preRegistered = true
 
         if (normalized) {
@@ -1350,6 +1387,8 @@ class Game {
           displayName: item.displayName,
           phoneE164: normalized,
           phoneRaw: item.phoneRaw,
+          tableNumber: item.tableNumber,
+          phoneNeedsReview: item.phoneNeedsReview,
           source: normalized ? "phone" : "web",
           status: "not_joined",
           points: 0,
@@ -1442,6 +1481,8 @@ class Game {
         clientId: entry.clientId,
         displayName: livePlayer ? livePlayer.username : entry.displayName,
         phoneE164: entry.phoneE164,
+        tableNumber: entry.tableNumber,
+        phoneNeedsReview: entry.phoneNeedsReview,
         source: entry.source,
         status,
         timedOut: entry.timedOut,
@@ -1775,7 +1816,37 @@ class Game {
       }
     }
 
+    // Browser representatives identify their existing public table row by the
+    // configured display name. Match only one not-yet-bound pre-registered row;
+    // phone/explicit IDs above remain authoritative and connected rows cannot
+    // be taken over by another browser.
+    if (!rosterEntry && !normalizedPhone && username?.trim()) {
+      const normalizedName = username.trim().toLocaleLowerCase()
+      const matches = [...this.rosterMap.values()].filter(
+        (entry) =>
+          entry.preRegistered &&
+          entry.displayName.trim().toLocaleLowerCase() === normalizedName,
+      )
+
+      if (matches.length === 1) {
+        rosterEntry = matches[0]
+        if (
+          rosterEntry.status === "connected" &&
+          rosterEntry.clientId !== clientId
+        ) {
+          return "errors:game.playerAlreadyConnected"
+        }
+      }
+    }
+
     // 2. Enforce phoneInviteOnly for unknown phone callers
+    if (
+      !rosterEntry &&
+      this.isCreatingWorldsShow &&
+      [...this.rosterMap.values()].some((entry) => entry.preRegistered)
+    ) {
+      return "errors:game.locked"
+    }
     if (
       !rosterEntry &&
       (claimsExtra?.source === "phone" || normalizedPhone) &&

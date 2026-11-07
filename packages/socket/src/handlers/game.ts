@@ -9,6 +9,11 @@ import { getClientId } from "@razzia/socket/utils/socket"
 export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   const registry = Registry.getInstance()
   const clientId = getClientId(socket)
+  socket.on("extensions:clock", (ack) => {
+    if (typeof ack === "function") {
+      ack(Date.now())
+    }
+  })
 
   const closeLobby = (game: Game) => {
     game.abortCooldown()

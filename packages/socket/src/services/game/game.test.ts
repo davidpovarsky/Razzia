@@ -105,6 +105,34 @@ describe("joining a game", () => {
     )
   })
 
+  it("binds a browser representative to the configured table row by exact name", () => {
+    const { game, createSocket } = setup(createQuizz([createQuestion()]), [])
+    const rosterPlayerId = crypto.randomUUID()
+    game.replaceRosterParticipants(
+      [
+        {
+          rosterPlayerId,
+          displayName: "Table Representative",
+          phoneE164: null,
+        },
+      ],
+      false,
+    )
+
+    expect(
+      game.join(createSocket("representative"), "table representative"),
+    ).toBeNull()
+    const presence = game.getHostPresenceSnapshot()
+
+    expect(presence.registeredTotal).toBe(1)
+    expect(presence.connectedNow).toBe(1)
+    expect(presence.players[0]).toMatchObject({
+      rosterPlayerId,
+      displayName: "Table Representative",
+      status: "connected",
+    })
+  })
+
   it("notifies the manager and the players", () => {
     const { game, lastEvent } = setup(createQuizz([createQuestion()]))
 
@@ -676,10 +704,10 @@ describe("mixed quiz + survey gameplay and finish semantics", () => {
     const q2 = createQuestion({ solutions: [], playMode: "survey" })
     const quizz = createQuizz([q1, q2], QUIZZ_MODES.QUIZ)
 
-    const { game, sockets, start, reachAnswers, lastStatus } = setup(
-      quizz,
-      ["Alice", "Bob"],
-    )
+    const { game, sockets, start, reachAnswers, lastStatus } = setup(quizz, [
+      "Alice",
+      "Bob",
+    ])
     const [alice, bob] = sockets
 
     // Start game -> reach Q1 answers
@@ -753,10 +781,10 @@ describe("mixed quiz + survey gameplay and finish semantics", () => {
       })
       const quizz = createQuizz([q0, q1])
 
-      const { game, sockets, start, reachAnswers, lastStatus } = setup(
-        quizz,
-        ["Alice", "Bob"],
-      )
+      const { game, sockets, start, reachAnswers, lastStatus } = setup(quizz, [
+        "Alice",
+        "Bob",
+      ])
       const [alice, bob] = sockets
 
       await start()
@@ -845,8 +873,12 @@ describe("mixed quiz + survey gameplay and finish semantics", () => {
       expect(game.roundManager.currentStepName).toBe("reveal")
 
       // Both now have points
-      expect(game.players.find((p) => p.username === "Alice")?.points).toBeGreaterThan(0)
-      expect(game.players.find((p) => p.username === "Bob")?.points).toBeGreaterThan(0)
+      expect(
+        game.players.find((p) => p.username === "Alice")?.points,
+      ).toBeGreaterThan(0)
+      expect(
+        game.players.find((p) => p.username === "Bob")?.points,
+      ).toBeGreaterThan(0)
     })
   })
 })

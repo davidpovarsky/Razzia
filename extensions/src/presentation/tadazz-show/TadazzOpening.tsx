@@ -11,6 +11,8 @@ export const TADAZZ_OPENING_LOTTIE_URL =
 
 export const TADAZZ_OPENING_VIDEO_DURATION_MS = 7933
 
+export const TADAZZ_EVENT_ARTWORK_DURATION_MS = 2200
+
 export const TADAZZ_OPENING_SOUNDTRACK_DURATION_MS = 12000
 
 const lottieCache = new Map<string, Promise<Record<string, unknown> | null>>()
@@ -55,6 +57,7 @@ export interface TadazzOpeningProps {
   videoUrl?: string
   lottieUrl?: string
   eventArtworkUrl?: string
+  eventArtworkPending?: boolean
   onFinished: () => void
   onEnableSound?: () => void
   canSkip?: boolean
@@ -66,6 +69,7 @@ export function TadazzOpening({
   videoUrl = TADAZZ_OPENING_VIDEO_URL,
   lottieUrl = TADAZZ_OPENING_LOTTIE_URL,
   eventArtworkUrl,
+  eventArtworkPending = false,
   onFinished,
   onEnableSound,
   canSkip = false,
@@ -80,6 +84,10 @@ export function TadazzOpening({
   const [videoFailed, setVideoFailed] = useState(false)
   const [lottieReady, setLottieReady] = useState(false)
   const [soundRequested, setSoundRequested] = useState(false)
+  const [eventArtworkActive, setEventArtworkActive] = useState(
+    Boolean(eventArtworkUrl) || eventArtworkPending,
+  )
+  const brandTransitionActive = !eventArtworkActive
 
   const finish = useCallback(() => {
     if (finishedRef.current) {
@@ -102,7 +110,35 @@ export function TadazzOpening({
     }
   }, [lottieUrl])
 
+  // Wait briefly for the authoritative extension snapshot before choosing the
+  // opening. This prevents a brand-frame flash while Creating Worlds roster
+  // data is still arriving; games without event artwork continue normally.
   useEffect(() => {
+    if (!eventArtworkActive) {
+      return
+    }
+    if (eventArtworkUrl) {
+      const id = setTimeout(
+        () => setEventArtworkActive(false),
+        TADAZZ_EVENT_ARTWORK_DURATION_MS,
+      )
+
+      return () => clearTimeout(id)
+    }
+    if (!eventArtworkPending) {
+      setEventArtworkActive(false)
+
+      return
+    }
+    const id = setTimeout(() => setEventArtworkActive(false), 3000)
+
+    return () => clearTimeout(id)
+  }, [eventArtworkActive, eventArtworkPending, eventArtworkUrl])
+
+  useEffect(() => {
+    if (!brandTransitionActive) {
+      return
+    }
     const video = videoRef.current
 
     if (!video) {
@@ -113,77 +149,88 @@ export function TadazzOpening({
     video.muted = true
     video.volume = 0
     void video.play().catch(() => setVideoFailed(true))
-  }, [videoUrl])
+  }, [brandTransitionActive, videoUrl])
 
   useEffect(() => {
-    if (videoPlaying || videoFailed) {
+    if (!brandTransitionActive || videoPlaying || videoFailed) {
       return
     }
     const id = setTimeout(() => setVideoFailed(true), 2000)
 
     return () => clearTimeout(id)
-  }, [videoPlaying, videoFailed])
+  }, [brandTransitionActive, videoPlaying, videoFailed])
 
-  // A single monotonic visual clock reveals the QR lobby at 7.933 seconds,
-  // independent of decode, load, or media-ended races.
+  // The branded transition gets its complete verified runtime after the event
+  // artwork. Decode/load races cannot shorten either screen.
   useEffect(() => {
+    if (!brandTransitionActive) {
+      return
+    }
     const id = setTimeout(finish, TADAZZ_OPENING_VIDEO_DURATION_MS)
 
     return () => clearTimeout(id)
-  }, [finish])
+  }, [brandTransitionActive, finish])
 
-  const showLottie = Boolean(lottieData) && (videoPlaying || videoFailed)
+  const showLottie =
+    brandTransitionActive &&
+    Boolean(lottieData) &&
+    (videoPlaying || videoFailed)
 
   return (
     <div
       className="tz-opening"
       data-testid="tadazz-opening"
+      data-opening-phase={eventArtworkActive ? "event-artwork" : "brand"}
       data-video-playing={videoPlaying ? "true" : "false"}
       data-lottie-ready={lottieReady ? "true" : "false"}
     >
-      <img
-        className="tz-opening-poster"
-        src={TADAZZ_BACKDROP_URL}
-        alt=""
-        aria-hidden="true"
-      />
-      {!videoFailed && (
-        <video
-          ref={videoRef}
-          data-testid="tadazz-opening-video"
-          src={videoUrl}
-          playsInline
-          muted
-          disablePictureInPicture
-          preload="auto"
-          onVolumeChange={(event) => {
-            event.currentTarget.muted = true
-            event.currentTarget.volume = 0
-          }}
-          onPlaying={() => setVideoPlaying(true)}
-          onEnded={finish}
-          onError={() => setVideoFailed(true)}
-        />
-      )}
-      {showLottie && lottieData && (
-        <div
-          className="tz-opening-lottie"
-          style={{ opacity: lottieReady ? 1 : 0 }}
-        >
-          <LottiePlayer
-            data={lottieData}
-            loop={false}
-            autoplay
-            fit="contain"
-            finish="holdLastFrame"
-            dataTestId="tadazz-opening-lottie"
-            className="relative h-full w-full"
-            onReady={() => setLottieReady(true)}
-            onError={() => setLottieReady(false)}
+      {brandTransitionActive && (
+        <>
+          <img
+            className="tz-opening-poster"
+            src={TADAZZ_BACKDROP_URL}
+            alt=""
+            aria-hidden="true"
           />
-        </div>
+          {!videoFailed && (
+            <video
+              ref={videoRef}
+              data-testid="tadazz-opening-video"
+              src={videoUrl}
+              playsInline
+              muted
+              disablePictureInPicture
+              preload="auto"
+              onVolumeChange={(event) => {
+                event.currentTarget.muted = true
+                event.currentTarget.volume = 0
+              }}
+              onPlaying={() => setVideoPlaying(true)}
+              onEnded={finish}
+              onError={() => setVideoFailed(true)}
+            />
+          )}
+          {showLottie && lottieData && (
+            <div
+              className="tz-opening-lottie"
+              style={{ opacity: lottieReady ? 1 : 0 }}
+            >
+              <LottiePlayer
+                data={lottieData}
+                loop={false}
+                autoplay
+                fit="contain"
+                finish="holdLastFrame"
+                dataTestId="tadazz-opening-lottie"
+                className="relative h-full w-full"
+                onReady={() => setLottieReady(true)}
+                onError={() => setLottieReady(false)}
+              />
+            </div>
+          )}
+        </>
       )}
-      {eventArtworkUrl && (
+      {eventArtworkActive && eventArtworkUrl && (
         <img
           className="tz-opening-event-card"
           src={eventArtworkUrl}
@@ -191,7 +238,7 @@ export function TadazzOpening({
           data-testid="tadazz-opening-event-artwork"
         />
       )}
-      {onEnableSound && !soundRequested && (
+      {brandTransitionActive && onEnableSound && !soundRequested && (
         <button
           type="button"
           className="tz-opening-skip tz-opening-sound"
@@ -212,7 +259,7 @@ export function TadazzOpening({
           {labels.enableSound}
         </button>
       )}
-      {canSkip && (
+      {brandTransitionActive && canSkip && (
         <button
           type="button"
           className="tz-opening-skip"

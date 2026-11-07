@@ -81,9 +81,26 @@ export function TadazzLobbyScreen({
   // Creating Worlds is a hosted table show: show join code AND the full live
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
-  if (representatives?.length === 40) {
-    const sorted = [...representatives].sort((a, b) => a.table - b.table)
-    const connected = new Set(fullShowData?.connectedTables ?? [])
+  if (representatives?.length) {
+    const tables = [...new Set(representatives.map((rep) => rep.table))].sort(
+      (a, b) => a - b,
+    )
+    const sorted = tables.map((table) => ({
+      table,
+      names: representatives
+        .filter((rep) => rep.table === table)
+        .map((rep) => rep.name),
+      name: representatives
+        .filter((rep) => rep.table === table)
+        .map((rep) => rep.name)
+        .join(" / "),
+    }))
+    const columnSize = Math.ceil(sorted.length / 4)
+    const connected = new Set(
+      (fullShowData?.connectedTables ?? []).filter((table) =>
+        tables.includes(table),
+      ),
+    )
     const joinUrl = `${webUrl}?pin=${inviteCode ?? ""}`
     return (
       <div
@@ -123,7 +140,7 @@ export function TadazzLobbyScreen({
               className="tz-lobby-show-connected"
               data-testid="tadazz-lobby-count"
             >
-              {connected.size} / 40 TABLES CONNECTED
+              {connected.size} / {tables.length} TABLES CONNECTED
             </div>
           </aside>
           <section
@@ -137,24 +154,47 @@ export function TadazzLobbyScreen({
               {Array.from({ length: 4 }, (_, column) => (
                 <div className="tz-lobby-show-col" key={column}>
                   <div className="tz-lobby-show-col-label">
-                    TABLES {String(column * 10 + 1).padStart(2, "0")}–
-                    {String(column * 10 + 10).padStart(2, "0")}
+                    TABLES{" "}
+                    {String(sorted[column * columnSize]?.table ?? "").padStart(
+                      2,
+                      "0",
+                    )}
+                    –
+                    {String(
+                      sorted[
+                        Math.min(
+                          sorted.length - 1,
+                          (column + 1) * columnSize - 1,
+                        )
+                      ]?.table ?? "",
+                    ).padStart(2, "0")}
                   </div>
-                  {sorted.slice(column * 10, column * 10 + 10).map((rep) => {
-                    const joined = connected.has(rep.table)
-                    return (
-                      <div
-                        className={`tz-lobby-show-rep${joined ? " connected" : ""}`}
-                        key={rep.table}
-                        data-table={rep.table}
-                        data-testid="tadazz-lobby-representative"
-                      >
-                        <strong>{String(rep.table).padStart(2, "0")}</strong>
-                        <span title={rep.name}>{rep.name}</span>
-                        <i aria-label={joined ? "Connected" : "Waiting"} />
-                      </div>
-                    )
-                  })}
+                  {sorted
+                    .slice(column * columnSize, (column + 1) * columnSize)
+                    .map((rep) => {
+                      const joined = connected.has(rep.table)
+                      return (
+                        <div
+                          className={[
+                            "tz-lobby-show-rep",
+                            joined && "connected",
+                          ]
+                            .filter(Boolean)
+                            .join(" ")}
+                          key={rep.table}
+                          data-table={rep.table}
+                          data-testid="tadazz-lobby-representative"
+                        >
+                          <strong>{String(rep.table).padStart(2, "0")}</strong>
+                          <span title={rep.name}>
+                            {rep.names.map((name) => (
+                              <em key={name}>{name}</em>
+                            ))}
+                          </span>
+                          <i aria-label={joined ? "Connected" : "Waiting"} />
+                        </div>
+                      )
+                    })}
                 </div>
               ))}
             </div>
@@ -240,7 +280,12 @@ export function TadazzLobbyScreen({
               <button
                 type="button"
                 key={player.id}
-                className={`tz-x-pill${player.connected === false ? "is-lost" : ""}`}
+                className={[
+                  "tz-x-pill",
+                  player.connected === false && "is-lost",
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
                 title={tx("kickPlayer", "Remove player")}
                 onClick={() => kick(player.id)}
               >
@@ -400,7 +445,11 @@ export function TadazzPlayerResultScreen({
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-player-result">
       {!survey && (
-        <div className={`tz-result-badge${correct ? "" : "is-wrong"}`}>
+        <div
+          className={["tz-result-badge", !correct && "is-wrong"]
+            .filter(Boolean)
+            .join(" ")}
+        >
           {correct ? "✓" : "✕"}
         </div>
       )}

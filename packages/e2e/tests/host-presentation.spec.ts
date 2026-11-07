@@ -175,6 +175,9 @@ test("same-window host presentation hides manager UI and controls authoritative 
   await expect(shell).toHaveAttribute("data-host-presenting", "false")
   await expect(host.getByTestId("manager-control-toolbar")).toBeVisible()
   await expect(pin).toHaveText(originalPin ?? "")
+  await expect
+    .poll(() => host.evaluate(() => document.fullscreenElement === null))
+    .toBe(true)
 
   await host.getByTestId("host-present-from-host-btn").click()
   await expect(shell).toHaveAttribute("data-host-presenting", "true")

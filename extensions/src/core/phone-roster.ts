@@ -156,7 +156,9 @@ export function normalizePhoneE164(
 /**
  * Formats an E.164 phone number or raw input cleanly for display while keeping it FULL and UNMASKED.
  */
-export function formatFullPhoneDisplay(phoneE164: string | null | undefined): string {
+export function formatFullPhoneDisplay(
+  phoneE164: string | null | undefined,
+): string {
   if (!phoneE164?.trim()) {
     return "—"
   }
@@ -164,19 +166,20 @@ export function formatFullPhoneDisplay(phoneE164: string | null | undefined): st
   return phoneE164.trim()
 }
 
-export const rosterParticipantSchema = z
-  .strictObject({
-    rosterPlayerId: z.string().min(1),
-    displayName: z.string().trim().min(1).max(40),
-    phoneE164: z
-      .string()
-      .trim()
-      .regex(/^\+[1-9]\d{7,14}$/u, "errors:extensions.invalidPhoneNumber")
-      .nullable()
-      .optional()
-      .transform((val) => val ?? null),
-    phoneRaw: z.string().max(40).optional(),
-  })
+export const rosterParticipantSchema = z.strictObject({
+  rosterPlayerId: z.string().min(1),
+  displayName: z.string().trim().min(1).max(40),
+  phoneE164: z
+    .string()
+    .trim()
+    .regex(/^\+[1-9]\d{7,14}$/u, "errors:extensions.invalidPhoneNumber")
+    .nullable()
+    .optional()
+    .transform((val) => val ?? null),
+  phoneRaw: z.string().max(40).optional(),
+  tableNumber: z.number().int().min(1).max(2000).optional(),
+  phoneNeedsReview: z.boolean().optional(),
+})
 
 export type RosterParticipant = z.infer<typeof rosterParticipantSchema>
 
@@ -228,6 +231,8 @@ export const hostPlayerStatusSchema = z.strictObject({
   clientId: z.string().nullable(),
   displayName: z.string().min(1),
   phoneE164: z.string().nullable(),
+  tableNumber: z.number().int().min(1).max(2000).optional(),
+  phoneNeedsReview: z.boolean().optional(),
   source: z.enum(["web", "phone"]),
   status: z.enum(["not_joined", "connected", "disconnected"]),
   timedOut: z.boolean().optional(),

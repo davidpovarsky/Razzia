@@ -8,9 +8,22 @@ import {
   useState,
   type ReactNode,
 } from "react"
-import { FINALE, INTRO, confettiBit } from "./motion-spec"
-import { MotionEngine } from "./motion-engine"
+import {
+  TADAZZ_V4_LABELS,
+  TadazzV4Stage,
+  percentagesFor,
+  topIndicesFor,
+  type TadazzV4Answer,
+  type TadazzV4Cue,
+  type TadazzV4Data,
+  type TadazzV4Labels,
+  type TadazzV4StageHandle,
+} from "../tadazz-v4"
 import { DEFAULT_TADAZZ_STAGE_LABELS, type TadazzStageLabels } from "./labels"
+import { MotionEngine } from "./motion-engine"
+import { FINALE, INTRO, confettiBit } from "./motion-spec"
+import "./tadazz-motion-kit.css"
+import "./tadazz-show-adaptations.css"
 import {
   TADAZZ_LOGO_URL,
   type StageLeaderEntry,
@@ -23,22 +36,10 @@ import {
   type TadazzStageHandle,
   type TadazzStageProps,
 } from "./TadazzStage"
-import {
-  TADAZZ_V4_LABELS,
-  TadazzV4Stage,
-  percentagesFor,
-  topIndicesFor,
-  type TadazzV4Answer,
-  type TadazzV4Cue,
-  type TadazzV4Data,
-  type TadazzV4Labels,
-  type TadazzV4StageHandle,
-} from "../tadazz-v4"
-import "./tadazz-motion-kit.css"
-import "./tadazz-show-adaptations.css"
 
 export interface TadazzV4StageAdapterProps extends TadazzStageProps {
   v4Labels?: Partial<TadazzV4Labels>
+  fitRevision?: number
   onCue?: (cue: TadazzV4Cue) => void
 }
 
@@ -80,6 +81,7 @@ export const TadazzV4StageAdapter = forwardRef<
     underlay,
     overlay,
     reducedMotion = false,
+    fitRevision = 0,
     className,
     onModeChange,
     onCue,
@@ -118,6 +120,15 @@ export const TadazzV4StageAdapter = forwardRef<
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
   >(() => (customScreen ? "custom" : "none"))
+  // Lobby/wait/result custom screens may arrive after the persistent stage
+  // mounts. Keep them visible even if the director's first ref-dependent pump
+  // ran before the imperative handle was available.
+  useEffect(() => {
+    if (customScreen) {
+      modeRef.current = "custom"
+      setScreenMode("custom")
+    }
+  }, [customScreen])
   const [winner, setWinner] = useState<StageWinner | null>(null)
   const [confettiKey, setConfettiKey] = useState(0)
 
@@ -308,7 +319,10 @@ export const TadazzV4StageAdapter = forwardRef<
         cardsOnStageKeyRef.current = q.key
         const remaining =
           deadlineMs !== undefined
-            ? Math.max(0, (deadlineMs - Date.now()) / 1000)
+            ? Math.min(
+                seconds ?? Infinity,
+                Math.max(0, (deadlineMs - Date.now()) / 1000),
+              )
             : seconds
         const timed =
           seconds !== null && seconds > 0 && remaining !== null && remaining > 0
@@ -362,6 +376,12 @@ export const TadazzV4StageAdapter = forwardRef<
         if (!q || modeRef.current === "locked") return
         if (modeRef.current !== "voting" && modeRef.current !== "question")
           return
+        if (modeRef.current === "voting") {
+          // The server has closed acceptance. Paint zero before replacing the
+          // clock, including when a results packet wins the final RAF race.
+          v4Ref.current?.skipToEnd()
+          await new Promise<void>((resolve) => setTimeout(resolve, 120))
+        }
         setScreenMode("none")
         setMode("locked")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
@@ -637,7 +657,9 @@ export const TadazzV4StageAdapter = forwardRef<
   const customSlot: ReactNode = (
     <>
       <div
-        className={`tz-screen${screenMode === "intro" ? "is-visible" : ""}`}
+        className={["tz-screen", screenMode === "intro" && "is-visible"]
+          .filter(Boolean)
+          .join(" ")}
         data-testid="tadazz-intro-screen"
       >
         <div className="tz-screen-inner">
@@ -653,7 +675,9 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen${screenMode === "win" ? "is-visible" : ""}`}
+        className={["tz-screen", screenMode === "win" && "is-visible"]
+          .filter(Boolean)
+          .join(" ")}
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
@@ -701,7 +725,13 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen tz-custom-screen${screenMode === "custom" ? " is-visible" : ""}`}
+        className={[
+          "tz-screen",
+          "tz-custom-screen",
+          screenMode === "custom" && "is-visible",
+        ]
+          .filter(Boolean)
+          .join(" ")}
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">
@@ -720,6 +750,7 @@ export const TadazzV4StageAdapter = forwardRef<
         labels: v4Labels,
       }}
       reducedMotion={reducedMotion}
+      fitRevision={fitRevision}
       className={className}
       underlay={underlay}
       overlay={overlay}

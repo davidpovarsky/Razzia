@@ -139,5 +139,6 @@ export type ClientToServerEvents = {
         ) => void
       : (_message: z.infer<ClientEventValidators[E]>) => void
 } & {
+  "extensions:clock": (_ack: (_serverNow: number) => void) => void
   disconnect: () => void
 }

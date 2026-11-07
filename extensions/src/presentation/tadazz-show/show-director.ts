@@ -1,9 +1,9 @@
-import type { ShowScene } from "./presentation-scene"
 import {
   isFullShowScene,
-  type FullShowScene,
   type FullShowInput,
+  type FullShowScene,
 } from "../tadazz-v4/FullShowScenes"
+import type { ShowScene } from "./presentation-scene"
 import type {
   StageLeaderEntry,
   StageMode,
@@ -132,9 +132,10 @@ export function planTransition(
         op: "openVoting",
         seconds: next.seconds,
         deadlineMs:
-          remaining !== null && remaining !== undefined
+          next.votingEndsAt ??
+          (remaining !== null && remaining !== undefined
             ? now + remaining * 1000
-            : undefined,
+            : undefined),
       })
 
       return steps
@@ -473,16 +474,21 @@ function planScene(
             round: (scene as { round?: number }).round,
             winners: (activeSceneData?.answerRecap?.items ?? [])
               .slice(0, 5)
-              .flatMap((item) =>
+              .map((item) =>
                 item.winningOptions.length === 1
-                  ? [
-                      {
-                        label: item.winningOptions[0].label,
-                        image: item.winningOptions[0].imageUrl,
-                        alt: item.winningOptions[0].alt,
-                      },
-                    ]
-                  : [],
+                  ? {
+                      label: item.winningOptions[0].label,
+                      image: item.winningOptions[0].imageUrl,
+                      alt: item.winningOptions[0].alt,
+                    }
+                  : {
+                      label:
+                        item.winningOptions.length > 1
+                          ? item.winningOptions
+                              .map((option) => option.label)
+                              .join(" / ")
+                          : "—",
+                    },
               ),
           },
         ]
@@ -519,12 +525,19 @@ function planScene(
             }
           : prevQ
         const counts = r ? r.options.map((o) => o.count) : undefined
+        const tieData = activeSceneData?.fullShow
+        const resolvedCandidate =
+          typeof tieData?.tieResolvedIndex === "number"
+            ? tieData.tieCandidates?.[tieData.tieResolvedIndex]
+            : undefined
+        const topIndex = resolvedCandidate?.answerIndex
 
         return [
           {
             op: "showTopPick",
             question,
             counts,
+            topIndex,
             emptyMessage: scene.subtitle ?? scene.description,
           },
         ]

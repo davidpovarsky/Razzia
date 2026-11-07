@@ -1,9 +1,9 @@
 import { expect, test } from "@playwright/test"
 import { createHash } from "node:crypto"
-import { loginManager, next } from "../utils/manager"
+import { loginManager } from "../utils/manager"
 import { joinGame } from "../utils/player"
 
-const title = "Build Our Story — Tzila · Two-Round Audience Vote"
+const title = "Creating Worlds"
 const media = [
   [
     "tadazz-determination-20261106.mp3",
@@ -84,9 +84,14 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   await page.getByRole("button", { name: title, exact: true }).click()
   await page.getByRole("button", { name: "Start game", exact: true }).click()
 
+  const opening = page.getByTestId("tadazz-opening")
+  await expect(opening).toHaveAttribute("data-opening-phase", "event-artwork")
+  await expect(page.getByTestId("tadazz-opening-event-artwork")).toBeVisible()
+  await expect(page.getByTestId("tadazz-opening-video")).toHaveCount(0)
+  await expect(opening).toHaveAttribute("data-opening-phase", "brand")
+  await expect(page.getByTestId("tadazz-opening-event-artwork")).toHaveCount(0)
   const video = page.getByTestId("tadazz-opening-video")
   await expect(video).toBeVisible()
-  await expect(page.getByTestId("tadazz-opening-event-artwork")).toBeVisible()
   expect(
     await video.evaluate(
       (element: HTMLVideoElement) => element.muted && element.volume === 0,
@@ -99,7 +104,10 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   await page.getByTestId("tadazz-opening-skip").click()
   await expect(page.getByTestId("tadazz-lobby-pin")).toHaveText(/^\d{6}$/u)
   await expect(page.getByTestId("tadazz-lobby-qr")).toBeVisible()
-  await expect(page.getByTestId("tadazz-lobby-representative")).toHaveCount(40)
+  await expect(page.getByTestId("tadazz-lobby-representative")).toHaveCount(31)
+  await expect(
+    page.getByText("+44 330 613 1984", { exact: true }),
+  ).toBeVisible()
   await expect(page.locator(".tz-lobby-show-rep.connected")).toHaveCount(0)
   await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-url",
@@ -110,7 +118,12 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
     viewport: { width: 390, height: 844 },
   })
   const player = await playerContext.newPage()
-  await joinGame(player, code, "Candidate QA player")
+  const sidecar = await request.get(
+    "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
+    { headers: { Authorization: `Bearer ${token}` } },
+  )
+  const saved = await sidecar.json()
+  await joinGame(player, code, saved.extras.roster.participants[0].displayName)
   await page.waitForTimeout(1500)
 
   await page.getByRole("button", { name: "Start", exact: true }).click()
