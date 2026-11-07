@@ -701,7 +701,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen tz-custom-screen${screenMode === "custom" ? "is-visible" : ""}`}
+        className={`tz-screen tz-custom-screen${screenMode === "custom" ? " is-visible" : ""}`}
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">

@@ -144,7 +144,7 @@ export function TadazzLobbyScreen({
                     const joined = connected.has(rep.table)
                     return (
                       <div
-                        className={`tz-lobby-show-rep${joined ? "connected" : ""}`}
+                        className={`tz-lobby-show-rep${joined ? " connected" : ""}`}
                         key={rep.table}
                         data-table={rep.table}
                         data-testid="tadazz-lobby-representative"
