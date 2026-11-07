@@ -104,6 +104,10 @@ export interface RoundManagerOptions {
   }
   onPreviousTimelineStep?: () => boolean
   hasAuthoredResultsScene?: (questionIndex: number) => boolean
+  /** Picture-led shows open the answers directly, without two preview statuses. */
+  skipQuestionPreview?: () => boolean
+  /** Automatically hold one normal results reveal before the next scene (seconds). */
+  quickResultsHoldSeconds?: () => number | null
 }
 
 interface RoundStep {
@@ -180,7 +184,10 @@ export class RoundManager {
             return 0
           }
 
-          return settings.autoAdvance.responsesDelay
+          return (
+            this.opts.quickResultsHoldSeconds?.() ??
+            settings.autoAdvance.responsesDelay
+          )
         },
       },
       {
@@ -486,10 +493,10 @@ export class RoundManager {
     )
   }
 
-  private scheduleAutoAdvance(delay: number): void {
+  private scheduleAutoAdvance(delay: number, force = false): void {
     this.clearAutoAdvance()
 
-    if (!this.opts.getSettings().autoAdvance.enable) {
+    if (!force && !this.opts.getSettings().autoAdvance.enable) {
       return
     }
 
@@ -1110,7 +1117,9 @@ export class RoundManager {
     const delay = step.delay(this.opts.getSettings())
 
     if (delay > 0) {
-      this.scheduleAutoAdvance(delay)
+      const force =
+        step.name === "reveal" && this.opts.quickResultsHoldSeconds?.() != null
+      this.scheduleAutoAdvance(delay, force)
     }
   }
 
@@ -1167,36 +1176,31 @@ export class RoundManager {
       total: this.opts.quizz.questions.length,
     })
 
-    this.opts.broadcast(STATUS.SHOW_PREPARED, {
-      totalAnswers: this.question.answers.length,
-      questionNumber: this.currentQuestion + 1,
-      questionType: this.question.type,
-    })
+    // Tzila's picture-led show has ONE question screen: the question with its
+    // five answer cards. Skip legacy prepared/question-only preview broadcasts.
+    // All other quizzes retain their original prep and question cooldowns.
+    if (!this.opts.skipQuestionPreview?.()) {
+      this.opts.broadcast(STATUS.SHOW_PREPARED, {
+        totalAnswers: this.question.answers.length,
+        questionNumber: this.currentQuestion + 1,
+        questionType: this.question.type,
+      })
 
-    const ok1 = await this.cancellableSleep(2, gen)
+      const ok1 = await this.cancellableSleep(2, gen)
+      if (!ok1 || this.generation !== gen || !this.started) return
 
-    if (!ok1 || this.generation !== gen || !this.started) {
-      return
-    }
+      const imageMedia =
+        this.question.media?.type === MEDIA_TYPES.IMAGE
+          ? this.question.media
+          : undefined
+      this.opts.broadcast(STATUS.SHOW_QUESTION, {
+        question: this.question.question,
+        media: imageMedia,
+        cooldown: this.question.cooldown,
+      })
 
-    const imageMedia = (() => {
-      if (this.question.media?.type !== MEDIA_TYPES.IMAGE) {
-        return undefined
-      }
-
-      return this.question.media
-    })()
-
-    this.opts.broadcast(STATUS.SHOW_QUESTION, {
-      question: this.question.question,
-      media: imageMedia,
-      cooldown: this.question.cooldown,
-    })
-
-    const ok2 = await this.cancellableSleep(this.question.cooldown, gen)
-
-    if (!ok2 || this.generation !== gen || !this.started) {
-      return
+      const ok2 = await this.cancellableSleep(this.question.cooldown, gen)
+      if (!ok2 || this.generation !== gen || !this.started) return
     }
 
     this.startTime = Date.now()

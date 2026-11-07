@@ -86,6 +86,7 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
 
   const video = page.getByTestId("tadazz-opening-video")
   await expect(video).toBeVisible()
+  await expect(page.getByTestId("tadazz-opening-event-artwork")).toBeVisible()
   expect(
     await video.evaluate(
       (element: HTMLVideoElement) => element.muted && element.volume === 0,
@@ -98,6 +99,8 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   await page.getByTestId("tadazz-opening-skip").click()
   await expect(page.getByTestId("tadazz-lobby-pin")).toHaveText(/^\d{6}$/u)
   await expect(page.getByTestId("tadazz-lobby-qr")).toBeVisible()
+  await expect(page.getByTestId("tadazz-lobby-representative")).toHaveCount(40)
+  await expect(page.locator(".tz-lobby-show-rep.connected")).toHaveCount(0)
   await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-url",
     "/media/tadazz-exploration-20261106.mp3",
@@ -111,15 +114,13 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   await page.waitForTimeout(1500)
 
   await page.getByRole("button", { name: "Start", exact: true }).click()
-  await expect(page.locator('[data-v4-scene="company-opening"]')).toBeVisible()
-  await next(page)
-  await expect(page.locator('[data-v4-scene="grand-opening"]')).toBeVisible()
-  await next(page)
+  await expect(page.locator('[data-v4-scene="round-one"]')).toBeVisible()
+  // The artwork and 40-person roster belong BEFORE Start, never on the timeline.
+  await expect(page.locator('[data-v4-scene="company-opening"]')).toHaveCount(0)
   await expect(
     page.locator('[data-v4-scene="representative-directory"]'),
-  ).toBeVisible()
-  await expect(page.locator(".full-rep-row")).toHaveCount(40)
-  await expect(page.locator(".full-rep-row.connected")).toHaveCount(0)
+  ).toHaveCount(0)
+  await expect(page.locator('[data-v4-scene="interimResults"]')).toHaveCount(0)
 
   const originalUrl = page.url()
   await page.getByTestId("host-present-from-host-btn").click()
@@ -129,7 +130,7 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
   )
   await expect(page.getByTestId("manager-control-toolbar")).toHaveCount(0)
   await expect(page.getByTestId("tadazz-host-controls")).toHaveCount(0)
-  await expect(page.locator(".full-rep-row")).toHaveCount(40)
+  await expect(page.locator('[data-v4-scene="round-one"]')).toBeVisible()
   expect(page.url()).toBe(originalUrl)
   await page.keyboard.press("Escape")
   await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()

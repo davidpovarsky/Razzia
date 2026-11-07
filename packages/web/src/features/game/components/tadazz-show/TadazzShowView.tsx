@@ -575,6 +575,15 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               scene.inviteCode ?? managerState.inviteCode ?? undefined
             }
             isManager={manager && !isHostPresenting}
+            fullShowData={
+              extensionState?.extras.lobbyFullShow as
+                | {
+                    dialNumber?: string
+                    representatives?: Array<{ table: number; name: string }>
+                    connectedTables?: number[]
+                  }
+                | undefined
+            }
             text={scene.text}
           />
         )
@@ -747,6 +756,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   if (openingActive && openingEligible) {
     overlay = (
       <TadazzOpening
+        eventArtworkUrl={
+          extensionState?.extras.lobbyFullShow
+            ? "/tadazz-show/second-library/creating-worlds-intro.png"
+            : undefined
+        }
         onFinished={finishOpening}
         onEnableSound={
           manager && !isHostPresenting ? enableOpeningSound : undefined

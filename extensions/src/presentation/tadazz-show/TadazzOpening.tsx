@@ -54,6 +54,7 @@ export function preloadOpeningAssets(): void {
 export interface TadazzOpeningProps {
   videoUrl?: string
   lottieUrl?: string
+  eventArtworkUrl?: string
   onFinished: () => void
   onEnableSound?: () => void
   canSkip?: boolean
@@ -64,6 +65,7 @@ export interface TadazzOpeningProps {
 export function TadazzOpening({
   videoUrl = TADAZZ_OPENING_VIDEO_URL,
   lottieUrl = TADAZZ_OPENING_LOTTIE_URL,
+  eventArtworkUrl,
   onFinished,
   onEnableSound,
   canSkip = false,
@@ -180,6 +182,14 @@ export function TadazzOpening({
             onError={() => setLottieReady(false)}
           />
         </div>
+      )}
+      {eventArtworkUrl && (
+        <img
+          className="tz-opening-event-card"
+          src={eventArtworkUrl}
+          alt="Creating Worlds"
+          data-testid="tadazz-opening-event-artwork"
+        />
       )}
       {onEnableSound && !soundRequested && (
         <button

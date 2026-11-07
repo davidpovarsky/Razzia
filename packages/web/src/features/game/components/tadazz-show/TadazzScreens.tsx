@@ -3,7 +3,10 @@ import type { Player } from "@razzia/common/types/game"
 import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
 import type { SceneDescriptor } from "@razzia/extensions/presentation"
 import { TADAZZ_LOGO_URL } from "@razzia/extensions/presentation"
-import { useEvent, useSocket } from "@razzia/web/features/game/contexts/socket-context"
+import {
+  useEvent,
+  useSocket,
+} from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SFX } from "@razzia/web/features/game/utils/constants"
 import { Lock, X } from "lucide-react"
@@ -30,27 +33,42 @@ export function TadazzConnectingScreen() {
 export function TadazzLobbyScreen({
   inviteCode,
   isManager,
+  fullShowData,
   text,
 }: {
   inviteCode?: string
   isManager: boolean
+  fullShowData?: {
+    dialNumber?: string
+    representatives?: Array<{ table: number; name: string }>
+    connectedTables?: number[]
+  }
   text?: string
 }) {
   const { t } = useTranslation()
   const tx = useTadazzShellText()
   const { gameId, players, locked } = useManagerStore()
   const { socket } = useSocket()
-  const [list, setList] = useState<Array<Player & { timedOut?: boolean }>>(players)
+  const [list, setList] =
+    useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
   const webUrl = typeof window !== "undefined" ? window.location.origin : ""
   const host = typeof window !== "undefined" ? window.location.host : ""
 
   // Same live roster events as the legacy Room screen (manager only).
-  useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) => setList((l) => (l.some((p) => p.id === player.id) ? l : [...l, player])))
-  useEvent(EVENTS.MANAGER.REMOVE_PLAYER, (playerId) => setList((l) => l.filter((p) => p.id !== playerId)))
-  useEvent(EVENTS.MANAGER.PLAYER_KICKED, (playerId) => setList((l) => l.filter((p) => p.id !== playerId)))
+  useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) =>
+    setList((l) => (l.some((p) => p.id === player.id) ? l : [...l, player])),
+  )
+  useEvent(EVENTS.MANAGER.REMOVE_PLAYER, (playerId) =>
+    setList((l) => l.filter((p) => p.id !== playerId)),
+  )
+  useEvent(EVENTS.MANAGER.PLAYER_KICKED, (playerId) =>
+    setList((l) => l.filter((p) => p.id !== playerId)),
+  )
   useEvent(EVENTS.MANAGER.PLAYER_UPDATED, ({ previousId, player, timedOut }) =>
-    setList((l) => l.map((p) => (p.id === previousId ? { ...player, timedOut } : p))),
+    setList((l) =>
+      l.map((p) => (p.id === previousId ? { ...player, timedOut } : p)),
+    ),
   )
 
   const kick = (playerId: string) => {
@@ -59,6 +77,92 @@ export function TadazzLobbyScreen({
   }
 
   const isLocked = isManager ? locked : false
+
+  // Creating Worlds is a hosted table show: show join code AND the full live
+  // 40-representative roster in ONE public screen, without four follow-up pages.
+  const representatives = fullShowData?.representatives
+  if (representatives?.length === 40) {
+    const sorted = [...representatives].sort((a, b) => a.table - b.table)
+    const connected = new Set(fullShowData?.connectedTables ?? [])
+    const joinUrl = `${webUrl}?pin=${inviteCode ?? ""}`
+    return (
+      <div
+        className="tz-x-fill tz-lobby-show"
+        data-testid="tadazz-screen-lobby"
+      >
+        <header className="tz-lobby-show-brand">
+          <span>JOIN THE SHOW</span>
+          <img src={TADAZZ_LOGO_URL} alt="TADAZZ!" />
+        </header>
+        <div className="tz-lobby-show-main">
+          <aside className="tz-lobby-show-join tz-x-panel">
+            <div className="tz-lobby-show-small">JOIN THE GAME AT</div>
+            <div className="tz-lobby-show-url">{host || webUrl}</div>
+            <div className="tz-lobby-show-small">GAME PIN</div>
+            <div className="tz-lobby-show-pin" data-testid="tadazz-lobby-pin">
+              {inviteCode
+                ? isLocked
+                  ? inviteCode.replace(/./g, "#")
+                  : inviteCode
+                : "—"}
+            </div>
+            {inviteCode && !isLocked ? (
+              <div className="tz-lobby-show-qr" data-testid="tadazz-lobby-qr">
+                <QRCodeSVG value={joinUrl} />
+              </div>
+            ) : (
+              <div className="tz-lobby-show-qr tz-lobby-lock">
+                <Lock />
+              </div>
+            )}
+            <div className="tz-lobby-show-small">CALL TO JOIN</div>
+            <div className="tz-lobby-show-phone">
+              {fullShowData?.dialNumber?.trim() || "NUMBER NOT CONFIGURED"}
+            </div>
+            <div
+              className="tz-lobby-show-connected"
+              data-testid="tadazz-lobby-count"
+            >
+              {connected.size} / 40 TABLES CONNECTED
+            </div>
+          </aside>
+          <section
+            className="tz-lobby-show-roster"
+            data-testid="tadazz-full-directory"
+          >
+            <div className="tz-lobby-show-roster-title">
+              FIND YOUR TABLE REPRESENTATIVE
+            </div>
+            <div className="tz-lobby-show-grid">
+              {Array.from({ length: 4 }, (_, column) => (
+                <div className="tz-lobby-show-col" key={column}>
+                  <div className="tz-lobby-show-col-label">
+                    TABLES {String(column * 10 + 1).padStart(2, "0")}–
+                    {String(column * 10 + 10).padStart(2, "0")}
+                  </div>
+                  {sorted.slice(column * 10, column * 10 + 10).map((rep) => {
+                    const joined = connected.has(rep.table)
+                    return (
+                      <div
+                        className={`tz-lobby-show-rep${joined ? "connected" : ""}`}
+                        key={rep.table}
+                        data-table={rep.table}
+                        data-testid="tadazz-lobby-representative"
+                      >
+                        <strong>{String(rep.table).padStart(2, "0")}</strong>
+                        <span title={rep.name}>{rep.name}</span>
+                        <i aria-label={joined ? "Connected" : "Waiting"} />
+                      </div>
+                    )
+                  })}
+                </div>
+              ))}
+            </div>
+          </section>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="tz-x-fill" data-testid="tadazz-screen-lobby">
@@ -70,17 +174,27 @@ export function TadazzLobbyScreen({
       <div className="tz-lobby-join tz-x-panel">
         <div>
           <div className="tz-lobby-label">{t("game:joinInstruction")}</div>
-          <div className="tz-lobby-url" data-testid="tadazz-lobby-url">{host || webUrl}</div>
+          <div className="tz-lobby-url" data-testid="tadazz-lobby-url">
+            {host || webUrl}
+          </div>
         </div>
         <div className="tz-lobby-divider" />
         <div>
           <div className="tz-lobby-label">{t("game:gamePinLabel")}</div>
           <div className="tz-lobby-pin" data-testid="tadazz-lobby-pin">
-            {inviteCode ? (isLocked ? inviteCode.replace(/./g, "#") : inviteCode) : "—"}
+            {inviteCode
+              ? isLocked
+                ? inviteCode.replace(/./g, "#")
+                : inviteCode
+              : "—"}
           </div>
         </div>
         {isLocked || !inviteCode ? (
-          <div className="tz-lobby-qr tz-lobby-lock" aria-hidden="true" style={{ background: "transparent", border: 0, boxShadow: "none" }}>
+          <div
+            className="tz-lobby-qr tz-lobby-lock"
+            aria-hidden="true"
+            style={{ background: "transparent", border: 0, boxShadow: "none" }}
+          >
             {isLocked ? <Lock className="size-28" /> : null}
           </div>
         ) : (
@@ -93,7 +207,10 @@ export function TadazzLobbyScreen({
               <QRCodeSVG value={`${webUrl}?pin=${inviteCode}`} />
             </AlertDialog.Trigger>
             <AlertDialog.Portal>
-              <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/70" onClick={() => setQrOpen(false)} />
+              <AlertDialog.Overlay
+                className="fixed inset-0 z-50 bg-black/70"
+                onClick={() => setQrOpen(false)}
+              />
               <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6">
                 <button
                   type="button"
@@ -103,7 +220,10 @@ export function TadazzLobbyScreen({
                 >
                   <X className="text-foreground size-6" />
                 </button>
-                <QRCodeSVG className="size-56 md:size-70 lg:size-95" value={`${webUrl}?pin=${inviteCode}`} />
+                <QRCodeSVG
+                  className="size-56 md:size-70 lg:size-95"
+                  value={`${webUrl}?pin=${inviteCode}`}
+                />
               </AlertDialog.Content>
             </AlertDialog.Portal>
           </AlertDialog.Root>
@@ -112,14 +232,15 @@ export function TadazzLobbyScreen({
       {isManager && (
         <>
           <div className="tz-lobby-count" data-testid="tadazz-lobby-count">
-            <span>{t(text || "game:waitingForPlayers")}</span> <span>· {list.length}</span>
+            <span>{t(text || "game:waitingForPlayers")}</span>{" "}
+            <span>· {list.length}</span>
           </div>
           <div className="tz-lobby-players">
             {list.map((player) => (
               <button
                 type="button"
                 key={player.id}
-                className={`tz-x-pill${player.connected === false ? " is-lost" : ""}`}
+                className={`tz-x-pill${player.connected === false ? "is-lost" : ""}`}
                 title={tx("kickPlayer", "Remove player")}
                 onClick={() => kick(player.id)}
               >
@@ -129,32 +250,67 @@ export function TadazzLobbyScreen({
           </div>
         </>
       )}
-      {!isManager && <div className="tz-lobby-count">{t(text || "game:waitingForPlayers")}</div>}
+      {!isManager && (
+        <div className="tz-lobby-count">
+          {t(text || "game:waitingForPlayers")}
+        </div>
+      )}
     </div>
   )
 }
 
-export function TadazzMessageScreen({ eyebrow, headline, sub }: { eyebrow?: string; headline?: string; sub?: string }) {
+export function TadazzMessageScreen({
+  eyebrow,
+  headline,
+  sub,
+}: {
+  eyebrow?: string
+  headline?: string
+  sub?: string
+}) {
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-message">
       {eyebrow && <div className="tz-x-sub">{eyebrow}</div>}
       {headline && <div className="tz-x-headline">{headline}</div>}
-      {sub && <div className="tz-x-sub" style={{ letterSpacing: ".14em", fontSize: 28 }}>{sub}</div>}
+      {sub && (
+        <div
+          className="tz-x-sub"
+          style={{ letterSpacing: ".14em", fontSize: 28 }}
+        >
+          {sub}
+        </div>
+      )}
     </div>
   )
 }
 
-export function TadazzWaitScreen({ text }: { text: string; playerName?: string }) {
+export function TadazzWaitScreen({
+  text,
+}: {
+  text: string
+  playerName?: string
+}) {
   const { t } = useTranslation()
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-wait">
-      <img className="tz-x-logo" src={TADAZZ_LOGO_URL} alt="TADAZZ!" style={{ width: 520 }} />
+      <img
+        className="tz-x-logo"
+        src={TADAZZ_LOGO_URL}
+        alt="TADAZZ!"
+        style={{ width: 520 }}
+      />
       <div className="tz-x-sub">{text ? t(text) : ""}</div>
     </div>
   )
 }
 
-export function TadazzStartScreen({ subject, time }: { subject: string; time: number }) {
+export function TadazzStartScreen({
+  subject,
+  time,
+}: {
+  subject: string
+  time: number
+}) {
   const [showTitle, setShowTitle] = useState(true)
   const [cooldown, setCooldown] = useState(time)
   const [sfxBoump] = useSound(SFX.BOUMP_SOUND, { volume: 0.2 })
@@ -174,21 +330,40 @@ export function TadazzStartScreen({ subject, time }: { subject: string; time: nu
   )
 }
 
-export function TadazzPreparedScreen({ questionNumber, total }: { questionNumber: number; total: number | null }) {
+export function TadazzPreparedScreen({
+  questionNumber,
+  total,
+}: {
+  questionNumber: number
+  total: number | null
+}) {
   const tx = useTadazzShellText()
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-prepared">
       <div className="tz-x-sub">{tx("getReady", "GET READY")}</div>
       <div className="tz-x-headline">
         {total
-          ? tx("questionOfTotal", "QUESTION {{n}} / {{total}}", { n: String(questionNumber).padStart(2, "0"), total })
-          : tx("questionNumber", "QUESTION {{n}}", { n: String(questionNumber).padStart(2, "0") })}
+          ? tx("questionOfTotal", "QUESTION {{n}} / {{total}}", {
+              n: String(questionNumber).padStart(2, "0"),
+              total,
+            })
+          : tx("questionNumber", "QUESTION {{n}}", {
+              n: String(questionNumber).padStart(2, "0"),
+            })}
       </div>
     </div>
   )
 }
 
-export function TadazzSummaryScreen({ subject, totalPlayers, totalQuestions }: { subject: string; totalPlayers: number; totalQuestions: number }) {
+export function TadazzSummaryScreen({
+  subject,
+  totalPlayers,
+  totalQuestions,
+}: {
+  subject: string
+  totalPlayers: number
+  totalQuestions: number
+}) {
   const { t } = useTranslation()
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-summary">
@@ -224,7 +399,11 @@ export function TadazzPlayerResultScreen({
   const { t } = useTranslation()
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-player-result">
-      {!survey && <div className={`tz-result-badge${correct ? "" : " is-wrong"}`}>{correct ? "✓" : "✕"}</div>}
+      {!survey && (
+        <div className={`tz-result-badge${correct ? "" : "is-wrong"}`}>
+          {correct ? "✓" : "✕"}
+        </div>
+      )}
       <div className="tz-x-headline">{t(message)}</div>
       {!survey && (
         <div className="tz-x-sub" style={{ letterSpacing: ".12em" }}>
@@ -233,27 +412,62 @@ export function TadazzPlayerResultScreen({
           {aheadOfMe ? `${t("game:resultBehind")}${aheadOfMe}` : ""}
         </div>
       )}
-      {!survey && correct && <div className="tz-x-big" style={{ fontSize: 120 }}>+{points}</div>}
+      {!survey && correct && (
+        <div className="tz-x-big" style={{ fontSize: 120 }}>
+          +{points}
+        </div>
+      )}
     </div>
   )
 }
 
-export function TadazzPlayerFinishedScreen({ rank, subject, points }: { rank?: number; subject?: string; points: number }) {
+export function TadazzPlayerFinishedScreen({
+  rank,
+  subject,
+  points,
+}: {
+  rank?: number
+  subject?: string
+  points: number
+}) {
   const { t } = useTranslation()
   const tx = useTadazzShellText()
   return (
     <div className="tz-x-center" data-testid="tadazz-screen-player-finished">
-      <img className="tz-x-logo" src={TADAZZ_LOGO_URL} alt="TADAZZ!" style={{ width: 520 }} />
+      <img
+        className="tz-x-logo"
+        src={TADAZZ_LOGO_URL}
+        alt="TADAZZ!"
+        style={{ width: 520 }}
+      />
       {subject && <div className="tz-x-sub">{subject}</div>}
-      <div className="tz-x-headline">{typeof rank === "number" ? t("game:rank", { count: rank, ordinal: true }) : "—"}</div>
-      <div className="tz-x-pill">{tx("pointsShort", "{{points}} pts", { points })}</div>
+      <div className="tz-x-headline">
+        {typeof rank === "number"
+          ? t("game:rank", { count: rank, ordinal: true })
+          : "—"}
+      </div>
+      <div className="tz-x-pill">
+        {tx("pointsShort", "{{points}} pts", { points })}
+      </div>
     </div>
   )
 }
 
 /** Countdown driven by the authoritative server start time. */
-export function TadazzCountdownScreen({ title, startedAt, seconds }: { title?: string; startedAt?: number; seconds: number }) {
-  const compute = () => Math.max(0, Math.ceil(seconds - (Date.now() - (startedAt ?? Date.now())) / 1000))
+export function TadazzCountdownScreen({
+  title,
+  startedAt,
+  seconds,
+}: {
+  title?: string
+  startedAt?: number
+  seconds: number
+}) {
+  const compute = () =>
+    Math.max(
+      0,
+      Math.ceil(seconds - (Date.now() - (startedAt ?? Date.now())) / 1000),
+    )
   const [left, setLeft] = useState(compute)
   useEffect(() => {
     const id = setInterval(() => setLeft(compute()), 250)
@@ -268,27 +482,61 @@ export function TadazzCountdownScreen({ title, startedAt, seconds }: { title?: s
   )
 }
 
-export function TadazzRecapScreen({ title, recap }: { title?: string; recap: NonNullable<ActiveSceneData["answerRecap"]> }) {
+export function TadazzRecapScreen({
+  title,
+  recap,
+}: {
+  title?: string
+  recap: NonNullable<ActiveSceneData["answerRecap"]>
+}) {
   const tx = useTadazzShellText()
-  const items = recap.items.slice(0, Math.max(1, Math.min(6, recap.maxItemsPerPage || 4)))
+  const items = recap.items.slice(
+    0,
+    Math.max(1, Math.min(6, recap.maxItemsPerPage || 4)),
+  )
   return (
     <div className="tz-x-fill" data-testid="tadazz-screen-recap">
-      <div className="tz-x-eyebrow">{tx("recapEyebrow", "THE AUDIENCE HAS SPOKEN")}</div>
-      <div className="tz-x-title" style={{ fontSize: 72 }}>{title || tx("recapTitle", "ANSWER RECAP")}</div>
+      <div className="tz-x-eyebrow">
+        {tx("recapEyebrow", "THE AUDIENCE HAS SPOKEN")}
+      </div>
+      <div className="tz-x-title" style={{ fontSize: 72 }}>
+        {title || tx("recapTitle", "ANSWER RECAP")}
+      </div>
       <div className="tz-x-underline" />
       <div className="tz-recap-rows">
-        {items.length === 0 && <div className="tz-x-sub" style={{ textAlign: "center" }}>{tx("noResponses", "No responses recorded yet.")}</div>}
+        {items.length === 0 && (
+          <div className="tz-x-sub" style={{ textAlign: "center" }}>
+            {tx("noResponses", "No responses recorded yet.")}
+          </div>
+        )}
         {items.map((item) => {
-          const option = (recap.mode === "correctAnswer" ? item.correctOptions?.[0] : undefined) ?? item.winningOptions[0]
+          const option =
+            (recap.mode === "correctAnswer"
+              ? item.correctOptions?.[0]
+              : undefined) ?? item.winningOptions[0]
           return (
             <div key={item.questionId} className="tz-leader-row tz-recap-row">
               <div className="tz-rank">{item.questionNumber}</div>
               <div className="tz-team-name">
-                <div style={{ fontSize: 22, color: "#d1b1ff", fontWeight: 800 }}>{item.questionText}</div>
-                <div>{option ? option.label : tx("noResponses", "No responses recorded yet.")}</div>
+                <div
+                  style={{ fontSize: 22, color: "#d1b1ff", fontWeight: 800 }}
+                >
+                  {item.questionText}
+                </div>
+                <div>
+                  {option
+                    ? option.label
+                    : tx("noResponses", "No responses recorded yet.")}
+                </div>
               </div>
-              {option?.imageUrl && <img src={option.imageUrl} alt={option.alt || option.label} />}
-              {option && recap.showPercentages && <div className="tz-team-score">{Math.round(option.percentage)}%</div>}
+              {option?.imageUrl && (
+                <img src={option.imageUrl} alt={option.alt || option.label} />
+              )}
+              {option && recap.showPercentages && (
+                <div className="tz-team-score">
+                  {Math.round(option.percentage)}%
+                </div>
+              )}
             </div>
           )
         })}
@@ -298,12 +546,29 @@ export function TadazzRecapScreen({ title, recap }: { title?: string; recap: Non
 }
 
 export function TadazzSceneTitleScreen({ scene }: { scene: SceneDescriptor }) {
-  return <TadazzMessageScreen headline={scene.title} sub={scene.subtitle ?? scene.description} />
+  return (
+    <TadazzMessageScreen
+      headline={scene.title}
+      sub={scene.subtitle ?? scene.description}
+    />
+  )
 }
 
-export function TadazzInterludeScreen({ interlude, startedAt }: { interlude: Interlude; startedAt?: number }) {
+export function TadazzInterludeScreen({
+  interlude,
+  startedAt,
+}: {
+  interlude: Interlude
+  startedAt?: number
+}) {
   if (interlude.kind === "countdown") {
-    return <TadazzCountdownScreen title={interlude.title} startedAt={startedAt} seconds={Math.round(interlude.durationMs / 1000)} />
+    return (
+      <TadazzCountdownScreen
+        title={interlude.title}
+        startedAt={startedAt}
+        seconds={Math.round(interlude.durationMs / 1000)}
+      />
+    )
   }
   return <TadazzMessageScreen headline={interlude.title} />
 }
@@ -313,7 +578,12 @@ export function TadazzEstimationResultScreen({
   estimation,
 }: {
   question: string
-  estimation?: { target: number; closestGuess?: number; median?: number; guessesCount: number }
+  estimation?: {
+    target: number
+    closestGuess?: number
+    median?: number
+    guessesCount: number
+  }
 }) {
   const tx = useTadazzShellText()
   return (
@@ -323,13 +593,27 @@ export function TadazzEstimationResultScreen({
         <>
           <div className="tz-x-big">{estimation.target}</div>
           <div style={{ display: "flex", gap: 24 }}>
-            {estimation.closestGuess !== undefined && <div className="tz-x-pill">{tx("closestGuess", "Closest: {{v}}", { v: estimation.closestGuess })}</div>}
-            {estimation.median !== undefined && <div className="tz-x-pill">{tx("median", "Median: {{v}}", { v: estimation.median })}</div>}
-            <div className="tz-x-pill">{tx("guesses", "{{n}} guesses", { n: estimation.guessesCount })}</div>
+            {estimation.closestGuess !== undefined && (
+              <div className="tz-x-pill">
+                {tx("closestGuess", "Closest: {{v}}", {
+                  v: estimation.closestGuess,
+                })}
+              </div>
+            )}
+            {estimation.median !== undefined && (
+              <div className="tz-x-pill">
+                {tx("median", "Median: {{v}}", { v: estimation.median })}
+              </div>
+            )}
+            <div className="tz-x-pill">
+              {tx("guesses", "{{n}} guesses", { n: estimation.guessesCount })}
+            </div>
           </div>
         </>
       ) : (
-        <div className="tz-x-headline">{tx("noResponses", "No responses recorded yet.")}</div>
+        <div className="tz-x-headline">
+          {tx("noResponses", "No responses recorded yet.")}
+        </div>
       )}
     </div>
   )

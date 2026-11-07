@@ -192,7 +192,11 @@ export const TadazzV4StageAdapter = forwardRef<
         question: q.question,
         note: q.note,
         number: q.number,
-        round: q.round ?? (q.totalQuestions === 10 && q.number ? Math.floor((q.number - 1) / 5) + 1 : 1),
+        round:
+          q.round ??
+          (q.totalQuestions === 10 && q.number
+            ? Math.floor((q.number - 1) / 5) + 1
+            : 1),
         totalQuestions: q.totalQuestions,
         answers: toV4Answers(q.options),
         questionImage: q.questionImage,
@@ -298,6 +302,7 @@ export const TadazzV4StageAdapter = forwardRef<
         const q = questionRef.current
         if (!q || modeRef.current === "results") return
         setScreenMode("none")
+        const isAlreadyVoting = modeRef.current === "voting"
         setMode("voting")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key
@@ -307,6 +312,18 @@ export const TadazzV4StageAdapter = forwardRef<
             : seconds
         const timed =
           seconds !== null && seconds > 0 && remaining !== null && remaining > 0
+        if (isAlreadyVoting && alreadyOnStage) {
+          // COOLDOWN ticks must never replay the entrance/clock animation.
+          v4Ref.current?.patchData(
+            buildQuestionData(q, {
+              seconds,
+              remainingSeconds: remaining,
+              deadlineMs,
+              cardsAlreadyOnStage: true,
+            }),
+          )
+          return
+        }
         if (isPhotoQuestion(q)) {
           if (alreadyOnStage) {
             v4Ref.current?.patchData(
@@ -620,7 +637,7 @@ export const TadazzV4StageAdapter = forwardRef<
   const customSlot: ReactNode = (
     <>
       <div
-        className={`tz-screen${screenMode === "intro" ? " is-visible" : ""}`}
+        className={`tz-screen${screenMode === "intro" ? "is-visible" : ""}`}
         data-testid="tadazz-intro-screen"
       >
         <div className="tz-screen-inner">
@@ -636,7 +653,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen${screenMode === "win" ? " is-visible" : ""}`}
+        className={`tz-screen${screenMode === "win" ? "is-visible" : ""}`}
         data-testid="tadazz-finale-screen"
       >
         <div className="tz-screen-inner">
@@ -684,7 +701,7 @@ export const TadazzV4StageAdapter = forwardRef<
       </div>
 
       <div
-        className={`tz-screen tz-custom-screen${screenMode === "custom" ? " is-visible" : ""}`}
+        className={`tz-screen tz-custom-screen${screenMode === "custom" ? "is-visible" : ""}`}
         data-testid="tadazz-custom-screen"
       >
         <div className="tz-screen-inner">

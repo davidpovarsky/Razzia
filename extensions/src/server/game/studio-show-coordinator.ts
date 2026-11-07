@@ -138,8 +138,14 @@ export class StudioShowCoordinator {
    */
   hasAuthoredOpeningAtStart(): boolean {
     const first = this.runner.getItem(0)
+    const firstScene = this.runner.getCurrentStep()?.scene
 
-    return first?.kind === "opening"
+    return (
+      first?.kind === "opening" ||
+      (first?.kind === "animation" &&
+        firstScene?.kind === "animation" &&
+        firstScene.preset === "company-opening")
+    )
   }
 
   /**

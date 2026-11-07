@@ -32,16 +32,44 @@ def patch_show(source: dict) -> tuple[dict, dict]:
         and scene_for(step).get("groupPage") is not None
     ]
     pages = sorted(scene_for(step).get("groupPage") for step in grouped)
-    if len(full_directory) != 1 or pages != [0, 1, 2, 3]:
+    interim = [step for step in timeline if step.get("kind") == "interimResults"]
+    prejoin = [
+        step for step in timeline
+        if scene_for(step).get("preset") in ("company-opening", "grand-opening", "phone-instructions", "connection-readiness")
+    ] + full_directory
+    old_openings = [scene_for(step).get("preset") for step in prejoin]
+    if len(full_directory) not in (0, 1) or pages not in ([0, 1, 2, 3], []):
         raise ValueError(
             f"Unexpected directory layout: full={len(full_directory)}, pages={pages}"
         )
-    dropped_ids = {step["sceneId"] for step in grouped}
-    updated["timeline"] = [step for step in timeline if step not in grouped]
+    if old_openings and sorted(old_openings) != sorted([
+        "company-opening", "grand-opening", "representative-directory",
+        "phone-instructions", "connection-readiness"
+    ]):
+        raise ValueError(f"Unexpected authored pre-join screens: {old_openings}")
+    if len(interim) not in (0, 10):
+        raise ValueError(f"Unexpected interimResults count: {len(interim)}")
+    if sum(step.get("kind") == "question" for step in timeline) != 10:
+        raise ValueError("Not Tzila's original ten-question story")
+    for index, step in enumerate(timeline):
+        if step.get("kind") != "question":
+            continue
+        following = [it for it in timeline[index + 1:] if it.get("kind") not in ("interimResults",)]
+        if not following or scene_for(following[0]).get("preset") != "tie-break":
+            raise ValueError("Unexpected question-to-tie-break sequence")
+    removed = grouped + interim + prejoin
+    dropped_ids = {step["sceneId"] for step in removed}
+    removed_step_ids = {step["id"] for step in removed}
+    updated["timeline"] = [step for step in timeline if step["id"] not in removed_step_ids]
     remaining_ids = {
         step.get("sceneId") for step in updated["timeline"] if step.get("sceneId")
     }
     for scene_id in dropped_ids - remaining_ids:
+        # Keep the full directory as a settings-only scene. The phone number
+        # is authored there and used by the public lobby before Start Game.
+        if scenes.get(scene_id, {}).get("preset") == "representative-directory" and \
+           scenes[scene_id].get("groupPage") is None:
+            continue
         scenes.pop(scene_id, None)
 
     tracks = updated["audio"]["soundtrack"]
@@ -54,14 +82,16 @@ def patch_show(source: dict) -> tuple[dict, dict]:
     opening = tracks["openingIntro"]
     if opening.get("loop") is not False or opening.get("maxDurationMs") != 12000:
         raise ValueError("Unexpected original timed opening - refusing to alter it")
-    if len(updated["timeline"]) != len(timeline) - 4:
+    if len(updated["timeline"]) != len(timeline) - len(removed):
         raise AssertionError("Unexpected timeline changes")
 
     return updated, {
         "oldSteps": len(timeline),
         "newSteps": len(updated["timeline"]),
         "removedFocusedPages": pages,
-        "fullDirectoryCount": 1,
+        "removedInterimResults": len(interim),
+        "relocatedPreJoinScreens": old_openings,
+        "fullDirectoryInLobby": True,
         "loopedTracks": ["roundStart", "finale"],
         "openingPreserved": True,
     }

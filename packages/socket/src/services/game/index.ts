@@ -73,6 +73,7 @@ class Game {
   private readonly cooldown: CooldownTimer
   private readonly extensionSession: ExtensionGameSession | null
   private readonly showCoordinator: StudioShowCoordinator | null = null
+  private readonly isCreatingWorldsShow: boolean
   private lastCompletedDistribution: RevealDistributionSnapshot | null = null
   private managerGraceTimer: NodeJS.Timeout | null = null
 
@@ -128,7 +129,20 @@ class Game {
 
     const quizzId = (quizz as { id?: string }).id
     const sidecar = quizzId ? readSidecar(getPath, quizzId) : null
+    // Scope fast picture voting strictly to the authored Creating Worlds show.
+    const isCreatingWorlds = Boolean(
+      sidecar &&
+      isQuizExtrasV2(sidecar) &&
+      sidecar.questionIds.length === 10 &&
+      ["round-one", "top-pick", "story-progress", "grand-finale"].every(
+        (preset) =>
+          Object.values(sidecar.scenes).some(
+            (scene) => scene.kind === "animation" && scene.preset === preset,
+          ),
+      ),
+    )
 
+    this.isCreatingWorldsShow = isCreatingWorlds
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
@@ -363,7 +377,9 @@ class Game {
           }
         : undefined,
       skipShowStartCountdown: this.showCoordinator
-        ? () => this.showCoordinator?.hasAuthoredOpeningAtStart() ?? false
+        ? () =>
+            this.isCreatingWorldsShow ||
+            (this.showCoordinator?.hasAuthoredOpeningAtStart() ?? false)
         : undefined,
       onQuestionCompleted: this.showCoordinator
         ? (qIdx) => {
@@ -388,6 +404,8 @@ class Game {
         ? (qIdx) =>
             this.showCoordinator?.hasNextSceneResultsForQuestion(qIdx) ?? false
         : undefined,
+      skipQuestionPreview: () => isCreatingWorlds,
+      quickResultsHoldSeconds: () => (isCreatingWorlds ? 5 : null),
     })
 
     if (this.extensionSession) {
@@ -568,6 +586,16 @@ class Game {
         },
         getFullShowData: () => ({
           isLive: true,
+          dialNumber:
+            sidecar && isQuizExtrasV2(sidecar)
+              ? (
+                  Object.values(sidecar.scenes).find(
+                    (scene) =>
+                      scene.kind === "animation" &&
+                      scene.preset === "representative-directory",
+                  ) as { dialNumber?: string } | undefined
+                )?.dialNumber
+              : undefined,
           connectedTables: [...this.rosterMap.values()].flatMap(
             (entry, index) => (entry.status === "connected" ? [index + 1] : []),
           ),
@@ -1586,9 +1614,16 @@ class Game {
     const statusData = { name: status, data }
     this.lastBroadcastStatus = statusData
     const publicStatus = this.sanitizeStatusForAudience(statusData)
+
+    // For Creating Worlds, the per-question image/answer metadata MUST arrive
+    // before the five-card voting status. Otherwise the browser briefly pairs
+    // the next question text with the previous question pictures.
+    if (this.isCreatingWorldsShow && this.extensionSession) {
+      this.syncExtensionStatus(status)
+    }
     this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, publicStatus)
 
-    if (this.extensionSession) {
+    if (!this.isCreatingWorldsShow && this.extensionSession) {
       this.syncExtensionStatus(status)
     }
   }
@@ -1598,7 +1633,14 @@ class Game {
       return
     }
 
-    if (status === STATUS.SHOW_QUESTION) {
+    if (
+      status === STATUS.SHOW_QUESTION ||
+      (status === STATUS.SELECT_ANSWER &&
+        this.showCoordinator?.currentPhase === "question" &&
+        this.extensionSession.currentPhase !== "question")
+    ) {
+      // The picture-led show skips SHOW_QUESTION: initialize its authoritative
+      // per-question visuals when the five-card voting screen first opens.
       this.extensionSession.onQuestionStart(this.round.currentQuestionIndex)
     } else {
       const phaseMap: Partial<

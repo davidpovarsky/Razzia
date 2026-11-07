@@ -23,22 +23,47 @@ it("adds every source show preset to the original ten questions, preserving auth
       : [],
   )
   for (const preset of CREATING_WORLDS_PRESETS) {
-    expect(presets).toContain(preset)
+    if (
+      [
+        "company-opening",
+        "grand-opening",
+        "representative-directory",
+        "phone-instructions",
+        "connection-readiness",
+      ].includes(preset)
+    ) {
+      expect(presets).not.toContain(preset)
+    } else {
+      expect(presets).toContain(preset)
+    }
   }
   expect(
     complete.timeline.filter((item) => item.kind === "question"),
   ).toHaveLength(10)
-  const directorySteps = complete.timeline.filter((item) =>
-    item.kind === "animation" &&
-    (complete.scenes[item.sceneId] as { preset?: string }).preset ===
-      "representative-directory",
+  const directorySteps = complete.timeline.filter(
+    (item) =>
+      item.kind === "animation" &&
+      (complete.scenes[item.sceneId] as { preset?: string }).preset ===
+        "representative-directory",
   )
-  // The full 40-representative directory must be shown just once.
-  expect(directorySteps).toHaveLength(1)
-  expect(complete.timeline).toHaveLength(66)
+  // The full 40-representative directory is now part of the join lobby, not the timeline.
+  expect(directorySteps).toHaveLength(0)
   expect(
-    (complete.scenes[(directorySteps[0] as { sceneId: string }).sceneId] as { groupPage?: number }).groupPage,
-  ).toBeUndefined()
+    Object.values(complete.scenes).filter(
+      (s) => s.kind === "animation" && s.preset === "representative-directory",
+    ),
+  ).toHaveLength(1)
+  expect(complete.timeline).toHaveLength(51)
+  expect(complete.timeline.some((item) => item.kind === "interimResults")).toBe(
+    false,
+  )
+  for (let index = 0; index < complete.timeline.length - 1; index++) {
+    if (complete.timeline[index]?.kind !== "question") continue
+    const next = complete.timeline[index + 1]
+    const scene =
+      next?.kind === "animation" ? complete.scenes[next.sceneId] : undefined
+    expect(scene && "preset" in scene ? scene.preset : null).toBe("tie-break")
+  }
   const original = {
     rosterPlayerId: "real",
     displayName: "Existing representative",

@@ -38,6 +38,7 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
     preset: (typeof CREATING_WORLDS_PRESETS)[number],
     round = 1,
     props: Record<string, unknown> = {},
+    onTimeline = true,
   ) => {
     const id = crypto.randomUUID()
     extras.scenes[id] = {
@@ -49,14 +50,15 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
       durationMs: 10000,
       ...props,
     }
-    timeline.push({ id: crypto.randomUUID(), kind: "animation", sceneId: id })
+    if (onTimeline) {
+      timeline.push({ id: crypto.randomUUID(), kind: "animation", sceneId: id })
+    }
   }
-  scene("company-opening")
-  scene("grand-opening")
-  // The complete 40-table directory is presented once; do not repeat it in four groups.
-  scene("representative-directory")
-  scene("phone-instructions")
-  scene("connection-readiness")
+  // Preserve the editable dial-in number/roster scene metadata without creating
+  // another on-stage directory. The public lobby renders the directory once.
+  scene("representative-directory", 1, {}, false)
+  // Creating Worlds artwork, join instructions and live connection readiness
+  // are lobby-only. Start Game enters the first-round title immediately.
   scene("round-one")
   extras.questionIds.forEach((qid, i) => {
     const round = Math.floor(i / 5) + 1
@@ -65,18 +67,8 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
       kind: "question",
       questionId: qid,
     })
-    const id = crypto.randomUUID()
-    extras.scenes[id] = {
-      id,
-      kind: "interimResults",
-      advance: "manual",
-      durationMs: 5000,
-    }
-    timeline.push({
-      id: crypto.randomUUID(),
-      kind: "interimResults",
-      sceneId: id,
-    })
+    // The normal results reveal happens immediately after voting ends.
+    // Do not add a second interimResults scene after every question.
     // The server skips this step before broadcast when there is no genuine tie.
     scene("tie-break", round)
     scene("top-pick", round)

@@ -64,6 +64,7 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   const audio = host.getByTestId("audio-cue-player-state")
   const video = host.getByTestId("tadazz-opening-video")
   await expect(video).toBeVisible()
+  await expect(host.getByTestId("tadazz-opening-event-artwork")).toBeVisible()
   expect(
     await video.evaluate(
       (element: HTMLVideoElement) => element.muted && element.volume === 0,
@@ -81,6 +82,8 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   const pin = host.getByTestId("tadazz-lobby-pin")
   await expect(pin).toHaveText(/^\d{6}$/u)
   await expect(host.getByTestId("tadazz-lobby-qr")).toBeVisible()
+  await expect(host.getByTestId("tadazz-lobby-representative")).toHaveCount(40)
+  await expect(host.locator(".tz-lobby-show-rep.connected")).toHaveCount(0)
   await expect(audio).toHaveAttribute(
     "data-audio-url",
     "/media/tadazz-exploration-20261106.mp3",
@@ -132,24 +135,15 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
     await host.waitForTimeout(500)
   }
 
-  await scene("company-opening")
-  await host.screenshot({ path: join(evidence, "01-company-opening.png") })
-  await advance()
-  await scene("grand-opening")
-  await advance()
-  await scene("representative-directory")
-  await expect(host.locator(".full-rep-row")).toHaveCount(40)
-  await expect(host.locator(".full-rep-row.connected")).toHaveCount(0)
-  await host.screenshot({ path: join(evidence, "02-directory-40.png") })
-  // Advance directly from the full directory. The four 10-table duplicates were removed.
-  await advance()
-  await scene("phone-instructions")
-  await expect(host.locator(".full-phone-key")).toHaveCount(12)
-  await advance()
-  await scene("connection-readiness")
-  await expect(host.locator(".full-table-led")).toHaveCount(40)
-  await advance()
+  // Creating Worlds artwork, phone/QR and all 40 table representatives
+  // appear before Start Game. No duplicate company, directory, phone or
+  // connection-readiness scenes are permitted in the question timeline.
   await scene("round-one")
+  await expect(host.locator('[data-v4-scene="company-opening"]')).toHaveCount(0)
+  await expect(
+    host.locator('[data-v4-scene="representative-directory"]'),
+  ).toHaveCount(0)
+  await expect(host.locator('[data-v4-scene="interimResults"]')).toHaveCount(0)
   await expect(audio).toHaveAttribute(
     "data-audio-url",
     "/media/tadazz-prepare-to-fight-20261106.mp3",
@@ -218,12 +212,12 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
         `result-${String(question + 1).padStart(2, "0")}.png`,
       ),
     })
-    await host.waitForTimeout(1800)
+    // Exactly one results reveal automatically advances to top-pick (or
+    // the manual tie decision), without an interim-results screen.
     if (question === 0) {
       await host.keyboard.press("Escape")
       await expect(host.getByTestId("manager-control-toolbar")).toBeVisible()
     }
-    await nextHost(host)
 
     if (question === 1) {
       await scene("tie-break")

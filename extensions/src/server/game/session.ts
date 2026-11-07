@@ -309,6 +309,19 @@ export class ExtensionGameSession {
 
     const extrasPayload: Record<string, unknown> = {}
 
+    // The public Creating Worlds join lobby shows the SAME authoritative 40
+    // representatives/connection states as the stage, before the show starts.
+    if (
+      this.extras &&
+      isQuizExtrasV2(this.extras) &&
+      this.showCoordinator?.currentPhase === "lobby"
+    ) {
+      const lobbyData = this.delegate?.getFullShowData?.()
+      if (lobbyData?.representatives?.length === 40) {
+        extrasPayload.lobbyFullShow = lobbyData
+      }
+    }
+
     // Team scores and assignments
     if (this.extras?.teams.enabled) {
       extrasPayload.teamScores = this.getTeamScores(players)
