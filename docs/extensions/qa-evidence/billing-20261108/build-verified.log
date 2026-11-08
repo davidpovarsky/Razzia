@@ -24,7 +24,7 @@ packages/web build: dist/assets/index-FenIYSQy.css                              
 packages/web build: dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
 packages/web build: dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
 packages/web build: dist/assets/index-xsKI0xFY.js                              2,745.37 kB │ gzip: 715.63 kB
-packages/web build: [plugin builtin:vite-reporter] 
+packages/web build: [plugin builtin:vite-reporter]
 packages/web build: (!) Some chunks are larger than 2000 kB after minification. Consider:
 packages/web build: - Using dynamic import() to code-split the application
 packages/web build: - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
