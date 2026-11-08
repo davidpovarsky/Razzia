@@ -22,10 +22,11 @@ import {
   Monitor,
   Pause,
   Play,
+  RotateCcw,
   SkipForward,
   Timer,
 } from "lucide-react"
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useMemo, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 /**
@@ -386,60 +387,6 @@ export const ManagerControlToolbar = ({
         "question",
     )
 
-  useEffect(() => {
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape" && historyOpen) {
-        setHistoryOpen(false)
-
-        return
-      }
-
-      if (e.key === " " || e.key === "Enter") {
-        if (shouldIgnoreKeyboardShortcut(e, historyOpen)) {
-          return
-        }
-
-        if (statusName === STATUS.SELECT_ANSWER) {
-          e.preventDefault()
-          handleEndTimer()
-        } else if (
-          statusName === STATUS.SHOW_RESPONSES ||
-          statusName === STATUS.SHOW_LEADERBOARD ||
-          isInterlude ||
-          isScene
-        ) {
-          e.preventDefault()
-          handleNextScreen()
-        }
-      }
-
-      if (e.altKey && e.key === "ArrowLeft") {
-        if (
-          !shouldIgnoreKeyboardShortcut(e, historyOpen, true) &&
-          canPrevious
-        ) {
-          e.preventDefault()
-          handlePreviousScreen()
-        }
-      }
-    }
-
-    window.addEventListener("keydown", handleKeyDown)
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown)
-    }
-  }, [
-    historyOpen,
-    statusName,
-    isInterlude,
-    isScene,
-    canPrevious,
-    handleEndTimer,
-    handleNextScreen,
-    handlePreviousScreen,
-  ])
-
   // Active viewing history snapshot normalized from backend QuestionResult or HistorySummaryItem
   const viewingHistoryEnvelope = extensionState?.extras.viewingHistory as
     | {
@@ -464,6 +411,14 @@ export const ManagerControlToolbar = ({
     statusName === STATUS.SHOW_QUESTION ||
     statusName === STATUS.SELECT_ANSWER
   const canEndTimer = statusName === STATUS.SELECT_ANSWER
+  const canRestartQuestion =
+    !isLobby &&
+    !isFinished &&
+    (questionStates?.current ?? 0) > 0 &&
+    (statusName === STATUS.SHOW_QUESTION ||
+      statusName === STATUS.SELECT_ANSWER ||
+      statusName === STATUS.SHOW_RESPONSES ||
+      phase === "responses")
   const canNextScreen =
     statusName === STATUS.SHOW_RESPONSES ||
     statusName === STATUS.SHOW_LEADERBOARD ||
@@ -579,7 +534,7 @@ export const ManagerControlToolbar = ({
         )}
 
         {/* Previous Screen Button (authoritative one-click step back, permanently at upper LEFT) */}
-        {!isLobby && (
+        {gameId && (
           <>
             <Button
               onClick={handlePreviousScreen}
@@ -597,7 +552,7 @@ export const ManagerControlToolbar = ({
                 "relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold shadow-md transition-all active:scale-95 sm:px-4 sm:py-2 sm:text-base",
                 canPrevious && !isPending
                   ? "bg-white text-black hover:bg-white/90"
-                  : "pointer-events-none border border-white/10 bg-white/10 text-white/40 opacity-40",
+                  : "border border-white/10 bg-white/10 text-white/40 opacity-40",
               )}
               data-testid="host-previous-screen-btn"
             >
@@ -645,6 +600,34 @@ export const ManagerControlToolbar = ({
 
       {/* Right section: Control buttons */}
       <div className="flex min-w-0 flex-wrap items-center gap-1.5 sm:ml-auto sm:gap-2">
+        {canRestartQuestion && (
+          <AlertDialog
+            trigger={
+              <Button
+                disabled={isPending}
+                className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white hover:bg-white/30"
+                data-testid="host-restart-question-btn"
+              >
+                <RotateCcw className="size-4" />
+                {t("extensions:host.restartQuestion")}
+              </Button>
+            }
+            title={t("extensions:host.restartQuestion")}
+            description={t("extensions:host.restartQuestionDesc")}
+            confirmLabel={t("extensions:host.restartQuestion")}
+            confirmTestId="confirm-restart-question-btn"
+            onConfirm={() =>
+              sendCommand({
+                action: "REPLAY_FROM_CHECKPOINT",
+                payload: {
+                  questionIndex: currentQuestionIdx,
+                  epoch,
+                  confirmed: true,
+                },
+              })
+            }
+          />
+        )}
         {/* Lobby Start Game */}
         {isLobby && onStartGame && (
           <Button
@@ -751,6 +734,13 @@ export const ManagerControlToolbar = ({
           </Button>
         )}
       </div>
+
+      <p
+        className="w-full text-xs text-white/70"
+        data-testid="host-shortcut-hint"
+      >
+        {t("extensions:host.doublePressShortcuts")}
+      </p>
 
       {/* History Viewer Modal */}
       <HistoryDialog

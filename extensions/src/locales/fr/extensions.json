@@ -220,7 +220,10 @@
     "reopenConfirmButton": "Continuer",
     "cancelActiveVoteConfirmTitle": "Annuler le vote actif",
     "cancelActiveVoteConfirmDesc": "Revenir en arrière annulera le tour de vote en cours et ignorera les réponses envoyées. Continuer ?",
-    "cannotPreviousLobby": "Au début du spectacle"
+    "cannotPreviousLobby": "Au début du spectacle",
+    "restartQuestion": "Recommencer la question",
+    "restartQuestionDesc": "La question actuelle redémarre ; ses réponses et son score sont effacés. Les autres questions sont conservées.",
+    "doublePressShortcuts": "Appuyez deux fois : ← Retour · → Suivant / passer la question · Espace Pause / reprendre · Entrée Terminer le chrono"
   },
   "reveal": {
     "votes": "{{count}} votes",

@@ -183,11 +183,13 @@ const GameWrapper = ({
     isHostPresentingConfirmed || isHostPresentationPending
 
   useHostPresentationCommands({
-    enabled: Boolean(manager && isHostPresenting),
+    enabled: Boolean(manager && isEnhancedQuiz),
     statusName,
     extensionState,
     currentQuestion: questionStates?.current ?? 0,
-    onExit: exitHostPresentation,
+    onExit: () => {
+      if (isHostPresenting) exitHostPresentation()
+    },
     onAdvanceFallback: onNext,
   })
 

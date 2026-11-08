@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest"
 import {
   resolvePresentationShortcut,
   shouldIgnorePresentationShortcut,
+  isDoublePress,
+  DOUBLE_PRESS_WINDOW_MS,
 } from "./host-presentation-controller"
 
 describe("P0 host presentation keyboard map", () => {
@@ -9,19 +11,33 @@ describe("P0 host presentation keyboard map", () => {
     resolvePresentationShortcut({ key: value, shiftKey })
 
   it("keeps next, timer and pause as separate actions", () => {
-    expect(key(" ")).toBe("next")
-    expect(key("Enter")).toBe("next")
+    expect(key(" ")).toBe("pause-toggle")
+    expect(key("Enter")).toBe("end-timer")
     expect(key("ArrowRight")).toBe("next")
-    expect(key("t")).toBe("end-timer")
-    expect(key("P")).toBe("pause-toggle")
+    expect(key("t")).toBeNull()
+    expect(key("P")).toBeNull()
   })
 
   it("maps destructive chords without using browser Alt+Left", () => {
-    expect(key("ArrowRight", true)).toBe("skip-question")
-    expect(key("S", true)).toBe("skip-question")
-    expect(key("ArrowLeft", true)).toBe("replay-previous-question")
+    expect(key("ArrowRight", true)).toBeNull()
+    expect(key("S", true)).toBeNull()
+    expect(key("ArrowLeft", true)).toBeNull()
     expect(key("ArrowLeft")).toBe("previous")
     expect(key("Escape")).toBe("exit")
+  })
+
+  it("requires two matching presses inside the half-second window", () => {
+    expect(DOUBLE_PRESS_WINDOW_MS).toBe(500)
+    expect(isDoublePress(null, "ArrowRight", 1000)).toBe(false)
+    expect(
+      isDoublePress({ chord: "ArrowRight", until: 1500 }, "ArrowRight", 1300),
+    ).toBe(true)
+    expect(
+      isDoublePress({ chord: "ArrowRight", until: 1500 }, "ArrowLeft", 1300),
+    ).toBe(false)
+    expect(
+      isDoublePress({ chord: "ArrowRight", until: 1500 }, "ArrowRight", 1501),
+    ).toBe(false)
   })
 
   it("ignores repeats, modifiers, interactive focus and dialogs", () => {

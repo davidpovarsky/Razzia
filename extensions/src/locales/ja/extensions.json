@@ -220,7 +220,10 @@
     "reopenConfirmButton": "続行",
     "cancelActiveVoteConfirmTitle": "進行中の投票をキャンセル",
     "cancelActiveVoteConfirmDesc": "戻ると現在の投票ラウンドがキャンセルされ、送信された回答は破棄されます。続行しますか？",
-    "cannotPreviousLobby": "ショーの開始地点です"
+    "cannotPreviousLobby": "ショーの開始地点です",
+    "restartQuestion": "この質問をやり直す",
+    "restartQuestionDesc": "現在の質問を最初からやり直し、回答と得点を消去します。他の質問は保持されます。",
+    "doublePressShortcuts": "2回押す：← 戻る · → 次へ／質問をスキップ · スペース 一時停止／再開 · Enter タイマー終了"
   },
   "reveal": {
     "votes": "{{count}} 票",

@@ -757,6 +757,8 @@ export class RoundManager {
     }
 
     if (this.currentStep < 0) {
+      if (this.opts.canPreviousTimelineStep)
+        return this.opts.canPreviousTimelineStep()
       return { can: false, reason: "Question starting" }
     }
 

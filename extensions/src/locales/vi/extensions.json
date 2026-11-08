@@ -220,7 +220,10 @@
     "reopenConfirmButton": "Tiếp tục",
     "cancelActiveVoteConfirmTitle": "Hủy bỏ bình chọn đang diễn ra",
     "cancelActiveVoteConfirmDesc": "Quay lại sẽ hủy vòng bình chọn hiện tại và loại bỏ các câu trả lời đã gửi. Tiếp tục?",
-    "cannotPreviousLobby": "Ở đầu buổi diễn"
+    "cannotPreviousLobby": "Ở đầu buổi diễn",
+    "restartQuestion": "Bắt đầu lại câu hỏi",
+    "restartQuestionDesc": "Bắt đầu lại câu hỏi hiện tại và xóa câu trả lời cùng điểm của câu này. Các câu hỏi khác được giữ nguyên.",
+    "doublePressShortcuts": "Nhấn hai lần: ← Quay lại · → Tiếp / bỏ qua câu hỏi · Phím cách Tạm dừng / tiếp tục · Enter Kết thúc đếm giờ"
   },
   "reveal": {
     "votes": "{{count}} lượt bình chọn",

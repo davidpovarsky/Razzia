@@ -486,7 +486,20 @@ class Game {
         },
         getAnswersCount: () => this.round.getAnswerCount(),
         skipQuestion: (reason) => this.round.skipQuestion(reason),
-        replayFromCheckpoint: (qIdx) => this.round.replayFromCheckpoint(qIdx),
+        replayFromCheckpoint: (qIdx) => {
+          // Restarting the live question keeps participants who joined after its
+          // checkpoint. Earlier history replay retains its existing rewind semantics.
+          if (qIdx !== this.round.currentQuestionIndex)
+            return this.round.replayFromCheckpoint(qIdx)
+          this.clearQuestionVerdicts(qIdx)
+          const ok = this.round.reopenQuestion(qIdx)
+          if (ok) {
+            this.syncRosterScoresFromPlayers()
+            this.broadcastHostPresence()
+            this.broadcastExtensionState()
+          }
+          return ok
+        },
         endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
         getHistory: (qIdx) => this.round.getHistory(qIdx),
         advanceTimelineScene: (sceneId, epoch, timelineStepIndex) =>

@@ -220,7 +220,10 @@
     "reopenConfirmButton": "Continue",
     "cancelActiveVoteConfirmTitle": "Cancel Active Vote",
     "cancelActiveVoteConfirmDesc": "Navigating back will cancel the current voting round and discard submitted answers. Continue?",
-    "cannotPreviousLobby": "At start of show"
+    "cannotPreviousLobby": "At start of show",
+    "restartQuestion": "Restart question",
+    "restartQuestionDesc": "This restarts the current question and clears its answers and score. Other questions are preserved.",
+    "doublePressShortcuts": "Double press: ← Back · → Next / skip question · Space Pause / resume · Enter End timer"
   },
   "reveal": {
     "votes": "{{count}} votes",

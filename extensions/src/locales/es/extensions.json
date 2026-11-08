@@ -220,7 +220,10 @@
     "reopenConfirmButton": "Continuar",
     "cancelActiveVoteConfirmTitle": "Cancelar votación activa",
     "cancelActiveVoteConfirmDesc": "Volver atrás cancelará la ronda de votación actual y descartará las respuestas enviadas. ¿Continuar?",
-    "cannotPreviousLobby": "Al inicio del programa"
+    "cannotPreviousLobby": "Al inicio del programa",
+    "restartQuestion": "Reiniciar pregunta",
+    "restartQuestionDesc": "Reinicia la pregunta actual y borra sus respuestas y puntuación. Las demás preguntas se conservan.",
+    "doublePressShortcuts": "Pulsa dos veces: ← Atrás · → Siguiente / saltar pregunta · Espacio Pausar / continuar · Intro Terminar temporizador"
   },
   "reveal": {
     "votes": "{{count}} votos",

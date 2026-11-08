@@ -220,7 +220,10 @@
     "reopenConfirmButton": "Fortfahren",
     "cancelActiveVoteConfirmTitle": "Aktive Abstimmung abbrechen",
     "cancelActiveVoteConfirmDesc": "Wenn Sie zurückgehen, wird die aktuelle Abstimmungsrunde abgebrochen und die abgegebenen Antworten werden verworfen. Fortfahren?",
-    "cannotPreviousLobby": "Am Anfang der Show"
+    "cannotPreviousLobby": "Am Anfang der Show",
+    "restartQuestion": "Frage neu starten",
+    "restartQuestionDesc": "Die aktuelle Frage wird neu gestartet. Ihre Antworten und Punkte werden gelöscht. Andere Fragen bleiben erhalten.",
+    "doublePressShortcuts": "Zweimal drücken: ← Zurück · → Weiter / Frage überspringen · Leertaste Pause / Fortsetzen · Eingabe Timer beenden"
   },
   "reveal": {
     "votes": "{{count}} Stimmen",

@@ -14,7 +14,7 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest"
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
-function timerFixture() {
+function timerFixture(withTimeline = false) {
   const fake = createFakeIo()
   const players = new PlayerManager({
     io: fake.io,
@@ -48,6 +48,15 @@ function timerFixture() {
     votingEntranceMs: () => 4000,
     skipShowStartCountdown: () => true,
     onShowStart: (proceed) => proceed(),
+    ...(withTimeline
+      ? {
+          canPreviousTimelineStep: () => ({
+            can: true,
+            willReopenQuestion: true,
+          }),
+          onPreviousTimelineStep: () => true,
+        }
+      : {}),
   })
   void round.start(fake.createSocket("manager"))
 
@@ -126,6 +135,15 @@ it("cancels pending entrance when voting is cancelled", async () => {
   const { round } = timerFixture()
   await vi.advanceTimersByTimeAsync(1000)
   round.cancelActiveVote()
+  await vi.advanceTimersByTimeAsync(10000)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  round.dispose()
+})
+
+it("allows timeline back during question entrance and cancels the pending vote", async () => {
+  const { round } = timerFixture(true)
+  expect(round.canPrevious().can).toBe(true)
+  expect(round.previousScreen()).toBe(true)
   await vi.advanceTimersByTimeAsync(10000)
   expect(round.isCurrentlyAcceptingAnswers).toBe(false)
   round.dispose()

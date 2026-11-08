@@ -7,16 +7,10 @@ import {
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
 import { useCallback, useEffect, useRef, useState } from "react"
 
-const CONFIRM_WINDOW_MS = 2000
+export const DOUBLE_PRESS_WINDOW_MS = 500
 
 export type PresentationShortcut =
-  | "next"
-  | "previous"
-  | "end-timer"
-  | "pause-toggle"
-  | "skip-question"
-  | "replay-previous-question"
-  | "exit"
+  "next" | "previous" | "end-timer" | "pause-toggle" | "exit"
 
 export function shouldIgnorePresentationShortcut(
   event: KeyboardEvent,
@@ -67,37 +61,31 @@ export function resolvePresentationShortcut(
   if (event.key === "Escape") {
     return "exit"
   }
-  if (event.shiftKey && event.key === "ArrowRight") {
-    return "skip-question"
-  }
-  if (event.shiftKey && event.key.toLowerCase() === "s") {
-    return "skip-question"
-  }
-  if (event.shiftKey && event.key === "ArrowLeft") {
-    return "replay-previous-question"
-  }
-
   if (event.shiftKey) {
     return null
   }
-  if (
-    event.key === " " ||
-    event.key === "Enter" ||
-    event.key === "ArrowRight"
-  ) {
+  if (event.key === "ArrowRight") {
     return "next"
   }
 
   if (event.key === "ArrowLeft") {
     return "previous"
   }
-  if (event.key.toLowerCase() === "t") {
+  if (event.key === "Enter") {
     return "end-timer"
   }
-  if (event.key.toLowerCase() === "p") {
+  if (event.key === " ") {
     return "pause-toggle"
   }
   return null
+}
+
+export function isDoublePress(
+  previous: { chord: string; until: number } | null,
+  chord: string,
+  now: number,
+): boolean {
+  return previous?.chord === chord && previous.until >= now
 }
 
 export interface HostPresentationCommandOptions {
@@ -145,7 +133,6 @@ export function useHostPresentationCommands({
   }
 
   useEffect(() => {
-    confirmationRef.current = null
     pendingRef.current = false
 
     if (pendingTimerRef.current) {
@@ -153,6 +140,12 @@ export function useHostPresentationCommands({
     }
     pendingTimerRef.current = null
   }, [extensionState?.seq, extensionState?.epoch])
+
+  // Presence/clock snapshots can arrive between the two physical presses.
+  // They must not cancel a valid double press.
+  useEffect(() => {
+    confirmationRef.current = null
+  }, [extensionState?.gameId])
 
   useEffect(() => {
     if (!enabled) {
@@ -211,13 +204,13 @@ export function useHostPresentationCommands({
       const now = Date.now()
       const pending = confirmationRef.current
 
-      if (pending?.chord === chord && pending.until >= now) {
+      if (isDoublePress(pending, chord, now)) {
         confirmationRef.current = null
 
         return true
       }
 
-      confirmationRef.current = { chord, until: now + CONFIRM_WINDOW_MS }
+      confirmationRef.current = { chord, until: now + DOUBLE_PRESS_WINDOW_MS }
 
       return false
     }
@@ -225,12 +218,14 @@ export function useHostPresentationCommands({
     const handleKeyDown = (event: KeyboardEvent) => {
       const { current } = latestRef
       if (!current.enabled || shouldIgnorePresentationShortcut(event)) {
+        if (!event.repeat) confirmationRef.current = null
         return
       }
       const chord = `${event.shiftKey ? "Shift+" : ""}${event.key}`
       const shortcut = resolvePresentationShortcut(event)
 
       if (!shortcut) {
+        confirmationRef.current = null
         return
       }
 
@@ -242,6 +237,8 @@ export function useHostPresentationCommands({
 
         return
       }
+
+      if (!confirmDestructive(chord)) return
 
       const state = current.extensionState
 
@@ -278,8 +275,18 @@ export function useHostPresentationCommands({
       if (shortcut === "next") {
         if (
           current.statusName === STATUS.SELECT_ANSWER &&
-          state.phase !== "responses"
+          state.phase !== "responses" &&
+          !isScene
         ) {
+          send(
+            "SKIP_QUESTION",
+            {
+              epoch,
+              questionIndex: Math.max(0, current.currentQuestion - 1),
+              reason: "Double-press next question",
+            },
+            `${state.seq}`,
+          )
           return
         }
         if (isInterlude) {
@@ -305,45 +312,15 @@ export function useHostPresentationCommands({
 
       if (shortcut === "previous") {
         const canPrevious = state.extras.canPrevious === true
-        const destructive = state.extras.willReopenQuestion === true
-
-        if (canPrevious && !destructive) {
-          send("PREVIOUS_SCREEN", { epoch, phase: state.phase }, `${state.seq}`)
+        if (canPrevious) {
+          send(
+            "PREVIOUS_SCREEN",
+            { epoch, phase: state.phase, confirmed: true },
+            `${state.seq}`,
+          )
         }
 
         return
-      }
-
-      if (shortcut === "skip-question") {
-        if (!confirmDestructive(chord)) {
-          return
-        }
-        send(
-          "SKIP_QUESTION",
-          {
-            epoch,
-            questionIndex: Math.max(0, current.currentQuestion - 1),
-            reason: "Host presentation double-chord skip",
-          },
-          `${state.seq}`,
-        )
-
-        return
-      }
-
-      if (shortcut === "replay-previous-question") {
-        if (current.currentQuestion <= 1 || !confirmDestructive(shortcut)) {
-          return
-        }
-        send(
-          "REPLAY_FROM_CHECKPOINT",
-          {
-            epoch,
-            questionIndex: current.currentQuestion - 2,
-            confirmed: true,
-          },
-          `${state.seq}`,
-        )
       }
     }
 
