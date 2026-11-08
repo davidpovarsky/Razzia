@@ -625,5 +625,6 @@ export function renderFullShowScene(
   if (!isFullShowScene(scene)) {
     return null
   }
+
   return <FullShowSceneView scene={scene} data={data} />
 }

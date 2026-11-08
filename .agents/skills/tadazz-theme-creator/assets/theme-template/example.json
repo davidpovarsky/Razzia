@@ -11,9 +11,20 @@
   "posterAssetId": "classic-poster",
   "provenance": "Current source-controlled Goldy/TADAZZ native v4 adapter and canonical motion specifications. No motion keyframes changed by theme extraction.",
   "capabilities": {
-    "playModes": ["quiz", "survey"],
-    "questionTypes": ["single", "multi", "estimation"],
-    "roles": ["manager", "player", "spectator"],
+    "playModes": [
+      "quiz",
+      "survey"
+    ],
+    "questionTypes": [
+      "single",
+      "multi",
+      "estimation"
+    ],
+    "roles": [
+      "manager",
+      "player",
+      "spectator"
+    ],
     "minAnswers": 2,
     "maxAnswers": 64,
     "reducedMotion": "same-theme-static",
@@ -285,7 +296,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -302,7 +316,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.lobby.accent",
@@ -313,7 +330,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"],
+          "roles": [
+            "manager",
+            "spectator"
+          ],
           "assetId": "classic-confirm"
         }
       ],
@@ -332,7 +352,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.showQuestion.silent",
@@ -343,7 +366,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -361,7 +387,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "epoch",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.answersMusic.silent",
@@ -372,7 +401,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "epoch",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -389,7 +421,9 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["player"]
+          "roles": [
+            "player"
+          ]
         }
       ],
       "customMedia": false
@@ -407,7 +441,9 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["player"]
+          "roles": [
+            "player"
+          ]
         },
         {
           "id": "tadazz-classic.audio.answerSubmitted.silent",
@@ -418,7 +454,9 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["player"]
+          "roles": [
+            "player"
+          ]
         }
       ],
       "customMedia": false
@@ -436,7 +474,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.timerWarning.silent",
@@ -447,7 +488,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.timerWarning.urgent",
@@ -459,7 +503,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.timerWarning.final",
@@ -471,7 +518,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -489,7 +539,10 @@
           "priority": 90,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.timerExpired.silent",
@@ -500,7 +553,10 @@
           "priority": 90,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -518,7 +574,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.voteLocked.silent",
@@ -529,19 +588,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
-        },
-        {
-          "id": "tadazz-classic.audio.voteLocked.completion",
-          "labelKey": "extensions:themes.default",
-          "assetId": "classic-timer",
-          "silent": false,
-          "volume": 0.7,
-          "loop": false,
-          "priority": 60,
-          "fadeMs": 0,
-          "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -559,7 +609,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.silent",
@@ -570,7 +623,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.accent",
@@ -582,7 +638,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.music",
@@ -594,7 +653,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.fallback",
@@ -606,7 +668,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.story-mixer",
@@ -618,7 +683,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.revealResults.story-reveal",
@@ -630,7 +698,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -648,7 +719,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.leaderboard.silent",
@@ -659,7 +733,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -677,7 +754,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.zzTransition.silent",
@@ -688,7 +768,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -706,7 +789,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.podium1.silent",
@@ -717,7 +803,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -735,7 +824,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.podium2.silent",
@@ -746,7 +838,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -764,7 +859,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.podium3.silent",
@@ -775,7 +873,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": false
@@ -793,7 +894,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         },
         {
           "id": "tadazz-classic.audio.closing.silent",
@@ -804,7 +908,10 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": ["manager", "spectator"]
+          "roles": [
+            "manager",
+            "spectator"
+          ]
         }
       ],
       "customMedia": true
@@ -817,7 +924,7 @@
     },
     "vote-locked": {
       "event": "voteLocked",
-      "variantId": "tadazz-classic.audio.voteLocked.completion"
+      "variantId": "tadazz-classic.audio.voteLocked.default"
     },
     "countdown-ended": {
       "event": "voteLocked",

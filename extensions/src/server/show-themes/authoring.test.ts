@@ -53,6 +53,9 @@ it("rejects changed hashes, external fetching and executable/archive payloads", 
     "throw new Error('never execute')",
   )
   await expect(inspectAuthoringDirectory(directory)).rejects.toThrow("Unsafe")
+  await rm(join(directory, "payload.js"))
+  await writeFile(join(directory, "nested.zip"), Buffer.from("not a trusted archive"))
+  await expect(inspectAuthoringDirectory(directory)).rejects.toThrow("Unsafe")
 })
 
 it("rejects MIME spoofing even when an attacker updates the hash", async () => {

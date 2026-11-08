@@ -435,6 +435,9 @@ test("Studio shows only registered Classic choices, previews locally, and persis
   const settings = page.getByTestId("show-theme-settings")
   await expect(settings.getByTestId("show-theme-tadazz-classic")).toBeVisible()
   await expect(settings.locator('[data-testid^="show-theme-"]')).toHaveCount(1)
+  await page.screenshot({
+    path: join(testInfo.outputDir, "studio-theme-family-picker.png"),
+  })
   await settings.getByRole("button", { name: "Preview", exact: true }).click()
   await expect(
     page.getByTestId("show-theme-preview").getByTestId("tadazz-stage"),
@@ -592,6 +595,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
   ).toHaveLength(1)
+  expect((await probe(page)).plays.filter(item => item.url.includes("tadazz-timer-end-"))).toHaveLength(0)
   for (let i = 0; i < 3; i += 1) {
     if (
       (await page
@@ -636,6 +640,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
   ).toHaveLength(1)
+  expect((await probe(page)).plays.filter(item => item.url.includes("tadazz-timer-end-"))).toHaveLength(1)
   for (const surface of [page, player, display]) {
     const evidence = await probe(surface)
     expect(evidence.frames).toBeGreaterThan(0)
@@ -721,6 +726,24 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     await expect(
       display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
     ).toHaveCount(5)
+    await expect(display.getByTestId("tadazz-question-panel")).toContainText(
+      "Theme question 4",
+    )
+    await expect
+      .poll(() =>
+        display.getByTestId("tadazz-card-4").evaluate((element) => {
+          let opacity = 1
+          for (
+            let node: Element | null = element;
+            node;
+            node = node.parentElement
+          )
+            {opacity *= Number(getComputedStyle(node).opacity)}
+
+          return opacity
+        }),
+      )
+      .toBeGreaterThan(0.98)
     await display.screenshot({
       path: join(testInfo.outputDir, `question-5-cards-${width}.png`),
     })
