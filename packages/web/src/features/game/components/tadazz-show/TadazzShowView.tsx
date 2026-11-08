@@ -83,6 +83,7 @@ import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
 import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
 import { TadazzAnswerPad } from "./TadazzAnswerPad"
+import { LiveParticipation } from "./LiveParticipation"
 import {
   TadazzConnectingScreen,
   TadazzCountdownScreen,
@@ -359,13 +360,13 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const referenceStoryTrack = useMemo(() => {
     if (scene.kind !== "scene" || scene.scene.kind !== "animation") return undefined
     const preset = (scene.scene as {preset?:string}).preset
-    if (preset !== "story-assembly" && preset !== "story-live") return undefined
+    if (preset !== "story-assembly") return undefined
     return {
       key: scene.key,
-      url: preset === "story-assembly" ? STORY_ASSETS.mixerMusic : STORY_ASSETS.revealMusic,
+      url: STORY_ASSETS.mixerMusic,
       startedAt: scene.startedAt,
       elapsedMs: scene.elapsedMs,
-      durationMs: preset === "story-assembly" ? 60000 : 5600,
+      durationMs: 60000,
       volume: 0.62,
     }
   }, [scene])
@@ -1099,6 +1100,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     managerState.hostPresence?.registeredTotal ??
     totalPlayers ??
     managerState.players.length
+  const participation = extensionState?.extras.participation as
+    { connected: number; answered: number } | undefined
+  const publicConnected = participation?.connected ?? (manager ? connectedCount : 0)
+  const publicAnswered = participation?.answered ?? 0
+  const isStoryReading = scene.kind === "scene" && scene.scene.preset === "story-live"
 
   return (
     <ExtensionStateProvider value={extensionState}>
@@ -1230,6 +1236,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 reducedMotion={reduced}
               />
             )}
+            {role !== "player" && <LiveParticipation
+              connected={publicConnected} answered={publicAnswered}
+              voting={scene.kind === "voting" && votingOpen}
+            />}
             {playerAnswersOnly && scene.kind === "voting" && (
               <QuestionDialog
                 question={scene.fullQuestion ?? ""}
@@ -1316,7 +1326,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 extensionState.extras.cardAudioCues as
                   CardAudioOverrides | undefined
               }
-              sceneAudio={props.sceneAudio as never}
+              sceneAudio={(isStoryReading ? undefined : props.sceneAudio) as never}
               gameId={extensionState.gameId}
               activeCardKey={props.activeCardKey}
               phase={

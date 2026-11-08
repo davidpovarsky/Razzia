@@ -21,6 +21,7 @@ import {
 } from "../tadazz-v4"
 import { DEFAULT_TADAZZ_STAGE_LABELS, type TadazzStageLabels } from "./labels"
 import { MotionEngine } from "./motion-engine"
+import { votingPresentation } from "./voting-presentation"
 import { FINALE, INTRO, confettiBit } from "./motion-spec"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
@@ -116,6 +117,7 @@ export const TadazzV4StageAdapter = forwardRef<
   reducedMotionRef.current = reducedMotion
   const showPercentagesRef = useRef(true)
   const lastRevealInputRef = useRef<StageRevealInput | null>(null)
+  const votingSceneRef = useRef<string | null>(null)
 
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
@@ -264,6 +266,7 @@ export const TadazzV4StageAdapter = forwardRef<
       },
 
       async showQuestion(data) {
+        votingSceneRef.current = null
         auxEngine.reset()
         questionRef.current = data
         selectedRef.current = []
@@ -303,6 +306,7 @@ export const TadazzV4StageAdapter = forwardRef<
           return
         }
         cardsOnStageKeyRef.current = data.key
+        votingSceneRef.current = null
         const scene = isPhotoQuestion(data)
           ? "question-image"
           : "picture-answers"
@@ -324,9 +328,8 @@ export const TadazzV4StageAdapter = forwardRef<
                 Math.max(0, (deadlineMs - Date.now()) / 1000),
               )
             : seconds
-        const timed =
-          seconds !== null && seconds > 0 && remaining !== null && remaining > 0
-        if (isAlreadyVoting && alreadyOnStage) {
+        const scene = isPhotoQuestion(q) ? "question-image" : votingPresentation(seconds)
+        if (isAlreadyVoting && alreadyOnStage && votingSceneRef.current === scene) {
           // COOLDOWN ticks must never replay the entrance/clock animation.
           v4Ref.current?.patchData(
             buildQuestionData(q, {
@@ -339,6 +342,7 @@ export const TadazzV4StageAdapter = forwardRef<
           return
         }
         if (isPhotoQuestion(q)) {
+          votingSceneRef.current = scene
           if (alreadyOnStage) {
             v4Ref.current?.patchData(
               buildQuestionData(q, {
@@ -359,7 +363,7 @@ export const TadazzV4StageAdapter = forwardRef<
           }
           return
         }
-        const scene = timed ? "countdown" : "voting-open"
+        votingSceneRef.current = scene
         await v4Ref.current?.play(
           scene,
           buildQuestionData(q, {

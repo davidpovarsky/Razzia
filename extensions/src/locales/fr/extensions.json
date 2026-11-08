@@ -668,6 +668,7 @@
     "sceneSubtitleTooLong": "Le sous-titre ({{current}}/{{max}} car.) dépasse la longueur recommandée."
   },
   "tadazzShow": {
+    "participation": {"connected": "CONNECTÉS : {{count}}", "answered": "ONT RÉPONDU : {{answered}} / {{connected}}"},
     "questionReady": "QUESTION PRÊTE",
     "votingOpen": "VOTE OUVERT",
     "votesLocked": "VOTES VERROUILLÉS · RÉVÉLATION À VENIR",
