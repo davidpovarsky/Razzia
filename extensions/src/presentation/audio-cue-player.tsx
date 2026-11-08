@@ -315,7 +315,21 @@ export const AudioCuePlayer = ({
         maxDurationMs: showTrack.durationMs - elapsed,
       }
     }
-    // Voting is a protected invariant: the existing answersMusic URL/gain/loop wins.
+    // An authored scene can follow a question while its base status still says
+    // answersMusic. Scene ownership must win over that previous question's cue.
+    if (!liveSlotOverride && sceneAudio?.mode === "mute") return null
+    if (!liveSlotOverride && sceneAudio?.url && sceneAudio.mode !== "inherit") {
+      return {
+        identity: `${gameId ?? "g"}:scene-music:${activeCardKey ?? continuityKey}:${sceneAudio.url}`,
+        url: sceneAudio.url,
+        volume: sceneAudio.volume ?? 0.8,
+        loop: sceneAudio.loop ?? true,
+        fadeMs: 400,
+        startOffsetSeconds: 0,
+      }
+    }
+
+    // Voting retains the existing answersMusic URL/gain/loop or authored question override.
     if (
       effectiveCueId === "answersMusic" &&
       resolvedCue?.shouldPlay &&
@@ -396,6 +410,8 @@ export const AudioCuePlayer = ({
     soundtrack,
     audioExtras,
     stageOwnsReveal,
+    liveSlotOverride,
+    sceneAudio,
   ])
 
   const effectiveVolume = useCallback(
@@ -894,6 +910,18 @@ export const AudioCuePlayer = ({
         data-audio-blocked={audioBlocked ? "true" : "false"}
         data-audio-paused={paused || userPaused ? "true" : "false"}
       />
+      {selectedSoundtrackSlot === "finale" &&
+        audioExtras?.soundtrack?.results?.url === "/tadazz-show/music/cutie-patootie.mp3" && (
+        <a
+          className="absolute bottom-2 left-2 z-40 rounded px-2 py-1 text-xs text-white/70 hover:text-white"
+          href="/tadazz-show/music/credits.html"
+          target="_blank"
+          rel="noreferrer"
+          data-testid="soundtrack-credit"
+        >
+          Cutie Patootie · Eric Matyas · soundimage.org / Epic Main Menu Theme · Cleyton Kauffman
+        </a>
+      )}
       {showControls && (
         <div
           className="z-50 flex items-center gap-2 px-2 pb-2"

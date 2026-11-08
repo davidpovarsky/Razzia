@@ -8,6 +8,40 @@ import { AudioCuePlayer, resolveAudioCue, TADAZZ_SFX_BY_CUE } from "./audio-cue-
 import { resolveTadazzAudioPolicy } from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
+  it("plays the selected results bed, then the authored original spotlight bed, without replacing reveal SFX", () => {
+    const audio = { cues: {}, soundtrack: { results: {
+      mode: "media", url: "/tadazz-show/music/cutie-patootie.mp3",
+      volume: 0.3, loop: true, fadeMs: 400, startOffsetSeconds: 0,
+    } } } as unknown as AudioExtras
+    const props = { audioExtras: audio, soundtrackSlot: "results" as const,
+      stageOwnsReveal: true, cueId: "revealResults" as const, autoPlay: false }
+    const results = renderToString(createElement(AudioCuePlayer, props))
+    expect(results).toContain('data-audio-url="/tadazz-show/music/cutie-patootie.mp3"')
+    expect(results).not.toContain('data-testid="soundtrack-credit"')
+    const ending = renderToString(createElement(AudioCuePlayer, { ...props, soundtrackSlot: "finale" }))
+    expect(ending).toContain('data-testid="soundtrack-credit"')
+    const spotlight = renderToString(createElement(AudioCuePlayer, { ...props,
+      sceneAudio: { mode: "custom", url: "/media/original-results.mp3", volume: 0.3, loop: true },
+    }))
+    expect(spotlight).toContain('data-audio-url="/media/original-results.mp3"')
+    const afterVoting = renderToString(createElement(AudioCuePlayer, { ...props,
+      cueId: "answersMusic", cardAudioCues: { answersMusic: { mode: "custom", url: "/tadazz-show/music/epic-main-menu.mp3", volume: 0.38, loop: true } },
+      sceneAudio: { mode: "custom", url: "/media/original-results.mp3", volume: 0.3, loop: true },
+    }))
+    expect(afterVoting).toContain('data-audio-url="/media/original-results.mp3"')
+    expect(spotlight).not.toContain('data-testid="soundtrack-credit"')
+    expect(TADAZZ_SFX_BY_CUE["survey-reveal"]).toBe("/sounds/tadazz-reveal-bright-20261108.mp3")
+  })
+
+  it("uses an authored question timer track instead of the global voting bed", () => {
+    const html = renderToString(createElement(AudioCuePlayer, {
+      cueId: "answersMusic", soundtrackSlot: "voting", autoPlay: false,
+      cardAudioCues: { answersMusic: { mode: "custom", url: "/tadazz-show/music/epic-main-menu.mp3", volume: 0.38, loop: true } },
+    }))
+    expect(html).toContain('data-audio-url="/tadazz-show/music/epic-main-menu.mp3"')
+    expect(html).toContain('data-audio-loop="true"')
+  })
+
   it("loops every stage soundtrack but preserves the twelve-second non-looping intro", () => {
     const slots = [
       "openingIntro", "lobby", "roundStart", "question", "results",
