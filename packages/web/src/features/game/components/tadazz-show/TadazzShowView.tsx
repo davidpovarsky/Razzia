@@ -887,7 +887,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     return resolveTadazzAudioPolicy({
       statusName: props.statusName,
       extensionPhase: extensionState?.phase,
-      sceneKind: descriptor?.kind ?? (scene.kind === "voting" && !votingOpen ? "question" : scene.kind),
+      sceneKind: descriptor?.kind ?? scene.kind,
       scenePreset:
         descriptor &&
         "preset" in descriptor &&
@@ -896,7 +896,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
           : null,
       openingActive: openingMusicActive,
     })
-  }, [extensionState?.phase, openingMusicActive, props.statusName, scene, votingOpen])
+  }, [extensionState?.phase, openingMusicActive, props.statusName, scene])
 
   let overlay: React.ReactNode = null
 

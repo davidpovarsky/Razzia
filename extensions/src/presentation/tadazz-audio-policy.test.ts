@@ -4,10 +4,16 @@ import { createElement } from "react"
 import { renderToString } from "react-dom/server"
 import { describe, expect, it } from "vitest"
 import type { AudioExtras } from "../core/quiz-extras"
-import { AudioCuePlayer, resolveAudioCue, TADAZZ_SFX_BY_CUE } from "./audio-cue-player"
+import { AudioCuePlayer, calibratedMusicVolume, resolveAudioCue, TADAZZ_SFX_BY_CUE } from "./audio-cue-player"
 import { resolveTadazzAudioPolicy } from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
+  it("makes the approved results recording audible without changing other music or SFX", () => {
+    expect(calibratedMusicVolume("/tadazz-show/music/cutie-patootie.mp3", 0.3)).toBe(0.75)
+    expect(calibratedMusicVolume("/media/tzila-determined-pursuit-20261105.mp3", 0.38)).toBe(0.38)
+    expect(calibratedMusicVolume("/sounds/tadazz-reveal-bright-20261108.mp3", 0.9)).toBe(0.9)
+    expect(calibratedMusicVolume("/tadazz-show/music/cutie-patootie.mp3", 1)).toBe(1)
+  })
   it("connects every authored show scene independently of a previous question's base status", () => {
     const mappings = {
       "round-one": "roundStart", "round-two": "roundStart", "interlude": "roundStart", "z-wipe": "roundStart",

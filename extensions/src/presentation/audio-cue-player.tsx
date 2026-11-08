@@ -152,6 +152,10 @@ interface DesiredTrack {
   fallbackUrl?: string
 }
 
+/** Match the approved, quieter recording to the existing voting music level. */
+export const calibratedMusicVolume = (url: string, volume: number) =>
+  Math.min(1, Math.max(0, volume * (url === "/tadazz-show/music/cutie-patootie.mp3" ? 2.5 : 1)))
+
 function resolveSoundtrack(
   slot: SoundtrackSlotId | undefined,
   audioExtras: AudioExtras | undefined,
@@ -419,7 +423,7 @@ export const AudioCuePlayer = ({
     (track: DesiredTrack) =>
       muted
         ? 0
-        : track.volume *
+        : calibratedMusicVolume(track.url, track.volume) *
           masterVolume *
           (hasCompetingMedia ? 0.22 : 1) *
           (ducked ? 0.3 : 1),
@@ -473,6 +477,7 @@ export const AudioCuePlayer = ({
 
     if (rampRef.current) {
       clearInterval(rampRef.current)
+      rampRef.current = null
     }
     if (stopTimerRef.current) {
       clearTimeout(stopTimerRef.current)
@@ -554,7 +559,9 @@ export const AudioCuePlayer = ({
     const next = elements[nextIndex]
     next.pause()
     delete next.dataset.fallbackAttempted
-    next.src = desired.url
+    // Reuse the result track buffered during voting instead of starting another
+    // network request at the exact moment the short reveal scene begins.
+    if (next.getAttribute("src") !== desired.url || next.error) next.src = desired.url
     next.currentTime = desired.startOffsetSeconds
     next.loop = desired.loop
     next.volume = desired.fadeMs > 0 ? 0 : effectiveVolume(desired)
@@ -673,6 +680,21 @@ export const AudioCuePlayer = ({
     userPaused,
     synchronizeShowTrack,
   ])
+
+  useEffect(() => {
+    if (!autoPlay || selectedSoundtrackSlot !== "voting" || showTrack !== undefined) return
+    const upcoming = audioExtras?.soundtrack?.results
+    const elements = backgroundsRef.current
+    if (!elements || upcoming?.mode !== "media" || !upcoming.url || rampRef.current) return
+    const inactive = elements[activeIndexRef.current === 0 ? 1 : 0]
+    if (!inactive.paused || inactive.getAttribute("src") === upcoming.url) return
+    inactive.onended = null
+    inactive.onerror = null
+    inactive.volume = 0
+    inactive.preload = "auto"
+    inactive.src = upcoming.url
+    inactive.load()
+  }, [autoPlay, selectedSoundtrackSlot, showTrack, audioExtras, desired])
 
   useEffect(() => {
     const elements = backgroundsRef.current

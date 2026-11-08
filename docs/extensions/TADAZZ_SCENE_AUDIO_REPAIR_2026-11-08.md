@@ -1,5 +1,7 @@
 # Scene audio and presentation cleanup — 8 November 2026
 
+**Current correction:** the user rejected the separate pre-timer question music. Follow `TADAZZ_TIMER_REVEAL_CONTINUITY_2026-11-08.md` for current playback behavior and release. The historical v2 question-bed assertion below is not an acceptance requirement anymore.
+
 User authorized removing the imported technical note under question 3, removing extra Z wings from round launches, repairing soundtrack playback across the show, and deploying both accounts.
 
 ## Upstream hook, recorded before editing
