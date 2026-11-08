@@ -203,6 +203,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const { questionStates } = useQuestionStore()
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
+  const tieRequestPendingRef = useRef(false)
   const reduced = useMemo(prefersReducedMotion, [])
   const [serverClockOffset, setServerClockOffset] = useState(0)
   useEffect(() => {
@@ -357,6 +358,20 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
+  const resolveStoryTie = useCallback((contestantIndex: number) => {
+    if (role !== "manager" || isPaused || !isConnected || !extensionState || tieRequestPendingRef.current) return
+    const fullShow = extensionState.extras.activeSceneData as
+      { fullShow?: { tieCandidates?: Array<{ answerIndex: number }> } } | undefined
+    const candidate = fullShow?.fullShow?.tieCandidates?.[contestantIndex]
+    if (!candidate) return
+    tieRequestPendingRef.current = true
+    socket.emit(EXTENSION_EVENTS.COMMAND, {
+      v: 1, gameId: extensionState.gameId, requestId: crypto.randomUUID(),
+      action: "RESOLVE_STORY_TIE",
+      payload: { answerIndex: candidate.answerIndex, epoch: extensionState.epoch },
+    })
+    setTimeout(() => { tieRequestPendingRef.current = false }, 800)
+  }, [role, isPaused, isConnected, extensionState, socket])
   const referenceStoryTrack = useMemo(() => {
     if (scene.kind !== "scene" || scene.scene.kind !== "animation") return undefined
     const preset = (scene.scene as {preset?:string}).preset
@@ -1192,6 +1207,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 labels={labels}
                 v4Labels={v4Labels}
                 onCue={handleStageCue}
+                onResolveStoryTie={role === "manager" ? resolveStoryTie : undefined}
                 backdropUrl={backdrop?.url}
                 backdropFit={backdrop?.fit}
                 interactive={

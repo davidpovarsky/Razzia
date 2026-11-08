@@ -42,6 +42,7 @@ export interface TadazzV4StageAdapterProps extends TadazzStageProps {
   v4Labels?: Partial<TadazzV4Labels>
   fitRevision?: number
   onCue?: (cue: TadazzV4Cue) => void
+  onResolveStoryTie?: (contestantIndex: number) => void
 }
 
 function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
@@ -78,6 +79,7 @@ export const TadazzV4StageAdapter = forwardRef<
     interactive = false,
     multiSelect = false,
     onSelectOption,
+    onResolveStoryTie,
     customScreen,
     underlay,
     overlay,
@@ -168,6 +170,7 @@ export const TadazzV4StageAdapter = forwardRef<
     interactive,
     multiSelect,
     onSelectOption,
+    onResolveStoryTie,
     backdropUrl,
     backdropFit,
   })
@@ -175,6 +178,7 @@ export const TadazzV4StageAdapter = forwardRef<
     interactive,
     multiSelect,
     onSelectOption,
+    onResolveStoryTie,
     backdropUrl,
     backdropFit,
   }
@@ -555,6 +559,9 @@ export const TadazzV4StageAdapter = forwardRef<
         const p = interactivePropsRef.current
         await v4Ref.current?.play(scene, {
           ...data,
+          onResolveTie: scene === "tie-break" && p.onResolveStoryTie
+            ? (index: number) => interactivePropsRef.current.onResolveStoryTie?.(index)
+            : undefined,
           backgroundUrl: data.backgroundUrl ?? p.backdropUrl,
           backgroundFit: data.backgroundFit ?? p.backdropFit,
           labels: v4LabelsRef.current,
