@@ -4,7 +4,10 @@ import type { PropsWithChildren } from "react"
 const TADAZZ_LOGO = "/tadazz-show/v4/tadazz-brand-logo.png"
 const TADAZZ_STAGE = "/tadazz-show/v4/show-stage.webp"
 
-const ManagerAuthBackground = ({ children }: PropsWithChildren) => (
+const ManagerAuthBackground = ({
+  children,
+  showLanguageSwitcher = true,
+}: PropsWithChildren<{ showLanguageSwitcher?: boolean }>) => (
   <section
     className="bg-secondary relative isolate flex min-h-dvh flex-col items-center justify-center overflow-hidden px-4 py-24 sm:px-6"
     data-testid="tadazz-manager-auth-background"
@@ -18,9 +21,11 @@ const ManagerAuthBackground = ({ children }: PropsWithChildren) => (
     />
     <div className="bg-secondary/70 absolute inset-0 -z-10" />
 
-    <div className="absolute top-4 right-4 z-20">
-      <LanguageSwitcher />
-    </div>
+    {showLanguageSwitcher && (
+      <div className="absolute top-4 right-4 z-20">
+        <LanguageSwitcher />
+      </div>
+    )}
 
     <img
       src={TADAZZ_LOGO}

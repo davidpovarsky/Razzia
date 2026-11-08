@@ -64,3 +64,7 @@ Owner explicitly requested immediate deployment without tests: homepage opens ma
 ## Urgent TADAZZ logo/favicon update
 
 Owner requested replacing the visible Razzia heading on /manager/config with the existing official TADAZZ logo and using the supplied Z PNG as favicon, with immediate deployment. Narrow touches: shared Background default logo/name and removal of its Razzia footer; index.html favicon URL; copy the supplied PNG unchanged into public assets. Build and deploy the web only, retaining the current runtime environment and revision-8 quiz data. No test suite for this urgent follow-up.
+
+## Immediate manager background update
+
+Owner requested the management screen use the same TADAZZ background as login and immediate deployment. Replace the /manager/config Background wrapper with existing ManagerAuthBackground. Add an optional language-switch visibility prop so management keeps its existing language control without duplication. Web-only build/deploy; retain runtime environment and quiz/roster data.
