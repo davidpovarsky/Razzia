@@ -24,6 +24,9 @@ import {
   preloadOpeningAssets,
   resolveStageBackdrop,
   resolveTadazzAudioPolicy,
+  acceptsQuestionMilestone,
+  timerEndTransition,
+  type TimerEndState,
   runSteps,
   type CinematicLayerStackProps,
   type SceneDescriptor,
@@ -556,6 +559,19 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const revealAttemptRef = useRef(0)
   if (scene.kind === "voting")
     revealAttemptRef.current = extensionState?.epoch ?? 0
+  const timerEndRef = useRef<TimerEndState | null>(null)
+  useEffect(() => {
+    const next = timerEndTransition(timerEndRef.current, {
+      enabled: useV4 && role !== "player", gameId: showGameId,
+      questionId: extensionState?.questionId ?? questionKey,
+      epoch: extensionState?.epoch ?? 0, voting: scene.kind === "voting",
+      results: extensionState?.phase === "responses", paused: isPaused,
+    })
+    timerEndRef.current = next.state
+    if (next.cue) window.dispatchEvent(new CustomEvent("tadazz:sfx", {
+      detail: { name: "timer-ended", identity: next.cue, volume: 0.8 },
+    }))
+  }, [useV4, role, showGameId, extensionState?.questionId, extensionState?.epoch, extensionState?.phase, questionKey, scene.kind, isPaused])
   useTimerBeeps({
     enabled:
       useV4 &&
@@ -845,27 +861,29 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   )
 
   const handleStageCue = useCallback(
-    (cue: { name: string; scene: string }) => {
+    (cue: { name: string; scene: string; questionKey?: string; questionNumber?: number }) => {
       // The browser clock can finish during skips/fast-forward too. Only the
       // authoritative result scene owns the audible end-of-question cue.
       if (cue.name === "countdown-ended") return
       // Finishing an old animation during restart/skip may emit its final cue.
       // Only the authoritative results screen may make that reveal audible.
-      if (
-        cue.name === "survey-reveal" &&
-        !(scene.kind === "results" && extensionState?.phase === "responses") &&
-        !(scene.kind === "scene" && scene.scene.kind === "interimResults")
-      )
-        return
+      if (!acceptsQuestionMilestone({
+        name: cue.name, paintedScene: cue.scene, paintedQuestion: cue.questionNumber,
+        currentQuestion: questionStates?.current, currentKind: scene.kind, currentPhase: extensionState?.phase,
+        paintedQuestionKey: cue.questionKey,
+        currentQuestionText: "question" in scene ? scene.question.question : scene.kind === "scene" ? scene.activeSceneData?.interimResults?.questionText : undefined,
+        currentPreset: scene.kind === "scene" && "preset" in scene.scene ? String(scene.scene.preset) : undefined,
+        currentSceneKind: scene.kind === "scene" ? scene.scene.kind : undefined,
+      })) return
       window.dispatchEvent(
         new CustomEvent("tadazz:sfx", {
           detail: {
             name: cue.name,
             identity:
-              cue.name === "survey-reveal"
-                ? `${showGameId}:${extensionState?.questionId ?? questionKey ?? sceneIdentity}:${revealAttemptRef.current}:results-reveal`
-                : `${showGameId}:${extensionState?.epoch ?? 0}:${sceneIdentity}:${cue.scene}:${cue.name}`,
-            volume: cue.name === "survey-reveal" ? 0.9 : 0.55,
+              cue.name === "survey-reveal" || cue.name === "top-pick-reveal"
+                ? `${showGameId}:${cue.questionKey ?? extensionState?.questionId ?? questionKey ?? scene.key}:${revealAttemptRef.current}:${cue.name}`
+                : `${showGameId}:${extensionState?.epoch ?? 0}:${scene.key}:${cue.scene}:${cue.name}`,
+            volume: cue.name === "survey-reveal" ? 0.9 : cue.name === "top-pick-reveal" ? 0.7 : 0.55,
           },
         }),
       )
@@ -875,6 +893,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       extensionState?.phase,
       extensionState?.questionId,
       questionKey,
+      questionStates?.current,
       sceneIdentity,
       scene,
       showGameId,

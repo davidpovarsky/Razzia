@@ -70,8 +70,10 @@ export const TADAZZ_PHASE_SFX: Partial<Record<CueId, string>> = {
   revealResults: REVEAL,
 }
 export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
+  "timer-ended": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
   "countdown-ended": REVEAL,
   "survey-reveal": REVEAL,
+  "top-pick-reveal": CONFIRM,
   "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",
   "timer-urgent": "/sounds/tadazz-timer-urgent-20261108.mp3",
   "timer-final": "/sounds/tadazz-timer-final-20261108.mp3",
@@ -227,13 +229,21 @@ export const AudioCuePlayer = ({
     null,
   )
   const sfxRef = useRef<HTMLAudioElement | null>(null)
+  const revealRef = useRef<HTMLAudioElement | null>(null)
+  const timerEndRef = useRef<HTMLAudioElement | null>(null)
+  const spotlightRef = useRef<HTMLAudioElement | null>(null)
+  const epicWarmRef = useRef<HTMLAudioElement | null>(null)
   const tickRef = useRef<HTMLAudioElement | null>(null)
   const sfxLevelRef = useRef(0.7)
+  const revealLevelRef = useRef(0.9)
+  const timerEndLevelRef = useRef(0.8)
+  const spotlightLevelRef = useRef(0.7)
   const tickLevelRef = useRef(0.27)
   const protectedUntilRef = useRef(0)
   const lastEffectRef = useRef({ url: "", at: 0 })
   const duckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [ducked, setDucked] = useState(false)
+  const [timerEnding, setTimerEnding] = useState(false)
   const activeIndexRef = useRef(0)
   const generationRef = useRef(0)
   const rampRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -247,6 +257,9 @@ export const AudioCuePlayer = ({
   const [muted, setMuted] = useState(false)
   const [masterVolume, setMasterVolume] = useState(1)
   const [userPaused, setUserPaused] = useState(false)
+  const playbackControlsRef = useRef({ autoPlay, paused, userPaused })
+  playbackControlsRef.current = { autoPlay, paused, userPaused }
+  const votingAttemptRef = useRef<string | null>(null)
   const synchronizeShowTrack = useCallback(
     (active: HTMLAudioElement, track: DesiredTrack) => {
       if (showTrack === undefined) return true
@@ -281,16 +294,30 @@ export const AudioCuePlayer = ({
   const liveSlotOverride =
     manualTrack?.stageKey === stageKey ? manualTrack.slot : null
   const selectedSoundtrackSlot = liveSlotOverride ?? soundtrackSlot
+  useEffect(() => {
+    if (selectedSoundtrackSlot !== "voting") return
+    const attempt = `${gameId ?? "g"}:${activeCardKey ?? "q"}:${epoch ?? 0}`
+    if (votingAttemptRef.current === attempt) return
+    votingAttemptRef.current = attempt
+    // A skip/restart must never carry an old milestone into a new question.
+    revealRef.current?.pause()
+    spotlightRef.current?.pause()
+    timerEndRef.current?.pause()
+    setTimerEnding(false)
+    protectedUntilRef.current = 0
+    if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+    setDucked(false)
+  }, [selectedSoundtrackSlot, gameId, activeCardKey, epoch])
   const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter(
     (slot) => audioExtras?.soundtrack?.[slot]?.mode === "media",
   )
   const effectiveCueId: CueId | undefined =
-    cueId ?? sceneAudio?.cueId ?? (sceneAudio?.url ? "start" : undefined)
+    selectedSoundtrackSlot === "voting" ? "answersMusic" : cueId ?? sceneAudio?.cueId ?? (sceneAudio?.url ? "start" : undefined)
   const resolvedCue = effectiveCueId
     ? resolveEffectiveAudioCue({
         cueId: effectiveCueId,
         cardAudioCues,
-        sceneAudio,
+        sceneAudio: selectedSoundtrackSlot === "voting" ? undefined : sceneAudio,
         globalAudio: audioExtras,
         defaultUrl: DEFAULT_CUE_URLS[effectiveCueId],
         defaultVolume: effectiveCueId === "answersMusic" ? 0.35 : 0.7,
@@ -321,8 +348,8 @@ export const AudioCuePlayer = ({
     }
     // An authored scene can follow a question while its base status still says
     // answersMusic. Scene ownership must win over that previous question's cue.
-    if (!liveSlotOverride && sceneAudio?.mode === "mute") return null
-    if (!liveSlotOverride && sceneAudio?.url && sceneAudio.mode !== "inherit") {
+    if (!liveSlotOverride && selectedSoundtrackSlot !== "voting" && sceneAudio?.mode === "mute") return null
+    if (!liveSlotOverride && selectedSoundtrackSlot !== "voting" && sceneAudio?.url && sceneAudio.mode !== "inherit") {
       return {
         identity: `${gameId ?? "g"}:scene-music:${activeCardKey ?? continuityKey}:${sceneAudio.url}`,
         url: sceneAudio.url,
@@ -347,7 +374,7 @@ export const AudioCuePlayer = ({
         loop: resolvedCue.loop,
         fadeMs: 0,
         startOffsetSeconds: 0,
-        fallbackUrl: undefined,
+        fallbackUrl: audioExtras?.cues?.answersMusic?.url !== resolvedCue.url ? audioExtras?.cues?.answersMusic?.url : undefined,
       }
     }
 
@@ -426,8 +453,8 @@ export const AudioCuePlayer = ({
         : calibratedMusicVolume(track.url, track.volume) *
           masterVolume *
           (hasCompetingMedia ? 0.22 : 1) *
-          (ducked ? 0.3 : 1),
-    [hasCompetingMedia, masterVolume, muted, ducked],
+          (timerEnding ? 0.15 : ducked ? 0.3 : 1),
+    [hasCompetingMedia, masterVolume, muted, ducked, timerEnding],
   )
 
   useEffect(() => {
@@ -437,13 +464,23 @@ export const AudioCuePlayer = ({
     const a = new Audio()
     const b = new Audio()
     const sfx = new Audio()
+    const reveal = new Audio(REVEAL)
+    const timerEnd = new Audio(TADAZZ_SFX_BY_CUE["timer-ended"])
+    timerEnd.onended = () => setTimerEnding(false)
+    const spotlight = new Audio(CONFIRM)
     const tick = new Audio()
     a.preload = "auto"
     b.preload = "auto"
     sfx.preload = "auto"
+    reveal.preload = "auto"
+    timerEnd.preload = "auto"
+    spotlight.preload = "auto"
     tick.preload = "auto"
     backgroundsRef.current = [a, b]
     sfxRef.current = sfx
+    revealRef.current = reveal
+    timerEndRef.current = timerEnd
+    spotlightRef.current = spotlight
     tickRef.current = tick
 
     return () => {
@@ -456,13 +493,19 @@ export const AudioCuePlayer = ({
         clearTimeout(stopTimerRef.current)
       }
       if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
-      for (const audio of [a, b, sfx, tick]) {
+      timerEnd.onended = null
+      for (const audio of new Set([a, b, sfx, tick, reveal, timerEnd, spotlight, ...(backgroundsRef.current ?? []), epicWarmRef.current])) {
+        if (!audio) continue
         audio.pause()
         audio.removeAttribute("src")
         audio.load()
       }
       backgroundsRef.current = null
       sfxRef.current = null
+      revealRef.current = null
+      timerEndRef.current = null
+      spotlightRef.current = null
+      epicWarmRef.current = null
       tickRef.current = null
     }
   }, [])
@@ -556,6 +599,15 @@ export const AudioCuePlayer = ({
     finishedIdentityRef.current = null
     stopRemainingRef.current = null
     stopDeadlineRef.current = null
+    const warmed = epicWarmRef.current
+    if (warmed && warmed.getAttribute("src") === desired.url && !warmed.error) {
+      const displaced = elements[nextIndex]
+      displaced.pause()
+      displaced.onended = null
+      displaced.onerror = null
+      elements[nextIndex] = warmed
+      epicWarmRef.current = displaced
+    }
     const next = elements[nextIndex]
     next.pause()
     delete next.dataset.fallbackAttempted
@@ -582,15 +634,28 @@ export const AudioCuePlayer = ({
       onEnded()
     }
     next.onerror = () => {
-      if (generationRef.current !== generation) {
+      // Same-track state updates legitimately advance the generation while an
+      // asynchronous network error is pending. Retain this handler for that
+      // active element/identity, but never let it revive an abandoned scene.
+      const stillActive = () => currentRef.current?.identity === desired.identity &&
+        elements[activeIndexRef.current] === next
+      if (!stillActive()) {
         return
       }
       if (desired.fallbackUrl && next.dataset.fallbackAttempted !== "true") {
         next.dataset.fallbackAttempted = "true"
         next.src = desired.fallbackUrl
 
-        if (autoPlay && !paused && !userPaused) {
-          void next.play().catch((error: unknown) => {
+        const controls = playbackControlsRef.current
+        if (controls.autoPlay && !controls.paused && !controls.userPaused) {
+          void next.play().then(() => {
+            if (!stillActive()) return
+            next.volume = effectiveVolume(desired)
+            old.pause()
+            setAudioBlocked(false)
+            onPlaybackStarted(desired.identity)
+          }).catch((error: unknown) => {
+            if (!stillActive()) return
             setAudioBlocked(true)
             onError(error)
           })
@@ -665,6 +730,7 @@ export const AudioCuePlayer = ({
         if (generationRef.current !== generation) {
           return
         }
+        if (next.dataset.fallbackAttempted === "true" && next.getAttribute("src") === desired.fallbackUrl) return
         old.pause()
         setAudioBlocked(true)
         onError(error)
@@ -695,6 +761,22 @@ export const AudioCuePlayer = ({
     inactive.src = upcoming.url
     inactive.load()
   }, [autoPlay, selectedSoundtrackSlot, showTrack, audioExtras, desired])
+
+  useEffect(() => {
+    if (!autoPlay || audioExtras?.soundtrack?.results?.url !== "/tadazz-show/music/cutie-patootie.mp3") return
+    const url = "/tadazz-show/music/epic-main-menu.mp3"
+    if (backgroundsRef.current?.some(a => a.getAttribute("src") === url)) return
+    const warm = epicWarmRef.current ?? new Audio()
+    epicWarmRef.current = warm
+    if (warm.getAttribute("src") === url && !warm.error) return
+    warm.pause()
+    warm.onended = null
+    warm.onerror = null
+    warm.volume = 0
+    warm.preload = "auto"
+    warm.src = url
+    warm.load()
+  }, [autoPlay, audioExtras, desired])
 
   useEffect(() => {
     const elements = backgroundsRef.current
@@ -740,6 +822,7 @@ export const AudioCuePlayer = ({
         })
         .catch((error: unknown) => {
           if (!stillCurrent()) return
+          if (active.dataset.fallbackAttempted === "true" && active.getAttribute("src") === current.fallbackUrl) return
           setAudioBlocked(true)
           onError(error)
         })
@@ -774,24 +857,28 @@ export const AudioCuePlayer = ({
       if (!url || !identity || playedSfxRef.current.has(identity)) {
         return
       }
-      const isTick = detail.name?.startsWith("timer-") ?? false
+      const isTimerEnd = detail.name === "timer-ended"
+      const isTick = !isTimerEnd && (detail.name?.startsWith("timer-") ?? false)
       const isReveal = detail.name === "survey-reveal"
+      const isSpotlight = detail.name === "top-pick-reveal"
+      const isMilestone = isReveal || isSpotlight || isTimerEnd
       const now = Date.now()
-      if (!isTick && !isReveal && now < protectedUntilRef.current) return
+      if (!isTick && !isMilestone && now < protectedUntilRef.current) return
       playedSfxRef.current.add(identity)
       // The wipe/impact animation can emit adjacent cues for one movement.
       if (
-        !isTick &&
+        !isTick && !isMilestone &&
         lastEffectRef.current.url === url &&
         now - lastEffectRef.current.at < 500
       )
         return
       if (!isTick) lastEffectRef.current = { url, at: now }
-      if (isReveal) {
-        protectedUntilRef.current = now + 1100
+      if (isReveal || isTimerEnd) {
+        if (isTimerEnd) setTimerEnding(true)
+        protectedUntilRef.current = Math.max(protectedUntilRef.current, now + (isTimerEnd ? 2530 : 1100))
         setDucked(true)
         if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
-        duckTimerRef.current = setTimeout(() => setDucked(false), 1100)
+        duckTimerRef.current = setTimeout(() => setDucked(false), protectedUntilRef.current - now)
         tickRef.current?.pause()
       }
 
@@ -801,19 +888,25 @@ export const AudioCuePlayer = ({
         const oldest = playedSfxRef.current.values().next().value
         if (oldest) playedSfxRef.current.delete(oldest)
       }
-      const sfx = isTick ? tickRef.current : sfxRef.current
+      const sfx = isTick ? tickRef.current : isTimerEnd ? timerEndRef.current : isReveal ? revealRef.current : isSpotlight ? spotlightRef.current : sfxRef.current
 
       if (!sfx) {
         return
       }
       sfx.pause()
-      sfx.src = url
+      if (sfx.getAttribute("src") !== url || sfx.error) sfx.src = url
       sfx.currentTime = 0
-      const level = Math.max(0, Math.min(1, detail?.volume ?? 0.7))
+      const level = Math.max(0, Math.min(1, detail?.volume ?? 0.7)) * (isReveal && timerEndRef.current && !timerEndRef.current.paused ? 0.75 : 1)
       if (isTick) tickLevelRef.current = level
+      else if (isTimerEnd) timerEndLevelRef.current = level
+      else if (isReveal) revealLevelRef.current = level
+      else if (isSpotlight) spotlightLevelRef.current = level
       else sfxLevelRef.current = level
       sfx.volume = level * masterVolume
-      void sfx.play().catch(onError)
+      void sfx.play().catch((error: unknown) => {
+        if (isTimerEnd) setTimerEnding(false)
+        onError(error)
+      })
     }
     window.addEventListener("tadazz:sfx", handleCue)
     const stopTimer = () => {
@@ -911,11 +1004,18 @@ export const AudioCuePlayer = ({
   useEffect(() => {
     if (paused || userPaused || muted) {
       sfxRef.current?.pause()
+      revealRef.current?.pause()
+      timerEndRef.current?.pause()
+      setTimerEnding(false)
+      spotlightRef.current?.pause()
       tickRef.current?.pause()
     }
     if (sfxRef.current) {
       sfxRef.current.volume = muted ? 0 : sfxLevelRef.current * masterVolume
     }
+    if (revealRef.current) revealRef.current.volume = muted ? 0 : revealLevelRef.current * masterVolume
+    if (timerEndRef.current) timerEndRef.current.volume = muted ? 0 : timerEndLevelRef.current * masterVolume
+    if (spotlightRef.current) spotlightRef.current.volume = muted ? 0 : spotlightLevelRef.current * masterVolume
     if (tickRef.current)
       tickRef.current.volume = muted ? 0 : tickLevelRef.current * masterVolume
   }, [masterVolume, muted, paused, userPaused])

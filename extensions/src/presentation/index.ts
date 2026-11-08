@@ -11,6 +11,8 @@ export * from "./interlude-preview"
 export * from "./audio-cue-player"
 
 export * from "./tadazz-audio-policy"
+export * from "./tadazz-sfx-policy"
+export * from "./timer-end-cue"
 
 export * from "./team-scoring"
 

@@ -178,7 +178,7 @@ export function AnswerSlotV4({
       <article className="answer-card">
         <figure className="answer-figure">
           <div
-            className={`tz-photo-frame${answer.imageUrl ? "" : " tz-photo-empty"}`}
+            className={["tz-photo-frame", !answer.imageUrl && "tz-photo-empty"].filter(Boolean).join(" ")}
           >
             {answer.imageUrl ? (
               <img
@@ -301,7 +301,7 @@ export function FivePictureAnswersV4({
   )
   return (
     <div
-      className={`answers${recap ? " recap-answers" : ""}`}
+      className={["answers", recap && "recap-answers"].filter(Boolean).join(" ")}
       style={recap && answers.length === 5 ? undefined : dynamicStyle}
       data-v4="answer-cards"
       role={canSelect ? "group" : undefined}
@@ -354,7 +354,7 @@ export function VoteStatusV4({
       : null
   return (
     <div
-      className={`vote-status${locked ? " locked-status" : ""}`}
+      className={["vote-status", locked && "locked-status"].filter(Boolean).join(" ")}
       data-v4="vote-status"
       data-testid="tadazz-status"
     >
