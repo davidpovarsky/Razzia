@@ -8,6 +8,10 @@ import path from "node:path"
 import { fileURLToPath } from "url"
 import { defineConfig, type Plugin } from "vite"
 import packageJson from "../../package.json" with { type: "json" }
+import {
+  createPrivateMediaProxy,
+  usesPrivateMediaRoutes,
+} from "./vite/private-media"
 
 const configDir = (name: string) => {
   const customConfig = process.env.CONFIG_PATH
@@ -81,11 +85,11 @@ const configServer = (): Plugin => ({
   name: "razzia-config-server",
   configureServer(server) {
     server.middlewares.use(serveBranding)
-    server.middlewares.use(serveMedia)
+    if (!usesPrivateMediaRoutes()) server.middlewares.use(serveMedia)
   },
   configurePreviewServer(server) {
     server.middlewares.use(serveBranding)
-    server.middlewares.use(serveMedia)
+    if (!usesPrivateMediaRoutes()) server.middlewares.use(serveMedia)
   },
 })
 
@@ -96,6 +100,7 @@ const serverOptions = {
   port: webPort,
   host: "0.0.0.0",
   proxy: {
+    ...createPrivateMediaProxy(socketUrl),
     "/ws": {
       target: socketUrl,
       ws: true,

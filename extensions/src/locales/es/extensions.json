@@ -668,7 +668,10 @@
     "sceneSubtitleTooLong": "El subtítulo ({{current}}/{{max}} car.) supera la longitud recomendada."
   },
   "tadazzShow": {
-    "participation": {"connected": "CONECTADOS: {{count}}", "answered": "HAN RESPONDIDO: {{answered}} / {{connected}}"},
+    "participation": {
+      "connected": "CONECTADOS: {{count}}",
+      "answered": "HAN RESPONDIDO: {{answered}} / {{connected}}"
+    },
     "questionReady": "PREGUNTA LISTA",
     "votingOpen": "VOTACIÓN ABIERTA",
     "votesLocked": "VOTOS CERRADOS · ESPERA LA REVELACIÓN",
@@ -836,6 +839,7 @@
       "question": "Pregunta",
       "survey-results": "Resultados",
       "z-wipe": "Transición"
-    }
+    },
+    "installationPreview": "Vista previa privada del tema para revisión y aprobación."
   }
 }

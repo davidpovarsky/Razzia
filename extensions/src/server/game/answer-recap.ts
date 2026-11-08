@@ -1,9 +1,6 @@
+import { resolveQuestionPlayMode } from "../../core/question-play-mode"
 // oxlint-disable typescript/no-unnecessary-condition -- Timeline/history arrays may be sparse at runtime.
-import {
-  resolveQuestionPlayMode,
-  type Quizz,
-  type QuestionResult,
-} from "@razzia/common/types/game"
+import { type Quizz, type QuestionResult } from "@razzia/common/types/game"
 import {
   isQuizExtrasV2,
   type AnyQuizExtras,

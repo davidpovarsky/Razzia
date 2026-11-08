@@ -1,7 +1,8 @@
 import { expect, test } from "@playwright/test"
 import fs from "node:fs"
 import { join } from "node:path"
-import { endTimer, next as nextHost } from "../utils/manager"
+import { next as nextHost } from "../utils/manager"
+import { endTimer } from "../utils/extension-manager"
 import { joinGame } from "../utils/player"
 
 const title = "Build Our Story — Tzila · Two-Round Audience Vote"

@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@razzia/web/components/Select"
 import ToggleGroup from "@razzia/web/components/ToggleGroup"
-import { getUploadAccept } from "@razzia/web/features/quizz/hooks/useUploadMedia"
+import { getMediaUploadAccept as getUploadAccept } from "@razzia/extensions/core"
 import { LayoutGrid, List, Search, Upload } from "lucide-react"
 import type { ChangeEvent } from "react"
 import { useTranslation } from "react-i18next"

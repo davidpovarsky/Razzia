@@ -1,13 +1,7 @@
+import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
 import {
-  createDefaultGameSettings,
-  EVENTS,
-  SESSION_ROLES,
-} from "@razzia/common/constants"
-import {
-  resolveQuestionPlayMode,
   type GameSettings,
   type Player,
-  type QuestionResult,
   type Quizz,
   type QuizzMode,
 } from "@razzia/common/types/game"
@@ -18,30 +12,35 @@ import {
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
 import {
-  generateRosterPlayerId,
-  isQuizExtrasV2,
-  normalizePhoneE164,
   type HostPresenceSnapshot,
   type RevealDistributionSnapshot,
   type RosterParticipant,
 } from "@razzia/extensions/core"
-import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
 import {
-  buildInterimResults,
-  buildAnswerRecap,
   ExtensionGameSession,
   GameRoster,
+  GamePhoneController,
+  createShowRoundHooks,
+  createSessionDelegate,
+  createAuthoredCoordinator,
+  sendSessionSnapshot,
+  isCreatingWorldsProgram,
+  allowsTemporaryGuests,
+  sanitizeAudienceStatus,
+  canViewReferencedMedia,
+  syncSessionStatus,
+  broadcastSessionSnapshot,
+  connectAudience,
   PresentationLaunch,
   readSidecar,
-  StudioShowCoordinator,
-  type PlayerScoreInfo,
+  type StudioShowCoordinator,
 } from "@razzia/extensions/server"
-import { isQuestionSupportedOnPstn } from "@razzia/extensions/telephony"
 import {
   accountsEnabled,
   withAccount,
 } from "@razzia/socket/services/account-scope"
 import { getPath, saveResult } from "@razzia/socket/services/config"
+import { installedThemeForSelection } from "@razzia/socket/services/theme-installation"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
@@ -96,6 +95,7 @@ class Game {
   >()
   private readonly spectatorSocketIds = new Set<string>()
 
+  private readonly phone: GamePhoneController
   private readonly roster: GameRoster
 
   constructor(io: Server, managerClientId: string, quizz: Quizz) {
@@ -126,88 +126,54 @@ class Game {
 
     const quizzId = (quizz as { id?: string }).id
     const sidecar = quizzId ? readSidecar(getPath, quizzId) : null
-    // Scope fast picture voting strictly to the authored Creating Worlds show.
-    const isCreatingWorlds = Boolean(
-      sidecar &&
-      isQuizExtrasV2(sidecar) &&
-      sidecar.questionIds.length === 10 &&
-      ["round-one", "top-pick", "round-recap", "grand-finale"].every((preset) =>
-        Object.values(sidecar.scenes).some(
-          (scene) => scene.kind === "animation" && scene.preset === preset,
-        ),
-      ),
-    )
-
+    const isCreatingWorlds = isCreatingWorldsProgram(sidecar)
     this.isCreatingWorldsShow = isCreatingWorlds
-    this.temporaryGuestsAllowed = Boolean(
-      quizzId &&
-      (process.env.TADA_TEMP_GUEST_QUIZ_IDS ?? "")
-        .split(",")
-        .map((id) => id.trim())
-        .includes(quizzId) &&
-      (!(
-        process.env.TADA_TEMP_GUEST_OWNER_IDS ?? process.env.TADA_PILOT_OWNER_ID
-      ) ||
-        (
-          process.env.TADA_TEMP_GUEST_OWNER_IDS ??
-          process.env.TADA_PILOT_OWNER_ID ??
-          ""
-        )
-          .split(",")
-          .map((id) => id.trim())
-          .includes(managerClientId)),
+    this.temporaryGuestsAllowed = allowsTemporaryGuests(
+      quizzId,
+      managerClientId,
+      process.env,
     )
     this.extensionSession = sidecar
-      ? new ExtensionGameSession(this.gameId, sidecar)
+      ? new ExtensionGameSession(
+          this.gameId,
+          sidecar,
+          installedThemeForSelection(
+            managerClientId,
+            "defaults" in sidecar ? sidecar.defaults.showTheme : undefined,
+          ),
+        )
       : null
-    this.presentationLaunch = isCreatingWorlds ? new PresentationLaunch(() => {
-      this.extensionSession?.onPresenceChanged()
-      this.broadcastExtensionState()
-    }) : null
+    this.presentationLaunch = isCreatingWorlds
+      ? new PresentationLaunch(() => {
+          this.extensionSession?.onPresenceChanged()
+          this.broadcastExtensionState()
+        })
+      : null
 
-    if (sidecar && isQuizExtrasV2(sidecar)) {
-      this.showCoordinator = new StudioShowCoordinator({
-        timeline: sidecar.timeline,
-        scenes: sidecar.scenes,
-        questionIds: sidecar.questionIds,
-        defaults: sidecar.defaults,
-        callbacks: {
-          onStartQuestion: (qIdx) => {
-            this.round.startQuestionAtIndex(qIdx)
-          },
-          onReopenQuestion: (qIdx) => {
-            this.clearQuestionVerdicts(qIdx)
-            this.round.reopenQuestion(qIdx)
-            this.syncRosterScoresFromPlayers()
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          },
-          onShowCompletedQuestionResults: (qIdx) => {
-            this.round.showCompletedQuestionResults(qIdx)
-            this.syncExtensionStatus(STATUS.SHOW_RESPONSES)
-          },
-          onFinish: () => {
-            this.round.finish()
-          },
-          onBroadcastState: () => {
-            const scene = this.showCoordinator?.currentScene
-
-            if (
-              scene?.kind === "animation" &&
-              scene.preset === "tie-break" &&
-              !this.extensionSession?.hasUnresolvedStoryTie()
-            ) {
-              this.showCoordinator?.advanceScene()
-
-              return
-            }
-
-            this.broadcastExtensionState()
-          },
+    this.showCoordinator = createAuthoredCoordinator(
+      sidecar,
+      this.extensionSession,
+      {
+        onStartQuestion: (qIdx) => {
+          this.round.startQuestionAtIndex(qIdx)
         },
-      })
-      this.extensionSession?.setShowCoordinator(this.showCoordinator)
-    }
+        onReopenQuestion: (qIdx) => {
+          this.clearQuestionVerdicts(qIdx)
+          this.round.reopenQuestion(qIdx)
+          this.syncRosterScoresFromPlayers()
+          this.broadcastHostPresence()
+          this.broadcastExtensionState()
+        },
+        onShowCompletedQuestionResults: (qIdx) => {
+          this.round.showCompletedQuestionResults(qIdx)
+          this.syncExtensionStatus(STATUS.SHOW_RESPONSES)
+        },
+        onFinish: () => {
+          this.round.finish()
+        },
+        onBroadcastState: () => this.broadcastExtensionState(),
+      },
+    )
 
     if (sidecar?.roster) {
       this._settings = {
@@ -228,6 +194,7 @@ class Game {
       isStarted: () => this.started,
     })
 
+    const getRoundIndex = () => this.round.currentQuestionIndex
     this.round = new RoundManager({
       quizz,
       players: this.playerManager,
@@ -250,337 +217,70 @@ class Game {
         }
       },
       getSettings: () => this._settings,
-      shouldShowLeaderboard: this.extensionSession
-        ? (params) => {
-            const extras = this.extensionSession?.extras
+      ...createShowRoundHooks({
+        extensionSession: this.extensionSession,
+        showCoordinator: this.showCoordinator,
+        isCreatingWorldsShow: isCreatingWorlds,
+        gameMode: this.gameMode,
+        roster: this.roster,
+        round: {
+          get currentQuestionIndex() {
+            return getRoundIndex()
+          },
+        },
+        setLastDistribution: (dist) => {
+          this.lastCompletedDistribution = dist
+        },
+        syncRosterScoresFromPlayers: () => this.syncRosterScoresFromPlayers(),
+        broadcastHostPresence: () => this.broadcastHostPresence(),
+        broadcastExtensionState: () => this.broadcastExtensionState(),
+      }),
+    })
 
-            if (!extras) {
-              return false
-            }
-
-            if (isQuizExtrasV2(extras)) {
-              if (
-                extras.defaults.leaderboardPolicy === "cardOnly" ||
-                extras.defaults.leaderboardPolicy === "disabled"
-              ) {
-                return false
-              }
-
-              if (extras.leaderboard) {
-                const currentQId =
-                  extras.questionIds[params.currentQuestionIndex]
-                const nextQId =
-                  extras.questionIds[params.currentQuestionIndex + 1]
-
-                return shouldShowLeaderboard({
-                  policy: extras.leaderboard,
-                  gameMode: this.gameMode,
-                  currentQuestionIndex: params.currentQuestionIndex,
-                  totalQuestions: params.totalQuestions,
-                  currentQuestionId: currentQId,
-                  nextQuestionId: nextQId,
-                  currentCategory: params.currentCategory,
-                  nextCategory: params.nextCategory,
-                  isManualRequested:
-                    this.extensionSession.consumeManualLeaderboardRequest(),
-                })
-              }
-
-              return false
-            }
-
-            const currentQId = extras.questionIds[params.currentQuestionIndex]
-            const nextQId = extras.questionIds[params.currentQuestionIndex + 1]
-
-            return shouldShowLeaderboard({
-              policy: extras.leaderboard,
-              gameMode: this.gameMode,
-              currentQuestionIndex: params.currentQuestionIndex,
-              totalQuestions: params.totalQuestions,
-              currentQuestionId: currentQId,
-              nextQuestionId: nextQId,
-              currentCategory: params.currentCategory,
-              nextCategory: params.nextCategory,
-              isManualRequested:
-                this.extensionSession.consumeManualLeaderboardRequest(),
-            })
-          }
-        : undefined,
-      hasInterlude: (qIdx) => {
-        if (
-          this.extensionSession?.extras &&
-          isQuizExtrasV2(this.extensionSession.extras)
-        ) {
-          return false
-        }
-
-        return this.extensionSession?.hasInterlude(qIdx) ?? false
-      },
-      getInterludeAdvance: (qIdx) =>
-        this.extensionSession?.getInterludeAdvance(qIdx) ?? "manual",
-      getInterludeDuration: (qIdx) =>
-        this.extensionSession?.getInterludeDuration(qIdx) ?? 5000,
-      onInterlude: (qIdx) => {
-        if (this.extensionSession) {
-          this.extensionSession.onInterludeStart(qIdx)
-          this.broadcastExtensionState()
-        }
-      },
-      getQuestionId: (qIdx) => this.extensionSession?.getQuestionId(qIdx),
-      onResultsCalculated: (dist) => {
-        this.lastCompletedDistribution = dist
-
-        if (this.extensionSession) {
-          this.extensionSession.setRevealDistribution(dist)
-          this.broadcastExtensionState()
-        }
-      },
-      onPresenceChange: () => {
-        this.broadcastHostPresence()
-      },
-      onQuestionScored: (scoredPlayers) => {
-        const epoch =
-          this.extensionSession?.currentEpoch ??
-          this.round.currentQuestionIndex + 1
-        this.roster.recordScores(scoredPlayers, epoch)
-      },
-      onReplayCheckpoint: (qIdx) => {
-        this.lastCompletedDistribution = null
-        this.showCoordinator?.restoreQuestionPosition(qIdx)
-
-        if (this.extensionSession) {
-          this.extensionSession.onReplayCheckpoint(qIdx)
-          this.broadcastExtensionState()
-        }
-
-        this.syncRosterScoresFromPlayers()
-        this.broadcastHostPresence()
-      },
-      onShowStart: this.showCoordinator
-        ? () => {
-            this.showCoordinator?.start()
-          }
-        : undefined,
-      skipShowStartCountdown: this.showCoordinator
-        ? () =>
-            this.isCreatingWorldsShow ||
-            (this.showCoordinator?.hasAuthoredOpeningAtStart() ?? false)
-        : undefined,
-      onQuestionCompleted: this.showCoordinator
-        ? (qIdx) => {
-            this.showCoordinator?.onQuestionCompleted(qIdx)
-          }
-        : undefined,
-      onQuestionSkipped: this.showCoordinator
-        ? () => {
-            this.showCoordinator?.skipQuestionSequence()
-          }
-        : undefined,
-      canPreviousTimelineStep: this.showCoordinator
-        ? () => this.showCoordinator?.canPrevious() ?? { can: false }
-        : undefined,
-      onPreviousTimelineStep: this.showCoordinator
-        ? () => {
-            const ok = this.showCoordinator?.previousScene() ?? false
-
-            if (ok) {
-              this.broadcastExtensionState()
-            }
-
-            return ok
-          }
-        : undefined,
-      hasAuthoredResultsScene: this.showCoordinator
-        ? (qIdx) =>
-            this.showCoordinator?.hasNextSceneResultsForQuestion(qIdx) ?? false
-        : undefined,
-      skipQuestionPreview: () => isCreatingWorlds,
-      // Five answer cards (~2s), then the existing 1.12s clock entrance.
-      votingEntranceMs: () => (isCreatingWorlds ? 4000 : 0),
-      // The server hold includes up to ~2 seconds of queued card/result
-      // choreography, leaving the completed percentages readable for ~5 seconds.
-      quickResultsHoldSeconds: () => (isCreatingWorlds ? 7 : null),
+    this.phone = new GamePhoneController({
+      gameId: this.gameId,
+      inviteCode: this.inviteCode,
+      gameMode: this.gameMode,
+      quizz,
+      io,
+      roster: this.roster,
+      round: this.round,
+      players: this.playerManager,
+      started: () => this.started,
+      settings: () => this._settings,
+      locked: () => this._locked,
+      session: () => this.extensionSession,
+      coordinator: () => this.showCoordinator,
+      notifyPlayerUpdated: (previous, player, timedOut) =>
+        this.notifyPlayerUpdated(previous, player, timedOut),
+      broadcastExtensionState: () => this.broadcastExtensionState(),
+      broadcastHostPresence: () => this.broadcastHostPresence(),
+      setPlayerDisconnected: (id, timedOut) =>
+        this.setPlayerDisconnected(id, timedOut),
     })
 
     if (this.extensionSession) {
-      this.extensionSession.setDelegate({
-        getVoteCompletionReason: () => this.getVoteCompletionReason(),
-        endAnswerTimer: () => this.round.endTimer(),
-        nextScreen: () => {
-          if (!this.started && this.presentationLaunch?.advance()) return true
-          if (this.started) return this.round.nextScreen()
-          const hostSocket = this.io.sockets.sockets.get(this.manager.id)
-          if (!hostSocket || this.playerManager.count() === 0) return false
-          void this.start(hostSocket)
-          return this.started
-        },
-        previousScreen: () => {
-          const ok = this.round.previousScreen()
-
-          if (ok) {
-            this.syncRosterScoresFromPlayers()
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          }
-
-          return ok
-        },
-        cancelActiveVote: () => {
-          const ok = this.round.cancelActiveVote()
-
-          if (ok) {
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          }
-
-          return ok
-        },
-        reopenQuestion: (qIdx) => {
-          this.clearQuestionVerdicts(qIdx)
-          const ok = this.round.reopenQuestion(qIdx)
-
-          if (ok) {
-            this.syncRosterScoresFromPlayers()
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          }
-
-          return ok
-        },
-        getAnswersCount: () => this.round.getAnswerCount(),
-        getPresentationLaunch: () => this.presentationLaunch?.snapshot(this.started) ?? null,
-        getParticipation: () => {
-          const connected = this.players.filter((player) => player.connected)
-          return {
-            connected: connected.length,
-            answered: connected.filter((player) =>
-              this.round.hasPlayerAnswered(player.id),
-            ).length,
-          }
-        },
-        skipQuestion: (reason) => this.round.skipQuestion(reason),
-        replayFromCheckpoint: (qIdx) => {
-          // Restarting the live question keeps participants who joined after its
-          // checkpoint. Earlier history replay retains its existing rewind semantics.
-          if (qIdx !== this.round.currentQuestionIndex)
-            return this.round.replayFromCheckpoint(qIdx)
-          this.clearQuestionVerdicts(qIdx)
-          const ok = this.round.reopenQuestion(qIdx)
-          if (ok) {
-            this.syncRosterScoresFromPlayers()
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          }
-          return ok
-        },
-        endOrSkipInterlude: () => this.round.endOrSkipInterlude(),
-        getHistory: (qIdx) => this.round.getHistory(qIdx),
-        advanceTimelineScene: (sceneId, epoch, timelineStepIndex) =>
-          this.showCoordinator?.advanceScene(
-            sceneId,
-            epoch,
-            timelineStepIndex,
-          ) ?? false,
-        previousTimelineScene: () => {
-          const ok = this.showCoordinator?.previousScene() ?? false
-
-          if (ok) {
-            this.syncRosterScoresFromPlayers()
-            this.broadcastHostPresence()
-            this.broadcastExtensionState()
-          }
-
-          return ok
-        },
-        skipTimelineScene: (sceneId, epoch, timelineStepIndex) =>
-          this.showCoordinator?.skipScene(sceneId, epoch, timelineStepIndex) ??
-          false,
-        canPrevious: () => {
-          if (this.showCoordinator?.isSceneActive()) {
-            return this.showCoordinator.canPrevious()
-          }
-
-          return this.round.canPrevious()
-        },
-        isAcceptingAnswers: () => this.round.isCurrentlyAcceptingAnswers,
-        pauseGame: () => {
-          const ok = this.showCoordinator?.isSceneActive()
-            ? this.showCoordinator.pauseGame()
-            : this.round.pauseGame()
-
-          if (ok) {
-            this.broadcastExtensionState()
-          }
-          return ok
-        },
-        resumeGame: () => {
-          const ok = this.showCoordinator?.isSceneActive()
-            ? this.showCoordinator.resumeGame()
-            : this.round.resumeGame()
-
-          if (ok) {
-            this.broadcastExtensionState()
-          }
-          return ok
-        },
-        getPauseSnapshot: () =>
-          this.showCoordinator?.isSceneActive()
-            ? this.showCoordinator.getPauseSnapshot()
-            : this.round.getPauseSnapshot(),
-        getLeaderboard: () => {
-          const currentLb = this.round.currentLeaderboard
-          const source = currentLb.length > 0 ? currentLb : this.players
-
-          return source.map((p) => ({
-            displayName: p.username,
-            points: p.points,
-          }))
-        },
-        getLastCompletedQuestionSummary: () =>
-          buildInterimResults(
-            this.lastCompletedDistribution ??
-              this.round.getRevealDistribution(),
-            this.quizz,
-            this.extensionSession?.extras ?? null,
-          ),
-        getFullShowData: () => ({
-          isLive: true,
-          dialNumber:
-            sidecar && isQuizExtrasV2(sidecar)
-              ? (
-                  Object.values(sidecar.scenes).find(
-                    (scene) =>
-                      scene.kind === "animation" &&
-                      scene.preset === "representative-directory",
-                  ) as { dialNumber?: string } | undefined
-                )?.dialNumber
-              : undefined,
-          connectedTables: [
-            ...new Set(
-              [...this.roster.entries.values()].flatMap((entry, index) =>
-                entry.status === "connected"
-                  ? [entry.tableNumber ?? index + 1]
-                  : [],
-              ),
-            ),
-          ],
-          representatives: [...this.roster.entries.values()].map(
-            (entry, index) => ({
-              table: entry.tableNumber ?? index + 1,
-              name: entry.displayName,
-            }),
-          ),
+      this.extensionSession.setDelegate(
+        createSessionDelegate({
+          extensionSession: this.extensionSession,
+          presentationLaunch: this.presentationLaunch,
+          showCoordinator: this.showCoordinator,
+          round: this.round,
+          quizz,
+          roster: this.roster,
+          started: () => this.started,
+          players: () => this.players,
+          playerCount: () => this.playerManager.count(),
+          hostSocket: () => this.io.sockets.sockets.get(this.manager.id),
+          start: (socket) => this.start(socket),
+          getVoteCompletionReason: () => this.getVoteCompletionReason(),
+          lastCompletedDistribution: () => this.lastCompletedDistribution,
+          clearQuestionVerdicts: (index) => this.clearQuestionVerdicts(index),
+          syncRosterScoresFromPlayers: () => this.syncRosterScoresFromPlayers(),
+          broadcastHostPresence: () => this.broadcastHostPresence(),
+          broadcastExtensionState: () => this.broadcastExtensionState(),
         }),
-        getAnswerRecapSummary: (scene, timelineStepIndex) =>
-          buildAnswerRecap({
-            scene,
-            timelineStepIndex,
-            quizz: this.quizz,
-            extras: this.extensionSession?.extras ?? null,
-            history: (this.round.getHistory() ?? []) as QuestionResult[],
-            getLedger: (index) => this.round.getQuestionLedgerEntry(index),
-          }),
-      })
+      )
     }
 
     console.log(
@@ -592,20 +292,19 @@ class Game {
     return this._manager
   }
 
-  /** Public-room images only; never reveal media belonging to a different account. */
+  /** Authorize only files referenced by this room's actual content. */
   canViewMedia(name: string): boolean {
-    const content = JSON.stringify([
-      this.quizz,
-      this.extensionSession?.extras ?? {},
-    ])
-    const referenced = new Set(
-      Array.from(
-        content.matchAll(new RegExp("/media/([A-Za-z0-9_.-]+)", "g")),
-        (match) => match[1],
-      ),
+    if (
+      this.extensionSession?.themeDefinition?.assets.some(
+        (asset) => asset.url === `/media/${name}`,
+      )
     )
-
-    return referenced.has(name)
+      return true
+    return canViewReferencedMedia(
+      this.quizz,
+      this.extensionSession?.extras ?? null,
+      name,
+    )
   }
 
   get roundManager(): RoundManager {
@@ -662,279 +361,22 @@ class Game {
     return this.roster.get(rosterPlayerId)
   }
 
-  getCurrentQuestionPstnSupport(): {
-    supported: boolean
-    reason?: string
-    answersCount: number
-    maxAnswerIndex: number
-    isSurvey: boolean
-    epoch: number
-  } {
-    const epoch =
-      this.extensionSession?.currentEpoch ??
-      (this.started ? this.round.currentEpoch : 0)
-
-    if (!this.started || this.showCoordinator?.isSceneActive()) {
-      return {
-        supported: false,
-        reason: "no_active_question",
-        answersCount: 0,
-        maxAnswerIndex: -1,
-        isSurvey: false,
-        epoch,
-      }
-    }
-
-    const currentQ = this.quizz.questions[this.round.currentQuestionIndex]
-
-    if (!currentQ) {
-      return {
-        supported: false,
-        reason: "no_active_question",
-        answersCount: 0,
-        maxAnswerIndex: -1,
-        isSurvey: false,
-        epoch,
-      }
-    }
-
-    const answersCount = currentQ.answers?.length ?? 0
-    const playMode = resolveQuestionPlayMode(currentQ, this.gameMode)
-    const check = isQuestionSupportedOnPstn(
-      this.gameMode,
-      currentQ.type,
-      answersCount,
-      playMode,
-    )
-
-    return {
-      supported: check.supported,
-      reason: check.reason,
-      answersCount,
-      maxAnswerIndex: answersCount - 1,
-      isSurvey: this.round.isSurvey(),
-      epoch,
-    }
+  getCurrentQuestionPstnSupport(
+    ...args: Parameters<GamePhoneController["getCurrentQuestionPstnSupport"]>
+  ) {
+    return this.phone.getCurrentQuestionPstnSupport(...args)
   }
 
-  getQuestionStateForGateway(rosterPlayerId?: string) {
-    const pstn = this.getCurrentQuestionPstnSupport()
-
-    if (this.showCoordinator?.isSceneActive()) {
-      const entry = rosterPlayerId
-        ? this.roster.entries.get(rosterPlayerId)
-        : null
-      const player = entry?.clientId
-        ? this.playerManager.findByClientId(entry.clientId)
-        : undefined
-      const verdict = rosterPlayerId
-        ? (this.roster.verdicts.get(rosterPlayerId) ?? null)
-        : null
-
-      return {
-        gameId: this.gameId,
-        inviteCode: this.inviteCode,
-        started: this.started,
-        gameMode: this.gameMode,
-        epoch: this.showCoordinator.currentEpoch,
-        questionIndex: this.round.currentQuestionIndex,
-        acceptingAnswers: false,
-        answeredCurrentQuestion: true,
-        points: player?.points ?? entry?.points ?? 0,
-        lastVerdict: verdict,
-        answersCount: pstn.answersCount,
-        maxAnswerIndex: pstn.maxAnswerIndex,
-        isSurvey: pstn.isSurvey,
-        isSupportedOnPstn: pstn.supported,
-      }
-    }
-
-    const epoch =
-      this.extensionSession?.currentEpoch ??
-      (this.started ? this.round.currentEpoch : 0)
-    const entry = rosterPlayerId
-      ? this.roster.entries.get(rosterPlayerId)
-      : null
-    const player = entry?.clientId
-      ? this.playerManager.findByClientId(entry.clientId)
-      : undefined
-    const answered = player ? this.round.hasPlayerAnswered(player.id) : false
-    const verdict = rosterPlayerId
-      ? (this.roster.verdicts.get(rosterPlayerId) ?? null)
-      : null
-
-    return {
-      gameId: this.gameId,
-      inviteCode: this.inviteCode,
-      started: this.started,
-      gameMode: this.gameMode,
-      epoch,
-      questionIndex: this.round.currentQuestionIndex,
-      acceptingAnswers: this.round.isCurrentlyAcceptingAnswers,
-      answeredCurrentQuestion: answered,
-      points: player?.points ?? entry?.points ?? 0,
-      lastVerdict: verdict,
-      answersCount: pstn.answersCount,
-      maxAnswerIndex: pstn.maxAnswerIndex,
-      isSurvey: pstn.isSurvey,
-      isSupportedOnPstn: pstn.supported,
-    }
+  getQuestionStateForGateway(
+    ...args: Parameters<GamePhoneController["getQuestionStateForGateway"]>
+  ) {
+    return this.phone.getQuestionStateForGateway(...args)
   }
 
-  /**
-   * Direct server-side answer evaluation for authenticated gateway/telephony session.
-   * Returns immediate acceptance status and whether verdict is known now or delayed until reveal.
-   */
   submitPhoneAnswerByRosterId(
-    rosterPlayerId: string,
-    zeroBasedAnswerIndex: number,
-    callId?: string,
-  ): {
-    accepted: boolean
-    epoch: number
-    correct?: boolean
-    verdictPending?: boolean
-    isSurvey?: boolean
-    reason?: string
-  } {
-    const pstn = this.getCurrentQuestionPstnSupport()
-    const { epoch } = pstn
-
-    if (this.showCoordinator?.isSceneActive()) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "scene_active",
-      }
-    }
-
-    if (this.round.isPaused) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "game_paused",
-      }
-    }
-
-    if (!pstn.supported) {
-      return {
-        accepted: false,
-        epoch,
-        reason: pstn.reason ?? "unsupported_question_type",
-      }
-    }
-
-    if (
-      typeof zeroBasedAnswerIndex !== "number" ||
-      !Number.isInteger(zeroBasedAnswerIndex) ||
-      zeroBasedAnswerIndex < 0 ||
-      zeroBasedAnswerIndex > pstn.maxAnswerIndex
-    ) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "invalid_answer_index",
-      }
-    }
-
-    if (!this.started || !this.round.isCurrentlyAcceptingAnswers) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "not_accepting_answers",
-      }
-    }
-
-    const entry = this.roster.entries.get(rosterPlayerId)
-
-    if (!entry?.clientId) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "player_not_joined",
-      }
-    }
-
-    if (callId && entry.activeCallId && entry.activeCallId !== callId) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "stale_call",
-      }
-    }
-
-    const player = this.playerManager.findByClientId(entry.clientId)
-
-    if (!player) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "player_not_found",
-      }
-    }
-
-    if (this.round.hasPlayerAnswered(player.id)) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "duplicate_answer",
-      }
-    }
-
-    entry.lastSeenAt = Date.now()
-    // Construct a minimal Socket-compatible shim for RoundManager.selectAnswer
-    const fakeSocket = {
-      id: player.id,
-      data: { clientId: player.clientId, role: "player" },
-      to: (room: string) => this.io.to(room),
-      emit: (ev: string, payload: unknown) => {
-        ;(
-          this.io.to(player.id) as unknown as {
-            emit: (_e: string, _p: unknown) => void
-          }
-        ).emit(ev, payload)
-      },
-    } as unknown as Socket
-
-    this.round.selectAnswer(fakeSocket, [zeroBasedAnswerIndex])
-
-    const nowAnswered = this.round.hasPlayerAnswered(player.id)
-
-    if (!nowAnswered) {
-      return {
-        accepted: false,
-        epoch,
-        reason: "rejected_by_engine",
-      }
-    }
-
-    if (this.round.isSurvey()) {
-      return {
-        accepted: true,
-        epoch,
-        isSurvey: true,
-        verdictPending: false,
-      }
-    }
-
-    // Note: if this was the last connected player to answer, RoundManager immediately
-    // aborts cooldown and runs showResults() synchronously or right after!
-    const verdict = this.roster.verdicts.get(rosterPlayerId)
-
-    if (verdict?.epoch === epoch) {
-      return {
-        accepted: true,
-        epoch,
-        correct: verdict.correct,
-        verdictPending: false,
-      }
-    }
-
-    return {
-      accepted: true,
-      epoch,
-      verdictPending: true,
-    }
+    ...args: Parameters<GamePhoneController["submitPhoneAnswerByRosterId"]>
+  ) {
+    return this.phone.submitPhoneAnswerByRosterId(...args)
   }
 
   /**
@@ -1010,70 +452,22 @@ class Game {
   joinSpectator(socket: Socket) {
     socket.join(this.gameId)
     this.spectatorSocketIds.add(socket.id)
-    socket.data = {
-      clientId: getClientId(socket),
-      role: SESSION_ROLES.SPECTATOR,
-      gameId: this.gameId,
-    }
-
-    socket.emit(EVENTS.SPECTATOR.SUCCESS_JOIN, {
+    connectAudience({
+      socket,
       gameId: this.gameId,
       inviteCode: this.inviteCode,
       gameMode: this.gameMode,
+      clientId: getClientId(socket),
+      managerStatus: this.managerStatus,
+      lastBroadcastStatus: this.lastBroadcastStatus,
+      started: this.started,
+      acceptingAnswers: this.round.isCurrentlyAcceptingAnswers,
+      remainingSeconds: this.round.getRemainingSeconds(),
+      reconnectInfo: this.round.getReconnectInfo(),
+      survey: this.round.isSurvey(),
+      session: this.extensionSession,
+      players: this.players,
     })
-
-    const currentStatus =
-      this.managerStatus ??
-      this.lastBroadcastStatus ??
-      (!this.started
-        ? {
-            name: STATUS.SHOW_ROOM,
-            data: {
-              text: "game:waitingForPlayers",
-              inviteCode: this.inviteCode,
-            },
-          }
-        : null)
-
-    if (currentStatus) {
-      const sanitized = this.sanitizeStatusForAudience(currentStatus)
-
-      if (
-        sanitized.name === STATUS.SELECT_ANSWER &&
-        this.round.isCurrentlyAcceptingAnswers
-      ) {
-        const remaining = this.round.getRemainingSeconds()
-
-        if (remaining !== null && remaining !== undefined) {
-          ;(sanitized.data as Record<string, unknown>).remainingTime = remaining
-        }
-      }
-
-      socket.emit(EVENTS.GAME.STATUS, sanitized)
-    }
-
-    const reconnectInfo = this.round.getReconnectInfo()
-
-    if (reconnectInfo) {
-      socket.emit(EVENTS.GAME.UPDATE_QUESTION, reconnectInfo)
-    }
-
-    if (this.round.isCurrentlyAcceptingAnswers) {
-      socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
-    }
-
-    if (this.extensionSession) {
-      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
-        clientId: p.clientId,
-        score: p.points,
-        isConnected: p.connected,
-      }))
-      const specSnapshot = this.extensionSession.getStateSnapshot(
-        "player",
-        playerScores,
-      )
-      socket.emit(EVENTS.EXTENSIONS.STATE, specSnapshot)
-    }
   }
 
   leaveSpectator(socket: Socket) {
@@ -1084,37 +478,8 @@ class Game {
   public sanitizeStatusForAudience<T extends Status>(statusData: {
     name: T
     data: StatusDataMap[T]
-  }): { name: T; data: StatusDataMap[T] } {
-    if (!statusData || typeof statusData !== "object" || !statusData.data) {
-      return statusData
-    }
-
-    const cleanData = { ...statusData.data } as Record<string, unknown>
-
-    // Policy: Never expose editorial/backstage note to audience or players
-    if ("note" in cleanData) {
-      delete cleanData.note
-    }
-
-    // In SELECT_ANSWER: never leak solutions
-    if (
-      statusData.name === STATUS.SELECT_ANSWER ||
-      statusData.name === STATUS.SHOW_QUESTION
-    ) {
-      if ("solutions" in cleanData) {
-        delete cleanData.solutions
-      }
-    }
-
-    // For survey questions: solutions must be undefined
-    if (this.round.isSurvey() && "solutions" in cleanData) {
-      delete cleanData.solutions
-    }
-
-    return {
-      name: statusData.name,
-      data: cleanData as StatusDataMap[T],
-    }
+  }) {
+    return sanitizeAudienceStatus(statusData, this.round.isSurvey())
   }
 
   // ── Status broadcasting ──────────────────────────────────────────────────
@@ -1138,88 +503,24 @@ class Game {
   }
 
   private syncExtensionStatus(status: Status) {
-    if (!this.extensionSession) {
-      return
-    }
-
-    if (
-      status === STATUS.SHOW_QUESTION ||
-      (status === STATUS.SELECT_ANSWER &&
-        this.showCoordinator?.currentPhase === "question" &&
-        (this.extensionSession.currentPhase !== "question" ||
-          this.extensionSession.getCurrentQuestionId() !==
-            this.extensionSession.getQuestionId(
-              this.round.currentQuestionIndex,
-            )))
-    ) {
-      // The picture-led show skips SHOW_QUESTION: initialize its authoritative
-      // per-question visuals when the five-card voting screen first opens.
-      this.extensionSession.onQuestionStart(this.round.currentQuestionIndex)
-    } else {
-      const phaseMap: Partial<
-        Record<
-          Status,
-          | "lobby"
-          | "prepared"
-          | "question"
-          | "responses"
-          | "leaderboard"
-          | "finished"
-        >
-      > = {
-        [STATUS.SHOW_ROOM]: "lobby",
-        [STATUS.SHOW_START]: "prepared",
-        [STATUS.SHOW_PREPARED]: "prepared",
-        [STATUS.SELECT_ANSWER]: "question",
-        [STATUS.SHOW_RESULT]: "responses",
-        [STATUS.SHOW_RESPONSES]: "responses",
-        [STATUS.SHOW_LEADERBOARD]: "leaderboard",
-        [STATUS.FINISHED]: "finished",
-        [STATUS.SUMMARY]: "finished",
-      }
-
-      const phase = phaseMap[status]
-
-      if (phase) {
-        this.extensionSession.setPhase(phase)
-      }
-    }
-
+    if (!this.extensionSession) return
+    syncSessionStatus({
+      session: this.extensionSession,
+      coordinator: this.showCoordinator,
+      questionIndex: this.round.currentQuestionIndex,
+      status,
+    })
     this.broadcastExtensionState()
   }
 
   private broadcastExtensionState() {
-    if (!this.extensionSession) {
-      return
-    }
-
-    const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
-      clientId: p.clientId,
-      score: p.points,
-      isConnected: p.connected,
-    }))
-
-    if (this._manager.id) {
-      this.io
-        .to(this._manager.id)
-        .emit(
-          EVENTS.EXTENSIONS.STATE,
-          this.extensionSession.getStateSnapshot("manager", playerScores),
-        )
-    }
-
-    const playerSnapshot = this.extensionSession.getStateSnapshot(
-      "player",
-      playerScores,
-    )
-
-    for (const player of this.players) {
-      this.io.to(player.id).emit(EVENTS.EXTENSIONS.STATE, playerSnapshot)
-    }
-
-    for (const specId of this.spectatorSocketIds) {
-      this.io.to(specId).emit(EVENTS.EXTENSIONS.STATE, playerSnapshot)
-    }
+    broadcastSessionSnapshot({
+      session: this.extensionSession,
+      io: this.io,
+      managerId: this._manager.id,
+      players: this.players,
+      spectatorIds: this.spectatorSocketIds,
+    })
   }
 
   handleExtensionCommand(command: unknown) {
@@ -1271,62 +572,19 @@ class Game {
     },
   ): string | null {
     const clientId = getClientId(socket)
-    const normalizedPhone = claimsExtra?.phoneE164
-      ? normalizePhoneE164(claimsExtra.phoneE164)
-      : null
-
-    // 1. Resolve matching roster entry by explicit rosterPlayerId or phoneE164
-    let rosterEntry = claimsExtra?.rosterPlayerId
-      ? this.roster.entries.get(claimsExtra.rosterPlayerId)
-      : undefined
-
-    if (!rosterEntry && normalizedPhone) {
-      const matchedId = this.roster.phoneIndex.get(normalizedPhone)
-
-      if (matchedId) {
-        rosterEntry = this.roster.entries.get(matchedId)
-      }
-    }
-
-    // Browser representatives identify their existing public table row by the
-    // configured display name. Match only one not-yet-bound pre-registered row;
-    // phone/explicit IDs above remain authoritative and connected rows cannot
-    // be taken over by another browser.
-    if (!rosterEntry && !normalizedPhone && username?.trim()) {
-      const normalizedName = username.trim().toLocaleLowerCase()
-      const matches = [...this.roster.entries.values()].filter(
-        (entry) =>
-          entry.preRegistered &&
-          entry.displayName.trim().toLocaleLowerCase() === normalizedName,
-      )
-
-      if (matches.length === 1) {
-        rosterEntry = matches[0]
-        if (
-          rosterEntry.status === "connected" &&
-          rosterEntry.clientId !== clientId
-        ) {
-          return "errors:game.playerAlreadyConnected"
-        }
-      }
-    }
-
-    // 2. Enforce phoneInviteOnly for unknown phone callers
-    if (
-      !rosterEntry &&
-      this.isCreatingWorldsShow &&
-      !this.temporaryGuestsAllowed &&
-      [...this.roster.entries.values()].some((entry) => entry.preRegistered)
-    ) {
-      return "errors:game.locked"
-    }
-    if (
-      !rosterEntry &&
-      (claimsExtra?.source === "phone" || normalizedPhone) &&
-      this._settings.phoneInviteOnly
-    ) {
-      return "errors:game.locked"
-    }
+    const {
+      entry: rosterEntry,
+      normalizedPhone,
+      error: rosterError,
+    } = this.roster.resolveBrowserJoin({
+      clientId,
+      username,
+      claimsExtra,
+      isCreatingWorldsShow: this.isCreatingWorldsShow,
+      temporaryGuestsAllowed: this.temporaryGuestsAllowed,
+      phoneInviteOnly: Boolean(this._settings.phoneInviteOnly),
+    })
+    if (rosterError) return rosterError
 
     // 3. If this roster entry already has an existing Player (e.g., redial with a new CallId/clientId/socket),
     // rebind the existing Player row without creating a duplicate or losing score/epoch/answer state!
@@ -1447,44 +705,13 @@ class Game {
       return error
     }
 
-    const now = Date.now()
-
-    if (rosterEntry) {
-      rosterEntry.clientId = clientId
-      rosterEntry.displayName = finalUsername
-
-      if (normalizedPhone && !rosterEntry.phoneE164) {
-        rosterEntry.phoneE164 = normalizedPhone
-        this.roster.phoneIndex.set(normalizedPhone, rosterEntry.rosterPlayerId)
-      }
-
-      rosterEntry.source =
-        claimsExtra?.source ?? (rosterEntry.phoneE164 ? "phone" : "web")
-      rosterEntry.status = "connected"
-      rosterEntry.timedOut = false
-      rosterEntry.lastSeenAt = now
-      this.roster.clientIndex.set(clientId, rosterEntry.rosterPlayerId)
-    } else {
-      const rId = claimsExtra?.rosterPlayerId ?? generateRosterPlayerId()
-      const source = claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
-      this.roster.entries.set(rId, {
-        rosterPlayerId: rId,
-        clientId,
-        displayName: finalUsername,
-        phoneE164: normalizedPhone,
-        source,
-        status: "connected",
-        timedOut: false,
-        points: 0,
-        lastSeenAt: now,
-        preRegistered: false,
-      })
-      this.roster.clientIndex.set(clientId, rId)
-
-      if (normalizedPhone) {
-        this.roster.phoneIndex.set(normalizedPhone, rId)
-      }
-    }
+    this.roster.recordBrowserJoin({
+      rosterEntry,
+      clientId,
+      finalUsername,
+      normalizedPhone,
+      claimsExtra,
+    })
 
     if (this.extensionSession) {
       this.extensionSession.onPlayerJoin(clientId)
@@ -1506,190 +733,16 @@ class Game {
    * Ensures phone callers appear in PlayerManager, host leaderboard, and HostPresenceSnapshot
    * even without a browser WebSocket client.
    */
-  joinOrRebindPhoneCaller(input: {
-    rosterPlayerId?: string
-    phoneRaw?: string | null
-    callId: string
-    fallbackName?: string
-  }): {
-    ok: boolean
-    error?: string
-    rosterPlayerId?: string
-    clientId?: string
-    displayName?: string
-    phoneE164?: string | null
-    reconnected?: boolean
-    points?: number
-  } {
-    const normalizedPhone = input.phoneRaw
-      ? normalizePhoneE164(input.phoneRaw)
-      : null
-
-    let rosterEntry = input.rosterPlayerId
-      ? this.roster.entries.get(input.rosterPlayerId)
-      : normalizedPhone
-        ? (() => {
-            const rId = this.roster.phoneIndex.get(normalizedPhone)
-
-            return rId ? this.roster.entries.get(rId) : undefined
-          })()
-        : undefined
-
-    if (!rosterEntry && this._settings.phoneInviteOnly) {
-      return {
-        ok: false,
-        error: "errors:game.locked",
-      }
-    }
-
-    if (!rosterEntry && this._locked) {
-      return {
-        ok: false,
-        error: "errors:game.locked",
-      }
-    }
-
-    const now = Date.now()
-    const syntheticSocketId = `phone-sock-${input.callId}`
-
-    // Rebind if already in roster and has a Player
-    if (rosterEntry?.clientId) {
-      const existingPlayer = this.playerManager.findByClientId(
-        rosterEntry.clientId,
-      )
-
-      if (existingPlayer) {
-        const oldSocketId = existingPlayer.id
-        this.playerManager.updateSocketId(oldSocketId, syntheticSocketId)
-        this.round.updatePlayerId(oldSocketId, syntheticSocketId)
-        existingPlayer.connected = true
-        rosterEntry.status = "connected"
-        rosterEntry.timedOut = false
-        rosterEntry.lastSeenAt = now
-        rosterEntry.source = "phone"
-        rosterEntry.activeCallId = input.callId
-
-        this.notifyPlayerUpdated(oldSocketId, existingPlayer, false)
-        this.playerManager.broadcastCount()
-        this.broadcastExtensionState()
-        this.broadcastHostPresence()
-
-        return {
-          ok: true,
-          rosterPlayerId: rosterEntry.rosterPlayerId,
-          clientId: existingPlayer.clientId,
-          displayName: existingPlayer.username,
-          phoneE164: rosterEntry.phoneE164,
-          reconnected: true,
-          points: existingPlayer.points,
-        }
-      }
-    }
-
-    const rId = rosterEntry?.rosterPlayerId ?? generateRosterPlayerId()
-    const clientId = rosterEntry?.clientId ?? `phone-client-${rId}`
-    const suffix = normalizedPhone
-      ? normalizedPhone.slice(-4)
-      : input.callId.slice(-4).padStart(4, "0")
-    const displayName =
-      rosterEntry?.displayName ?? input.fallbackName ?? `Caller_${suffix}`
-
-    const fakeSocket = {
-      id: syntheticSocketId,
-      data: { clientId, role: "player" },
-      join: (_room: string) => undefined,
-      to: (room: string) => this.io.to(room),
-      emit: (_event: string) => false,
-    } as unknown as Socket
-
-    const joinErr = this.playerManager.join(fakeSocket, displayName)
-
-    if (joinErr) {
-      return { ok: false, error: joinErr }
-    }
-
-    if (rosterEntry) {
-      rosterEntry.clientId = clientId
-      rosterEntry.status = "connected"
-      rosterEntry.timedOut = false
-      rosterEntry.lastSeenAt = now
-      rosterEntry.source = "phone"
-      rosterEntry.activeCallId = input.callId
-    } else {
-      rosterEntry = {
-        rosterPlayerId: rId,
-        clientId,
-        displayName,
-        phoneE164: normalizedPhone,
-        phoneRaw: input.phoneRaw ?? undefined,
-        source: "phone",
-        status: "connected",
-        timedOut: false,
-        points: 0,
-        lastSeenAt: now,
-        preRegistered: false,
-        activeCallId: input.callId,
-      }
-      this.roster.entries.set(rId, rosterEntry)
-
-      if (normalizedPhone) {
-        this.roster.phoneIndex.set(normalizedPhone, rId)
-      }
-    }
-
-    this.roster.clientIndex.set(clientId, rId)
-
-    if (this.extensionSession) {
-      this.extensionSession.onPlayerJoin(clientId)
-      this.broadcastExtensionState()
-    }
-
-    this.broadcastHostPresence()
-
-    return {
-      ok: true,
-      rosterPlayerId: rId,
-      clientId,
-      displayName,
-      phoneE164: normalizedPhone,
-      reconnected: false,
-      points: 0,
-    }
+  joinOrRebindPhoneCaller(
+    ...args: Parameters<GamePhoneController["joinOrRebindPhoneCaller"]>
+  ) {
+    return this.phone.joinOrRebindPhoneCaller(...args)
   }
 
   disconnectPhoneCallerByRosterId(
-    rosterPlayerId: string,
-    timedOut = false,
-    callId?: string,
-  ): boolean {
-    const entry = this.roster.entries.get(rosterPlayerId)
-
-    if (!entry) {
-      return false
-    }
-
-    // If a callId was provided and does not match the currently bound callId, this hangup is stale!
-    if (callId && entry.activeCallId && entry.activeCallId !== callId) {
-      return false
-    }
-
-    entry.status = "disconnected"
-    entry.timedOut = timedOut
-    entry.lastSeenAt = Date.now()
-
-    if (entry.clientId) {
-      const player = this.playerManager.findByClientId(entry.clientId)
-
-      if (player) {
-        this.setPlayerDisconnected(player.id, timedOut)
-
-        return true
-      }
-    }
-
-    this.broadcastHostPresence()
-
-    return true
+    ...args: Parameters<GamePhoneController["disconnectPhoneCallerByRosterId"]>
+  ) {
+    return this.phone.disconnectPhoneCallerByRosterId(...args)
   }
 
   dispose() {
@@ -1722,24 +775,7 @@ class Game {
     if (this.playerManager.kick(playerId)) {
       this.playerStatus.delete(playerId)
 
-      if (player) {
-        const rId = this.roster.clientIndex.get(player.clientId)
-
-        if (rId) {
-          const entry = this.roster.entries.get(rId)
-
-          if (entry) {
-            if (entry.preRegistered || entry.phoneE164) {
-              entry.status = "not_joined"
-              entry.clientId = null
-            } else {
-              this.roster.entries.delete(rId)
-            }
-          }
-
-          this.roster.clientIndex.delete(player.clientId)
-        }
-      }
+      if (player) this.roster.afterKick(player.clientId)
 
       if (this.extensionSession && player) {
         this.extensionSession.onPlayerKicked(player.clientId)
@@ -1813,18 +849,11 @@ class Game {
       socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
     }
 
-    if (this.extensionSession) {
-      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
-        clientId: p.clientId,
-        score: p.points,
-        isConnected: p.connected,
-      }))
-
-      socket.emit(
-        EVENTS.EXTENSIONS.STATE,
-        this.extensionSession.getStateSnapshot("manager", playerScores),
-      )
-    }
+    sendSessionSnapshot(socket, {
+      session: this.extensionSession,
+      role: "manager",
+      players: this.players,
+    })
 
     registry.reactivateGame(this.gameId)
     console.log(`Manager reconnected to game ${this.inviteCode}`)
@@ -1846,17 +875,7 @@ class Game {
     this.round.updatePlayerId(oldSocketId, socket.id)
     player.connected = true
 
-    const rId = this.roster.clientIndex.get(clientId)
-
-    if (rId) {
-      const entry = this.roster.entries.get(rId)
-
-      if (entry) {
-        entry.status = "connected"
-        entry.timedOut = false
-        entry.lastSeenAt = Date.now()
-      }
-    }
+    this.roster.markConnected(clientId)
 
     this.notifyPlayerUpdated(oldSocketId, player)
 
@@ -1902,18 +921,11 @@ class Game {
       socket.emit(EVENTS.GAME.COOLDOWN, this.round.getRemainingSeconds())
     }
 
-    if (this.extensionSession) {
-      const playerScores: PlayerScoreInfo[] = this.players.map((p) => ({
-        clientId: p.clientId,
-        score: p.points,
-        isConnected: p.connected,
-      }))
-
-      socket.emit(
-        EVENTS.EXTENSIONS.STATE,
-        this.extensionSession.getStateSnapshot("player", playerScores),
-      )
-    }
+    sendSessionSnapshot(socket, {
+      session: this.extensionSession,
+      role: "player",
+      players: this.players,
+    })
 
     console.log(
       `Player ${player.username} reconnected to game ${this.inviteCode}`,
@@ -1930,24 +942,11 @@ class Game {
     const existingPlayer = this.playerManager.findById(socketId)
 
     if (existingPlayer) {
-      const rId = this.roster.clientIndex.get(existingPlayer.clientId)
-
-      if (rId) {
-        const entry = this.roster.entries.get(rId)
-
-        if (
-          entry &&
-          (entry.preRegistered || entry.phoneE164 || entry.source === "phone")
-        ) {
-          // Keep pre-registered / phone participants in the game as disconnected so they aren't lost in lobby
-          this.setPlayerDisconnected(socketId, false)
-
-          return existingPlayer
-        }
-
-        this.roster.entries.delete(rId)
-        this.roster.clientIndex.delete(existingPlayer.clientId)
+      if (this.roster.shouldKeepParticipant(existingPlayer.clientId)) {
+        this.setPlayerDisconnected(socketId, false)
+        return existingPlayer
       }
+      this.roster.forgetClient(existingPlayer.clientId)
     }
 
     const player = this.playerManager.remove(socketId)
@@ -1969,18 +968,7 @@ class Game {
     const player = this.playerManager.findById(socketId)
 
     if (player) {
-      const rId = this.roster.clientIndex.get(player.clientId)
-
-      if (rId) {
-        const entry = this.roster.entries.get(rId)
-
-        if (entry) {
-          entry.status = "disconnected"
-          entry.timedOut = timedOut
-          entry.lastSeenAt = Date.now()
-          entry.points = player.points
-        }
-      }
+      this.roster.markDisconnected(player.clientId, player.points, timedOut)
 
       this.notifyPlayerUpdated(socketId, player, timedOut)
     }
@@ -2015,14 +1003,7 @@ class Game {
       const away = this.playerManager.getAll().filter((p) => !p.connected)
 
       for (const player of away) {
-        const rId = this.roster.clientIndex.get(player.clientId)
-        const entry = rId ? this.roster.entries.get(rId) : undefined
-
-        // Only remove ad-hoc web lobby leavers; keep pre-registered / phone participants
-        if (
-          !entry ||
-          (!entry.preRegistered && !entry.phoneE164 && entry.source !== "phone")
-        ) {
+        if (!this.roster.shouldKeepParticipant(player.clientId)) {
           this.removePlayer(player.id)
         }
       }

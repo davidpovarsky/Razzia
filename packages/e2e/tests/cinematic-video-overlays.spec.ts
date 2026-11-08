@@ -6,11 +6,11 @@ import zlib from "node:zlib"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import {
   createGame,
-  endTimer,
   loginManager,
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 

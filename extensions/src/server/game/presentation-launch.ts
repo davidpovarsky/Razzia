@@ -2,7 +2,10 @@ export class PresentationLaunch {
   private stage: "standby" | "opening" | "lobby" = "standby"
   private startedAt: number | null = null
   private timer: ReturnType<typeof setTimeout> | null = null
-  constructor(private readonly onChange: () => void) {}
+  private readonly onChange: () => void
+  constructor(onChange: () => void) {
+    this.onChange = onChange
+  }
 
   /** Only the host's explicit advance begins or skips the opening. */
   advance(): boolean {
@@ -23,7 +26,10 @@ export class PresentationLaunch {
   }
 
   snapshot(running: boolean) {
-    return { stage: running ? "running" as const : this.stage, startedAt: this.startedAt }
+    return {
+      stage: running ? ("running" as const) : this.stage,
+      startedAt: this.startedAt,
+    }
   }
 
   dispose() {

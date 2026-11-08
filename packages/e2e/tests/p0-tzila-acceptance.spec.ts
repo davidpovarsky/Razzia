@@ -2,12 +2,8 @@ import fs from "node:fs"
 import { join } from "node:path"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
-import {
-  createGame,
-  endTimer,
-  next,
-  startGame,
-} from "@razzia/e2e/utils/manager"
+import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 
@@ -310,9 +306,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await expect(interimRunners).toHaveCount(4)
     const firstInterimRunnerBox = await interimRunners.first().boundingBox()
     expect(firstInterimRunnerBox).not.toBeNull()
-    expect(
-      interimWinnerBox!.width * interimWinnerBox!.height,
-    ).toBeGreaterThan(
+    expect(interimWinnerBox!.width * interimWinnerBox!.height).toBeGreaterThan(
       1.8 * firstInterimRunnerBox!.width * firstInterimRunnerBox!.height,
     )
     expect(firstInterimRunnerBox!.y).toBeGreaterThanOrEqual(
@@ -418,19 +412,16 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await endTimer(managerPage)
 
     // Verify zero votes neutral state: no fake winner hero
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toHaveCount(0, { timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0, {
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.getByText(/No votes yet|0 votes/i).first(),
     ).toBeVisible()
 
     // Capture (10) Zero Votes No Winner (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      spectatorPage,
-      "10_zero_votes_no_winner_1280.png",
-    )
+    await saveScreenshot(spectatorPage, "10_zero_votes_no_winner_1280.png")
 
     await playerContext.close()
     await spectatorContext.close()
@@ -543,9 +534,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
 
     // End timer on Q1 -> Doctor wins with 2 votes
     await endTimer(managerPage)
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
+      timeout: 15_000,
+    })
     const winnerCardInitial = spectatorPage.locator('[data-winner="true"]')
     await expect(winnerCardInitial).toContainText("Doctor")
     await expect(winnerCardInitial).toContainText("2 votes")
@@ -628,9 +619,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await endTimer(managerPage)
 
     // Verify new results: Working Girl is now the winner with 2 votes!
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
+      timeout: 15_000,
+    })
     const newWinnerCard = spectatorPage.locator('[data-winner="true"]')
     await expect(newWinnerCard).toContainText("Working Girl")
     await expect(newWinnerCard).toContainText("2 votes")

@@ -10,18 +10,21 @@ import { useReducedMotion } from "motion/react"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import { useStudioEditor } from "./studio-editor-context"
 import Button from "@razzia/web/components/Button"
+import { useInstalledThemeCatalog } from "./installed-theme-catalog"
 
 /** Native stage preview only: no socket, live game, timers or audio owner. */
 export function ShowThemePreview() {
   const { t } = useTranslation()
   const { questions, currentIndex, questionIds, extras } = useQuizzEditor()
   const { defaults } = useStudioEditor()
+  const registry = useInstalledThemeCatalog()
   const [scene, setScene] = useState<TadazzV4Scene>("question")
   const reducedMotion = useReducedMotion() ?? false
   const theme = resolveShowTheme({
     selection: defaults.showTheme,
     scope: extras?.perQuestion[questionIds[currentIndex]]?.themeOverrides,
     role: "manager",
+    registry,
   })
   const question = questions.at(currentIndex) ?? questions.at(0)
   const visuals =

@@ -668,7 +668,10 @@
     "sceneSubtitleTooLong": "Le sous-titre ({{current}}/{{max}} car.) dépasse la longueur recommandée."
   },
   "tadazzShow": {
-    "participation": {"connected": "CONNECTÉS : {{count}}", "answered": "ONT RÉPONDU : {{answered}} / {{connected}}"},
+    "participation": {
+      "connected": "CONNECTÉS : {{count}}",
+      "answered": "ONT RÉPONDU : {{answered}} / {{connected}}"
+    },
     "questionReady": "QUESTION PRÊTE",
     "votingOpen": "VOTE OUVERT",
     "votesLocked": "VOTES VERROUILLÉS · RÉVÉLATION À VENIR",
@@ -836,6 +839,7 @@
       "question": "Question",
       "survey-results": "Résultats",
       "z-wipe": "Transition"
-    }
+    },
+    "installationPreview": "Aperçu privé du thème pour révision et approbation."
   }
 }

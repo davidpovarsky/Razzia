@@ -205,7 +205,22 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
       throw new Error(`Create game failed: HTTP ${res.status}`)
     }
 
-    return (await res.json()) as { gameId: string; inviteCode: string }
+    const created = (await res.json()) as { gameId: string; inviteCode: string }
+    // These scenarios assert immediate scoring after all callers vote. Enable
+    // that host option explicitly instead of relying on an obsolete default.
+    const settings = await realTransport.http.fetch(
+      `${baseUrl}/api/games/${created.gameId}/settings`,
+      {
+        method: "PATCH",
+        headers: {
+          "content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ endOnAllAnswered: true }),
+      },
+    )
+    expect(settings.ok).toBe(true)
+    return created
   }
 
   // Helper to join a normal web player over real HTTP & Socket.IO
@@ -797,17 +812,20 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     const BATCH_SIZE = 20
 
     for (let b = 0; b < PARTICIPANTS; b += BATCH_SIZE) {
-      const batchPromises = Array.from({ length: BATCH_SIZE }, async (_, offset) => {
-        const i = b + offset
-        const sim = new KeypadSimulatorCore(bridge, {
-          callId: `live_load_call_${String(i + 1).padStart(3, "0")}`,
-        })
+      const batchPromises = Array.from(
+        { length: BATCH_SIZE },
+        async (_, offset) => {
+          const i = b + offset
+          const sim = new KeypadSimulatorCore(bridge, {
+            callId: `live_load_call_${String(i + 1).padStart(3, "0")}`,
+          })
 
-        simulators.push(sim)
-        await sim.startCall(`07700900${String(i).padStart(4, "0")}`)
+          simulators.push(sim)
+          await sim.startCall(`07700900${String(i).padStart(4, "0")}`)
 
-        return sim.enterDigits(inviteCode)
-      })
+          return sim.enterDigits(inviteCode)
+        },
+      )
 
       const batchRes = await Promise.all(batchPromises)
       joinResults.push(...batchRes)
@@ -879,7 +897,8 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     await waitForCondition(
       () =>
         (internalGame?.round.playersAnswers.length ?? 0) === PARTICIPANTS ||
-        ((internalGame?.round.questionsHistory?.[0]?.playerAnswers?.length ?? 0) === PARTICIPANTS) ||
+        (internalGame?.round.questionsHistory?.[0]?.playerAnswers?.length ??
+          0) === PARTICIPANTS ||
         (internalGame?.round.leaderboard?.length ?? 0) === PARTICIPANTS,
       10000,
       `Timeout waiting for 100 answers; got active=${internalGame?.round.playersAnswers.length}, history=${internalGame?.round.questionsHistory?.[0]?.playerAnswers?.length}`,
@@ -888,7 +907,8 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     const totalAnswerTime = performance.now() - answerStart
 
     // Phase 4: Authoritative Server-Side Answer Record Assertions
-    const historyAnswers = internalGame?.round.questionsHistory?.[0]?.playerAnswers
+    const historyAnswers =
+      internalGame?.round.questionsHistory?.[0]?.playerAnswers
     const activeAnswers = internalGame?.round.playersAnswers
 
     if (historyAnswers && historyAnswers.length === PARTICIPANTS) {
@@ -896,8 +916,12 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
       const answeredNames = new Set(historyAnswers.map((a) => a.playerName))
       expect(answeredNames.size).toBe(PARTICIPANTS)
 
-      const correctAnswers = historyAnswers.filter((a) => a.answerIds?.includes(0))
-      const incorrectAnswers = historyAnswers.filter((a) => a.answerIds?.includes(1))
+      const correctAnswers = historyAnswers.filter((a) =>
+        a.answerIds?.includes(0),
+      )
+      const incorrectAnswers = historyAnswers.filter((a) =>
+        a.answerIds?.includes(1),
+      )
 
       expect(correctAnswers.length).toBe(50)
       expect(incorrectAnswers.length).toBe(50)
@@ -905,9 +929,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
     } else {
       expect(activeAnswers?.length).toBe(PARTICIPANTS)
 
-      const answeredPlayerIds = new Set(
-        activeAnswers?.map((a) => a.playerId),
-      )
+      const answeredPlayerIds = new Set(activeAnswers?.map((a) => a.playerId))
       expect(answeredPlayerIds.size).toBe(PARTICIPANTS)
 
       const correctAnswers =

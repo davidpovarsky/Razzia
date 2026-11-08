@@ -1,3 +1,4 @@
+import { matchesMediaUploadType } from "@razzia/extensions/core"
 import { ACCEPTED_MEDIA_TYPES, MAX_MEDIA_SIZE } from "@razzia/common/constants"
 import type { UploadedMedia } from "@razzia/common/types/game"
 import { mediaKeys, uploadMedia } from "@razzia/web/features/quizz/queries"
@@ -13,19 +14,6 @@ import { useTranslation } from "react-i18next"
 export const UPLOAD_ACCEPT = Object.entries(ACCEPTED_MEDIA_TYPES)
   .flatMap(([mime, { ext }]) => [mime, ext])
   .join(",")
-
-export const getUploadAccept = (
-  acceptType?: "image" | "video" | "audio" | "all",
-): string => {
-  if (!acceptType || acceptType === "all") {
-    return UPLOAD_ACCEPT
-  }
-
-  return Object.entries(ACCEPTED_MEDIA_TYPES)
-    .filter(([, { type }]) => type === acceptType)
-    .flatMap(([mime, { ext }]) => [mime, ext])
-    .join(",")
-}
 
 const uploadKey = [...mediaKeys.all, "upload"] as const
 
@@ -57,22 +45,14 @@ export const useUploadMedia = (
         continue
       }
 
-      if (acceptType && acceptType !== "all") {
-        const matchedEntry = Object.entries(ACCEPTED_MEDIA_TYPES).find(
-          ([mime, { ext }]) =>
-            file.type === mime ||
-            file.name.toLowerCase().endsWith(ext.toLowerCase()),
+      if (!matchesMediaUploadType(file, acceptType)) {
+        toast.error(
+          t("extensions:errors.invalidMediaType", {
+            expected: acceptType,
+            defaultValue: `Only ${acceptType} files are allowed here`,
+          }),
         )
-        if (!matchedEntry || matchedEntry[1].type !== acceptType) {
-          toast.error(
-            t("extensions:errors.invalidMediaType", {
-              expected: acceptType,
-              defaultValue: `Only ${acceptType} files are allowed here`,
-            }),
-          )
-
-          continue
-        }
+        continue
       }
 
       mutate(file)

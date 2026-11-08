@@ -13,6 +13,7 @@ import {
   type SceneConfig,
 } from "@razzia/extensions/core"
 import type { UploadedMedia } from "@razzia/common/types/game"
+import { useInstalledThemeCatalog } from "./installed-theme-catalog"
 import {
   CinematicLayerStack,
   LottiePlayer,
@@ -118,6 +119,7 @@ function getManagerAuthHeaders(
 
 export const StudioSceneEditor = () => {
   const { t } = useTranslation()
+  const registry = useInstalledThemeCatalog()
   const {
     selectedTimelineItem,
     selectedTimelineIndex,
@@ -405,6 +407,7 @@ export const StudioSceneEditor = () => {
     : resolveShowTheme({
         selection: defaults.showTheme,
         role: "manager",
+        registry,
       }).definition.capabilities.animationPresets.map((value) => ({
         value,
         label: t(`extensions:themes.presets.${value}`),

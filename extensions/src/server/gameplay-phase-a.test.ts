@@ -197,6 +197,9 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
       getSettings: () => ({
         answersOnly: false,
         generatedUsernames: false,
+        // These cases explicitly exercise completion when every player answers.
+        // Production timed questions now default to retaining their full timer.
+        endOnAllAnswered: true,
         autoAdvance: { enable: false, responsesDelay: 5, leaderboardDelay: 5 },
       }),
       shouldShowLeaderboard: () => options.showLeaderboard ?? false,
@@ -915,6 +918,7 @@ describe("WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Dat
         getSettings: () => ({
           answersOnly: false,
           generatedUsernames: false,
+          endOnAllAnswered: true,
           autoAdvance: {
             enable: false,
             responsesDelay: 5,

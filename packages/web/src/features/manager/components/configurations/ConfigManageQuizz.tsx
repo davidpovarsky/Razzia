@@ -1,78 +1,26 @@
-import {
-  exportTadaShowWorkbook,
-  generateTadaShowWorkbookBlankTemplate,
-  nativeBundleToAuthoredShow,
-  preflightShowImport,
-  type ShowPreflightResult,
-} from "@razzia/extensions/core"
-import { CompositeApiClient } from "@razzia/extensions/editor"
+import { ShowExportActions } from "./ShowExportActions"
+import { useShowFileActions } from "./use-show-file-actions"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import { SkeletonRows } from "@razzia/web/components/Skeleton"
 import {
-  createQuizz,
   deleteQuizz,
   quizzKeys,
   quizzListQuery,
 } from "@razzia/web/features/manager/queries"
-import { api, ApiError, unwrap } from "@razzia/web/lib/api"
+import { ApiError } from "@razzia/web/lib/api"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import {
-  Download,
-  FileCode,
-  FileDown,
-  FileSpreadsheet,
-  Sparkles,
-  SquarePen,
-  Trash2,
-  Upload,
-} from "lucide-react"
-import { type ChangeEvent, useRef, useState } from "react"
+import { Download, FileDown, SquarePen, Trash2, Upload } from "lucide-react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import { ShowImportModal } from "./ShowImportModal"
-
-const downloadBlob = (blob: Blob, filename: string) => {
-  const url = URL.createObjectURL(blob)
-  const a = document.createElement("a")
-
-  a.href = url
-  a.download = filename
-  document.body.appendChild(a)
-  a.click()
-  a.remove()
-
-  setTimeout(() => URL.revokeObjectURL(url), 1000)
-}
-
-const downloadJson = (data: unknown, filename: string) => {
-  const blob = new Blob([JSON.stringify(data, null, 2)], {
-    type: "application/json",
-  })
-  downloadBlob(blob, filename)
-}
-
-const downloadBuffer = (
-  bytes: Uint8Array,
-  filename: string,
-  mimeType: string,
-) => {
-  const blob = new Blob([bytes as any], { type: mimeType })
-  downloadBlob(blob, filename)
-}
 
 const ConfigManageQuizz = () => {
   const { data, isPending } = useQuery(quizzListQuery())
   const queryClient = useQueryClient()
   const navigate = useNavigate()
-  const fileInputRef = useRef<HTMLInputElement>(null)
   const { t } = useTranslation()
-
-  const [preflightData, setPreflightData] =
-    useState<ShowPreflightResult | null>(null)
-  const [isImportModalOpen, setIsImportModalOpen] = useState(false)
-  const [isImporting, setIsImporting] = useState(false)
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: quizzKeys.all })
@@ -90,166 +38,20 @@ const ConfigManageQuizz = () => {
     onError: (error) => onError(error, "errors:quizz.failedToDelete"),
   })
 
-  const { mutate: importQuizz } = useMutation({
-    mutationFn: createQuizz,
-    onSuccess: (res) => {
-      invalidate()
-      setIsImportModalOpen(false)
-      setPreflightData(null)
-      toast.success(t("quizz:quizzSaved"))
-      if (res && typeof res === "object" && "id" in res && typeof res.id === "string") {
-        navigate({
-          to: "/manager/quizz/$quizzId",
-          params: { quizzId: res.id },
-        })
-      }
-    },
-    onError: (error) => onError(error, "errors:quizz.failedToSave"),
-  })
-
-  const handleExportLegacy = (id: string) => async () => {
-    try {
-      const { id: _id, ...quizz } = await unwrap(
-        api.quizz[":id"].$get({ param: { id } }),
-      )
-
-      downloadJson(quizz, `${quizz.subject}.json`)
-    } catch (error) {
-      onError(error as Error, "errors:quizz.notFound")
-    }
-  }
-
-  const handleExportEnhanced = (id: string) => async () => {
-    try {
-      const client = new CompositeApiClient()
-      const bundle = await client.exportQuizBundle(id)
-      const subject =
-        (bundle.quizz as { subject?: string } | null)?.subject ?? id
-
-      downloadJson(bundle, `${subject}.bundle.json`)
-      toast.success(t("extensions:bundle.exportEnhanced"))
-    } catch (error) {
-      onError(error as Error, "errors:quizz.notFound")
-    }
-  }
-
-  const handleExportXlsx = (id: string, defaultSubject: string) => async () => {
-    try {
-      const client = new CompositeApiClient()
-      const bundle = await client.exportQuizBundle(id)
-      const subject =
-        (bundle.quizz as { subject?: string } | null)?.subject ??
-        defaultSubject ??
-        id
-      const xlsxBytes = exportTadaShowWorkbook(bundle)
-
-      downloadBuffer(
-        xlsxBytes,
-        `${subject}.xlsx`,
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      )
-      toast.success(t("extensions:showImport.exportTadaXlsx"))
-    } catch (error) {
-      onError(error as Error, "errors:quizz.notFound")
-    }
-  }
-
-  const handleExportTadaJson = (id: string, defaultSubject: string) => async () => {
-    try {
-      const client = new CompositeApiClient()
-      const bundle = await client.exportQuizBundle(id)
-      const subject =
-        (bundle.quizz as { subject?: string } | null)?.subject ??
-        defaultSubject ??
-        id
-      const authoredShow = nativeBundleToAuthoredShow(bundle as any, {
-        includePrivateRoster: false,
-      })
-
-      downloadJson(authoredShow, `${subject}.tada.json`)
-      toast.success(t("extensions:showImport.exportTadaJson"))
-    } catch (error) {
-      onError(error as Error, "errors:quizz.notFound")
-    }
-  }
-
-  const handleDownloadTemplate = () => {
-    try {
-      const templateBytes = generateTadaShowWorkbookBlankTemplate()
-      downloadBuffer(
-        templateBytes,
-        "TADA_Show_Template_v1.xlsx",
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      )
-    } catch (error) {
-      onError(error as Error, "errors:api.serverError")
-    }
-  }
-
-  const handleImportFileSelect = async (e: ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (!file) {
-      return
-    }
-
-    try {
-      const arrayBuffer = await file.arrayBuffer()
-      const preflight = preflightShowImport(
-        new Uint8Array(arrayBuffer),
-        file.name,
-      )
-
-      setPreflightData(preflight)
-      setIsImportModalOpen(true)
-    } catch {
-      toast.error(t("errors:invalidRequest"))
-    } finally {
-      e.target.value = ""
-    }
-  }
-
-  const handleCommitImport = async () => {
-    if (!preflightData || !preflightData.ok) {
-      return
-    }
-
-    setIsImporting(true)
-
-    try {
-      if (preflightData.normalizedBundleDraft) {
-        const client = new CompositeApiClient()
-        const result = await client.importQuizBundle(
-          preflightData.normalizedBundleDraft,
-        )
-
-        invalidate()
-        setIsImportModalOpen(false)
-        setPreflightData(null)
-        toast.success(t("extensions:showImport.successToast"))
-
-        if (result.quizId) {
-          navigate({
-            to: "/manager/quizz/$quizzId",
-            params: { quizzId: result.quizId },
-          })
-        }
-
-        return
-      }
-
-      if (preflightData.legacyQuizzDraft) {
-        importQuizz(preflightData.legacyQuizzDraft)
-
-        return
-      }
-    } catch (err: unknown) {
-      toast.error(
-        err instanceof Error ? err.message : t("errors:quizz.failedToSave"),
-      )
-    } finally {
-      setIsImporting(false)
-    }
-  }
+  const {
+    fileInputRef,
+    preflightData,
+    isImportModalOpen,
+    setIsImportModalOpen,
+    isImporting,
+    handleExportLegacy,
+    handleExportEnhanced,
+    handleExportXlsx,
+    handleExportTadaJson,
+    handleDownloadTemplate,
+    handleImportFileSelect,
+    handleCommitImport,
+  } = useShowFileActions({ invalidate, onError })
 
   const quizz = data?.quizz ?? []
 
@@ -317,35 +119,12 @@ const ConfigManageQuizz = () => {
                 <SquarePen className="size-4" />
               </button>
 
-              <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
-                onClick={() => handleExportEnhanced(q.id)()}
-                title={t("extensions:bundle.exportEnhanced")}
-                aria-label={t("extensions:bundle.exportEnhanced")}
-                data-testid={`export-enhanced-${q.id}`}
-              >
-                <Sparkles className="size-4 text-amber-500" />
-              </button>
-
-              <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
-                onClick={() => handleExportXlsx(q.id, q.subject)()}
-                title={t("extensions:showImport.exportTadaXlsx")}
-                aria-label={t("extensions:showImport.exportTadaXlsx")}
-                data-testid={`export-xlsx-${q.id}`}
-              >
-                <FileSpreadsheet className="size-4 text-emerald-600 dark:text-emerald-400" />
-              </button>
-
-              <button
-                className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
-                onClick={() => handleExportTadaJson(q.id, q.subject)()}
-                title={t("extensions:showImport.exportTadaJson")}
-                aria-label={t("extensions:showImport.exportTadaJson")}
-                data-testid={`export-tada-json-${q.id}`}
-              >
-                <FileCode className="size-4 text-sky-500" />
-              </button>
+              <ShowExportActions
+                q={q}
+                handleExportEnhanced={handleExportEnhanced}
+                handleExportXlsx={handleExportXlsx}
+                handleExportTadaJson={handleExportTadaJson}
+              />
 
               <button
                 className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"

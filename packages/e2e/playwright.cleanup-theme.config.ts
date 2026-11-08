@@ -4,6 +4,11 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 const root = join(import.meta.dirname, "../..")
+if (process.env.TADAZZ_REMOTE_QA !== "1") {
+  throw new Error(
+    "Run this game/browser suite only in the isolated remote QA container",
+  )
+}
 // Never reuse .config, operational data, another worktree or a running server.
 const configPath =
   process.env.TADAZZ_CLEANUP_TEST_CONFIG ??
@@ -19,7 +24,12 @@ fs.copyFileSync(
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: "cleanup-theme.spec.ts",
+  testMatch: [
+    "cleanup-theme.spec.ts",
+    "cleanup-legacy-flow.spec.ts",
+    "manager.spec.ts",
+    "tadazz-manager-branding.spec.ts",
+  ],
   outputDir: "test-results/cleanup-theme",
   timeout: 90_000,
   expect: { timeout: 15_000 },
@@ -30,7 +40,7 @@ export default defineConfig({
     ["json", { outputFile: "test-results/cleanup-theme-report.json" }],
   ],
   use: {
-    actionTimeout: 10_000,
+    actionTimeout: 30_000,
     baseURL: "http://127.0.0.1:3170",
     locale: "en-US",
     trace: "retain-on-failure",

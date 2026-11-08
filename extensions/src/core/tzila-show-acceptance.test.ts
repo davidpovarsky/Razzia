@@ -12,10 +12,7 @@ import {
   authoredShowToNativeBundleDraft,
   nativeBundleToAuthoredShow,
 } from "./show-authoring-convert"
-import {
-  parseTadaShowWorkbook,
-  exportTadaShowWorkbook,
-} from "./show-workbook"
+import { parseTadaShowWorkbook, exportTadaShowWorkbook } from "./show-workbook"
 import { preflightShowImport } from "./show-import-preflight"
 import {
   mapDtmfToAnswerIndex,
@@ -26,13 +23,13 @@ import { MockRazziaTransport } from "../telephony/transport"
 import { MockProvider } from "../telephony/mock-provider"
 import { KeypadSimulatorCore } from "../telephony/simulator"
 import { CANONICAL_ANSWER_COLORS } from "../editor/components/utils"
-import { MAX_ANSWERS, QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
-import { getPath } from "@razzia/socket/services/config"
+import {
+  MAX_ANSWERS,
+  QUESTION_TYPES,
+  QUIZZ_MODES,
+} from "@razzia/common/constants"
 
-const FIXTURES_DIR = path.resolve(
-  __dirname,
-  "../../fixtures/tzila-show",
-)
+const FIXTURES_DIR = path.resolve(__dirname, "../../fixtures/tzila-show")
 
 describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
   // ── A01: Existing 2/3/4 option quizzes/polls unchanged ─────────────────────
@@ -67,7 +64,10 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
   it("A02: 5-option survey .tada.json preflight accepts and creates valid native V2 bundle", () => {
     const jsonPath = path.join(FIXTURES_DIR, "TZILA_STORY_SHOW.tada.json")
     const jsonText = fs.readFileSync(jsonPath, "utf-8")
-    const preflight = preflightShowImport(jsonText, "TZILA_STORY_SHOW.tada.json")
+    const preflight = preflightShowImport(
+      jsonText,
+      "TZILA_STORY_SHOW.tada.json",
+    )
 
     expect(preflight.ok).toBe(true)
     expect(preflight.issues).toEqual([])
@@ -229,7 +229,9 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
   it("A07: Fifth answer color and label tokens exist and match design system", () => {
     expect(MAX_ANSWERS).toBe(5)
     expect(CANONICAL_ANSWER_COLORS).toHaveLength(5)
-    expect(CANONICAL_ANSWER_COLORS[4]).toBe("bg-[var(--color-answer-5)] text-white")
+    expect(CANONICAL_ANSWER_COLORS[4]).toBe(
+      "bg-[var(--color-answer-5)] text-white",
+    )
 
     // Verify packages/web/src/features/game/utils/constants.ts file content
     const webConstantsPath = path.resolve(
@@ -367,17 +369,27 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
 
     const expectedSequence = [
       "OPENING",
-      "R1C1", "R1C1_RESULTS",
-      "R1C2", "R1C2_RESULTS",
-      "R1C3", "R1C3_RESULTS",
-      "R1C4", "R1C4_RESULTS",
-      "R1C5", "R1C5_RESULTS",
+      "R1C1",
+      "R1C1_RESULTS",
+      "R1C2",
+      "R1C2_RESULTS",
+      "R1C3",
+      "R1C3_RESULTS",
+      "R1C4",
+      "R1C4_RESULTS",
+      "R1C5",
+      "R1C5_RESULTS",
       "ROUND_2",
-      "R2C1", "R2C1_RESULTS",
-      "R2C2", "R2C2_RESULTS",
-      "R2C3", "R2C3_RESULTS",
-      "R2C4", "R2C4_RESULTS",
-      "R2C5", "R2C5_RESULTS",
+      "R2C1",
+      "R2C1_RESULTS",
+      "R2C2",
+      "R2C2_RESULTS",
+      "R2C3",
+      "R2C3_RESULTS",
+      "R2C4",
+      "R2C4_RESULTS",
+      "R2C5",
+      "R2C5_RESULTS",
       "FINALE",
     ]
 
@@ -405,16 +417,18 @@ describe("Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18)", () => {
     const details = JSON.parse(fs.readFileSync(mapPath, "utf-8"))
     expect(details.length).toBe(40)
 
-    const mediaDir = getPath("media")
+    // Verify the immutable intake assets in the repository. A developer's live
+    // config/media directory is neither a fixture nor required for this test.
     for (const item of details) {
-      const fileName = item.newUrl.replace(/^\/media\//, "")
-      const filePath = path.join(mediaDir, fileName)
+      const filePath = path.join(FIXTURES_DIR, item.file)
       expect(fs.existsSync(filePath)).toBe(true)
 
       const fileBuf = fs.readFileSync(filePath)
       expect(fileBuf.length).toBeGreaterThan(0)
       // Check PNG magic bytes
-      expect(fileBuf.subarray(0, 4)).toEqual(Buffer.from([0x89, 0x50, 0x4e, 0x47]))
+      expect(fileBuf.subarray(0, 4)).toEqual(
+        Buffer.from([0x89, 0x50, 0x4e, 0x47]),
+      )
 
       const hash = crypto.createHash("sha256").update(fileBuf).digest("hex")
       expect(hash).toBe(item.sha256)

@@ -12,6 +12,8 @@ import {
   type PublicRankEntry,
   type RevealDistributionSnapshot,
   type SceneConfig,
+  createShowThemeRegistry,
+  type ShowThemeDefinition,
 } from "../../core/index"
 import {
   assignManual,
@@ -60,7 +62,10 @@ export interface ExtensionSessionDelegate {
   isAcceptingAnswers?: () => boolean
   getAnswersCount?: () => number
   getParticipation?: () => { connected: number; answered: number }
-  getPresentationLaunch?: () => { stage: "standby" | "opening" | "lobby" | "running"; startedAt: number | null } | null
+  getPresentationLaunch?: () => {
+    stage: "standby" | "opening" | "lobby" | "running"
+    startedAt: number | null
+  } | null
   pauseGame?: () => boolean
   resumeGame?: () => boolean
   getPauseSnapshot?: () => {
@@ -73,6 +78,8 @@ export interface ExtensionSessionDelegate {
 export class ExtensionGameSession {
   readonly gameId: string
   readonly extras: AnyQuizExtras | null
+  readonly themeDefinition: ShowThemeDefinition | null
+  private readonly themeDefinitionJson: string | null
 
   private seq = 0
   private epoch = 0
@@ -89,9 +96,22 @@ export class ExtensionGameSession {
   private delegate: ExtensionSessionDelegate | null = null
   private showCoordinator: StudioShowCoordinator | null = null
 
-  constructor(gameId: string, extras: AnyQuizExtras | null) {
+  constructor(
+    gameId: string,
+    extras: AnyQuizExtras | null,
+    themeDefinition: ShowThemeDefinition | null = null,
+  ) {
     this.gameId = gameId
     this.extras = extras
+    this.themeDefinition = themeDefinition
+      ? (createShowThemeRegistry([themeDefinition]).get(
+          themeDefinition.id,
+          themeDefinition.version,
+        ) ?? null)
+      : null
+    this.themeDefinitionJson = this.themeDefinition
+      ? JSON.stringify(this.themeDefinition)
+      : null
   }
 
   setDelegate(delegate: ExtensionSessionDelegate | null): void {
@@ -315,8 +335,14 @@ export class ExtensionGameSession {
         : undefined
 
     const extrasPayload: Record<string, unknown> = {}
+
+    if (this.themeDefinitionJson)
+      {extrasPayload.themeDefinitionJson = this.themeDefinitionJson}
+
     const launch = this.delegate?.getPresentationLaunch?.()
-    if (launch) extrasPayload.presentationLaunch = launch
+
+    if (launch) {extrasPayload.presentationLaunch = launch}
+
     // Public aggregate only; host roster identities/contacts remain private.
     if (this.delegate?.getParticipation) {
       extrasPayload.participation = this.delegate.getParticipation()
@@ -354,6 +380,7 @@ export class ExtensionGameSession {
           (directory?.kind === "animation" ? directory.dialNumber : undefined),
       }
     }
+
     // Team scores and assignments
     if (this.extras?.teams.enabled) {
       extrasPayload.teamScores = this.getTeamScores(players)
@@ -532,12 +559,14 @@ export class ExtensionGameSession {
             if (recap) {
               for (const item of recap.items) {
                 const chosen = this.storyTieChoices.get(item.questionId)
+
                 if (chosen !== undefined)
-                  item.winningOptions = item.winningOptions.filter(
+                  {item.winningOptions = item.winningOptions.filter(
                     (option) => option.answerIndex === chosen,
-                  )
+                  )}
               }
             }
+
             const summary =
               this.delegate?.getLastCompletedQuestionSummary?.() ?? null
             const candidates = summary?.isTie
@@ -595,11 +624,7 @@ export class ExtensionGameSession {
         }
       }
 
-      const prevCheck = this.delegate?.canPrevious
-        ? this.delegate.canPrevious()
-        : this.showCoordinator
-          ? this.showCoordinator.canPrevious()
-          : { can: false }
+      const prevCheck = this.delegate?.canPrevious?.() ?? this.showCoordinator?.canPrevious() ?? { can: false }
 
       extrasPayload.canPrevious = prevCheck.can
 
@@ -713,6 +738,7 @@ export class ExtensionGameSession {
         if (!ok) {
           throw new Error("errors:extensions.pauseFailed")
         }
+
         this.seq += 1
 
         break
@@ -724,6 +750,7 @@ export class ExtensionGameSession {
         if (!ok) {
           throw new Error("errors:extensions.resumeFailed")
         }
+
         this.seq += 1
 
         break
@@ -744,6 +771,7 @@ export class ExtensionGameSession {
         ) {
           throw new Error("errors:extensions.invalidCommand")
         }
+
         this.storyTieChoices.set(
           summary.sourceQuestionId,
           command.payload.answerIndex,
@@ -869,6 +897,7 @@ export class ExtensionGameSession {
         const isAccepting = this.delegate?.isAcceptingAnswers?.() ?? false
         const answersCount = this.delegate?.getAnswersCount?.() ?? 0
         const confirmed = Boolean(
+          // oxlint-disable-next-line typescript/no-unnecessary-condition -- Preserve the runtime guard for absent legacy command payloads.
           (command.payload as { confirmed?: boolean })?.confirmed,
         )
 

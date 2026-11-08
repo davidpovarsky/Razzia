@@ -668,7 +668,10 @@
     "sceneSubtitleTooLong": "Scene subtitle ({{current}}/{{max}} chars) exceeds recommended stage length."
   },
   "tadazzShow": {
-    "participation": {"connected": "CONNECTED: {{count}}", "answered": "ANSWERED: {{answered}} / {{connected}}"},
+    "participation": {
+      "connected": "CONNECTED: {{count}}",
+      "answered": "ANSWERED: {{answered}} / {{connected}}"
+    },
     "questionReady": "QUESTION READY",
     "votingOpen": "VOTING OPEN",
     "votesLocked": "VOTES LOCKED · AWAIT REVEAL",
@@ -836,6 +839,7 @@
       "question": "Question",
       "survey-results": "Results",
       "z-wipe": "Transition"
-    }
+    },
+    "installationPreview": "Private theme preview for review and approval."
   }
 }

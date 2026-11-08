@@ -2,12 +2,8 @@ import fs from "node:fs"
 import { join } from "node:path"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
-import {
-  createGame,
-  endTimer,
-  next,
-  startGame,
-} from "@razzia/e2e/utils/manager"
+import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 
@@ -191,10 +187,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     expect(Math.abs(playerSec - spectatorSec)).toBeLessThanOrEqual(1)
 
     // Capture (04) Synchronized Player vs Spectator Timers
-    await saveScreenshot(
-      spectatorPage,
-      "04_player_vs_spectator_timers.png",
-    )
+    await saveScreenshot(spectatorPage, "04_player_vs_spectator_timers.png")
 
     // Capture (03) Spectator Join Mid-Voting (Gate A mid-voting join while voting window is fresh)
     const lateSpectatorContext = await browser.newContext({
@@ -213,28 +206,21 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     await expect(lateTimer).toBeVisible({ timeout: 10_000 })
     const lateTimerText = (await lateTimer.textContent()) ?? ""
     const remainingSeconds = parseInt(lateTimerText.replace(/\D/gu, ""), 10)
-    console.log(`[Gate A] Mid-voting spectator joined with timer: ${remainingSeconds}s`)
+    console.log(
+      `[Gate A] Mid-voting spectator joined with timer: ${remainingSeconds}s`,
+    )
     expect(remainingSeconds).toBeLessThanOrEqual(20)
     expect(remainingSeconds).toBeGreaterThan(0)
-    await saveScreenshot(
-      lateSpectatorPage,
-      "03_spectator_join_mid_voting.png",
-    )
+    await saveScreenshot(lateSpectatorPage, "03_spectator_join_mid_voting.png")
     await lateSpectatorContext.close()
 
     // Capture (01) Spectator Live Question (1920)
-    await saveScreenshot(
-      spectatorPage,
-      "01_spectator_live_question_1920.png",
-    )
+    await saveScreenshot(spectatorPage, "01_spectator_live_question_1920.png")
 
     // Capture (02) Spectator Live Question at 1024x768 (check no scroll overflow)
     await spectatorPage.setViewportSize({ width: 1024, height: 768 })
     await spectatorPage.waitForTimeout(200)
-    await saveScreenshot(
-      spectatorPage,
-      "02_spectator_live_question_1024.png",
-    )
+    await saveScreenshot(spectatorPage, "02_spectator_live_question_1024.png")
     const scrollHeight1024 = await spectatorPage.evaluate(
       () => document.documentElement.scrollHeight,
     )
@@ -258,10 +244,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
 
     // Capture (05) Single Result Transition (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      spectatorPage,
-      "05_single_result_transition.png",
-    )
+    await saveScreenshot(spectatorPage, "05_single_result_transition.png")
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
     // 7. Single Advance Click moves directly to Question 2 (NO duplicate reveal!)
@@ -280,10 +263,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     ).toHaveCount(5, { timeout: 20_000 })
 
     // Capture (06) Next Poll No Duplicate (1920)
-    await saveScreenshot(
-      spectatorPage,
-      "06_next_poll_no_duplicate.png",
-    )
+    await saveScreenshot(spectatorPage, "06_next_poll_no_duplicate.png")
 
     // 8. Question 2: Vote Tie Scenario
     await Promise.all([
@@ -322,10 +302,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
 
     // Capture (07) Tie Result (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      spectatorPage,
-      "07_tie_result.png",
-    )
+    await saveScreenshot(spectatorPage, "07_tie_result.png")
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
     // 9. Question 3: Zero Votes Scenario
@@ -347,19 +324,16 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     await endTimer(managerPage)
 
     // Verify zero votes neutral state: no fake winner hero
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toHaveCount(0, { timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0, {
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.getByText(/No votes|0 votes|Total votes/i).first(),
     ).toBeVisible()
 
     // Capture (08) Zero Votes Result (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      spectatorPage,
-      "08_zero_votes_result.png",
-    )
+    await saveScreenshot(spectatorPage, "08_zero_votes_result.png")
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
 
     // 10. Previous Screen & True Revote on Q3
@@ -414,18 +388,15 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     await endTimer(managerPage)
 
     // Verify clean revote winner
-    await expect(
-      spectatorPage.locator('[data-winner="true"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
+      timeout: 15_000,
+    })
     const revoteWinner = spectatorPage.locator('[data-winner="true"]')
     await expect(revoteWinner).toContainText("2 votes")
 
     // Capture (09) Revote Clean Result (1280)
     await spectatorPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      spectatorPage,
-      "09_revote_clean_result.png",
-    )
+    await saveScreenshot(spectatorPage, "09_revote_clean_result.png")
 
     await playerContext.close()
     await spectatorContext.close()
@@ -472,7 +443,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       timeout: 20_000,
     })
 
-    const toolbar = managerPage.locator('[data-testid="manager-control-toolbar"]')
+    const toolbar = managerPage.locator(
+      '[data-testid="manager-control-toolbar"]',
+    )
     await expect(toolbar).toBeVisible({ timeout: 10_000 })
 
     // Viewport widths to verify
@@ -504,7 +477,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       const toolbarBox = await toolbar.boundingBox()
       expect(toolbarBox).not.toBeNull()
       expect(toolbarBox!.x).toBeGreaterThanOrEqual(0)
-      expect(toolbarBox!.x + toolbarBox!.width).toBeLessThanOrEqual(vp.width + 2)
+      expect(toolbarBox!.x + toolbarBox!.width).toBeLessThanOrEqual(
+        vp.width + 2,
+      )
 
       // 3. No raw unrendered i18n keys
       const toolbarText = await toolbar.innerText()
@@ -604,19 +579,21 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     // In a normal quiz without authored interimResults scenes, standard SHOW_RESPONSES MUST APPEAR!
     // Verify standard responses stage is visible on Host
     const nextBtn = managerPage.getByRole("button", {
-      name: new RegExp(`${t("game:next")}|${t("extensions:host.nextScreen")}`, "i"),
+      name: new RegExp(
+        `${t("game:next")}|${t("extensions:host.nextScreen")}`,
+        "i",
+      ),
     })
     await expect(nextBtn).toBeVisible({ timeout: 15_000 })
 
     // Host shows responses (e.g. answer counts / percentages)
-    await expect(managerPage.getByText("Paris")).toBeVisible({ timeout: 10_000 })
+    await expect(managerPage.getByText("Paris")).toBeVisible({
+      timeout: 10_000,
+    })
 
     // Capture (14) Normal Quiz Results Unaffected (1280)
     await managerPage.setViewportSize({ width: 1280, height: 800 })
-    await saveScreenshot(
-      managerPage,
-      "14_normal_quiz_results_unaffected.png",
-    )
+    await saveScreenshot(managerPage, "14_normal_quiz_results_unaffected.png")
 
     await playerContext.close()
   })

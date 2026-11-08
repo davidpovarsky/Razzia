@@ -23,3 +23,26 @@ export { GameRoster } from "./game/roster"
 export { buildInterimResults } from "./game/interim-results"
 export { buildAnswerRecap } from "./game/answer-recap"
 export { createRevealDistribution } from "./game/reveal-distribution"
+
+export * from "./game/score-ledger"
+
+export * from "./game/phone-controller"
+
+export * from "./game/round-scheduling"
+
+export * from "./game/pausable-countdown"
+
+export * from "./game/round-policy"
+
+export * from "./game/session-bridge"
+
+export * from "./game/audience"
+
+export * from "./game/runtime-policy"
+
+export * from "./game/round-checkpoints"
+
+export * from "./game/authored-coordinator"
+
+export * from "./show-themes/installation"
+export type { ThemePrincipal } from "./show-themes/review"

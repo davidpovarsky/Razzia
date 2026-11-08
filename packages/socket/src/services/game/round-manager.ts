@@ -1,4 +1,4 @@
-// oxlint-disable typescript/no-unnecessary-condition
+// oxlint-disable typescript/no-unnecessary-condition -- Preserve authoritative runtime guards for sparse authored data.
 import {
   EVENTS,
   MAX_POINTS,
@@ -8,7 +8,6 @@ import {
 } from "@razzia/common/constants"
 import { isEstimationOptions } from "@razzia/common/questions/options"
 import {
-  resolveQuestionPlayMode,
   type Answer,
   type GameResult,
   type GameSettings,
@@ -25,15 +24,27 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
-import type { RevealDistributionSnapshot } from "@razzia/extensions/core"
-import { createRevealDistribution } from "@razzia/extensions/server"
+import {
+  resolveQuestionPlayMode,
+  type RevealDistributionSnapshot,
+} from "@razzia/extensions/core"
+import { evaluatePreviousScreen } from "@razzia/extensions/gameplay"
+import {
+  RoundCheckpointStore,
+  restoreCheckpointData,
+  rebindLedgerPlayer,
+  RoundScheduling,
+  recomputeScoresFromLedger,
+  createRevealDistribution,
+  type LedgerQuestionEntry,
+  type ShowRoundHooks,
+} from "@razzia/extensions/server"
+export type { QuestionCheckpoint } from "@razzia/extensions/server"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
 import {
   countAnswers,
-  recomputeScoresFromLedger,
-  type LedgerQuestionEntry,
   type ScoredPlayer,
 } from "@razzia/socket/services/scoring/round"
 import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
@@ -50,16 +61,7 @@ type SendFn = <T extends Status>(
   _data: StatusDataMap[T],
 ) => void
 
-export interface QuestionCheckpoint {
-  questionIndex: number
-  players: Player[]
-  leaderboard: Player[]
-  tempOldLeaderboard: Player[] | null
-  questionsHistory: QuestionResult[]
-  questionLedger?: Map<number, LedgerQuestionEntry>
-}
-
-export interface RoundManagerOptions {
+export interface RoundManagerOptions extends ShowRoundHooks {
   quizz: Quizz
   players: PlayerManager
   cooldown: CooldownTimer
@@ -71,43 +73,6 @@ export interface RoundManagerOptions {
   onNewQuestion: () => void
   onGameFinished: (_result: GameResult) => void
   getSettings: () => GameSettings
-  shouldShowLeaderboard?: (params: {
-    currentQuestionIndex: number
-    currentCategory?: string
-    nextCategory?: string
-    totalQuestions: number
-  }) => boolean
-  hasInterlude?: (questionIndex: number) => boolean
-  getInterludeAdvance?: (questionIndex: number) => "auto" | "manual"
-  getInterludeDuration?: (questionIndex: number) => number
-  onInterlude?: (questionIndex: number) => void
-  getQuestionId?: (questionIndex: number) => string | undefined
-  onResultsCalculated?: (dist: RevealDistributionSnapshot) => void
-  onReplayCheckpoint?: (questionIndex: number) => void
-  onPresenceChange?: () => void
-  onAnswerSubmitted?: (
-    playerId: string,
-    answerIds: number[],
-    points: number,
-  ) => void
-  onQuestionScored?: (scoredPlayers: ScoredPlayer[]) => void
-  onQuestionCompleted?: (questionIndex: number, proceed: () => void) => void
-  /** Skip every authored scene belonging to this question and open the next. */
-  onQuestionSkipped?: (questionIndex: number) => void
-  onShowStart?: (proceed: () => void) => void
-  skipShowStartCountdown?: () => boolean
-  canPreviousTimelineStep?: () => {
-    can: boolean
-    reason?: string
-    willReopenQuestion?: boolean
-  }
-  onPreviousTimelineStep?: () => boolean
-  hasAuthoredResultsScene?: (questionIndex: number) => boolean
-  /** Picture-led shows open the answers directly, without two preview statuses. */
-  skipQuestionPreview?: () => boolean
-  /** Automatically hold one normal results reveal before the next scene (seconds). */
-  quickResultsHoldSeconds?: () => number | null
-  votingEntranceMs?: () => number
 }
 
 interface RoundStep {
@@ -116,14 +81,6 @@ interface RoundStep {
   skip?: () => boolean
   enter: () => void
   delay: (_settings: GameSettings) => number
-}
-
-interface PendingDelay {
-  timer: NodeJS.Timeout | null
-  deadline: number
-  remainingMs: number
-  generation: number
-  resolve: (_completed: boolean) => void
 }
 
 export interface GamePauseSnapshot {
@@ -157,23 +114,29 @@ export class RoundManager {
   private leaderboard: Player[] = []
   private tempOldLeaderboard: Player[] | null = null
   private questionsHistory: QuestionResult[] = []
-  private autoAdvanceTimer: NodeJS.Timeout | null = null
-  private autoAdvanceDeadline: number | null = null
-  private autoAdvanceRemainingMs: number | null = null
-  private autoAdvanceTotalSeconds: number | null = null
-  private interludeTimer: NodeJS.Timeout | null = null
-  private interludeDeadline: number | null = null
-  private interludeRemainingMs: number | null = null
   private paused = false
   private pausedAt: number | null = null
   private generation = 0
-  private readonly pendingDelays = new Set<PendingDelay>()
-  private readonly checkpoints = new Map<number, QuestionCheckpoint>()
+  private readonly scheduling: RoundScheduling
+  private readonly checkpoints = new RoundCheckpointStore()
   private readonly questionLedger = new Map<number, LedgerQuestionEntry>()
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
 
   constructor(opts: RoundManagerOptions) {
     this.opts = opts
+    this.scheduling = new RoundScheduling({
+      tickMs: SECOND_MS,
+      isPaused: () => this.paused,
+      isStarted: () => this.started,
+      generation: () => this.generation,
+      isInterlude: () => this.currentStep === this.getInterludeStepIndex(),
+      autoAdvanceEnabled: () => this.opts.getSettings().autoAdvance.enable,
+      emitAutoAdvance: (state) =>
+        this.opts.io
+          .to(this.opts.getManagerId())
+          .emit(EVENTS.MANAGER.AUTO_ADVANCE, state),
+      advance: () => this.advance(),
+    })
 
     const steps: RoundStep[] = [
       {
@@ -283,17 +246,7 @@ export class RoundManager {
   getPauseSnapshot(): GamePauseSnapshot {
     const candidates = [
       this.opts.cooldown.remainingMs,
-      ...Array.from(this.pendingDelays, (delay) =>
-        delay.timer
-          ? Math.max(0, delay.deadline - Date.now())
-          : delay.remainingMs,
-      ),
-      this.autoAdvanceTimer
-        ? Math.max(0, (this.autoAdvanceDeadline ?? Date.now()) - Date.now())
-        : this.autoAdvanceRemainingMs,
-      this.interludeTimer
-        ? Math.max(0, (this.interludeDeadline ?? Date.now()) - Date.now())
-        : this.interludeRemainingMs,
+      ...this.scheduling.remainingCandidates(),
     ].filter((value): value is number => value !== null)
     const remainingMs = candidates.length > 0 ? Math.min(...candidates) : null
 
@@ -368,168 +321,33 @@ export class RoundManager {
 
   // ── Generation & Async Cancellation ─────────────────────────────────────
 
-  private armDelay(delay: PendingDelay): void {
-    if (this.paused || delay.remainingMs <= 0) {
-      if (!this.paused) {
-        this.pendingDelays.delete(delay)
-        delay.resolve(this.generation === delay.generation && this.started)
-      }
-
-      return
-    }
-
-    delay.deadline = Date.now() + delay.remainingMs
-    delay.timer = setTimeout(() => {
-      delay.timer = null
-      delay.remainingMs = 0
-      this.pendingDelays.delete(delay)
-      delay.resolve(this.generation === delay.generation && this.started)
-    }, delay.remainingMs)
+  private cancellableSleep(seconds: number, generation: number) {
+    return this.scheduling.cancellableSleep(seconds, generation)
   }
-
-  private cancellableSleep(sec: number, gen: number): Promise<boolean> {
-    if (sec <= 0) {
-      return Promise.resolve(this.generation === gen && this.started)
-    }
-
-    return new Promise((resolve) => {
-      const delay: PendingDelay = {
-        timer: null,
-        deadline: Date.now() + sec * SECOND_MS,
-        remainingMs: sec * SECOND_MS,
-        generation: gen,
-        resolve,
-      }
-      this.pendingDelays.add(delay)
-      this.armDelay(delay)
-    })
+  private cancelPendingAsync() {
+    this.scheduling.cancelPendingAsync()
   }
-
-  private cancelPendingAsync(): void {
-    for (const delay of this.pendingDelays) {
-      if (delay.timer) {
-        clearTimeout(delay.timer)
-      }
-      delay.resolve(false)
-    }
-
-    this.pendingDelays.clear()
+  clearAutoAdvance() {
+    this.scheduling.clearAutoAdvance()
   }
-
-  // ── Auto advance ─────────────────────────────────────────────────────────
-
-  clearAutoAdvance(): void {
-    if (this.autoAdvanceTimer) {
-      clearTimeout(this.autoAdvanceTimer)
-      this.autoAdvanceTimer = null
-    }
-
-    const hadTimer =
-      this.autoAdvanceDeadline !== null || this.autoAdvanceRemainingMs !== null
-    this.autoAdvanceDeadline = null
-    this.autoAdvanceRemainingMs = null
-    this.autoAdvanceTotalSeconds = null
-
-    if (hadTimer) {
-      this.emitAutoAdvance(null)
-    }
+  private clearInterludeTimer() {
+    this.scheduling.clearInterludeTimer()
   }
-
-  private clearInterludeTimer(): void {
-    if (this.interludeTimer) {
-      clearTimeout(this.interludeTimer)
-      this.interludeTimer = null
-    }
-
-    this.interludeDeadline = null
-    this.interludeRemainingMs = null
+  private scheduleAutoAdvance(delay: number, force = false) {
+    this.scheduling.scheduleAutoAdvance(delay, force)
   }
-
-  private emitAutoAdvance(state: { seconds: number; total: number } | null) {
-    this.opts.io
-      .to(this.opts.getManagerId())
-      .emit(EVENTS.MANAGER.AUTO_ADVANCE, state)
-  }
-
-  private armAutoAdvance(): void {
-    if (
-      this.paused ||
-      this.autoAdvanceRemainingMs === null ||
-      this.autoAdvanceTotalSeconds === null
-    ) {
-      return
-    }
-
-    this.autoAdvanceDeadline = Date.now() + this.autoAdvanceRemainingMs
-    const tick = () => {
-      this.autoAdvanceTimer = null
-
-      if (this.paused || this.autoAdvanceDeadline === null) {
-        return
-      }
-      this.autoAdvanceRemainingMs = Math.max(
-        0,
-        this.autoAdvanceDeadline - Date.now(),
-      )
-      const seconds = Math.ceil(this.autoAdvanceRemainingMs / SECOND_MS)
-
-      if (seconds > 0) {
-        this.emitAutoAdvance({
-          seconds,
-          total: this.autoAdvanceTotalSeconds ?? seconds,
-        })
-        const delay = Math.max(
-          1,
-          Math.min(SECOND_MS, this.autoAdvanceRemainingMs),
-        )
-        this.autoAdvanceTimer = setTimeout(tick, delay)
-
-        return
-      }
-
-      this.clearAutoAdvance()
-      this.advance()
-    }
-    this.autoAdvanceTimer = setTimeout(
-      tick,
-      Math.max(1, Math.min(SECOND_MS, this.autoAdvanceRemainingMs)),
-    )
-  }
-
-  private scheduleAutoAdvance(delay: number, force = false): void {
-    this.clearAutoAdvance()
-
-    if (!force && !this.opts.getSettings().autoAdvance.enable) {
-      return
-    }
-
-    this.autoAdvanceRemainingMs = delay * SECOND_MS
-    this.autoAdvanceTotalSeconds = delay
-    this.emitAutoAdvance({ seconds: delay, total: delay })
-    this.armAutoAdvance()
-  }
-
-  // ── Checkpoint management ────────────────────────────────────────────────
 
   private captureCheckpoint(index: number): void {
-    const playersSnapshot = this.opts.players.getAll().map((p) => ({ ...p }))
-    const leaderboardSnapshot = this.leaderboard.map((p) => ({ ...p }))
-    const tempOldLeaderboardSnapshot = this.tempOldLeaderboard
-      ? this.tempOldLeaderboard.map((p) => ({ ...p }))
-      : null
-
-    this.checkpoints.set(index, {
-      questionIndex: index,
-      players: playersSnapshot,
-      leaderboard: leaderboardSnapshot,
-      tempOldLeaderboard: tempOldLeaderboardSnapshot,
-      questionsHistory: structuredClone(this.questionsHistory),
-      questionLedger: new Map(this.questionLedger),
+    this.checkpoints.capture(index, {
+      players: this.opts.players.getAll(),
+      leaderboard: this.leaderboard,
+      tempOldLeaderboard: this.tempOldLeaderboard,
+      questionsHistory: this.questionsHistory,
+      questionLedger: this.questionLedger,
     })
   }
-
   getCheckpoints(): number[] {
-    return Array.from(this.checkpoints.keys()).sort((a, b) => a - b)
+    return this.checkpoints.list()
   }
 
   replayFromCheckpoint(targetIndex: number): boolean {
@@ -555,41 +373,21 @@ export class RoundManager {
     this.opts.cooldown.abort()
     this.acceptingAnswers = false
 
-    // Restore players while preserving current socket IDs and connected state
-    const currentPlayers = this.opts.players.getAll()
-    const restoredPlayers = cp.players.map((saved) => {
-      const live = currentPlayers.find((p) => p.clientId === saved.clientId)
-
-      return {
-        ...saved,
-        id: live ? live.id : saved.id,
-        connected: live ? live.connected : saved.connected,
-      }
-    })
-
-    this.opts.players.replace(restoredPlayers)
-    this.leaderboard = cp.leaderboard.map((p) => ({ ...p }))
-    this.tempOldLeaderboard = cp.tempOldLeaderboard
-      ? cp.tempOldLeaderboard.map((p) => ({ ...p }))
-      : null
-    this.questionsHistory = structuredClone(cp.questionsHistory)
-
-    if (cp.questionLedger) {
+    const restored = restoreCheckpointData(cp, this.opts.players.getAll())
+    this.opts.players.replace(restored.players)
+    this.leaderboard = restored.leaderboard
+    this.tempOldLeaderboard = restored.tempOldLeaderboard
+    this.questionsHistory = restored.questionsHistory
+    if (restored.questionLedger) {
       this.questionLedger.clear()
-      for (const [k, v] of cp.questionLedger.entries()) {
-        this.questionLedger.set(k, { ...v, answers: [...v.answers] })
-      }
+      for (const [key, value] of restored.questionLedger)
+        this.questionLedger.set(key, value)
     }
 
     this.playersAnswers = []
     this.latestRevealDistribution = null
 
-    // Prune later checkpoints
-    for (const k of Array.from(this.checkpoints.keys())) {
-      if (k > targetIndex) {
-        this.checkpoints.delete(k)
-      }
-    }
+    this.checkpoints.pruneAfter(targetIndex)
 
     this.currentQuestion = targetIndex
     this.opts.onReplayCheckpoint?.(targetIndex)
@@ -629,34 +427,7 @@ export class RoundManager {
     this.pausedAt = Date.now()
     this.opts.cooldown.pause()
 
-    for (const delay of this.pendingDelays) {
-      if (!delay.timer) {
-        continue
-      }
-      clearTimeout(delay.timer)
-      delay.timer = null
-      delay.remainingMs = Math.max(0, delay.deadline - Date.now())
-    }
-
-    if (this.autoAdvanceTimer) {
-      clearTimeout(this.autoAdvanceTimer)
-      this.autoAdvanceTimer = null
-      this.autoAdvanceRemainingMs = Math.max(
-        0,
-        (this.autoAdvanceDeadline ?? Date.now()) - Date.now(),
-      )
-      this.autoAdvanceDeadline = null
-    }
-
-    if (this.interludeTimer) {
-      clearTimeout(this.interludeTimer)
-      this.interludeTimer = null
-      this.interludeRemainingMs = Math.max(
-        0,
-        (this.interludeDeadline ?? Date.now()) - Date.now(),
-      )
-      this.interludeDeadline = null
-    }
+    this.scheduling.pause()
 
     return true
   }
@@ -675,11 +446,7 @@ export class RoundManager {
     }
     this.opts.cooldown.resume()
 
-    for (const delay of this.pendingDelays) {
-      this.armDelay(delay)
-    }
-    this.armAutoAdvance()
-    this.armInterludeTimer()
+    this.scheduling.resume()
 
     if (this.votingStartsAt !== null && this.currentStep < 0) {
       this.votingStartsAt += pausedFor
@@ -734,63 +501,15 @@ export class RoundManager {
     return this.nextScreen()
   }
 
-  canPrevious(): {
-    can: boolean
-    reason?: string
-    willReopenQuestion?: boolean
-    answersReceived?: number
-  } {
-    if (!this.started) {
-      return { can: false, reason: "Game not started" }
-    }
-
-    if (this.acceptingAnswers) {
-      const answersReceived = this.playersAnswers.length
-
-      if (this.opts.canPreviousTimelineStep) {
-        const timelineCheck = this.opts.canPreviousTimelineStep()
-
-        if (timelineCheck.can) {
-          return {
-            can: true,
-            willReopenQuestion: timelineCheck.willReopenQuestion ?? true,
-            answersReceived,
-          }
-        }
-      }
-
-      if (this.currentQuestion > 0) {
-        return { can: true, willReopenQuestion: true, answersReceived }
-      }
-
-      return { can: false, reason: "At start of show" }
-    }
-
-    if (this.currentStep < 0) {
-      if (this.opts.canPreviousTimelineStep)
-        return this.opts.canPreviousTimelineStep()
-      return { can: false, reason: "Question starting" }
-    }
-
-    // Step 0: reveal/results. Moving back reopens this question!
-    if (this.currentStep === 0) {
-      return { can: true, willReopenQuestion: true, answersReceived: 0 }
-    }
-
-    // Step 1: leaderboard, Step 2: interlude. Navigates back within question
-    if (this.currentStep > 0) {
-      return { can: true, willReopenQuestion: false, answersReceived: 0 }
-    }
-
-    if (this.opts.canPreviousTimelineStep) {
-      return this.opts.canPreviousTimelineStep()
-    }
-
-    if (this.currentQuestion > 0) {
-      return { can: true, willReopenQuestion: true, answersReceived: 0 }
-    }
-
-    return { can: false, reason: "At start of show" }
+  canPrevious() {
+    return evaluatePreviousScreen({
+      started: this.started,
+      acceptingAnswers: this.acceptingAnswers,
+      currentQuestion: this.currentQuestion,
+      currentStep: this.currentStep,
+      answersReceived: this.playersAnswers.length,
+      canPreviousTimelineStep: this.opts.canPreviousTimelineStep,
+    })
   }
 
   cancelActiveVote(): boolean {
@@ -842,6 +561,7 @@ export class RoundManager {
     const recomputed = recomputeScoresFromLedger(
       this.opts.players.getAll(),
       Array.from(this.questionLedger.values()),
+      QUESTION_SCORING,
     )
     this.opts.players.replace(recomputed)
     this.leaderboard = recomputed
@@ -1391,6 +1111,7 @@ export class RoundManager {
     const sortedPlayers = recomputeScoresFromLedger(
       currentPlayers,
       Array.from(this.questionLedger.values()),
+      QUESTION_SCORING,
     )
 
     this.opts.players.replace(sortedPlayers)
@@ -1454,33 +1175,6 @@ export class RoundManager {
     this.tempOldLeaderboard = null
   }
 
-  private armInterludeTimer(): void {
-    if (
-      this.paused ||
-      this.interludeRemainingMs === null ||
-      this.currentStep !== this.getInterludeStepIndex()
-    ) {
-      return
-    }
-
-    const gen = this.generation
-    this.interludeDeadline = Date.now() + this.interludeRemainingMs
-    this.interludeTimer = setTimeout(() => {
-      this.interludeTimer = null
-      this.interludeRemainingMs = null
-      this.interludeDeadline = null
-
-      if (
-        !this.paused &&
-        this.generation === gen &&
-        this.started &&
-        this.currentStep === this.getInterludeStepIndex()
-      ) {
-        this.advance()
-      }
-    }, this.interludeRemainingMs)
-  }
-
   private showInterlude(): void {
     this.clearInterludeTimer()
     this.opts.onInterlude?.(this.currentQuestion)
@@ -1489,9 +1183,9 @@ export class RoundManager {
       this.opts.getInterludeAdvance?.(this.currentQuestion) ?? "manual"
 
     if (advanceMode === "auto") {
-      this.interludeRemainingMs =
-        this.opts.getInterludeDuration?.(this.currentQuestion) ?? 5000
-      this.armInterludeTimer()
+      this.scheduling.scheduleInterlude(
+        this.opts.getInterludeDuration?.(this.currentQuestion) ?? 5000,
+      )
     }
   }
 
@@ -1655,6 +1349,8 @@ export class RoundManager {
   }
 
   updatePlayerId(oldId: string, newId: string): void {
+    rebindLedgerPlayer(this.questionLedger, oldId, newId)
+    this.checkpoints.updateSocketId(oldId, newId)
     this.playersAnswers = this.playersAnswers.map((answer) =>
       answer.playerId === oldId ? { ...answer, playerId: newId } : answer,
     )
@@ -1670,20 +1366,7 @@ export class RoundManager {
   }
 
   updateCheckpointClientId(oldClientId: string, newClientId: string): void {
-    for (const cp of this.checkpoints.values()) {
-      cp.players = cp.players.map((p) =>
-        p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
-      )
-      cp.leaderboard = cp.leaderboard.map((p) =>
-        p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
-      )
-
-      if (cp.tempOldLeaderboard) {
-        cp.tempOldLeaderboard = cp.tempOldLeaderboard.map((p) =>
-          p.clientId === oldClientId ? { ...p, clientId: newClientId } : p,
-        )
-      }
-    }
+    this.checkpoints.updateClientId(oldClientId, newClientId)
   }
 
   endIfEveryoneAnswered(): void {

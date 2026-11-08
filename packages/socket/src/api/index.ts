@@ -6,6 +6,7 @@ import { media } from "@razzia/socket/api/routes/media"
 import { quizz } from "@razzia/socket/api/routes/quizz"
 import { results } from "@razzia/socket/api/routes/results"
 import { requireManager } from "@razzia/socket/api/middleware"
+import { themeRoutes } from "@razzia/socket/api/extensions/theme-routes"
 import {
   deleteQuizz,
   getPath,
@@ -37,6 +38,7 @@ const routes = new Hono()
   .route("/games", games)
   .route("/media", media)
   .route("/extensions", extensionRoutes)
+  .route("/themes", themeRoutes)
 
 export const api = routes
 

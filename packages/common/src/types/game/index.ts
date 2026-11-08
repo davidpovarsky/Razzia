@@ -80,17 +80,6 @@ export interface Question {
   options?: QuestionOptions
 }
 
-export const resolveQuestionPlayMode = (
-  question: { playMode?: QuestionPlayMode } | null | undefined,
-  fallbackQuizzMode?: QuizzMode,
-): QuestionPlayMode => {
-  if (question?.playMode === "quiz" || question?.playMode === "survey") {
-    return question.playMode
-  }
-
-  return fallbackQuizzMode === "survey" ? "survey" : "quiz"
-}
-
 export interface Quizz {
   gameMode: QuizzMode
   subject: string

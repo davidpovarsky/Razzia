@@ -1,7 +1,11 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
-import { stripLottieBackgroundPlate, stripOpeningExportWatermark } from "./lottie-plate"
+import {
+  stripLottieBackgroundPlate,
+  stripOpeningExportWatermark,
+} from "./lottie-plate"
 import { TADAZZ_BACKDROP_URL } from "./TadazzStage"
+import { isSafeThemeAssetUrl } from "../../core/show-themes/selection"
 
 export const TADAZZ_OPENING_VIDEO_URL =
   "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4"
@@ -20,18 +24,22 @@ const lottieCache = new Map<string, Promise<Record<string, unknown> | null>>()
 export function loadOpeningLottie(
   url: string,
 ): Promise<Record<string, unknown> | null> {
-  let pending = lottieCache.get(url)
+  const bundled = url.startsWith("/tadazz-show/") && isSafeThemeAssetUrl(url)
+  let pending = bundled ? lottieCache.get(url) : undefined
 
   if (!pending) {
-    pending = fetch(url, { cache: "force-cache" })
+    pending = fetch(url, { cache: bundled ? "force-cache" : "no-store" })
       .then((response) => (response.ok ? response.json() : null))
       .then((json) =>
         json
-          ? stripLottieBackgroundPlate(stripOpeningExportWatermark(json as Record<string, unknown>)).data
+          ? stripLottieBackgroundPlate(
+              stripOpeningExportWatermark(json as Record<string, unknown>),
+            ).data
           : null,
       )
       .catch(() => null)
-    lottieCache.set(url, pending)
+
+    if (bundled) {lottieCache.set(url, pending)}
   }
 
   return pending
@@ -58,6 +66,7 @@ export function preloadOpeningAssets(
 }
 
 export interface TadazzOpeningProps {
+  backdropUrl?: string
   videoUrl?: string
   lottieUrl?: string
   eventArtworkUrl?: string
@@ -71,6 +80,7 @@ export interface TadazzOpeningProps {
 
 /** Muted visual opening. Music is owned by the presenter-scoped AudioCuePlayer. */
 export function TadazzOpening({
+  backdropUrl = TADAZZ_BACKDROP_URL,
   videoUrl = TADAZZ_OPENING_VIDEO_URL,
   lottieUrl = TADAZZ_OPENING_LOTTIE_URL,
   eventArtworkUrl,
@@ -101,6 +111,7 @@ export function TadazzOpening({
     if (finishedRef.current) {
       return
     }
+
     finishedRef.current = true
     onFinished()
   }, [onFinished])
@@ -110,7 +121,8 @@ export function TadazzOpening({
     void loadOpeningLottie(lottieUrl).then((data) => {
       if (alive) {
         setLottieData(data)
-        if (!data) setLottieFailed(true)
+
+        if (!data) {setLottieFailed(true)}
       }
     })
 
@@ -124,16 +136,19 @@ export function TadazzOpening({
     if (!brandEnded) {
       return
     }
+
     if (eventArtworkUrl) {
       const id = setTimeout(finish, TADAZZ_EVENT_ARTWORK_DURATION_MS)
 
       return () => clearTimeout(id)
     }
+
     if (!eventArtworkPending) {
       finish()
 
       return
     }
+
     const id = setTimeout(finish, 3000)
 
     return () => clearTimeout(id)
@@ -143,11 +158,13 @@ export function TadazzOpening({
     if (brandEnded || !videoReady || (!lottieReady && !lottieFailed)) {
       return
     }
+
     const video = videoRef.current
 
     if (!video) {
       return
     }
+
     // The source MP4 contains AAC. It must never become audible.
     video.defaultMuted = true
     video.muted = true
@@ -156,23 +173,30 @@ export function TadazzOpening({
   }, [brandEnded, videoReady, lottieReady, lottieFailed, videoUrl])
 
   useEffect(() => {
-    if (brandEnded) return
+    if (brandEnded) {return}
+
     // A missing asset must not trap the show; normal completion follows the MP4.
     const id = setTimeout(() => {
       setVideoFailed(true)
       setLottieFailed(true)
     }, 8000)
-    if (videoPlaying || videoFailed) clearTimeout(id)
+
+    if (videoPlaying || videoFailed) {clearTimeout(id)}
+
     return () => clearTimeout(id)
   }, [brandEnded, videoPlaying, videoFailed])
   useEffect(() => {
-    if (brandEnded || !videoFailed) return
+    if (brandEnded || !videoFailed) {return}
+
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS)
+
     return () => clearTimeout(id)
   }, [brandEnded, videoFailed, endBrand])
   useEffect(() => {
-    if (brandEnded || !videoPlaying) return
+    if (brandEnded || !videoPlaying) {return}
+
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS + 12000)
+
     return () => clearTimeout(id)
   }, [brandEnded, videoPlaying, endBrand])
 
@@ -200,7 +224,7 @@ export function TadazzOpening({
         <>
           <img
             className="tz-opening-poster"
-            src={TADAZZ_BACKDROP_URL}
+            src={backdropUrl}
             alt=""
             aria-hidden="true"
           />
@@ -273,8 +297,9 @@ export function TadazzOpening({
             if (video) {
               video.muted = true
               video.volume = 0
+
               if (lottieReady || lottieFailed)
-                void video.play().catch(() => setVideoFailed(true))
+                {void video.play().catch(() => setVideoFailed(true))}
             }
 
             setSoundRequested(true)

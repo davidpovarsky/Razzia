@@ -79,6 +79,31 @@ const color = z
   .string()
   .regex(/^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$/u)
 
+export const SHOW_THEME_LOCALES = [
+  "en",
+  "fr",
+  "de",
+  "es",
+  "it",
+  "ja",
+  "tr",
+  "vi",
+] as const
+
+const localizations = z.record(
+  z.enum(SHOW_THEME_LOCALES),
+  z
+    .record(
+      z
+        .string()
+        .min(1)
+        .max(160)
+        .regex(/^[a-zA-Z0-9_.:-]+$/u),
+      z.string().min(1).max(1000),
+    )
+    .refine((value) => Object.keys(value).length <= 1200),
+)
+
 export const showThemeDefinitionSchema = z
   .strictObject({
     manifestVersion: z.literal(1),
@@ -86,6 +111,7 @@ export const showThemeDefinitionSchema = z
     version: themeVersionSchema,
     nameKey: z.string().min(1).max(160),
     descriptionKey: z.string().min(1).max(160),
+    localizations: localizations.optional(),
     category: z.literal("show"),
     kind: z.enum(["declarative", "code-backed"]),
     rendererApiVersion: z.literal(1),
@@ -142,6 +168,36 @@ export const showThemeDefinitionSchema = z
     assets: z.array(asset).min(1).max(256),
   })
   .superRefine((theme, ctx) => {
+    if (new TextEncoder().encode(JSON.stringify(theme)).byteLength > 100_000) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Theme metadata exceeds runtime budget",
+        path: [],
+      })
+    }
+
+    if (theme.localizations) {
+      const keys = [
+        theme.nameKey,
+        theme.descriptionKey,
+        ...Object.values(theme.slots).flatMap((slotDefinition) =>
+          slotDefinition.variants.map((choice) => choice.labelKey),
+        ),
+        ...Object.values(theme.audioEvents).flatMap((event) =>
+          event.variants.map((choice) => choice.labelKey),
+        ),
+      ]
+      for (const locale of SHOW_THEME_LOCALES)
+        {for (const key of keys) {
+          if (!theme.localizations[locale][key])
+            {ctx.addIssue({
+              code: "custom",
+              message: "Missing localized theme label",
+              path: ["localizations", locale, key],
+            })}
+        }}
+    }
+
     const assetIds = new Set(theme.assets.map((a) => a.id))
     const variantIds = new Set<string>()
     for (const item of theme.assets) {
@@ -231,6 +287,58 @@ export const showThemeDefinitionSchema = z
         }
 
         for (const choice of entry.variants) {
+          if ("rendererId" in choice) {
+            const slotIndex = SHOW_THEME_SLOTS.indexOf(
+              key as (typeof SHOW_THEME_SLOTS)[number],
+            )
+
+            if (choice.rendererId !== TRUSTED_SLOT_RENDERERS[slotIndex]) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Renderer does not support this slot",
+                path: [group, key],
+              })
+            }
+
+            for (const ref of [choice.backgroundAssetId, choice.logoAssetId]) {
+              if (
+                ref &&
+                theme.assets.find((referencedAsset) => referencedAsset.id === ref)?.kind !== "image"
+              ) {
+                ctx.addIssue({
+                  code: "custom",
+                  message: "Backdrop/logo must reference an image",
+                  path: [group, key],
+                })
+              }
+            }
+
+            if (
+              choice.overlayAssetId &&
+              theme.assets.find((referencedAsset) => referencedAsset.id === choice.overlayAssetId)
+                ?.kind !== "lottie"
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Overlay must reference Lottie",
+                path: [group, key],
+              })
+            }
+
+            if (
+              key === "opening" &&
+              choice.mediaAssetId &&
+              theme.assets.find((referencedAsset) => referencedAsset.id === choice.mediaAssetId)
+                ?.kind !== "video"
+            ) {
+              ctx.addIssue({
+                code: "custom",
+                message: "Opening media must reference video",
+                path: [group, key],
+              })
+            }
+          }
+
           if (
             !choice.id.startsWith(`${theme.id}.`) ||
             variantIds.has(choice.id)
@@ -292,3 +400,21 @@ export const showThemeDefinitionSchema = z
 export type ShowThemeDefinition = z.infer<typeof showThemeDefinitionSchema>
 
 export type ThemeAsset = ShowThemeDefinition["assets"][number]
+
+/** Plain text lookup; does not register resources globally or interpret HTML/code. */
+// oxlint-disable-next-line eslint/max-params -- Text resolution explicitly binds manifest, key, current locale and host translator.
+export function showThemeText(
+  definition: ShowThemeDefinition,
+  key: string,
+  language: string,
+  fallback: (key: string) => string,
+): string {
+  const locale = language.split("-")[0] as (typeof SHOW_THEME_LOCALES)[number]
+
+  return (
+    // oxlint-disable-next-line typescript/no-unnecessary-condition -- Browser locale strings may be outside the eight supported manifest keys.
+    definition.localizations?.[locale]?.[key] ??
+    definition.localizations?.en[key] ??
+    fallback(key)
+  )
+}

@@ -1,21 +1,23 @@
+import {
+  EndOnAllAnsweredSetting,
+  RosterGameSettings,
+} from "./ExtensionSettings"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { GameSettings } from "@razzia/common/types/game"
 import { gameSettingsSchema } from "@razzia/common/validators/game"
 import Button from "@razzia/web/components/Button"
 import Tooltip from "@razzia/web/components/Tooltip"
-import Switch from "@razzia/web/components/Switch"
 import AutoAdvance from "@razzia/web/features/game/components/GameSettingsModal/AutoAdvance"
 import GeneratedUsernames from "@razzia/web/features/game/components/GameSettingsModal/GeneratedUsernames"
 import AnswersOnly from "@razzia/web/features/game/components/GameSettingsModal/AnswersOnly"
-import SettingRow from "@razzia/web/features/game/components/GameSettingsModal/SettingRow"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { updateGameSettings } from "@razzia/web/features/manager/queries"
 import { ApiError } from "@razzia/web/lib/api"
 import { useMutation } from "@tanstack/react-query"
-import { Settings, Users, X } from "lucide-react"
+import { Settings, X } from "lucide-react"
 import { Dialog } from "radix-ui"
 import { useState } from "react"
-import { Controller, FormProvider, useForm } from "react-hook-form"
+import { FormProvider, useForm } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -103,63 +105,12 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
               <div className="min-h-0 flex-1 overflow-y-auto">
                 <GeneratedUsernames />
                 <AnswersOnly />
-                <Controller
-                  control={form.control}
-                  name="endOnAllAnswered"
-                  render={({ field }) => (
-                    <SettingRow
-                      label="extensions:host.endOnAllAnswered"
-                      hint="extensions:host.endOnAllAnsweredDesc"
-                    >
-                      <Switch
-                        aria-label={t("extensions:host.endOnAllAnswered")}
-                        data-testid="settings-end-on-all-answered"
-                        checked={Boolean(field.value)}
-                        onCheckedChange={field.onChange}
-                      />
-                    </SettingRow>
-                  )}
-                />
+                <EndOnAllAnsweredSetting />
                 <AutoAdvance />
-                <Controller
-                  control={form.control}
-                  name="phoneInviteOnly"
-                  render={({ field }) => (
-                    <SettingRow
-                      label="extensions:roster.phoneInviteOnly"
-                      hint="extensions:roster.phoneInviteOnlyDesc"
-                    >
-                      <Switch
-                        aria-label={t(
-                          "extensions:roster.phoneInviteOnly",
-                          "Phone Invite Only",
-                        )}
-                        checked={Boolean(field.value)}
-                        onCheckedChange={field.onChange}
-                      />
-                    </SettingRow>
-                  )}
+                <RosterGameSettings
+                  onOpenRoster={onOpenRoster}
+                  onClose={() => setOpen(false)}
                 />
-
-                {onOpenRoster && (
-                  <div className="mt-6 border-t border-neutral-200 pt-4 dark:border-neutral-800">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setOpen(false)
-                        onOpenRoster()
-                      }}
-                      className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 flex w-full items-center justify-center gap-2 rounded-lg border py-2.5 text-sm font-bold"
-                      data-testid="settings-open-roster-btn"
-                    >
-                      <Users className="size-4" />
-                      {t(
-                        "extensions:roster.title",
-                        "Participants & Phone Roster",
-                      )}
-                    </button>
-                  </div>
-                )}
               </div>
 
               <Button

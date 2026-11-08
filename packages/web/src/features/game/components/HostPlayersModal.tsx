@@ -16,7 +16,7 @@ import {
   fetchGameRoster,
   updateGameRosterSettings,
   upsertGameRosterParticipant,
-} from "@razzia/web/features/manager/queries"
+} from "@razzia/web/features/manager/roster-queries"
 import clsx from "clsx"
 import {
   AlertCircle,
@@ -39,12 +39,7 @@ import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
 type FilterTab =
-  | "all"
-  | "connected"
-  | "disconnected"
-  | "not_joined"
-  | "phone"
-  | "web"
+  "all" | "connected" | "disconnected" | "not_joined" | "phone" | "web"
 
 function triggerFileDownload(
   filename: string,
@@ -384,7 +379,10 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 data-testid="host-modal-xlsx-template-btn"
               >
                 <FileSpreadsheet className="size-3.5" />
-                {t("extensions:roster.downloadXlsxTemplate", "Template (.xlsx)")}
+                {t(
+                  "extensions:roster.downloadXlsxTemplate",
+                  "Template (.xlsx)",
+                )}
               </button>
 
               <button

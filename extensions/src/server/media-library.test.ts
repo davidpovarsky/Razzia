@@ -1,7 +1,7 @@
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
-import { afterEach, beforeEach, describe, expect, it } from "vitest"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
   createDefaultAudioExtras,
   createDefaultRosterExtras,
@@ -323,10 +323,10 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       schemaVersion: 2,
       revision: 1,
       quizId: "catalog-only-show",
-      leaderboard: {mode: "upstream"},
-      teams: {enabled: false, teams: [], autoAssign: "roundRobin"},
+      leaderboard: { mode: "upstream" },
+      teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
       audio: createDefaultAudioExtras(),
-      roster: {phoneInviteOnly: false, participants: []},
+      roster: { phoneInviteOnly: false, participants: [] },
       baseDigest: VALID_DIGEST,
       defaults: {
         newQuestionMode: "quiz",
@@ -404,15 +404,27 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       JSON.stringify(show2, null, 2),
     )
 
-    // Make show-rollback-2 file read-only on disk so writeFileSync throws EPERM / EACCES
+    // Inject an actual commit I/O failure. chmod on the destination does not
+    // prevent atomic rename on Linux, and root can write read-only files.
     const file2Path = path.join(getPath("quizz"), "show-rollback-2.json")
-    fs.chmodSync(file2Path, 0o444)
+    const originalRename = fs.renameSync.bind(fs)
+    let injected = false
+    const rename = vi.spyOn(fs, "renameSync").mockImplementation((from, to) => {
+      if (!injected && to === file2Path) {
+        injected = true
+        throw Object.assign(new Error("Injected commit I/O failure"), {
+          code: "EIO",
+        })
+      }
+      return originalRename(from, to)
+    })
 
     try {
       const result = checkMediaDeleteSafety(getPath, "rollback-target.png", {
         detach: true,
       })
 
+      expect(injected).toBe(true)
       // Must fail closed because show 2 could not be safely updated
       expect(result.allowed).toBe(false)
       expect(result.error).toContain("Detach failed and was safely rolled back")
@@ -426,13 +438,9 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       expect(show1Parsed.questions[0].media.url).toBe(
         "/media/rollback-target.png",
       )
+      expect(JSON.parse(fs.readFileSync(file2Path, "utf8"))).toEqual(show2)
     } finally {
-      // Restore permissions for cleanup
-      try {
-        fs.chmodSync(file2Path, 0o666)
-      } catch {
-        // ignore
-      }
+      rename.mockRestore()
     }
   })
 
@@ -1494,8 +1502,6 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     expect(deleteDetachedRes.status).toBe(204)
     const updatedSidecar = readSidecar(getPath, showId) as any
     expect(updatedSidecar.scenes[sceneId].overlayAnimations).toEqual([])
-    expect(
-      updatedSidecar.scenes[closingSceneId].overlayAnimations,
-    ).toEqual([])
+    expect(updatedSidecar.scenes[closingSceneId].overlayAnimations).toEqual([])
   })
 })

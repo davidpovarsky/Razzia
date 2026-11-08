@@ -1,3 +1,9 @@
+import {
+  resolveBrowserJoin,
+  recordBrowserJoin,
+  type BrowserJoinInput,
+  type BrowserBindingInput,
+} from "./browser-identity"
 import type { Player } from "@razzia/common/types/game"
 import { normalizePhoneE164, type RosterParticipant } from "../../../core/index"
 import {
@@ -23,6 +29,66 @@ export class GameRoster implements RosterState {
 
   constructor(ports: RosterPorts) {
     this.ports = ports
+  }
+
+  markConnected(clientId: string): void {
+    const id = this.clientIndex.get(clientId)
+    const entry = id ? this.entries.get(id) : undefined
+    if (entry) {
+      entry.status = "connected"
+      entry.timedOut = false
+      entry.lastSeenAt = Date.now()
+    }
+  }
+
+  markDisconnected(clientId: string, points: number, timedOut: boolean): void {
+    const id = this.clientIndex.get(clientId)
+    const entry = id ? this.entries.get(id) : undefined
+    if (entry) {
+      entry.status = "disconnected"
+      entry.timedOut = timedOut
+      entry.lastSeenAt = Date.now()
+      entry.points = points
+    }
+  }
+
+  shouldKeepParticipant(clientId: string): boolean {
+    const id = this.clientIndex.get(clientId)
+    const entry = id ? this.entries.get(id) : undefined
+    return Boolean(
+      entry &&
+      (entry.preRegistered || entry.phoneE164 || entry.source === "phone"),
+    )
+  }
+
+  forgetClient(clientId: string): void {
+    const id = this.clientIndex.get(clientId)
+    if (id) {
+      this.entries.delete(id)
+      this.clientIndex.delete(clientId)
+    }
+  }
+
+  afterKick(clientId: string): void {
+    const id = this.clientIndex.get(clientId)
+    if (!id) return
+    const entry = this.entries.get(id)
+    if (entry) {
+      if (entry.preRegistered || entry.phoneE164) {
+        entry.status = "not_joined"
+        entry.clientId = null
+      } else {
+        this.entries.delete(id)
+      }
+    }
+    this.clientIndex.delete(clientId)
+  }
+
+  resolveBrowserJoin(input: BrowserJoinInput) {
+    return resolveBrowserJoin(this, input)
+  }
+  recordBrowserJoin(input: BrowserBindingInput) {
+    recordBrowserJoin(this, input)
   }
 
   seed(participants: RosterParticipant[]): void {

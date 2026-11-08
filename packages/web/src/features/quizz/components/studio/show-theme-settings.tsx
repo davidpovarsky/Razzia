@@ -7,7 +7,7 @@ import {
   isLegacyShowRollback,
   resetThemeScope,
   resolveShowTheme,
-  showThemeRegistry,
+  showThemeText,
   type ShowThemeSelection,
   type ThemeOverrides,
 } from "@razzia/extensions/core"
@@ -20,10 +20,16 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { ShowThemePreview } from "./show-theme-preview"
+import {
+  useInstalledThemeCatalog,
+  useAvailableShowThemes,
+} from "./installed-theme-catalog"
 
 export function ShowThemeSettings() {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const { defaults, updateDefaults } = useStudioEditor()
+  const registry = useInstalledThemeCatalog()
+  const available = useAvailableShowThemes()
   const [pending, setPending] = useState<ShowThemeSelection | null>(null)
   const [showPreview, setShowPreview] = useState(false)
   const [pickingSlot, setPickingSlot] = useState<
@@ -31,7 +37,18 @@ export function ShowThemeSettings() {
   >(null)
   const [archiveFull, setArchiveFull] = useState(false)
   const selected = defaults.showTheme ?? createDefaultShowTheme()
-  const theme = resolveShowTheme({ selection: selected, role: "manager" })
+  const theme = resolveShowTheme({
+    selection: selected,
+    role: "manager",
+    registry,
+  })
+  const choices = available.some(
+    (value) =>
+      value.id === theme.definition.id &&
+      value.version === theme.definition.version,
+  )
+    ? available
+    : [...available, theme.definition]
   const update = (overrides: ThemeOverrides) =>
     updateDefaults({ showTheme: { ...selected, overrides } })
   const choose = (next: ShowThemeSelection) => {
@@ -74,7 +91,7 @@ export function ShowThemeSettings() {
             {t("extensions:themes.archiveFull")}
           </p>
         )}
-        {showThemeRegistry.list().map((definition) => {
+        {choices.map((definition) => {
           const poster = definition.assets.find(
             (asset) => asset.id === definition.posterAssetId,
           )
@@ -97,10 +114,21 @@ export function ShowThemeSettings() {
               />
               <div className="flex min-w-0 flex-1 flex-col gap-1">
                 <p className="text-foreground font-semibold">
-                  {t(definition.nameKey)} · {definition.version}
+                  {showThemeText(
+                    definition,
+                    definition.nameKey,
+                    i18n.language,
+                    (key) => t(key),
+                  )}{" "}
+                  · {definition.version}
                 </p>
                 <p className="text-muted-foreground text-xs">
-                  {t(definition.descriptionKey)}
+                  {showThemeText(
+                    definition,
+                    definition.descriptionKey,
+                    i18n.language,
+                    (key) => t(key),
+                  )}
                 </p>
               </div>
               <Button
@@ -183,7 +211,12 @@ export function ShowThemeSettings() {
                             },
                             ...spec.variants.map((item) => ({
                               value: item.id,
-                              label: t(item.labelKey),
+                              label: showThemeText(
+                                theme.definition,
+                                item.labelKey,
+                                i18n.language,
+                                (key) => t(key),
+                              ),
                             })),
                           ]}
                           onChange={(variantId) =>

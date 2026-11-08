@@ -18,6 +18,8 @@ import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor
 import { useStudioEditor } from "./studio-editor-context"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { StudioSelect } from "./studio-select"
+import { useInstalledThemeCatalog } from "./installed-theme-catalog"
+import { showThemeText } from "@razzia/extensions/core"
 
 function omitKeys<T extends object>(value: T, keys: readonly string[]): T {
   return Object.fromEntries(
@@ -59,7 +61,8 @@ export function ThemeScopeControls({
   section: "audio" | "background" | "motion"
   kind?: "question" | "scene"
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
+  const registry = useInstalledThemeCatalog()
   const { defaults, selectedTimelineItem, scenes, updateSceneConfig } =
     useStudioEditor()
   const { extras, setExtras, currentQuestionId } = useQuizzEditor()
@@ -80,6 +83,7 @@ export function ThemeScopeControls({
     selection,
     scope: card?.themeOverrides,
     role: "manager",
+    registry,
   })
   const compatible =
     card?.themeOverrides?.themeId === selection.id &&
@@ -193,7 +197,12 @@ export function ThemeScopeControls({
                 { value: "__inherit", label: t("extensions:themes.inherited") },
                 ...spec.variants.map((variant) => ({
                   value: variant.id,
-                  label: t(variant.labelKey),
+                  label: showThemeText(
+                    theme.definition,
+                    variant.labelKey,
+                    i18n.language,
+                    (key) => t(key),
+                  ),
                 })),
               ]}
               onChange={(variantId) =>

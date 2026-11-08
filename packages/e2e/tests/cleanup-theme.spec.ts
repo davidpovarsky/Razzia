@@ -150,34 +150,46 @@ test("Classic host, player and display keep the current lobby and authoritative 
   await player.getByPlaceholder("Username here").fill("Cleanup Alice")
   await player.getByRole("button", { name: "Submit", exact: true }).click()
   await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
-  const displayContext = await browser.newContext({
-    viewport: { width: 800, height: 600 },
-  })
-  const display = await displayContext.newPage()
-  await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
-  await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
-    game.inviteCode,
-  )
-  await expect(display.getByTestId("manager-control-toolbar")).toHaveCount(0)
-  await expect(display.locator('img[alt="background"], iframe')).toHaveCount(0)
-  await page.getByRole("button", { name: "Start", exact: true }).click()
-  await expect(page.getByTestId("host-pause-resume-btn")).toBeVisible()
-  await page.getByTestId("host-pause-resume-btn").click()
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-game-paused",
-    "true",
-  )
-  await page.getByTestId("host-pause-resume-btn").click()
-  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
-    "data-game-paused",
-    "false",
-  )
-  await page.screenshot({ path: join(testInfo.outputDir, "classic-host.png") })
-  await display.screenshot({
-    path: join(testInfo.outputDir, "classic-display.png"),
-  })
-  await playerContext.close()
-  await displayContext.close()
+  // Model the audience as an independent browser/device on the ARM64 QA host.
+  const displayBrowser = await browser.browserType().launch()
+  try {
+    const displayContext = await displayBrowser.newContext({
+      viewport: { width: 800, height: 600 },
+    })
+    const display = await displayContext.newPage()
+    await display.goto(`http://127.0.0.1:3170/display/${game.gameId}`)
+    await expect(display.getByTestId("tadazz-lobby-pin")).toHaveText(
+      game.inviteCode,
+    )
+    await expect(display.getByTestId("manager-control-toolbar")).toHaveCount(0)
+    await expect(display.locator('img[alt="background"], iframe')).toHaveCount(
+      0,
+    )
+    // Focus the host after opening the separate audience page. WebKit throttles
+    // background-page animation frames used by normal click actionability checks.
+    await page.bringToFront()
+    await page.getByRole("button", { name: "Start", exact: true }).click()
+    await expect(page.getByTestId("host-pause-resume-btn")).toBeVisible()
+    await page.getByTestId("host-pause-resume-btn").click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-game-paused",
+      "true",
+    )
+    await page.getByTestId("host-pause-resume-btn").click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-game-paused",
+      "false",
+    )
+    await page.screenshot({
+      path: join(testInfo.outputDir, "classic-host.png"),
+    })
+    await display.screenshot({
+      path: join(testInfo.outputDir, "classic-display.png"),
+    })
+  } finally {
+    await displayBrowser.close()
+    await playerContext.close()
+  }
 })
 
 test("explicit rollback uses extracted scene presenter and original Studio controls", async ({
@@ -384,6 +396,8 @@ test("blocked audio waits for a user gesture without retrying on ticks", async (
   await player.goto(`http://127.0.0.1:3170/?pin=${game.inviteCode}`)
   await player.getByPlaceholder("Username here").fill("Gesture Alice")
   await player.getByRole("button", { name: "Submit", exact: true }).click()
+  await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
+  await page.bringToFront()
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-voting-open",
@@ -595,7 +609,11 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
   ).toHaveLength(1)
-  expect((await probe(page)).plays.filter(item => item.url.includes("tadazz-timer-end-"))).toHaveLength(0)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(0)
   for (let i = 0; i < 3; i += 1) {
     if (
       (await page
@@ -640,7 +658,11 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
   ).toHaveLength(1)
-  expect((await probe(page)).plays.filter(item => item.url.includes("tadazz-timer-end-"))).toHaveLength(1)
+  expect(
+    (await probe(page)).plays.filter((item) =>
+      item.url.includes("tadazz-timer-end-"),
+    ),
+  ).toHaveLength(1)
   for (const surface of [page, player, display]) {
     const evidence = await probe(surface)
     expect(evidence.frames).toBeGreaterThan(0)
@@ -737,8 +759,9 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
             let node: Element | null = element;
             node;
             node = node.parentElement
-          )
-            {opacity *= Number(getComputedStyle(node).opacity)}
+          ) {
+            opacity *= Number(getComputedStyle(node).opacity)
+          }
 
           return opacity
         }),

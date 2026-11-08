@@ -668,7 +668,10 @@
     "sceneSubtitleTooLong": "サブタイトル ({{current}}/{{max}}文字) が推奨文字数を超えています。"
   },
   "tadazzShow": {
-    "participation": {"connected": "接続中: {{count}}", "answered": "回答済み: {{answered}} / {{connected}}"},
+    "participation": {
+      "connected": "接続中: {{count}}",
+      "answered": "回答済み: {{answered}} / {{connected}}"
+    },
     "questionReady": "問題の準備完了",
     "votingOpen": "投票受付中",
     "votesLocked": "投票締切 · 結果発表を待ってください",
@@ -836,6 +839,7 @@
       "question": "質問",
       "survey-results": "結果",
       "z-wipe": "トランジション"
-    }
+    },
+    "installationPreview": "レビューと承認のための非公開テーマプレビューです。"
   }
 }

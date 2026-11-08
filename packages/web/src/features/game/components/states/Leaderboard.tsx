@@ -1,13 +1,6 @@
+import { TeamLeaderboardAdapter } from "../tadazz-show/team-adapters"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
-import {
-  EXTENSION_EVENTS,
-  type ExtensionStateEnvelope,
-  type TeamDefinition,
-} from "@razzia/extensions/core"
-import { TeamLeaderboardPanel } from "@razzia/extensions/presentation"
 import Fire from "@razzia/web/features/game/components/icons/Fire"
-import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
-import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { AnimatePresence, motion, useSpring, useTransform } from "motion/react"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -60,14 +53,7 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
   const [displayedLeaderboard, setDisplayedLeaderboard] =
     useState(oldLeaderboard)
   const [isAnimating, setIsAnimating] = useState(false)
-  const { extensionState: storeExtensionState } = useManagerStore()
-  const [extensionState, setExtensionState] =
-    useState<ExtensionStateEnvelope | null>(storeExtensionState)
   const { t } = useTranslation()
-
-  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setExtensionState(payload)
-  })
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -80,54 +66,48 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
     }
   }, [oldLeaderboard, leaderboard])
 
-  const teamsData = extensionState?.extras.teams as
-    | {
-        enabled?: boolean
-        teams?: TeamDefinition[]
-        assignments?: Record<string, string>
-      }
-    | undefined
-
   const individualLeaderboardView = (
     <div className="flex min-h-0 w-full flex-col gap-1.5 sm:gap-2 overflow-hidden">
       <AnimatePresence mode="popLayout">
-        {displayedLeaderboard.slice(0, 6).map(({ id, username, points, streak }) => (
-          <motion.div
-            key={id}
-            layout
-            initial={{ opacity: 0, y: 50 }}
-            animate={{
-              opacity: 1,
-              y: 0,
-            }}
-            exit={{
-              opacity: 0,
-              y: 50,
-              transition: { duration: 0.2 },
-            }}
-            transition={{
-              layout: {
-                type: "spring",
-                stiffness: 350,
-                damping: 25,
-              },
-            }}
-            className="bg-primary flex w-full justify-between rounded-xl p-2 sm:p-3 text-xl sm:text-2xl md:text-3xl font-bold text-white"
-          >
-            <span className="flex items-center gap-2 drop-shadow-md truncate">
-              {username}
-              <StreakBadge streak={streak} />
-            </span>
-            {isAnimating ? (
-              <AnimatedPoints
-                from={oldLeaderboard.find((u) => u.id === id)?.points ?? 0}
-                to={leaderboard.find((u) => u.id === id)?.points ?? 0}
-              />
-            ) : (
-              <span className="drop-shadow-md">{points}</span>
-            )}
-          </motion.div>
-        ))}
+        {displayedLeaderboard
+          .slice(0, 6)
+          .map(({ id, username, points, streak }) => (
+            <motion.div
+              key={id}
+              layout
+              initial={{ opacity: 0, y: 50 }}
+              animate={{
+                opacity: 1,
+                y: 0,
+              }}
+              exit={{
+                opacity: 0,
+                y: 50,
+                transition: { duration: 0.2 },
+              }}
+              transition={{
+                layout: {
+                  type: "spring",
+                  stiffness: 350,
+                  damping: 25,
+                },
+              }}
+              className="bg-primary flex w-full justify-between rounded-xl p-2 sm:p-3 text-xl sm:text-2xl md:text-3xl font-bold text-white"
+            >
+              <span className="flex items-center gap-2 drop-shadow-md truncate">
+                {username}
+                <StreakBadge streak={streak} />
+              </span>
+              {isAnimating ? (
+                <AnimatedPoints
+                  from={oldLeaderboard.find((u) => u.id === id)?.points ?? 0}
+                  to={leaderboard.find((u) => u.id === id)?.points ?? 0}
+                />
+              ) : (
+                <span className="drop-shadow-md">{points}</span>
+              )}
+            </motion.div>
+          ))}
       </AnimatePresence>
     </div>
   )
@@ -137,22 +117,9 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
       <h2 className="mb-3 sm:mb-6 text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-md">
         {t("game:leaderboard")}
       </h2>
-      {teamsData?.enabled && teamsData.teams && teamsData.teams.length >= 2 ? (
-        <TeamLeaderboardPanel
-          teams={teamsData.teams}
-          players={leaderboard}
-          teamAssignments={teamsData.assignments ?? {}}
-          individualView={individualLeaderboardView}
-          t={(key, opts, fb) =>
-            t(
-              key,
-              typeof opts === "object" ? opts : { defaultValue: fb ?? opts },
-            )
-          }
-        />
-      ) : (
-        individualLeaderboardView
-      )}
+      <TeamLeaderboardAdapter players={leaderboard}>
+        {individualLeaderboardView}
+      </TeamLeaderboardAdapter>
     </section>
   )
 }

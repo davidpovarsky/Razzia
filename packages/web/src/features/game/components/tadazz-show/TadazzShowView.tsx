@@ -335,19 +335,28 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     }
   }, [role, openingLottieUrl, scene.kind])
   const launch = extensionState?.extras.presentationLaunch as
-    { stage: "standby" | "opening" | "lobby" | "running"; startedAt: number | null } | undefined
+    | {
+        stage: "standby" | "opening" | "lobby" | "running"
+        startedAt: number | null
+      }
+    | undefined
   const isStandby = launch?.stage === "standby"
   const advancePresentation = useCallback(() => {
     if (role !== "manager" || !extensionState || !isConnected) return
     socket.emit(EXTENSION_EVENTS.COMMAND, {
-      v: 1, gameId: extensionState.gameId, requestId: crypto.randomUUID(),
-      action: "NEXT_SCREEN", payload: { epoch: extensionState.epoch, phase: extensionState.phase },
+      v: 1,
+      gameId: extensionState.gameId,
+      requestId: crypto.randomUUID(),
+      action: "NEXT_SCREEN",
+      payload: { epoch: extensionState.epoch, phase: extensionState.phase },
     })
   }, [role, extensionState, isConnected, socket])
   const [legacyOpeningActive, setOpeningActive] = useState(
     () => role !== "player" && !reduced && !openingSeen(showGameId),
   )
-  const openingActive = launch ? role !== "player" && launch.stage === "opening" : legacyOpeningActive
+  const openingActive = launch
+    ? role !== "player" && launch.stage === "opening"
+    : legacyOpeningActive
   const configuredAudio = extensionState?.extras.audio as
     QuizExtrasV1["audio"] | undefined
   const hasOpeningSoundtrack =
@@ -365,7 +374,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const [legacyOpeningMusicActive, setOpeningMusicActive] = useState(
     () => role !== "player" && !reduced && !openingSeen(showGameId),
   )
-  const openingMusicActive = launch ? role !== "player" && launch.stage === "opening" : legacyOpeningMusicActive
+  const openingMusicActive = launch
+    ? role !== "player" && launch.stage === "opening"
+    : legacyOpeningMusicActive
   useEffect(() => {
     if (
       hasOpeningSoundtrack ||
@@ -388,26 +399,45 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
   const openingEligible =
     role !== "player" &&
-    (launch?.stage === "opening" || scene.kind === "lobby" ||
+    (launch?.stage === "opening" ||
+      scene.kind === "lobby" ||
       ((scene.kind === "connecting" || scene.kind === "wait") &&
         !questionStates))
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
-  const resolveStoryTie = useCallback((contestantIndex: number) => {
-    if (role !== "manager" || isPaused || !isConnected || !extensionState || tieRequestPendingRef.current) return
-    const fullShow = extensionState.extras.activeSceneData as
-      { fullShow?: { tieCandidates?: Array<{ answerIndex: number }> } } | undefined
-    const candidate = fullShow?.fullShow?.tieCandidates?.[contestantIndex]
-    if (!candidate) return
-    tieRequestPendingRef.current = true
-    socket.emit(EXTENSION_EVENTS.COMMAND, {
-      v: 1, gameId: extensionState.gameId, requestId: crypto.randomUUID(),
-      action: "RESOLVE_STORY_TIE",
-      payload: { answerIndex: candidate.answerIndex, epoch: extensionState.epoch },
-    })
-    setTimeout(() => { tieRequestPendingRef.current = false }, 800)
-  }, [role, isPaused, isConnected, extensionState, socket])
+  const resolveStoryTie = useCallback(
+    (contestantIndex: number) => {
+      if (
+        role !== "manager" ||
+        isPaused ||
+        !isConnected ||
+        !extensionState ||
+        tieRequestPendingRef.current
+      )
+        return
+      const fullShow = extensionState.extras.activeSceneData as
+        | { fullShow?: { tieCandidates?: Array<{ answerIndex: number }> } }
+        | undefined
+      const candidate = fullShow?.fullShow?.tieCandidates?.[contestantIndex]
+      if (!candidate) return
+      tieRequestPendingRef.current = true
+      socket.emit(EXTENSION_EVENTS.COMMAND, {
+        v: 1,
+        gameId: extensionState.gameId,
+        requestId: crypto.randomUUID(),
+        action: "RESOLVE_STORY_TIE",
+        payload: {
+          answerIndex: candidate.answerIndex,
+          epoch: extensionState.epoch,
+        },
+      })
+      setTimeout(() => {
+        tieRequestPendingRef.current = false
+      }, 800)
+    },
+    [role, isPaused, isConnected, extensionState, socket],
+  )
   const referenceStoryTrack = useMemo(() => {
     if (scene.kind !== "scene" || scene.scene.kind !== "animation") {
       return undefined
@@ -1070,6 +1100,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   if (openingActive && openingEligible) {
     overlay = (
       <TadazzOpening
+        backdropUrl={themeSlotAsset(theme, "opening", "backgroundAssetId")}
         videoUrl={themeSlotAsset(theme, "opening", "mediaAssetId")}
         lottieUrl={themeSlotAsset(theme, "opening", "overlayAssetId")}
         eventArtworkPending={!extensionState}
@@ -1312,7 +1343,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 questionStates={questionStates}
                 onExit={onBack ?? (() => undefined)}
                 onStartGame={
-                  props.statusName === STATUS.SHOW_ROOM ? (launch ? advancePresentation : onNext) : undefined
+                  props.statusName === STATUS.SHOW_ROOM
+                    ? launch
+                      ? advancePresentation
+                      : onNext
+                    : undefined
                 }
                 onAdvanceFallback={onNext}
                 onPresent={onPresent}
@@ -1362,7 +1397,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 labels={labels}
                 v4Labels={v4Labels}
                 onCue={handleStageCue}
-                onResolveStoryTie={role === "manager" ? resolveStoryTie : undefined}
+                onResolveStoryTie={
+                  role === "manager" ? resolveStoryTie : undefined
+                }
                 backdropUrl={backdrop?.url}
                 backdropFit={backdrop?.fit}
                 interactive={

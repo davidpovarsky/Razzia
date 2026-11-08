@@ -145,3 +145,135 @@ PARTIAL/NOT TESTED gates. In particular: no physical iPad, manual listening,
 complete historical pixel parity, long memory profiling or production theme
 installer was claimed. No push, main merge, deployment, credential change,
 telephony purchase or Asana write was performed.
+
+## Continuation requested 8 November — exhaustive original-file review
+
+The owner explicitly requires a semantic review of all 96 original files, further
+safe extractions before finishing the complete theme-authoring/install/runtime
+path, in this isolated branch. The prior quantitative ledger is not treated as
+proof that the extraction is exhaustive. No delegation, production deployment,
+main merge or push is requested.
+
+Synchronization reviewed and merged `0079e45`: explicit synchronized opening,
+fullscreen tie choice and host guide. Integration fixes before proceeding:
+`TadazzV4Data.onResolveTie` must declare the callback already supplied by the new
+native adapter; `PresentationLaunch` uses an explicit field instead of a TS
+parameter property so the web app's erasableSyntaxOnly typecheck remains valid.
+The TDZ in the opening music state was resolved while composing the merge.
+
+First inspected original files: Dockerfile, docker/nginx.conf, common constants,
+auth/game/socket/status types, auth/game/quizz/socket validators. Retain shared
+wire/types/validation; extract `resolveQuestionPlayMode` implementation from
+common/types into extensions/core and update its actual callers. The validator's
+mixed-mode solution requirement stays at the common wire-validation boundary.
+Docker workspace/WASM integration is necessary; assess restoring unrelated build
+command/cache changes with an actual local build. Move downstream nginx host,
+cache and protected-media configuration to an included extension fragment, keeping
+the protected media route and existing proxy behavior identical. Record parser
+validation and verify no tenant file alias becomes public.
+
+### Next extraction ledger (before the following edits)
+
+| Original path/symbol | Planned integration retained | Verification |
+| --- | --- | --- |
+| `QuizzEditorHeader.tsx` / save, conflict, Studio tabs | Original title/save/exit shell; owned composite-save hook and Studio controls | Actual app typecheck, import/export/save browser cases |
+| `QuizzEditorSidebar.tsx` / timeline mapping and scene rows | Original question sorting shell; owned timeline items/add controls | App typecheck, timeline reorder/duplicate browser cases |
+| `quizz-editor-context.tsx` / extras loading and stable IDs | Original form/field-array authority; owned extras hook and mutation helpers | App typecheck, mixed-mode and clone/persistence tests |
+| `QuestionEditorAnswers.tsx` / per-answer visuals | Original answer form/controller and solution picker; owned visual editing hook/controls | App typecheck, picture answer browser cases |
+| `QuestionEditor/index.tsx` / stage-fit warning/background | Original editor field ordering; owned warning/preview components | App typecheck, editor/browser rendering |
+| `Answers.tsx`, `Question.tsx`, `Responses.tsx` / decoration/reveal/view adapters | Original transport/answer authority; owned lifecycle/presentation helpers | App typecheck, browser role/answer/reveal matrix |
+| `GameWrapper.tsx` / legacy audio/background, host presence | Original shell and role boundaries; owned presenters | Browser parity and audio lifecycle checks |
+| `GameSettingsModal/index.tsx` / extension switches | Original form and save transport; owned settings fields | App typecheck, live settings checks |
+| `(auth)/manager/index.tsx` / account mode and session check | Route registration; owned account page and preloader | Account/session and browser login tests |
+| `services/config.ts` / root discovery | Single tenant-aware getPath hook | Root/account/storage suites |
+| `docker/nginx.conf`, `Dockerfile` | One protected extension server include and required workspace/WASM copies | Build, isolated nginx syntax check if installed runtime is available |
+
+The JSON review is a work-in-progress ledger: `reviewed` means semantically
+inspected, not that every listed extraction and verification is already closed.
+
+## Owner-directed remote QA continuation
+
+The owner stopped local browser/game QA because it interfered with simultaneous
+manual work, then explicitly requested continued tests on the real server in an
+isolated test environment. Local Playwright and its servers were stopped. All
+subsequent game/browser checks run headlessly on Oracle, in the new disposable
+`/home/ubuntu/tadazz-cleanup-theme-20261108-ae0692a` workspace/container, with no
+published ports, no production volume, no real provider credentials or customer
+fixture, and CPU/memory limits. Production identity/start time is recorded before
+and after. SSH uses the existing authorized key; no credentials are changed.
+
+First remote exact snapshot: root tests and all four effective typechecks passed.
+Extensions: 571/572; the existing chmod-based I/O failure test is not portable to
+Linux atomic rename/root. Replace only its failure injection with a one-shot EIO
+at rename commit, then verify both files roll back. No production transaction
+behavior changes. pnpm 12 rejects the existing extensions devDependency -> socket
+-> extensions cycle. All socket imports from extensions are integration tests,
+resolved by existing Vitest/TypeScript aliases. Remove that unnecessary owned
+package devDependency and its lockfile link; preserve original recursive build,
+then validate frozen install/build/tests on the server. Browser tests were not
+started after the failed build; do not count the interrupted local matrix as a
+complete pass. Remote image includes Chromium and WebKit installed on ARM64.
+
+Origin's current next-branch pointer 5ea0f47 is an ancestor of the already merged
+0079e45; history verification confirms the stale-shell/audio fix is included.
+No production restart, Caddy reload, provider call, public tunnel, push or Asana
+write is part of this continuation.
+
+### Theme installation continuation — implementation boundary
+
+After completing source review/extractions, finish the previously explicitly
+incomplete installer through an owned durable service and authenticated socket
+HTTP adapter. Keep it OFF by default; the user authorizes isolated remote staging
+and tests, not production activation. Tenant identity and assigned review/publish
+grants come exclusively from verified manager claims and server policy. Preserve
+independent human review, immutable versions, actual asset-byte validation,
+private media, audit, signing and rollback. Uploaded code/archives/SVG remain
+rejected. Code-backed registration requires a matching source-controlled trusted
+build record, never a caller-supplied hash alone. Production catalog continues to
+contain Classic only; independent synthetic themes exist only in test fixtures.
+
+Necessary original hooks before editing: api/index.ts mounts the owned theme
+router using existing auth; Game initialization attaches an approved theme from
+the tenant store once, and its existing media-reference seam includes that
+immutable definition. All runtime/catalog/install code stays in owned modules.
+Session snapshot and native ShowThemeRenderer are downstream-owned and can carry
+and resolve the approved definition without a second transport or game engine.
+No score/timer/telephony mutation is part of theme installation. Verification:
+real HTTP two-tenant denial, reviewer assignment and approval, byte/mime/path
+attacks, persisted restart, publish/rollback/signature, code-build rejection,
+Studio/catalog/native runtime and audio browser cases on the remote server.
+
+### Remote verification and final lifecycle refinements
+
+R2 on Oracle: root352/352, extensions572/572, four effective typechecks and
+recursive build passed; browser26/28 (two harness timing/focus failures recorded).
+R4 fixed the Chromium join/start race, browser27/28. R6 reran the remaining
+WebKit host/player/display case with a separate audience browser: PASS, with
+actual pause/resume controls. No source assertion was weakened or forced click
+used. The remote-only browser configurations reject accidental local runs.
+
+R7: build and five typechecks passed, extensions passed, skill validator/wrapper
+and generated schema passed. The new real-HTTP adversarial case exposed a
+connection-reuse problem after an early oversized/unread POST rejection. Signal
+Connection: close only on owned theme-router error responses; do not change the
+production HTTP server or unrelated upstream routes. Preserve failed logs.
+
+Finish the authoring lifecycle with editable private drafts (CAS revision),
+rejection/return from review, and approval bound to the exact inspected revision
+and manifest digest. Published/staged artifacts remain immutable. Track all draft
+contributors so none can self-approve. This belongs entirely to owned theme
+modules. Extend real HTTP and durable tests before claiming completion.
+
+Additional minimal upstream extraction before final closure: games.ts join
+identity/name/phone/roster policy moves into owned api/extensions/join-policy.ts.
+Retain the original registry lookup, manager exclusion, media authorization and
+signed join-ticket issuance in the original REST boundary. Verify duplicate-before-
+lock priority, invite-only rejection, roster bypass, generated names and source
+metadata. This is pure downstream policy, not a second game authority.
+
+Private-media QA must use the same authentication boundary as nginx. The original
+Vite config-directory middleware currently intercepts /media before proxying and
+cannot serve tenant/SQLite theme assets. Add an owned private-media proxy policy;
+retain original static media serving when accounts are OFF, and use authenticated
+backend media routes when accounts are ON. Minimal upstream Vite hooks only;
+verify private preview/room assets in real remote browser and preserve legacy QA.

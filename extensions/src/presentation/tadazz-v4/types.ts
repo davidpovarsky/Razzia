@@ -61,6 +61,8 @@ export interface TadazzV4Data {
   sceneStartedAt?: number
   sceneElapsedMs?: number
   scenePaused?: boolean
+  /** Host-owned tie interaction; presentation never chooses or scores a winner. */
+  onResolveTie?: (contestantIndex: number) => void
   question?: string
   eyebrow?: string
   note?: string

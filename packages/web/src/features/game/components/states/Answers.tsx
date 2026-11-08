@@ -1,32 +1,18 @@
-import { EVENTS, MEDIA_TYPES, NO_TIME_LIMIT } from "@razzia/common/constants"
+import {
+  AnswerStageHud,
+  LegacyVotingMotion,
+} from "../tadazz-show/answer-stage-elements"
+import { useQuestionPresentation } from "../tadazz-show/use-question-presentation"
+import { QuestionUnderline } from "@razzia/extensions/presentation"
+import { EVENTS, MEDIA_TYPES } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
-import {
-  EXTENSION_EVENTS,
-  resolveCardStageAnimations,
-  resolveQuestionDecoration,
-  type AnswerVisual,
-  type CardStageAnimations,
-  type ExtensionStateEnvelope,
-  type QuestionDecoration,
-  type QuestionEntrance as QuestionEntranceConfig,
-  type QuestionReveal,
-} from "@razzia/extensions/core"
+import { type AnswerVisual, type QuestionReveal } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
-import AnswerCountdown from "@razzia/web/features/game/components/AnswerCountdown"
-import { TadazzMotionStage } from "@razzia/web/features/game/components/TadazzMotionStage"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
-import {
-  LottiePlayer,
-  TadazzSurveyCards,
-  useStageFit,
-} from "@razzia/extensions/presentation"
-import {
-  getAuthoritativeEnvelope,
-  useExtensionState,
-} from "@razzia/web/features/game/contexts/extension-state-context"
+import { TadazzSurveyCards, useStageFit } from "@razzia/extensions/presentation"
 import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import {
   useEvent,
@@ -72,25 +58,19 @@ const Answers = ({
   const canSubmit = Boolean(player) && !isSpectator
 
   const initialCooldown =
-    typeof (data as any)?.remainingTime === "number"
-      ? (data as any).remainingTime
-      : time
+    typeof data?.remainingTime === "number" ? data.remainingTime : time
   const [cooldown, setCooldown] = useState(initialCooldown)
   const [totalAnswer, setTotalAnswer] = useState(0)
-  const [extensionState, setExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
-  const contextExtensionState = useExtensionState()
-  const effectiveExtensionState = getAuthoritativeEnvelope(
-    extensionState,
-    contextExtensionState,
-  )
+  const {
+    effectiveExtensionState,
+    defaultsObj,
+    stageAnimations,
+    questionDecoration,
+    animationEpochKey,
+  } = useQuestionPresentation(question, "answers")
   const { t } = useTranslation()
   const { width } = useScreenSize()
   const { isUltraCompact } = useStageFit()
-
-  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setExtensionState(payload)
-  })
 
   const rawAnswerVisuals = effectiveExtensionState?.extras.answerVisuals as
     AnswerVisual[] | undefined
@@ -170,31 +150,6 @@ const Answers = ({
 
   const MediaIcon = media?.type === MEDIA_TYPES.VIDEO ? Video : Image
 
-  const defaultsObj = effectiveExtensionState?.extras?.defaults as
-    | {
-        stageAnimations?: CardStageAnimations
-        questionDecoration?: QuestionDecoration
-        tadazzBackground?: { mode: "original" | "animated" | "static" }
-        motionKit?: "goldy-20261105"
-      }
-    | undefined
-
-  const stageAnimations = resolveCardStageAnimations({
-    questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
-      QuestionEntranceConfig | undefined,
-    stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
-      CardStageAnimations | undefined,
-    globalStageAnimations: defaultsObj?.stageAnimations,
-  })
-
-  const questionDecoration = resolveQuestionDecoration({
-    questionDecoration: effectiveExtensionState?.extras?.questionDecoration as
-      QuestionDecoration | undefined,
-    globalDecoration: defaultsObj?.questionDecoration,
-  })
-
-  const animationEpochKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-answers`
-
   const showTadazzCards =
     defaultsObj?.tadazzBackground?.mode !== undefined &&
     defaultsObj.tadazzBackground.mode !== "original" &&
@@ -210,32 +165,20 @@ const Answers = ({
       epoch={animationEpochKey}
       className="relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden"
     >
-      {showTadazzCards &&
-        defaultsObj?.motionKit === "goldy-20261105" &&
-        (viewRole === "manager" || isSpectator) &&
-        currentVisuals?.length === 5 && (
-          <TadazzMotionStage
-            scene={{
-              key: `${String(
-                effectiveExtensionState?.gameId ?? gameId ?? "",
-              )}:${animationEpochKey}`,
-              mode: "vote",
-              question: {
-                question,
-                round: (questionStates?.current ?? 1) <= 5 ? 1 : 2,
-                number: questionStates?.current ?? 1,
-                totalQuestions: questionStates?.total ?? 10,
-                options: answers.map((label, index) => ({
-                  label,
-                  image:
-                    currentVisuals.find((v) => v.answerIndex === index)?.url ??
-                    "",
-                })),
-              },
-              seconds: time,
-            }}
-          />
-        )}
+      <LegacyVotingMotion
+        showTadazzCards={showTadazzCards}
+        defaultsObj={defaultsObj}
+        viewRole={viewRole}
+        isSpectator={isSpectator}
+        currentVisuals={currentVisuals}
+        effectiveExtensionState={effectiveExtensionState}
+        gameId={gameId}
+        animationEpochKey={animationEpochKey}
+        question={question}
+        questionStates={questionStates}
+        answers={answers}
+        time={time}
+      />
       {/* Question Header & Media Area */}
       <div
         className={clsx("mx-auto w-full max-w-7xl px-2 text-center", {
@@ -259,31 +202,11 @@ const Answers = ({
           {question}
         </h2>
 
-        {questionDecoration.enabled && questionDecoration.preset !== "none" && (
-          <div
-            data-testid="question-decoration-underline"
-            data-tada-underline={questionDecoration.preset}
-            className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
-          >
-            {(questionDecoration.preset === "lottie" ||
-              (questionDecoration.preset as string) === "custom-lottie") &&
-            questionDecoration.lottieUrl ? (
-              <LottiePlayer
-                src={questionDecoration.lottieUrl}
-                loop={true}
-                className="h-4 w-full"
-                dataTestId="question-decoration-lottie"
-              />
-            ) : (
-              <div
-                className={clsx(
-                  "w-full",
-                  `tada-underline-${questionDecoration.preset}`,
-                )}
-              />
-            )}
-          </div>
-        )}
+        <QuestionUnderline
+          decoration={questionDecoration}
+          className="mx-auto mt-1 flex w-40 items-center justify-center sm:w-56"
+          playerClassName="h-4 w-full"
+        />
 
         {showAnswersOnly ? (
           <>
@@ -347,43 +270,14 @@ const Answers = ({
           "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
         })}
       >
-        <div
-          className={clsx(
-            "mx-auto flex w-full max-w-7xl shrink-0 items-center justify-between gap-2 px-2",
-            isUltraCompact ? "mb-0.5" : "mb-1.5 sm:mb-2.5",
-          )}
-        >
-          {time !== NO_TIME_LIMIT && (
-            <AnswerCountdown
-              seconds={cooldown}
-              totalSeconds={time}
-              variant={isVisualPlayerMode ? "player" : "host"}
-            />
-          )}
-          <div
-            className={clsx(
-              "flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 shadow-lg backdrop-blur-md",
-              isUltraCompact ? "px-2 py-0.5" : "px-3 py-1 sm:px-4 sm:py-1.5",
-            )}
-          >
-            <div className="flex flex-col items-center leading-none">
-              <span className="text-[9px] font-bold tracking-wider text-white/60 uppercase sm:text-[10px]">
-                {t("game:hud.answers")}
-              </span>
-              <span
-                data-testid="stage-hud-answer-counter"
-                className={clsx(
-                  "font-mono font-black text-white tabular-nums",
-                  isUltraCompact
-                    ? "text-lg sm:text-xl"
-                    : "text-xl sm:text-2xl md:text-3xl",
-                )}
-              >
-                {totalAnswer}/{totalPlayer}
-              </span>
-            </div>
-          </div>
-        </div>
+        <AnswerStageHud
+          time={time}
+          cooldown={cooldown}
+          totalAnswer={totalAnswer}
+          totalPlayer={totalPlayer}
+          isUltraCompact={isUltraCompact}
+          isVisualPlayerMode={isVisualPlayerMode}
+        />
 
         {showTadazzCards ? (
           <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden px-2">

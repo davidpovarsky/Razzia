@@ -1,26 +1,14 @@
+import { useQuestionPresentation } from "../tadazz-show/use-question-presentation"
+import { QuestionUnderline } from "@razzia/extensions/presentation"
 import { MEDIA_TYPES } from "@razzia/common/constants"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
 import clsx from "clsx"
-import {
-  EXTENSION_EVENTS,
-  resolveCardStageAnimations,
-  resolveQuestionDecoration,
-  type CardStageAnimations,
-  type ExtensionStateEnvelope,
-  type QuestionDecoration,
-  type QuestionEntrance as QuestionEntranceConfig,
-  type QuestionReveal,
-} from "@razzia/extensions/core"
+import { type QuestionReveal } from "@razzia/extensions/core"
 import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
-import { LottiePlayer, useStageFit } from "@razzia/extensions/presentation"
-import {
-  getAuthoritativeEnvelope,
-  useExtensionState,
-} from "@razzia/web/features/game/contexts/extension-state-context"
-import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
+import { useStageFit } from "@razzia/extensions/presentation"
 import { SFX } from "@razzia/web/features/game/utils/constants"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import useSound from "use-sound"
 
 interface Props {
@@ -29,17 +17,12 @@ interface Props {
 
 const Question = ({ data: { question, media, cooldown } }: Props) => {
   const [sfxShow] = useSound(SFX.SHOW_SOUND, { volume: 0.5 })
-  const [extensionState, setExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
-  const contextExtensionState = useExtensionState()
-  const effectiveExtensionState = getAuthoritativeEnvelope(
-    extensionState,
-    contextExtensionState,
-  )
-
-  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setExtensionState(payload)
-  })
+  const {
+    effectiveExtensionState,
+    stageAnimations,
+    questionDecoration,
+    animationEpochKey: activeKey,
+  } = useQuestionPresentation(question, "show")
 
   useEffect(() => {
     // When extensionState is present, GameWrapper's unified AudioCuePlayer manages phase audio
@@ -49,31 +32,6 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
     sfxShow()
   }, [sfxShow, effectiveExtensionState?.gameId])
 
-  const defaultsObj = effectiveExtensionState?.extras?.defaults as
-    | {
-        stageAnimations?: CardStageAnimations
-        questionDecoration?: QuestionDecoration
-      }
-    | undefined
-
-  const stageAnimations = resolveCardStageAnimations({
-    questionEntrance: effectiveExtensionState?.extras?.questionEntrance as
-      | QuestionEntranceConfig
-      | undefined,
-    stageAnimations: effectiveExtensionState?.extras?.stageAnimations as
-      | CardStageAnimations
-      | undefined,
-    globalStageAnimations: defaultsObj?.stageAnimations,
-  })
-
-  const questionDecoration = resolveQuestionDecoration({
-    questionDecoration: effectiveExtensionState?.extras?.questionDecoration as
-      | QuestionDecoration
-      | undefined,
-    globalDecoration: defaultsObj?.questionDecoration,
-  })
-
-  const activeKey = `${effectiveExtensionState?.questionId ?? question}-${effectiveExtensionState?.epoch ?? 0}-show`
   const { isUltraCompact, isCompact } = useStageFit()
 
   return (
@@ -97,31 +55,11 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
           {question}
         </h2>
 
-        {questionDecoration.enabled && questionDecoration.preset !== "none" && (
-          <div
-            data-testid="question-decoration-underline"
-            data-tada-underline={questionDecoration.preset}
-            className="flex w-48 sm:w-64 items-center justify-center"
-          >
-            {(questionDecoration.preset === "lottie" ||
-              (questionDecoration.preset as string) === "custom-lottie") &&
-            questionDecoration.lottieUrl ? (
-              <LottiePlayer
-                src={questionDecoration.lottieUrl}
-                loop={true}
-                className="h-5 w-full"
-                dataTestId="question-decoration-lottie"
-              />
-            ) : (
-              <div
-                className={clsx(
-                  "w-full",
-                  `tada-underline-${questionDecoration.preset}`,
-                )}
-              />
-            )}
-          </div>
-        )}
+        <QuestionUnderline
+          decoration={questionDecoration}
+          className="flex w-48 sm:w-64 items-center justify-center"
+          playerClassName="h-5 w-full"
+        />
 
         {media?.type === MEDIA_TYPES.IMAGE && (
           <div
@@ -139,8 +77,7 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
               alt={question}
               reveal={
                 effectiveExtensionState?.extras.reveal as
-                  | QuestionReveal
-                  | undefined
+                  QuestionReveal | undefined
               }
               serverStartedAt={effectiveExtensionState?.startedAt}
               currentEpoch={effectiveExtensionState?.epoch}
@@ -148,8 +85,7 @@ const Question = ({ data: { question, media, cooldown } }: Props) => {
               isManuallyRevealed={
                 (
                   effectiveExtensionState?.extras.reveal as
-                    | { isRevealed?: boolean }
-                    | undefined
+                    { isRevealed?: boolean } | undefined
                 )?.isRevealed
               }
             />

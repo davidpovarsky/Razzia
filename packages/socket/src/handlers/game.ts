@@ -1,3 +1,4 @@
+import { registerGameExtensionHandlers } from "./game-extensions"
 import { EVENTS } from "@razzia/common/constants"
 import type { SocketContext } from "@razzia/socket/handlers/types"
 import { verifyJoinTicket } from "@razzia/socket/services/auth"
@@ -9,11 +10,7 @@ import { getClientId } from "@razzia/socket/utils/socket"
 export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
   const registry = Registry.getInstance()
   const clientId = getClientId(socket)
-  socket.on("extensions:clock", (ack) => {
-    if (typeof ack === "function") {
-      ack(Date.now())
-    }
-  })
+  registerGameExtensionHandlers(socket, registry)
 
   const closeLobby = (game: Game) => {
     game.abortCooldown()
@@ -139,56 +136,12 @@ export const gameSocketHandlers = ({ io, socket }: SocketContext) => {
     withManagerGame(gameId, socket, (game) => game.advance()),
   )
 
-  socket.on(EVENTS.EXTENSIONS.COMMAND, (command, ack) =>
-    withManagerGame(command.gameId, socket, (game) => {
-      try {
-        const result = game.handleExtensionCommand(command)
-        ack?.(result)
-      } catch (err) {
-        const message = err instanceof Error ? err.message : String(err)
-        ack?.({ success: false, error: message })
-        socket.emit(EVENTS.GAME.ERROR_MESSAGE, message)
-      }
-    }),
-  )
-
   socket.on(EVENTS.MANAGER.LEAVE, ({ gameId }) => {
     const game = registry.getManagerGame(gameId, clientId)
 
     if (game) {
       console.log(`Manager left game ${game.inviteCode}`)
       handleManagerLeave(game)
-    }
-  })
-
-  socket.on(
-    EVENTS.SPECTATOR.JOIN,
-    ({ gameId, inviteCode }: { gameId?: string; inviteCode?: string }) => {
-      let game: Game | undefined
-
-      if (gameId) {
-        game = registry.getGameById(gameId)
-      } else if (inviteCode) {
-        game = registry.getGameByInviteCode(inviteCode)
-      }
-
-      if (!game) {
-        socket.emit(EVENTS.GAME.RESET, "errors:game.notFound")
-
-        return
-      }
-
-      game.joinSpectator(socket)
-    },
-  )
-
-  socket.on(EVENTS.SPECTATOR.LEAVE, ({ gameId }: { gameId?: string }) => {
-    const game = gameId
-      ? registry.getGameById(gameId)
-      : registry.getGameBySpectatorSocketId(socket.id)
-
-    if (game) {
-      game.leaveSpectator(socket)
     }
   })
 

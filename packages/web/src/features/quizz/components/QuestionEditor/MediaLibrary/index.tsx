@@ -1,13 +1,11 @@
 import {
-  reconcileDeletedEditorMedia,
-  collectEditorMediaUrls,
-} from "@razzia/extensions/editor"
+  MediaLibraryScopeTabs,
+  MediaDeleteBanner,
+  BuiltinSoundList,
+  type MediaScopeTab,
+} from "./extension-panels"
+import { useMediaLibraryExtensions } from "./use-media-library-extensions"
 import type { UploadedMedia } from "@razzia/common/types/game"
-import {
-  BUILT_IN_SOUNDS_LIST,
-  isLegacyShowRollback,
-  resolveShowTheme,
-} from "@razzia/extensions/core"
 import Loader from "@razzia/web/components/Loader"
 import MediaCard from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard"
 import MediaDropOverlay from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaDropOverlay"
@@ -18,18 +16,12 @@ import MediaLibraryToolbar, {
   type MediaView,
 } from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
-import { useUploadMedia } from "@razzia/web/features/quizz/hooks/useUploadMedia"
-import {
-  deleteMedia,
-  mediaKeys,
-  mediaListQuery,
-} from "@razzia/web/features/quizz/queries"
-import { ApiError } from "@razzia/web/lib/api"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { mediaListQuery } from "@razzia/web/features/quizz/queries"
+import { useQuery } from "@tanstack/react-query"
 import clsx from "clsx"
-import { AlertTriangle, Music, Volume2, X } from "lucide-react"
+import { X } from "lucide-react"
 import { Dialog } from "radix-ui"
-import { type DragEvent, useMemo, useRef, useState } from "react"
+import { type DragEvent, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -41,11 +33,6 @@ interface Props {
   allowedBuiltinUrls?: readonly string[]
 }
 
-type MediaScopeTab = "all" | "show" | "builtin"
-
-const LEGACY_BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> =
-  BUILT_IN_SOUNDS_LIST
-
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
 const MediaLibrary = ({
@@ -55,14 +42,7 @@ const MediaLibrary = ({
   acceptType,
   allowedBuiltinUrls,
 }: Props) => {
-  const {
-    quizzId,
-    questions,
-    updateQuestion,
-    currentIndex,
-    extras,
-    setExtras,
-  } = useQuizzEditor()
+  const { currentIndex, updateQuestion } = useQuizzEditor()
   const { data, isPending } = useQuery({ ...mediaListQuery(), enabled: open })
   const [search, setSearch] = useState("")
   const [filter, setFilter] = useState<MediaFilter>(
@@ -71,141 +51,21 @@ const MediaLibrary = ({
   const [scopeTab, setScopeTab] = useState<MediaScopeTab>("all")
   const [view, setView] = useState<MediaView>("grid")
   const [isDragging, setIsDragging] = useState(false)
-  const [pendingForceDeleteItem, setPendingForceDeleteItem] =
-    useState<UploadedMedia | null>(null)
-  const previewAudioRef = useRef<HTMLAudioElement | null>(null)
-  const [playingBuiltinUrl, setPlayingBuiltinUrl] = useState<string | null>(
-    null,
-  )
-  const queryClient = useQueryClient()
   const { t } = useTranslation()
-  const themeDefaults =
-    extras && "defaults" in extras ? extras.defaults : undefined
-  const BUILT_IN_SOUNDS = useMemo(() => {
-    const theme = resolveShowTheme({
-      selection: themeDefaults?.showTheme,
-      role: "manager",
-    })
-    const eventsByAsset = new Map<string, string>()
-    for (const [event, spec] of Object.entries(theme.definition.audioEvents)) {
-      for (const variant of spec.variants) {
-        if (variant.assetId && !eventsByAsset.has(variant.assetId)) {
-          eventsByAsset.set(variant.assetId, event)
-        }
-      }
-    }
-    const sounds = isLegacyShowRollback(themeDefaults)
-      ? LEGACY_BUILT_IN_SOUNDS
-      : theme.definition.assets.flatMap((asset) => {
-          const event = eventsByAsset.get(asset.id)
-
-          return asset.kind === "audio" && event
-            ? [
-                {
-                  name: asset.id,
-                  url: asset.url,
-                  type: "audio" as const,
-                  label: t(`extensions:themes.audio.${event}`),
-                },
-              ]
-            : []
-        })
-
-    return allowedBuiltinUrls
-      ? sounds.filter((sound) => allowedBuiltinUrls.includes(sound.url))
-      : sounds
-  }, [themeDefaults, allowedBuiltinUrls, t])
-
-  const handleUploadedItem = (uploaded: UploadedMedia) => {
-    setExtras((prev) => {
-      if (!prev) {
-        return prev
-      }
-      const currentCatalog = prev.mediaCatalog ? [...prev.mediaCatalog] : []
-      if (
-        !currentCatalog.some(
-          (c) => c.url === uploaded.url || c.name === uploaded.name,
-        )
-      ) {
-        currentCatalog.unshift({
-          name: uploaded.name,
-          url: uploaded.url,
-          type: uploaded.type,
-          addedAt: Date.now(),
-        })
-      }
-
-      return {
-        ...prev,
-        mediaCatalog: currentCatalog,
-      }
-    })
-
-    if (quizzId) {
-      const token = localStorage.getItem("token")
-      fetch("/api/extensions/media/associate", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        },
-        body: JSON.stringify({
-          quizId: quizzId,
-          item: {
-            name: uploaded.name,
-            url: uploaded.url,
-            type: uploaded.type,
-            addedAt: Date.now(),
-          },
-        }),
-      }).catch(() => undefined)
-    }
-  }
-
-  const { upload, pendingCount } = useUploadMedia(
+  const {
+    BUILT_IN_SOUNDS,
+    upload,
+    pendingCount,
+    usedUrlsInShow,
+    pendingForceDeleteItem,
+    setPendingForceDeleteItem,
+    playingBuiltinUrl,
+    stopPreviewAudio,
+    toggleBuiltinPreview,
     handleUploadedItem,
-    acceptType,
-  )
-
-  const reconcileDeletedMediaInEditor = (item: UploadedMedia) => {
-    // 1. Clear matching base question media
-    questions.forEach((question, index) => {
-      if (question.media?.url === item.url) {
-        updateQuestion(index, { media: undefined })
-      }
-    })
-
-    const reconciled = reconcileDeletedEditorMedia(extras, item)
-    if (reconciled !== extras) setExtras(reconciled)
-  }
-
-  const { mutate: remove } = useMutation({
-    mutationFn: ({ item, detach }: { item: UploadedMedia; detach?: boolean }) =>
-      deleteMedia(item.name, { detach }),
-    onSuccess: (_, { item }) => {
-      setPendingForceDeleteItem(null)
-      reconcileDeletedMediaInEditor(item)
-      queryClient.invalidateQueries({ queryKey: mediaKeys.all })
-    },
-    onError: (error, { item }) => {
-      if (
-        error instanceof ApiError &&
-        (error.key === "extensions:mediaLibrary.deleteBlockedDesc" ||
-          error.key.includes("deleteBlocked"))
-      ) {
-        setPendingForceDeleteItem(item)
-        return
-      }
-      toast.error(
-        t(error instanceof ApiError ? error.key : "errors:media.notFound"),
-      )
-    },
-  })
-
-  const usedUrlsInShow = useMemo(
-    () => collectEditorMediaUrls(questions, extras),
-    [questions, extras],
-  )
+    handleDelete,
+    handleConfirmForceDelete,
+  } = useMediaLibraryExtensions(acceptType, allowedBuiltinUrls)
 
   const media = data?.media ?? []
   const query = search.trim().toLowerCase()
@@ -228,32 +88,6 @@ const MediaLibrary = ({
       item.name.toLowerCase().includes(query) ||
       item.label.toLowerCase().includes(query),
   )
-
-  const stopPreviewAudio = () => {
-    if (previewAudioRef.current) {
-      previewAudioRef.current.pause()
-      previewAudioRef.current.currentTime = 0
-      previewAudioRef.current = null
-    }
-    setPlayingBuiltinUrl(null)
-  }
-
-  const toggleBuiltinPreview = (url: string) => {
-    if (playingBuiltinUrl === url) {
-      stopPreviewAudio()
-      return
-    }
-    stopPreviewAudio()
-    try {
-      const audio = new Audio(url)
-      previewAudioRef.current = audio
-      setPlayingBuiltinUrl(url)
-      audio.onended = () => setPlayingBuiltinUrl(null)
-      audio.play().catch(() => setPlayingBuiltinUrl(null))
-    } catch {
-      setPlayingBuiltinUrl(null)
-    }
-  }
 
   const handleSelect = (item: UploadedMedia) => () => {
     if (acceptType && acceptType !== "all" && item.type !== acceptType) {
@@ -279,15 +113,6 @@ const MediaLibrary = ({
     }
 
     onOpenChange(false)
-  }
-
-  const handleDelete = (item: UploadedMedia) => () => {
-    remove({ item, detach: false })
-  }
-
-  const handleConfirmForceDelete = () => {
-    if (!pendingForceDeleteItem) return
-    remove({ item: pendingForceDeleteItem, detach: true })
   }
 
   const handleDragOver = (e: DragEvent) => {
@@ -360,96 +185,16 @@ const MediaLibrary = ({
             </Dialog.Close>
           </div>
 
-          <div
-            data-testid="media-library-scope-tabs"
-            className="flex flex-wrap items-center gap-1.5"
-          >
-            <button
-              type="button"
-              data-testid="media-scope-all"
-              onClick={() => setScopeTab("all")}
-              className={clsx(
-                "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
-                scopeTab === "all"
-                  ? "bg-primary text-white shadow-xs"
-                  : "bg-muted text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {t("extensions:mediaLibrary.allUploaded", {
-                defaultValue: "All Uploaded",
-              })}
-            </button>
-            <button
-              type="button"
-              data-testid="media-scope-show"
-              data-tab="in-show"
-              onClick={() => setScopeTab("show")}
-              className={clsx(
-                "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
-                scopeTab === "show"
-                  ? "bg-primary text-white shadow-xs"
-                  : "bg-muted text-muted-foreground hover:text-foreground",
-              )}
-            >
-              {t("extensions:mediaLibrary.inThisShow", {
-                defaultValue: "In This Show",
-              })}
-            </button>
-            {showBuiltInTab && (
-              <button
-                type="button"
-                data-testid="media-scope-builtin"
-                data-tab="builtin-sounds"
-                onClick={() => setScopeTab("builtin")}
-                className={clsx(
-                  "rounded-lg px-3 py-1.5 text-xs font-semibold transition",
-                  scopeTab === "builtin"
-                    ? "bg-primary text-white shadow-xs"
-                    : "bg-muted text-muted-foreground hover:text-foreground",
-                )}
-              >
-                {t("extensions:mediaLibrary.builtInSounds", {
-                  defaultValue: "Built-in Sounds",
-                })}
-              </button>
-            )}
-          </div>
-
-          {pendingForceDeleteItem && (
-            <div
-              data-testid="media-delete-in-use-banner"
-              className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-amber-500/40 bg-amber-500/10 px-3 py-2.5 text-xs"
-            >
-              <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200">
-                <AlertTriangle className="size-4 shrink-0 text-amber-600" />
-                <span className="font-medium">
-                  {t("extensions:mediaLibrary.inUseWarning", {
-                    name: pendingForceDeleteItem.name,
-                    defaultValue: `"${pendingForceDeleteItem.name}" is currently used by one or more cards or shows. Detach it from all cards and delete permanently?`,
-                  })}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => setPendingForceDeleteItem(null)}
-                  className="bg-muted text-foreground hover:bg-muted/80 rounded-md px-2.5 py-1 font-semibold"
-                >
-                  {t("common:cancel", { defaultValue: "Cancel" })}
-                </button>
-                <button
-                  type="button"
-                  data-testid="media-confirm-force-delete"
-                  onClick={handleConfirmForceDelete}
-                  className="rounded-md bg-red-600 px-2.5 py-1 font-semibold text-white hover:bg-red-700"
-                >
-                  {t("extensions:mediaLibrary.detachAndDelete", {
-                    defaultValue: "Detach & Delete",
-                  })}
-                </button>
-              </div>
-            </div>
-          )}
+          <MediaLibraryScopeTabs
+            scopeTab={scopeTab}
+            setScopeTab={setScopeTab}
+            showBuiltInTab={showBuiltInTab}
+          />
+          <MediaDeleteBanner
+            pendingForceDeleteItem={pendingForceDeleteItem}
+            onCancel={() => setPendingForceDeleteItem(null)}
+            handleConfirmForceDelete={handleConfirmForceDelete}
+          />
 
           <MediaLibraryToolbar
             search={search}
@@ -464,47 +209,12 @@ const MediaLibrary = ({
 
           <div className="relative min-h-0 flex-1">
             {scopeTab === "builtin" ? (
-              <div className="grid h-full auto-rows-min grid-cols-1 gap-2 overflow-y-auto p-0.5 sm:grid-cols-2">
-                {visibleBuiltInSounds.map((sound) => (
-                  <div
-                    key={sound.url}
-                    data-testid={`builtin-sound-${sound.name}`}
-                    className="border-accent bg-muted/40 flex items-center justify-between gap-2 rounded-xl border p-3"
-                  >
-                    <div className="flex min-w-0 items-center gap-2.5">
-                      <button
-                        type="button"
-                        data-testid={`builtin-sound-preview-${sound.name}`}
-                        onClick={() => toggleBuiltinPreview(sound.url)}
-                        aria-label={`Preview ${sound.label}`}
-                        className="bg-primary/15 text-primary hover:bg-primary/25 flex size-9 shrink-0 items-center justify-center rounded-lg transition"
-                      >
-                        {playingBuiltinUrl === sound.url ? (
-                          <Volume2 className="size-4 animate-pulse" />
-                        ) : (
-                          <Music className="size-4" />
-                        )}
-                      </button>
-                      <div className="min-w-0">
-                        <p className="text-foreground truncate text-sm font-semibold">
-                          {sound.label}
-                        </p>
-                        <p className="text-muted-foreground truncate text-xs">
-                          {sound.name}
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      data-testid={`builtin-sound-select-${sound.name}`}
-                      onClick={handleSelect(sound)}
-                      className="bg-primary shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold text-white hover:brightness-105"
-                    >
-                      {t("quizz:media.use")}
-                    </button>
-                  </div>
-                ))}
-              </div>
+              <BuiltinSoundList
+                visibleBuiltInSounds={visibleBuiltInSounds}
+                playingBuiltinUrl={playingBuiltinUrl}
+                toggleBuiltinPreview={toggleBuiltinPreview}
+                handleSelect={handleSelect}
+              />
             ) : (
               <>
                 {isPending && (

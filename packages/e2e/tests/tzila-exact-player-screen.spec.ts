@@ -2,12 +2,8 @@ import fs from "node:fs"
 import { join } from "node:path"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
-import {
-  createGame,
-  endTimer,
-  next,
-  startGame,
-} from "@razzia/e2e/utils/manager"
+import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 
@@ -97,8 +93,12 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     ).toBeVisible()
 
     // Both player and spectator are in lobby (Wait screen)
-    await expect(playerPage.getByText(/waiting/i)).toBeVisible({ timeout: 10_000 })
-    await expect(spectatorPage.getByText(/waiting/i)).toBeVisible({ timeout: 10_000 })
+    await expect(playerPage.getByText(/waiting/i)).toBeVisible({
+      timeout: 10_000,
+    })
+    await expect(spectatorPage.getByText(/waiting/i)).toBeVisible({
+      timeout: 10_000,
+    })
 
     // A3: Verify footer: player has bottom white bar with username "Alice"; spectator DOES NOT
     await expect(playerPage.getByText("Alice")).toBeVisible()
@@ -127,8 +127,12 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     await advanceBtn.click()
 
     const q1Title = "Round 1 · Who is the main character?"
-    await expect(managerPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
-    await expect(spectatorPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
+    await expect(managerPage.getByText(q1Title)).toBeVisible({
+      timeout: 20_000,
+    })
+    await expect(spectatorPage.getByText(q1Title)).toBeVisible({
+      timeout: 20_000,
+    })
     await expect(playerPage.getByText(q1Title)).toBeVisible({ timeout: 20_000 })
 
     // Wait for voting state SELECT_ANSWER
@@ -138,26 +142,32 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
 
     // A1 & A4: DOM Architecture & Card Parity on Question 1
     const playerGrid = playerPage.locator('[data-testid="photo-card-grid"]')
-    const spectatorGrid = spectatorPage.locator('[data-testid="photo-card-grid"]')
+    const spectatorGrid = spectatorPage.locator(
+      '[data-testid="photo-card-grid"]',
+    )
     await expect(playerGrid).toBeVisible({ timeout: 10_000 })
     await expect(spectatorGrid).toBeVisible({ timeout: 10_000 })
 
-    const playerCards = playerPage.locator('[data-testid^="photo-card-choice-"]')
-    const spectatorCards = spectatorPage.locator('[data-testid^="photo-card-choice-"]')
+    const playerCards = playerPage.locator(
+      '[data-testid^="photo-card-choice-"]',
+    )
+    const spectatorCards = spectatorPage.locator(
+      '[data-testid^="photo-card-choice-"]',
+    )
     await expect(playerCards).toHaveCount(5)
     await expect(spectatorCards).toHaveCount(5)
 
     // Verify colors, labels, and images match exactly across all 5 cards
     const [pColors, sColors] = await Promise.all([
       playerPage.evaluate(() =>
-        Array.from(document.querySelectorAll('[data-testid^="photo-card-choice-"]')).map(
-          (el) => window.getComputedStyle(el).backgroundColor,
-        ),
+        Array.from(
+          document.querySelectorAll('[data-testid^="photo-card-choice-"]'),
+        ).map((el) => window.getComputedStyle(el).backgroundColor),
       ),
       spectatorPage.evaluate(() =>
-        Array.from(document.querySelectorAll('[data-testid^="photo-card-choice-"]')).map(
-          (el) => window.getComputedStyle(el).backgroundColor,
-        ),
+        Array.from(
+          document.querySelectorAll('[data-testid^="photo-card-choice-"]'),
+        ).map((el) => window.getComputedStyle(el).backgroundColor),
       ),
     ])
     expect(pColors).toEqual(EXPECTED_COLORS)
@@ -210,8 +220,14 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     await expect(playerTimer).toBeVisible({ timeout: 5000 })
     await expect(spectatorTimer).toBeVisible({ timeout: 5000 })
 
-    const pTime = parseInt(((await playerTimer.textContent()) ?? "").replace(/\D/gu, ""), 10)
-    const sTime = parseInt(((await spectatorTimer.textContent()) ?? "").replace(/\D/gu, ""), 10)
+    const pTime = parseInt(
+      ((await playerTimer.textContent()) ?? "").replace(/\D/gu, ""),
+      10,
+    )
+    const sTime = parseInt(
+      ((await spectatorTimer.textContent()) ?? "").replace(/\D/gu, ""),
+      10,
+    )
     console.log(`[Timer Parity] Player: ${pTime}s, Spectator: ${sTime}s`)
     expect(Math.abs(pTime - sTime)).toBeLessThanOrEqual(1)
 
@@ -225,18 +241,35 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
 
     for (const vp of viewports) {
       await playerPage.setViewportSize({ width: vp.width, height: vp.height })
-      await spectatorPage.setViewportSize({ width: vp.width, height: vp.height })
+      await spectatorPage.setViewportSize({
+        width: vp.width,
+        height: vp.height,
+      })
 
       // No horizontal scrollbar overflow on either view
-      const pScrollW = await playerPage.evaluate(() => document.documentElement.scrollWidth)
-      const pClientW = await playerPage.evaluate(() => document.documentElement.clientWidth)
-      const sScrollW = await spectatorPage.evaluate(() => document.documentElement.scrollWidth)
-      const sClientW = await spectatorPage.evaluate(() => document.documentElement.clientWidth)
+      const pScrollW = await playerPage.evaluate(
+        () => document.documentElement.scrollWidth,
+      )
+      const pClientW = await playerPage.evaluate(
+        () => document.documentElement.clientWidth,
+      )
+      const sScrollW = await spectatorPage.evaluate(
+        () => document.documentElement.scrollWidth,
+      )
+      const sClientW = await spectatorPage.evaluate(
+        () => document.documentElement.clientWidth,
+      )
       expect(pScrollW).toBeLessThanOrEqual(pClientW + 4)
       expect(sScrollW).toBeLessThanOrEqual(sClientW + 4)
 
-      await saveScreenshot(playerPage, `paired_02_select_answer_${vp.name}_player.png`)
-      await saveScreenshot(spectatorPage, `paired_02_select_answer_${vp.name}_spectator.png`)
+      await saveScreenshot(
+        playerPage,
+        `paired_02_select_answer_${vp.name}_player.png`,
+      )
+      await saveScreenshot(
+        spectatorPage,
+        `paired_02_select_answer_${vp.name}_spectator.png`,
+      )
     }
 
     // Reset viewports back to 1920x1080
@@ -247,18 +280,25 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     await endTimer(managerPage)
 
     // A7: interimResults scene appears directly without duplicate reveal
-    const interimWinner = spectatorPage.locator('[data-testid="interim-option-row"][data-winner="true"]')
+    const interimWinner = spectatorPage.locator(
+      '[data-testid="interim-option-row"][data-winner="true"]',
+    )
     await expect(interimWinner).toBeVisible({ timeout: 15_000 })
     await expect(interimWinner).toContainText("Doctor")
 
     // Save Paired Interim Results Screenshots
     await saveScreenshot(playerPage, "paired_04_interim_results_player.png")
-    await saveScreenshot(spectatorPage, "paired_04_interim_results_spectator.png")
+    await saveScreenshot(
+      spectatorPage,
+      "paired_04_interim_results_spectator.png",
+    )
 
     // 5. Question 2: Advance directly to next poll (Single advance click)
     await next(managerPage)
     const q2Title = "Round 1 · Who is the second character?"
-    await expect(spectatorPage.getByText(q2Title)).toBeVisible({ timeout: 20_000 })
+    await expect(spectatorPage.getByText(q2Title)).toBeVisible({
+      timeout: 20_000,
+    })
     await expect(playerPage.getByText(q2Title)).toBeVisible({ timeout: 20_000 })
     await expect(
       managerPage.getByRole("button", { name: t("extensions:host.endTimer") }),
@@ -271,9 +311,15 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     })
     const lateSpectator = await lateContext.newPage()
     await lateSpectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
-    await expect(lateSpectator.locator('[data-testid="audience-display"]')).toBeVisible({ timeout: 10_000 })
-    await expect(lateSpectator.getByText(q2Title)).toBeVisible({ timeout: 10_000 })
-    await expect(lateSpectator.locator('[data-testid^="photo-card-choice-"]')).toHaveCount(5)
+    await expect(
+      lateSpectator.locator('[data-testid="audience-display"]'),
+    ).toBeVisible({ timeout: 10_000 })
+    await expect(lateSpectator.getByText(q2Title)).toBeVisible({
+      timeout: 10_000,
+    })
+    await expect(
+      lateSpectator.locator('[data-testid^="photo-card-choice-"]'),
+    ).toHaveCount(5)
 
     const lateTimer = lateSpectator.locator('[role="timer"]')
     await expect(lateTimer).toBeVisible({ timeout: 10_000 })
@@ -285,24 +331,45 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
 
     // Save evidence of late join mid-voting showing question + cards + timer
     await saveScreenshot(lateSpectator, "03_spectator_join_mid_voting.png")
-    await saveScreenshot(lateSpectator, "paired_03_late_join_mid_voting_spectator.png")
+    await saveScreenshot(
+      lateSpectator,
+      "paired_03_late_join_mid_voting_spectator.png",
+    )
     await lateContext.close()
 
     // Tie Scenario on Question 2: Option 0 (1 vote) & Option 2 (1 vote)
     await Promise.all([
       spectatorPage.request.post(SOCKET_API_URL, {
-        data: { action: "answer", gameId, phone: "+972501000001", callId: "c_tie_1", answerIndex: 0 },
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000001",
+          callId: "c_tie_1",
+          answerIndex: 0,
+        },
       }),
       spectatorPage.request.post(SOCKET_API_URL, {
-        data: { action: "answer", gameId, phone: "+972501000002", callId: "c_tie_2", answerIndex: 2 },
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000002",
+          callId: "c_tie_2",
+          answerIndex: 2,
+        },
       }),
     ])
 
     await endTimer(managerPage)
 
     // Verify Tie presentation in interimResults scene
-    await expect(spectatorPage.locator('[data-testid="spotlight-tie"]')).toBeVisible({ timeout: 15_000 })
-    await expect(spectatorPage.locator('[data-testid="interim-option-row"][data-winner="true"]')).toHaveCount(2)
+    await expect(
+      spectatorPage.locator('[data-testid="spotlight-tie"]'),
+    ).toBeVisible({ timeout: 15_000 })
+    await expect(
+      spectatorPage.locator(
+        '[data-testid="interim-option-row"][data-winner="true"]',
+      ),
+    ).toHaveCount(2)
 
     await saveScreenshot(playerPage, "paired_05_tie_result_player.png")
     await saveScreenshot(spectatorPage, "paired_05_tie_result_spectator.png")
@@ -310,7 +377,9 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     // 6. Question 3: Zero Votes Scenario
     await next(managerPage)
     const q3Title = "Round 1 · In which era does the story take place?"
-    await expect(spectatorPage.getByText(q3Title)).toBeVisible({ timeout: 20_000 })
+    await expect(spectatorPage.getByText(q3Title)).toBeVisible({
+      timeout: 20_000,
+    })
     await expect(playerPage.getByText(q3Title)).toBeVisible({ timeout: 20_000 })
     await expect(
       managerPage.getByRole("button", {
@@ -324,23 +393,33 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     // End timer immediately with 0 votes
     await endTimer(managerPage)
 
-    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0, { timeout: 15_000 })
-    await expect(spectatorPage.getByText(/No votes|0 votes|Total votes/i).first()).toBeVisible()
+    await expect(spectatorPage.locator('[data-winner="true"]')).toHaveCount(0, {
+      timeout: 15_000,
+    })
+    await expect(
+      spectatorPage.getByText(/No votes|0 votes|Total votes/i).first(),
+    ).toBeVisible()
 
     await saveScreenshot(playerPage, "paired_06_zero_votes_player.png")
     await saveScreenshot(spectatorPage, "paired_06_zero_votes_spectator.png")
 
     // 7. Revote on Question 3
-    const prevBtn = managerPage.locator('[data-testid="host-previous-screen-btn"]')
+    const prevBtn = managerPage.locator(
+      '[data-testid="host-previous-screen-btn"]',
+    )
     await expect(prevBtn).toBeVisible({ timeout: 5000 })
     await prevBtn.click()
 
-    const confirmBtn = managerPage.locator('[data-testid="confirm-reopen-question-btn"]')
+    const confirmBtn = managerPage.locator(
+      '[data-testid="confirm-reopen-question-btn"]',
+    )
     if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
       await confirmBtn.click()
     }
 
-    await expect(spectatorPage.getByText(q3Title)).toBeVisible({ timeout: 20_000 })
+    await expect(spectatorPage.getByText(q3Title)).toBeVisible({
+      timeout: 20_000,
+    })
     await expect(playerPage.getByText(q3Title)).toBeVisible({ timeout: 20_000 })
     await expect(
       managerPage.getByRole("button", { name: t("extensions:host.endTimer") }),
@@ -349,15 +428,29 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     // Vote 2 for Option 1
     await Promise.all([
       spectatorPage.request.post(SOCKET_API_URL, {
-        data: { action: "answer", gameId, phone: "+972501000001", callId: "c_revote1", answerIndex: 1 },
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000001",
+          callId: "c_revote1",
+          answerIndex: 1,
+        },
       }),
       spectatorPage.request.post(SOCKET_API_URL, {
-        data: { action: "answer", gameId, phone: "+972501000002", callId: "c_revote2", answerIndex: 1 },
+        data: {
+          action: "answer",
+          gameId,
+          phone: "+972501000002",
+          callId: "c_revote2",
+          answerIndex: 1,
+        },
       }),
     ])
 
     await endTimer(managerPage)
-    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({ timeout: 15_000 })
+    await expect(spectatorPage.locator('[data-winner="true"]')).toBeVisible({
+      timeout: 15_000,
+    })
 
     await saveScreenshot(playerPage, "paired_07_revote_clean_player.png")
     await saveScreenshot(spectatorPage, "paired_07_revote_clean_spectator.png")
@@ -380,21 +473,33 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     const gameId = gameIdMatch![1]
 
     // Spectator and Player
-    const spectatorContext = await browser.newContext({ viewport: { width: 1280, height: 800 } })
+    const spectatorContext = await browser.newContext({
+      viewport: { width: 1280, height: 800 },
+    })
     const spectatorPage = await spectatorContext.newPage()
     await spectatorPage.goto(`http://127.0.0.1:3010/display/${gameId}`)
-    await expect(spectatorPage.locator('[data-testid="audience-display"]')).toBeVisible({ timeout: 15_000 })
+    await expect(
+      spectatorPage.locator('[data-testid="audience-display"]'),
+    ).toBeVisible({ timeout: 15_000 })
 
-    const playerContext = await browser.newContext({ viewport: { width: 375, height: 667 } })
+    const playerContext = await browser.newContext({
+      viewport: { width: 375, height: 667 },
+    })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "Dan")
 
     await startGame(managerPage)
 
     // Question 1: "What is the capital of France?"
-    await expect(managerPage.getByText("What is the capital of France?")).toBeVisible({ timeout: 20_000 })
-    await expect(spectatorPage.getByText("What is the capital of France?")).toBeVisible({ timeout: 20_000 })
-    await expect(playerPage.getByText("What is the capital of France?")).toBeVisible({ timeout: 20_000 })
+    await expect(
+      managerPage.getByText("What is the capital of France?"),
+    ).toBeVisible({ timeout: 20_000 })
+    await expect(
+      spectatorPage.getByText("What is the capital of France?"),
+    ).toBeVisible({ timeout: 20_000 })
+    await expect(
+      playerPage.getByText("What is the capital of France?"),
+    ).toBeVisible({ timeout: 20_000 })
 
     // Player answers
     const answerBtn = playerPage.getByRole("button", { name: "Paris" })
@@ -404,7 +509,9 @@ test.describe("TADA P0: Exact Player Screen Reuse for Audience Display", () => {
     await endTimer(managerPage)
 
     // In a normal quiz without authored scenes, default results/responses appear
-    await expect(managerPage.getByText("Paris")).toBeVisible({ timeout: 10_000 })
+    await expect(managerPage.getByText("Paris")).toBeVisible({
+      timeout: 10_000,
+    })
 
     await saveScreenshot(playerPage, "paired_08_normal_quiz_player.png")
     await saveScreenshot(spectatorPage, "paired_08_normal_quiz_spectator.png")

@@ -1,11 +1,6 @@
-import {
-  MAX_POINTS,
-  NO_TIME_LIMIT,
-} from "@razzia/common/constants"
-import {
-  resolveQuestionPlayMode,
-  type ScoringMode,
-} from "@razzia/common/types/game"
+import { resolveQuestionPlayMode } from "@razzia/extensions/core"
+import { MAX_POINTS, NO_TIME_LIMIT } from "@razzia/common/constants"
+import { type ScoringMode } from "@razzia/common/types/game"
 import { isMultiOptions } from "@razzia/common/questions/options"
 import {
   Select,

@@ -668,7 +668,10 @@
     "sceneSubtitleTooLong": "Phụ đề cảnh ({{current}}/{{max}} ký tự) vượt quá độ dài khuyến nghị."
   },
   "tadazzShow": {
-    "participation": {"connected": "ĐÃ KẾT NỐI: {{count}}", "answered": "ĐÃ TRẢ LỜI: {{answered}} / {{connected}}"},
+    "participation": {
+      "connected": "ĐÃ KẾT NỐI: {{count}}",
+      "answered": "ĐÃ TRẢ LỜI: {{answered}} / {{connected}}"
+    },
     "questionReady": "CÂU HỎI SẴN SÀNG",
     "votingOpen": "ĐANG MỞ BÌNH CHỌN",
     "votesLocked": "ĐÃ KHÓA BÌNH CHỌN · CHỜ CÔNG BỐ",
@@ -836,6 +839,7 @@
       "question": "Câu hỏi",
       "survey-results": "Kết quả",
       "z-wipe": "Chuyển cảnh"
-    }
+    },
+    "installationPreview": "Bản xem trước chủ đề riêng tư để xem xét và phê duyệt."
   }
 }

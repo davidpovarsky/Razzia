@@ -4,11 +4,11 @@ import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import {
   createGame,
-  endTimer,
   loginManager,
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
 import { seedQuizz } from "@razzia/e2e/utils/editor"
 import type { Page } from "@playwright/test"
@@ -155,7 +155,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     for (const pg of [managerPage, spectator]) {
       const skipBtn = pg.getByTestId("tadazz-opening-skip")
       if (await skipBtn.isVisible().catch(() => false)) {
-        await skipBtn.click({ force: true, timeout: 1500 }).catch(() => undefined)
+        await skipBtn
+          .click({ force: true, timeout: 1500 })
+          .catch(() => undefined)
       }
     }
 
@@ -164,9 +166,15 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
 
-    const p1Ctx = await browser.newContext({ viewport: { width: 1024, height: 768 } })
-    const p2Ctx = await browser.newContext({ viewport: { width: 800, height: 600 } })
-    const p3Ctx = await browser.newContext({ viewport: { width: 390, height: 844 } })
+    const p1Ctx = await browser.newContext({
+      viewport: { width: 1024, height: 768 },
+    })
+    const p2Ctx = await browser.newContext({
+      viewport: { width: 800, height: 600 },
+    })
+    const p3Ctx = await browser.newContext({
+      viewport: { width: 390, height: 844 },
+    })
     const alice = await p1Ctx.newPage()
     const bob = await p2Ctx.newPage()
     const dana = await p3Ctx.newPage()
@@ -208,13 +216,17 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // 5. A04 & A05: Question 1 with 5 square photo cards
     const q1Text = "Round 1 · Who is the main character?"
-    await expect(managerPage.getByTestId("tadazz-question-panel")).toContainText(q1Text)
+    await expect(
+      managerPage.getByTestId("tadazz-question-panel"),
+    ).toContainText(q1Text)
 
     // Wait for SELECT_ANSWER (openVoting) on manager and cast first 3 votes immediately while window is fresh
     await expect(
       managerPage.getByRole("button", { name: t("extensions:host.endTimer") }),
     ).toBeVisible()
-    await expect(managerPage.getByTestId("tadazz-status")).toContainText("VOTING OPEN")
+    await expect(managerPage.getByTestId("tadazz-status")).toContainText(
+      "VOTING OPEN",
+    )
     await expect(managerPage.getByTestId("tadazz-timer")).toBeVisible()
 
     // Verify 5 cards with square photo frames and canonical classes in 2 fast round-trips
@@ -251,8 +263,12 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await clickCard(alice, "tadazz-card-3")
     await clickCard(bob, "tadazz-card-3")
 
-    await expect(spectator.getByTestId("tadazz-question-panel")).toContainText(q1Text)
-    await expect(alice.getByTestId("tadazz-question-panel")).toContainText(q1Text)
+    await expect(spectator.getByTestId("tadazz-question-panel")).toContainText(
+      q1Text,
+    )
+    await expect(alice.getByTestId("tadazz-question-panel")).toContainText(
+      q1Text,
+    )
 
     await expect
       .poll(async () =>
@@ -304,10 +320,11 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Single Next Screen click advances from Q1 interimResults to Q2 (test TIE case)
     await next(managerPage)
-    await expect(managerPage.getByTestId("tadazz-question-panel")).toContainText(
-      "Round 1 · Who is the second character?",
-      { timeout: 15_000 },
-    )
+    await expect(
+      managerPage.getByTestId("tadazz-question-panel"),
+    ).toContainText("Round 1 · Who is the second character?", {
+      timeout: 15_000,
+    })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
       "VOTING OPEN",
       { timeout: 15_000 },
@@ -332,10 +349,11 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Single Next Screen click advances from Q2 interimResults to Q3 (test ZERO VOTES case)
     await next(managerPage)
-    await expect(managerPage.getByTestId("tadazz-question-panel")).toContainText(
-      "Round 1 · In which era does the story take place?",
-      { timeout: 15_000 },
-    )
+    await expect(
+      managerPage.getByTestId("tadazz-question-panel"),
+    ).toContainText("Round 1 · In which era does the story take place?", {
+      timeout: 15_000,
+    })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
       "VOTING OPEN",
       { timeout: 15_000 },
@@ -402,8 +420,12 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     })
 
     const pin = await createGame(managerPage, subject)
-    const p1Ctx = await browser.newContext({ viewport: { width: 1366, height: 768 } })
-    const p2Ctx = await browser.newContext({ viewport: { width: 1024, height: 768 } })
+    const p1Ctx = await browser.newContext({
+      viewport: { width: 1366, height: 768 },
+    })
+    const p2Ctx = await browser.newContext({
+      viewport: { width: 1024, height: 768 },
+    })
     const alice = await p1Ctx.newPage()
     const bob = await p2Ctx.newPage()
 
@@ -431,7 +453,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await next(managerPage)
     const lbScreen = managerPage.getByTestId("tadazz-leaderboard-screen")
     await expect(lbScreen).toHaveClass(/is-visible/u)
-    await expect(lbScreen.locator(".tz-leader-row").nth(0)).toContainText("Alice")
+    await expect(lbScreen.locator(".tz-leader-row").nth(0)).toContainText(
+      "Alice",
+    )
     await expect(lbScreen.locator(".tz-leader-row").nth(1)).toContainText("Bob")
     // Verify demo TEAMS are never rendered
     await expect(lbScreen).not.toContainText("The Brainwaves")
@@ -474,13 +498,15 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       )
       await expect
         .poll(async () => {
-          const box = await managerPage.getByTestId("tadazz-stage").boundingBox()
+          const box = await managerPage
+            .getByTestId("tadazz-stage")
+            .boundingBox()
           return Boolean(
             box &&
-              box.width > 100 &&
-              box.height > 100 &&
-              box.width <= w + 2 &&
-              box.height <= h + 2,
+            box.width > 100 &&
+            box.height > 100 &&
+            box.width <= w + 2 &&
+            box.height <= h + 2,
           )
         })
         .toBe(true)

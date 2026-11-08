@@ -1,30 +1,23 @@
-import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
+import {
+  LegacyStageBackdrops,
+  LegacyStageAudio,
+  HostPresenceButton,
+  PlayerTeamBadge,
+} from "./tadazz-show/legacy-stage-elements"
+import { useGameExtensionConnection } from "./tadazz-show/use-game-extension-connection"
+import { useLegacyPresentation } from "./tadazz-show/use-legacy-presentation"
+import { EVENTS, QUIZZ_MODES } from "@razzia/common/constants"
 import {
   STATUS,
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
+import { EXTENSION_EVENTS } from "@razzia/extensions/core"
 import {
-  EXTENSION_EVENTS,
-  resolveEffectiveCardBackground,
-  resolveTadazzStageBackground,
-  type CardAudioOverrides,
-  type CardBackgroundOverride,
-  type CueId,
-  type ExtensionStateEnvelope,
-  type HostPresenceSnapshot,
-  type QuizExtrasV1,
-  type TadazzShowBackground,
-  type TeamDefinition,
-} from "@razzia/extensions/core"
-import {
-  AudioCuePlayer,
   ShowThemeRenderer,
   ExtensionStageContent,
   createScenePresenterLabels,
   isTadazzShowActive,
-  TADAZZ_IMAGE_URL,
-  TadazzAnimatedBackdrop,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
@@ -39,15 +32,8 @@ import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersMo
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { SHOW_THEME_ADAPTERS } from "@razzia/web/features/game/components/tadazz-show/show-theme-adapters"
-import {
-  TadazzMotionStage,
-  type TadazzMotionScene,
-} from "@razzia/web/features/game/components/TadazzMotionStage"
-import {
-  ExtensionStateProvider,
-  getAuthoritativeEnvelope,
-  isNewerEnvelope,
-} from "@razzia/web/features/game/contexts/extension-state-context"
+import { TadazzMotionStage } from "@razzia/web/features/game/components/TadazzMotionStage"
+import { ExtensionStateProvider } from "@razzia/web/features/game/contexts/extension-state-context"
 import {
   useEvent,
   useSocket,
@@ -61,17 +47,10 @@ import { usePlayerStore } from "@razzia/web/features/game/stores/player"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import { MANAGER_SKIP_BTN } from "@razzia/web/features/game/utils/constants"
 import type { Status as GameStatus } from "@razzia/web/features/game/utils/createStatus"
-import { fetchGameRoster } from "@razzia/web/features/manager/queries"
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
-import { Maximize, Minimize, PhoneCall, Users } from "lucide-react"
-import {
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type PropsWithChildren,
-} from "react"
+import { Maximize, Minimize } from "lucide-react"
+import { useEffect, useRef, useState, type PropsWithChildren } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -94,15 +73,8 @@ const GameWrapper = ({
   const effectiveRole: ViewRole = manager ? "manager" : (viewRole ?? "player")
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
-  const {
-    gameId,
-    players,
-    inviteCode,
-    locked,
-    status,
-    hostPresence,
-    updateManager,
-  } = useManagerStore()
+  const { players, inviteCode, locked, status, hostPresence } =
+    useManagerStore()
   const { questionStates, setQuestionStates } = useQuestionStore()
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const { t } = useTranslation()
@@ -110,64 +82,14 @@ const GameWrapper = ({
     useState<GameStatus<StatusDataMap> | null>(null)
   const [totalPlayers, setTotalPlayers] = useState<number | null>(null)
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
-  const [roomMediaReady, setRoomMediaReady] = useState(false)
   const [countdown, setCountdown] = useState<{
     seconds: number
     total: number
   } | null>(null)
-  const storeExtensionState = useManagerStore((s) => s.extensionState)
-  const [localExtensionState, setLocalExtensionState] =
-    useState<ExtensionStateEnvelope | null>(null)
   const { socket, clientId } = useSocket()
   const presentationRootRef = useRef<HTMLElement | null>(null)
 
-  useEffect(() => {
-    if (manager && gameId && !hostPresence) {
-      fetchGameRoster(gameId)
-        .then(({ presence }) => {
-          updateManager({ hostPresence: presence })
-        })
-        .catch(() => undefined)
-    }
-  }, [manager, gameId, hostPresence, updateManager])
-
-  // Browser <img>/<audio> elements cannot attach the manager's Bearer token.
-  // Refresh the short-lived room media cookie whenever a host opens a room.
-  // Remount the stage once authorized so images retried after an initial 401.
-  useEffect(() => {
-    if (!manager || !gameId) {
-      return
-    }
-    let alive = true
-    setRoomMediaReady(false)
-    void fetch(`/api/games/${encodeURIComponent(gameId)}/display-media`, {
-      credentials: "same-origin",
-      cache: "no-store",
-    })
-      .then((response) => {
-        if (alive && response.ok) {
-          setRoomMediaReady(true)
-        }
-      })
-      .catch(() => undefined)
-
-    return () => {
-      alive = false
-    }
-  }, [manager, gameId])
-
-  // Single authoritative state: resolve between store and local event state by epoch/seq
-  const extensionState = useMemo(() => {
-    if (manager) {
-      if (!storeExtensionState && !localExtensionState) {
-        return null
-      }
-
-      return getAuthoritativeEnvelope(localExtensionState, storeExtensionState)
-    }
-
-    return localExtensionState
-  }, [manager, storeExtensionState, localExtensionState])
+  const { extensionState, roomMediaReady } = useGameExtensionConnection(manager)
 
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
@@ -295,18 +217,6 @@ const GameWrapper = ({
     )
   }
 
-  useEvent(EXTENSION_EVENTS.STATE, (payload: ExtensionStateEnvelope) => {
-    setLocalExtensionState((prev) => {
-      const current = getAuthoritativeEnvelope(prev, storeExtensionState)
-
-      if (isNewerEnvelope(payload, current)) {
-        return payload
-      }
-
-      return prev
-    })
-  })
-
   useEvent(EVENTS.GAME.UPDATE_QUESTION, ({ current, total }) => {
     setQuestionStates({
       current,
@@ -316,12 +226,6 @@ const GameWrapper = ({
 
   useEvent(EVENTS.GAME.TOTAL_PLAYERS, (total) => {
     setTotalPlayers(total)
-  })
-
-  useEvent(EVENTS.MANAGER.HOST_PRESENCE, (snapshot: HostPresenceSnapshot) => {
-    if (manager) {
-      updateManager({ hostPresence: snapshot })
-    }
   })
 
   useEvent(EVENTS.MANAGER.AUTO_ADVANCE, (state) => {
@@ -342,177 +246,27 @@ const GameWrapper = ({
 
   const defaultExit = () => undefined
 
-  const playerStatus = usePlayerStore((s) => s.status)
-  const activeStatus = status ?? playerStatus
-  const activeStatusMediaType = (
-    activeStatus?.data as { media?: { type?: string } } | undefined
-  )?.media?.type
-
-  const currentSceneObj = extensionState?.extras.currentScene as
-    | {
-        id?: string
-        mediaType?: string
-        mediaUrl?: string
-        muted?: boolean
-        background?: CardBackgroundOverride
-        audio?: {
-          mode?: "inherit" | "mute" | "custom"
-          cueId?: CueId
-          url?: string
-          volume?: number
-          loop?: boolean
-        }
-      }
-    | undefined
-
-  const rawCardBackground =
-    (extensionState?.extras.cardBackground as
-      CardBackgroundOverride | undefined) ?? currentSceneObj?.background
-
-  const effectiveBackground = useMemo(
-    () => resolveEffectiveCardBackground(rawCardBackground),
-    [rawCardBackground],
-  )
-
-  const [cardBgErrorUrl, setCardBgErrorUrl] = useState<string | null>(null)
-  const showCustomCardBackground =
-    effectiveBackground.mode === "card" &&
-    Boolean(effectiveBackground.url) &&
-    cardBgErrorUrl !== effectiveBackground.url
-
-  const [tadazzImageUnavailable, setTadazzImageUnavailable] = useState(false)
-  const tadazzSettings = (
-    extensionState?.extras.defaults as
-      { tadazzBackground?: TadazzShowBackground } | undefined
-  )?.tadazzBackground
-  // Video scenes and card-specific art always override the show backdrop.
-  const tadazzBackdrop = resolveTadazzStageBackground({
-    settings: tadazzSettings,
-    cardBackground: showCustomCardBackground ? rawCardBackground : undefined,
-    fullScreenVideo:
-      (extensionState?.phase === "scene" &&
-        currentSceneObj?.mediaType === "video") ||
-      activeStatusMediaType === MEDIA_TYPES.VIDEO,
-    imageReady: !tadazzImageUnavailable,
-    tadazzImageUrl: TADAZZ_IMAGE_URL,
+  const {
+    currentSceneObj,
+    effectiveBackground,
+    showCustomCardBackground,
+    setCardBgErrorUrl,
+    tadazzBackdrop,
+    setTadazzImageUnavailable,
+    activePhaseCueId,
+    hasCompetingMediaAudio,
+    activeCardKey,
+    motionEnabled,
+    sceneKind,
+    motionScene,
+  } = useLegacyPresentation({
+    extensionState,
+    manager,
+    effectiveRole,
+    statusName,
+    status,
+    questionStates,
   })
-
-  const activePhaseCueId: CueId | undefined = useMemo(() => {
-    if (!extensionState) {
-      return undefined
-    }
-
-    if (extensionState.extras.audioCue) {
-      return extensionState.extras.audioCue as CueId
-    }
-
-    if (extensionState.phase === "scene") {
-      return (
-        currentSceneObj?.audio?.cueId ??
-        (currentSceneObj?.audio?.url ? "start" : undefined)
-      )
-    }
-
-    if (statusName === STATUS.SHOW_QUESTION) {
-      return "showQuestion"
-    }
-
-    if (statusName === STATUS.SELECT_ANSWER) {
-      return "answersMusic"
-    }
-
-    if (statusName === STATUS.SHOW_RESPONSES) {
-      return "revealResults"
-    }
-
-    if (statusName === STATUS.SHOW_LEADERBOARD) {
-      return "leaderboard"
-    }
-
-    return undefined
-  }, [extensionState, statusName, currentSceneObj])
-
-  const hasCompetingMediaAudio = Boolean(
-    activeStatusMediaType === MEDIA_TYPES.VIDEO ||
-    activeStatusMediaType === MEDIA_TYPES.AUDIO ||
-    (extensionState?.phase === "scene" &&
-      (currentSceneObj?.mediaType === "video" ||
-        currentSceneObj?.mediaType === "audio") &&
-      !currentSceneObj?.muted &&
-      Boolean(currentSceneObj?.mediaUrl)),
-  )
-
-  const activeCardKey =
-    extensionState?.phase === "scene"
-      ? (currentSceneObj?.id ?? "scene")
-      : (extensionState?.questionId ?? "question")
-
-  // Goldy's original Motion Kit is an explicitly opt-in visual presentation layer.
-  // The underlying Razzia manager/player logic remains the source of truth.
-  const motionEnabled =
-    (manager || effectiveRole === "spectator") &&
-    (extensionState?.extras.defaults as { motionKit?: string } | undefined)
-      ?.motionKit === "goldy-20261105"
-  const sceneKind = (
-    extensionState?.extras.currentScene as { kind?: string } | undefined
-  )?.kind
-  const activeSceneData = extensionState?.extras.activeSceneData as
-    | {
-        interimResults?: {
-          questionText: string
-          options: Array<{
-            answerIndex?: number
-            label: string
-            imageUrl?: string
-            count?: number
-          }>
-        }
-      }
-    | undefined
-  const motionResults = activeSceneData?.interimResults
-  const motionQuestionIndex = questionStates?.current ?? 1
-  const motionQuestion =
-    motionResults?.options?.length === 5 && sceneKind === "interimResults"
-      ? {
-          question: motionResults.questionText,
-          round: motionQuestionIndex <= 5 ? 1 : 2,
-          number: motionQuestionIndex,
-          totalQuestions: questionStates?.total ?? 10,
-          options: motionResults.options.map((opt) => ({
-            label: opt.label,
-            image: opt.imageUrl ?? "",
-          })),
-        }
-      : undefined
-  const motionMode =
-    sceneKind === "opening"
-      ? "intro"
-      : sceneKind === "transition"
-        ? "transition"
-        : sceneKind === "interimResults"
-          ? "results"
-          : null
-  const motionScene: TadazzMotionScene | null =
-    motionEnabled &&
-    motionMode &&
-    (motionMode === "intro" ||
-      motionMode === "transition" ||
-      (motionQuestion?.question &&
-        motionQuestion.options.every((option) => Boolean(option.image))))
-      ? {
-          key: [
-            extensionState?.gameId ?? "",
-            motionMode,
-            motionQuestionIndex,
-            extensionState?.epoch ?? 0,
-            extensionState?.questionId ?? "",
-            sceneKind ?? "",
-          ].join(":"),
-          mode: motionMode,
-          question: motionQuestion,
-          counts: motionResults?.options.map((opt) => opt.count ?? 0),
-        }
-      : null
 
   const renderStageContent = () => (
     <ExtensionStateProvider value={extensionState}>
@@ -590,49 +344,13 @@ const GameWrapper = ({
     >
       <GameBackground />
 
-      {(tadazzBackdrop.source === "tadazz" ||
-        tadazzBackdrop.source === "static") && (
-        <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-          <TadazzAnimatedBackdrop
-            state={tadazzBackdrop}
-            onImageFailure={() => setTadazzImageUnavailable(true)}
-          />
-        </div>
-      )}
-
-      {showCustomCardBackground && effectiveBackground.url && (
-        <div
-          data-testid="stage-card-background"
-          data-bg-url={effectiveBackground.url}
-          data-bg-fit={effectiveBackground.fit}
-          data-bg-position={effectiveBackground.position}
-          className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
-        >
-          <img
-            src={effectiveBackground.url}
-            alt=""
-            onError={() => setCardBgErrorUrl(effectiveBackground.url ?? null)}
-            className={clsx(
-              "pointer-events-none h-full w-full select-none",
-              effectiveBackground.fit === "contain"
-                ? "object-contain"
-                : "object-cover",
-              effectiveBackground.position === "top" && "object-top",
-              effectiveBackground.position === "bottom" && "object-bottom",
-              effectiveBackground.position === "left" && "object-left",
-              effectiveBackground.position === "right" && "object-right",
-              effectiveBackground.position === "center" && "object-center",
-            )}
-          />
-          {effectiveBackground.overlayOpacity > 0 && (
-            <div
-              data-testid="stage-card-background-overlay"
-              className="pointer-events-none absolute inset-0 bg-black"
-              style={{ opacity: effectiveBackground.overlayOpacity }}
-            />
-          )}
-        </div>
-      )}
+      <LegacyStageBackdrops
+        tadazzBackdrop={tadazzBackdrop}
+        setTadazzImageUnavailable={setTadazzImageUnavailable}
+        showCustomCardBackground={showCustomCardBackground}
+        effectiveBackground={effectiveBackground}
+        setCardBgErrorUrl={setCardBgErrorUrl}
+      />
 
       <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
         {!isConnected && !statusName ? (
@@ -660,72 +378,18 @@ const GameWrapper = ({
               {motionScene && <TadazzMotionStage scene={motionScene} />}
             </div>
 
-            {extensionState &&
-              effectiveRole !== "player" &&
-              (!manager || roomMediaReady) && (
-                <AudioCuePlayer
-                  cueId={activePhaseCueId}
-                  audioExtras={
-                    extensionState.extras.audio as
-                      QuizExtrasV1["audio"] | undefined
-                  }
-                  cardAudioCues={
-                    extensionState.extras.cardAudioCues as
-                      CardAudioOverrides | undefined
-                  }
-                  sceneAudio={
-                    (extensionState.extras.sceneAudio as
-                      | {
-                          mode?: "inherit" | "mute" | "custom"
-                          cueId?: CueId
-                          url?: string
-                          volume?: number
-                          loop?: boolean
-                        }
-                      | undefined) ?? currentSceneObj?.audio
-                  }
-                  gameId={extensionState.gameId}
-                  activeCardKey={activeCardKey}
-                  phase={
-                    extensionState.phase === "scene"
-                      ? "scene"
-                      : (statusName ?? extensionState.phase)
-                  }
-                  epoch={extensionState.epoch}
-                  paused={extensionState.pause?.paused}
-                  showControls={Boolean(manager && !isHostPresenting)}
-                  controlLabels={{
-                    enable: t("extensions:audio.enableSound", "Enable sound"),
-                    mute: t("extensions:audio.mute", "Mute"),
-                    unmute: t("extensions:audio.unmute", "Unmute"),
-                    pause: t("extensions:audio.pauseAudio", "Pause audio"),
-                    play: t("extensions:audio.playAudio", "Play audio"),
-                    track: t("extensions:audio.track", "Track"),
-                    followShow: t("extensions:audio.followShow", "Follow show"),
-                  }}
-                  soundtrackLabels={{
-                    openingIntro: t(
-                      "extensions:audio.slotOpeningIntro",
-                      "Opening intro",
-                    ),
-                    lobby: t("extensions:audio.slotLobby", "Lobby / QR"),
-                    roundStart: t(
-                      "extensions:audio.slotRoundStart",
-                      "Round start",
-                    ),
-                    question: t("extensions:audio.slotQuestion", "Question"),
-                    voting: t("extensions:audio.slotVoting", "Voting"),
-                    results: t("extensions:audio.slotResults", "Results"),
-                    leaderboard: t(
-                      "extensions:audio.slotLeaderboard",
-                      "Leaderboard",
-                    ),
-                    recap: t("extensions:audio.slotRecap", "Recap"),
-                    finale: t("extensions:audio.slotFinale", "Finale"),
-                  }}
-                  hasCompetingMedia={hasCompetingMediaAudio}
-                />
-              )}
+            <LegacyStageAudio
+              extensionState={extensionState}
+              effectiveRole={effectiveRole}
+              manager={manager}
+              roomMediaReady={roomMediaReady}
+              activePhaseCueId={activePhaseCueId}
+              currentSceneObj={currentSceneObj}
+              activeCardKey={activeCardKey}
+              statusName={statusName}
+              isHostPresenting={isHostPresenting}
+              hasCompetingMediaAudio={hasCompetingMediaAudio}
+            />
 
             {manager ? (
               isHostPresenting ? null : (
@@ -753,49 +417,13 @@ const GameWrapper = ({
                     </div>
                   )}
 
-                  <Tooltip
-                    content={t(
-                      "extensions:roster.liveModalTitle",
-                      "Players & Live Connection Status",
-                    )}
-                  >
-                    <button
-                      type="button"
-                      onClick={() => setPlayersModalOpen(true)}
-                      data-testid="host-bottom-players-btn"
-                      className={clsx(
-                        "ml-auto flex shrink-0 items-center gap-1.5 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md transition-colors hover:bg-black/60 sm:gap-2 sm:px-3 sm:py-1.5 sm:text-base md:text-xl",
-                        !isConnected && "opacity-60",
-                      )}
-                    >
-                      <Users className="size-5" />
-                      <span data-testid="host-connected-counter">
-                        {(() => {
-                          const connectedCount =
-                            hostPresence?.connectedNow ??
-                            players.filter((p) => p.connected).length
-                          const registeredCount =
-                            hostPresence?.registeredTotal ??
-                            totalPlayers ??
-                            players.length
-
-                          if (
-                            (registeredCount > 0 &&
-                              registeredCount !== connectedCount) ||
-                            hostPresence
-                          ) {
-                            return `${connectedCount} / ${registeredCount}`
-                          }
-
-                          return String(totalPlayers ?? players.length)
-                        })()}
-                      </span>
-                      <span className="ml-1 hidden items-center gap-1 rounded bg-white/20 px-2 py-0.5 text-xs font-semibold sm:inline-flex">
-                        <PhoneCall className="size-3" />
-                        {t("extensions:roster.playersButton", "Players")}
-                      </span>
-                    </button>
-                  </Tooltip>
+                  <HostPresenceButton
+                    hostPresence={hostPresence}
+                    players={players}
+                    totalPlayers={totalPlayers}
+                    isConnected={isConnected}
+                    onClick={() => setPlayersModalOpen(true)}
+                  />
 
                   <GameSettingsModal
                     onOpenRoster={() => setPlayersModalOpen(true)}
@@ -835,39 +463,11 @@ const GameWrapper = ({
               <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
                 <div className="flex items-center gap-2">
                   <p className="text-gray-800">{player?.username}</p>
-                  {(() => {
-                    const teamsData = extensionState?.extras.teams as
-                      | {
-                          teams?: TeamDefinition[]
-                          assignments?: Record<string, string>
-                        }
-                      | undefined
-                    const assignedTeamId =
-                      (clientId
-                        ? teamsData?.assignments?.[clientId]
-                        : undefined) ??
-                      teamsData?.assignments?.[
-                        (player as { id?: string } | null)?.id ??
-                          player?.username ??
-                          ""
-                      ]
-                    const assignedTeam = teamsData?.teams?.find(
-                      (team) => team.id === assignedTeamId,
-                    )
-
-                    if (!assignedTeam) {
-                      return null
-                    }
-
-                    return (
-                      <span
-                        className="rounded-md px-2 py-0.5 text-xs font-bold text-white shadow-sm"
-                        style={{ backgroundColor: assignedTeam.color }}
-                      >
-                        {assignedTeam.name}
-                      </span>
-                    )
-                  })()}
+                  <PlayerTeamBadge
+                    extensionState={extensionState}
+                    clientId={clientId}
+                    player={player}
+                  />
                 </div>
                 {(gameMode !== QUIZZ_MODES.SURVEY ||
                   (player?.points !== undefined && player.points > 0)) && (

@@ -10,6 +10,8 @@ import {
   resolveShowTheme,
   type ResolvedShowTheme,
   type ShowThemeRole,
+  createShowThemeRegistry,
+  showThemeRegistry,
 } from "../../core/show-themes/index"
 
 const ShowThemeContext = createContext<ResolvedShowTheme | null>(null)
@@ -47,9 +49,29 @@ export function ShowThemeRenderer<Props extends object>({
   const scene = envelope?.extras.currentScene as
     { themeOverrides?: unknown } | undefined
   const scope = scene?.themeOverrides ?? envelope?.extras.themeOverrides
+  // A value-stable immutable manifest avoids reparsing/freezing on each clock snapshot.
+  const installedDefinition = envelope?.extras.themeDefinitionJson
+  const registry = useMemo(() => {
+    try {
+      return createShowThemeRegistry(
+        typeof installedDefinition === "string"
+          ? [JSON.parse(installedDefinition)]
+          : [],
+      )
+    } catch {
+      // Preserve the requested identity and display the existing manager warning.
+      return showThemeRegistry
+    }
+  }, [installedDefinition])
   const theme = useMemo(
-    () => resolveShowTheme({ selection: defaults?.showTheme, scope, role }),
-    [defaults?.showTheme, scope, role],
+    () =>
+      resolveShowTheme({
+        selection: defaults?.showTheme,
+        scope,
+        role,
+        registry,
+      }),
+    [defaults?.showTheme, scope, role, registry],
   )
   const Renderer = renderers[theme.definition.rendererId]
 

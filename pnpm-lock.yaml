@@ -105,9 +105,6 @@ importers:
       '@hono/node-server':
         specifier: ^2.1.4
         version: 2.1.4(hono@4.13.13)
-      '@razzia/socket':
-        specifier: workspace:*
-        version: link:../packages/socket
       '@types/node':
         specifier: 'catalog:'
         version: 26.6.5

@@ -5,6 +5,7 @@ import type {
   ShowThemeAudioEvent,
   ThemeOverrides,
 } from "@razzia/extensions/core"
+import { showThemeText } from "@razzia/extensions/core"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
@@ -24,7 +25,7 @@ export function ThemeAudioOptions({
   value: Choice
   onChange: (value: Choice) => void
 }) {
-  const { t } = useTranslation()
+  const { t, i18n } = useTranslation()
   const [picker, setPicker] = useState(false)
   const [previewing, setPreviewing] = useState(false)
   const [error, setError] = useState(false)
@@ -66,6 +67,13 @@ export function ThemeAudioOptions({
     } else if (item.id.endsWith(".default")) {
       label = t("extensions:themes.default")
     }
+    if (theme.definition.localizations)
+      label = showThemeText(
+        theme.definition,
+        item.labelKey,
+        i18n.language,
+        (key) => t(key),
+      )
 
     return { value: item.id, label }
   })

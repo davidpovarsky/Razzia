@@ -33,7 +33,9 @@ export class ThemeReviewWorkspace {
   private readonly artifacts = new Map<string, Artifact>()
   private readonly active = new Map<string, string>()
   private readonly events: ThemeAudit[] = []
-  constructor(private readonly signingKey: Buffer) {
+  private readonly signingKey: Buffer
+  constructor(signingKey: Buffer) {
+    this.signingKey = signingKey
     if (signingKey.length < 32) {
       throw new Error("A private signing key of at least 32 bytes is required")
     }

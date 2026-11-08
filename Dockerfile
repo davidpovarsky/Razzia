@@ -13,11 +13,11 @@ COPY packages/socket/package.json ./packages/socket/
 COPY packages/e2e/package.json ./packages/e2e/
 COPY extensions/package.json ./extensions/
 
-RUN pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
 COPY . .
 
-RUN pnpm --filter @razzia/socket build && pnpm --filter @razzia/web build
+RUN pnpm build
 
 # Preserve the dotLottie WASM engine in the slim Alpine runner.
 RUN mkdir -p /app/runtime && \
@@ -31,6 +31,7 @@ FROM alpine:3.24.2 AS runner
 RUN apk add --no-cache nginx nodejs supervisor
 
 COPY docker/nginx.conf /etc/nginx/http.d/default.conf
+COPY extensions/deployment/nginx-server.conf /etc/nginx/tadazz/server.conf
 COPY docker/supervisord.conf /etc/supervisord.conf
 
 COPY --from=builder /app/packages/web/dist /app/web

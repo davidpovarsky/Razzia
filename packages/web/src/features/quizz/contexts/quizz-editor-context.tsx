@@ -1,3 +1,4 @@
+import { useQuizzExtras } from "./extensions/use-quizz-extras"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { QUESTION_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import type {
@@ -9,21 +10,10 @@ import {
   quizzValidator,
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
-import {
-  generateQuestionId,
-  isQuizExtrasV2,
-  type AnyQuizExtras,
-} from "@razzia/extensions/core"
-import {
-  CompositeApiClient,
-  duplicateQuestionInExtras,
-  removeQuestionFromExtras,
-  reorderQuestionsInExtras,
-} from "@razzia/extensions/editor"
+import type { AnyQuizExtras } from "@razzia/extensions/core"
 import {
   createContext,
   useContext,
-  useEffect,
   useState,
   type PropsWithChildren,
 } from "react"
@@ -115,58 +105,18 @@ export const QuizzEditorProvider = ({
   })
   const [currentIndex, setCurrentIndex] = useState(0)
   const [removingFrom, setRemovingFrom] = useState<Question[] | null>(null)
-  const [extras, setExtras] = useState<AnyQuizExtras | null>(null)
-  const [conflict, setConflict] = useState<{
-    serverRevision?: number
-    expectedRevision?: number | null
-  } | null>(null)
-
-  const [questionIds, setQuestionIds] = useState<string[]>(() => {
-    const count = initialData?.questions.length ?? 1
-
-    return Array.from({ length: count }, () => generateQuestionId())
-  })
-
-  useEffect(() => {
-    if (!initialData?.id) {
-      return
-    }
-
-    let isSubscribed = true
-    const client = new CompositeApiClient({
-      getAuthToken: () => localStorage.getItem("token"),
-    })
-    client
-      .getQuizComposite(initialData.id)
-      .then((res) => {
-        if (!isSubscribed) {
-          return
-        }
-
-        if (res.exists && res.extras) {
-          setExtras((prev) => {
-            // Guard: do not overwrite if user has already modified extras locally
-            if (prev) {
-              return prev
-            }
-
-            return res.extras
-          })
-
-          if (
-            Array.isArray(res.extras.questionIds) &&
-            res.extras.questionIds.length > 0
-          ) {
-            setQuestionIds(res.extras.questionIds)
-          }
-        }
-      })
-      .catch(() => undefined)
-
-    return () => {
-      isSubscribed = false
-    }
-  }, [initialData?.id])
+  const {
+    extras,
+    setExtras,
+    conflict,
+    setConflict,
+    questionIds,
+    setQuestionIds,
+    appendQuestionIdentity,
+    removeQuestionIdentity,
+    reorderQuestionIdentity,
+    duplicateQuestionIdentity,
+  } = useQuizzExtras(initialData)
 
   const questions = useWatch({ control, name: "questions" })
   const gameMode = useWatch({ control, name: "gameMode" })
@@ -197,42 +147,16 @@ export const QuizzEditorProvider = ({
 
   const addQuestion = () => {
     const category = questions.at(-1)?.category
-    const newUuid = generateQuestionId()
-
     append({ ...defaultQuestion(), ...(category ? { category } : {}) })
-    setQuestionIds((prev) => [...prev, newUuid])
+    appendQuestionIdentity()
     setCurrentIndex(questions.length)
-
-    if (extras) {
-      setExtras({
-        ...extras,
-        questionIds: [...extras.questionIds, newUuid],
-      })
-    }
   }
 
   const removeQuestion = (index: number) => {
     flushSync(() => setRemovingFrom(questions))
     remove(index)
 
-    setQuestionIds((prev) => prev.filter((_, i) => i !== index))
-
-    if (extras) {
-      if (isQuizExtrasV2(extras)) {
-        const removedQId = effectiveQuestionIds[index]
-        const nextPerQuestion = extras.perQuestion ? { ...extras.perQuestion } : {}
-        if (removedQId && removedQId in nextPerQuestion) {
-          delete nextPerQuestion[removedQId]
-        }
-        setExtras({
-          ...extras,
-          questionIds: effectiveQuestionIds.filter((_, i) => i !== index),
-          perQuestion: nextPerQuestion,
-        })
-      } else {
-        setExtras(removeQuestionFromExtras(extras, index))
-      }
-    }
+    removeQuestionIdentity(index, effectiveQuestionIds)
 
     setCurrentIndex((current) => {
       if (current < index) {
@@ -251,32 +175,7 @@ export const QuizzEditorProvider = ({
     move(from, to)
     setCurrentIndex(to)
 
-    setQuestionIds((prev) => {
-      const next = [...prev]
-      const [moved] = next.splice(from, 1)
-
-      if (moved) {
-        next.splice(to, 0, moved)
-      }
-
-      return next
-    })
-
-    if (extras) {
-      if (isQuizExtrasV2(extras)) {
-        const nextQIds = [...effectiveQuestionIds]
-        const [moved] = nextQIds.splice(from, 1)
-        if (moved) {
-          nextQIds.splice(to, 0, moved)
-        }
-        setExtras({
-          ...extras,
-          questionIds: nextQIds,
-        })
-      } else {
-        setExtras(reorderQuestionsInExtras(extras, from, to))
-      }
-    }
+    reorderQuestionIdentity(from, to, effectiveQuestionIds)
   }
 
   const duplicateQuestion = (index: number) => {
@@ -285,51 +184,7 @@ export const QuizzEditorProvider = ({
     insert(index + 1, cloned)
     setCurrentIndex(index + 1)
 
-    if (extras) {
-      if (isQuizExtrasV2(extras)) {
-        const sourceQId = effectiveQuestionIds[index]
-        const newUuid = generateQuestionId()
-        const nextPerQuestion = extras.perQuestion ? { ...extras.perQuestion } : {}
-        if (sourceQId && sourceQId in nextPerQuestion) {
-          nextPerQuestion[newUuid] = structuredClone(nextPerQuestion[sourceQId])
-        }
-        setExtras({
-          ...extras,
-          questionIds: [
-            ...effectiveQuestionIds.slice(0, index + 1),
-            newUuid,
-            ...effectiveQuestionIds.slice(index + 1),
-          ],
-          perQuestion: nextPerQuestion,
-        })
-        setQuestionIds((prev) => {
-          const next = [...prev]
-          next.splice(index + 1, 0, newUuid)
-
-          return next
-        })
-      } else {
-        const { extras: newExtras, newQuestionId } = duplicateQuestionInExtras(
-          extras,
-          index,
-        )
-        setExtras(newExtras)
-        setQuestionIds((prev) => {
-          const next = [...prev]
-          next.splice(index + 1, 0, newQuestionId)
-
-          return next
-        })
-      }
-    } else {
-      const newUuid = generateQuestionId()
-      setQuestionIds((prev) => {
-        const next = [...prev]
-        next.splice(index + 1, 0, newUuid)
-
-        return next
-      })
-    }
+    duplicateQuestionIdentity(index, effectiveQuestionIds)
   }
 
   const questionPath = <K extends FieldPath<Question>>(field: K) =>

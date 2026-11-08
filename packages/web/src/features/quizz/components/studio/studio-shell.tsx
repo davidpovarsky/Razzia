@@ -6,6 +6,7 @@ import { StudioLaunchPage } from "./studio-launch-page"
 import { StudioParticipantsPage } from "./studio-participants-page"
 import { StudioSceneEditor } from "./studio-scene-editor"
 import { StudioSettingsPage } from "./studio-settings-page"
+import { InstalledThemeCatalogProvider } from "./installed-theme-catalog"
 
 const StudioContent = () => {
   const { activeTab, selectedTimelineItem } = useStudioEditor()
@@ -45,10 +46,12 @@ const StudioContent = () => {
 }
 
 export const StudioShell = () => (
-  <StudioEditorProvider>
-    <div className="bg-muted relative flex h-svh max-w-full flex-col overflow-x-hidden">
-      <QuizzEditorHeader />
-      <StudioContent />
-    </div>
-  </StudioEditorProvider>
+  <InstalledThemeCatalogProvider>
+    <StudioEditorProvider>
+      <div className="bg-muted relative flex h-svh max-w-full flex-col overflow-x-hidden">
+        <QuizzEditorHeader />
+        <StudioContent />
+      </div>
+    </StudioEditorProvider>
+  </InstalledThemeCatalogProvider>
 )

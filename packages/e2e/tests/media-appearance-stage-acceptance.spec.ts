@@ -5,11 +5,11 @@ import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import {
   createGame,
-  endTimer,
   loginManager,
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
+import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
 
@@ -20,7 +20,10 @@ const SCREENSHOT_DIR = join(
 
 const saveScreenshot = async (page: Page, filename: string) => {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
-  await page.screenshot({ path: join(SCREENSHOT_DIR, filename), fullPage: false })
+  await page.screenshot({
+    path: join(SCREENSHOT_DIR, filename),
+    fullPage: false,
+  })
 }
 
 // 1x1 transparent PNG buffer for real upload testing
@@ -86,8 +89,16 @@ function createPngBuffer(
   ])
 }
 
-const LANDSCAPE_PNG_BUFFER = createPngBuffer(1600, 900, { r: 234, g: 88, b: 12 })
-const PORTRAIT_PNG_BUFFER = createPngBuffer(1200, 1600, { r: 16, g: 185, b: 129 })
+const LANDSCAPE_PNG_BUFFER = createPngBuffer(1600, 900, {
+  r: 234,
+  g: 88,
+  b: 12,
+})
+const PORTRAIT_PNG_BUFFER = createPngBuffer(1200, 1600, {
+  r: 16,
+  g: 185,
+  b: 129,
+})
 const SQUARE_PNG_BUFFER = createPngBuffer(1024, 1024, { r: 139, g: 92, b: 246 })
 
 const assertZeroStageScroll = async (page: Page, label: string) => {
@@ -364,9 +375,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       .getByRole("radio", { name: /Transition/i })
     await transitionToggle.click()
 
-    await expect(
-      page.getByPlaceholder("Card title..."),
-    ).toBeVisible({ timeout: 5_000 })
+    await expect(page.getByPlaceholder("Card title...")).toBeVisible({
+      timeout: 5_000,
+    })
 
     // Convert scene back to Quiz question and populate question title -> then converting to Scene MUST prompt confirmation
     const quizToggle = page
@@ -423,9 +434,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await chooseBgBtn.click()
     await expect(dialog).toBeVisible()
     await dialog.locator('[data-testid="media-scope-show"]').click()
-    await expect(
-      dialog.locator('img[alt^="shared-stage-asset"]'),
-    ).toBeVisible()
+    await expect(dialog.locator('img[alt^="shared-stage-asset"]')).toBeVisible()
     await dialog.locator('img[alt^="shared-stage-asset"]').click()
 
     await expect(page.locator('[data-testid="card-bg-preview"]')).toBeVisible()
@@ -581,7 +590,8 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
               {
                 type: "single",
                 playMode: "survey",
-                question: "Question 1 with Custom Background & 5 Visual Options",
+                question:
+                  "Question 1 with Custom Background & 5 Visual Options",
                 answers: [
                   "Alpha Choice",
                   "Beta Choice",
@@ -983,11 +993,13 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         `Q1 Title / Timer Overlap @ ${vp.name}`,
       )
 
-      if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "390x844" || vp.name === "320x568") {
-        await saveScreenshot(
-          spectatorPage,
-          `04_q1_voting_${vp.name}.png`,
-        )
+      if (
+        vp.name === "800x600_4_3" ||
+        vp.name === "1920x1080" ||
+        vp.name === "390x844" ||
+        vp.name === "320x568"
+      ) {
+        await saveScreenshot(spectatorPage, `04_q1_voting_${vp.name}.png`)
       }
     }
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
@@ -998,7 +1010,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       { width: 320, height: 568, name: "320x568" },
     ]) {
       await playerPage.setViewportSize(playerVp)
-      await assertZeroStageScroll(playerPage, `Player Q1 Voting @ ${playerVp.name}`)
+      await assertZeroStageScroll(
+        playerPage,
+        `Player Q1 Voting @ ${playerVp.name}`,
+      )
       await assertVisualContainment(
         playerPage,
         '[data-testid="game-question-title"]',
@@ -1027,7 +1042,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
     // Verify resultsRevealEntrance animation on interim results winner
     await expect(
-      spectatorPage.locator('[data-testid="interim-option-row"][data-winner="true"]'),
+      spectatorPage.locator(
+        '[data-testid="interim-option-row"][data-winner="true"]',
+      ),
     ).toHaveAttribute("data-tada-entrance", "slide-up")
     await spectatorPage.waitForTimeout(600)
 
@@ -1049,7 +1066,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         `Reveal Question Text @ ${vp.name}`,
         { checkTextCompleteness: true },
       )
-      const qText = (await spectatorPage.locator('[data-testid="scene-question-text"]').textContent()) ?? ""
+      const qText =
+        (await spectatorPage
+          .locator('[data-testid="scene-question-text"]')
+          .textContent()) ?? ""
       expect(qText).toContain("Question 1 with Custom Background")
       expect(qText).not.toContain("...")
 
@@ -1060,7 +1080,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         `Reveal Awaiting Host Line @ ${vp.name}`,
         { checkTextCompleteness: true },
       )
-      const hostText = (await spectatorPage.locator('[data-testid="scene-awaiting-host"]').textContent()) ?? ""
+      const hostText =
+        (await spectatorPage
+          .locator('[data-testid="scene-awaiting-host"]')
+          .textContent()) ?? ""
       expect(hostText.toLowerCase()).toContain("awaiting host")
 
       // 3. Dominant hero winner and runners up
@@ -1094,11 +1117,12 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         `Reveal Hero / Awaiting Host Overlap @ ${vp.name}`,
       )
 
-      if (vp.name === "800x600_4_3" || vp.name === "1920x1080" || vp.name === "320x568") {
-        await saveScreenshot(
-          spectatorPage,
-          `05_q1_reveal_${vp.name}.png`,
-        )
+      if (
+        vp.name === "800x600_4_3" ||
+        vp.name === "1920x1080" ||
+        vp.name === "320x568"
+      ) {
+        await saveScreenshot(spectatorPage, `05_q1_reveal_${vp.name}.png`)
       }
     }
     await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
@@ -1245,7 +1269,8 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
               {
                 type: "single",
                 playMode: "quiz",
-                question: "Wave 2 Quiz Q2: Which planet is known as the Red Planet?",
+                question:
+                  "Wave 2 Quiz Q2: Which planet is known as the Red Planet?",
                 answers: ["Venus", "Mars", "Jupiter"],
                 solutions: [1],
                 cooldown: 4,
