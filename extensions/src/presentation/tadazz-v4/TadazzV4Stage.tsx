@@ -280,10 +280,15 @@ export const TadazzV4Stage = forwardRef<
       return
     }
     const cueHandler = (cue: { name: string; scene: TadazzV4Scene }) => {
+      const taggedCue = {
+        ...cue,
+        questionKey: view.data.questionKey,
+        questionNumber: view.data.number,
+      }
       el.dispatchEvent(
-        new CustomEvent("tadazz:cue", { detail: cue, bubbles: false }),
+        new CustomEvent("tadazz:cue", { detail: taggedCue, bubbles: false }),
       )
-      callbackRef.current.onCue?.(cue)
+      callbackRef.current.onCue?.(taggedCue)
     }
     const engine = new TadazzV4Motion(el, {
       motionScale: motionScaleRef.current,

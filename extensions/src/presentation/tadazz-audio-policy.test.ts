@@ -8,6 +8,15 @@ import { AudioCuePlayer, calibratedMusicVolume, resolveAudioCue, TADAZZ_SFX_BY_C
 import { resolveTadazzAudioPolicy } from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
+  it("starts the active voting music despite a delayed previous-scene cue and music payload", () => {
+    const html = renderToString(createElement(AudioCuePlayer, {
+      soundtrackSlot: "voting", cueId: "start", autoPlay: false,
+      sceneAudio: { mode: "custom", url: "/media/previous-spotlight.mp3", volume: .3, loop: true },
+      cardAudioCues: { answersMusic: { mode: "custom", url: "/tadazz-show/music/epic-main-menu.mp3", volume: .38, loop: true } },
+    }))
+    expect(html).toContain('data-audio-url="/tadazz-show/music/epic-main-menu.mp3"')
+    expect(html).toContain('data-cue-id="answersMusic"')
+  })
   it("makes the approved results recording audible without changing other music or SFX", () => {
     expect(calibratedMusicVolume("/tadazz-show/music/cutie-patootie.mp3", 0.3)).toBe(0.75)
     expect(calibratedMusicVolume("/media/tzila-determined-pursuit-20261105.mp3", 0.38)).toBe(0.38)
@@ -139,6 +148,7 @@ describe("P0 Tadazz soundtrack policy", () => {
 
   it("maps audible show cues to real assets and keeps decorative impact silent", () => {
     expect(TADAZZ_SFX_BY_CUE.impact).toBeUndefined()
+    expect(TADAZZ_SFX_BY_CUE["top-pick-reveal"]).toBe("/sounds/tadazz-confirm-20261108.mp3")
     const emitted = [
       "countdown-ended",
       "survey-reveal",

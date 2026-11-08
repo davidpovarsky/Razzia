@@ -567,6 +567,7 @@ export const TadazzV4StageAdapter = forwardRef<
         const q = question ?? questionRef.current
         const p = interactivePropsRef.current
         await v4Ref.current?.play("top-pick", {
+          questionKey: q?.key,
           answers: q ? toV4Answers(q.options) : [],
           counts,
           topIndex,

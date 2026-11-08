@@ -774,6 +774,7 @@ export class TadazzV4Motion {
 
     if (hasWinner) {
       this.impact(690, "big")
+      this.cue("top-pick-reveal", 690)
     }
   }
   private questionImage() {

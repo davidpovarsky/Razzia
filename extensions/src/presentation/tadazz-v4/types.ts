@@ -176,6 +176,8 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
 export interface TadazzV4Cue {
   name: string
   scene: TadazzV4Scene
+  questionKey?: string
+  questionNumber?: number
 }
 export interface TadazzV4StageHandle {
   play(scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean>
