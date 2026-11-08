@@ -92,6 +92,7 @@ const server = http.createServer((req, res) => {
       }
 
       const rawPhone = params.get('ApiPhone') || params.get('apiphone') || '';
+      const dialedNumber = (params.get('ApiDID') || '').replace(/\D/g, '') || undefined;
       const id = crypto.createHash('sha256').update(rawId).digest('hex');
 
       if (params.has('ApiHangupExtension') || params.get('hangup') === 'yes') {
@@ -99,6 +100,7 @@ const server = http.createServer((req, res) => {
         live.delete(id);
         await callRazziaBackend({
           action: 'hangup',
+          dialedNumber,
           callId: id.slice(0, 24),
           phone: rawPhone || existing?.phoneRaw || null,
           rosterPlayerId: existing?.rosterPlayerId || undefined,
@@ -124,6 +126,7 @@ const server = http.createServer((req, res) => {
       // 1. Poll / join authoritative Razzia server state
       const pollRes = await callRazziaBackend({
         action: 'join_or_poll',
+        dialedNumber,
         callId: id.slice(0, 24),
         phone: s.phoneRaw,
         rosterPlayerId: s.rosterPlayerId || undefined,
@@ -181,6 +184,7 @@ const server = http.createServer((req, res) => {
         const zeroIdx = Number.parseInt(enteredDigit, 10) - 1;
         const ansRes = await callRazziaBackend({
           action: 'answer',
+          dialedNumber,
           callId: id.slice(0, 24),
           phone: s.phoneRaw,
           rosterPlayerId: (serverData && serverData.rosterPlayerId) || s.rosterPlayerId || undefined,

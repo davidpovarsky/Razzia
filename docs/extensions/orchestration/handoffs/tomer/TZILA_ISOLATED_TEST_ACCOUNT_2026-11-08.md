@@ -1,5 +1,9 @@
 # Owner-requested isolated Tzila test account
 
+SUPERSEDED: the owner explicitly requires the copied account on the real `https://tadazz.com` environment. The separate-host interpretation was wrong. The full source tenant has now been copied into production under the new account ID below, including both quizzes, all91 media, both results and remaining metadata (97 files total). The copied production account's normal login was verified. The separate host is no longer the user destination.
+
+Production routing change scope: protected gateway forwards provider ApiDID as dialedNumber on poll/answer/hangup; API resolves that DID through server-controlled exact owner+quiz mapping; the Israeli DID maps only to the copied production account and the UK DID only to the customer. Guest opt-in gains an exact owner allowlist covering the two approved accounts. Upstream hooks: packages/socket/src/api/routes/games.ts pilot body/resolver and services/game/index.ts temporary guest gate. No customer credentials or original tenant files changed. Validate simultaneous two-owner target isolation before deploying server/gateway, then repoint only Israeli provider callback to the real site. Keep secrets and new account password outside Git.
+
 The owner explicitly requested a new account with the complete game, player list and game assets, Israeli dial-in routed to this account, and UK dial-in retained for the customer. Provisioned a separate application and gateway using the already verified production images. The customer's application/gateway were not restarted, and the customer's quiz, roster, account credentials and UK provider settings were not changed. Caddy gained an additional HTTPS virtual host through a validated reload; the main site's routing remained unchanged.
 
 - Test URL: https://tzila-test.132.145.25.168.sslip.io

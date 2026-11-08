@@ -18,6 +18,7 @@ import { grantMediaForGuest } from "@razzia/socket/services/media-access"
 import { getQuizz } from "@razzia/socket/services/config"
 import Game from "@razzia/socket/services/game"
 import { selectQuizPilotTarget } from "@razzia/socket/services/game/pilot-target"
+import { selectDialedPilotTarget } from "@razzia/socket/services/game/pilot-dial-target"
 import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { StatusCodes } from "http-status-codes"
@@ -50,13 +51,25 @@ const pilotPhoneBodySchema = z.object({
   rosterPlayerId: z.string().max(64).optional(),
   answerIndex: z.number().int().min(0).max(9).optional(),
   epoch: z.number().int().nonnegative().optional(),
+  dialedNumber: z
+    .string()
+    .regex(/^\+?\d{5,20}$/)
+    .optional(),
 })
 
 function resolvePilotTargetGame(
   registry: Registry,
   gameId?: string,
   inviteCode?: string,
+  dialedNumber?: string,
 ): { game: Game | null; error?: string } {
+  if (dialedNumber && process.env.TADA_PILOT_DIAL_TARGETS) {
+    return selectDialedPilotTarget(
+      registry.getAllGames(),
+      dialedNumber,
+      process.env.TADA_PILOT_DIAL_TARGETS,
+    )
+  }
   const targetGameId = gameId ?? process.env.TADA_ACTIVE_GAME_ID
   const targetInviteCode = inviteCode ?? process.env.TADA_ACTIVE_INVITE_CODE
 
@@ -421,6 +434,7 @@ const routes = apiFactory
         registry,
         body.gameId,
         body.inviteCode,
+        body.dialedNumber,
       )
 
       if (!resolved.game) {

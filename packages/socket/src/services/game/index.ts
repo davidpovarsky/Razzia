@@ -151,8 +151,17 @@ class Game {
         .split(",")
         .map((id) => id.trim())
         .includes(quizzId) &&
-      (!process.env.TADA_PILOT_OWNER_ID ||
-        process.env.TADA_PILOT_OWNER_ID === managerClientId),
+      (!(
+        process.env.TADA_TEMP_GUEST_OWNER_IDS ?? process.env.TADA_PILOT_OWNER_ID
+      ) ||
+        (
+          process.env.TADA_TEMP_GUEST_OWNER_IDS ??
+          process.env.TADA_PILOT_OWNER_ID ??
+          ""
+        )
+          .split(",")
+          .map((id) => id.trim())
+          .includes(managerClientId)),
     )
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
