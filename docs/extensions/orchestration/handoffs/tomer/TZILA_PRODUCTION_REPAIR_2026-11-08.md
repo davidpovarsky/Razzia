@@ -60,3 +60,7 @@ Production activation/public verification results and the immutable release comm
 ## Owner-directed urgent routing update (after verified release)
 
 Owner explicitly requested immediate deployment without tests: homepage opens manager login and restores saved manager session; move room-PIN joining to /game. Minimal frontend touches: auth index redirect with old ?pin compatibility, new auth game route, join Room search from the common auth layout, manager login redirect guard (keep redirects outside catch), party reset target /game, lobby join URLs/QRs /game. Build only; no tests requested or run for this follow-up. Preserve production revision 8 and all quiz/roster/phone settings; activate a web-only image based on the verified production image with rollback container retained.
+
+## Urgent TADAZZ logo/favicon update
+
+Owner requested replacing the visible Razzia heading on /manager/config with the existing official TADAZZ logo and using the supplied Z PNG as favicon, with immediate deployment. Narrow touches: shared Background default logo/name and removal of its Razzia footer; index.html favicon URL; copy the supplied PNG unchanged into public assets. Build and deploy the web only, retaining the current runtime environment and revision-8 quiz data. No test suite for this urgent follow-up.
