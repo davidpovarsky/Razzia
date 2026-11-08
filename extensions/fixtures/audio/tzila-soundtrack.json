@@ -1,0 +1,61 @@
+{
+  "audio": {
+    "cues": {
+      "start": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "showQuestion": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "answersMusic": {
+        "source": "media",
+        "url": "/media/tzila-determined-pursuit-20261105.mp3",
+        "volume": 0.38,
+        "enabled": true,
+        "loop": true
+      },
+      "answerPressed": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "revealResults": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "leaderboard": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "podium1": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "podium2": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      },
+      "podium3": {
+        "source": "default",
+        "volume": 0.8,
+        "enabled": true,
+        "loop": false
+      }
+    }
+  }
+}

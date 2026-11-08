@@ -159,7 +159,7 @@ describe("P0 Tadazz soundtrack policy", () => {
 
   it("resolves the preserved Goldy/Tzila voting configuration without changing URL, gain, enabled state or loop", () => {
     const fixturePath = fileURLToPath(
-      new URL("../../../work/goldy-tzila-extras.json", import.meta.url),
+      new URL("../../fixtures/audio/tzila-soundtrack.json", import.meta.url),
     )
     const fixture = JSON.parse(readFileSync(fixturePath, "utf8")) as {
       audio: AudioExtras
