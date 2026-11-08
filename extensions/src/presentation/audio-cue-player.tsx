@@ -332,6 +332,7 @@ export const AudioCuePlayer = ({
     // Voting retains the existing answersMusic URL/gain/loop or authored question override.
     if (
       effectiveCueId === "answersMusic" &&
+      (!selectedSoundtrackSlot || selectedSoundtrackSlot === "voting") &&
       resolvedCue?.shouldPlay &&
       resolvedCue.url
     ) {
@@ -680,6 +681,10 @@ export const AudioCuePlayer = ({
       return
     }
     const active = elements[activeIndexRef.current]
+    const generation = generationRef.current
+    const stillCurrent = () => generationRef.current === generation &&
+      currentRef.current?.identity === current.identity &&
+      elements[activeIndexRef.current] === active
     active.volume = effectiveVolume(current)
 
     if (paused || userPaused) {
@@ -689,6 +694,7 @@ export const AudioCuePlayer = ({
       void active
         .play()
         .then(() => {
+          if (!stillCurrent()) return
           if (!synchronizeShowTrack(active, current)) return
           onPlaybackStarted(current.identity)
 
@@ -700,6 +706,7 @@ export const AudioCuePlayer = ({
             stopRemainingRef.current = current.maxDurationMs
             stopDeadlineRef.current = Date.now() + current.maxDurationMs
             stopTimerRef.current = setTimeout(() => {
+              if (!stillCurrent()) return
               active.pause()
               stopTimerRef.current = null
               stopRemainingRef.current = null
@@ -710,6 +717,7 @@ export const AudioCuePlayer = ({
           }
         })
         .catch((error: unknown) => {
+          if (!stillCurrent()) return
           setAudioBlocked(true)
           onError(error)
         })

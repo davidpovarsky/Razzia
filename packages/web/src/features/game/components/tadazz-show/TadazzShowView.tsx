@@ -404,16 +404,13 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   }, [showGameId])
   // Leaving the lobby (host started) ends any opening still on screen.
   useEffect(() => {
-    if (
-      openingActive &&
-      scene.kind !== "lobby" &&
-      scene.kind !== "connecting" &&
-      scene.kind !== "wait"
-    ) {
+    if (scene.kind === "lobby" || scene.kind === "connecting" || scene.kind === "wait") return
+    if (openingActive) {
       markOpeningSeen(showGameId)
       setOpeningActive(false)
     }
-  }, [openingActive, scene.kind, showGameId])
+    if (openingMusicActive) setOpeningMusicActive(false)
+  }, [openingActive, openingMusicActive, scene.kind, showGameId])
 
   // ── Director: authoritative scene → reference animation methods ────────
   const prevSceneRef = useRef<ShowScene | null>(null)
@@ -890,7 +887,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     return resolveTadazzAudioPolicy({
       statusName: props.statusName,
       extensionPhase: extensionState?.phase,
-      sceneKind: descriptor?.kind,
+      sceneKind: descriptor?.kind ?? (scene.kind === "voting" && !votingOpen ? "question" : scene.kind),
       scenePreset:
         descriptor &&
         "preset" in descriptor &&
@@ -899,7 +896,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
           : null,
       openingActive: openingMusicActive,
     })
-  }, [extensionState?.phase, openingMusicActive, props.statusName, scene])
+  }, [extensionState?.phase, openingMusicActive, props.statusName, scene, votingOpen])
 
   let overlay: React.ReactNode = null
 

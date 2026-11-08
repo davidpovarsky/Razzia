@@ -560,8 +560,6 @@ export function RoundLaunch({
     <div className="full-round-launch">
       <Head title="" chip={`ROUND ${num(isRoundOne ? 1 : 2)}`} />
       <div className="full-launch-glow" />
-      <div className="full-wing-z left">Z</div>
-      <div className="full-wing-z right">Z</div>
       <div className="full-round-plaque">
         <small className="full-round-mini">
           {isRoundOne ? "THE FIRST STORY" : "A WHOLE NEW WORLD"}

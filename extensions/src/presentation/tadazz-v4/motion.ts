@@ -1189,26 +1189,6 @@ export class TadazzV4Motion {
       case "round-one":
 
       case "round-two":
-        for (const [side, distance] of [
-          ["left", -340],
-          ["right", 340],
-        ] as const) {
-          this.animate(
-            query(root, `.full-wing-z.${side}`),
-            [
-              {
-                opacity: 0,
-                transform: `translate3d(${distance}px,0,0) scale(.86)`,
-              },
-              { opacity: 1, transform: "none" },
-            ],
-            {
-              duration: 1120,
-              delay: 40,
-              easing: "cubic-bezier(.28,.85,.15,1)",
-            },
-          )
-        }
         this.animate(
           query(root, ".full-launch-glow"),
           [

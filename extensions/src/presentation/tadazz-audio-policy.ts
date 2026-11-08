@@ -56,9 +56,37 @@ export function resolveTadazzAudioPolicy({
   if (
     preset.includes("round-one") ||
     preset.includes("round-two") ||
-    statusName === "SHOW_START" ||
-    statusName === "SHOW_PREPARED"
+    preset === "interlude" || preset === "z-wipe" || sceneKind === "countdown"
   ) {
+    return { slot: "roundStart", continuityKey: "round-launch" }
+  }
+
+  if (preset === "top-pick" || preset === "most-chosen" || preset === "spotlight") {
+    return { slot: "results", continuityKey: "post-results" }
+  }
+
+  if (sceneKind === "interimResults") {
+    return { slot: "results", continuityKey: "result-reveal" }
+  }
+
+  if (sceneKind === "voting") return { slot: "voting", continuityKey: "voting" }
+  if (sceneKind === "question") return { slot: "question", continuityKey: "question" }
+  if (sceneKind === "results") return { slot: "results", continuityKey: "result-reveal" }
+
+  // Authored scenes own their music even when the underlying round status is
+  // still SELECT_ANSWER from the preceding question.
+  if (extensionPhase === "scene" || sceneKind === "opening") {
+    return { slot: "lobby", continuityKey: "lobby" }
+  }
+
+  if (extensionPhase === "responses") {
+    return { slot: "results", continuityKey: "result-reveal" }
+  }
+  if (extensionPhase === "answers") {
+    return { slot: "voting", continuityKey: "voting" }
+  }
+
+  if (statusName === "SHOW_START" || statusName === "SHOW_PREPARED") {
     return { slot: "roundStart", continuityKey: "round-launch" }
   }
 

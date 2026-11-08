@@ -1,0 +1,181 @@
+{
+  "pass": true,
+  "questionsVerified": 10,
+  "roundsVerified": 2,
+  "questionPresentationAudible": 369,
+  "checks": [
+    {
+      "url": "/media/tadazz-exploration-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-prepare-to-fight-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-fantasy-orchestral-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "audible": true
+    },
+    {
+      "round": 1,
+      "storySpeechHoldIntentionallySilent": true
+    },
+    {
+      "url": "/media/tadazz-prepare-to-fight-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tzila-determined-pursuit-20261105.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-determination-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/media/tadazz-fantasy-orchestral-20261106.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "audible": true
+    },
+    {
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "audible": true
+    },
+    {
+      "round": 2,
+      "storySpeechHoldIntentionallySilent": true
+    },
+    {
+      "url": "/media/tadazz-epic-endgame-20261106.mp3",
+      "audible": true
+    }
+  ],
+  "errors": []
+}

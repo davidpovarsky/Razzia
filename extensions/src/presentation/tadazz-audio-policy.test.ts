@@ -8,6 +8,36 @@ import { AudioCuePlayer, resolveAudioCue, TADAZZ_SFX_BY_CUE } from "./audio-cue-
 import { resolveTadazzAudioPolicy } from "./tadazz-audio-policy"
 
 describe("P0 Tadazz soundtrack policy", () => {
+  it("connects every authored show scene independently of a previous question's base status", () => {
+    const mappings = {
+      "round-one": "roundStart", "round-two": "roundStart", "interlude": "roundStart", "z-wipe": "roundStart",
+      "top-pick": "results", "tie-break": "leaderboard", "story-progress": "recap", "round-recap": "recap",
+      "story-assembly": "recap", "story-live": "recap", "grand-finale": "finale",
+      "representative-directory": "lobby", "phone-instructions": "lobby", "connection-readiness": "lobby",
+    } as const
+    for (const [scenePreset, slot] of Object.entries(mappings)) {
+      const policy = resolveTadazzAudioPolicy({ scenePreset, sceneKind: "animation", extensionPhase: "scene", statusName: "SELECT_ANSWER" })
+      expect(policy.slot, scenePreset).toBe(slot)
+    }
+    expect(resolveTadazzAudioPolicy({ sceneKind: "question", extensionPhase: "question", statusName: "SELECT_ANSWER" }).slot).toBe("question")
+    expect(resolveTadazzAudioPolicy({ sceneKind: "voting", extensionPhase: "question", statusName: "SHOW_QUESTION" }).slot).toBe("voting")
+    expect(resolveTadazzAudioPolicy({ sceneKind: "results", extensionPhase: "question", statusName: "SELECT_ANSWER" }).slot).toBe("results")
+    expect(resolveTadazzAudioPolicy({ extensionPhase: "responses", statusName: "SELECT_ANSWER" }).slot).toBe("results")
+  })
+
+  it("never lets a stale timer cue replace a question, results or round soundtrack", () => {
+    for (const slot of ["question", "results", "roundStart", "leaderboard", "recap", "finale"] as const) {
+      const audio = { cues: {}, soundtrack: { [slot]: {
+        mode: "media", url: `/media/${slot}.mp3`, volume: 0.3, loop: true, fadeMs: 0, startOffsetSeconds: 0,
+      } } } as unknown as AudioExtras
+      const html = renderToString(createElement(AudioCuePlayer, {
+        audioExtras: audio, soundtrackSlot: slot, cueId: "answersMusic", autoPlay: false,
+        cardAudioCues: { answersMusic: { mode: "custom", url: "/media/prior-timer.mp3", volume: 0.38, loop: true } },
+      }))
+      expect(html, slot).toContain(`data-audio-url="/media/${slot}.mp3"`)
+    }
+  })
+
   it("plays the selected results bed, then the authored original spotlight bed, without replacing reveal SFX", () => {
     const audio = { cues: {}, soundtrack: { results: {
       mode: "media", url: "/tadazz-show/music/cutie-patootie.mp3",

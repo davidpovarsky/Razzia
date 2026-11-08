@@ -4,6 +4,7 @@ import {
   type FullShowInput,
 } from "./FullShowScenes"
 import type { CSSProperties } from "react"
+import { presentationNote } from "./presentation-note"
 import {
   TADAZZ_V4_ASSET_BASE,
   TADAZZ_V4_LABELS,
@@ -64,6 +65,7 @@ export function QuestionFrameV4({
 }) {
   const tx = labelsFor(data)
   const question = data.question ?? ""
+  const note = presentationNote(data.note)
   const size = question.length > 65 ? 49 : question.length > 48 ? 56 : undefined
   return (
     <div
@@ -77,9 +79,9 @@ export function QuestionFrameV4({
       <div className="q-text" style={size ? { fontSize: size } : undefined}>
         {question}
       </div>
-      {data.note && results && (
+      {note && results && (
         <div className="q-note" data-testid="tadazz-question-note">
-          {data.note}
+          {note}
         </div>
       )}
     </div>
