@@ -135,7 +135,9 @@ const SortableSceneItem = ({
     >
       <TimelineSceneCard
         DeleteConfirmation={AlertDialog}
-        t={(key, fallback) => fallback === undefined ? t(key) : t(key, fallback)}
+        t={(key, fallback) =>
+          fallback === undefined ? t(key) : t(key, fallback)
+        }
         kind={kind}
         title={title}
         durationText={durationText}

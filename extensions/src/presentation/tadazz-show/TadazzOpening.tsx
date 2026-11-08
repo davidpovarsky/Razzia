@@ -43,6 +43,7 @@ export function preloadOpeningAssets(
   if (typeof document === "undefined") {
     return
   }
+
   void loadOpeningLottie(assets.lottieUrl ?? TADAZZ_OPENING_LOTTIE_URL)
 
   if (!document.querySelector(`link[data-tadazz-preload="wasm"]`)) {

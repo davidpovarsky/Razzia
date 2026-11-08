@@ -21,7 +21,9 @@ export class GameRoster implements RosterState {
 
   private readonly ports: RosterPorts
 
-  constructor(ports: RosterPorts) { this.ports = ports }
+  constructor(ports: RosterPorts) {
+    this.ports = ports
+  }
 
   seed(participants: RosterParticipant[]): void {
     for (const item of participants) {

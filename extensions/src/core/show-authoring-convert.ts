@@ -622,7 +622,9 @@ export function nativeBundleToAuthoredShow(
       const rawSolutions = (
         Array.isArray(q.solutions) ? q.solutions : []
       ) as number[]
-      const perQ = extrasV2.perQuestion[item.questionId]
+      const perQ = Object.hasOwn(extrasV2.perQuestion, item.questionId)
+        ? extrasV2.perQuestion[item.questionId]
+        : undefined
 
       const authoredAnswers: AuthoredAnswer[] = rawAnswers.map((txt, aIdx) => {
         const visual = perQ?.answerVisuals?.find((v) => v.answerIndex === aIdx)

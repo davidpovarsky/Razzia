@@ -325,11 +325,14 @@ function inflateRawBytes(
           const length =
             FIXED_LEN_BASE[lenCode] + readBits(FIXED_LEN_EXTRA[lenCode])
           const distSym = decodeSymbol(distTable)
+
           if (distSym >= 30) {
             throw new Error("errors:extensions.corruptXlsxFile")
           }
+
           const dist =
             FIXED_DIST_BASE[distSym] + readBits(FIXED_DIST_EXTRA[distSym])
+
           if (dist > outPos) {
             throw new Error("errors:extensions.corruptXlsxFile")
           }
@@ -719,6 +722,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const relIdToTarget = new Map<string, string>()
   const relRegex = /<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"/gu
   let relMatch = relRegex.exec(workbookRelsXml)
+
   while (relMatch !== null) {
     relIdToTarget.set(relMatch[1], relMatch[2])
     relMatch = relRegex.exec(workbookRelsXml)
@@ -727,6 +731,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const sheetNameToTarget = new Map<string, string>()
   const sheetRegex = /<sheet\b[^>]*\bname="([^"]+)"[^>]*\br:id="([^"]+)"/gu
   let sheetMatch = sheetRegex.exec(workbookXml)
+
   while (sheetMatch !== null) {
     const rawName = sheetMatch[1].trim()
     const rId = sheetMatch[2]
@@ -970,11 +975,13 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       try {
         const rawInterlude = JSON.parse(interludeJsonStr)
         const parsed = interludeSchema.safeParse(rawInterlude)
+
         if (!parsed.success) {
           throw new Error(
             `errors:extensions.invalidInterludeJson:Questions!T${r + 1}`,
           )
         }
+
         interludeObj = parsed.data
       } catch (err: any) {
         if (
@@ -985,6 +992,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         ) {
           throw err
         }
+
         throw new Error(
           `errors:extensions.invalidInterludeJson:Questions!T${r + 1}`,
         )
@@ -1003,11 +1011,13 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         preset: entrancePresetRaw,
         durationMs: Number.isNaN(durationParsed) ? 800 : durationParsed,
       })
+
       if (!parsedEntrance.success) {
         throw new Error(
           `errors:extensions.invalidEntrancePreset:Questions!U${r + 1}`,
         )
       }
+
       questionEntranceObj = parsedEntrance.data
     }
 
@@ -1150,6 +1160,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const ansNum = Number.parseInt(ansNumStr, 10)
+
     if (Number.isNaN(ansNum) || ansNum < 1 || ansNum > MAX_ANSWERS) {
       throw new Error(
         `errors:extensions.invalidAnswerNumber:${qKey}#${ansNumStr}`,
@@ -1280,6 +1291,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     if (sceneConfigJsonStr) {
       try {
         const parsed = JSON.parse(sceneConfigJsonStr)
+
         if (
           typeof parsed === "object" &&
           parsed !== null &&
@@ -1291,6 +1303,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
                 parsed.overlayAnimations,
               )
           }
+
           sceneConfigExtras = parsed
         } else {
           throw new Error("not-object")
@@ -1675,9 +1688,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
 
       const settingKey = `${scope}::${property}::${targetKey}`
+
       if (seenSettings.has(settingKey)) {
         throw new Error(`errors:extensions.duplicateSetting:Settings!A${r + 1}`)
       }
+
       seenSettings.add(settingKey)
 
       settings.push({
@@ -1692,12 +1707,15 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const themeId = showMap.get("themeId")
   const themeVersion = showMap.get("themeVersion")
   const themeOverrides = showMap.get("themeOverridesJson")
+  const parsedThemeOverrides: unknown = themeOverrides
+    ? JSON.parse(themeOverrides)
+    : {}
   const showTheme =
     themeId || themeVersion || themeOverrides
       ? showThemeSelectionSchema.parse({
           id: themeId,
           version: themeVersion,
-          overrides: themeOverrides ? JSON.parse(themeOverrides) : {},
+          overrides: parsedThemeOverrides,
           ...(showMap.get("themeLegacyPolicy")
             ? { legacyPolicy: showMap.get("themeLegacyPolicy") }
             : {}),
@@ -1706,7 +1724,12 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const motionKit = showMap.get("motionKit")
   const preservedDefaults = createStudioDefaults({
     ...(showMap.get("themeHistoryJson")
-      ? { themeHistory: JSON.parse(showMap.get("themeHistoryJson") ?? "[]") }
+      ? {
+          themeHistory: showThemeSelectionSchema
+            .array()
+            .max(32)
+            .parse(JSON.parse(showMap.get("themeHistoryJson") ?? "[]")),
+        }
       : {}),
     ...(motionKit
       ? { motionKit: motionKit as "legacy" | "tadazz-v4" | "goldy-20261105" }
@@ -1817,16 +1840,19 @@ export function exportTadaShowWorkbook(
   if (show.defaults?.motionKit) {
     showData.push(["motionKit", show.defaults.motionKit])
   }
+
   if (show.defaults?.showTheme) {
     showData.push(
       ["themeId", show.defaults.showTheme.id],
       ["themeVersion", show.defaults.showTheme.version],
       ["themeOverridesJson", JSON.stringify(show.defaults.showTheme.overrides)],
     )
+
     if (show.defaults.showTheme.legacyPolicy) {
       showData.push(["themeLegacyPolicy", show.defaults.showTheme.legacyPolicy])
     }
   }
+
   if (show.defaults?.themeHistory) {
     showData.push([
       "themeHistoryJson",

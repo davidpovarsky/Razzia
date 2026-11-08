@@ -76,11 +76,17 @@ export function resolveTadazzAudioPolicy({
     return { slot: "results", continuityKey: "result-reveal" }
   }
 
-  if (sceneKind === "voting") return { slot: "voting", continuityKey: "voting" }
-  if (sceneKind === "question")
+  if (sceneKind === "voting") {
+    return { slot: "voting", continuityKey: "voting" }
+  }
+
+  if (sceneKind === "question") {
     return { slot: "question", continuityKey: "question" }
-  if (sceneKind === "results")
+  }
+
+  if (sceneKind === "results") {
     return { slot: "results", continuityKey: "result-reveal" }
+  }
 
   // Authored scenes own their music even when the underlying round status is
   // still SELECT_ANSWER from the preceding question.

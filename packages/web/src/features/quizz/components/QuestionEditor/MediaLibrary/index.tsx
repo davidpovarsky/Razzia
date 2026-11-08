@@ -89,14 +89,16 @@ const MediaLibrary = ({
     const eventsByAsset = new Map<string, string>()
     for (const [event, spec] of Object.entries(theme.definition.audioEvents)) {
       for (const variant of spec.variants) {
-        if (variant.assetId && !eventsByAsset.has(variant.assetId))
+        if (variant.assetId && !eventsByAsset.has(variant.assetId)) {
           eventsByAsset.set(variant.assetId, event)
+        }
       }
     }
     const sounds = isLegacyShowRollback(themeDefaults)
       ? LEGACY_BUILT_IN_SOUNDS
       : theme.definition.assets.flatMap((asset) => {
           const event = eventsByAsset.get(asset.id)
+
           return asset.kind === "audio" && event
             ? [
                 {
@@ -108,6 +110,7 @@ const MediaLibrary = ({
               ]
             : []
         })
+
     return allowedBuiltinUrls
       ? sounds.filter((sound) => allowedBuiltinUrls.includes(sound.url))
       : sounds

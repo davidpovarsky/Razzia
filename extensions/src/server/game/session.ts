@@ -364,6 +364,7 @@ export class ExtensionGameSession {
     // Audio cues
     extrasPayload.voteCompletionReason =
       this.delegate?.getVoteCompletionReason?.() ?? null
+
     if (this.extras?.audio) {
       extrasPayload.audio = this.extras.audio
     }
@@ -412,6 +413,7 @@ export class ExtensionGameSession {
       if (questionExtras.audioCues) {
         extrasPayload.cardAudioCues = questionExtras.audioCues
       }
+
       if (questionExtras.themeOverrides) {
         extrasPayload.themeOverrides = questionExtras.themeOverrides
       }
@@ -435,6 +437,7 @@ export class ExtensionGameSession {
         if (this.showCoordinator.isSceneActive()) {
           extrasPayload.sceneElapsedMs =
             this.showCoordinator.getSceneElapsedMs()
+
           if (activeStepEnvelope?.startedAt) {
             this.startedAt = activeStepEnvelope.startedAt
           }
@@ -447,6 +450,7 @@ export class ExtensionGameSession {
             } else {
               delete extrasPayload.themeOverrides
             }
+
             if ("background" in activeScene && activeScene.background) {
               extrasPayload.cardBackground = activeScene.background
             } else {

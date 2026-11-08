@@ -526,12 +526,20 @@ export function computeShowScene(input: ShowInput): ShowScene {
         photoAlt: fullQuestion,
       })
       const time = Number(data.time)
-      const startsAt = typeof data.votingStartsAt === "number" ? data.votingStartsAt : undefined
-      const endsAt = typeof data.votingEndsAt === "number" ? data.votingEndsAt : undefined
-      const inferredTime = startsAt !== undefined && endsAt !== undefined
-        ? (endsAt - startsAt) / 1000
-        : typeof data.remainingTime === "number" ? data.remainingTime : 0
-      const timedSeconds = Number.isFinite(time) && time > 0 ? time : inferredTime
+      const startsAt =
+        typeof data.votingStartsAt === "number"
+          ? data.votingStartsAt
+          : undefined
+      const endsAt =
+        typeof data.votingEndsAt === "number" ? data.votingEndsAt : undefined
+      const inferredTime =
+        startsAt !== undefined && endsAt !== undefined
+          ? (endsAt - startsAt) / 1000
+          : typeof data.remainingTime === "number"
+            ? data.remainingTime
+            : 0
+      const timedSeconds =
+        Number.isFinite(time) && time > 0 ? time : inferredTime
 
       return {
         kind: "voting",
@@ -539,7 +547,9 @@ export function computeShowScene(input: ShowInput): ShowScene {
         question,
         questionType: String(data.questionType ?? "single"),
         seconds:
-          time !== NO_TIME_LIMIT && Number.isFinite(timedSeconds) && timedSeconds > 0
+          time !== NO_TIME_LIMIT &&
+          Number.isFinite(timedSeconds) &&
+          timedSeconds > 0
             ? timedSeconds
             : null,
         remainingSeconds:

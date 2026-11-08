@@ -35,7 +35,11 @@ export function StageIdentityV4({
   assetBase: string
 }) {
   const theme = useOptionalShowTheme()
-  if (scene === "z-wipe" || scene === "interlude") return null
+
+  if (scene === "z-wipe" || scene === "interlude") {
+    return null
+  }
+
   const number = Math.max(1, data.number ?? 1)
   const round = Math.max(1, data.round ?? 1)
   const detail =
@@ -700,9 +704,10 @@ export function StageBackdropV4({
   const theme = useOptionalShowTheme()
   const isShow = TADAZZ_V4_SHOW_SCENES.has(scene)
   const defaultUrl =
-    themeAdapterAsset(theme, isShow ? "showBackdrop" : "questionBackdrop") ||
+    themeAdapterAsset(theme, isShow ? "showBackdrop" : "questionBackdrop") ??
     asset(assetBase, isShow ? "show-stage.webp" : "question-bg.webp")
   const url = data.backgroundUrl || defaultUrl
+
   return (
     <div
       className="stage-bg"

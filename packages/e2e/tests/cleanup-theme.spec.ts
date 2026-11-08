@@ -247,7 +247,9 @@ async function installProbes(page: Page) {
     const setTime = time?.set as
       ((this: HTMLMediaElement, value: number) => void) | undefined
 
-    if (!setTime) { throw new Error("Media time setter unavailable") }
+    if (!setTime) {
+      throw new Error("Media time setter unavailable")
+    }
 
     Object.defineProperty(HTMLMediaElement.prototype, "currentTime", {
       ...time,

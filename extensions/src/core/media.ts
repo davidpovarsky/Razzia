@@ -342,12 +342,14 @@ export function validateBundleMedia(bundle: {
       perQuestion?: Record<string, { themeOverrides?: unknown }>
       scenes?: Record<string, { themeOverrides?: unknown }>
     }
+
     if (
       themed.defaults?.showTheme !== undefined &&
       !showThemeSelectionSchema.safeParse(themed.defaults.showTheme).success
     ) {
       return { ok: false, path: "extras.defaults.showTheme" }
     }
+
     for (const [group, entries] of [
       ["perQuestion", themed.perQuestion],
       ["scenes", themed.scenes],
@@ -362,5 +364,6 @@ export function validateBundleMedia(bundle: {
       }
     }
   }
+
   return { ok: true }
 }

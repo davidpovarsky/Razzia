@@ -400,6 +400,7 @@ const LegacyCardAudioConfig = ({
 
 const CardAudioConfig = (props: CardAudioConfigProps = {}) => {
   const { defaults } = useStudioEditor()
+
   return isLegacyShowRollback(defaults) ? (
     <LegacyCardAudioConfig {...props} />
   ) : (

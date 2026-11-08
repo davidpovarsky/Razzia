@@ -69,6 +69,7 @@ export function preflightShowImport(
 ): ShowPreflightResult {
   const result = inspectShowImport(rawInput, filename)
   const extras = result.normalizedBundleDraft?.extras
+
   if (extras && isQuizExtrasV2(extras) && extras.defaults.showTheme) {
     const theme = resolveShowTheme({
       selection: extras.defaults.showTheme,
@@ -86,6 +87,7 @@ export function preflightShowImport(
       })
     }
   }
+
   return result
 }
 
@@ -457,6 +459,7 @@ function buildSummaryFromAuthored(
         (card as any).media?.url ||
         card.background?.url,
       )
+
       if (hasMedia) {
         mediaCount += 1
       }
@@ -521,6 +524,7 @@ function collectMediaWarnings(
           "revealResults",
         ] as const) {
           const cue = card.audioCues[cueKey]
+
           if (cue?.url && cue.url.startsWith("https://")) {
             issues.push({
               severity: "warning",

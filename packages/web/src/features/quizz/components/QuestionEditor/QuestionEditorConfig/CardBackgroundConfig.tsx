@@ -272,6 +272,7 @@ const LegacyCardBackgroundConfig = ({
 
 const CardBackgroundConfig = (props: CardBackgroundConfigProps = {}) => {
   const { defaults } = useStudioEditor()
+
   return isLegacyShowRollback(defaults) ? (
     <LegacyCardBackgroundConfig {...props} />
   ) : (

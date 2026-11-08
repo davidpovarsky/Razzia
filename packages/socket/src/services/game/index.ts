@@ -445,7 +445,9 @@ class Game {
           const connected = this.players.filter((player) => player.connected)
           return {
             connected: connected.length,
-            answered: connected.filter((player) => this.round.hasPlayerAnswered(player.id)).length,
+            answered: connected.filter((player) =>
+              this.round.hasPlayerAnswered(player.id),
+            ).length,
           }
         },
         skipQuestion: (reason) => this.round.skipQuestion(reason),

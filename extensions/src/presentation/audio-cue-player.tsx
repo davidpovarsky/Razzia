@@ -239,33 +239,43 @@ export const AudioCuePlayer = ({
     if (!theme || !suppliedCardAudioCues) {
       return suppliedCardAudioCues
     }
+
     return Object.fromEntries(
       Object.entries(suppliedCardAudioCues).filter(([key, choice]) => {
         const event = CUE_THEME_EVENTS[key as CueId]
-        if (Object.keys(theme.audioSelections[event] ?? {}).length > 0)
+
+        if (Object.keys(theme.audioSelections[event] ?? {}).length > 0) {
           return false
+        }
+
         return (
           choice.mode !== "custom" ||
           Boolean(choice.url && themeAllowsAudioUrl(theme, event, choice.url))
         )
       }),
-    ) as CardAudioOverrides
+    )
   }, [theme, suppliedCardAudioCues])
   const activeThemeAudioEvent =
     SOUNDTRACK_THEME_EVENTS[soundtrackSlot ?? "lobby"]
-  const sceneAudio =
-    !theme || !suppliedSceneAudio
-      ? suppliedSceneAudio
-      : Object.keys(theme.audioSelections[activeThemeAudioEvent] ?? {}).length >
-            0 ||
-          (suppliedSceneAudio.url &&
-            !themeAllowsAudioUrl(
-              theme,
-              activeThemeAudioEvent,
-              suppliedSceneAudio.url,
-            ))
-        ? undefined
-        : suppliedSceneAudio
+  const sceneAudio = useMemo(() => {
+    if (!theme || !suppliedSceneAudio) {
+      return suppliedSceneAudio
+    }
+
+    if (
+      Object.keys(theme.audioSelections[activeThemeAudioEvent] ?? {}).length >
+        0 ||
+      (suppliedSceneAudio.url &&
+        !themeAllowsAudioUrl(
+          theme,
+          activeThemeAudioEvent,
+          suppliedSceneAudio.url,
+        ))
+    )
+      return undefined
+
+    return suppliedSceneAudio
+  }, [theme, suppliedSceneAudio, activeThemeAudioEvent])
   const pendingEffectRef = useRef<{
     element: HTMLAudioElement
     volume: number
@@ -395,9 +405,14 @@ export const AudioCuePlayer = ({
   const soundtrack = resolveSoundtrack(selectedSoundtrackSlot, audioExtras)
 
   const desired = useMemo<DesiredTrack | null>(() => {
-    if (eventOnly) return null
+    if (eventOnly) {
+      return null
+    }
+
     if (showTrack !== undefined) {
-      if (!showTrack) return null
+      if (!showTrack) {
+        return null
+      }
       const elapsed = paused
         ? (showTrack.elapsedMs ?? 0)
         : showTrack.startedAt === undefined
@@ -416,6 +431,7 @@ export const AudioCuePlayer = ({
     }
     // Native reveal choreography owns one-shot theme effects. A looping
     // alternative is a background bed; it must not also play as an SFX.
+
     if (
       theme &&
       stageOwnsReveal &&
@@ -423,16 +439,20 @@ export const AudioCuePlayer = ({
         selectedSoundtrackSlot === "recap") &&
       Object.keys(theme.audioSelections.revealResults ?? {}).length > 0 &&
       !theme.audio.revealResults.loop
-    )
+    ) {
       return null
+    }
     // An authored scene can follow a question while its base status still says
     // answersMusic. Scene ownership must win over that previous question's cue.
+
     if (
       !liveSlotOverride &&
       selectedSoundtrackSlot !== "voting" &&
       sceneAudio?.mode === "mute"
-    )
+    ) {
       return null
+    }
+
     if (
       !liveSlotOverride &&
       selectedSoundtrackSlot !== "voting" &&
@@ -464,8 +484,8 @@ export const AudioCuePlayer = ({
         fadeMs: 0,
         startOffsetSeconds: 0,
         fallbackUrl:
-          audioExtras?.cues?.answersMusic?.url !== resolvedCue.url
-            ? audioExtras?.cues?.answersMusic?.url
+          audioExtras?.cues.answersMusic.url !== resolvedCue.url
+            ? audioExtras?.cues.answersMusic.url
             : undefined,
       }
     }
@@ -503,6 +523,24 @@ export const AudioCuePlayer = ({
     ) {
       return null
     }
+
+    let fallbackUrl: string | undefined = undefined
+
+    if (theme) {
+      fallbackUrl = defaultThemeAudioUrl(
+        theme,
+        CUE_THEME_EVENTS[effectiveCueId],
+      )
+    } else if (resolvedCue.url !== DEFAULT_CUE_URLS[effectiveCueId]) {
+      fallbackUrl =
+        (stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
+        DEFAULT_CUE_URLS[effectiveCueId]
+    }
+
+    if (fallbackUrl === resolvedCue.url) {
+      fallbackUrl = undefined
+    }
+
     return {
       identity: `${gameId ?? "g"}:${continuityKey ?? activeCardKey ?? phase ?? epoch ?? 0}:${effectiveCueId}:${resolvedCue.url}`,
       url:
@@ -513,12 +551,7 @@ export const AudioCuePlayer = ({
       loop: resolvedCue.loop,
       fadeMs: 250,
       startOffsetSeconds: 0,
-      fallbackUrl: theme
-        ? defaultThemeAudioUrl(theme, CUE_THEME_EVENTS[effectiveCueId])
-        : resolvedCue.url === DEFAULT_CUE_URLS[effectiveCueId]
-          ? undefined
-          : ((stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
-            DEFAULT_CUE_URLS[effectiveCueId]),
+      fallbackUrl,
     }
   }, [
     eventOnly,
@@ -561,16 +594,18 @@ export const AudioCuePlayer = ({
     const a = new Audio()
     const b = new Audio()
     const sfx = new Audio()
-    const reveal = new Audio(
+    const createEffectAudio = (url: string | undefined) =>
+      url ? new Audio(url) : new Audio()
+    const reveal = createEffectAudio(
       theme ? resolveThemeEffect(theme, "survey-reveal")?.url : REVEAL,
     )
-    const timerEnd = new Audio(
+    const timerEnd = createEffectAudio(
       theme
         ? resolveThemeEffect(theme, "timer-ended")?.url
         : TADAZZ_SFX_BY_CUE["timer-ended"],
     )
     timerEnd.onended = () => setTimerEnding(false)
-    const spotlight = new Audio(
+    const spotlight = createEffectAudio(
       theme ? resolveThemeEffect(theme, "top-pick-reveal")?.url : CONFIRM,
     )
     const tick = new Audio()
@@ -598,6 +633,7 @@ export const AudioCuePlayer = ({
         clearTimeout(stopTimerRef.current)
       }
       if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+
       timerEnd.onended = null
       for (const audio of new Set([
         a,
@@ -610,7 +646,10 @@ export const AudioCuePlayer = ({
         ...(backgroundsRef.current ?? []),
         epicWarmRef.current,
       ])) {
-        if (!audio) continue
+        if (!audio) {
+          continue
+        }
+
         audio.pause()
         audio.removeAttribute("src")
         audio.load()
@@ -728,8 +767,11 @@ export const AudioCuePlayer = ({
     delete next.dataset.fallbackAttempted
     // Reuse the result track buffered during voting instead of starting another
     // network request at the exact moment the short reveal scene begins.
-    if (next.getAttribute("src") !== desired.url || next.error)
+
+    if (next.getAttribute("src") !== desired.url || next.error) {
       next.src = desired.url
+    }
+
     next.currentTime = desired.startOffsetSeconds
     next.loop = desired.loop
     next.volume = desired.fadeMs > 0 ? 0 : effectiveVolume(desired)
@@ -756,6 +798,7 @@ export const AudioCuePlayer = ({
       const stillActive = () =>
         currentRef.current?.identity === desired.identity &&
         elements[activeIndexRef.current] === next
+
       if (!stillActive()) {
         return
       }
@@ -764,18 +807,25 @@ export const AudioCuePlayer = ({
         next.src = desired.fallbackUrl
 
         const controls = playbackControlsRef.current
+
         if (controls.autoPlay && !controls.paused && !controls.userPaused) {
           void next
             .play()
             .then(() => {
-              if (!stillActive()) return
+              if (!stillActive()) {
+                return
+              }
+
               next.volume = effectiveVolume(desired)
               old.pause()
               setAudioBlocked(false)
               onPlaybackStarted(desired.identity)
             })
             .catch((error: unknown) => {
-              if (!stillActive()) return
+              if (!stillActive()) {
+                return
+              }
+
               setAudioBlocked(true)
               onError(error)
             })
@@ -850,11 +900,14 @@ export const AudioCuePlayer = ({
         if (generationRef.current !== generation) {
           return
         }
+
         if (
           next.dataset.fallbackAttempted === "true" &&
           next.getAttribute("src") === desired.fallbackUrl
-        )
+        ) {
           return
+        }
+
         old.pause()
         setAudioBlocked(true)
         onError(error)
@@ -877,20 +930,28 @@ export const AudioCuePlayer = ({
       !autoPlay ||
       selectedSoundtrackSlot !== "voting" ||
       showTrack !== undefined
-    )
+    ) {
       return
+    }
+
     const upcoming = audioExtras?.soundtrack?.results
     const elements = backgroundsRef.current
+
     if (
       !elements ||
       upcoming?.mode !== "media" ||
       !upcoming.url ||
       rampRef.current
-    )
+    ) {
       return
+    }
+
     const inactive = elements[activeIndexRef.current === 0 ? 1 : 0]
-    if (!inactive.paused || inactive.getAttribute("src") === upcoming.url)
+
+    if (!inactive.paused || inactive.getAttribute("src") === upcoming.url) {
       return
+    }
+
     inactive.onended = null
     inactive.onerror = null
     inactive.volume = 0
@@ -904,11 +965,16 @@ export const AudioCuePlayer = ({
       !autoPlay ||
       audioExtras?.soundtrack?.results?.url !==
         "/tadazz-show/music/cutie-patootie.mp3"
-    )
+    ) {
       return
+    }
+
     const url = "/tadazz-show/music/epic-main-menu.mp3"
-    if (backgroundsRef.current?.some((a) => a.getAttribute("src") === url))
+
+    if (backgroundsRef.current?.some((a) => a.getAttribute("src") === url)) {
       return
+    }
+
     const warm = epicWarmRef.current ?? new Audio()
     epicWarmRef.current = warm
     if (warm.getAttribute("src") === url && !warm.error) return
@@ -943,7 +1009,10 @@ export const AudioCuePlayer = ({
       active.paused &&
       finishedIdentityRef.current !== current.identity
     ) {
-      if (!synchronizeShowTrack(active, current)) return
+      if (!synchronizeShowTrack(active, current)) {
+        return
+      }
+
       void active
         .play()
         .then(() => {
@@ -970,12 +1039,17 @@ export const AudioCuePlayer = ({
           }
         })
         .catch((error: unknown) => {
-          if (!stillCurrent()) return
+          if (!stillCurrent()) {
+            return
+          }
+
           if (
             active.dataset.fallbackAttempted === "true" &&
             active.getAttribute("src") === current.fallbackUrl
-          )
+          ) {
             return
+          }
+
           setAudioBlocked(true)
           onError(error)
         })
@@ -996,34 +1070,47 @@ export const AudioCuePlayer = ({
       if (paused || userPaused || muted) {
         return
       }
-      const { detail } = event as CustomEvent<{
-        name?: string
-        identity?: string
-        url?: string
-        volume?: number
-      }>
+      const { detail } = event as CustomEvent<
+        | {
+            name?: string
+            identity?: string
+            url?: string
+            volume?: number
+          }
+        | undefined
+      >
+
+      if (!detail) {
+        return
+      }
+
       if (
         eventOnly &&
-        detail?.name !== "answer-selected" &&
-        detail?.name !== "answer-submitted"
-      )
+        detail.name !== "answer-selected" &&
+        detail.name !== "answer-submitted"
+      ) {
         return
+      }
+
       const themeCue =
-        theme && detail?.name
+        theme && detail.name
           ? resolveThemeEffect(theme, detail.name)
           : undefined
       let url = theme
         ? themeCue?.url
-        : (detail?.url ??
-          (detail?.name ? TADAZZ_SFX_BY_CUE[detail.name] : undefined))
+        : (detail.url ??
+          (detail.name ? TADAZZ_SFX_BY_CUE[detail.name] : undefined))
+
       if (
         theme &&
         themeCue &&
         Object.keys(theme.audioSelections[themeCue.event] ?? {}).length > 0 &&
         url &&
         currentRef.current?.url === url
-      )
+      ) {
         return
+      }
+
       if (
         theme &&
         themeCue &&
@@ -1036,7 +1123,11 @@ export const AudioCuePlayer = ({
           savedCueId && theme.requested.legacyPolicy !== "theme-defaults"
             ? suppliedAudioExtras?.cues[savedCueId]
             : undefined
-        if (saved?.enabled === false || saved?.volume === 0) return
+
+        if (saved?.enabled === false || saved?.volume === 0) {
+          return
+        }
+
         const card =
           savedCueId &&
           (savedCueId === "showQuestion" ||
@@ -1044,22 +1135,30 @@ export const AudioCuePlayer = ({
             savedCueId === "revealResults")
             ? cardAudioCues?.[savedCueId]
             : undefined
-        if (card?.mode === "mute") return
-        const custom =
-          card?.mode === "custom"
-            ? card.url
-            : saved?.source === "media"
-              ? saved.url
-              : undefined
+
+        if (card?.mode === "mute") {
+          return
+        }
+
+        let custom: string | undefined = undefined
+
+        if (card?.mode === "custom") {
+          custom = card.url
+        } else if (saved?.source === "media") {
+          custom = saved.url
+        }
+
         if (custom && themeAllowsAudioUrl(theme, themeCue.event, custom)) {
           url = custom
         }
       }
-      const identity = detail?.identity
+
+      const { identity } = detail
 
       if (!url || !identity || playedSfxRef.current.has(identity)) {
         return
       }
+
       const isTimerEnd =
         detail.name === "timer-ended" || detail.name === "vote-locked"
       const isTick = !isTimerEnd && (detail.name?.startsWith("timer-") ?? false)
@@ -1070,6 +1169,7 @@ export const AudioCuePlayer = ({
       if (!isTick && !isMilestone && now < protectedUntilRef.current) return
       playedSfxRef.current.add(identity)
       // The wipe/impact animation can emit adjacent cues for one movement.
+
       if (
         !isTick &&
         !isMilestone &&
@@ -1079,13 +1179,20 @@ export const AudioCuePlayer = ({
         return
       if (!isTick) lastEffectRef.current = { url, at: now }
       if (isReveal || isTimerEnd) {
-        if (isTimerEnd) setTimerEnding(true)
+        if (isTimerEnd) {
+          setTimerEnding(true)
+        }
+
         protectedUntilRef.current = Math.max(
           protectedUntilRef.current,
           now + (isTimerEnd ? 2530 : 1100),
         )
         setDucked(true)
-        if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+
+        if (duckTimerRef.current) {
+          clearTimeout(duckTimerRef.current)
+        }
+
         duckTimerRef.current = setTimeout(
           () => setDucked(false),
           protectedUntilRef.current - now,
@@ -1099,6 +1206,7 @@ export const AudioCuePlayer = ({
         const oldest = playedSfxRef.current.values().next().value
         if (oldest) playedSfxRef.current.delete(oldest)
       }
+
       const sfx = isTick
         ? tickRef.current
         : isTimerEnd
@@ -1114,6 +1222,7 @@ export const AudioCuePlayer = ({
       }
       sfx.pause()
       if (sfx.getAttribute("src") !== url || sfx.error) sfx.src = url
+
       sfx.currentTime = 0
       const explicitVolume =
         themeCue && theme?.audioSelections[themeCue.event]?.volume
@@ -1122,27 +1231,37 @@ export const AudioCuePlayer = ({
           0,
           Math.min(
             1,
-            explicitVolume ?? detail?.volume ?? themeCue?.volume ?? 0.7,
+            explicitVolume ?? detail.volume ?? themeCue?.volume ?? 0.7,
           ),
         ) *
         (isReveal && timerEndRef.current && !timerEndRef.current.paused
           ? 0.75
           : 1)
-      if (isTick) tickLevelRef.current = level
-      else if (isTimerEnd) timerEndLevelRef.current = level
-      else if (isReveal) revealLevelRef.current = level
+
+      if (isTick) {
+        tickLevelRef.current = level
+      } else if (isTimerEnd) {
+        timerEndLevelRef.current = level
+      } else if (isReveal) revealLevelRef.current = level
       else if (isSpotlight) spotlightLevelRef.current = level
       else sfxLevelRef.current = level
+
       sfx.volume = level * masterVolume
+
       if (audioBlocked) {
         pendingEffectRef.current = {
           element: sfx,
           volume: level * masterVolume,
         }
+
         return
       }
+
       void sfx.play().catch((error: unknown) => {
-        if (isTimerEnd) setTimerEnding(false)
+        if (isTimerEnd) {
+          setTimerEnding(false)
+        }
+
         pendingEffectRef.current = {
           element: sfx,
           volume: level * masterVolume,
@@ -1210,6 +1329,7 @@ export const AudioCuePlayer = ({
     setAudioBlocked(false)
     setUserPaused(false)
     const pending = pendingEffectRef.current
+
     if (pending && !paused) {
       pending.element.currentTime = 0
       pending.element.volume = pending.volume
@@ -1223,6 +1343,7 @@ export const AudioCuePlayer = ({
           onError(error)
         })
     }
+
     const { current } = currentRef
     const elements = backgroundsRef.current
 
@@ -1281,20 +1402,28 @@ export const AudioCuePlayer = ({
     if (sfxRef.current) {
       sfxRef.current.volume = muted ? 0 : sfxLevelRef.current * masterVolume
     }
-    if (revealRef.current)
+
+    if (revealRef.current) {
       revealRef.current.volume = muted
         ? 0
         : revealLevelRef.current * masterVolume
-    if (timerEndRef.current)
+    }
+
+    if (timerEndRef.current) {
       timerEndRef.current.volume = muted
         ? 0
         : timerEndLevelRef.current * masterVolume
-    if (spotlightRef.current)
+    }
+
+    if (spotlightRef.current) {
       spotlightRef.current.volume = muted
         ? 0
         : spotlightLevelRef.current * masterVolume
-    if (tickRef.current)
+    }
+
+    if (tickRef.current) {
       tickRef.current.volume = muted ? 0 : tickLevelRef.current * masterVolume
+    }
   }, [masterVolume, muted, paused, userPaused])
 
   useEffect(() => {
