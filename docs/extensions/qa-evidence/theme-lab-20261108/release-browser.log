@@ -1,0 +1,11 @@
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/theme-lab.spec.ts:15:1 › three themes are selectable, all packaged demo assets match their hashes and videos decode (5.4s)
+  ✓  2 [chromium] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Quick Quiz: host, participant, display and saved theme (29.2s)
+  ✓  3 [chromium] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Quick Quiz: host, participant, display and saved theme (28.1s)
+  ✓  4 [webkit] › tests/theme-lab.spec.ts:15:1 › three themes are selectable, all packaged demo assets match their hashes and videos decode (18.7s)
+  ✓  5 [webkit] › tests/theme-lab.spec.ts:120:3 › Cosmic Night — Quick Quiz: host, participant, display and saved theme (1.2m)
+  ✓  6 [webkit] › tests/theme-lab.spec.ts:120:3 › Jade Studio — Quick Quiz: host, participant, display and saved theme (1.1m)
+
+  6 passed (3.7m)

@@ -1,0 +1,36 @@
+$ pnpm -r run build
+Scope: 5 of 6 workspace projects
+$ rolldown -c
+<DIR>/index.cjs.map  asset │ size: 3,510.06 kB
+<DIR>/index.cjs      chunk │ size: 1,024.14 kB
+
+✔ rolldown v1.2.13 Finished in 732.45 ms
+$ node --experimental-strip-types ./node_modules/vite/bin/vite.js build
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 3160 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                0.98 kB │ gzip:   0.53 kB
+dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+dist/assets/index-Mw96l-zy.css                               288.53 kB │ gzip:  55.22 kB
+dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
+dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
+dist/assets/index-BGXZC6EC.js                              2,762.58 kB │ gzip: 723.19 kB
+
+[plugin builtin:vite-reporter] 
+(!) Some chunks are larger than 2000 kB after minification. Consider:
+- Using dynamic import() to code-split the application
+- Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+- Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+✓ built in 3.13s

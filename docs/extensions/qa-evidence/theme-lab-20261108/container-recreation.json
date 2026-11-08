@@ -1,0 +1,7 @@
+{
+  "beforeContainer": "c6b49a555e100c78429811f674dd1bedb330d2ce6d6c5b5d7af7d280f99c2880",
+  "afterContainer": "07c076e2a118ccbe47263ca451ff14a4bff2e063ba5d739d30e689ed9d4f9bbe",
+  "mount": "/opt/tadazz-releases/theme-lab-20261108/config -> /app/config",
+  "savedGamesAfterReplacement": 6,
+  "sourceImage": "tadazz:theme-lab-release-r4"
+}
