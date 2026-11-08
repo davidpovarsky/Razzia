@@ -167,13 +167,18 @@ export function useCompositeQuizzSave() {
 
       if (index >= 0) {
         setActiveTab("questions")
+
         const item = timeline.find(
           (entry) =>
             entry.kind === "question" &&
             entry.questionId === questionIds[index],
         )
-        if (item) selectTimelineItem(item.id)
-        else setCurrentIndex(index)
+
+        if (item) {
+          selectTimelineItem(item.id)
+        } else {
+          setCurrentIndex(index)
+        }
       }
     },
   )

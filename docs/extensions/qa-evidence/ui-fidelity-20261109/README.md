@@ -1,5 +1,7 @@
 # Native Razzia layout and fixed TADAZZ branding — 9 November 2026
 
+> Follow-up, 9 November 2026: all twelve retained failures below are now resolved. See [native controls and complete regression evidence](../native-controls-20261109/README.md) for classification, the real invalid-save focus repair, 21/21 legacy and 22/22 UI browser cases. The results and public deployment described below remain historical; this follow-up did not replace that running lab.
+
 Runtime source: `4d8fa98065e7a05bcf2d98fb356dad9c4d249ba7`. Isolated branch `codex/upstream-cleanup-theme-engine-20261108`. The final documentation commit does not change this runtime. All game/browser/type/build verification ran on Oracle, with no Windows game or browser launch.
 
 Staging: https://theme-lab-v2.132.145.25.168.sslip.io/manager . Eight persisted three-question examples: quiz and survey for Classic, Razzia Original, Cosmic Night v2 and Jade Studio v2. Credentials stay outside Git. Original production and the previously handed-over lab were neither replaced nor restarted; their container identity/image/start time match before and after. Only the new loopback 3289 staging container was recreated for the persistence proof.

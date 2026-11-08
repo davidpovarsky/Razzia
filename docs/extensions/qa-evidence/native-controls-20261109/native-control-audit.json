@@ -1,0 +1,31 @@
+{
+  "originalButtonByteExact": true,
+  "originalButtonSha256": "951bb0d41553c48ec5ae1ab16a92c625ffefbd2001f088b7afb1af35cc8063a0",
+  "baseline": "5161eb7",
+  "remainingRawOriginalPrimitiveFiles": 19,
+  "remainingRawOriginalPrimitiveSites": 25,
+  "primitiveInventory": {
+    "packages/web/src/components/Button.tsx": 1,
+    "packages/web/src/features/game/components/AnswerButton.tsx": 1,
+    "packages/web/src/features/game/components/GameWrapper.tsx": 1,
+    "packages/web/src/features/game/components/RoomLockButton.tsx": 1,
+    "packages/web/src/features/game/components/join/Reconnect.tsx": 1,
+    "packages/web/src/features/game/components/states/Room.tsx": 1,
+    "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx": 3,
+    "packages/web/src/features/manager/components/configurations/ConfigResults.tsx": 2,
+    "packages/web/src/features/manager/components/configurations/ConfigSelectQuizz.tsx": 1,
+    "packages/web/src/features/manager/components/configurations/ConfigTabButton.tsx": 1,
+    "packages/web/src/features/manager/components/configurations/index.tsx": 1,
+    "packages/web/src/features/manager/components/ResultModal/ResultModalHeader.tsx": 3,
+    "packages/web/src/features/questions/multi/components/MultiPicker.tsx": 1,
+    "packages/web/src/features/questions/single/components/SinglePicker.tsx": 1,
+    "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx": 2,
+    "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorMedia.tsx": 1,
+    "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard.tsx": 1,
+    "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaDeleteButton.tsx": 1,
+    "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaRow.tsx": 1
+  },
+  "applicationBinding": "main.tsx supplies actual @razzia/web/components/Button through CSS-free public presentation/platform-controls entry",
+  "guards": "No new raw buttons/dynamic button factories or fake role=button feature elements in any extension React UI or web source. Only the headless standalone port can render an unstyled HTML fallback; actual-app browser cases require zero fallback controls.",
+  "backwardCompatibility": "upstream specialized answer/picker/media/lock/close primitives retained; grouped toggles compose original ToggleGroup with unchanged default radio/style/keyboard behavior; no scoring/wire/default changes"
+}

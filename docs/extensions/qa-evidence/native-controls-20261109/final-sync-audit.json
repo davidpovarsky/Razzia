@@ -1,0 +1,132 @@
+{
+  "checkedAtUtc": "2026-11-08T23:57:39.540600+00:00",
+  "headBeforeEvidenceCommit": "78b571716eb083b8e8ca121239d204e9631657da",
+  "policy": "Fetch all remotes; compare every committed local/origin branch. Preserve other worktrees and uncommitted changes. External upstream is inspected separately and not silently upgraded.",
+  "branches": [
+    {
+      "ref": "refs/heads/agent/dana/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/eitan/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/maya/wave1",
+      "sha": "1f761205c76885a5a5de9eaf6b8bc19bf19636c0",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/maya/wave2",
+      "sha": "1153dfa4cc235fa48310d63e675275a8472e20fc",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/noam/wave1",
+      "sha": "9d1c48b4f4c54180a465514aeeb5bece7f0a8933",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/roni/wave1",
+      "sha": "22c28349295bb5f25994dc07d408311937b868d3",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-accounts-20261104",
+      "sha": "57db9e789d30b9dc91c690722cfce23925f3ca71",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-full-show-20261105",
+      "sha": "158c589675933a1fcaee59795a2e20ddce05e00a",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-motion-20261104",
+      "sha": "fbca624a8254b908a72181c1cfc2339f15846550",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-next-20261105",
+      "sha": "0079e456228dddf0b53152004d7fb081e106a060",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-v4-design-kit-20261105",
+      "sha": "eb71474046a03f9e496dbb8ec245d912e24c2c72",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tadazz-validated-20261104",
+      "sha": "4dc0af472331cc4b0dc510641d063c9587017a12",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tomer/wave1",
+      "sha": "c2c698a937aa17c7973b1ca975a8084ed9d53f55",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tomer/wave2",
+      "sha": "4dc0af472331cc4b0dc510641d063c9587017a12",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/tzila-seating-20261108",
+      "sha": "cd793cd0c9ceedf9deb76fc98df449db4adf1a56",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/agent/yael/wave1",
+      "sha": "da85885cd7b4ee21333fd8299c303a5ea70dbed3",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/codex/tadazz-billing-20261108",
+      "sha": "edb4b2babf5d06ace0b0c68710a86f9a63e3367e",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/codex/upstream-cleanup-theme-engine-20261108",
+      "sha": "78b571716eb083b8e8ca121239d204e9631657da",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/feat/modular-extensions-planning",
+      "sha": "22c28349295bb5f25994dc07d408311937b868d3",
+      "integrated": true
+    },
+    {
+      "ref": "refs/heads/main",
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "integrated": true
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-full-show-20261105",
+      "sha": "158c589675933a1fcaee59795a2e20ddce05e00a",
+      "integrated": true
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-next-20261105",
+      "sha": "5ea0f47edefc1c6aa858f84d4245be19f927f1d7",
+      "integrated": true
+    },
+    {
+      "ref": "refs/remotes/origin/agent/tadazz-v4-design-kit-20261105",
+      "sha": "eb71474046a03f9e496dbb8ec245d912e24c2c72",
+      "integrated": true
+    },
+    {
+      "ref": "refs/remotes/origin/codex/upstream-cleanup-theme-engine-20261108",
+      "sha": "78b571716eb083b8e8ca121239d204e9631657da",
+      "integrated": true
+    },
+    {
+      "ref": "refs/remotes/origin/main",
+      "sha": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+      "integrated": true
+    }
+  ]
+}

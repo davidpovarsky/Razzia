@@ -1,0 +1,22 @@
+{
+  "date": "2026-11-09",
+  "branch": "codex/upstream-cleanup-theme-engine-20261108",
+  "sourceCommit": "78b571716eb083b8e8ca121239d204e9631657da",
+  "finalSourceManifest": "final-source-inputs.json",
+  "resolvedPriorFailures": 12,
+  "originalCasesRetained": 20,
+  "legacyBrowserPassed": 21,
+  "uiBrowserPassed": 22,
+  "browserFailed": 0,
+  "browserSkipped": 0,
+  "browserFlaky": 0,
+  "rootUnitPassed": 365,
+  "extensionUnitPassed": 624,
+  "typeProjectsPassed": 5,
+  "productionBuild": "passed",
+  "validationLocation": "Oracle private Docker QA only",
+  "publicLabUpdated": false,
+  "physicalIPadTested": false,
+  "nativeControls": "Actual original Button/AnswerButton/ToggleGroup and retained original specialized primitives",
+  "notes": "Final 2-case browser and focused hook lint rerun covers final braces/spacing only; r7 types/build and 9 targeted browser checks cover CSS-free public entry refinement."
+}

@@ -32,6 +32,7 @@ export default function GroupedToggleGroup<T extends string>({
       beforeItem={(_, index) => {
         const group = items[index]?.group
         const previous = index > 0 ? items[index - 1]?.group : undefined
+
         return group && previous && group !== previous ? (
           <span
             data-testid={`toggle-group-divider-${group}`}
