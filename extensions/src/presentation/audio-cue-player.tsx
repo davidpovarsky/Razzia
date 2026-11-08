@@ -70,7 +70,6 @@ export const TADAZZ_PHASE_SFX: Partial<Record<CueId, string>> = {
   revealResults: REVEAL,
 }
 export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
-  impact: TRANSITION,
   "countdown-ended": REVEAL,
   "survey-reveal": REVEAL,
   "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",

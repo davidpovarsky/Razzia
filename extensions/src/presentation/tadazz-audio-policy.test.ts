@@ -67,9 +67,9 @@ describe("P0 Tadazz soundtrack policy", () => {
     )
   })
 
-  it("covers every currently emitted full-show cue with a real /sounds route", () => {
+  it("maps audible show cues to real assets and keeps decorative impact silent", () => {
+    expect(TADAZZ_SFX_BY_CUE.impact).toBeUndefined()
     const emitted = [
-      "impact",
       "countdown-ended",
       "survey-reveal",
       "story-begin",
