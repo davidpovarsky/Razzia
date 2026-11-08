@@ -223,7 +223,7 @@
     "cannotPreviousLobby": "Al inicio del programa",
     "restartQuestion": "Reiniciar pregunta",
     "restartQuestionDesc": "Reinicia la pregunta actual y borra sus respuestas y puntuación. Las demás preguntas se conservan.",
-    "doublePressShortcuts": "Pulsa dos veces: ← Atrás · → Siguiente / saltar pregunta · Espacio Pausar / continuar · Intro Terminar temporizador",
+    "doublePressShortcuts": "Pulsa dos veces: ← Atrás · → Siguiente / saltar pregunta · Espacio Pausar / continuar · Intro Terminar temporizador · R Reiniciar pregunta",
     "keyboardShortcuts": "Atajos de teclado",
     "doublePressHelp": "Pulsa la misma tecla dos veces rápidamente (en medio segundo). Los atajos no actúan dentro de diálogos ni campos.",
     "previousShortcut": "Pantalla anterior. Retroceder durante una votación borra sus respuestas.",
@@ -233,7 +233,8 @@
     "escapeShortcut": "Salir de la presentación (una pulsación).",
     "spaceKey": "Espacio",
     "endOnAllAnswered": "Terminar el tiempo cuando todos respondan",
-    "endOnAllAnsweredDesc": "Desactivado por defecto: conservar todo el tiempo. Al activarlo, termina cuando todos los jugadores conectados hayan respondido."
+    "endOnAllAnsweredDesc": "Desactivado por defecto: conservar todo el tiempo. Al activarlo, termina cuando todos los jugadores conectados hayan respondido.",
+    "restartShortcut": "Reiniciar la pregunta actual; borra sus respuestas y puntuación."
   },
   "reveal": {
     "votes": "{{count}} votos",

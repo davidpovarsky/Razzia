@@ -69,6 +69,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
+import { useTimerBeeps } from "./use-timer-beeps"
 import { useTadazzRawStatus } from "./raw-status-context"
 import { TadazzAnswerPad } from "./TadazzAnswerPad"
 import {
@@ -527,8 +528,29 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const [selected, setSelected] = useState<number[]>([])
   const [submitted, setSubmitted] = useState(false)
   const [answerPending, setAnswerPending] = useState(false)
-  const [sfxPop] = useSound(SFX.ANSWERS.SOUND, { volume: 0.1 })
+  const [sfxPop] = useSound(
+    useV4 ? "/sounds/tadazz-confirm-20261108.mp3" : SFX.ANSWERS.SOUND,
+    { volume: 0.2 },
+  )
   const questionKey = "question" in scene ? scene.question.key : null
+  const revealAttemptRef = useRef(0)
+  if (scene.kind === "voting")
+    revealAttemptRef.current = extensionState?.epoch ?? 0
+  useTimerBeeps({
+    enabled:
+      useV4 &&
+      role !== "player" &&
+      scene.kind === "voting" &&
+      (votingStartsAt === undefined ||
+        extensionState?.startedAt === undefined ||
+        votingStartsAt >= extensionState.startedAt - serverClockOffset),
+    gameId: showGameId,
+    questionKey,
+    epoch: extensionState?.epoch ?? 0,
+    startsAt: votingStartsAt,
+    endsAt: votingEndsAt,
+    paused: isPaused,
+  })
   useEffect(() => {
     if (scene.kind === "wait") {
       return
@@ -807,24 +829,34 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       // The browser clock can finish during skips/fast-forward too. Only the
       // authoritative result scene owns the audible end-of-question cue.
       if (cue.name === "countdown-ended") return
+      // Finishing an old animation during restart/skip may emit its final cue.
+      // Only the authoritative results screen may make that reveal audible.
+      if (
+        cue.name === "survey-reveal" &&
+        !(scene.kind === "results" && extensionState?.phase === "responses") &&
+        !(scene.kind === "scene" && scene.scene.kind === "interimResults")
+      )
+        return
       window.dispatchEvent(
         new CustomEvent("tadazz:sfx", {
           detail: {
             name: cue.name,
             identity:
               cue.name === "survey-reveal"
-                ? `${showGameId}:${extensionState?.questionId ?? questionKey ?? sceneIdentity}:results-reveal`
+                ? `${showGameId}:${extensionState?.questionId ?? questionKey ?? sceneIdentity}:${revealAttemptRef.current}:results-reveal`
                 : `${showGameId}:${extensionState?.epoch ?? 0}:${sceneIdentity}:${cue.scene}:${cue.name}`,
-            ...(cue.name === "survey-reveal" ? { volume: 0.5 } : {}),
+            volume: cue.name === "survey-reveal" ? 0.9 : 0.55,
           },
         }),
       )
     },
     [
       extensionState?.epoch,
+      extensionState?.phase,
       extensionState?.questionId,
       questionKey,
       sceneIdentity,
+      scene,
       showGameId,
     ],
   )

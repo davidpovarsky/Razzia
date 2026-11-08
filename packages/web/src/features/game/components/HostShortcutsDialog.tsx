@@ -16,6 +16,7 @@ export default function HostShortcutsDialog({
     ["→ ×2", "nextShortcut"],
     [`${t("extensions:host.spaceKey")} ×2`, "pauseShortcut"],
     ["Enter ×2", "endTimerShortcut"],
+    ["R ×2", "restartShortcut"],
     ["Esc", "escapeShortcut"],
   ]
 

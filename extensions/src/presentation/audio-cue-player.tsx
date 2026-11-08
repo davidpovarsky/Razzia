@@ -60,25 +60,37 @@ export const shouldDuckMusic = (
   cueId: CueId,
 ): boolean => cueId === "answersMusic" && hasCompetingQuestionMedia
 
+const TRANSITION = "/sounds/tadazz-silky-transition-20261108.mp3"
+const REVEAL = "/sounds/tadazz-reveal-bright-20261108.mp3"
+const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
+export const TADAZZ_PHASE_SFX: Partial<Record<CueId, string>> = {
+  start: TRANSITION,
+  showQuestion: TRANSITION,
+  answerPressed: CONFIRM,
+  revealResults: REVEAL,
+}
 export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
-  impact: "/sounds/boump.mp3",
-  "countdown-ended": "/sounds/results.mp3",
-  "survey-reveal": "/sounds/tadazz-soft-reveal-20261108.mp3",
-  "story-begin": "/sounds/show.mp3",
-  "wipe-covered": "/sounds/boump.mp3",
-  "company-ident": "/sounds/show.mp3",
-  "tadazz-welcome": "/sounds/boump.mp3",
-  "opening-portal": "/sounds/show.mp3",
-  "opening-logo": "/sounds/boump.mp3",
-  "directory-loaded": "/sounds/answersSound.mp3",
-  "phone-ready": "/sounds/answersSound.mp3",
-  "readiness-grid": "/sounds/answersSound.mp3",
-  "round-launch": "/sounds/boump.mp3",
-  "story-progress-update": "/sounds/answersSound.mp3",
-  "story-assembled": "/sounds/results.mp3",
-  "story-live-hold": "/sounds/show.mp3",
+  impact: TRANSITION,
+  "countdown-ended": REVEAL,
+  "survey-reveal": REVEAL,
+  "timer-tick": "/sounds/tadazz-timer-tick-20261108.mp3",
+  "timer-urgent": "/sounds/tadazz-timer-urgent-20261108.mp3",
+  "timer-final": "/sounds/tadazz-timer-final-20261108.mp3",
+  "story-begin": TRANSITION,
+  "wipe-covered": TRANSITION,
+  "company-ident": TRANSITION,
+  "tadazz-welcome": TRANSITION,
+  "opening-portal": TRANSITION,
+  "opening-logo": TRANSITION,
+  "directory-loaded": CONFIRM,
+  "phone-ready": CONFIRM,
+  "readiness-grid": CONFIRM,
+  "round-launch": TRANSITION,
+  "story-progress-update": CONFIRM,
+  "story-assembled": REVEAL,
+  "story-live-hold": TRANSITION,
   "finale-impact": "/sounds/first.mp3",
-  "curtains-closed": "/sounds/boump.mp3",
+  "curtains-closed": TRANSITION,
 }
 
 export interface AudioCuePlayerProps {
@@ -201,6 +213,13 @@ export const AudioCuePlayer = ({
     null,
   )
   const sfxRef = useRef<HTMLAudioElement | null>(null)
+  const tickRef = useRef<HTMLAudioElement | null>(null)
+  const sfxLevelRef = useRef(0.7)
+  const tickLevelRef = useRef(0.27)
+  const protectedUntilRef = useRef(0)
+  const lastEffectRef = useRef({ url: "", at: 0 })
+  const duckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const [ducked, setDucked] = useState(false)
   const activeIndexRef = useRef(0)
   const generationRef = useRef(0)
   const rampRef = useRef<ReturnType<typeof setInterval> | null>(null)
@@ -294,7 +313,10 @@ export const AudioCuePlayer = ({
     }
     return {
       identity: `${gameId ?? "g"}:${continuityKey ?? activeCardKey ?? phase ?? epoch ?? 0}:${effectiveCueId}:${resolvedCue.url}`,
-      url: resolvedCue.url,
+      url:
+        stageOwnsReveal && resolvedCue.url === DEFAULT_CUE_URLS[effectiveCueId]
+          ? (TADAZZ_PHASE_SFX[effectiveCueId] ?? resolvedCue.url)
+          : resolvedCue.url,
       volume: resolvedCue.volume,
       loop: resolvedCue.loop,
       fadeMs: 250,
@@ -302,7 +324,8 @@ export const AudioCuePlayer = ({
       fallbackUrl:
         resolvedCue.url === DEFAULT_CUE_URLS[effectiveCueId]
           ? undefined
-          : DEFAULT_CUE_URLS[effectiveCueId],
+          : ((stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
+            DEFAULT_CUE_URLS[effectiveCueId]),
     }
   }, [
     activeCardKey,
@@ -323,8 +346,13 @@ export const AudioCuePlayer = ({
 
   const effectiveVolume = useCallback(
     (track: DesiredTrack) =>
-      muted ? 0 : track.volume * masterVolume * (hasCompetingMedia ? 0.22 : 1),
-    [hasCompetingMedia, masterVolume, muted],
+      muted
+        ? 0
+        : track.volume *
+          masterVolume *
+          (hasCompetingMedia ? 0.22 : 1) *
+          (ducked ? 0.3 : 1),
+    [hasCompetingMedia, masterVolume, muted, ducked],
   )
 
   useEffect(() => {
@@ -334,11 +362,14 @@ export const AudioCuePlayer = ({
     const a = new Audio()
     const b = new Audio()
     const sfx = new Audio()
+    const tick = new Audio()
     a.preload = "auto"
     b.preload = "auto"
     sfx.preload = "auto"
+    tick.preload = "auto"
     backgroundsRef.current = [a, b]
     sfxRef.current = sfx
+    tickRef.current = tick
 
     return () => {
       generationRef.current += 1
@@ -349,13 +380,15 @@ export const AudioCuePlayer = ({
       if (stopTimerRef.current) {
         clearTimeout(stopTimerRef.current)
       }
-      for (const audio of [a, b, sfx]) {
+      if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+      for (const audio of [a, b, sfx, tick]) {
         audio.pause()
         audio.removeAttribute("src")
         audio.load()
       }
       backgroundsRef.current = null
       sfxRef.current = null
+      tickRef.current = null
     }
   }, [])
 
@@ -634,12 +667,34 @@ export const AudioCuePlayer = ({
       if (!url || !identity || playedSfxRef.current.has(identity)) {
         return
       }
+      const isTick = detail.name?.startsWith("timer-") ?? false
+      const isReveal = detail.name === "survey-reveal"
+      const now = Date.now()
+      if (!isTick && !isReveal && now < protectedUntilRef.current) return
       playedSfxRef.current.add(identity)
-
-      if (playedSfxRef.current.size > 200) {
-        playedSfxRef.current.clear()
+      // The wipe/impact animation can emit adjacent cues for one movement.
+      if (
+        !isTick &&
+        lastEffectRef.current.url === url &&
+        now - lastEffectRef.current.at < 500
+      )
+        return
+      if (!isTick) lastEffectRef.current = { url, at: now }
+      if (isReveal) {
+        protectedUntilRef.current = now + 1100
+        setDucked(true)
+        if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+        duckTimerRef.current = setTimeout(() => setDucked(false), 1100)
+        tickRef.current?.pause()
       }
-      const sfx = sfxRef.current
+
+      // Retain recent identities when long shows add hundreds of timer ticks.
+      // Clearing the entire cache could replay the current question's reveal.
+      if (playedSfxRef.current.size > 512) {
+        const oldest = playedSfxRef.current.values().next().value
+        if (oldest) playedSfxRef.current.delete(oldest)
+      }
+      const sfx = isTick ? tickRef.current : sfxRef.current
 
       if (!sfx) {
         return
@@ -647,13 +702,22 @@ export const AudioCuePlayer = ({
       sfx.pause()
       sfx.src = url
       sfx.currentTime = 0
-      sfx.volume =
-        Math.max(0, Math.min(1, detail?.volume ?? 0.7)) * masterVolume
+      const level = Math.max(0, Math.min(1, detail?.volume ?? 0.7))
+      if (isTick) tickLevelRef.current = level
+      else sfxLevelRef.current = level
+      sfx.volume = level * masterVolume
       void sfx.play().catch(onError)
     }
     window.addEventListener("tadazz:sfx", handleCue)
+    const stopTimer = () => {
+      tickRef.current?.pause()
+    }
+    window.addEventListener("tadazz:timer-stop", stopTimer)
 
-    return () => window.removeEventListener("tadazz:sfx", handleCue)
+    return () => {
+      window.removeEventListener("tadazz:sfx", handleCue)
+      window.removeEventListener("tadazz:timer-stop", stopTimer)
+    }
   }, [masterVolume, muted, onError, paused, userPaused])
 
   useEffect(() => {
@@ -671,7 +735,10 @@ export const AudioCuePlayer = ({
       new CustomEvent("tadazz:sfx", {
         detail: {
           name: `phase-${effectiveCueId}`,
-          url: DEFAULT_CUE_URLS[effectiveCueId],
+          ...(stageOwnsReveal ? { volume: 0.55 } : {}),
+          url:
+            (stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
+            DEFAULT_CUE_URLS[effectiveCueId],
           identity: `${gameId ?? "g"}:${epoch ?? 0}:phase:${effectiveCueId}`,
         },
       }),
@@ -726,13 +793,16 @@ export const AudioCuePlayer = ({
   }, [effectiveVolume, onEnded, onError, onPlaybackStarted, paused])
 
   useEffect(() => {
-    if (paused || userPaused) {
+    if (paused || userPaused || muted) {
       sfxRef.current?.pause()
+      tickRef.current?.pause()
     }
     if (sfxRef.current) {
-      sfxRef.current.volume = muted ? 0 : 0.7
+      sfxRef.current.volume = muted ? 0 : sfxLevelRef.current * masterVolume
     }
-  }, [muted, paused, userPaused])
+    if (tickRef.current)
+      tickRef.current.volume = muted ? 0 : tickLevelRef.current * masterVolume
+  }, [masterVolume, muted, paused, userPaused])
 
   useEffect(() => {
     window.addEventListener("tadazz:audio-unlock", unlock)
@@ -745,6 +815,7 @@ export const AudioCuePlayer = ({
       <span
         className="sr-only"
         data-testid="audio-cue-player-state"
+        data-sfx-ducked={ducked ? "true" : "false"}
         data-cue-id={effectiveCueId ?? "none"}
         data-soundtrack-slot={selectedSoundtrackSlot ?? "none"}
         data-should-play={desired ? "true" : "false"}

@@ -223,7 +223,7 @@
     "cannotPreviousLobby": "Ở đầu buổi diễn",
     "restartQuestion": "Bắt đầu lại câu hỏi",
     "restartQuestionDesc": "Bắt đầu lại câu hỏi hiện tại và xóa câu trả lời cùng điểm của câu này. Các câu hỏi khác được giữ nguyên.",
-    "doublePressShortcuts": "Nhấn hai lần: ← Quay lại · → Tiếp / bỏ qua câu hỏi · Phím cách Tạm dừng / tiếp tục · Enter Kết thúc đếm giờ",
+    "doublePressShortcuts": "Nhấn hai lần: ← Quay lại · → Tiếp / bỏ qua câu hỏi · Phím cách Tạm dừng / tiếp tục · Enter Kết thúc đếm giờ · R Bắt đầu lại câu hỏi",
     "keyboardShortcuts": "Phím tắt",
     "doublePressHelp": "Nhấn nhanh cùng một phím hai lần (trong nửa giây). Phím tắt không hoạt động trong hộp thoại và ô nhập liệu.",
     "previousShortcut": "Màn hình trước. Quay lại khi đang bỏ phiếu sẽ xóa câu trả lời.",
@@ -233,7 +233,8 @@
     "escapeShortcut": "Thoát trình chiếu (nhấn một lần).",
     "spaceKey": "Phím cách",
     "endOnAllAnswered": "Kết thúc giờ khi tất cả đã trả lời",
-    "endOnAllAnsweredDesc": "Mặc định tắt: giữ đủ thời gian. Khi bật, kết thúc sớm khi tất cả người chơi hiện đang kết nối đã trả lời."
+    "endOnAllAnsweredDesc": "Mặc định tắt: giữ đủ thời gian. Khi bật, kết thúc sớm khi tất cả người chơi hiện đang kết nối đã trả lời.",
+    "restartShortcut": "Bắt đầu lại câu hỏi hiện tại; xóa câu trả lời và điểm của câu này."
   },
   "reveal": {
     "votes": "{{count}} lượt bình chọn",

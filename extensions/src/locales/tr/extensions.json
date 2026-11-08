@@ -223,7 +223,7 @@
     "cannotPreviousLobby": "Gösterinin başlangıcında",
     "restartQuestion": "Soruyu yeniden başlat",
     "restartQuestionDesc": "Geçerli soruyu yeniden başlatır, yanıtlarını ve puanını siler. Diğer sorular korunur.",
-    "doublePressShortcuts": "İki kez basın: ← Geri · → İleri / soruyu atla · Boşluk Duraklat / sürdür · Enter Sayacı bitir",
+    "doublePressShortcuts": "İki kez basın: ← Geri · → İleri / soruyu atla · Boşluk Duraklat / sürdür · Enter Sayacı bitir · R Soruyu yeniden başlat",
     "keyboardShortcuts": "Klavye kısayolları",
     "doublePressHelp": "Aynı tuşa hızlıca iki kez basın (yarım saniye içinde). Kısayollar iletişim kutularında ve form alanlarında devre dışıdır.",
     "previousShortcut": "Önceki ekran. Oylama sırasında geri dönmek yanıtları siler.",
@@ -233,7 +233,8 @@
     "escapeShortcut": "Sunumdan çık (tek basış).",
     "spaceKey": "Boşluk",
     "endOnAllAnswered": "Herkes yanıtladığında sayacı bitir",
-    "endOnAllAnsweredDesc": "Varsayılan olarak kapalıdır: sürenin tamamı kullanılır. Açıldığında, bağlı olan tüm oyuncular yanıt verince erken biter."
+    "endOnAllAnsweredDesc": "Varsayılan olarak kapalıdır: sürenin tamamı kullanılır. Açıldığında, bağlı olan tüm oyuncular yanıt verince erken biter.",
+    "restartShortcut": "Geçerli soruyu yeniden başlatır; yanıtlarını ve puanını siler."
   },
   "reveal": {
     "votes": "{{count}} oy",

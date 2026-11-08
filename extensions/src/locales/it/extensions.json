@@ -223,7 +223,7 @@
     "cannotPreviousLobby": "All'inizio dello spettacolo",
     "restartQuestion": "Ricomincia domanda",
     "restartQuestionDesc": "Riavvia la domanda attuale e cancella le sue risposte e il punteggio. Le altre domande rimangono invariate.",
-    "doublePressShortcuts": "Premi due volte: ← Indietro · → Avanti / salta domanda · Spazio Pausa / riprendi · Invio Termina timer",
+    "doublePressShortcuts": "Premi due volte: ← Indietro · → Avanti / salta domanda · Spazio Pausa / riprendi · Invio Termina timer · R Ricomincia domanda",
     "keyboardShortcuts": "Scorciatoie da tastiera",
     "doublePressHelp": "Premi lo stesso tasto due volte rapidamente (entro mezzo secondo). Le scorciatoie sono disattivate nei dialoghi e nei campi.",
     "previousShortcut": "Schermata precedente. Tornare indietro durante il voto cancella le risposte.",
@@ -233,7 +233,8 @@
     "escapeShortcut": "Esci dalla presentazione (una pressione).",
     "spaceKey": "Spazio",
     "endOnAllAnswered": "Termina il tempo quando tutti hanno risposto",
-    "endOnAllAnsweredDesc": "Disattivato per impostazione predefinita: mantieni tutto il tempo. Se attivato, termina quando tutti i giocatori attualmente connessi hanno risposto."
+    "endOnAllAnsweredDesc": "Disattivato per impostazione predefinita: mantieni tutto il tempo. Se attivato, termina quando tutti i giocatori attualmente connessi hanno risposto.",
+    "restartShortcut": "Ricomincia la domanda attuale; cancella le sue risposte e il punteggio."
   },
   "reveal": {
     "votes": "{{count}} voti",

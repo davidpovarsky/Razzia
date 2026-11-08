@@ -10,7 +10,7 @@ import { useCallback, useEffect, useRef, useState } from "react"
 export const DOUBLE_PRESS_WINDOW_MS = 500
 
 export type PresentationShortcut =
-  "next" | "previous" | "end-timer" | "pause-toggle" | "exit"
+  "next" | "previous" | "end-timer" | "pause-toggle" | "restart" | "exit"
 
 export function shouldIgnorePresentationShortcut(
   event: KeyboardEvent,
@@ -67,13 +67,17 @@ export function shouldIgnorePresentationShortcut(
 }
 
 export function resolvePresentationShortcut(
-  event: Pick<KeyboardEvent, "key" | "shiftKey">,
+  event: Pick<KeyboardEvent, "key" | "shiftKey"> &
+    Partial<Pick<KeyboardEvent, "code">>,
 ): PresentationShortcut | null {
   if (event.key === "Escape") {
     return "exit"
   }
   if (event.shiftKey) {
     return null
+  }
+  if (event.key.toLowerCase() === "r" || event.code === "KeyR") {
+    return "restart"
   }
   if (event.key === "ArrowRight") {
     return "next"
@@ -264,6 +268,31 @@ export function useHostPresentationCommands({
       if (shortcut === "pause-toggle") {
         send(paused ? "RESUME_GAME" : "PAUSE_GAME", { epoch }, `${state.seq}`)
 
+        return
+      }
+
+      if (shortcut === "restart") {
+        if (
+          current.currentQuestion > 0 &&
+          ((
+            [
+              STATUS.SHOW_QUESTION,
+              STATUS.SELECT_ANSWER,
+              STATUS.SHOW_RESPONSES,
+            ] as readonly string[]
+          ).includes(current.statusName ?? "") ||
+            state.phase === "responses")
+        ) {
+          send(
+            "REPLAY_FROM_CHECKPOINT",
+            {
+              epoch,
+              questionIndex: current.currentQuestion - 1,
+              confirmed: true,
+            },
+            `${state.seq}`,
+          )
+        }
         return
       }
 

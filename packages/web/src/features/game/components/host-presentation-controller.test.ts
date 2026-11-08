@@ -26,6 +26,11 @@ describe("P0 host presentation keyboard map", () => {
     expect(key(" ")).toBe("pause-toggle")
     expect(key("Enter")).toBe("end-timer")
     expect(key("ArrowRight")).toBe("next")
+    expect(key("r")).toBe("restart")
+    expect(key("R")).toBe("restart")
+    expect(
+      resolvePresentationShortcut({ key: "ר", code: "KeyR", shiftKey: false }),
+    ).toBe("restart")
     expect(key("t")).toBeNull()
     expect(key("P")).toBeNull()
   })
