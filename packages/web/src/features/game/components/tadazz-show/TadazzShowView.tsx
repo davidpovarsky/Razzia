@@ -524,7 +524,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const [submitted, setSubmitted] = useState(false)
   const [answerPending, setAnswerPending] = useState(false)
   const [sfxPop] = useSound(SFX.ANSWERS.SOUND, { volume: 0.1 })
-  const [sfxResults] = useSound(SFX.RESULTS_SOUND, { volume: 0.2 })
   const questionKey = "question" in scene ? scene.question.key : null
   useEffect(() => {
     if (scene.kind === "wait") {
@@ -613,7 +612,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     [scene, submit, toggle],
   )
 
-  // Legacy Result screen side effect: personal score + results sound.
+  // Personal scores update here; the presenter owns the shared reveal sound.
   useEffect(() => {
     if (scene.kind !== "player-result") {
       return
@@ -621,7 +620,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     updatePlayer(({ player: p }) => ({
       player: p ? { ...p, points: scene.myPoints } : p,
     }))
-    sfxResults()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene.key])
 
@@ -802,16 +800,29 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
   const handleStageCue = useCallback(
     (cue: { name: string; scene: string }) => {
+      // The browser clock can finish during skips/fast-forward too. Only the
+      // authoritative result scene owns the audible end-of-question cue.
+      if (cue.name === "countdown-ended") return
       window.dispatchEvent(
         new CustomEvent("tadazz:sfx", {
           detail: {
             name: cue.name,
-            identity: `${showGameId}:${extensionState?.epoch ?? 0}:${sceneIdentity}:${cue.scene}:${cue.name}`,
+            identity:
+              cue.name === "survey-reveal"
+                ? `${showGameId}:${extensionState?.questionId ?? questionKey ?? sceneIdentity}:results-reveal`
+                : `${showGameId}:${extensionState?.epoch ?? 0}:${sceneIdentity}:${cue.scene}:${cue.name}`,
+            ...(cue.name === "survey-reveal" ? { volume: 0.5 } : {}),
           },
         }),
       )
     },
-    [extensionState?.epoch, sceneIdentity, showGameId],
+    [
+      extensionState?.epoch,
+      extensionState?.questionId,
+      questionKey,
+      sceneIdentity,
+      showGameId,
+    ],
   )
 
   const audioPolicy = useMemo(() => {
@@ -1220,6 +1231,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
           {extensionState && role !== "player" && (
             <AudioCuePlayer
+              stageOwnsReveal={useV4}
               cueId={props.audioCueId}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined

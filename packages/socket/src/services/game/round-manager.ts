@@ -1742,11 +1742,6 @@ export class RoundManager {
   }
 
   endIfEveryoneAnswered(): void {
-    if (
-      (this.opts.votingEntranceMs?.() ?? 0) > 0 &&
-      this.question.time !== NO_TIME_LIMIT
-    )
-      return
     if (!this.acceptingAnswers) {
       return
     }

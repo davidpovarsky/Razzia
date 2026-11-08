@@ -51,11 +51,11 @@ function timerFixture() {
   })
   void round.start(fake.createSocket("manager"))
 
-  return { round, player, statuses }
+  return { round, player, players, statuses }
 }
 
-it("opens a complete authoritative 20-second window after entrance, including when everyone answered", async () => {
-  const { round, player, statuses } = timerFixture()
+it("opens the complete 20-second window after entrance when nobody answers", async () => {
+  const { round, statuses } = timerFixture()
   const start = Date.now()
   expect(statuses.at(-1)?.data).toMatchObject({
     votingStartsAt: start + 4000,
@@ -68,11 +68,35 @@ it("opens a complete authoritative 20-second window after entrance, including wh
   await vi.advanceTimersByTimeAsync(1)
   expect(round.isCurrentlyAcceptingAnswers).toBe(true)
   expect(round.getRemainingSeconds()).toBe(20)
-  round.selectAnswer(player, [0])
   await vi.advanceTimersByTimeAsync(19999)
   expect(round.isCurrentlyAcceptingAnswers).toBe(true)
   expect(statuses.at(-1)?.name).toBe(STATUS.SELECT_ANSWER)
   await vi.advanceTimersByTimeAsync(1)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
+  round.dispose()
+})
+
+it("ends early after the only connected player answers", async () => {
+  const { round, player, statuses } = timerFixture()
+  await vi.advanceTimersByTimeAsync(4000)
+  expect(round.selectAnswer(player, [0]).accepted).toBe(true)
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
+  round.dispose()
+})
+
+it("waits for other connected players but excludes a disconnected player", async () => {
+  const { round, player, players, statuses } = timerFixture()
+  players.join(createFakeIo().createSocket("second"), "Second")
+  await vi.advanceTimersByTimeAsync(4000)
+  round.selectAnswer(player, [0])
+  await vi.advanceTimersByTimeAsync(1000)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+  players.setDisconnected("second")
+  round.endIfEveryoneAnswered()
+  await vi.advanceTimersByTimeAsync(1000)
   expect(round.isCurrentlyAcceptingAnswers).toBe(false)
   expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
   round.dispose()

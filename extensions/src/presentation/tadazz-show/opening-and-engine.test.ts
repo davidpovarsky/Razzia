@@ -20,7 +20,7 @@ const load = (name: string) =>
   ) as Record<string, unknown>
 
 describe("opening Lottie overlay", () => {
-  it("shows the event artwork first, then preserves the complete brand and music timings", () => {
+  it("shows TADAZZ first, then the event artwork before the lobby", () => {
     expect(TADAZZ_EVENT_ARTWORK_DURATION_MS).toBe(2200)
     expect(TADAZZ_OPENING_VIDEO_DURATION_MS).toBe(7933)
     expect(TADAZZ_OPENING_SOUNDTRACK_DURATION_MS).toBe(12000)
@@ -32,7 +32,7 @@ describe("opening Lottie overlay", () => {
     expect(source).toContain(
       'data-opening-phase={eventArtworkActive ? "event-artwork" : "brand"}',
     )
-    expect(source).toContain("Boolean(eventArtworkUrl) || eventArtworkPending")
+    expect(source).toContain("brandEnded && Boolean(eventArtworkUrl)")
     expect(source).toContain("{brandTransitionActive && (")
     expect(source).toContain("{eventArtworkActive && eventArtworkUrl && (")
   })

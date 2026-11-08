@@ -55,6 +55,10 @@ export interface LottiePlayerProps {
   onReady?: (info: { durationMs: number; totalFrames: number }) => void
   onComplete?: () => void
   onError?: (error: string) => void
+  /** Cap expensive full-screen canvas rendering without changing other players. */
+  renderDevicePixelRatio?: number
+  /** Frame diagnostics need not trigger React renders on every animation frame. */
+  frameUpdateIntervalMs?: number
 }
 
 /**
@@ -211,6 +215,8 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
   onReady,
   onComplete,
   onError,
+  renderDevicePixelRatio,
+  frameUpdateIntervalMs = 0,
 }) => {
   const effectiveData = data ?? animationData
   const resolvedTestId = dataTestId ?? testId ?? "lottie-player"
@@ -231,6 +237,14 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
   onErrorRef.current = onError
   const onReadyRef = useRef(onReady)
   onReadyRef.current = onReady
+  const lastFrameReport = useRef(0)
+  const renderConfig = useMemo(
+    () =>
+      renderDevicePixelRatio === undefined
+        ? undefined
+        : { devicePixelRatio: renderDevicePixelRatio },
+    [renderDevicePixelRatio],
+  )
 
   useEffect(() => {
     ensureDotLottieWasmConfigured()
@@ -309,10 +323,14 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     }
 
     const handleFrame = (evt: { currentFrame: number }) => {
+      const now = performance.now()
+      if (now - lastFrameReport.current < frameUpdateIntervalMs) return
+      lastFrameReport.current = now
       setCurrentFrame(Math.round(evt.currentFrame))
     }
 
     const handleComplete = () => {
+      setCurrentFrame(Math.max(0, dotLottie.totalFrames - 1))
       setHasCompletedOnce(true)
       onCompleteRef.current?.()
     }
@@ -340,7 +358,14 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       dotLottie.removeEventListener("loadError", handleLoadError)
       dotLottie.removeEventListener("renderError", handleLoadError)
     }
-  }, [dotLottie, prefersReducedMotion, autoplay, paused, seekTimeMs])
+  }, [
+    dotLottie,
+    prefersReducedMotion,
+    autoplay,
+    paused,
+    seekTimeMs,
+    frameUpdateIntervalMs,
+  ])
 
   // Synchronize controlled seekTimeMs or play/pause state with DotLottie instance
   useEffect(() => {
@@ -533,6 +558,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
       }}
     >
       <DotLottieReact
+        renderConfig={renderConfig}
         src={trimmedSrc || undefined}
         data={
           !trimmedSrc && inlineValidation && inlineValidation.ok

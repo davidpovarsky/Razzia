@@ -63,7 +63,7 @@ export const shouldDuckMusic = (
 export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
   impact: "/sounds/boump.mp3",
   "countdown-ended": "/sounds/results.mp3",
-  "survey-reveal": "/sounds/results.mp3",
+  "survey-reveal": "/sounds/tadazz-soft-reveal-20261108.mp3",
   "story-begin": "/sounds/show.mp3",
   "wipe-covered": "/sounds/boump.mp3",
   "company-ident": "/sounds/show.mp3",
@@ -82,6 +82,8 @@ export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
 }
 
 export interface AudioCuePlayerProps {
+  /** The show animation owns the question's reveal cue, rather than phase changes. */
+  stageOwnsReveal?: boolean
   cueId?: CueId
   audioExtras?: AudioExtras
   cardAudioCues?: CardAudioOverrides | null
@@ -150,6 +152,7 @@ function resolveSoundtrack(
  * survive phase renders; only their sources and gain change.
  */
 export const AudioCuePlayer = ({
+  stageOwnsReveal = false,
   cueId,
   audioExtras,
   cardAudioCues,
@@ -218,7 +221,8 @@ export const AudioCuePlayer = ({
     stageKey: string
   } | null>(null)
   const stageKey = `${soundtrackSlot ?? ""}:${continuityKey ?? ""}`
-  const liveSlotOverride = manualTrack?.stageKey === stageKey ? manualTrack.slot : null
+  const liveSlotOverride =
+    manualTrack?.stageKey === stageKey ? manualTrack.slot : null
   const selectedSoundtrackSlot = liveSlotOverride ?? soundtrackSlot
   const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter(
     (slot) => audioExtras?.soundtrack?.[slot]?.mode === "media",
@@ -271,7 +275,8 @@ export const AudioCuePlayer = ({
         volume: soundtrack.volume,
         // Continuous stage beds must repeat until the show changes phase.
         // The deliberately timed 12-second opening ident is the only exception.
-        loop: selectedSoundtrackSlot === "openingIntro" ? soundtrack.loop : true,
+        loop:
+          selectedSoundtrackSlot === "openingIntro" ? soundtrack.loop : true,
         fadeMs: soundtrack.fadeMs,
         startOffsetSeconds: soundtrack.startOffsetSeconds,
         maxDurationMs:
@@ -279,7 +284,12 @@ export const AudioCuePlayer = ({
       }
     }
 
-    if (!effectiveCueId || !resolvedCue?.shouldPlay || !resolvedCue.url) {
+    if (
+      !effectiveCueId ||
+      (stageOwnsReveal && effectiveCueId === "revealResults") ||
+      !resolvedCue?.shouldPlay ||
+      !resolvedCue.url
+    ) {
       return null
     }
     return {
@@ -308,6 +318,7 @@ export const AudioCuePlayer = ({
     selectedSoundtrackSlot,
     soundtrack,
     audioExtras,
+    stageOwnsReveal,
   ])
 
   const effectiveVolume = useCallback(
@@ -613,6 +624,7 @@ export const AudioCuePlayer = ({
         name?: string
         identity?: string
         url?: string
+        volume?: number
       }>
       const url =
         detail?.url ??
@@ -635,19 +647,21 @@ export const AudioCuePlayer = ({
       sfx.pause()
       sfx.src = url
       sfx.currentTime = 0
-      sfx.volume = 0.7
+      sfx.volume =
+        Math.max(0, Math.min(1, detail?.volume ?? 0.7)) * masterVolume
       void sfx.play().catch(onError)
     }
     window.addEventListener("tadazz:sfx", handleCue)
 
     return () => window.removeEventListener("tadazz:sfx", handleCue)
-  }, [muted, onError, paused, userPaused])
+  }, [masterVolume, muted, onError, paused, userPaused])
 
   useEffect(() => {
     if (
       !soundtrack ||
       !effectiveCueId ||
       effectiveCueId === "answersMusic" ||
+      (stageOwnsReveal && effectiveCueId === "revealResults") ||
       selectedSoundtrackSlot === "openingIntro" ||
       selectedSoundtrackSlot === "lobby"
     ) {
@@ -662,7 +676,14 @@ export const AudioCuePlayer = ({
         },
       }),
     )
-  }, [effectiveCueId, epoch, gameId, selectedSoundtrackSlot, soundtrack])
+  }, [
+    effectiveCueId,
+    epoch,
+    gameId,
+    selectedSoundtrackSlot,
+    soundtrack,
+    stageOwnsReveal,
+  ])
 
   const unlock = useCallback(() => {
     setAudioBlocked(false)
@@ -755,7 +776,10 @@ export const AudioCuePlayer = ({
                 onChange={(event) =>
                   setManualTrack(
                     event.target.value
-                      ? { slot: event.target.value as SoundtrackSlotId, stageKey }
+                      ? {
+                          slot: event.target.value as SoundtrackSlotId,
+                          stageKey,
+                        }
                       : null,
                   )
                 }

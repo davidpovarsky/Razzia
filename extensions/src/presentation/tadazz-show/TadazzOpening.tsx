@@ -43,12 +43,13 @@ export function preloadOpeningAssets(): void {
   }
   void loadOpeningLottie(TADAZZ_OPENING_LOTTIE_URL)
 
-  if (!document.querySelector(`link[data-tadazz-preload="video"]`)) {
+  if (!document.querySelector(`link[data-tadazz-preload="wasm"]`)) {
     const link = document.createElement("link")
     link.rel = "preload"
-    link.as = "video"
-    link.href = TADAZZ_OPENING_VIDEO_URL
-    link.dataset.tadazzPreload = "video"
+    link.as = "fetch"
+    link.href = "/api/extensions/lottie-wasm"
+    link.crossOrigin = "anonymous"
+    link.dataset.tadazzPreload = "wasm"
     document.head.appendChild(link)
   }
 }
@@ -82,12 +83,14 @@ export function TadazzOpening({
   )
   const [videoPlaying, setVideoPlaying] = useState(false)
   const [videoFailed, setVideoFailed] = useState(false)
+  const [videoReady, setVideoReady] = useState(false)
   const [lottieReady, setLottieReady] = useState(false)
+  const [lottieFailed, setLottieFailed] = useState(false)
   const [soundRequested, setSoundRequested] = useState(false)
-  const [eventArtworkActive, setEventArtworkActive] = useState(
-    Boolean(eventArtworkUrl) || eventArtworkPending,
-  )
+  const [brandEnded, setBrandEnded] = useState(false)
+  const eventArtworkActive = brandEnded && Boolean(eventArtworkUrl)
   const brandTransitionActive = !eventArtworkActive
+  const endBrand = useCallback(() => setBrandEnded(true), [])
 
   const finish = useCallback(() => {
     if (finishedRef.current) {
@@ -102,6 +105,7 @@ export function TadazzOpening({
     void loadOpeningLottie(lottieUrl).then((data) => {
       if (alive) {
         setLottieData(data)
+        if (!data) setLottieFailed(true)
       }
     })
 
@@ -110,33 +114,28 @@ export function TadazzOpening({
     }
   }, [lottieUrl])
 
-  // Wait briefly for the authoritative extension snapshot before choosing the
-  // opening. This prevents a brand-frame flash while Creating Worlds roster
-  // data is still arriving; games without event artwork continue normally.
+  // TADAZZ always comes first. Only then show the event artwork before the lobby.
   useEffect(() => {
-    if (!eventArtworkActive) {
+    if (!brandEnded) {
       return
     }
     if (eventArtworkUrl) {
-      const id = setTimeout(
-        () => setEventArtworkActive(false),
-        TADAZZ_EVENT_ARTWORK_DURATION_MS,
-      )
+      const id = setTimeout(finish, TADAZZ_EVENT_ARTWORK_DURATION_MS)
 
       return () => clearTimeout(id)
     }
     if (!eventArtworkPending) {
-      setEventArtworkActive(false)
+      finish()
 
       return
     }
-    const id = setTimeout(() => setEventArtworkActive(false), 3000)
+    const id = setTimeout(finish, 3000)
 
     return () => clearTimeout(id)
-  }, [eventArtworkActive, eventArtworkPending, eventArtworkUrl])
+  }, [brandEnded, eventArtworkPending, eventArtworkUrl, finish])
 
   useEffect(() => {
-    if (!brandTransitionActive) {
+    if (brandEnded || !videoReady || (!lottieReady && !lottieFailed)) {
       return
     }
     const video = videoRef.current
@@ -149,32 +148,40 @@ export function TadazzOpening({
     video.muted = true
     video.volume = 0
     void video.play().catch(() => setVideoFailed(true))
-  }, [brandTransitionActive, videoUrl])
+  }, [brandEnded, videoReady, lottieReady, lottieFailed, videoUrl])
 
   useEffect(() => {
-    if (!brandTransitionActive || videoPlaying || videoFailed) {
-      return
-    }
-    const id = setTimeout(() => setVideoFailed(true), 2000)
-
+    if (brandEnded) return
+    // A missing asset must not trap the show; normal completion follows the MP4.
+    const id = setTimeout(() => {
+      setVideoFailed(true)
+      setLottieFailed(true)
+    }, 8000)
+    if (videoPlaying || videoFailed) clearTimeout(id)
     return () => clearTimeout(id)
-  }, [brandTransitionActive, videoPlaying, videoFailed])
-
-  // The branded transition gets its complete verified runtime after the event
-  // artwork. Decode/load races cannot shorten either screen.
+  }, [brandEnded, videoPlaying, videoFailed])
   useEffect(() => {
-    if (!brandTransitionActive) {
-      return
-    }
-    const id = setTimeout(finish, TADAZZ_OPENING_VIDEO_DURATION_MS)
-
+    if (brandEnded || !videoFailed) return
+    const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS)
     return () => clearTimeout(id)
-  }, [brandTransitionActive, finish])
+  }, [brandEnded, videoFailed, endBrand])
+  useEffect(() => {
+    if (brandEnded || !videoPlaying) return
+    const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS + 12000)
+    return () => clearTimeout(id)
+  }, [brandEnded, videoPlaying, endBrand])
 
   const showLottie =
-    brandTransitionActive &&
-    Boolean(lottieData) &&
-    (videoPlaying || videoFailed)
+    brandTransitionActive && Boolean(lottieData) && !lottieFailed
+  const lottieDurationMs = lottieData
+    ? ((Number(lottieData.op) - Number(lottieData.ip ?? 0)) /
+        Number(lottieData.fr)) *
+      1000
+    : 4500
+  const lottieSpeed = Math.max(
+    0.25,
+    lottieDurationMs / TADAZZ_OPENING_VIDEO_DURATION_MS,
+  )
 
   return (
     <div
@@ -201,30 +208,42 @@ export function TadazzOpening({
               muted
               disablePictureInPicture
               preload="auto"
+              onLoadedData={() => setVideoReady(true)}
+              onCanPlay={() => setVideoReady(true)}
               onVolumeChange={(event) => {
                 event.currentTarget.muted = true
                 event.currentTarget.volume = 0
               }}
               onPlaying={() => setVideoPlaying(true)}
-              onEnded={finish}
+              onWaiting={() => setVideoPlaying(false)}
+              onEnded={endBrand}
               onError={() => setVideoFailed(true)}
             />
           )}
           {showLottie && lottieData && (
             <div
               className="tz-opening-lottie"
-              style={{ opacity: lottieReady ? 1 : 0 }}
+              style={{
+                opacity:
+                  lottieReady && (videoPlaying || videoFailed || brandEnded)
+                    ? 1
+                    : 0,
+              }}
             >
               <LottiePlayer
                 data={lottieData}
                 loop={false}
                 autoplay
+                paused={brandEnded || (!videoPlaying && !videoFailed)}
+                speed={lottieSpeed}
+                renderDevicePixelRatio={1}
+                frameUpdateIntervalMs={100}
                 fit="contain"
                 finish="holdLastFrame"
                 dataTestId="tadazz-opening-lottie"
                 className="relative h-full w-full"
                 onReady={() => setLottieReady(true)}
-                onError={() => setLottieReady(false)}
+                onError={() => setLottieFailed(true)}
               />
             </div>
           )}
@@ -249,7 +268,8 @@ export function TadazzOpening({
             if (video) {
               video.muted = true
               video.volume = 0
-              void video.play().catch(() => setVideoFailed(true))
+              if (lottieReady || lottieFailed)
+                void video.play().catch(() => setVideoFailed(true))
             }
 
             setSoundRequested(true)
@@ -259,12 +279,12 @@ export function TadazzOpening({
           {labels.enableSound}
         </button>
       )}
-      {brandTransitionActive && canSkip && (
+      {canSkip && (
         <button
           type="button"
           className="tz-opening-skip"
           data-testid="tadazz-opening-skip"
-          onClick={finish}
+          onClick={eventArtworkActive ? finish : endBrand}
         >
           {labels.skip}
         </button>
