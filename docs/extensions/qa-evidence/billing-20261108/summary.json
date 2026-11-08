@@ -1,0 +1,105 @@
+{
+  "date": "2026-11-08",
+  "branch": "codex/tadazz-billing-20261108",
+  "committedBase": "ae0692a",
+  "billing": {
+    "total": 32,
+    "passed": 32,
+    "failed": 0,
+    "pending": 0
+  },
+  "root": {
+    "total": 356,
+    "passed": 356,
+    "failed": 0,
+    "pending": 0
+  },
+  "fullExtensionScan": {
+    "total": 603,
+    "passed": 588,
+    "failed": 15,
+    "pending": 0
+  },
+  "baselineComparison": {
+    "reference": "theme-engine-20261108/baseline-extensions-vitest.json.gz",
+    "sameFailureNames": true,
+    "failures": [
+      "GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant",
+      "GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) Scenario 7: Real Player Reconnection & State Synchronization",
+      "Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18) A16: 40 distinct assets intake verified, R2C3/R2C5 reuse C3/C5 without duplicate upload",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A1: Interlude Progression & Server Authority (Asana 1219846884974853) prevents interlude after the final question per Asana V1 rule",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A1: Interlude Progression & Server Authority (Asana 1219846884974853) progresses SHOW_RESPONSES -> interlude -> next question with auto and manual advance",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A3: History Inspection & Safe Rollback (Asana 1219846387400318) REPLAY_FROM_CHECKPOINT: rolls back scores, leaderboard, bumps epoch, and resumes scoring afresh",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A3: History Inspection & Safe Rollback (Asana 1219846387400318) VIEW_HISTORY: manager-only read-only snapshot does not alter live game state",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A4: Post-Answer Distribution Data & Immediate Personal Results (Asana 1219846702589614) delivers personal results immediately to players without projector delay",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A4: Post-Answer Distribution Data & Immediate Personal Results (Asana 1219846702589614) produces immutable reveal distribution for single, multi, and estimation",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data Load Acceptance: 100 Concurrent Simulated Participants scores 100 concurrent participants without dropped or duplicate answers",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P0 authoritative pause/resume freezes and resumes an automatic interlude without stale advancement",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P0 authoritative pause/resume freezes the vote deadline, rejects paused votes, and resumes once",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation navigates back from leaderboard to reveal within the same question",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation reopens question for fresh vote, removes old question contribution, and preserves other questions",
+      "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation requires confirmation when PREVIOUS_SCREEN is requested during active answering with submitted answers"
+    ]
+  },
+  "browser": {
+    "startTime": "2026-11-08T16:49:43.912Z",
+    "duration": 128614.46800000001,
+    "expected": 6,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0,
+    "engines": [
+      "Chromium",
+      "WebKit"
+    ],
+    "languages": [
+      "en",
+      "fr",
+      "de",
+      "es",
+      "it",
+      "ja",
+      "tr",
+      "vi"
+    ],
+    "viewports": [
+      "390x844",
+      "1366x900"
+    ],
+    "provider": "simulated Paddle only; real account/Hono/Socket.IO and billing code"
+  },
+  "checks": {
+    "productionBuild": "PASS (existing large-bundle warning)",
+    "focusedLint": "PASS (0 errors, 0 warnings)",
+    "typescript": [
+      "socket",
+      "web/app",
+      "extensions",
+      "e2e"
+    ],
+    "format": "PASS",
+    "gitDiffCheck": "PASS"
+  },
+  "runtime": {
+    "defaultEnabled": false,
+    "productionChanged": false,
+    "actualPaddleSandboxTransaction": "NOT TESTED — owner has no account/keys or approved prices yet",
+    "supportedCurrencies": [
+      "ILS",
+      "GBP",
+      "USD",
+      "EUR"
+    ]
+  },
+  "integration": {
+    "otherBranchesUnchanged": [
+      "agent/tadazz-next-20261105 @ 0079e45",
+      "codex/upstream-cleanup-theme-engine-20261108 @ ae0692a"
+    ],
+    "uncommittedParallelWork": "Excluded; merge only reviewed committed changes, then regenerate routes and compose phone/join guards."
+  },
+  "artifacts": {
+    "textLogsNormalizedToLf": true,
+    "rawReports": "gzip"
+  }
+}

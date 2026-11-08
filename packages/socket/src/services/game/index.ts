@@ -1,4 +1,11 @@
 import {
+  reserveBilledGame,
+  startBilledGame,
+  admitBilledParticipant,
+  admitBilledPhone,
+  finishBilledPhone,
+} from "@razzia/socket/services/billing"
+import {
   createDefaultGameSettings,
   EVENTS,
   SESSION_ROLES,
@@ -102,6 +109,7 @@ class Game {
     this.io = io
     this.quizz = quizz
     this.gameId = uuid()
+    reserveBilledGame(managerClientId, this.gameId)
     this.inviteCode = createInviteCode()
     this.gameMode = quizz.gameMode
     this._manager = {
@@ -160,10 +168,12 @@ class Game {
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
-    this.presentationLaunch = isCreatingWorlds ? new PresentationLaunch(() => {
-      this.extensionSession?.onPresenceChanged()
-      this.broadcastExtensionState()
-    }) : null
+    this.presentationLaunch = isCreatingWorlds
+      ? new PresentationLaunch(() => {
+          this.extensionSession?.onPresenceChanged()
+          this.broadcastExtensionState()
+        })
+      : null
 
     if (sidecar && isQuizExtrasV2(sidecar)) {
       this.showCoordinator = new StudioShowCoordinator({
@@ -448,7 +458,8 @@ class Game {
           return ok
         },
         getAnswersCount: () => this.round.getAnswerCount(),
-        getPresentationLaunch: () => this.presentationLaunch?.snapshot(this.started) ?? null,
+        getPresentationLaunch: () =>
+          this.presentationLaunch?.snapshot(this.started) ?? null,
         getParticipation: () => {
           const connected = this.players.filter((player) => player.connected)
           return {
@@ -1441,7 +1452,22 @@ class Game {
       return "errors:auth.usernameTooShort"
     }
 
-    const error = this.playerManager.join(socket, finalUsername)
+    const billingRosterId =
+      rosterEntry?.rosterPlayerId ??
+      claimsExtra?.rosterPlayerId ??
+      generateRosterPlayerId()
+    const billingIdentity =
+      rosterEntry?.preRegistered ||
+      normalizedPhone ||
+      claimsExtra?.rosterPlayerId
+        ? `roster:${billingRosterId}`
+        : `client:${clientId}`
+    const error = admitBilledParticipant(
+      this._manager.clientId,
+      this.gameId,
+      billingIdentity,
+      () => this.playerManager.join(socket, finalUsername),
+    )
 
     if (error) {
       return error
@@ -1465,7 +1491,7 @@ class Game {
       rosterEntry.lastSeenAt = now
       this.roster.clientIndex.set(clientId, rosterEntry.rosterPlayerId)
     } else {
-      const rId = claimsExtra?.rosterPlayerId ?? generateRosterPlayerId()
+      const rId = billingRosterId
       const source = claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
       this.roster.entries.set(rId, {
         rosterPlayerId: rId,
@@ -1560,6 +1586,16 @@ class Game {
 
       if (existingPlayer) {
         const oldSocketId = existingPlayer.id
+        const billingError = admitBilledPhone(
+          this._manager.clientId,
+          this.gameId,
+          `roster:${rosterEntry.rosterPlayerId}`,
+          input.callId,
+          () => null,
+        )
+        if (billingError) return { ok: false, error: billingError }
+        if (rosterEntry.activeCallId !== input.callId)
+          finishBilledPhone(this.gameId, rosterEntry.activeCallId)
         this.playerManager.updateSocketId(oldSocketId, syntheticSocketId)
         this.round.updatePlayerId(oldSocketId, syntheticSocketId)
         existingPlayer.connected = true
@@ -1602,7 +1638,13 @@ class Game {
       emit: (_event: string) => false,
     } as unknown as Socket
 
-    const joinErr = this.playerManager.join(fakeSocket, displayName)
+    const joinErr = admitBilledPhone(
+      this._manager.clientId,
+      this.gameId,
+      `roster:${rId}`,
+      input.callId,
+      () => this.playerManager.join(fakeSocket, displayName),
+    )
 
     if (joinErr) {
       return { ok: false, error: joinErr }
@@ -1669,6 +1711,7 @@ class Game {
     }
 
     // If a callId was provided and does not match the currently bound callId, this hangup is stale!
+    finishBilledPhone(this.gameId, callId ?? entry.activeCallId)
     if (callId && entry.activeCallId && entry.activeCallId !== callId) {
       return false
     }
@@ -2028,6 +2071,17 @@ class Game {
       }
     }
 
+    if (
+      !this.started &&
+      this.playerManager.count() > 0 &&
+      socket.id === this._manager.id
+    ) {
+      const error = startBilledGame(this._manager.clientId, this.gameId)
+      if (error) {
+        socket.emit(EVENTS.GAME.ERROR_MESSAGE, error)
+        return
+      }
+    }
     await this.round.start(socket)
     this.broadcastHostPresence()
   }
