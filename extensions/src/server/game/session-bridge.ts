@@ -1,8 +1,8 @@
+import { buildFullShowDirectory } from "./public-directory"
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
 import type { Player, QuestionResult, Quizz } from "@razzia/common/types/game"
 import type { Socket } from "@razzia/common/types/game/socket"
 import {
-  isQuizExtrasV2,
   type RevealDistributionSnapshot,
 } from "../../core/index"
 import { buildAnswerRecap } from "./answer-recap"
@@ -221,32 +221,8 @@ export function createSessionDelegate(
         ctx.quizz,
         ctx.extensionSession?.extras ?? null,
       ),
-    getFullShowData: () => ({
-      isLive: true,
-      dialNumber:
-        sidecar && isQuizExtrasV2(sidecar)
-          ? (
-              Object.values(sidecar.scenes).find(
-                (scene) =>
-                  scene.kind === "animation" &&
-                  scene.preset === "representative-directory",
-              ) as { dialNumber?: string } | undefined
-            )?.dialNumber
-          : undefined,
-      connectedTables: [
-        ...new Set(
-          [...ctx.roster.entries.values()].flatMap((entry, index) =>
-            entry.status === "connected"
-              ? [entry.tableNumber ?? index + 1]
-              : [],
-          ),
-        ),
-      ],
-      representatives: [...ctx.roster.entries.values()].map((entry, index) => ({
-        table: entry.tableNumber ?? index + 1,
-        name: entry.displayName,
-      })),
-    }),
+    getFullShowData: () =>
+      buildFullShowDirectory(sidecar, [...ctx.roster.entries.values()]),
     getAnswerRecapSummary: (scene, timelineStepIndex) =>
       buildAnswerRecap({
         scene,

@@ -1,3 +1,4 @@
+import { buildLobbyDirectory } from "./public-directory"
 import {
   extensionCommandSchema,
   isQuizExtrasV2,
@@ -351,38 +352,12 @@ export class ExtensionGameSession {
       extrasPayload.participation = this.delegate.getParticipation()
     }
 
-    // Public directory contains names and table assignments, never phone data.
-    // No connected players are required to render the names.
-    if (
-      this.extras &&
-      isQuizExtrasV2(this.extras) &&
-      this.extras.questionIds.length === 10 &&
-      this.extras.roster.participants.length > 0 &&
-      Object.values(this.extras.scenes).some(
-        (s) =>
-          s.kind === "animation" && s.preset === "representative-directory",
-      )
-    ) {
-      const live = this.delegate?.getFullShowData?.()
-      const names = this.extras.roster.participants.map((rep, index) => ({
-        table: rep.tableNumber ?? index + 1,
-        name: rep.displayName,
-      }))
-      const directory = Object.values(this.extras.scenes).find(
-        (s) =>
-          s.kind === "animation" && s.preset === "representative-directory",
-      )
-      extrasPayload.lobbyFullShow = {
-        isLive: live?.isLive ?? false,
-        representatives: live?.representatives?.length
-          ? live.representatives
-          : names,
-        connectedTables: live?.connectedTables ?? [],
-        dialNumber:
-          live?.dialNumber ??
-          (directory?.kind === "animation" ? directory.dialNumber : undefined),
-      }
-    }
+    // Names/table assignments only; private contacts remain outside public snapshots.
+    const lobbyDirectory = buildLobbyDirectory(this.extras, () =>
+      this.delegate?.getFullShowData?.(),
+    )
+
+    if (lobbyDirectory) {extrasPayload.lobbyFullShow = lobbyDirectory}
 
     // Team scores and assignments
     if (this.extras?.teams.enabled) {

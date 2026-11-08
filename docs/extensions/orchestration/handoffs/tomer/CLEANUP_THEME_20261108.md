@@ -309,3 +309,31 @@ archives and helper scripts were moved out of the worktree to
 C:/Users/DAVID/AppData/Local/Temp/tadazz-cleanup-theme-scratch-20261108-53f0c02.
 Other worktrees and their uncommitted changes were left alone. Current upstream
 4.0.2 rehearsal has Dockerfile + pnpm-lock.yaml conflicts; upstream was not merged.
+
+
+### New owner request — synchronize remaining feature branches
+
+Starting clean HEAD: 5d93605. Origin fetch completed without an interactive
+credential prompt. All local and origin feature refs were audited: Maya wave1,
+Noam wave1 and v4 design-kit commits are patch-equivalent to commits already in
+this branch. Motion fbca624 is an earlier form of the existing evolved motion,
+background, cards, ScenePresenter and workbook implementation; retain current
+trusted theme/legacy behavior and recover its missing historical gate document.
+
+Seating cd793cd predates the native reference-story SeatingPlan and authoritative
+roster tableNumber work already integrated here. Do not restore the duplicate
+English-only stage, old geometry, name-only identity matching, or the 65-line
+upstream Game callback. Reconcile its optional seatingPlan authoring field and
+authored directory behavior in owned server modules. Preserve the current native
+map, localization, QR/PIN and explicit tableNumber precedence. The existing
+unflagged ten-question lobby behavior remains compatible.
+
+Before edits: target extensions/src/core/studio-timeline-schema.ts optional flag;
+owned game/public-directory.ts projection with tests; session.ts lobby projection;
+session-bridge.ts delegate projection. No new upstream protected hooks. Verify
+ordinary/explicit seating, shared-table presence, explicit table identity,
+fallback/revocation-like disconnect presence and absence of private contact data.
+Read-only review of other worktrees found uncommitted changes; none will be
+copied, committed, reset or stashed. Archive/historical docs are not deployment
+instructions. All executable tests and app/browser work stay on remote Oracle
+in private resource-limited containers. No production activation or push.

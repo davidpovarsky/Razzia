@@ -166,6 +166,7 @@ export const animationSceneSchema = z.strictObject({
   round: z.number().int().min(1).max(10).optional(),
   completed: z.number().int().min(0).max(10).optional(),
   dialNumber: z.string().max(32).optional(),
+  seatingPlan: z.boolean().optional(),
   connectedTables: z.array(z.number().int().min(1).max(100)).optional(),
   representatives: z
     .array(z.object({ table: z.number().int(), name: z.string() }))
@@ -439,6 +440,7 @@ export interface PublicFullShowData {
   storyRoles?: string[]
   connectedTables?: number[]
   dialNumber?: string
+  seatingPlan?: boolean
   representatives?: Array<{ table: number; name: string }>
   isLive?: boolean
   tieCandidates?: PublicInterimOption[]
