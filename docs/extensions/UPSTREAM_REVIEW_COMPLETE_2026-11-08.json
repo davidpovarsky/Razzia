@@ -1,1066 +1,2594 @@
 {
   "baseline": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
-  "scope": "All 96 original files from the first delivery; each requires explicit semantic review, extraction/retention rationale and actual verification before closure.",
-  "reviewed": 96,
-  "total": 96,
+  "scope": "Union of all 96 modified originals in the supplied 4a93f4c report, all 96 reviewed originals at continuation start, and newly integrated upstream hooks. Historical restored files remain explicitly recorded.",
+  "reviewed": 113,
+  "total": 113,
   "records": [
     {
       "number": 1,
       "file": "Dockerfile",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Dockerfile",
       "reason": "Restored upstream recursive pnpm build and install cache mount. Retained only extension workspace manifest, runtime WASM and downstream nginx fragment copies; the actual recursive build passed.",
       "readSha256": "46cf5c647875c22bb51cab90b1ace0785c12c31943cb89d1b6f3847a571e085a",
       "currentSha256": "d8dbdb1db58a82ac471977535db4daa8ec27ac8d7ece2f12cf167519923ef73f",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/deployment/nginx-server.conf",
+        "extensions/package.json"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "Review the upstream changes at Dockerfile; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 2,
       "file": "docker/nginx.conf",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "nginx server block",
       "reason": "Moved canonical-host redirect, SPA no-store and authenticated/internal media locations to extensions/deployment/nginx-server.conf. Retained one include at the original server boundary; nginx -t passed without starting a daemon.",
       "readSha256": "c23fa6f01d06d45a6cddf149deff54e2f649a9495b828edc0ab305cfa6d44ddb",
       "currentSha256": "3edfd96a46ed0346c2631ca30cdfd206e300a2637f3f86afa10b966dd657a0e2",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/deployment/nginx-server.conf"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at nginx server block; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 3,
       "file": "packages/common/src/constants.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "EVENTS, SESSION_ROLES, GameSettings defaults, MAX_ANSWERS",
       "reason": "Shared event names, spectator role, explicit settings defaults and five-answer limit are public server/client contracts; hiding them in module augmentation would obscure required validation.",
       "readSha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f",
       "currentSha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at EVENTS, SESSION_ROLES, GameSettings defaults, MAX_ANSWERS; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 4,
       "file": "packages/common/src/types/auth.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "SessionClaims/JoinTicketClaims",
       "reason": "sid binds revocation; roster/source/phone fields are signed join identity claims consumed by both clients and authentication. They are type-only metadata, not feature logic.",
       "readSha256": "d1b010e42264335a94a7c04cd16066b64291f1e60089d07ab0230a2a669e1673",
       "currentSha256": "d1b010e42264335a94a7c04cd16066b64291f1e60089d07ab0230a2a669e1673",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at SessionClaims/JoinTicketClaims; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 5,
       "file": "packages/common/src/types/game/index.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuestionPlayMode/resolveQuestionPlayMode",
       "reason": "Moved executable resolveQuestionPlayMode to extensions/src/core/question-play-mode.ts and updated all callers. Retained only shared question-mode/settings/history wire types.",
       "readSha256": "1c0bf7275168203e33f05d379f882afb2e132a64db7fabc79036bfe1671092f8",
       "currentSha256": "ec550e1f3aa050c3eb5538c1e3c2abfaaf4444a5a5c09778ba4676d3c7dfbb1d",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/question-play-mode.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuestionPlayMode/resolveQuestionPlayMode; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 6,
       "file": "packages/common/src/types/game/socket.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "SocketData/ServerToClientEvents/ClientToServerEvents",
       "reason": "Room association, extension/spectator events and accepted-answer/command ACK signatures are shared protocol declarations; no runtime feature code to extract.",
       "readSha256": "94c66a1108684be609f8584b3e964847be30e2120cb189e3d97a4b2496f463ab",
       "currentSha256": "94c66a1108684be609f8584b3e964847be30e2120cb189e3d97a4b2496f463ab",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at SocketData/ServerToClientEvents/ClientToServerEvents; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 7,
       "file": "packages/common/src/types/game/status.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "CommonStatusDataMap",
       "reason": "questionId/number, playMode and server voting deadlines prevent stale question/clock pairing; optional fields preserve old clients.",
       "readSha256": "06fa1be9141a4049c1259181b3a04b9d8b0111e82da445fc5e88997d3c61940c",
       "currentSha256": "06fa1be9141a4049c1259181b3a04b9d8b0111e82da445fc5e88997d3c61940c",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at CommonStatusDataMap; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 8,
       "file": "packages/common/src/validators/auth.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "sessionClaimsValidator/joinTicketClaimsValidator",
       "reason": "Validate the signed account/session and participant identity fields at the existing shared trust boundary.",
       "readSha256": "426cf34b60202bfb7ac84e671d7c282b162a32619676be236af42893d92b1452",
       "currentSha256": "426cf34b60202bfb7ac84e671d7c282b162a32619676be236af42893d92b1452",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at sessionClaimsValidator/joinTicketClaimsValidator; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 9,
       "file": "packages/common/src/validators/game.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "joinGameValidator/gameSettingsSchema",
       "reason": "Bound phone/source and optional invite/end-on-all settings at shared REST/socket boundary; clients and server use the same schema.",
       "readSha256": "4f45c67f6cb70364af7169b5f8dc801d66a2f4d4e635fa4cc7146b0e1243e0b4",
       "currentSha256": "4f45c67f6cb70364af7169b5f8dc801d66a2f4d4e635fa4cc7146b0e1243e0b4",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at joinGameValidator/gameSettingsSchema; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 10,
       "file": "packages/common/src/validators/quizz.test.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "quizzValidator tests",
       "reason": "Keep the five-answer and mixed survey/quiz solution-contract cases adjacent to their original common validator.",
       "readSha256": "a64c47bc6e0e5b31c7fdac87018b3632f47fa9dd4268ef839ec56cf6b2a9bf80",
       "currentSha256": "a64c47bc6e0e5b31c7fdac87018b3632f47fa9dd4268ef839ec56cf6b2a9bf80",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at quizzValidator tests; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 11,
       "file": "packages/common/src/validators/quizz.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "questionSchema/quizzValidator.superRefine",
       "reason": "Per-card playMode must survive validation; quiz questions still require solutions while survey questions do not. Changing the frozen wire representation is unsafe.",
       "readSha256": "ec17678d9473a6b6bd4539e969cb78799bba60ee3e6778df97f560c498e214c2",
       "currentSha256": "ec17678d9473a6b6bd4539e969cb78799bba60ee3e6778df97f560c498e214c2",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at questionSchema/quizzValidator.superRefine; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 12,
       "file": "packages/common/src/validators/socket.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "clientEventValidators",
       "reason": "All additional commands remain schema-validated and role-authorized by handlers; metadata-only additions are required at the shared socket boundary.",
       "readSha256": "932133a2ecd21cb60c9e6c4735bd4d766b076ed9ab81501a7c85d1ddf91e8247",
       "currentSha256": "932133a2ecd21cb60c9e6c4735bd4d766b076ed9ab81501a7c85d1ddf91e8247",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at clientEventValidators; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 13,
       "file": "packages/e2e/.gitignore",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": ".config* ignore",
       "reason": "Prevent isolated fixture/private configuration folders from entering Git; no runtime code.",
       "readSha256": "9e95f75f8e9d245e3df07ae784b4d8dd41565eeda35250d737dc2e26615616a0",
       "currentSha256": "9e95f75f8e9d245e3df07ae784b4d8dd41565eeda35250d737dc2e26615616a0",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at .config* ignore; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 14,
       "file": "packages/e2e/playwright.config.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Playwright webServer command",
       "reason": "Installed Vite config is TypeScript; Node strip-types flags are toolchain integration, not feature behavior.",
       "readSha256": "a4e1a631182957673df84c4b851803f09b3cc482c7b5138389186da2eb492a8a",
       "currentSha256": "a4e1a631182957673df84c4b851803f09b3cc482c7b5138389186da2eb492a8a",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Playwright webServer command; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 15,
       "file": "packages/e2e/tests/manager.spec.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain-minimal-integration",
       "symbols": "manager branding viewport tests",
       "reason": "Moved the three-size branding matrix to tadazz-manager-branding.spec.ts. Retained one original manager-test change: language persistence opens /game after the intentional manager homepage migration.",
       "readSha256": "40ab4c5d2a481a168e91e48150e75004798d07b55c31c43e9df2ee56bd4da46e",
       "currentSha256": "677565bd4e42efbe2689cc4671ffd324323f81e8fc6947a150cba3437e5e35f3",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at manager branding viewport tests; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 16,
       "file": "packages/e2e/tsconfig.json",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "compilerOptions.jsx",
       "reason": "E2E source imports typed web/extension TSX public entry points; compiler setting is the minimal integration.",
       "readSha256": "54866a9e8e09f9b9e45653b1744ce343b5b4ba8efa51a124f12da0557893dad2",
       "currentSha256": "54866a9e8e09f9b9e45653b1744ce343b5b4ba8efa51a124f12da0557893dad2",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at compilerOptions.jsx; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 17,
       "file": "packages/e2e/utils/i18n.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "test locale initialization",
       "reason": "Register extension namespace in the test i18n instance; leave upstream namespaces intact and match actual UI labels.",
       "readSha256": "84944fc8e9aac49a89c40d6ef0d23ce740ab6c978e37f9b921462af5e1db6847",
       "currentSha256": "84944fc8e9aac49a89c40d6ef0d23ce740ab6c978e37f9b921462af5e1db6847",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at test locale initialization; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 18,
       "file": "packages/e2e/utils/manager.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "loginManager/endTimer/next helpers",
       "reason": "Moved endTimer into packages/e2e/utils/extension-manager.ts and updated actual consumers. Retained compatibility-aware original login/next selectors for the changed current UI.",
       "readSha256": "f0f6abf2d1c821001ce88d33301f57fd3a550426e6b59cc751676d1521e57295",
       "currentSha256": "1383e0eeba6935c20e6383174fe4d84d4a79f3d6a8a50e82c919b0de9cc4bc96",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at loginManager/endTimer/next helpers; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 19,
       "file": "packages/socket/package.json",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "@razzia/extensions workspace dependency",
       "reason": "Required source-controlled package linkage for injected runtime extension modules.",
       "readSha256": "adfc10bc038bc2dbb919f21576034d83e7d94559041f609e83b8b453d521aa0f",
       "currentSha256": "adfc10bc038bc2dbb919f21576034d83e7d94559041f609e83b8b453d521aa0f",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "Review the upstream changes at @razzia/extensions workspace dependency; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 20,
       "file": "packages/socket/src/api/index.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "extension/account route composition",
       "reason": "Mount the extension router once with original storage/auth ports. Wiring is necessary; the router implementation already lives downstream.",
       "readSha256": "6b82f3cb0ccc999d35c48712d38cfdfffc2739d0c1073f373599e05f6c3281dd",
-      "currentSha256": "6b82f3cb0ccc999d35c48712d38cfdfffc2739d0c1073f373599e05f6c3281dd",
-      "matchesGitBaseline": false
+      "currentSha256": "1635e319df5c93753a27fdfca4c84f69788e5b74fab1a8fdcf7a9982f75476db",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/server/index.ts",
+        "packages/socket/src/api/extensions/billing-routes.ts",
+        "packages/socket/src/api/extensions/theme-routes.ts",
+        "packages/socket/src/api/routes/accounts.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at extension/account route composition; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 21,
       "file": "packages/socket/src/api/middleware.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "requireManager account scoping",
       "reason": "Restored upstream middleware structure; retained the single withAccount(claims.sub,next) authorization/storage-scope boundary.",
       "readSha256": "905ce362219cfb263c09f48f4ca898881731db5343566de95539b5002d79ac40",
       "currentSha256": "0fa1d2b278a13d0cecb616a0c13bf597a0fe72f5f57cb2ca866df566ca66a496",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at requireManager account scoping; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 22,
       "file": "packages/socket/src/api/routes/auth.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "auth account-mode/session/logout policies",
       "reason": "Moved canRefreshAsPlayer and retireManagerClaims to services/account-session-policy.ts. Original auth routes retain JWT/HTTP/cookie boundaries, invalid-manager retirement and the fresh anonymous identity after account logout.",
       "readSha256": "853627aae009565d8b9b9dda3e8bbcca71f9e03bb636d2bf65dcf041c1836de8",
       "currentSha256": "a4a6a199afc914d38c07a96b69cdb6fd44b4150b4c2053ac41f786ec3880c162",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts",
+        "packages/socket/src/services/account-session-policy.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at auth account-mode/session/logout policies; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 23,
       "file": "packages/socket/src/api/routes/games.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "game HTTP composition, join ticket boundary",
-      "reason": "Moved roster CRUD/import, projector media and pilot-phone routing into api/extensions/game-routes.ts. Retained original create/check/join/settings, exact manager exclusion, roster-aware lock/name resolution and signed ticket issuance at the HTTP trust boundary.",
+      "reason": "Moved roster CRUD/import, projector media and pilot-phone routing into api/extensions/game-routes.ts, and browser/roster/name/phone admission policy into join-policy.ts. Original create/check/join/settings retain registry lookup, exact manager exclusion, media authorization and signed-ticket issuance at the HTTP trust boundary.",
       "readSha256": "46186d4f7af8ce0787663974e90e907aee9fb0b282a74a9e385f13c8b8e991eb",
-      "currentSha256": "6d62802a2067eb37001e26418100dfe6ca44adfd7a7c254c202af48685b3a604",
-      "matchesGitBaseline": false
+      "currentSha256": "9db7101b5a49b72ac9e525acf035d12596958c8aa7820f4eb472bf41f5db3aa4",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/api/extensions/game-routes.ts",
+        "packages/socket/src/api/extensions/join-policy.ts",
+        "packages/socket/src/services/media-access.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at game HTTP composition, join ticket boundary; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 24,
       "file": "packages/socket/src/api/routes/media.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "media route composition",
       "reason": "Moved tenant/room media-read authorization and referenced-media delete lifecycle into owned socket/api/extensions/media-routes.ts. Original route retains upload/list validation and two explicit handler hooks; private media is never restored to a public alias.",
       "readSha256": "b4a54d96e31a7e6a97f532e6edb76f23b4b1fadc709711b0ff6598b55f5e2a7b",
       "currentSha256": "ff76c19ac1c908f4b0350e042328e3acff8019fd2f9dbdd826e3d878d1943b60",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/api/extensions/media-routes.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at media route composition; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 25,
       "file": "packages/socket/src/app.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "createSocketServer packet middleware",
       "reason": "The nine-line revoked-manager revalidation must run before privileged packets on an already-open websocket. Existing account verifier owns policy; moving the call would hide the security boundary.",
       "readSha256": "f6a448b039ad861d958af9fdd2c3ebfe0889666a403ce593a5774cf1e03cad78",
       "currentSha256": "f6a448b039ad861d958af9fdd2c3ebfe0889666a403ce593a5774cf1e03cad78",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at createSocketServer packet middleware; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 26,
       "file": "packages/socket/src/handlers/game.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "gameSocketHandlers extension commands, spectator handlers, answer acknowledgement",
       "reason": "Moved spectator and extension-command registrations into handlers/game-extensions.ts with the existing withManagerGame authorization wrapper. Original handler retains authoritative answer acknowledgement and disconnect integration.",
       "readSha256": "8746fa28e79b6e751076226601d3462a6c304a499245afda4b785e6e2b3e15a1",
       "currentSha256": "86a2c94a2d03c3c12907ac8cebed3bc6f5d1cee1cad0abf31a36dc80900bad72",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/handlers/game-extensions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at gameSocketHandlers extension commands, spectator handlers, answer acknowledgement; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 27,
       "file": "packages/socket/src/index.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "startup composition",
       "reason": "Startup account configuration and transaction-journal recovery must finish before accepting requests. Storage recovery implementation already belongs to extensions; these are explicit boot hooks.",
       "readSha256": "64751acb3f9ebc1b6baf44885a0a8006eb48653eb4ed2e712facdaab95b9a824",
       "currentSha256": "64751acb3f9ebc1b6baf44885a0a8006eb48653eb4ed2e712facdaab95b9a824",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/server/index.ts",
+        "packages/socket/src/services/account-db.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at startup composition; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 28,
       "file": "packages/socket/src/services/auth.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "mintToken, verifyToken, mintJoinTicket",
       "reason": "Session-id validation and revocation integrate at JWT signing/verification authority. Optional roster metadata is signed in the original join ticket; do not create a parallel insecure ticket path. Policy persistence is already in owned account-auth/account-db modules.",
       "readSha256": "11b43894c5757ba20c6f67fba943046afb6b5bfa00df236a3425435e1061caf6",
       "currentSha256": "11b43894c5757ba20c6f67fba943046afb6b5bfa00df236a3425435e1061caf6",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/account-auth.ts",
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at mintToken, verifyToken, mintJoinTicket; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 29,
       "file": "packages/socket/src/services/config.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "getPath",
       "reason": "Moved configuration-root discovery and tenant resolution into services/config-scope.ts. Original config getPath delegates once; all original quiz/result persistence continues through that scoped path.",
       "readSha256": "03d3a13640e7ff2074aa24e48f1ddfb074d173696d35938d183de11bd461ea6e",
       "currentSha256": "1d892a5a40f099681b0557f55d4ab4951a902cffce35e4a99e64ebbb206b0cec",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/config-scope.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at getPath; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 30,
       "file": "packages/socket/src/services/game/cooldown-timer.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "CooldownTimer",
       "reason": "Moved pausable countdown/deadline scheduling to extension PausableCountdown with tickMs/onTick ports. Original file is a small socket adapter. Immediate abort and next-tick waiter settlement are preserved.",
       "readSha256": "0be38cae6d9a1eaa3e6d894233bbb32ea9dfd8a4406d44681dcd0a19be77c0e7",
       "currentSha256": "6df7222fb134b50f0718e931be928e9a5b697d506f547ebf67e687c63c0323d0",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/server/game/pausable-countdown.ts",
+        "extensions/src/server/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at CooldownTimer; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 31,
       "file": "packages/socket/src/services/game/game.test.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "game.test.ts downstream roster, mixed-mode and revote tests",
       "reason": "Moved independent downstream roster/mixed-mode/revote tests into downstream-game.test.ts and the common fixture into src/test/game-setup.ts. Original regression tests remain; four cases explicitly opt in to endOnAllAnswered after its intentional default change.",
       "readSha256": "f5fa57fe36e3577a98aee292113be2a676dfa51e7e9cfd397e58d911a840aa66",
       "currentSha256": "43964e0087367c1ef418fd978eb8e061bda8b7bc0e58e6a947086609806b9095",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/socket/src/services/game/downstream-game.test.ts",
+        "packages/socket/src/test/game-setup.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at game.test.ts downstream roster, mixed-mode and revote tests; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 32,
       "file": "packages/socket/src/services/game/index.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Game constructor policies, session bridge, phone transport, roster join, audience projection",
       "reason": "Extracted phone-controller, round-policy, session-bridge, audience projections, runtime-policy, authored-coordinator and roster/browser-identity into extensions. Game retains original lifecycle, authoritative players/round mutation, authorization and ordered identity-rebind integration. Moving these mutations would duplicate or relocate the upstream engine.",
       "readSha256": "1121a647b037f65da957baff5b6991db7b7e6ea1fd727094510a85a9374f6a42",
-      "currentSha256": "bdd90a21eeca21d7e2d1c65135551fb6247075007e2171b32da2b4cec6018a54",
-      "matchesGitBaseline": false
+      "currentSha256": "90919b6bd3e0cdbd72e30213933ae792d906c1a648161abb82178d1315db7424",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/server/game/audience.ts",
+        "extensions/src/server/game/authored-coordinator.ts",
+        "extensions/src/server/game/phone-controller.ts",
+        "extensions/src/server/game/roster/browser-identity.ts",
+        "extensions/src/server/game/round-policy.ts",
+        "extensions/src/server/game/runtime-policy.ts",
+        "extensions/src/server/game/session-bridge.ts",
+        "extensions/src/server/index.ts",
+        "packages/socket/src/services/account-scope.ts",
+        "packages/socket/src/services/billing.ts",
+        "packages/socket/src/services/theme-installation.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Game constructor policies, session bridge, phone transport, roster join, audience projection; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 33,
       "file": "packages/socket/src/services/game/player-manager.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "PlayerManager.updateClientId",
       "reason": "Eight-line identity mutation is necessary for a rostered redial/rebind while retaining the canonical Player row and checkpoint scores. All registry/policy decisions stay outside PlayerManager.",
       "readSha256": "ffead1639365e71fd9033d2bda97bcfc65224ad181a635cb5b4ba7a4830e095c",
       "currentSha256": "ffead1639365e71fd9033d2bda97bcfc65224ad181a635cb5b4ba7a4830e095c",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at PlayerManager.updateClientId; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 34,
       "file": "packages/socket/src/services/game/round-manager.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "RoundManager scheduling, checkpoint/navigation/ledger policies",
       "reason": "Extracted pausable countdown, round-scheduling, round-checkpoints, score-ledger and pure previous-navigation eligibility. RoundManager retains authoritative answer acceptance, state/score/history mutations and their ordered navigation seams. Added reconnect checkpoint remapping after a regression proved loss of earlier-question points.",
       "readSha256": "a7aef71b7a2d5c665a4e0a0d51bfcb97f822ea3b28af35084879ca116b7b68c6",
       "currentSha256": "16a9b2a06633c729d4ba2067be80daff1d5af1b011fa27a3d7d436b94b0e55cc",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/gameplay/index.ts",
+        "extensions/src/gameplay/round-navigation.ts",
+        "extensions/src/server/game/round-checkpoints.ts",
+        "extensions/src/server/game/round-scheduling.ts",
+        "extensions/src/server/game/score-ledger.ts",
+        "extensions/src/server/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at RoundManager scheduling, checkpoint/navigation/ledger policies; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 35,
       "file": "packages/socket/src/services/registry.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Registry.getGameBySpectatorSocketId",
       "reason": "Four-line registry lookup is the required disconnect integration for non-player spectator sockets. No separate game registry should be introduced.",
       "readSha256": "b3a05a1458fea796292d9a4073e24ac4e343845b62461b12c028a05a9f4afdae",
       "currentSha256": "b3a05a1458fea796292d9a4073e24ac4e343845b62461b12c028a05a9f4afdae",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Registry.getGameBySpectatorSocketId; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 36,
       "file": "packages/socket/src/services/scoring/round.test.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-restored-to-upstream",
       "decision": "restore",
       "symbols": "scoring round.test.ts",
       "reason": "Moved downstream ledger tests into score-ledger.test.ts; original scoring test file restored byte-for-byte to baseline. Tests still exercise production scoring and penalty-floor behavior.",
       "readSha256": "ee9065444406a2df3e975a3f13579d049dd993d0063865abce2fa6db179e5b68",
       "currentSha256": "ee9065444406a2df3e975a3f13579d049dd993d0063865abce2fa6db179e5b68",
-      "matchesGitBaseline": true
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "packages/socket/src/services/scoring/score-ledger.test.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 37,
       "file": "packages/socket/src/services/scoring/round.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-restored-to-upstream",
       "decision": "restore",
       "symbols": "scoring round.ts",
       "reason": "Moved ledger replay into extensions with an injected scoring table; original one-question scorer restored byte-for-byte to baseline. No runtime extension import of socket scoring or duplicated scoring algorithms.",
       "readSha256": "57c6168c99113fe092f3c12e4460b59ba55bf24d5ac5416892a8c971af56cd80",
       "currentSha256": "57c6168c99113fe092f3c12e4460b59ba55bf24d5ac5416892a8c971af56cd80",
-      "matchesGitBaseline": true
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/server/game/score-ledger.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 38,
       "file": "packages/socket/tsconfig.json",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "socket compiler JSX option",
       "reason": "Extension public barrels include TSX presentation types; jsx react-jsx is required for the actual package typecheck and introduces no runtime behavior.",
       "readSha256": "d65bee18cd13cf327d16d05ddc64cca3c45ddddeebeabd3109fbe8cf89112603",
       "currentSha256": "d65bee18cd13cf327d16d05ddc64cca3c45ddddeebeabd3109fbe8cf89112603",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at socket compiler JSX option; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 39,
       "file": "packages/web/index.html",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain-minimal-integration",
       "symbols": "HTML title/favicon/first-paint metadata",
       "reason": "Retained the short first-paint script and branded title/favicon in the original document. It must run before React and external asset loading; moving it to a later extension component would reintroduce the visible flash. No independent downstream feature implementation remains here.",
       "readSha256": "ef8842953517bf7aa9db285f02ba245c90910bc254ee0b52b65de70e1a23b5aa",
       "currentSha256": "ef8842953517bf7aa9db285f02ba245c90910bc254ee0b52b65de70e1a23b5aa",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at HTML title/favicon/first-paint metadata; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 40,
       "file": "packages/web/package.json",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "web workspace dependency and Vite Node entry",
       "reason": "Extension workspace dependency and strip-types Node entry are build integration. Do not hide required package/build dependencies.",
       "readSha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02",
       "currentSha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "Review the upstream changes at web workspace dependency and Vite Node entry; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 41,
       "file": "packages/web/src/components/AlertDialog.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "AlertDialog optional controlled props",
       "reason": "Small additive public prop extension permits controlled confirmation of destructive vote navigation while retaining Radix/Razzia structure. No downstream business logic lives here.",
       "readSha256": "e6ad21e19394232ad16aa19eb56d6764aca62210a23350fa245e033e58919113",
       "currentSha256": "e6ad21e19394232ad16aa19eb56d6764aca62210a23350fa245e033e58919113",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at AlertDialog optional controlled props; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 42,
       "file": "packages/web/src/components/Background.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain-minimal-integration",
       "symbols": "Background branding",
       "reason": "Retained the small default TADAZZ branding/logo sizing and intentionally removed upstream footer. These are the shared background component public defaults; moving the original component or adding global CSS to disguise the same defaults would enlarge the design seam.",
       "readSha256": "10871ec6c1104bfdc5134c7a45f92e692ae4650d774cb366c29d6f14a26d15fd",
       "currentSha256": "10871ec6c1104bfdc5134c7a45f92e692ae4650d774cb366c29d6f14a26d15fd",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Background branding; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 43,
       "file": "packages/web/src/components/GameBackground.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "GameBackground stacking/pointer events",
       "reason": "Two CSS classes establish non-interactive background layering under host controls. Moving them to global overrides would obscure rather than reduce the integration.",
       "readSha256": "97aa2d9947792249cb82e32c44951e80a4dfe727184de3f214cff0ea12e19fe4",
       "currentSha256": "97aa2d9947792249cb82e32c44951e80a4dfe727184de3f214cff0ea12e19fe4",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at GameBackground stacking/pointer events; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 44,
       "file": "packages/web/src/components/QuestionMedia.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "QuestionMedia reveal adapter",
       "reason": "Reveal implementation already lives in extensions/media. Shared optional props and a small conditional hook are required at the original media renderer; responsive containment retains current stage fit.",
       "readSha256": "1936d80d1500637a9820e7d3bbdcc2aec845d6e5fe615f577e26386c504e8a44",
       "currentSha256": "1936d80d1500637a9820e7d3bbdcc2aec845d6e5fe615f577e26386c504e8a44",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/media/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuestionMedia reveal adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 45,
       "file": "packages/web/src/components/ToggleGroup.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-restored-to-upstream",
       "decision": "restore",
       "symbols": "ToggleGroup",
       "reason": "Moved the studio-specific grouped control to owned studio/GroupedToggleGroup.tsx and changed its only grouped consumer. Restored original shared ToggleGroup byte-for-byte; MediaLibrary continues to use it unchanged.",
       "readSha256": "19e1ec52913feedcd3318e26da39fa92b24272077dc930a188960cf5f0e71192",
       "currentSha256": "19e1ec52913feedcd3318e26da39fa92b24272077dc930a188960cf5f0e71192",
-      "matchesGitBaseline": true
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/GroupedToggleGroup.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 46,
       "file": "packages/web/src/features/game/components/AnswerButton.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "AnswerButton image/percent/entrance presentation",
       "reason": "Moved answer visual/style/accessibility projection, enhanced content and percentage presentation to extensions/src/media/answer-button-presentation.tsx. Original AnswerButton retains the semantic button, original state/correctness and selection callbacks.",
       "readSha256": "058c9110d12b8a6984efd37796ac58171953f0fcc41adfcc974f160ac28a9185",
       "currentSha256": "8803520f4e68a1193cc4d7aad4791d67e435bae859c068fbdd8976c3872c895f",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/media/answer-button-presentation.tsx",
+        "extensions/src/media/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at AnswerButton image/percent/entrance presentation; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 47,
       "file": "packages/web/src/features/game/components/AnswerNote.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "AnswerNote visibility guard",
       "reason": "Manager-only editorial notes are enforced at the shared rendering boundary as defense in depth, even though server public sanitization also strips them. Six-line guard is necessary.",
       "readSha256": "f48690da220705d4bfbc359abcf3622bfe1b4cfcf57a70275fb68c43a481a022",
       "currentSha256": "f48690da220705d4bfbc359abcf3622bfe1b4cfcf57a70275fb68c43a481a022",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at AnswerNote visibility guard; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 48,
       "file": "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "GameSettingsModal extension settings and roster shortcut",
       "reason": "Moved added completion/phone switches and roster shortcut to GameSettingsModal/ExtensionSettings.tsx. Original form and save boundary retain a small changed-settings projection so live updates do not resend rejected unrelated settings.",
       "readSha256": "6e4b63f0ca34b9c187022c0711bb76dbf65688af436df2b715ce29df1bca97bb",
       "currentSha256": "5110265cacb68d7ae800a40c9b3d81a55d364d18320b71efc184ad644c5b8c45",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/GameSettingsModal/ExtensionSettings.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at GameSettingsModal extension settings and roster shortcut; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 49,
       "file": "packages/web/src/features/game/components/GameWrapper.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "GameWrapper extension connection, legacy presentation, controls",
       "reason": "Moved envelope/media-cookie/roster connection, legacy audio/background/motion projection and host/player overlay presentation into owned tadazz-show hooks/components. Original role shell, transport and native renderer seam remain; Classic still returns before legacy mounts.",
       "readSha256": "c326fc5c0dc15b2dcf650827f2362a84f6ba76f4bfc84acf89f5129ac5b6a9f2",
       "currentSha256": "44cdcbfbfe733f872c5e0a922da32c434bf35070a079f851d8496e309dc77c1c",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/HostPlayersModal.tsx",
+        "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+        "packages/web/src/features/game/components/TadazzMotionStage.tsx",
+        "packages/web/src/features/game/components/host-presentation-controller.ts",
+        "packages/web/src/features/game/components/tadazz-show/legacy-stage-elements.tsx",
+        "packages/web/src/features/game/components/tadazz-show/show-theme-adapters.ts",
+        "packages/web/src/features/game/components/tadazz-show/use-game-extension-connection.ts",
+        "packages/web/src/features/game/components/tadazz-show/use-legacy-presentation.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx",
+        "packages/web/src/features/game/contexts/view-role-context.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at GameWrapper extension connection, legacy presentation, controls; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 50,
       "file": "packages/web/src/features/game/components/join/Room.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "join Room router id",
       "reason": "One-line route-id correction follows generated TanStack route topology; restoring the obsolete id breaks typed route search.",
       "readSha256": "ff9b1f42dfd2230dcd8f675ea1355943fe2baac342b3e2c7fdceeb0e612c57e8",
       "currentSha256": "ff9b1f42dfd2230dcd8f675ea1355943fe2baac342b3e2c7fdceeb0e612c57e8",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at join Room router id; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 51,
       "file": "packages/web/src/features/game/components/states/Answers.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Answers extension state and enhanced presentation",
       "reason": "Moved shared envelope/animation/decoration resolution, legacy voting motion and answer HUD into owned presentation hooks/components; shared underline lives in extensions/presentation. Original socket submission, cooldown and duplicate-audio suppression remain at their authoritative boundaries.",
       "readSha256": "ce42a2a4cd98652ffb9fc8a11a023b135191003d3873f45115122a6f9443569c",
       "currentSha256": "cf1f5d2ad0d1649243ece356a825476a0a48667f7125f9ac87c603a4ff00b39d",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/QuestionEntrance.tsx",
+        "packages/web/src/features/game/components/tadazz-show/answer-stage-elements.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-question-presentation.ts",
+        "packages/web/src/features/game/contexts/view-role-context.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Answers extension state and enhanced presentation; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 52,
       "file": "packages/web/src/features/game/components/states/Leaderboard.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Leaderboard team wrapper",
       "reason": "Moved team-store, translation and scoreboard binding into tadazz-show/team-adapters.tsx. Original leaderboard retains individual ranking and spring animation.",
       "readSha256": "05d48be4a3d7a4fc7d8f2814ce8a244d7716d985fbf333892e9e133a1962b998",
       "currentSha256": "73c868ed0df957d40b34a761401ed3d8880f3ae5d335f6f98df74b3b0cf9452e",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/tadazz-show/team-adapters.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Leaderboard team wrapper; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 53,
       "file": "packages/web/src/features/game/components/states/Podium.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Podium viewport containment",
       "reason": "Only six layout/class changes prevent clipped spotlight and overflow at compact aspect ratios. No new business or rendering logic to extract; keep original podium choreography.",
       "readSha256": "9949a8bdf28680f78affe0a657be4bbb0d425db9ee250674a101aca093e0beb3",
       "currentSha256": "9949a8bdf28680f78affe0a657be4bbb0d425db9ee250674a101aca093e0beb3",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Podium viewport containment; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 54,
       "file": "packages/web/src/features/game/components/states/Question.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Question state/decoration",
       "reason": "Moved shared envelope/animation/decoration projection into use-question-presentation.ts and reusable underline into extensions/presentation. Original question media/sound hooks and responsive question geometry remain.",
       "readSha256": "f426b63cb662490ccbca025fa04dff33f4c8d1ad5e56b30285372fbeca5c7083",
       "currentSha256": "6ed0e91cc1effbcf4e6e403fbebfe9b5cdf552787c0f9c64f581e6995d0b35f7",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/QuestionEntrance.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-question-presentation.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Question state/decoration; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 55,
       "file": "packages/web/src/features/game/components/states/Responses.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Responses reveal lifecycle and picture results",
       "reason": "Moved authoritative snapshot validation, percentage/reveal lifecycle into use-response-reveal.ts and enhanced choice cards into choice-results-view.tsx. Original Responses retains QUESTION_REGISTRY dispatch and specialized estimation results; no choice rendering implementation remains.",
       "readSha256": "6e82662d5ff7f49bb16e884f7068cb357129752920c194a76dc2cb74b9ce2eca",
       "currentSha256": "d3ca2b441cc70e7752af72c30435a528ffd53be93043bc86e643f8081e27d2ad",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/game/components/tadazz-show/choice-results-view.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-response-reveal.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Responses reveal lifecycle and picture results; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 56,
       "file": "packages/web/src/features/game/components/states/Room.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "Room team assignment",
       "reason": "Moved team subscription/reassignment binding into team-adapters.tsx. Original room retains player roster events, original lobby animation and QR with the intentional /game entry URL.",
       "readSha256": "458e2a37682c87b396a84e9cf1425558e204f6c4b42f37c5fba59f24ec1e163b",
       "currentSha256": "4de082043e12e57fba1c9383cfaabd0be7e0a1e1f745e5e1de9559b7a7bd61d0",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/tadazz-show/team-adapters.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Room team assignment; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 57,
       "file": "packages/web/src/features/game/contexts/socket-context.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Socket debug registration",
       "reason": "Four-line window socket exposure is used by current browser transport diagnostics. Keep behavior during cleanup; isolate the diagnostic adapter if changed, and do not remove it while browser checks depend on it.",
       "readSha256": "cd836b19883c05a10c06462522404bffd650252efb5258f222ba56c899f83038",
       "currentSha256": "cd836b19883c05a10c06462522404bffd650252efb5258f222ba56c899f83038",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Socket debug registration; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 58,
       "file": "packages/web/src/features/game/stores/manager.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "ManagerState.extensionState/hostPresence",
       "reason": "Two explicit nullable store fields and initial values are necessary shared state integration. No policy implementation to relocate.",
       "readSha256": "a5d2cdaebca799e922abe9b7d6cb1d1c74eb31b8d8150581f08e315b97cd2d5c",
       "currentSha256": "a5d2cdaebca799e922abe9b7d6cb1d1c74eb31b8d8150581f08e315b97cd2d5c",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at ManagerState.extensionState/hostPresence; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 59,
       "file": "packages/web/src/features/game/utils/constants.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "answer color/label constants and result mapping",
       "reason": "Fifth answer and numeric labels implement the signed answer/DTMF convention across editor/player/projector. SHOW_RESPONSES mapping is required for shared audience renderers.",
       "readSha256": "812c80d3cdfcb8ba52d08feda81c424008ba9e94c9d88f2e77db9a8b1a96c73b",
       "currentSha256": "812c80d3cdfcb8ba52d08feda81c424008ba9e94c9d88f2e77db9a8b1a96c73b",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at answer color/label constants and result mapping; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 60,
       "file": "packages/web/src/features/manager/components/ManagerPassword.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "ManagerPassword Card classes",
       "reason": "Single responsive Card style change matches the current manager login. Hiding one class override in global CSS would reduce clarity.",
       "readSha256": "c261b492721fba89e503aab6f0eceb24d727696426c50e8f43023e5ce670d178",
       "currentSha256": "c261b492721fba89e503aab6f0eceb24d727696426c50e8f43023e5ce670d178",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at ManagerPassword Card classes; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 61,
       "file": "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "ConfigManageQuizz file import/export",
       "reason": "Moved file download, workbook/native import/export, preflight and composite commit to configurations/use-show-file-actions.ts; added export buttons to ShowExportActions.tsx. Original configuration list/delete/create/navigation and accessibility remain.",
       "readSha256": "9413995d6119cf09e665f705dd223b62ae2f8ac50cda145378e251d2eeb29271",
       "currentSha256": "393410e706b72421b8ae605462d874fa6d7340d736468eb43c10e13a68332de5",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/configurations/ShowExportActions.tsx",
+        "packages/web/src/features/manager/components/configurations/ShowImportModal.tsx",
+        "packages/web/src/features/manager/components/configurations/use-show-file-actions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at ConfigManageQuizz file import/export; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 62,
       "file": "packages/web/src/features/manager/queries.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-restored-to-upstream",
       "decision": "restore",
       "symbols": "manager/queries.ts roster API adapters",
       "reason": "Moved added roster endpoints to owned roster-queries.ts, redirected actual named imports, restored original queries.ts byte-for-byte. Real HTTP and app/e2e typechecks verify inferred Hono routes.",
       "readSha256": "38c54a35c6e084a29667f6d0839a6c93e5f1b7d9ffceaa7b463200598e60e9b4",
       "currentSha256": "38c54a35c6e084a29667f6d0839a6c93e5f1b7d9ffceaa7b463200598e60e9b4",
-      "matchesGitBaseline": true
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "packages/web/src/features/manager/roster-queries.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 63,
       "file": "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "MultiAnswers optional presentation props",
       "reason": "Small visual/entrance prop forwarding and fifth-item span are the necessary shared AnswerButton integration; selection and submission remain original. No duplicated multi-choice scoring.",
       "readSha256": "39357299d32faafe2ab588bfbd05a384f674168cf18ddf17d0938febeed27f6f",
       "currentSha256": "39357299d32faafe2ab588bfbd05a384f674168cf18ddf17d0938febeed27f6f",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at MultiAnswers optional presentation props; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 64,
       "file": "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "SingleAnswers optional image-grid adapter",
       "reason": "Actual picture grid lives in owned PhotoCardGrid. Keep small conditional adapter, optional prop forwarding and fifth-card span; original onSubmit binding retains answer authority.",
       "readSha256": "8db019eb42b045171f7cf889c7be2d084e4607768896bdafaa2cd181867fe098",
       "currentSha256": "8db019eb42b045171f7cf889c7be2d084e4607768896bdafaa2cd181867fe098",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/PhotoCardGrid.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at SingleAnswers optional image-grid adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 65,
       "file": "packages/web/src/features/questions/types.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "AnswerComponentProps",
       "reason": "Three optional extension presentation props define the shared renderer contract. Do not conceal necessary API extension through unsafe casts or module augmentation.",
       "readSha256": "5f0b0f79d6ae801ee8e181834d154d08bb2e079db52ba92dba9dbbcaf4f10aa9",
       "currentSha256": "5f0b0f79d6ae801ee8e181834d154d08bb2e079db52ba92dba9dbbcaf4f10aa9",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at AnswerComponentProps; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 66,
       "file": "packages/web/src/features/questions/utils.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "choiceInitialValues null/partial guard",
       "reason": "Small defensive initialization guard prevents crashes during empty/transitional editor selection. Original default generation remains unchanged.",
       "readSha256": "107dddb68161762d39d467b46f94e7eb5cc4bc164fef77f35c073bd6a34582fe",
       "currentSha256": "107dddb68161762d39d467b46f94e7eb5cc4bc164fef77f35c073bd6a34582fe",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at choiceInitialValues null/partial guard; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 67,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "MediaLibraryToolbar acceptType",
       "reason": "Optional locked filter and upload accept forwarding are required at this shared toolbar. Actual upload validation and catalog policy are separate; retain the Radix/Tailwind controls.",
       "readSha256": "ec2e6bcdd3c4ce05c9684447e517dce5686b4b2d4884c46cde61b4a88df2d847",
       "currentSha256": "e2dd37641e5dd7b89d3611e9c974d2d9101ca4e1dd1bdb1cc42d44a4b34762c8",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at MediaLibraryToolbar acceptType; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 68,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "MediaLibrary catalog, preview, safe deletion, tabs",
       "reason": "Read complete current source. Moved catalog association, theme-owned built-ins, preview lifecycle, reference reconciliation and delete mutation into use-media-library-extensions.ts. Moved new scope tabs, delete banner and built-in list to extension-panels.tsx. Original dialog/grid/drop/selection shell remains. Added real preview unmount cleanup.",
       "readSha256": "4b6c1e2da5ad4bcbd113839f8a7f0126443a3cb75b9ebaa49678ca05aa43f3e1",
       "currentSha256": "492d21da7cadf280de6a971575a7644136b47ce6c02a4a7ead8717f8a6f50603",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/extension-panels.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/use-media-library-extensions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at MediaLibrary catalog, preview, safe deletion, tabs; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 69,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuestionEditorAnswers visual state and controls",
       "reason": "Moved visual mutation/alt/mode/picker policy into use-answer-visual-editor.ts and added controls into AnswerVisualControls.tsx. Original react-hook-form Controller, solution picker and min/max answer mutation remain; removal prunes visuals through the extracted policy.",
       "readSha256": "fef50b206b194d0c34a9eec38396410b204a3649741c76a77c4adbd452247605",
       "currentSha256": "00f80b29443892c1d65f84bd30fcd80dfb30aafac88c31846513e2adcf70b906",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/use-answer-visual-editor.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuestionEditorAnswers visual state and controls; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 70,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "BaseConfig optional sections/mixed mode",
       "reason": "Only public extension config components and per-card mode resolver are wired here. Actual card audio/background/motion editors already live in new downstream files.",
       "readSha256": "7a7bf98887b4b6d200cbaa65a184fbd64b3101bb7ea7108df8b57c42ab5348e8",
       "currentSha256": "99b0af4e3c02ade1a359f8cc3b5fee22ec47b48636af13221a61b9233703a68e",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at BaseConfig optional sections/mixed mode; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 71,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "ConfigField.Label icon optional",
       "reason": "One optional prop makes text-only downstream settings reuse the existing Razzia label; no implementation or design fork.",
       "readSha256": "b4d926df7dde43e57378b74e5ab39986cf664c984d4fe3631760ef5a1252d280",
       "currentSha256": "b4d926df7dde43e57378b74e5ab39986cf664c984d4fe3631760ef5a1252d280",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at ConfigField.Label icon optional; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 72,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "QuestionEditorConfig per-card mode and containment",
       "reason": "Per-card mode/category hook and responsive aside classes are necessary integration. Type-to-config registry stays original.",
       "readSha256": "762dd42803fe61b2d93f6ce0784894d8074e8062b42c2b36115195f2ea5eb40e",
       "currentSha256": "8c8bae85bc08cba8b36990868a11f384ae78d8fc561792732fa6bf27f37ef081",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuestionEditorConfig per-card mode and containment; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 73,
       "file": "packages/web/src/features/quizz/components/QuestionEditor/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuestionEditor fit notice/background preview",
       "reason": "Moved stage-fit warning and authored background preview into QuestionEditor/extension-adornments.tsx. Original editor retains field ordering and transient-empty guard.",
       "readSha256": "8e42cf36b93ba64909e054a65720f6daa58ca57c25fb7928fc0db15e5aef0372",
       "currentSha256": "e633a74de844b8465909e787ba6899f4cc485311be9d14db21983df97eb2ec45",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/QuestionEditor/extension-adornments.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuestionEditor fit notice/background preview; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 74,
       "file": "packages/web/src/features/quizz/components/QuizzEditorCard.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuizzEditorCard duplicate action",
       "reason": "Moved duplicate/delete controls into studio/QuestionCardActions.tsx, retaining AlertDialog, event propagation and accessible button behavior. Original card/media/content stays in place.",
       "readSha256": "84dc11670b7044fd6bf77877a0637ee281b388eb6892e8c4ca561722be482cc0",
       "currentSha256": "4640095024a9d70f4bb822abb1ab28fa16bd40a35dc855c84ad1c2e675a64a66",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/QuestionCardActions.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuizzEditorCard duplicate action; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 75,
       "file": "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuizzEditorHeader composite persistence and Studio controls",
       "reason": "Read complete current source. Moved composite save/create/conflict lifecycle to use-composite-quizz-save.ts and Studio navigation/type/conversion controls to header-controls.tsx. Original title field and save/exit shell remain, with explicit small hooks.",
       "readSha256": "dbf2b51e2e31b651f9eb515e288aad6770f4e855785bdae37d535859041e270a",
       "currentSha256": "13b5738668524345ab058d1a3069ea0bd2a282af45ba3042b5d7ac045748d0bd",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/ConflictDialog.tsx",
+        "packages/web/src/features/quizz/components/studio/header-controls.tsx",
+        "packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuizzEditorHeader composite persistence and Studio controls; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 76,
       "file": "packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuizzEditorSidebar authored timeline",
       "reason": "Moved scene sorting/mapping/selection/insertion into use-studio-timeline-sidebar.tsx, injecting the original SortableQuestionItem. Original upstream question sorting/card shell and small form/timeline composition remain.",
       "readSha256": "f598e4564b38afb5e88db7edc38723cd694b2a373f7d9a1adbef3ef3083fafbb",
       "currentSha256": "e9360ec5a4afb765e312e2df9505e86d2b239265089fb414f55b6c818afb0507",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/use-studio-timeline-sidebar.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuizzEditorSidebar authored timeline; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 77,
       "file": "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "QuizzEditorProvider extras and stable identity",
       "reason": "Moved extras loading/conflict/stable IDs and V1/V2 metadata transforms into contexts/extensions/use-quizz-extras.ts. Original useFieldArray remains the sole form-mutation authority and invokes the owned metadata adapter alongside the original operation.",
       "readSha256": "f8ec67dfd5d4bda2fc763775d4efc6e076c4c4d49f24b251872ea5fc40db245a",
       "currentSha256": "8f571449acefc6a860b41abc913a3a5157847a735779958756619bf5dd13b182",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at QuizzEditorProvider extras and stable identity; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 78,
       "file": "packages/web/src/features/quizz/hooks/useUploadMedia.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "useUploadMedia accept validation",
       "reason": "Moved typed accept-list/file-kind policy to extensions/src/core/media-selection.ts; Toolbar and upload hook share it. Original upload hook retains mutation, size validation and error presentation.",
       "readSha256": "ecab512746751857c774fd814af7b84b7866744ec0b9c5b2c76e8e81b9e9be3a",
       "currentSha256": "9c0e697f1c6c1f91d106e8a6ffc42660871530f76d7190f78522d79da799525a",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at useUploadMedia accept validation; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 79,
       "file": "packages/web/src/features/quizz/queries.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "mediaKeys.catalog/deleteMedia detach",
       "reason": "Small shared cache-key and delete query option are necessary API integration. Delete safety implementation is server-side; original upload/list queries remain.",
       "readSha256": "0f66c4372cdf8d24834a3002b0618c6ad163dfc4b0b65a01581f33dba6da4e7e",
       "currentSha256": "0f66c4372cdf8d24834a3002b0618c6ad163dfc4b0b65a01581f33dba6da4e7e",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at mediaKeys.catalog/deleteMedia detach; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 80,
       "file": "packages/web/src/i18n.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "i18n extension registration",
       "reason": "Extension namespace registration and host additions are minimal boot integration; original locale JSON files were restored. Query-string language selection is intentional for existing supported locales and previews.",
       "readSha256": "af9923f3399910e39f2f4301cada0d91132f1a2f071fa4b5e72f958cc9c059de",
       "currentSha256": "af9923f3399910e39f2f4301cada0d91132f1a2f071fa4b5e72f958cc9c059de",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at i18n extension registration; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 81,
       "file": "packages/web/src/index.css",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "CSS extension import/source and fifth color",
       "reason": "Only extension stylesheet import, Tailwind source registration and fifth answer token remain. Full downstream effects already live outside the original stylesheet.",
       "readSha256": "7ec692a4158f90baf7fc93f815bfd4d32493712947d31c777d0a8ff387190c5e",
       "currentSha256": "7ec692a4158f90baf7fc93f815bfd4d32493712947d31c777d0a8ff387190c5e",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at CSS extension import/source and fifth color; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 82,
       "file": "packages/web/src/locales/locales.test.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "locale test registration",
       "reason": "Tests must include the same merged host additions as runtime when checking socket error keys. Original localization coverage remains active across eight languages.",
       "readSha256": "59965642d59b509213f15f7869cf26fa3ae13931a97040fbf4e7efb1684b2d39",
       "currentSha256": "59965642d59b509213f15f7869cf26fa3ae13931a97040fbf4e7efb1684b2d39",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at locale test registration; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 83,
       "file": "packages/web/src/pages/(auth)/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "root auth redirect",
       "reason": "Minimal route-level migration preserves old printed pin URLs via /game and directs the manager entry to /manager. Removed player entry implementation already lives in the new /game route.",
       "readSha256": "0a6188a144fc3b5048d6c36c09088b6c60bdf5115219a8aa65a61a2d412aa86d",
       "currentSha256": "0a6188a144fc3b5048d6c36c09088b6c60bdf5115219a8aa65a61a2d412aa86d",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at root auth redirect; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 84,
       "file": "packages/web/src/pages/(auth)/layout.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "AuthLayout manager backdrop branch",
       "reason": "Small route-composition condition selects the existing owned ManagerAuthBackground and retains the player language switcher. No account/business logic belongs here.",
       "readSha256": "ee74bb6710722b3d9096b6617a12448f400547e2fdae42dfc065e606b0a65f7a",
       "currentSha256": "ee74bb6710722b3d9096b6617a12448f400547e2fdae42dfc065e606b0a65f7a",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/ManagerAuthBackground.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at AuthLayout manager backdrop branch; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 85,
       "file": "packages/web/src/pages/(auth)/manager/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "extract",
       "symbols": "ManagerAuthPage account mode/preloader",
       "reason": "Moved account loading/error/account/legacy view into manager/components/ManagerAuthPage.tsx and session preloader into manager/account-route-guard.ts. Original route only registers component and beforeLoad; redirect control flow remains explicit in the owned guard.",
       "readSha256": "d6e6990309f9384b054bf13f6c81522edf45a1e9ed0b0a669ec198ed9167d30b",
       "currentSha256": "0a1877643913599ac193db18b6c26329b9848f2e0983826014afcc56b0c76adb",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/manager/account-route-guard.ts",
+        "packages/web/src/features/manager/components/ManagerAuthPage.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at ManagerAuthPage account mode/preloader; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 86,
       "file": "packages/web/src/pages/manager/config.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "manager config background adapter",
       "reason": "Only imports/wraps the owned branded background around existing Configurations. Nothing substantial remains to extract.",
       "readSha256": "24016e365d097a1cd69d2a65e21d884ed598b7f3b2772497bb322bdd2d742a59",
       "currentSha256": "24016e365d097a1cd69d2a65e21d884ed598b7f3b2772497bb322bdd2d742a59",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/ManagerAuthBackground.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at manager config background adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 87,
       "file": "packages/web/src/pages/manager/quizz/$quizzId.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "existing quiz route StudioShell adapter",
       "reason": "Original data fetching/error handling remains; original three-part editor shell is replaced by the owned StudioShell component. Minimal required composition.",
       "readSha256": "2b636e6c0a2ab4db5a3e50ef762d842b8ff2eb049375b61fd66777f0482b1fab",
       "currentSha256": "2b636e6c0a2ab4db5a3e50ef762d842b8ff2eb049375b61fd66777f0482b1fab",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at existing quiz route StudioShell adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 88,
       "file": "packages/web/src/pages/manager/quizz/index.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "new quiz route StudioShell adapter",
       "reason": "Original provider owns form; a single owned StudioShell replaces inline layout. Minimal required integration.",
       "readSha256": "3e53a8c4717d16120d76c65169a23972ce2b1c47f076357da44eda85dee24869",
       "currentSha256": "3e53a8c4717d16120d76c65169a23972ce2b1c47f076357da44eda85dee24869",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/index.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at new quiz route StudioShell adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 89,
       "file": "packages/web/src/pages/party/$gameId.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "player route PlayerGameView adapter",
       "reason": "Original socket lifecycle stays in place; owned role-aware view replaces inline renderer selection. /game reset target preserves moved public entry.",
       "readSha256": "7d5cbf7ea38e90d1f3a2157efead86abdbb9dfa9380885fab9d2ca2659ba3faa",
       "currentSha256": "7d5cbf7ea38e90d1f3a2157efead86abdbb9dfa9380885fab9d2ca2659ba3faa",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/PlayerGameView.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at player route PlayerGameView adapter; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 90,
       "file": "packages/web/src/pages/party/manager/$gameId.tsx",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "manager route extension store subscription",
       "reason": "Retained the route-bound monotonic epoch/sequence guard and store update. This manager route receives updates before the stage mounts; merging it with the stage-owned local hook would change subscription lifetime. Exit remains available beyond lobby.",
       "readSha256": "a23c871e36df70334640a4379d53e5e5a0dfdf3d08c65899e9937311dc753811",
       "currentSha256": "a23c871e36df70334640a4379d53e5e5a0dfdf3d08c65899e9937311dc753811",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at manager route extension store subscription; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 91,
       "file": "packages/web/src/route.gen.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "generated route.gen.ts",
-      "reason": "Generated TanStack route declarations add only /game and /display/$gameId. Regenerate from actual route sources; do not manually move generated contracts.",
+      "reason": "Generated TanStack route declarations for /game, /display, authenticated theme preview and the synchronized billing checkout. Generated by the actual production build, never manually maintained.",
       "readSha256": "1d6c009d003679cbdda55353cf7a87475a9e3e4823c8760bfc1b130a80bfe809",
-      "currentSha256": "1d6c009d003679cbdda55353cf7a87475a9e3e4823c8760bfc1b130a80bfe809",
-      "matchesGitBaseline": false
+      "currentSha256": "47eae7e30040e92de88b657b121d7c33176ca5ff0350fd93dac8c4f5ea78f3d6",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/src/pages/(auth)/game.tsx",
+        "packages/web/src/pages/display/$gameId.tsx",
+        "packages/web/src/pages/manager/checkout.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at generated route.gen.ts; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 92,
       "file": "packages/web/vite.config.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Vite config CONFIG_PATH and JSON media MIME",
-      "reason": "Small local configuration-root hook is necessary for isolated worktrees/test servers; JSON MIME supports local Lottie. Existing serveDir implementation is unchanged.",
+      "reason": "Configuration-root hook isolates worktree/test data; JSON MIME supports Lottie. Added an owned private-media proxy policy: accounts ON forwards /media to authenticated backend; accounts OFF retains the original static middleware. No tenant/SQLite asset is made public by the dev/preview server.",
       "readSha256": "64293ec86bf357548737efcb66ebef6cc9bb028dc3652b12ffc6e2c34228d7c9",
-      "currentSha256": "64293ec86bf357548737efcb66ebef6cc9bb028dc3652b12ffc6e2c34228d7c9",
-      "matchesGitBaseline": false
+      "currentSha256": "a18e81fc0ea839bd33bcac5cdcd1e3a3c73db89d39e2c3e5cd346898534e30a3",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "packages/web/vite/private-media.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Vite config CONFIG_PATH and JSON media MIME; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 93,
       "file": "pnpm-lock.yaml",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "generated pnpm lock importers and runtime assets",
       "reason": "Reviewed generated dependency delta: workspace links, official dotLottie React/web runtime, and existing oxlint 1.87 to 1.90 update/bindings. Do not duplicate or relocate lock metadata; validate frozen install. The unrelated lint tool update warrants compatibility assessment because its peer lower bound differs.",
       "readSha256": "9e9f1884188f80a51464c9f896ad82c3ebb9f7d32072a38b3e0ab3d10d93c4d6",
-      "currentSha256": "9e9f1884188f80a51464c9f896ad82c3ebb9f7d32072a38b3e0ab3d10d93c4d6",
-      "matchesGitBaseline": false
+      "currentSha256": "13bee2c056eb1d42e92bbd7b194af40db11eaf3a1f25a40d397d1a45d21a6408",
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "Review the upstream changes at generated pnpm lock importers and runtime assets; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 94,
       "file": "pnpm-workspace.yaml",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "workspace extensions entry",
       "reason": "Single workspace registration is mandatory build integration.",
       "readSha256": "0ece424c7aa68f6f205e61720de504a31e513b0dbb00e4b8fe0d9e0f51031502",
       "currentSha256": "0ece424c7aa68f6f205e61720de504a31e513b0dbb00e4b8fe0d9e0f51031502",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "Review the upstream changes at workspace extensions entry; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 95,
       "file": "tsconfig.json",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "TypeScript extension paths",
       "reason": "Two alias entries provide the public extension surface to compiler tooling.",
       "readSha256": "d56ba48424503b6b02f99f8eb319e9ec7c1036c5cc0d31cc8a0795391937c474",
       "currentSha256": "d56ba48424503b6b02f99f8eb319e9ec7c1036c5cc0d31cc8a0795391937c474",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at TypeScript extension paths; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     },
     {
       "number": 96,
       "file": "vitest.config.ts",
-      "status": "reviewed-awaiting-remote-verification",
+      "status": "reviewed-remote-verified",
       "decision": "retain",
       "symbols": "Vitest extension alias",
       "reason": "One resolver registration ensures root regression tests execute actual extension source.",
       "readSha256": "a83fd2f7d68452456a2f0bc9a8821b71e4fce7132734e077064e66c1e13bd7c9",
       "currentSha256": "a83fd2f7d68452456a2f0bc9a8821b71e4fce7132734e077064e66c1e13bd7c9",
-      "matchesGitBaseline": false
+      "matchesGitBaseline": false,
+      "extensionTargets": [],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Vitest extension alias; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 97,
+      "file": "packages/web/src/locales/de/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "ff1019b572e6b6a0479f0a6a37833991feb1d644db0574275ac0c35a4a146223",
+      "currentSha256": "ff1019b572e6b6a0479f0a6a37833991feb1d644db0574275ac0c35a4a146223",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 98,
+      "file": "packages/web/src/locales/de/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "148c54ca19749ac7df2f85f29ba60d9cd9ecbe27132011b618a347b672ead497",
+      "currentSha256": "148c54ca19749ac7df2f85f29ba60d9cd9ecbe27132011b618a347b672ead497",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 99,
+      "file": "packages/web/src/locales/en/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "e764f859a86056b4f94cab14848a40348099f64951a4703b6746cf45897e5650",
+      "currentSha256": "e764f859a86056b4f94cab14848a40348099f64951a4703b6746cf45897e5650",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 100,
+      "file": "packages/web/src/locales/en/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "120a50cd60d3410e4ac3daeb717e252c47801049fd8d79f8b1849d7c6ea859e9",
+      "currentSha256": "120a50cd60d3410e4ac3daeb717e252c47801049fd8d79f8b1849d7c6ea859e9",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 101,
+      "file": "packages/web/src/locales/es/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "471107b0386799959a4d5c414280273286c9270c7fae5c1886370d27458ec371",
+      "currentSha256": "471107b0386799959a4d5c414280273286c9270c7fae5c1886370d27458ec371",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 102,
+      "file": "packages/web/src/locales/es/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "e59a6e5a2a8412e5ddc19cad8ba0f79fbc31864051795b278f34485440db8c83",
+      "currentSha256": "e59a6e5a2a8412e5ddc19cad8ba0f79fbc31864051795b278f34485440db8c83",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 103,
+      "file": "packages/web/src/locales/fr/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "7648f9d974d72b49eb9af518cee36640c930a816a630a2ba6adb63449aabc9c9",
+      "currentSha256": "7648f9d974d72b49eb9af518cee36640c930a816a630a2ba6adb63449aabc9c9",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 104,
+      "file": "packages/web/src/locales/fr/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "4b7905ef2361a49f8ad307c2e67f1b51953a4aeaf909e1b954cbc91917bfd0c3",
+      "currentSha256": "4b7905ef2361a49f8ad307c2e67f1b51953a4aeaf909e1b954cbc91917bfd0c3",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 105,
+      "file": "packages/web/src/locales/it/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "e44f4952292db45bcebb9e9fcbd5376c5128e1a14c820cf280c84f21a738fda9",
+      "currentSha256": "e44f4952292db45bcebb9e9fcbd5376c5128e1a14c820cf280c84f21a738fda9",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 106,
+      "file": "packages/web/src/locales/it/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "8ced91aa3cc9115837967a08be0d1cba2966d754276409d84250f70f138d7005",
+      "currentSha256": "8ced91aa3cc9115837967a08be0d1cba2966d754276409d84250f70f138d7005",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 107,
+      "file": "packages/web/src/locales/ja/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "9e67b6c80536a48f70543ec8a50c8e8c9f3d8d50de8f2245b4e81a409351c4b0",
+      "currentSha256": "9e67b6c80536a48f70543ec8a50c8e8c9f3d8d50de8f2245b4e81a409351c4b0",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 108,
+      "file": "packages/web/src/locales/ja/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "6dd3112e2d81c7e83177116cac7641ffebb26063a1fd13b6d77f539540a8cc70",
+      "currentSha256": "6dd3112e2d81c7e83177116cac7641ffebb26063a1fd13b6d77f539540a8cc70",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 109,
+      "file": "packages/web/src/locales/tr/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "b5683886a9041d42c884a97b52b16db361204cd045d7e18bb809c24c1fac92da",
+      "currentSha256": "b5683886a9041d42c884a97b52b16db361204cd045d7e18bb809c24c1fac92da",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 110,
+      "file": "packages/web/src/locales/tr/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "431e90653feb8f176d7bc265def5115b58fe68aa2e0b597416a9e59c8b680056",
+      "currentSha256": "431e90653feb8f176d7bc265def5115b58fe68aa2e0b597416a9e59c8b680056",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 111,
+      "file": "packages/web/src/locales/vi/errors.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "77cb3df20b1bca49c1619d04c8c638e0ed2e981241436e6b53877d609af2b30b",
+      "currentSha256": "77cb3df20b1bca49c1619d04c8c638e0ed2e981241436e6b53877d609af2b30b",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": true,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 112,
+      "file": "packages/web/src/locales/vi/quizz.json",
+      "status": "reviewed-restored-to-upstream",
+      "decision": "restored",
+      "symbols": "Original locale dictionary",
+      "reason": "Restored byte-for-byte to Razzia 4.0.1. Downstream host additions are registered by extensions/src/locales/host-additions.ts and the extension namespace; upstream dictionaries no longer contain product-specific keys.",
+      "readSha256": "c431d914c0ae1fd3ced4ceb54effff2c8a755a34113f006782da7665103131f9",
+      "currentSha256": "c431d914c0ae1fd3ced4ceb54effff2c8a755a34113f006782da7665103131f9",
+      "matchesGitBaseline": true,
+      "extensionTargets": [
+        "extensions/src/locales/host-additions.ts"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "No downstream hunk remains; take the new upstream file and keep owned regression/resource registration.",
+      "alternativeConsidered": "Keep downstream logic/labels in the original file; rejected because the listed owned modules preserve that behavior.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
+    },
+    {
+      "number": 113,
+      "file": "packages/web/src/features/manager/components/configurations/index.tsx",
+      "status": "reviewed-remote-verified",
+      "decision": "retain",
+      "symbols": "Configurations: billingEnabled/TabComponent/account-tab button",
+      "reason": "Synchronized the separate committed billing feature. The optional AccountBilling component and all checkout/entitlement policy live in owned billing modules. Retain the small OFF-by-default tab/button composition in the existing configuration shell; moving the original tabs or account state would widen the integration.",
+      "readSha256": "9d56b794f832be53eba099df1a2eb56345e2aa03e11f4c1c32f9d5d5b92c39c5",
+      "currentSha256": "9d56b794f832be53eba099df1a2eb56345e2aa03e11f4c1c32f9d5d5b92c39c5",
+      "matchesGitBaseline": false,
+      "extensionTargets": [
+        "extensions/src/editor/billing/panel.tsx",
+        "packages/web/src/features/manager/billing/index.tsx"
+      ],
+      "upstream402AlsoChanged": false,
+      "upgradeImpact": "Review the upstream changes at Configurations: billingEnabled/TabComponent/account-tab button; reapply only the retained seam described above, preserve its existing authority, and rerun the recorded integration checks.",
+      "alternativeConsidered": "Relocate or duplicate the shared validation/state/render boundary; retained the current explicit seam for the file-specific reason above.",
+      "verificationScope": "Shared remote build/type/unit/browser suites, not an individual assertion that every possible historical input is covered.",
+      "verificationEvidence": [
+        "qa-evidence/remote-cleanup-theme-20261108/remote-summary.json",
+        "qa-evidence/remote-cleanup-theme-20261108/local-source-identity.json"
+      ]
     }
   ],
-  "completion": "All 96 files semantically reviewed; extraction performed. Final closure awaits exact-source remote regression and theme installation/runtime acceptance.",
-  "verificationLocation": "Remote Oracle server only after owner steering; never restart local game or browser QA."
+  "completion": "All historical 96 and current-scope originals reviewed. Separable downstream implementations extracted; necessary authority/contract/composition seams retained with per-file rationale. Final synchronized runtime source verified in remote r12; human listening/physical iPad/content review are not claimed.",
+  "verificationLocation": "Remote Oracle server only after owner steering; never restart local game or browser QA.",
+  "historicalOriginal96": {
+    "commit": "4a93f4c",
+    "count": 96,
+    "files": [
+      "packages/common/src/constants.ts",
+      "packages/common/src/types/auth.ts",
+      "packages/common/src/types/game/index.ts",
+      "packages/common/src/types/game/socket.ts",
+      "packages/common/src/types/game/status.ts",
+      "packages/common/src/validators/auth.ts",
+      "packages/common/src/validators/game.ts",
+      "packages/common/src/validators/quizz.test.ts",
+      "packages/common/src/validators/quizz.ts",
+      "packages/common/src/validators/socket.ts",
+      "packages/e2e/.gitignore",
+      "packages/e2e/playwright.config.ts",
+      "packages/e2e/tsconfig.json",
+      "packages/e2e/utils/i18n.ts",
+      "packages/e2e/utils/manager.ts",
+      "packages/socket/package.json",
+      "packages/socket/src/api/index.ts",
+      "packages/socket/src/api/routes/games.ts",
+      "packages/socket/src/api/routes/media.ts",
+      "packages/socket/src/handlers/game.ts",
+      "packages/socket/src/index.ts",
+      "packages/socket/src/services/auth.ts",
+      "packages/socket/src/services/config.ts",
+      "packages/socket/src/services/game/cooldown-timer.ts",
+      "packages/socket/src/services/game/game.test.ts",
+      "packages/socket/src/services/game/index.ts",
+      "packages/socket/src/services/game/player-manager.ts",
+      "packages/socket/src/services/game/round-manager.ts",
+      "packages/socket/src/services/registry.ts",
+      "packages/socket/src/services/scoring/round.test.ts",
+      "packages/socket/src/services/scoring/round.ts",
+      "packages/socket/tsconfig.json",
+      "packages/web/package.json",
+      "packages/web/src/components/AlertDialog.tsx",
+      "packages/web/src/components/GameBackground.tsx",
+      "packages/web/src/components/QuestionMedia.tsx",
+      "packages/web/src/components/ToggleGroup.tsx",
+      "packages/web/src/features/game/components/AnswerButton.tsx",
+      "packages/web/src/features/game/components/AnswerNote.tsx",
+      "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+      "packages/web/src/features/game/components/GameWrapper.tsx",
+      "packages/web/src/features/game/components/states/Answers.tsx",
+      "packages/web/src/features/game/components/states/Leaderboard.tsx",
+      "packages/web/src/features/game/components/states/Podium.tsx",
+      "packages/web/src/features/game/components/states/Question.tsx",
+      "packages/web/src/features/game/components/states/Responses.tsx",
+      "packages/web/src/features/game/components/states/Room.tsx",
+      "packages/web/src/features/game/contexts/socket-context.tsx",
+      "packages/web/src/features/game/stores/manager.tsx",
+      "packages/web/src/features/game/utils/constants.ts",
+      "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx",
+      "packages/web/src/features/manager/queries.ts",
+      "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
+      "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
+      "packages/web/src/features/questions/types.ts",
+      "packages/web/src/features/questions/utils.ts",
+      "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx",
+      "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx",
+      "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx",
+      "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx",
+      "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx",
+      "packages/web/src/features/quizz/components/QuestionEditor/index.tsx",
+      "packages/web/src/features/quizz/components/QuizzEditorCard.tsx",
+      "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx",
+      "packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx",
+      "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
+      "packages/web/src/features/quizz/hooks/useUploadMedia.ts",
+      "packages/web/src/features/quizz/queries.ts",
+      "packages/web/src/i18n.ts",
+      "packages/web/src/index.css",
+      "packages/web/src/locales/de/errors.json",
+      "packages/web/src/locales/de/quizz.json",
+      "packages/web/src/locales/en/errors.json",
+      "packages/web/src/locales/en/quizz.json",
+      "packages/web/src/locales/es/errors.json",
+      "packages/web/src/locales/es/quizz.json",
+      "packages/web/src/locales/fr/errors.json",
+      "packages/web/src/locales/fr/quizz.json",
+      "packages/web/src/locales/it/errors.json",
+      "packages/web/src/locales/it/quizz.json",
+      "packages/web/src/locales/ja/errors.json",
+      "packages/web/src/locales/ja/quizz.json",
+      "packages/web/src/locales/tr/errors.json",
+      "packages/web/src/locales/tr/quizz.json",
+      "packages/web/src/locales/vi/errors.json",
+      "packages/web/src/locales/vi/quizz.json",
+      "packages/web/src/pages/manager/quizz/$quizzId.tsx",
+      "packages/web/src/pages/manager/quizz/index.tsx",
+      "packages/web/src/pages/party/$gameId.tsx",
+      "packages/web/src/pages/party/manager/$gameId.tsx",
+      "packages/web/src/route.gen.ts",
+      "packages/web/vite.config.ts",
+      "pnpm-lock.yaml",
+      "pnpm-workspace.yaml",
+      "tsconfig.json",
+      "vitest.config.ts"
+    ],
+    "coverage": "Every file is included in records; the sixteen original locale dictionaries were independently verified byte-exact."
+  },
+  "synchronizedBilling": "ef35617456a44ff88460a383e7a294a73300ddbd, merged in 398b8ad; phone metering injected into owned phone controller, no reintroduction of extracted Game code.",
+  "sourceCommit": "5c51ca73d00374aac4f626f6c5c74d9d3a96a9a8",
+  "verifiedOriginalFilesStillModified": 93,
+  "reviewedOriginalFilesRestored": 20
 }

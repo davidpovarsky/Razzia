@@ -1,0 +1,14 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/billing.spec.ts:33:1 › original manager UI, all locales, narrow and desktop layouts (4.9s)
+  ✓  2 [chromium] › tests/billing.spec.ts:79:1 › four currencies and access granted only after signed server notification (4.1s)
+  ✓  3 [chromium] › tests/billing.spec.ts:164:1 › a second authenticated account sees no other account's allowance (1.1s)
+  ✓  4 [webkit] › tests/billing.spec.ts:33:1 › original manager UI, all locales, narrow and desktop layouts (13.7s)
+  ✓  5 [webkit] › tests/billing.spec.ts:79:1 › four currencies and access granted only after signed server notification (6.7s)
+  ✓  6 [webkit] › tests/billing.spec.ts:164:1 › a second authenticated account sees no other account's allowance (1.9s)
+
+  6 passed (37.1s)

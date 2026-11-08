@@ -1,0 +1,11 @@
+  HTTP/1.1 200 OK
+  Server: nginx
+  Date: Sun, 08 Nov 2026 17:56:39 GMT
+  Content-Type: text/html
+  Content-Length: 985
+  Last-Modified: Sun, 08 Nov 2026 17:55:07 GMT
+  Connection: close
+  ETag: "6af0b77b-3d9"
+  Cache-Control: no-store, no-cache, must-revalidate
+  Accept-Ranges: bytes
+

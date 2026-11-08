@@ -1,0 +1,8 @@
+2026-11-08 17:56:35,535 CRIT Supervisor is running as root.  Privileges were not dropped because no user is specified in the config file.  If you intend to run as root, you can set user=root in the config file to avoid this message.
+2026-11-08 17:56:35,543 INFO supervisord started with pid 1
+2026-11-08 17:56:36,547 INFO spawned: 'nginx' with pid 12
+2026-11-08 17:56:36,552 INFO spawned: 'socket' with pid 13
+2026-11-08 17:56:37,701 INFO success: nginx entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+2026-11-08 17:56:37,701 INFO success: socket entered RUNNING state, process has stayed up for > than 1 seconds (startsecs)
+Game cleanup task started
+Server running on port 3001

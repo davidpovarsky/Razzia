@@ -1,0 +1,739 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "manifestVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,79}$"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+    },
+    "nameKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "descriptionKey": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "localizations": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "en",
+          "fr",
+          "de",
+          "es",
+          "it",
+          "ja",
+          "tr",
+          "vi"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[a-zA-Z0-9_.:-]+$"
+        },
+        "additionalProperties": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "en",
+        "fr",
+        "de",
+        "es",
+        "it",
+        "ja",
+        "tr",
+        "vi"
+      ]
+    },
+    "category": {
+      "type": "string",
+      "const": "show"
+    },
+    "kind": {
+      "type": "string",
+      "enum": [
+        "declarative",
+        "code-backed"
+      ]
+    },
+    "rendererApiVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "rendererId": {
+      "type": "string",
+      "enum": [
+        "tadazz-classic-stage"
+      ]
+    },
+    "posterAssetId": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160,
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "provenance": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 1000
+    },
+    "adapterAssets": {
+      "type": "object",
+      "properties": {
+        "questionBackdrop": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+        "showBackdrop": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        },
+        "brandLogo": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[a-zA-Z0-9._-]+$"
+        }
+      },
+      "required": [
+        "questionBackdrop",
+        "showBackdrop",
+        "brandLogo"
+      ],
+      "additionalProperties": false
+    },
+    "capabilities": {
+      "type": "object",
+      "properties": {
+        "playModes": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "quiz",
+              "survey"
+            ]
+          }
+        },
+        "questionTypes": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "single",
+              "multi",
+              "estimation"
+            ]
+          }
+        },
+        "roles": {
+          "minItems": 1,
+          "maxItems": 3,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": [
+              "manager",
+              "player",
+              "spectator"
+            ]
+          }
+        },
+        "minAnswers": {
+          "type": "integer",
+          "minimum": 2,
+          "maximum": 9007199254740991
+        },
+        "maxAnswers": {
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 64
+        },
+        "reducedMotion": {
+          "type": "string",
+          "const": "same-theme-static"
+        },
+        "animationPresets": {
+          "minItems": 1,
+          "maxItems": 32,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[a-zA-Z0-9._-]+$"
+          }
+        }
+      },
+      "required": [
+        "playModes",
+        "questionTypes",
+        "roles",
+        "minAnswers",
+        "maxAnswers",
+        "reducedMotion",
+        "animationPresets"
+      ],
+      "additionalProperties": false
+    },
+    "tokens": {
+      "type": "object",
+      "properties": {
+        "background": {
+          "type": "string",
+          "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+        },
+        "foreground": {
+          "type": "string",
+          "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+        },
+        "accent": {
+          "type": "string",
+          "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+        },
+        "fontId": {
+          "type": "string",
+          "enum": [
+            "rubik",
+            "goldy-canonical"
+          ]
+        },
+        "stageAspect": {
+          "type": "string",
+          "const": "16:9"
+        },
+        "imageSizing": {
+          "type": "string",
+          "enum": [
+            "square-contain",
+            "square-cover"
+          ]
+        },
+        "palette": {
+          "type": "object",
+          "properties": {
+            "night": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "purple": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "violet": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "pink": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "blue": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "royal": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "lime": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "gold": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "cream": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            },
+            "ink": {
+              "type": "string",
+              "pattern": "^#(?:[a-fA-F0-9]{3}|[a-fA-F0-9]{4}|[a-fA-F0-9]{6}|[a-fA-F0-9]{8})$"
+            }
+          },
+          "required": [
+            "night",
+            "purple",
+            "violet",
+            "pink",
+            "blue",
+            "royal",
+            "lime",
+            "gold",
+            "cream",
+            "ink"
+          ],
+          "additionalProperties": false
+        },
+        "effects": {
+          "type": "string",
+          "const": "goldy-canonical-v4"
+        },
+        "contrast": {
+          "type": "string",
+          "const": "light-on-dark-with-selected-outline"
+        }
+      },
+      "required": [
+        "background",
+        "foreground",
+        "accent",
+        "fontId",
+        "stageAspect",
+        "imageSizing",
+        "palette",
+        "effects",
+        "contrast"
+      ],
+      "additionalProperties": false
+    },
+    "slots": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "firstPaint",
+          "opening",
+          "lobby",
+          "question",
+          "answerCards",
+          "voting",
+          "timer",
+          "voteLock",
+          "resultsReveal",
+          "leaderboard",
+          "rankUpdate",
+          "zzTransition",
+          "interlude",
+          "closing",
+          "personalResult"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "defaultVariantId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[a-zA-Z0-9._-]+$"
+          },
+          "variants": {
+            "minItems": 1,
+            "maxItems": 32,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "labelKey": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "rendererId": {
+                  "type": "string",
+                  "enum": [
+                    "classic-shell",
+                    "classic-opening",
+                    "classic-lobby",
+                    "classic-question",
+                    "classic-cards",
+                    "classic-voting",
+                    "classic-timer",
+                    "classic-lock",
+                    "classic-results",
+                    "classic-leaderboard",
+                    "classic-rank",
+                    "classic-zz",
+                    "classic-interlude",
+                    "classic-closing",
+                    "classic-personal-result"
+                  ]
+                },
+                "backgroundAssetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "logoAssetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "mediaAssetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "overlayAssetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "animationId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                }
+              },
+              "required": [
+                "id",
+                "labelKey",
+                "rendererId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "customMedia": {
+            "default": "none",
+            "type": "string",
+            "enum": [
+              "none",
+              "background",
+              "foreground"
+            ]
+          }
+        },
+        "required": [
+          "defaultVariantId",
+          "variants",
+          "customMedia"
+        ],
+        "additionalProperties": false
+      },
+      "required": [
+        "firstPaint",
+        "opening",
+        "lobby",
+        "question",
+        "answerCards",
+        "voting",
+        "timer",
+        "voteLock",
+        "resultsReveal",
+        "leaderboard",
+        "rankUpdate",
+        "zzTransition",
+        "interlude",
+        "closing",
+        "personalResult"
+      ]
+    },
+    "audioEvents": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "opening",
+          "lobby",
+          "showQuestion",
+          "answersMusic",
+          "answerSelected",
+          "answerSubmitted",
+          "timerWarning",
+          "timerExpired",
+          "voteLocked",
+          "revealResults",
+          "leaderboard",
+          "zzTransition",
+          "podium1",
+          "podium2",
+          "podium3",
+          "closing"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "defaultVariantId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[a-zA-Z0-9._-]+$"
+          },
+          "variants": {
+            "minItems": 1,
+            "maxItems": 32,
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "labelKey": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160
+                },
+                "assetId": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 160,
+                  "pattern": "^[a-zA-Z0-9._-]+$"
+                },
+                "silent": {
+                  "type": "boolean"
+                },
+                "volume": {
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 1
+                },
+                "loop": {
+                  "type": "boolean"
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 100
+                },
+                "fadeMs": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 5000
+                },
+                "restart": {
+                  "type": "string",
+                  "enum": [
+                    "epoch",
+                    "event",
+                    "continuous"
+                  ]
+                },
+                "roles": {
+                  "minItems": 1,
+                  "maxItems": 3,
+                  "type": "array",
+                  "items": {
+                    "type": "string",
+                    "enum": [
+                      "manager",
+                      "player",
+                      "spectator"
+                    ]
+                  }
+                }
+              },
+              "required": [
+                "id",
+                "labelKey",
+                "silent",
+                "volume",
+                "loop",
+                "priority",
+                "fadeMs",
+                "restart",
+                "roles"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "customMedia": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "defaultVariantId",
+          "variants",
+          "customMedia"
+        ],
+        "additionalProperties": false
+      },
+      "required": [
+        "opening",
+        "lobby",
+        "showQuestion",
+        "answersMusic",
+        "answerSelected",
+        "answerSubmitted",
+        "timerWarning",
+        "timerExpired",
+        "voteLocked",
+        "revealResults",
+        "leaderboard",
+        "zzTransition",
+        "podium1",
+        "podium2",
+        "podium3",
+        "closing"
+      ]
+    },
+    "choreographyCues": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 160,
+        "pattern": "^[a-zA-Z0-9._-]+$"
+      },
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "event": {
+            "type": "string",
+            "enum": [
+              "opening",
+              "lobby",
+              "showQuestion",
+              "answersMusic",
+              "answerSelected",
+              "answerSubmitted",
+              "timerWarning",
+              "timerExpired",
+              "voteLocked",
+              "revealResults",
+              "leaderboard",
+              "zzTransition",
+              "podium1",
+              "podium2",
+              "podium3",
+              "closing"
+            ]
+          },
+          "variantId": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[a-zA-Z0-9._-]+$"
+          }
+        },
+        "required": [
+          "event",
+          "variantId"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "assets": {
+      "minItems": 1,
+      "maxItems": 256,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 160,
+            "pattern": "^[a-zA-Z0-9._-]+$"
+          },
+          "url": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "image",
+              "video",
+              "lottie",
+              "audio"
+            ]
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 100000000
+          },
+          "provenance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "rights": {
+            "type": "string",
+            "enum": [
+              "repository-existing",
+              "licensed",
+              "owner-authorized"
+            ]
+          },
+          "preload": {
+            "type": "string",
+            "enum": [
+              "critical",
+              "slot"
+            ]
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "kind",
+          "sha256",
+          "bytes",
+          "provenance",
+          "rights",
+          "preload"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "manifestVersion",
+    "id",
+    "version",
+    "nameKey",
+    "descriptionKey",
+    "category",
+    "kind",
+    "rendererApiVersion",
+    "rendererId",
+    "posterAssetId",
+    "provenance",
+    "adapterAssets",
+    "capabilities",
+    "tokens",
+    "slots",
+    "audioEvents",
+    "choreographyCues",
+    "assets"
+  ],
+  "additionalProperties": false
+}

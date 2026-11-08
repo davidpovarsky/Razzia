@@ -1,0 +1,7 @@
+test_actual_repository_classic_validates_without_installing (test_validate_theme.ValidatorTests.test_actual_repository_classic_validates_without_installing) ... ok
+test_customer_cannot_claim_existing_repository_rights (test_validate_theme.ValidatorTests.test_customer_cannot_claim_existing_repository_rights) ... ok
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.785s
+
+OK

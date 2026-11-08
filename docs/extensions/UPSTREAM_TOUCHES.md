@@ -102,3 +102,32 @@ conflicts at `pnpm-lock.yaml`; upstream was not merged into the product branch.
 The new Studio, theme adapter and extension files were absent from original
 Razzia `5161eb7`; they are downstream additions, not additional modified original
 files. Original motion keyframe/timing files remain unchanged by this task.
+
+
+### 2026-11-08 continuation — exhaustive review and durable installation
+
+The owner requested review of every historical original and remote-only game/
+browser verification. The authoritative union is now the 113 per-file records
+in `UPSTREAM_REVIEW_COMPLETE_2026-11-08.json`: all historical 96, the updated
+96, and the synchronized billing configuration hook. Twenty reviewed originals
+are byte-exact to baseline; 93 retain documented seams. The generated current
+ledger is `qa-evidence/remote-cleanup-theme-20261108/source-review/`.
+
+New essential protected seams: socket API mounts `/themes`; Game captures one
+approved account-scoped definition and includes its media references in existing
+room authorization; Vite delegates accounts-mode media to the authenticated
+backend through an owned policy. Alternatives of global registry mutation,
+public private-media aliases, uploaded code execution and duplicating the game
+engine were rejected. Implementations live in owned theme/install/preview modules.
+
+Latest committed billing work was merged into this isolated branch. Its phone
+admission/metering is injected into the already extracted phone controller;
+roster identity is shared between billing admission and the recorded join. The
+extracted Game implementations were not reintroduced during conflict resolution.
+Billing remains OFF in theme/legacy QA; its own synthetic suite verifies ON mode.
+
+Current upstream 4.0.2 merge rehearsal now reports Dockerfile AND pnpm-lock.yaml
+conflicts, superseding the earlier one-conflict observation above. The actual
+candidate Dockerfile, frozen install, nginx syntax, isolated startup/private-route
+checks and source regression are recorded in the current QA evidence. No main
+merge, push, production activation or Asana write is part of this continuation.

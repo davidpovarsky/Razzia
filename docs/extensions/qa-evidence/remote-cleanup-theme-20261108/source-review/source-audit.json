@@ -1,0 +1,1644 @@
+{
+  "generatedAt": "2026-11-08T18:09:00.895Z",
+  "baseline": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+  "starting": "46a1e0049a23816b32d5061592bd373f0e636b9e",
+  "head": "5c51ca73d00374aac4f626f6c5c74d9d3a96a9a8",
+  "upstreamHead": "8345663f7f47a8d466964fcf5b642cc7a4ed90fb",
+  "methodology": "Only files present in the original Git tree count as modified originals. New tracked files are separate. Current tracked working-tree edits are included; untracked additions are not included in the totals until staged. Git line counts are quantitative, not proof that a retained change is minimal.",
+  "initial": {
+    "originalFiles": 341,
+    "modifiedOriginals": 111,
+    "unchangedOriginals": 230,
+    "unchangedPercent": 67.4,
+    "addedTrackedFiles": 730,
+    "originalInsertions": 10702,
+    "originalDeletions": 1074,
+    "newFileLines": 129359
+  },
+  "current": {
+    "originalFiles": 341,
+    "modifiedOriginals": 93,
+    "unchangedOriginals": 248,
+    "unchangedPercent": 72.7,
+    "addedTrackedFiles": 1037,
+    "originalInsertions": 4000,
+    "originalDeletions": 1278,
+    "newFileLines": 170568
+  },
+  "perArea": {
+    "packages/web": {
+      "originals": 53,
+      "added": 1749,
+      "removed": 880
+    },
+    "packages/socket": {
+      "originals": 18,
+      "added": 1870,
+      "removed": 284
+    },
+    "packages/common": {
+      "originals": 10,
+      "added": 159,
+      "removed": 9
+    },
+    "packages/e2e": {
+      "originals": 6,
+      "added": 43,
+      "removed": 8
+    },
+    "root": {
+      "originals": 6,
+      "added": 179,
+      "removed": 97
+    }
+  },
+  "ledger": [
+    {
+      "file": "Dockerfile",
+      "added": 9,
+      "removed": 0,
+      "purpose": "Dockerfile",
+      "decision": "Restored upstream recursive pnpm build and install cache mount. Retained only extension workspace manifest, runtime WASM and downstream nginx fragment copies; the actual recursive build passed.",
+      "risk": "medium",
+      "reviewNumber": 1,
+      "extensionTargets": [
+        "extensions/deployment/nginx-server.conf",
+        "extensions/package.json"
+      ],
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "COPY packages/e2e/package.json ./packages/e2e/",
+        "RUN pnpm build",
+        "COPY docker/nginx.conf /etc/nginx/http.d/default.conf",
+        "COPY --from=builder /app/packages/socket/dist/index.cjs /app/socket/index.cjs"
+      ]
+    },
+    {
+      "file": "docker/nginx.conf",
+      "added": 1,
+      "removed": 16,
+      "purpose": "nginx server block",
+      "decision": "Moved canonical-host redirect, SPA no-store and authenticated/internal media locations to extensions/deployment/nginx-server.conf. Retained one include at the original server boundary; nginx -t passed without starting a daemon.",
+      "risk": "medium",
+      "reviewNumber": 2,
+      "extensionTargets": [
+        "extensions/deployment/nginx-server.conf"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "server {"
+      ]
+    },
+    {
+      "file": "packages/common/src/constants.ts",
+      "added": 14,
+      "removed": 1,
+      "purpose": "EVENTS, SESSION_ROLES, GameSettings defaults, MAX_ANSWERS",
+      "decision": "Shared event names, spectator role, explicit settings defaults and five-answer limit are public server/client contracts; hiding them in module augmentation would obscure required validation.",
+      "risk": "high",
+      "reviewNumber": 3,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const EVENTS = {",
+        "export const SESSION_ROLES = {",
+        "export const createDefaultGameSettings = (): GameSettings => ({",
+        "export const MIN_ANSWERS = 2"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/auth.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "SessionClaims/JoinTicketClaims",
+      "decision": "sid binds revocation; roster/source/phone fields are signed join identity claims consumed by both clients and authentication. They are type-only metadata, not feature logic.",
+      "risk": "high",
+      "reviewNumber": 4,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface SessionClaims {",
+        "export interface JoinTicketClaims {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/index.ts",
+      "added": 8,
+      "removed": 0,
+      "purpose": "QuestionPlayMode/resolveQuestionPlayMode",
+      "decision": "Moved executable resolveQuestionPlayMode to extensions/src/core/question-play-mode.ts and updated all callers. Retained only shared question-mode/settings/history wire types.",
+      "risk": "high",
+      "reviewNumber": 5,
+      "extensionTargets": [
+        "extensions/src/core/question-play-mode.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface UploadedMedia {",
+        "export interface Question {",
+        "export interface GameSettings {",
+        "export type QuestionResult = Question & {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/socket.ts",
+      "added": 40,
+      "removed": 3,
+      "purpose": "SocketData/ServerToClientEvents/ClientToServerEvents",
+      "decision": "Room association, extension/spectator events and accepted-answer/command ACK signatures are shared protocol declarations; no runtime feature code to extract.",
+      "risk": "high",
+      "reviewNumber": 6,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface SocketData {",
+        "export interface ServerToClientEvents {",
+        "type ClientEventValidators = typeof clientEventValidators",
+        "export type ClientToServerEvents = {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/status.ts",
+      "added": 10,
+      "removed": 0,
+      "purpose": "CommonStatusDataMap",
+      "decision": "questionId/number, playMode and server voting deadlines prevent stale question/clock pairing; optional fields preserve old clients.",
+      "risk": "high",
+      "reviewNumber": 7,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface CommonStatusDataMap {",
+        "interface ManagerExtraStatus {"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/auth.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "sessionClaimsValidator/joinTicketClaimsValidator",
+      "decision": "Validate the signed account/session and participant identity fields at the existing shared trust boundary.",
+      "risk": "high",
+      "reviewNumber": 8,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const sessionClaimsValidator = z.object({",
+        "export const joinTicketClaimsValidator = z.object({"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/game.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "joinGameValidator/gameSettingsSchema",
+      "decision": "Bound phone/source and optional invite/end-on-all settings at shared REST/socket boundary; clients and server use the same schema.",
+      "risk": "high",
+      "reviewNumber": 9,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const joinGameValidator = z.object({",
+        "export const gameSettingsSchema = z.object({"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/quizz.test.ts",
+      "added": 41,
+      "removed": 1,
+      "purpose": "quizzValidator tests",
+      "decision": "Keep the five-answer and mixed survey/quiz solution-contract cases adjacent to their original common validator.",
+      "risk": "low",
+      "reviewNumber": 10,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "describe(\"quizzValidator\", () => {",
+        "describe(\"normalizeLegacyQuizz\", () => {"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/quizz.ts",
+      "added": 8,
+      "removed": 4,
+      "purpose": "questionSchema/quizzValidator.superRefine",
+      "decision": "Per-card playMode must survive validation; quiz questions still require solutions while survey questions do not. Changing the frozen wire representation is unsafe.",
+      "risk": "high",
+      "reviewNumber": 11,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const questionSchema = z.object({",
+        "export const quizzValidator = z"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/socket.ts",
+      "added": 26,
+      "removed": 0,
+      "purpose": "clientEventValidators",
+      "decision": "All additional commands remain schema-validated and role-authorized by handlers; metadata-only additions are required at the shared socket boundary.",
+      "risk": "high",
+      "reviewNumber": 12,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const clientEventValidators = {"
+      ]
+    },
+    {
+      "file": "packages/e2e/.gitignore",
+      "added": 1,
+      "removed": 0,
+      "purpose": ".config* ignore",
+      "decision": "Prevent isolated fixture/private configuration folders from entering Git; no runtime code.",
+      "risk": "low",
+      "reviewNumber": 13,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "node_modules"
+      ]
+    },
+    {
+      "file": "packages/e2e/playwright.config.ts",
+      "added": 4,
+      "removed": 1,
+      "purpose": "Playwright webServer command",
+      "decision": "Installed Vite config is TypeScript; Node strip-types flags are toolchain integration, not feature behavior.",
+      "risk": "low",
+      "reviewNumber": 14,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export default defineConfig({"
+      ]
+    },
+    {
+      "file": "packages/e2e/tests/manager.spec.ts",
+      "added": 1,
+      "removed": 1,
+      "purpose": "manager branding viewport tests",
+      "decision": "Moved the three-size branding matrix to tadazz-manager-branding.spec.ts. Retained one original manager-test change: language persistence opens /game after the intentional manager homepage migration.",
+      "risk": "low",
+      "reviewNumber": 15,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "test(\"switches the language and keeps it after a reload\", async ({ page }) => {"
+      ]
+    },
+    {
+      "file": "packages/e2e/tsconfig.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "compilerOptions.jsx",
+      "decision": "E2E source imports typed web/extension TSX public entry points; compiler setting is the minimal integration.",
+      "risk": "low",
+      "reviewNumber": 16,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/e2e/utils/i18n.ts",
+      "added": 7,
+      "removed": 0,
+      "purpose": "test locale initialization",
+      "decision": "Register extension namespace in the test i18n instance; leave upstream namespaces intact and match actual UI labels.",
+      "risk": "low",
+      "reviewNumber": 17,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import fs from \"fs\"",
+        "const resources: Resource = Object.fromEntries("
+      ]
+    },
+    {
+      "file": "packages/e2e/utils/manager.ts",
+      "added": 29,
+      "removed": 6,
+      "purpose": "loginManager/endTimer/next helpers",
+      "decision": "Moved endTimer into packages/e2e/utils/extension-manager.ts and updated actual consumers. Retained compatibility-aware original login/next selectors for the changed current UI.",
+      "risk": "low",
+      "reviewNumber": 18,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const loginManager = async (page: Page) => {",
+        "export const next = async (manager: Page) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/package.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "@razzia/extensions workspace dependency",
+      "decision": "Required source-controlled package linkage for injected runtime extension modules.",
+      "risk": "medium",
+      "reviewNumber": 19,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": true,
+      "anchors": []
+    },
+    {
+      "file": "packages/socket/src/api/index.ts",
+      "added": 29,
+      "removed": 0,
+      "purpose": "extension/account route composition",
+      "decision": "Mount the extension router once with original storage/auth ports. Wiring is necessary; the router implementation already lives downstream.",
+      "risk": "medium",
+      "reviewNumber": 20,
+      "extensionTargets": [
+        "extensions/src/server/index.ts",
+        "packages/socket/src/api/extensions/billing-routes.ts",
+        "packages/socket/src/api/extensions/theme-routes.ts",
+        "packages/socket/src/api/routes/accounts.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { auth } from \"@razzia/socket/api/routes/auth\"",
+        "import { results } from \"@razzia/socket/api/routes/results\"",
+        "import { Hono } from \"hono\"",
+        "const routes = new Hono()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/middleware.ts",
+      "added": 2,
+      "removed": 1,
+      "purpose": "requireManager account scoping",
+      "decision": "Restored upstream middleware structure; retained the single withAccount(claims.sub,next) authorization/storage-scope boundary.",
+      "risk": "high",
+      "reviewNumber": 21,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const requireManager = createMiddleware<ApiEnv>(async (c, next) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/auth.ts",
+      "added": 21,
+      "removed": 3,
+      "purpose": "auth account-mode/session/logout policies",
+      "decision": "Moved canRefreshAsPlayer and retireManagerClaims to services/account-session-policy.ts. Original auth routes retain JWT/HTTP/cookie boundaries, invalid-manager retirement and the fresh anonymous identity after account logout.",
+      "risk": "high",
+      "reviewNumber": 22,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts",
+        "packages/socket/src/services/account-session-policy.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const routes = new Hono()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/games.ts",
+      "added": 41,
+      "removed": 25,
+      "purpose": "game HTTP composition, join ticket boundary",
+      "decision": "Moved roster CRUD/import, projector media and pilot-phone routing into api/extensions/game-routes.ts, and browser/roster/name/phone admission policy into join-policy.ts. Original create/check/join/settings retain registry lookup, exact manager exclusion, media authorization and signed-ticket issuance at the HTTP trust boundary.",
+      "risk": "high",
+      "reviewNumber": 23,
+      "extensionTargets": [
+        "packages/socket/src/api/extensions/game-routes.ts",
+        "packages/socket/src/api/extensions/join-policy.ts",
+        "packages/socket/src/services/media-access.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import { mintJoinTicket } from \"@razzia/socket/services/auth\"",
+        "const routes = apiFactory"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/media.ts",
+      "added": 7,
+      "removed": 10,
+      "purpose": "media route composition",
+      "decision": "Moved tenant/room media-read authorization and referenced-media delete lifecycle into owned socket/api/extensions/media-routes.ts. Original route retains upload/list validation and two explicit handler hooks; private media is never restored to a public alias.",
+      "risk": "high",
+      "reviewNumber": 24,
+      "extensionTargets": [
+        "packages/socket/src/api/extensions/media-routes.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { i18nHook } from \"@razzia/socket/api/validation\"",
+        "const routes = apiFactory"
+      ]
+    },
+    {
+      "file": "packages/socket/src/app.ts",
+      "added": 12,
+      "removed": 2,
+      "purpose": "createSocketServer packet middleware",
+      "decision": "The nine-line revoked-manager revalidation must run before privileged packets on an already-open websocket. Existing account verifier owns policy; moving the call would hide the security boundary.",
+      "risk": "high",
+      "reviewNumber": 25,
+      "extensionTargets": [
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ServerType } from \"@hono/node-server\"",
+        "import { verifyToken } from \"@razzia/socket/services/auth\"",
+        "export const createSocketServer = (server: ServerType): Server => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/handlers/game.ts",
+      "added": 25,
+      "removed": 6,
+      "purpose": "gameSocketHandlers extension commands, spectator handlers, answer acknowledgement",
+      "decision": "Moved spectator and extension-command registrations into handlers/game-extensions.ts with the existing withManagerGame authorization wrapper. Original handler retains authoritative answer acknowledgement and disconnect integration.",
+      "risk": "medium",
+      "reviewNumber": 26,
+      "extensionTargets": [
+        "packages/socket/src/handlers/game-extensions.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const gameSocketHandlers = ({ io, socket }: SocketContext) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/index.ts",
+      "added": 16,
+      "removed": 1,
+      "purpose": "startup composition",
+      "decision": "Startup account configuration and transaction-journal recovery must finish before accepting requests. Storage recovery implementation already belongs to extensions; these are explicit boot hooks.",
+      "risk": "high",
+      "reviewNumber": 27,
+      "extensionTargets": [
+        "extensions/src/server/index.ts",
+        "packages/socket/src/services/account-db.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { createAdaptorServer } from \"@hono/node-server\"",
+        "import { app, createSocketServer } from \"@razzia/socket/app\"",
+        "import Registry from \"@razzia/socket/services/registry\"",
+        "initConfig()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/auth.ts",
+      "added": 52,
+      "removed": 5,
+      "purpose": "mintToken, verifyToken, mintJoinTicket",
+      "decision": "Session-id validation and revocation integrate at JWT signing/verification authority. Optional roster metadata is signed in the original join ticket; do not create a parallel insecure ticket path. Policy persistence is already in owned account-auth/account-db modules.",
+      "risk": "high",
+      "reviewNumber": 28,
+      "extensionTargets": [
+        "packages/socket/src/services/account-auth.ts",
+        "packages/socket/src/services/account-scope.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { jwtSecret } from \"@razzia/socket/env\"",
+        "export const mintToken = async (",
+        "const JOIN_TICKET_TTL = 60 * 5",
+        "export const mintJoinTicket = ("
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/config.ts",
+      "added": 3,
+      "removed": 7,
+      "purpose": "getPath",
+      "decision": "Moved configuration-root discovery and tenant resolution into services/config-scope.ts. Original config getPath delegates once; all original quiz/result persistence continues through that scoped path.",
+      "risk": "high",
+      "reviewNumber": 29,
+      "extensionTargets": [
+        "packages/socket/src/services/config-scope.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { normalizeFilename } from \"@razzia/socket/utils/file\"",
+        "import { nanoid } from \"nanoid\"",
+        "import { join, resolve } from \"path\""
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/cooldown-timer.ts",
+      "added": 7,
+      "removed": 46,
+      "purpose": "CooldownTimer",
+      "decision": "Moved pausable countdown/deadline scheduling to extension PausableCountdown with tickMs/onTick ports. Original file is a small socket adapter. Immediate abort and next-tick waiter settlement are preserved.",
+      "risk": "medium",
+      "reviewNumber": 30,
+      "extensionTargets": [
+        "extensions/src/server/game/pausable-countdown.ts",
+        "extensions/src/server/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { Server } from \"@razzia/common/types/game/socket\"",
+        "import { SECOND_MS } from \"@razzia/socket/utils/sleep\"",
+        "export class CooldownTimer {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/game.test.ts",
+      "added": 10,
+      "removed": 43,
+      "purpose": "game.test.ts downstream roster, mixed-mode and revote tests",
+      "decision": "Moved independent downstream roster/mixed-mode/revote tests into downstream-game.test.ts and the common fixture into src/test/game-setup.ts. Original regression tests remain; four cases explicitly opt in to endOnAllAnswered after its intentional default change.",
+      "risk": "low",
+      "reviewNumber": 31,
+      "extensionTargets": [
+        "packages/socket/src/services/game/downstream-game.test.ts",
+        "packages/socket/src/test/game-setup.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import { afterEach, beforeEach, describe, expect, it, vi } from \"vitest\"",
+        "describe(\"quiz flow\", () => {",
+        "describe(\"survey flow\", () => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/index.ts",
+      "added": 700,
+      "removed": 20,
+      "purpose": "Game constructor policies, session bridge, phone transport, roster join, audience projection",
+      "decision": "Extracted phone-controller, round-policy, session-bridge, audience projections, runtime-policy, authored-coordinator and roster/browser-identity into extensions. Game retains original lifecycle, authoritative players/round mutation, authorization and ordered identity-rebind integration. Moving these mutations would duplicate or relocate the upstream engine.",
+      "risk": "high",
+      "reviewNumber": 32,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/server/game/audience.ts",
+        "extensions/src/server/game/authored-coordinator.ts",
+        "extensions/src/server/game/phone-controller.ts",
+        "extensions/src/server/game/roster/browser-identity.ts",
+        "extensions/src/server/game/round-policy.ts",
+        "extensions/src/server/game/runtime-policy.ts",
+        "extensions/src/server/game/session-bridge.ts",
+        "extensions/src/server/index.ts",
+        "packages/socket/src/services/account-scope.ts",
+        "packages/socket/src/services/billing.ts",
+        "packages/socket/src/services/theme-installation.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { createDefaultGameSettings, EVENTS } from \"@razzia/common/constants\"",
+        "import {",
+        "class Game {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/player-manager.ts",
+      "added": 8,
+      "removed": 0,
+      "purpose": "PlayerManager.updateClientId",
+      "decision": "Eight-line identity mutation is necessary for a rostered redial/rebind while retaining the canonical Player row and checkpoint scores. All registry/policy decisions stay outside PlayerManager.",
+      "risk": "medium",
+      "reviewNumber": 33,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export class PlayerManager {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/round-manager.ts",
+      "added": 931,
+      "removed": 115,
+      "purpose": "RoundManager scheduling, checkpoint/navigation/ledger policies",
+      "decision": "Extracted pausable countdown, round-scheduling, round-checkpoints, score-ledger and pure previous-navigation eligibility. RoundManager retains authoritative answer acceptance, state/score/history mutations and their ordered navigation seams. Added reconnect checkpoint remapping after a regression proved loss of earlier-question points.",
+      "risk": "high",
+      "reviewNumber": 34,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/gameplay/index.ts",
+        "extensions/src/gameplay/round-navigation.ts",
+        "extensions/src/server/game/round-checkpoints.ts",
+        "extensions/src/server/game/round-scheduling.ts",
+        "extensions/src/server/game/score-ledger.ts",
+        "extensions/src/server/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { isEstimationOptions } from \"@razzia/common/questions/options\"",
+        "import {",
+        "import { PlayerManager } from \"@razzia/socket/services/game/player-manager\"",
+        "import { orderToPoint, timeToPoint } from \"@razzia/socket/utils/game\"",
+        "type SendFn = <T extends Status>(",
+        "interface RoundStep {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/registry.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Registry.getGameBySpectatorSocketId",
+      "decision": "Four-line registry lookup is the required disconnect integration for non-player spectator sockets. No separate game registry should be introduced.",
+      "risk": "medium",
+      "reviewNumber": 35,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "class Registry {"
+      ]
+    },
+    {
+      "file": "packages/socket/tsconfig.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "socket compiler JSX option",
+      "decision": "Extension public barrels include TSX presentation types; jsx react-jsx is required for the actual package typecheck and introduces no runtime behavior.",
+      "risk": "medium",
+      "reviewNumber": 38,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/index.html",
+      "added": 17,
+      "removed": 2,
+      "purpose": "HTML title/favicon/first-paint metadata",
+      "decision": "Retained the short first-paint script and branded title/favicon in the original document. It must run before React and external asset loading; moving it to a later extension component would reintroduce the visible flash. No independent downstream feature implementation remains here.",
+      "risk": "medium",
+      "reviewNumber": 39,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/package.json",
+      "added": 3,
+      "removed": 2,
+      "purpose": "web workspace dependency and Vite Node entry",
+      "decision": "Extension workspace dependency and strip-types Node entry are build integration. Do not hide required package/build dependencies.",
+      "risk": "medium",
+      "reviewNumber": 40,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": true,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/src/components/AlertDialog.tsx",
+      "added": 10,
+      "removed": 3,
+      "purpose": "AlertDialog optional controlled props",
+      "decision": "Small additive public prop extension permits controlled confirmation of destructive vote navigation while retaining Radix/Razzia structure. No downstream business logic lives here.",
+      "risk": "medium",
+      "reviewNumber": 41,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface Props {",
+        "const AlertDialog = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/Background.tsx",
+      "added": 4,
+      "removed": 15,
+      "purpose": "Background branding",
+      "decision": "Retained the small default TADAZZ branding/logo sizing and intentionally removed upstream footer. These are the shared background component public defaults; moving the original component or adding global CSS to disguise the same defaults would enlarge the design seam.",
+      "risk": "medium",
+      "reviewNumber": 42,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { getBranding, imageFallback } from \"@razzia/web/branding\"",
+        "import type { PropsWithChildren } from \"react\"",
+        "const Background = ({ children }: PropsWithChildren) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/GameBackground.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "GameBackground stacking/pointer events",
+      "decision": "Two CSS classes establish non-interactive background layering under host controls. Moving them to global overrides would obscure rather than reduce the integration.",
+      "risk": "medium",
+      "reviewNumber": 43,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const GameBackground = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/QuestionMedia.tsx",
+      "added": 34,
+      "removed": 4,
+      "purpose": "QuestionMedia reveal adapter",
+      "decision": "Reveal implementation already lives in extensions/media. Shared optional props and a small conditional hook are required at the original media renderer; responsive containment retains current stage fit.",
+      "risk": "medium",
+      "reviewNumber": 44,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/media/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { QuestionMedia as QuestionMediaType } from \"@razzia/common/types/ga",
+        "interface Props {",
+        "const QuestionMedia = ({ media, alt = \"\", autoPlay = true }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/AnswerButton.tsx",
+      "added": 65,
+      "removed": 14,
+      "purpose": "AnswerButton image/percent/entrance presentation",
+      "decision": "Moved answer visual/style/accessibility projection, enhanced content and percentage presentation to extensions/src/media/answer-button-presentation.tsx. Original AnswerButton retains the semantic button, original state/correctness and selection callbacks.",
+      "risk": "medium",
+      "reviewNumber": 46,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/media/answer-button-presentation.tsx",
+        "extensions/src/media/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "type Props = PropsWithChildren &",
+        "const AnswerButton = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/AnswerNote.tsx",
+      "added": 7,
+      "removed": 1,
+      "purpose": "AnswerNote visibility guard",
+      "decision": "Manager-only editorial notes are enforced at the shared rendering boundary as defense in depth, even though server public sanitization also strips them. Six-line guard is necessary.",
+      "risk": "medium",
+      "reviewNumber": 47,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface Props {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+      "added": 22,
+      "removed": 2,
+      "purpose": "GameSettingsModal extension settings and roster shortcut",
+      "decision": "Moved added completion/phone switches and roster shortcut to GameSettingsModal/ExtensionSettings.tsx. Original form and save boundary retain a small changed-settings projection so live updates do not resend rejected unrelated settings.",
+      "risk": "medium",
+      "reviewNumber": 48,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/GameSettingsModal/ExtensionSettings.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { useTranslation } from \"react-i18next\"",
+        "const GameSettingsModal = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/GameWrapper.tsx",
+      "added": 363,
+      "removed": 96,
+      "purpose": "GameWrapper extension connection, legacy presentation, controls",
+      "decision": "Moved envelope/media-cookie/roster connection, legacy audio/background/motion projection and host/player overlay presentation into owned tadazz-show hooks/components. Original role shell, transport and native renderer seam remain; Classic still returns before legacy mounts.",
+      "risk": "high",
+      "reviewNumber": 49,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/HostPlayersModal.tsx",
+        "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+        "packages/web/src/features/game/components/TadazzMotionStage.tsx",
+        "packages/web/src/features/game/components/host-presentation-controller.ts",
+        "packages/web/src/features/game/components/tadazz-show/legacy-stage-elements.tsx",
+        "packages/web/src/features/game/components/tadazz-show/show-theme-adapters.ts",
+        "packages/web/src/features/game/components/tadazz-show/use-game-extension-connection.ts",
+        "packages/web/src/features/game/components/tadazz-show/use-legacy-presentation.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx",
+        "packages/web/src/features/game/contexts/view-role-context.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import GameSettingsModal from \"@razzia/web/features/game/components/GameSettings",
+        "import RoomLockButton from \"@razzia/web/features/game/components/RoomLockButton\"",
+        "import clsx from \"clsx\"",
+        "type Props = PropsWithChildren & {",
+        "const GameWrapper = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/join/Room.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "join Room router id",
+      "decision": "One-line route-id correction follows generated TanStack route topology; restoring the obsolete id breaks typed route search.",
+      "risk": "medium",
+      "reviewNumber": 50,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Room = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Answers.tsx",
+      "added": 204,
+      "removed": 77,
+      "purpose": "Answers extension state and enhanced presentation",
+      "decision": "Moved shared envelope/animation/decoration resolution, legacy voting motion and answer HUD into owned presentation hooks/components; shared underline lives in extensions/presentation. Original socket submission, cooldown and duplicate-audio suppression remain at their authoritative boundaries.",
+      "risk": "high",
+      "reviewNumber": 51,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/QuestionEntrance.tsx",
+        "packages/web/src/features/game/components/tadazz-show/answer-stage-elements.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-question-presentation.ts",
+        "packages/web/src/features/game/contexts/view-role-context.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { CommonStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import QuestionMedia from \"@razzia/web/components/QuestionMedia\"",
+        "import QuestionDialog from \"@razzia/web/features/game/components/QuestionDialog\"",
+        "const Answers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Leaderboard.tsx",
+      "added": 21,
+      "removed": 12,
+      "purpose": "Leaderboard team wrapper",
+      "decision": "Moved team-store, translation and scoreboard binding into tadazz-show/team-adapters.tsx. Original leaderboard retains individual ranking and spring animation.",
+      "risk": "high",
+      "reviewNumber": 52,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/tadazz-show/team-adapters.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Podium.tsx",
+      "added": 4,
+      "removed": 4,
+      "purpose": "Podium viewport containment",
+      "decision": "Only six layout/class changes prevent clipped spotlight and overflow at compact aspect ratios. No new business or rendering logic to extract; keep original podium choreography.",
+      "risk": "high",
+      "reviewNumber": 53,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Podium = ({ data: { subject, top } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Question.tsx",
+      "added": 73,
+      "removed": 11,
+      "purpose": "Question state/decoration",
+      "decision": "Moved shared envelope/animation/decoration projection into use-question-presentation.ts and reusable underline into extensions/presentation. Original question media/sound hooks and responsive question geometry remain.",
+      "risk": "high",
+      "reviewNumber": 54,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "extensions/src/presentation/index.ts",
+        "packages/web/src/features/game/components/QuestionEntrance.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-question-presentation.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { CommonStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "const Question = ({ data: { question, media, cooldown } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Responses.tsx",
+      "added": 22,
+      "removed": 84,
+      "purpose": "Responses reveal lifecycle and picture results",
+      "decision": "Moved authoritative snapshot validation, percentage/reveal lifecycle into use-response-reveal.ts and enhanced choice cards into choice-results-view.tsx. Original Responses retains QUESTION_REGISTRY dispatch and specialized estimation results; no choice rendering implementation remains.",
+      "risk": "high",
+      "reviewNumber": 55,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/game/components/tadazz-show/choice-results-view.tsx",
+        "packages/web/src/features/game/components/tadazz-show/use-response-reveal.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import { QUESTION_REGISTRY } from \"@razzia/web/features/questions\"",
+        "interface Props {",
+        "const Responses = ({ data }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Room.tsx",
+      "added": 8,
+      "removed": 1,
+      "purpose": "Room team assignment",
+      "decision": "Moved team subscription/reassignment binding into team-adapters.tsx. Original room retains player roster events, original lobby animation and QR with the intentional /game entry URL.",
+      "risk": "high",
+      "reviewNumber": 56,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/tadazz-show/team-adapters.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Room = ({ data: { text, inviteCode } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/contexts/socket-context.tsx",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Socket debug registration",
+      "decision": "Four-line window socket exposure is used by current browser transport diagnostics. Keep behavior during cleanup; isolate the diagnostic adapter if changed, and do not remove it while browser checks depend on it.",
+      "risk": "high",
+      "reviewNumber": 57,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const socketClient: TypedSocket = io(\"/\", {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/stores/manager.tsx",
+      "added": 8,
+      "removed": 0,
+      "purpose": "ManagerState.extensionState/hostPresence",
+      "decision": "Two explicit nullable store fields and initial values are necessary shared state integration. No policy implementation to relocate.",
+      "risk": "medium",
+      "reviewNumber": 58,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { StatusDataMap } from \"@razzia/common/types/game/status\"",
+        "interface ManagerState<T> {",
+        "const initialState: ManagerState<StatusDataMap> = {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/utils/constants.ts",
+      "added": 3,
+      "removed": 1,
+      "purpose": "answer color/label constants and result mapping",
+      "decision": "Fifth answer and numeric labels implement the signed answer/DTMF convention across editor/player/projector. SHOW_RESPONSES mapping is required for shared audience renderers.",
+      "risk": "medium",
+      "reviewNumber": 59,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const ANSWERS_COLORS = [",
+        "export const GAME_STATE_COMPONENTS = {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/components/ManagerPassword.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "ManagerPassword Card classes",
+      "decision": "Single responsive Card style change matches the current manager login. Hiding one class override in global CSS would reduce clarity.",
+      "risk": "medium",
+      "reviewNumber": 60,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const ManagerPassword = ({ onSubmit, disabled }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx",
+      "added": 61,
+      "removed": 70,
+      "purpose": "ConfigManageQuizz file import/export",
+      "decision": "Moved file download, workbook/native import/export, preflight and composite commit to configurations/use-show-file-actions.ts; added export buttons to ShowExportActions.tsx. Original configuration list/delete/create/navigation and accessibility remain.",
+      "risk": "medium",
+      "reviewNumber": 61,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/configurations/ShowExportActions.tsx",
+        "packages/web/src/features/manager/components/configurations/ShowImportModal.tsx",
+        "packages/web/src/features/manager/components/configurations/use-show-file-actions.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import { useNavigate } from \"@tanstack/react-router\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const ConfigManageQuizz = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/components/configurations/index.tsx",
+      "added": 22,
+      "removed": 2,
+      "purpose": "Configurations: billingEnabled/TabComponent/account-tab button",
+      "decision": "Synchronized the separate committed billing feature. The optional AccountBilling component and all checkout/entitlement policy live in owned billing modules. Retain the small OFF-by-default tab/button composition in the existing configuration shell; moving the original tabs or account state would widen the integration.",
+      "risk": "medium",
+      "reviewNumber": 113,
+      "extensionTargets": [
+        "extensions/src/editor/billing/panel.tsx",
+        "packages/web/src/features/manager/billing/index.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import Card from \"@razzia/web/components/Card\"",
+        "import { useNavigate } from \"@tanstack/react-router\"",
+        "const Configurations = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
+      "added": 16,
+      "removed": 4,
+      "purpose": "MultiAnswers optional presentation props",
+      "decision": "Small visual/entrance prop forwarding and fifth-item span are the necessary shared AnswerButton integration; selection and submission remain original. No duplicated multi-choice scoring.",
+      "risk": "high",
+      "reviewNumber": 63,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const MultiAnswers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
+      "added": 33,
+      "removed": 3,
+      "purpose": "SingleAnswers optional image-grid adapter",
+      "decision": "Actual picture grid lives in owned PhotoCardGrid. Keep small conditional adapter, optional prop forwarding and fifth-card span; original onSubmit binding retains answer authority.",
+      "risk": "high",
+      "reviewNumber": 64,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/PhotoCardGrid.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import AnswerButton from \"@razzia/web/features/game/components/AnswerButton\"",
+        "const SingleAnswers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/types.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "AnswerComponentProps",
+      "decision": "Three optional extension presentation props define the shared renderer contract. Do not conceal necessary API extension through unsafe casts or module augmentation.",
+      "risk": "high",
+      "reviewNumber": 65,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "export interface AnswerComponentProps {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/utils.ts",
+      "added": 8,
+      "removed": 2,
+      "purpose": "choiceInitialValues null/partial guard",
+      "decision": "Small defensive initialization guard prevents crashes during empty/transitional editor selection. Original default generation remains unchanged.",
+      "risk": "high",
+      "reviewNumber": 66,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { Question } from \"@razzia/common/types/game\""
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx",
+      "added": 18,
+      "removed": 4,
+      "purpose": "MediaLibraryToolbar acceptType",
+      "decision": "Optional locked filter and upload accept forwarding are required at this shared toolbar. Actual upload validation and catalog policy are separate; retain the Radix/Tailwind controls.",
+      "risk": "medium",
+      "reviewNumber": 67,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import ToggleGroup from \"@razzia/web/components/ToggleGroup\"",
+        "interface Props {",
+        "const MediaLibraryToolbar = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx",
+      "added": 170,
+      "removed": 87,
+      "purpose": "MediaLibrary catalog, preview, safe deletion, tabs",
+      "decision": "Read complete current source. Moved catalog association, theme-owned built-ins, preview lifecycle, reference reconciliation and delete mutation into use-media-library-extensions.ts. Moved new scope tabs, delete banner and built-in list to extension-panels.tsx. Original dialog/grid/drop/selection shell remains. Added real preview unmount cleanup.",
+      "risk": "medium",
+      "reviewNumber": 68,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/extension-panels.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/use-media-library-extensions.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { useQuizzEditor } from \"@razzia/web/features/quizz/contexts/quizz-editor",
+        "interface Props {",
+        "const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes(\"Files\")",
+        "const MediaLibrary = ({ open, onOpenChange }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx",
+      "added": 74,
+      "removed": 27,
+      "purpose": "QuestionEditorAnswers visual state and controls",
+      "decision": "Moved visual mutation/alt/mode/picker policy into use-answer-visual-editor.ts and added controls into AnswerVisualControls.tsx. Original react-hook-form Controller, solution picker and min/max answer mutation remain; removal prunes visuals through the extracted policy.",
+      "risk": "medium",
+      "reviewNumber": 69,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/components/QuestionEditor/AnswerVisualControls.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/use-answer-visual-editor.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { QUESTION_REGISTRY } from \"@razzia/web/features/questions\"",
+        "const QuestionEditorAnswers = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx",
+      "added": 13,
+      "removed": 7,
+      "purpose": "BaseConfig optional sections/mixed mode",
+      "decision": "Only public extension config components and per-card mode resolver are wired here. Actual card audio/background/motion editors already live in new downstream files.",
+      "risk": "medium",
+      "reviewNumber": 70,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardAudioConfig.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/CardBackgroundConfig.tsx",
+        "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/QuestionEntranceConfig.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { isMultiOptions } from \"@razzia/common/questions/options\"",
+        "import ConfigSection from \"@razzia/web/features/quizz/components/QuestionEditor/",
+        "const BaseConfig = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "ConfigField.Label icon optional",
+      "decision": "One optional prop makes text-only downstream settings reuse the existing Razzia label; no implementation or design fork.",
+      "risk": "medium",
+      "reviewNumber": 71,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface LabelProps {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx",
+      "added": 5,
+      "removed": 3,
+      "purpose": "QuestionEditorConfig per-card mode and containment",
+      "decision": "Per-card mode/category hook and responsive aside classes are necessary integration. Type-to-config registry stays original.",
+      "risk": "medium",
+      "reviewNumber": 72,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { QuestionType } from \"@razzia/common/types/game\"",
+        "const QuestionEditorConfig = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/index.tsx",
+      "added": 17,
+      "removed": 8,
+      "purpose": "QuestionEditor fit notice/background preview",
+      "decision": "Moved stage-fit warning and authored background preview into QuestionEditor/extension-adornments.tsx. Original editor retains field ordering and transient-empty guard.",
+      "risk": "medium",
+      "reviewNumber": 73,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/QuestionEditor/extension-adornments.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import GameBackground from \"@razzia/web/components/GameBackground\"",
+        "import QuestionEditorTitle from \"@razzia/web/features/quizz/components/QuestionE",
+        "const QuestionEditor = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorCard.tsx",
+      "added": 9,
+      "removed": 19,
+      "purpose": "QuizzEditorCard duplicate action",
+      "decision": "Moved duplicate/delete controls into studio/QuestionCardActions.tsx, retaining AlertDialog, event propagation and accessible button behavior. Original card/media/content stays in place.",
+      "risk": "medium",
+      "reviewNumber": 74,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/QuestionCardActions.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { Question, QuestionMedia } from \"@razzia/common/types/game\"",
+        "import clsx from \"clsx\"",
+        "interface Props {",
+        "const QuizzEditorCard = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx",
+      "added": 84,
+      "removed": 131,
+      "purpose": "QuizzEditorHeader composite persistence and Studio controls",
+      "decision": "Read complete current source. Moved composite save/create/conflict lifecycle to use-composite-quizz-save.ts and Studio navigation/type/conversion controls to header-controls.tsx. Original title field and save/exit shell remain, with explicit small hooks.",
+      "risk": "medium",
+      "reviewNumber": 75,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/ConflictDialog.tsx",
+        "packages/web/src/features/quizz/components/studio/header-controls.tsx",
+        "packages/web/src/features/quizz/components/studio/use-composite-quizz-save.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import Input from \"@razzia/web/components/Input\"",
+        "import clsx from \"clsx\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const QuizzEditorHeader = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx",
+      "added": 42,
+      "removed": 49,
+      "purpose": "QuizzEditorSidebar authored timeline",
+      "decision": "Moved scene sorting/mapping/selection/insertion into use-studio-timeline-sidebar.tsx, injecting the original SortableQuestionItem. Original upstream question sorting/card shell and small form/timeline composition remain.",
+      "risk": "medium",
+      "reviewNumber": 76,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/use-studio-timeline-sidebar.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { CSS } from \"@dnd-kit/utilities\"",
+        "import QuizzEditorCard from \"@razzia/web/features/quizz/components/QuizzEditorCa",
+        "import clsx from \"clsx\"",
+        "import { useFormContext } from \"react-hook-form\"",
+        "const SortableItem = ({",
+        "const QuizzEditorSidebar = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
+      "added": 79,
+      "removed": 7,
+      "purpose": "QuizzEditorProvider extras and stable identity",
+      "decision": "Moved extras loading/conflict/stable IDs and V1/V2 metadata transforms into contexts/extensions/use-quizz-extras.ts. Original useFieldArray remains the sole form-mutation authority and invokes the owned metadata adapter alongside the original operation.",
+      "risk": "high",
+      "reviewNumber": 77,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/quizz/contexts/extensions/use-quizz-extras.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "interface QuizzEditorContextType {",
+        "export const QuizzEditorProvider = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/hooks/useUploadMedia.ts",
+      "added": 12,
+      "removed": 0,
+      "purpose": "useUploadMedia accept validation",
+      "decision": "Moved typed accept-list/file-kind policy to extensions/src/core/media-selection.ts; Toolbar and upload hook share it. Original upload hook retains mutation, size validation and error presentation.",
+      "risk": "medium",
+      "reviewNumber": 78,
+      "extensionTargets": [
+        "extensions/src/core/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const useUploadMedia = ("
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/queries.ts",
+      "added": 8,
+      "removed": 2,
+      "purpose": "mediaKeys.catalog/deleteMedia detach",
+      "decision": "Small shared cache-key and delete query option are necessary API integration. Delete safety implementation is server-side; original upload/list queries remain.",
+      "risk": "medium",
+      "reviewNumber": 79,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const mediaKeys = {",
+        "export const uploadMedia = (file: File) =>"
+      ]
+    },
+    {
+      "file": "packages/web/src/i18n.ts",
+      "added": 14,
+      "removed": 1,
+      "purpose": "i18n extension registration",
+      "decision": "Extension namespace registration and host additions are minimal boot integration; original locale JSON files were restored. Query-string language selection is intentional for existing supported locales and previews.",
+      "risk": "low",
+      "reviewNumber": 80,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const resources = Object.entries(modules).reduce<Resource>(",
+        "i18n"
+      ]
+    },
+    {
+      "file": "packages/web/src/index.css",
+      "added": 3,
+      "removed": 0,
+      "purpose": "CSS extension import/source and fifth color",
+      "decision": "Only extension stylesheet import, Tailwind source registration and fifth answer token remain. Full downstream effects already live outside the original stylesheet.",
+      "risk": "low",
+      "reviewNumber": 81,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/src/locales/locales.test.ts",
+      "added": 11,
+      "removed": 4,
+      "purpose": "locale test registration",
+      "decision": "Tests must include the same merged host additions as runtime when checking socket error keys. Original localization coverage remains active across eight languages.",
+      "risk": "low",
+      "reviewNumber": 82,
+      "extensionTargets": [
+        "extensions/src/locales/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { EVENTS } from \"@razzia/common/constants\"",
+        "const flatten = (messages: Messages, prefix = \"\"): string[] =>",
+        "const readKeys = (lang: string) =>"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/index.tsx",
+      "added": 11,
+      "removed": 21,
+      "purpose": "root auth redirect",
+      "decision": "Minimal route-level migration preserves old printed pin URLs via /game and directs the manager entry to /manager. Removed player entry implementation already lives in the new /game route.",
+      "risk": "high",
+      "reviewNumber": 83,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const Route = createFileRoute(\"/(auth)/\")({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/layout.tsx",
+      "added": 24,
+      "removed": 9,
+      "purpose": "AuthLayout manager backdrop branch",
+      "decision": "Small route-composition condition selects the existing owned ManagerAuthBackground and retains the player language switcher. No account/business logic belongs here.",
+      "risk": "high",
+      "reviewNumber": 84,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/ManagerAuthBackground.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import LanguageSwitcher from \"@razzia/web/components/LanguageSwitcher\"",
+        "const searchSchema = z.object({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/manager/index.tsx",
+      "added": 4,
+      "removed": 35,
+      "purpose": "ManagerAuthPage account mode/preloader",
+      "decision": "Moved account loading/error/account/legacy view into manager/components/ManagerAuthPage.tsx and session preloader into manager/account-route-guard.ts. Original route only registers component and beforeLoad; redirect control flow remains explicit in the owned guard.",
+      "risk": "high",
+      "reviewNumber": 85,
+      "extensionTargets": [
+        "packages/web/src/features/manager/account-route-guard.ts",
+        "packages/web/src/features/manager/components/ManagerAuthPage.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const Route = createFileRoute(\"/(auth)/manager/\")({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/config.tsx",
+      "added": 3,
+      "removed": 3,
+      "purpose": "manager config background adapter",
+      "decision": "Only imports/wraps the owned branded background around existing Configurations. Nothing substantial remains to extract.",
+      "risk": "high",
+      "reviewNumber": 86,
+      "extensionTargets": [
+        "packages/web/src/features/manager/components/ManagerAuthBackground.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { SESSION_ROLES } from \"@razzia/common/constants\"",
+        "const ManagerConfigPage = () => ("
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/quizz/$quizzId.tsx",
+      "added": 2,
+      "removed": 10,
+      "purpose": "existing quiz route StudioShell adapter",
+      "decision": "Original data fetching/error handling remains; original three-part editor shell is replaced by the owned StudioShell component. Minimal required composition.",
+      "risk": "medium",
+      "reviewNumber": 87,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { quizzQuery } from \"@razzia/web/features/manager/queries\"",
+        "const QuizzEditPage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/quizz/index.tsx",
+      "added": 2,
+      "removed": 10,
+      "purpose": "new quiz route StudioShell adapter",
+      "decision": "Original provider owns form; a single owned StudioShell replaces inline layout. Minimal required integration.",
+      "risk": "medium",
+      "reviewNumber": 88,
+      "extensionTargets": [
+        "packages/web/src/features/quizz/components/studio/index.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const QuizzEditorPage = () => ("
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/party/$gameId.tsx",
+      "added": 4,
+      "removed": 20,
+      "purpose": "player route PlayerGameView adapter",
+      "decision": "Original socket lifecycle stays in place; owned role-aware view replaces inline renderer selection. /game reset target preserves moved public entry.",
+      "risk": "medium",
+      "reviewNumber": 89,
+      "extensionTargets": [
+        "packages/web/src/features/game/components/PlayerGameView.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { STATUS } from \"@razzia/common/types/game/status\"",
+        "import { useQuestionStore } from \"@razzia/web/features/game/stores/question\"",
+        "const PlayerGamePage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/party/manager/$gameId.tsx",
+      "added": 14,
+      "removed": 1,
+      "purpose": "manager route extension store subscription",
+      "decision": "Retained the route-bound monotonic epoch/sequence guard and store update. This manager route receives updates before the stage mounts; merging it with the stage-owned local hook would change subscription lifetime. Exit remains available beyond lobby.",
+      "risk": "medium",
+      "reviewNumber": 90,
+      "extensionTargets": [
+        "extensions/src/core/index.ts",
+        "packages/web/src/features/game/contexts/extension-state-context.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { STATUS } from \"@razzia/common/types/game/status\"",
+        "import GameWrapper from \"@razzia/web/features/game/components/GameWrapper\"",
+        "const ManagerGamePage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/route.gen.ts",
+      "added": 85,
+      "removed": 0,
+      "purpose": "generated route.gen.ts",
+      "decision": "Generated TanStack route declarations for /game, /display, authenticated theme preview and the synchronized billing checkout. Generated by the actual production build, never manually maintained.",
+      "risk": "medium",
+      "reviewNumber": 91,
+      "extensionTargets": [
+        "packages/web/src/pages/(auth)/game.tsx",
+        "packages/web/src/pages/display/$gameId.tsx",
+        "packages/web/src/pages/manager/checkout.tsx"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { Route as authIndexRouteImport } from './pages/(auth)/index'",
+        "import { Route as PartyManagerGameIdRouteImport } from './pages/party/manager/$g",
+        "const authIndexRoute = authIndexRouteImport.update({",
+        "const PartyManagerGameIdRoute = PartyManagerGameIdRouteImport.update({",
+        "export interface FileRoutesByFullPath {",
+        "export interface FileRoutesByTo {"
+      ]
+    },
+    {
+      "file": "packages/web/vite.config.ts",
+      "added": 21,
+      "removed": 8,
+      "purpose": "Vite config CONFIG_PATH and JSON media MIME",
+      "decision": "Configuration-root hook isolates worktree/test data; JSON MIME supports Lottie. Added an owned private-media proxy policy: accounts ON forwards /media to authenticated backend; accounts OFF retains the original static middleware. No tenant/SQLite asset is made public by the dev/preview server.",
+      "risk": "high",
+      "reviewNumber": 92,
+      "extensionTargets": [
+        "packages/web/vite/private-media.ts"
+      ],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import packageJson from \"../../package.json\" with { type: \"json\" }",
+        "const brandingMimeTypes: Record<string, string> = {",
+        "const configServer = (): Plugin => ({",
+        "const serverOptions = {"
+      ]
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "added": 163,
+      "removed": 81,
+      "purpose": "generated pnpm lock importers and runtime assets",
+      "decision": "Reviewed generated dependency delta: workspace links, official dotLottie React/web runtime, and existing oxlint 1.87 to 1.90 update/bindings. Do not duplicate or relocate lock metadata; validate frozen install. The unrelated lint tool update warrants compatibility assessment because its peer lower bound differs.",
+      "risk": "medium",
+      "reviewNumber": 93,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "importers:",
+        "packages:",
+        "snapshots:"
+      ]
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "added": 1,
+      "removed": 0,
+      "purpose": "workspace extensions entry",
+      "decision": "Single workspace registration is mandatory build integration.",
+      "risk": "medium",
+      "reviewNumber": 94,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "packages:"
+      ]
+    },
+    {
+      "file": "tsconfig.json",
+      "added": 2,
+      "removed": 0,
+      "purpose": "TypeScript extension paths",
+      "decision": "Two alias entries provide the public extension surface to compiler tooling.",
+      "risk": "medium",
+      "reviewNumber": 95,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "vitest.config.ts",
+      "added": 3,
+      "removed": 0,
+      "purpose": "Vitest extension alias",
+      "decision": "One resolver registration ensures root regression tests execute actual extension source.",
+      "risk": "low",
+      "reviewNumber": 96,
+      "extensionTargets": [],
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const alias = {"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "sourceCommit": "5c51ca73d00374aac4f626f6c5c74d9d3a96a9a8",
+  "branch": "codex/upstream-cleanup-theme-engine-20261108",
+  "upstreamBaseline": "5161eb7",
+  "upstreamChecked": "8345663",
+  "mergedFeatureHeads": [
+    "0079e45",
+    "ef35617"
+  ],
+  "originalFileReview": {
+    "historical96Covered": 96,
+    "unionReviewed": 113,
+    "restoredToBaseline": 20,
+    "currentModifiedOriginals": 93,
+    "baselineOriginals": 341,
+    "originalAddedLines": 4000,
+    "originalRemovedLines": 1278
+  },
+  "unitPassed": 978,
+  "browserPassed": 38,
+  "typecheckProjects": 5,
+  "focusedLintDiagnostics": 0,
+  "fullLint": {
+    "exitCode": 1,
+    "totalDiagnostics": 7677,
+    "severity": {
+      "error": 7630,
+      "warning": 47
+    },
+    "diagnosticsInFilesAddedSinceContinuationBaseline": 0,
+    "newFileFindings": [],
+    "largestSources": {
+      "docs/extensions/references/tadazz-v4/motion-runtime-reference.js": 1358,
+      "extensions/qa/tadazz-navigation-participation.cjs": 606,
+      "extensions/qa/tadazz-audio-flow.cjs": 576,
+      "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts": 359,
+      "extensions/src/core/show-workbook.ts": 215
+    },
+    "focusedInstallerThemeLint": {
+      "files": 28,
+      "diagnostics": 0
+    }
+  },
+  "runtimeSourceMatchesRemote": true,
+  "matchedSourceFiles": 1001,
+  "humanDeviceGatesNotTested": [
+    "Physical iPad",
+    "Manual listening",
+    "Customer rights/content/photoflash review",
+    "Complete historical pixel/timing parity"
+  ],
+  "productionActivation": false,
+  "pushed": false
+}

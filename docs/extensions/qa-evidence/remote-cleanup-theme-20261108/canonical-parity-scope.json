@@ -1,0 +1,17 @@
+{
+  "baseline": "ae0692a",
+  "verifiedSourceCommit": "5c51ca7",
+  "protectedPaths": [
+    "extensions/src/core/show-themes/classic.manifest.json",
+    "packages/web/public/tadazz-show",
+    "extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+    "extensions/src/presentation/tadazz-v4/full-show.css",
+    "extensions/src/presentation/tadazz-v4/source-layout.css",
+    "extensions/src/presentation/tadazz-v4/motion.ts",
+    "extensions/src/presentation/tadazz-v4/motion-spec-v4.json",
+    "extensions/src/presentation/tadazz-show/motion-spec.ts",
+    "extensions/src/presentation/tadazz-show/motion-engine.ts"
+  ],
+  "changedPaths": [],
+  "claim": "Canonical source assets/styles/motion spec unchanged in this continuation; this is not a pixel/timing comparison across every historical show."
+}

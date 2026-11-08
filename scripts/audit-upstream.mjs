@@ -47,10 +47,14 @@ const classify = file => {
   if (/packages\/web\/src/.test(file)) return { purpose: "UI integration for rich answers, current show rendering, editing or account routes", decision: "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.", risk: /states|context|questions/.test(file) ? "high" : "medium" }
   return { purpose: "Workspace/build/runtime configuration", decision: "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.", risk: "medium" }
 }
+const semanticReview = JSON.parse(fs.readFileSync("docs/extensions/UPSTREAM_REVIEW_COMPLETE_2026-11-08.json", "utf8"))
+const reviewedByFile = new Map(semanticReview.records.map(record => [record.file, record]))
 const ledger = changes.map(row => {
+  const reviewed = reviewedByFile.get(row.file)
+  if (!reviewed) throw new Error(`Original file has no semantic review: ${row.file}`)
   const diff = git("diff", "--no-renames", "--unified=0", original, "--", row.file)
   const anchors = diff.split("\n").filter(line => line.startsWith("@@")).map(line => line.replace(/^@@.*?@@\s*/, "")).filter(Boolean)
-  return { ...row, ...classify(row.file), upstreamAlsoChanged: upstreamFiles.has(row.file), anchors: [...new Set(anchors)].slice(0, 6) }
+  return { ...row, ...classify(row.file), purpose: reviewed.symbols, decision: reviewed.reason, reviewNumber: reviewed.number, extensionTargets: reviewed.extensionTargets ?? [], upstreamAlsoChanged: upstreamFiles.has(row.file), anchors: [...new Set(anchors)].slice(0, 6) }
 })
 const report = {
   generatedAt: new Date().toISOString(), baseline: original, starting, head: git("rev-parse", "HEAD"), upstreamHead,

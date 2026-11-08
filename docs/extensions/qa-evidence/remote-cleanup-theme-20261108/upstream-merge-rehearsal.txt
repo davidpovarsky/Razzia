@@ -1,0 +1,15 @@
+f86c0b7fb53d28bd7d11294dd7bb038344dd99bd
+100644 cb701bcf9040a9d2d22e9d66d7414f36ca01ac10 1	Dockerfile
+100644 c9ce3b78b9c2a4dc9b33532653926894eb5a1bf1 2	Dockerfile
+100644 d4b3feec67df02116de9c6fd4feba8f11398c47d 3	Dockerfile
+100644 88bfdcf7728c17055e67d275d78baa0c4eead63e 1	pnpm-lock.yaml
+100644 02cf6dea812f97c47c505d5be83f9681543f6430 2	pnpm-lock.yaml
+100644 a70051d42919077ed4ae034db94df093ed4ad2f0 3	pnpm-lock.yaml
+
+Auto-merging Dockerfile
+CONFLICT (content): Merge conflict in Dockerfile
+Auto-merging packages/socket/package.json
+Auto-merging packages/web/package.json
+Auto-merging pnpm-lock.yaml
+CONFLICT (content): Merge conflict in pnpm-lock.yaml
+Auto-merging pnpm-workspace.yaml
