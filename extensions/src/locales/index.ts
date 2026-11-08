@@ -7,6 +7,8 @@ import jaExtensions from "./ja/extensions.json" with { type: "json" }
 import trExtensions from "./tr/extensions.json" with { type: "json" }
 import viExtensions from "./vi/extensions.json" with { type: "json" }
 
+export { registerHostLocaleAdditions } from "./host-additions"
+
 export const EXTENSION_LOCALES = {
   de: deExtensions,
   en: enExtensions,

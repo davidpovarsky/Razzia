@@ -66,8 +66,7 @@
     "notePlaceholder": "Erklärung hinzufügen, die beim Aufdecken der Antwort angezeigt wird",
     "estimation": {
       "correctAnswer": "Richtige Antwort"
-    },
-    "duplicateQuestion": "Frage duplizieren"
+    }
   },
   "questionHasErrors": "Diese Frage enthält Fehler",
   "questionType": {

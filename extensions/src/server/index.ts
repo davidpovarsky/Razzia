@@ -16,3 +16,9 @@ export * from "./storage/sidecar"
 export * from "./real-transport"
 
 export type { PlayerScoreInfo } from "../gameplay/index"
+
+export { GameRoster } from "./game/roster"
+
+export { buildInterimResults } from "./game/interim-results"
+export { buildAnswerRecap } from "./game/answer-recap"
+export { createRevealDistribution } from "./game/reveal-distribution"

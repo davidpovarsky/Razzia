@@ -5,6 +5,7 @@ import {
 } from "@razzia/extensions/core"
 import {
   CompositeApiClient,
+  getTimelineKindOptions,
   RevisionConflictError,
 } from "@razzia/extensions/editor"
 import { useStudioEditor } from "@razzia/web/features/quizz/components/studio"
@@ -27,22 +28,7 @@ import { ApiError, api, unwrap } from "@razzia/web/lib/api"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import clsx from "clsx"
-import {
-  BarChart2,
-  DoorOpen,
-  Flag,
-  HelpCircle,
-  Image as ImageIcon,
-  Layers,
-  ListChecks,
-  Play,
-  Rocket,
-  Settings,
-  Sparkles,
-  Timer,
-  Trophy,
-  Users,
-} from "lucide-react"
+import { Rocket, Settings, Users } from "lucide-react"
 import { Controller, useFormContext } from "react-hook-form"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
@@ -280,82 +266,10 @@ const QuizzEditorHeader = () => {
     }
   }
 
-  const timelineKinds = [
-    // Group 1: Question
-    {
-      value: "quiz",
-      label: t("extensions:timeline.quiz", "Quiz"),
-      icon: Play,
-      group: "question",
-    },
-    {
-      value: "survey",
-      label: t("extensions:timeline.survey", "Survey"),
-      icon: HelpCircle,
-      group: "question",
-    },
-    // Group 2: Media
-    {
-      value: "media",
-      label: t("extensions:timeline.media", "Media"),
-      icon: ImageIcon,
-      group: "media",
-    },
-    // Group 3: Effects / Animation
-    {
-      value: "animation",
-      label: t("extensions:timeline.animation", "Animation"),
-      icon: Sparkles,
-      group: "effects",
-    },
-    {
-      value: "transition",
-      label: t("extensions:timeline.transition", "Transition"),
-      icon: Layers,
-      group: "effects",
-    },
-    // Group 4: Show Scenes
-    {
-      value: "opening",
-      label: t("extensions:timeline.opening", "Opening"),
-      icon: DoorOpen,
-      group: "show",
-    },
-    {
-      value: "closing",
-      label: t("extensions:timeline.closing", "Closing"),
-      icon: Flag,
-      group: "show",
-    },
-    {
-      value: "countdown",
-      label: t("extensions:timeline.countdown", "Countdown"),
-      icon: Timer,
-      group: "show",
-    },
-    // Group 5: Results
-    {
-      value: "leaderboard",
-      label: t("extensions:timeline.leaderboard", "Leaderboard"),
-      icon: Trophy,
-      group: "results",
-    },
-    {
-      value: "interimResults",
-      label: t("extensions:timeline.interimResults", "Interim Results"),
-      icon: BarChart2,
-      group: "results",
-    },
-    {
-      value: "answerRecap",
-      label: t("extensions:timeline.answerRecap", "Answer Recap"),
-      icon: ListChecks,
-      group: "results",
-    },
-  ]
+  const timelineKinds = getTimelineKindOptions(t)
 
   return (
-    <header className="bg-background z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b border-border shadow-sm">
+    <header className="bg-background border-border z-20 flex w-full max-w-full flex-col overflow-x-hidden border-b shadow-sm">
       {/* Row 1 / Top: Quiz Title + Studio Navigation Tabs + Exit / Save */}
       <div className="flex min-h-14 w-full flex-wrap items-center justify-between gap-2 px-3 py-1.5 sm:gap-4 sm:px-4">
         {/* Title input */}
@@ -373,7 +287,7 @@ const QuizzEditorHeader = () => {
                     fieldState.invalid ? `${field.name}-error` : undefined
                   }
                   className={clsx(
-                    "w-32 sm:w-48 md:w-56 shrink-0",
+                    "w-32 shrink-0 sm:w-48 md:w-56",
                     fieldState.invalid && "ring-2 ring-red-500",
                   )}
                   placeholder={t("quizz:titleQuizzPlaceholder")}
@@ -388,7 +302,7 @@ const QuizzEditorHeader = () => {
         </div>
 
         {/* Center: Studio Screen Navigation Tabs */}
-        <div className="bg-accent/80 scrollbar-none flex h-8 max-w-full shrink-0 items-center overflow-x-auto rounded-lg p-0.5">
+        <div className="bg-accent/80 flex h-8 max-w-full shrink-0 scrollbar-none items-center overflow-x-auto rounded-lg p-0.5">
           <button
             type="button"
             data-testid="studio-tab-questions"
@@ -450,7 +364,7 @@ const QuizzEditorHeader = () => {
         <div className="flex shrink-0 items-center gap-1.5 sm:gap-2">
           <Button
             type="button"
-            className="bg-accent text-accent-foreground px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2 sm:text-md"
+            className="bg-accent text-accent-foreground sm:text-md px-2.5 py-1.5 text-sm font-semibold sm:px-4 sm:py-2"
             onClick={handleExit}
             data-testid="editor-exit-btn"
           >
@@ -458,7 +372,7 @@ const QuizzEditorHeader = () => {
           </Button>
           <Button
             type="button"
-            className="bg-primary px-2.5 py-1.5 text-sm sm:px-4 sm:py-2 sm:text-md"
+            className="bg-primary sm:text-md px-2.5 py-1.5 text-sm sm:px-4 sm:py-2"
             onClick={handleSave}
             data-testid="editor-save-btn"
           >
@@ -471,9 +385,9 @@ const QuizzEditorHeader = () => {
       {activeTab === "questions" && (
         <div
           data-testid="studio-card-type-bar"
-          className="bg-muted/30 flex h-11 w-full items-center justify-between border-t border-border/40 px-4"
+          className="bg-muted/30 border-border/40 flex h-11 w-full items-center justify-between border-t px-4"
         >
-          <div className="scrollbar-none min-w-0 flex-1 overflow-x-auto py-1">
+          <div className="min-w-0 flex-1 scrollbar-none overflow-x-auto py-1">
             <ToggleGroup
               value={selectedKind}
               onChange={(next) =>
@@ -483,11 +397,11 @@ const QuizzEditorHeader = () => {
             />
           </div>
 
-          <div className="text-xs text-muted-foreground hidden sm:flex items-center gap-1.5 shrink-0 pl-3">
+          <div className="text-muted-foreground hidden shrink-0 items-center gap-1.5 pl-3 text-xs sm:flex">
             <span className="font-medium">
               {t("extensions:studio.cardKindLabel", "Card Type")}:
             </span>
-            <span className="capitalize text-foreground font-semibold">
+            <span className="text-foreground font-semibold capitalize">
               {selectedKind}
             </span>
           </div>
@@ -506,7 +420,9 @@ const QuizzEditorHeader = () => {
       <AlertDialog
         open={Boolean(pendingConversion)}
         onOpenChange={(open: boolean) => {
-          if (!open) {cancelPendingConversion()}
+          if (!open) {
+            cancelPendingConversion()
+          }
         }}
         title={t(
           "extensions:timeline.deleteConfirmTitle",

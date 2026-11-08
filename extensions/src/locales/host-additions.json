@@ -1,0 +1,98 @@
+{
+  "en": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Multiple active games found; specify gameId or inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Duplicate question"
+      }
+    }
+  },
+  "fr": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Plusieurs parties actives trouvées ; spécifiez gameId ou inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Dupliquer la question"
+      }
+    }
+  },
+  "de": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Mehrere aktive Spiele gefunden; gameId oder inviteCode angeben"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Frage duplizieren"
+      }
+    }
+  },
+  "es": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Múltiples partidas activas encontradas; especifique gameId o inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Duplicar pregunta"
+      }
+    }
+  },
+  "it": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Rilevate più partite attive; specifica gameId o inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Duplica domanda"
+      }
+    }
+  },
+  "ja": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "複数のアクティブなゲームが見つかりました。gameId または inviteCode を指定してください"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "質問を複製"
+      }
+    }
+  },
+  "tr": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Birden fazla aktif oyun bulundu; gameId veya inviteCode belirtin"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Soruyu çoğalt"
+      }
+    }
+  },
+  "vi": {
+    "errors": {
+      "game": {
+        "ambiguousTargetGame": "Tìm thấy nhiều trò chơi đang hoạt động; vui lòng chỉ định gameId hoặc inviteCode"
+      }
+    },
+    "quizz": {
+      "question": {
+        "duplicateQuestion": "Nhân bản câu hỏi"
+      }
+    }
+  }
+}

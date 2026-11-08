@@ -66,8 +66,7 @@
     "notePlaceholder": "Ajouter une explication affichée à la révélation de la réponse",
     "estimation": {
       "correctAnswer": "Bonne réponse"
-    },
-    "duplicateQuestion": "Dupliquer la question"
+    }
   },
   "questionHasErrors": "Cette question contient des erreurs",
   "questionType": {

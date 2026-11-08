@@ -13,20 +13,17 @@ import {
   type CueId,
   type ExtensionStateEnvelope,
   type HostPresenceSnapshot,
-  type Interlude,
   type QuizExtrasV1,
   type TadazzShowBackground,
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
   AudioCuePlayer,
-  InterludePresenter,
+  ExtensionStageContent,
+  createScenePresenterLabels,
   isTadazzShowActive,
-  ScenePresenter,
-  StageFitContainer,
   TADAZZ_IMAGE_URL,
   TadazzAnimatedBackdrop,
-  type ScenePresenterProps,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
@@ -516,216 +513,37 @@ const GameWrapper = ({
         }
       : null
 
-  const renderStageContent = () => {
-    // The Goldy Motion Kit paints the whole branded opening. Do not mount
-    // the legacy black cinema card underneath while its iframe initializes.
-    // The manager's independent Next Screen control remains available.
-    if (motionEnabled && sceneKind === "opening" && motionScene) {
-      return (
-        <ExtensionStateProvider value={extensionState}>
-          <ViewRoleContext.Provider value={effectiveRole}>
-            <div
-              data-testid="tadazz-opening-background"
-              className="flex min-h-0 w-full flex-1"
-            />
-          </ViewRoleContext.Provider>
-        </ExtensionStateProvider>
-      )
-    }
-
-    if (!extensionState) {
-      return (
-        <ExtensionStateProvider value={extensionState}>
-          <ViewRoleContext.Provider value={effectiveRole}>
-            <div className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-              {children}
-            </div>
-          </ViewRoleContext.Provider>
-        </ExtensionStateProvider>
-      )
-    }
-
-    if (
-      extensionState.phase === "scene" &&
-      (Boolean(extensionState.extras.currentScene) ||
-        (extensionState.extras.activeTimelineStep &&
-          (extensionState.extras.activeTimelineStep as { kind?: string })
-            .kind !== "question"))
-    ) {
-      const activeStep = extensionState.extras.activeTimelineStep as
-        ScenePresenterProps["step"] | undefined
-      const currentScene = extensionState.extras.currentScene as
-        ScenePresenterProps["scene"] | undefined
-      const activeSceneData = extensionState.extras.activeSceneData as
-        ScenePresenterProps["activeSceneData"] | undefined
-      const globalStageAnimations = (
-        extensionState.extras.defaults as
-          | { stageAnimations?: ScenePresenterProps["globalStageAnimations"] }
-          | undefined
-      )?.stageAnimations
-
-      const scenePresenterLabels: ScenePresenterProps["labels"] = {
-        rankLabel: t("extensions:studio.scene.rankLabel", "Rank"),
-        scoreLabel: t("extensions:studio.scene.scoreLabel", "pts"),
-        noRankingsYet: t(
-          "extensions:studio.scene.noRankingsYet",
-          "No player scores yet.",
-        ),
-        noResponsesYet: t(
-          "extensions:studio.scene.noResponsesYet",
-          "No responses recorded yet.",
-        ),
-        votesSuffix: t("extensions:studio.scene.votesSuffix", "votes"),
-        advanceButtonLabel: t(
-          "extensions:studio.scene.advanceButtonLabel",
-          "Next →",
-        ),
-        intermissionDefaultTitle: t(
-          "extensions:studio.scene.intermissionDefaultTitle",
-          "Take a Breather",
-        ),
-        intermissionDefaultSubtitle: t(
-          "extensions:studio.scene.intermissionDefaultSubtitle",
-          "The next question will begin shortly...",
-        ),
-        leaderboardDefaultTitle: t(
-          "extensions:studio.scene.leaderboardDefaultTitle",
-          "Leaderboard",
-        ),
-        leaderboardDefaultSubtitle: t(
-          "extensions:studio.scene.leaderboardDefaultSubtitle",
-          "Top scorers right now",
-        ),
-        interimResultsDefaultTitle: t(
-          "extensions:studio.scene.interimResultsDefaultTitle",
-          "Interim Results",
-        ),
-        interimResultsDefaultSubtitle: t(
-          "extensions:studio.scene.interimResultsDefaultSubtitle",
-          "Latest question breakdown",
-        ),
-      }
-
-      return (
-        <ExtensionStateProvider value={extensionState}>
-          <ViewRoleContext.Provider value={effectiveRole}>
-            <StageFitContainer className="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden p-1 sm:p-2 md:p-4">
-              <ScenePresenter
-                step={activeStep}
-                scene={currentScene}
-                activeSceneData={activeSceneData}
-                globalStageAnimations={globalStageAnimations}
-                tadazzEnabled={
-                  tadazzBackdrop.source === "tadazz" ||
-                  tadazzBackdrop.source === "static"
-                }
-                labels={scenePresenterLabels}
-                serverStartedAt={extensionState.startedAt}
-                epoch={extensionState.epoch}
-                controlledPaused={extensionState.pause?.paused}
-                isManager={Boolean(manager && !isHostPresenting)}
-                onMediaEnded={() => {
-                  if (manager && extensionState.gameId) {
-                    socket.emit(EXTENSION_EVENTS.COMMAND, {
-                      v: 1,
-                      gameId: extensionState.gameId,
-                      action: "ADVANCE_TIMELINE_SCENE",
-                      payload: {
-                        epoch: extensionState.epoch,
-                        sceneId: activeStep?.sceneId ?? currentScene?.id,
-                        timelineStepIndex: activeStep?.stepIndex,
-                        reason: "mediaEnded",
-                      },
-                      requestId: `media-end-${extensionState.epoch}-${activeStep?.stepIndex ?? 0}`,
-                    })
-                  }
-                }}
-                onAdvance={() => {
-                  if (manager && extensionState.gameId) {
-                    socket.emit(EXTENSION_EVENTS.COMMAND, {
-                      v: 1,
-                      gameId: extensionState.gameId,
-                      action: "ADVANCE_TIMELINE_SCENE",
-                      payload: {
-                        epoch: extensionState.epoch,
-                      },
-                      requestId: `adv-${Date.now()}`,
-                    })
-                  }
-                }}
-                onSkip={() => {
-                  if (manager && extensionState.gameId) {
-                    socket.emit(EXTENSION_EVENTS.COMMAND, {
-                      v: 1,
-                      gameId: extensionState.gameId,
-                      action: "SKIP_TIMELINE_SCENE",
-                      payload: {
-                        epoch: extensionState.epoch,
-                      },
-                      requestId: `skip-${Date.now()}`,
-                    })
-                  }
-                }}
-              />
-            </StageFitContainer>
-          </ViewRoleContext.Provider>
-        </ExtensionStateProvider>
-      )
-    }
-
-    if (
-      extensionState.phase === "interlude" &&
-      extensionState.extras.interlude
-    ) {
-      return (
-        <ExtensionStateProvider value={extensionState}>
-          <ViewRoleContext.Provider value={effectiveRole}>
-            <StageFitContainer className="flex min-h-0 w-full flex-1 items-center justify-center overflow-hidden p-1 sm:p-2 md:p-4">
-              <InterludePresenter
-                interlude={extensionState.extras.interlude as Interlude}
-                serverStartedAt={extensionState.startedAt}
-                isManager={Boolean(manager && !isHostPresenting)}
-                labels={{
-                  secondsRemaining: (sec) =>
-                    t("extensions:interludes.secondsRemaining", {
-                      seconds: sec,
-                    }),
-                  awaitingHost: t("extensions:interludes.awaitingHost"),
-                  skipInterlude: t("extensions:interludes.skipInterlude"),
-                  skipped: t("extensions:interludes.skipped"),
-                  slideAlt: t("extensions:interludes.slideAlt"),
-                }}
-                onSkip={() => {
-                  if (manager && extensionState.gameId) {
-                    socket.emit(EXTENSION_EVENTS.COMMAND, {
-                      v: 1,
-                      gameId: extensionState.gameId,
-                      action: "END_OR_SKIP_INTERLUDE",
-                      payload: {
-                        reason: "manual",
-                        epoch: extensionState.epoch,
-                      },
-                      requestId: `skip-${Date.now()}`,
-                    })
-                  }
-                }}
-              />
-            </StageFitContainer>
-          </ViewRoleContext.Provider>
-        </ExtensionStateProvider>
-      )
-    }
-
-    return (
-      <ExtensionStateProvider value={extensionState}>
-        <ViewRoleContext.Provider value={effectiveRole}>
-          <StageFitContainer className="flex min-h-0 w-full flex-1 flex-col overflow-hidden">
-            {children}
-          </StageFitContainer>
-        </ViewRoleContext.Provider>
-      </ExtensionStateProvider>
-    )
-  }
+  const renderStageContent = () => (
+    <ExtensionStateProvider value={extensionState}>
+      <ViewRoleContext.Provider value={effectiveRole}>
+        <ExtensionStageContent
+          extensionState={extensionState}
+          openingPlaceholder={Boolean(
+            motionEnabled && sceneKind === "opening" && motionScene,
+          )}
+          tadazzEnabled={
+            tadazzBackdrop.source === "tadazz" ||
+            tadazzBackdrop.source === "static"
+          }
+          isManager={Boolean(manager && !isHostPresenting)}
+          scenePresenterLabels={createScenePresenterLabels(t)}
+          interludeLabels={{
+            secondsRemaining: (seconds) =>
+              t("extensions:interludes.secondsRemaining", { seconds }),
+            awaitingHost: t("extensions:interludes.awaitingHost"),
+            skipInterlude: t("extensions:interludes.skipInterlude"),
+            skipped: t("extensions:interludes.skipped"),
+            slideAlt: t("extensions:interludes.slideAlt"),
+          }}
+          onCommand={(command) =>
+            socket.emit(EXTENSION_EVENTS.COMMAND, command)
+          }
+        >
+          {children}
+        </ExtensionStageContent>
+      </ViewRoleContext.Provider>
+    </ExtensionStateProvider>
+  )
 
   // TADAZZ show (UPSTREAM_TOUCHES 2026-11-05 T1): own the whole stage so the
   // legacy background/state components are never mounted, not even for a frame.

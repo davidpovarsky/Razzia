@@ -1,4 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
+import { registerHostLocaleAdditions } from "@razzia/extensions/locales"
 import fs from "fs"
 import { extname, join } from "path"
 import { describe, expect, it } from "vitest"
@@ -23,15 +24,21 @@ const flatten = (messages: Messages, prefix = ""): string[] =>
       : [`${prefix}${key}`],
   )
 
-const readKeys = (lang: string) =>
-  fs.readdirSync(join(LOCALES_DIR, lang)).flatMap((file) => {
+const readKeys = (lang: string) => {
+  const resources: Record<string, Record<string, unknown>> = { [lang]: {} }
+  for (const file of fs.readdirSync(join(LOCALES_DIR, lang))) {
     const namespace = file.replace(/\.json$/u, "")
     const messages = JSON.parse(
       fs.readFileSync(join(LOCALES_DIR, lang, file), "utf-8"),
     ) as Messages
 
-    return flatten(messages).map((key) => `${namespace}:${key}`)
-  })
+    resources[lang][namespace] = messages
+  }
+  registerHostLocaleAdditions(resources)
+  return Object.entries(resources[lang]).flatMap(([namespace, messages]) =>
+    flatten(messages as Messages).map((key) => `${namespace}:${key}`),
+  )
+}
 
 const listSources = (dir: string): string[] =>
   fs.readdirSync(dir, { withFileTypes: true }).flatMap((entry) => {

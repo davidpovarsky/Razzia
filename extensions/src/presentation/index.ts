@@ -47,3 +47,6 @@ export * from "./tadazz-zz-transition"
 export * from "./tadazz-show"
 
 export * from "./tadazz-v4"
+
+export * from "./extension-stage-content"
+export * from "./scene-labels"

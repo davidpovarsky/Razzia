@@ -66,8 +66,7 @@
     "notePlaceholder": "Add an explanation shown when the answer is revealed",
     "estimation": {
       "correctAnswer": "Correct answer"
-    },
-    "duplicateQuestion": "Duplicate question"
+    }
   },
   "questionHasErrors": "This question has errors",
   "questionType": {

@@ -15,7 +15,6 @@
   },
   "game": {
     "alreadyStarted": "La partida ya ha comenzado",
-    "ambiguousTargetGame": "Múltiples partidas activas encontradas; especifique gameId o inviteCode",
     "expired": "Partida expirada",
     "invalidAutoAdvanceDelay": "El retraso debe estar entre 3 y 600 segundos",
     "kickedByManager": "Has sido expulsado por el administrador",

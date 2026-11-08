@@ -25,11 +25,8 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
-import type {
-  EstimationDistribution,
-  RevealDistributionSnapshot,
-  RevealOptionDistribution,
-} from "@razzia/extensions/core"
+import type { RevealDistributionSnapshot } from "@razzia/extensions/core"
+import { createRevealDistribution } from "@razzia/extensions/server"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
@@ -1315,97 +1312,15 @@ export class RoundManager {
 
   private showResults(): void {
     const currentPlayers = this.opts.players.getAll()
-    const connectedPlayers = currentPlayers.filter((p) => p.connected)
-    const eligibleCount = connectedPlayers.length
-    const uniqueResponders = new Set(this.playersAnswers.map((a) => a.playerId))
-      .size
-
-    // Calculate reveal distribution data for cinematic reveal without withholding player results
-    let optionsDist: Record<number, RevealOptionDistribution> | undefined =
-      undefined
-    let estimationDist: EstimationDistribution | undefined = undefined
-
-    if (isEstimationOptions(this.question.options)) {
-      const guesses: number[] = []
-
-      for (const ans of this.playersAnswers) {
-        const val = ans.answerIds?.[0]
-
-        if (typeof val === "number" && Number.isFinite(val)) {
-          guesses.push(val)
-        }
-      }
-
-      guesses.sort((a, b) => a - b)
-      const target = this.question.solutions?.[0] ?? 0
-      let closestGuess: number | undefined = undefined
-
-      if (guesses.length > 0) {
-        closestGuess = guesses.reduce((prev, curr) =>
-          Math.abs(curr - target) < Math.abs(prev - target) ? curr : prev,
-        )
-      }
-
-      const median =
-        guesses.length > 0 ? guesses[Math.floor(guesses.length / 2)] : undefined
-
-      estimationDist = {
-        min: this.question.options.min,
-        max: this.question.options.max,
-        target,
-        guessesCount: guesses.length,
-        closestGuess,
-        median,
-        guesses,
-      }
-    } else {
-      optionsDist = {}
-      const counts: Record<number, number> = {}
-
-      for (let i = 0; i < this.question.answers.length; i += 1) {
-        counts[i] = 0
-      }
-
-      for (const ans of this.playersAnswers) {
-        if (Array.isArray(ans.answerIds)) {
-          for (const id of ans.answerIds) {
-            if (typeof id === "number" && id in counts) {
-              counts[id] += 1
-            }
-          }
-        }
-      }
-
-      for (let i = 0; i < this.question.answers.length; i += 1) {
-        const count = counts[i]
-        const percentage =
-          uniqueResponders > 0
-            ? Math.round((count / uniqueResponders) * 100)
-            : 0
-        const isSolution = this.isSurvey()
-          ? undefined
-          : (this.question.solutions?.includes(i) ?? false)
-
-        optionsDist[i] = {
-          index: i,
-          count,
-          percentage,
-          isSolution,
-        }
-      }
-    }
-
-    this.latestRevealDistribution = {
-      questionId: this.opts.getQuestionId?.(this.currentQuestion),
+    this.latestRevealDistribution = createRevealDistribution({
+      question: this.question,
+      answers: this.playersAnswers,
+      players: currentPlayers,
+      survey: this.isSurvey(),
       questionIndex: this.currentQuestion,
-      questionType: this.question.type,
-      totalResponders: uniqueResponders,
-      eligiblePlayers: eligibleCount,
-      revealStartedAt: Date.now(),
-      options: optionsDist,
-      estimation: estimationDist,
-      solutions: this.isSurvey() ? undefined : this.question.solutions,
-    }
+      questionId: this.opts.getQuestionId?.(this.currentQuestion),
+      startedAt: Date.now(),
+    })
 
     this.opts.onResultsCalculated?.(this.latestRevealDistribution)
 

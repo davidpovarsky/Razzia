@@ -21,14 +21,16 @@ import {
   generateRosterPlayerId,
   isQuizExtrasV2,
   normalizePhoneE164,
-  type HostPlayerStatus,
   type HostPresenceSnapshot,
   type RevealDistributionSnapshot,
   type RosterParticipant,
 } from "@razzia/extensions/core"
 import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
 import {
+  buildInterimResults,
+  buildAnswerRecap,
   ExtensionGameSession,
+  GameRoster,
   readSidecar,
   StudioShowCoordinator,
   type PlayerScoreInfo,
@@ -91,32 +93,8 @@ class Game {
     { name: Status; data: StatusDataMap[Status] }
   >()
   private readonly spectatorSocketIds = new Set<string>()
-  private presenceSeq = 0
-  private readonly rosterMap = new Map<
-    string,
-    {
-      rosterPlayerId: string
-      clientId: string | null
-      displayName: string
-      phoneE164: string | null
-      phoneRaw?: string
-      tableNumber?: number
-      phoneNeedsReview?: boolean
-      source: "web" | "phone"
-      status: "not_joined" | "connected" | "disconnected"
-      timedOut?: boolean
-      points: number
-      lastSeenAt?: number
-      preRegistered: boolean
-      activeCallId?: string
-    }
-  >()
-  private readonly phoneIndex = new Map<string, string>()
-  private readonly clientRosterIndex = new Map<string, string>()
-  private readonly lastVerdictByRosterId = new Map<
-    string,
-    { epoch: number; correct: boolean; points: number }
-  >()
+
+  private readonly roster: GameRoster
 
   constructor(io: Server, managerClientId: string, quizz: Quizz) {
     this.io = io
@@ -129,6 +107,20 @@ class Game {
       clientId: managerClientId,
       connected: false,
     }
+
+    this.roster = new GameRoster({
+      players: {
+        getAll: () => this.playerManager.getAll(),
+        findByClientId: (id) => this.playerManager.findByClientId(id),
+      },
+      onPlayerRenamed: (player) =>
+        this.notifyPlayerUpdated(player.id, player, false),
+      kickPlayer: (id) => this.kickPlayer(id),
+      onChange: () => this.broadcastHostPresence(),
+      setPhoneInviteOnly: (phoneInviteOnly) => {
+        this._settings = { ...this._settings, phoneInviteOnly }
+      },
+    })
 
     const quizzId = (quizz as { id?: string }).id
     const sidecar = quizzId ? readSidecar(getPath, quizzId) : null
@@ -217,28 +209,7 @@ class Game {
         phoneInviteOnly:
           sidecar.roster.phoneInviteOnly && !this.temporaryGuestsAllowed,
       }
-      for (const item of sidecar.roster.participants) {
-        const normalized = item.phoneE164
-          ? normalizePhoneE164(item.phoneE164)
-          : null
-        this.rosterMap.set(item.rosterPlayerId, {
-          rosterPlayerId: item.rosterPlayerId,
-          clientId: null,
-          displayName: item.displayName,
-          phoneE164: normalized,
-          phoneRaw: item.phoneRaw,
-          tableNumber: item.tableNumber,
-          phoneNeedsReview: item.phoneNeedsReview,
-          source: normalized ? "phone" : "web",
-          status: "not_joined",
-          points: 0,
-          preRegistered: true,
-        })
-
-        if (normalized) {
-          this.phoneIndex.set(normalized, item.rosterPlayerId)
-        }
-      }
+      this.roster.seed(sidecar.roster.participants)
     }
 
     this.cooldown = new CooldownTimer(io, this.gameId)
@@ -365,23 +336,7 @@ class Game {
         const epoch =
           this.extensionSession?.currentEpoch ??
           this.round.currentQuestionIndex + 1
-        for (const sp of scoredPlayers) {
-          const rId = this.clientRosterIndex.get(sp.clientId)
-
-          if (rId) {
-            const entry = this.rosterMap.get(rId)
-
-            if (entry) {
-              entry.points = sp.points
-            }
-
-            this.lastVerdictByRosterId.set(rId, {
-              epoch,
-              correct: sp.lastCorrect,
-              points: sp.lastPoints,
-            })
-          }
-        }
+        this.roster.recordScores(scoredPlayers, epoch)
       },
       onReplayCheckpoint: (qIdx) => {
         this.lastCompletedDistribution = null
@@ -563,73 +518,13 @@ class Game {
             points: p.points,
           }))
         },
-        getLastCompletedQuestionSummary: () => {
-          const dist =
-            this.lastCompletedDistribution ?? this.round.getRevealDistribution()
-
-          if (
-            !dist ||
-            dist.questionIndex < 0 ||
-            dist.questionIndex >= this.quizz.questions.length
-          ) {
-            return null
-          }
-
-          const q = this.quizz.questions[dist.questionIndex]
-          const qId = this.extensionSession?.getQuestionId(dist.questionIndex)
-          const qExtras =
-            qId &&
-            this.extensionSession?.extras &&
-            "perQuestion" in this.extensionSession.extras
-              ? (this.extensionSession.extras as any).perQuestion?.[qId]
-              : undefined
-          const answerVisuals = qExtras?.answerVisuals ?? []
-
-          let maxCount = 0
-          for (let i = 0; i < q.answers.length; i += 1) {
-            const count = dist.options?.[i]?.count ?? 0
-
-            if (count > maxCount) {
-              maxCount = count
-            }
-          }
-
-          const winners: number[] = []
-
-          if (maxCount > 0) {
-            for (let i = 0; i < q.answers.length; i += 1) {
-              const count = dist.options?.[i]?.count ?? 0
-
-              if (count === maxCount) {
-                winners.push(i)
-              }
-            }
-          }
-
-          const isTie = winners.length > 1
-
-          const options = q.answers.map((label: string, idx: number) => {
-            const visual = answerVisuals.find((v: any) => v.answerIndex === idx)
-
-            return {
-              answerIndex: idx,
-              label,
-              count: dist.options?.[idx]?.count ?? 0,
-              percentage: dist.options?.[idx]?.percentage ?? 0,
-              imageUrl: visual?.url,
-              alt: visual?.alt,
-            }
-          })
-
-          return {
-            sourceQuestionId: dist.questionId ?? qId ?? null,
-            questionText: q.question,
-            totalResponders: dist.totalResponders,
-            options,
-            winners,
-            isTie,
-          }
-        },
+        getLastCompletedQuestionSummary: () =>
+          buildInterimResults(
+            this.lastCompletedDistribution ??
+              this.round.getRevealDistribution(),
+            this.quizz,
+            this.extensionSession?.extras ?? null,
+          ),
         getFullShowData: () => ({
           isLive: true,
           dialNumber:
@@ -644,230 +539,29 @@ class Game {
               : undefined,
           connectedTables: [
             ...new Set(
-              [...this.rosterMap.values()].flatMap((entry, index) =>
+              [...this.roster.entries.values()].flatMap((entry, index) =>
                 entry.status === "connected"
                   ? [entry.tableNumber ?? index + 1]
                   : [],
               ),
             ),
           ],
-          representatives: [...this.rosterMap.values()].map((entry, index) => ({
-            table: entry.tableNumber ?? index + 1,
-            name: entry.displayName,
-          })),
+          representatives: [...this.roster.entries.values()].map(
+            (entry, index) => ({
+              table: entry.tableNumber ?? index + 1,
+              name: entry.displayName,
+            }),
+          ),
         }),
-        getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
-          const scene =
-            inputScene.kind === "animation"
-              ? {
-                  id: inputScene.id,
-                  kind: "answerRecap" as const,
-                  title: inputScene.title,
-                  mode: "mostSelected" as const,
-                  startQuestionId: this.extensionSession?.getQuestionId(
-                    ((inputScene.round ?? 1) - 1) * 5,
-                  ),
-                  maxItemsPerPage: 5,
-                  showCounts: true,
-                  showPercentages: true,
-                }
-              : inputScene
-
-          if (scene.kind !== "answerRecap") {
-            return null
-          }
-
-          const extras = this.extensionSession?.extras
-
-          if (!extras || !isQuizExtrasV2(extras)) {
-            return null
-          }
-
-          const { timeline } = extras
-          const boundIndex = Math.min(timelineStepIndex, timeline.length)
-
-          const precedingQuestions: Array<{
-            questionId: string
-            questionIndex: number
-            questionNumber: number
-          }> = []
-
-          let qOrdinal = 0
-          for (let i = 0; i < boundIndex; i += 1) {
-            const item = timeline[i]
-
-            if (item?.kind === "question") {
-              qOrdinal += 1
-              const qIdx = extras.questionIds.indexOf(item.questionId)
-
-              if (qIdx >= 0 && qIdx < this.quizz.questions.length) {
-                precedingQuestions.push({
-                  questionId: item.questionId,
-                  questionIndex: qIdx,
-                  questionNumber: qOrdinal,
-                })
-              }
-            }
-          }
-
-          let startPos = 0
-
-          if (scene.startQuestionId) {
-            const foundPos = precedingQuestions.findIndex(
-              (pq) => pq.questionId === scene.startQuestionId,
-            )
-
-            if (foundPos >= 0) {
-              startPos = foundPos
-            }
-          }
-
-          const selectedRange = precedingQuestions.slice(startPos)
-          const historyAll = (this.round.getHistory() ?? []) as QuestionResult[]
-
-          const items = []
-          for (const pq of selectedRange) {
-            const q = this.quizz.questions[pq.questionIndex]
-            const hist = historyAll[pq.questionIndex]
-            const ledger = this.round.getQuestionLedgerEntry(pq.questionIndex)
-
-            if (!q) {
-              continue
-            }
-            // Authored round recaps retain every question's position, even a
-            // skipped or empty vote. Other recap cards keep their legacy range.
-            if (
-              inputScene.kind !== "animation" &&
-              (hist?.skipped || ledger?.skipped || (!hist && !ledger))
-            ) {
-              continue
-            }
-
-            const qExtras = extras.perQuestion?.[pq.questionId]
-            const answerVisuals = qExtras?.answerVisuals ?? []
-            const playMode = resolveQuestionPlayMode(q, this.quizz.gameMode)
-
-            // Tally votes per option index from authoritative ledger or history
-            const optionCounts = new Array<number>(q.answers.length).fill(0)
-            let totalResponders = 0
-
-            if (ledger && !ledger.skipped) {
-              totalResponders = ledger.answers.length
-              for (const ans of ledger.answers) {
-                for (const aid of ans.answerIds) {
-                  if (aid >= 0 && aid < optionCounts.length) {
-                    optionCounts[aid] += 1
-                  }
-                }
-              }
-            } else if (hist) {
-              const answeredPlayers = (hist.playerAnswers ?? []).filter(
-                (pa) => Array.isArray(pa.answerIds) && pa.answerIds.length > 0,
-              )
-              totalResponders =
-                typeof hist.playerAnswersCount === "number"
-                  ? hist.playerAnswersCount
-                  : answeredPlayers.length
-              for (const pa of answeredPlayers) {
-                for (const aid of pa.answerIds ?? []) {
-                  if (aid >= 0 && aid < optionCounts.length) {
-                    optionCounts[aid] += 1
-                  }
-                }
-              }
-            }
-
-            let maxCount = 0
-            for (const c of optionCounts) {
-              if (c > maxCount) {
-                maxCount = c
-              }
-            }
-
-            const useCorrectAnswer =
-              scene.mode === "correctAnswer" &&
-              playMode === "quiz" &&
-              Array.isArray(q.solutions) &&
-              q.solutions.length > 0
-
-            let winningIdxList: number[] = []
-            let badgeType:
-              | "mostSelected"
-              | "correctAnswer"
-              | "tiedMostSelected"
-              | "noResponses" = "mostSelected"
-            let isTie = false
-
-            if (useCorrectAnswer) {
-              winningIdxList = (q.solutions ?? []).filter(
-                (idx) => idx >= 0 && idx < q.answers.length,
-              )
-              badgeType = "correctAnswer"
-              isTie = winningIdxList.length > 1
-            } else if (totalResponders === 0 || maxCount === 0) {
-              winningIdxList = []
-              badgeType = "noResponses"
-              isTie = false
-            } else {
-              for (let idx = 0; idx < optionCounts.length; idx += 1) {
-                if (optionCounts[idx] === maxCount) {
-                  winningIdxList.push(idx)
-                }
-              }
-              isTie = winningIdxList.length > 1
-              badgeType = isTie ? "tiedMostSelected" : "mostSelected"
-            }
-
-            const winningOptions = winningIdxList.map((idx) => {
-              const count = optionCounts[idx] ?? 0
-              const percentage =
-                totalResponders > 0
-                  ? Math.round((count / totalResponders) * 100)
-                  : 0
-              const visual = answerVisuals.find(
-                (v: any) => v.answerIndex === idx,
-              )
-
-              return {
-                answerIndex: idx,
-                label: q.answers[idx] ?? `Option ${idx + 1}`,
-                count,
-                percentage,
-                imageUrl: visual?.url,
-                alt: visual?.alt,
-              }
-            })
-
-            items.push({
-              questionId: pq.questionId,
-              questionNumber: pq.questionNumber,
-              questionText: q.question,
-              questionImageUrl:
-                q.media?.type === "image" ? q.media.url : undefined,
-              playMode,
-              badgeType,
-              totalResponders,
-              isTie,
-              winningOptions,
-            })
-          }
-
-          return {
-            title: scene.title,
-            subtitle: "subtitle" in scene ? scene.subtitle : undefined,
-            totalQuestionsInRange: selectedRange.length,
-            completedQuestionsCount: items.length,
-            startQuestionId:
-              scene.startQuestionId ?? selectedRange[0]?.questionId ?? null,
-            endQuestionId:
-              selectedRange[selectedRange.length - 1]?.questionId ?? null,
-            mode: scene.mode ?? "mostSelected",
-            maxItemsPerPage: scene.maxItemsPerPage ?? 4,
-            showCounts: scene.showCounts ?? true,
-            showPercentages: scene.showPercentages ?? true,
-            items,
-          }
-        },
+        getAnswerRecapSummary: (scene, timelineStepIndex) =>
+          buildAnswerRecap({
+            scene,
+            timelineStepIndex,
+            quizz: this.quizz,
+            extras: this.extensionSession?.extras ?? null,
+            history: (this.round.getHistory() ?? []) as QuestionResult[],
+            getLedger: (index) => this.round.getQuestionLedgerEntry(index),
+          }),
       })
     }
 
@@ -942,44 +636,12 @@ class Game {
     this.broadcastHostPresence()
   }
 
-  findRosterByPhone(rawOrE164: string): {
-    rosterPlayerId: string
-    displayName: string
-    phoneE164: string
-    clientId: string | null
-    status: "not_joined" | "connected" | "disconnected"
-    points: number
-  } | null {
-    const normalized = normalizePhoneE164(rawOrE164)
-
-    if (!normalized) {
-      return null
-    }
-
-    const rId = this.phoneIndex.get(normalized)
-
-    if (!rId) {
-      return null
-    }
-
-    const entry = this.rosterMap.get(rId)
-
-    if (!entry?.phoneE164) {
-      return null
-    }
-
-    return {
-      rosterPlayerId: entry.rosterPlayerId,
-      displayName: entry.displayName,
-      phoneE164: entry.phoneE164,
-      clientId: entry.clientId,
-      status: entry.status,
-      points: entry.points,
-    }
+  findRosterByPhone(rawOrE164: string) {
+    return this.roster.findByPhone(rawOrE164)
   }
 
   getRosterEntry(rosterPlayerId: string) {
-    return this.rosterMap.get(rosterPlayerId) ?? null
+    return this.roster.get(rosterPlayerId)
   }
 
   getCurrentQuestionPstnSupport(): {
@@ -1041,12 +703,14 @@ class Game {
     const pstn = this.getCurrentQuestionPstnSupport()
 
     if (this.showCoordinator?.isSceneActive()) {
-      const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
+      const entry = rosterPlayerId
+        ? this.roster.entries.get(rosterPlayerId)
+        : null
       const player = entry?.clientId
         ? this.playerManager.findByClientId(entry.clientId)
         : undefined
       const verdict = rosterPlayerId
-        ? (this.lastVerdictByRosterId.get(rosterPlayerId) ?? null)
+        ? (this.roster.verdicts.get(rosterPlayerId) ?? null)
         : null
 
       return {
@@ -1070,13 +734,15 @@ class Game {
     const epoch =
       this.extensionSession?.currentEpoch ??
       (this.started ? this.round.currentEpoch : 0)
-    const entry = rosterPlayerId ? this.rosterMap.get(rosterPlayerId) : null
+    const entry = rosterPlayerId
+      ? this.roster.entries.get(rosterPlayerId)
+      : null
     const player = entry?.clientId
       ? this.playerManager.findByClientId(entry.clientId)
       : undefined
     const answered = player ? this.round.hasPlayerAnswered(player.id) : false
     const verdict = rosterPlayerId
-      ? (this.lastVerdictByRosterId.get(rosterPlayerId) ?? null)
+      ? (this.roster.verdicts.get(rosterPlayerId) ?? null)
       : null
 
     return {
@@ -1161,7 +827,7 @@ class Game {
       }
     }
 
-    const entry = this.rosterMap.get(rosterPlayerId)
+    const entry = this.roster.entries.get(rosterPlayerId)
 
     if (!entry?.clientId) {
       return {
@@ -1235,7 +901,7 @@ class Game {
 
     // Note: if this was the last connected player to answer, RoundManager immediately
     // aborts cooldown and runs showResults() synchronously or right after!
-    const verdict = this.lastVerdictByRosterId.get(rosterPlayerId)
+    const verdict = this.roster.verdicts.get(rosterPlayerId)
 
     if (verdict?.epoch === epoch) {
       return {
@@ -1256,300 +922,41 @@ class Game {
   /**
    * CRUD operations on game roster for the host.
    */
-  upsertRosterParticipant(input: {
-    rosterPlayerId?: string
-    displayName: string
-    phone?: string | null
-  }): RosterParticipant {
-    const trimmedName = input.displayName.trim()
-
-    if (!trimmedName || trimmedName.length > 40) {
-      throw new Error("errors:auth.usernameTooShort")
-    }
-
-    let phoneE164: string | null = null
-
-    if (input.phone?.trim()) {
-      phoneE164 = normalizePhoneE164(input.phone)
-
-      if (!phoneE164) {
-        throw new Error("errors:invalidRequest")
-      }
-    }
-
-    // Check duplicate phone across other entries
-    if (phoneE164) {
-      const existingOwner = this.phoneIndex.get(phoneE164)
-
-      if (existingOwner && existingOwner !== input.rosterPlayerId) {
-        throw new Error("errors:game.playerAlreadyConnected")
-      }
-    }
-
-    const rId = input.rosterPlayerId ?? generateRosterPlayerId()
-    const existing = this.rosterMap.get(rId)
-
-    if (existing) {
-      if (existing.phoneE164 && existing.phoneE164 !== phoneE164) {
-        this.phoneIndex.delete(existing.phoneE164)
-      }
-
-      existing.displayName = trimmedName
-      existing.phoneE164 = phoneE164
-      existing.phoneRaw = input.phone ?? undefined
-
-      if (phoneE164) {
-        this.phoneIndex.set(phoneE164, rId)
-      }
-
-      // Also update live Player username if already joined
-      if (existing.clientId) {
-        const livePlayer = this.playerManager.findByClientId(existing.clientId)
-
-        if (livePlayer) {
-          livePlayer.username = trimmedName
-          this.notifyPlayerUpdated(livePlayer.id, livePlayer, false)
-        }
-      }
-    } else {
-      this.rosterMap.set(rId, {
-        rosterPlayerId: rId,
-        clientId: null,
-        displayName: trimmedName,
-        phoneE164,
-        phoneRaw: input.phone ?? undefined,
-        source: phoneE164 ? "phone" : "web",
-        status: "not_joined",
-        points: 0,
-        preRegistered: true,
-      })
-
-      if (phoneE164) {
-        this.phoneIndex.set(phoneE164, rId)
-      }
-    }
-
-    this.broadcastHostPresence()
-
-    return {
-      rosterPlayerId: rId,
-      displayName: trimmedName,
-      phoneE164,
-      phoneRaw: input.phone ?? undefined,
-    }
+  upsertRosterParticipant(
+    input: Parameters<GameRoster["upsert"]>[0],
+  ): RosterParticipant {
+    return this.roster.upsert(input)
   }
 
   removeRosterParticipant(rosterPlayerId: string): boolean {
-    const existing = this.rosterMap.get(rosterPlayerId)
-
-    if (!existing) {
-      return false
-    }
-
-    if (existing.phoneE164) {
-      this.phoneIndex.delete(existing.phoneE164)
-    }
-
-    if (existing.clientId) {
-      this.clientRosterIndex.delete(existing.clientId)
-      const livePlayer = this.playerManager.findByClientId(existing.clientId)
-
-      if (livePlayer) {
-        this.kickPlayer(livePlayer.id)
-      }
-    }
-
-    this.rosterMap.delete(rosterPlayerId)
-    this.broadcastHostPresence()
-
-    return true
+    return this.roster.remove(rosterPlayerId)
   }
 
   replaceRosterParticipants(
     participants: RosterParticipant[],
     phoneInviteOnly?: boolean,
   ): void {
-    if (phoneInviteOnly !== undefined) {
-      this._settings = { ...this._settings, phoneInviteOnly }
-    }
-
-    // A replacement removes omitted pre-registrations and their stale indices.
-    // Ad-hoc players are retained; callers must explicitly kick those if wanted.
-    const incomingIds = new Set(participants.map((item) => item.rosterPlayerId))
-    const incomingPhones = new Set(
-      participants.flatMap((item) =>
-        item.phoneE164 ? [normalizePhoneE164(item.phoneE164)] : [],
-      ),
-    )
-    for (const entry of [...this.rosterMap.values()]) {
-      if (
-        entry.preRegistered &&
-        !incomingIds.has(entry.rosterPlayerId) &&
-        !incomingPhones.has(entry.phoneE164)
-      ) {
-        this.removeRosterParticipant(entry.rosterPlayerId)
-      }
-    }
-    for (const item of participants) {
-      const normalized = item.phoneE164
-        ? normalizePhoneE164(item.phoneE164)
-        : null
-      const existingByPhone = normalized
-        ? this.phoneIndex.get(normalized)
-        : undefined
-      const targetId = existingByPhone ?? item.rosterPlayerId
-      const current = this.rosterMap.get(targetId)
-
-      if (current) {
-        if (current.phoneE164 && current.phoneE164 !== normalized) {
-          this.phoneIndex.delete(current.phoneE164)
-        }
-
-        current.displayName = item.displayName
-        current.phoneE164 = normalized
-        current.phoneRaw = item.phoneRaw
-        current.tableNumber = item.tableNumber
-        current.phoneNeedsReview = item.phoneNeedsReview
-        current.preRegistered = true
-
-        if (normalized) {
-          this.phoneIndex.set(normalized, targetId)
-        }
-
-        if (current.clientId) {
-          const livePlayer = this.playerManager.findByClientId(current.clientId)
-
-          if (livePlayer) {
-            livePlayer.username = item.displayName
-          }
-        }
-      } else {
-        this.rosterMap.set(targetId, {
-          rosterPlayerId: targetId,
-          clientId: null,
-          displayName: item.displayName,
-          phoneE164: normalized,
-          phoneRaw: item.phoneRaw,
-          tableNumber: item.tableNumber,
-          phoneNeedsReview: item.phoneNeedsReview,
-          source: normalized ? "phone" : "web",
-          status: "not_joined",
-          points: 0,
-          preRegistered: true,
-        })
-
-        if (normalized) {
-          this.phoneIndex.set(normalized, targetId)
-        }
-      }
-    }
-
-    this.broadcastHostPresence()
+    this.roster.replace(participants, phoneInviteOnly)
   }
 
   private clearQuestionVerdicts(_qIdx?: number): void {
-    this.lastVerdictByRosterId.clear()
+    this.roster.verdicts.clear()
   }
 
   private syncRosterScoresFromPlayers(): void {
-    for (const player of this.playerManager.getAll()) {
-      const rId = this.clientRosterIndex.get(player.clientId)
-
-      if (rId) {
-        const entry = this.rosterMap.get(rId)
-
-        if (entry) {
-          entry.points = player.points
-          entry.status = player.connected ? "connected" : "disconnected"
-        }
-      }
-    }
+    this.roster.syncScores()
   }
 
   getHostPresenceSnapshot(): HostPresenceSnapshot {
-    this.syncRosterScoresFromPlayers()
-    const answeredIds = this.round.getAnsweredPlayerIds()
-    const playersList: HostPlayerStatus[] = []
-
-    // Ensure any player in playerManager that wasn't indexed yet is indexed
-    for (const p of this.playerManager.getAll()) {
-      let rId = this.clientRosterIndex.get(p.clientId)
-
-      if (!rId) {
-        rId = generateRosterPlayerId()
-        this.clientRosterIndex.set(p.clientId, rId)
-        this.rosterMap.set(rId, {
-          rosterPlayerId: rId,
-          clientId: p.clientId,
-          displayName: p.username,
-          phoneE164: null,
-          source: "web",
-          status: p.connected ? "connected" : "disconnected",
-          points: p.points,
-          lastSeenAt: Date.now(),
-          preRegistered: false,
-        })
-      }
-    }
-
-    let connectedNow = 0
-    let disconnectedNow = 0
-    let notJoinedNow = 0
-
-    for (const entry of this.rosterMap.values()) {
-      const livePlayer = entry.clientId
-        ? this.playerManager.findByClientId(entry.clientId)
-        : undefined
-      let status: "not_joined" | "connected" | "disconnected" = entry.status
-
-      if (livePlayer) {
-        status = livePlayer.connected ? "connected" : "disconnected"
-      }
-
-      const points = livePlayer ? livePlayer.points : entry.points
-      const answeredCurrentQuestion = livePlayer
-        ? answeredIds.has(livePlayer.id)
-        : false
-
-      if (status === "connected") {
-        connectedNow += 1
-      } else if (status === "disconnected") {
-        disconnectedNow += 1
-      } else {
-        notJoinedNow += 1
-      }
-
-      playersList.push({
-        rosterPlayerId: entry.rosterPlayerId,
-        clientId: entry.clientId,
-        displayName: livePlayer ? livePlayer.username : entry.displayName,
-        phoneE164: entry.phoneE164,
-        tableNumber: entry.tableNumber,
-        phoneNeedsReview: entry.phoneNeedsReview,
-        source: entry.source,
-        status,
-        timedOut: entry.timedOut,
-        points,
-        answeredCurrentQuestion,
-        lastSeenAt: entry.lastSeenAt,
-      })
-    }
-
-    return {
-      v: 1,
-      gameId: this.gameId,
-      seq: this.presenceSeq,
-      phoneInviteOnly: Boolean(this._settings.phoneInviteOnly),
-      registeredTotal: playersList.length,
-      connectedNow,
-      disconnectedNow,
-      notJoinedNow,
-      players: playersList,
-    }
+    return this.roster.snapshot(
+      this.gameId,
+      this.phoneInviteOnly,
+      this.round.getAnsweredPlayerIds(),
+    )
   }
 
   broadcastHostPresence(): void {
-    this.presenceSeq += 1
+    this.roster.sequence += 1
     // Displays receive the live roster through the extension envelope as well.
     // Give presence changes a new sequence so clients accept the update.
     this.extensionSession?.onPresenceChanged()
@@ -1723,7 +1130,9 @@ class Game {
         this.showCoordinator?.currentPhase === "question" &&
         (this.extensionSession.currentPhase !== "question" ||
           this.extensionSession.getCurrentQuestionId() !==
-            this.extensionSession.getQuestionId(this.round.currentQuestionIndex)))
+            this.extensionSession.getQuestionId(
+              this.round.currentQuestionIndex,
+            )))
     ) {
       // The picture-led show skips SHOW_QUESTION: initialize its authoritative
       // per-question visuals when the five-card voting screen first opens.
@@ -1850,14 +1259,14 @@ class Game {
 
     // 1. Resolve matching roster entry by explicit rosterPlayerId or phoneE164
     let rosterEntry = claimsExtra?.rosterPlayerId
-      ? this.rosterMap.get(claimsExtra.rosterPlayerId)
+      ? this.roster.entries.get(claimsExtra.rosterPlayerId)
       : undefined
 
     if (!rosterEntry && normalizedPhone) {
-      const matchedId = this.phoneIndex.get(normalizedPhone)
+      const matchedId = this.roster.phoneIndex.get(normalizedPhone)
 
       if (matchedId) {
-        rosterEntry = this.rosterMap.get(matchedId)
+        rosterEntry = this.roster.entries.get(matchedId)
       }
     }
 
@@ -1867,7 +1276,7 @@ class Game {
     // be taken over by another browser.
     if (!rosterEntry && !normalizedPhone && username?.trim()) {
       const normalizedName = username.trim().toLocaleLowerCase()
-      const matches = [...this.rosterMap.values()].filter(
+      const matches = [...this.roster.entries.values()].filter(
         (entry) =>
           entry.preRegistered &&
           entry.displayName.trim().toLocaleLowerCase() === normalizedName,
@@ -1889,7 +1298,7 @@ class Game {
       !rosterEntry &&
       this.isCreatingWorldsShow &&
       !this.temporaryGuestsAllowed &&
-      [...this.rosterMap.values()].some((entry) => entry.preRegistered)
+      [...this.roster.entries.values()].some((entry) => entry.preRegistered)
     ) {
       return "errors:game.locked"
     }
@@ -1927,7 +1336,7 @@ class Game {
         socket.join(this.gameId)
 
         if (oldClientId !== clientId) {
-          this.clientRosterIndex.delete(oldClientId)
+          this.roster.clientIndex.delete(oldClientId)
           this.playerManager.updateClientId(oldSocketId, clientId)
           this.round.updateCheckpointClientId(oldClientId, clientId)
           this.extensionSession?.rebindPlayerClientId(oldClientId, clientId)
@@ -1950,7 +1359,7 @@ class Game {
           rosterEntry.source = "phone"
         }
 
-        this.clientRosterIndex.set(clientId, rosterEntry.rosterPlayerId)
+        this.roster.clientIndex.set(clientId, rosterEntry.rosterPlayerId)
 
         this.notifyPlayerUpdated(oldSocketId, existingPlayer, false)
 
@@ -2028,7 +1437,7 @@ class Game {
 
       if (normalizedPhone && !rosterEntry.phoneE164) {
         rosterEntry.phoneE164 = normalizedPhone
-        this.phoneIndex.set(normalizedPhone, rosterEntry.rosterPlayerId)
+        this.roster.phoneIndex.set(normalizedPhone, rosterEntry.rosterPlayerId)
       }
 
       rosterEntry.source =
@@ -2036,11 +1445,11 @@ class Game {
       rosterEntry.status = "connected"
       rosterEntry.timedOut = false
       rosterEntry.lastSeenAt = now
-      this.clientRosterIndex.set(clientId, rosterEntry.rosterPlayerId)
+      this.roster.clientIndex.set(clientId, rosterEntry.rosterPlayerId)
     } else {
       const rId = claimsExtra?.rosterPlayerId ?? generateRosterPlayerId()
       const source = claimsExtra?.source ?? (normalizedPhone ? "phone" : "web")
-      this.rosterMap.set(rId, {
+      this.roster.entries.set(rId, {
         rosterPlayerId: rId,
         clientId,
         displayName: finalUsername,
@@ -2052,10 +1461,10 @@ class Game {
         lastSeenAt: now,
         preRegistered: false,
       })
-      this.clientRosterIndex.set(clientId, rId)
+      this.roster.clientIndex.set(clientId, rId)
 
       if (normalizedPhone) {
-        this.phoneIndex.set(normalizedPhone, rId)
+        this.roster.phoneIndex.set(normalizedPhone, rId)
       }
     }
 
@@ -2099,12 +1508,12 @@ class Game {
       : null
 
     let rosterEntry = input.rosterPlayerId
-      ? this.rosterMap.get(input.rosterPlayerId)
+      ? this.roster.entries.get(input.rosterPlayerId)
       : normalizedPhone
         ? (() => {
-            const rId = this.phoneIndex.get(normalizedPhone)
+            const rId = this.roster.phoneIndex.get(normalizedPhone)
 
-            return rId ? this.rosterMap.get(rId) : undefined
+            return rId ? this.roster.entries.get(rId) : undefined
           })()
         : undefined
 
@@ -2203,14 +1612,14 @@ class Game {
         preRegistered: false,
         activeCallId: input.callId,
       }
-      this.rosterMap.set(rId, rosterEntry)
+      this.roster.entries.set(rId, rosterEntry)
 
       if (normalizedPhone) {
-        this.phoneIndex.set(normalizedPhone, rId)
+        this.roster.phoneIndex.set(normalizedPhone, rId)
       }
     }
 
-    this.clientRosterIndex.set(clientId, rId)
+    this.roster.clientIndex.set(clientId, rId)
 
     if (this.extensionSession) {
       this.extensionSession.onPlayerJoin(clientId)
@@ -2235,7 +1644,7 @@ class Game {
     timedOut = false,
     callId?: string,
   ): boolean {
-    const entry = this.rosterMap.get(rosterPlayerId)
+    const entry = this.roster.entries.get(rosterPlayerId)
 
     if (!entry) {
       return false
@@ -2295,21 +1704,21 @@ class Game {
       this.playerStatus.delete(playerId)
 
       if (player) {
-        const rId = this.clientRosterIndex.get(player.clientId)
+        const rId = this.roster.clientIndex.get(player.clientId)
 
         if (rId) {
-          const entry = this.rosterMap.get(rId)
+          const entry = this.roster.entries.get(rId)
 
           if (entry) {
             if (entry.preRegistered || entry.phoneE164) {
               entry.status = "not_joined"
               entry.clientId = null
             } else {
-              this.rosterMap.delete(rId)
+              this.roster.entries.delete(rId)
             }
           }
 
-          this.clientRosterIndex.delete(player.clientId)
+          this.roster.clientIndex.delete(player.clientId)
         }
       }
 
@@ -2418,10 +1827,10 @@ class Game {
     this.round.updatePlayerId(oldSocketId, socket.id)
     player.connected = true
 
-    const rId = this.clientRosterIndex.get(clientId)
+    const rId = this.roster.clientIndex.get(clientId)
 
     if (rId) {
-      const entry = this.rosterMap.get(rId)
+      const entry = this.roster.entries.get(rId)
 
       if (entry) {
         entry.status = "connected"
@@ -2502,10 +1911,10 @@ class Game {
     const existingPlayer = this.playerManager.findById(socketId)
 
     if (existingPlayer) {
-      const rId = this.clientRosterIndex.get(existingPlayer.clientId)
+      const rId = this.roster.clientIndex.get(existingPlayer.clientId)
 
       if (rId) {
-        const entry = this.rosterMap.get(rId)
+        const entry = this.roster.entries.get(rId)
 
         if (
           entry &&
@@ -2517,8 +1926,8 @@ class Game {
           return existingPlayer
         }
 
-        this.rosterMap.delete(rId)
-        this.clientRosterIndex.delete(existingPlayer.clientId)
+        this.roster.entries.delete(rId)
+        this.roster.clientIndex.delete(existingPlayer.clientId)
       }
     }
 
@@ -2541,10 +1950,10 @@ class Game {
     const player = this.playerManager.findById(socketId)
 
     if (player) {
-      const rId = this.clientRosterIndex.get(player.clientId)
+      const rId = this.roster.clientIndex.get(player.clientId)
 
       if (rId) {
-        const entry = this.rosterMap.get(rId)
+        const entry = this.roster.entries.get(rId)
 
         if (entry) {
           entry.status = "disconnected"
@@ -2581,8 +1990,8 @@ class Game {
       const away = this.playerManager.getAll().filter((p) => !p.connected)
 
       for (const player of away) {
-        const rId = this.clientRosterIndex.get(player.clientId)
-        const entry = rId ? this.rosterMap.get(rId) : undefined
+        const rId = this.roster.clientIndex.get(player.clientId)
+        const entry = rId ? this.roster.entries.get(rId) : undefined
 
         // Only remove ad-hoc web lobby leavers; keep pre-registered / phone participants
         if (

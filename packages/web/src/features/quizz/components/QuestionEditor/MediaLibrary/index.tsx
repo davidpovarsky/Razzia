@@ -1,5 +1,9 @@
+import {
+  reconcileDeletedEditorMedia,
+  collectEditorMediaUrls,
+} from "@razzia/extensions/editor"
 import type { UploadedMedia } from "@razzia/common/types/game"
-import { BUILT_IN_SOUNDS_LIST, isQuizExtrasV2 } from "@razzia/extensions/core"
+import { BUILT_IN_SOUNDS_LIST } from "@razzia/extensions/core"
 import Loader from "@razzia/web/components/Loader"
 import MediaCard from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard"
 import MediaDropOverlay from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaDropOverlay"
@@ -34,7 +38,8 @@ interface Props {
 
 type MediaScopeTab = "all" | "show" | "builtin"
 
-const BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> = BUILT_IN_SOUNDS_LIST
+const BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> =
+  BUILT_IN_SOUNDS_LIST
 
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
@@ -123,136 +128,13 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
       }
     })
 
-    // 2. Reconcile extras sidecar to avoid dangling broken media references
-    if (extras) {
-      let hasChanges = false
-      const updatedPerQuestion = { ...extras.perQuestion }
-
-      for (const [qId, qItem] of Object.entries(updatedPerQuestion)) {
-        const updatedItem = { ...qItem }
-        let itemChanged = false
-
-        if (updatedItem.answerVisuals?.some((v) => v.url === item.url)) {
-          itemChanged = true
-          updatedItem.answerVisuals = updatedItem.answerVisuals.map((v) =>
-            v.url === item.url
-              ? { ...v, url: undefined, display: "text" as const }
-              : v,
-          )
-        }
-
-        if (updatedItem.interlude?.url === item.url) {
-          itemChanged = true
-          updatedItem.interlude = {
-            ...updatedItem.interlude,
-            url: undefined,
-          }
-        }
-
-        if (updatedItem.background?.url === item.url) {
-          itemChanged = true
-          delete updatedItem.background
-        }
-
-        if (updatedItem.audioCues) {
-          const nextCues = { ...updatedItem.audioCues }
-          for (const key of [
-            "showQuestion",
-            "answersMusic",
-            "revealResults",
-          ] as const) {
-            if (nextCues[key]?.url === item.url) {
-              itemChanged = true
-              nextCues[key] = {
-                mode: "inherit",
-                volume: nextCues[key]?.volume ?? 0.8,
-              }
-            }
-          }
-          updatedItem.audioCues = nextCues
-        }
-
-        if (itemChanged) {
-          hasChanges = true
-          updatedPerQuestion[qId] = updatedItem
-        }
-      }
-
-      const updatedAudio = { ...extras.audio }
-      let audioChanged = false
-      for (const [cueId, cueSetting] of Object.entries(updatedAudio.cues)) {
-        if (cueSetting.url === item.url) {
-          audioChanged = true
-          updatedAudio.cues = {
-            ...updatedAudio.cues,
-            [cueId as keyof typeof updatedAudio.cues]: {
-              ...cueSetting,
-              source: "default",
-              url: undefined,
-            },
-          }
-        }
-      }
-
-      let updatedScenes = isQuizExtrasV2(extras)
-        ? { ...extras.scenes }
-        : undefined
-      let scenesChanged = false
-      if (updatedScenes) {
-        for (const [sId, scene] of Object.entries(updatedScenes)) {
-          const nextScene = { ...scene }
-          let sChanged = false
-          if ("mediaUrl" in nextScene && nextScene.mediaUrl === item.url) {
-            if (nextScene.kind === "media") {
-              nextScene.mediaUrl = ""
-            } else {
-              delete (nextScene as { mediaUrl?: string }).mediaUrl
-            }
-            sChanged = true
-          }
-          if (nextScene.background?.url === item.url) {
-            delete nextScene.background
-            sChanged = true
-          }
-          if (nextScene.audio?.url === item.url) {
-            delete nextScene.audio
-            sChanged = true
-          }
-          if (sChanged) {
-            scenesChanged = true
-            updatedScenes[sId] = nextScene
-          }
-        }
-      }
-
-      const updatedCatalog = extras.mediaCatalog?.filter(
-        (c) => c.url !== item.url && c.name !== item.name,
-      )
-      const catalogChanged =
-        (updatedCatalog?.length ?? 0) !== (extras.mediaCatalog?.length ?? 0)
-
-      if (hasChanges || audioChanged || scenesChanged || catalogChanged) {
-        setExtras({
-          ...extras,
-          perQuestion: updatedPerQuestion,
-          audio: updatedAudio,
-          ...(isQuizExtrasV2(extras) && updatedScenes
-            ? { scenes: updatedScenes }
-            : {}),
-          ...(updatedCatalog ? { mediaCatalog: updatedCatalog } : {}),
-        })
-      }
-    }
+    const reconciled = reconcileDeletedEditorMedia(extras, item)
+    if (reconciled !== extras) setExtras(reconciled)
   }
 
   const { mutate: remove } = useMutation({
-    mutationFn: ({
-      item,
-      detach,
-    }: {
-      item: UploadedMedia
-      detach?: boolean
-    }) => deleteMedia(item.name, { detach }),
+    mutationFn: ({ item, detach }: { item: UploadedMedia; detach?: boolean }) =>
+      deleteMedia(item.name, { detach }),
     onSuccess: (_, { item }) => {
       setPendingForceDeleteItem(null)
       reconcileDeletedMediaInEditor(item)
@@ -273,54 +155,16 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
     },
   })
 
-  const usedUrlsInShow = useMemo(() => {
-    const urls = new Set<string>()
-    for (const q of questions) {
-      if (q.media?.url) {
-        urls.add(q.media.url)
-      }
-    }
-    if (extras) {
-      for (const pq of Object.values(extras.perQuestion ?? {})) {
-        if (!pq) continue
-        if (pq.background?.url) urls.add(pq.background.url)
-        if (pq.interlude?.url) urls.add(pq.interlude.url)
-        for (const av of pq.answerVisuals ?? []) {
-          if (av.url) urls.add(av.url)
-        }
-        if (pq.audioCues?.showQuestion?.url)
-          urls.add(pq.audioCues.showQuestion.url)
-        if (pq.audioCues?.answersMusic?.url)
-          urls.add(pq.audioCues.answersMusic.url)
-        if (pq.audioCues?.revealResults?.url)
-          urls.add(pq.audioCues.revealResults.url)
-      }
-      if (isQuizExtrasV2(extras)) {
-        for (const scene of Object.values(extras.scenes ?? {})) {
-          if (!scene) continue
-          if ("mediaUrl" in scene && typeof scene.mediaUrl === "string") {
-            urls.add(scene.mediaUrl)
-          }
-          if (scene.background?.url) urls.add(scene.background.url)
-          if (scene.audio?.url) urls.add(scene.audio.url)
-        }
-      }
-      for (const cue of Object.values(extras.audio?.cues ?? {})) {
-        if (cue?.url) urls.add(cue.url)
-      }
-      for (const cat of extras.mediaCatalog ?? []) {
-        if (cat.url) urls.add(cat.url)
-      }
-    }
-    return urls
-  }, [questions, extras])
+  const usedUrlsInShow = useMemo(
+    () => collectEditorMediaUrls(questions, extras),
+    [questions, extras],
+  )
 
   const media = data?.media ?? []
   const query = search.trim().toLowerCase()
   const effectiveFilter: MediaFilter =
     acceptType && acceptType !== "all" ? acceptType : filter
-  const showBuiltInTab =
-    acceptType === "audio" || effectiveFilter === "audio"
+  const showBuiltInTab = acceptType === "audio" || effectiveFilter === "audio"
 
   const visibleMedia = media.filter((item) => {
     const matchesType =

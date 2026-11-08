@@ -66,8 +66,7 @@
     "notePlaceholder": "Thêm phần giải thích hiển thị khi công bố đáp án",
     "estimation": {
       "correctAnswer": "Đáp án đúng"
-    },
-    "duplicateQuestion": "Nhân bản câu hỏi"
+    }
   },
   "questionHasErrors": "Câu hỏi này có lỗi",
   "questionType": {

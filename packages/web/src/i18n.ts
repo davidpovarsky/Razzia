@@ -1,4 +1,7 @@
-import { getExtensionResources } from "@razzia/extensions/locales"
+import {
+  getExtensionResources,
+  registerHostLocaleAdditions,
+} from "@razzia/extensions/locales"
 import i18n, { type Resource, type ResourceKey } from "i18next"
 import LanguageDetector from "i18next-browser-languagedetector"
 import { initReactI18next } from "react-i18next"
@@ -24,6 +27,7 @@ const resources = Object.entries(modules).reduce<Resource>(
 
 // Register extensions namespaces for all 8 supported languages
 const extensionResources = getExtensionResources()
+registerHostLocaleAdditions(resources)
 for (const [lang, nsMap] of Object.entries(extensionResources)) {
   resources[lang] ??= {}
   resources[lang].extensions = nsMap.extensions

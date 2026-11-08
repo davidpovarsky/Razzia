@@ -15,7 +15,6 @@
   },
   "game": {
     "alreadyStarted": "ゲームはすでに開始されています",
-    "ambiguousTargetGame": "複数のアクティブなゲームが見つかりました。gameId または inviteCode を指定してください",
     "expired": "ゲームの有効期限が切れました",
     "invalidAutoAdvanceDelay": "待ち時間は3秒から600秒の間で指定してください",
     "kickedByManager": "管理者によって退室させられました",

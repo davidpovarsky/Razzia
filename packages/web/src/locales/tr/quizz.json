@@ -66,8 +66,7 @@
     "notePlaceholder": "Cevap açıklandığında gösterilecek bir açıklama ekleyin",
     "estimation": {
       "correctAnswer": "Doğru cevap"
-    },
-    "duplicateQuestion": "Soruyu çoğalt"
+    }
   },
   "questionHasErrors": "Bu soruda hatalar var",
   "questionType": {

@@ -1,3 +1,4 @@
+import { TimelineSceneCard } from "@razzia/extensions/editor"
 import {
   DndContext,
   PointerSensor,
@@ -36,7 +37,6 @@ import {
 import clsx from "clsx"
 import {
   BarChart2,
-  Copy,
   DoorOpen,
   Flag,
   Image as ImageIcon,
@@ -45,130 +45,11 @@ import {
   Plus,
   Sparkles,
   Timer,
-  Trash2,
   Trophy,
 } from "lucide-react"
 import { useRef, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
-import { twMerge } from "tailwind-merge"
-
-interface TimelineSceneCardProps {
-  kind: string
-  title?: string
-  durationText: string
-  isActive: boolean
-  onClick: () => void
-  onDelete: () => void
-  onDuplicate: () => void
-}
-
-const getSceneIcon = (kind: string) => {
-  switch (kind) {
-    case "transition":
-      return <Layers className="size-5 text-primary" />
-
-    case "animation":
-      return <Sparkles className="size-5 text-primary" />
-
-    case "media":
-      return <ImageIcon className="size-5 text-primary" />
-
-    case "leaderboard":
-      return <Trophy className="size-5 text-primary" />
-
-    case "interimResults":
-      return <BarChart2 className="size-5 text-primary" />
-
-    case "answerRecap":
-      return <ListChecks className="size-5 text-primary" />
-
-    case "countdown":
-      return <Timer className="size-5 text-primary" />
-
-    case "opening":
-      return <DoorOpen className="size-5 text-primary" />
-
-    case "closing":
-      return <Flag className="size-5 text-primary" />
-
-    default:
-      return <Layers className="size-5 text-primary" />
-  }
-}
-
-const TimelineSceneCard = ({
-  kind,
-  title,
-  durationText,
-  isActive,
-  onClick,
-  onDelete,
-  onDuplicate,
-}: TimelineSceneCardProps) => {
-  const { t } = useTranslation()
-
-  return (
-    <div
-      onClick={onClick}
-      className={twMerge(
-        clsx(
-          "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
-          {
-            "border-primary shadow-sm": isActive,
-          },
-        ),
-      )}
-    >
-      <div className="absolute top-2 left-2 flex items-center gap-1.5">
-        <span className="rounded bg-accent/40 px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
-          {kind}
-        </span>
-      </div>
-
-      <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
-        {getSceneIcon(kind)}
-        <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
-          {title ?? t(`extensions:timeline.${kind}`, kind)}
-        </p>
-      </div>
-
-      <div className="flex items-center justify-between border-t border-accent/40 pt-1 text-[11px] text-muted-foreground">
-        <span>{durationText}</span>
-      </div>
-
-      <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            onDuplicate()
-          }}
-          title="Duplicate card"
-          className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
-        >
-          <Copy className="size-3.5" />
-        </button>
-
-        <AlertDialog
-          trigger={
-            <button
-              type="button"
-              onClick={(e) => e.stopPropagation()}
-              className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
-            >
-              <Trash2 className="size-3.5" />
-            </button>
-          }
-          title="Delete Scene Card"
-          description="Are you sure you want to delete this scene card from the timeline?"
-          confirmLabel={t("common:delete")}
-          onConfirm={onDelete}
-        />
-      </div>
-    </div>
-  )
-}
 
 interface SortableItemProps {
   id: string
@@ -245,6 +126,7 @@ const SortableSceneItem = ({
   onDelete,
   onDuplicate,
 }: SortableSceneItemProps) => {
+  const { t } = useTranslation()
   const {
     attributes,
     listeners,
@@ -263,6 +145,8 @@ const SortableSceneItem = ({
       className={clsx(isDragging && "shadow-lg")}
     >
       <TimelineSceneCard
+        DeleteConfirmation={AlertDialog}
+        t={t}
         kind={kind}
         title={title}
         durationText={durationText}
@@ -312,14 +196,32 @@ const QuizzEditorSidebar = () => {
     { value: "quiz", label: t("extensions:timeline.quiz", "Quiz") },
     { value: "survey", label: t("extensions:timeline.survey", "Survey") },
     { value: "media", label: t("extensions:timeline.media", "Media") },
-    { value: "animation", label: t("extensions:timeline.animation", "Animation") },
-    { value: "transition", label: t("extensions:timeline.transition", "Transition") },
+    {
+      value: "animation",
+      label: t("extensions:timeline.animation", "Animation"),
+    },
+    {
+      value: "transition",
+      label: t("extensions:timeline.transition", "Transition"),
+    },
     { value: "opening", label: t("extensions:timeline.opening", "Opening") },
     { value: "closing", label: t("extensions:timeline.closing", "Closing") },
-    { value: "countdown", label: t("extensions:timeline.countdown", "Countdown") },
-    { value: "leaderboard", label: t("extensions:timeline.leaderboard", "Leaderboard") },
-    { value: "interimResults", label: t("extensions:timeline.interimResults", "Interim Results") },
-    { value: "answerRecap", label: t("extensions:timeline.answerRecap", "Answer Recap") },
+    {
+      value: "countdown",
+      label: t("extensions:timeline.countdown", "Countdown"),
+    },
+    {
+      value: "leaderboard",
+      label: t("extensions:timeline.leaderboard", "Leaderboard"),
+    },
+    {
+      value: "interimResults",
+      label: t("extensions:timeline.interimResults", "Interim Results"),
+    },
+    {
+      value: "answerRecap",
+      label: t("extensions:timeline.answerRecap", "Answer Recap"),
+    },
   ]
 
   const isDragging = useRef(false)
@@ -356,7 +258,7 @@ const QuizzEditorSidebar = () => {
     timeline.length > 0 ? timeline.map((item) => item.id) : questionIds
 
   return (
-    <aside className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 xl:w-72 lg:p-3">
+    <aside className="bg-background z-10 m-2 flex max-h-56 w-[calc(100%-1rem)] shrink-0 flex-col gap-2 overflow-y-auto rounded-xl p-2.5 shadow-sm lg:m-3 lg:max-h-none lg:w-64 lg:p-3 xl:w-72">
       <DndContext
         sensors={sensors}
         collisionDetection={closestCenter}
