@@ -357,3 +357,7 @@ runtime code hashes match across both runs. See BRANCH_SYNC_2026-11-08.md and
 qa-evidence/branch-sync-20261108/. All test containers finished; Windows had no
 game/browser runs. Other worktrees/uncommitted changes remained untouched; no push,
 main merge, new upstream upgrade, production activation or Asana write.
+
+## Authorized isolated theme lab deployment — 2026-11-08
+
+User explicitly authorized GitHub push, separate public test URL, multiple selectable themes and saved examples. Add two source-controlled declarative demo definitions, gated by TADAZZ_DEMO_CATALOG_ENABLED (default OFF). Reuse the reviewed compiled Classic choreography; do not claim independent motion engines or human publication approval. Only owned server catalog/selection services and owned extension API middleware change; no new upstream hooks. Installer/workspace mutations stay disabled with installer OFF. Dedicated config, JWT/password, loopback container and additive Caddy hostname; no production data, gateway, container restart or local game/browser execution. Validate remotely before activation.

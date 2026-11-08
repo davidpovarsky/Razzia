@@ -4,6 +4,7 @@ import { createHmac } from "node:crypto"
 import { resolve } from "node:path"
 import { z } from "zod"
 import {
+  demoThemeDefinitions,
   ThemeInstallationError,
   ThemeInstallationStore,
   type TrustedThemeBuild,
@@ -29,6 +30,13 @@ const assignmentSchema = z.record(
 const TRUSTED_THEME_BUILDS: ReadonlyMap<string, TrustedThemeBuild> = new Map()
 let store: ThemeInstallationStore | undefined = undefined
 let storeRoot: string | undefined = undefined
+
+/** Operator-owned demo catalog, deliberately independent of customer publication. */
+export const demoCatalogEnabled = () =>
+  process.env.TADAZZ_DEMO_CATALOG_ENABLED === "true"
+
+export const enabledDemoThemes = () =>
+  demoCatalogEnabled() ? demoThemeDefinitions : []
 
 export const themeInstallerEnabled = () =>
   process.env.TADAZZ_THEME_INSTALLER_ENABLED === "true" && accountsEnabled()
@@ -89,11 +97,23 @@ export function installedThemeForSelection(
   tenantId: string,
   selection: unknown,
 ): ShowThemeDefinition | null {
-  if (!themeInstallerEnabled() || !selection || typeof selection !== "object") {
+  if (!selection || typeof selection !== "object") {
     return null
   }
 
   const { id, version } = selection as { id?: unknown; version?: unknown }
+
+  const demo = enabledDemoThemes().find(
+    (theme) => theme.id === id && theme.version === version,
+  )
+
+  if (demo) {
+    return demo
+  }
+
+  if (!themeInstallerEnabled()) {
+    return null
+  }
 
   return (
     themeInstallationStore()

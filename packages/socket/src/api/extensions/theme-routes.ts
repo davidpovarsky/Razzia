@@ -14,6 +14,8 @@ import {
 } from "@razzia/extensions/server"
 import { showThemeDefinitionSchema } from "@razzia/extensions/core"
 import {
+  demoCatalogEnabled,
+  enabledDemoThemes,
   themeInstallerEnabled,
   themeInstallationStore,
   themeWorkspaceAssignments,
@@ -252,7 +254,12 @@ export const themeRoutes = apiFactory
   .use("*", async (c, next) => {
     c.header("Cache-Control", "private, no-store")
 
-    if (!themeInstallerEnabled()) {
+    const demoRead =
+      demoCatalogEnabled() &&
+      c.req.method === "GET" &&
+      c.req.path === "/api/themes/catalog"
+
+    if (!themeInstallerEnabled() && !demoRead) {
       c.header("Connection", "close")
 
       return c.json({ error: "not-found" }, 404)
@@ -269,6 +276,11 @@ export const themeRoutes = apiFactory
   .use("*", requireManager)
   .use("*", async (c, next) => {
     await next()
+
+    if (!themeInstallerEnabled()) {
+      return
+    }
+
     // Record authenticated access/denial without copying request bodies or tokens.
     const claims = c.get("claims")
     const requested = c.req.param("tenantId")
@@ -308,14 +320,23 @@ export const themeRoutes = apiFactory
     c.json({ workspaces: themeWorkspaceAssignments(c.get("claims").sub) }),
   )
   .get("/catalog", (c) => {
-    const store = themeInstallationStore()
     const owner = c.get("claims").sub
+    const store = themeInstallerEnabled() ? themeInstallationStore() : null
+    const demos = enabledDemoThemes()
 
     return c.json({
-      definitions: store.catalog(owner).concat(store.catalog("platform")),
-      available: store
-        .availableVersions(owner)
-        .concat(store.availableVersions("platform")),
+      definitions: demos.concat(
+        store ? store.catalog(owner).concat(store.catalog("platform")) : [],
+      ),
+      available: demos
+        .map(({ id, version }) => ({ id, version }))
+        .concat(
+          store
+            ? store
+                .availableVersions(owner)
+                .concat(store.availableVersions("platform"))
+            : [],
+        ),
     })
   })
   .route("/workspaces/:tenantId", workspace)
