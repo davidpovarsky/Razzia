@@ -1,0 +1,1348 @@
+{
+  "generatedAt": "2026-11-08T10:16:39.666Z",
+  "baseline": "5161eb7022144ee26d46a5f94cdbc714ec8b560d",
+  "starting": "46a1e0049a23816b32d5061592bd373f0e636b9e",
+  "head": "2db7e036078db85de6ca59785b6bcf9061c2c6af",
+  "upstreamHead": "8345663f7f47a8d466964fcf5b642cc7a4ed90fb",
+  "methodology": "Only files present in the original Git tree count as modified originals. New tracked files are separate. Current tracked working-tree edits are included; untracked additions are not included in the totals until staged. Git line counts are quantitative, not proof that a retained change is minimal.",
+  "initial": {
+    "originalFiles": 341,
+    "modifiedOriginals": 111,
+    "unchangedOriginals": 230,
+    "unchangedPercent": 67.4,
+    "addedTrackedFiles": 730,
+    "originalInsertions": 10702,
+    "originalDeletions": 1074,
+    "newFileLines": 129359
+  },
+  "current": {
+    "originalFiles": 341,
+    "modifiedOriginals": 96,
+    "unchangedOriginals": 245,
+    "unchangedPercent": 71.8,
+    "addedTrackedFiles": 880,
+    "originalInsertions": 9241,
+    "originalDeletions": 1069,
+    "newFileLines": 148948
+  },
+  "perArea": {
+    "packages/web": {
+      "originals": 54,
+      "added": 4445,
+      "removed": 717
+    },
+    "packages/socket": {
+      "originals": 20,
+      "added": 4324,
+      "removed": 241
+    },
+    "packages/common": {
+      "originals": 10,
+      "added": 170,
+      "removed": 9
+    },
+    "packages/e2e": {
+      "originals": 6,
+      "added": 92,
+      "removed": 7
+    },
+    "root": {
+      "originals": 6,
+      "added": 210,
+      "removed": 95
+    }
+  },
+  "ledger": [
+    {
+      "file": "Dockerfile",
+      "added": 10,
+      "removed": 2,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "COPY packages/e2e/package.json ./packages/e2e/",
+        "COPY . .",
+        "COPY --from=builder /app/packages/socket/dist/index.cjs /app/socket/index.cjs"
+      ]
+    },
+    {
+      "file": "docker/nginx.conf",
+      "added": 28,
+      "removed": 12,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "server {"
+      ]
+    },
+    {
+      "file": "packages/common/src/constants.ts",
+      "added": 14,
+      "removed": 1,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const EVENTS = {",
+        "export const SESSION_ROLES = {",
+        "export const createDefaultGameSettings = (): GameSettings => ({",
+        "export const MIN_ANSWERS = 2"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/auth.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface SessionClaims {",
+        "export interface JoinTicketClaims {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/index.ts",
+      "added": 19,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface UploadedMedia {",
+        "export interface Question {",
+        "export interface GameSettings {",
+        "export type QuestionResult = Question & {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/socket.ts",
+      "added": 40,
+      "removed": 3,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface SocketData {",
+        "export interface ServerToClientEvents {",
+        "type ClientEventValidators = typeof clientEventValidators",
+        "export type ClientToServerEvents = {"
+      ]
+    },
+    {
+      "file": "packages/common/src/types/game/status.ts",
+      "added": 10,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export interface CommonStatusDataMap {",
+        "interface ManagerExtraStatus {"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/auth.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const sessionClaimsValidator = z.object({",
+        "export const joinTicketClaimsValidator = z.object({"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/game.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const joinGameValidator = z.object({",
+        "export const gameSettingsSchema = z.object({"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/quizz.test.ts",
+      "added": 41,
+      "removed": 1,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "describe(\"quizzValidator\", () => {",
+        "describe(\"normalizeLegacyQuizz\", () => {"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/quizz.ts",
+      "added": 8,
+      "removed": 4,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const questionSchema = z.object({",
+        "export const quizzValidator = z"
+      ]
+    },
+    {
+      "file": "packages/common/src/validators/socket.ts",
+      "added": 26,
+      "removed": 0,
+      "purpose": "Shared protocol: mixed play modes, pause/host controls, presence and validation",
+      "decision": "Retain wire/schema additions: server and client must validate the same public messages. No feature implementation belongs here.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const clientEventValidators = {"
+      ]
+    },
+    {
+      "file": "packages/e2e/.gitignore",
+      "added": 1,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "node_modules"
+      ]
+    },
+    {
+      "file": "packages/e2e/playwright.config.ts",
+      "added": 4,
+      "removed": 1,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export default defineConfig({"
+      ]
+    },
+    {
+      "file": "packages/e2e/tests/manager.spec.ts",
+      "added": 41,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { loginManager } from \"@razzia/e2e/utils/manager\""
+      ]
+    },
+    {
+      "file": "packages/e2e/tsconfig.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/e2e/utils/i18n.ts",
+      "added": 7,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import fs from \"fs\"",
+        "const resources: Resource = Object.fromEntries("
+      ]
+    },
+    {
+      "file": "packages/e2e/utils/manager.ts",
+      "added": 38,
+      "removed": 6,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const loginManager = async (page: Page) => {",
+        "export const startGame = async (manager: Page) => {",
+        "export const next = async (manager: Page) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/package.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": true,
+      "anchors": []
+    },
+    {
+      "file": "packages/socket/src/api/index.ts",
+      "added": 25,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { auth } from \"@razzia/socket/api/routes/auth\"",
+        "import { results } from \"@razzia/socket/api/routes/results\"",
+        "import { Hono } from \"hono\"",
+        "const routes = new Hono()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/middleware.ts",
+      "added": 5,
+      "removed": 20,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { type ApiEnv } from \"@razzia/socket/api/factory\"",
+        "const getBearerToken = (c: Context): string | undefined => {",
+        "export const readClaims = async (",
+        "export const requireSession = createMiddleware<ApiEnv>(async (c, next) => {",
+        "export const requireManager = createMiddleware<ApiEnv>(async (c, next) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/auth.ts",
+      "added": 28,
+      "removed": 31,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { managerPassword } from \"@razzia/socket/env\"",
+        "import {",
+        "const readRequestToken = async (c: Context): Promise<string | undefined> => {",
+        "const routes = new Hono()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/games.ts",
+      "added": 484,
+      "removed": 17,
+      "purpose": "Authenticated roster / spectator / pilot routes and existing game creation",
+      "decision": "Retain auth and registry-bound route composition. Future route factory extraction must preserve Hono RPC types and tenant context.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import { mintJoinTicket } from \"@razzia/socket/services/auth\"",
+        "import Game from \"@razzia/socket/services/game\"",
+        "import { StatusCodes } from \"http-status-codes\"",
+        "const routes = apiFactory"
+      ]
+    },
+    {
+      "file": "packages/socket/src/api/routes/media.ts",
+      "added": 88,
+      "removed": 2,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { zValidator } from \"@hono/zod-validator\"",
+        "import { mediaUploadValidator } from \"@razzia/common/validators/quizz\"",
+        "import { requireManager } from \"@razzia/socket/api/middleware\"",
+        "import { i18nHook } from \"@razzia/socket/api/validation\"",
+        "const routes = apiFactory"
+      ]
+    },
+    {
+      "file": "packages/socket/src/app.ts",
+      "added": 12,
+      "removed": 2,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ServerType } from \"@hono/node-server\"",
+        "import { verifyToken } from \"@razzia/socket/services/auth\"",
+        "export const createSocketServer = (server: ServerType): Server => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/handlers/game.ts",
+      "added": 72,
+      "removed": 6,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const gameSocketHandlers = ({ io, socket }: SocketContext) => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/index.ts",
+      "added": 16,
+      "removed": 1,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { createAdaptorServer } from \"@hono/node-server\"",
+        "import { app, createSocketServer } from \"@razzia/socket/app\"",
+        "import Registry from \"@razzia/socket/services/registry\"",
+        "initConfig()"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/auth.ts",
+      "added": 52,
+      "removed": 5,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { jwtSecret } from \"@razzia/socket/env\"",
+        "export const mintToken = async (",
+        "const JOIN_TICKET_TTL = 60 * 5",
+        "export const mintJoinTicket = ("
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/config.ts",
+      "added": 17,
+      "removed": 5,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { normalizeFilename } from \"@razzia/socket/utils/file\"",
+        "import { join, resolve } from \"path\"",
+        "const inContainerPath = process.env.CONFIG_PATH"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/cooldown-timer.ts",
+      "added": 145,
+      "removed": 26,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { SECOND_MS } from \"@razzia/socket/utils/sleep\"",
+        "export class CooldownTimer {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/game.test.ts",
+      "added": 218,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "describe(\"joining a game\", () => {",
+        "describe(\"quiz flow\", () => {",
+        "describe(\"survey flow\", () => {",
+        "describe(\"manager grace period\", () => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/index.ts",
+      "added": 1676,
+      "removed": 21,
+      "purpose": "Game lifecycle + authenticated extension/session/player composition",
+      "decision": "Extracted roster and read-only show projections. Retain join, identity rebind, room authorization and game lifecycle seams; further split requires targeted integration proof.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "class Game {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/player-manager.ts",
+      "added": 8,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export class PlayerManager {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/game/round-manager.ts",
+      "added": 1238,
+      "removed": 105,
+      "purpose": "Authoritative round control, pause, replay and score ledger integration",
+      "decision": "Extracted cinematic distribution. Retain authoritative clock, score/replay lifecycle and extension callbacks; do not relocate the upstream round engine.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { isEstimationOptions } from \"@razzia/common/questions/options\"",
+        "import {",
+        "import { PlayerManager } from \"@razzia/socket/services/game/player-manager\"",
+        "import { orderToPoint, timeToPoint } from \"@razzia/socket/utils/game\"",
+        "type SendFn = <T extends Status>(",
+        "export interface RoundManagerOptions {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/registry.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "class Registry {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/scoring/round.test.ts",
+      "added": 151,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "describe(\"scoreQuestion\", () => {"
+      ]
+    },
+    {
+      "file": "packages/socket/src/services/scoring/round.ts",
+      "added": 83,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const scoreQuestion = ("
+      ]
+    },
+    {
+      "file": "packages/socket/tsconfig.json",
+      "added": 1,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/index.html",
+      "added": 17,
+      "removed": 2,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/package.json",
+      "added": 3,
+      "removed": 2,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": true,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/src/components/AlertDialog.tsx",
+      "added": 10,
+      "removed": 3,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface Props {",
+        "const AlertDialog = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/Background.tsx",
+      "added": 4,
+      "removed": 15,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { getBranding, imageFallback } from \"@razzia/web/branding\"",
+        "import type { PropsWithChildren } from \"react\"",
+        "const Background = ({ children }: PropsWithChildren) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/GameBackground.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const GameBackground = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/QuestionMedia.tsx",
+      "added": 34,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { QuestionMedia as QuestionMediaType } from \"@razzia/common/types/ga",
+        "interface Props {",
+        "const QuestionMedia = ({ media, alt = \"\", autoPlay = true }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/components/ToggleGroup.tsx",
+      "added": 33,
+      "removed": 14,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { ToggleGroup as RadixToggleGroup } from \"radix-ui\"",
+        "interface Item<T extends string> {",
+        "const ToggleGroup = <T extends string>({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/AnswerButton.tsx",
+      "added": 126,
+      "removed": 13,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { Check, X } from \"lucide-react\"",
+        "type Props = PropsWithChildren &",
+        "const AnswerButton = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/AnswerNote.tsx",
+      "added": 7,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface Props {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+      "added": 73,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import Tooltip from \"@razzia/web/components/Tooltip\"",
+        "import AnswersOnly from \"@razzia/web/features/game/components/GameSettingsModal/",
+        "import { useMutation } from \"@tanstack/react-query\"",
+        "import { useState } from \"react\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const GameSettingsModal = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/GameWrapper.tsx",
+      "added": 760,
+      "removed": 93,
+      "purpose": "Host/player view composition, media readiness and extension stage seam",
+      "decision": "Extracted extension scene/interlude rendering and labels. Retain role contexts, subscriptions and existing host chrome; keep Classic early return before legacy mounts.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import GameSettingsModal from \"@razzia/web/features/game/components/GameSettings",
+        "import RoomLockButton from \"@razzia/web/features/game/components/RoomLockButton\"",
+        "import type { Status as GameStatus } from \"@razzia/web/features/game/utils/creat",
+        "import clsx from \"clsx\"",
+        "type Props = PropsWithChildren & {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/join/Room.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Room = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Answers.tsx",
+      "added": 302,
+      "removed": 69,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { CommonStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import QuestionMedia from \"@razzia/web/components/QuestionMedia\"",
+        "import QuestionDialog from \"@razzia/web/features/game/components/QuestionDialog\"",
+        "const Answers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Leaderboard.tsx",
+      "added": 85,
+      "removed": 43,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import Fire from \"@razzia/web/features/game/components/icons/Fire\"",
+        "const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Podium.tsx",
+      "added": 4,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const Podium = ({ data: { subject, top } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Question.tsx",
+      "added": 138,
+      "removed": 12,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { CommonStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import { SFX } from \"@razzia/web/features/game/utils/constants\"",
+        "const Question = ({ data: { question, media, cooldown } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Responses.tsx",
+      "added": 380,
+      "removed": 64,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "import AnswerButton from \"@razzia/web/features/game/components/AnswerButton\"",
+        "import {",
+        "import clsx from \"clsx\"",
+        "interface Props {",
+        "const Responses = ({ data }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/components/states/Room.tsx",
+      "added": 71,
+      "removed": 2,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "const Room = ({ data: { text, inviteCode } }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/contexts/socket-context.tsx",
+      "added": 4,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const socketClient: TypedSocket = io(\"/\", {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/stores/manager.tsx",
+      "added": 8,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { StatusDataMap } from \"@razzia/common/types/game/status\"",
+        "interface ManagerState<T> {",
+        "const initialState: ManagerState<StatusDataMap> = {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/game/utils/constants.ts",
+      "added": 3,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const ANSWERS_COLORS = [",
+        "export const GAME_STATE_COMPONENTS = {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/components/ManagerPassword.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const ManagerPassword = ({ onSubmit, disabled }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/components/configurations/ConfigManageQuizz.tsx",
+      "added": 241,
+      "removed": 29,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { useNavigate } from \"@tanstack/react-router\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const downloadJson = (data: unknown, filename: string) => {",
+        "const ConfigManageQuizz = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/manager/queries.ts",
+      "added": 65,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { QuizzValidated } from \"@razzia/common/validators/quizz\"",
+        "export const updateGameSettings = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/multi/components/MultiAnswers.tsx",
+      "added": 16,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const MultiAnswers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/single/components/SingleAnswers.tsx",
+      "added": 33,
+      "removed": 3,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import AnswerButton from \"@razzia/web/features/game/components/AnswerButton\"",
+        "const SingleAnswers = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/types.ts",
+      "added": 4,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { ManagerStatusDataMap } from \"@razzia/common/types/game/status\"",
+        "export interface AnswerComponentProps {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/questions/utils.ts",
+      "added": 8,
+      "removed": 2,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { Question } from \"@razzia/common/types/game\""
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/MediaLibraryToolbar.tsx",
+      "added": 18,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import ToggleGroup from \"@razzia/web/components/ToggleGroup\"",
+        "interface Props {",
+        "const MediaLibraryToolbar = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx",
+      "added": 442,
+      "removed": 69,
+      "purpose": "Reusable media browser with show catalog and protected deletion",
+      "decision": "Extracted sidecar cleanup and used-media projection. Retain authenticated requests, upload and existing modal components.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { UploadedMedia } from \"@razzia/common/types/game\"",
+        "import clsx from \"clsx\"",
+        "import { Dialog } from \"radix-ui\"",
+        "interface Props {",
+        "const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes(\"Files\")",
+        "const MediaLibrary = ({ open, onOpenChange }: Props) => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorAnswers.tsx",
+      "added": 283,
+      "removed": 28,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { QUESTION_REGISTRY } from \"@razzia/web/features/questions\"",
+        "import clsx from \"clsx\"",
+        "const QuestionEditorAnswers = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/BaseConfig.tsx",
+      "added": 14,
+      "removed": 3,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "import { isMultiOptions } from \"@razzia/common/questions/options\"",
+        "import ConfigSection from \"@razzia/web/features/quizz/components/QuestionEditor/",
+        "const BaseConfig = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigField.tsx",
+      "added": 1,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "interface LabelProps {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/QuestionEditorConfig/index.tsx",
+      "added": 3,
+      "removed": 4,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const QuestionEditorConfig = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuestionEditor/index.tsx",
+      "added": 75,
+      "removed": 7,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import GameBackground from \"@razzia/web/components/GameBackground\"",
+        "import QuestionEditorTitle from \"@razzia/web/features/quizz/components/QuestionE",
+        "import { useQuizzEditor } from \"@razzia/web/features/quizz/contexts/quizz-editor",
+        "const QuestionEditor = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorCard.tsx",
+      "added": 41,
+      "removed": 18,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import clsx from \"clsx\"",
+        "interface Props {",
+        "const QuizzEditorCard = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorHeader.tsx",
+      "added": 356,
+      "removed": 59,
+      "purpose": "Editor save/conflict handling and Studio navigation",
+      "decision": "Extracted timeline-kind catalogue. Keep form/cache/routing integration and atomic composite save semantics; do not reintroduce legacy-only save.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import type { QuizzValidated } from \"@razzia/common/validators/quizz\"",
+        "import {",
+        "import clsx from \"clsx\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const QuizzEditorHeader = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/components/QuizzEditorSidebar.tsx",
+      "added": 294,
+      "removed": 34,
+      "purpose": "Stable question IDs and mixed timeline drag/drop composition",
+      "decision": "Extracted scene-card presentation. Retain form/DnD integration; preserve stable metadata bindings during reorder/duplicate/delete.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { CSS } from \"@dnd-kit/utilities\"",
+        "import Button from \"@razzia/web/components/Button\"",
+        "import QuizzEditorCard from \"@razzia/web/features/quizz/components/QuizzEditorCa",
+        "import { Plus } from \"lucide-react\"",
+        "interface SortableItemProps {",
+        "const SortableItem = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/contexts/quizz-editor-context.tsx",
+      "added": 223,
+      "removed": 6,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import {",
+        "interface QuizzEditorContextType {",
+        "export const QuizzEditorProvider = ({"
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/hooks/useUploadMedia.ts",
+      "added": 32,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const UPLOAD_ACCEPT = Object.entries(ACCEPTED_MEDIA_TYPES)",
+        "export const useUploadMedia = ("
+      ]
+    },
+    {
+      "file": "packages/web/src/features/quizz/queries.ts",
+      "added": 8,
+      "removed": 2,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const mediaKeys = {",
+        "export const uploadMedia = (file: File) =>"
+      ]
+    },
+    {
+      "file": "packages/web/src/i18n.ts",
+      "added": 14,
+      "removed": 1,
+      "purpose": "Translations and extension resource registration",
+      "decision": "Retain localized errors/labels and single resource registration hook; preserve upstream namespace keys on upgrade.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const resources = Object.entries(modules).reduce<Resource>(",
+        "i18n"
+      ]
+    },
+    {
+      "file": "packages/web/src/index.css",
+      "added": 3,
+      "removed": 0,
+      "purpose": "Extension CSS loading and fifth-answer token",
+      "decision": "Moved all appended downstream keyframes to extension CSS; retain one import, Tailwind source directive and shared fifth-answer token.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "packages/web/src/locales/locales.test.ts",
+      "added": 11,
+      "removed": 4,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { EVENTS } from \"@razzia/common/constants\"",
+        "const flatten = (messages: Messages, prefix = \"\"): string[] =>",
+        "const readKeys = (lang: string) =>"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/index.tsx",
+      "added": 11,
+      "removed": 21,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "export const Route = createFileRoute(\"/(auth)/\")({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/layout.tsx",
+      "added": 24,
+      "removed": 9,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import LanguageSwitcher from \"@razzia/web/components/LanguageSwitcher\"",
+        "const searchSchema = z.object({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/(auth)/manager/index.tsx",
+      "added": 80,
+      "removed": 11,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { SESSION_ROLES } from \"@razzia/common/constants\"",
+        "import { ApiError } from \"@razzia/web/lib/api\"",
+        "import { createFileRoute, redirect, useNavigate } from \"@tanstack/react-router\"",
+        "import { useTranslation } from \"react-i18next\"",
+        "const ManagerAuthPage = () => {",
+        "export const Route = createFileRoute(\"/(auth)/manager/\")({"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/config.tsx",
+      "added": 3,
+      "removed": 3,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { SESSION_ROLES } from \"@razzia/common/constants\"",
+        "const ManagerConfigPage = () => ("
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/quizz/$quizzId.tsx",
+      "added": 2,
+      "removed": 10,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { quizzQuery } from \"@razzia/web/features/manager/queries\"",
+        "const QuizzEditPage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/manager/quizz/index.tsx",
+      "added": 2,
+      "removed": 10,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const QuizzEditorPage = () => ("
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/party/$gameId.tsx",
+      "added": 4,
+      "removed": 20,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { STATUS } from \"@razzia/common/types/game/status\"",
+        "import { useQuestionStore } from \"@razzia/web/features/game/stores/question\"",
+        "const PlayerGamePage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/pages/party/manager/$gameId.tsx",
+      "added": 14,
+      "removed": 1,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { STATUS } from \"@razzia/common/types/game/status\"",
+        "import GameWrapper from \"@razzia/web/features/game/components/GameWrapper\"",
+        "const ManagerGamePage = () => {"
+      ]
+    },
+    {
+      "file": "packages/web/src/route.gen.ts",
+      "added": 42,
+      "removed": 0,
+      "purpose": "UI integration for rich answers, current show rendering, editing or account routes",
+      "decision": "Retain integration at the existing React/router/store boundary; rendering-only changes must preserve disabled/legacy behavior and theme precedence.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import { Route as authIndexRouteImport } from './pages/(auth)/index'",
+        "const authIndexRoute = authIndexRouteImport.update({",
+        "export interface FileRoutesByFullPath {",
+        "export interface FileRoutesByTo {",
+        "export interface FileRoutesById {",
+        "export interface FileRouteTypes {"
+      ]
+    },
+    {
+      "file": "packages/web/vite.config.ts",
+      "added": 13,
+      "removed": 5,
+      "purpose": "Account isolation, authenticated storage/media or API composition",
+      "decision": "Retain security and persistence integration; bypassing these seams would risk cross-account data exposure. Review upstream auth/storage updates semantically.",
+      "risk": "high",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "import packageJson from \"../../package.json\" with { type: \"json\" }",
+        "const brandingMimeTypes: Record<string, string> = {"
+      ]
+    },
+    {
+      "file": "pnpm-lock.yaml",
+      "added": 166,
+      "removed": 81,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "importers:",
+        "packages:",
+        "snapshots:"
+      ]
+    },
+    {
+      "file": "pnpm-workspace.yaml",
+      "added": 1,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": true,
+      "anchors": [
+        "packages:"
+      ]
+    },
+    {
+      "file": "tsconfig.json",
+      "added": 2,
+      "removed": 0,
+      "purpose": "Workspace/build/runtime configuration",
+      "decision": "Retain additive workspace dependencies, aliases and runtime composition; review overlaps individually when adopting upstream dependencies.",
+      "risk": "medium",
+      "upstreamAlsoChanged": false,
+      "anchors": []
+    },
+    {
+      "file": "vitest.config.ts",
+      "added": 3,
+      "removed": 0,
+      "purpose": "Regression coverage / test harness integration",
+      "decision": "Retain test adaptation; update assertions against current UI/protocol rather than reverting tests.",
+      "risk": "low",
+      "upstreamAlsoChanged": false,
+      "anchors": [
+        "const alias = {"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions
+
+·····················································
+
+ Test Files  5 passed (5)
+      Tests  53 passed (53)
+   Start at  12:09:20
+   Duration  1.61s (import 54%, transform 33%, tests 12%, worker 1%)
+

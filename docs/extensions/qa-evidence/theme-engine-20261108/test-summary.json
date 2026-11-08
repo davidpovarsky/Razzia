@@ -1,0 +1,91 @@
+{
+  "sourceCommit": "2db7e036078db85de6ca59785b6bcf9061c2c6af",
+  "root": {
+    "total": 351,
+    "passed": 351,
+    "failed": 0
+  },
+  "extensions": {
+    "total": 570,
+    "passed": 555,
+    "failed": 15,
+    "identicalBaselineFailures": true
+  },
+  "failures": [
+    {
+      "file": "src/core/tzila-show-acceptance.test.ts",
+      "name": "Tzila Five-Option Picture Polls Acceptance Suite (A01 - A18) A16: 40 distinct assets intake verified, R2C3/R2C5 reuse C3/C5 without duplicate upload",
+      "message": "AssertionError: expected false to be true // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/core/tzila-show-acceptance.test.ts:412:39\n    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35\n    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26\n    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20\n    at new Promise (<anonymous>)\n    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)\n    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20\n    at new Promise (<anonymous>)\n    at runWithTimeout (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3259:10)\n    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3882:64"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A1: Interlude Progression & Server Authority (Asana 1219846884974853) progresses SHOW_RESPONSES -> interlude -> next question with auto and manual advance",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:291:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A1: Interlude Progression & Server Authority (Asana 1219846884974853) prevents interlude after the final question per Asana V1 rule",
+      "message": "AssertionError: expected +0 to be 2 // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:365:42\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A3: History Inspection & Safe Rollback (Asana 1219846387400318) VIEW_HISTORY: manager-only read-only snapshot does not alter live game state",
+      "message": "AssertionError: expected +0 to be 1 // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:573:42\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A3: History Inspection & Safe Rollback (Asana 1219846387400318) REPLAY_FROM_CHECKPOINT: rolls back scores, leaderboard, bumps epoch, and resumes scoring afresh",
+      "message": "AssertionError: expected 0 to be greater than 0\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:637:33\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A4: Post-Answer Distribution Data & Immediate Personal Results (Asana 1219846702589614) delivers personal results immediately to players without projector delay",
+      "message": "AssertionError: expected 0 to be greater than 0\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:698:36\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data A4: Post-Answer Distribution Data & Immediate Personal Results (Asana 1219846702589614) produces immutable reveal distribution for single, multi, and estimation",
+      "message": "AssertionError: expected undefined to be 2 // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:717:43\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data Load Acceptance: 100 Concurrent Simulated Participants scores 100 concurrent participants without dropped or duplicate answers",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:948:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation requires confirmation when PREVIOUS_SCREEN is requested during active answering with submitted answers",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:1049:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation navigates back from leaderboard to reveal within the same question",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:1142:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P1: Authoritative Previous Screen Navigation reopens question for fresh vote, removes old question contribution, and preserves other questions",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:1181:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P0 authoritative pause/resume freezes the vote deadline, rejects paused votes, and resumes once",
+      "message": "AssertionError: expected null to be 'reveal' // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:1273:37\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/gameplay-phase-a.test.ts",
+      "name": "WAVE 2 / PHASE A - Authoritative Game Control, Interludes & Reveal Data P0 authoritative pause/resume freezes and resumes an automatic interlude without stale advancement",
+      "message": "AssertionError: expected false to be true // Object.is equality\n    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/gameplay-phase-a.test.ts:1284:34\n    at async file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:20"
+    },
+    {
+      "file": "src/server/real-telephony-e2e.test.ts",
+      "name": "GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) Scenario 1-5 & 8-9: Full real-transport game lifecycle with manager, web player, and telephony participant",
+      "message": "Error: Timeout waiting for SHOW_RESULT\n    at Timeout._onTimeout (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/real-telephony-e2e.test.ts:353:22)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7)"
+    },
+    {
+      "file": "src/server/real-telephony-e2e.test.ts",
+      "name": "GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real Socket.IO /ws) Scenario 7: Real Player Reconnection & State Synchronization",
+      "message": "Error: Timeout waiting for round score\n    at Timeout._onTimeout (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-cleanup-theme-20261108/extensions/src/server/real-telephony-e2e.test.ts:149:16)\n    at listOnTimeout (node:internal/timers:685:17)\n    at process.processTimers (node:internal/timers:618:7)"
+    }
+  ]
+}

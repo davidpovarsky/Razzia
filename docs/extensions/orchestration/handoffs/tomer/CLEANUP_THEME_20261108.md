@@ -114,3 +114,34 @@ stays unchanged. Expected protected diff: under 25 lines across Game/RoundManage
 Validate natural/manual/all-answered, pause, skip, restart, history and reconnect
 with contract tests and browser audio spies. This is essential to Gate 4, not a
 theme implementation inside the game engine.
+
+## Final delivery — 8 November 2026
+
+Code checkpoints: `7c0c4bd` (cleanup), `d4b3159` (themes), `15b2fda`
+(boundary/canonical corrections), `2db7e03` (dedicated expiry sound only on
+natural expiry). Reviewed and locally merged `69cbf80` and `9d63b56` from the
+concurrent branch. No uncommitted source work from another worktree was copied.
+The only merge conflict preserved both theme resolution and the newer quiet
+story-reading policy. The baseline-only QA worktree at detached `3823be9`
+contains cleanup plus the same synchronized commit, without the theme engine.
+
+Final actual checks: 351/351 root tests; 555/570 extension tests with exactly the
+same 15 baseline failures; 12/12 isolated Chromium/WebKit browser tests; 53/53
+focused theme/authoring/native-scene tests, including the normal Tailwind
+formatter roundtrip. Effective app/socket/extension/e2e typechecks and production
+build passed. Full lint remains failing; normalized per-file/rule comparison and
+focused clean checks are recorded with raw compressed outputs. The final native
+class helper preserves exact tokens and prevents formatter whitespace loss.
+
+The manual-vote-lock sound is separate from the timer-expiry asset. Browser
+spies assert zero expiry-file plays on manual completion and exactly one on a
+natural expiry, as well as track identity/restart, pause/replay/skip, role output,
+autoplay recovery and refresh. Thirty-two real-app screenshots cover the focused
+matrix; screenshots wait for visible card/question content after entrance.
+
+Read `docs/extensions/SHOW_THEME_ENGINE_QA_2026-11-08.md` and
+`docs/extensions/qa-evidence/theme-engine-20261108/summary.json` for evidence and
+PARTIAL/NOT TESTED gates. In particular: no physical iPad, manual listening,
+complete historical pixel parity, long memory profiling or production theme
+installer was claimed. No push, main merge, deployment, credential change,
+telephony purchase or Asana write was performed.
