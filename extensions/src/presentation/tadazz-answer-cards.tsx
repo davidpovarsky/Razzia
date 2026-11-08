@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import {
   useEffect,
   useMemo,
@@ -252,7 +253,7 @@ export function TadazzSurveyCards({
         const animated = slot.preset !== "none" && !reduceMotion
 
         return (
-          <button
+          <PlatformButton size="sm" classNameContent="contents"
             key={`${epochKey}-card-${index}`}
             type="button"
             data-testid={`tadazz-answer-choice-${index}`}
@@ -267,7 +268,7 @@ export function TadazzSurveyCards({
             }}
             style={animated ? motionStyle(slot, index) : undefined}
             className={clsx(
-              "tdz-answer-card",
+              "tdz-answer-card disabled:opacity-100",
               animated && "tdz-answer-card--motion",
               isSelected && "tdz-answer-card--selected",
               isFinal && "tdz-answer-card--revealed",
@@ -332,7 +333,7 @@ export function TadazzSurveyCards({
                 </span>
               </>
             )}
-          </button>
+          </PlatformButton>
         )
       })}
     </div>

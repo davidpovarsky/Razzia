@@ -1,3 +1,4 @@
+import { PlatformButton } from "../platform-controls"
 import {
   FullShowSceneView,
   isFullShowScene,
@@ -158,14 +159,14 @@ export function AnswerSlotV4({
   const isResultActive = Boolean(result && showPercentages)
   const pctText = isResultActive ? `${roundedPct}%` : ""
   return (
-    <div
-      className={slotClasses}
+    <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!interactive}
+      className={`p-0 border-0 bg-transparent disabled:opacity-100 ${slotClasses}`}
       data-v4-choice={index}
       data-index={index}
       data-testid={`tadazz-card-${index}`}
       data-multi={multiSelect ? "true" : undefined}
-      role={interactive ? "button" : undefined}
-      tabIndex={interactive ? 0 : undefined}
+
+
       aria-pressed={interactive ? Boolean(selected) : undefined}
       aria-label={
         interactive
@@ -173,16 +174,7 @@ export function AnswerSlotV4({
           : undefined
       }
       onClick={interactive ? () => onSelect?.(index) : undefined}
-      onKeyDown={
-        interactive
-          ? (e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault()
-                onSelect?.(index)
-              }
-            }
-          : undefined
-      }
+
     >
       <article className="answer-card">
         <figure className="answer-figure">
@@ -261,7 +253,7 @@ export function AnswerSlotV4({
         </div>
       </article>
       <div className="answer-index">{id2(index + 1)}</div>
-    </div>
+    </PlatformButton>
   )
 }
 export function FivePictureAnswersV4({
@@ -476,14 +468,14 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
             .filter(Boolean)
             .join(" ")
           return (
-            <div
+            <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!canSelect}
               key={i}
-              className={cls}
+              className={`p-0 border-0 bg-transparent disabled:opacity-100 ${cls}`}
               data-v4-choice={i}
               data-index={i}
               data-testid={`tadazz-card-${i}`}
-              role={canSelect ? "button" : undefined}
-              tabIndex={canSelect ? 0 : undefined}
+
+
               aria-pressed={canSelect ? isSelected : undefined}
               aria-label={
                 canSelect
@@ -491,17 +483,8 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
                   : undefined
               }
               onClick={canSelect ? () => data.onSelectOption?.(i) : undefined}
-              onKeyDown={
-                canSelect
-                  ? (e) => {
-                      if (e.key === "Enter" || e.key === " ") {
-                        e.preventDefault()
-                        data.onSelectOption?.(i)
-                      }
-                    }
-                  : undefined
-              }
-            >{`${String.fromCharCode(65 + i)}  ·  ${title}`}</div>
+
+            >{`${String.fromCharCode(65 + i)}  ·  ${title}`}</PlatformButton>
           )
         })}
       </div>

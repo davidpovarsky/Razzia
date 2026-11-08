@@ -1,3 +1,4 @@
+import { PlatformButton } from "../platform-controls"
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
@@ -314,9 +315,9 @@ export function TadazzOpening({
         />
       )}
       {brandTransitionActive && onEnableSound && !soundRequested && (
-        <button
+        <PlatformButton size="sm"
           type="button"
-          className="tz-opening-skip tz-opening-sound"
+          className="absolute bottom-8 left-8 z-30 pointer-events-auto font-display"
           data-testid="tadazz-opening-enable-sound"
           onClick={() => {
             const video = videoRef.current
@@ -335,17 +336,17 @@ export function TadazzOpening({
           }}
         >
           {labels.enableSound}
-        </button>
+        </PlatformButton>
       )}
       {canSkip && (
-        <button
+        <PlatformButton size="sm"
           type="button"
-          className="tz-opening-skip"
+          className="absolute bottom-8 right-8 z-30 pointer-events-auto font-display"
           data-testid="tadazz-opening-skip"
           onClick={onSkip ?? (eventArtworkActive ? finish : endBrand)}
         >
           {labels.skip}
-        </button>
+        </PlatformButton>
       )}
     </div>
   )

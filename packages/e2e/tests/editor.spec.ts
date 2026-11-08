@@ -1,6 +1,8 @@
 import { BASIC_QUIZZ } from "@razzia/e2e/utils/constants"
 import {
   addAnswer,
+  addQuestionCard,
+  questionCard,
   answerInput,
   numberSetting,
   openQuizzTab,
@@ -57,7 +59,7 @@ test("saves every question type and setting", async ({ page }) => {
   )
   await switchSetting(page, t("quizz:question.config.answerTime")).click()
 
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+  await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Multi question")
@@ -77,7 +79,7 @@ test("saves every question type and setting", async ({ page }) => {
     t("quizz:question.config.scoringMode.strict"),
   )
 
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+  await addQuestionCard(page)
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Estimation question")
@@ -171,7 +173,10 @@ test("hides the scoring settings in survey mode", async ({ page }) => {
   await answerInput(page, 1).fill("Blue")
   await saveQuizz(page)
 
-  expect(readQuizz(subject)?.gameMode).toBe("survey")
+  expect(readQuizz(subject)?.questions[0]).toMatchObject({
+    playMode: "survey",
+    answers: ["Red", "Blue"],
+  })
 })
 
 test("shows validation errors and jumps to the invalid question", async ({
@@ -183,8 +188,8 @@ test("shows validation errors and jumps to the invalid question", async ({
     .fill("Valid question")
   await answerInput(page, 0).fill("Yes")
   await answerInput(page, 1).fill("No")
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
-  await page.getByRole("button", { name: /^1 Valid question/u }).click()
+  await addQuestionCard(page)
+  await questionCard(page, 0).click()
 
   await page.getByRole("button", { name: t("common:save") }).click()
 
@@ -194,7 +199,7 @@ test("shows validation errors and jumps to the invalid question", async ({
   await expect(page.getByText(t("errors:quizz.questionEmpty"))).toBeVisible()
   await expect(page.getByText(t("errors:quizz.answerEmpty"))).toHaveCount(2)
   await expect(
-    page.getByRole("button", { name: /^2 This question has errors/u }),
+    questionCard(page, 1).getByLabel(t("quizz:questionHasErrors")),
   ).toBeVisible()
   await expect(page).toHaveURL(/\/manager\/quizz$/u)
 })
@@ -214,16 +219,16 @@ test("edits then deletes a quizz", async ({ page }) => {
   await page
     .getByPlaceholder(t("quizz:question.placeholder"))
     .fill("Edited question")
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
-  await page
-    .getByRole("button", { name: /^2 / })
+  await addQuestionCard(page)
+  await questionCard(page, 1).hover()
+  await questionCard(page, 1)
     .getByRole("button", { name: t("quizz:question.deleteQuestion") })
     .click()
   await page
     .getByRole("alertdialog")
     .getByRole("button", { name: t("common:delete") })
     .click()
-  await expect(page.getByRole("button", { name: /^2 / })).toBeHidden()
+  await expect(questionCard(page, 1)).toHaveCount(0)
   await saveQuizz(page, t("quizz:quizzUpdated"))
 
   expect(readQuizz(subject)?.questions).toMatchObject([
@@ -268,9 +273,24 @@ test("exports and imports a quizz as JSON", async ({ page }) => {
     buffer: Buffer.from(JSON.stringify({ ...exported, subject })),
   })
 
+  const preview = page.getByRole("alertdialog")
+  await expect(preview).toBeVisible()
+  await preview
+    .getByRole("button", {
+      name: "Import Show",
+      exact: true,
+    })
+    .click()
   await expect(page.getByText(t("quizz:quizzSaved"))).toBeVisible()
-  await expect(page.getByText(subject, { exact: true })).toBeVisible()
+  await expect(
+    page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")),
+  ).toHaveValue(subject)
   expect(readQuizz(subject)?.questions).toHaveLength(2)
+  await page.getByTestId("editor-exit-btn").click()
+  await page
+    .getByRole("button", { name: t("manager:tabs.quizz"), exact: true })
+    .click()
+  await expect(page.getByText(subject, { exact: true })).toBeVisible()
 })
 
 test("attaches an uploaded image to a question", async ({ page }) => {
@@ -322,17 +342,17 @@ test("keeps the other questions intact when deleting one in the middle", async (
   await page.getByPlaceholder(t("quizz:titleQuizzPlaceholder")).fill(subject)
   await fillQuestion("First", ["A1", "B1"])
 
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+  await addQuestionCard(page)
   await fillQuestion("Second", ["A2", "B2", "C2", "D2"])
   await toggleSolution(page, 3)
   await toggleSolution(page, 0)
 
-  await page.getByRole("button", { name: t("quizz:addQuestion") }).click()
+  await addQuestionCard(page)
   await fillQuestion("Third", ["A3", "B3", "C3"])
   await toggleSolution(page, 2)
   await toggleSolution(page, 0)
 
-  const second = page.getByRole("button", { name: /^2 Second/u })
+  const second = questionCard(page, 1)
 
   await second.click()
   await second
@@ -343,7 +363,7 @@ test("keeps the other questions intact when deleting one in the middle", async (
     .getByRole("button", { name: t("common:delete") })
     .click()
 
-  await page.getByRole("button", { name: /^2 Third/u }).click()
+  await questionCard(page, 1).click()
   await expect(answerInput(page, 2)).toHaveValue("C3")
   await saveQuizz(page)
 
@@ -430,4 +450,68 @@ test("keeps the number settings within their limits", async ({ page }) => {
     time: 5,
     maxPoints: 0,
   })
+})
+
+test("uses original Studio controls for every card kind, keyboard navigation and media", async ({
+  page,
+}, info) => {
+  await page.getByRole("button", { name: t("manager:quizz.create") }).click()
+  const kinds = [
+    "quiz",
+    "survey",
+    "media",
+    "animation",
+    "transition",
+    "opening",
+    "closing",
+    "countdown",
+    "leaderboard",
+    "interimResults",
+    "answerRecap",
+  ]
+  for (const kind of kinds)
+    await expect(page.getByTestId(`toggle-kind-${kind}`)).toBeVisible()
+  const quiz = page.getByTestId("toggle-kind-quiz")
+  const survey = page.getByTestId("toggle-kind-survey")
+  await quiz.focus()
+  await quiz.press("ArrowRight")
+  await expect(survey).toBeFocused()
+  await survey.press("Space")
+  await expect(survey).toHaveAttribute("data-state", "on")
+  await survey.press("ArrowLeft")
+  await expect(quiz).toBeFocused()
+  await quiz.press("Space")
+  await expect(quiz).toHaveAttribute("data-state", "on")
+  for (const group of ["media", "effects", "show", "results"])
+    await expect(
+      page.getByTestId(`toggle-group-divider-${group}`),
+    ).toBeVisible()
+  const imageAction = page.getByTestId("answer-pick-image-0")
+  expect(
+    await imageAction.evaluate(
+      (element) => getComputedStyle(element).fontFamily,
+    ),
+  ).toContain("Rubik Variable")
+  expect(
+    await imageAction.evaluate(
+      (element) => getComputedStyle(element).borderRadius,
+    ),
+  ).toBe("8px")
+  await imageAction.click()
+  await expect(page.getByRole("dialog")).toBeVisible()
+  await expect(page.getByTestId("media-scope-all")).toBeVisible()
+  await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
+    0,
+  )
+  await page.screenshot({ path: info.outputPath("native-media-controls.png") })
+  await page.keyboard.press("Escape")
+  await expect(page.getByRole("dialog")).toHaveCount(0)
+  await page.setViewportSize({ width: 800, height: 900 })
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth + 1,
+    ),
+  ).toBe(true)
+  await expect(quiz).toHaveAttribute("data-state", "on")
+  await page.screenshot({ path: info.outputPath("native-editor-narrow.png") })
 })

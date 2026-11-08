@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
   resolveSceneOverlayAnimations,
@@ -452,7 +453,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
   // Editor pointer drag support on the shared stage coordinate plane
   const handleDragStartOverlay = useCallback(
-    (id: string, e: React.PointerEvent<HTMLDivElement>) => {
+    (id: string, e: React.PointerEvent<HTMLElement>) => {
       if (!interactiveEditorMode || !onUpdateOverlayPosition) {
         return
       }
@@ -464,7 +465,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   )
 
   const handleStagePointerMove = useCallback(
-    (e: React.PointerEvent<HTMLDivElement>) => {
+    (e: React.PointerEvent<HTMLElement>) => {
       const dragId = draggingOverlayIdRef.current
 
       if (!dragId || !interactiveEditorMode || !onUpdateOverlayPosition) {
@@ -491,7 +492,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   }, [])
 
   const handleOverlayKeyDown = useCallback(
-    (id: string, e: React.KeyboardEvent<HTMLDivElement>) => {
+    (id: string, e: React.KeyboardEvent<HTMLElement>) => {
       if (!interactiveEditorMode || !onUpdateOverlayPosition) {
         return
       }
@@ -710,15 +711,15 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         {showAutoplayControl &&
           autoplayAudioBlocked &&
           !interactiveEditorMode && (
-            <button
+            <PlatformButton size="sm"
               type="button"
               data-testid="cinematic-activate-audio"
               onClick={handleActivateAudio}
-              className="mb-3 inline-flex items-center gap-2 rounded-full border border-amber-400/50 bg-slate-950/85 px-4 py-1.5 text-xs font-bold text-amber-300 shadow-lg backdrop-blur-md transition hover:bg-slate-900"
+              className="mb-3 bg-white text-black hover:bg-accent"
             >
               <span>🔊</span>
               <span>{activateAudioLabel}</span>
-            </button>
+            </PlatformButton>
           )}
         {interactiveSlot}
       </div>

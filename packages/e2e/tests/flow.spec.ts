@@ -6,6 +6,24 @@ import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
 import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
 
+/** Exercise the original automatic-completion capability explicitly; manual hosting remains available. */
+const createAutomaticGame = async (
+  manager: import("@playwright/test").Page,
+  subject = BASIC_QUIZZ,
+) => {
+  const pin = await createGame(manager, subject)
+  await manager.getByRole("button", { name: t("game:settings.title") }).click()
+  const dialog = manager.getByRole("dialog")
+  const completion = dialog.getByTestId("settings-end-on-all-answered")
+  if ((await completion.getAttribute("aria-checked")) !== "true")
+    await completion.click()
+  await dialog
+    .getByRole("button", { name: t("common:save"), exact: true })
+    .click()
+  await expect(dialog).toBeHidden()
+  return pin
+}
+
 const question = (overrides: Partial<Question>): Question => ({
   type: "single",
   question: "Capital of France?",
@@ -22,26 +40,41 @@ test("restores the manager screen after a reload", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
   await expect(
-    manager.getByRole("button", { name: t("common:skip") }),
+    manager.getByRole("button", { name: t("common:skip"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.skipQuestion"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 
   await manager.reload()
 
   await expect(manager.getByText("1 / 2")).toBeVisible()
   await expect(
-    manager.getByRole("button", { name: t("common:skip") }),
+    manager.getByRole("button", { name: t("common:skip"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.skipQuestion"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 
   await answer(player, "Paris")
   await expect(
-    manager.getByRole("button", { name: t("common:next") }),
+    manager.getByRole("button", { name: t("common:next"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.nextScreen"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 })
 
@@ -53,17 +86,22 @@ test("marks a player who did not answer in time as wrong", async ({
 
   seedQuizz(subject, { questions: [question({ time: 5 })] })
 
-  const pin = await createGame(manager, subject)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
   await expect(manager.getByText("Alice")).toBeVisible()
   await startGame(manager)
-  await expect(player.getByRole("button", { name: /^A Paris$/u })).toBeVisible()
+  await expect(player.getByRole("button", { name: /^1 Paris$/u })).toBeVisible()
 
   await expect(player.getByText(t("game:wrong"))).toBeVisible()
   await expect(
-    manager.getByRole("button", { name: t("common:next") }),
+    manager.getByRole("button", { name: t("common:next"), exact: true }).or(
+      manager.getByRole("button", {
+        name: t("extensions:host.nextScreen"),
+        exact: true,
+      }),
+    ),
   ).toBeVisible()
 })
 
@@ -71,7 +109,7 @@ test("reveals the answers without waiting for a player who left", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
   const alice = await newPage()
   const bob = await newPage()
 
@@ -81,7 +119,7 @@ test("reveals the answers without waiting for a player who left", async ({
   await startGame(manager)
   await expect(alice.getByText(BASIC_QUIZZ)).toBeVisible()
 
-  await bob.goto("/")
+  await bob.goto("/game")
   await expect(bob.getByText(t("game:reconnectTitle"))).toBeVisible()
 
   await answer(alice, "Paris")
@@ -109,7 +147,7 @@ test("scores an estimation answered with the slider", async ({
     ],
   })
 
-  const pin = await createGame(manager, subject)
+  const pin = await createAutomaticGame(manager, subject)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")
@@ -128,7 +166,7 @@ test("lets the manager skip the auto-advance countdown", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
 
   await manager.getByRole("button", { name: t("game:settings.title") }).click()
 
@@ -172,7 +210,7 @@ test("keeps the waiting room when the manager reloads the page", async ({
   page: manager,
   newPage,
 }) => {
-  const pin = await createGame(manager)
+  const pin = await createAutomaticGame(manager)
   const player = await newPage()
 
   await joinGame(player, pin, "Alice")

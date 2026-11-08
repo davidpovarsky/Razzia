@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import {
   DEFAULT_CUE_URLS,
   SOUNDTRACK_SLOT_IDS,
@@ -1509,14 +1510,14 @@ export const AudioCuePlayer = ({
         data-audio-paused={paused || userPaused ? "true" : "false"}
       />
       {!showControls && audioBlocked && (
-        <button
+        <PlatformButton size="sm"
           type="button"
           className="tz-x-pill absolute bottom-3 left-3 z-50"
           data-testid="player-enable-audio"
           onClick={unlock}
         >
           {controlLabels.enable}
-        </button>
+        </PlatformButton>
       )}
       {selectedSoundtrackSlot === "finale" &&
         audioExtras?.soundtrack?.results?.url ===
@@ -1563,14 +1564,14 @@ export const AudioCuePlayer = ({
             data-testid="host-audio-controls"
           >
             {audioBlocked && (
-              <button
+              <PlatformButton size="sm"
                 type="button"
                 onClick={unlock}
-                className="tz-x-pill"
+                className="bg-white text-black hover:bg-accent font-display"
                 data-testid="host-enable-audio"
               >
                 {controlLabels.enable}
-              </button>
+              </PlatformButton>
             )}
             {configuredSoundtrackSlots.length > 0 &&
               showTrack === undefined && (
@@ -1600,15 +1601,15 @@ export const AudioCuePlayer = ({
                   </select>
                 </label>
               )}
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={() => setMuted((value) => !value)}
-              className="tz-x-pill"
+              className="bg-white text-black hover:bg-accent font-display"
               data-testid="host-toggle-audio-mute"
               aria-pressed={muted}
             >
               {muted ? controlLabels.unmute : controlLabels.mute}
-            </button>
+            </PlatformButton>
             <input
               type="range"
               min={0}
@@ -1620,15 +1621,15 @@ export const AudioCuePlayer = ({
               onChange={(event) => setMasterVolume(Number(event.target.value))}
               className="accent-primary w-24"
             />
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={() => setUserPaused((value) => !value)}
-              className="tz-x-pill"
+              className="bg-white text-black hover:bg-accent font-display"
               data-testid="host-toggle-audio-pause"
               aria-pressed={userPaused}
             >
               {userPaused ? controlLabels.play : controlLabels.pause}
-            </button>
+            </PlatformButton>
           </div>
         ))}
     </>

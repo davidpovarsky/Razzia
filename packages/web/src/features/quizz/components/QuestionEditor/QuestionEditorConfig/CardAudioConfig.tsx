@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import {
   isLegacyShowRollback,
   type CardAudioCueOverride,
@@ -209,7 +210,7 @@ const LegacyCardAudioConfig = ({
             className="bg-muted flex items-center gap-0.5 rounded-lg p-0.5"
           >
             {(["inherit", "mute", "custom"] as const).map((m) => (
-              <button
+              <NativeButton size="sm"
                 key={m}
                 type="button"
                 data-testid={`card-audio-mode-${slotId}-${m}`}
@@ -238,7 +239,7 @@ const LegacyCardAudioConfig = ({
                 {m === "mute" && t("extensions:cardAudio.modeMute", "Mute")}
                 {m === "custom" &&
                   t("extensions:cardAudio.modeCustom", "Custom")}
-              </button>
+              </NativeButton>
             ))}
           </div>
         </div>
@@ -246,7 +247,7 @@ const LegacyCardAudioConfig = ({
         {mode === "custom" && (
           <div className="border-border/40 flex flex-col gap-2 border-t pt-2">
             <div className="flex items-center justify-between gap-1.5">
-              <button
+              <NativeButton size="sm"
                 type="button"
                 data-testid={`card-audio-choose-${slotId}`}
                 onClick={() => setPickingSlot(slotId)}
@@ -258,10 +259,10 @@ const LegacyCardAudioConfig = ({
                     ? url.split("/").pop()
                     : t("extensions:cardAudio.chooseAudio", "Choose Sound")}
                 </span>
-              </button>
+              </NativeButton>
               {url && (
                 <>
-                  <button
+                  <NativeButton size="sm"
                     type="button"
                     data-testid={`card-audio-preview-${slotId}`}
                     onClick={() => togglePreview(slotId, url, volume)}
@@ -277,8 +278,8 @@ const LegacyCardAudioConfig = ({
                     ) : (
                       <Play className="size-3.5" />
                     )}
-                  </button>
-                  <button
+                  </NativeButton>
+                  <NativeButton size="sm"
                     type="button"
                     data-testid={`card-audio-remove-${slotId}`}
                     onClick={() => {
@@ -292,7 +293,7 @@ const LegacyCardAudioConfig = ({
                     className="bg-accent text-muted-foreground flex size-7 shrink-0 items-center justify-center rounded-lg hover:text-red-500"
                   >
                     <Trash2 className="size-3.5" />
-                  </button>
+                  </NativeButton>
                 </>
               )}
             </div>

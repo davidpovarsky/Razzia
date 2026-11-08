@@ -54,7 +54,7 @@ export const HistoryDialog = ({
           {/* Question Index Tabs */}
           <div className="mb-4 flex gap-2 overflow-x-auto border-b pb-2">
             {Array.from({ length: currentQuestionIdx }).map((_, idx) => (
-              <button
+              <Button size="sm" classNameContent="contents"
                 key={idx}
                 type="button"
                 onClick={() => onSelectHistoryIndex(idx)}
@@ -67,7 +67,7 @@ export const HistoryDialog = ({
                 data-testid={`history-tab-${idx}`}
               >
                 {t("extensions:host.questionNum", { num: idx + 1 })}
-              </button>
+              </Button>
             ))}
           </div>
 

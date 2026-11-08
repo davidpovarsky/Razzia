@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import type {
   AnswerVisual,
   ResolvedCardStageAnimations,
@@ -527,7 +528,7 @@ export const PhotoCardGrid = ({
               key={`${animationEpochKey}-vote-${index}`}
               className={clsx("flex min-h-0 flex-col", colClass)}
             >
-              <button
+              <NativeButton size="sm" classNameContent="contents"
                 type="button"
                 disabled={readOnly}
                 onClick={() => !readOnly && onSubmit?.(index)}
@@ -547,7 +548,7 @@ export const PhotoCardGrid = ({
                   cardPreset !== "none" && `tada-entrance-${cardPreset}`,
                   !readOnly &&
                     "cursor-pointer hover:scale-[1.01] focus-visible:ring-4 focus-visible:ring-white active:scale-[0.98]",
-                  readOnly && "cursor-default",
+                  readOnly && "cursor-default disabled:opacity-100",
                   isSelected && "scale-[1.01] shadow-2xl ring-4 ring-white",
                 )}
               >
@@ -647,7 +648,7 @@ export const PhotoCardGrid = ({
                     />
                   </div>
                 )}
-              </button>
+              </NativeButton>
             </div>
           )
         })}

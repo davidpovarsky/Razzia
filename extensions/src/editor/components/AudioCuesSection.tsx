@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type {
   AudioCueSetting,
   CueId,
@@ -252,7 +253,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                 <span className="text-foreground text-sm font-bold">
                   {tr(labelKey, fallback)}
                 </span>
-                <button
+                <PlatformButton size="sm"
                   type="button"
                   onClick={() => handleTestPlay(id)}
                   className={clsx(
@@ -274,7 +275,7 @@ export const AudioCuesSection = ({ extras, onChange, tr }: Props) => {
                       <span>{tr("audio.testPlay", "Play")}</span>
                     </>
                   )}
-                </button>
+                </PlatformButton>
               </div>
 
               <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">

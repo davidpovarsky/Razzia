@@ -13,7 +13,7 @@ if (
   !origin ||
   !password ||
   !receipt ||
-  !/^http:\/\/127\.0\.0\.1:(3288|3289)$/u.test(origin)
+  !/^http:\/\/127\.0\.0\.1:(3288|3289|3290)$/u.test(origin)
 )
   throw new Error("Explicit isolated loopback lab required")
 if (existsSync(receipt))

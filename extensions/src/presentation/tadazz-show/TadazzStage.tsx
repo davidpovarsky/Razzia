@@ -1,3 +1,4 @@
+import { PlatformButton } from "../platform-controls"
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import {
   forwardRef,
@@ -1040,16 +1041,16 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                     .filter(Boolean)
                     .join(" ")
                   return (
-                    <article
+                    <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!canSelect}
                       key={`${q.key}:${i}`}
                       ref={(node) => {
                         cardRefs.current[i] = node
                       }}
-                      className={cls}
+                      className={`p-0 border-0 bg-transparent disabled:opacity-100 ${cls}`}
                       data-index={i}
                       data-testid={`tadazz-card-${i}`}
-                      role={canSelect ? "button" : undefined}
-                      tabIndex={canSelect ? 0 : undefined}
+
+
                       aria-pressed={canSelect ? isSelected : undefined}
                       aria-label={
                         canSelect
@@ -1059,16 +1060,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                       onClick={
                         canSelect ? () => onSelectOption?.(i) : undefined
                       }
-                      onKeyDown={
-                        canSelect
-                          ? (e) => {
-                              if (e.key === "Enter" || e.key === " ") {
-                                e.preventDefault()
-                                onSelectOption?.(i)
-                              }
-                            }
-                          : undefined
-                      }
+
                       data-multi={multiSelect ? "true" : undefined}
                     >
                       <div
@@ -1114,7 +1106,7 @@ export const TadazzStage = forwardRef<TadazzStageHandle, TadazzStageProps>(
                         </div>
                       </div>
                       <div className="tz-winner-tag">{model.winnerTag}</div>
-                    </article>
+                    </PlatformButton>
                   )
                 })}
               </div>

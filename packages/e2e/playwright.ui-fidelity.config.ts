@@ -22,6 +22,15 @@ fs.copyFileSync(
   join(configPath, "media/theme-answer.png"),
 )
 
+for (const [source, destination] of [
+  ["demos/cosmic/v2/opening.webm", "native-preview.webm"],
+  ["demos/cosmic/v2/opening.json", "native-overlay.json"],
+])
+  fs.copyFileSync(
+    join(root, "packages/web/public/tadazz-show", source),
+    join(configPath, "media", destination),
+  )
+
 export default defineConfig({
   testDir: "tests",
   testMatch: ["ui-fidelity.spec.ts"],
@@ -61,6 +70,7 @@ export default defineConfig({
       cwd: join(root, "packages/socket"),
       url: "http://127.0.0.1:3191/api/health",
       reuseExistingServer: false,
+      timeout: 180_000,
       env: {
         CONFIG_PATH: configPath,
         MANAGER_PASSWORD: "e2e-password",
@@ -78,6 +88,7 @@ export default defineConfig({
       cwd: join(root, "packages/web"),
       url: "http://127.0.0.1:3190",
       reuseExistingServer: false,
+      timeout: 180_000,
       env: { CONFIG_PATH: configPath, WEB_PORT: "3190", SOCKET_PORT: "3191" },
     },
   ],

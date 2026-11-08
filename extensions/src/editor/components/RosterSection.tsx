@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import {
   createDefaultRosterExtras,
   exportRosterToCsv,
@@ -270,7 +271,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
             className="hidden"
             data-testid="roster-file-input"
           />
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={() => fileInputRef.current?.click()}
             className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold transition-colors"
@@ -278,9 +279,9 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           >
             <Upload className="size-3.5" />
             {tr("roster.importExcelCsv", "Import Excel / CSV")}
-          </button>
+          </PlatformButton>
 
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={() =>
               triggerDownload(
@@ -294,9 +295,9 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           >
             <FileSpreadsheet className="size-3.5" />
             {tr("roster.downloadXlsxTemplate", "Template (.xlsx)")}
-          </button>
+          </PlatformButton>
 
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={() =>
               triggerDownload(
@@ -310,10 +311,10 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           >
             <Download className="size-3.5" />
             {tr("roster.downloadCsvTemplate", "Template (.csv)")}
-          </button>
+          </PlatformButton>
 
           {participants.length > 0 && (
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={() =>
                 triggerDownload(
@@ -327,7 +328,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
             >
               <Download className="size-3.5" />
               {tr("roster.exportCsv", "Export (.csv)")}
-            </button>
+            </PlatformButton>
           )}
         </div>
       </div>
@@ -389,14 +390,14 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                 </p>
               )}
             </div>
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={() => setImportPreview(null)}
               className="text-neutral-400 hover:text-neutral-700"
               aria-label={tr("roster.cancelImport", "Cancel Import")}
             >
               <X className="size-4" />
-            </button>
+            </PlatformButton>
           </div>
 
           {importPreview.rows.length > 0 && (
@@ -460,16 +461,16 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           )}
 
           <div className="flex items-center justify-end gap-2">
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={() => setImportPreview(null)}
               className="border-border bg-background text-foreground hover:bg-accent rounded-lg border px-3 py-1.5 text-xs font-bold"
               data-testid="roster-import-cancel-btn"
             >
               {tr("roster.cancelImport", "Cancel Import")}
-            </button>
+            </PlatformButton>
             {importPreview.ok && importPreview.validCount > 0 && (
-              <button
+              <PlatformButton size="sm"
                 type="button"
                 onClick={handleApproveImport}
                 className="bg-primary rounded-lg px-4 py-1.5 text-xs font-bold text-white shadow-sm hover:opacity-90"
@@ -479,7 +480,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                   "roster.approveImport",
                   `Approve & Import (${importPreview.validCount})`,
                 ).replace("{{count}}", String(importPreview.validCount))}
-              </button>
+              </PlatformButton>
             )}
           </div>
         </div>
@@ -524,7 +525,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
           </div>
 
           <div className="flex items-end gap-2 sm:col-span-2">
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={handleSaveParticipant}
               className="bg-primary flex w-full items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold text-white shadow-sm transition-opacity hover:opacity-90"
@@ -534,16 +535,16 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
               {editingId
                 ? tr("roster.saveParticipant", "Save")
                 : tr("roster.addParticipant", "Add Participant")}
-            </button>
+            </PlatformButton>
             {editingId && (
-              <button
+              <PlatformButton size="sm"
                 type="button"
                 onClick={handleCancelEdit}
                 className="border-border bg-background text-foreground rounded-lg border px-2.5 py-2 text-xs font-semibold"
                 data-testid="roster-cancel-edit-btn"
               >
                 {tr("roster.cancel", "Cancel")}
-              </button>
+              </PlatformButton>
             )}
           </div>
         </div>
@@ -634,7 +635,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                     </td>
                     <td className="px-3 py-2 text-right">
                       <div className="inline-flex items-center gap-1">
-                        <button
+                        <PlatformButton size="sm"
                           type="button"
                           onClick={() => handleStartEdit(participant)}
                           className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
@@ -645,8 +646,8 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                           data-testid={`roster-edit-${participant.rosterPlayerId}`}
                         >
                           <Edit2 className="size-3.5" />
-                        </button>
-                        <button
+                        </PlatformButton>
+                        <PlatformButton size="sm"
                           type="button"
                           onClick={() =>
                             handleRemoveParticipant(participant.rosterPlayerId)
@@ -656,7 +657,7 @@ export const RosterSection = ({ extras, onChange, tr }: Props) => {
                           data-testid={`roster-remove-${participant.rosterPlayerId}`}
                         >
                           <Trash2 className="size-3.5" />
-                        </button>
+                        </PlatformButton>
                       </div>
                     </td>
                   </tr>

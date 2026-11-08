@@ -49,6 +49,7 @@ const QuizzEditorCard = ({
 
   return (
     <div
+      data-testid={`editor-question-card-${index}`}
       onClick={onClick}
       className={twMerge(
         clsx(

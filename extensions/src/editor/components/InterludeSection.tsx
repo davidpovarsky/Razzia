@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type { CueId } from "@razzia/extensions/core"
 import { Video, Image as ImageIcon } from "lucide-react"
 import {
@@ -99,7 +100,7 @@ export const InterludeSection = ({
                     },
                   ] as const
                 ).map(({ kind, label }) => (
-                  <button
+                  <PlatformButton size="sm"
                     key={kind}
                     type="button"
                     onClick={() => {
@@ -118,7 +119,7 @@ export const InterludeSection = ({
                     data-testid={`interlude-kind-${kind}`}
                   >
                     {label}
-                  </button>
+                  </PlatformButton>
                 ))}
               </div>
             </div>
@@ -170,7 +171,7 @@ export const InterludeSection = ({
                     data-testid="interlude-media-url-input"
                   />
                   {onOpenMediaPicker && (
-                    <button
+                    <PlatformButton size="sm"
                       type="button"
                       onClick={() => {
                         onOpenMediaPicker({
@@ -190,7 +191,7 @@ export const InterludeSection = ({
                         <ImageIcon className="size-3.5" />
                       )}
                       {tr("editor.select", "Select")}
-                    </button>
+                    </PlatformButton>
                   )}
                 </div>
               </div>
@@ -228,7 +229,7 @@ export const InterludeSection = ({
               </label>
               <div className="flex gap-2">
                 {(["auto", "manual"] as const).map((mode) => (
-                  <button
+                  <PlatformButton size="sm"
                     key={mode}
                     type="button"
                     onClick={() => {
@@ -252,7 +253,7 @@ export const InterludeSection = ({
                           "interludes.advanceManual",
                           "Manual Manager Advance",
                         )}
-                  </button>
+                  </PlatformButton>
                 ))}
               </div>
             </div>

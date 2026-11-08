@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
@@ -1357,27 +1358,27 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               />
             ) : (
               <div className="tz-player-bar" data-testid="tadazz-host-bar">
-                <button
+                <NativeButton size="sm"
                   type="button"
-                  className="tz-x-pill"
+                  className="bg-white text-black hover:bg-accent font-display"
                   style={{ fontSize: 14, padding: "6px 14px" }}
                   onClick={onBack}
                 >
                   <LogOut className="inline size-4" /> {t("common:exit")}
-                </button>
+                </NativeButton>
                 {questionStates && (
                   <span>{`${questionStates.current} / ${questionStates.total ?? "?"}`}</span>
                 )}
                 {onNext && hostNextKey && (
-                  <button
+                  <NativeButton size="sm"
                     type="button"
-                    className="tz-pad-submit"
+                    className="font-display"
                     style={{ marginTop: 0, padding: "8px 18px" }}
                     onClick={onNext}
                     data-testid="tadazz-host-next"
                   >
                     <SkipForward className="inline size-4" /> {t(hostNextKey)}
-                  </button>
+                  </NativeButton>
                 )}
               </div>
             ))}
@@ -1511,9 +1512,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             scene.questionType === "multi" &&
             !submitted && (
               <div className="tz-pad">
-                <button
+                <NativeButton size="sm"
                   type="button"
-                  className="tz-pad-submit"
+                  className="font-display"
                   disabled={
                     selected.length === 0 ||
                     isPaused ||
@@ -1523,7 +1524,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                   onClick={() => submit([...selected].sort((a, b) => a - b))}
                 >
                   {t("game:confirm")}
-                </button>
+                </NativeButton>
               </div>
             )}
 
@@ -1621,7 +1622,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                     </div>
                   )}
                 {props.statusName === STATUS.SHOW_ROOM && (
-                  <RoomLockButton className="tz-x-pill" />
+                  <RoomLockButton className="bg-white text-black hover:bg-accent font-display" />
                 )}
                 <Tooltip
                   content={t(
@@ -1629,7 +1630,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                     "Players & Live Connection Status",
                   )}
                 >
-                  <button
+                  <NativeButton size="sm"
                     type="button"
                     onClick={() => setPlayersModalOpen(true)}
                     data-testid="host-bottom-players-btn"
@@ -1649,7 +1650,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                         : String(totalPlayers ?? managerState.players.length)}
                     </span>
                     <PhoneCall className="size-3" />
-                  </button>
+                  </NativeButton>
                 </Tooltip>
                 <GameSettingsModal
                   onOpenRoster={() => setPlayersModalOpen(true)}
@@ -1665,7 +1666,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                       : "common:fullscreen",
                   )}
                 >
-                  <button
+                  <NativeButton size="sm"
                     type="button"
                     onClick={toggleFullscreen}
                     aria-label={t(
@@ -1673,7 +1674,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                         ? "common:exitFullscreen"
                         : "common:fullscreen",
                     )}
-                    className="tz-x-pill flex items-center justify-center"
+                    className="bg-white text-black hover:bg-accent font-display flex items-center justify-center"
                     style={{ padding: "6px 12px" }}
                   >
                     {isFullscreen ? (
@@ -1681,7 +1682,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                     ) : (
                       <Maximize className="size-5" />
                     )}
-                  </button>
+                  </NativeButton>
                 </Tooltip>
               </div>
             )

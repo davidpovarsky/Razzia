@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import { Copy, Trash2 } from "lucide-react"
 import { useTranslation } from "react-i18next"
@@ -16,7 +17,7 @@ export function QuestionCardActions({
   return (
     <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
       {onDuplicate && (
-        <button
+        <NativeButton size="sm"
           type="button"
           onClick={(e) => {
             e.stopPropagation()
@@ -30,20 +31,20 @@ export function QuestionCardActions({
           className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground focus:ring-primary rounded-sm p-1 focus:ring-2 focus:outline-none"
         >
           <Copy className="size-3.5" />
-        </button>
+        </NativeButton>
       )}
 
       {canDelete && (
         <AlertDialog
           trigger={
-            <button
+            <NativeButton size="sm"
               type="button"
               onClick={(e) => e.stopPropagation()}
               aria-label={t("quizz:question.deleteQuestion")}
               className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
             >
               <Trash2 className="size-3.5" />
-            </button>
+            </NativeButton>
           }
           title={t("quizz:question.deleteQuestion")}
           description={t("quizz:question.deleteQuestionConfirm")}

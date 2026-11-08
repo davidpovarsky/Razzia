@@ -1,3 +1,4 @@
+import {PlatformButton} from "./platform-controls"
 import React, { useCallback, useState } from "react"
 import type { CinematicOverlayAnimation } from "../core/cinematic-overlays"
 import {
@@ -18,11 +19,11 @@ export interface CinematicOverlayProps {
   onSelectOverlay?: (id: string) => void
   onDragStartOverlay?: (
     id: string,
-    e: React.PointerEvent<HTMLDivElement>,
+    e: React.PointerEvent<HTMLElement>,
   ) => void
   onOverlayKeyDown?: (
     id: string,
-    e: React.KeyboardEvent<HTMLDivElement>,
+    e: React.KeyboardEvent<HTMLElement>,
   ) => void
   /** Local visual-layer completion callback (NEVER advances scene) */
   onOverlayCompleted?: (id: string) => void
@@ -73,7 +74,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
   const inlineData = inlineLottieMap?.[overlay.assetUrl]
 
   return (
-    <div
+    <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!interactiveEditorMode}
       data-testid={`cinematic-overlay-${overlay.id}`}
       data-overlay-id={overlay.id}
       data-overlay-layer={overlay.layer}
@@ -82,8 +83,6 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
       data-overlay-visible={playback.visible ? "true" : "false"}
       data-overlay-phase={playback.phase}
       aria-hidden={interactiveEditorMode ? undefined : "true"}
-      tabIndex={interactiveEditorMode ? 0 : undefined}
-      role={interactiveEditorMode ? "button" : undefined}
       aria-label={
         interactiveEditorMode
           ? overlay.label || `Overlay ${overlay.order + 1}`
@@ -113,7 +112,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
             }
           : undefined
       }
-      className={
+      className={`p-0 border-0 rounded-none bg-transparent disabled:opacity-100 ${(
         interactiveEditorMode
           ? `transition-shadow select-none ${
               isSelected
@@ -121,7 +120,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
                 : "cursor-pointer hover:ring-1 hover:ring-white/50"
             }`
           : "pointer-events-none select-none"
-      }
+      )}`}
       style={{
         ...stageStyle,
         visibility:
@@ -160,6 +159,6 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
           {Math.round(overlay.position.y * 100)}%
         </span>
       )}
-    </div>
+    </PlatformButton>
   )
 }

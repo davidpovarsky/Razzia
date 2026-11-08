@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type { QuizExtrasV1, TeamDefinition } from "@razzia/extensions/core"
 import { Plus, Trash2 } from "lucide-react"
 import { DEFAULT_TEAM_PALETTE } from "./utils"
@@ -153,7 +154,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                     ).replace("{{num}}", String(idx + 1))}
                   />
                   {teamsList.length > 2 && (
-                    <button
+                    <PlatformButton size="sm"
                       type="button"
                       onClick={() => handleRemoveTeam(team.id)}
                       className="hover:bg-accent rounded-md p-1.5 text-red-500 hover:text-red-700"
@@ -161,14 +162,14 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
                       aria-label={tr("teams.removeTeam", "Remove Team")}
                     >
                       <Trash2 className="size-4" />
-                    </button>
+                    </PlatformButton>
                   )}
                 </div>
               ))}
             </div>
 
             {teamsList.length < 12 && (
-              <button
+              <PlatformButton size="sm"
                 type="button"
                 onClick={handleAddTeam}
                 className="hover:bg-accent border-primary/30 bg-primary/10 text-primary flex items-center justify-center gap-1.5 rounded-lg border py-2 text-xs font-bold shadow-sm transition-all"
@@ -176,7 +177,7 @@ export const TeamsSection = ({ extras, onChange, tr }: Props) => {
               >
                 <Plus className="size-4" />
                 {tr("teams.addTeam", "Add Team")}
-              </button>
+              </PlatformButton>
             )}
           </div>
         )}

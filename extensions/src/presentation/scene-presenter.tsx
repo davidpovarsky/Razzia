@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import type {
   ActiveSceneData,
   SceneConfig,
@@ -1503,7 +1504,7 @@ export const ScenePresenter = ({
                     data-testid="recap-pagination-bar"
                     className="flex shrink-0 items-center justify-center gap-3 pt-1"
                   >
-                    <button
+                    <PlatformButton size="sm"
                       type="button"
                       data-testid="recap-prev-page"
                       onClick={() =>
@@ -1515,14 +1516,14 @@ export const ScenePresenter = ({
                       className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
                     >
                       <ChevronLeft className="size-4" />
-                    </button>
+                    </PlatformButton>
                     <span
                       data-testid="recap-page-indicator"
                       className="text-xs font-bold text-white/80"
                     >
                       Page {clampedRecapPage + 1} of {totalRecapPages}
                     </span>
-                    <button
+                    <PlatformButton size="sm"
                       type="button"
                       data-testid="recap-next-page"
                       onClick={() =>
@@ -1531,7 +1532,7 @@ export const ScenePresenter = ({
                       className="rounded-full bg-white/15 p-1 text-white hover:bg-white/25"
                     >
                       <ChevronRight className="size-4" />
-                    </button>
+                    </PlatformButton>
                   </div>
                 )}
               </div>
@@ -1696,7 +1697,7 @@ export const ScenePresenter = ({
           </p>
 
           {isManager && (
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={handleSkipClick}
               disabled={skipState.hasSkipped}
@@ -1714,7 +1715,7 @@ export const ScenePresenter = ({
               {skipState.hasSkipped
                 ? labels?.skipped ?? "Skipped"
                 : labels?.advanceScene ?? "Advance Scene"}
-            </button>
+            </PlatformButton>
           )}
         </div>
       </div>

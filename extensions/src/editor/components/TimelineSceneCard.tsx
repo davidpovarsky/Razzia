@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type { ComponentType, ReactNode } from "react"
 import {
   BarChart2,
@@ -77,12 +78,12 @@ export const TimelineSceneCard = ({
   t,
 }: TimelineSceneCardProps) => (
   <div
-    onClick={onClick}
     className={[
       "group border-accent bg-background relative flex h-36 cursor-pointer flex-col justify-between gap-1 rounded-lg border-2 px-6 py-2 transition-all",
       isActive ? "border-primary shadow-sm" : "",
     ].join(" ")}
   >
+    <PlatformButton type="button" size="sm" classNameContent="contents" onClick={onClick} aria-label={title ?? t(`extensions:timeline.${kind}`,kind)} className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0">
     <div className="absolute top-2 left-2 flex items-center gap-1.5">
       <span className="bg-accent/40 text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
         {kind}
@@ -100,8 +101,9 @@ export const TimelineSceneCard = ({
       <span>{durationText}</span>
     </div>
 
+    </PlatformButton>
     <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
-      <button
+      <PlatformButton size="sm"
         type="button"
         onClick={(e) => {
           e.stopPropagation()
@@ -111,17 +113,17 @@ export const TimelineSceneCard = ({
         className="text-muted-foreground bg-background hover:bg-accent hover:text-foreground rounded-sm p-1"
       >
         <Copy className="size-3.5" />
-      </button>
+      </PlatformButton>
 
       <DeleteConfirmation
         trigger={
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={(e) => e.stopPropagation()}
             className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"
           >
             <Trash2 className="size-3.5" />
-          </button>
+          </PlatformButton>
         }
         title="Delete Scene Card"
         description="Are you sure you want to delete this scene card from the timeline?"

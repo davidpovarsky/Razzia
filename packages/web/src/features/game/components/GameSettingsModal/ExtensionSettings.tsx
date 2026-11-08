@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import type { GameSettings } from "@razzia/common/types/game"
 import Switch from "@razzia/web/components/Switch"
 import SettingRow from "./SettingRow"
@@ -64,7 +65,7 @@ export function RosterGameSettings({
       />
       {onOpenRoster && (
         <div className="mt-6 border-t border-neutral-200 pt-4 dark:border-neutral-800">
-          <button
+          <NativeButton size="sm"
             type="button"
             onClick={() => {
               onClose()
@@ -75,7 +76,7 @@ export function RosterGameSettings({
           >
             <Users className="size-4" />
             {t("extensions:roster.title", "Participants & Phone Roster")}
-          </button>
+          </NativeButton>
         </div>
       )}
     </>

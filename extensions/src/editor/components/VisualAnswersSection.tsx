@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type { AnswerDisplay } from "@razzia/extensions/core"
 import { Image as ImageIcon, Trash2 } from "lucide-react"
 import {
@@ -130,7 +131,7 @@ export const VisualAnswersSection = ({
                 </span>
 
                 {visual && (
-                  <button
+                  <PlatformButton size="sm"
                     type="button"
                     onClick={() => handleRemoveVisual(answerIndex)}
                     className="hover:bg-accent flex items-center gap-1 rounded-md px-2 py-1 text-xs text-red-600 hover:text-red-700 dark:text-red-400"
@@ -139,7 +140,7 @@ export const VisualAnswersSection = ({
                   >
                     <Trash2 className="size-3.5" />
                     <span>{tr("common:delete", "Remove")}</span>
-                  </button>
+                  </PlatformButton>
                 )}
               </div>
 
@@ -171,7 +172,7 @@ export const VisualAnswersSection = ({
                 </select>
                 <div className="hidden">
                   {(["text", "image", "both"] as const).map((mode) => (
-                    <button
+                    <PlatformButton size="sm"
                       key={mode}
                       type="button"
                       onClick={() =>
@@ -198,7 +199,7 @@ export const VisualAnswersSection = ({
                     />
 
                     {onOpenMediaPicker && (
-                      <button
+                      <PlatformButton size="sm"
                         type="button"
                         onClick={() => {
                           onOpenMediaPicker({
@@ -214,7 +215,7 @@ export const VisualAnswersSection = ({
                       >
                         <ImageIcon className="size-3.5" />
                         {tr("editor.browse", "Browse")}
-                      </button>
+                      </PlatformButton>
                     )}
                   </div>
 

@@ -1,3 +1,4 @@
+import { Fragment, type ReactNode } from "react"
 import clsx from "clsx"
 import type { LucideIcon } from "lucide-react"
 import { ToggleGroup as RadixToggleGroup } from "radix-ui"
@@ -15,6 +16,11 @@ interface Props<T extends string> {
   onChange: (_value: T) => void
   iconOnly?: boolean
   className?: string
+  itemMetadata?: (
+    value: T,
+    index: number,
+  ) => { "data-testid"?: string; "data-group"?: string }
+  beforeItem?: (value: T, index: number) => ReactNode
 }
 
 const ToggleGroup = <T extends string>({
@@ -23,6 +29,8 @@ const ToggleGroup = <T extends string>({
   onChange,
   iconOnly,
   className,
+  itemMetadata,
+  beforeItem,
 }: Props<T>) => (
   <RadixToggleGroup.Root
     type="single"
@@ -39,19 +47,23 @@ const ToggleGroup = <T extends string>({
       ),
     )}
   >
-    {items.map(({ value: itemValue, label, icon: Icon }) => (
-      <RadixToggleGroup.Item
-        key={itemValue}
-        value={itemValue}
-        aria-label={iconOnly ? label : undefined}
-        className={clsx(
-          "text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground focus-visible:outline-primary flex h-full cursor-pointer items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-2",
-          iconOnly ? "px-2.5" : "px-3",
-        )}
-      >
-        {Icon && <Icon className="size-4" />}
-        {!iconOnly && label}
-      </RadixToggleGroup.Item>
+    {items.map(({ value: itemValue, label, icon: Icon }, index) => (
+      <Fragment key={itemValue}>
+        {beforeItem?.(itemValue, index)}
+        <RadixToggleGroup.Item
+          {...itemMetadata?.(itemValue, index)}
+          key={itemValue}
+          value={itemValue}
+          aria-label={iconOnly ? label : undefined}
+          className={clsx(
+            "text-muted-foreground data-[state=on]:bg-background data-[state=on]:text-foreground focus-visible:outline-primary flex h-full cursor-pointer items-center gap-1.5 rounded-md text-sm font-semibold focus-visible:outline-2",
+            iconOnly ? "px-2.5" : "px-3",
+          )}
+        >
+          {Icon && <Icon className="size-4" />}
+          {!iconOnly && label}
+        </RadixToggleGroup.Item>
+      </Fragment>
     ))}
   </RadixToggleGroup.Root>
 )

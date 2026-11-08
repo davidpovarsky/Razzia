@@ -1,3 +1,4 @@
+import { PlatformButton } from "../platform-controls"
 import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
 import type { TadazzV4Data, TadazzV4Answer } from "./types"
@@ -456,7 +457,7 @@ export function Tie({ data }: { data: FullShowInput }) {
               data-chosen={isChosen ? "true" : undefined}
             >
               {data.onResolveTie && !isResolved && (
-                <button
+                <PlatformButton size="sm"
                   type="button"
                   className="full-tie-choose"
                   aria-label={displayTitle}

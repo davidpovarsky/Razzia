@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import type { TeamDefinition } from "@razzia/extensions/core"
 import { useState } from "react"
 import {
@@ -97,7 +98,7 @@ export const TeamLeaderboardPanel = ({
   return (
     <div
       className={clsx(
-        "relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 font-sans",
+        "relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 font-display",
         className,
       )}
       data-testid="team-leaderboard-panel"
@@ -109,7 +110,7 @@ export const TeamLeaderboardPanel = ({
           aria-label={tr("tabs.leaderboard", "Leaderboard")}
           className="mb-6 flex rounded-xl bg-white/20 p-1 backdrop-blur-md"
         >
-          <button
+          <PlatformButton size="sm"
             type="button"
             role="tab"
             aria-selected={viewMode === "individual"}
@@ -123,8 +124,8 @@ export const TeamLeaderboardPanel = ({
             data-testid="toggle-individual-view"
           >
             {tr("leaderboard.toggleIndividual", "Individual")}
-          </button>
-          <button
+          </PlatformButton>
+          <PlatformButton size="sm"
             type="button"
             role="tab"
             aria-selected={viewMode === "teams"}
@@ -138,7 +139,7 @@ export const TeamLeaderboardPanel = ({
             data-testid="toggle-teams-view"
           >
             {tr("leaderboard.toggleTeams", "Teams")}
-          </button>
+          </PlatformButton>
         </div>
       )}
 

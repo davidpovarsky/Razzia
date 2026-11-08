@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
 import type { AnswerDisplay, AnswerVisual } from "@razzia/extensions/core"
 import clsx from "clsx"
@@ -38,13 +39,13 @@ export function AnswerVisualControls({
           className="flex items-center gap-1 rounded-lg bg-black/20 p-0.5"
         >
           {(["text", "image", "both"] as const).map((mode) => (
-            <button
+            <NativeButton size="sm"
               key={mode}
               type="button"
               data-testid={`answer-mode-${i}-${mode}`}
               onClick={() => handleDisplayModeChange(i, mode)}
               className={clsx(
-                "rounded-md px-2 py-0.5 text-[11px] font-semibold transition",
+                "bg-transparent rounded-md px-2 py-0.5 text-[11px] font-semibold transition",
                 displayMode === mode
                   ? "bg-white text-black shadow-xs"
                   : "text-white/80 hover:text-white",
@@ -54,12 +55,12 @@ export function AnswerVisualControls({
               {mode === "image" &&
                 t("extensions:visuals.displayImage", "Image")}
               {mode === "both" && t("extensions:visuals.displayBoth", "Both")}
-            </button>
+            </NativeButton>
           ))}
         </div>
 
         <div className="flex items-center gap-1.5">
-          <button
+          <NativeButton size="sm"
             type="button"
             data-testid={`answer-pick-image-${i}`}
             onClick={() => setPickingAnswerIdx(i)}
@@ -71,9 +72,9 @@ export function AnswerVisualControls({
                 ? t("extensions:editor.browse", "Change")
                 : t("extensions:visuals.chooseMedia", "Image")}
             </span>
-          </button>
+          </NativeButton>
           {hasImage && (
-            <button
+            <NativeButton size="sm"
               type="button"
               data-testid={`answer-remove-image-${i}`}
               onClick={() => handleRemoveAnswerImage(i)}
@@ -81,7 +82,7 @@ export function AnswerVisualControls({
               className="flex size-6 items-center justify-center rounded-lg bg-black/25 text-white transition hover:bg-red-500/80"
             >
               <Trash2 className="size-3.5" />
-            </button>
+            </NativeButton>
           )}
         </div>
       </div>

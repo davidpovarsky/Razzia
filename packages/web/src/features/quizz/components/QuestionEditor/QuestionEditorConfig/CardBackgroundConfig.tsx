@@ -122,7 +122,7 @@ const LegacyCardBackgroundConfig = ({
         className="flex flex-col gap-3"
       >
         <div className="bg-muted flex items-center gap-1.5 rounded-lg p-1">
-          <button
+          <Button size="sm"
             type="button"
             data-testid="card-bg-mode-default"
             onClick={() => updateBackground(undefined)}
@@ -134,8 +134,8 @@ const LegacyCardBackgroundConfig = ({
             )}
           >
             {t("extensions:cardBackground.useGameDefault", "Game Default")}
-          </button>
-          <button
+          </Button>
+          <Button size="sm"
             type="button"
             data-testid="card-bg-mode-custom"
             onClick={() => {
@@ -151,7 +151,7 @@ const LegacyCardBackgroundConfig = ({
             )}
           >
             {t("extensions:cardBackground.useCustom", "Custom Image")}
-          </button>
+          </Button>
         </div>
 
         <div className="flex items-center gap-2">
@@ -168,7 +168,7 @@ const LegacyCardBackgroundConfig = ({
             </span>
           </Button>
           {hasCustom && (
-            <button
+            <Button size="sm"
               type="button"
               data-testid="card-bg-remove-btn"
               onClick={() => updateBackground(undefined)}
@@ -185,7 +185,7 @@ const LegacyCardBackgroundConfig = ({
                   "Remove from Card",
                 )}
               </span>
-            </button>
+            </Button>
           )}
         </div>
 

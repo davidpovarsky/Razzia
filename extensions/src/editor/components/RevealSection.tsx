@@ -1,3 +1,4 @@
+import {PlatformButton} from "../../presentation/platform-controls"
 import type {
   RevealAudience,
   RevealEffect,
@@ -108,7 +109,7 @@ export const RevealSection = ({
               <div className="flex gap-2">
                 {(["automatic", "manual"] as const).map(
                   (mode: RevealTrigger) => (
-                    <button
+                    <PlatformButton size="sm"
                       key={mode}
                       type="button"
                       onClick={() => {
@@ -135,7 +136,7 @@ export const RevealSection = ({
                             "visuals.triggerManual",
                             "Manual (manager button)",
                           )}
-                    </button>
+                    </PlatformButton>
                   ),
                 )}
               </div>
@@ -147,7 +148,7 @@ export const RevealSection = ({
               </label>
               <div className="flex gap-2">
                 {(["manager", "all"] as const).map((aud: RevealAudience) => (
-                  <button
+                  <PlatformButton size="sm"
                     key={aud}
                     type="button"
                     onClick={() => {
@@ -171,7 +172,7 @@ export const RevealSection = ({
                           "Presenter / Manager Only",
                         )
                       : tr("visuals.audienceAll", "All Participants")}
-                  </button>
+                  </PlatformButton>
                 ))}
               </div>
             </div>

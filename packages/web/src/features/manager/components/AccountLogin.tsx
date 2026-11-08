@@ -191,36 +191,36 @@ export default function AccountLogin({ onAuthenticated }: Props) {
         </form>
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           {step !== "login" && (
-            <button
+            <Button size="sm"
               type="button"
-              className="text-primary underline"
+              className="bg-transparent text-primary hover:bg-accent underline"
               onClick={() => changeStep("login")}
             >
               {label("backToLogin", "Back to login")}
-            </button>
+            </Button>
           )}
           {step === "login" && (
             <>
-              <button
+              <Button size="sm"
                 type="button"
-                className="text-primary underline"
+                className="bg-transparent text-primary hover:bg-accent underline"
                 onClick={() => changeStep("register")}
               >
                 {label("register", "Create an account")}
-              </button>
-              <button
+              </Button>
+              <Button size="sm"
                 type="button"
-                className="text-primary underline"
+                className="bg-transparent text-primary hover:bg-accent underline"
                 onClick={() => changeStep("forgot")}
               >
                 {label("forgot", "Forgot password?")}
-              </button>
+              </Button>
             </>
           )}
           {step === "verify" && (
-            <button
+            <Button size="sm"
               type="button"
-              className="text-primary underline"
+              className="bg-transparent text-primary hover:bg-accent underline"
               disabled={busy}
               onClick={async () => {
                 try {
@@ -232,7 +232,7 @@ export default function AccountLogin({ onAuthenticated }: Props) {
               }}
             >
               {label("resend", "Resend code")}
-            </button>
+            </Button>
           )}
         </div>
       </div>

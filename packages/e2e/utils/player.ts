@@ -22,9 +22,10 @@ export const joinGame = async (page: Page, pin: string, username: string) => {
 }
 
 export const answer = async (page: Page, label: string) => {
-  await page
-    .getByRole("button", { name: new RegExp(`^[A-D] ${label}$`, "u") })
-    .click()
+  const choices = Array.from({ length: 5 }, (_, index) =>
+    page.getByRole("button", { name: `${index + 1} ${label}`, exact: true }),
+  )
+  await choices.reduce((matches, choice) => matches.or(choice)).click()
 }
 
 export const confirm = async (page: Page) => {

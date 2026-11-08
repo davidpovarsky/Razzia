@@ -13,6 +13,7 @@
     "./gameplay": "./src/gameplay/index.ts",
     "./media": "./src/media/index.ts",
     "./presentation": "./src/presentation/index.ts",
+    "./presentation/platform-controls": "./src/presentation/platform-controls.tsx",
     "./telephony": "./src/telephony/index.ts",
     "./testkit": "./src/testkit/index.ts",
     "./editor": "./src/editor/index.ts",

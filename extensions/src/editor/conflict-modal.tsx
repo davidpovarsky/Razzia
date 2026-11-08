@@ -1,3 +1,4 @@
+import {PlatformButton} from "../presentation/platform-controls"
 import { AlertTriangle, RefreshCw, Save } from "lucide-react"
 import { useEffect, useRef } from "react"
 
@@ -166,16 +167,16 @@ export const ConflictModal = ({
         </div>
 
         <div className="flex flex-col gap-2.5 sm:flex-row sm:justify-end">
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={onCancel}
             className="rounded-xl border border-neutral-300 px-4 py-2.5 text-sm font-semibold text-neutral-700 hover:bg-neutral-100 focus:ring-2 focus:ring-neutral-400 focus:outline-none dark:border-neutral-700 dark:text-neutral-300 dark:hover:bg-neutral-800"
             data-testid="conflict-cancel-button"
           >
             {tr("conflict.cancel", "Cancel")}
-          </button>
+          </PlatformButton>
 
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={onReload}
             className="bg-primary focus:ring-primary flex items-center justify-center gap-2 rounded-xl px-4 py-2.5 text-sm font-bold text-white shadow-sm hover:brightness-105 focus:ring-2 focus:outline-none active:scale-[0.98]"
@@ -183,9 +184,9 @@ export const ConflictModal = ({
           >
             <RefreshCw className="size-4" />
             {tr("conflict.reload", "Reload Latest Version")}
-          </button>
+          </PlatformButton>
 
-          <button
+          <PlatformButton size="sm"
             type="button"
             onClick={onOverwrite}
             className="flex items-center justify-center gap-2 rounded-xl border border-red-300 bg-red-50 px-4 py-2.5 text-sm font-bold text-red-700 hover:bg-red-100 focus:ring-2 focus:ring-red-400 focus:outline-none dark:border-red-800 dark:bg-red-950/40 dark:text-red-300"
@@ -193,7 +194,7 @@ export const ConflictModal = ({
           >
             <Save className="size-4" />
             {tr("conflict.overwrite", "Force Overwrite")}
-          </button>
+          </PlatformButton>
         </div>
       </div>
     </div>

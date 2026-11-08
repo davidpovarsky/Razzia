@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import {
   exportRosterToCsv,
   formatFullPhoneDisplay,
@@ -356,7 +357,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 className="hidden"
                 data-testid="host-modal-file-input"
               />
-              <button
+              <NativeButton size="sm"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold"
@@ -364,9 +365,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               >
                 <Upload className="size-3.5" />
                 {t("extensions:roster.importExcelCsv", "Import Excel / CSV")}
-              </button>
+              </NativeButton>
 
-              <button
+              <NativeButton size="sm"
                 type="button"
                 onClick={() =>
                   triggerFileDownload(
@@ -383,9 +384,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   "extensions:roster.downloadXlsxTemplate",
                   "Template (.xlsx)",
                 )}
-              </button>
+              </NativeButton>
 
-              <button
+              <NativeButton size="sm"
                 type="button"
                 onClick={() =>
                   triggerFileDownload(
@@ -399,10 +400,10 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               >
                 <Download className="size-3.5" />
                 {t("extensions:roster.downloadCsvTemplate", "Template (.csv)")}
-              </button>
+              </NativeButton>
 
               {snapshot.players.length > 0 && (
-                <button
+                <NativeButton size="sm"
                   type="button"
                   onClick={() =>
                     triggerFileDownload(
@@ -422,7 +423,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 >
                   <Download className="size-3.5" />
                   {t("extensions:roster.exportCsv", "Export (.csv)")}
-                </button>
+                </NativeButton>
               )}
             </div>
           </div>
@@ -510,16 +511,16 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   total)
                 </div>
                 <div className="flex items-center gap-2">
-                  <button
+                  <NativeButton size="sm"
                     type="button"
                     onClick={() => setImportPreview(null)}
                     className="border-border rounded border px-2.5 py-1 text-xs font-semibold"
                     data-testid="host-modal-import-cancel-btn"
                   >
                     {t("extensions:roster.cancelImport", "Cancel Import")}
-                  </button>
+                  </NativeButton>
                   {importPreview.ok && importPreview.validCount > 0 && (
-                    <button
+                    <NativeButton size="sm"
                       type="button"
                       onClick={handleApproveImport}
                       className="bg-primary rounded px-3 py-1 text-xs font-bold text-white"
@@ -529,7 +530,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                         count: importPreview.validCount,
                         defaultValue: `Approve & Import (${importPreview.validCount})`,
                       })}
-                    </button>
+                    </NativeButton>
                   )}
                 </div>
               </div>
@@ -603,7 +604,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               className="border-border bg-background text-foreground min-w-48 flex-1 rounded-lg border px-3 py-1.5 font-mono text-xs"
               data-testid="host-modal-phone-input"
             />
-            <button
+            <NativeButton size="sm"
               type="button"
               disabled={isBusy}
               onClick={handleSaveParticipant}
@@ -614,9 +615,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               {editingId
                 ? t("extensions:roster.saveParticipant", "Save")
                 : t("extensions:roster.addParticipant", "Add Participant")}
-            </button>
+            </NativeButton>
             {editingId && (
-              <button
+              <NativeButton size="sm"
                 type="button"
                 onClick={() => {
                   setEditingId(null)
@@ -626,7 +627,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 className="border-border bg-background rounded-lg border px-2.5 py-1.5 text-xs font-semibold"
               >
                 {t("extensions:roster.cancel", "Cancel")}
-              </button>
+              </NativeButton>
             )}
             {formError && (
               <span
@@ -660,7 +661,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   ["web", t("extensions:roster.filterWeb", "Web")],
                 ] as Array<[FilterTab, string]>
               ).map(([tabId, label]) => (
-                <button
+                <NativeButton size="sm"
                   key={tabId}
                   type="button"
                   onClick={() => setFilterTab(tabId)}
@@ -673,7 +674,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   )}
                 >
                   {label}
-                </button>
+                </NativeButton>
               ))}
             </div>
 
@@ -817,7 +818,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                       </td>
                       <td className="px-3 py-2 text-right">
                         <div className="inline-flex items-center gap-1">
-                          <button
+                          <NativeButton size="sm"
                             type="button"
                             onClick={() => handleEdit(p)}
                             className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
@@ -828,8 +829,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                             data-testid={`host-player-edit-${p.rosterPlayerId}`}
                           >
                             <Edit2 className="size-3.5" />
-                          </button>
-                          <button
+                          </NativeButton>
+                          <NativeButton size="sm"
                             type="button"
                             onClick={() => handleRemove(p.rosterPlayerId)}
                             className="hover:bg-accent rounded p-1 text-red-500 hover:text-red-700"
@@ -837,7 +838,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                             data-testid={`host-player-remove-${p.rosterPlayerId}`}
                           >
                             <Trash2 className="size-3.5" />
-                          </button>
+                          </NativeButton>
                         </div>
                       </td>
                     </tr>

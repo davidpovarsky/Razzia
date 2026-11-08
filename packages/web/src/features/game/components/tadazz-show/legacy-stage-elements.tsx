@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import type { Player } from "@razzia/common/types/game"
 import type { Status } from "@razzia/common/types/game/status"
@@ -209,7 +210,7 @@ export function HostPresenceButton({
         "Players & Live Connection Status",
       )}
     >
-      <button
+      <NativeButton size="sm"
         type="button"
         onClick={onClick}
         data-testid="host-bottom-players-btn"
@@ -241,7 +242,7 @@ export function HostPresenceButton({
           <PhoneCall className="size-3" />
           {t("extensions:roster.playersButton", "Players")}
         </span>
-      </button>
+      </NativeButton>
     </Tooltip>
   )
 }

@@ -1001,7 +1001,7 @@ export const StudioSceneEditor = () => {
             className="border-accent bg-background/90 flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs shadow-xs"
           >
             <div className="flex items-center gap-1.5">
-              <button
+              <Button size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-16-9"
                 onClick={() => setPreviewAspect("16:9")}
@@ -1013,8 +1013,8 @@ export const StudioSceneEditor = () => {
                 )}
               >
                 {t("extensions:studio.scene.overlays.aspect16x9", "16:9 Wide")}
-              </button>
-              <button
+              </Button>
+              <Button size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-4-3"
                 onClick={() => setPreviewAspect("4:3")}
@@ -1029,12 +1029,12 @@ export const StudioSceneEditor = () => {
                   "extensions:studio.scene.overlays.aspect4x3",
                   "4:3 Standard",
                 )}
-              </button>
+              </Button>
             </div>
 
             {isCinemaMode && (
               <div className="flex items-center gap-2">
-                <button
+                <Button size="sm"
                   type="button"
                   data-testid="studio-preview-play-pause"
                   onClick={() => {
@@ -1064,8 +1064,8 @@ export const StudioSceneEditor = () => {
                       </span>
                     </>
                   )}
-                </button>
-                <button
+                </Button>
+                <Button size="sm"
                   type="button"
                   data-testid="studio-preview-replay"
                   onClick={() => {
@@ -1079,7 +1079,7 @@ export const StudioSceneEditor = () => {
                   className="bg-accent text-accent-foreground inline-flex items-center gap-1 rounded-md px-2 py-1 font-semibold transition hover:opacity-85"
                 >
                   <RotateCcw className="size-3.5" />
-                </button>
+                </Button>
                 <span
                   data-testid="studio-preview-time-readout"
                   className="text-muted-foreground font-mono text-[11px] font-bold"
@@ -1583,7 +1583,7 @@ export const StudioSceneEditor = () => {
                     overlayTrackColors[idx % overlayTrackColors.length]
 
                   return (
-                    <div
+                    <Button type="button" size="sm" classNameContent="contents"
                       key={ov.id}
                       data-testid={`studio-preview-track-${ov.id}`}
                       onClick={() => {
@@ -1591,7 +1591,7 @@ export const StudioSceneEditor = () => {
                         setExpandedOverlayId(ov.id)
                         setOverlaysSectionOpen(true)
                       }}
-                      className="bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded"
+                      className={`p-0 border-0 bg-transparent disabled:opacity-100 ${"bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded"}`}
                       title={`${ov.label || `Overlay ${idx + 1}`}: ${(
                         ov.startMs / 1000
                       ).toFixed(1)}s – ${(endMs / 1000).toFixed(1)}s`}
@@ -1613,7 +1613,7 @@ export const StudioSceneEditor = () => {
                           {ov.label || `Overlay ${idx + 1}`}
                         </span>
                       </div>
-                    </div>
+                    </Button>
                   )
                 })}
                 <p className="text-muted-foreground text-[10px]">
@@ -2065,7 +2065,7 @@ export const StudioSceneEditor = () => {
             className="border-accent flex flex-col gap-2.5 rounded-lg border p-2.5"
           >
             <div className="flex items-center justify-between gap-2">
-              <button
+              <Button size="sm"
                 type="button"
                 data-testid="studio-overlay-section-toggle"
                 onClick={() => setOverlaysSectionOpen((prev) => !prev)}
@@ -2086,7 +2086,7 @@ export const StudioSceneEditor = () => {
                 <span className="bg-accent text-muted-foreground rounded-full px-1.5 py-0.5 text-[10px] font-bold">
                   {resolvedOverlays.length}/{MAX_CINEMATIC_OVERLAY_ANIMATIONS}
                 </span>
-              </button>
+              </Button>
 
               <div className="flex items-center gap-1">
                 <Button
@@ -2205,7 +2205,7 @@ export const StudioSceneEditor = () => {
                         data-testid={`studio-lottie-catalog-item-${item.name}`}
                         className="bg-background flex items-center justify-between gap-2 rounded px-2 py-1 text-[11px]"
                       >
-                        <button
+                        <Button size="sm"
                           type="button"
                           data-testid={`studio-lottie-catalog-select-${item.name}`}
                           onClick={() => {
@@ -2233,8 +2233,8 @@ export const StudioSceneEditor = () => {
                                 ({item.referenceCount} in use)
                               </span>
                             )}
-                        </button>
-                        <button
+                        </Button>
+                        <Button size="sm"
                           type="button"
                           data-testid={`studio-lottie-catalog-delete-${item.name}`}
                           onClick={() => handleDeleteLottieFromCatalog(item)}
@@ -2245,7 +2245,7 @@ export const StudioSceneEditor = () => {
                           className="text-muted-foreground hover:text-red-500"
                         >
                           <Trash2 className="size-3.5" />
-                        </button>
+                        </Button>
                       </div>
                     ))}
                   </div>
@@ -2343,7 +2343,7 @@ export const StudioSceneEditor = () => {
                                 "Enabled",
                               )}
                             />
-                            <button
+                            <Button size="sm"
                               type="button"
                               data-testid={`studio-overlay-expand-${ov.id}`}
                               onClick={() => {
@@ -2367,14 +2367,14 @@ export const StudioSceneEditor = () => {
                                     },
                                   )}
                               </span>
-                            </button>
+                            </Button>
                           </div>
 
                           <div className="flex shrink-0 items-center gap-1">
                             <span className="bg-accent text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-semibold">
                               {(ov.startMs / 1000).toFixed(1)}s
                             </span>
-                            <button
+                            <Button size="sm"
                               type="button"
                               data-testid={`studio-overlay-up-${ov.id}`}
                               disabled={idx === 0}
@@ -2386,8 +2386,8 @@ export const StudioSceneEditor = () => {
                               className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1 disabled:opacity-30"
                             >
                               <ArrowUp className="size-3.5" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button size="sm"
                               type="button"
                               data-testid={`studio-overlay-down-${ov.id}`}
                               disabled={idx === resolvedOverlays.length - 1}
@@ -2399,8 +2399,8 @@ export const StudioSceneEditor = () => {
                               className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1 disabled:opacity-30"
                             >
                               <ArrowDown className="size-3.5" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button size="sm"
                               type="button"
                               data-testid={`studio-overlay-duplicate-${ov.id}`}
                               onClick={() => handleDuplicateOverlay(ov.id)}
@@ -2411,8 +2411,8 @@ export const StudioSceneEditor = () => {
                               className="text-muted-foreground hover:bg-accent hover:text-foreground rounded p-1"
                             >
                               <Copy className="size-3.5" />
-                            </button>
-                            <button
+                            </Button>
+                            <Button size="sm"
                               type="button"
                               data-testid={`studio-overlay-remove-${ov.id}`}
                               onClick={() => handleRemoveOverlay(ov.id)}
@@ -2423,7 +2423,7 @@ export const StudioSceneEditor = () => {
                               className="text-muted-foreground rounded p-1 hover:bg-red-500/15 hover:text-red-500"
                             >
                               <Trash2 className="size-3.5" />
-                            </button>
+                            </Button>
                           </div>
                         </div>
 
@@ -2645,7 +2645,7 @@ export const StudioSceneEditor = () => {
 
                             {/* Size Presets & Reset to Center */}
                             <div className="flex flex-wrap items-center gap-1">
-                              <button
+                              <Button size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-sm-${ov.id}`}
                                 onClick={() =>
@@ -2657,8 +2657,8 @@ export const StudioSceneEditor = () => {
                                   "extensions:studio.scene.overlays.sizeSmall",
                                   "Small (20%)",
                                 )}
-                              </button>
-                              <button
+                              </Button>
+                              <Button size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-md-${ov.id}`}
                                 onClick={() =>
@@ -2670,8 +2670,8 @@ export const StudioSceneEditor = () => {
                                   "extensions:studio.scene.overlays.sizeMedium",
                                   "Medium (35%)",
                                 )}
-                              </button>
-                              <button
+                              </Button>
+                              <Button size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-lg-${ov.id}`}
                                 onClick={() =>
@@ -2683,8 +2683,8 @@ export const StudioSceneEditor = () => {
                                   "extensions:studio.scene.overlays.sizeLarge",
                                   "Large (55%)",
                                 )}
-                              </button>
-                              <button
+                              </Button>
+                              <Button size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-reset-center-${ov.id}`}
                                 onClick={() =>
@@ -2699,7 +2699,7 @@ export const StudioSceneEditor = () => {
                                   "extensions:studio.scene.overlays.resetCenter",
                                   "Reset to Center",
                                 )}
-                              </button>
+                              </Button>
                             </div>
 
                             {/* Fit, Opacity, Rotation */}

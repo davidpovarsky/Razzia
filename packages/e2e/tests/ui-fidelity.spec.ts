@@ -9,6 +9,7 @@ import {
   createDefaultQuizExtrasV2,
   computeCanonicalBaseDigest,
   TADAZZ_PRODUCT_LOGO_URL,
+  createDefaultOverlayAnimation,
 } from "../../../extensions/src/core"
 import { join } from "node:path"
 const families = [
@@ -22,7 +23,7 @@ async function room(
   page: Page,
   id: string,
   type = "single",
-  scene = false,
+  scene: boolean | "overlay" = false,
   many = false,
 ) {
   const login = await request.post("/api/auth/manager", {
@@ -79,16 +80,42 @@ async function room(
       durationMs: 5000,
       advance: "manual",
     }
-    extras.timeline.unshift({
-      id: crypto.randomUUID(),
-      kind: "transition",
-      sceneId,
-    })
+    if (scene === "overlay") {
+      extras.scenes[sceneId] = {
+        id: sceneId,
+        kind: "opening",
+        title: "Native overlay controls",
+        durationMs: 10000,
+        advance: "manual",
+        mediaUrl: "/media/native-preview.webm",
+        mediaType: "video",
+        stageLayout: "cinema",
+        endBehavior: "holdFrame",
+        overlayAnimations: [
+          createDefaultOverlayAnimation({
+            id: "native-edit-overlay",
+            label: "Editable overlay",
+            assetUrl: "/media/native-overlay.json",
+            timeBase: "scene",
+            durationMs: 10000,
+            loop: true,
+          }),
+        ],
+      }
+      extras.timeline.unshift({
+        id: crypto.randomUUID(),
+        kind: "opening",
+        sceneId,
+      })
+    } else {
+      extras.timeline.unshift({
+        id: crypto.randomUUID(),
+        kind: "transition",
+        sceneId,
+      })
+    }
   }
-  if (
-    type === "multi" ||
-    (id === "razzia-original" && type === "single" && !scene && !many)
-  )
+  if (type === "multi" || (type === "single" && !scene && !many))
     extras.perQuestion[questionId] = {
       answerVisuals: [0, 1, 2, 3].map((answerIndex) => ({
         answerIndex,
@@ -122,6 +149,9 @@ async function room(
   return { ...game, quizId, token }
 }
 async function noOverflow(page: Page) {
+  await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
+    0,
+  )
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth + 1,
@@ -302,6 +332,9 @@ test("native game keeps timeline scenes and original editor remains outside game
   await page.bringToFront()
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.getByTestId("studio-scene-presenter")).toBeVisible()
+  await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
+    0,
+  )
   await expect(
     page.getByText("Native enhancement scene", { exact: true }),
   ).toBeVisible()
@@ -462,4 +495,91 @@ test("native public lobby reuses the Razzia invitation and QR without management
   } finally {
     await context.close()
   }
+})
+
+test("native overlay and timeline buttons preserve keyboard positioning, pointer drag and saving", async ({
+  page,
+  request,
+}, info) => {
+  const game = await room(request, page, "razzia-original", "single", "overlay")
+  await page.goto(`/manager/quizz/${game.quizId}`)
+  const track = page.getByTestId("studio-preview-track-native-edit-overlay")
+  await expect(track).toHaveJSProperty("tagName", "BUTTON")
+  await track.click()
+  const scrub = page.getByTestId("studio-preview-scrub-slider")
+  await scrub.fill("1000")
+  const overlay = page.getByTestId("cinematic-overlay-native-edit-overlay")
+  await expect(overlay).toBeVisible()
+  await expect(overlay).toHaveJSProperty("tagName", "BUTTON")
+  await expect(overlay).toHaveAttribute("data-control-source", "razzia")
+  await overlay.focus()
+  await overlay.press("ArrowRight")
+  await expect(
+    page.getByTestId("studio-overlay-x-native-edit-overlay"),
+  ).toHaveValue("51")
+  await overlay.press("Shift+ArrowDown")
+  await expect(
+    page.getByTestId("studio-overlay-y-native-edit-overlay"),
+  ).toHaveValue("55")
+  const plane = await page
+    .getByTestId("cinematic-layer-stack-opening")
+    .boundingBox()
+  const box = await overlay.boundingBox()
+  expect(plane).not.toBeNull()
+  expect(box).not.toBeNull()
+  await page.mouse.move(box!.x + box!.width / 2, box!.y + box!.height / 2)
+  await page.mouse.down()
+  await page.mouse.move(
+    plane!.x + plane!.width * 0.65,
+    plane!.y + plane!.height * 0.45,
+    { steps: 5 },
+  )
+  await page.mouse.up()
+  await expect
+    .poll(async () =>
+      Number(
+        await page
+          .getByTestId("studio-overlay-x-native-edit-overlay")
+          .inputValue(),
+      ),
+    )
+    .toBeGreaterThanOrEqual(64)
+  expect(
+    Number(
+      await page
+        .getByTestId("studio-overlay-x-native-edit-overlay")
+        .inputValue(),
+    ),
+  ).toBeLessThanOrEqual(66)
+  const y = Number(
+    await page.getByTestId("studio-overlay-y-native-edit-overlay").inputValue(),
+  )
+  expect(y).toBeGreaterThanOrEqual(44)
+  expect(y).toBeLessThanOrEqual(46)
+  await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
+    0,
+  )
+  await page.screenshot({
+    path: info.outputPath("native-overlay-controls.png"),
+  })
+  await page.getByTestId("editor-save-btn").click()
+  await expect(page).toHaveURL(/\/manager\/config$/)
+  const saved = await request.get(`/api/extensions/quizzes/${game.quizId}`, {
+    headers: { Authorization: `Bearer ${game.token}` },
+  })
+  expect(saved.ok()).toBe(true)
+  const extras = (await saved.json()).extras
+  const scenes = extras.scenes as Record<
+    string,
+    {
+      kind: string
+      overlayAnimations: Array<{ position: { x: number; y: number } }>
+    }
+  >
+  const opening = Object.values(scenes).find(
+    (scene) => scene.kind === "opening",
+  )
+  if (!opening) throw new Error("Saved opening is missing")
+  expect(opening.overlayAnimations[0].position.x).toBeCloseTo(0.65, 1)
+  expect(opening.overlayAnimations[0].position.y).toBeCloseTo(0.45, 1)
 })

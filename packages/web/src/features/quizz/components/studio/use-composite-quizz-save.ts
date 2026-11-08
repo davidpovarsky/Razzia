@@ -1,3 +1,4 @@
+import { useStudioEditor } from "./studio-editor-context"
 import type { QuizzValidated } from "@razzia/common/validators/quizz"
 import { computeCanonicalBaseDigest } from "@razzia/extensions/core"
 import {
@@ -36,6 +37,7 @@ export function useCompositeQuizzSave() {
     unknown,
     QuizzValidated
   >()
+  const { timeline, selectTimelineItem, setActiveTab } = useStudioEditor()
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const { t } = useTranslation()
@@ -164,7 +166,14 @@ export function useCompositeQuizzSave() {
       const index = invalid.questions.findIndex(Boolean)
 
       if (index >= 0) {
-        setCurrentIndex(index)
+        setActiveTab("questions")
+        const item = timeline.find(
+          (entry) =>
+            entry.kind === "question" &&
+            entry.questionId === questionIds[index],
+        )
+        if (item) selectTimelineItem(item.id)
+        else setCurrentIndex(index)
       }
     },
   )

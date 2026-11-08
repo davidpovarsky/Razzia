@@ -1,3 +1,4 @@
+import { PlatformButton } from "./platform-controls"
 import type { Interlude } from "@razzia/extensions/core"
 import { useEffect, useMemo, useRef, useState } from "react"
 import {
@@ -214,7 +215,7 @@ export const InterludePresenter = ({
           </span>
 
           {isManager && (
-            <button
+            <PlatformButton size="sm"
               type="button"
               onClick={handleSkipClick}
               disabled={skipState.hasSkipped}
@@ -225,7 +226,7 @@ export const InterludePresenter = ({
               data-testid="interlude-skip-button"
             >
               {skipState.hasSkipped ? labelSkipped : labelSkipInterlude}
-            </button>
+            </PlatformButton>
           )}
         </div>
       </div>

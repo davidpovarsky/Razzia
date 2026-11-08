@@ -419,7 +419,7 @@ const LegacyQuestionEntranceConfig = ({
               className="bg-muted flex items-center gap-1 rounded-lg p-0.5"
             >
               {(["simultaneous", "sequential"] as const).map((tm) => (
-                <button
+                <Button size="sm"
                   key={tm}
                   type="button"
                   data-testid={`stage-anim-timing-${slotKey}-${tm}`}
@@ -430,7 +430,7 @@ const LegacyQuestionEntranceConfig = ({
                     })
                   }
                   className={clsx(
-                    "flex-1 rounded-md px-1.5 py-1 text-[10px] font-semibold transition",
+                    "bg-transparent flex-1 rounded-md px-1.5 py-1 text-[10px] font-semibold transition",
                     slotCfg.timing === tm
                       ? "bg-background text-foreground shadow-xs"
                       : "text-muted-foreground hover:text-foreground",
@@ -439,7 +439,7 @@ const LegacyQuestionEntranceConfig = ({
                   {tm === "simultaneous"
                     ? t("extensions:stageMotion.simultaneous", "All Together")
                     : t("extensions:stageMotion.sequential", "One by One")}
-                </button>
+                </Button>
               ))}
             </div>
           )}

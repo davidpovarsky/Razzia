@@ -1,3 +1,4 @@
+import {PlatformButton} from "../presentation/platform-controls"
 import {
   answerVisualSchema,
   isSafeMediaUrl,
@@ -90,9 +91,10 @@ export const RichAnswerCard = ({
     : `${label}: ${text}`
 
   return (
-    <button
+    <PlatformButton size="sm" classNameContent="contents"
       type="button"
       className={clsx(
+        "disabled:opacity-100",
         "relative flex rounded-2xl p-4 text-left transition-transform active:scale-[0.99] sm:py-6",
         colorClass,
         disabled && "cursor-not-allowed opacity-80",
@@ -177,6 +179,6 @@ export const RichAnswerCard = ({
           </span>
         )}
       </div>
-    </button>
+    </PlatformButton>
   )
 }

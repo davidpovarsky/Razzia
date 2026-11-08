@@ -1,5 +1,6 @@
+import { PlatformButton } from "./platform-controls"
 import type { TeamDefinition } from "@razzia/extensions/core"
-import { useState, type KeyboardEvent } from "react"
+import { useState } from "react"
 import type { PlayerScoreSnapshot } from "./team-scoring"
 
 export interface LobbyTeamAssignmentProps {
@@ -122,12 +123,6 @@ export const LobbyTeamAssignment = ({
     setSelectedPlayerId(null)
   }
 
-  const handleCardKeyDown = (e: KeyboardEvent, teamId: string) => {
-    if ((e.key === "Enter" || e.key === " ") && selectedPlayerId) {
-      e.preventDefault()
-      handleAssignToTeam(teamId)
-    }
-  }
 
   return (
     <div
@@ -160,8 +155,14 @@ export const LobbyTeamAssignment = ({
           return (
             <div
               key={team.id}
-              role={isTargetable ? "button" : undefined}
-              tabIndex={isTargetable ? 0 : undefined}
+              className={clsx(
+                "relative flex flex-col rounded-xl border border-white/10 bg-white/10 p-4 transition-all",
+                isTargetable &&
+                  "hover:border-primary/60 focus:ring-primary cursor-pointer hover:bg-white/20 focus:ring-2 focus:outline-none",
+              )}
+              data-testid={`lobby-team-card-${team.id}`}
+            >
+              {isTargetable && <PlatformButton type="button" size="sm" className="absolute inset-0 size-full border-0 bg-transparent p-0 hover:bg-white/10" data-testid={`lobby-team-target-${team.id}`} onClick={()=>handleAssignToTeam(team.id)}
               aria-label={
                 isTargetable
                   ? tr(
@@ -171,20 +172,8 @@ export const LobbyTeamAssignment = ({
                     )
                   : undefined
               }
-              onKeyDown={(e) => isTargetable && handleCardKeyDown(e, team.id)}
-              onClick={() => {
-                if (isTargetable) {
-                  handleAssignToTeam(team.id)
-                }
-              }}
-              className={clsx(
-                "flex flex-col rounded-xl border border-white/10 bg-white/10 p-4 transition-all",
-                isTargetable &&
-                  "hover:border-primary/60 focus:ring-primary cursor-pointer hover:bg-white/20 focus:ring-2 focus:outline-none",
-              )}
-              data-testid={`lobby-team-card-${team.id}`}
-            >
-              <div className="flex items-center justify-between">
+              />}
+              <div className="pointer-events-none relative flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span
                     className="size-3.5 rounded-full ring-2 ring-white/30"
@@ -201,12 +190,12 @@ export const LobbyTeamAssignment = ({
                 </span>
               </div>
 
-              <div className="mt-3 flex flex-wrap gap-1.5">
+              <div className="pointer-events-none relative mt-3 flex flex-wrap gap-1.5">
                 {members.map((member) => {
                   const isSelected = selectedPlayerId === member.id
 
                   return (
-                    <button
+                    <PlatformButton size="sm"
                       key={member.id}
                       type="button"
                       disabled={!isManager || isLocked}
@@ -216,7 +205,7 @@ export const LobbyTeamAssignment = ({
                         handlePlayerClick(member.id)
                       }}
                       className={clsx(
-                        "focus:ring-primary rounded-md px-2.5 py-1 text-sm font-semibold text-white transition-all focus:ring-2 focus:outline-none",
+                        "pointer-events-auto disabled:opacity-100 focus:ring-primary rounded-md px-2.5 py-1 text-sm font-semibold text-white transition-all focus:ring-2 focus:outline-none",
                         isSelected
                           ? "bg-primary font-bold text-white ring-2 ring-white"
                           : "bg-black/30 hover:bg-black/50",
@@ -227,7 +216,7 @@ export const LobbyTeamAssignment = ({
                       data-testid={`player-chip-${member.id}`}
                     >
                       {member.username}
-                    </button>
+                    </PlatformButton>
                   )
                 })}
 
@@ -251,7 +240,7 @@ export const LobbyTeamAssignment = ({
               const isSelected = selectedPlayerId === player.id
 
               return (
-                <button
+                <PlatformButton size="sm"
                   key={player.id}
                   type="button"
                   disabled={!isManager || isLocked}
@@ -269,7 +258,7 @@ export const LobbyTeamAssignment = ({
                   data-testid={`unassigned-chip-${player.id}`}
                 >
                   {player.username}
-                </button>
+                </PlatformButton>
               )
             })}
           </div>

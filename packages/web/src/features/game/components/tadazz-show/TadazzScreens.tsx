@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import { EVENTS } from "@razzia/common/constants"
 import { TADAZZ_BACKDROP_URL } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
@@ -152,14 +153,14 @@ export function TadazzLobbyScreen({
                 onClick={() => setQrOpen(false)}
               />
               <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6">
-                <button
+                <NativeButton size="sm"
                   type="button"
                   onClick={() => setQrOpen(false)}
                   aria-label={t("common:close")}
                   className="hover:bg-muted absolute -top-3 -right-3 rounded-full bg-white p-1.5 shadow-md"
                 >
                   <X className="text-foreground size-6" />
-                </button>
+                </NativeButton>
                 <QRCodeSVG
                   className="size-56 md:size-70 lg:size-95"
                   value={`${webUrl}?pin=${inviteCode}`}
@@ -177,11 +178,11 @@ export function TadazzLobbyScreen({
           </div>
           <div className="tz-lobby-players">
             {list.map((player) => (
-              <button
+              <NativeButton size="sm"
                 type="button"
                 key={player.id}
                 className={[
-                  "tz-x-pill",
+                  "bg-white text-black hover:bg-accent font-display",
                   player.connected === false && "is-lost",
                 ]
                   .filter(Boolean)
@@ -190,7 +191,7 @@ export function TadazzLobbyScreen({
                 onClick={() => kick(player.id)}
               >
                 {player.username}
-              </button>
+              </NativeButton>
             ))}
           </div>
         </>
@@ -315,10 +316,10 @@ export function TadazzSummaryScreen({
       <div className="tz-x-sub">{t("game:summary.title")}</div>
       <div className="tz-x-headline">{subject}</div>
       <div style={{ display: "flex", gap: 24 }}>
-        <div className="tz-x-pill">
+        <div className="bg-white text-black hover:bg-accent font-display">
           {totalPlayers} · {t("game:summary.participants")}
         </div>
-        <div className="tz-x-pill">
+        <div className="bg-white text-black hover:bg-accent font-display">
           {totalQuestions} · {t("game:summary.questions")}
         </div>
       </div>
@@ -395,7 +396,7 @@ export function TadazzPlayerFinishedScreen({
           ? t("game:rank", { count: rank, ordinal: true })
           : "—"}
       </div>
-      <div className="tz-x-pill">
+      <div className="bg-white text-black hover:bg-accent font-display">
         {tx("pointsShort", "{{points}} pts", { points })}
       </div>
     </div>
@@ -543,18 +544,18 @@ export function TadazzEstimationResultScreen({
           <div className="tz-x-big">{estimation.target}</div>
           <div style={{ display: "flex", gap: 24 }}>
             {estimation.closestGuess !== undefined && (
-              <div className="tz-x-pill">
+              <div className="bg-white text-black hover:bg-accent font-display">
                 {tx("closestGuess", "Closest: {{v}}", {
                   v: estimation.closestGuess,
                 })}
               </div>
             )}
             {estimation.median !== undefined && (
-              <div className="tz-x-pill">
+              <div className="bg-white text-black hover:bg-accent font-display">
                 {tx("median", "Median: {{v}}", { v: estimation.median })}
               </div>
             )}
-            <div className="tz-x-pill">
+            <div className="bg-white text-black hover:bg-accent font-display">
               {tx("guesses", "{{n}} guesses", { n: estimation.guessesCount })}
             </div>
           </div>

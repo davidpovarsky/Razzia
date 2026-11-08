@@ -36,7 +36,7 @@ export const answerInput = (page: Page, index: number) =>
 
 export const solutionPicker = (page: Page, index: number) =>
   page.getByRole("button", {
-    name: t("quizz:markCorrect", { label: String.fromCharCode(65 + index) }),
+    name: t("quizz:markCorrect", { label: String(index + 1) }),
   })
 
 export const toggleSolution = async (page: Page, index: number) => {
@@ -90,4 +90,12 @@ export const seedQuizz = (
     join(CONFIG_PATH, "quizz", `${id}.json`),
     JSON.stringify({ id, gameMode, subject, questions }),
   )
+}
+
+/** Existing Studio card composition: selection and action visibility are separate. */
+export const questionCard = (page: Page, index: number) =>
+  page.getByTestId(`editor-question-card-${index}`)
+
+export const addQuestionCard = async (page: Page) => {
+  await page.getByTestId("studio-add-card-btn").click()
 }

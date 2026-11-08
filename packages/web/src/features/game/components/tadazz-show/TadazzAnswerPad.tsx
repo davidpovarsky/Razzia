@@ -1,3 +1,6 @@
+import AnswerButton from "../AnswerButton"
+import {ANSWERS_COLORS,ANSWERS_LABELS} from "../../utils/constants"
+import NativeButton from "@razzia/web/components/Button"
 import type { StageQuestion } from "@razzia/extensions/presentation"
 import {
   formatValue,
@@ -45,24 +48,27 @@ export function TadazzAnswerPad({ question, questionType, options, selected, sub
   return (
     <div className="tz-pad" data-testid="tadazz-answer-pad" role="group" aria-label={tx("answerChoices", "Answer choices")}>
       {question.options.map((opt, i) => (
-        <button
+        <AnswerButton
+          label={ANSWERS_LABELS[i]}
+          answerIndex={i}
+          selected={multi ? selected.includes(i) : undefined}
+          visual={opt.image ? {answerIndex:i,url:opt.image,display:"both",alt:opt.label} : undefined}
           key={`${question.key}:${i}`}
           type="button"
-          className={`tz-pad-option${selected.includes(i) ? " is-selected" : ""}`}
+          className={ANSWERS_COLORS[i]}
           disabled={disabled}
           aria-pressed={selected.includes(i)}
-          aria-label={`${String.fromCharCode(65 + i)} ${opt.label}`}
+          aria-label={`${ANSWERS_LABELS[i]} ${opt.label}`}
           data-testid={`tadazz-pad-option-${i}`}
           onClick={() => (multi ? onToggle(i) : onSubmit([i]))}
         >
-          <span className="tz-pad-thumb">{opt.image ? <img src={opt.image} alt="" /> : i + 1}</span>
-          <span>{opt.label}</span>
-        </button>
+          {opt.label}
+        </AnswerButton>
       ))}
       {multi && (
-        <button type="button" className="tz-pad-submit" disabled={disabled || selected.length === 0} onClick={() => onSubmit([...selected].sort((a, b) => a - b))} data-testid="tadazz-pad-submit">
+        <NativeButton size="sm" type="button" className="font-display" disabled={disabled || selected.length === 0} onClick={() => onSubmit([...selected].sort((a, b) => a - b))} data-testid="tadazz-pad-submit">
           {t("game:confirm")}
-        </button>
+        </NativeButton>
       )}
     </div>
   )
@@ -105,9 +111,9 @@ function EstimationPad({ options, disabled, onSubmit }: { options?: unknown; dis
           onChange={(e) => setInput(e.target.value)}
         />
       )}
-      <button type="button" className="tz-pad-submit" disabled={disabled || !valid} onClick={() => onSubmit([isSlider ? value : parsed])}>
+      <NativeButton size="sm" type="button" className="font-display" disabled={disabled || !valid} onClick={() => onSubmit([isSlider ? value : parsed])}>
         {t("game:confirm")}
-      </button>
+      </NativeButton>
     </div>
   )
 }

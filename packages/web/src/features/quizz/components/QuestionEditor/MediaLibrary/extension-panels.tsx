@@ -1,3 +1,4 @@
+import NativeButton from "@razzia/web/components/Button"
 import type { UploadedMedia } from "@razzia/common/types/game"
 import clsx from "clsx"
 import { AlertTriangle, Music, Volume2 } from "lucide-react"
@@ -21,7 +22,7 @@ export function MediaLibraryScopeTabs({
       data-testid="media-library-scope-tabs"
       className="flex flex-wrap items-center gap-1.5"
     >
-      <button
+      <NativeButton size="sm"
         type="button"
         data-testid="media-scope-all"
         onClick={() => setScopeTab("all")}
@@ -35,8 +36,8 @@ export function MediaLibraryScopeTabs({
         {t("extensions:mediaLibrary.allUploaded", {
           defaultValue: "All Uploaded",
         })}
-      </button>
-      <button
+      </NativeButton>
+      <NativeButton size="sm"
         type="button"
         data-testid="media-scope-show"
         data-tab="in-show"
@@ -51,9 +52,9 @@ export function MediaLibraryScopeTabs({
         {t("extensions:mediaLibrary.inThisShow", {
           defaultValue: "In This Show",
         })}
-      </button>
+      </NativeButton>
       {showBuiltInTab && (
-        <button
+        <NativeButton size="sm"
           type="button"
           data-testid="media-scope-builtin"
           data-tab="builtin-sounds"
@@ -68,7 +69,7 @@ export function MediaLibraryScopeTabs({
           {t("extensions:mediaLibrary.builtInSounds", {
             defaultValue: "Built-in Sounds",
           })}
-        </button>
+        </NativeButton>
       )}
     </div>
   )
@@ -104,14 +105,14 @@ export function MediaDeleteBanner({
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <button
+        <NativeButton size="sm"
           type="button"
           onClick={() => onCancel()}
           className="bg-muted text-foreground hover:bg-muted/80 rounded-md px-2.5 py-1 font-semibold"
         >
           {t("common:cancel", { defaultValue: "Cancel" })}
-        </button>
-        <button
+        </NativeButton>
+        <NativeButton size="sm"
           type="button"
           data-testid="media-confirm-force-delete"
           onClick={handleConfirmForceDelete}
@@ -120,7 +121,7 @@ export function MediaDeleteBanner({
           {t("extensions:mediaLibrary.detachAndDelete", {
             defaultValue: "Detach & Delete",
           })}
-        </button>
+        </NativeButton>
       </div>
     </div>
   )
@@ -148,7 +149,7 @@ export function BuiltinSoundList({
           className="border-accent bg-muted/40 flex items-center justify-between gap-2 rounded-xl border p-3"
         >
           <div className="flex min-w-0 items-center gap-2.5">
-            <button
+            <NativeButton size="sm"
               type="button"
               data-testid={`builtin-sound-preview-${sound.name}`}
               onClick={() => toggleBuiltinPreview(sound.url)}
@@ -160,7 +161,7 @@ export function BuiltinSoundList({
               ) : (
                 <Music className="size-4" />
               )}
-            </button>
+            </NativeButton>
             <div className="min-w-0">
               <p className="text-foreground truncate text-sm font-semibold">
                 {sound.label}
@@ -170,14 +171,14 @@ export function BuiltinSoundList({
               </p>
             </div>
           </div>
-          <button
+          <NativeButton size="sm"
             type="button"
             data-testid={`builtin-sound-select-${sound.name}`}
             onClick={handleSelect(sound)}
             className="bg-primary shrink-0 rounded-lg px-3 py-1.5 text-xs font-semibold text-white hover:brightness-105"
           >
             {t("quizz:media.use")}
-          </button>
+          </NativeButton>
         </div>
       ))}
     </div>
