@@ -1,0 +1,30 @@
+{
+  "localDate": "2026-11-09",
+  "checkedAt": "2026-11-08T22:43:32.487Z",
+  "source": "ef35617456a44ff88460a383e7a294a73300ddbd",
+  "environment": "sandbox",
+  "ownerApprovedDeployment": true,
+  "origin": "https://billing-sandbox.132.145.25.168.sslip.io",
+  "focusedTests": {
+    "total": 32,
+    "passed": 32,
+    "failed": 0
+  },
+  "actualProviderPricesVerified": 8,
+  "actualPaddleJsCheckouts": {
+    "single": "GBP",
+    "monthly": "USD",
+    "completed": 2,
+    "testCardOnly": true
+  },
+  "signedWebhooksFulfilled": true,
+  "portalVerified": true,
+  "crossTenantIsolationVerified": true,
+  "canonicalReconciliationVerified": true,
+  "noDuplicateGrants": true,
+  "restartPersistenceVerified": true,
+  "productionContainerUnchanged": true,
+  "productionHealth": 200,
+  "commercialPricingChosen": false,
+  "livePaymentsEnabled": false
+}

@@ -1,0 +1,30 @@
+{
+  "checkedAt": "2026-11-08T22:37:11.252Z",
+  "origin": "https://billing-sandbox.132.145.25.168.sslip.io",
+  "tests": [
+    {
+      "path": "/api/health",
+      "status": 200
+    },
+    {
+      "path": "/api/billing/config",
+      "status": 200
+    },
+    {
+      "path": "/manager/checkout",
+      "status": 200
+    },
+    {
+      "account": 0,
+      "configured": true,
+      "plans": 2,
+      "grants": 0
+    },
+    {
+      "account": 1,
+      "configured": true,
+      "plans": 2,
+      "grants": 0
+    }
+  ]
+}

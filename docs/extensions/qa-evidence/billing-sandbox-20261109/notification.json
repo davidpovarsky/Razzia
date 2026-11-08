@@ -1,0 +1,20 @@
+{
+  "id": "ntfset_01m6ympt64hnz915gqpwzv8879",
+  "destination": "https://billing-sandbox.132.145.25.168.sslip.io/api/billing/webhooks/paddle",
+  "active": true,
+  "traffic_source": "all",
+  "include_sensitive_fields": false,
+  "events": [
+    "transaction.completed",
+    "subscription.activated",
+    "subscription.canceled",
+    "subscription.created",
+    "subscription.past_due",
+    "subscription.paused",
+    "subscription.resumed",
+    "subscription.trialing",
+    "subscription.updated",
+    "adjustment.created",
+    "adjustment.updated"
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "source": "ef35617456a44ff88460a383e7a294a73300ddbd",
+  "image": "sha256:b1f53680debfb07c0ead707a23bdd11ab470ae802e962c4e560af74a206c0645",
+  "container": "tadazz-billing-sandbox",
+  "port": "127.0.0.1:3290",
+  "config": "/var/lib/tadazz-billing-sandbox-20261109/config",
+  "health": "passed",
+  "unsignedWebhook": 401,
+  "productionContainerUnchanged": true,
+  "mainContainerId": "8227d0c96ba1cda10d4f003a51bb6465e495e64afa2f24443d82c0cd7dd5d0ec",
+  "mainStartedAt": "2026-11-08T17:29:44.514365819Z"
+}

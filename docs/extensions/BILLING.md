@@ -23,8 +23,17 @@ Paddle API reconciliation is required for fulfillment.
 
 ## Configure a Paddle sandbox
 
-The owner has not created an account or chosen prices. All automated payment
-fixtures are synthetic; they do not establish a real Paddle sandbox connection.
+The owner's Tadazz Sandbox account is connected and an isolated server was
+deployed with explicit authorization on 9 November 2026. Two real sandbox
+checkouts (single GBP and monthly USD), signed provider webhooks, entitlements,
+portal access, tenant isolation, reconciliation and restart persistence passed.
+See [sandbox deployment and evidence](BILLING_SANDBOX_20261109.md).
+
+The owner approved temporary test prices of 10 units in each of ILS, GBP, USD
+and EUR, without a trial. Commercial prices and allowances remain undecided.
+Existing automated fixtures are still synthetic; the new sandbox evidence is
+recorded separately from those fixtures. The following steps describe setup for
+another environment, not changes to the active production service.
 
 1. Create a sandbox account at <https://sandbox-vendors.paddle.com/>.
 2. Create one-time and/or monthly products and prices. For a game-only upgrade,
