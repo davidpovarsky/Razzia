@@ -668,6 +668,7 @@
     "sceneSubtitleTooLong": "Alt başlık ({{current}}/{{max}} krk.) önerilen uzunluğu aşıyor."
   },
   "tadazzShow": {
+    "participation": {"connected": "BAĞLI: {{count}}", "answered": "YANITLAYAN: {{answered}} / {{connected}}"},
     "questionReady": "SORU HAZIR",
     "votingOpen": "OYLAMA AÇIK",
     "votesLocked": "OYLAR KİLİTLENDİ · AÇIKLAMAYI BEKLEYİN",

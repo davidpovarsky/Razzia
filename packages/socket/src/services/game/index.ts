@@ -441,6 +441,13 @@ class Game {
           return ok
         },
         getAnswersCount: () => this.round.getAnswerCount(),
+        getParticipation: () => {
+          const connected = this.players.filter((player) => player.connected)
+          return {
+            connected: connected.length,
+            answered: connected.filter((player) => this.round.hasPlayerAnswered(player.id)).length,
+          }
+        },
         skipQuestion: (reason) => this.round.skipQuestion(reason),
         replayFromCheckpoint: (qIdx) => {
           // Restarting the live question keeps participants who joined after its

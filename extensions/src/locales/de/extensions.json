@@ -668,6 +668,7 @@
     "sceneSubtitleTooLong": "Untertitel ({{current}}/{{max}} Zeichen) überschreitet die empfohlene Länge."
   },
   "tadazzShow": {
+    "participation": {"connected": "VERBUNDEN: {{count}}", "answered": "GEANTWORTET: {{answered}} / {{connected}}"},
     "questionReady": "FRAGE BEREIT",
     "votingOpen": "ABSTIMMUNG OFFEN",
     "votesLocked": "STIMMEN GESPERRT · AUFLÖSUNG FOLGT",

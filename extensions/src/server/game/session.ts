@@ -59,6 +59,7 @@ export interface ExtensionSessionDelegate {
   }
   isAcceptingAnswers?: () => boolean
   getAnswersCount?: () => number
+  getParticipation?: () => { connected: number; answered: number }
   pauseGame?: () => boolean
   resumeGame?: () => boolean
   getPauseSnapshot?: () => {
@@ -313,6 +314,10 @@ export class ExtensionGameSession {
         : undefined
 
     const extrasPayload: Record<string, unknown> = {}
+    // Public aggregate only; host roster identities/contacts remain private.
+    if (this.delegate?.getParticipation) {
+      extrasPayload.participation = this.delegate.getParticipation()
+    }
 
     // Public directory contains names and table assignments, never phone data.
     // No connected players are required to render the names.

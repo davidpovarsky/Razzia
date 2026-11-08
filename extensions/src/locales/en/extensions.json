@@ -668,6 +668,7 @@
     "sceneSubtitleTooLong": "Scene subtitle ({{current}}/{{max}} chars) exceeds recommended stage length."
   },
   "tadazzShow": {
+    "participation": {"connected": "CONNECTED: {{count}}", "answered": "ANSWERED: {{answered}} / {{connected}}"},
     "questionReady": "QUESTION READY",
     "votingOpen": "VOTING OPEN",
     "votesLocked": "VOTES LOCKED · AWAIT REVEAL",

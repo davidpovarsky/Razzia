@@ -1,0 +1,50 @@
+{
+  "passed": true,
+  "report": [
+    {
+      "question": 1,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    },
+    {
+      "question": 2,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    },
+    {
+      "question": 3,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    },
+    {
+      "question": 4,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    },
+    {
+      "question": 5,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    },
+    {
+      "question": 6,
+      "circularClockBoth": true,
+      "connected": 2,
+      "answered": 1
+    }
+  ],
+  "previousNextCycles": 4,
+  "publicCountsBothScreens": true,
+  "duplicateVoteStable": true,
+  "disconnectReconnect": true,
+  "storyReadingRecapMusicBeyondIdent": true,
+  "mixerUnchanged": true,
+  "locales": 8,
+  "narrowViewport": true,
+  "pageErrors": []
+}
