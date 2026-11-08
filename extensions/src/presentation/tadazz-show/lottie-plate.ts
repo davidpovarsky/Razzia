@@ -12,6 +12,20 @@ export interface StrippedLottie {
 
 type Json = Record<string, unknown>
 
+/** Remove the identified export badge from the owner's 640×360 opening. */
+export function stripOpeningExportWatermark(source: Json): Json {
+  const meta = source.meta as Json | undefined
+  const layers = source.layers as Json[] | undefined
+  if (source.w !== 640 || source.h !== 360 || meta?.g !== "https://jitter.video" || !Array.isArray(layers)) return source
+  const badge = layers[0]
+  const parent = layers.find((layer) => layer.ind === badge?.parent)
+  const position = (parent?.ks as Json | undefined)?.p as Json | undefined
+  // This stationary topmost precomposition is the small lower-right export
+  // badge, not one of the animated TADAZZ letters. Other animations are intact.
+  if (badge?.ty !== 0 || badge.refId !== "13" || parent?.ty !== 3 || position?.a !== 0 || JSON.stringify(position.k) !== "[542,324]") return source
+  return { ...source, layers: layers.slice(1) }
+}
+
 const num = (v: unknown): number | undefined => (typeof v === "number" ? v : undefined)
 
 function staticValue(prop: unknown): unknown {

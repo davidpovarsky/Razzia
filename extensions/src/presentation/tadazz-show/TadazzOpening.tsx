@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
-import { stripLottieBackgroundPlate } from "./lottie-plate"
+import { stripLottieBackgroundPlate, stripOpeningExportWatermark } from "./lottie-plate"
 import { TADAZZ_BACKDROP_URL } from "./TadazzStage"
 
 export const TADAZZ_OPENING_VIDEO_URL =
@@ -27,7 +27,7 @@ export function loadOpeningLottie(
       .then((response) => (response.ok ? response.json() : null))
       .then((json) =>
         json
-          ? stripLottieBackgroundPlate(json as Record<string, unknown>).data
+          ? stripLottieBackgroundPlate(stripOpeningExportWatermark(json as Record<string, unknown>)).data
           : null,
       )
       .catch(() => null)

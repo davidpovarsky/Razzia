@@ -2705,6 +2705,58 @@
   font-variant-numeric: tabular-nums;
   color: #fcf8ff;
 }
+.tadazz-reference-seating.has-host-guide .logo {
+  top: 60px;
+  height: 180px;
+}
+.tadazz-reference-seating.has-host-guide .dial-info {
+  top: 270px;
+}
+.tadazz-reference-seating.has-host-guide .join-note {
+  top: 970px;
+}
+.tadazz-reference-seating .host-quick-guide {
+  position: absolute;
+  top: 605px;
+  left: 49px;
+  width: 410px;
+  color: #ddd4fb;
+  font-size: 17px;
+  line-height: 1.4;
+}
+.tadazz-reference-seating .host-quick-guide h2 {
+  margin: 0 0 10px;
+  color: #f0e9ff;
+  font-size: 21px;
+  font-weight: 850;
+  letter-spacing: 0.08em;
+}
+.tadazz-reference-seating .host-quick-guide p {
+  margin: 0 0 12px;
+}
+.tadazz-reference-seating .host-quick-guide dl {
+  display: grid;
+  gap: 5px;
+  margin: 0 0 12px;
+}
+.tadazz-reference-seating .host-quick-guide dl > div {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 10px;
+  align-items: baseline;
+}
+.tadazz-reference-seating .host-quick-guide dt,
+.tadazz-reference-seating .host-quick-guide dd {
+  margin: 0;
+}
+.tadazz-reference-seating .host-quick-guide kbd {
+  color: var(--lime);
+  font: inherit;
+  font-weight: 800;
+}
+.tadazz-reference-seating .host-quick-guide .guide-note {
+  font-size: 16px;
+}
 .tadazz-reference-seating .join-note {
   position: absolute;
   top: 846px;
