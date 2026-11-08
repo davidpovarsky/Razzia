@@ -1,3 +1,4 @@
+import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import type { Player } from "@razzia/common/types/game"
 import type { Status } from "@razzia/common/types/game/status"
 import type {
@@ -8,10 +9,7 @@ import type {
   QuizExtrasV1,
   TeamDefinition,
 } from "@razzia/extensions/core"
-import {
-  AudioCuePlayer,
-  TadazzAnimatedBackdrop,
-} from "@razzia/extensions/presentation"
+import { TadazzAnimatedBackdrop } from "@razzia/extensions/presentation"
 import Tooltip from "@razzia/web/components/Tooltip"
 import type { ViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import clsx from "clsx"
@@ -22,6 +20,8 @@ import type { useLegacyPresentation } from "./use-legacy-presentation"
 type Legacy = ReturnType<typeof useLegacyPresentation>
 
 export function LegacyStageBackdrops({
+  contained = false,
+  showBase = true,
   tadazzBackdrop,
   setTadazzImageUnavailable,
   showCustomCardBackground,
@@ -34,26 +34,35 @@ export function LegacyStageBackdrops({
   | "showCustomCardBackground"
   | "effectiveBackground"
   | "setCardBgErrorUrl"
->) {
+> & { contained?: boolean; showBase?: boolean }) {
   return (
     <>
       {" "}
-      {(tadazzBackdrop.source === "tadazz" ||
-        tadazzBackdrop.source === "static") && (
-        <div className="pointer-events-none fixed inset-0 z-[1] overflow-hidden">
-          <TadazzAnimatedBackdrop
-            state={tadazzBackdrop}
-            onImageFailure={() => setTadazzImageUnavailable(true)}
-          />
-        </div>
-      )}
+      {showBase &&
+        (tadazzBackdrop.source === "tadazz" ||
+          tadazzBackdrop.source === "static") && (
+          <div
+            className={clsx(
+              "pointer-events-none inset-0 z-[1] overflow-hidden",
+              contained ? "absolute" : "fixed",
+            )}
+          >
+            <TadazzAnimatedBackdrop
+              state={tadazzBackdrop}
+              onImageFailure={() => setTadazzImageUnavailable(true)}
+            />
+          </div>
+        )}
       {showCustomCardBackground && effectiveBackground.url && (
         <div
           data-testid="stage-card-background"
           data-bg-url={effectiveBackground.url}
           data-bg-fit={effectiveBackground.fit}
           data-bg-position={effectiveBackground.position}
-          className="pointer-events-none fixed inset-0 z-[1] overflow-hidden"
+          className={clsx(
+            "pointer-events-none inset-0 z-[1] overflow-hidden",
+            contained ? "absolute" : "fixed",
+          )}
         >
           <img
             src={effectiveBackground.url}
@@ -149,6 +158,7 @@ export function LegacyStageAudio({
             showControls={Boolean(manager && !isHostPresenting)}
             controlLabels={{
               enable: t("extensions:audio.enableSound", "Enable sound"),
+              volume: t("extensions:audio.volume", "Volume"),
               mute: t("extensions:audio.mute", "Mute"),
               unmute: t("extensions:audio.unmute", "Unmute"),
               pause: t("extensions:audio.pauseAudio", "Pause audio"),

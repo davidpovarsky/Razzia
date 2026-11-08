@@ -42,18 +42,18 @@ export function AnswerStageHud({
       )}
       <div
         className={clsx(
-          "flex items-center gap-2 rounded-xl border border-white/15 bg-black/60 shadow-lg backdrop-blur-md",
+          "flex items-center gap-2 rounded-lg bg-black/40",
           isUltraCompact ? "px-2 py-0.5" : "px-3 py-1 sm:px-4 sm:py-1.5",
         )}
       >
         <div className="flex flex-col items-center leading-none">
-          <span className="text-[9px] font-bold tracking-wider text-white/60 uppercase sm:text-[10px]">
+          <span className="text-sm font-semibold text-white">
             {t("game:hud.answers")}
           </span>
           <span
             data-testid="stage-hud-answer-counter"
             className={clsx(
-              "font-mono font-black text-white tabular-nums",
+              "font-display font-bold text-white tabular-nums",
               isUltraCompact
                 ? "text-lg sm:text-xl"
                 : "text-xl sm:text-2xl md:text-3xl",

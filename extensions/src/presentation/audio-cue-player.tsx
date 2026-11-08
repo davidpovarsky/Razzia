@@ -10,7 +10,19 @@ import {
   type SoundtrackSetting,
   type SoundtrackSlotId,
 } from "@razzia/extensions/core"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  createContext,
+  useContext,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type ReactNode,
+  type PropsWithChildren,
+  type Dispatch,
+  type SetStateAction,
+} from "react"
 import {
   applyThemeAudioDefaults,
   CUE_THEME_EVENTS,
@@ -103,6 +115,46 @@ export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "curtains-closed": TRANSITION,
 }
 
+type AudioPreferences = {
+  muted: boolean
+  setMuted: Dispatch<SetStateAction<boolean>>
+  volume: number
+  setVolume: Dispatch<SetStateAction<number>>
+  paused: boolean
+  setPaused: Dispatch<SetStateAction<boolean>>
+}
+const AudioPreferencesContext = createContext<AudioPreferences | null>(null)
+/** A room-local preference owner, retained while the operator changes layouts. */
+export function AudioPreferencesScope({ children }: PropsWithChildren) {
+  const [muted, setMuted] = useState(false)
+  const [volume, setVolume] = useState(1)
+  const [paused, setPaused] = useState(false)
+  const value = useMemo(
+    () => ({ muted, setMuted, volume, setVolume, paused, setPaused }),
+    [muted, volume, paused],
+  )
+  return (
+    <AudioPreferencesContext.Provider value={value}>
+      {children}
+    </AudioPreferencesContext.Provider>
+  )
+}
+
+export interface AudioControlState {
+  blocked: boolean
+  muted: boolean
+  userPaused: boolean
+  volume: number
+  track: string
+  tracks: readonly { value: string; label: string }[]
+  labels: NonNullable<AudioCuePlayerProps["controlLabels"]>
+  unlock: () => void
+  toggleMute: () => void
+  togglePause: () => void
+  setVolume: (value: number) => void
+  setTrack: (value: string) => void
+}
+
 export interface AudioCuePlayerProps {
   /** Player role: process permitted interaction effects, without a second music engine. */
   eventOnly?: boolean
@@ -137,6 +189,7 @@ export interface AudioCuePlayerProps {
   hasCompetingMedia?: boolean
   paused?: boolean
   autoPlay?: boolean
+  renderControls?: (state: AudioControlState) => ReactNode
   showControls?: boolean
   controlLabels?: {
     enable: string
@@ -213,6 +266,7 @@ export const AudioCuePlayer = ({
   paused = false,
   autoPlay = true,
   showControls = false,
+  renderControls,
   controlLabels = {
     enable: "Enable sound",
     mute: "Mute",
@@ -328,9 +382,16 @@ export const AudioCuePlayer = ({
   const finishedIdentityRef = useRef<string | null>(null)
   const playedSfxRef = useRef(new Set<string>())
   const [audioBlocked, setAudioBlocked] = useState(false)
-  const [muted, setMuted] = useState(false)
-  const [masterVolume, setMasterVolume] = useState(1)
-  const [userPaused, setUserPaused] = useState(false)
+  const sharedPreferences = useContext(AudioPreferencesContext)
+  const [localMuted, setLocalMuted] = useState(false)
+  const [localVolume, setLocalVolume] = useState(1)
+  const [localPaused, setLocalPaused] = useState(false)
+  const muted = sharedPreferences?.muted ?? localMuted
+  const setMuted = sharedPreferences?.setMuted ?? setLocalMuted
+  const masterVolume = sharedPreferences?.volume ?? localVolume
+  const setMasterVolume = sharedPreferences?.setVolume ?? setLocalVolume
+  const userPaused = sharedPreferences?.paused ?? localPaused
+  const setUserPaused = sharedPreferences?.setPaused ?? setLocalPaused
   const playbackControlsRef = useRef({ autoPlay, paused, userPaused })
   playbackControlsRef.current = { autoPlay, paused, userPaused }
   const votingAttemptRef = useRef<string | null>(null)
@@ -1471,79 +1532,105 @@ export const AudioCuePlayer = ({
             · Cleyton Kauffman
           </a>
         )}
-      {showControls && (
-        <div
-          className="z-50 flex items-center gap-2 px-2 pb-2"
-          data-testid="host-audio-controls"
-        >
-          {audioBlocked && (
+      {showControls &&
+        (renderControls ? (
+          renderControls({
+            blocked: audioBlocked,
+            muted,
+            userPaused,
+            volume: masterVolume,
+            track: liveSlotOverride ?? "",
+            tracks:
+              showTrack === undefined
+                ? configuredSoundtrackSlots.map((slot) => ({
+                    value: slot,
+                    label: soundtrackLabels?.[slot] ?? slot,
+                  }))
+                : [],
+            labels: controlLabels,
+            unlock,
+            toggleMute: () => setMuted((value) => !value),
+            togglePause: () => setUserPaused((value) => !value),
+            setVolume: setMasterVolume,
+            setTrack: (value) =>
+              setManualTrack(
+                value ? { slot: value as SoundtrackSlotId, stageKey } : null,
+              ),
+          })
+        ) : (
+          <div
+            className="z-50 flex items-center gap-2 px-2 pb-2"
+            data-testid="host-audio-controls"
+          >
+            {audioBlocked && (
+              <button
+                type="button"
+                onClick={unlock}
+                className="tz-x-pill"
+                data-testid="host-enable-audio"
+              >
+                {controlLabels.enable}
+              </button>
+            )}
+            {configuredSoundtrackSlots.length > 0 &&
+              showTrack === undefined && (
+                <label className="tz-x-pill flex items-center gap-2">
+                  <span>{controlLabels.track}</span>
+                  <select
+                    value={liveSlotOverride ?? ""}
+                    onChange={(event) =>
+                      setManualTrack(
+                        event.target.value
+                          ? {
+                              slot: event.target.value as SoundtrackSlotId,
+                              stageKey,
+                            }
+                          : null,
+                      )
+                    }
+                    className="rounded bg-black/30 px-2 py-1 text-white"
+                    data-testid="host-audio-track-select"
+                  >
+                    <option value="">{controlLabels.followShow}</option>
+                    {configuredSoundtrackSlots.map((slot) => (
+                      <option key={slot} value={slot}>
+                        {soundtrackLabels?.[slot] ?? slot}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
             <button
               type="button"
-              onClick={unlock}
+              onClick={() => setMuted((value) => !value)}
               className="tz-x-pill"
-              data-testid="host-enable-audio"
+              data-testid="host-toggle-audio-mute"
+              aria-pressed={muted}
             >
-              {controlLabels.enable}
+              {muted ? controlLabels.unmute : controlLabels.mute}
             </button>
-          )}
-          {configuredSoundtrackSlots.length > 0 && showTrack === undefined && (
-            <label className="tz-x-pill flex items-center gap-2">
-              <span>{controlLabels.track}</span>
-              <select
-                value={liveSlotOverride ?? ""}
-                onChange={(event) =>
-                  setManualTrack(
-                    event.target.value
-                      ? {
-                          slot: event.target.value as SoundtrackSlotId,
-                          stageKey,
-                        }
-                      : null,
-                  )
-                }
-                className="rounded bg-black/30 px-2 py-1 text-white"
-                data-testid="host-audio-track-select"
-              >
-                <option value="">{controlLabels.followShow}</option>
-                {configuredSoundtrackSlots.map((slot) => (
-                  <option key={slot} value={slot}>
-                    {soundtrackLabels?.[slot] ?? slot}
-                  </option>
-                ))}
-              </select>
-            </label>
-          )}
-          <button
-            type="button"
-            onClick={() => setMuted((value) => !value)}
-            className="tz-x-pill"
-            data-testid="host-toggle-audio-mute"
-            aria-pressed={muted}
-          >
-            {muted ? controlLabels.unmute : controlLabels.mute}
-          </button>
-          <input
-            type="range"
-            min={0}
-            max={1}
-            step={0.01}
-            value={masterVolume}
-            aria-label={controlLabels.volume ?? "Volume"}
-            data-testid="host-audio-volume"
-            onChange={(event) => setMasterVolume(Number(event.target.value))}
-            className="accent-primary w-24"
-          />
-          <button
-            type="button"
-            onClick={() => setUserPaused((value) => !value)}
-            className="tz-x-pill"
-            data-testid="host-toggle-audio-pause"
-            aria-pressed={userPaused}
-          >
-            {userPaused ? controlLabels.play : controlLabels.pause}
-          </button>
-        </div>
-      )}
+            <input
+              type="range"
+              min={0}
+              max={1}
+              step={0.01}
+              value={masterVolume}
+              aria-label={controlLabels.volume ?? "Volume"}
+              data-testid="host-audio-volume"
+              onChange={(event) => setMasterVolume(Number(event.target.value))}
+              className="accent-primary w-24"
+            />
+            <button
+              type="button"
+              onClick={() => setUserPaused((value) => !value)}
+              className="tz-x-pill"
+              data-testid="host-toggle-audio-pause"
+              aria-pressed={userPaused}
+            >
+              {userPaused ? controlLabels.play : controlLabels.pause}
+            </button>
+          </div>
+        ))}
     </>
   )
 }

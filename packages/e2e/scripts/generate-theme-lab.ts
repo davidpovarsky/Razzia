@@ -20,7 +20,7 @@ try {
   ] as const) {
     const directory = resolve(
       root,
-      `packages/web/public/tadazz-show/demos/${slug}/v1`,
+      `packages/web/public/tadazz-show/demos/${slug}/v2`,
     )
     mkdirSync(directory, { recursive: true })
     const page = await browser.newPage()
@@ -85,18 +85,7 @@ try {
         }
         draw(0)
         const background = canvas.toDataURL("image/png").split(",")[1]
-        const logo = document.createElement("canvas")
-        logo.width = 640
-        logo.height = 180
-        const l = logo.getContext("2d")!
-        l.fillStyle = colors[2]
-        l.font = "bold 90px sans-serif"
-        l.textAlign = "center"
-        l.fillText("TADAZZ", 320, 92)
-        l.fillStyle = "#ffffff"
-        l.font = "28px sans-serif"
-        l.fillText(title.toUpperCase(), 320, 146)
-        const logoPng = logo.toDataURL("image/png").split(",")[1]
+        const logoPng = ""
         const stream = canvas.captureStream(25)
         const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
           ? "video/webm;codecs=vp9"
@@ -117,7 +106,6 @@ try {
             const t = (performance.now() - started) / 1000
             draw(t)
             ctx.globalAlpha = Math.min(1, t)
-            ctx.drawImage(logo, 640, 450)
             ctx.globalAlpha = 1
             if (t < 3) requestAnimationFrame(frame)
             else resolve()
@@ -139,10 +127,6 @@ try {
     writeFileSync(
       resolve(directory, "backdrop.png"),
       Buffer.from(generated.background, "base64"),
-    )
-    writeFileSync(
-      resolve(directory, "logo.png"),
-      Buffer.from(generated.logo, "base64"),
     )
     writeFileSync(
       resolve(directory, "opening.webm"),
@@ -215,6 +199,7 @@ try {
       ),
     )
     theme.id = `tadazz-demo-${slug}`
+    theme.version = "2.0.0"
     theme.kind = "declarative"
     theme.nameKey = `demo.${slug}.name`
     theme.descriptionKey = `demo.${slug}.description`
@@ -277,7 +262,6 @@ try {
     const replacements: Record<string, string> = {
       "classic-poster": "backdrop.png",
       "classic-backdrop": "backdrop.png",
-      "classic-logo": "logo.png",
       "classic-opening-video": "opening.webm",
       "classic-opening-lottie": "opening.json",
       "classic-adapter-a27be4883ee9": "backdrop.png",
@@ -286,7 +270,7 @@ try {
       const filename = replacements[asset.id]
       if (!filename) continue
       const bytes = readFileSync(resolve(directory, filename))
-      asset.url = `/tadazz-show/demos/${slug}/v1/${filename}`
+      asset.url = `/tadazz-show/demos/${slug}/v2/${filename}`
       asset.bytes = bytes.length
       asset.sha256 = createHash("sha256").update(bytes).digest("hex")
       asset.rights = "owner-authorized"

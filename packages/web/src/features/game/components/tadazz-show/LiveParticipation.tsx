@@ -18,12 +18,7 @@ export function LiveParticipation({
       aria-live="polite"
       aria-atomic="true"
       data-testid="tadazz-live-participation"
-      className="tz-x-pill pointer-events-none absolute bottom-3 left-3 z-40 flex max-w-[calc(100%-24px)] flex-wrap items-center gap-x-4 gap-y-1"
-      style={{
-        fontSize: "clamp(12px, 1.35vw, 24px)",
-        padding: "8px 16px",
-        fontVariantNumeric: "tabular-nums",
-      }}
+      className="font-display pointer-events-none absolute bottom-3 left-3 z-40 flex max-w-[calc(100%-24px)] flex-wrap items-center gap-x-4 gap-y-1 rounded-lg bg-black/40 px-3 py-1.5 text-sm font-semibold text-white"
     >
       <span
         className="flex items-center gap-2"

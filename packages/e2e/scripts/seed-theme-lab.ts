@@ -1,5 +1,5 @@
 /** Explicit remote-only seeding into a new isolated staging config. Never production. */
-import { readFileSync, writeFileSync, existsSync } from "node:fs"
+import { writeFileSync, existsSync } from "node:fs"
 import { randomUUID } from "node:crypto"
 import {
   computeCanonicalBaseDigest,
@@ -13,7 +13,7 @@ if (
   !origin ||
   !password ||
   !receipt ||
-  !/^http:\/\/127\.0\.0\.1:3288$/u.test(origin)
+  !/^http:\/\/127\.0\.0\.1:(3288|3289)$/u.test(origin)
 )
   throw new Error("Explicit isolated loopback lab required")
 if (existsSync(receipt))
@@ -34,6 +34,7 @@ const headers = {
 const samples = []
 for (const [id, name] of [
   ["tadazz-classic", "Classic"],
+  ["razzia-original", "Razzia Original"],
   ["tadazz-demo-cosmic", "Cosmic Night"],
   ["tadazz-demo-jade", "Jade Studio"],
 ]) {
@@ -103,7 +104,11 @@ for (const [id, name] of [
       questionIds,
       computeCanonicalBaseDigest(quizz),
     )
-    extras.defaults.showTheme = { id, version: "1.0.0", overrides: {} }
+    extras.defaults.showTheme = {
+      id,
+      version: id.startsWith("tadazz-demo-") ? "2.0.0" : "1.0.0",
+      overrides: {},
+    }
     extras.scenes = {}
     extras.timeline = questionIds.map((questionId) => ({
       id: randomUUID(),
@@ -121,6 +126,7 @@ for (const [id, name] of [
     samples.push({
       quizId,
       themeId: id,
+      themeVersion: id.startsWith("tadazz-demo-") ? "2.0.0" : "1.0.0",
       name: quizz.subject,
       mode,
       questions: questions.length,

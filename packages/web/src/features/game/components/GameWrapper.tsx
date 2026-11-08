@@ -1,3 +1,8 @@
+import { NativePublicContent } from "./tadazz-show/NativePublicContent"
+import {
+  NativeGameFrame,
+  NativeGameSurface,
+} from "./tadazz-show/NativeGameLayout"
 import {
   LegacyStageBackdrops,
   LegacyStageAudio,
@@ -14,7 +19,9 @@ import {
 } from "@razzia/common/types/game/status"
 import { EXTENSION_EVENTS } from "@razzia/extensions/core"
 import {
+  AudioPreferencesScope,
   ShowThemeRenderer,
+  useResolvedShowTheme,
   ExtensionStageContent,
   createScenePresenterLabels,
   isTadazzShowActive,
@@ -50,7 +57,13 @@ import type { Status as GameStatus } from "@razzia/web/features/game/utils/creat
 import { useFullscreen } from "@razzia/web/hooks/useFullscreen"
 import clsx from "clsx"
 import { Maximize, Minimize } from "lucide-react"
-import { useEffect, useRef, useState, type PropsWithChildren } from "react"
+import {
+  useEffect,
+  useRef,
+  useState,
+  type PropsWithChildren,
+  type RefObject,
+} from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 
@@ -62,14 +75,15 @@ type Props = PropsWithChildren & {
   viewRole?: ViewRole
 }
 
-const GameWrapper = ({
+const GameWrapperView = ({
   children,
   statusName,
   onNext,
   onBack,
   manager,
   viewRole,
-}: Props) => {
+  presentationRootRef,
+}: Props & { presentationRootRef: RefObject<HTMLDivElement | null> }) => {
   const effectiveRole: ViewRole = manager ? "manager" : (viewRole ?? "player")
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
@@ -87,10 +101,10 @@ const GameWrapper = ({
     total: number
   } | null>(null)
   const { socket, clientId } = useSocket()
-  const presentationRootRef = useRef<HTMLElement | null>(null)
 
   const { extensionState, roomMediaReady } = useGameExtensionConnection(manager)
 
+  const theme = useResolvedShowTheme(extensionState, effectiveRole)
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
@@ -294,7 +308,9 @@ const GameWrapper = ({
             socket.emit(EXTENSION_EVENTS.COMMAND, command)
           }
         >
-          {children}
+          <NativePublicContent role={effectiveRole} theme={theme}>
+            {children}
+          </NativePublicContent>
         </ExtensionStageContent>
       </ViewRoleContext.Provider>
     </ExtensionStateProvider>
@@ -302,13 +318,17 @@ const GameWrapper = ({
 
   // TADAZZ show (UPSTREAM_TOUCHES 2026-11-05 T1): own the whole stage so the
   // legacy background/state components are never mounted, not even for a frame.
-  if (isTadazzShowActive(extensionState)) {
+  // Operator controls and participant interaction stay in native responsive Razzia.
+  // The 16:9 composition belongs to the public display / explicit host projection.
+  const cinematicSurface = effectiveRole === "spectator" || isHostPresenting
+  if (cinematicSurface && isTadazzShowActive(extensionState)) {
     return (
       <ShowThemeRenderer
         envelope={extensionState}
         role={effectiveRole}
         renderers={SHOW_THEME_ADAPTERS}
         viewProps={{
+          nativeContent: renderStageContent(),
           manager: Boolean(manager),
           role: effectiveRole,
           statusName,
@@ -326,31 +346,22 @@ const GameWrapper = ({
           isHostPresenting,
           onPresent: beginHostPresentation,
           onExitPresentation: exitHostPresentation,
-          presentationRootRef: (node) => {
-            presentationRootRef.current = node
-          },
+          presentationRootRef: () => undefined,
         }}
       />
     )
   }
 
   return (
-    <section
-      ref={(node) => {
-        presentationRootRef.current = node
-      }}
-      data-host-presenting={isHostPresenting ? "true" : "false"}
-      className="relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden"
+    <NativeGameFrame
+      onRoot={() => undefined}
+      theme={theme}
+      extensionState={extensionState}
+      statusName={statusName}
+      role={effectiveRole}
+      isHostPresenting={isHostPresenting}
     >
       <GameBackground />
-
-      <LegacyStageBackdrops
-        tadazzBackdrop={tadazzBackdrop}
-        setTadazzImageUnavailable={setTadazzImageUnavailable}
-        showCustomCardBackground={showCustomCardBackground}
-        effectiveBackground={effectiveBackground}
-        setCardBgErrorUrl={setCardBgErrorUrl}
-      />
 
       <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
         {!isConnected && !statusName ? (
@@ -363,20 +374,42 @@ const GameWrapper = ({
         ) : (
           <>
             {!isHostPresenting && renderHeader()}
+            {manager && !isHostPresenting && theme.diagnostics.length > 0 && (
+              <p
+                role="status"
+                data-testid="show-theme-warning"
+                className="relative z-50 rounded-lg bg-white px-3 py-2 text-sm text-foreground"
+              >
+                {t("extensions:themes.invalidChoice")}
+              </p>
+            )}
 
-            <div className="relative flex min-h-0 w-full flex-1 flex-col overflow-hidden">
+            <NativeGameSurface theme={theme}>
+              <LegacyStageBackdrops
+                contained
+                showBase={
+                  theme.requested.id === "tadazz-classic" &&
+                  theme.diagnostics.length > 0
+                }
+                tadazzBackdrop={tadazzBackdrop}
+                setTadazzImageUnavailable={setTadazzImageUnavailable}
+                showCustomCardBackground={showCustomCardBackground}
+                effectiveBackground={effectiveBackground}
+                setCardBgErrorUrl={setCardBgErrorUrl}
+              />
+
               <div
                 key={
                   manager && roomMediaReady
                     ? "media-authorized"
                     : "media-pending"
                 }
-                className="flex h-full min-h-0 w-full flex-1 flex-col"
+                className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col"
               >
                 {renderStageContent()}
               </div>
               {motionScene && <TadazzMotionStage scene={motionScene} />}
-            </div>
+            </NativeGameSurface>
 
             <LegacyStageAudio
               extensionState={extensionState}
@@ -480,7 +513,29 @@ const GameWrapper = ({
           </>
         )}
       </div>
-    </section>
+    </NativeGameFrame>
+  )
+}
+
+const GameWrapper = (props: Props) => {
+  const presentationRootRef = useRef<HTMLDivElement | null>(null)
+  const managerGameId = useManagerStore((state) => state.gameId)
+  const playerGameId = usePlayerStore((state) => state.gameId)
+  const gameId =
+    props.manager || props.viewRole === "spectator"
+      ? managerGameId
+      : playerGameId
+
+  return (
+    <AudioPreferencesScope key={gameId ?? "pending"}>
+      <div
+        ref={presentationRootRef}
+        className="h-dvh w-full max-w-full"
+        data-testid="game-viewport"
+      >
+        <GameWrapperView {...props} presentationRootRef={presentationRootRef} />
+      </div>
+    </AudioPreferencesScope>
   )
 }
 

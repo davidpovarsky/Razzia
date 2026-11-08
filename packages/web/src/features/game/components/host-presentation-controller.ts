@@ -381,9 +381,12 @@ export function useHostPresentation(enabled: boolean) {
   const [isPending, setIsPending] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const targetRef = useRef<HTMLElement | null>(null)
+  const enterAttemptRef = useRef(0)
   const exitPromiseRef = useRef<Promise<void> | null>(null)
 
   const exit = useCallback(() => {
+    enterAttemptRef.current += 1
+    targetRef.current = null
     setIsPending(false)
     setIsPresenting(false)
     setError(null)
@@ -424,13 +427,25 @@ export function useHostPresentation(enabled: boolean) {
         return false
       }
 
+      const attempt = ++enterAttemptRef.current
       setError(null)
       setIsPending(true)
 
       try {
         await exitPromiseRef.current
+        if (attempt !== enterAttemptRef.current) return false
         targetRef.current = target
         await target.requestFullscreen()
+
+        if (attempt !== enterAttemptRef.current) {
+          if (
+            targetRef.current === null &&
+            document.fullscreenElement === target
+          ) {
+            await document.exitFullscreen().catch(() => undefined)
+          }
+          return false
+        }
 
         if (document.fullscreenElement !== target) {
           setIsPending(false)

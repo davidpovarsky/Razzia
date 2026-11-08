@@ -1,0 +1,1304 @@
+{
+  "manifestVersion": 1,
+  "id": "razzia-original",
+  "version": "1.0.0",
+  "nameKey": "themes.razziaOriginalName",
+  "descriptionKey": "themes.razziaOriginalDescription",
+  "category": "show",
+  "kind": "code-backed",
+  "rendererApiVersion": 1,
+  "rendererId": "razzia-native-stage",
+  "posterAssetId": "classic-poster",
+  "provenance": "Native Razzia 4.0.1 React states and QUESTION_REGISTRY, with additive downstream features; no embedded reproduction or altered scoring.",
+  "capabilities": {
+    "playModes": ["quiz", "survey"],
+    "questionTypes": ["single", "multi", "estimation"],
+    "roles": ["manager", "player", "spectator"],
+    "minAnswers": 2,
+    "maxAnswers": 5,
+    "reducedMotion": "same-theme-static",
+    "animationPresets": [
+      "company-opening",
+      "grand-opening",
+      "representative-directory",
+      "phone-instructions",
+      "connection-readiness",
+      "round-one",
+      "story-progress",
+      "tie-break",
+      "story-assembly",
+      "story-live",
+      "round-two",
+      "grand-finale",
+      "top-pick",
+      "round-recap",
+      "interlude",
+      "z-wipe"
+    ]
+  },
+  "tokens": {
+    "background": "#1a140b",
+    "foreground": "#ffffff",
+    "accent": "#ff9900",
+    "fontId": "rubik",
+    "stageAspect": "16:9",
+    "imageSizing": "square-contain",
+    "palette": {
+      "night": "#1a140b",
+      "purple": "#1a140b",
+      "violet": "#ff9900",
+      "pink": "#cc79a7",
+      "blue": "#56b4e9",
+      "royal": "#0072b2",
+      "lime": "#3dbfa0",
+      "gold": "#e69f00",
+      "cream": "#ffffff",
+      "ink": "#1a140b"
+    },
+    "effects": "goldy-canonical-v4",
+    "contrast": "light-on-dark-with-selected-outline"
+  },
+  "slots": {
+    "firstPaint": {
+      "defaultVariantId": "razzia-original.firstPaint.default",
+      "variants": [
+        {
+          "id": "razzia-original.firstPaint.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-shell",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "opening": {
+      "defaultVariantId": "razzia-original.opening.default",
+      "variants": [
+        {
+          "id": "razzia-original.opening.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-opening",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "lobby": {
+      "defaultVariantId": "razzia-original.lobby.default",
+      "variants": [
+        {
+          "id": "razzia-original.lobby.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-lobby",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "question": {
+      "defaultVariantId": "razzia-original.question.default",
+      "variants": [
+        {
+          "id": "razzia-original.question.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-question",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "answerCards": {
+      "defaultVariantId": "razzia-original.answerCards.default",
+      "variants": [
+        {
+          "id": "razzia-original.answerCards.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-cards",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "voting": {
+      "defaultVariantId": "razzia-original.voting.default",
+      "variants": [
+        {
+          "id": "razzia-original.voting.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-voting",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "timer": {
+      "defaultVariantId": "razzia-original.timer.default",
+      "variants": [
+        {
+          "id": "razzia-original.timer.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-timer",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "voteLock": {
+      "defaultVariantId": "razzia-original.voteLock.default",
+      "variants": [
+        {
+          "id": "razzia-original.voteLock.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-lock",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "resultsReveal": {
+      "defaultVariantId": "razzia-original.resultsReveal.default",
+      "variants": [
+        {
+          "id": "razzia-original.resultsReveal.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-results",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "leaderboard": {
+      "defaultVariantId": "razzia-original.leaderboard.default",
+      "variants": [
+        {
+          "id": "razzia-original.leaderboard.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-leaderboard",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "rankUpdate": {
+      "defaultVariantId": "razzia-original.rankUpdate.default",
+      "variants": [
+        {
+          "id": "razzia-original.rankUpdate.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-rank",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "zzTransition": {
+      "defaultVariantId": "razzia-original.zzTransition.default",
+      "variants": [
+        {
+          "id": "razzia-original.zzTransition.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-zz",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "interlude": {
+      "defaultVariantId": "razzia-original.interlude.default",
+      "variants": [
+        {
+          "id": "razzia-original.interlude.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-interlude",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "closing": {
+      "defaultVariantId": "razzia-original.closing.default",
+      "variants": [
+        {
+          "id": "razzia-original.closing.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-closing",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    },
+    "personalResult": {
+      "defaultVariantId": "razzia-original.personalResult.default",
+      "variants": [
+        {
+          "id": "razzia-original.personalResult.default",
+          "labelKey": "extensions:themes.default",
+          "rendererId": "classic-personal-result",
+          "backgroundAssetId": "classic-backdrop",
+          "logoAssetId": "classic-logo"
+        }
+      ],
+      "customMedia": "none"
+    }
+  },
+  "audioEvents": {
+    "opening": {
+      "defaultVariantId": "razzia-original.audio.opening.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.opening.default",
+          "labelKey": "extensions:themes.default",
+          "silent": false,
+          "volume": 0.5,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"],
+          "assetId": "razzia-audio-opening"
+        }
+      ],
+      "customMedia": true
+    },
+    "lobby": {
+      "defaultVariantId": "razzia-original.audio.lobby.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.lobby.default",
+          "labelKey": "extensions:themes.default",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.lobby.accent",
+          "labelKey": "extensions:themes.default",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"],
+          "assetId": "classic-confirm"
+        }
+      ],
+      "customMedia": true
+    },
+    "showQuestion": {
+      "defaultVariantId": "razzia-original.audio.showQuestion.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.showQuestion.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-transition",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.showQuestion.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "answersMusic": {
+      "defaultVariantId": "razzia-original.audio.answersMusic.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.answersMusic.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-voting",
+          "silent": false,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.answersMusic.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.35,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "epoch",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "answerSelected": {
+      "defaultVariantId": "razzia-original.audio.answerSelected.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.answerSelected.default",
+          "labelKey": "extensions:themes.default",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        }
+      ],
+      "customMedia": false
+    },
+    "answerSubmitted": {
+      "defaultVariantId": "razzia-original.audio.answerSubmitted.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.answerSubmitted.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "razzia-audio-answerSubmitted",
+          "silent": false,
+          "volume": 0.5,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        },
+        {
+          "id": "razzia-original.audio.answerSubmitted.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["player"]
+        }
+      ],
+      "customMedia": false
+    },
+    "timerWarning": {
+      "defaultVariantId": "razzia-original.audio.timerWarning.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.timerWarning.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-tick",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.timerWarning.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.timerWarning.urgent",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-urgent",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.timerWarning.final",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-final",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "timerExpired": {
+      "defaultVariantId": "razzia-original.audio.timerExpired.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.timerExpired.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-timer",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 90,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.timerExpired.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 90,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "voteLocked": {
+      "defaultVariantId": "razzia-original.audio.voteLocked.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.voteLocked.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-reveal",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.voteLocked.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "revealResults": {
+      "defaultVariantId": "razzia-original.audio.revealResults.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.revealResults.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "razzia-audio-revealResults",
+          "silent": false,
+          "volume": 0.5,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.accent",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-confirm",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.music",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-results-music",
+          "silent": false,
+          "volume": 0.7,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.fallback",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-results-fallback",
+          "silent": false,
+          "volume": 0.7,
+          "loop": true,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.story-mixer",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-story-mixer",
+          "silent": false,
+          "volume": 0.62,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.revealResults.story-reveal",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-story-reveal",
+          "silent": false,
+          "volume": 0.62,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "leaderboard": {
+      "defaultVariantId": "razzia-original.audio.leaderboard.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.leaderboard.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "razzia-audio-leaderboard",
+          "silent": false,
+          "volume": 0.5,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.leaderboard.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "zzTransition": {
+      "defaultVariantId": "razzia-original.audio.zzTransition.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.zzTransition.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-transition",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.zzTransition.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    },
+    "podium1": {
+      "defaultVariantId": "razzia-original.audio.podium1.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.podium1.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-first",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.podium1.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "podium2": {
+      "defaultVariantId": "razzia-original.audio.podium2.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.podium2.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-second",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.podium2.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "podium3": {
+      "defaultVariantId": "razzia-original.audio.podium3.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.podium3.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "classic-third",
+          "silent": false,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.podium3.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": false
+    },
+    "closing": {
+      "defaultVariantId": "razzia-original.audio.closing.default",
+      "variants": [
+        {
+          "id": "razzia-original.audio.closing.default",
+          "labelKey": "extensions:themes.default",
+          "assetId": "razzia-audio-closing",
+          "silent": false,
+          "volume": 0.5,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        },
+        {
+          "id": "razzia-original.audio.closing.silent",
+          "labelKey": "extensions:themes.silent",
+          "silent": true,
+          "volume": 0.7,
+          "loop": false,
+          "priority": 60,
+          "fadeMs": 0,
+          "restart": "event",
+          "roles": ["manager", "spectator"]
+        }
+      ],
+      "customMedia": true
+    }
+  },
+  "choreographyCues": {
+    "timer-ended": {
+      "event": "timerExpired",
+      "variantId": "razzia-original.audio.timerExpired.default"
+    },
+    "vote-locked": {
+      "event": "voteLocked",
+      "variantId": "razzia-original.audio.voteLocked.default"
+    },
+    "countdown-ended": {
+      "event": "voteLocked",
+      "variantId": "razzia-original.audio.voteLocked.default"
+    },
+    "survey-reveal": {
+      "event": "revealResults",
+      "variantId": "razzia-original.audio.revealResults.default"
+    },
+    "top-pick-reveal": {
+      "event": "revealResults",
+      "variantId": "razzia-original.audio.revealResults.accent"
+    },
+    "timer-tick": {
+      "event": "timerWarning",
+      "variantId": "razzia-original.audio.timerWarning.default"
+    },
+    "timer-urgent": {
+      "event": "timerWarning",
+      "variantId": "razzia-original.audio.timerWarning.urgent"
+    },
+    "timer-final": {
+      "event": "timerWarning",
+      "variantId": "razzia-original.audio.timerWarning.final"
+    },
+    "story-begin": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "wipe-covered": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "company-ident": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "tadazz-welcome": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "opening-portal": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "opening-logo": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "directory-loaded": {
+      "event": "lobby",
+      "variantId": "razzia-original.audio.lobby.accent"
+    },
+    "phone-ready": {
+      "event": "lobby",
+      "variantId": "razzia-original.audio.lobby.accent"
+    },
+    "readiness-grid": {
+      "event": "lobby",
+      "variantId": "razzia-original.audio.lobby.accent"
+    },
+    "round-launch": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "story-progress-update": {
+      "event": "lobby",
+      "variantId": "razzia-original.audio.lobby.accent"
+    },
+    "story-assembled": {
+      "event": "revealResults",
+      "variantId": "razzia-original.audio.revealResults.default"
+    },
+    "story-live-hold": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "finale-impact": {
+      "event": "closing",
+      "variantId": "razzia-original.audio.closing.default"
+    },
+    "curtains-closed": {
+      "event": "zzTransition",
+      "variantId": "razzia-original.audio.zzTransition.default"
+    },
+    "story-mixer-track": {
+      "event": "revealResults",
+      "variantId": "razzia-original.audio.revealResults.story-mixer"
+    },
+    "story-reveal-track": {
+      "event": "revealResults",
+      "variantId": "razzia-original.audio.revealResults.story-reveal"
+    }
+  },
+  "assets": [
+    {
+      "id": "classic-backdrop",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "id": "classic-logo",
+      "url": "/tadazz-show/v4/tadazz-brand-logo.png",
+      "kind": "image",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "critical"
+    },
+    {
+      "id": "classic-poster",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-opening-video",
+      "url": "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
+      "kind": "video",
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "bytes": 5028530,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-opening-lottie",
+      "url": "/tadazz-show/opening/TADAZZ-Opening-4-5s.json",
+      "kind": "lottie",
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "bytes": 1212173,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-transition",
+      "url": "/sounds/tadazz-silky-transition-20261108.mp3",
+      "kind": "audio",
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-reveal",
+      "url": "/sounds/tadazz-reveal-bright-20261108.mp3",
+      "kind": "audio",
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-confirm",
+      "url": "/sounds/tadazz-confirm-20261108.mp3",
+      "kind": "audio",
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-voting",
+      "url": "/sounds/answersMusic.mp3",
+      "kind": "audio",
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-timer",
+      "url": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
+      "kind": "audio",
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-tick",
+      "url": "/sounds/tadazz-timer-tick-20261108.mp3",
+      "kind": "audio",
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-urgent",
+      "url": "/sounds/tadazz-timer-urgent-20261108.mp3",
+      "kind": "audio",
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-final",
+      "url": "/sounds/tadazz-timer-final-20261108.mp3",
+      "kind": "audio",
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-first",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-second",
+      "url": "/sounds/second.mp3",
+      "kind": "audio",
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-third",
+      "url": "/sounds/three.mp3",
+      "kind": "audio",
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-story-mixer",
+      "url": "/tadazz-show/story/672dd07f229b8c36.mp3",
+      "kind": "audio",
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-story-reveal",
+      "url": "/tadazz-show/story/9db4acdc6c4e411c.mp3",
+      "kind": "audio",
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-results-music",
+      "url": "/tadazz-show/music/cutie-patootie.mp3",
+      "kind": "audio",
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-results-fallback",
+      "url": "/tadazz-show/music/epic-main-menu.mp3",
+      "kind": "audio",
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-0f3c7d29e913",
+      "url": "/tadazz-show/motion/logo.webp",
+      "kind": "image",
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-d6997d876b26",
+      "url": "/tadazz-show/second-library/creating-worlds-intro.png",
+      "kind": "image",
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-b47f49feae9c",
+      "url": "/tadazz-show/second-library/curtain-left.png",
+      "kind": "image",
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-cfc4eaa014dd",
+      "url": "/tadazz-show/second-library/curtain-right.png",
+      "kind": "image",
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-7af6b5041525",
+      "url": "/tadazz-show/second-library/teaser-screen-source.jpg",
+      "kind": "image",
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-a5b34d556931",
+      "url": "/tadazz-show/story/7ff12046cb1aac7b.png",
+      "kind": "image",
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-5ebee0b89664",
+      "url": "/tadazz-show/story/84acdb923677d591.webp",
+      "kind": "image",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-86afffeb48f1",
+      "url": "/tadazz-show/story/b789ffb48c74e55d.webp",
+      "kind": "image",
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-8baa3c35f436",
+      "url": "/tadazz-show/story/fef87578b7d57eae.webp",
+      "kind": "image",
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706,
+      "provenance": "Existing source-controlled canonical Classic adapter asset. Preserve repository attribution; re-review rights before redistribution.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "classic-adapter-a27be4883ee9",
+      "url": "/tadazz-show/razzia-original/background.png",
+      "kind": "image",
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "provenance": "Byte-identical upstream Razzia v4.0.1 game background.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "razzia-audio-opening",
+      "url": "/sounds/boump.mp3",
+      "kind": "audio",
+      "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+      "bytes": 5878,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "razzia-audio-answerSubmitted",
+      "url": "/sounds/answersSound.mp3",
+      "kind": "audio",
+      "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+      "bytes": 28212,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "razzia-audio-revealResults",
+      "url": "/sounds/results.mp3",
+      "kind": "audio",
+      "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+      "bytes": 52845,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "razzia-audio-leaderboard",
+      "url": "/sounds/snearRoll.mp3",
+      "kind": "audio",
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    },
+    {
+      "id": "razzia-audio-closing",
+      "url": "/sounds/first.mp3",
+      "kind": "audio",
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "provenance": "Original upstream Razzia phase sound, reused without modification.",
+      "rights": "repository-existing",
+      "preload": "slot"
+    }
+  ],
+  "adapterAssets": {
+    "questionBackdrop": "classic-adapter-a27be4883ee9",
+    "showBackdrop": "classic-poster",
+    "brandLogo": "classic-logo"
+  },
+  "localizations": {
+    "en": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Original Razzia game components and responsive layout, with TADAZZ enhancements.",
+      "extensions:themes.default": "Theme default",
+      "extensions:themes.silent": "Silent"
+    },
+    "fr": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Composants de jeu et mise en page adaptative Razzia, avec les ajouts TADAZZ.",
+      "extensions:themes.default": "Valeur du thème",
+      "extensions:themes.silent": "Silence"
+    },
+    "de": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Originale Razzia-Spielkomponenten und responsives Layout mit TADAZZ-Erweiterungen.",
+      "extensions:themes.default": "Designstandard",
+      "extensions:themes.silent": "Stumm"
+    },
+    "es": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Componentes originales y diseño adaptable de Razzia con mejoras TADAZZ.",
+      "extensions:themes.default": "Valor del tema",
+      "extensions:themes.silent": "Silencio"
+    },
+    "it": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Componenti originali e layout adattivo Razzia con miglioramenti TADAZZ.",
+      "extensions:themes.default": "Valore del tema",
+      "extensions:themes.silent": "Silenzio"
+    },
+    "ja": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Razzia 本来のゲーム部品とレスポンシブ表示に TADAZZ の拡張を追加。",
+      "extensions:themes.default": "テーマの既定値",
+      "extensions:themes.silent": "無音"
+    },
+    "tr": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "TADAZZ geliştirmeleriyle özgün Razzia oyun bileşenleri ve duyarlı düzen.",
+      "extensions:themes.default": "Tema varsayılanı",
+      "extensions:themes.silent": "Sessiz"
+    },
+    "vi": {
+      "themes.razziaOriginalName": "Razzia Original",
+      "themes.razziaOriginalDescription": "Thành phần trò chơi và bố cục thích ứng Razzia gốc cùng cải tiến TADAZZ.",
+      "extensions:themes.default": "Mặc định của chủ đề",
+      "extensions:themes.silent": "Im lặng"
+    }
+  }
+}

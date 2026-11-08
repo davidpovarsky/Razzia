@@ -8,7 +8,10 @@ import {
   themeVersionSchema,
 } from "./selection"
 
-export const TRUSTED_THEME_RENDERERS = ["tadazz-classic-stage"] as const
+export const TRUSTED_THEME_RENDERERS = [
+  "tadazz-classic-stage",
+  "razzia-native-stage",
+] as const
 
 export const TRUSTED_SLOT_RENDERERS = [
   "classic-shell",
@@ -168,6 +171,19 @@ export const showThemeDefinitionSchema = z
     assets: z.array(asset).min(1).max(256),
   })
   .superRefine((theme, ctx) => {
+    if (
+      theme.rendererId === "razzia-native-stage" &&
+      (theme.id !== "razzia-original" ||
+        theme.version !== "1.0.0" ||
+        theme.kind !== "code-backed")
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Native Razzia renderer is a compiled bundled family",
+        path: ["rendererId"],
+      })
+    }
+
     if (new TextEncoder().encode(JSON.stringify(theme)).byteLength > 100_000) {
       ctx.addIssue({
         code: "custom",

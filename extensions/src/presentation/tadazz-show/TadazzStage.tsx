@@ -1,3 +1,4 @@
+import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import {
   forwardRef,
   useCallback,
@@ -39,7 +40,7 @@ import { DEFAULT_TADAZZ_STAGE_LABELS, type TadazzStageLabels } from "./labels"
 import "./tadazz-motion-kit.css"
 import "./tadazz-show-adaptations.css"
 
-export const TADAZZ_LOGO_URL = "/tadazz-show/motion/logo.webp"
+export const TADAZZ_LOGO_URL = TADAZZ_PRODUCT_LOGO_URL
 export const TADAZZ_BACKDROP_URL = "/tadazz-show/motion/backdrop.webp"
 
 export interface StageOption {

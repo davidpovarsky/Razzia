@@ -329,6 +329,7 @@ export const themeRoutes = apiFactory
         store ? store.catalog(owner).concat(store.catalog("platform")) : [],
       ),
       available: demos
+        .filter((theme) => theme.version === "2.0.0")
         .map(({ id, version }) => ({ id, version }))
         .concat(
           store

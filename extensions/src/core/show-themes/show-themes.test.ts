@@ -20,7 +20,7 @@ const selection = createDefaultShowTheme()
 
 describe("show theme manifest and immutable registry", () => {
   it("registers one real complete Classic with verified bundled asset hashes", () => {
-    expect(showThemeRegistry.list()).toHaveLength(1)
+    expect(showThemeRegistry.list()).toHaveLength(2)
     const definition = showThemeRegistry.classic()
     expect(Object.keys(definition.slots)).toHaveLength(15)
     expect(Object.keys(definition.audioEvents)).toHaveLength(16)
@@ -105,7 +105,7 @@ describe("show theme manifest and immutable registry", () => {
     })
     expect(resolved.definition.id).toBe("test-client")
     expect(resolved.slots.question.id).toBe("test-client.question.default")
-    expect(showThemeRegistry.list()).toHaveLength(1)
+    expect(showThemeRegistry.list()).toHaveLength(2)
   })
 })
 

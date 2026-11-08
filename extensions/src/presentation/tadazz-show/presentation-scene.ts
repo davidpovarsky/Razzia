@@ -1,3 +1,4 @@
+import { RAZZIA_THEME_ID } from "../../core/product-branding"
 import type { Status } from "@razzia/common/types/game/status"
 import { isLegacyShowRollback } from "../../core/show-themes/selection"
 import type {
@@ -712,9 +713,16 @@ export function isTadazzShowActive(
   envelope: ShowEnvelope | null | undefined,
 ): boolean {
   const defaults = envelope?.extras?.defaults as
-    { motionKit?: string } | undefined
+    | { motionKit?: string; showTheme?: { id?: string; version?: string } }
+    | undefined
 
-  return !isLegacyShowRollback(defaults)
+  return (
+    !isLegacyShowRollback(defaults) &&
+    !(
+      defaults?.showTheme?.id === RAZZIA_THEME_ID &&
+      defaults.showTheme.version === "1.0.0"
+    )
+  )
 }
 
 /** Whether the active show stage uses the v4 design kit (default: true unless goldy-20261105 or legacy). */
@@ -722,9 +730,10 @@ export function isTadazzV4Active(
   envelope: ShowEnvelope | null | undefined,
 ): boolean {
   const defaults = envelope?.extras?.defaults as
-    { motionKit?: string } | undefined
+    | { motionKit?: string; showTheme?: { id?: string; version?: string } }
+    | undefined
 
   return (
-    !isLegacyShowRollback(defaults) && defaults?.motionKit !== "goldy-20261105"
+    isTadazzShowActive(envelope) && defaults?.motionKit !== "goldy-20261105"
   )
 }

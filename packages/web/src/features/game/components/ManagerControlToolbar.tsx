@@ -429,13 +429,14 @@ export const ManagerControlToolbar = ({
 
   return (
     <div
-      className="box-border flex w-full max-w-full flex-wrap items-center justify-between gap-2 p-2 sm:gap-3 sm:p-4"
+      className="font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2"
       data-testid="manager-control-toolbar"
     >
       {(
         extensionState?.extras.activeSceneData as ActiveSceneData | undefined
       )?.fullShow?.tieCandidates?.map((option) => (
         <Button
+          size="sm"
           key={option.answerIndex}
           data-testid={`host-resolve-tie-${option.answerIndex}`}
           disabled={isPending}
@@ -470,6 +471,7 @@ export const ManagerControlToolbar = ({
         {gameId && (
           <div className="flex shrink-0 items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
             <Button
+              size="sm"
               onClick={handleOpenDisplay}
               className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/20 sm:px-3 sm:text-sm"
               title={t("extensions:host.openDisplay")}
@@ -479,6 +481,7 @@ export const ManagerControlToolbar = ({
               <span>{t("extensions:host.openDisplay")}</span>
             </Button>
             <Button
+              size="sm"
               onClick={handleCopyDisplayUrl}
               className="flex items-center rounded-md p-1.5 text-white hover:bg-white/20"
               title={t("extensions:host.copyDisplayUrl")}
@@ -495,6 +498,7 @@ export const ManagerControlToolbar = ({
 
         {onPresent && (
           <Button
+            size="sm"
             onClick={onPresent}
             className="bg-primary flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold text-white shadow-lg hover:brightness-105 sm:px-4 sm:py-2 sm:text-base"
             data-testid="host-present-from-host-btn"
@@ -509,6 +513,7 @@ export const ManagerControlToolbar = ({
         {/* Exit Button with confirmation when game in progress */}
         {isLobby || isFinished ? (
           <Button
+            size="sm"
             onClick={onExit}
             className="hover:bg-accent flex shrink-0 items-center gap-1.5 rounded-lg bg-white px-3 py-1.5 text-sm font-bold text-black shadow-md sm:px-4 sm:py-2 sm:text-base"
             data-testid="host-exit-btn"
@@ -520,6 +525,7 @@ export const ManagerControlToolbar = ({
           <AlertDialog
             trigger={
               <Button
+                size="sm"
                 className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/30 px-3 py-1.5 text-sm font-bold text-white shadow-md backdrop-blur-md hover:bg-white/40 sm:px-4 sm:py-2 sm:text-base"
                 data-testid="host-exit-btn"
               >
@@ -538,6 +544,7 @@ export const ManagerControlToolbar = ({
         {gameId && (
           <>
             <Button
+              size="sm"
               onClick={handlePreviousScreen}
               disabled={!canPrevious || isPending}
               title={
@@ -605,6 +612,7 @@ export const ManagerControlToolbar = ({
           <AlertDialog
             trigger={
               <Button
+                size="sm"
                 disabled={isPending}
                 className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white hover:bg-white/30"
                 data-testid="host-restart-question-btn"
@@ -632,6 +640,7 @@ export const ManagerControlToolbar = ({
         {/* Lobby Start Game */}
         {isLobby && onStartGame && (
           <Button
+            size="sm"
             onClick={onStartGame}
             className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 text-base font-bold text-black shadow-lg sm:px-6 sm:py-2.5 sm:text-lg"
           >
@@ -643,6 +652,7 @@ export const ManagerControlToolbar = ({
         {/* History button (retained separately on the right) */}
         {canViewHistory && (
           <Button
+            size="sm"
             onClick={handleOpenHistory}
             disabled={isPending}
             className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
@@ -658,6 +668,7 @@ export const ManagerControlToolbar = ({
           <AlertDialog
             trigger={
               <Button
+                size="sm"
                 disabled={isPending}
                 className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-xs font-semibold text-white shadow-md backdrop-blur-md hover:bg-white/30 sm:px-3.5 sm:py-2 sm:text-sm"
                 data-testid="host-skip-question-btn"
@@ -675,6 +686,7 @@ export const ManagerControlToolbar = ({
 
         {!isLobby && !isFinished && (
           <Button
+            size="sm"
             onClick={handlePauseToggle}
             disabled={isPending}
             className="flex shrink-0 items-center gap-1.5 rounded-lg border border-white/10 bg-white/20 px-3 py-1.5 text-sm font-bold text-white shadow-md hover:bg-white/30 sm:px-4 sm:py-2"
@@ -696,6 +708,7 @@ export const ManagerControlToolbar = ({
         {/* End Timer button during answering */}
         {canEndTimer && (
           <Button
+            size="sm"
             onClick={handleEndTimer}
             disabled={isPending}
             className={clsx(
@@ -712,6 +725,7 @@ export const ManagerControlToolbar = ({
         {/* Next Screen / Advance button during results, leaderboard, or interlude */}
         {canNextScreen && (
           <Button
+            size="sm"
             onClick={handleNextScreen}
             disabled={isPending}
             className={clsx(

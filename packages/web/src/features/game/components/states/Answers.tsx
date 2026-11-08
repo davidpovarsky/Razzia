@@ -2,7 +2,10 @@ import {
   AnswerStageHud,
   LegacyVotingMotion,
 } from "../tadazz-show/answer-stage-elements"
-import { useQuestionPresentation } from "../tadazz-show/use-question-presentation"
+import {
+  useQuestionPresentation,
+  useNativeVotingGate,
+} from "../tadazz-show/use-question-presentation"
 import { QuestionUnderline } from "@razzia/extensions/presentation"
 import { EVENTS, MEDIA_TYPES } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
@@ -46,6 +49,7 @@ const Answers = ({
     options,
     answersOnly,
     playMode,
+    votingStartsAt,
   },
   data,
 }: Props & { data?: { remainingTime?: number } }) => {
@@ -55,7 +59,7 @@ const Answers = ({
   const viewRole = useViewRole()
   const isSpectator = viewRole === "spectator"
   const isVisualPlayerMode = Boolean(player) || isSpectator
-  const canSubmit = Boolean(player) && !isSpectator
+  const roleCanSubmit = Boolean(player) && !isSpectator
 
   const initialCooldown =
     typeof data?.remainingTime === "number" ? data.remainingTime : time
@@ -68,6 +72,12 @@ const Answers = ({
     questionDecoration,
     animationEpochKey,
   } = useQuestionPresentation(question, "answers")
+  const nativeVotingOpen = useNativeVotingGate(
+    votingStartsAt,
+    Boolean(effectiveExtensionState?.pause?.paused),
+  )
+  const canSubmit =
+    roleCanSubmit && nativeVotingOpen && !effectiveExtensionState?.pause?.paused
   const { t } = useTranslation()
   const { width } = useScreenSize()
   const { isUltraCompact } = useStageFit()
@@ -266,9 +276,12 @@ const Answers = ({
       </div>
 
       <div
-        className={clsx("flex min-h-0 flex-col overflow-hidden", {
-          "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
-        })}
+        className={clsx(
+          "flex min-h-0 flex-col overflow-y-auto overscroll-contain",
+          {
+            "flex-1 justify-end": showAnswersOnly || Boolean(currentVisuals),
+          },
+        )}
       >
         <AnswerStageHud
           time={time}

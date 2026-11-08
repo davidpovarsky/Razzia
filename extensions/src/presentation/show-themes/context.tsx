@@ -5,6 +5,7 @@ import {
   useMemo,
   type ComponentType,
   type CSSProperties,
+  type PropsWithChildren,
 } from "react"
 import {
   resolveShowTheme,
@@ -13,6 +14,8 @@ import {
   createShowThemeRegistry,
   showThemeRegistry,
 } from "../../core/show-themes/index"
+
+import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 
 const ShowThemeContext = createContext<ResolvedShowTheme | null>(null)
 
@@ -30,20 +33,11 @@ interface ThemeEnvelope {
   extras: Record<string, unknown>
 }
 
-/** A renderer seam, not a game controller. It adds no DOM or transports. */
-export function ShowThemeRenderer<Props extends object>({
-  envelope,
-  role,
-  renderers,
-  viewProps,
-}: {
-  envelope: ThemeEnvelope | null
-  role: ShowThemeRole
-  renderers: Readonly<
-    Record<ResolvedShowTheme["definition"]["rendererId"], ComponentType<Props>>
-  >
-  viewProps: Props
-}) {
+/** A room-scoped value, shared by cinematic and native Razzia surfaces. */
+export function useResolvedShowTheme(
+  envelope: ThemeEnvelope | null,
+  role: ShowThemeRole,
+) {
   const defaults = envelope?.extras.defaults as
     { showTheme?: unknown } | undefined
   const scene = envelope?.extras.currentScene as
@@ -73,6 +67,35 @@ export function ShowThemeRenderer<Props extends object>({
       }),
     [defaults?.showTheme, scope, role, registry],
   )
+  return theme
+}
+
+export function ShowThemeScope({
+  theme,
+  children,
+}: PropsWithChildren<{ theme: ResolvedShowTheme }>) {
+  return (
+    <ShowThemeContext.Provider value={theme}>
+      {children}
+    </ShowThemeContext.Provider>
+  )
+}
+
+/** A renderer seam, not a game controller. It adds no DOM or transports. */
+export function ShowThemeRenderer<Props extends object>({
+  envelope,
+  role,
+  renderers,
+  viewProps,
+}: {
+  envelope: ThemeEnvelope | null
+  role: ShowThemeRole
+  renderers: Readonly<
+    Record<ResolvedShowTheme["definition"]["rendererId"], ComponentType<Props>>
+  >
+  viewProps: Props
+}) {
+  const theme = useResolvedShowTheme(envelope, role)
   const Renderer = renderers[theme.definition.rendererId]
 
   return (
@@ -90,7 +113,7 @@ export function showThemeStyle(theme: ResolvedShowTheme): CSSProperties {
     "--show-theme-accent": theme.definition.tokens.accent,
     "--show-theme-font":
       theme.definition.tokens.fontId === "rubik"
-        ? "Rubik, sans-serif"
+        ? '"Rubik Variable", sans-serif'
         : 'Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif',
     ...Object.fromEntries(
       Object.entries(theme.definition.tokens.palette).map(([key, value]) => [
@@ -105,6 +128,10 @@ export function themeAdapterAsset(
   theme: ResolvedShowTheme | null,
   key: "questionBackdrop" | "showBackdrop" | "brandLogo",
 ): string | undefined {
+  if (key === "brandLogo") {
+    return TADAZZ_PRODUCT_LOGO_URL
+  }
+
   return theme?.definition.assets.find(
     (asset) => asset.id === theme.definition.adapterAssets[key],
   )?.url

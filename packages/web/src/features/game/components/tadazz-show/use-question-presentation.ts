@@ -13,7 +13,7 @@ import {
   useExtensionState,
 } from "@razzia/web/features/game/contexts/extension-state-context"
 import { useEvent } from "@razzia/web/features/game/contexts/socket-context"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export function useQuestionPresentation(
   question: string,
@@ -60,4 +60,20 @@ export function useQuestionPresentation(
     questionDecoration,
     animationEpochKey,
   }
+}
+
+/** Preserve the server's optional entrance window when using native answer controls. */
+export function useNativeVotingGate(startsAt?: number, paused = false) {
+  const [, refresh] = useState(0)
+  useEffect(() => {
+    if (!startsAt || paused) return
+    const delay = startsAt - Date.now()
+    if (delay <= 0) return
+    const timer = window.setTimeout(
+      () => refresh((value) => value + 1),
+      delay + 10,
+    )
+    return () => window.clearTimeout(timer)
+  }, [startsAt, paused])
+  return !paused && (!startsAt || Date.now() >= startsAt)
 }

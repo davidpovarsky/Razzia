@@ -1,3 +1,4 @@
+import razziaManifest from "./razzia.manifest.json" with { type: "json" }
 import classicManifest from "./classic.manifest.json" with { type: "json" }
 import {
   showThemeDefinitionSchema,
@@ -53,6 +54,7 @@ export class ShowThemeRegistry {
 export const showThemeRegistry = new ShowThemeRegistry()
 
 showThemeRegistry.register(classicManifest)
+showThemeRegistry.register(razziaManifest)
 
 /** Per-tenant/per-room registry; never mutate the global bundled catalog. */
 export function createShowThemeRegistry(definitions: readonly unknown[] = []) {

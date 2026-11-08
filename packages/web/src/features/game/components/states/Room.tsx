@@ -16,10 +16,11 @@ import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 
 interface Props {
+  readOnly?: boolean
   data: ManagerStatusDataMap["SHOW_ROOM"]
 }
 
-const Room = ({ data: { text, inviteCode } }: Props) => {
+const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
   const { gameId, players, locked } = useManagerStore()
   const { socket } = useSocket()
   const webUrl = `${window.location.origin}/game`
@@ -53,7 +54,7 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
   )
 
   const handleKick = (playerId: string) => () => {
-    if (!gameId) {
+    if (!gameId || readOnly) {
       return
     }
 
@@ -145,31 +146,35 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
         {t(text)}
       </h2>
 
-      <LobbyTeamAssignmentAdapter
-        players={playerList}
-        gameId={gameId}
-        locked={locked}
-      />
+      {!readOnly && (
+        <>
+          <LobbyTeamAssignmentAdapter
+            players={playerList}
+            gameId={gameId}
+            locked={locked}
+          />
 
-      <div className="flex flex-wrap gap-3">
-        {playerList.map((player) => (
-          <div
-            key={player.id}
-            className="bg-primary has-[[data-lost]]:bg-primary/50 relative rounded-xl px-4 py-3 font-bold text-white has-[[data-lost]]:text-white/60"
-            onClick={handleKick(player.id)}
-          >
-            <span className="cursor-pointer text-3xl drop-shadow-sm hover:line-through hover:decoration-3">
-              {player.username}
-            </span>
-            {!player.connected && (
-              <PlayerConnectionStatus
-                key={String(player.timedOut)}
-                timedOut={player.timedOut}
-              />
-            )}
+          <div className="flex flex-wrap gap-3">
+            {playerList.map((player) => (
+              <div
+                key={player.id}
+                className="bg-primary has-[[data-lost]]:bg-primary/50 relative rounded-xl px-4 py-3 font-bold text-white has-[[data-lost]]:text-white/60"
+                onClick={handleKick(player.id)}
+              >
+                <span className="cursor-pointer text-3xl drop-shadow-sm hover:line-through hover:decoration-3">
+                  {player.username}
+                </span>
+                {!player.connected && (
+                  <PlayerConnectionStatus
+                    key={String(player.timedOut)}
+                    timedOut={player.timedOut}
+                  />
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </section>
   )
 }

@@ -1,7 +1,7 @@
 {
   "manifestVersion": 1,
   "id": "tadazz-demo-cosmic",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "nameKey": "demo.cosmic.name",
   "descriptionKey": "demo.cosmic.description",
   "category": "show",
@@ -11,20 +11,9 @@
   "posterAssetId": "classic-poster",
   "provenance": "Operator-owned isolated demonstration. Original Canvas artwork; existing trusted Classic choreography and repository audio. Not a customer-published package.",
   "capabilities": {
-    "playModes": [
-      "quiz",
-      "survey"
-    ],
-    "questionTypes": [
-      "single",
-      "multi",
-      "estimation"
-    ],
-    "roles": [
-      "manager",
-      "player",
-      "spectator"
-    ],
+    "playModes": ["quiz", "survey"],
+    "questionTypes": ["single", "multi", "estimation"],
+    "roles": ["manager", "player", "spectator"],
     "minAnswers": 2,
     "maxAnswers": 64,
     "reducedMotion": "same-theme-static",
@@ -296,10 +285,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -316,10 +302,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.lobby.accent",
@@ -330,10 +313,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ],
+          "roles": ["manager", "spectator"],
           "assetId": "classic-confirm"
         }
       ],
@@ -352,10 +332,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.showQuestion.silent",
@@ -366,10 +343,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -387,10 +361,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "epoch",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.answersMusic.silent",
@@ -401,10 +372,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "epoch",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -421,9 +389,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "player"
-          ]
+          "roles": ["player"]
         }
       ],
       "customMedia": false
@@ -441,9 +407,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "player"
-          ]
+          "roles": ["player"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.answerSubmitted.silent",
@@ -454,9 +418,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "player"
-          ]
+          "roles": ["player"]
         }
       ],
       "customMedia": false
@@ -474,10 +436,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.timerWarning.silent",
@@ -488,10 +447,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.timerWarning.urgent",
@@ -503,10 +459,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.timerWarning.final",
@@ -518,10 +471,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -539,10 +489,7 @@
           "priority": 90,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.timerExpired.silent",
@@ -553,10 +500,7 @@
           "priority": 90,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -574,10 +518,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.voteLocked.silent",
@@ -588,10 +529,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -609,10 +547,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.silent",
@@ -623,10 +558,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.accent",
@@ -638,10 +570,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.music",
@@ -653,10 +582,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.fallback",
@@ -668,10 +594,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.story-mixer",
@@ -683,10 +606,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.revealResults.story-reveal",
@@ -698,10 +618,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -719,10 +636,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.leaderboard.silent",
@@ -733,10 +647,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -754,10 +665,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.zzTransition.silent",
@@ -768,10 +676,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -789,10 +694,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.podium1.silent",
@@ -803,10 +705,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -824,10 +723,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.podium2.silent",
@@ -838,10 +734,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -859,10 +752,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.podium3.silent",
@@ -873,10 +763,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": false
@@ -894,10 +781,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         },
         {
           "id": "tadazz-demo-cosmic.audio.closing.silent",
@@ -908,10 +792,7 @@
           "priority": 60,
           "fadeMs": 0,
           "restart": "event",
-          "roles": [
-            "manager",
-            "spectator"
-          ]
+          "roles": ["manager", "spectator"]
         }
       ],
       "customMedia": true
@@ -1022,7 +903,7 @@
   "assets": [
     {
       "id": "classic-backdrop",
-      "url": "/tadazz-show/demos/cosmic/v1/backdrop.png",
+      "url": "/tadazz-show/demos/cosmic/v2/backdrop.png",
       "kind": "image",
       "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
       "bytes": 2228060,
@@ -1032,17 +913,17 @@
     },
     {
       "id": "classic-logo",
-      "url": "/tadazz-show/demos/cosmic/v1/logo.png",
+      "url": "/tadazz-show/v4/tadazz-brand-logo.png",
       "kind": "image",
-      "sha256": "9057bad3a21e098f26494c056fa725b05943d2ed53a4df67116ae16fe7f9007a",
-      "bytes": 11791,
-      "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
-      "rights": "owner-authorized",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "provenance": "Existing source-controlled TADAZZ/Razzia asset; original attribution retained in repository. Re-review rights before redistributing a new customer package.",
+      "rights": "repository-existing",
       "preload": "critical"
     },
     {
       "id": "classic-poster",
-      "url": "/tadazz-show/demos/cosmic/v1/backdrop.png",
+      "url": "/tadazz-show/demos/cosmic/v2/backdrop.png",
       "kind": "image",
       "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
       "bytes": 2228060,
@@ -1052,20 +933,20 @@
     },
     {
       "id": "classic-opening-video",
-      "url": "/tadazz-show/demos/cosmic/v1/opening.webm",
+      "url": "/tadazz-show/demos/cosmic/v2/opening.webm",
       "kind": "video",
-      "sha256": "a517338c881a4f1b674a862839d03f849e770a3ee27a35356c0aa0d7a4d338a0",
-      "bytes": 145492,
+      "sha256": "09919adec55d6463e8bb532b98abe20a5d0ff9e3334b2486e0eff7d9537a7304",
+      "bytes": 151150,
       "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
       "rights": "owner-authorized",
       "preload": "slot"
     },
     {
       "id": "classic-opening-lottie",
-      "url": "/tadazz-show/demos/cosmic/v1/opening.json",
+      "url": "/tadazz-show/demos/cosmic/v2/opening.json",
       "kind": "lottie",
-      "sha256": "4ec6b0de97a844b7f46ae1190d806fe90f7cda7f18f773e65c3e0dca51ad136b",
-      "bytes": 1121,
+      "sha256": "e02fddf90cafac0427d291fa658b3b6dcd4e8af76e45fe4cc8b369cbdabd7697",
+      "bytes": 574,
       "provenance": "Original source-generated Canvas/Lottie artwork for the authorized isolated demo.",
       "rights": "owner-authorized",
       "preload": "slot"
@@ -1322,7 +1203,7 @@
     },
     {
       "id": "classic-adapter-a27be4883ee9",
-      "url": "/tadazz-show/demos/cosmic/v1/backdrop.png",
+      "url": "/tadazz-show/demos/cosmic/v2/backdrop.png",
       "kind": "image",
       "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
       "bytes": 2228060,
@@ -1340,50 +1221,50 @@
     "en": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Demonstration using Classic choreography.",
-      "extensions:themes.silent": "Silent",
-      "extensions:themes.default": "Theme default"
+      "extensions:themes.default": "Theme default",
+      "extensions:themes.silent": "Silent"
     },
     "fr": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Démonstration utilisant la chorégraphie Classic.",
-      "extensions:themes.silent": "Silence",
-      "extensions:themes.default": "Valeur du thème"
+      "extensions:themes.default": "Valeur du thème",
+      "extensions:themes.silent": "Silence"
     },
     "de": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Demonstration mit Classic-Choreografie.",
-      "extensions:themes.silent": "Stumm",
-      "extensions:themes.default": "Designstandard"
+      "extensions:themes.default": "Designstandard",
+      "extensions:themes.silent": "Stumm"
     },
     "es": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Demostración con coreografía Classic.",
-      "extensions:themes.silent": "Silencio",
-      "extensions:themes.default": "Valor del tema"
+      "extensions:themes.default": "Valor del tema",
+      "extensions:themes.silent": "Silencio"
     },
     "it": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Dimostrazione con coreografia Classic.",
-      "extensions:themes.silent": "Silenzio",
-      "extensions:themes.default": "Valore del tema"
+      "extensions:themes.default": "Valore del tema",
+      "extensions:themes.silent": "Silenzio"
     },
     "ja": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Classic の演出を使用したデモ。",
-      "extensions:themes.silent": "無音",
-      "extensions:themes.default": "テーマの既定値"
+      "extensions:themes.default": "テーマの既定値",
+      "extensions:themes.silent": "無音"
     },
     "tr": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Classic koreografisini kullanan demo.",
-      "extensions:themes.silent": "Sessiz",
-      "extensions:themes.default": "Tema varsayılanı"
+      "extensions:themes.default": "Tema varsayılanı",
+      "extensions:themes.silent": "Sessiz"
     },
     "vi": {
       "demo.cosmic.name": "Cosmic Night",
       "demo.cosmic.description": "Bản trình diễn sử dụng chuyển động Classic.",
-      "extensions:themes.silent": "Im lặng",
-      "extensions:themes.default": "Mặc định của chủ đề"
+      "extensions:themes.default": "Mặc định của chủ đề",
+      "extensions:themes.silent": "Im lặng"
     }
   }
 }

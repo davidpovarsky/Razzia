@@ -1,3 +1,4 @@
+import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
 import {
@@ -232,6 +233,20 @@ export function TadazzOpening({
       data-video-playing={videoPlaying ? "true" : "false"}
       data-lottie-ready={lottieReady ? "true" : "false"}
     >
+      <img
+        src={TADAZZ_PRODUCT_LOGO_URL}
+        alt="TADAZZ!"
+        data-testid="product-logo"
+        style={{
+          position: "absolute",
+          top: "4%",
+          left: "4%",
+          width: "17%",
+          height: "auto",
+          objectFit: "contain",
+          zIndex: 5,
+        }}
+      />
       {brandTransitionActive && (
         <>
           <img

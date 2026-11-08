@@ -1,3 +1,5 @@
+import { useOptionalShowTheme } from "@razzia/extensions/presentation"
+import { RAZZIA_THEME_ID } from "@razzia/extensions/core"
 import AnswerButton from "@razzia/web/features/game/components/AnswerButton"
 import PhotoCardGrid from "@razzia/web/features/game/components/PhotoCardGrid"
 import {
@@ -16,13 +18,14 @@ const SingleAnswers = ({
   stageAnimations,
   animationEpochKey,
 }: AnswerComponentProps) => {
+  const theme = useOptionalShowTheme()
   const handleSubmit = (key: number) => onSubmit([key])
 
   const hasVisuals = Boolean(
     visuals && visuals.length > 0 && visuals.some((v) => Boolean(v.url)),
   )
 
-  if (hasVisuals) {
+  if (hasVisuals && theme?.definition.id !== RAZZIA_THEME_ID) {
     return (
       <div className="min-h-0 w-full flex-1 flex flex-col justify-center overflow-hidden">
         <PhotoCardGrid
@@ -47,6 +50,7 @@ const SingleAnswers = ({
       {answers.map((answer, key) => (
         <AnswerButton
           key={`${animationEpochKey ?? "static"}-${key}`}
+          visual={visuals?.find((item) => item.answerIndex === key)}
           answerIndex={key}
           cardEntrance={stageAnimations?.answerEntrance}
           badgeEntrance={stageAnimations?.answerBadgeEntrance}

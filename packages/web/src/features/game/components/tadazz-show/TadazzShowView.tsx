@@ -1,3 +1,4 @@
+import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
@@ -12,7 +13,6 @@ import {
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
-  AudioCuePlayer,
   useShowTheme,
   showThemeStyle,
   reconcileThemeScene,
@@ -109,6 +109,7 @@ import {
 } from "./useTadazzLabels"
 
 export interface TadazzShowViewProps {
+  nativeContent?: React.ReactNode
   manager: boolean
   role: ViewRole
   statusName: Status | undefined

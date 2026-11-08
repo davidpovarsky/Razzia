@@ -1,3 +1,4 @@
+import { TADAZZ_PRODUCT_LOGO_URL } from "../product-branding"
 import type { ShowThemeDefinition } from "./definition"
 import { ShowThemeRegistry, showThemeRegistry } from "./registry"
 import {
@@ -210,6 +211,10 @@ export function themeSlotAsset(
   slot: (typeof SHOW_THEME_SLOTS)[number],
   kind: "backgroundAssetId" | "logoAssetId" | "mediaAssetId" | "overlayAssetId",
 ): string | undefined {
+  if (kind === "logoAssetId") {
+    return TADAZZ_PRODUCT_LOGO_URL
+  }
+
   const selection = theme.slots[slot]
 
   if (kind === "backgroundAssetId" && selection.mediaUrl) {
