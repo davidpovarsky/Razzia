@@ -6,6 +6,7 @@ import {
 } from "react"
 import { SEATING_LAYOUT } from "./seating-layout"
 import { STORY_ASSETS } from "./assets"
+import { HostQuickGuide } from "./HostQuickGuide"
 import "./reference-stages.css"
 
 export interface SeatingLabels {
@@ -50,7 +51,7 @@ export function SeatingPlan({
       : `${parts.slice(0, -1).join(" ")} ${parts.at(-1)![0]}.`
   }
   return (
-    <div className="tadazz-reference-seating" data-testid="tadazz-screen-lobby">
+    <div className="tadazz-reference-seating has-host-guide" data-testid="tadazz-screen-lobby">
       <div id="screen">
         <aside className="left-panel">
           <div className="left-accent" aria-hidden="true" />
@@ -73,6 +74,7 @@ export function SeatingPlan({
               </div>
             </div>
           </section>
+          <HostQuickGuide />
           <div className="join-note" data-testid="tadazz-lobby-count">
             {labels.connected}
           </div>

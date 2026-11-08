@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react"
 import { LottiePlayer } from "../lottie-player"
-import { stripLottieBackgroundPlate } from "./lottie-plate"
+import { stripLottieBackgroundPlate, stripOpeningExportWatermark } from "./lottie-plate"
 import { TADAZZ_BACKDROP_URL } from "./TadazzStage"
 
 export const TADAZZ_OPENING_VIDEO_URL =
@@ -27,7 +27,7 @@ export function loadOpeningLottie(
       .then((response) => (response.ok ? response.json() : null))
       .then((json) =>
         json
-          ? stripLottieBackgroundPlate(json as Record<string, unknown>).data
+          ? stripLottieBackgroundPlate(stripOpeningExportWatermark(json as Record<string, unknown>)).data
           : null,
       )
       .catch(() => null)
@@ -63,6 +63,7 @@ export interface TadazzOpeningProps {
   eventArtworkUrl?: string
   eventArtworkPending?: boolean
   onFinished: () => void
+  onSkip?: () => void
   onEnableSound?: () => void
   canSkip?: boolean
   labels?: { skip: string; enableSound: string }
@@ -75,6 +76,7 @@ export function TadazzOpening({
   eventArtworkUrl,
   eventArtworkPending = false,
   onFinished,
+  onSkip,
   onEnableSound,
   canSkip = false,
   labels = { skip: "Skip", enableSound: "Enable sound" },
@@ -287,7 +289,7 @@ export function TadazzOpening({
           type="button"
           className="tz-opening-skip"
           data-testid="tadazz-opening-skip"
-          onClick={eventArtworkActive ? finish : endBrand}
+          onClick={onSkip ?? (eventArtworkActive ? finish : endBrand)}
         >
           {labels.skip}
         </button>

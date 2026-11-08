@@ -918,6 +918,7 @@
   justify-content: center;
 }
 .tzv4-stage .full-tie-card {
+  position: relative;
   width: 460px;
   height: 575px;
   padding: 18px;
@@ -971,11 +972,37 @@
 .tzv4-stage .full-tie-card.muted {
   opacity: 0.35;
 }
+.tzv4-stage .full-tie-choose {
+  pointer-events: auto;
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: pointer;
+}
+.tzv4-stage .full-tie-choose:focus-visible {
+  outline: 5px solid #eaff52;
+  outline-offset: 5px;
+}
+.tzv4-stage .full-tie-card:has(.full-tie-choose:hover) {
+  border-color: #eaff52;
+}
+.tzv4-stage .full-tie-choose:disabled {
+  cursor: default;
+}
 .tzv4-stage .full-equals {
   position: absolute;
   left: 50%;
-  top: 200px;
-  transform: translateX(-50%);
+  top: 50%;
+  translate: -50% -50%;
+  width: 100px;
+  height: 100px;
+  display: grid;
+  place-items: center;
+  line-height: 1;
+  pointer-events: none;
   font-size: 150px;
   font-weight: 1000;
   color: #efff60;

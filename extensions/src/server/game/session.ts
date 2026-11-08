@@ -60,6 +60,7 @@ export interface ExtensionSessionDelegate {
   isAcceptingAnswers?: () => boolean
   getAnswersCount?: () => number
   getParticipation?: () => { connected: number; answered: number }
+  getPresentationLaunch?: () => { stage: "standby" | "opening" | "lobby" | "running"; startedAt: number | null } | null
   pauseGame?: () => boolean
   resumeGame?: () => boolean
   getPauseSnapshot?: () => {
@@ -314,6 +315,8 @@ export class ExtensionGameSession {
         : undefined
 
     const extrasPayload: Record<string, unknown> = {}
+    const launch = this.delegate?.getPresentationLaunch?.()
+    if (launch) extrasPayload.presentationLaunch = launch
     // Public aggregate only; host roster identities/contacts remain private.
     if (this.delegate?.getParticipation) {
       extrasPayload.participation = this.delegate.getParticipation()

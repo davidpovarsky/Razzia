@@ -36,6 +36,7 @@ export interface FullShowInput extends TadazzV4Data {
   contestants?: TadazzV4Answer[]
   voteCount?: number
   resolvedIndex?: number | null
+  onResolveTie?: (contestantIndex: number) => void
   isLive?: boolean
   storyRoles?: string[]
   eventArtworkUrl?: string
@@ -454,6 +455,16 @@ export function Tie({ data }: { data: FullShowInput }) {
               data-tie-index={i}
               data-chosen={isChosen ? "true" : undefined}
             >
+              {data.onResolveTie && !isResolved && (
+                <button
+                  type="button"
+                  className="full-tie-choose"
+                  aria-label={displayTitle}
+                  disabled={data.scenePaused}
+                  onClick={() => data.onResolveTie?.(i)}
+                  data-testid={`host-tie-picture-${i}`}
+                />
+              )}
               {picture(pick, i)}
               <div className="full-tie-index">{num(i + 1)}</div>
               <h2>{displayTitle}</h2>

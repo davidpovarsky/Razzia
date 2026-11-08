@@ -2,6 +2,7 @@ export * from "./api/routes"
 export * from "./media-library"
 
 export * from "./game/session"
+export * from "./game/presentation-launch"
 
 export * from "./game/studio-show-coordinator"
 
