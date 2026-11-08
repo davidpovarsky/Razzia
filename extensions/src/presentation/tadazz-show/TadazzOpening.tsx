@@ -37,11 +37,13 @@ export function loadOpeningLottie(
   return pending
 }
 
-export function preloadOpeningAssets(): void {
+export function preloadOpeningAssets(
+  assets: { lottieUrl?: string } = {},
+): void {
   if (typeof document === "undefined") {
     return
   }
-  void loadOpeningLottie(TADAZZ_OPENING_LOTTIE_URL)
+  void loadOpeningLottie(assets.lottieUrl ?? TADAZZ_OPENING_LOTTIE_URL)
 
   if (!document.querySelector(`link[data-tadazz-preload="wasm"]`)) {
     const link = document.createElement("link")

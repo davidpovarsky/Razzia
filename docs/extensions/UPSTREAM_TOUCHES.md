@@ -72,3 +72,33 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Activation / rollback:** Active by default for all games via `isTadazzShowActive()`; per-show rollback via `defaults.motionKit = "legacy"`.
 - **Tests:** 39/39 extension unit test files (438 tests), 24/24 root unit test files (321 tests), 28/28 core live game E2E tests, and 6/6 full-show parity E2E tests (`tadazz-full-show-parity.spec.ts` across Chromium and WebKit iPad).
 - **Owner approval:** **GRANTED 2026-11-05 14:52** in Antigravity conversation `c4229ed5` (T1 and T2 hooks, default activation with `motionKit="legacy"` rollback, git push + safe production deploy to `https://tadazz.com` after backup + Asana update).
+
+## 2026-11-08 — isolated source cleanup and Show Theme Engine
+
+Current worktree: `tadazz-cleanup-theme-20261108`, branch
+`codex/upstream-cleanup-theme-engine-20261108`. Owner explicitly requested source
+cleanup followed by the supplied theme-engine prompt in a separate worktree.
+The pre-edit plan and necessary server observation were recorded in
+`orchestration/handoffs/tomer/CLEANUP_THEME_20261108.md`.
+
+| Original file / symbols | Necessary change and alternative | Verification / scope |
+| --- | --- | --- |
+| socket `services/game/index.ts`: roster operations, interim/recap projections | Delegate downstream identity/projections to extensions; keep authorization and player mutation in Game. Moving the entire game was rejected. | Root regression, new roster/projection boundary tests. Phase 1 reduction captured in the source ledger. |
+| socket `services/game/round-manager.ts`: reveal distribution | Extract pure downstream projection only; preserve authoritative round/scoring. | Root + distribution tests. |
+| socket Game `getVoteCompletionReason`, `abortCooldown`; RoundManager `newQuestion`, `advance`, `endTimer`, `checkAllAnswered` | Read-only annotation of existing completion paths; client deadlines cannot distinguish a delayed manual completion. No scheduler/score/abort ordering change. | 3 real Game tests + browser manual/natural/skip/restart audio traces; phase-2 addition about 20 lines combined. |
+| web `GameWrapper.tsx`: modern early return | Inject typed ShowThemeRenderer and the existing view props. No new transport or game state owner. Hardcoded family conditionals rejected. | Role parity, refresh, first-paint RAF probes, isolated legacy rollback; approximately +26/-19 before formatting. |
+| web `QuizzEditorSidebar.tsx`: TimelineSceneCard | Downstream scene card extraction with injected original AlertDialog and translation wrapper. Remove only imports made unused by the extraction. | Editor browser save, actual app typecheck. |
+| web `QuestionEditor/MediaLibrary/index.tsx`: built-in audio list | Optional event-owned URL whitelist and manifest assets, retain user uploads. A combined legacy/global preset gallery was rejected. | Studio/audio browser checks; no original media API change. |
+| web `QuestionEditorConfig/{CardBackgroundConfig,CardAudioConfig,QuestionEntranceConfig}.tsx`: exported wrappers | Active-theme controls in extensions/downstream Studio; retain original implementations for explicit legacy rollback. | Classic/legacy browser tests, strict save/reopen, localized choice tests. |
+| web `index.css`, editor media helper callers, `i18n.ts`, original locale JSONs | Move downstream keyframes/helpers/translation additions out; restore upstream translation files byte-for-byte. | 8-locale merge/idempotence checks and root locale suite. |
+
+For **every original file still modified**, exact baseline/current line totals,
+hunk anchors and upstream-overlap risk are listed in the generated
+`qa-evidence/upstream-cleanup-20261108/SOURCE_LEDGER.md` (and its JSON). The ledger
+also documents the intentionally retained modifications: wholesale rollback of
+prior product work is not this cleanup. Current upstream v4.0.2 merge rehearsal
+conflicts at `pnpm-lock.yaml`; upstream was not merged into the product branch.
+
+The new Studio, theme adapter and extension files were absent from original
+Razzia `5161eb7`; they are downstream additions, not additional modified original
+files. Original motion keyframe/timing files remain unchanged by this task.

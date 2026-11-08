@@ -35,18 +35,7 @@ import {
   type QuizzFormValues,
 } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
 import clsx from "clsx"
-import {
-  BarChart2,
-  DoorOpen,
-  Flag,
-  Image as ImageIcon,
-  Layers,
-  ListChecks,
-  Plus,
-  Sparkles,
-  Timer,
-  Trophy,
-} from "lucide-react"
+import { Plus } from "lucide-react"
 import { useRef, useState } from "react"
 import { useFormContext } from "react-hook-form"
 import { useTranslation } from "react-i18next"
@@ -146,7 +135,7 @@ const SortableSceneItem = ({
     >
       <TimelineSceneCard
         DeleteConfirmation={AlertDialog}
-        t={t}
+        t={(key, fallback) => fallback === undefined ? t(key) : t(key, fallback)}
         kind={kind}
         title={title}
         durationText={durationText}

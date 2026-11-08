@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { scopedThemeOverridesSchema } from "./show-themes/selection"
 import {
   cardAudioOverridesSchema,
   cardBackgroundOverrideSchema,
@@ -179,6 +180,7 @@ export type QuestionEntrance = z.infer<typeof questionEntranceSchema>
 
 export const perQuestionItemSchema = z
   .strictObject({
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     answerVisuals: z.array(answerVisualSchema).optional(),
     reveal: questionRevealSchema.optional(),
     interlude: interludeSchema.optional(),

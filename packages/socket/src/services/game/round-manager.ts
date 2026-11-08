@@ -153,6 +153,7 @@ export class RoundManager {
   private votingStartsAt: number | null = null
   private votingEndsAt: number | null = null
   private acceptingAnswers = false
+  private voteCompletion: "elapsed" | "manual" | "allAnswered" | null = null
   private leaderboard: Player[] = []
   private tempOldLeaderboard: Player[] | null = null
   private questionsHistory: QuestionResult[] = []
@@ -695,10 +696,21 @@ export class RoundManager {
       return false
     }
 
+    this.voteCompletion = "manual"
     this.acceptingAnswers = false
     this.opts.cooldown.abort()
 
     return true
+  }
+
+  getVoteCompletionReason() {
+    return this.voteCompletion
+  }
+
+  noteManualVoteCompletion(): void {
+    if (this.acceptingAnswers) {
+      this.voteCompletion = "manual"
+    }
   }
 
   nextScreen(): boolean {
@@ -1108,6 +1120,7 @@ export class RoundManager {
     this.clearInterludeTimer()
 
     if (this.isAskingQuestion()) {
+      this.noteManualVoteCompletion()
       this.acceptingAnswers = false
       this.opts.cooldown.abort()
 
@@ -1190,6 +1203,7 @@ export class RoundManager {
     this.latestRevealDistribution = null
 
     // Capture pre-question checkpoint
+    this.voteCompletion = null
     this.captureCheckpoint(this.currentQuestion)
 
     this.opts.onNewQuestion()
@@ -1257,6 +1271,7 @@ export class RoundManager {
       return
     }
 
+    this.voteCompletion ??= "elapsed"
     this.runStep(0)
   }
 
@@ -1691,6 +1706,7 @@ export class RoundManager {
     )
 
     if (connected.length > 0 && everyoneAnswered) {
+      this.voteCompletion = "allAnswered"
       this.opts.cooldown.abort()
     }
   }

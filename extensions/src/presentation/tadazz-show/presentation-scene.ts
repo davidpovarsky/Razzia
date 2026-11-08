@@ -1,4 +1,5 @@
 import type { Status } from "@razzia/common/types/game/status"
+import { isLegacyShowRollback } from "../../core/show-themes/selection"
 import type {
   ActiveSceneData,
   PublicRankEntry,
@@ -374,7 +375,10 @@ export function computeShowScene(input: ShowInput): ShowScene {
         activeSceneData: extras.activeSceneData as ActiveSceneData | undefined,
         startedAt: envelope.startedAt,
         stepIndex: step?.stepIndex,
-        elapsedMs: typeof extras.sceneElapsedMs === "number" ? extras.sceneElapsedMs : undefined,
+        elapsedMs:
+          typeof extras.sceneElapsedMs === "number"
+            ? extras.sceneElapsedMs
+            : undefined,
         paused: envelope.pause?.paused,
       }
     }
@@ -694,7 +698,7 @@ export function isTadazzShowActive(
   const defaults = envelope?.extras?.defaults as
     { motionKit?: string } | undefined
 
-  return defaults?.motionKit !== "legacy"
+  return !isLegacyShowRollback(defaults)
 }
 
 /** Whether the active show stage uses the v4 design kit (default: true unless goldy-20261105 or legacy). */
@@ -705,6 +709,6 @@ export function isTadazzV4Active(
     { motionKit?: string } | undefined
 
   return (
-    defaults?.motionKit !== "legacy" && defaults?.motionKit !== "goldy-20261105"
+    !isLegacyShowRollback(defaults) && defaults?.motionKit !== "goldy-20261105"
   )
 }

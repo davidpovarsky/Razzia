@@ -1,4 +1,5 @@
 import {
+  isLegacyShowRollback,
   QUESTION_DECORATION_PRESETS,
   QUESTION_ENTRANCE_PRESETS,
   resolveCardStageAnimations,
@@ -10,6 +11,8 @@ import {
   type QuestionEntrancePreset,
   type StageAnimationSlot,
 } from "@razzia/extensions/core"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio/studio-editor-context"
+import { ThemeScopeControls } from "@razzia/web/features/quizz/components/studio/theme-scope-controls"
 import Button from "@razzia/web/components/Button"
 import Input from "@razzia/web/components/Input"
 import {
@@ -40,7 +43,7 @@ interface QuestionEntranceConfigProps {
   onSceneStageAnimationsChange?: (next: CardStageAnimations | undefined) => void
 }
 
-const QuestionEntranceConfig = ({
+const LegacyQuestionEntranceConfig = ({
   kind = "question",
   sceneStageAnimations,
   onSceneStageAnimationsChange,
@@ -790,6 +793,16 @@ const QuestionEntranceConfig = ({
         )}
       </div>
     </ConfigSection>
+  )
+}
+
+const QuestionEntranceConfig = (props: QuestionEntranceConfigProps = {}) => {
+  const { defaults } = useStudioEditor()
+
+  return isLegacyShowRollback(defaults) ? (
+    <LegacyQuestionEntranceConfig {...props} />
+  ) : (
+    <ThemeScopeControls section="motion" kind={props.kind} />
   )
 }
 

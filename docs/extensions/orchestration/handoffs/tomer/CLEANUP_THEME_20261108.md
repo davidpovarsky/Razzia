@@ -65,3 +65,52 @@ owner's current request for isolation and synchronization. Its requirements for
 Classic fidelity, data continuity, honest QA and no deployment remain binding.
 The AI Creator handoff ZIP must be located; do not invent its contents or claim a
 production installer from a static manifest validator.
+
+## Phase 1 checkpoint and synchronization
+
+Cleanup commit: `7c0c4bd`. Root 348/348; isolated Chromium/WebKit 4/4;
+all three project typechecks and production build exit 0. New-module lint exit 0.
+The extension suite retains exactly the original 15 failures (no new failures).
+Additional boundary/locale checks: 18/18. Latest audio commit `69cbf80` was
+reviewed and merged locally after the checkpoint; no other worktree was changed.
+An object-only `git merge-tree --write-tree HEAD upstream/main` rehearsal found
+one actual conflict: `pnpm-lock.yaml`. No upstream merge was applied.
+
+## Theme integration ledger (before implementation)
+
+- `packages/web/src/features/game/components/GameWrapper.tsx`: replace only the
+  Classic early-return element with an injected typed theme renderer/provider.
+  Keep identical view props, event subscriptions, legacy rollback and media gate.
+  No new game engine, transport or timer. Test all roles and first paint.
+- Existing downstream `packages/web/src/features/game/components/tadazz-show/`:
+  consume resolved theme assets/tokens/audio from the provider; retain current
+  v4/Goldy animation adapters, choreography and authoritative milestones.
+- Existing downstream Studio settings/scene editor and CardBackgroundConfig,
+  CardAudioConfig, QuestionEntranceConfig: use the active manifest capabilities
+  and variant lists. Archive old picker implementations behind explicit legacy
+  rollback. Reuse original controls; no new editor or global styling.
+- `packages/web/src/features/quizz/components/QuestionEditor/MediaLibrary/index.tsx`:
+  optional finite URL whitelist for a theme-owned picker, so old sounds cannot
+  leak into Classic choices. Existing general library remains reusable.
+- No theme-specific edit to `packages/socket/**` or `packages/common/**` is
+  planned. The current extension state already carries authoritative defaults.
+  Extension schemas/serializer/import/export must carry additional safe metadata.
+
+The requested theme work now follows the current owner's explicit execution
+request, rather than the older prompt's wait-for-event instruction. No publish,
+production change or external message is authorized by that interpretation.
+
+### Necessary observational server seam for audio correctness
+
+The existing extension envelope has no authoritative vote-completion reason.
+A client deadline comparison cannot distinguish delayed manual/all-answered
+completion from real timer expiry. Before editing: add a read-only completion
+reason (`elapsed`, `manual`, `allAnswered`) in `RoundManager`, clear it at a new
+question, annotate the existing manual/all-answered paths, and expose it through
+one session delegate in `Game`. `Game.abortCooldown` annotates only an open vote.
+No timeout, abort, score, accepted-answer or state-transition behavior changes.
+Only the versioned extension envelope carries the field; common/base protocol
+stays unchanged. Expected protected diff: under 25 lines across Game/RoundManager.
+Validate natural/manual/all-answered, pause, skip, restart, history and reconnect
+with contract tests and browser audio spies. This is essential to Gate 4, not a
+theme implementation inside the game engine.

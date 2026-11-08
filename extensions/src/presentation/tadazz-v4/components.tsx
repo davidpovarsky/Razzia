@@ -5,6 +5,7 @@ import {
 } from "./FullShowScenes"
 import type { CSSProperties } from "react"
 import { presentationNote } from "./presentation-note"
+import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
 import {
   TADAZZ_V4_ASSET_BASE,
   TADAZZ_V4_LABELS,
@@ -33,6 +34,7 @@ export function StageIdentityV4({
   scene: TadazzV4Scene
   assetBase: string
 }) {
+  const theme = useOptionalShowTheme()
   if (scene === "z-wipe" || scene === "interlude") return null
   const number = Math.max(1, data.number ?? 1)
   const round = Math.max(1, data.round ?? 1)
@@ -45,7 +47,10 @@ export function StageIdentityV4({
       <div className="stage-identity">
         <img
           className="stage-brand-logo"
-          src={asset(assetBase, "tadazz-brand-logo.png")}
+          src={
+            themeAdapterAsset(theme, "brandLogo") ??
+            asset(assetBase, "tadazz-brand-logo.png")
+          }
           alt="TADAZZ!"
         />
       </div>
@@ -178,7 +183,9 @@ export function AnswerSlotV4({
       <article className="answer-card">
         <figure className="answer-figure">
           <div
-            className={["tz-photo-frame", !answer.imageUrl && "tz-photo-empty"].filter(Boolean).join(" ")}
+            className={["tz-photo-frame", !answer.imageUrl && "tz-photo-empty"]
+              .filter(Boolean)
+              .join(" ")}
           >
             {answer.imageUrl ? (
               <img
@@ -301,7 +308,9 @@ export function FivePictureAnswersV4({
   )
   return (
     <div
-      className={["answers", recap && "recap-answers"].filter(Boolean).join(" ")}
+      className={["answers", recap && "recap-answers"]
+        .filter(Boolean)
+        .join(" ")}
       style={recap && answers.length === 5 ? undefined : dynamicStyle}
       data-v4="answer-cards"
       role={canSelect ? "group" : undefined}
@@ -354,7 +363,9 @@ export function VoteStatusV4({
       : null
   return (
     <div
-      className={["vote-status", locked && "locked-status"].filter(Boolean).join(" ")}
+      className={["vote-status", locked && "locked-status"]
+        .filter(Boolean)
+        .join(" ")}
       data-v4="vote-status"
       data-testid="tadazz-status"
     >
@@ -686,16 +697,20 @@ export function StageBackdropV4({
   data: TadazzV4Data
   assetBase: string
 }) {
+  const theme = useOptionalShowTheme()
   const isShow = TADAZZ_V4_SHOW_SCENES.has(scene)
-  const url =
-    data.backgroundUrl ||
+  const defaultUrl =
+    themeAdapterAsset(theme, isShow ? "showBackdrop" : "questionBackdrop") ||
     asset(assetBase, isShow ? "show-stage.webp" : "question-bg.webp")
+  const url = data.backgroundUrl || defaultUrl
   return (
     <div
       className="stage-bg"
       data-testid="tadazz-backdrop"
       style={{
-        backgroundImage: `url("${url.replaceAll('"', "%22")}")`,
+        backgroundImage: [...new Set([url, defaultUrl])]
+          .map((value) => `url("${value.replaceAll('"', "%22")}")`)
+          .join(", "),
         backgroundSize: data.backgroundFit ?? "cover",
       }}
     />

@@ -1,6 +1,7 @@
-import {ReferenceStoryScene} from "./reference-story/ReferenceStoryScene"
+import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
 import type { TadazzV4Data, TadazzV4Answer } from "./types"
+import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
 
 export const FULL_SHOW_SCENES = [
   "company-opening",
@@ -54,10 +55,11 @@ const BRAND_LOGO_SRC = "/tadazz-show/v4/tadazz-brand-logo.png"
 const num = (n: number) => String(Math.max(1, n)).padStart(2, "0")
 
 export function BrandLogo({ className }: { className?: string }) {
+  const theme = useOptionalShowTheme()
   return (
     <span className={`full-brand-badge ${className || ""}`.trim()}>
       <img
-        src={BRAND_LOGO_SRC}
+        src={themeAdapterAsset(theme, "brandLogo") ?? BRAND_LOGO_SRC}
         alt="TADAZZ!"
         className="full-brand-img"
         onError={(e) => {
@@ -127,7 +129,7 @@ export function StoryCards({
 
   return (
     <div
-      className={`full-story-cards full-story-deck${live ? " full-story-hold holding" : ""}`}
+      className={`full-story-cards full-story-deck${live ? "full-story-hold holding" : ""}`}
     >
       {roles.map((role, i) => {
         const a = winners[i]
@@ -192,7 +194,7 @@ export function Directory({ data }: { data: FullShowInput }) {
         </span>
       </div>
       <div
-        className={`full-directory${focused ? " focus" : ""}`}
+        className={`full-directory${focused ? "focus" : ""}`}
         data-testid="tadazz-full-directory"
         data-group-page={data.groupPage}
       >
@@ -214,7 +216,7 @@ export function Directory({ data }: { data: FullShowInput }) {
                 return (
                   <div
                     key={table}
-                    className={`full-rep-row${joined ? " connected" : ""}`}
+                    className={`full-rep-row${joined ? "connected" : ""}`}
                     data-table={table}
                     aria-label={`Table ${table}: ${name}, ${joined ? "connected" : "waiting"}`}
                   >
@@ -260,7 +262,7 @@ export function PhoneInstructions({ data }: { data: FullShowInput }) {
               (key, i) => (
                 <div
                   key={key}
-                  className={`full-phone-key${i < 5 ? " full-number-key" : ""}`}
+                  className={`full-phone-key${i < 5 ? "full-number-key" : ""}`}
                 >
                   {key}
                 </div>
@@ -320,7 +322,7 @@ export function Readiness({ data }: { data: FullShowInput }) {
             <div
               key={i + 1}
               data-table={i + 1}
-              className={`full-table-led${connected.has(i + 1) ? " connected" : ""}`}
+              className={`full-table-led${connected.has(i + 1) ? "connected" : ""}`}
             >
               <span className="full-led-label">TABLE</span>
               <span className="full-led-number">{num(i + 1)}</span>
@@ -371,7 +373,7 @@ export function StoryProgress({ data }: { data: FullShowInput }) {
           return (
             <div
               key={role}
-              className={`full-progress-piece${ready ? " is-filled" : ""}`}
+              className={`full-progress-piece${ready ? "is-filled" : ""}`}
             >
               <div className="full-progress-cap">{role}</div>
               <div className="full-progress-frame">
@@ -609,7 +611,7 @@ export function FullShowSceneView({
 
     case "story-assembly":
     case "story-live":
-      return <ReferenceStoryScene scene={scene} data={data}/>
+      return <ReferenceStoryScene scene={scene} data={data} />
 
     case "grand-finale":
       return <Finale data={data} />

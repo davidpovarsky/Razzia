@@ -11,6 +11,10 @@ const configPath =
 process.env.TADAZZ_CLEANUP_TEST_CONFIG = configPath
 for (const directory of ["quizz", "media", "extensions/quizzes"])
   fs.mkdirSync(join(configPath, directory), { recursive: true })
+fs.copyFileSync(
+  join(root, "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png"),
+  join(configPath, "media/theme-answer.png"),
+)
 
 export default defineConfig({
   testDir: "tests",

@@ -1,8 +1,11 @@
-import type { UploadedMedia } from "@razzia/common/types/game"
-import type {
-  BackgroundFit,
-  CardBackgroundOverride,
+import {
+  isLegacyShowRollback,
+  type BackgroundFit,
+  type CardBackgroundOverride,
 } from "@razzia/extensions/core"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio/studio-editor-context"
+import { ThemeScopeControls } from "@razzia/web/features/quizz/components/studio/theme-scope-controls"
+import type { UploadedMedia } from "@razzia/common/types/game"
 import Button from "@razzia/web/components/Button"
 import {
   Select,
@@ -25,7 +28,7 @@ interface CardBackgroundConfigProps {
   onBackgroundChange?: (next: CardBackgroundOverride | undefined) => void
 }
 
-const CardBackgroundConfig = ({
+const LegacyCardBackgroundConfig = ({
   backgroundOverride,
   onBackgroundChange,
 }: CardBackgroundConfigProps = {}) => {
@@ -264,6 +267,18 @@ const CardBackgroundConfig = ({
         acceptType="image"
       />
     </ConfigSection>
+  )
+}
+
+const CardBackgroundConfig = (props: CardBackgroundConfigProps = {}) => {
+  const { defaults } = useStudioEditor()
+  return isLegacyShowRollback(defaults) ? (
+    <LegacyCardBackgroundConfig {...props} />
+  ) : (
+    <ThemeScopeControls
+      section="background"
+      kind={props.onBackgroundChange ? "scene" : "question"}
+    />
   )
 }
 

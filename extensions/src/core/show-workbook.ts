@@ -1,4 +1,16 @@
 import {
+  showThemeSelectionSchema,
+  scopedThemeOverridesSchema,
+  type ScopedThemeOverrides,
+} from "./show-themes/selection"
+import {
+  createStudioDefaults,
+  sceneAudioSchema,
+  type AnswerRecapMode,
+  type SceneAdvanceMode,
+  type SceneAudio,
+} from "./studio-timeline-schema"
+import {
   tadaShowV1Schema,
   type AuthoredAnswer,
   type AuthoredCard,
@@ -17,14 +29,11 @@ import {
   type QuestionDecoration,
 } from "./card-appearance"
 import { interludeSchema, type Interlude } from "./media"
-import { tadazzShowBackgroundSchema, type TadazzShowBackground } from "./tadazz-appearance"
-import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
 import {
-  sceneAudioSchema,
-  type AnswerRecapMode,
-  type SceneAdvanceMode,
-  type SceneAudio,
-} from "./studio-timeline-schema"
+  tadazzShowBackgroundSchema,
+  type TadazzShowBackground,
+} from "./tadazz-appearance"
+import { questionEntranceSchema, type QuestionEntrance } from "./quiz-extras"
 import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import type { AnyQuizExtras } from "./index"
 import { MAX_ANSWERS } from "@razzia/common/constants"
@@ -143,8 +152,8 @@ const FIXED_LEN_EXTRA = [
   5, 5, 0,
 ]
 const FIXED_DIST_BASE = [
-  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513,
-  769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
+  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
+  1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
 ]
 const FIXED_DIST_EXTRA = [
   0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
@@ -201,10 +210,18 @@ function inflateRawBytes(
   }
 
   const fixedLitLengths = new Uint8Array(288)
-  for (let i = 0; i <= 143; i += 1) {fixedLitLengths[i] = 8}
-  for (let i = 144; i <= 255; i += 1) {fixedLitLengths[i] = 9}
-  for (let i = 256; i <= 279; i += 1) {fixedLitLengths[i] = 7}
-  for (let i = 280; i <= 287; i += 1) {fixedLitLengths[i] = 8}
+  for (let i = 0; i <= 143; i += 1) {
+    fixedLitLengths[i] = 8
+  }
+  for (let i = 144; i <= 255; i += 1) {
+    fixedLitLengths[i] = 9
+  }
+  for (let i = 256; i <= 279; i += 1) {
+    fixedLitLengths[i] = 7
+  }
+  for (let i = 280; i <= 287; i += 1) {
+    fixedLitLengths[i] = 8
+  }
   const fixedDistLengths = new Uint8Array(32)
   fixedDistLengths.fill(5)
 
@@ -305,12 +322,14 @@ function inflateRawBytes(
           break
         } else if (sym <= 285) {
           const lenCode = sym - 257
-          const length = FIXED_LEN_BASE[lenCode] + readBits(FIXED_LEN_EXTRA[lenCode])
+          const length =
+            FIXED_LEN_BASE[lenCode] + readBits(FIXED_LEN_EXTRA[lenCode])
           const distSym = decodeSymbol(distTable)
           if (distSym >= 30) {
             throw new Error("errors:extensions.corruptXlsxFile")
           }
-          const dist = FIXED_DIST_BASE[distSym] + readBits(FIXED_DIST_EXTRA[distSym])
+          const dist =
+            FIXED_DIST_BASE[distSym] + readBits(FIXED_DIST_EXTRA[distSym])
           if (dist > outPos) {
             throw new Error("errors:extensions.corruptXlsxFile")
           }
@@ -619,7 +638,10 @@ function parseSheetRows(
       }
 
       // Check for formula injection indicators at cell start or strip safety escape apostrophe
-      if (cellValue.startsWith("'") && /^[=+\-@\t\r]/u.test(cellValue.slice(1))) {
+      if (
+        cellValue.startsWith("'") &&
+        /^[=+\-@\t\r]/u.test(cellValue.slice(1))
+      ) {
         cellValue = cellValue.slice(1)
       } else if (
         /^[=+\-@\t\r]/u.test(cellValue) &&
@@ -695,8 +717,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const workbookRelsXml = utf8Decoder.decode(workbookRelsBytes)
 
   const relIdToTarget = new Map<string, string>()
-  const relRegex =
-    /<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"/gu
+  const relRegex = /<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"/gu
   let relMatch = relRegex.exec(workbookRelsXml)
   while (relMatch !== null) {
     relIdToTarget.set(relMatch[1], relMatch[2])
@@ -704,8 +725,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   }
 
   const sheetNameToTarget = new Map<string, string>()
-  const sheetRegex =
-    /<sheet\b[^>]*\bname="([^"]+)"[^>]*\br:id="([^"]+)"/gu
+  const sheetRegex = /<sheet\b[^>]*\bname="([^"]+)"[^>]*\br:id="([^"]+)"/gu
   let sheetMatch = sheetRegex.exec(workbookXml)
   while (sheetMatch !== null) {
     const rawName = sheetMatch[1].trim()
@@ -757,20 +777,17 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const versionStr = showMap.get("version") ?? "1"
   const version = Number.parseInt(versionStr, 10)
   const title = showMap.get("title") ?? ""
-  const defaultQuestionMode = (showMap.get("defaultQuestionMode") ??
-    "quiz") as "quiz" | "survey"
+  const defaultQuestionMode = (showMap.get("defaultQuestionMode") ?? "quiz") as
+    "quiz" | "survey"
   const defaultAdvance = (showMap.get("defaultAdvance") ?? "auto") as
-    | "auto"
-    | "manual"
+    "auto" | "manual"
   const leaderboardPolicy = (showMap.get("leaderboardPolicy") ?? "cardOnly") as
-    | "cardOnly"
-    | "everyN"
-    | "upstream"
-    | "disabled"
+    "cardOnly" | "everyN" | "upstream" | "disabled"
   const baseGameMode = (showMap.get("baseGameMode") ?? "quiz") as
-    | "quiz"
-    | "survey"
-  const note = showMap.has("note") ? showMap.get("note") || undefined : undefined
+    "quiz" | "survey"
+  const note = showMap.has("note")
+    ? showMap.get("note") || undefined
+    : undefined
 
   let defaultStageAnimations: CardStageAnimations | undefined
   const defaultStageAnimationsStr = showMap.get("defaultStageAnimationsJson")
@@ -858,6 +875,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     background?: CardBackgroundOverride
     audioCues?: CardAudioOverrides
     stageAnimations?: CardStageAnimations
+    themeOverrides?: ScopedThemeOverrides
     questionDecoration?: QuestionDecoration
     extraJson?: Record<string, unknown>
     answers: AuthoredAnswer[]
@@ -953,14 +971,23 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         const rawInterlude = JSON.parse(interludeJsonStr)
         const parsed = interludeSchema.safeParse(rawInterlude)
         if (!parsed.success) {
-          throw new Error(`errors:extensions.invalidInterludeJson:Questions!T${r + 1}`)
+          throw new Error(
+            `errors:extensions.invalidInterludeJson:Questions!T${r + 1}`,
+          )
         }
         interludeObj = parsed.data
       } catch (err: any) {
-        if (err.message && err.message.startsWith("errors:extensions.invalidInterludeJson:Questions!T")) {
+        if (
+          err.message &&
+          err.message.startsWith(
+            "errors:extensions.invalidInterludeJson:Questions!T",
+          )
+        ) {
           throw err
         }
-        throw new Error(`errors:extensions.invalidInterludeJson:Questions!T${r + 1}`)
+        throw new Error(
+          `errors:extensions.invalidInterludeJson:Questions!T${r + 1}`,
+        )
       }
     }
 
@@ -977,7 +1004,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         durationMs: Number.isNaN(durationParsed) ? 800 : durationParsed,
       })
       if (!parsedEntrance.success) {
-        throw new Error(`errors:extensions.invalidEntrancePreset:Questions!U${r + 1}`)
+        throw new Error(
+          `errors:extensions.invalidEntrancePreset:Questions!U${r + 1}`,
+        )
       }
       questionEntranceObj = parsedEntrance.data
     }
@@ -1010,6 +1039,10 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
+    const questionThemeJson = getQVal(row, "themeOverridesJson")
+    const questionTheme = questionThemeJson
+      ? scopedThemeOverridesSchema.parse(JSON.parse(questionThemeJson))
+      : undefined
     const stageAnimationsJsonStr = getQVal(row, "stageAnimationsJson")
     let stageAnimationsObj: CardStageAnimations | undefined
     if (stageAnimationsJsonStr) {
@@ -1067,6 +1100,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       background: backgroundObj,
       audioCues: audioCuesObj,
       stageAnimations: stageAnimationsObj,
+      themeOverrides: questionTheme,
       questionDecoration: questionDecorationObj,
       extraJson: extraJsonObj,
       answers: [],
@@ -1117,7 +1151,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
     const ansNum = Number.parseInt(ansNumStr, 10)
     if (Number.isNaN(ansNum) || ansNum < 1 || ansNum > MAX_ANSWERS) {
-      throw new Error(`errors:extensions.invalidAnswerNumber:${qKey}#${ansNumStr}`)
+      throw new Error(
+        `errors:extensions.invalidAnswerNumber:${qKey}#${ansNumStr}`,
+      )
     }
 
     const authoredAns: AuthoredAnswer = {
@@ -1201,9 +1237,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   intermediateCards.sort((a, b) => a.order - b.order)
 
   if (
-    intermediateCards.some(
-      (c) => c.kind === "quiz" || c.kind === "survey",
-    ) &&
+    intermediateCards.some((c) => c.kind === "quiz" || c.kind === "survey") &&
     questionRows.length < 2
   ) {
     throw new Error("errors:extensions.missingQuestions")
@@ -1246,11 +1280,16 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     if (sceneConfigJsonStr) {
       try {
         const parsed = JSON.parse(sceneConfigJsonStr)
-        if (typeof parsed === "object" && parsed !== null && !Array.isArray(parsed)) {
+        if (
+          typeof parsed === "object" &&
+          parsed !== null &&
+          !Array.isArray(parsed)
+        ) {
           if (parsed.overlayAnimations !== undefined) {
-            parsed.overlayAnimations = cinematicOverlayAnimationsArraySchema.parse(
-              parsed.overlayAnimations,
-            )
+            parsed.overlayAnimations =
+              cinematicOverlayAnimationsArraySchema.parse(
+                parsed.overlayAnimations,
+              )
           }
           sceneConfigExtras = parsed
         } else {
@@ -1292,6 +1331,10 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
+    const sceneThemeJson = getTVal(row, "themeOverridesJson")
+    const sceneTheme = sceneThemeJson
+      ? scopedThemeOverridesSchema.parse(JSON.parse(sceneThemeJson))
+      : undefined
     const tStageAnimationsJsonStr = getTVal(row, "stageAnimationsJson")
     let tStageAnimations: CardStageAnimations | undefined
     if (tStageAnimationsJsonStr) {
@@ -1308,6 +1351,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
     const sceneAppearance = {
       ...(tBackground ? { background: tBackground } : {}),
+      ...(sceneTheme ? { themeOverrides: sceneTheme } : {}),
       ...(tAudio ? { audio: tAudio } : {}),
       ...(tStageAnimations ? { stageAnimations: tStageAnimations } : {}),
     }
@@ -1340,6 +1384,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           background: qData.background ?? tBackground,
           audioCues: qData.audioCues,
           stageAnimations: qData.stageAnimations ?? tStageAnimations,
+          themeOverrides: qData.themeOverrides ?? sceneTheme,
           questionDecoration: qData.questionDecoration,
           extraJson,
         })
@@ -1368,6 +1413,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           background: qData.background ?? tBackground,
           audioCues: qData.audioCues,
           stageAnimations: qData.stageAnimations ?? tStageAnimations,
+          themeOverrides: qData.themeOverrides ?? sceneTheme,
           questionDecoration: qData.questionDecoration,
           extraJson,
         })
@@ -1630,9 +1676,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
       const settingKey = `${scope}::${property}::${targetKey}`
       if (seenSettings.has(settingKey)) {
-        throw new Error(
-          `errors:extensions.duplicateSetting:Settings!A${r + 1}`,
-        )
+        throw new Error(`errors:extensions.duplicateSetting:Settings!A${r + 1}`)
       }
       seenSettings.add(settingKey)
 
@@ -1645,6 +1689,31 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
   }
 
+  const themeId = showMap.get("themeId")
+  const themeVersion = showMap.get("themeVersion")
+  const themeOverrides = showMap.get("themeOverridesJson")
+  const showTheme =
+    themeId || themeVersion || themeOverrides
+      ? showThemeSelectionSchema.parse({
+          id: themeId,
+          version: themeVersion,
+          overrides: themeOverrides ? JSON.parse(themeOverrides) : {},
+          ...(showMap.get("themeLegacyPolicy")
+            ? { legacyPolicy: showMap.get("themeLegacyPolicy") }
+            : {}),
+        })
+      : undefined
+  const motionKit = showMap.get("motionKit")
+  const preservedDefaults = createStudioDefaults({
+    ...(showMap.get("themeHistoryJson")
+      ? { themeHistory: JSON.parse(showMap.get("themeHistoryJson") ?? "[]") }
+      : {}),
+    ...(motionKit
+      ? { motionKit: motionKit as "legacy" | "tadazz-v4" | "goldy-20261105" }
+      : {}),
+    ...(showTheme ? { showTheme } : {}),
+  })
+
   const rawAuthoredShow: TadaShowV1 = {
     format: "tada-show",
     version: 1,
@@ -1652,6 +1721,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     note,
     baseGameMode,
     defaults: {
+      ...preservedDefaults,
       newQuestionMode: defaultQuestionMode,
       leaderboardPolicy,
       advanceMode: defaultAdvance,
@@ -1744,6 +1814,26 @@ export function exportTadaShowWorkbook(
     ])
   }
 
+  if (show.defaults?.motionKit) {
+    showData.push(["motionKit", show.defaults.motionKit])
+  }
+  if (show.defaults?.showTheme) {
+    showData.push(
+      ["themeId", show.defaults.showTheme.id],
+      ["themeVersion", show.defaults.showTheme.version],
+      ["themeOverridesJson", JSON.stringify(show.defaults.showTheme.overrides)],
+    )
+    if (show.defaults.showTheme.legacyPolicy) {
+      showData.push(["themeLegacyPolicy", show.defaults.showTheme.legacyPolicy])
+    }
+  }
+  if (show.defaults?.themeHistory) {
+    showData.push([
+      "themeHistoryJson",
+      JSON.stringify(show.defaults.themeHistory),
+    ])
+  }
+
   // 2. Sheet: Timeline
   const timelineData: string[][] = [
     [
@@ -1765,6 +1855,7 @@ export function exportTadaShowWorkbook(
       "backgroundJson",
       "audioJson",
       "stageAnimationsJson",
+      "themeOverridesJson",
       "sceneConfigJson",
     ],
   ]
@@ -1797,20 +1888,14 @@ export function exportTadaShowWorkbook(
       "backgroundJson",
       "audioCuesJson",
       "stageAnimationsJson",
+      "themeOverridesJson",
       "questionDecorationJson",
     ],
   ]
 
   // 4. Sheet: Answers
   const answersData: string[][] = [
-    [
-      "questionKey",
-      "answerNumber",
-      "answerText",
-      "display",
-      "imageUrl",
-      "alt",
-    ],
+    ["questionKey", "answerNumber", "answerText", "display", "imageUrl", "alt"],
   ]
 
   for (let idx = 0; idx < show.cards.length; idx += 1) {
@@ -1851,9 +1936,7 @@ export function exportTadaShowWorkbook(
         card.category ?? "",
         card.note ?? "",
         card.timeSeconds !== undefined ? String(card.timeSeconds) : "20",
-        card.cooldownSeconds !== undefined
-          ? String(card.cooldownSeconds)
-          : "3",
+        card.cooldownSeconds !== undefined ? String(card.cooldownSeconds) : "3",
         card.maxPoints !== undefined
           ? String(card.maxPoints)
           : card.kind === "survey"
@@ -1877,6 +1960,7 @@ export function exportTadaShowWorkbook(
         card.background ? JSON.stringify(card.background) : "",
         card.audioCues ? JSON.stringify(card.audioCues) : "",
         card.stageAnimations ? JSON.stringify(card.stageAnimations) : "",
+        card.themeOverrides ? JSON.stringify(card.themeOverrides) : "",
         card.questionDecoration ? JSON.stringify(card.questionDecoration) : "",
       ])
 
@@ -2069,6 +2153,7 @@ export function exportTadaShowWorkbook(
         card.background ? JSON.stringify(card.background) : "",
         card.audio ? JSON.stringify(card.audio) : "",
         card.stageAnimations ? JSON.stringify(card.stageAnimations) : "",
+        card.themeOverrides ? JSON.stringify(card.themeOverrides) : "",
         sceneConfigObj ? JSON.stringify(sceneConfigObj) : "",
       ])
     }
@@ -2174,7 +2259,10 @@ export function exportTadaShowWorkbook(
       name: "xl/_rels/workbook.xml.rels",
       data: utf8Encoder.encode(workbookRelsXml),
     },
-    { name: "xl/worksheets/sheet1.xml", data: utf8Encoder.encode(sheetShowXml) },
+    {
+      name: "xl/worksheets/sheet1.xml",
+      data: utf8Encoder.encode(sheetShowXml),
+    },
     {
       name: "xl/worksheets/sheet2.xml",
       data: utf8Encoder.encode(sheetTimelineXml),
@@ -2191,7 +2279,10 @@ export function exportTadaShowWorkbook(
       name: "xl/worksheets/sheet5.xml",
       data: utf8Encoder.encode(sheetSettingsXml),
     },
-    { name: "xl/worksheets/sheet6.xml", data: utf8Encoder.encode(sheetHelpXml) },
+    {
+      name: "xl/worksheets/sheet6.xml",
+      data: utf8Encoder.encode(sheetHelpXml),
+    },
   ])
 }
 

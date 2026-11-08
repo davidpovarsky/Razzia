@@ -56,12 +56,19 @@ export function resolveTadazzAudioPolicy({
   if (
     preset.includes("round-one") ||
     preset.includes("round-two") ||
-    preset === "interlude" || preset === "z-wipe" || sceneKind === "countdown"
+    preset === "interlude" ||
+    preset === "z-wipe" ||
+    sceneKind === "countdown" ||
+    sceneKind === "transition"
   ) {
     return { slot: "roundStart", continuityKey: "round-launch" }
   }
 
-  if (preset === "top-pick" || preset === "most-chosen" || preset === "spotlight") {
+  if (
+    preset === "top-pick" ||
+    preset === "most-chosen" ||
+    preset === "spotlight"
+  ) {
     return { slot: "results", continuityKey: "post-results" }
   }
 
@@ -70,8 +77,10 @@ export function resolveTadazzAudioPolicy({
   }
 
   if (sceneKind === "voting") return { slot: "voting", continuityKey: "voting" }
-  if (sceneKind === "question") return { slot: "question", continuityKey: "question" }
-  if (sceneKind === "results") return { slot: "results", continuityKey: "result-reveal" }
+  if (sceneKind === "question")
+    return { slot: "question", continuityKey: "question" }
+  if (sceneKind === "results")
+    return { slot: "results", continuityKey: "result-reveal" }
 
   // Authored scenes own their music even when the underlying round status is
   // still SELECT_ANSWER from the preceding question.

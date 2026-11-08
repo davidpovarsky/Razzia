@@ -23,6 +23,7 @@ import {
 import type { StudioShowCoordinator } from "./studio-show-coordinator"
 
 export interface ExtensionSessionDelegate {
+  getVoteCompletionReason?: () => "elapsed" | "manual" | "allAnswered" | null
   getFullShowData?: () => PublicFullShowData
   endAnswerTimer?: () => boolean
   nextScreen?: () => boolean
@@ -356,6 +357,8 @@ export class ExtensionGameSession {
     }
 
     // Audio cues
+    extrasPayload.voteCompletionReason =
+      this.delegate?.getVoteCompletionReason?.() ?? null
     if (this.extras?.audio) {
       extrasPayload.audio = this.extras.audio
     }
@@ -404,6 +407,9 @@ export class ExtensionGameSession {
       if (questionExtras.audioCues) {
         extrasPayload.cardAudioCues = questionExtras.audioCues
       }
+      if (questionExtras.themeOverrides) {
+        extrasPayload.themeOverrides = questionExtras.themeOverrides
+      }
 
       // Interlude
       if (this.phase === "interlude" && questionExtras.interlude) {
@@ -422,7 +428,8 @@ export class ExtensionGameSession {
         extrasPayload.currentScene = this.showCoordinator.currentScene
 
         if (this.showCoordinator.isSceneActive()) {
-          extrasPayload.sceneElapsedMs = this.showCoordinator.getSceneElapsedMs()
+          extrasPayload.sceneElapsedMs =
+            this.showCoordinator.getSceneElapsedMs()
           if (activeStepEnvelope?.startedAt) {
             this.startedAt = activeStepEnvelope.startedAt
           }
@@ -430,6 +437,11 @@ export class ExtensionGameSession {
           const activeScene = this.showCoordinator.currentScene
 
           if (activeScene) {
+            if (activeScene.themeOverrides) {
+              extrasPayload.themeOverrides = activeScene.themeOverrides
+            } else {
+              delete extrasPayload.themeOverrides
+            }
             if ("background" in activeScene && activeScene.background) {
               extrasPayload.cardBackground = activeScene.background
             } else {

@@ -1,5 +1,6 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve defensive guards for historical sidecars.
 import type { Question } from "@razzia/common/types/game"
+import { collectThemeExtrasMedia } from "../core/show-themes/media"
 import { isQuizExtrasV2, type AnyQuizExtras } from "../core/index"
 
 export function collectEditorMediaUrls(
@@ -15,6 +16,9 @@ export function collectEditorMediaUrls(
   }
 
   if (extras) {
+    for (const url of collectThemeExtrasMedia(extras)) {
+      urls.add(url)
+    }
     for (const pq of Object.values(extras.perQuestion ?? {})) {
       if (!pq) {
         continue

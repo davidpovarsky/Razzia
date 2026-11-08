@@ -1,0 +1,28 @@
+{
+  "status": "example-only",
+  "client": "Client name",
+  "showGoal": "Describe the full audience experience",
+  "languages": ["en"],
+  "brand": {
+    "colors": [],
+    "authorizedLogoFiles": [],
+    "typographyRights": "Provide evidence"
+  },
+  "roles": ["manager", "player", "spectator"],
+  "content": {
+    "playModes": ["quiz", "survey"],
+    "questionTypes": ["single", "multi", "estimation"],
+    "answers": [2, 3, 4, 5]
+  },
+  "audio": {
+    "authorizedFiles": [],
+    "silentEvents": [],
+    "autoplayFallback": "User-gesture enable sound"
+  },
+  "restrictions": ["No unlicensed assets", "No customer JavaScript execution"],
+  "review": {
+    "conceptApproved": false,
+    "runtimeQaApproved": false,
+    "publicationAuthorized": false
+  }
+}

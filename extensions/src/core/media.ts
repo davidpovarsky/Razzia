@@ -1,5 +1,9 @@
 import { z } from "zod"
 import {
+  showThemeSelectionSchema,
+  scopedThemeOverridesSchema,
+} from "./show-themes/selection"
+import {
   ANSWER_DISPLAYS,
   INTERLUDE_ADVANCES,
   INTERLUDE_KINDS,
@@ -332,5 +336,31 @@ export function validateBundleMedia(bundle: {
     }
   }
 
+  if (bundle.extras && typeof bundle.extras === "object") {
+    const themed = bundle.extras as {
+      defaults?: { showTheme?: unknown }
+      perQuestion?: Record<string, { themeOverrides?: unknown }>
+      scenes?: Record<string, { themeOverrides?: unknown }>
+    }
+    if (
+      themed.defaults?.showTheme !== undefined &&
+      !showThemeSelectionSchema.safeParse(themed.defaults.showTheme).success
+    ) {
+      return { ok: false, path: "extras.defaults.showTheme" }
+    }
+    for (const [group, entries] of [
+      ["perQuestion", themed.perQuestion],
+      ["scenes", themed.scenes],
+    ] as const) {
+      for (const [id, entry] of Object.entries(entries ?? {})) {
+        if (
+          entry.themeOverrides !== undefined &&
+          !scopedThemeOverridesSchema.safeParse(entry.themeOverrides).success
+        ) {
+          return { ok: false, path: `extras.${group}[${id}].themeOverrides` }
+        }
+      }
+    }
+  }
   return { ok: true }
 }

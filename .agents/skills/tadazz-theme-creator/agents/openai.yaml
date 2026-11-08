@@ -1,0 +1,4 @@
+interface:
+  display_name: "TADAZZ Theme Creator"
+  short_description: "Author and validate complete TADAZZ show themes"
+  default_prompt: "Use $tadazz-theme-creator to prepare a complete client theme with validation and review evidence."

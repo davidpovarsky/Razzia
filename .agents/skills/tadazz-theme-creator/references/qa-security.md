@@ -1,0 +1,9 @@
+# QA and review
+
+For each candidate record PASS, FAIL or NOT TESTED and link actual output. Cover: complete manifest, duplicate/foreign variants, uninstalled versions, unsafe URLs/paths, hashes and MIME signatures, budgets, asset rights, external Lottie resources and expressions, reduced motion; all roles and 2–5 answers; survey/multi/estimation; lock/results/tie/zero/ranking/finale; scope reset/history and JSON/native/XLSX/clone/reconnect; Chromium and WebKit viewports; no initial legacy flash/scroll; audio event tracing, restart once per epoch, ducking and autoplay recovery plus manual listening.
+
+`ThemeReviewWorkspace` takes a principal supplied by a trusted caller, never a tenant ID/grants supplied by customer JSON. It provides isolated drafts, independent review, immutable version keys, signed publication records and rollback. It is an in-process reference only: production needs authenticated routes, persistent private tenant storage/media URLs, a server-held key, trusted CI evidence lookup, audit retention and preview authorization. Do not wire it directly to uploads without those pieces. Never expose the signing key to browsers or artifacts.
+
+The CLI accepts bounded JSON and a directory of local assets. It rejects executable/archive formats instead of extracting ZIPs. Any future archive adapter must reject traversal, absolute entries, symlinks, nested archives and decompression bombs before extraction. Unsupported SVG/dotlottie archives need a dedicated reviewed sanitizer, not relaxed extension checks. Remote assets must first be imported through authorized tenant media storage; validation does not fetch them.
+
+Code-backed candidates require platform build/review in addition to tenant approval. Declarative manifests can use only compiled renderers and bounded tokens. Content/accessibility/photoflash/licensing judgments require review; byte validation cannot prove them. Do not mark those gates green from static tests.

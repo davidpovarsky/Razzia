@@ -1,12 +1,17 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve historical sidecar cleanup semantics.
 import type { UploadedMedia } from "@razzia/common/types/game"
+import { detachThemeExtrasMedia } from "../core/show-themes/media"
 import { isQuizExtrasV2, type AnyQuizExtras } from "../core/index"
 
 /** Preserve the editor's established cleanup semantics after an authorized delete. */
 export function reconcileDeletedEditorMedia(
-  extras: AnyQuizExtras | null,
+  sourceExtras: AnyQuizExtras | null,
   item: UploadedMedia,
 ): AnyQuizExtras | null {
+  const extras = sourceExtras
+    ? detachThemeExtrasMedia(sourceExtras, item.url)
+    : null
+
   if (extras) {
     let hasChanges = false
     const updatedPerQuestion = { ...extras.perQuestion }

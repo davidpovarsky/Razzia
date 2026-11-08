@@ -1,5 +1,6 @@
-import type { UploadedMedia } from "@razzia/common/types/game"
 import {
+  isLegacyShowRollback,
+  resolveShowTheme,
   type LottieMeta,
   MAX_CINEMATIC_OVERLAY_ANIMATIONS,
   CREATING_WORLDS_PRESETS,
@@ -11,6 +12,7 @@ import {
   type CinematicOverlayAnimation,
   type SceneConfig,
 } from "@razzia/extensions/core"
+import type { UploadedMedia } from "@razzia/common/types/game"
 import {
   CinematicLayerStack,
   LottiePlayer,
@@ -122,6 +124,7 @@ export const StudioSceneEditor = () => {
     timeline,
     scenes,
     updateSceneConfig,
+    defaults,
   } = useStudioEditor()
   const { quizzId, questionIds } = useQuizzEditor()
   const { control } = useFormContext<QuizzFormValues>()
@@ -376,28 +379,36 @@ export const StudioSceneEditor = () => {
     )
   }
 
-  const presetItems = [
-    ...CREATING_WORLDS_PRESETS.map((value) => ({
-      value,
-      label: `TADAZZ · ${value.replaceAll("-", " ")}`,
-    })),
-    {
-      value: "spotlight",
-      label: t("extensions:studio.scene.presetSpotlight", "Spotlight"),
-    },
-    {
-      value: "confetti",
-      label: t("extensions:studio.scene.presetConfetti", "Confetti"),
-    },
-    {
-      value: "bounce",
-      label: t("extensions:studio.scene.presetBounce", "Bounce"),
-    },
-    {
-      value: "pulse",
-      label: t("extensions:studio.scene.presetPulse", "Pulse"),
-    },
-  ]
+  const presetItems = isLegacyShowRollback(defaults)
+    ? [
+        ...CREATING_WORLDS_PRESETS.map((value) => ({
+          value,
+          label: `TADAZZ · ${value.replaceAll("-", " ")}`,
+        })),
+        {
+          value: "spotlight",
+          label: t("extensions:studio.scene.presetSpotlight", "Spotlight"),
+        },
+        {
+          value: "confetti",
+          label: t("extensions:studio.scene.presetConfetti", "Confetti"),
+        },
+        {
+          value: "bounce",
+          label: t("extensions:studio.scene.presetBounce", "Bounce"),
+        },
+        {
+          value: "pulse",
+          label: t("extensions:studio.scene.presetPulse", "Pulse"),
+        },
+      ]
+    : resolveShowTheme({
+        selection: defaults.showTheme,
+        role: "manager",
+      }).definition.capabilities.animationPresets.map((value) => ({
+        value,
+        label: t(`extensions:themes.presets.${value}`),
+      }))
 
   const supportsOnMediaEnd =
     scene.kind === "media" ||

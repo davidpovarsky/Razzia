@@ -4,25 +4,18 @@ import {
   type QuizzValidated,
 } from "@razzia/common/validators/quizz"
 import { isSafeMediaUrl, validateBundleMedia } from "./media"
-import {
-  isEnhancedBundle,
-  type EnhancedBundle,
-} from "./bundle"
+import { isEnhancedBundle, type EnhancedBundle } from "./bundle"
 import {
   authoredShowToNativeBundleDraft,
   nativeBundleToAuthoredShow,
 } from "./show-authoring-convert"
-import {
-  tadaShowV1Schema,
-  type TadaShowV1,
-} from "./show-authoring-schema"
+import { tadaShowV1Schema, type TadaShowV1 } from "./show-authoring-schema"
 import { parseTadaShowWorkbook } from "./show-workbook"
+import { resolveShowTheme } from "./show-themes/resolve"
+import { isQuizExtrasV2 } from "./studio-migrate"
 
 export type ImportFormatType =
-  | "legacy-json"
-  | "enhanced-bundle"
-  | "tada-json"
-  | "tada-xlsx"
+  "legacy-json" | "enhanced-bundle" | "tada-json" | "tada-xlsx"
 
 export interface ShowImportIssue {
   severity: "error" | "warning"
@@ -70,11 +63,37 @@ export interface ShowPreflightResult {
   legacyQuizzDraft?: QuizzValidated
 }
 
+export function preflightShowImport(
+  rawInput: string | ArrayBuffer | Uint8Array,
+  filename = "upload",
+): ShowPreflightResult {
+  const result = inspectShowImport(rawInput, filename)
+  const extras = result.normalizedBundleDraft?.extras
+  if (extras && isQuizExtrasV2(extras) && extras.defaults.showTheme) {
+    const theme = resolveShowTheme({
+      selection: extras.defaults.showTheme,
+      role: "manager",
+    })
+    for (const diagnostic of theme.diagnostics) {
+      result.issues.push({
+        severity: "warning",
+        code: `THEME_${diagnostic.code}`,
+        messageKey:
+          diagnostic.code === "unknown-theme"
+            ? "extensions:themes.unknownTheme"
+            : "extensions:themes.invalidChoice",
+        path: "defaults.showTheme",
+      })
+    }
+  }
+  return result
+}
+
 /**
  * Pure preflight function that detects format, parses and validates completely
  * without any disk writes, side effects, or remote network calls.
  */
-export function preflightShowImport(
+function inspectShowImport(
   rawInput: string | ArrayBuffer | Uint8Array,
   filename = "upload",
 ): ShowPreflightResult {
@@ -434,7 +453,9 @@ function buildSummaryFromAuthored(
     } else {
       sceneCount += 1
       const hasMedia = Boolean(
-        (card as any).mediaUrl || (card as any).media?.url || card.background?.url,
+        (card as any).mediaUrl ||
+        (card as any).media?.url ||
+        card.background?.url,
       )
       if (hasMedia) {
         mediaCount += 1
@@ -465,7 +486,10 @@ function buildSummaryFromAuthored(
   }
 }
 
-function collectMediaWarnings(show: TadaShowV1, issues: ShowImportIssue[]): void {
+function collectMediaWarnings(
+  show: TadaShowV1,
+  issues: ShowImportIssue[],
+): void {
   for (let idx = 0; idx < show.cards.length; idx += 1) {
     const card = show.cards[idx]
 
@@ -491,7 +515,11 @@ function collectMediaWarnings(show: TadaShowV1, issues: ShowImportIssue[]): void
       }
 
       if (card.audioCues) {
-        for (const cueKey of ["showQuestion", "answersMusic", "revealResults"] as const) {
+        for (const cueKey of [
+          "showQuestion",
+          "answersMusic",
+          "revealResults",
+        ] as const) {
           const cue = card.audioCues[cueKey]
           if (cue?.url && cue.url.startsWith("https://")) {
             issues.push({

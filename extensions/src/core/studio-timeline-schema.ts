@@ -1,5 +1,11 @@
 import { z } from "zod"
 import {
+  createDefaultShowTheme,
+  isLegacyShowRollback,
+  scopedThemeOverridesSchema,
+  showThemeSelectionSchema,
+} from "./show-themes/selection"
+import {
   cardAudioModeSchema,
   cardBackgroundOverrideSchema,
   cardStageAnimationsSchema,
@@ -130,6 +136,7 @@ export type SceneAudio = z.infer<typeof sceneAudioSchema>
 
 const sceneAppearanceFields = {
   background: cardBackgroundOverrideSchema.optional(),
+  themeOverrides: scopedThemeOverridesSchema.optional(),
   audio: sceneAudioSchema.optional(),
   stageAnimations: cardStageAnimationsSchema.optional(),
 }
@@ -451,6 +458,8 @@ export interface ActiveSceneData {
 // ── Studio Defaults Schema ────────────────────────────────────────────────
 
 export const studioDefaultsSchema = z.strictObject({
+  showTheme: showThemeSelectionSchema.optional(),
+  themeHistory: z.array(showThemeSelectionSchema).max(32).optional(),
   newQuestionMode: z.enum(["quiz", "survey"]).default("quiz"),
   leaderboardPolicy: z
     .enum(["upstream", "everyN", "cardOnly", "disabled"])
@@ -464,6 +473,17 @@ export const studioDefaultsSchema = z.strictObject({
 })
 
 export type StudioDefaults = z.infer<typeof studioDefaultsSchema>
+
+export function createStudioDefaults(
+  input: Partial<StudioDefaults> = {},
+): StudioDefaults {
+  return studioDefaultsSchema.parse({
+    ...input,
+    ...(isLegacyShowRollback(input)
+      ? {}
+      : { showTheme: input.showTheme ?? createDefaultShowTheme() }),
+  })
+}
 
 export const authoringMetadataSchema = z.strictObject({
   showNote: z.string().max(2000).optional(),
@@ -657,11 +677,7 @@ export const createDefaultQuizExtrasV2 = (
     questionIds,
     timeline,
     scenes: {},
-    defaults: {
-      newQuestionMode: "quiz",
-      leaderboardPolicy: "cardOnly",
-      advanceMode: "auto",
-    },
+    defaults: createStudioDefaults(),
     audio: createDefaultAudioExtras(),
     teams: {
       enabled: false,

@@ -1,11 +1,14 @@
-import type { UploadedMedia } from "@razzia/common/types/game"
-import type {
-  CardAudioCueOverride,
-  CardAudioMode,
-  CardAudioOverrides,
-  QuestionAudioCueKey,
-  SceneAudio,
+import {
+  isLegacyShowRollback,
+  type CardAudioCueOverride,
+  type CardAudioMode,
+  type CardAudioOverrides,
+  type QuestionAudioCueKey,
+  type SceneAudio,
 } from "@razzia/extensions/core"
+import { useStudioEditor } from "@razzia/web/features/quizz/components/studio/studio-editor-context"
+import { ThemeScopeControls } from "@razzia/web/features/quizz/components/studio/theme-scope-controls"
+import type { UploadedMedia } from "@razzia/common/types/game"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
 import ConfigSection from "@razzia/web/features/quizz/components/QuestionEditor/QuestionEditorConfig/ConfigSection"
 import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
@@ -46,7 +49,7 @@ const QUESTION_SLOTS: Array<{
   },
 ]
 
-const CardAudioConfig = ({
+const LegacyCardAudioConfig = ({
   kind = "question",
   sceneAudio,
   onSceneAudioChange,
@@ -392,6 +395,15 @@ const CardAudioConfig = ({
         acceptType="audio"
       />
     </ConfigSection>
+  )
+}
+
+const CardAudioConfig = (props: CardAudioConfigProps = {}) => {
+  const { defaults } = useStudioEditor()
+  return isLegacyShowRollback(defaults) ? (
+    <LegacyCardAudioConfig {...props} />
+  ) : (
+    <ThemeScopeControls section="audio" kind={props.kind} />
   )
 }
 

@@ -1,4 +1,5 @@
 import {
+  isLegacyShowRollback,
   QUESTION_DECORATION_PRESETS,
   QUESTION_ENTRANCE_PRESETS,
   resolveCardStageAnimations,
@@ -11,6 +12,7 @@ import {
   type QuestionEntrancePreset,
   type StageAnimationTiming,
 } from "@razzia/extensions/core"
+import { ShowThemeSettings } from "./show-theme-settings"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import Card from "@razzia/web/components/Card"
@@ -194,6 +196,7 @@ export const StudioSettingsPage = () => {
           </div>
         </div>
 
+        <ShowThemeSettings />
         <Card className="flex w-full max-w-none flex-col gap-6 p-6 md:p-8">
           {/* Default Question Mode */}
           <ConfigField>
@@ -320,270 +323,282 @@ export const StudioSettingsPage = () => {
 
           <hr className="border-accent" />
 
-          {/* Opt-in brand stage background. Original Razzia shows remain unchanged. */}
-          <ConfigField>
-            <ConfigField.Label
-              icon={<Sparkles className="text-primary size-4" />}
-              label={t(
-                "extensions:studio.settings.tadazzBackground",
-                "Tadazz Show Background",
-              )}
-            />
-            <ConfigField.Description>
-              {t(
-                "extensions:studio.settings.tadazzBackgroundDesc",
-                "The show-wide background is automatically overridden by a card-specific image or full-screen video.",
-              )}
-            </ConfigField.Description>
-            <StudioSelect
-              value={tadazzBackground.mode}
-              onChange={(mode: string) => {
-                if (mode === "static" && !tadazzBackground.staticUrl) {
-                  setTadazzMediaPickerOpen(true)
-
-                  return
-                }
-
-                updateTadazzBackground({
-                  mode: mode as TadazzShowBackground["mode"],
-                })
-              }}
-              items={[
-                {
-                  value: "original",
-                  label: t(
-                    "extensions:studio.settings.originalBg",
-                    "Original Razzia",
-                  ),
-                },
-                {
-                  value: "animated",
-                  label: t(
-                    "extensions:studio.settings.tadazzAnimated",
-                    "Tadazz Animated",
-                  ),
-                },
-                {
-                  value: "static",
-                  label: t(
-                    "extensions:studio.settings.staticBg",
-                    "Custom Still Image",
-                  ),
-                },
-              ]}
-            />
-            {tadazzBackground.mode === "animated" && (
-              <div
-                className="flex flex-wrap items-center gap-4"
-                data-testid="tadazz-background-motion-controls"
-              >
-                <label className="text-foreground flex flex-1 flex-col gap-1 text-sm font-medium">
-                  {t(
-                    "extensions:studio.settings.motionIntensity",
-                    "Motion Intensity",
+          {isLegacyShowRollback(defaults) && (
+            <>
+              {/* Archived compatibility controls. */}
+              <ConfigField>
+                <ConfigField.Label
+                  icon={<Sparkles className="text-primary size-4" />}
+                  label={t(
+                    "extensions:studio.settings.tadazzBackground",
+                    "Tadazz Show Background",
                   )}
-                  : {tadazzBackground.intensity.toFixed(2)}
-                  <input
-                    aria-label={t(
-                      "extensions:studio.settings.motionIntensity",
-                      "Motion Intensity",
-                    )}
-                    type="range"
-                    min={0}
-                    max={1.5}
-                    step={0.05}
-                    value={tadazzBackground.intensity}
-                    onChange={(event) =>
-                      updateTadazzBackground({
-                        intensity: Number(event.currentTarget.value),
-                      })
-                    }
-                  />
-                </label>
-                <label className="text-foreground flex items-center gap-2 text-sm">
-                  <input
-                    type="checkbox"
-                    checked={tadazzBackground.paused}
-                    onChange={(event) =>
-                      updateTadazzBackground({
-                        paused: event.currentTarget.checked,
-                      })
-                    }
-                  />
+                />
+                <ConfigField.Description>
                   {t(
-                    "extensions:studio.settings.pauseMotion",
-                    "Pause Animation",
+                    "extensions:studio.settings.tadazzBackgroundDesc",
+                    "The show-wide background is automatically overridden by a card-specific image or full-screen video.",
                   )}
-                </label>
-              </div>
-            )}
-            {tadazzBackground.mode === "static" && (
-              <Button
-                type="button"
-                size="sm"
-                onClick={() => setTadazzMediaPickerOpen(true)}
-              >
-                {t(
-                  "extensions:studio.settings.changeBackground",
-                  "Choose Image From Library",
-                )}
-              </Button>
-            )}
-            {tadazzBackground.mode !== "original" && (
-              <>
+                </ConfigField.Description>
                 <StudioSelect
-                  value={tadazzBackground.fit}
-                  onChange={(value: string) =>
+                  value={tadazzBackground.mode}
+                  onChange={(mode: string) => {
+                    if (mode === "static" && !tadazzBackground.staticUrl) {
+                      setTadazzMediaPickerOpen(true)
+
+                      return
+                    }
+
                     updateTadazzBackground({
-                      fit: value as "cover" | "contain",
+                      mode: mode as TadazzShowBackground["mode"],
                     })
-                  }
+                  }}
                   items={[
                     {
-                      value: "cover",
+                      value: "original",
                       label: t(
-                        "extensions:studio.settings.coverBg",
-                        "Fill Screen (Crop Edges)",
+                        "extensions:studio.settings.originalBg",
+                        "Original Razzia",
                       ),
                     },
                     {
-                      value: "contain",
+                      value: "animated",
                       label: t(
-                        "extensions:studio.settings.containBg",
-                        "Fit Entire Image",
+                        "extensions:studio.settings.tadazzAnimated",
+                        "Tadazz Animated",
+                      ),
+                    },
+                    {
+                      value: "static",
+                      label: t(
+                        "extensions:studio.settings.staticBg",
+                        "Custom Still Image",
                       ),
                     },
                   ]}
                 />
+                {tadazzBackground.mode === "animated" && (
+                  <div
+                    className="flex flex-wrap items-center gap-4"
+                    data-testid="tadazz-background-motion-controls"
+                  >
+                    <label className="text-foreground flex flex-1 flex-col gap-1 text-sm font-medium">
+                      {t(
+                        "extensions:studio.settings.motionIntensity",
+                        "Motion Intensity",
+                      )}
+                      : {tadazzBackground.intensity.toFixed(2)}
+                      <input
+                        aria-label={t(
+                          "extensions:studio.settings.motionIntensity",
+                          "Motion Intensity",
+                        )}
+                        type="range"
+                        min={0}
+                        max={1.5}
+                        step={0.05}
+                        value={tadazzBackground.intensity}
+                        onChange={(event) =>
+                          updateTadazzBackground({
+                            intensity: Number(event.currentTarget.value),
+                          })
+                        }
+                      />
+                    </label>
+                    <label className="text-foreground flex items-center gap-2 text-sm">
+                      <input
+                        type="checkbox"
+                        checked={tadazzBackground.paused}
+                        onChange={(event) =>
+                          updateTadazzBackground({
+                            paused: event.currentTarget.checked,
+                          })
+                        }
+                      />
+                      {t(
+                        "extensions:studio.settings.pauseMotion",
+                        "Pause Animation",
+                      )}
+                    </label>
+                  </div>
+                )}
+                {tadazzBackground.mode === "static" && (
+                  <Button
+                    type="button"
+                    size="sm"
+                    onClick={() => setTadazzMediaPickerOpen(true)}
+                  >
+                    {t(
+                      "extensions:studio.settings.changeBackground",
+                      "Choose Image From Library",
+                    )}
+                  </Button>
+                )}
+                {tadazzBackground.mode !== "original" && (
+                  <>
+                    <StudioSelect
+                      value={tadazzBackground.fit}
+                      onChange={(value: string) =>
+                        updateTadazzBackground({
+                          fit: value as "cover" | "contain",
+                        })
+                      }
+                      items={[
+                        {
+                          value: "cover",
+                          label: t(
+                            "extensions:studio.settings.coverBg",
+                            "Fill Screen (Crop Edges)",
+                          ),
+                        },
+                        {
+                          value: "contain",
+                          label: t(
+                            "extensions:studio.settings.containBg",
+                            "Fit Entire Image",
+                          ),
+                        },
+                      ]}
+                    />
+                    <div
+                      className="border-accent relative aspect-video w-full max-w-lg overflow-hidden rounded-xl border bg-[#090119]"
+                      data-testid="tadazz-settings-preview"
+                    >
+                      <TadazzAnimatedBackdrop
+                        state={resolveTadazzStageBackground({
+                          settings: tadazzBackground,
+                          tadazzImageUrl: TADAZZ_IMAGE_URL,
+                        })}
+                      />
+                    </div>
+                  </>
+                )}
+              </ConfigField>
+
+              <hr className="border-accent" />
+
+              {/* Global Stage Animation Defaults */}
+              <ConfigField>
+                <ConfigField.Label
+                  icon={<Sparkles className="text-primary size-4" />}
+                  label={t(
+                    "extensions:stageMotion.globalDefaultsTitle",
+                    "Global Stage Animation Defaults",
+                  )}
+                />
+                <ConfigField.Description>
+                  {t(
+                    "extensions:stageMotion.globalDefaultsDesc",
+                    "Default stage animations inherited by question and scene cards unless overridden per card.",
+                  )}
+                </ConfigField.Description>
+
                 <div
-                  className="border-accent relative aspect-video w-full max-w-lg overflow-hidden rounded-xl border bg-[#090119]"
-                  data-testid="tadazz-settings-preview"
+                  data-testid="global-stage-animations-grid"
+                  className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2"
                 >
-                  <TadazzAnimatedBackdrop
-                    state={resolveTadazzStageBackground({
-                      settings: tadazzBackground,
-                      tadazzImageUrl: TADAZZ_IMAGE_URL,
-                    })}
-                  />
+                  {(
+                    [
+                      [
+                        "questionEntrance",
+                        t(
+                          "extensions:stageMotion.slotQuestion",
+                          "Question Title & Media",
+                        ),
+                      ],
+                      [
+                        "answerEntrance",
+                        t("extensions:stageMotion.slotAnswers", "Answer Cards"),
+                      ],
+                      [
+                        "answerBadgeEntrance",
+                        t(
+                          "extensions:stageMotion.slotBadges",
+                          "Key Badges (1-5)",
+                        ),
+                      ],
+                      [
+                        "resultsRevealEntrance",
+                        t(
+                          "extensions:stageMotion.slotResults",
+                          "Results Reveal",
+                        ),
+                      ],
+                    ] as const
+                  ).map(([slotKey, slotLabel]) => (
+                    <div
+                      key={slotKey}
+                      data-testid={`global-stage-slot-${slotKey}`}
+                      className="border-accent bg-muted/20 flex flex-col gap-1.5 rounded-lg border p-3"
+                    >
+                      <span className="text-foreground text-xs font-semibold">
+                        {slotLabel}
+                      </span>
+                      <StudioSelect
+                        value={resolvedGlobalStage[slotKey].preset}
+                        onChange={(val: string) =>
+                          updateGlobalStageSlot(
+                            slotKey,
+                            val as QuestionEntrancePreset,
+                          )
+                        }
+                        items={stagePresetItems}
+                      />
+                    </div>
+                  ))}
                 </div>
-              </>
-            )}
-          </ConfigField>
+              </ConfigField>
 
-          <hr className="border-accent" />
+              <hr className="border-accent" />
 
-          {/* Global Stage Animation Defaults */}
-          <ConfigField>
-            <ConfigField.Label
-              icon={<Sparkles className="text-primary size-4" />}
-              label={t(
-                "extensions:stageMotion.globalDefaultsTitle",
-                "Global Stage Animation Defaults",
-              )}
-            />
-            <ConfigField.Description>
-              {t(
-                "extensions:stageMotion.globalDefaultsDesc",
-                "Default stage animations inherited by question and scene cards unless overridden per card.",
-              )}
-            </ConfigField.Description>
-
-            <div
-              data-testid="global-stage-animations-grid"
-              className="mt-2 grid grid-cols-1 gap-3 sm:grid-cols-2"
-            >
-              {(
-                [
-                  [
-                    "questionEntrance",
-                    t(
-                      "extensions:stageMotion.slotQuestion",
-                      "Question Title & Media",
-                    ),
-                  ],
-                  [
-                    "answerEntrance",
-                    t("extensions:stageMotion.slotAnswers", "Answer Cards"),
-                  ],
-                  [
-                    "answerBadgeEntrance",
-                    t("extensions:stageMotion.slotBadges", "Key Badges (1-5)"),
-                  ],
-                  [
-                    "resultsRevealEntrance",
-                    t("extensions:stageMotion.slotResults", "Results Reveal"),
-                  ],
-                ] as const
-              ).map(([slotKey, slotLabel]) => (
-                <div
-                  key={slotKey}
-                  data-testid={`global-stage-slot-${slotKey}`}
-                  className="border-accent bg-muted/20 flex flex-col gap-1.5 rounded-lg border p-3"
-                >
-                  <span className="text-foreground text-xs font-semibold">
-                    {slotLabel}
-                  </span>
-                  <StudioSelect
-                    value={resolvedGlobalStage[slotKey].preset}
-                    onChange={(val: string) =>
-                      updateGlobalStageSlot(
-                        slotKey,
-                        val as QuestionEntrancePreset,
-                      )
-                    }
-                    items={stagePresetItems}
-                  />
-                </div>
-              ))}
-            </div>
-          </ConfigField>
-
-          <hr className="border-accent" />
-
-          {/* Global Question Decorative Underline */}
-          <ConfigField>
-            <ConfigField.Label
-              icon={<Sparkles className="text-primary size-4" />}
-              label={t(
-                "extensions:stageMotion.decorationTitle",
-                "Question Underline Effect",
-              )}
-            />
-            <ConfigField.Description>
-              {t(
-                "extensions:stageMotion.decorationDesc",
-                "Optional decorative visual accent under the question title (never replaces the authoritative round timer).",
-              )}
-            </ConfigField.Description>
-            <StudioSelect
-              value={
-                resolvedGlobalDecoration.enabled
-                  ? resolvedGlobalDecoration.preset
-                  : "none"
-              }
-              onChange={(val: string) =>
-                updateDefaults({
-                  questionDecoration: {
-                    enabled: val !== "none",
-                    preset: val as QuestionDecorationPreset,
-                  },
-                })
-              }
-              items={decorationPresetItems}
-            />
-          </ConfigField>
+              {/* Global Question Decorative Underline */}
+              <ConfigField>
+                <ConfigField.Label
+                  icon={<Sparkles className="text-primary size-4" />}
+                  label={t(
+                    "extensions:stageMotion.decorationTitle",
+                    "Question Underline Effect",
+                  )}
+                />
+                <ConfigField.Description>
+                  {t(
+                    "extensions:stageMotion.decorationDesc",
+                    "Optional decorative visual accent under the question title (never replaces the authoritative round timer).",
+                  )}
+                </ConfigField.Description>
+                <StudioSelect
+                  value={
+                    resolvedGlobalDecoration.enabled
+                      ? resolvedGlobalDecoration.preset
+                      : "none"
+                  }
+                  onChange={(val: string) =>
+                    updateDefaults({
+                      questionDecoration: {
+                        enabled: val !== "none",
+                        preset: val as QuestionDecorationPreset,
+                      },
+                    })
+                  }
+                  items={decorationPresetItems}
+                />
+              </ConfigField>
+            </>
+          )}
         </Card>
-        <MediaLibrary
-          open={tadazzMediaPickerOpen}
-          onOpenChange={setTadazzMediaPickerOpen}
-          acceptType="image"
-          onSelect={(item) => {
-            if (item.type === "image") {
-              updateTadazzBackground({ mode: "static", staticUrl: item.url })
-              setTadazzMediaPickerOpen(false)
-            }
-          }}
-        />
+        {isLegacyShowRollback(defaults) && (
+          <MediaLibrary
+            open={tadazzMediaPickerOpen}
+            onOpenChange={setTadazzMediaPickerOpen}
+            acceptType="image"
+            onSelect={(item) => {
+              if (item.type === "image") {
+                updateTadazzBackground({ mode: "static", staticUrl: item.url })
+                setTadazzMediaPickerOpen(false)
+              }
+            }}
+          />
+        )}
       </div>
     </div>
   )

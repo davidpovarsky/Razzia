@@ -1,17 +1,17 @@
 /* TADAZZ V4 — declaration values extracted from the supplied HTML. */
 /* DOM/UI rooted under .tzv4-stage; old game/editor styling is untouched. */
 .tzv4-stage {
-  --night: #08001d;
-  --purple: #34056f;
-  --violet: #8b20f4;
-  --pink: #ef48df;
-  --blue: #00baff;
-  --royal: #2e70ff;
-  --lime: #e5ff37;
-  --gold: #ffbe53;
-  --cream: #fff5db;
-  --ink: #130423;
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
+  --night: var(--show-theme-night, #08001d);
+  --purple: var(--show-theme-purple, #34056f);
+  --violet: var(--show-theme-violet, #8b20f4);
+  --pink: var(--show-theme-pink, #ef48df);
+  --blue: var(--show-theme-blue, #00baff);
+  --royal: var(--show-theme-royal, #2e70ff);
+  --lime: var(--show-theme-lime, #e5ff37);
+  --gold: var(--show-theme-gold, #ffbe53);
+  --cream: var(--show-theme-cream, #fff5db);
+  --ink: var(--show-theme-ink, #130423);
+  font-family: var(--show-theme-font, Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Arial, sans-serif);
   color-scheme: dark;
 }
 .tzv4-stage { width:1920px; height:1080px; position:absolute; left:50%; top:50%; transform:translate(-50%,-50%) scale(var(--scale,1)); transform-origin:center; overflow:hidden; isolation:isolate; color:var(--cream); user-select:none; background:#0f002c; pointer-events:none; }

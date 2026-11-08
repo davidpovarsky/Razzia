@@ -19,6 +19,7 @@ import {
 } from "@razzia/extensions/core"
 import {
   AudioCuePlayer,
+  ShowThemeRenderer,
   ExtensionStageContent,
   createScenePresenterLabels,
   isTadazzShowActive,
@@ -37,7 +38,7 @@ import {
 import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
-import { TadazzShowView } from "@razzia/web/features/game/components/tadazz-show/TadazzShowView"
+import { SHOW_THEME_ADAPTERS } from "@razzia/web/features/game/components/tadazz-show/show-theme-adapters"
 import {
   TadazzMotionStage,
   type TadazzMotionScene,
@@ -549,25 +550,31 @@ const GameWrapper = ({
   // legacy background/state components are never mounted, not even for a frame.
   if (isTadazzShowActive(extensionState)) {
     return (
-      <TadazzShowView
-        manager={Boolean(manager)}
+      <ShowThemeRenderer
+        envelope={extensionState}
         role={effectiveRole}
-        statusName={statusName}
-        extensionState={extensionState}
-        onNext={onNext}
-        onBack={onBack}
-        countdown={countdown}
-        totalPlayers={totalPlayers}
-        roomMediaReady={roomMediaReady}
-        audioCueId={activePhaseCueId}
-        hasCompetingMediaAudio={hasCompetingMediaAudio}
-        activeCardKey={activeCardKey}
-        sceneAudio={extensionState?.extras.sceneAudio ?? currentSceneObj?.audio}
-        isHostPresenting={isHostPresenting}
-        onPresent={beginHostPresentation}
-        onExitPresentation={exitHostPresentation}
-        presentationRootRef={(node) => {
-          presentationRootRef.current = node
+        renderers={SHOW_THEME_ADAPTERS}
+        viewProps={{
+          manager: Boolean(manager),
+          role: effectiveRole,
+          statusName,
+          extensionState,
+          onNext,
+          onBack,
+          countdown,
+          totalPlayers,
+          roomMediaReady,
+          audioCueId: activePhaseCueId,
+          hasCompetingMediaAudio,
+          activeCardKey,
+          sceneAudio:
+            extensionState?.extras.sceneAudio ?? currentSceneObj?.audio,
+          isHostPresenting,
+          onPresent: beginHostPresentation,
+          onExitPresentation: exitHostPresentation,
+          presentationRootRef: (node) => {
+            presentationRootRef.current = node
+          },
         }}
       />
     )

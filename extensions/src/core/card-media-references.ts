@@ -1,4 +1,9 @@
 import type { QuizExtrasV2 } from "./studio-timeline-schema"
+import {
+  collectThemeMediaUrls,
+  collectThemeExtrasMedia,
+  detachThemeExtrasMedia,
+} from "./show-themes/media"
 
 // V1 and V2 share these media fields; intersecting their literal schema versions
 // would reduce the entire object to never.
@@ -7,6 +12,7 @@ type MediaExtras = Partial<
 >
 
 export type MediaReferenceField =
+  | "show.themeAsset"
   | "question.media"
   | "question.answerVisual"
   | "question.background"
@@ -404,6 +410,22 @@ export const collectQuizMediaReferences = (
     }
   }
 
+  for (const url of collectThemeMediaUrls(
+    show.extras?.defaults?.showTheme?.overrides,
+  )) {
+    addRef("show-theme", "global", quizTitle, "show.themeAsset", url)
+  }
+  for (const [cardId, card] of Object.entries(show.extras?.perQuestion ?? {})) {
+    for (const url of collectThemeMediaUrls(card.themeOverrides?.overrides)) {
+      addRef(cardId, "question", cardId, "show.themeAsset", url)
+    }
+  }
+  for (const [cardId, card] of Object.entries(show.extras?.scenes ?? {})) {
+    for (const url of collectThemeMediaUrls(card.themeOverrides?.overrides)) {
+      addRef(cardId, "scene", cardId, "show.themeAsset", url)
+    }
+  }
+
   return refs
 }
 
@@ -481,7 +503,11 @@ export const detachMediaFromShowData = <
     return { quizz: nextQuizz, extras, modified }
   }
 
-  const nextExtras = structuredClone(extras)
+  let nextExtras = structuredClone(extras)
+  for (const url of collectThemeExtrasMedia(nextExtras).filter(matchesTarget)) {
+    nextExtras = detachThemeExtrasMedia(nextExtras, url)
+    modified = true
+  }
 
   if (nextExtras.perQuestion) {
     for (const pq of Object.values(nextExtras.perQuestion)) {

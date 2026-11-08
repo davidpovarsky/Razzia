@@ -1,3 +1,4 @@
+import { scopedThemeOverridesSchema } from "./show-themes/selection"
 import { z } from "zod"
 import {
   cardAudioOverridesSchema,
@@ -96,6 +97,7 @@ export const authoredQuizCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audioCues: cardAudioOverridesSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     questionDecoration: questionDecorationSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
@@ -153,6 +155,7 @@ export const authoredSurveyCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audioCues: cardAudioOverridesSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     questionDecoration: questionDecorationSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
@@ -187,6 +190,7 @@ export const authoredTransitionCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -218,6 +222,7 @@ export const authoredAnimationCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -258,6 +263,7 @@ export const authoredMediaCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -290,6 +296,7 @@ export const authoredLeaderboardCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -316,6 +323,7 @@ export const authoredInterimResultsCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -347,6 +355,7 @@ export const authoredAnswerRecapCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -373,6 +382,7 @@ export const authoredCountdownCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((card, ctx) => {
@@ -425,6 +435,7 @@ export const authoredOpeningCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {
@@ -460,6 +471,7 @@ export const authoredClosingCardSchema = z
     background: cardBackgroundOverrideSchema.optional(),
     audio: sceneAudioSchema.optional(),
     stageAnimations: cardStageAnimationsSchema.optional(),
+    themeOverrides: scopedThemeOverridesSchema.optional(),
     extraJson: z.record(z.string(), z.unknown()).optional(),
   })
   .superRefine((data, ctx) => {

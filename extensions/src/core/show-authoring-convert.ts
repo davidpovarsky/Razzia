@@ -4,6 +4,7 @@ import {
 } from "@razzia/common/validators/quizz"
 import {
   computeCanonicalBaseDigest,
+  createStudioDefaults,
   createDefaultAudioExtras,
   createDefaultRosterExtras,
   quizExtrasV2Schema,
@@ -152,6 +153,10 @@ export function authoredShowToNativeBundleDraft(
         qExtras.questionDecoration = card.questionDecoration
       }
 
+      if (card.themeOverrides) {
+        qExtras.themeOverrides = card.themeOverrides
+      }
+
       if (Object.keys(qExtras).length > 0) {
         perQuestion[qId] = qExtras
       }
@@ -167,6 +172,7 @@ export function authoredShowToNativeBundleDraft(
 
       const sceneAppearance = {
         ...(card.background ? { background: card.background } : {}),
+        ...(card.themeOverrides ? { themeOverrides: card.themeOverrides } : {}),
         ...(card.audio ? { audio: card.audio } : {}),
         ...(card.stageAnimations
           ? { stageAnimations: card.stageAnimations }
@@ -426,20 +432,7 @@ export function authoredShowToNativeBundleDraft(
 
   const baseDigest = computeCanonicalBaseDigest(quizz)
 
-  const defaults: QuizExtrasV2["defaults"] = {
-    newQuestionMode: show.defaults?.newQuestionMode ?? "quiz",
-    leaderboardPolicy: show.defaults?.leaderboardPolicy ?? "cardOnly",
-    advanceMode: show.defaults?.advanceMode ?? "auto",
-    ...(show.defaults?.stageAnimations
-      ? { stageAnimations: show.defaults.stageAnimations }
-      : {}),
-    ...(show.defaults?.questionDecoration
-      ? { questionDecoration: show.defaults.questionDecoration }
-      : {}),
-    ...(show.defaults?.tadazzBackground
-      ? { tadazzBackground: show.defaults.tadazzBackground }
-      : {}),
-  }
+  const defaults = createStudioDefaults(show.defaults)
 
   // Apply settings channel overrides if present
   let leaderboardExtras: QuizExtrasV2["leaderboard"]
@@ -668,6 +661,7 @@ export function nativeBundleToAuthoredShow(
           audioCues: perQ?.audioCues,
           stageAnimations: perQ?.stageAnimations,
           questionDecoration: perQ?.questionDecoration,
+          themeOverrides: perQ?.themeOverrides,
         })
       } else {
         const correctAnswers = rawSolutions.map((solIdx) => solIdx + 1)
@@ -693,6 +687,7 @@ export function nativeBundleToAuthoredShow(
           audioCues: perQ?.audioCues,
           stageAnimations: perQ?.stageAnimations,
           questionDecoration: perQ?.questionDecoration,
+          themeOverrides: perQ?.themeOverrides,
         })
       }
     } else {
@@ -706,6 +701,9 @@ export function nativeBundleToAuthoredShow(
 
       const sceneAppearance = {
         ...(scene.background ? { background: scene.background } : {}),
+        ...(scene.themeOverrides
+          ? { themeOverrides: scene.themeOverrides }
+          : {}),
         ...(scene.audio ? { audio: scene.audio } : {}),
         ...(scene.stageAnimations
           ? { stageAnimations: scene.stageAnimations }

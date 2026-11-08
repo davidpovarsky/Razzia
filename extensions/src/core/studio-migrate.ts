@@ -8,13 +8,16 @@ import {
   type SceneConfig,
   type TimelineItem,
   createDefaultQuizExtrasV2,
+  createStudioDefaults,
 } from "./studio-timeline-schema"
 import { createDefaultRosterExtras } from "./phone-roster"
 
 export type AnyQuizExtras = QuizExtrasV1 | QuizExtrasV2
 
 export const isQuizExtrasV2 = (extras: unknown): extras is QuizExtrasV2 => {
-  if (!extras || typeof extras !== "object") {return false}
+  if (!extras || typeof extras !== "object") {
+    return false
+  }
 
   const r = extras as Record<string, unknown>
 
@@ -22,7 +25,9 @@ export const isQuizExtrasV2 = (extras: unknown): extras is QuizExtrasV2 => {
 }
 
 export const isQuizExtrasV1 = (extras: unknown): extras is QuizExtrasV1 => {
-  if (!extras || typeof extras !== "object") {return false}
+  if (!extras || typeof extras !== "object") {
+    return false
+  }
 
   const r = extras as Record<string, unknown>
 
@@ -79,13 +84,13 @@ export const upgradeLegacyExtrasToV2 = (
     // 2. Migrate perQuestion interlude if present and not last question (CORE/MIGRATE requirement)
     const perQ = v1.perQuestion[qId] as PerQuestionItem | undefined
 
-    if (
-      perQ?.interlude &&
-      i < questionIds.length - 1
-    ) {
+    if (perQ?.interlude && i < questionIds.length - 1) {
       const sceneId = crypto.randomUUID()
       const mediaUrl = perQ.interlude.url
-      const isMedia = Boolean(mediaUrl && (perQ.interlude.kind === "image" || perQ.interlude.kind === "video"))
+      const isMedia = Boolean(
+        mediaUrl &&
+        (perQ.interlude.kind === "image" || perQ.interlude.kind === "video"),
+      )
 
       if (isMedia && mediaUrl) {
         const mediaScene: SceneConfig = {
@@ -130,12 +135,12 @@ export const upgradeLegacyExtrasToV2 = (
     questionIds,
     timeline,
     scenes,
-    defaults: {
+    defaults: createStudioDefaults({
       newQuestionMode: "quiz",
       leaderboardPolicy:
         v1.leaderboard.mode === "everyN" ? "everyN" : "cardOnly",
       advanceMode: "auto",
-    },
+    }),
     leaderboard: v1.leaderboard,
     teams: v1.teams,
     audio: v1.audio,

@@ -398,6 +398,7 @@ class Game {
 
     if (this.extensionSession) {
       this.extensionSession.setDelegate({
+        getVoteCompletionReason: () => this.getVoteCompletionReason(),
         endAnswerTimer: () => this.round.endTimer(),
         nextScreen: () => {
           if (this.started) return this.round.nextScreen()
@@ -1982,7 +1983,12 @@ class Game {
   // Game flow
 
   abortCooldown() {
+    this.round.noteManualVoteCompletion()
     this.cooldown.abort()
+  }
+
+  getVoteCompletionReason() {
+    return this.round.getVoteCompletionReason()
   }
 
   async start(socket: Socket) {

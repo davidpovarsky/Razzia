@@ -3,7 +3,11 @@ import {
   collectEditorMediaUrls,
 } from "@razzia/extensions/editor"
 import type { UploadedMedia } from "@razzia/common/types/game"
-import { BUILT_IN_SOUNDS_LIST } from "@razzia/extensions/core"
+import {
+  BUILT_IN_SOUNDS_LIST,
+  isLegacyShowRollback,
+  resolveShowTheme,
+} from "@razzia/extensions/core"
 import Loader from "@razzia/web/components/Loader"
 import MediaCard from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaCard"
 import MediaDropOverlay from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary/MediaDropOverlay"
@@ -34,16 +38,23 @@ interface Props {
   onOpenChange: (_open: boolean) => void
   onSelect?: (_item: UploadedMedia) => void
   acceptType?: "image" | "video" | "audio" | "all"
+  allowedBuiltinUrls?: readonly string[]
 }
 
 type MediaScopeTab = "all" | "show" | "builtin"
 
-const BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> =
+const LEGACY_BUILT_IN_SOUNDS: Array<UploadedMedia & { label: string }> =
   BUILT_IN_SOUNDS_LIST
 
 const hasFiles = (e: DragEvent) => e.dataTransfer.types.includes("Files")
 
-const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
+const MediaLibrary = ({
+  open,
+  onOpenChange,
+  onSelect,
+  acceptType,
+  allowedBuiltinUrls,
+}: Props) => {
   const {
     quizzId,
     questions,
@@ -68,6 +79,39 @@ const MediaLibrary = ({ open, onOpenChange, onSelect, acceptType }: Props) => {
   )
   const queryClient = useQueryClient()
   const { t } = useTranslation()
+  const themeDefaults =
+    extras && "defaults" in extras ? extras.defaults : undefined
+  const BUILT_IN_SOUNDS = useMemo(() => {
+    const theme = resolveShowTheme({
+      selection: themeDefaults?.showTheme,
+      role: "manager",
+    })
+    const eventsByAsset = new Map<string, string>()
+    for (const [event, spec] of Object.entries(theme.definition.audioEvents)) {
+      for (const variant of spec.variants) {
+        if (variant.assetId && !eventsByAsset.has(variant.assetId))
+          eventsByAsset.set(variant.assetId, event)
+      }
+    }
+    const sounds = isLegacyShowRollback(themeDefaults)
+      ? LEGACY_BUILT_IN_SOUNDS
+      : theme.definition.assets.flatMap((asset) => {
+          const event = eventsByAsset.get(asset.id)
+          return asset.kind === "audio" && event
+            ? [
+                {
+                  name: asset.id,
+                  url: asset.url,
+                  type: "audio" as const,
+                  label: t(`extensions:themes.audio.${event}`),
+                },
+              ]
+            : []
+        })
+    return allowedBuiltinUrls
+      ? sounds.filter((sound) => allowedBuiltinUrls.includes(sound.url))
+      : sounds
+  }, [themeDefaults, allowedBuiltinUrls, t])
 
   const handleUploadedItem = (uploaded: UploadedMedia) => {
     setExtras((prev) => {
