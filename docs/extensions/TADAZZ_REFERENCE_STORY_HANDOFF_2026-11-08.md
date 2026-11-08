@@ -27,6 +27,14 @@ Evidence in `work/reference-story-proof/`:
 - Book/reveal and live story screenshots; reveal soundtrack ends before the host's story clock.
 - Master volume/mute use the existing audio owner, with live-clock synchronization to prevent rewinding on volume changes.
 
-Validation: web app TypeScript, socket TypeScript, web production build and socket production bundle pass. Seven focused extension suites pass (78 tests), plus the shared host shortcut suite (5 tests). This includes both new round boundaries, existing question skip semantics, exact paused scene elapsed time, eight-locale key consistency, and restart/reconnect clock behavior.
+Validation: web app TypeScript, socket TypeScript, web production build and socket production bundle pass. Eight focused extension suites pass (79 tests), plus the shared host shortcut suite (5 tests). This includes both new round boundaries, existing question skip semantics, exact paused scene elapsed time, eight-locale key consistency, and restart/reconnect clock behavior. The seating presence regression checks the real `connected` class as well as the connection data, preventing a class-token formatting error from hiding the illumination.
+
+Additional real-browser evidence:
+- `round-two-verification.json`: five real second-round phone-simulation votes yield exactly the five displayed winner URLs. The first-round fixture was skipped in this run to independently exercise both new round boundaries; full first-round voting and natural 60-second playback were verified separately.
+- The registered caller lights the correct table; 1 / 31 connected tables, with both representatives' real names retained.
+- Mixer master gain is 0.186 at 30% master volume; soundtrack position and the stage clock differ by about 70 ms in the captured sample.
+- Story clock renders 00:00 after advancing Playwright's client clock and remains on the manual story scene until Next; Next enters the original finale.
+- `delayed-audio-verification.json`: delaying reveal MP3 delivery by 2.5 seconds still stops the previous bed immediately and leaves storytelling speech time silent. Playback re-synchronizes after actual media start and after autoplay unlock.
+- Pause data and the frozen timer/canvas are committed in layout effects, before paint, instead of waiting for a subsequent animation frame.
 
 Private deployment scripts and backups stay outside Git under `work/` and the restricted remote release directory. No credentials, contact books or test tokens are included in this handoff.

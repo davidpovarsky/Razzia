@@ -14,7 +14,7 @@ export function MixerMarkup({
     <section
       className="theater"
       id="theater"
-      aria-label="TADAZZ sixty-second storytelling show"
+      aria-label={labels.begin}
     >
       <img
         className="stage-art"
@@ -35,7 +35,7 @@ export function MixerMarkup({
       <div
         className="card-row"
         id="cardRow"
-        aria-label="The five pictures chosen for the story"
+        aria-label={labels.story}
       >
         {cards}
       </div>
@@ -52,7 +52,7 @@ export function MixerMarkup({
       <div className="countdown-big" id="countdownBig" aria-hidden="true"></div>
       <div
         className="bottom-marquee"
-        aria-label="Let the story begin, 60 second countdown"
+        aria-label={labels.begin}
       >
         <div className="marquee-shine" aria-hidden="true"></div>
         <div className="hero-title" id="heroTitle">

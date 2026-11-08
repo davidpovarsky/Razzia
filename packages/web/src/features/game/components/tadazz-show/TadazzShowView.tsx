@@ -66,7 +66,14 @@ import {
   Users,
   Video,
 } from "lucide-react"
-import { useCallback, useEffect, useMemo, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
 import { resolveMonotonicCooldownDeadline } from "./cooldown-sync"
@@ -491,7 +498,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sceneIdentity, pump])
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (scene.kind !== "scene" || scene.scene.kind !== "animation") {
       return
     }

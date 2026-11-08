@@ -518,6 +518,7 @@ export const AudioCuePlayer = ({
     }
 
     const old = elements[activeIndexRef.current]
+    if (showTrack !== undefined) old.pause()
 
     if (!desired) {
       elements.forEach((element) => element.pause())
@@ -592,6 +593,7 @@ export const AudioCuePlayer = ({
         if (generationRef.current !== generation) {
           return
         }
+        if (!synchronizeShowTrack(next, desired)) return
         setAudioBlocked(false)
         onPlaybackStarted(desired.identity)
         const target = effectiveVolume(desired)
@@ -671,6 +673,7 @@ export const AudioCuePlayer = ({
       void active
         .play()
         .then(() => {
+          if (!synchronizeShowTrack(active, current)) return
           onPlaybackStarted(current.identity)
 
           if (
@@ -824,6 +827,7 @@ export const AudioCuePlayer = ({
     void active
       .play()
       .then(() => {
+        if (!synchronizeShowTrack(active, current)) return
         active.volume = effectiveVolume(current)
         onPlaybackStarted(current.identity)
 

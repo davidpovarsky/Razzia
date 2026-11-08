@@ -17,6 +17,9 @@ export function ReferenceStoryScene({
   data: FullShowInput
 }) {
   const root = useRef<HTMLDivElement>(null)
+  const renderer = useRef<
+    ((elapsed: number, reduced?: boolean) => void) | null
+  >(null)
   const latest = useRef(data)
   latest.current = data
   const labels = { ...TADAZZ_V4_LABELS, ...data.labels }
@@ -77,6 +80,7 @@ export function ReferenceStoryScene({
     const render = mixer
       ? createMixerRenderer(root.current)
       : createRevealRenderer(root.current)
+    renderer.current = render
     let frame = 0
     let lastPaint = -1
     const paint = () => {
@@ -94,8 +98,24 @@ export function ReferenceStoryScene({
       frame = requestAnimationFrame(paint)
     }
     paint()
-    return () => cancelAnimationFrame(frame)
+    return () => {
+      cancelAnimationFrame(frame)
+      renderer.current = null
+    }
   }, [mixer])
+  // Commit the frozen server snapshot with React's pause update. Waiting for
+  // the next animation frame can briefly show the previous timer value.
+  useLayoutEffect(() => {
+    const element = root.current
+    if (!element) return
+    const elapsed = storyElapsedSeconds(data)
+    element.setAttribute("data-story-elapsed", elapsed.toFixed(3))
+    const reduced =
+      element
+        .closest("[data-reduced-motion]")
+        ?.getAttribute("data-reduced-motion") === "true"
+    renderer.current?.(elapsed, reduced)
+  }, [data.scenePaused, data.sceneElapsedMs, data.sceneStartedAt])
   return (
     <div
       ref={root}

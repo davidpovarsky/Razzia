@@ -14,7 +14,7 @@ export function RevealMarkup({
     <section
       className="theater"
       id="theater"
-      aria-label="TADAZZ story reveal show and two-minute storytelling timer"
+      aria-label={labels.story}
     >
       <img
         className="stage-art"
@@ -44,7 +44,7 @@ export function RevealMarkup({
       <div
         id="gallery"
         className="gallery"
-        aria-label="The five pictures chosen for the story"
+        aria-label={labels.story}
       >
         {cards}
       </div>
