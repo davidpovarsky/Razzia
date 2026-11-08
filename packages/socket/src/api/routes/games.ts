@@ -17,6 +17,7 @@ import { mintJoinTicket } from "@razzia/socket/services/auth"
 import { grantMediaForGuest } from "@razzia/socket/services/media-access"
 import { getQuizz } from "@razzia/socket/services/config"
 import Game from "@razzia/socket/services/game"
+import { selectQuizPilotTarget } from "@razzia/socket/services/game/pilot-target"
 import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { StatusCodes } from "http-status-codes"
@@ -74,6 +75,13 @@ function resolvePilotTargetGame(
   }
 
   const allGames = registry.getAllGames()
+  if (process.env.TADA_PILOT_QUIZ_ID) {
+    return selectQuizPilotTarget(
+      allGames,
+      process.env.TADA_PILOT_QUIZ_ID,
+      process.env.TADA_PILOT_OWNER_ID,
+    )
+  }
 
   if (allGames.length === 0) {
     return { game: null, error: "errors:game.notFound" }

@@ -74,6 +74,7 @@ class Game {
   private readonly extensionSession: ExtensionGameSession | null
   private readonly showCoordinator: StudioShowCoordinator | null = null
   private readonly isCreatingWorldsShow: boolean
+  private readonly temporaryGuestsAllowed: boolean
   private lastCompletedDistribution: RevealDistributionSnapshot | null = null
   private managerGraceTimer: NodeJS.Timeout | null = null
 
@@ -144,6 +145,15 @@ class Game {
     )
 
     this.isCreatingWorldsShow = isCreatingWorlds
+    this.temporaryGuestsAllowed = Boolean(
+      quizzId &&
+      (process.env.TADA_TEMP_GUEST_QUIZ_IDS ?? "")
+        .split(",")
+        .map((id) => id.trim())
+        .includes(quizzId) &&
+      (!process.env.TADA_PILOT_OWNER_ID ||
+        process.env.TADA_PILOT_OWNER_ID === managerClientId),
+    )
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
@@ -195,7 +205,8 @@ class Game {
     if (sidecar?.roster) {
       this._settings = {
         ...this._settings,
-        phoneInviteOnly: sidecar.roster.phoneInviteOnly,
+        phoneInviteOnly:
+          sidecar.roster.phoneInviteOnly && !this.temporaryGuestsAllowed,
       }
       for (const item of sidecar.roster.participants) {
         const normalized = item.phoneE164
@@ -611,17 +622,26 @@ class Game {
               : undefined,
           connectedTables: [
             ...new Set(
-              [...this.rosterMap.values()].flatMap((entry, index) =>
-                entry.status === "connected"
-                  ? [entry.tableNumber ?? index + 1]
-                  : [],
-              ),
+              [...this.rosterMap.values()]
+                .filter(
+                  (entry) =>
+                    !this.temporaryGuestsAllowed || entry.preRegistered,
+                )
+                .flatMap((entry, index) =>
+                  entry.status === "connected"
+                    ? [entry.tableNumber ?? index + 1]
+                    : [],
+                ),
             ),
           ],
-          representatives: [...this.rosterMap.values()].map((entry, index) => ({
-            table: entry.tableNumber ?? index + 1,
-            name: entry.displayName,
-          })),
+          representatives: [...this.rosterMap.values()]
+            .filter(
+              (entry) => !this.temporaryGuestsAllowed || entry.preRegistered,
+            )
+            .map((entry, index) => ({
+              table: entry.tableNumber ?? index + 1,
+              name: entry.displayName,
+            })),
         }),
         getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
           const scene =
@@ -877,6 +897,10 @@ class Game {
 
   get settings(): GameSettings {
     return this._settings
+  }
+
+  get quizId(): string | undefined {
+    return (this.quizz as { id?: string }).id
   }
 
   updateSettings(settings: Partial<GameSettings>): boolean {
@@ -1843,6 +1867,7 @@ class Game {
     if (
       !rosterEntry &&
       this.isCreatingWorldsShow &&
+      !this.temporaryGuestsAllowed &&
       [...this.rosterMap.values()].some((entry) => entry.preRegistered)
     ) {
       return "errors:game.locked"

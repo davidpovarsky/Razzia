@@ -68,3 +68,11 @@ Owner requested replacing the visible Razzia heading on /manager/config with the
 ## Immediate manager background update
 
 Owner requested the management screen use the same TADAZZ background as login and immediate deployment. Replace the /manager/config Background wrapper with existing ManagerAuthBackground. Add an optional language-switch visibility prop so management keeps its existing language control without duplication. Web-only build/deploy; retain runtime environment and quiz/roster data.
+
+## Opening order/smoothness and temporary guest rehearsal
+
+Owner requests TADAZZ video/animation first, then Tzila artwork, then join lobby; investigate frozen animation; temporarily permit non-rostered participants. Scope before edits: downstream TadazzOpening/LottiePlayer coordinate preparation, ready/start, timing and render configuration; opening CSS and focused browser assertions. Existing upstream Game constructor/join guard gets an exact-quiz runtime rehearsal flag (default off), leaving persisted roster and invite policy intact; public table directory remains limited to configured representatives. Runtime activation enables this flag only for Tzila, and retains gateway authentication. No provider settings or credentials change.
+
+## Phone-first owner steering
+
+Owner explicitly prioritizes releasing guest access and both UK/Israel dial-ins, directly bound to Tzila with no room PIN now; opening changes remain uncommitted for the subsequent task. Add exact quiz+owner runtime target selection, runtime-only guest opt-in, and preserve persisted roster/public table layout. Existing protected provider root callbacks were read back OK for 443306131984 and 0772263533. Gateway keypad submission now carries the prompt epoch to prevent a delayed digit being assigned to a newer question. Deploy server/gateway only; preserve the current published web bundle. Verify callbacks for both DIDs and DTMF 1..5 against the actual protected HTTPS gateway. Physical PSTN calls remain a separate unverified step without a handset.

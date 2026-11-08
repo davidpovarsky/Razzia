@@ -145,7 +145,7 @@ const server = http.createServer((req, res) => {
       const joinedConfirmed = Boolean(pollRes.ok && pollRes.data && pollRes.data.joined);
       const serverData = pollRes.ok ? pollRes.data : null;
 
-      // 2. Check if caller pressed a valid 1..4 digit for the current step when question is active
+      // 2. Map keypad 1..5 to answer indices 0..4 for the prompt's question epoch.
       const prevKey = s.seq ? 'td' + s.seq : null;
       const enteredDigit = prevKey && params.has(prevKey) ? params.get(prevKey) : undefined;
       let answerOutcome = null;
@@ -170,6 +170,9 @@ const server = http.createServer((req, res) => {
           phone: s.phoneRaw,
           rosterPlayerId: (serverData && serverData.rosterPlayerId) || s.rosterPlayerId || undefined,
           answerIndex: zeroIdx,
+          epoch: s.acceptingAnswers
+            ? s.questionEpoch
+            : serverData?.state?.epoch,
         });
         if (ansRes.ok && ansRes.data) {
           answerOutcome = ansRes.data;
