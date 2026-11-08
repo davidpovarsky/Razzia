@@ -9,6 +9,7 @@ import { formatHistoryItem } from "@razzia/extensions/presentation"
 import AlertDialog from "@razzia/web/components/AlertDialog"
 import Button from "@razzia/web/components/Button"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
+import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
 import clsx from "clsx"
@@ -735,12 +736,7 @@ export const ManagerControlToolbar = ({
         )}
       </div>
 
-      <p
-        className="w-full text-xs text-white/70"
-        data-testid="host-shortcut-hint"
-      >
-        {t("extensions:host.doublePressShortcuts")}
-      </p>
+      <HostShortcutsDialog />
 
       {/* History Viewer Modal */}
       <HistoryDialog

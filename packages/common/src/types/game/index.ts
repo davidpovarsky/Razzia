@@ -114,6 +114,7 @@ export interface GameSettings {
   generatedUsernames: boolean
   answersOnly: boolean
   phoneInviteOnly?: boolean
+  endOnAllAnswered?: boolean
   autoAdvance: AutoAdvanceSettings
 }
 

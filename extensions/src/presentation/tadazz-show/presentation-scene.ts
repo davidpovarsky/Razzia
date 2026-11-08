@@ -347,7 +347,7 @@ function sceneKey(envelope: ShowEnvelope | null, suffix: string): string {
  * no fallback to the legacy UI.
  */
 export function computeShowScene(input: ShowInput): ShowScene {
-  const { envelope, status, role, questionStates } = input
+  const { envelope, status, role, questionStates: counter } = input
   const extras = envelope?.extras ?? {}
 
   if (envelope?.phase === "scene") {
@@ -391,6 +391,14 @@ export function computeShowScene(input: ShowInput): ShowScene {
   }
 
   const data = asRecord(status.data)
+  // UPDATE_QUESTION and the content status arrive as separate socket events.
+  // Never combine the new counter with the preceding question's content.
+  const questionStates =
+    typeof data.questionNumber === "number" &&
+    Number.isInteger(data.questionNumber) &&
+    data.questionNumber > 0
+      ? { current: data.questionNumber, total: counter?.total ?? null }
+      : counter
   const qNumber = questionStates?.current ?? 0
 
   switch (status.name) {

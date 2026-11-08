@@ -223,7 +223,17 @@
     "cannotPreviousLobby": "Au début du spectacle",
     "restartQuestion": "Recommencer la question",
     "restartQuestionDesc": "La question actuelle redémarre ; ses réponses et son score sont effacés. Les autres questions sont conservées.",
-    "doublePressShortcuts": "Appuyez deux fois : ← Retour · → Suivant / passer la question · Espace Pause / reprendre · Entrée Terminer le chrono"
+    "doublePressShortcuts": "Appuyez deux fois : ← Retour · → Suivant / passer la question · Espace Pause / reprendre · Entrée Terminer le chrono",
+    "keyboardShortcuts": "Raccourcis clavier",
+    "doublePressHelp": "Appuyez deux fois rapidement sur la même touche (en moins d’une demi-seconde). Les raccourcis sont désactivés dans les fenêtres et les champs.",
+    "previousShortcut": "Écran précédent. Revenir pendant un vote efface ses réponses.",
+    "nextShortcut": "Écran suivant. Pendant un vote, passe la question et efface ses réponses.",
+    "pauseShortcut": "Mettre le jeu en pause ou le reprendre.",
+    "endTimerShortcut": "Terminer le chrono et afficher les résultats en conservant les réponses.",
+    "escapeShortcut": "Quitter la présentation (un seul appui).",
+    "spaceKey": "Espace",
+    "endOnAllAnswered": "Terminer le chrono quand tous ont répondu",
+    "endOnAllAnsweredDesc": "Désactivé par défaut : conserver tout le temps prévu. Si activé, terminer dès que tous les joueurs actuellement connectés ont répondu."
   },
   "reveal": {
     "votes": "{{count}} votes",

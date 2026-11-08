@@ -477,10 +477,6 @@ export const TadazzV4StageAdapter = forwardRef<
       },
 
       async nextQuestion(data: StageQuestion) {
-        questionRef.current = data
-        selectedRef.current = []
-        lastRevealInputRef.current = null
-        cardsOnStageKeyRef.current = null
         const box: { entered?: Promise<void> } = {}
         // Swap to the next question exactly under the Z-wipe cover (wipe-covered cue).
         const handle = v4Ref.current

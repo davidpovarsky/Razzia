@@ -210,6 +210,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
 
     expect(game.updateSettings({ answersOnly: true })).toBe(false)
@@ -301,6 +302,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.setPlayerDisconnected(bob.id)
     game.selectAnswer(alice, [0])
@@ -315,6 +317,7 @@ describe("quiz flow", () => {
     )
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.selectAnswer(alice, [0])
     await vi.advanceTimersByTimeAsync(TICK_MS)
@@ -491,6 +494,7 @@ describe("survey flow", () => {
     const { game, sockets, status, start } = setup(quizz)
     const [alice, bob] = sockets
 
+    game.updateSettings({ endOnAllAnswered: true })
     await start()
     game.selectAnswer(alice, [2])
     game.selectAnswer(bob, [2])

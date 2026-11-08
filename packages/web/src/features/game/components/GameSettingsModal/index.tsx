@@ -59,7 +59,14 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
       return
     }
 
-    save({ gameId, json: values })
+    const changed = Object.fromEntries(
+      Object.entries(values).filter(
+        ([key, value]) =>
+          JSON.stringify(value) !==
+          JSON.stringify(settings[key as keyof GameSettings]),
+      ),
+    )
+    save({ gameId, json: changed })
   }
 
   return (
@@ -96,6 +103,23 @@ const GameSettingsModal = ({ onOpenRoster }: Props) => {
               <div className="min-h-0 flex-1 overflow-y-auto">
                 <GeneratedUsernames />
                 <AnswersOnly />
+                <Controller
+                  control={form.control}
+                  name="endOnAllAnswered"
+                  render={({ field }) => (
+                    <SettingRow
+                      label="extensions:host.endOnAllAnswered"
+                      hint="extensions:host.endOnAllAnsweredDesc"
+                    >
+                      <Switch
+                        aria-label={t("extensions:host.endOnAllAnswered")}
+                        data-testid="settings-end-on-all-answered"
+                        checked={Boolean(field.value)}
+                        onCheckedChange={field.onChange}
+                      />
+                    </SettingRow>
+                  )}
+                />
                 <AutoAdvance />
                 <Controller
                   control={form.control}

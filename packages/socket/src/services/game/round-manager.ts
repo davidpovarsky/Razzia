@@ -689,6 +689,7 @@ export class RoundManager {
       this.broadcastVotingQuestion()
     }
 
+    this.endIfEveryoneAnswered()
     return true
   }
 
@@ -885,6 +886,7 @@ export class RoundManager {
 
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
       ...targetQ,
+      questionNumber: targetQuestionIndex + 1,
       solutions: this.isSurvey() ? undefined : targetQ.solutions,
       responses: counts,
     })
@@ -944,6 +946,7 @@ export class RoundManager {
 
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...targetQ,
+        questionNumber: this.currentQuestion + 1,
         solutions: this.isSurvey() ? undefined : targetQ.solutions,
         responses: counts,
       })
@@ -1215,6 +1218,7 @@ export class RoundManager {
           ? this.question.media
           : undefined
       this.opts.broadcast(STATUS.SHOW_QUESTION, {
+        questionNumber: this.currentQuestion + 1,
         question: this.question.question,
         media: imageMedia,
         cooldown: this.question.cooldown,
@@ -1258,6 +1262,7 @@ export class RoundManager {
 
   private broadcastVotingQuestion(): void {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
+      questionNumber: this.currentQuestion + 1,
       question: this.question.question,
       answers: this.question.answers,
       media: this.question.media,
@@ -1426,6 +1431,7 @@ export class RoundManager {
       if (!hasAuthoredScene) {
         this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
           ...this.question,
+          questionNumber: this.currentQuestion + 1,
           solutions: undefined,
           responses: answerCounts,
         })
@@ -1488,6 +1494,7 @@ export class RoundManager {
     if (!hasAuthoredScene) {
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...this.question,
+        questionNumber: this.currentQuestion + 1,
         responses: answerCounts,
       })
     } else {
@@ -1744,7 +1751,16 @@ export class RoundManager {
   }
 
   endIfEveryoneAnswered(): void {
-    if (!this.acceptingAnswers) {
+    if (!this.acceptingAnswers || this.paused) {
+      return
+    }
+
+    // Unlimited questions still need their existing completion path. Timed
+    // questions keep the full countdown unless the host explicitly opts in.
+    if (
+      this.question.time !== NO_TIME_LIMIT &&
+      !this.opts.getSettings().endOnAllAnswered
+    ) {
       return
     }
 

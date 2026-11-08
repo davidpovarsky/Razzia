@@ -30,6 +30,7 @@ export const gameSettingsSchema = z.object({
   generatedUsernames: z.boolean(),
   answersOnly: z.boolean(),
   phoneInviteOnly: z.boolean().optional(),
+  endOnAllAnswered: z.boolean().optional(),
   autoAdvance: z.object({
     enable: z.boolean(),
     responsesDelay: delayValidator,

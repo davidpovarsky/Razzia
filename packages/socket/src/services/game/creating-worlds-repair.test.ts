@@ -14,7 +14,7 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest"
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
-function timerFixture(withTimeline = false) {
+function timerFixture(withTimeline = false, endOnAllAnswered = false) {
   const fake = createFakeIo()
   const players = new PlayerManager({
     io: fake.io,
@@ -33,7 +33,7 @@ function timerFixture(withTimeline = false) {
     quizz: createQuizz([createQuestion({ time: 20 })], QUIZZ_MODES.SURVEY),
     cooldown: new CooldownTimer(fake.io, "g"),
     getManagerId: () => "manager",
-    getSettings: createDefaultGameSettings,
+    getSettings: () => ({ ...createDefaultGameSettings(), endOnAllAnswered }),
     broadcast: (name, data) => {
       statuses.push({ name, data })
     },
@@ -60,7 +60,16 @@ function timerFixture(withTimeline = false) {
   })
   void round.start(fake.createSocket("manager"))
 
-  return { round, player, players, statuses }
+  return {
+    round,
+    player,
+    players,
+    statuses,
+    setEarlyEnd: (enabled: boolean) => {
+      endOnAllAnswered = enabled
+      round.endIfEveryoneAnswered()
+    },
+  }
 }
 
 it("opens the complete 20-second window after entrance when nobody answers", async () => {
@@ -87,7 +96,7 @@ it("opens the complete 20-second window after entrance when nobody answers", asy
 })
 
 it("ends early after the only connected player answers", async () => {
-  const { round, player, statuses } = timerFixture()
+  const { round, player, statuses } = timerFixture(false, true)
   await vi.advanceTimersByTimeAsync(4000)
   expect(round.selectAnswer(player, [0]).accepted).toBe(true)
   await vi.advanceTimersByTimeAsync(1000)
@@ -97,7 +106,7 @@ it("ends early after the only connected player answers", async () => {
 })
 
 it("waits for other connected players but excludes a disconnected player", async () => {
-  const { round, player, players, statuses } = timerFixture()
+  const { round, player, players, statuses } = timerFixture(false, true)
   players.join(createFakeIo().createSocket("second"), "Second")
   await vi.advanceTimersByTimeAsync(4000)
   round.selectAnswer(player, [0])
@@ -107,6 +116,45 @@ it("waits for other connected players but excludes a disconnected player", async
   round.endIfEveryoneAnswered()
   await vi.advanceTimersByTimeAsync(1000)
   expect(round.isCurrentlyAcceptingAnswers).toBe(false)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
+  round.dispose()
+})
+
+it("keeps the full timer by default even when every connected player answers", async () => {
+  expect(createDefaultGameSettings().endOnAllAnswered).toBe(false)
+  const { round, player, statuses } = timerFixture()
+  await vi.advanceTimersByTimeAsync(4000)
+  expect(round.selectAnswer(player, [0]).accepted).toBe(true)
+  await vi.advanceTimersByTimeAsync(19999)
+  expect(round.isCurrentlyAcceptingAnswers).toBe(true)
+  await vi.advanceTimersByTimeAsync(1)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
+  round.dispose()
+})
+
+it("allows changing only the early-end setting after the game starts", () => {
+  const fake = createFakeIo()
+  const game = new Game(fake.io, "manager", createQuizz([createQuestion()]))
+  game.join(fake.createSocket("player"), "Player")
+  void game.start(fake.createSocket("manager"))
+  expect(game.updateSettings({ endOnAllAnswered: true })).toBe(true)
+  expect(game.settings.endOnAllAnswered).toBe(true)
+  expect(game.updateSettings({ answersOnly: true })).toBe(false)
+  expect(game.updateSettings({ endOnAllAnswered: false })).toBe(true)
+  expect(game.settings.endOnAllAnswered).toBe(false)
+  game.dispose()
+})
+
+it("defers early completion while paused and applies it on resume", async () => {
+  const { round, player, statuses, setEarlyEnd } = timerFixture()
+  await vi.advanceTimersByTimeAsync(4000)
+  round.selectAnswer(player, [0])
+  round.pauseGame()
+  setEarlyEnd(true)
+  await vi.advanceTimersByTimeAsync(5000)
+  expect(statuses.at(-1)?.name).toBe(STATUS.SELECT_ANSWER)
+  round.resumeGame()
+  await vi.advanceTimersByTimeAsync(1000)
   expect(statuses.at(-1)?.name).toBe(STATUS.SHOW_RESPONSES)
   round.dispose()
 })

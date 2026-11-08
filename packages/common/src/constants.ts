@@ -62,6 +62,7 @@ export const createDefaultGameSettings = (): GameSettings => ({
   generatedUsernames: false,
   answersOnly: false,
   phoneInviteOnly: false,
+  endOnAllAnswered: false,
   autoAdvance: {
     enable: false,
     responsesDelay: 10,

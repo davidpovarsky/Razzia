@@ -917,11 +917,17 @@ class Game {
   }
 
   updateSettings(settings: Partial<GameSettings>): boolean {
-    if (this.started) {
+    if (
+      this.started &&
+      Object.keys(settings).some((key) => key !== "endOnAllAnswered")
+    ) {
       return false
     }
 
     this._settings = { ...this._settings, ...settings }
+    if (settings.endOnAllAnswered) {
+      this.round.endIfEveryoneAnswered()
+    }
     this.broadcastHostPresence()
 
     return true

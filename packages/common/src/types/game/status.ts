@@ -29,11 +29,13 @@ export interface CommonStatusDataMap {
     questionType: QuestionType
   }
   SHOW_QUESTION: {
+    questionNumber?: number
     question: string
     media?: QuestionMedia
     cooldown: number
   }
   SELECT_ANSWER: {
+    questionNumber?: number
     question: string
     answers: string[]
     media?: QuestionMedia
@@ -67,6 +69,7 @@ export interface CommonStatusDataMap {
 interface ManagerExtraStatus {
   SHOW_ROOM: { text: string; inviteCode?: string }
   SHOW_RESPONSES: {
+    questionNumber?: number
     question: string
     responses: Record<number, number>
     solutions?: number[]

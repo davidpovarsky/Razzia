@@ -223,7 +223,17 @@
     "cannotPreviousLobby": "At start of show",
     "restartQuestion": "Restart question",
     "restartQuestionDesc": "This restarts the current question and clears its answers and score. Other questions are preserved.",
-    "doublePressShortcuts": "Double press: ← Back · → Next / skip question · Space Pause / resume · Enter End timer"
+    "doublePressShortcuts": "Double press: ← Back · → Next / skip question · Space Pause / resume · Enter End timer",
+    "keyboardShortcuts": "Keyboard shortcuts",
+    "doublePressHelp": "Press the same key twice quickly (within half a second). Shortcuts are inactive inside dialogs and form fields.",
+    "previousShortcut": "Previous screen. Going back from voting clears its answers.",
+    "nextShortcut": "Next screen. During voting, skips the question and discards its answers.",
+    "pauseShortcut": "Pause or resume the game.",
+    "endTimerShortcut": "End the answer timer and show results, keeping submitted answers.",
+    "escapeShortcut": "Exit presentation (single press).",
+    "spaceKey": "Space",
+    "endOnAllAnswered": "End timer when everyone has answered",
+    "endOnAllAnsweredDesc": "Off by default: keep the full timer. When enabled, finish early once all currently connected players have answered."
   },
   "reveal": {
     "votes": "{{count}} votes",

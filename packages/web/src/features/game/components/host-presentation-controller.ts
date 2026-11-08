@@ -25,6 +25,17 @@ export function shouldIgnorePresentationShortcut(
     return true
   }
 
+  // Entering native fullscreen can briefly move focus outside Radix's trap.
+  // An open modal still owns the keyboard during that focus handoff.
+  if (
+    typeof document !== "undefined" &&
+    document.querySelector?.(
+      "[role='dialog'][data-state='open'], [role='alertdialog'][data-state='open']",
+    )
+  ) {
+    return true
+  }
+
   const active =
     (event.target as HTMLElement | null) ??
     (typeof document !== "undefined"

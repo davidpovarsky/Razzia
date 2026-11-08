@@ -33,6 +33,7 @@ import {
 import Tooltip from "@razzia/web/components/Tooltip"
 import GameSettingsModal from "@razzia/web/features/game/components/GameSettingsModal"
 import HostPlayersModal from "@razzia/web/features/game/components/HostPlayersModal"
+import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import ManagerControlToolbar from "@razzia/web/features/game/components/ManagerControlToolbar"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -1290,7 +1291,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
           )}
 
           {manager ? (
-            isHostPresenting ? null : (
+            isHostPresenting ? (
+              <div className="absolute top-3 right-3 z-40">
+                <HostShortcutsDialog compact />
+              </div>
+            ) : (
               <div
                 className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
                 style={{ background: "#08011a" }}

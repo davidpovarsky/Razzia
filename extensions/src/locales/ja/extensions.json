@@ -223,7 +223,17 @@
     "cannotPreviousLobby": "ショーの開始地点です",
     "restartQuestion": "この質問をやり直す",
     "restartQuestionDesc": "現在の質問を最初からやり直し、回答と得点を消去します。他の質問は保持されます。",
-    "doublePressShortcuts": "2回押す：← 戻る · → 次へ／質問をスキップ · スペース 一時停止／再開 · Enter タイマー終了"
+    "doublePressShortcuts": "2回押す：← 戻る · → 次へ／質問をスキップ · スペース 一時停止／再開 · Enter タイマー終了",
+    "keyboardShortcuts": "キーボードショートカット",
+    "doublePressHelp": "同じキーを素早く2回押してください（0.5秒以内）。ダイアログや入力欄では無効です。",
+    "previousShortcut": "前の画面へ。投票中に戻ると、その回答は消去されます。",
+    "nextShortcut": "次の画面へ。投票中は質問をスキップし、その回答を破棄します。",
+    "pauseShortcut": "ゲームを一時停止・再開します。",
+    "endTimerShortcut": "回答時間を終了し、送信済みの回答を保持して結果を表示します。",
+    "escapeShortcut": "プレゼンテーションを終了します（1回押す）。",
+    "spaceKey": "スペース",
+    "endOnAllAnswered": "全員が回答したらタイマーを終了",
+    "endOnAllAnsweredDesc": "初期設定はオフで、制限時間をすべて使います。オンの場合、現在接続中の全員が回答すると早く終了します。"
   },
   "reveal": {
     "votes": "{{count}} 票",

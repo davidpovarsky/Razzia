@@ -223,7 +223,17 @@
     "cannotPreviousLobby": "Am Anfang der Show",
     "restartQuestion": "Frage neu starten",
     "restartQuestionDesc": "Die aktuelle Frage wird neu gestartet. Ihre Antworten und Punkte werden gelöscht. Andere Fragen bleiben erhalten.",
-    "doublePressShortcuts": "Zweimal drücken: ← Zurück · → Weiter / Frage überspringen · Leertaste Pause / Fortsetzen · Eingabe Timer beenden"
+    "doublePressShortcuts": "Zweimal drücken: ← Zurück · → Weiter / Frage überspringen · Leertaste Pause / Fortsetzen · Eingabe Timer beenden",
+    "keyboardShortcuts": "Tastenkürzel",
+    "doublePressHelp": "Dieselbe Taste zweimal schnell drücken (innerhalb einer halben Sekunde). In Dialogen und Eingabefeldern sind die Kürzel inaktiv.",
+    "previousShortcut": "Vorheriger Bildschirm. Zurück während der Abstimmung löscht ihre Antworten.",
+    "nextShortcut": "Nächster Bildschirm. Während der Abstimmung wird die Frage übersprungen und ihre Antworten werden verworfen.",
+    "pauseShortcut": "Spiel pausieren oder fortsetzen.",
+    "endTimerShortcut": "Antwortzeit beenden und Ergebnisse mit den abgegebenen Antworten anzeigen.",
+    "escapeShortcut": "Präsentation verlassen (einmal drücken).",
+    "spaceKey": "Leertaste",
+    "endOnAllAnswered": "Timer beenden, wenn alle geantwortet haben",
+    "endOnAllAnsweredDesc": "Standardmäßig aus: die volle Zeit bleibt erhalten. Wenn aktiviert, endet der Timer, sobald alle aktuell verbundenen Spieler geantwortet haben."
   },
   "reveal": {
     "votes": "{{count}} Stimmen",

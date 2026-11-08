@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest"
+import { describe, expect, it, vi } from "vitest"
 import {
   resolvePresentationShortcut,
   shouldIgnorePresentationShortcut,
@@ -7,6 +7,18 @@ import {
 } from "./host-presentation-controller"
 
 describe("P0 host presentation keyboard map", () => {
+  it("blocks game keys while a modal is open even if fullscreen moves focus outside it", () => {
+    vi.stubGlobal("document", { querySelector: () => ({}) })
+    try {
+      expect(
+        shouldIgnorePresentationShortcut({
+          target: { tagName: "BODY", closest: () => null },
+        } as unknown as KeyboardEvent),
+      ).toBe(true)
+    } finally {
+      vi.unstubAllGlobals()
+    }
+  })
   const key = (value: string, shiftKey = false) =>
     resolvePresentationShortcut({ key: value, shiftKey })
 
