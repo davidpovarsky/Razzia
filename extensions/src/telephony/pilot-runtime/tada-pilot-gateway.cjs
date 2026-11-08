@@ -1,7 +1,7 @@
 'use strict';
 const http = require('node:http');
 const crypto = require('node:crypto');
-const { live, createSession, event } = require('./tada-audio-logic.cjs');
+const { live, createSession, event, syncServerState } = require('./tada-audio-logic.cjs');
 
 const secret = process.env.TADA_PILOT_SECRET;
 if (!secret || secret.length < 32) throw Error('missing protected route secret');
@@ -162,6 +162,14 @@ const server = http.createServer((req, res) => {
       }
       if (targetGameId) s.gameId = targetGameId;
 
+      // The generic keypad read can span multiple questions (provider timeout is 30s).
+      // Bind each arriving digit to the fresh poll, never the previous read's epoch.
+      // The backend still rejects an epoch change between this poll and submission.
+      syncServerState(s, serverData);
+      if (typeof serverData?.state?.answeredCurrentQuestion === 'boolean') {
+        s.answered = serverData.state.answeredCurrentQuestion;
+      }
+
       // 2. Map keypad 1..5 to answer indices 0..4 for the prompt's question epoch.
       const prevKey = s.seq ? 'td' + s.seq : null;
       const enteredDigit = prevKey && params.has(prevKey) ? params.get(prevKey) : undefined;
@@ -189,10 +197,17 @@ const server = http.createServer((req, res) => {
           phone: s.phoneRaw,
           rosterPlayerId: (serverData && serverData.rosterPlayerId) || s.rosterPlayerId || undefined,
           answerIndex: zeroIdx,
-          epoch: s.acceptingAnswers
-            ? s.questionEpoch
-            : serverData?.state?.epoch,
+          epoch: serverData?.state?.epoch,
         });
+        console.log('TADA_PHONE_ANSWER', new Date().toISOString(), JSON.stringify({
+          channel: dialedNumber ?? 'unspecified',
+          call: id.slice(0, 10),
+          question: serverData?.state?.questionIndex,
+          epoch: serverData?.state?.epoch,
+          accepted: Boolean(ansRes.data?.accepted),
+          reason: ansRes.data?.reason ?? (ansRes.ok ? null : 'backend_unavailable'),
+          status: ansRes.status,
+        }));
         if (ansRes.ok && ansRes.data) {
           answerOutcome = ansRes.data;
         }
