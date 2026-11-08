@@ -1,4 +1,5 @@
 import { EVENTS } from "@razzia/common/constants"
+import { TADAZZ_BACKDROP_URL } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
 import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
 import type { SceneDescriptor } from "@razzia/extensions/presentation"
@@ -19,6 +20,12 @@ import { useTadazzShellText } from "./useTadazzLabels"
 
 /* All screens render inside the canonical `.tz-screen` slot of the 1920×1080
  * stage and only use canonical tokens (see tadazz-show-adaptations.css). */
+
+export function TadazzStandbyScreen() {
+  return <div className="tz-x-center" data-testid="tadazz-screen-standby" style={{ backgroundImage: `url(${TADAZZ_BACKDROP_URL})`, backgroundSize: "cover", backgroundPosition: "center", width: "100%", height: "100%" }}>
+    <img className="tz-x-logo" src={TADAZZ_LOGO_URL} alt="TADAZZ!" />
+  </div>
+}
 
 export function TadazzConnectingScreen() {
   const { t } = useTranslation()

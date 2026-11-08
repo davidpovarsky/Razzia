@@ -29,6 +29,7 @@ import {
 import { shouldShowLeaderboard } from "@razzia/extensions/gameplay"
 import {
   ExtensionGameSession,
+  PresentationLaunch,
   readSidecar,
   StudioShowCoordinator,
   type PlayerScoreInfo,
@@ -74,6 +75,7 @@ class Game {
   private readonly extensionSession: ExtensionGameSession | null
   private readonly showCoordinator: StudioShowCoordinator | null = null
   private readonly isCreatingWorldsShow: boolean
+  private readonly presentationLaunch: PresentationLaunch | null
   private readonly temporaryGuestsAllowed: boolean
   private lastCompletedDistribution: RevealDistributionSnapshot | null = null
   private managerGraceTimer: NodeJS.Timeout | null = null
@@ -166,6 +168,10 @@ class Game {
     this.extensionSession = sidecar
       ? new ExtensionGameSession(this.gameId, sidecar)
       : null
+    this.presentationLaunch = isCreatingWorlds ? new PresentationLaunch(() => {
+      this.extensionSession?.onPresenceChanged()
+      this.broadcastExtensionState()
+    }) : null
 
     if (sidecar && isQuizExtrasV2(sidecar)) {
       this.showCoordinator = new StudioShowCoordinator({
@@ -445,6 +451,7 @@ class Game {
       this.extensionSession.setDelegate({
         endAnswerTimer: () => this.round.endTimer(),
         nextScreen: () => {
+          if (!this.started && this.presentationLaunch?.advance()) return true
           if (this.started) return this.round.nextScreen()
           const hostSocket = this.io.sockets.sockets.get(this.manager.id)
           if (!hostSocket || this.playerManager.count() === 0) return false
@@ -485,6 +492,7 @@ class Game {
           return ok
         },
         getAnswersCount: () => this.round.getAnswerCount(),
+        getPresentationLaunch: () => this.presentationLaunch?.snapshot(this.started) ?? null,
         getParticipation: () => {
           const connected = this.players.filter((player) => player.connected)
           return {
@@ -2273,6 +2281,7 @@ class Game {
   }
 
   dispose() {
+    this.presentationLaunch?.dispose()
     this.round.dispose()
     this.cancelManagerGrace()
   }
@@ -2584,6 +2593,7 @@ class Game {
   }
 
   async start(socket: Socket) {
+    if (!this.started && this.presentationLaunch?.advance()) return
     if (!this.started) {
       const away = this.playerManager.getAll().filter((p) => !p.connected)
 

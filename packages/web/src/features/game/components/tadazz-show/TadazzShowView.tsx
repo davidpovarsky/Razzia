@@ -97,6 +97,7 @@ import {
   TadazzRecapScreen,
   TadazzSceneTitleScreen,
   TadazzStartScreen,
+  TadazzStandbyScreen,
   TadazzSummaryScreen,
   TadazzWaitScreen,
 } from "./TadazzScreens"
@@ -310,9 +311,20 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   useEffect(() => {
     preloadOpeningAssets()
   }, [])
-  const [openingActive, setOpeningActive] = useState(
+  const launch = extensionState?.extras.presentationLaunch as
+    { stage: "standby" | "opening" | "lobby" | "running"; startedAt: number | null } | undefined
+  const isStandby = launch?.stage === "standby"
+  const advancePresentation = useCallback(() => {
+    if (role !== "manager" || !extensionState || !isConnected) return
+    socket.emit(EXTENSION_EVENTS.COMMAND, {
+      v: 1, gameId: extensionState.gameId, requestId: crypto.randomUUID(),
+      action: "NEXT_SCREEN", payload: { epoch: extensionState.epoch, phase: extensionState.phase },
+    })
+  }, [role, extensionState, isConnected, socket])
+  const [legacyOpeningActive, setOpeningActive] = useState(
     () => role !== "player" && !reduced && !openingSeen(showGameId),
   )
+  const openingActive = launch ? role !== "player" && launch.stage === "opening" : legacyOpeningActive
   const configuredAudio = extensionState?.extras.audio as
     QuizExtrasV1["audio"] | undefined
   const hasOpeningSoundtrack =
@@ -327,7 +339,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       ? Date.now() + 12000
       : null,
   )
-  const [openingMusicActive, setOpeningMusicActive] = useState(
+  const [legacyOpeningMusicActive, setOpeningMusicActive] = useState(
     () => role !== "player" && !reduced && !openingSeen(showGameId),
   )
   useEffect(() => {
@@ -350,9 +362,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     window.dispatchEvent(new Event("tadazz:audio-unlock"))
   }, [hasOpeningSoundtrack])
 
+  const openingMusicActive = launch ? role !== "player" && launch.stage === "opening" : legacyOpeningMusicActive
   const openingEligible =
     role !== "player" &&
-    (scene.kind === "lobby" ||
+    (launch?.stage === "opening" || scene.kind === "lobby" ||
       ((scene.kind === "connecting" || scene.kind === "wait") &&
         !questionStates))
   const stageRef = useRef<TadazzStageHandle>(null)
@@ -709,6 +722,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         return <TadazzConnectingScreen />
 
       case "lobby":
+        if (isStandby) return <TadazzStandbyScreen />
         return (
           <TadazzLobbyScreen
             inviteCode={
@@ -946,6 +960,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             : undefined
         }
         onFinished={finishOpening}
+        onSkip={launch?.stage === "opening" ? advancePresentation : undefined}
         onEnableSound={
           manager && !isHostPresenting ? enableOpeningSound : undefined
         }
@@ -1157,7 +1172,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 questionStates={questionStates}
                 onExit={onBack ?? (() => undefined)}
                 onStartGame={
-                  props.statusName === STATUS.SHOW_ROOM ? onNext : undefined
+                  props.statusName === STATUS.SHOW_ROOM ? (launch ? advancePresentation : onNext) : undefined
                 }
                 onAdvanceFallback={onNext}
                 onPresent={onPresent}
@@ -1252,7 +1267,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 reducedMotion={reduced}
               />
             )}
-            {role !== "player" && <LiveParticipation
+            {role !== "player" && !isStandby && <LiveParticipation
               connected={publicConnected} answered={publicAnswered}
               voting={scene.kind === "voting" && votingOpen}
             />}
@@ -1353,7 +1368,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               epoch={extensionState.epoch}
               soundtrackSlot={audioPolicy.slot}
               continuityKey={audioPolicy.continuityKey}
-              paused={isPaused}
+              paused={isPaused || isStandby}
               autoPlay={!manager || roomMediaReady}
               onEnded={() => {
                 if (audioPolicy.slot === "openingIntro")
