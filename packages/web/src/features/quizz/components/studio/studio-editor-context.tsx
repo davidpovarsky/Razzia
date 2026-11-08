@@ -784,6 +784,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         const newQuestion: Question = {
           type: "single",
           playMode: targetKind,
+          ...(currentQuestions.at(-1)?.category
+            ? { category: currentQuestions.at(-1)!.category }
+            : {}),
           question: "",
           answers: ["", ""],
           solutions: targetKind === "quiz" ? [0] : [],
