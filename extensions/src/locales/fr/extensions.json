@@ -719,7 +719,24 @@
       "upNext": "À SUIVRE",
       "lookClosely": "REGARDEZ BIEN",
       "noVotes": "AUCUN VOTE POUR L'INSTANT",
-      "points": "PTS"
+      "points": "PTS",
+      "storyBuild": "QUE L’HISTOIRE COMMENCE",
+      "storyReady": "PLACE À L’HISTOIRE !",
+      "storyTime": "TEMPS DU RÉCIT",
+      "storyUnfolds": "L’HISTOIRE SE DÉROULE...",
+      "storyNow": "ET MAINTENANT...",
+      "storyTitle": "L’HISTOIRE",
+      "storyRound": "MANCHE"
+    },
+    "seating": {
+      "call": "APPELEZ POUR REJOINDRE",
+      "pin": "CODE DU JEU",
+      "stage": "SCÈNE",
+      "production": "ÉQUIPE DE PRODUCTION",
+      "entrance": "ENTRÉE",
+      "table": "Table",
+      "noPhone": "NUMÉRO NON CONFIGURÉ",
+      "connected": "{{connected}} / {{total}} TABLES CONNECTÉES"
     }
   }
 }

@@ -1,3 +1,4 @@
+import {ReferenceStoryScene} from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
 import type { TadazzV4Data, TadazzV4Answer } from "./types"
 
@@ -609,36 +610,8 @@ export function FullShowSceneView({
       return <Tie data={data} />
 
     case "story-assembly":
-      return (
-        <>
-          <Head
-            title="THE WORLD YOU CREATED"
-            chip={`ROUND ${num(data.round || 1)}`}
-          />
-          <StoryCards data={data} />
-          <div className="full-story-bridge full-story-ribbon" />
-          <div className="full-story-ending full-story-begin">
-            LET THE STORY BEGIN…
-          </div>
-        </>
-      )
-
     case "story-live":
-      return (
-        <>
-          <Head
-            title="THE WORLD YOU CREATED"
-            chip={`ROUND ${num(data.round || 1)}`}
-            eyebrow="STORYTELLING MODE"
-            subtitle="All five choices remain visible while the host tells the story."
-          />
-          <StoryCards data={data} live />
-          <div className="full-story-live-note full-live-footer">
-            <span className="full-live-dot" />
-            <span>STORY {data.round || 1} · HOST IS TELLING YOUR STORY</span>
-          </div>
-        </>
-      )
+      return <ReferenceStoryScene scene={scene} data={data}/>
 
     case "grand-finale":
       return <Finale data={data} />

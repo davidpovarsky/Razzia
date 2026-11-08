@@ -31,8 +31,6 @@ it("adds every source show preset to the original ten questions, preserving auth
         "phone-instructions",
         "connection-readiness",
         "story-progress",
-        "story-assembly",
-        "story-live",
         "interlude",
       ].includes(preset)
     ) {
@@ -57,7 +55,13 @@ it("adds every source show preset to the original ten questions, preserving auth
       (s) => s.kind === "animation" && s.preset === "representative-directory",
     ),
   ).toHaveLength(1)
-  expect(complete.timeline).toHaveLength(36)
+  expect(complete.timeline).toHaveLength(40)
+  const authoredScenes = complete.timeline.flatMap(item => item.kind === "animation" ? [complete.scenes[item.sceneId]] : [])
+  for (const round of [1,2]) {
+    const recap = authoredScenes.findIndex(scene => scene.kind === "animation" && scene.preset === "round-recap" && scene.round === round)
+    expect(authoredScenes[recap+1]).toMatchObject({preset:"story-assembly",round,advance:"auto",durationMs:60000})
+    expect(authoredScenes[recap+2]).toMatchObject({preset:"story-live",round,advance:"manual"})
+  }
   expect(presets.filter((preset) => preset === "top-pick")).toHaveLength(10)
   expect(presets.filter((preset) => preset === "round-recap")).toHaveLength(2)
   expect(complete.timeline.some((item) => item.kind === "interimResults")).toBe(

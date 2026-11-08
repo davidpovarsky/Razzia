@@ -719,7 +719,24 @@
       "upNext": "A CONTINUACIÓN",
       "lookClosely": "MIRA CON ATENCIÓN",
       "noVotes": "SIN VOTOS TODAVÍA",
-      "points": "PTS"
+      "points": "PTS",
+      "storyBuild": "QUE COMIENCE LA HISTORIA",
+      "storyReady": "¡ES HORA DE CONTAR!",
+      "storyTime": "TIEMPO DEL RELATO",
+      "storyUnfolds": "LA HISTORIA COBRA VIDA...",
+      "storyNow": "Y AHORA...",
+      "storyTitle": "LA HISTORIA",
+      "storyRound": "RONDA"
+    },
+    "seating": {
+      "call": "LLAMA PARA UNIRTE",
+      "pin": "PIN DEL JUEGO",
+      "stage": "ESCENARIO",
+      "production": "EQUIPO DE PRODUCCIÓN",
+      "entrance": "ENTRADA",
+      "table": "Mesa",
+      "noPhone": "NÚMERO SIN CONFIGURAR",
+      "connected": "{{connected}} / {{total}} MESAS CONECTADAS"
     }
   }
 }

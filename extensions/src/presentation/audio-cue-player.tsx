@@ -93,6 +93,16 @@ export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
 }
 
 export interface AudioCuePlayerProps {
+  /** Timed stage soundtrack, played by this same master pause/mute/volume owner.
+   * undefined uses normal policy; null deliberately keeps the stage silent. */
+  showTrack?: {
+    key: string
+    url: string
+    startedAt?: number
+    elapsedMs?: number
+    durationMs: number
+    volume: number
+  } | null
   /** The show animation owns the question's reveal cue, rather than phase changes. */
   stageOwnsReveal?: boolean
   cueId?: CueId
@@ -163,6 +173,7 @@ function resolveSoundtrack(
  * survive phase renders; only their sources and gain change.
  */
 export const AudioCuePlayer = ({
+  showTrack,
   stageOwnsReveal = false,
   cueId,
   audioExtras,
@@ -232,6 +243,30 @@ export const AudioCuePlayer = ({
   const [muted, setMuted] = useState(false)
   const [masterVolume, setMasterVolume] = useState(1)
   const [userPaused, setUserPaused] = useState(false)
+  const synchronizeShowTrack = useCallback(
+    (active: HTMLAudioElement, track: DesiredTrack) => {
+      if (showTrack === undefined) return true
+      if (!showTrack) return false
+      const elapsed = paused
+        ? (showTrack.elapsedMs ?? 0)
+        : showTrack.startedAt === undefined
+          ? (showTrack.elapsedMs ?? 0)
+          : Math.max(0, Date.now() - showTrack.startedAt)
+      if (elapsed >= showTrack.durationMs) {
+        active.pause()
+        finishedIdentityRef.current = track.identity
+        return false
+      }
+      // Compute from the live clock on each user action. Reusing the initial
+      // offset here would rewind the soundtrack whenever volume/mute changes.
+      if (Math.abs(active.currentTime - elapsed / 1000) > 0.4)
+        active.currentTime = elapsed / 1000
+      track.maxDurationMs = showTrack.durationMs - elapsed
+      stopRemainingRef.current = track.maxDurationMs
+      return true
+    },
+    [showTrack, paused],
+  )
   // Manual track previews apply only to the current show phase. On the next
   // scene transition, automatically resume the soundtrack chosen by the show.
   const [manualTrack, setManualTrack] = useState<{
@@ -262,6 +297,24 @@ export const AudioCuePlayer = ({
   const soundtrack = resolveSoundtrack(selectedSoundtrackSlot, audioExtras)
 
   const desired = useMemo<DesiredTrack | null>(() => {
+    if (showTrack !== undefined) {
+      if (!showTrack) return null
+      const elapsed = paused
+        ? (showTrack.elapsedMs ?? 0)
+        : showTrack.startedAt === undefined
+          ? (showTrack.elapsedMs ?? 0)
+          : Math.max(0, Date.now() - showTrack.startedAt)
+      if (elapsed >= showTrack.durationMs) return null
+      return {
+        identity: `${gameId ?? "g"}:reference-story:${showTrack.key}:${showTrack.url}`,
+        url: showTrack.url,
+        volume: showTrack.volume,
+        loop: false,
+        fadeMs: 0,
+        startOffsetSeconds: elapsed / 1000,
+        maxDurationMs: showTrack.durationMs - elapsed,
+      }
+    }
     // Voting is a protected invariant: the existing answersMusic URL/gain/loop wins.
     if (
       effectiveCueId === "answersMusic" &&
@@ -327,6 +380,8 @@ export const AudioCuePlayer = ({
             DEFAULT_CUE_URLS[effectiveCueId]),
     }
   }, [
+    showTrack,
+    paused,
     activeCardKey,
     continuityKey,
     effectiveCueId,
@@ -419,6 +474,7 @@ export const AudioCuePlayer = ({
     const { current } = currentRef
     if (current && desired && current.identity === desired.identity) {
       const active = elements[activeIndexRef.current]
+      if (!synchronizeShowTrack(active, desired)) return
       elements[activeIndexRef.current === 0 ? 1 : 0].pause()
       active.onended = () => {
         if (
@@ -596,6 +652,7 @@ export const AudioCuePlayer = ({
     onPlaybackStarted,
     paused,
     userPaused,
+    synchronizeShowTrack,
   ])
 
   useEffect(() => {
@@ -610,6 +667,7 @@ export const AudioCuePlayer = ({
     if (paused || userPaused) {
       elements.forEach((element) => element.pause())
     } else if (autoPlay && finishedIdentityRef.current !== current.identity) {
+      if (!synchronizeShowTrack(active, current)) return
       void active
         .play()
         .then(() => {
@@ -645,6 +703,7 @@ export const AudioCuePlayer = ({
     onPlaybackStarted,
     paused,
     userPaused,
+    synchronizeShowTrack,
   ])
 
   useEffect(() => {
@@ -761,6 +820,7 @@ export const AudioCuePlayer = ({
       return
     }
     const active = elements[activeIndexRef.current]
+    if (!synchronizeShowTrack(active, current)) return
     void active
       .play()
       .then(() => {
@@ -789,7 +849,14 @@ export const AudioCuePlayer = ({
         setAudioBlocked(true)
         onError(error)
       })
-  }, [effectiveVolume, onEnded, onError, onPlaybackStarted, paused])
+  }, [
+    effectiveVolume,
+    onEnded,
+    onError,
+    onPlaybackStarted,
+    paused,
+    synchronizeShowTrack,
+  ])
 
   useEffect(() => {
     if (paused || userPaused || muted) {
@@ -838,7 +905,7 @@ export const AudioCuePlayer = ({
               {controlLabels.enable}
             </button>
           )}
-          {configuredSoundtrackSlots.length > 0 && (
+          {configuredSoundtrackSlots.length > 0 && showTrack === undefined && (
             <label className="tz-x-pill flex items-center gap-2">
               <span>{controlLabels.track}</span>
               <select

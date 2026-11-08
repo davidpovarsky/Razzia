@@ -719,7 +719,24 @@
       "upNext": "UP NEXT",
       "lookClosely": "LOOK CLOSELY",
       "noVotes": "NO VOTES YET",
-      "points": "PTS"
+      "points": "PTS",
+      "storyBuild": "LET THE STORY BEGIN",
+      "storyReady": "IT'S STORYTIME!",
+      "storyTime": "STORY TIME",
+      "storyUnfolds": "THE STORY UNFOLDS...",
+      "storyNow": "AND NOW...",
+      "storyTitle": "THE STORY",
+      "storyRound": "ROUND"
+    },
+    "seating": {
+      "call": "CALL TO JOIN",
+      "pin": "GAME PIN",
+      "stage": "STAGE",
+      "production": "PRODUCTIONS TEAM",
+      "entrance": "ENTRANCE",
+      "table": "Table",
+      "noPhone": "NUMBER NOT CONFIGURED",
+      "connected": "{{connected}} / {{total}} TABLES CONNECTED"
     }
   }
 }

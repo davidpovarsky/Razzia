@@ -751,15 +751,18 @@ describe("P0 authoritative scene pause", () => {
     expect(coordinator.pauseGame()).toBe(true)
     const remaining = coordinator.getPauseSnapshot().remainingMs
     expect(remaining).toBe(3000)
+    expect(coordinator.getSceneElapsedMs()).toBe(2000)
     expect(coordinator.advanceScene(sceneId, coordinator.currentEpoch, 0)).toBe(
       false,
     )
     vi.advanceTimersByTime(10000)
     expect(finished).toBe(false)
     expect(coordinator.getPauseSnapshot().remainingMs).toBe(remaining)
+    expect(coordinator.getSceneElapsedMs()).toBe(2000)
 
     expect(coordinator.resumeGame()).toBe(true)
     vi.advanceTimersByTime(2999)
+    expect(coordinator.getSceneElapsedMs()).toBe(4999)
     expect(finished).toBe(false)
     vi.advanceTimersByTime(1)
     expect(finished).toBe(true)
@@ -796,6 +799,10 @@ it("keeps both five-position round boundaries when all ten questions are skipped
     preset: "round-recap",
     round: 1,
   })
+  coordinator.advanceScene() // mixer
+  expect(coordinator.currentScene).toMatchObject({preset:"story-assembly",round:1})
+  coordinator.advanceScene() // story
+  expect(coordinator.currentScene).toMatchObject({preset:"story-live",round:1})
   coordinator.advanceScene() // wipe
   coordinator.advanceScene() // round two
   coordinator.advanceScene() // Q6
@@ -805,6 +812,10 @@ it("keeps both five-position round boundaries when all ten questions are skipped
     preset: "round-recap",
     round: 2,
   })
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({preset:"story-assembly",round:2})
+  coordinator.advanceScene()
+  expect(coordinator.currentScene).toMatchObject({preset:"story-live",round:2})
   coordinator.advanceScene()
   expect(coordinator.currentScene).toMatchObject({
     kind: "animation",

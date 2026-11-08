@@ -308,8 +308,6 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
         expectedCue: "tie-resolved",
         input: { contestants: [], resolvedIndex: 0 },
       },
-      { scene: "story-assembly", expectedCue: "story-assembled" },
-      { scene: "story-live", expectedCue: "story-live-hold" },
       { scene: "grand-finale", expectedCue: "finale-impact" },
       { scene: "grand-finale", expectedCue: "curtains-closed" },
     ]

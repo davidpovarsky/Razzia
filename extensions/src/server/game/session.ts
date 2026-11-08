@@ -422,6 +422,7 @@ export class ExtensionGameSession {
         extrasPayload.currentScene = this.showCoordinator.currentScene
 
         if (this.showCoordinator.isSceneActive()) {
+          extrasPayload.sceneElapsedMs = this.showCoordinator.getSceneElapsedMs()
           if (activeStepEnvelope?.startedAt) {
             this.startedAt = activeStepEnvelope.startedAt
           }

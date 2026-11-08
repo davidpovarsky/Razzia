@@ -133,6 +133,10 @@ export class StudioShowCoordinator {
     return this.paused
   }
 
+  getSceneElapsedMs(): number {
+    return Math.max(0, (this.pausedAt ?? Date.now()) - this.startedAt)
+  }
+
   getPauseSnapshot(): {
     paused: boolean
     remainingMs: number | null

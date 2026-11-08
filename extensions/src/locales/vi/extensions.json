@@ -719,7 +719,24 @@
       "upNext": "TIẾP THEO",
       "lookClosely": "QUAN SÁT KỸ",
       "noVotes": "CHƯA CÓ PHIẾU BẦU",
-      "points": "ĐIỂM"
+      "points": "ĐIỂM",
+      "storyBuild": "HÃY BẮT ĐẦU CÂU CHUYỆN",
+      "storyReady": "ĐẾN GIỜ KỂ CHUYỆN!",
+      "storyTime": "THỜI GIAN KỂ CHUYỆN",
+      "storyUnfolds": "CÂU CHUYỆN ĐANG MỞ RA...",
+      "storyNow": "VÀ BÂY GIỜ...",
+      "storyTitle": "CÂU CHUYỆN",
+      "storyRound": "VÒNG"
+    },
+    "seating": {
+      "call": "GỌI ĐỂ THAM GIA",
+      "pin": "MÃ PIN TRÒ CHƠI",
+      "stage": "SÂN KHẤU",
+      "production": "NHÓM SẢN XUẤT",
+      "entrance": "LỐI VÀO",
+      "table": "Bàn",
+      "noPhone": "CHƯA CẤU HÌNH SỐ ĐIỆN THOẠI",
+      "connected": "{{connected}} / {{total}} BÀN ĐÃ KẾT NỐI"
     }
   }
 }

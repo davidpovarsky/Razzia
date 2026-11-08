@@ -1282,25 +1282,10 @@ export class TadazzV4Motion {
       }
 
       case "story-assembly":
-        this.cue("story-assembled", 2400)
-        this.holdScene(authoredDuration ?? 3040)
-
-        break
-
       case "story-live":
-        this.cue("story-live-hold", 900)
-
-        // Hold indefinitely without auto-advance clock unless explicitly authored.
-        if (authoredDuration) {
-          this.holdScene(authoredDuration)
-        } else {
-          // A cue ending must not report completion for a host-held scene.
-          this.animate(this.fx(), [{ opacity: 1 }, { opacity: 1 }], {
-            duration: 1000,
-            iterations: Infinity,
-          })
-        }
-
+        // Reference React renderer owns choreography; server owns advancement.
+        // Do not replay the previous kit's decorative story audio.
+        this.holdScene(1)
         break
 
       case "grand-finale":

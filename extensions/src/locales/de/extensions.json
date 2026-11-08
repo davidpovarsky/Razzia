@@ -719,7 +719,24 @@
       "upNext": "ALS NÄCHSTES",
       "lookClosely": "GENAU HINSCHAUEN",
       "noVotes": "NOCH KEINE STIMMEN",
-      "points": "PKT"
+      "points": "PKT",
+      "storyBuild": "DIE GESCHICHTE BEGINNT",
+      "storyReady": "ZEIT FÜR DIE GESCHICHTE!",
+      "storyTime": "ERZÄHLZEIT",
+      "storyUnfolds": "DIE GESCHICHTE ENTFALTET SICH...",
+      "storyNow": "UND JETZT...",
+      "storyTitle": "DIE GESCHICHTE",
+      "storyRound": "RUNDE"
+    },
+    "seating": {
+      "call": "ANRUFEN UND MITMACHEN",
+      "pin": "SPIEL-PIN",
+      "stage": "BÜHNE",
+      "production": "PRODUKTIONSTEAM",
+      "entrance": "EINGANG",
+      "table": "Tisch",
+      "noPhone": "NUMMER NICHT EINGERICHTET",
+      "connected": "{{connected}} / {{total}} TISCHE VERBUNDEN"
     }
   }
 }

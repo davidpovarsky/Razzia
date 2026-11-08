@@ -370,7 +370,7 @@ export const TadazzV4Stage = forwardRef<
         {underlay as ReactNode}
         <StageAmbientV4 />
         {view &&
-          !["company-opening", "grand-opening", "grand-finale"].includes(
+          !["company-opening", "grand-opening", "grand-finale", "story-assembly", "story-live"].includes(
             view.scene,
           ) && (
             <img

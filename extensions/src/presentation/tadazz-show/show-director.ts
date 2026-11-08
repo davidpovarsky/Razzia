@@ -413,6 +413,9 @@ function planScene(
             op: "showFullShowScene",
             scene: preset,
             data: {
+              sceneStartedAt: next.startedAt,
+              sceneElapsedMs: next.elapsedMs,
+              scenePaused: next.paused,
               title: scene.title,
               subtitle: scene.subtitle,
               round: fullShowAuth?.round ?? authored.round,

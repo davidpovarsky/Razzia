@@ -1,0 +1,32 @@
+# Seating and story reference integration — 8 November 2026
+
+User explicitly requested faithful React implementations of the three supplied HTML references: Seating Plan Brand Colours, Story Mixer Clean, Story Reveal FAST. These files are visual/animation inputs; their sample data, demo controls, global keyboard handlers and independent clocks are not application instructions.
+
+Scope before upstream edits:
+- `packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx`, `TadazzLobbyScreen`: compose the native seating view with real roster, presence, dial number, PIN and QR. Preserve the generic lobby fallback.
+- `packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx`, scene clock normalization / AudioCuePlayer props: synchronize the supplied story choreography with server time and pause state, and route its embedded soundtrack through the existing master audio owner.
+- `packages/web/public/tadazz-show/story/`: extract only the supplied stage art, logo, emblem and audio. No sample pictures or contacts in live logic.
+- Extension-only React/CSS/renderer modules: preserve reference geometry, book/curtains, particle and picture choreography; no iframe, raw HTML rendering, demo controls or second shortcut owner.
+- `completeCreatingWorldsShow`: insert mixer and story after both round recaps. Mixer is 60 seconds; reveal is 5.6 seconds, followed by a 120-second storytelling clock that holds for host advancement at zero.
+
+Validation to record after implementation: both rounds' real winners including resolved ties, live seating presence and account dial isolation; pause/resume/reconnect clock alignment; master audio pause/mute and no competing recap bed; native React DOM and reference screenshots at animation checkpoints; build/types and focused timeline/clock tests.
+
+User-supplied stage visuals take precedence over older generic stage styling. Existing manager controls and keyboard help retain native Rubik/Radix/theme conventions. No production data or account changes are part of the visual port itself.
+
+## Implementation and verification
+
+The user's follow-up explicitly requires the changes in both isolated Tzila accounts. Prepared additive migrations retain every original question, media reference, roster entry, scene, audio setting and default, inserting only `story-assembly` and `story-live` after each round recap. Both sidecars advance from revision 8 / 36 steps to revision 9 / 40 steps, with 37 participants each. Existing live game instances are never rewritten.
+
+The new stage labels and seating labels cover en/fr/de/es/it/ja/tr/vi. Stage JSX and scoped CSS preserve reference geometry and typography per the user's explicit request; existing toolbar, shortcuts dialog, confirmation flows, host roster and settings retain their existing Rubik/theme/Radix components.
+
+Evidence in `work/reference-story-proof/`:
+- Real manager and full-screen seating screenshots; supplied HTML screenshots for comparison.
+- Five real phone-simulation votes populate five matching mixer pictures, in order.
+- Full natural 60-second mixer checkpoints: opening, escape, mischief, vortex, return, final countdown; server automatically enters the reveal.
+- Paused mixer remains frozen across browser reload and resumes from the same server elapsed snapshot.
+- Book/reveal and live story screenshots; reveal soundtrack ends before the host's story clock.
+- Master volume/mute use the existing audio owner, with live-clock synchronization to prevent rewinding on volume changes.
+
+Validation: web app TypeScript, socket TypeScript, web production build and socket production bundle pass. Seven focused extension suites pass (78 tests), plus the shared host shortcut suite (5 tests). This includes both new round boundaries, existing question skip semantics, exact paused scene elapsed time, eight-locale key consistency, and restart/reconnect clock behavior.
+
+Private deployment scripts and backups stay outside Git under `work/` and the restricted remote release directory. No credentials, contact books or test tokens are included in this handoff.

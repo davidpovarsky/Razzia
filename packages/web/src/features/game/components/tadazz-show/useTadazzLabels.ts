@@ -67,6 +67,13 @@ export function useTadazzV4Labels(): Partial<TadazzV4Labels> {
     const tx = (key: keyof TadazzV4Labels) => t(`${K}.v4.${key}`, d[key])
     return {
       nextQuestion: tx("nextQuestion"),
+      storyBuild: tx("storyBuild"),
+      storyReady: tx("storyReady"),
+      storyTime: tx("storyTime"),
+      storyUnfolds: tx("storyUnfolds"),
+      storyNow: tx("storyNow"),
+      storyTitle: tx("storyTitle"),
+      storyRound: tx("storyRound"),
       focus: tx("focus"),
       chooseOne: tx("chooseOne"),
       votesLocked: tx("votesLocked"),

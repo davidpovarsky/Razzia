@@ -11,6 +11,7 @@ import {
 } from "@razzia/extensions/core"
 import {
   AudioCuePlayer,
+  STORY_ASSETS,
   CinematicLayerStack,
   TadazzOpening,
   TadazzStage,
@@ -251,6 +252,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       if (next.votingEndsAt !== undefined)
         next.votingEndsAt -= serverClockOffset
     }
+    if (next.kind === "scene" && next.startedAt !== undefined)
+      next.startedAt -= serverClockOffset
     return next
   }, [
     role,
@@ -343,6 +346,19 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const stageRef = useRef<TadazzStageHandle>(null)
   const showRootRef = useRef<HTMLElement | null>(null)
   const isPaused = Boolean(extensionState?.pause?.paused)
+  const referenceStoryTrack = useMemo(() => {
+    if (scene.kind !== "scene" || scene.scene.kind !== "animation") return undefined
+    const preset = (scene.scene as {preset?:string}).preset
+    if (preset !== "story-assembly" && preset !== "story-live") return undefined
+    return {
+      key: scene.key,
+      url: preset === "story-assembly" ? STORY_ASSETS.mixerMusic : STORY_ASSETS.revealMusic,
+      startedAt: scene.startedAt,
+      elapsedMs: scene.elapsedMs,
+      durationMs: preset === "story-assembly" ? 60000 : 5600,
+      volume: 0.62,
+    }
+  }, [scene])
   const votingStartsAt =
     scene.kind === "voting" ? scene.votingStartsAt : undefined
   const votingEndsAt = scene.kind === "voting" ? scene.votingEndsAt : undefined
@@ -1267,6 +1283,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
           {extensionState && role !== "player" && (
             <AudioCuePlayer
+              showTrack={referenceStoryTrack}
               stageOwnsReveal={useV4}
               cueId={props.audioCueId}
               audioExtras={

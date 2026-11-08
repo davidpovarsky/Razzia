@@ -75,6 +75,9 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
 
     if (i === 4 || i === 9) {
       scene("round-recap", round)
+      scene("story-assembly", round, { advance: "auto", durationMs: 60000 })
+      // Reveal + two-minute story clock hold at zero for host advancement.
+      scene("story-live", round)
 
       if (i === 4) {
         scene("z-wipe", 2, { advance: "auto", durationMs: 1800 })

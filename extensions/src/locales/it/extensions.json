@@ -719,7 +719,24 @@
       "upNext": "PROSSIMAMENTE",
       "lookClosely": "GUARDA ATTENTAMENTE",
       "noVotes": "ANCORA NESSUN VOTO",
-      "points": "PT"
+      "points": "PT",
+      "storyBuild": "CHE LA STORIA ABBIA INIZIO",
+      "storyReady": "È IL MOMENTO DELLA STORIA!",
+      "storyTime": "TEMPO DEL RACCONTO",
+      "storyUnfolds": "LA STORIA PRENDE VITA...",
+      "storyNow": "E ORA...",
+      "storyTitle": "LA STORIA",
+      "storyRound": "TURNO"
+    },
+    "seating": {
+      "call": "CHIAMA PER PARTECIPARE",
+      "pin": "PIN DEL GIOCO",
+      "stage": "PALCO",
+      "production": "SQUADRA DI PRODUZIONE",
+      "entrance": "INGRESSO",
+      "table": "Tavolo",
+      "noPhone": "NUMERO NON CONFIGURATO",
+      "connected": "{{connected}} / {{total}} TAVOLI CONNESSI"
     }
   }
 }

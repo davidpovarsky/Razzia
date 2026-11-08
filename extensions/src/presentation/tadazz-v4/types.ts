@@ -57,6 +57,10 @@ export interface TadazzV4Team {
 export interface TadazzV4Data {
   /** Stable question identity (questionId/epoch) used for continuous live-game transitions. */
   questionKey?: string
+  /** Server-owned story clock including a frozen pause snapshot. */
+  sceneStartedAt?: number
+  sceneElapsedMs?: number
+  scenePaused?: boolean
   question?: string
   eyebrow?: string
   note?: string
@@ -110,6 +114,13 @@ export interface TadazzV4Data {
   backgroundFit?: "cover" | "contain"
 }
 export interface TadazzV4Labels {
+  storyBuild: string
+  storyReady: string
+  storyTime: string
+  storyUnfolds: string
+  storyNow: string
+  storyTitle: string
+  storyRound: string
   nextQuestion: string
   audienceResults: string
   focus: string
@@ -133,6 +144,13 @@ export interface TadazzV4Labels {
   points: string
 }
 export const TADAZZ_V4_LABELS: TadazzV4Labels = {
+  storyBuild: "LET THE STORY BEGIN",
+  storyReady: "IT'S STORYTIME!",
+  storyTime: "STORY TIME",
+  storyUnfolds: "THE STORY UNFOLDS...",
+  storyNow: "AND NOW...",
+  storyTitle: "THE STORY",
+  storyRound: "ROUND",
   nextQuestion: "THE NEXT QUESTION",
   audienceResults: "AUDIENCE RESULTS",
   focus: "THE QUESTION IS ON THE SCREEN",

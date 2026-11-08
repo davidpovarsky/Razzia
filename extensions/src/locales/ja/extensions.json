@@ -719,7 +719,24 @@
       "upNext": "次はコチラ",
       "lookClosely": "よく見てください",
       "noVotes": "まだ投票がありません",
-      "points": "PT"
+      "points": "PT",
+      "storyBuild": "物語を始めよう",
+      "storyReady": "物語の時間です！",
+      "storyTime": "物語の時間",
+      "storyUnfolds": "物語が広がる…",
+      "storyNow": "さあ、いよいよ…",
+      "storyTitle": "物語",
+      "storyRound": "ラウンド"
+    },
+    "seating": {
+      "call": "電話で参加",
+      "pin": "ゲームPIN",
+      "stage": "ステージ",
+      "production": "制作チーム",
+      "entrance": "入口",
+      "table": "テーブル",
+      "noPhone": "電話番号が未設定です",
+      "connected": "{{connected}} / {{total}} テーブル接続中"
     }
   }
 }

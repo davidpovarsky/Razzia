@@ -719,7 +719,24 @@
       "upNext": "SIRADA",
       "lookClosely": "YAKINDAN BAKIN",
       "noVotes": "HENÜZ OY YOK",
-      "points": "PUAN"
+      "points": "PUAN",
+      "storyBuild": "HİKÂYE BAŞLASIN",
+      "storyReady": "HİKÂYE ZAMANI!",
+      "storyTime": "ANLATIM SÜRESİ",
+      "storyUnfolds": "HİKÂYE ŞEKİLLENİYOR...",
+      "storyNow": "VE ŞİMDİ...",
+      "storyTitle": "HİKÂYE",
+      "storyRound": "TUR"
+    },
+    "seating": {
+      "call": "KATILMAK İÇİN ARA",
+      "pin": "OYUN PIN KODU",
+      "stage": "SAHNE",
+      "production": "YAPIM EKİBİ",
+      "entrance": "GİRİŞ",
+      "table": "Masa",
+      "noPhone": "NUMARA AYARLANMADI",
+      "connected": "{{connected}} / {{total}} MASA BAĞLANDI"
     }
   }
 }

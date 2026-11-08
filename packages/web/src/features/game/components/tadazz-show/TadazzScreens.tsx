@@ -2,7 +2,7 @@ import { EVENTS } from "@razzia/common/constants"
 import type { Player } from "@razzia/common/types/game"
 import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
 import type { SceneDescriptor } from "@razzia/extensions/presentation"
-import { TADAZZ_LOGO_URL } from "@razzia/extensions/presentation"
+import { SeatingPlan, TADAZZ_LOGO_URL } from "@razzia/extensions/presentation"
 import {
   useEvent,
   useSocket,
@@ -84,126 +84,17 @@ export function TadazzLobbyScreen({
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
   if (representatives?.length) {
-    const tables = [...new Set(representatives.map((rep) => rep.table))].sort(
+    const tables = [...new Set(representatives.map((rep) => rep.table).filter(table=>table>=1 && table<=31))].sort(
       (a, b) => a - b,
     )
-    const sorted = tables.map((table) => ({
-      table,
-      names: representatives
-        .filter((rep) => rep.table === table)
-        .map((rep) => rep.name),
-      name: representatives
-        .filter((rep) => rep.table === table)
-        .map((rep) => rep.name)
-        .join(" / "),
-    }))
-    const columnSize = Math.ceil(sorted.length / 4)
-    const connected = new Set(
-      (fullShowData?.connectedTables ?? []).filter((table) =>
-        tables.includes(table),
-      ),
-    )
-    const joinUrl = `${webUrl}?pin=${inviteCode ?? ""}`
-    return (
-      <div
-        className="tz-x-fill tz-lobby-show"
-        data-testid="tadazz-screen-lobby"
-      >
-        <header className="tz-lobby-show-brand">
-          <span>JOIN THE SHOW</span>
-          <img src={TADAZZ_LOGO_URL} alt="TADAZZ!" />
-        </header>
-        <div className="tz-lobby-show-main">
-          <aside className="tz-lobby-show-join tz-x-panel">
-            <div className="tz-lobby-show-small">JOIN THE GAME AT</div>
-            <div className="tz-lobby-show-url">{host || webUrl}</div>
-            <div className="tz-lobby-show-small">GAME PIN</div>
-            <div className="tz-lobby-show-pin" data-testid="tadazz-lobby-pin">
-              {inviteCode
-                ? isLocked
-                  ? inviteCode.replace(/./g, "#")
-                  : inviteCode
-                : "—"}
-            </div>
-            {inviteCode && !isLocked ? (
-              <div className="tz-lobby-show-qr" data-testid="tadazz-lobby-qr">
-                <QRCodeSVG value={joinUrl} />
-              </div>
-            ) : (
-              <div className="tz-lobby-show-qr tz-lobby-lock">
-                <Lock />
-              </div>
-            )}
-            <div className="tz-lobby-show-small">CALL TO JOIN</div>
-            <div className="tz-lobby-show-phone">
-              {fullShowData?.dialNumber?.trim() || "NUMBER NOT CONFIGURED"}
-            </div>
-            <div
-              className="tz-lobby-show-connected"
-              data-testid="tadazz-lobby-count"
-            >
-              {connected.size} / {tables.length} TABLES CONNECTED
-            </div>
-          </aside>
-          <section
-            className="tz-lobby-show-roster"
-            data-testid="tadazz-full-directory"
-          >
-            <div className="tz-lobby-show-roster-title">
-              FIND YOUR TABLE REPRESENTATIVE
-            </div>
-            <div className="tz-lobby-show-grid">
-              {Array.from({ length: 4 }, (_, column) => (
-                <div className="tz-lobby-show-col" key={column}>
-                  <div className="tz-lobby-show-col-label">
-                    TABLES{" "}
-                    {String(sorted[column * columnSize]?.table ?? "").padStart(
-                      2,
-                      "0",
-                    )}
-                    –
-                    {String(
-                      sorted[
-                        Math.min(
-                          sorted.length - 1,
-                          (column + 1) * columnSize - 1,
-                        )
-                      ]?.table ?? "",
-                    ).padStart(2, "0")}
-                  </div>
-                  {sorted
-                    .slice(column * columnSize, (column + 1) * columnSize)
-                    .map((rep) => {
-                      const joined = connected.has(rep.table)
-                      return (
-                        <div
-                          className={[
-                            "tz-lobby-show-rep",
-                            joined && "connected",
-                          ]
-                            .filter(Boolean)
-                            .join(" ")}
-                          key={rep.table}
-                          data-table={rep.table}
-                          data-testid="tadazz-lobby-representative"
-                        >
-                          <strong>{String(rep.table).padStart(2, "0")}</strong>
-                          <span title={rep.name}>
-                            {rep.names.map((name) => (
-                              <em key={name}>{name}</em>
-                            ))}
-                          </span>
-                          <i aria-label={joined ? "Connected" : "Waiting"} />
-                        </div>
-                      )
-                    })}
-                </div>
-              ))}
-            </div>
-          </section>
-        </div>
-      </div>
-    )
+    const connected = (fullShowData?.connectedTables ?? []).filter(table=>tables.includes(table))
+    return <SeatingPlan representatives={representatives} connectedTables={connected}
+      dialNumber={fullShowData?.dialNumber} pin={inviteCode ? isLocked ? inviteCode.replace(/./g,"#") : inviteCode : "—"}
+      qr={inviteCode && !isLocked ? <QRCodeSVG value={`${webUrl}?pin=${inviteCode}`}/> : <Lock/>}
+      labels={{call:tx("seating.call","CALL TO JOIN"),pin:tx("seating.pin","GAME PIN"),stage:tx("seating.stage","STAGE"),
+        production:tx("seating.production","PRODUCTIONS TEAM"),entrance:tx("seating.entrance","ENTRANCE"),table:tx("seating.table","Table"),
+        noPhone:tx("seating.noPhone","NUMBER NOT CONFIGURED"),
+        connected:tx("seating.connected","{{connected}} / {{total}} TABLES CONNECTED",{connected:new Set(connected).size,total:tables.length})}}/>
   }
 
   return (

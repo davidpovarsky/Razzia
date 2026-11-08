@@ -23,6 +23,7 @@ export type ShowRole = "manager" | "player" | "spectator"
 
 /** Minimal shape of the authoritative extension envelope used by the show. */
 export interface ShowEnvelope {
+  pause?: { paused: boolean }
   gameId?: string
   epoch?: number
   seq?: number
@@ -149,6 +150,8 @@ export type ShowScene =
       activeSceneData?: ActiveSceneData
       startedAt?: number
       stepIndex?: number
+      elapsedMs?: number
+      paused?: boolean
     }
   | { kind: "interlude"; key: string; interlude: Interlude; startedAt?: number }
 
@@ -371,6 +374,8 @@ export function computeShowScene(input: ShowInput): ShowScene {
         activeSceneData: extras.activeSceneData as ActiveSceneData | undefined,
         startedAt: envelope.startedAt,
         stepIndex: step?.stepIndex,
+        elapsedMs: typeof extras.sceneElapsedMs === "number" ? extras.sceneElapsedMs : undefined,
+        paused: envelope.pause?.paused,
       }
     }
   }
