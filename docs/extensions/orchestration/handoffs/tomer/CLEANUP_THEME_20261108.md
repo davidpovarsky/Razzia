@@ -337,3 +337,23 @@ Read-only review of other worktrees found uncommitted changes; none will be
 copied, committed, reset or stashed. Archive/historical docs are not deployment
 instructions. All executable tests and app/browser work stay on remote Oracle
 in private resource-limited containers. No production activation or push.
+
+
+### Branch synchronization complete
+
+Source compatibility commit 10a0851 and history merge 2836e25 include all five
+previously non-ancestor feature heads. Latest origin fetch and a complete
+reachable-commit audit confirm all 25 local/origin refs are included. The history
+merge tree equals 10a0851; no protected original Razzia file changed in this sync.
+Maya/Noam/v4 patches were already equivalent; older motion/seating implementations
+were superseded by the current native versions, with the missing seating metadata
+compatibility reconciled explicitly before the history merge.
+
+Remote verification: 363 root + 620 extension tests, five effective typechecks,
+build, seven-file focused lint, six sync/legacy browser tests and two Classic
+three-role browser tests PASS. Initial browser expectation was corrected to keep
+an authenticated host's existing roster map while asserting public-display privacy;
+runtime code hashes match across both runs. See BRANCH_SYNC_2026-11-08.md and
+qa-evidence/branch-sync-20261108/. All test containers finished; Windows had no
+game/browser runs. Other worktrees/uncommitted changes remained untouched; no push,
+main merge, new upstream upgrade, production activation or Asana write.

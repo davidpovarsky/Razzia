@@ -1,0 +1,20 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/branch-sync.spec.ts:6:3 › synchronized seating metadata uses native live table presence (4.9s)
+  ✓  2 [chromium] › tests/branch-sync.spec.ts:6:3 › synchronized seating metadata keeps ordinary lobbies unchanged (4.6s)
+[WebServer] 6:50:44 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 6:50:44 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓  3 [chromium] › tests/cleanup-legacy-flow.spec.ts:38:1 › legacy adapters retain picture voting, multi percentages and zero votes (12.1s)
+  ✓  4 [webkit-ipad] › tests/branch-sync.spec.ts:6:3 › synchronized seating metadata uses native live table presence (35.2s)
+  ✓  5 [webkit-ipad] › tests/branch-sync.spec.ts:6:3 › synchronized seating metadata keeps ordinary lobbies unchanged (10.0s)
+  ✓  6 [webkit-ipad] › tests/cleanup-legacy-flow.spec.ts:38:1 › legacy adapters retain picture voting, multi percentages and zero votes (24.8s)
+
+  6 passed (1.6m)

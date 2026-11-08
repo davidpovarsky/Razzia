@@ -1,0 +1,42 @@
+{
+  "sourceHead": "5d93605f282b41503a02286139d58bc0dbfa55c2",
+  "runtimeFilesIdenticalAcrossRuns": [
+    "extensions/src/core/studio-timeline-schema.ts",
+    "extensions/src/server/game/public-directory.test.ts",
+    "extensions/src/server/game/public-directory.ts",
+    "extensions/src/server/game/session-bridge.ts",
+    "extensions/src/server/game/session.ts",
+    "packages/e2e/playwright.branch-sync.config.ts"
+  ],
+  "units": {
+    "root-tests": {
+      "numTotalTests": 363,
+      "numPassedTests": 363,
+      "numFailedTests": 0
+    },
+    "extension-tests": {
+      "numTotalTests": 620,
+      "numPassedTests": 620,
+      "numFailedTests": 0
+    }
+  },
+  "browser": {
+    "cleanup-theme-report.json": {
+      "startTime": "2026-11-08T18:48:20.285Z",
+      "duration": 53151.915,
+      "expected": 2,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    },
+    "branch-sync-report.json": {
+      "startTime": "2026-11-08T18:50:17.771Z",
+      "duration": 98598.077,
+      "expected": 6,
+      "skipped": 0,
+      "unexpected": 0,
+      "flaky": 0
+    }
+  },
+  "initialFailure": "The first new ordinary-lobby assertion incorrectly expected the authenticated host roster to be hidden. Corrected to preserve the host view and test public-display privacy. Runtime source remained identical; raw failed evidence is retained remotely."
+}
