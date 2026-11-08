@@ -16,6 +16,7 @@ import {
 } from "@razzia/socket/services/config"
 import { listMedia } from "@razzia/socket/services/media"
 import { Hono } from "hono"
+import { billingRoutes } from "@razzia/socket/api/extensions/billing-routes"
 
 const extensionRoutes = createExtensionRoutes(
   {
@@ -33,6 +34,7 @@ const routes = new Hono()
   .get("/health", (c) => c.json({ status: "ok" }))
   .route("/auth", auth)
   .route("/accounts", accounts)
+  .route("/billing", billingRoutes)
   .route("/quizz", quizz)
   .route("/results", results)
   .route("/games", games)

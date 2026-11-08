@@ -88,6 +88,7 @@ export interface TadazzV4Data {
   interactive?: boolean
   multiSelect?: boolean
   onSelectOption?: (index: number) => void
+  onResolveTie?: (index: number) => void
   seconds?: number | null
   remainingSeconds?: number | null
   deadlineMs?: number

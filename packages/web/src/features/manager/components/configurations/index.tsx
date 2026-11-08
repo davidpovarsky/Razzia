@@ -1,4 +1,9 @@
 import Card from "@razzia/web/components/Card"
+import Button from "@razzia/web/components/Button"
+import {
+  AccountBilling,
+  useBillingEnabled,
+} from "@razzia/web/features/manager/billing"
 import LanguageSwitcher from "@razzia/web/components/LanguageSwitcher"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import ConfigManageQuizz from "@razzia/web/features/manager/components/configurations/ConfigManageQuizz"
@@ -9,7 +14,7 @@ import { managerLogout } from "@razzia/web/features/manager/queries"
 import { setToken } from "@razzia/web/lib/session"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
-import { LogOut } from "lucide-react"
+import { LogOut, CreditCard } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
 
@@ -29,12 +34,16 @@ const tabs = [
 ]
 
 const Configurations = () => {
+  const billingEnabled = useBillingEnabled()
   const [selectedTab, setSelectedTab] = useState(0)
   const { resetManager } = useManagerStore()
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { t } = useTranslation()
-  const TabComponent = tabs[selectedTab].component
+  const TabComponent =
+    billingEnabled && selectedTab === 3
+      ? AccountBilling
+      : (tabs[selectedTab] ?? tabs[0]).component
 
   const handleSelect = (index: number) => () => {
     setSelectedTab(index)
@@ -57,6 +66,17 @@ const Configurations = () => {
           {t("manager:configurationsTitle")}
         </p>
         <div className="flex items-center gap-2">
+          {billingEnabled && (
+            <Button
+              size="sm"
+              onClick={() => setSelectedTab(selectedTab === 3 ? 0 : 3)}
+              title={t("extensions:billing.tab")}
+              aria-label={t("extensions:billing.tab")}
+              aria-pressed={selectedTab === 3}
+            >
+              <CreditCard className="size-4" />
+            </Button>
+          )}
           <LanguageSwitcher />
           <button
             className="text-muted-foreground hover:bg-accent hover:text-accent-foreground rounded-sm p-1.5"

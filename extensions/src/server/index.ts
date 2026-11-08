@@ -46,3 +46,4 @@ export * from "./game/authored-coordinator"
 
 export * from "./show-themes/installation"
 export type { ThemePrincipal } from "./show-themes/review"
+export * from "./billing"

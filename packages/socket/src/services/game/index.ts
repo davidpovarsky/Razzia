@@ -1,3 +1,7 @@
+import {
+  reserveBilledGame, startBilledGame, admitBilledParticipant,
+  admitBilledPhone, finishBilledPhone,
+} from "@razzia/socket/services/billing"
 import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
 import {
   type GameSettings,
@@ -102,6 +106,7 @@ class Game {
     this.io = io
     this.quizz = quizz
     this.gameId = uuid()
+    reserveBilledGame(managerClientId, this.gameId)
     this.inviteCode = createInviteCode()
     this.gameMode = quizz.gameMode
     this._manager = {
@@ -251,6 +256,8 @@ class Game {
       locked: () => this._locked,
       session: () => this.extensionSession,
       coordinator: () => this.showCoordinator,
+      admitPhone: (identity, callId, join) => admitBilledPhone(this._manager.clientId, this.gameId, identity, callId, join),
+      finishPhone: callId => finishBilledPhone(this.gameId, callId),
       notifyPlayerUpdated: (previous, player, timedOut) =>
         this.notifyPlayerUpdated(previous, player, timedOut),
       broadcastExtensionState: () => this.broadcastExtensionState(),
@@ -699,7 +706,22 @@ class Game {
       return "errors:auth.usernameTooShort"
     }
 
-    const error = this.playerManager.join(socket, finalUsername)
+    const billingRosterId =
+      rosterEntry?.rosterPlayerId ??
+      claimsExtra?.rosterPlayerId ??
+      generateRosterPlayerId()
+    const billingIdentity =
+      rosterEntry?.preRegistered ||
+      normalizedPhone ||
+      claimsExtra?.rosterPlayerId
+        ? `roster:${billingRosterId}`
+        : `client:${clientId}`
+    const error = admitBilledParticipant(
+      this._manager.clientId,
+      this.gameId,
+      billingIdentity,
+      () => this.playerManager.join(socket, finalUsername),
+    )
 
     if (error) {
       return error
@@ -710,7 +732,7 @@ class Game {
       clientId,
       finalUsername,
       normalizedPhone,
-      claimsExtra,
+      claimsExtra: { ...claimsExtra, rosterPlayerId: billingRosterId },
     })
 
     if (this.extensionSession) {
@@ -1009,6 +1031,17 @@ class Game {
       }
     }
 
+    if (
+      !this.started &&
+      this.playerManager.count() > 0 &&
+      socket.id === this._manager.id
+    ) {
+      const error = startBilledGame(this._manager.clientId, this.gameId)
+      if (error) {
+        socket.emit(EVENTS.GAME.ERROR_MESSAGE, error)
+        return
+      }
+    }
     await this.round.start(socket)
     this.broadcastHostPresence()
   }
