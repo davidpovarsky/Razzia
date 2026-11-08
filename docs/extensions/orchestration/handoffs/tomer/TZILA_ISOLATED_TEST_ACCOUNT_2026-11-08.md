@@ -1,0 +1,20 @@
+# Owner-requested isolated Tzila test account
+
+The owner explicitly requested a new account with the complete game, player list and game assets, Israeli dial-in routed to this account, and UK dial-in retained for the customer. Provisioned a separate application and gateway using the already verified production images. The customer's application/gateway were not restarted, and the customer's quiz, roster, account credentials and UK provider settings were not changed. Caddy gained an additional HTTPS virtual host through a validated reload; the main site's routing remained unchanged.
+
+- Test URL: https://tzila-test.132.145.25.168.sslip.io
+- Test login: `qa-tzila@tadazz.com`. The generated password is delivered only in the owner's private Downloads file, never in Git.
+- New account ID: `4ce8228f-3346-460d-a206-b4e3890f2781`.
+- App container `tadazz-tzila-test`, localhost3276, verified image `sha256:cb26ca63e40fb3380dd6a70ab83ce75d31e36e5a5ad3641883ecad0eb5c30609`.
+- Gateway `tadazz-phone-gateway-israel-test`, localhost38994, existing verified image `sha256:4f91324216bb50a9353f61bf44c599617fe27608b8e7af3c7571b50674e2de68`.
+- Independent config `/var/lib/tadazz-tzila-test-20261108/config`, independent SQLite account database, JWT secret, pilot-route secret, sessions, tenants, rooms and results.
+- Same authored quiz ID `0KTcUgc0uvF_vGWYHrpTJ` is intentionally retained inside the physically independent account/store; room IDs and authentication are independent. Exact cloned base bytes,10 questions,37 registered representatives across31 tables,36 timeline steps. All51 referenced uploaded assets (42,293,979 bytes) are actual independent copies with matching SHA256, plus the complete built-in/static asset library in the app image. Results history and other customers' accounts/quizzes were not copied.
+- Only the clone's dial-number display changed to `077-226-3533`. Its runtime guest flag and direct-owner/quiz target point to the new account.
+- Israeli provider account0772263533 root API callback now points to the test host's separately protected gateway route. API POST=yes and logging=no. UK443306131984 still points to its original protected callback at tadazz.com; read-back confirmed unchanged.
+- Native scrypt account password format verified via normal login. New account provisioned verified by the authorized administrator; no email messages sent. Database files remain0600; copied game-media files0644 and directories0755 permit Nginx's authenticated internal media serving. Public raw media still requires manager/room authorization.
+
+Verification: real Chromium login through the test hostname; only one quiz visible;37/31 roster and36-step timeline verified; all51 referenced media fetched200; correct Israeli number visible; protected public Israeli callback joins an unlisted test participant and lights the lobby1/32; keypad5 accepted; timer closes early. The test token returns401 on the customer's `/api/accounts/me`; no browser errors. Physical handset calls after this split were not made by the agent. Existing provider audio files remained unchanged. Separate lab app restart after verification removes only the agent's transient test room; the customer's main app remains running.
+
+Private operational evidence, uncommitted: `work/isolated-tzila-evidence/verification.json`, `isolated-israeli-lobby.png`, `work/isolated-tzila-verification.log`. Server provisioning records, per-asset manifest, prior Caddy configuration and restrictive runtime environment files reside under `/home/ubuntu/tadazz-repair-20261108/isolated-tzila-20261108/`. Provider prior-state backup and operational account material are protected with Windows DPAPI in the owner's local Tada Secrets directory; no callback secret/password is present in this handoff.
+
+The owner must use the test URL for this login and open Creating Worlds there. The customer continues at https://tadazz.com with UK +44 3306131984. Reverting Israeli routing can restore the exact previous provider root callback from the private backup; keep the UK account untouched. Never replace the customer's tenant or merge test results back into it.
