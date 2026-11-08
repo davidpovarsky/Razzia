@@ -1,0 +1,69 @@
+{
+  "createdAt": "2026-11-08T22:11:00.743Z",
+  "samples": [
+    {
+      "quizId": "PYdVJFxJZMUIF0FvcfWrj",
+      "themeId": "tadazz-classic",
+      "themeVersion": "1.0.0",
+      "name": "Classic — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "9M6HS6TFH8P_-Reo1T_bX",
+      "themeId": "tadazz-classic",
+      "themeVersion": "1.0.0",
+      "name": "Classic — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    },
+    {
+      "quizId": "ByLe3pcmezNxLiwa-UuXW",
+      "themeId": "razzia-original",
+      "themeVersion": "1.0.0",
+      "name": "Razzia Original — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "OSyLexU8gkEyagi6_kebo",
+      "themeId": "razzia-original",
+      "themeVersion": "1.0.0",
+      "name": "Razzia Original — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    },
+    {
+      "quizId": "13-mJwqCZpkarszW4KUHs",
+      "themeId": "tadazz-demo-cosmic",
+      "themeVersion": "2.0.0",
+      "name": "Cosmic Night — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "-a9mgBX6NtHRlRpyves5k",
+      "themeId": "tadazz-demo-cosmic",
+      "themeVersion": "2.0.0",
+      "name": "Cosmic Night — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    },
+    {
+      "quizId": "mMhbp_BzDbjXL0AtuLC2o",
+      "themeId": "tadazz-demo-jade",
+      "themeVersion": "2.0.0",
+      "name": "Jade Studio — Quick Quiz",
+      "mode": "quiz",
+      "questions": 3
+    },
+    {
+      "quizId": "aDqE-zJAInWpWMDRqGazN",
+      "themeId": "tadazz-demo-jade",
+      "themeVersion": "2.0.0",
+      "name": "Jade Studio — Audience Picks",
+      "mode": "survey",
+      "questions": 3
+    }
+  ]
+}

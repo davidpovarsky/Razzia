@@ -1,0 +1,42 @@
+{
+  "runtimeSource": "4d8fa98065e7a05bcf2d98fb356dad9c4d249ba7",
+  "unitTests": [
+    {
+      "group": "root",
+      "total": 365,
+      "passed": 365,
+      "failed": 0
+    },
+    {
+      "group": "extensions",
+      "total": 622,
+      "passed": 622,
+      "failed": 0
+    }
+  ],
+  "typeChecks": 5,
+  "productionBuild": "passed",
+  "newUiBrowser": {
+    "startTime": "2026-11-08T22:12:46.577Z",
+    "duration": 498983.611,
+    "expected": 20,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "studioNativeParity": "1 passed; original field/save assertions, Studio selectors and numeric answer labels",
+  "publicSavedGames": "8 passed through HTTPS host/iPad/display/vote/results",
+  "reconnection": "host lobby and voting reload, iPad player reload and successful scoring",
+  "replacement": "8 saved games preserved; four selectable families; browser picker verified again",
+  "legacyOriginalSuite": {
+    "startTime": "2026-11-08T22:01:10.084Z",
+    "duration": 866589.3069999999,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 12,
+    "flaky": 0
+  },
+  "legacyLimitation": "12 existing-assumption failures retained; full old suite is not green. Most refer to old Add question/A-B labels/global quiz mode/no import preview or old host controls. The adapted all-question-types case exposed lost category inheritance, restored in the owned Studio code. Do not claim blanket upstream behavior parity.",
+  "browserLimitations": "WebKit mobile viewport emulation, not physical iPad hardware; fullscreen success tested in Chromium and denial recovery tested in WebKit",
+  "launcherCorrections": "r9/r10 did not build preview assets before starting Vite; r11 corrects the remote launcher and passes all 20. Early live harness corrected response shape, accepted auth rejection codes and normal countdown timeout. No product feature relaxed for these."
+}
