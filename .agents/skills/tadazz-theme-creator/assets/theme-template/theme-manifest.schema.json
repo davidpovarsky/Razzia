@@ -24,6 +24,46 @@
       "minLength": 1,
       "maxLength": 160
     },
+    "localizations": {
+      "type": "object",
+      "propertyNames": {
+        "type": "string",
+        "enum": [
+          "en",
+          "fr",
+          "de",
+          "es",
+          "it",
+          "ja",
+          "tr",
+          "vi"
+        ]
+      },
+      "additionalProperties": {
+        "type": "object",
+        "propertyNames": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160,
+          "pattern": "^[a-zA-Z0-9_.:-]+$"
+        },
+        "additionalProperties": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 1000
+        }
+      },
+      "required": [
+        "en",
+        "fr",
+        "de",
+        "es",
+        "it",
+        "ja",
+        "tr",
+        "vi"
+      ]
+    },
     "category": {
       "type": "string",
       "const": "show"

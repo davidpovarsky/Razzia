@@ -39,7 +39,9 @@ export function loadOpeningLottie(
       )
       .catch(() => null)
 
-    if (bundled) {lottieCache.set(url, pending)}
+    if (bundled) {
+      lottieCache.set(url, pending)
+    }
   }
 
   return pending
@@ -122,7 +124,9 @@ export function TadazzOpening({
       if (alive) {
         setLottieData(data)
 
-        if (!data) {setLottieFailed(true)}
+        if (!data) {
+          setLottieFailed(true)
+        }
       }
     })
 
@@ -173,7 +177,9 @@ export function TadazzOpening({
   }, [brandEnded, videoReady, lottieReady, lottieFailed, videoUrl])
 
   useEffect(() => {
-    if (brandEnded) {return}
+    if (brandEnded) {
+      return
+    }
 
     // A missing asset must not trap the show; normal completion follows the MP4.
     const id = setTimeout(() => {
@@ -181,19 +187,25 @@ export function TadazzOpening({
       setLottieFailed(true)
     }, 8000)
 
-    if (videoPlaying || videoFailed) {clearTimeout(id)}
+    if (videoPlaying || videoFailed) {
+      clearTimeout(id)
+    }
 
     return () => clearTimeout(id)
   }, [brandEnded, videoPlaying, videoFailed])
   useEffect(() => {
-    if (brandEnded || !videoFailed) {return}
+    if (brandEnded || !videoFailed) {
+      return
+    }
 
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS)
 
     return () => clearTimeout(id)
   }, [brandEnded, videoFailed, endBrand])
   useEffect(() => {
-    if (brandEnded || !videoPlaying) {return}
+    if (brandEnded || !videoPlaying) {
+      return
+    }
 
     const id = setTimeout(endBrand, TADAZZ_OPENING_VIDEO_DURATION_MS + 12000)
 
@@ -298,8 +310,9 @@ export function TadazzOpening({
               video.muted = true
               video.volume = 0
 
-              if (lottieReady || lottieFailed)
-                {void video.play().catch(() => setVideoFailed(true))}
+              if (lottieReady || lottieFailed) {
+                void video.play().catch(() => setVideoFailed(true))
+              }
             }
 
             setSoundRequested(true)

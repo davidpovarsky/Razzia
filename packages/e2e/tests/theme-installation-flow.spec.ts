@@ -247,7 +247,11 @@ test("package to private review, approved publication, Studio persistence and al
   const converted = authoredShowToNativeBundleDraft(parsed)
   expect(converted.ok).toBe(true)
   const cloned = converted.bundleDraft
-  if (!cloned) { throw new Error("Workbook conversion must provide a valid bundle") }
+
+  if (!cloned) {
+    throw new Error("Workbook conversion must provide a valid bundle")
+  }
+
   expect(cloned.extras.defaults.showTheme?.id).toBe(themeId)
   const copied = await page.request.post("/api/extensions/import", {
     headers,

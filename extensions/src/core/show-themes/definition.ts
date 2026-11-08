@@ -187,15 +187,17 @@ export const showThemeDefinitionSchema = z
           event.variants.map((choice) => choice.labelKey),
         ),
       ]
-      for (const locale of SHOW_THEME_LOCALES)
-        {for (const key of keys) {
-          if (!theme.localizations[locale][key])
-            {ctx.addIssue({
+      for (const locale of SHOW_THEME_LOCALES) {
+        for (const key of keys) {
+          if (!theme.localizations[locale][key]) {
+            ctx.addIssue({
               code: "custom",
               message: "Missing localized theme label",
               path: ["localizations", locale, key],
-            })}
-        }}
+            })
+          }
+        }
+      }
     }
 
     const assetIds = new Set(theme.assets.map((a) => a.id))
@@ -303,7 +305,9 @@ export const showThemeDefinitionSchema = z
             for (const ref of [choice.backgroundAssetId, choice.logoAssetId]) {
               if (
                 ref &&
-                theme.assets.find((referencedAsset) => referencedAsset.id === ref)?.kind !== "image"
+                theme.assets.find(
+                  (referencedAsset) => referencedAsset.id === ref,
+                )?.kind !== "image"
               ) {
                 ctx.addIssue({
                   code: "custom",
@@ -315,8 +319,10 @@ export const showThemeDefinitionSchema = z
 
             if (
               choice.overlayAssetId &&
-              theme.assets.find((referencedAsset) => referencedAsset.id === choice.overlayAssetId)
-                ?.kind !== "lottie"
+              theme.assets.find(
+                (referencedAsset) =>
+                  referencedAsset.id === choice.overlayAssetId,
+              )?.kind !== "lottie"
             ) {
               ctx.addIssue({
                 code: "custom",
@@ -328,8 +334,9 @@ export const showThemeDefinitionSchema = z
             if (
               key === "opening" &&
               choice.mediaAssetId &&
-              theme.assets.find((referencedAsset) => referencedAsset.id === choice.mediaAssetId)
-                ?.kind !== "video"
+              theme.assets.find(
+                (referencedAsset) => referencedAsset.id === choice.mediaAssetId,
+              )?.kind !== "video"
             ) {
               ctx.addIssue({
                 code: "custom",

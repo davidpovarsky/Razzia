@@ -124,11 +124,15 @@ if (command === "schema") {
     for (const key of labelKeys) {
       let value: unknown = resources
       for (const part of key.split(":")[1].split(".")) {
-        value = typeof value === "object" && value !== null ? (value as Record<string, unknown>)[part] : undefined
+        value =
+          typeof value === "object" && value !== null
+            ? (value as Record<string, unknown>)[part]
+            : undefined
       }
 
-      if (typeof value !== "string")
-        {throw new Error(`Missing starter translation: ${locale}/${key}`)}
+      if (typeof value !== "string") {
+        throw new Error(`Missing starter translation: ${locale}/${key}`)
+      }
 
       values[key] = value
     }

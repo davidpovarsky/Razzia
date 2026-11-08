@@ -143,7 +143,9 @@ export function validateThemeAssetBytes(
 }
 
 function validateRasterBudget(bytes: Buffer, extension: string) {
-  if (bytes.length > 20_000_000) {throw new Error("Image exceeds encoded budget")}
+  if (bytes.length > 20_000_000) {
+    throw new Error("Image exceeds encoded budget")
+  }
 
   let width = 0,
     height = 0,
@@ -159,14 +161,16 @@ function validateRasterBudget(bytes: Buffer, extension: string) {
     for (let offset = 8; offset + 12 <= bytes.length;) {
       const length = bytes.readUInt32BE(offset)
 
-      if (offset + length + 12 > bytes.length)
-        {throw new Error("Truncated PNG chunk")}
+      if (offset + length + 12 > bytes.length) {
+        throw new Error("Truncated PNG chunk")
+      }
 
       if (
         bytes.toString("ascii", offset + 4, offset + 8) === "acTL" &&
         length >= 8
-      )
-        {frames = bytes.readUInt32BE(offset + 8)}
+      ) {
+        frames = bytes.readUInt32BE(offset + 8)
+      }
 
       offset += length + 12
     }
@@ -174,20 +178,29 @@ function validateRasterBudget(bytes: Buffer, extension: string) {
     let offset = 2
 
     while (offset + 4 <= bytes.length) {
-      if (bytes[offset++] !== 255) {throw new Error("Invalid JPEG marker")}
+      if (bytes[offset++] !== 255) {
+        throw new Error("Invalid JPEG marker")
+      }
 
-      while (bytes[offset] === 255) {offset++}
+      while (bytes[offset] === 255) {
+        offset++
+      }
 
       const marker = bytes[offset++]
 
-      if (marker === 217 || marker === 218) {break}
+      if (marker === 217 || marker === 218) {
+        break
+      }
 
-      if (marker === 1 || (marker >= 208 && marker <= 215)) {continue}
+      if (marker === 1 || (marker >= 208 && marker <= 215)) {
+        continue
+      }
 
       const length = bytes.readUInt16BE(offset)
 
-      if (length < 2 || offset + length > bytes.length)
-        {throw new Error("Truncated JPEG segment")}
+      if (length < 2 || offset + length > bytes.length) {
+        throw new Error("Truncated JPEG segment")
+      }
 
       if (
         [
@@ -226,10 +239,13 @@ function validateRasterBudget(bytes: Buffer, extension: string) {
     for (let offset = 12; offset + 8 <= bytes.length;) {
       const size = bytes.readUInt32LE(offset + 4)
 
-      if (offset + size + 8 > bytes.length)
-        {throw new Error("Truncated WebP chunk")}
+      if (offset + size + 8 > bytes.length) {
+        throw new Error("Truncated WebP chunk")
+      }
 
-      if (bytes.toString("ascii", offset, offset + 4) === "ANMF") {count++}
+      if (bytes.toString("ascii", offset, offset + 4) === "ANMF") {
+        count++
+      }
 
       offset += size + 8 + (size & 1)
     }
@@ -243,28 +259,41 @@ function validateRasterBudget(bytes: Buffer, extension: string) {
     while (offset < bytes.length) {
       const type = bytes[offset++]
 
-      if (type === 59) {break}
+      if (type === 59) {
+        break
+      }
 
-      if (type === 33) {offset++}
-      else if (type === 44 && offset + 9 <= bytes.length) {
+      if (type === 33) {
+        offset++
+      } else if (type === 44 && offset + 9 <= bytes.length) {
         const packed = bytes[offset + 8]
         offset += 9 + (packed & 128 ? 3 * 2 ** ((packed & 7) + 1) : 0) + 1
         count++
-      } else {throw new Error("Invalid GIF block")}
+      } else {
+        throw new Error("Invalid GIF block")
+      }
 
       for (;;) {
-        if (offset >= bytes.length) {throw new Error("Truncated GIF block")}
+        if (offset >= bytes.length) {
+          throw new Error("Truncated GIF block")
+        }
 
         const size = bytes[offset++]
 
-        if (!size) {break}
+        if (!size) {
+          break
+        }
 
         offset += size
 
-        if (offset > bytes.length) {throw new Error("Truncated GIF data")}
+        if (offset > bytes.length) {
+          throw new Error("Truncated GIF data")
+        }
       }
 
-      if (count > 240) {throw new Error("Animation frame budget exceeded")}
+      if (count > 240) {
+        throw new Error("Animation frame budget exceeded")
+      }
     }
 
     frames = count
@@ -364,8 +393,9 @@ function validateLottie(bytes: Buffer, embeddedResourcesOnly = false) {
       value.op <= value.ip ||
       (value.op - value.ip) / value.fr > 180 ||
       value.layers.length > 256)
-  )
-    {throw new Error("Lottie render budget exceeded")}
+  ) {
+    throw new Error("Lottie render budget exceeded")
+  }
 
   let nodes = 0
   let embeddedPixels = 0
@@ -403,8 +433,9 @@ function validateLottie(bytes: Buffer, embeddedResourcesOnly = false) {
           if (embeddedResourcesOnly) {
             embeddedPixels += validateRasterBudget(raster, `.${embedded[1]}`)
 
-            if (embeddedPixels > 67_108_864)
-              {throw new Error("Embedded Lottie image budget exceeded")}
+            if (embeddedPixels > 67_108_864) {
+              throw new Error("Embedded Lottie image budget exceeded")
+            }
           }
         } else if (
           (embeddedResourcesOnly && child !== "") ||

@@ -89,7 +89,9 @@ export function createInstallationFixture(
     for (const slot of Object.values(definition.slots)) {
       for (const variant of slot.variants) {
         for (const field of ["backgroundAssetId", "logoAssetId"] as const) {
-          if (variant[field]) {variant[field] = "picture"}
+          if (variant[field]) {
+            variant[field] = "picture"
+          }
         }
         delete variant.mediaAssetId
         delete variant.overlayAssetId
@@ -97,7 +99,9 @@ export function createInstallationFixture(
     }
     for (const event of Object.values(definition.audioEvents)) {
       for (const variant of event.variants) {
-        if (variant.assetId) {variant.assetId = "sound"}
+        if (variant.assetId) {
+          variant.assetId = "sound"
+        }
       }
     }
   } else {

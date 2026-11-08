@@ -16,6 +16,7 @@ import {
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
 import {
+  generateRosterPlayerId,
   type HostPresenceSnapshot,
   type RevealDistributionSnapshot,
   type RosterParticipant,

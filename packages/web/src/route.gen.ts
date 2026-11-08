@@ -21,6 +21,7 @@ import { Route as authManagerIndexRouteImport } from './pages/(auth)/manager/ind
 import { Route as ManagerQuizzIndexRouteImport } from './pages/manager/quizz/index'
 import { Route as ManagerQuizzQuizzIdRouteImport } from './pages/manager/quizz/$quizzId'
 import { Route as PartyManagerGameIdRouteImport } from './pages/party/manager/$gameId'
+import { Route as ManagerThemesTenantIdArtifactIdRouteImport } from './pages/manager/themes/$tenantId/$artifactId'
 
 const authLayoutRoute = authLayoutRouteImport.update({
   id: '/(auth)',
@@ -81,6 +82,12 @@ const PartyManagerGameIdRoute = PartyManagerGameIdRouteImport.update({
   path: '/party/manager/$gameId',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ManagerThemesTenantIdArtifactIdRoute =
+  ManagerThemesTenantIdArtifactIdRouteImport.update({
+    id: '/manager/themes/$tenantId/$artifactId',
+    path: '/manager/themes/$tenantId/$artifactId',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
@@ -94,6 +101,7 @@ export interface FileRoutesByFullPath {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/manager/': typeof authManagerIndexRoute
   '/manager/quizz/': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRoutesByTo {
   '/game': typeof authGameRoute
@@ -106,6 +114,7 @@ export interface FileRoutesByTo {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/manager': typeof authManagerIndexRoute
   '/manager/quizz': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -121,6 +130,7 @@ export interface FileRoutesById {
   '/party/manager/$gameId': typeof PartyManagerGameIdRoute
   '/(auth)/manager/': typeof authManagerIndexRoute
   '/manager/quizz/': typeof ManagerQuizzIndexRoute
+  '/manager/themes/$tenantId/$artifactId': typeof ManagerThemesTenantIdArtifactIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -136,6 +146,7 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/manager/'
     | '/manager/quizz/'
+    | '/manager/themes/$tenantId/$artifactId'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/game'
@@ -148,6 +159,7 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/manager'
     | '/manager/quizz'
+    | '/manager/themes/$tenantId/$artifactId'
   id:
     | '__root__'
     | '/(auth)'
@@ -162,6 +174,7 @@ export interface FileRouteTypes {
     | '/party/manager/$gameId'
     | '/(auth)/manager/'
     | '/manager/quizz/'
+    | '/manager/themes/$tenantId/$artifactId'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -172,6 +185,7 @@ export interface RootRouteChildren {
   ManagerConfigRoute: typeof ManagerConfigRoute
   PartyGameIdRoute: typeof PartyGameIdRoute
   PartyManagerGameIdRoute: typeof PartyManagerGameIdRoute
+  ManagerThemesTenantIdArtifactIdRoute: typeof ManagerThemesTenantIdArtifactIdRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -260,6 +274,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PartyManagerGameIdRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/manager/themes/$tenantId/$artifactId': {
+      id: '/manager/themes/$tenantId/$artifactId'
+      path: '/manager/themes/$tenantId/$artifactId'
+      fullPath: '/manager/themes/$tenantId/$artifactId'
+      preLoaderRoute: typeof ManagerThemesTenantIdArtifactIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -300,6 +321,7 @@ const rootRouteChildren: RootRouteChildren = {
   ManagerConfigRoute: ManagerConfigRoute,
   PartyGameIdRoute: PartyGameIdRoute,
   PartyManagerGameIdRoute: PartyManagerGameIdRoute,
+  ManagerThemesTenantIdArtifactIdRoute: ManagerThemesTenantIdArtifactIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

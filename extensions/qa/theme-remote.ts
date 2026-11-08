@@ -146,7 +146,9 @@ export async function runThemeRemote(command: string, args: string[]) {
     if (!response.ok) {
       const errorBody = (await response.json()) as { error?: unknown }
       const message =
-        typeof errorBody.error === "string" ? errorBody.error : "operation-rejected"
+        typeof errorBody.error === "string"
+          ? errorBody.error
+          : "operation-rejected"
       throw new Error(
         `Theme operation failed: HTTP ${response.status} ${message}`,
       )

@@ -48,7 +48,11 @@ export interface PhoneGamePorts {
   locked(): boolean
   session(): ExtensionGameSession | null
   coordinator(): StudioShowCoordinator | null
-  admitPhone(identity: string, callId: string, join: () => string | null): string | null
+  admitPhone(
+    identity: string,
+    callId: string,
+    join: () => string | null,
+  ): string | null
   finishPhone(callId: string | undefined): void
   notifyPlayerUpdated(previous: string, player: Player, timedOut: boolean): void
   broadcastExtensionState(): void
@@ -447,9 +451,20 @@ export class GamePhoneController {
 
       if (existingPlayer) {
         const oldSocketId = existingPlayer.id
-        const billingError = this.ports.admitPhone(`roster:${rosterEntry.rosterPlayerId}`, input.callId, () => null)
-        if (billingError) return { ok: false, error: billingError }
-        if (rosterEntry.activeCallId !== input.callId) this.ports.finishPhone(rosterEntry.activeCallId)
+        const billingError = this.ports.admitPhone(
+          `roster:${rosterEntry.rosterPlayerId}`,
+          input.callId,
+          () => null,
+        )
+
+        if (billingError) {
+          return { ok: false, error: billingError }
+        }
+
+        if (rosterEntry.activeCallId !== input.callId) {
+          this.ports.finishPhone(rosterEntry.activeCallId)
+        }
+
         this.playerManager.updateSocketId(oldSocketId, syntheticSocketId)
         this.round.updatePlayerId(oldSocketId, syntheticSocketId)
         existingPlayer.connected = true
@@ -492,7 +507,9 @@ export class GamePhoneController {
       emit: (_event: string) => false,
     } as unknown as Socket
 
-    const joinErr = this.ports.admitPhone(`roster:${rId}`, input.callId, () => this.playerManager.join(fakeSocket, displayName))
+    const joinErr = this.ports.admitPhone(`roster:${rId}`, input.callId, () =>
+      this.playerManager.join(fakeSocket, displayName),
+    )
 
     if (joinErr) {
       return { ok: false, error: joinErr }
@@ -560,6 +577,7 @@ export class GamePhoneController {
 
     // If a callId was provided and does not match the currently bound callId, this hangup is stale!
     this.ports.finishPhone(callId ?? entry.activeCallId)
+
     if (callId && entry.activeCallId && entry.activeCallId !== callId) {
       return false
     }

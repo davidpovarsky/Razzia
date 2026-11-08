@@ -336,12 +336,15 @@ export class ExtensionGameSession {
 
     const extrasPayload: Record<string, unknown> = {}
 
-    if (this.themeDefinitionJson)
-      {extrasPayload.themeDefinitionJson = this.themeDefinitionJson}
+    if (this.themeDefinitionJson) {
+      extrasPayload.themeDefinitionJson = this.themeDefinitionJson
+    }
 
     const launch = this.delegate?.getPresentationLaunch?.()
 
-    if (launch) {extrasPayload.presentationLaunch = launch}
+    if (launch) {
+      extrasPayload.presentationLaunch = launch
+    }
 
     // Public aggregate only; host roster identities/contacts remain private.
     if (this.delegate?.getParticipation) {
@@ -560,10 +563,11 @@ export class ExtensionGameSession {
               for (const item of recap.items) {
                 const chosen = this.storyTieChoices.get(item.questionId)
 
-                if (chosen !== undefined)
-                  {item.winningOptions = item.winningOptions.filter(
+                if (chosen !== undefined) {
+                  item.winningOptions = item.winningOptions.filter(
                     (option) => option.answerIndex === chosen,
-                  )}
+                  )
+                }
               }
             }
 
@@ -624,7 +628,8 @@ export class ExtensionGameSession {
         }
       }
 
-      const prevCheck = this.delegate?.canPrevious?.() ?? this.showCoordinator?.canPrevious() ?? { can: false }
+      const prevCheck = this.delegate?.canPrevious?.() ??
+        this.showCoordinator?.canPrevious() ?? { can: false }
 
       extrasPayload.canPrevious = prevCheck.can
 

@@ -57,9 +57,12 @@ showThemeRegistry.register(classicManifest)
 /** Per-tenant/per-room registry; never mutate the global bundled catalog. */
 export function createShowThemeRegistry(definitions: readonly unknown[] = []) {
   const registry = new ShowThemeRegistry()
-  for (const definition of showThemeRegistry.list())
-    {registry.register(definition)}
-  for (const definition of definitions) {registry.register(definition)}
+  for (const definition of showThemeRegistry.list()) {
+    registry.register(definition)
+  }
+  for (const definition of definitions) {
+    registry.register(definition)
+  }
 
   return registry
 }

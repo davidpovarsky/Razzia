@@ -80,8 +80,11 @@ test("reviews all fifteen native slots, sixteen explicit audio events and eight 
     manifestSha256: string
   }
   const definition = showThemeDefinitionSchema.parse(receipt.definition)
-  const localizations = definition.localizations
-  if (!localizations) { throw new Error("Preview must contain all locale maps") }
+  const { localizations } = definition
+
+  if (!localizations) {
+    throw new Error("Preview must contain all locale maps")
+  }
 
   if (process.env.TADAZZ_THEME_EXPECTED_MANIFEST) {
     expect(receipt.manifestSha256).toBe(
