@@ -92,7 +92,7 @@ const PlayerGamePage = () => {
   useEvent(EVENTS.GAME.RESET, (message) => {
     localStorage.removeItem("game_pin")
     localStorage.removeItem("game_id")
-    navigate({ to: "/" })
+    navigate({ to: "/game" })
     resetPlayer()
     setQuestionStates(null)
     toast.error(t(message))

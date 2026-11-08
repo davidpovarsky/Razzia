@@ -87,6 +87,7 @@ export const Route = createFileRoute("/(auth)/manager/")({
     if (getRole() !== SESSION_ROLES.MANAGER) return
     const token = getToken()
     if (!token) return
+    let isManager = false
     try {
       const response = await fetch("/api/auth/session", {
         method: "POST",
@@ -96,12 +97,12 @@ export const Route = createFileRoute("/(auth)/manager/")({
       })
       if (!response.ok) return
       const session = (await response.json()) as { role?: string }
-      if (session.role === SESSION_ROLES.MANAGER)
-        throw redirect({ to: "/manager/config" })
-      clearToken()
-    } catch (error) {
-      if (error && typeof error === "object" && "to" in error) throw error
+      isManager = session.role === SESSION_ROLES.MANAGER
+      if (!isManager) clearToken()
+    } catch {
+      return
     }
+    if (isManager) throw redirect({ to: "/manager/config", replace: true })
   },
   component: ManagerAuthPage,
 })

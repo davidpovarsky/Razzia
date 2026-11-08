@@ -1,24 +1,14 @@
-import Reconnect from "@razzia/web/features/game/components/join/Reconnect"
-import Room from "@razzia/web/features/game/components/join/Room"
-import Username from "@razzia/web/features/game/components/join/Username"
-import { usePlayerStore } from "@razzia/web/features/game/stores/player"
-import { createFileRoute } from "@tanstack/react-router"
-
-const PlayerAuthPage = () => {
-  const { inviteCode } = usePlayerStore()
-
-  if (inviteCode) {
-    return <Username />
-  }
-
-  return (
-    <>
-      <Room />
-      <Reconnect />
-    </>
-  )
-}
+import { createFileRoute, redirect } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/(auth)/")({
-  component: PlayerAuthPage,
+  beforeLoad: ({ search }) => {
+    // Existing printed/old QR links remain valid after moving player joining.
+    if (search.pin)
+      throw redirect({
+        to: "/game",
+        search: { pin: search.pin },
+        replace: true,
+      })
+    throw redirect({ to: "/manager", replace: true })
+  },
 })

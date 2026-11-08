@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './pages/__root'
 import { Route as authLayoutRouteImport } from './pages/(auth)/layout'
 import { Route as authIndexRouteImport } from './pages/(auth)/index'
+import { Route as authGameRouteImport } from './pages/(auth)/game'
 import { Route as DisplayGameIdRouteImport } from './pages/display/$gameId'
 import { Route as ManagerConfigRouteImport } from './pages/manager/config'
 import { Route as ManagerQuizzLayoutRouteImport } from './pages/manager/quizz/layout'
@@ -27,6 +28,11 @@ const authLayoutRoute = authLayoutRouteImport.update({
 const authIndexRoute = authIndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => authLayoutRoute,
+} as any)
+const authGameRoute = authGameRouteImport.update({
+  id: '/game',
+  path: '/game',
   getParentRoute: () => authLayoutRoute,
 } as any)
 const DisplayGameIdRoute = DisplayGameIdRouteImport.update({
@@ -72,6 +78,7 @@ const PartyManagerGameIdRoute = PartyManagerGameIdRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
+  '/game': typeof authGameRoute
   '/display/$gameId': typeof DisplayGameIdRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
@@ -82,6 +89,7 @@ export interface FileRoutesByFullPath {
   '/manager/quizz/': typeof ManagerQuizzIndexRoute
 }
 export interface FileRoutesByTo {
+  '/game': typeof authGameRoute
   '/display/$gameId': typeof DisplayGameIdRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
@@ -95,6 +103,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/(auth)': typeof authLayoutRouteWithChildren
   '/manager/quizz': typeof ManagerQuizzLayoutRouteWithChildren
+  '/(auth)/game': typeof authGameRoute
   '/display/$gameId': typeof DisplayGameIdRoute
   '/manager/config': typeof ManagerConfigRoute
   '/party/$gameId': typeof PartyGameIdRoute
@@ -108,6 +117,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/manager/quizz'
+    | '/game'
     | '/display/$gameId'
     | '/manager/config'
     | '/party/$gameId'
@@ -118,6 +128,7 @@ export interface FileRouteTypes {
     | '/manager/quizz/'
   fileRoutesByTo: FileRoutesByTo
   to:
+    | '/game'
     | '/display/$gameId'
     | '/manager/config'
     | '/party/$gameId'
@@ -130,6 +141,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/(auth)'
     | '/manager/quizz'
+    | '/(auth)/game'
     | '/display/$gameId'
     | '/manager/config'
     | '/party/$gameId'
@@ -163,6 +175,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof authIndexRouteImport
+      parentRoute: typeof authLayoutRoute
+    }
+    '/(auth)/game': {
+      id: '/(auth)/game'
+      path: '/game'
+      fullPath: '/game'
+      preLoaderRoute: typeof authGameRouteImport
       parentRoute: typeof authLayoutRoute
     }
     '/display/$gameId': {
@@ -225,11 +244,13 @@ declare module '@tanstack/react-router' {
 }
 
 interface authLayoutRouteChildren {
+  authGameRoute: typeof authGameRoute
   authIndexRoute: typeof authIndexRoute
   authManagerIndexRoute: typeof authManagerIndexRoute
 }
 
 const authLayoutRouteChildren: authLayoutRouteChildren = {
+  authGameRoute: authGameRoute,
   authIndexRoute: authIndexRoute,
   authManagerIndexRoute: authManagerIndexRoute,
 }

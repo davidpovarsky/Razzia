@@ -32,7 +32,7 @@ const Room = ({ data: { text, inviteCode } }: Props) => {
     extensionState: storeExtensionState,
   } = useManagerStore()
   const { socket } = useSocket()
-  const webUrl = window.location.origin
+  const webUrl = `${window.location.origin}/game`
   const [playerList, setPlayerList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)

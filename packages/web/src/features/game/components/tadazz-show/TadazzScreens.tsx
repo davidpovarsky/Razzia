@@ -52,8 +52,10 @@ export function TadazzLobbyScreen({
   const [list, setList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
-  const webUrl = typeof window !== "undefined" ? window.location.origin : ""
-  const host = typeof window !== "undefined" ? window.location.host : ""
+  const webUrl =
+    typeof window !== "undefined" ? `${window.location.origin}/game` : ""
+  const host =
+    typeof window !== "undefined" ? `${window.location.host}/game` : ""
 
   // Same live roster events as the legacy Room screen (manager only).
   useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) =>
