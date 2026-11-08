@@ -1721,7 +1721,9 @@ class Game {
       status === STATUS.SHOW_QUESTION ||
       (status === STATUS.SELECT_ANSWER &&
         this.showCoordinator?.currentPhase === "question" &&
-        this.extensionSession.currentPhase !== "question")
+        (this.extensionSession.currentPhase !== "question" ||
+          this.extensionSession.getCurrentQuestionId() !==
+            this.extensionSession.getQuestionId(this.round.currentQuestionIndex)))
     ) {
       // The picture-led show skips SHOW_QUESTION: initialize its authoritative
       // per-question visuals when the five-card voting screen first opens.

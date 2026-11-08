@@ -391,6 +391,25 @@ export function computeShowScene(input: ShowInput): ShowScene {
   }
 
   const data = asRecord(status.data)
+  const activeQuestion = asRecord(extras.activeTimelineStep)
+  if (
+    (typeof data.questionId === "string" &&
+      activeQuestion.kind === "question" &&
+      typeof activeQuestion.questionId === "string" &&
+      data.questionId !== activeQuestion.questionId) ||
+    (typeof data.questionId === "string" &&
+      envelope?.questionId &&
+      data.questionId !== envelope.questionId) ||
+    (typeof data.questionNumber === "number" &&
+      counter &&
+      data.questionNumber !== counter.current)
+  ) {
+    return {
+      kind: "wait",
+      key: "wait:question-content",
+      text: "game:waitingForAnswers",
+    }
+  }
   // UPDATE_QUESTION and the content status arrive as separate socket events.
   // Never combine the new counter with the preceding question's content.
   const questionStates =

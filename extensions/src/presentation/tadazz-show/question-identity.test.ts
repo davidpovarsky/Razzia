@@ -7,13 +7,14 @@ it.each(["SHOW_QUESTION", "SELECT_ANSWER", "SHOW_RESPONSES"] as const)(
     const input: ShowInput = {
       role: "manager",
       isConnected: true,
-      envelope: null,
+      envelope: { questionId: "old", phase: "question", extras: {} },
       questionStates: { current: 1, total: 10 },
       status: {
         name,
         data: {
           question: "Old question",
           questionNumber: 1,
+          questionId: "old",
           answers: ["A", "B"],
           responses: {},
           time: 20,
@@ -21,22 +22,40 @@ it.each(["SHOW_QUESTION", "SELECT_ANSWER", "SHOW_RESPONSES"] as const)(
       },
     }
     const before = computeShowScene(input)
+    const timelineFirst = computeShowScene({
+      ...input,
+      envelope: {
+        ...input.envelope!,
+        extras: { activeTimelineStep: { kind: "question", questionId: "new" } },
+      },
+    })
+    expect(timelineFirst.key).toBe("wait:question-content")
     const counterFirst = computeShowScene({
       ...input,
       questionStates: { current: 2, total: 10 },
     })
-    expect(counterFirst.key).toBe(before.key)
-    expect("question" in counterFirst && counterFirst.question.number).toBe(1)
+    expect(counterFirst.key).toBe("wait:question-content")
+    const envelopeFirst = computeShowScene({
+      ...input,
+      envelope: { questionId: "new", phase: "question", extras: {} },
+    })
+    expect(envelopeFirst.key).toBe("wait:question-content")
+    const newStatus = {
+      name,
+      data: {
+        ...input.status!.data,
+        question: "New question",
+        questionNumber: 2,
+        questionId: "new",
+      },
+    }
+    expect(computeShowScene({ ...input, status: newStatus }).key).toBe(
+      "wait:question-content",
+    )
     const next = computeShowScene({
       ...input,
-      status: {
-        name,
-        data: {
-          ...input.status!.data,
-          question: "New question",
-          questionNumber: 2,
-        },
-      },
+      status: newStatus,
+      envelope: { questionId: "new", phase: "question", extras: {} },
       questionStates: { current: 2, total: 10 },
     })
     expect(next.key).not.toBe(before.key)

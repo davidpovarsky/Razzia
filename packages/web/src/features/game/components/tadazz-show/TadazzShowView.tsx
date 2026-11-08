@@ -466,6 +466,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   }, [reduced])
 
   useEffect(() => {
+    // Keep the painted scene and director history until status content and its
+    // separately delivered counter/extension envelope describe one question.
+    if (scene.kind === "wait" && scene.key === "wait:question-content") return
     pendingRef.current = scene
     void pump()
     // eslint-disable-next-line react-hooks/exhaustive-deps

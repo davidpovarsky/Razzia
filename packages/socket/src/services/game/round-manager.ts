@@ -887,6 +887,7 @@ export class RoundManager {
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
       ...targetQ,
       questionNumber: targetQuestionIndex + 1,
+      questionId: this.opts.getQuestionId?.(targetQuestionIndex),
       solutions: this.isSurvey() ? undefined : targetQ.solutions,
       responses: counts,
     })
@@ -947,6 +948,7 @@ export class RoundManager {
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...targetQ,
         questionNumber: this.currentQuestion + 1,
+        questionId: this.opts.getQuestionId?.(this.currentQuestion),
         solutions: this.isSurvey() ? undefined : targetQ.solutions,
         responses: counts,
       })
@@ -1219,6 +1221,7 @@ export class RoundManager {
           : undefined
       this.opts.broadcast(STATUS.SHOW_QUESTION, {
         questionNumber: this.currentQuestion + 1,
+        questionId: this.opts.getQuestionId?.(this.currentQuestion),
         question: this.question.question,
         media: imageMedia,
         cooldown: this.question.cooldown,
@@ -1263,6 +1266,7 @@ export class RoundManager {
   private broadcastVotingQuestion(): void {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       questionNumber: this.currentQuestion + 1,
+      questionId: this.opts.getQuestionId?.(this.currentQuestion),
       question: this.question.question,
       answers: this.question.answers,
       media: this.question.media,
@@ -1432,6 +1436,7 @@ export class RoundManager {
         this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
           ...this.question,
           questionNumber: this.currentQuestion + 1,
+          questionId: this.opts.getQuestionId?.(this.currentQuestion),
           solutions: undefined,
           responses: answerCounts,
         })
@@ -1495,6 +1500,7 @@ export class RoundManager {
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...this.question,
         questionNumber: this.currentQuestion + 1,
+        questionId: this.opts.getQuestionId?.(this.currentQuestion),
         responses: answerCounts,
       })
     } else {
