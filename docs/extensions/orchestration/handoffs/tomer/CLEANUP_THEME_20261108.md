@@ -277,3 +277,35 @@ cannot serve tenant/SQLite theme assets. Add an owned private-media proxy policy
 retain original static media serving when accounts are OFF, and use authenticated
 backend media routes when accounts are ON. Minimal upstream Vite hooks only;
 verify private preview/room assets in real remote browser and preserve legacy QA.
+
+
+### Continuation closed — verified source 5c51ca7, evidence 53f0c02
+
+The exhaustive review and executable theme-installation path are complete in this
+isolated branch. All historical 96 originals are covered by the 113-record union;
+20 records are baseline-exact, and 93 original files retain documented seams.
+Final original-file totals: +4,000/-1,278 against Razzia 4.0.1. The synchronized
+billing head ef35617 and latest committed next head 0079e45 are included.
+
+Remote Oracle r12: 363 root + 615 extension tests; 28 cleanup + 2 installation +
+2 CLI-driven preview + 6 billing browser cases; five effective typechecks;
+monorepo build, frozen-install Docker build, nginx/private candidate checks,
+skill validation/wrapper and generated schema all PASS. Focused 28-file lint has
+zero diagnostics; full lint remains FAIL with 7,677 diagnostics, none in files
+added since the continuation baseline. Do not describe full-repository lint as
+green. 1,001 exact source/config/asset hashes match the remote source snapshot;
+two documented generated/reporting outputs are separately identified.
+
+Current handoff: SHOW_THEME_ENGINE_QA_2026-11-08.md and the complete evidence in
+qa-evidence/remote-cleanup-theme-20261108/. Physical iPad, manual listening,
+customer content/rights/photoflash review and exhaustive historical pixel/timing
+parity remain NOT TESTED. Installer stays OFF by default, Classic is the only
+bundled production family, and all other families/accounts used here are synthetic
+private fixtures. No push, main merge, production activation or Asana write.
+
+All task test/candidate/builder processes on Oracle are stopped; no game/browser
+runs were launched on Windows after the owner's instruction. Own temporary
+archives and helper scripts were moved out of the worktree to
+C:/Users/DAVID/AppData/Local/Temp/tadazz-cleanup-theme-scratch-20261108-53f0c02.
+Other worktrees and their uncommitted changes were left alone. Current upstream
+4.0.2 rehearsal has Dockerfile + pnpm-lock.yaml conflicts; upstream was not merged.
