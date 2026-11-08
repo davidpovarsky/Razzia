@@ -622,26 +622,17 @@ class Game {
               : undefined,
           connectedTables: [
             ...new Set(
-              [...this.rosterMap.values()]
-                .filter(
-                  (entry) =>
-                    !this.temporaryGuestsAllowed || entry.preRegistered,
-                )
-                .flatMap((entry, index) =>
-                  entry.status === "connected"
-                    ? [entry.tableNumber ?? index + 1]
-                    : [],
-                ),
+              [...this.rosterMap.values()].flatMap((entry, index) =>
+                entry.status === "connected"
+                  ? [entry.tableNumber ?? index + 1]
+                  : [],
+              ),
             ),
           ],
-          representatives: [...this.rosterMap.values()]
-            .filter(
-              (entry) => !this.temporaryGuestsAllowed || entry.preRegistered,
-            )
-            .map((entry, index) => ({
-              table: entry.tableNumber ?? index + 1,
-              name: entry.displayName,
-            })),
+          representatives: [...this.rosterMap.values()].map((entry, index) => ({
+            table: entry.tableNumber ?? index + 1,
+            name: entry.displayName,
+          })),
         }),
         getAnswerRecapSummary: (inputScene, timelineStepIndex) => {
           const scene =

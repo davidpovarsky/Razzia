@@ -144,6 +144,20 @@ const server = http.createServer((req, res) => {
 
       const joinedConfirmed = Boolean(pollRes.ok && pollRes.data && pollRes.data.joined);
       const serverData = pollRes.ok ? pollRes.data : null;
+      const targetGameId = serverData?.state?.gameId;
+      const targetChanged = Boolean(s.gameId && targetGameId && s.gameId !== targetGameId);
+      if (targetChanged) {
+        // A fresh host room supersedes the previous rehearsal. Keep the live call/read key,
+        // but never carry the previous room's answer or question state across rooms.
+        s.questionEpoch = null;
+        s.acceptingAnswers = false;
+        s.answered = false;
+        s.rosterPlayerId = null;
+        s.joinedConfirmed = false;
+        s.pendingVerdictCue = null;
+        s.lastDeliveredVerdictEpoch = 0;
+      }
+      if (targetGameId) s.gameId = targetGameId;
 
       // 2. Map keypad 1..5 to answer indices 0..4 for the prompt's question epoch.
       const prevKey = s.seq ? 'td' + s.seq : null;
@@ -157,6 +171,7 @@ const server = http.createServer((req, res) => {
 
       if (
         joinedConfirmed &&
+        !targetChanged &&
         prevKey &&
         !s.handled.has(prevKey) &&
         enteredDigit &&

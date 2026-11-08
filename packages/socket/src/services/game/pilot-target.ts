@@ -1,4 +1,4 @@
-/** Prefer the connected host's live show; never guess between two active hosts. */
+/** Registry order is creation order: an owner-bound direct dial follows their newest room. */
 export function selectQuizPilotTarget<
   T extends {
     quizId?: string
@@ -15,12 +15,8 @@ export function selectQuizPilotTarget<
       game.quizId === quizId && (!ownerId || game.manager.clientId === ownerId),
   )
   const connected = matching.filter((game) => game.manager.connected)
-  const started = connected.filter((game) => game.started)
-  const candidates = started.length
-    ? started
-    : connected.length
-      ? connected
-      : matching
+  const candidates = connected.length ? connected : matching
+  if (ownerId && candidates.length) return { game: candidates.at(-1)! }
   if (candidates.length === 1) return { game: candidates[0] }
   return {
     game: null,
