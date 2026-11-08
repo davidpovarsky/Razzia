@@ -1105,8 +1105,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         lottieUrl={themeSlotAsset(theme, "opening", "overlayAssetId")}
         eventArtworkPending={!extensionState}
         eventArtworkUrl={
-          extensionState?.extras.lobbyFullShow ||
-          Boolean(managerState.hostPresence?.players.length)
+          theme.definition.id === "tadazz-classic" &&
+          (extensionState?.extras.lobbyFullShow ||
+            Boolean(managerState.hostPresence?.players.length))
             ? "/tadazz-show/second-library/creating-worlds-intro.png"
             : undefined
         }

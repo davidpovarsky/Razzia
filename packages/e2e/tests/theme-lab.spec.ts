@@ -16,6 +16,19 @@ test("three themes are selectable, all packaged demo assets match their hashes a
   page,
   request,
 }) => {
+  await page.goto("/manager")
+  await page
+    .getByPlaceholder("Password", { exact: true })
+    .fill(process.env.MANAGER_PASSWORD ?? "")
+  await page.getByRole("button", { name: "Submit", exact: true }).click()
+  await expect(page).toHaveURL(/\/manager\/config$/u)
+  for (const sample of samples) {
+    await expect(
+      page.getByRole("button", { name: sample.name, exact: true }),
+    ).toBeVisible()
+  }
+  await page.reload()
+  await expect(page).toHaveURL(/\/manager\/config$/u)
   const response = await request.post("/api/auth/manager", {
     data: { password: process.env.MANAGER_PASSWORD },
   })
@@ -84,15 +97,21 @@ test("three themes are selectable, all packaged demo assets match their hashes a
     const video = definition.assets.find(
       (value: { kind: string }) => value.kind === "video",
     )
-    await page.goto(video.url)
+    // WebKit's standalone media document waits for a gesture; exercise an
+    // embedded playsinline video, as the actual opening component does.
+    const url = new URL(video.url, process.env.TADAZZ_LAB_URL).href
+    await page.setContent(
+      `<video muted playsinline preload="auto" src="${url}"></video><button onclick="document.querySelector('video').play()">Play opening</button>`,
+    )
+    await page
+      .getByRole("button", { name: "Play opening", exact: true })
+      .click()
     await expect
       .poll(() =>
-        page
-          .locator("video")
-          .evaluate((element: HTMLVideoElement) => ({
-            error: element.error?.code ?? 0,
-            width: element.videoWidth,
-          })),
+        page.locator("video").evaluate((element: HTMLVideoElement) => ({
+          error: element.error?.code ?? 0,
+          width: element.videoWidth,
+        })),
       )
       .toEqual({ error: 0, width: 1920 })
   }
@@ -130,6 +149,13 @@ for (const sample of samples)
     await page.goto(`/party/manager/${gameId}`)
     const skip = page.getByTestId("tadazz-opening-skip")
     if (await skip.isVisible().catch(() => false)) await skip.click()
+    if (sample.themeId !== "tadazz-classic") {
+      await expect(
+        page.locator(
+          'img[src="/tadazz-show/second-library/creating-worlds-intro.png"]',
+        ),
+      ).toHaveCount(0)
+    }
     const stage = page.getByTestId("tadazz-show")
     await expect(stage).toHaveAttribute("data-show-theme", sample.themeId)
     await expect(stage).toHaveAttribute("data-theme-fallback", "false")
@@ -146,11 +172,26 @@ for (const sample of samples)
       await expect(page.getByTestId("host-connected-counter")).toHaveText(
         "1 / 1",
       )
+      if (sample.themeId !== "tadazz-classic") {
+        await expect(
+          page.locator(
+            'img[src="/tadazz-show/second-library/creating-worlds-intro.png"]',
+          ),
+        ).toHaveCount(0)
+      }
       await page.bringToFront()
       await page.getByRole("button", { name: "Start", exact: true }).click()
       await expect(stage).toHaveAttribute("data-voting-open", "true", {
         timeout: 35_000,
       })
+      await expect
+        .poll(() =>
+          page
+            .getByTestId("tadazz-question-panel")
+            .first()
+            .evaluate((element) => getComputedStyle(element).opacity),
+        )
+        .toBe("1")
       await page.getByTestId("host-pause-resume-btn").click()
       await expect(stage).toHaveAttribute("data-game-paused", "true")
       await expect(player.getByTestId("tadazz-show")).toHaveAttribute(
@@ -176,6 +217,28 @@ for (const sample of samples)
       )
       await page.screenshot({ path: join(info.outputDir, "host.png") })
       await display.screenshot({ path: join(info.outputDir, "display.png") })
+      await page.bringToFront()
+      await page.getByTestId("host-pause-resume-btn").click()
+      await expect(stage).toHaveAttribute("data-game-paused", "false")
+      await player.bringToFront()
+      await player.getByTestId("tadazz-pad-option-0").click()
+      await page.bringToFront()
+      await page.getByTestId("host-end-timer-btn").click()
+      await expect(stage).toHaveAttribute("data-show-scene", "results")
+      await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
+        "data-show-scene",
+        "results",
+      )
+      await expect(stage).toHaveAttribute("data-show-theme", sample.themeId)
+      await expect
+        .poll(() =>
+          page
+            .getByTestId("tadazz-question-panel")
+            .first()
+            .evaluate((element) => getComputedStyle(element).opacity),
+        )
+        .toBe("1")
+      await page.screenshot({ path: join(info.outputDir, "result.png") })
     } finally {
       await playerContext.close()
       await displayBrowser.close()
