@@ -38,3 +38,13 @@ Additional real-browser evidence:
 - Pause data and the frozen timer/canvas are committed in layout effects, before paint, instead of waiting for a subsequent animation frame.
 
 Private deployment scripts and backups stay outside Git under `work/` and the restricted remote release directory. No credentials, contact books or test tokens are included in this handoff.
+
+## Production release — completed
+
+Released to `https://tadazz.com` with image `sha256:7301eca108e07472e2b7745afbc7f158938a16c13663b1ebe8b409a7b510f881`, tag `tadazz:reference-story-20261108-final`. Public bootstrap entry: `/assets/index-CBrdtRGL.js`, with `Cache-Control: no-store, no-cache, must-revalidate`.
+
+Authenticated production API reads verified BOTH customer and test sidecars at revision 9, 40 timeline steps and 37 participants. Original question/base hashes and every existing sidecar field remain intact; only the four new scenes, their timeline entries and the revision changed. Account credentials, runtime environment, gateway image and DID routing are unchanged.
+
+Release gates observed zero registry games and zero active calls on both providers. The stopped previous container is `tadazz-pre-reference-story-20261108`. Original sidecars, environment and inspection metadata are retained privately in `/home/ubuntu/tadazz-repair-20261108/reference-story-production/`; use these only after checking for subsequent user changes. Existing browser pages need a refresh; newly created games load the updated 40-step sequence.
+
+Final candidate also passed the delayed-audio browser verification after accessibility labels were connected to localization. No physical telephone calls were initiated for this UI release.
