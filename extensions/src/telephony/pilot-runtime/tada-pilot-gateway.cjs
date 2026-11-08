@@ -236,6 +236,11 @@ const server = http.createServer((req, res) => {
   });
 });
 
+// Caddy reuses upstream connections for 120s. Node's default 5s timeout can
+// reset a reused POST connection and turn an arriving vote into HTTP 502.
+server.keepAliveTimeout = 180_000;
+server.headersTimeout = 185_000;
+
 if (require.main === module) {
   const port = Number(process.env.TADA_PILOT_PORT || 38991);
   server.listen(port, '127.0.0.1', () => console.log('TADA_PHONE_AUDIO_V1_RUNNING'));

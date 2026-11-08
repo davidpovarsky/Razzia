@@ -24,6 +24,8 @@ test('three persistent calls vote once on each question without an intervening t
   process.env.TADA_PILOT_SECRET='gateway-persistent-calls-regression-secret';
   process.env.TADA_RAZZIA_API_URL='http://127.0.0.1:'+backend.address().port;
   const {server}=require('./tada-pilot-gateway.cjs');
+  assert.ok(server.keepAliveTimeout > 120_000, 'gateway outlives the proxy idle connection lifetime');
+  assert.ok(server.headersTimeout > server.keepAliveTimeout);
   await new Promise(r=>server.listen(0,'127.0.0.1',r));
   const call=async(index,params={})=>{
     const response=await fetch('http://127.0.0.1:'+server.address().port+'/yemot/'+process.env.TADA_PILOT_SECRET,{method:'POST',headers:{'content-type':'application/x-www-form-urlencoded'},body:new URLSearchParams({ApiCallId:'persistent-caller-'+index,ApiPhone:'+1202555012'+index,ApiDID:'443306131984',...params})});
