@@ -34,7 +34,9 @@ authoritative `elapsed` completions (question 2 / epoch 2 and question 4 / epoch
 not a duplicated cue. The last five-viewport screenshot loop ran against a live
 20-second timer (`400 / GAME_SPEED 20`). Pause before this second geometry loop,
 assert it stays paused, then resume and end manually, retaining the exact one
-natural-expiry and manual-lock audio assertions. No production audio/clock change
+natural-expiry and manual-lock audio assertions. Wait for the fifth card's
+entrance opacity before pausing: pausing earlier correctly freezes that animation,
+which would invalidate the screenshot. No production audio/clock change
 is warranted by this evidence. Preserve the initial failing probe/report.
 
 Type-verification correction: the earlier follow-up called `tsc -p` on the web

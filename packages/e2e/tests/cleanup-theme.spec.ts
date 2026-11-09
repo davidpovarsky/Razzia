@@ -366,6 +366,17 @@ function probe(page: Page) {
   )
 }
 
+function cardOpacity(surface: Page, index: number) {
+  return surface.getByTestId(`tadazz-card-${index}`).evaluate((element) => {
+    let opacity = 1
+    for (let node: Element | null = element; node; node = node.parentElement) {
+      opacity *= Number(getComputedStyle(node).opacity)
+    }
+
+    return opacity
+  })
+}
+
 test.afterEach(async ({ page }, info) => {
   if (info.status !== info.expectedStatus) {
     await info.attach("theme-failure-probe.json", {
@@ -830,6 +841,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   await expect(
     display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(5)
+  await expect.poll(() => cardOpacity(display, 4)).toBeGreaterThan(0.98)
   await page.getByTestId("host-pause-resume-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-game-paused",
@@ -853,22 +865,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     await expect(display.getByTestId("tadazz-question-panel")).toContainText(
       "Theme question 4",
     )
-    await expect
-      .poll(() =>
-        display.getByTestId("tadazz-card-4").evaluate((element) => {
-          let opacity = 1
-          for (
-            let node: Element | null = element;
-            node;
-            node = node.parentElement
-          ) {
-            opacity *= Number(getComputedStyle(node).opacity)
-          }
-
-          return opacity
-        }),
-      )
-      .toBeGreaterThan(0.98)
+    await expect.poll(() => cardOpacity(display, 4)).toBeGreaterThan(0.98)
     await display.screenshot({
       path: join(testInfo.outputDir, `question-5-cards-${width}.png`),
     })
