@@ -8,7 +8,12 @@ if (process.platform !== "linux" || process.env.TADAZZ_REMOTE_QA !== "1") {
 }
 
 const root = join(import.meta.dirname, "../..")
-const configPath = "/evidence/package-staging-config"
+const configPath =
+  process.env.TADAZZ_PACKAGE_QA_CONFIG_PATH ??
+  "/evidence/package-staging-config"
+if (!/^\/evidence\/package-staging-[a-z0-9-]+$/u.test(configPath)) {
+  throw new Error("Private package QA data path required")
+}
 for (const dir of ["quizz", "media", "extensions/quizzes"]) {
   fs.mkdirSync(join(configPath, dir), { recursive: true })
 }
@@ -31,7 +36,7 @@ const common = {
 
 export default defineConfig({
   testDir: "tests",
-  testMatch: "package-runtime.spec.ts",
+  testMatch: ["package-runtime.spec.ts", "package-runtime-load.spec.ts"],
   outputDir: "test-results/package-runtime",
   timeout: 240_000,
   expect: { timeout: 20_000 },
