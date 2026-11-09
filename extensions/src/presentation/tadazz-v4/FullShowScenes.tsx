@@ -228,7 +228,7 @@ export function Directory({ data }: { data: FullShowInput }) {
                   {
                     length: size,
                   },
-                  (Value, i) => {
+                  (_value, i) => {
                     const table = first + i
                     const name =
                       data.representatives?.find((rep) => rep.table === table)

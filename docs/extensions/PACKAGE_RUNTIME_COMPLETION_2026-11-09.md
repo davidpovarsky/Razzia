@@ -29,4 +29,12 @@ devices, an unbounded GPU test or hard browser process isolation.
 
 ## State
 
+Type-verification correction: the earlier follow-up called `tsc -p` on the web
+solution config with an empty `files` list, which did not traverse references.
+The closure runner checks `tsconfig.app.json` and `tsconfig.node.json` directly.
+Its first run exposed one unused callback argument at
+`extensions/src/presentation/tadazz-v4/FullShowScenes.tsx:231`; rename it to
+`_value`, TypeScript's explicit unused-parameter spelling. This does not change
+generated behavior. Two required blank lines in the new QA config are also fixed.
+
 In progress. Do not infer passing results from this plan or older evidence.

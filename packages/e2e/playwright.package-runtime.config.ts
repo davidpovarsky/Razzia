@@ -11,9 +11,11 @@ const root = join(import.meta.dirname, "../..")
 const configPath =
   process.env.TADAZZ_PACKAGE_QA_CONFIG_PATH ??
   "/evidence/package-staging-config"
+
 if (!/^\/evidence\/package-staging-[a-z0-9-]+$/u.test(configPath)) {
   throw new Error("Private package QA data path required")
 }
+
 for (const dir of ["quizz", "media", "extensions/quizzes"]) {
   fs.mkdirSync(join(configPath, dir), { recursive: true })
 }
