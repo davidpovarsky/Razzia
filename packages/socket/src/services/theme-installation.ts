@@ -4,9 +4,16 @@ import { createHmac } from "node:crypto"
 import { resolve } from "node:path"
 import { z } from "zod"
 import {
+  installedPackageThemes,
+  packageInstallerEnabled,
+  packageStore,
+  packageRuntimeSecret,
+} from "./package-installation"
+import {
   demoThemeDefinitions,
   ThemeInstallationError,
   ThemeInstallationStore,
+  readRuntimeAccess,
   type TrustedThemeBuild,
   type ThemePrincipal,
 } from "@razzia/extensions/server"
@@ -112,12 +119,13 @@ export function installedThemeForSelection(
   }
 
   if (!themeInstallerEnabled()) {
-    return null
+    return installedPackageThemes(tenantId).find((theme) => theme.id === id && theme.version === version) ?? null
   }
 
   return (
     themeInstallationStore()
       .catalog(tenantId)
+      .concat(installedPackageThemes(tenantId))
       .concat(themeInstallationStore().catalog("platform"))
       .find((theme) => theme.id === id && theme.version === version) ?? null
   )
@@ -130,6 +138,10 @@ export function closeThemeInstallationStore() {
 }
 
 export function readInstalledThemeMedia(ownerId: string, name: string) {
+  if (packageInstallerEnabled() && name.startsWith("pkg_")) {
+    return packageStore().readMedia(ownerId, name)
+  }
+
   if (!themeInstallerEnabled() || !name.startsWith("theme_")) {
     return null
   }
@@ -168,6 +180,17 @@ export function createThemePreviewTicket(
 }
 
 export async function readThemePreviewMedia(ticket: string, name: string) {
+  if (ticket.startsWith("pkg.") && packageInstallerEnabled()) {
+    const portableStore = packageStore()
+    const { row } = readRuntimeAccess(portableStore, ticket.slice(4), packageRuntimeSecret())
+
+    if (!name.startsWith(`pkg_${row.source.slice(0, 24)}_`)) {
+      return null
+    }
+
+    return portableStore.readMedia(row.tenant, name, row.source)
+  }
+
   if (!themeInstallerEnabled() || !name.startsWith("theme_")) {
     return null
   }

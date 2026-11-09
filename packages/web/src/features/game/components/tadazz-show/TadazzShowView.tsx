@@ -108,6 +108,7 @@ import {
   useTadazzStageLabels,
   useTadazzV4Labels,
 } from "./useTadazzLabels"
+import { PackageStage } from "./PackageStage"
 
 export interface TadazzShowViewProps {
   nativeContent?: React.ReactNode
@@ -469,6 +470,31 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const votingStartsAt =
     scene.kind === "voting" ? scene.votingStartsAt : undefined
   const votingEndsAt = scene.kind === "voting" ? scene.votingEndsAt : undefined
+  const runtimeClockKey = `${scene.key}:${extensionState?.epoch ?? 0}`
+  const [runtimeTick, setRuntimeTick] = useState<{ key: string; deadline: number; sequence: number } | null>(null)
+  let runtimeDeadline: number | null = votingEndsAt ?? null
+
+  if (runtimeDeadline === null && runtimeTick?.key === runtimeClockKey && runtimeTick.sequence === (extensionState?.seq ?? 0)) {
+    runtimeDeadline = runtimeTick.deadline
+  }
+
+  const serverPauseDeadline = extensionState?.pause?.deadline
+
+  if (runtimeDeadline === null && typeof serverPauseDeadline === "number") {
+    runtimeDeadline = serverPauseDeadline - serverClockOffset
+  }
+
+  // Presentation uses the same server deadline and frozen pause remainder.
+  let runtimeRemainingMs = 0
+
+  if (isPaused) {
+    runtimeRemainingMs = extensionState?.pause?.remainingMs ?? 0
+  } else if (runtimeDeadline !== null) {
+    runtimeRemainingMs = Math.max(0, runtimeDeadline - Date.now())
+  } else if (scene.kind === "voting") {
+    runtimeRemainingMs = Math.max(0, (scene.remainingSeconds ?? scene.seconds ?? 0) * 1000)
+  }
+
   const [votingOpen, setVotingOpen] = useState(false)
   useEffect(() => {
     const delay = Math.max(0, (votingStartsAt ?? 0) - Date.now())
@@ -629,6 +655,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       votingEndsAt ?? Date.now() + sec * 1000,
     )
     deadlineRef.current = deadline
+
+    if (theme.definition.sandbox && Number.isFinite(sec) && sec >= 0) {
+      setRuntimeTick({ key: runtimeClockKey, deadline, sequence: extensionState?.seq ?? 0 })
+    }
+
     const handle = stageRef.current
 
     if (handle?.mode === "voting") {
@@ -1018,6 +1049,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       questionKey?: string
       questionNumber?: number
     }) => {
+      if (theme.definition.sandbox) {
+        return
+      }
+
       // The browser clock can finish during skips/fast-forward too. Only the
       // authoritative result scene owns the audible end-of-question cue.
       if (cue.name === "countdown-ended") return
@@ -1077,6 +1112,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       sceneIdentity,
       scene,
       showGameId,
+      theme.definition.sandbox,
     ],
   )
 
@@ -1207,6 +1243,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const showPad =
     isPlayer &&
     scene.kind === "voting" &&
+    (!theme.definition.sandbox || scene.questionType === "estimation") &&
     (portrait || scene.questionType === "estimation")
   const playerAnswersOnly = Boolean(
     isPlayer && scene.kind === "voting" && scene.answersOnly,
@@ -1394,6 +1431,21 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               overflow: "hidden",
             }}
           >
+            <PackageStage scene={scene} roomId={extensionState?.gameId ?? ""}
+              backgroundUrl={backdrop?.url} trustedOverlay={overlay}
+              questionId={extensionState?.questionId ?? ""} epoch={extensionState?.epoch ?? 0}
+              sequence={extensionState?.seq ?? 0} role={role} paused={isPaused}
+              canAnswer={isPlayer && scene.kind === "voting" && votingOpen && !submitted && !answerPending && !isPaused}
+              voteLocked={isPlayer && (submitted || (scene.kind === "wait" && scene.key !== "wait:question-content" && scene.text === "game:waitingForAnswers"))}
+              remainingMs={runtimeRemainingMs}
+              serverTime={Date.now() + serverClockOffset}
+              deadline={isPaused || runtimeDeadline === null ? null : runtimeDeadline + serverClockOffset} onSubmit={submit}
+              onFallback={() => {
+                prevSceneRef.current = null
+                resumeRef.current = true
+                pendingRef.current = scene
+                void pump()
+              }}>
             {useV4 ? (
               <TadazzV4StageAdapter
                 ref={stageRef}
@@ -1447,6 +1499,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 reducedMotion={reduced}
               />
             )}
+            </PackageStage>
             {role !== "player" && !isStandby && (
               <LiveParticipation
                 connected={publicConnected}
@@ -1532,7 +1585,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             <AudioCuePlayer
               eventOnly={role === "player" || scene.kind === "wait"}
               showTrack={referenceStoryTrack}
-              stageOwnsReveal={useV4}
+              stageOwnsReveal={useV4 && !theme.definition.sandbox}
               cueId={props.audioCueId}
               audioExtras={
                 extensionState.extras.audio as QuizExtrasV1["audio"] | undefined

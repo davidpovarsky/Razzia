@@ -320,7 +320,7 @@ const GameWrapperView = ({
   // legacy background/state components are never mounted, not even for a frame.
   // Operator controls and participant interaction stay in native responsive Razzia.
   // The 16:9 composition belongs to the public display / explicit host projection.
-  const cinematicSurface = effectiveRole === "spectator" || isHostPresenting
+  const cinematicSurface = effectiveRole === "spectator" || isHostPresenting || Boolean(theme.definition.runtime)
   if (cinematicSurface && isTadazzShowActive(extensionState)) {
     return (
       <ShowThemeRenderer

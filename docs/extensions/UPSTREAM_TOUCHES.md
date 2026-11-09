@@ -131,3 +131,29 @@ conflicts, superseding the earlier one-conflict observation above. The actual
 candidate Dockerfile, frozen install, nginx syntax, isolated startup/private-route
 checks and source regression are recorded in the current QA evidence. No main
 merge, push, production activation or Asana write is part of this continuation.
+
+
+## Portable package runtime — 2026-11-09
+
+Authorized by the supplied Universal Package Runtime development plan. Pre-edit
+file/symbol/rationale/test decisions are recorded in
+`PACKAGE_RUNTIME_ADR_2026-11-09.md`; this is the final ledger index.
+
+- Socket `api/index.ts`: mount the default-OFF authenticated package lane.
+- Socket `theme-routes.ts`, `services/theme-installation.ts`: compose private
+  catalog/version pins and media; recognize only signed, expiring package-preview
+  capabilities for decoded staging media. Existing theme publication stays intact.
+- Socket `media-read.ts` and theme media response: m4a/lottie MIME support without
+  changing account/room authorization.
+- Web `ConfigManageQuizz`, `configurations/index.tsx`, installed-theme catalog:
+  native package panel, explicit authenticated preview link and catalog refresh.
+- Web show adapters, `TadazzShowView`, `GameWrapper`: one generic sandbox adapter
+  and optional stage surface, public snapshots using the existing clock, original
+  answer/audio handlers and original-stage fallback. No uploaded renderer import.
+- Verification: package browser suite in both engines, current native UI and
+  upstream editor/flow/manager suites, root/extension units and five TS projects;
+  exact results and baseline failures in `PACKAGE_RUNTIME_ACCEPTANCE_2026-11-09.md`.
+
+No changes to scoring, server clock, game transport, telephony or common wire.
+No production enablement/deployment. All executable verification stays in private
+Oracle QA.

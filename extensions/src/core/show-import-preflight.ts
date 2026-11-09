@@ -13,6 +13,7 @@ import { tadaShowV1Schema, type TadaShowV1 } from "./show-authoring-schema"
 import { parseTadaShowWorkbook } from "./show-workbook"
 import { resolveShowTheme } from "./show-themes/resolve"
 import { isQuizExtrasV2 } from "./studio-migrate"
+import { zipInventoryHasEntry } from "./packages/zip-detection"
 
 export type ImportFormatType =
   "legacy-json" | "enhanced-bundle" | "tada-json" | "tada-xlsx"
@@ -122,7 +123,36 @@ function inspectShowImport(
     }
   }
 
-  if (lowerName.endsWith(".xlsx") || isZipBuffer) {
+  if (
+    lowerName.endsWith(".tadazz") ||
+    (isZipBuffer && uint8Buf && zipInventoryHasEntry(uint8Buf, "manifest.json"))
+  ) {
+    return {
+      ok: false,
+      issues: [{
+        severity: "error",
+        code: "PACKAGE_IMPORT_REQUIRED",
+        messageKey: "extensions:packages.usePackageImport",
+      }],
+    }
+  }
+
+  // XLSX has an OOXML content-types inventory. An arbitrary ZIP is never XLSX.
+  const workbookZip = isZipBuffer && uint8Buf &&
+    zipInventoryHasEntry(uint8Buf, "[Content_Types].xml")
+
+  if (isZipBuffer && !workbookZip && !lowerName.endsWith(".xlsx")) {
+    return {
+      ok: false,
+      issues: [{
+        severity: "error",
+        code: "UNKNOWN_ARCHIVE",
+        messageKey: "extensions:packages.unknownArchive",
+      }],
+    }
+  }
+
+  if (lowerName.endsWith(".xlsx") || workbookZip) {
     if (!uint8Buf) {
       issues.push({
         severity: "error",

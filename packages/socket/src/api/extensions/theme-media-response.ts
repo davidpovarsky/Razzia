@@ -9,10 +9,12 @@ const mime: Record<string, string> = {
   gif: "image/gif",
   mp3: "audio/mpeg",
   wav: "audio/wav",
+  m4a: "audio/mp4",
   ogg: "audio/ogg",
   mp4: "video/mp4",
   webm: "video/webm",
   json: "application/json",
+  lottie: "application/zip",
 }
 
 export function themeMediaResponse(

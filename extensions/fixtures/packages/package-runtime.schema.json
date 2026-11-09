@@ -1,0 +1,1112 @@
+{
+  "snapshot": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "type": "object",
+    "properties": {
+      "roomId": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "questionId": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "epoch": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "sequence": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 9007199254740991
+      },
+      "role": {
+        "type": "string",
+        "enum": ["manager", "player", "spectator"]
+      },
+      "phase": {
+        "type": "string",
+        "enum": [
+          "opening",
+          "lobby",
+          "question",
+          "answerCards",
+          "voting",
+          "voteLocked",
+          "results",
+          "leaderboard",
+          "interlude",
+          "closing",
+          "personalResult"
+        ]
+      },
+      "locale": {
+        "type": "string",
+        "maxLength": 16
+      },
+      "reducedMotion": {
+        "type": "boolean"
+      },
+      "title": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "question": {
+        "type": "string",
+        "maxLength": 1000
+      },
+      "questionImage": {
+        "type": "string",
+        "maxLength": 7000000,
+        "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+      },
+      "backgroundImage": {
+        "type": "string",
+        "maxLength": 7000000,
+        "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+      },
+      "joinCode": {
+        "type": "string",
+        "pattern": "^(?:[0-9]{6})?$"
+      },
+      "joinUrl": {
+        "type": "string",
+        "maxLength": 2048,
+        "pattern": "^https?:\\/\\/[^\\s?#]+\\/game$"
+      },
+      "answers": {
+        "maxItems": 64,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "id": {
+              "type": "string",
+              "maxLength": 64
+            },
+            "label": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "image": {
+              "type": "string",
+              "maxLength": 7000000,
+              "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+            },
+            "percent": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 100
+            },
+            "correct": {
+              "type": "boolean"
+            },
+            "votes": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": ["id", "label"],
+          "additionalProperties": false
+        }
+      },
+      "leaders": {
+        "maxItems": 100,
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "label": {
+              "type": "string",
+              "maxLength": 1000
+            },
+            "score": {
+              "type": "number"
+            },
+            "rank": {
+              "type": "integer",
+              "exclusiveMinimum": 0,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": ["label", "score", "rank"],
+          "additionalProperties": false
+        }
+      },
+      "personalResult": {
+        "anyOf": [
+          {
+            "type": "object",
+            "properties": {
+              "correct": {
+                "type": "boolean"
+              },
+              "points": {
+                "type": "number"
+              },
+              "rank": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": ["correct", "points", "rank"],
+            "additionalProperties": false
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "serverTime": {
+        "type": "number"
+      },
+      "deadline": {
+        "type": ["number", "null"]
+      },
+      "remainingMs": {
+        "type": "number",
+        "minimum": 0,
+        "maximum": 86400000
+      },
+      "paused": {
+        "type": "boolean"
+      },
+      "canAnswer": {
+        "type": "boolean"
+      },
+      "labels": {
+        "type": "object",
+        "properties": {
+          "submit": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "waiting": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "results": {
+            "type": "string",
+            "maxLength": 1000
+          }
+        },
+        "required": ["submit", "waiting", "results"],
+        "additionalProperties": false
+      }
+    },
+    "required": [
+      "roomId",
+      "questionId",
+      "epoch",
+      "sequence",
+      "role",
+      "phase",
+      "locale",
+      "reducedMotion",
+      "title",
+      "question",
+      "answers",
+      "leaders",
+      "personalResult",
+      "serverTime",
+      "deadline",
+      "remainingMs",
+      "paused",
+      "canAnswer",
+      "labels"
+    ],
+    "additionalProperties": false
+  },
+  "rendererMessage": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "READY"
+          },
+          "runtimeApi": {
+            "type": "number",
+            "const": 1
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "runtimeApi"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "RENDER_HEALTH"
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "ANSWER_INTENT"
+          },
+          "optionIds": {
+            "minItems": 1,
+            "maxItems": 64,
+            "type": "array",
+            "items": {
+              "type": "string",
+              "maxLength": 64
+            }
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "optionIds"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "AUDIO_CUE_REQUEST"
+          },
+          "cueId": {
+            "type": "string",
+            "maxLength": 64
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "cueId"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "RUNTIME_ERROR"
+          },
+          "code": {
+            "type": "string",
+            "enum": ["RENDER_FAILED", "UNSUPPORTED_SLOT"]
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "code"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  },
+  "parentMessage": {
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "oneOf": [
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "BOOTSTRAP"
+          },
+          "snapshot": {
+            "type": "object",
+            "properties": {
+              "roomId": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "questionId": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "epoch": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "role": {
+                "type": "string",
+                "enum": ["manager", "player", "spectator"]
+              },
+              "phase": {
+                "type": "string",
+                "enum": [
+                  "opening",
+                  "lobby",
+                  "question",
+                  "answerCards",
+                  "voting",
+                  "voteLocked",
+                  "results",
+                  "leaderboard",
+                  "interlude",
+                  "closing",
+                  "personalResult"
+                ]
+              },
+              "locale": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "reducedMotion": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "question": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "questionImage": {
+                "type": "string",
+                "maxLength": 7000000,
+                "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+              },
+              "backgroundImage": {
+                "type": "string",
+                "maxLength": 7000000,
+                "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+              },
+              "joinCode": {
+                "type": "string",
+                "pattern": "^(?:[0-9]{6})?$"
+              },
+              "joinUrl": {
+                "type": "string",
+                "maxLength": 2048,
+                "pattern": "^https?:\\/\\/[^\\s?#]+\\/game$"
+              },
+              "answers": {
+                "maxItems": 64,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "image": {
+                      "type": "string",
+                      "maxLength": 7000000,
+                      "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+                    },
+                    "percent": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "correct": {
+                      "type": "boolean"
+                    },
+                    "votes": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": ["id", "label"],
+                  "additionalProperties": false
+                }
+              },
+              "leaders": {
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "score": {
+                      "type": "number"
+                    },
+                    "rank": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": ["label", "score", "rank"],
+                  "additionalProperties": false
+                }
+              },
+              "personalResult": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "correct": {
+                        "type": "boolean"
+                      },
+                      "points": {
+                        "type": "number"
+                      },
+                      "rank": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": ["correct", "points", "rank"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "serverTime": {
+                "type": "number"
+              },
+              "deadline": {
+                "type": ["number", "null"]
+              },
+              "remainingMs": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 86400000
+              },
+              "paused": {
+                "type": "boolean"
+              },
+              "canAnswer": {
+                "type": "boolean"
+              },
+              "labels": {
+                "type": "object",
+                "properties": {
+                  "submit": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "waiting": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "results": {
+                    "type": "string",
+                    "maxLength": 1000
+                  }
+                },
+                "required": ["submit", "waiting", "results"],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "roomId",
+              "questionId",
+              "epoch",
+              "sequence",
+              "role",
+              "phase",
+              "locale",
+              "reducedMotion",
+              "title",
+              "question",
+              "answers",
+              "leaders",
+              "personalResult",
+              "serverTime",
+              "deadline",
+              "remainingMs",
+              "paused",
+              "canAnswer",
+              "labels"
+            ],
+            "additionalProperties": false
+          },
+          "assetMap": {
+            "type": "object",
+            "propertyNames": {
+              "type": "string",
+              "maxLength": 240
+            },
+            "additionalProperties": {
+              "type": "string",
+              "maxLength": 2048
+            }
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "snapshot",
+          "assetMap"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "STATE_SNAPSHOT"
+          },
+          "snapshot": {
+            "type": "object",
+            "properties": {
+              "roomId": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "questionId": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "epoch": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "sequence": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "role": {
+                "type": "string",
+                "enum": ["manager", "player", "spectator"]
+              },
+              "phase": {
+                "type": "string",
+                "enum": [
+                  "opening",
+                  "lobby",
+                  "question",
+                  "answerCards",
+                  "voting",
+                  "voteLocked",
+                  "results",
+                  "leaderboard",
+                  "interlude",
+                  "closing",
+                  "personalResult"
+                ]
+              },
+              "locale": {
+                "type": "string",
+                "maxLength": 16
+              },
+              "reducedMotion": {
+                "type": "boolean"
+              },
+              "title": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "question": {
+                "type": "string",
+                "maxLength": 1000
+              },
+              "questionImage": {
+                "type": "string",
+                "maxLength": 7000000,
+                "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+              },
+              "backgroundImage": {
+                "type": "string",
+                "maxLength": 7000000,
+                "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+              },
+              "joinCode": {
+                "type": "string",
+                "pattern": "^(?:[0-9]{6})?$"
+              },
+              "joinUrl": {
+                "type": "string",
+                "maxLength": 2048,
+                "pattern": "^https?:\\/\\/[^\\s?#]+\\/game$"
+              },
+              "answers": {
+                "maxItems": 64,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {
+                      "type": "string",
+                      "maxLength": 64
+                    },
+                    "label": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "image": {
+                      "type": "string",
+                      "maxLength": 7000000,
+                      "pattern": "^data:image\\/(?:png|jpeg|webp|gif);base64,[A-Za-z0-9+/=]+$"
+                    },
+                    "percent": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100
+                    },
+                    "correct": {
+                      "type": "boolean"
+                    },
+                    "votes": {
+                      "type": "integer",
+                      "minimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": ["id", "label"],
+                  "additionalProperties": false
+                }
+              },
+              "leaders": {
+                "maxItems": 100,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "label": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "score": {
+                      "type": "number"
+                    },
+                    "rank": {
+                      "type": "integer",
+                      "exclusiveMinimum": 0,
+                      "maximum": 9007199254740991
+                    }
+                  },
+                  "required": ["label", "score", "rank"],
+                  "additionalProperties": false
+                }
+              },
+              "personalResult": {
+                "anyOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "correct": {
+                        "type": "boolean"
+                      },
+                      "points": {
+                        "type": "number"
+                      },
+                      "rank": {
+                        "type": "integer",
+                        "minimum": 0,
+                        "maximum": 9007199254740991
+                      }
+                    },
+                    "required": ["correct", "points", "rank"],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "serverTime": {
+                "type": "number"
+              },
+              "deadline": {
+                "type": ["number", "null"]
+              },
+              "remainingMs": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 86400000
+              },
+              "paused": {
+                "type": "boolean"
+              },
+              "canAnswer": {
+                "type": "boolean"
+              },
+              "labels": {
+                "type": "object",
+                "properties": {
+                  "submit": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "waiting": {
+                    "type": "string",
+                    "maxLength": 1000
+                  },
+                  "results": {
+                    "type": "string",
+                    "maxLength": 1000
+                  }
+                },
+                "required": ["submit", "waiting", "results"],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "roomId",
+              "questionId",
+              "epoch",
+              "sequence",
+              "role",
+              "phase",
+              "locale",
+              "reducedMotion",
+              "title",
+              "question",
+              "answers",
+              "leaders",
+              "personalResult",
+              "serverTime",
+              "deadline",
+              "remainingMs",
+              "paused",
+              "canAnswer",
+              "labels"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type",
+          "snapshot"
+        ],
+        "additionalProperties": false
+      },
+      {
+        "type": "object",
+        "properties": {
+          "v": {
+            "type": "number",
+            "const": 1
+          },
+          "channel": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "roomId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "questionId": {
+            "type": "string",
+            "maxLength": 1000
+          },
+          "role": {
+            "type": "string",
+            "enum": ["manager", "player", "spectator"]
+          },
+          "sequence": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 9007199254740991
+          },
+          "epoch": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 9007199254740991
+          },
+          "type": {
+            "type": "string",
+            "const": "DISPOSE"
+          }
+        },
+        "required": [
+          "v",
+          "channel",
+          "roomId",
+          "questionId",
+          "role",
+          "sequence",
+          "epoch",
+          "type"
+        ],
+        "additionalProperties": false
+      }
+    ]
+  }
+}

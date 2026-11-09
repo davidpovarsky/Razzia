@@ -35,7 +35,9 @@ const tabs = [
 
 const Configurations = () => {
   const billingEnabled = useBillingEnabled()
-  const [selectedTab, setSelectedTab] = useState(0)
+  const [selectedTab, setSelectedTab] = useState(() =>
+    new URLSearchParams(window.location.search).has("packageUpload") ? 1 : 0,
+  )
   const { resetManager } = useManagerStore()
   const queryClient = useQueryClient()
   const navigate = useNavigate()

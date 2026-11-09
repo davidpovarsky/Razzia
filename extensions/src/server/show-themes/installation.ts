@@ -248,6 +248,13 @@ export class ThemeInstallationStore {
   private parseInput(input: unknown) {
     const definition = showThemeDefinitionSchema.parse(input)
 
+    if (definition.sandbox || definition.runtime) {
+      throw new ThemeInstallationError(
+        "Sandbox themes require the isolated portable package lane",
+        409,
+      )
+    }
+
     if (showThemeRegistry.list().some((theme) => theme.id === definition.id)) {
       throw new ThemeInstallationError(
         "Bundled theme identity is source-controlled",

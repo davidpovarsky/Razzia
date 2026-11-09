@@ -1,0 +1,149 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "format": {
+      "type": "string",
+      "const": "tadazz-package"
+    },
+    "formatVersion": {
+      "type": "number",
+      "const": 1
+    },
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9-]{1,79}$"
+    },
+    "version": {
+      "type": "string",
+      "maxLength": 32,
+      "pattern": "^(0|[1-9]\\d*)\\.(0|[1-9]\\d*)\\.(0|[1-9]\\d*)$"
+    },
+    "displayName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 120
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 160
+    },
+    "requires": {
+      "type": "object",
+      "properties": {
+        "packageApi": {
+          "type": "number",
+          "const": 1
+        },
+        "runtimeApi": {
+          "type": "number",
+          "const": 1
+        }
+      },
+      "required": ["packageApi", "runtimeApi"],
+      "additionalProperties": false
+    },
+    "contents": {
+      "minItems": 1,
+      "maxItems": 40,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "kind": {
+            "type": "string",
+            "enum": ["declarative-theme", "sandboxed-react-theme", "game"]
+          },
+          "id": {
+            "type": "string",
+            "pattern": "^[a-z][a-z0-9-]{1,79}$"
+          },
+          "path": {
+            "type": "string"
+          },
+          "themeRef": {
+            "type": "string",
+            "maxLength": 160,
+            "pattern": "^[a-z0-9][a-z0-9-]*@\\d+\\.\\d+\\.\\d+$"
+          },
+          "demo": {
+            "default": false,
+            "type": "boolean"
+          }
+        },
+        "required": ["kind", "id", "path", "demo"],
+        "additionalProperties": false
+      }
+    },
+    "files": {
+      "minItems": 1,
+      "maxItems": 2047,
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "path": {
+            "type": "string"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "descriptor",
+              "source",
+              "style",
+              "image",
+              "video",
+              "audio",
+              "lottie",
+              "font"
+            ]
+          },
+          "bytes": {
+            "type": "integer",
+            "exclusiveMinimum": 0,
+            "maximum": 100000000
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "rights": {
+            "type": "string",
+            "enum": ["licensed", "owner-authorized"]
+          },
+          "provenance": {
+            "type": "string",
+            "minLength": 1,
+            "maxLength": 1000
+          },
+          "exportable": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "path",
+          "kind",
+          "bytes",
+          "sha256",
+          "rights",
+          "provenance",
+          "exportable"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "format",
+    "formatVersion",
+    "id",
+    "version",
+    "displayName",
+    "author",
+    "requires",
+    "contents",
+    "files"
+  ],
+  "additionalProperties": false
+}

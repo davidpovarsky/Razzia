@@ -37,6 +37,13 @@ export function InstalledThemeCatalogProvider({
   children: ReactNode
 }) {
   const owner = getClientId()
+  const [catalogRevision, setCatalogRevision] = useState(0)
+  useEffect(() => {
+    const update = () => setCatalogRevision((value) => value + 1)
+    window.addEventListener("tadazz:packages-changed", update)
+
+    return () => window.removeEventListener("tadazz:packages-changed", update)
+  }, [])
   const [result, setResult] = useState<{
     owner: string
     catalog: Catalog
@@ -98,7 +105,7 @@ export function InstalledThemeCatalogProvider({
     return () => {
       alive = false
     }
-  }, [owner])
+  }, [owner, catalogRevision])
 
   if (!result || result.owner !== owner) {
     return <Loader />

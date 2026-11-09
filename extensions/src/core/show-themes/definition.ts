@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { runtimePinSchema, sandboxDefinitionSchema } from "../packages/protocol"
 import {
   SHOW_THEME_AUDIO_EVENTS,
   SHOW_THEME_ROLES,
@@ -11,6 +12,7 @@ import {
 export const TRUSTED_THEME_RENDERERS = [
   "tadazz-classic-stage",
   "razzia-native-stage",
+  "tadazz-sandbox-stage",
 ] as const
 
 export const TRUSTED_SLOT_RENDERERS = [
@@ -116,7 +118,9 @@ export const showThemeDefinitionSchema = z
     descriptionKey: z.string().min(1).max(160),
     localizations: localizations.optional(),
     category: z.literal("show"),
-    kind: z.enum(["declarative", "code-backed"]),
+    kind: z.enum(["declarative", "code-backed", "sandboxed-react"]),
+    sandbox: sandboxDefinitionSchema.optional(),
+    runtime: runtimePinSchema.optional(),
     rendererApiVersion: z.literal(1),
     rendererId: z.enum(TRUSTED_THEME_RENDERERS),
     posterAssetId: id,
@@ -171,6 +175,18 @@ export const showThemeDefinitionSchema = z
     assets: z.array(asset).min(1).max(256),
   })
   .superRefine((theme, ctx) => {
+    if (
+      (theme.kind === "sandboxed-react") !== (theme.rendererId === "tadazz-sandbox-stage") ||
+      (theme.kind === "sandboxed-react") !== Boolean(theme.sandbox) ||
+      (theme.runtime && !theme.sandbox)
+    ) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Sandbox descriptor/renderer mismatch",
+        path: ["sandbox"],
+      })
+    }
+
     if (
       theme.rendererId === "razzia-native-stage" &&
       (theme.id !== "razzia-original" ||

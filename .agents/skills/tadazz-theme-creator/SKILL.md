@@ -5,7 +5,15 @@ description: Author and validate complete TADAZZ client show themes against this
 
 Use the current repository contracts, not a copied handoff schema. Read [the contract map](references/live-contract.md), then the client's brief, authorized assets and rights. Preserve Classic's canonical choreography and the editor's existing design.
 
-Classify the request: declarative themes reference already trusted renderer IDs; new React/CSS/motion requires source review and CI through the code-backed lane. Never execute customer JavaScript, TSX, HTML or an archive. A custom palette using the Classic renderer is a declarative variant, not proof of a new complete visual system.
+Classify the request: legacy declarative packages reference compiled renderers;
+legacy trusted code-backed packages require the existing source-controlled build
+review. Portable `.tadazz` packages additionally support isolated React/TSX via
+the versioned SDK and generic sandbox adapter. Read
+[portable package authoring](references/portable-packages.md) for Theme, Game and
+Complete packs. Never execute customer source in the application/server process
+or import it into the host React tree. Build only with the pinned, networkless,
+unprivileged worker; render only on the separate cookie-free runtime origin.
+A palette change is not proof of an independent React visual system.
 
 Storyboard all 15 visual slots and 16 audio events, including explicit silence. Obtain concept approval when the request requires it; existing authorization remains valid. Use only theme-owned finite variant lists. Do not invent files, licenses or completed installations. Preserve scoped edits on theme changes and keep legacy choices archived.
 

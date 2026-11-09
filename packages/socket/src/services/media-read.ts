@@ -12,6 +12,7 @@ const types: Record<string, string> = {
   ".mp3": "audio/mpeg",
   ".ogg": "audio/ogg",
   ".wav": "audio/wav",
+  ".m4a": "audio/mp4",
   ".mp4": "video/mp4",
   ".webm": "video/webm",
   ".json": "application/json",
@@ -19,7 +20,7 @@ const types: Record<string, string> = {
 }
 
 export function allowedMediaName(name: string): boolean {
-  return /^[A-Za-z0-9_-]+\.(png|jpg|jpeg|webp|gif|mp3|ogg|wav|mp4|webm|json|lottie)$/u.test(
+  return /^[A-Za-z0-9_-]+\.(png|jpg|jpeg|webp|gif|mp3|ogg|wav|m4a|mp4|webm|json|lottie)$/u.test(
     name,
   )
 }

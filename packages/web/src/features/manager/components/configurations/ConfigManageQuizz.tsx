@@ -15,12 +15,16 @@ import { Download, FileDown, SquarePen, Trash2, Upload } from "lucide-react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import { ShowImportModal } from "./ShowImportModal"
+import { useCallback, useState } from "react"
+import { PackageManager } from "../packages/PackageManager"
 
 const ConfigManageQuizz = () => {
   const { data, isPending } = useQuery(quizzListQuery())
   const queryClient = useQueryClient()
   const navigate = useNavigate()
   const { t } = useTranslation()
+  const [packageFile, setPackageFile] = useState<File | null>(null)
+  const consumePackageFile = useCallback(() => setPackageFile(null), [])
 
   const invalidate = () =>
     queryClient.invalidateQueries({ queryKey: quizzKeys.all })
@@ -57,6 +61,11 @@ const ConfigManageQuizz = () => {
 
   return (
     <div className="flex min-h-0 flex-1 flex-col">
+      <PackageManager
+        file={packageFile}
+        onFileConsumed={consumePackageFile}
+        onImported={invalidate}
+      />
       <div className="mb-4 flex shrink-0 gap-2">
         <Button
           className="flex-1"
@@ -88,9 +97,18 @@ const ConfigManageQuizz = () => {
         <input
           ref={fileInputRef}
           type="file"
-          accept=".json,.xlsx"
+          accept=".json,.xlsx,.tadazz"
           className="hidden"
-          onChange={handleImportFileSelect}
+          onChange={(event) => {
+            const file = event.target.files?.[0]
+
+            if (file?.name.toLowerCase().endsWith(".tadazz")) {
+              setPackageFile(file)
+              event.target.value = ""
+            } else {
+              void handleImportFileSelect(event)
+            }
+          }}
           data-testid="import-file-input"
         />
       </div>
