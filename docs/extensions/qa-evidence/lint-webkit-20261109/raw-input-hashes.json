@@ -1,0 +1,127 @@
+{
+  "root-units.json.gz": {
+    "source": "followup-root-units.json",
+    "rawBytes": 122904,
+    "rawSha256": "122f3da3bdd8b79cc2f5ae4a7f52b9d48c57dde7df5f9fd1ed5a8cc91e2972ed"
+  },
+  "extension-units.json.gz": {
+    "source": "followup-extension-units-retry.json",
+    "rawBytes": 272930,
+    "rawSha256": "1fc0dc02bf245208de512d65b1867a81187d9e630536ba497613a01bb19737bd"
+  },
+  "root-units.log.gz": {
+    "source": "followup-root-units.log",
+    "rawBytes": 150,
+    "rawSha256": "f4edc7da65d9d8ea0a467636862d5b53c2d07ea0bf27efbe7de367a443fc5fb5"
+  },
+  "extension-units.log.gz": {
+    "source": "followup-extension-units-retry.log",
+    "rawBytes": 172,
+    "rawSha256": "5c484aa7ad2f22dcda0c8e8a7a87f3f25f32b2ab481d88e049b84317f181496b"
+  },
+  "lint.json": {
+    "source": "followup-lint-final.json",
+    "rawBytes": 198,
+    "rawSha256": "dbababbbc5dea439f38ff6be59fab7a78aa27be70cbf23fcbe41ac5c14412c61"
+  },
+  "format.log": {
+    "source": "followup-format-final.log",
+    "rawBytes": 38,
+    "rawSha256": "f0c1d2b0c2a34df0d3f6516571027867215029eef79e9358c8d072f862d9f91d"
+  },
+  "build.log.gz": {
+    "source": "followup-build-retry.log",
+    "rawBytes": 2167,
+    "rawSha256": "cc02553b8ce202beb620ccc5dbc76513adee131462fc1e6ff218c27b0359c07b"
+  },
+  "upstream-browser.json.gz": {
+    "source": "followup-upstream-browser-report.json",
+    "rawBytes": 25395,
+    "rawSha256": "028992b5c78e0be44849644132e27e9b42a0a8cca2f65ba97d5909754b7cacef"
+  },
+  "upstream-browser.log.gz": {
+    "source": "followup-upstream-browser.log",
+    "rawBytes": 3515,
+    "rawSha256": "c080fe92a36b6859246e7f0ed0b4ee90ff3e4b83c46e2c2cd7a91511b387bec6"
+  },
+  "ui-browser.json.gz": {
+    "source": "followup-ui-browser-report.json",
+    "rawBytes": 28077,
+    "rawSha256": "158651e105241100cc4e070f24a1fad0cde23611903171b5ae6e0d2b6c83294f"
+  },
+  "ui-browser.log.gz": {
+    "source": "followup-ui-browser.log",
+    "rawBytes": 5353,
+    "rawSha256": "39dfc3410742a86362c02104caffa2bb8ad0db1776455ac8306b094e100d347c"
+  },
+  "cleanup-browser.json.gz": {
+    "source": "followup-cleanup-browser-report.json",
+    "rawBytes": 101157,
+    "rawSha256": "70440d8c7b3fa1f01f27c232b3e5ad467584f4239a980f41bc50e7c1003752d7"
+  },
+  "cleanup-browser.log.gz": {
+    "source": "followup-cleanup-browser.log",
+    "rawBytes": 7649,
+    "rawSha256": "330085a4634b7250c730bd8cad70ade78178dc0b9ec359329ed41283cba1e325"
+  },
+  "package-browser.json.gz": {
+    "source": "followup-package-browser-report.json",
+    "rawBytes": 10660,
+    "rawSha256": "c6cf36e9280dd35404e563ef774725e69f55cddb4f9a98344a8cfe71bda93f8d"
+  },
+  "package-browser.log.gz": {
+    "source": "followup-package-browser.log",
+    "rawBytes": 3172,
+    "rawSha256": "986bdaaf330465d799e2f8ada6ab010dd66b95a10270a891ffcbf6c4ee289293"
+  },
+  "isolated-builder.log.gz": {
+    "source": "followup-isolated-builder.log",
+    "rawBytes": 14902,
+    "rawSha256": "098b1c1fa71cae70c310b8491767570cd753ca3392c12ddf087555dad006ce77"
+  },
+  "source-verification-before-tests.json": {
+    "source": "followup-source-verification.json",
+    "rawBytes": 60,
+    "rawSha256": "b25d2e2d65585647f1042f8616ab70a76901c8ee2b09abacb3eb0306c10f1331"
+  },
+  "web-types.log": {
+    "source": "followup-web-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "socket-types.log": {
+    "source": "followup-socket-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "extension-types.log": {
+    "source": "followup-extension-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "e2e-types.log": {
+    "source": "followup-e2e-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "authoring-types.log": {
+    "source": "followup-authoring-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "scripts-types.log": {
+    "source": "followup-scripts-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "qa-types.log": {
+    "source": "followup-qa-types.log",
+    "rawBytes": 0,
+    "rawSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "lint.stderr.log": {
+    "source": "followup-lint-final.stderr.log",
+    "rawBytes": 39,
+    "rawSha256": "356c8491a93c4763f2cd5894b3c6e5b2b4f3c97808b4bc8012134f73df611a4b"
+  }
+}

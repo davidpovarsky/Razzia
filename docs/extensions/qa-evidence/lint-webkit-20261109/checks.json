@@ -1,0 +1,153 @@
+[
+  {
+    "name": "lint",
+    "command": [
+      "pnpm",
+      "lint",
+      "--deny-warnings",
+      "--format",
+      "json"
+    ],
+    "exitCode": 0,
+    "seconds": 16.91
+  },
+  {
+    "name": "format",
+    "command": [
+      "pnpm",
+      "format"
+    ],
+    "exitCode": 0,
+    "seconds": 18.1
+  },
+  {
+    "name": "web-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "packages/web/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 0.07
+  },
+  {
+    "name": "socket-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "packages/socket/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 2.55
+  },
+  {
+    "name": "extension-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "extensions/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 3.83
+  },
+  {
+    "name": "e2e-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "packages/e2e/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 1.77
+  },
+  {
+    "name": "authoring-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "extensions/tsconfig.package-authoring.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 1.07
+  },
+  {
+    "name": "scripts-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "extensions/scripts/tsconfig.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 0.82
+  },
+  {
+    "name": "qa-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "-p",
+      "extensions/tsconfig.qa.json",
+      "--noEmit"
+    ],
+    "exitCode": 0,
+    "seconds": 2.3
+  },
+  {
+    "name": "root-units",
+    "command": [
+      "pnpm",
+      "test",
+      "--maxWorkers",
+      "2",
+      "--reporter=json",
+      "--outputFile=/evidence/followup-root-units.json"
+    ],
+    "exitCode": 0,
+    "seconds": 24.25
+  },
+  {
+    "name": "extension-units",
+    "command": [
+      "pnpm",
+      "--filter",
+      "@razzia/extensions",
+      "test",
+      "--maxWorkers",
+      "2",
+      "--reporter=json",
+      "--outputFile=/evidence/followup-extension-units.json"
+    ],
+    "exitCode": 0,
+    "seconds": 35.51,
+    "retryReport": "extension-units.json.gz",
+    "note": "Generated stylesheet restored byte-exactly; complete suite rerun."
+  },
+  {
+    "name": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.86
+  }
+]
