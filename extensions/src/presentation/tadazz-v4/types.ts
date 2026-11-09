@@ -26,7 +26,9 @@ export const TADAZZ_V4_SCENES = [
   "round-two",
   "grand-finale",
 ] as const
+
 export type TadazzV4Scene = (typeof TADAZZ_V4_SCENES)[number]
+
 export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>([
   "top-pick",
   "round-recap",
@@ -40,6 +42,7 @@ export const TADAZZ_V4_SHOW_SCENES = new Set<TadazzV4Scene>([
   "story-live",
   "grand-finale",
 ])
+
 export const TADAZZ_V4_ASSET_BASE = "/tadazz-show/v4/"
 
 export interface TadazzV4Answer {
@@ -47,6 +50,7 @@ export interface TadazzV4Answer {
   imageUrl?: string | null
   alt?: string
 }
+
 export interface TadazzV4Team {
   id?: string
   name: string
@@ -54,6 +58,7 @@ export interface TadazzV4Team {
   icon?: string
   streak?: number
 }
+
 export interface TadazzV4Data {
   /** Stable question identity (questionId/epoch) used for continuous live-game transitions. */
   questionKey?: string
@@ -115,6 +120,7 @@ export interface TadazzV4Data {
   backgroundUrl?: string | null
   backgroundFit?: "cover" | "contain"
 }
+
 export interface TadazzV4Labels {
   storyBuild: string
   storyReady: string
@@ -145,6 +151,7 @@ export interface TadazzV4Labels {
   noVotes: string
   points: string
 }
+
 export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   storyBuild: "LET THE STORY BEGIN",
   storyReady: "IT'S STORYTIME!",
@@ -175,12 +182,14 @@ export const TADAZZ_V4_LABELS: TadazzV4Labels = {
   noVotes: "NO VOTES YET",
   points: "PTS",
 }
+
 export interface TadazzV4Cue {
   name: string
   scene: TadazzV4Scene
   questionKey?: string
   questionNumber?: number
 }
+
 export interface TadazzV4StageHandle {
   play(scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean>
   /** Clear the active v4 scene so a custom/overlay screen is shown on the v4 stage backdrop. */
@@ -196,6 +205,7 @@ export interface TadazzV4StageHandle {
   stop(): void
   setPercentagesVisible(visible: boolean): void
 }
+
 export interface TadazzV4StageProps {
   initialScene?: TadazzV4Scene
   initialData?: TadazzV4Data
@@ -218,15 +228,24 @@ export function percentagesFor(data: TadazzV4Data, length: number): number[] {
     Math.max(0, Number(data.counts?.[i]) || 0),
   )
   const total = counts.reduce((a, b) => a + b, 0)
+
   return counts.map((count, i) => {
     const fromServer = data.percentages?.[i]
-    return typeof fromServer === "number" && Number.isFinite(fromServer)
-      ? Math.max(0, Math.min(100, fromServer))
-      : total > 0
-        ? (100 * count) / total
-        : 0
+
+    return (() => {
+      if (typeof fromServer === "number" && Number.isFinite(fromServer)) {
+        return Math.max(0, Math.min(100, fromServer))
+      }
+
+      if (total > 0) {
+        return (100 * count) / total
+      }
+
+      return 0
+    })()
   })
 }
+
 export function topIndicesFor(data: TadazzV4Data, length: number): number[] {
   if (
     data.mode === "quiz" &&
@@ -237,16 +256,21 @@ export function topIndicesFor(data: TadazzV4Data, length: number): number[] {
       (x) => Number.isInteger(x) && x >= 0 && x < length,
     )
   }
-  if (data.winnerIndices)
+
+  if (data.winnerIndices) {
     return data.winnerIndices.filter(
       (x) => Number.isInteger(x) && x >= 0 && x < length,
     )
+  }
+
   const counts = Array.from({ length }, (_, i) =>
     Math.max(0, Number(data.counts?.[i]) || 0),
   )
   const max = Math.max(0, ...counts)
+
   return max > 0 ? counts.flatMap((v, i) => (v === max ? [i] : [])) : []
 }
+
 export function normalizeData(data: TadazzV4Data): TadazzV4Data {
   return {
     ...data,

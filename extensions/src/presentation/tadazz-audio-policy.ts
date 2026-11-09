@@ -97,6 +97,7 @@ export function resolveTadazzAudioPolicy({
   if (extensionPhase === "responses") {
     return { slot: "results", continuityKey: "result-reveal" }
   }
+
   if (extensionPhase === "answers") {
     return { slot: "voting", continuityKey: "voting" }
   }

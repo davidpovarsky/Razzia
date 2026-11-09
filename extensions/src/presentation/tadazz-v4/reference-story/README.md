@@ -30,10 +30,10 @@ winning choices appear. Missing votes retain empty, localized placeholders.
 
 Source SHA-256:
 
-| Supplied file | SHA-256 |
-| --- | --- |
-| TADAZZ_Story_Mixer_Clean.html | d2f3f7f9ccf5063a25c53e95a07bfcae8b262b419b4f909e778c259594a001e3 |
-| TADAZZ_Story_Reveal_FAST.html | f0665c32c87982ab88bac34d0b3b5240f624382d3b5b685ccbc18e76e7527e6b |
+| Supplied file                          | SHA-256                                                          |
+| -------------------------------------- | ---------------------------------------------------------------- |
+| TADAZZ_Story_Mixer_Clean.html          | d2f3f7f9ccf5063a25c53e95a07bfcae8b262b419b4f909e778c259594a001e3 |
+| TADAZZ_Story_Reveal_FAST.html          | f0665c32c87982ab88bac34d0b3b5240f624382d3b5b685ccbc18e76e7527e6b |
 | TADAZZ_Seating_Plan_Brand_Colours.html | e25b39172e0a548303bf97744105b1fddaf96949cf896c9f651f55135cb27c85 |
 
 Six artwork/audio files are extracted under `packages/web/public/tadazz-show/story/`.

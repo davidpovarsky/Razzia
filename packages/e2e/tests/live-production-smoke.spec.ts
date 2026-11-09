@@ -11,7 +11,7 @@ test("final live Tzila smoke: real room, host presentation, pause, vote, results
   test.skip(!token, "TADAZZ_LIVE_QA_TOKEN is required")
   await host.addInitScript(
     (value) => localStorage.setItem("token", value),
-    token!,
+    token,
   )
   await host.context().addCookies([
     {

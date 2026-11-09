@@ -124,6 +124,36 @@ async function seed(
     token,
   )
   await page.goto(`/party/manager/${game.gameId}`)
+  await expect(page.getByTestId("tadazz-show")).toBeVisible()
+  await page.evaluate(() => {
+    const target = window as unknown as {
+      __socket?: {
+        on(
+          event: string,
+          callback: (value: {
+            phase: string
+            epoch: number
+            questionId?: string
+            extras: { voteCompletionReason?: unknown }
+          }) => void,
+        ): void
+      }
+      __themeProbe?: { states?: unknown[] }
+    }
+
+    if (target.__themeProbe) {
+      const states: unknown[] = []
+      target.__themeProbe.states = states
+      target.__socket?.on("extensions:state", (value) =>
+        states.push({
+          phase: value.phase,
+          epoch: value.epoch,
+          questionId: value.questionId,
+          completion: value.extras.voteCompletionReason,
+        }),
+      )
+    }
+  })
 
   return { ...game, quizId, token, extras, quizz }
 }
@@ -141,7 +171,11 @@ test("Classic host, player and display keep the current lobby and authoritative 
   }
 
   await expect(page.getByTestId("tadazz-show")).toBeVisible()
-  await expect(page.getByTestId("tadazz-lobby-pin")).toHaveText(game.inviteCode)
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-native-layout",
+    "true",
+  )
+  await expect(page.getByText(game.inviteCode, { exact: true })).toBeVisible()
   const playerContext = await browser.newContext({
     viewport: { width: 390, height: 844 },
   })
@@ -152,6 +186,7 @@ test("Classic host, player and display keep the current lobby and authoritative 
   await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
   // Model the audience as an independent browser/device on the ARM64 QA host.
   const displayBrowser = await browser.browserType().launch()
+
   try {
     const displayContext = await displayBrowser.newContext({
       viewport: { width: 800, height: 600 },
@@ -169,6 +204,16 @@ test("Classic host, player and display keep the current lobby and authoritative 
     // background-page animation frames used by normal click actionability checks.
     await page.bringToFront()
     await page.getByRole("button", { name: "Start", exact: true }).click()
+    await expect(
+      page.getByRole("heading", { name: "Isolated scene" }),
+    ).toBeVisible()
+    await page
+      .getByRole("button", { name: "Advance Scene", exact: true })
+      .click()
+    await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-voting-open",
+      "true",
+    )
     await expect(page.getByTestId("host-pause-resume-btn")).toBeVisible()
     await page.getByTestId("host-pause-resume-btn").click()
     await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
@@ -283,13 +328,15 @@ async function installProbes(page: Page) {
     const sample = () => {
       state.frames += 1
 
-      if (document.querySelector('img[alt="background"], iframe')) {
+      if (
+        location.pathname.startsWith("/display") &&
+        document.querySelector('img[alt="background"], iframe')
+      ) {
         state.legacy += 1
       }
 
       if (
-        (location.pathname.startsWith("/party") ||
-          location.pathname.startsWith("/display")) &&
+        location.pathname.startsWith("/display") &&
         getComputedStyle(document.documentElement).backgroundColor !==
           "rgb(8, 1, 26)"
       ) {
@@ -318,6 +365,15 @@ function probe(page: Page) {
       ).__themeProbe,
   )
 }
+
+test.afterEach(async ({ page }, info) => {
+  if (info.status !== info.expectedStatus) {
+    await info.attach("theme-failure-probe.json", {
+      body: JSON.stringify(await probe(page).catch(() => null), null, 2),
+      contentType: "application/json",
+    })
+  }
+})
 async function skipOpening(page: Page) {
   await expect(page.getByTestId("tadazz-show")).toBeVisible()
   const skip = page.getByTestId("tadazz-opening-skip")
@@ -438,7 +494,7 @@ test("blocked audio waits for a user gesture without retrying on ticks", async (
   await context.close()
 })
 
-test("Studio shows only registered Classic choices, previews locally, and persists explicit mute", async ({
+test("Studio shows only registered built-in choices, previews locally, and persists explicit mute", async ({
   page,
   request,
 }, testInfo) => {
@@ -448,7 +504,8 @@ test("Studio shows only registered Classic choices, previews locally, and persis
   await page.getByTestId("studio-tab-settings").click()
   const settings = page.getByTestId("show-theme-settings")
   await expect(settings.getByTestId("show-theme-tadazz-classic")).toBeVisible()
-  await expect(settings.locator('[data-testid^="show-theme-"]')).toHaveCount(1)
+  await expect(settings.getByTestId("show-theme-razzia-original")).toBeVisible()
+  await expect(settings.locator('[data-testid^="show-theme-"]')).toHaveCount(2)
   await page.screenshot({
     path: join(testInfo.outputDir, "studio-theme-family-picker.png"),
   })
@@ -525,6 +582,13 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
       "tadazz-classic",
     )
   }
+  for (const native of [page, player]) {
+    await expect(native.getByTestId("tadazz-show")).toHaveAttribute(
+      "data-native-layout",
+      "true",
+    )
+  }
+  await page.bringToFront()
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-voting-open",
@@ -532,7 +596,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect(
-    page.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(2)
   await expect(page.getByTestId("audio-cue-player-state")).toHaveAttribute(
     "data-audio-url",
@@ -547,6 +611,14 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   const musicBefore = (await probe(page)).plays.filter(
     (item) => item.url.endsWith("/sounds/answersMusic.mp3") && item.time < 0.2,
   ).length
+  await expect(page.getByRole("button", { name: /Choice [0-9]/u })).toHaveCount(
+    2,
+  )
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
   for (const [width, height] of [
     [1920, 1080],
     [1366, 768],
@@ -555,6 +627,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     [320, 568],
   ]) {
     await page.setViewportSize({ width, height })
+    await display.setViewportSize({ width, height })
     const dimensions = await page.evaluate(() => ({
       width: innerWidth,
       height: innerHeight,
@@ -563,7 +636,9 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     }))
     expect(dimensions.scrollW).toBeLessThanOrEqual(dimensions.width)
     expect(dimensions.scrollH).toBeLessThanOrEqual(dimensions.height)
-    const photo = page.getByTestId("tadazz-card-0").locator(".tz-photo-frame")
+    const photo = display
+      .getByTestId("tadazz-card-0")
+      .locator(".tz-photo-frame")
     const shape = await photo.evaluate((element) => {
       const style = getComputedStyle(element)
 
@@ -573,13 +648,22 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
       }
     })
     expect(Math.abs(shape.width - shape.height)).toBeLessThan(1)
-    await page.screenshot({
+    await display.screenshot({
       path: join(testInfo.outputDir, `question-2-cards-${width}.png`),
     })
   }
   await page.setViewportSize({ width: 1366, height: 768 })
-  await expect(player.getByTestId("tadazz-pad-option-0")).toBeEnabled()
-  await player.getByTestId("tadazz-pad-option-0").click()
+  await display.setViewportSize({ width: 1920, height: 1080 })
+  await page.bringToFront()
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "false",
+  )
+  await player.bringToFront()
+  const answer = player.getByRole("button", { name: /Choice 1/u })
+  await expect(answer).toBeEnabled()
+  await answer.click()
   await expect
     .poll(
       async () =>
@@ -598,6 +682,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(player)).cues.filter((cue) => cue.name === "answer-submitted"),
   ).toHaveLength(1)
+  await page.bringToFront()
   await page.getByTestId("host-end-timer-btn").click()
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-show-scene",
@@ -606,9 +691,13 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   expect(
     (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
   ).toHaveLength(0)
-  expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "vote-locked"),
-  ).toHaveLength(1)
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+          .length,
+    )
+    .toBe(1)
   expect(
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
@@ -632,7 +721,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect(
-    page.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(3)
   const musicAfter = (await probe(page)).plays.filter(
     (item) => item.url.endsWith("/sounds/answersMusic.mp3") && item.time < 0.2,
@@ -655,9 +744,13 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     "results",
     { timeout: 30_000 },
   )
-  expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
-  ).toHaveLength(1)
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(1)
   expect(
     (await probe(page)).plays.filter((item) =>
       item.url.includes("tadazz-timer-end-"),
@@ -690,7 +783,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect(
-    page.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(4)
   const identityBeforePause = await page
     .getByTestId("audio-cue-player-state")
@@ -722,7 +815,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect(
-    page.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(4)
   await page.getByTestId("host-skip-question-btn").click()
   await page
@@ -735,7 +828,7 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
     { timeout: 30_000 },
   )
   await expect(
-    page.locator('.choice-slot[data-testid^="tadazz-card-"]'),
+    display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(5)
   for (const [width, height] of [
     [1920, 1080],
@@ -778,9 +871,13 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
       ),
     ).toBe(true)
   }
-  expect(
-    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
-  ).toHaveLength(1)
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "timer-ended")
+          .length,
+    )
+    .toBe(1)
   await testInfo.attach("complete-audio-trace.json", {
     body: JSON.stringify(
       {

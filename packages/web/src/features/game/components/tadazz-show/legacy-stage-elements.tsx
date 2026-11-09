@@ -1,7 +1,7 @@
 import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import type { Player } from "@razzia/common/types/game"
-import type { Status } from "@razzia/common/types/game/status"
+import { STATUS, type Status } from "@razzia/common/types/game/status"
 import type {
   CardAudioOverrides,
   CueId,
@@ -10,7 +10,13 @@ import type {
   QuizExtrasV1,
   TeamDefinition,
 } from "@razzia/extensions/core"
-import { TadazzAnimatedBackdrop } from "@razzia/extensions/presentation"
+import {
+  TadazzAnimatedBackdrop,
+  isTadazzShowActive,
+  themeTimerTransition,
+  type ThemeTimerEndState,
+} from "@razzia/extensions/presentation"
+import { useEffect, useRef } from "react"
 import Tooltip from "@razzia/web/components/Tooltip"
 import type { ViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import clsx from "clsx"
@@ -120,14 +126,60 @@ export function LegacyStageAudio({
   isHostPresenting: boolean
 }) {
   const { t } = useTranslation()
+  const themed = Boolean(extensionState && isTadazzShowActive(extensionState))
+  const timerState = useRef<ThemeTimerEndState | null>(null)
+  useEffect(() => {
+    if (!extensionState) {
+      timerState.current = null
+
+      return
+    }
+
+    const voting = statusName === STATUS.SELECT_ANSWER
+
+    // The native status reaches responses before the extension snapshot carries
+    // the completion reason. Keep the observed attempt until that snapshot arrives.
+    if (
+      !voting &&
+      extensionState.phase === "question" &&
+      timerState.current?.gameId === extensionState.gameId &&
+      timerState.current.epoch === extensionState.epoch &&
+      timerState.current.questionId === extensionState.questionId
+    ) {
+      return
+    }
+
+    const next = themeTimerTransition(timerState.current, {
+      enabled: themed && effectiveRole !== "player",
+      gameId: extensionState.gameId,
+      questionId: extensionState.questionId ?? null,
+      epoch: extensionState.epoch,
+      voting,
+      results: extensionState.phase === "responses",
+      paused: extensionState.pause?.paused ?? false,
+      now: Date.now(),
+      reason: extensionState.extras.voteCompletionReason as
+        "elapsed" | "manual" | "allAnswered" | null | undefined,
+    })
+    timerState.current = next.state
+
+    if (next.cue) {
+      window.dispatchEvent(
+        new CustomEvent("tadazz:sfx", {
+          detail: { name: next.event, identity: next.cue, volume: 0.8 },
+        }),
+      )
+    }
+  }, [extensionState, themed, effectiveRole, statusName])
 
   return (
     <>
       {" "}
       {extensionState &&
-        effectiveRole !== "player" &&
+        (effectiveRole !== "player" || themed) &&
         (!manager || roomMediaReady) && (
           <AudioCuePlayer
+            eventOnly={effectiveRole === "player"}
             cueId={activePhaseCueId}
             audioExtras={
               extensionState.extras.audio as QuizExtrasV1["audio"] | undefined
@@ -210,7 +262,8 @@ export function HostPresenceButton({
         "Players & Live Connection Status",
       )}
     >
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         onClick={onClick}
         data-testid="host-bottom-players-btn"

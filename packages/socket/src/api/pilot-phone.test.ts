@@ -1,16 +1,16 @@
-import { QUESTION_TYPES, QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
+import { QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
 import { app } from "@razzia/socket/app"
 import { mintToken } from "@razzia/socket/services/auth"
-import {
-  getPath,
-  initConfig,
-  saveQuizz,
-} from "@razzia/socket/services/config"
+import { getPath, initConfig, saveQuizz } from "@razzia/socket/services/config"
 import { setIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
-import { createEstimationQuestion, createQuestion, createQuizz } from "@razzia/socket/test/fixtures"
+import {
+  createEstimationQuestion,
+  createQuestion,
+  createQuizz,
+} from "@razzia/socket/test/fixtures"
 import fs from "fs"
 import { StatusCodes } from "http-status-codes"
 import {
@@ -22,15 +22,17 @@ import {
   it,
   vi,
 } from "vitest"
-
 const FIRST_QUESTION_DELAY_MS = 8000
 const NEXT_QUESTION_DELAY_MS = 2000
-
 let managerToken = ""
-
 const request = (
   path: string,
-  { method = "GET", token, body, headers = {} }: {
+  {
+    method = "GET",
+    token,
+    body,
+    headers = {},
+  }: {
     method?: string
     token?: string
     body?: unknown
@@ -41,26 +43,29 @@ const request = (
     method,
     headers: {
       "Content-Type": "application/json",
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {}),
       ...headers,
     },
     body: body === undefined ? undefined : JSON.stringify(body),
   })
-
 const json = async <T = Record<string, unknown>>(response: Response) =>
   (await response.json()) as T
-
 beforeAll(async () => {
   setIo(createFakeIo().io)
   managerToken = (await mintToken("manager", SESSION_ROLES.MANAGER)).token
 })
-
 beforeEach(() => {
-  fs.rmSync(getPath(), { recursive: true, force: true })
+  fs.rmSync(getPath(), {
+    recursive: true,
+    force: true,
+  })
   initConfig()
   vi.useFakeTimers()
 })
-
 afterEach(() => {
   vi.useRealTimers()
   Registry.getInstance()
@@ -69,7 +74,6 @@ afterEach(() => {
       Registry.getInstance().removeGame(game.gameId)
     })
 })
-
 describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
   it("A01: accepts answerIndex 4 for 5-answer survey and tallies 5th vote correctly", async () => {
     const q1 = createQuestion({
@@ -81,13 +85,17 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     })
     const quizz = createQuizz([q1], QUIZZ_MODES.SURVEY)
     const { id: quizzId } = saveQuizz(quizz)
-
     const createRes = await request("/games", {
       method: "POST",
       token: managerToken,
-      body: { quizzId },
+      body: {
+        quizzId,
+      },
     })
-    const { gameId, inviteCode } = await json<{ gameId: string; inviteCode: string }>(createRes)
+    const { gameId, inviteCode } = await json<{
+      gameId: string
+      inviteCode: string
+    }>(createRes)
     const game = Registry.getInstance().getGameById(gameId)!
     expect(game).toBeDefined()
 
@@ -106,7 +114,9 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
       ok: boolean
       joined: boolean
       rosterPlayerId: string
-      state: { acceptingAnswers: boolean }
+      state: {
+        acceptingAnswers: boolean
+      }
     }>(joinRes)
     expect(joinData.ok).toBe(true)
     expect(joinData.joined).toBe(true)
@@ -115,7 +125,9 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
 
     // 2. Start game and reach answering
     void game.start(createFakeIo().createSocket("manager"))
-    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + q1.cooldown * 1000)
+    await vi.advanceTimersByTimeAsync(
+      FIRST_QUESTION_DELAY_MS + q1.cooldown * 1000,
+    )
 
     // 3. Poll question state
     const pollRes = await request("/games/pilot-phone", {
@@ -162,17 +174,32 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     expect(answerData.isSurvey).toBe(true)
 
     // 5. End timer / advance to reveal and check tally
-    ;(game as any).round.endTimer()
+    ;(
+      game as unknown as {
+        round: {
+          endTimer(): void
+        }
+      }
+    ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
-
-    const revealStatus = ((game as any).managerStatus ?? (game as any).lastBroadcastStatus) as {
+    const revealStatus = ((
+      game as unknown as {
+        managerStatus?: unknown
+      }
+    ).managerStatus ??
+      (
+        game as unknown as {
+          lastBroadcastStatus?: unknown
+        }
+      ).lastBroadcastStatus) as {
       name: string
-      data: { responses: Record<number, number> }
+      data: {
+        responses: Record<number, number>
+      }
     }
     expect(revealStatus.name).toBe(STATUS.SHOW_RESPONSES)
     expect(revealStatus.data.responses[4]).toBe(1)
   })
-
   it("A02: bounds validation (2..5), rejects invalid indices, unsupported types, and enforces phone limits", async () => {
     const q5 = createQuestion({
       answers: ["Option 1", "Option 2", "Option 3", "Option 4", "Option 5"],
@@ -191,13 +218,17 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     const qEst = createEstimationQuestion()
     const quizz = createQuizz([q5, q4, qEst])
     const { id: quizzId } = saveQuizz(quizz)
-
     const createRes = await request("/games", {
       method: "POST",
       token: managerToken,
-      body: { quizzId },
+      body: {
+        quizzId,
+      },
     })
-    const { gameId, inviteCode } = await json<{ gameId: string; inviteCode: string }>(createRes)
+    const { gameId, inviteCode } = await json<{
+      gameId: string
+      inviteCode: string
+    }>(createRes)
     const game = Registry.getInstance().getGameById(gameId)!
 
     // Join caller
@@ -210,11 +241,15 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         callId: "call-002",
       },
     })
-    const { rosterPlayerId } = await json<{ rosterPlayerId: string }>(joinRes)
+    const { rosterPlayerId } = await json<{
+      rosterPlayerId: string
+    }>(joinRes)
 
     // Start Question 1 (5 options)
     void game.start(createFakeIo().createSocket("manager"))
-    await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + q5.cooldown * 1000)
+    await vi.advanceTimersByTimeAsync(
+      FIRST_QUESTION_DELAY_MS + q5.cooldown * 1000,
+    )
 
     // Test out-of-bounds: index 5 (would be key 6) on 5-option question
     const outOfBounds = await request("/games/pilot-phone", {
@@ -227,7 +262,11 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 5,
       },
     })
-    const oobData = await json<{ ok: boolean; accepted: boolean; reason: string }>(outOfBounds)
+    const oobData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(outOfBounds)
     expect(oobData.accepted).toBe(false)
     expect(oobData.reason).toBe("invalid_answer_index")
 
@@ -268,7 +307,10 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 2,
       },
     })
-    const validData = await json<{ ok: boolean; accepted: boolean }>(validVote)
+    const validData = await json<{
+      ok: boolean
+      accepted: boolean
+    }>(validVote)
     expect(validData.accepted).toBe(true)
 
     // Duplicate answer in same question -> duplicate_answer
@@ -282,25 +324,47 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 3,
       },
     })
-    const dupData = await json<{ ok: boolean; accepted: boolean; reason: string }>(dupVote)
+    const dupData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(dupVote)
     expect(dupData.accepted).toBe(false)
     expect(dupData.reason).toBe("duplicate_answer")
 
     // Expire timer on Q5 to reach responses
-    ;(game as any).round.endTimer()
+    ;(
+      game as unknown as {
+        round: {
+          endTimer(): void
+        }
+      }
+    ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
     // Advance past responses/leaderboard to Q4
     game.advance()
     await vi.advanceTimersByTimeAsync(1000)
     game.advance()
-    await vi.advanceTimersByTimeAsync(NEXT_QUESTION_DELAY_MS + q4.cooldown * 1000)
+    await vi.advanceTimersByTimeAsync(
+      NEXT_QUESTION_DELAY_MS + q4.cooldown * 1000,
+    )
 
     // In 4-option question: verify maxAnswerIndex is 3
     const pollQ4 = await request("/games/pilot-phone", {
       method: "POST",
-      body: { action: "join_or_poll", gameId, rosterPlayerId, callId: "call-002" },
+      body: {
+        action: "join_or_poll",
+        gameId,
+        rosterPlayerId,
+        callId: "call-002",
+      },
     })
-    const q4Data = await json<{ state: { answersCount: number; maxAnswerIndex: number } }>(pollQ4)
+    const q4Data = await json<{
+      state: {
+        answersCount: number
+        maxAnswerIndex: number
+      }
+    }>(pollQ4)
     expect(q4Data.state.answersCount).toBe(4)
     expect(q4Data.state.maxAnswerIndex).toBe(3)
 
@@ -315,7 +379,11 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 4,
       },
     })
-    const rejectData = await json<{ ok: boolean; accepted: boolean; reason: string }>(rejectKey5On4Options)
+    const rejectData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(rejectKey5On4Options)
     expect(rejectData.accepted).toBe(false)
     expect(rejectData.reason).toBe("invalid_answer_index")
 
@@ -330,16 +398,29 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 3,
       },
     })
-    const acceptData = await json<{ ok: boolean; accepted: boolean }>(acceptKey4On4Options)
+    const acceptData = await json<{
+      ok: boolean
+      accepted: boolean
+    }>(acceptKey4On4Options)
     expect(acceptData.accepted).toBe(true)
 
     // Advance Q4 to reveal, advance past leaderboard, then advance to Question 3 (Estimation)
-    ;(game as any).round.endTimer()
+    ;(
+      game as unknown as {
+        round: {
+          endTimer(): void
+        }
+      }
+    ).round.endTimer()
     await vi.advanceTimersByTimeAsync(1000)
-    game.advance() // reveal -> leaderboard
+    // Reveal -> leaderboard
+    game.advance()
     await vi.advanceTimersByTimeAsync(1000)
-    game.advance() // leaderboard -> next question
-    await vi.advanceTimersByTimeAsync(NEXT_QUESTION_DELAY_MS + qEst.cooldown * 1000)
+    // Leaderboard -> next question
+    game.advance()
+    await vi.advanceTimersByTimeAsync(
+      NEXT_QUESTION_DELAY_MS + qEst.cooldown * 1000,
+    )
 
     // Estimation is not single-choice PSTN supported
     const estVote = await request("/games/pilot-phone", {
@@ -352,52 +433,79 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         answerIndex: 1,
       },
     })
-    const estData = await json<{ ok: boolean; accepted: boolean; reason: string }>(estVote)
+    const estData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(estVote)
     expect(estData.accepted).toBe(false)
     expect(estData.reason).toContain("not supported via telephone keypad")
   })
-
   it("enforces TADA_PILOT_SECRET when configured", async () => {
     process.env.TADA_PILOT_SECRET = "super-secret-token"
 
     try {
-    const q = createQuestion({ cooldown: 3 })
-    const quizz = createQuizz([q])
-    const { id: quizzId } = saveQuizz(quizz)
-    const createRes = await request("/games", {
-      method: "POST",
-      token: managerToken,
-      body: { quizzId },
-    })
-    const { inviteCode } = await json<{ inviteCode: string }>(createRes)
+      const q = createQuestion({
+        cooldown: 3,
+      })
+      const quizz = createQuizz([q])
+      const { id: quizzId } = saveQuizz(quizz)
+      const createRes = await request("/games", {
+        method: "POST",
+        token: managerToken,
+        body: {
+          quizzId,
+        },
+      })
+      const { inviteCode } = await json<{
+        inviteCode: string
+      }>(createRes)
 
-    // Request without secret -> 401
-    const noSecretRes = await request("/games/pilot-phone", {
-      method: "POST",
-      body: { action: "join_or_poll", inviteCode, phone: "+972501111111", callId: "sec-01" },
-    })
-    expect(noSecretRes.status).toBe(StatusCodes.UNAUTHORIZED)
+      // Request without secret -> 401
+      const noSecretRes = await request("/games/pilot-phone", {
+        method: "POST",
+        body: {
+          action: "join_or_poll",
+          inviteCode,
+          phone: "+972501111111",
+          callId: "sec-01",
+        },
+      })
+      expect(noSecretRes.status).toBe(StatusCodes.UNAUTHORIZED)
 
-    // Request with wrong secret -> 401
-    const wrongSecretRes = await request("/games/pilot-phone", {
-      method: "POST",
-      headers: { "x-tada-pilot-secret": "wrong" },
-      body: { action: "join_or_poll", inviteCode, phone: "+972501111111", callId: "sec-01" },
-    })
-    expect(wrongSecretRes.status).toBe(StatusCodes.UNAUTHORIZED)
+      // Request with wrong secret -> 401
+      const wrongSecretRes = await request("/games/pilot-phone", {
+        method: "POST",
+        headers: {
+          "x-tada-pilot-secret": "wrong",
+        },
+        body: {
+          action: "join_or_poll",
+          inviteCode,
+          phone: "+972501111111",
+          callId: "sec-01",
+        },
+      })
+      expect(wrongSecretRes.status).toBe(StatusCodes.UNAUTHORIZED)
 
-    // Request with correct secret -> 200
-    const correctSecretRes = await request("/games/pilot-phone", {
-      method: "POST",
-      headers: { "x-tada-pilot-secret": "super-secret-token" },
-      body: { action: "join_or_poll", inviteCode, phone: "+972501111111", callId: "sec-01" },
-    })
-    expect(correctSecretRes.status).toBe(StatusCodes.OK)
+      // Request with correct secret -> 200
+      const correctSecretRes = await request("/games/pilot-phone", {
+        method: "POST",
+        headers: {
+          "x-tada-pilot-secret": "super-secret-token",
+        },
+        body: {
+          action: "join_or_poll",
+          inviteCode,
+          phone: "+972501111111",
+          callId: "sec-01",
+        },
+      })
+      expect(correctSecretRes.status).toBe(StatusCodes.OK)
     } finally {
       delete process.env.TADA_PILOT_SECRET
     }
   })
-
   it("allows telephone participant to revote after Previous Screen reopens question in new epoch", async () => {
     const q1 = createQuestion({
       answers: ["A", "B", "C", "D", "E"],
@@ -407,27 +515,37 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     })
     const quizz = createQuizz([q1])
     const { id: quizzId } = saveQuizz(quizz)
-
     const createRes = await request("/games", {
       method: "POST",
       token: managerToken,
-      body: { quizzId },
+      body: {
+        quizzId,
+      },
     })
-    const { gameId, inviteCode } = await json<{ gameId: string; inviteCode: string }>(createRes)
+    const { gameId, inviteCode } = await json<{
+      gameId: string
+      inviteCode: string
+    }>(createRes)
     const game = Registry.getInstance().getGameById(gameId)!
 
     // Join phone participant
     const joinRes = await request("/games/pilot-phone", {
       method: "POST",
-      body: { action: "join_or_poll", inviteCode, phone: "+972509998888", callId: "call-revote-1" },
+      body: {
+        action: "join_or_poll",
+        inviteCode,
+        phone: "+972509998888",
+        callId: "call-revote-1",
+      },
     })
-    const { rosterPlayerId } = await json<{ rosterPlayerId: string }>(joinRes)
+    const { rosterPlayerId } = await json<{
+      rosterPlayerId: string
+    }>(joinRes)
 
     // Start game
     const manager = createFakeIo().createSocket("manager")
     game.reconnect(manager)
     void game.start(manager)
-
     await vi.advanceTimersByTimeAsync(FIRST_QUESTION_DELAY_MS + 3000)
     expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
     const initialEpoch = game.getCurrentQuestionPstnSupport().epoch
@@ -444,7 +562,10 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         epoch: initialEpoch,
       },
     })
-    const vote1Data = await json<{ ok: boolean; accepted: boolean }>(vote1)
+    const vote1Data = await json<{
+      ok: boolean
+      accepted: boolean
+    }>(vote1)
     expect(vote1Data.accepted).toBe(true)
 
     // Advance to reveal
@@ -463,7 +584,6 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
     await vi.advanceTimersByTimeAsync(NEXT_QUESTION_DELAY_MS + 3000)
     expect(game.roundManager.isCurrentlyAcceptingAnswers).toBe(true)
     expect(game.roundManager.getAnswerCount()).toBe(0)
-
     const newEpoch = game.getCurrentQuestionPstnSupport().epoch
     expect(newEpoch).toBeGreaterThan(initialEpoch)
 
@@ -476,10 +596,15 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         rosterPlayerId,
         callId: "call-revote-1",
         answerIndex: 0,
-        epoch: initialEpoch, // stale!
+        // Stale!
+        epoch: initialEpoch,
       },
     })
-    const staleData = await json<{ ok: boolean; accepted: boolean; reason: string }>(staleVote)
+    const staleData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(staleVote)
     expect(staleData.accepted).toBe(false)
     expect(staleData.reason).toBe("stale_question_epoch")
 
@@ -495,7 +620,10 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         epoch: newEpoch,
       },
     })
-    const revoteData = await json<{ ok: boolean; accepted: boolean }>(revote)
+    const revoteData = await json<{
+      ok: boolean
+      accepted: boolean
+    }>(revote)
     expect(revoteData.accepted).toBe(true)
     expect(game.roundManager.getAnswerCount()).toBe(1)
 
@@ -511,7 +639,11 @@ describe("POST /api/games/pilot-phone (PSTN DTMF 1-5 Acceptance)", () => {
         epoch: newEpoch,
       },
     })
-    const dupData = await json<{ ok: boolean; accepted: boolean; reason: string }>(dupVote)
+    const dupData = await json<{
+      ok: boolean
+      accepted: boolean
+      reason: string
+    }>(dupVote)
     expect(dupData.accepted).toBe(false)
     expect(dupData.reason).toBe("duplicate_answer")
 

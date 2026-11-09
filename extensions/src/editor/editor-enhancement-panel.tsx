@@ -1,4 +1,4 @@
-import {PlatformButton} from "../presentation/platform-controls"
+import { PlatformButton } from "../presentation/platform-controls"
 import type { QuizExtrasV1 } from "@razzia/extensions/core"
 import {
   Eye,
@@ -152,7 +152,8 @@ export const EditorEnhancementPanel = ({
       {/* Navigation Tabs Header */}
       <div className="flex overflow-x-auto border-b border-neutral-200 dark:border-neutral-800">
         {tabs.map(({ id, labelKey, fallback, icon: Icon }) => (
-          <PlatformButton size="sm"
+          <PlatformButton
+            size="sm"
             key={id}
             type="button"
             onClick={() => setActiveTab(id)}

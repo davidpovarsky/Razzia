@@ -112,7 +112,9 @@ export function TadazzSurveyCards({
   }))
   const [reduceMotion, setReduceMotion] = useState(false)
   const [revealEpoch, setRevealEpoch] = useState<string | null>(null)
-  const revealStartRef = useRef<{ epoch: string; startedAt: number } | null>(null)
+  const revealStartRef = useRef<{ epoch: string; startedAt: number } | null>(
+    null,
+  )
   const lastResetEpochRef = useRef<string | null>(null)
 
   useEffect(() => {
@@ -146,7 +148,8 @@ export function TadazzSurveyCards({
 
     if (
       revealStartRef.current?.epoch !== epochKey ||
-      (serverRevealStartedAt && revealStartRef.current.startedAt !== serverRevealStartedAt)
+      (serverRevealStartedAt &&
+        revealStartRef.current.startedAt !== serverRevealStartedAt)
     ) {
       revealStartRef.current = {
         epoch: epochKey,
@@ -154,7 +157,7 @@ export function TadazzSurveyCards({
       }
     }
 
-    const {startedAt} = revealStartRef.current
+    const { startedAt } = revealStartRef.current
     let raf = 0
     let lastTick = -Infinity
     const tick = (now: number) => {
@@ -253,7 +256,9 @@ export function TadazzSurveyCards({
         const animated = slot.preset !== "none" && !reduceMotion
 
         return (
-          <PlatformButton size="sm" classNameContent="contents"
+          <PlatformButton
+            size="sm"
+            classNameContent="contents"
             key={`${epochKey}-card-${index}`}
             type="button"
             data-testid={`tadazz-answer-choice-${index}`}

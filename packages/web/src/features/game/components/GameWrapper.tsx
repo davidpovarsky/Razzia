@@ -66,7 +66,6 @@ import {
 } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
-
 type Props = PropsWithChildren & {
   statusName: Status | undefined
   onNext?: () => void
@@ -74,7 +73,6 @@ type Props = PropsWithChildren & {
   manager?: boolean
   viewRole?: ViewRole
 }
-
 const GameWrapperView = ({
   children,
   statusName,
@@ -83,7 +81,9 @@ const GameWrapperView = ({
   manager,
   viewRole,
   presentationRootRef,
-}: Props & { presentationRootRef: RefObject<HTMLDivElement | null> }) => {
+}: Props & {
+  presentationRootRef: RefObject<HTMLDivElement | null>
+}) => {
   const effectiveRole: ViewRole = manager ? "manager" : (viewRole ?? "player")
   const { isConnected } = useSocket()
   const { player, gameMode } = usePlayerStore()
@@ -101,9 +101,7 @@ const GameWrapperView = ({
     total: number
   } | null>(null)
   const { socket, clientId } = useSocket()
-
   const { extensionState, roomMediaReady } = useGameExtensionConnection(manager)
-
   const theme = useResolvedShowTheme(extensionState, effectiveRole)
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
@@ -115,24 +113,25 @@ const GameWrapperView = ({
   } = useHostPresentation(Boolean(manager && isEnhancedQuiz))
   const isHostPresenting =
     isHostPresentingConfirmed || isHostPresentationPending
-
   useHostPresentationCommands({
     enabled: Boolean(manager && isEnhancedQuiz),
     statusName,
     extensionState,
     currentQuestion: questionStates?.current ?? 0,
     onExit: () => {
-      if (isHostPresenting) exitHostPresentation()
+      if (isHostPresenting) {
+        exitHostPresentation()
+      }
     },
     onAdvanceFallback: onNext,
   })
-
+  /* oxlint-disable react/set-state-in-effect -- Synchronize external server/media/editor state without remounting this surface. */
   useEffect(() => {
     if (isHostPresenting) {
       setPlayersModalOpen(false)
     }
   }, [isHostPresenting])
-
+  /* oxlint-enable react/set-state-in-effect */
   useEffect(() => {
     if (presentationError) {
       toast.error(
@@ -143,19 +142,15 @@ const GameWrapperView = ({
       )
     }
   }, [presentationError, t])
-
   const beginHostPresentation = () => {
     void enterHostPresentation(presentationRootRef.current)
   }
-
   const next = statusName ? MANAGER_SKIP_BTN[statusName] : null
   const isDisabled = skippedStatus !== null && skippedStatus === status
-
   const handleNext = () => {
     setSkippedStatus(status)
     onNext?.()
   }
-
   const renderHeader = () => {
     if (manager && !isEnhancedQuiz) {
       return (
@@ -184,7 +179,9 @@ const GameWrapperView = ({
               <Button
                 className={clsx(
                   "hover:bg-accent relative overflow-hidden bg-white px-4 text-black",
-                  { "pointer-events-none": isDisabled },
+                  {
+                    "pointer-events-none": isDisabled,
+                  },
                 )}
                 onClick={handleNext}
               >
@@ -230,18 +227,15 @@ const GameWrapperView = ({
       </div>
     )
   }
-
   useEvent(EVENTS.GAME.UPDATE_QUESTION, ({ current, total }) => {
     setQuestionStates({
       current,
       total,
     })
   })
-
   useEvent(EVENTS.GAME.TOTAL_PLAYERS, (total) => {
     setTotalPlayers(total)
   })
-
   useEvent(EVENTS.MANAGER.AUTO_ADVANCE, (state) => {
     setCountdown((current) => {
       if (state === null) {
@@ -251,15 +245,12 @@ const GameWrapperView = ({
       return current ?? state
     })
   })
-
   useEvent(EVENTS.GAME.ERROR_MESSAGE, (message) => {
     toast.error(t(message))
     console.log(t(message))
     setSkippedStatus(null)
   })
-
   const defaultExit = () => undefined
-
   const {
     currentSceneObj,
     effectiveBackground,
@@ -281,7 +272,6 @@ const GameWrapperView = ({
     status,
     questionStates,
   })
-
   const renderStageContent = () => (
     <ExtensionStateProvider value={extensionState}>
       <ViewRoleContext.Provider value={effectiveRole}>
@@ -298,7 +288,9 @@ const GameWrapperView = ({
           scenePresenterLabels={createScenePresenterLabels(t)}
           interludeLabels={{
             secondsRemaining: (seconds) =>
-              t("extensions:interludes.secondsRemaining", { seconds }),
+              t("extensions:interludes.secondsRemaining", {
+                seconds,
+              }),
             awaitingHost: t("extensions:interludes.awaitingHost"),
             skipInterlude: t("extensions:interludes.skipInterlude"),
             skipped: t("extensions:interludes.skipped"),
@@ -320,7 +312,11 @@ const GameWrapperView = ({
   // legacy background/state components are never mounted, not even for a frame.
   // Operator controls and participant interaction stay in native responsive Razzia.
   // The 16:9 composition belongs to the public display / explicit host projection.
-  const cinematicSurface = effectiveRole === "spectator" || isHostPresenting || Boolean(theme.definition.runtime)
+  const cinematicSurface =
+    effectiveRole === "spectator" ||
+    isHostPresenting ||
+    Boolean(theme.definition.runtime)
+
   if (cinematicSurface && isTadazzShowActive(extensionState)) {
     return (
       <ShowThemeRenderer
@@ -378,7 +374,7 @@ const GameWrapperView = ({
               <p
                 role="status"
                 data-testid="show-theme-warning"
-                className="relative z-50 rounded-lg bg-white px-3 py-2 text-sm text-foreground"
+                className="text-foreground relative z-50 rounded-lg bg-white px-3 py-2 text-sm"
               >
                 {t("extensions:themes.invalidChoice")}
               </p>
@@ -424,99 +420,110 @@ const GameWrapperView = ({
               hasCompetingMediaAudio={hasCompetingMediaAudio}
             />
 
-            {manager ? (
-              isHostPresenting ? null : (
-                <div
-                  className={clsx(
-                    "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
-                    {
-                      "absolute inset-x-0 bottom-0":
-                        statusName === STATUS.FINISHED,
-                    },
-                  )}
-                >
-                  {inviteCode && statusName !== STATUS.SHOW_ROOM && (
-                    <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
-                      {!locked && (
-                        <>
-                          <span className="max-w-[120px] truncate sm:max-w-none">
-                            {window.location.host}
-                          </span>
-                          <span className="h-4 w-px bg-white/40 sm:h-5" />
-                          <span>{inviteCode}</span>
-                        </>
-                      )}
-                      <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
-                    </div>
-                  )}
+            {(() => {
+              if (manager) {
+                if (isHostPresenting) {
+                  return null
+                }
 
-                  <HostPresenceButton
-                    hostPresence={hostPresence}
-                    players={players}
-                    totalPlayers={totalPlayers}
-                    isConnected={isConnected}
-                    onClick={() => setPlayersModalOpen(true)}
-                  />
-
-                  <GameSettingsModal
-                    onOpenRoster={() => setPlayersModalOpen(true)}
-                  />
-
-                  <HostPlayersModal
-                    open={playersModalOpen}
-                    onOpenChange={setPlayersModalOpen}
-                  />
-
-                  <Tooltip
-                    content={t(
-                      isFullscreen
-                        ? "common:exitFullscreen"
-                        : "common:fullscreen",
+                return (
+                  <div
+                    className={clsx(
+                      "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
+                      {
+                        "absolute inset-x-0 bottom-0":
+                          statusName === STATUS.FINISHED,
+                      },
                     )}
                   >
-                    <button
-                      onClick={toggleFullscreen}
-                      aria-label={t(
+                    {inviteCode && statusName !== STATUS.SHOW_ROOM && (
+                      <div className="flex shrink-0 items-center gap-2 rounded-lg bg-black/40 px-2.5 py-1 text-sm font-bold text-white drop-shadow-md sm:gap-3 sm:px-3 sm:py-1.5 sm:text-base md:text-xl">
+                        {!locked && (
+                          <>
+                            <span className="max-w-[120px] truncate sm:max-w-none">
+                              {window.location.host}
+                            </span>
+                            <span className="h-4 w-px bg-white/40 sm:h-5" />
+                            <span>{inviteCode}</span>
+                          </>
+                        )}
+                        <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                      </div>
+                    )}
+
+                    <HostPresenceButton
+                      hostPresence={hostPresence}
+                      players={players}
+                      totalPlayers={totalPlayers}
+                      isConnected={isConnected}
+                      onClick={() => setPlayersModalOpen(true)}
+                    />
+
+                    <GameSettingsModal
+                      onOpenRoster={() => setPlayersModalOpen(true)}
+                    />
+
+                    <HostPlayersModal
+                      open={playersModalOpen}
+                      onOpenChange={setPlayersModalOpen}
+                    />
+
+                    <Tooltip
+                      content={t(
                         isFullscreen
                           ? "common:exitFullscreen"
                           : "common:fullscreen",
                       )}
-                      className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
                     >
-                      {isFullscreen ? (
-                        <Minimize className="size-5" />
-                      ) : (
-                        <Maximize className="size-5" />
-                      )}
-                    </button>
-                  </Tooltip>
+                      <button
+                        onClick={toggleFullscreen}
+                        aria-label={t(
+                          isFullscreen
+                            ? "common:exitFullscreen"
+                            : "common:fullscreen",
+                        )}
+                        className="flex items-center justify-center rounded-lg bg-black/40 px-2.5 text-white drop-shadow-md hover:bg-black/60"
+                      >
+                        {isFullscreen ? (
+                          <Minimize className="size-5" />
+                        ) : (
+                          <Maximize className="size-5" />
+                        )}
+                      </button>
+                    </Tooltip>
+                  </div>
+                )
+              }
+
+              if (effectiveRole === "spectator") {
+                return null
+              }
+
+              return (
+                <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
+                  <div className="flex items-center gap-2">
+                    <p className="text-gray-800">{player?.username}</p>
+                    <PlayerTeamBadge
+                      extensionState={extensionState}
+                      clientId={clientId}
+                      player={player}
+                    />
+                  </div>
+                  {(gameMode !== QUIZZ_MODES.SURVEY ||
+                    (player?.points !== undefined && player.points > 0)) && (
+                    <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
+                      {player?.points}
+                    </div>
+                  )}
                 </div>
               )
-            ) : effectiveRole === "spectator" ? null : (
-              <div className="z-50 flex items-center justify-between bg-white px-4 py-2 text-lg font-bold text-white">
-                <div className="flex items-center gap-2">
-                  <p className="text-gray-800">{player?.username}</p>
-                  <PlayerTeamBadge
-                    extensionState={extensionState}
-                    clientId={clientId}
-                    player={player}
-                  />
-                </div>
-                {(gameMode !== QUIZZ_MODES.SURVEY ||
-                  (player?.points !== undefined && player.points > 0)) && (
-                  <div className="rounded-lg bg-gray-800 px-3 py-1 text-lg">
-                    {player?.points}
-                  </div>
-                )}
-              </div>
-            )}
+            })()}
           </>
         )}
       </div>
     </NativeGameFrame>
   )
 }
-
 const GameWrapper = (props: Props) => {
   const presentationRootRef = useRef<HTMLDivElement | null>(null)
   const managerGameId = useManagerStore((state) => state.gameId)

@@ -9,13 +9,19 @@ export class PresentationLaunch {
 
   /** Only the host's explicit advance begins or skips the opening. */
   advance(): boolean {
-    if (this.stage === "lobby") return false
+    if (this.stage === "lobby") {
+      return false
+    }
+
     if (this.stage === "standby") {
       this.stage = "opening"
       this.startedAt = Date.now()
       this.timer = setTimeout(() => this.finish(), 10200)
       this.onChange()
-    } else this.finish()
+    } else {
+      this.finish()
+    }
+
     return true
   }
 
@@ -33,7 +39,10 @@ export class PresentationLaunch {
   }
 
   dispose() {
-    if (this.timer) clearTimeout(this.timer)
+    if (this.timer) {
+      clearTimeout(this.timer)
+    }
+
     this.timer = null
   }
 }

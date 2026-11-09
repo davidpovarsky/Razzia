@@ -45,60 +45,99 @@ const commonCookie = {
 
 export const accounts = new Hono()
   .use("*", async (c, next) => {
-    if (!accountsEnabled()) return c.json({ error: "accounts-disabled" }, 404)
+    if (!accountsEnabled()) {
+      return c.json({ error: "accounts-disabled" }, 404)
+    }
+
     checkAccountConfiguration()
     await next()
   })
   .post("/register", zValidator("json", credentials), async (c) => {
-    if (!limitAction("registration:global", 1000, 86400000))
+    if (!limitAction("registration:global", 1000, 86400000)) {
       return c.json({ error: "too-many-requests" }, 429)
+    }
+
     const { email, password } = c.req.valid("json")
     const user = await registerAccount(email, password)
-    if (!user.verified) await sendAccountMail(user, "verify")
+
+    if (!user.verified) {
+      await sendAccountMail(user, "verify")
+    }
+
     return c.json({ status: "check_email" }, 202)
   })
   .post("/verify", zValidator("json", verifyBody), async (c) => {
     const { email, code, password } = c.req.valid("json")
-    if (!limitAction("verify:" + email, 40, 3600000))
+
+    if (!limitAction(`verify:${email}`, 40, 3600000)) {
       return c.json({ error: "too-many-requests" }, 429)
-    if (!(await verifyRegistrationPassword(email, password)))
+    }
+
+    if (!(await verifyRegistrationPassword(email, password))) {
       return c.json({ error: "invalid-credentials" }, 400)
+    }
+
     const user = consumeCode(email, "verify", code)
-    if (!user) return c.json({ error: "invalid-or-expired-code" }, 400)
+
+    if (!user) {
+      return c.json({ error: "invalid-or-expired-code" }, 400)
+    }
+
     ensureAccountStorage(user.id)
+
     return c.json({ status: "verified" })
   })
   .post("/resend", zValidator("json", emailOnly), async (c) => {
     const { email } = c.req.valid("json")
     const user = accountForEmail(email)
-    if (user && !user.verified) await sendAccountMail(user, "verify")
+
+    if (user && !user.verified) {
+      await sendAccountMail(user, "verify")
+    }
+
     return c.json({ status: "check_email" }, 202)
   })
   .post("/login", zValidator("json", credentials), async (c) => {
-    if (!limitAction("login:global", 10000, 3600000))
+    if (!limitAction("login:global", 10000, 3600000)) {
       return c.json({ error: "too-many-requests" }, 429)
+    }
+
     const { email, password } = c.req.valid("json")
     const user = await authenticate(email, password)
-    if (!user) return c.json({ error: "invalid-credentials" }, 401)
+
+    if (!user) {
+      return c.json({ error: "invalid-credentials" }, 401)
+    }
+
     const session = await mintToken(user.id, SESSION_ROLES.MANAGER)
     setCookie(c, "tdz_media_auth", session.token, {
       ...commonCookie,
       maxAge: 12 * 60 * 60,
     })
+
     return c.json({ ...session, email: user.email })
   })
   .post("/forgot", zValidator("json", emailOnly), async (c) => {
     await requestAccountReset(c.req.valid("json").email)
+
     return c.json({ status: "check_email" }, 202)
   })
   .post("/reset", zValidator("json", passwordReset), async (c) => {
     const { email, code, password } = c.req.valid("json")
     const ok = await resetPassword(email, code, password)
-    if (!ok) return c.json({ error: "invalid-or-expired-code" }, 400)
+
+    if (!ok) {
+      return c.json({ error: "invalid-or-expired-code" }, 400)
+    }
+
     return c.json({ status: "password_updated" })
   })
   .get("/me", requireManager, (c) => {
     const account = getAccount(c.get("claims").sub)
-    if (!account) return c.json({ error: "unauthorized" }, 401)
+
+    if (!account) {
+      return c.json({ error: "unauthorized" }, 401)
+    }
+
     return c.json(account)
   })

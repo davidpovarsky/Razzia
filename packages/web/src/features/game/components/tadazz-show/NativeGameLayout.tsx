@@ -32,10 +32,12 @@ export function NativeGameFrame({
   useEffect(() => {
     const previous = document.body.style.touchAction
     document.body.style.touchAction = "pan-y"
+
     return () => {
       document.body.style.touchAction = previous
     }
   }, [])
+
   return (
     <ShowThemeScope theme={theme}>
       <section
@@ -58,14 +60,20 @@ export function NativeGameFrame({
             ? "true"
             : "false"
         }
-        data-show-scene={
-          statusName === STATUS.SELECT_ANSWER
-            ? "voting"
-            : statusName === STATUS.SHOW_RESPONSES ||
-                statusName === STATUS.SHOW_RESULT
-              ? "results"
-              : (extensionState?.phase ?? "lobby")
-        }
+        data-show-scene={(() => {
+          if (statusName === STATUS.SELECT_ANSWER) {
+            return "voting"
+          }
+
+          if (
+            statusName === STATUS.SHOW_RESPONSES ||
+            statusName === STATUS.SHOW_RESULT
+          ) {
+            return "results"
+          }
+
+          return extensionState?.phase ?? "lobby"
+        })()}
       >
         {children}
       </section>

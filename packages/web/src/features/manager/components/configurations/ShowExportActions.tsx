@@ -17,8 +17,9 @@ export function ShowExportActions({
   return (
     <>
       {" "}
-      <NativeButton size="sm"
-        className="bg-transparent text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
+      <NativeButton
+        size="sm"
+        className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm bg-transparent p-2 focus:ring-2 focus:outline-none"
         onClick={() => handleExportEnhanced(q.id)()}
         title={t("extensions:bundle.exportEnhanced")}
         aria-label={t("extensions:bundle.exportEnhanced")}
@@ -26,8 +27,9 @@ export function ShowExportActions({
       >
         <Sparkles className="size-4 text-amber-500" />
       </NativeButton>
-      <NativeButton size="sm"
-        className="bg-transparent text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
+      <NativeButton
+        size="sm"
+        className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm bg-transparent p-2 focus:ring-2 focus:outline-none"
         onClick={() => handleExportXlsx(q.id, q.subject)()}
         title={t("extensions:showImport.exportTadaXlsx")}
         aria-label={t("extensions:showImport.exportTadaXlsx")}
@@ -35,8 +37,9 @@ export function ShowExportActions({
       >
         <FileSpreadsheet className="size-4 text-emerald-600 dark:text-emerald-400" />
       </NativeButton>
-      <NativeButton size="sm"
-        className="bg-transparent text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm p-2 focus:ring-2 focus:outline-none"
+      <NativeButton
+        size="sm"
+        className="text-accent-foreground hover:bg-accent-foreground/10 focus:ring-primary rounded-sm bg-transparent p-2 focus:ring-2 focus:outline-none"
         onClick={() => handleExportTadaJson(q.id, q.subject)()}
         title={t("extensions:showImport.exportTadaJson")}
         aria-label={t("extensions:showImport.exportTadaJson")}

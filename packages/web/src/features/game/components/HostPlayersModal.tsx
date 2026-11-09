@@ -357,7 +357,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 className="hidden"
                 data-testid="host-modal-file-input"
               />
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 type="button"
                 onClick={() => fileInputRef.current?.click()}
                 className="border-primary/40 bg-primary/10 text-primary hover:bg-primary/20 flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs font-bold"
@@ -367,7 +368,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 {t("extensions:roster.importExcelCsv", "Import Excel / CSV")}
               </NativeButton>
 
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 type="button"
                 onClick={() =>
                   triggerFileDownload(
@@ -386,7 +388,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 )}
               </NativeButton>
 
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 type="button"
                 onClick={() =>
                   triggerFileDownload(
@@ -403,7 +406,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               </NativeButton>
 
               {snapshot.players.length > 0 && (
-                <NativeButton size="sm"
+                <NativeButton
+                  size="sm"
                   type="button"
                   onClick={() =>
                     triggerFileDownload(
@@ -511,7 +515,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   total)
                 </div>
                 <div className="flex items-center gap-2">
-                  <NativeButton size="sm"
+                  <NativeButton
+                    size="sm"
                     type="button"
                     onClick={() => setImportPreview(null)}
                     className="border-border rounded border px-2.5 py-1 text-xs font-semibold"
@@ -520,7 +525,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                     {t("extensions:roster.cancelImport", "Cancel Import")}
                   </NativeButton>
                   {importPreview.ok && importPreview.validCount > 0 && (
-                    <NativeButton size="sm"
+                    <NativeButton
+                      size="sm"
                       type="button"
                       onClick={handleApproveImport}
                       className="bg-primary rounded px-3 py-1 text-xs font-bold text-white"
@@ -604,7 +610,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               className="border-border bg-background text-foreground min-w-48 flex-1 rounded-lg border px-3 py-1.5 font-mono text-xs"
               data-testid="host-modal-phone-input"
             />
-            <NativeButton size="sm"
+            <NativeButton
+              size="sm"
               type="button"
               disabled={isBusy}
               onClick={handleSaveParticipant}
@@ -617,7 +624,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 : t("extensions:roster.addParticipant", "Add Participant")}
             </NativeButton>
             {editingId && (
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 type="button"
                 onClick={() => {
                   setEditingId(null)
@@ -661,7 +669,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   ["web", t("extensions:roster.filterWeb", "Web")],
                 ] as Array<[FilterTab, string]>
               ).map(([tabId, label]) => (
-                <NativeButton size="sm"
+                <NativeButton
+                  size="sm"
                   key={tabId}
                   type="button"
                   onClick={() => setFilterTab(tabId)}
@@ -818,7 +827,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                       </td>
                       <td className="px-3 py-2 text-right">
                         <div className="inline-flex items-center gap-1">
-                          <NativeButton size="sm"
+                          <NativeButton
+                            size="sm"
                             type="button"
                             onClick={() => handleEdit(p)}
                             className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
@@ -830,7 +840,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                           >
                             <Edit2 className="size-3.5" />
                           </NativeButton>
-                          <NativeButton size="sm"
+                          <NativeButton
+                            size="sm"
                             type="button"
                             onClick={() => handleRemove(p.rosterPlayerId)}
                             className="hover:bg-accent rounded p-1 text-red-500 hover:text-red-700"

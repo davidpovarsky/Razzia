@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { PlatformButton } from "./platform-controls"
 import type { TeamDefinition } from "@razzia/extensions/core"
 import { useState } from "react"
@@ -123,7 +124,6 @@ export const LobbyTeamAssignment = ({
     setSelectedPlayerId(null)
   }
 
-
   return (
     <div
       className={clsx(
@@ -162,17 +162,24 @@ export const LobbyTeamAssignment = ({
               )}
               data-testid={`lobby-team-card-${team.id}`}
             >
-              {isTargetable && <PlatformButton type="button" size="sm" className="absolute inset-0 size-full border-0 bg-transparent p-0 hover:bg-white/10" data-testid={`lobby-team-target-${team.id}`} onClick={()=>handleAssignToTeam(team.id)}
-              aria-label={
-                isTargetable
-                  ? tr(
-                      "teams.assignToTeam",
-                      { teamName: team.name },
-                      `Assign selected player to ${team.name}`,
-                    )
-                  : undefined
-              }
-              />}
+              {isTargetable && (
+                <PlatformButton
+                  type="button"
+                  size="sm"
+                  className="absolute inset-0 size-full border-0 bg-transparent p-0 hover:bg-white/10"
+                  data-testid={`lobby-team-target-${team.id}`}
+                  onClick={() => handleAssignToTeam(team.id)}
+                  aria-label={
+                    isTargetable
+                      ? tr(
+                          "teams.assignToTeam",
+                          { teamName: team.name },
+                          `Assign selected player to ${team.name}`,
+                        )
+                      : undefined
+                  }
+                />
+              )}
               <div className="pointer-events-none relative flex items-center justify-between">
                 <div className="flex items-center gap-2">
                   <span
@@ -195,7 +202,8 @@ export const LobbyTeamAssignment = ({
                   const isSelected = selectedPlayerId === member.id
 
                   return (
-                    <PlatformButton size="sm"
+                    <PlatformButton
+                      size="sm"
                       key={member.id}
                       type="button"
                       disabled={!isManager || isLocked}
@@ -205,7 +213,7 @@ export const LobbyTeamAssignment = ({
                         handlePlayerClick(member.id)
                       }}
                       className={clsx(
-                        "pointer-events-auto disabled:opacity-100 focus:ring-primary rounded-md px-2.5 py-1 text-sm font-semibold text-white transition-all focus:ring-2 focus:outline-none",
+                        "focus:ring-primary pointer-events-auto rounded-md px-2.5 py-1 text-sm font-semibold text-white transition-all focus:ring-2 focus:outline-none disabled:opacity-100",
                         isSelected
                           ? "bg-primary font-bold text-white ring-2 ring-white"
                           : "bg-black/30 hover:bg-black/50",
@@ -240,7 +248,8 @@ export const LobbyTeamAssignment = ({
               const isSelected = selectedPlayerId === player.id
 
               return (
-                <PlatformButton size="sm"
+                <PlatformButton
+                  size="sm"
                   key={player.id}
                   type="button"
                   disabled={!isManager || isLocked}

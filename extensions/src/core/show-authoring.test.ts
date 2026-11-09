@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import type { QuizExtrasV2 } from "./index"
 import { describe, expect, it } from "vitest"
 import {
   authoredShowToNativeBundleDraft,
@@ -7,8 +9,12 @@ import {
   isTadaShowV1,
   tadaShowV1Schema,
   type TadaShowV1,
+  type AuthoredQuizCard,
+  type AuthoredSurveyCard,
+  type AuthoredOpeningCard,
+  type AuthoredMediaCard,
+  type AuthoredClosingCard,
 } from "./show-authoring-schema"
-
 describe("Show Authoring Schema & Converters", () => {
   const minimalValidShow: TadaShowV1 = {
     format: "tada-show",
@@ -22,8 +28,14 @@ describe("Show Authoring Schema & Converters", () => {
         questionType: "single",
         question: "What is 2 + 2?",
         answers: [
-          { text: "3", display: "text" },
-          { text: "4", display: "text" },
+          {
+            text: "3",
+            display: "text",
+          },
+          {
+            text: "4",
+            display: "text",
+          },
         ],
         correctAnswers: [2],
         timeSeconds: 20,
@@ -34,23 +46,25 @@ describe("Show Authoring Schema & Converters", () => {
     ],
     settings: [],
   }
-
   it("validates minimal friendly show schema", () => {
     expect(isTadaShowV1(minimalValidShow)).toBe(true)
     const parsed = tadaShowV1Schema.safeParse(minimalValidShow)
     expect(parsed.success).toBe(true)
   })
-
   it("rejects show with duplicate card keys", () => {
     const invalidShow = {
       ...minimalValidShow,
       cards: [
         minimalValidShow.cards[0],
-        { ...minimalValidShow.cards[0], question: "Another question" },
+        {
+          ...minimalValidShow.cards[0],
+          question: "Another question",
+        },
       ],
     }
     const result = tadaShowV1Schema.safeParse(invalidShow)
     expect(result.success).toBe(false)
+
     if (!result.success) {
       expect(
         result.error.issues.some((i) =>
@@ -59,7 +73,6 @@ describe("Show Authoring Schema & Converters", () => {
       ).toBe(true)
     }
   })
-
   it("rejects show with no question cards", () => {
     const sceneOnlyShow = {
       format: "tada-show",
@@ -78,19 +91,20 @@ describe("Show Authoring Schema & Converters", () => {
     const result = tadaShowV1Schema.safeParse(sceneOnlyShow)
     expect(result.success).toBe(false)
   })
-
   it("rejects quiz card with out-of-bounds correct answer", () => {
     const invalidAnsShow = {
       ...minimalValidShow,
       cards: [
         {
           ...minimalValidShow.cards[0],
-          correctAnswers: [5], // only 2 answers!
+          // Only 2 answers!
+          correctAnswers: [5],
         },
       ],
     }
     const result = tadaShowV1Schema.safeParse(invalidAnsShow)
     expect(result.success).toBe(false)
+
     if (!result.success) {
       expect(
         result.error.issues.some((i) =>
@@ -99,7 +113,6 @@ describe("Show Authoring Schema & Converters", () => {
       ).toBe(true)
     }
   })
-
   it("rejects image answer missing required alt text", () => {
     const missingAltShow = {
       ...minimalValidShow,
@@ -111,15 +124,20 @@ describe("Show Authoring Schema & Converters", () => {
               text: "Paris",
               display: "image",
               imageUrl: "https://example.com/paris.jpg",
-              alt: "", // empty alt
+              // Empty alt
+              alt: "",
             },
-            { text: "London", display: "text" },
+            {
+              text: "London",
+              display: "text",
+            },
           ],
         },
       ],
     }
     const result = tadaShowV1Schema.safeParse(missingAltShow)
     expect(result.success).toBe(false)
+
     if (!result.success) {
       expect(
         result.error.issues.some((i) =>
@@ -128,7 +146,6 @@ describe("Show Authoring Schema & Converters", () => {
       ).toBe(true)
     }
   })
-
   it("rejects unsafe media URLs", () => {
     const unsafeUrlShow = {
       ...minimalValidShow,
@@ -142,20 +159,23 @@ describe("Show Authoring Schema & Converters", () => {
               imageUrl: "javascript:alert(1)",
               alt: "Malicious",
             },
-            { text: "Safe", display: "text" },
+            {
+              text: "Safe",
+              display: "text",
+            },
           ],
         },
       ],
     }
     const result = tadaShowV1Schema.safeParse(unsafeUrlShow)
     expect(result.success).toBe(false)
+
     if (!result.success) {
       expect(
         result.error.issues.some((i) => i.message.includes("invalidMediaUrl")),
       ).toBe(true)
     }
   })
-
   it("converts complete 10-kind show and preserves exact chronological order and 0-based solution mapping", () => {
     const fullShow: TadaShowV1 = {
       format: "tada-show",
@@ -189,11 +209,23 @@ describe("Show Authoring Schema & Converters", () => {
           questionType: "single",
           question: "Capital of France?",
           answers: [
-            { text: "Paris", display: "both", imageUrl: "https://example.com/paris.png", alt: "Eiffel tower" },
-            { text: "London", display: "text" },
-            { text: "Berlin", display: "text" },
+            {
+              text: "Paris",
+              display: "both",
+              imageUrl: "https://example.com/paris.png",
+              alt: "Eiffel tower",
+            },
+            {
+              text: "London",
+              display: "text",
+            },
+            {
+              text: "Berlin",
+              display: "text",
+            },
           ],
-          correctAnswers: [1], // 1-based answer 1 -> 0-based solution 0
+          // 1-based answer 1 -> 0-based solution 0
+          correctAnswers: [1],
           timeSeconds: 20,
           cooldownSeconds: 3,
           maxPoints: 1000,
@@ -230,9 +262,15 @@ describe("Show Authoring Schema & Converters", () => {
           questionType: "single",
           question: "How do you feel?",
           answers: [
-            { text: "Great" },
-            { text: "Good" },
-            { text: "Okay" },
+            {
+              text: "Great",
+            },
+            {
+              text: "Good",
+            },
+            {
+              text: "Okay",
+            },
           ],
           timeSeconds: 15,
           cooldownSeconds: 3,
@@ -264,24 +302,22 @@ describe("Show Authoring Schema & Converters", () => {
       ],
       settings: [],
     }
-
     const conversion = authoredShowToNativeBundleDraft(fullShow)
     expect(conversion.ok).toBe(true)
     expect(conversion.bundleDraft).toBeDefined()
-
     const { quizz, extras } = conversion.bundleDraft!
-
     expect(quizz.subject).toBe("Complete 10-Kind Show")
     expect(quizz.questions.length).toBe(2)
 
     // Check Question 1 (Quiz)
-    const q1 = quizz.questions[0]
+    const { 0: q1 } = quizz.questions
     expect(q1.question).toBe("Capital of France?")
     expect(q1.playMode).toBe("quiz")
-    expect(q1.solutions).toEqual([0]) // 1-based answer 1 converted to 0-based solution 0
+    // 1-based answer 1 converted to 0-based solution 0
+    expect(q1.solutions).toEqual([0])
 
     // Check Question 2 (Survey)
-    const q2 = quizz.questions[1]
+    const { 1: q2 } = quizz.questions
     expect(q2.question).toBe("How do you feel?")
     expect(q2.playMode).toBe("survey")
     expect(q2.solutions).toBeUndefined()
@@ -293,7 +329,6 @@ describe("Show Authoring Schema & Converters", () => {
         ? quizz.questions[extras.questionIds.indexOf(item.questionId)].playMode
         : item.kind,
     )
-
     expect(timelineKinds).toEqual([
       "opening",
       "countdown",
@@ -308,7 +343,7 @@ describe("Show Authoring Schema & Converters", () => {
     ])
 
     // Check Answer Visuals in perQuestion
-    const q1Id = extras.questionIds[0]
+    const { 0: q1Id } = extras.questionIds
     expect(extras.perQuestion[q1Id]).toBeDefined()
     expect(extras.perQuestion[q1Id].answerVisuals).toEqual([
       {
@@ -320,7 +355,10 @@ describe("Show Authoring Schema & Converters", () => {
     ])
 
     // Check Roundtrip: nativeBundleToAuthoredShow
-    const backToAuthored = nativeBundleToAuthoredShow({ quizz, extras })
+    const backToAuthored = nativeBundleToAuthoredShow({
+      quizz,
+      extras,
+    })
     expect(backToAuthored.format).toBe("tada-show")
     expect(backToAuthored.version).toBe(1)
     expect(backToAuthored.title).toBe("Complete 10-Kind Show")
@@ -337,14 +375,14 @@ describe("Show Authoring Schema & Converters", () => {
       "leaderboard",
       "closing",
     ])
-
-    const roundtripQ1 = backToAuthored.cards[2] as any
+    const roundtripQ1 = backToAuthored.cards[2] as AuthoredQuizCard
     expect(roundtripQ1.correctAnswers).toEqual([1])
     expect(roundtripQ1.answers[0].display).toBe("both")
-    expect(roundtripQ1.answers[0].imageUrl).toBe("https://example.com/paris.png")
+    expect(roundtripQ1.answers[0].imageUrl).toBe(
+      "https://example.com/paris.png",
+    )
     expect(roundtripQ1.answers[0].alt).toBe("Eiffel tower")
   })
-
   it("losslessly roundtrips audio cues including non-default volume (0.37)", () => {
     const showWithAudio: TadaShowV1 = {
       format: "tada-show",
@@ -356,7 +394,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Test Question?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
       ],
@@ -377,25 +422,24 @@ describe("Show Authoring Schema & Converters", () => {
         },
       ],
     }
-
     const conversion = authoredShowToNativeBundleDraft(showWithAudio)
     expect(conversion.ok).toBe(true)
     expect(conversion.bundleDraft?.extras.audio?.cues?.start.volume).toBe(0.37)
     expect(conversion.bundleDraft?.extras.audio?.cues?.start.url).toBe(
       "https://example.com/start.mp3",
     )
-
     const backToAuthored = nativeBundleToAuthoredShow(conversion.bundleDraft!)
     const audioSetting = backToAuthored.settings?.find(
       (s) => s.scope === "audio" && s.property === "cues",
     )
     expect(audioSetting).toBeDefined()
-    expect((audioSetting?.valueJson as any)?.start?.volume).toBe(0.37)
-    expect((audioSetting?.valueJson as any)?.start?.url).toBe(
-      "https://example.com/start.mp3",
-    )
+    expect(
+      (audioSetting?.valueJson as QuizExtrasV2["audio"]["cues"])?.start?.volume,
+    ).toBe(0.37)
+    expect(
+      (audioSetting?.valueJson as QuizExtrasV2["audio"]["cues"])?.start?.url,
+    ).toBe("https://example.com/start.mp3")
   })
-
   it("losslessly preserves teams configuration even when enabled is false", () => {
     const showWithTeams: TadaShowV1 = {
       format: "tada-show",
@@ -407,7 +451,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Test Question?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
       ],
@@ -420,28 +471,37 @@ describe("Show Authoring Schema & Converters", () => {
             enabled: false,
             autoAssign: "roundRobin",
             teams: [
-              { id: "t1", name: "Red Team", color: "#FF0000" },
-              { id: "t2", name: "Blue Team", color: "#0000FF" },
+              {
+                id: "t1",
+                name: "Red Team",
+                color: "#FF0000",
+              },
+              {
+                id: "t2",
+                name: "Blue Team",
+                color: "#0000FF",
+              },
             ],
           },
         },
       ],
     }
-
     const conversion = authoredShowToNativeBundleDraft(showWithTeams)
     expect(conversion.ok).toBe(true)
     expect(conversion.bundleDraft?.extras.teams?.enabled).toBe(false)
     expect(conversion.bundleDraft?.extras.teams?.teams).toHaveLength(2)
-
     const backToAuthored = nativeBundleToAuthoredShow(conversion.bundleDraft!)
     const teamSetting = backToAuthored.settings?.find(
       (s) => s.scope === "team" && s.property === "config",
     )
     expect(teamSetting).toBeDefined()
-    expect((teamSetting?.valueJson as any)?.enabled).toBe(false)
-    expect((teamSetting?.valueJson as any)?.teams).toHaveLength(2)
+    expect((teamSetting?.valueJson as QuizExtrasV2["teams"])?.enabled).toBe(
+      false,
+    )
+    expect(
+      (teamSetting?.valueJson as QuizExtrasV2["teams"])?.teams,
+    ).toHaveLength(2)
   })
-
   it("bidirectionally remaps leaderboard afterQuestionIds between card keys and native UUIDs", () => {
     const showWithLeaderboard: TadaShowV1 = {
       format: "tada-show",
@@ -453,7 +513,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Question 1?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
         {
@@ -461,7 +528,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Question 2?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [2],
         },
       ],
@@ -474,7 +548,6 @@ describe("Show Authoring Schema & Converters", () => {
         },
       ],
     }
-
     const conversion = authoredShowToNativeBundleDraft(showWithLeaderboard)
     expect(conversion.ok).toBe(true)
     const { extras } = conversion.bundleDraft!
@@ -490,7 +563,6 @@ describe("Show Authoring Schema & Converters", () => {
     )
     expect(lbSetting?.valueJson).toEqual(["Q01", "Q02"])
   })
-
   it("strictly rejects unknown setting scopes and properties during preflight validation", () => {
     const unknownScopeShow = {
       format: "tada-show",
@@ -502,7 +574,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Question?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
       ],
@@ -515,9 +594,9 @@ describe("Show Authoring Schema & Converters", () => {
         },
       ],
     }
-
     const parseResult = tadaShowV1Schema.safeParse(unknownScopeShow)
     expect(parseResult.success).toBe(false)
+
     if (!parseResult.success) {
       expect(
         parseResult.error.issues.some((i) =>
@@ -539,6 +618,7 @@ describe("Show Authoring Schema & Converters", () => {
     }
     const parseResult2 = tadaShowV1Schema.safeParse(unknownPropShow)
     expect(parseResult2.success).toBe(false)
+
     if (!parseResult2.success) {
       expect(
         parseResult2.error.issues.some((i) =>
@@ -549,7 +629,6 @@ describe("Show Authoring Schema & Converters", () => {
       ).toBe(true)
     }
   })
-
   it("strictly rejects non-empty extraJson on authored cards", () => {
     const showWithExtraJson = {
       format: "tada-show",
@@ -561,15 +640,24 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Question?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
-          extraJson: { untypedPayload: 123 },
+          extraJson: {
+            untypedPayload: 123,
+          },
         },
       ],
     }
-
     const parseResult = tadaShowV1Schema.safeParse(showWithExtraJson)
     expect(parseResult.success).toBe(false)
+
     if (!parseResult.success) {
       expect(
         parseResult.error.issues.some((i) =>
@@ -578,7 +666,6 @@ describe("Show Authoring Schema & Converters", () => {
       ).toBe(true)
     }
   })
-
   it("strips private roster PII by default during shareable export", () => {
     const bundleWithRoster = {
       quizz: {
@@ -612,35 +699,67 @@ describe("Show Authoring Schema & Converters", () => {
         roster: {
           enabled: true,
           participants: [
-            { id: "p1", name: "Alice Secret", phone: "+1234567890" },
+            {
+              id: "p1",
+              name: "Alice Secret",
+              phone: "+1234567890",
+            },
           ],
         },
       },
     }
 
     // Default export: shareable mode -> roster PII stripped
-    const shareableShow = nativeBundleToAuthoredShow(bundleWithRoster as any)
+    const shareableShow = nativeBundleToAuthoredShow(
+      bundleWithRoster as unknown as Parameters<
+        typeof nativeBundleToAuthoredShow
+      >[0],
+    )
     const shareableRosterSetting = shareableShow.settings?.find(
       (s) => s.scope === "roster" && s.property === "config",
     )
     expect(shareableRosterSetting).toBeDefined()
-    expect((shareableRosterSetting?.valueJson as any)?.participants).toEqual([])
+    expect(
+      (
+        shareableRosterSetting?.valueJson as {
+          participants: Array<{
+            name: string
+          }>
+        }
+      )?.participants,
+    ).toEqual([])
 
     // Explicit opt-in export: private mode -> includes participants
-    const privateShow = nativeBundleToAuthoredShow(bundleWithRoster as any, {
-      includePrivateRoster: true,
-    })
+    const privateShow = nativeBundleToAuthoredShow(
+      bundleWithRoster as unknown as Parameters<
+        typeof nativeBundleToAuthoredShow
+      >[0],
+      {
+        includePrivateRoster: true,
+      },
+    )
     const privateRosterSetting = privateShow.settings?.find(
       (s) => s.scope === "roster" && s.property === "config",
     )
-    expect((privateRosterSetting?.valueJson as any)?.participants).toHaveLength(
-      1,
-    )
-    expect((privateRosterSetting?.valueJson as any)?.participants[0].name).toBe(
-      "Alice Secret",
-    )
+    expect(
+      (
+        privateRosterSetting?.valueJson as {
+          participants: Array<{
+            name: string
+          }>
+        }
+      )?.participants,
+    ).toHaveLength(1)
+    expect(
+      (
+        privateRosterSetting?.valueJson as {
+          participants: Array<{
+            name: string
+          }>
+        }
+      )?.participants[0].name,
+    ).toBe("Alice Secret")
   })
-
   it("Gate C01: preserves quiz and survey perQuestion.interlude across native -> authored -> native", () => {
     const q1Id = "11111111-1111-1111-1111-111111111111"
     const q2Id = "22222222-2222-2222-2222-222222222222"
@@ -659,7 +778,6 @@ describe("Show Authoring Schema & Converters", () => {
       advance: "auto" as const,
       audioCue: "cues.countdown",
     }
-
     const nativeBundle = {
       quizz: {
         gameMode: "quiz" as const,
@@ -691,27 +809,45 @@ describe("Show Authoring Schema & Converters", () => {
         baseDigest: "dummy-digest",
         questionIds: [q1Id, q2Id],
         timeline: [
-          { id: "44444444-4444-4444-4444-444444444444", kind: "question" as const, questionId: q1Id },
-          { id: "55555555-5555-5555-5555-555555555555", kind: "question" as const, questionId: q2Id },
+          {
+            id: "44444444-4444-4444-4444-444444444444",
+            kind: "question" as const,
+            questionId: q1Id,
+          },
+          {
+            id: "55555555-5555-5555-5555-555555555555",
+            kind: "question" as const,
+            questionId: q2Id,
+          },
         ],
         scenes: {},
-        defaults: { newQuestionMode: "quiz" as const, leaderboardPolicy: "cardOnly" as const, advanceMode: "auto" as const },
+        defaults: {
+          newQuestionMode: "quiz" as const,
+          leaderboardPolicy: "cardOnly" as const,
+          advanceMode: "auto" as const,
+        },
         perQuestion: {
-          [q1Id]: { interlude: quizInterlude },
-          [q2Id]: { interlude: surveyInterlude },
+          [q1Id]: {
+            interlude: quizInterlude,
+          },
+          [q2Id]: {
+            interlude: surveyInterlude,
+          },
         },
       },
     }
 
     // 1. Native -> Authored
-    const authored = nativeBundleToAuthoredShow(nativeBundle as any)
+    const authored = nativeBundleToAuthoredShow(
+      nativeBundle as unknown as Parameters<
+        typeof nativeBundleToAuthoredShow
+      >[0],
+    )
     expect(authored.cards).toHaveLength(2)
-
-    const authoredQ1 = authored.cards[0] as any
+    const authoredQ1 = authored.cards[0] as AuthoredQuizCard
     expect(authoredQ1.kind).toBe("quiz")
     expect(authoredQ1.interlude).toEqual(quizInterlude)
-
-    const authoredQ2 = authored.cards[1] as any
+    const authoredQ2 = authored.cards[1] as AuthoredSurveyCard
     expect(authoredQ2.kind).toBe("survey")
     expect(authoredQ2.interlude).toEqual(surveyInterlude)
 
@@ -719,20 +855,24 @@ describe("Show Authoring Schema & Converters", () => {
     const converted = authoredShowToNativeBundleDraft(authored)
     expect(converted.ok).toBe(true)
     expect(converted.bundleDraft).toBeDefined()
-
-    const { extras: roundtripExtras, quizz: roundtripQuizz } = converted.bundleDraft!
+    const { extras: roundtripExtras, quizz: _roundtripQuizz } =
+      converted.bundleDraft!
     expect(roundtripExtras.questionIds).toHaveLength(2)
-    const newQ1Id = roundtripExtras.questionIds[0]
-    const newQ2Id = roundtripExtras.questionIds[1]
-
-    expect(roundtripExtras.perQuestion[newQ1Id]?.interlude).toEqual(quizInterlude)
-    expect(roundtripExtras.perQuestion[newQ2Id]?.interlude).toEqual(surveyInterlude)
+    const { 0: newQ1Id } = roundtripExtras.questionIds
+    const { 1: newQ2Id } = roundtripExtras.questionIds
+    expect(roundtripExtras.perQuestion[newQ1Id]?.interlude).toEqual(
+      quizInterlude,
+    )
+    expect(roundtripExtras.perQuestion[newQ2Id]?.interlude).toEqual(
+      surveyInterlude,
+    )
 
     // Ensure no spurious timeline scenes were injected
     expect(roundtripExtras.timeline).toHaveLength(2)
-    expect(roundtripExtras.timeline.every((t) => t.kind === "question")).toBe(true)
+    expect(roundtripExtras.timeline.every((t) => t.kind === "question")).toBe(
+      true,
+    )
   })
-
   it("Gate C01: preserves answerVisuals, reveal, and interlude simultaneously without collision", () => {
     const qId = "11111111-2222-3333-4444-555555555555"
     const interludeConfig = {
@@ -756,7 +896,6 @@ describe("Show Authoring Schema & Converters", () => {
         alt: "Answer 1 Visual",
       },
     ]
-
     const nativeBundle = {
       quizz: {
         gameMode: "quiz" as const,
@@ -779,9 +918,19 @@ describe("Show Authoring Schema & Converters", () => {
         quizId: "66666666-6666-6666-6666-666666666666",
         baseDigest: "dummy-digest",
         questionIds: [qId],
-        timeline: [{ id: "77777777-7777-7777-7777-777777777777", kind: "question" as const, questionId: qId }],
+        timeline: [
+          {
+            id: "77777777-7777-7777-7777-777777777777",
+            kind: "question" as const,
+            questionId: qId,
+          },
+        ],
         scenes: {},
-        defaults: { newQuestionMode: "quiz" as const, leaderboardPolicy: "cardOnly" as const, advanceMode: "auto" as const },
+        defaults: {
+          newQuestionMode: "quiz" as const,
+          leaderboardPolicy: "cardOnly" as const,
+          advanceMode: "auto" as const,
+        },
         perQuestion: {
           [qId]: {
             answerVisuals: visualsConfig,
@@ -791,25 +940,29 @@ describe("Show Authoring Schema & Converters", () => {
         },
       },
     }
-
-    const authored = nativeBundleToAuthoredShow(nativeBundle as any)
-    const card = authored.cards[0] as any
+    const authored = nativeBundleToAuthoredShow(
+      nativeBundle as unknown as Parameters<
+        typeof nativeBundleToAuthoredShow
+      >[0],
+    )
+    const card = authored.cards[0] as AuthoredQuizCard
     expect(card.answers[0].imageUrl).toBe("https://example.com/media/ans1.png")
     expect(card.reveal).toEqual(revealConfig)
     expect(card.interlude).toEqual(interludeConfig)
-
     const roundtrip = authoredShowToNativeBundleDraft(authored)
     expect(roundtrip.ok).toBe(true)
-    const newQId = roundtrip.bundleDraft!.extras.questionIds[0]
+    const { 0: newQId } = roundtrip.bundleDraft!.extras.questionIds
     const roundtripItem = roundtrip.bundleDraft!.extras.perQuestion[newQId]
-
     expect(roundtripItem.answerVisuals).toEqual(visualsConfig)
     expect(roundtripItem.reveal).toEqual(revealConfig)
     expect(roundtripItem.interlude).toEqual(interludeConfig)
   })
-
   it("Gate C02: persists show-level note across friendly -> native -> friendly (Hebrew, newlines, empty, absent)", () => {
-    const testCases: Array<{ name: string; note: string | undefined; expectedNote: string | undefined }> = [
+    const testCases: Array<{
+      name: string
+      note: string | undefined
+      expectedNote: string | undefined
+    }> = [
       {
         name: "Hebrew note with punctuation and emojis",
         note: "הערת מפיק ראשית: נא לוודא סאונד במיקרופונים! 🎤✨",
@@ -817,8 +970,9 @@ describe("Show Authoring Schema & Converters", () => {
       },
       {
         name: "Multiline note with quotes and newlines",
-        note: "Line 1: Special briefing\nLine 2: \"Do not reveal answer before cue 3\"\nLine 3: Final notes.",
-        expectedNote: "Line 1: Special briefing\nLine 2: \"Do not reveal answer before cue 3\"\nLine 3: Final notes.",
+        note: 'Line 1: Special briefing\nLine 2: "Do not reveal answer before cue 3"\nLine 3: Final notes.',
+        expectedNote:
+          'Line 1: Special briefing\nLine 2: "Do not reveal answer before cue 3"\nLine 3: Final notes.',
       },
       {
         name: "Absent note",
@@ -826,7 +980,6 @@ describe("Show Authoring Schema & Converters", () => {
         expectedNote: undefined,
       },
     ]
-
     for (const tc of testCases) {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -840,7 +993,14 @@ describe("Show Authoring Schema & Converters", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -863,7 +1023,6 @@ describe("Show Authoring Schema & Converters", () => {
       expect(backToAuthored.note).toBe(tc.expectedNote)
     }
   })
-
   it("Gate C03: strictly rejects invalid or non-'show' targetKey for all supported scopes", () => {
     const invalidTargetCases = [
       {
@@ -876,7 +1035,11 @@ describe("Show Authoring Schema & Converters", () => {
         scope: "team",
         targetKey: "Q01",
         property: "config",
-        valueJson: { enabled: false, teams: [], autoAssign: "roundRobin" },
+        valueJson: {
+          enabled: false,
+          teams: [],
+          autoAssign: "roundRobin",
+        },
       },
       {
         scope: "leaderboard",
@@ -888,10 +1051,12 @@ describe("Show Authoring Schema & Converters", () => {
         scope: "roster",
         targetKey: "",
         property: "config",
-        valueJson: { phoneInviteOnly: false, participants: [] },
+        valueJson: {
+          phoneInviteOnly: false,
+          participants: [],
+        },
       },
     ]
-
     for (const invalidSetting of invalidTargetCases) {
       const showWithInvalidSetting = {
         format: "tada-show",
@@ -903,15 +1068,22 @@ describe("Show Authoring Schema & Converters", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question text?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
         settings: [invalidSetting],
       }
-
       const parseResult = tadaShowV1Schema.safeParse(showWithInvalidSetting)
       expect(parseResult.success).toBe(false)
+
       if (!parseResult.success) {
         const issue = parseResult.error.issues.find(
           (i) => i.path.join(".") === "settings.0.targetKey",
@@ -921,7 +1093,9 @@ describe("Show Authoring Schema & Converters", () => {
       }
 
       // Direct converter also rejects
-      const convertResult = authoredShowToNativeBundleDraft(showWithInvalidSetting)
+      const convertResult = authoredShowToNativeBundleDraft(
+        showWithInvalidSetting,
+      )
       expect(convertResult.ok).toBe(false)
       const diag = convertResult.diagnostics.find(
         (d) => d.path.join(".") === "settings.0.targetKey",
@@ -929,7 +1103,6 @@ describe("Show Authoring Schema & Converters", () => {
       expect(diag).toBeDefined()
     }
   })
-
   it("Gate C03: rejects duplicate settings definitions deterministically", () => {
     const showWithDuplicates = {
       format: "tada-show",
@@ -941,7 +1114,14 @@ describe("Show Authoring Schema & Converters", () => {
           kind: "quiz",
           questionType: "single",
           question: "Question text?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
       ],
@@ -960,9 +1140,9 @@ describe("Show Authoring Schema & Converters", () => {
         },
       ],
     }
-
     const parseResult = tadaShowV1Schema.safeParse(showWithDuplicates)
     expect(parseResult.success).toBe(false)
+
     if (!parseResult.success) {
       const issue = parseResult.error.issues.find((i) =>
         i.message.includes("duplicateSetting:leaderboard.mode"),
@@ -984,25 +1164,43 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Question 1",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "fade", durationMs: 600 },
+            questionEntrance: {
+              preset: "fade",
+              durationMs: 600,
+            },
           },
           {
             key: "S1",
             kind: "survey",
             question: "Survey 1",
-            answers: [{ text: "Yes" }, { text: "No" }],
-            questionEntrance: { preset: "spotlight", durationMs: 1200 },
+            answers: [
+              {
+                text: "Yes",
+              },
+              {
+                text: "No",
+              },
+            ],
+            questionEntrance: {
+              preset: "spotlight",
+              durationMs: 1200,
+            },
           },
         ],
         settings: [],
       }
-
       const parsed = tadaShowV1Schema.safeParse(show)
       expect(parsed.success).toBe(true)
     })
-
     it("rejects unknown entrance presets", () => {
       const invalidShow = {
         format: "tada-show",
@@ -1013,16 +1211,26 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Question 1",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "3d-flip-explode", durationMs: 800 },
+            questionEntrance: {
+              preset: "3d-flip-explode",
+              durationMs: 800,
+            },
           },
         ],
         settings: [],
       }
-
       const parsed = tadaShowV1Schema.safeParse(invalidShow)
       expect(parsed.success).toBe(false)
+
       if (!parsed.success) {
         expect(
           parsed.error.issues.some((i) =>
@@ -1031,7 +1239,6 @@ describe("Show Authoring Schema & Converters", () => {
         ).toBe(true)
       }
     })
-
     it("rejects entrance duration out of bounds (< 250ms or > 2500ms)", () => {
       const tooShort = {
         format: "tada-show",
@@ -1042,15 +1249,24 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Question 1",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "fade", durationMs: 100 },
+            questionEntrance: {
+              preset: "fade",
+              durationMs: 100,
+            },
           },
         ],
         settings: [],
       }
       expect(tadaShowV1Schema.safeParse(tooShort).success).toBe(false)
-
       const tooLong = {
         format: "tada-show",
         version: 1,
@@ -1060,16 +1276,25 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Question 1",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "fade", durationMs: 5000 },
+            questionEntrance: {
+              preset: "fade",
+              durationMs: 5000,
+            },
           },
         ],
         settings: [],
       }
       expect(tadaShowV1Schema.safeParse(tooLong).success).toBe(false)
     })
-
     it("two-way conversion roundtrips questionEntrance for both quiz and survey", () => {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -1080,29 +1305,58 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Animated Quiz",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "slide-up", durationMs: 750 },
+            questionEntrance: {
+              preset: "slide-up",
+              durationMs: 750,
+            },
           },
           {
             key: "S1",
             kind: "survey",
             question: "Spotlight Survey",
-            answers: [{ text: "A" }, { text: "B" }],
-            questionEntrance: { preset: "spotlight", durationMs: 1000 },
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
+            questionEntrance: {
+              preset: "spotlight",
+              durationMs: 1000,
+            },
           },
           {
             key: "Q2",
             kind: "quiz",
             question: "Regular Quiz",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "none", durationMs: 800 },
+            questionEntrance: {
+              preset: "none",
+              durationMs: 800,
+            },
           },
         ],
         settings: [],
       }
-
       const bundleDraft = authoredShowToNativeBundleDraft(show)
       expect(bundleDraft.ok).toBe(true)
       const bundle = bundleDraft.bundleDraft!
@@ -1115,15 +1369,16 @@ describe("Show Authoring Schema & Converters", () => {
         preset: "spotlight",
         durationMs: 1000,
       })
-      // preset: 'none' is omitted or normalized in extras
-      expect(bundle.extras.perQuestion[qIds[2]]?.questionEntrance).toBeUndefined()
+      // Preset: 'none' is omitted or normalized in extras
+      expect(
+        bundle.extras.perQuestion[qIds[2]]?.questionEntrance,
+      ).toBeUndefined()
 
       // Convert back to authored show
       const restored = nativeBundleToAuthoredShow(bundle)
-      const restoredQ1 = restored.cards[0] as any
-      const restoredS1 = restored.cards[1] as any
-      const restoredQ2 = restored.cards[2] as any
-
+      const restoredQ1 = restored.cards[0] as AuthoredQuizCard
+      const restoredS1 = restored.cards[1] as AuthoredSurveyCard
+      const restoredQ2 = restored.cards[2] as AuthoredQuizCard
       expect(restoredQ1.questionEntrance).toEqual({
         preset: "slide-up",
         durationMs: 750,
@@ -1135,7 +1390,6 @@ describe("Show Authoring Schema & Converters", () => {
       expect(restoredQ2.questionEntrance).toBeUndefined()
     })
   })
-
   describe("Gate 6: Cinematic Video & Multi-Layer Lottie Overlays Roundtrip", () => {
     it("roundtrips opening, closing, and cinema media scenes with overlayAnimations and mediaEndFallbackMs across .tada.json <-> native V2 bundle", () => {
       const sampleOverlays = [
@@ -1151,7 +1405,10 @@ describe("Show Authoring Schema & Converters", () => {
           loop: false,
           speed: 1,
           finish: "holdLastFrame" as const,
-          position: { x: 0.5, y: 0.22 },
+          position: {
+            x: 0.5,
+            y: 0.22,
+          },
           anchor: "center" as const,
           widthPct: 28,
           fit: "contain" as const,
@@ -1173,7 +1430,10 @@ describe("Show Authoring Schema & Converters", () => {
           loop: true,
           speed: 1.25,
           finish: "hide" as const,
-          position: { x: 0.5, y: 0.5 },
+          position: {
+            x: 0.5,
+            y: 0.5,
+          },
           anchor: "center" as const,
           widthPct: 82,
           fit: "contain" as const,
@@ -1183,7 +1443,6 @@ describe("Show Authoring Schema & Converters", () => {
           fadeOutMs: 200,
         },
       ]
-
       const show: TadaShowV1 = {
         format: "tada-show",
         version: 1,
@@ -1211,7 +1470,14 @@ describe("Show Authoring Schema & Converters", () => {
             key: "Q1",
             kind: "quiz",
             question: "Ready?",
-            answers: [{ text: "Yes" }, { text: "Absolutely" }],
+            answers: [
+              {
+                text: "Yes",
+              },
+              {
+                text: "Absolutely",
+              },
+            ],
             correctAnswers: [1],
           },
           {
@@ -1246,16 +1512,13 @@ describe("Show Authoring Schema & Converters", () => {
         ],
         settings: [],
       }
-
       const converted = authoredShowToNativeBundleDraft(show)
       expect(converted.ok).toBe(true)
       const bundle = converted.bundleDraft!
-
       const scenesList = Object.values(bundle.extras.scenes)
-      const openScene = scenesList.find((s) => s.kind === "opening") as any
-      const mediaScene = scenesList.find((s) => s.kind === "media") as any
-      const closeScene = scenesList.find((s) => s.kind === "closing") as any
-
+      const openScene = scenesList.find((s) => s.kind === "opening")!
+      const mediaScene = scenesList.find((s) => s.kind === "media")!
+      const closeScene = scenesList.find((s) => s.kind === "closing")!
       expect(openScene.mediaEndFallbackMs).toBe(24000)
       expect(openScene.overlayAnimations).toEqual(sampleOverlays)
       expect(mediaScene.stageLayout).toBe("cinema")
@@ -1268,10 +1531,9 @@ describe("Show Authoring Schema & Converters", () => {
 
       // Convert back to authored TadaShowV1
       const restored = nativeBundleToAuthoredShow(bundle)
-      const restoredOpen = restored.cards[0] as any
-      const restoredMedia = restored.cards[2] as any
-      const restoredClose = restored.cards[3] as any
-
+      const restoredOpen = restored.cards[0] as AuthoredOpeningCard
+      const restoredMedia = restored.cards[2] as AuthoredMediaCard
+      const restoredClose = restored.cards[3] as AuthoredClosingCard
       expect(restoredOpen.mediaEndFallbackMs).toBe(24000)
       expect(restoredOpen.overlayAnimations).toEqual(sampleOverlays)
       expect(restoredMedia.stageLayout).toBe("cinema")

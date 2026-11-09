@@ -46,7 +46,8 @@ export default defineConfig({
       },
     },
     {
-      command: "node node_modules/vite/bin/vite.js preview --port 3010 --strictPort",
+      command:
+        "node node_modules/vite/bin/vite.js preview --port 3010 --strictPort",
       cwd: join(root, "packages/web"),
       url: "http://127.0.0.1:3010",
       reuseExistingServer: false,

@@ -67,6 +67,7 @@ export function useResolvedShowTheme(
       }),
     [defaults?.showTheme, scope, role, registry],
   )
+
   return theme
 }
 

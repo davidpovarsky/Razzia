@@ -43,7 +43,7 @@ const QuestionMedia = ({
       <img
         alt={alt}
         src={media.url}
-        className="max-h-36 sm:max-h-56 md:max-h-72 w-auto max-w-full rounded-md object-contain"
+        className="max-h-36 w-auto max-w-full rounded-md object-contain sm:max-h-56 md:max-h-72"
       />
     )
   }
@@ -51,7 +51,7 @@ const QuestionMedia = ({
   if (media?.type === MEDIA_TYPES.VIDEO) {
     return (
       <video
-        className="m-1 sm:m-2 aspect-video max-h-36 sm:max-h-56 md:max-h-72 w-auto max-w-full rounded-md px-2 object-contain"
+        className="m-1 aspect-video max-h-36 w-auto max-w-full rounded-md object-contain px-2 sm:m-2 sm:max-h-56 md:max-h-72"
         src={media.url}
         autoPlay={autoPlay}
         controls
@@ -62,7 +62,7 @@ const QuestionMedia = ({
   if (media?.type === MEDIA_TYPES.AUDIO) {
     return (
       <audio
-        className="m-1 sm:m-2 w-full max-w-md rounded-md"
+        className="m-1 w-full max-w-md rounded-md sm:m-2"
         src={media.url}
         autoPlay={autoPlay}
         controls

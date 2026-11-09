@@ -15,6 +15,7 @@ export function NativePublicContent({
   theme,
 }: PropsWithChildren<{ role: ViewRole; theme: ResolvedShowTheme }>) {
   const status = useTadazzRawStatus()
+
   if (
     role === "spectator" &&
     theme.definition.id === RAZZIA_THEME_ID &&
@@ -24,6 +25,7 @@ export function NativePublicContent({
       typeof status.data.inviteCode === "string"
         ? status.data.inviteCode
         : undefined
+
     return (
       <Room
         readOnly
@@ -37,5 +39,6 @@ export function NativePublicContent({
       />
     )
   }
+
   return children
 }

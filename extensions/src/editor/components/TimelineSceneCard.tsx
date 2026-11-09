@@ -1,4 +1,4 @@
-import {PlatformButton} from "../../presentation/platform-controls"
+import { PlatformButton } from "../../presentation/platform-controls"
 import type { ComponentType, ReactNode } from "react"
 import {
   BarChart2,
@@ -83,27 +83,34 @@ export const TimelineSceneCard = ({
       isActive ? "border-primary shadow-sm" : "",
     ].join(" ")}
   >
-    <PlatformButton type="button" size="sm" classNameContent="contents" onClick={onClick} aria-label={title ?? t(`extensions:timeline.${kind}`,kind)} className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0">
-    <div className="absolute top-2 left-2 flex items-center gap-1.5">
-      <span className="bg-accent/40 text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
-        {kind}
-      </span>
-    </div>
+    <PlatformButton
+      type="button"
+      size="sm"
+      classNameContent="contents"
+      onClick={onClick}
+      aria-label={title ?? t(`extensions:timeline.${kind}`, kind)}
+      className="flex h-full w-full flex-1 flex-col justify-between gap-1 bg-transparent p-0"
+    >
+      <div className="absolute top-2 left-2 flex items-center gap-1.5">
+        <span className="bg-accent/40 text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-bold tracking-wider uppercase">
+          {kind}
+        </span>
+      </div>
 
-    <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
-      {getSceneIcon(kind)}
-      <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
-        {title ?? t(`extensions:timeline.${kind}`, kind)}
-      </p>
-    </div>
+      <div className="flex flex-1 flex-col items-center justify-center gap-1.5 pt-4">
+        {getSceneIcon(kind)}
+        <p className="text-foreground max-w-[180px] truncate text-center text-xs font-semibold">
+          {title ?? t(`extensions:timeline.${kind}`, kind)}
+        </p>
+      </div>
 
-    <div className="border-accent/40 text-muted-foreground flex items-center justify-between border-t pt-1 text-[11px]">
-      <span>{durationText}</span>
-    </div>
-
+      <div className="border-accent/40 text-muted-foreground flex items-center justify-between border-t pt-1 text-[11px]">
+        <span>{durationText}</span>
+      </div>
     </PlatformButton>
     <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
-      <PlatformButton size="sm"
+      <PlatformButton
+        size="sm"
         type="button"
         onClick={(e) => {
           e.stopPropagation()
@@ -117,7 +124,8 @@ export const TimelineSceneCard = ({
 
       <DeleteConfirmation
         trigger={
-          <PlatformButton size="sm"
+          <PlatformButton
+            size="sm"
             type="button"
             onClick={(e) => e.stopPropagation()}
             className="text-muted-foreground bg-background rounded-sm p-1 hover:bg-red-50 hover:text-red-500"

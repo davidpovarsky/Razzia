@@ -43,7 +43,10 @@ describe("Tadazz show-level settings persistence", () => {
     ).toBe(false)
     expect(
       studioDefaultsSchema.safeParse({
-        tadazzBackground: { mode: "static", staticUrl: ["java", "script:alert(1)"].join("") },
+        tadazzBackground: {
+          mode: "static",
+          staticUrl: ["java", "script:alert(1)"].join(""),
+        },
       }).success,
     ).toBe(false)
   })

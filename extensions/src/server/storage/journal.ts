@@ -34,7 +34,9 @@ export const getJournalDirectory = (
   const journalDir = path.join(sidecarDir, ".journal")
 
   if (!fs.existsSync(journalDir)) {
-    fs.mkdirSync(journalDir, { recursive: true })
+    fs.mkdirSync(journalDir, {
+      recursive: true,
+    })
   }
 
   return journalDir
@@ -72,9 +74,7 @@ export const createStagedJournal = (
     targetBase: params.targetBase,
     targetExtras: params.targetExtras,
   }
-
   const filePath = getJournalFilePath(getPath, params.quizId)
-
   const tmpPath = `${filePath}.tmp.${Date.now()}`
   fs.writeFileSync(tmpPath, JSON.stringify(entry, null, 2), "utf-8")
   fs.renameSync(tmpPath, filePath)
@@ -137,7 +137,6 @@ export const recoverJournals = (
 
   const recoveredQuizIds: string[] = []
   const unresolvedQuizIds: string[] = []
-
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
 
@@ -146,7 +145,7 @@ export const recoverJournals = (
         continue
       }
 
-      let raw: string
+      let raw = ""
 
       try {
         raw = fs.readFileSync(journalPath, "utf-8")
@@ -157,10 +156,12 @@ export const recoverJournals = (
         continue
       }
 
-      let entry: Omit<JournalEntry, "kind" | "version"> & {
-        kind?: string
-        version?: number
-      }
+      let entry:
+        | (Omit<JournalEntry, "kind" | "version"> & {
+            kind?: string
+            version?: number
+          })
+        | undefined = undefined
 
       try {
         entry = JSON.parse(raw) as JournalEntry

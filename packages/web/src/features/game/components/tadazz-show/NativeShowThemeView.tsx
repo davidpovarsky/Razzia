@@ -15,9 +15,10 @@ export function NativeShowThemePreview({
   previewTitle,
 }: ShowThemePreviewProps) {
   const { AnswerComponent } = QUESTION_REGISTRY.single
+
   return (
     <div
-      className="font-display flex size-full min-h-0 flex-col gap-4 overflow-auto rounded-xl bg-secondary p-4 text-white"
+      className="font-display bg-secondary flex size-full min-h-0 flex-col gap-4 overflow-auto rounded-xl p-4 text-white"
       style={{
         backgroundImage: 'url("/tadazz-show/razzia-original/background.png")',
         backgroundSize: "cover",

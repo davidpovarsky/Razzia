@@ -17,7 +17,11 @@ describe("restored timed question", () => {
         },
       })
       expect(scene.kind).toBe("voting")
-      if (scene.kind !== "voting") throw new Error("expected voting")
+
+      if (scene.kind !== "voting") {
+        throw new Error("expected voting")
+      }
+
       expect(votingPresentation(scene.seconds)).toBe("countdown")
     },
   )

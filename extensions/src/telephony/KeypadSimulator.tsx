@@ -1,4 +1,4 @@
-import {PlatformButton} from "../presentation/platform-controls"
+import { PlatformButton } from "../presentation/platform-controls"
 import React, { useEffect, useState } from "react"
 import type { KeypadSimulatorCore, SimulatorDisplayState } from "./simulator"
 
@@ -113,7 +113,8 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
       {/* 3x4 Telephone Keypad */}
       <div className="mb-4 grid grid-cols-3 gap-2.5">
         {KEYS.flat().map((key) => (
-          <PlatformButton size="sm"
+          <PlatformButton
+            size="sm"
             key={key}
             type="button"
             disabled={!isConnected || loading}
@@ -128,7 +129,8 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
 
       {/* Control Buttons: Call / Hangup / Clear */}
       <div className="grid grid-cols-3 gap-2">
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
           disabled={isConnected || loading}
           onClick={handleCall}
@@ -137,7 +139,8 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
         >
           CALL
         </PlatformButton>
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
           disabled={!isConnected || loading}
           onClick={() => simulator.clearInput()}
@@ -146,7 +149,8 @@ export const KeypadSimulator: React.FC<KeypadSimulatorProps> = ({
         >
           CLEAR
         </PlatformButton>
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
           disabled={!isConnected || loading}
           onClick={handleHangup}

@@ -1,6 +1,6 @@
 import { expect, it } from "vitest"
 import { selectQuizPilotTarget } from "./pilot-target"
-
+/* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
 const game = (
   quizId = "tzila",
   owner = "owner",
@@ -9,9 +9,12 @@ const game = (
 ) => ({
   quizId,
   started,
-  manager: { clientId: owner, connected },
+  manager: {
+    clientId: owner,
+    connected,
+  },
 })
-
+/* oxlint-enable max-params */
 it("routes directly to the connected owner's Tzila show among unrelated games", () => {
   const target = game()
   expect(
@@ -27,7 +30,6 @@ it("routes directly to the connected owner's Tzila show among unrelated games", 
     ).game,
   ).toBe(target)
 })
-
 it("follows the owner's newest connected room even while an older show is running", () => {
   const target = game()
   expect(
@@ -38,7 +40,6 @@ it("follows the owner's newest connected room even while an older show is runnin
     ).game,
   ).toBe(target)
 })
-
 it("never routes to another quiz or guesses between active Tzila shows", () => {
   expect(selectQuizPilotTarget([game("other")], "tzila", "owner").error).toBe(
     "errors:game.notFound",

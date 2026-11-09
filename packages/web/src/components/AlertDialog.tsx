@@ -28,7 +28,9 @@ const AlertDialog = ({
 
   return (
     <RadixAlertDialog.Root open={open} onOpenChange={onOpenChange}>
-      {trigger && <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>}
+      {trigger && (
+        <RadixAlertDialog.Trigger asChild>{trigger}</RadixAlertDialog.Trigger>
+      )}
 
       <RadixAlertDialog.Portal>
         <RadixAlertDialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/40" />

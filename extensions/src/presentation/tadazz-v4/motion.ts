@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   percentagesFor,
   topIndicesFor,
@@ -21,7 +22,10 @@ export const V4_FX_COLORS = [
   "#508dff",
 ] as const
 
-export const V4_FRAME_SIZE = { width: 1920, height: 1080 } as const
+export const V4_FRAME_SIZE = {
+  width: 1920,
+  height: 1080,
+} as const
 
 export interface MotionConfig {
   motionScale?: number
@@ -38,17 +42,23 @@ interface AnimOptions {
 }
 const raf = (cb: FrameRequestCallback) => requestAnimationFrame(cb)
 const ease = (p: number) => Math.max(0, Math.min(1, p))
-const seededRandom = (seed: number) => () => {
-  seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0
+const seededRandom = (initialSeed: number) => {
+  let seed = initialSeed
 
-  return seed / 4294967296
+  return () => {
+    seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0
+
+    return seed / 4294967296
+  }
 }
+/* oxlint-disable typescript/no-unnecessary-type-parameters -- Mirror querySelector<T> so callers select the expected DOM element type. */
 function query<T extends Element = HTMLElement>(
   root: Element,
   selector: string,
 ): T | null {
   return root.querySelector<T>(selector)
 }
+/* oxlint-enable typescript/no-unnecessary-type-parameters */
 function all<T extends Element = HTMLElement>(
   root: Element,
   selector: string,
@@ -73,7 +83,7 @@ export class TadazzV4Motion {
 
   /** Stop only effects owned by this kit. Never mutate the Razzia/host timeline. */
   stop() {
-    ++this.token
+    this.token += 1
     for (const animation of this.active) {
       try {
         animation.cancel()
@@ -93,6 +103,7 @@ export class TadazzV4Motion {
     if (fx) {
       fx.replaceChildren()
     }
+
     const flash = this.flash()
 
     if (flash) {
@@ -100,7 +111,9 @@ export class TadazzV4Motion {
     }
   }
   pause() {
-    for (const a of this.root().getAnimations?.({ subtree: true }) ?? []) {
+    for (const a of this.root().getAnimations?.({
+      subtree: true,
+    }) ?? []) {
       if (!this.active.includes(a)) {
         this.active.push(a)
       }
@@ -128,7 +141,11 @@ export class TadazzV4Motion {
   /** Update only the clock. Choreography and real seconds are independent. */
   syncCountdown(data: TadazzV4Data) {
     const sweep = this.countdownSweep
-    if (!sweep || data.deadlineMs === undefined || !this.countdownTotal) return
+
+    if (!sweep || data.deadlineMs === undefined || !this.countdownTotal) {
+      return
+    }
+
     const now = Date.now()
     const opensAt = data.deadlineMs - this.countdownTotal * 1000
     sweep.effect?.updateTiming({
@@ -180,6 +197,7 @@ export class TadazzV4Motion {
     if (!node || !("animate" in node)) {
       return null
     }
+
     const a = node.animate(frames, {
       duration: this.motionMs(options.duration || 650),
       delay: this.config.reducedMotion
@@ -211,8 +229,12 @@ export class TadazzV4Motion {
       if (token !== this.token) {
         return
       }
+
       callback?.()
-      this.config.onCue?.({ name, scene: this.scene })
+      this.config.onCue?.({
+        name,
+        scene: this.scene,
+      })
     }
 
     if (delay <= 0 || this.config.reducedMotion) {
@@ -226,15 +248,27 @@ export class TadazzV4Motion {
     if (!owner) {
       return
     }
+
     const clock = document.createElement("span")
     clock.setAttribute("aria-hidden", "true")
     clock.style.cssText =
       "position:absolute;width:0;height:0;visibility:hidden;pointer-events:none;"
     owner.appendChild(clock)
-    const a = this.animate(clock, [{ opacity: 0 }, { opacity: 0 }], {
-      duration: 1,
-      delay,
-    })
+    const a = this.animate(
+      clock,
+      [
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 0,
+        },
+      ],
+      {
+        duration: 1,
+        delay,
+      },
+    )
     void a?.finished.then(fire).catch(() => undefined)
   }
   private tick(callback: FrameRequestCallback) {
@@ -249,26 +283,53 @@ export class TadazzV4Motion {
     this.animate(
       q,
       [
-        { opacity: 0, transform: "translate3d(0,95px,0) scale(.96)" },
-        { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
+        {
+          opacity: 0,
+          transform: "translate3d(0,95px,0) scale(.96)",
+        },
+        {
+          opacity: 1,
+          transform: "translate3d(0,0,0) scale(1)",
+        },
       ],
-      { duration: 970, delay },
+      {
+        duration: 970,
+        delay,
+      },
     )
     this.animate(
       query(root, ".q-frame .eyebrow"),
       [
-        { opacity: 0, transform: "translate3d(0,18px,0)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translate3d(0,18px,0)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 730, delay: delay + 360 },
+      {
+        duration: 730,
+        delay: delay + 360,
+      },
     )
     this.animate(
       query(root, ".q-text"),
       [
-        { opacity: 0, transform: "translate3d(0,22px,0)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translate3d(0,22px,0)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 760, delay: delay + 500 },
+      {
+        duration: 760,
+        delay: delay + 500,
+      },
     )
   }
   private cardsMotion(baseDelay = 460) {
@@ -286,7 +347,10 @@ export class TadazzV4Motion {
             transform: `translate3d(0,-9px,0) rotate(${side * -1.2}deg) scale(1.02)`,
             offset: 0.78,
           },
-          { opacity: 1, transform: "translate3d(0,0,0) rotate(0deg) scale(1)" },
+          {
+            opacity: 1,
+            transform: "translate3d(0,0,0) rotate(0deg) scale(1)",
+          },
         ],
         {
           duration: 1180,
@@ -302,6 +366,7 @@ export class TadazzV4Motion {
     if (!fx) {
       return
     }
+
     this.cue("impact", delay + 65)
     const full = style === "big"
     const add = (cls: string) => {
@@ -315,10 +380,24 @@ export class TadazzV4Motion {
     this.animate(
       ring,
       [
-        { opacity: 0, transform: "scale(.2)" },
-        { opacity: 0.85, transform: "scale(.57)", offset: 0.14 },
-        { opacity: 0.12, transform: "scale(2.8)", offset: 0.72 },
-        { opacity: 0, transform: "scale(3.6)" },
+        {
+          opacity: 0,
+          transform: "scale(.2)",
+        },
+        {
+          opacity: 0.85,
+          transform: "scale(.57)",
+          offset: 0.14,
+        },
+        {
+          opacity: 0.12,
+          transform: "scale(2.8)",
+          offset: 0.72,
+        },
+        {
+          opacity: 0,
+          transform: "scale(3.6)",
+        },
       ],
       {
         duration: full ? 1060 : 800,
@@ -330,28 +409,51 @@ export class TadazzV4Motion {
     this.animate(
       blade,
       [
-        { opacity: 0, transform: "rotate(-24deg) scaleX(.1)" },
+        {
+          opacity: 0,
+          transform: "rotate(-24deg) scaleX(.1)",
+        },
         {
           opacity: 0.95,
           transform: "rotate(-20deg) scaleX(1.4)",
           offset: 0.26,
         },
-        { opacity: 0, transform: "rotate(-13deg) scaleX(1.95)" },
+        {
+          opacity: 0,
+          transform: "rotate(-13deg) scaleX(1.95)",
+        },
       ],
-      { duration: 920, delay: delay + 35 },
+      {
+        duration: 920,
+        delay: delay + 35,
+      },
     )
     this.animate(
       this.flash(),
       [
-        { opacity: 0 },
-        { opacity: 0.98, offset: 0.1 },
-        { opacity: 0.26, offset: 0.28 },
-        { opacity: 0 },
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 0.98,
+          offset: 0.1,
+        },
+        {
+          opacity: 0.26,
+          offset: 0.28,
+        },
+        {
+          opacity: 0,
+        },
       ],
-      { duration: 680, delay: delay + 55, easing: "ease-out" },
+      {
+        duration: 680,
+        delay: delay + 55,
+        easing: "ease-out",
+      },
     )
     const random = seededRandom(7319)
-    for (let i = 0; i < (full ? 55 : 22); i++) {
+    for (let i = 0; i < (full ? 55 : 22); i += 1) {
       const a = random() * Math.PI * 2
       const length = 300 + random() * 650
       const sx = Math.cos(a) * length
@@ -398,12 +500,32 @@ export class TadazzV4Motion {
     this.animate(
       status,
       [
-        { opacity: 0, transform: "translate(-50%,65px) scale(.72)" },
-        { opacity: 1, transform: "translate(-50%,0) scale(1)" },
+        {
+          opacity: 0,
+          transform: "translate(-50%,65px) scale(.72)",
+        },
+        {
+          opacity: 1,
+          transform: "translate(-50%,0) scale(1)",
+        },
       ],
       {
         duration: 980,
-        delay: keepCards ? (locked ? 80 : 120) : locked ? 950 : 1300,
+        delay: (() => {
+          if (keepCards) {
+            if (locked) {
+              return 80
+            }
+
+            return 120
+          }
+
+          if (locked) {
+            return 950
+          }
+
+          return 1300
+        })(),
       },
     )
 
@@ -412,11 +534,23 @@ export class TadazzV4Motion {
         this.animate(
           slot,
           [
-            { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
-            { opacity: 0.75, transform: "translate3d(0,0,0) scale(.974)" },
-            { opacity: 0.84, transform: "translate3d(0,0,0) scale(.98)" },
+            {
+              opacity: 1,
+              transform: "translate3d(0,0,0) scale(1)",
+            },
+            {
+              opacity: 0.75,
+              transform: "translate3d(0,0,0) scale(.974)",
+            },
+            {
+              opacity: 0.84,
+              transform: "translate3d(0,0,0) scale(.98)",
+            },
           ],
-          { duration: 730, delay: (keepCards ? 90 : 960) + i * 42 },
+          {
+            duration: 730,
+            delay: (keepCards ? 90 : 960) + i * 42,
+          },
         )
       })
       this.impact(keepCards ? 160 : 1030, "small")
@@ -462,25 +596,55 @@ export class TadazzV4Motion {
           transform: "translate3d(-300px,125px,0) scale(1.48)",
           offset: 0.61,
         },
-        { opacity: 1, transform: "translate3d(0,0,0) scale(1)", offset: 1 },
+        {
+          opacity: 1,
+          transform: "translate3d(0,0,0) scale(1)",
+          offset: 1,
+        },
       ],
-      { duration: 1120, easing: "cubic-bezier(.15,.78,.24,1)" },
+      {
+        duration: 1120,
+        easing: "cubic-bezier(.15,.78,.24,1)",
+      },
     )
-    this.animate(label, [{ opacity: 0 }, { opacity: 1 }], {
-      duration: 550,
-      delay: 720,
-    })
+    this.animate(
+      label,
+      [
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 1,
+        },
+      ],
+      {
+        duration: 550,
+        delay: 720,
+      },
+    )
     const rawSeconds = data.seconds ?? data.remainingSeconds ?? 0
-    const totalSeconds = Math.max(0, Number(rawSeconds) || 0)
+    const totalSeconds = Math.max(0, rawSeconds || 0)
     const duration = Math.max(1, totalSeconds * 1000)
     // Clock duration must never be scaled by reduced motion or show speed.
     const sweep =
       ring?.animate(
-        [{ strokeDashoffset: 0 }, { strokeDashoffset: circumference }],
-        { duration, easing: "linear", fill: "both" },
+        [
+          {
+            strokeDashoffset: 0,
+          },
+          {
+            strokeDashoffset: circumference,
+          },
+        ],
+        {
+          duration,
+          easing: "linear",
+          fill: "both",
+        },
       ) ?? null
     this.countdownSweep = sweep
     this.countdownTotal = totalSeconds
+
     if (sweep) {
       this.active.push(sweep)
       void sweep.finished.catch(() => undefined)
@@ -499,8 +663,9 @@ export class TadazzV4Motion {
       if (token !== this.token || !value || !sweep) {
         return
       }
+
       // Use WAAPI as one pause-safe time source; no divergent setInterval stopwatch.
-      const progress = Number(sweep.effect?.getComputedTiming().progress ?? 0)
+      const progress = sweep.effect?.getComputedTiming().progress ?? 0
       const left = Math.max(0, Math.ceil(totalSeconds * (1 - progress)))
       value.textContent = String(left).padStart(2, "0")
       value.classList.toggle("timer-low", left <= 3)
@@ -526,17 +691,35 @@ export class TadazzV4Motion {
     this.animate(
       status,
       [
-        { opacity: 0, transform: "translate(-50%,70px) scale(.84)" },
-        { opacity: 1, transform: "translate(-50%,0) scale(1)" },
+        {
+          opacity: 0,
+          transform: "translate(-50%,70px) scale(.84)",
+        },
+        {
+          opacity: 1,
+          transform: "translate(-50%,0) scale(1)",
+        },
       ],
-      { duration: 760, delay: keepCards ? 180 : 1480 },
+      {
+        duration: 760,
+        delay: keepCards ? 180 : 1480,
+      },
     )
     const chosenSet = new Set<number>(
-      Array.isArray(data.selectedIndices) && data.selectedIndices.length > 0
-        ? data.selectedIndices
-        : typeof data.selectedIndex === "number" && data.selectedIndex >= 0
-          ? [data.selectedIndex]
-          : [],
+      (() => {
+        if (
+          Array.isArray(data.selectedIndices) &&
+          data.selectedIndices.length > 0
+        ) {
+          return data.selectedIndices
+        }
+
+        if (typeof data.selectedIndex === "number" && data.selectedIndex >= 0) {
+          return [data.selectedIndex]
+        }
+
+        return []
+      })(),
     )
     all(this.root(), ".choice-slot").forEach((slot, i) => {
       if (chosenSet.has(i)) {
@@ -544,20 +727,39 @@ export class TadazzV4Motion {
         this.animate(
           slot,
           [
-            { transform: "translate3d(0,0,0) scale(1)" },
-            { transform: "translate3d(0,-42px,0) scale(1.115)", offset: 0.65 },
-            { transform: "translate3d(0,-32px,0) scale(1.09)" },
+            {
+              transform: "translate3d(0,0,0) scale(1)",
+            },
+            {
+              transform: "translate3d(0,-42px,0) scale(1.115)",
+              offset: 0.65,
+            },
+            {
+              transform: "translate3d(0,-32px,0) scale(1.09)",
+            },
           ],
-          { duration: 890, delay: keepCards ? 80 : 1380 },
+          {
+            duration: 890,
+            delay: keepCards ? 80 : 1380,
+          },
         )
       } else {
         this.animate(
           slot,
           [
-            { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
-            { opacity: 0.38, transform: "translate3d(0,13px,0) scale(.94)" },
+            {
+              opacity: 1,
+              transform: "translate3d(0,0,0) scale(1)",
+            },
+            {
+              opacity: 0.38,
+              transform: "translate3d(0,13px,0) scale(.94)",
+            },
           ],
-          { duration: 850, delay: keepCards ? 50 : 1350 },
+          {
+            duration: 850,
+            delay: keepCards ? 50 : 1350,
+          },
         )
       }
     })
@@ -565,6 +767,7 @@ export class TadazzV4Motion {
     if (chosenSet.size > 0) {
       this.impact(keepCards ? 270 : 1570, "small")
     }
+
     const hasResults = Boolean(
       (data.percentages && data.percentages.length > 0) ||
       (data.counts && data.counts.length > 0),
@@ -589,6 +792,7 @@ export class TadazzV4Motion {
         if (track) {
           track.style.opacity = "1"
         }
+
         if (fill) {
           fill.style.transform = `scaleX(${Math.max(0.003, (percentages[i] || 0) / 100)})`
           fill.style.transformOrigin = "left center"
@@ -621,10 +825,19 @@ export class TadazzV4Motion {
         this.animate(
           slot,
           [
-            { opacity: 0.84, transform: "translate3d(0,0,0) scale(.98)" },
-            { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
+            {
+              opacity: 0.84,
+              transform: "translate3d(0,0,0) scale(.98)",
+            },
+            {
+              opacity: 1,
+              transform: "translate3d(0,0,0) scale(1)",
+            },
           ],
-          { duration: 320, delay: 0 },
+          {
+            duration: 320,
+            delay: 0,
+          },
         )
       }
 
@@ -641,20 +854,44 @@ export class TadazzV4Motion {
       this.animate(
         number,
         [
-          { opacity: 0, transform: "translate3d(0,24px,0) scale(.8)" },
-          { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
+          {
+            opacity: 0,
+            transform: "translate3d(0,24px,0) scale(.8)",
+          },
+          {
+            opacity: 1,
+            transform: "translate3d(0,0,0) scale(1)",
+          },
         ],
-        { duration: 560, delay },
+        {
+          duration: 560,
+          delay,
+        },
       )
-      this.animate(track, [{ opacity: 0 }, { opacity: 1 }], {
-        duration: 480,
-        delay: Math.max(0, delay - 100),
-      })
+      this.animate(
+        track,
+        [
+          {
+            opacity: 0,
+          },
+          {
+            opacity: 1,
+          },
+        ],
+        {
+          duration: 480,
+          delay: Math.max(0, delay - 100),
+        },
+      )
       const fillAnimation = this.animate(
         fill,
         [
-          { transform: "scaleX(0)" },
-          { transform: `scaleX(${Math.max(0.003, percentages[i] / 100)})` },
+          {
+            transform: "scaleX(0)",
+          },
+          {
+            transform: `scaleX(${Math.max(0.003, percentages[i] / 100)})`,
+          },
         ],
         {
           duration: 1070,
@@ -665,7 +902,11 @@ export class TadazzV4Motion {
 
       if (showPercentages && number && fillAnimation) {
         const target = Math.round(percentages[i])
-        animated.push({ node: number, target, animation: fillAnimation })
+        animated.push({
+          node: number,
+          target,
+          animation: fillAnimation,
+        })
         this.finalizers.push(() => {
           number.textContent = `${target}%`
           number.style.opacity = "1"
@@ -674,6 +915,7 @@ export class TadazzV4Motion {
           if (track) {
             track.style.opacity = "1"
           }
+
           if (fill) {
             fill.style.transform = `scaleX(${Math.max(0.003, percentages[i] / 100)})`
             fill.style.transformOrigin = "left center"
@@ -686,19 +928,39 @@ export class TadazzV4Motion {
         this.animate(
           query(slot, ".winner-tag"),
           [
-            { opacity: 0, transform: "translateY(-14px) scale(.9)" },
-            { opacity: 1, transform: "none" },
+            {
+              opacity: 0,
+              transform: "translateY(-14px) scale(.9)",
+            },
+            {
+              opacity: 1,
+              transform: "none",
+            },
           ],
-          { duration: 680, delay: winnerTagDelay },
+          {
+            duration: 680,
+            delay: winnerTagDelay,
+          },
         )
         this.animate(
           slot,
           [
-            { transform: "translate3d(0,0,0) scale(1)" },
-            { transform: "translate3d(0,-17px,0) scale(1.027)", offset: 0.68 },
-            { transform: "translate3d(0,-9px,0) scale(1.016)" },
+            {
+              transform: "translate3d(0,0,0) scale(1)",
+            },
+            {
+              transform: "translate3d(0,-17px,0) scale(1.027)",
+              offset: 0.68,
+            },
+            {
+              transform: "translate3d(0,-9px,0) scale(1.016)",
+            },
           ],
-          { duration: 730, delay: winnerLiftDelay, easing: V4_EASE_DRAMATIC },
+          {
+            duration: 730,
+            delay: winnerLiftDelay,
+            easing: V4_EASE_DRAMATIC,
+          },
         )
       }
     })
@@ -707,10 +969,11 @@ export class TadazzV4Motion {
       if (token !== this.token) {
         return
       }
+
       let running = false
       for (const item of animated) {
         const progress = ease(
-          Number(item.animation.effect?.getComputedTiming().progress ?? 0),
+          item.animation.effect?.getComputedTiming().progress ?? 0,
         )
         item.node.textContent = `${Math.round(item.target * progress)}%`
 
@@ -727,6 +990,7 @@ export class TadazzV4Motion {
     if (animated.length) {
       tick()
     }
+
     this.cue("survey-reveal", keepCards ? 200 : 1450)
   }
   private topPick(data: TadazzV4Data) {
@@ -734,42 +998,77 @@ export class TadazzV4Motion {
     this.animate(
       query(root, ".spotlight-top"),
       [
-        { opacity: 0, transform: "translateY(-30px)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translateY(-30px)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 840, delay: 400 },
+      {
+        duration: 840,
+        delay: 400,
+      },
     )
     this.animate(
       query(root, ".spotlight-plate"),
       [
-        { opacity: 0, transform: "scale(.5)" },
-        { opacity: 1, transform: "scale(1.05)" },
+        {
+          opacity: 0,
+          transform: "scale(.5)",
+        },
+        {
+          opacity: 1,
+          transform: "scale(1.05)",
+        },
       ],
-      { duration: 1400 },
+      {
+        duration: 1400,
+      },
     )
     this.animate(
       query(root, ".spotlight-portrait"),
       [
-        { opacity: 0, transform: "translateY(160px) rotate(-8deg) scale(.58)" },
+        {
+          opacity: 0,
+          transform: "translateY(160px) rotate(-8deg) scale(.58)",
+        },
         {
           opacity: 1,
           transform: "translateY(-24px) rotate(2deg) scale(1.06)",
           offset: 0.83,
         },
-        { opacity: 1, transform: "translateY(0) rotate(0deg) scale(1)" },
+        {
+          opacity: 1,
+          transform: "translateY(0) rotate(0deg) scale(1)",
+        },
       ],
-      { duration: 1490, easing: V4_EASE_DRAMATIC },
+      {
+        duration: 1490,
+        easing: V4_EASE_DRAMATIC,
+      },
     )
     this.animate(
       query(root, ".spotlight-name"),
       [
-        { opacity: 0, transform: "translateY(80px) scale(.87)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translateY(80px) scale(.87)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 1040, delay: 540 },
+      {
+        duration: 1040,
+        delay: 540,
+      },
     )
     const hasWinner =
-      data.topIndex != null ||
+      (data.topIndex !== null && data.topIndex !== undefined) ||
       topIndicesFor(data, data.answers?.length ?? 0).length === 1
 
     if (hasWinner) {
@@ -779,16 +1078,25 @@ export class TadazzV4Motion {
   }
   private questionImage() {
     const root = this.root()
-    all(root, ".photo-option").forEach((option, i) =>
+    all(root, ".photo-option").forEach((option, i) => {
       this.animate(
         option,
         [
-          { opacity: 0, transform: "translate3d(75px,35px,0)" },
-          { opacity: 1, transform: "none" },
+          {
+            opacity: 0,
+            transform: "translate3d(75px,35px,0)",
+          },
+          {
+            opacity: 1,
+            transform: "none",
+          },
         ],
-        { duration: 850, delay: 740 + i * 90 },
-      ),
-    )
+        {
+          duration: 850,
+          delay: 740 + i * 90,
+        },
+      )
+    })
     this.animate(
       query(root, ".photo-question-img"),
       [
@@ -796,17 +1104,31 @@ export class TadazzV4Motion {
           opacity: 0,
           transform: "translate3d(-130px,85px,0) scale(.78) rotate(-5deg)",
         },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 1370 },
+      {
+        duration: 1370,
+      },
     )
     this.animate(
       query(root, ".photo-question-panel"),
       [
-        { opacity: 0, transform: "translate3d(120px,0,0) scale(.94)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translate3d(120px,0,0) scale(.94)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 1200, delay: 270 },
+      {
+        duration: 1200,
+        delay: 270,
+      },
     )
   }
   private leaderboard() {
@@ -814,33 +1136,59 @@ export class TadazzV4Motion {
     this.animate(
       query(root, ".leader-head"),
       [
-        { opacity: 0, transform: "translateY(60px)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translateY(60px)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 880 },
+      {
+        duration: 880,
+      },
     )
-    all(root, ".team-row").forEach((row, i) =>
+    all(root, ".team-row").forEach((row, i) => {
       this.animate(
         row,
         [
-          { opacity: 0, transform: "translate3d(-190px,45px,0) scale(.96)" },
-          { opacity: 1, transform: "none" },
+          {
+            opacity: 0,
+            transform: "translate3d(-190px,45px,0) scale(.96)",
+          },
+          {
+            opacity: 1,
+            transform: "none",
+          },
         ],
-        { duration: 1100, delay: 270 + i * 180 },
-      ),
-    )
+        {
+          duration: 1100,
+          delay: 270 + i * 180,
+        },
+      )
+    })
   }
   private recap() {
     const root = this.root()
     this.animate(
       query(root, ".story-connection"),
       [
-        { opacity: 0, transform: "scaleX(.06)" },
-        { opacity: 0.82, transform: "scaleX(1)" },
+        {
+          opacity: 0,
+          transform: "scaleX(.06)",
+        },
+        {
+          opacity: 0.82,
+          transform: "scaleX(1)",
+        },
       ],
-      { duration: 1650, delay: 970 },
+      {
+        duration: 1650,
+        delay: 970,
+      },
     )
-    all(root, ".choice-slot").forEach((slot, i) =>
+    all(root, ".choice-slot").forEach((slot, i) => {
       this.animate(
         slot,
         [
@@ -853,23 +1201,40 @@ export class TadazzV4Motion {
             transform: "translate3d(0,-10px,0) rotate(0deg) scale(1.02)",
             offset: 0.85,
           },
-          { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
+          {
+            opacity: 1,
+            transform: "translate3d(0,0,0) scale(1)",
+          },
         ],
-        { duration: 1230, delay: 180 + i * 140, easing: V4_EASE_DRAMATIC },
-      ),
-    )
+        {
+          duration: 1230,
+          delay: 180 + i * 140,
+          easing: V4_EASE_DRAMATIC,
+        },
+      )
+    })
     this.animate(
       query(root, ".story-finale"),
       [
-        { opacity: 0, transform: "translate3d(0,70px,0) scale(.88)" },
+        {
+          opacity: 0,
+          transform: "translate3d(0,70px,0) scale(.88)",
+        },
         {
           opacity: 1,
           transform: "translate3d(0,-8px,0) scale(1.03)",
           offset: 0.76,
         },
-        { opacity: 1, transform: "translate3d(0,0,0) scale(1)" },
+        {
+          opacity: 1,
+          transform: "translate3d(0,0,0) scale(1)",
+        },
       ],
-      { duration: 1240, delay: 1450, easing: V4_EASE_DRAMATIC },
+      {
+        duration: 1240,
+        delay: 1450,
+        easing: V4_EASE_DRAMATIC,
+      },
     )
     this.cue("story-begin", 1800)
   }
@@ -878,39 +1243,75 @@ export class TadazzV4Motion {
     this.animate(
       query(root, ".interlude-ray"),
       [
-        { opacity: 0, transform: "translate(-50%,-50%) scale(.6)" },
-        { opacity: 1, transform: "translate(-50%,-50%) scale(1.25)" },
+        {
+          opacity: 0,
+          transform: "translate(-50%,-50%) scale(.6)",
+        },
+        {
+          opacity: 1,
+          transform: "translate(-50%,-50%) scale(1.25)",
+        },
       ],
-      { duration: 1500 },
+      {
+        duration: 1500,
+      },
     )
     this.animate(
       query(root, ".interlude-mini"),
       [
-        { opacity: 0, transform: "translateY(40px)" },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 0,
+          transform: "translateY(40px)",
+        },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 950, delay: 380 },
+      {
+        duration: 950,
+        delay: 380,
+      },
     )
     this.animate(
       query(root, ".interlude-title"),
       [
-        { opacity: 0, transform: "translateY(110px) scale(.7)" },
+        {
+          opacity: 0,
+          transform: "translateY(110px) scale(.7)",
+        },
         {
           opacity: 1,
           transform: "translateY(-15px) scale(1.035)",
           offset: 0.8,
         },
-        { opacity: 1, transform: "none" },
+        {
+          opacity: 1,
+          transform: "none",
+        },
       ],
-      { duration: 1310, delay: 220, easing: V4_EASE_DRAMATIC },
+      {
+        duration: 1310,
+        delay: 220,
+        easing: V4_EASE_DRAMATIC,
+      },
     )
     this.animate(
       query(root, ".interlude-rule"),
       [
-        { opacity: 0, transform: "scaleX(.03)" },
-        { opacity: 1, transform: "scaleX(1)" },
+        {
+          opacity: 0,
+          transform: "scaleX(.03)",
+        },
+        {
+          opacity: 1,
+          transform: "scaleX(1)",
+        },
       ],
-      { duration: 980, delay: 660 },
+      {
+        duration: 980,
+        delay: 660,
+      },
     )
     this.impact(400, "small")
   }
@@ -919,28 +1320,47 @@ export class TadazzV4Motion {
     this.animate(
       query(root, ".wipe:not(.second)"),
       [
-        { opacity: 0, transform: "translateX(-2000px) skewX(-22deg)" },
+        {
+          opacity: 0,
+          transform: "translateX(-2000px) skewX(-22deg)",
+        },
         {
           opacity: 1,
           transform: "translateX(700px) skewX(-22deg)",
           offset: 0.38,
         },
-        { opacity: 0.85, transform: "translateX(2450px) skewX(-22deg)" },
+        {
+          opacity: 0.85,
+          transform: "translateX(2450px) skewX(-22deg)",
+        },
       ],
-      { duration: 1490, easing: "cubic-bezier(.55,0,.22,1)" },
+      {
+        duration: 1490,
+        easing: "cubic-bezier(.55,0,.22,1)",
+      },
     )
     this.animate(
       query(root, ".wipe.second"),
       [
-        { opacity: 0, transform: "translateX(2500px) skewX(21deg)" },
+        {
+          opacity: 0,
+          transform: "translateX(2500px) skewX(21deg)",
+        },
         {
           opacity: 1,
           transform: "translateX(600px) skewX(21deg)",
           offset: 0.55,
         },
-        { opacity: 0, transform: "translateX(-2000px) skewX(21deg)" },
+        {
+          opacity: 0,
+          transform: "translateX(-2000px) skewX(21deg)",
+        },
       ],
-      { duration: 1570, delay: 160, easing: "cubic-bezier(.55,0,.22,1)" },
+      {
+        duration: 1570,
+        delay: 160,
+        easing: "cubic-bezier(.55,0,.22,1)",
+      },
     )
     this.impact(680, "small")
     this.cue("wipe-covered", 720, () => this.config.onWipeCovered?.())
@@ -949,11 +1369,13 @@ export class TadazzV4Motion {
     if (typeof document === "undefined") {
       return
     }
-    const owner = this.fx() || this.root()
+
+    const owner = this.fx() ?? this.root()
 
     if (!owner || typeof owner.appendChild !== "function") {
       return
     }
+
     const clock = document.createElement("span")
     clock.setAttribute("aria-hidden", "true")
     clock.style.cssText =
@@ -966,9 +1388,20 @@ export class TadazzV4Motion {
         /* Ignore */
       }
     })
-    this.animate(clock, [{ opacity: 0 }, { opacity: 0 }], {
-      duration: durationMs,
-    })
+    this.animate(
+      clock,
+      [
+        {
+          opacity: 0,
+        },
+        {
+          opacity: 0,
+        },
+      ],
+      {
+        duration: durationMs,
+      },
+    )
   }
   play(scene: TadazzV4Scene, data: TadazzV4Data = {}): Promise<boolean> {
     this.stop()
@@ -977,26 +1410,38 @@ export class TadazzV4Motion {
     const { token } = this
     const root = this.root()
     const safeData = data || {}
+    const duration = (
+      safeData as {
+        durationMs?: number
+      }
+    ).durationMs
     const authoredDuration =
-      typeof (safeData as { durationMs?: number }).durationMs === "number" &&
-      (safeData as { durationMs?: number }).durationMs! > 0
-        ? (safeData as { durationMs?: number }).durationMs!
-        : undefined
-
+      typeof duration === "number" && duration > 0 ? duration : undefined
+    /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
     const fade = (
       selector: string,
       delay = 100,
-      duration = 880,
+      durationValue = 880,
       from = "translate3d(0,38px,0) scale(.97)",
     ) =>
       this.animate(
         query(root, selector),
         [
-          { opacity: 0, transform: from },
-          { opacity: 1, transform: "none" },
+          {
+            opacity: 0,
+            transform: from,
+          },
+          {
+            opacity: 1,
+            transform: "none",
+          },
         ],
-        { delay, duration },
+        {
+          delay,
+          duration: durationValue,
+        },
       )
+    /* oxlint-enable max-params */
     fade(".full-head", 100, 900)
     fade(".full-corner-logo", 70, 670, "translate3d(-32px,0,0) scale(.94)")
     fade(".full-status-pill", 160, 660, "translate3d(24px,0,0) scale(.96)")
@@ -1007,18 +1452,36 @@ export class TadazzV4Motion {
         this.animate(
           query(root, ".rail.top"),
           [
-            { opacity: 0, transform: "scaleX(.1)" },
-            { opacity: 0.8, transform: "scaleX(1)" },
+            {
+              opacity: 0,
+              transform: "scaleX(.1)",
+            },
+            {
+              opacity: 0.8,
+              transform: "scaleX(1)",
+            },
           ],
-          { duration: 1300, delay: 250 },
+          {
+            duration: 1300,
+            delay: 250,
+          },
         )
         this.animate(
           query(root, ".hud-focus"),
           [
-            { opacity: 0, transform: "translateY(30px)" },
-            { opacity: 1, transform: "none" },
+            {
+              opacity: 0,
+              transform: "translateY(30px)",
+            },
+            {
+              opacity: 1,
+              transform: "none",
+            },
           ],
-          { duration: 850, delay: 820 },
+          {
+            duration: 850,
+            delay: 820,
+          },
         )
 
         break
@@ -1109,21 +1572,39 @@ export class TadazzV4Motion {
           this.animate(
             column,
             [
-              { opacity: 0, transform: "translate3d(0,18px,0) scale(.98)" },
-              { opacity: 1, transform: "none" },
+              {
+                opacity: 0,
+                transform: "translate3d(0,18px,0) scale(.98)",
+              },
+              {
+                opacity: 1,
+                transform: "none",
+              },
             ],
-            { delay: 140 + col * 90, duration: 700 },
+            {
+              delay: 140 + col * 90,
+              duration: 700,
+            },
           )
-          all(column, ".full-rep-row").forEach((row, i) =>
+          all(column, ".full-rep-row").forEach((row, i) => {
             this.animate(
               row,
               [
-                { opacity: 0, transform: "translate3d(0,27px,0)" },
-                { opacity: 1, transform: "none" },
+                {
+                  opacity: 0,
+                  transform: "translate3d(0,27px,0)",
+                },
+                {
+                  opacity: 1,
+                  transform: "none",
+                },
               ],
-              { delay: 300 + i * 45 + col * 65, duration: 650 },
-            ),
-          )
+              {
+                delay: 300 + i * 45 + col * 65,
+                duration: 650,
+              },
+            )
+          })
         })
         this.cue("directory-loaded", 650)
         this.holdScene(authoredDuration ?? 1500)
@@ -1137,50 +1618,74 @@ export class TadazzV4Motion {
           1300,
           "translate3d(-100px,110px,0) rotate(-8deg) scale(.80)",
         )
-        all(root, ".full-step").forEach((step, i) =>
+        all(root, ".full-step").forEach((step, i) => {
           this.animate(
             step,
             [
-              { opacity: 0, transform: "translate3d(85px,0,0) scale(.96)" },
-              { opacity: 1, transform: "none" },
+              {
+                opacity: 0,
+                transform: "translate3d(85px,0,0) scale(.96)",
+              },
+              {
+                opacity: 1,
+                transform: "none",
+              },
             ],
-            { delay: 450 + i * 320, duration: 850 },
-          ),
-        )
-        all(root, ".full-number-key").forEach((key, i) =>
+            {
+              delay: 450 + i * 320,
+              duration: 850,
+            },
+          )
+        })
+        all(root, ".full-number-key").forEach((key, i) => {
           this.animate(
             key,
             [
-              { backgroundColor: "#35125e", transform: "scale(1)" },
+              {
+                backgroundColor: "#35125e",
+                transform: "scale(1)",
+              },
               {
                 backgroundColor: i % 2 ? "#31a7dc" : "#dbff51",
                 transform: "scale(1.13)",
                 offset: 0.5,
               },
-              { backgroundColor: "#35125e", transform: "scale(1)" },
+              {
+                backgroundColor: "#35125e",
+                transform: "scale(1)",
+              },
             ],
-            { duration: 590, delay: 1150 + i * 180 },
-          ),
-        )
+            {
+              duration: 590,
+              delay: 1150 + i * 180,
+            },
+          )
+        })
         this.cue("phone-ready", 1490)
         this.holdScene(authoredDuration ?? 2000)
 
         break
 
       case "connection-readiness":
-        all(root, ".full-table-led").forEach((tile, i) =>
+        all(root, ".full-table-led").forEach((tile, i) => {
           this.animate(
             tile,
             [
-              { opacity: 0, transform: "translate3d(0,35px,0) scale(.84)" },
-              { opacity: 1, transform: "none" },
+              {
+                opacity: 0,
+                transform: "translate3d(0,35px,0) scale(.84)",
+              },
+              {
+                opacity: 1,
+                transform: "none",
+              },
             ],
             {
               duration: 540,
               delay: 300 + ((i + 1) % 10) * 62 + Math.floor(i / 10) * 80,
             },
-          ),
-        )
+          )
+        })
         fade(".full-connection-status", 1200, 750)
         this.cue("readiness-grid", 600)
         this.holdScene(authoredDuration ?? 1500)
@@ -1193,26 +1698,52 @@ export class TadazzV4Motion {
         this.animate(
           query(root, ".full-launch-glow"),
           [
-            { opacity: 0, transform: "translate(-50%,-50%) scale(.5)" },
-            { opacity: 1, transform: "translate(-50%,-50%) scale(1.15)" },
+            {
+              opacity: 0,
+              transform: "translate(-50%,-50%) scale(.5)",
+            },
+            {
+              opacity: 1,
+              transform: "translate(-50%,-50%) scale(1.15)",
+            },
           ],
-          { duration: 1800 },
+          {
+            duration: 1800,
+          },
         )
         this.animate(
           query(root, ".full-round-plaque"),
           [
-            { opacity: 0, transform: "translate3d(0,150px,0) scale(.76)" },
-            { opacity: 1, transform: "none" },
+            {
+              opacity: 0,
+              transform: "translate3d(0,150px,0) scale(.76)",
+            },
+            {
+              opacity: 1,
+              transform: "none",
+            },
           ],
-          { delay: 390, duration: 1250 },
+          {
+            delay: 390,
+            duration: 1250,
+          },
         )
         this.animate(
           query(root, ".full-round-underline"),
           [
-            { opacity: 0, transform: "scaleX(.01)" },
-            { opacity: 1, transform: "scaleX(1)" },
+            {
+              opacity: 0,
+              transform: "scaleX(.01)",
+            },
+            {
+              opacity: 1,
+              transform: "scaleX(1)",
+            },
           ],
-          { delay: 1200, duration: 970 },
+          {
+            delay: 1200,
+            duration: 970,
+          },
         )
         this.impact(700, "small")
         this.cue("round-launch", 1600)
@@ -1221,29 +1752,48 @@ export class TadazzV4Motion {
         break
 
       case "story-progress":
-        all(root, ".full-progress-piece").forEach((card, i) =>
+        all(root, ".full-progress-piece").forEach((card, i) => {
           this.animate(
             card,
             [
-              { opacity: 0, transform: "translate3d(0,105px,0) scale(.77)" },
+              {
+                opacity: 0,
+                transform: "translate3d(0,105px,0) scale(.77)",
+              },
               {
                 opacity: 1,
                 transform: "translate3d(0,-10px,0) scale(1.03)",
                 offset: 0.84,
               },
-              { opacity: 1, transform: "none" },
+              {
+                opacity: 1,
+                transform: "none",
+              },
             ],
-            { duration: 1090, delay: 220 + i * 135, easing: V4_EASE_DRAMATIC },
-          ),
-        )
+            {
+              duration: 1090,
+              delay: 220 + i * 135,
+              easing: V4_EASE_DRAMATIC,
+            },
+          )
+        })
         fade(".full-progress-bottom", 1300, 740)
         this.animate(
           query(root, ".full-progress-bridge"),
           [
-            { opacity: 0, transform: "scaleX(.03)" },
-            { opacity: 0.9, transform: "scaleX(1)" },
+            {
+              opacity: 0,
+              transform: "scaleX(.03)",
+            },
+            {
+              opacity: 0.9,
+              transform: "scaleX(1)",
+            },
           ],
-          { delay: 950, duration: 1350 },
+          {
+            delay: 950,
+            duration: 1350,
+          },
         )
         this.cue("story-progress-update", 1280)
         this.holdScene(authoredDuration ?? 2200)
@@ -1252,7 +1802,16 @@ export class TadazzV4Motion {
 
       case "tie-break": {
         const hasResolved =
-          (data as { resolvedIndex?: number | null }).resolvedIndex != null
+          (
+            data as {
+              resolvedIndex?: number | null
+            }
+          ).resolvedIndex !== null &&
+          (
+            data as {
+              resolvedIndex?: number | null
+            }
+          ).resolvedIndex !== undefined
         this.cue(
           hasResolved ? "tie-resolved" : "tie-unresolved",
           hasResolved ? 1810 : 1510,
@@ -1263,10 +1822,12 @@ export class TadazzV4Motion {
       }
 
       case "story-assembly":
+
       case "story-live":
         // Reference React renderer owns choreography; server owns advancement.
         // Do not replay the previous kit's decorative story audio.
         this.holdScene(1)
+
         break
 
       case "grand-finale":
@@ -1277,7 +1838,9 @@ export class TadazzV4Motion {
         break
     }
 
-    for (const a of root.getAnimations?.({ subtree: true }) ?? []) {
+    for (const a of root.getAnimations?.({
+      subtree: true,
+    }) ?? []) {
       if (
         !this.active.includes(a) &&
         a.effect?.getTiming().iterations !== Infinity

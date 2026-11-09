@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import fs from "node:fs"
 import path from "node:path"
 import { v7 as uuidv7 } from "uuid"
@@ -69,7 +70,7 @@ export function loadAllShowsHealth(
         }
 
         const raw = fs.readFileSync(filePath, "utf-8")
-        let parsed: unknown
+        let parsed: unknown = undefined
 
         try {
           parsed = JSON.parse(raw)
@@ -87,12 +88,13 @@ export function loadAllShowsHealth(
           continue
         }
 
-        const quizObj = parsed as LoadedShowRecord["quizz"] & { id?: string }
+        const quizObj = parsed as LoadedShowRecord["quizz"] & {
+          id?: string
+        }
         const quizId =
           typeof quizObj.id === "string" && quizObj.id.trim().length > 0
             ? quizObj.id
             : file.replace(/\.json$/iu, "")
-
         let extras: AnyQuizExtras | null = null
 
         if (sidecarExists(getPath, quizId)) {
@@ -152,7 +154,10 @@ export function loadAllShowsHealth(
             records.push({
               id: cleanQuizId,
               filePath: sPath,
-              quizz: { subject: cleanQuizId, questions: [] },
+              quizz: {
+                subject: cleanQuizId,
+                questions: [],
+              },
               extras,
             })
           }
@@ -165,7 +170,10 @@ export function loadAllShowsHealth(
     }
   }
 
-  return { records, unreadableFiles }
+  return {
+    records,
+    unreadableFiles,
+  }
 }
 
 export function loadAllShowsFromDisk(
@@ -193,7 +201,9 @@ export const getMediaDeleteJournalDirectory = (
   )
 
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+    fs.mkdirSync(dir, {
+      recursive: true,
+    })
   }
 
   return dir
@@ -205,7 +215,9 @@ export const getMediaQuarantineDirectory = (
   const dir = path.join(getMediaDeleteJournalDirectory(getPath), "quarantine")
 
   if (!fs.existsSync(dir)) {
-    fs.mkdirSync(dir, { recursive: true })
+    fs.mkdirSync(dir, {
+      recursive: true,
+    })
   }
 
   return dir
@@ -330,7 +342,6 @@ export function executeMediaDeleteTransaction(
   const affectedShows = shows.filter((show) =>
     references.some((r) => r.quizId === show.id),
   )
-
   const journalId = uuidv7()
   const quarantineDir = getMediaQuarantineDirectory(getPath)
   const quarantinePath = mediaExists
@@ -369,7 +380,6 @@ export function executeMediaDeleteTransaction(
       originalSidecarRaw,
     }
   })
-
   const journalEntry: MediaDeleteJournalEntry = {
     version: 1,
     kind: "media-delete",
@@ -382,20 +392,16 @@ export function executeMediaDeleteTransaction(
     status: "staged",
     shows: journalShows,
   }
-
   const journalDir = getMediaDeleteJournalDirectory(getPath)
   const journalFilePath = path.join(
     journalDir,
     `media-${cleanMediaName}-${journalId}.media-journal.json`,
   )
-
   const tmpJournal = `${journalFilePath}.tmp.${Date.now()}`
   fs.writeFileSync(tmpJournal, JSON.stringify(journalEntry, null, 2), "utf-8")
   fs.renameSync(tmpJournal, journalFilePath)
-
   const rollback = (): boolean => {
     let allSucceeded = true
-
     for (const b of journalShows) {
       try {
         if (b.originalBaseRaw !== null) {
@@ -474,7 +480,6 @@ export function executeMediaDeleteTransaction(
 
     return allSucceeded
   }
-
   const detachedFromShows: string[] = []
 
   try {
@@ -515,7 +520,7 @@ export function executeMediaDeleteTransaction(
       }
 
       detachedFromShows.push(show.id)
-      writeCount++
+      writeCount += 1
 
       if (
         options?.faultInjection?.failAfterFirstShowWrite &&
@@ -705,11 +710,9 @@ export function recoverMediaDeleteJournals(
   const restoredMediaNames: string[] = []
   const unresolvedJournals: string[] = []
   let recoveredCount = 0
-
   const authorizedMediaDir = getPath("media")
   const authorizedQuarantineDir = getMediaQuarantineDirectory(getPath)
   const authorizedQuizzDir = getPath("quizz")
-
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
 
@@ -718,7 +721,7 @@ export function recoverMediaDeleteJournals(
         continue
       }
 
-      let raw: string
+      let raw = ""
 
       try {
         raw = fs.readFileSync(journalPath, "utf-8")
@@ -732,7 +735,7 @@ export function recoverMediaDeleteJournals(
         continue
       }
 
-      let entry: Partial<MediaDeleteJournalEntry>
+      let entry: Partial<MediaDeleteJournalEntry> | undefined = undefined
 
       try {
         entry = JSON.parse(raw) as Partial<MediaDeleteJournalEntry>
@@ -883,7 +886,7 @@ export function recoverMediaDeleteJournals(
           fs.unlinkSync(journalPath)
         }
 
-        recoveredCount++
+        recoveredCount += 1
 
         continue
       }
@@ -996,7 +999,7 @@ export function recoverMediaDeleteJournals(
           fs.unlinkSync(journalPath)
         }
 
-        recoveredCount++
+        recoveredCount += 1
 
         continue
       }
@@ -1052,22 +1055,18 @@ export function recoverStartupJournals(
     typeof optionsOrGetPath === "function"
       ? optionsOrGetPath
       : optionsOrGetPath.getPath
-
   const updateQuizz =
     typeof optionsOrGetPath === "function"
       ? undefined
       : optionsOrGetPath.updateQuizz
-
   const deleteQuizz =
     typeof optionsOrGetPath === "function"
       ? undefined
       : optionsOrGetPath.deleteQuizz
-
   const throwOnUnresolved =
     typeof optionsOrGetPath === "function"
       ? false
       : (optionsOrGetPath.throwOnUnresolved ?? true)
-
   const injections: StorageInjections = {
     getPath,
     getQuizzById: (id: string) => {
@@ -1078,21 +1077,30 @@ export function recoverStartupJournals(
         throw new Error("errors:quizz.notFound")
       }
 
-      return JSON.parse(fs.readFileSync(filePath, "utf-8"))
+      return JSON.parse(fs.readFileSync(filePath, "utf-8")) as Record<
+        string,
+        unknown
+      >
     },
-    saveQuizz: () => ({ id: "" }),
+    saveQuizz: () => ({
+      id: "",
+    }),
     updateQuizz: (id: string, data: unknown) => {
       if (updateQuizz) {
         updateQuizz(id, data)
 
-        return { id }
+        return {
+          id,
+        }
       }
 
       const quizzDir = getPath("quizz")
       const filePath = path.join(quizzDir, `${id}.json`)
       fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8")
 
-      return { id }
+      return {
+        id,
+      }
     },
     deleteQuizz:
       deleteQuizz ??
@@ -1105,19 +1113,21 @@ export function recoverStartupJournals(
         }
       }),
   }
-
   const quizRecovery = recoverJournals(injections)
   const mediaRecovery = recoverMediaDeleteJournals(getPath)
-
   const totalUnresolved =
     (quizRecovery.unresolvedCount ?? 0) + (mediaRecovery.unresolvedCount ?? 0)
+  const status: "clean" | "recovered" | "failed" = (() => {
+    if (totalUnresolved > 0) {
+      return "failed"
+    }
 
-  const status: "clean" | "recovered" | "failed" =
-    totalUnresolved > 0
-      ? "failed"
-      : quizRecovery.recoveredCount > 0 || mediaRecovery.recoveredCount > 0
-        ? "recovered"
-        : "clean"
+    if (quizRecovery.recoveredCount > 0 || mediaRecovery.recoveredCount > 0) {
+      return "recovered"
+    }
+
+    return "clean"
+  })()
 
   if (status === "failed" && throwOnUnresolved) {
     const errorMsg = `[StartupRecovery] Server startup blocked: ${totalUnresolved} critical journal(s) unresolved. Check journal files in .journal/`
@@ -1170,11 +1180,9 @@ export function buildMediaCatalogResponse(
 ): MediaCatalogResponse {
   const shows = loadAllShowsFromDisk(getPath)
   const allRefs: CardMediaReference[] = []
-
   for (const show of shows) {
     allRefs.push(...collectQuizMediaReferences(show))
   }
-
   const currentShow = currentQuizId
     ? shows.find((s) => s.id === currentQuizId)
     : undefined
@@ -1182,7 +1190,6 @@ export function buildMediaCatalogResponse(
     currentShow?.extras?.mediaCatalog ?? []
   const currentCatalogNames = new Set(showMediaCatalog.map((item) => item.name))
   const currentCatalogUrls = new Set(showMediaCatalog.map((item) => item.url))
-
   const enriched: EnrichedMediaCatalogItem[] = uploadedMedia.map((item) => {
     const itemRefs = allRefs.filter(
       (r) => r.mediaName === item.name || r.url === item.url,
@@ -1235,7 +1242,6 @@ export function buildMediaCatalogResponse(
       lottieNames.set(catItem.name, catItem.addedAt ?? 0)
     }
   }
-
   const lottieAssets: EnrichedLottieCatalogItem[] = [...lottieNames.entries()]
     .sort((a, b) => b[1] - a[1])
     .map(([name]) => {

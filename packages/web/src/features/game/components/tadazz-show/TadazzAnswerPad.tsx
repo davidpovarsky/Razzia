@@ -1,5 +1,5 @@
 import AnswerButton from "../AnswerButton"
-import {ANSWERS_COLORS,ANSWERS_LABELS} from "../../utils/constants"
+import { ANSWERS_COLORS, ANSWERS_LABELS } from "../../utils/constants"
 import NativeButton from "@razzia/web/components/Button"
 import type { StageQuestion } from "@razzia/extensions/presentation"
 import {
@@ -28,31 +28,63 @@ export interface TadazzAnswerPadProps {
  * Motion Kit card skin. Selection semantics mirror the registry components:
  * single → submit on tap; multi → toggle + submit; estimation → value submit.
  */
-export function TadazzAnswerPad({ question, questionType, options, selected, submitted, disabled, onToggle, onSubmit }: TadazzAnswerPadProps) {
+export function TadazzAnswerPad({
+  question,
+  questionType,
+  options,
+  selected,
+  submitted,
+  disabled,
+  onToggle,
+  onSubmit,
+}: TadazzAnswerPadProps) {
   const { t } = useTranslation()
   const tx = useTadazzShellText()
 
   if (submitted) {
     return (
       <div className="tz-pad" data-testid="tadazz-answer-pad">
-        <div className="tz-pad-status" data-testid="tadazz-answer-sent">{tx("answerSent", "ANSWER SENT")}</div>
+        <div className="tz-pad-status" data-testid="tadazz-answer-sent">
+          {tx("answerSent", "ANSWER SENT")}
+        </div>
       </div>
     )
   }
 
   if (questionType === "estimation") {
-    return <EstimationPad options={options} disabled={disabled} onSubmit={onSubmit} />
+    return (
+      <EstimationPad
+        options={options}
+        disabled={disabled}
+        onSubmit={onSubmit}
+      />
+    )
   }
 
   const multi = questionType === "multi"
+
   return (
-    <div className="tz-pad" data-testid="tadazz-answer-pad" role="group" aria-label={tx("answerChoices", "Answer choices")}>
+    <div
+      className="tz-pad"
+      data-testid="tadazz-answer-pad"
+      role="group"
+      aria-label={tx("answerChoices", "Answer choices")}
+    >
       {question.options.map((opt, i) => (
         <AnswerButton
           label={ANSWERS_LABELS[i]}
           answerIndex={i}
           selected={multi ? selected.includes(i) : undefined}
-          visual={opt.image ? {answerIndex:i,url:opt.image,display:"both",alt:opt.label} : undefined}
+          visual={
+            opt.image
+              ? {
+                  answerIndex: i,
+                  url: opt.image,
+                  display: "both",
+                  alt: opt.label,
+                }
+              : undefined
+          }
           key={`${question.key}:${i}`}
           type="button"
           className={ANSWERS_COLORS[i]}
@@ -66,7 +98,14 @@ export function TadazzAnswerPad({ question, questionType, options, selected, sub
         </AnswerButton>
       ))}
       {multi && (
-        <NativeButton size="sm" type="button" className="font-display" disabled={disabled || selected.length === 0} onClick={() => onSubmit([...selected].sort((a, b) => a - b))} data-testid="tadazz-pad-submit">
+        <NativeButton
+          size="sm"
+          type="button"
+          className="font-display"
+          disabled={disabled || selected.length === 0}
+          onClick={() => onSubmit([...selected].sort((a, b) => a - b))}
+          data-testid="tadazz-pad-submit"
+        >
           {t("game:confirm")}
         </NativeButton>
       )}
@@ -74,15 +113,27 @@ export function TadazzAnswerPad({ question, questionType, options, selected, sub
   )
 }
 
-function EstimationPad({ options, disabled, onSubmit }: { options?: unknown; disabled: boolean; onSubmit: (keys: number[]) => void }) {
+function EstimationPad({
+  options,
+  disabled,
+  onSubmit,
+}: {
+  options?: unknown
+  disabled: boolean
+  onSubmit: (keys: number[]) => void
+}) {
   const { t } = useTranslation()
   const estimation = getEstimationOptions(options as never)
   const { min, max, step, inputMode } = estimation
   const isSlider = inputMode === ESTIMATION_INPUT_MODES.SLIDER
-  const [value, setValue] = useState(() => snapToStep((min + max) / 2, estimation))
+  const [value, setValue] = useState(() =>
+    snapToStep((min + max) / 2, estimation),
+  )
   const [input, setInput] = useState("")
   const parsed = input.trim() === "" ? NaN : Number(input)
-  const valid = isSlider || (Number.isFinite(parsed) && parsed >= min && parsed <= max)
+  const valid =
+    isSlider || (Number.isFinite(parsed) && parsed >= min && parsed <= max)
+
   return (
     <div className="tz-pad" data-testid="tadazz-answer-pad">
       {isSlider ? (
@@ -97,7 +148,9 @@ function EstimationPad({ options, disabled, onSubmit }: { options?: unknown; dis
             step={step}
             value={value}
             disabled={disabled}
-            onChange={(e) => setValue(snapToStep(Number(e.target.value), estimation))}
+            onChange={(e) =>
+              setValue(snapToStep(Number(e.target.value), estimation))
+            }
           />
         </>
       ) : (
@@ -111,7 +164,13 @@ function EstimationPad({ options, disabled, onSubmit }: { options?: unknown; dis
           onChange={(e) => setInput(e.target.value)}
         />
       )}
-      <NativeButton size="sm" type="button" className="font-display" disabled={disabled || !valid} onClick={() => onSubmit([isSlider ? value : parsed])}>
+      <NativeButton
+        size="sm"
+        type="button"
+        className="font-display"
+        disabled={disabled || !valid}
+        onClick={() => onSubmit([isSlider ? value : parsed])}
+      >
         {t("game:confirm")}
       </NativeButton>
     </div>

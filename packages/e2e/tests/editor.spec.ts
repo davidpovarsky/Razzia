@@ -469,8 +469,9 @@ test("uses original Studio controls for every card kind, keyboard navigation and
     "interimResults",
     "answerRecap",
   ]
-  for (const kind of kinds)
+  for (const kind of kinds) {
     await expect(page.getByTestId(`toggle-kind-${kind}`)).toBeVisible()
+  }
   const quiz = page.getByTestId("toggle-kind-quiz")
   const survey = page.getByTestId("toggle-kind-survey")
   await quiz.focus()
@@ -482,10 +483,11 @@ test("uses original Studio controls for every card kind, keyboard navigation and
   await expect(quiz).toBeFocused()
   await quiz.press("Space")
   await expect(quiz).toHaveAttribute("data-state", "on")
-  for (const group of ["media", "effects", "show", "results"])
+  for (const group of ["media", "effects", "show", "results"]) {
     await expect(
       page.getByTestId(`toggle-group-divider-${group}`),
     ).toBeVisible()
+  }
   const imageAction = page.getByTestId("answer-pick-image-0")
   expect(
     await imageAction.evaluate(

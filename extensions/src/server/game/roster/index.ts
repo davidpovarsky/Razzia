@@ -34,6 +34,7 @@ export class GameRoster implements RosterState {
   markConnected(clientId: string): void {
     const id = this.clientIndex.get(clientId)
     const entry = id ? this.entries.get(id) : undefined
+
     if (entry) {
       entry.status = "connected"
       entry.timedOut = false
@@ -44,6 +45,7 @@ export class GameRoster implements RosterState {
   markDisconnected(clientId: string, points: number, timedOut: boolean): void {
     const id = this.clientIndex.get(clientId)
     const entry = id ? this.entries.get(id) : undefined
+
     if (entry) {
       entry.status = "disconnected"
       entry.timedOut = timedOut
@@ -55,6 +57,7 @@ export class GameRoster implements RosterState {
   shouldKeepParticipant(clientId: string): boolean {
     const id = this.clientIndex.get(clientId)
     const entry = id ? this.entries.get(id) : undefined
+
     return Boolean(
       entry &&
       (entry.preRegistered || entry.phoneE164 || entry.source === "phone"),
@@ -63,6 +66,7 @@ export class GameRoster implements RosterState {
 
   forgetClient(clientId: string): void {
     const id = this.clientIndex.get(clientId)
+
     if (id) {
       this.entries.delete(id)
       this.clientIndex.delete(clientId)
@@ -71,8 +75,13 @@ export class GameRoster implements RosterState {
 
   afterKick(clientId: string): void {
     const id = this.clientIndex.get(clientId)
-    if (!id) return
+
+    if (!id) {
+      return
+    }
+
     const entry = this.entries.get(id)
+
     if (entry) {
       if (entry.preRegistered || entry.phoneE164) {
         entry.status = "not_joined"
@@ -81,6 +90,7 @@ export class GameRoster implements RosterState {
         this.entries.delete(id)
       }
     }
+
     this.clientIndex.delete(clientId)
   }
 

@@ -6,7 +6,9 @@ import {
 import type { RosterEntry } from "./roster/types"
 
 function directoryScene(extras: AnyQuizExtras | null) {
-  if (!extras || !isQuizExtrasV2(extras)) {return undefined}
+  if (!extras || !isQuizExtrasV2(extras)) {
+    return undefined
+  }
 
   const scene = Object.values(extras.scenes).find(
     (item) =>
@@ -29,7 +31,9 @@ export function buildFullShowDirectory(
   const normalize = (name: string) =>
     name.trim().replace(/\s+/gu, " ").toLocaleLowerCase("en-GB")
   entries.forEach((entry, index) => {
-    if (entry.status !== "connected") {return}
+    if (entry.status !== "connected") {
+      return
+    }
 
     if (entry.tableNumber !== undefined || authored.length === 0) {
       connectedTables.add(entry.tableNumber ?? index + 1)
@@ -38,8 +42,9 @@ export function buildFullShowDirectory(
     }
 
     for (const seat of authored) {
-      if (normalize(seat.name) === normalize(entry.displayName))
-        {connectedTables.add(seat.table)}
+      if (normalize(seat.name) === normalize(entry.displayName)) {
+        connectedTables.add(seat.table)
+      }
     }
   })
 
@@ -63,7 +68,9 @@ export function buildLobbyDirectory(
   extras: AnyQuizExtras | null,
   getLive?: () => PublicFullShowData | undefined,
 ): PublicFullShowData | null {
-  if (!extras || !isQuizExtrasV2(extras)) {return null}
+  if (!extras || !isQuizExtrasV2(extras)) {
+    return null
+  }
 
   const directory = directoryScene(extras)
 
@@ -72,8 +79,9 @@ export function buildLobbyDirectory(
     (!directory.seatingPlan &&
       (extras.questionIds.length !== 10 ||
         extras.roster.participants.length === 0))
-  )
-    {return null}
+  ) {
+    return null
+  }
 
   const live = getLive?.()
   const authored = directory.seatingPlan
@@ -90,7 +98,9 @@ export function buildLobbyDirectory(
     ? live.representatives
     : fallback
 
-  if (!representatives.length) {return null}
+  if (!representatives.length) {
+    return null
+  }
 
   return {
     isLive: live?.isLive ?? false,

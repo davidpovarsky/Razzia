@@ -12,14 +12,14 @@ import {
 import { endTimer } from "@razzia/e2e/utils/extension-manager"
 import { joinGame } from "@razzia/e2e/utils/player"
 import type { Page } from "@playwright/test"
-
 const SCREENSHOT_DIR = join(
   import.meta.dirname,
   "../test-results/screenshots/media-appearance-stage",
 )
-
 const saveScreenshot = async (page: Page, filename: string) => {
-  fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
+  fs.mkdirSync(SCREENSHOT_DIR, {
+    recursive: true,
+  })
   await page.screenshot({
     path: join(SCREENSHOT_DIR, filename),
     fullPage: false,
@@ -34,16 +34,19 @@ const TINY_PNG_BUFFER = Buffer.from(
 
 // Dynamic multi-aspect ratio PNG generator for varied, realistic image fixtures
 const CRC_TABLE = new Int32Array(256)
-for (let n = 0; n < 256; n++) {
+for (let n = 0; n < 256; n += 1) {
   let c = n
-  for (let k = 0; k < 8; k++) c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+  for (let k = 0; k < 8; k += 1) {
+    c = c & 1 ? 0xedb88320 ^ (c >>> 1) : c >>> 1
+  }
   CRC_TABLE[n] = c
 }
 function crc32(buf: Buffer): number {
   let crc = -1
-  for (let i = 0; i < buf.length; i++) {
-    crc = (crc >>> 8) ^ CRC_TABLE[(crc ^ buf[i]) & 0xff]
+  for (const _entry of buf) {
+    crc = (crc >>> 8) ^ CRC_TABLE[(crc ^ _entry) & 0xff]
   }
+
   return crc ^ -1
 }
 function makeChunk(type: string, data: Buffer): Buffer {
@@ -52,12 +55,17 @@ function makeChunk(type: string, data: Buffer): Buffer {
   const typeBuf = Buffer.from(type, "ascii")
   const crc = Buffer.alloc(4)
   crc.writeInt32BE(crc32(Buffer.concat([typeBuf, data])), 0)
+
   return Buffer.concat([len, typeBuf, data, crc])
 }
 function createPngBuffer(
   width: number,
   height: number,
-  color = { r: 59, g: 130, b: 246 },
+  color = {
+    r: 59,
+    g: 130,
+    b: 246,
+  },
 ): Buffer {
   const sig = Buffer.from([137, 80, 78, 71, 13, 10, 26, 10])
   const ihdr = Buffer.alloc(13)
@@ -70,10 +78,10 @@ function createPngBuffer(
   ihdr[12] = 0
   const scanlineLength = 1 + width * 3
   const raw = Buffer.alloc(scanlineLength * height)
-  for (let y = 0; y < height; y++) {
+  for (let y = 0; y < height; y += 1) {
     const offset = y * scanlineLength
     raw[offset] = 0
-    for (let x = 0; x < width; x++) {
+    for (let x = 0; x < width; x += 1) {
       const px = offset + 1 + x * 3
       raw[px] = (color.r + (x * 40) / width) % 256
       raw[px + 1] = (color.g + (y * 40) / height) % 256
@@ -81,6 +89,7 @@ function createPngBuffer(
     }
   }
   const idat = makeChunk("IDAT", zlib.deflateSync(raw))
+
   return Buffer.concat([
     sig,
     makeChunk("IHDR", ihdr),
@@ -88,7 +97,6 @@ function createPngBuffer(
     makeChunk("IEND", Buffer.alloc(0)),
   ])
 }
-
 const LANDSCAPE_PNG_BUFFER = createPngBuffer(1600, 900, {
   r: 234,
   g: 88,
@@ -99,16 +107,20 @@ const PORTRAIT_PNG_BUFFER = createPngBuffer(1200, 1600, {
   g: 185,
   b: 129,
 })
-const SQUARE_PNG_BUFFER = createPngBuffer(1024, 1024, { r: 139, g: 92, b: 246 })
-
+const SQUARE_PNG_BUFFER = createPngBuffer(1024, 1024, {
+  r: 139,
+  g: 92,
+  b: 246,
+})
 const assertZeroStageScroll = async (page: Page, label: string) => {
   const metrics = await page.evaluate(() => {
     const doc = document.documentElement
-    const body = document.body
+    const { body } = document
     const stage =
-      document.querySelector('[data-testid="audience-display"] section') ||
-      document.querySelector("section") ||
+      document.querySelector('[data-testid="audience-display"] section') ??
+      document.querySelector("section") ??
       doc
+
     return {
       innerWidth: window.innerWidth,
       innerHeight: window.innerHeight,
@@ -123,22 +135,18 @@ const assertZeroStageScroll = async (page: Page, label: string) => {
       stageClientWidth: (stage as HTMLElement).clientWidth,
     }
   })
-
   expect(
     metrics.docScrollWidth,
     `${label}: docScrollWidth (${metrics.docScrollWidth}) > docClientWidth (${metrics.docClientWidth})`,
   ).toBeLessThanOrEqual(metrics.docClientWidth + 1)
-
   expect(
     metrics.docScrollHeight,
     `${label}: docScrollHeight (${metrics.docScrollHeight}) > docClientHeight (${metrics.docClientHeight})`,
   ).toBeLessThanOrEqual(metrics.docClientHeight + 1)
-
   expect(
     metrics.stageScrollWidth,
     `${label}: stageScrollWidth (${metrics.stageScrollWidth}) > stageClientWidth (${metrics.stageClientWidth})`,
   ).toBeLessThanOrEqual(metrics.stageClientWidth + 1)
-
   expect(
     metrics.stageScrollHeight,
     `${label}: stageScrollHeight (${metrics.stageScrollHeight}) > stageClientHeight (${metrics.stageClientHeight})`,
@@ -152,21 +160,30 @@ const assertZeroStageScroll = async (page: Page, label: string) => {
  * NOT truncated by any overflow:hidden container, and that no CSS line-clamp or overflow
  * hides essential text.
  */
+/* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
 const assertVisualContainment = async (
   page: Page,
   selector: string,
   label: string,
-  options?: { checkImageLoaded?: boolean; checkTextCompleteness?: boolean },
+  options?: {
+    checkImageLoaded?: boolean
+    checkTextCompleteness?: boolean
+  },
 ) => {
   await expect(async () => {
     const result = await page.evaluate(
       ({ sel, checkImg, checkText }) => {
         const el = document.querySelector(sel)
+
         if (!el) {
-          return { ok: false, error: `Element not found in DOM: ${sel}` }
+          return {
+            ok: false,
+            error: `Element not found in DOM: ${sel}`,
+          }
         }
 
         const style = window.getComputedStyle(el)
+
         if (
           style.display === "none" ||
           style.visibility === "hidden" ||
@@ -179,6 +196,7 @@ const assertVisualContainment = async (
         }
 
         const rect = el.getBoundingClientRect()
+
         if (rect.width <= 0 || rect.height <= 0) {
           return {
             ok: false,
@@ -204,6 +222,7 @@ const assertVisualContainment = async (
 
         // 2. Walk clipping ancestors and assert element is not clipped by any overflow-hidden/clip container
         let ancestor = el.parentElement
+
         while (
           ancestor &&
           ancestor !== document.body &&
@@ -229,6 +248,7 @@ const assertVisualContainment = async (
               }
             }
           }
+
           ancestor = ancestor.parentElement
         }
 
@@ -243,16 +263,19 @@ const assertVisualContainment = async (
         }
 
         // 4. Text completeness check: detect CSS line-clamp or overflow ellipsis cuts
-        if (checkText !== false) {
+        if (checkText) {
           const text = (el.textContent || "").trim()
+
           if (text.length > 0) {
             const clamp = style.webkitLineClamp
+
             if (clamp && clamp !== "none") {
               return {
                 ok: false,
                 error: `Element has -webkit-line-clamp: ${clamp} applied to text: "${text.slice(0, 30)}..."`,
               }
             }
+
             if (el.scrollHeight > el.clientHeight + 1.5) {
               return {
                 ok: false,
@@ -280,40 +303,52 @@ const assertVisualContainment = async (
         checkText: options?.checkTextCompleteness ?? true,
       },
     )
-
     expect(result.ok, `${label}: ${result.error}`).toBe(true)
-  }).toPass({ timeout: 5000, intervals: [100, 250, 500] })
+  }).toPass({
+    timeout: 5000,
+    intervals: [100, 250, 500],
+  })
 }
 
 /**
  * P0-4: Asserts that an upper stage element does not vertically overlap a lower element.
  * Fail-closed: missing required selectors FAIL the test unless explicitly marked optional.
  */
+/* oxlint-enable max-params */
+/* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
 const assertNoVerticalOverlap = async (
   page: Page,
   topSelector: string,
   bottomSelector: string,
   label: string,
-  options?: { optional?: boolean },
+  options?: {
+    optional?: boolean
+  },
 ) => {
   const result = await page.evaluate(
     ({ topSel, bottomSel, isOptional }) => {
       const topEl = document.querySelector(topSel)
       const bottomEl = document.querySelector(bottomSel)
+
       if (!topEl || !bottomEl) {
         if (isOptional) {
-          return { ok: true }
+          return {
+            ok: true,
+          }
         }
+
         return {
           ok: false,
           error: `Missing required element for overlap check: topEl(${topSel})=${Boolean(topEl)}, bottomEl(${bottomSel})=${Boolean(bottomEl)}`,
         }
       }
+
       const topRect = topEl.getBoundingClientRect()
       const bottomRect = bottomEl.getBoundingClientRect()
       const overlaps =
         topRect.bottom > bottomRect.top + 2 &&
         topRect.top < bottomRect.bottom - 2
+
       return {
         ok: !overlaps,
         topBottom: topRect.bottom,
@@ -331,7 +366,7 @@ const assertNoVerticalOverlap = async (
     `${label}: ${result.error || `upper element bottom (${result.topBottom?.toFixed(1)}) overlaps lower element top (${result.bottomTop?.toFixed(1)})`}`,
   ).toBe(true)
 }
-
+/* oxlint-enable max-params */
 test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audio, Staged Motion & Zero-Scroll Stage", () => {
   test("1. Studio Editor: Responsive Zero-Overflow (1280..320), Smart Convert Question->Scene, Per-Answer Visuals, Shared Media Library & Reference-Safe Delete", async ({
     page,
@@ -342,12 +377,17 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await page.goto("/manager/quizz")
     await expect(
       page.locator('[data-testid="studio-card-type-bar"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
 
     // 1A. Verify responsive zero-horizontal-overflow across 1280, 1024, 844, 768, 390, 320
     const editorWidths = [1280, 1024, 844, 768, 390, 320]
     for (const w of editorWidths) {
-      await page.setViewportSize({ width: w, height: 800 })
+      await page.setViewportSize({
+        width: w,
+        height: 800,
+      })
       const overflow = await page.evaluate(() => ({
         scrollWidth: document.documentElement.scrollWidth,
         clientWidth: document.documentElement.clientWidth,
@@ -360,9 +400,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         page.locator('[data-testid="studio-card-type-bar"]'),
       ).toBeVisible()
     }
-
     await saveScreenshot(page, "01_editor_narrow_320px.png")
-    await page.setViewportSize({ width: 1280, height: 900 })
+    await page.setViewportSize({
+      width: 1280,
+      height: 900,
+    })
 
     // 1B. Smart Conversion Confirmation:
     // Add a second question card so we have > 1 question
@@ -372,9 +414,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     // New question is blank -> converting to "Transition" scene should happen IMMEDIATELY without confirmation dialog!
     const transitionToggle = page
       .locator('[data-testid="studio-card-type-bar"]')
-      .getByRole("radio", { name: /Transition/i })
+      .getByRole("radio", {
+        name: /Transition/i,
+      })
     await transitionToggle.click()
-
     await expect(page.getByPlaceholder("Card title...")).toBeVisible({
       timeout: 5_000,
     })
@@ -382,13 +425,13 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     // Convert scene back to Quiz question and populate question title -> then converting to Scene MUST prompt confirmation
     const quizToggle = page
       .locator('[data-testid="studio-card-type-bar"]')
-      .getByRole("radio", { name: /Quiz/i })
+      .getByRole("radio", {
+        name: /Quiz/i,
+      })
     await quizToggle.click()
-
     const titleInput = page.getByPlaceholder(t("quizz:question.placeholder"))
     await expect(titleInput).toBeVisible()
     await titleInput.fill("Populated Question Title")
-
     await transitionToggle.click()
     // Confirmation dialog should appear, and its text must NOT falsely claim automatic Undo
     const dialogDesc = page.getByText(/replace its question content/i)
@@ -397,14 +440,17 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     expect(descText.toLowerCase()).not.toContain("undo")
 
     // Cancel keeps the populated question intact
-    await page.getByRole("button", { name: t("common:cancel") }).click()
+    await page
+      .getByRole("button", {
+        name: t("common:cancel"),
+      })
+      .click()
     await expect(titleInput).toHaveValue("Populated Question Title")
 
     // 1C. Upload image once in Answer 0 picker and reuse across Card Background & Scene without re-uploading
     const pickAns0Btn = page.locator('[data-testid="answer-pick-image-0"]')
     await expect(pickAns0Btn).toBeVisible()
     await pickAns0Btn.click()
-
     const dialog = page.getByRole("dialog")
     await expect(dialog).toBeVisible()
 
@@ -421,7 +467,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
     // Select the uploaded image from the library grid
     const uploadedThumb = dialog.locator('img[alt^="shared-stage-asset"]')
-    await expect(uploadedThumb).toBeVisible({ timeout: 10_000 })
+    await expect(uploadedThumb).toBeVisible({
+      timeout: 10_000,
+    })
     await uploadedThumb.click()
 
     // Verify Answer 0 now displays the thumbnail preview and "Both" mode is active
@@ -436,7 +484,6 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await dialog.locator('[data-testid="media-scope-show"]').click()
     await expect(dialog.locator('img[alt^="shared-stage-asset"]')).toBeVisible()
     await dialog.locator('img[alt^="shared-stage-asset"]').click()
-
     await expect(page.locator('[data-testid="card-bg-preview"]')).toBeVisible()
 
     // 1D. Configure Per-Card Audio Cue (Built-in sound selection) & Staged Animations
@@ -476,11 +523,10 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
 
     // Verify grouped card chooser exposes Answer Recap
     await expect(
-      page
-        .locator('[data-testid="studio-card-type-bar"]')
-        .getByRole("radio", { name: /Answer Recap/i }),
+      page.locator('[data-testid="studio-card-type-bar"]').getByRole("radio", {
+        name: /Answer Recap/i,
+      }),
     ).toBeVisible()
-
     await saveScreenshot(page, "02_editor_card_appearance_configured.png")
 
     // 1E. Verify "Remove from Card" only detaches from card, while Library Delete on a referenced asset returns 409 Conflict warning
@@ -496,7 +542,6 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       page.locator('[data-testid="answer-image-preview-0"]'),
     ).toBeVisible()
   })
-
   test("2. Live Runtime & Zero-Scroll Stage Matrix (STAGE-P0) across 8 Viewports + Card Background + Single Audio + Staged Motion", async ({
     page: managerPage,
     browser,
@@ -511,7 +556,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const uploadLandscapeRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/media`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
         multipart: {
           file: {
             name: "custom-card-bg.png",
@@ -527,11 +576,14 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       url: string
       type: string
     }
-
     const uploadPortraitRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/media`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
         multipart: {
           file: {
             name: "fixture-portrait.png",
@@ -547,11 +599,14 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       url: string
       type: string
     }
-
     const uploadSquareRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/media`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
         multipart: {
           file: {
             name: "fixture-square.png",
@@ -580,7 +635,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       {
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         data: {
           quizz: {
@@ -826,13 +885,19 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const deleteBlockedRes = await managerPage.request.delete(
       `${SOCKET_ORIGIN}/api/media/${uploadedBg.name}`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
       },
     )
     expect(deleteBlockedRes.status()).toBe(409)
     const blockedBody = (await deleteBlockedRes.json()) as {
       error: string
-      references: Array<{ quizId: string }>
+      references: Array<{
+        quizId: string
+      }>
     }
     expect(blockedBody.references.length).toBeGreaterThan(0)
 
@@ -843,56 +908,99 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       "Zero Scroll & Appearance E2E Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
-
-    const gameIdMatch = managerPage.url().match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
+    const { 1: gameId } = gameIdMatch!
 
     // Open Spectator Display (/display/$gameId) and Player (/game/$gameId)
     const spectatorContext = await browser.newContext({
-      viewport: { width: 1920, height: 1080 },
+      viewport: {
+        width: 1920,
+        height: 1080,
+      },
     })
     const spectatorPage = await spectatorContext.newPage()
     await spectatorPage.goto(`/display/${gameId}`)
     await expect(
       spectatorPage.locator('[data-testid="audience-display"]'),
-    ).toBeVisible({ timeout: 15_000 })
-
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     const playerContext = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: {
+        width: 390,
+        height: 844,
+      },
     })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "StageTester")
 
     // Assert host sees 1 player connected before starting
     await expect(
-      managerPage.getByRole("button", { name: /1 \/ 1 Players/i }),
-    ).toBeVisible({ timeout: 10_000 })
-
+      managerPage.getByRole("button", {
+        name: /1 \/ 1 Players/i,
+      }),
+    ).toBeVisible({
+      timeout: 10_000,
+    })
     await startGame(managerPage)
 
     // 2A. Opening Scene: verify custom card background, custom audio state, and zero-scroll across viewports
     await expect(
-      spectatorPage.getByRole("heading", { name: "Welcome to Studio Stage" }),
-    ).toBeVisible({ timeout: 15_000 })
+      spectatorPage.getByRole("heading", {
+        name: "Welcome to Studio Stage",
+      }),
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.locator('[data-testid="stage-card-background"]'),
     ).toHaveAttribute("data-bg-url", uploadedBg.url)
     await expect(
       spectatorPage.locator('[data-testid="audio-cue-player-state"]'),
     ).toHaveAttribute("data-audio-url", "/sounds/boump.mp3")
-
     const stageViewports = [
-      { width: 1920, height: 1080, name: "1920x1080" },
-      { width: 1366, height: 768, name: "1366x768" },
-      { width: 1280, height: 800, name: "1280x800" },
-      { width: 1024, height: 768, name: "1024x768" },
-      { width: 800, height: 600, name: "800x600_4_3" },
-      { width: 768, height: 1024, name: "768x1024" },
-      { width: 390, height: 844, name: "390x844" },
-      { width: 320, height: 568, name: "320x568" },
+      {
+        width: 1920,
+        height: 1080,
+        name: "1920x1080",
+      },
+      {
+        width: 1366,
+        height: 768,
+        name: "1366x768",
+      },
+      {
+        width: 1280,
+        height: 800,
+        name: "1280x800",
+      },
+      {
+        width: 1024,
+        height: 768,
+        name: "1024x768",
+      },
+      {
+        width: 800,
+        height: 600,
+        name: "800x600_4_3",
+      },
+      {
+        width: 768,
+        height: 1024,
+        name: "768x1024",
+      },
+      {
+        width: 390,
+        height: 844,
+        name: "390x844",
+      },
+      {
+        width: 320,
+        height: 568,
+        name: "320x568",
+      },
     ]
-
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -900,21 +1008,32 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       })
       await assertZeroStageScroll(spectatorPage, `Opening Scene @ ${vp.name}`)
     }
-    await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
+    await spectatorPage.setViewportSize({
+      width: 1920,
+      height: 1080,
+    })
     await saveScreenshot(spectatorPage, "03_opening_scene_custom_bg_1080p.png")
 
     // Advance to Question 1
-    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await managerPage
+      .getByRole("button", {
+        name: /Advance Scene/i,
+      })
+      .click()
 
     // Wait for Question 1 voting phase (SELECT_ANSWER)
     await expect(
       spectatorPage.getByText(
         "Question 1 with Custom Background & 5 Visual Options",
       ),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.locator('[data-testid="photo-card-grid"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
 
     // Verify custom background is active on Question 1
     await expect(
@@ -961,7 +1080,7 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       )
 
       // 3. All 5 photo answer cards, labels, images, and captions are fully visible & contained
-      for (let i = 0; i < 5; i++) {
+      for (let i = 0; i < 5; i += 1) {
         await assertVisualContainment(
           spectatorPage,
           `[data-testid="photo-card-choice-${i}"]`,
@@ -976,7 +1095,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
           spectatorPage,
           `[data-testid="photo-card-image-${i}"]`,
           `Q1 Image ${i} @ ${vp.name}`,
-          { checkImageLoaded: true },
+          {
+            checkImageLoaded: true,
+          },
         )
         await assertVisualContainment(
           spectatorPage,
@@ -1002,12 +1123,23 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         await saveScreenshot(spectatorPage, `04_q1_voting_${vp.name}.png`)
       }
     }
-    await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
+    await spectatorPage.setViewportSize({
+      width: 1920,
+      height: 1080,
+    })
 
     // Also assert mobile player containment on playerPage (390x844 and 320x568) with bottom player footer
     for (const playerVp of [
-      { width: 390, height: 844, name: "390x844" },
-      { width: 320, height: 568, name: "320x568" },
+      {
+        width: 390,
+        height: 844,
+        name: "390x844",
+      },
+      {
+        width: 320,
+        height: 568,
+        name: "320x568",
+      },
     ]) {
       await playerPage.setViewportSize(playerVp)
       await assertZeroStageScroll(
@@ -1038,7 +1170,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await endTimer(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="results-hero-section"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
 
     // Verify resultsRevealEntrance animation on interim results winner
     await expect(
@@ -1047,7 +1181,6 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       ),
     ).toHaveAttribute("data-tada-entrance", "slide-up")
     await spectatorPage.waitForTimeout(600)
-
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -1064,7 +1197,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         '[data-testid="scene-question-text"]',
         `Reveal Question Text @ ${vp.name}`,
-        { checkTextCompleteness: true },
+        {
+          checkTextCompleteness: true,
+        },
       )
       const qText =
         (await spectatorPage
@@ -1078,7 +1213,9 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         '[data-testid="scene-awaiting-host"]',
         `Reveal Awaiting Host Line @ ${vp.name}`,
-        { checkTextCompleteness: true },
+        {
+          checkTextCompleteness: true,
+        },
       )
       const hostText =
         (await spectatorPage
@@ -1125,21 +1262,29 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         await saveScreenshot(spectatorPage, `05_q1_reveal_${vp.name}.png`)
       }
     }
-    await spectatorPage.setViewportSize({ width: 1920, height: 1080 })
+    await spectatorPage.setViewportSize({
+      width: 1920,
+      height: 1080,
+    })
 
     // Advance to Question 2 (which has NO custom card background and has showQuestion audio MUTED)
-    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await managerPage
+      .getByRole("button", {
+        name: /Advance Scene/i,
+      })
+      .click()
     await expect(
       spectatorPage.getByText(
         "Question 2 with Default Game Background & Muted Cue",
       ),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
 
     // Verify fallback to default GameBackground (no stage-card-background overlay)
     await expect(
       spectatorPage.locator('[data-testid="stage-card-background"]'),
     ).toHaveCount(0)
-
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -1147,18 +1292,15 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       })
       await assertZeroStageScroll(spectatorPage, `Q2 Default BG @ ${vp.name}`)
     }
-
     await spectatorContext.close()
     await playerContext.close()
   })
-
   test("3. Wave 2 Complete: Cinema Opening, Media Audio, Standalone Animation + Lottie Fixture, Question Decoration, and Cumulative Answer Recap across 8 Viewports", async ({
     page: managerPage,
     browser,
   }) => {
     const SOCKET_ORIGIN = "http://127.0.0.1:3011"
     await loginManager(managerPage)
-
     const token = await managerPage.evaluate(() =>
       localStorage.getItem("token"),
     )
@@ -1169,7 +1311,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       {
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         data: {
           name: "malicious.json",
@@ -1180,13 +1326,16 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
             op: 60,
             w: 200,
             h: 200,
-            layers: [{ nm: "<script>alert(1)</script>" }],
+            layers: [
+              {
+                nm: "<script>alert(1)</script>",
+              },
+            ],
           }),
         },
       },
     )
     expect(badLottieRes.status()).toBe(400)
-
     const validLottieFixture = JSON.stringify({
       v: "5.7.4",
       fr: 30,
@@ -1195,14 +1344,26 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       w: 240,
       h: 240,
       nm: "test-lottie-fixture",
-      layers: [{ ty: 4, nm: "shape-layer", ip: 0, op: 60, st: 0 }],
+      layers: [
+        {
+          ty: 4,
+          nm: "shape-layer",
+          ip: 0,
+          op: 60,
+          st: 0,
+        },
+      ],
     })
     const goodLottieRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/extensions/lottie`,
       {
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         data: {
           name: "engineering-fixture.json",
@@ -1222,7 +1383,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     const uploadOpeningRes = await managerPage.request.post(
       `${SOCKET_ORIGIN}/api/media`,
       {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+        headers: token
+          ? {
+              Authorization: `Bearer ${token}`,
+            }
+          : {},
         multipart: {
           file: {
             name: "cinema-opening.png",
@@ -1250,7 +1415,11 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       {
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         data: {
           quizz: {
@@ -1418,72 +1587,98 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
       },
     )
     expect(createRes.status()).toBe(201)
-
     await managerPage.reload()
     const pin = await createGame(
       managerPage,
       "Wave 2 Cinema, Audio, Motion & Answer Recap Show",
     )
     expect(pin).toMatch(/^\d{6}$/u)
-
-    const gameIdMatch = managerPage.url().match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
-
+    const { 1: gameId } = gameIdMatch!
     const spectatorContext = await browser.newContext({
-      viewport: { width: 1920, height: 1080 },
+      viewport: {
+        width: 1920,
+        height: 1080,
+      },
     })
     const spectatorPage = await spectatorContext.newPage()
     await spectatorPage.goto(`/display/${gameId}`)
     await expect(
       spectatorPage.locator('[data-testid="audience-display"]'),
-    ).toBeVisible({ timeout: 15_000 })
-
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     const playerContext = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: {
+        width: 390,
+        height: 844,
+      },
     })
     const playerPage = await playerContext.newPage()
     await joinGame(playerPage, pin, "RecapTester")
-
     await expect(
-      managerPage.getByRole("button", { name: /1 \/ 1 Players/i }),
-    ).toBeVisible({ timeout: 10_000 })
-
+      managerPage.getByRole("button", {
+        name: /1 \/ 1 Players/i,
+      }),
+    ).toBeVisible({
+      timeout: 10_000,
+    })
     await startGame(managerPage)
 
     // 1. Cinema Opening Scene renders immediately without legacy 6s countdown
     await expect(
       spectatorPage.locator('[data-testid="scene-cinema-backdrop"]'),
-    ).toBeVisible({ timeout: 8_000 })
+    ).toBeVisible({
+      timeout: 8_000,
+    })
     await expect(
-      spectatorPage.getByRole("heading", { name: "Cinema Premiere Opening" }),
+      spectatorPage.getByRole("heading", {
+        name: "Cinema Premiere Opening",
+      }),
     ).toBeVisible()
     await spectatorPage.waitForTimeout(800)
     await assertZeroStageScroll(spectatorPage, "Cinema Opening @ 1920x1080")
     await saveScreenshot(spectatorPage, "06_wave2_cinema_opening_1080p.png")
 
     // 2. Advance to Q1: verify decorative underline (`glow-sweep`) and inherited global stage motion (`pop-bounce` / `cascade`)
-    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await managerPage
+      .getByRole("button", {
+        name: /Advance Scene/i,
+      })
+      .click()
     await expect(
       spectatorPage.locator('[data-testid="question-decoration-underline"]'),
-    ).toHaveAttribute("data-tada-underline", "glow-sweep", { timeout: 10_000 })
+    ).toHaveAttribute("data-tada-underline", "glow-sweep", {
+      timeout: 10_000,
+    })
 
     // Wait for SELECT_ANSWER on Q1 and let 700ms entrance animation settle
     await expect(
-      spectatorPage.getByRole("button", { name: /Solar Flare/i }),
-    ).toBeVisible({ timeout: 15_000 })
+      spectatorPage.getByRole("button", {
+        name: /Solar Flare/i,
+      }),
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await spectatorPage.waitForTimeout(850)
     await saveScreenshot(spectatorPage, "07_wave2_q1_decoration_and_motion.png")
 
     // Player selects Option 0 ("Solar Flare") on Survey Q1
-    await playerPage.getByRole("button", { name: /Solar Flare/i }).click()
+    await playerPage
+      .getByRole("button", {
+        name: /Solar Flare/i,
+      })
+      .click()
     await endTimer(managerPage)
 
     // Advance from Q1 SHOW_RESPONSES to Media Audio Scene
     await next(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="scene-audio-container"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.locator('[data-testid="scene-audio"]'),
     ).toBeVisible()
@@ -1491,10 +1686,16 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await saveScreenshot(spectatorPage, "08_wave2_media_audio_scene.png")
 
     // Advance from Media Audio Scene to Standalone Animation + Lottie Fixture Scene
-    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await managerPage
+      .getByRole("button", {
+        name: /Advance Scene/i,
+      })
+      .click()
     await expect(
       spectatorPage.locator('[data-testid="scene-animation-preset-confetti"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.locator('[data-testid="scene-lottie-player"]'),
     ).toBeVisible()
@@ -1505,20 +1706,34 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     await saveScreenshot(spectatorPage, "09_wave2_animation_lottie_scene.png")
 
     // Advance to Quiz Q2
-    await managerPage.getByRole("button", { name: /Advance Scene/i }).click()
+    await managerPage
+      .getByRole("button", {
+        name: /Advance Scene/i,
+      })
+      .click()
     await expect(
-      spectatorPage.getByRole("button", { name: /Mars/i }),
-    ).toBeVisible({ timeout: 15_000 })
+      spectatorPage.getByRole("button", {
+        name: /Mars/i,
+      }),
+    ).toBeVisible({
+      timeout: 15_000,
+    })
 
     // Player votes for Option 1 ("Mars", the correct answer)
-    await playerPage.getByRole("button", { name: /Mars/i }).click()
+    await playerPage
+      .getByRole("button", {
+        name: /Mars/i,
+      })
+      .click()
     await endTimer(managerPage)
 
     // Advance from Q2 SHOW_RESPONSES to Cumulative Answer Recap Scene!
     await next(managerPage)
     await expect(
       spectatorPage.locator('[data-testid="scene-answer-recap"]'),
-    ).toBeVisible({ timeout: 15_000 })
+    ).toBeVisible({
+      timeout: 15_000,
+    })
     await expect(
       spectatorPage.locator('[data-testid="recap-question-card"]'),
     ).toHaveCount(2)
@@ -1531,18 +1746,48 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
     expect(recapText).toContain("Solar Flare")
     expect(recapText).toContain("Mars")
     expect(recapText).not.toContain("RecapTester")
-
     const stageViewports = [
-      { width: 1920, height: 1080, name: "1920x1080" },
-      { width: 1366, height: 768, name: "1366x768" },
-      { width: 1280, height: 800, name: "1280x800" },
-      { width: 1024, height: 768, name: "1024x768" },
-      { width: 800, height: 600, name: "800x600_4_3" },
-      { width: 768, height: 1024, name: "768x1024" },
-      { width: 390, height: 844, name: "390x844" },
-      { width: 320, height: 568, name: "320x568" },
+      {
+        width: 1920,
+        height: 1080,
+        name: "1920x1080",
+      },
+      {
+        width: 1366,
+        height: 768,
+        name: "1366x768",
+      },
+      {
+        width: 1280,
+        height: 800,
+        name: "1280x800",
+      },
+      {
+        width: 1024,
+        height: 768,
+        name: "1024x768",
+      },
+      {
+        width: 800,
+        height: 600,
+        name: "800x600_4_3",
+      },
+      {
+        width: 768,
+        height: 1024,
+        name: "768x1024",
+      },
+      {
+        width: 390,
+        height: 844,
+        name: "390x844",
+      },
+      {
+        width: 320,
+        height: 568,
+        name: "320x568",
+      },
     ]
-
     for (const vp of stageViewports) {
       await spectatorPage.setViewportSize({
         width: vp.width,
@@ -1556,13 +1801,16 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         spectatorPage,
         '[data-testid="scene-answer-recap"]',
         `Answer Recap Container @ ${vp.name}`,
-        { checkTextCompleteness: false },
+        {
+          checkTextCompleteness: false,
+        },
       )
       await assertVisualContainment(
         spectatorPage,
         '[data-testid="scene-awaiting-host"]',
         `Answer Recap Awaiting Host @ ${vp.name}`,
       )
+
       if (
         vp.name === "1920x1080" ||
         vp.name === "800x600_4_3" ||
@@ -1575,7 +1823,6 @@ test.describe("Tada Studio Complete: Media Library Reuse, Card Backgrounds, Audi
         )
       }
     }
-
     await spectatorContext.close()
     await playerContext.close()
   })

@@ -1,6 +1,7 @@
 // JSX geometry ported from the supplied HTML. Live cards and copy are React props.
 import type { ReactNode } from "react"
 import type { StoryLabels } from "./story-labels"
+
 export function MixerMarkup({
   cards,
   flyers,
@@ -11,11 +12,7 @@ export function MixerMarkup({
   labels: StoryLabels
 }) {
   return (
-    <section
-      className="theater"
-      id="theater"
-      aria-label={labels.begin}
-    >
+    <section className="theater" id="theater" aria-label={labels.begin}>
       <img
         className="stage-art"
         src="/tadazz-show/story/fef87578b7d57eae.webp"
@@ -32,11 +29,7 @@ export function MixerMarkup({
       <div className="light-spot spot-2" aria-hidden="true"></div>
       <div className="light-spot spot-3" aria-hidden="true"></div>
       <div className="pulse-field" id="pulseField" aria-hidden="true"></div>
-      <div
-        className="card-row"
-        id="cardRow"
-        aria-label={labels.story}
-      >
+      <div className="card-row" id="cardRow" aria-label={labels.story}>
         {cards}
       </div>
       <canvas
@@ -50,10 +43,7 @@ export function MixerMarkup({
         {flyers}
       </div>
       <div className="countdown-big" id="countdownBig" aria-hidden="true"></div>
-      <div
-        className="bottom-marquee"
-        aria-label={labels.begin}
-      >
+      <div className="bottom-marquee" aria-label={labels.begin}>
         <div className="marquee-shine" aria-hidden="true"></div>
         <div className="hero-title" id="heroTitle">
           {labels.begin}

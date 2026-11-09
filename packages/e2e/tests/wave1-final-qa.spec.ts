@@ -1,11 +1,7 @@
 import fs from "node:fs"
 import { join } from "node:path"
 import { CONFIG_PATH } from "@razzia/e2e/utils/constants"
-import {
-  openQuizzTab,
-  quizzRow,
-  seedQuizz,
-} from "@razzia/e2e/utils/editor"
+import { openQuizzTab, quizzRow, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
@@ -438,12 +434,12 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     await startGame(manager)
 
     // 4. Question 1 (Quiz) starts: Alice answers correct ("Four"), Bob answers wrong ("Three")
-    await expect(
-      alice.getByText("Four", { exact: true }),
-    ).toBeVisible({ timeout: 15000 })
-    await expect(
-      bob.getByText("Three", { exact: true }),
-    ).toBeVisible({ timeout: 15000 })
+    await expect(alice.getByText("Four", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
+    await expect(bob.getByText("Three", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
 
     await alice.getByText("Four", { exact: true }).click()
     await bob.getByText("Three", { exact: true }).click()
@@ -485,12 +481,12 @@ test.describe("Wave 1 Final Acceptance: UI Reachability, Settings Width, UI Work
     await advanceSceneBtn.click()
 
     // 7. Question 2 (Survey) starts: Alice votes "Red", Bob votes "Blue"
-    await expect(
-      alice.getByText("Red", { exact: true }),
-    ).toBeVisible({ timeout: 15000 })
-    await expect(
-      bob.getByText("Blue", { exact: true }),
-    ).toBeVisible({ timeout: 15000 })
+    await expect(alice.getByText("Red", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
+    await expect(bob.getByText("Blue", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
 
     await alice.getByText("Red", { exact: true }).click()
     await bob.getByText("Blue", { exact: true }).click()

@@ -9,7 +9,11 @@ describe("Gate 3: StageFit Presentation Primitive", () => {
       React.createElement(
         StageFitContainer,
         { className: "custom-fit-class" },
-        React.createElement("div", { "data-testid": "test-child" }, "Stage Content"),
+        React.createElement(
+          "div",
+          { "data-testid": "test-child" },
+          "Stage Content",
+        ),
       ),
     )
 
@@ -29,6 +33,7 @@ describe("Gate 3: StageFit Presentation Primitive", () => {
       const state = useStageFit()
       capturedMode = state.fitMode
       capturedMaxPhotoH = state.maxPhotoHeightPx
+
       return React.createElement("div", null, `Mode: ${state.fitMode}`)
     }
 
@@ -53,6 +58,7 @@ describe("Gate 3: StageFit Presentation Primitive", () => {
       const state = useStageFit()
       capturedMode = state.fitMode
       capturedMaxPhotoH = state.maxPhotoHeightPx
+
       return React.createElement("div", null, `Mode: ${state.fitMode}`)
     }
 

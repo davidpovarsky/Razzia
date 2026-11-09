@@ -22,7 +22,11 @@ export interface TadazzStageLabels {
   answerOption: string
   streak: string
   points: (score: number) => string
-  roundLabel: (q: { round?: number | null; number: number; totalQuestions: number | null }) => string
+  roundLabel: (q: {
+    round?: number | null
+    number: number
+    totalQuestions: number | null
+  }) => string
 }
 
 const pad2 = (n: number) => String(n).padStart(2, "0")
@@ -45,9 +49,10 @@ export const DEFAULT_TADAZZ_STAGE_LABELS: TadazzStageLabels = {
   answerChoices: "Answer choices",
   answerOption: "Answer option",
   streak: "Streak",
-  points: (score) => `${Number(score).toLocaleString("en-US")} POINTS`,
+  points: (score) => `${score.toLocaleString("en-US")} POINTS`,
   roundLabel: ({ round, number, totalQuestions }) => {
     const question = `QUESTION ${pad2(number || 1)}${totalQuestions ? ` / ${totalQuestions}` : ""}`
+
     return round ? `ROUND ${pad2(round)} · ${question}` : question
   },
 }

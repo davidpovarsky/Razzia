@@ -26,15 +26,15 @@ const StudioContent = () => {
   // ActiveTab === "questions"
   if (!selectedTimelineItem) {
     return (
-      <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden lg:flex-row lg:overflow-hidden">
+      <div className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto lg:flex-row lg:overflow-hidden">
         <QuizzEditorSidebar />
-        <div className="flex flex-1 items-center justify-center p-8 text-muted-foreground text-sm font-medium" />
+        <div className="text-muted-foreground flex flex-1 items-center justify-center p-8 text-sm font-medium" />
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-0 flex-1 flex-col overflow-y-auto overflow-x-hidden lg:flex-row lg:overflow-hidden">
+    <div className="flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto lg:flex-row lg:overflow-hidden">
       <QuizzEditorSidebar />
       {selectedTimelineItem.kind === "question" ? (
         <QuestionEditor />

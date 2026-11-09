@@ -3,6 +3,7 @@
 User approved: restore the circular timer after Previous/Next; reuse recap music during story reading, preserving the mixer track; show a permanent connected-participant count on host and projector plus answered count during voting.
 
 Upstream hooks recorded before editing:
+
 - `packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx`: render a noninteractive aggregate footer for host/spectator; select configured recap music during story reading instead of its short ident; preserve mixer timing.
 - `packages/socket/src/services/game/index.ts`, extension-session delegate: project connected participant count and connected respondents from existing `round.hasPlayerAnswered`; expose only numeric aggregates in extension snapshots, never roster contacts.
 

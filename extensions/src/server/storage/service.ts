@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { StatusCodes } from "http-status-codes"
 import {
   normalizeLegacyQuizz,

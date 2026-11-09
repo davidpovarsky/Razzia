@@ -201,18 +201,22 @@ describe("A2: Host Control Surface & Permissions Logic (Maya V3)", () => {
       const isAnswering = statusName === STATUS.SELECT_ANSWER
       const isAllowed = canPrevious && !isAnswering
       let reason: string | null = null
+
       if (isAnswering) {
         reason = "Cannot go back while answers are being accepted"
       } else if (!canPrevious) {
         reason = "At the beginning of show"
       }
+
       return { isAllowed, reason }
     }
 
     it("disallows Previous Screen during active answering even if canPrevious is true", () => {
       const res = evaluatePreviousPermission(STATUS.SELECT_ANSWER, true)
       expect(res.isAllowed).toBe(false)
-      expect(res.reason).toContain("Cannot go back while answers are being accepted")
+      expect(res.reason).toContain(
+        "Cannot go back while answers are being accepted",
+      )
     })
 
     it("disallows Previous Screen when at start of show (canPrevious is false)", () => {

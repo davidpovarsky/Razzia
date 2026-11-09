@@ -36,6 +36,7 @@ export class ThemeReviewWorkspace {
   private readonly signingKey: Buffer
   constructor(signingKey: Buffer) {
     this.signingKey = signingKey
+
     if (signingKey.length < 32) {
       throw new Error("A private signing key of at least 32 bytes is required")
     }

@@ -1,4 +1,4 @@
-import {PlatformButton} from "../../presentation/platform-controls"
+import { PlatformButton } from "../../presentation/platform-controls"
 import type {
   RevealAudience,
   RevealEffect,
@@ -109,7 +109,8 @@ export const RevealSection = ({
               <div className="flex gap-2">
                 {(["automatic", "manual"] as const).map(
                   (mode: RevealTrigger) => (
-                    <PlatformButton size="sm"
+                    <PlatformButton
+                      size="sm"
                       key={mode}
                       type="button"
                       onClick={() => {
@@ -148,7 +149,8 @@ export const RevealSection = ({
               </label>
               <div className="flex gap-2">
                 {(["manager", "all"] as const).map((aud: RevealAudience) => (
-                  <PlatformButton size="sm"
+                  <PlatformButton
+                    size="sm"
                     key={aud}
                     type="button"
                     onClick={() => {

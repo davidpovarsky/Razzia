@@ -491,7 +491,6 @@ export class TelephonyBridge {
       }
     }
 
-
     // Map digit 1..5 -> index 0..4
     const answerIndex = mapDtmfToAnswerIndex(firstDigit)
 
@@ -541,6 +540,7 @@ export class TelephonyBridge {
     // Check bounds against active question
     if (answerIndex >= gameState.answersCount) {
       const maxAns = Math.min(gameState.answersCount || 5, 5)
+
       return {
         success: false,
         directive: {
@@ -550,7 +550,6 @@ export class TelephonyBridge {
         error: "Invalid answer digit",
       }
     }
-
 
     // Submit answer to Razzia server (server receipt time is authoritative)
     const submitResult = client.selectAnswer(answerIndex)

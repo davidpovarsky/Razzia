@@ -25,23 +25,28 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   host.on("websocket", (socket) => {
     socket.on("framesent", (frame) => {
       const value = String(frame.payload)
-      if (value.includes("extensions:command"))
+
+      if (value.includes("extensions:command")) {
         console.log("HOST_WS_SENT", value)
+      }
     })
     socket.on("framereceived", (frame) => {
       const value = String(frame.payload)
-      if (value.startsWith("43") || value.includes("errorMessage"))
+
+      if (value.startsWith("43") || value.includes("errorMessage")) {
         console.log("HOST_WS_RECV", value.slice(0, 1200))
+      }
     })
   })
   host.on("response", (response) => {
-    if (response.status() >= 400)
+    if (response.status() >= 400) {
       console.log("HTTP_ERROR", response.status(), response.url())
+    }
   })
 
   await host.addInitScript(
     (value) => localStorage.setItem("token", value),
-    token!,
+    token,
   )
   await host.context().addCookies([
     {
@@ -76,7 +81,11 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
     "/media/tadazz-production-intro-20261106.wav",
   )
   const enableSound = host.getByTestId("tadazz-opening-enable-sound")
-  if (await enableSound.isVisible()) await enableSound.click()
+
+  if (await enableSound.isVisible()) {
+    await enableSound.click()
+  }
+
   await expect(host.getByTestId("tadazz-opening")).toHaveCount(0, {
     timeout: 12_000,
   })
@@ -100,8 +109,10 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   const display = await displayContext.newPage()
   await display.goto(`/display/${gameId}`)
   const displaySkip = display.getByTestId("tadazz-opening-skip")
-  if (await displaySkip.isVisible())
+
+  if (await displaySkip.isVisible()) {
     await displaySkip.click().catch(() => undefined)
+  }
 
   const playerContexts = await Promise.all(
     Array.from({ length: 4 }, () =>
@@ -114,8 +125,9 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   const players = await Promise.all(
     playerContexts.map((context) => context.newPage()),
   )
-  for (let index = 0; index < players.length; index += 1)
+  for (let index = 0; index < players.length; index += 1) {
     await joinGame(players[index], code, `Live QA ${index + 1}`)
+  }
   await host.waitForTimeout(1500)
 
   await host.getByRole("button", { name: "Start", exact: true }).click()
@@ -189,17 +201,24 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
       question === 1
         ? [0, 0, 1, 1]
         : [question % 5, question % 5, question % 5, (question + 1) % 5]
-    for (let player = 0; player < players.length; player += 1)
+    for (let player = 0; player < players.length; player += 1) {
       await players[player]
         .getByTestId(`tadazz-pad-option-${choices[player]}`)
         .click()
-    if (question === 0) await host.keyboard.press("t")
-    else await endTimer(host)
+    }
+
+    if (question === 0) {
+      await host.keyboard.press("t")
+    } else {
+      await endTimer(host)
+    }
+
     await expect(
       host.locator(".tzv4-stage .result-percentage").first(),
     ).toBeVisible({ timeout: 20_000 })
-    for (const player of players)
+    for (const player of players) {
       await expect(player.locator(".result-percentage").first()).toBeVisible()
+    }
     await expect(audio).toHaveAttribute(
       "data-audio-url",
       "/media/tadazz-determination-20261106.mp3",
@@ -213,6 +232,7 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
         `result-${String(question + 1).padStart(2, "0")}.png`,
       ),
     })
+
     // Exactly one results reveal automatically advances to top-pick (or
     // the manual tie decision), without an interim-results screen.
     if (question === 0) {
@@ -242,6 +262,7 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
       await scene("story-assembly")
       await nextHost(host)
       await scene("story-live")
+
       if (question === 4) {
         await nextHost(host)
         await scene("interlude")
@@ -268,6 +289,8 @@ test("live production: original Tzila show, forty representatives, ten votes, ti
   await host.keyboard.press("Escape")
   await expect(host.getByTestId("manager-control-toolbar")).toBeVisible()
 
-  for (const context of playerContexts) await context.close()
+  for (const context of playerContexts) {
+    await context.close()
+  }
   await displayContext.close()
 })

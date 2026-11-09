@@ -1,5 +1,5 @@
-import type { PublicAccount } from "./account-auth"
 import {
+  type PublicAccount,
   accountForEmail,
   canIssueCode,
   issueCode,
@@ -10,11 +10,21 @@ export async function sendAccountMail(
   user: PublicAccount,
   purpose: "verify" | "reset",
 ): Promise<void> {
-  if (!canIssueCode(user.id, purpose)) return
-  if (!limitAction(user.id + ":" + purpose, 5, 3600000)) return
+  if (!canIssueCode(user.id, purpose)) {
+    return
+  }
+
+  if (!limitAction(`${user.id}:${purpose}`, 5, 3600000)) {
+    return
+  }
+
   const key = process.env.RESEND_API_KEY
   const from = process.env.TADAZZ_AUTH_EMAIL_FROM
-  if (!key || !from) throw new Error("Account email is not configured")
+
+  if (!key || !from) {
+    throw new Error("Account email is not configured")
+  }
+
   const code = issueCode(user.id, purpose)
   const title =
     purpose === "verify" ? "Verify your email" : "Reset your password"
@@ -33,10 +43,16 @@ export async function sendAccountMail(
     }),
     signal: AbortSignal.timeout(12000),
   })
-  if (!res.ok) throw new Error("Could not send verification message")
+
+  if (!res.ok) {
+    throw new Error("Could not send verification message")
+  }
 }
 
 export async function requestAccountReset(email: string): Promise<void> {
   const user = accountForEmail(email)
-  if (user?.verified) await sendAccountMail(user, "reset")
+
+  if (user?.verified) {
+    await sendAccountMail(user, "reset")
+  }
 }

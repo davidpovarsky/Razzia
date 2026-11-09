@@ -87,7 +87,9 @@ describe("Studio Timeline V2 Schema & Migration", () => {
 
     const parseResult = quizExtrasV2Schema.safeParse(v2)
     expect(parseResult.success).toBe(false)
-    expect(parseResult.error?.issues.some((i) => i.path.includes("id"))).toBe(true)
+    expect(parseResult.error?.issues.some((i) => i.path.includes("id"))).toBe(
+      true,
+    )
   })
 
   it("rejects orphan questionId in timeline", () => {
@@ -156,11 +158,10 @@ describe("Studio Timeline V2 Schema & Migration", () => {
       },
     }
 
-    const upgraded = upgradeLegacyExtrasToV2(
-      { questions: [{}, {}, {}] },
-      v1,
-      { quizId, baseDigest },
-    )
+    const upgraded = upgradeLegacyExtrasToV2({ questions: [{}, {}, {}] }, v1, {
+      quizId,
+      baseDigest,
+    })
     expect(upgraded.schemaVersion).toBe(2)
     expect(upgraded.questionIds).toEqual([qId1, qId2, qId3])
 
@@ -215,7 +216,11 @@ describe("Studio Timeline V2 Schema & Migration", () => {
       ...validV2,
       scenes: {
         [recapId]: {
-          ...(validV2.scenes[recapId] as any),
+          ...(validV2.scenes[recapId] as Extract<
+            QuizExtrasV2["scenes"][string],
+            { kind: "answerRecap" }
+          >),
+          kind: "answerRecap" as const,
           startQuestionId: qId2,
         },
       },
@@ -233,7 +238,11 @@ describe("Studio Timeline V2 Schema & Migration", () => {
       ...validV2,
       scenes: {
         [recapId]: {
-          ...(validV2.scenes[recapId] as any),
+          ...(validV2.scenes[recapId] as Extract<
+            QuizExtrasV2["scenes"][string],
+            { kind: "answerRecap" }
+          >),
+          kind: "answerRecap" as const,
           startQuestionId: crypto.randomUUID(),
         },
       },

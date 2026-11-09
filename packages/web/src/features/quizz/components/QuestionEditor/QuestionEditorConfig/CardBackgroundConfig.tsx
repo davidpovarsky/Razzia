@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   isLegacyShowRollback,
   type BackgroundFit,
@@ -94,6 +95,7 @@ const LegacyCardBackgroundConfig = ({
     if (!activeBackground) {
       return
     }
+
     updateBackground({
       ...activeBackground,
       fit,
@@ -104,6 +106,7 @@ const LegacyCardBackgroundConfig = ({
     if (!activeBackground) {
       return
     }
+
     const num = Math.max(0, Math.min(0.85, Number(raw) || 0))
     updateBackground({
       ...activeBackground,
@@ -122,7 +125,8 @@ const LegacyCardBackgroundConfig = ({
         className="flex flex-col gap-3"
       >
         <div className="bg-muted flex items-center gap-1.5 rounded-lg p-1">
-          <Button size="sm"
+          <Button
+            size="sm"
             type="button"
             data-testid="card-bg-mode-default"
             onClick={() => updateBackground(undefined)}
@@ -135,7 +139,8 @@ const LegacyCardBackgroundConfig = ({
           >
             {t("extensions:cardBackground.useGameDefault", "Game Default")}
           </Button>
-          <Button size="sm"
+          <Button
+            size="sm"
             type="button"
             data-testid="card-bg-mode-custom"
             onClick={() => {
@@ -168,7 +173,8 @@ const LegacyCardBackgroundConfig = ({
             </span>
           </Button>
           {hasCustom && (
-            <Button size="sm"
+            <Button
+              size="sm"
               type="button"
               data-testid="card-bg-remove-btn"
               onClick={() => updateBackground(undefined)}

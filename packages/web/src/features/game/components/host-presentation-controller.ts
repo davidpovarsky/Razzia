@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
@@ -5,7 +6,13 @@ import {
   type ExtensionStateEnvelope,
 } from "@razzia/extensions/core"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
-import { useCallback, useEffect, useRef, useState } from "react"
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react"
 
 export const DOUBLE_PRESS_WINDOW_MS = 500
 
@@ -73,12 +80,15 @@ export function resolvePresentationShortcut(
   if (event.key === "Escape") {
     return "exit"
   }
+
   if (event.shiftKey) {
     return null
   }
+
   if (event.key.toLowerCase() === "r" || event.code === "KeyR") {
     return "restart"
   }
+
   if (event.key === "ArrowRight") {
     return "next"
   }
@@ -86,17 +96,23 @@ export function resolvePresentationShortcut(
   if (event.key === "ArrowLeft") {
     return "previous"
   }
+
   if (event.key === "Enter") {
     return "end-timer"
   }
+
   if (event.key === " ") {
     return "pause-toggle"
   }
+
   return null
 }
 
 export function isDoublePress(
-  previous: { chord: string; until: number } | null,
+  previous: {
+    chord: string
+    until: number
+  } | null,
   chord: string,
   now: number,
 ): boolean {
@@ -137,22 +153,24 @@ export function useHostPresentationCommands({
     onAdvanceFallback,
     isConnected,
   })
-  latestRef.current = {
-    enabled,
-    statusName,
-    extensionState,
-    currentQuestion,
-    onExit,
-    onAdvanceFallback,
-    isConnected,
-  }
-
+  useLayoutEffect(() => {
+    latestRef.current = {
+      enabled,
+      statusName,
+      extensionState,
+      currentQuestion,
+      onExit,
+      onAdvanceFallback,
+      isConnected,
+    }
+  })
   useEffect(() => {
     pendingRef.current = false
 
     if (pendingTimerRef.current) {
       clearTimeout(pendingTimerRef.current)
     }
+
     pendingTimerRef.current = null
   }, [extensionState?.seq, extensionState?.epoch])
 
@@ -161,14 +179,12 @@ export function useHostPresentationCommands({
   useEffect(() => {
     confirmationRef.current = null
   }, [extensionState?.gameId])
-
   useEffect(() => {
     if (!enabled) {
       confirmationRef.current = null
       pendingRef.current = false
     }
   }, [enabled])
-
   useEffect(() => {
     const send = (
       action: CommandAction,
@@ -197,6 +213,7 @@ export function useHostPresentationCommands({
           if (pendingTimerRef.current) {
             clearTimeout(pendingTimerRef.current)
           }
+
           pendingTimerRef.current = null
           pendingRef.current = false
 
@@ -214,7 +231,6 @@ export function useHostPresentationCommands({
         pendingTimerRef.current = null
       }, 1500)
     }
-
     const confirmDestructive = (chord: string): boolean => {
       const now = Date.now()
       const pending = confirmationRef.current
@@ -225,22 +241,30 @@ export function useHostPresentationCommands({
         return true
       }
 
-      confirmationRef.current = { chord, until: now + DOUBLE_PRESS_WINDOW_MS }
+      confirmationRef.current = {
+        chord,
+        until: now + DOUBLE_PRESS_WINDOW_MS,
+      }
 
       return false
     }
-
     const handleKeyDown = (event: KeyboardEvent) => {
       const { current } = latestRef
+
       if (!current.enabled || shouldIgnorePresentationShortcut(event)) {
-        if (!event.repeat) confirmationRef.current = null
+        if (!event.repeat) {
+          confirmationRef.current = null
+        }
+
         return
       }
+
       const chord = `${event.shiftKey ? "Shift+" : ""}${event.key}`
       const shortcut = resolvePresentationShortcut(event)
 
       if (!shortcut) {
         confirmationRef.current = null
+
         return
       }
 
@@ -253,20 +277,29 @@ export function useHostPresentationCommands({
         return
       }
 
-      if (!confirmDestructive(chord)) return
+      if (!confirmDestructive(chord)) {
+        return
+      }
 
       const state = current.extensionState
 
       if (!state) {
         return
       }
+
       const { epoch } = state
       const paused = Boolean(state.pause?.paused)
       const isScene = state.phase === "scene"
       const isInterlude = state.phase === "interlude"
 
       if (shortcut === "pause-toggle") {
-        send(paused ? "RESUME_GAME" : "PAUSE_GAME", { epoch }, `${state.seq}`)
+        send(
+          paused ? "RESUME_GAME" : "PAUSE_GAME",
+          {
+            epoch,
+          },
+          `${state.seq}`,
+        )
 
         return
       }
@@ -293,6 +326,7 @@ export function useHostPresentationCommands({
             `${state.seq}`,
           )
         }
+
         return
       }
 
@@ -304,7 +338,10 @@ export function useHostPresentationCommands({
         if (current.statusName === STATUS.SELECT_ANSWER) {
           send(
             "END_ANSWER_TIMER",
-            { epoch, questionIndex: Math.max(0, current.currentQuestion - 1) },
+            {
+              epoch,
+              questionIndex: Math.max(0, current.currentQuestion - 1),
+            },
             `${state.seq}`,
           )
         }
@@ -327,12 +364,17 @@ export function useHostPresentationCommands({
             },
             `${state.seq}`,
           )
+
           return
         }
+
         if (isInterlude) {
           send(
             "END_OR_SKIP_INTERLUDE",
-            { epoch, reason: "manual" },
+            {
+              epoch,
+              reason: "manual",
+            },
             `${state.seq}`,
           )
         } else if (
@@ -342,7 +384,14 @@ export function useHostPresentationCommands({
           current.statusName === STATUS.SHOW_RESPONSES ||
           current.statusName === STATUS.SHOW_LEADERBOARD
         ) {
-          send("NEXT_SCREEN", { epoch, phase: state.phase }, `${state.seq}`)
+          send(
+            "NEXT_SCREEN",
+            {
+              epoch,
+              phase: state.phase,
+            },
+            `${state.seq}`,
+          )
         } else if (!state.gameId) {
           current.onAdvanceFallback?.()
         }
@@ -352,22 +401,28 @@ export function useHostPresentationCommands({
 
       if (shortcut === "previous") {
         const canPrevious = state.extras.canPrevious === true
+
         if (canPrevious) {
           send(
             "PREVIOUS_SCREEN",
-            { epoch, phase: state.phase, confirmed: true },
+            {
+              epoch,
+              phase: state.phase,
+              confirmed: true,
+            },
             `${state.seq}`,
           )
         }
-
-        return
       }
     }
-
-    window.addEventListener("keydown", handleKeyDown, { capture: true })
+    window.addEventListener("keydown", handleKeyDown, {
+      capture: true,
+    })
 
     return () => {
-      window.removeEventListener("keydown", handleKeyDown, { capture: true })
+      window.removeEventListener("keydown", handleKeyDown, {
+        capture: true,
+      })
 
       if (pendingTimerRef.current) {
         clearTimeout(pendingTimerRef.current)
@@ -383,7 +438,6 @@ export function useHostPresentation(enabled: boolean) {
   const targetRef = useRef<HTMLElement | null>(null)
   const enterAttemptRef = useRef(0)
   const exitPromiseRef = useRef<Promise<void> | null>(null)
-
   const exit = useCallback(() => {
     enterAttemptRef.current += 1
     targetRef.current = null
@@ -396,7 +450,10 @@ export function useHostPresentation(enabled: boolean) {
       // A new enter must wait for that event or the old exit cancels it later.
       const exiting = new Promise<void>((resolve) => {
         const complete = () => {
-          if (document.fullscreenElement) return
+          if (document.fullscreenElement) {
+            return
+          }
+
           document.removeEventListener("fullscreenchange", complete)
           resolve()
         }
@@ -404,7 +461,9 @@ export function useHostPresentation(enabled: boolean) {
         void document
           .exitFullscreen()
           .then(() => {
-            if (!document.fullscreenElement) requestAnimationFrame(complete)
+            if (!document.fullscreenElement) {
+              requestAnimationFrame(complete)
+            }
           })
           .catch(() => {
             document.removeEventListener("fullscreenchange", complete)
@@ -413,11 +472,12 @@ export function useHostPresentation(enabled: boolean) {
       })
       exitPromiseRef.current = exiting
       void exiting.then(() => {
-        if (exitPromiseRef.current === exiting) exitPromiseRef.current = null
+        if (exitPromiseRef.current === exiting) {
+          exitPromiseRef.current = null
+        }
       })
     }
   }, [])
-
   const enter = useCallback(
     async (target: HTMLElement | null) => {
       if (!enabled || !target?.requestFullscreen) {
@@ -427,13 +487,18 @@ export function useHostPresentation(enabled: boolean) {
         return false
       }
 
-      const attempt = ++enterAttemptRef.current
+      const attempt = enterAttemptRef.current + 1
+      enterAttemptRef.current = attempt
       setError(null)
       setIsPending(true)
 
       try {
         await exitPromiseRef.current
-        if (attempt !== enterAttemptRef.current) return false
+
+        if (attempt !== enterAttemptRef.current) {
+          return false
+        }
+
         targetRef.current = target
         await target.requestFullscreen()
 
@@ -444,6 +509,7 @@ export function useHostPresentation(enabled: boolean) {
           ) {
             await document.exitFullscreen().catch(() => undefined)
           }
+
           return false
         }
 
@@ -457,7 +523,9 @@ export function useHostPresentation(enabled: boolean) {
         setIsPending(false)
         setIsPresenting(true)
         target.tabIndex = -1
-        target.focus({ preventScroll: true })
+        target.focus({
+          preventScroll: true,
+        })
 
         return true
       } catch {
@@ -470,7 +538,6 @@ export function useHostPresentation(enabled: boolean) {
     },
     [enabled],
   )
-
   useEffect(() => {
     const change = () => {
       const active = Boolean(
@@ -507,5 +574,11 @@ export function useHostPresentation(enabled: boolean) {
     }
   }, [])
 
-  return { isPresenting, isPending, error, enter, exit }
+  return {
+    isPresenting,
+    isPending,
+    error,
+    enter,
+    exit,
+  }
 }

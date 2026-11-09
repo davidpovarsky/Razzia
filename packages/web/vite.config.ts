@@ -15,9 +15,11 @@ import {
 
 const configDir = (name: string) => {
   const customConfig = process.env.CONFIG_PATH
+
   if (customConfig) {
     return path.resolve(customConfig, name)
   }
+
   return fileURLToPath(new URL(`../../config/${name}`, import.meta.url))
 }
 
@@ -85,11 +87,17 @@ const configServer = (): Plugin => ({
   name: "razzia-config-server",
   configureServer(server) {
     server.middlewares.use(serveBranding)
-    if (!usesPrivateMediaRoutes()) server.middlewares.use(serveMedia)
+
+    if (!usesPrivateMediaRoutes()) {
+      server.middlewares.use(serveMedia)
+    }
   },
   configurePreviewServer(server) {
     server.middlewares.use(serveBranding)
-    if (!usesPrivateMediaRoutes()) server.middlewares.use(serveMedia)
+
+    if (!usesPrivateMediaRoutes()) {
+      server.middlewares.use(serveMedia)
+    }
   },
 })
 

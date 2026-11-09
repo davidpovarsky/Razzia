@@ -38,7 +38,7 @@ export function ReferenceStoryScene({
     winners[i]?.imageUrl ? (
       <img
         className={className}
-        src={winners[i]!.imageUrl!}
+        src={winners[i].imageUrl}
         alt={winners[i]?.alt || winners[i]?.title || ""}
         draggable={false}
       />
@@ -76,7 +76,10 @@ export function ReferenceStoryScene({
     </div>
   ))
   useLayoutEffect(() => {
-    if (!root.current) return
+    if (!root.current) {
+      return
+    }
+
     const render = mixer
       ? createMixerRenderer(root.current)
       : createRevealRenderer(root.current)
@@ -91,13 +94,16 @@ export function ReferenceStoryScene({
           ?.closest("[data-reduced-motion]")
           ?.getAttribute("data-reduced-motion") === "true"
       const tick = Math.floor(elapsed * (reduced ? 1 : 60))
+
       if (tick !== lastPaint) {
         render(elapsed, reduced)
         lastPaint = tick
       }
+
       frame = requestAnimationFrame(paint)
     }
     paint()
+
     return () => {
       cancelAnimationFrame(frame)
       renderer.current = null
@@ -107,7 +113,11 @@ export function ReferenceStoryScene({
   // the next animation frame can briefly show the previous timer value.
   useLayoutEffect(() => {
     const element = root.current
-    if (!element) return
+
+    if (!element) {
+      return
+    }
+
     const elapsed = storyElapsedSeconds(data)
     element.setAttribute("data-story-elapsed", elapsed.toFixed(3))
     const reduced =
@@ -116,6 +126,7 @@ export function ReferenceStoryScene({
         ?.getAttribute("data-reduced-motion") === "true"
     renderer.current?.(elapsed, reduced)
   }, [data.scenePaused, data.sceneElapsedMs, data.sceneStartedAt])
+
   return (
     <div
       ref={root}

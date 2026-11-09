@@ -100,8 +100,7 @@ export function generateRosterCsvTemplate(): string {
 export function exportRosterToCsv(participants: RosterParticipant[]): string {
   const escapeCsvCell = (val: string): string => {
     // Prevent CSV formula injection when opened in spreadsheet tools, but allow valid E.164 phone numbers (+digits)
-    const isFormulaPrefix =
-      /^[=+\-@]/u.test(val) && !/^\+\d{7,15}$/u.test(val)
+    const isFormulaPrefix = /^[=+\-@]/u.test(val) && !/^\+\d{7,15}$/u.test(val)
     const safeVal = isFormulaPrefix ? `'${val}` : val
 
     if (
@@ -197,8 +196,8 @@ const FIXED_LEN_EXTRA = [
   5, 5, 0,
 ]
 const FIXED_DIST_BASE = [
-  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513,
-  769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
+  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
+  1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
 ]
 const FIXED_DIST_EXTRA = [
   0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
@@ -293,17 +292,27 @@ function inflateRawBytes(
   }
 
   const fixedLitLengths = new Uint8Array(288)
-  for (let i = 0; i <= 143; i += 1) {fixedLitLengths[i] = 8}
-  for (let i = 144; i <= 255; i += 1) {fixedLitLengths[i] = 9}
-  for (let i = 256; i <= 279; i += 1) {fixedLitLengths[i] = 7}
-  for (let i = 280; i <= 287; i += 1) {fixedLitLengths[i] = 8}
+  for (let i = 0; i <= 143; i += 1) {
+    fixedLitLengths[i] = 8
+  }
+  for (let i = 144; i <= 255; i += 1) {
+    fixedLitLengths[i] = 9
+  }
+  for (let i = 256; i <= 279; i += 1) {
+    fixedLitLengths[i] = 7
+  }
+  for (let i = 280; i <= 287; i += 1) {
+    fixedLitLengths[i] = 8
+  }
   const fixedDistLengths = new Uint8Array(32)
   fixedDistLengths.fill(5)
 
   const fixedLitTable = buildHuffman(fixedLitLengths, 288)
   const fixedDistTable = buildHuffman(fixedDistLengths, 32)
 
-  let out = new Uint8Array(Math.min(maxOutputLength, Math.max(4096, src.length * 3)))
+  let out = new Uint8Array(
+    Math.min(maxOutputLength, Math.max(4096, src.length * 3)),
+  )
   let outPos = 0
 
   const ensureOut = (extra: number) => {
@@ -565,10 +574,7 @@ function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
   let ptr = cdOffset
 
   for (let i = 0; i < totalEntries; i += 1) {
-    if (
-      ptr + 46 > zipBuf.byteLength ||
-      readU32LE(zipBuf, ptr) !== 0x02014b50
-    ) {
+    if (ptr + 46 > zipBuf.byteLength || readU32LE(zipBuf, ptr) !== 0x02014b50) {
       throw new Error("errors:extensions.corruptXlsxFile")
     }
 
@@ -632,8 +638,7 @@ export interface ParsedCell {
  * Preserves string cells and leading zeros accurately, detects formula cells (`<f>`).
  */
 export function parseXlsxCells(buffer: Uint8Array): ParsedCell[][] {
-  const buf =
-    buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer)
+  const buf = buffer instanceof Uint8Array ? buffer : new Uint8Array(buffer)
 
   if (buf.byteLength > MAX_IMPORT_BYTES) {
     throw new Error("errors:extensions.fileTooLarge")

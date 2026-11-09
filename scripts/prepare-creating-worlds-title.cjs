@@ -16,38 +16,40 @@ const dialNumber = "+44 330 613 1984"
 const base = JSON.parse(fs.readFileSync(inputBase, "utf8"))
 const extras = JSON.parse(fs.readFileSync(inputExtras, "utf8"))
 function canonical(value) {
-  if (value === null || typeof value !== "object") return JSON.stringify(value)
-  if (Array.isArray(value))
-    return (
-      "[" +
-      value.map((v) => (v === undefined ? "null" : canonical(v))).join(",") +
-      "]"
+  if (value === null || typeof value !== "object") {
+    return JSON.stringify(value)
+  }
+
+  if (Array.isArray(value)) {
+    return `[${value
+      .map((v) => (v === undefined ? "null" : canonical(v)))
+      .join(",")}]`
+  }
+
+  return `{${Object.keys(value)
+    .sort()
+    .filter(
+      (k) =>
+        value[k] !== undefined &&
+        typeof value[k] !== "function" &&
+        typeof value[k] !== "symbol",
     )
-  return (
-    "{" +
-    Object.keys(value)
-      .sort()
-      .filter(
-        (k) =>
-          value[k] !== undefined &&
-          typeof value[k] !== "function" &&
-          typeof value[k] !== "symbol",
-      )
-      .map((k) => JSON.stringify(k) + ":" + canonical(value[k]))
-      .join(",") +
-    "}"
-  )
+    .map((k) => `${JSON.stringify(k)}:${canonical(value[k])}`)
+    .join(",")}}`
 }
 const sha = (v) =>
   crypto.createHash("sha256").update(canonical(v)).digest("hex")
 const oldDigest = sha(base)
-if (oldDigest !== extras.baseDigest)
+
+if (oldDigest !== extras.baseDigest) {
   throw new Error(
-    "Base digest does NOT match live sidecar. Refusing title update. New digest " +
-      oldDigest.slice(0, 10) +
-      " sidecar digest " +
-      extras.baseDigest.slice(0, 10),
+    `Base digest does NOT match live sidecar. Refusing title update. New digest ${oldDigest.slice(
+      0,
+      10,
+    )} sidecar digest ${extras.baseDigest.slice(0, 10)}`,
   )
+}
+
 if (
   base.id !== extras.quizId ||
   base.questions.length !== 10 ||
@@ -55,8 +57,10 @@ if (
   extras.roster.participants.length !== 40 ||
   extras.timeline.length !== 51 ||
   extras.revision !== 6
-)
+) {
   throw new Error("Quiz shape unexpected")
+}
+
 const nextBase = { ...base, subject: "Creating Worlds" }
 const nextExtras = structuredClone(extras)
 nextExtras.baseDigest = sha(nextBase)
@@ -67,29 +71,42 @@ const directoryScenes = Object.values(nextExtras.scenes).filter(
     scene.preset === "representative-directory" &&
     scene.groupPage === undefined,
 )
-if (directoryScenes.length !== 1)
+
+if (directoryScenes.length !== 1) {
   throw new Error("Expected one settings-only representative directory")
+}
+
 directoryScenes[0].dialNumber = dialNumber
-if (!/^[0-9a-f]{64}$/.test(nextExtras.baseDigest))
+
+if (!/^[0-9a-f]{64}$/.test(nextExtras.baseDigest)) {
   throw new Error("New digest not SHA256")
-for (const k of Object.keys(base))
+}
+
+for (const k of Object.keys(base)) {
   if (
     k !== "subject" &&
     JSON.stringify(base[k]) !== JSON.stringify(nextBase[k])
-  )
-    throw new Error("Base changed: " + k)
-for (const k of Object.keys(extras))
+  ) {
+    throw new Error(`Base changed: ${k}`)
+  }
+}
+for (const k of Object.keys(extras)) {
   if (
     !["baseDigest", "revision", "scenes"].includes(k) &&
     JSON.stringify(extras[k]) !== JSON.stringify(nextExtras[k])
-  )
-    throw new Error("Extras changed: " + k)
+  ) {
+    throw new Error(`Extras changed: ${k}`)
+  }
+}
 const changedSceneIds = Object.keys(extras.scenes).filter(
   (id) =>
     JSON.stringify(extras.scenes[id]) !== JSON.stringify(nextExtras.scenes[id]),
 )
-if (changedSceneIds.length !== 1)
+
+if (changedSceneIds.length !== 1) {
   throw new Error("Expected exactly one directory scene change")
+}
+
 const oldDirectory = extras.scenes[changedSceneIds[0]]
 const newDirectory = nextExtras.scenes[changedSceneIds[0]]
 for (const key of new Set([
@@ -99,14 +116,16 @@ for (const key of new Set([
   if (
     key !== "dialNumber" &&
     JSON.stringify(oldDirectory[key]) !== JSON.stringify(newDirectory[key])
-  )
-    throw new Error("Directory scene changed: " + key)
+  ) {
+    throw new Error(`Directory scene changed: ${key}`)
+  }
 }
 for (const [dest, obj] of [
   [destBase, nextBase],
   [destExtras, nextExtras],
-])
-  fs.writeFileSync(dest, JSON.stringify(obj, null, 2) + "\n", { flag: "wx" })
+]) {
+  fs.writeFileSync(dest, `${JSON.stringify(obj, null, 2)}\n`, { flag: "wx" })
+}
 console.log(
   JSON.stringify(
     {

@@ -1,6 +1,10 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
-  reserveBilledGame, startBilledGame, admitBilledParticipant,
-  admitBilledPhone, finishBilledPhone,
+  reserveBilledGame,
+  startBilledGame,
+  admitBilledParticipant,
+  admitBilledPhone,
+  finishBilledPhone,
 } from "@razzia/socket/services/billing"
 import { createDefaultGameSettings, EVENTS } from "@razzia/common/constants"
 import {
@@ -257,8 +261,15 @@ class Game {
       locked: () => this._locked,
       session: () => this.extensionSession,
       coordinator: () => this.showCoordinator,
-      admitPhone: (identity, callId, join) => admitBilledPhone(this._manager.clientId, this.gameId, identity, callId, join),
-      finishPhone: callId => finishBilledPhone(this.gameId, callId),
+      admitPhone: (identity, callId, join) =>
+        admitBilledPhone(
+          this._manager.clientId,
+          this.gameId,
+          identity,
+          callId,
+          join,
+        ),
+      finishPhone: (callId) => finishBilledPhone(this.gameId, callId),
       notifyPlayerUpdated: (previous, player, timedOut) =>
         this.notifyPlayerUpdated(previous, player, timedOut),
       broadcastExtensionState: () => this.broadcastExtensionState(),
@@ -306,8 +317,10 @@ class Game {
       this.extensionSession?.themeDefinition?.assets.some(
         (asset) => asset.url === `/media/${name}`,
       )
-    )
+    ) {
       return true
+    }
+
     return canViewReferencedMedia(
       this.quizz,
       this.extensionSession?.extras ?? null,
@@ -344,9 +357,11 @@ class Game {
     }
 
     this._settings = { ...this._settings, ...settings }
+
     if (settings.endOnAllAnswered) {
       this.round.endIfEveryoneAnswered()
     }
+
     this.broadcastHostPresence()
 
     return true
@@ -503,6 +518,7 @@ class Game {
     if (this.isCreatingWorldsShow && this.extensionSession) {
       this.syncExtensionStatus(status)
     }
+
     this.io.to(this.gameId).emit(EVENTS.GAME.STATUS, publicStatus)
 
     if (!this.isCreatingWorldsShow && this.extensionSession) {
@@ -511,7 +527,10 @@ class Game {
   }
 
   private syncExtensionStatus(status: Status) {
-    if (!this.extensionSession) return
+    if (!this.extensionSession) {
+      return
+    }
+
     syncSessionStatus({
       session: this.extensionSession,
       coordinator: this.showCoordinator,
@@ -592,7 +611,10 @@ class Game {
       temporaryGuestsAllowed: this.temporaryGuestsAllowed,
       phoneInviteOnly: Boolean(this._settings.phoneInviteOnly),
     })
-    if (rosterError) return rosterError
+
+    if (rosterError) {
+      return rosterError
+    }
 
     // 3. If this roster entry already has an existing Player (e.g., redial with a new CallId/clientId/socket),
     // rebind the existing Player row without creating a duplicate or losing score/epoch/answer state!
@@ -798,7 +820,9 @@ class Game {
     if (this.playerManager.kick(playerId)) {
       this.playerStatus.delete(playerId)
 
-      if (player) this.roster.afterKick(player.clientId)
+      if (player) {
+        this.roster.afterKick(player.clientId)
+      }
 
       if (this.extensionSession && player) {
         this.extensionSession.onPlayerKicked(player.clientId)
@@ -967,8 +991,10 @@ class Game {
     if (existingPlayer) {
       if (this.roster.shouldKeepParticipant(existingPlayer.clientId)) {
         this.setPlayerDisconnected(socketId, false)
+
         return existingPlayer
       }
+
       this.roster.forgetClient(existingPlayer.clientId)
     }
 
@@ -1021,7 +1047,10 @@ class Game {
   }
 
   async start(socket: Socket) {
-    if (!this.started && this.presentationLaunch?.advance()) return
+    if (!this.started && this.presentationLaunch?.advance()) {
+      return
+    }
+
     if (!this.started) {
       const away = this.playerManager.getAll().filter((p) => !p.connected)
 
@@ -1038,11 +1067,14 @@ class Game {
       socket.id === this._manager.id
     ) {
       const error = startBilledGame(this._manager.clientId, this.gameId)
+
       if (error) {
         socket.emit(EVENTS.GAME.ERROR_MESSAGE, error)
+
         return
       }
     }
+
     await this.round.start(socket)
     this.broadcastHostPresence()
   }

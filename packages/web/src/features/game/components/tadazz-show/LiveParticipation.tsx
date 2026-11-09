@@ -12,6 +12,7 @@ export function LiveParticipation({
   voting: boolean
 }) {
   const { t } = useTranslation()
+
   return (
     <div
       role="status"

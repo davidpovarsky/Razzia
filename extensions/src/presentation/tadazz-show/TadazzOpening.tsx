@@ -315,9 +315,10 @@ export function TadazzOpening({
         />
       )}
       {brandTransitionActive && onEnableSound && !soundRequested && (
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
-          className="absolute bottom-8 left-8 z-30 pointer-events-auto font-display"
+          className="font-display pointer-events-auto absolute bottom-8 left-8 z-30"
           data-testid="tadazz-opening-enable-sound"
           onClick={() => {
             const video = videoRef.current
@@ -339,9 +340,10 @@ export function TadazzOpening({
         </PlatformButton>
       )}
       {canSkip && (
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
-          className="absolute bottom-8 right-8 z-30 pointer-events-auto font-display"
+          className="font-display pointer-events-auto absolute right-8 bottom-8 z-30"
           data-testid="tadazz-opening-skip"
           onClick={onSkip ?? (eventArtworkActive ? finish : endBrand)}
         >

@@ -1,6 +1,17 @@
-import { defineConfig } from "oxlint"
+import { defineConfig, type OxlintConfig } from "oxlint"
 
-export default defineConfig({
+const config: OxlintConfig = defineConfig({
+  // Imported artifacts are evidence, not maintained source. Keep their bytes intact.
+  ignorePatterns: [
+    "docs/extensions/references/**",
+    "docs/extensions/qa-evidence/**",
+    "docs/extensions/package-runtime-evidence/**",
+    // Supplied canvas choreography is vendored with @ts-nocheck; adapters stay checked.
+    "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+    "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+    "**/dist/**",
+    "**/test-results/**",
+  ],
   env: {
     browser: true,
     builtin: true,
@@ -13,6 +24,33 @@ export default defineConfig({
   },
   plugins: ["typescript"],
   overrides: [
+    {
+      files: [
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "extensions/qa/**",
+        "extensions/scripts/**",
+        "packages/e2e/**",
+      ],
+      rules: {
+        // Game actions, timer probes and fixture setup depend on preceding steps.
+        "no-await-in-loop": "off",
+        // Describe/test/evaluate callbacks add structural nesting in browser tests.
+        "max-nested-callbacks": ["error", 6],
+      },
+    },
+    {
+      files: ["**/*.spec.ts", "**/*.test.ts"],
+      rules: {
+        // Runtime expect/assert calls establish fixture presence; TS cannot infer
+        // narrowing from every matcher (especially serialized browser callbacks).
+        "typescript/no-non-null-assertion": "off",
+        // These are deliberate injection fixtures, never navigation targets.
+        "no-script-url": "off",
+        // No-op callbacks model disabled observers and mocked browser APIs.
+        "no-empty-function": ["error", { allow: ["arrowFunctions"] }],
+      },
+    },
     {
       files: ["packages/web/**/*.{ts,tsx}"],
       plugins: ["react"],
@@ -119,7 +157,9 @@ export default defineConfig({
     "no-dupe-else-if": "error",
     "no-dupe-keys": "error",
     "no-duplicate-case": "error",
-    "no-duplicate-imports": ["error", { includeExports: true }],
+    // Oxlint 1.90 reports each specifier in a single export list as a duplicate.
+    // Import deduplication and the parser still reject duplicate bindings.
+    "no-duplicate-imports": "error",
     "no-else-return": "error",
     "no-empty": "error",
     "no-empty-character-class": "error",
@@ -132,7 +172,7 @@ export default defineConfig({
     "no-extend-native": "error",
     "no-extra-boolean-cast": "error",
     "no-extra-label": "error",
-    "no-fallthrough": "error",
+    "no-fallthrough": ["error", { allowEmptyCase: true }],
     "no-func-assign": "error",
     "no-global-assign": "error",
     "no-implicit-coercion": "error",
@@ -293,7 +333,18 @@ export default defineConfig({
     "typescript/prefer-includes": "error",
     "typescript/prefer-literal-enum-member": "error",
     "typescript/prefer-namespace-keyword": "error",
-    "typescript/prefer-nullish-coalescing": "error",
+    // Empty names/URLs and zero durations intentionally select existing defaults.
+    "typescript/prefer-nullish-coalescing": [
+      "error",
+      {
+        ignorePrimitives: {
+          string: true,
+          number: true,
+          boolean: true,
+          bigint: true,
+        },
+      },
+    ],
     "typescript/prefer-optional-chain": "error",
     "typescript/prefer-promise-reject-errors": "error",
     "typescript/prefer-reduce-type-parameter": "error",
@@ -326,3 +377,16 @@ export default defineConfig({
     yoda: "error",
   },
 })
+
+// Untyped JS utilities still receive every JavaScript correctness/style rule.
+// TypeScript-only guarantees apply to TS projects, not inferred `any` in JS probes.
+config.overrides?.push({
+  files: ["**/*.{js,mjs,cjs}"],
+  rules: Object.fromEntries(
+    Object.keys(config.rules ?? {})
+      .filter((rule) => rule.startsWith("typescript/"))
+      .map((rule) => [rule, "off" as const]),
+  ),
+})
+
+export default config

@@ -1,4 +1,4 @@
-import {PlatformButton} from "../presentation/platform-controls"
+import { PlatformButton } from "../presentation/platform-controls"
 import {
   answerVisualSchema,
   isSafeMediaUrl,
@@ -91,7 +91,9 @@ export const RichAnswerCard = ({
     : `${label}: ${text}`
 
   return (
-    <PlatformButton size="sm" classNameContent="contents"
+    <PlatformButton
+      size="sm"
+      classNameContent="contents"
       type="button"
       className={clsx(
         "disabled:opacity-100",

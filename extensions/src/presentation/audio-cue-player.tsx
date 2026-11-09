@@ -85,12 +85,14 @@ export const shouldDuckMusic = (
 const TRANSITION = "/sounds/tadazz-silky-transition-20261108.mp3"
 const REVEAL = "/sounds/tadazz-reveal-bright-20261108.mp3"
 const CONFIRM = "/sounds/tadazz-confirm-20261108.mp3"
+
 export const TADAZZ_PHASE_SFX: Partial<Record<CueId, string>> = {
   start: TRANSITION,
   showQuestion: TRANSITION,
   answerPressed: CONFIRM,
   revealResults: REVEAL,
 }
+
 export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "timer-ended": "/sounds/tadazz-timer-end-368edc1d9522.mp3",
   "countdown-ended": REVEAL,
@@ -116,7 +118,7 @@ export const TADAZZ_SFX_BY_CUE: Readonly<Record<string, string>> = {
   "curtains-closed": TRANSITION,
 }
 
-type AudioPreferences = {
+interface AudioPreferences {
   muted: boolean
   setMuted: Dispatch<SetStateAction<boolean>>
   volume: number
@@ -125,15 +127,24 @@ type AudioPreferences = {
   setPaused: Dispatch<SetStateAction<boolean>>
 }
 const AudioPreferencesContext = createContext<AudioPreferences | null>(null)
+
 /** A room-local preference owner, retained while the operator changes layouts. */
 export function AudioPreferencesScope({ children }: PropsWithChildren) {
   const [muted, setMuted] = useState(false)
   const [volume, setVolume] = useState(1)
   const [paused, setPaused] = useState(false)
   const value = useMemo(
-    () => ({ muted, setMuted, volume, setVolume, paused, setPaused }),
+    () => ({
+      muted,
+      setMuted,
+      volume,
+      setVolume,
+      paused,
+      setPaused,
+    }),
     [muted, volume, paused],
   )
+
   return (
     <AudioPreferencesContext.Provider value={value}>
       {children}
@@ -147,7 +158,10 @@ export interface AudioControlState {
   userPaused: boolean
   volume: number
   track: string
-  tracks: readonly { value: string; label: string }[]
+  tracks: ReadonlyArray<{
+    value: string
+    label: string
+  }>
   labels: NonNullable<AudioCuePlayerProps["controlLabels"]>
   unlock: () => void
   toggleMute: () => void
@@ -159,8 +173,8 @@ export interface AudioControlState {
 export interface AudioCuePlayerProps {
   /** Player role: process permitted interaction effects, without a second music engine. */
   eventOnly?: boolean
-  /** Timed stage soundtrack, played by this same master pause/mute/volume owner.
-   * undefined uses normal policy; null deliberately keeps the stage silent. */
+  // Timed stage soundtrack, played by this same master pause/mute/volume owner.
+  // undefined uses normal policy; null deliberately keeps the stage silent.
   showTrack?: {
     key: string
     url: string
@@ -236,11 +250,13 @@ function resolveSoundtrack(
   if (!slot) {
     return null
   }
+
   const setting = audioExtras?.soundtrack?.[slot]
 
   if (setting?.mode !== "media" || !setting.url) {
     return null
   }
+
   return setting
 }
 
@@ -326,8 +342,9 @@ export const AudioCuePlayer = ({
           activeThemeAudioEvent,
           suppliedSceneAudio.url,
         ))
-    )
+    ) {
       return undefined
+    }
 
     return suppliedSceneAudio
   }, [theme, suppliedSceneAudio, activeThemeAudioEvent])
@@ -343,7 +360,11 @@ export const AudioCuePlayer = ({
     onEndedProp,
     onErrorProp,
   })
-  callbacksRef.current = { onPlaybackStartedProp, onEndedProp, onErrorProp }
+  callbacksRef.current = {
+    onPlaybackStartedProp,
+    onEndedProp,
+    onErrorProp,
+  }
   const onPlaybackStarted = useCallback(
     (identity: string) =>
       callbacksRef.current.onPlaybackStartedProp?.(identity),
@@ -369,7 +390,10 @@ export const AudioCuePlayer = ({
   const spotlightLevelRef = useRef(0.7)
   const tickLevelRef = useRef(0.27)
   const protectedUntilRef = useRef(0)
-  const lastEffectRef = useRef({ url: "", at: 0 })
+  const lastEffectRef = useRef({
+    url: "",
+    at: 0,
+  })
   const duckTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [ducked, setDucked] = useState(false)
   const [timerEnding, setTimerEnding] = useState(false)
@@ -393,29 +417,55 @@ export const AudioCuePlayer = ({
   const setMasterVolume = sharedPreferences?.setVolume ?? setLocalVolume
   const userPaused = sharedPreferences?.paused ?? localPaused
   const setUserPaused = sharedPreferences?.setPaused ?? setLocalPaused
-  const playbackControlsRef = useRef({ autoPlay, paused, userPaused })
-  playbackControlsRef.current = { autoPlay, paused, userPaused }
+  const playbackControlsRef = useRef({
+    autoPlay,
+    paused,
+    userPaused,
+  })
+  playbackControlsRef.current = {
+    autoPlay,
+    paused,
+    userPaused,
+  }
   const votingAttemptRef = useRef<string | null>(null)
   const synchronizeShowTrack = useCallback(
     (active: HTMLAudioElement, track: DesiredTrack) => {
-      if (showTrack === undefined) return true
-      if (!showTrack) return false
-      const elapsed = paused
-        ? (showTrack.elapsedMs ?? 0)
-        : showTrack.startedAt === undefined
-          ? (showTrack.elapsedMs ?? 0)
-          : Math.max(0, Date.now() - showTrack.startedAt)
+      if (showTrack === undefined) {
+        return true
+      }
+
+      if (!showTrack) {
+        return false
+      }
+
+      const elapsed = (() => {
+        if (paused) {
+          return showTrack.elapsedMs ?? 0
+        }
+
+        if (showTrack.startedAt === undefined) {
+          return showTrack.elapsedMs ?? 0
+        }
+
+        return Math.max(0, Date.now() - showTrack.startedAt)
+      })()
+
       if (elapsed >= showTrack.durationMs) {
         active.pause()
         finishedIdentityRef.current = track.identity
+
         return false
       }
+
       // Compute from the live clock on each user action. Reusing the initial
       // offset here would rewind the soundtrack whenever volume/mute changes.
-      if (Math.abs(active.currentTime - elapsed / 1000) > 0.4)
+      if (Math.abs(active.currentTime - elapsed / 1000) > 0.4) {
         active.currentTime = elapsed / 1000
+      }
+
       track.maxDurationMs = showTrack.durationMs - elapsed
       stopRemainingRef.current = track.maxDurationMs
+
       return true
     },
     [showTrack, paused],
@@ -431,9 +481,16 @@ export const AudioCuePlayer = ({
     manualTrack?.stageKey === stageKey ? manualTrack.slot : null
   const selectedSoundtrackSlot = liveSlotOverride ?? soundtrackSlot
   useEffect(() => {
-    if (selectedSoundtrackSlot !== "voting") return
+    if (selectedSoundtrackSlot !== "voting") {
+      return
+    }
+
     const attempt = `${gameId ?? "g"}:${activeCardKey ?? "q"}:${epoch ?? 0}`
-    if (votingAttemptRef.current === attempt) return
+
+    if (votingAttemptRef.current === attempt) {
+      return
+    }
+
     votingAttemptRef.current = attempt
     // A skip/restart must never carry an old milestone into a new question.
     revealRef.current?.pause()
@@ -441,7 +498,11 @@ export const AudioCuePlayer = ({
     timerEndRef.current?.pause()
     setTimerEnding(false)
     protectedUntilRef.current = 0
-    if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+
+    if (duckTimerRef.current) {
+      clearTimeout(duckTimerRef.current)
+    }
+
     setDucked(false)
   }, [selectedSoundtrackSlot, gameId, activeCardKey, epoch])
   const configuredSoundtrackSlots = SOUNDTRACK_SLOT_IDS.filter(
@@ -465,7 +526,6 @@ export const AudioCuePlayer = ({
       })
     : null
   const soundtrack = resolveSoundtrack(selectedSoundtrackSlot, audioExtras)
-
   const desired = useMemo<DesiredTrack | null>(() => {
     if (eventOnly) {
       return null
@@ -475,12 +535,23 @@ export const AudioCuePlayer = ({
       if (!showTrack) {
         return null
       }
-      const elapsed = paused
-        ? (showTrack.elapsedMs ?? 0)
-        : showTrack.startedAt === undefined
-          ? (showTrack.elapsedMs ?? 0)
-          : Math.max(0, Date.now() - showTrack.startedAt)
-      if (elapsed >= showTrack.durationMs) return null
+
+      const elapsed = (() => {
+        if (paused) {
+          return showTrack.elapsedMs ?? 0
+        }
+
+        if (showTrack.startedAt === undefined) {
+          return showTrack.elapsedMs ?? 0
+        }
+
+        return Math.max(0, Date.now() - showTrack.startedAt)
+      })()
+
+      if (elapsed >= showTrack.durationMs) {
+        return null
+      }
+
       return {
         identity: `${gameId ?? "g"}:reference-story:${showTrack.key}:${showTrack.url}`,
         url: showTrack.url,
@@ -637,7 +708,6 @@ export const AudioCuePlayer = ({
     liveSlotOverride,
     sceneAudio,
   ])
-
   const effectiveVolume = useCallback(
     (track: DesiredTrack) =>
       muted
@@ -645,14 +715,24 @@ export const AudioCuePlayer = ({
         : calibratedMusicVolume(track.url, track.volume) *
           masterVolume *
           (hasCompetingMedia ? 0.22 : 1) *
-          (timerEnding ? 0.15 : ducked ? 0.3 : 1),
+          (() => {
+            if (timerEnding) {
+              return 0.15
+            }
+
+            if (ducked) {
+              return 0.3
+            }
+
+            return 1
+          })(),
     [hasCompetingMedia, masterVolume, muted, ducked, timerEnding],
   )
-
   useEffect(() => {
     if (typeof Audio === "undefined") {
       return
     }
+
     const a = new Audio()
     const b = new Audio()
     const sfx = new Audio()
@@ -691,10 +771,14 @@ export const AudioCuePlayer = ({
       if (rampRef.current) {
         clearInterval(rampRef.current)
       }
+
       if (stopTimerRef.current) {
         clearTimeout(stopTimerRef.current)
       }
-      if (duckTimerRef.current) clearTimeout(duckTimerRef.current)
+
+      if (duckTimerRef.current) {
+        clearTimeout(duckTimerRef.current)
+      }
 
       timerEnd.onended = null
       for (const audio of new Set([
@@ -725,19 +809,21 @@ export const AudioCuePlayer = ({
       tickRef.current = null
     }
   }, [])
-
   useEffect(() => {
     const elements = backgroundsRef.current
 
     if (!elements) {
       return
     }
-    const generation = ++generationRef.current
+
+    const generation = generationRef.current + 1
+    generationRef.current = generation
 
     if (rampRef.current) {
       clearInterval(rampRef.current)
       rampRef.current = null
     }
+
     if (stopTimerRef.current) {
       clearTimeout(stopTimerRef.current)
       stopTimerRef.current = null
@@ -753,9 +839,14 @@ export const AudioCuePlayer = ({
     }
 
     const { current } = currentRef
+
     if (current && desired && current.identity === desired.identity) {
       const active = elements[activeIndexRef.current]
-      if (!synchronizeShowTrack(active, desired)) return
+
+      if (!synchronizeShowTrack(active, desired)) {
+        return
+      }
+
       elements[activeIndexRef.current === 0 ? 1 : 0].pause()
       active.onended = () => {
         if (
@@ -764,9 +855,11 @@ export const AudioCuePlayer = ({
         ) {
           return
         }
+
         if (stopTimerRef.current) {
           clearTimeout(stopTimerRef.current)
         }
+
         stopTimerRef.current = null
         stopRemainingRef.current = null
         stopDeadlineRef.current = null
@@ -799,10 +892,15 @@ export const AudioCuePlayer = ({
     }
 
     const old = elements[activeIndexRef.current]
-    if (showTrack !== undefined) old.pause()
+
+    if (showTrack !== undefined) {
+      old.pause()
+    }
 
     if (!desired) {
-      elements.forEach((element) => element.pause())
+      elements.forEach((element) => {
+        element.pause()
+      })
       old.currentTime = 0
       currentRef.current = null
       stopRemainingRef.current = null
@@ -816,6 +914,7 @@ export const AudioCuePlayer = ({
     stopRemainingRef.current = null
     stopDeadlineRef.current = null
     const warmed = epicWarmRef.current
+
     if (warmed && warmed.getAttribute("src") === desired.url && !warmed.error) {
       const displaced = elements[nextIndex]
       displaced.pause()
@@ -824,6 +923,7 @@ export const AudioCuePlayer = ({
       elements[nextIndex] = warmed
       epicWarmRef.current = displaced
     }
+
     const next = elements[nextIndex]
     next.pause()
     delete next.dataset.fallbackAttempted
@@ -844,9 +944,11 @@ export const AudioCuePlayer = ({
       ) {
         return
       }
+
       if (stopTimerRef.current) {
         clearTimeout(stopTimerRef.current)
       }
+
       stopTimerRef.current = null
       stopRemainingRef.current = null
       stopDeadlineRef.current = null
@@ -864,10 +966,10 @@ export const AudioCuePlayer = ({
       if (!stillActive()) {
         return
       }
+
       if (desired.fallbackUrl && next.dataset.fallbackAttempted !== "true") {
         next.dataset.fallbackAttempted = "true"
         next.src = desired.fallbackUrl
-
         const controls = playbackControlsRef.current
 
         if (controls.autoPlay && !controls.paused && !controls.userPaused) {
@@ -914,7 +1016,11 @@ export const AudioCuePlayer = ({
         if (generationRef.current !== generation) {
           return
         }
-        if (!synchronizeShowTrack(next, desired)) return
+
+        if (!synchronizeShowTrack(next, desired)) {
+          return
+        }
+
         setAudioBlocked(false)
         onPlaybackStarted(desired.identity)
         const target = effectiveVolume(desired)
@@ -949,6 +1055,7 @@ export const AudioCuePlayer = ({
             if (generationRef.current !== generation) {
               return
             }
+
             next.pause()
             stopTimerRef.current = null
             stopRemainingRef.current = null
@@ -986,7 +1093,6 @@ export const AudioCuePlayer = ({
     userPaused,
     synchronizeShowTrack,
   ])
-
   useEffect(() => {
     if (
       !autoPlay ||
@@ -1021,7 +1127,6 @@ export const AudioCuePlayer = ({
     inactive.src = upcoming.url
     inactive.load()
   }, [autoPlay, selectedSoundtrackSlot, showTrack, audioExtras, desired])
-
   useEffect(() => {
     if (
       !autoPlay ||
@@ -1039,7 +1144,11 @@ export const AudioCuePlayer = ({
 
     const warm = epicWarmRef.current ?? new Audio()
     epicWarmRef.current = warm
-    if (warm.getAttribute("src") === url && !warm.error) return
+
+    if (warm.getAttribute("src") === url && !warm.error) {
+      return
+    }
+
     warm.pause()
     warm.onended = null
     warm.onerror = null
@@ -1048,13 +1157,14 @@ export const AudioCuePlayer = ({
     warm.src = url
     warm.load()
   }, [autoPlay, audioExtras, desired])
-
   useEffect(() => {
     const elements = backgroundsRef.current
     const { current } = currentRef
+
     if (!elements || !current) {
       return
     }
+
     const active = elements[activeIndexRef.current]
     const generation = generationRef.current
     const stillCurrent = () =>
@@ -1064,7 +1174,9 @@ export const AudioCuePlayer = ({
     active.volume = effectiveVolume(current)
 
     if (paused || userPaused) {
-      elements.forEach((element) => element.pause())
+      elements.forEach((element) => {
+        element.pause()
+      })
     } else if (
       autoPlay &&
       !audioBlocked &&
@@ -1078,8 +1190,14 @@ export const AudioCuePlayer = ({
       void active
         .play()
         .then(() => {
-          if (!stillCurrent()) return
-          if (!synchronizeShowTrack(active, current)) return
+          if (!stillCurrent()) {
+            return
+          }
+
+          if (!synchronizeShowTrack(active, current)) {
+            return
+          }
+
           onPlaybackStarted(current.identity)
 
           if (
@@ -1090,7 +1208,10 @@ export const AudioCuePlayer = ({
             stopRemainingRef.current = current.maxDurationMs
             stopDeadlineRef.current = Date.now() + current.maxDurationMs
             stopTimerRef.current = setTimeout(() => {
-              if (!stillCurrent()) return
+              if (!stillCurrent()) {
+                return
+              }
+
               active.pause()
               stopTimerRef.current = null
               stopRemainingRef.current = null
@@ -1126,12 +1247,12 @@ export const AudioCuePlayer = ({
     userPaused,
     synchronizeShowTrack,
   ])
-
   useEffect(() => {
     const handleCue = (event: Event) => {
       if (paused || userPaused || muted) {
         return
       }
+
       const { detail } = event as CustomEvent<
         | {
             name?: string
@@ -1228,7 +1349,11 @@ export const AudioCuePlayer = ({
       const isSpotlight = detail.name === "top-pick-reveal"
       const isMilestone = isReveal || isSpotlight || isTimerEnd
       const now = Date.now()
-      if (!isTick && !isMilestone && now < protectedUntilRef.current) return
+
+      if (!isTick && !isMilestone && now < protectedUntilRef.current) {
+        return
+      }
+
       playedSfxRef.current.add(identity)
       // The wipe/impact animation can emit adjacent cues for one movement.
 
@@ -1237,9 +1362,17 @@ export const AudioCuePlayer = ({
         !isMilestone &&
         lastEffectRef.current.url === url &&
         now - lastEffectRef.current.at < 500
-      )
+      ) {
         return
-      if (!isTick) lastEffectRef.current = { url, at: now }
+      }
+
+      if (!isTick) {
+        lastEffectRef.current = {
+          url,
+          at: now,
+        }
+      }
+
       if (isReveal || isTimerEnd) {
         if (isTimerEnd) {
           setTimerEnding(true)
@@ -1266,24 +1399,41 @@ export const AudioCuePlayer = ({
       // Clearing the entire cache could replay the current question's reveal.
       if (playedSfxRef.current.size > 512) {
         const oldest = playedSfxRef.current.values().next().value
-        if (oldest) playedSfxRef.current.delete(oldest)
+
+        if (oldest) {
+          playedSfxRef.current.delete(oldest)
+        }
       }
 
-      const sfx = isTick
-        ? tickRef.current
-        : isTimerEnd
-          ? timerEndRef.current
-          : isReveal
-            ? revealRef.current
-            : isSpotlight
-              ? spotlightRef.current
-              : sfxRef.current
+      const sfx = (() => {
+        if (isTick) {
+          return tickRef.current
+        }
+
+        if (isTimerEnd) {
+          return timerEndRef.current
+        }
+
+        if (isReveal) {
+          return revealRef.current
+        }
+
+        if (isSpotlight) {
+          return spotlightRef.current
+        }
+
+        return sfxRef.current
+      })()
 
       if (!sfx) {
         return
       }
+
       sfx.pause()
-      if (sfx.getAttribute("src") !== url || sfx.error) sfx.src = url
+
+      if (sfx.getAttribute("src") !== url || sfx.error) {
+        sfx.src = url
+      }
 
       sfx.currentTime = 0
       const explicitVolume =
@@ -1304,9 +1454,13 @@ export const AudioCuePlayer = ({
         tickLevelRef.current = level
       } else if (isTimerEnd) {
         timerEndLevelRef.current = level
-      } else if (isReveal) revealLevelRef.current = level
-      else if (isSpotlight) spotlightLevelRef.current = level
-      else sfxLevelRef.current = level
+      } else if (isReveal) {
+        revealLevelRef.current = level
+      } else if (isSpotlight) {
+        spotlightLevelRef.current = level
+      } else {
+        sfxLevelRef.current = level
+      }
 
       sfx.volume = level * masterVolume
 
@@ -1354,7 +1508,6 @@ export const AudioCuePlayer = ({
     suppliedAudioExtras,
     cardAudioCues,
   ])
-
   useEffect(() => {
     if (
       !soundtrack ||
@@ -1366,11 +1519,16 @@ export const AudioCuePlayer = ({
     ) {
       return
     }
+
     window.dispatchEvent(
       new CustomEvent("tadazz:sfx", {
         detail: {
           name: `phase-${effectiveCueId}`,
-          ...(stageOwnsReveal ? { volume: 0.55 } : {}),
+          ...(stageOwnsReveal
+            ? {
+                volume: 0.55,
+              }
+            : {}),
           url:
             (stageOwnsReveal ? TADAZZ_PHASE_SFX[effectiveCueId] : undefined) ??
             DEFAULT_CUE_URLS[effectiveCueId],
@@ -1386,7 +1544,6 @@ export const AudioCuePlayer = ({
     soundtrack,
     stageOwnsReveal,
   ])
-
   const unlock = useCallback(() => {
     setAudioBlocked(false)
     setUserPaused(false)
@@ -1412,12 +1569,20 @@ export const AudioCuePlayer = ({
     if (!current || !elements || paused) {
       return
     }
+
     const active = elements[activeIndexRef.current]
-    if (!synchronizeShowTrack(active, current)) return
+
+    if (!synchronizeShowTrack(active, current)) {
+      return
+    }
+
     void active
       .play()
       .then(() => {
-        if (!synchronizeShowTrack(active, current)) return
+        if (!synchronizeShowTrack(active, current)) {
+          return
+        }
+
         active.volume = effectiveVolume(current)
         onPlaybackStarted(current.identity)
 
@@ -1451,7 +1616,6 @@ export const AudioCuePlayer = ({
     paused,
     synchronizeShowTrack,
   ])
-
   useEffect(() => {
     if (paused || userPaused || muted) {
       sfxRef.current?.pause()
@@ -1461,6 +1625,7 @@ export const AudioCuePlayer = ({
       spotlightRef.current?.pause()
       tickRef.current?.pause()
     }
+
     if (sfxRef.current) {
       sfxRef.current.volume = muted ? 0 : sfxLevelRef.current * masterVolume
     }
@@ -1487,7 +1652,6 @@ export const AudioCuePlayer = ({
       tickRef.current.volume = muted ? 0 : tickLevelRef.current * masterVolume
     }
   }, [masterVolume, muted, paused, userPaused])
-
   useEffect(() => {
     window.addEventListener("tadazz:audio-unlock", unlock)
 
@@ -1510,7 +1674,8 @@ export const AudioCuePlayer = ({
         data-audio-paused={paused || userPaused ? "true" : "false"}
       />
       {!showControls && audioBlocked && (
-        <PlatformButton size="sm"
+        <PlatformButton
+          size="sm"
           type="button"
           className="tz-x-pill absolute bottom-3 left-3 z-50"
           data-testid="player-enable-audio"
@@ -1555,7 +1720,12 @@ export const AudioCuePlayer = ({
             setVolume: setMasterVolume,
             setTrack: (value) =>
               setManualTrack(
-                value ? { slot: value as SoundtrackSlotId, stageKey } : null,
+                value
+                  ? {
+                      slot: value as SoundtrackSlotId,
+                      stageKey,
+                    }
+                  : null,
               ),
           })
         ) : (
@@ -1564,10 +1734,11 @@ export const AudioCuePlayer = ({
             data-testid="host-audio-controls"
           >
             {audioBlocked && (
-              <PlatformButton size="sm"
+              <PlatformButton
+                size="sm"
                 type="button"
                 onClick={unlock}
-                className="bg-white text-black hover:bg-accent font-display"
+                className="hover:bg-accent font-display bg-white text-black"
                 data-testid="host-enable-audio"
               >
                 {controlLabels.enable}
@@ -1601,10 +1772,11 @@ export const AudioCuePlayer = ({
                   </select>
                 </label>
               )}
-            <PlatformButton size="sm"
+            <PlatformButton
+              size="sm"
               type="button"
               onClick={() => setMuted((value) => !value)}
-              className="bg-white text-black hover:bg-accent font-display"
+              className="hover:bg-accent font-display bg-white text-black"
               data-testid="host-toggle-audio-mute"
               aria-pressed={muted}
             >
@@ -1621,10 +1793,11 @@ export const AudioCuePlayer = ({
               onChange={(event) => setMasterVolume(Number(event.target.value))}
               className="accent-primary w-24"
             />
-            <PlatformButton size="sm"
+            <PlatformButton
+              size="sm"
               type="button"
               onClick={() => setUserPaused((value) => !value)}
-              className="bg-white text-black hover:bg-accent font-display"
+              className="hover:bg-accent font-display bg-white text-black"
               data-testid="host-toggle-audio-pause"
               aria-pressed={userPaused}
             >

@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   duplicateQuestion,
   generateQuestionId,
@@ -203,10 +204,12 @@ export const normalizeTimelineRecapReferences = (
   for (const item of timeline) {
     if (item.kind === "question") {
       seenQuestionIds.push(item.questionId)
+
       continue
     }
 
     const scene = nextScenes[item.sceneId]
+
     if (scene?.kind === "answerRecap") {
       if (seenQuestionIds.length === 0) {
         if (scene.startQuestionId !== undefined) {

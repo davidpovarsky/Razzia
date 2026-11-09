@@ -20,5 +20,5 @@ export const deleteMedia = (name: string, options?: { detach?: boolean }) =>
     api.media[":name"].$delete({
       param: { name },
       ...(options?.detach ? { query: { detach: "true" } } : {}),
-    } as any),
+    }),
   )

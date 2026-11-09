@@ -1,5 +1,6 @@
-import type { CSSProperties, ReactNode } from "react"
 import {
+  type CSSProperties,
+  type ReactNode,
   forwardRef,
   useCallback,
   useEffect,
@@ -27,7 +28,6 @@ import {
   type TadazzV4StageHandle,
   type TadazzV4StageProps,
 } from "./types"
-
 interface CurrentScene {
   scene: TadazzV4Scene
   data: TadazzV4Data
@@ -65,7 +65,11 @@ export const TadazzV4Stage = forwardRef<
   const engineRef = useRef<TadazzV4Motion | null>(null)
   const [view, setView] = useState<CurrentScene | null>(
     initialScene
-      ? { scene: initialScene, data: normalizeData(initialData), revision: 0 }
+      ? {
+          scene: initialScene,
+          data: normalizeData(initialData),
+          revision: 0,
+        }
       : null,
   )
   const viewRef = useRef(view)
@@ -75,8 +79,14 @@ export const TadazzV4Stage = forwardRef<
   >(null)
   const sequence = useRef(0)
   const resolutions = useRef(new Map<number, (completed: boolean) => void>())
-  const callbackRef = useRef({ onCue, onComplete })
-  callbackRef.current = { onCue, onComplete }
+  const callbackRef = useRef({
+    onCue,
+    onComplete,
+  })
+  callbackRef.current = {
+    onCue,
+    onComplete,
+  }
   const motionScaleRef = useRef(motionScale)
   motionScaleRef.current = motionScale
   const reducedMotionRef = useRef(reducedMotion)
@@ -84,7 +94,6 @@ export const TadazzV4Stage = forwardRef<
   useEffect(() => {
     engineRef.current?.setReducedMotion(reducedMotion)
   }, [reducedMotion])
-
   useLayoutEffect(() => {
     const element = stageRef.current
     const viewport = viewportRef.current
@@ -92,6 +101,7 @@ export const TadazzV4Stage = forwardRef<
     if (!viewport || !element) {
       return
     }
+
     const fit = () => {
       const rect = viewport.getBoundingClientRect()
       const vw = Math.min(
@@ -120,11 +130,11 @@ export const TadazzV4Stage = forwardRef<
       window.removeEventListener("resize", fit)
     }
   }, [fitRevision])
-
   const start = useCallback(
     (scene: TadazzV4Scene, data: TadazzV4Data): Promise<boolean> => {
-      const revision = ++sequence.current
+      const revision = sequence.current + 1
       // Superseded play requests settle predictably, including pending React renders.
+      sequence.current = revision
       for (const [key, resolve] of resolutions.current) {
         if (key !== revision) {
           resolve(false)
@@ -132,11 +142,15 @@ export const TadazzV4Stage = forwardRef<
         }
       }
       engineRef.current?.stop()
-      setView({ scene, data: normalizeData(data), revision })
+      setView({
+        scene,
+        data: normalizeData(data),
+        revision,
+      })
 
-      return new Promise<boolean>((resolve) =>
-        resolutions.current.set(revision, resolve),
-      )
+      return new Promise<boolean>((resolve) => {
+        resolutions.current.set(revision, resolve)
+      })
     },
     [],
   )
@@ -165,10 +179,15 @@ export const TadazzV4Stage = forwardRef<
     (onCovered?: () => void | Promise<void>): Promise<boolean> => {
       wipeEngineRef.current?.stop()
       wipeRequest.current?.resolve(false)
-      const rev = ++wipeCounter.current
+      const rev = wipeCounter.current + 1
+      wipeCounter.current = rev
 
       return new Promise<boolean>((resolve) => {
-        wipeRequest.current = { rev, onCovered, resolve }
+        wipeRequest.current = {
+          rev,
+          onCovered,
+          resolve,
+        }
         setWipeRev(rev)
       })
     },
@@ -181,11 +200,13 @@ export const TadazzV4Stage = forwardRef<
     if (!layer || !req || req.rev !== wipeRev) {
       return
     }
+
     let covered = false
     const fireCovered = () => {
       if (covered) {
         return
       }
+
       covered = true
       void Promise.resolve(req.onCovered?.()).catch(() => undefined)
     }
@@ -196,6 +217,7 @@ export const TadazzV4Stage = forwardRef<
         if (cue.name === "wipe-covered") {
           fireCovered()
         }
+
         callbackRef.current.onCue?.(cue)
       },
     })
@@ -205,14 +227,18 @@ export const TadazzV4Stage = forwardRef<
       if (!alive) {
         return
       }
+
       fireCovered()
 
       if (wipeRequest.current === req) {
         wipeRequest.current = null
       }
+
       req.resolve(ok)
       // Remove the blades: zero stuck blocking layers after the wipe.
+      /* oxlint-disable max-nested-callbacks -- The stage callback structure follows the existing animation lifecycle and render tree. */
       setWipeRev((r) => (r === req.rev ? 0 : r))
+      /* oxlint-enable max-nested-callbacks */
     })
 
     return () => {
@@ -224,10 +250,9 @@ export const TadazzV4Stage = forwardRef<
       }
     }
   }, [wipeRev])
-
   const showPercentagesRef = useRef(showPercentages)
   showPercentagesRef.current = overridePercentages ?? showPercentages
-
+  /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
   useImperativeHandle(
     ref,
     () => ({
@@ -238,12 +263,19 @@ export const TadazzV4Stage = forwardRef<
         engineRef.current?.syncCountdown(patch)
         setView((prev) =>
           prev
-            ? { ...prev, data: normalizeData({ ...prev.data, ...patch }) }
+            ? {
+                ...prev,
+                data: normalizeData({
+                  ...prev.data,
+                  ...patch,
+                }),
+              }
             : prev,
         )
       },
       replay: async () => {
         const { current } = viewRef
+
         return current ? start(current.scene, current.data) : false
       },
       pause: () => {
@@ -265,20 +297,25 @@ export const TadazzV4Stage = forwardRef<
       setPercentagesVisible: (value) => {
         setOverridePercentages(value)
         const { current } = viewRef
+
         if (current?.scene === "survey-results") {
-          void start(current.scene, { ...current.data, showPercentages: value })
+          void start(current.scene, {
+            ...current.data,
+            showPercentages: value,
+          })
         }
       },
     }),
     [start, clear, wipe],
   )
-
+  /* oxlint-enable require-await, typescript/require-await */
   useLayoutEffect(() => {
     const el = stageRef.current
 
     if (!el || !view) {
       return
     }
+
     const cueHandler = (cue: { name: string; scene: TadazzV4Scene }) => {
       const taggedCue = {
         ...cue,
@@ -286,7 +323,10 @@ export const TadazzV4Stage = forwardRef<
         questionNumber: view.data.number,
       }
       el.dispatchEvent(
-        new CustomEvent("tadazz:cue", { detail: taggedCue, bubbles: false }),
+        new CustomEvent("tadazz:cue", {
+          detail: taggedCue,
+          bubbles: false,
+        }),
       )
       callbackRef.current.onCue?.(taggedCue)
     }
@@ -308,13 +348,16 @@ export const TadazzV4Stage = forwardRef<
         if (!alive) {
           return
         }
+
         resolutions.current.get(view.revision)?.(completed)
         resolutions.current.delete(view.revision)
 
         if (completed) {
           el.dispatchEvent(
             new CustomEvent("tadazz:animation-complete", {
-              detail: { scene: view.scene },
+              detail: {
+                scene: view.scene,
+              },
             }),
           )
           callbackRef.current.onComplete?.(view.scene)
@@ -332,7 +375,6 @@ export const TadazzV4Stage = forwardRef<
       }
     }
   }, [view?.revision, view?.scene])
-
   useEffect(
     () => () => {
       engineRef.current?.dispose()
@@ -346,11 +388,13 @@ export const TadazzV4Stage = forwardRef<
     },
     [],
   )
-
   const scene = view?.scene ?? "interlude"
   const data = view?.data ?? initialData
   const isShow = view ? TADAZZ_V4_SHOW_SCENES.has(view.scene) : true
-  const stageStyle: CSSProperties = { width: 1920, height: 1080 }
+  const stageStyle: CSSProperties = {
+    width: 1920,
+    height: 1080,
+  }
 
   return (
     <div
@@ -375,9 +419,13 @@ export const TadazzV4Stage = forwardRef<
         {underlay as ReactNode}
         <StageAmbientV4 />
         {view &&
-          !["company-opening", "grand-opening", "grand-finale", "story-assembly", "story-live"].includes(
-            view.scene,
-          ) && (
+          ![
+            "company-opening",
+            "grand-opening",
+            "grand-finale",
+            "story-assembly",
+            "story-live",
+          ].includes(view.scene) && (
             <img
               className="stage-teaser"
               src="/tadazz-show/second-library/teaser-screen-source.jpg"

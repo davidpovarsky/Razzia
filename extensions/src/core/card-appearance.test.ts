@@ -1,10 +1,14 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import type {
+  AuthoredQuizCard,
+  AuthoredOpeningCard,
+} from "./show-authoring-schema"
 import { describe, expect, it } from "vitest"
 import {
   authoredShowToNativeBundleDraft,
   clampAnimationDurationMs,
   clampAnimationStaggerMs,
   collectQuizMediaReferences,
-  CUE_IDS,
   detachMediaFromShowData,
   evaluateCardStageFitWarnings,
   exportTadaShowWorkbook,
@@ -19,7 +23,6 @@ import {
   resolveQuestionDecoration,
   validateBundleMedia,
 } from "./index"
-
 describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip Contracts", () => {
   it("resolves effective card background with fallback to game branding background", () => {
     expect(
@@ -31,7 +34,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       position: "center",
       overlayOpacity: 0,
     })
-
     expect(
       resolveEffectiveCardBackground(
         {
@@ -63,7 +65,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       ).mode,
     ).toBe("game")
   })
-
   it("resolves effective audio cues with precedence: card override > global show audio > built-in default", () => {
     // 1. Default built-in when neither card nor global is set
     expect(
@@ -185,19 +186,16 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       }).shouldPlay,
     ).toBe(false)
   })
-
   it("resolves 4 independent stage animation slots and maintains legacy questionEntrance compatibility", () => {
     expect(clampAnimationDurationMs(50)).toBe(250)
     expect(clampAnimationDurationMs(5000)).toBe(2500)
     expect(clampAnimationStaggerMs(999)).toBe(300)
-
     const resolvedFromLegacy = resolveCardStageAnimations({
       questionEntrance: {
         preset: "spotlight",
         durationMs: 900,
       },
     })
-
     expect(resolvedFromLegacy.questionEntrance).toEqual({
       preset: "spotlight",
       timing: "simultaneous",
@@ -207,7 +205,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
     expect(resolvedFromLegacy.answerEntrance.preset).toBe("none")
     expect(resolvedFromLegacy.answerBadgeEntrance.preset).toBe("none")
     expect(resolvedFromLegacy.resultsRevealEntrance.preset).toBe("none")
-
     const resolvedIndependent = resolveCardStageAnimations({
       stageAnimations: {
         questionEntrance: {
@@ -236,14 +233,12 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         },
       },
     })
-
     expect(resolvedIndependent.questionEntrance.preset).toBe("curtain")
     expect(resolvedIndependent.answerEntrance.preset).toBe("zoom-soft")
     expect(resolvedIndependent.answerEntrance.timing).toBe("sequential")
     expect(resolvedIndependent.answerBadgeEntrance.preset).toBe("fade")
     expect(resolvedIndependent.resultsRevealEntrance.preset).toBe("spotlight")
   })
-
   it("roundtrips card background, audioCues, scene audio, stageAnimations, and mediaCatalog across Bundle, TadaShowV1 JSON, and XLSX", () => {
     const initialAuthored = {
       format: "tada-show" as const,
@@ -389,11 +384,10 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       quizz: draftRes.bundleDraft!.quizz,
       extras: draftRes.bundleDraft!.extras,
     }
-
     expect(validateBundleMedia(bundle).ok).toBe(true)
     expect(bundle.extras.mediaCatalog).toHaveLength(1)
-    const sceneEntry = Object.values(bundle.extras.scenes ?? {})[0]
-    const pqEntry = Object.values(bundle.extras.perQuestion ?? {})[0]
+    const { 0: sceneEntry } = Object.values(bundle.extras.scenes ?? {})
+    const { 0: pqEntry } = Object.values(bundle.extras.perQuestion ?? {})
     expect(sceneEntry?.background?.url).toBe("/media/shared-bg.png")
     expect(sceneEntry?.audio?.url).toBe("/media/opening-fanfare.mp3")
     expect(pqEntry?.background?.url).toBe("/media/space-bg.png")
@@ -404,17 +398,16 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
     const exportedAuthored = nativeBundleToAuthoredShow(bundle)
     const xlsxBytes = exportTadaShowWorkbook(exportedAuthored)
     const parsedFromXlsx = parseTadaShowWorkbook(xlsxBytes)
-
     expect(parsedFromXlsx.cards[0].background).toEqual(
       initialAuthored.cards[0].background,
     )
-    expect((parsedFromXlsx.cards[0] as any).audio).toEqual(
+    expect((parsedFromXlsx.cards[0] as AuthoredOpeningCard).audio).toEqual(
       initialAuthored.cards[0].audio,
     )
     expect(parsedFromXlsx.cards[1].background).toEqual(
       initialAuthored.cards[1].background,
     )
-    expect((parsedFromXlsx.cards[1] as any).audioCues).toEqual(
+    expect((parsedFromXlsx.cards[1] as AuthoredQuizCard).audioCues).toEqual(
       initialAuthored.cards[1].audioCues,
     )
     expect(parsedFromXlsx.cards[1].stageAnimations).toEqual(
@@ -426,7 +419,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
     expect(preflightRes.ok).toBe(true)
     expect(preflightRes.summary?.answerImageCount).toBe(1)
   })
-
   it("scans media references across shows and detaches cleanly without breaking other fields", () => {
     const showA = {
       id: "show-a",
@@ -437,7 +429,10 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
           {
             id: "q1",
             question: "Q1",
-            media: { type: "image", url: "/media/shared.png" },
+            media: {
+              type: "image",
+              url: "/media/shared.png",
+            },
             answers: ["A", "B"],
             solutions: [0],
             cooldown: 5,
@@ -467,7 +462,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         },
       },
     }
-
     const showB = {
       id: "show-b",
       quizz: {
@@ -494,29 +488,32 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         },
       },
     }
-
     const refsA = collectQuizMediaReferences(showA)
     expect(refsA).toHaveLength(3)
-
     const crossRefs = findMediaReferencesAcrossShows("shared.png", [
       showA,
       showB,
     ])
-    expect(crossRefs).toHaveLength(3) // showA question.media, showA answerVisuals[0], showB scene.background
-
+    // ShowA question.media, showA answerVisuals[0], showB scene.background
+    expect(crossRefs).toHaveLength(3)
     const detached = detachMediaFromShowData(
       "shared.png",
       showA.quizz,
-      showA.extras as any,
+      showA.extras as unknown as Parameters<typeof detachMediaFromShowData>[2],
     )
     expect(detached.modified).toBe(true)
-    expect((detached.quizz.questions[0] as any).media).toBeUndefined()
+    expect(
+      (
+        detached.quizz.questions as Array<{
+          media?: unknown
+        }>
+      )[0].media,
+    ).toBeUndefined()
     expect(detached.extras?.perQuestion?.q1.answerVisuals).toHaveLength(0)
     expect(detached.extras?.perQuestion?.q1.background?.url).toBe(
       "/media/card-bg.png",
     )
   })
-
   it("detects blank default questions vs authored questions for smart scene conversion", () => {
     // Brand-new blank question
     expect(
@@ -555,7 +552,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       ),
     ).toBe(false)
   })
-
   it("evaluates non-blocking stage-fit warnings when text exceeds recommended limits", () => {
     const warnings = evaluateCardStageFitWarnings({
       question: "X".repeat(160),
@@ -563,7 +559,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
     })
     expect(warnings.map((w) => w.field)).toEqual(["question", "answer"])
   })
-
   it("inherits global stage animations when card slot is undefined and respects explicit none and new motion presets", () => {
     const globalStageAnimations = {
       questionEntrance: {
@@ -591,20 +586,19 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         durationMs: 850,
       },
     }
-
     const resolved = resolveCardStageAnimations({
       globalStageAnimations,
       stageAnimations: {
-        // questionEntrance is omitted -> inherits global "pop-bounce"
+        // QuestionEntrance is omitted -> inherits global "pop-bounce"
         answerEntrance: {
-          // explicit none overrides global "cascade"
+          // Explicit none overrides global "cascade"
           preset: "none",
           timing: "simultaneous",
           staggerMs: 90,
           durationMs: 600,
         },
         answerBadgeEntrance: {
-          // custom card override "fan-flip"
+          // Custom card override "fan-flip"
           preset: "fan-flip",
           timing: "sequential",
           staggerMs: 100,
@@ -612,14 +606,12 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         },
       },
     })
-
     expect(resolved.questionEntrance.preset).toBe("pop-bounce")
     expect(resolved.questionEntrance.durationMs).toBe(700)
     expect(resolved.answerEntrance.preset).toBe("none")
     expect(resolved.answerBadgeEntrance.preset).toBe("fan-flip")
     expect(resolved.resultsRevealEntrance.preset).toBe("wipe-ripple")
   })
-
   it("resolves decorative question underline with global fallback and explicit none override", () => {
     const globalDecoration = {
       preset: "shimmer-line" as const,
@@ -628,13 +620,17 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
 
     // Inherit global
     expect(
-      resolveQuestionDecoration({ globalDecoration }).preset,
+      resolveQuestionDecoration({
+        globalDecoration,
+      }).preset,
     ).toBe("shimmer-line")
 
     // Explicit card none overrides global
     expect(
       resolveQuestionDecoration({
-        cardDecoration: { preset: "none" },
+        cardDecoration: {
+          preset: "none",
+        },
         globalDecoration,
       }).preset,
     ).toBe("none")
@@ -654,7 +650,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       lottieUrl: "/media/underline.json",
     })
   })
-
   it("roundtrips cinematic opening, audio media scene, answerRecap, Lottie, global stage defaults, and questionDecoration across JSON, Native, and XLSX", () => {
     const show = {
       format: "tada-show" as const,
@@ -713,7 +708,14 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
           kind: "quiz" as const,
           questionType: "single" as const,
           question: "First Question?",
-          answers: [{ text: "Alpha" }, { text: "Beta" }],
+          answers: [
+            {
+              text: "Alpha",
+            },
+            {
+              text: "Beta",
+            },
+          ],
           correctAnswers: [1],
           questionDecoration: {
             enabled: true,
@@ -760,7 +762,14 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
           kind: "survey" as const,
           questionType: "single" as const,
           question: "Audience Poll?",
-          answers: [{ text: "Option 1" }, { text: "Option 2" }],
+          answers: [
+            {
+              text: "Option 1",
+            },
+            {
+              text: "Option 2",
+            },
+          ],
         },
         {
           key: "RECAP_1",
@@ -776,7 +785,6 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
         },
       ],
     }
-
     const draftRes = authoredShowToNativeBundleDraft(show)
     expect(draftRes.ok).toBe(true)
     const bundle = {
@@ -784,20 +792,17 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
       quizz: draftRes.bundleDraft!.quizz,
       extras: draftRes.bundleDraft!.extras,
     }
-
     expect(validateBundleMedia(bundle).ok).toBe(true)
     const exportedJson = nativeBundleToAuthoredShow(bundle)
     const xlsxBytes = exportTadaShowWorkbook(exportedJson)
     const parsedFromXlsx = parseTadaShowWorkbook(xlsxBytes)
-
     expect(parsedFromXlsx.defaults?.stageAnimations).toEqual(
       show.defaults.stageAnimations,
     )
     expect(parsedFromXlsx.defaults?.questionDecoration).toEqual(
       show.defaults.questionDecoration,
     )
-
-    const openCard = parsedFromXlsx.cards.find((c) => c.kind === "opening") as any
+    const openCard = parsedFromXlsx.cards.find((c) => c.kind === "opening")!
     expect(openCard.mediaType).toBe("video")
     expect(openCard.stageLayout).toBe("cinema")
     expect(openCard.logoPosition).toBe("top")
@@ -805,22 +810,21 @@ describe("Gate B: Card Appearance, Audio, Motion, Media References & Roundtrip C
     expect(openCard.endBehavior).toBe("advanceNext")
     expect(openCard.advance).toBe("onMediaEnd")
     expect(openCard.lottieUrl).toBe("/media/intro-badge.json")
-
-    const q1Card = parsedFromXlsx.cards.find((c) => c.kind === "quiz") as any
+    const q1Card = parsedFromXlsx.cards.find((c) => c.kind === "quiz")!
     expect(q1Card.questionDecoration).toEqual({
       enabled: true,
       preset: "glow-sweep",
       color: "#fbbf24",
     })
     expect(q1Card.stageAnimations?.answerEntrance?.preset).toBe("fan-flip")
-
-    const mediaCard = parsedFromXlsx.cards.find((c) => c.kind === "media") as any
+    const mediaCard = parsedFromXlsx.cards.find((c) => c.kind === "media")!
     expect(mediaCard.mediaType).toBe("audio")
     expect(mediaCard.volume).toBe(0.85)
     expect(mediaCard.showControls).toBe(true)
     expect(mediaCard.advance).toBe("onMediaEnd")
-
-    const recapCard = parsedFromXlsx.cards.find((c) => c.kind === "answerRecap") as any
+    const recapCard = parsedFromXlsx.cards.find(
+      (c) => c.kind === "answerRecap",
+    )!
     expect(recapCard.kind).toBe("answerRecap")
     expect(recapCard.startQuestionKey).toBe("Q01")
     expect(recapCard.mode).toBe("mostSelected")

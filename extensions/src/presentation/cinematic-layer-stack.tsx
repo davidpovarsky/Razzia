@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { PlatformButton } from "./platform-controls"
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import {
@@ -16,7 +17,6 @@ export interface CinematicLayerStackProps {
   sceneKind: "opening" | "closing" | "media"
   epoch?: number
   serverStartedAt?: number
-
   mediaUrl?: string
   mediaType?: "image" | "video" | "audio"
   mediaFit?: "contain" | "cover"
@@ -53,7 +53,13 @@ export interface CinematicLayerStackProps {
   controlledPaused?: boolean
   selectedOverlayId?: string | null
   onSelectOverlay?: (id: string | null) => void
-  onUpdateOverlayPosition?: (id: string, pos: { x: number; y: number }) => void
+  onUpdateOverlayPosition?: (
+    id: string,
+    pos: {
+      x: number
+      y: number
+    },
+  ) => void
   onVideoDurationDetected?: (durationMs: number) => void
   onClockTick?: (timeMs: number) => void
   onEditorMediaEnded?: () => void
@@ -103,7 +109,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
   const lateSeekAppliedKeyRef = useRef<string | null>(null)
   const mountTimestampRef = useRef<number>(Date.now())
   const draggingOverlayIdRef = useRef<string | null>(null)
-
   const trimmedMediaUrl = mediaUrl?.trim() ?? ""
   const effectiveMediaType: "image" | "video" | "audio" | undefined =
     useMemo(() => {
@@ -125,19 +130,16 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
       return "image"
     }, [trimmedMediaUrl, mediaType])
-
   const hasVideoBackdrop =
     effectiveMediaType === "video" && trimmedMediaUrl.length > 0
-
   const [videoTimeMs, setVideoTimeMs] = useState(0)
   const [isVideoPaused, setIsVideoPaused] = useState(
-    Boolean(interactiveEditorMode && (controlledPaused ?? true)),
+    interactiveEditorMode && (controlledPaused ?? true),
   )
   const [sceneTimeMs, setSceneTimeMs] = useState(0)
   const [mediaEndedVisual, setMediaEndedVisual] = useState(false)
   const [mediaError, setMediaError] = useState(false)
   const [autoplayAudioBlocked, setAutoplayAudioBlocked] = useState(false)
-
   const stageIdentityKey = `${sceneId}::${epoch}::${trimmedMediaUrl}`
 
   // Reset per-entry state when sceneId, epoch, or mediaUrl changes
@@ -196,7 +198,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
     vid.volume = Math.max(0, Math.min(1, volume))
   }, [volume, trimmedMediaUrl])
-
   useEffect(() => {
     const vid = videoRef.current
 
@@ -227,9 +228,9 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         setIsVideoPaused(true)
       } else {
         setIsVideoPaused(false)
-        const playPromise = vid.play()
+        const playPromise = vid.play() as Promise<void> | undefined
 
-        if (playPromise && typeof playPromise.catch === "function") {
+        if (typeof playPromise?.catch === "function") {
           playPromise.catch(() => {
             setIsVideoPaused(true)
           })
@@ -248,9 +249,9 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
     vid.volume = Math.max(0, Math.min(1, volume))
     vid.muted = muted
-    const playPromise = vid.play()
+    const playPromise = vid.play() as Promise<void> | undefined
 
-    if (playPromise && typeof playPromise.catch === "function") {
+    if (typeof playPromise?.catch === "function") {
       playPromise.catch(() => {
         // Browser blocked unmuted autoplay -> fallback to muted playback so visual stage never stalls
         if (!vid.muted) {
@@ -274,7 +275,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
     let rafId = 0
     let lastReportedMs = -1
-
     const tick = () => {
       const vid = videoRef.current
 
@@ -290,7 +290,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
 
       rafId = requestAnimationFrame(tick)
     }
-
     rafId = requestAnimationFrame(tick)
 
     return () => {
@@ -299,7 +298,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       }
     }
   }, [hasVideoBackdrop, controlledTimeMs, onClockTick, stageIdentityKey])
-
   const handleVideoLoadedMetadata = useCallback(
     (e: React.SyntheticEvent<HTMLVideoElement>) => {
       const vid = e.currentTarget
@@ -343,7 +341,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       onVideoDurationDetected,
     ],
   )
-
   const handleVideoTimeUpdate = useCallback(
     (e: React.SyntheticEvent<HTMLVideoElement>) => {
       if (controlledTimeMs !== undefined) {
@@ -356,7 +353,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     },
     [controlledTimeMs, onClockTick],
   )
-
   const handleForegroundVideoEnded = useCallback(() => {
     setMediaEndedVisual(true)
     setIsVideoPaused(true)
@@ -380,7 +376,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     endedKeyRef.current = stageIdentityKey
     onForegroundMediaEnded?.()
   }, [interactiveEditorMode, onForegroundMediaEnded, stageIdentityKey])
-
   const handleActivateAudio = useCallback(() => {
     const vid = videoRef.current
 
@@ -395,7 +390,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       // Ignore if still blocked
     })
   }, [volume])
-
   const resolvedOverlays = useMemo(
     () =>
       resolveSceneOverlayAnimations({
@@ -419,7 +413,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       overlayAnimations,
     ],
   )
-
   const behindTitleOverlays = useMemo(
     () => resolvedOverlays.filter((o) => o.layer === "behindTitle"),
     [resolvedOverlays],
@@ -428,16 +421,12 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     () => resolvedOverlays.filter((o) => o.layer === "aboveTitle"),
     [resolvedOverlays],
   )
-
   const effectiveClock: CinematicClockInput = useMemo(
     () => ({
       hasVideoBackdrop: hasVideoBackdrop && !mediaError,
-      videoTimeMs:
-        controlledTimeMs !== undefined ? controlledTimeMs : videoTimeMs,
-      isVideoPaused:
-        controlledPaused !== undefined ? controlledPaused : isVideoPaused,
-      sceneTimeMs:
-        controlledTimeMs !== undefined ? controlledTimeMs : sceneTimeMs,
+      videoTimeMs: controlledTimeMs ?? videoTimeMs,
+      isVideoPaused: controlledPaused ?? isVideoPaused,
+      sceneTimeMs: controlledTimeMs ?? sceneTimeMs,
       isScenePaused: controlledPaused,
     }),
     [
@@ -463,7 +452,6 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     },
     [interactiveEditorMode, onUpdateOverlayPosition],
   )
-
   const handleStagePointerMove = useCallback(
     (e: React.PointerEvent<HTMLElement>) => {
       const dragId = draggingOverlayIdRef.current
@@ -486,11 +474,9 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     },
     [interactiveEditorMode, onUpdateOverlayPosition],
   )
-
   const handleStagePointerUp = useCallback(() => {
     draggingOverlayIdRef.current = null
   }, [])
-
   const handleOverlayKeyDown = useCallback(
     (id: string, e: React.KeyboardEvent<HTMLElement>) => {
       if (!interactiveEditorMode || !onUpdateOverlayPosition) {
@@ -540,13 +526,17 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
       onSelectOverlay,
     ],
   )
+  const defaultTintOpacity = (() => {
+    if (endBehavior === "fadeToTitle" && mediaEndedVisual) {
+      return 0.75
+    }
 
-  const defaultTintOpacity =
-    endBehavior === "fadeToTitle" && mediaEndedVisual
-      ? 0.75
-      : trimmedMediaUrl && effectiveMediaType !== "audio"
-        ? 0.35
-        : 0
+    if (trimmedMediaUrl && effectiveMediaType !== "audio") {
+      return 0.35
+    }
+
+    return 0
+  })()
   const resolvedTintOpacity = contrastOverlayOpacity ?? defaultTintOpacity
 
   return (
@@ -600,15 +590,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
                 onSeeked={handleVideoTimeUpdate}
                 onEnded={handleForegroundVideoEnded}
                 onError={() => setMediaError(true)}
-                className={`pointer-events-none h-full w-full transition-opacity duration-500 ${
-                  mediaFit === "contain"
-                    ? "bg-black object-contain"
-                    : "object-cover"
-                } ${
-                  endBehavior === "fadeToTitle" && mediaEndedVisual
-                    ? "opacity-25"
-                    : "opacity-100"
-                }`}
+                className={`pointer-events-none h-full w-full transition-opacity duration-500 ${mediaFit === "contain" ? "bg-black object-contain" : "object-cover"} ${endBehavior === "fadeToTitle" && mediaEndedVisual ? "opacity-25" : "opacity-100"}`}
               />
             ) : (
               <img
@@ -617,11 +599,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
                 src={trimmedMediaUrl}
                 alt=""
                 onError={() => setMediaError(true)}
-                className={`pointer-events-none h-full w-full ${
-                  mediaFit === "contain"
-                    ? "bg-black/40 object-contain"
-                    : "object-cover"
-                }`}
+                className={`pointer-events-none h-full w-full ${mediaFit === "contain" ? "bg-black/40 object-contain" : "object-cover"}`}
               />
             )}
           </div>
@@ -711,11 +689,12 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         {showAutoplayControl &&
           autoplayAudioBlocked &&
           !interactiveEditorMode && (
-            <PlatformButton size="sm"
+            <PlatformButton
+              size="sm"
               type="button"
               data-testid="cinematic-activate-audio"
               onClick={handleActivateAudio}
-              className="mb-3 bg-white text-black hover:bg-accent"
+              className="hover:bg-accent mb-3 bg-white text-black"
             >
               <span>🔊</span>
               <span>{activateAudioLabel}</span>

@@ -6,10 +6,17 @@ export interface StoryClock {
 
 /** Server pause snapshots survive reconnects; resumed startedAt includes paused time. */
 export function storyElapsedSeconds(clock: StoryClock, now = Date.now()) {
-  const elapsed = clock.scenePaused
-    ? (clock.sceneElapsedMs ?? 0)
-    : clock.sceneStartedAt === undefined
-      ? (clock.sceneElapsedMs ?? 0)
-      : now - clock.sceneStartedAt
+  const elapsed = (() => {
+    if (clock.scenePaused) {
+      return clock.sceneElapsedMs ?? 0
+    }
+
+    if (clock.sceneStartedAt === undefined) {
+      return clock.sceneElapsedMs ?? 0
+    }
+
+    return now - clock.sceneStartedAt
+  })()
+
   return Math.max(0, elapsed / 1000)
 }

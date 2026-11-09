@@ -41,7 +41,7 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
     })
 
     it("triggers urgency warning state when seconds <= 5", () => {
-      for (let s = 1; s <= 5; s++) {
+      for (let s = 1; s <= 5; s += 1) {
         const res = computeTimerDisplay(s)
         expect(res.isVisible).toBe(true)
         expect(res.isUrgent).toBe(true)
@@ -86,6 +86,7 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
         if (preset === "none") {
           continue
         }
+
         const className = `tada-entrance-${preset}`
         expect(className).toMatch(
           /^tada-entrance-(fade|slide-up|slide-side|zoom-soft|spotlight|curtain|pop-bounce|wobble-settle|cascade|fan-flip|wipe-ripple)$/,
@@ -96,9 +97,11 @@ describe("P1: Timer & Question Entrance Logic & Verification", () => {
     it("clamps entrance animation duration to bounded range [250ms, 2500ms]", () => {
       const clampDuration = (ms?: number) => {
         const fallback = 800
+
         if (ms === undefined || isNaN(ms)) {
           return fallback
         }
+
         return Math.min(2500, Math.max(250, ms))
       }
 

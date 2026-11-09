@@ -4,11 +4,13 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 
 const root = join(import.meta.dirname, "../..")
+
 if (process.env.TADAZZ_REMOTE_QA !== "1") {
   throw new Error(
     "Run this game/browser suite only in the isolated remote QA container",
   )
 }
+
 // Never reuse .config, operational data, another worktree or a running server.
 const configPath =
   process.env.TADAZZ_CLEANUP_TEST_CONFIG ??

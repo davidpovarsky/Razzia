@@ -112,6 +112,7 @@ const routes = apiFactory
         phone,
         source,
       })
+
       if (resolution.kind === "existing") {
         await grantMediaForGuest(c, game.gameId)
 

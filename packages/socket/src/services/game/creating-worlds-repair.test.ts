@@ -14,7 +14,8 @@ import { afterEach, beforeEach, expect, it, vi } from "vitest"
 beforeEach(() => vi.useFakeTimers())
 afterEach(() => vi.useRealTimers())
 
-function timerFixture(withTimeline = false, endOnAllAnswered = false) {
+function timerFixture(withTimeline = false, initialEndOnAllAnswered = false) {
+  let endOnAllAnswered = initialEndOnAllAnswered
   const fake = createFakeIo()
   const players = new PlayerManager({
     io: fake.io,

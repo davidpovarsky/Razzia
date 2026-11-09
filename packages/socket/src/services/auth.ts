@@ -42,14 +42,19 @@ export const mintToken = async (
   const iat = Math.floor(Date.now() / 1000)
   const exp = iat + (role === SESSION_ROLES.MANAGER ? MANAGER_TTL : PLAYER_TTL)
 
-  const sid =
-    accountsEnabled() && role === SESSION_ROLES.MANAGER
-      ? activeAccount(sub)
-        ? createAccountSession(sub, exp)
-        : (() => {
-            throw new Error("Account inactive")
-          })()
-      : undefined
+  const sid = (() => {
+    if (accountsEnabled() && role === SESSION_ROLES.MANAGER) {
+      if (activeAccount(sub)) {
+        return createAccountSession(sub, exp)
+      }
+
+      return (() => {
+        throw new Error("Account inactive")
+      })()
+    }
+
+    return undefined
+  })()
   const token = await sign(
     { sub, role, iat, exp, ...(sid ? { sid } : {}) },
     jwtSecret,
@@ -61,6 +66,7 @@ export const mintToken = async (
 
 export const verifyToken = async (token: string): Promise<SessionClaims> => {
   const claims = parseClaims(await verify(token, jwtSecret, ALGORITHM))
+
   if (
     accountsEnabled() &&
     claims.role === SESSION_ROLES.MANAGER &&
@@ -68,6 +74,7 @@ export const verifyToken = async (token: string): Promise<SessionClaims> => {
   ) {
     throw new Error("Manager session revoked or invalid")
   }
+
   return claims
 }
 

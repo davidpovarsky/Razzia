@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import type { CinematicOverlayAnimation } from "../core/cinematic-overlays"
 
 export interface CinematicClockInput {
@@ -51,7 +52,7 @@ export function evaluateOverlayPlaybackState(
   clock: CinematicClockInput,
   intrinsicDurationMs?: number,
 ): OverlayPlaybackState {
-  if (!overlay.enabled || !overlay.assetUrl || !overlay.assetUrl.trim()) {
+  if (!overlay.enabled || !overlay.assetUrl?.trim()) {
     return {
       visible: false,
       localElapsedMs: 0,
@@ -122,6 +123,7 @@ export function evaluateOverlayPlaybackState(
         phase: "finishedHidden",
       }
     }
+
     phase = "holdingLastFrame"
     seekTimeMs = effectiveAnimDurationMs
   }
@@ -145,6 +147,7 @@ export function evaluateOverlayPlaybackState(
     overlay.durationMs !== undefined
   ) {
     const remainingMs = overlay.durationMs - localElapsedMs
+
     if (remainingMs < overlay.fadeOutMs) {
       effectiveOpacity *= Math.max(
         0,
@@ -179,14 +182,18 @@ export function computeLateJoinVideoSeekSeconds(params: {
     videoDurationSeconds,
     loop,
   } = params
+
   if (!serverStartedAt || serverStartedAt <= 0) {
     return 0
   }
+
   const elapsedSec = Math.max(0, (nowMs - serverStartedAt) / 1000)
+
   // Ignore tiny < 0.35s startup jitter so normal scene start begins cleanly at 0
   if (elapsedSec < 0.35) {
     return 0
   }
+
   if (
     videoDurationSeconds === undefined ||
     !Number.isFinite(videoDurationSeconds) ||
@@ -194,9 +201,11 @@ export function computeLateJoinVideoSeekSeconds(params: {
   ) {
     return elapsedSec
   }
+
   if (loop) {
     return elapsedSec % videoDurationSeconds
   }
+
   return Math.min(Math.max(0, videoDurationSeconds - 0.1), elapsedSec)
 }
 
@@ -209,5 +218,6 @@ export function formatTimelineMs(ms: number): string {
   const mins = Math.floor(totalSec / 60)
   const secs = totalSec % 60
   const tenths = Math.floor((safeMs % 1000) / 100)
+
   return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}.${tenths}`
 }

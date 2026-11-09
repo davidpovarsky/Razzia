@@ -98,7 +98,7 @@ export const TeamLeaderboardPanel = ({
   return (
     <div
       className={clsx(
-        "relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4 font-display",
+        "font-display relative mx-auto flex w-full max-w-4xl flex-col items-center justify-center px-4",
         className,
       )}
       data-testid="team-leaderboard-panel"
@@ -110,7 +110,8 @@ export const TeamLeaderboardPanel = ({
           aria-label={tr("tabs.leaderboard", "Leaderboard")}
           className="mb-6 flex rounded-xl bg-white/20 p-1 backdrop-blur-md"
         >
-          <PlatformButton size="sm"
+          <PlatformButton
+            size="sm"
             type="button"
             role="tab"
             aria-selected={viewMode === "individual"}
@@ -125,7 +126,8 @@ export const TeamLeaderboardPanel = ({
           >
             {tr("leaderboard.toggleIndividual", "Individual")}
           </PlatformButton>
-          <PlatformButton size="sm"
+          <PlatformButton
+            size="sm"
             type="button"
             role="tab"
             aria-selected={viewMode === "teams"}

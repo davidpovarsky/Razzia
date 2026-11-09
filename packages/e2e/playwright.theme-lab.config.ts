@@ -1,6 +1,9 @@
 import { defineConfig } from "@playwright/test"
-if (process.env.TADAZZ_REMOTE_QA !== "1" || !process.env.TADAZZ_LAB_URL)
+
+if (process.env.TADAZZ_REMOTE_QA !== "1" || !process.env.TADAZZ_LAB_URL) {
   throw new Error("Explicit remote lab only")
+}
+
 export default defineConfig({
   testDir: "tests",
   testMatch: "theme-lab.spec.ts",

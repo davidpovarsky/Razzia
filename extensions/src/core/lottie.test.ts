@@ -63,6 +63,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
   it("validates a clean Bodymovin Lottie JSON fixture and extracts metadata", () => {
     const res = validateLottieJson(JSON.stringify(MINIMAL_VALID_LOTTIE_FIXTURE))
     expect(res.ok).toBe(true)
+
     if (res.ok) {
       expect(res.meta.fr).toBe(60)
       expect(res.meta.ip).toBe(0)
@@ -90,7 +91,8 @@ describe("Lottie JSON Security & Schema Validator", () => {
       validateLottieJson({ ...MINIMAL_VALID_LOTTIE_FIXTURE, fr: 500 }).ok,
     ).toBe(false)
     expect(
-      validateLottieJson({ ...MINIMAL_VALID_LOTTIE_FIXTURE, ip: 120, op: 60 }).ok,
+      validateLottieJson({ ...MINIMAL_VALID_LOTTIE_FIXTURE, ip: 120, op: 60 })
+        .ok,
     ).toBe(false)
     expect(
       validateLottieJson({ ...MINIMAL_VALID_LOTTIE_FIXTURE, w: 0 }).ok,
@@ -106,6 +108,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
       "var $bm_rt = wiggle(5, 20);"
     const res = validateLottieJson(withExpression)
     expect(res.ok).toBe(false)
+
     if (!res.ok) {
       expect(res.error).toBe("errors:extensions.unsafeLottieContent")
     }
@@ -125,6 +128,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
       }
       const res = validateLottieJson(bad)
       expect(res.ok).toBe(false)
+
       if (!res.ok) {
         expect(res.error).toBe("errors:extensions.unsafeLottieContent")
       }
@@ -134,13 +138,29 @@ describe("Lottie JSON Security & Schema Validator", () => {
   it("rejects external network URLs and path traversal in Lottie assets", () => {
     const withExternalAssetDir = {
       ...MINIMAL_VALID_LOTTIE_FIXTURE,
-      assets: [{ id: "img_0", w: 100, h: 100, u: "https://cdn.example.com/", p: "logo.png" }],
+      assets: [
+        {
+          id: "img_0",
+          w: 100,
+          h: 100,
+          u: "https://cdn.example.com/",
+          p: "logo.png",
+        },
+      ],
     }
     expect(validateLottieJson(withExternalAssetDir).ok).toBe(false)
 
     const withExternalAssetPath = {
       ...MINIMAL_VALID_LOTTIE_FIXTURE,
-      assets: [{ id: "img_0", w: 100, h: 100, u: "", p: "https://cdn.example.com/logo.png" }],
+      assets: [
+        {
+          id: "img_0",
+          w: 100,
+          h: 100,
+          u: "",
+          p: "https://cdn.example.com/logo.png",
+        },
+      ],
     }
     expect(validateLottieJson(withExternalAssetPath).ok).toBe(false)
 
@@ -171,6 +191,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
     const huge = new Uint8Array(MAX_LOTTIE_JSON_BYTES + 10)
     const res = validateLottieJson(huge)
     expect(res.ok).toBe(false)
+
     if (!res.ok) {
       expect(res.error).toBe("errors:extensions.lottieTooLarge")
     }
@@ -179,7 +200,10 @@ describe("Lottie JSON Security & Schema Validator", () => {
   it("validates showMediaCatalogItemSchema with type 'lottie' and lottieMeta", () => {
     const validation = validateLottieJson(MINIMAL_VALID_LOTTIE_FIXTURE)
     expect(validation.ok).toBe(true)
-    if (!validation.ok) return
+
+    if (!validation.ok) {
+      return
+    }
 
     const item = {
       name: "pulse.lottie.json",
@@ -219,6 +243,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
     }
     const res = validateLottieJson(withBakedBg)
     expect(res.ok).toBe(true)
+
     if (res.ok) {
       expect(res.meta.hasBakedBackground).toBe(true)
       expect(res.meta.warnings).toContain(
@@ -255,6 +280,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
 
     const res = validateDotLottieContainer(archive)
     expect(res.ok).toBe(true)
+
     if (res.ok) {
       expect(res.animationIds).toEqual(["intro"])
       expect(res.convertedFromBodymovinZip).toBe(false)
@@ -284,6 +310,7 @@ describe("Lottie JSON Security & Schema Validator", () => {
 
     const res = validateDotLottieContainer(rawBodymovinZip)
     expect(res.ok).toBe(true)
+
     if (res.ok) {
       expect(res.convertedFromBodymovinZip).toBe(true)
       expect(res.animationIds).toEqual(["default"])

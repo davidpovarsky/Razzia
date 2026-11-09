@@ -19,28 +19,47 @@ assert(
   "Only an isolated loopback QA server is allowed",
 )
 const out = path.resolve(process.env.AUDIO_EVIDENCE_DIR || "work/audio-flow")
-fs.mkdirSync(out, { recursive: true })
+fs.mkdirSync(out, {
+  recursive: true,
+})
 ;(async () => {
-  const browser = await chromium.launch({ channel: "msedge" })
-  const p = await browser.newPage({ viewport: { width: 1920, height: 1080 } })
+  const browser = await chromium.launch({
+    channel: "msedge",
+  })
+  const p = await browser.newPage({
+    viewport: {
+      width: 1920,
+      height: 1080,
+    },
+  })
   p.setDefaultTimeout(35000)
-  let gameId
-  const call = { callId: "music-" + crypto.randomUUID(), phone: "+12025550180" }
+  let gameId = undefined
+  const call = {
+    callId: `music-${crypto.randomUUID()}`,
+    phone: "+12025550180",
+  }
   const errors = []
   p.on("pageerror", (e) => errors.push(e.message))
+
   try {
     await p.addInitScript(() => {
       window.__refs = []
       window.__plays = []
-      const play = HTMLMediaElement.prototype.play
-      HTMLMediaElement.prototype.play = function () {
-        if (!window.__refs.includes(this)) window.__refs.push(this)
+      const { play } = HTMLMediaElement.prototype
+      HTMLMediaElement.prototype.play = function traceMediaPlayback(
+        ...callArgs
+      ) {
+        if (!window.__refs.includes(this)) {
+          window.__refs.push(this)
+        }
+
         window.__plays.push({
           src: this.src,
           at: Date.now(),
           paused: this.paused,
         })
-        return play.apply(this, arguments)
+
+        return play.apply(this, callArgs)
       }
     })
     await p.addInitScript(() =>
@@ -52,16 +71,28 @@ fs.mkdirSync(out, { recursive: true })
         true,
       ),
     )
-    if (process.env.AUDIO_FAULT_EPIC === "1")
+
+    if (process.env.AUDIO_FAULT_EPIC === "1") {
       await p.route("**/epic-main-menu.mp3", (route) => route.abort("failed"))
-    await p.goto(base + "/manager?lng=en")
+    }
+
+    await p.goto(`${base}/manager?lng=en`)
     await p.getByPlaceholder("Password").fill("e2e-password")
-    await p.getByRole("button", { name: "Submit", exact: true }).click()
+    await p
+      .getByRole("button", {
+        name: "Submit",
+        exact: true,
+      })
+      .click()
     await p.waitForURL("**/manager/config")
     const token = await p.evaluate(() => localStorage.getItem("token"))
     const response = await p.request.get(
-      base + "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
-      { headers: { Authorization: "Bearer " + token } },
+      `${base}/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      },
     )
     assert.equal(response.status(), 200)
     const config = (await response.json()).extras
@@ -73,7 +104,7 @@ fs.mkdirSync(out, { recursive: true })
       config.audio.cues.answersMusic.url,
       "/media/tzila-determined-pursuit-20261105.mp3",
     )
-    for (let n = 1; n <= 10; n++)
+    for (let n = 1; n <= 10; n += 1) {
       assert.equal(
         config.perQuestion[config.questionIds[n - 1]]?.audioCues?.answersMusic
           ?.url,
@@ -81,47 +112,70 @@ fs.mkdirSync(out, { recursive: true })
           ? "/tadazz-show/music/epic-main-menu.mp3"
           : undefined,
       )
+    }
     call.phone = config.roster.participants.find(
       (x) => x.phoneE164 && x.tableNumber >= 1 && x.tableNumber <= 31,
     ).phoneE164
     await p
-      .getByRole("button", { name: "Creating Worlds", exact: true })
+      .getByRole("button", {
+        name: "Creating Worlds",
+        exact: true,
+      })
       .click()
-    await p.getByRole("button", { name: "Start game", exact: true }).click()
+    await p
+      .getByRole("button", {
+        name: "Start game",
+        exact: true,
+      })
+      .click()
     await p.getByTestId("tadazz-opening").waitFor()
-    gameId = /manager\/([a-f0-9-]{36})/.exec(p.url())[1]
+    ;({ 1: gameId } = /manager\/([a-f0-9-]{36})/.exec(p.url()))
+
     while (await p.getByTestId("tadazz-opening").count()) {
       await p.getByTestId("tadazz-opening-skip").click()
       await p.waitForTimeout(100)
     }
+
     await p.evaluate(() => {
       window.__states = []
-      window.__socket.on(
-        "extensions:state",
-        (s) => (
-          (window.__state = s),
-          window.__states.push({
-            phase: s.phase,
-            q: document.querySelector('[data-testid="host-question-counter"]')?.textContent,
-            step: s.extras.activeTimelineStep?.kind,
-            preset: s.extras.currentScene?.preset,
-            sceneAudio: s.extras.sceneAudio,
-            at: Date.now(),
-          })
-        ),
-      )
+      window.__socket.on("extensions:state", (s) => {
+        window.__state = s
+        const _result = window.__states.push({
+          phase: s.phase,
+          q: document.querySelector('[data-testid="host-question-counter"]')
+            ?.textContent,
+          step: s.extras.activeTimelineStep?.kind,
+          preset: s.extras.currentScene?.preset,
+          sceneAudio: s.extras.sceneAudio,
+          at: Date.now(),
+        })
+
+        return _result
+      })
     })
     async function phone(action = "join_or_poll", extra = {}) {
-      const r = await p.request.post(base + "/api/games/pilot-phone", {
-        headers: { "x-tada-pilot-secret": secret },
-        data: { action, gameId, ...call, ...extra },
+      const r = await p.request.post(`${base}/api/games/pilot-phone`, {
+        headers: {
+          "x-tada-pilot-secret": secret,
+        },
+        data: {
+          action,
+          gameId,
+          ...call,
+          ...extra,
+        },
       })
       assert.equal(r.status(), 200)
+
       return r.json()
     }
     async function next() {
       const b = p.getByTestId("host-next-screen-btn")
-      const start = p.getByRole("button", { name: "Start", exact: true })
+      const start = p.getByRole("button", {
+        name: "Start",
+        exact: true,
+      })
+
       if (await b.isVisible()) {
         await expect(b).toBeEnabled()
         await b.click()
@@ -133,17 +187,21 @@ fs.mkdirSync(out, { recursive: true })
         await p.waitForTimeout(65)
         await p.keyboard.press("ArrowRight")
       }
+
       await p.waitForTimeout(250)
     }
     async function waitOpen() {
-      for (let i = 0; i < 200; i++) {
+      for (let i = 0; i < 200; i += 1) {
         const s = await phone()
-        if (s.state.acceptingAnswers) return s
+
+        if (s.state.acceptingAnswers) {
+          return s
+        }
+
         await p.waitForTimeout(80)
       }
       throw Error("Voting never opened")
     }
-
     await p.evaluate(() => {
       window.__cues = []
       window.__sfx = []
@@ -169,17 +227,27 @@ fs.mkdirSync(out, { recursive: true })
         "tadazz:sfx",
         (e) => {
           window.__lastSfx = e.detail
-          window.__sfx.push({ ...e.detail, q: counter(), at: Date.now() })
+          window.__sfx.push({
+            ...e.detail,
+            q: counter(),
+            at: Date.now(),
+          })
         },
         true,
       )
-      const play = HTMLMediaElement.prototype.play
-      HTMLMediaElement.prototype.play = function () {
+      const { play } = HTMLMediaElement.prototype
+      HTMLMediaElement.prototype.play = function traceMediaPlayback(
+        ...callArgs
+      ) {
         const a = this,
           url = a.src,
           cue = window.__lastSfx,
           q = counter()
-        a.__qaCue = { q, cue: cue?.name }
+        a.__qaCue = {
+          q,
+          cue: cue?.name,
+        }
+
         if (!a.__qaEnded) {
           a.__qaEnded = true
           a.addEventListener("ended", () =>
@@ -191,8 +259,9 @@ fs.mkdirSync(out, { recursive: true })
             }),
           )
         }
+
         return play
-          .apply(a, arguments)
+          .apply(a, callArgs)
           .then(() => {
             window.__started.push({
               url: new URL(url, location.href).pathname,
@@ -250,28 +319,38 @@ fs.mkdirSync(out, { recursive: true })
               a.src.endsWith(u),
           ),
         url,
-        { timeout: 12000 },
+        {
+          timeout: 12000,
+        },
       )
     }
-    async function command(action, payload = {}) {
+    /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
+    async function _command(action, payload = {}) {
       return p.evaluate(
-        ({ action, payload }) =>
-          new Promise((resolve) =>
+        ({ action: actionValue, payload: payloadValue }) =>
+          new Promise((resolve) => {
             window.__socket.emit(
               "extensions:command",
               {
                 v: 1,
                 gameId: window.__state.gameId,
                 requestId: crypto.randomUUID(),
-                action,
-                payload: { ...payload, epoch: window.__state.epoch },
+                action: actionValue,
+                payload: {
+                  ...payloadValue,
+                  epoch: window.__state.epoch,
+                },
               },
               resolve,
-            ),
-          ),
-        { action, payload },
+            )
+          }),
+        {
+          action,
+          payload,
+        },
       )
     }
+    /* oxlint-enable require-await, typescript/require-await */
     async function story() {
       await expect(p.locator('[data-v4-scene="round-recap"]')).toBeVisible()
       await actual("/media/tadazz-fantasy-orchestral-20261106.mp3")
@@ -291,14 +370,22 @@ fs.mkdirSync(out, { recursive: true })
     await next()
     const count = Number(process.env.AUDIO_QUESTIONS || 10),
       report = []
-    if (process.env.AUDIO_FAULT_EPIC === "1")
-      await p.evaluate(() => (window.__forceEpicFailure = true))
-    for (let n = 1; n <= count; n++) {
+
+    if (process.env.AUDIO_FAULT_EPIC === "1") {
+      await p.evaluate(() => {
+        const _result2 = true
+        window.__forceEpicFailure = _result2
+
+        return _result2
+      })
+    }
+
+    for (let n = 1; n <= count; n += 1) {
       console.log("Question", n)
       await p.waitForFunction(
-        (n) =>
+        (nValue) =>
           window.__state?.extras.activeTimelineStep?.kind === "question" &&
-          window.__state.extras.activeTimelineStep.questionOrdinal === n,
+          window.__state.extras.activeTimelineStep.questionOrdinal === nValue,
         n,
       )
       const state = await waitOpen()
@@ -307,11 +394,13 @@ fs.mkdirSync(out, { recursive: true })
           ? "/tadazz-show/music/epic-main-menu.mp3"
           : "/media/tzila-determined-pursuit-20261105.mp3"
       let timerOK = true
+
       try {
         await actual(expected)
       } catch {
         timerOK = false
       }
+
       assert.equal(
         (
           await phone("answer", {
@@ -321,21 +410,27 @@ fs.mkdirSync(out, { recursive: true })
         ).accepted,
         true,
       )
+
       if (
         process.env.AUDIO_RAPID === "1" ||
         (process.env.AUDIO_MIXED_END === "1" && n % 2 === 0)
-      )
+      ) {
         await p.getByTestId("host-end-timer-btn").click()
+      }
+
       await p.waitForFunction(
         () => window.__state?.extras.currentScene?.preset === "top-pick",
         null,
-        { timeout: 40000 },
+        {
+          timeout: 40000,
+        },
       )
       await expect(p.locator('[data-v4-scene="top-pick"]')).toBeVisible()
       await actual("/media/tadazz-determination-20261106.mp3")
       await p.waitForTimeout(2400)
-      const evidence = await p.evaluate((n) => {
-        const q = `${n} / 10`
+      const evidence = await p.evaluate((nValue) => {
+        const q = `${nValue} / 10`
+
         return {
           raw: window.__cues.filter(
             (e) =>
@@ -361,7 +456,7 @@ fs.mkdirSync(out, { recursive: true })
               s.playing.some(
                 (a) =>
                   a.url ===
-                  ([2, 4, 7, 9].includes(n) && !window.__forceEpicFailure
+                  ([2, 4, 7, 9].includes(nValue) && !window.__forceEpicFailure
                     ? "/tadazz-show/music/epic-main-menu.mp3"
                     : "/media/tzila-determined-pursuit-20261105.mp3"),
               ),
@@ -373,7 +468,11 @@ fs.mkdirSync(out, { recursive: true })
           ).length,
         }
       }, n)
-      report.push({ question: n, timerOK, ...evidence })
+      report.push({
+        question: n,
+        timerOK,
+        ...evidence,
+      })
       fs.writeFileSync(
         path.join(out, "progress.json"),
         JSON.stringify(report, null, 2),
@@ -388,6 +487,7 @@ fs.mkdirSync(out, { recursive: true })
           sfx: evidence.sfx.map((e) => e.name),
         }),
       )
+
       if (process.env.AUDIO_STRICT === "1") {
         assert(
           timerOK && evidence.timerSamples > 0 && evidence.resultsSamples > 0,
@@ -404,12 +504,17 @@ fs.mkdirSync(out, { recursive: true })
             1,
             `Question ${n}: ${name} must dispatch exactly once`,
           )
-          const file =
-            name === "timer-ended"
-              ? "tadazz-timer-end-368edc1d9522.mp3"
-              : name === "survey-reveal"
-                ? "tadazz-reveal-bright-20261108.mp3"
-                : "tadazz-confirm-20261108.mp3"
+          const file = (() => {
+            if (name === "timer-ended") {
+              return "tadazz-timer-end-368edc1d9522.mp3"
+            }
+
+            if (name === "survey-reveal") {
+              return "tadazz-reveal-bright-20261108.mp3"
+            }
+
+            return "tadazz-confirm-20261108.mp3"
+          })()
           assert.equal(
             evidence.started.filter(
               (e) =>
@@ -430,12 +535,17 @@ fs.mkdirSync(out, { recursive: true })
           )
         }
       }
-      if (n < count || n === 5 || n === 10) await next()
+
+      if (n < count || n === 5 || n === 10) {
+        await next()
+      }
+
       if (n === 5 && count > 5) {
         await story()
         await expect(p.locator('[data-v4-scene="round-two"]')).toBeVisible()
         await next()
       }
+
       if (n === 10) {
         await story()
         await expect(p.locator('[data-v4-scene="grand-finale"]')).toBeVisible()
@@ -469,7 +579,13 @@ fs.mkdirSync(out, { recursive: true })
     )
     console.log("Completed full audio audit", count)
   } catch (e) {
-    await p.screenshot({ path: path.join(out, "failure.png") }).catch(() => {})
+    await p
+      .screenshot({
+        path: path.join(out, "failure.png"),
+      })
+      .catch(() => {
+        /* Intentional no-op callback. */
+      })
     fs.writeFileSync(
       path.join(out, "failure-trace.json"),
       JSON.stringify(
@@ -486,18 +602,32 @@ fs.mkdirSync(out, { recursive: true })
   } finally {
     if (gameId) {
       await p.request
-        .post(base + "/api/games/pilot-phone", {
-          headers: { "x-tada-pilot-secret": secret },
-          data: { action: "hangup", gameId, ...call },
+        .post(`${base}/api/games/pilot-phone`, {
+          headers: {
+            "x-tada-pilot-secret": secret,
+          },
+          data: {
+            action: "hangup",
+            gameId,
+            ...call,
+          },
         })
-        .catch(() => {})
+        .catch(() => {
+          /* Intentional no-op callback. */
+        })
       await p
         .evaluate(
-          (id) => window.__socket?.emit("manager:leave", { gameId: id }),
+          (id) =>
+            window.__socket?.emit("manager:leave", {
+              gameId: id,
+            }),
           gameId,
         )
-        .catch(() => {})
+        .catch(() => {
+          /* Intentional no-op callback. */
+        })
     }
+
     await browser.close()
   }
 })().catch((e) => {

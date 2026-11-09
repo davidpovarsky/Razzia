@@ -1,10 +1,10 @@
-const fs = require('fs');
-const path = require('path');
-const { chromium } = require('@playwright/test');
+const fs = require("fs")
+const path = require("path")
+const { chromium } = require("@playwright/test")
 
 async function main() {
-  const outputDir = path.join(__dirname, 'test-results', 'p0-acceptance');
-  fs.mkdirSync(outputDir, { recursive: true });
+  const outputDir = path.join(__dirname, "test-results", "p0-acceptance")
+  fs.mkdirSync(outputDir, { recursive: true })
 
   const html = `<!DOCTYPE html>
 <html lang="en">
@@ -210,17 +210,19 @@ async function main() {
     </div>
   </div>
 </body>
-</html>`;
+</html>`
 
-  const htmlPath = path.join(outputDir, 'diagnostics.html');
-  fs.writeFileSync(htmlPath, html, 'utf8');
+  const htmlPath = path.join(outputDir, "diagnostics.html")
+  fs.writeFileSync(htmlPath, html, "utf8")
 
-  const browser = await chromium.launch();
-  const page = await browser.newPage({ viewport: { width: 1200, height: 800 } });
-  await page.goto('file:///' + htmlPath.replace(/\\/g, '/'));
-  await page.screenshot({ path: path.join(outputDir, '07_phone_diagnostics.png') });
-  await browser.close();
-  console.log('Saved 07_phone_diagnostics.png successfully.');
+  const browser = await chromium.launch()
+  const page = await browser.newPage({ viewport: { width: 1200, height: 800 } })
+  await page.goto(`file:///${htmlPath.replace(/\\/g, "/")}`)
+  await page.screenshot({
+    path: path.join(outputDir, "07_phone_diagnostics.png"),
+  })
+  await browser.close()
+  console.log("Saved 07_phone_diagnostics.png successfully.")
 }
 
-main().catch(console.error);
+main().catch(console.error)

@@ -1,11 +1,14 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import Button from "@razzia/web/components/Button"
 import Card from "@razzia/web/components/Card"
 import Input from "@razzia/web/components/Input"
-import { useState, type FormEvent } from "react"
+import { useState, type SubmitEvent } from "react"
 import { useTranslation } from "react-i18next"
 
 type Step = "login" | "register" | "verify" | "forgot" | "reset"
-type AuthSession = { token: string }
+interface AuthSession {
+  token: string
+}
 
 interface Props {
   onAuthenticated: (token: string) => void
@@ -25,8 +28,15 @@ async function requestAccount(
     string,
     unknown
   >
-  if (!response.ok)
-    throw new Error(String(body.error ?? "Unable to complete request"))
+
+  if (!response.ok) {
+    throw new Error(
+      typeof body.error === "string"
+        ? body.error
+        : "Unable to complete request",
+    )
+  }
+
   return body
 }
 
@@ -49,14 +59,20 @@ export default function AccountLogin({ onAuthenticated }: Props) {
     setCode("")
   }
 
-  const submit = async (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: SubmitEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (busy) return
+
+    if (busy) {
+      return
+    }
+
     setBusy(true)
     setError("")
     setNotice("")
+
     try {
       const fields = { email: email.trim().toLowerCase(), password }
+
       if (step === "login") {
         const session = (await requestAccount(
           "login",
@@ -115,6 +131,7 @@ export default function AccountLogin({ onAuthenticated }: Props) {
     forgot: label("forgot", "Forgot password"),
     reset: label("reset", "Reset password"),
   }
+
   return (
     <Card className="max-w-md p-6 shadow-xl sm:p-8">
       <div className="w-full space-y-4" data-testid="tadazz-account-auth">
@@ -191,9 +208,10 @@ export default function AccountLogin({ onAuthenticated }: Props) {
         </form>
         <div className="flex flex-wrap justify-center gap-4 text-sm">
           {step !== "login" && (
-            <Button size="sm"
+            <Button
+              size="sm"
               type="button"
-              className="bg-transparent text-primary hover:bg-accent underline"
+              className="text-primary hover:bg-accent bg-transparent underline"
               onClick={() => changeStep("login")}
             >
               {label("backToLogin", "Back to login")}
@@ -201,16 +219,18 @@ export default function AccountLogin({ onAuthenticated }: Props) {
           )}
           {step === "login" && (
             <>
-              <Button size="sm"
+              <Button
+                size="sm"
                 type="button"
-                className="bg-transparent text-primary hover:bg-accent underline"
+                className="text-primary hover:bg-accent bg-transparent underline"
                 onClick={() => changeStep("register")}
               >
                 {label("register", "Create an account")}
               </Button>
-              <Button size="sm"
+              <Button
+                size="sm"
                 type="button"
-                className="bg-transparent text-primary hover:bg-accent underline"
+                className="text-primary hover:bg-accent bg-transparent underline"
                 onClick={() => changeStep("forgot")}
               >
                 {label("forgot", "Forgot password?")}
@@ -218,9 +238,10 @@ export default function AccountLogin({ onAuthenticated }: Props) {
             </>
           )}
           {step === "verify" && (
-            <Button size="sm"
+            <Button
+              size="sm"
               type="button"
-              className="bg-transparent text-primary hover:bg-accent underline"
+              className="text-primary hover:bg-accent bg-transparent underline"
               disabled={busy}
               onClick={async () => {
                 try {

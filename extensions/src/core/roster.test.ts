@@ -83,8 +83,7 @@ describe("Phone Roster & XLSX/CSV Import (P0)", () => {
       const rows100: string[][] = [["name", "phone"]]
       for (let i = 1; i <= 100; i += 1) {
         const padded = String(i).padStart(4, "0")
-        const phone =
-          i % 2 === 0 ? `050-123-${padded}` : `+44791112${padded}`
+        const phone = i % 2 === 0 ? `050-123-${padded}` : `+44791112${padded}`
         rows100.push([`Player ${i}`, phone])
       }
 
@@ -130,7 +129,10 @@ describe("Phone Roster & XLSX/CSV Import (P0)", () => {
       const mixedXlsx = buildXlsxBuffer([
         ["name", "phone"],
         ["Valid User", "050-111-2222"],
-        ["Formula User", { value: "0501113333", formula: "CONCATENATE(0,501113333)" }],
+        [
+          "Formula User",
+          { value: "0501113333", formula: "CONCATENATE(0,501113333)" },
+        ],
         ["Sci User", "9.72501E+11"],
         ["", "050-111-4444"],
         ["Missing Phone", ""],
@@ -153,7 +155,9 @@ describe("Phone Roster & XLSX/CSV Import (P0)", () => {
         errorReasons.push(err.reasonKey)
       }
       expect(errorReasons).toContain("errors:extensions.formulaNotAllowed")
-      expect(errorReasons).toContain("errors:extensions.scientificNotationPhone")
+      expect(errorReasons).toContain(
+        "errors:extensions.scientificNotationPhone",
+      )
       expect(errorReasons).toContain("errors:extensions.missingParticipantName")
       expect(errorReasons).toContain("errors:extensions.missingPhoneNumber")
       expect(errorReasons).toContain("errors:extensions.duplicatePhoneInImport")
@@ -173,7 +177,10 @@ describe("Phone Roster & XLSX/CSV Import (P0)", () => {
       expect(corruptXlsx.ok).toBe(false)
       expect(corruptXlsx.fatalError).toContain("corruptXlsxFile")
 
-      const badExt = parseRosterImportFile("name,phone\nA,0501234567", "file.pdf")
+      const badExt = parseRosterImportFile(
+        "name,phone\nA,0501234567",
+        "file.pdf",
+      )
       expect(badExt.ok).toBe(false)
       expect(badExt.fatalError).toContain("Only .xlsx and .csv")
     })

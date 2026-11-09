@@ -15,7 +15,7 @@ export const sessionClaimsValidator = z.object({
   role: z.enum(SESSION_ROLES),
   iat: z.number(),
   exp: z.number(),
-  sid: z.string().uuid().optional(),
+  sid: z.uuid().optional(),
 })
 
 export const joinTicketClaimsValidator = z.object({

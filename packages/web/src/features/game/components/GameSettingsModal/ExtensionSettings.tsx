@@ -65,7 +65,8 @@ export function RosterGameSettings({
       />
       {onOpenRoster && (
         <div className="mt-6 border-t border-neutral-200 pt-4 dark:border-neutral-800">
-          <NativeButton size="sm"
+          <NativeButton
+            size="sm"
             type="button"
             onClick={() => {
               onClose()

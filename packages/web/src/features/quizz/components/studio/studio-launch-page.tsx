@@ -27,12 +27,18 @@ export const StudioLaunchPage = () => {
   const { updateManager } = useManagerStore()
   const { quizzId, extras } = useQuizzEditor()
   const { timeline, scenes } = useStudioEditor()
-  const { formState: { isDirty } } = useFormContext()
+  const {
+    formState: { isDirty },
+  } = useFormContext()
 
   const questionItems = timeline.filter((tlItem) => tlItem.kind === "question")
-  const nonQuestionItems = timeline.filter((tlItem) => tlItem.kind !== "question")
+  const nonQuestionItems = timeline.filter(
+    (tlItem) => tlItem.kind !== "question",
+  )
 
-  const mediaItems = nonQuestionItems.filter((tlItem) => tlItem.kind === "media")
+  const mediaItems = nonQuestionItems.filter(
+    (tlItem) => tlItem.kind === "media",
+  )
   const missingMedia = mediaItems.some((m) => {
     const s = scenes[m.sceneId]
 
@@ -40,8 +46,9 @@ export const StudioLaunchPage = () => {
   })
 
   const hasQuestions = questionItems.length > 0
-  const participantCount =
-    extras?.roster ? extras.roster.participants.length : 0
+  const participantCount = extras?.roster
+    ? extras.roster.participants.length
+    : 0
 
   const isNew = !quizzId
   const isReadyToLaunch = !isNew && hasQuestions && !isDirty && !missingMedia
@@ -57,7 +64,9 @@ export const StudioLaunchPage = () => {
           inviteCode,
         }),
       })
-      toast.success(t("extensions:studio.launch.success", "Game created successfully!"))
+      toast.success(
+        t("extensions:studio.launch.success", "Game created successfully!"),
+      )
       navigate({ to: "/party/manager/$gameId", params: { gameId } })
     },
     onError: (error) => {
@@ -69,19 +78,34 @@ export const StudioLaunchPage = () => {
 
   const handleLaunch = () => {
     if (!quizzId) {
-      toast.error(t("extensions:studio.launch.saveFirst", "Please save the quiz before launching a live session."))
+      toast.error(
+        t(
+          "extensions:studio.launch.saveFirst",
+          "Please save the quiz before launching a live session.",
+        ),
+      )
 
       return
     }
 
     if (isDirty) {
-      toast.error(t("extensions:studio.launch.unsavedWarning", "Unsaved changes detected. Please save the quiz before launching."))
+      toast.error(
+        t(
+          "extensions:studio.launch.unsavedWarning",
+          "Unsaved changes detected. Please save the quiz before launching.",
+        ),
+      )
 
       return
     }
 
     if (missingMedia) {
-      toast.error(t("extensions:studio.launch.missingMediaWarning", "Some media cards have empty URLs"))
+      toast.error(
+        t(
+          "extensions:studio.launch.missingMediaWarning",
+          "Some media cards have empty URLs",
+        ),
+      )
 
       return
     }
@@ -96,17 +120,17 @@ export const StudioLaunchPage = () => {
   }
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-muted/40 p-6 md:p-10">
+    <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex w-full max-w-4xl flex-col gap-6">
-        <div className="flex items-center gap-3 border-b border-accent pb-4">
-          <div className="rounded-lg bg-primary/10 p-2 text-primary">
+        <div className="border-accent flex items-center gap-3 border-b pb-4">
+          <div className="bg-primary/10 text-primary rounded-lg p-2">
             <Rocket className="size-6" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold tracking-tight text-foreground">
+            <h1 className="text-foreground text-2xl font-bold tracking-tight">
               {t("extensions:studio.launch.readyTitle", "Launch Live Show")}
             </h1>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-muted-foreground text-sm">
               {t(
                 "extensions:studio.launch.subtitle",
                 "Review timeline readiness, participant counts, and initiate the live presenter session.",
@@ -117,67 +141,89 @@ export const StudioLaunchPage = () => {
 
         {/* Readiness Warnings */}
         {isNew && (
-          <div className="rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700 flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
             <AlertTriangle className="size-5 shrink-0" />
-            <span>{t("extensions:studio.launch.saveFirst", "Please save the quiz before launching a live session.")}</span>
+            <span>
+              {t(
+                "extensions:studio.launch.saveFirst",
+                "Please save the quiz before launching a live session.",
+              )}
+            </span>
           </div>
         )}
 
         {isDirty && !isNew && (
-          <div className="rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700 flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
             <AlertTriangle className="size-5 shrink-0" />
-            <span>{t("extensions:studio.launch.unsavedWarning", "Unsaved changes detected. Please save the quiz before launching.")}</span>
+            <span>
+              {t(
+                "extensions:studio.launch.unsavedWarning",
+                "Unsaved changes detected. Please save the quiz before launching.",
+              )}
+            </span>
           </div>
         )}
 
         {!hasQuestions && (
-          <div className="rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-sm font-semibold text-red-600 flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-lg border border-red-500/40 bg-red-500/10 p-4 text-sm font-semibold text-red-600">
             <AlertTriangle className="size-5 shrink-0" />
             <span>{t("extensions:studio.launch.noQuestionsWarning")}</span>
           </div>
         )}
 
         {missingMedia && (
-          <div className="rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700 flex items-center gap-3">
+          <div className="flex items-center gap-3 rounded-lg border border-yellow-500/40 bg-yellow-500/10 p-4 text-sm font-semibold text-yellow-700">
             <AlertTriangle className="size-5 shrink-0" />
             <span>{t("extensions:studio.launch.missingMediaWarning")}</span>
           </div>
         )}
 
         {/* Summary Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
           <Card className="flex items-center gap-4 p-5">
-            <div className="rounded-full bg-primary/10 p-3 text-primary">
+            <div className="bg-primary/10 text-primary rounded-full p-3">
               <ListOrdered className="size-6" />
             </div>
             <div>
-              <p className="text-2xl font-black text-foreground">{timeline.length}</p>
-              <p className="text-xs font-semibold text-muted-foreground">
+              <p className="text-foreground text-2xl font-black">
+                {timeline.length}
+              </p>
+              <p className="text-muted-foreground text-xs font-semibold">
                 {t("extensions:studio.launch.totalCards", "Timeline Cards")}
               </p>
             </div>
           </Card>
 
           <Card className="flex items-center gap-4 p-5">
-            <div className="rounded-full bg-primary/10 p-3 text-primary">
+            <div className="bg-primary/10 text-primary rounded-full p-3">
               <Play className="size-6" />
             </div>
             <div>
-              <p className="text-2xl font-black text-foreground">{questionItems.length}</p>
-              <p className="text-xs font-semibold text-muted-foreground">
-                {t("extensions:studio.launch.totalQuestions", "Questions & Surveys")}
+              <p className="text-foreground text-2xl font-black">
+                {questionItems.length}
+              </p>
+              <p className="text-muted-foreground text-xs font-semibold">
+                {t(
+                  "extensions:studio.launch.totalQuestions",
+                  "Questions & Surveys",
+                )}
               </p>
             </div>
           </Card>
 
           <Card className="flex items-center gap-4 p-5">
-            <div className="rounded-full bg-primary/10 p-3 text-primary">
+            <div className="bg-primary/10 text-primary rounded-full p-3">
               <Users className="size-6" />
             </div>
             <div>
-              <p className="text-2xl font-black text-foreground">{participantCount}</p>
-              <p className="text-xs font-semibold text-muted-foreground">
-                {t("extensions:studio.launch.totalParticipants", "Registered Participants")}
+              <p className="text-foreground text-2xl font-black">
+                {participantCount}
+              </p>
+              <p className="text-muted-foreground text-xs font-semibold">
+                {t(
+                  "extensions:studio.launch.totalParticipants",
+                  "Registered Participants",
+                )}
               </p>
             </div>
           </Card>
@@ -199,12 +245,15 @@ export const StudioLaunchPage = () => {
             )}
           </div>
           <div>
-            <h2 className="text-xl font-bold text-foreground">
+            <h2 className="text-foreground text-xl font-bold">
               {isReadyToLaunch
                 ? t("extensions:studio.launch.summary", "Ready to Start")
-                : t("extensions:studio.launch.unsavedTitle", "Unsaved Changes or Requirements Missing")}
+                : t(
+                    "extensions:studio.launch.unsavedTitle",
+                    "Unsaved Changes or Requirements Missing",
+                  )}
             </h2>
-            <p className="max-w-md text-sm text-muted-foreground">
+            <p className="text-muted-foreground max-w-md text-sm">
               {isReadyToLaunch
                 ? t(
                     "extensions:studio.launch.launchNotice",
@@ -222,7 +271,7 @@ export const StudioLaunchPage = () => {
             size="lg"
             disabled={!isReadyToLaunch || isPending}
             onClick={handleLaunch}
-            className="bg-primary text-white font-bold text-lg px-8 py-6 rounded-xl shadow-md hover:opacity-90 flex items-center gap-2 disabled:opacity-50"
+            className="bg-primary flex items-center gap-2 rounded-xl px-8 py-6 text-lg font-bold text-white shadow-md hover:opacity-90 disabled:opacity-50"
           >
             <Rocket className="size-5" />
             {isPending

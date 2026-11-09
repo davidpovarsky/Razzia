@@ -1,9 +1,5 @@
 import { PlatformButton } from "../platform-controls"
-import {
-  FullShowSceneView,
-  isFullShowScene,
-  type FullShowInput,
-} from "./FullShowScenes"
+import { FullShowSceneView, isFullShowScene } from "./FullShowScenes"
 import type { CSSProperties } from "react"
 import { presentationNote } from "./presentation-note"
 import { themeAdapterAsset, useOptionalShowTheme } from "../show-themes/context"
@@ -18,14 +14,18 @@ import {
   type TadazzV4Labels,
   type TadazzV4Scene,
 } from "./types"
-
 function asset(base: string, name: string) {
   return `${base || TADAZZ_V4_ASSET_BASE}${name}`
 }
 const id2 = (n: number) => String(Math.max(0, n)).padStart(2, "0")
+
 export function labelsFor(data: TadazzV4Data): TadazzV4Labels {
-  return { ...TADAZZ_V4_LABELS, ...(data.labels ?? {}) }
+  return {
+    ...TADAZZ_V4_LABELS,
+    ...(data.labels ?? {}),
+  }
 }
+
 export function StageIdentityV4({
   data,
   scene,
@@ -47,6 +47,7 @@ export function StageIdentityV4({
     data.showQuestionNumber === false
       ? ""
       : ` · QUESTION ${id2(number)}${data.totalQuestions ? ` / ${data.totalQuestions}` : ""}`
+
   return (
     <>
       <div className="stage-identity">
@@ -66,6 +67,7 @@ export function StageIdentityV4({
     </>
   )
 }
+
 export function QuestionFrameV4({
   data,
   results = false,
@@ -76,7 +78,18 @@ export function QuestionFrameV4({
   const tx = labelsFor(data)
   const question = data.question ?? ""
   const note = presentationNote(data.note)
-  const size = question.length > 65 ? 49 : question.length > 48 ? 56 : undefined
+  const size = (() => {
+    if (question.length > 65) {
+      return 49
+    }
+
+    if (question.length > 48) {
+      return 56
+    }
+
+    return undefined
+  })()
+
   return (
     <div
       className="q-frame"
@@ -86,7 +99,16 @@ export function QuestionFrameV4({
       <div className="eyebrow">
         {data.eyebrow || (results ? tx.audienceResults : tx.nextQuestion)}
       </div>
-      <div className="q-text" style={size ? { fontSize: size } : undefined}>
+      <div
+        className="q-text"
+        style={
+          size
+            ? {
+                fontSize: size,
+              }
+            : undefined
+        }
+      >
         {question}
       </div>
       {note && results && (
@@ -97,6 +119,7 @@ export function QuestionFrameV4({
     </div>
   )
 }
+
 export interface AnswerSlotProps {
   answer: TadazzV4Answer
   index: number
@@ -115,6 +138,7 @@ export interface AnswerSlotProps {
   assetBase?: string
   labels?: Partial<TadazzV4Labels>
 }
+
 export function AnswerSlotV4({
   answer,
   index,
@@ -132,11 +156,18 @@ export function AnswerSlotV4({
   recap = false,
   labels = {},
 }: AnswerSlotProps) {
-  const tx = { ...TADAZZ_V4_LABELS, ...labels }
+  const tx = {
+    ...TADAZZ_V4_LABELS,
+    ...labels,
+  }
   const displayTitle =
     answer.title ||
     answer.alt ||
-    (answer as { label?: string }).label ||
+    (
+      answer as {
+        label?: string
+      }
+    ).label ||
     (recap ? `Choice ${index + 1}` : "")
   const slotClasses = [
     "choice-slot",
@@ -150,23 +181,32 @@ export function AnswerSlotV4({
   ]
     .filter(Boolean)
     .join(" ")
-  const tagText = correct
-    ? tx.correctAnswer
-    : tie
-      ? tx.jointAudienceFavourite
-      : tx.audienceFavourite
+  const tagText = (() => {
+    if (correct) {
+      return tx.correctAnswer
+    }
+
+    if (tie) {
+      return tx.jointAudienceFavourite
+    }
+
+    return tx.audienceFavourite
+  })()
   const roundedPct = Math.round(percentage)
   const isResultActive = Boolean(result && showPercentages)
   const pctText = isResultActive ? `${roundedPct}%` : ""
+
   return (
-    <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!interactive}
-      className={`p-0 border-0 bg-transparent disabled:opacity-100 ${slotClasses}`}
+    <PlatformButton
+      type="button"
+      size="sm"
+      classNameContent="contents"
+      disabled={!interactive}
+      className={`border-0 bg-transparent p-0 disabled:opacity-100 ${slotClasses}`}
       data-v4-choice={index}
       data-index={index}
       data-testid={`tadazz-card-${index}`}
       data-multi={multiSelect ? "true" : undefined}
-
-
       aria-pressed={interactive ? Boolean(selected) : undefined}
       aria-label={
         interactive
@@ -174,7 +214,6 @@ export function AnswerSlotV4({
           : undefined
       }
       onClick={interactive ? () => onSelect?.(index) : undefined}
-
     >
       <article className="answer-card">
         <figure className="answer-figure">
@@ -204,13 +243,21 @@ export function AnswerSlotV4({
           </div>
           <figcaption
             className="answer-title"
-            style={
-              displayTitle.length > 28
-                ? { fontSize: 21 }
-                : displayTitle.length > 16
-                  ? { fontSize: 25 }
-                  : undefined
-            }
+            style={(() => {
+              if (displayTitle.length > 28) {
+                return {
+                  fontSize: 21,
+                }
+              }
+
+              if (displayTitle.length > 16) {
+                return {
+                  fontSize: 25,
+                }
+              }
+
+              return undefined
+            })()}
             data-has-caption={displayTitle ? "true" : "false"}
             dir="auto"
           >
@@ -233,13 +280,21 @@ export function AnswerSlotV4({
         </div>
         <div
           className="winner-tag tz-winner-tag"
-          style={favourite ? { opacity: 1 } : undefined}
+          style={
+            favourite
+              ? {
+                  opacity: 1,
+                }
+              : undefined
+          }
         >
           {tagText}
         </div>
         <div
           className="result-track tz-result-track"
-          style={{ opacity: result ? 1 : 0 }}
+          style={{
+            opacity: result ? 1 : 0,
+          }}
         >
           <div
             className="result-track-fill tz-result-fill"
@@ -256,6 +311,7 @@ export function AnswerSlotV4({
     </PlatformButton>
   )
 }
+
 export function FivePictureAnswersV4({
   data,
   results = false,
@@ -279,11 +335,17 @@ export function FivePictureAnswersV4({
   const top = results ? topIndicesFor(data, answers.length) : []
   const percentages = percentagesFor(data, answers.length)
   const selectedSet = new Set<number>(
-    Array.isArray(data.selectedIndices)
-      ? data.selectedIndices
-      : typeof data.selectedIndex === "number" && data.selectedIndex >= 0
-        ? [data.selectedIndex]
-        : [],
+    (() => {
+      if (Array.isArray(data.selectedIndices)) {
+        return data.selectedIndices
+      }
+
+      if (typeof data.selectedIndex === "number" && data.selectedIndex >= 0) {
+        return [data.selectedIndex]
+      }
+
+      return []
+    })(),
   )
   const dynamicStyle: CSSProperties | undefined =
     answers.length === 5
@@ -302,6 +364,7 @@ export function FivePictureAnswersV4({
   const canSelect = Boolean(
     data.interactive && !results && !recap && answers.length > 0,
   )
+
   return (
     <div
       className={["answers", recap && "recap-answers"]
@@ -313,6 +376,7 @@ export function FivePictureAnswersV4({
     >
       {answers.map((answer, i) => {
         const isTop = top.includes(i)
+
         return (
           <AnswerSlotV4
             key={i}
@@ -337,6 +401,7 @@ export function FivePictureAnswersV4({
     </div>
   )
 }
+
 export function VoteStatusV4({
   data,
   locked,
@@ -347,16 +412,27 @@ export function VoteStatusV4({
   chosen?: boolean
 }) {
   const tx = labelsFor(data)
-  const text = chosen
-    ? tx.choiceSelected
-    : locked
-      ? tx.votesLocked
-      : tx.votingOpen
+  const text = (() => {
+    if (chosen) {
+      return tx.choiceSelected
+    }
+
+    if (locked) {
+      return tx.votesLocked
+    }
+
+    return tx.votingOpen
+  })()
   const left = data.remainingSeconds
   const time =
-    !locked && !chosen && left != null && Number.isFinite(left)
+    !locked &&
+    !chosen &&
+    left !== null &&
+    left !== undefined &&
+    Number.isFinite(left)
       ? `${id2(Math.floor(left / 60))}:${id2(Math.max(0, Math.ceil(left) % 60))}`
       : null
+
   return (
     <div
       className={["vote-status", locked && "locked-status"]
@@ -371,10 +447,12 @@ export function VoteStatusV4({
     </div>
   )
 }
+
 export function CountdownFloaterV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
   const total = Math.max(0, data.remainingSeconds ?? data.seconds ?? 0)
   const value = id2(Math.ceil(total))
+
   return (
     <div className="countdown-floater" data-v4="countdown-floater">
       <div className="countdown-label">{tx.timeLeft}</div>
@@ -390,34 +468,46 @@ export function CountdownFloaterV4({ data }: { data: TadazzV4Data }) {
     </div>
   )
 }
+
 export function TopPickV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
   const answers = data.answers ?? []
   const top =
-    data.topIndex != null
+    data.topIndex !== null && data.topIndex !== undefined
       ? [data.topIndex]
       : topIndicesFor(data, answers.length)
   const winner = top.length === 1 ? answers[top[0]] : null
+
   return (
     <>
       <div className="spotlight-top">{tx.mostChosenAnswer}</div>
       <div className="spotlight-plate" />
-      {winner?.imageUrl ? (
-        <img
-          className="spotlight-portrait"
-          src={winner.imageUrl}
-          alt={winner.alt ?? winner.title}
-        />
-      ) : winner ? (
-        <div
-          className="spotlight-portrait answer-image-empty"
-          aria-label={winner.alt ?? winner.title}
-        >
-          <span className="answer-monogram" aria-hidden="true">
-            {(top[0] ?? 0) + 1}
-          </span>
-        </div>
-      ) : null}
+      {(() => {
+        if (winner?.imageUrl) {
+          return (
+            <img
+              className="spotlight-portrait"
+              src={winner.imageUrl}
+              alt={winner.alt ?? winner.title}
+            />
+          )
+        }
+
+        if (winner) {
+          return (
+            <div
+              className="spotlight-portrait answer-image-empty"
+              aria-label={winner.alt ?? winner.title}
+            >
+              <span className="answer-monogram" aria-hidden="true">
+                {(top[0] ?? 0) + 1}
+              </span>
+            </div>
+          )
+        }
+
+        return null
+      })()}
       <div className="spotlight-name" data-testid="tadazz-top-pick-name">
         {winner
           ? winner.title
@@ -427,16 +517,24 @@ export function TopPickV4({ data }: { data: TadazzV4Data }) {
     </>
   )
 }
+
 export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
   const canSelect = Boolean(data.interactive)
   const selectedSet = new Set<number>(
-    Array.isArray(data.selectedIndices)
-      ? data.selectedIndices
-      : typeof data.selectedIndex === "number" && data.selectedIndex >= 0
-        ? [data.selectedIndex]
-        : [],
+    (() => {
+      if (Array.isArray(data.selectedIndices)) {
+        return data.selectedIndices
+      }
+
+      if (typeof data.selectedIndex === "number" && data.selectedIndex >= 0) {
+        return [data.selectedIndex]
+      }
+
+      return []
+    })(),
   )
+
   return (
     <div className="photo-question" data-testid="tadazz-question-image-scene">
       {data.questionImage ? (
@@ -467,15 +565,18 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
           ]
             .filter(Boolean)
             .join(" ")
+
           return (
-            <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!canSelect}
+            <PlatformButton
+              type="button"
+              size="sm"
+              classNameContent="contents"
+              disabled={!canSelect}
               key={i}
-              className={`p-0 border-0 bg-transparent disabled:opacity-100 ${cls}`}
+              className={`border-0 bg-transparent p-0 disabled:opacity-100 ${cls}`}
               data-v4-choice={i}
               data-index={i}
               data-testid={`tadazz-card-${i}`}
-
-
               aria-pressed={canSelect ? isSelected : undefined}
               aria-label={
                 canSelect
@@ -483,7 +584,6 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
                   : undefined
               }
               onClick={canSelect ? () => data.onSelectOption?.(i) : undefined}
-
             >{`${String.fromCharCode(65 + i)}  ·  ${title}`}</PlatformButton>
           )
         })}
@@ -491,6 +591,7 @@ export function QuestionImageV4({ data }: { data: TadazzV4Data }) {
     </div>
   )
 }
+
 export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
   const allTeams = data.teams ?? []
@@ -498,6 +599,7 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
   const visibleTeams =
     allTeams.length > 4 ? allTeams.slice(page * 4, (page + 1) * 4) : allTeams
   const rankOffset = allTeams.length > 4 ? page * 4 : 0
+
   return (
     <div
       data-testid="tadazz-leaderboard-screen"
@@ -511,6 +613,7 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
       <div className="leader-board">
         {visibleTeams.map((team, i) => {
           const rank = rankOffset + i + 1
+
           return (
             <div
               className="team-row tz-leader-row"
@@ -543,8 +646,10 @@ export function LeaderboardV4({ data }: { data: TadazzV4Data }) {
     </div>
   )
 }
+
 export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
+
   return (
     <div data-testid="tadazz-screen-recap">
       <FivePictureAnswersV4 data={data} recap />
@@ -553,8 +658,10 @@ export function RoundRecapV4({ data }: { data: TadazzV4Data }) {
     </div>
   )
 }
+
 export function InterludeV4({ data }: { data: TadazzV4Data }) {
   const tx = labelsFor(data)
+
   return (
     <div className="interlude-panel" data-testid="tadazz-screen-interlude">
       <div className="interlude-ray" />
@@ -565,6 +672,7 @@ export function InterludeV4({ data }: { data: TadazzV4Data }) {
     </div>
   )
 }
+
 export function ZWipeV4() {
   return (
     <>
@@ -573,6 +681,7 @@ export function ZWipeV4() {
     </>
   )
 }
+
 export function StageSceneV4({
   scene,
   data,
@@ -582,12 +691,14 @@ export function StageSceneV4({
   data: TadazzV4Data
   assetBase: string
 }) {
-  if (isFullShowScene(scene))
+  if (isFullShowScene(scene)) {
     return (
       <div className="full-show-root" data-full-show-scene={scene}>
-        <FullShowSceneView scene={scene} data={data as FullShowInput} />
+        <FullShowSceneView scene={scene} data={data} />
       </div>
     )
+  }
+
   const tx = labelsFor(data)
   const hasCards = [
     "picture-answers",
@@ -608,13 +719,17 @@ export function StageSceneV4({
       "survey-results",
     ],
   ].includes(scene)
+
   return (
     <>
       <StageIdentityV4
         scene={scene}
         data={
           scene === "round-recap"
-            ? { ...data, showQuestionNumber: false }
+            ? {
+                ...data,
+                showQuestionNumber: false,
+              }
             : data
         }
         assetBase={assetBase}
@@ -675,6 +790,7 @@ export function StageSceneV4({
     </>
   )
 }
+
 export function StageBackdropV4({
   scene,
   data,
@@ -704,16 +820,32 @@ export function StageBackdropV4({
     />
   )
 }
+
 export function StageAmbientV4() {
   return (
     <div className="ambient" aria-hidden="true">
-      {Array.from({ length: 4 }, (_, j) => (
-        <div className="ambient-beam" key={j} />
-      ))}
+      {Array.from(
+        {
+          length: 4,
+        },
+        (_, j) => (
+          <div className="ambient-beam" key={j} />
+        ),
+      )}
       <div className="ambient-bulbs">
-        {Array.from({ length: 15 }, (_, j) => (
-          <i key={j} style={{ animationDelay: `${(-j * 0.16).toFixed(2)}s` }} />
-        ))}
+        {Array.from(
+          {
+            length: 15,
+          },
+          (_, j) => (
+            <i
+              key={j}
+              style={{
+                animationDelay: `${(-j * 0.16).toFixed(2)}s`,
+              }}
+            />
+          ),
+        )}
       </div>
       <div className="ambient-floor" />
     </div>

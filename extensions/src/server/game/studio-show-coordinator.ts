@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import type {
   SceneConfig,
   StudioDefaults,
@@ -69,8 +70,9 @@ export class StudioShowCoordinator {
     this.runner = new TimelineRunner(options.timeline, options.scenes)
     this.questionIds = options.questionIds
     options.timeline.forEach((item, index) => {
-      if (item.kind === "question")
+      if (item.kind === "question") {
         this.questionSteps.set(item.questionId, index)
+      }
     })
     this.callbacks = options.callbacks
   }
@@ -83,13 +85,18 @@ export class StudioShowCoordinator {
   restoreQuestionPosition(questionIndex: number): boolean {
     const questionId = this.questionIds[questionIndex]
     const stepIndex = this.questionSteps.get(questionId)
-    if (stepIndex === undefined) return false
+
+    if (stepIndex === undefined) {
+      return false
+    }
+
     this.clearTimer()
     this.runner.jumpTo(stepIndex)
     this.phase = "question"
     this.epoch += 1
     this.seq += 1
     this.startedAt = Date.now()
+
     return true
   }
 
@@ -534,11 +541,16 @@ export class StudioShowCoordinator {
           this.epoch += 1
           this.seq += 1
           this.startedAt = Date.now()
-          if (step.advanceMode === "auto")
+
+          if (step.advanceMode === "auto") {
             this.scheduleAutoAdvance(step.durationMs, this.epoch)
+          }
+
           this.callbacks.onBroadcastState()
+
           return true
         }
+
         continue
       }
 

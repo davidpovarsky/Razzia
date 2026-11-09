@@ -32,10 +32,12 @@ const check = process.argv.includes("--check")
 
 const raw = readFileSync(SOURCE)
 const sourceSha = sha256(raw)
+
 if (sourceSha !== EXPECTED_SHA) {
   console.error(`Canonical HTML hash mismatch: ${sourceSha}`)
   process.exit(1)
 }
+
 const html = raw.toString("utf8")
 
 /** Named extraction points, located by the exact surrounding source text. */
@@ -43,7 +45,8 @@ const TARGETS = [
   {
     file: "backdrop.webp",
     role: ".tz-backdrop background (CSS line 15)",
-    before: ".tz-backdrop { position:absolute; inset:0; background: center/cover no-repeat url(",
+    before:
+      ".tz-backdrop { position:absolute; inset:0; background: center/cover no-repeat url(",
   },
   {
     file: "logo.webp",
@@ -55,15 +58,24 @@ const TARGETS = [
 const results = []
 for (const target of TARGETS) {
   const at = html.indexOf(target.before)
-  if (at < 0) throw new Error(`Anchor not found for ${target.file}`)
+
+  if (at < 0) {
+    throw new Error(`Anchor not found for ${target.file}`)
+  }
+
   const start = at + target.before.length
   const match = /^data:(image\/[a-z+]+);base64,([A-Za-z0-9+/=]+)/.exec(
     html.slice(start, start + 400000),
   )
-  if (!match) throw new Error(`No data URI after anchor for ${target.file}`)
+
+  if (!match) {
+    throw new Error(`No data URI after anchor for ${target.file}`)
+  }
+
   const bytes = Buffer.from(match[2], "base64")
   const hash = sha256(bytes)
   const outPath = join(OUT_DIR, target.file)
+
   if (check) {
     if (!existsSync(outPath) || sha256(readFileSync(outPath)) !== hash) {
       console.error(`Asset drift: ${target.file}`)
@@ -73,6 +85,7 @@ for (const target of TARGETS) {
     mkdirSync(OUT_DIR, { recursive: true })
     writeFileSync(outPath, bytes)
   }
+
   results.push({
     file: `/tadazz-show/motion/${target.file}`,
     role: target.role,
@@ -86,10 +99,19 @@ for (const target of TARGETS) {
 const introAnchor = "introLogo.src='"
 const introAt = html.indexOf(introAnchor)
 const introUri = /^data:image\/[a-z+]+;base64,([A-Za-z0-9+/=]+)/.exec(
-  html.slice(introAt + introAnchor.length, introAt + introAnchor.length + 400000),
+  html.slice(
+    introAt + introAnchor.length,
+    introAt + introAnchor.length + 400000,
+  ),
 )
-if (!introUri || sha256(Buffer.from(introUri[1], "base64")) !== results[1].sha256) {
-  throw new Error("Intro logo differs from finale logo; extraction needs review")
+
+if (
+  !introUri ||
+  sha256(Buffer.from(introUri[1], "base64")) !== results[1].sha256
+) {
+  throw new Error(
+    "Intro logo differs from finale logo; extraction needs review",
+  )
 }
 
 // ── Stylesheet port ─────────────────────────────────────────────────────────
@@ -121,7 +143,11 @@ const cssLines = html
   .split(/\r?\n/)
   .filter((line) => {
     const drop = DROPPED_PREFIXES.some((p) => line.trimStart().startsWith(p))
-    if (drop) dropped.push(line.slice(0, 60))
+
+    if (drop) {
+      dropped.push(line.slice(0, 60))
+    }
+
     return !drop
   })
   .map((line) =>
@@ -131,15 +157,14 @@ const cssLines = html
     ),
   )
 const cssText =
-  "/*\n" +
-  " * AUTO-PORTED from the canonical TADAZZ Motion Kit stylesheet\n" +
+  `/*\n` +
+  ` * AUTO-PORTED from the canonical TADAZZ Motion Kit stylesheet\n` +
   ` * (source SHA-256 ${sourceSha}).\n` +
-  " * Values are byte-identical to the reference; do not hand-edit — rerun\n" +
-  " * scripts/tadazz/extract-motion-assets.mjs. Project adaptations live in\n" +
-  " * tadazz-show-adaptations.css.\n" +
-  " */\n" +
-  cssLines.join("\n").trim() +
-  "\n"
+  ` * Values are byte-identical to the reference; do not hand-edit — rerun\n` +
+  ` * scripts/tadazz/extract-motion-assets.mjs. Project adaptations live in\n` +
+  ` * tadazz-show-adaptations.css.\n` +
+  ` */\n${cssLines.join("\n").trim()}\n`
+
 if (check) {
   if (!existsSync(CSS_OUT) || readFileSync(CSS_OUT, "utf8") !== cssText) {
     console.error("Stylesheet drift: tadazz-motion-kit.css")
@@ -150,7 +175,8 @@ if (check) {
 }
 
 const provenance = {
-  source: "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
+  source:
+    "docs/extensions/references/TADAZZ_Motion_Showcase_One_Click_20261105.html",
   sourceSha256: sourceSha,
   sourceBytes: raw.length,
   note: "Assets decoded byte-for-byte from the canonical HTML. The HTML is a reference only and is never served or executed.",
@@ -161,7 +187,9 @@ const provenance = {
     droppedDocumentAndDemoRules: dropped,
   },
 }
+
 if (!check) {
-  writeFileSync(PROVENANCE, JSON.stringify(provenance, null, 2) + "\n")
+  writeFileSync(PROVENANCE, `${JSON.stringify(provenance, null, 2)}\n`)
 }
+
 console.log(JSON.stringify(provenance, null, 2))

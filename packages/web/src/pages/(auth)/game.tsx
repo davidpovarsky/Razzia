@@ -6,7 +6,11 @@ import { createFileRoute } from "@tanstack/react-router"
 
 const PlayerAuthPage = () => {
   const { inviteCode } = usePlayerStore()
-  if (inviteCode) return <Username />
+
+  if (inviteCode) {
+    return <Username />
+  }
+
   return (
     <>
       <Room />

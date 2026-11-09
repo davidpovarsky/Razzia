@@ -357,7 +357,9 @@ export class ExtensionGameSession {
       this.delegate?.getFullShowData?.(),
     )
 
-    if (lobbyDirectory) {extrasPayload.lobbyFullShow = lobbyDirectory}
+    if (lobbyDirectory) {
+      extrasPayload.lobbyFullShow = lobbyDirectory
+    }
 
     // Team scores and assignments
     if (this.extras?.teams.enabled) {

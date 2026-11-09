@@ -17,7 +17,8 @@ export function QuestionCardActions({
   return (
     <div className="absolute top-1.5 right-1.5 hidden items-center gap-1 group-focus-within:flex group-hover:flex focus-within:flex">
       {onDuplicate && (
-        <NativeButton size="sm"
+        <NativeButton
+          size="sm"
           type="button"
           onClick={(e) => {
             e.stopPropagation()
@@ -37,7 +38,8 @@ export function QuestionCardActions({
       {canDelete && (
         <AlertDialog
           trigger={
-            <NativeButton size="sm"
+            <NativeButton
+              size="sm"
               type="button"
               onClick={(e) => e.stopPropagation()}
               aria-label={t("quizz:question.deleteQuestion")}

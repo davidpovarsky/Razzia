@@ -119,7 +119,11 @@ export function installedThemeForSelection(
   }
 
   if (!themeInstallerEnabled()) {
-    return installedPackageThemes(tenantId).find((theme) => theme.id === id && theme.version === version) ?? null
+    return (
+      installedPackageThemes(tenantId).find(
+        (theme) => theme.id === id && theme.version === version,
+      ) ?? null
+    )
   }
 
   return (
@@ -182,7 +186,11 @@ export function createThemePreviewTicket(
 export async function readThemePreviewMedia(ticket: string, name: string) {
   if (ticket.startsWith("pkg.") && packageInstallerEnabled()) {
     const portableStore = packageStore()
-    const { row } = readRuntimeAccess(portableStore, ticket.slice(4), packageRuntimeSecret())
+    const { row } = readRuntimeAccess(
+      portableStore,
+      ticket.slice(4),
+      packageRuntimeSecret(),
+    )
 
     if (!name.startsWith(`pkg_${row.source.slice(0, 24)}_`)) {
       return null

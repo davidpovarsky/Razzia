@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { useEffect, useRef, useState } from "react"
 
 export interface MotionQuestion {
@@ -35,12 +36,23 @@ export function TadazzMotionStage({ scene }: { scene: TadazzMotionScene }) {
       ) {
         return
       }
+
       const message = event.data as { source?: string; kind?: string }
-      if (message?.source !== "tadazz-motion") return
-      if (message.kind === "ready") setReady(true)
-      if (message.kind === "error") setFailed(true)
+
+      if (message?.source !== "tadazz-motion") {
+        return
+      }
+
+      if (message.kind === "ready") {
+        setReady(true)
+      }
+
+      if (message.kind === "error") {
+        setFailed(true)
+      }
     }
     window.addEventListener("message", handleMessage)
+
     return () => window.removeEventListener("message", handleMessage)
   }, [])
 
@@ -48,7 +60,11 @@ export function TadazzMotionStage({ scene }: { scene: TadazzMotionScene }) {
   useEffect(() => {
     if (ready && !failed) {
       frame.current?.contentWindow?.postMessage(
-        { source: "tadazz-game", kind: "render", state: JSON.parse(payload) },
+        {
+          source: "tadazz-game",
+          kind: "render",
+          state: JSON.parse(payload) as unknown,
+        },
         window.location.origin,
       )
     }

@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { z } from "zod"
 import { type CueId } from "./constants.js"
 import { lottieMetaSchema } from "./lottie.js"
@@ -90,7 +91,7 @@ export const cardAudioCueOverrideSchema = z
   .superRefine((val, ctx) => {
     if (val.mode === "custom" && !val.url) {
       ctx.addIssue({
-        code: z.ZodIssueCode.custom,
+        code: "custom",
         message: "errors:invalidMediaUrl",
         path: ["url"],
       })
@@ -215,14 +216,21 @@ export const resolveEffectiveAudioCue = (params: {
   }
 
   // 2. Check question card-level override if applicable
-  const cardOverride: CardAudioCueOverride | undefined =
-    cueId === "showQuestion"
-      ? cardAudioCues?.showQuestion
-      : cueId === "answersMusic"
-        ? cardAudioCues?.answersMusic
-        : cueId === "revealResults"
-          ? cardAudioCues?.revealResults
-          : undefined
+  const cardOverride: CardAudioCueOverride | undefined = (() => {
+    if (cueId === "showQuestion") {
+      return cardAudioCues?.showQuestion
+    }
+
+    if (cueId === "answersMusic") {
+      return cardAudioCues?.answersMusic
+    }
+
+    if (cueId === "revealResults") {
+      return cardAudioCues?.revealResults
+    }
+
+    return undefined
+  })()
 
   if (cardOverride) {
     if (cardOverride.mode === "mute") {
@@ -414,12 +422,10 @@ export const resolveCardStageAnimations = (
       return { ...DEFAULT_SLOT }
     }
 
+    const preset = slot.preset ?? "none"
+
     return {
-      preset: STAGE_ANIMATION_PRESETS.includes(
-        slot.preset as StageAnimationPreset,
-      )
-        ? (slot.preset as StageAnimationPreset)
-        : "none",
+      preset: STAGE_ANIMATION_PRESETS.includes(preset) ? preset : "none",
       durationMs: clampAnimationDurationMs(slot.durationMs),
       timing: slot.timing === "sequential" ? "sequential" : "simultaneous",
       staggerMs: clampAnimationStaggerMs(slot.staggerMs),

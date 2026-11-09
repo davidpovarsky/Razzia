@@ -3,6 +3,7 @@
 Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 
 ### Touch 1: `packages/socket/src/index.ts` (Startup Journal Recovery)
+
 - **File and exact insertion point:** `packages/socket/src/index.ts` immediately after `initConfig()` at line 8.
 - **Required capability:** Run `recoverStartupJournals(getPath)` at process boot before starting HTTP and WebSocket servers, ensuring incomplete writes and uncommitted media deletions recover deterministically before traffic arrives.
 - **Alternatives considered:** Calling inside `initConfig()` in `packages/socket/src/services/config.ts`, but keeping `config.ts` free of `@razzia/extensions` imports preserves cleaner package architecture.
@@ -12,6 +13,7 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Owner approval:** Approved per P0 Final Targeted Repair specification (Gate A2).
 
 ### Touch 2: `packages/socket/src/api/routes/media.ts` (Transactional Media Deletion)
+
 - **File and exact insertion point:** `packages/socket/src/api/routes/media.ts` in `.delete("/:name")` handler.
 - **Required capability:** Execute media deletion as an atomic, quarantine-backed transaction (`executeMediaDeleteTransaction`) that protects media binary from partial detachment failure.
 - **Alternatives considered:** Calling `deleteMedia` separately after `checkMediaDeleteSafety`, but crash or failure in `deleteMedia` left orphaned reference detachments with no recovery record.
@@ -21,6 +23,7 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Owner approval:** Approved per P0 Final Targeted Repair specification (Gate A3).
 
 ### Touch 3: `packages/socket/src/services/game/round-manager.ts` & `packages/socket/src/services/game/index.ts` (Skip Duplicate `SHOW_START` When Authored Opening Scene Exists & Cumulative Answer Recap Aggregation)
+
 - **File and exact insertion point:** `packages/socket/src/services/game/round-manager.ts` (`RoundManagerOptions.skipShowStartCountdown` and `RoundManager.start()`) and `packages/socket/src/services/game/index.ts` (`Game.buildActiveSceneData()`, `Game.getAnswerRecapSummary()`, and `RoundManager` options).
 - **Required capability:**
   1. When a Studio show defines an authored `opening` scene at timeline index 0, skip the legacy 6-second `SHOW_START` countdown so the audience is not shown two consecutive start screens; when no authored `opening` scene is at step 0, preserve legacy `SHOW_START` countdown unchanged.
@@ -29,21 +32,25 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Merge risk:** Low. Default-off when `skipShowStartCountdown` returns false or is omitted.
 
 ### Touch 4: `packages/web/vite.config.ts` (Serve `.json` Lottie Assets in Dev Media Middleware)
+
 - **File and exact insertion point:** `packages/web/vite.config.ts` (`mediaMimeTypes`).
 - **Required capability:** Add `".json": "application/json; charset=utf-8"` so user-uploaded `.json` Lottie files in `media/` are served with proper MIME type during local dev/E2E runs.
 - **Tests and compatibility evidence:** `extensions/src/presentation/presentation.test.ts`, Playwright E2E suite.
 
 ### Touch 5: `packages/web/src/components/ToggleGroup.tsx`, `packages/web/src/features/quizz/components/QuizzEditorHeader.tsx`, `QuizzEditorSidebar.tsx`, `studio-editor-context.tsx`, `studio-scene-editor.tsx`, `QuestionEntranceConfig.tsx`, `studio-settings-page.tsx`, `MediaLibrary.tsx` (Studio Editor Grouping, Audio/Cinema Scenes, Motion Presets, Lottie Picker, Answer Recap)
+
 - **File and exact insertion point:** Studio editor components under `packages/web/src/features/quizz/components/**` and optional `group` divider support in `ToggleGroup.tsx`.
 - **Required capability:** Grouped contextual card-kind chooser in `QuizzEditorHeader.tsx` (preserving exact placement and `data-testid="toggle-kind-<kind>"`), `answerRecap` timeline support, audio/video/cinema scene authoring, 5 new stage motion presets + global inheritance + decorative question underline, and user-supplied Lottie upload/selection.
 - **Tests and compatibility evidence:** `extensions/src/editor/editor.test.ts`, Playwright E2E suite.
 
 ### Touch 6: `packages/web/src/index.css`, `QuestionEntrance.tsx`, `AnswerButton.tsx`, `PhotoCardGrid.tsx`, `Question.tsx`, `GameWrapper.tsx` (Stage Motion Keyframes, Decorative Question Underline, Audio Ducking, Global Stage Animation Inheritance)
+
 - **File and exact insertion point:** Stage presentation components under `packages/web/src/features/game/components/**` and CSS keyframes in `packages/web/src/index.css`.
 - **Required capability:** Render the 5 new motion presets (`pop-bounce`, `wobble-settle`, `cascade`, `fan-flip`, `wipe-ripple`), inherit global stage animation defaults when card slot is `undefined`, render optional decorative question underline below the question title without affecting the authoritative cooldown/round timer, and suppress background loop audio when `media`/`opening`/`closing` scenes play foreground `video` or `audio`.
 - **Tests and compatibility evidence:** `extensions/src/presentation/presentation.test.ts`, Playwright 8-viewport matrix.
 
 ### Touch 7: `pnpm-lock.yaml` (Official `@lottiefiles/dotlottie-react` Dependency in `@razzia/extensions`)
+
 - **File and exact insertion point:** Root `pnpm-lock.yaml` lockfile entries for `@razzia/extensions` dependency `@lottiefiles/dotlottie-react@0.17.1` (and its transitive `@lottiefiles/dotlottie-web@0.52.2`, MIT license). Zero protected source files under `packages/**` are modified for the Cinematic Video + Multi-Lottie Overlays implementation (`studio-scene-editor.tsx` and `studio-editor-context.tsx` are downstream additions not present at `5161eb7022144ee26d46a5f94cdbc714ec8b560d`).
 - **Required capability:** Official MIT-licensed Lottie/dotLottie runtime with self-hosted WASM (`dotlottie-player.wasm`) behind `extensions/src/presentation/lottie-player.tsx` to render complex Bodymovin `.json` and `.lottie` assets (masks, bezier paths, nested shapes, mattes, gradients, precomps, embedded raster images) offline without external CDN requests.
 - **Alternatives considered:** Keeping the hand-written SVG subset renderer in `lottie-player.tsx`, which lacks support for complex masks, bezier morphs, mattes, precomps, and `.lottie` containers.
@@ -54,6 +61,7 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Owner approval:** Explicitly mandated in `TADA_CINEMATIC_MULTI_LOTTIE_OVERLAYS_AGENT_PROMPT_2026-11-03.md` Section 2 ("Add one tested, pinned exact `@lottiefiles/dotlottie-react` version to the extension package (`extensions/package.json`) and update the minimum necessary `pnpm-lock.yaml` entries; document MIT license and the exact selected installed version").
 
 ### APPROVED & IMPLEMENTED — Tadazz branded stage motion hooks (2026-11-04)
+
 - **Scope:** The owner explicitly approved all proposed integration and protected source edits in this conversation on 2026-11-04 ("מאשר הכל!!! יאללה בצע!!!"). The four listed web UI files were edited in isolated worktree `agent/tadazz-validated-20261104`; no scoring, telephony, timer, or socket sources changed.
 - **Exact baseline:** Razzia v4.0.1 `5161eb7022144ee26d46a5f94cdbc714ec8b560d`, current target `7dd6519`. Baseline-to-current diff via `git diff --numstat 5161eb7 HEAD`: `GameWrapper.tsx` +619/-66, `states/Answers.tsx` +240/-63, `states/Responses.tsx` +335/-63. These files already contain substantial previous changes, so proposed changes increase upstream merge risk. `studio-settings-page.tsx` did not exist at baseline but still needs to preserve source Razzia controls and opt-in.
 - **Hook A: `packages/web/src/features/game/components/GameWrapper.tsx`.** Symbols: `GameWrapper` `extensionState`, `effectiveBackground`, `showCustomCardBackground`, active `ScenePresenter` and main stage background layer around `<GameBackground />`. Required: use `resolveTadazzStageBackground` and `TadazzAnimatedBackdrop` only for `extras.defaults.tadazzBackground.mode='animated'` with per-card/background/media precedence; source `TADAZZ_IMAGE_URL` from bundler. If cinema video stage or card background active, pause/unmount the canvas. Target <20 additive lines; if more, stop for architecture review. No timers/controls touched. Alternatives considered: extension-only layer and CSS global injection cannot access correct authoritative GameWrapper stage epoch/role/scene or precedence; iframe/standalone HTML explicitly rejected by owner. Expected compatibility: legacy default unchanged; host/player/read-only /display share stage.
@@ -65,6 +73,7 @@ Baseline upstream SHA: 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
 - **Owner approval:** **GRANTED on 2026-11-04**, in direct response to the above requested protected-file hooks. Implemented in isolated worktree only; peer review/merge/deployment remain separate. Build: Web+Socket succeeded; 19 focused tests and 2 Excel/JSON round-trip tests passed; Playwright rendered UI validated at 1920x1080, 1366x768, 800x600, 390x844, 320x568 (5/5) with square art, no overflow, authoritative example percentages/leader. Tests used a dedicated visualization harness, not full multiplayer/telephony E2E. Baseline extension TypeScript still has 97 pre-existing errors.
 
 ### APPROVED & IMPLEMENTED — TADAZZ full-show native stage hooks (2026-11-05)
+
 - **Task:** `docs/extensions/orchestration/prompts/TADAZZ_FULL_SHOW_AGENT_PROMPT_2026-11-05.md` + binding owner instruction for 100% native React + TypeScript/TSX + CSS port (zero `iframe` / zero runtime HTML). Canonical HTML SHA-256 `1eea4698bc97080c7fc82f5c0376a6ac8c6efb25a8223a178062628fa14a8669`. Worktree `tadazz-full-show`, branch `agent/tadazz-full-show-20261105`, base `57db9e7`.
 - **New, unprotected downstream modules:** `extensions/src/presentation/tadazz-show/**` (1:1 React + TypeScript + Web Animations API port of `TadazzMotion` + CSS, `TadazzStage`, `TadazzOpening` MP4+Lottie compositor, `presentation-scene`, `show-director`, unit tests), `packages/web/src/features/game/components/tadazz-show/**` (`TadazzShowView`, `TadazzScreens`, `TadazzAnswerPad`, `useTadazzLabels`, `raw-status-context`), `packages/web/public/tadazz-show/**` (MP4, Lottie, extracted backdrop/logo). Legacy `Room.tsx`, `Answers.tsx`, `Responses.tsx`, `Leaderboard.tsx`, `Podium.tsx`, `GameBackground.tsx` are NOT edited and remain on disk for rollback.
 - **Hook T1 — `packages/web/src/features/game/components/GameWrapper.tsx`, symbol `GameWrapper` (just before final `return (`).** Baseline-to-current: +786/-65. Patch: 1 import + 1 early return `if (isTadazzShowActive(extensionState)) return <TadazzShowView ... />` (+17 added lines, 0 changed existing lines). Effect: in a TADAZZ show `<GameBackground />`, legacy stage children, and legacy overlays are never mounted (eliminates first-frame Razzia flash at the root across manager/player/display).
@@ -81,16 +90,16 @@ cleanup followed by the supplied theme-engine prompt in a separate worktree.
 The pre-edit plan and necessary server observation were recorded in
 `orchestration/handoffs/tomer/CLEANUP_THEME_20261108.md`.
 
-| Original file / symbols | Necessary change and alternative | Verification / scope |
-| --- | --- | --- |
-| socket `services/game/index.ts`: roster operations, interim/recap projections | Delegate downstream identity/projections to extensions; keep authorization and player mutation in Game. Moving the entire game was rejected. | Root regression, new roster/projection boundary tests. Phase 1 reduction captured in the source ledger. |
-| socket `services/game/round-manager.ts`: reveal distribution | Extract pure downstream projection only; preserve authoritative round/scoring. | Root + distribution tests. |
-| socket Game `getVoteCompletionReason`, `abortCooldown`; RoundManager `newQuestion`, `advance`, `endTimer`, `checkAllAnswered` | Read-only annotation of existing completion paths; client deadlines cannot distinguish a delayed manual completion. No scheduler/score/abort ordering change. | 3 real Game tests + browser manual/natural/skip/restart audio traces; phase-2 addition about 20 lines combined. |
-| web `GameWrapper.tsx`: modern early return | Inject typed ShowThemeRenderer and the existing view props. No new transport or game state owner. Hardcoded family conditionals rejected. | Role parity, refresh, first-paint RAF probes, isolated legacy rollback; approximately +26/-19 before formatting. |
-| web `QuizzEditorSidebar.tsx`: TimelineSceneCard | Downstream scene card extraction with injected original AlertDialog and translation wrapper. Remove only imports made unused by the extraction. | Editor browser save, actual app typecheck. |
-| web `QuestionEditor/MediaLibrary/index.tsx`: built-in audio list | Optional event-owned URL whitelist and manifest assets, retain user uploads. A combined legacy/global preset gallery was rejected. | Studio/audio browser checks; no original media API change. |
-| web `QuestionEditorConfig/{CardBackgroundConfig,CardAudioConfig,QuestionEntranceConfig}.tsx`: exported wrappers | Active-theme controls in extensions/downstream Studio; retain original implementations for explicit legacy rollback. | Classic/legacy browser tests, strict save/reopen, localized choice tests. |
-| web `index.css`, editor media helper callers, `i18n.ts`, original locale JSONs | Move downstream keyframes/helpers/translation additions out; restore upstream translation files byte-for-byte. | 8-locale merge/idempotence checks and root locale suite. |
+| Original file / symbols                                                                                                       | Necessary change and alternative                                                                                                                              | Verification / scope                                                                                             |
+| ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| socket `services/game/index.ts`: roster operations, interim/recap projections                                                 | Delegate downstream identity/projections to extensions; keep authorization and player mutation in Game. Moving the entire game was rejected.                  | Root regression, new roster/projection boundary tests. Phase 1 reduction captured in the source ledger.          |
+| socket `services/game/round-manager.ts`: reveal distribution                                                                  | Extract pure downstream projection only; preserve authoritative round/scoring.                                                                                | Root + distribution tests.                                                                                       |
+| socket Game `getVoteCompletionReason`, `abortCooldown`; RoundManager `newQuestion`, `advance`, `endTimer`, `checkAllAnswered` | Read-only annotation of existing completion paths; client deadlines cannot distinguish a delayed manual completion. No scheduler/score/abort ordering change. | 3 real Game tests + browser manual/natural/skip/restart audio traces; phase-2 addition about 20 lines combined.  |
+| web `GameWrapper.tsx`: modern early return                                                                                    | Inject typed ShowThemeRenderer and the existing view props. No new transport or game state owner. Hardcoded family conditionals rejected.                     | Role parity, refresh, first-paint RAF probes, isolated legacy rollback; approximately +26/-19 before formatting. |
+| web `QuizzEditorSidebar.tsx`: TimelineSceneCard                                                                               | Downstream scene card extraction with injected original AlertDialog and translation wrapper. Remove only imports made unused by the extraction.               | Editor browser save, actual app typecheck.                                                                       |
+| web `QuestionEditor/MediaLibrary/index.tsx`: built-in audio list                                                              | Optional event-owned URL whitelist and manifest assets, retain user uploads. A combined legacy/global preset gallery was rejected.                            | Studio/audio browser checks; no original media API change.                                                       |
+| web `QuestionEditorConfig/{CardBackgroundConfig,CardAudioConfig,QuestionEntranceConfig}.tsx`: exported wrappers               | Active-theme controls in extensions/downstream Studio; retain original implementations for explicit legacy rollback.                                          | Classic/legacy browser tests, strict save/reopen, localized choice tests.                                        |
+| web `index.css`, editor media helper callers, `i18n.ts`, original locale JSONs                                                | Move downstream keyframes/helpers/translation additions out; restore upstream translation files byte-for-byte.                                                | 8-locale merge/idempotence checks and root locale suite.                                                         |
 
 For **every original file still modified**, exact baseline/current line totals,
 hunk anchors and upstream-overlap risk are listed in the generated
@@ -102,7 +111,6 @@ conflicts at `pnpm-lock.yaml`; upstream was not merged into the product branch.
 The new Studio, theme adapter and extension files were absent from original
 Razzia `5161eb7`; they are downstream additions, not additional modified original
 files. Original motion keyframe/timing files remain unchanged by this task.
-
 
 ### 2026-11-08 continuation — exhaustive review and durable installation
 
@@ -131,7 +139,6 @@ conflicts, superseding the earlier one-conflict observation above. The actual
 candidate Dockerfile, frozen install, nginx syntax, isolated startup/private-route
 checks and source regression are recorded in the current QA evidence. No main
 merge, push, production activation or Asana write is part of this continuation.
-
 
 ## Portable package runtime — 2026-11-09
 

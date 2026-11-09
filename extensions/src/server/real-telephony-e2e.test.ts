@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import fs from "node:fs"
 import type { AddressInfo } from "node:net"
 import os from "node:os"
@@ -220,6 +221,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
       },
     )
     expect(settings.ok).toBe(true)
+
     return created
   }
 
@@ -911,7 +913,7 @@ describe("GATE 1: Real Local Telephony End-to-End Acceptance (Real Hono + Real S
       internalGame?.round.questionsHistory?.[0]?.playerAnswers
     const activeAnswers = internalGame?.round.playersAnswers
 
-    if (historyAnswers && historyAnswers.length === PARTICIPANTS) {
+    if (historyAnswers?.length === PARTICIPANTS) {
       // All 100 answers archived immediately upon everyone answering
       const answeredNames = new Set(historyAnswers.map((a) => a.playerName))
       expect(answeredNames.size).toBe(PARTICIPANTS)

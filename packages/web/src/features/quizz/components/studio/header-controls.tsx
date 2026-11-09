@@ -14,12 +14,13 @@ export function StudioHeaderNavigation() {
 
   return (
     <div className="bg-accent/80 flex h-8 max-w-full shrink-0 scrollbar-none items-center overflow-x-auto rounded-lg p-0.5">
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="studio-tab-questions"
         onClick={() => setActiveTab("questions")}
         className={clsx(
-          "bg-transparent flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
           activeTab === "questions"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -27,12 +28,13 @@ export function StudioHeaderNavigation() {
       >
         {t("extensions:studio.tabs.questions", "Questions")}
       </NativeButton>
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="studio-tab-participants"
         onClick={() => setActiveTab("participants")}
         className={clsx(
-          "bg-transparent flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
           activeTab === "participants"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -41,12 +43,13 @@ export function StudioHeaderNavigation() {
         <Users className="size-3.5" />
         {t("extensions:studio.tabs.participants", "Participants")}
       </NativeButton>
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="studio-tab-settings"
         onClick={() => setActiveTab("settings")}
         className={clsx(
-          "bg-transparent flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
           activeTab === "settings"
             ? "bg-background text-foreground shadow-xs"
             : "text-muted-foreground hover:text-foreground",
@@ -55,12 +58,13 @@ export function StudioHeaderNavigation() {
         <Settings className="size-3.5" />
         {t("extensions:studio.tabs.settings", "Settings")}
       </NativeButton>
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="studio-tab-launch"
         onClick={() => setActiveTab("launch")}
         className={clsx(
-          "bg-transparent flex h-full shrink-0 items-center gap-1 rounded-md px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
+          "flex h-full shrink-0 items-center gap-1 rounded-md bg-transparent px-2.5 text-xs font-semibold transition-colors sm:gap-1.5 sm:px-3",
           activeTab === "launch"
             ? "bg-primary text-white shadow-xs"
             : "text-muted-foreground hover:text-foreground",

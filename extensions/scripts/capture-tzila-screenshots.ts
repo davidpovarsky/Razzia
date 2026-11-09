@@ -1,48 +1,69 @@
+import type { BrowserType, Page } from "@razzia/e2e/utils/playwright-types"
 import http from "http"
 import fs from "fs"
 import path from "path"
 import { createRequire } from "module"
-
 const req = createRequire(path.resolve("packages/e2e/package.json"))
-const { chromium } = req("@playwright/test")
-
+const { chromium } = req("@playwright/test") as {
+  chromium: BrowserType
+}
 const WEB_DIST = path.resolve("packages/web/dist")
 const MEDIA_DIR = path.resolve("config/media")
-const SCREENSHOT_DIR = path.resolve("packages/e2e/test-results/screenshots/tzila")
-const ARTIFACT_DIR = "C:/Users/DAVID/.gemini/antigravity/brain/cf94a9e2-6ce9-492f-ade2-d2819b05e18a"
+const SCREENSHOT_DIR = path.resolve(
+  "packages/e2e/test-results/screenshots/tzila",
+)
+const ARTIFACT_DIR =
+  "C:/Users/DAVID/.gemini/antigravity/brain/cf94a9e2-6ce9-492f-ade2-d2819b05e18a"
 
 // Find the built CSS file
-const cssFiles = fs.readdirSync(path.join(WEB_DIST, "assets")).filter((f) => f.endsWith(".css"))
-const cssFileName = cssFiles[0]
+const cssFiles = fs
+  .readdirSync(path.join(WEB_DIST, "assets"))
+  .filter((f) => f.endsWith(".css"))
+const { 0: cssFileName } = cssFiles
+
 if (!cssFileName) {
   throw new Error("Compiled CSS not found in packages/web/dist/assets")
 }
 
 // Load media URL map
-const mapPath = path.resolve("extensions/fixtures/tzila-show/MEDIA_URL_MAP.json")
-const mediaMap: Array<{ originalUrl: string; newUrl: string; file: string }> = JSON.parse(
-  fs.readFileSync(mapPath, "utf-8"),
+const mapPath = path.resolve(
+  "extensions/fixtures/tzila-show/MEDIA_URL_MAP.json",
 )
+const mediaMap = JSON.parse(fs.readFileSync(mapPath, "utf-8")) as Array<{
+  originalUrl: string
+  newUrl: string
+  file: string
+}>
 const c1Images = mediaMap.filter((m) => m.file.includes("tzila-c1-option-"))
 
 // Simple HTTP server to serve dist assets and media files locally on isolated port
 const PORT = 38995
-const server = http.createServer((req, res) => {
-  const url = decodeURIComponent(req.url ?? "/")
+const server = http.createServer((reqValue, res) => {
+  const url = decodeURIComponent(reqValue.url ?? "/")
 
   if (url.startsWith("/assets/")) {
     const filePath = path.join(WEB_DIST, url)
+
     if (fs.existsSync(filePath)) {
       res.writeHead(200, {
-        "Content-Type": url.endsWith(".css")
-          ? "text/css"
-          : url.endsWith(".woff2")
-            ? "font/woff2"
-            : url.endsWith(".svg")
-              ? "image/svg+xml"
-              : "application/octet-stream",
+        "Content-Type": (() => {
+          if (url.endsWith(".css")) {
+            return "text/css"
+          }
+
+          if (url.endsWith(".woff2")) {
+            return "font/woff2"
+          }
+
+          if (url.endsWith(".svg")) {
+            return "image/svg+xml"
+          }
+
+          return "application/octet-stream"
+        })(),
       })
       res.end(fs.readFileSync(filePath))
+
       return
     }
   }
@@ -50,9 +71,13 @@ const server = http.createServer((req, res) => {
   if (url.startsWith("/media/")) {
     const fileName = url.replace(/^\/media\//, "")
     const filePath = path.join(MEDIA_DIR, fileName)
+
     if (fs.existsSync(filePath)) {
-      res.writeHead(200, { "Content-Type": "image/png" })
+      res.writeHead(200, {
+        "Content-Type": "image/png",
+      })
       res.end(fs.readFileSync(filePath))
+
       return
     }
   }
@@ -60,7 +85,6 @@ const server = http.createServer((req, res) => {
   res.writeHead(404)
   res.end("Not found")
 })
-
 function generatePollHtml() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -188,7 +212,6 @@ function generatePollHtml() {
 </body>
 </html>`
 }
-
 function generateWinnerSpotlightHtml() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -310,7 +333,6 @@ function generateWinnerSpotlightHtml() {
 </body>
 </html>`
 }
-
 function generateTieHtml() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -371,7 +393,6 @@ function generateTieHtml() {
 </body>
 </html>`
 }
-
 function generateZeroVotesHtml() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -417,7 +438,6 @@ function generateZeroVotesHtml() {
 </body>
 </html>`
 }
-
 function generateMobileParticipantHtml() {
   return `<!DOCTYPE html>
 <html lang="en">
@@ -482,27 +502,49 @@ function generateMobileParticipantHtml() {
 }
 
 export async function captureAllScreenshots() {
-  fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
-  fs.mkdirSync(ARTIFACT_DIR, { recursive: true })
-
-  await new Promise<void>((resolve) => server.listen(PORT, resolve))
+  fs.mkdirSync(SCREENSHOT_DIR, {
+    recursive: true,
+  })
+  fs.mkdirSync(ARTIFACT_DIR, {
+    recursive: true,
+  })
+  await new Promise<void>((resolve) => {
+    server.listen(PORT, resolve)
+  })
   console.log(`[Screenshot Server] Running on http://localhost:${PORT}`)
-
-  const browser = await chromium.launch({ headless: true })
-
+  const browser = await chromium.launch({
+    headless: true,
+  })
   const viewports = [
-    { name: "1920", width: 1920, height: 1080 },
-    { name: "1280", width: 1280, height: 800 },
-    { name: "1024", width: 1024, height: 768 },
-    { name: "375", width: 375, height: 667 },
+    {
+      name: "1920",
+      width: 1920,
+      height: 1080,
+    },
+    {
+      name: "1280",
+      width: 1280,
+      height: 800,
+    },
+    {
+      name: "1024",
+      width: 1024,
+      height: 768,
+    },
+    {
+      name: "375",
+      width: 375,
+      height: 667,
+    },
   ]
-
   const savedFiles: string[] = []
-
-  const save = async (page: any, filename: string) => {
+  const save = async (page: Page, filename: string) => {
     const e2ePath = path.join(SCREENSHOT_DIR, filename)
     const artPath = path.join(ARTIFACT_DIR, filename)
-    await page.screenshot({ path: e2ePath, fullPage: true })
+    await page.screenshot({
+      path: e2ePath,
+      fullPage: true,
+    })
     fs.copyFileSync(e2ePath, artPath)
     savedFiles.push(filename)
     console.log(`[Captured] ${filename}`)
@@ -511,40 +553,77 @@ export async function captureAllScreenshots() {
   try {
     // 1. 5-Image Question Poll on Projector at 1920, 1280, 1024
     for (const vp of viewports.filter((v) => v.name !== "375")) {
-      const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } })
-      await page.setContent(generatePollHtml(), { waitUntil: "networkidle" })
+      const page = await browser.newPage({
+        viewport: {
+          width: vp.width,
+          height: vp.height,
+        },
+      })
+      await page.setContent(generatePollHtml(), {
+        waitUntil: "networkidle",
+      })
       await save(page, `01_projector_5_options_${vp.name}.png`)
       await page.close()
     }
 
     // 2. Mobile participant at 375px
     {
-      const page = await browser.newPage({ viewport: { width: 375, height: 667 } })
-      await page.setContent(generateMobileParticipantHtml(), { waitUntil: "networkidle" })
+      const page = await browser.newPage({
+        viewport: {
+          width: 375,
+          height: 667,
+        },
+      })
+      await page.setContent(generateMobileParticipantHtml(), {
+        waitUntil: "networkidle",
+      })
       await save(page, "02_participant_5_options_375.png")
       await page.close()
     }
 
     // 3. Results Winner Spotlight at 1920 and 1280
-    for (const vp of viewports.filter((v) => v.name === "1920" || v.name === "1280")) {
-      const page = await browser.newPage({ viewport: { width: vp.width, height: vp.height } })
-      await page.setContent(generateWinnerSpotlightHtml(), { waitUntil: "networkidle" })
+    for (const vp of viewports.filter(
+      (v) => v.name === "1920" || v.name === "1280",
+    )) {
+      const page = await browser.newPage({
+        viewport: {
+          width: vp.width,
+          height: vp.height,
+        },
+      })
+      await page.setContent(generateWinnerSpotlightHtml(), {
+        waitUntil: "networkidle",
+      })
       await save(page, `03_results_winner_spotlight_${vp.name}.png`)
       await page.close()
     }
 
     // 4. Results Tie Co-leaders at 1280
     {
-      const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
-      await page.setContent(generateTieHtml(), { waitUntil: "networkidle" })
+      const page = await browser.newPage({
+        viewport: {
+          width: 1280,
+          height: 800,
+        },
+      })
+      await page.setContent(generateTieHtml(), {
+        waitUntil: "networkidle",
+      })
       await save(page, "04_results_tie_co_winners_1280.png")
       await page.close()
     }
 
     // 5. Results No Votes at 1280
     {
-      const page = await browser.newPage({ viewport: { width: 1280, height: 800 } })
-      await page.setContent(generateZeroVotesHtml(), { waitUntil: "networkidle" })
+      const page = await browser.newPage({
+        viewport: {
+          width: 1280,
+          height: 800,
+        },
+      })
+      await page.setContent(generateZeroVotesHtml(), {
+        waitUntil: "networkidle",
+      })
       await save(page, "05_results_no_votes_1280.png")
       await page.close()
     }
@@ -553,17 +632,20 @@ export async function captureAllScreenshots() {
     server.close()
   }
 
-  console.log(`[Screenshot Capture] Completed: ${savedFiles.length} files saved`)
+  console.log(
+    `[Screenshot Capture] Completed: ${savedFiles.length} files saved`,
+  )
+
   return savedFiles
 }
 
-if (process.argv[1] && process.argv[1].endsWith("capture-tzila-screenshots.ts")) {
+if (process.argv[1]?.endsWith("capture-tzila-screenshots.ts")) {
   captureAllScreenshots()
     .then((files) => {
       console.log("Screenshots captured successfully:", files)
       process.exit(0)
     })
-    .catch((err) => {
+    .catch((err: unknown) => {
       console.error("Screenshot capture failed:", err)
       process.exit(1)
     })

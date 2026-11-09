@@ -3,8 +3,9 @@
 Private staging delivery. Production installer/runtime remain OFF by default.
 No production deployment, existing lab replacement, push, main merge, real phone
 call, provider purchase or credential change was performed. Exact source/image
-identities and final check outcomes are in
-`package-runtime-evidence/delivery.json`; artifact hashes are in its SHA256SUMS.
+identities for the original delivery are in `package-runtime-evidence/delivery.json`.
+The completed lint/WebKit follow-up is recorded in `LINT_WEBKIT_REPAIR_2026-11-09.md`
+and `qa-evidence/lint-webkit-20261109/`; each evidence directory has SHA256SUMS.
 
 Implementation branch: `codex/tadazz-package-runtime-20261109`, new worktree
 `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-package-runtime-20261109`.
@@ -21,7 +22,7 @@ observed `3a5b6aa` was superseded by this verified newer base.
 | 2 — declarative themes  | Done   | Native compiled preview with scoped media capability before installation; independent exact review, catalog selection, immutable versions, restart and rollback contracts.                                                                                                                          |
 | 3 — independent React   | Done   | Pinned networkless/unprivileged builder, tiny SDK, dedicated cookie-free origin, opaque iframe and one generic adapter. Actual uploaded Arcade and Cinematic TSX/CSS render without another platform build between uploads. All three roles, answer intents and core audio ownership remain intact. |
 | 4 — complete packages   | Done   | One archive creates one theme and two games. Selection/dependency checks, explicit Classic option, journaled staging, injected second-game failure compensation and startup recovery tests.                                                                                                         |
-| 5 — security/regression | Done   | See exact final delivery check results below and in machine-readable reports. Earlier obsolete WebKit cases and global baseline lint are disclosed separately, without being called green.                                                                                                          |
+| 5 — security/regression | Done   | See exact final delivery check results below and in machine-readable reports. The subsequent lint/WebKit follow-up resolves the earlier baseline failures; fresh reports record 1,024 unit tests and 77 browser cases passing.                                                                      |
 | 6 — authoring           | Done   | CLI scaffold/pack/validate/inspect/build/preview/install/export/rollback, schemas, six portable examples, README and updated creator skill.                                                                                                                                                         |
 | 7 — staging             | Done   | Separate Oracle container/data, immutable builder, private backup, actual container recreation, all 255 initial persisted-file hashes retained, backup restored and checked read-only. Final application image/checks are recorded in delivery.json.                                                |
 
@@ -104,21 +105,27 @@ egress/navigation denial, and rejected Node/computed/remote imports in actual
 networkless containers. Current native UI and original editor/flow/manager
 suites are rerun separately, rather than treating old reports as new evidence.
 
-## Known baseline failures and excluded claims
+## Resolved baseline failures and excluded claims
 
-The old `playwright.cleanup-theme.config.ts` run was 25/28. Its three failing
-WebKit cases were reproduced unchanged on the clean a489197 source: Classic
-host lobby expected a cinematic PIN in the native operator, Studio's broad
-test-id selector counted two current controls, and the old live-theme case
-expected cinematic answer slots on the native surface. No assertion was removed
-or product behavior altered to disguise these failures. Their reports and the
-separate current-native-suite results are included.
+The original delivery recorded 25/28 in the old cleanup suite and a failing
+whole-repository lint scan. Those historical reports remain byte-preserved.
+The owner then explicitly requested repairing both before proceeding.
 
-Whole-repository `pnpm lint` fails. A clean baseline scan also fails (8,451
-errors, 49 warnings); the complete new-file lint and diagnostics on added hook
-lines are checked independently. Global lint is not reported green or all
-differences attributed to historical code. The build retains its existing large
-chunk warning. These are separate from the verified package acceptance cases.
+The completed follow-up passes `pnpm lint --deny-warnings`, full `pnpm format`,
+seven TypeScript projects, the production build, all 1,024 unit tests and 77
+browser cases. The old cleanup suite now passes 28/28, including all three
+previously failing WebKit cases. Native operator/player selectors and the two
+bundled families are tested on their current surfaces; cinematic geometry stays
+asserted on the audience display. The missing native theme audio event bridge
+was restored with server-acknowledged submission and authoritative completion
+reasons, preserving the existing audio engine and legacy rollback.
+
+See the follow-up report for commands, source identities, exact lint scope,
+explained scoped exceptions, screenshots and raw report hashes. The four
+isolated browser configurations are the coverage claimed; historical probes
+requiring other deployments/providers are not reported green. Vite retains its
+non-failing config-loader/chunk-size notices; preview teardown can log proxy
+connection resets.
 
 Not tested: physical iPad/Safari hardware, real provider/PSTN/DTMF calls, a
 40–400-browser runtime soak, long-running GPU exhaustion, hard browser CPU

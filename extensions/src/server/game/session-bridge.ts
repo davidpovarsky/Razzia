@@ -2,9 +2,7 @@ import { buildFullShowDirectory } from "./public-directory"
 // oxlint-disable typescript/no-unnecessary-condition -- Preserve runtime guards for sparse legacy/authored snapshots at the extension boundary.
 import type { Player, QuestionResult, Quizz } from "@razzia/common/types/game"
 import type { Socket } from "@razzia/common/types/game/socket"
-import {
-  type RevealDistributionSnapshot,
-} from "../../core/index"
+import { type RevealDistributionSnapshot } from "../../core/index"
 import { buildAnswerRecap } from "./answer-recap"
 import { buildInterimResults } from "./interim-results"
 import type { ExtensionGameSession, ExtensionSessionDelegate } from "./session"

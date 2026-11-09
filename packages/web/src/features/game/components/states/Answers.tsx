@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   AnswerStageHud,
   LegacyVotingMotion,
@@ -6,7 +7,12 @@ import {
   useQuestionPresentation,
   useNativeVotingGate,
 } from "../tadazz-show/use-question-presentation"
-import { QuestionUnderline } from "@razzia/extensions/presentation"
+import {
+  QuestionUnderline,
+  TadazzSurveyCards,
+  useStageFit,
+  isTadazzShowActive,
+} from "@razzia/extensions/presentation"
 import { EVENTS, MEDIA_TYPES } from "@razzia/common/constants"
 import type { QuestionMediaType } from "@razzia/common/types/game"
 import type { CommonStatusDataMap } from "@razzia/common/types/game/status"
@@ -15,7 +21,7 @@ import QuestionMedia from "@razzia/web/components/QuestionMedia"
 import { useQuestionStore } from "@razzia/web/features/game/stores/question"
 import QuestionDialog from "@razzia/web/features/game/components/QuestionDialog"
 import QuestionEntrance from "@razzia/web/features/game/components/QuestionEntrance"
-import { TadazzSurveyCards, useStageFit } from "@razzia/extensions/presentation"
+
 import { useViewRole } from "@razzia/web/features/game/contexts/view-role-context"
 import {
   useEvent,
@@ -76,6 +82,10 @@ const Answers = ({
     votingStartsAt,
     Boolean(effectiveExtensionState?.pause?.paused),
   )
+  const themedAudio = Boolean(
+    effectiveExtensionState?.gameId &&
+    isTadazzShowActive(effectiveExtensionState),
+  )
   const canSubmit =
     roleCanSubmit && nativeVotingOpen && !effectiveExtensionState?.pause?.paused
   const { t } = useTranslation()
@@ -110,6 +120,32 @@ const Answers = ({
 
   const handleSubmit = (answerKeys: number[]) => {
     if (!canSubmit || !gameId) {
+      return
+    }
+
+    if (themedAudio && effectiveExtensionState) {
+      const { epoch, questionId } = effectiveExtensionState
+      socket.emit(
+        EVENTS.PLAYER.SELECTED_ANSWER,
+        {
+          gameId,
+          data: { answerKeys },
+        },
+        (result) => {
+          if (result.accepted) {
+            window.dispatchEvent(
+              new CustomEvent("tadazz:sfx", {
+                detail: {
+                  name: "answer-submitted",
+                  identity: `${gameId}:${epoch}:${questionId ?? question}:submitted`,
+                  volume: 0.2,
+                },
+              }),
+            )
+          }
+        },
+      )
+
       return
     }
 
@@ -153,7 +189,10 @@ const Answers = ({
 
   useEvent(EVENTS.GAME.PLAYER_ANSWER, (count) => {
     setTotalAnswer(count)
-    sfxPop()
+
+    if (!themedAudio) {
+      sfxPop()
+    }
   })
 
   const { AnswerComponent } = QUESTION_REGISTRY[questionType]
@@ -202,11 +241,17 @@ const Answers = ({
           data-testid="game-question-title"
           className={clsx(
             "text-center leading-tight font-bold break-words text-white drop-shadow-lg",
-            isUltraCompact
-              ? "text-sm sm:text-base"
-              : showAnswersOnly || currentVisuals
-                ? "text-base sm:text-xl md:text-2xl"
-                : "text-lg sm:text-2xl md:text-3xl lg:text-4xl",
+            (() => {
+              if (isUltraCompact) {
+                return "text-sm sm:text-base"
+              }
+
+              if (showAnswersOnly || currentVisuals) {
+                return "text-base sm:text-xl md:text-2xl"
+              }
+
+              return "text-lg sm:text-2xl md:text-3xl lg:text-4xl"
+            })(),
           )}
         >
           {question}

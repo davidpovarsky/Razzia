@@ -57,21 +57,25 @@ export const StudioParticipantsPage = () => {
     })
   }
 
-  const tr = (key: string, fallback: string) => t(key, { defaultValue: fallback })
+  const tr = (key: string, fallback: string) =>
+    t(key, { defaultValue: fallback })
 
   return (
-    <div className="flex flex-1 flex-col overflow-y-auto bg-muted/40 p-6 md:p-10">
+    <div className="bg-muted/40 flex flex-1 flex-col overflow-y-auto p-6 md:p-10">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-6">
-        <div className="flex flex-col gap-1 border-b border-accent pb-4">
+        <div className="border-accent flex flex-col gap-1 border-b pb-4">
           <div className="flex items-center gap-3">
-            <div className="rounded-lg bg-primary/10 p-2 text-primary">
+            <div className="bg-primary/10 text-primary rounded-lg p-2">
               <Users className="size-6" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold tracking-tight text-foreground">
-                {t("extensions:studio.tabs.participants", "Participants & Phone Roster")}
+              <h1 className="text-foreground text-2xl font-bold tracking-tight">
+                {t(
+                  "extensions:studio.tabs.participants",
+                  "Participants & Phone Roster",
+                )}
               </h1>
-              <p className="text-sm text-muted-foreground">
+              <p className="text-muted-foreground text-sm">
                 {t(
                   "extensions:studio.participants.subtitle",
                   "Manage registered attendees, telephone numbers, spreadsheet imports, and admission policies.",
@@ -81,7 +85,7 @@ export const StudioParticipantsPage = () => {
           </div>
         </div>
 
-        <div className="rounded-xl border border-accent bg-background p-6 shadow-sm">
+        <div className="border-accent bg-background rounded-xl border p-6 shadow-sm">
           <RosterSection
             extras={safeExtras}
             onChange={handleRosterChange}

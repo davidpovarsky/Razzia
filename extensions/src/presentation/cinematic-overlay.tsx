@@ -1,4 +1,4 @@
-import {PlatformButton} from "./platform-controls"
+import { PlatformButton } from "./platform-controls"
 import React, { useCallback, useState } from "react"
 import type { CinematicOverlayAnimation } from "../core/cinematic-overlays"
 import {
@@ -17,14 +17,8 @@ export interface CinematicOverlayProps {
   interactiveEditorMode?: boolean
   isSelected?: boolean
   onSelectOverlay?: (id: string) => void
-  onDragStartOverlay?: (
-    id: string,
-    e: React.PointerEvent<HTMLElement>,
-  ) => void
-  onOverlayKeyDown?: (
-    id: string,
-    e: React.KeyboardEvent<HTMLElement>,
-  ) => void
+  onDragStartOverlay?: (id: string, e: React.PointerEvent<HTMLElement>) => void
+  onOverlayKeyDown?: (id: string, e: React.KeyboardEvent<HTMLElement>) => void
   /** Local visual-layer completion callback (NEVER advances scene) */
   onOverlayCompleted?: (id: string) => void
   /** Legacy compatibility testId when migrated from single lottieUrl */
@@ -74,7 +68,11 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
   const inlineData = inlineLottieMap?.[overlay.assetUrl]
 
   return (
-    <PlatformButton type="button" size="sm" classNameContent="contents" disabled={!interactiveEditorMode}
+    <PlatformButton
+      type="button"
+      size="sm"
+      classNameContent="contents"
+      disabled={!interactiveEditorMode}
       data-testid={`cinematic-overlay-${overlay.id}`}
       data-overlay-id={overlay.id}
       data-overlay-layer={overlay.layer}
@@ -112,7 +110,7 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
             }
           : undefined
       }
-      className={`p-0 border-0 rounded-none bg-transparent disabled:opacity-100 ${(
+      className={`rounded-none border-0 bg-transparent p-0 disabled:opacity-100 ${
         interactiveEditorMode
           ? `transition-shadow select-none ${
               isSelected
@@ -120,18 +118,24 @@ export const CinematicOverlay: React.FC<CinematicOverlayProps> = ({
                 : "cursor-pointer hover:ring-1 hover:ring-white/50"
             }`
           : "pointer-events-none select-none"
-      )}`}
+      }`}
       style={{
         ...stageStyle,
         visibility:
           playback.visible || (interactiveEditorMode && isSelected)
             ? "visible"
             : "hidden",
-        opacity: playback.visible
-          ? playback.effectiveOpacity
-          : interactiveEditorMode && isSelected
-            ? 0.35
-            : 0,
+        opacity: (() => {
+          if (playback.visible) {
+            return playback.effectiveOpacity
+          }
+
+          if (interactiveEditorMode && isSelected) {
+            return 0.35
+          }
+
+          return 0
+        })(),
         pointerEvents: interactiveEditorMode ? "auto" : "none",
       }}
     >

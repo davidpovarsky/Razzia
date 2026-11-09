@@ -52,7 +52,6 @@ function toV4Answers(options: StageOption[]): TadazzV4Answer[] {
     alt: opt.alt || opt.label,
   }))
 }
-
 function isPhotoQuestion(q: StageQuestion): boolean {
   return Boolean(
     q.questionImage &&
@@ -92,7 +91,10 @@ export const TadazzV4StageAdapter = forwardRef<
   ref,
 ) {
   const stageLabels = useMemo<TadazzStageLabels>(
-    () => ({ ...DEFAULT_TADAZZ_STAGE_LABELS, ...stageLabelOverrides }),
+    () => ({
+      ...DEFAULT_TADAZZ_STAGE_LABELS,
+      ...stageLabelOverrides,
+    }),
     [stageLabelOverrides],
   )
   const v4Labels = useMemo<TadazzV4Labels>(
@@ -109,7 +111,6 @@ export const TadazzV4StageAdapter = forwardRef<
   )
   const v4LabelsRef = useRef(v4Labels)
   v4LabelsRef.current = v4Labels
-
   const v4Ref = useRef<TadazzV4StageHandle>(null)
   const modeRef = useRef<StageMode>(customScreen ? "custom" : "idle")
   const questionRef = useRef<StageQuestion | null>(null)
@@ -120,7 +121,6 @@ export const TadazzV4StageAdapter = forwardRef<
   const showPercentagesRef = useRef(true)
   const lastRevealInputRef = useRef<StageRevealInput | null>(null)
   const votingSceneRef = useRef<string | null>(null)
-
   const [screenMode, setScreenMode] = useState<
     "none" | "custom" | "intro" | "win"
   >(() => (customScreen ? "custom" : "none"))
@@ -135,7 +135,6 @@ export const TadazzV4StageAdapter = forwardRef<
   }, [customScreen])
   const [winner, setWinner] = useState<StageWinner | null>(null)
   const [confettiKey, setConfettiKey] = useState(0)
-
   const introLogoRef = useRef<HTMLImageElement>(null)
   const shockRef = useRef<HTMLDivElement>(null)
   const winLogoRef = useRef<HTMLImageElement>(null)
@@ -143,29 +142,24 @@ export const TadazzV4StageAdapter = forwardRef<
   const winNameRef = useRef<HTMLDivElement>(null)
   const winScoreRef = useRef<HTMLDivElement>(null)
   const confettiRefs = useRef<Array<HTMLSpanElement | null>>([])
-
   const auxEngineRef = useRef<MotionEngine | null>(null)
-  if (!auxEngineRef.current) auxEngineRef.current = new MotionEngine()
+  auxEngineRef.current ??= new MotionEngine()
   const auxEngine = auxEngineRef.current
-
   useEffect(() => {
     auxEngine.reducedMotion = reducedMotion
   }, [auxEngine, reducedMotion])
-
   useEffect(
     () => () => {
       auxEngine.dispose()
     },
     [auxEngine],
   )
-
   const onModeChangeRef = useRef(onModeChange)
   onModeChangeRef.current = onModeChange
   const setMode = useCallback((m: StageMode) => {
     modeRef.current = m
     onModeChangeRef.current?.(m)
   }, [])
-
   const interactivePropsRef = useRef({
     interactive,
     multiSelect,
@@ -182,7 +176,6 @@ export const TadazzV4StageAdapter = forwardRef<
     backdropUrl,
     backdropFit,
   }
-
   useEffect(() => {
     v4Ref.current?.patchData({
       interactive,
@@ -200,10 +193,10 @@ export const TadazzV4StageAdapter = forwardRef<
     backdropFit,
     v4Labels,
   ])
-
   const buildQuestionData = useCallback(
     (q: StageQuestion, over: Partial<TadazzV4Data> = {}): TadazzV4Data => {
       const p = interactivePropsRef.current
+
       return {
         questionKey: q.key,
         question: q.question,
@@ -234,28 +227,30 @@ export const TadazzV4StageAdapter = forwardRef<
     },
     [],
   )
-
-  const api = useMemo<TadazzStageHandle>(() => {
-    return {
+  const api = useMemo<TadazzStageHandle>(
+    () => ({
       get mode() {
         return modeRef.current
       },
       get questionKey() {
         return questionRef.current?.key ?? null
       },
-
       async showIntro() {
         auxEngine.reset()
         v4Ref.current?.clear()
         cardsOnStageKeyRef.current = null
         setMode("intro")
         setScreenMode("intro")
-        await new Promise<void>((r) => requestAnimationFrame(() => r()))
+        await new Promise<void>((r) => {
+          requestAnimationFrame(() => r())
+        })
         const logo = introLogoRef.current
+
         if (logo) {
           logo.style.opacity = INTRO.logoInitial.opacity
           logo.style.transform = INTRO.logoInitial.transform
         }
+
         await Promise.all([
           auxEngine.animate(logo, INTRO.logo, {
             duration: INTRO.logoDuration,
@@ -268,7 +263,6 @@ export const TadazzV4StageAdapter = forwardRef<
           }),
         ])
       },
-
       async showQuestion(data) {
         votingSceneRef.current = null
         auxEngine.reset()
@@ -278,6 +272,7 @@ export const TadazzV4StageAdapter = forwardRef<
         setScreenMode("none")
         setMode("question")
         const hasOptions = data.options.length > 0
+
         if (hasOptions) {
           cardsOnStageKeyRef.current = data.key
           const scene = isPhotoQuestion(data)
@@ -289,12 +284,15 @@ export const TadazzV4StageAdapter = forwardRef<
           await v4Ref.current?.play("question", buildQuestionData(data))
         }
       },
-
       async presentOptions(data) {
-        const current = questionRef.current
+        const { current } = questionRef
         questionRef.current = data
         setScreenMode("none")
-        if (modeRef.current !== "voting") setMode("question")
+
+        if (modeRef.current !== "voting") {
+          setMode("question")
+        }
+
         if (
           current &&
           current.key === data.key &&
@@ -307,8 +305,10 @@ export const TadazzV4StageAdapter = forwardRef<
           )
         ) {
           v4Ref.current?.patchData(buildQuestionData(data))
+
           return
         }
+
         cardsOnStageKeyRef.current = data.key
         votingSceneRef.current = null
         const scene = isPhotoQuestion(data)
@@ -316,10 +316,13 @@ export const TadazzV4StageAdapter = forwardRef<
           : "picture-answers"
         await v4Ref.current?.play(scene, buildQuestionData(data))
       },
-
       async openVoting(seconds, deadlineMs) {
         const q = questionRef.current
-        if (!q || modeRef.current === "results") return
+
+        if (!q || modeRef.current === "results") {
+          return
+        }
+
         setScreenMode("none")
         const isAlreadyVoting = modeRef.current === "voting"
         setMode("voting")
@@ -332,8 +335,15 @@ export const TadazzV4StageAdapter = forwardRef<
                 Math.max(0, (deadlineMs - Date.now()) / 1000),
               )
             : seconds
-        const scene = isPhotoQuestion(q) ? "question-image" : votingPresentation(seconds)
-        if (isAlreadyVoting && alreadyOnStage && votingSceneRef.current === scene) {
+        const scene = isPhotoQuestion(q)
+          ? "question-image"
+          : votingPresentation(seconds)
+
+        if (
+          isAlreadyVoting &&
+          alreadyOnStage &&
+          votingSceneRef.current === scene
+        ) {
           // COOLDOWN ticks must never replay the entrance/clock animation.
           v4Ref.current?.patchData(
             buildQuestionData(q, {
@@ -343,10 +353,13 @@ export const TadazzV4StageAdapter = forwardRef<
               cardsAlreadyOnStage: true,
             }),
           )
+
           return
         }
+
         if (isPhotoQuestion(q)) {
           votingSceneRef.current = scene
+
           if (alreadyOnStage) {
             v4Ref.current?.patchData(
               buildQuestionData(q, {
@@ -365,8 +378,10 @@ export const TadazzV4StageAdapter = forwardRef<
               }),
             )
           }
+
           return
         }
+
         votingSceneRef.current = scene
         await v4Ref.current?.play(
           scene,
@@ -378,18 +393,26 @@ export const TadazzV4StageAdapter = forwardRef<
           }),
         )
       },
-
       async lockVoting() {
         const q = questionRef.current
-        if (!q || modeRef.current === "locked") return
-        if (modeRef.current !== "voting" && modeRef.current !== "question")
+
+        if (!q || modeRef.current === "locked") {
           return
+        }
+
+        if (modeRef.current !== "voting" && modeRef.current !== "question") {
+          return
+        }
+
         if (modeRef.current === "voting") {
           // The server has closed acceptance. Paint zero before replacing the
           // clock, including when a results packet wins the final RAF race.
           v4Ref.current?.skipToEnd()
-          await new Promise<void>((resolve) => setTimeout(resolve, 120))
+          await new Promise<void>((resolve) => {
+            setTimeout(resolve, 120)
+          })
         }
+
         setScreenMode("none")
         setMode("locked")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
@@ -402,10 +425,13 @@ export const TadazzV4StageAdapter = forwardRef<
           }),
         )
       },
-
       async showChosen(selectedIndices) {
         const q = questionRef.current
-        if (!q) return
+
+        if (!q) {
+          return
+        }
+
         selectedRef.current = selectedIndices
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key
@@ -424,20 +450,26 @@ export const TadazzV4StageAdapter = forwardRef<
           }),
         )
       },
-
       async revealResults(
         input: StageRevealInput,
       ): Promise<StageRevealResult | null> {
         const q = questionRef.current
-        if (!q) return null
+
+        if (!q) {
+          return null
+        }
+
         lastRevealInputRef.current = input
         setScreenMode("none")
         setMode("results")
         const alreadyOnStage = cardsOnStageKeyRef.current === q.key
         cardsOnStageKeyRef.current = q.key
         const n = q.options.length
-        const counts = Array.from({ length: n }, (_, i) =>
-          Math.max(0, input.counts[i] ?? 0),
+        const counts = Array.from(
+          {
+            length: n,
+          },
+          (_, i) => Math.max(0, input.counts[i] ?? 0),
         )
         const total = counts.reduce((a, b) => a + b, 0)
         const data = buildQuestionData(q, {
@@ -453,9 +485,13 @@ export const TadazzV4StageAdapter = forwardRef<
         const percentages = percentagesFor(data, n)
         const topIndices = topIndicesFor(data, n)
         await v4Ref.current?.play("survey-results", data)
-        return { percentages, topIndices, total }
-      },
 
+        return {
+          percentages,
+          topIndices,
+          total,
+        }
+      },
       async showLeaderboard(entries: StageLeaderEntry[]) {
         setScreenMode("none")
         setMode("leaderboard")
@@ -477,38 +513,52 @@ export const TadazzV4StageAdapter = forwardRef<
           backgroundFit: p.backdropFit,
           labels: v4LabelsRef.current,
         })
+
         return sorted
       },
-
-      async updateLeaderboard(entries: StageLeaderEntry[]) {
+      /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */ async updateLeaderboard(
+        entries: StageLeaderEntry[],
+      ) {
         return this.showLeaderboard(entries)
-      },
-
+      } /* oxlint-enable require-await, typescript/require-await */,
       async nextQuestion(data: StageQuestion) {
-        const box: { entered?: Promise<void> } = {}
+        const box: {
+          entered?: Promise<void>
+        } = {}
         // Swap to the next question exactly under the Z-wipe cover (wipe-covered cue).
         const handle = v4Ref.current
+
         if (handle) {
           await handle.wipe(() => {
             box.entered = this.showQuestion(data)
           })
         }
-        if (box.entered) await box.entered
-        else await this.showQuestion(data)
-      },
 
+        if (box.entered) {
+          await box.entered
+        } else {
+          await this.showQuestion(data)
+        }
+      },
       async playZZWipe(onCovered) {
         const handle = v4Ref.current
+
         if (!handle) {
-          if (onCovered) await onCovered()
+          if (onCovered) {
+            await onCovered()
+          }
+
           return
         }
+
         await handle.wipe(async () => {
           cardsOnStageKeyRef.current = null
-          if (onCovered) await onCovered()
+
+          if (onCovered) {
+            await onCovered()
+          }
         })
       },
-
       async showFinale(win) {
         auxEngine.reset()
         v4Ref.current?.clear()
@@ -517,7 +567,9 @@ export const TadazzV4StageAdapter = forwardRef<
         setWinner(win)
         setConfettiKey((k) => k + 1)
         setScreenMode("win")
-        await new Promise<void>((r) => requestAnimationFrame(() => r()))
+        await new Promise<void>((r) => {
+          requestAnimationFrame(() => r())
+        })
         const tasks: Array<Promise<void>> = [
           auxEngine.animate(winLogoRef.current, FINALE.logo, {
             duration: FINALE.logoDuration,
@@ -537,6 +589,7 @@ export const TadazzV4StageAdapter = forwardRef<
             delay: FINALE.scoreDelay,
           }),
         ]
+
         if (!auxEngine.reducedMotion) {
           confettiRefs.current.forEach((bit, i) => {
             const spec = confettiBit(i)
@@ -549,9 +602,9 @@ export const TadazzV4StageAdapter = forwardRef<
             )
           })
         }
+
         await Promise.all(tasks)
       },
-
       async showFullShowScene(scene, data) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null
@@ -559,19 +612,19 @@ export const TadazzV4StageAdapter = forwardRef<
         const p = interactivePropsRef.current
         await v4Ref.current?.play(scene, {
           ...data,
-          onResolveTie: scene === "tie-break" && p.onResolveStoryTie
-            ? (index: number) => interactivePropsRef.current.onResolveStoryTie?.(index)
-            : undefined,
+          onResolveTie:
+            scene === "tie-break" && p.onResolveStoryTie
+              ? (index: number) =>
+                  interactivePropsRef.current.onResolveStoryTie?.(index)
+              : undefined,
           backgroundUrl: data.backgroundUrl ?? p.backdropUrl,
           backgroundFit: data.backgroundFit ?? p.backdropFit,
           labels: v4LabelsRef.current,
         })
       },
-
       updateFullShowData(patch) {
         v4Ref.current?.patchData(patch)
       },
-
       async showTopPick({ question, counts, topIndex, emptyMessage }) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null
@@ -591,7 +644,6 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-
       async showRoundRecap({ winners, round, subtitle }) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null
@@ -606,7 +658,6 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-
       async showInterlude({ title, subtitle }) {
         setScreenMode("none")
         cardsOnStageKeyRef.current = null
@@ -619,16 +670,15 @@ export const TadazzV4StageAdapter = forwardRef<
           labels: v4LabelsRef.current,
         })
       },
-
       showCustomScreen() {
         auxEngine.reset()
         v4Ref.current?.clear()
         cardsOnStageKeyRef.current = null
         setMode("custom")
         setScreenMode("custom")
+
         return Promise.resolve()
       },
-
       pauseAnimations() {
         v4Ref.current?.pause()
       },
@@ -644,7 +694,7 @@ export const TadazzV4StageAdapter = forwardRef<
         auxEngine.finishAll()
       },
       setAmbientEnabled() {
-        /* v4 ambient is always managed by CSS / reduced-motion */
+        /* V4 ambient is always managed by CSS / reduced-motion */
       },
       setReducedMotion(on) {
         reducedMotionRef.current = on
@@ -657,11 +707,10 @@ export const TadazzV4StageAdapter = forwardRef<
           selectedIndex: indexes[0] ?? null,
         })
       },
-    }
-  }, [auxEngine, buildQuestionData, setMode])
-
+    }),
+    [auxEngine, buildQuestionData, setMode],
+  )
   useImperativeHandle(ref, () => api, [api])
-
   const customSlot: ReactNode = (
     <>
       <div
@@ -691,24 +740,30 @@ export const TadazzV4StageAdapter = forwardRef<
         <div className="tz-screen-inner">
           <div className="tz-confetti">
             {confettiKey > 0 &&
-              Array.from({ length: FINALE.confettiCount }, (_, i) => {
-                const spec = confettiBit(i)
-                return (
-                  <span
-                    key={`${confettiKey}:${i}`}
-                    className="tz-confetti-bit"
-                    style={{
-                      background: spec.background,
-                      left: spec.left,
-                      width: spec.width,
-                      height: spec.height,
-                    }}
-                    ref={(node) => {
-                      confettiRefs.current[i] = node
-                    }}
-                  />
-                )
-              })}
+              Array.from(
+                {
+                  length: FINALE.confettiCount,
+                },
+                (_, i) => {
+                  const spec = confettiBit(i)
+
+                  return (
+                    <span
+                      key={`${confettiKey}:${i}`}
+                      className="tz-confetti-bit"
+                      style={{
+                        background: spec.background,
+                        left: spec.left,
+                        width: spec.width,
+                        height: spec.height,
+                      }}
+                      ref={(node) => {
+                        confettiRefs.current[i] = node
+                      }}
+                    />
+                  )
+                },
+              )}
           </div>
           <img
             ref={winLogoRef}

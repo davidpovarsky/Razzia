@@ -15,12 +15,16 @@ const createAutomaticGame = async (
   await manager.getByRole("button", { name: t("game:settings.title") }).click()
   const dialog = manager.getByRole("dialog")
   const completion = dialog.getByTestId("settings-end-on-all-answered")
-  if ((await completion.getAttribute("aria-checked")) !== "true")
+
+  if ((await completion.getAttribute("aria-checked")) !== "true") {
     await completion.click()
+  }
+
   await dialog
     .getByRole("button", { name: t("common:save"), exact: true })
     .click()
   await expect(dialog).toBeHidden()
+
   return pin
 }
 

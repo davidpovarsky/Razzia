@@ -4,7 +4,6 @@ import { describe, expect, it } from "vitest"
 import {
   assignRoundRobin,
   calculateInterludeRemainingMs,
-  CinematicLayerStack,
   clampNormalizedStagePoint,
   computeLateJoinVideoSeekSeconds,
   computeOverlayStageStyle,
@@ -419,6 +418,7 @@ describe("PRESENTATION & AUDIO Acceptance Cases & Unit Tests", () => {
           { playerName: "Bob", answerIds: [1], correct: false, points: 0 },
           { playerName: "Charlie", answerIds: [0], correct: true, points: 90 },
         ],
+
         skipped: false,
       }
 

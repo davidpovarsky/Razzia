@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { PlatformButton } from "../platform-controls"
 import { ReferenceStoryScene } from "./reference-story/ReferenceStoryScene"
 import type { ReactNode } from "react"
@@ -92,7 +93,6 @@ const picture = (a: TadazzV4Answer | undefined, fallback: number) =>
       {num(fallback + 1)}
     </div>
   )
-
 function Head({
   title,
   chip,
@@ -159,7 +159,9 @@ export function StoryCards({
             ]
               .filter(Boolean)
               .join(" ")}
-            style={{ animationDelay: `${i * 180}ms` }}
+            style={{
+              animationDelay: `${i * 180}ms`,
+            }}
             data-role-index={i}
             data-ready={ready ? "true" : "false"}
           >
@@ -185,12 +187,14 @@ export function StoryCards({
 }
 
 export function Directory({ data }: { data: FullShowInput }) {
-  const connected = new Set(data.connectedTables || [])
+  const connected = new Set(data.connectedTables ?? [])
+  const { groupPage } = data
   const focused =
-    Number.isInteger(data.groupPage) &&
-    data.groupPage! >= 0 &&
-    data.groupPage! < 4
-  const start = focused ? data.groupPage! * 10 : 0
+    typeof groupPage === "number" &&
+    Number.isInteger(groupPage) &&
+    groupPage >= 0 &&
+    groupPage < 4
+  const start = focused ? groupPage * 10 : 0
   const columns = focused ? 2 : 4
   const size = focused ? 5 : 10
 
@@ -208,45 +212,55 @@ export function Directory({ data }: { data: FullShowInput }) {
         data-testid="tadazz-full-directory"
         data-group-page={data.groupPage}
       >
-        {Array.from({ length: columns }, (_, column) => {
-          const first = start + column * size + 1
+        {Array.from(
+          {
+            length: columns,
+          },
+          (_, column) => {
+            const first = start + column * size + 1
 
-          return (
-            <div className="full-directory-col" key={column}>
-              <div className="full-col-title">
-                TABLES {num(first)}–{num(first + size - 1)}
+            return (
+              <div className="full-directory-col" key={column}>
+                <div className="full-col-title">
+                  TABLES {num(first)}–{num(first + size - 1)}
+                </div>
+                {Array.from(
+                  {
+                    length: size,
+                  },
+                  (Value, i) => {
+                    const table = first + i
+                    const name =
+                      data.representatives?.find((rep) => rep.table === table)
+                        ?.name || "Name to be supplied"
+                    const joined = connected.has(table)
+
+                    return (
+                      <div
+                        key={table}
+                        className={sceneClasses(
+                          "full-rep-row",
+                          joined && "connected",
+                        )}
+                        data-table={table}
+                        aria-label={`Table ${table}: ${name}, ${joined ? "connected" : "waiting"}`}
+                      >
+                        <span className="full-table-number">{num(table)}</span>
+                        <span className="full-rep-name" dir="auto">
+                          {name}
+                        </span>
+                        <span
+                          className="full-rep-joined"
+                          aria-label={joined ? "Connected" : "Waiting"}
+                        />
+                      </div>
+                    )
+                  },
+                )}
               </div>
-              {Array.from({ length: size }, (_, i) => {
-                const table = first + i
-                const name =
-                  data.representatives?.find((rep) => rep.table === table)
-                    ?.name || "Name to be supplied"
-                const joined = connected.has(table)
-
-                return (
-                  <div
-                    key={table}
-                    className={sceneClasses(
-                      "full-rep-row",
-                      joined && "connected",
-                    )}
-                    data-table={table}
-                    aria-label={`Table ${table}: ${name}, ${joined ? "connected" : "waiting"}`}
-                  >
-                    <span className="full-table-number">{num(table)}</span>
-                    <span className="full-rep-name" dir="auto">
-                      {name}
-                    </span>
-                    <span
-                      className="full-rep-joined"
-                      aria-label={joined ? "Connected" : "Waiting"}
-                    />
-                  </div>
-                )
-              })}
-            </div>
-          )
-        })}
+            )
+          },
+        )}
       </div>
     </>
   )
@@ -321,7 +335,7 @@ export function PhoneInstructions({ data }: { data: FullShowInput }) {
 
 export function Readiness({ data }: { data: FullShowInput }) {
   const connected = new Set(
-    (data.connectedTables || []).filter((n) => n >= 1 && n <= 40),
+    (data.connectedTables ?? []).filter((n) => n >= 1 && n <= 40),
   )
 
   return (
@@ -334,20 +348,25 @@ export function Readiness({ data }: { data: FullShowInput }) {
       />
       <div className="full-readiness-tray">
         <div className="full-table-grid">
-          {Array.from({ length: 40 }, (_, i) => (
-            <div
-              key={i + 1}
-              data-table={i + 1}
-              className={sceneClasses(
-                "full-table-led",
-                connected.has(i + 1) && "connected",
-              )}
-            >
-              <span className="full-led-label">TABLE</span>
-              <span className="full-led-number">{num(i + 1)}</span>
-              <span className="full-led-pip" />
-            </div>
-          ))}
+          {Array.from(
+            {
+              length: 40,
+            },
+            (_, i) => (
+              <div
+                key={i + 1}
+                data-table={i + 1}
+                className={sceneClasses(
+                  "full-table-led",
+                  connected.has(i + 1) && "connected",
+                )}
+              >
+                <span className="full-led-label">TABLE</span>
+                <span className="full-led-number">{num(i + 1)}</span>
+                <span className="full-led-pip" />
+              </div>
+            ),
+          )}
         </div>
       </div>
       <div className="full-connection-status">
@@ -357,7 +376,9 @@ export function Readiness({ data }: { data: FullShowInput }) {
         <div className="full-connection-track">
           <div
             className="full-connection-fill"
-            style={{ transform: `scaleX(${connected.size / 40})` }}
+            style={{
+              transform: `scaleX(${connected.size / 40})`,
+            }}
           />
         </div>
         <div className="full-connection-legend">
@@ -426,10 +447,15 @@ export function StoryProgress({ data }: { data: FullShowInput }) {
 }
 
 export function Tie({ data }: { data: FullShowInput }) {
-  const picks = data.contestants || data.winners?.slice(0, 2) || []
-  const isResolved = data.resolvedIndex != null
+  const picks = data.contestants ?? data.winners?.slice(0, 2) ?? []
+  const isResolved =
+    data.resolvedIndex !== null && data.resolvedIndex !== undefined
   const chosenPick =
-    isResolved && data.resolvedIndex != null ? picks[data.resolvedIndex] : null
+    isResolved &&
+    data.resolvedIndex !== null &&
+    data.resolvedIndex !== undefined
+      ? picks[data.resolvedIndex]
+      : null
   const chosenTitle =
     chosenPick?.title || chosenPick?.alt
       ? ` · ${chosenPick.title || chosenPick.alt}`
@@ -451,13 +477,26 @@ export function Tie({ data }: { data: FullShowInput }) {
           return (
             <article
               key={i}
-              className={`full-tie-card ${isChosen ? "chosen" : isMuted ? "muted" : ""}`}
-              style={{ animationDelay: `${i * 190}ms` }}
+              className={`full-tie-card ${(() => {
+                if (isChosen) {
+                  return "chosen"
+                }
+
+                if (isMuted) {
+                  return "muted"
+                }
+
+                return ""
+              })()}`}
+              style={{
+                animationDelay: `${i * 190}ms`,
+              }}
               data-tie-index={i}
               data-chosen={isChosen ? "true" : undefined}
             >
               {data.onResolveTie && !isResolved && (
-                <PlatformButton size="sm"
+                <PlatformButton
+                  size="sm"
                   type="button"
                   className="full-tie-choose"
                   aria-label={displayTitle}
@@ -470,7 +509,7 @@ export function Tie({ data }: { data: FullShowInput }) {
               <div className="full-tie-index">{num(i + 1)}</div>
               <h2>{displayTitle}</h2>
               <b>
-                {data.voteCount == null
+                {data.voteCount === null || data.voteCount === undefined
                   ? "EQUAL VOTES"
                   : `${data.voteCount} VOTES`}
               </b>
@@ -480,7 +519,7 @@ export function Tie({ data }: { data: FullShowInput }) {
         <strong className="full-equals">=</strong>
       </div>
       <p className="full-tie-instruction">
-        {data.resolvedIndex == null
+        {data.resolvedIndex === null || data.resolvedIndex === undefined
           ? "Host, choose which picture goes into the story."
           : `CHOICE SELECTED${chosenTitle}`}
       </p>
@@ -516,13 +555,22 @@ export function Finale({ data }: { data: FullShowInput }) {
         />
       </svg>
       <div className="full-final-tunnel">
-        {Array.from({ length: 9 }, (_, i) => (
-          <div
-            key={i}
-            className="full-final-ray"
-            style={{ "--ray-rot": `${(i - 4) * 13}deg` } as React.CSSProperties}
-          />
-        ))}
+        {Array.from(
+          {
+            length: 9,
+          },
+          (_, i) => (
+            <div
+              key={i}
+              className="full-final-ray"
+              style={
+                {
+                  "--ray-rot": `${(i - 4) * 13}deg`,
+                } as React.CSSProperties
+              }
+            />
+          ),
+        )}
       </div>
       <div className="full-final-sparks" />
       <div className="full-final-center">
@@ -631,6 +679,7 @@ export function FullShowSceneView({
       return <Readiness data={data} />
 
     case "round-one":
+
     case "round-two":
       return <RoundLaunch scene={scene} data={data} />
 
@@ -641,6 +690,7 @@ export function FullShowSceneView({
       return <Tie data={data} />
 
     case "story-assembly":
+
     case "story-live":
       return <ReferenceStoryScene scene={scene} data={data} />
 

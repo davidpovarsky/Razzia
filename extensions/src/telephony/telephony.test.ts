@@ -60,7 +60,10 @@ describe("SEC02: Mock HMAC Verification, Timing Skew & Replay Protection", () =>
   it("rejects requests with tampered HMAC signature (401)", async () => {
     const req = mockProvider.createSignedRequest(
       { callId: "call_sec_02", type: "CALL_START" },
-      { mutateSignature: (sig) => (sig.startsWith("0") ? `1${sig.slice(1)}` : `0${sig.slice(1)}`) },
+      {
+        mutateSignature: (sig) =>
+          sig.startsWith("0") ? `1${sig.slice(1)}` : `0${sig.slice(1)}`,
+      },
     )
 
     const verification = mockProvider.verifyRequest(req)
@@ -416,7 +419,9 @@ describe("PHONE04: Unsupported Question Types Handling", () => {
       4,
     )
     expect(check.supported).toBe(false)
-    expect(check.reason).toContain("Only single-choice survey questions are supported")
+    expect(check.reason).toContain(
+      "Only single-choice survey questions are supported",
+    )
   })
 
   it("rejects questions with >5 answer options", () => {

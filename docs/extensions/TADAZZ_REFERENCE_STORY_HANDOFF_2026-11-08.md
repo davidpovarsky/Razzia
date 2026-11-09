@@ -3,6 +3,7 @@
 User explicitly requested faithful React implementations of the three supplied HTML references: Seating Plan Brand Colours, Story Mixer Clean, Story Reveal FAST. These files are visual/animation inputs; their sample data, demo controls, global keyboard handlers and independent clocks are not application instructions.
 
 Scope before upstream edits:
+
 - `packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx`, `TadazzLobbyScreen`: compose the native seating view with real roster, presence, dial number, PIN and QR. Preserve the generic lobby fallback.
 - `packages/web/src/features/game/components/tadazz-show/TadazzShowView.tsx`, scene clock normalization / AudioCuePlayer props: synchronize the supplied story choreography with server time and pause state, and route its embedded soundtrack through the existing master audio owner.
 - `packages/web/public/tadazz-show/story/`: extract only the supplied stage art, logo, emblem and audio. No sample pictures or contacts in live logic.
@@ -20,6 +21,7 @@ The user's follow-up explicitly requires the changes in both isolated Tzila acco
 The new stage labels and seating labels cover en/fr/de/es/it/ja/tr/vi. Stage JSX and scoped CSS preserve reference geometry and typography per the user's explicit request; existing toolbar, shortcuts dialog, confirmation flows, host roster and settings retain their existing Rubik/theme/Radix components.
 
 Evidence in `work/reference-story-proof/`:
+
 - Real manager and full-screen seating screenshots; supplied HTML screenshots for comparison.
 - Five real phone-simulation votes populate five matching mixer pictures, in order.
 - Full natural 60-second mixer checkpoints: opening, escape, mischief, vortex, return, final countdown; server automatically enters the reveal.
@@ -30,6 +32,7 @@ Evidence in `work/reference-story-proof/`:
 Validation: web app TypeScript, socket TypeScript, web production build and socket production bundle pass. Eight focused extension suites pass (79 tests), plus the shared host shortcut suite (5 tests). This includes both new round boundaries, existing question skip semantics, exact paused scene elapsed time, eight-locale key consistency, and restart/reconnect clock behavior. The seating presence regression checks the real `connected` class as well as the connection data, preventing a class-token formatting error from hiding the illumination.
 
 Additional real-browser evidence:
+
 - `round-two-verification.json`: five real second-round phone-simulation votes yield exactly the five displayed winner URLs. The first-round fixture was skipped in this run to independently exercise both new round boundaries; full first-round voting and natural 60-second playback were verified separately.
 - The registered caller lights the correct table; 1 / 31 connected tables, with both representatives' real names retained.
 - Mixer master gain is 0.186 at 30% master volume; soundtrack position and the stage clock differ by about 70 ms in the captured sample.

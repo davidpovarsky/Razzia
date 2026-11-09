@@ -3,28 +3,37 @@ import { chmodSync, mkdirSync } from "node:fs"
 import { dirname, resolve } from "node:path"
 import { accountsEnabled } from "./account-scope"
 
-let db: DatabaseSync | undefined
+let db: DatabaseSync | undefined = undefined
 
 export function getAccountDb(): DatabaseSync {
-  if (!accountsEnabled()) throw new Error("Accounts are disabled")
-  if (db) return db
+  if (!accountsEnabled()) {
+    throw new Error("Accounts are disabled")
+  }
+
+  if (db) {
+    return db
+  }
+
   const base = process.env.CONFIG_PATH ?? resolve(process.cwd(), "config")
   const path = resolve(base, "tadazz-accounts.sqlite")
   mkdirSync(dirname(path), { recursive: true })
   // Restrict SQLite sidecar creation without changing uploaded media permissions.
   const priorUmask = process.platform === "win32" ? null : process.umask(0o077)
+
   try {
     db = new DatabaseSync(path, { timeout: 3000 })
     db.exec("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
+
     if (process.platform !== "win32") {
-      for (const filename of [path, path + "-wal", path + "-shm"]) {
+      for (const filename of [path, `${path}-wal`, `${path}-shm`]) {
         try {
           chmodSync(filename, 0o600)
         } catch {
-          /* sidecar may not yet exist */
+          /* Sidecar may not yet exist */
         }
       }
     }
+
     db.exec(`
     CREATE TABLE IF NOT EXISTS accounts (
       id TEXT PRIMARY KEY,
@@ -56,24 +65,35 @@ export function getAccountDb(): DatabaseSync {
     );
   `)
   } finally {
-    if (priorUmask !== null) process.umask(priorUmask)
+    if (priorUmask !== null) {
+      process.umask(priorUmask)
+    }
   }
+
   if (process.platform !== "win32") {
     try {
       chmodSync(path, 0o600)
     } catch {
-      /* restricted volume */
+      /* Restricted volume */
     }
   }
+
   return db
 }
 
 export function checkAccountConfiguration(): void {
-  if (!accountsEnabled()) return
-  if ((process.env.JWT_SECRET?.length ?? 0) < 32)
+  if (!accountsEnabled()) {
+    return
+  }
+
+  if ((process.env.JWT_SECRET?.length ?? 0) < 32) {
     throw new Error("A persistent JWT_SECRET is required for account mode")
-  if (!process.env.RESEND_API_KEY || !process.env.TADAZZ_AUTH_EMAIL_FROM)
+  }
+
+  if (!process.env.RESEND_API_KEY || !process.env.TADAZZ_AUTH_EMAIL_FROM) {
     throw new Error("Resend email sending must be configured for account mode")
+  }
+
   getAccountDb()
 }
 

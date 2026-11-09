@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { it, expect } from "vitest"
 import {
   completeCreatingWorldsShow,
@@ -56,19 +57,38 @@ it("adds every source show preset to the original ten questions, preserving auth
     ),
   ).toHaveLength(1)
   expect(complete.timeline).toHaveLength(40)
-  const authoredScenes = complete.timeline.flatMap(item => item.kind === "animation" ? [complete.scenes[item.sceneId]] : [])
-  for (const round of [1,2]) {
-    const recap = authoredScenes.findIndex(scene => scene.kind === "animation" && scene.preset === "round-recap" && scene.round === round)
-    expect(authoredScenes[recap+1]).toMatchObject({preset:"story-assembly",round,advance:"auto",durationMs:60000})
-    expect(authoredScenes[recap+2]).toMatchObject({preset:"story-live",round,advance:"manual"})
+  const authoredScenes = complete.timeline.flatMap((item) =>
+    item.kind === "animation" ? [complete.scenes[item.sceneId]] : [],
+  )
+  for (const round of [1, 2]) {
+    const recap = authoredScenes.findIndex(
+      (scene) =>
+        scene.kind === "animation" &&
+        scene.preset === "round-recap" &&
+        scene.round === round,
+    )
+    expect(authoredScenes[recap + 1]).toMatchObject({
+      preset: "story-assembly",
+      round,
+      advance: "auto",
+      durationMs: 60000,
+    })
+    expect(authoredScenes[recap + 2]).toMatchObject({
+      preset: "story-live",
+      round,
+      advance: "manual",
+    })
   }
   expect(presets.filter((preset) => preset === "top-pick")).toHaveLength(10)
   expect(presets.filter((preset) => preset === "round-recap")).toHaveLength(2)
   expect(complete.timeline.some((item) => item.kind === "interimResults")).toBe(
     false,
   )
-  for (let index = 0; index < complete.timeline.length - 1; index++) {
-    if (complete.timeline[index]?.kind !== "question") continue
+  for (let index = 0; index < complete.timeline.length - 1; index += 1) {
+    if (complete.timeline[index]?.kind !== "question") {
+      continue
+    }
+
     const next = complete.timeline[index + 1]
     const scene =
       next?.kind === "animation" ? complete.scenes[next.sceneId] : undefined

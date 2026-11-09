@@ -347,7 +347,7 @@ export const createExtensionRoutes = (
     )
 
     if (isBinaryRequest) {
-      let rawBytes: Uint8Array
+      let rawBytes: Uint8Array | undefined = undefined
 
       try {
         if (body.contentBase64) {

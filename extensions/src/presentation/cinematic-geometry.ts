@@ -21,9 +21,11 @@ export function computeOverlayStageStyle(
     : 0
 
   const transforms: string[] = []
+
   if (overlay.anchor === "center") {
     transforms.push("translate(-50%, -50%)")
   }
+
   if (rotation !== 0) {
     transforms.push(`rotate(${rotation}deg)`)
   }

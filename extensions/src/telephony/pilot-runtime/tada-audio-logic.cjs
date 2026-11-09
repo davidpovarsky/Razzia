@@ -1,25 +1,33 @@
-'use strict';
+"use strict"
 const CUES = Object.freeze({
-  intro: '000',
-  join: '001',
-  correct: '002',
-  wrong: '003',
-  neutral: '004',
-  silence: '005',
-});
-const live = new Map();
+  intro: "000",
+  join: "001",
+  correct: "002",
+  wrong: "003",
+  neutral: "004",
+  silence: "005",
+})
+const live = new Map()
 
 const AUDIO_READ = (cue, key, timeout = 30) =>
-  'read=f-/9/' + cue + '=' + key + ',,1,1,' + timeout + ',No,no,no,,,,Ok,None,,no';
+  "read=f-/9/" +
+  cue +
+  "=" +
+  key +
+  ",,1,1," +
+  timeout +
+  ",No,no,no,,,,Ok,None,,no"
 
 const introRead = (key, joined = true) =>
   joined
-    ? 'read=f-/9/000.f-/9/001.f-/9/005=' + key + ',,1,1,30,No,no,no,,,,Ok,None,,no'
-    : 'read=f-/9/000.f-/9/005=' + key + ',,1,1,30,No,no,no,,,,Ok,None,,no';
+    ? "read=f-/9/000.f-/9/001.f-/9/005=" +
+      key +
+      ",,1,1,30,No,no,no,,,,Ok,None,,no"
+    : "read=f-/9/000.f-/9/005=" + key + ",,1,1,30,No,no,no,,,,Ok,None,,no"
 
 function createSession(meta = {}) {
   return {
-    stage: 'awaiting_game',
+    stage: "awaiting_game",
     joinedConfirmed: false,
     rosterPlayerId: meta.rosterPlayerId || null,
     phoneRaw: meta.phoneRaw || null,
@@ -32,197 +40,212 @@ function createSession(meta = {}) {
     seq: 0,
     handled: new Set(),
     lastSeen: Date.now(),
-  };
+  }
 }
 
 function nextKey(s) {
-  return 'td' + (++s.seq);
+  return "td" + ++s.seq
 }
 
 function isDigit(v) {
-  return typeof v === 'string' && /^[0-9]$/.test(v);
+  return typeof v === "string" && /^[0-9]$/.test(v)
 }
 
 function syncServerState(s, serverState) {
-  if (!serverState || typeof serverState !== 'object') return;
+  if (!serverState || typeof serverState !== "object") return
   if (serverState.rosterPlayerId) {
-    s.rosterPlayerId = serverState.rosterPlayerId;
+    s.rosterPlayerId = serverState.rosterPlayerId
   }
-  const st = serverState.state || serverState;
-  if (typeof st.epoch === 'number' && st.epoch >= 1) {
+  const st = serverState.state || serverState
+  if (typeof st.epoch === "number" && st.epoch >= 1) {
     if (s.questionEpoch !== st.epoch) {
-      s.questionEpoch = st.epoch;
-      s.answered = Boolean(st.answeredCurrentQuestion);
+      s.questionEpoch = st.epoch
+      s.answered = Boolean(st.answeredCurrentQuestion)
     } else if (st.answeredCurrentQuestion) {
-      s.answered = true;
+      s.answered = true
     }
   }
-  if (typeof st.acceptingAnswers === 'boolean') {
-    s.acceptingAnswers = st.acceptingAnswers;
+  if (typeof st.acceptingAnswers === "boolean") {
+    s.acceptingAnswers = st.acceptingAnswers
   }
-  if (typeof st.answersCount === 'number' && st.answersCount >= 2 && st.answersCount <= 5) {
-    s.answersCount = st.answersCount;
+  if (
+    typeof st.answersCount === "number" &&
+    st.answersCount >= 2 &&
+    st.answersCount <= 5
+  ) {
+    s.answersCount = st.answersCount
   }
   if (
     st.lastVerdict &&
-    typeof st.lastVerdict.epoch === 'number' &&
+    typeof st.lastVerdict.epoch === "number" &&
     st.lastVerdict.epoch > (s.lastDeliveredVerdictEpoch || 0)
   ) {
-    s.lastDeliveredVerdictEpoch = st.lastVerdict.epoch;
-    s.pendingVerdictCue = st.lastVerdict.correct ? CUES.correct : CUES.wrong;
+    s.lastDeliveredVerdictEpoch = st.lastVerdict.epoch
+    s.pendingVerdictCue = st.lastVerdict.correct ? CUES.correct : CUES.wrong
   }
 }
 
 function event(s, keyValue, current, options = {}) {
-  s.lastSeen = Date.now();
-  const preKeyAnswered = s.answered;
+  s.lastSeen = Date.now()
+  const preKeyAnswered = s.answered
 
   if (options && options.serverState) {
-    syncServerState(s, options.serverState);
+    syncServerState(s, options.serverState)
   }
 
   if (!s.seq) {
-    s.seq = 1;
+    s.seq = 1
     const joinConfirmed =
-      options && typeof options.joinedConfirmed === 'boolean'
+      options && typeof options.joinedConfirmed === "boolean"
         ? options.joinedConfirmed
-        : true;
-    s.joinedConfirmed = joinConfirmed;
+        : true
+    s.joinedConfirmed = joinConfirmed
     return {
       cue: CUES.intro,
-      body: introRead('td1', joinConfirmed),
-      event: joinConfirmed ? 'join_audio' : 'intro_awaiting_join',
-    };
+      body: introRead("td1", joinConfirmed),
+      event: joinConfirmed ? "join_audio" : "intro_awaiting_join",
+    }
   }
 
   // If caller was not joined on initial intro, and server now confirms join, play 001 once
   if (options && options.joinedConfirmed === true && !s.joinedConfirmed) {
-    s.joinedConfirmed = true;
+    s.joinedConfirmed = true
     return {
       cue: CUES.join,
-      body: AUDIO_READ(CUES.join, 'td' + s.seq),
-      event: 'join_confirmed_audio',
-    };
+      body: AUDIO_READ(CUES.join, "td" + s.seq),
+      event: "join_confirmed_audio",
+    }
   }
 
-  const previous = 'td' + s.seq;
-  const rawVal = current && typeof current.get === 'function' ? current.get(previous) : undefined;
+  const previous = "td" + s.seq
+  const rawVal =
+    current && typeof current.get === "function"
+      ? current.get(previous)
+      : undefined
 
   // Treat missing parameter or Yemot timeout value 'None' / '' as no digit entered
-  if (!current || !current.has(previous) || rawVal === '' || rawVal === 'None') {
+  if (
+    !current ||
+    !current.has(previous) ||
+    rawVal === "" ||
+    rawVal === "None"
+  ) {
     if (s.pendingVerdictCue) {
-      const vCue = s.pendingVerdictCue;
-      s.pendingVerdictCue = null;
+      const vCue = s.pendingVerdictCue
+      s.pendingVerdictCue = null
       return {
         cue: vCue,
         body: AUDIO_READ(vCue, previous),
-        event: vCue === CUES.correct ? 'delayed_verdict_correct' : 'delayed_verdict_wrong',
-      };
+        event:
+          vCue === CUES.correct
+            ? "delayed_verdict_correct"
+            : "delayed_verdict_wrong",
+      }
     }
     return {
       cue: CUES.silence,
       body: AUDIO_READ(CUES.silence, previous),
-      event: 'await_input',
-    };
+      event: "await_input",
+    }
   }
 
-  const value = rawVal;
+  const value = rawVal
   if (s.handled.has(previous)) {
     return {
       cue: CUES.silence,
       body: AUDIO_READ(CUES.silence, nextKey(s)),
-      event: 'replayed_key_ignored',
-    };
+      event: "replayed_key_ignored",
+    }
   }
-  s.handled.add(previous);
+  s.handled.add(previous)
 
-  const maxAnswers = s.answersCount || 5;
+  const maxAnswers = s.answersCount || 5
   const valid =
     isDigit(value) &&
     /^[1-5]$/.test(value) &&
-    Number.parseInt(value, 10) <= maxAnswers;
+    Number.parseInt(value, 10) <= maxAnswers
   if (!valid) {
     return {
       cue: CUES.neutral,
       body: AUDIO_READ(CUES.neutral, nextKey(s)),
-      event: 'invalid_key',
-    };
+      event: "invalid_key",
+    }
   }
 
   if (preKeyAnswered || !s.questionEpoch) {
     return {
       cue: CUES.neutral,
       body: AUDIO_READ(CUES.neutral, nextKey(s)),
-      event: 'inactive_or_duplicate',
-    };
+      event: "inactive_or_duplicate",
+    }
   }
 
-  const judge = typeof keyValue === 'function' ? keyValue : null;
-  const outcome = judge ? judge(value, s.questionEpoch) : null;
+  const judge = typeof keyValue === "function" ? keyValue : null
+  const outcome = judge ? judge(value, s.questionEpoch) : null
 
   if (outcome && outcome.accepted) {
-    s.answered = true;
+    s.answered = true
 
     // If question is a survey, produce neutral acknowledgement only, never right/wrong
     if (outcome.isSurvey) {
-      s.pendingVerdictCue = null;
+      s.pendingVerdictCue = null
       return {
         cue: CUES.neutral,
         body: AUDIO_READ(CUES.neutral, nextKey(s)),
-        event: 'survey_answer',
-      };
+        event: "survey_answer",
+      }
     }
 
     // If the game delays revealing whether the answer is right/wrong until question close,
     // play neutral acknowledgement now and deliver 002/003 once verdict is revealed.
-    if (outcome.verdictPending || typeof outcome.correct !== 'boolean') {
+    if (outcome.verdictPending || typeof outcome.correct !== "boolean") {
       return {
         cue: CUES.neutral,
         body: AUDIO_READ(CUES.neutral, nextKey(s)),
-        event: 'accepted_pending_verdict',
-      };
+        event: "accepted_pending_verdict",
+      }
     }
 
-    s.lastDeliveredVerdictEpoch = s.questionEpoch;
-    s.pendingVerdictCue = null;
-    const cue = outcome.correct ? CUES.correct : CUES.wrong;
+    s.lastDeliveredVerdictEpoch = s.questionEpoch
+    s.pendingVerdictCue = null
+    const cue = outcome.correct ? CUES.correct : CUES.wrong
     return {
       cue,
       body: AUDIO_READ(cue, nextKey(s)),
-      event: outcome.correct ? 'correct' : 'wrong',
-    };
+      event: outcome.correct ? "correct" : "wrong",
+    }
   }
 
   if (!s.acceptingAnswers) {
     return {
       cue: CUES.neutral,
       body: AUDIO_READ(CUES.neutral, nextKey(s)),
-      event: 'inactive_or_duplicate',
-    };
+      event: "inactive_or_duplicate",
+    }
   }
 
   if (!judge) {
     return {
       cue: CUES.neutral,
       body: AUDIO_READ(CUES.neutral, nextKey(s)),
-      event: 'no_authoritative_judge',
-    };
+      event: "no_authoritative_judge",
+    }
   }
 
   return {
     cue: CUES.neutral,
     body: AUDIO_READ(CUES.neutral, nextKey(s)),
-    event: 'server_rejected',
-  };
+    event: "server_rejected",
+  }
 }
 
 function newQuestion(s, epoch) {
-  if (!Number.isSafeInteger(epoch) || epoch < 1) throw new Error('bad epoch');
-  if (s.questionEpoch === epoch) return false;
-  s.questionEpoch = epoch;
-  s.answered = false;
-  s.acceptingAnswers = true;
-  return true;
+  if (!Number.isSafeInteger(epoch) || epoch < 1) throw new Error("bad epoch")
+  if (s.questionEpoch === epoch) return false
+  s.questionEpoch = epoch
+  s.answered = false
+  s.acceptingAnswers = true
+  return true
 }
 
 module.exports = {
@@ -234,5 +257,4 @@ module.exports = {
   event,
   newQuestion,
   live,
-};
-
+}

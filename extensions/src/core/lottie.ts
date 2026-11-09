@@ -1,11 +1,22 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { z } from "zod"
 
-export const MAX_LOTTIE_JSON_BYTES = 32 * 1024 * 1024 // 32 MiB
-export const SOFT_WARNING_LOTTIE_JSON_BYTES = 4 * 1024 * 1024 // 4 MiB
-export const MAX_DOTLOTTIE_COMPRESSED_BYTES = 24 * 1024 * 1024 // 24 MiB
-export const MAX_DOTLOTTIE_UNCOMPRESSED_BYTES = 80 * 1024 * 1024 // 80 MiB
+// 32 MiB
+export const MAX_LOTTIE_JSON_BYTES = 32 * 1024 * 1024
+
+// 4 MiB
+export const SOFT_WARNING_LOTTIE_JSON_BYTES = 4 * 1024 * 1024
+
+// 24 MiB
+export const MAX_DOTLOTTIE_COMPRESSED_BYTES = 24 * 1024 * 1024
+
+// 80 MiB
+export const MAX_DOTLOTTIE_UNCOMPRESSED_BYTES = 80 * 1024 * 1024
+
 export const MAX_DOTLOTTIE_ENTRIES = 256
+
 export const MAX_LOTTIE_LAYERS = 500
+
 export const MAX_ZIP_COMPRESSION_RATIO = 100
 
 export const LOTTIE_ROLES = [
@@ -80,7 +91,6 @@ const UNSAFE_STRING_PATTERNS = [
   /\bonload\s*=/i,
   /\bonerror\s*=/i,
 ]
-
 const isSafeEmbeddedImageDataUri = (value: string): boolean =>
   /^data:image\/(png|jpeg|jpg|webp|gif);base64,[A-Za-z0-9+/=\s]+$/i.test(
     value.trim(),
@@ -95,9 +105,19 @@ const isSafeEmbeddedImageDataUri = (value: string): boolean =>
 const scanLottieNodeSafety = (
   node: unknown,
   depth = 0,
-): { safe: true } | { safe: false; reason: string } => {
+):
+  | {
+      safe: true
+    }
+  | {
+      safe: false
+      reason: string
+    } => {
   if (depth > 40) {
-    return { safe: false, reason: "Excessive JSON nesting depth (> 40)" }
+    return {
+      safe: false,
+      reason: "Excessive JSON nesting depth (> 40)",
+    }
   }
 
   if (typeof node === "string") {
@@ -109,7 +129,10 @@ const scanLottieNodeSafety = (
         }
       }
     }
-    return { safe: true }
+
+    return {
+      safe: true,
+    }
   }
 
   if (Array.isArray(node)) {
@@ -119,13 +142,18 @@ const scanLottieNodeSafety = (
         reason: "Array length exceeds maximum allowed (10000)",
       }
     }
+
     for (const item of node) {
       const res = scanLottieNodeSafety(item, depth + 1)
+
       if (!res.safe) {
         return res
       }
     }
-    return { safe: true }
+
+    return {
+      safe: true,
+    }
   }
 
   if (typeof node === "object" && node !== null) {
@@ -146,6 +174,7 @@ const scanLottieNodeSafety = (
     }
 
     const keys = Object.keys(record)
+
     if (keys.length > 500) {
       return {
         safe: false,
@@ -155,18 +184,24 @@ const scanLottieNodeSafety = (
 
     for (const key of keys) {
       if (key === "__proto__" || key === "constructor" || key === "prototype") {
-        return { safe: false, reason: `Forbidden prototype key: ${key}` }
+        return {
+          safe: false,
+          reason: `Forbidden prototype key: ${key}`,
+        }
       }
+
       const res = scanLottieNodeSafety(record[key], depth + 1)
+
       if (!res.safe) {
         return res
       }
     }
   }
 
-  return { safe: true }
+  return {
+    safe: true,
+  }
 }
-
 function detectBakedSolidBackground(
   layers: unknown[],
   w: number,
@@ -175,7 +210,9 @@ function detectBakedSolidBackground(
   if (layers.length === 0) {
     return false
   }
+
   const bottomLayer = layers[layers.length - 1]
+
   if (
     typeof bottomLayer !== "object" ||
     bottomLayer === null ||
@@ -183,10 +220,19 @@ function detectBakedSolidBackground(
   ) {
     return false
   }
+
   const rec = bottomLayer as Record<string, unknown>
-  if (rec.ty === 1 && typeof rec.sw === "number" && typeof rec.sh === "number") {
-    return rec.sw >= w * 0.95 && rec.sh >= h * 0.95 && typeof rec.sc === "string"
+
+  if (
+    rec.ty === 1 &&
+    typeof rec.sw === "number" &&
+    typeof rec.sh === "number"
+  ) {
+    return (
+      rec.sw >= w * 0.95 && rec.sh >= h * 0.95 && typeof rec.sc === "string"
+    )
   }
+
   return false
 }
 
@@ -197,21 +243,29 @@ function detectBakedSolidBackground(
  * scripts, and executable expressions.
  */
 export const validateLottieJson = (
-  rawInput: string | Uint8Array | unknown,
+  rawInput: unknown,
 ): LottieValidationResult => {
   const result = validateLottieJsonInternal(rawInput)
+
   if (result.ok) {
-    return { ...result, valid: true }
+    return {
+      ...result,
+      valid: true,
+    }
   }
-  return { ...result, valid: false, code: result.error }
+
+  return {
+    ...result,
+    valid: false,
+    code: result.error,
+  }
 }
 
 interface InternalLottieValidateOptions {
   allowInternalArchiveAssets?: Set<string>
 }
-
 const validateLottieJsonInternal = (
-  rawInput: string | Uint8Array | unknown,
+  rawInput: unknown,
   options?: InternalLottieValidateOptions,
 ):
   | {
@@ -225,12 +279,13 @@ const validateLottieJsonInternal = (
       error: string
       reason: string
     } => {
-  let rawString: string | undefined
-  let parsed: unknown
+  let rawString: string | undefined = undefined
+  let parsed: unknown = undefined
   let byteLen = 0
 
   if (typeof rawInput === "string") {
     byteLen = new TextEncoder().encode(rawInput).byteLength
+
     if (byteLen > MAX_LOTTIE_JSON_BYTES) {
       return {
         ok: false,
@@ -238,6 +293,7 @@ const validateLottieJsonInternal = (
         reason: `Lottie JSON size (${byteLen} bytes) exceeds 32 MiB limit`,
       }
     }
+
     if (rawInput.trim().length === 0) {
       return {
         ok: false,
@@ -245,7 +301,9 @@ const validateLottieJsonInternal = (
         reason: "Empty input",
       }
     }
+
     rawString = rawInput
+
     try {
       parsed = JSON.parse(rawInput)
     } catch {
@@ -257,6 +315,7 @@ const validateLottieJsonInternal = (
     }
   } else if (rawInput instanceof Uint8Array) {
     byteLen = rawInput.byteLength
+
     if (byteLen > MAX_LOTTIE_JSON_BYTES) {
       return {
         ok: false,
@@ -264,8 +323,11 @@ const validateLottieJsonInternal = (
         reason: `Lottie JSON size (${byteLen} bytes) exceeds 32 MiB limit`,
       }
     }
+
     try {
-      rawString = new TextDecoder("utf-8", { fatal: true }).decode(rawInput)
+      rawString = new TextDecoder("utf-8", {
+        fatal: true,
+      }).decode(rawInput)
       parsed = JSON.parse(rawString)
     } catch {
       return {
@@ -288,7 +350,9 @@ const validateLottieJsonInternal = (
         reason: "Unserializable object",
       }
     }
+
     byteLen = new TextEncoder().encode(rawString).byteLength
+
     if (byteLen > MAX_LOTTIE_JSON_BYTES) {
       return {
         ok: false,
@@ -296,6 +360,7 @@ const validateLottieJsonInternal = (
         reason: `Lottie JSON size (${byteLen} bytes) exceeds 32 MiB limit`,
       }
     }
+
     parsed = rawInput
   } else {
     return {
@@ -314,20 +379,14 @@ const validateLottieJsonInternal = (
   }
 
   const obj = parsed as Record<string, unknown>
+  const { fr } = obj
+  const { ip } = obj
+  const { op } = obj
+  const { w } = obj
+  const { h } = obj
+  const { layers } = obj
 
-  const fr = obj.fr
-  const ip = obj.ip
-  const op = obj.op
-  const w = obj.w
-  const h = obj.h
-  const layers = obj.layers
-
-  if (
-    typeof fr !== "number" ||
-    !Number.isFinite(fr) ||
-    fr <= 0 ||
-    fr > 240
-  ) {
+  if (typeof fr !== "number" || !Number.isFinite(fr) || fr <= 0 || fr > 240) {
     return {
       ok: false,
       error: "errors:extensions.invalidLottieSchema",
@@ -387,7 +446,8 @@ const validateLottieJsonInternal = (
   }
 
   for (let i = 0; i < layers.length; i += 1) {
-    const layer = layers[i]
+    const layer: unknown = layers[i]
+
     if (typeof layer !== "object" || layer === null || Array.isArray(layer)) {
       return {
         ok: false,
@@ -406,8 +466,10 @@ const validateLottieJsonInternal = (
         reason: "Invalid 'assets' array in Lottie JSON",
       }
     }
+
     for (let i = 0; i < obj.assets.length; i += 1) {
-      const asset = obj.assets[i]
+      const asset: unknown = obj.assets[i]
+
       if (typeof asset !== "object" || asset === null || Array.isArray(asset)) {
         return {
           ok: false,
@@ -415,6 +477,7 @@ const validateLottieJsonInternal = (
           reason: `Asset at index ${i} is not an object`,
         }
       }
+
       const assetRec = asset as Record<string, unknown>
       const u = typeof assetRec.u === "string" ? assetRec.u.trim() : ""
       const p = typeof assetRec.p === "string" ? assetRec.p.trim() : ""
@@ -432,6 +495,7 @@ const validateLottieJsonInternal = (
             reason: `External or unsafe asset path 'p' ("${p}") is forbidden in Lottie animations`,
           }
         }
+
         if (p.startsWith("data:")) {
           if (!isSafeEmbeddedImageDataUri(p)) {
             return {
@@ -441,6 +505,7 @@ const validateLottieJsonInternal = (
                 "Only safe base64 raster data URIs are allowed in embedded Lottie assets",
             }
           }
+
           if (u.length > 0) {
             return {
               ok: false,
@@ -454,6 +519,7 @@ const validateLottieJsonInternal = (
           const candidate1 = cleanU ? `${cleanU}/${cleanP}` : cleanP
           const candidate2 = `images/${cleanP}`
           const candidate3 = `i/${cleanP}`
+
           if (
             !options.allowInternalArchiveAssets.has(candidate1) &&
             !options.allowInternalArchiveAssets.has(candidate2) &&
@@ -484,6 +550,7 @@ const validateLottieJsonInternal = (
 
   // Recursive safety scan for expressions and scripts
   const safety = scanLottieNodeSafety(obj)
+
   if (!safety.safe) {
     return {
       ok: false,
@@ -501,12 +568,14 @@ const validateLottieJsonInternal = (
     typeof obj.v === "string" && obj.v.trim().length > 0
       ? obj.v.trim().slice(0, 32)
       : undefined
-
   const warnings: string[] = []
+
   if (byteLen > SOFT_WARNING_LOTTIE_JSON_BYTES) {
     warnings.push("warnings:extensions.largeLottieFile")
   }
+
   const hasBakedBackground = detectBakedSolidBackground(layers, w, h)
+
   if (hasBakedBackground) {
     warnings.push("warnings:extensions.lottieBakedBackground")
   }
@@ -519,10 +588,26 @@ const validateLottieJsonInternal = (
     h,
     durationMs,
     layerCount: layers.length,
-    ...(nm ? { nm } : {}),
-    ...(v ? { v } : {}),
-    ...(hasBakedBackground ? { hasBakedBackground: true } : {}),
-    ...(warnings.length > 0 ? { warnings } : {}),
+    ...(nm
+      ? {
+          nm,
+        }
+      : {}),
+    ...(v
+      ? {
+          v,
+        }
+      : {}),
+    ...(hasBakedBackground
+      ? {
+          hasBakedBackground: true,
+        }
+      : {}),
+    ...(warnings.length > 0
+      ? {
+          warnings,
+        }
+      : {}),
   }
 
   return {
@@ -538,7 +623,6 @@ const validateLottieJsonInternal = (
 function readU16LE(buf: Uint8Array, offset: number): number {
   return buf[offset] | (buf[offset + 1] << 8)
 }
-
 function readU32LE(buf: Uint8Array, offset: number): number {
   return (
     (buf[offset] |
@@ -548,28 +632,25 @@ function readU32LE(buf: Uint8Array, offset: number): number {
     0
   )
 }
-
 function writeU16LE(buf: Uint8Array, offset: number, val: number): void {
   buf[offset] = val & 0xff
   buf[offset + 1] = (val >>> 8) & 0xff
 }
-
 function writeU32LE(buf: Uint8Array, offset: number, val: number): void {
   buf[offset] = val & 0xff
   buf[offset + 1] = (val >>> 8) & 0xff
   buf[offset + 2] = (val >>> 16) & 0xff
   buf[offset + 3] = (val >>> 24) & 0xff
 }
-
 interface HuffmanTable {
   counts: Uint16Array
   symbols: Uint16Array
 }
-
 function buildHuffman(lengths: Uint8Array, maxSymbol: number): HuffmanTable {
   const counts = new Uint16Array(16)
   for (let i = 0; i < maxSymbol; i += 1) {
     const len = lengths[i]
+
     if (len > 0) {
       counts[len] += 1
     }
@@ -583,14 +664,18 @@ function buildHuffman(lengths: Uint8Array, maxSymbol: number): HuffmanTable {
   const symbols = new Uint16Array(code)
   for (let i = 0; i < maxSymbol; i += 1) {
     const len = lengths[i]
+
     if (len > 0) {
       symbols[offsets[len]] = i
       offsets[len] += 1
     }
   }
-  return { counts, symbols }
-}
 
+  return {
+    counts,
+    symbols,
+  }
+}
 const FIXED_LEN_BASE = [
   3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67,
   83, 99, 115, 131, 163, 195, 227, 258,
@@ -600,8 +685,8 @@ const FIXED_LEN_EXTRA = [
   5, 5, 0,
 ]
 const FIXED_DIST_BASE = [
-  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513,
-  769, 1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
+  1, 2, 3, 4, 5, 7, 9, 13, 17, 25, 33, 49, 65, 97, 129, 193, 257, 385, 513, 769,
+  1025, 1537, 2049, 3073, 4097, 6145, 8193, 12289, 16385, 24577,
 ]
 const FIXED_DIST_EXTRA = [
   0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 4, 4, 5, 5, 6, 6, 7, 7, 8, 8, 9, 9, 10, 10, 11,
@@ -610,7 +695,6 @@ const FIXED_DIST_EXTRA = [
 const CLEN_ORDER = [
   16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15,
 ]
-
 function inflateRawDeflate(
   src: Uint8Array,
   maxOutputLength: number,
@@ -618,26 +702,25 @@ function inflateRawDeflate(
   let bytePos = 0
   let bitBuf = 0
   let bitCnt = 0
-
   const needBits = (n: number) => {
     while (bitCnt < n) {
       if (bytePos >= src.length) {
         throw new Error("errors:extensions.corruptDotLottieArchive")
       }
+
       bitBuf |= src[bytePos] << bitCnt
       bytePos += 1
       bitCnt += 8
     }
   }
-
   const readBits = (n: number): number => {
     needBits(n)
     const val = bitBuf & ((1 << n) - 1)
     bitBuf >>>= n
     bitCnt -= n
+
     return val
   }
-
   const decodeSymbol = (table: HuffmanTable): number => {
     let code = 0
     let first = 0
@@ -645,9 +728,11 @@ function inflateRawDeflate(
     for (let len = 1; len <= 15; len += 1) {
       code |= readBits(1)
       const count = table.counts[len]
+
       if (code - count < first) {
         return table.symbols[index + (code - first)]
       }
+
       index += count
       first += count
       first <<= 1
@@ -655,39 +740,46 @@ function inflateRawDeflate(
     }
     throw new Error("errors:extensions.corruptDotLottieArchive")
   }
-
   const fixedLitLengths = new Uint8Array(288)
-  for (let i = 0; i <= 143; i += 1) fixedLitLengths[i] = 8
-  for (let i = 144; i <= 255; i += 1) fixedLitLengths[i] = 9
-  for (let i = 256; i <= 279; i += 1) fixedLitLengths[i] = 7
-  for (let i = 280; i <= 287; i += 1) fixedLitLengths[i] = 8
+  for (let i = 0; i <= 143; i += 1) {
+    fixedLitLengths[i] = 8
+  }
+  for (let i = 144; i <= 255; i += 1) {
+    fixedLitLengths[i] = 9
+  }
+  for (let i = 256; i <= 279; i += 1) {
+    fixedLitLengths[i] = 7
+  }
+  for (let i = 280; i <= 287; i += 1) {
+    fixedLitLengths[i] = 8
+  }
   const fixedDistLengths = new Uint8Array(32)
   fixedDistLengths.fill(5)
-
   const fixedLitTable = buildHuffman(fixedLitLengths, 288)
   const fixedDistTable = buildHuffman(fixedDistLengths, 32)
-
   let out = new Uint8Array(
     Math.min(maxOutputLength, Math.max(4096, src.length * 3)),
   )
   let outPos = 0
-
   const ensureOut = (extra: number) => {
     if (outPos + extra > maxOutputLength) {
       throw new Error("errors:extensions.dotLottieTooLarge")
     }
+
     if (outPos + extra > out.length) {
       let nextLen = out.length * 2
+
       while (nextLen < outPos + extra) {
         nextLen *= 2
       }
+
       const next = new Uint8Array(Math.min(maxOutputLength, nextLen))
       next.set(out.subarray(0, outPos))
       out = next
     }
   }
-
   let isFinal = 0
+
   while (!isFinal) {
     isFinal = readBits(1)
     const btype = readBits(2)
@@ -695,15 +787,19 @@ function inflateRawDeflate(
     if (btype === 0) {
       bitBuf = 0
       bitCnt = 0
+
       if (bytePos + 4 > src.length) {
         throw new Error("errors:extensions.corruptDotLottieArchive")
       }
+
       const len = src[bytePos] | (src[bytePos + 1] << 8)
       const nlen = src[bytePos + 2] | (src[bytePos + 3] << 8)
       bytePos += 4
+
       if ((len ^ 0xffff) !== nlen || bytePos + len > src.length) {
         throw new Error("errors:extensions.corruptDotLottieArchive")
       }
+
       ensureOut(len)
       out.set(src.subarray(bytePos, bytePos + len), outPos)
       bytePos += len
@@ -724,8 +820,10 @@ function inflateRawDeflate(
         const totalLengths = hlit + hdist
         const litDistLens = new Uint8Array(totalLengths)
         let curIdx = 0
+
         while (curIdx < totalLengths) {
           const sym = decodeSymbol(clenTable)
+
           if (sym < 16) {
             litDistLens[curIdx] = sym
             curIdx += 1
@@ -733,6 +831,7 @@ function inflateRawDeflate(
             if (curIdx === 0) {
               throw new Error("errors:extensions.corruptDotLottieArchive")
             }
+
             const prev = litDistLens[curIdx - 1]
             const repeat = readBits(2) + 3
             litDistLens.fill(prev, curIdx, curIdx + repeat)
@@ -747,12 +846,14 @@ function inflateRawDeflate(
             curIdx += repeat
           }
         }
+
         litTable = buildHuffman(litDistLens.subarray(0, hlit), hlit)
         distTable = buildHuffman(litDistLens.subarray(hlit), hdist)
       }
 
       while (true) {
         const sym = decodeSymbol(litTable)
+
         if (sym < 256) {
           ensureOut(1)
           out[outPos] = sym
@@ -761,20 +862,26 @@ function inflateRawDeflate(
           break
         } else {
           const lenIdx = sym - 257
+
           if (lenIdx < 0 || lenIdx >= FIXED_LEN_BASE.length) {
             throw new Error("errors:extensions.corruptDotLottieArchive")
           }
+
           const length =
             FIXED_LEN_BASE[lenIdx] + readBits(FIXED_LEN_EXTRA[lenIdx])
           const distSym = decodeSymbol(distTable)
+
           if (distSym < 0 || distSym >= FIXED_DIST_BASE.length) {
             throw new Error("errors:extensions.corruptDotLottieArchive")
           }
+
           const distance =
             FIXED_DIST_BASE[distSym] + readBits(FIXED_DIST_EXTRA[distSym])
+
           if (distance > outPos) {
             throw new Error("errors:extensions.corruptDotLottieArchive")
           }
+
           ensureOut(length)
           for (let i = 0; i < length; i += 1) {
             out[outPos] = out[outPos - distance]
@@ -789,11 +896,11 @@ function inflateRawDeflate(
 
   return out.subarray(0, outPos)
 }
-
 function isSafeArchiveEntryPath(name: string): boolean {
   if (!name || name.length > 240) {
     return false
   }
+
   if (
     name.startsWith("/") ||
     name.includes("\\") ||
@@ -806,11 +913,12 @@ function isSafeArchiveEntryPath(name: string): boolean {
   ) {
     return false
   }
+
   return /^[A-Za-z0-9_./-]+$/u.test(name)
 }
-
 function isRasterImageBytes(name: string, bytes: Uint8Array): boolean {
   const lower = name.toLowerCase()
+
   if (lower.endsWith(".png")) {
     return (
       bytes.length >= 8 &&
@@ -824,6 +932,7 @@ function isRasterImageBytes(name: string, bytes: Uint8Array): boolean {
       bytes[7] === 0x0a
     )
   }
+
   if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
     return (
       bytes.length >= 3 &&
@@ -832,6 +941,7 @@ function isRasterImageBytes(name: string, bytes: Uint8Array): boolean {
       bytes[2] === 0xff
     )
   }
+
   if (lower.endsWith(".webp")) {
     return (
       bytes.length >= 12 &&
@@ -845,6 +955,7 @@ function isRasterImageBytes(name: string, bytes: Uint8Array): boolean {
       bytes[11] === 0x50
     )
   }
+
   if (lower.endsWith(".gif")) {
     return (
       bytes.length >= 6 &&
@@ -856,9 +967,9 @@ function isRasterImageBytes(name: string, bytes: Uint8Array): boolean {
       bytes[5] === 0x61
     )
   }
+
   return false
 }
-
 const CRC32_TABLE = (() => {
   const table = new Uint32Array(256)
   for (let i = 0; i < 256; i += 1) {
@@ -868,14 +979,15 @@ const CRC32_TABLE = (() => {
     }
     table[i] = c >>> 0
   }
+
   return table
 })()
-
 function crc32(bytes: Uint8Array): number {
   let crc = 0xffffffff
-  for (let i = 0; i < bytes.length; i += 1) {
-    crc = CRC32_TABLE[(crc ^ bytes[i]) & 0xff] ^ (crc >>> 8)
+  for (const _entry of bytes) {
+    crc = CRC32_TABLE[(crc ^ _entry) & 0xff] ^ (crc >>> 8)
   }
+
   return (crc ^ 0xffffffff) >>> 0
 }
 
@@ -883,24 +995,26 @@ function crc32(bytes: Uint8Array): number {
  * Builds an uncompressed (STORE) ZIP archive for `.lottie` packaging or test fixtures.
  */
 export function createDotLottieArchive(
-  entries: Array<{ name: string; data: Uint8Array | string }>,
+  entries: Array<{
+    name: string
+    data: Uint8Array | string
+  }>,
 ): Uint8Array {
   const encoder = new TextEncoder()
   const localParts: Uint8Array[] = []
   const centralParts: Uint8Array[] = []
   let localOffset = 0
-
   for (const entry of entries) {
     const nameBytes = encoder.encode(entry.name)
     const contentBytes =
       typeof entry.data === "string" ? encoder.encode(entry.data) : entry.data
     const crc = crc32(contentBytes)
-
     const localHeader = new Uint8Array(30 + nameBytes.length)
     writeU32LE(localHeader, 0, 0x04034b50)
     writeU16LE(localHeader, 4, 20)
     writeU16LE(localHeader, 6, 0)
-    writeU16LE(localHeader, 8, 0) // method 0 = STORE
+    // Method 0 = STORE
+    writeU16LE(localHeader, 8, 0)
     writeU16LE(localHeader, 10, 0)
     writeU16LE(localHeader, 12, 0)
     writeU32LE(localHeader, 14, crc)
@@ -909,9 +1023,7 @@ export function createDotLottieArchive(
     writeU16LE(localHeader, 26, nameBytes.length)
     writeU16LE(localHeader, 28, 0)
     localHeader.set(nameBytes, 30)
-
     localParts.push(localHeader, contentBytes)
-
     const centralHeader = new Uint8Array(46 + nameBytes.length)
     writeU32LE(centralHeader, 0, 0x02014b50)
     writeU16LE(centralHeader, 4, 20)
@@ -931,11 +1043,9 @@ export function createDotLottieArchive(
     writeU32LE(centralHeader, 38, 0)
     writeU32LE(centralHeader, 42, localOffset)
     centralHeader.set(nameBytes, 46)
-
     centralParts.push(centralHeader)
     localOffset += localHeader.length + contentBytes.length
   }
-
   const centralSize = centralParts.reduce((acc, a) => acc + a.byteLength, 0)
   const eocd = new Uint8Array(22)
   writeU32LE(eocd, 0, 0x06054b50)
@@ -946,7 +1056,6 @@ export function createDotLottieArchive(
   writeU32LE(eocd, 12, centralSize)
   writeU32LE(eocd, 16, localOffset)
   writeU16LE(eocd, 20, 0)
-
   const allParts = [...localParts, ...centralParts, eocd]
   const totalBytes = allParts.reduce((acc, a) => acc + a.byteLength, 0)
   const out = new Uint8Array(totalBytes)
@@ -955,6 +1064,7 @@ export function createDotLottieArchive(
     out.set(part, pos)
     pos += part.byteLength
   }
+
   return out
 }
 
@@ -982,7 +1092,9 @@ export type DotLottieValidationResult =
  */
 export function validateDotLottieContainer(
   rawBytes: Uint8Array,
-  options?: { allowBodymovinZipConversion?: boolean },
+  options?: {
+    allowBodymovinZipConversion?: boolean
+  },
 ): DotLottieValidationResult {
   const fail = (error: string, reason: string): DotLottieValidationResult => ({
     ok: false,
@@ -1019,9 +1131,11 @@ export function validateDotLottieContainer(
   for (let i = rawBytes.length - 22; i >= minEocdSearch; i -= 1) {
     if (readU32LE(rawBytes, i) === 0x06054b50) {
       eocdOffset = i
+
       break
     }
   }
+
   if (eocdOffset < 0) {
     return fail(
       "errors:extensions.corruptDotLottieArchive",
@@ -1050,12 +1164,13 @@ export function validateDotLottieContainer(
     )
   }
 
-  const decoder = new TextDecoder("utf-8", { fatal: true })
+  const decoder = new TextDecoder("utf-8", {
+    fatal: true,
+  })
   const seenNamesLower = new Set<string>()
   const extractedEntries = new Map<string, Uint8Array>()
   let totalUncompressed = 0
   let ptr = centralDirOffset
-
   for (let idx = 0; idx < totalEntries; idx += 1) {
     if (ptr + 46 > rawBytes.length || readU32LE(rawBytes, ptr) !== 0x02014b50) {
       return fail(
@@ -1083,6 +1198,7 @@ export function validateDotLottieContainer(
 
     // Unix symlink mode check (S_IFLNK = 0o120000 = 0xa000)
     const unixFileType = (externalAttr >>> 16) & 0xf000
+
     if (unixFileType === 0xa000) {
       return fail(
         "errors:extensions.unsafeDotLottieArchive",
@@ -1097,26 +1213,32 @@ export function validateDotLottieContainer(
       )
     }
 
-    let entryName: string
+    let entryName = ""
+
     try {
-      entryName = decoder.decode(rawBytes.subarray(ptr + 46, ptr + 46 + nameLen))
+      entryName = decoder.decode(
+        rawBytes.subarray(ptr + 46, ptr + 46 + nameLen),
+      )
     } catch {
       return fail(
         "errors:extensions.unsafeDotLottieArchive",
         "Non-UTF8 entry filename in archive",
       )
     }
+
     ptr += 46 + nameLen + extraLen + commentLen
 
     // Skip pure directory entries if safe
     if (entryName.endsWith("/")) {
       const stripped = entryName.slice(0, -1)
+
       if (stripped && !isSafeArchiveEntryPath(stripped)) {
         return fail(
           "errors:extensions.unsafeDotLottieArchive",
           `Unsafe directory entry path: ${entryName}`,
         )
       }
+
       continue
     }
 
@@ -1128,12 +1250,14 @@ export function validateDotLottieContainer(
     }
 
     const lowerName = entryName.toLowerCase()
+
     if (seenNamesLower.has(lowerName)) {
       return fail(
         "errors:extensions.unsafeDotLottieArchive",
         `Duplicate entry path in archive: ${entryName}`,
       )
     }
+
     seenNamesLower.add(lowerName)
 
     if (
@@ -1191,7 +1315,8 @@ export function validateDotLottieContainer(
     }
 
     const compSlice = rawBytes.subarray(dataStart, dataEnd)
-    let entryBytes: Uint8Array
+    let entryBytes: Uint8Array | undefined = undefined
+
     try {
       if (method === 0) {
         if (compSize !== uncompSize) {
@@ -1200,6 +1325,7 @@ export function validateDotLottieContainer(
             `Store size mismatch on entry ${entryName}`,
           )
         }
+
         entryBytes = compSlice
       } else if (method === 8) {
         const remainingAllowance =
@@ -1208,6 +1334,7 @@ export function validateDotLottieContainer(
           compSlice,
           Math.min(remainingAllowance, Math.max(uncompSize, 1024)),
         )
+
         if (entryBytes.byteLength !== uncompSize) {
           return fail(
             "errors:extensions.corruptDotLottieArchive",
@@ -1221,9 +1348,15 @@ export function validateDotLottieContainer(
         )
       }
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "errors:extensions.corruptDotLottieArchive"
+      const msg =
+        err instanceof Error
+          ? err.message
+          : "errors:extensions.corruptDotLottieArchive"
+
       return fail(
-        msg.startsWith("errors:") ? msg : "errors:extensions.corruptDotLottieArchive",
+        msg.startsWith("errors:")
+          ? msg
+          : "errors:extensions.corruptDotLottieArchive",
         `Failed to decompress ${entryName}`,
       )
     }
@@ -1243,18 +1376,21 @@ export function validateDotLottieContainer(
   // Classify allowed entries: images, animations, manifest
   const imagePaths = new Set<string>()
   for (const [entryPath, bytes] of extractedEntries.entries()) {
-    if (/^(images|i)\/[A-Za-z0-9_.-]+\.(png|jpg|jpeg|webp|gif)$/i.test(entryPath)) {
+    if (
+      /^(images|i)\/[A-Za-z0-9_.-]+\.(png|jpg|jpeg|webp|gif)$/i.test(entryPath)
+    ) {
       if (!isRasterImageBytes(entryPath, bytes)) {
         return fail(
           "errors:extensions.unsafeDotLottieArchive",
           `Invalid image magic bytes in ${entryPath}`,
         )
       }
+
       imagePaths.add(entryPath)
     }
   }
-
   const manifestBytes = extractedEntries.get("manifest.json")
+
   if (!manifestBytes) {
     // Check if raw Bodymovin ZIP conversion is permitted and applicable
     if (options?.allowBodymovinZipConversion !== false) {
@@ -1270,30 +1406,61 @@ export function validateDotLottieContainer(
       )
 
       if (rootJsonEntries.length === 1 && allEntriesRecognized) {
-        const [, animBytes] = rootJsonEntries[0]
+        const {
+          0: [, animBytes],
+        } = rootJsonEntries
         const animRes = validateLottieJsonInternal(animBytes, {
           allowInternalArchiveAssets: imagePaths,
         })
+
         if (!animRes.ok) {
           return fail(animRes.error, animRes.reason)
         }
+
         const manifestObj = {
           version: "1.0",
           generator: "tada-studio-safe-packager",
-          animations: [{ id: "default", speed: 1, loop: true }],
+          animations: [
+            {
+              id: "default",
+              speed: 1,
+              loop: true,
+            },
+          ],
         }
-        const newEntries: Array<{ name: string; data: Uint8Array | string }> = [
-          { name: "manifest.json", data: JSON.stringify(manifestObj) },
-          { name: "animations/default.json", data: animRes.sanitizedJson },
+        const newEntries: Array<{
+          name: string
+          data: Uint8Array | string
+        }> = [
+          {
+            name: "manifest.json",
+            data: JSON.stringify(manifestObj),
+          },
+          {
+            name: "animations/default.json",
+            data: animRes.sanitizedJson,
+          },
         ]
         for (const imgPath of imagePaths) {
-          const imgData = extractedEntries.get(imgPath)!
+          const imgData = extractedEntries.get(imgPath)
+
+          if (!imgData) {
+            return fail(
+              "errors:extensions.unsafeDotLottieArchive",
+              "Missing referenced image",
+            )
+          }
+
           const normalizedImgPath = imgPath.startsWith("i/")
             ? `images/${imgPath.slice(2)}`
             : imgPath
-          newEntries.push({ name: normalizedImgPath, data: imgData })
+          newEntries.push({
+            name: normalizedImgPath,
+            data: imgData,
+          })
         }
         const packagedArchive = createDotLottieArchive(newEntries)
+
         return {
           ok: true,
           valid: true,
@@ -1312,7 +1479,8 @@ export function validateDotLottieContainer(
   }
 
   // Validate manifest.json
-  let manifestJson: unknown
+  let manifestJson: unknown = undefined
+
   try {
     const manifestText = decoder.decode(manifestBytes)
     manifestJson = JSON.parse(manifestText)
@@ -1324,6 +1492,7 @@ export function validateDotLottieContainer(
   }
 
   const manifestSafety = scanLottieNodeSafety(manifestJson)
+
   if (!manifestSafety.safe) {
     return fail(
       "errors:extensions.unsafeDotLottieArchive",
@@ -1343,6 +1512,7 @@ export function validateDotLottieContainer(
   }
 
   const rawAnimations = (manifestJson as Record<string, unknown>).animations
+
   if (
     !Array.isArray(rawAnimations) ||
     rawAnimations.length === 0 ||
@@ -1355,8 +1525,7 @@ export function validateDotLottieContainer(
   }
 
   const animationIds: string[] = []
-  let primaryMeta: LottieMeta | undefined
-
+  let primaryMeta: LottieMeta | undefined = undefined
   for (const item of rawAnimations) {
     if (typeof item !== "object" || item === null || Array.isArray(item)) {
       return fail(
@@ -1364,7 +1533,9 @@ export function validateDotLottieContainer(
         "Invalid animation entry in manifest.json",
       )
     }
-    const id = (item as Record<string, unknown>).id
+
+    const { id } = item as Record<string, unknown>
+
     if (
       typeof id !== "string" ||
       !/^[A-Za-z0-9_-]{1,80}$/u.test(id) ||
@@ -1375,11 +1546,12 @@ export function validateDotLottieContainer(
         `Invalid or duplicate animation id in manifest.json: ${String(id)}`,
       )
     }
-    animationIds.push(id)
 
+    animationIds.push(id)
     const animBytes =
       extractedEntries.get(`animations/${id}.json`) ??
       extractedEntries.get(`a/${id}.json`)
+
     if (!animBytes) {
       return fail(
         "errors:extensions.invalidDotLottieManifest",
@@ -1390,12 +1562,12 @@ export function validateDotLottieContainer(
     const validatedAnim = validateLottieJsonInternal(animBytes, {
       allowInternalArchiveAssets: imagePaths,
     })
+
     if (!validatedAnim.ok) {
       return fail(validatedAnim.error, validatedAnim.reason)
     }
-    if (!primaryMeta) {
-      primaryMeta = validatedAnim.meta
-    }
+
+    primaryMeta ??= validatedAnim.meta
   }
 
   // Ensure no unrecognized extra files exist in the archive
@@ -1403,22 +1575,32 @@ export function validateDotLottieContainer(
     if (entryPath === "manifest.json" || imagePaths.has(entryPath)) {
       continue
     }
+
     const animMatch = /^(?:animations|a)\/([A-Za-z0-9_-]+)\.json$/u.exec(
       entryPath,
     )
+
     if (animMatch && animationIds.includes(animMatch[1])) {
       continue
     }
+
     return fail(
       "errors:extensions.unsafeDotLottieArchive",
       `Unrecognized or unreferenced file in .lottie archive: ${entryPath}`,
     )
   }
 
+  if (!primaryMeta) {
+    return fail(
+      "errors:extensions.invalidLottieSchema",
+      "No animation metadata found",
+    )
+  }
+
   return {
     ok: true,
     valid: true,
-    meta: primaryMeta!,
+    meta: primaryMeta,
     animationIds,
     convertedFromBodymovinZip: false,
     archiveBytes: rawBytes,

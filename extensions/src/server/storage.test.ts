@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import fs from "node:fs"
 import os from "node:os"
 import path from "node:path"
@@ -21,20 +22,16 @@ import {
 } from "./storage/journal"
 import { CompositeStorageService } from "./storage/service"
 import {
-  deleteSidecar,
   getSidecarFilePath,
   readSidecar,
-  sidecarExists,
   writeSidecar,
   type StorageInjections,
 } from "./storage/sidecar"
-
 describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => {
   let tempDir = ""
   let baseQuizzes = new Map<string, Record<string, unknown>>()
   let injections = {} as StorageInjections
   let service = {} as CompositeStorageService
-
   const sampleQuiz = {
     gameMode: "quiz",
     subject: "British History",
@@ -62,11 +59,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       },
     ],
   }
-
   beforeEach(() => {
     tempDir = fs.mkdtempSync(path.join(os.tmpdir(), "razzia-test-storage-"))
     baseQuizzes = new Map()
-
     injections = {
       getPath: (subPath = "") => path.join(tempDir, subPath),
       getQuizzById: (id: string) => {
@@ -80,39 +75,46 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       },
       saveQuizz: (data: unknown) => {
         const id = `quiz-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`
-        const record = { id, ...(data as Record<string, unknown>) }
-
+        const record = {
+          id,
+          ...(data as Record<string, unknown>),
+        }
         baseQuizzes.set(id, record)
 
-        return { id }
+        return {
+          id,
+        }
       },
       updateQuizz: (id: string, data: unknown) => {
         if (!baseQuizzes.has(id)) {
           throw new Error("errors:quizz.notFound")
         }
 
-        const record = { id, ...(data as Record<string, unknown>) }
-
+        const record = {
+          id,
+          ...(data as Record<string, unknown>),
+        }
         baseQuizzes.set(id, record)
 
-        return { id }
+        return {
+          id,
+        }
       },
       deleteQuizz: (id: string) => {
         baseQuizzes.delete(id)
       },
     }
-
     service = new CompositeStorageService(injections)
   })
-
   afterEach(() => {
-    fs.rmSync(tempDir, { recursive: true, force: true })
+    fs.rmSync(tempDir, {
+      recursive: true,
+      force: true,
+    })
   })
-
   it("CORE01: reads legacy quiz with no sidecar and never auto-creates sidecar", () => {
     const { id } = injections.saveQuizz(sampleQuiz)
     const composite = service.getCompositeQuiz(id)
-
     expect(composite.exists).toBe(true)
     expect(composite.extras).toBeNull()
     expect(composite.baseDigest).toBe(
@@ -121,10 +123,8 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Ensure no sidecar file was created on disk
     const sidecarPath = getSidecarFilePath(injections.getPath, id)
-
     expect(fs.existsSync(sidecarPath)).toBe(false)
   })
-
   it("CORE02: preserves question associations during reorder (no swapped answers)", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const qIds = generateQuestionIds(2)
@@ -155,18 +155,14 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Now reorder questions in base quiz: swap question 0 and 1
     const reorderedQuiz = structuredClone(baseQuiz)
     const [q0] = (reorderedQuiz.questions as unknown[]).splice(0, 1)
-
     ;(reorderedQuiz.questions as unknown[]).splice(1, 0, q0)
-
     const newBaseDigest = computeCanonicalBaseDigest(reorderedQuiz)
     const reorderedQIds = reorderQuestionIds(qIds, 0, 1)
-
     const updatedExtras = {
       ...extras,
       baseDigest: newBaseDigest,
       questionIds: reorderedQIds,
     }
-
     service.saveCompositeQuiz({
       quizId,
       expectedRevision: 1,
@@ -176,17 +172,14 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Read back and verify attachment is still pinned to Walpole question
     const stored = service.getCompositeQuiz(quizId)
-
     expect(stored.extras?.questionIds).toEqual(reorderedQIds)
 
     // The question at index 1 now has the Walpole attachment (because qIds[0] was moved to index 1)
     const [, secondQId] = stored.extras?.questionIds ?? []
-
     expect(stored.extras?.perQuestion[secondQId]?.answerVisuals?.[0]?.alt).toBe(
       "Walpole portrait",
     )
   })
-
   it("CORE03: duplicates question with fresh ID and removes question without orphans", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const qIds = generateQuestionIds(2)
@@ -203,7 +196,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         advance: "auto",
       },
     }
-
     service.saveCompositeQuiz({
       quizId,
       expectedRevision: null,
@@ -221,7 +213,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(baseQuizzes.has(quizId)).toBe(false)
     expect(readSidecar(injections.getPath, quizId)).toBeNull()
   })
-
   it("CORE04: concurrent writes with expectedRevision detect conflict (409)", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const qIds = generateQuestionIds(2)
@@ -236,7 +227,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       quizz: baseQuiz,
       extras,
     })
-
     expect(res1.revision).toBe(1)
 
     // Client A saves with expectedRevision = 1 -> succeeds, advances to 2
@@ -244,9 +234,11 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       quizId,
       expectedRevision: 1,
       quizz: baseQuiz,
-      extras: { ...extras, revision: 1 },
+      extras: {
+        ...extras,
+        revision: 1,
+      },
     })
-
     expect(res2.revision).toBe(2)
 
     // Client B attempts to save with stale expectedRevision = 1 -> 409 conflict!
@@ -257,7 +249,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         quizId,
         expectedRevision: 1,
         quizz: baseQuiz,
-        extras: { ...extras, revision: 1 },
+        extras: {
+          ...extras,
+          revision: 1,
+        },
       })
     } catch (err) {
       thrownError = err
@@ -265,66 +260,60 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     expect(thrownError).toBeInstanceOf(RevisionConflictError)
     const conflict = thrownError as RevisionConflictError
-
     expect(conflict.currentRevision).toBe(2)
     expect(conflict.expectedRevision).toBe(1)
   })
-
   it("CORE05: recovers consistent pair from staged journal on simulated power-loss", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
     const qIds = generateQuestionIds(2)
     const baseDigest = computeCanonicalBaseDigest(initialBase)
     const initialExtras = createDefaultQuizExtras(quizId, qIds, baseDigest)
-
     writeSidecar(injections.getPath, quizId, initialExtras)
 
     // Simulate power-loss injection: stage a journal entry, write new base, but crash before writing new sidecar!
-    const modifiedBase = { ...initialBase, subject: "Modified While Crashing" }
-
+    const modifiedBase = {
+      ...initialBase,
+      subject: "Modified While Crashing",
+    }
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
       backupExtras: initialExtras,
       targetBase: modifiedBase,
-      targetExtras: { ...initialExtras, revision: 2 },
+      targetExtras: {
+        ...initialExtras,
+        revision: 2,
+      },
     })
 
     // Corrupt base partially written
     injections.updateQuizz(quizId, modifiedBase)
-
     const corruptStored = baseQuizzes.get(quizId)
-
     expect(corruptStored?.subject).toBe("Modified While Crashing")
 
     // Run crash recovery
     const report = recoverJournals(injections)
-
     expect(report.recoveredCount).toBe(1)
     expect(report.recoveredQuizIds).toContain(quizId)
 
     // Base quiz should be rolled back to consistent original subject
     const rolledBack = baseQuizzes.get(quizId)
-
     expect(rolledBack?.subject).toBe("British History")
 
     // Sidecar remains consistent
     const recoveredExtras = readSidecar(injections.getPath, quizId)
-
     expect(recoveredExtras?.revision).toBe(1)
   })
-
   it("Bug A: recovers valid V2 extras from staged journal without stripping timeline, scenes, audio, backgrounds, authoring, and media catalog", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
     const qIds = generateQuestionIds(2)
     const initialBaseDigest = computeCanonicalBaseDigest(initialBase)
-
     const sceneId = crypto.randomUUID()
     const tItemSceneId = crypto.randomUUID()
     const tItemQ1Id = crypto.randomUUID()
     const tItemQ2Id = crypto.randomUUID()
-
     const v2Extras: QuizExtrasV2 = {
       schemaVersion: 2,
       revision: 1,
@@ -332,9 +321,21 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       baseDigest: initialBaseDigest,
       questionIds: qIds,
       timeline: [
-        { id: tItemSceneId, kind: "opening", sceneId },
-        { id: tItemQ1Id, kind: "question", questionId: qIds[0] },
-        { id: tItemQ2Id, kind: "question", questionId: qIds[1] },
+        {
+          id: tItemSceneId,
+          kind: "opening",
+          sceneId,
+        },
+        {
+          id: tItemQ1Id,
+          kind: "question",
+          questionId: qIds[0],
+        },
+        {
+          id: tItemQ2Id,
+          kind: "question",
+          questionId: qIds[1],
+        },
       ],
       scenes: {
         [sceneId]: {
@@ -363,7 +364,11 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         leaderboardPolicy: "cardOnly",
         advanceMode: "auto",
       },
-      teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
+      teams: {
+        enabled: false,
+        teams: [],
+        autoAssign: "roundRobin",
+      },
       audio: {
         cues: {
           start: {
@@ -469,7 +474,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       backupBase: initialBase,
       backupExtras: v2Extras,
       targetBase: modifiedBase,
-      targetExtras: { ...v2Extras, revision: 2 },
+      targetExtras: {
+        ...v2Extras,
+        revision: 2,
+      },
     })
 
     // Mutate base quiz to the partially written target state
@@ -480,7 +488,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Run recovery
     const report = recoverJournals(injections)
-
     expect(report.recoveredCount).toBe(1)
     expect(report.recoveredQuizIds).toContain(quizId)
 
@@ -516,7 +523,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const journalPath = getJournalFilePath(injections.getPath, quizId)
     expect(fs.existsSync(journalPath)).toBe(false)
   })
-
   it("Bug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
@@ -533,15 +539,19 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       schemaVersion: "INVALID_VERSION",
       totallyBroken: true,
     }
-
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
       backupExtras: corruptBackupExtras,
-      targetBase: { ...initialBase, subject: "Crash Write" },
-      targetExtras: { ...v2Extras, revision: 2 },
+      targetBase: {
+        ...initialBase,
+        subject: "Crash Write",
+      },
+      targetExtras: {
+        ...v2Extras,
+        revision: 2,
+      },
     })
-
     const journalPath = getJournalFilePath(injections.getPath, quizId)
     expect(fs.existsSync(journalPath)).toBe(true)
 
@@ -560,7 +570,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Journal MUST remain on disk as evidence for forensic recovery
     expect(fs.existsSync(journalPath)).toBe(true)
   })
-
   it("Bug A: crash after sidecar write before cleanup is idempotent and preserves consistent state", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
@@ -568,7 +577,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const initialBaseDigest = computeCanonicalBaseDigest(initialBase)
     const v2Extras = createDefaultQuizExtras(quizId, qIds, initialBaseDigest)
     writeSidecar(injections.getPath, quizId, v2Extras)
-
     const updatedBase = {
       ...initialBase,
       subject: "Updated Subject Both Written",
@@ -578,7 +586,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       revision: 2,
       baseDigest: computeCanonicalBaseDigest(updatedBase),
     }
-
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
@@ -590,7 +597,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Simulate crash after BOTH base update and sidecar write, but BEFORE removeJournal
     injections.updateQuizz(quizId, updatedBase)
     writeSidecar(injections.getPath, quizId, updatedExtras)
-
     const journalPath = getJournalFilePath(injections.getPath, quizId)
     expect(fs.existsSync(journalPath)).toBe(true)
 
@@ -613,7 +619,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(report2.recoveredQuizIds).toHaveLength(0)
     expect(baseQuizzes.get(quizId)?.subject).toBe("British History")
   })
-
   it("Bug A: rejects bogus kind/version and path traversal quizIds without deleting files", () => {
     const journalDir = getJournalDirectory(injections.getPath)
 
@@ -650,7 +655,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       }),
       "utf-8",
     )
-
     const report = recoverJournals(injections)
     expect(report.recoveredCount).toBe(0)
     expect(report.unresolvedCount ?? 2).toBeGreaterThanOrEqual(1)
@@ -659,7 +663,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(fs.existsSync(bogusKindFile)).toBe(true)
     expect(fs.existsSync(traversalFile)).toBe(true)
   })
-
   it("Bug A: failed base restore preserves journal and reports failure", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
@@ -670,15 +673,19 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       computeCanonicalBaseDigest(initialBase),
     )
     writeSidecar(injections.getPath, quizId, v2Extras)
-
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
       backupExtras: v2Extras,
-      targetBase: { ...initialBase, subject: "Crash" },
-      targetExtras: { ...v2Extras, revision: 2 },
+      targetBase: {
+        ...initialBase,
+        subject: "Crash",
+      },
+      targetExtras: {
+        ...v2Extras,
+        revision: 2,
+      },
     })
-
     const journalPath = getJournalFilePath(injections.getPath, quizId)
 
     // Create broken injections where updateQuizz throws
@@ -688,7 +695,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         throw new Error("Disk full or permission denied on base quiz update")
       },
     }
-
     const report = recoverJournals(brokenInjections)
     expect(report.recoveredQuizIds).not.toContain(quizId)
     expect(report.unresolvedCount ?? 1).toBeGreaterThanOrEqual(1)
@@ -696,7 +702,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Journal must be preserved!
     expect(fs.existsSync(journalPath)).toBe(true)
   })
-
   it("Bug A: does not blindly restore over a newer concurrent revision", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const initialBase = structuredClone(baseQuizzes.get(quizId) ?? {})
@@ -711,9 +716,16 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     createStagedJournal(injections.getPath, {
       quizId,
       backupBase: initialBase,
-      backupExtras: v2Extras, // revision 1
-      targetBase: { ...initialBase, subject: "Target Revision 2" },
-      targetExtras: { ...v2Extras, revision: 2 },
+      // Revision 1
+      backupExtras: v2Extras,
+      targetBase: {
+        ...initialBase,
+        subject: "Target Revision 2",
+      },
+      targetExtras: {
+        ...v2Extras,
+        revision: 2,
+      },
     })
 
     // But meanwhile, a concurrent transaction succeeded and reached revision 3!
@@ -730,7 +742,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       subject: "Concurrent New Subject Rev 3",
     })
     writeSidecar(injections.getPath, quizId, newerRevision3)
-
     const journalPath = getJournalFilePath(injections.getPath, quizId)
     expect(fs.existsSync(journalPath)).toBe(true)
 
@@ -745,14 +756,12 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       "Concurrent New Subject Rev 3",
     )
   })
-
   it("CORE06: enhanced bundle import/export remaps question IDs and preserves metadata", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const qIds = generateQuestionIds(2)
     const baseQuiz = baseQuizzes.get(quizId) ?? {}
     const baseDigest = computeCanonicalBaseDigest(baseQuiz)
     const extras = createDefaultQuizExtras(quizId, qIds, baseDigest)
-
     extras.perQuestion[qIds[0]] = {
       reveal: {
         effect: "blur",
@@ -761,7 +770,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         audience: "all",
       },
     }
-
     service.saveCompositeQuiz({
       quizId,
       expectedRevision: null,
@@ -771,34 +779,28 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // Export bundle
     const exported = service.exportEnhancedBundle(quizId)
-
     expect(exported.bundleVersion).toBe(1)
     expect(exported.extras.quizId).toBe(quizId)
 
     // Import bundle into new quiz
     const importedResult = service.importEnhancedBundle(exported)
-
     expect(importedResult.quizId).not.toBe(quizId)
     expect(importedResult.revision).toBe(1)
 
     // Verify imported quiz has fresh question IDs with attachments preserved
     const importedComposite = service.getCompositeQuiz(importedResult.quizId)
-
     expect(importedComposite.extras?.questionIds).not.toEqual(qIds)
     const [firstFreshId] = importedComposite.extras?.questionIds ?? []
-
     expect(
       importedComposite.extras?.perQuestion[firstFreshId]?.reveal?.effect,
     ).toBe("blur")
   })
-
   it("MEDIA02: rejects unsafe media URL or missing alt in answerVisuals", () => {
     const { id: quizId } = injections.saveQuizz(sampleQuiz)
     const qIds = generateQuestionIds(2)
     const baseQuiz = baseQuizzes.get(quizId) ?? {}
     const baseDigest = computeCanonicalBaseDigest(baseQuiz)
     const extras = createDefaultQuizExtras(quizId, qIds, baseDigest)
-
     const jsScheme = [
       "j",
       "a",
@@ -824,7 +826,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
       ],
     }
-
     let thrown: unknown = null
 
     try {
@@ -841,7 +842,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(thrown).toBeInstanceOf(CompositeStorageError)
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
   })
-
   it("createCompositeQuiz: pre-validation prevents base quiz creation on invalid extras", () => {
     const initialBaseCount = baseQuizzes.size
     const qIds = generateQuestionIds(2)
@@ -860,7 +860,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
       },
     }
-
     let thrown: unknown = null
 
     try {
@@ -877,7 +876,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Verify no base quiz was saved
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
-
   it("createCompositeQuiz: rolls back base quiz if sidecar write throws", () => {
     const initialBaseCount = baseQuizzes.size
     const qIds = generateQuestionIds(2)
@@ -891,7 +889,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       },
     }
     const failingService = new CompositeStorageService(throwingInjections)
-
     let thrown: unknown = null
 
     try {
@@ -907,7 +904,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     // Verify base quiz was rolled back
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
-
   it("importEnhancedBundle: rolls back base quiz if bundle sidecar write fails", () => {
     const initialBaseCount = baseQuizzes.size
     const qIds = generateQuestionIds(2)
@@ -930,7 +926,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
       },
     }
-
     let thrown: unknown = null
 
     try {
@@ -943,18 +938,20 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect((thrown as CompositeStorageError).statusCode).toBe(400)
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
-
   it("importEnhancedBundle: remaps leaderboard.afterQuestionIds and imports V2 bundle cleanly", () => {
     const qIds = generateQuestionIds(2)
     const baseQuiz = {
       ...sampleQuiz,
       questions: [
-        { ...sampleQuiz.questions[0] },
-        { ...sampleQuiz.questions[1] },
+        {
+          ...sampleQuiz.questions[0],
+        },
+        {
+          ...sampleQuiz.questions[1],
+        },
       ],
     }
     const baseDigest = computeCanonicalBaseDigest(baseQuiz)
-
     const bundle = {
       bundleVersion: 1,
       quizz: baseQuiz,
@@ -965,8 +962,16 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         baseDigest,
         questionIds: qIds,
         timeline: [
-          { id: crypto.randomUUID(), kind: "question", questionId: qIds[0] },
-          { id: crypto.randomUUID(), kind: "question", questionId: qIds[1] },
+          {
+            id: crypto.randomUUID(),
+            kind: "question",
+            questionId: qIds[0],
+          },
+          {
+            id: crypto.randomUUID(),
+            kind: "question",
+            questionId: qIds[1],
+          },
         ],
         scenes: {},
         defaults: {
@@ -976,9 +981,14 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
         leaderboard: {
           mode: "selected",
-          afterQuestionIds: [qIds[0]], // reference to old questionId!
+          // Reference to old questionId!
+          afterQuestionIds: [qIds[0]],
         },
-        teams: { enabled: false, teams: [], autoAssign: "roundRobin" },
+        teams: {
+          enabled: false,
+          teams: [],
+          autoAssign: "roundRobin",
+        },
         audio: {
           cues: {
             start: {
@@ -1041,11 +1051,9 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         roster: createDefaultRosterExtras(),
       },
     }
-
     const { quizId } = service.importEnhancedBundle(bundle)
     expect(quizId).toBeDefined()
     expect(quizId).not.toBe("temp-id")
-
     const imported = service.getCompositeQuiz(quizId)
     expect(imported.exists).toBe(true)
     expect(imported.extras?.schemaVersion).toBe(2)
@@ -1054,7 +1062,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const freshQ0 = imported.extras?.questionIds[0]
     expect(imported.extras?.leaderboard?.afterQuestionIds).toEqual([freshQ0])
   })
-
   it("importEnhancedBundle: directly imports friendly authored Tada show payload", () => {
     const authoredShow = {
       format: "tada-show",
@@ -1081,7 +1088,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
               imageUrl: "https://example.com/100.png",
               alt: "100",
             },
-            { text: "1000", display: "text" },
+            {
+              text: "1000",
+              display: "text",
+            },
           ],
           correctAnswers: [1],
           timeSeconds: 15,
@@ -1090,20 +1100,17 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       ],
       settings: [],
     }
-
     const { quizId } = service.importEnhancedBundle(authoredShow)
     expect(quizId).toBeDefined()
-
     const imported = service.getCompositeQuiz(quizId)
     expect(imported.exists).toBe(true)
     expect(imported.quizz.subject).toBe("Authored Show Storage Test")
     expect(imported.extras?.schemaVersion).toBe(2)
-    const extrasV2 = imported.extras as any
+    const extrasV2 = imported.extras as QuizExtrasV2
     expect(extrasV2?.timeline.length).toBe(2)
     expect(extrasV2?.timeline[0].kind).toBe("opening")
     expect(extrasV2?.timeline[1].kind).toBe("question")
   })
-
   it("importEnhancedBundle: strictly rejects legacy quiz payload containing unsafe media URL", () => {
     const initialBaseCount = baseQuizzes.size
     const unsafeLegacy = {
@@ -1124,8 +1131,8 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
       ],
     }
-
     let thrown: unknown = null
+
     try {
       service.importEnhancedBundle(unsafeLegacy)
     } catch (err) {
@@ -1139,7 +1146,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     )
     expect(baseQuizzes.size).toBe(initialBaseCount)
   })
-
   it("exportEnhancedBundle: synthesizes valid V2 extras on-the-fly without sidecar on disk", () => {
     // Save raw legacy quiz directly without writing any sidecar
     const saveResult = injections.saveQuizz(sampleQuiz)
@@ -1152,14 +1158,13 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     expect(exportedBundle.bundleVersion).toBe(1)
     expect(exportedBundle.quizz).toBeDefined()
     expect(exportedBundle.extras.schemaVersion).toBe(2)
-    const extrasV2 = exportedBundle.extras as any
+    const extrasV2 = exportedBundle.extras as QuizExtrasV2
     expect(extrasV2.quizId).toBe(legacyId)
     expect(extrasV2.timeline.length).toBe(sampleQuiz.questions.length)
 
     // Verify sidecar was NOT written to disk merely by exporting!
     expect(fs.existsSync(sidecarFile)).toBe(false)
   })
-
   it("Gate C01, C02, C05: imports friendly show with note and interlude, preserves metadata through reload and revision increment", () => {
     const interludeConfig = {
       kind: "title" as const,
@@ -1169,7 +1174,6 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
       audioCue: "start",
     }
     const noteText = 'הערת עורך לשעשועון חי\nLine 2 with quotes "tested"'
-
     const authoredShow = {
       format: "tada-show",
       version: 1,
@@ -1182,7 +1186,14 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
           kind: "quiz",
           questionType: "single",
           question: "First Question?",
-          answers: [{ text: "Ans1" }, { text: "Ans2" }],
+          answers: [
+            {
+              text: "Ans1",
+            },
+            {
+              text: "Ans2",
+            },
+          ],
           correctAnswers: [1],
           interlude: interludeConfig,
         },
@@ -1191,8 +1202,11 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     }
 
     // 1. Import friendly show via service
-    const { quizId, revision, baseDigest } =
-      service.importEnhancedBundle(authoredShow)
+    const {
+      quizId,
+      revision,
+      baseDigest: _baseDigest,
+    } = service.importEnhancedBundle(authoredShow)
     expect(quizId).toBeDefined()
     expect(revision).toBe(1)
 
@@ -1200,16 +1214,15 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const loaded = service.getCompositeQuiz(quizId)
     expect(loaded.exists).toBe(true)
     expect(loaded.extras?.schemaVersion).toBe(2)
-    const extrasV2 = loaded.extras as any
-
+    const extrasV2 = loaded.extras as QuizExtrasV2
     expect(extrasV2.authoring?.showNote).toBe(noteText)
     expect(extrasV2.questionIds).toHaveLength(1)
-    const freshQId = extrasV2.questionIds[0]
+    const { 0: freshQId } = extrasV2.questionIds
     expect(extrasV2.perQuestion[freshQId]?.interlude).toEqual(interludeConfig)
 
     // 3. Export enhanced bundle & verify metadata presence
     const exportedBundle = service.exportEnhancedBundle(quizId)
-    const exportedExtras = exportedBundle.extras as any
+    const exportedExtras = exportedBundle.extras as QuizExtrasV2
     expect(exportedExtras.authoring?.showNote).toBe(noteText)
     expect(exportedExtras.perQuestion[freshQId]?.interlude).toEqual(
       interludeConfig,
@@ -1234,14 +1247,13 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
 
     // 5. Reopen and verify note and interlude are still intact
     const reloaded = service.getCompositeQuiz(quizId)
-    const reloadedExtras = reloaded.extras as any
+    const reloadedExtras = reloaded.extras as QuizExtrasV2
     expect(reloadedExtras.authoring?.showNote).toBe(noteText)
     expect(reloadedExtras.perQuestion[freshQId]?.interlude).toEqual(
       interludeConfig,
     )
     expect(reloadedExtras.defaults.advanceMode).toBe("manual")
   })
-
   it("Gate C03 & C05: invalid targetKey direct server import returns 400 and performs zero writes", () => {
     const initialBaseCount = baseQuizzes.size
     const authoredWithInvalidTarget = {
@@ -1254,7 +1266,14 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
           kind: "quiz",
           questionType: "single",
           question: "Question?",
-          answers: [{ text: "A" }, { text: "B" }],
+          answers: [
+            {
+              text: "A",
+            },
+            {
+              text: "B",
+            },
+          ],
           correctAnswers: [1],
         },
       ],
@@ -1267,8 +1286,8 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
         },
       ],
     }
-
     let thrown: unknown = null
+
     try {
       service.importEnhancedBundle(authoredWithInvalidTarget)
     } catch (err) {

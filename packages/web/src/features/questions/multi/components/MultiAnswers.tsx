@@ -32,7 +32,7 @@ const MultiAnswers = ({
   return (
     <div
       className={clsx(
-        "mx-auto mb-2 sm:mb-4 flex w-full max-w-7xl flex-col gap-2 px-2",
+        "mx-auto mb-2 flex w-full max-w-7xl flex-col gap-2 px-2 sm:mb-4",
         {
           "flex-1": fill,
         },
@@ -40,7 +40,7 @@ const MultiAnswers = ({
     >
       <div
         className={clsx(
-          "grid gap-1.5 sm:gap-2 text-base font-bold text-white sm:text-lg md:text-xl",
+          "grid gap-1.5 text-base font-bold text-white sm:gap-2 sm:text-lg md:text-xl",
           fill
             ? "flex-1 auto-rows-fr grid-cols-1 sm:grid-cols-2"
             : "grid-cols-2",

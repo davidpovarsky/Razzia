@@ -64,16 +64,27 @@ export function useQuestionPresentation(
 
 /** Preserve the server's optional entrance window when using native answer controls. */
 export function useNativeVotingGate(startsAt?: number, paused = false) {
-  const [, refresh] = useState(0)
+  const [openedAt, setOpenedAt] = useState(() =>
+    startsAt && Date.now() >= startsAt ? startsAt : undefined,
+  )
   useEffect(() => {
-    if (!startsAt || paused) return
+    if (!startsAt || paused) {
+      return
+    }
+
     const delay = startsAt - Date.now()
-    if (delay <= 0) return
-    const timer = window.setTimeout(
-      () => refresh((value) => value + 1),
-      delay + 10,
-    )
+
+    if (delay <= 0) {
+      // oxlint-disable-next-line react/set-state-in-effect -- Synchronize the server deadline with the external wall clock.
+      setOpenedAt(startsAt)
+
+      return
+    }
+
+    const timer = window.setTimeout(() => setOpenedAt(startsAt), delay + 10)
+
     return () => window.clearTimeout(timer)
   }, [startsAt, paused])
-  return !paused && (!startsAt || Date.now() >= startsAt)
+
+  return !paused && (!startsAt || openedAt === startsAt)
 }

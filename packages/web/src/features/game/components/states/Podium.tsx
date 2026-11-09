@@ -113,8 +113,8 @@ const Podium = ({ data: { subject, top } }: Props) => {
           <div className="spotlight"></div>
         </div>
       )}
-      <section className="relative mx-auto flex min-h-0 h-full w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-2">
-        <h2 className="anim-show text-center text-2xl sm:text-3xl font-bold text-white drop-shadow-lg md:text-4xl lg:text-5xl line-clamp-2">
+      <section className="relative mx-auto flex h-full min-h-0 w-full max-w-7xl flex-1 flex-col items-center justify-between overflow-hidden px-2">
+        <h2 className="anim-show line-clamp-2 text-center text-2xl font-bold text-white drop-shadow-lg sm:text-3xl md:text-4xl lg:text-5xl">
           {subject}
         </h2>
 

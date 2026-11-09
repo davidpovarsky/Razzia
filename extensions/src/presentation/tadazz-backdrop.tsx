@@ -187,7 +187,9 @@ export function TadazzAnimatedBackdrop({
       <div className="tdz-artbackdrop__art" style={style}>
         <img
           className="tdz-artbackdrop__image"
-          style={state.source === "static" ? { objectFit: state.fit } : undefined}
+          style={
+            state.source === "static" ? { objectFit: state.fit } : undefined
+          }
           src={state.url}
           alt=""
           draggable={false}

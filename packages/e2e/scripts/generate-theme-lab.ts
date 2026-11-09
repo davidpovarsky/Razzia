@@ -1,20 +1,27 @@
+import type { ShowThemeDefinition } from "../../../extensions/src/core"
 /** Remote-only original Canvas artwork. No existing artwork is transformed. */
 import { chromium } from "@playwright/test"
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { resolve } from "node:path"
 import { createHash } from "node:crypto"
 
-if (process.env.TADAZZ_REMOTE_QA !== "1") throw new Error("Remote QA only")
+if (process.env.TADAZZ_REMOTE_QA !== "1") {
+  throw new Error("Remote QA only")
+}
+
 const root = resolve(import.meta.dirname, "../../..")
-const classic = JSON.parse(
+const classic: unknown = JSON.parse(
   readFileSync(
     resolve(root, "extensions/src/core/show-themes/classic.manifest.json"),
     "utf8",
   ),
 )
-const browser = await chromium.launch({ headless: true })
+const browser = await chromium.launch({
+  headless: true,
+})
+
 try {
-  for (const [slug, title, colors] of [
+  for (const [slug, titleValue, colors] of [
     ["cosmic", "Cosmic Night", ["#041128", "#102f64", "#51e2ff", "#eea7ff"]],
     ["jade", "Jade Studio", ["#03201f", "#075449", "#9af5c9", "#f8d886"]],
   ] as const) {
@@ -22,37 +29,44 @@ try {
       root,
       `packages/web/public/tadazz-show/demos/${slug}/v2`,
     )
-    mkdirSync(directory, { recursive: true })
+    mkdirSync(directory, {
+      recursive: true,
+    })
     const page = await browser.newPage()
     await page.addInitScript("globalThis.__name = (target) => target")
     await page.goto("about:blank")
     const generated = await page.evaluate(
-      async ({ slug, title, colors }) => {
+      async ({ slug: slugValue, title: _title, colors: colorsValue }) => {
         const canvas = document.createElement("canvas")
         canvas.width = 1920
         canvas.height = 1080
-        const ctx = canvas.getContext("2d")!
+        const ctx =
+          canvas.getContext("2d") ??
+          (() => {
+            throw new Error("Canvas context unavailable")
+          })()
         function draw(t: number) {
           const g = ctx.createLinearGradient(0, 0, 1920, 1080)
-          g.addColorStop(0, colors[1])
-          g.addColorStop(0.5, colors[0])
-          g.addColorStop(1, colors[1])
+          g.addColorStop(0, colorsValue[1])
+          g.addColorStop(0.5, colorsValue[0])
+          g.addColorStop(1, colorsValue[1])
           ctx.fillStyle = g
           ctx.fillRect(0, 0, 1920, 1080)
-          ctx.strokeStyle = colors[2]
+          ;({ 2: ctx.strokeStyle } = colorsValue)
           ctx.lineWidth = 3
-          if (slug === "cosmic") {
-            for (let i = 0; i < 110; i++) {
+
+          if (slugValue === "cosmic") {
+            for (let i = 0; i < 110; i += 1) {
               const x = (i * 431 + 79) % 1920,
                 y = (i * 193 + 37) % 1080
               ctx.globalAlpha = 0.18 + (i % 6) / 10
-              ctx.fillStyle = colors[2]
+              ;({ 2: ctx.fillStyle } = colorsValue)
               ctx.beginPath()
               ctx.arc(x, y, 1 + (i % 3), 0, Math.PI * 2)
               ctx.fill()
             }
             ctx.globalAlpha = 0.45
-            for (let i = 0; i < 4; i++) {
+            for (let i = 0; i < 4; i += 1) {
               ctx.beginPath()
               ctx.ellipse(
                 1800,
@@ -67,7 +81,7 @@ try {
             }
           } else {
             ctx.globalAlpha = 0.25
-            for (let i = 0; i < 9; i++) {
+            for (let i = 0; i < 9; i += 1) {
               ctx.save()
               ctx.translate(80 + i * 230, 1020)
               ctx.rotate(-0.5 + t * 0.02)
@@ -81,10 +95,11 @@ try {
             ctx.lineTo(420 + t * 20, 70)
             ctx.stroke()
           }
+
           ctx.globalAlpha = 1
         }
         draw(0)
-        const background = canvas.toDataURL("image/png").split(",")[1]
+        const { 1: background } = canvas.toDataURL("image/png").split(",")
         const logoPng = ""
         const stream = canvas.captureStream(25)
         const mimeType = MediaRecorder.isTypeSupported("video/webm;codecs=vp9")
@@ -96,33 +111,57 @@ try {
         })
         const chunks: Blob[] = []
         recorder.ondataavailable = (e) => chunks.push(e.data)
-        const stopped = new Promise<void>((resolve) => {
-          recorder.onstop = () => resolve()
+        const stopped = new Promise<void>((resolveValue) => {
+          recorder.onstop = () => resolveValue()
         })
         recorder.start()
         const started = performance.now()
-        await new Promise<void>((resolve) => {
+        await new Promise<void>((resolveValue) => {
           function frame() {
             const t = (performance.now() - started) / 1000
             draw(t)
             ctx.globalAlpha = Math.min(1, t)
             ctx.globalAlpha = 1
-            if (t < 3) requestAnimationFrame(frame)
-            else resolve()
+
+            if (t < 3) {
+              requestAnimationFrame(frame)
+            } else {
+              resolveValue()
+            }
           }
           frame()
         })
         recorder.stop()
         await stopped
-        stream.getTracks().forEach((track) => track.stop())
-        const video = await new Promise<string>((resolve) => {
-          const reader = new FileReader()
-          reader.onload = () => resolve(String(reader.result).split(",")[1])
-          reader.readAsDataURL(new Blob(chunks, { type: mimeType }))
+        stream.getTracks().forEach((track) => {
+          track.stop()
         })
-        return { background, logo: logoPng, video }
+        const video = await new Promise<string>((resolveValue) => {
+          const reader = new FileReader()
+          reader.onload = () =>
+            resolveValue(
+              (typeof reader.result === "string" ? reader.result : "").split(
+                ",",
+              )[1],
+            )
+          reader.readAsDataURL(
+            new Blob(chunks, {
+              type: mimeType,
+            }),
+          )
+        })
+
+        return {
+          background,
+          logo: logoPng,
+          video,
+        }
       },
-      { slug, title, colors },
+      {
+        slug,
+        title: titleValue,
+        colors,
+      },
     )
     writeFileSync(
       resolve(directory, "backdrop.png"),
@@ -142,7 +181,7 @@ try {
         op: 75,
         w: 1920,
         h: 1080,
-        nm: `${title} rings`,
+        nm: `${titleValue} rings`,
         ddd: 0,
         assets: [],
         layers: [
@@ -156,29 +195,68 @@ try {
               o: {
                 a: 1,
                 k: [
-                  { t: 0, s: [0] },
-                  { t: 15, s: [45] },
-                  { t: 60, s: [45] },
-                  { t: 74, s: [0] },
+                  {
+                    t: 0,
+                    s: [0],
+                  },
+                  {
+                    t: 15,
+                    s: [45],
+                  },
+                  {
+                    t: 60,
+                    s: [45],
+                  },
+                  {
+                    t: 74,
+                    s: [0],
+                  },
                 ],
               },
-              r: { a: 0, k: 0 },
-              p: { a: 0, k: [960, 540, 0] },
-              a: { a: 0, k: [0, 0, 0] },
-              s: { a: 0, k: [100, 100, 100] },
+              r: {
+                a: 0,
+                k: 0,
+              },
+              p: {
+                a: 0,
+                k: [960, 540, 0],
+              },
+              a: {
+                a: 0,
+                k: [0, 0, 0],
+              },
+              s: {
+                a: 0,
+                k: [100, 100, 100],
+              },
             },
             shapes: [
               {
                 ty: "el",
-                p: { a: 0, k: [0, 0] },
-                s: { a: 0, k: [600, 600] },
+                p: {
+                  a: 0,
+                  k: [0, 0],
+                },
+                s: {
+                  a: 0,
+                  k: [600, 600],
+                },
                 nm: "ellipse",
               },
               {
                 ty: "st",
-                c: { a: 0, k: [0.5, 0.9, 0.9, 1] },
-                o: { a: 0, k: 70 },
-                w: { a: 0, k: 2 },
+                c: {
+                  a: 0,
+                  k: [0.5, 0.9, 0.9, 1],
+                },
+                o: {
+                  a: 0,
+                  k: 70,
+                },
+                w: {
+                  a: 0,
+                  k: 2,
+                },
                 lc: 2,
                 lj: 2,
                 nm: "outline",
@@ -197,7 +275,7 @@ try {
         "tadazz-classic.",
         `tadazz-demo-${slug}.`,
       ),
-    )
+    ) as ShowThemeDefinition
     theme.id = `tadazz-demo-${slug}`
     theme.version = "2.0.0"
     theme.kind = "declarative"
@@ -215,37 +293,50 @@ try {
       tr: "Classic koreografisini kullanan demo.",
       vi: "Bản trình diễn sử dụng chuyển động Classic.",
     }
-    theme.localizations = Object.fromEntries(
+    const localizations: Record<
+      string,
+      Record<string, string>
+    > = Object.fromEntries(
       Object.entries(descriptions).map(([locale, description]) => [
         locale,
-        { [theme.nameKey]: title, [theme.descriptionKey]: description },
+        {
+          [theme.nameKey]: titleValue,
+          [theme.descriptionKey]: description,
+        },
       ]),
     )
     const keys = new Set(
       [
         ...Object.values(theme.slots),
         ...Object.values(theme.audioEvents),
-      ].flatMap((entry: any) => entry.variants.map((v: any) => v.labelKey)),
+      ].flatMap((entry) =>
+        entry.variants.map((v: { labelKey: string }) => v.labelKey),
+      ),
     )
-    for (const [locale, labels] of Object.entries(theme.localizations) as [
-      string,
-      Record<string, string>,
-    ][]) {
-      const source = JSON.parse(
+    for (const [locale, labels] of Object.entries(localizations)) {
+      const source: unknown = JSON.parse(
         readFileSync(
           resolve(root, `extensions/src/locales/${locale}/extensions.json`),
           "utf8",
         ),
       )
-      for (const key of keys as Set<string>)
+      for (const key of keys) {
         labels[key] = key
           .replace("extensions:", "")
           .split(".")
-          .reduce((value, part) => value[part], source)
+          .reduce<unknown>((value, part) => {
+            if (!value || typeof value !== "object") {
+              throw new Error(`Missing translation ${key}`)
+            }
+
+            return (value as Record<string, unknown>)[part]
+          }, source) as string
+      }
     }
-    theme.tokens.background = colors[0]
+    theme.localizations = localizations
+    ;({ 0: theme.tokens.background } = colors)
     theme.tokens.foreground = "#ffffff"
-    theme.tokens.accent = colors[2]
+    ;({ 2: theme.tokens.accent } = colors)
     theme.tokens.fontId = "rubik"
     theme.tokens.palette = {
       night: colors[0],
@@ -268,7 +359,11 @@ try {
     }
     for (const asset of theme.assets) {
       const filename = replacements[asset.id]
-      if (!filename) continue
+
+      if (!filename) {
+        continue
+      }
+
       const bytes = readFileSync(resolve(directory, filename))
       asset.url = `/tadazz-show/demos/${slug}/v2/${filename}`
       asset.bytes = bytes.length
@@ -277,22 +372,28 @@ try {
       asset.provenance =
         "Original source-generated Canvas/Lottie artwork for the authorized isolated demo."
     }
-    if (slug === "jade")
-      for (const event of Object.values(theme.audioEvents) as any[]) {
-        for (const variant of event.variants)
+
+    if (slug === "jade") {
+      for (const event of Object.values(theme.audioEvents)) {
+        for (const variant of event.variants) {
           variant.volume = Math.min(0.35, variant.volume)
+        }
       }
+    }
+
     const manifests = resolve(
       root,
       "extensions/src/server/show-themes/demo-themes",
     )
-    mkdirSync(manifests, { recursive: true })
+    mkdirSync(manifests, {
+      recursive: true,
+    })
     writeFileSync(
       resolve(manifests, `${slug}.manifest.json`),
-      JSON.stringify(theme, null, 2) + "\n",
+      `${JSON.stringify(theme, null, 2)}\n`,
     )
     await page.close()
-    console.log(`Generated ${title}`)
+    console.log(`Generated ${titleValue}`)
   }
 } finally {
   await browser.close()

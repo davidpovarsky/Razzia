@@ -2,7 +2,6 @@ import fs from "node:fs"
 import { extname } from "node:path"
 import { getPath } from "./config"
 import { withAccount } from "./account-scope"
-
 const types: Record<string, string> = {
   ".png": "image/png",
   ".jpg": "image/jpeg",
@@ -25,15 +24,26 @@ export function allowedMediaName(name: string): boolean {
   )
 }
 
-export async function readAccountMedia(
+export /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
+async function readAccountMedia(
   ownerId: string | null,
   name: string,
-): Promise<{ bytes: Uint8Array; type: string } | null> {
-  if (!allowedMediaName(name)) return null
+): Promise<{
+  bytes: Uint8Array
+  type: string
+} | null> {
+  if (!allowedMediaName(name)) {
+    return null
+  }
+
   return withAccount(ownerId ?? "", () => {
-    const path = getPath("media/" + name)
+    const path = getPath(`media/${name}`)
+
     try {
-      if (!fs.lstatSync(path).isFile()) return null
+      if (!fs.lstatSync(path).isFile()) {
+        return null
+      }
+
       return {
         bytes: new Uint8Array(fs.readFileSync(path)),
         type: types[extname(name)] ?? "application/octet-stream",
@@ -43,3 +53,4 @@ export async function readAccountMedia(
     }
   })
 }
+/* oxlint-enable require-await, typescript/require-await */

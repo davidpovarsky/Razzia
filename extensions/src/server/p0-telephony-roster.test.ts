@@ -11,10 +11,7 @@ import { getIo } from "@razzia/socket/services/io"
 import Registry from "@razzia/socket/services/registry"
 import { io as connect, type Socket } from "socket.io-client"
 import { afterAll, beforeAll, describe, expect, it } from "vitest"
-import {
-  buildXlsxBuffer,
-  type HostPresenceSnapshot,
-} from "../core/index"
+import { buildXlsxBuffer, type HostPresenceSnapshot } from "../core/index"
 import { RealRazziaTransport } from "./real-transport"
 
 describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Socket.IO)", () => {
@@ -145,20 +142,17 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     const { gameId, inviteCode } = await createRealGame(mgrToken)
 
     // 1. Add 2 participants to roster (+972 and +44) and enable phoneInviteOnly
-    const add1 = await fetchApi(
-      `${baseUrl}/api/games/${gameId}/roster`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${mgrToken}`,
-        },
-        body: JSON.stringify({
-          displayName: "David Israel",
-          phone: "050-222-3344",
-        }),
+    const add1 = await fetchApi(`${baseUrl}/api/games/${gameId}/roster`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${mgrToken}`,
       },
-    )
+      body: JSON.stringify({
+        displayName: "David Israel",
+        phone: "050-222-3344",
+      }),
+    })
     expect(add1.status).toBe(200)
     const add1Data = (await add1.json()) as {
       presence: HostPresenceSnapshot
@@ -166,20 +160,17 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     }
     expect(add1Data.participant.phoneE164).toBe("+972502223344")
 
-    const add2 = await fetchApi(
-      `${baseUrl}/api/games/${gameId}/roster`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${mgrToken}`,
-        },
-        body: JSON.stringify({
-          displayName: "Sarah London",
-          phone: "+44 7911 654321",
-        }),
+    const add2 = await fetchApi(`${baseUrl}/api/games/${gameId}/roster`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${mgrToken}`,
       },
-    )
+      body: JSON.stringify({
+        displayName: "Sarah London",
+        phone: "+44 7911 654321",
+      }),
+    })
     expect(add2.status).toBe(200)
 
     const setInviteOnly = await fetchApi(
@@ -196,38 +187,35 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     expect(setInviteOnly.status).toBe(200)
 
     // 2. Unrecognized phone caller via /api/games/pilot-phone is rejected with 403
-    const unknownCall = await fetchApi(
-      `${baseUrl}/api/games/pilot-phone`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          action: "join_or_poll",
-          gameId,
-          callId: "unknown-call-1",
-          phone: "052-999-8888",
-        }),
-      },
-    )
+    const unknownCall = await fetchApi(`${baseUrl}/api/games/pilot-phone`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        action: "join_or_poll",
+        gameId,
+        callId: "unknown-call-1",
+        phone: "052-999-8888",
+      }),
+    })
     expect(unknownCall.status).toBe(403)
-    const unknownBody = (await unknownCall.json()) as { error: string; reason?: string }
+    const unknownBody = (await unknownCall.json()) as {
+      error: string
+      reason?: string
+    }
     expect(unknownBody.error).toBe("errors:game.locked")
     expect(unknownBody.reason).toBe("phone_invite_only")
 
     // 3. Recognized phone caller joins automatically with saved name "David Israel"
-    const knownCall = await fetchApi(
-      `${baseUrl}/api/games/pilot-phone`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-          action: "join_or_poll",
-          gameId,
-          callId: "david-call-1",
-          phone: "+972502223344",
-        }),
-      },
-    )
+    const knownCall = await fetchApi(`${baseUrl}/api/games/pilot-phone`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({
+        action: "join_or_poll",
+        gameId,
+        callId: "david-call-1",
+        phone: "+972502223344",
+      }),
+    })
     expect(knownCall.status).toBe(200)
     const knownBody = (await knownCall.json()) as {
       ok: boolean
@@ -243,14 +231,11 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     expect(knownBody.rosterPlayerId).toBe(add1Data.participant.rosterPlayerId)
 
     // 4. Web player joins normally and must NEVER receive phone numbers on any event
-    const sessRes = await fetchApi(
-      `${baseUrl}/api/auth/session`,
-      {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({}),
-      },
-    )
+    const sessRes = await fetchApi(`${baseUrl}/api/auth/session`, {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({}),
+    })
     const { token: webToken } = (await sessRes.json()) as { token: string }
 
     // Web player attempting to fetch manager roster is rejected
@@ -262,17 +247,14 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
     )
     expect([401, 403]).toContain(forbiddenRoster.status)
 
-    const joinRes = await fetchApi(
-      `${baseUrl}/api/games/join`,
-      {
-        method: "POST",
-        headers: {
-          "content-type": "application/json",
-          Authorization: `Bearer ${webToken}`,
-        },
-        body: JSON.stringify({ inviteCode, username: "WebGuest" }),
+    const joinRes = await fetchApi(`${baseUrl}/api/games/join`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${webToken}`,
       },
-    )
+      body: JSON.stringify({ inviteCode, username: "WebGuest" }),
+    })
     expect(joinRes.status).toBe(200)
     const { ticket } = (await joinRes.json()) as { ticket: string }
 
@@ -494,7 +476,9 @@ describe("P0 Telephony, Roster, Redial & Host Presence E2E (Real Hono + Real Soc
         // Must rebind to the EXACT same rosterPlayerId and preserve Q1 points!
         const expectedRId = rosterIdsByIndex.get(i) ?? ""
         expect(redialData.rosterPlayerId).toBe(expectedRId)
-        expect(redialData.state.points).toBe(q1ScoresByRosterId.get(expectedRId))
+        expect(redialData.state.points).toBe(
+          q1ScoresByRosterId.get(expectedRId),
+        )
       }),
     )
 

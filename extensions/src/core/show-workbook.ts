@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   showThemeSelectionSchema,
   scopedThemeOverridesSchema,
@@ -13,7 +14,7 @@ import {
 import {
   tadaShowV1Schema,
   type AuthoredAnswer,
-  type AuthoredCard,
+  type AuthoredQuizCard,
   type AuthoredSetting,
   type TadaShowV1,
 } from "./show-authoring-schema"
@@ -38,14 +39,14 @@ import { cinematicOverlayAnimationsArraySchema } from "./cinematic-overlays"
 import type { AnyQuizExtras } from "./index"
 import { MAX_ANSWERS } from "@razzia/common/constants"
 
-const MAX_WORKBOOK_BYTES = 5 * 1024 * 1024 // 5 MB
-const MAX_INFLATED_BYTES = 25 * 1024 * 1024 // 25 MB
+// 5 MB
+const MAX_WORKBOOK_BYTES = 5 * 1024 * 1024
+// 25 MB
+const MAX_INFLATED_BYTES = 25 * 1024 * 1024
 const MAX_ROWS = 2000
 const MAX_WORKBOOK_ENTRIES = 50
-
 const utf8Encoder = new TextEncoder()
 const utf8Decoder = new TextDecoder("utf-8")
-
 function decodeXmlEntities(str: string): string {
   return str
     .replaceAll("&lt;", "<")
@@ -60,7 +61,6 @@ function decodeXmlEntities(str: string): string {
       String.fromCodePoint(Number.parseInt(dec, 10)),
     )
 }
-
 function escapeXml(str: string): string {
   return str
     .replaceAll("&", "&amp;")
@@ -69,11 +69,9 @@ function escapeXml(str: string): string {
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&apos;")
 }
-
 function readU16LE(buf: Uint8Array, offset: number): number {
   return buf[offset] | (buf[offset + 1] << 8)
 }
-
 function readU32LE(buf: Uint8Array, offset: number): number {
   return (
     (buf[offset] |
@@ -83,19 +81,16 @@ function readU32LE(buf: Uint8Array, offset: number): number {
     0
   )
 }
-
 function writeU16LE(buf: Uint8Array, offset: number, val: number): void {
   buf[offset] = val & 0xff
   buf[offset + 1] = (val >>> 8) & 0xff
 }
-
 function writeU32LE(buf: Uint8Array, offset: number, val: number): void {
   buf[offset] = val & 0xff
   buf[offset + 1] = (val >>> 8) & 0xff
   buf[offset + 2] = (val >>> 16) & 0xff
   buf[offset + 3] = (val >>> 24) & 0xff
 }
-
 function concatUint8Arrays(arrays: Uint8Array[]): Uint8Array {
   const totalLength = arrays.reduce((acc, a) => acc + a.byteLength, 0)
   const result = new Uint8Array(totalLength)
@@ -114,35 +109,36 @@ interface HuffmanTable {
   counts: Uint16Array
   symbols: Uint16Array
 }
-
 function buildHuffman(lengths: Uint8Array, maxSymbol: number): HuffmanTable {
   const counts = new Uint16Array(16)
   for (let i = 0; i < maxSymbol; i += 1) {
     const len = lengths[i]
+
     if (len > 0) {
       counts[len] += 1
     }
   }
-
   const offsets = new Uint16Array(16)
   let code = 0
   for (let bits = 1; bits <= 15; bits += 1) {
     offsets[bits] = code
     code += counts[bits]
   }
-
   const symbols = new Uint16Array(code)
   for (let i = 0; i < maxSymbol; i += 1) {
     const len = lengths[i]
+
     if (len > 0) {
       symbols[offsets[len]] = i
       offsets[len] += 1
     }
   }
 
-  return { counts, symbols }
+  return {
+    counts,
+    symbols,
+  }
 }
-
 const FIXED_LEN_BASE = [
   3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 15, 17, 19, 23, 27, 31, 35, 43, 51, 59, 67,
   83, 99, 115, 131, 163, 195, 227, 258,
@@ -162,7 +158,6 @@ const FIXED_DIST_EXTRA = [
 const CLEN_ORDER = [
   16, 17, 18, 0, 8, 7, 9, 6, 10, 5, 11, 4, 12, 3, 13, 2, 14, 1, 15,
 ]
-
 function inflateRawBytes(
   src: Uint8Array,
   maxOutputLength = MAX_INFLATED_BYTES,
@@ -170,18 +165,17 @@ function inflateRawBytes(
   let bytePos = 0
   let bitBuf = 0
   let bitCnt = 0
-
   const needBits = (n: number) => {
     while (bitCnt < n) {
       if (bytePos >= src.length) {
         throw new Error("errors:extensions.corruptXlsxFile")
       }
+
       bitBuf |= src[bytePos] << bitCnt
       bytePos += 1
       bitCnt += 8
     }
   }
-
   const readBits = (n: number): number => {
     needBits(n)
     const val = bitBuf & ((1 << n) - 1)
@@ -190,7 +184,6 @@ function inflateRawBytes(
 
     return val
   }
-
   const decodeSymbol = (table: HuffmanTable): number => {
     let code = 0
     let first = 0
@@ -198,9 +191,11 @@ function inflateRawBytes(
     for (let len = 1; len <= 15; len += 1) {
       code |= readBits(1)
       const count = table.counts[len]
+
       if (code - count < first) {
         return table.symbols[index + (code - first)]
       }
+
       index += count
       first += count
       first <<= 1
@@ -208,7 +203,6 @@ function inflateRawBytes(
     }
     throw new Error("errors:extensions.corruptXlsxFile")
   }
-
   const fixedLitLengths = new Uint8Array(288)
   for (let i = 0; i <= 143; i += 1) {
     fixedLitLengths[i] = 8
@@ -224,31 +218,31 @@ function inflateRawBytes(
   }
   const fixedDistLengths = new Uint8Array(32)
   fixedDistLengths.fill(5)
-
   const fixedLitTable = buildHuffman(fixedLitLengths, 288)
   const fixedDistTable = buildHuffman(fixedDistLengths, 32)
-
   let out = new Uint8Array(
     Math.min(maxOutputLength, Math.max(4096, src.length * 3)),
   )
   let outPos = 0
-
   const ensureOut = (extra: number) => {
     if (outPos + extra > maxOutputLength) {
       throw new Error("errors:extensions.xlsxTooLarge")
     }
+
     if (outPos + extra > out.length) {
       let nextLen = out.length * 2
+
       while (nextLen < outPos + extra) {
         nextLen *= 2
       }
+
       const next = new Uint8Array(Math.min(maxOutputLength, nextLen))
       next.set(out.subarray(0, outPos))
       out = next
     }
   }
-
   let isFinal = 0
+
   while (!isFinal) {
     isFinal = readBits(1)
     const btype = readBits(2)
@@ -256,15 +250,19 @@ function inflateRawBytes(
     if (btype === 0) {
       bitBuf = 0
       bitCnt = 0
+
       if (bytePos + 4 > src.length) {
         throw new Error("errors:extensions.corruptXlsxFile")
       }
+
       const len = src[bytePos] | (src[bytePos + 1] << 8)
       const nlen = src[bytePos + 2] | (src[bytePos + 3] << 8)
       bytePos += 4
+
       if ((len ^ 0xffff) !== nlen || bytePos + len > src.length) {
         throw new Error("errors:extensions.corruptXlsxFile")
       }
+
       ensureOut(len)
       out.set(src.subarray(bytePos, bytePos + len), outPos)
       bytePos += len
@@ -285,8 +283,10 @@ function inflateRawBytes(
         const totalLengths = hlit + hdist
         const litDistLens = new Uint8Array(totalLengths)
         let curIdx = 0
+
         while (curIdx < totalLengths) {
           const sym = decodeSymbol(clenTable)
+
           if (sym < 16) {
             litDistLens[curIdx] = sym
             curIdx += 1
@@ -294,6 +294,7 @@ function inflateRawBytes(
             if (curIdx === 0) {
               throw new Error("errors:extensions.corruptXlsxFile")
             }
+
             const prev = litDistLens[curIdx - 1]
             const repeat = readBits(2) + 3
             litDistLens.fill(prev, curIdx, curIdx + repeat)
@@ -308,12 +309,14 @@ function inflateRawBytes(
             curIdx += repeat
           }
         }
+
         litTable = buildHuffman(litDistLens.subarray(0, hlit), hlit)
         distTable = buildHuffman(litDistLens.subarray(hlit), hdist)
       }
 
       while (true) {
         const sym = decodeSymbol(litTable)
+
         if (sym < 256) {
           ensureOut(1)
           out[outPos] = sym
@@ -336,6 +339,7 @@ function inflateRawBytes(
           if (dist > outPos) {
             throw new Error("errors:extensions.corruptXlsxFile")
           }
+
           ensureOut(length)
           let copySrc = outPos - dist
           for (let k = 0; k < length; k += 1) {
@@ -365,6 +369,7 @@ export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
   for (let i = zipBuf.byteLength - 22; i >= minEocd; i -= 1) {
     if (readU32LE(zipBuf, i) === 0x06054b50) {
       eocdOffset = i
+
       break
     }
   }
@@ -383,7 +388,6 @@ export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
   const entries = new Map<string, Uint8Array>()
   let ptr = cdOffset
   let cumulativeInflated = 0
-
   for (let i = 0; i < totalEntries; i += 1) {
     if (ptr + 46 > zipBuf.byteLength || readU32LE(zipBuf, ptr) !== 0x02014b50) {
       throw new Error("errors:extensions.corruptXlsxFile")
@@ -396,8 +400,8 @@ export function extractZipEntries(zipBuf: Uint8Array): Map<string, Uint8Array> {
     const extraLen = readU16LE(zipBuf, ptr + 30)
     const commentLen = readU16LE(zipBuf, ptr + 32)
     const localHeaderOffset = readU32LE(zipBuf, ptr + 42)
-
     cumulativeInflated += uncompressedSize
+
     if (cumulativeInflated > MAX_INFLATED_BYTES) {
       throw new Error("errors:extensions.xlsxTooLarge")
     }
@@ -456,10 +460,10 @@ function colLettersToIndex(letters: string): number {
 
   return idx - 1
 }
-
 function indexToColLetters(colIdx: number): string {
   let n = colIdx + 1
   let letters = ""
+
   while (n > 0) {
     const rem = (n - 1) % 26
     letters = String.fromCharCode(65 + rem) + letters
@@ -484,17 +488,18 @@ function crc32(buf: Uint8Array): number {
 }
 
 export function createZipArchive(
-  files: Array<{ name: string; data: Uint8Array }>,
+  files: Array<{
+    name: string
+    data: Uint8Array
+  }>,
 ): Uint8Array {
   const localParts: Uint8Array[] = []
   const centralParts: Uint8Array[] = []
   let offset = 0
-
   for (const file of files) {
     const nameBuf = utf8Encoder.encode(file.name)
     const uncompressed = file.data
     const crc = crc32(uncompressed)
-
     const localHeader = new Uint8Array(30 + nameBuf.byteLength)
     writeU32LE(localHeader, 0, 0x04034b50)
     writeU16LE(localHeader, 4, 20)
@@ -508,9 +513,7 @@ export function createZipArchive(
     writeU16LE(localHeader, 26, nameBuf.byteLength)
     writeU16LE(localHeader, 28, 0)
     localHeader.set(nameBuf, 30)
-
     localParts.push(localHeader, uncompressed)
-
     const centralHeader = new Uint8Array(46 + nameBuf.byteLength)
     writeU32LE(centralHeader, 0, 0x02014b50)
     writeU16LE(centralHeader, 4, 20)
@@ -530,11 +533,9 @@ export function createZipArchive(
     writeU32LE(centralHeader, 38, 0)
     writeU32LE(centralHeader, 42, offset)
     centralHeader.set(nameBuf, 46)
-
     centralParts.push(centralHeader)
     offset += localHeader.byteLength + uncompressed.byteLength
   }
-
   const centralDirSize = centralParts.reduce((acc, b) => acc + b.byteLength, 0)
   const eocd = new Uint8Array(22)
   writeU32LE(eocd, 0, 0x06054b50)
@@ -553,9 +554,11 @@ export function createZipArchive(
 
 function normalizeKind(rawKind: string): string {
   const lower = rawKind.trim().toLowerCase()
+
   if (lower === "interimresults" || lower === "interim_results") {
     return "interimResults"
   }
+
   if (
     lower === "answerrecap" ||
     lower === "answer_recap" ||
@@ -566,12 +569,10 @@ function normalizeKind(rawKind: string): string {
 
   return lower
 }
-
 interface SheetCell {
   value: string
   hasFormula: boolean
 }
-
 function parseSheetRows(
   sheetXml: string,
   sharedStrings: string[],
@@ -584,6 +585,7 @@ function parseSheetRows(
 
   while (rowMatch !== null) {
     rowCount += 1
+
     if (rowCount > MAX_ROWS) {
       throw new Error(`errors:extensions.sheetRowsExceeded:${sheetName}`)
     }
@@ -597,14 +599,17 @@ function parseSheetRows(
     while (cellMatch !== null) {
       const [, attrs, rawCellInner] = cellMatch
       const cellInner = (rawCellInner as string | undefined) ?? ""
-
       const refMatch = /\br="([A-Z]+)(\d+)"/u.exec(attrs)
       const colIdx = refMatch ? colLettersToIndex(refMatch[1]) : nextColIdx
       const cellRowStr = refMatch ? refMatch[2] : String(rowCount)
 
       while (rowCells.length < colIdx) {
-        rowCells.push({ value: "", hasFormula: false })
+        rowCells.push({
+          value: "",
+          hasFormula: false,
+        })
       }
+
       nextColIdx = colIdx + 1
 
       // Security Check: strictly forbid formula tags `<f>`
@@ -616,11 +621,12 @@ function parseSheetRows(
 
       const typeMatch = /\bt="([^"]+)"/u.exec(attrs)
       const cellType = typeMatch ? typeMatch[1] : "n"
-
       let cellValue = ""
+
       if (cellType === "inlineStr") {
         const tRegex = /<t(?:\s+[^>]*)?>([\s\S]*?)<\/t>/gu
         let tMatch = tRegex.exec(cellInner)
+
         while (tMatch !== null) {
           cellValue += decodeXmlEntities(tMatch[1])
           tMatch = tRegex.exec(cellInner)
@@ -648,7 +654,7 @@ function parseSheetRows(
         cellValue = cellValue.slice(1)
       } else if (
         /^[=+\-@\t\r]/u.test(cellValue) &&
-        !/^[+\-]?\d+(\.\d+)?$/u.test(cellValue)
+        !/^[+-]?\d+(\.\d+)?$/u.test(cellValue)
       ) {
         throw new Error(
           `errors:extensions.formulaCellForbidden:${sheetName}!${indexToColLetters(colIdx)}${cellRowStr}`,
@@ -659,7 +665,6 @@ function parseSheetRows(
         value: cellValue.trim(),
         hasFormula: false,
       }
-
       cellMatch = cellRegex.exec(rowInner)
     }
 
@@ -688,19 +693,23 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   // 1. Shared Strings
   const sharedStrings: string[] = []
   const sharedStringsBytes = entries.get("xl/sharedStrings.xml")
+
   if (sharedStringsBytes) {
     const xml = utf8Decoder.decode(sharedStringsBytes)
     const siRegex = /<si\b[^>]*>([\s\S]*?)<\/si>/gu
     let siMatch = siRegex.exec(xml)
+
     while (siMatch !== null) {
       const [, inner] = siMatch
       const tRegex = /<t(?:\s+[^>]*)?>([\s\S]*?)<\/t>/gu
       let text = ""
       let tMatch = tRegex.exec(inner)
+
       while (tMatch !== null) {
         text += decodeXmlEntities(tMatch[1])
         tMatch = tRegex.exec(inner)
       }
+
       sharedStrings.push(text)
       siMatch = siRegex.exec(xml)
     }
@@ -708,17 +717,19 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // 2. Map Sheet Names to Target Files via workbook.xml and workbook.xml.rels
   const workbookXmlBytes = entries.get("xl/workbook.xml")
+
   if (!workbookXmlBytes) {
     throw new Error("errors:extensions.corruptXlsxMissingWorkbook")
   }
-  const workbookXml = utf8Decoder.decode(workbookXmlBytes)
 
+  const workbookXml = utf8Decoder.decode(workbookXmlBytes)
   const workbookRelsBytes = entries.get("xl/_rels/workbook.xml.rels")
+
   if (!workbookRelsBytes) {
     throw new Error("errors:extensions.corruptXlsxMissingWorkbook")
   }
-  const workbookRelsXml = utf8Decoder.decode(workbookRelsBytes)
 
+  const workbookRelsXml = utf8Decoder.decode(workbookRelsBytes)
   const relIdToTarget = new Map<string, string>()
   const relRegex = /<Relationship\b[^>]*\bId="([^"]+)"[^>]*\bTarget="([^"]+)"/gu
   let relMatch = relRegex.exec(workbookRelsXml)
@@ -734,26 +745,37 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   while (sheetMatch !== null) {
     const rawName = sheetMatch[1].trim()
-    const rId = sheetMatch[2]
+    const { 2: rId } = sheetMatch
     const target = relIdToTarget.get(rId)
+
     if (target) {
       // Target is relative to xl/
-      const normalizedPath = target.startsWith("/")
-        ? target.slice(1)
-        : target.startsWith("xl/")
-          ? target
-          : `xl/${target}`
+      const normalizedPath = (() => {
+        if (target.startsWith("/")) {
+          return target.slice(1)
+        }
+
+        if (target.startsWith("xl/")) {
+          return target
+        }
+
+        return `xl/${target}`
+      })()
       sheetNameToTarget.set(rawName.toLowerCase(), normalizedPath)
     }
+
     sheetMatch = sheetRegex.exec(workbookXml)
   }
 
   const loadSheet = (name: string): SheetCell[][] => {
     const targetPath = sheetNameToTarget.get(name.toLowerCase())
+
     if (!targetPath) {
       return []
     }
+
     const bytes = entries.get(targetPath)
+
     if (!bytes) {
       return []
     }
@@ -763,6 +785,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // ── Sheet: Show ──────────────────────────────────────────────────────────
   const showRows = loadSheet("Show")
+
   if (showRows.length === 0) {
     throw new Error("errors:extensions.missingSheet:Show")
   }
@@ -772,12 +795,12 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     if (row.length >= 2) {
       const key = row[0].value.trim()
       const val = key === "note" ? row[1].value : row[1].value.trim()
+
       if (key) {
         showMap.set(key, val)
       }
     }
   }
-
   const format = showMap.get("format") ?? "tada-show"
   const versionStr = showMap.get("version") ?? "1"
   const version = Number.parseInt(versionStr, 10)
@@ -793,9 +816,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   const note = showMap.has("note")
     ? showMap.get("note") || undefined
     : undefined
-
-  let defaultStageAnimations: CardStageAnimations | undefined
+  let defaultStageAnimations: CardStageAnimations | undefined = undefined
   const defaultStageAnimationsStr = showMap.get("defaultStageAnimationsJson")
+
   if (defaultStageAnimationsStr) {
     try {
       defaultStageAnimations = cardStageAnimationsSchema.parse(
@@ -806,10 +829,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
   }
 
-  let defaultQuestionDecoration: QuestionDecoration | undefined
+  let defaultQuestionDecoration: QuestionDecoration | undefined = undefined
   const defaultQuestionDecorationStr = showMap.get(
     "defaultQuestionDecorationJson",
   )
+
   if (defaultQuestionDecorationStr) {
     try {
       defaultQuestionDecoration = questionDecorationSchema.parse(
@@ -820,8 +844,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
   }
 
-  let defaultTadazzBackground: TadazzShowBackground | undefined
+  let defaultTadazzBackground: TadazzShowBackground | undefined = undefined
   const defaultTadazzBackgroundStr = showMap.get("tadazzBackgroundJson")
+
   if (defaultTadazzBackgroundStr) {
     try {
       defaultTadazzBackground = tadazzShowBackgroundSchema.parse(
@@ -835,12 +860,14 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   if (format !== "tada-show" || version !== 1) {
     throw new Error("errors:extensions.unsupportedShowFormat")
   }
+
   if (!title) {
     throw new Error("errors:quizz.subjectEmpty")
   }
 
   // ── Sheet: Questions ─────────────────────────────────────────────────────
   const questionRows = loadSheet("Questions")
+
   if (questionRows.length === 0) {
     throw new Error("errors:extensions.missingSheet:Questions")
   }
@@ -850,16 +877,15 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   for (let i = 0; i < qHeaders.length; i += 1) {
     qColMap.set(qHeaders[i], i)
   }
-
   const getQVal = (row: SheetCell[], colName: string): string => {
     const idx = qColMap.get(colName.toLowerCase())
+
     if (idx === undefined || idx >= row.length) {
       return ""
     }
 
     return row[idx].value.trim()
   }
-
   interface IntermediateQuestion {
     key: string
     type: "single" | "multi" | "estimation"
@@ -871,10 +897,13 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     cooldownSeconds: number
     maxPoints: number
     penalty: number
-    media?: { type?: "image" | "video" | "audio"; url: string }
+    media?: {
+      type?: "image" | "video" | "audio"
+      url: string
+    }
     correctAnswerNumbers: number[]
-    options?: any
-    reveal?: any
+    options?: AuthoredQuizCard["options"]
+    reveal?: AuthoredQuizCard["reveal"]
     interlude?: Interlude
     questionEntrance?: QuestionEntrance
     background?: CardBackgroundOverride
@@ -885,12 +914,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     extraJson?: Record<string, unknown>
     answers: AuthoredAnswer[]
   }
-
   const questionsByKey = new Map<string, IntermediateQuestion>()
-
   for (let r = 1; r < questionRows.length; r += 1) {
     const row = questionRows[r]
     const key = getQVal(row, "questionKey")
+
     if (!key) {
       continue
     }
@@ -919,31 +947,38 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     const revealAudience = getQVal(row, "revealAudience").toLowerCase()
     const extraJsonStr = getQVal(row, "extraJson")
     const interludeJsonStr = getQVal(row, "interludeJson")
-
     const correctAnsNums = correctAnsStr
       ? correctAnsStr
           .split(/[;,]/)
           .map((s) => Number.parseInt(s.trim(), 10))
           .filter((n) => !Number.isNaN(n))
       : []
+    let mediaObj: IntermediateQuestion["media"] | undefined = undefined
 
-    let mediaObj: IntermediateQuestion["media"]
     if (mediaUrl) {
       mediaObj = {
-        type:
-          mediaTypeStr === "video"
-            ? "video"
-            : mediaTypeStr === "audio"
-              ? "audio"
-              : "image",
+        type: (() => {
+          if (mediaTypeStr === "video") {
+            return "video"
+          }
+
+          if (mediaTypeStr === "audio") {
+            return "audio"
+          }
+
+          return "image"
+        })(),
         url: mediaUrl,
       }
     }
 
-    let revealObj: any
+    let revealObj: AuthoredQuizCard["reveal"] = undefined
+
     if (revealEffect && revealEffect !== "none") {
       revealObj = {
-        effect: revealEffect,
+        effect: revealEffect as NonNullable<
+          AuthoredQuizCard["reveal"]
+        >["effect"],
         durationMs: revealDurationVal
           ? Number.parseInt(revealDurationVal, 10)
           : 2000,
@@ -952,28 +987,31 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
-    let optionsObj: any
+    let optionsObj: AuthoredQuizCard["options"] = undefined
+
     if (optionsJsonStr) {
       try {
-        optionsObj = JSON.parse(optionsJsonStr)
+        optionsObj = JSON.parse(optionsJsonStr) as AuthoredQuizCard["options"]
       } catch {
         throw new Error(`errors:extensions.invalidOptionsJson:${key}`)
       }
     }
 
-    let extraJsonObj: Record<string, unknown> | undefined
+    let extraJsonObj: Record<string, unknown> | undefined = undefined
+
     if (extraJsonStr) {
       try {
-        extraJsonObj = JSON.parse(extraJsonStr)
+        extraJsonObj = JSON.parse(extraJsonStr) as Record<string, unknown>
       } catch {
         throw new Error(`errors:extensions.invalidExtraJson:${key}`)
       }
     }
 
-    let interludeObj: Interlude | undefined
+    let interludeObj: Interlude | undefined = undefined
+
     if (interludeJsonStr) {
       try {
-        const rawInterlude = JSON.parse(interludeJsonStr)
+        const rawInterlude: unknown = JSON.parse(interludeJsonStr)
         const parsed = interludeSchema.safeParse(rawInterlude)
 
         if (!parsed.success) {
@@ -983,9 +1021,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         }
 
         interludeObj = parsed.data
-      } catch (err: any) {
+      } catch (err: unknown) {
         if (
-          err.message &&
+          err instanceof Error &&
           err.message.startsWith(
             "errors:extensions.invalidInterludeJson:Questions!T",
           )
@@ -1001,7 +1039,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
     const entrancePresetRaw = getQVal(row, "entrancePreset").toLowerCase()
     const entranceDurationRaw = getQVal(row, "entranceDurationMs")
-    let questionEntranceObj: QuestionEntrance | undefined
+    let questionEntranceObj: QuestionEntrance | undefined = undefined
 
     if (entrancePresetRaw && entrancePresetRaw !== "none") {
       const durationParsed = entranceDurationRaw
@@ -1022,7 +1060,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const backgroundJsonStr = getQVal(row, "backgroundJson")
-    let backgroundObj: CardBackgroundOverride | undefined
+    let backgroundObj: CardBackgroundOverride | undefined = undefined
+
     if (backgroundJsonStr) {
       try {
         backgroundObj = cardBackgroundOverrideSchema.parse(
@@ -1036,7 +1075,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const audioCuesJsonStr = getQVal(row, "audioCuesJson")
-    let audioCuesObj: CardAudioOverrides | undefined
+    let audioCuesObj: CardAudioOverrides | undefined = undefined
+
     if (audioCuesJsonStr) {
       try {
         audioCuesObj = cardAudioOverridesSchema.parse(
@@ -1054,7 +1094,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       ? scopedThemeOverridesSchema.parse(JSON.parse(questionThemeJson))
       : undefined
     const stageAnimationsJsonStr = getQVal(row, "stageAnimationsJson")
-    let stageAnimationsObj: CardStageAnimations | undefined
+    let stageAnimationsObj: CardStageAnimations | undefined = undefined
+
     if (stageAnimationsJsonStr) {
       try {
         stageAnimationsObj = cardStageAnimationsSchema.parse(
@@ -1068,7 +1109,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const questionDecorationJsonStr = getQVal(row, "questionDecorationJson")
-    let questionDecorationObj: QuestionDecoration | undefined
+    let questionDecorationObj: QuestionDecoration | undefined = undefined
+
     if (questionDecorationJsonStr) {
       try {
         questionDecorationObj = questionDecorationSchema.parse(
@@ -1082,14 +1124,17 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const parseNumOrDefault = (str: string, fallback: number): number => {
-      if (!str) return fallback
+      if (!str) {
+        return fallback
+      }
+
       const parsed = Number.parseInt(str, 10)
+
       return Number.isNaN(parsed) ? fallback : parsed
     }
-
     questionsByKey.set(key, {
       key,
-      type: (typeStr as any) || "single",
+      type: (typeStr || "single") as IntermediateQuestion["type"],
       playMode: playModeStr === "survey" ? "survey" : "quiz",
       question: questionText,
       category,
@@ -1119,9 +1164,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
   // ── Sheet: Answers ───────────────────────────────────────────────────────
   const answerRows = loadSheet("Answers")
+
   if (answerRows.length === 0) {
     throw new Error("errors:extensions.missingSheet:Answers")
   }
+
   if (questionsByKey.size > 0 && answerRows.length < 2) {
     throw new Error("errors:extensions.missingAnswers")
   }
@@ -1131,21 +1178,22 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   for (let i = 0; i < aHeaders.length; i += 1) {
     aColMap.set(aHeaders[i], i)
   }
-
   const getAVal = (row: SheetCell[], colName: string): string => {
     const idx = aColMap.get(colName.toLowerCase())
+
     if (idx === undefined || idx >= row.length) {
       return ""
     }
 
     return row[idx].value.trim()
   }
-
   const answersGrouped = new Map<
     string,
-    Array<{ num: number; ans: AuthoredAnswer }>
+    Array<{
+      num: number
+      ans: AuthoredAnswer
+    }>
   >()
-
   for (let r = 1; r < answerRows.length; r += 1) {
     const row = answerRows[r]
     const qKey = getAVal(row, "questionKey")
@@ -1169,19 +1217,22 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
 
     const authoredAns: AuthoredAnswer = {
       text: ansText,
-      display: (displayStr as any) || "text",
+      display: (displayStr || "text") as AuthoredAnswer["display"],
       imageUrl: imageUrl || undefined,
       alt: alt || undefined,
     }
-
     let list = answersGrouped.get(qKey)
+
     if (!list) {
       list = []
       answersGrouped.set(qKey, list)
     }
-    list.push({ num: ansNum, ans: authoredAns })
-  }
 
+    list.push({
+      num: ansNum,
+      ans: authoredAns,
+    })
+  }
   for (const [qKey, qItem] of questionsByKey.entries()) {
     const rawList = answersGrouped.get(qKey) ?? []
     rawList.sort((a, b) => a.num - b.num)
@@ -1194,15 +1245,16 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         )
       }
     }
-
     qItem.answers = rawList.map((item) => item.ans)
   }
 
   // ── Sheet: Timeline ──────────────────────────────────────────────────────
   const timelineRows = loadSheet("Timeline")
+
   if (timelineRows.length === 0) {
     throw new Error("errors:extensions.missingSheet:Timeline")
   }
+
   if (questionsByKey.size > 0 && timelineRows.length < 2) {
     throw new Error("errors:extensions.missingTimeline")
   }
@@ -1212,25 +1264,22 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
   for (let i = 0; i < tHeaders.length; i += 1) {
     tColMap.set(tHeaders[i], i)
   }
-
   const getTVal = (row: SheetCell[], colName: string): string => {
     const idx = tColMap.get(colName.toLowerCase())
+
     if (idx === undefined || idx >= row.length) {
       return ""
     }
 
     return row[idx].value.trim()
   }
-
   interface IntermediateTimelineRow {
     order: number
     cardKey: string
     kind: string
     row: SheetCell[]
   }
-
   const intermediateCards: IntermediateTimelineRow[] = []
-
   for (let r = 1; r < timelineRows.length; r += 1) {
     const row = timelineRows[r]
     const orderStr = getTVal(row, "order")
@@ -1242,9 +1291,13 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const order = orderStr ? Number.parseInt(orderStr, 10) : r
-    intermediateCards.push({ order, cardKey, kind: normalizeKind(kind), row })
+    intermediateCards.push({
+      order,
+      cardKey,
+      kind: normalizeKind(kind),
+      row,
+    })
   }
-
   intermediateCards.sort((a, b) => a.order - b.order)
 
   if (
@@ -1254,8 +1307,7 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     throw new Error("errors:extensions.missingQuestions")
   }
 
-  const cards: AuthoredCard[] = []
-
+  const cards: unknown[] = []
   for (const item of intermediateCards) {
     const { cardKey, kind, row } = item
     const titleVal = getTVal(row, "title")
@@ -1266,31 +1318,46 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     const durationSecondsVal = getTVal(row, "durationSeconds")
     const advanceRaw =
       getTVal(row, "advance").toLowerCase() || defaultAdvance || "auto"
-    const advanceVal: SceneAdvanceMode =
-      advanceRaw === "manual"
-        ? "manual"
-        : advanceRaw === "onmediaend" ||
-            advanceRaw === "on_media_end" ||
-            advanceRaw === "on-media-end"
-          ? "onMediaEnd"
-          : "auto"
+    const advanceVal: SceneAdvanceMode = (() => {
+      if (advanceRaw === "manual") {
+        return "manual"
+      }
+
+      if (
+        advanceRaw === "onmediaend" ||
+        advanceRaw === "on_media_end" ||
+        advanceRaw === "on-media-end"
+      ) {
+        return "onMediaEnd"
+      }
+
+      return "auto"
+    })()
     const presetVal = getTVal(row, "preset") || "spotlight"
     const rawMediaTypeVal = getTVal(row, "mediaType").toLowerCase()
-    const mediaTypeVal: "image" | "video" | "audio" =
-      rawMediaTypeVal === "video"
-        ? "video"
-        : rawMediaTypeVal === "audio"
-          ? "audio"
-          : "image"
+    const mediaTypeVal: "image" | "video" | "audio" = (() => {
+      if (rawMediaTypeVal === "video") {
+        return "video"
+      }
+
+      if (rawMediaTypeVal === "audio") {
+        return "audio"
+      }
+
+      return "image"
+    })()
     const mediaUrlVal = getTVal(row, "mediaUrl")
     const subtitleVal = getTVal(row, "subtitle")
     const extraJsonStr = getTVal(row, "extraJson")
     const sceneConfigJsonStr = getTVal(row, "sceneConfigJson")
+    let sceneConfigExtras: Record<string, unknown> | undefined = undefined
 
-    let sceneConfigExtras: Record<string, any> | undefined
     if (sceneConfigJsonStr) {
       try {
-        const parsed = JSON.parse(sceneConfigJsonStr)
+        const parsed = JSON.parse(sceneConfigJsonStr) as Record<
+          string,
+          unknown
+        > | null
 
         if (
           typeof parsed === "object" &&
@@ -1313,17 +1380,19 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
     }
 
-    let extraJson: Record<string, unknown> | undefined
+    let extraJson: Record<string, unknown> | undefined = undefined
+
     if (extraJsonStr) {
       try {
-        extraJson = JSON.parse(extraJsonStr)
+        extraJson = JSON.parse(extraJsonStr) as Record<string, unknown>
       } catch {
         throw new Error(`errors:extensions.invalidExtraJson:${cardKey}`)
       }
     }
 
     const tBackgroundJsonStr = getTVal(row, "backgroundJson")
-    let tBackground: CardBackgroundOverride | undefined
+    let tBackground: CardBackgroundOverride | undefined = undefined
+
     if (tBackgroundJsonStr) {
       try {
         tBackground = cardBackgroundOverrideSchema.parse(
@@ -1335,7 +1404,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const tAudioJsonStr = getTVal(row, "audioJson")
-    let tAudio: SceneAudio | undefined
+    let tAudio: SceneAudio | undefined = undefined
+
     if (tAudioJsonStr) {
       try {
         tAudio = sceneAudioSchema.parse(JSON.parse(tAudioJsonStr))
@@ -1349,7 +1419,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       ? scopedThemeOverridesSchema.parse(JSON.parse(sceneThemeJson))
       : undefined
     const tStageAnimationsJsonStr = getTVal(row, "stageAnimationsJson")
-    let tStageAnimations: CardStageAnimations | undefined
+    let tStageAnimations: CardStageAnimations | undefined = undefined
+
     if (tStageAnimationsJsonStr) {
       try {
         tStageAnimations = cardStageAnimationsSchema.parse(
@@ -1363,15 +1434,32 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     }
 
     const sceneAppearance = {
-      ...(tBackground ? { background: tBackground } : {}),
-      ...(sceneTheme ? { themeOverrides: sceneTheme } : {}),
-      ...(tAudio ? { audio: tAudio } : {}),
-      ...(tStageAnimations ? { stageAnimations: tStageAnimations } : {}),
+      ...(tBackground
+        ? {
+            background: tBackground,
+          }
+        : {}),
+      ...(sceneTheme
+        ? {
+            themeOverrides: sceneTheme,
+          }
+        : {}),
+      ...(tAudio
+        ? {
+            audio: tAudio,
+          }
+        : {}),
+      ...(tStageAnimations
+        ? {
+            stageAnimations: tStageAnimations,
+          }
+        : {}),
     }
 
     if (kind === "quiz" || kind === "survey") {
       const qRef = questionKeyVal || cardKey
       const qData = questionsByKey.get(qRef)
+
       if (!qData) {
         throw new Error(`errors:extensions.orphanTimelineQuestionKey:${qRef}`)
       }
@@ -1446,7 +1534,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "animation":
           cards.push({
             key: cardKey,
@@ -1458,21 +1548,31 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
               : 3000,
             advance: advanceVal,
             ...(sceneConfigExtras?.lottieUrl
-              ? { lottieUrl: sceneConfigExtras.lottieUrl }
+              ? {
+                  lottieUrl: sceneConfigExtras.lottieUrl,
+                }
               : {}),
             ...(sceneConfigExtras?.lottieFit
-              ? { lottieFit: sceneConfigExtras.lottieFit }
+              ? {
+                  lottieFit: sceneConfigExtras.lottieFit,
+                }
               : {}),
             ...(sceneConfigExtras?.lottieLoop !== undefined
-              ? { lottieLoop: sceneConfigExtras.lottieLoop }
+              ? {
+                  lottieLoop: sceneConfigExtras.lottieLoop,
+                }
               : {}),
             ...(sceneConfigExtras?.lottieSpeed !== undefined
-              ? { lottieSpeed: sceneConfigExtras.lottieSpeed }
+              ? {
+                  lottieSpeed: sceneConfigExtras.lottieSpeed,
+                }
               : {}),
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "media":
           cards.push({
             key: cardKey,
@@ -1480,45 +1580,71 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             mediaUrl: mediaUrlVal,
             mediaType: mediaTypeVal,
             title: titleVal || undefined,
-            ...(subtitleVal ? { subtitle: subtitleVal } : {}),
+            ...(subtitleVal
+              ? {
+                  subtitle: subtitleVal,
+                }
+              : {}),
             ...(sceneConfigExtras?.stageLayout
-              ? { stageLayout: sceneConfigExtras.stageLayout }
+              ? {
+                  stageLayout: sceneConfigExtras.stageLayout,
+                }
               : {}),
             ...(sceneConfigExtras?.textOverlay !== undefined
-              ? { textOverlay: sceneConfigExtras.textOverlay }
+              ? {
+                  textOverlay: sceneConfigExtras.textOverlay,
+                }
               : {}),
             ...(sceneConfigExtras?.endBehavior
-              ? { endBehavior: sceneConfigExtras.endBehavior }
+              ? {
+                  endBehavior: sceneConfigExtras.endBehavior,
+                }
               : {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
               : 5000,
             ...(sceneConfigExtras?.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: sceneConfigExtras.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: sceneConfigExtras.mediaEndFallbackMs,
+                }
               : {}),
             advance: advanceVal,
             ...(sceneConfigExtras?.volume !== undefined
-              ? { volume: sceneConfigExtras.volume }
+              ? {
+                  volume: sceneConfigExtras.volume,
+                }
               : {}),
             ...(sceneConfigExtras?.loop !== undefined
-              ? { loop: sceneConfigExtras.loop }
+              ? {
+                  loop: sceneConfigExtras.loop,
+                }
               : {}),
             ...(sceneConfigExtras?.muted !== undefined
-              ? { muted: sceneConfigExtras.muted }
+              ? {
+                  muted: sceneConfigExtras.muted,
+                }
               : {}),
             ...(sceneConfigExtras?.showControls !== undefined
-              ? { showControls: sceneConfigExtras.showControls }
+              ? {
+                  showControls: sceneConfigExtras.showControls,
+                }
               : {}),
             ...(sceneConfigExtras?.mediaFit
-              ? { mediaFit: sceneConfigExtras.mediaFit }
+              ? {
+                  mediaFit: sceneConfigExtras.mediaFit,
+                }
               : {}),
             ...(sceneConfigExtras?.overlayAnimations
-              ? { overlayAnimations: sceneConfigExtras.overlayAnimations }
+              ? {
+                  overlayAnimations: sceneConfigExtras.overlayAnimations,
+                }
               : {}),
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "leaderboard":
           cards.push({
             key: cardKey,
@@ -1531,7 +1657,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "interimResults":
           cards.push({
             key: cardKey,
@@ -1544,7 +1672,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "answerRecap": {
           const rawRecapMode =
             getTVal(row, "preset") ||
@@ -1563,16 +1693,26 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             key: cardKey,
             kind: "answerRecap",
             title: titleVal || undefined,
-            ...(startQKey ? { startQuestionKey: startQKey } : {}),
+            ...(startQKey
+              ? {
+                  startQuestionKey: startQKey,
+                }
+              : {}),
             mode: recapMode,
             ...(sceneConfigExtras?.maxItemsPerPage !== undefined
-              ? { maxItemsPerPage: sceneConfigExtras.maxItemsPerPage }
+              ? {
+                  maxItemsPerPage: sceneConfigExtras.maxItemsPerPage,
+                }
               : {}),
             ...(sceneConfigExtras?.showCounts !== undefined
-              ? { showCounts: sceneConfigExtras.showCounts }
+              ? {
+                  showCounts: sceneConfigExtras.showCounts,
+                }
               : {}),
             ...(sceneConfigExtras?.showPercentages !== undefined
-              ? { showPercentages: sceneConfigExtras.showPercentages }
+              ? {
+                  showPercentages: sceneConfigExtras.showPercentages,
+                }
               : {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
@@ -1581,8 +1721,10 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
         }
+
         case "countdown":
           cards.push({
             key: cardKey,
@@ -1595,7 +1737,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "opening":
           cards.push({
             key: cardKey,
@@ -1603,7 +1747,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             title: titleVal || "Welcome",
             subtitle: subtitleVal || undefined,
             mediaUrl: mediaUrlVal || undefined,
-            ...(rawMediaTypeVal ? { mediaType: mediaTypeVal } : {}),
+            ...(rawMediaTypeVal
+              ? {
+                  mediaType: mediaTypeVal,
+                }
+              : {}),
             ...(sceneConfigExtras ?? {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
@@ -1612,7 +1760,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         case "closing":
           cards.push({
             key: cardKey,
@@ -1620,7 +1770,11 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             title: titleVal || "Thank you!",
             subtitle: subtitleVal || undefined,
             mediaUrl: mediaUrlVal || undefined,
-            ...(rawMediaTypeVal ? { mediaType: mediaTypeVal } : {}),
+            ...(rawMediaTypeVal
+              ? {
+                  mediaType: mediaTypeVal,
+                }
+              : {}),
             ...(sceneConfigExtras ?? {}),
             durationMs: durationMsVal
               ? Number.parseInt(durationMsVal, 10)
@@ -1629,7 +1783,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
             ...sceneAppearance,
             extraJson,
           })
+
           break
+
         default:
           throw new Error(`errors:extensions.unsupportedTimelineKind:${kind}`)
       }
@@ -1646,16 +1802,15 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
     for (let i = 0; i < sHeaders.length; i += 1) {
       sColMap.set(sHeaders[i], i)
     }
-
     const getSVal = (row: SheetCell[], colName: string): string => {
       const idx = sColMap.get(colName.toLowerCase())
+
       if (idx === undefined || idx >= row.length) {
         return ""
       }
 
       return row[idx].value.trim()
     }
-
     const seenSettings = new Set<string>()
     for (let r = 1; r < settingsRows.length; r += 1) {
       const row = settingsRows[r]
@@ -1678,7 +1833,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         continue
       }
 
-      let parsedVal: unknown
+      let parsedVal: unknown = undefined
+
       try {
         parsedVal = JSON.parse(valueJsonStr)
       } catch {
@@ -1694,9 +1850,8 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       }
 
       seenSettings.add(settingKey)
-
       settings.push({
-        scope: scope as any,
+        scope,
         targetKey,
         property,
         valueJson: parsedVal,
@@ -1717,7 +1872,9 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
           version: themeVersion,
           overrides: parsedThemeOverrides,
           ...(showMap.get("themeLegacyPolicy")
-            ? { legacyPolicy: showMap.get("themeLegacyPolicy") }
+            ? {
+                legacyPolicy: showMap.get("themeLegacyPolicy"),
+              }
             : {}),
         })
       : undefined
@@ -1732,12 +1889,17 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
         }
       : {}),
     ...(motionKit
-      ? { motionKit: motionKit as "legacy" | "tadazz-v4" | "goldy-20261105" }
+      ? {
+          motionKit: motionKit as "legacy" | "tadazz-v4" | "goldy-20261105",
+        }
       : {}),
-    ...(showTheme ? { showTheme } : {}),
+    ...(showTheme
+      ? {
+          showTheme,
+        }
+      : {}),
   })
-
-  const rawAuthoredShow: TadaShowV1 = {
+  const rawAuthoredShow = {
     format: "tada-show",
     version: 1,
     title,
@@ -1749,13 +1911,19 @@ export function parseTadaShowWorkbook(buffer: Uint8Array): TadaShowV1 {
       leaderboardPolicy,
       advanceMode: defaultAdvance,
       ...(defaultStageAnimations
-        ? { stageAnimations: defaultStageAnimations }
+        ? {
+            stageAnimations: defaultStageAnimations,
+          }
         : {}),
       ...(defaultQuestionDecoration
-        ? { questionDecoration: defaultQuestionDecoration }
+        ? {
+            questionDecoration: defaultQuestionDecoration,
+          }
         : {}),
       ...(defaultTadazzBackground
-        ? { tadazzBackground: defaultTadazzBackground }
+        ? {
+            tadazzBackground: defaultTadazzBackground,
+          }
         : {}),
     },
     cards,
@@ -1778,9 +1946,8 @@ function buildWorksheetXml(rows: string[][]): string {
 
       // Formula injection defense: escape prefixes =, +, -, @, \t, \r if text
       const isFormulaPrefix =
-        /^[=+\-@\t\r]/u.test(val) && !/^[+\-]?\d+(\.\d+)?$/u.test(val)
+        /^[=+\-@\t\r]/u.test(val) && !/^[+-]?\d+(\.\d+)?$/u.test(val)
       const safeVal = isFormulaPrefix ? `'${val}` : val
-
       cellXmls.push(
         `<c r="${ref}" t="inlineStr"><is><t>${escapeXml(safeVal)}</t></is></c>`,
       )
@@ -1798,12 +1965,22 @@ function buildWorksheetXml(rows: string[][]): string {
  * Exports a `TadaShowV1` or native bundle into a canonical multi-sheet `.xlsx` buffer.
  */
 export function exportTadaShowWorkbook(
-  input: TadaShowV1 | { quizz: unknown; extras: AnyQuizExtras },
+  input:
+    | TadaShowV1
+    | {
+        quizz: unknown
+        extras: AnyQuizExtras
+      },
 ): Uint8Array {
   const show: TadaShowV1 =
     "format" in input && input.format === "tada-show"
-      ? (input as TadaShowV1)
-      : nativeBundleToAuthoredShow(input as any)
+      ? input
+      : nativeBundleToAuthoredShow(
+          input as {
+            quizz: unknown
+            extras: AnyQuizExtras
+          },
+        )
 
   // 1. Sheet: Show
   const showData: string[][] = [
@@ -1817,12 +1994,14 @@ export function exportTadaShowWorkbook(
     ["baseGameMode", show.baseGameMode ?? "quiz"],
     ["note", show.note ?? ""],
   ]
+
   if (show.defaults?.stageAnimations) {
     showData.push([
       "defaultStageAnimationsJson",
       JSON.stringify(show.defaults.stageAnimations),
     ])
   }
+
   if (show.defaults?.questionDecoration) {
     showData.push([
       "defaultQuestionDecorationJson",
@@ -1923,7 +2102,6 @@ export function exportTadaShowWorkbook(
   const answersData: string[][] = [
     ["questionKey", "answerNumber", "answerText", "display", "imageUrl", "alt"],
   ]
-
   for (let idx = 0; idx < show.cards.length; idx += 1) {
     const card = show.cards[idx]
     const orderNum = String(idx + 1)
@@ -1950,10 +2128,8 @@ export function exportTadaShowWorkbook(
         "",
         "",
       ])
-
       const correctAnsStr =
         card.kind === "quiz" ? card.correctAnswers.join(";") : ""
-
       questionsData.push([
         card.key,
         card.questionType ?? "single",
@@ -1963,11 +2139,17 @@ export function exportTadaShowWorkbook(
         card.note ?? "",
         card.timeSeconds !== undefined ? String(card.timeSeconds) : "20",
         card.cooldownSeconds !== undefined ? String(card.cooldownSeconds) : "3",
-        card.maxPoints !== undefined
-          ? String(card.maxPoints)
-          : card.kind === "survey"
-            ? "0"
-            : "1000",
+        (() => {
+          if (card.maxPoints !== undefined) {
+            return String(card.maxPoints)
+          }
+
+          if (card.kind === "survey") {
+            return "0"
+          }
+
+          return "1000"
+        })(),
         card.penalty !== undefined ? String(card.penalty) : "0",
         card.media?.type ?? "",
         card.media?.url ?? "",
@@ -1989,7 +2171,6 @@ export function exportTadaShowWorkbook(
         card.themeOverrides ? JSON.stringify(card.themeOverrides) : "",
         card.questionDecoration ? JSON.stringify(card.questionDecoration) : "",
       ])
-
       for (let a = 0; a < card.answers.length; a += 1) {
         const ans = card.answers[a]
         answersData.push([
@@ -2007,23 +2188,26 @@ export function exportTadaShowWorkbook(
       let questionKeyCol = ""
       let durationMs = ""
       let durationSeconds = ""
-      let advance = card.advance ?? "auto"
+      const advance = card.advance ?? "auto"
       let preset = ""
       let mediaType = ""
       let mediaUrl = ""
       let subtitle = ""
-      let sceneConfigObj: Record<string, unknown> | undefined
+      let sceneConfigObj: Record<string, unknown> | undefined = undefined
 
       switch (card.kind) {
         case "transition":
           title = card.title ?? ""
           desc = card.description ?? ""
           durationMs = String(card.durationMs ?? 5000)
+
           break
+
         case "animation":
           title = card.title ?? ""
           preset = card.preset ?? "spotlight"
           durationMs = String(card.durationMs ?? 3000)
+
           if (
             card.lottieUrl ||
             card.lottieFit ||
@@ -2031,23 +2215,38 @@ export function exportTadaShowWorkbook(
             card.lottieSpeed !== undefined
           ) {
             sceneConfigObj = {
-              ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
-              ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+              ...(card.lottieUrl
+                ? {
+                    lottieUrl: card.lottieUrl,
+                  }
+                : {}),
+              ...(card.lottieFit
+                ? {
+                    lottieFit: card.lottieFit,
+                  }
+                : {}),
               ...(card.lottieLoop !== undefined
-                ? { lottieLoop: card.lottieLoop }
+                ? {
+                    lottieLoop: card.lottieLoop,
+                  }
                 : {}),
               ...(card.lottieSpeed !== undefined
-                ? { lottieSpeed: card.lottieSpeed }
+                ? {
+                    lottieSpeed: card.lottieSpeed,
+                  }
                 : {}),
             }
           }
+
           break
+
         case "media":
           title = card.title ?? ""
           subtitle = card.subtitle ?? ""
           mediaUrl = card.mediaUrl ?? ""
           mediaType = card.mediaType ?? "image"
           durationMs = String(card.durationMs ?? 5000)
+
           if (
             card.stageLayout !== undefined ||
             card.textOverlay !== undefined ||
@@ -2061,40 +2260,79 @@ export function exportTadaShowWorkbook(
             card.overlayAnimations !== undefined
           ) {
             sceneConfigObj = {
-              ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
+              ...(card.stageLayout
+                ? {
+                    stageLayout: card.stageLayout,
+                  }
+                : {}),
               ...(card.textOverlay !== undefined
-                ? { textOverlay: card.textOverlay }
+                ? {
+                    textOverlay: card.textOverlay,
+                  }
                 : {}),
-              ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+              ...(card.endBehavior
+                ? {
+                    endBehavior: card.endBehavior,
+                  }
+                : {}),
               ...(card.mediaEndFallbackMs !== undefined
-                ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+                ? {
+                    mediaEndFallbackMs: card.mediaEndFallbackMs,
+                  }
                 : {}),
-              ...(card.volume !== undefined ? { volume: card.volume } : {}),
-              ...(card.loop !== undefined ? { loop: card.loop } : {}),
-              ...(card.muted !== undefined ? { muted: card.muted } : {}),
+              ...(card.volume !== undefined
+                ? {
+                    volume: card.volume,
+                  }
+                : {}),
+              ...(card.loop !== undefined
+                ? {
+                    loop: card.loop,
+                  }
+                : {}),
+              ...(card.muted !== undefined
+                ? {
+                    muted: card.muted,
+                  }
+                : {}),
               ...(card.showControls !== undefined
-                ? { showControls: card.showControls }
+                ? {
+                    showControls: card.showControls,
+                  }
                 : {}),
-              ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+              ...(card.mediaFit
+                ? {
+                    mediaFit: card.mediaFit,
+                  }
+                : {}),
               ...(card.overlayAnimations
-                ? { overlayAnimations: card.overlayAnimations }
+                ? {
+                    overlayAnimations: card.overlayAnimations,
+                  }
                 : {}),
             }
           }
+
           break
+
         case "leaderboard":
           title = card.title ?? ""
           durationMs = String(card.durationMs ?? 5000)
+
           break
+
         case "interimResults":
           title = card.title ?? ""
           durationMs = String(card.durationMs ?? 5000)
+
           break
+
         case "answerRecap":
           title = card.title ?? ""
           questionKeyCol = card.startQuestionKey ?? ""
           preset = card.mode ?? "mostSelected"
           durationMs = String(card.durationMs ?? 8000)
+
           if (
             card.maxItemsPerPage !== undefined ||
             card.showCounts !== undefined ||
@@ -2102,60 +2340,121 @@ export function exportTadaShowWorkbook(
           ) {
             sceneConfigObj = {
               ...(card.maxItemsPerPage !== undefined
-                ? { maxItemsPerPage: card.maxItemsPerPage }
+                ? {
+                    maxItemsPerPage: card.maxItemsPerPage,
+                  }
                 : {}),
               ...(card.showCounts !== undefined
-                ? { showCounts: card.showCounts }
+                ? {
+                    showCounts: card.showCounts,
+                  }
                 : {}),
               ...(card.showPercentages !== undefined
-                ? { showPercentages: card.showPercentages }
+                ? {
+                    showPercentages: card.showPercentages,
+                  }
                 : {}),
             }
           }
+
           break
+
         case "countdown":
           title = card.title ?? ""
           durationSeconds = String(card.durationSeconds ?? 10)
+
           break
+
         case "opening":
+
         case "closing": {
-          title = card.title
+          ;({ title } = card)
           subtitle = card.subtitle ?? ""
           mediaUrl = card.mediaUrl ?? ""
           mediaType = card.mediaType ?? ""
           durationMs = String(card.durationMs ?? 5000)
           const bookendCfg: Record<string, unknown> = {
-            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
-            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
-            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.stageLayout
+              ? {
+                  stageLayout: card.stageLayout,
+                }
+              : {}),
+            ...(card.mediaFit
+              ? {
+                  mediaFit: card.mediaFit,
+                }
+              : {}),
+            ...(card.logoPosition
+              ? {
+                  logoPosition: card.logoPosition,
+                }
+              : {}),
             ...(card.textOverlay !== undefined
-              ? { textOverlay: card.textOverlay }
+              ? {
+                  textOverlay: card.textOverlay,
+                }
               : {}),
-            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.endBehavior
+              ? {
+                  endBehavior: card.endBehavior,
+                }
+              : {}),
             ...(card.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: card.mediaEndFallbackMs,
+                }
               : {}),
-            ...(card.volume !== undefined ? { volume: card.volume } : {}),
-            ...(card.loop !== undefined ? { loop: card.loop } : {}),
-            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.volume !== undefined
+              ? {
+                  volume: card.volume,
+                }
+              : {}),
+            ...(card.loop !== undefined
+              ? {
+                  loop: card.loop,
+                }
+              : {}),
+            ...(card.muted !== undefined
+              ? {
+                  muted: card.muted,
+                }
+              : {}),
             ...(card.showControls !== undefined
-              ? { showControls: card.showControls }
+              ? {
+                  showControls: card.showControls,
+                }
               : {}),
-            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
-            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieUrl
+              ? {
+                  lottieUrl: card.lottieUrl,
+                }
+              : {}),
+            ...(card.lottieFit
+              ? {
+                  lottieFit: card.lottieFit,
+                }
+              : {}),
             ...(card.lottieLoop !== undefined
-              ? { lottieLoop: card.lottieLoop }
+              ? {
+                  lottieLoop: card.lottieLoop,
+                }
               : {}),
             ...(card.lottieSpeed !== undefined
-              ? { lottieSpeed: card.lottieSpeed }
+              ? {
+                  lottieSpeed: card.lottieSpeed,
+                }
               : {}),
             ...(card.overlayAnimations
-              ? { overlayAnimations: card.overlayAnimations }
+              ? {
+                  overlayAnimations: card.overlayAnimations,
+                }
               : {}),
           }
+
           if (Object.keys(bookendCfg).length > 0) {
             sceneConfigObj = bookendCfg
           }
+
           break
         }
       }
@@ -2189,6 +2488,7 @@ export function exportTadaShowWorkbook(
   const settingsData: string[][] = [
     ["scope", "targetKey", "property", "valueJson"],
   ]
+
   if (show.settings) {
     for (const s of show.settings) {
       settingsData.push([
@@ -2229,14 +2529,12 @@ export function exportTadaShowWorkbook(
       "ערוץ הגדרות מתקדם עבור לוח תוצאות, מוזיקה ואפקטים, צוותים ומשתתפים.",
     ],
   ]
-
   const sheetShowXml = buildWorksheetXml(showData)
   const sheetTimelineXml = buildWorksheetXml(timelineData)
   const sheetQuestionsXml = buildWorksheetXml(questionsData)
   const sheetAnswersXml = buildWorksheetXml(answersData)
   const sheetSettingsXml = buildWorksheetXml(settingsData)
   const sheetHelpXml = buildWorksheetXml(helpData)
-
   const contentTypesXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Types xmlns="http://schemas.openxmlformats.org/package/2006/content-types">
   <Default Extension="rels" ContentType="application/vnd.openxmlformats-package.relationships+xml"/>
@@ -2249,12 +2547,10 @@ export function exportTadaShowWorkbook(
   <Override PartName="/xl/worksheets/sheet5.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
   <Override PartName="/xl/worksheets/sheet6.xml" ContentType="application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml"/>
 </Types>`
-
   const relsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument" Target="xl/workbook.xml"/>
 </Relationships>`
-
   const workbookXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <workbook xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships">
   <sheets>
@@ -2266,7 +2562,6 @@ export function exportTadaShowWorkbook(
     <sheet name="Help" sheetId="6" r:id="rId6"/>
   </sheets>
 </workbook>`
-
   const workbookRelsXml = `<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <Relationships xmlns="http://schemas.openxmlformats.org/package/2006/relationships">
   <Relationship Id="rId1" Type="http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet" Target="worksheets/sheet1.xml"/>
@@ -2278,9 +2573,18 @@ export function exportTadaShowWorkbook(
 </Relationships>`
 
   return createZipArchive([
-    { name: "[Content_Types].xml", data: utf8Encoder.encode(contentTypesXml) },
-    { name: "_rels/.rels", data: utf8Encoder.encode(relsXml) },
-    { name: "xl/workbook.xml", data: utf8Encoder.encode(workbookXml) },
+    {
+      name: "[Content_Types].xml",
+      data: utf8Encoder.encode(contentTypesXml),
+    },
+    {
+      name: "_rels/.rels",
+      data: utf8Encoder.encode(relsXml),
+    },
+    {
+      name: "xl/workbook.xml",
+      data: utf8Encoder.encode(workbookXml),
+    },
     {
       name: "xl/_rels/workbook.xml.rels",
       data: utf8Encoder.encode(workbookRelsXml),
@@ -2383,9 +2687,18 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
             imageUrl: "https://example.com/paris.png",
             alt: "Eiffel Tower in Paris",
           },
-          { text: "Big Ben", display: "text" },
-          { text: "Colosseum", display: "text" },
-          { text: "Statue of Liberty", display: "text" },
+          {
+            text: "Big Ben",
+            display: "text",
+          },
+          {
+            text: "Colosseum",
+            display: "text",
+          },
+          {
+            text: "Statue of Liberty",
+            display: "text",
+          },
         ],
         correctAnswers: [1],
       },
@@ -2408,10 +2721,22 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
         maxPoints: 0,
         penalty: 0,
         answers: [
-          { text: "Outdoor sports", display: "text" },
-          { text: "Reading & learning", display: "text" },
-          { text: "Gaming & movies", display: "text" },
-          { text: "Relaxing with friends", display: "text" },
+          {
+            text: "Outdoor sports",
+            display: "text",
+          },
+          {
+            text: "Reading & learning",
+            display: "text",
+          },
+          {
+            text: "Gaming & movies",
+            display: "text",
+          },
+          {
+            text: "Relaxing with friends",
+            display: "text",
+          },
         ],
       },
       {
@@ -2440,9 +2765,18 @@ export function generateTadaShowWorkbookTemplate(): Uint8Array {
         maxPoints: 1000,
         penalty: 0,
         answers: [
-          { text: "365", display: "text" },
-          { text: "366", display: "text" },
-          { text: "364", display: "text" },
+          {
+            text: "365",
+            display: "text",
+          },
+          {
+            text: "366",
+            display: "text",
+          },
+          {
+            text: "364",
+            display: "text",
+          },
         ],
         correctAnswers: [2],
       },

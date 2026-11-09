@@ -27,7 +27,7 @@ const SingleAnswers = ({
 
   if (hasVisuals && theme?.definition.id !== RAZZIA_THEME_ID) {
     return (
-      <div className="min-h-0 w-full flex-1 flex flex-col justify-center overflow-hidden">
+      <div className="flex min-h-0 w-full flex-1 flex-col justify-center overflow-hidden">
         <PhotoCardGrid
           answers={answers}
           visuals={visuals}
@@ -43,7 +43,7 @@ const SingleAnswers = ({
   return (
     <div
       className={clsx(
-        "mx-auto mb-2 sm:mb-4 grid w-full max-w-7xl gap-1.5 sm:gap-2 px-2 text-base font-bold text-white sm:text-lg md:text-xl",
+        "mx-auto mb-2 grid w-full max-w-7xl gap-1.5 px-2 text-base font-bold text-white sm:mb-4 sm:gap-2 sm:text-lg md:text-xl",
         fill ? "flex-1 auto-rows-fr grid-cols-1 sm:grid-cols-2" : "grid-cols-2",
       )}
     >

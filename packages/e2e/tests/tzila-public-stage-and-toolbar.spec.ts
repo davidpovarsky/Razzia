@@ -20,11 +20,16 @@ const saveScreenshot = async (page: Page, filename: string) => {
 }
 
 const EXPECTED_COLORS = [
-  "rgb(230, 159, 0)", // Option 1 (#e69f00)
-  "rgb(86, 180, 233)", // Option 2 (#56b4e9)
-  "rgb(61, 191, 160)", // Option 3 (#3dbfa0)
-  "rgb(204, 121, 167)", // Option 4 (#cc79a7)
-  "rgb(0, 114, 178)", // Option 5 (#0072b2)
+  // Option 1 (#e69f00)
+  "rgb(230, 159, 0)",
+  // Option 2 (#56b4e9)
+  "rgb(86, 180, 233)",
+  // Option 3 (#3dbfa0)
+  "rgb(61, 191, 160)",
+  // Option 4 (#cc79a7)
+  "rgb(204, 121, 167)",
+  // Option 5 (#0072b2)
+  "rgb(0, 114, 178)",
 ]
 
 const SOCKET_API_URL = "http://127.0.0.1:3011/api/games/pilot-phone"
@@ -42,9 +47,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     expect(pin).toMatch(/^\d{6}$/u)
 
     const managerUrl = managerPage.url()
-    const gameIdMatch = managerUrl.match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerUrl)
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
+    const { 1: gameId } = gameIdMatch!
 
     // 2. Open Spectator Page at 1920x1080
     const spectatorContext = await browser.newContext({
@@ -138,9 +143,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
         },
       }),
     ])
-    expect((await vote1.json()).accepted).toBe(true)
-    expect((await vote2.json()).accepted).toBe(true)
-    expect((await vote3.json()).accepted).toBe(true)
+    expect(((await vote1.json()) as { accepted: boolean }).accepted).toBe(true)
+    expect(((await vote2.json()) as { accepted: boolean }).accepted).toBe(true)
+    expect(((await vote3.json()) as { accepted: boolean }).accepted).toBe(true)
 
     // 4. Gate A Verification: Spectator 5 solid photo cards, completed images immediately
     const spectatorCards = spectatorPage.locator(
@@ -148,7 +153,7 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     )
     await expect(spectatorCards).toHaveCount(5)
 
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       const card = spectatorPage.locator(
         `[data-testid="photo-card-choice-${i}"]`,
       )
@@ -346,7 +351,8 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
     const confirmBtn = managerPage.locator(
       '[data-testid="confirm-reopen-question-btn"]',
     )
-    if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
+
+    if (await confirmBtn.isVisible().catch(() => false)) {
       await confirmBtn.click()
     }
 
@@ -381,8 +387,12 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
         },
       }),
     ])
-    expect((await revote1.json()).accepted).toBe(true)
-    expect((await revote2.json()).accepted).toBe(true)
+    expect(((await revote1.json()) as { accepted: boolean }).accepted).toBe(
+      true,
+    )
+    expect(((await revote2.json()) as { accepted: boolean }).accepted).toBe(
+      true,
+    )
 
     // End timer on revote
     await endTimer(managerPage)
@@ -490,8 +500,9 @@ test.describe("P0: Tzila Public Stage, Single Poll Reveal, and Responsive Toolba
       // 4. All visible buttons have valid bounding boxes within viewport
       const buttons = toolbar.locator("button")
       const btnCount = await buttons.count()
-      for (let i = 0; i < btnCount; i++) {
+      for (let i = 0; i < btnCount; i += 1) {
         const btn = buttons.nth(i)
+
         if (await btn.isVisible()) {
           const box = await btn.boundingBox()
           expect(box).not.toBeNull()

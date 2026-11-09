@@ -176,7 +176,8 @@ export const showThemeDefinitionSchema = z
   })
   .superRefine((theme, ctx) => {
     if (
-      (theme.kind === "sandboxed-react") !== (theme.rendererId === "tadazz-sandbox-stage") ||
+      (theme.kind === "sandboxed-react") !==
+        (theme.rendererId === "tadazz-sandbox-stage") ||
       (theme.kind === "sandboxed-react") !== Boolean(theme.sandbox) ||
       (theme.runtime && !theme.sandbox)
     ) {

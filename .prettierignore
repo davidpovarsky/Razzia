@@ -10,3 +10,19 @@ pnpm-lock.yaml
 /packages/e2e/test-results
 /packages/e2e/playwright-report
 /coverage
+
+# Generated test output and byte-preserved reference/release artifacts.
+**/.vitest/**
+docs/extensions/references/**
+docs/extensions/qa-evidence/**
+docs/extensions/package-runtime-evidence/**
+docs/extensions/orchestration/**
+docs/extensions/**/*.json
+assets/tadazz-release-media-20261106/**
+extensions/fixtures/**
+.agents/skills/tadazz-theme-creator/assets/**
+packages/web/public/**
+extensions/assets/tadazz-source-demo.html
+extensions/src/presentation/tadazz-show/tadazz-motion-kit.css
+extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts
+extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts

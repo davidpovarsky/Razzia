@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import NativeButton from "@razzia/web/components/Button"
 import type {
   AnswerVisual,
@@ -80,15 +81,18 @@ export const PhotoCardGrid = ({
   } = useStageFit()
 
   // Reset image errors when question or media changes
+  /* oxlint-disable react/set-state-in-effect -- Synchronize external server/media/editor state without remounting this surface. */
   useEffect(() => {
     setImageErrors({})
   }, [answers, visuals])
 
   // Preload images into browser cache
+  /* oxlint-enable react/set-state-in-effect */
   useEffect(() => {
     if (!visuals) {
       return
     }
+
     for (const v of visuals) {
       if (v?.url) {
         const img = new Image()
@@ -96,36 +100,47 @@ export const PhotoCardGrid = ({
       }
     }
   }, [visuals])
+  const heroPhotoHeightPx = (() => {
+    if (isUltraCompact) {
+      return Math.min(80, Math.max(50, Math.floor(availableHeight * 0.14)))
+    }
 
-  const heroPhotoHeightPx = isUltraCompact
-    ? Math.min(80, Math.max(50, Math.floor(availableHeight * 0.14)))
-    : isCompact || isPortrait || isNarrowMobile
-      ? Math.min(120, Math.max(70, Math.floor(availableHeight * 0.18)))
-      : 180
+    if (isCompact || isPortrait || isNarrowMobile) {
+      return Math.min(120, Math.max(70, Math.floor(availableHeight * 0.18)))
+    }
 
-  const runnerPhotoHeightPx = isUltraCompact
-    ? Math.min(48, Math.max(36, Math.floor(availableHeight * 0.08)))
-    : isCompact || isPortrait || isNarrowMobile
-      ? Math.min(68, Math.max(44, Math.floor(availableHeight * 0.1)))
-      : 96
+    return 180
+  })()
+  const runnerPhotoHeightPx = (() => {
+    if (isUltraCompact) {
+      return Math.min(48, Math.max(36, Math.floor(availableHeight * 0.08)))
+    }
 
-  const votingPhotoHeightPx = isUltraCompact
-    ? Math.min(56, Math.max(40, Math.floor(availableHeight * 0.09)))
-    : isNarrowMobile || isPortrait
-      ? Math.min(84, Math.max(50, Math.floor(availableHeight * 0.11)))
-      : isCompact
-        ? Math.min(110, Math.max(64, Math.floor(availableHeight * 0.16)))
-        : 160
+    if (isCompact || isPortrait || isNarrowMobile) {
+      return Math.min(68, Math.max(44, Math.floor(availableHeight * 0.1)))
+    }
 
+    return 96
+  })()
+  const votingPhotoHeightPx = (() => {
+    if (isUltraCompact) {
+      return Math.min(56, Math.max(40, Math.floor(availableHeight * 0.09)))
+    }
+
+    if (isNarrowMobile || isPortrait) {
+      return Math.min(84, Math.max(50, Math.floor(availableHeight * 0.11)))
+    }
+
+    if (isCompact) {
+      return Math.min(110, Math.max(64, Math.floor(availableHeight * 0.16)))
+    }
+
+    return 160
+  })()
   const totalVotes = responses
-    ? Object.values(responses).reduce(
-        (acc: number, c) => acc + (Number(c) || 0),
-        0,
-      )
+    ? Object.values(responses).reduce((acc: number, c) => acc + (c || 0), 0)
     : 0
-
   const hasZeroVotes = totalVotes === 0
-
   const getCardColor = (index: number) =>
     CANONICAL_ANSWER_COLORS[index] ?? "#334155"
 
@@ -135,15 +150,19 @@ export const PhotoCardGrid = ({
       if (index === 0) {
         return "col-span-3 sm:col-span-2 sm:col-start-1"
       }
+
       if (index === 1) {
         return "col-span-3 sm:col-span-2 sm:col-start-3"
       }
+
       if (index === 2) {
         return "col-span-3 sm:col-span-2 sm:col-start-5"
       }
+
       if (index === 3) {
         return "col-span-3 sm:col-span-2 sm:col-start-2"
       }
+
       if (index === 4) {
         return "col-span-6 sm:col-span-2 sm:col-start-4"
       }
@@ -157,12 +176,12 @@ export const PhotoCardGrid = ({
       if (index === 2) {
         return "col-span-6 sm:col-span-2"
       }
+
       return "col-span-3 sm:col-span-2"
     }
 
     return "col-span-3 sm:col-span-3"
   }
-
   const activeCardSlot = isRevealed
     ? stageAnimations?.resultsRevealEntrance
     : stageAnimations?.answerEntrance
@@ -187,7 +206,6 @@ export const PhotoCardGrid = ({
         alt: visual?.alt,
       }
     })
-
     const ranking = computePollRanking(optionItems)
     const { winners: rankedWinners, runnersUp, isTie: rankingTie } = ranking
 
@@ -289,7 +307,10 @@ export const PhotoCardGrid = ({
                       data-testid={`photo-card-image-${index}`}
                       loading="eager"
                       onError={() =>
-                        setImageErrors((prev) => ({ ...prev, [index]: true }))
+                        setImageErrors((prev) => ({
+                          ...prev,
+                          [index]: true,
+                        }))
                       }
                       className="h-full w-full rounded-lg object-contain p-1 transition-transform duration-300"
                     />
@@ -423,7 +444,10 @@ export const PhotoCardGrid = ({
                         data-testid={`photo-card-image-${index}`}
                         loading="eager"
                         onError={() =>
-                          setImageErrors((prev) => ({ ...prev, [index]: true }))
+                          setImageErrors((prev) => ({
+                            ...prev,
+                            [index]: true,
+                          }))
                         }
                         className="h-full w-full rounded-md object-contain p-0.5 transition-transform duration-300"
                       />
@@ -528,7 +552,9 @@ export const PhotoCardGrid = ({
               key={`${animationEpochKey}-vote-${index}`}
               className={clsx("flex min-h-0 flex-col", colClass)}
             >
-              <NativeButton size="sm" classNameContent="contents"
+              <NativeButton
+                size="sm"
+                classNameContent="contents"
                 type="button"
                 disabled={readOnly}
                 onClick={() => !readOnly && onSubmit?.(index)}
@@ -591,7 +617,10 @@ export const PhotoCardGrid = ({
                       data-testid={`photo-card-image-${index}`}
                       loading="eager"
                       onError={() =>
-                        setImageErrors((prev) => ({ ...prev, [index]: true }))
+                        setImageErrors((prev) => ({
+                          ...prev,
+                          [index]: true,
+                        }))
                       }
                       className="h-full w-full rounded-lg object-contain p-0.5 transition-transform duration-300 group-hover:scale-105 sm:p-1"
                     />
@@ -643,7 +672,9 @@ export const PhotoCardGrid = ({
                   <div className="mt-1 h-1.5 w-full overflow-hidden rounded-full bg-white/20">
                     <div
                       className="h-full rounded-full bg-white transition-all duration-700 ease-out"
-                      style={{ width: `${Math.min(100, Math.max(0, pct))}%` }}
+                      style={{
+                        width: `${Math.min(100, Math.max(0, pct))}%`,
+                      }}
                       data-testid={`photo-card-bar-${index}`}
                     />
                   </div>

@@ -104,7 +104,9 @@ const QuizzEditorSidebar = () => {
       return
     }
 
-    if (timelineControls.reorder(active.id, over.id)) return
+    if (timelineControls.reorder(active.id, over.id)) {
+      return
+    }
 
     const from = questionIds.findIndex((id) => id === active.id)
     const to = questionIds.findIndex((id) => id === over.id)

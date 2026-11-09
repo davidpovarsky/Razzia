@@ -19,6 +19,7 @@ export interface SeatingLabels {
   table: string
   noPhone: string
 }
+
 export function SeatingPlan({
   representatives,
   connectedTables,
@@ -27,7 +28,10 @@ export function SeatingPlan({
   qr,
   labels,
 }: {
-  representatives: Array<{ table: number; name: string }>
+  representatives: Array<{
+    table: number
+    name: string
+  }>
   connectedTables: number[]
   dialNumber?: string
   pin: string
@@ -37,21 +41,33 @@ export function SeatingPlan({
   const dial = useRef<HTMLDivElement>(null)
   useLayoutEffect(() => {
     const el = dial.current
-    if (!el) return
+
+    if (!el) {
+      return
+    }
+
     let size = 67
     el.style.fontSize = `${size}px`
-    while (el.scrollWidth > 420 && size > 33) el.style.fontSize = `${--size}px`
+
+    while (el.scrollWidth > 420 && size > 33) {
+      el.style.fontSize = `${(size -= 1)}px`
+    }
   }, [dialNumber, labels.noPhone])
   const connected = new Set(connectedTables)
   // Reference uses first name + surname initial; retain each real roster entry.
   const shortName = (name: string) => {
     const parts = name.trim().split(/\s+/)
+
     return parts.length < 2
       ? name
-      : `${parts.slice(0, -1).join(" ")} ${parts.at(-1)![0]}.`
+      : `${parts.slice(0, -1).join(" ")} ${parts.at(-1)?.[0] ?? ""}.`
   }
+
   return (
-    <div className="tadazz-reference-seating has-host-guide" data-testid="tadazz-screen-lobby">
+    <div
+      className="tadazz-reference-seating has-host-guide"
+      data-testid="tadazz-screen-lobby"
+    >
       <div id="screen">
         <aside className="left-panel">
           <div className="left-accent" aria-hidden="true" />
@@ -90,6 +106,7 @@ export function SeatingPlan({
               const names = representatives
                 .filter((rep) => rep.table === table)
                 .map((rep) => rep.name)
+
               return (
                 <div
                   key={table}
@@ -103,7 +120,12 @@ export function SeatingPlan({
                   data-table={table}
                   data-connected={connected.has(table)}
                   aria-label={`${labels.table} ${table}: ${names.join(", ")}`}
-                  style={{ "--x": `${x}px`, "--y": `${y}px` } as CSSProperties}
+                  style={
+                    {
+                      "--x": `${x}px`,
+                      "--y": `${y}px`,
+                    } as CSSProperties
+                  }
                 >
                   <div className="top" aria-hidden="true">
                     <span className="table-number">{table}</span>

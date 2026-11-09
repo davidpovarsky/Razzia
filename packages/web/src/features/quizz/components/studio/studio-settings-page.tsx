@@ -104,49 +104,80 @@ export const StudioSettingsPage = () => {
 
   const stagePresetItems = QUESTION_ENTRANCE_PRESETS.map((p) => ({
     value: p,
-    label:
-      p === "none"
-        ? t("extensions:entrance.none", "Regular / None")
-        : p === "fade"
-          ? t("extensions:entrance.fade", "Fade In")
-          : p === "slide-up"
-            ? t("extensions:entrance.slideUp", "Slide Up")
-            : p === "slide-side"
-              ? t("extensions:entrance.slideSide", "Slide Side")
-              : p === "zoom-soft"
-                ? t("extensions:entrance.zoomSoft", "Soft Zoom")
-                : p === "spotlight"
-                  ? t("extensions:entrance.spotlight", "Spotlight")
-                  : p === "curtain"
-                    ? t("extensions:entrance.curtain", "Curtain")
-                    : p === "pop-bounce"
-                      ? t("extensions:entrance.popBounce", "Pop Bounce")
-                      : p === "wobble-settle"
-                        ? t("extensions:entrance.wobbleSettle", "Wobble Settle")
-                        : p === "cascade"
-                          ? t("extensions:entrance.cascade", "Cascade")
-                          : p === "fan-flip"
-                            ? t("extensions:entrance.fanFlip", "Fan Flip")
-                            : t(
-                                "extensions:entrance.wipeRipple",
-                                "Wipe Ripple",
-                              ),
+    label: (() => {
+      if (p === "none") {
+        return t("extensions:entrance.none", "Regular / None")
+      }
+
+      if (p === "fade") {
+        return t("extensions:entrance.fade", "Fade In")
+      }
+
+      if (p === "slide-up") {
+        return t("extensions:entrance.slideUp", "Slide Up")
+      }
+
+      if (p === "slide-side") {
+        return t("extensions:entrance.slideSide", "Slide Side")
+      }
+
+      if (p === "zoom-soft") {
+        return t("extensions:entrance.zoomSoft", "Soft Zoom")
+      }
+
+      if (p === "spotlight") {
+        return t("extensions:entrance.spotlight", "Spotlight")
+      }
+
+      if (p === "curtain") {
+        return t("extensions:entrance.curtain", "Curtain")
+      }
+
+      if (p === "pop-bounce") {
+        return t("extensions:entrance.popBounce", "Pop Bounce")
+      }
+
+      if (p === "wobble-settle") {
+        return t("extensions:entrance.wobbleSettle", "Wobble Settle")
+      }
+
+      if (p === "cascade") {
+        return t("extensions:entrance.cascade", "Cascade")
+      }
+
+      if (p === "fan-flip") {
+        return t("extensions:entrance.fanFlip", "Fan Flip")
+      }
+
+      return t("extensions:entrance.wipeRipple", "Wipe Ripple")
+    })(),
   }))
 
   const decorationPresetItems = QUESTION_DECORATION_PRESETS.map((dp) => ({
     value: dp,
-    label:
-      dp === "none"
-        ? t("extensions:stageMotion.decorationNone", "None")
-        : dp === "pulse-bar"
-          ? t("extensions:stageMotion.decorationPulseBar", "Pulse Bar")
-          : dp === "shimmer-line"
-            ? t("extensions:stageMotion.decorationShimmerLine", "Shimmer Line")
-            : dp === "wave-dots"
-              ? t("extensions:stageMotion.decorationWaveDots", "Wave Dots")
-              : dp === "glow-sweep"
-                ? t("extensions:stageMotion.decorationGlowSweep", "Glow Sweep")
-                : t("extensions:stageMotion.decorationLottie", "Custom Lottie"),
+    label: (() => {
+      if (dp === "none") {
+        return t("extensions:stageMotion.decorationNone", "None")
+      }
+
+      if (dp === "pulse-bar") {
+        return t("extensions:stageMotion.decorationPulseBar", "Pulse Bar")
+      }
+
+      if (dp === "shimmer-line") {
+        return t("extensions:stageMotion.decorationShimmerLine", "Shimmer Line")
+      }
+
+      if (dp === "wave-dots") {
+        return t("extensions:stageMotion.decorationWaveDots", "Wave Dots")
+      }
+
+      if (dp === "glow-sweep") {
+        return t("extensions:stageMotion.decorationGlowSweep", "Glow Sweep")
+      }
+
+      return t("extensions:stageMotion.decorationLottie", "Custom Lottie")
+    })(),
   }))
 
   const resolvedGlobalStage = resolveCardStageAnimations({

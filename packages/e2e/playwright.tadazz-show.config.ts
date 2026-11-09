@@ -18,24 +18,29 @@ if (!process.env.TEST_WORKER_INDEX) {
   )
 
   const repoConfig = join(root, "config")
+
   if (fs.existsSync(join(repoConfig, "quizz/build-our-FcsLmJBP.json"))) {
     fs.cpSync(
       join(repoConfig, "quizz/build-our-FcsLmJBP.json"),
       join(CONFIG_PATH, "quizz/build-our-FcsLmJBP.json"),
     )
   }
-  if (fs.existsSync(join(repoConfig, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"))) {
+
+  if (
+    fs.existsSync(
+      join(repoConfig, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
+    )
+  ) {
     fs.cpSync(
       join(repoConfig, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
       join(CONFIG_PATH, "extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ.json"),
     )
   }
+
   if (fs.existsSync(join(repoConfig, "media"))) {
-    fs.cpSync(
-      join(repoConfig, "media"),
-      join(CONFIG_PATH, "media"),
-      { recursive: true },
-    )
+    fs.cpSync(join(repoConfig, "media"), join(CONFIG_PATH, "media"), {
+      recursive: true,
+    })
   }
 }
 
@@ -79,7 +84,8 @@ export default defineConfig({
       },
     },
     {
-      command: "node node_modules/vite/bin/vite.js preview --port 3010 --strictPort",
+      command:
+        "node node_modules/vite/bin/vite.js preview --port 3010 --strictPort",
       cwd: join(root, "packages/web"),
       url: "http://127.0.0.1:3010",
       reuseExistingServer: false,

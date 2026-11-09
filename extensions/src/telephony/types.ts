@@ -250,12 +250,16 @@ export function mapDtmfToAnswerIndex(digit: string): number | null {
  * Telephone PSTN supports single-choice questions (quiz or survey) with <= 5 options.
  * Multi-choice, estimation, or >5 options are explicitly unsupported.
  */
-export function isQuestionSupportedOnPstn(
+export /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
+function isQuestionSupportedOnPstn(
   gameMode: string,
   questionType: string,
   answersCount: number,
   playMode?: string | null,
-): { supported: boolean; reason?: string } {
+): {
+  supported: boolean
+  reason?: string
+} {
   const isSurvey =
     playMode === "survey" || (!playMode && gameMode === QUIZZ_MODES.SURVEY)
 
@@ -291,5 +295,8 @@ export function isQuestionSupportedOnPstn(
     }
   }
 
-  return { supported: true }
+  return {
+    supported: true,
+  }
 }
+/* oxlint-enable max-params */

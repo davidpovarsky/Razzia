@@ -234,9 +234,9 @@ describe("Show Import Preflight & Format Detection", () => {
       "unsafe.bundle.json",
     )
     expect(bundleResult.ok).toBe(false)
-    expect(
-      bundleResult.issues.some((i) => i.code === "UNSAFE_MEDIA_URL"),
-    ).toBe(true)
+    expect(bundleResult.issues.some((i) => i.code === "UNSAFE_MEDIA_URL")).toBe(
+      true,
+    )
   })
 
   it("normalizes pre-modern legacy quiz missing gameMode cleanly", () => {

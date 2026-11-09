@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   isLegacyShowRollback,
   resolveShowTheme,
@@ -61,7 +62,6 @@ import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
 import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
-
 interface CatalogLottieAsset {
   name: string
   url: string
@@ -72,7 +72,6 @@ interface CatalogLottieAsset {
   referenceCount?: number
   lottieMeta?: LottieMeta
 }
-
 interface PendingLottieDeleteConflict {
   name: string
   url: string
@@ -83,7 +82,6 @@ interface PendingLottieDeleteConflict {
     location: string
   }>
 }
-
 function arrayBufferToBase64(buffer: ArrayBuffer): string {
   const bytes = new Uint8Array(buffer)
   let binary = ""
@@ -95,7 +93,6 @@ function arrayBufferToBase64(buffer: ArrayBuffer): string {
 
   return btoa(binary)
 }
-
 function formatMsReadout(ms: number): string {
   const clamped = Math.max(0, Math.round(ms))
   const totalSec = clamped / 1000
@@ -104,7 +101,6 @@ function formatMsReadout(ms: number): string {
 
   return `${String(mins).padStart(2, "0")}:${secs}`
 }
-
 function getManagerAuthHeaders(
   extra?: Record<string, string>,
 ): Record<string, string> {
@@ -112,7 +108,11 @@ function getManagerAuthHeaders(
     typeof window !== "undefined" ? window.localStorage.getItem("token") : null
 
   return {
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    ...(token
+      ? {
+          Authorization: `Bearer ${token}`,
+        }
+      : {}),
     ...extra,
   }
 }
@@ -130,8 +130,11 @@ export const StudioSceneEditor = () => {
   } = useStudioEditor()
   const { quizzId, questionIds } = useQuizzEditor()
   const { control } = useFormContext<QuizzFormValues>()
-  const questions = useWatch({ control, name: "questions" }) ?? []
-
+  const questions =
+    useWatch({
+      control,
+      name: "questions",
+    }) ?? []
   const [mediaPickerOpen, setMediaPickerOpen] = useState(false)
   const lottieInputRef = useRef<HTMLInputElement>(null)
   const overlayFileInputRef = useRef<HTMLInputElement>(null)
@@ -163,7 +166,6 @@ export const StudioSceneEditor = () => {
   )
   const [pendingDeleteConflict, setPendingDeleteConflict] =
     useState<PendingLottieDeleteConflict | null>(null)
-
   const refreshLottieCatalog = useCallback(async () => {
     try {
       const query = quizzId ? `?quizId=${encodeURIComponent(quizzId)}` : ""
@@ -174,6 +176,7 @@ export const StudioSceneEditor = () => {
       if (!res.ok) {
         return
       }
+
       const data = (await res.json()) as {
         lottieAssets?: CatalogLottieAsset[]
       }
@@ -185,7 +188,7 @@ export const StudioSceneEditor = () => {
       // Ignore network error in offline/unit environment
     }
   }, [quizzId])
-
+  /* oxlint-disable react/set-state-in-effect -- Synchronize external server/media/editor state without remounting this surface. */
   useEffect(() => {
     refreshLottieCatalog()
   }, [refreshLottieCatalog, selectedTimelineItem?.id])
@@ -199,7 +202,7 @@ export const StudioSceneEditor = () => {
     setExpandedOverlayId(null)
     setLottieUploadError(null)
   }, [selectedTimelineItem?.id])
-
+  /* oxlint-enable react/set-state-in-effect */
   const sceneId =
     selectedTimelineItem && selectedTimelineItem.kind !== "question"
       ? selectedTimelineItem.sceneId
@@ -207,17 +210,14 @@ export const StudioSceneEditor = () => {
   const scene = sceneId
     ? (scenes[sceneId] as SceneConfig | undefined)
     : undefined
-
   const isCinemaCapableScene =
     scene?.kind === "opening" ||
     scene?.kind === "closing" ||
     scene?.kind === "media"
-
   const isCinemaMode =
     scene?.kind === "opening" ||
     scene?.kind === "closing" ||
     (scene?.kind === "media" && scene.stageLayout === "cinema")
-
   const hasForegroundVideo = Boolean(
     scene &&
     "mediaUrl" in scene &&
@@ -225,10 +225,8 @@ export const StudioSceneEditor = () => {
     (scene.mediaType === "video" ||
       /\.(mp4|webm|mov|m4v)$/iu.test(scene.mediaUrl)),
   )
-
   const configuredDurationMs =
     scene && "durationMs" in scene ? scene.durationMs : 5000
-
   const effectivePreviewDurationMs = useMemo(() => {
     if (
       hasForegroundVideo &&
@@ -249,7 +247,6 @@ export const StudioSceneEditor = () => {
 
     let rafId = 0
     let lastTs = performance.now()
-
     const step = (now: number) => {
       const dt = Math.max(0, now - lastTs)
       lastTs = now
@@ -266,7 +263,6 @@ export const StudioSceneEditor = () => {
       })
       rafId = requestAnimationFrame(step)
     }
-
     rafId = requestAnimationFrame(step)
 
     return () => {
@@ -275,7 +271,6 @@ export const StudioSceneEditor = () => {
       }
     }
   }, [isPreviewPlaying, hasForegroundVideo, effectivePreviewDurationMs])
-
   const resolvedOverlays = useMemo(() => {
     if (!scene || !isCinemaCapableScene) {
       return []
@@ -283,14 +278,16 @@ export const StudioSceneEditor = () => {
 
     return resolveSceneOverlayAnimations(scene)
   }, [scene, isCinemaCapableScene])
-
   const cinematicWarnings = useMemo(() => {
     if (!scene || !isCinemaMode) {
       return []
     }
 
     const flags = getCinematicSceneWarnings(scene)
-    const warnings: Array<{ code: string; message: string }> = []
+    const warnings: Array<{
+      code: string
+      message: string
+    }> = []
 
     if (flags.loopAndOnMediaEndConflict) {
       warnings.push({
@@ -334,12 +331,12 @@ export const StudioSceneEditor = () => {
 
     return warnings
   }, [scene, isCinemaMode, t])
-
   const commitOverlays = useCallback(
     (nextOverlays: CinematicOverlayAnimation[]) => {
       if (!sceneId) {
         return
       }
+
       const normalized = nextOverlays.map((ov, idx) => ({
         ...ov,
         order: idx,
@@ -350,9 +347,14 @@ export const StudioSceneEditor = () => {
     },
     [sceneId, updateSceneConfig],
   )
-
   const handleUpdateOverlayPosition = useCallback(
-    (overlayId: string, pos: { x: number; y: number }) => {
+    (
+      overlayId: string,
+      pos: {
+        x: number
+        y: number
+      },
+    ) => {
       const next = resolvedOverlays.map((ov) =>
         ov.id === overlayId
           ? {
@@ -412,13 +414,11 @@ export const StudioSceneEditor = () => {
         value,
         label: t(`extensions:themes.presets.${value}`),
       }))
-
   const supportsOnMediaEnd =
     scene.kind === "media" ||
     scene.kind === "opening" ||
     scene.kind === "closing" ||
     scene.kind === "animation"
-
   const advanceItems = [
     {
       value: "auto",
@@ -446,7 +446,6 @@ export const StudioSceneEditor = () => {
         ]
       : []),
   ]
-
   const mediaTypeItems = [
     {
       value: "image",
@@ -461,7 +460,6 @@ export const StudioSceneEditor = () => {
       label: t("extensions:studio.scene.mediaTypeAudio", "Audio"),
     },
   ]
-
   const stageLayoutItems = [
     {
       value: "cinema",
@@ -475,7 +473,6 @@ export const StudioSceneEditor = () => {
       label: t("extensions:studio.scene.stageLayoutCard", "Framed Card"),
     },
   ]
-
   const mediaFitItems = [
     {
       value: "cover",
@@ -486,7 +483,6 @@ export const StudioSceneEditor = () => {
       label: t("extensions:studio.scene.mediaFitContain", "Contain (Fit all)"),
     },
   ]
-
   const logoPositionItems = [
     {
       value: "top",
@@ -505,7 +501,6 @@ export const StudioSceneEditor = () => {
       label: t("extensions:studio.scene.logoHidden", "Hidden"),
     },
   ]
-
   const endBehaviorItems = [
     {
       value: "holdFrame",
@@ -526,7 +521,6 @@ export const StudioSceneEditor = () => {
       ),
     },
   ]
-
   let subtitleOrDesc = ""
 
   if ("subtitle" in scene && typeof scene.subtitle === "string") {
@@ -541,29 +535,34 @@ export const StudioSceneEditor = () => {
   const advanceMode = "advance" in scene ? scene.advance : "auto"
   const mediaUrl = "mediaUrl" in scene ? (scene.mediaUrl ?? "") : ""
   const isCountdown = scene.kind === "countdown"
-
   const stageFitWarnings = evaluateCardStageFitWarnings({
     sceneTitle: scene.title,
     sceneSubtitle: subtitleOrDesc,
   })
-
   const handleMediaSelect = (item: UploadedMedia) => {
-    const detectedType: "image" | "video" | "audio" =
-      item.type === "video"
-        ? "video"
-        : item.type === "audio"
-          ? "audio"
-          : "image"
+    const detectedType: "image" | "video" | "audio" = (() => {
+      if (item.type === "video") {
+        return "video"
+      }
+
+      if (item.type === "audio") {
+        return "audio"
+      }
+
+      return "image"
+    })()
     updateSceneConfig(sceneId, {
       mediaUrl: item.url,
       mediaType: detectedType,
     })
     setMediaPickerOpen(false)
   }
-
   const uploadLottieFileToServer = async (
     file: File,
-  ): Promise<{ url: string; name: string } | null> => {
+  ): Promise<{
+    url: string
+    name: string
+  } | null> => {
     setLottieUploadError(null)
 
     try {
@@ -593,7 +592,11 @@ export const StudioSceneEditor = () => {
             name: file.name,
             format,
             contentBase64,
-            ...(quizzId ? { quizId: quizzId } : {}),
+            ...(quizzId
+              ? {
+                  quizId: quizzId,
+                }
+              : {}),
           }),
         })
 
@@ -622,7 +625,10 @@ export const StudioSceneEditor = () => {
         await refreshLottieCatalog()
 
         if (uploaded.url) {
-          return { url: uploaded.url, name: uploaded.name ?? file.name }
+          return {
+            url: uploaded.url,
+            name: uploaded.name ?? file.name,
+          }
         }
 
         return null
@@ -648,7 +654,11 @@ export const StudioSceneEditor = () => {
           name: file.name,
           format: "json",
           content: rawText,
-          ...(quizzId ? { quizId: quizzId } : {}),
+          ...(quizzId
+            ? {
+                quizId: quizzId,
+              }
+            : {}),
         }),
       })
 
@@ -677,7 +687,10 @@ export const StudioSceneEditor = () => {
       await refreshLottieCatalog()
 
       if (uploaded.url) {
-        return { url: uploaded.url, name: uploaded.name ?? file.name }
+        return {
+          url: uploaded.url,
+          name: uploaded.name ?? file.name,
+        }
       }
 
       return null
@@ -692,7 +705,6 @@ export const StudioSceneEditor = () => {
       return null
     }
   }
-
   const handleLottieUpload = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -706,10 +718,11 @@ export const StudioSceneEditor = () => {
     const uploaded = await uploadLottieFileToServer(file)
 
     if (uploaded?.url) {
-      updateSceneConfig(sceneId, { lottieUrl: uploaded.url })
+      updateSceneConfig(sceneId, {
+        lottieUrl: uploaded.url,
+      })
     }
   }
-
   const handleAddOverlayLayer = (assetUrl?: string, customLabel?: string) => {
     if (resolvedOverlays.length >= MAX_CINEMATIC_OVERLAY_ANIMATIONS) {
       toast.error(
@@ -740,7 +753,6 @@ export const StudioSceneEditor = () => {
     setExpandedOverlayId(created.id)
     setOverlaysSectionOpen(true)
   }
-
   const handleOverlayFileSelected = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -761,7 +773,12 @@ export const StudioSceneEditor = () => {
 
     if (targetOverlayId) {
       const next = resolvedOverlays.map((ov) =>
-        ov.id === targetOverlayId ? { ...ov, assetUrl: uploaded.url } : ov,
+        ov.id === targetOverlayId
+          ? {
+              ...ov,
+              assetUrl: uploaded.url,
+            }
+          : ov,
       )
       commitOverlays(next)
       setSelectedOverlayId(targetOverlayId)
@@ -771,34 +788,38 @@ export const StudioSceneEditor = () => {
       handleAddOverlayLayer(uploaded.url, cleanLabel)
     }
   }
-
   const handleUpdateOverlay = (
     overlayId: string,
     patch: Partial<CinematicOverlayAnimation>,
   ) => {
     const next = resolvedOverlays.map((ov) =>
-      ov.id === overlayId ? { ...ov, ...patch } : ov,
+      ov.id === overlayId
+        ? {
+            ...ov,
+            ...patch,
+          }
+        : ov,
     )
     commitOverlays(next)
   }
-
   const handleMoveOverlay = (overlayId: string, delta: -1 | 1) => {
     const idx = resolvedOverlays.findIndex((ov) => ov.id === overlayId)
 
     if (idx < 0) {
       return
     }
+
     const targetIdx = idx + delta
 
     if (targetIdx < 0 || targetIdx >= resolvedOverlays.length) {
       return
     }
+
     const copy = [...resolvedOverlays]
     const [moved] = copy.splice(idx, 1)
     copy.splice(targetIdx, 0, moved)
     commitOverlays(copy)
   }
-
   const handleDuplicateOverlay = (overlayId: string) => {
     if (resolvedOverlays.length >= MAX_CINEMATIC_OVERLAY_ANIMATIONS) {
       toast.error(
@@ -813,6 +834,7 @@ export const StudioSceneEditor = () => {
     if (idx < 0) {
       return
     }
+
     const source = resolvedOverlays[idx]
     const cloned: CinematicOverlayAnimation = {
       ...structuredClone(source),
@@ -829,7 +851,6 @@ export const StudioSceneEditor = () => {
     setSelectedOverlayId(cloned.id)
     setExpandedOverlayId(cloned.id)
   }
-
   const handleRemoveOverlay = (overlayId: string) => {
     const next = resolvedOverlays.filter((ov) => ov.id !== overlayId)
     commitOverlays(next)
@@ -842,17 +863,17 @@ export const StudioSceneEditor = () => {
       setExpandedOverlayId(null)
     }
   }
-
   const handleDeleteLottieFromCatalog = async (
     asset: CatalogLottieAsset,
     detach = false,
   ) => {
     try {
       const res = await fetch(
-        `/api/extensions/lottie/${encodeURIComponent(asset.name)}${
-          detach ? "?detach=true" : ""
-        }`,
-        { method: "DELETE", headers: getManagerAuthHeaders() },
+        `/api/extensions/lottie/${encodeURIComponent(asset.name)}${detach ? "?detach=true" : ""}`,
+        {
+          method: "DELETE",
+          headers: getManagerAuthHeaders(),
+        },
       )
 
       if (res.status === 409) {
@@ -912,6 +933,7 @@ export const StudioSceneEditor = () => {
       if (i >= selectedTimelineIndex && selectedTimelineIndex >= 0) {
         break
       }
+
       const item = timeline[i]
 
       if (item.kind === "question") {
@@ -938,24 +960,36 @@ export const StudioSceneEditor = () => {
           (q) => q.questionId === scene.startQuestionId,
         )
       : -1
-  const recapQuestionRange =
-    scene.kind === "answerRecap"
-      ? selectedStartQuestionIndex >= 0
-        ? precedingQuestions.slice(selectedStartQuestionIndex)
-        : precedingQuestions
-      : []
+  const recapQuestionRange = (() => {
+    if (scene.kind === "answerRecap") {
+      if (selectedStartQuestionIndex >= 0) {
+        return precedingQuestions.slice(selectedStartQuestionIndex)
+      }
 
-  const pickerAcceptType =
-    "mediaType" in scene
-      ? scene.mediaType === "audio"
-        ? "audio"
-        : scene.mediaType === "video"
-          ? "video"
-          : scene.mediaType === "image"
-            ? "image"
-            : "all"
-      : "all"
+      return precedingQuestions
+    }
 
+    return []
+  })()
+  const pickerAcceptType = (() => {
+    if ("mediaType" in scene) {
+      if (scene.mediaType === "audio") {
+        return "audio"
+      }
+
+      if (scene.mediaType === "video") {
+        return "video"
+      }
+
+      if (scene.mediaType === "image") {
+        return "image"
+      }
+
+      return "all"
+    }
+
+    return "all"
+  })()
   const overlayTrackColors = [
     "bg-amber-400/80 border-amber-300",
     "bg-sky-400/80 border-sky-300",
@@ -1001,7 +1035,8 @@ export const StudioSceneEditor = () => {
             className="border-accent bg-background/90 flex w-full max-w-3xl flex-wrap items-center justify-between gap-2 rounded-xl border px-3 py-1.5 text-xs shadow-xs"
           >
             <div className="flex items-center gap-1.5">
-              <Button size="sm"
+              <Button
+                size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-16-9"
                 onClick={() => setPreviewAspect("16:9")}
@@ -1014,7 +1049,8 @@ export const StudioSceneEditor = () => {
               >
                 {t("extensions:studio.scene.overlays.aspect16x9", "16:9 Wide")}
               </Button>
-              <Button size="sm"
+              <Button
+                size="sm"
                 type="button"
                 data-testid="studio-preview-aspect-4-3"
                 onClick={() => setPreviewAspect("4:3")}
@@ -1034,7 +1070,8 @@ export const StudioSceneEditor = () => {
 
             {isCinemaMode && (
               <div className="flex items-center gap-2">
-                <Button size="sm"
+                <Button
+                  size="sm"
                   type="button"
                   data-testid="studio-preview-play-pause"
                   onClick={() => {
@@ -1065,7 +1102,8 @@ export const StudioSceneEditor = () => {
                     </>
                   )}
                 </Button>
-                <Button size="sm"
+                <Button
+                  size="sm"
                   type="button"
                   data-testid="studio-preview-replay"
                   onClick={() => {
@@ -1122,7 +1160,9 @@ export const StudioSceneEditor = () => {
               />
               <div
                 className="absolute inset-0 bg-black"
-                style={{ opacity: scene.background.overlayOpacity ?? 0.35 }}
+                style={{
+                  opacity: scene.background.overlayOpacity ?? 0.35,
+                }}
               />
             </div>
           )}
@@ -1352,13 +1392,17 @@ export const StudioSceneEditor = () => {
                     )}
                   {!scene.mediaUrl && (
                     <div className="flex flex-col items-center gap-2 text-white/60">
-                      {scene.mediaType === "audio" ? (
-                        <Music className="size-16" />
-                      ) : scene.mediaType === "video" ? (
-                        <Film className="size-16" />
-                      ) : (
-                        <ImageIcon className="size-16" />
-                      )}
+                      {(() => {
+                        if (scene.mediaType === "audio") {
+                          return <Music className="size-16" />
+                        }
+
+                        if (scene.mediaType === "video") {
+                          return <Film className="size-16" />
+                        }
+
+                        return <ImageIcon className="size-16" />
+                      })()}
                       <p className="text-sm">
                         {t(
                           "extensions:studio.scene.noMedia",
@@ -1583,7 +1627,10 @@ export const StudioSceneEditor = () => {
                     overlayTrackColors[idx % overlayTrackColors.length]
 
                   return (
-                    <Button type="button" size="sm" classNameContent="contents"
+                    <Button
+                      type="button"
+                      size="sm"
+                      classNameContent="contents"
                       key={ov.id}
                       data-testid={`studio-preview-track-${ov.id}`}
                       onClick={() => {
@@ -1591,10 +1638,8 @@ export const StudioSceneEditor = () => {
                         setExpandedOverlayId(ov.id)
                         setOverlaysSectionOpen(true)
                       }}
-                      className={`p-0 border-0 bg-transparent disabled:opacity-100 ${"bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded"}`}
-                      title={`${ov.label || `Overlay ${idx + 1}`}: ${(
-                        ov.startMs / 1000
-                      ).toFixed(1)}s – ${(endMs / 1000).toFixed(1)}s`}
+                      className={`bg-accent/50 relative h-4 w-full cursor-pointer overflow-hidden rounded border-0 bg-transparent p-0 disabled:opacity-100`}
+                      title={`${ov.label || `Overlay ${idx + 1}`}: ${(ov.startMs / 1000).toFixed(1)}s – ${(endMs / 1000).toFixed(1)}s`}
                     >
                       <div
                         className={clsx(
@@ -1647,7 +1692,9 @@ export const StudioSceneEditor = () => {
           <Input
             value={scene.title ?? ""}
             onChange={(e) =>
-              updateSceneConfig(sceneId, { title: e.target.value })
+              updateSceneConfig(sceneId, {
+                title: e.target.value,
+              })
             }
             placeholder={t(
               "extensions:studio.scene.titlePlaceholder",
@@ -1669,9 +1716,13 @@ export const StudioSceneEditor = () => {
               value={subtitleOrDesc}
               onChange={(e) => {
                 if ("subtitle" in scene) {
-                  updateSceneConfig(sceneId, { subtitle: e.target.value })
+                  updateSceneConfig(sceneId, {
+                    subtitle: e.target.value,
+                  })
                 } else if ("description" in scene) {
-                  updateSceneConfig(sceneId, { description: e.target.value })
+                  updateSceneConfig(sceneId, {
+                    description: e.target.value,
+                  })
                 }
               }}
               placeholder={t(
@@ -1801,7 +1852,9 @@ export const StudioSceneEditor = () => {
                   type="checkbox"
                   checked={scene.showCounts ?? true}
                   onChange={(e) =>
-                    updateSceneConfig(sceneId, { showCounts: e.target.checked })
+                    updateSceneConfig(sceneId, {
+                      showCounts: e.target.checked,
+                    })
                   }
                 />
                 {t(
@@ -1855,7 +1908,9 @@ export const StudioSceneEditor = () => {
                   data-testid="scene-media-url-input"
                   value={mediaUrl}
                   onChange={(e) =>
-                    updateSceneConfig(sceneId, { mediaUrl: e.target.value })
+                    updateSceneConfig(sceneId, {
+                      mediaUrl: e.target.value,
+                    })
                   }
                   placeholder={t(
                     "extensions:studio.scene.mediaPlaceholder",
@@ -1945,7 +2000,9 @@ export const StudioSceneEditor = () => {
                       type="checkbox"
                       checked={scene.loop ?? false}
                       onChange={(e) =>
-                        updateSceneConfig(sceneId, { loop: e.target.checked })
+                        updateSceneConfig(sceneId, {
+                          loop: e.target.checked,
+                        })
                       }
                     />
                     {t(
@@ -1958,7 +2015,9 @@ export const StudioSceneEditor = () => {
                       type="checkbox"
                       checked={scene.muted ?? false}
                       onChange={(e) =>
-                        updateSceneConfig(sceneId, { muted: e.target.checked })
+                        updateSceneConfig(sceneId, {
+                          muted: e.target.checked,
+                        })
                       }
                     />
                     {t("extensions:studio.scene.mutedLabel", "Start Muted")}
@@ -2047,7 +2106,9 @@ export const StudioSceneEditor = () => {
                 type="checkbox"
                 checked={scene.textOverlay ?? true}
                 onChange={(e) =>
-                  updateSceneConfig(sceneId, { textOverlay: e.target.checked })
+                  updateSceneConfig(sceneId, {
+                    textOverlay: e.target.checked,
+                  })
                 }
               />
               {t(
@@ -2065,7 +2126,8 @@ export const StudioSceneEditor = () => {
             className="border-accent flex flex-col gap-2.5 rounded-lg border p-2.5"
           >
             <div className="flex items-center justify-between gap-2">
-              <Button size="sm"
+              <Button
+                size="sm"
                 type="button"
                 data-testid="studio-overlay-section-toggle"
                 onClick={() => setOverlaysSectionOpen((prev) => !prev)}
@@ -2205,7 +2267,8 @@ export const StudioSceneEditor = () => {
                         data-testid={`studio-lottie-catalog-item-${item.name}`}
                         className="bg-background flex items-center justify-between gap-2 rounded px-2 py-1 text-[11px]"
                       >
-                        <Button size="sm"
+                        <Button
+                          size="sm"
                           type="button"
                           data-testid={`studio-lottie-catalog-select-${item.name}`}
                           onClick={() => {
@@ -2234,7 +2297,8 @@ export const StudioSceneEditor = () => {
                               </span>
                             )}
                         </Button>
-                        <Button size="sm"
+                        <Button
+                          size="sm"
                           type="button"
                           data-testid={`studio-lottie-catalog-delete-${item.name}`}
                           onClick={() => handleDeleteLottieFromCatalog(item)}
@@ -2343,7 +2407,8 @@ export const StudioSceneEditor = () => {
                                 "Enabled",
                               )}
                             />
-                            <Button size="sm"
+                            <Button
+                              size="sm"
                               type="button"
                               data-testid={`studio-overlay-expand-${ov.id}`}
                               onClick={() => {
@@ -2374,7 +2439,8 @@ export const StudioSceneEditor = () => {
                             <span className="bg-accent text-muted-foreground rounded px-1.5 py-0.5 text-[10px] font-semibold">
                               {(ov.startMs / 1000).toFixed(1)}s
                             </span>
-                            <Button size="sm"
+                            <Button
+                              size="sm"
                               type="button"
                               data-testid={`studio-overlay-up-${ov.id}`}
                               disabled={idx === 0}
@@ -2387,7 +2453,8 @@ export const StudioSceneEditor = () => {
                             >
                               <ArrowUp className="size-3.5" />
                             </Button>
-                            <Button size="sm"
+                            <Button
+                              size="sm"
                               type="button"
                               data-testid={`studio-overlay-down-${ov.id}`}
                               disabled={idx === resolvedOverlays.length - 1}
@@ -2400,7 +2467,8 @@ export const StudioSceneEditor = () => {
                             >
                               <ArrowDown className="size-3.5" />
                             </Button>
-                            <Button size="sm"
+                            <Button
+                              size="sm"
                               type="button"
                               data-testid={`studio-overlay-duplicate-${ov.id}`}
                               onClick={() => handleDuplicateOverlay(ov.id)}
@@ -2412,7 +2480,8 @@ export const StudioSceneEditor = () => {
                             >
                               <Copy className="size-3.5" />
                             </Button>
-                            <Button size="sm"
+                            <Button
+                              size="sm"
                               type="button"
                               data-testid={`studio-overlay-remove-${ov.id}`}
                               onClick={() => handleRemoveOverlay(ov.id)}
@@ -2636,7 +2705,9 @@ export const StudioSceneEditor = () => {
                                         Number(e.target.value) || 28,
                                       ),
                                     )
-                                    handleUpdateOverlay(ov.id, { widthPct: w })
+                                    handleUpdateOverlay(ov.id, {
+                                      widthPct: w,
+                                    })
                                   }}
                                   variant="sm"
                                 />
@@ -2645,11 +2716,14 @@ export const StudioSceneEditor = () => {
 
                             {/* Size Presets & Reset to Center */}
                             <div className="flex flex-wrap items-center gap-1">
-                              <Button size="sm"
+                              <Button
+                                size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-sm-${ov.id}`}
                                 onClick={() =>
-                                  handleUpdateOverlay(ov.id, { widthPct: 20 })
+                                  handleUpdateOverlay(ov.id, {
+                                    widthPct: 20,
+                                  })
                                 }
                                 className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
@@ -2658,11 +2732,14 @@ export const StudioSceneEditor = () => {
                                   "Small (20%)",
                                 )}
                               </Button>
-                              <Button size="sm"
+                              <Button
+                                size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-md-${ov.id}`}
                                 onClick={() =>
-                                  handleUpdateOverlay(ov.id, { widthPct: 35 })
+                                  handleUpdateOverlay(ov.id, {
+                                    widthPct: 35,
+                                  })
                                 }
                                 className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
@@ -2671,11 +2748,14 @@ export const StudioSceneEditor = () => {
                                   "Medium (35%)",
                                 )}
                               </Button>
-                              <Button size="sm"
+                              <Button
+                                size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-preset-lg-${ov.id}`}
                                 onClick={() =>
-                                  handleUpdateOverlay(ov.id, { widthPct: 55 })
+                                  handleUpdateOverlay(ov.id, {
+                                    widthPct: 55,
+                                  })
                                 }
                                 className="bg-accent text-accent-foreground rounded px-2 py-0.5 text-[10px] font-semibold hover:opacity-85"
                               >
@@ -2684,12 +2764,16 @@ export const StudioSceneEditor = () => {
                                   "Large (55%)",
                                 )}
                               </Button>
-                              <Button size="sm"
+                              <Button
+                                size="sm"
                                 type="button"
                                 data-testid={`studio-overlay-reset-center-${ov.id}`}
                                 onClick={() =>
                                   handleUpdateOverlay(ov.id, {
-                                    position: { x: 0.5, y: 0.5 },
+                                    position: {
+                                      x: 0.5,
+                                      y: 0.5,
+                                    },
                                     rotationDeg: 0,
                                   })
                                 }
@@ -2925,7 +3009,9 @@ export const StudioSceneEditor = () => {
                                       0.25,
                                       Math.min(3, Number(e.target.value) || 1),
                                     )
-                                    handleUpdateOverlay(ov.id, { speed: sp })
+                                    handleUpdateOverlay(ov.id, {
+                                      speed: sp,
+                                    })
                                   }}
                                   variant="sm"
                                 />
@@ -2999,7 +3085,9 @@ export const StudioSceneEditor = () => {
             <StudioSelect
               value={animationPreset}
               onChange={(val: string) =>
-                updateSceneConfig(sceneId, { preset: val })
+                updateSceneConfig(sceneId, {
+                  preset: val,
+                })
               }
               items={presetItems}
             />
@@ -3083,7 +3171,9 @@ export const StudioSceneEditor = () => {
                   type="button"
                   size="sm"
                   onClick={() =>
-                    updateSceneConfig(sceneId, { lottieUrl: undefined })
+                    updateSceneConfig(sceneId, {
+                      lottieUrl: undefined,
+                    })
                   }
                   className="bg-accent text-accent-foreground px-2 py-0.5 text-[11px]"
                 >
@@ -3211,7 +3301,9 @@ export const StudioSceneEditor = () => {
         <CardBackgroundConfig
           backgroundOverride={scene.background}
           onBackgroundChange={(next) =>
-            updateSceneConfig(sceneId, { background: next })
+            updateSceneConfig(sceneId, {
+              background: next,
+            })
           }
         />
 
@@ -3220,7 +3312,9 @@ export const StudioSceneEditor = () => {
           kind="scene"
           sceneAudio={scene.audio}
           onSceneAudioChange={(next) =>
-            updateSceneConfig(sceneId, { audio: next })
+            updateSceneConfig(sceneId, {
+              audio: next,
+            })
           }
         />
 
@@ -3229,7 +3323,9 @@ export const StudioSceneEditor = () => {
           kind="scene"
           sceneStageAnimations={scene.stageAnimations}
           onSceneStageAnimationsChange={(next) =>
-            updateSceneConfig(sceneId, { stageAnimations: next })
+            updateSceneConfig(sceneId, {
+              stageAnimations: next,
+            })
           }
         />
       </aside>

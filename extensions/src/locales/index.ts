@@ -40,12 +40,28 @@ export type SupportedExtensionLanguage =
  * Returns an i18next-compatible resources map for the "extensions" namespace.
  */
 export const getExtensionResources = () => ({
-  de: { extensions: { ...deExtensions, billing: billing.de, packages: packages.de } },
-  en: { extensions: { ...enExtensions, billing: billing.en, packages: packages.en } },
-  es: { extensions: { ...esExtensions, billing: billing.es, packages: packages.es } },
-  fr: { extensions: { ...frExtensions, billing: billing.fr, packages: packages.fr } },
-  it: { extensions: { ...itExtensions, billing: billing.it, packages: packages.it } },
-  ja: { extensions: { ...jaExtensions, billing: billing.ja, packages: packages.ja } },
-  tr: { extensions: { ...trExtensions, billing: billing.tr, packages: packages.tr } },
-  vi: { extensions: { ...viExtensions, billing: billing.vi, packages: packages.vi } },
+  de: {
+    extensions: { ...deExtensions, billing: billing.de, packages: packages.de },
+  },
+  en: {
+    extensions: { ...enExtensions, billing: billing.en, packages: packages.en },
+  },
+  es: {
+    extensions: { ...esExtensions, billing: billing.es, packages: packages.es },
+  },
+  fr: {
+    extensions: { ...frExtensions, billing: billing.fr, packages: packages.fr },
+  },
+  it: {
+    extensions: { ...itExtensions, billing: billing.it, packages: packages.it },
+  },
+  ja: {
+    extensions: { ...jaExtensions, billing: billing.ja, packages: packages.ja },
+  },
+  tr: {
+    extensions: { ...trExtensions, billing: billing.tr, packages: packages.tr },
+  },
+  vi: {
+    extensions: { ...viExtensions, billing: billing.vi, packages: packages.vi },
+  },
 })

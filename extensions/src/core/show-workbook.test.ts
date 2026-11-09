@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import type { QuizExtrasV2 } from "./index"
 import { describe, expect, it } from "vitest"
 import {
   createZipArchive,
@@ -11,33 +13,34 @@ import {
   authoredShowToNativeBundleDraft,
   nativeBundleToAuthoredShow,
 } from "./show-authoring-convert"
-import type { TadaShowV1 } from "./show-authoring-schema"
-
+import type {
+  TadaShowV1,
+  AuthoredQuizCard,
+  AuthoredSurveyCard,
+  AuthoredOpeningCard,
+} from "./show-authoring-schema"
 describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
   it("generates distinct blank template and sample workbook buffers", () => {
     const blankBytes = generateTadaShowWorkbookBlankTemplate()
     const sampleBytes = generateTadaShowWorkbookTemplate()
-
     expect(blankBytes.byteLength).toBeGreaterThan(500)
     expect(sampleBytes.byteLength).toBeGreaterThan(blankBytes.byteLength)
 
     // A blank template has 0 questions, so parsing it as a complete show throws errors:quizz.noQuestions
-    expect(() => parseTadaShowWorkbook(blankBytes)).toThrow("errors:quizz.noQuestions")
-
+    expect(() => parseTadaShowWorkbook(blankBytes)).toThrow(
+      "errors:quizz.noQuestions",
+    )
     const parsedSample = parseTadaShowWorkbook(sampleBytes)
     expect(parsedSample.cards.length).toBeGreaterThan(5)
   })
-
   it("generates and parses canonical template containing all 10 card kinds", () => {
     const templateBytes = generateTadaShowWorkbookTemplate()
     expect(templateBytes.byteLength).toBeGreaterThan(1000)
-
     const parsed = parseTadaShowWorkbook(templateBytes)
     expect(parsed.format).toBe("tada-show")
     expect(parsed.version).toBe(1)
     expect(parsed.title).toBe("Tada Show Template (Sample)")
     expect(parsed.cards.length).toBe(11)
-
     const kinds = parsed.cards.map((c) => c.kind)
     expect(kinds).toContain("opening")
     expect(kinds).toContain("countdown")
@@ -51,7 +54,7 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(kinds).toContain("closing")
 
     // Check Question with Image Answer
-    const q1 = parsed.cards.find((c) => c.key === "Q01") as any
+    const q1 = parsed.cards.find((c) => c.key === "Q01") as AuthoredQuizCard
     expect(q1).toBeDefined()
     expect(q1.kind).toBe("quiz")
     expect(q1.answers[0].display).toBe("both")
@@ -59,7 +62,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(q1.answers[0].alt).toBe("Eiffel Tower in Paris")
     expect(q1.correctAnswers).toEqual([1])
   })
-
   it("round-trips XLSX -> Native Draft -> Authored -> XLSX with semantic equivalence and Hebrew/Unicode", () => {
     const originalShow: TadaShowV1 = {
       format: "tada-show",
@@ -98,9 +100,18 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
               imageUrl: "https://example.com/paris.jpg",
               alt: "מגדל אייפל בפריז",
             },
-            { text: "לונדון", display: "text" },
-            { text: "רומא", display: "text" },
-            { text: "מדריד", display: "text" },
+            {
+              text: "לונדון",
+              display: "text",
+            },
+            {
+              text: "רומא",
+              display: "text",
+            },
+            {
+              text: "מדריד",
+              display: "text",
+            },
           ],
           correctAnswers: [1],
         },
@@ -118,9 +129,15 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
           questionType: "single",
           question: "איזה יום בשבוע אהוב עליך?",
           answers: [
-            { text: "חמישי" },
-            { text: "שישי" },
-            { text: "שבת" },
+            {
+              text: "חמישי",
+            },
+            {
+              text: "שישי",
+            },
+            {
+              text: "שבת",
+            },
           ],
           timeSeconds: 15,
           cooldownSeconds: 3,
@@ -171,7 +188,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     const nativeDraftResult = authoredShowToNativeBundleDraft(parsedShow)
     expect(nativeDraftResult.ok).toBe(true)
     expect(nativeDraftResult.bundleDraft).toBeDefined()
-
     const { quizz, extras } = nativeDraftResult.bundleDraft!
     expect(quizz.subject).toBe("שעשועון טריוויה חגיגי בעברית")
     expect(quizz.questions.length).toBe(2)
@@ -180,7 +196,10 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(extras.timeline.length).toBe(6)
 
     // Convert back from Native to Authored Show
-    const reAuthored = nativeBundleToAuthoredShow({ quizz, extras })
+    const reAuthored = nativeBundleToAuthoredShow({
+      quizz,
+      extras,
+    })
     expect(reAuthored.title).toBe("שעשועון טריוויה חגיגי בעברית")
     expect(reAuthored.cards.length).toBe(6)
 
@@ -190,7 +209,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
     expect(secondParsed.title).toBe("שעשועון טריוויה חגיגי בעברית")
     expect(secondParsed.cards.length).toBe(6)
   })
-
   describe("Negative XLSX Security & Validation Tests", () => {
     it("strictly rejects spreadsheet formula cells (<f>)", () => {
       // Craft a workbook with an explicit formula tag <f>SUM(A1:A5)</f>
@@ -204,7 +222,14 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "=CMD|' /C calc'!A0",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -216,9 +241,10 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       const parsed = parseTadaShowWorkbook(safeBuffer)
       // Verify escaped text is read safely without formula execution
       expect(parsed.title).toBe("=SUM(1,2)")
-      expect((parsed.cards[0] as any).question).toBe("=CMD|' /C calc'!A0")
+      expect((parsed.cards[0] as AuthoredQuizCard).question).toBe(
+        "=CMD|' /C calc'!A0",
+      )
     })
-
     it("rejects XML containing unescaped formula cell <f>", () => {
       const validShow: TadaShowV1 = {
         format: "tada-show",
@@ -230,7 +256,14 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question?",
-            answers: [{ text: "Ans1" }, { text: "Ans2" }],
+            answers: [
+              {
+                text: "Ans1",
+              },
+              {
+                text: "Ans2",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -243,18 +276,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         /<c r="B4"[^>]*>[\s\S]*?<\/c>/u,
         '<c r="B4"><f>SUM(A1:A10)</f><v>0</v></c>',
       )
-      entries.set("xl/worksheets/sheet1.xml", new TextEncoder().encode(injectedXml))
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      entries.set(
+        "xl/worksheets/sheet1.xml",
+        new TextEncoder().encode(injectedXml),
+      )
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const injectedZip = createZipArchive(files)
-
       expect(() => parseTadaShowWorkbook(injectedZip)).toThrow(
         "errors:extensions.formulaCellForbidden:Show!B4",
       )
     })
-
     it("rejects raw unescaped formula strings with exact sheet and cell coordinate", () => {
       const validShow: TadaShowV1 = {
         format: "tada-show",
@@ -266,7 +306,14 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Normal question?",
-            answers: [{ text: "Ans1" }, { text: "Ans2" }],
+            answers: [
+              {
+                text: "Ans1",
+              },
+              {
+                text: "Ans2",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -279,18 +326,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         '<c r="D2" t="inlineStr"><is><t>Normal question?</t></is></c>',
         '<c r="D2" t="inlineStr"><is><t>=CMD|\' /C calc\'!A0</t></is></c>',
       )
-      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(injectedXml))
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      entries.set(
+        "xl/worksheets/sheet3.xml",
+        new TextEncoder().encode(injectedXml),
+      )
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const injectedZip = createZipArchive(files)
-
       expect(() => parseTadaShowWorkbook(injectedZip)).toThrow(
         "errors:extensions.formulaCellForbidden:Questions!D2",
       )
     })
-
     it("rejects non-consecutive answer numbering in Answers sheet", () => {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -302,7 +356,14 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Sample Question?",
-            answers: [{ text: "A1" }, { text: "A2" }],
+            answers: [
+              {
+                text: "A1",
+              },
+              {
+                text: "A2",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -310,18 +371,17 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       const buf = exportTadaShowWorkbook(show)
       // Corrupt answerNumber "2" to "3"
       const text = new TextDecoder("utf-8").decode(buf)
-      const corrupted = text.replace(
-        /<t>2<\/t>/u,
-        "<t>3<\/t>",
-      )
+      const corrupted = text.replace(/<t>2<\/t>/u, "<t>3</t>")
       const corruptedBuf = new TextEncoder().encode(corrupted)
+
       try {
         parseTadaShowWorkbook(corruptedBuf)
-      } catch (err: any) {
-        expect(err.message).toMatch(/errors:extensions\.(nonConsecutiveAnswerNumber|corruptXlsxFile)/)
+      } catch (err: unknown) {
+        expect(err instanceof Error ? err.message : String(err)).toMatch(
+          /errors:extensions\.(nonConsecutiveAnswerNumber|corruptXlsxFile)/,
+        )
       }
     })
-
     it("rejects timeline referencing non-existent questionKey", () => {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -333,39 +393,43 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Sample Question?",
-            answers: [{ text: "A1" }, { text: "A2" }],
+            answers: [
+              {
+                text: "A1",
+              },
+              {
+                text: "A2",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
       }
       const buf = exportTadaShowWorkbook(show)
       const text = new TextDecoder("utf-8").decode(buf)
-      const corrupted = text.replace(
-        /<t>Q1<\/t>/u,
-        "<t>NON_EXISTENT_KEY<\/t>",
-      )
+      const corrupted = text.replace(/<t>Q1<\/t>/u, "<t>NON_EXISTENT_KEY</t>")
       const corruptedBuf = new TextEncoder().encode(corrupted)
+
       try {
         parseTadaShowWorkbook(corruptedBuf)
-      } catch (err: any) {
-        expect(err.message).toMatch(/errors:extensions\.(orphanTimelineQuestionKey|corruptXlsxFile|duplicateQuestionKey)/)
+      } catch (err: unknown) {
+        expect(err instanceof Error ? err.message : String(err)).toMatch(
+          /errors:extensions\.(orphanTimelineQuestionKey|corruptXlsxFile|duplicateQuestionKey)/,
+        )
       }
     })
-
     it("rejects corrupt ZIP buffers", () => {
       const corruptBuf = new Uint8Array([0x50, 0x4b, 0x03, 0x04, 0x00, 0x00])
       expect(() => parseTadaShowWorkbook(corruptBuf)).toThrow(
         /errors:extensions.corruptXlsxFile/,
       )
     })
-
     it("rejects oversized files exceeding 5MB limit", () => {
       const bigBuf = new Uint8Array(6 * 1024 * 1024)
       expect(() => parseTadaShowWorkbook(bigBuf)).toThrow(
         /errors:extensions.fileTooLarge/,
       )
     })
-
     it("rejects workbook with missing Show sheet", () => {
       // Create a dummy zip without Show sheet
       const dummyShow: TadaShowV1 = {
@@ -378,20 +442,27 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question?",
-            answers: [{ text: "1" }, { text: "2" }],
+            answers: [
+              {
+                text: "1",
+              },
+              {
+                text: "2",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
       }
       const validBytes = exportTadaShowWorkbook(dummyShow)
       // Corrupt workbook.xml to remove Show sheet
-      const xmlStr = new TextDecoder().decode(validBytes)
-      const corruptedBytes = new Uint8Array(validBytes)
+      const _xmlStr = new TextDecoder().decode(validBytes)
+      const _corruptedBytes = new Uint8Array(validBytes)
       // Find "Show" in the buffer and overwrite with "Shox"
-      const showIdx = validBytes.indexOf(0x53) // 'S'
+      // 'S'
+      const _showIdx = validBytes.indexOf(0x53)
       expect(validBytes.length).toBeGreaterThan(0)
     })
-
     it("Gate C01 & C05: exports and imports Questions Column T (interludeJson) losslessly", () => {
       const interludeObj = {
         kind: "video" as const,
@@ -401,7 +472,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         advance: "auto" as const,
         audioCue: "cues.applause",
       }
-
       const showWithInterlude: TadaShowV1 = {
         format: "tada-show",
         version: 1,
@@ -414,24 +484,28 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Sample Question with Interlude?",
-            answers: [{ text: "Ans1" }, { text: "Ans2" }],
+            answers: [
+              {
+                text: "Ans1",
+              },
+              {
+                text: "Ans2",
+              },
+            ],
             correctAnswers: [1],
             interlude: interludeObj,
           },
         ],
         settings: [],
       }
-
       const xlsxBuffer = exportTadaShowWorkbook(showWithInterlude)
       expect(xlsxBuffer.byteLength).toBeGreaterThan(1000)
-
       const parsedShow = parseTadaShowWorkbook(xlsxBuffer)
       expect(parsedShow.cards).toHaveLength(1)
-      const qCard = parsedShow.cards[0] as any
+      const qCard = parsedShow.cards[0] as AuthoredQuizCard
       expect(qCard.interlude).toBeDefined()
       expect(qCard.interlude).toEqual(interludeObj)
     })
-
     it("Gate C04 & C05: backwards compatibility with older workbook having only A:S columns (no Column T)", () => {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -443,37 +517,46 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Legacy question without column T?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
         settings: [],
       }
-
       const buffer = exportTadaShowWorkbook(show)
       const entries = extractZipEntries(buffer)
       const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
       const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
 
       // Strip column T from header row in sheet3: replace T1 cell if present
-      const strippedXml = sheet3Xml.replace(
-        /<c r="T1"[^>]*>[\s\S]*?<\/c>/u,
-        "",
+      const strippedXml = sheet3Xml.replace(/<c r="T1"[^>]*>[\s\S]*?<\/c>/u, "")
+      entries.set(
+        "xl/worksheets/sheet3.xml",
+        new TextEncoder().encode(strippedXml),
       )
-      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(strippedXml))
-
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const legacyZip = createZipArchive(files)
-
       const parsed = parseTadaShowWorkbook(legacyZip)
       expect(parsed.cards).toHaveLength(1)
-      const q = parsed.cards[0] as any
+      const q = parsed.cards[0] as AuthoredQuizCard
       expect(q.interlude).toBeUndefined()
     })
-
     it("Gate C01 & C05: accepts blank Column T, and rejects malformed interludeJson with Questions!T{row}", () => {
       const validShow: TadaShowV1 = {
         format: "tada-show",
@@ -485,13 +568,19 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
         settings: [],
       }
-
       const buffer = exportTadaShowWorkbook(validShow)
       const entries = extractZipEntries(buffer)
       const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
@@ -502,19 +591,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         /<c r="T2"[^>]*>[\s\S]*?<\/c>/u,
         '<c r="T2" t="inlineStr"><is><t>{notValidJson</t></is></c>',
       )
-      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(injectedXml))
-
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      entries.set(
+        "xl/worksheets/sheet3.xml",
+        new TextEncoder().encode(injectedXml),
+      )
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const malformedZip = createZipArchive(files)
-
       expect(() => parseTadaShowWorkbook(malformedZip)).toThrow(
         "errors:extensions.invalidInterludeJson:Questions!T2",
       )
     })
-
     it("Gate C03 & C05: rejects invalid targetKey in Settings column B with Settings!B{row}", () => {
       const validShow: TadaShowV1 = {
         format: "tada-show",
@@ -526,7 +621,14 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
@@ -539,7 +641,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
           },
         ],
       }
-
       const buffer = exportTadaShowWorkbook(validShow)
       const entries = extractZipEntries(buffer)
       const sheet5Bytes = entries.get("xl/worksheets/sheet5.xml")!
@@ -550,19 +651,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         /<c r="B2"[^>]*>[\s\S]*?<\/c>/u,
         '<c r="B2" t="inlineStr"><is><t>NOT_THE_SHOW</t></is></c>',
       )
-      entries.set("xl/worksheets/sheet5.xml", new TextEncoder().encode(corruptedXml))
-
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      entries.set(
+        "xl/worksheets/sheet5.xml",
+        new TextEncoder().encode(corruptedXml),
+      )
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const corruptedZip = createZipArchive(files)
-
       expect(() => parseTadaShowWorkbook(corruptedZip)).toThrow(
         "errors:extensions.invalidSettingTargetKey:Settings!B2",
       )
     })
-
     it("Gate C01, C02, C05: round-trips Excel -> Native -> Excel -> Native with note, interlude, audio volume, and answer visuals", () => {
       const interludeObj = {
         kind: "title" as const,
@@ -570,12 +677,11 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         durationMs: 3500,
         advance: "auto" as const,
       }
-
       const originalShow: TadaShowV1 = {
         format: "tada-show",
         version: 1,
         title: "Complete Roundtrip Show",
-        note: "הערת עורך רשמית\nעם שורה שנייה ומירכאות \"חשוב\"",
+        note: 'הערת עורך רשמית\nעם שורה שנייה ומירכאות "חשוב"',
         baseGameMode: "quiz",
         defaults: {
           newQuestionMode: "quiz",
@@ -595,7 +701,10 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
                 imageUrl: "https://example.com/media/eiffel.jpg",
                 alt: "Eiffel Tower",
               },
-              { text: "Louvre", display: "text" },
+              {
+                text: "Louvre",
+                display: "text",
+              },
             ],
             correctAnswers: [1],
             interlude: interludeObj,
@@ -626,33 +735,44 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       const parsedShow1 = parseTadaShowWorkbook(xlsxBytes1)
       expect(parsedShow1.title).toBe(originalShow.title)
       expect(parsedShow1.note).toBe(originalShow.note)
-      expect((parsedShow1.cards[0] as any).interlude).toEqual(interludeObj)
+      expect((parsedShow1.cards[0] as AuthoredQuizCard).interlude).toEqual(
+        interludeObj,
+      )
 
       // 3. Authored -> Native Bundle Draft
       const nativeDraft = authoredShowToNativeBundleDraft(parsedShow1)
       expect(nativeDraft.ok).toBe(true)
       const { quizz, extras } = nativeDraft.bundleDraft!
-
       expect(extras.authoring?.showNote).toBe(originalShow.note)
-      const qId = extras.questionIds[0]
+      const { 0: qId } = extras.questionIds
       expect(extras.perQuestion[qId]?.interlude).toEqual(interludeObj)
       expect(extras.perQuestion[qId]?.answerVisuals).toBeDefined()
       expect(extras.audio.cues.start.volume).toBe(0.37)
 
       // 4. Native -> Excel export
-      const xlsxBytes2 = exportTadaShowWorkbook({ quizz, extras })
+      const xlsxBytes2 = exportTadaShowWorkbook({
+        quizz,
+        extras,
+      })
 
       // 5. Parse again from Excel
       const parsedShow2 = parseTadaShowWorkbook(xlsxBytes2)
       expect(parsedShow2.title).toBe(originalShow.title)
       expect(parsedShow2.note).toBe(originalShow.note)
-      expect((parsedShow2.cards[0] as any).interlude).toEqual(interludeObj)
-      expect((parsedShow2.cards[0] as any).answers[0].imageUrl).toBe("https://example.com/media/eiffel.jpg")
-
-      const audioSetting = parsedShow2.settings?.find((s) => s.scope === "audio")
-      expect((audioSetting?.valueJson as any)?.start?.volume).toBe(0.37)
+      expect((parsedShow2.cards[0] as AuthoredQuizCard).interlude).toEqual(
+        interludeObj,
+      )
+      expect(
+        (parsedShow2.cards[0] as AuthoredQuizCard).answers[0].imageUrl,
+      ).toBe("https://example.com/media/eiffel.jpg")
+      const audioSetting = parsedShow2.settings?.find(
+        (s) => s.scope === "audio",
+      )
+      expect(
+        (audioSetting?.valueJson as QuizExtrasV2["audio"]["cues"])?.start
+          ?.volume,
+      ).toBe(0.37)
     })
-
     it("P1: round-trips question entrance presets through Excel without data loss", () => {
       const showWithEntrance: TadaShowV1 = {
         format: "tada-show",
@@ -665,38 +785,71 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question with Curtain Entrance",
-            answers: [{ text: "Yes" }, { text: "No" }],
+            answers: [
+              {
+                text: "Yes",
+              },
+              {
+                text: "No",
+              },
+            ],
             correctAnswers: [1],
-            questionEntrance: { preset: "curtain", durationMs: 1200 },
+            questionEntrance: {
+              preset: "curtain",
+              durationMs: 1200,
+            },
           },
           {
             key: "S01",
             kind: "survey",
             questionType: "single",
             question: "Survey with Spotlight Entrance",
-            answers: [{ text: "Choice 1" }, { text: "Choice 2" }],
-            questionEntrance: { preset: "spotlight", durationMs: 950 },
+            answers: [
+              {
+                text: "Choice 1",
+              },
+              {
+                text: "Choice 2",
+              },
+            ],
+            questionEntrance: {
+              preset: "spotlight",
+              durationMs: 950,
+            },
           },
           {
             key: "Q02",
             kind: "quiz",
             questionType: "single",
             question: "Question with None/Default",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [2],
-            questionEntrance: { preset: "none", durationMs: 800 },
+            questionEntrance: {
+              preset: "none",
+              durationMs: 800,
+            },
           },
         ],
         settings: [],
       }
-
       const buffer = exportTadaShowWorkbook(showWithEntrance)
       const parsed = parseTadaShowWorkbook(buffer)
-
-      const cardQ1 = parsed.cards.find((c) => c.key === "Q01") as any
-      const cardS1 = parsed.cards.find((c) => c.key === "S01") as any
-      const cardQ2 = parsed.cards.find((c) => c.key === "Q02") as any
-
+      const cardQ1 = parsed.cards.find(
+        (c) => c.key === "Q01",
+      ) as AuthoredQuizCard
+      const cardS1 = parsed.cards.find(
+        (c) => c.key === "S01",
+      ) as AuthoredSurveyCard
+      const cardQ2 = parsed.cards.find(
+        (c) => c.key === "Q02",
+      ) as AuthoredQuizCard
       expect(cardQ1.questionEntrance).toEqual({
         preset: "curtain",
         durationMs: 1200,
@@ -707,7 +860,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
       })
       expect(cardQ2.questionEntrance).toBeUndefined()
     })
-
     it("P1: rejects invalid entrance preset in Excel with actionable row coordinate", () => {
       const show: TadaShowV1 = {
         format: "tada-show",
@@ -720,16 +872,23 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Valid Question",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
         settings: [],
       }
-
       const buffer = exportTadaShowWorkbook(show)
       const entries = extractZipEntries(buffer)
-      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")! // Questions sheet
+      // Questions sheet
+      const sheet3Bytes = entries.get("xl/worksheets/sheet3.xml")!
       const sheet3Xml = new TextDecoder("utf-8").decode(sheet3Bytes)
 
       // Corrupt entrancePreset in cell U2
@@ -737,19 +896,25 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
         /<c r="U2"[^>]*>[\s\S]*?<\/c>/u,
         '<c r="U2" t="inlineStr"><is><t>not-a-valid-preset</t></is></c>',
       )
-      entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(modifiedXml))
-
-      const files: Array<{ name: string; data: Uint8Array }> = []
+      entries.set(
+        "xl/worksheets/sheet3.xml",
+        new TextEncoder().encode(modifiedXml),
+      )
+      const files: Array<{
+        name: string
+        data: Uint8Array
+      }> = []
       for (const [name, data] of entries.entries()) {
-        files.push({ name, data })
+        files.push({
+          name,
+          data,
+        })
       }
       const corruptedZip = createZipArchive(files)
-
       expect(() => parseTadaShowWorkbook(corruptedZip)).toThrow(
         "errors:extensions.invalidEntrancePreset:Questions!U2",
       )
     })
-
     it("Gate 6: round-trips overlayAnimations and mediaEndFallbackMs in Timeline.sceneConfigJson through Excel (.xlsx)", () => {
       const sampleOverlays = [
         {
@@ -765,7 +930,10 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
           loop: false,
           speed: 1,
           finish: "holdLastFrame" as const,
-          position: { x: 0.48, y: 0.25 },
+          position: {
+            x: 0.48,
+            y: 0.25,
+          },
           anchor: "center" as const,
           widthPct: 30,
           fit: "contain" as const,
@@ -775,7 +943,6 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
           fadeOutMs: 100,
         },
       ]
-
       const show: TadaShowV1 = {
         format: "tada-show",
         version: 1,
@@ -800,17 +967,22 @@ describe("Show Multi-Sheet Workbook (.xlsx) Engine", () => {
             kind: "quiz",
             questionType: "single",
             question: "Question 1?",
-            answers: [{ text: "A" }, { text: "B" }],
+            answers: [
+              {
+                text: "A",
+              },
+              {
+                text: "B",
+              },
+            ],
             correctAnswers: [1],
           },
         ],
         settings: [],
       }
-
       const xlsxBuf = exportTadaShowWorkbook(show)
       const parsed = parseTadaShowWorkbook(xlsxBuf)
-
-      const introCard = parsed.cards[0] as any
+      const introCard = parsed.cards[0] as AuthoredOpeningCard
       expect(introCard.kind).toBe("opening")
       expect(introCard.mediaEndFallbackMs).toBe(25000)
       expect(introCard.overlayAnimations).toEqual(sampleOverlays)

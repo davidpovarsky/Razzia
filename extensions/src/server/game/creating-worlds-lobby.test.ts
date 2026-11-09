@@ -23,6 +23,7 @@ describe("Creating Worlds: authoritative lobby roster", () => {
       advance: "manual",
       durationMs: 10000,
     }
+
     return extras
   }
 

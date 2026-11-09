@@ -145,7 +145,9 @@ it("local default replaces global custom media and host effects never reach play
   expect(resolveThemeEffect(theme, "timer-ended")?.url).toContain(
     "tadazz-timer-end-",
   )
-  expect(resolveThemeEffect(theme, "vote-locked")?.url).not.toContain("tadazz-timer-end-")
+  expect(resolveThemeEffect(theme, "vote-locked")?.url).not.toContain(
+    "tadazz-timer-end-",
+  )
   expect(
     themeAllowsAudioUrl(
       theme,

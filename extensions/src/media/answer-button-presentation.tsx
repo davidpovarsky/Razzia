@@ -82,14 +82,14 @@ export function AnswerVisualContent({
   children: ReactNode
 }) {
   return (
-    <div className="col-span-3 row-start-2 flex flex-col items-start gap-1.5 sm:gap-2 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1">
+    <div className="col-span-3 row-start-2 flex flex-col items-start gap-1.5 wrap-break-word drop-shadow-md sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:gap-2">
       {image && (
-        <div className="relative max-h-20 sm:max-h-28 md:max-h-32 w-auto overflow-hidden rounded-lg bg-black/10">
+        <div className="relative max-h-20 w-auto overflow-hidden rounded-lg bg-black/10 sm:max-h-28 md:max-h-32">
           <img
             src={image.url}
             alt={image.alt}
             data-testid="answer-visual-image"
-            className="max-h-20 sm:max-h-28 md:max-h-32 w-auto rounded-lg object-contain"
+            className="max-h-20 w-auto rounded-lg object-contain sm:max-h-28 md:max-h-32"
             loading="lazy"
           />
         </div>
@@ -99,8 +99,8 @@ export function AnswerVisualContent({
         <p
           className={
             large
-              ? "break-words leading-tight text-sm sm:text-lg md:text-xl"
-              : "break-words leading-tight text-xs sm:text-sm md:text-lg"
+              ? "text-sm leading-tight break-words sm:text-lg md:text-xl"
+              : "text-xs leading-tight break-words sm:text-sm md:text-lg"
           }
         >
           {children}

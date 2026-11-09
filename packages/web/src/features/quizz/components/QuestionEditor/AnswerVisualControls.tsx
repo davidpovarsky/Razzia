@@ -39,13 +39,14 @@ export function AnswerVisualControls({
           className="flex items-center gap-1 rounded-lg bg-black/20 p-0.5"
         >
           {(["text", "image", "both"] as const).map((mode) => (
-            <NativeButton size="sm"
+            <NativeButton
+              size="sm"
               key={mode}
               type="button"
               data-testid={`answer-mode-${i}-${mode}`}
               onClick={() => handleDisplayModeChange(i, mode)}
               className={clsx(
-                "bg-transparent rounded-md px-2 py-0.5 text-[11px] font-semibold transition",
+                "rounded-md bg-transparent px-2 py-0.5 text-[11px] font-semibold transition",
                 displayMode === mode
                   ? "bg-white text-black shadow-xs"
                   : "text-white/80 hover:text-white",
@@ -60,7 +61,8 @@ export function AnswerVisualControls({
         </div>
 
         <div className="flex items-center gap-1.5">
-          <NativeButton size="sm"
+          <NativeButton
+            size="sm"
             type="button"
             data-testid={`answer-pick-image-${i}`}
             onClick={() => setPickingAnswerIdx(i)}
@@ -74,7 +76,8 @@ export function AnswerVisualControls({
             </span>
           </NativeButton>
           {hasImage && (
-            <NativeButton size="sm"
+            <NativeButton
+              size="sm"
               type="button"
               data-testid={`answer-remove-image-${i}`}
               onClick={() => handleRemoveAnswerImage(i)}

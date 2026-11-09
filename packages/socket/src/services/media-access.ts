@@ -11,7 +11,8 @@ export interface MediaAccessClaims {
 
 export const mediaAccessTtl = 6 * 60 * 60
 
-export async function mintMediaAccess(gameId: string): Promise<string> {
+export /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
+async function mintMediaAccess(gameId: string): Promise<string> {
   return sign(
     {
       purpose: "room-media",
@@ -22,13 +23,17 @@ export async function mintMediaAccess(gameId: string): Promise<string> {
     "HS256",
   )
 }
+
+/* oxlint-enable require-await, typescript/require-await */
 export async function verifyMediaAccess(
   token: string,
 ): Promise<MediaAccessClaims> {
   const claims = await verify(token, jwtSecret, "HS256")
+
   if (claims.purpose !== "room-media" || typeof claims.gameId !== "string") {
     throw new Error("Not a room media ticket")
   }
+
   return claims as unknown as MediaAccessClaims
 }
 
@@ -37,7 +42,10 @@ export async function grantMediaForGuest(
   c: import("hono").Context,
   gameId: string,
 ): Promise<void> {
-  if (!accountsEnabled()) return
+  if (!accountsEnabled()) {
+    return
+  }
+
   const ticket = await mintMediaAccess(gameId)
   setCookie(c, "tdz_room", ticket, {
     path: "/media",

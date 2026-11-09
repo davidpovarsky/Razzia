@@ -1,26 +1,23 @@
 import { beforeAll, afterAll, describe, expect, it } from "vitest"
-import { randomUUID } from "node:crypto"
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
-import { mkdtempSync } from "node:fs"
+import "node:crypto"
+import { mkdirSync, readFileSync, writeFileSync, mkdtempSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { dirname, join } from "node:path"
 import { SESSION_ROLES } from "@razzia/common/constants"
 import { getPath } from "./config"
-import { withAccount, accountsEnabled } from "./account-scope"
+import { withAccount } from "./account-scope"
 import {
   registerAccount,
   issueCode,
   consumeCode,
   verifyRegistrationPassword,
   authenticate,
-  createAccountSession,
   revokeAccountSession,
   isAccountSessionValid,
   resetPassword,
   activeAccount,
 } from "./account-auth"
 import { mintToken, verifyToken, verifyIgnoringExpiry } from "./auth"
-
 const dataDir = mkdtempSync(join(tmpdir(), "tadazz-tenant-test-"))
 const original = {
   TADAZZ_ACCOUNTS_ENABLED: process.env.TADAZZ_ACCOUNTS_ENABLED,
@@ -32,19 +29,24 @@ const original = {
 beforeAll(() => {
   process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
   process.env.CONFIG_PATH = dataDir
-  process.env.JWT_SECRET = "test-local-secret-" + "9".repeat(54)
+  process.env.JWT_SECRET = `test-local-secret-${"9".repeat(54)}`
   process.env.RESEND_API_KEY = "test-no-network"
   process.env.TADAZZ_AUTH_EMAIL_FROM = "tests@example.invalid"
 })
 afterAll(() => {
   for (const [key, val] of Object.entries(original)) {
-    if (val === undefined) delete process.env[key]
-    else process.env[key] = val
+    if (val === undefined) {
+      /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
+      delete process.env[key]
+      /* oxlint-enable typescript/no-dynamic-delete */
+    } else {
+      process.env[key] = val
+    }
   }
 })
-
 describe("Tadazz account ownership and authentication", () => {
-  let a: string, b: string
+  let a = "",
+    b = ""
   it("creates distinct verified accounts, never grants access to unverified users", async () => {
     const first = await registerAccount(
       " ALICE@Example.com ",
@@ -67,23 +69,47 @@ describe("Tadazz account ownership and authentication", () => {
     expect(consumeCode(second.email, "verify", two)?.id).toBe(b)
     expect(
       await authenticate(first.email, "alice-password-long"),
-    ).toMatchObject({ id: a })
+    ).toMatchObject({
+      id: a,
+    })
     expect(await authenticate(first.email, "wrong-password")).toBeNull()
   }, 60_000)
   it("physically isolates quiz files by verified account ID", async () => {
+    /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     const fileFor = async (id: string) =>
       withAccount(id, async () => {
         const target = getPath("quizz/private.json")
-        mkdirSync(dirname(target), { recursive: true })
-        writeFileSync(target, JSON.stringify({ owner: id }))
+        mkdirSync(dirname(target), {
+          recursive: true,
+        })
+        writeFileSync(
+          target,
+          JSON.stringify({
+            owner: id,
+          }),
+        )
         await Promise.resolve()
+
         return getPath("quizz/private.json")
       })
+    /* oxlint-enable require-await, typescript/require-await */
     const first = await fileFor(a)
     const second = await fileFor(b)
     expect(first).not.toBe(second)
-    expect(JSON.parse(readFileSync(first, "utf8")).owner).toBe(a)
-    expect(JSON.parse(readFileSync(second, "utf8")).owner).toBe(b)
+    expect(
+      (
+        JSON.parse(readFileSync(first, "utf8")) as {
+          owner: string
+        }
+      ).owner,
+    ).toBe(a)
+    expect(
+      (
+        JSON.parse(readFileSync(second, "utf8")) as {
+          owner: string
+        }
+      ).owner,
+    ).toBe(b)
     expect(await withAccount(a, () => getPath("media/private.png"))).not.toBe(
       await withAccount(b, () => getPath("media/private.png")),
     )
@@ -112,6 +138,8 @@ describe("Tadazz account ownership and authentication", () => {
     ).toBeNull()
     expect(
       await authenticate("bob@example.com", "new-secure-password-123"),
-    ).toMatchObject({ id: b })
+    ).toMatchObject({
+      id: b,
+    })
   })
 })

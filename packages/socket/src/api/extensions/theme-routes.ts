@@ -6,7 +6,10 @@ import { setCookie } from "hono/cookie"
 import { HTTPException } from "hono/http-exception"
 import { themeMediaResponse } from "./theme-media-response"
 import { z } from "zod"
-import { installedPackageThemes, packageInstallerEnabled } from "@razzia/socket/services/package-installation"
+import {
+  installedPackageThemes,
+  packageInstallerEnabled,
+} from "@razzia/socket/services/package-installation"
 import { apiFactory, type ApiEnv } from "@razzia/socket/api/factory"
 import { requireManager } from "@razzia/socket/api/middleware"
 import {
@@ -260,7 +263,15 @@ export const themeRoutes = apiFactory
       c.req.method === "GET" &&
       c.req.path === "/api/themes/catalog"
 
-    if (!themeInstallerEnabled() && !demoRead && !(packageInstallerEnabled() && c.req.method === "GET" && c.req.path === "/api/themes/catalog")) {
+    if (
+      !themeInstallerEnabled() &&
+      !demoRead &&
+      !(
+        packageInstallerEnabled() &&
+        c.req.method === "GET" &&
+        c.req.path === "/api/themes/catalog"
+      )
+    ) {
       c.header("Connection", "close")
 
       return c.json({ error: "not-found" }, 404)
@@ -339,7 +350,13 @@ export const themeRoutes = apiFactory
                 .availableVersions(owner)
                 .concat(store.availableVersions("platform"))
             : [],
-        ).concat(installedPackageThemes(owner, true).map(({ id, version }) => ({ id, version }))),
+        )
+        .concat(
+          installedPackageThemes(owner, true).map(({ id, version }) => ({
+            id,
+            version,
+          })),
+        ),
     })
   })
   .route("/workspaces/:tenantId", workspace)

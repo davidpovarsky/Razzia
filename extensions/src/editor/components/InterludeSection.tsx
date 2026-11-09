@@ -1,4 +1,4 @@
-import {PlatformButton} from "../../presentation/platform-controls"
+import { PlatformButton } from "../../presentation/platform-controls"
 import type { CueId } from "@razzia/extensions/core"
 import { Video, Image as ImageIcon } from "lucide-react"
 import {
@@ -100,7 +100,8 @@ export const InterludeSection = ({
                     },
                   ] as const
                 ).map(({ kind, label }) => (
-                  <PlatformButton size="sm"
+                  <PlatformButton
+                    size="sm"
                     key={kind}
                     type="button"
                     onClick={() => {
@@ -171,7 +172,8 @@ export const InterludeSection = ({
                     data-testid="interlude-media-url-input"
                   />
                   {onOpenMediaPicker && (
-                    <PlatformButton size="sm"
+                    <PlatformButton
+                      size="sm"
                       type="button"
                       onClick={() => {
                         onOpenMediaPicker({
@@ -229,7 +231,8 @@ export const InterludeSection = ({
               </label>
               <div className="flex gap-2">
                 {(["auto", "manual"] as const).map((mode) => (
-                  <PlatformButton size="sm"
+                  <PlatformButton
+                    size="sm"
                     key={mode}
                     type="button"
                     onClick={() => {

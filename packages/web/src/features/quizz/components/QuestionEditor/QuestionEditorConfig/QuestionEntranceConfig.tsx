@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   isLegacyShowRollback,
   QUESTION_DECORATION_PRESETS,
@@ -30,19 +31,15 @@ import { Play, RotateCcw, Sparkles, Upload } from "lucide-react"
 import { useRef, useState } from "react"
 import toast from "react-hot-toast"
 import { useTranslation } from "react-i18next"
-
 const DEFAULT_DURATION_MS = 800
 const MIN_DURATION_MS = 250
 const MAX_DURATION_MS = 2500
-
 type SlotKey = keyof CardStageAnimations
-
 interface QuestionEntranceConfigProps {
   kind?: "question" | "scene"
   sceneStageAnimations?: CardStageAnimations
   onSceneStageAnimationsChange?: (next: CardStageAnimations | undefined) => void
 }
-
 const LegacyQuestionEntranceConfig = ({
   kind = "question",
   sceneStageAnimations,
@@ -52,20 +49,16 @@ const LegacyQuestionEntranceConfig = ({
   const { t } = useTranslation()
   const [previewEpoch, setPreviewEpoch] = useState(0)
   const lottieInputRef = useRef<HTMLInputElement | null>(null)
-
   const v2Defaults =
     extras && "defaults" in extras ? extras.defaults : undefined
   const globalStageAnimations = v2Defaults?.stageAnimations
   const globalQuestionDecoration = v2Defaults?.questionDecoration
-
   const currentItem =
     currentQuestionId && extras?.perQuestion
       ? extras.perQuestion[currentQuestionId]
       : undefined
-
   const cardStageAnimations =
     kind === "scene" ? sceneStageAnimations : currentItem?.stageAnimations
-
   const resolved = resolveCardStageAnimations(
     kind === "scene"
       ? {
@@ -78,16 +71,13 @@ const LegacyQuestionEntranceConfig = ({
           globalStageAnimations,
         },
   )
-
   const resolvedDecoration = resolveQuestionDecoration({
     cardDecoration: currentItem?.questionDecoration,
     globalDecoration: globalQuestionDecoration,
   })
-
   const preset: QuestionEntrancePreset = resolved.questionEntrance.preset
   const durationMs: number =
     resolved.questionEntrance.durationMs ?? DEFAULT_DURATION_MS
-
   const getSlotSelectValue = (slotKey: SlotKey): string => {
     const explicitSlot = cardStageAnimations?.[slotKey]
 
@@ -112,7 +102,6 @@ const LegacyQuestionEntranceConfig = ({
 
     return resolved[slotKey].preset
   }
-
   const updateSlot = (
     slotKey: SlotKey,
     nextSlot: StageAnimationSlot | undefined,
@@ -123,7 +112,9 @@ const LegacyQuestionEntranceConfig = ({
       }
 
       if (nextSlot === undefined) {
+        /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
         delete nextMap[slotKey]
+        /* oxlint-enable typescript/no-dynamic-delete */
       } else {
         nextMap[slotKey] = nextSlot
       }
@@ -152,7 +143,9 @@ const LegacyQuestionEntranceConfig = ({
       }
 
       if (nextSlot === undefined) {
+        /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
         delete nextStageAnimations[slotKey]
+        /* oxlint-enable typescript/no-dynamic-delete */
       } else {
         nextStageAnimations[slotKey] = nextSlot
       }
@@ -184,10 +177,8 @@ const LegacyQuestionEntranceConfig = ({
         },
       }
     })
-
     setPreviewEpoch((p) => p + 1)
   }
-
   const handlePresetChange = (val: string) => {
     if (val === "__inherit__") {
       updateSlot("questionEntrance", undefined)
@@ -202,7 +193,6 @@ const LegacyQuestionEntranceConfig = ({
       durationMs,
     })
   }
-
   const updateQuestionDecoration = (
     nextDec: QuestionDecoration | undefined,
   ) => {
@@ -217,7 +207,9 @@ const LegacyQuestionEntranceConfig = ({
 
       const existingPerQ = prev.perQuestion ?? {}
       const existingItem = existingPerQ[currentQuestionId] ?? {}
-      const updatedItem = { ...existingItem }
+      const updatedItem = {
+        ...existingItem,
+      }
 
       if (nextDec === undefined) {
         delete updatedItem.questionDecoration
@@ -235,7 +227,6 @@ const LegacyQuestionEntranceConfig = ({
     })
     setPreviewEpoch((p) => p + 1)
   }
-
   const handleLottieDecorationUpload = async (
     e: React.ChangeEvent<HTMLInputElement>,
   ) => {
@@ -261,7 +252,11 @@ const LegacyQuestionEntranceConfig = ({
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          ...(token
+            ? {
+                Authorization: `Bearer ${token}`,
+              }
+            : {}),
         },
         body: JSON.stringify({
           name: file.name,
@@ -276,7 +271,9 @@ const LegacyQuestionEntranceConfig = ({
         return
       }
 
-      const data = (await res.json()) as { url: string }
+      const data = (await res.json()) as {
+        url: string
+      }
       updateQuestionDecoration({
         enabled: true,
         preset: "lottie",
@@ -288,7 +285,6 @@ const LegacyQuestionEntranceConfig = ({
       toast.error("Failed to upload Lottie file")
     }
   }
-
   const handleDurationChange = (raw: string) => {
     const num = Number(raw)
 
@@ -303,11 +299,9 @@ const LegacyQuestionEntranceConfig = ({
       durationMs: clamped,
     })
   }
-
   const handleTriggerPreview = () => {
     setPreviewEpoch((p) => p + 1)
   }
-
   const getPresetLabel = (p: QuestionEntrancePreset) => {
     switch (p) {
       case "none":
@@ -350,7 +344,6 @@ const LegacyQuestionEntranceConfig = ({
         return p
     }
   }
-
   const renderPresetItems = (slotKey: SlotKey) => {
     const globalSlotPreset = globalStageAnimations?.[slotKey]?.preset
     const hasGlobalSlot = Boolean(
@@ -362,7 +355,7 @@ const LegacyQuestionEntranceConfig = ({
         {hasGlobalSlot && (
           <SelectItem value="__inherit__">
             {t("extensions:entrance.inheritGlobal", "Inherit Global Default")} (
-            {getPresetLabel(globalSlotPreset!)})
+            {getPresetLabel(globalSlotPreset ?? "none")})
           </SelectItem>
         )}
         {QUESTION_ENTRANCE_PRESETS.map((p) => (
@@ -373,7 +366,6 @@ const LegacyQuestionEntranceConfig = ({
       </>
     )
   }
-
   const renderAdditionalSlot = (
     slotKey: "answerEntrance" | "answerBadgeEntrance" | "resultsRevealEntrance",
     label: string,
@@ -419,7 +411,8 @@ const LegacyQuestionEntranceConfig = ({
               className="bg-muted flex items-center gap-1 rounded-lg p-0.5"
             >
               {(["simultaneous", "sequential"] as const).map((tm) => (
-                <Button size="sm"
+                <Button
+                  size="sm"
                   key={tm}
                   type="button"
                   data-testid={`stage-anim-timing-${slotKey}-${tm}`}
@@ -430,7 +423,7 @@ const LegacyQuestionEntranceConfig = ({
                     })
                   }
                   className={clsx(
-                    "bg-transparent flex-1 rounded-md px-1.5 py-1 text-[10px] font-semibold transition",
+                    "flex-1 rounded-md bg-transparent px-1.5 py-1 text-[10px] font-semibold transition",
                     slotCfg.timing === tm
                       ? "bg-background text-foreground shadow-xs"
                       : "text-muted-foreground hover:text-foreground",
@@ -447,7 +440,6 @@ const LegacyQuestionEntranceConfig = ({
       </div>
     )
   }
-
   const decorationSelectValue = (() => {
     if (currentItem?.questionDecoration) {
       return !currentItem.questionDecoration.enabled
@@ -464,7 +456,6 @@ const LegacyQuestionEntranceConfig = ({
 
     return "none"
   })()
-
   const anyPresetActive =
     preset !== "none" ||
     resolved.answerEntrance.preset !== "none" ||
@@ -738,7 +729,9 @@ const LegacyQuestionEntranceConfig = ({
                       )}
                       style={
                         resolvedDecoration.color
-                          ? { backgroundColor: resolvedDecoration.color }
+                          ? {
+                              backgroundColor: resolvedDecoration.color,
+                            }
                           : undefined
                       }
                     />
@@ -795,7 +788,6 @@ const LegacyQuestionEntranceConfig = ({
     </ConfigSection>
   )
 }
-
 const QuestionEntranceConfig = (props: QuestionEntranceConfigProps = {}) => {
   const { defaults } = useStudioEditor()
 

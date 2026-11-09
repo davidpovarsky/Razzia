@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import NativeButton from "@razzia/web/components/Button"
 import {
   isLegacyShowRollback,
@@ -17,13 +18,11 @@ import clsx from "clsx"
 import { Music, Play, Square, Trash2 } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
-
 interface CardAudioConfigProps {
   kind?: "question" | "scene"
   sceneAudio?: SceneAudio
   onSceneAudioChange?: (next: SceneAudio | undefined) => void
 }
-
 const QUESTION_SLOTS: Array<{
   key: QuestionAudioCueKey
   labelKey: string
@@ -49,7 +48,6 @@ const QUESTION_SLOTS: Array<{
     defaultLoop: false,
   },
 ]
-
 const LegacyCardAudioConfig = ({
   kind = "question",
   sceneAudio,
@@ -62,7 +60,6 @@ const LegacyCardAudioConfig = ({
   >(null)
   const previewAudioRef = useRef<HTMLAudioElement | null>(null)
   const [playingSlot, setPlayingSlot] = useState<string | null>(null)
-
   useEffect(
     () => () => {
       if (previewAudioRef.current) {
@@ -72,7 +69,6 @@ const LegacyCardAudioConfig = ({
     },
     [currentQuestionId],
   )
-
   const stopPreview = () => {
     if (previewAudioRef.current) {
       previewAudioRef.current.pause()
@@ -82,7 +78,6 @@ const LegacyCardAudioConfig = ({
 
     setPlayingSlot(null)
   }
-
   const togglePreview = (slotKey: string, url?: string, volume = 0.8) => {
     if (playingSlot === slotKey) {
       stopPreview()
@@ -95,6 +90,7 @@ const LegacyCardAudioConfig = ({
     if (!url) {
       return
     }
+
     try {
       const audio = new Audio(url)
       audio.volume = Math.max(0, Math.min(1, volume))
@@ -106,13 +102,11 @@ const LegacyCardAudioConfig = ({
       setPlayingSlot(null)
     }
   }
-
   const currentPerQ =
     currentQuestionId && extras?.perQuestion
       ? extras.perQuestion[currentQuestionId]
       : undefined
   const activeCues: CardAudioOverrides = currentPerQ?.audioCues ?? {}
-
   const updateQuestionSlot = (
     slot: QuestionAudioCueKey,
     next: CardAudioCueOverride | undefined,
@@ -120,16 +114,24 @@ const LegacyCardAudioConfig = ({
     if (!currentQuestionId) {
       return
     }
+
     setExtras((prev) => {
       if (!prev) {
         return prev
       }
+
       const existingPerQ = prev.perQuestion ?? {}
-      const existingItem = { ...(existingPerQ[currentQuestionId] ?? {}) }
-      const nextCues: CardAudioOverrides = { ...(existingItem.audioCues ?? {}) }
+      const existingItem = {
+        ...(existingPerQ[currentQuestionId] ?? {}),
+      }
+      const nextCues: CardAudioOverrides = {
+        ...(existingItem.audioCues ?? {}),
+      }
 
       if (!next || next.mode === "inherit") {
+        /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
         delete nextCues[slot]
+        /* oxlint-enable typescript/no-dynamic-delete */
       } else {
         nextCues[slot] = next
       }
@@ -149,11 +151,11 @@ const LegacyCardAudioConfig = ({
       }
     })
   }
-
   const handleSelectAudio = (item: UploadedMedia) => {
     if (!pickingSlot) {
       return
     }
+
     if (pickingSlot === "scene") {
       onSceneAudioChange?.({
         mode: "custom",
@@ -174,7 +176,7 @@ const LegacyCardAudioConfig = ({
 
     setPickingSlot(null)
   }
-
+  /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
   const renderSlotRow = (
     slotId: QuestionAudioCueKey | "scene",
     label: string,
@@ -210,7 +212,8 @@ const LegacyCardAudioConfig = ({
             className="bg-muted flex items-center gap-0.5 rounded-lg p-0.5"
           >
             {(["inherit", "mute", "custom"] as const).map((m) => (
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 key={m}
                 type="button"
                 data-testid={`card-audio-mode-${slotId}-${m}`}
@@ -220,9 +223,18 @@ const LegacyCardAudioConfig = ({
                   if (m === "inherit") {
                     onChange(undefined)
                   } else if (m === "mute") {
-                    onChange({ mode: "mute", volume: 0, loop: false })
+                    onChange({
+                      mode: "mute",
+                      volume: 0,
+                      loop: false,
+                    })
                   } else if (url) {
-                    onChange({ mode: "custom", url, volume, loop })
+                    onChange({
+                      mode: "custom",
+                      url,
+                      volume,
+                      loop,
+                    })
                   } else {
                     setPickingSlot(slotId)
                   }
@@ -247,7 +259,8 @@ const LegacyCardAudioConfig = ({
         {mode === "custom" && (
           <div className="border-border/40 flex flex-col gap-2 border-t pt-2">
             <div className="flex items-center justify-between gap-1.5">
-              <NativeButton size="sm"
+              <NativeButton
+                size="sm"
                 type="button"
                 data-testid={`card-audio-choose-${slotId}`}
                 onClick={() => setPickingSlot(slotId)}
@@ -262,7 +275,8 @@ const LegacyCardAudioConfig = ({
               </NativeButton>
               {url && (
                 <>
-                  <NativeButton size="sm"
+                  <NativeButton
+                    size="sm"
                     type="button"
                     data-testid={`card-audio-preview-${slotId}`}
                     onClick={() => togglePreview(slotId, url, volume)}
@@ -279,7 +293,8 @@ const LegacyCardAudioConfig = ({
                       <Play className="size-3.5" />
                     )}
                   </NativeButton>
-                  <NativeButton size="sm"
+                  <NativeButton
+                    size="sm"
                     type="button"
                     data-testid={`card-audio-remove-${slotId}`}
                     onClick={() => {
@@ -347,6 +362,7 @@ const LegacyCardAudioConfig = ({
     )
   }
 
+  /* oxlint-enable max-params */
   return (
     <ConfigSection
       title={
@@ -398,7 +414,6 @@ const LegacyCardAudioConfig = ({
     </ConfigSection>
   )
 }
-
 const CardAudioConfig = (props: CardAudioConfigProps = {}) => {
   const { defaults } = useStudioEditor()
 

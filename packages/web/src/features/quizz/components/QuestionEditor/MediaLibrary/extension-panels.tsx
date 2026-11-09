@@ -22,7 +22,8 @@ export function MediaLibraryScopeTabs({
       data-testid="media-library-scope-tabs"
       className="flex flex-wrap items-center gap-1.5"
     >
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="media-scope-all"
         onClick={() => setScopeTab("all")}
@@ -37,7 +38,8 @@ export function MediaLibraryScopeTabs({
           defaultValue: "All Uploaded",
         })}
       </NativeButton>
-      <NativeButton size="sm"
+      <NativeButton
+        size="sm"
         type="button"
         data-testid="media-scope-show"
         data-tab="in-show"
@@ -54,7 +56,8 @@ export function MediaLibraryScopeTabs({
         })}
       </NativeButton>
       {showBuiltInTab && (
-        <NativeButton size="sm"
+        <NativeButton
+          size="sm"
           type="button"
           data-testid="media-scope-builtin"
           data-tab="builtin-sounds"
@@ -105,14 +108,16 @@ export function MediaDeleteBanner({
         </span>
       </div>
       <div className="flex items-center gap-2">
-        <NativeButton size="sm"
+        <NativeButton
+          size="sm"
           type="button"
           onClick={() => onCancel()}
           className="bg-muted text-foreground hover:bg-muted/80 rounded-md px-2.5 py-1 font-semibold"
         >
           {t("common:cancel", { defaultValue: "Cancel" })}
         </NativeButton>
-        <NativeButton size="sm"
+        <NativeButton
+          size="sm"
           type="button"
           data-testid="media-confirm-force-delete"
           onClick={handleConfirmForceDelete}
@@ -149,7 +154,8 @@ export function BuiltinSoundList({
           className="border-accent bg-muted/40 flex items-center justify-between gap-2 rounded-xl border p-3"
         >
           <div className="flex min-w-0 items-center gap-2.5">
-            <NativeButton size="sm"
+            <NativeButton
+              size="sm"
               type="button"
               data-testid={`builtin-sound-preview-${sound.name}`}
               onClick={() => toggleBuiltinPreview(sound.url)}
@@ -171,7 +177,8 @@ export function BuiltinSoundList({
               </p>
             </div>
           </div>
-          <NativeButton size="sm"
+          <NativeButton
+            size="sm"
             type="button"
             data-testid={`builtin-sound-select-${sound.name}`}
             onClick={handleSelect(sound)}

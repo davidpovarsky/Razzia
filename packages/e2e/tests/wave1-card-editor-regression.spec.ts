@@ -563,8 +563,12 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
     await expect(questionInput).toBeVisible()
     await questionInput.fill("Converted from countdown question")
 
-    const answer0 = page.getByPlaceholder(t("quizz:addAnswerPlaceholder")).nth(0)
-    const answer1 = page.getByPlaceholder(t("quizz:addAnswerPlaceholder")).nth(1)
+    const answer0 = page
+      .getByPlaceholder(t("quizz:addAnswerPlaceholder"))
+      .nth(0)
+    const answer1 = page
+      .getByPlaceholder(t("quizz:addAnswerPlaceholder"))
+      .nth(1)
     await expect(answer0).toBeVisible()
     await expect(answer1).toBeVisible()
 
@@ -673,9 +677,7 @@ test.describe("Wave 1 Card Editor Regression & Header Row Swap Suite (C01–C15)
       .last()
     await cardToDelete.hover()
     await cardToDelete
-      .locator(
-        `button[aria-label="${t("quizz:question.deleteQuestion")}"]`,
-      )
+      .locator(`button[aria-label="${t("quizz:question.deleteQuestion")}"]`)
       .click()
 
     // Confirm delete dialog

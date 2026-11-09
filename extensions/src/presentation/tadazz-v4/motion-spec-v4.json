@@ -1,8 +1,25 @@
 {
   "source": "TadazzStageKit v4, animation library set.html",
-  "size": [1920,1080],
-  "scenes": ["question","picture-answers","voting-open","countdown","vote-locked","chosen","survey-results","top-pick","question-image","leaderboard","round-recap","interlude","z-wipe"],
-  "easings": {"default":"cubic-bezier(.16,.9,.23,1)","dramatic":"cubic-bezier(.15,.82,.22,1.02)"},
+  "size": [1920, 1080],
+  "scenes": [
+    "question",
+    "picture-answers",
+    "voting-open",
+    "countdown",
+    "vote-locked",
+    "chosen",
+    "survey-results",
+    "top-pick",
+    "question-image",
+    "leaderboard",
+    "round-recap",
+    "interlude",
+    "z-wipe"
+  ],
+  "easings": {
+    "default": "cubic-bezier(.16,.9,.23,1)",
+    "dramatic": "cubic-bezier(.15,.82,.22,1.02)"
+  },
   "motionsMs": {
     "questionPanel": 970,
     "questionEyebrow": 730,
@@ -37,5 +54,5 @@
     "zWipeRightDelay": 160,
     "zWipeImpactDelay": 680
   },
-  "particles": {"big":55,"small":22,"seed":7319}
+  "particles": { "big": 55, "small": 22, "seed": 7319 }
 }

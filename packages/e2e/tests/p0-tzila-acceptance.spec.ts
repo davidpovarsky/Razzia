@@ -20,11 +20,16 @@ const saveScreenshot = async (page: Page, filename: string) => {
 }
 
 const EXPECTED_COLORS = [
-  "rgb(230, 159, 0)", // Option 1 (#e69f00)
-  "rgb(86, 180, 233)", // Option 2 (#56b4e9)
-  "rgb(61, 191, 160)", // Option 3 (#3dbfa0)
-  "rgb(204, 121, 167)", // Option 4 (#cc79a7)
-  "rgb(0, 114, 178)", // Option 5 (#0072b2)
+  // Option 1 (#e69f00)
+  "rgb(230, 159, 0)",
+  // Option 2 (#56b4e9)
+  "rgb(86, 180, 233)",
+  // Option 3 (#3dbfa0)
+  "rgb(61, 191, 160)",
+  // Option 4 (#cc79a7)
+  "rgb(204, 121, 167)",
+  // Option 5 (#0072b2)
+  "rgb(0, 114, 178)",
 ]
 
 test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () => {
@@ -43,27 +48,28 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     const settingsBtn = managerPage.getByRole("button", {
       name: t("game:settings.title"),
     })
-    if (await settingsBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
+
+    if (await settingsBtn.isVisible().catch(() => false)) {
       await settingsBtn.click()
       const dialog = managerPage.getByRole("dialog")
       const answersOnlySwitch = dialog.getByRole("switch", {
         name: t("game:settings.answersOnly.label"),
         exact: true,
       })
-      if (
-        await answersOnlySwitch.isVisible({ timeout: 2000 }).catch(() => false)
-      ) {
+
+      if (await answersOnlySwitch.isVisible().catch(() => false)) {
         await answersOnlySwitch.click()
       }
+
       await dialog.getByRole("button", { name: t("common:save") }).click()
       await expect(dialog).toBeHidden()
     }
 
     // Extract gameId from manager URL
     const managerUrl = managerPage.url()
-    const gameIdMatch = managerUrl.match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerUrl)
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
+    const { 1: gameId } = gameIdMatch!
 
     // 2. Open Spectator Page in a clean secondary browser context (1920x1080)
     const spectatorContext = await browser.newContext({
@@ -170,9 +176,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(vote1.ok()).toBe(true)
     expect(vote2.ok()).toBe(true)
     expect(vote3.ok()).toBe(true)
-    expect((await vote1.json()).accepted).toBe(true)
-    expect((await vote2.json()).accepted).toBe(true)
-    expect((await vote3.json()).accepted).toBe(true)
+    expect(((await vote1.json()) as { accepted: boolean }).accepted).toBe(true)
+    expect(((await vote2.json()) as { accepted: boolean }).accepted).toBe(true)
+    expect(((await vote3.json()) as { accepted: boolean }).accepted).toBe(true)
 
     // FIX D verification on joined player with answersOnly: question header is visible inline WITHOUT clicking any dialog!
     const playerHeading = playerPage.locator(
@@ -188,7 +194,8 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     const fontSize = await timerDigits.evaluate((el) =>
       parseInt(window.getComputedStyle(el).fontSize, 10),
     )
-    expect(fontSize).toBeGreaterThanOrEqual(28) // Materially larger than 24px
+    // Materially larger than 24px
+    expect(fontSize).toBeGreaterThanOrEqual(28)
 
     // Geometry check: no overlap at 375x667
     const qBox = await playerHeading.boundingBox()
@@ -216,14 +223,14 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     await expect(spectatorCards).toHaveCount(5)
 
     // Verify badge numbers 1 to 5
-    for (let i = 1; i <= 5; i++) {
+    for (let i = 1; i <= 5; i += 1) {
       await expect(
         spectatorPage.getByText(String(i), { exact: true }).first(),
       ).toBeVisible()
     }
 
     // FIX A verification: Solid opaque answer-colour cards & artwork frame
-    for (let i = 0; i < 5; i++) {
+    for (let i = 0; i < 5; i += 1) {
       const card = spectatorPage.locator(
         `[data-testid="photo-card-choice-${i}"]`,
       )
@@ -439,9 +446,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     expect(pin).toMatch(/^\d{6}$/u)
 
     const managerUrl = managerPage.url()
-    const gameIdMatch = managerUrl.match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerUrl)
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
+    const { 1: gameId } = gameIdMatch!
 
     // 2. Open Spectator Page
     const spectatorContext = await browser.newContext({
@@ -519,7 +526,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         answerIndex: 4,
       },
     })
-    expect((await vote1.json()).accepted).toBe(true)
+    expect(((await vote1.json()) as { accepted: boolean }).accepted).toBe(true)
 
     const vote2 = await spectatorPage.request.post(socketApiUrl, {
       data: {
@@ -530,7 +537,7 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
         answerIndex: 4,
       },
     })
-    expect((await vote2.json()).accepted).toBe(true)
+    expect(((await vote2.json()) as { accepted: boolean }).accepted).toBe(true)
 
     // End timer on Q1 -> Doctor wins with 2 votes
     await endTimer(managerPage)
@@ -552,9 +559,8 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
     const confirmBtn = managerPage.locator(
       '[data-testid="confirm-reopen-question-btn"]',
     )
-    const hasConfirm = await confirmBtn
-      .isVisible({ timeout: 3000 })
-      .catch(() => false)
+    const hasConfirm = await confirmBtn.isVisible().catch(() => false)
+
     if (hasConfirm) {
       await confirmBtn.click()
     }
@@ -601,7 +607,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       },
     })
     expect(revote1.ok()).toBe(true)
-    expect((await revote1.json()).accepted).toBe(true)
+    expect(((await revote1.json()) as { accepted: boolean }).accepted).toBe(
+      true,
+    )
 
     const revote2 = await spectatorPage.request.post(socketApiUrl, {
       data: {
@@ -613,7 +621,9 @@ test.describe("P0: Tzila Five-Option Picture Polls & Projector Acceptance", () =
       },
     })
     expect(revote2.ok()).toBe(true)
-    expect((await revote2.json()).accepted).toBe(true)
+    expect(((await revote2.json()) as { accepted: boolean }).accepted).toBe(
+      true,
+    )
 
     // End timer for revoted Q1
     await endTimer(managerPage)

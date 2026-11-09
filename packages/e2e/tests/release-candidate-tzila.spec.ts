@@ -53,12 +53,14 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
     )
     socket.on("framereceived", (frame) => {
       const value = String(frame.payload)
+
       if (
         value.includes("error") ||
         value.includes("START") ||
         value.includes("extensions:state")
-      )
+      ) {
         console.log("WS_RECV", value.slice(0, 1000))
+      }
     })
   })
   const auth = await request.post("/api/auth/manager", {
@@ -122,7 +124,9 @@ test("staged Tzila release has exact media, QR, roster, soundtrack and same-wind
     "/api/extensions/quizzes/0KTcUgc0uvF_vGWYHrpTJ",
     { headers: { Authorization: `Bearer ${token}` } },
   )
-  const saved = await sidecar.json()
+  const saved = (await sidecar.json()) as {
+    extras: import("../../../extensions/src/core").QuizExtrasV2
+  }
   await joinGame(player, code, saved.extras.roster.participants[0].displayName)
   await page.waitForTimeout(1500)
 

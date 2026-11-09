@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { z } from "zod"
 import {
   showThemeSelectionSchema,
@@ -151,11 +152,14 @@ export function validateBundleMedia(bundle: {
   extras: unknown
 }): { ok: boolean; path?: string } {
   const quizz = bundle.quizz as Record<string, unknown> | null | undefined
+
   if (quizz && Array.isArray(quizz.questions)) {
     for (let qIdx = 0; qIdx < quizz.questions.length; qIdx += 1) {
       const q = quizz.questions[qIdx] as Record<string, unknown>
+
       if (q && typeof q === "object") {
         const media = q.media as { url?: unknown } | undefined
+
         if (
           media &&
           typeof media.url === "string" &&
@@ -168,6 +172,7 @@ export function validateBundleMedia(bundle: {
   }
 
   const extras = bundle.extras as Record<string, unknown> | null | undefined
+
   if (extras && typeof extras === "object") {
     // 1. perQuestion answerVisuals & interludes
     if (extras.perQuestion && typeof extras.perQuestion === "object") {
@@ -176,7 +181,9 @@ export function validateBundleMedia(bundle: {
       )) {
         if (item && Array.isArray(item.answerVisuals)) {
           for (let vIdx = 0; vIdx < item.answerVisuals.length; vIdx += 1) {
-            const v = item.answerVisuals[vIdx]
+            const v = item.answerVisuals[vIdx] as
+              { url?: unknown } | null | undefined
+
             if (v && typeof v.url === "string" && !isSafeMediaUrl(v.url)) {
               return {
                 ok: false,
@@ -185,13 +192,14 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
+
         if (
-          item &&
-          item.interlude &&
+          item?.interlude &&
           typeof (item.interlude as Record<string, unknown>).url === "string"
         ) {
           const interludeUrl = (item.interlude as Record<string, unknown>)
             .url as string
+
           if (!isSafeMediaUrl(interludeUrl)) {
             return {
               ok: false,
@@ -199,13 +207,14 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
+
         if (
-          item &&
-          item.background &&
+          item?.background &&
           typeof (item.background as Record<string, unknown>).url === "string"
         ) {
           const bgUrl = (item.background as Record<string, unknown>)
             .url as string
+
           if (!isSafeMediaUrl(bgUrl)) {
             return {
               ok: false,
@@ -213,7 +222,8 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
-        if (item && item.audioCues && typeof item.audioCues === "object") {
+
+        if (item?.audioCues && typeof item.audioCues === "object") {
           for (const [cueKey, cueVal] of Object.entries(
             item.audioCues as Record<string, { url?: unknown }>,
           )) {
@@ -230,14 +240,15 @@ export function validateBundleMedia(bundle: {
             }
           }
         }
+
         if (
-          item &&
-          item.questionDecoration &&
+          item?.questionDecoration &&
           typeof (item.questionDecoration as Record<string, unknown>)
             .lottieUrl === "string"
         ) {
           const lottieUrl = (item.questionDecoration as Record<string, unknown>)
             .lottieUrl as string
+
           if (lottieUrl && !isSafeMediaUrl(lottieUrl)) {
             return {
               ok: false,
@@ -262,6 +273,7 @@ export function validateBundleMedia(bundle: {
         (extras.defaults as Record<string, unknown>)
           .questionDecoration as Record<string, unknown>
       ).lottieUrl as string
+
       if (lottieUrl && !isSafeMediaUrl(lottieUrl)) {
         return {
           ok: false,
@@ -283,6 +295,7 @@ export function validateBundleMedia(bundle: {
         ) {
           return { ok: false, path: `extras.scenes[${sId}].mediaUrl` }
         }
+
         if (
           scene &&
           typeof scene.lottieUrl === "string" &&
@@ -291,24 +304,26 @@ export function validateBundleMedia(bundle: {
         ) {
           return { ok: false, path: `extras.scenes[${sId}].lottieUrl` }
         }
+
         if (
-          scene &&
-          scene.background &&
+          scene?.background &&
           typeof (scene.background as Record<string, unknown>).url === "string"
         ) {
           const bgUrl = (scene.background as Record<string, unknown>)
             .url as string
+
           if (!isSafeMediaUrl(bgUrl)) {
             return { ok: false, path: `extras.scenes[${sId}].background.url` }
           }
         }
+
         if (
-          scene &&
-          scene.audio &&
+          scene?.audio &&
           typeof (scene.audio as Record<string, unknown>).url === "string"
         ) {
           const audioUrl = (scene.audio as Record<string, unknown>)
             .url as string
+
           if (audioUrl && !isSafeMediaUrl(audioUrl)) {
             return { ok: false, path: `extras.scenes[${sId}].audio.url` }
           }
@@ -318,9 +333,10 @@ export function validateBundleMedia(bundle: {
 
     // 3. audio cues
     if (extras.audio && typeof extras.audio === "object") {
-      const cues = (
-        extras.audio as { cues?: Record<string, { url?: unknown }> }
-      ).cues
+      const { cues } = extras.audio as {
+        cues?: Record<string, { url?: unknown }>
+      }
+
       if (cues && typeof cues === "object") {
         for (const [cueId, cue] of Object.entries(cues)) {
           if (

@@ -16,6 +16,7 @@ import { Pause, Play, Volume2, VolumeX } from "lucide-react"
 /** Original Razzia controls; the extension engine remains the sole audio owner. */
 export function NativeAudioControls(state: AudioControlState) {
   const secondary = "bg-white text-black hover:bg-accent"
+
   return (
     <div
       className="font-display relative z-50 flex shrink-0 flex-wrap items-center gap-2 px-3 py-2 text-sm font-semibold"

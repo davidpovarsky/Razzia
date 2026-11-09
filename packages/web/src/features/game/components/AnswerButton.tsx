@@ -64,7 +64,7 @@ const AnswerButton = ({
   return (
     <button
       className={clsx(
-        "relative flex overflow-hidden rounded-xl sm:rounded-2xl p-2.5 sm:p-4 text-left",
+        "relative flex overflow-hidden rounded-xl p-2.5 text-left sm:rounded-2xl sm:p-4",
         cardPreset !== "none" && `tada-entrance-${cardPreset}`,
         className,
       )}
@@ -75,7 +75,7 @@ const AnswerButton = ({
     >
       <AnswerPercentageBar percentage={percentage} />
 
-      <div className="relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 sm:gap-x-3 gap-y-1.5 sm:content-center">
+      <div className="relative z-10 grid w-full grid-cols-[auto_1fr_auto] content-start items-center gap-x-2.5 gap-y-1.5 sm:content-center sm:gap-x-3">
         <span
           data-testid={`answer-badge-${answerIndex}`}
           data-tada-entrance={badgePreset !== "none" ? badgePreset : undefined}

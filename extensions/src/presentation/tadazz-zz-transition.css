@@ -1,23 +1,254 @@
 /* Collision-only fallback; replace with user's own Lottie/logo whenever available. */
-.tdz-zz-stage{position:relative;width:min(88vw,960px);height:min(48vh,390px);isolation:isolate;overflow:visible;pointer-events:none;--tdz-zz-duration:2900ms;display:flex;align-items:center;justify-content:center}
-.tdz-zz-letter{position:absolute;top:1%;width:min(30vw,285px);height:min(38vh,310px);filter:drop-shadow(0 9px 1px #22083c) drop-shadow(0 0 14px #af39ff);animation-duration:var(--tdz-zz-duration);animation-fill-mode:both;animation-timing-function:cubic-bezier(.25,.7,.12,1)}
-.tdz-zz-letter svg{width:100%;height:100%;overflow:visible}
-.tdz-zz-blue{animation-name:tdz-zz-collide-blue}
-.tdz-zz-lime{animation-name:tdz-zz-collide-lime}
-.tdz-zz-ring{position:absolute;left:50%;top:41%;width:22%;aspect-ratio:1;border:4px solid #eaff39;border-radius:50%;box-shadow:0 0 50px #eaff39b5,0 0 30px #fb61ffae inset;transform:translate(-50%,-50%) scale(.1);opacity:0;animation:tdz-zz-shockwave var(--tdz-zz-duration) ease-out both}
-.tdz-zz-impact{position:absolute;left:50%;top:42%;width:34%;aspect-ratio:1;border-radius:50%;background:radial-gradient(circle,#fff 0,#ffed8b 17%,#fb66eb88 42%,transparent 73%);transform:translate(-50%,-50%);mix-blend-mode:screen;filter:blur(11px);opacity:0;animation:tdz-zz-flash var(--tdz-zz-duration) linear both}
-.tdz-zz-burst{position:absolute;top:42%;left:50%;width:70%;height:4px;background:linear-gradient(90deg,transparent,#fffbd7 45%,#eaff39 50%,#f164ff 55%,transparent);transform-origin:center;opacity:0;box-shadow:0 0 16px #ffbfff;animation:tdz-zz-spark var(--tdz-zz-duration) ease-out both}
-.tdz-zz-burst-a{transform:rotate(-37deg)}
-.tdz-zz-burst-b{transform:rotate(22deg)}
-.tdz-zz-burst-c{transform:rotate(85deg)}
-.tdz-zz-wordmark,.tdz-zz-final-logo{position:absolute;left:50%;top:77%;transform:translateX(-50%);max-width:90%;max-height:20%;white-space:nowrap;opacity:0;animation:tdz-zz-word var(--tdz-zz-duration) ease-out both;filter:drop-shadow(0 3px 4px #0b0027)}
-.tdz-zz-wordmark{font-weight:1000;font-size:clamp(38px,6vw,80px);font-style:italic;letter-spacing:-.085em;color:#fff0df;text-shadow:0 4px #a74613,0 6px #220349}
-.tdz-zz-wordmark span{color:#eeff27;text-shadow:0 4px #af4510,0 6px #220349}
-.tdz-zz-final-logo{width:auto;height:auto;object-fit:contain}
-@keyframes tdz-zz-collide-blue{0%{transform:translateX(-190%) rotate(-26deg) scale(.5);opacity:0}25%{opacity:1}48%{transform:translateX(-5%) rotate(12deg) scale(1.12)}57%{transform:translateX(-35%) rotate(-12deg) scale(.9)}68%{transform:translateX(-25%) rotate(-9deg) scale(1)}83%,100%{transform:translateX(-25%) rotate(-9deg) scale(1);opacity:1}}
-@keyframes tdz-zz-collide-lime{0%{transform:translateX(190%) rotate(23deg) scale(.5);opacity:0}25%{opacity:1}48%{transform:translateX(6%) rotate(-12deg) scale(1.12)}57%{transform:translateX(34%) rotate(13deg) scale(.9)}68%{transform:translateX(27%) rotate(10deg) scale(1)}83%,100%{transform:translateX(27%) rotate(10deg) scale(1);opacity:1}}
-@keyframes tdz-zz-shockwave{0%,42%{transform:translate(-50%,-50%) scale(.1);opacity:0}49%{opacity:1}74%{transform:translate(-50%,-50%) scale(3);opacity:0}100%{opacity:0}}
-@keyframes tdz-zz-flash{0%,46%{opacity:0}50%{opacity:1}57%{opacity:0}100%{opacity:0}}
-@keyframes tdz-zz-spark{0%,46%{opacity:0;scale:.4}50%{opacity:1;scale:1}69%,100%{opacity:0;scale:1.7}}
-@keyframes tdz-zz-word{0%,66%{opacity:0;transform:translateX(-50%) translateY(15px) scale(.88)}82%,100%{opacity:1;transform:translateX(-50%) translateY(0) scale(1)}}
-@media(prefers-reduced-motion:reduce){.tdz-zz-stage *{animation:none!important}.tdz-zz-blue{transform:translateX(-25%) rotate(-9deg);opacity:1}.tdz-zz-lime{transform:translateX(27%) rotate(10deg);opacity:1}.tdz-zz-wordmark,.tdz-zz-final-logo{opacity:1}}
+.tdz-zz-stage {
+  position: relative;
+  width: min(88vw, 960px);
+  height: min(48vh, 390px);
+  isolation: isolate;
+  overflow: visible;
+  pointer-events: none;
+  --tdz-zz-duration: 2900ms;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.tdz-zz-letter {
+  position: absolute;
+  top: 1%;
+  width: min(30vw, 285px);
+  height: min(38vh, 310px);
+  filter: drop-shadow(0 9px 1px #22083c) drop-shadow(0 0 14px #af39ff);
+  animation-duration: var(--tdz-zz-duration);
+  animation-fill-mode: both;
+  animation-timing-function: cubic-bezier(0.25, 0.7, 0.12, 1);
+}
+.tdz-zz-letter svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+.tdz-zz-blue {
+  animation-name: tdz-zz-collide-blue;
+}
+.tdz-zz-lime {
+  animation-name: tdz-zz-collide-lime;
+}
+.tdz-zz-ring {
+  position: absolute;
+  left: 50%;
+  top: 41%;
+  width: 22%;
+  aspect-ratio: 1;
+  border: 4px solid #eaff39;
+  border-radius: 50%;
+  box-shadow:
+    0 0 50px #eaff39b5,
+    0 0 30px #fb61ffae inset;
+  transform: translate(-50%, -50%) scale(0.1);
+  opacity: 0;
+  animation: tdz-zz-shockwave var(--tdz-zz-duration) ease-out both;
+}
+.tdz-zz-impact {
+  position: absolute;
+  left: 50%;
+  top: 42%;
+  width: 34%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #fff 0,
+    #ffed8b 17%,
+    #fb66eb88 42%,
+    transparent 73%
+  );
+  transform: translate(-50%, -50%);
+  mix-blend-mode: screen;
+  filter: blur(11px);
+  opacity: 0;
+  animation: tdz-zz-flash var(--tdz-zz-duration) linear both;
+}
+.tdz-zz-burst {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: 70%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #fffbd7 45%,
+    #eaff39 50%,
+    #f164ff 55%,
+    transparent
+  );
+  transform-origin: center;
+  opacity: 0;
+  box-shadow: 0 0 16px #ffbfff;
+  animation: tdz-zz-spark var(--tdz-zz-duration) ease-out both;
+}
+.tdz-zz-burst-a {
+  transform: rotate(-37deg);
+}
+.tdz-zz-burst-b {
+  transform: rotate(22deg);
+}
+.tdz-zz-burst-c {
+  transform: rotate(85deg);
+}
+.tdz-zz-wordmark,
+.tdz-zz-final-logo {
+  position: absolute;
+  left: 50%;
+  top: 77%;
+  transform: translateX(-50%);
+  max-width: 90%;
+  max-height: 20%;
+  white-space: nowrap;
+  opacity: 0;
+  animation: tdz-zz-word var(--tdz-zz-duration) ease-out both;
+  filter: drop-shadow(0 3px 4px #0b0027);
+}
+.tdz-zz-wordmark {
+  font-weight: 1000;
+  font-size: clamp(38px, 6vw, 80px);
+  font-style: italic;
+  letter-spacing: -0.085em;
+  color: #fff0df;
+  text-shadow:
+    0 4px #a74613,
+    0 6px #220349;
+}
+.tdz-zz-wordmark span {
+  color: #eeff27;
+  text-shadow:
+    0 4px #af4510,
+    0 6px #220349;
+}
+.tdz-zz-final-logo {
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+@keyframes tdz-zz-collide-blue {
+  0% {
+    transform: translateX(-190%) rotate(-26deg) scale(0.5);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  48% {
+    transform: translateX(-5%) rotate(12deg) scale(1.12);
+  }
+  57% {
+    transform: translateX(-35%) rotate(-12deg) scale(0.9);
+  }
+  68% {
+    transform: translateX(-25%) rotate(-9deg) scale(1);
+  }
+  83%,
+  100% {
+    transform: translateX(-25%) rotate(-9deg) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes tdz-zz-collide-lime {
+  0% {
+    transform: translateX(190%) rotate(23deg) scale(0.5);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  48% {
+    transform: translateX(6%) rotate(-12deg) scale(1.12);
+  }
+  57% {
+    transform: translateX(34%) rotate(13deg) scale(0.9);
+  }
+  68% {
+    transform: translateX(27%) rotate(10deg) scale(1);
+  }
+  83%,
+  100% {
+    transform: translateX(27%) rotate(10deg) scale(1);
+    opacity: 1;
+  }
+}
+@keyframes tdz-zz-shockwave {
+  0%,
+  42% {
+    transform: translate(-50%, -50%) scale(0.1);
+    opacity: 0;
+  }
+  49% {
+    opacity: 1;
+  }
+  74% {
+    transform: translate(-50%, -50%) scale(3);
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tdz-zz-flash {
+  0%,
+  46% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  57% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes tdz-zz-spark {
+  0%,
+  46% {
+    opacity: 0;
+    scale: 0.4;
+  }
+  50% {
+    opacity: 1;
+    scale: 1;
+  }
+  69%,
+  100% {
+    opacity: 0;
+    scale: 1.7;
+  }
+}
+@keyframes tdz-zz-word {
+  0%,
+  66% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(15px) scale(0.88);
+  }
+  82%,
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0) scale(1);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tdz-zz-stage * {
+    animation: none !important;
+  }
+  .tdz-zz-blue {
+    transform: translateX(-25%) rotate(-9deg);
+    opacity: 1;
+  }
+  .tdz-zz-lime {
+    transform: translateX(27%) rotate(10deg);
+    opacity: 1;
+  }
+  .tdz-zz-wordmark,
+  .tdz-zz-final-logo {
+    opacity: 1;
+  }
+}

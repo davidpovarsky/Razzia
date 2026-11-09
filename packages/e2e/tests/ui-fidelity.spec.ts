@@ -18,6 +18,7 @@ const families = [
   "tadazz-demo-jade",
   "razzia-original",
 ]
+/* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
 async function room(
   request: APIRequestContext,
   page: Page,
@@ -27,29 +28,58 @@ async function room(
   many = false,
 ) {
   const login = await request.post("/api/auth/manager", {
-    data: { password: "e2e-password" },
+    data: {
+      password: "e2e-password",
+    },
   })
   expect(login.ok()).toBe(true)
-  const { token } = await login.json()
+  const { token } = (await login.json()) as {
+    token: string
+  }
   const questionId = crypto.randomUUID()
   const question = {
     type,
     question: type === "estimation" ? "Pick 50" : "Which answer is correct?",
-    answers: many
-      ? Array.from({ length: 5 }, (_, index) => `Option ${index + 1}`)
-      : type === "estimation"
-        ? []
-        : ["One", "Two", "Three", "Four"],
-    solutions: many
-      ? [4]
-      : type === "estimation"
-        ? [50]
-        : type === "multi"
-          ? [0, 2]
-          : [0],
+    answers: (() => {
+      if (many) {
+        return Array.from(
+          {
+            length: 5,
+          },
+          (_, index) => `Option ${index + 1}`,
+        )
+      }
+
+      if (type === "estimation") {
+        return []
+      }
+
+      return ["One", "Two", "Three", "Four"]
+    })(),
+    solutions: (() => {
+      if (many) {
+        return [4]
+      }
+
+      if (type === "estimation") {
+        return [50]
+      }
+
+      if (type === "multi") {
+        return [0, 2]
+      }
+
+      return [0]
+    })(),
     options:
       type === "estimation"
-        ? { inputMode: "input", min: 0, max: 100, step: 1, margin: 10 }
+        ? {
+            inputMode: "input",
+            min: 0,
+            max: 100,
+            step: 1,
+            margin: 10,
+          }
         : undefined,
     time: 120,
     cooldown: 3,
@@ -70,7 +100,14 @@ async function room(
     overrides: {},
   }
   extras.scenes = {}
-  extras.timeline = [{ id: crypto.randomUUID(), kind: "question", questionId }]
+  extras.timeline = [
+    {
+      id: crypto.randomUUID(),
+      kind: "question",
+      questionId,
+    },
+  ]
+
   if (scene) {
     const sceneId = crypto.randomUUID()
     extras.scenes[sceneId] = {
@@ -80,6 +117,7 @@ async function room(
       durationMs: 5000,
       advance: "manual",
     }
+
     if (scene === "overlay") {
       extras.scenes[sceneId] = {
         id: sceneId,
@@ -115,7 +153,8 @@ async function room(
       })
     }
   }
-  if (type === "multi" || (type === "single" && !scene && !many))
+
+  if (type === "multi" || (type === "single" && !scene && !many)) {
     extras.perQuestion[questionId] = {
       answerVisuals: [0, 1, 2, 3].map((answerIndex) => ({
         answerIndex,
@@ -124,19 +163,33 @@ async function room(
         alt: `Image ${answerIndex + 1}`,
       })),
     }
-  const headers = { Authorization: `Bearer ${token}` }
+  }
+
+  const headers = {
+    Authorization: `Bearer ${token}`,
+  }
   const saved = await request.post("/api/extensions/quizzes", {
     headers,
-    data: { quizz, extras },
+    data: {
+      quizz,
+      extras,
+    },
   })
   expect(saved.ok(), await saved.text()).toBe(true)
-  const { quizId } = await saved.json()
+  const { quizId } = (await saved.json()) as {
+    quizId: string
+  }
   const created = await request.post("/api/games", {
     headers,
-    data: { quizzId: quizId },
+    data: {
+      quizzId: quizId,
+    },
   })
   expect(created.ok(), await created.text()).toBe(true)
-  const game = (await created.json()) as { gameId: string; inviteCode: string }
+  const game = (await created.json()) as {
+    gameId: string
+    inviteCode: string
+  }
   await page.addInitScript(
     (value) => localStorage.setItem("token", value),
     token,
@@ -146,8 +199,14 @@ async function room(
     "data-native-layout",
     "true",
   )
-  return { ...game, quizId, token }
+
+  return {
+    ...game,
+    quizId,
+    token,
+  }
 }
+/* oxlint-enable max-params */
 async function noOverflow(page: Page) {
   await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
     0,
@@ -168,7 +227,7 @@ async function noOverflow(page: Page) {
     TADAZZ_PRODUCT_LOGO_URL,
   )
 }
-for (const family of families)
+for (const family of families) {
   test(`${family}: native operator, responsive iPad, fixed brand and projector`, async ({
     page,
     browser,
@@ -176,27 +235,45 @@ for (const family of families)
   }, info) => {
     const game = await room(request, page, family)
     const ctx = await browser.newContext({
-      viewport: { width: 1024, height: 768 },
+      viewport: {
+        width: 1024,
+        height: 768,
+      },
       isMobile: true,
       hasTouch: true,
       locale: "en-US",
     })
     const player = await ctx.newPage()
     const displayBrowser = await browser.browserType().launch()
+
     try {
       await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
       await player.getByPlaceholder("Username here").fill("Responsive iPad")
-      await player.getByRole("button", { name: "Submit", exact: true }).click()
+      await player
+        .getByRole("button", {
+          name: "Submit",
+          exact: true,
+        })
+        .click()
       await expect(page.getByTestId("host-connected-counter")).toHaveText(
         "1 / 1",
       )
       await page.bringToFront()
-      await page.getByRole("button", { name: "Start", exact: true }).click()
+      await page
+        .getByRole("button", {
+          name: "Start",
+          exact: true,
+        })
+        .click()
       await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
         "data-voting-open",
         "true",
       )
-      await expect(player.getByRole("button", { name: /One/ })).toBeVisible()
+      await expect(
+        player.getByRole("button", {
+          name: /One/,
+        }),
+      ).toBeVisible()
       await noOverflow(page)
       await noOverflow(player)
       expect(
@@ -214,11 +291,18 @@ for (const family of families)
         "data-game-paused",
         "true",
       )
-      await expect(player.getByRole("button", { name: /One/ })).toBeDisabled()
+      await expect(
+        player.getByRole("button", {
+          name: /One/,
+        }),
+      ).toBeDisabled()
       await player.screenshot({
         path: join(info.outputDir, "ipad-landscape.png"),
       })
-      await player.setViewportSize({ width: 768, height: 1024 })
+      await player.setViewportSize({
+        width: 768,
+        height: 1024,
+      })
       await noOverflow(player)
       await player.screenshot({
         path: join(info.outputDir, "ipad-portrait.png"),
@@ -233,12 +317,21 @@ for (const family of families)
       )
       await page.getByTestId("host-pause-resume-btn").click()
       await player.bringToFront()
-      await player.getByRole("button", { name: /One/ }).click()
+      await player
+        .getByRole("button", {
+          name: /One/,
+        })
+        .click()
       await expect(
-        player.getByText("Waiting for the players to answer", { exact: true }),
+        player.getByText("Waiting for the players to answer", {
+          exact: true,
+        }),
       ).toBeVisible()
       const display = await displayBrowser.newPage({
-        viewport: { width: 1280, height: 720 },
+        viewport: {
+          width: 1280,
+          height: 720,
+        },
         locale: "en-US",
       })
       await display.goto(`http://127.0.0.1:3190/display/${game.gameId}`)
@@ -250,6 +343,7 @@ for (const family of families)
         0,
       )
       await expect(display.getByTestId("host-audio-controls")).toHaveCount(0)
+
       if (family === "razzia-original") {
         await expect(display.locator(".tzv4-stage")).toHaveCount(0)
         await expect(display.getByTestId("native-game-surface")).toBeVisible()
@@ -260,21 +354,31 @@ for (const family of families)
           TADAZZ_PRODUCT_LOGO_URL,
         )
       }
+
       await page.bringToFront()
       await page.getByTestId("host-end-timer-btn").click()
       await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
         "data-show-scene",
         "results",
       )
-      await expect(player.getByText("Nice!", { exact: true })).toBeVisible()
-      await page.screenshot({ path: join(info.outputDir, "native-host.png") })
-      await display.screenshot({ path: join(info.outputDir, "projector.png") })
+      await expect(
+        player.getByText("Nice!", {
+          exact: true,
+        }),
+      ).toBeVisible()
+      await page.screenshot({
+        path: join(info.outputDir, "native-host.png"),
+      })
+      await display.screenshot({
+        path: join(info.outputDir, "projector.png"),
+      })
     } finally {
       await ctx.close()
       await displayBrowser.close()
     }
   })
-for (const type of ["multi", "estimation"])
+}
+for (const type of ["multi", "estimation"]) {
   test(`native ${type} retains scoring, picture cards and confirmation`, async ({
     page,
     browser,
@@ -282,41 +386,77 @@ for (const type of ["multi", "estimation"])
   }) => {
     const game = await room(request, page, "razzia-original", type)
     const ctx = await browser.newContext({
-      viewport: { width: 1024, height: 768 },
+      viewport: {
+        width: 1024,
+        height: 768,
+      },
       hasTouch: true,
       isMobile: true,
       locale: "en-US",
     })
+
     try {
       const player = await ctx.newPage()
       await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
       await player.getByPlaceholder("Username here").fill("Native Types")
-      await player.getByRole("button", { name: "Submit", exact: true }).click()
+      await player
+        .getByRole("button", {
+          name: "Submit",
+          exact: true,
+        })
+        .click()
       await expect(page.getByTestId("host-connected-counter")).toHaveText(
         "1 / 1",
       )
       await page.bringToFront()
-      await page.getByRole("button", { name: "Start", exact: true }).click()
+      await page
+        .getByRole("button", {
+          name: "Start",
+          exact: true,
+        })
+        .click()
       await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
         "data-voting-open",
         "true",
       )
       await player.bringToFront()
+
       if (type === "multi") {
         await expect(
           player.locator('img[src="/media/theme-answer.png"]').first(),
         ).toBeVisible()
-        await player.getByRole("button", { name: /One/ }).click()
-        await player.getByRole("button", { name: /Three/ }).click()
-      } else await player.getByRole("spinbutton").fill("50")
-      await player.getByRole("button", { name: "Confirm", exact: true }).click()
+        await player
+          .getByRole("button", {
+            name: /One/,
+          })
+          .click()
+        await player
+          .getByRole("button", {
+            name: /Three/,
+          })
+          .click()
+      } else {
+        await player.getByRole("spinbutton").fill("50")
+      }
+
+      await player
+        .getByRole("button", {
+          name: "Confirm",
+          exact: true,
+        })
+        .click()
       await page.bringToFront()
       await page.getByTestId("host-end-timer-btn").click()
-      await expect(player.getByText("Nice!", { exact: true })).toBeVisible()
+      await expect(
+        player.getByText("Nice!", {
+          exact: true,
+        }),
+      ).toBeVisible()
     } finally {
       await ctx.close()
     }
   })
+}
 test("native game keeps timeline scenes and original editor remains outside game styles", async ({
   page,
   request,
@@ -327,23 +467,36 @@ test("native game keeps timeline scenes and original editor remains outside game
   const participant = await context.newPage()
   await participant.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
   await participant.getByPlaceholder("Username here").fill("Scene QA")
-  await participant.getByRole("button", { name: "Submit", exact: true }).click()
+  await participant
+    .getByRole("button", {
+      name: "Submit",
+      exact: true,
+    })
+    .click()
   await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
   await page.bringToFront()
-  await page.getByRole("button", { name: "Start", exact: true }).click()
+  await page
+    .getByRole("button", {
+      name: "Start",
+      exact: true,
+    })
+    .click()
   await expect(page.getByTestId("studio-scene-presenter")).toBeVisible()
   await expect(page.locator('[data-control-source="standalone"]')).toHaveCount(
     0,
   )
   await expect(
-    page.getByText("Native enhancement scene", { exact: true }),
+    page.getByText("Native enhancement scene", {
+      exact: true,
+    }),
   ).toBeVisible()
   await page.getByTestId("host-next-screen-btn").click()
   await expect(page.getByTestId("game-question-title")).toBeVisible()
   await page.goto(`/manager/quizz/${game.quizId}`)
   await page.getByTestId("studio-tab-settings").click()
-  for (const id of families)
+  for (const id of families) {
     await expect(page.getByTestId(`show-theme-${id}`)).toBeVisible()
+  }
   await expect(page.getByTestId("tadazz-show")).toHaveCount(0)
   expect(
     await page
@@ -352,7 +505,6 @@ test("native game keeps timeline scenes and original editor remains outside game
   ).toContain("Rubik Variable")
   await context.close()
 })
-
 test("operator projection preserves native audio preferences and can return to responsive controls", async ({
   page,
   request,
@@ -366,21 +518,26 @@ test("operator projection preserves native audio preferences and can return to r
   )
   await page.getByTestId("host-audio-volume").fill("0.37")
   await page.getByTestId("host-toggle-audio-pause").click()
+
   if (browserName === "webkit") {
     await page.evaluate(() => {
       HTMLElement.prototype.requestFullscreen = () =>
         Promise.reject(new Error("Fullscreen denial fixture"))
     })
   }
+
   await page.getByTestId("host-present-from-host-btn").click()
+
   if (browserName === "webkit") {
     await expect(page.getByTestId("manager-control-toolbar")).toBeVisible()
     await expect(page.getByTestId("host-toggle-audio-mute")).toHaveAttribute(
       "aria-pressed",
       "true",
     )
+
     return
   }
+
   await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
     "data-host-presenting",
     "true",
@@ -425,7 +582,6 @@ test("operator projection preserves native audio preferences and can return to r
     "true",
   )
 })
-
 test("native iPad keeps the upstream five choices reachable and scores the last choice", async ({
   page,
   request,
@@ -440,19 +596,33 @@ test("native iPad keeps the upstream five choices reachable and scores the last 
     true,
   )
   const context = await browser.newContext({
-    viewport: { width: 1024, height: 768 },
+    viewport: {
+      width: 1024,
+      height: 768,
+    },
     isMobile: true,
     hasTouch: true,
     locale: "en-US",
   })
+
   try {
     const player = await context.newPage()
     await player.goto(`http://127.0.0.1:3190/game?pin=${game.inviteCode}`)
     await player.getByPlaceholder("Username here").fill("Long list QA")
-    await player.getByRole("button", { name: "Submit", exact: true }).click()
+    await player
+      .getByRole("button", {
+        name: "Submit",
+        exact: true,
+      })
+      .click()
     await expect(page.getByTestId("host-connected-counter")).toHaveText("1 / 1")
     await page.bringToFront()
-    await page.getByRole("button", { name: "Start", exact: true }).click()
+    await page
+      .getByRole("button", {
+        name: "Start",
+        exact: true,
+      })
+      .click()
     await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
       "data-voting-open",
       "true",
@@ -461,30 +631,45 @@ test("native iPad keeps the upstream five choices reachable and scores the last 
     expect(
       await player.evaluate(() => getComputedStyle(document.body).touchAction),
     ).toBe("pan-y")
-    await player.getByRole("button", { name: /Option 5/ }).click()
+    await player
+      .getByRole("button", {
+        name: /Option 5/,
+      })
+      .click()
     await page.bringToFront()
     await page.getByTestId("host-end-timer-btn").click()
-    await expect(player.getByText("Nice!", { exact: true })).toBeVisible()
+    await expect(
+      player.getByText("Nice!", {
+        exact: true,
+      }),
+    ).toBeVisible()
   } finally {
     await context.close()
   }
 })
-
 test("native public lobby reuses the Razzia invitation and QR without management controls", async ({
   page,
   request,
   browser,
 }) => {
   const game = await room(request, page, "razzia-original")
-  const context = await browser.newContext({ locale: "en-US" })
+  const context = await browser.newContext({
+    locale: "en-US",
+  })
+
   try {
     const display = await context.newPage()
     await display.goto(`http://127.0.0.1:3190/display/${game.gameId}`)
     await expect(
-      display.getByText(game.inviteCode, { exact: true }),
+      display.getByText(game.inviteCode, {
+        exact: true,
+      }),
     ).toBeVisible()
     await expect(
-      display.getByRole("button", { name: "Show QR code", exact: true }),
+      display.getByRole("button", {
+        name: "Show QR code",
+        exact: true,
+      }),
     ).toBeVisible()
     await expect(display.getByTestId("manager-control-toolbar")).toHaveCount(0)
     await expect(display.getByTestId("host-bottom-players-btn")).toHaveCount(0)
@@ -496,7 +681,6 @@ test("native public lobby reuses the Razzia invitation and QR without management
     await context.close()
   }
 })
-
 test("native overlay and timeline buttons preserve keyboard positioning, pointer drag and saving", async ({
   page,
   request,
@@ -532,7 +716,9 @@ test("native overlay and timeline buttons preserve keyboard positioning, pointer
   await page.mouse.move(
     plane!.x + plane!.width * 0.65,
     plane!.y + plane!.height * 0.45,
-    { steps: 5 },
+    {
+      steps: 5,
+    },
   )
   await page.mouse.up()
   await expect
@@ -565,21 +751,34 @@ test("native overlay and timeline buttons preserve keyboard positioning, pointer
   await page.getByTestId("editor-save-btn").click()
   await expect(page).toHaveURL(/\/manager\/config$/)
   const saved = await request.get(`/api/extensions/quizzes/${game.quizId}`, {
-    headers: { Authorization: `Bearer ${game.token}` },
+    headers: {
+      Authorization: `Bearer ${game.token}`,
+    },
   })
   expect(saved.ok()).toBe(true)
-  const extras = (await saved.json()).extras
+  const { extras } = (await saved.json()) as {
+    extras: import("../../../extensions/src/core").QuizExtrasV2
+  }
   const scenes = extras.scenes as Record<
     string,
     {
       kind: string
-      overlayAnimations: Array<{ position: { x: number; y: number } }>
+      overlayAnimations: Array<{
+        position: {
+          x: number
+          y: number
+        }
+      }>
     }
   >
   const opening = Object.values(scenes).find(
     (scene) => scene.kind === "opening",
   )
-  if (!opening) throw new Error("Saved opening is missing")
+
+  if (!opening) {
+    throw new Error("Saved opening is missing")
+  }
+
   expect(opening.overlayAnimations[0].position.x).toBeCloseTo(0.65, 1)
   expect(opening.overlayAnimations[0].position.y).toBeCloseTo(0.45, 1)
 })

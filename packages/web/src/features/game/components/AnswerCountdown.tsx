@@ -1,6 +1,7 @@
 import { NO_TIME_LIMIT } from "@razzia/common/constants"
 import clsx from "clsx"
 import { useTranslation } from "react-i18next"
+
 export interface AnswerCountdownProps {
   seconds: number | null
   totalSeconds?: number
@@ -8,6 +9,7 @@ export interface AnswerCountdownProps {
   className?: string
   "data-testid"?: string
 }
+
 /** Same Rubik, badge, spacing and hierarchy as the original Razzia answer HUD. */
 export const AnswerCountdown = ({
   seconds,
@@ -19,8 +21,13 @@ export const AnswerCountdown = ({
     : "answer-cooldown",
 }: AnswerCountdownProps) => {
   const { t } = useTranslation()
-  if (seconds === null || seconds === NO_TIME_LIMIT) return null
+
+  if (seconds === null || seconds === NO_TIME_LIMIT) {
+    return null
+  }
+
   const safeSeconds = Math.max(0, Math.floor(seconds))
+
   return (
     <div
       role="timer"
@@ -54,4 +61,5 @@ export const AnswerCountdown = ({
     </div>
   )
 }
+
 export default AnswerCountdown

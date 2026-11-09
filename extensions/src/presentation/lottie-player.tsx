@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import {
   DotLottieReact,
   setWasmUrl,
@@ -125,6 +126,7 @@ function extractStaticPosterShapes(data: Record<string, unknown>): {
     if (typeof rawLayer !== "object" || rawLayer === null) {
       return
     }
+
     const layer = rawLayer as Record<string, unknown>
 
     if (layer.ty === 1 && typeof layer.sc === "string") {
@@ -155,6 +157,7 @@ function extractStaticPosterShapes(data: Record<string, unknown>): {
         if (typeof item !== "object" || item === null) {
           continue
         }
+
         const s = item as Record<string, unknown>
 
         if (s.ty === "fl" && typeof s.c === "object" && s.c !== null) {
@@ -324,7 +327,11 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
 
     const handleFrame = (evt: { currentFrame: number }) => {
       const now = performance.now()
-      if (now - lastFrameReport.current < frameUpdateIntervalMs) return
+
+      if (now - lastFrameReport.current < frameUpdateIntervalMs) {
+        return
+      }
+
       lastFrameReport.current = now
       setCurrentFrame(Math.round(evt.currentFrame))
     }
@@ -460,7 +467,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
     !loop && finish === "hide" && hasCompletedOnce && !prefersReducedMotion
 
   const staticPoster = useMemo(() => {
-    if (inlineValidation && inlineValidation.ok) {
+    if (inlineValidation?.ok) {
       return extractStaticPosterShapes(inlineValidation.data)
     }
 
@@ -561,7 +568,7 @@ export const LottiePlayer: React.FC<LottiePlayerProps> = ({
         renderConfig={renderConfig}
         src={trimmedSrc || undefined}
         data={
-          !trimmedSrc && inlineValidation && inlineValidation.ok
+          !trimmedSrc && inlineValidation?.ok
             ? inlineValidation.sanitizedJson
             : undefined
         }

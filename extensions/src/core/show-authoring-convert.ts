@@ -1,3 +1,8 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+// Preserve legacy wire text coercion while keeping unknown values at the boundary.
+function legacyText(value: unknown): string {
+  return String(value)
+}
 import {
   quizzValidator,
   type QuizzValidated,
@@ -17,6 +22,7 @@ import {
   tadaShowV1Schema,
   type AuthoredAnswer,
   type AuthoredCard,
+  type AuthoredQuizCard,
   type AuthoredSetting,
   type TadaShowV1,
 } from "./show-authoring-schema"
@@ -47,7 +53,6 @@ export function authoredShowToNativeBundleDraft(
   fixedQuizId?: string,
 ): ConvertShowResult {
   const diagnostics: ConversionDiagnostic[] = []
-
   const parseResult = tadaShowV1Schema.safeParse(showInput)
 
   if (!parseResult.success) {
@@ -59,34 +64,32 @@ export function authoredShowToNativeBundleDraft(
       })
     }
 
-    return { ok: false, diagnostics }
+    return {
+      ok: false,
+      diagnostics,
+    }
   }
 
   const show = parseResult.data
   const tempQuizId = fixedQuizId || crypto.randomUUID()
-
   const questionIds: string[] = []
   const timeline: TimelineItem[] = []
   const scenes: Record<string, SceneConfig> = {}
   const perQuestion: Record<string, PerQuestionItem> = {}
   const baseQuestions: QuizzValidated["questions"] = []
-
   const keyToQuestionId = new Map<string, string>()
-
-  for (let i = 0; i < show.cards.length; i += 1) {
-    const card = show.cards[i]
+  for (const _entry of show.cards) {
+    const card = _entry
 
     if (card.kind === "quiz" || card.kind === "survey") {
       const qId = crypto.randomUUID()
       const timelineItemId = crypto.randomUUID()
       keyToQuestionId.set(card.key, qId)
       questionIds.push(qId)
-
       const solutions =
         card.kind === "quiz" && card.correctAnswers
           ? card.correctAnswers.map((ansNum) => ansNum - 1)
           : undefined
-
       const baseQ = {
         type: card.questionType,
         playMode: card.kind,
@@ -118,7 +121,6 @@ export function authoredShowToNativeBundleDraft(
           })
         }
       }
-
       const qExtras: PerQuestionItem = {}
 
       if (answerVisuals.length > 0) {
@@ -169,17 +171,29 @@ export function authoredShowToNativeBundleDraft(
     } else {
       const sceneId = crypto.randomUUID()
       const timelineItemId = crypto.randomUUID()
-
       const sceneAppearance = {
-        ...(card.background ? { background: card.background } : {}),
-        ...(card.themeOverrides ? { themeOverrides: card.themeOverrides } : {}),
-        ...(card.audio ? { audio: card.audio } : {}),
+        ...(card.background
+          ? {
+              background: card.background,
+            }
+          : {}),
+        ...(card.themeOverrides
+          ? {
+              themeOverrides: card.themeOverrides,
+            }
+          : {}),
+        ...(card.audio
+          ? {
+              audio: card.audio,
+            }
+          : {}),
         ...(card.stageAnimations
-          ? { stageAnimations: card.stageAnimations }
+          ? {
+              stageAnimations: card.stageAnimations,
+            }
           : {}),
       }
-
-      let sceneConfig: SceneConfig
+      let sceneConfig: SceneConfig | undefined = undefined
 
       switch (card.kind) {
         case "transition":
@@ -203,13 +217,25 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             durationMs: card.durationMs,
             advance: card.advance,
-            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
-            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieUrl
+              ? {
+                  lottieUrl: card.lottieUrl,
+                }
+              : {}),
+            ...(card.lottieFit
+              ? {
+                  lottieFit: card.lottieFit,
+                }
+              : {}),
             ...(card.lottieLoop !== undefined
-              ? { lottieLoop: card.lottieLoop }
+              ? {
+                  lottieLoop: card.lottieLoop,
+                }
               : {}),
             ...(card.lottieSpeed !== undefined
-              ? { lottieSpeed: card.lottieSpeed }
+              ? {
+                  lottieSpeed: card.lottieSpeed,
+                }
               : {}),
             ...sceneAppearance,
           }
@@ -223,26 +249,62 @@ export function authoredShowToNativeBundleDraft(
             mediaUrl: card.mediaUrl,
             mediaType: card.mediaType,
             title: card.title,
-            ...(card.subtitle !== undefined ? { subtitle: card.subtitle } : {}),
-            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
-            ...(card.textOverlay !== undefined
-              ? { textOverlay: card.textOverlay }
+            ...(card.subtitle !== undefined
+              ? {
+                  subtitle: card.subtitle,
+                }
               : {}),
-            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.stageLayout
+              ? {
+                  stageLayout: card.stageLayout,
+                }
+              : {}),
+            ...(card.textOverlay !== undefined
+              ? {
+                  textOverlay: card.textOverlay,
+                }
+              : {}),
+            ...(card.endBehavior
+              ? {
+                  endBehavior: card.endBehavior,
+                }
+              : {}),
             durationMs: card.durationMs,
             ...(card.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: card.mediaEndFallbackMs,
+                }
               : {}),
             advance: card.advance,
-            ...(card.volume !== undefined ? { volume: card.volume } : {}),
-            ...(card.loop !== undefined ? { loop: card.loop } : {}),
-            ...(card.muted !== undefined ? { muted: card.muted } : {}),
-            ...(card.showControls !== undefined
-              ? { showControls: card.showControls }
+            ...(card.volume !== undefined
+              ? {
+                  volume: card.volume,
+                }
               : {}),
-            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
+            ...(card.loop !== undefined
+              ? {
+                  loop: card.loop,
+                }
+              : {}),
+            ...(card.muted !== undefined
+              ? {
+                  muted: card.muted,
+                }
+              : {}),
+            ...(card.showControls !== undefined
+              ? {
+                  showControls: card.showControls,
+                }
+              : {}),
+            ...(card.mediaFit
+              ? {
+                  mediaFit: card.mediaFit,
+                }
+              : {}),
             ...(card.overlayAnimations
-              ? { overlayAnimations: card.overlayAnimations }
+              ? {
+                  overlayAnimations: card.overlayAnimations,
+                }
               : {}),
             ...sceneAppearance,
           }
@@ -281,16 +343,26 @@ export function authoredShowToNativeBundleDraft(
             id: sceneId,
             kind: "answerRecap",
             title: card.title,
-            ...(resolvedStartQId ? { startQuestionId: resolvedStartQId } : {}),
+            ...(resolvedStartQId
+              ? {
+                  startQuestionId: resolvedStartQId,
+                }
+              : {}),
             mode: card.mode ?? "mostSelected",
             ...(card.maxItemsPerPage !== undefined
-              ? { maxItemsPerPage: card.maxItemsPerPage }
+              ? {
+                  maxItemsPerPage: card.maxItemsPerPage,
+                }
               : {}),
             ...(card.showCounts !== undefined
-              ? { showCounts: card.showCounts }
+              ? {
+                  showCounts: card.showCounts,
+                }
               : {}),
             ...(card.showPercentages !== undefined
-              ? { showPercentages: card.showPercentages }
+              ? {
+                  showPercentages: card.showPercentages,
+                }
               : {}),
             durationMs: card.durationMs,
             advance: card.advance,
@@ -319,33 +391,85 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             subtitle: card.subtitle,
             mediaUrl: card.mediaUrl,
-            ...(card.mediaType ? { mediaType: card.mediaType } : {}),
-            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
-            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
-            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.mediaType
+              ? {
+                  mediaType: card.mediaType,
+                }
+              : {}),
+            ...(card.stageLayout
+              ? {
+                  stageLayout: card.stageLayout,
+                }
+              : {}),
+            ...(card.mediaFit
+              ? {
+                  mediaFit: card.mediaFit,
+                }
+              : {}),
+            ...(card.logoPosition
+              ? {
+                  logoPosition: card.logoPosition,
+                }
+              : {}),
             ...(card.textOverlay !== undefined
-              ? { textOverlay: card.textOverlay }
+              ? {
+                  textOverlay: card.textOverlay,
+                }
               : {}),
-            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.endBehavior
+              ? {
+                  endBehavior: card.endBehavior,
+                }
+              : {}),
             ...(card.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: card.mediaEndFallbackMs,
+                }
               : {}),
-            ...(card.volume !== undefined ? { volume: card.volume } : {}),
-            ...(card.loop !== undefined ? { loop: card.loop } : {}),
-            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.volume !== undefined
+              ? {
+                  volume: card.volume,
+                }
+              : {}),
+            ...(card.loop !== undefined
+              ? {
+                  loop: card.loop,
+                }
+              : {}),
+            ...(card.muted !== undefined
+              ? {
+                  muted: card.muted,
+                }
+              : {}),
             ...(card.showControls !== undefined
-              ? { showControls: card.showControls }
+              ? {
+                  showControls: card.showControls,
+                }
               : {}),
-            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
-            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieUrl
+              ? {
+                  lottieUrl: card.lottieUrl,
+                }
+              : {}),
+            ...(card.lottieFit
+              ? {
+                  lottieFit: card.lottieFit,
+                }
+              : {}),
             ...(card.lottieLoop !== undefined
-              ? { lottieLoop: card.lottieLoop }
+              ? {
+                  lottieLoop: card.lottieLoop,
+                }
               : {}),
             ...(card.lottieSpeed !== undefined
-              ? { lottieSpeed: card.lottieSpeed }
+              ? {
+                  lottieSpeed: card.lottieSpeed,
+                }
               : {}),
             ...(card.overlayAnimations
-              ? { overlayAnimations: card.overlayAnimations }
+              ? {
+                  overlayAnimations: card.overlayAnimations,
+                }
               : {}),
             durationMs: card.durationMs,
             advance: card.advance,
@@ -361,33 +485,85 @@ export function authoredShowToNativeBundleDraft(
             title: card.title,
             subtitle: card.subtitle,
             mediaUrl: card.mediaUrl,
-            ...(card.mediaType ? { mediaType: card.mediaType } : {}),
-            ...(card.stageLayout ? { stageLayout: card.stageLayout } : {}),
-            ...(card.mediaFit ? { mediaFit: card.mediaFit } : {}),
-            ...(card.logoPosition ? { logoPosition: card.logoPosition } : {}),
+            ...(card.mediaType
+              ? {
+                  mediaType: card.mediaType,
+                }
+              : {}),
+            ...(card.stageLayout
+              ? {
+                  stageLayout: card.stageLayout,
+                }
+              : {}),
+            ...(card.mediaFit
+              ? {
+                  mediaFit: card.mediaFit,
+                }
+              : {}),
+            ...(card.logoPosition
+              ? {
+                  logoPosition: card.logoPosition,
+                }
+              : {}),
             ...(card.textOverlay !== undefined
-              ? { textOverlay: card.textOverlay }
+              ? {
+                  textOverlay: card.textOverlay,
+                }
               : {}),
-            ...(card.endBehavior ? { endBehavior: card.endBehavior } : {}),
+            ...(card.endBehavior
+              ? {
+                  endBehavior: card.endBehavior,
+                }
+              : {}),
             ...(card.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: card.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: card.mediaEndFallbackMs,
+                }
               : {}),
-            ...(card.volume !== undefined ? { volume: card.volume } : {}),
-            ...(card.loop !== undefined ? { loop: card.loop } : {}),
-            ...(card.muted !== undefined ? { muted: card.muted } : {}),
+            ...(card.volume !== undefined
+              ? {
+                  volume: card.volume,
+                }
+              : {}),
+            ...(card.loop !== undefined
+              ? {
+                  loop: card.loop,
+                }
+              : {}),
+            ...(card.muted !== undefined
+              ? {
+                  muted: card.muted,
+                }
+              : {}),
             ...(card.showControls !== undefined
-              ? { showControls: card.showControls }
+              ? {
+                  showControls: card.showControls,
+                }
               : {}),
-            ...(card.lottieUrl ? { lottieUrl: card.lottieUrl } : {}),
-            ...(card.lottieFit ? { lottieFit: card.lottieFit } : {}),
+            ...(card.lottieUrl
+              ? {
+                  lottieUrl: card.lottieUrl,
+                }
+              : {}),
+            ...(card.lottieFit
+              ? {
+                  lottieFit: card.lottieFit,
+                }
+              : {}),
             ...(card.lottieLoop !== undefined
-              ? { lottieLoop: card.lottieLoop }
+              ? {
+                  lottieLoop: card.lottieLoop,
+                }
               : {}),
             ...(card.lottieSpeed !== undefined
-              ? { lottieSpeed: card.lottieSpeed }
+              ? {
+                  lottieSpeed: card.lottieSpeed,
+                }
               : {}),
             ...(card.overlayAnimations
-              ? { overlayAnimations: card.overlayAnimations }
+              ? {
+                  overlayAnimations: card.overlayAnimations,
+                }
               : {}),
             durationMs: card.durationMs,
             advance: card.advance,
@@ -398,7 +574,6 @@ export function authoredShowToNativeBundleDraft(
       }
 
       scenes[sceneId] = sceneConfig
-
       timeline.push({
         id: timelineItemId,
         kind: card.kind,
@@ -413,7 +588,6 @@ export function authoredShowToNativeBundleDraft(
     subject: show.title,
     questions: baseQuestions,
   }
-
   const baseParse = quizzValidator.safeParse(baseQuizzCandidate)
 
   if (!baseParse.success) {
@@ -425,17 +599,18 @@ export function authoredShowToNativeBundleDraft(
       })
     }
 
-    return { ok: false, diagnostics }
+    return {
+      ok: false,
+      diagnostics,
+    }
   }
 
   const quizz = baseParse.data
-
   const baseDigest = computeCanonicalBaseDigest(quizz)
-
   const defaults = createStudioDefaults(show.defaults)
 
   // Apply settings channel overrides if present
-  let leaderboardExtras: QuizExtrasV2["leaderboard"]
+  const settingExtras: Pick<QuizExtrasV2, "leaderboard"> = {}
   let teamsExtras: QuizExtrasV2["teams"] = {
     enabled: false,
     teams: [],
@@ -443,7 +618,7 @@ export function authoredShowToNativeBundleDraft(
   }
   let audioExtras: QuizExtrasV2["audio"] = createDefaultAudioExtras()
   let rosterExtras: QuizExtrasV2["roster"] = createDefaultRosterExtras()
-  let mediaCatalogExtras: QuizExtrasV2["mediaCatalog"]
+  let mediaCatalogExtras: QuizExtrasV2["mediaCatalog"] | undefined = undefined
 
   if (show.settings && show.settings.length > 0) {
     for (let sIdx = 0; sIdx < show.settings.length; sIdx += 1) {
@@ -459,14 +634,16 @@ export function authoredShowToNativeBundleDraft(
 
       if (s.scope === "leaderboard") {
         if (s.property === "mode" && typeof s.valueJson === "string") {
-          leaderboardExtras = {
-            mode: s.valueJson as any,
-            ...leaderboardExtras,
+          settingExtras.leaderboard = {
+            mode: s.valueJson as NonNullable<
+              QuizExtrasV2["leaderboard"]
+            >["mode"],
+            ...(settingExtras.leaderboard ?? {}),
           }
         } else if (s.property === "everyN" && typeof s.valueJson === "number") {
-          leaderboardExtras = {
-            mode: leaderboardExtras?.mode ?? "everyN",
-            ...leaderboardExtras,
+          settingExtras.leaderboard = {
+            mode: settingExtras.leaderboard?.mode ?? "everyN",
+            ...(settingExtras.leaderboard ?? {}),
             everyN: s.valueJson,
           }
         } else if (
@@ -488,9 +665,9 @@ export function authoredShowToNativeBundleDraft(
               mappedIds.push(resolvedQId)
             }
           }
-          leaderboardExtras = {
-            mode: leaderboardExtras?.mode ?? "selected",
-            ...leaderboardExtras,
+          settingExtras.leaderboard = {
+            mode: settingExtras.leaderboard?.mode ?? "selected",
+            ...(settingExtras.leaderboard ?? {}),
             afterQuestionIds: mappedIds,
           }
         } else {
@@ -501,18 +678,18 @@ export function authoredShowToNativeBundleDraft(
           })
         }
       } else if (s.scope === "team" && s.property === "config") {
-        teamsExtras = s.valueJson as any
+        teamsExtras = s.valueJson as QuizExtrasV2["teams"]
       } else if (s.scope === "audio" && s.property === "cues") {
         audioExtras = {
           cues: {
             ...createDefaultAudioExtras().cues,
-            ...(s.valueJson as any),
+            ...(s.valueJson as QuizExtrasV2["audio"]["cues"]),
           },
         }
       } else if (s.scope === "roster" && s.property === "config") {
-        rosterExtras = s.valueJson as any
+        rosterExtras = s.valueJson as QuizExtrasV2["roster"]
       } else if (s.scope === "media" && s.property === "catalog") {
-        mediaCatalogExtras = s.valueJson as any
+        mediaCatalogExtras = s.valueJson as QuizExtrasV2["mediaCatalog"]
       } else {
         diagnostics.push({
           path: ["settings", String(sIdx)],
@@ -532,15 +709,23 @@ export function authoredShowToNativeBundleDraft(
     timeline,
     scenes,
     defaults,
-    leaderboard: leaderboardExtras,
+    leaderboard: settingExtras.leaderboard,
     teams: teamsExtras,
     audio: audioExtras,
     perQuestion,
     roster: rosterExtras,
-    authoring: show.note !== undefined ? { showNote: show.note } : undefined,
-    ...(mediaCatalogExtras ? { mediaCatalog: mediaCatalogExtras } : {}),
+    authoring:
+      show.note !== undefined
+        ? {
+            showNote: show.note,
+          }
+        : undefined,
+    ...(mediaCatalogExtras
+      ? {
+          mediaCatalog: mediaCatalogExtras,
+        }
+      : {}),
   }
-
   const extrasParse = quizExtrasV2Schema.safeParse(extrasCandidate)
 
   if (!extrasParse.success) {
@@ -552,7 +737,10 @@ export function authoredShowToNativeBundleDraft(
       })
     }
 
-    return { ok: false, diagnostics }
+    return {
+      ok: false,
+      diagnostics,
+    }
   }
 
   return {
@@ -589,11 +777,9 @@ export function nativeBundleToAuthoredShow(
         quizId: bundle.extras.quizId,
         baseDigest: bundle.extras.baseDigest,
       })
-
   const cards: AuthoredCard[] = []
   const questionMap = new Map<string, Record<string, unknown>>()
   const questionIdToCardKey = new Map<string, string>()
-
   for (let i = 0; i < extrasV2.questionIds.length; i += 1) {
     const qId = extrasV2.questionIds[i]
 
@@ -601,12 +787,10 @@ export function nativeBundleToAuthoredShow(
       questionMap.set(qId, questions[i])
     }
   }
-
   let qCount = 0
   let sceneCount = 0
-
-  for (let tIdx = 0; tIdx < extrasV2.timeline.length; tIdx += 1) {
-    const item = extrasV2.timeline[tIdx]
+  for (const _entry2 of extrasV2.timeline) {
+    const item = _entry2
 
     if (item.kind === "question") {
       qCount += 1
@@ -625,7 +809,6 @@ export function nativeBundleToAuthoredShow(
       const perQ = Object.hasOwn(extrasV2.perQuestion, item.questionId)
         ? extrasV2.perQuestion[item.questionId]
         : undefined
-
       const authoredAnswers: AuthoredAnswer[] = rawAnswers.map((txt, aIdx) => {
         const visual = perQ?.answerVisuals?.find((v) => v.answerIndex === aIdx)
 
@@ -636,7 +819,6 @@ export function nativeBundleToAuthoredShow(
           alt: visual?.alt,
         }
       })
-
       const playMode =
         (q.playMode as "quiz" | "survey" | undefined) ??
         (quizz.gameMode === "survey" ? "survey" : "quiz")
@@ -645,17 +827,18 @@ export function nativeBundleToAuthoredShow(
         cards.push({
           key: qKey,
           kind: "survey",
-          questionType: (q.type as any) ?? "single",
-          question: String(q.question ?? ""),
-          category: q.category ? String(q.category) : undefined,
-          note: q.note ? String(q.note) : undefined,
+          questionType:
+            (q.type as AuthoredQuizCard["questionType"]) ?? "single",
+          question: legacyText(q.question ?? ""),
+          category: q.category ? legacyText(q.category) : undefined,
+          note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
           cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : 3,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 0,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
-          media: q.media as any,
+          media: q.media as AuthoredQuizCard["media"],
           answers: authoredAnswers,
-          options: q.options as any,
+          options: q.options as AuthoredQuizCard["options"],
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
           questionEntrance: perQ?.questionEntrance,
@@ -670,18 +853,19 @@ export function nativeBundleToAuthoredShow(
         cards.push({
           key: qKey,
           kind: "quiz",
-          questionType: (q.type as any) ?? "single",
-          question: String(q.question ?? ""),
-          category: q.category ? String(q.category) : undefined,
-          note: q.note ? String(q.note) : undefined,
+          questionType:
+            (q.type as AuthoredQuizCard["questionType"]) ?? "single",
+          question: legacyText(q.question ?? ""),
+          category: q.category ? legacyText(q.category) : undefined,
+          note: q.note ? legacyText(q.note) : undefined,
           timeSeconds: typeof q.time === "number" ? q.time : 20,
           cooldownSeconds: typeof q.cooldown === "number" ? q.cooldown : 3,
           maxPoints: typeof q.maxPoints === "number" ? q.maxPoints : 1000,
           penalty: typeof q.penalty === "number" ? q.penalty : 0,
-          media: q.media as any,
+          media: q.media as AuthoredQuizCard["media"],
           answers: authoredAnswers,
           correctAnswers: correctAnswers.length > 0 ? correctAnswers : [1],
-          options: q.options as any,
+          options: q.options as AuthoredQuizCard["options"],
           reveal: perQ?.reveal,
           interlude: perQ?.interlude,
           questionEntrance: perQ?.questionEntrance,
@@ -702,13 +886,25 @@ export function nativeBundleToAuthoredShow(
       }
 
       const sceneAppearance = {
-        ...(scene.background ? { background: scene.background } : {}),
-        ...(scene.themeOverrides
-          ? { themeOverrides: scene.themeOverrides }
+        ...(scene.background
+          ? {
+              background: scene.background,
+            }
           : {}),
-        ...(scene.audio ? { audio: scene.audio } : {}),
+        ...(scene.themeOverrides
+          ? {
+              themeOverrides: scene.themeOverrides,
+            }
+          : {}),
+        ...(scene.audio
+          ? {
+              audio: scene.audio,
+            }
+          : {}),
         ...(scene.stageAnimations
-          ? { stageAnimations: scene.stageAnimations }
+          ? {
+              stageAnimations: scene.stageAnimations,
+            }
           : {}),
       }
 
@@ -734,13 +930,25 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             durationMs: scene.durationMs,
             advance: scene.advance,
-            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
-            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieUrl
+              ? {
+                  lottieUrl: scene.lottieUrl,
+                }
+              : {}),
+            ...(scene.lottieFit
+              ? {
+                  lottieFit: scene.lottieFit,
+                }
+              : {}),
             ...(scene.lottieLoop !== undefined
-              ? { lottieLoop: scene.lottieLoop }
+              ? {
+                  lottieLoop: scene.lottieLoop,
+                }
               : {}),
             ...(scene.lottieSpeed !== undefined
-              ? { lottieSpeed: scene.lottieSpeed }
+              ? {
+                  lottieSpeed: scene.lottieSpeed,
+                }
               : {}),
             ...sceneAppearance,
           })
@@ -755,27 +963,61 @@ export function nativeBundleToAuthoredShow(
             mediaType: scene.mediaType,
             title: scene.title,
             ...(scene.subtitle !== undefined
-              ? { subtitle: scene.subtitle }
+              ? {
+                  subtitle: scene.subtitle,
+                }
               : {}),
-            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
+            ...(scene.stageLayout
+              ? {
+                  stageLayout: scene.stageLayout,
+                }
+              : {}),
             ...(scene.textOverlay !== undefined
-              ? { textOverlay: scene.textOverlay }
+              ? {
+                  textOverlay: scene.textOverlay,
+                }
               : {}),
-            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.endBehavior
+              ? {
+                  endBehavior: scene.endBehavior,
+                }
+              : {}),
             durationMs: scene.durationMs,
             ...(scene.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: scene.mediaEndFallbackMs,
+                }
               : {}),
             advance: scene.advance,
-            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
-            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
-            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
-            ...(scene.showControls !== undefined
-              ? { showControls: scene.showControls }
+            ...(scene.volume !== undefined
+              ? {
+                  volume: scene.volume,
+                }
               : {}),
-            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
+            ...(scene.loop !== undefined
+              ? {
+                  loop: scene.loop,
+                }
+              : {}),
+            ...(scene.muted !== undefined
+              ? {
+                  muted: scene.muted,
+                }
+              : {}),
+            ...(scene.showControls !== undefined
+              ? {
+                  showControls: scene.showControls,
+                }
+              : {}),
+            ...(scene.mediaFit
+              ? {
+                  mediaFit: scene.mediaFit,
+                }
+              : {}),
             ...(scene.overlayAnimations
-              ? { overlayAnimations: scene.overlayAnimations }
+              ? {
+                  overlayAnimations: scene.overlayAnimations,
+                }
               : {}),
             ...sceneAppearance,
           })
@@ -814,16 +1056,26 @@ export function nativeBundleToAuthoredShow(
             key: sKey,
             kind: "answerRecap",
             title: scene.title,
-            ...(startQuestionKey ? { startQuestionKey } : {}),
+            ...(startQuestionKey
+              ? {
+                  startQuestionKey,
+                }
+              : {}),
             mode: scene.mode ?? "mostSelected",
             ...(scene.maxItemsPerPage !== undefined
-              ? { maxItemsPerPage: scene.maxItemsPerPage }
+              ? {
+                  maxItemsPerPage: scene.maxItemsPerPage,
+                }
               : {}),
             ...(scene.showCounts !== undefined
-              ? { showCounts: scene.showCounts }
+              ? {
+                  showCounts: scene.showCounts,
+                }
               : {}),
             ...(scene.showPercentages !== undefined
-              ? { showPercentages: scene.showPercentages }
+              ? {
+                  showPercentages: scene.showPercentages,
+                }
               : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
@@ -852,33 +1104,85 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             subtitle: scene.subtitle,
             mediaUrl: scene.mediaUrl,
-            ...(scene.mediaType ? { mediaType: scene.mediaType } : {}),
-            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
-            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
-            ...(scene.logoPosition ? { logoPosition: scene.logoPosition } : {}),
+            ...(scene.mediaType
+              ? {
+                  mediaType: scene.mediaType,
+                }
+              : {}),
+            ...(scene.stageLayout
+              ? {
+                  stageLayout: scene.stageLayout,
+                }
+              : {}),
+            ...(scene.mediaFit
+              ? {
+                  mediaFit: scene.mediaFit,
+                }
+              : {}),
+            ...(scene.logoPosition
+              ? {
+                  logoPosition: scene.logoPosition,
+                }
+              : {}),
             ...(scene.textOverlay !== undefined
-              ? { textOverlay: scene.textOverlay }
+              ? {
+                  textOverlay: scene.textOverlay,
+                }
               : {}),
-            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.endBehavior
+              ? {
+                  endBehavior: scene.endBehavior,
+                }
+              : {}),
             ...(scene.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: scene.mediaEndFallbackMs,
+                }
               : {}),
-            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
-            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
-            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
+            ...(scene.volume !== undefined
+              ? {
+                  volume: scene.volume,
+                }
+              : {}),
+            ...(scene.loop !== undefined
+              ? {
+                  loop: scene.loop,
+                }
+              : {}),
+            ...(scene.muted !== undefined
+              ? {
+                  muted: scene.muted,
+                }
+              : {}),
             ...(scene.showControls !== undefined
-              ? { showControls: scene.showControls }
+              ? {
+                  showControls: scene.showControls,
+                }
               : {}),
-            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
-            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieUrl
+              ? {
+                  lottieUrl: scene.lottieUrl,
+                }
+              : {}),
+            ...(scene.lottieFit
+              ? {
+                  lottieFit: scene.lottieFit,
+                }
+              : {}),
             ...(scene.lottieLoop !== undefined
-              ? { lottieLoop: scene.lottieLoop }
+              ? {
+                  lottieLoop: scene.lottieLoop,
+                }
               : {}),
             ...(scene.lottieSpeed !== undefined
-              ? { lottieSpeed: scene.lottieSpeed }
+              ? {
+                  lottieSpeed: scene.lottieSpeed,
+                }
               : {}),
             ...(scene.overlayAnimations
-              ? { overlayAnimations: scene.overlayAnimations }
+              ? {
+                  overlayAnimations: scene.overlayAnimations,
+                }
               : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
@@ -894,33 +1198,85 @@ export function nativeBundleToAuthoredShow(
             title: scene.title,
             subtitle: scene.subtitle,
             mediaUrl: scene.mediaUrl,
-            ...(scene.mediaType ? { mediaType: scene.mediaType } : {}),
-            ...(scene.stageLayout ? { stageLayout: scene.stageLayout } : {}),
-            ...(scene.mediaFit ? { mediaFit: scene.mediaFit } : {}),
-            ...(scene.logoPosition ? { logoPosition: scene.logoPosition } : {}),
+            ...(scene.mediaType
+              ? {
+                  mediaType: scene.mediaType,
+                }
+              : {}),
+            ...(scene.stageLayout
+              ? {
+                  stageLayout: scene.stageLayout,
+                }
+              : {}),
+            ...(scene.mediaFit
+              ? {
+                  mediaFit: scene.mediaFit,
+                }
+              : {}),
+            ...(scene.logoPosition
+              ? {
+                  logoPosition: scene.logoPosition,
+                }
+              : {}),
             ...(scene.textOverlay !== undefined
-              ? { textOverlay: scene.textOverlay }
+              ? {
+                  textOverlay: scene.textOverlay,
+                }
               : {}),
-            ...(scene.endBehavior ? { endBehavior: scene.endBehavior } : {}),
+            ...(scene.endBehavior
+              ? {
+                  endBehavior: scene.endBehavior,
+                }
+              : {}),
             ...(scene.mediaEndFallbackMs !== undefined
-              ? { mediaEndFallbackMs: scene.mediaEndFallbackMs }
+              ? {
+                  mediaEndFallbackMs: scene.mediaEndFallbackMs,
+                }
               : {}),
-            ...(scene.volume !== undefined ? { volume: scene.volume } : {}),
-            ...(scene.loop !== undefined ? { loop: scene.loop } : {}),
-            ...(scene.muted !== undefined ? { muted: scene.muted } : {}),
+            ...(scene.volume !== undefined
+              ? {
+                  volume: scene.volume,
+                }
+              : {}),
+            ...(scene.loop !== undefined
+              ? {
+                  loop: scene.loop,
+                }
+              : {}),
+            ...(scene.muted !== undefined
+              ? {
+                  muted: scene.muted,
+                }
+              : {}),
             ...(scene.showControls !== undefined
-              ? { showControls: scene.showControls }
+              ? {
+                  showControls: scene.showControls,
+                }
               : {}),
-            ...(scene.lottieUrl ? { lottieUrl: scene.lottieUrl } : {}),
-            ...(scene.lottieFit ? { lottieFit: scene.lottieFit } : {}),
+            ...(scene.lottieUrl
+              ? {
+                  lottieUrl: scene.lottieUrl,
+                }
+              : {}),
+            ...(scene.lottieFit
+              ? {
+                  lottieFit: scene.lottieFit,
+                }
+              : {}),
             ...(scene.lottieLoop !== undefined
-              ? { lottieLoop: scene.lottieLoop }
+              ? {
+                  lottieLoop: scene.lottieLoop,
+                }
               : {}),
             ...(scene.lottieSpeed !== undefined
-              ? { lottieSpeed: scene.lottieSpeed }
+              ? {
+                  lottieSpeed: scene.lottieSpeed,
+                }
               : {}),
             ...(scene.overlayAnimations
-              ? { overlayAnimations: scene.overlayAnimations }
+              ? {
+                  overlayAnimations: scene.overlayAnimations,
+                }
               : {}),
             durationMs: scene.durationMs,
             advance: scene.advance,
@@ -1026,17 +1382,22 @@ export function nativeBundleToAuthoredShow(
     })
   }
 
-  const showNote =
-    extrasV2.authoring?.showNote !== undefined
-      ? extrasV2.authoring.showNote
-      : typeof (quizz as any).note === "string"
-        ? (quizz as any).note
-        : undefined
+  const showNote = (() => {
+    if (extrasV2.authoring?.showNote !== undefined) {
+      return extrasV2.authoring.showNote
+    }
+
+    if (typeof quizz.note === "string") {
+      return quizz.note
+    }
+
+    return undefined
+  })()
 
   return {
     format: "tada-show",
     version: 1,
-    title: String(quizz.subject ?? "Untitled Show"),
+    title: legacyText(quizz.subject ?? "Untitled Show"),
     note: showNote,
     baseGameMode: (quizz.gameMode as "quiz" | "survey") ?? "quiz",
     defaults: extrasV2.defaults,

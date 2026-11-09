@@ -109,9 +109,11 @@ function inspectShowImport(
   let isZipBuffer = false
 
   let uint8Buf: Uint8Array | null = null
+
   if (isBinary) {
     uint8Buf =
       rawInput instanceof Uint8Array ? rawInput : new Uint8Array(rawInput)
+
     if (
       uint8Buf.length >= 4 &&
       uint8Buf[0] === 0x50 &&
@@ -129,26 +131,32 @@ function inspectShowImport(
   ) {
     return {
       ok: false,
-      issues: [{
-        severity: "error",
-        code: "PACKAGE_IMPORT_REQUIRED",
-        messageKey: "extensions:packages.usePackageImport",
-      }],
+      issues: [
+        {
+          severity: "error",
+          code: "PACKAGE_IMPORT_REQUIRED",
+          messageKey: "extensions:packages.usePackageImport",
+        },
+      ],
     }
   }
 
   // XLSX has an OOXML content-types inventory. An arbitrary ZIP is never XLSX.
-  const workbookZip = isZipBuffer && uint8Buf &&
+  const workbookZip =
+    isZipBuffer &&
+    uint8Buf &&
     zipInventoryHasEntry(uint8Buf, "[Content_Types].xml")
 
   if (isZipBuffer && !workbookZip && !lowerName.endsWith(".xlsx")) {
     return {
       ok: false,
-      issues: [{
-        severity: "error",
-        code: "UNKNOWN_ARCHIVE",
-        messageKey: "extensions:packages.unknownArchive",
-      }],
+      issues: [
+        {
+          severity: "error",
+          code: "UNKNOWN_ARCHIVE",
+          messageKey: "extensions:packages.unknownArchive",
+        },
+      ],
     }
   }
 
@@ -163,11 +171,14 @@ function inspectShowImport(
       return { ok: false, issues }
     }
 
-    let parsedShow: TadaShowV1
+    let parsedShow: TadaShowV1 | undefined = undefined
+
     try {
       parsedShow = parseTadaShowWorkbook(uint8Buf)
-    } catch (err: any) {
-      const errMsg = err?.message || "errors:extensions.corruptXlsxFile"
+    } catch (err: unknown) {
+      const errMsg =
+        (err instanceof Error ? err.message : undefined) ||
+        "errors:extensions.corruptXlsxFile"
       const coordMatch = /:([A-Za-z]+)!([A-Z]+)(\d+)/u.exec(errMsg)
       issues.push({
         severity: "error",
@@ -182,6 +193,7 @@ function inspectShowImport(
     }
 
     const draftResult = authoredShowToNativeBundleDraft(parsedShow)
+
     if (!draftResult.ok || !draftResult.bundleDraft) {
       for (const diag of draftResult.diagnostics) {
         issues.push({
@@ -216,6 +228,7 @@ function inspectShowImport(
 
   // 2. JSON handling (text or string)
   let text = ""
+
   if (typeof rawInput === "string") {
     text = rawInput
   } else if (uint8Buf) {
@@ -232,7 +245,8 @@ function inspectShowImport(
     }
   }
 
-  let parsedJson: unknown
+  let parsedJson: unknown = undefined
+
   try {
     parsedJson = JSON.parse(text)
   } catch {
@@ -252,9 +266,11 @@ function inspectShowImport(
     ("format" in parsedJson || "cards" in parsedJson)
   ) {
     const showParse = tadaShowV1Schema.safeParse(parsedJson)
+
     if (showParse.success) {
       const show = showParse.data
       const draftResult = authoredShowToNativeBundleDraft(show)
+
       if (!draftResult.ok || !draftResult.bundleDraft) {
         for (const diag of draftResult.diagnostics) {
           issues.push({
@@ -286,9 +302,10 @@ function inspectShowImport(
         normalizedBundleDraft,
       }
     }
+
     // If it claims to be tada-show but has schema errors:
     if (
-      (parsedJson as any).format === "tada-show" ||
+      (parsedJson as { format?: unknown }).format === "tada-show" ||
       lowerName.endsWith(".tada.json")
     ) {
       for (const issue of showParse.error.issues) {
@@ -306,8 +323,9 @@ function inspectShowImport(
 
   // Check 2B: Native Enhanced Bundle (`bundleVersion: 1`)
   if (isEnhancedBundle(parsedJson)) {
-    const bundle = parsedJson as EnhancedBundle
+    const bundle = parsedJson
     const mediaCheck = validateBundleMedia(bundle)
+
     if (!mediaCheck.ok) {
       issues.push({
         severity: "error",
@@ -350,11 +368,13 @@ function inspectShowImport(
   // Check 2D: Legacy Quizz (`questions` array, subject/title)
   const normalizedLegacy = normalizeLegacyQuizz(parsedJson)
   const legacyParse = quizzValidator.safeParse(normalizedLegacy)
+
   if (legacyParse.success) {
     const quizz = legacyParse.data
     const unsafeIssues: ShowImportIssue[] = []
     for (let qIdx = 0; qIdx < quizz.questions.length; qIdx += 1) {
       const q = quizz.questions[qIdx]
+
       if (q.media?.url && !isSafeMediaUrl(q.media.url)) {
         unsafeIssues.push({
           severity: "error",
@@ -364,6 +384,7 @@ function inspectShowImport(
         })
       }
     }
+
     if (unsafeIssues.length > 0) {
       issues.push(...unsafeIssues)
 
@@ -443,9 +464,11 @@ function buildSummaryFromAuthored(
     if (card.kind === "quiz") {
       quizCount += 1
       const hasMedia = Boolean(card.media?.url || card.background?.url)
+
       if (hasMedia) {
         mediaCount += 1
       }
+
       const imgAnswers = card.answers.filter(
         (a) => a.display !== "text" && a.imageUrl,
       ).length
@@ -464,9 +487,11 @@ function buildSummaryFromAuthored(
     } else if (card.kind === "survey") {
       surveyCount += 1
       const hasMedia = Boolean(card.media?.url || card.background?.url)
+
       if (hasMedia) {
         mediaCount += 1
       }
+
       const imgAnswers = card.answers.filter(
         (a) => a.display !== "text" && a.imageUrl,
       ).length
@@ -485,8 +510,8 @@ function buildSummaryFromAuthored(
     } else {
       sceneCount += 1
       const hasMedia = Boolean(
-        (card as any).mediaUrl ||
-        (card as any).media?.url ||
+        ("mediaUrl" in card ? card.mediaUrl : undefined) ||
+        undefined ||
         card.background?.url,
       )
 
@@ -498,8 +523,8 @@ function buildSummaryFromAuthored(
         order,
         key: card.key,
         kind: card.kind,
-        title: (card as any).title,
-        advance: (card as any).advance,
+        title: "title" in card ? card.title : undefined,
+        advance: card.advance,
         hasMedia,
       })
     }
@@ -569,7 +594,8 @@ function collectMediaWarnings(
 
       for (let aIdx = 0; aIdx < card.answers.length; aIdx += 1) {
         const ans = card.answers[aIdx]
-        if (ans.imageUrl && ans.imageUrl.startsWith("https://")) {
+
+        if (ans.imageUrl?.startsWith("https://")) {
           issues.push({
             severity: "warning",
             code: "REMOTE_ANSWER_IMAGE",
@@ -581,8 +607,7 @@ function collectMediaWarnings(
       }
     } else {
       if (
-        (card as any).mediaUrl &&
-        (card as any).mediaUrl.startsWith("https://")
+        ("mediaUrl" in card ? card.mediaUrl : undefined)?.startsWith("https://")
       ) {
         issues.push({
           severity: "warning",

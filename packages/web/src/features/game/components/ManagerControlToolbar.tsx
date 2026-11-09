@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { STATUS, type Status } from "@razzia/common/types/game/status"
 import {
   EXTENSION_EVENTS,
@@ -137,6 +138,7 @@ export const ManagerControlToolbar = ({
     if (!gameId || typeof window === "undefined") {
       return
     }
+
     window.open(`/display/${gameId}`, "_blank")
   }, [gameId])
 
@@ -144,6 +146,7 @@ export const ManagerControlToolbar = ({
     if (!gameId || typeof window === "undefined") {
       return
     }
+
     const url = `${window.location.origin}/display/${gameId}`
 
     try {
@@ -207,6 +210,7 @@ export const ManagerControlToolbar = ({
     if (!gameId) {
       return
     }
+
     sendCommand({
       action: isPaused ? "RESUME_GAME" : "PAUSE_GAME",
       payload: { epoch },
@@ -445,7 +449,7 @@ export const ManagerControlToolbar = ({
               action: "RESOLVE_STORY_TIE",
               payload: {
                 answerIndex: option.answerIndex,
-                epoch: extensionState!.epoch,
+                epoch: extensionState?.epoch,
               },
             })
           }

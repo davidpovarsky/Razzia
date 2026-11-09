@@ -1,7 +1,5 @@
-import type {
-  TimelineItem,
-  SceneConfig,
-} from "../core/studio-timeline-schema"
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import type { TimelineItem, SceneConfig } from "../core/studio-timeline-schema"
 
 export interface TimelineStepState {
   index: number
@@ -20,15 +18,19 @@ function resolveSceneAdvanceMode(
   if (!scene || !("advance" in scene)) {
     return "manual"
   }
+
   const rawAdvance =
     (scene as { advance?: "auto" | "manual" | "onMediaEnd" }).advance ??
     "manual"
+
   if (rawAdvance === "manual") {
     return "manual"
   }
+
   if (rawAdvance === "onMediaEnd") {
     return "onMediaEnd"
   }
+
   // Legacy compatibility: endBehavior: "advanceNext" on opening/closing/media with foreground video/audio
   if (
     "endBehavior" in scene &&
@@ -40,6 +42,7 @@ function resolveSceneAdvanceMode(
   ) {
     return "onMediaEnd"
   }
+
   return rawAdvance
 }
 
@@ -51,19 +54,21 @@ export function computeSceneSafetyTimeoutMs(
   if (advanceMode === "manual") {
     return undefined
   }
+
   if (advanceMode === "auto") {
     return durationMs
   }
-  // advanceMode === "onMediaEnd"
+
+  // AdvanceMode === "onMediaEnd"
   const hasForegroundTimedMedia = Boolean(
     scene &&
-      "mediaUrl" in scene &&
-      typeof scene.mediaUrl === "string" &&
-      scene.mediaUrl.trim().length > 0 &&
-      (("mediaType" in scene &&
-        (scene.mediaType === "video" || scene.mediaType === "audio")) ||
-        (!("mediaType" in scene) &&
-          /\.(mp4|webm|mov|m4v|mp3|wav|ogg|m4a)$/iu.test(scene.mediaUrl))),
+    "mediaUrl" in scene &&
+    typeof scene.mediaUrl === "string" &&
+    scene.mediaUrl.trim().length > 0 &&
+    (("mediaType" in scene &&
+      (scene.mediaType === "video" || scene.mediaType === "audio")) ||
+      (!("mediaType" in scene) &&
+        /\.(mp4|webm|mov|m4v|mp3|wav|ogg|m4a)$/iu.test(scene.mediaUrl))),
   )
   const isLooping = Boolean(
     scene && "loop" in scene && (scene as { loop?: boolean }).loop === true,
@@ -159,7 +164,8 @@ export class TimelineRunner {
       return null
     }
 
-    const scene = item.kind === "question" ? undefined : this.scenes[item.sceneId]
+    const scene =
+      item.kind === "question" ? undefined : this.scenes[item.sceneId]
     const advanceMode = resolveSceneAdvanceMode(scene)
     const durationMs =
       scene && "durationMs" in scene

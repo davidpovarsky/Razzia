@@ -105,6 +105,7 @@ export const createSocketServer = (server: ServerType): Server => {
       `A user connected: socketId: ${socket.id}, clientId: ${socket.data.clientId}`,
     )
 
+    // oxlint-disable-next-line typescript/no-misused-promises -- Async authorization catches errors and invokes the socket middleware continuation on every branch.
     socket.use(async (packet, next) => {
       // A revoked manager must not retain privileged controls through an open websocket.
       if (accountsEnabled() && socket.data.role === SESSION_ROLES.MANAGER) {
@@ -112,9 +113,11 @@ export const createSocketServer = (server: ServerType): Server => {
           await verifyToken(String(socket.handshake.auth.token ?? ""))
         } catch {
           socket.disconnect(true)
+
           return
         }
       }
+
       const validator = eventValidators[packet[0]]
 
       if (!validator) {

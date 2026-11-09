@@ -64,7 +64,9 @@ export function resolveTadazzStageBackground(input: {
     }
   }
 
-  if (!settings || settings.mode === "original") {return original}
+  if (!settings || settings.mode === "original") {
+    return original
+  }
 
   if (settings.mode === "static") {
     return settings.staticUrl && isSafeMediaUrl(settings.staticUrl)
@@ -78,7 +80,9 @@ export function resolveTadazzStageBackground(input: {
       : original
   }
 
-  if (input.imageReady === false || !tadazzImageUrl) {return original}
+  if (input.imageReady === false || !tadazzImageUrl) {
+    return original
+  }
 
   return {
     source: "tadazz",

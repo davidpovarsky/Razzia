@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import type { QuizExtrasV2 } from "./studio-timeline-schema"
 import {
   collectThemeMediaUrls,
@@ -8,7 +9,9 @@ import {
 // V1 and V2 share these media fields; intersecting their literal schema versions
 // would reduce the entire object to never.
 type MediaExtras = Partial<
-  Omit<QuizExtrasV2, "schemaVersion"> & { schemaVersion: 1 | 2 }
+  Omit<QuizExtrasV2, "schemaVersion"> & {
+    schemaVersion: 1 | 2
+  }
 >
 
 export type MediaReferenceField =
@@ -60,7 +63,10 @@ export const extractMediaNameFromUrl = (url: string): string => {
  */
 export const normalizeMediaTarget = (
   urlOrName: string,
-): { url: string; name: string } => {
+): {
+  url: string
+  name: string
+} => {
   const trimmed = urlOrName.trim()
 
   if (trimmed.startsWith("/media/")) {
@@ -83,7 +89,10 @@ export interface InspectableQuizShow {
     questions?: Array<{
       id?: string
       question?: string
-      media?: { type?: string; url?: string } | null
+      media?: {
+        type?: string
+        url?: string
+      } | null
     }>
   }
   extras?: MediaExtras | null
@@ -104,7 +113,7 @@ export const collectQuizMediaReferences = (
     ? show.quizz.questions
     : []
   const questionIds = show.extras?.questionIds ?? []
-
+  /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
   const addRef = (
     cardId: string,
     cardKind: "question" | "scene" | "global",
@@ -135,6 +144,7 @@ export const collectQuizMediaReferences = (
   }
 
   // 1. Base questions & perQuestion extras
+  /* oxlint-enable max-params */
   questions.forEach((q, idx) => {
     const qId = q.id || questionIds[idx] || `q_${idx + 1}`
     const qLabel = q.question?.trim() || `Question ${idx + 1}`
@@ -194,7 +204,13 @@ export const collectQuizMediaReferences = (
 
       const interludeUrl =
         pq.interlude?.url ??
-        (pq.interlude as { mediaUrl?: string } | undefined)?.mediaUrl
+        (
+          pq.interlude as
+            | {
+                mediaUrl?: string
+              }
+            | undefined
+        )?.mediaUrl
 
       if (interludeUrl) {
         addRef(
@@ -279,7 +295,13 @@ export const collectQuizMediaReferences = (
 
       const interludeUrl =
         pq.interlude?.url ??
-        (pq.interlude as { mediaUrl?: string } | undefined)?.mediaUrl
+        (
+          pq.interlude as
+            | {
+                mediaUrl?: string
+              }
+            | undefined
+        )?.mediaUrl
 
       if (interludeUrl) {
         addRef(
@@ -367,7 +389,13 @@ export const collectQuizMediaReferences = (
   // 3. Global show audio cues
   if (show.extras?.audio?.cues) {
     for (const [cueKey, cueCfg] of Object.entries(show.extras.audio.cues)) {
-      const source = (cueCfg as { source?: string } | undefined)?.source
+      const source = (
+        cueCfg as
+          | {
+              source?: string
+            }
+          | undefined
+      )?.source
 
       if ((source === "media" || source === "custom") && cueCfg?.url) {
         addRef(
@@ -439,7 +467,6 @@ export const findMediaReferencesAcrossShows = (
 ): CardMediaReference[] => {
   const target = normalizeMediaTarget(urlOrName)
   const matches: CardMediaReference[] = []
-
   for (const show of shows) {
     const refs = collectQuizMediaReferences(show)
     for (const ref of refs) {
@@ -459,7 +486,10 @@ export const findMediaReferencesAcrossShows = (
 export const detachMediaFromShowData = <
   TQuizz extends {
     questions?: Array<{
-      media?: { type?: string; url?: string } | null
+      media?: {
+        type?: string
+        url?: string
+      } | null
     }>
   },
   TExtras extends MediaExtras,
@@ -467,10 +497,13 @@ export const detachMediaFromShowData = <
   urlOrName: string,
   quizz: TQuizz,
   extras?: TExtras | null,
-): { quizz: TQuizz; extras: TExtras | null | undefined; modified: boolean } => {
+): {
+  quizz: TQuizz
+  extras: TExtras | null | undefined
+  modified: boolean
+} => {
   const target = normalizeMediaTarget(urlOrName)
   let modified = false
-
   const matchesTarget = (u?: string | null): boolean => {
     if (!u) {
       return false
@@ -482,14 +515,15 @@ export const detachMediaFromShowData = <
       trimmed === target.url || extractMediaNameFromUrl(trimmed) === target.name
     )
   }
-
   const nextQuizz = structuredClone(quizz)
 
   if (Array.isArray(nextQuizz.questions)) {
     nextQuizz.questions = nextQuizz.questions.map((q) => {
       if (q.media?.url && matchesTarget(q.media.url)) {
         modified = true
-        const nextQ = { ...q }
+        const nextQ = {
+          ...q,
+        }
         delete nextQ.media
 
         return nextQ
@@ -500,7 +534,11 @@ export const detachMediaFromShowData = <
   }
 
   if (!extras) {
-    return { quizz: nextQuizz, extras, modified }
+    return {
+      quizz: nextQuizz,
+      extras,
+      modified,
+    }
   }
 
   let nextExtras = structuredClone(extras)
@@ -607,7 +645,11 @@ export const detachMediaFromShowData = <
         typeof scene.mediaUrl === "string" &&
         matchesTarget(scene.mediaUrl)
       ) {
-        delete (scene as { mediaUrl?: string }).mediaUrl
+        delete (
+          scene as {
+            mediaUrl?: string
+          }
+        ).mediaUrl
         modified = true
       }
 
@@ -616,7 +658,11 @@ export const detachMediaFromShowData = <
         typeof scene.lottieUrl === "string" &&
         matchesTarget(scene.lottieUrl)
       ) {
-        delete (scene as { lottieUrl?: string }).lottieUrl
+        delete (
+          scene as {
+            lottieUrl?: string
+          }
+        ).lottieUrl
         modified = true
       }
 
@@ -634,7 +680,9 @@ export const detachMediaFromShowData = <
 
         if (filtered.length !== beforeLen) {
           ;(
-            scene as { overlayAnimations?: typeof filtered }
+            scene as {
+              overlayAnimations?: typeof filtered
+            }
           ).overlayAnimations = filtered
           modified = true
         }
@@ -681,5 +729,9 @@ export const detachMediaFromShowData = <
     }
   }
 
-  return { quizz: nextQuizz, extras: nextExtras, modified }
+  return {
+    quizz: nextQuizz,
+    extras: nextExtras,
+    modified,
+  }
 }

@@ -5,27 +5,40 @@ import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtrasV2,
 } from "../../../extensions/src/core"
-if (process.env.TADAZZ_REMOTE_QA !== "1") throw new Error("Remote staging only")
+
+if (process.env.TADAZZ_REMOTE_QA !== "1") {
+  throw new Error("Remote staging only")
+}
+
 const origin = process.env.TADAZZ_LAB_URL
 const password = process.env.MANAGER_PASSWORD
 const receipt = process.env.TADAZZ_LAB_SEED_RECEIPT
+
 if (
   !origin ||
   !password ||
   !receipt ||
   !/^http:\/\/127\.0\.0\.1:(3288|3289|3290)$/u.test(origin)
-)
+) {
   throw new Error("Explicit isolated loopback lab required")
-if (existsSync(receipt))
+}
+
+if (existsSync(receipt)) {
   throw new Error(
     "Seed receipt already exists; refusing to duplicate or overwrite games",
   )
+}
+
 const response = await fetch(`${origin}/api/auth/manager`, {
   method: "POST",
   headers: { "Content-Type": "application/json" },
   body: JSON.stringify({ password }),
 })
-if (!response.ok) throw new Error(`Login failed ${response.status}`)
+
+if (!response.ok) {
+  throw new Error(`Login failed ${response.status}`)
+}
+
 const { token } = (await response.json()) as { token: string }
 const headers = {
   Authorization: `Bearer ${token}`,
@@ -120,8 +133,11 @@ for (const [id, name] of [
       headers,
       body: JSON.stringify({ quizz, extras }),
     })
-    if (!saved.ok)
+
+    if (!saved.ok) {
       throw new Error(`Seed failed ${saved.status}: ${await saved.text()}`)
+    }
+
     const { quizId } = (await saved.json()) as { quizId: string }
     samples.push({
       quizId,
@@ -135,8 +151,11 @@ for (const [id, name] of [
 }
 writeFileSync(
   receipt,
-  JSON.stringify({ createdAt: new Date().toISOString(), samples }, null, 2) +
-    "\n",
+  `${JSON.stringify(
+    { createdAt: new Date().toISOString(), samples },
+    null,
+    2,
+  )}\n`,
   { mode: 0o600 },
 )
 console.log(`Saved ${samples.length} example games, each with three questions`)

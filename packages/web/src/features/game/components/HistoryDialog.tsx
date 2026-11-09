@@ -54,7 +54,9 @@ export const HistoryDialog = ({
           {/* Question Index Tabs */}
           <div className="mb-4 flex gap-2 overflow-x-auto border-b pb-2">
             {Array.from({ length: currentQuestionIdx }).map((_, idx) => (
-              <Button size="sm" classNameContent="contents"
+              <Button
+                size="sm"
+                classNameContent="contents"
                 key={idx}
                 type="button"
                 onClick={() => onSelectHistoryIndex(idx)}

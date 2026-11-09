@@ -1,3 +1,5 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+// oxlint-disable no-await-in-loop -- Scene choreography and ordered stage operations must complete before the next step starts.
 import NativeButton from "@razzia/web/components/Button"
 import { NativeAudioCuePlayer as AudioCuePlayer } from "./NativeAudioCuePlayer"
 import { EVENTS, MEDIA_TYPES, QUIZZ_MODES } from "@razzia/common/constants"
@@ -118,7 +120,10 @@ export interface TadazzShowViewProps {
   extensionState: ExtensionStateEnvelope | null
   onNext?: () => void
   onBack?: () => void
-  countdown: { seconds: number; total: number } | null
+  countdown: {
+    seconds: number
+    total: number
+  } | null
   totalPlayers: number | null
   roomMediaReady: boolean
   audioCueId?: CueId
@@ -131,40 +136,36 @@ export interface TadazzShowViewProps {
   presentationRootRef: (_node: HTMLElement | null) => void
 }
 
-const OPENING_SEEN_KEY = (gameId: string) => `tadazz:opening-seen:${gameId}`
-
+const openingSeenKey = (gameId: string) => `tadazz:opening-seen:${gameId}`
 function openingSeen(gameId: string): boolean {
   try {
-    return window.sessionStorage.getItem(OPENING_SEEN_KEY(gameId)) === "1"
+    return window.sessionStorage.getItem(openingSeenKey(gameId)) === "1"
   } catch {
     return false
   }
 }
-
 function markOpeningSeen(gameId: string) {
   try {
-    window.sessionStorage.setItem(OPENING_SEEN_KEY(gameId), "1")
+    window.sessionStorage.setItem(openingSeenKey(gameId), "1")
   } catch {
     /* Private mode */
   }
 }
-
 const prefersReducedMotion = () =>
   typeof window !== "undefined" &&
   typeof window.matchMedia === "function" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches
-
 const CINEMATIC_SCENE_KINDS = new Set([
   "opening",
   "closing",
   "media",
   "animation",
 ])
-
 function isCinematicScene(scene: SceneDescriptor): boolean {
   if (!CINEMATIC_SCENE_KINDS.has(scene.kind)) {
     return false
   }
+
   return Boolean(
     scene.mediaUrl?.trim() ||
     scene.lottieUrl ||
@@ -207,13 +208,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   } = usePlayerStore()
   const playerStatus = usePlayerStore((s) => s.status)
   const { questionStates } = useQuestionStore()
+  const currentQuestionNumber = questionStates?.current
   const { isFullscreen, toggle: toggleFullscreen } = useFullscreen()
   const [playersModalOpen, setPlayersModalOpen] = useState(false)
   const tieRequestPendingRef = useRef(false)
   const reduced = useMemo(prefersReducedMotion, [])
   const [serverClockOffset, setServerClockOffset] = useState(0)
   useEffect(() => {
-    if (!isConnected) return
+    if (!isConnected) {
+      return
+    }
+
     let alive = true
     let bestRtt = Infinity
     const sample = () => {
@@ -221,6 +226,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       socket.emit("extensions:clock", (serverNow) => {
         const received = Date.now()
         const rtt = received - sent
+
         if (alive && Number.isFinite(serverNow) && rtt < bestRtt) {
           bestRtt = rtt
           setServerClockOffset(serverNow - (sent + received) / 2)
@@ -230,13 +236,13 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     sample()
     const second = setTimeout(sample, 250)
     const third = setTimeout(sample, 750)
+
     return () => {
       alive = false
       clearTimeout(second)
       clearTimeout(third)
     }
   }, [isConnected, socket])
-
   const status = useMemo(() => {
     if (manager && managerState.status) {
       return {
@@ -244,18 +250,20 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         data: managerState.status.data,
       }
     }
+
     if (rawStatus) {
       return rawStatus
     }
+
     if (playerStatus) {
       return {
         name: playerStatus.name,
         data: playerStatus.data,
       }
     }
+
     return null
   }, [manager, managerState.status, rawStatus, playerStatus])
-
   const scene = useMemo(() => {
     const next = reconcileThemeScene(
       computeShowScene({
@@ -269,13 +277,19 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     )
 
     if (next.kind === "voting") {
-      if (next.votingStartsAt !== undefined)
+      if (next.votingStartsAt !== undefined) {
         next.votingStartsAt -= serverClockOffset
-      if (next.votingEndsAt !== undefined)
+      }
+
+      if (next.votingEndsAt !== undefined) {
         next.votingEndsAt -= serverClockOffset
+      }
     }
-    if (next.kind === "scene" && next.startedAt !== undefined)
+
+    if (next.kind === "scene" && next.startedAt !== undefined) {
       next.startedAt -= serverClockOffset
+    }
+
     return next
   }, [
     role,
@@ -291,12 +305,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       scene.kind === "voting" ||
       (scene.kind === "scene" &&
         scene.scene.kind === "animation" &&
-        isFullShowScene((scene.scene as { preset?: string }).preset ?? ""))
+        isFullShowScene(
+          (
+            scene.scene as {
+              preset?: string
+            }
+          ).preset ?? "",
+        ))
         ? scene.key
         : JSON.stringify(scene),
     [scene],
   )
-
   const showGameId =
     managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
   const authoredBackdrop = resolveStageBackdrop(extensionState)
@@ -307,7 +326,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const themeBackground = theme.slots[themeSlot]
   const backdrop =
     (!authoredBackdrop || scopedBackground) && themeBackground.mediaUrl
-      ? { url: themeBackground.mediaUrl, fit: themeBackground.fit ?? "cover" }
+      ? {
+          url: themeBackground.mediaUrl,
+          fit: themeBackground.fit ?? "cover",
+        }
       : authoredBackdrop
   // TADAZZ v4 design kit is the default stage; goldy-20261105 / legacy stay available as rollback.
   const useV4 = isTadazzV4Active(extensionState)
@@ -334,7 +356,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       role !== "player" &&
       ["lobby", "connecting", "wait"].includes(scene.kind)
     ) {
-      preloadOpeningAssets({ lottieUrl: openingLottieUrl })
+      preloadOpeningAssets({
+        lottieUrl: openingLottieUrl,
+      })
     }
   }, [role, openingLottieUrl, scene.kind])
   const launch = extensionState?.extras.presentationLaunch as
@@ -345,13 +369,19 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     | undefined
   const isStandby = launch?.stage === "standby"
   const advancePresentation = useCallback(() => {
-    if (role !== "manager" || !extensionState || !isConnected) return
+    if (role !== "manager" || !extensionState || !isConnected) {
+      return
+    }
+
     socket.emit(EXTENSION_EVENTS.COMMAND, {
       v: 1,
       gameId: extensionState.gameId,
       requestId: crypto.randomUUID(),
       action: "NEXT_SCREEN",
-      payload: { epoch: extensionState.epoch, phase: extensionState.phase },
+      payload: {
+        epoch: extensionState.epoch,
+        phase: extensionState.phase,
+      },
     })
   }, [role, extensionState, isConnected, socket])
   const [legacyOpeningActive, setOpeningActive] = useState(
@@ -388,18 +418,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     ) {
       return
     }
+
     const remaining = Math.max(0, openingMusicDeadline - Date.now())
     const timer = setTimeout(() => setOpeningMusicActive(false), remaining)
 
     return () => clearTimeout(timer)
   }, [hasOpeningSoundtrack, openingMusicActive, openingMusicDeadline])
-
   const enableOpeningSound = useCallback(() => {
     setOpeningMusicActive(true)
     setOpeningMusicDeadline(hasOpeningSoundtrack ? null : Date.now() + 12000)
     window.dispatchEvent(new Event("tadazz:audio-unlock"))
   }, [hasOpeningSoundtrack])
-
   const openingEligible =
     role !== "player" &&
     (launch?.stage === "opening" ||
@@ -417,13 +446,25 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         !isConnected ||
         !extensionState ||
         tieRequestPendingRef.current
-      )
+      ) {
         return
+      }
+
       const fullShow = extensionState.extras.activeSceneData as
-        | { fullShow?: { tieCandidates?: Array<{ answerIndex: number }> } }
+        | {
+            fullShow?: {
+              tieCandidates?: Array<{
+                answerIndex: number
+              }>
+            }
+          }
         | undefined
       const candidate = fullShow?.fullShow?.tieCandidates?.[contestantIndex]
-      if (!candidate) return
+
+      if (!candidate) {
+        return
+      }
+
       tieRequestPendingRef.current = true
       socket.emit(EXTENSION_EVENTS.COMMAND, {
         v: 1,
@@ -446,7 +487,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       return undefined
     }
 
-    const preset = (scene.scene as { preset?: string }).preset
+    const { preset } = scene.scene as {
+      preset?: string
+    }
 
     if (preset !== "story-assembly") {
       return undefined
@@ -471,10 +514,18 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     scene.kind === "voting" ? scene.votingStartsAt : undefined
   const votingEndsAt = scene.kind === "voting" ? scene.votingEndsAt : undefined
   const runtimeClockKey = `${scene.key}:${extensionState?.epoch ?? 0}`
-  const [runtimeTick, setRuntimeTick] = useState<{ key: string; deadline: number; sequence: number } | null>(null)
+  const [runtimeTick, setRuntimeTick] = useState<{
+    key: string
+    deadline: number
+    sequence: number
+  } | null>(null)
   let runtimeDeadline: number | null = votingEndsAt ?? null
 
-  if (runtimeDeadline === null && runtimeTick?.key === runtimeClockKey && runtimeTick.sequence === (extensionState?.seq ?? 0)) {
+  if (
+    runtimeDeadline === null &&
+    runtimeTick?.key === runtimeClockKey &&
+    runtimeTick.sequence === (extensionState?.seq ?? 0)
+  ) {
     runtimeDeadline = runtimeTick.deadline
   }
 
@@ -492,15 +543,23 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   } else if (runtimeDeadline !== null) {
     runtimeRemainingMs = Math.max(0, runtimeDeadline - Date.now())
   } else if (scene.kind === "voting") {
-    runtimeRemainingMs = Math.max(0, (scene.remainingSeconds ?? scene.seconds ?? 0) * 1000)
+    runtimeRemainingMs = Math.max(
+      0,
+      (scene.remainingSeconds ?? scene.seconds ?? 0) * 1000,
+    )
   }
 
   const [votingOpen, setVotingOpen] = useState(false)
   useEffect(() => {
     const delay = Math.max(0, (votingStartsAt ?? 0) - Date.now())
     setVotingOpen(scene.kind === "voting" && delay === 0)
-    if (scene.kind !== "voting" || delay === 0 || isPaused) return
+
+    if (scene.kind !== "voting" || delay === 0 || isPaused) {
+      return
+    }
+
     const timer = setTimeout(() => setVotingOpen(true), delay)
+
     return () => clearTimeout(timer)
   }, [scene.kind, votingStartsAt, isPaused])
   useEffect(() => {
@@ -509,7 +568,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
     if (isPaused) {
       stage?.pauseAnimations?.()
-      media.forEach((element) => (element as HTMLMediaElement).pause())
+      media.forEach((element) => {
+        ;(element as HTMLMediaElement).pause()
+      })
 
       return
     }
@@ -523,7 +584,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       }
     })
   }, [isPaused])
-
   const finishOpening = useCallback(() => {
     markOpeningSeen(showGameId)
     setOpeningActive(false)
@@ -542,7 +602,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       markOpeningSeen(showGameId)
       setOpeningActive(false)
     }
-    if (openingMusicActive) setOpeningMusicActive(false)
+
+    if (openingMusicActive) {
+      setOpeningMusicActive(false)
+    }
   }, [openingActive, openingMusicActive, scene.kind, showGameId])
 
   // ── Director: authoritative scene → reference animation methods ────────
@@ -553,7 +616,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const tokenRef = useRef(0)
   const roleRef = useRef(role)
   roleRef.current = role
-
   const pump = useCallback(async () => {
     if (busyRef.current) {
       stageRef.current?.setReducedMotion(true)
@@ -573,6 +635,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         if (!handle) {
           break
         }
+
         handle.setReducedMotion(reduced)
         let steps: StageStep[] = planTransition(prevSceneRef.current, next, {
           questionKey: handle.questionKey,
@@ -580,17 +643,37 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         })
 
         if (next.kind === "results" && next.question.options.length === 0) {
-          steps = [{ op: "custom" }]
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
         }
+
         if (next.kind === "finale" && roleRef.current === "player") {
-          steps = [{ op: "custom" }]
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
         }
+
         if (next.kind === "results" && next.questionType === "estimation") {
-          steps = [{ op: "custom" }]
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
         }
+
         if (next.kind === "scene" && isCinematicScene(next.scene)) {
-          steps = [{ op: "custom" }]
+          steps = [
+            {
+              op: "custom",
+            },
+          ]
         }
+
         const resume = resumeRef.current
         resumeRef.current = false
 
@@ -600,7 +683,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         }
 
         prevSceneRef.current = next
-        const token = ++tokenRef.current
+        const token = tokenRef.current + 1
+        tokenRef.current = token
 
         try {
           await runSteps(
@@ -618,29 +702,31 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       busyRef.current = false
     }
   }, [reduced])
-
   useEffect(() => {
     // Keep the painted scene and director history until status content and its
     // separately delivered counter/extension envelope describe one question.
-    if (scene.kind === "wait" && scene.key === "wait:question-content") return
+    if (scene.kind === "wait" && scene.key === "wait:question-content") {
+      return
+    }
+
     pendingRef.current = scene
     void pump()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sceneIdentity, pump])
-
   useLayoutEffect(() => {
     if (scene.kind !== "scene" || scene.scene.kind !== "animation") {
       return
     }
+
     const step = planTransition(null, scene, {
       questionKey: stageRef.current?.questionKey ?? null,
       mode: stageRef.current?.mode ?? "idle",
-    }).find((step) => step.op === "showFullShowScene")
+    }).find((stepValue) => stepValue.op === "showFullShowScene")
 
     if (step?.op === "showFullShowScene") {
       stageRef.current?.updateFullShowData?.(step.data)
     }
-  }, [extensionState?.seq])
+  }, [extensionState?.seq, scene])
 
   // Server cooldown ticks patch the active voting clock. They never start the
   // voting scene themselves, and delayed ticks can only shorten the deadline.
@@ -650,6 +736,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     if (scene.kind !== "voting" || typeof sec !== "number") {
       return
     }
+
     const deadline = resolveMonotonicCooldownDeadline(
       deadlineRef.current,
       votingEndsAt ?? Date.now() + sec * 1000,
@@ -657,7 +744,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     deadlineRef.current = deadline
 
     if (theme.definition.sandbox && Number.isFinite(sec) && sec >= 0) {
-      setRuntimeTick({ key: runtimeClockKey, deadline, sequence: extensionState?.seq ?? 0 })
+      setRuntimeTick({
+        key: runtimeClockKey,
+        deadline,
+        sequence: extensionState?.seq ?? 0,
+      })
     }
 
     const handle = stageRef.current
@@ -674,12 +765,18 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       deadlineRef.current = null
     }
   }, [isPaused])
+  const votingSeconds = scene.kind === "voting" ? scene.seconds : 0
   useEffect(() => {
-    if (scene.kind !== "voting" || votingEndsAt === undefined) return
+    if (votingEndsAt === undefined) {
+      return
+    }
+
     deadlineRef.current = votingEndsAt
-    if (stageRef.current?.mode === "voting")
-      void stageRef.current.openVoting(scene.seconds, votingEndsAt)
-  }, [votingEndsAt])
+
+    if (stageRef.current?.mode === "voting") {
+      void stageRef.current.openVoting(votingSeconds, votingEndsAt)
+    }
+  }, [votingEndsAt, votingSeconds])
 
   // ── Player answering (same socket contract as the registry components) ──
   const isPlayer = role === "player" && Boolean(player)
@@ -689,6 +786,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const selectionSoundSequence = useRef(0)
   const questionKey = "question" in scene ? scene.question.key : null
   const revealAttemptRef = useRef(0)
+
   if (scene.kind === "voting") {
     revealAttemptRef.current = extensionState?.epoch ?? 0
   }
@@ -713,7 +811,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     if (next.cue) {
       window.dispatchEvent(
         new CustomEvent("tadazz:sfx", {
-          detail: { name: next.event, identity: next.cue, volume: 0.8 },
+          detail: {
+            name: next.event,
+            identity: next.cue,
+            volume: 0.8,
+          },
         }),
       )
     }
@@ -749,6 +851,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     if (scene.kind === "wait") {
       return
     }
+
     setSelected([])
     setSubmitted(false)
     setAnswerPending(false)
@@ -767,12 +870,15 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       ) {
         return
       }
+
       setAnswerPending(true)
       socket.emit(
         EVENTS.PLAYER.SELECTED_ANSWER,
         {
           gameId: playerGameId,
-          data: { answerKeys },
+          data: {
+            answerKeys,
+          },
         },
         (result) => {
           setAnswerPending(false)
@@ -846,6 +952,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       if (scene.kind !== "voting") {
         return
       }
+
       if (scene.questionType === "multi") {
         toggle(index)
       } else {
@@ -860,8 +967,14 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     if (scene.kind !== "player-result") {
       return
     }
+
     updatePlayer(({ player: p }) => ({
-      player: p ? { ...p, points: scene.myPoints } : p,
+      player: p
+        ? {
+            ...p,
+            points: scene.myPoints,
+          }
+        : p,
     }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [scene.key])
@@ -874,7 +987,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         return <TadazzConnectingScreen />
 
       case "lobby":
-        if (isStandby) return <TadazzStandbyScreen />
+        if (isStandby) {
+          return <TadazzStandbyScreen />
+        }
+
         return (
           <TadazzLobbyScreen
             inviteCode={
@@ -882,29 +998,23 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             }
             isManager={manager && !isHostPresenting}
             fullShowData={
-              (extensionState?.extras.lobbyFullShow ??
-                (managerState.hostPresence?.players.length
-                  ? {
-                      representatives: managerState.hostPresence.players.map(
-                        (p, i) => ({
-                          table: p.tableNumber ?? i + 1,
-                          name: p.displayName,
-                        }),
-                      ),
-                      connectedTables:
-                        managerState.hostPresence.players.flatMap((p, i) =>
-                          p.status === "connected"
-                            ? [p.tableNumber ?? i + 1]
-                            : [],
-                        ),
-                    }
-                  : undefined)) as
-                | {
-                    dialNumber?: string
-                    representatives?: Array<{ table: number; name: string }>
-                    connectedTables?: number[]
+              extensionState?.extras.lobbyFullShow ??
+              (managerState.hostPresence?.players.length
+                ? {
+                    representatives: managerState.hostPresence.players.map(
+                      (p, i) => ({
+                        table: p.tableNumber ?? i + 1,
+                        name: p.displayName,
+                      }),
+                    ),
+                    connectedTables: managerState.hostPresence.players.flatMap(
+                      (p, i) =>
+                        p.status === "connected"
+                          ? [p.tableNumber ?? i + 1]
+                          : [],
+                    ),
                   }
-                | undefined
+                : undefined)
             }
             text={scene.text}
           />
@@ -914,6 +1024,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
         if (submitted || Boolean(stageRef.current?.questionKey)) {
           return null
         }
+
         return (
           <TadazzWaitScreen
             text={scene.text}
@@ -983,10 +1094,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
         if (
           s.kind === "animation" &&
-          isCreatingWorldsPreset((s as { preset?: string }).preset ?? "")
+          isCreatingWorldsPreset(
+            (
+              s as {
+                preset?: string
+              }
+            ).preset ?? "",
+          )
         ) {
           return null
         }
+
         if (s.kind === "countdown") {
           return (
             <TadazzCountdownScreen
@@ -996,6 +1114,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             />
           )
         }
+
         if (s.kind === "answerRecap" && scene.activeSceneData?.answerRecap) {
           return (
             <TadazzRecapScreen
@@ -1004,6 +1123,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             />
           )
         }
+
         if (s.kind === "interimResults" || s.kind === "leaderboard") {
           return (
             <TadazzMessageScreen
@@ -1012,6 +1132,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             />
           )
         }
+
         return <TadazzSceneTitleScreen scene={s} />
       }
 
@@ -1026,6 +1147,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       if (!manager || !extensionState?.gameId || scene.kind !== "scene") {
         return
       }
+
       socket.emit(EXTENSION_EVENTS.COMMAND, {
         v: 1,
         gameId: extensionState.gameId,
@@ -1041,7 +1163,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     },
     [manager, extensionState, scene, socket],
   )
-
   const handleStageCue = useCallback(
     (cue: {
       name: string
@@ -1055,7 +1176,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
       // The browser clock can finish during skips/fast-forward too. Only the
       // authoritative result scene owns the audible end-of-question cue.
-      if (cue.name === "countdown-ended") return
+      if (cue.name === "countdown-ended") {
+        return
+      }
       // Finishing an old animation during restart/skip may emit its final cue.
       // Only the authoritative results screen may make that reveal audible.
 
@@ -1064,16 +1187,21 @@ export function TadazzShowView(props: TadazzShowViewProps) {
           name: cue.name,
           paintedScene: cue.scene,
           paintedQuestion: cue.questionNumber,
-          currentQuestion: questionStates?.current,
+          currentQuestion: currentQuestionNumber,
           currentKind: scene.kind,
           currentPhase: extensionState?.phase,
           paintedQuestionKey: cue.questionKey,
-          currentQuestionText:
-            "question" in scene
-              ? scene.question.question
-              : scene.kind === "scene"
-                ? scene.activeSceneData?.interimResults?.questionText
-                : undefined,
+          currentQuestionText: (() => {
+            if ("question" in scene) {
+              return scene.question.question
+            }
+
+            if (scene.kind === "scene") {
+              return scene.activeSceneData?.interimResults?.questionText
+            }
+
+            return undefined
+          })(),
           currentPreset:
             scene.kind === "scene" && "preset" in scene.scene
               ? String(scene.scene.preset)
@@ -1093,12 +1221,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               cue.name === "survey-reveal" || cue.name === "top-pick-reveal"
                 ? `${showGameId}:${cue.questionKey ?? extensionState?.questionId ?? questionKey ?? scene.key}:${revealAttemptRef.current}:${cue.name}`
                 : `${showGameId}:${extensionState?.epoch ?? 0}:${scene.key}:${cue.scene}:${cue.name}`,
-            volume:
-              cue.name === "survey-reveal"
-                ? 0.9
-                : cue.name === "top-pick-reveal"
-                  ? 0.7
-                  : 0.55,
+            volume: (() => {
+              if (cue.name === "survey-reveal") {
+                return 0.9
+              }
+
+              if (cue.name === "top-pick-reveal") {
+                return 0.7
+              }
+
+              return 0.55
+            })(),
           },
         }),
       )
@@ -1108,14 +1241,12 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       extensionState?.phase,
       extensionState?.questionId,
       questionKey,
-      questionStates?.current,
-      sceneIdentity,
+      currentQuestionNumber,
       scene,
       showGameId,
       theme.definition.sandbox,
     ],
   )
-
   const audioPolicy = useMemo(() => {
     const descriptor = scene.kind === "scene" ? scene.scene : null
 
@@ -1132,7 +1263,6 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       openingActive: openingMusicActive,
     })
   }, [extensionState?.phase, openingMusicActive, props.statusName, scene])
-
   let overlay: React.ReactNode = null
 
   if (openingActive && openingEligible) {
@@ -1168,7 +1298,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     overlay = (
       <div
         className="tz-scene-media"
-        style={{ zIndex: 20 }}
+        style={{
+          zIndex: 20,
+        }}
         data-testid="tadazz-cinematic-scene"
       >
         <CinematicLayerStack
@@ -1208,7 +1340,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     overlay = (
       <div
         className="tz-scene-media"
-        style={{ zIndex: 20 }}
+        style={{
+          zIndex: 20,
+        }}
         data-testid="tadazz-interlude-media"
       >
         <CinematicLayerStack
@@ -1233,7 +1367,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   }))
   useEffect(() => {
     const onResize = () =>
-      setViewportSize({ w: window.innerWidth, h: window.innerHeight })
+      setViewportSize({
+        w: window.innerWidth,
+        h: window.innerHeight,
+      })
     window.addEventListener("resize", onResize)
 
     return () => window.removeEventListener("resize", onResize)
@@ -1277,7 +1414,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             autoPlay
             playsInline
             muted={scene.kind === "voting"}
-            style={{ objectFit: "contain" }}
+            style={{
+              objectFit: "contain",
+            }}
           />
         ) : (
           <img
@@ -1287,7 +1426,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 ? scene.question.question
                 : ""
             }
-            style={{ objectFit: "contain" }}
+            style={{
+              objectFit: "contain",
+            }}
           />
         )}
       </div>
@@ -1299,20 +1440,27 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   const hostNextKey = props.statusName
     ? MANAGER_SKIP_BTN[props.statusName]
     : null
-
   const teamsData = extensionState?.extras.teams as
-    | { teams?: TeamDefinition[]; assignments?: Record<string, string> }
+    | {
+        teams?: TeamDefinition[]
+        assignments?: Record<string, string>
+      }
     | undefined
   const assignedTeam = (() => {
     const id =
       (clientId ? teamsData?.assignments?.[clientId] : undefined) ??
       teamsData?.assignments?.[
-        (player as { id?: string } | null)?.id ?? player?.username ?? ""
+        (
+          player as {
+            id?: string
+          } | null
+        )?.id ??
+          player?.username ??
+          ""
       ]
 
     return teamsData?.teams?.find((team) => team.id === id)
   })()
-
   const isEnhanced = Boolean(extensionState?.gameId)
   const connectedCount =
     managerState.hostPresence?.connectedNow ??
@@ -1322,7 +1470,11 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     totalPlayers ??
     managerState.players.length
   const participation = extensionState?.extras.participation as
-    { connected: number; answered: number } | undefined
+    | {
+        connected: number
+        answered: number
+      }
+    | undefined
   const publicConnected =
     participation?.connected ?? (manager ? connectedCount : 0)
   const publicAnswered = participation?.answered ?? 0
@@ -1382,23 +1534,31 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                 extensionState={extensionState}
                 questionStates={questionStates}
                 onExit={onBack ?? (() => undefined)}
-                onStartGame={
-                  props.statusName === STATUS.SHOW_ROOM
-                    ? launch
-                      ? advancePresentation
-                      : onNext
-                    : undefined
-                }
+                onStartGame={(() => {
+                  if (props.statusName === STATUS.SHOW_ROOM) {
+                    if (launch) {
+                      return advancePresentation
+                    }
+
+                    return onNext
+                  }
+
+                  return undefined
+                })()}
                 onAdvanceFallback={onNext}
                 onPresent={onPresent}
                 countdown={countdown}
               />
             ) : (
               <div className="tz-player-bar" data-testid="tadazz-host-bar">
-                <NativeButton size="sm"
+                <NativeButton
+                  size="sm"
                   type="button"
-                  className="bg-white text-black hover:bg-accent font-display"
-                  style={{ fontSize: 14, padding: "6px 14px" }}
+                  className="hover:bg-accent font-display bg-white text-black"
+                  style={{
+                    fontSize: 14,
+                    padding: "6px 14px",
+                  }}
                   onClick={onBack}
                 >
                   <LogOut className="inline size-4" /> {t("common:exit")}
@@ -1407,10 +1567,14 @@ export function TadazzShowView(props: TadazzShowViewProps) {
                   <span>{`${questionStates.current} / ${questionStates.total ?? "?"}`}</span>
                 )}
                 {onNext && hostNextKey && (
-                  <NativeButton size="sm"
+                  <NativeButton
+                    size="sm"
                     type="button"
                     className="font-display"
-                    style={{ marginTop: 0, padding: "8px 18px" }}
+                    style={{
+                      marginTop: 0,
+                      padding: "8px 18px",
+                    }}
                     onClick={onNext}
                     data-testid="tadazz-host-next"
                   >
@@ -1431,74 +1595,99 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               overflow: "hidden",
             }}
           >
-            <PackageStage scene={scene} roomId={extensionState?.gameId ?? ""}
-              backgroundUrl={backdrop?.url} trustedOverlay={overlay}
-              questionId={extensionState?.questionId ?? ""} epoch={extensionState?.epoch ?? 0}
-              sequence={extensionState?.seq ?? 0} role={role} paused={isPaused}
-              canAnswer={isPlayer && scene.kind === "voting" && votingOpen && !submitted && !answerPending && !isPaused}
-              voteLocked={isPlayer && (submitted || (scene.kind === "wait" && scene.key !== "wait:question-content" && scene.text === "game:waitingForAnswers"))}
+            <PackageStage
+              scene={scene}
+              roomId={extensionState?.gameId ?? ""}
+              backgroundUrl={backdrop?.url}
+              trustedOverlay={overlay}
+              questionId={extensionState?.questionId ?? ""}
+              epoch={extensionState?.epoch ?? 0}
+              sequence={extensionState?.seq ?? 0}
+              role={role}
+              paused={isPaused}
+              canAnswer={
+                isPlayer &&
+                scene.kind === "voting" &&
+                votingOpen &&
+                !submitted &&
+                !answerPending &&
+                !isPaused
+              }
+              voteLocked={
+                isPlayer &&
+                (submitted ||
+                  (scene.kind === "wait" &&
+                    scene.key !== "wait:question-content" &&
+                    scene.text === "game:waitingForAnswers"))
+              }
               remainingMs={runtimeRemainingMs}
               serverTime={Date.now() + serverClockOffset}
-              deadline={isPaused || runtimeDeadline === null ? null : runtimeDeadline + serverClockOffset} onSubmit={submit}
+              deadline={
+                isPaused || runtimeDeadline === null
+                  ? null
+                  : runtimeDeadline + serverClockOffset
+              }
+              onSubmit={submit}
               onFallback={() => {
                 prevSceneRef.current = null
                 resumeRef.current = true
                 pendingRef.current = scene
                 void pump()
-              }}>
-            {useV4 ? (
-              <TadazzV4StageAdapter
-                ref={stageRef}
-                labels={labels}
-                v4Labels={v4Labels}
-                onCue={handleStageCue}
-                onResolveStoryTie={
-                  role === "manager" ? resolveStoryTie : undefined
-                }
-                backdropUrl={backdrop?.url}
-                backdropFit={backdrop?.fit}
-                interactive={
-                  isPlayer &&
-                  scene.kind === "voting" &&
-                  !submitted &&
-                  !answerPending &&
-                  !isPaused &&
-                  !showPad
-                }
-                multiSelect={
-                  scene.kind === "voting" && scene.questionType === "multi"
-                }
-                onSelectOption={onSelectOption}
-                customScreen={customScreen}
-                underlay={underlay}
-                overlay={overlay}
-                reducedMotion={reduced}
-                fitRevision={isHostPresenting ? 1 : 0}
-              />
-            ) : (
-              <TadazzStage
-                ref={stageRef}
-                labels={labels}
-                backdropUrl={backdrop?.url}
-                backdropFit={backdrop?.fit}
-                interactive={
-                  isPlayer &&
-                  scene.kind === "voting" &&
-                  !submitted &&
-                  !answerPending &&
-                  !isPaused &&
-                  !showPad
-                }
-                multiSelect={
-                  scene.kind === "voting" && scene.questionType === "multi"
-                }
-                onSelectOption={onSelectOption}
-                customScreen={customScreen}
-                underlay={underlay}
-                overlay={overlay}
-                reducedMotion={reduced}
-              />
-            )}
+              }}
+            >
+              {useV4 ? (
+                <TadazzV4StageAdapter
+                  ref={stageRef}
+                  labels={labels}
+                  v4Labels={v4Labels}
+                  onCue={handleStageCue}
+                  onResolveStoryTie={
+                    role === "manager" ? resolveStoryTie : undefined
+                  }
+                  backdropUrl={backdrop?.url}
+                  backdropFit={backdrop?.fit}
+                  interactive={
+                    isPlayer &&
+                    scene.kind === "voting" &&
+                    !submitted &&
+                    !answerPending &&
+                    !isPaused &&
+                    !showPad
+                  }
+                  multiSelect={
+                    scene.kind === "voting" && scene.questionType === "multi"
+                  }
+                  onSelectOption={onSelectOption}
+                  customScreen={customScreen}
+                  underlay={underlay}
+                  overlay={overlay}
+                  reducedMotion={reduced}
+                  fitRevision={isHostPresenting ? 1 : 0}
+                />
+              ) : (
+                <TadazzStage
+                  ref={stageRef}
+                  labels={labels}
+                  backdropUrl={backdrop?.url}
+                  backdropFit={backdrop?.fit}
+                  interactive={
+                    isPlayer &&
+                    scene.kind === "voting" &&
+                    !submitted &&
+                    !answerPending &&
+                    !isPaused &&
+                    !showPad
+                  }
+                  multiSelect={
+                    scene.kind === "voting" && scene.questionType === "multi"
+                  }
+                  onSelectOption={onSelectOption}
+                  customScreen={customScreen}
+                  underlay={underlay}
+                  overlay={overlay}
+                  reducedMotion={reduced}
+                />
+              )}
             </PackageStage>
             {role !== "player" && !isStandby && (
               <LiveParticipation
@@ -1565,7 +1754,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             scene.questionType === "multi" &&
             !submitted && (
               <div className="tz-pad">
-                <NativeButton size="sm"
+                <NativeButton
+                  size="sm"
                   type="button"
                   className="font-display"
                   disabled={
@@ -1610,8 +1800,9 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               paused={isPaused || isStandby}
               autoPlay={!manager || roomMediaReady}
               onEnded={() => {
-                if (audioPolicy.slot === "openingIntro")
+                if (audioPolicy.slot === "openingIntro") {
                   setOpeningMusicActive(false)
+                }
               }}
               showControls={manager && !isHostPresenting}
               controlLabels={{
@@ -1645,119 +1836,142 @@ export function TadazzShowView(props: TadazzShowViewProps) {
             />
           )}
 
-          {manager ? (
-            isHostPresenting ? (
-              <div className="absolute top-3 right-3 z-40">
-                <HostShortcutsDialog compact />
-              </div>
-            ) : (
-              <div
-                className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
-                style={{ background: "#08011a" }}
-                data-testid="tadazz-host-controls"
-              >
-                {managerState.inviteCode &&
-                  props.statusName !== STATUS.SHOW_ROOM && (
-                    <div
-                      className="tz-x-pill flex shrink-0 items-center gap-2"
-                      style={{ fontSize: 16, padding: "6px 14px" }}
-                    >
-                      {!managerState.locked && (
-                        <>
-                          <span className="max-w-[160px] truncate sm:max-w-none">
-                            {window.location.host}
-                          </span>
-                          <span className="h-4 w-px bg-white/40" />
-                          <span>{managerState.inviteCode}</span>
-                        </>
-                      )}
-                      <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
-                    </div>
-                  )}
-                {props.statusName === STATUS.SHOW_ROOM && (
-                  <RoomLockButton className="bg-white text-black hover:bg-accent font-display" />
-                )}
-                <Tooltip
-                  content={t(
-                    "extensions:roster.liveModalTitle",
-                    "Players & Live Connection Status",
-                  )}
+          {(() => {
+            if (manager) {
+              if (isHostPresenting) {
+                return (
+                  <div className="absolute top-3 right-3 z-40">
+                    <HostShortcutsDialog compact />
+                  </div>
+                )
+              }
+
+              return (
+                <div
+                  className="z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3"
+                  style={{
+                    background: "#08011a",
+                  }}
+                  data-testid="tadazz-host-controls"
                 >
-                  <NativeButton size="sm"
-                    type="button"
-                    onClick={() => setPlayersModalOpen(true)}
-                    data-testid="host-bottom-players-btn"
-                    className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
-                    style={{
-                      fontSize: 16,
-                      padding: "6px 14px",
-                      opacity: isConnected ? 1 : 0.6,
-                    }}
+                  {managerState.inviteCode &&
+                    props.statusName !== STATUS.SHOW_ROOM && (
+                      <div
+                        className="tz-x-pill flex shrink-0 items-center gap-2"
+                        style={{
+                          fontSize: 16,
+                          padding: "6px 14px",
+                        }}
+                      >
+                        {!managerState.locked && (
+                          <>
+                            <span className="max-w-[160px] truncate sm:max-w-none">
+                              {window.location.host}
+                            </span>
+                            <span className="h-4 w-px bg-white/40" />
+                            <span>{managerState.inviteCode}</span>
+                          </>
+                        )}
+                        <RoomLockButton className="-mx-1 rounded-md p-1 hover:bg-white/20" />
+                      </div>
+                    )}
+                  {props.statusName === STATUS.SHOW_ROOM && (
+                    <RoomLockButton className="hover:bg-accent font-display bg-white text-black" />
+                  )}
+                  <Tooltip
+                    content={t(
+                      "extensions:roster.liveModalTitle",
+                      "Players & Live Connection Status",
+                    )}
                   >
-                    <Users className="size-5" />
-                    <span data-testid="host-connected-counter">
-                      {registeredCount > 0 &&
-                      (registeredCount !== connectedCount ||
-                        managerState.hostPresence)
-                        ? `${connectedCount} / ${registeredCount}`
-                        : String(totalPlayers ?? managerState.players.length)}
-                    </span>
-                    <PhoneCall className="size-3" />
-                  </NativeButton>
-                </Tooltip>
-                <GameSettingsModal
-                  onOpenRoster={() => setPlayersModalOpen(true)}
-                />
-                <HostPlayersModal
-                  open={playersModalOpen}
-                  onOpenChange={setPlayersModalOpen}
-                />
-                <Tooltip
-                  content={t(
-                    isFullscreen
-                      ? "common:exitFullscreen"
-                      : "common:fullscreen",
-                  )}
-                >
-                  <NativeButton size="sm"
-                    type="button"
-                    onClick={toggleFullscreen}
-                    aria-label={t(
+                    <NativeButton
+                      size="sm"
+                      type="button"
+                      onClick={() => setPlayersModalOpen(true)}
+                      data-testid="host-bottom-players-btn"
+                      className="tz-x-pill ml-auto flex shrink-0 items-center gap-1.5"
+                      style={{
+                        fontSize: 16,
+                        padding: "6px 14px",
+                        opacity: isConnected ? 1 : 0.6,
+                      }}
+                    >
+                      <Users className="size-5" />
+                      <span data-testid="host-connected-counter">
+                        {registeredCount > 0 &&
+                        (registeredCount !== connectedCount ||
+                          managerState.hostPresence)
+                          ? `${connectedCount} / ${registeredCount}`
+                          : String(totalPlayers ?? managerState.players.length)}
+                      </span>
+                      <PhoneCall className="size-3" />
+                    </NativeButton>
+                  </Tooltip>
+                  <GameSettingsModal
+                    onOpenRoster={() => setPlayersModalOpen(true)}
+                  />
+                  <HostPlayersModal
+                    open={playersModalOpen}
+                    onOpenChange={setPlayersModalOpen}
+                  />
+                  <Tooltip
+                    content={t(
                       isFullscreen
                         ? "common:exitFullscreen"
                         : "common:fullscreen",
                     )}
-                    className="bg-white text-black hover:bg-accent font-display flex items-center justify-center"
-                    style={{ padding: "6px 12px" }}
                   >
-                    {isFullscreen ? (
-                      <Minimize className="size-5" />
-                    ) : (
-                      <Maximize className="size-5" />
-                    )}
-                  </NativeButton>
-                </Tooltip>
-              </div>
-            )
-          ) : role === "spectator" ? null : (
-            <div className="tz-player-bar" data-testid="tadazz-player-bar">
-              <div className="flex items-center gap-2">
-                <span>{player?.username}</span>
-                {assignedTeam && (
-                  <span
-                    className="tz-player-team"
-                    style={{ backgroundColor: assignedTeam.color }}
-                  >
-                    {assignedTeam.name}
-                  </span>
+                    <NativeButton
+                      size="sm"
+                      type="button"
+                      onClick={toggleFullscreen}
+                      aria-label={t(
+                        isFullscreen
+                          ? "common:exitFullscreen"
+                          : "common:fullscreen",
+                      )}
+                      className="hover:bg-accent font-display flex items-center justify-center bg-white text-black"
+                      style={{
+                        padding: "6px 12px",
+                      }}
+                    >
+                      {isFullscreen ? (
+                        <Minimize className="size-5" />
+                      ) : (
+                        <Maximize className="size-5" />
+                      )}
+                    </NativeButton>
+                  </Tooltip>
+                </div>
+              )
+            }
+
+            if (role === "spectator") {
+              return null
+            }
+
+            return (
+              <div className="tz-player-bar" data-testid="tadazz-player-bar">
+                <div className="flex items-center gap-2">
+                  <span>{player?.username}</span>
+                  {assignedTeam && (
+                    <span
+                      className="tz-player-team"
+                      style={{
+                        backgroundColor: assignedTeam.color,
+                      }}
+                    >
+                      {assignedTeam.name}
+                    </span>
+                  )}
+                </div>
+                {(gameMode !== QUIZZ_MODES.SURVEY ||
+                  (player?.points !== undefined && player.points > 0)) && (
+                  <span className="tz-player-score">{player?.points ?? 0}</span>
                 )}
               </div>
-              {(gameMode !== QUIZZ_MODES.SURVEY ||
-                (player?.points !== undefined && player.points > 0)) && (
-                <span className="tz-player-score">{player?.points ?? 0}</span>
-              )}
-            </div>
-          )}
+            )
+          })()}
         </section>
       </ViewRoleContext.Provider>
     </ExtensionStateProvider>

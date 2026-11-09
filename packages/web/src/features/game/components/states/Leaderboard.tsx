@@ -67,7 +67,7 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
   }, [oldLeaderboard, leaderboard])
 
   const individualLeaderboardView = (
-    <div className="flex min-h-0 w-full flex-col gap-1.5 sm:gap-2 overflow-hidden">
+    <div className="flex min-h-0 w-full flex-col gap-1.5 overflow-hidden sm:gap-2">
       <AnimatePresence mode="popLayout">
         {displayedLeaderboard
           .slice(0, 6)
@@ -92,9 +92,9 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
                   damping: 25,
                 },
               }}
-              className="bg-primary flex w-full justify-between rounded-xl p-2 sm:p-3 text-xl sm:text-2xl md:text-3xl font-bold text-white"
+              className="bg-primary flex w-full justify-between rounded-xl p-2 text-xl font-bold text-white sm:p-3 sm:text-2xl md:text-3xl"
             >
-              <span className="flex items-center gap-2 drop-shadow-md truncate">
+              <span className="flex items-center gap-2 truncate drop-shadow-md">
                 {username}
                 <StreakBadge streak={streak} />
               </span>
@@ -113,8 +113,8 @@ const Leaderboard = ({ data: { oldLeaderboard, leaderboard } }: Props) => {
   )
 
   return (
-    <section className="relative mx-auto flex min-h-0 h-full w-full max-w-4xl flex-1 flex-col items-center justify-center overflow-hidden px-2 py-2">
-      <h2 className="mb-3 sm:mb-6 text-3xl sm:text-4xl md:text-5xl font-bold text-white drop-shadow-md">
+    <section className="relative mx-auto flex h-full min-h-0 w-full max-w-4xl flex-1 flex-col items-center justify-center overflow-hidden px-2 py-2">
+      <h2 className="mb-3 text-3xl font-bold text-white drop-shadow-md sm:mb-6 sm:text-4xl md:text-5xl">
         {t("game:leaderboard")}
       </h2>
       <TeamLeaderboardAdapter players={leaderboard}>

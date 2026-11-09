@@ -149,7 +149,10 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     const saveBtn = page.getByRole("button", { name: t("common:save") })
     await saveBtn.click()
     const saveRes = await savePromise
-    const saveJson = (await saveRes.json()) as { quizId: string; revision: number }
+    const saveJson = (await saveRes.json()) as {
+      quizId: string
+      revision: number
+    }
     const actualQuizId = saveJson.quizId
     await expect(page).toHaveURL(/\/manager\/config$/u)
 
@@ -195,9 +198,9 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     expect(sidecarData.leaderboard?.everyN).toBe(2)
     expect(sidecarData.questionIds).toHaveLength(1)
     const [initialQ0Id] = sidecarData.questionIds
-    expect(
-      sidecarData.perQuestion[initialQ0Id]?.answerVisuals?.[0]?.alt,
-    ).toBe("Hydrogen gas cloud")
+    expect(sidecarData.perQuestion[initialQ0Id]?.answerVisuals?.[0]?.alt).toBe(
+      "Hydrogen gas cloud",
+    )
     expect(sidecarData.perQuestion[initialQ0Id]?.interlude?.kind).toBe("title")
 
     // 10. Reopen the quiz and test QuizzEditorProvider Lifecycle
@@ -205,9 +208,9 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
     await quizzRow(page, subject)
       .getByRole("button", { name: t("manager:quizz.edit") })
       .click()
-    await expect(
-      page,
-    ).toHaveURL(new RegExp(`/manager/quizz/${actualQuizId}$`, "u"))
+    await expect(page).toHaveURL(
+      new RegExp(`/manager/quizz/${actualQuizId}$`, "u"),
+    )
     await toggleBtn.click({ force: true })
     await expect(enhancementPanel).toBeVisible()
 
@@ -279,13 +282,13 @@ test.describe("GATE 3: Browser Acceptance & Real-World UI Verification", () => {
 
     const [finalQ0, finalQ1] = sidecarData2.questionIds
     expect(finalQ0).toBe(initialQ0Id)
-    expect(
-      sidecarData2.perQuestion[finalQ0]?.answerVisuals?.[0]?.alt,
-    ).toBe("Hydrogen gas cloud")
+    expect(sidecarData2.perQuestion[finalQ0]?.answerVisuals?.[0]?.alt).toBe(
+      "Hydrogen gas cloud",
+    )
     expect(finalQ1).not.toBe(finalQ0)
-    expect(
-      sidecarData2.perQuestion[finalQ1]?.answerVisuals?.[0]?.alt,
-    ).toBe("Hydrogen gas cloud")
+    expect(sidecarData2.perQuestion[finalQ1]?.answerVisuals?.[0]?.alt).toBe(
+      "Hydrogen gas cloud",
+    )
     expect(Object.keys(sidecarData2.perQuestion)).toHaveLength(2)
   })
 

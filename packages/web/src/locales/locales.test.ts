@@ -35,6 +35,7 @@ const readKeys = (lang: string) => {
     resources[lang][namespace] = messages
   }
   registerHostLocaleAdditions(resources)
+
   return Object.entries(resources[lang]).flatMap(([namespace, messages]) =>
     flatten(messages as Messages).map((key) => `${namespace}:${key}`),
   )

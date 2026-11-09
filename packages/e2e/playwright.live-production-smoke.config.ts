@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test"
+
 export default defineConfig({
   testDir: "tests",
   testMatch: "live-production-smoke.spec.ts",

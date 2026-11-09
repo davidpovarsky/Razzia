@@ -18,15 +18,21 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
     }
     qa.qaAudio = []
     qa.qaAllowAudio = false
+    // oxlint-disable-next-line typescript/unbound-method -- Rebound to the actual media element with apply below.
     const originalPlay = HTMLMediaElement.prototype.play
-    HTMLMediaElement.prototype.play = function () {
+    HTMLMediaElement.prototype.play = function play() {
       if (this instanceof HTMLAudioElement) {
-        if (!qa.qaAudio.includes(this)) qa.qaAudio.push(this)
-        if (!qa.qaAllowAudio)
+        if (!qa.qaAudio.includes(this)) {
+          qa.qaAudio.push(this)
+        }
+
+        if (!qa.qaAllowAudio) {
           return Promise.reject(
             new DOMException("QA autoplay restriction", "NotAllowedError"),
           )
+        }
       }
+
       return originalPlay.call(this)
     }
     window.addEventListener(
@@ -104,6 +110,7 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
       const intro = qa.qaAudio.find((a) =>
         a.src.endsWith("/media/tadazz-production-intro-20261106.wav"),
       )
+
       return { time: intro?.currentTime ?? 0, paused: intro?.paused ?? true }
     })
   await expect.poll(async () => (await introTime()).time).toBeGreaterThan(0.2)
@@ -118,10 +125,7 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
   expect(duringLobby.paused).toBe(false)
   // Lobby has no game timer; exercise the presenter's media pause here.
   await page.getByTestId("host-toggle-audio-pause").click()
-  await expect(audio).toHaveAttribute(
-    "data-audio-paused",
-    "true",
-  )
+  await expect(audio).toHaveAttribute("data-audio-paused", "true")
   const pausedAt = (await introTime()).time
   await page.waitForTimeout(1300)
   expect(Math.abs((await introTime()).time - pausedAt)).toBeLessThan(0.12)
@@ -136,14 +140,18 @@ test("real presenter media: rejected autoplay unlocks, intro survives video end,
     page.evaluate(() => {
       const qa = window as unknown as { qaAudio: HTMLAudioElement[] }
       const background = qa.qaAudio.filter((a) =>
-        /\/tadazz-(production-intro|exploration)-20261106\.(wav|mp3)$/u.test(a.src),
+        /\/tadazz-(production-intro|exploration)-20261106\.(wav|mp3)$/u.test(
+          a.src,
+        ),
       )
+
       return {
         total: qa.qaAudio.length,
         playing: background.filter((a) => !a.paused && a.volume > 0).length,
         introTime:
-          background.find((a) => a.src.endsWith("tadazz-production-intro-20261106.wav"))
-            ?.currentTime ?? 0,
+          background.find((a) =>
+            a.src.endsWith("tadazz-production-intro-20261106.wav"),
+          )?.currentTime ?? 0,
       }
     })
   await expect.poll(async () => (await mediaState()).playing).toBe(1)

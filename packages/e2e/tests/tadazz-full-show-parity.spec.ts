@@ -1,3 +1,16 @@
+type ReferenceWindow = Window & {
+  tadazzShow: Record<
+    | "openVoting"
+    | "lockVoting"
+    | "revealResults"
+    | "showLeaderboard"
+    | "showFinale",
+    (...args: unknown[]) => unknown
+  >
+  TadazzMotion: {
+    sampleTeams: unknown
+  }
+}
 import fs from "node:fs"
 import { join } from "node:path"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
@@ -8,11 +21,10 @@ import {
   next,
   startGame,
 } from "@razzia/e2e/utils/manager"
-import { endTimer } from "@razzia/e2e/utils/extension-manager"
-import { answer, confirm, joinGame } from "@razzia/e2e/utils/player"
+import "@razzia/e2e/utils/extension-manager"
+import { joinGame } from "@razzia/e2e/utils/player"
 import { seedQuizz } from "@razzia/e2e/utils/editor"
 import type { Page } from "@playwright/test"
-
 const SCREENSHOT_DIR = join(
   import.meta.dirname,
   "../../../docs/extensions/qa-evidence/tadazz-show-20261105",
@@ -23,28 +35,32 @@ const CANONICAL_HTML_PATH = join(
 )
 const SOCKET_API_URL = "http://127.0.0.1:3011/api/games/pilot-phone"
 const TZILA_TITLE = "Build Our Story — Tzila · Two-Round Audience Vote"
-
 const saveShot = async (page: Page, name: string, allowWebkit = false) => {
   const isWebkit = page.context().browser()?.browserType().name() === "webkit"
-  if (isWebkit && !allowWebkit) return
-  fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
+
+  if (isWebkit && !allowWebkit) {
+    return
+  }
+
+  fs.mkdirSync(SCREENSHOT_DIR, {
+    recursive: true,
+  })
   await page.screenshot({
     path: join(SCREENSHOT_DIR, name),
     fullPage: false,
   })
 }
-
 const clickCard = async (page: Page, testId: string) => {
   const card = page.getByTestId(testId)
   await expect(card).toBeVisible()
   await expect(card).toHaveClass(/is-selectable/u)
   await card.evaluate((el: HTMLElement) => el.click())
 }
-
 const endVotingNow = async (managerPage: Page) => {
   const btn = managerPage.getByRole("button", {
     name: t("extensions:host.endTimer"),
   })
+
   if (await btn.isVisible().catch(() => false)) {
     await btn.evaluate((el: HTMLElement) => el.click())
   }
@@ -72,11 +88,14 @@ const installZeroLegacyFlickerProbe = async (page: Page) => {
       firstDocBg: "",
     }
     w.__tadazzFlickerProbe = state
-
     const check = () => {
       state.samples += 1
       const bg = getComputedStyle(document.documentElement).backgroundColor
-      if (!state.firstDocBg) state.firstDocBg = bg
+
+      if (!state.firstDocBg) {
+        state.firstDocBg = bg
+      }
+
       if (
         (location.pathname.startsWith("/party") ||
           location.pathname.startsWith("/display")) &&
@@ -84,11 +103,11 @@ const installZeroLegacyFlickerProbe = async (page: Page) => {
       ) {
         state.wrongDocBgFrames += 1
       }
+
       if (document.querySelector('img[alt="background"]')) {
         state.legacyBgFrames += 1
       }
     }
-
     const tick = () => {
       check()
       requestAnimationFrame(tick)
@@ -97,7 +116,6 @@ const installZeroLegacyFlickerProbe = async (page: Page) => {
     document.addEventListener("DOMContentLoaded", check)
   })
 }
-
 test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21", () => {
   test("A01, A02, A03, A04, A05, A06, A07, A08, A11, A12, A15: Live 5-Image Show (Opening MP4+Lottie -> ZZ Wipe -> Lobby -> 3 Players + Phone Vote -> Question -> Vote -> Lock -> Reveal -> Tie -> Zero Votes -> Next Question -> Finale & Projector Parity)", async ({
     page: managerPage,
@@ -106,18 +124,23 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
   }) => {
     await managerPage.setViewportSize(
       browserName === "webkit"
-        ? { width: 1194, height: 834 }
-        : { width: 1920, height: 1080 },
+        ? {
+            width: 1194,
+            height: 834,
+          }
+        : {
+            width: 1920,
+            height: 1080,
+          },
     )
     await installZeroLegacyFlickerProbe(managerPage)
 
     // 1. Host creates game with Tzila 5-option picture show
     const pin = await createGame(managerPage, TZILA_TITLE)
     expect(pin).toMatch(/^\d{6}$/u)
-
-    const gameIdMatch = managerPage.url().match(/\/party\/manager\/([^/?#]+)/u)
+    const gameIdMatch = /\/party\/manager\/([^/?#]+)/u.exec(managerPage.url())
     expect(gameIdMatch).not.toBeNull()
-    const gameId = gameIdMatch![1]
+    const { 1: gameId } = gameIdMatch!
 
     // Verify ZERO iframe is mounted anywhere in the show (strict native port check)
     await expect(managerPage.locator("iframe")).toHaveCount(0)
@@ -127,26 +150,32 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     const spectatorCtx = await browser.newContext({
       viewport:
         browserName === "webkit"
-          ? { width: 1024, height: 768 }
-          : { width: 1920, height: 1080 },
+          ? {
+              width: 1024,
+              height: 768,
+            }
+          : {
+              width: 1920,
+              height: 1080,
+            },
     })
     const spectator = await spectatorCtx.newPage()
     await installZeroLegacyFlickerProbe(spectator)
     await spectator.goto(`http://127.0.0.1:3010/display/${gameId}`)
-
     await expect(spectator.getByTestId("tadazz-show")).toBeVisible()
     await expect(spectator.locator("iframe")).toHaveCount(0)
     await expect(spectator.locator('img[alt="background"]')).toHaveCount(0)
-
     const opening = spectator.getByTestId("tadazz-opening")
     await expect(opening).toBeVisible()
     const openingVideo = spectator.getByTestId("tadazz-opening-video")
+
     if (await openingVideo.isVisible().catch(() => false)) {
       await expect(openingVideo).toHaveAttribute(
         "src",
         "/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4",
       )
     }
+
     const openingLottie = spectator.getByTestId("tadazz-opening-lottie")
     await expect(openingLottie).toBeVisible()
     await saveShot(spectator, "01_opening_mp4_plus_lottie.png")
@@ -154,9 +183,13 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     // If manager or spectator opening is still playing, skip or let it transition via ZZ wipe to Lobby
     for (const pg of [managerPage, spectator]) {
       const skipBtn = pg.getByTestId("tadazz-opening-skip")
+
       if (await skipBtn.isVisible().catch(() => false)) {
         await skipBtn
-          .click({ force: true, timeout: 1500 })
+          .click({
+            force: true,
+            timeout: 1500,
+          })
           .catch(() => undefined)
       }
     }
@@ -165,25 +198,31 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await expect(managerPage.getByTestId("tadazz-screen-lobby")).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-lobby-pin")).toHaveText(pin)
     await expect(managerPage.getByTestId("tadazz-lobby-qr")).toBeVisible()
-
     const p1Ctx = await browser.newContext({
-      viewport: { width: 1024, height: 768 },
+      viewport: {
+        width: 1024,
+        height: 768,
+      },
     })
     const p2Ctx = await browser.newContext({
-      viewport: { width: 800, height: 600 },
+      viewport: {
+        width: 800,
+        height: 600,
+      },
     })
     const p3Ctx = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: {
+        width: 390,
+        height: 844,
+      },
     })
     const alice = await p1Ctx.newPage()
     const bob = await p2Ctx.newPage()
     const dana = await p3Ctx.newPage()
     await installZeroLegacyFlickerProbe(alice)
-
     await joinGame(alice, pin, "Alice")
     await joinGame(bob, pin, "Bob")
     await joinGame(dana, pin, "Dana")
-
     await expect(managerPage.getByText("Alice")).toBeVisible()
     await expect(managerPage.getByText("Bob")).toBeVisible()
     await expect(managerPage.getByText("Dana")).toBeVisible()
@@ -199,6 +238,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await expect(managerPage.getByTestId("tadazz-intro-screen")).toHaveClass(
       /is-visible/u,
     )
+    /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     await expect
       .poll(async () =>
         managerPage
@@ -207,8 +247,8 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
           .evaluate((el) => Number(getComputedStyle(el).opacity)),
       )
       .toBeGreaterThan(0.95)
+    /* oxlint-enable require-await, typescript/require-await */
     await saveShot(managerPage, "03_timeline_opening_scene.png")
-
     const advanceBtn = managerPage.getByRole("button", {
       name: /Next Screen|Advance Scene/i,
     })
@@ -222,7 +262,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Wait for SELECT_ANSWER (openVoting) on manager and cast first 3 votes immediately while window is fresh
     await expect(
-      managerPage.getByRole("button", { name: t("extensions:host.endTimer") }),
+      managerPage.getByRole("button", {
+        name: t("extensions:host.endTimer"),
+      }),
     ).toBeVisible()
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
       "VOTING OPEN",
@@ -231,6 +273,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Verify 5 cards with square photo frames and canonical classes in 2 fast round-trips
     await expect(managerPage.locator(".tz-card.is-vote-open")).toHaveCount(5)
+    /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     await expect
       .poll(async () =>
         managerPage
@@ -249,27 +292,33 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Cast PSTN telephony vote + Alice + Bob first (3 of 4 players -> voting stays open!):
     // Option 3 (index 3, Businessman) gets Phone + Alice + Bob = 3 votes (75%)
+    /* oxlint-enable require-await, typescript/require-await */
     const phoneVote = await managerPage.request.post(SOCKET_API_URL, {
       data: {
         action: "answer",
         gameId,
         phone: "+972501000099",
         callId: "call_parity_01",
-        answerIndex: 3, // 0-based index 3 (Businessman)
+        // 0-based index 3 (Businessman)
+        answerIndex: 3,
       },
     })
-    expect((await phoneVote.json()).accepted).toBe(true)
-
+    expect(
+      (
+        (await phoneVote.json()) as {
+          accepted: boolean
+        }
+      ).accepted,
+    ).toBe(true)
     await clickCard(alice, "tadazz-card-3")
     await clickCard(bob, "tadazz-card-3")
-
     await expect(spectator.getByTestId("tadazz-question-panel")).toContainText(
       q1Text,
     )
     await expect(alice.getByTestId("tadazz-question-panel")).toContainText(
       q1Text,
     )
-
+    /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
     await expect
       .poll(async () =>
         managerPage
@@ -278,6 +327,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       )
       .toBeGreaterThan(0.95)
 
+    /* oxlint-enable require-await, typescript/require-await */
     if (browserName === "webkit") {
       await saveShot(
         managerPage,
@@ -304,7 +354,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     )
     await expect(managerPage.getByTestId("tadazz-card-3")).toHaveClass(
       /is-favourite/u,
-      { timeout: 10_000 },
+      {
+        timeout: 10_000,
+      },
     )
     // A09: Survey mode must NOT mark cards as is-correct / is-incorrect
     await expect(managerPage.locator(".tz-card.is-correct")).toHaveCount(0)
@@ -327,17 +379,20 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
       "VOTING OPEN",
-      { timeout: 15_000 },
+      {
+        timeout: 15_000,
+      },
     )
 
     // Q2: Tie between Option 0 and Option 1 (1 vote each = 50% / 50%)
     await clickCard(alice, "tadazz-card-0")
     await clickCard(bob, "tadazz-card-1")
     await endVotingNow(managerPage)
-
     await expect(managerPage.getByTestId("tadazz-card-0")).toHaveClass(
       /is-favourite/u,
-      { timeout: 10_000 },
+      {
+        timeout: 10_000,
+      },
     )
     await expect(managerPage.getByTestId("tadazz-card-1")).toHaveClass(
       /is-favourite/u,
@@ -356,7 +411,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     })
     await expect(managerPage.getByTestId("tadazz-status")).toContainText(
       "VOTING OPEN",
-      { timeout: 15_000 },
+      {
+        timeout: 15_000,
+      },
     )
     // Nobody votes -> end timer immediately
     await endVotingNow(managerPage)
@@ -385,18 +442,19 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       expect(probe.legacyBgFrames).toBe(0)
       expect(probe.wrongDocBgFrames).toBe(0)
     }
-
     await spectatorCtx.close()
     await p1Ctx.close()
     await p2Ctx.close()
     await p3Ctx.close()
   })
-
   test("A09, A10, A12, A14, A17: Scored Quiz — Correct/Incorrect Badges, Leaderboard + Rank Change (updateLeaderboard), 2–4 Options Monogram Fallback, Finale with Real Winner & Confetti", async ({
     page: managerPage,
     browser,
   }) => {
-    await managerPage.setViewportSize({ width: 1920, height: 1080 })
+    await managerPage.setViewportSize({
+      width: 1920,
+      height: 1080,
+    })
     const subject = `TADAZZ Quiz Parity ${Date.now()}`
     seedQuizz(subject, {
       questions: [
@@ -418,24 +476,30 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
         },
       ],
     })
-
     const pin = await createGame(managerPage, subject)
     const p1Ctx = await browser.newContext({
-      viewport: { width: 1366, height: 768 },
+      viewport: {
+        width: 1366,
+        height: 768,
+      },
     })
     const p2Ctx = await browser.newContext({
-      viewport: { width: 1024, height: 768 },
+      viewport: {
+        width: 1024,
+        height: 768,
+      },
     })
     const alice = await p1Ctx.newPage()
     const bob = await p2Ctx.newPage()
-
     await joinGame(alice, pin, "Alice")
     await joinGame(bob, pin, "Bob")
     await startGame(managerPage)
 
     // Q1 (3 text options -> monogram 1, 2, 3 fallback)
-    await clickCard(alice, "tadazz-card-1") // Mars — Alice right (1st)
-    await clickCard(bob, "tadazz-card-0") // Venus — Bob wrong
+    // Mars — Alice right (1st)
+    await clickCard(alice, "tadazz-card-1")
+    // Venus — Bob wrong
+    await clickCard(bob, "tadazz-card-0")
 
     // Verify Quiz reveal: Mars (card 1) is-correct, Venus/Jupiter are is-incorrect
     await expect(managerPage.getByTestId("tadazz-card-1")).toHaveClass(
@@ -464,8 +528,10 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
 
     // Q2 (4 options): Bob answers right, Alice answers wrong -> Bob overtakes or scores
     await next(managerPage)
-    await clickCard(bob, "tadazz-card-2") // Vacuum
-    await clickCard(alice, "tadazz-card-0") // Water
+    // Vacuum
+    await clickCard(bob, "tadazz-card-2")
+    // Water
+    await clickCard(alice, "tadazz-card-0")
     await saveShot(managerPage, "10_quiz_4_options_reveal.png")
 
     // Advance to Finale
@@ -488,7 +554,10 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       [800, 600],
       [390, 844],
     ] as const) {
-      await managerPage.setViewportSize({ width: w, height: h })
+      await managerPage.setViewportSize({
+        width: w,
+        height: h,
+      })
       await managerPage.evaluate(
         () =>
           new Promise<void>((resolve) => {
@@ -501,6 +570,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
           const box = await managerPage
             .getByTestId("tadazz-stage")
             .boundingBox()
+
           return Boolean(
             box &&
             box.width > 100 &&
@@ -512,11 +582,9 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
         .toBe(true)
       await saveShot(managerPage, `12_viewport_${w}x${h}.png`)
     }
-
     await p1Ctx.close()
     await p2Ctx.close()
   })
-
   test("A20 & A21: Studio Editor Untouched + Side-by-Side Frame Sampling (0s, 0.25s, 0.5s, 1.0s, 3.0s) vs Canonical HTML", async ({
     page,
     browser,
@@ -524,14 +592,20 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     // A20: Verify Studio Editor (/manager/config -> Quizz tab) retains its original Razzia/Studio design
     await loginManager(page)
     await page
-      .getByRole("button", { name: t("manager:tabs.quizz"), exact: true })
+      .getByRole("button", {
+        name: t("manager:tabs.quizz"),
+        exact: true,
+      })
       .click()
     await expect(page.getByTestId("tadazz-stage")).toHaveCount(0)
     await saveShot(page, "13_editor_untouched.png")
 
     // A21: Open Canonical Reference HTML at 1920x1080 and sample frames at 0s, 0.25s, 0.5s, 1.0s, 3.0s
     const refCtx = await browser.newContext({
-      viewport: { width: 1920, height: 1080 },
+      viewport: {
+        width: 1920,
+        height: 1080,
+      },
     })
     const refPage = await refCtx.newPage()
     const fileUrl = `file:///${CANONICAL_HTML_PATH.replace(/\\/gu, "/")}`
@@ -541,7 +615,6 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     await refPage.addStyleTag({
       content: ".tz-demo-ui { display: none !important; }",
     })
-
     for (const [label, ms] of [
       ["0000ms", 0],
       ["0250ms", 250],
@@ -549,35 +622,43 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       ["1000ms", 1000],
       ["3000ms", 3000],
     ] as const) {
-      if (ms > 0) await refPage.waitForTimeout(250)
+      if (ms > 0) {
+        await refPage.waitForTimeout(250)
+      }
+
       await saveShot(refPage, `ref_question_${label}.png`)
     }
 
     // Trigger reference lockVoting -> revealResults -> showLeaderboard -> showFinale and capture reference frames
-    await refPage.evaluate(() => (window as any).tadazzShow.openVoting(12))
+    await refPage.evaluate(() =>
+      (window as unknown as ReferenceWindow).tadazzShow.openVoting(12),
+    )
     await refPage.waitForTimeout(300)
     await saveShot(refPage, "ref_voting_open.png")
-
-    await refPage.evaluate(() => (window as any).tadazzShow.lockVoting())
+    await refPage.evaluate(() =>
+      (window as unknown as ReferenceWindow).tadazzShow.lockVoting(),
+    )
     await refPage.waitForTimeout(550)
     await saveShot(refPage, "ref_voting_locked.png")
-
     await refPage.evaluate(() =>
-      (window as any).tadazzShow.revealResults([8, 19, 12, 34, 27]),
+      (window as unknown as ReferenceWindow).tadazzShow.revealResults([
+        8, 19, 12, 34, 27,
+      ]),
     )
     await refPage.waitForTimeout(1600)
     await saveShot(refPage, "ref_reveal_results.png")
-
     await refPage.evaluate(() =>
-      (window as any).tadazzShow.showLeaderboard(
-        (window as any).TadazzMotion.sampleTeams,
+      (window as unknown as ReferenceWindow).tadazzShow.showLeaderboard(
+        (window as unknown as ReferenceWindow).TadazzMotion.sampleTeams,
       ),
     )
     await refPage.waitForTimeout(1100)
     await saveShot(refPage, "ref_leaderboard.png")
-
     await refPage.evaluate(() =>
-      (window as any).tadazzShow.showFinale({ name: "Alice", score: 1500 }),
+      (window as unknown as ReferenceWindow).tadazzShow.showFinale({
+        name: "Alice",
+        score: 1500,
+      }),
     )
     await refPage.waitForTimeout(1200)
     await saveShot(refPage, "ref_finale.png")
@@ -588,6 +669,7 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
       const panel = document.querySelector(".tz-question-panel")!
       const sStyle = getComputedStyle(stage)
       const pStyle = getComputedStyle(panel)
+
       return {
         stageW: sStyle.width,
         stageH: sStyle.height,
@@ -597,7 +679,6 @@ test.describe("TADAZZ Full Show 1:1 Native Port — Acceptance Gates A01–A21",
     expect(refMetrics.stageW).toBe("1920px")
     expect(refMetrics.stageH).toBe("1080px")
     expect(refMetrics.panelRadius).toBe("44px")
-
     await refCtx.close()
   })
 })

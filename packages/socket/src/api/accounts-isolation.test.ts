@@ -11,7 +11,6 @@ import { createQuestion, createQuizz } from "@razzia/socket/test/fixtures"
 import { setIo } from "@razzia/socket/services/io"
 import { createFakeIo } from "@razzia/socket/test/fake-io"
 import Registry from "@razzia/socket/services/registry"
-
 const root = mkdtempSync(join(tmpdir(), "tadazz-e2e-auth-"))
 const old = {
   TADAZZ_ACCOUNTS_ENABLED: process.env.TADAZZ_ACCOUNTS_ENABLED,
@@ -22,13 +21,20 @@ const old = {
 }
 const codes = new Map<string, string>()
 const credentials = [
-  { email: "alice@example.invalid", password: "Passphrase-A-very-long" },
-  { email: "bob@example.invalid", password: "Passphrase-B-very-long" },
+  {
+    email: "alice@example.invalid",
+    password: "Passphrase-A-very-long",
+  },
+  {
+    email: "bob@example.invalid",
+    password: "Passphrase-B-very-long",
+  },
 ]
 let tokenA = ""
 let tokenB = ""
 let quizId = ""
-
+/* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
+/* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
 const req = async (
   path: string,
   method = "GET",
@@ -36,49 +42,92 @@ const req = async (
   token?: string,
   cookie?: string,
 ) =>
-  app.request("/api" + path, {
+  app.request(`/api${path}`, {
     method,
     headers: {
-      ...(body ? { "Content-Type": "application/json" } : {}),
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      ...(cookie ? { Cookie: cookie } : {}),
+      ...(body
+        ? {
+            "Content-Type": "application/json",
+          }
+        : {}),
+      ...(token
+        ? {
+            Authorization: `Bearer ${token}`,
+          }
+        : {}),
+      ...(cookie
+        ? {
+            Cookie: cookie,
+          }
+        : {}),
     },
-    ...(body ? { body: JSON.stringify(body) } : {}),
+    ...(body
+      ? {
+          body: JSON.stringify(body),
+        }
+      : {}),
   })
-
+/* oxlint-enable max-params */
+/* oxlint-enable require-await, typescript/require-await */
 beforeAll(() => {
   process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
   process.env.CONFIG_PATH = root
-  process.env.JWT_SECRET = "test-super-secret-" + "x".repeat(48)
+  process.env.JWT_SECRET = `test-super-secret-${"x".repeat(48)}`
   process.env.RESEND_API_KEY = "test-not-a-real-api-key"
   process.env.TADAZZ_AUTH_EMAIL_FROM = "Tadazz Test <auth@example.invalid>"
   setIo(createFakeIo().io)
+  /* oxlint-disable require-await, typescript/require-await -- Retain promise-returning API and rejection semantics for synchronous implementations. */
   vi.stubGlobal(
     "fetch",
     vi.fn(async (_url: string, opts: RequestInit) => {
-      const msg = JSON.parse(String(opts.body)) as {
+      if (typeof opts.body !== "string") {
+        throw new Error("Expected JSON request body")
+      }
+
+      const msg = JSON.parse(opts.body) as {
         to: string[]
         text: string
       }
-      const found = msg.text.match(/\b\d{6}\b/u)
-      if (found) codes.set(msg.to[0], found[0])
-      return new Response(JSON.stringify({ id: "test-mail" }), { status: 200 })
+      const found = /\b\d{6}\b/u.exec(msg.text)
+
+      if (found) {
+        codes.set(msg.to[0], found[0])
+      }
+
+      return new Response(
+        JSON.stringify({
+          id: "test-mail",
+        }),
+        {
+          status: 200,
+        },
+      )
     }),
   )
+  /* oxlint-enable require-await, typescript/require-await */
 })
 afterAll(() => {
   vi.unstubAllGlobals()
   for (const [key, val] of Object.entries(old)) {
-    if (val === undefined) delete process.env[key]
-    else process.env[key] = val
+    if (val === undefined) {
+      /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
+      delete process.env[key]
+      /* oxlint-enable typescript/no-dynamic-delete */
+    } else {
+      process.env[key] = val
+    }
   }
   Registry.getInstance()
     .getAllGames()
-    .forEach((game) => Registry.getInstance().removeGame(game.gameId))
+    .forEach((game) => {
+      Registry.getInstance().removeGame(game.gameId)
+    })
   closeAccountDb()
-  rmSync(root, { recursive: true, force: true })
+  rmSync(root, {
+    recursive: true,
+    force: true,
+  })
 })
-
 describe("Tadazz HTTP tenant separation", () => {
   it("rejects legacy password and unverified account, then verifies both new accounts", async () => {
     expect((await req("/auth/mode")).status).toBe(200)
@@ -86,36 +135,63 @@ describe("Tadazz HTTP tenant separation", () => {
       accountsEnabled: true,
     })
     expect(
-      (await req("/auth/manager", "POST", { password: "legacy-password" }))
-        .status,
+      (
+        await req("/auth/manager", "POST", {
+          password: "legacy-password",
+        })
+      ).status,
     ).toBe(403)
     for (const { email, password } of credentials) {
       expect(
-        (await req("/accounts/register", "POST", { email, password })).status,
+        (
+          await req("/accounts/register", "POST", {
+            email,
+            password,
+          })
+        ).status,
       ).toBe(202)
       expect(
-        (await req("/accounts/login", "POST", { email, password })).status,
+        (
+          await req("/accounts/login", "POST", {
+            email,
+            password,
+          })
+        ).status,
       ).toBe(401)
       const code = codes.get(email)
       expect(code).toMatch(/^\d{6}$/u)
       expect(
-        (await req("/accounts/verify", "POST", { email, password, code }))
-          .status,
+        (
+          await req("/accounts/verify", "POST", {
+            email,
+            password,
+            code,
+          })
+        ).status,
       ).toBe(200)
     }
     const first = await req("/accounts/login", "POST", credentials[0])
     expect(first.status).toBe(200)
-    tokenA = ((await first.json()) as { token: string }).token
+    tokenA = (
+      (await first.json()) as {
+        token: string
+      }
+    ).token
     expect(first.headers.get("set-cookie")).toContain("HttpOnly")
     const second = await req("/accounts/login", "POST", credentials[1])
     expect(second.status).toBe(200)
-    tokenB = ((await second.json()) as { token: string }).token
+    tokenB = (
+      (await second.json()) as {
+        token: string
+      }
+    ).token
   }, 60_000)
-
   it("A can read their quiz, but B cannot list, fetch, export or delete it", async () => {
     const identity = await req("/accounts/me", "GET", undefined, tokenA)
     expect(identity.status).toBe(200)
-    const owner = (await identity.json()) as { id: string }
+    const owner = (await identity.json()) as {
+      id: string
+    }
     quizId = (
       await withAccount(owner.id, () =>
         saveQuizz(createQuizz([createQuestion()])),
@@ -128,30 +204,33 @@ describe("Tadazz HTTP tenant separation", () => {
     expect(JSON.stringify(await aList.json())).toContain(quizId)
     expect(JSON.stringify(await bList.json())).not.toContain(quizId)
     expect(
-      (await req("/quizz/" + quizId, "GET", undefined, tokenA)).status,
+      (await req(`/quizz/${quizId}`, "GET", undefined, tokenA)).status,
     ).toBe(200)
     expect(
-      (await req("/quizz/" + quizId, "GET", undefined, tokenB)).status,
+      (await req(`/quizz/${quizId}`, "GET", undefined, tokenB)).status,
     ).toBe(404)
     expect(
-      (await req("/extensions/export/" + quizId, "GET", undefined, tokenB))
+      (await req(`/extensions/export/${quizId}`, "GET", undefined, tokenB))
         .status,
     ).toBe(404)
     expect(
-      (await req("/quizz/" + quizId, "DELETE", undefined, tokenB)).status,
+      (await req(`/quizz/${quizId}`, "DELETE", undefined, tokenB)).status,
     ).toBe(404)
     expect(
-      (await req("/quizz/" + quizId, "GET", undefined, tokenA)).status,
+      (await req(`/quizz/${quizId}`, "GET", undefined, tokenA)).status,
     ).toBe(200)
   })
-
   it("media is served to its owner, never by another account or unauthenticated request", async () => {
     const me = (await (
       await req("/accounts/me", "GET", undefined, tokenA)
-    ).json()) as { id: string }
+    ).json()) as {
+      id: string
+    }
     await withAccount(me.id, () => {
       const dest = getPath("media/private.png")
-      mkdirSync(dirname(dest), { recursive: true })
+      mkdirSync(dirname(dest), {
+        recursive: true,
+      })
       writeFileSync(dest, Buffer.from("89504e470d0a1a0a", "hex"))
     })
     const a = await req(
@@ -174,9 +253,15 @@ describe("Tadazz HTTP tenant separation", () => {
     expect(b.status).toBe(404)
     expect(anon.status).not.toBe(200)
   })
-
   it("lets guests join via room code but never lets another manager control the room", async () => {
-    const response = await req("/games", "POST", { quizzId: quizId }, tokenA)
+    const response = await req(
+      "/games",
+      "POST",
+      {
+        quizzId: quizId,
+      },
+      tokenA,
+    )
     expect(response.status).toBe(201)
     const room = (await response.json()) as {
       gameId: string
@@ -184,14 +269,14 @@ describe("Tadazz HTTP tenant separation", () => {
     }
     expect(room.inviteCode).toBeTruthy()
     const otherManager = await req(
-      "/games/" + room.gameId + "/roster",
+      `/games/${room.gameId}/roster`,
       "GET",
       undefined,
       tokenB,
     )
     expect(otherManager.status).toBe(404)
     const ownerRoster = await req(
-      "/games/" + room.gameId + "/roster",
+      `/games/${room.gameId}/roster`,
       "GET",
       undefined,
       tokenA,
@@ -202,22 +287,34 @@ describe("Tadazz HTTP tenant separation", () => {
     expect(ownerRoster.headers.get("set-cookie")).toContain("tdz_room=")
     expect(ownerRoster.headers.get("set-cookie")).toContain("Path=/media")
     const guest = await req("/auth/session", "POST", {})
-    const playerToken = ((await guest.json()) as { token: string }).token
+    const playerToken = (
+      (await guest.json()) as {
+        token: string
+      }
+    ).token
     const check = await req("/games/check", "POST", {
       inviteCode: room.inviteCode,
     })
     expect(check.status).toBe(200)
     expect(check.headers.get("set-cookie")).toContain("tdz_room")
-    const join = await req(
+    const joinValue = await req(
       "/games/join",
       "POST",
-      { inviteCode: room.inviteCode, username: "Guest" },
+      {
+        inviteCode: room.inviteCode,
+        username: "Guest",
+      },
       playerToken,
     )
-    expect(join.status).toBe(200)
-    expect(((await join.json()) as { gameId: string }).gameId).toBe(room.gameId)
+    expect(joinValue.status).toBe(200)
+    expect(
+      (
+        (await joinValue.json()) as {
+          gameId: string
+        }
+      ).gameId,
+    ).toBe(room.gameId)
   })
-
   it("logging out revokes the managerial token while anonymous player sessions remain available", async () => {
     const logout = await req("/auth/logout", "POST", {}, tokenB)
     expect(logout.status).toBe(200)
@@ -226,8 +323,12 @@ describe("Tadazz HTTP tenant separation", () => {
     )
     const player = await req("/auth/session", "POST", {})
     expect(player.status).toBe(200)
-    expect(((await player.json()) as { role: string }).role).toBe(
-      SESSION_ROLES.PLAYER,
-    )
+    expect(
+      (
+        (await player.json()) as {
+          role: string
+        }
+      ).role,
+    ).toBe(SESSION_ROLES.PLAYER)
   })
 })

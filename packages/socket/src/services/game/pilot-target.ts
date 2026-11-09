@@ -16,8 +16,17 @@ export function selectQuizPilotTarget<
   )
   const connected = matching.filter((game) => game.manager.connected)
   const candidates = connected.length ? connected : matching
-  if (ownerId && candidates.length) return { game: candidates.at(-1)! }
-  if (candidates.length === 1) return { game: candidates[0] }
+
+  const latest = candidates.at(-1)
+
+  if (ownerId && latest) {
+    return { game: latest }
+  }
+
+  if (candidates.length === 1) {
+    return { game: candidates[0] }
+  }
+
   return {
     game: null,
     error: candidates.length

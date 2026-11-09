@@ -1,5 +1,7 @@
 export { SeatingPlan } from "./tadazz-v4/reference-story/SeatingPlan"
+
 export { STORY_ASSETS } from "./tadazz-v4/reference-story/assets"
+
 export * from "./interlude-state"
 
 export * from "./interlude-presenter"
@@ -11,7 +13,9 @@ export * from "./interlude-preview"
 export * from "./audio-cue-player"
 
 export * from "./tadazz-audio-policy"
+
 export * from "./tadazz-sfx-policy"
+
 export * from "./timer-end-cue"
 
 export * from "./team-scoring"

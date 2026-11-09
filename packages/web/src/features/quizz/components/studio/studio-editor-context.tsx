@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 import { QUIZZ_MODES } from "@razzia/common/constants"
 import type { Question } from "@razzia/common/types/game"
 import {
@@ -51,18 +52,22 @@ interface StudioEditorContextType {
   updateSceneConfig: (sceneId: string, updates: Partial<SceneConfig>) => void
   updateDefaults: (updates: Partial<StudioDefaults>) => void
   bulkApplyQuestionMode: (mode: "quiz" | "survey") => void
-  pendingConversion: { from: TimelineItem; toKind: TimelineItemKind } | null
+  pendingConversion: {
+    from: TimelineItem
+    toKind: TimelineItemKind
+  } | null
   confirmPendingConversion: () => void
   cancelPendingConversion: () => void
 }
-
 const StudioEditorContext = createContext<StudioEditorContextType | null>(null)
 
 export const useStudioEditor = () => {
   const ctx = useContext(StudioEditorContext)
 
   if (!ctx) {
-    throw new Error("useStudioEditor must be used within a StudioEditorProvider")
+    throw new Error(
+      "useStudioEditor must be used within a StudioEditorProvider",
+    )
   }
 
   return ctx
@@ -80,11 +85,15 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     currentIndex,
     setCurrentIndex,
   } = useQuizzEditor()
-
   const { control, getValues, setValue } = useFormContext<QuizzFormValues>()
-  const questions = useWatch({ control, name: "questions" })
-  const gameMode = useWatch({ control, name: "gameMode" })
-
+  const questions = useWatch({
+    control,
+    name: "questions",
+  })
+  const gameMode = useWatch({
+    control,
+    name: "gameMode",
+  })
   const [activeTab, setActiveTab] = useState<StudioTab>("questions")
   const [timeline, setTimeline] = useState<TimelineItem[]>([])
   const [scenes, setScenes] = useState<Record<string, SceneConfig>>({})
@@ -93,13 +102,16 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     leaderboardPolicy: "cardOnly",
     advanceMode: "auto",
   })
-  const [selectedTimelineId, setSelectedTimelineId] = useState<string | null>(null)
+  const [selectedTimelineId, setSelectedTimelineId] = useState<string | null>(
+    null,
+  )
   const [pendingConversion, setPendingConversion] = useState<{
     from: TimelineItem
     toKind: TimelineItemKind
   } | null>(null)
 
   // Initialize or synchronize V2 timeline and scenes from extras
+  /* oxlint-disable react/set-state-in-effect -- Synchronize external server/media/editor state without remounting this surface. */
   useEffect(() => {
     if (extras && isQuizExtrasV2(extras)) {
       setTimeline(extras.timeline)
@@ -111,7 +123,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       }
     } else if (extras && !isQuizExtrasV2(extras)) {
       // Migrate V1 to V2
-      const baseQuiz = { questions: getValues("questions") }
+      const baseQuiz = {
+        questions: getValues("questions"),
+      }
       const upgraded = upgradeLegacyExtrasToV2(baseQuiz, extras, {
         quizId: quizzId ?? "temp-quiz",
         baseDigest: extras.baseDigest,
@@ -159,23 +173,35 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         setExtras(defaultV2)
       }
     }
-  }, [extras, quizzId, getValues, setExtras, questionIds, setQuestionIds, timeline.length])
+  }, [
+    extras,
+    quizzId,
+    getValues,
+    setExtras,
+    questionIds,
+    setQuestionIds,
+    timeline.length,
+  ])
 
   // Derive selected timeline index & item
+  /* oxlint-enable react/set-state-in-effect */
   const selectedTimelineIndex = useMemo(() => {
-    if (!selectedTimelineId || timeline.length === 0) {return 0}
+    if (!selectedTimelineId || timeline.length === 0) {
+      return 0
+    }
 
     const idx = timeline.findIndex((item) => item.id === selectedTimelineId)
 
     return idx >= 0 ? idx : 0
   }, [timeline, selectedTimelineId])
-
   const selectedTimelineItem: TimelineItem | undefined =
     timeline.length > 0 ? timeline[selectedTimelineIndex] : undefined
 
   // Map selected question item to questionIndex and sync with QuizzEditorContext
   useEffect(() => {
-    if (!selectedTimelineItem) {return}
+    if (!selectedTimelineItem) {
+      return
+    }
 
     if (selectedTimelineItem.kind === "question") {
       let qIndex = questionIds.findIndex(
@@ -208,7 +234,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
 
   // Determine effective kind of currently selected card
   const selectedKind: TimelineItemKind = useMemo(() => {
-    if (!selectedTimelineItem) {return "quiz"}
+    if (!selectedTimelineItem) {
+      return "quiz"
+    }
 
     if (selectedTimelineItem.kind === "question") {
       const qIndex = questionIds.findIndex(
@@ -216,7 +244,10 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       )
       const q = qIndex >= 0 ? questions[qIndex] : undefined
 
-      if (q?.playMode === "survey" || (!q?.playMode && gameMode === QUIZZ_MODES.SURVEY)) {
+      if (
+        q?.playMode === "survey" ||
+        (!q?.playMode && gameMode === QUIZZ_MODES.SURVEY)
+      ) {
         return "survey"
       }
 
@@ -247,7 +278,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           (Array.isArray(prev.questionIds) && prev.questionIds.length > 0
             ? prev.questionIds
             : questionIds)
-
         const v2: QuizExtrasV2 = {
           schemaVersion: 2,
           revision: prev.revision,
@@ -263,7 +293,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           perQuestion: options?.targetPerQuestion ?? prev.perQuestion,
           leaderboard: prev.leaderboard,
           authoring: (prev as QuizExtrasV2).authoring,
-          ...(prev.mediaCatalog ? { mediaCatalog: prev.mediaCatalog } : {}),
+          ...(prev.mediaCatalog
+            ? {
+                mediaCatalog: prev.mediaCatalog,
+              }
+            : {}),
         }
 
         return v2
@@ -271,7 +305,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     },
     [questionIds, setExtras, defaults],
   )
-
   const selectTimelineItem = useCallback(
     (id: string) => {
       setSelectedTimelineId(id)
@@ -363,7 +396,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             id: sceneId,
             kind: "answerRecap",
             title: "",
-            ...(questionIds[0] ? { startQuestionId: questionIds[0] } : {}),
+            ...(questionIds[0]
+              ? {
+                  startQuestionId: questionIds[0],
+                }
+              : {}),
             mode: "mostSelected",
             maxItemsPerPage: 4,
             showCounts: true,
@@ -413,7 +450,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     },
     [getValues, questionIds],
   )
-
   interface StudioMutationResult {
     nextQuestions: Question[]
     nextQuestionIds: string[]
@@ -423,7 +459,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     nextCurrentIndex: number
     nextPerQuestion?: QuizExtrasV2["perQuestion"]
   }
-
   const normalizeRecapSceneStartRefs = useCallback(
     (
       nextTimeline: TimelineItem[],
@@ -433,8 +468,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const validQIds = new Set(nextQuestionIds)
       const seenBefore: string[] = []
       let mutated = false
-      const normalized = { ...nextScenes }
-
+      const normalized = {
+        ...nextScenes,
+      }
       for (const item of nextTimeline) {
         if (item.kind === "question") {
           if (validQIds.has(item.questionId)) {
@@ -442,12 +478,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           }
         } else if (item.kind === "answerRecap") {
           const existing = normalized[item.sceneId]
-          if (existing && existing.kind === "answerRecap") {
+
+          if (existing?.kind === "answerRecap") {
             const currentStart = existing.startQuestionId
             const isValidPreceding =
               currentStart !== undefined && seenBefore.includes(currentStart)
+
             if (!isValidPreceding) {
-              const fallbackStart = seenBefore[0]
+              const { 0: fallbackStart } = seenBefore
               normalized[item.sceneId] = {
                 ...existing,
                 startQuestionId: fallbackStart,
@@ -462,7 +500,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     },
     [],
   )
-
   const applyStudioMutation = useCallback(
     (result: StudioMutationResult) => {
       const normalizedScenes = normalizeRecapSceneStartRefs(
@@ -470,10 +507,13 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         result.nextScenes,
         result.nextQuestionIds,
       )
+
       if (replaceQuestions) {
         replaceQuestions(result.nextQuestions, result.nextQuestionIds)
       } else {
-        setValue("questions", result.nextQuestions, { shouldDirty: true })
+        setValue("questions", result.nextQuestions, {
+          shouldDirty: true,
+        })
 
         if (setQuestionIds) {
           setQuestionIds(result.nextQuestionIds)
@@ -517,7 +557,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQuestions = getValues("questions")
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
-      const currentScenes = { ...scenes }
+      const currentScenes = {
+        ...scenes,
+      }
 
       // Case 1: Question -> Question (Quiz <-> Survey)
       if (
@@ -533,7 +575,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             playMode: toKind,
             ...(toKind === "quiz" &&
             (!currentQ.solutions || currentQ.solutions.length === 0)
-              ? { solutions: [0] }
+              ? {
+                  solutions: [0],
+                }
               : {}),
           }
           const nextQuestions = currentQuestions.map((q, idx) =>
@@ -543,7 +587,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           if (replaceQuestions) {
             replaceQuestions(nextQuestions, currentQIds)
           } else {
-            setValue("questions", nextQuestions, { shouldDirty: true })
+            setValue("questions", nextQuestions, {
+              shouldDirty: true,
+            })
           }
         }
 
@@ -568,13 +614,19 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
 
         const sceneId = crypto.randomUUID()
         const newScene = createDefaultScene(toKind, sceneId)
-        const nextScenes = { ...currentScenes, [sceneId]: newScene }
+        const nextScenes = {
+          ...currentScenes,
+          [sceneId]: newScene,
+        }
         const nextTimeline = currentTimeline.map((entry) =>
           entry.id === item.id
-            ? { id: item.id, kind: toKind as never, sceneId }
+            ? {
+                id: item.id,
+                kind: toKind as never,
+                sceneId,
+              }
             : entry,
         )
-
         const qIndex = currentQIds.findIndex((id) => id === item.questionId)
         const nextQuestions =
           qIndex >= 0
@@ -589,10 +641,15 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           Math.min(qIndex, nextQuestions.length - 1),
         )
         const nextPerQuestion = extras?.perQuestion
-          ? { ...extras.perQuestion }
+          ? {
+              ...extras.perQuestion,
+            }
           : undefined
+
         if (nextPerQuestion && item.questionId in nextPerQuestion) {
+          /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
           delete nextPerQuestion[item.questionId]
+          /* oxlint-enable typescript/no-dynamic-delete */
         }
 
         applyStudioMutation({
@@ -625,15 +682,17 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           cooldown: 5,
           time: 20,
         }
-
         const nextQuestions = [...currentQuestions, newQuestion]
         const nextQIds = [...currentQIds, newQId]
         const nextTimeline = currentTimeline.map((entry) =>
           entry.id === item.id
-            ? { id: item.id, kind: "question" as const, questionId: newQId }
+            ? {
+                id: item.id,
+                kind: "question" as const,
+                questionId: newQId,
+              }
             : entry,
         )
-
         const nextScenes =
           "sceneId" in item
             ? Object.fromEntries(
@@ -641,8 +700,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
                   ([id]) => id !== item.sceneId,
                 ),
               )
-            : { ...currentScenes }
-
+            : {
+                ...currentScenes,
+              }
         applyStudioMutation({
           nextQuestions,
           nextQuestionIds: nextQIds,
@@ -675,15 +735,22 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
                   ([id]) => id !== item.sceneId,
                 ),
               )
-            : { ...currentScenes }
-        const nextScenes = { ...filteredScenes, [sceneId]: newScene }
-
+            : {
+                ...currentScenes,
+              }
+        const nextScenes = {
+          ...filteredScenes,
+          [sceneId]: newScene,
+        }
         const nextTimeline = currentTimeline.map((entry) =>
           entry.id === item.id
-            ? { id: item.id, kind: toKind as never, sceneId }
+            ? {
+                id: item.id,
+                kind: toKind as never,
+                sceneId,
+              }
             : entry,
         )
-
         applyStudioMutation({
           nextQuestions: currentQuestions,
           nextQuestionIds: currentQIds,
@@ -705,9 +772,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       setValue,
       applyStudioMutation,
       currentIndex,
+      extras,
     ],
   )
-
   const changeSelectedCardKind = useCallback(
     (newKind: TimelineItemKind) => {
       if (!selectedTimelineItem || selectedKind === newKind) {
@@ -723,8 +790,10 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         const questionCount = timeline.filter(
           (entry) => entry.kind === "question",
         ).length
+
         if (questionCount <= 1) {
           toast.error(t("extensions:timeline.cannotDeleteLastQuestion"))
+
           return
         }
 
@@ -737,10 +806,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
 
         if (isQuestionCardBlankForConversion(currentQ, perQ)) {
           executeConversion(selectedTimelineItem, newKind)
+
           return
         }
 
-        setPendingConversion({ from: selectedTimelineItem, toKind: newKind })
+        setPendingConversion({
+          from: selectedTimelineItem,
+          toKind: newKind,
+        })
 
         return
       }
@@ -758,14 +831,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       executeConversion,
     ],
   )
-
   const confirmPendingConversion = useCallback(() => {
-    if (!pendingConversion) {return}
+    if (!pendingConversion) {
+      return
+    }
 
     executeConversion(pendingConversion.from, pendingConversion.toKind)
     setPendingConversion(null)
   }, [pendingConversion, executeConversion])
-
   const cancelPendingConversion = useCallback(() => {
     setPendingConversion(null)
   }, [])
@@ -777,7 +850,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQuestions = getValues("questions")
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
-      const currentScenes = { ...scenes }
+      const currentScenes = {
+        ...scenes,
+      }
 
       if (targetKind === "quiz" || targetKind === "survey") {
         const newQId = crypto.randomUUID()
@@ -785,7 +860,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           type: "single",
           playMode: targetKind,
           ...(currentQuestions.at(-1)?.category
-            ? { category: currentQuestions.at(-1)!.category }
+            ? {
+                category: currentQuestions.at(-1)?.category,
+              }
             : {}),
           question: "",
           answers: ["", ""],
@@ -793,7 +870,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           cooldown: 5,
           time: 20,
         }
-
         const nextQuestions = [...currentQuestions, newQuestion]
         const nextQIds = [...currentQIds, newQId]
         const newItem: TimelineItem = {
@@ -802,7 +878,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           questionId: newQId,
         }
         const nextTimeline = [...currentTimeline, newItem]
-
         applyStudioMutation({
           nextQuestions,
           nextQuestionIds: nextQIds,
@@ -814,14 +889,16 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       } else {
         const sceneId = crypto.randomUUID()
         const newScene = createDefaultScene(targetKind, sceneId)
-        const nextScenes = { ...currentScenes, [sceneId]: newScene }
+        const nextScenes = {
+          ...currentScenes,
+          [sceneId]: newScene,
+        }
         const newItem: TimelineItem = {
           id: crypto.randomUUID(),
           kind: targetKind as never,
           sceneId,
         }
         const nextTimeline = [...currentTimeline, newItem]
-
         applyStudioMutation({
           nextQuestions: currentQuestions,
           nextQuestionIds: currentQIds,
@@ -855,9 +932,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQuestions = getValues("questions")
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
-      const currentScenes = { ...scenes }
-      const nextPerQuestion = extras?.perQuestion ? { ...extras.perQuestion } : undefined
-
+      const currentScenes = {
+        ...scenes,
+      }
+      const nextPerQuestion = extras?.perQuestion
+        ? {
+            ...extras.perQuestion,
+          }
+        : undefined
       let nextQuestions = currentQuestions
       let nextQIds = currentQIds
       let nextScenes = currentScenes
@@ -878,8 +960,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         if (qIndex >= 0) {
           nextQuestions = currentQuestions.filter((_, idx) => idx !== qIndex)
           nextQIds = currentQIds.filter((_, idx) => idx !== qIndex)
+
           if (nextPerQuestion && item.questionId in nextPerQuestion) {
+            /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
             delete nextPerQuestion[item.questionId]
+            /* oxlint-enable typescript/no-dynamic-delete */
           }
         }
       } else if ("sceneId" in item) {
@@ -892,14 +977,12 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const nextSelectedIdx = Math.min(index, nextTimeline.length - 1)
       const nextSelected = nextTimeline[nextSelectedIdx]
       const nextSelectedId = nextSelected.id
-
       let nextCurrentIndex = 0
 
       if (nextSelected.kind === "question") {
         const targetQIdx = nextQIds.findIndex(
           (id) => id === nextSelected.questionId,
         )
-
         nextCurrentIndex = targetQIdx >= 0 ? targetQIdx : 0
       } else {
         nextCurrentIndex = Math.max(
@@ -941,8 +1024,14 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQuestions = getValues("questions")
       const currentQIds = [...questionIds]
       const currentTimeline = [...timeline]
-      const currentScenes = { ...scenes }
-      const nextPerQuestion = extras?.perQuestion ? { ...extras.perQuestion } : undefined
+      const currentScenes = {
+        ...scenes,
+      }
+      const nextPerQuestion = extras?.perQuestion
+        ? {
+            ...extras.perQuestion,
+          }
+        : undefined
 
       if (item.kind === "question") {
         const qIndex = currentQIds.findIndex((id) => id === item.questionId)
@@ -976,7 +1065,9 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           ]
 
           if (nextPerQuestion && item.questionId in nextPerQuestion) {
-            nextPerQuestion[newQId] = structuredClone(nextPerQuestion[item.questionId])
+            nextPerQuestion[newQId] = structuredClone(
+              nextPerQuestion[item.questionId],
+            )
           }
 
           applyStudioMutation({
@@ -991,8 +1082,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         }
       } else if ("sceneId" in item) {
         const sourceScene = currentScenes[item.sceneId] as
-          | SceneConfig
-          | undefined
+          SceneConfig | undefined
         const newSceneId = crypto.randomUUID()
         const sourceTitle =
           sourceScene && "title" in sourceScene ? sourceScene.title : undefined
@@ -1012,11 +1102,21 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         const newScene: SceneConfig = {
           ...clonedSource,
           id: newSceneId,
-          ...(sourceTitle ? { title: `${sourceTitle} (Copy)` } : {}),
-          ...(clonedOverlays ? { overlayAnimations: clonedOverlays } : {}),
+          ...(sourceTitle
+            ? {
+                title: `${sourceTitle} (Copy)`,
+              }
+            : {}),
+          ...(clonedOverlays
+            ? {
+                overlayAnimations: clonedOverlays,
+              }
+            : {}),
         } as SceneConfig
-
-        const nextScenes = { ...currentScenes, [newSceneId]: newScene }
+        const nextScenes = {
+          ...currentScenes,
+          [newSceneId]: newScene,
+        }
         const newItem: TimelineItem = {
           id: crypto.randomUUID(),
           kind: item.kind,
@@ -1027,7 +1127,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           newItem,
           ...currentTimeline.slice(index + 1),
         ]
-
         applyStudioMutation({
           nextQuestions: currentQuestions,
           nextQuestionIds: currentQIds,
@@ -1066,21 +1165,20 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       const currentQIds = [...questionIds]
       const nextTimeline = [...timeline]
       const [moved] = nextTimeline.splice(from, 1)
-
       nextTimeline.splice(to, 0, moved)
-
       const timelineQuestionIds = nextTimeline
         .filter(
           (
             entry,
-          ): entry is { id: string; kind: "question"; questionId: string } =>
-            entry.kind === "question",
+          ): entry is {
+            id: string
+            kind: "question"
+            questionId: string
+          } => entry.kind === "question",
         )
         .map((entry) => entry.questionId)
-
       const reorderedQuestions: Question[] = []
       const reorderedQIds: string[] = []
-
       for (const qId of timelineQuestionIds) {
         const origIdx = currentQIds.findIndex((id) => id === qId)
 
@@ -1089,7 +1187,6 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           reorderedQIds.push(currentQIds[origIdx])
         }
       }
-
       let nextCurrentIndex = currentIndex
 
       if (moved.kind === "question") {
@@ -1115,9 +1212,15 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         nextCurrentIndex,
       })
     },
-    [timeline, getValues, questionIds, currentIndex, applyStudioMutation, scenes],
+    [
+      timeline,
+      getValues,
+      questionIds,
+      currentIndex,
+      applyStudioMutation,
+      scenes,
+    ],
   )
-
   const updateSceneConfig = useCallback(
     (sceneId: string, updates: Partial<SceneConfig>) => {
       setScenes((prev) => {
@@ -1127,30 +1230,39 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           return prev
         }
 
-        const updated = { ...existing, ...updates } as SceneConfig
-        const nextScenes = { ...prev, [sceneId]: updated }
-
-        syncToExtras(timeline, nextScenes, { defaults })
+        const updated = {
+          ...existing,
+          ...updates,
+        } as SceneConfig
+        const nextScenes = {
+          ...prev,
+          [sceneId]: updated,
+        }
+        syncToExtras(timeline, nextScenes, {
+          defaults,
+        })
 
         return nextScenes
       })
     },
     [timeline, defaults, syncToExtras],
   )
-
   const updateDefaults = useCallback(
     (updates: Partial<StudioDefaults>) => {
       setDefaults((prev) => {
-        const next = { ...prev, ...updates }
-
-        syncToExtras(timeline, scenes, { defaults: next })
+        const next = {
+          ...prev,
+          ...updates,
+        }
+        syncToExtras(timeline, scenes, {
+          defaults: next,
+        })
 
         return next
       })
     },
     [timeline, scenes, syncToExtras],
   )
-
   const bulkApplyQuestionMode = useCallback(
     (mode: "quiz" | "survey") => {
       const currentQuestions = getValues("questions")
@@ -1158,12 +1270,13 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
         ...q,
         playMode: mode,
       }))
-      setValue("questions", updated, { shouldDirty: true })
+      setValue("questions", updated, {
+        shouldDirty: true,
+      })
       toast.success(t("extensions:studio.settings.bulkSuccess"))
     },
     [getValues, setValue, t],
   )
-
   const value = useMemo<StudioEditorContextType>(
     () => ({
       activeTab,

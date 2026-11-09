@@ -10,6 +10,7 @@ import {
   type ShowThemeAudioEvent,
   type ShowThemeSlotId,
   type ScopedThemeOverrides,
+  showThemeText,
 } from "@razzia/extensions/core"
 import Button from "@razzia/web/components/Button"
 import MediaLibrary from "@razzia/web/features/quizz/components/QuestionEditor/MediaLibrary"
@@ -19,7 +20,6 @@ import { useStudioEditor } from "./studio-editor-context"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { StudioSelect } from "./studio-select"
 import { useInstalledThemeCatalog } from "./installed-theme-catalog"
-import { showThemeText } from "@razzia/extensions/core"
 
 function omitKeys<T extends object>(value: T, keys: readonly string[]): T {
   return Object.fromEntries(

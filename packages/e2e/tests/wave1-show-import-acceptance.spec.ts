@@ -1,3 +1,9 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import type {
+  TadaShowV1,
+  AuthoredQuizCard,
+  AuthoredSurveyCard,
+} from "../../../extensions/src/core/show-authoring-schema"
 /* oxlint-disable eslint/no-await-in-loop, eslint/no-plusplus */
 import fs from "node:fs"
 import { join } from "node:path"
@@ -10,7 +16,6 @@ import {
   exportTadaShowWorkbook,
   extractZipEntries,
   parseTadaShowWorkbook,
-  type TadaShowV1,
 } from "@razzia/extensions/core"
 
 const SCREENSHOT_DIR = join(
@@ -248,23 +253,26 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     expect(download.suggestedFilename()).toMatch(/\.tada\.json$/)
 
     const downloadStream = await download.createReadStream()
+
     if (downloadStream) {
       const chunks: Buffer[] = []
       for await (const chunk of downloadStream) {
-        chunks.push(Buffer.from(chunk))
+        chunks.push(Buffer.from(chunk as Uint8Array))
       }
       const downloadedContent = Buffer.concat(chunks).toString("utf-8")
-      const parsedJson = JSON.parse(downloadedContent)
+      const parsedJson = JSON.parse(downloadedContent) as TadaShowV1
       expect(parsedJson.format).toBe("tada-show")
       expect(parsedJson.version).toBe(1)
       expect(Array.isArray(parsedJson.cards)).toBe(true)
 
       // Verify shareable mode: if roster setting exists, participants must be empty []
       const rosterSetting = parsedJson.settings?.find(
-        (s: any) => s.scope === "roster" && s.property === "config",
+        (s: NonNullable<TadaShowV1["settings"]>[number]) =>
+          s.scope === "roster" && s.property === "config",
       )
+
       if (rosterSetting) {
-        expect(rosterSetting.valueJson?.participants).toEqual([])
+        expect(rosterSetting.valueJson).toMatchObject({ participants: [] })
       }
     }
 
@@ -320,7 +328,8 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await page.setViewportSize({ width: 1280, height: 800 })
     await openManageQuizzTab(page)
 
-    const hebrewNote = "שעשועון הדגמה חי בעברית - הערת הפקה סודית 🌟\nשורה שנייה עם הנחיות למנחה: \"נא להמתין לצליל!\""
+    const hebrewNote =
+      'שעשועון הדגמה חי בעברית - הערת הפקה סודית 🌟\nשורה שנייה עם הנחיות למנחה: "נא להמתין לצליל!"'
     const quizInterlude = {
       kind: "title" as const,
       title: "מעברון שאלת בונוס",
@@ -374,10 +383,7 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
           cooldownSeconds: 3,
           maxPoints: 0,
           penalty: 0,
-          answers: [
-            { text: "פופ" },
-            { text: "רוק" },
-          ],
+          answers: [{ text: "פופ" }, { text: "רוק" }],
           interlude: surveyInterlude,
         },
       ],
@@ -392,7 +398,11 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     }
 
     const tmpJsonFile = join(SCREENSHOT_DIR, "temp_import05.tada.json")
-    fs.writeFileSync(tmpJsonFile, JSON.stringify(syntheticShow, null, 2), "utf-8")
+    fs.writeFileSync(
+      tmpJsonFile,
+      JSON.stringify(syntheticShow, null, 2),
+      "utf-8",
+    )
 
     // 1. Upload valid .tada.json
     const fileInput = page.getByTestId("import-file-input")
@@ -413,10 +423,14 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     // 4. Save harmless change in editor
     await page.getByTestId("editor-save-btn").click()
     await expect(page).toHaveURL(/\/manager\/config$/u)
-    await page.getByRole("button", { name: t("manager:tabs.quizz"), exact: true }).click()
+    await page
+      .getByRole("button", { name: t("manager:tabs.quizz"), exact: true })
+      .click()
 
     // 5. Export as .tada.json and verify byte content
-    const exportTadaJsonBtn = page.locator("[data-testid^='export-tada-json-']").first()
+    const exportTadaJsonBtn = page
+      .locator("[data-testid^='export-tada-json-']")
+      .first()
     await expect(exportTadaJsonBtn).toBeVisible()
 
     const jsonDownloadPromise = page.waitForEvent("download")
@@ -425,21 +439,27 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
 
     const jsonStream = await jsonDownload.createReadStream()
     const jsonChunks: Buffer[] = []
+
     if (jsonStream) {
       for await (const chunk of jsonStream) {
-        jsonChunks.push(Buffer.from(chunk))
+        jsonChunks.push(Buffer.from(chunk as Uint8Array))
       }
     }
-    const downloadedJson = JSON.parse(Buffer.concat(jsonChunks).toString("utf-8"))
+
+    const downloadedJson = JSON.parse(
+      Buffer.concat(jsonChunks).toString("utf-8"),
+    ) as Omit<TadaShowV1, "cards"> & {
+      cards: [AuthoredQuizCard, AuthoredSurveyCard]
+    }
     expect(downloadedJson.format).toBe("tada-show")
     expect(downloadedJson.title).toBe("מופע טריוויה וסקר חי בעברית")
     expect(downloadedJson.note).toBe(hebrewNote)
     expect(downloadedJson.cards).toHaveLength(2)
 
-    const downloadedQ1 = downloadedJson.cards[0]
+    const { 0: downloadedQ1 } = downloadedJson.cards
     expect(downloadedQ1.interlude).toEqual(quizInterlude)
 
-    const downloadedSurvey = downloadedJson.cards[1]
+    const { 1: downloadedSurvey } = downloadedJson.cards
     expect(downloadedSurvey.interlude).toEqual(surveyInterlude)
 
     // 6. Export as .xlsx and verify byte content
@@ -452,19 +472,25 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
 
     const xlsxStream = await xlsxDownload.createReadStream()
     const xlsxChunks: Buffer[] = []
+
     if (xlsxStream) {
       for await (const chunk of xlsxStream) {
-        xlsxChunks.push(Buffer.from(chunk))
+        xlsxChunks.push(Buffer.from(chunk as Uint8Array))
       }
     }
+
     const xlsxBytes = new Uint8Array(Buffer.concat(xlsxChunks))
     const parsedXlsx = parseTadaShowWorkbook(xlsxBytes)
 
     expect(parsedXlsx.title).toBe("מופע טריוויה וסקר חי בעברית")
     expect(parsedXlsx.note).toBe(hebrewNote)
     expect(parsedXlsx.cards).toHaveLength(2)
-    expect((parsedXlsx.cards[0] as any).interlude).toEqual(quizInterlude)
-    expect((parsedXlsx.cards[1] as any).interlude).toEqual(surveyInterlude)
+    expect((parsedXlsx.cards[0] as AuthoredQuizCard).interlude).toEqual(
+      quizInterlude,
+    )
+    expect((parsedXlsx.cards[1] as AuthoredSurveyCard).interlude).toEqual(
+      surveyInterlude,
+    )
 
     fs.rmSync(tmpJsonFile, { force: true })
     telemetry.assertClean()
@@ -477,7 +503,9 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await page.setViewportSize({ width: 1280, height: 800 })
     await openManageQuizzTab(page)
 
-    const initialQuizzesCount = await page.locator("[data-testid^='export-tada-json-']").count()
+    const initialQuizzesCount = await page
+      .locator("[data-testid^='export-tada-json-']")
+      .count()
 
     // 1. Invalid targetKey in JSON
     const invalidTargetJson = {
@@ -504,8 +532,15 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
       ],
     }
 
-    const tmpInvalidJson = join(SCREENSHOT_DIR, "temp_import06_invalid_target.tada.json")
-    fs.writeFileSync(tmpInvalidJson, JSON.stringify(invalidTargetJson, null, 2), "utf-8")
+    const tmpInvalidJson = join(
+      SCREENSHOT_DIR,
+      "temp_import06_invalid_target.tada.json",
+    )
+    fs.writeFileSync(
+      tmpInvalidJson,
+      JSON.stringify(invalidTargetJson, null, 2),
+      "utf-8",
+    )
 
     const fileInput = page.getByTestId("import-file-input")
     await fileInput.setInputFiles(tmpInvalidJson)
@@ -513,7 +548,9 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     const dialog = page.getByTestId("show-import-dialog")
     await expect(dialog).toBeVisible()
     await expect(page.getByTestId("show-import-errors")).toBeVisible()
-    await expect(page.getByTestId("show-import-errors")).toContainText("settings.0.targetKey")
+    await expect(page.getByTestId("show-import-errors")).toContainText(
+      "settings.0.targetKey",
+    )
     await expect(page.getByTestId("show-import-commit")).toBeDisabled()
 
     await saveScreenshot(page, "09_import06_invalid_target_error.png")
@@ -523,7 +560,9 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await expect(dialog).not.toBeVisible()
 
     // Assert zero writes
-    const countAfterJsonCancel = await page.locator("[data-testid^='export-tada-json-']").count()
+    const countAfterJsonCancel = await page
+      .locator("[data-testid^='export-tada-json-']")
+      .count()
     expect(countAfterJsonCancel).toBe(initialQuizzesCount)
 
     // 2. Malformed interludeJson in XLSX Column T
@@ -554,7 +593,10 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
       /<c r="T2"[^>]*>[\s\S]*?<\/c>/u,
       '<c r="T2" t="inlineStr"><is><t>{badJson:notClosed</t></is></c>',
     )
-    entries.set("xl/worksheets/sheet3.xml", new TextEncoder().encode(corruptedXml))
+    entries.set(
+      "xl/worksheets/sheet3.xml",
+      new TextEncoder().encode(corruptedXml),
+    )
 
     const files: Array<{ name: string; data: Uint8Array }> = []
     for (const [name, data] of entries.entries()) {
@@ -562,14 +604,19 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     }
     const corruptedXlsxBuffer = createZipArchive(files)
 
-    const tmpMalformedXlsx = join(SCREENSHOT_DIR, "temp_import06_malformed_t.xlsx")
+    const tmpMalformedXlsx = join(
+      SCREENSHOT_DIR,
+      "temp_import06_malformed_t.xlsx",
+    )
     fs.writeFileSync(tmpMalformedXlsx, corruptedXlsxBuffer)
 
     await fileInput.setInputFiles(tmpMalformedXlsx)
 
     await expect(dialog).toBeVisible()
     await expect(page.getByTestId("show-import-errors")).toBeVisible()
-    await expect(page.getByTestId("show-import-errors")).toContainText("Questions!T2")
+    await expect(page.getByTestId("show-import-errors")).toContainText(
+      "Questions!T2",
+    )
     await expect(page.getByTestId("show-import-commit")).toBeDisabled()
 
     await saveScreenshot(page, "10_import06_malformed_interlude_error.png")
@@ -579,7 +626,9 @@ test.describe("TADA Studio Show Import/Export Acceptance (JSON + Excel)", () => 
     await expect(dialog).not.toBeVisible()
 
     // Assert zero writes
-    const countAfterXlsxCancel = await page.locator("[data-testid^='export-tada-json-']").count()
+    const countAfterXlsxCancel = await page
+      .locator("[data-testid^='export-tada-json-']")
+      .count()
     expect(countAfterXlsxCancel).toBe(initialQuizzesCount)
 
     fs.rmSync(tmpInvalidJson, { force: true })

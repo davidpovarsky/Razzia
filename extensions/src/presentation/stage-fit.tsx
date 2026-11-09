@@ -9,14 +9,24 @@ import React, {
 const clsx = (...classes: unknown[]): string =>
   classes
     .flatMap((c) => {
-      if (!c) return []
-      if (typeof c === "string") return [c]
-      if (Array.isArray(c)) return [clsx(...c)]
+      if (!c) {
+        return []
+      }
+
+      if (typeof c === "string") {
+        return [c]
+      }
+
+      if (Array.isArray(c)) {
+        return [clsx(...(c as unknown[]))]
+      }
+
       if (typeof c === "object") {
         return Object.entries(c as Record<string, unknown>)
           .filter(([, v]) => Boolean(v))
           .map(([k]) => k)
       }
+
       return []
     })
     .join(" ")
@@ -76,6 +86,7 @@ export const StageFitContainer = ({
         height: heightOverride ?? window.innerHeight,
       }
     }
+
     return { width: 1280, height: heightOverride ?? 800 }
   })
 
@@ -94,6 +105,7 @@ export const StageFitContainer = ({
         if (Math.abs(prev.width - w) > 2 || Math.abs(prev.height - h) > 2) {
           return { width: w, height: h }
         }
+
         return prev
       })
     }
@@ -111,6 +123,7 @@ export const StageFitContainer = ({
         }
       })
       ro.observe(containerRef.current)
+
       return () => ro.disconnect()
     }
 
@@ -126,6 +139,7 @@ export const StageFitContainer = ({
     }
 
     window.addEventListener("resize", onResize)
+
     return () => window.removeEventListener("resize", onResize)
   }, [heightOverride])
 
@@ -133,20 +147,37 @@ export const StageFitContainer = ({
   const isPortrait = height > width
   const isNarrowMobile = width < 450
 
-  const fitMode: StageFitMode =
-    height < 580 ? "ultracompact" : height < 750 ? "compact" : "spacious"
+  const fitMode: StageFitMode = (() => {
+    if (height < 580) {
+      return "ultracompact"
+    }
+
+    if (height < 750) {
+      return "compact"
+    }
+
+    return "spacious"
+  })()
 
   const isUltraCompact = fitMode === "ultracompact"
   const isCompact = fitMode === "compact" || isUltraCompact
 
   // Compute maximum frame height for photos depending on vertical budget
-  const maxPhotoHeightPx = isUltraCompact
-    ? Math.max(40, Math.min(60, Math.floor(height * 0.09)))
-    : isNarrowMobile || isPortrait
-      ? Math.max(50, Math.min(84, Math.floor(height * 0.11)))
-      : isCompact
-        ? Math.max(64, Math.min(110, Math.floor(height * 0.16)))
-        : Math.max(90, Math.min(180, Math.floor(height * 0.20)))
+  const maxPhotoHeightPx = (() => {
+    if (isUltraCompact) {
+      return Math.max(40, Math.min(60, Math.floor(height * 0.09)))
+    }
+
+    if (isNarrowMobile || isPortrait) {
+      return Math.max(50, Math.min(84, Math.floor(height * 0.11)))
+    }
+
+    if (isCompact) {
+      return Math.max(64, Math.min(110, Math.floor(height * 0.16)))
+    }
+
+    return Math.max(90, Math.min(180, Math.floor(height * 0.2)))
+  })()
 
   const state: StageFitState = {
     availableWidth: width,
@@ -168,14 +199,16 @@ export const StageFitContainer = ({
         data-is-compact={isCompact ? "true" : "false"}
         data-is-ultracompact={isUltraCompact ? "true" : "false"}
         data-is-portrait={isPortrait ? "true" : "false"}
-        style={{
-          // Expose reactive stage dimension variables for child css clamp
-          "--stage-available-height": `${height}px`,
-          "--stage-available-width": `${width}px`,
-          "--stage-max-photo-h": `${maxPhotoHeightPx}px`,
-        } as React.CSSProperties}
+        style={
+          {
+            // Expose reactive stage dimension variables for child css clamp
+            "--stage-available-height": `${height}px`,
+            "--stage-available-width": `${width}px`,
+            "--stage-max-photo-h": `${maxPhotoHeightPx}px`,
+          } as React.CSSProperties
+        }
         className={clsx(
-          "relative flex h-full w-full min-h-0 flex-1 flex-col justify-between overflow-hidden",
+          "relative flex h-full min-h-0 w-full flex-1 flex-col justify-between overflow-hidden",
           className,
         )}
       >

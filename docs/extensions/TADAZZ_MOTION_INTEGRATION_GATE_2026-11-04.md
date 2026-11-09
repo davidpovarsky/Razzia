@@ -5,12 +5,14 @@
 # Tadazz Motion — protected integration gate (2026-11-04)
 
 ## Status and scope
+
 Safe implementation exists exclusively in `extensions/**` on isolated branch
 `agent/tadazz-motion-20261104` based on `agent/tomer/wave2@7dd6519`.
 Source assets are Goldy's original `background.png`, `index.html` and `README.txt` from 04 Nov.
 **Not deployed, merged, pushed, or enabled in any existing show.** No protected upstream files were edited.
 
 ## Safe extension components implemented
+
 1. `core/tadazz-appearance.ts` — optional show-level background schema, safe static URL and
    priority: full-screen cinema video > per-card override > opt-in show theme > original Razzia.
 2. `presentation/tadazz-backdrop.tsx` — relative to source 1920x1080; still image,
@@ -22,7 +24,7 @@ Source assets are Goldy's original `background.png`, `index.html` and `README.tx
    handled by the existing poll-ranking engine.
 4. `presentation/tadazz-leaderboard.tsx` — server-authoritative ranks and points with
    motion animations. Existing legacy `states/Leaderboard.tsx` is unchanged.
-5. `presentation/tadazz-zz-transition.tsx` — CSS/SVG *placeholder* for named `tadazz-zz`
+5. `presentation/tadazz-zz-transition.tsx` — CSS/SVG _placeholder_ for named `tadazz-zz`
    animation scene; **NOT the brand's finished layered Lottie**. Prefer authentic user-supplied Lottie.
 6. Extension ScenePresenter has `tadazzThemeEnabled` **default false**. It uses new cards for
    a 5-image interimResults scene and new ranking rows only when explicitly opted in.
@@ -30,6 +32,7 @@ Source assets are Goldy's original `background.png`, `index.html` and `README.tx
    workbook `tadazzBackgroundJson` import/export, native conversion and bundle.
 
 ## Protected files that still need independent owner approval
+
 Upstream baseline: `5161eb7022144ee26d46a5f94cdbc714ec8b560d`.
 These are protected under `AGENTS.md` / `docs/extensions/WORKING_RULES.md`.
 **This document is a proposed change request, NOT approval to edit them.**
@@ -66,6 +69,7 @@ If patch exceeds 20 lines or changes base semantics, obtain separate architectur
 Do not use this implementation work as generic authorization to alter original Razzia.
 
 ## Acceptance gates (must pass before any local merge or event use)
+
 - Screen role parity: host, player, read-only /display; websocket refresh/reconnect.
 - Five square images at 1920x1080 in one row, fallback 3+2 or 2+3 on narrow widths, 4:3
   no clipping/scroll; labels and images always move with parent card; actual vote updates.
@@ -79,6 +83,7 @@ Do not use this implementation work as generic authorization to alter original R
 - Brand-specific logo Lottie assets not supplied/accepted: user-authored file still needed.
 
 ## Verification recorded in this isolated branch
+
 - Source-grounded module tests and workbook round-trip have passed.
 - Root production `pnpm build` has passed during implementation.
 - Actual client live browser end-to-end and 8-locale acceptance are **not signed off**.

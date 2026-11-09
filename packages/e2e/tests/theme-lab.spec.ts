@@ -1,16 +1,26 @@
+import type {
+  ShowThemeDefinition,
+  QuizExtrasV2,
+} from "../../../extensions/src/core"
 /* oxlint-disable eslint/no-await-in-loop -- Ordered remote acceptance follows each saved game. */
 import { test, expect } from "@playwright/test"
 import { readFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 import { join } from "node:path"
 const receipt = process.env.TADAZZ_LAB_SEED_RECEIPT
-if (!receipt) throw new Error("Explicit sample receipt required")
-const samples = JSON.parse(readFileSync(receipt, "utf8")).samples as {
-  quizId: string
-  themeId: string
-  name: string
-  mode: string
-}[]
+
+if (!receipt) {
+  throw new Error("Explicit sample receipt required")
+}
+
+const { samples } = JSON.parse(readFileSync(receipt, "utf8")) as {
+  samples: Array<{
+    quizId: string
+    themeId: string
+    name: string
+    mode: string
+  }>
+}
 
 test("three themes are selectable, all packaged demo assets match their hashes and videos decode", async ({
   page,
@@ -33,7 +43,7 @@ test("three themes are selectable, all packaged demo assets match their hashes a
     data: { password: process.env.MANAGER_PASSWORD },
   })
   expect(response.ok()).toBe(true)
-  const { token } = await response.json()
+  const { token } = (await response.json()) as { token: string }
   const headers = { Authorization: `Bearer ${token}` }
   expect((await request.get("/api/themes/catalog")).status()).toBe(401)
   expect(
@@ -46,7 +56,9 @@ test("three themes are selectable, all packaged demo assets match their hashes a
   ).toBe(404)
   const catalog = await request.get("/api/themes/catalog", { headers })
   expect(catalog.ok()).toBe(true)
-  const { definitions } = await catalog.json()
+  const { definitions } = (await catalog.json()) as {
+    definitions: ShowThemeDefinition[]
+  }
   expect(definitions).toHaveLength(2)
   await page.addInitScript(
     (value) => localStorage.setItem("token", value),
@@ -54,8 +66,13 @@ test("three themes are selectable, all packaged demo assets match their hashes a
   )
   await page.goto(`/manager/quizz/${samples[0].quizId}`)
   await page.getByTestId("studio-tab-settings").click()
-  for (const id of ["tadazz-classic", "tadazz-demo-cosmic", "tadazz-demo-jade"])
+  for (const id of [
+    "tadazz-classic",
+    "tadazz-demo-cosmic",
+    "tadazz-demo-jade",
+  ]) {
     await expect(page.getByTestId(`show-theme-${id}`)).toBeVisible()
+  }
   const jade = page.getByTestId("show-theme-tadazz-demo-jade")
   await jade
     .getByRole("button", { name: "Use this theme", exact: true })
@@ -99,7 +116,7 @@ test("three themes are selectable, all packaged demo assets match their hashes a
     )
     // WebKit's standalone media document waits for a gesture; exercise an
     // embedded playsinline video, as the actual opening component does.
-    const url = new URL(video.url, process.env.TADAZZ_LAB_URL).href
+    const url = new URL(video!.url, process.env.TADAZZ_LAB_URL).href
     await page.setContent(
       `<video muted playsinline preload="auto" src="${url}"></video><button onclick="document.querySelector('video').play()">Play opening</button>`,
     )
@@ -116,7 +133,7 @@ test("three themes are selectable, all packaged demo assets match their hashes a
       .toEqual({ error: 0, width: 1920 })
   }
 })
-for (const sample of samples)
+for (const sample of samples) {
   test(`${sample.name}: host, participant, display and saved theme`, async ({
     page,
     browser,
@@ -126,29 +143,37 @@ for (const sample of samples)
       data: { password: process.env.MANAGER_PASSWORD },
     })
     expect(response.ok()).toBe(true)
-    const { token } = await response.json()
+    const { token } = (await response.json()) as { token: string }
     const headers = { Authorization: `Bearer ${token}` }
     const saved = await request.get(
       `/api/extensions/quizzes/${sample.quizId}`,
       { headers },
     )
     expect(saved.ok()).toBe(true)
-    expect((await saved.json()).extras.defaults.showTheme.id).toBe(
-      sample.themeId,
-    )
+    expect(
+      ((await saved.json()) as { extras: QuizExtrasV2 }).extras.defaults
+        .showTheme!.id,
+    ).toBe(sample.themeId)
     const created = await request.post("/api/games", {
       headers,
       data: { quizzId: sample.quizId },
     })
     expect(created.ok(), await created.text()).toBe(true)
-    const { gameId, inviteCode } = await created.json()
+    const { gameId, inviteCode } = (await created.json()) as {
+      gameId: string
+      inviteCode: string
+    }
     await page.addInitScript(
       (value) => localStorage.setItem("token", value),
       token,
     )
     await page.goto(`/party/manager/${gameId}`)
     const skip = page.getByTestId("tadazz-opening-skip")
-    if (await skip.isVisible().catch(() => false)) await skip.click()
+
+    if (await skip.isVisible().catch(() => false)) {
+      await skip.click()
+    }
+
     if (sample.themeId !== "tadazz-classic") {
       await expect(
         page.locator(
@@ -156,6 +181,7 @@ for (const sample of samples)
         ),
       ).toHaveCount(0)
     }
+
     const stage = page.getByTestId("tadazz-show")
     await expect(stage).toHaveAttribute("data-show-theme", sample.themeId)
     await expect(stage).toHaveAttribute("data-theme-fallback", "false")
@@ -164,6 +190,7 @@ for (const sample of samples)
       locale: "en-US",
     })
     const displayBrowser = await browser.browserType().launch()
+
     try {
       const player = await playerContext.newPage()
       await player.goto(`${process.env.TADAZZ_LAB_URL}/game?pin=${inviteCode}`)
@@ -172,6 +199,7 @@ for (const sample of samples)
       await expect(page.getByTestId("host-connected-counter")).toHaveText(
         "1 / 1",
       )
+
       if (sample.themeId !== "tadazz-classic") {
         await expect(
           page.locator(
@@ -179,6 +207,7 @@ for (const sample of samples)
           ),
         ).toHaveCount(0)
       }
+
       await page.bringToFront()
       await page.getByRole("button", { name: "Start", exact: true }).click()
       await expect(stage).toHaveAttribute("data-voting-open", "true", {
@@ -244,3 +273,4 @@ for (const sample of samples)
       await displayBrowser.close()
     }
   })
+}

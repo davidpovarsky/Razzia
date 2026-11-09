@@ -12,6 +12,7 @@ const basePath = join(
 )
 const extrasPath = join(root, "work/tzila-repaired-private-20261108.json")
 const fixturesPresent = fs.existsSync(basePath) && fs.existsSync(extrasPath)
+// oxlint-disable-next-line no-empty-pattern -- Playwright requires an object fixture pattern; this hook only reads testInfo.
 test.beforeEach(({}, testInfo) => {
   test.skip(
     !fixturesPresent || testInfo.config.metadata.tzilaRepairCandidate !== true,
@@ -181,16 +182,20 @@ test("runs the complete Creating Worlds show with real assets, results, tie and 
       await expect(host.locator(".countdown-value")).toHaveText("20")
       await host.evaluate(() => {
         const samples: Array<{ value: string; at: number }> = []
-        ;(window as any).__tzTimerSamples = samples
+        Object.assign(window, { __tzTimerSamples: samples })
         let previous = ""
         const sample = () => {
           const value =
             document.querySelector(".countdown-value")?.textContent ?? ""
+
           if (value && value !== previous) {
             samples.push({ value, at: Date.now() })
             previous = value
           }
-          if (value !== "00") requestAnimationFrame(sample)
+
+          if (value !== "00") {
+            requestAnimationFrame(sample)
+          }
         }
         sample()
       })
@@ -224,6 +229,7 @@ test("runs the complete Creating Worlds show with real assets, results, tie and 
     )
     const expectedPercentages = Array.from({ length: 5 }, (_, index) => {
       const count = choices.filter((choice) => choice === index).length
+
       return `${Math.round((count / choices.length) * 100)}%`
     })
     await expect
@@ -241,7 +247,8 @@ test("runs the complete Creating Worlds show with real assets, results, tie and 
     if (questionIndex === 0) {
       const timing = await host.evaluate(
         () =>
-          (window as any).__tzTimerSamples as Array<{
+          (window as unknown as { __tzTimerSamples: unknown })
+            .__tzTimerSamples as Array<{
             value: string
             at: number
           }>,
@@ -276,6 +283,7 @@ test("runs the complete Creating Worlds show with real assets, results, tie and 
     }
 
     let winnerIndex = questionIndex % 5
+
     if (questionIndex === 1) {
       await expectScene(host, "tie-break")
       await host.getByTestId("host-resolve-tie-1").click()
@@ -318,7 +326,9 @@ test("runs the complete Creating Worlds show with real assets, results, tie and 
   await expect(host.locator(".full-curtain.right")).toBeVisible()
   await host.screenshot({ path: testInfo.outputPath("99-grand-finale.png") })
 
-  for (const context of playerContexts) await context.close()
+  for (const context of playerContexts) {
+    await context.close()
+  }
   await displayContext.close()
   expect(browserErrors).toEqual([])
 })
@@ -352,6 +362,7 @@ test("fits the 16:9 stage across projector and laptop viewports", async ({
     await expect
       .poll(async () => {
         const box = await page.getByTestId("tadazz-stage").boundingBox()
+
         return Boolean(
           box &&
           box.x >= -1 &&

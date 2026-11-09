@@ -71,7 +71,8 @@ export const quizzValidator = z
   .superRefine((quizz, ctx) => {
     quizz.questions.forEach((question, index) => {
       const effectiveMode =
-        question.playMode ?? (quizz.gameMode === QUIZZ_MODES.SURVEY ? "survey" : "quiz")
+        question.playMode ??
+        (quizz.gameMode === QUIZZ_MODES.SURVEY ? "survey" : "quiz")
 
       if (effectiveMode !== "quiz") {
         return

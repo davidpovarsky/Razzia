@@ -215,7 +215,8 @@ export const InterludePresenter = ({
           </span>
 
           {isManager && (
-            <PlatformButton size="sm"
+            <PlatformButton
+              size="sm"
               type="button"
               onClick={handleSkipClick}
               disabled={skipState.hasSkipped}

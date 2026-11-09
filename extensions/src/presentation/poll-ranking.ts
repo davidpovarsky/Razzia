@@ -1,13 +1,19 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
 /**
  * Canonical answer colours matching Razzia palette tokens
  * (--color-answer-1 to --color-answer-5 in packages/web/src/index.css).
  */
 export const CANONICAL_ANSWER_COLORS = [
-  "#e69f00", // 1 - Amber
-  "#56b4e9", // 2 - Sky Blue
-  "#3dbfa0", // 3 - Teal
-  "#cc79a7", // 4 - Purple / Pink
-  "#0072b2", // 5 - Deep Blue
+  // 1 - Amber
+  "#e69f00",
+  // 2 - Sky Blue
+  "#56b4e9",
+  // 3 - Teal
+  "#3dbfa0",
+  // 4 - Purple / Pink
+  "#cc79a7",
+  // 5 - Deep Blue
+  "#0072b2",
 ] as const
 
 export const CANONICAL_ANSWER_LABELS = ["1", "2", "3", "4", "5"] as const
@@ -63,10 +69,7 @@ export function computePollRanking(
     }
   }
 
-  const totalVotes = options.reduce(
-    (sum, opt) => sum + (Number(opt.count) || 0),
-    0,
-  )
+  const totalVotes = options.reduce((sum, opt) => sum + (opt.count || 0), 0)
 
   if (totalVotes === 0) {
     const unranked: RankedPollOption[] = options.map((opt) => ({
@@ -89,22 +92,25 @@ export function computePollRanking(
 
   // Sort descending by count; tie-break by original answerIndex ascending
   const sorted = [...options].sort((a, b) => {
-    const countA = Number(a.count) || 0
-    const countB = Number(b.count) || 0
+    const countA = a.count || 0
+    const countB = b.count || 0
+
     if (countB !== countA) {
       return countB - countA
     }
+
     return a.answerIndex - b.answerIndex
   })
 
-  const maxVotes = Number(sorted[0].count) || 0
+  const maxVotes = sorted[0].count || 0
   const winners: RankedPollOption[] = []
   const runnersUp: RankedPollOption[] = []
 
   let currentRank = 1
-  for (let i = 0; i < sorted.length; i++) {
+  for (let i = 0; i < sorted.length; i += 1) {
     const opt = sorted[i]
-    const count = Number(opt.count) || 0
+    const count = opt.count || 0
+
     if (count === maxVotes && maxVotes > 0) {
       winners.push({
         ...opt,
@@ -112,9 +118,10 @@ export function computePollRanking(
         isWinner: true,
       })
     } else {
-      if (i > 0 && (Number(sorted[i - 1].count) || 0) !== count) {
+      if (i > 0 && (sorted[i - 1].count || 0) !== count) {
         currentRank = i + 1
       }
+
       runnersUp.push({
         ...opt,
         rank: currentRank,

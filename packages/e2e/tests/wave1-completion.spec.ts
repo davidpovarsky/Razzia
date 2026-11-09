@@ -1,11 +1,7 @@
 import fs from "node:fs"
 import { join } from "node:path"
 import { CONFIG_PATH } from "@razzia/e2e/utils/constants"
-import {
-  openQuizzTab,
-  quizzRow,
-  seedQuizz,
-} from "@razzia/e2e/utils/editor"
+import { openQuizzTab, quizzRow, seedQuizz } from "@razzia/e2e/utils/editor"
 import { expect, test } from "@razzia/e2e/utils/fixtures"
 import { t } from "@razzia/e2e/utils/i18n"
 import { createGame, next, startGame } from "@razzia/e2e/utils/manager"
@@ -17,7 +13,10 @@ import {
 } from "@razzia/extensions/core"
 import type { Page } from "@playwright/test"
 
-const SCREENSHOT_DIR = join(import.meta.dirname, "../test-results/wave1-completion")
+const SCREENSHOT_DIR = join(
+  import.meta.dirname,
+  "../test-results/wave1-completion",
+)
 
 const saveScreenshot = async (page: Page, filename: string) => {
   fs.mkdirSync(SCREENSHOT_DIR, { recursive: true })
@@ -66,7 +65,11 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     fs.mkdirSync(sidecarDir, { recursive: true })
 
     const baseDigest = computeCanonicalBaseDigest({ subject, questions })
-    const defaultV2 = createDefaultQuizExtrasV2(quizId, [q1Id, q2Id], baseDigest)
+    const defaultV2 = createDefaultQuizExtrasV2(
+      quizId,
+      [q1Id, q2Id],
+      baseDigest,
+    )
 
     const openSceneId = crypto.randomUUID()
     const transSceneId = crypto.randomUUID()
@@ -115,11 +118,25 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     await expect(page).toHaveURL(new RegExp(`/manager/quizz/${quizId}$`, "u"))
 
     // 4. Verify Studio Timeline cards in sidebar
-    await expect(page.locator("aside").getByText(/opening/i).first()).toBeVisible()
-    await expect(page.locator("aside").getByText(/transition/i).first()).toBeVisible()
+    await expect(
+      page
+        .locator("aside")
+        .getByText(/opening/i)
+        .first(),
+    ).toBeVisible()
+    await expect(
+      page
+        .locator("aside")
+        .getByText(/transition/i)
+        .first(),
+    ).toBeVisible()
 
     // 5. Click Opening Scene card -> Verify StudioSceneEditor renders
-    await page.locator("aside").getByText(/opening/i).first().click()
+    await page
+      .locator("aside")
+      .getByText(/opening/i)
+      .first()
+      .click()
     await expect(
       page.getByRole("heading", { name: "Welcome to TADA Studio Show" }),
     ).toBeVisible()
@@ -127,29 +144,49 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
 
     // 6. Click Question 1 -> Verify QuestionEditor renders
     await page.locator("aside").getByText("1").first().click()
-    await expect(page.getByPlaceholder(t("quizz:question.placeholder"))).toHaveValue(
-      "What is 2 + 2?",
-    )
+    await expect(
+      page.getByPlaceholder(t("quizz:question.placeholder")),
+    ).toHaveValue("What is 2 + 2?")
     await saveScreenshot(page, "02_studio_question_editor.png")
 
     // 7. Click Participants tab in header
-    await page.getByRole("button", {
-      name: t("extensions:studio.tabs.participants", { defaultValue: "Participants" }),
-    }).click()
-    await expect(page.getByText(t("extensions:roster.title", { defaultValue: "Participant Roster" }))).toBeVisible()
+    await page
+      .getByRole("button", {
+        name: t("extensions:studio.tabs.participants", {
+          defaultValue: "Participants",
+        }),
+      })
+      .click()
+    await expect(
+      page.getByText(
+        t("extensions:roster.title", { defaultValue: "Participant Roster" }),
+      ),
+    ).toBeVisible()
     await saveScreenshot(page, "03_studio_participants.png")
 
     // 8. Click Settings tab in header
-    await page.getByRole("button", {
-      name: t("extensions:studio.tabs.settings", { defaultValue: "Settings" }),
-    }).click()
-    await expect(page.getByText(t("extensions:studio.settings.newQuestionMode", { defaultValue: "Default Question Mode" }))).toBeVisible()
+    await page
+      .getByRole("button", {
+        name: t("extensions:studio.tabs.settings", {
+          defaultValue: "Settings",
+        }),
+      })
+      .click()
+    await expect(
+      page.getByText(
+        t("extensions:studio.settings.newQuestionMode", {
+          defaultValue: "Default Question Mode",
+        }),
+      ),
+    ).toBeVisible()
     await saveScreenshot(page, "04_studio_settings.png")
 
     // 9. Click Launch tab in header
-    await page.getByRole("button", {
-      name: t("extensions:studio.tabs.launch", { defaultValue: "Launch" }),
-    }).click()
+    await page
+      .getByRole("button", {
+        name: t("extensions:studio.tabs.launch", { defaultValue: "Launch" }),
+      })
+      .click()
     await expect(
       page.getByRole("heading", { name: /Launch Live Show/i }),
     ).toBeVisible()
@@ -195,7 +232,11 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     fs.mkdirSync(sidecarDir, { recursive: true })
 
     const baseDigest = computeCanonicalBaseDigest({ subject, questions })
-    const defaultV2 = createDefaultQuizExtrasV2(quizId, [q1Id, q2Id], baseDigest)
+    const defaultV2 = createDefaultQuizExtrasV2(
+      quizId,
+      [q1Id, q2Id],
+      baseDigest,
+    )
 
     const openSceneId = crypto.randomUUID()
     const transSceneId = crypto.randomUUID()
@@ -242,15 +283,21 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     // 2. Web Player Alice joins
     const alice = await newPage()
     await joinGame(alice, pin, "Alice")
-    await expect(manager.getByRole("button", { name: /1.*Players/i })).toBeVisible()
+    await expect(
+      manager.getByRole("button", { name: /1.*Players/i }),
+    ).toBeVisible()
 
     // 3. Start Game
     await startGame(manager)
 
     // 4. Authoritative Stage is now Step 0: Grand Opening Scene!
     // Manager and Alice both see Opening Scene
-    await expect(manager.getByText("Grand Opening Scene")).toBeVisible({ timeout: 15000 })
-    await expect(alice.getByText("Grand Opening Scene")).toBeVisible({ timeout: 15000 })
+    await expect(manager.getByText("Grand Opening Scene")).toBeVisible({
+      timeout: 15000,
+    })
+    await expect(alice.getByText("Grand Opening Scene")).toBeVisible({
+      timeout: 15000,
+    })
 
     // Web Player Alice does NOT see answer options during scene (input suppression)
     await expect(alice.getByText("Four")).not.toBeVisible()
@@ -263,7 +310,9 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     await advanceSceneBtn.click()
 
     // 6. Question 1 answers appear for Alice
-    await expect(alice.getByText("Four", { exact: true })).toBeVisible({ timeout: 15000 })
+    await expect(alice.getByText("Four", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
     await saveScreenshot(manager, "08_live_question1_manager.png")
 
     // Alice selects correct answer "Four"
@@ -274,21 +323,29 @@ test.describe("Wave 1 Acceptance: Studio Navigation, Launch Protection & Live Ga
     await next(manager)
 
     // Verify Transition Scene appears for both Manager and Alice
-    await expect(manager.getByText("Transition to Survey")).toBeVisible({ timeout: 15000 })
-    await expect(alice.getByText("Transition to Survey")).toBeVisible({ timeout: 15000 })
+    await expect(manager.getByText("Transition to Survey")).toBeVisible({
+      timeout: 15000,
+    })
+    await expect(alice.getByText("Transition to Survey")).toBeVisible({
+      timeout: 15000,
+    })
 
     // Manager advances past Transition Scene -> Question 2 (Survey) begins
     await advanceSceneBtn.click()
 
     // Question 2 (Survey) answers appear for Alice
-    await expect(alice.getByText("Great", { exact: true })).toBeVisible({ timeout: 15000 })
+    await expect(alice.getByText("Great", { exact: true })).toBeVisible({
+      timeout: 15000,
+    })
     await alice.getByText("Great", { exact: true }).click()
 
     // Manager advances survey reveal -> finish
     await next(manager)
 
     // 7. Verify finish podium (since Q1 was scored quiz, mixed finish delivers STATUS.FINISHED with podium!)
-    await expect(manager.getByText(/Alice/u).first()).toBeVisible({ timeout: 15000 })
+    await expect(manager.getByText(/Alice/u).first()).toBeVisible({
+      timeout: 15000,
+    })
     await saveScreenshot(manager, "09_live_finish_podium.png")
   })
 })

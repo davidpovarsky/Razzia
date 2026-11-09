@@ -40,12 +40,16 @@ export const ShowImportModal = ({
     switch (format) {
       case "tada-xlsx":
         return t("extensions:showImport.formatTadaXlsx")
+
       case "tada-json":
         return t("extensions:showImport.formatTadaJson")
+
       case "enhanced-bundle":
         return t("extensions:showImport.formatEnhancedBundle")
+
       case "legacy-json":
         return t("extensions:showImport.formatLegacyJson")
+
       default:
         return ""
     }
@@ -62,16 +66,22 @@ export const ShowImportModal = ({
           data-testid="show-import-dialog"
         >
           {/* Header */}
-          <div className="flex shrink-0 items-start justify-between gap-4 border-b border-accent pb-4">
+          <div className="border-accent flex shrink-0 items-start justify-between gap-4 border-b pb-4">
             <div>
-              <RadixAlertDialog.Title className="text-foreground text-xl font-bold flex items-center gap-2">
-                {format === "tada-xlsx" ? (
-                  <FileSpreadsheet className="size-5 text-emerald-500" />
-                ) : format === "enhanced-bundle" ? (
-                  <Sparkles className="size-5 text-amber-500" />
-                ) : (
-                  <FileText className="size-5 text-primary" />
-                )}
+              <RadixAlertDialog.Title className="text-foreground flex items-center gap-2 text-xl font-bold">
+                {(() => {
+                  if (format === "tada-xlsx") {
+                    return (
+                      <FileSpreadsheet className="size-5 text-emerald-500" />
+                    )
+                  }
+
+                  if (format === "enhanced-bundle") {
+                    return <Sparkles className="size-5 text-amber-500" />
+                  }
+
+                  return <FileText className="text-primary size-5" />
+                })()}
                 {t("extensions:showImport.dialogTitle")}
               </RadixAlertDialog.Title>
 
@@ -91,10 +101,10 @@ export const ShowImportModal = ({
               <>
                 {/* Show Title & Overview */}
                 <div className="bg-accent/40 rounded-lg p-3">
-                  <div className="text-muted-foreground text-xs uppercase tracking-wider font-semibold">
+                  <div className="text-muted-foreground text-xs font-semibold tracking-wider uppercase">
                     {t("extensions:showImport.showTitle")}
                   </div>
-                  <div className="text-foreground text-base font-bold truncate mt-0.5">
+                  <div className="text-foreground mt-0.5 truncate text-base font-bold">
                     {summary.title || "—"}
                   </div>
                 </div>
@@ -116,7 +126,7 @@ export const ShowImportModal = ({
                     </div>
                     <div className="text-foreground text-lg font-bold">
                       {summary.questionCount}
-                      <span className="text-muted-foreground text-xs font-normal ml-1">
+                      <span className="text-muted-foreground ml-1 text-xs font-normal">
                         ({summary.quizCount}Q / {summary.surveyCount}S)
                       </span>
                     </div>
@@ -138,7 +148,7 @@ export const ShowImportModal = ({
                     <div className="text-foreground text-lg font-bold">
                       {summary.mediaCount}
                       {summary.answerImageCount > 0 && (
-                        <span className="text-muted-foreground text-xs font-normal ml-1">
+                        <span className="text-muted-foreground ml-1 text-xs font-normal">
                           (+{summary.answerImageCount} img)
                         </span>
                       )}
@@ -153,33 +163,33 @@ export const ShowImportModal = ({
                   </h4>
                   <div className="border-accent max-h-48 overflow-y-auto rounded-lg border">
                     <table className="w-full text-left text-xs">
-                      <thead className="bg-accent/60 sticky top-0 text-muted-foreground font-semibold">
+                      <thead className="bg-accent/60 text-muted-foreground sticky top-0 font-semibold">
                         <tr>
-                          <th className="p-2 w-8 text-center">#</th>
-                          <th className="p-2 w-24">
+                          <th className="w-8 p-2 text-center">#</th>
+                          <th className="w-24 p-2">
                             {t("extensions:showImport.colKind")}
                           </th>
-                          <th className="p-2 w-20">
+                          <th className="w-20 p-2">
                             {t("extensions:showImport.colKey")}
                           </th>
                           <th className="p-2">
                             {t("extensions:showImport.colTitle")}
                           </th>
-                          <th className="p-2 w-16 text-center">
+                          <th className="w-16 p-2 text-center">
                             {t("extensions:showImport.colAdvance")}
                           </th>
-                          <th className="p-2 w-16 text-center">
+                          <th className="w-16 p-2 text-center">
                             {t("extensions:showImport.colMedia")}
                           </th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-accent">
+                      <tbody className="divide-accent divide-y">
                         {summary.timelinePreview.map((item) => (
                           <tr
                             key={`${item.order}-${item.key}`}
                             className="hover:bg-accent/20"
                           >
-                            <td className="p-2 text-center text-muted-foreground">
+                            <td className="text-muted-foreground p-2 text-center">
                               {item.order}
                             </td>
                             <td className="p-2">
@@ -187,13 +197,13 @@ export const ShowImportModal = ({
                                 {item.kind}
                               </span>
                             </td>
-                            <td className="p-2 font-mono text-muted-foreground truncate max-w-[80px]">
+                            <td className="text-muted-foreground max-w-[80px] truncate p-2 font-mono">
                               {item.key}
                             </td>
-                            <td className="p-2 truncate max-w-[220px]">
+                            <td className="max-w-[220px] truncate p-2">
                               {item.title ?? item.questionText ?? "—"}
                             </td>
-                            <td className="p-2 text-center text-muted-foreground">
+                            <td className="text-muted-foreground p-2 text-center">
                               {item.advance === "manual"
                                 ? t("extensions:showImport.advanceManual")
                                 : t("extensions:showImport.advanceAuto")}
@@ -202,7 +212,7 @@ export const ShowImportModal = ({
                               {item.hasMedia ||
                               (item.answerImageCount &&
                                 item.answerImageCount > 0) ? (
-                                <span className="text-emerald-500 font-bold">
+                                <span className="font-bold text-emerald-500">
                                   ✓
                                 </span>
                               ) : (
@@ -221,17 +231,19 @@ export const ShowImportModal = ({
             {/* Error Messages */}
             {errors.length > 0 && (
               <div
-                className="bg-red-500/10 border-red-500/30 text-red-600 dark:text-red-400 rounded-lg border p-3 text-xs space-y-1.5"
+                className="space-y-1.5 rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-xs text-red-600 dark:text-red-400"
                 data-testid="show-import-errors"
               >
-                <div className="font-bold flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 font-bold">
                   <XCircle className="size-4 shrink-0 stroke-red-500" />
                   {t("extensions:showImport.errorsHeading")}
                 </div>
-                <ul className="list-disc pl-5 space-y-1">
+                <ul className="list-disc space-y-1 pl-5">
                   {errors.map((err, idx) => (
                     <li key={idx}>
-                      {err.path ? <strong className="font-mono">[{err.path}]: </strong> : null}
+                      {err.path ? (
+                        <strong className="font-mono">[{err.path}]: </strong>
+                      ) : null}
                       {t(err.messageKey) || err.messageKey}
                     </li>
                   ))}
@@ -242,17 +254,21 @@ export const ShowImportModal = ({
             {/* Warnings */}
             {warnings.length > 0 && (
               <div
-                className="bg-amber-500/10 border-amber-500/30 text-amber-700 dark:text-amber-400 rounded-lg border p-3 text-xs space-y-1.5"
+                className="space-y-1.5 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-xs text-amber-700 dark:text-amber-400"
                 data-testid="show-import-warnings"
               >
-                <div className="font-bold flex items-center gap-1.5">
+                <div className="flex items-center gap-1.5 font-bold">
                   <AlertTriangle className="size-4 shrink-0 stroke-amber-500" />
                   {t("extensions:showImport.warningsHeading")}
                 </div>
-                <ul className="list-disc pl-5 space-y-1">
+                <ul className="list-disc space-y-1 pl-5">
                   {warnings.map((warn, idx) => (
                     <li key={idx}>
-                      {warn.cardKey ? <strong className="font-mono">[{warn.cardKey}]: </strong> : null}
+                      {warn.cardKey ? (
+                        <strong className="font-mono">
+                          [{warn.cardKey}]:{" "}
+                        </strong>
+                      ) : null}
                       {t(warn.messageKey) || warn.messageKey}
                     </li>
                   ))}

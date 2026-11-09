@@ -52,6 +52,7 @@ export const useUploadMedia = (
             defaultValue: `Only ${acceptType} files are allowed here`,
           }),
         )
+
         continue
       }
 

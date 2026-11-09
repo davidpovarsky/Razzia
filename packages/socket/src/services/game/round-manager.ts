@@ -39,7 +39,9 @@ import {
   type LedgerQuestionEntry,
   type ShowRoundHooks,
 } from "@razzia/extensions/server"
+
 export type { QuestionCheckpoint } from "@razzia/extensions/server"
+
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { QUESTION_SCORING } from "@razzia/socket/services/scoring"
@@ -50,7 +52,6 @@ import {
 import { orderToPoint, timeToPoint } from "@razzia/socket/utils/game"
 import { SECOND_MS } from "@razzia/socket/utils/sleep"
 import { nanoid } from "nanoid"
-
 type BroadcastFn = <T extends Status>(
   _status: T,
   _data: StatusDataMap[T],
@@ -121,7 +122,6 @@ export class RoundManager {
   private readonly checkpoints = new RoundCheckpointStore()
   private readonly questionLedger = new Map<number, LedgerQuestionEntry>()
   private latestRevealDistribution: RevealDistributionSnapshot | null = null
-
   constructor(opts: RoundManagerOptions) {
     this.opts = opts
     this.scheduling = new RoundScheduling({
@@ -137,7 +137,6 @@ export class RoundManager {
           .emit(EVENTS.MANAGER.AUTO_ADVANCE, state),
       advance: () => this.advance(),
     })
-
     const steps: RoundStep[] = [
       {
         name: "reveal",
@@ -170,7 +169,6 @@ export class RoundManager {
               this.opts.quizz.questions[
                 this.currentQuestion + 1
               ]?.category?.trim()
-
             const show = this.opts.shouldShowLeaderboard({
               currentQuestionIndex: this.currentQuestion,
               currentCategory: currentCat,
@@ -208,41 +206,32 @@ export class RoundManager {
         delay: () => 0,
       },
     ]
-
     this.steps = steps
   }
-
   getAnsweredPlayerIds(): Set<string> {
     return new Set(this.playersAnswers.map((a) => a.playerId))
   }
-
   hasPlayerAnswered(playerId: string): boolean {
     return this.playersAnswers.some((a) => a.playerId === playerId)
   }
-
   getPlayerSubmittedAnswer(playerId: string): number[] | null {
     return (
       this.playersAnswers.find((a) => a.playerId === playerId)?.answerIds ??
       null
     )
   }
-
   isStarted(): boolean {
     return this.started
   }
-
   get currentQuestionIndex(): number {
     return this.currentQuestion
   }
-
   get isCurrentlyAcceptingAnswers(): boolean {
     return this.acceptingAnswers && !this.paused
   }
-
   get isPaused(): boolean {
     return this.paused
   }
-
   getPauseSnapshot(): GamePauseSnapshot {
     const candidates = [
       this.opts.cooldown.remainingMs,
@@ -257,7 +246,6 @@ export class RoundManager {
         !this.paused && remainingMs !== null ? Date.now() + remainingMs : null,
     }
   }
-
   getRemainingSeconds(): number {
     if (!this.acceptingAnswers || this.question.time === NO_TIME_LIMIT) {
       return 0
@@ -273,11 +261,9 @@ export class RoundManager {
 
     return Math.max(0, Math.ceil(this.question.time - elapsed))
   }
-
   get currentLeaderboard(): readonly Player[] {
     return this.leaderboard
   }
-
   get currentStepName(): string | null {
     if (this.currentStep < 0 || this.currentStep >= this.steps.length) {
       return null
@@ -285,36 +271,29 @@ export class RoundManager {
 
     return this.steps[this.currentStep].name
   }
-
   private get question(): Question {
     return this.opts.quizz.questions[this.currentQuestion]
   }
-
   private isAskingQuestion(): boolean {
     return this.currentStep < 0
   }
-
   private isLastQuestion(): boolean {
     return !this.opts.quizz.questions[this.currentQuestion + 1]
   }
-
   private isSameCategoryNext(): boolean {
     const category = this.question.category?.trim()
     const next = this.opts.quizz.questions[this.currentQuestion + 1]
 
     return Boolean(category) && next?.category?.trim() === category
   }
-
   get currentEpoch(): number {
     return this.generation
   }
-
   isSurvey(): boolean {
     const q = this.question
 
     return resolveQuestionPlayMode(q, this.opts.quizz.gameMode) === "survey"
   }
-
   private getInterludeStepIndex(): number {
     return this.steps.findIndex((s) => s.name === "interlude")
   }
@@ -336,7 +315,6 @@ export class RoundManager {
   private scheduleAutoAdvance(delay: number, force = false) {
     this.scheduling.scheduleAutoAdvance(delay, force)
   }
-
   private captureCheckpoint(index: number): void {
     this.checkpoints.capture(index, {
       players: this.opts.players.getAll(),
@@ -349,7 +327,6 @@ export class RoundManager {
   getCheckpoints(): number[] {
     return this.checkpoints.list()
   }
-
   replayFromCheckpoint(targetIndex: number): boolean {
     if (!this.started) {
       return false
@@ -372,23 +349,22 @@ export class RoundManager {
     this.clearInterludeTimer()
     this.opts.cooldown.abort()
     this.acceptingAnswers = false
-
     const restored = restoreCheckpointData(cp, this.opts.players.getAll())
     this.opts.players.replace(restored.players)
     this.leaderboard = restored.leaderboard
     this.tempOldLeaderboard = restored.tempOldLeaderboard
     this.questionsHistory = restored.questionsHistory
+
     if (restored.questionLedger) {
       this.questionLedger.clear()
-      for (const [key, value] of restored.questionLedger)
+      for (const [key, value] of restored.questionLedger) {
         this.questionLedger.set(key, value)
+      }
     }
 
     this.playersAnswers = []
     this.latestRevealDistribution = null
-
     this.checkpoints.pruneAfter(targetIndex)
-
     this.currentQuestion = targetIndex
     this.opts.onReplayCheckpoint?.(targetIndex)
 
@@ -397,7 +373,6 @@ export class RoundManager {
 
     return true
   }
-
   getHistory(questionIndex?: number): QuestionResult[] | QuestionResult | null {
     if (questionIndex !== undefined) {
       return this.questionsHistory[questionIndex] ?? null
@@ -405,13 +380,11 @@ export class RoundManager {
 
     return this.questionsHistory
   }
-
   getQuestionLedgerEntry(
     questionIndex: number,
   ): LedgerQuestionEntry | undefined {
     return this.questionLedger.get(questionIndex)
   }
-
   getRevealDistribution(): RevealDistributionSnapshot | null {
     return this.latestRevealDistribution
   }
@@ -426,12 +399,10 @@ export class RoundManager {
     this.paused = true
     this.pausedAt = Date.now()
     this.opts.cooldown.pause()
-
     this.scheduling.pause()
 
     return true
   }
-
   resumeGame(): boolean {
     if (!this.started || !this.paused) {
       return false
@@ -444,20 +415,24 @@ export class RoundManager {
     if (this.acceptingAnswers) {
       this.startTime += pausedFor
     }
-    this.opts.cooldown.resume()
 
+    this.opts.cooldown.resume()
     this.scheduling.resume()
 
     if (this.votingStartsAt !== null && this.currentStep < 0) {
       this.votingStartsAt += pausedFor
-      if (this.votingEndsAt !== null) this.votingEndsAt += pausedFor
+
+      if (this.votingEndsAt !== null) {
+        this.votingEndsAt += pausedFor
+      }
+
       this.broadcastVotingQuestion()
     }
 
     this.endIfEveryoneAnswered()
+
     return true
   }
-
   endTimer(): boolean {
     if (!this.started || !this.acceptingAnswers || this.paused) {
       return false
@@ -469,17 +444,14 @@ export class RoundManager {
 
     return true
   }
-
   getVoteCompletionReason() {
     return this.voteCompletion
   }
-
   noteManualVoteCompletion(): void {
     if (this.acceptingAnswers) {
       this.voteCompletion = "manual"
     }
   }
-
   nextScreen(): boolean {
     if (!this.started) {
       return false
@@ -496,11 +468,9 @@ export class RoundManager {
 
     return true
   }
-
   skipScreen(): boolean {
     return this.nextScreen()
   }
-
   canPrevious() {
     return evaluatePreviousScreen({
       started: this.started,
@@ -511,7 +481,6 @@ export class RoundManager {
       canPreviousTimelineStep: this.opts.canPreviousTimelineStep,
     })
   }
-
   cancelActiveVote(): boolean {
     if (!this.started) {
       return false
@@ -528,11 +497,9 @@ export class RoundManager {
 
     return true
   }
-
   getAnswerCount(): number {
     return this.playersAnswers.length
   }
-
   reopenQuestion(targetIndex: number): boolean {
     if (!this.started) {
       this.started = true
@@ -553,11 +520,13 @@ export class RoundManager {
 
     // Invalidate old attempt in ledger and questionsHistory
     this.questionLedger.delete(targetIndex)
+    /* oxlint-disable typescript/no-dynamic-delete -- Remove a keyed optional override from its mutable dictionary without replacing object identity. */
     delete (
       this.questionsHistory as Record<number, QuestionResult | undefined>
     )[targetIndex]
 
     // Recompute player scores and streaks from remaining active ledger
+    /* oxlint-enable typescript/no-dynamic-delete */
     const recomputed = recomputeScoresFromLedger(
       this.opts.players.getAll(),
       Array.from(this.questionLedger.values()),
@@ -567,14 +536,12 @@ export class RoundManager {
     this.leaderboard = recomputed
     this.tempOldLeaderboard = null
     this.opts.onQuestionScored?.(recomputed)
-
     this.currentQuestion = targetIndex
     this.opts.onReplayCheckpoint?.(targetIndex)
     void this.newQuestion()
 
     return true
   }
-
   showCompletedQuestionResults(targetQuestionIndex: number): boolean {
     if (
       targetQuestionIndex < 0 ||
@@ -594,13 +561,10 @@ export class RoundManager {
     this.acceptingAnswers = false
     this.currentQuestion = targetQuestionIndex
     this.currentStep = 0
-
     const counts: Record<number, number> = {}
-
     for (let i = 0; i < historyItem.answers.length; i += 1) {
       counts[i] = 0
     }
-
     for (const pa of historyItem.playerAnswers) {
       if (Array.isArray(pa.answerIds)) {
         for (const id of pa.answerIds) {
@@ -610,9 +574,7 @@ export class RoundManager {
         }
       }
     }
-
     const targetQ = this.opts.quizz.questions[targetQuestionIndex]
-
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
       ...targetQ,
       questionNumber: targetQuestionIndex + 1,
@@ -620,7 +582,6 @@ export class RoundManager {
       solutions: this.isSurvey() ? undefined : targetQ.solutions,
       responses: counts,
     })
-
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.UPDATE_QUESTION, {
       current: targetQuestionIndex + 1,
       total: this.opts.quizz.questions.length,
@@ -628,7 +589,6 @@ export class RoundManager {
 
     return true
   }
-
   previousScreen(): boolean {
     if (!this.started) {
       return false
@@ -669,11 +629,9 @@ export class RoundManager {
     // 2. If at leaderboard (step 1):
     if (this.currentStep === 1) {
       this.currentStep = 0
-
       const targetQ = this.opts.quizz.questions[this.currentQuestion]
       const ledgerEntry = this.questionLedger.get(this.currentQuestion)
       const counts = countAnswers(ledgerEntry?.answers ?? [])
-
       this.opts.send(this.opts.getManagerId(), STATUS.SHOW_RESPONSES, {
         ...targetQ,
         questionNumber: this.currentQuestion + 1,
@@ -681,7 +639,6 @@ export class RoundManager {
         solutions: this.isSurvey() ? undefined : targetQ.solutions,
         responses: counts,
       })
-
       this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.UPDATE_QUESTION, {
         current: this.currentQuestion + 1,
         total: this.opts.quizz.questions.length,
@@ -694,7 +651,6 @@ export class RoundManager {
     // Navigating back from reveal reopens this question for a fresh vote!
     return this.reopenQuestion(this.currentQuestion)
   }
-
   endOrSkipInterlude(): boolean {
     if (!this.started) {
       return false
@@ -711,7 +667,6 @@ export class RoundManager {
 
     return true
   }
-
   skipQuestion(reason?: string): boolean {
     if (!this.started) {
       return false
@@ -738,7 +693,6 @@ export class RoundManager {
       answers: [],
       skipped: true,
     })
-
     this.questionsHistory[this.currentQuestion] = {
       ...this.question,
       solutions: undefined,
@@ -749,9 +703,12 @@ export class RoundManager {
         playerName: player.username,
         answerIds: null,
       })),
-      ...(reason ? { note: `Skipped: ${reason}` } : {}),
+      ...(reason
+        ? {
+            note: `Skipped: ${reason}`,
+          }
+        : {}),
     }
-
     this.playersAnswers = []
 
     if (this.opts.onQuestionSkipped) {
@@ -775,7 +732,6 @@ export class RoundManager {
       total: this.opts.quizz.questions.length,
     }
   }
-
   async start(socket: Socket): Promise<void> {
     if (this.started) {
       return
@@ -803,7 +759,6 @@ export class RoundManager {
       time: 3,
       subject: this.opts.quizz.subject,
     })
-
     await this.cancellableSleep(
       Math.max(3, Math.ceil(1200 / SECOND_MS)),
       this.generation,
@@ -830,7 +785,6 @@ export class RoundManager {
 
     void this.newQuestion()
   }
-
   advance(): void {
     if (!this.started || this.paused) {
       return
@@ -849,7 +803,6 @@ export class RoundManager {
 
     this.runStep(this.currentStep + 1)
   }
-
   private runStep(index: number): void {
     const step = this.steps[index]
 
@@ -867,16 +820,15 @@ export class RoundManager {
 
     this.currentStep = index
     step.enter()
-
     const delay = step.delay(this.opts.getSettings())
 
     if (delay > 0) {
       const force =
-        step.name === "reveal" && this.opts.quickResultsHoldSeconds?.() != null
+        step.name === "reveal" &&
+        typeof this.opts.quickResultsHoldSeconds?.() === "number"
       this.scheduleAutoAdvance(delay, force)
     }
   }
-
   private nextQuestion(): void {
     if (this.opts.onQuestionCompleted) {
       this.opts.onQuestionCompleted(this.currentQuestion, () => {
@@ -902,7 +854,6 @@ export class RoundManager {
     this.currentQuestion += 1
     void this.newQuestion()
   }
-
   private async newQuestion(): Promise<void> {
     if (!this.started) {
       return
@@ -910,11 +861,9 @@ export class RoundManager {
 
     this.generation += 1
     const gen = this.generation
-
     this.cancelPendingAsync()
     this.clearAutoAdvance()
     this.clearInterludeTimer()
-
     this.currentStep = -1
     this.acceptingAnswers = false
     this.playersAnswers = []
@@ -925,9 +874,7 @@ export class RoundManager {
     // Capture pre-question checkpoint
     this.voteCompletion = null
     this.captureCheckpoint(this.currentQuestion)
-
     this.opts.onNewQuestion()
-
     this.opts.io.to(this.opts.gameId).emit(EVENTS.GAME.UPDATE_QUESTION, {
       current: this.currentQuestion + 1,
       total: this.opts.quizz.questions.length,
@@ -942,9 +889,11 @@ export class RoundManager {
         questionNumber: this.currentQuestion + 1,
         questionType: this.question.type,
       })
-
       const ok1 = await this.cancellableSleep(2, gen)
-      if (!ok1 || this.generation !== gen || !this.started) return
+
+      if (!ok1 || this.generation !== gen || !this.started) {
+        return
+      }
 
       const imageMedia =
         this.question.media?.type === MEDIA_TYPES.IMAGE
@@ -957,12 +906,15 @@ export class RoundManager {
         media: imageMedia,
         cooldown: this.question.cooldown,
       })
-
       const ok2 = await this.cancellableSleep(this.question.cooldown, gen)
-      if (!ok2 || this.generation !== gen || !this.started) return
+
+      if (!ok2 || this.generation !== gen || !this.started) {
+        return
+      }
     }
 
     const entranceMs = this.opts.votingEntranceMs?.() ?? 0
+
     if (entranceMs > 0) {
       this.votingStartsAt = Date.now() + entranceMs
       this.votingEndsAt =
@@ -971,10 +923,15 @@ export class RoundManager {
           : this.votingStartsAt + this.question.time * SECOND_MS
       this.broadcastVotingQuestion()
       const ready = await this.cancellableSleep(entranceMs / SECOND_MS, gen)
-      if (!ready || this.generation !== gen || !this.started) return
+
+      if (!ready || this.generation !== gen || !this.started) {
+        return
+      }
     }
+
     this.startTime = Date.now()
     this.acceptingAnswers = true
+
     if (entranceMs > 0) {
       this.votingStartsAt = this.startTime
       this.votingEndsAt =
@@ -982,9 +939,9 @@ export class RoundManager {
           ? null
           : this.startTime + this.question.time * SECOND_MS
     }
+
     this.broadcastVotingQuestion()
     await this.opts.cooldown.start(this.question.time)
-
     this.acceptingAnswers = false
 
     if (this.generation !== gen || !this.started) {
@@ -994,7 +951,6 @@ export class RoundManager {
     this.voteCompletion ??= "elapsed"
     this.runStep(0)
   }
-
   private broadcastVotingQuestion(): void {
     this.opts.broadcast(STATUS.SELECT_ANSWER, {
       questionNumber: this.currentQuestion + 1,
@@ -1012,7 +968,9 @@ export class RoundManager {
         ? {
             votingStartsAt: this.votingStartsAt,
             ...(this.votingEndsAt !== null
-              ? { votingEndsAt: this.votingEndsAt }
+              ? {
+                  votingEndsAt: this.votingEndsAt,
+                }
               : {}),
           }
         : {}),
@@ -1041,10 +999,8 @@ export class RoundManager {
         }
       }),
     }
-
     this.questionsHistory[this.currentQuestion] = historyItem
   }
-
   private showResults(): void {
     const currentPlayers = this.opts.players.getAll()
     this.latestRevealDistribution = createRevealDistribution({
@@ -1056,11 +1012,8 @@ export class RoundManager {
       questionId: this.opts.getQuestionId?.(this.currentQuestion),
       startedAt: Date.now(),
     })
-
     this.opts.onResultsCalculated?.(this.latestRevealDistribution)
-
     const answerCounts = countAnswers(this.playersAnswers)
-
     const currentEntry: LedgerQuestionEntry = {
       questionIndex: this.currentQuestion,
       question: this.question,
@@ -1068,7 +1021,6 @@ export class RoundManager {
       skipped: false,
     }
     this.questionLedger.set(this.currentQuestion, currentEntry)
-
     const hasAuthoredScene =
       this.opts.hasAuthoredResultsScene?.(this.currentQuestion) ?? false
 
@@ -1078,7 +1030,6 @@ export class RoundManager {
           text: "game:answerNoted",
         })
       })
-
       this.recordHistory(currentPlayers)
       this.playersAnswers = []
 
@@ -1102,21 +1053,22 @@ export class RoundManager {
 
     const oldLeaderboard = (() => {
       if (this.leaderboard.length === 0) {
-        return currentPlayers.map((p) => ({ ...p }))
+        return currentPlayers.map((p) => ({
+          ...p,
+        }))
       }
 
-      return this.leaderboard.map((p) => ({ ...p }))
+      return this.leaderboard.map((p) => ({
+        ...p,
+      }))
     })()
-
     const sortedPlayers = recomputeScoresFromLedger(
       currentPlayers,
       Array.from(this.questionLedger.values()),
       QUESTION_SCORING,
     )
-
     this.opts.players.replace(sortedPlayers)
     this.opts.onQuestionScored?.(sortedPlayers)
-
     const scoring = QUESTION_SCORING[this.question.type]
 
     // Immediate personal result to each player based on THIS question's contribution
@@ -1134,7 +1086,6 @@ export class RoundManager {
       const penalty =
         !correct && playerAnswer ? (this.question.penalty ?? 0) : 0
       const delta = correct ? earned : -penalty
-
       this.opts.send(player.id, STATUS.SHOW_RESULT, {
         correct,
         message: correct ? "game:correct" : "game:wrong",
@@ -1144,7 +1095,6 @@ export class RoundManager {
         aheadOfMe: aheadPlayer ? aheadPlayer.username : null,
       })
     })
-
     this.recordHistory(currentPlayers, sortedPlayers)
 
     if (!hasAuthoredScene) {
@@ -1163,22 +1113,17 @@ export class RoundManager {
     this.playersAnswers = []
     this.opts.onPresenceChange?.()
   }
-
   private showLeaderboard(): void {
     const oldLeaderboard = this.tempOldLeaderboard ?? this.leaderboard
-
     this.opts.send(this.opts.getManagerId(), STATUS.SHOW_LEADERBOARD, {
       oldLeaderboard: oldLeaderboard.slice(0, 5),
       leaderboard: this.leaderboard.slice(0, 5),
     })
-
     this.tempOldLeaderboard = null
   }
-
   private showInterlude(): void {
     this.clearInterludeTimer()
     this.opts.onInterlude?.(this.currentQuestion)
-
     const advanceMode =
       this.opts.getInterludeAdvance?.(this.currentQuestion) ?? "manual"
 
@@ -1188,38 +1133,30 @@ export class RoundManager {
       )
     }
   }
-
   private finishSurvey(): void {
     const players = this.opts.players.getAll()
-
     const summary = {
       subject: this.opts.quizz.subject,
       totalPlayers: players.length,
       totalQuestions: this.opts.quizz.questions.length,
     }
-
     this.opts.send(this.opts.getManagerId(), STATUS.SUMMARY, summary)
-
     players.forEach((player) => {
       this.opts.send(player.id, STATUS.SUMMARY, summary)
     })
   }
-
   finish(): void {
     this.started = false
     this.paused = false
     this.pausedAt = null
     this.clearAutoAdvance()
     this.clearInterludeTimer()
-
     const hasScoredQuestions = this.opts.quizz.questions.some(
       (q) => resolveQuestionPlayMode(q, this.opts.quizz.gameMode) === "quiz",
     )
-
     const finalPlayers = hasScoredQuestions
       ? this.leaderboard
       : this.opts.players.getAll()
-
     this.opts.onGameFinished({
       id: `${Date.now()}-${nanoid(8)}`,
       gameMode: hasScoredQuestions ? QUIZZ_MODES.QUIZ : QUIZZ_MODES.SURVEY,
@@ -1239,15 +1176,14 @@ export class RoundManager {
       return
     }
 
-    const top = this.leaderboard
-      .slice(0, 3)
-      .map(({ username, points }) => ({ username, points }))
-
+    const top = this.leaderboard.slice(0, 3).map(({ username, points }) => ({
+      username,
+      points,
+    }))
     this.opts.send(this.opts.getManagerId(), STATUS.FINISHED, {
       subject: this.opts.quizz.subject,
       top,
     })
-
     this.leaderboard.forEach((player, index) => {
       this.opts.send(player.id, STATUS.FINISHED, {
         subject: this.opts.quizz.subject,
@@ -1256,7 +1192,6 @@ export class RoundManager {
       })
     })
   }
-
   startQuestionAtIndex(index: number): void {
     if (!this.started) {
       this.started = true
@@ -1287,28 +1222,44 @@ export class RoundManager {
 
     return [Math.min(options.max, Math.max(options.min, value))]
   }
-
   selectAnswer(socket: Socket, answerIds: number[]): AnswerSubmissionResult {
     const player = this.opts.players.findById(socket.id)
 
     if (!player) {
-      return { accepted: false, reason: "player_not_found" }
+      return {
+        accepted: false,
+        reason: "player_not_found",
+      }
     }
+
     if (this.paused) {
-      return { accepted: false, reason: "game_paused" }
+      return {
+        accepted: false,
+        reason: "game_paused",
+      }
     }
+
     if (!this.acceptingAnswers) {
-      return { accepted: false, reason: "not_accepting_answers" }
+      return {
+        accepted: false,
+        reason: "not_accepting_answers",
+      }
     }
 
     if (this.playersAnswers.find((a) => a.playerId === socket.id)) {
-      return { accepted: false, reason: "duplicate_answer" }
+      return {
+        accepted: false,
+        reason: "duplicate_answer",
+      }
     }
 
     const submitted = this.normalizeAnswer(answerIds)
 
     if (!submitted) {
-      return { accepted: false, reason: "invalid_answer" }
+      return {
+        accepted: false,
+        reason: "invalid_answer",
+      }
     }
 
     const points = (() => {
@@ -1326,17 +1277,14 @@ export class RoundManager {
 
       return timeToPoint(this.startTime, this.question)
     })()
-
     this.playersAnswers.push({
       playerId: player.id,
       answerIds: submitted,
       points,
     })
-
     this.opts.send(socket.id, STATUS.WAIT, {
       text: "game:waitingForAnswers",
     })
-
     socket
       .to(this.opts.gameId)
       .emit(EVENTS.GAME.PLAYER_ANSWER, this.playersAnswers.length)
@@ -1345,30 +1293,44 @@ export class RoundManager {
     this.opts.onPresenceChange?.()
     this.endIfEveryoneAnswered()
 
-    return { accepted: true }
+    return {
+      accepted: true,
+    }
   }
-
   updatePlayerId(oldId: string, newId: string): void {
     rebindLedgerPlayer(this.questionLedger, oldId, newId)
     this.checkpoints.updateSocketId(oldId, newId)
     this.playersAnswers = this.playersAnswers.map((answer) =>
-      answer.playerId === oldId ? { ...answer, playerId: newId } : answer,
+      answer.playerId === oldId
+        ? {
+            ...answer,
+            playerId: newId,
+          }
+        : answer,
     )
     this.leaderboard = this.leaderboard.map((p) =>
-      p.id === oldId ? { ...p, id: newId } : p,
+      p.id === oldId
+        ? {
+            ...p,
+            id: newId,
+          }
+        : p,
     )
 
     if (this.tempOldLeaderboard) {
       this.tempOldLeaderboard = this.tempOldLeaderboard.map((p) =>
-        p.id === oldId ? { ...p, id: newId } : p,
+        p.id === oldId
+          ? {
+              ...p,
+              id: newId,
+            }
+          : p,
       )
     }
   }
-
   updateCheckpointClientId(oldClientId: string, newClientId: string): void {
     this.checkpoints.updateClientId(oldClientId, newClientId)
   }
-
   endIfEveryoneAnswered(): void {
     if (!this.acceptingAnswers || this.paused) {
       return
@@ -1393,7 +1355,6 @@ export class RoundManager {
       this.opts.cooldown.abort()
     }
   }
-
   dispose(): void {
     this.started = false
     this.paused = false

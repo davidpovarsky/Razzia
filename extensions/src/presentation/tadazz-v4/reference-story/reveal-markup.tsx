@@ -1,6 +1,7 @@
 // JSX geometry ported from the supplied HTML. Live cards and copy are React props.
 import type { ReactNode } from "react"
 import type { StoryLabels } from "./story-labels"
+
 export function RevealMarkup({
   cards,
   flyers,
@@ -11,11 +12,7 @@ export function RevealMarkup({
   labels: StoryLabels
 }) {
   return (
-    <section
-      className="theater"
-      id="theater"
-      aria-label={labels.story}
-    >
+    <section className="theater" id="theater" aria-label={labels.story}>
       <img
         className="stage-art"
         src="/tadazz-show/story/fef87578b7d57eae.webp"
@@ -41,11 +38,7 @@ export function RevealMarkup({
         height="900"
         aria-hidden="true"
       ></canvas>
-      <div
-        id="gallery"
-        className="gallery"
-        aria-label={labels.story}
-      >
+      <div id="gallery" className="gallery" aria-label={labels.story}>
         {cards}
       </div>
       <div id="flyingPictures" className="flying-pictures" aria-hidden="true">

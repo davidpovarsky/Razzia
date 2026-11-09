@@ -32,8 +32,10 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
   if (input.questionIds.length !== 10) {
     throw new Error("Creating Worlds requires two five-question rounds")
   }
+
   const extras = structuredClone(input)
   const timeline: TimelineItem[] = []
+  /* oxlint-disable max-params -- Preserve the existing positional protocol/animation API; changing callers is outside this lint repair. */
   const scene = (
     preset: (typeof CREATING_WORLDS_PRESETS)[number],
     round = 1,
@@ -50,12 +52,18 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
       durationMs: 10000,
       ...props,
     }
+
     if (onTimeline) {
-      timeline.push({ id: crypto.randomUUID(), kind: "animation", sceneId: id })
+      timeline.push({
+        id: crypto.randomUUID(),
+        kind: "animation",
+        sceneId: id,
+      })
     }
   }
   // Preserve the editable dial-in number/roster scene metadata without creating
   // another on-stage directory. The public lobby renders the directory once.
+  /* oxlint-enable max-params */
   scene("representative-directory", 1, {}, false)
   // Creating Worlds artwork, join instructions and live connection readiness
   // are lobby-only. Start Game enters the first-round title immediately.
@@ -75,12 +83,18 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
 
     if (i === 4 || i === 9) {
       scene("round-recap", round)
-      scene("story-assembly", round, { advance: "auto", durationMs: 60000 })
+      scene("story-assembly", round, {
+        advance: "auto",
+        durationMs: 60000,
+      })
       // Reveal + two-minute story clock hold at zero for host advancement.
       scene("story-live", round)
 
       if (i === 4) {
-        scene("z-wipe", 2, { advance: "auto", durationMs: 1800 })
+        scene("z-wipe", 2, {
+          advance: "auto",
+          durationMs: 1800,
+        })
         scene("round-two", 2)
       }
     }
@@ -91,11 +105,16 @@ export function completeCreatingWorldsShow(input: QuizExtrasV2): QuizExtrasV2 {
   if (extras.roster.participants.length === 0) {
     extras.roster = {
       phoneInviteOnly: false,
-      participants: Array.from({ length: 40 }, (_, i) => ({
-        rosterPlayerId: crypto.randomUUID(),
-        displayName: `Test Representative ${String(i + 1).padStart(2, "0")}`,
-        phoneE164: null,
-      })),
+      participants: Array.from(
+        {
+          length: 40,
+        },
+        (_, i) => ({
+          rosterPlayerId: crypto.randomUUID(),
+          displayName: `Test Representative ${String(i + 1).padStart(2, "0")}`,
+          phoneE164: null,
+        }),
+      ),
     }
   }
 

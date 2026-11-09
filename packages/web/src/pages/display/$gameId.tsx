@@ -39,6 +39,7 @@ const AudienceDisplayPage = () => {
     if (syncedRef.current) {
       return
     }
+
     syncedRef.current = true
 
     // Obtain temporary room-media authorization before joining the public display.
@@ -52,6 +53,7 @@ const AudienceDisplayPage = () => {
         if (!response.ok) {
           throw new Error("Room no longer exists")
         }
+
         if (!disposed) {
           socket.emit(EVENTS.SPECTATOR.JOIN, { gameId })
         }

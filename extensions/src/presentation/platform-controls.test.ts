@@ -1,4 +1,5 @@
 import { createElement } from "react"
+import { parse } from "@babel/parser"
 import { describe, expect, it } from "vitest"
 import { renderToStaticMarkup } from "react-dom/server"
 import { readdirSync, readFileSync } from "node:fs"
@@ -29,6 +30,84 @@ function sourceFiles(directory: string): string[] {
 
     return []
   })
+}
+
+function record(value: unknown): Record<string, unknown> | null {
+  return value !== null && typeof value === "object"
+    ? (value as Record<string, unknown>)
+    : null
+}
+
+function inspectControls(source: string) {
+  const result = { raw: 0, impersonated: false, dynamic: false }
+  const visit = (value: unknown): void => {
+    const node = record(value)
+
+    if (!node) {
+      return
+    }
+
+    if (node.type === "JSXOpeningElement") {
+      const name = record(node.name)
+      const tag = name?.type === "JSXIdentifier" ? name.name : null
+
+      if (
+        tag === "button" ||
+        (name?.type === "JSXMemberExpression" &&
+          record(name.object)?.name === "motion" &&
+          record(name.property)?.name === "button")
+      ) {
+        result.raw += 1
+      }
+
+      if (["div", "span", "article"].includes(String(tag))) {
+        for (const attribute of node.attributes as unknown[]) {
+          const field = record(attribute)
+          const content = record(field?.value)
+
+          if (
+            record(field?.name)?.name === "role" &&
+            (content?.value === "button" ||
+              record(content?.expression)?.value === "button")
+          ) {
+            result.impersonated = true
+          }
+        }
+      }
+    }
+
+    if (node.type === "CallExpression") {
+      const callee = record(node.callee)
+
+      if (
+        (callee?.name === "createElement" ||
+          record(callee?.property)?.name === "createElement") &&
+        record((node.arguments as unknown[])[0])?.value === "button"
+      ) {
+        result.dynamic = true
+      }
+    }
+
+    for (const [key, child] of Object.entries(node)) {
+      if (["loc", "start", "end", "comments", "tokens"].includes(key)) {
+        continue
+      }
+
+      if (Array.isArray(child)) {
+        for (const item of child as unknown[]) {
+          visit(item)
+        }
+      } else {
+        visit(child)
+      }
+    }
+  }
+  visit(
+    parse(source, { sourceType: "unambiguous", plugins: ["typescript", "jsx"] })
+      .program,
+  )
+
+  return result
 }
 
 describe("native platform control contract", () => {
@@ -80,7 +159,8 @@ describe("native platform control contract", () => {
     ]) {
       const name = relative(root, file).replaceAll("\\", "/")
       const text = readFileSync(file, "utf8")
-      const count = [...text.matchAll(/<(?:button|motion\.button)\b/g)].length
+      const controls = inspectControls(text)
+      const count = controls.raw
       const original = (primitives as Record<string, number>)[name] ?? 0
 
       if (count > original) {
@@ -89,12 +169,7 @@ describe("native platform control contract", () => {
         )
       }
 
-      if (
-        /<(?:div|span|article)\b[^>]*\brole=\{?[^}>]*["']button["']/.test(
-          text,
-        ) &&
-        !(name in primitives)
-      ) {
+      if (controls.impersonated && !(name in primitives)) {
         unexpected.push(
           `${name}: feature action impersonates a button with a raw element`,
         )
@@ -102,7 +177,7 @@ describe("native platform control contract", () => {
 
       if (
         name !== "extensions/src/presentation/platform-controls.tsx" &&
-        /createElement\(\s*["']button["']/.test(text)
+        controls.dynamic
       ) {
         unexpected.push(`${name}: dynamic raw button`)
       }

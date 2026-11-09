@@ -71,6 +71,7 @@ const routes = new Hono()
           if (canRefreshAsPlayer(claims)) {
             return c.json(await mintToken(claims.sub, SESSION_ROLES.PLAYER))
           }
+
           retireManagerClaims(claims)
         } catch {
           /* Empty */
@@ -78,6 +79,7 @@ const routes = new Hono()
       }
 
       deleteCookie(c, "tdz_media_auth", { path: "/media" })
+
       return c.json(await freshPlayerSession())
     }
   })
@@ -120,6 +122,7 @@ const routes = new Hono()
 
     retireManagerClaims(claims)
     deleteCookie(c, "tdz_media_auth", { path: "/media" })
+
     return c.json(
       await mintToken(
         accountsEnabled() ? newClientId() : claims.sub,

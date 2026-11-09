@@ -2,26 +2,32 @@ import { z } from "zod"
 import { safeMediaUrlSchema } from "./media"
 
 export const MAX_CINEMATIC_OVERLAY_ANIMATIONS = 8
+
 export const SOFT_WARNING_OVERLAY_ANIMATIONS = 4
 
 export const OVERLAY_ANCHORS = ["center", "topLeft"] as const
+
 export type OverlayAnchor = (typeof OVERLAY_ANCHORS)[number]
 
 export const OVERLAY_FITS = ["contain", "cover"] as const
+
 export type OverlayFit = (typeof OVERLAY_FITS)[number]
 
 export const OVERLAY_LAYERS = ["behindTitle", "aboveTitle"] as const
+
 export type OverlayLayer = (typeof OVERLAY_LAYERS)[number]
 
 export const OVERLAY_TIME_BASES = ["video", "scene"] as const
+
 export type OverlayTimeBase = (typeof OVERLAY_TIME_BASES)[number]
 
 export const OVERLAY_FINISH_MODES = ["hide", "holdLastFrame"] as const
+
 export type OverlayFinishMode = (typeof OVERLAY_FINISH_MODES)[number]
 
 export const overlayPositionSchema = z.strictObject({
-  x: z.number().finite().min(0).max(1),
-  y: z.number().finite().min(0).max(1),
+  x: z.number().min(0).max(1),
+  y: z.number().min(0).max(1),
 })
 
 export type OverlayPosition = z.infer<typeof overlayPositionSchema>
@@ -40,9 +46,9 @@ export const cinematicOverlayAnimationSchema = z
 
     position: overlayPositionSchema.default({ x: 0.5, y: 0.5 }),
     anchor: z.enum(OVERLAY_ANCHORS).default("center"),
-    widthPct: z.number().finite().min(1).max(100).default(28),
-    rotationDeg: z.number().finite().min(-180).max(180).default(0),
-    opacity: z.number().finite().min(0).max(1).default(1),
+    widthPct: z.number().min(1).max(100).default(28),
+    rotationDeg: z.number().min(-180).max(180).default(0),
+    opacity: z.number().min(0).max(1).default(1),
     fit: z.enum(OVERLAY_FITS).default("contain"),
     layer: z.enum(OVERLAY_LAYERS).default("aboveTitle"),
     order: z.number().int().min(0).max(63).default(0),
@@ -50,7 +56,7 @@ export const cinematicOverlayAnimationSchema = z
     timeBase: z.enum(OVERLAY_TIME_BASES).default("video"),
     startMs: z.number().int().min(0).max(300000).default(0),
     durationMs: z.number().int().min(100).max(300000).optional(),
-    speed: z.number().finite().min(0.25).max(3).default(1),
+    speed: z.number().min(0.25).max(3).default(1),
     loop: z.boolean().default(false),
     finish: z.enum(OVERLAY_FINISH_MODES).default("hide"),
     fadeInMs: z.number().int().min(0).max(10000).optional(),
@@ -74,6 +80,7 @@ export const cinematicOverlayAnimationSchema = z
 export type CinematicOverlayAnimation = z.infer<
   typeof cinematicOverlayAnimationSchema
 >
+
 export type CinematicOverlayAnimationInput = z.input<
   typeof cinematicOverlayAnimationSchema
 >
@@ -87,7 +94,8 @@ export const cinematicOverlayAnimationsArraySchema = z
   .superRefine((items, ctx) => {
     const seenIds = new Set<string>()
     for (let i = 0; i < items.length; i += 1) {
-      const id = items[i].id
+      const { id } = items[i]
+
       if (seenIds.has(id)) {
         ctx.addIssue({
           code: "custom",
@@ -95,6 +103,7 @@ export const cinematicOverlayAnimationsArraySchema = z
           message: "errors:extensions.duplicateOverlayId",
         })
       }
+
       seenIds.add(id)
     }
   })
@@ -118,7 +127,8 @@ export function normalizeOverlayAnimationsOrder(
  */
 export function deriveLegacyOverlayId(sceneId?: string): string {
   const cleanHex = (sceneId ?? "").replaceAll(/[^0-9a-fA-F]/g, "").toLowerCase()
-  const padded = (cleanHex + "00000000000000000000000000000001").slice(0, 32)
+  const padded = `${cleanHex}00000000000000000000000000000001`.slice(0, 32)
+
   return `${padded.slice(0, 8)}-${padded.slice(8, 12)}-4${padded.slice(13, 16)}-8${padded.slice(17, 20)}-${padded.slice(20, 32)}`
 }
 
