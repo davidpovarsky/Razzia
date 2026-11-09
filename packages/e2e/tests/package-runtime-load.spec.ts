@@ -244,6 +244,39 @@ test("bounded heavy TSX stays responsive and missing renderer heartbeat falls ba
     await page.getByTestId("host-pause-resume-btn").click()
     await page.getByTestId("host-end-timer-btn").click()
     await waitForPhase(page, "results")
+    await expect(display.getByTestId("tadazz-question-panel")).toContainText(
+      "Question 1",
+    )
+    await expect(display.getByTestId("tadazz-card-0")).toBeVisible()
+    await expect(display.getByTestId("tadazz-card-0")).toBeInViewport({
+      ratio: 0.9,
+    })
+    await expect
+      .poll(() =>
+        display.getByTestId("package-runtime-fallback").evaluate((element) => {
+          const own = element.getBoundingClientRect()
+          const parent = element.parentElement?.getBoundingClientRect()
+
+          return parent && parent.height > 0 ? own.height / parent.height : 0
+        }),
+      )
+      .toBeGreaterThan(0.98)
+    await expect
+      .poll(() =>
+        display.getByTestId("tadazz-card-0").evaluate((element) => {
+          let opacity = 1
+          for (
+            let node: Element | null = element;
+            node;
+            node = node.parentElement
+          ) {
+            opacity *= Number(getComputedStyle(node).opacity)
+          }
+
+          return opacity
+        }),
+      )
+      .toBeGreaterThan(0.98)
     await display.screenshot({
       path: info.outputPath("heartbeat-safe-fallback.png"),
     })

@@ -29,6 +29,13 @@ devices, an unbounded GPU test or hard browser process isolation.
 
 ## State
 
+Visual fallback repair ledger: `ThemeSandboxHost.tsx` returns an unsized fallback
+wrapper in place of a full-size iframe. DOM/opacity checks can pass while the
+absolute-positioned compiled stage is clipped to a collapsed containing block.
+Preserve the iframe's allocated width/height on that wrapper and verify the
+fallback's viewport geometry and a card's actual intersection before capturing
+the screenshot. Application verification must be rerun after this layout fix.
+
 Final cleanup-fixture correction: the WebKit failure probe records two distinct
 authoritative `elapsed` completions (question 2 / epoch 2 and question 4 / epoch 5),
 not a duplicated cue. The last five-viewport screenshot loop ran against a live

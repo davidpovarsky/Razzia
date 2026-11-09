@@ -197,6 +197,7 @@ export function ThemeSandboxHost({
       <div
         data-testid="package-runtime-fallback"
         data-runtime-error={failureCode}
+        className="h-full w-full"
       >
         {fallback}
       </div>
