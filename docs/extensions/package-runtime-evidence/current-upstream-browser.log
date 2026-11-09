@@ -1,0 +1,37 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter] 
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 21 tests using 1 worker
+
+  ✓   1 [chromium] › tests/editor.spec.ts:33:1 › saves every question type and setting (4.5s)
+  ✓   2 [chromium] › tests/editor.spec.ts:151:1 › hides the scoring settings in survey mode (1.9s)
+  ✓   3 [chromium] › tests/editor.spec.ts:182:1 › shows validation errors and jumps to the invalid question (2.1s)
+  ✓   4 [chromium] › tests/editor.spec.ts:207:1 › edits then deletes a quizz (2.9s)
+  ✓   5 [chromium] › tests/editor.spec.ts:254:1 › exports and imports a quizz as JSON (1.9s)
+  ✓   6 [chromium] › tests/editor.spec.ts:296:1 › attaches an uploaded image to a question (1.9s)
+  ✓   7 [chromium] › tests/editor.spec.ts:322:1 › keeps the other questions intact when deleting one in the middle (3.5s)
+  ✓   8 [chromium] › tests/editor.spec.ts:376:1 › restores the quiz settings when switching back from survey (2.2s)
+  ✓   9 [chromium] › tests/editor.spec.ts:407:1 › refuses to save a quizz without a title (1.6s)
+  ✓  10 [chromium] › tests/editor.spec.ts:419:1 › keeps the number settings within their limits (2.1s)
+  ✓  11 [chromium] › tests/editor.spec.ts:455:1 › uses original Studio controls for every card kind, keyboard navigation and media (2.5s)
+  ✓  12 [chromium] › tests/flow.spec.ts:39:1 › restores the manager screen after a reload (16.9s)
+  ✓  13 [chromium] › tests/flow.spec.ts:81:1 › marks a player who did not answer in time as wrong (19.1s)
+  ✓  14 [chromium] › tests/flow.spec.ts:108:1 › reveals the answers without waiting for a player who left (18.1s)
+  ✓  15 [chromium] › tests/flow.spec.ts:132:1 › scores an estimation answered with the slider (16.1s)
+  ✓  16 [chromium] › tests/flow.spec.ts:165:1 › lets the manager skip the auto-advance countdown (24.0s)
+  ✓  17 [chromium] › tests/flow.spec.ts:209:1 › keeps the waiting room when the manager reloads the page (16.6s)
+  ✓  18 [chromium] › tests/manager.spec.ts:5:1 › refuses a wrong manager password (900ms)
+  ✓  19 [chromium] › tests/manager.spec.ts:16:1 › keeps the manager logged in after a reload (1.2s)
+  ✓  20 [chromium] › tests/manager.spec.ts:23:1 › logs the manager out (1.2s)
+  ✓  21 [chromium] › tests/manager.spec.ts:37:1 › switches the language and keeps it after a reload (1.2s)
+
+  21 passed (2.5m)

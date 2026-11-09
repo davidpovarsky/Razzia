@@ -1,0 +1,105 @@
+{"status":"FIXTURES_VALIDATED","directory":"/evidence/samples"}
+{"status":"SYNTHETIC_STARTER","directory":"/evidence/authoring-smoke-final","kind":"theme"}
+{"output":"/evidence/authoring-smoke-final.tadazz","sourceDigest":"129730fd32f7c457c7260b17143008d31ba9c3b482a5e02d19ded2aac33dd7b2","bytes":53720}
+{
+  "manifest": {
+    "format": "tadazz-package",
+    "formatVersion": 1,
+    "id": "fixture-theme-cinematic",
+    "version": "1.0.0",
+    "displayName": "Synthetic theme cinematic",
+    "author": "TADAZZ QA fixture",
+    "requires": {
+      "packageApi": 1,
+      "runtimeApi": 1
+    },
+    "contents": [
+      {
+        "kind": "sandboxed-react-theme",
+        "id": "fixture-cinematic",
+        "path": "theme/theme.json",
+        "demo": false
+      }
+    ],
+    "files": [
+      {
+        "path": "shared/backdrop.png",
+        "kind": "image",
+        "bytes": 8898,
+        "sha256": "db31494b73c6fbc7774f597e4036bda8e98a5517369f17970255b01a83819733",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "shared/music.wav",
+        "kind": "audio",
+        "bytes": 16044,
+        "sha256": "5730a503a3ba9592467ac94b568c93242189a2028f004b5196b8dc6396523c71",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "shared/intro.mp4",
+        "kind": "video",
+        "bytes": 1736,
+        "sha256": "8e94de92d8154dc3d1daff31048698dfde212ff42eb2ce2c6ea2e76bc1f5e295",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "shared/intro.json",
+        "kind": "lottie",
+        "bytes": 429,
+        "sha256": "1097ffff838d92ec8c6f5100a274aa2222ec2deaf3cf871a13094fa6b0212833",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "theme/src/entry.tsx",
+        "kind": "source",
+        "bytes": 1686,
+        "sha256": "2cd43ffb6fdb3b8605825e84d2aa43548337a71a85e997cfaee7a0b595916cca",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "theme/src/style.css",
+        "kind": "style",
+        "bytes": 1335,
+        "sha256": "90720bf1127dc1306b800781db12cc7c0eebd733ae907b415c099f3a78312b4a",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      },
+      {
+        "path": "theme/theme.json",
+        "kind": "descriptor",
+        "bytes": 20631,
+        "sha256": "9cb35de97d878a3cb3aa12a46502cc7cb45df74bde83f5ddca852aea8562cccc",
+        "rights": "owner-authorized",
+        "provenance": "Synthetic QA generated fixture; not customer review",
+        "exportable": true
+      }
+    ]
+  },
+  "sourceDigest": "129730fd32f7c457c7260b17143008d31ba9c3b482a5e02d19ded2aac33dd7b2",
+  "type": "theme",
+  "code": true,
+  "games": [],
+  "themes": [
+    {
+      "id": "fixture-cinematic",
+      "kind": "sandboxed-react-theme",
+      "version": "1.0.0"
+    }
+  ],
+  "assetCount": 4,
+  "totalBytes": 50759,
+  "requiresIndependentReview": true,
+  "status": "validated"
+}

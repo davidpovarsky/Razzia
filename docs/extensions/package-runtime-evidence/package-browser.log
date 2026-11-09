@@ -1,0 +1,14 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (5.4s)
+  ✓  2 [chromium] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (52.4s)
+  ✓  3 [chromium] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (12.9s)
+  ✓  4 [webkit] › tests/package-runtime.spec.ts:33:1 › declarative package previews decoded private assets before installation (9.6s)
+  ✓  5 [webkit] › tests/package-runtime.spec.ts:148:1 › one-file complete React installation, independent layouts, live core and sandbox boundary (57.0s)
+  ✓  6 [webkit] › tests/package-runtime.spec.ts:570:1 › networkless builder rejects unapproved dependencies and executable import tricks (12.0s)
+
+  6 passed (2.6m)
