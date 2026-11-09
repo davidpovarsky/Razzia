@@ -830,6 +830,15 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
   await expect(
     display.locator('.choice-slot[data-testid^="tadazz-card-"]'),
   ).toHaveCount(5)
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
+  await expect(display.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "true",
+  )
   for (const [width, height] of [
     [1920, 1080],
     [1366, 768],
@@ -878,6 +887,26 @@ test("live theme shares all roles, fits five viewports, and restarts voting musi
           .length,
     )
     .toBe(1)
+  await page.getByTestId("host-pause-resume-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-game-paused",
+    "false",
+  )
+  await page.getByTestId("host-end-timer-btn").click()
+  await expect(page.getByTestId("tadazz-show")).toHaveAttribute(
+    "data-show-scene",
+    "results",
+  )
+  await expect
+    .poll(
+      async () =>
+        (await probe(page)).cues.filter((cue) => cue.name === "vote-locked")
+          .length,
+    )
+    .toBe(2)
+  expect(
+    (await probe(page)).cues.filter((cue) => cue.name === "timer-ended"),
+  ).toHaveLength(1)
   await testInfo.attach("complete-audio-trace.json", {
     body: JSON.stringify(
       {

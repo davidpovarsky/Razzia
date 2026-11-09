@@ -29,6 +29,14 @@ devices, an unbounded GPU test or hard browser process isolation.
 
 ## State
 
+Final cleanup-fixture correction: the WebKit failure probe records two distinct
+authoritative `elapsed` completions (question 2 / epoch 2 and question 4 / epoch 5),
+not a duplicated cue. The last five-viewport screenshot loop ran against a live
+20-second timer (`400 / GAME_SPEED 20`). Pause before this second geometry loop,
+assert it stays paused, then resume and end manually, retaining the exact one
+natural-expiry and manual-lock audio assertions. No production audio/clock change
+is warranted by this evidence. Preserve the initial failing probe/report.
+
 Type-verification correction: the earlier follow-up called `tsc -p` on the web
 solution config with an empty `files` list, which did not traverse references.
 The closure runner checks `tsconfig.app.json` and `tsconfig.node.json` directly.
