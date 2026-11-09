@@ -69,11 +69,6 @@
     "rawBytes": 155562,
     "rawSha256": "a91bb5fef1a7d4c011c899dd3b22f2635d321019c545c85b86f45c22673c6f7c"
   },
-  "backup-copy-migration.json": {
-    "source": "completion-backup-copy-migration.json",
-    "rawBytes": 623,
-    "rawSha256": "0cd1387616dcdf44435a24a06276e1dcd18c578d3c2f5ca0b21264f78100b88b"
-  },
   "fallback-dom-only-browser.json.gz": {
     "source": "watchdog-opacity-only-report.json",
     "rawBytes": 7799,
@@ -253,5 +248,10 @@
     "source": "completion-final-delivery-format.log",
     "rawBytes": 38,
     "rawSha256": "f0c1d2b0c2a34df0d3f6516571027867215029eef79e9358c8d072f862d9f91d"
+  },
+  "backup-copy-migration.json.gz": {
+    "source": "completion-backup-copy-migration.json",
+    "rawBytes": 623,
+    "rawSha256": "0cd1387616dcdf44435a24a06276e1dcd18c578d3c2f5ca0b21264f78100b88b"
   }
 }
