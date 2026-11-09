@@ -1,5 +1,0 @@
-extensions/src/testkit/package-fixtures.ts 255ms (unchanged)
-Found 0 warnings and 0 errors.
-Finished in 1.1s on 1 file with 233 rules using 2 threads.
-JSON report written to /evidence/final-fixture-unit-report.json
-{"status":"FIXTURES_VALIDATED","directory":"/evidence/samples"}
