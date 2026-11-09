@@ -4,7 +4,8 @@ Private staging delivery. Production installer/runtime remain OFF by default.
 No production deployment, existing lab replacement, push, main merge, real phone
 call, provider purchase or credential change was performed. Exact source/image
 identities for the original delivery are in `package-runtime-evidence/delivery.json`.
-The completed lint/WebKit follow-up is recorded in `LINT_WEBKIT_REPAIR_2026-11-09.md`
+The final closure is recorded in `PACKAGE_RUNTIME_COMPLETION_2026-11-09.md` and
+`qa-evidence/package-completion-20261109/`. The earlier lint/WebKit follow-up is recorded in `LINT_WEBKIT_REPAIR_2026-11-09.md`
 and `qa-evidence/lint-webkit-20261109/`; each evidence directory has SHA256SUMS.
 
 Implementation branch: `codex/tadazz-package-runtime-20261109`, new worktree
@@ -15,37 +16,83 @@ observed `3a5b6aa` was superseded by this verified newer base.
 
 ## Gate results
 
-| Gate                    | Status | Implemented and actual evidence                                                                                                                                                                                                                                                                     |
-| ----------------------- | ------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 0 — contracts/baseline  | Done   | Read current instructions/components; ADR and hook inventory; strict manifest/runtime Zod plus generated schemas. Original root 365 and extension 624 tests passed in Oracle before implementation.                                                                                                 |
-| 1 — portable games      | Done   | ZIP parser/packer, relative references, existing composite import with fresh IDs, fifty answer images across ten questions, shared PNG/WAV/MP4/Lottie, source and current-game export. Real browser reimport under another account and contract tests.                                              |
-| 2 — declarative themes  | Done   | Native compiled preview with scoped media capability before installation; independent exact review, catalog selection, immutable versions, restart and rollback contracts.                                                                                                                          |
-| 3 — independent React   | Done   | Pinned networkless/unprivileged builder, tiny SDK, dedicated cookie-free origin, opaque iframe and one generic adapter. Actual uploaded Arcade and Cinematic TSX/CSS render without another platform build between uploads. All three roles, answer intents and core audio ownership remain intact. |
-| 4 — complete packages   | Done   | One archive creates one theme and two games. Selection/dependency checks, explicit Classic option, journaled staging, injected second-game failure compensation and startup recovery tests.                                                                                                         |
-| 5 — security/regression | Done   | See exact final delivery check results below and in machine-readable reports. The subsequent lint/WebKit follow-up resolves the earlier baseline failures; fresh reports record 1,024 unit tests and 77 browser cases passing.                                                                      |
-| 6 — authoring           | Done   | CLI scaffold/pack/validate/inspect/build/preview/install/export/rollback, schemas, six portable examples, README and updated creator skill.                                                                                                                                                         |
-| 7 — staging             | Done   | Separate Oracle container/data, immutable builder, private backup, actual container recreation, all 255 initial persisted-file hashes retained, backup restored and checked read-only. Final application image/checks are recorded in delivery.json.                                                |
+| Gate                    | Status | Implemented and actual evidence                                                                                                                                                                                                                                                                                                           |
+| ----------------------- | ------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 — contracts/baseline  | Done   | Read current instructions/components; ADR and hook inventory; strict manifest/runtime Zod plus generated schemas. Original root 365 and extension 624 tests passed in Oracle before implementation.                                                                                                                                       |
+| 1 — portable games      | Done   | ZIP parser/packer, relative references, existing composite import with fresh IDs, fifty answer images across ten questions, shared PNG/WAV/MP4/Lottie, source and current-game export. Real browser reimport under another account and contract tests.                                                                                    |
+| 2 — declarative themes  | Done   | Native compiled preview with scoped media capability before installation; independent exact review, catalog selection, immutable versions, restart and rollback contracts.                                                                                                                                                                |
+| 3 — independent React   | Done   | Pinned networkless/unprivileged builder, tiny SDK, dedicated cookie-free origin, opaque iframe and one generic adapter. Actual uploaded Arcade and Cinematic TSX/CSS render without another platform build between uploads. All three roles, answer intents and core audio ownership remain intact.                                       |
+| 4 — complete packages   | Done   | One archive creates one theme and two games. Selection/dependency checks, explicit Classic option, journaled staging, injected second-game failure compensation and startup recovery tests.                                                                                                                                               |
+| 5 — security/regression | Done   | See exact final delivery check results below and in machine-readable reports. The subsequent lint/WebKit follow-up resolves the earlier baseline failures; final closure reports record 1,024 unit tests and 81 browser cases passing.                                                                                                    |
+| 6 — authoring           | Done   | CLI scaffold/pack/validate/inspect/build/preview/install/export/rollback, schemas, six portable examples, README and updated creator skill.                                                                                                                                                                                               |
+| 7 — staging             | Done   | Separate Oracle container/data, immutable builder, private backup, actual container recreation, all 255 initial persisted-file hashes retained, backup restored and checked read-only. Original image/checks remain in delivery.json; final source/build/image, 1,991-file persistence and restore proofs are in the completion evidence. |
 
 ## Final measured results
 
-| Check                                                               | Actual result                                                                                                                                |
-| ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| Root / extension units                                              | 365 + 659 = **1,024 passed**; no failures                                                                                                    |
-| Current native UI / original editor-flow-manager / package browsers | 22 + 21 + 6 = **49 passed**; no failures or flaky cases                                                                                      |
-| Final starter polish                                                | 35 package contract tests, authoring types and focused lint passed; all six package browser cases passed again                               |
-| Five TypeScript projects / production build                         | Passed; web/socket types and build repeated after final lint-only corrections                                                                |
-| New-file / added integration-line lint                              | Zero diagnostics; whole-repository baseline lint remains failing                                                                             |
-| Local-to-Oracle source verification                                 | **72 files**, identical hashes                                                                                                               |
-| Final immutable staging image                                       | `sha256:3470e5567b5fa95bc2fd759b96fad1d500a4881c95ac0ded66280a8daf1d6e51`                                                                    |
-| Independent networkless builder                                     | `sha256:41a49a0e68d13c2bdfc576d0364176c2e27ab278e10605b5a577ffc62cbe3c88`                                                                    |
-| Final container recreation                                          | **762 files** retained with identical hashes; read-only audit verified 44 installed versions, 67 synthetic games and 2,360 object references |
-| Backup restoration                                                  | 255-file initial backup restored byte-for-byte and read successfully by final source                                                         |
+These supersede the original delivery and lint-only follow-up. Full evidence is
+in `qa-evidence/package-completion-20261109/`; raw earlier reports stay unchanged.
 
-Source commits: `63c93644001a8218fdd17fb019f4f2d7fc7995eb` (runtime),
-`416a98a58f4c46b9707939f903f84f90fcfb3db5` (starter timer/result labels).
-The final template adjustment changed packaged customer CSS, then was uploaded
-and tested on the already built platform. It required no platform rebuild for
-the theme. Final image capture followed the tests for reproducible handoff.
+| Check                                  | Final observed result                                                                                                                                       |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Root / extension units                 | 365 + 659 = **1,024 passed**, no failures or pending                                                                                                        |
+| Original editor/game/manager           | **21/21** Chromium                                                                                                                                          |
+| Current UI fidelity                    | **22/22** Chromium + WebKit                                                                                                                                 |
+| Cleanup and audio regression           | **28/28** Chromium + WebKit                                                                                                                                 |
+| Package acceptance                     | **10/10** Chromium + WebKit, including four new load/watchdog cases                                                                                         |
+| Browser total                          | **81 passed**, 0 failed, 0 skipped, 0 flaky in the four named configurations                                                                                |
+| TypeScript                             | **8 actual projects pass**, including web app and web tooling directly                                                                                      |
+| Whole configured lint / format / build | Pass; **0 lint errors and warnings**, existing non-failing Vite notices retained                                                                            |
+| Concurrent runtime displays            | **40 Chromium / 20 WebKit**, both 800×600, plus manager/player; 10-second synchronized pause smoke, zero-vote results and reload                            |
+| Heavy renderer / watchdog              | Actual TSX does bounded 60ms work every 500ms; lost child health triggers fallback, room resumes/completes and renderer recovers after reload, both engines |
+| Source verification                    | **1,802 files** at source commit `354669edc365e10ad92bdbfbad9308b05cbcf133`, identical local/Oracle hashes                                                  |
+| Immutable final staging image          | `sha256:76a77a56d964b53611541c7a1a7594567fbee9b6bcc9bd547feda82646840d10`                                                                                   |
+| Isolated immutable builder             | `sha256:41a49a0e68d13c2bdfc576d0364176c2e27ab278e10605b5a577ffc62cbe3c88`                                                                                   |
+| Built web verification                 | **90 compiled files** match exactly after final container recreation                                                                                        |
+| Persistence and backup/restore         | **1,991 durable files** match before/after recreation and restored backup; existing installed games/assets pass read-only smoke                             |
+
+The 40-tab WebKit capacity probes exceeded the private host's 8 GiB QA limit,
+including a compact viewport attempt. They are documented failures and are not
+included as passed/skipped cases. The final bounded acceptance profile uses
+20 real WebKit display pages; full iPad/4:3 compatibility remains separately
+covered by the unchanged functional suites. No claim of 40 WebKit tabs or a
+400-device soak is made. This aggregate browser harness uses 2 CPU, 8 GiB and
+1,536 PIDs; that is not the game server's per-viewer memory requirement.
+
+The load fixture isolates question/media fanout from opening choreography and
+uses 120-second questions ended through native controls. The original package
+cases retain opening/video/Lottie and 20-second question coverage. Pre-start
+diagnostics found all surfaces visible with no renderer error; a background
+heartbeat hypothesis was not established and the runtime was not changed on
+that assumption. The real stopped-heartbeat case still verifies the existing
+five-second watchdog. See [MDN Page Visibility](https://developer.mozilla.org/en-US/docs/Web/API/Page_Visibility_API)
+for the browser scheduling behavior considered during diagnosis.
+
+The earlier lint follow-up's web `tsc -p` command targeted the empty-files
+solution config and did not traverse its references. Direct app/tooling checks
+exposed one unused callback argument; it is corrected, and all eight projects
+now pass. The original seven-command report is not evidence of that direct app
+check. This correction is recorded with the raw initial diagnostic.
+
+The fallback viewport repair was a real application correction: its unsized
+wrapper clipped the absolutely positioned compiled stage even though DOM and
+opacity checks passed. `ThemeSandboxHost` now gives the fallback wrapper the
+parent's full height and width. Both engines verify answer-card intersection,
+wrapper dimensions and completed entrance, and final screenshots show the
+question and five answer cards. All 13 static commands and all 81 browser cases
+were rerun after this repair against application source `354669edc365e10ad92bdbfbad9308b05cbcf133` and the
+same 90 built web artifacts. The final data restart recreates the exact same
+immutable tested image. Delivery-only Markdown and evidence follow without
+application code changes. SQLite backup connections are checkpointed and
+explicitly closed; ephemeral SHM/WAL files are excluded from durable comparisons.
+Private backups and rollback images remain. Two older redundant backup archives
+were copied byte-exactly into the user's private local backup directory before
+retiring their Oracle copies; original stable r5/r6/r7, v3 and final backups remain
+on Oracle. Only stopped task-owned duplicate container root filesystems and
+verified temporary restore copies were removed to reclaim space.
+
+Original implementation commits remain `63c9364` and `416a98a`; lint/native audio
+repairs are `ca5cadb`. Load/verification source is `0e4e7c8` and
+`354669e`. Nothing was pushed or merged to main.
 
 ## Delivered behavior and boundaries
 
@@ -112,7 +159,7 @@ whole-repository lint scan. Those historical reports remain byte-preserved.
 The owner then explicitly requested repairing both before proceeding.
 
 The completed follow-up passes `pnpm lint --deny-warnings`, full `pnpm format`,
-seven TypeScript projects, the production build, all 1,024 unit tests and 77
+eight actual TypeScript projects, the production build, all 1,024 unit tests and 81
 browser cases. The old cleanup suite now passes 28/28, including all three
 previously failing WebKit cases. Native operator/player selectors and the two
 bundled families are tested on their current surfaces; cinematic geometry stays
@@ -128,7 +175,7 @@ non-failing config-loader/chunk-size notices; preview teardown can log proxy
 connection resets.
 
 Not tested: physical iPad/Safari hardware, real provider/PSTN/DTMF calls, a
-40–400-browser runtime soak, long-running GPU exhaustion, hard browser CPU
+prolonged/400-device runtime soak, long-running GPU exhaustion, hard browser CPU
 isolation, real customer licenses/content or human accessibility/performance
 sign-off. Browser process/thread scheduling cannot be guaranteed by iframe CSP;
 watchdog/error recovery is not a hard CPU/GPU quota. Synthetic assigned-review

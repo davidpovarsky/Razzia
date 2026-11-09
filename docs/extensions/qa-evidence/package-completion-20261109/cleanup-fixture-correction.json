@@ -1,0 +1,9 @@
+{
+  "initialPassed": 27,
+  "initialFailed": 1,
+  "observed": "Two different authoritative elapsed completions: question 2 epoch 2 and question 4 epoch 5, not duplicate delivery.",
+  "cause": "Last five-viewport screenshots ran during a live 20-second question and could outlast it in WebKit.",
+  "fix": "Wait for entrance opacity, pause before that geometry loop, retain one natural expiry assertion, resume and manually lock; assert two manual locks and still one natural expiry. Focused both-engine and full 28-case reruns pass.",
+  "productionCodeChanged": false,
+  "finalFullSuitePassed": 28
+}

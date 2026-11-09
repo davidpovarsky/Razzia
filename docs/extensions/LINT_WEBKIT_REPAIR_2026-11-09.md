@@ -51,7 +51,16 @@ APIs, positional public APIs and mutable dictionary deletion have explained
 scoped exceptions. Runtime guards for sparse legacy dictionaries and browser
 APIs are retained rather than deleted based on optimistic indexed types.
 
-## Final result — Done
+## Subsequent verification correction
+
+The closure report `PACKAGE_RUNTIME_COMPLETION_2026-11-09.md` supersedes the
+TypeScript scope below: the earlier web command targeted an empty-files solution
+config without traversing references. Direct app/tooling checks found one unused
+argument, now fixed. All eight actual projects pass in final closure evidence.
+The historical raw seven-command logs remain unchanged; lint and all three WebKit
+repairs remain confirmed by the final full rerun.
+
+## Follow-up result — Done
 
 | Check                           | Actual result                                                                 |
 | ------------------------------- | ----------------------------------------------------------------------------- |

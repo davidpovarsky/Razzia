@@ -1,0 +1,52 @@
+[
+  {
+    "browserName": "chromium",
+    "simultaneousDisplays": 40,
+    "viewport": {
+      "width": 800,
+      "height": 600
+    },
+    "pausedSoakMs": 10000,
+    "successfulDisplays": 40,
+    "failures": 0,
+    "loadP50Ms": 2750,
+    "loadP95Ms": 2890,
+    "resultFanoutMs": 4534,
+    "scope": "One browser, real display pages and sandbox renderers; synthetic content, no physical devices/PSTN or 400-client claim. Forty WebKit tabs exceed this host's tested 8 GiB budget."
+  },
+  {
+    "browserName": "chromium",
+    "fallbackMs": 5846,
+    "boundedWorkMs": 60,
+    "workPeriodMs": 500,
+    "retainedRoom": true,
+    "resumedAndCompleted": true,
+    "rendererRecoveredAfterReload": true,
+    "scope": "Bounded CPU stress and stopped health callbacks; not a hard CPU/GPU isolation claim"
+  },
+  {
+    "browserName": "webkit",
+    "simultaneousDisplays": 20,
+    "viewport": {
+      "width": 800,
+      "height": 600
+    },
+    "pausedSoakMs": 10000,
+    "successfulDisplays": 20,
+    "failures": 0,
+    "loadP50Ms": 4800,
+    "loadP95Ms": 5681,
+    "resultFanoutMs": 3757,
+    "scope": "One browser, real display pages and sandbox renderers; synthetic content, no physical devices/PSTN or 400-client claim. Forty WebKit tabs exceed this host's tested 8 GiB budget."
+  },
+  {
+    "browserName": "webkit",
+    "fallbackMs": 5868,
+    "boundedWorkMs": 60,
+    "workPeriodMs": 500,
+    "retainedRoom": true,
+    "resumedAndCompleted": true,
+    "rendererRecoveredAfterReload": true,
+    "scope": "Bounded CPU stress and stopped health callbacks; not a hard CPU/GPU isolation claim"
+  }
+]

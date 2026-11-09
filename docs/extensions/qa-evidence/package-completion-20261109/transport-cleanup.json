@@ -1,0 +1,8 @@
+{
+  "file": "package-baseline-source.tar.gz",
+  "bytes": 296263079,
+  "sha256": "ae21640ffeb0ac919a61d02876dcd204466e20ffa6d3bccb046ec263d9d283c8",
+  "sourceFiles": 1633,
+  "allPathsInCommittedSourceManifest": true,
+  "reason": "Redundant task-owned source transport archive; Git history, verified source and immutable images retained; private backups/data untouched"
+}

@@ -1,0 +1,14 @@
+[
+  {
+    "name": "package-staging-backup-final.tar.gz",
+    "sha256": "4a7b73caa35b7af915454714ce23d4155c60a33dfafcd661c62f889ffcce3b27",
+    "bytes": 97526564,
+    "preservedLocal": "C:\\Users\\DAVID\\.codex\\private-backups\\tadazz-package-runtime-20261109\\package-staging-backup-final.tar.gz"
+  },
+  {
+    "name": "package-staging-backup-final-v2.tar.gz",
+    "sha256": "67bc72d80961b9463300e8a1d8c722741b001e7409da709b996b17f13e050e47",
+    "bytes": 97485949,
+    "preservedLocal": "C:\\Users\\DAVID\\.codex\\private-backups\\tadazz-package-runtime-20261109\\package-staging-backup-final-v2.tar.gz"
+  }
+]

@@ -1,0 +1,6 @@
+{
+  "cause": "Fallback wrapper had no dimensions; absolute stage content was clipped despite passing DOM/opacity assertions.",
+  "fix": "ThemeSandboxHost fallback wrapper fills parent with h-full w-full.",
+  "verification": "Both engines assert card intersection, wrapper height and completed entrance; all static checks and full 81 browser cases rerun after repair.",
+  "sourceCommit": "354669edc365e10ad92bdbfbad9308b05cbcf133"
+}

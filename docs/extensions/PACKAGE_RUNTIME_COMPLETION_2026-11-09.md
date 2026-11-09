@@ -54,4 +54,55 @@ Its first run exposed one unused callback argument at
 `_value`, TypeScript's explicit unused-parameter spelling. This does not change
 generated behavior. Two required blank lines in the new QA config are also fixed.
 
-In progress. Do not infer passing results from this plan or older evidence.
+**Done for private staging delivery.** The final source is `354669edc365e10ad92bdbfbad9308b05cbcf133` and the
+final immutable image is `sha256:76a77a56d964b53611541c7a1a7594567fbee9b6bcc9bd547feda82646840d10`. The acceptance report has the complete
+measured table; `qa-evidence/package-completion-20261109/` contains exact reports,
+logs, metrics, screenshots, source/compiled artifact hashes and SHA256SUMS.
+
+All 1,024 unit tests and 81 browser acceptance cases pass with zero failures,
+skips or flaky cases. Eight actual TypeScript projects, strict whole-scope lint,
+format and build pass. Production and both existing labs retain their exact
+container/image/start identities; package flags remain disabled in production.
+No push, production deployment, credential change or provider call was performed.
+
+The recorded load envelope is 40 Chromium / 20 WebKit at 800×600 plus native
+manager/player. Forty-tab WebKit probes exceeded 8 GiB and remain documented
+capacity failures; they are not reported green or hidden as skips. Steady-state
+load fixtures retain ten questions and media while avoiding opening-video
+choreography, which remains covered by the original package tests. The load
+questions use 120 seconds; original acceptance retains 20-second coverage.
+The heavy TSX/real stopped-health cases pass in both engines. This is a short
+bounded smoke, not a prolonged GPU/400-device or physical hardware qualification.
+
+All 1,991 durable staged files survive recreation and backup restoration.
+The source manifest covers 1,802 files; 90 compiled web hashes also match after
+recreation. All 13 static commands and all 81 cases were rerun after the actual
+fallback-wrapper viewport repair, against the exact application source/build
+in the final immutable image. Both engines check geometry and card intersection;
+final captures show the question and answer cards. Final data recreation uses
+that same tested image. Read-only smoke validates original, restored and newly
+imported installed games/media. Private rollback images and backups are retained;
+two older redundant archives were transferred and hash-verified in the user's
+private local backup directory before their remote copies were retired. Stopped
+task-owned duplicate rootfs and verified temporary restore copies were removed;
+bind data and unrelated containers were preserved.
+
+## Supplied plan: final DONE checklist
+
+- [x] One `.tadazz` upload automatically resolves inventoried media/audio.
+- [x] Theme, Game and Complete package lanes install.
+- [x] Newly uploaded TSX/CSS runs without per-theme platform source/deploy edits.
+- [x] Actual sandbox denies host DOM/cookies/private APIs/unauthorized intents.
+- [x] Distinct Arcade and Cinematic compositions render; six example archives ship.
+- [x] Game media import/save/reload/export/reimport works across test accounts.
+- [x] One Complete pack creates two games and one assigned independent theme.
+- [x] Existing clock, votes, pause, skip, reconnect and audio retain core ownership.
+- [x] Classic/Razzia and original editor/game/manager regressions pass.
+- [x] Account and media authorization/cross-tenant denial are tested.
+- [x] Logs/screenshots/build/source/security/review/version/rollback evidence ships.
+- [x] Production code-backed runtime remains OFF and no rollout was performed.
+
+The plan's private-staging boundary is reached. Before a separately authorized
+real-user rollout, physical devices, real PSTN/provider behavior, customer
+rights/content/accessibility/performance sign-off and wider/prolonged capacity
+qualification remain explicit production gates. This task does not grant them.

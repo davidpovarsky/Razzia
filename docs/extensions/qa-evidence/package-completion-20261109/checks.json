@@ -1,0 +1,164 @@
+[
+  {
+    "check": "root-units",
+    "command": [
+      "pnpm",
+      "test",
+      "--maxWorkers",
+      "2",
+      "--reporter=json",
+      "--outputFile=/evidence/completion-root-units.json"
+    ],
+    "exitCode": 0,
+    "seconds": 24.3
+  },
+  {
+    "check": "extension-units",
+    "command": [
+      "pnpm",
+      "--filter",
+      "@razzia/extensions",
+      "test",
+      "--maxWorkers",
+      "2",
+      "--reporter=json",
+      "--outputFile=/evidence/completion-extension-units.json"
+    ],
+    "exitCode": 0,
+    "seconds": 34.91
+  },
+  {
+    "check": "web-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "packages/web/tsconfig.app.json"
+    ],
+    "exitCode": 0,
+    "seconds": 5.01
+  },
+  {
+    "check": "web-tooling-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "packages/web/tsconfig.node.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.24
+  },
+  {
+    "check": "socket-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "packages/socket/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "seconds": 2.49
+  },
+  {
+    "check": "extension-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "extensions/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "seconds": 3.79
+  },
+  {
+    "check": "authoring-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "extensions/tsconfig.package-authoring.json"
+    ],
+    "exitCode": 0,
+    "seconds": 1.03
+  },
+  {
+    "check": "e2e-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "packages/e2e/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "seconds": 1.7
+  },
+  {
+    "check": "scripts-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "extensions/scripts/tsconfig.json"
+    ],
+    "exitCode": 0,
+    "seconds": 0.77
+  },
+  {
+    "check": "qa-types",
+    "command": [
+      "pnpm",
+      "exec",
+      "tsc",
+      "--noEmit",
+      "-p",
+      "extensions/tsconfig.qa.json"
+    ],
+    "exitCode": 0,
+    "seconds": 2.25
+  },
+  {
+    "check": "build",
+    "command": [
+      "pnpm",
+      "build"
+    ],
+    "exitCode": 0,
+    "seconds": 3.42
+  },
+  {
+    "check": "root-lint",
+    "command": [
+      "pnpm",
+      "lint",
+      "--deny-warnings",
+      "--format",
+      "json"
+    ],
+    "exitCode": 0,
+    "seconds": 16.59
+  },
+  {
+    "check": "format",
+    "command": [
+      "pnpm",
+      "format"
+    ],
+    "exitCode": 0,
+    "seconds": 18.58
+  }
+]

@@ -78,3 +78,36 @@ authorization before deploying/enabling runtime for real accounts. Independently
 review customer licenses/content/accessibility/performance, physical devices,
 operational capacity and real telephony provider behavior. The acceptance report
 lists measured coverage and exclusions. No marketplace publishing API is added.
+
+## Final verified private QA image
+
+Source: `354669edc365e10ad92bdbfbad9308b05cbcf133`. Application/toolchain snapshot:
+`sha256:76a77a56d964b53611541c7a1a7594567fbee9b6bcc9bd547feda82646840d10`. It includes the passing compiled web build and verified `/verify`
+source mirror. The immutable builder remains the separately pinned `41a49a0...`
+image named in the acceptance report. No dependency download occurs per upload.
+
+The canonical static runner supports:
+`python3 scripts/qa/package-static-checks.py --source-root /verify --prefix completion`
+from `/verify` with `TADAZZ_REMOTE_QA=1`. It checks all eight actual TS projects,
+units, lint with `--deny-warnings`, format and build. The web solution's empty
+`files` config alone is insufficient in `tsc -p` mode.
+
+The host broker/browser runner accepts `--source-root /verify` and
+`--config-name package-staging-visual-final`; it returns the real browser
+exit code. A fresh dedicated synthetic config name avoids accumulated test
+login/upload limits while retaining previous QA data. It never disables limits.
+Use the recorded 2 CPU / 8 GiB / 1536 PID QA profile for the browser harness;
+the final configuration qualifies 40 Chromium / 20 WebKit display pages at
+800×600. Forty WebKit tabs exceeded this private host's memory budget and are
+a documented capacity failure. This is not a per-viewer server container model.
+
+Before backup, stop only this QA application's writes, checkpoint every SQLite
+database and explicitly close connections (a transaction context alone is not
+connection close). Archive durable metadata/objects/media/quizzes together;
+exclude ephemeral SQLite SHM and truncated WAL files after checkpoint. The final
+backup restored 1,991 durable files byte-exactly, and read-only smoke validated
+installed games/assets. Keep backups private. The final evidence records exact
+source, compiled files, image, container and backup identities. Retained immutable
+images provide rollback; duplicate stopped QA rootfs copies may be removed only
+after proving their images and bind data remain, without `docker rm -v` or pruning
+unrelated resources. None of these operations authorizes a production rollout.
