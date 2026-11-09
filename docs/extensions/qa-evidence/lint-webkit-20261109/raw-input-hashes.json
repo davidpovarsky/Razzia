@@ -19,11 +19,6 @@
     "rawBytes": 172,
     "rawSha256": "5c484aa7ad2f22dcda0c8e8a7a87f3f25f32b2ab481d88e049b84317f181496b"
   },
-  "lint.json": {
-    "source": "followup-lint-final.json",
-    "rawBytes": 198,
-    "rawSha256": "dbababbbc5dea439f38ff6be59fab7a78aa27be70cbf23fcbe41ac5c14412c61"
-  },
   "format.log": {
     "source": "followup-format-final.log",
     "rawBytes": 38,
@@ -123,5 +118,10 @@
     "source": "followup-lint-final.stderr.log",
     "rawBytes": 39,
     "rawSha256": "356c8491a93c4763f2cd5894b3c6e5b2b4f3c97808b4bc8012134f73df611a4b"
+  },
+  "lint.json.gz": {
+    "source": "followup-lint-final.json",
+    "rawBytes": 198,
+    "rawSha256": "dbababbbc5dea439f38ff6be59fab7a78aa27be70cbf23fcbe41ac5c14412c61"
   }
 }
