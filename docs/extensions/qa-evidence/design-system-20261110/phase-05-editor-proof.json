@@ -1,0 +1,38 @@
+{
+  "phase": "phase-05",
+  "sourceControl": "cb29c8c9010ebe26e22f8d8d1a22c101ec0a3a9475efd1aed4a1d5fa39bb8b2a",
+  "pairs": [
+    {
+      "name": "editor-question",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "f6ea941ae0bcb6152f576a6e3e86ad0fcc2b11389a4e1ef7638f55832e7bc19d",
+      "candidate": "f6ea941ae0bcb6152f576a6e3e86ad0fcc2b11389a4e1ef7638f55832e7bc19d"
+    },
+    {
+      "name": "editor-media",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "03b22c1d72bc642346e1e4bae562d544ec37d4c5c63699d47684cf43ebc37dbc",
+      "candidate": "03b22c1d72bc642346e1e4bae562d544ec37d4c5c63699d47684cf43ebc37dbc"
+    },
+    {
+      "name": "editor-scene-timeline",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530",
+      "candidate": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530"
+    },
+    {
+      "name": "editor-theme-settings",
+      "byteIdentical": true,
+      "changedRgbaPixels": 0,
+      "samples": [],
+      "control": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5",
+      "candidate": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5"
+    }
+  ]
+}

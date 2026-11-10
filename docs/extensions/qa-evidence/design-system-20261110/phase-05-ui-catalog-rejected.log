@@ -1,0 +1,10 @@
+$ node --experimental-strip-types node_modules/vite/bin/vite.js --config tds.catalog.vite.config.ts --host 0.0.0.0
+error when starting dev server:
+Error: Catalog must bind to loopback only
+    at BasicMinimalPluginContext.configResolved (file:///cleanup/extensions/node_modules/.vite-temp/tds.catalog.vite.config.ts.timestamp-1794348219179-ec9cb9f421659.mjs:12:98)
+    at file:///cleanup/node_modules/.pnpm/vite@8.3.4_@types+node@26.6.5_esbuild@0.28.2_jiti@2.7.0_tsx@4.23.15/node_modules/vite/dist/node/chunks/node.js:37846:87
+    at Array.map (<anonymous>)
+    at resolveConfig (file:///cleanup/node_modules/.pnpm/vite@8.3.4_@types+node@26.6.5_esbuild@0.28.2_jiti@2.7.0_tsx@4.23.15/node_modules/vite/dist/node/chunks/node.js:37846:68)
+    at async _createServer (file:///cleanup/node_modules/.pnpm/vite@8.3.4_@types+node@26.6.5_esbuild@0.28.2_jiti@2.7.0_tsx@4.23.15/node_modules/vite/dist/node/chunks/node.js:24830:65)
+    at async CAC.<anonymous> (file:///cleanup/node_modules/.pnpm/vite@8.3.4_@types+node@26.6.5_esbuild@0.28.2_jiti@2.7.0_tsx@4.23.15/node_modules/vite/dist/node/cli.js:712:18)
+[ELIFECYCLE] Command failed with exit code 1.

@@ -1,0 +1,20 @@
+[WebServer] $ node --experimental-strip-types node_modules/vite/bin/vite.js preview --config tds.catalog.vite.config.ts
+
+Running 14 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-catalog.spec.ts:4:1 › all typed production component families have working state examples (1.9s)
+  ✓   2 [chromium] › qa/tds-catalog.spec.ts:52:3 › platform.marketing: live token edit reaches real button and modal portal (1.8s)
+  ✓   3 [chromium] › qa/tds-catalog.spec.ts:52:3 › platform.studio: live token edit reaches real button and modal portal (1.8s)
+  ✓   4 [chromium] › qa/tds-catalog.spec.ts:52:3 › platform.host: live token edit reaches real button and modal portal (1.9s)
+  ✓   5 [chromium] › qa/tds-catalog.spec.ts:93:1 › eight existing locales drive actual component content and dialog close labels (3.2s)
+  ✓   6 [chromium] › qa/tds-catalog.spec.ts:121:1 › layout dialog table keeps forty safe synthetic rows and scroll inside modal (900ms)
+  ✓   7 [chromium] › qa/tds-catalog.spec.ts:148:1 › responsive widths, light preview, RTL, reduced motion and 200% CSS zoom (2.1s)
+  ✓   8 [webkit] › qa/tds-catalog.spec.ts:4:1 › all typed production component families have working state examples (7.8s)
+  ✓   9 [webkit] › qa/tds-catalog.spec.ts:52:3 › platform.marketing: live token edit reaches real button and modal portal (5.6s)
+  ✓  10 [webkit] › qa/tds-catalog.spec.ts:52:3 › platform.studio: live token edit reaches real button and modal portal (5.4s)
+  ✓  11 [webkit] › qa/tds-catalog.spec.ts:52:3 › platform.host: live token edit reaches real button and modal portal (6.7s)
+  ✓  12 [webkit] › qa/tds-catalog.spec.ts:93:1 › eight existing locales drive actual component content and dialog close labels (17.7s)
+  ✓  13 [webkit] › qa/tds-catalog.spec.ts:121:1 › layout dialog table keeps forty safe synthetic rows and scroll inside modal (3.4s)
+  ✓  14 [webkit] › qa/tds-catalog.spec.ts:148:1 › responsive widths, light preview, RTL, reduced motion and 200% CSS zoom (10.4s)
+
+  14 passed (1.2m)

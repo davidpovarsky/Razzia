@@ -1,0 +1,2 @@
+PASS: ui:catalog rejects public bind before starting
+PASS: ui:catalog:preview rejects public bind before starting

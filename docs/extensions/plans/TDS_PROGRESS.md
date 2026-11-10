@@ -15,7 +15,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | TDS-02 | 1220402647256448 | VERIFIED    | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md)             |
 | TDS-03 | 1220402777623967 | VERIFIED    | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed                   |
 | TDS-04 | 1220402719463680 | VERIFIED    | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario |
-| TDS-05 | 1220402777822480 | NOT_STARTED | Live catalog                                                                                                    |
+| TDS-05 | 1220402777822480 | VERIFIED    | [Internal catalog](TDS_CATALOG.md); 14 catalog + 18 component + 6 token cases, original editor PNG parity       |
 | TDS-06 | 1220402777861386 | NOT_STARTED | Site / Studio                                                                                                   |
 | TDS-07 | 1220402729693747 | NOT_STARTED | Stage / join                                                                                                    |
 | TDS-08 | 1220402719392041 | NOT_STARTED | Host controls / modals                                                                                          |
@@ -31,10 +31,10 @@ exact nine subsequently owner-approved host seams have bounded exceptions.
 An untouched source tree alone is insufficient: editor production-bundle visual
 and behavior checks are separately required.
 
-Session checkpoint: dependencies installed with frozen lockfile, no lock changes.
+Dependencies installed with frozen lockfile; TDS-04 adds only three importer lines for an already-locked optional peer, with no upgrades.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-TDS-04 canonical components verified. TDS-05 internal live catalog is next.
+TDS-05 live catalog verified. TDS-06 real site and Studio usability is next.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their
@@ -102,3 +102,24 @@ Tab boundary, implicit-submit and long fullscreen fixture issues fixed and
 their failed attempts retained. See TDS_COMPONENTS.md and phase-04 evidence.
 NOT RUN: final exhaustive matrix, physical devices, release (later gates).
 No remaining TDS-04 blocker. Next exact action: TDS-05 live internal catalog.
+
+TDS-04 commit: `c27a337efc452fd8bd828661a436a482a24eb6ae`; Asana VERIFIED.
+TDS-05 BASE_HEAD: that same commit. Added isolated localhost-only Vite catalog,
+38 typed production exports / nine story families, actual token palette and
+interactive controls, eight existing locale resources, RTL/light/state/layout
+examples, source/governance checks and linked agent guidance. No new dependency.
+Visual review caught and fixed scoped native WebKit select color-scheme and
+shared dialog body spacing; original pre-correction evidence retained.
+PASS remote tds-phase05.sh: extension/web types; 14 units; 14 catalog + 18 canonical
+
+- 6 token browser cases across Chromium/WebKit (no skips); separate catalog build;
+  both dev and preview reject public-bind overrides; 577-source import separation;
+  full actual API/site/Studio/host/editor regression 1 passed 35.6s; freeze/design/
+  registry. All four final editor PNGs BYTE-IDENTICAL to independently built original
+  control, zero raw-RGBA differences; historical 9/2 AA observations remain retained.
+  Only existing approved toolbar source exception, 12/140 lines, 601 unchanged hashes.
+  Evidence: TDS_CATALOG.md and phase-05*, including phase-05-editor-proof.json.
+  NOT RUN: physical devices / native browser zoom / final performance/lifecycle
+  matrix / GitHub CI execution / release. No new upstream/lock changes or blocker.
+  Next exact action: TDS-06 My Games thumbnails/actions, advanced package disclosure,
+  marketing demo state controls and compact real account layout, all eight locales.

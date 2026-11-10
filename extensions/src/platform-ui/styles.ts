@@ -1,6 +1,8 @@
 /** Production CSS. Every selector is bounded by the explicit platform scope. */
 export const platformComponentCss = `
 .tds-scope{font-family:var(--tds-font-family);color:var(--tds-text)}
+.tds-scope[data-platform-appearance="dark"]{color-scheme:dark}
+.tds-scope[data-platform-appearance="light"]{color-scheme:light}
 .tds-scope .tds-button:not([data-variant="unstyled"]){display:inline-flex;align-items:center;justify-content:center;gap:var(--tds-button-gap);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-button-radius);background:var(--tds-elevated);color:var(--tds-text);font:var(--tds-weight-label) var(--tds-type-label)/1.3 var(--tds-font-family);text-decoration:none;cursor:pointer;transition:background var(--tds-motion-fast) var(--tds-motion-easing),box-shadow var(--tds-motion-fast) var(--tds-motion-easing),transform var(--tds-motion-fast) var(--tds-motion-easing)}
 .tds-scope .tds-button[data-variant="primary"]{background:var(--tds-action);color:var(--tds-action-text);border-color:transparent}
 .tds-scope .tds-button[data-variant="destructive"]{background:var(--tds-danger);color:var(--tds-danger-text);border-color:transparent}
@@ -57,7 +59,8 @@ export const platformComponentCss = `
 .tds-scope .tds-dialog-title{margin:0;padding-inline-end:calc(var(--tds-button-min-height) + var(--tds-space-3));font-size:var(--tds-type-title);font-weight:var(--tds-weight-heading);line-height:1.3}
 .tds-scope .tds-dialog-description{margin-block:var(--tds-space-3);color:var(--tds-muted-text);line-height:1.5}
 .tds-scope .tds-dialog-close{position:absolute;inset-block-start:var(--tds-space-3);inset-inline-end:var(--tds-space-3)}
-.tds-scope .tds-dialog-body{margin-block-start:var(--tds-space-4);min-height:0}
+.tds-scope .tds-dialog-body{display:grid;gap:var(--tds-space-4);margin-block-start:var(--tds-space-4);min-height:0}
+.tds-scope .tds-dialog-body>.tds-button{justify-self:start}
 .tds-scope .tds-dialog-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--tds-space-2);margin-block-start:var(--tds-space-6)}
 .tds-scope .tds-menu-surface{z-index:var(--tds-z-menu);min-width:12rem;max-width:calc(100vw - var(--tds-space-8));max-height:min(70dvh,var(--radix-dropdown-menu-content-available-height,70dvh));overflow:auto;padding:var(--tds-space-2);border:1px solid var(--tds-border);border-radius:var(--tds-radius-control);background:var(--tds-surface);color:var(--tds-text);font-family:var(--tds-font-family);box-shadow:var(--tds-shadow-raised)}
 .tds-scope .tds-menu-item{display:flex;align-items:center;gap:var(--tds-space-2);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-3);border-radius:var(--tds-radius-small);font-size:var(--tds-type-label);cursor:pointer;outline:none}

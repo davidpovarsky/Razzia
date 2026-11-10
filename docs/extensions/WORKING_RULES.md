@@ -13,6 +13,8 @@ approved exact seam; historical P0 ownership exceptions do not authorize them.
 Use one isolated primary session and update the existing Asana phase description
 after verification and commit. The owner explicitly authorized these Asana
 updates, not push/merge/deployment or production changes.
+Use the [internal live catalog](plans/TDS_CATALOG.md) and canonical component
+imports for new platform UI. Run `pnpm --dir extensions ui:check` each checkpoint.
 
 ## Ownership
 

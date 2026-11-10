@@ -1,5 +1,8 @@
 # Google Antigravity instructions — Razzia V3
 
+For Tadazz platform UI, use [the live catalog guide](docs/extensions/plans/TDS_CATALOG.md)
+and canonical `@razzia/extensions/platform-ui` imports; run `pnpm --dir extensions ui:check`.
+
 ## Tadazz design-system scope — 10 November 2026
 
 For this initiative the current scoped section in [AGENTS.md](AGENTS.md),

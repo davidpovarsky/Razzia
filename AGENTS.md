@@ -6,6 +6,8 @@ For the design-system initiative, follow
 [the canonical mandate](docs/extensions/plans/TADAZZ_DESIGN_SYSTEM_UI_UNIFICATION_AGENT_PROMPT_2026-11-10.md),
 [phase checkpoint](docs/extensions/plans/TDS_PROGRESS.md) and
 [naming/scope policy](docs/extensions/plans/TDS_POLICY.md) first.
+Use the [live catalog and component import guide](docs/extensions/plans/TDS_CATALOG.md)
+for new platform UI, and run `pnpm --dir extensions ui:check` at each checkpoint.
 This scope uses one sequential primary session and its isolated scoped worktree.
 The old requirement to match original Razzia visuals applies to the frozen
 editor and legacy compatibility surfaces; it does not govern new site, customer

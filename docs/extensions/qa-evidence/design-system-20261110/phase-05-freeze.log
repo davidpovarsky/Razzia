@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "base": "fb6c7631999f33c8fb47638a99920e450f326fbf",
+  "protectedFiles": 602,
+  "unchangedHashes": 601,
+  "approvedModifiedHashes": [
+    "packages/web/src/features/game/components/ManagerControlToolbar.tsx"
+  ],
+  "approvedSeams": [],
+  "changedPaths": [],
+  "manifest": "docs/extensions/plans/tds-freeze.json"
+}

@@ -4,8 +4,11 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "ui:catalog": "node --experimental-strip-types node_modules/vite/bin/vite.js --config tds.catalog.vite.config.ts",
+    "ui:catalog:build": "node --experimental-strip-types node_modules/vite/bin/vite.js build --config tds.catalog.vite.config.ts",
+    "ui:catalog:preview": "node --experimental-strip-types node_modules/vite/bin/vite.js preview --config tds.catalog.vite.config.ts",
     "ui:tokens": "node qa/tds-token-registry.mjs",
-    "ui:check": "node qa/tds-design-check.mjs && node qa/tds-token-registry.mjs --check && node qa/tds-boundary.mjs",
+    "ui:check": "node qa/tds-design-check.mjs && node qa/tds-token-registry.mjs --check && node qa/tds-catalog-check.mjs && node qa/tds-boundary.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "site:dev": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js --config ../../extensions/site.vite.config.ts --host 127.0.0.1",
