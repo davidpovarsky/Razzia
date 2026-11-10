@@ -1,0 +1,879 @@
+{
+  "integrationBase": "18d3c9d",
+  "branch": "codex/tadazz-unified-site-20261110",
+  "note": "Exact implementation commit file list, including immutable references and evidence; self hash intentionally omitted. Later handoff-only commits are separately identified in the report.",
+  "upstreamModified": [],
+  "fileCount": 145,
+  "files": [
+    {
+      "path": ".gitignore",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "0f7918bbb3dd4b08e7d0dd28a955a898df8c8efdbef4888581caf4061808c58c"
+    },
+    {
+      "path": ".prettierignore",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "3e83f9201746a8acfa156c448c7cf4f160ec47e102caa847f589ce8c9f7c7faf"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/MANIFEST_SHA256.json",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "5ef774b263fca069f2942472f3bb78e05880730a68438d66a2faa685604ff335"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/README_FIRST.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "c0f3f222d6eeba7fdea479e31b896cbadbb026be007d99e66205b864efa3a6ca"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/TADAZZ_UNIFIED_SITE_AGENT_PROMPT.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "a197973564b154cd717a764fe4ac035911cf262c46d0c3644f5a640aa53796d4"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/ARCHITECTURE.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "974a35668186a4d1a9e77bd691a6fdc554af45a7639ff6fc415a4029232d2137"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/COMPONENT_SOURCES.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "4ae3017989b998ab2b12a692d5fb49090a431ee571b2ead28f44aa6dbee91b68"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/DEPLOYED_STATIC_PREVIEW_HISTORICAL.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "6968498f456491f724172ac417d68c60c3864b298aa478e4f5740d3b1cd9f864"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/DESIGN_LANGUAGE.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "bab8373ac04fbe6624f34597744bf9f3b21650b4844206b4da3d0eeacc566d4e"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/FILE_OWNERSHIP_HISTORICAL.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "b348785d7664d65340cb11d8a671db140cdb18f9ca1913542ba1c1d00c76f88f"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/IMPLEMENTATION_STATUS_HISTORICAL.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "7b7feb849387fe22930bcda3004db63020bfed9e00b9d4acf05b9163747f4687"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/INTEGRATION_CONTRACT.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "1c861df92f07fc21480ec438562cae8d402b523593200a572142d858e8a85cff"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/INTEGRATION_POINTS.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "8c9d674a321f636101362d8fcc89575108a8ceb05fbbf4ec46219cf91a234642"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/UNIFIED_SITE_INTEGRATION.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "baac6d7d45dc5a7040884c38f4f85b31533176b2f9d7e4effbe22727c2be0c4a"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/documentation/WORKING_RULES.md",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "e4e52b6550cd55ab8a258b7589b00f58a34a83ce3bf526427d0e8970ca759675"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/ReferenceCanvas.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "bb53842ec07a0cc1b9c031ba2b7c0f95c6e499540afa1027b8c54efd29364304"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/SiteAccountGateway.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "f6764e9b860a6e12d2f3e1997e4c3058aae7bb2dc522145dd05dfde4f687b6e3"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/SitePreview.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "4494f5cfd11778e51e1fcbe1561fdeffcd6476059eb5d8d265cdf9e208e39456"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/components/HoverDevTiltCard.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "1a4b8103acaf3d73af6a69233f0fa86b25fcfc46159a8908a608900d8c456780"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/components/MagicBorderBeam.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "71b1552af016015687ef8cf0c788c972c849da6911ef2a328f88adfeaebc3095"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/routes/index.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "1522dd9e209dc055ef81ee88d55371a25ccbf8349a7d3fc3d321999c1707162b"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/routes/login.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "9ad2bd7a2cb6630e951a794caeb806efae335ddd4d5660ca65fb6a3dda2d98f2"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/routes/signup.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "c93da54cbaf30028255e26fe1c85c60f0d44a7a3152dc65eb2904ea4a48241fa"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/routes/studio.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "2e91d1b28b166bb6c792174ae1dac5cb4e63500599a3530eee3c98e893c41ec8"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/tadazz-preview.vite.config.ts",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "075ab2d9560e292ea82b3a757ff6ed0c6b2423bfa713e422d290de911ea0bd24"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/existing-implementation/tadazz-standalone-preview-main.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "5ae7ba2d13daf2cfd00f870a92068985febe1ab26bb79f07489e79fed0a9c43c"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/TADAZZ-Animated-Modern.html",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "4414d32c0e8f5b87519470d824ff72325bd0041776060c21c09ec9300acb7e0f"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/TADAZZ-My-Studio-Modern.html",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "f054e110766b7a21798de4e3efffdad8939127bab9846c8d8a6fba2b75c169a7"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/asset-manifest.json",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "7e731359793f8c1ea178799e1acbe12a276ec7fd778d64aeab4e2f4af00494a3"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-exclaim.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-icons.svg",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-logo.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-questions.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-rays.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-stage.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-worlds.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-zb.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing-zl.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/marketing.css",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-blue.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-icons.svg",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-lime.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-logo.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-questions.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-stage.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio-worlds.webp",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/design_assets/studio.css",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/screenshots/marketing-reference-1440.png",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "b3b0cf781243131a86b1262db88afad77e8eb0684e1417c86ac9c43b1615d6f4"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/screenshots/marketing-reference-mobile-390.png",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "a1aaaedbbb3f6f7a9a7a3b822d4b32aefd24789b627db8ddf4ca0fba8c3f49ce"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/screenshots/studio-reference-1440.png",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "2a6587cb43b514782500e76a9a2f8021f03f653fe2a86cf6f0f20cc17128164e"
+    },
+    {
+      "path": "docs/design-reference/handoff-20261110/reference/screenshots/studio-reference-mobile-390.png",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "d7b3164471ca37b7e2fa282883388fdd708d020855dbf7435354d0155415315e"
+    },
+    {
+      "path": "docs/design-reference/upstream/HoverDev-TiltCard-original.tsx",
+      "status": "A",
+      "category": "immutable-reference",
+      "sha256": "8e9b71be0cd7ea646c6b534804cffe7841d8404d213d1bd4fe52f574b3a44859"
+    },
+    {
+      "path": "docs/extensions/UNIFIED_SITE_20261110.md",
+      "status": "A",
+      "category": "handoff",
+      "sha256": "f2b7945a5bd8393b21e380bc29e6fd8f41dbae452fc6854b8ca2e55aff310ebf"
+    },
+    {
+      "path": "docs/extensions/UNIFIED_SITE_SOURCES_20261110.md",
+      "status": "A",
+      "category": "handoff",
+      "sha256": "68611124208a5cb818aba30bec13c2bfd09ef8cb45d5d9fd8cf787212c596b3a"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/acceptance.json",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "bb99fbb91e354666cb6636dfb3a562cca3b6ab1d7bef41ea38b44a23cb6b41ec"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/baseline-browser-results.json",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e38d13d27d89951a19b928048c5d0492808384edcfdac7c694134350601eefd4"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/baseline-unit-reproduction.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "d7b2d3b35850703bc461db76135ceb09af8355d23c5043da9010b879e96153ac"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/browser-results.json",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "ebc16082f2cea9895af8596563af50a8741f916f9051a25316221d1abf5ac9e0"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/compatibility-browser.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "591b65b5002b23f233623d52f37421638f8aa27687caaf475752256ad31aaab7"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/default-build.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "7211d0e10a632e038286c1b8ef3db58a5aa150a2150e872995574f310226d632"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/events-1440.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "5536d96f468bc4463cd9c763128cde35e75cf61da0c173a4528beec1a6a22891"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/extension-types.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/extension-unit.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "0cde1bbb1167d148e1b8a9b8776e2b42dc4d880437c54539b2197cd3afc46627"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/final-visual-browser.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "1c7df1e500cc2a7806d2dc48c41bc6e3a5a5fcefc0e389e5409a49b4ca6b5635"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/format.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/frozen-install.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "b3b52d38847900322b96aa76bdc23a0868574116d5a9e7de354cd3a4067a411e"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/legacy-browser-attempt.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "598809b9b40d5925ff34d49d13fcc23bffe41def4385e7681619148839c078fb"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/lint.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/marketing-1024.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "fc716b7853041c5c455a891baafdeea702cce7bae8aff333a061523d973a18ce"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/marketing-1440.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "5915617d6fcf5925227a4c434934b48bfb5becac293b189fd53f7e7de980ff83"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/marketing-390.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "49fa524f497953e7cfc93ed39da78e9996d7408f647bae3cf294d015701792eb"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/original-editor-1440.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "b46fbba005b8bafedf18fc80387c91c6964e470d41cf87b21c957d2adb5de319"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/root-unit.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "1d2c4f377b960fde43d6922c54646f00e51737c76f78d6250645bf4ea7516787"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/site-browser.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "cea24313d4730b3136be9e4a3a271ddd4fba68e1fcf8657d8d8746ec741c92f0"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/socket-types.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/studio-empty-1024.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "9cc777ba8b09f0d2514501f3509044c44f5b7e97de0170c373aa014b5fd21312"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/studio-empty-1440.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "7539a962bd824da3315277a1fb601ad4e24c3402fd10aa5cd0c783eaa062e477"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/studio-empty-390.png",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "d8bf18bdfb1f880d900a3b78833a4eab59fab1bf807f7bdab6470a5f28dbf011"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/web-types.log",
+      "status": "A",
+      "category": "qa-evidence",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "extensions/package.json",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "e6079841290f292e6c002c9e1ed5f5f6f872d96cc2fa585cf96e8c0ab9e6f3e0"
+    },
+    {
+      "path": "extensions/qa/site-fixture-server.ts",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "7d3236affee411342c8d23b55932bba99b95743814fe5513b72e9e2834e4a804"
+    },
+    {
+      "path": "extensions/qa/site-flag-off.spec.ts",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "afb3360ac64e8bb61dacf04083e8433bc5a7bd0c68a5d533ce83154df06baf2f"
+    },
+    {
+      "path": "extensions/qa/site-preview-server.mjs",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "639e6ca5e8ceb4927875ada4ec20a1c8b0e72d9bda6b13e759f192dbec5f1a1f"
+    },
+    {
+      "path": "extensions/qa/site-runtime.spec.ts",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "83c5a6c2168bec151b65f65f3848959419adca5fb60de4ba7e73ccff0d9b991c"
+    },
+    {
+      "path": "extensions/site-assets/marketing-exclaim.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1"
+    },
+    {
+      "path": "extensions/site-assets/marketing-icons.svg",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a"
+    },
+    {
+      "path": "extensions/site-assets/marketing-logo.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "extensions/site-assets/marketing-questions.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "extensions/site-assets/marketing-rays.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4"
+    },
+    {
+      "path": "extensions/site-assets/marketing-stage.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "extensions/site-assets/marketing-worlds.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "extensions/site-assets/marketing-zb.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "extensions/site-assets/marketing-zl.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "extensions/site-assets/marketing.css",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309"
+    },
+    {
+      "path": "extensions/site-assets/studio-blue.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+    },
+    {
+      "path": "extensions/site-assets/studio-icons.svg",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e"
+    },
+    {
+      "path": "extensions/site-assets/studio-lime.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+    },
+    {
+      "path": "extensions/site-assets/studio-logo.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+    },
+    {
+      "path": "extensions/site-assets/studio-questions.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+    },
+    {
+      "path": "extensions/site-assets/studio-stage.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+    },
+    {
+      "path": "extensions/site-assets/studio-worlds.webp",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+    },
+    {
+      "path": "extensions/site-assets/studio.css",
+      "status": "A",
+      "category": "original-design-assets",
+      "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4"
+    },
+    {
+      "path": "extensions/site.baseline.playwright.config.ts",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "859745bb7105eadea17c3172b20780d515160bdeda790c16b77fc92686661109"
+    },
+    {
+      "path": "extensions/site.playwright.config.ts",
+      "status": "A",
+      "category": "downstream-qa",
+      "sha256": "7cc9688025697c79bc77e38dccecfc32e89345e6cd533bcee01ef18f0c1a8a7b"
+    },
+    {
+      "path": "extensions/site.vite.config.ts",
+      "status": "A",
+      "category": "downstream-build-composition",
+      "sha256": "390868dc846038e247590fbb63172a71bb50be231b2cecc18445b45ddb8634d0"
+    },
+    {
+      "path": "extensions/src/server/storage/service.ts",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "f9dac6bb71ec73e7d6db709d508868d7acce9c937ff2b8a10bda8c271958f548"
+    },
+    {
+      "path": "extensions/src/site/adapters/client.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "625c6c1a448ef29d2316d12a7fcd94603d89ed638f290ca970ce67f5b9c8d19e"
+    },
+    {
+      "path": "extensions/src/site/bootstrap.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "8f282c43fa86d2f0563c336488de2eeaea3929a7962d7c89a38bdef87312f5c5"
+    },
+    {
+      "path": "extensions/src/site/components/HoverDevTiltCard.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "b703a8ff58466adc832a03554f574807e535749366515a52c975e7568bd4cbc3"
+    },
+    {
+      "path": "extensions/src/site/components/LICENSE-MagicUI.txt",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "0147b84235ed916b8b4e89c1f80655351c5afe7d211b629be61f553a227b34ba"
+    },
+    {
+      "path": "extensions/src/site/components/MagicBorderBeam.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "5bd66b2223fdd53204cd07af19f28c7dc98a88f123d534b85d2c5f03a308f942"
+    },
+    {
+      "path": "extensions/src/site/env.d.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "65996936fbb042915f7b74a200fcdde7e410f32a669b1ab9597cfaa4b0faddb5"
+    },
+    {
+      "path": "extensions/src/site/index.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "221c6c54975da7a0f06b2d0e66e544d2498108746faec20d45f448709051997e"
+    },
+    {
+      "path": "extensions/src/site/locales/de.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "fc9c3a49c45c1b0fc68a1e73d79c5f6dc86b83572b3f23477be43bfc6a5e10d5"
+    },
+    {
+      "path": "extensions/src/site/locales/en.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "de45b5da08e0fdb845cf00434c746020302c809bc921aea02f7c21e15324d3a6"
+    },
+    {
+      "path": "extensions/src/site/locales/es.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "f86b540e78bf8a8942ea678d3912a6eb9afa1dd2111aeeb08b363042c28b98e0"
+    },
+    {
+      "path": "extensions/src/site/locales/fr.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "a27844a4e64c1f1a7e23f06c0ea645006e45173b4230c082f551c9988628ca5e"
+    },
+    {
+      "path": "extensions/src/site/locales/index.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "e32506c0a745d9e71ff9bbaf43049eb7066caebcafe16a146e1bb5a486887c8b"
+    },
+    {
+      "path": "extensions/src/site/locales/it.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "0d5f700c48081bd08632f37f963dfdca10a55fa9e0a0e23563d98301cd531eca"
+    },
+    {
+      "path": "extensions/src/site/locales/ja.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "7f172751a3f3cc3b5a257a6b6be115e19086a364188cad0d0a3127498da90ba8"
+    },
+    {
+      "path": "extensions/src/site/locales/tr.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "1187687a4ca5f7596fd19febf31d82055baa9b12c26640085c03896b7a45b79e"
+    },
+    {
+      "path": "extensions/src/site/locales/vi.json",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "76a0b14dbdf2eea98f83a6d0e74d8149284f17bbbb462a831c4848dc1319940a"
+    },
+    {
+      "path": "extensions/src/site/tests/browser/site.spec.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "c960f424dcb64def078b3a0290b2ce047da38bdce2e36db595b46d3ea50cc391"
+    },
+    {
+      "path": "extensions/src/site/tests/client.test.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "b0ac999f7862bf00bc8a50b3308fa0993bec6f83d1b0be98f9c25f404166e537"
+    },
+    {
+      "path": "extensions/src/site/tests/delete-boundary.test.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "2e85f1ce1362b676e1bf0c8709ba9704eafcd7c17e77f94fd0a6af6f8d867745"
+    },
+    {
+      "path": "extensions/src/site/tests/locales.test.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "5fcf5b0aba74d3779ba10cb669f276a794869918d845c6b65ba1c512e1da84d4"
+    },
+    {
+      "path": "extensions/src/site/themes/account.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "5f4a46dbc0b67d4fde29884551f8479dbc3640267c80e01550c0f225c125b2a5"
+    },
+    {
+      "path": "extensions/src/site/themes/corrections.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "98629654e2efe11154f3b0c2afa6200946ca33abea611117542e0f8fc969792b"
+    },
+    {
+      "path": "extensions/src/site/themes/native.css",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "7fec535daf7335afd340eca395edd2fd6fa1d782f0de83016665c260ba8611c3"
+    },
+    {
+      "path": "extensions/src/site/themes/studio.ts",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "781bcd2cb5c77adaaa76ce1449b06cd72ff78d243259315b54a190de0eb0522a"
+    },
+    {
+      "path": "extensions/src/site/web/account/AccountGateway.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "0341e32930847424b7a0b8a47206eeea94798beecb19eea632ffe65b29e7e78a"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/Catalogue.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "02a7d8700677aee2651273095211db0d1e9eb2b3e24fedba42aa05e8dab871ba"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/MarketingSite.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "ab5439eb909386a3f5954bd75d099550f14ec68b82ad725d690d6a143ec78e2f"
+    },
+    {
+      "path": "extensions/src/site/web/marketing/Pricing.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "469b539f416e79b12cd18e97810bdf18d371fa3fdf84612f59e84880405fc85a"
+    },
+    {
+      "path": "extensions/src/site/web/shared/Dialog.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "ba53144d9738b62e8e83a08196b7d044856274dc5ad1f234c449b96bc1172840"
+    },
+    {
+      "path": "extensions/src/site/web/shared/ReferenceCanvas.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "19a819a0edbf18bda6f6ba01a53c2f772e22afd9f402471e3d639aeaf7444cfb"
+    },
+    {
+      "path": "extensions/src/site/web/shared/SiteButton.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "e9d4e7509c4ea952290c98fec4789603051adbe91876f23a25495a3edf74fe50"
+    },
+    {
+      "path": "extensions/src/site/web/studio/AccountPanel.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "0b9ddc17dab979bb1dae661a38f12a54fecc34a7284abba19dc392b752924ae9"
+    },
+    {
+      "path": "extensions/src/site/web/studio/Events.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "a356285aefc0cf64c0ce58e67a2c0dbdb0e438a4131fa01ad417616be7e06dec"
+    },
+    {
+      "path": "extensions/src/site/web/studio/MyGames.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "ba7b9f07f5ac96179f44f1a946c33e2a4f69bfb8caab414a319a2d95845e99ba"
+    },
+    {
+      "path": "extensions/src/site/web/studio/Studio.tsx",
+      "status": "A",
+      "category": "new-downstream-site",
+      "sha256": "21b41c093082b49ad480db2824ad1168367b0adf66489bbe6568ee8d9edcaf26"
+    },
+    {
+      "path": "extensions/vitest.config.ts",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "73742e609bb01e7567e054e7b0c3475d6ec973e1bb4a51f4b131374198db0d30"
+    },
+    {
+      "path": "oxlint.config.ts",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "e4d3ab7d73c9dadae1f810badf2265fe14d2be3ecaf6289f8d79eb33f50ba091"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "status": "M",
+      "category": "existing-downstream-or-tooling",
+      "sha256": "32f87dda23586066cb2e8a7e58b6beddbbc6da185a4b30dc4dfdebb9c28d2ae2"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/unified-site-20261110/SOURCE_INVENTORY.json",
+      "status": "A",
+      "category": "generated-inventory",
+      "sha256": null
+    }
+  ]
+}

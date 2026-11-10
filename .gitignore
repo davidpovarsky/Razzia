@@ -4,3 +4,7 @@
 .secrets
 release.json
 /coverage
+# Isolated unified-site QA data and local process logs.
+extensions/.site-test-config/
+extensions/site-*.log
+docs/extensions/qa-evidence/unified-site-20261110/traces/

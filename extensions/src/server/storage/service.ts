@@ -293,6 +293,10 @@ export class CompositeStorageService {
    * Deletes both base quiz and sidecar.
    */
   deleteCompositeQuiz(quizId: string): void {
+    // Resolve through the current account scope before either deletion. Besides
+    // protecting sidecars, this normalizes absent/foreign IDs to the composite
+    // API's existing 404 contract instead of leaking a backend exception as 500.
+    this.getCompositeQuiz(quizId)
     this.injections.deleteQuizz(quizId)
     deleteSidecar(this.injections.getPath, quizId)
   }

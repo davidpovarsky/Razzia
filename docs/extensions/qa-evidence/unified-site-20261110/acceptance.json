@@ -1,0 +1,336 @@
+{
+  "date": "2026-11-10",
+  "branch": "codex/tadazz-unified-site-20261110",
+  "integrationBase": "18d3c9d",
+  "previewSource": "08ddc42",
+  "ownerDeliveryFiles": 48,
+  "referenceAssets": 18,
+  "localeKeys": 225,
+  "siteDefaultEnabled": false,
+  "upstreamPackagesModified": [],
+  "defaultBundleContainsSite": false,
+  "tests": {
+    "extensions": {
+      "passed": 671,
+      "files": 80,
+      "exitCode": 0
+    },
+    "root": {
+      "passed": 364,
+      "failed": 1,
+      "exitCode": 1,
+      "baselineReproduced": true
+    },
+    "siteBrowser": {
+      "passed": 6,
+      "exitCode": 0
+    },
+    "currentCompatibility": {
+      "passed": 4,
+      "exitCode": 0
+    },
+    "legacyBrowserAttempt": {
+      "passed": 2,
+      "failed": 2,
+      "reason": "Stale player root route / and cinematic-only lobby selector; current native route/shortcut tests separately pass."
+    },
+    "typescript": {
+      "extensions": 0,
+      "web": 0,
+      "socket": 0
+    },
+    "lint": 0,
+    "format": 0,
+    "defaultBuild": 0,
+    "optInProductionBuild": 0,
+    "finalVisualBrowser": {
+      "exitCode": 0,
+      "passed": 3
+    }
+  },
+  "browser": "Microsoft Edge Chromium, Windows, production build",
+  "screenshots": [
+    {
+      "width": 1440,
+      "height": 900
+    },
+    {
+      "width": 1024,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "deploymentPerformed": false,
+  "sourceHashChecks": [
+    {
+      "path": "TADAZZ_UNIFIED_SITE_AGENT_PROMPT.md",
+      "verified": true
+    },
+    {
+      "path": "README_FIRST.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/ARCHITECTURE.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/COMPONENT_SOURCES.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/DEPLOYED_STATIC_PREVIEW_HISTORICAL.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/DESIGN_LANGUAGE.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/FILE_OWNERSHIP_HISTORICAL.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/IMPLEMENTATION_STATUS_HISTORICAL.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/INTEGRATION_CONTRACT.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/INTEGRATION_POINTS.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/UNIFIED_SITE_INTEGRATION.md",
+      "verified": true
+    },
+    {
+      "path": "documentation/WORKING_RULES.md",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/ReferenceCanvas.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/SiteAccountGateway.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/SitePreview.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/components/HoverDevTiltCard.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/components/MagicBorderBeam.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/routes/index.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/routes/login.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/routes/signup.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/routes/studio.tsx",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/tadazz-preview.vite.config.ts",
+      "verified": true
+    },
+    {
+      "path": "existing-implementation/tadazz-standalone-preview-main.tsx",
+      "verified": true
+    },
+    {
+      "path": "reference/TADAZZ-Animated-Modern.html",
+      "verified": true
+    },
+    {
+      "path": "reference/TADAZZ-My-Studio-Modern.html",
+      "verified": true
+    },
+    {
+      "path": "reference/asset-manifest.json",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-exclaim.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-icons.svg",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-logo.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-questions.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-rays.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-stage.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-worlds.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-zb.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing-zl.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/marketing.css",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-blue.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-icons.svg",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-lime.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-logo.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-questions.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-stage.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio-worlds.webp",
+      "verified": true
+    },
+    {
+      "path": "reference/design_assets/studio.css",
+      "verified": true
+    },
+    {
+      "path": "reference/screenshots/marketing-reference-1440.png",
+      "verified": true
+    },
+    {
+      "path": "reference/screenshots/marketing-reference-mobile-390.png",
+      "verified": true
+    },
+    {
+      "path": "reference/screenshots/studio-reference-1440.png",
+      "verified": true
+    },
+    {
+      "path": "reference/screenshots/studio-reference-mobile-390.png",
+      "verified": true
+    }
+  ],
+  "assetHashChecks": [
+    {
+      "path": "marketing-exclaim.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-icons.svg",
+      "verified": true
+    },
+    {
+      "path": "marketing-logo.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-questions.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-rays.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-stage.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-worlds.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-zb.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing-zl.webp",
+      "verified": true
+    },
+    {
+      "path": "marketing.css",
+      "verified": true
+    },
+    {
+      "path": "studio-blue.webp",
+      "verified": true
+    },
+    {
+      "path": "studio-icons.svg",
+      "verified": true
+    },
+    {
+      "path": "studio-lime.webp",
+      "verified": true
+    },
+    {
+      "path": "studio-logo.webp",
+      "verified": true
+    },
+    {
+      "path": "studio-questions.webp",
+      "verified": true
+    },
+    {
+      "path": "studio-stage.webp",
+      "verified": true
+    },
+    {
+      "path": "studio-worlds.webp",
+      "verified": true
+    },
+    {
+      "path": "studio.css",
+      "verified": true
+    }
+  ],
+  "hoverSourceSha256": "8e9b71be0cd7ea646c6b534804cffe7841d8404d213d1bd4fe52f574b3a44859"
+}

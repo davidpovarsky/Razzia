@@ -3,6 +3,8 @@ import { defineConfig, type OxlintConfig } from "oxlint"
 const config: OxlintConfig = defineConfig({
   // Imported artifacts are evidence, not maintained source. Keep their bytes intact.
   ignorePatterns: [
+    "docs/design-reference/handoff-20261110/**",
+    "docs/design-reference/upstream/**",
     "docs/extensions/references/**",
     "docs/extensions/qa-evidence/**",
     "docs/extensions/package-runtime-evidence/**",

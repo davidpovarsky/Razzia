@@ -26,3 +26,8 @@ extensions/assets/tadazz-source-demo.html
 extensions/src/presentation/tadazz-show/tadazz-motion-kit.css
 extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts
 extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts
+
+# Immutable owner-supplied site delivery and extracted reference bytes.
+docs/design-reference/handoff-20261110/**
+extensions/site-assets/**
+docs/design-reference/upstream/**

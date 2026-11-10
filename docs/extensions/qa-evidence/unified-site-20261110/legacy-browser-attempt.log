@@ -1,0 +1,103 @@
+[WebServer] (node:29216) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:11232) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:5:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (node:34024) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:5:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 4 tests using 1 worker
+
+(node:34956) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [edge-chromium-feature-off] › packages\e2e\tests\editor.spec.ts:33:1 › saves every question type and setting (6.7s)
+  x  2 [edge-chromium-feature-off] › packages\e2e\tests\game.spec.ts:7:1 › plays a full quiz from the lobby to the podium (2.0m)
+(node:34240) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  x  3 [edge-chromium-feature-off] › packages\e2e\tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause (23.5s)
+(node:1872) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 4 [feature-off-boundary] › extensions\qa\site-flag-off.spec.ts:3:1 › keeps the site disabled and preserves original authentication (1.8s)
+
+
+  1) [edge-chromium-feature-off] › packages\e2e\tests\game.spec.ts:7:1 › plays a full quiz from the lobby to the podium
+
+    Test timeout of 120000ms exceeded.
+
+    Error: locator.click: Target page, context or browser has been closed
+    Call log:
+      - waiting for getByRole('textbox', { name: 'PIN digit 1' })
+
+
+       at ..\utils\player.ts:8
+
+       6 |   await page
+       7 |     .getByRole("textbox", { name: t("game:pinDigit", { position: 1 }) })
+    >  8 |     .click()
+         |      ^
+       9 |   await page.keyboard.type(pin)
+      10 | }
+      11 |
+        at typePin (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\packages\e2e\utils\player.ts:8:6)
+        at enterPin (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\packages\e2e\utils\player.ts:13:3)
+        at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\packages\e2e\tests\game.spec.ts:15:3
+
+    Error Context: docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\game-plays-a-full-quiz-from-the-lobby-to-the-podium-edge-chromium-feature-off\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\game-plays-a-full-quiz-from-the-lobby-to-the-podium-edge-chromium-feature-off\trace.zip
+    Usage:
+
+        npx playwright show-trace docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\game-plays-a-full-quiz-from-the-lobby-to-the-podium-edge-chromium-feature-off\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [edge-chromium-feature-off] › packages\e2e\tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByTestId('tadazz-lobby-pin')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByTestId('tadazz-lobby-pin') with timeout 20000ms
+      - waiting for getByTestId('tadazz-lobby-pin')
+
+
+      78 |
+      79 |   const pin = host.getByTestId("tadazz-lobby-pin")
+    > 80 |   await expect(pin).toBeVisible()
+         |                     ^
+      81 |   const originalPin = await pin.textContent()
+      82 |   const originalUrl = host.url()
+      83 |   const gameId = /manager\/([^/?#]+)/u.exec(originalUrl)?.[1]
+        at C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110\packages\e2e\tests\host-presentation.spec.ts:80:21
+
+    Error Context: docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\host-presentation-same-win-421f5-ontrols-authoritative-pause-edge-chromium-feature-off\error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\host-presentation-same-win-421f5-ontrols-authoritative-pause-edge-chromium-feature-off\trace.zip
+    Usage:
+
+        npx playwright show-trace docs\extensions\qa-evidence\unified-site-20261110\traces\baseline\host-presentation-same-win-421f5-ontrols-authoritative-pause-edge-chromium-feature-off\trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2 failed
+    [edge-chromium-feature-off] › packages\e2e\tests\game.spec.ts:7:1 › plays a full quiz from the lobby to the podium
+    [edge-chromium-feature-off] › packages\e2e\tests\host-presentation.spec.ts:11:1 › same-window host presentation hides manager UI and controls authoritative pause
+  2 passed (2.8m)

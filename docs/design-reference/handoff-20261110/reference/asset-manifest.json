@@ -1,0 +1,86 @@
+{
+  "marketing": {
+    "source": "TADAZZ-Animated-Modern.html",
+    "source_sha256": "4414d32c0e8f5b87519470d824ff72325bd0041776060c21c09ec9300acb7e0f",
+    "css": "marketing.css",
+    "assets": {
+      "logo": {
+        "path": "/tadazz-design-reference/marketing-logo.webp",
+        "size": 187692,
+        "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+      },
+      "stage": {
+        "path": "/tadazz-design-reference/marketing-stage.webp",
+        "size": 242306,
+        "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+      },
+      "questions": {
+        "path": "/tadazz-design-reference/marketing-questions.webp",
+        "size": 79910,
+        "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+      },
+      "worlds": {
+        "path": "/tadazz-design-reference/marketing-worlds.webp",
+        "size": 56520,
+        "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+      },
+      "zb": {
+        "path": "/tadazz-design-reference/marketing-zb.webp",
+        "size": 53972,
+        "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+      },
+      "zl": {
+        "path": "/tadazz-design-reference/marketing-zl.webp",
+        "size": 48894,
+        "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+      },
+      "rays": {
+        "path": "/tadazz-design-reference/marketing-rays.webp",
+        "size": 35080,
+        "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4"
+      },
+      "exclaim": {
+        "path": "/tadazz-design-reference/marketing-exclaim.webp",
+        "size": 19460,
+        "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1"
+      }
+    }
+  },
+  "studio": {
+    "source": "TADAZZ-My-Studio-Modern.html",
+    "source_sha256": "f054e110766b7a21798de4e3efffdad8939127bab9846c8d8a6fba2b75c169a7",
+    "css": "studio.css",
+    "assets": {
+      "logo": {
+        "path": "/tadazz-design-reference/studio-logo.webp",
+        "size": 187692,
+        "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03"
+      },
+      "stage": {
+        "path": "/tadazz-design-reference/studio-stage.webp",
+        "size": 242306,
+        "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116"
+      },
+      "questions": {
+        "path": "/tadazz-design-reference/studio-questions.webp",
+        "size": 79910,
+        "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574"
+      },
+      "worlds": {
+        "path": "/tadazz-design-reference/studio-worlds.webp",
+        "size": 56520,
+        "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af"
+      },
+      "blue": {
+        "path": "/tadazz-design-reference/studio-blue.webp",
+        "size": 53972,
+        "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322"
+      },
+      "lime": {
+        "path": "/tadazz-design-reference/studio-lime.webp",
+        "size": 48894,
+        "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271"
+      }
+    }
+  }
+}

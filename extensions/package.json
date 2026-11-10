@@ -5,7 +5,10 @@
   "private": true,
   "scripts": {
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "site:dev": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js --config ../../extensions/site.vite.config.ts --host 127.0.0.1",
+    "site:build": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js build --config ../../extensions/site.vite.config.ts",
+    "site:preview": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js preview --config ../../extensions/site.vite.config.ts --host 127.0.0.1"
   },
   "exports": {
     ".": "./src/index.ts",
@@ -18,7 +21,8 @@
     "./testkit": "./src/testkit/index.ts",
     "./editor": "./src/editor/index.ts",
     "./locales": "./src/locales/index.ts",
-    "./server": "./src/server/index.ts"
+    "./server": "./src/server/index.ts",
+    "./site": "./src/site/index.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",
@@ -27,7 +31,12 @@
     "hono": "catalog:",
     "http-status-codes": "catalog:",
     "uuid": "catalog:",
-    "zod": "catalog:"
+    "zod": "catalog:",
+    "@tanstack/react-query": "^5.104.1",
+    "@tanstack/react-router": "^1.170.42",
+    "react-i18next": "^17.0.16",
+    "i18next": "catalog:",
+    "@fontsource-variable/rubik": "^5.3.0"
   },
   "peerDependencies": {
     "lucide-react": "^1.55.0",
@@ -59,6 +68,9 @@
     "socket.io-client": "catalog:",
     "tsx": "^4.23.15",
     "typescript": "catalog:",
-    "vitest": "^5.0.3"
+    "vitest": "^5.0.3",
+    "vite": "^8.3.4",
+    "tailwindcss": "^4.3.3",
+    "@playwright/test": "^1.64.0"
   }
 }

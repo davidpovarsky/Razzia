@@ -8,6 +8,9 @@ export default defineConfig({
         new URL("../packages/common/src", import.meta.url),
       ),
       "@razzia/extensions": fileURLToPath(new URL("./src", import.meta.url)),
+      "@razzia/web": fileURLToPath(
+        new URL("../packages/web/src", import.meta.url),
+      ),
       "@razzia/socket": fileURLToPath(
         new URL("../packages/socket/src", import.meta.url),
       ),
