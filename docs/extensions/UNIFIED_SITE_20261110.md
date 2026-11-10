@@ -1,5 +1,12 @@
 # Unified TADAZZ site — implementation and acceptance
 
+> **Deployment update:** after the owner's explicit instruction "בצע פריסה",
+> the approved build was activated on `https://tadazz.com` on 10 November 2026,
+> 14:19 UTC. See [production deployment](UNIFIED_SITE_PRODUCTION_20261110.md)
+> for exact image, verified safeguards and rollback. Statements below about
+> no deployment describe the initial implementation handoff, before that approval.
+> Source defaults remain OFF; the deployed artifact was explicitly built ON.
+
 ## Scope and baseline
 
 Owner instruction: `docs/design-reference/handoff-20261110/TADAZZ_UNIFIED_SITE_AGENT_PROMPT.md`.

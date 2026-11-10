@@ -1,0 +1,562 @@
+{
+  "sourceRevision": "eeb973eea88766ea6388e034b4df830aa99d29f3",
+  "siteEnabled": true,
+  "baseImage": "sha256:62f91aae8bb518196f27852ab5abc5d54120116b2dd0b98383fc5f3fe3d7ee34",
+  "files": [
+    {
+      "sha256": "82428d8259695b33eedd0997fccbf8a50da6fb965928a2a93175d04226d56113",
+      "bytes": 9173,
+      "path": "deploy-unified-site.py"
+    },
+    {
+      "sha256": "4055150a2e9c37a8d690debe5363ee5f9d66627ecb5e588356aabbef6ad36221",
+      "bytes": 509,
+      "path": "Dockerfile"
+    },
+    {
+      "sha256": "83f75aac39d14e92eb849cca17d3848e13dd140fee5ce3a1c946694c289d6476",
+      "bytes": 1189416,
+      "path": "socket/index.cjs"
+    },
+    {
+      "sha256": "7594a69ec11c73e9f8c04d189bd3ac6d5533bfe00f65dedb4d420478ea4bcadb",
+      "bytes": 988,
+      "path": "web/icon.svg"
+    },
+    {
+      "sha256": "9d8cb6d29dd9aa3219610c3c68c3e8fb474cfbddd07acea9faae4919a555a914",
+      "bytes": 985,
+      "path": "web/index.html"
+    },
+    {
+      "sha256": "0773459d325e1903f56fdc8542560a98c9021e2a26e8b4c1ccfa5ae61b2a410f",
+      "bytes": 1223522,
+      "path": "web/tadazz-favicon-z-20261108.png"
+    },
+    {
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "path": "web/assets/background-CMjhDDHd.png"
+    },
+    {
+      "sha256": "6bde5a81ee3770a016e796c84ceee7a092a991817c6d56210afba780b59e3074",
+      "bytes": 35943,
+      "path": "web/assets/howler-DvpfHRP7.js"
+    },
+    {
+      "sha256": "353552edabf21b5fe7579a0cff5bbbda2a4eab861c0435a90329b0114f887e4c",
+      "bytes": 288478,
+      "path": "web/assets/index-DpoUs08e.css"
+    },
+    {
+      "sha256": "48080bddb379ace57845652d82d459f2a4648918cea7352b6d77695378a21c01",
+      "bytes": 4597607,
+      "path": "web/assets/index-utt8Akjm.js"
+    },
+    {
+      "sha256": "580ad8c58061a4dde99bde0a56905e382f0568516ee2f5b84dbfb52085709021",
+      "bytes": 716,
+      "path": "web/assets/rolldown-runtime-hePW80VL.js"
+    },
+    {
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0",
+      "bytes": 32468,
+      "path": "web/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2"
+    },
+    {
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b",
+      "bytes": 12388,
+      "path": "web/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2"
+    },
+    {
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8",
+      "bytes": 15112,
+      "path": "web/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2"
+    },
+    {
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2",
+      "bytes": 9348,
+      "path": "web/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2"
+    },
+    {
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479",
+      "bytes": 19400,
+      "path": "web/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2"
+    },
+    {
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691",
+      "bytes": 35348,
+      "path": "web/assets/rubik-latin-wght-normal-CnQIisVs.woff2"
+    },
+    {
+      "sha256": "fb3dba4bc8587abf8e10165f02191c649610923f4c6bc8625218065965c3a31c",
+      "bytes": 1610338,
+      "path": "web/assets/tadazz-question-background-BnsH8I8M.png"
+    },
+    {
+      "sha256": "c414cd0e204de974f73753c7e28d7638e7b3691bb8b1a2bab6b25bb7fed7ce77",
+      "bytes": 70,
+      "path": "web/media/blue-sky.png"
+    },
+    {
+      "sha256": "d5980f1d673271274eba650ed00a9d62284d48fd4607e8cd83d5ef1f05aba8b6",
+      "bytes": 992496,
+      "path": "web/motion/tadazz-motion-runtime.html"
+    },
+    {
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "bytes": 1246763,
+      "path": "web/sounds/answersMusic.mp3"
+    },
+    {
+      "sha256": "14a1a33ddf0b7b1a5b45cf3c6e4f87892ae6bc09ca06c4a12df43b0ba2972d5b",
+      "bytes": 28212,
+      "path": "web/sounds/answersSound.mp3"
+    },
+    {
+      "sha256": "4569d220e4dfd88a61390ea3139806021dd015eabac73fa23dac311295c63224",
+      "bytes": 5878,
+      "path": "web/sounds/boump.mp3"
+    },
+    {
+      "sha256": "9fcd09708b798984a0d2ad7edb46efaad5cc4bda7123ee06133fa99c476f6e90",
+      "bytes": 164093,
+      "path": "web/sounds/first.mp3"
+    },
+    {
+      "sha256": "851de7da474e2bd62978bcde5ef4f3fbca67eb4fdb4396751d6e95d0b5695382",
+      "bytes": 52845,
+      "path": "web/sounds/results.mp3"
+    },
+    {
+      "sha256": "75e490e301325354d62fb2f44876a90999e3da322e064961876fe9973a9f1cdb",
+      "bytes": 77750,
+      "path": "web/sounds/second.mp3"
+    },
+    {
+      "sha256": "e3e2d6b871982ffcef21d2329109fc477103fa6e6243fb2958432e7225757649",
+      "bytes": 7941,
+      "path": "web/sounds/show.mp3"
+    },
+    {
+      "sha256": "0928c8cf6063808a14e674a04aa370a29941c802c41c4e31e471e00ca3701212",
+      "bytes": 390765,
+      "path": "web/sounds/snearRoll.mp3"
+    },
+    {
+      "sha256": "2d9152323b9061b99512b8876da2d26dac250ce17c3c7f132c62a6fbcba7da94",
+      "bytes": 8193,
+      "path": "web/sounds/tadazz-confirm-20261108.mp3"
+    },
+    {
+      "sha256": "f264ded0b6135806df49240840de23054d936c0bf0c3c0b26c6efb2d4d234823",
+      "bytes": 28255,
+      "path": "web/sounds/tadazz-reveal-bright-20261108.mp3"
+    },
+    {
+      "sha256": "4c3c0a5b880c5a1eae787c3895fae6a4cab4b4b7538eadb3b0b66955ce87e104",
+      "bytes": 18476,
+      "path": "web/sounds/tadazz-silky-transition-20261108.mp3"
+    },
+    {
+      "sha256": "0b7f14b455819166fa3576b92c2a2f5c1271a6aaba3cd7e1231ab46abb7ec427",
+      "bytes": 17647,
+      "path": "web/sounds/tadazz-soft-reveal-20261108.mp3"
+    },
+    {
+      "sha256": "368edc1d95220e8255c853850f02b447a128c06b59e1a8756fb02b6b9f4ab8e4",
+      "bytes": 25974,
+      "path": "web/sounds/tadazz-timer-end-368edc1d9522.mp3"
+    },
+    {
+      "sha256": "623deeb6e312c17f6feeb4d2fad8482d4c967055f7a5df975a84f8962e03630e",
+      "bytes": 9447,
+      "path": "web/sounds/tadazz-timer-final-20261108.mp3"
+    },
+    {
+      "sha256": "efcd6b041fc7f13e565e30a6ee878965d5caab7d29aa6ad86b657dbf3444c275",
+      "bytes": 5058,
+      "path": "web/sounds/tadazz-timer-tick-20261108.mp3"
+    },
+    {
+      "sha256": "dcb2f17e811e0107cd324b541fecdd1334fd2dd19b8a9f8fed7feb0302960047",
+      "bytes": 5685,
+      "path": "web/sounds/tadazz-timer-urgent-20261108.mp3"
+    },
+    {
+      "sha256": "374b3a93f05832dd1544e645d69413b82272fdf8f88416ffc23c3a30686ea997",
+      "bytes": 61238,
+      "path": "web/sounds/three.mp3"
+    },
+    {
+      "sha256": "090b7d7ac46428834537a19286167631b600ea72914b05c4fac7416ee59b6df1",
+      "bytes": 19460,
+      "path": "web/tadazz-design-reference/marketing-exclaim.webp"
+    },
+    {
+      "sha256": "bca131a95be247ba5789580406e85bc70ee8859e2268fd0d48052083a14d9b9a",
+      "bytes": 3571,
+      "path": "web/tadazz-design-reference/marketing-icons.svg"
+    },
+    {
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03",
+      "bytes": 187692,
+      "path": "web/tadazz-design-reference/marketing-logo.webp"
+    },
+    {
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574",
+      "bytes": 79910,
+      "path": "web/tadazz-design-reference/marketing-questions.webp"
+    },
+    {
+      "sha256": "d1dbd3dbf6f9219a04fb5d162056e204d68e6c023ffffa1d898b41a87b10d3d4",
+      "bytes": 35080,
+      "path": "web/tadazz-design-reference/marketing-rays.webp"
+    },
+    {
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116",
+      "bytes": 242306,
+      "path": "web/tadazz-design-reference/marketing-stage.webp"
+    },
+    {
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af",
+      "bytes": 56520,
+      "path": "web/tadazz-design-reference/marketing-worlds.webp"
+    },
+    {
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322",
+      "bytes": 53972,
+      "path": "web/tadazz-design-reference/marketing-zb.webp"
+    },
+    {
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271",
+      "bytes": 48894,
+      "path": "web/tadazz-design-reference/marketing-zl.webp"
+    },
+    {
+      "sha256": "d0068b44e5e680a3e3a681783634e36ad30dd74d36233536b786ca9f3cd3d309",
+      "bytes": 72036,
+      "path": "web/tadazz-design-reference/marketing.css"
+    },
+    {
+      "sha256": "d3b8626a274c9f00cc12524e85e17eaea8fa7f7aeaa48248510f267e6ce56322",
+      "bytes": 53972,
+      "path": "web/tadazz-design-reference/studio-blue.webp"
+    },
+    {
+      "sha256": "f51ebefd4edfc2cd3cf4854b6257e76d9b4ece1ff4a9b75f56c555a51d9e807e",
+      "bytes": 3352,
+      "path": "web/tadazz-design-reference/studio-icons.svg"
+    },
+    {
+      "sha256": "e478114cbfec416ca2135e8ab683461484da382e46be1334bcbe8cb4f3264271",
+      "bytes": 48894,
+      "path": "web/tadazz-design-reference/studio-lime.webp"
+    },
+    {
+      "sha256": "4815ad04e3d56b0c5d81d9f5651473036230aa69af732fae185f88d02ad30c03",
+      "bytes": 187692,
+      "path": "web/tadazz-design-reference/studio-logo.webp"
+    },
+    {
+      "sha256": "c0661f2e193d37758a315973990c5205c480fdd56b4c64eec4724cad6a867574",
+      "bytes": 79910,
+      "path": "web/tadazz-design-reference/studio-questions.webp"
+    },
+    {
+      "sha256": "cc754716cb22677b88e80bf7535e62647096d71275f2c95ec15fd15725fe8116",
+      "bytes": 242306,
+      "path": "web/tadazz-design-reference/studio-stage.webp"
+    },
+    {
+      "sha256": "cff8fe590f8a60c5aac67c859784101879215be7ba77b8d75c3b5d121cb573af",
+      "bytes": 56520,
+      "path": "web/tadazz-design-reference/studio-worlds.webp"
+    },
+    {
+      "sha256": "119e2a3edc6050f778e7db424bb9242bb3e0815f2535f0d3e42c01c32b7acea4",
+      "bytes": 1927702,
+      "path": "web/tadazz-design-reference/studio.css"
+    },
+    {
+      "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
+      "bytes": 2228060,
+      "path": "web/tadazz-show/demos/cosmic/v1/backdrop.png"
+    },
+    {
+      "sha256": "9057bad3a21e098f26494c056fa725b05943d2ed53a4df67116ae16fe7f9007a",
+      "bytes": 11791,
+      "path": "web/tadazz-show/demos/cosmic/v1/logo.png"
+    },
+    {
+      "sha256": "4ec6b0de97a844b7f46ae1190d806fe90f7cda7f18f773e65c3e0dca51ad136b",
+      "bytes": 1121,
+      "path": "web/tadazz-show/demos/cosmic/v1/opening.json"
+    },
+    {
+      "sha256": "a517338c881a4f1b674a862839d03f849e770a3ee27a35356c0aa0d7a4d338a0",
+      "bytes": 145492,
+      "path": "web/tadazz-show/demos/cosmic/v1/opening.webm"
+    },
+    {
+      "sha256": "7a613b3b59e2c6f89f081ca2b5cf4cd84e4f54e94341212a45da726b36446fe7",
+      "bytes": 2228060,
+      "path": "web/tadazz-show/demos/cosmic/v2/backdrop.png"
+    },
+    {
+      "sha256": "e02fddf90cafac0427d291fa658b3b6dcd4e8af76e45fe4cc8b369cbdabd7697",
+      "bytes": 574,
+      "path": "web/tadazz-show/demos/cosmic/v2/opening.json"
+    },
+    {
+      "sha256": "09919adec55d6463e8bb532b98abe20a5d0ff9e3334b2486e0eff7d9537a7304",
+      "bytes": 151150,
+      "path": "web/tadazz-show/demos/cosmic/v2/opening.webm"
+    },
+    {
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148,
+      "path": "web/tadazz-show/demos/jade/v1/backdrop.png"
+    },
+    {
+      "sha256": "ef6eb964850cd2992416104dbf161a1d369acb5413f60fcee810c7635460ed1e",
+      "bytes": 11217,
+      "path": "web/tadazz-show/demos/jade/v1/logo.png"
+    },
+    {
+      "sha256": "2232e53b589b83df629dcc772c4996af010750ba37b0e6582662424d08ee048c",
+      "bytes": 1120,
+      "path": "web/tadazz-show/demos/jade/v1/opening.json"
+    },
+    {
+      "sha256": "2f570937511660da009fa1dcc65fd406d461bc7e027b34a99d84b0445b2bc485",
+      "bytes": 158881,
+      "path": "web/tadazz-show/demos/jade/v1/opening.webm"
+    },
+    {
+      "sha256": "4ea30988916082f5600ec49ae27472fa90490b21e160bc34a828add0c07baebd",
+      "bytes": 2183148,
+      "path": "web/tadazz-show/demos/jade/v2/backdrop.png"
+    },
+    {
+      "sha256": "ea3bc7bba8f09cd73b98bee3c49e7fdae1852766c93723ec2203c377b1e9d107",
+      "bytes": 573,
+      "path": "web/tadazz-show/demos/jade/v2/opening.json"
+    },
+    {
+      "sha256": "e9d119aeb6b20b8a74c3bf5b9da6f56a056198375acd21a2b7f03b14c6ee3894",
+      "bytes": 157352,
+      "path": "web/tadazz-show/demos/jade/v2/opening.webm"
+    },
+    {
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "bytes": 94502,
+      "path": "web/tadazz-show/motion/backdrop.webp"
+    },
+    {
+      "sha256": "4a925b8950ac3ba4ba878b849b88d1ce8dd44cf91d4e444547826251b1b1b672",
+      "bytes": 151654,
+      "path": "web/tadazz-show/motion/logo.webp"
+    },
+    {
+      "sha256": "63c963f6f90fe9aec17061089271038833dc161f9e08a3f40109eeb58f552b5a",
+      "bytes": 2962473,
+      "path": "web/tadazz-show/music/balloons-forever.ogg"
+    },
+    {
+      "sha256": "3bf75206f9b0728ab5a6ff13d303f138d1d873e838ca7656c1c266fc759814ed",
+      "bytes": 1125,
+      "path": "web/tadazz-show/music/credits.html"
+    },
+    {
+      "sha256": "1c3cafcf431726d25105ed8346271a9e69e35bdb09d40e418c55d46b6272f80c",
+      "bytes": 784914,
+      "path": "web/tadazz-show/music/cutie-patootie.mp3"
+    },
+    {
+      "sha256": "36377deb75d643232d583e509126919ec8feeb14a16dee734b1a9cbc778adf36",
+      "bytes": 839514,
+      "path": "web/tadazz-show/music/epic-main-menu.mp3"
+    },
+    {
+      "sha256": "74e5f1d1114053ea55805af1d4b327eedab8092ef5ac088321220251175d4fac",
+      "bytes": 5028530,
+      "path": "web/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4"
+    },
+    {
+      "sha256": "7da27b375f06da524a04fd51fadd651f91fb6a54a04a4f1b6dc39353fbdfe06b",
+      "bytes": 1354334,
+      "path": "web/tadazz-show/opening/Scene-1.json"
+    },
+    {
+      "sha256": "48037458d5aedef5055d6ca85f167b8fc079aa91e109b540eb81c554fa266f78",
+      "bytes": 1212173,
+      "path": "web/tadazz-show/opening/TADAZZ-Opening-4-5s.json"
+    },
+    {
+      "sha256": "39615d76461d456e303bdb4c90d7a1c0ec38c3beb7d679ea66b8d28c91bf6085",
+      "bytes": 2777381,
+      "path": "web/tadazz-show/razzia-original/background.png"
+    },
+    {
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "path": "web/tadazz-show/second-library/creating-worlds-intro.png"
+    },
+    {
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "path": "web/tadazz-show/second-library/curtain-left.png"
+    },
+    {
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "path": "web/tadazz-show/second-library/curtain-right.png"
+    },
+    {
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "bytes": 87904,
+      "path": "web/tadazz-show/second-library/question-bg.webp"
+    },
+    {
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "bytes": 261066,
+      "path": "web/tadazz-show/second-library/show-stage.webp"
+    },
+    {
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "path": "web/tadazz-show/second-library/tadazz-brand-logo.png"
+    },
+    {
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "path": "web/tadazz-show/second-library/teaser-screen-source.jpg"
+    },
+    {
+      "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d",
+      "bytes": 3780431,
+      "path": "web/tadazz-show/second-library/teaser-screen.jpg"
+    },
+    {
+      "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+      "bytes": 1962,
+      "path": "web/tadazz-show/second-library/cards/dog.svg"
+    },
+    {
+      "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+      "bytes": 2039,
+      "path": "web/tadazz-show/second-library/cards/lamplighter.svg"
+    },
+    {
+      "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+      "bytes": 1923,
+      "path": "web/tadazz-show/second-library/cards/pirate.svg"
+    },
+    {
+      "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+      "bytes": 1932,
+      "path": "web/tadazz-show/second-library/cards/shadchan.svg"
+    },
+    {
+      "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+      "bytes": 1847,
+      "path": "web/tadazz-show/second-library/cards/therapist.svg"
+    },
+    {
+      "sha256": "672dd07f229b8c36f9c56484975fad7e28bedff9623fea049d2ca475022e84f8",
+      "bytes": 1222052,
+      "path": "web/tadazz-show/story/672dd07f229b8c36.mp3"
+    },
+    {
+      "sha256": "7ff12046cb1aac7be6fbdd3131bc8e5854a96f34b5560446f3183170731de037",
+      "bytes": 412633,
+      "path": "web/tadazz-show/story/7ff12046cb1aac7b.png"
+    },
+    {
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "bytes": 134540,
+      "path": "web/tadazz-show/story/84acdb923677d591.webp"
+    },
+    {
+      "sha256": "9db4acdc6c4e411ced75f9c85b31b136a775a9ea43543f867a2976da1f1fd36b",
+      "bytes": 91052,
+      "path": "web/tadazz-show/story/9db4acdc6c4e411c.mp3"
+    },
+    {
+      "sha256": "b789ffb48c74e55dad7cee0275c9e1ad32edc19b45e9ef7c84a99d979f30f748",
+      "bytes": 60174,
+      "path": "web/tadazz-show/story/b789ffb48c74e55d.webp"
+    },
+    {
+      "sha256": "fef87578b7d57eae4b94709ff8fa909ed566a3336c84b7b041b795cba3007371",
+      "bytes": 178706,
+      "path": "web/tadazz-show/story/fef87578b7d57eae.webp"
+    },
+    {
+      "sha256": "2a9b5838016d41442079a2c3c533df6c1565a5e3f4ed40c1c8a4175640b7bbfd",
+      "bytes": 2410686,
+      "path": "web/tadazz-show/v4/creating-worlds-intro.png"
+    },
+    {
+      "sha256": "429ab6d5f360406bb22be1f4a833359543fd09f1f415583a20f0a319968df060",
+      "bytes": 1132717,
+      "path": "web/tadazz-show/v4/curtain-left.png"
+    },
+    {
+      "sha256": "9a46bb396bbbb104f0b398f0f9b52c38e6915d7013b010a8830404f85cf408fa",
+      "bytes": 1132143,
+      "path": "web/tadazz-show/v4/curtain-right.png"
+    },
+    {
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "bytes": 87904,
+      "path": "web/tadazz-show/v4/question-bg.webp"
+    },
+    {
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "bytes": 261066,
+      "path": "web/tadazz-show/v4/show-stage.webp"
+    },
+    {
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "bytes": 1976726,
+      "path": "web/tadazz-show/v4/tadazz-brand-logo.png"
+    },
+    {
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "bytes": 266631,
+      "path": "web/tadazz-show/v4/teaser-screen-source.jpg"
+    },
+    {
+      "sha256": "77b4214d75bbb2c3f61af285b0aca09678bbc78d217c47c904fb5e082eddf34d",
+      "bytes": 3780431,
+      "path": "web/tadazz-show/v4/teaser-screen.jpg"
+    },
+    {
+      "sha256": "e7c59ed107687236ca2975b6c63150ddb53d6d0e38295d69f079d383a377fa5a",
+      "bytes": 1962,
+      "path": "web/tadazz-show/v4/cards/dog.svg"
+    },
+    {
+      "sha256": "64347234d0627c91643abdbcab2073d30837a7ca45f20163de0c6d7f39a87b3b",
+      "bytes": 2039,
+      "path": "web/tadazz-show/v4/cards/lamplighter.svg"
+    },
+    {
+      "sha256": "686c5abfdfa22e39d44347725bd2b67555f7b9b0f22b09b96c90270b488a16bb",
+      "bytes": 1923,
+      "path": "web/tadazz-show/v4/cards/pirate.svg"
+    },
+    {
+      "sha256": "0fb4004f0f9e8cfac27f12bc67f49eb9bc84fdb99308d18243d6992e935bd564",
+      "bytes": 1932,
+      "path": "web/tadazz-show/v4/cards/shadchan.svg"
+    },
+    {
+      "sha256": "3f6cbb9afac04b7728b7d8ac31d2bde7a1649ccc08c7db6477e32415f0461bbe",
+      "bytes": 1847,
+      "path": "web/tadazz-show/v4/cards/therapist.svg"
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+$ rolldown -c
+<DIR>/index.cjs.map  asset │ size: 3,727.08 kB
+<DIR>/index.cjs      chunk │ size: 1,189.42 kB
+
+√ rolldown v1.2.13 Finished in 1.36 s

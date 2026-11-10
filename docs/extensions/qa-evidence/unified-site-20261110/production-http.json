@@ -1,0 +1,14 @@
+{
+  "/api/health": 200,
+  "/api/auth/mode": 200,
+  "/api/billing/config": 200,
+  "/ws/?EIO=4&transport=polling": 200,
+  "/manager/quizz": 200,
+  "/display/deployment-read-only-check": 200,
+  "/tadazz-design-reference/marketing-logo.webp": 200,
+  "/media/deployment-absent-check.png": 401,
+  "/__private_media/deployment-absent-check.png": 404,
+  "privateBackupVerified": true,
+  "sourceDefaultsRemainOff": true,
+  "productionSiteEnabled": true
+}
