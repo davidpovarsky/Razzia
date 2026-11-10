@@ -12,7 +12,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | ------ | ---------------- | ----------- | ------------------------------------------------------------- |
 | TDS-00 | 1220402430946120 | VERIFIED | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes |
 | TDS-01 | 1220402455305251 | VERIFIED | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed |
-| TDS-02 | 1220402647256448 | NOT_STARTED | Inventory and dependency map                                  |
+| TDS-02 | 1220402647256448 | VERIFIED | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md) |
 | TDS-03 | 1220402777623967 | NOT_STARTED | Tokens and scopes                                             |
 | TDS-04 | 1220402719463680 | NOT_STARTED | Canonical React UI                                            |
 | TDS-05 | 1220402777822480 | NOT_STARTED | Live catalog                                                  |
@@ -34,7 +34,7 @@ and behavior checks are separately required.
 Session checkpoint: dependencies installed with frozen lockfile, no lock changes.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-No application implementation yet. TDS-02 is the next exact action.
+No application implementation yet. TDS-03 is the next exact action.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their
@@ -52,3 +52,13 @@ PASS: 602-file boundary guard / `git diff --check`.
 Only guidance/evidence changes in this phase; production rendering code remains
 byte-identical, including every editor dependency. No new visual comparison
 claimed for this documentation-only phase. Next: source inventory/dependency map.
+
+TDS-01 commit: `d20a71a8c11d78226eba7f30cb1dcd89c2c550e1`; Asana VERIFIED.
+TDS-02 BASE_HEAD: that same commit. Added generated 327-file source inventory,
+six-class disposition/owner/migration map, exact imports/variables/motion anchors,
+both real manifests (31/36 assets), screen/component/token graphs, duplicate and
+ShadowRoot/fullscreen analysis. Concrete proposed nine-file host seam ledger
+is **NOT AUTHORIZED / NOT APPLIED**. No editor/upstream/product source changes.
+PASS: inventory generation / 602-file boundary audit / whitespace check.
+No new runtime tests needed for this documentation/source-inventory phase;
+runtime acceptance and host patches remain later gates. Next: downstream tokens.

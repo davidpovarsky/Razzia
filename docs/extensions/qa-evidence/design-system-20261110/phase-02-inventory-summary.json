@@ -1,0 +1,23 @@
+{
+  "files": 327,
+  "counts": {
+    "canonical": 40,
+    "not-in-scope": 112,
+    "editor-protected": 77,
+    "legacy-compatibility-only": 2,
+    "reuse-with-wrapper": 27,
+    "replace-presentation-only": 69
+  },
+  "themes": [
+    {
+      "id": "tadazz-classic",
+      "rendererId": "tadazz-classic-stage",
+      "assets": 31
+    },
+    {
+      "id": "razzia-original",
+      "rendererId": "razzia-native-stage",
+      "assets": 36
+    }
+  ]
+}
