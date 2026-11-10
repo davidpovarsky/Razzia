@@ -1,7 +1,8 @@
 import { readFileSync, mkdirSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { test, expect, type Page } from "@playwright/test"
+import { test, expect, devices, type Page } from "@playwright/test"
+import { swipePage } from "../../../../qa/site-touch"
 const evidence = fileURLToPath(
   new URL(
     "../../../../../docs/extensions/qa-evidence/unified-site-20261110/",
@@ -41,6 +42,81 @@ async function register(page: Page, address: string) {
 }
 
 test.beforeAll(() => mkdirSync(evidence, { recursive: true }))
+
+test("touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact", async ({
+  browser,
+  baseURL,
+}) => {
+  for (const device of ["iPad Pro 11", "iPad Pro 11 landscape", "iPhone 13"]) {
+    const context = await browser.newContext({ ...devices[device], baseURL })
+    const page = await context.newPage()
+
+    try {
+      await page.goto("/")
+      await expect(
+        page.getByRole("heading", { name: "Make it a show.", exact: true }),
+      ).toBeVisible()
+      await swipePage(page)
+      await page.goto("/signup")
+      await expect
+        .poll(() =>
+          page.evaluate(() => getComputedStyle(document.body).touchAction),
+        )
+        .toBe("auto")
+
+      if (device !== "iPad Pro 11") {
+        continue
+      }
+
+      await register(page, email())
+      const token = await page.evaluate(() => localStorage.getItem("token"))
+
+      for (let index = 0; index < 12; index += 1) {
+        const saved = await page.request.post("/api/quizz", {
+          headers: { Authorization: `Bearer ${token}` },
+          data: {
+            subject: `Touch scroll fixture ${index}`,
+            gameMode: "quiz",
+            questions: [
+              {
+                type: "single",
+                question: "Touch fixture",
+                answers: ["Yes", "No"],
+                solutions: [0],
+                cooldown: 3,
+                time: 10,
+              },
+            ],
+          },
+        })
+        expect(saved.ok()).toBe(true)
+      }
+
+      await page.goto("/studio/games")
+      await expect(
+        page.getByRole("heading", {
+          name: "Touch scroll fixture 0",
+          exact: true,
+        }),
+      ).toBeVisible()
+      await swipePage(page)
+      await page.goto("/manager/quizz")
+      await expect
+        .poll(() =>
+          page.evaluate(() => getComputedStyle(document.body).touchAction),
+        )
+        .toBe("none")
+      await page.goBack()
+      await expect
+        .poll(() =>
+          page.evaluate(() => getComputedStyle(document.body).touchAction),
+        )
+        .toBe("auto")
+    } finally {
+      await context.close()
+    }
+  }
+})
 
 test("public routes, catalogue, demo, history, responsive navigation and screenshots", async ({
   page,

@@ -1,4 +1,5 @@
-import { test, expect } from "@playwright/test"
+import { test, expect, devices } from "@playwright/test"
+import { swipePage } from "./site-touch"
 import { mkdirSync } from "node:fs"
 import { fileURLToPath } from "node:url"
 import { join } from "node:path"
@@ -79,4 +80,30 @@ test("deployed homepage, account routes and guest boundary stay on the productio
   })
   expect(pageErrors).toEqual([])
   expect(failedAssets).toEqual([])
+})
+
+test("real touch swipes scroll the public site on iPad portrait, landscape and phone", async ({
+  browser,
+  baseURL,
+}) => {
+  for (const device of ["iPad Pro 11", "iPad Pro 11 landscape", "iPhone 13"]) {
+    const context = await browser.newContext({ ...devices[device], baseURL })
+    const page = await context.newPage()
+
+    try {
+      await page.goto("/")
+      await expect(
+        page.getByRole("heading", { name: "Make it a show.", exact: true }),
+      ).toBeVisible()
+      await swipePage(page)
+      await page.screenshot({
+        path: join(
+          evidence,
+          `production-touch-${device.replaceAll(" ", "-")}.png`,
+        ),
+      })
+    } finally {
+      await context.close()
+    }
+  }
 })

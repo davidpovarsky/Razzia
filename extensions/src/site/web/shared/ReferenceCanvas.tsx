@@ -1,4 +1,4 @@
-import { useCallback, useState, type ReactNode } from "react"
+import { useCallback, useEffect, useState, type ReactNode } from "react"
 import { createPortal } from "react-dom"
 import marketing from "../../../../site-assets/marketing.css?inline"
 import studio from "../../../../site-assets/studio.css?inline"
@@ -13,6 +13,17 @@ export function ReferenceCanvas({
   children: ReactNode
 }) {
   const [root, setRoot] = useState<ShadowRoot | null>(null)
+  useEffect(() => {
+    // The unchanged game HTML sets touch-none on body. A descendant/ShadowRoot
+    // cannot override that ancestor's gesture restriction. Release it only while
+    // a site/account/Studio canvas is mounted; restore the game's policy on exit.
+    const previous = document.body.style.touchAction
+    document.body.style.touchAction = "auto"
+
+    return () => {
+      document.body.style.touchAction = previous
+    }
+  }, [])
   const attach = useCallback((node: HTMLDivElement | null) => {
     if (node) {
       setRoot(node.shadowRoot ?? node.attachShadow({ mode: "open" }))
