@@ -1,5 +1,32 @@
 # Razzia downstream extension rules — MANDATORY (V3)
 
+## Current scoped initiative — Tadazz platform UI, 10 November 2026
+
+For the design-system initiative, follow
+[the canonical mandate](docs/extensions/plans/TADAZZ_DESIGN_SYSTEM_UI_UNIFICATION_AGENT_PROMPT_2026-11-10.md),
+[phase checkpoint](docs/extensions/plans/TDS_PROGRESS.md) and
+[naming/scope policy](docs/extensions/plans/TDS_POLICY.md) first.
+This scope uses one sequential primary session and its isolated scoped worktree.
+The old requirement to match original Razzia visuals applies to the frozen
+editor and legacy compatibility surfaces; it does not govern new site, customer
+Studio or host platform UI. Those use the governed Tadazz system. Show palettes
+and cinematic choreography remain independently owned by the selected theme.
+
+The content editor is strictly read-only, including indirect typography, CSS,
+portal, routing and provider effects. No editor migration is authorized.
+All `packages/**` sources are protected for this initiative; old P0 role-hook
+permissions below do not authorize new upstream edits. First prove a downstream
+composition alternative; any unavoidable seam needs exact pre-edit ledger and
+separate explicit owner approval. Do not bypass this by build-time source
+rewrites, global aliases or hidden DOM mutation. Run the freeze guard every phase.
+
+The owner explicitly requested updates to the existing Asana parent and thirteen
+phase tasks after each significant verified phase. Follow the checkpoint format
+and keep incomplete phases and the release-gated parent open. No push, merge,
+deployment, provider/billing change or customer-data migration is authorized.
+The historical P0/V3 instructions below apply only where compatible with this
+new scope. Preserve all existing data/wire IDs, logos, licenses and eight locales.
+
 > **CURRENT P0 OVERRIDE (26 Oct 2026, Tomer one-agent):** The user's supplied `TADA_ONE_AGENT_TOMER_COMPLETE_P0_2026-10-26.md` is the active P0 execution instruction. BEFORE ANY P0 UI implementation, **MUST READ** `docs/extensions/orchestration/P0_ONE_AGENT_UI_FIDELITY_2026-10-26.md` and `docs/extensions/DESIGN_LANGUAGE.md`, then the actual current React components/CSS referenced there. All new interface components and typography must match original Razzia/Rubik/theme conventions. For this P0, the explicit single-agent and live private pilot instructions supersede older V3 three-agent/offline-only/ownership restrictions; preserve all other safety rules. Do not ask for Maya/Noam. This override applies only to the supplied P0 scope.
 
 ## Canonical instructions

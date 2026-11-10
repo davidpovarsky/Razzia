@@ -11,7 +11,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | Phase  | Task             | Status      | Evidence / next action                                        |
 | ------ | ---------------- | ----------- | ------------------------------------------------------------- |
 | TDS-00 | 1220402430946120 | VERIFIED | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes |
-| TDS-01 | 1220402455305251 | NOT_STARTED | Rules and naming contracts                                    |
+| TDS-01 | 1220402455305251 | VERIFIED | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed |
 | TDS-02 | 1220402647256448 | NOT_STARTED | Inventory and dependency map                                  |
 | TDS-03 | 1220402777623967 | NOT_STARTED | Tokens and scopes                                             |
 | TDS-04 | 1220402719463680 | NOT_STARTED | Canonical React UI                                            |
@@ -34,10 +34,21 @@ and behavior checks are separately required.
 Session checkpoint: dependencies installed with frozen lockfile, no lock changes.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-No application implementation yet. TDS-01 is the next exact action.
+No application implementation yet. TDS-02 is the next exact action.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their
 messages/results are unchanged), records the local guard output and Asana sync.
 Initial staged whitespace check flagged only those copied log spaces; the
 follow-up check passes. The raw server logs remain in the isolated QA directory.
+
+TDS-01 BASE_HEAD: `1209626d651e6858a17c339a05ae86462c257738`.
+Changed AGENTS.md, GEMINI.md and WORKING_RULES.md with current scoped precedence;
+added TDS_POLICY.md (brand/locales, naming, compatibility classes and freeze).
+PASS: 55 existing authored JSON/XLSX/preflight/theme round-trip/branding tests
+across 5 files in the isolated remote container; report
+`qa-evidence/design-system-20261110/phase-01-contracts.json`.
+PASS: 602-file boundary guard / `git diff --check`.
+Only guidance/evidence changes in this phase; production rendering code remains
+byte-identical, including every editor dependency. No new visual comparison
+claimed for this documentation-only phase. Next: source inventory/dependency map.

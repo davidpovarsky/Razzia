@@ -1,5 +1,19 @@
 # Non-negotiable engineering policy
 
+## Current Tadazz platform initiative
+
+For the 10 November design-system initiative, the
+[scoped mandate](plans/TADAZZ_DESIGN_SYSTEM_UI_UNIFICATION_AGENT_PROMPT_2026-11-10.md)
+and [policy](plans/TDS_POLICY.md) take precedence over historical visual and
+multi-agent rules. Site/Studio/host platform controls use the Tadazz design
+system; the original editor is frozen byte-for-byte and visually/behaviorally.
+Do not import platform tokens/components into it. Preserve show-theme styling
+and cinematic/audio/timer ownership. All upstream edits require a separately
+approved exact seam; historical P0 ownership exceptions do not authorize them.
+Use one isolated primary session and update the existing Asana phase description
+after verification and commit. The owner explicitly authorized these Asana
+updates, not push/merge/deployment or production changes.
+
 ## Ownership
 
 - UPSTREAM: existing tracked files in packages/, docs/, docker/, .github/ and root, as of baseline 5161eb7022144ee26d46a5f94cdbc714ec8b560d.
@@ -19,7 +33,9 @@
 
 ## Design and languages
 
-- Match original Razzia design, not a redesign. Reuse components, colors, Rubik, spacing, Motion and Lucide.
+- Preserve original Razzia design in the frozen editor and legacy surfaces.
+  For the scoped site/Studio/host initiative, use the governed Tadazz platform
+  system while reusing compatible React, Rubik, Radix, Motion and Lucide tooling.
 - All UI text uses i18next with keys and complete translations for en, fr, de, es, it, ja, tr, vi. Do not introduce Hebrew yet.
 - Do not implement tablet-specific adaptation yet; preserve existing responsiveness and accessibility.
 
