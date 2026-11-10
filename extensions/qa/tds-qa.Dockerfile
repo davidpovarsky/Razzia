@@ -3,5 +3,6 @@ WORKDIR /cleanup
 COPY source/ ./
 RUN pnpm install --frozen-lockfile
 RUN pnpm --dir extensions exec playwright install --with-deps chromium webkit
+RUN apt-get update -qq && apt-get install -y --no-install-recommends zbar-tools && rm -rf /var/lib/apt/lists/*
 ENV TADAZZ_REMOTE_QA=1
 CMD ["sleep", "infinity"]

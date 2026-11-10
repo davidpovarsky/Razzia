@@ -1,0 +1,427 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+Seating QR geometry [
+  {
+    tag: 'svg',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 59,
+    y: 439.03125,
+    width: 108,
+    height: 108
+  },
+  {
+    tag: 'DIV',
+    cls: 'qr',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'grid',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 429.03125,
+    width: 128,
+    height: 128
+  },
+  {
+    tag: 'DIV',
+    cls: 'qr-and-pin',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'flex',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 429.03125,
+    width: 417,
+    height: 128
+  },
+  {
+    tag: 'SECTION',
+    cls: 'dial-info',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 270,
+    width: 417,
+    height: 287.03125
+  },
+  {
+    tag: 'ASIDE',
+    cls: 'left-panel',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: '5',
+    x: 0,
+    y: 0,
+    width: 500,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tadazz-reference-seating has-host-guide',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-screen-inner',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: '1',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-screen tz-custom-screen is-visible',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: '15',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tzv4-custom-root',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: '15',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tzv4-stage stage-show',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-viewport tzv4-viewport',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'relative min-h-0 w-full min-w-0 flex-1 overflow-hidden',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'SECTION',
+    cls: 'relative isolate flex h-dvh max-h-dvh w-full max-w-full flex-col overflow-hidden',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'flex',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'h-dvh w-full max-w-full',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'MAIN',
+    cls: 'relative flex min-h-dvh w-full flex-col overflow-x-hidden text-white',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'flex',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'bg-secondary antialiased',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'BODY',
+    cls: 'font-display touch-none bg-secondary',
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'HTML',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    display: 'block',
+    filter: 'none',
+    clipPath: 'none',
+    contentVisibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  }
+]
+Painted assets [
+  {
+    tag: 'DIV',
+    cls: 'stage-bg',
+    src: null,
+    bg: 'url("http://127.0.0.1:4310/tadazz-show/v4/show-stage.webp")',
+    opacity: '1',
+    z: '0',
+    parent: 'tzv4-stage stage-show',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'IMG',
+    cls: 'logo',
+    src: '/tadazz-show/story/b789ffb48c74e55d.webp',
+    bg: 'none',
+    opacity: '1',
+    z: 'auto',
+    parent: 'left-panel',
+    x: 33,
+    y: 60,
+    width: 433,
+    height: 180
+  },
+  {
+    tag: 'IMG',
+    cls: null,
+    src: '/tadazz-show/v4/tadazz-brand-logo.png',
+    bg: 'none',
+    opacity: '1',
+    z: '5',
+    parent: 'tz-opening',
+    x: 76.796875,
+    y: 43.1875,
+    width: 326.390625,
+    height: 130.515625
+  },
+  {
+    tag: 'IMG',
+    cls: 'tz-opening-poster',
+    src: '/tadazz-show/motion/backdrop.webp',
+    bg: 'none',
+    opacity: '1',
+    z: 'auto',
+    parent: 'tz-opening',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'VIDEO',
+    cls: null,
+    src: '/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4',
+    bg: 'none',
+    opacity: '1',
+    z: 'auto',
+    parent: 'tz-opening',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'CANVAS',
+    cls: null,
+    src: null,
+    bg: 'none',
+    opacity: '1',
+    z: 'auto',
+    parent: 'pointer-events-none h-full w-full',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  }
+]
+  ✘  1 [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (8.3s)
+
+
+  1) [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data
+
+    Error: Command failed: zbarimg --quiet --raw /evidence/phase-07-seating-qr.png
+
+      335 |     .screenshot({ path: "/evidence/phase-07-seating-qr.png" })
+      336 |   expect(
+    > 337 |     execFileSync(
+          |     ^
+      338 |       "zbarimg",
+      339 |       ["--quiet", "--raw", "/evidence/phase-07-seating-qr.png"],
+      340 |       { encoding: "utf8" },
+        at /cleanup/extensions/qa/tds-stage-integration.spec.ts:337:5
+
+    Error Context: ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data

@@ -22,6 +22,8 @@
     "./media": "./src/media/index.ts",
     "./presentation": "./src/presentation/index.ts",
     "./presentation/platform-controls": "./src/presentation/platform-controls.tsx",
+    "./presentation/room-join": "./src/presentation/room-join/index.ts",
+    "./presentation/show-themes/viewport": "./src/presentation/show-themes/viewport.tsx",
     "./telephony": "./src/telephony/index.ts",
     "./testkit": "./src/testkit/index.ts",
     "./editor": "./src/editor/index.ts",
@@ -45,6 +47,7 @@
     "@fontsource-variable/rubik": "^5.3.0"
   },
   "peerDependencies": {
+    "qrcode.react": "^4.2.0",
     "radix-ui": "^1.7.0",
     "lucide-react": "^1.55.0",
     "motion": "^14.1.0",
@@ -52,6 +55,9 @@
     "react-dom": "^19.3.0"
   },
   "peerDependenciesMeta": {
+    "qrcode.react": {
+      "optional": true
+    },
     "radix-ui": {
       "optional": true
     },

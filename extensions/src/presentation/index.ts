@@ -67,5 +67,7 @@ export * from "./show-themes/timer-events"
 export * from "./question-underline"
 
 export * from "./platform-controls"
+export * from "./room-join"
+export * from "./show-themes/viewport"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"

@@ -17,7 +17,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | TDS-04 | 1220402719463680 | VERIFIED    | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario |
 | TDS-05 | 1220402777822480 | VERIFIED    | [Internal catalog](TDS_CATALOG.md); 14 catalog + 18 component + 6 token cases, original editor PNG parity       |
 | TDS-06 | 1220402777861386 | VERIFIED    | [Site/Studio](TDS_SITE.md); 82 units, 12 site + 22 component + 4 follow-up checks, editor regression            |
-| TDS-07 | 1220402729693747 | NOT_STARTED | Stage / join                                                                                                    |
+| TDS-07 | 1220402729693747 | VERIFIED    | [Viewport / room join](TDS_STAGE.md); 62 units, 16 catalog + 10 stage + 3 actual room + 1 seating checks, editor regression |
 | TDS-08 | 1220402719392041 | NOT_STARTED | Host controls / modals                                                                                          |
 | TDS-09 | 1220402539686302 | NOT_STARTED | Roster / packages                                                                                               |
 | TDS-10 | 1220402539658409 | NOT_STARTED | Platform motion                                                                                                 |
@@ -34,7 +34,7 @@ and behavior checks are separately required.
 Dependencies installed with frozen lockfile; TDS-04 adds only three importer lines for an already-locked optional peer, with no upgrades.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-TDS-06 site/Studio verified. TDS-07 themed viewport and join contract are next.
+TDS-07 themed viewport and join contract verified. TDS-08 host controls/modals are next.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their

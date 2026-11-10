@@ -1,5 +1,30 @@
 import { expect, test } from "@playwright/test"
 import { readFileSync } from "node:fs"
+import { execFileSync } from "node:child_process"
+
+test("lobby composition imports the actual room contract and decodable QR without transport", async ({
+  page,
+}, info) => {
+  const probes: string[] = []
+  page.on("request", (request) => {
+    if (request.url().includes("/api/")) probes.push(request.url())
+  })
+  await page.goto("/")
+  const qr = page.locator("#layouts svg[data-qr-url]")
+  await expect(qr).toHaveAttribute(
+    "data-qr-url",
+    "https://example.invalid/game?pin=246810",
+  )
+  await expect(qr).toHaveAccessibleName("Show QR code")
+  const path = `/evidence/phase-07-catalog-qr-${info.project.name}.png`
+  await qr.screenshot({ path })
+  expect(
+    execFileSync("zbarimg", ["--quiet", "--raw", path], {
+      encoding: "utf8",
+    }).trim(),
+  ).toBe("https://example.invalid/game?pin=246810")
+  expect(probes).toEqual([])
+})
 
 test("all typed production component families have working state examples", async ({
   page,

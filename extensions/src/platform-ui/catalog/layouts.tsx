@@ -10,6 +10,18 @@ import {
   MenuItem,
 } from "../index"
 import { ExampleTable } from "./stories"
+import {
+  resolveRoomJoin,
+  RoomQrCode,
+  RoomJoinMetadata,
+} from "../../presentation/room-join"
+
+const exampleJoin = resolveRoomJoin({
+  origin: "https://example.invalid",
+  inviteCode: "246810",
+  role: "spectator",
+  locked: false,
+})
 export function Layouts() {
   const [message, setMessage] = useState(
     "Synthetic examples, no live operations",
@@ -79,9 +91,11 @@ export function Layouts() {
         </p>
         <Badge>Example room — unlocked</Badge>
         <p>
-          PIN <strong>246810</strong>
+          PIN <strong>{exampleJoin.displayPin}</strong>
         </p>
-        <p>example.invalid/game?pin=246810</p>
+        <p>{exampleJoin.joinUrl}</p>
+        <RoomQrCode value={exampleJoin.qrUrl!} />
+        <RoomJoinMetadata join={exampleJoin} />
         <Toolbar label="Example display modes">
           <ToolbarGroup label="Audience">
             <Button

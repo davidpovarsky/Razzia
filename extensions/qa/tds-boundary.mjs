@@ -29,7 +29,7 @@ if (
 const protectedPath = (path) =>
   /^(?:packages\/|extensions\/src\/editor\/)/u.test(path)
 const allow =
-  /^(?:AGENTS\.md$|GEMINI\.md$|pnpm-lock\.yaml$|\.github\/workflows\/tadazz-platform-ui\.yml$|docs\/extensions\/|extensions\/(?:src\/(?:platform-ui|site)\/|src\/presentation\/platform-controls\.test\.ts$|qa\/tds[^/]*|tds[^/]*|package\.json$))/u
+  /^(?:AGENTS\.md$|GEMINI\.md$|pnpm-lock\.yaml$|\.github\/workflows\/tadazz-platform-ui\.yml$|docs\/extensions\/|extensions\/(?:src\/(?:platform-ui|site)\/|src\/presentation\/(?:platform-controls\.test\.ts$|index\.ts$|room-join\/|show-themes\/viewport[^/]*$)|qa\/tds[^/]*|tds[^/]*|package\.json$))/u
 
 if (process.argv.includes("--record")) {
   if (git("rev-parse", "HEAD") !== base)

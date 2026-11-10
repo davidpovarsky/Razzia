@@ -1,4 +1,10 @@
 import { LobbyTeamAssignmentAdapter } from "../tadazz-show/team-adapters"
+import {
+  useRoomJoin,
+  RoomJoinMetadata,
+  RoomQrCode as QRCodeSVG,
+} from "@razzia/extensions/presentation/room-join"
+import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
 import { EVENTS } from "@razzia/common/constants"
 import type { Player } from "@razzia/common/types/game"
 import type { ManagerStatusDataMap } from "@razzia/common/types/game/status"
@@ -10,7 +16,6 @@ import {
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { useOnClickOutside } from "@razzia/web/hooks/useOnClickOutside"
 import { Lock, Maximize2, X } from "lucide-react"
-import { QRCodeSVG } from "qrcode.react"
 import { AlertDialog } from "radix-ui"
 import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -21,9 +26,17 @@ interface Props {
 }
 
 const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
-  const { gameId, players, locked } = useManagerStore()
+  const { gameId, players, locked: storeLocked } = useManagerStore()
   const { socket } = useSocket()
-  const webUrl = `${window.location.origin}/game`
+  const presence = useManagerStore((state) => state.hostPresence)
+  const join = useRoomJoin({
+    inviteCode,
+    managerLocked: readOnly ? undefined : storeLocked,
+    envelope: useExtensionState(),
+    connectedCount: readOnly ? undefined : presence?.connectedNow,
+    rosterCount: readOnly ? undefined : presence?.registeredTotal,
+  })
+  const { locked, webUrl } = join
   const [playerList, setPlayerList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
@@ -110,7 +123,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
             >
               <QRCodeSVG
                 className="h-auto w-auto"
-                value={`${webUrl}?pin=${inviteCode}`}
+                value={join.qrUrl ?? webUrl}
               />
               <div className="absolute inset-0 flex items-center justify-center rounded-xl opacity-0 transition-opacity group-hover:opacity-100">
                 <div className="rounded-md bg-black/80 p-2">
@@ -134,7 +147,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
                 </button>
                 <QRCodeSVG
                   className="size-56 md:size-70 lg:size-95"
-                  value={`${webUrl}?pin=${inviteCode}`}
+                  value={join.qrUrl ?? webUrl}
                 />
               </AlertDialog.Content>
             </AlertDialog.Portal>
@@ -142,6 +155,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
         )}
       </div>
 
+      <RoomJoinMetadata join={join} />
       <h2 className="mb-6 text-4xl font-bold text-white drop-shadow-lg">
         {t(text)}
       </h2>

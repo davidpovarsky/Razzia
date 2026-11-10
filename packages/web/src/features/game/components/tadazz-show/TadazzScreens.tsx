@@ -6,6 +6,9 @@ import {
   type SceneDescriptor,
   SeatingPlan,
   TADAZZ_LOGO_URL,
+  useRoomJoin,
+  RoomJoinMetadata,
+  RoomQrCode as QRCodeSVG,
 } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
 import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
@@ -17,7 +20,6 @@ import {
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SFX } from "@razzia/web/features/game/utils/constants"
 import { Lock, X } from "lucide-react"
-import { QRCodeSVG } from "qrcode.react"
 import { AlertDialog } from "radix-ui"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
@@ -57,7 +59,7 @@ export function TadazzConnectingScreen() {
 }
 
 export function TadazzLobbyScreen({
-  inviteCode,
+  inviteCode: rawInviteCode,
   isManager,
   fullShowData,
   text,
@@ -78,10 +80,12 @@ export function TadazzLobbyScreen({
   const [list, setList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
   const [qrOpen, setQrOpen] = useState(false)
-  const webUrl =
-    typeof window !== "undefined" ? `${window.location.origin}/game` : ""
-  const host =
-    typeof window !== "undefined" ? `${window.location.host}/game` : ""
+  const join = useRoomJoin({
+    inviteCode: rawInviteCode,
+    managerLocked: isManager ? locked : undefined,
+    directory: fullShowData,
+  })
+  const { pin: inviteCode, locked: isLocked, webUrl, host } = join
 
   // Same live roster events as the legacy Room screen (manager only).
   useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) =>
@@ -107,8 +111,6 @@ export function TadazzLobbyScreen({
     socket.emit(EVENTS.MANAGER.KICK_PLAYER, { gameId, playerId })
   }
 
-  const isLocked = isManager ? locked : false
-
   // Creating Worlds is a hosted table show: show join code AND the full live
   // 40-representative roster in ONE public screen, without four follow-up pages.
   const representatives = fullShowData?.representatives
@@ -129,7 +131,7 @@ export function TadazzLobbyScreen({
       <SeatingPlan
         representatives={representatives}
         connectedTables={connected}
-        dialNumber={fullShowData?.dialNumber}
+        dialNumber={join.dialNumber}
         pin={(() => {
           if (inviteCode) {
             if (isLocked) {
@@ -143,7 +145,7 @@ export function TadazzLobbyScreen({
         })()}
         qr={
           inviteCode && !isLocked ? (
-            <QRCodeSVG value={`${webUrl}?pin=${inviteCode}`} />
+            <QRCodeSVG value={join.qrUrl ?? webUrl} />
           ) : (
             <Lock />
           )
@@ -212,7 +214,7 @@ export function TadazzLobbyScreen({
               className="tz-lobby-qr cursor-pointer"
               data-testid="tadazz-lobby-qr"
             >
-              <QRCodeSVG value={`${webUrl}?pin=${inviteCode}`} />
+              <QRCodeSVG value={join.qrUrl ?? webUrl} />
             </AlertDialog.Trigger>
             <AlertDialog.Portal>
               <AlertDialog.Overlay
@@ -231,13 +233,14 @@ export function TadazzLobbyScreen({
                 </NativeButton>
                 <QRCodeSVG
                   className="size-56 md:size-70 lg:size-95"
-                  value={`${webUrl}?pin=${inviteCode}`}
+                  value={join.qrUrl ?? webUrl}
                 />
               </AlertDialog.Content>
             </AlertDialog.Portal>
           </AlertDialog.Root>
         )}
       </div>
+      <RoomJoinMetadata join={join} />
       {isManager && (
         <>
           <div className="tz-lobby-count" data-testid="tadazz-lobby-count">

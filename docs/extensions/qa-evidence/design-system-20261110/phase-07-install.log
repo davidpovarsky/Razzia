@@ -1,0 +1,8 @@
+Scope: all 6 workspace projects
+? Verifying lockfile against supply-chain policies (467 entries)...
+✓ Lockfile passes supply-chain policies (467 entries in 1.3s)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+Agent skills awaiting approval: @tanstack/router-plugin.
+Run "pnpm approve" to review them.
+Done in 1.5s using pnpm v12.18.0

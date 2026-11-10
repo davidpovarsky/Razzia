@@ -16,6 +16,7 @@ const files = import.meta.glob<{ default: Record<string, unknown> }>(
   [
     "../../../../packages/web/src/locales/*/common.json",
     "../../../../packages/web/src/locales/*/errors.json",
+    "../../../../packages/web/src/locales/*/game.json",
   ],
   { eager: true },
 )

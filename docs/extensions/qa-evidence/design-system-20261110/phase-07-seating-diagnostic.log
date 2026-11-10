@@ -1,0 +1,185 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+Seating QR geometry [
+  {
+    tag: 'svg',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 59,
+    y: 439.03125,
+    width: 108,
+    height: 108
+  },
+  {
+    tag: 'DIV',
+    cls: 'qr',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 429.03125,
+    width: 128,
+    height: 128
+  },
+  {
+    tag: 'DIV',
+    cls: 'qr-and-pin',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 429.03125,
+    width: 417,
+    height: 128
+  },
+  {
+    tag: 'SECTION',
+    cls: 'dial-info',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 49,
+    y: 270,
+    width: 417,
+    height: 287.03125
+  },
+  {
+    tag: 'ASIDE',
+    cls: 'left-panel',
+    opacity: '1',
+    visibility: 'visible',
+    z: '5',
+    x: 0,
+    y: 0,
+    width: 500,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: null,
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tadazz-reference-seating has-host-guide',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-screen-inner',
+    opacity: '1',
+    visibility: 'visible',
+    z: '1',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-screen tz-custom-screen is-visible',
+    opacity: '1',
+    visibility: 'visible',
+    z: '15',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tzv4-custom-root',
+    opacity: '1',
+    visibility: 'visible',
+    z: '6',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tzv4-stage stage-show',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  },
+  {
+    tag: 'DIV',
+    cls: 'tz-viewport tzv4-viewport',
+    opacity: '1',
+    visibility: 'visible',
+    z: 'auto',
+    x: 0,
+    y: 0,
+    width: 1920,
+    height: 1080
+  }
+]
+[WebServer] 11:16:32 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:16:32 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✘  1 [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (9.0s)
+
+
+  1) [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data
+
+    Error: Command failed: zbarimg --quiet --raw /evidence/phase-07-seating-qr.png
+
+      298 |     .screenshot({ path: "/evidence/phase-07-seating-qr.png" })
+      299 |   expect(
+    > 300 |     execFileSync(
+          |     ^
+      301 |       "zbarimg",
+      302 |       ["--quiet", "--raw", "/evidence/phase-07-seating-qr.png"],
+      303 |       { encoding: "utf8" },
+        at /cleanup/extensions/qa/tds-stage-integration.spec.ts:300:5
+
+    Error Context: ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-07-traces/tds-stage-integration-conf-57eaa-without-private-roster-data-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-stage-integration.spec.ts:233:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data

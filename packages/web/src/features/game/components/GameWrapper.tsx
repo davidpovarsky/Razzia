@@ -17,7 +17,7 @@ import {
   type Status,
   type StatusDataMap,
 } from "@razzia/common/types/game/status"
-import { EXTENSION_EVENTS } from "@razzia/extensions/core"
+import { EXTENSION_EVENTS, RAZZIA_THEME_ID } from "@razzia/extensions/core"
 import {
   AudioPreferencesScope,
   ShowThemeRenderer,
@@ -25,6 +25,7 @@ import {
   ExtensionStageContent,
   createScenePresenterLabels,
   isTadazzShowActive,
+  ViewportBackdropLayer,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import GameBackground from "@razzia/web/components/GameBackground"
@@ -357,7 +358,7 @@ const GameWrapperView = ({
       role={effectiveRole}
       isHostPresenting={isHostPresenting}
     >
-      <GameBackground />
+      {theme.definition.id === RAZZIA_THEME_ID && <GameBackground />}
 
       <div className="relative z-10 flex h-full min-h-0 w-full max-w-full flex-1 flex-col justify-between overflow-hidden">
         {!isConnected && !statusName ? (
@@ -381,7 +382,8 @@ const GameWrapperView = ({
             )}
 
             <NativeGameSurface theme={theme}>
-              <LegacyStageBackdrops
+              <ViewportBackdropLayer
+                component={LegacyStageBackdrops}
                 contained
                 showBase={
                   theme.requested.id === "tadazz-classic" &&

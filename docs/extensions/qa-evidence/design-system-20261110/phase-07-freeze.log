@@ -1,0 +1,16 @@
+{
+  "status": "PASS",
+  "base": "fb6c7631999f33c8fb47638a99920e450f326fbf",
+  "protectedFiles": 602,
+  "unchangedHashes": 597,
+  "approvedModifiedHashes": [
+    "packages/web/src/features/game/components/GameWrapper.tsx",
+    "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+    "packages/web/src/features/game/components/states/Room.tsx",
+    "packages/web/src/features/game/components/tadazz-show/NativeGameLayout.tsx",
+    "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx"
+  ],
+  "approvedSeams": [],
+  "changedPaths": [],
+  "manifest": "docs/extensions/plans/tds-freeze.json"
+}
