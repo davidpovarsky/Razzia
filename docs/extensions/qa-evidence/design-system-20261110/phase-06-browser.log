@@ -1,0 +1,31 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 12 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-site-layout.spec.ts:5:1 › real gallery/list covers retain 16:9 and one creation CTA across responsive widths (5.3s)
+  ✓   2 [chromium] › qa/tds-site-layout.spec.ts:55:1 › all eight locale labels, compact account and real unavailable billing state remain usable (7.9s)
+  ✓   3 [chromium] › qa/tds-site-layout.spec.ts:127:1 › marketing demo exposes choose then reveal then replay with explicit synthetic disclosure (1.5s)
+  ✓   4 [chromium] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight (7.0s)
+  ✓   5 [chromium] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds (4.1s)
+  ✓   6 [chromium] › qa/tds-site.spec.ts:127:1 › advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed (4.2s)
+  ✓   7 [webkit] › qa/tds-site-layout.spec.ts:5:1 › real gallery/list covers retain 16:9 and one creation CTA across responsive widths (18.2s)
+  ✓   8 [webkit] › qa/tds-site-layout.spec.ts:55:1 › all eight locale labels, compact account and real unavailable billing state remain usable (23.8s)
+  ✓   9 [webkit] › qa/tds-site-layout.spec.ts:127:1 › marketing demo exposes choose then reveal then replay with explicit synthetic disclosure (4.7s)
+  ✓  10 [webkit] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight (21.6s)
+  ✓  11 [webkit] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds (11.4s)
+  ✓  12 [webkit] › qa/tds-site.spec.ts:127:1 › advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed (8.5s)
+
+  12 passed (2.1m)

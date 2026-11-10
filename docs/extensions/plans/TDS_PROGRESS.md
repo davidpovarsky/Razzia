@@ -16,7 +16,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | TDS-03 | 1220402777623967 | VERIFIED    | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed                   |
 | TDS-04 | 1220402719463680 | VERIFIED    | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario |
 | TDS-05 | 1220402777822480 | VERIFIED    | [Internal catalog](TDS_CATALOG.md); 14 catalog + 18 component + 6 token cases, original editor PNG parity       |
-| TDS-06 | 1220402777861386 | NOT_STARTED | Site / Studio                                                                                                   |
+| TDS-06 | 1220402777861386 | VERIFIED    | [Site/Studio](TDS_SITE.md); 82 units, 12 site + 22 component + 4 follow-up checks, editor regression            |
 | TDS-07 | 1220402729693747 | NOT_STARTED | Stage / join                                                                                                    |
 | TDS-08 | 1220402719392041 | NOT_STARTED | Host controls / modals                                                                                          |
 | TDS-09 | 1220402539686302 | NOT_STARTED | Roster / packages                                                                                               |
@@ -34,7 +34,7 @@ and behavior checks are separately required.
 Dependencies installed with frozen lockfile; TDS-04 adds only three importer lines for an already-locked optional peer, with no upgrades.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-TDS-05 live catalog verified. TDS-06 real site and Studio usability is next.
+TDS-06 site/Studio verified. TDS-07 themed viewport and join contract are next.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their
@@ -123,3 +123,28 @@ PASS remote tds-phase05.sh: extension/web types; 14 units; 14 catalog + 18 canon
   matrix / GitHub CI execution / release. No new upstream/lock changes or blocker.
   Next exact action: TDS-06 My Games thumbnails/actions, advanced package disclosure,
   marketing demo state controls and compact real account layout, all eight locales.
+
+TDS-05 commit: `aae7a0298543b19ab787dd9b3653c8ba971eee0d`; Asana VERIFIED.
+TDS-06 BASE_HEAD: that same commit. Real MyGames retains original API/import/
+export handlers through pure GameCard; explicit fallback cover/16:9, one secondary
+menu with all four exports and confirmed/error-aware deletion, empty-only create
+tile, lazy progressive package tools preserving jobs, compact authoritative account
+status, clearer demo choose/reveal/replay/reset-scroll, complete eight-locale copy
+and ordinary Tadazz branding. Fixed initial pointer-to-shadow menu focus; no editor,
+server, data/wire changes. Existing mixed E2E selectors maintained, not falsely
+claimed run when they write editor content.
+PASS remote main phase06-r3: types; 82 units; 12 site browser + 22 canonical cases;
+full actual API/editor scenario; guards. Final replay-only follow-up: fresh types,
+4 Chromium/WebKit demo/account-state cases, repeated final production bundle full
+API/editor scenario 1 passed 36.0s, freeze/design/catalog-source/registry. No skips.
+Source hashes: 601 unchanged; only prior approved toolbar exception 12/140 lines.
+Editor comparator unchanged zero thresholds; raw proof has exactly prior TDS-03/04
+9/2 AA-edge variant in question/media and byte-identical scene/settings; TDS-05
+all-byte-identical result preserved as its own observation. No new mismatch pattern
+or source/baseline/tolerance edits. See TDS_SITE.md and phase-06 evidence.
+Reviewed gallery/list, account, phone demo and corrected replay/top-of-page capture.
+Initial pointer failure reports and scrolled sticky-header capture retained.
+NOT RUN: physical devices, final host/roster/lifecycle/performance/CI/release gates.
+No phase blocker, new upstream seam or lock change. Next exact action: TDS-07 actual
+theme viewport underlay and shared live PIN/URL/lock/configured-phone data contract;
+preserve original theme fallback, user media and Creating Worlds seating layout.

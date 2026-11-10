@@ -66,6 +66,8 @@ test("Studio keeps navigation warm, protects initial verification and styles act
   await expect(
     page.getByRole("heading", { name: "My Games", exact: true }),
   ).toBeVisible()
+  await expect(page.getByTestId("package-manager")).toHaveCount(0)
+  await page.getByTestId("package-tools-toggle").click()
   await expect(page.getByTestId("package-manager")).toBeVisible()
   expect(await page.evaluate(() => performance.timeOrigin)).toBe(stamp)
   expect(visited.filter((path) => path === "/api/accounts/me")).toHaveLength(0)
@@ -146,7 +148,7 @@ test("Studio keeps navigation warm, protects initial verification and styles act
   const button = page
     .getByTestId("package-manager")
     .getByRole("button", { name: "Export package", exact: true })
-  await expect(button).toHaveCSS("background-color", "rgb(229, 255, 57)")
+  await expect(button).toHaveCSS("background-color", "rgb(231, 255, 55)")
   const download = page.waitForEvent("download")
   await button.click()
   expect((await download).suggestedFilename()).toMatch(/\.tadazz$/u)
@@ -510,8 +512,9 @@ test("real account → original editor save/edit → duplicate/export/delete →
   await page
     .locator("article[data-game-id]")
     .first()
-    .getByRole("button", { name: "Duplicate", exact: true })
+    .getByRole("button", { name: /^More actions for /u })
     .click()
+  await page.getByRole("menuitem", { name: "Duplicate", exact: true }).click()
   await expect(page.locator("article[data-game-id]")).toHaveCount(2)
   const ids = await page
     .locator("article[data-game-id]")
@@ -520,10 +523,15 @@ test("real account → original editor save/edit → duplicate/export/delete →
     )
   expect(new Set(ids).size).toBe(2)
   expect(ids).toContain(id)
-  await page.locator("article[data-game-id]").first().locator("summary").click()
+  await page
+    .locator("article[data-game-id]")
+    .first()
+    .getByRole("button", { name: /^More actions for /u })
+    .click()
+  await page.getByRole("menuitem", { name: "Export", exact: true }).click()
   const downloaded = page.waitForEvent("download")
   await page
-    .getByRole("button", { name: "Enhanced bundle", exact: true })
+    .getByRole("menuitem", { name: "Enhanced bundle", exact: true })
     .first()
     .click()
   const download = await downloaded
@@ -533,9 +541,10 @@ test("real account → original editor save/edit → duplicate/export/delete →
   await page
     .locator("article[data-game-id]")
     .first()
-    .getByRole("button", { name: "Delete", exact: true })
+    .getByRole("button", { name: /^More actions for /u })
     .click()
-  await expect(page.getByRole("dialog")).toBeVisible()
+  await page.getByRole("menuitem", { name: "Delete", exact: true }).click()
+  await expect(page.getByRole("alertdialog")).toBeVisible()
   await page
     .getByRole("button", { name: "Confirm delete", exact: true })
     .click()
@@ -575,7 +584,7 @@ test("real account → original editor save/edit → duplicate/export/delete →
   await expect(page.getByRole("dialog")).toHaveCount(0)
   await page.goto("/studio/account")
   await expect(
-    page.getByText("Billing is disabled. No purchases are available.", {
+    page.getByText("Purchases are currently unavailable.", {
       exact: true,
     }),
   ).toBeVisible()
@@ -811,6 +820,12 @@ test("failed deletion stays in the dialog and can be retried without a false suc
   expect(saved.ok()).toBe(true)
   const { id } = (await saved.json()) as { id: string }
   await page.goto("/studio/games")
+  await page
+    .getByRole("button", {
+      name: "More actions for Delete retry fixture",
+      exact: true,
+    })
+    .click()
   await page.route(`**/api/extensions/quizzes/${id}`, async (route) => {
     if (route.request().method() === "DELETE") {
       await route.fulfill({
@@ -821,11 +836,11 @@ test("failed deletion stays in the dialog and can be retried without a false suc
       await route.continue()
     }
   })
-  await page.getByRole("button", { name: "Delete", exact: true }).click()
+  await page.getByRole("menuitem", { name: "Delete", exact: true }).click()
   await page
     .getByRole("button", { name: "Confirm delete", exact: true })
     .click()
-  await expect(page.getByRole("dialog").getByRole("alert")).toContainText(
+  await expect(page.getByRole("alertdialog").getByRole("alert")).toContainText(
     "could not be completed",
   )
   expect(
@@ -839,7 +854,7 @@ test("failed deletion stays in the dialog and can be retried without a false suc
   await page
     .getByRole("button", { name: "Confirm delete", exact: true })
     .click()
-  await expect(page.getByRole("dialog")).toHaveCount(0)
+  await expect(page.getByRole("alertdialog")).toHaveCount(0)
   await expect(
     page.getByRole("heading", { name: "Delete retry fixture", exact: true }),
   ).toHaveCount(0)

@@ -226,7 +226,7 @@ export function AccountGateway() {
           <SiteLink href="/" aria-label={t("Home")}>
             <img
               src="/tadazz-design-reference/marketing-logo.webp"
-              alt="TADAZZ!"
+              alt="Tadazz"
             />
           </SiteLink>
           <SiteLink className="account-back" href="/">

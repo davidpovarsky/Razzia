@@ -23,6 +23,7 @@ import { ReferenceCanvas } from "../shared/ReferenceCanvas"
 import { SiteDialog } from "../shared/Dialog"
 import { corrections } from "../../themes/corrections"
 import { studioStyle } from "../../themes/studio"
+import { sitePlatformStyle } from "../../themes/platform"
 import {
   currentAccount,
   hasManagerSession,
@@ -240,6 +241,7 @@ function StudioWorkspace({ account }: { account: Account }) {
       <style>
         {corrections}
         {studioStyle}
+        {sitePlatformStyle}
       </style>
       <div className="workspace">
         <aside
@@ -249,7 +251,7 @@ function StudioWorkspace({ account }: { account: Account }) {
           <SiteLink className="side-brand" href="/">
             <img
               src="/tadazz-design-reference/marketing-logo.webp"
-              alt="TADAZZ!"
+              alt="Tadazz"
             />
           </SiteLink>
           <nav className="side-nav">
@@ -267,12 +269,12 @@ function StudioWorkspace({ account }: { account: Account }) {
             ))}
           </nav>
           <div className="side-bottom">
-            <SiteLink className="side-account" href="/studio/account">
+            <div className="side-identity">
               <span className="avatar">
                 {account.email.slice(0, 2).toUpperCase()}
               </span>
-              <span className="who">{t("My account")}</span>
-            </SiteLink>
+              <span>{account.email}</span>
+            </div>
             <SiteButton className="side-account" onClick={() => void logout()}>
               <span className="who">{t("Sign out")}</span>
             </SiteButton>
@@ -348,13 +350,6 @@ function StudioWorkspace({ account }: { account: Account }) {
                       </h1>
                       <SiteLink className="welcome-link" href="/studio/explore">
                         {t("Explore Games")} →
-                      </SiteLink>
-                      <SiteLink
-                        className="btn primary site-mobile-create"
-                        href="/manager/quizz"
-                      >
-                        <Plus size={16} />
-                        {t("Create game")}
                       </SiteLink>
                     </div>
                     <div className="welcome-art" aria-hidden="true">

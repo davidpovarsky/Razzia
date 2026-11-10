@@ -1,0 +1,141 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 12 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-site-layout.spec.ts:5:1 › real gallery/list covers retain 16:9 and one creation CTA across responsive widths (4.8s)
+  ✓   2 [chromium] › qa/tds-site-layout.spec.ts:55:1 › all eight locale labels, compact account and real unavailable billing state remain usable (8.1s)
+  ✓   3 [chromium] › qa/tds-site-layout.spec.ts:127:1 › marketing demo exposes choose then reveal then replay with explicit synthetic disclosure (1.5s)
+  ✘   4 [chromium] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight (17.8s)
+  ✘   5 [chromium] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds (18.2s)
+  ✓   6 [chromium] › qa/tds-site.spec.ts:127:1 › advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed (4.4s)
+  ✓   7 [webkit] › qa/tds-site-layout.spec.ts:5:1 › real gallery/list covers retain 16:9 and one creation CTA across responsive widths (18.4s)
+  ✓   8 [webkit] › qa/tds-site-layout.spec.ts:55:1 › all eight locale labels, compact account and real unavailable billing state remain usable (29.6s)
+  ✓   9 [webkit] › qa/tds-site-layout.spec.ts:127:1 › marketing demo exposes choose then reveal then replay with explicit synthetic disclosure (4.5s)
+  ✘  10 [webkit] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight (22.0s)
+  ✘  11 [webkit] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds (22.5s)
+  ✓  12 [webkit] › qa/tds-site.spec.ts:127:1 › advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed (8.6s)
+
+
+  1) [chromium] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Duplicate', exact: true })
+
+
+      17 |   const card = page.locator(`article[data-game-id="${game.id}"]`)
+      18 |   await openGameActions(card)
+    > 19 |   await page.getByRole("menuitem", { name: "Duplicate", exact: true }).click()
+         |                                                                        ^
+      20 |   await expect(page.locator("article[data-game-id]")).toHaveCount(2)
+      21 |   const ids = await page
+      22 |     .locator("article[data-game-id]")
+        at /cleanup/extensions/qa/tds-site.spec.ts:19:72
+
+    Error Context: ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Delete', exact: true })
+
+
+      89 |   })
+      90 |   await openGameActions(card)
+    > 91 |   await page.getByRole("menuitem", { name: "Delete", exact: true }).click()
+         |                                                                     ^
+      92 |   const dialog = page.getByRole("alertdialog", {
+      93 |     name: "Delete game?",
+      94 |     exact: true,
+        at /cleanup/extensions/qa/tds-site.spec.ts:91:69
+
+    Error Context: ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Duplicate', exact: true })
+
+
+      17 |   const card = page.locator(`article[data-game-id="${game.id}"]`)
+      18 |   await openGameActions(card)
+    > 19 |   await page.getByRole("menuitem", { name: "Duplicate", exact: true }).click()
+         |                                                                        ^
+      20 |   await expect(page.locator("article[data-game-id]")).toHaveCount(2)
+      21 |   const ids = await page
+      22 |     .locator("article[data-game-id]")
+        at /cleanup/extensions/qa/tds-site.spec.ts:19:72
+
+    Error Context: ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/site-platform-traces/tds-site-real-duplicate-an-be460-ormats-and-import-preflight-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('menuitem', { name: 'Delete', exact: true })
+
+
+      89 |   })
+      90 |   await openGameActions(card)
+    > 91 |   await page.getByRole("menuitem", { name: "Delete", exact: true }).click()
+         |                                                                     ^
+      92 |   const dialog = page.getByRole("alertdialog", {
+      93 |     name: "Delete game?",
+      94 |     exact: true,
+        at /cleanup/extensions/qa/tds-site.spec.ts:91:69
+
+    Error Context: ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/site-platform-traces/tds-site-delete-identifies-eddf2-ays-open-and-retry-succeeds-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight
+    [chromium] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds
+    [webkit] › qa/tds-site.spec.ts:11:1 › real duplicate and all four export handlers retain formats and import preflight
+    [webkit] › qa/tds-site.spec.ts:74:1 › delete identifies the game, cancel sends nothing, genuine failure stays open and retry succeeds
+  8 passed (2.9m)

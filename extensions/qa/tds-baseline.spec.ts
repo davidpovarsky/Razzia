@@ -116,6 +116,8 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
     `tds-fixture-${Date.now()}`,
     "1.0.0",
   )
+  await expect(page.getByTestId("package-manager")).toHaveCount(0)
+  await page.getByTestId("package-tools-toggle").click()
   await page.getByTestId("package-file-input").setInputFiles({
     name: "fixture.tadazz",
     mimeType: "application/octet-stream",

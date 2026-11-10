@@ -2,6 +2,7 @@ import marketing from "../../../../site-assets/marketing.css?inline"
 import { SiteLink } from "../shared/SiteLink"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
+import { sitePlatformStyle } from "../../themes/platform"
 import { Pricing } from "./Pricing"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState } from "react"
@@ -121,10 +122,11 @@ export function MarketingSite() {
   return (
     <ReferenceCanvas variant="marketing" styles={marketing}>
       <style>{corrections}</style>
+      <style>{sitePlatformStyle}</style>
       <header className="site-header">
         <div className="wide header-inner">
           <SiteLink className="brand" href="/">
-            <img src={asset("logo")} alt="TADAZZ!" />
+            <img src={asset("logo")} alt="Tadazz" />
           </SiteLink>
           <nav className="header-links" aria-label={t("Main navigation")}>
             {nav}
@@ -475,10 +477,10 @@ export function MarketingSite() {
               )}
             </p>
             <div className="demo-stage">
-              <img src={asset("logo")} alt="TADAZZ!" style={{ width: 180 }} />
+              <img src={asset("logo")} alt="Tadazz" style={{ width: 180 }} />
               {!showSampleResults ? (
                 <div
-                  className="button-row"
+                  className="demo-choice-grid"
                   role="group"
                   aria-label={t("Choose an answer")}
                 >
@@ -488,14 +490,17 @@ export function MarketingSite() {
                     "A wrong turn",
                     "A lost letter",
                     "A ticking clock",
-                  ].map((answer) => (
+                  ].map((answer, index) => (
                     <SiteButton
-                      className={`btn ${choice === answer ? "btn-primary" : "btn-outline"}`}
+                      className="demo-choice"
                       key={t(answer)}
                       onClick={() => setChoice(answer)}
                       aria-pressed={choice === answer}
                     >
-                      {t(answer)}
+                      <span className="demo-choice-number" aria-hidden="true">
+                        {index + 1}
+                      </span>
+                      <span>{t(answer)}</span>
                     </SiteButton>
                   ))}
                 </div>
@@ -582,15 +587,18 @@ export function MarketingSite() {
               )}
             </div>
             <div className="button-row" style={{ marginTop: 24 }}>
-              <SiteButton
-                className="btn btn-outline"
-                onClick={() => {
-                  setChoice(null)
-                  setShowSampleResults(false)
-                }}
-              >
-                {t("Try again")}
-              </SiteButton>
+              {showSampleResults && (
+                <SiteButton
+                  className="btn btn-outline"
+                  onClick={() => {
+                    setChoice(null)
+                    setShowSampleResults(false)
+                    window.scrollTo(0, 0)
+                  }}
+                >
+                  {t("Try again")}
+                </SiteButton>
+              )}
               <SiteButton
                 className="btn btn-outline"
                 onClick={() => go("home")}
@@ -709,7 +717,7 @@ export function MarketingSite() {
       <footer className="site-footer">
         <div className="wrap footer-inner">
           <div className="footer-brand">
-            <img src={asset("logo")} alt="TADAZZ!" />
+            <img src={asset("logo")} alt="Tadazz" />
             <p>{t("The gameshow is yours.")}</p>
           </div>
           <div className="footer-links">{nav}</div>

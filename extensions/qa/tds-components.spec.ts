@@ -1,6 +1,27 @@
 import { expect, test } from "@playwright/test"
 
 for (const name of ["host", "site"]) {
+  test(`${name}: fresh pointer entry opens menu without prior keyboard focus`, async ({
+    page,
+  }) => {
+    await page.goto("/")
+    const panel = page.getByTestId(`${name}-panel`)
+    const trigger = panel.getByRole("button", {
+      name: `${name} actions`,
+      exact: true,
+    })
+    await trigger.click()
+    const action = page.getByRole("menuitem", {
+      name: `${name} first action`,
+      exact: true,
+    })
+    await expect(action).toBeVisible()
+    await action.click()
+    await expect(panel.getByTestId(`${name}-message`)).toHaveText(
+      "First action",
+    )
+    await expect(trigger).toBeFocused()
+  })
   test(`${name}: native pending/disabled, labels, switch and roving tabs`, async ({
     page,
   }) => {

@@ -23,7 +23,23 @@ export function Menu({
 }) {
   return (
     <DropdownMenu.Root modal={false} open={open} onOpenChange={onOpenChange}>
-      <DropdownMenu.Trigger asChild>{trigger}</DropdownMenu.Trigger>
+      <DropdownMenu.Trigger
+        asChild
+        onPointerDown={(event) => {
+          // Radix suppresses default trigger focus on open. In a ShadowRoot the
+          // first body-to-shadow focus can otherwise look like an outside event.
+          const button = event.currentTarget
+          if (
+            !button.disabled &&
+            event.button === 0 &&
+            !event.ctrlKey &&
+            button.getRootNode() instanceof ShadowRoot
+          )
+            button.focus({ preventScroll: true })
+        }}
+      >
+        {trigger}
+      </DropdownMenu.Trigger>
       <MenuPortal>
         <DropdownMenu.Content
           onFocusCapture={shadowMenuEntry}

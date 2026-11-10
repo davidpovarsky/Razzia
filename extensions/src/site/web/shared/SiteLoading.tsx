@@ -18,7 +18,7 @@ export function SiteLoading() {
         src="/tadazz-design-reference/marketing-logo.webp"
         width="164"
         height="68"
-        alt="TADAZZ!"
+        alt="Tadazz"
       />
     </div>
   )

@@ -14,6 +14,7 @@ const canonical = walk(resolve(root, "extensions/src/platform-ui")).filter(
 const files = [
   ...canonical,
   resolve(root, "extensions/src/site/web/shared/ReferenceCanvas.tsx"),
+  resolve(root, "extensions/src/site/themes/platform.ts"),
 ]
 const errors = []
 for (const path of files) {
