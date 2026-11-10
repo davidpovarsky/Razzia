@@ -207,3 +207,21 @@ The branch is reviewable local work. Production rollout remains unapproved and
 the flag remains OFF by default. The source inventory distinguishes new feature
 modules, QA/reference/evidence files and the small existing downstream/tooling
 changes; it contains no upstream modification.
+
+## Delivery location and commit
+
+- Worktree: `C:\Users\DAVID\Code\Razzia-worktrees\tadazz-unified-site-20261110`.
+- Branch: `codex/tadazz-unified-site-20261110`.
+- Implementation and evidence commit: `2ec43cc5064dc8805dae8f6bfb650a02e03beac0`.
+- Exact 145-file inventory and SHA-256 hashes:
+  [SOURCE_INVENTORY.json](qa-evidence/unified-site-20261110/SOURCE_INVENTORY.json).
+  No file under `packages/**` changed relative to `18d3c9d`.
+- A subsequent documentation-only commit records this implementation ID and
+  delivery location. The inventory describes the implementation commit; its
+  report hash therefore precedes this handoff-only addition.
+- Entry route after explicitly opting in: `/`; account entry `/login` or
+  `/signup`; authenticated workspace `/studio`. My Games Create/Edit opens the
+  original `/manager/quizz*` editor, whose Save/Exit returns to `/studio/games`.
+
+The original dirty worktree and the historical preview branch were not modified.
+There is no remote push, merge or deployment associated with these local commits.
