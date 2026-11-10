@@ -1,3 +1,4 @@
+import "@razzia/web/i18n"
 import i18n from "i18next"
 import { useTranslation } from "react-i18next"
 

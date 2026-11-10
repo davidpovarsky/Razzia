@@ -1,3 +1,4 @@
+import { SiteLink } from "../shared/SiteLink"
 import { useState } from "react"
 import { useSiteText } from "../../locales"
 import { SiteButton } from "../shared/SiteButton"
@@ -81,9 +82,9 @@ export function Pricing({ custom }: { custom: () => void }) {
             )}
           </p>
         </div>
-        <a className="btn btn-outline" href="/studio/account">
+        <SiteLink className="btn btn-outline" href="/studio/account">
           {t("Account & licences")}
-        </a>
+        </SiteLink>
       </div>
       <div className="full-cta" style={{ margin: "54px 0" }}>
         <h3>{t("Something one of a kind?")}</h3>

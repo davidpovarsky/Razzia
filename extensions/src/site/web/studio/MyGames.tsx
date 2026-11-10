@@ -1,9 +1,10 @@
+import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
 import { useCallback, useState } from "react"
 import { CompositeApiClient } from "@razzia/extensions/editor"
 import { useShowFileActions } from "@razzia/web/features/manager/components/configurations/use-show-file-actions"
 import { ShowImportModal } from "@razzia/web/features/manager/components/configurations/ShowImportModal"
-import { PackageManager } from "@razzia/web/features/manager/components/packages/PackageManager"
+import { PackageTools } from "./PackageTools"
 import { SiteDialog } from "../shared/Dialog"
 import { useSiteText } from "../../locales"
 
@@ -141,18 +142,18 @@ export function MyGames({
               <h3 className="game-title">{game.subject}</h3>
               <p className="muted">{t("Account-owned game")}</p>
               <div className="button-row">
-                <a
+                <SiteLink
                   className="btn ghost"
                   href={`/manager/quizz/${encodeURIComponent(game.id)}`}
                 >
                   {t("Edit game")}
-                </a>
-                <a
+                </SiteLink>
+                <SiteLink
                   className="btn ghost"
                   href={`/studio/prepare?quiz=${encodeURIComponent(game.id)}`}
                 >
                   {t("Prepare show")}
-                </a>
+                </SiteLink>
               </div>
               {!limit && (
                 <div className="site-game-actions">
@@ -215,19 +216,17 @@ export function MyGames({
             <p>{t("Create a game or import an existing show.")}</p>
           </div>
         )}
-        <a className="game-card new-card" href="/manager/quizz">
+        <SiteLink className="game-card new-card" href="/manager/quizz">
           <div className="newicon">+</div>
           <h3>{t("Create game")}</h3>
-        </a>
+        </SiteLink>
       </div>
       {!limit && (
-        <div className="site-native-tools">
-          <PackageManager
-            file={packageFile}
-            onFileConsumed={consumeFile}
-            onImported={refresh}
-          />
-        </div>
+        <PackageTools
+          file={packageFile}
+          onFileConsumed={consumeFile}
+          onImported={refresh}
+        />
       )}
       <ShowImportModal
         open={files.isImportModalOpen}

@@ -1,7 +1,10 @@
+import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
-import { useEffect, useState } from "react"
+import { lazy, Suspense, useEffect, useState } from "react"
+import studio from "../../../../site-assets/studio.css?inline"
+import { StudioLoading } from "./StudioLoading"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
-import { useRouterState } from "@tanstack/react-router"
+import { useRouter, useRouterState } from "@tanstack/react-router"
 import {
   CalendarDays,
   HelpCircle,
@@ -16,8 +19,6 @@ import {
 import { clearToken, getClientId } from "@razzia/web/lib/session"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
-import Configurations from "@razzia/web/features/manager/components/configurations"
-import ManagerAuthBackground from "@razzia/web/features/manager/components/ManagerAuthBackground"
 import { ReferenceCanvas } from "../shared/ReferenceCanvas"
 import { SiteDialog } from "../shared/Dialog"
 import { corrections } from "../../themes/corrections"
@@ -31,8 +32,19 @@ import {
 } from "../../adapters/client"
 import { useSiteText } from "../../locales"
 import { AccountPanel } from "./AccountPanel"
-import { MyGames, type QuizMeta } from "./MyGames"
-import { Events, Prepare, type ResultMeta } from "./Events"
+import type { QuizMeta } from "./MyGames"
+import type { ResultMeta } from "./Events"
+
+const LegacyTools = lazy(() => import("./LegacyTools"))
+const MyGames = lazy(() =>
+  import("./MyGames").then((module) => ({ default: module.MyGames })),
+)
+const Events = lazy(() =>
+  import("./Events").then((module) => ({ default: module.Events })),
+)
+const Prepare = lazy(() =>
+  import("./Events").then((module) => ({ default: module.Prepare })),
+)
 
 const navigation = [
   ["dashboard", "Dashboard", House],
@@ -46,6 +58,8 @@ const studioPath = (section: string) =>
 
 export function Studio() {
   const t = useSiteText()
+  const router = useRouter()
+  const path = useRouterState({ select: (state) => state.location.pathname })
   const queryClient = useQueryClient()
   const local = hasManagerSession()
   const profile = useQuery({
@@ -53,9 +67,9 @@ export function Studio() {
     queryFn: ({ signal }) => currentAccount(signal),
     enabled: local,
     retry: false,
-    staleTime: 0,
-    refetchOnMount: "always",
-    refetchOnWindowFocus: true,
+    staleTime: 30000,
+    refetchOnMount: true,
+    refetchOnWindowFocus: "always",
   })
   useEffect(() => {
     if (
@@ -66,26 +80,22 @@ export function Studio() {
     ) {
       void queryClient.cancelQueries().then(() => {
         queryClient.clear()
-        window.location.replace(
-          `/login?returnTo=${encodeURIComponent(window.location.pathname)}`,
-        )
+        void router.navigate({
+          to: "/login",
+          search: () => ({ returnTo: path }),
+          replace: true,
+        })
       })
     }
-  }, [local, profile.isError, profile.error, queryClient])
+  }, [local, profile.isError, profile.error, queryClient, router, path])
 
   if (!local || profile.isPending) {
-    return (
-      <ReferenceCanvas variant="studio">
-        <p className="empty" role="status">
-          {t("Please wait…")}
-        </p>
-      </ReferenceCanvas>
-    )
+    return <StudioLoading />
   }
 
   if (profile.isError) {
     return (
-      <ReferenceCanvas variant="studio">
+      <ReferenceCanvas variant="studio" styles={studio}>
         <div className="empty" role="alert">
           <p>{t("Account service is unavailable.")}</p>
           <SiteButton
@@ -94,22 +104,19 @@ export function Studio() {
           >
             {t("Retry")}
           </SiteButton>
-          <a className="btn ghost" href="/login">
+          <SiteLink className="btn ghost" href="/login">
             {t("Log in")}
-          </a>
+          </SiteLink>
         </div>
       </ReferenceCanvas>
     )
   }
 
-  if (window.location.pathname === "/studio/legacy") {
+  if (path === "/studio/legacy") {
     return (
-      <ManagerAuthBackground showLanguageSwitcher={false}>
-        <div className="flex flex-col items-center gap-4">
-          <a href="/studio/games">{t("Back to My Studio")}</a>
-          <Configurations />
-        </div>
-      </ManagerAuthBackground>
+      <Suspense fallback={<StudioLoading />}>
+        <LegacyTools />
+      </Suspense>
     )
   }
 
@@ -137,15 +144,19 @@ function StudioWorkspace({ account }: { account: Account }) {
       siteRequest<{ quizz: QuizMeta[] }>("/api/quizz", { signal }),
     refetchOnWindowFocus: true,
     staleTime: 0,
+    enabled: ["dashboard", "games", "prepare"].includes(section),
   })
   const results = useQuery({
     queryKey: siteKey(account.id, "results"),
     queryFn: ({ signal }) =>
       siteRequest<{ results: ResultMeta[] }>("/api/results", { signal }),
     refetchOnWindowFocus: true,
+    enabled: ["dashboard", "events"].includes(section),
   })
-  const refresh = () =>
-    queryClient.invalidateQueries({ queryKey: siteKey(account.id) })
+  const refreshGames = () =>
+    queryClient.invalidateQueries({ queryKey: siteKey(account.id, "games") })
+  const refreshResults = () =>
+    queryClient.invalidateQueries({ queryKey: siteKey(account.id, "results") })
   const games = quizzes.data?.quizz ?? []
   useEffect(() => {
     const check = () => {
@@ -219,19 +230,13 @@ function StudioWorkspace({ account }: { account: Account }) {
   }
 
   if (expired || loggingOut) {
-    return (
-      <ReferenceCanvas variant="studio">
-        <p className="empty" role="status">
-          {t("Please wait…")}
-        </p>
-      </ReferenceCanvas>
-    )
+    return <StudioLoading />
   }
 
   const title = navigation.find(([id]) => id === section)?.[1] ?? "Prepare show"
 
   return (
-    <ReferenceCanvas variant="studio">
+    <ReferenceCanvas variant="studio" styles={studio}>
       <style>
         {corrections}
         {studioStyle}
@@ -241,32 +246,33 @@ function StudioWorkspace({ account }: { account: Account }) {
           className={`sidebar ${menu ? "open" : ""}`}
           aria-label={t("Studio navigation")}
         >
-          <a className="side-brand" href="/">
+          <SiteLink className="side-brand" href="/">
             <img
               src="/tadazz-design-reference/marketing-logo.webp"
               alt="TADAZZ!"
             />
-          </a>
+          </SiteLink>
           <nav className="side-nav">
             {navigation.map(([id, label, Icon]) => (
-              <a
+              <SiteLink
                 key={id}
                 href={studioPath(id)}
+                onClick={() => setMenu(false)}
                 className={`nav-btn ${section === id ? "active" : ""}`}
                 aria-current={section === id ? "page" : undefined}
               >
                 <Icon size={18} />
                 {t(label)}
-              </a>
+              </SiteLink>
             ))}
           </nav>
           <div className="side-bottom">
-            <a className="side-account" href="/studio/account">
+            <SiteLink className="side-account" href="/studio/account">
               <span className="avatar">
                 {account.email.slice(0, 2).toUpperCase()}
               </span>
               <span className="who">{t("My account")}</span>
-            </a>
+            </SiteLink>
             <SiteButton className="side-account" onClick={() => void logout()}>
               <span className="who">{t("Sign out")}</span>
             </SiteButton>
@@ -310,127 +316,175 @@ function StudioWorkspace({ account }: { account: Account }) {
               >
                 <HelpCircle size={18} />
               </SiteButton>
-              <a className="btn primary" href="/manager/quizz">
+              <SiteLink className="btn primary" href="/manager/quizz">
                 <Plus size={16} />
                 {t("Create game")}
-              </a>
-              <a
+              </SiteLink>
+              <SiteLink
                 className="avatar"
                 href="/studio/account"
                 aria-label={t("My account")}
               >
                 {account.email.slice(0, 2).toUpperCase()}
-              </a>
+              </SiteLink>
             </div>
           </header>
           <main className="content">
-            {section === "dashboard" && (
-              <>
-                <section className="welcome">
-                  <div className="welcome-copy">
-                    <h1>
-                      {t("Your")} <span>{t("shows.")}</span>
-                    </h1>
-                    <a className="welcome-link" href="/studio/explore">
-                      {t("Explore Games")} →
-                    </a>
-                    <a
-                      className="btn primary site-mobile-create"
-                      href="/manager/quizz"
-                    >
-                      <Plus size={16} />
-                      {t("Create game")}
-                    </a>
-                  </div>
-                  <div className="welcome-art" aria-hidden="true">
-                    <div className="zz-floor" />
-                    <img
-                      className="blue"
-                      src="/tadazz-design-reference/marketing-zb.webp"
-                      alt=""
-                    />
-                    <img
-                      className="lime"
-                      src="/tadazz-design-reference/marketing-zl.webp"
-                      alt=""
-                    />
-                  </div>
-                </section>
-                <section className="spotlight-grid">
-                  <article className="spotlight">
-                    <div className="thumb">
+            <Suspense
+              fallback={
+                <div
+                  className="site-skeleton site-skeleton-hero"
+                  role="status"
+                  aria-label={t("Loading your studio…")}
+                />
+              }
+            >
+              {section === "dashboard" && (
+                <>
+                  <section className="welcome">
+                    <div className="welcome-copy">
+                      <h1>
+                        {t("Your")} <span>{t("shows.")}</span>
+                      </h1>
+                      <SiteLink className="welcome-link" href="/studio/explore">
+                        {t("Explore Games")} →
+                      </SiteLink>
+                      <SiteLink
+                        className="btn primary site-mobile-create"
+                        href="/manager/quizz"
+                      >
+                        <Plus size={16} />
+                        {t("Create game")}
+                      </SiteLink>
+                    </div>
+                    <div className="welcome-art" aria-hidden="true">
+                      <div className="zz-floor" />
                       <img
-                        src="/tadazz-design-reference/marketing-worlds.webp"
+                        className="blue"
+                        src="/tadazz-design-reference/marketing-zb.webp"
+                        alt=""
+                      />
+                      <img
+                        className="lime"
+                        src="/tadazz-design-reference/marketing-zl.webp"
                         alt=""
                       />
                     </div>
-                    <div className="spotlight-info">
-                      <h3>
-                        {t("Welcome, {{name}}", {
-                          name: account.email.split("@")[0],
-                        })}
-                      </h3>
-                      <p>
-                        {t("{{games}} games · {{events}} past events", {
-                          games: quizzes.isSuccess ? games.length : "—",
-                          events: results.isSuccess
-                            ? results.data.results.length
-                            : "—",
-                        })}
-                      </p>
-                      <a className="spotlight-action" href="/studio/prepare">
-                        {t("Prepare show")} →
-                      </a>
-                    </div>
-                  </article>
-                  {games[0] && (
-                    <article className="spotlight editing">
+                  </section>
+                  <section className="spotlight-grid">
+                    <article className="spotlight">
                       <div className="thumb">
                         <img
-                          src="/tadazz-design-reference/marketing-stage.webp"
+                          src="/tadazz-design-reference/marketing-worlds.webp"
                           alt=""
                         />
                       </div>
                       <div className="spotlight-info">
-                        <h3>{games[0].subject}</h3>
-                        <p>{t("Pick up where you left off")}</p>
-                        <a
+                        <h3>
+                          {t("Welcome, {{name}}", {
+                            name: account.email.split("@")[0],
+                          })}
+                        </h3>
+                        <p>
+                          {t("{{games}} games · {{events}} past events", {
+                            games: quizzes.isSuccess ? games.length : "—",
+                            events: results.isSuccess
+                              ? results.data.results.length
+                              : "—",
+                          })}
+                        </p>
+                        <SiteLink
                           className="spotlight-action"
-                          href={`/manager/quizz/${encodeURIComponent(games[0].id)}`}
+                          href="/studio/prepare"
                         >
-                          {t("Continue editing")} →
-                        </a>
+                          {t("Prepare show")} →
+                        </SiteLink>
                       </div>
                     </article>
-                  )}
-                </section>
-                <div className="section-head">
-                  <h2>{t("My Games")}</h2>
-                  <a className="text-link" href="/studio/games">
-                    {t("View all")} →
-                  </a>
-                </div>
-              </>
-            )}
-            {(section === "games" || section === "dashboard") && (
-              <>
-                {section === "games" && (
-                  <div className="pagehead">
-                    <h1>{t("My Games")}</h1>
+                    {games[0] && (
+                      <article className="spotlight editing">
+                        <div className="thumb">
+                          <img
+                            src="/tadazz-design-reference/marketing-stage.webp"
+                            alt=""
+                          />
+                        </div>
+                        <div className="spotlight-info">
+                          <h3>{games[0].subject}</h3>
+                          <p>{t("Pick up where you left off")}</p>
+                          <SiteLink
+                            className="spotlight-action"
+                            href={`/manager/quizz/${encodeURIComponent(games[0].id)}`}
+                          >
+                            {t("Continue editing")} →
+                          </SiteLink>
+                        </div>
+                      </article>
+                    )}
+                  </section>
+                  <div className="section-head">
+                    <h2>{t("My Games")}</h2>
+                    <SiteLink className="text-link" href="/studio/games">
+                      {t("View all")} →
+                    </SiteLink>
                   </div>
-                )}
-                {(() => {
-                  if (quizzes.isPending) {
-                    return <p role="status">{t("Loading your games…")}</p>
+                </>
+              )}
+              {(section === "games" || section === "dashboard") && (
+                <>
+                  {section === "games" && (
+                    <div className="pagehead">
+                      <h1>{t("My Games")}</h1>
+                    </div>
+                  )}
+                  {(() => {
+                    if (quizzes.isPending) {
+                      return <p role="status">{t("Loading your games…")}</p>
+                    }
+
+                    if (quizzes.isError) {
+                      return (
+                        <div className="empty" role="alert">
+                          <p>{t("Could not load your games")}</p>
+                          <SiteButton
+                            className="btn ghost"
+                            onClick={() => void quizzes.refetch()}
+                          >
+                            {t("Retry")}
+                          </SiteButton>
+                        </div>
+                      )
+                    }
+
+                    return (
+                      <MyGames
+                        key={section}
+                        games={games}
+                        search={search}
+                        limit={section === "dashboard" ? 3 : undefined}
+                        refresh={refreshGames}
+                      />
+                    )
+                  })()}
+                </>
+              )}
+              {section === "events" &&
+                (() => {
+                  if (results.isPending) {
+                    return <p role="status">{t("Please wait…")}</p>
                   }
 
-                  if (quizzes.isError) {
+                  if (results.isError) {
                     return (
-                      <div className="empty" role="alert">
-                        <p>{t("Could not load your games")}</p>
+                      <div role="alert">
+                        <p>
+                          {t(
+                            "Your request could not be completed. Please try again.",
+                          )}
+                        </p>
                         <SiteButton
                           className="btn ghost"
-                          onClick={() => void quizzes.refetch()}
+                          onClick={() => void results.refetch()}
                         >
                           {t("Retry")}
                         </SiteButton>
@@ -439,102 +493,67 @@ function StudioWorkspace({ account }: { account: Account }) {
                   }
 
                   return (
-                    <MyGames
-                      key={section}
-                      games={games}
-                      search={search}
-                      limit={section === "dashboard" ? 3 : undefined}
-                      refresh={refresh}
+                    <Events
+                      accountId={account.id}
+                      results={results.data.results}
+                      refresh={refreshResults}
                     />
                   )
                 })()}
-              </>
-            )}
-            {section === "events" &&
-              (() => {
-                if (results.isPending) {
-                  return <p role="status">{t("Please wait…")}</p>
-                }
+              {section === "prepare" &&
+                (() => {
+                  if (quizzes.isPending) {
+                    return <p role="status">{t("Loading your games…")}</p>
+                  }
 
-                if (results.isError) {
-                  return (
-                    <div role="alert">
-                      <p>
-                        {t(
-                          "Your request could not be completed. Please try again.",
-                        )}
-                      </p>
-                      <SiteButton
-                        className="btn ghost"
-                        onClick={() => void results.refetch()}
-                      >
-                        {t("Retry")}
-                      </SiteButton>
-                    </div>
-                  )
-                }
+                  if (quizzes.isError) {
+                    return <p role="alert">{t("Could not load your games")}</p>
+                  }
 
-                return (
-                  <Events
-                    accountId={account.id}
-                    results={results.data.results}
-                    refresh={refresh}
-                  />
-                )
-              })()}
-            {section === "prepare" &&
-              (() => {
-                if (quizzes.isPending) {
-                  return <p role="status">{t("Loading your games…")}</p>
-                }
-
-                if (quizzes.isError) {
-                  return <p role="alert">{t("Could not load your games")}</p>
-                }
-
-                return <Prepare games={games} />
-              })()}
-            {section === "explore" && (
-              <>
-                <div className="pagehead">
-                  <h1>{t("Explore Games")}</h1>
-                </div>
-                <p className="muted">
-                  {t(
-                    "Illustrative catalogue. Template installation is unavailable.",
-                  )}
-                </p>
-                <div className="games-grid">
-                  {["Ready to play", "Make it yours", "Start fresh"].map(
-                    (label, index) => (
-                      <article className="game-card" key={label}>
-                        <img
-                          className="site-game-cover"
-                          src={`/tadazz-design-reference/marketing-${index === 1 ? "worlds" : "stage"}.webp`}
-                          alt=""
-                        />
-                        <div className="site-game-body">
-                          <h3>{t(label)}</h3>
-                          <a
-                            className="btn ghost"
-                            href={
-                              index === 2 ? "/manager/quizz" : "/?view=store"
-                            }
-                          >
-                            {t(
-                              index === 2
-                                ? "Create game"
-                                : "Explore collection",
-                            )}
-                          </a>
-                        </div>
-                      </article>
-                    ),
-                  )}
-                </div>
-              </>
-            )}
-            {section === "account" && <AccountPanel account={account} />}
+                  return <Prepare games={games} />
+                })()}
+              {section === "explore" && (
+                <>
+                  <div className="pagehead">
+                    <h1>{t("Explore Games")}</h1>
+                  </div>
+                  <p className="muted">
+                    {t(
+                      "Illustrative catalogue. Template installation is unavailable.",
+                    )}
+                  </p>
+                  <div className="games-grid">
+                    {["Ready to play", "Make it yours", "Start fresh"].map(
+                      (label, index) => (
+                        <article className="game-card" key={label}>
+                          <img
+                            className="site-game-cover"
+                            src={`/tadazz-design-reference/marketing-${index === 1 ? "worlds" : "stage"}.webp`}
+                            alt=""
+                          />
+                          <div className="site-game-body">
+                            <h3>{t(label)}</h3>
+                            <SiteLink
+                              className="btn ghost"
+                              href={
+                                index === 2 ? "/manager/quizz" : "/?view=store"
+                              }
+                            >
+                              {t(
+                                index === 2
+                                  ? "Create game"
+                                  : "Explore collection",
+                              )}
+                            </SiteLink>
+                          </div>
+                        </article>
+                      ),
+                    )}
+                  </div>
+                </>
+              )}
+              {section === "account" && <AccountPanel account={account} />}
+            </Suspense>
           </main>
         </div>
         {help && (
@@ -544,12 +563,12 @@ function StudioWorkspace({ account }: { account: Account }) {
                 "Create or import a game in My Games. Edit it in the original editor, then open Prepare show to start a room.",
               )}
             </p>
-            <a className="btn ghost" href="/studio/legacy">
+            <SiteLink className="btn ghost" href="/studio/legacy">
               {t("Existing management tools")}
-            </a>
-            <a className="btn ghost" href="/game">
+            </SiteLink>
+            <SiteLink className="btn ghost" href="/game">
               {t("Join a game")}
-            </a>
+            </SiteLink>
           </SiteDialog>
         )}
       </div>

@@ -1,3 +1,4 @@
+import { SiteLink } from "../shared/SiteLink"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState, type SubmitEvent } from "react"
@@ -222,16 +223,16 @@ export function AccountGateway() {
       <style>{accountStyle}</style>
       <div className="account-page">
         <header className="account-header">
-          <a href="/" aria-label={t("Home")}>
+          <SiteLink href="/" aria-label={t("Home")}>
             <img
               src="/tadazz-design-reference/marketing-logo.webp"
               alt="TADAZZ!"
             />
-          </a>
-          <a className="account-back" href="/">
+          </SiteLink>
+          <SiteLink className="account-back" href="/">
             <ArrowLeft size={18} />
             {t("Back to website")}
-          </a>
+          </SiteLink>
         </header>
         <main className="account-main">
           <section className="account-card">

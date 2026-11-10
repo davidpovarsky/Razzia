@@ -107,3 +107,33 @@ test("real touch swipes scroll the public site on iPad portrait, landscape and p
     }
   }
 })
+
+test("site links preserve the document and only fingerprinted public assets are immutable", async ({
+  page,
+  request,
+}) => {
+  await page.goto("/")
+  await expect(
+    page.getByRole("heading", { name: "Make it a show.", exact: true }),
+  ).toBeVisible()
+  const stamp = await page.evaluate(() => performance.timeOrigin)
+  await page.getByRole("link", { name: "Log in", exact: true }).first().click()
+  await expect(page.getByLabel("Email address", { exact: true })).toBeVisible()
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(stamp)
+  await page.goBack()
+  await expect(
+    page.getByRole("heading", { name: "Make it a show.", exact: true }),
+  ).toBeVisible()
+  const script = await page
+    .locator("script[type=module][src]")
+    .first()
+    .getAttribute("src")
+  expect(script).toMatch(/^\/assets\//u)
+  const bundle = await request.get(script!)
+  expect(bundle.headers()["cache-control"]).toContain("immutable")
+  const shell = await request.get("/")
+  expect(shell.headers()["cache-control"]).toContain("no-store")
+  const privateApi = await request.get("/api/accounts/me")
+  expect(privateApi.status()).toBe(401)
+  expect(privateApi.headers()["cache-control"] ?? "").not.toContain("public")
+})

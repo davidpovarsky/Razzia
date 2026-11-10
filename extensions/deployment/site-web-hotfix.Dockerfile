@@ -5,4 +5,5 @@ ARG TADAZZ_SOURCE_REVISION
 LABEL org.opencontainers.image.revision=${TADAZZ_SOURCE_REVISION}
 LABEL com.tadazz.site.enabled="true"
 COPY web/ /app/web/
+COPY nginx-server.conf /etc/nginx/tadazz/server.conf
 RUN chmod -R a+rX /app/web

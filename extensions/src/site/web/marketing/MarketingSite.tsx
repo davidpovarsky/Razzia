@@ -1,8 +1,11 @@
+import marketing from "../../../../site-assets/marketing.css?inline"
+import { SiteLink } from "../shared/SiteLink"
 import { asset, catalogue, Cover, GameCard, type Game } from "./Catalogue"
 import { corrections } from "../../themes/corrections"
 import { Pricing } from "./Pricing"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState } from "react"
+import { useRouter, useRouterState } from "@tanstack/react-router"
 import { siteText as t, useSiteText } from "../../locales"
 import { SESSION_ROLES } from "@razzia/common/constants"
 import { getRole } from "@razzia/web/lib/session"
@@ -21,6 +24,10 @@ import {
 
 export function MarketingSite() {
   useSiteText()
+  const router = useRouter()
+  const searchString = useRouterState({
+    select: (state) => state.location.searchStr,
+  })
   const [view, setView] = useState(() => {
     const requested = new URLSearchParams(window.location.search).get("view")
 
@@ -46,7 +53,7 @@ export function MarketingSite() {
   const [notice, setNotice] = useState("")
   useEffect(() => {
     const onBack = () => {
-      const requested = new URLSearchParams(window.location.search).get("view")
+      const requested = new URLSearchParams(searchString).get("view")
       setView(
         requested &&
           ["store", "how", "pricing", "custom", "demo", "product"].includes(
@@ -57,16 +64,13 @@ export function MarketingSite() {
       )
       setSelected(
         catalogue.find(
-          (game) =>
-            game.id === new URLSearchParams(window.location.search).get("game"),
+          (game) => game.id === new URLSearchParams(searchString).get("game"),
         ) ?? catalogue[0],
       )
       window.scrollTo(0, 0)
     }
-    window.addEventListener("popstate", onBack)
-
-    return () => window.removeEventListener("popstate", onBack)
-  }, [])
+    onBack()
+  }, [searchString])
 
   const go = (page: string, gameId?: string) => {
     setView(page)
@@ -74,13 +78,13 @@ export function MarketingSite() {
     setNotice("")
     setChoice(null)
     setShowSampleResults(false)
-    window.history.pushState(
-      null,
-      "",
-      page === "home"
-        ? "/"
-        : `/?view=${encodeURIComponent(page)}${gameId ? `&game=${encodeURIComponent(gameId)}` : ""}`,
-    )
+    void router.navigate({
+      to: "/",
+      search:
+        page === "home"
+          ? {}
+          : { view: page, ...(gameId ? { game: gameId } : {}) },
+    })
     window.scrollTo(0, 0)
   }
   const open = (game: Game) => {
@@ -115,13 +119,13 @@ export function MarketingSite() {
     ))
 
   return (
-    <ReferenceCanvas variant="marketing">
+    <ReferenceCanvas variant="marketing" styles={marketing}>
       <style>{corrections}</style>
       <header className="site-header">
         <div className="wide header-inner">
-          <a className="brand" href="/">
+          <SiteLink className="brand" href="/">
             <img src={asset("logo")} alt="TADAZZ!" />
-          </a>
+          </SiteLink>
           <nav className="header-links" aria-label={t("Main navigation")}>
             {nav}
           </nav>
@@ -134,18 +138,18 @@ export function MarketingSite() {
               {t("Try a round")}
             </SiteButton>
             {getRole() === SESSION_ROLES.MANAGER ? (
-              <a className="text-btn" href="/studio">
+              <SiteLink className="text-btn" href="/studio">
                 {t("My Studio")}
-              </a>
+              </SiteLink>
             ) : (
               <>
-                <a className="text-btn" href="/login">
+                <SiteLink className="text-btn" href="/login">
                   {t("Log in")}
-                </a>
-                <a className="btn btn-outline" href="/signup">
+                </SiteLink>
+                <SiteLink className="btn btn-outline" href="/signup">
                   {t("Sign up")}
                   <ArrowRight size={14} />
-                </a>
+                </SiteLink>
               </>
             )}
             <SiteButton
@@ -165,17 +169,17 @@ export function MarketingSite() {
               {t("Try a round")}
             </SiteButton>
             {getRole() === SESSION_ROLES.MANAGER ? (
-              <a className="text-btn" href="/studio">
+              <SiteLink className="text-btn" href="/studio">
                 {t("My Studio")}
-              </a>
+              </SiteLink>
             ) : (
               <>
-                <a className="text-btn" href="/login">
+                <SiteLink className="text-btn" href="/login">
                   {t("Log in")}
-                </a>
-                <a className="btn btn-primary" href="/signup">
+                </SiteLink>
+                <SiteLink className="btn btn-primary" href="/signup">
                   {t("Create an account")}
-                </a>
+                </SiteLink>
               </>
             )}
           </nav>
@@ -713,7 +717,7 @@ export function MarketingSite() {
             <SiteButton className="text-btn" onClick={() => go("demo")}>
               {t("Try a round")}
             </SiteButton>
-            <a href="/studio">{t("My Studio")}</a>
+            <SiteLink href="/studio">{t("My Studio")}</SiteLink>
           </div>
         </div>
         <div className="wrap footer-bottom">

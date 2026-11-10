@@ -1,8 +1,8 @@
+import { SiteLink } from "../shared/SiteLink"
 import { useTranslation } from "react-i18next"
 import { SiteButton } from "../shared/SiteButton"
 import { useState } from "react"
 import { useQuery } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
 import type { GameResult } from "@razzia/common/types/game"
 import { STATUS } from "@razzia/common/types/game/status"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
@@ -49,9 +49,9 @@ export function Events({
     <>
       <div className="section-head">
         <h1>{t("My Events")}</h1>
-        <a className="btn primary" href="/studio/prepare">
+        <SiteLink className="btn primary" href="/studio/prepare">
           {t("Prepare show")}
-        </a>
+        </SiteLink>
       </div>
       {gameId && (
         <section className="editor-panel">
@@ -61,18 +61,18 @@ export function Events({
               "Sessions live in memory. The host verifies availability when you reopen one.",
             )}
           </p>
-          <a
+          <SiteLink
             className="btn ghost"
             href={`/party/manager/${encodeURIComponent(gameId)}`}
           >
             {t("Open host")}
-          </a>
-          <a
+          </SiteLink>
+          <SiteLink
             className="btn ghost"
             href={`/display/${encodeURIComponent(gameId)}`}
           >
             {t("Open presenter")}
-          </a>
+          </SiteLink>
         </section>
       )}
       <h2>{t("Past events")}</h2>
@@ -180,7 +180,6 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
   )
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState(false)
-  const navigate = useNavigate()
   const { updateManager } = useManagerStore()
   const start = async () => {
     if (busy || !selected) {
@@ -206,7 +205,7 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
           inviteCode,
         }),
       })
-      await navigate({ to: "/party/manager/$gameId", params: { gameId } })
+      window.location.assign(`/party/manager/${encodeURIComponent(gameId)}`)
     } catch {
       setError(true)
       setBusy(false)
@@ -253,9 +252,9 @@ export function Prepare({ games }: { games: QuizMeta[] }) {
           </p>
         )}
         {!games.length && (
-          <a className="btn ghost" href="/manager/quizz">
+          <SiteLink className="btn ghost" href="/manager/quizz">
             {t("Create game")}
-          </a>
+          </SiteLink>
         )}
       </section>
     </>

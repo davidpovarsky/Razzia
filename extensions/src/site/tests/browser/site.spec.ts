@@ -3,6 +3,14 @@ import { join } from "node:path"
 import { fileURLToPath } from "node:url"
 import { test, expect, devices, type Page } from "@playwright/test"
 import { swipePage } from "../../../../qa/site-touch"
+import { createPackageFixture } from "../../../../src/testkit/package-fixtures"
+import { packageSha } from "../../../../src/server/packages/archive"
+import {
+  startGame,
+  next as nextQuestion,
+} from "../../../../../packages/e2e/utils/manager"
+import { joinGame, answer } from "../../../../../packages/e2e/utils/player"
+import { t as hostText } from "../../../../../packages/e2e/utils/i18n"
 const evidence = fileURLToPath(
   new URL(
     "../../../../../docs/extensions/qa-evidence/unified-site-20261110/",
@@ -42,6 +50,259 @@ async function register(page: Page, address: string) {
 }
 
 test.beforeAll(() => mkdirSync(evidence, { recursive: true }))
+
+test("Studio keeps navigation warm, protects initial verification and styles actual package actions", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  const address = email()
+  await register(page, address)
+  const stamp = await page.evaluate(() => performance.timeOrigin)
+  const navigationStarted = Date.now()
+  const visited: string[] = []
+  page.on("request", (request) => visited.push(new URL(request.url()).pathname))
+  await page.getByRole("link", { name: "My Games", exact: true }).click()
+  await expect(
+    page.getByRole("heading", { name: "My Games", exact: true }),
+  ).toBeVisible()
+  await expect(page.getByTestId("package-manager")).toBeVisible()
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(stamp)
+  expect(visited.filter((path) => path === "/api/accounts/me")).toHaveLength(0)
+  writeFileSync(
+    join(evidence, "audit-navigation.json"),
+    JSON.stringify(
+      {
+        fullDocumentReloads: 0,
+        extraProfileRequests: 0,
+        dashboardToGamesMs: Date.now() - navigationStarted,
+        origin: "isolated local production build",
+      },
+      null,
+      2,
+    ),
+  )
+
+  const fixture = createPackageFixture(
+    "game",
+    `site-package-${Date.now()}`,
+    "1.0.0",
+  )
+  await page.getByTestId("package-file-input").setInputFiles({
+    name: "site-fixture.tadazz",
+    mimeType: "application/octet-stream",
+    buffer: fixture.bytes,
+  })
+  await expect(page.getByTestId("package-preflight")).toBeVisible()
+  const built = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/build") &&
+      response.request().method() === "POST",
+  )
+  await page.getByRole("button", { name: "Build preview", exact: true }).click()
+  expect((await built).ok()).toBe(true)
+  const token = await page.evaluate(() => localStorage.getItem("token"))
+  const claims = JSON.parse(
+    Buffer.from(token!.split(".")[1], "base64url").toString(),
+  ) as { sub: string }
+  const headers = { Authorization: `Bearer ${token}` }
+  const catalog = (await (
+    await page.request.get("/api/packages", { headers })
+  ).json()) as { packages: Array<{ upload: string }> }
+  const [{ upload }] = catalog.packages
+  const receipt = (await (
+    await page.request.get(`/api/packages/uploads/${upload}`, { headers })
+  ).json()) as { sourceDigest: string }
+  // Local worker attestation fixture, as in the existing PackageStore tests.
+  // No production data, code execution or claim of real ffmpeg validation here.
+  const job = fileURLToPath(
+    new URL(
+      `../../../../.site-test-config/extensions/packages/${packageSha(claims.sub)}/jobs/${upload}/`,
+      import.meta.url,
+    ),
+  )
+  const output = Buffer.from("{}")
+  writeFileSync(join(job, "bundle.json"), output)
+  writeFileSync(
+    join(job, "result.json"),
+    JSON.stringify({
+      sourceDigest: receipt.sourceDigest,
+      outputDigest: packageSha(output),
+      mediaValidated: true,
+    }),
+  )
+  await expect(
+    page.getByRole("button", { name: "Install selected", exact: true }),
+  ).toBeEnabled({ timeout: 15000 })
+  await page
+    .getByRole("button", { name: "Install selected", exact: true })
+    .click()
+  await expect(
+    page
+      .getByTestId("package-manager")
+      .getByText("Installed privately", { exact: true })
+      .first(),
+  ).toBeVisible()
+  const button = page
+    .getByTestId("package-manager")
+    .getByRole("button", { name: "Export package", exact: true })
+  await expect(button).toHaveCSS("background-color", "rgb(229, 255, 57)")
+  const download = page.waitForEvent("download")
+  await button.click()
+  expect((await download).suggestedFilename()).toMatch(/\.tadazz$/u)
+  await page.setViewportSize({ width: 1024, height: 768 })
+  await page
+    .getByTestId("package-manager")
+    .screenshot({ path: `${evidence}/packages-restyled-1024.png` })
+  await page.setViewportSize({ width: 390, height: 844 })
+  await expect
+    .poll(() =>
+      page
+        .locator("aside.sidebar")
+        .evaluate((element) => element.getBoundingClientRect().right),
+    )
+    .toBeLessThanOrEqual(0)
+  await page
+    .getByTestId("package-manager")
+    .screenshot({ path: `${evidence}/packages-restyled-390.png` })
+  const bounds = await page.getByTestId("package-manager").evaluate((panel) => {
+    const parent = panel.getBoundingClientRect()
+
+    return [...panel.querySelectorAll("h2,p,button,label,li")].map(
+      (element) => ({
+        right: element.getBoundingClientRect().right,
+        left: element.getBoundingClientRect().left,
+        parentRight: parent.right,
+        parentLeft: parent.left,
+      }),
+    )
+  })
+  expect(
+    bounds.every(
+      (element) =>
+        element.right <= element.parentRight + 1 &&
+        element.left >= element.parentLeft - 1,
+    ),
+  ).toBe(true)
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  const mobile = await browser.newContext({
+    baseURL,
+    viewport: { width: 390, height: 844 },
+  })
+
+  try {
+    await mobile.addInitScript(
+      (value) => localStorage.setItem("token", value),
+      token!,
+    )
+    const phone = await mobile.newPage()
+    await phone.goto("/studio/games")
+    await phone
+      .getByTestId("package-manager")
+      .locator("ul li")
+      .first()
+      .getByRole("button")
+      .first()
+      .click()
+    await expect(phone.getByTestId("package-preflight")).toBeVisible()
+    await phone
+      .getByTestId("package-manager")
+      .screenshot({ path: `${evidence}/packages-mobile-direct.png` })
+    const textFits = await phone
+      .getByTestId("package-manager")
+      .evaluate((panel) =>
+        [...panel.querySelectorAll("h2,p,button")].every(
+          (element) => element.scrollWidth <= element.clientWidth + 1,
+        ),
+      )
+    expect(textFits).toBe(true)
+  } finally {
+    await mobile.close()
+  }
+
+  await page
+    .getByRole("link", { name: "My account", exact: true })
+    .first()
+    .click()
+  await expect(
+    page.getByRole("heading", { name: "Account & licences", exact: true }),
+  ).toBeVisible()
+  expect(await page.evaluate(() => performance.timeOrigin)).toBe(stamp)
+  await page.route("**/api/accounts/me", async (route) => {
+    await new Promise((resolve) => {
+      setTimeout(resolve, 700)
+    })
+    await route.continue()
+  })
+  await page.reload({ waitUntil: "domcontentloaded" })
+  await expect(page.getByTestId("studio-loading")).toBeVisible()
+  await expect(page.getByText(address, { exact: true })).toHaveCount(0)
+  await expect(
+    page.getByRole("heading", { name: "Account & licences", exact: true }),
+  ).toBeVisible()
+})
+
+test("split native entry reconnects a real host, display and PIN player and accepts answers", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  await register(page, email())
+  const token = await page.evaluate(() => localStorage.getItem("token"))
+  const saved = await page.request.post("/api/quizz", {
+    headers: { Authorization: `Bearer ${token}` },
+    data: {
+      subject: "Native connection audit",
+      gameMode: "quiz",
+      questions: [
+        {
+          type: "single",
+          question: "Connected?",
+          answers: ["Yes", "No"],
+          solutions: [0],
+          cooldown: 3,
+          time: 60,
+        },
+      ],
+    },
+  })
+  expect(saved.ok()).toBe(true)
+  const { id } = (await saved.json()) as { id: string }
+  await page.goto(`/studio/prepare?quiz=${encodeURIComponent(id)}`)
+  await page
+    .getByRole("button", { name: "Open show room", exact: true })
+    .click()
+  await expect(page).toHaveURL(/\/party\/manager\//u)
+  const pin = page.getByText(/^\d{6}$/u)
+  await expect(pin).toBeVisible()
+  const inviteCode = (await pin.textContent())!.trim()
+  const gameId = new URL(page.url()).pathname.split("/").at(-1)
+  const playerContext = await browser.newContext({ baseURL })
+  const displayContext = await browser.newContext({ baseURL })
+
+  try {
+    const player = await playerContext.newPage()
+    const display = await displayContext.newPage()
+    await display.goto(`/display/${gameId}`)
+    await expect(display.getByText(inviteCode, { exact: true })).toBeVisible()
+    await joinGame(player, inviteCode, "Audit player")
+    await expect(page.getByText("Audit player", { exact: true })).toBeVisible()
+    await startGame(page)
+    await answer(player, "Yes")
+    await expect(
+      player.getByText(hostText("game:correct"), { exact: true }),
+    ).toBeVisible()
+    await nextQuestion(page)
+  } finally {
+    await playerContext.close()
+    await displayContext.close()
+  }
+})
 
 test("touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact", async ({
   browser,

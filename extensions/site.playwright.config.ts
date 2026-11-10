@@ -22,6 +22,8 @@ export default defineConfig({
     ],
   ],
   use: {
+    actionTimeout: 15000,
+    navigationTimeout: 30000,
     baseURL: "http://127.0.0.1:4310",
     locale: "en-US",
     trace: "retain-on-failure",
@@ -42,6 +44,7 @@ export default defineConfig({
         CONFIG_PATH: join(root, "extensions/.site-test-config"),
         SOCKET_PORT: "4311",
         TADAZZ_ACCOUNTS_ENABLED: "true",
+        TADAZZ_PACKAGE_INSTALLER_ENABLED: "true",
         TADAZZ_PACKAGE_RUNTIME_ENABLED: "true",
         JWT_SECRET: "isolated-site-test-secret-at-least-32-characters",
         RESEND_API_KEY: "local-test-mail-only",

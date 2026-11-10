@@ -51,7 +51,7 @@ export async function siteRequest<T>(
     cache: "no-store",
   })
 
-  if (response.status === 401) {
+  if (response.status === 401 && getToken() === token) {
     clearToken()
   }
 

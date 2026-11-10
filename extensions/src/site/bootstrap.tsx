@@ -7,18 +7,38 @@ import Button from "@razzia/web/components/Button"
 import Toaster from "@razzia/web/components/Toaster"
 import { PlatformControlsProvider } from "@razzia/extensions/presentation/platform-controls"
 import { socketClient } from "@razzia/web/features/game/contexts/socket-context"
-import { routeTree } from "@razzia/web/route.gen"
+import { Route as rootRoute } from "@razzia/web/pages/__root"
 import {
   createRoute,
   createRouter,
   RouterProvider,
   type AnyRoute,
+  lazyRouteComponent,
+  redirect,
 } from "@tanstack/react-router"
 import { createRoot } from "react-dom/client"
 import { StrictMode, useEffect } from "react"
-import { MarketingSite } from "./web/marketing/MarketingSite"
-import { AccountGateway } from "./web/account/AccountGateway"
-import { Studio } from "./web/studio/Studio"
+import { SiteLoading } from "./web/shared/SiteLoading"
+import { hasManagerSession } from "./adapters/client"
+
+const MarketingSite = lazyRouteComponent(
+  () => import("./web/marketing/MarketingSite"),
+  "MarketingSite",
+)
+const AccountGateway = lazyRouteComponent(
+  () => import("./web/account/AccountGateway"),
+  "AccountGateway",
+)
+const Studio = lazyRouteComponent(() => import("./web/studio/Studio"), "Studio")
+// The generated native tree eagerly imports the editor, XLSX, show and checkout.
+// Load it only for native entry paths. Site -> native links use normal navigation.
+const nativeEntry = /^\/(?:manager|party|display|game)(?:\/|$)/u.test(
+  window.location.pathname,
+)
+const branding = loadBranding()
+const routeTree: AnyRoute = nativeEntry
+  ? (await import("@razzia/web/route.gen")).routeTree
+  : rootRoute
 
 // Generated routes remain unmodified. Compose with public router APIs, once,
 // before creating the router. Legacy manager/editor/game children are retained.
@@ -87,6 +107,18 @@ const routes = pages.map((path) =>
   createRoute({
     getParentRoute: () => routeTree,
     path,
+    beforeLoad: path.includes("studio")
+      ? ({ location }) => {
+          if (!hasManagerSession()) {
+            return redirect({
+              to: "/login",
+              search: () => ({ returnTo: location.pathname }),
+              replace: true,
+              throw: true,
+            })
+          }
+        }
+      : undefined,
     component: (() => {
       if (path.includes("studio")) {
         return Studio
@@ -100,10 +132,43 @@ const routes = pages.map((path) =>
     })(),
   }),
 )
-const composedTree = routeTree.addChildren([...children, home, ...routes])
+// Original manager hooks also navigate imperatively after imports. Reload those
+// native entry paths into their unchanged route tree, without eagerly loading it.
+const nativeBridges = nativeEntry
+  ? []
+  : [
+      "/manager",
+      "/manager/config",
+      "/manager/quizz",
+      "/manager/quizz/$quizzId",
+      "/manager/checkout",
+      "/manager/themes/$tenantId/$artifactId",
+      "/game",
+      "/party/$gameId",
+      "/party/manager/$gameId",
+      "/display/$gameId",
+    ].map((path) =>
+      createRoute({
+        getParentRoute: () => routeTree,
+        path,
+        beforeLoad: ({ location }) => {
+          window.location.replace(location.href)
+        },
+        component: SiteLoading,
+      }),
+    )
+const composedTree = routeTree.addChildren([
+  ...children,
+  home,
+  ...routes,
+  ...nativeBridges,
+])
 const router = createRouter({
   routeTree: composedTree,
   context: { socket: socketClient },
+  defaultPendingComponent: SiteLoading,
+  defaultPendingMs: 150,
+  defaultPendingMinMs: 0,
 })
 const root = document.getElementById("root")
 
@@ -111,7 +176,12 @@ if (!root) {
   throw new Error("Root element not found")
 }
 
-applyBranding(await loadBranding())
+if (nativeEntry) {
+  applyBranding(await branding)
+} else {
+  void branding.then(applyBranding)
+}
+
 createRoot(root).render(
   <StrictMode>
     <PlatformControlsProvider Button={Button}>

@@ -1,3 +1,4 @@
+import { SiteLink } from "../shared/SiteLink"
 import { useQuery } from "@tanstack/react-query"
 import type { BillingSnapshot } from "@razzia/extensions/core"
 import i18n from "i18next"
@@ -52,9 +53,9 @@ export function AccountPanel({ account }: { account: Account }) {
             ))}
           </select>
         </label>
-        <a className="btn ghost" href="/forgot">
+        <SiteLink className="btn ghost" href="/forgot">
           {t("Reset password")}
-        </a>
+        </SiteLink>
       </section>
       <section className="editor-panel">
         <h2>{t("Licences & capacity")}</h2>
@@ -76,9 +77,9 @@ export function AccountPanel({ account }: { account: Account }) {
             </article>
           ))}
         {capacity.data?.configured && (
-          <a className="btn ghost" href="/studio/legacy">
+          <SiteLink className="btn ghost" href="/studio/legacy">
             {t("Existing account management")}
-          </a>
+          </SiteLink>
         )}
         <p className="muted">
           {t(

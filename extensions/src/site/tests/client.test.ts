@@ -3,13 +3,15 @@ vi.mock("@razzia/web/lib/session", () => ({
   clearToken: vi.fn(),
   getClientId: () => "alice",
   getRole: () => "manager",
-  getToken: () => "secret-test-token",
+  getToken: vi.fn(() => "secret-test-token"),
 }))
-import { clearToken } from "@razzia/web/lib/session"
+import { clearToken, getToken } from "@razzia/web/lib/session"
 import { safeReturnTo, siteKey, siteRequest } from "../adapters/client"
 
 beforeEach(() => {
   vi.restoreAllMocks()
+  vi.clearAllMocks()
+  vi.mocked(getToken).mockReturnValue("secret-test-token")
 })
 describe("site security boundaries", () => {
   it("allows only local Studio and existing editor return routes", () => {
@@ -69,6 +71,26 @@ describe("site security boundaries", () => {
       siteRequest("/api/quizz", { method: "POST", body: "{}" }),
     ).rejects.toMatchObject({ status: 401 })
     expect(clearToken).toHaveBeenCalled()
+    vi.unstubAllGlobals()
+  })
+  it("does not erase a new login when an older session request returns 401 late", async () => {
+    let finish: (response: Response) => void = () => undefined
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(
+        () =>
+          new Promise<Response>((resolve) => {
+            finish = resolve
+          }),
+      ),
+    )
+    const oldRequest = siteRequest("/api/quizz")
+    vi.mocked(getToken).mockReturnValue("new-account-session")
+    finish(
+      new Response(JSON.stringify({ error: "unauthorized" }), { status: 401 }),
+    )
+    await expect(oldRequest).rejects.toMatchObject({ status: 401 })
+    expect(clearToken).not.toHaveBeenCalled()
     vi.unstubAllGlobals()
   })
 })
