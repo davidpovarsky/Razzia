@@ -35,3 +35,9 @@ Session checkpoint: dependencies installed with frozen lockfile, no lock changes
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
 No application implementation yet. TDS-01 is the next exact action.
+
+TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
+Checkpoint follow-up removes trailing whitespace from copied QA logs (their
+messages/results are unchanged), records the local guard output and Asana sync.
+Initial staged whitespace check flagged only those copied log spaces; the
+follow-up check passes. The raw server logs remain in the isolated QA directory.
