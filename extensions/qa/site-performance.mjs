@@ -134,7 +134,7 @@ try {
           0,
         ),
         scriptDecodedBytes: metrics.resources
-          .filter((resource) => resource.type === "script")
+          .filter((resource) => /\.m?js$/u.test(resource.path))
           .reduce((sum, resource) => sum + resource.decodedBytes, 0),
         taskDurationSeconds: cdp.metrics.find(
           (metric) => metric.name === "TaskDuration",

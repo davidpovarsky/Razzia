@@ -48,7 +48,7 @@ const siteComposition = (): Plugin => ({
   },
   transformIndexHtml: {
     order: "pre",
-    handler: (html) => ({
+    handler: (html: string) => ({
       html: html.replace(
         'src="/src/main.tsx"',
         `src="/@fs/${entry.replaceAll("\\", "/")}"`,
@@ -72,7 +72,7 @@ const siteComposition = (): Plugin => ({
     server.middlewares.use("/tadazz-design-reference", (req, res, next) => {
       const filename = (req.url ?? "").split("?")[0].slice(1)
 
-      if (!/^[a-z0-9-]+\.(?:css|webp|svg)$/u.test(filename)) {
+      if (!/^[a-z0-9-]+\.(?:css|webp|svg|png)$/u.test(filename)) {
         return next()
       }
 
@@ -86,6 +86,10 @@ const siteComposition = (): Plugin => ({
 
             if (filename.endsWith(".svg")) {
               return "image/svg+xml"
+            }
+
+            if (filename.endsWith(".png")) {
+              return "image/png"
             }
 
             return "image/webp"
@@ -107,7 +111,22 @@ const siteComposition = (): Plugin => ({
 export default defineConfig(
   mergeConfig(webConfig, {
     root: web,
-    plugins: enabled ? [siteComposition()] : [],
+    plugins: enabled
+      ? [
+          siteComposition(),
+          {
+            name: "tadazz-small-browser-icon",
+            transformIndexHtml: {
+              order: "post",
+              handler: (html: string) =>
+                html.replace(
+                  'href="/tadazz-favicon-z-20261108.png"',
+                  'href="/tadazz-design-reference/favicon-z-64-20261110.png"',
+                ),
+            },
+          },
+        ]
+      : [],
     server: { host: "127.0.0.1" },
     preview: { host: "127.0.0.1" },
   }),
