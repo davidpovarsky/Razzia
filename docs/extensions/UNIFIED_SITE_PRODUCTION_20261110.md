@@ -1,11 +1,14 @@
 # Unified TADAZZ site — production deployment, 10 November 2026
 
-> **Later hotfix:** the owner's iPad scrolling report was fixed and deployed
-> without restarting the application. Current public entry is
-> `/assets/index-Ce9j7yUX.js`; future recreates must use
-> `tadazz:site-touch-db15399` (`sha256:99f0d83cb4277c2dd852db4f3a17156a11be476c21fee6220c383ae29cb2991a`).
-> See [touch scrolling release](SITE_TOUCH_SCROLL_20261110.md). The release table
-> below describes the initial deployment and remains historical evidence.
+> **Current release, 17:42 UTC:** Studio styling, loading/navigation improvements,
+> asset caching and a small favicon are deployed, including the earlier touch fix.
+> Current public entry is `/assets/index-I6QCz3Vn.js`. Future recreates must use
+> `tadazz:site-audit-final-ba64f49`
+> (`sha256:8bc2c0dc796151f0e9b8584773a980142bebdb0e14b30e704d3f207505196c2a`).
+> See the [Hebrew review and current deployment evidence](SITE_REVIEW_HE_20261110.md).
+> The running container was hot-patched without restarting its socket process;
+> its original base-image ID remains unchanged. The release table below describes
+> the initial deployment and remains historical evidence.
 
 The owner explicitly instructed **"בצע פריסה"** after receiving the implementation
 handoff and its known baseline test limitation. The unified site is now live at

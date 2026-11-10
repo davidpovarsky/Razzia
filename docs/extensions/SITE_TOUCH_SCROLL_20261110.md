@@ -1,5 +1,13 @@
 # Site touch scrolling — fixed and deployed, 10 November 2026
 
+> **Superseding release:** the scrolling fix is included in the later Studio and
+> performance update. For future container recreation use
+> `tadazz:site-audit-final-ba64f49`
+> (`sha256:8bc2c0dc796151f0e9b8584773a980142bebdb0e14b30e704d3f207505196c2a`),
+> public entry `/assets/index-I6QCz3Vn.js`. See the
+> [current review](SITE_REVIEW_HE_20261110.md). The earlier image and entry below
+> are retained as historical evidence of the touch-only deployment.
+
 The owner's iPad report was reproduced on production with trusted compositor
 touch input: an upward swipe left `window.scrollY` at **0**. The original HTML
 sets `touch-none` on `body` for the game. The new site's ShadowRoot styles could

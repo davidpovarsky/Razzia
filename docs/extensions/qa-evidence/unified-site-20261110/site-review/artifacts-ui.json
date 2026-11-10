@@ -1,0 +1,239 @@
+{
+  "sourceRevision": "3fe09557d1e1a4623496a2d287db6995dd0ff3c9",
+  "baseImage": "sha256:99f0d83cb4277c2dd852db4f3a17156a11be476c21fee6220c383ae29cb2991a",
+  "expectedContainer": "96e9a2b4c3f42edb6e4618309475b2893aa7e5d814fdb8527e5ed0220c554fb1",
+  "previousIndexSha256": "901b4aa669f33d91e5fe63fc88f584288c4979a4aba49199163f4dd03ec91fb8",
+  "nginxSha256": "17e42c8281fd9a0f673e87332f02f6130e8f471a4a977b0bba26389ef083ea7f",
+  "files": [
+    {
+      "path": "web/assets/AccountGateway-DJajLtKc.js",
+      "sha256": "2bc1651534c9cb6c2704841861fe26ba1c2f5b9ed789111884f150e9bf6d6c9c",
+      "bytes": 9496
+    },
+    {
+      "path": "web/assets/api-lcBKHecz.js",
+      "sha256": "c68edd895480ff6803dc3eb4ab96cb2f3f0940223d80efe4afbd1e93ccdd0198",
+      "bytes": 71360
+    },
+    {
+      "path": "web/assets/arrow-left-HE-n_rub.js",
+      "sha256": "bce8e81853541de3328aaddf3999952edf0a4319c98caba2d052ee7d9023d075",
+      "bytes": 205
+    },
+    {
+      "path": "web/assets/arrow-right-CHL9Baz1.js",
+      "sha256": "5830ceba19b24ad39390a6d9d1b19ad6e96f737318734efd1712299d389de528",
+      "bytes": 205
+    },
+    {
+      "path": "web/assets/Button-D8V7jXyY.js",
+      "sha256": "0b4205412130ef665f24082d730b4284830e996b3292d88e5e833344fad89a47",
+      "bytes": 122464
+    },
+    {
+      "path": "web/assets/Card-CMV3Dz_B.js",
+      "sha256": "0d3baa34320d987ca57c5461c136cbec39d1432611dc265821e302f10cd767da",
+      "bytes": 318
+    },
+    {
+      "path": "web/assets/circle-x-DXctpfUq.js",
+      "sha256": "a1aefe423019031c2a97e41f5cc10231ba93ddfd4a89cd9edb0d4a09e93e2929",
+      "bytes": 493
+    },
+    {
+      "path": "web/assets/client-C48MGrC7.js",
+      "sha256": "54cb1907cd171335a2fee49fb041912d2187a0451ddf8f7196cc80bb80de2045",
+      "bytes": 1147
+    },
+    {
+      "path": "web/assets/corrections-Bo_5Q__U.js",
+      "sha256": "0b2a77de69b73076e3e5cc7429d76afb1e52576a281b540c1a6d4b9dccbbcf0c",
+      "bytes": 1392
+    },
+    {
+      "path": "web/assets/createLucideIcon-Dl_l28jn.js",
+      "sha256": "9efcc94f1e691cc694f4e49e11681a34ebac9e4313348e97ac3e901e2be69685",
+      "bytes": 20558
+    },
+    {
+      "path": "web/assets/Dialog-Cv2mwnv3.js",
+      "sha256": "918114a8c82d4144d00dfc0c7d063a8ba8dd54c21c1f53013eccaa57265049ca",
+      "bytes": 1064
+    },
+    {
+      "path": "web/assets/dist-CpE0MYYZ.js",
+      "sha256": "242d07048f5df154a22788cee2b3f80b24f2a2f8e4f33cd76b7dad5887fdd3c0",
+      "bytes": 20112
+    },
+    {
+      "path": "web/assets/dist-DPUW9B6B.js",
+      "sha256": "5124d262276f269740ef2317b80fd6a66d800d859c343027fec026dd9a5a6e6b",
+      "bytes": 35824
+    },
+    {
+      "path": "web/assets/Events-QRBlu3Kh.js",
+      "sha256": "a1059414a967bb21ad3a50f14afd64139da269d7a9a6845b8b10677aedc57db1",
+      "bytes": 4565
+    },
+    {
+      "path": "web/assets/index-I6QCz3Vn.js",
+      "sha256": "9224800e9d0ced8460c051d32781bd7a5da7d07757882185404891836c0015ef",
+      "bytes": 218257
+    },
+    {
+      "path": "web/assets/index-_GVNxlLJ.css",
+      "sha256": "3bc838a0f674eeadffeaa4e3d0d64d95f4fc76b3714b9f2c2687e7547da6d0ac",
+      "bytes": 123566
+    },
+    {
+      "path": "web/assets/LegacyTools-DN-NFivX.js",
+      "sha256": "278cc1240e1c6bcc1e737493bdd679332415269d4e2a62c6887ee7b0451353a3",
+      "bytes": 462
+    },
+    {
+      "path": "web/assets/locales-l2oncJal.js",
+      "sha256": "3ad580c5905eded279ab5ca3c9712b682e51347f5a33d4d1147b42ca6c5dfb2e",
+      "bytes": 564780
+    },
+    {
+      "path": "web/assets/manager-D_TgYV0Z.js",
+      "sha256": "90bc92455c14e9437fac8280f8ab59a9113653b508951b6f205e0b9a71630059",
+      "bytes": 891
+    },
+    {
+      "path": "web/assets/ManagerAuthBackground-DE4UpwMX.js",
+      "sha256": "03cc7ad4df47169ca84892416050e64247a2dd3b9871f8903530503aab73b4a1",
+      "bytes": 18257
+    },
+    {
+      "path": "web/assets/MarketingSite-CJiVA6qK.js",
+      "sha256": "45eeabf01b33f580458bcaa676abd7bf75c0fabb9b0eceb53e5a5446cb56ea28",
+      "bytes": 90879
+    },
+    {
+      "path": "web/assets/MyGames-BgY5RyR0.js",
+      "sha256": "6e519b51c1da6ec389ff67666879cb0c0522d3fc2d9a053bf96213296fddd14b",
+      "bytes": 8709
+    },
+    {
+      "path": "web/assets/PackageManager-Cv79aZxo.js",
+      "sha256": "31d9f2bb6518a6c743ee406ea620346258d8924df3e235a0f51d276094ca702f",
+      "bytes": 62
+    },
+    {
+      "path": "web/assets/PackageManager-DeJ4Lali.js",
+      "sha256": "0e2c287f74ebb884f1b72932d55d2ee5a23fbdc1ff36bc366f1e071cbccc4170",
+      "bytes": 13622
+    },
+    {
+      "path": "web/assets/play-D48Xr4me.js",
+      "sha256": "4039703b249c80ad3197c8ea576c7b1639e970891ff63697f8b3f000e3e5d367",
+      "bytes": 230
+    },
+    {
+      "path": "web/assets/preload-helper-C8O7Ckvh.js",
+      "sha256": "50a404cff1d0b1ab1422bdc09555da33be8c089c23c2aaf57ee0b31842b90b0f",
+      "bytes": 8666
+    },
+    {
+      "path": "web/assets/presentation-0IiP9t3i.css",
+      "sha256": "c4121ab832e6ce8f00638208adc3954da21962b0cdad9ca6271bc74b9b628323",
+      "bytes": 164913
+    },
+    {
+      "path": "web/assets/presentation-BgEh0jZQ.js",
+      "sha256": "6cc43788d440d4b612c3fd65eb9f4391922c58012c40f957e862eb7d7138378b",
+      "bytes": 1003002
+    },
+    {
+      "path": "web/assets/query-sD_nJkaD.js",
+      "sha256": "67e09af69e568d79593ced96c892ab82a41894b2278dff776c1e7e023a532477",
+      "bytes": 7622
+    },
+    {
+      "path": "web/assets/QueryClientProvider-Dkr_17v5.js",
+      "sha256": "f0cae12bdfefff0a0f7484489b9bc7de454590575df283cdca9a939af1508f2d",
+      "bytes": 11934
+    },
+    {
+      "path": "web/assets/react-Cxpz1Ypv.js",
+      "sha256": "f093466fde9e92c74e0f59fa4f6511df33c7557a048a96184f4b92c3c04a37c9",
+      "bytes": 126516
+    },
+    {
+      "path": "web/assets/react-dom-BmcGZysk.js",
+      "sha256": "f6447ea3e1f770116d9c6e2c76bc0bab6ce048ccec972c68f1a46fc36edd0b7f",
+      "bytes": 63280
+    },
+    {
+      "path": "web/assets/ReferenceCanvas-C7vnOfVQ.js",
+      "sha256": "1f5f7c701e24466b7a4146730f5945df01ded359fbbe6c48ff33eb4f95791100",
+      "bytes": 93973
+    },
+    {
+      "path": "web/assets/ResultModal-BEI45lZn.js",
+      "sha256": "855fa696f23bda34d10c5e972b42e750d5c5e597e7dffd7f032c9bba61037c30",
+      "bytes": 263411
+    },
+    {
+      "path": "web/assets/route.gen-D2YdMbrB.js",
+      "sha256": "a2da4748e1e38081c3d048e0f4df9d97f37fb438833c36514410e9486ec0219d",
+      "bytes": 315471
+    },
+    {
+      "path": "web/assets/search-C2sY3YU-.js",
+      "sha256": "cd2cdda853000546db991c6359aa41bf768a662ab6f405ee9d1f81bcadfab2e2",
+      "bytes": 339
+    },
+    {
+      "path": "web/assets/ShowImportModal-B9Lyo5lw.js",
+      "sha256": "54cbe5874ac60999e7a63091a8cb3a8bc60fea8e77f736f2d21ed4ba338f6227",
+      "bytes": 11777
+    },
+    {
+      "path": "web/assets/SiteButton-D5qBUtf2.js",
+      "sha256": "0b6b9d8b7779b64892b2916a6ed63ec65ce53c1e901860330529a2614871e894",
+      "bytes": 207
+    },
+    {
+      "path": "web/assets/SiteLink-DXBceSda.js",
+      "sha256": "e8c7fd03d2eb44a24a8810ebac9d8822f5529e677e62b23813f968133e7facac",
+      "bytes": 527
+    },
+    {
+      "path": "web/assets/socket-context-B_dt4V0t.js",
+      "sha256": "17a8d23bdcce8667445a12221a36f243eb952a45332cea81eab79d5c046a858a",
+      "bytes": 42754
+    },
+    {
+      "path": "web/assets/Studio-CQEE1BWx.js",
+      "sha256": "9bf0be07af90e32c07ff309d53342dc987391c074a3054024d9624bc38d789d1",
+      "bytes": 73753
+    },
+    {
+      "path": "web/assets/useMatch-C_Zr_GOS.js",
+      "sha256": "cf3599e162e49efbb60469fb975e510c44788b670d6da667bfa7d20bb66a81ea",
+      "bytes": 1603
+    },
+    {
+      "path": "web/assets/useQuery-C4iSrNxx.js",
+      "sha256": "d91a3d6d1f8479ffffd760b46a7fd11d689ca3a10a8bae68c16774f9924b7f29",
+      "bytes": 8646
+    },
+    {
+      "path": "web/assets/useRouterState-BjqFf0H7.js",
+      "sha256": "26dc18a182c23678a747ac46d8937e5d42054e63910a8df4abbb0092a4e7c7d4",
+      "bytes": 207
+    },
+    {
+      "path": "web/assets/__root-CrodrDQo.js",
+      "sha256": "6ae13d4f7de315349cd451a21d8070c7ac82c2ff3c380c071b9577fcf678cd78",
+      "bytes": 18443
+    },
+    {
+      "path": "web/index.html",
+      "sha256": "161272329cdbb60a499772040a6b7763ba4b5fb77f5c86816c90204891888f65",
+      "bytes": 2311
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "timestampUtc": "2026-11-10T17:27:48.741361+00:00",
+  "host": "tadazz-quiz-server",
+  "uptime": "17:27:48 up 6 days, 14:55,  1 user,  load average: 0.28, 0.16, 0.11",
+  "memoryMiB": "total        used        free      shared  buff/cache   available\nMem:           11925         943        6187           5        5021       10981\nSwap:              0           0           0",
+  "disk": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1        48G   19G   29G  39% /",
+  "containers": "tadazz|0.02%|68.18MiB / 11.65GiB\ntadazz-phone-gateway|0.00%|32.58MiB / 11.65GiB",
+  "productionConfig": {
+    "accountsEnabled": true,
+    "billingEnabled": false,
+    "paddleEnvironment": "sandbox",
+    "paddleApiKeyPresent": false,
+    "paddleWebhookSecretPresent": false,
+    "billingCatalogConfigured": false,
+    "mailKeyPresent": true,
+    "mailFromConfigured": true,
+    "jwtSigningKeyPresent": true
+  },
+  "productionHealth": 200,
+  "billingSandboxHealth": 502,
+  "packageBuilderTimer": "active"
+}

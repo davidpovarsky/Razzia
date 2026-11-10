@@ -1,0 +1,7 @@
+Extensions TypeScript: pnpm exec tsc -p extensions/tsconfig.json --noEmit => exit 0
+Repository lint: pnpm lint => exit 0
+Repository format: pnpm format => exit 0
+Python compile(): optimize-site-icon.py and deploy-unified-site.py => passed
+Report local links => passed
+Source manifest: 48/48 and copied original assets: 18/18 => passed
+packages/** diff against 18d3c9d => empty

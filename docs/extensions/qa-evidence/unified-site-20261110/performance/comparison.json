@@ -1,0 +1,86 @@
+{
+  "labOnly": true,
+  "samplesPerCase": 1,
+  "finalPhase": "after-final",
+  "jsCounting": "All .js/.mjs resources, including modulepreloads; decoded bytes, not compressed network transfer.",
+  "cases": [
+    {
+      "route": "/",
+      "profile": "desktop unthrottled",
+      "readyBeforeMs": 1774,
+      "readyAfterMs": 1223,
+      "readyImprovementPercent": 31.1,
+      "lcpBeforeMs": 2260,
+      "lcpAfterMs": 1612,
+      "clsBefore": 8.293440286351165e-05,
+      "clsAfter": 0,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1453446
+    },
+    {
+      "route": "/login",
+      "profile": "desktop unthrottled",
+      "readyBeforeMs": 1384,
+      "readyAfterMs": 948,
+      "readyImprovementPercent": 31.5,
+      "lcpBeforeMs": 1360,
+      "lcpAfterMs": 960,
+      "clsBefore": 0.13589238023378558,
+      "clsAfter": 0.02749636069717721,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1244475
+    },
+    {
+      "route": "/studio/games",
+      "profile": "desktop unthrottled",
+      "readyBeforeMs": 2152,
+      "readyAfterMs": 910,
+      "readyImprovementPercent": 57.7,
+      "lcpBeforeMs": 528,
+      "lcpAfterMs": 916,
+      "clsBefore": 0.13589238023378558,
+      "clsAfter": 0.02749636069717721,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1244475
+    },
+    {
+      "route": "/",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyBeforeMs": 14726,
+      "readyAfterMs": 5182,
+      "readyImprovementPercent": 64.8,
+      "lcpBeforeMs": 16028,
+      "lcpAfterMs": 6064,
+      "clsBefore": 0,
+      "clsAfter": 0,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1453446
+    },
+    {
+      "route": "/login",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyBeforeMs": 14191,
+      "readyAfterMs": 4123,
+      "readyImprovementPercent": 70.9,
+      "lcpBeforeMs": 14136,
+      "lcpAfterMs": 4092,
+      "clsBefore": 0.21413106059578824,
+      "clsAfter": 0,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1244475
+    },
+    {
+      "route": "/studio/games",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyBeforeMs": 26709,
+      "readyAfterMs": 4165,
+      "readyImprovementPercent": 84.4,
+      "lcpBeforeMs": 12504,
+      "lcpAfterMs": 4112,
+      "clsBefore": 0.21413106059578824,
+      "clsAfter": 0,
+      "jsBeforeBytes": 4598477,
+      "jsAfterBytes": 1244475
+    }
+  ]
+}

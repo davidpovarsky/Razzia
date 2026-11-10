@@ -1,0 +1,3547 @@
+{
+  "origin": "https://tadazz.com",
+  "phase": "after-production",
+  "labOnly": true,
+  "fieldInpMeasured": false,
+  "samples": [
+    {
+      "route": "/",
+      "profile": "desktop unthrottled",
+      "readyMs": 1031,
+      "finalPath": "/",
+      "lcp": 1424,
+      "cls": 0,
+      "longTasks": [
+        66,
+        75
+      ],
+      "ttfbMs": 236.30000001192093,
+      "domContentLoadedMs": 764.0999999940395,
+      "fcpMs": 1288,
+      "totalBlockingMs": 41,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 160.40000000596046,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 397.90000000596046,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 235.7000000178814,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 235.10000002384186,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 440.89999997615814,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 393.59999999403954,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 394.30000001192093,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 393.2999999821186,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 394.2999999821186,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 395.89999997615814,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 394.2999999821186,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 394.5,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 394.7000000178814,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 394.5,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 396.09999999403954,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 395.7000000178814,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 396,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 394.59999999403954,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 313.80000001192093,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 81.30000001192093,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/assets/MarketingSite-CJiVA6qK.js",
+          "type": "script",
+          "duration": 82.90000000596046,
+          "transferBytes": 26881,
+          "encodedBytes": 26581,
+          "decodedBytes": 90879
+        },
+        {
+          "path": "/assets/useRouterState-BjqFf0H7.js",
+          "type": "script",
+          "duration": 86.19999998807907,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 87.69999998807907,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/corrections-Bo_5Q__U.js",
+          "type": "script",
+          "duration": 88.40000000596046,
+          "transferBytes": 1068,
+          "encodedBytes": 768,
+          "decodedBytes": 1392
+        },
+        {
+          "path": "/assets/play-D48Xr4me.js",
+          "type": "script",
+          "duration": 87.39999997615814,
+          "transferBytes": 530,
+          "encodedBytes": 230,
+          "decodedBytes": 230
+        },
+        {
+          "path": "/assets/search-C2sY3YU-.js",
+          "type": "script",
+          "duration": 87.59999999403954,
+          "transferBytes": 639,
+          "encodedBytes": 339,
+          "decodedBytes": 339
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 87.59999999403954,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 88,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 87.90000000596046,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/assets/react-Cxpz1Ypv.js",
+          "type": "script",
+          "duration": 91.40000000596046,
+          "transferBytes": 43856,
+          "encodedBytes": 43556,
+          "decodedBytes": 126516
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 199.60000002384186,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 131.5,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 103.69999998807907,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "type": "img",
+          "duration": 139.40000000596046,
+          "transferBytes": 242606,
+          "encodedBytes": 242306,
+          "decodedBytes": 242306
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "img",
+          "duration": 107,
+          "transferBytes": 54272,
+          "encodedBytes": 53972,
+          "decodedBytes": 53972
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "img",
+          "duration": 141.19999998807907,
+          "transferBytes": 49194,
+          "encodedBytes": 48894,
+          "decodedBytes": 48894
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "type": "css",
+          "duration": 161.80000001192093,
+          "transferBytes": 80210,
+          "encodedBytes": 79910,
+          "decodedBytes": 79910
+        }
+      ],
+      "transferBytes": 2367906,
+      "scriptDecodedBytes": 1453446,
+      "taskDurationSeconds": 0.540621,
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/MarketingSite-CJiVA6qK.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useRouterState-BjqFf0H7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/play-D48Xr4me.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "230",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/corrections-Bo_5Q__U.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "768",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/search-C2sY3YU-.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "339",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-Cxpz1Ypv.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "53972",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "242306",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "48894",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "79910",
+            "content-type": "image/webp"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "profile": "desktop unthrottled",
+      "readyMs": 946,
+      "finalPath": "/login",
+      "lcp": 940,
+      "cls": 0.02749636069717721,
+      "longTasks": [],
+      "ttfbMs": 237.59999999403954,
+      "domContentLoadedMs": 782.9000000059605,
+      "fcpMs": 940,
+      "totalBlockingMs": 0,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 160.59999999403954,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 393.40000000596046,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 311.19999998807907,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 392.40000000596046,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 470.2000000178814,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 466.90000000596046,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 466.90000000596046,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 467,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 464.69999998807907,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 467.09999999403954,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 468.80000001192093,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 467.2999999821186,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 467.69999998807907,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 467.80000001192093,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 468.69999998807907,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 468.80000001192093,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 468.90000000596046,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 467.7999999821186,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 388.2999999821186,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 80.2000000178814,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "type": "script",
+          "duration": 82.09999999403954,
+          "transferBytes": 4313,
+          "encodedBytes": 4013,
+          "decodedBytes": 9496
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "type": "script",
+          "duration": 79.80000001192093,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 80.10000002384186,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 82,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "type": "script",
+          "duration": 81.40000000596046,
+          "transferBytes": 848,
+          "encodedBytes": 548,
+          "decodedBytes": 891
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 82.09999999403954,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 83.09999999403954,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 209.59999999403954,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 143.60000002384186,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 143.19999998807907,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 157.19999998807907,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        }
+      ],
+      "transferBytes": 1874133,
+      "scriptDecodedBytes": 1244475,
+      "taskDurationSeconds": 0.206976,
+      "responses": [
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "4013",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "548",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/studio/games",
+      "profile": "desktop unthrottled",
+      "readyMs": 955,
+      "finalPath": "/login",
+      "lcp": 964,
+      "cls": 0.02749636069717721,
+      "longTasks": [],
+      "ttfbMs": 248.10000002384186,
+      "domContentLoadedMs": 794.6000000238419,
+      "fcpMs": 964,
+      "totalBlockingMs": 0,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 162.40000000596046,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 324.90000000596046,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 162.59999999403954,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 324,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 481.60000002384186,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 405.89999997615814,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 405,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 405.5,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 405.40000000596046,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 406.09999999403954,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 407.5,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 406.19999998807907,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 406.39999997615814,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 406.59999999403954,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 407.40000000596046,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 407.59999999403954,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 408,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 407.80000001192093,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 323.19999998807907,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 80.90000000596046,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "type": "script",
+          "duration": 80.7999999821186,
+          "transferBytes": 4313,
+          "encodedBytes": 4013,
+          "decodedBytes": 9496
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "type": "script",
+          "duration": 82.40000000596046,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 82.5,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 82.90000000596046,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "type": "script",
+          "duration": 82.90000000596046,
+          "transferBytes": 848,
+          "encodedBytes": 548,
+          "decodedBytes": 891
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 82.5,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 84.09999999403954,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 172.39999997615814,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 103.7999999821186,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 103.40000000596046,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 135.39999997615814,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        }
+      ],
+      "transferBytes": 1874133,
+      "scriptDecodedBytes": 1244475,
+      "taskDurationSeconds": 0.194993,
+      "responses": [
+        {
+          "path": "/studio/games",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "4013",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "548",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 5142,
+      "finalPath": "/",
+      "lcp": 6456,
+      "cls": 0,
+      "longTasks": [
+        382,
+        114,
+        61,
+        260,
+        413
+      ],
+      "ttfbMs": 314.19999998807907,
+      "domContentLoadedMs": 3215.699999988079,
+      "fcpMs": 3908,
+      "totalBlockingMs": 980,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 1124.5999999940395,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 1807.7000000178814,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 185.69999998807907,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 898.6999999880791,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 2395.0999999940395,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 1567.4000000059605,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 720.7999999821186,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 1171.7000000178814,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 450.69999998807907,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 1372.0999999940395,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 447.7999999821186,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 462.7999999821186,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 679,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 583,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 863.9000000059605,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 1175.9000000059605,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 878.1000000238419,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 503.59999999403954,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 1237.2000000178814,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 157.30000001192093,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/assets/MarketingSite-CJiVA6qK.js",
+          "type": "script",
+          "duration": 707.7999999821186,
+          "transferBytes": 26881,
+          "encodedBytes": 26581,
+          "decodedBytes": 90879
+        },
+        {
+          "path": "/assets/useRouterState-BjqFf0H7.js",
+          "type": "script",
+          "duration": 172.69999998807907,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 182.90000000596046,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/corrections-Bo_5Q__U.js",
+          "type": "script",
+          "duration": 181.10000002384186,
+          "transferBytes": 1068,
+          "encodedBytes": 768,
+          "decodedBytes": 1392
+        },
+        {
+          "path": "/assets/play-D48Xr4me.js",
+          "type": "script",
+          "duration": 190,
+          "transferBytes": 530,
+          "encodedBytes": 230,
+          "decodedBytes": 230
+        },
+        {
+          "path": "/assets/search-C2sY3YU-.js",
+          "type": "script",
+          "duration": 197.40000000596046,
+          "transferBytes": 639,
+          "encodedBytes": 339,
+          "decodedBytes": 339
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 212,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 210.89999997615814,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 520.5999999940395,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/assets/react-Cxpz1Ypv.js",
+          "type": "script",
+          "duration": 1034.9000000059605,
+          "transferBytes": 43856,
+          "encodedBytes": 43556,
+          "decodedBytes": 126516
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 332.09999999403954,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "img",
+          "duration": 1757.5999999940395,
+          "transferBytes": 54272,
+          "encodedBytes": 53972,
+          "decodedBytes": 53972
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "img",
+          "duration": 1616.8999999761581,
+          "transferBytes": 49194,
+          "encodedBytes": 48894,
+          "decodedBytes": 48894
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "type": "css",
+          "duration": 2282.0999999940395,
+          "transferBytes": 80210,
+          "encodedBytes": 79910,
+          "decodedBytes": 79910
+        }
+      ],
+      "transferBytes": 713474,
+      "scriptDecodedBytes": 1453446,
+      "taskDurationSeconds": 2.96839,
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/useRouterState-BjqFf0H7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/corrections-Bo_5Q__U.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "768",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/play-D48Xr4me.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "230",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/search-C2sY3YU-.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "339",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/MarketingSite-CJiVA6qK.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/react-Cxpz1Ypv.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "53972",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "242306",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "48894",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "79910",
+            "content-type": "image/webp"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 4152,
+      "finalPath": "/login",
+      "lcp": 4108,
+      "cls": 0.03379767714325295,
+      "longTasks": [
+        438,
+        137,
+        66,
+        138
+      ],
+      "ttfbMs": 311.5,
+      "domContentLoadedMs": 3258.2999999821186,
+      "fcpMs": 4108,
+      "totalBlockingMs": 579,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 1172,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 1854.5999999940395,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 232.90000000596046,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 466.40000000596046,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 2413.199999988079,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 1522.4000000059605,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 680,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 1083.300000011921,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 379.59999999403954,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 1312.800000011921,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 380.2000000178814,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 390.5,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 607.7000000178814,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 511.5,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 776.3000000119209,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 1087.5,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 789.1999999880791,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 430.30000001192093,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 1224.199999988079,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 169.30000001192093,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "type": "script",
+          "duration": 235.5,
+          "transferBytes": 4313,
+          "encodedBytes": 4013,
+          "decodedBytes": 9496
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "type": "script",
+          "duration": 170.90000000596046,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 179.59999999403954,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 178.2000000178814,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "type": "script",
+          "duration": 187.69999998807907,
+          "transferBytes": 848,
+          "encodedBytes": 548,
+          "decodedBytes": 891
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 190.2000000178814,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 319.19999998807907,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 332,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 2221.699999988079,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 203.19999998807907,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        }
+      ],
+      "transferBytes": 650299,
+      "scriptDecodedBytes": 1244475,
+      "taskDurationSeconds": 1.626964,
+      "responses": [
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "548",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "4013",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/studio/games",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 4129,
+      "finalPath": "/login",
+      "lcp": 4076,
+      "cls": 0.03379767714325295,
+      "longTasks": [
+        400,
+        127,
+        67,
+        138
+      ],
+      "ttfbMs": 312,
+      "domContentLoadedMs": 3253.4000000059605,
+      "fcpMs": 4076,
+      "totalBlockingMs": 532,
+      "resources": [
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "link",
+          "duration": 1165.0999999940395,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "type": "script",
+          "duration": 1848.199999988079,
+          "transferBytes": 72616,
+          "encodedBytes": 72316,
+          "decodedBytes": 218257
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 171.5,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "type": "other",
+          "duration": 477.09999999403954,
+          "transferBytes": 9284,
+          "encodedBytes": 8984,
+          "decodedBytes": 20558
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "type": "other",
+          "duration": 2420.4000000059605,
+          "transferBytes": 179124,
+          "encodedBytes": 178824,
+          "decodedBytes": 564780
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "type": "other",
+          "duration": 1531.3999999761581,
+          "transferBytes": 37250,
+          "encodedBytes": 36950,
+          "decodedBytes": 122464
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "type": "other",
+          "duration": 690.5,
+          "transferBytes": 5356,
+          "encodedBytes": 5056,
+          "decodedBytes": 11934
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "type": "other",
+          "duration": 1076.9000000059605,
+          "transferBytes": 14806,
+          "encodedBytes": 14506,
+          "decodedBytes": 42754
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "type": "other",
+          "duration": 384.5,
+          "transferBytes": 618,
+          "encodedBytes": 318,
+          "decodedBytes": 318
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "type": "other",
+          "duration": 1324.0999999940395,
+          "transferBytes": 24181,
+          "encodedBytes": 23881,
+          "decodedBytes": 63280
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "type": "other",
+          "duration": 384.19999998807907,
+          "transferBytes": 1171,
+          "encodedBytes": 871,
+          "decodedBytes": 1603
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "type": "other",
+          "duration": 390.19999998807907,
+          "transferBytes": 793,
+          "encodedBytes": 493,
+          "decodedBytes": 493
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "type": "other",
+          "duration": 605.7000000178814,
+          "transferBytes": 3880,
+          "encodedBytes": 3580,
+          "decodedBytes": 8666
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "type": "other",
+          "duration": 527.5999999940395,
+          "transferBytes": 3159,
+          "encodedBytes": 2859,
+          "decodedBytes": 7622
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "type": "other",
+          "duration": 773.2999999821186,
+          "transferBytes": 7372,
+          "encodedBytes": 7072,
+          "decodedBytes": 20112
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "type": "other",
+          "duration": 1083.699999988079,
+          "transferBytes": 14132,
+          "encodedBytes": 13832,
+          "decodedBytes": 35824
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "type": "other",
+          "duration": 785.7999999821186,
+          "transferBytes": 6755,
+          "encodedBytes": 6455,
+          "decodedBytes": 18443
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "type": "other",
+          "duration": 427.80000001192093,
+          "transferBytes": 1033,
+          "encodedBytes": 733,
+          "decodedBytes": 1147
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "type": "link",
+          "duration": 1232.5999999940395,
+          "transferBytes": 20373,
+          "encodedBytes": 20073,
+          "decodedBytes": 123566
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 159.5,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "type": "script",
+          "duration": 238.19999998807907,
+          "transferBytes": 4313,
+          "encodedBytes": 4013,
+          "decodedBytes": 9496
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "type": "script",
+          "duration": 180.09999999403954,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "type": "script",
+          "duration": 179,
+          "transferBytes": 505,
+          "encodedBytes": 205,
+          "decodedBytes": 205
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "type": "script",
+          "duration": 193.09999999403954,
+          "transferBytes": 665,
+          "encodedBytes": 365,
+          "decodedBytes": 527
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "type": "script",
+          "duration": 191.40000000596046,
+          "transferBytes": 848,
+          "encodedBytes": 548,
+          "decodedBytes": 891
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "type": "script",
+          "duration": 206.09999999403954,
+          "transferBytes": 507,
+          "encodedBytes": 207,
+          "decodedBytes": 207
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "type": "script",
+          "duration": 344.19999998807907,
+          "transferBytes": 15295,
+          "encodedBytes": 14995,
+          "decodedBytes": 93973
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 278,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 263.2000000178814,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        }
+      ],
+      "transferBytes": 462307,
+      "scriptDecodedBytes": 1244475,
+      "taskDurationSeconds": 1.562331,
+      "responses": [
+        {
+          "path": "/studio/games",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "850",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-_GVNxlLJ.css",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/Card-CMV3Dz_B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "318",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/useMatch-C_Zr_GOS.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "871",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/circle-x-DXctpfUq.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "493",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/client-C48MGrC7.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "733",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/createLucideIcon-Dl_l28jn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/query-sD_nJkaD.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "2859",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/preload-helper-C8O7Ckvh.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "3580",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/QueryClientProvider-Dkr_17v5.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-CpE0MYYZ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/__root-CrodrDQo.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/socket-context-B_dt4V0t.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/dist-DPUW9B6B.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        },
+        {
+          "path": "/assets/react-dom-BmcGZysk.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/Button-D8V7jXyY.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-I6QCz3Vn.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/locales-l2oncJal.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/arrow-left-HE-n_rub.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/arrow-right-CHL9Baz1.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "205",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/manager-D_TgYV0Z.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "548",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteLink-DXBceSda.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "365",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/SiteButton-D5qBUtf2.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-length": "207",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/AccountGateway-DJajLtKc.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-length": "4013",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/assets/ReferenceCanvas-C7vnOfVQ.js",
+          "status": 200,
+          "headers": {
+            "cache-control": "public, max-age=31536000, immutable",
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        }
+      ]
+    }
+  ],
+  "javascriptMeasurement": "All requested JS resources, including modulepreload links; decoded body bytes"
+}

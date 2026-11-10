@@ -1,0 +1,1228 @@
+{
+  "origin": "https://tadazz.com",
+  "phase": "before",
+  "labOnly": true,
+  "fieldInpMeasured": false,
+  "samples": [
+    {
+      "route": "/",
+      "profile": "desktop unthrottled",
+      "readyMs": 1774,
+      "finalPath": "/",
+      "lcp": 2260,
+      "cls": 0.00008293440286351165,
+      "longTasks": [
+        266,
+        82,
+        158
+      ],
+      "ttfbMs": 296.19999998807907,
+      "domContentLoadedMs": 1318.0999999940395,
+      "fcpMs": 2112,
+      "totalBlockingMs": 356,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 657.4000000059605,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 254.09999999403954,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 334.59999999403954,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 86.40000000596046,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 166.69999998807907,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 86.7000000178814,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 84,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "type": "img",
+          "duration": 92.39999997615814,
+          "transferBytes": 242606,
+          "encodedBytes": 242306,
+          "decodedBytes": 242306
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "img",
+          "duration": 86.69999998807907,
+          "transferBytes": 49194,
+          "encodedBytes": 48894,
+          "decodedBytes": 48894
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "img",
+          "duration": 90,
+          "transferBytes": 54272,
+          "encodedBytes": 53972,
+          "decodedBytes": 53972
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "type": "css",
+          "duration": 86,
+          "transferBytes": 80210,
+          "encodedBytes": 79910,
+          "decodedBytes": 79910
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 84.7000000178814,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 4039308,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 0.872936,
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "48894",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "242306",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "53972",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "79910",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "profile": "desktop unthrottled",
+      "readyMs": 1384,
+      "finalPath": "/login",
+      "lcp": 1360,
+      "cls": 0.13589238023378558,
+      "longTasks": [
+        161
+      ],
+      "ttfbMs": 248.09999999403954,
+      "domContentLoadedMs": 1124.300000011921,
+      "fcpMs": 1360,
+      "totalBlockingMs": 111,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 656.9000000059605,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 86.2000000178814,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 408.60000002384186,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 84.30000001192093,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 167.09999999403954,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 83.7000000178814,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 84.5,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 84.5,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 84.60000002384186,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 3613350,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 0.395081,
+      "responses": [
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/studio/games",
+      "profile": "desktop unthrottled",
+      "readyMs": 2152,
+      "finalPath": "/login",
+      "lcp": 528,
+      "cls": 0.13589238023378558,
+      "longTasks": [],
+      "ttfbMs": 94.09999999403954,
+      "domContentLoadedMs": 379.80000001192093,
+      "fcpMs": 528,
+      "totalBlockingMs": 0,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 169,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 88.2999999821186,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 89.59999999403954,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 83.10000002384186,
+          "transferBytes": 458,
+          "encodedBytes": 158,
+          "decodedBytes": 548
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "type": "other",
+          "duration": 98.09999999403954,
+          "transferBytes": 1223822,
+          "encodedBytes": 1223522,
+          "decodedBytes": 1223522
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 84.40000000596046,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 83.19999998807907,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 82.2000000178814,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 3612740,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 0.180663,
+      "responses": [
+        {
+          "path": "/studio/games",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "158",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 14726,
+      "finalPath": "/",
+      "lcp": 16028,
+      "cls": 0,
+      "longTasks": [
+        54,
+        80,
+        1548,
+        119,
+        481,
+        590,
+        118
+      ],
+      "ttfbMs": 312.69999998807907,
+      "domContentLoadedMs": 13220.09999999404,
+      "fcpMs": 14696,
+      "totalBlockingMs": 2640,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 11055.699999988079,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 252.19999998807907,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 672.1999999880791,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 177.7999999821186,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 190.69999998807907,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "type": "img",
+          "duration": 1946.800000011921,
+          "transferBytes": 54272,
+          "encodedBytes": 53972,
+          "decodedBytes": 53972
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "type": "img",
+          "duration": 1806.8999999761581,
+          "transferBytes": 49194,
+          "encodedBytes": 48894,
+          "decodedBytes": 48894
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "type": "css",
+          "duration": 2455.699999988079,
+          "transferBytes": 80210,
+          "encodedBytes": 79910,
+          "decodedBytes": 79910
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 1403.5,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 2384876,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 4.632947,
+      "responses": [
+        {
+          "path": "/",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-stage.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "242306",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zb.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "53972",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-zl.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "48894",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-questions.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "79910",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/login",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 14191,
+      "finalPath": "/login",
+      "lcp": 14136,
+      "cls": 0.21413106059578824,
+      "longTasks": [
+        61,
+        1526,
+        104,
+        342
+      ],
+      "ttfbMs": 310.30000001192093,
+      "domContentLoadedMs": 13166.09999999404,
+      "fcpMs": 14136,
+      "totalBlockingMs": 1833,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 11076.90000000596,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 260.2999999821186,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 802.2999999821186,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 178,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 211.09999999403954,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/api/auth/session",
+          "type": "fetch",
+          "duration": 217.90000000596046,
+          "transferBytes": 610,
+          "encodedBytes": 310,
+          "decodedBytes": 310
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 2215.2999999821186,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 686.3999999761581,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 2389516,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 2.931329,
+      "responses": [
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    },
+    {
+      "route": "/studio/games",
+      "profile": "iPad 1.6Mbps/150ms RTT/4x CPU",
+      "readyMs": 26709,
+      "finalPath": "/login",
+      "lcp": 12504,
+      "cls": 0.21413106059578824,
+      "longTasks": [
+        74,
+        371,
+        188
+      ],
+      "ttfbMs": 167,
+      "domContentLoadedMs": 11875.799999982119,
+      "fcpMs": 12504,
+      "totalBlockingMs": 483,
+      "resources": [
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "type": "script",
+          "duration": 11050.700000017881,
+          "transferBytes": 2104557,
+          "encodedBytes": 2104257,
+          "decodedBytes": 4597761
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "type": "other",
+          "duration": 159.59999999403954,
+          "transferBytes": 738,
+          "encodedBytes": 438,
+          "decodedBytes": 716
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "type": "link",
+          "duration": 783.7000000178814,
+          "transferBytes": 59201,
+          "encodedBytes": 58901,
+          "decodedBytes": 288478
+        },
+        {
+          "path": "/branding/theme.json",
+          "type": "fetch",
+          "duration": 171.7000000178814,
+          "transferBytes": 446,
+          "encodedBytes": 146,
+          "decodedBytes": 146
+        },
+        {
+          "path": "/api/auth/mode",
+          "type": "fetch",
+          "duration": 329.10000002384186,
+          "transferBytes": 324,
+          "encodedBytes": 24,
+          "decodedBytes": 24
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "type": "img",
+          "duration": 2239.5,
+          "transferBytes": 187992,
+          "encodedBytes": 187692,
+          "decodedBytes": 187692
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "type": "css",
+          "duration": 685.8999999761581,
+          "transferBytes": 35648,
+          "encodedBytes": 35348,
+          "decodedBytes": 35348
+        }
+      ],
+      "transferBytes": 2388906,
+      "scriptDecodedBytes": 4598477,
+      "taskDurationSeconds": 1.545774,
+      "responses": [
+        {
+          "path": "/studio/games",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/api/auth/session",
+          "status": 200,
+          "headers": {
+            "content-length": "310",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/login",
+          "status": 200,
+          "headers": {
+            "cache-control": "no-store, no-cache, must-revalidate",
+            "content-encoding": "zstd",
+            "content-length": "547",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/assets/rolldown-runtime-hePW80VL.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-length": "438",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/assets/index-DpoUs08e.css",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "text/css"
+          }
+        },
+        {
+          "path": "/assets/index-Ce9j7yUX.js",
+          "status": 200,
+          "headers": {
+            "content-encoding": "zstd",
+            "content-type": "application/javascript"
+          }
+        },
+        {
+          "path": "/branding/theme.json",
+          "status": 404,
+          "headers": {
+            "content-length": "146",
+            "content-type": "text/html"
+          }
+        },
+        {
+          "path": "/tadazz-favicon-z-20261108.png",
+          "status": 200,
+          "headers": {
+            "content-length": "1223522",
+            "content-type": "image/png"
+          }
+        },
+        {
+          "path": "/tadazz-design-reference/marketing-logo.webp",
+          "status": 200,
+          "headers": {
+            "content-length": "187692",
+            "content-type": "image/webp"
+          }
+        },
+        {
+          "path": "/api/auth/mode",
+          "status": 200,
+          "headers": {
+            "content-length": "24",
+            "content-type": "application/json"
+          }
+        },
+        {
+          "path": "/assets/rubik-latin-wght-normal-CnQIisVs.woff2",
+          "status": 200,
+          "headers": {
+            "content-length": "35348",
+            "content-type": "font/woff2"
+          }
+        }
+      ]
+    }
+  ],
+  "javascriptMeasurement": "All requested JS resources, including modulepreload links; decoded body bytes"
+}

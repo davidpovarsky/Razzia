@@ -1,0 +1,28 @@
+[WebServer] (node:3348) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3400) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (node:33752) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+(node:18716) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ok 1 [edge-chromium] › extensions\src\site\tests\browser\site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions (11.9s)
+
+  1 passed (23.0s)

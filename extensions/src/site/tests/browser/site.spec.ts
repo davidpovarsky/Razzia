@@ -233,15 +233,19 @@ test("Studio keeps navigation warm, protects initial verification and styles act
     page.getByRole("heading", { name: "Account & licences", exact: true }),
   ).toBeVisible()
   expect(await page.evaluate(() => performance.timeOrigin)).toBe(stamp)
+  let releaseProfile: () => void = () => undefined
+  const profileGate = new Promise<void>((resolve) => {
+    releaseProfile = resolve
+  })
   await page.route("**/api/accounts/me", async (route) => {
-    await new Promise((resolve) => {
-      setTimeout(resolve, 700)
-    })
+    await profileGate
     await route.continue()
   })
   await page.reload({ waitUntil: "domcontentloaded" })
   await expect(page.getByTestId("studio-loading")).toBeVisible()
   await expect(page.getByText(address, { exact: true })).toHaveCount(0)
+  await page.screenshot({ path: `${evidence}/studio-loading-branded.png` })
+  releaseProfile()
   await expect(
     page.getByRole("heading", { name: "Account & licences", exact: true }),
   ).toBeVisible()
