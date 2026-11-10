@@ -1,0 +1,20 @@
+{
+  "revision": "db1539974c82389e05c5152f66a95a74ba4c1e39",
+  "releaseImage": "sha256:99f0d83cb4277c2dd852db4f3a17156a11be476c21fee6220c383ae29cb2991a",
+  "releaseTag": "tadazz:site-touch-db15399",
+  "runningContainerBaseImage": "sha256:6b08742f1758aee1dc60554bbec5b885148209b3eaa4e5020b6db5ada6d92ba8",
+  "success": true,
+  "previousEntry": "/assets/index-utt8Akjm.js",
+  "entry": "/assets/index-Ce9j7yUX.js",
+  "indexBackup": "/home/ubuntu/tadazz-site-touch-20261110-db15399/index-before.html",
+  "container": "96e9a2b4c3f42edb6e4618309475b2893aa7e5d814fdb8527e5ed0220c554fb1",
+  "started": "2026-11-10T14:19:26.741504869Z",
+  "socketPid": 8,
+  "socketStartTicks": "56085637",
+  "socketBundleSha256": "83f75aac39d14e92eb849cca17d3848e13dd140fee5ce3a1c946694c289d6476",
+  "socketProcessUnchanged": true,
+  "containerUnchanged": true,
+  "gatewayUnchanged": true,
+  "environmentUnchanged": true,
+  "mountsUnchanged": true
+}

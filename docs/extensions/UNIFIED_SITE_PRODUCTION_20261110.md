@@ -1,5 +1,12 @@
 # Unified TADAZZ site — production deployment, 10 November 2026
 
+> **Later hotfix:** the owner's iPad scrolling report was fixed and deployed
+> without restarting the application. Current public entry is
+> `/assets/index-Ce9j7yUX.js`; future recreates must use
+> `tadazz:site-touch-db15399` (`sha256:99f0d83cb4277c2dd852db4f3a17156a11be476c21fee6220c383ae29cb2991a`).
+> See [touch scrolling release](SITE_TOUCH_SCROLL_20261110.md). The release table
+> below describes the initial deployment and remains historical evidence.
+
 The owner explicitly instructed **"בצע פריסה"** after receiving the implementation
 handoff and its known baseline test limitation. The unified site is now live at
 [tadazz.com](https://tadazz.com), using the existing account backend and original
