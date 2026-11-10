@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useState, type ReactNode } from "react"
 import { createPortal } from "react-dom"
 import native from "../../themes/native.css?inline"
+import {
+  PlatformScope,
+  SEMANTIC_TOKENS,
+  PRIMITIVE_TOKENS,
+} from "@razzia/extensions/platform-ui"
 
 /** Bundled scoped CSS. No prototype scripts or unsafe HTML execution. */
 export function ReferenceCanvas({
@@ -37,9 +42,9 @@ export function ReferenceCanvas({
       style={{
         display: "block",
         minHeight: "100dvh",
-        background: "#0b0718",
-        color: "#fbf7ff",
-        fontFamily: '"Rubik Variable", sans-serif',
+        background: SEMANTIC_TOKENS[`platform.${variant}`].background,
+        color: SEMANTIC_TOKENS[`platform.${variant}`].text,
+        fontFamily: PRIMITIVE_TOKENS.font.family,
       }}
     >
       {root &&
@@ -48,7 +53,9 @@ export function ReferenceCanvas({
             <style>{native}</style>
             <style>{`.tadazz-site-button{padding:0;background:transparent;color:inherit;font:inherit;border:0;border-radius:0;text-align:inherit}.tadazz-site-button>div{display:contents}`}</style>
             <style>{styles}</style>
-            <div id="app">{children}</div>
+            <PlatformScope id="app" context={`platform.${variant}`}>
+              {children}
+            </PlatformScope>
           </>,
           root,
         )}

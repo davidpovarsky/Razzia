@@ -1,10 +1,13 @@
 # Proposed host presentation seams — approval pending
 
-Status: **NOT AUTHORIZED / NOT APPLIED**. This ledger is a concrete scope proposal,
-not a grant. Baseline source: `fb6c7631999f`; source anchors verified at TDS-02.
+Status: **OWNER AUTHORIZED / NOT YET APPLIED**, 10 November 2026. The owner
+explicitly answered the linked nine-file proposal: **"מאשר את השינויים הממוקדים שברשימה"**.
+Authorization is limited to this table at commit `851a7878c68c` and its bounds;
+[machine-readable approval](tds-approved-seams.json) records the exact paths.
+Baseline source: `fb6c7631999f`; source anchors verified at TDS-02.
 The canonical mandate §1.4 / §4 / §7 explicitly requires separate owner consent
 when the only viable implementation changes a protected `packages/**` path.
-The current guard still rejects every file below. Editor code remains forbidden
+The guard may now allow only these bounded seams. Editor code remains forbidden
 even if the owner approves these host seams. No server/common source is proposed.
 
 | Protected file / exact symbol or anchor                                                                                                     | Smallest intended change                                                                                                                                                                                                                                                                 | Alternative evaluated / why insufficient                                                                                                                                                                                           | Validation / merge risk                                                                                                                                                      |
@@ -31,7 +34,8 @@ cinematic timing/choreography changes are included.
 Approval scope: the nine listed **host presentation** files, only the listed
 symbols/behavior-preserving seams and bounded diff targets. If an implementation
 exceeds a bound or needs a new file, stop and revise the review proposal first.
-Record the owner's exact authorization before changing the guard or source.
+The owner's exact authorization is recorded above. The guard now checks the
+listed paths and changed-line bounds; every other protected hash remains locked.
 All tests run in the isolated QA container; release/push/deploy stay separately
-gated. Until approval arrives, continue only independent downstream phases and
-leave host integration/acceptance open in Asana.
+gated. Continue sequentially through the planned phases and leave host
+integration/acceptance open in Asana until its actual tests pass.

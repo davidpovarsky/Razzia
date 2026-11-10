@@ -4,6 +4,8 @@
   "type": "module",
   "private": true,
   "scripts": {
+    "ui:tokens": "node qa/tds-token-registry.mjs",
+    "ui:check": "node qa/tds-design-check.mjs && node qa/tds-token-registry.mjs --check && node qa/tds-boundary.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "site:dev": "pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js --config ../../extensions/site.vite.config.ts --host 127.0.0.1",
@@ -22,7 +24,8 @@
     "./editor": "./src/editor/index.ts",
     "./locales": "./src/locales/index.ts",
     "./server": "./src/server/index.ts",
-    "./site": "./src/site/index.ts"
+    "./site": "./src/site/index.ts",
+    "./platform-ui": "./src/platform-ui/index.ts"
   },
   "dependencies": {
     "@hono/zod-validator": "^0.9.1",

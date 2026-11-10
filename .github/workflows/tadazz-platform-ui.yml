@@ -1,0 +1,29 @@
+name: Tadazz platform UI
+
+on:
+  pull_request:
+    paths:
+      - "extensions/src/platform-ui/**"
+      - "extensions/src/site/**"
+      - "extensions/qa/tds*"
+      - "extensions/tds*"
+      - "extensions/package.json"
+      - "docs/extensions/plans/**"
+      - "packages/web/src/features/game/components/**"
+      - ".github/workflows/tadazz-platform-ui.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  platform-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # same pinned action as existing CI
+        with:
+          fetch-depth: 0
+      - uses: ./.github/actions/setup
+      - name: Check source ownership, generated tokens and scoped design rules
+        run: pnpm --dir extensions ui:check
+      - name: Check actual platform unit contracts
+        run: pnpm --dir extensions exec vitest run src/platform-ui --maxWorkers 2

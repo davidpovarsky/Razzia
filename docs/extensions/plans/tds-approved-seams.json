@@ -1,0 +1,17 @@
+{
+  "authorization": "Owner replied: מאשר את השינויים הממוקדים שברשימה",
+  "date": "2026-11-10",
+  "proposalCommit": "851a7878c68c7e237ebec4554f1a9bc463693fe3",
+  "proposal": "docs/extensions/plans/TDS_UPSTREAM_SEAMS.md",
+  "files": {
+    "packages/web/src/features/game/components/tadazz-show/NativeGameLayout.tsx": 40,
+    "packages/web/src/features/game/components/GameWrapper.tsx": 35,
+    "packages/web/src/features/game/components/ManagerControlToolbar.tsx": 140,
+    "packages/web/src/features/game/components/HostPlayersModal.tsx": 110,
+    "packages/web/src/features/game/components/GameSettingsModal/index.tsx": 18,
+    "packages/web/src/features/game/components/HistoryDialog.tsx": 18,
+    "packages/web/src/features/game/components/HostShortcutsDialog.tsx": 18,
+    "packages/web/src/features/game/components/states/Room.tsx": 35,
+    "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx": 35
+  }
+}

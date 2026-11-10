@@ -21,13 +21,22 @@ const quizz = {
     time: 120,
   })),
 }
-const shot = (page: Page, name: string) =>
-  page.screenshot({
+const shot = async (page: Page, name: string) => {
+  if (/^editor-/u.test(name)) await page.mouse.move(1, 1)
+  const bytes = await page.screenshot({
     path: `${out}/${name}.png`,
     fullPage: true,
     animations: "disabled",
     caret: "hide",
   })
+  if (process.env.TDS_COMPARE_EDITOR === "1" && /^editor-/u.test(name)) {
+    expect(bytes).toMatchSnapshot(`${name}.png`, {
+      threshold: 0,
+      maxDiffPixels: 0,
+    })
+  }
+  return bytes
+}
 test.beforeAll(() => mkdirSync(out, { recursive: true }))
 
 async function account(page: Page) {
@@ -107,20 +116,16 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
     `tds-fixture-${Date.now()}`,
     "1.0.0",
   )
-  await page
-    .getByTestId("package-file-input")
-    .setInputFiles({
-      name: "fixture.tadazz",
-      mimeType: "application/octet-stream",
-      buffer: fixture.bytes,
-    })
+  await page.getByTestId("package-file-input").setInputFiles({
+    name: "fixture.tadazz",
+    mimeType: "application/octet-stream",
+    buffer: fixture.bytes,
+  })
   await expect(page.getByTestId("package-preflight")).toBeVisible()
-  await page
-    .getByTestId("package-manager")
-    .screenshot({
-      path: `${out}/package-preflight.png`,
-      animations: "disabled",
-    })
+  await page.getByTestId("package-manager").screenshot({
+    path: `${out}/package-preflight.png`,
+    animations: "disabled",
+  })
   await page.getByRole("button", { name: "Help", exact: true }).click()
   await shot(page, "studio-dialog")
   await page.keyboard.press("Escape")
@@ -136,6 +141,10 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
     .click()
   await expect(page.getByPlaceholder("Quizz title...")).toHaveValue(
     quizz.subject,
+  )
+  await page.getByTestId("editor-question-card-0").click()
+  await expect(page.getByTestId("editor-question-card-0")).toHaveClass(
+    /border-primary/u,
   )
   await expect(page.locator("[data-tadazz-site]")).toHaveCount(0)
   await page.evaluate(() => document.fonts.ready)
@@ -155,6 +164,7 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
     .click()
   await expect(page.getByTestId("show-theme-preview")).toBeVisible()
   await shot(page, "theme-preview")
+  if (process.env.TDS_EDITOR_ONLY === "1") return
   await page.getByTestId("studio-tab-questions").click()
   // Read-only capture after loading the saved fixture. No editor implementation is modified.
   await page.getByTestId("editor-exit-btn").click()
@@ -200,6 +210,9 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
   const player = await playerContext.newPage()
   const pin = await page.getByText(/^\d{6}$/u).textContent()
   await joinGame(player, pin!, "FixturePlayer")
+  await expect(page.getByTestId("host-connected-counter")).toHaveText(
+    /^1\s*\//u,
+  )
   await page.getByRole("button", { name: "Start", exact: true }).click()
   await expect(page.getByTestId("host-end-timer-btn")).toBeVisible()
   await page.getByTestId("host-end-timer-btn").click()

@@ -9,6 +9,8 @@ export default defineConfig({
   ...site,
   testDir: "qa",
   testMatch: "tds-baseline.spec.ts",
+  snapshotPathTemplate: `${process.env.TDS_EDITOR_BASELINE ?? "/evidence/before"}/{arg}{ext}`,
+  updateSnapshots: "none",
   outputDir: "/evidence/traces",
   reporter: [
     ["list"],
