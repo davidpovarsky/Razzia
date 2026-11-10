@@ -1,15 +1,16 @@
-import {
-  PlatformButton,
-  type PlatformButtonProps,
-} from "@razzia/extensions/presentation/platform-controls"
+import { Button, type ButtonProps } from "@razzia/extensions/platform-ui"
 
-// Keep the real host primitive and its disabled/accessibility behavior. Scoped
-// reference CSS supplies the owner's approved site appearance, never the editor.
-export function SiteButton({ className = "", ...props }: PlatformButtonProps) {
+// Transitional site adapter: canonical native behavior with the existing scoped skin.
+export function SiteButton({
+  className = "",
+  variant = "unstyled",
+  ...props
+}: ButtonProps) {
   return (
-    <PlatformButton
+    <Button
       {...props}
       className={`tadazz-site-button ${className}`}
+      variant={variant}
       classNameContent="contents"
     />
   )

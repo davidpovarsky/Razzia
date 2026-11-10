@@ -1,6 +1,6 @@
-# Proposed host presentation seams — approval pending
+# Approved host presentation seams
 
-Status: **OWNER AUTHORIZED / NOT YET APPLIED**, 10 November 2026. The owner
+Status: **OWNER AUTHORIZED / PARTIALLY APPLIED**, 10 November 2026. The owner
 explicitly answered the linked nine-file proposal: **"מאשר את השינויים הממוקדים שברשימה"**.
 Authorization is limited to this table at commit `851a7878c68c` and its bounds;
 [machine-readable approval](tds-approved-seams.json) records the exact paths.
@@ -39,3 +39,9 @@ listed paths and changed-line bounds; every other protected hash remains locked.
 All tests run in the isolated QA container; release/push/deploy stay separately
 gated. Continue sequentially through the planned phases and leave host
 integration/acceptance open in Asana until its actual tests pass.
+
+TDS-04 application checkpoint (from `b007fc50380c`): ManagerControlToolbar
+imports canonical Button/AlertDialog and replaces only its outer div with
+PlatformScope. Original command functions/effects/callbacks/test IDs stay intact.
+Cumulative diff versus baseline: **12 changed lines / 140 maximum**. The other
+eight approved seams have not yet been applied. Full regrouping remains TDS-08.

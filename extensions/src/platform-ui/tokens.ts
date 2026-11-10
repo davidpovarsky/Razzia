@@ -78,6 +78,7 @@ export const PRIMITIVE_TOKENS = {
     normal: "180ms",
     slow: "280ms",
     layout: "220ms",
+    spinner: "800ms",
     easing: "cubic-bezier(.2,0,0,1)",
     exit: "cubic-bezier(.4,0,1,1)",
   },
@@ -138,6 +139,14 @@ export const LIGHT_SEMANTIC_TOKENS: Record<SemanticToken, string> = {
 }
 
 export const COMPONENT_TOKENS = {
+  menu: { offset: "8px" },
+  tooltip: { delay: "300ms" },
+  switch: {
+    width: "2.75rem",
+    height: "1.75rem",
+    thumbSize: "1.25rem",
+    offset: "0.1875rem",
+  },
   button: {
     minHeight: "2.75rem",
     gap: PRIMITIVE_TOKENS.space[2],

@@ -1,4 +1,4 @@
-import { SiteButton } from "./SiteButton"
+import { Dialog } from "@razzia/extensions/platform-ui"
 import { useEffect, useRef, type ReactNode } from "react"
 import { useSiteText } from "../../locales"
 
@@ -11,41 +11,17 @@ export function SiteDialog({
   children: ReactNode
   onClose: () => void
 }) {
-  const ref = useRef<HTMLDialogElement>(null)
   const t = useSiteText()
-  useEffect(() => {
-    const dialog = ref.current
-    const previous =
-      dialog?.getRootNode() instanceof ShadowRoot
-        ? (dialog.getRootNode() as ShadowRoot).activeElement
-        : document.activeElement
-    dialog?.showModal()
-
-    return () => {
-      dialog?.close()
-
-      if (previous instanceof HTMLElement) {
-        previous.focus()
-      }
-    }
-  }, [])
 
   return (
-    <dialog
+    <Dialog
       className="site-dialog"
-      ref={ref}
-      aria-labelledby="site-dialog-title"
-      onCancel={(event) => {
-        event.preventDefault()
-        onClose()
-      }}
+      title={title}
+      closeLabel={t("Close")}
+      onClose={onClose}
     >
-      <h2 id="site-dialog-title">{title}</h2>
       {children}
-      <SiteButton className="btn ghost" onClick={onClose}>
-        {t("Close")}
-      </SiteButton>
-    </dialog>
+    </Dialog>
   )
 }
 

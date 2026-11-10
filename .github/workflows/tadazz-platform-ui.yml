@@ -26,4 +26,4 @@ jobs:
       - name: Check source ownership, generated tokens and scoped design rules
         run: pnpm --dir extensions ui:check
       - name: Check actual platform unit contracts
-        run: pnpm --dir extensions exec vitest run src/platform-ui --maxWorkers 2
+        run: pnpm --dir extensions exec vitest run src/platform-ui src/presentation/platform-controls.test.ts --maxWorkers 2

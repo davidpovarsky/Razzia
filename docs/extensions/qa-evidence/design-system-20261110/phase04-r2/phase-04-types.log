@@ -1,0 +1,6 @@
+extensions/src/platform-ui/menus.tsx(36,11): error TS2322: Type '{ ref: RefObject<HTMLDivElement | null>; onEntryFocus: (event: any) => void; onKeyDownCapture: (event: KeyboardEvent<HTMLDivElement>) => void; align: "end"; sideOffset: number; className: string; loop: true; children: ReactNode; }' is not assignable to type 'IntrinsicAttributes & DropdownMenuContentProps & RefAttributes<HTMLDivElement>'.
+  Property 'onEntryFocus' does not exist on type 'IntrinsicAttributes & DropdownMenuContentProps & RefAttributes<HTMLDivElement>'.
+extensions/src/platform-ui/menus.tsx(36,26): error TS7006: Parameter 'event' implicitly has an 'any' type.
+extensions/src/platform-ui/menus.tsx(90,11): error TS2322: Type '{ ref: RefObject<HTMLDivElement | null>; onEntryFocus: (event: any) => void; onKeyDownCapture: (event: KeyboardEvent<HTMLDivElement>) => void; className: string; sideOffset: number; children: ReactNode; }' is not assignable to type 'IntrinsicAttributes & DropdownMenuSubContentProps & RefAttributes<HTMLDivElement>'.
+  Property 'onEntryFocus' does not exist on type 'IntrinsicAttributes & DropdownMenuSubContentProps & RefAttributes<HTMLDivElement>'.
+extensions/src/platform-ui/menus.tsx(90,26): error TS7006: Parameter 'event' implicitly has an 'any' type.

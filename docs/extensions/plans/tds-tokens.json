@@ -77,6 +77,7 @@
       "normal": "180ms",
       "slow": "280ms",
       "layout": "220ms",
+      "spinner": "800ms",
       "easing": "cubic-bezier(.2,0,0,1)",
       "exit": "cubic-bezier(.4,0,1,1)"
     },
@@ -170,6 +171,18 @@
     "overlay": "#070312b3"
   },
   "components": {
+    "menu": {
+      "offset": "8px"
+    },
+    "tooltip": {
+      "delay": "300ms"
+    },
+    "switch": {
+      "width": "2.75rem",
+      "height": "1.75rem",
+      "thumbSize": "1.25rem",
+      "offset": "0.1875rem"
+    },
     "button": {
       "minHeight": "2.75rem",
       "gap": "0.5rem",
@@ -253,6 +266,7 @@
       "--tds-motion-normal": "180ms",
       "--tds-motion-slow": "280ms",
       "--tds-motion-layout": "220ms",
+      "--tds-motion-spinner": "800ms",
       "--tds-motion-easing": "cubic-bezier(.2,0,0,1)",
       "--tds-motion-exit": "cubic-bezier(.4,0,1,1)",
       "--tds-spring-stiffness": "320",
@@ -267,6 +281,12 @@
       "--tds-breakpoint-tablet": "768",
       "--tds-breakpoint-desktop": "1024",
       "--tds-breakpoint-wide": "1440",
+      "--tds-menu-offset": "8px",
+      "--tds-tooltip-delay": "300ms",
+      "--tds-switch-width": "2.75rem",
+      "--tds-switch-height": "1.75rem",
+      "--tds-switch-thumb-size": "1.25rem",
+      "--tds-switch-offset": "0.1875rem",
       "--tds-button-min-height": "2.75rem",
       "--tds-button-gap": "0.5rem",
       "--tds-button-radius": "0.75rem",
@@ -352,6 +372,7 @@
       "--tds-motion-normal": "180ms",
       "--tds-motion-slow": "280ms",
       "--tds-motion-layout": "220ms",
+      "--tds-motion-spinner": "800ms",
       "--tds-motion-easing": "cubic-bezier(.2,0,0,1)",
       "--tds-motion-exit": "cubic-bezier(.4,0,1,1)",
       "--tds-spring-stiffness": "320",
@@ -366,6 +387,12 @@
       "--tds-breakpoint-tablet": "768",
       "--tds-breakpoint-desktop": "1024",
       "--tds-breakpoint-wide": "1440",
+      "--tds-menu-offset": "8px",
+      "--tds-tooltip-delay": "300ms",
+      "--tds-switch-width": "2.75rem",
+      "--tds-switch-height": "1.75rem",
+      "--tds-switch-thumb-size": "1.25rem",
+      "--tds-switch-offset": "0.1875rem",
       "--tds-button-min-height": "2.75rem",
       "--tds-button-gap": "0.5rem",
       "--tds-button-radius": "0.75rem",
@@ -451,6 +478,7 @@
       "--tds-motion-normal": "180ms",
       "--tds-motion-slow": "280ms",
       "--tds-motion-layout": "220ms",
+      "--tds-motion-spinner": "800ms",
       "--tds-motion-easing": "cubic-bezier(.2,0,0,1)",
       "--tds-motion-exit": "cubic-bezier(.4,0,1,1)",
       "--tds-spring-stiffness": "320",
@@ -465,6 +493,12 @@
       "--tds-breakpoint-tablet": "768",
       "--tds-breakpoint-desktop": "1024",
       "--tds-breakpoint-wide": "1440",
+      "--tds-menu-offset": "8px",
+      "--tds-tooltip-delay": "300ms",
+      "--tds-switch-width": "2.75rem",
+      "--tds-switch-height": "1.75rem",
+      "--tds-switch-thumb-size": "1.25rem",
+      "--tds-switch-offset": "0.1875rem",
       "--tds-button-min-height": "2.75rem",
       "--tds-button-gap": "0.5rem",
       "--tds-button-radius": "0.75rem",

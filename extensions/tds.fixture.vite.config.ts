@@ -4,7 +4,14 @@ import webConfig from "../packages/web/vite.config"
 
 if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux")
   throw new Error("Isolated remote QA only")
-const entry = fileURLToPath(new URL("./qa/tds-fixture.tsx", import.meta.url))
+const entry = fileURLToPath(
+  new URL(
+    process.env.TDS_FIXTURE === "components"
+      ? "./qa/tds-components-fixture.tsx"
+      : "./qa/tds-fixture.tsx",
+    import.meta.url,
+  ),
+)
 export default defineConfig(
   mergeConfig(webConfig, {
     root: fileURLToPath(new URL("../packages/web", import.meta.url)),

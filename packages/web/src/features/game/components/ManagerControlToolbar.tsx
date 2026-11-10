@@ -7,8 +7,11 @@ import {
   type ExtensionStateEnvelope,
 } from "@razzia/extensions/core"
 import { formatHistoryItem } from "@razzia/extensions/presentation"
-import AlertDialog from "@razzia/web/components/AlertDialog"
-import Button from "@razzia/web/components/Button"
+import {
+  AlertDialog,
+  Button,
+  PlatformScope,
+} from "@razzia/extensions/platform-ui"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
 import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
@@ -432,7 +435,8 @@ export const ManagerControlToolbar = ({
   const canViewHistory = currentQuestionIdx > 0 && !isLobby && !isFinished
 
   return (
-    <div
+    <PlatformScope
+      context="platform.host"
       className="font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2"
       data-testid="manager-control-toolbar"
     >
@@ -766,7 +770,7 @@ export const ManagerControlToolbar = ({
         historyItem={historyItem}
         onReplayFromCheckpoint={handleReplayFromCheckpoint}
       />
-    </div>
+    </PlatformScope>
   )
 }
 

@@ -8,21 +8,21 @@ Worktree: `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
 Branch: `codex/tadazz-design-system-20261110`.
 BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 
-| Phase  | Task             | Status      | Evidence / next action                                                                              |
-| ------ | ---------------- | ----------- | --------------------------------------------------------------------------------------------------- |
-| TDS-00 | 1220402430946120 | VERIFIED    | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes                     |
-| TDS-01 | 1220402455305251 | VERIFIED    | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed                                     |
-| TDS-02 | 1220402647256448 | VERIFIED    | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md) |
-| TDS-03 | 1220402777623967 | VERIFIED    | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed       |
-| TDS-04 | 1220402719463680 | NOT_STARTED | Canonical React UI                                                                                  |
-| TDS-05 | 1220402777822480 | NOT_STARTED | Live catalog                                                                                        |
-| TDS-06 | 1220402777861386 | NOT_STARTED | Site / Studio                                                                                       |
-| TDS-07 | 1220402729693747 | NOT_STARTED | Stage / join                                                                                        |
-| TDS-08 | 1220402719392041 | NOT_STARTED | Host controls / modals                                                                              |
-| TDS-09 | 1220402539686302 | NOT_STARTED | Roster / packages                                                                                   |
-| TDS-10 | 1220402539658409 | NOT_STARTED | Platform motion                                                                                     |
-| TDS-11 | 1220402430879047 | NOT_STARTED | Naming compatibility                                                                                |
-| TDS-12 | 1220402539686110 | NOT_STARTED | Full QA / handoff / release gate                                                                    |
+| Phase  | Task             | Status      | Evidence / next action                                                                                          |
+| ------ | ---------------- | ----------- | --------------------------------------------------------------------------------------------------------------- |
+| TDS-00 | 1220402430946120 | VERIFIED    | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes                                 |
+| TDS-01 | 1220402455305251 | VERIFIED    | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed                                                 |
+| TDS-02 | 1220402647256448 | VERIFIED    | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md)             |
+| TDS-03 | 1220402777623967 | VERIFIED    | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed                   |
+| TDS-04 | 1220402719463680 | VERIFIED    | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario |
+| TDS-05 | 1220402777822480 | NOT_STARTED | Live catalog                                                                                                    |
+| TDS-06 | 1220402777861386 | NOT_STARTED | Site / Studio                                                                                                   |
+| TDS-07 | 1220402729693747 | NOT_STARTED | Stage / join                                                                                                    |
+| TDS-08 | 1220402719392041 | NOT_STARTED | Host controls / modals                                                                                          |
+| TDS-09 | 1220402539686302 | NOT_STARTED | Roster / packages                                                                                               |
+| TDS-10 | 1220402539658409 | NOT_STARTED | Platform motion                                                                                                 |
+| TDS-11 | 1220402430879047 | NOT_STARTED | Naming compatibility                                                                                            |
+| TDS-12 | 1220402539686110 | NOT_STARTED | Full QA / handoff / release gate                                                                                |
 
 Run `node extensions/qa/tds-boundary.mjs` at every checkpoint. The guard rejects
 all `packages/**` and editor modifications and paths outside the locked allowlist.
@@ -34,7 +34,7 @@ and behavior checks are separately required.
 Session checkpoint: dependencies installed with frozen lockfile, no lock changes.
 TDS-00 verified in isolated remote container `tadazz-design-system-qa-20261110`
 (2 CPUs / 4 GiB / 768 PIDs / no published ports or production storage).
-TDS-03 token/scope implementation verified. TDS-04 components are next.
+TDS-04 canonical components verified. TDS-05 internal live catalog is next.
 
 TDS-00 evidence commit: `10c41075b67c129222e0fd13e231482091ec14ae`.
 Checkpoint follow-up removes trailing whitespace from copied QA logs (their
@@ -83,3 +83,22 @@ Initial selection-state snapshot mismatch and its independently source-verified
 control recapture are explained in TDS_TOKENS.md; original images/logs retained.
 Full runtime/role/device matrix remains TDS-12. Next exact action: TDS-04 canonical
 React components, with representative site/host integration and keyboard tests.
+
+TDS-03 commit: `b007fc50380c92faf3ac0f0ffa958d1939fdfca3`; Asana VERIFIED.
+TDS-04 BASE_HEAD: that same commit. Canonical components, scoped fullscreen/
+ShadowRoot portals, site adapters, explicit account-form submit and approved
+toolbar imports/scope implemented; original handlers and editor remain intact.
+Added optional existing Radix peer (three lock importer lines), exact native
+button registry and additive original-primitive CI audit. No dependency upgrades.
+PASS: remote `tds-phase04.sh` final run: frozen install; 14 unit contracts;
+extensions/web types; 18 Chromium/WebKit interactions including actual fullscreen;
+6 token browser contracts; 1 full actual API/production bundle scenario (35.4s);
+registry/design/freeze. Guard: 601 unchanged protected hashes, only authorized
+ManagerControlToolbar modified (12/140 cumulative changed lines).
+PASS: all four editor PNGs byte-identical to verified TDS-03; original control
+comparison retains disclosed 9/2 AA-edge pixels (question/media), scene/settings
+byte-identical. No comparator relaxation. Initial ShadowRoot traversal/WebKit
+Tab boundary, implicit-submit and long fullscreen fixture issues fixed and
+their failed attempts retained. See TDS_COMPONENTS.md and phase-04 evidence.
+NOT RUN: final exhaustive matrix, physical devices, release (later gates).
+No remaining TDS-04 blocker. Next exact action: TDS-05 live internal catalog.

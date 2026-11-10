@@ -1,0 +1,314 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 18 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-components.spec.ts:4:3 › host: native pending/disabled, labels, switch and roving tabs (2.4s)
+  ✓   2 [chromium] › qa/tds-components.spec.ts:47:3 › host: keyboard menu, native/Radix dialog trap, nested portal and focus return (3.1s)
+  ✓   3 [chromium] › qa/tds-components.spec.ts:108:3 › host: alert cancel, single async confirmation and visible failure (2.3s)
+  ✓   4 [chromium] › qa/tds-components.spec.ts:137:3 › host: popover Escape and keyboard tooltip (1.6s)
+  ✘   5 [chromium] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs (7.1s)
+  ✘   6 [chromium] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return (6.6s)
+  ✓   7 [chromium] › qa/tds-components.spec.ts:108:3 › site: alert cancel, single async confirmation and visible failure (2.5s)
+  ✓   8 [chromium] › qa/tds-components.spec.ts:137:3 › site: popover Escape and keyboard tooltip (1.5s)
+  ✘   9 [chromium] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen (45.4s)
+  ✓  10 [webkit] › qa/tds-components.spec.ts:4:3 › host: native pending/disabled, labels, switch and roving tabs (11.2s)
+  ✓  11 [webkit] › qa/tds-components.spec.ts:47:3 › host: keyboard menu, native/Radix dialog trap, nested portal and focus return (10.6s)
+  ✓  12 [webkit] › qa/tds-components.spec.ts:108:3 › host: alert cancel, single async confirmation and visible failure (9.0s)
+  ✓  13 [webkit] › qa/tds-components.spec.ts:137:3 › host: popover Escape and keyboard tooltip (3.0s)
+  ✘  14 [webkit] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs (8.7s)
+  ✘  15 [webkit] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return (7.3s)
+  ✓  16 [webkit] › qa/tds-components.spec.ts:108:3 › site: alert cancel, single async confirmation and visible failure (7.8s)
+  ✓  17 [webkit] › qa/tds-components.spec.ts:137:3 › site: popover Escape and keyboard tooltip (2.9s)
+  ✘  18 [webkit] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen (45.7s)
+
+
+  1) [chromium] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms
+      - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })
+        14 × locator resolved to <button role="tab" type="button" tabindex="-1" class="tds-tab" aria-selected="false" data-state="inactive" data-orientation="horizontal" data-radix-collection-item="" id="radix-_r_r_-trigger-second" aria-controls="radix-_r_r_-content-second">site second tab</button>
+           - unexpected value "false"
+
+
+      39 |     await expect(
+      40 |       panel.getByRole("tab", { name: `${name} second tab` }),
+    > 41 |     ).toHaveAttribute("aria-selected", "true")
+         |       ^
+      42 |     await panel.getByRole("button", { name: `${name} toggle RTL` }).click()
+      43 |     await panel.getByRole("tab", { name: `${name} second tab` }).focus()
+      44 |     await page.keyboard.press("ArrowRight")
+        at /cleanup/extensions/qa/tds-components.spec.ts:41:7
+
+    Error Context: ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('menuitem', { name: 'site first action', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms
+      - waiting for getByRole('menuitem', { name: 'site first action', exact: true })
+        14 × locator resolved to <div tabindex="-1" role="menuitem" class="tds-menu-item " data-orientation="vertical" data-radix-collection-item="">site first action</div>
+           - unexpected value "inactive"
+
+
+      58 |     await expect(
+      59 |       page.getByRole("menuitem", { name: `${name} first action`, exact: true }),
+    > 60 |     ).toBeFocused()
+         |       ^
+      61 |     await page.keyboard.press("Enter")
+      62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(
+      63 |       "First action",
+        at /cleanup/extensions/qa/tds-components.spec.ts:60:7
+
+    Error Context: ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Browser logs:
+
+    <launching> /root/.cache/ms-playwright/chromium_headless_shell-1248/chrome-headless-shell-linux-arm64/chrome-headless-shell --disable-field-trial-config --disable-background-networking --disable-background-timer-throttling --disable-backgrounding-occluded-windows --disable-back-forward-cache --disable-breakpad --disable-client-side-phishing-detection --disable-component-extensions-with-background-pages --disable-component-update --no-default-browser-check --disable-default-apps --disable-dev-shm-usage --disable-edgeupdater --disable-extensions --disable-features=AvoidUnnecessaryBeforeUnloadCheckSync,DestroyProfileOnBrowserClose,DialMediaRouteProvider,GlobalMediaControls,HttpsUpgrades,LensOverlay,MediaRouter,PaintHolding,ThirdPartyStoragePartitioning,BlockOriginHeaderModificationOnRedirect,Translate,AutoDeElevate,OptimizationHints,NetworkTimeServiceQuerying,AimEnabled,msForceBrowserSignIn,msEdgeUpdateLaunchServicesPreferredVersion --enable-features=CDPScreenshotNewSurface --allow-pre-commit-input --disable-hang-monitor --disable-ipc-flooding-protection --disable-popup-blocking --disable-prompt-on-repost --disable-renderer-backgrounding --disable-updater-scheduler --force-color-profile=srgb --metrics-recording-only --no-first-run --password-store=basic --use-mock-keychain --no-service-autorun --export-tagged-pdf --disable-search-engine-choice-screen --unsafely-disable-devtools-self-xss-warnings --edge-skip-compat-layer-relaunch --disable-infobars --disable-search-engine-choice-screen --disable-sync --enable-unsafe-swiftshader --headless --hide-scrollbars --mute-audio --blink-settings=primaryHoverType=2,availableHoverTypes=2,primaryPointerType=4,availablePointerTypes=4 --no-sandbox --user-data-dir=/tmp/playwright_chromiumdev_profile-VBzonK --remote-debugging-pipe --no-startup-window
+    <launched> pid=3922
+    [pid=3922][err] [1110/213614.451506:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=3922][err] [1110/213614.451606:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+    [pid=3922][err] [1110/213614.469892:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=3922][err] [1110/213614.469946:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory
+    [pid=3922][err] [1110/213614.484287:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type:
+    [pid=3922][err] [1110/213614.484467:WARNING:device/bluetooth/dbus/bluez_dbus_manager.cc:209] Floss manager service not available, cannot set Floss enable/disable.
+    [pid=3922][err] [1110/213614.487622:ERROR:dbus/bus.cc:405] Failed to connect to the bus: Could not parse server address: Unknown address type (examples of valid types are "tcp" and on UNIX "unix")
+    [pid=3922][err] [1110/213614.504781:ERROR:dbus/object_proxy.cc:572] Failed to call method: org.freedesktop.DBus.NameHasOwner: object_path= /org/freedesktop/DBus: unknown error type:
+    [pid=3922][err] [1110/213614.525100:WARNING:media/gpu/vaapi/vaapi_wrapper.cc:1655] drmGetDevices2() has not found any devices
+    [pid=3922][err] [1110/213614.532512:WARNING:sandbox/policy/linux/sandbox_linux.cc:405] InitializeSandbox() called with multiple threads in process gpu-process.
+    [pid=3922][err] [1110/213614.817466:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:4330/@vite/client (935)
+    [pid=3922][err] [1110/213614.879677:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:4330/@vite/client (1048)
+    [pid=3922][err] [1110/213615.525465:INFO:CONSOLE:15805] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)
+    [pid=3922][err] [1110/213617.253040:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:4330/@vite/client (935)
+    [pid=3922][err] [1110/213617.527955:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:4330/@vite/client (1048)
+    [pid=3922][err] [1110/213617.819433:INFO:CONSOLE:15805] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)
+    [pid=3922][err] [1110/213618.816299:INFO:CONSOLE:935] "[vite] connecting...", source: http://127.0.0.1:4330/@vite/client (935)
+    [pid=3922][err] [1110/213619.115432:INFO:CONSOLE:1048] "[vite] connected.", source: http://127.0.0.1:4330/@vite/client (1048)
+    [pid=3922][err] [1110/213619.488182:INFO:CONSOLE:15805] "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold", source: http://127.0.0.1:4330/node_modules/.vite/deps/react-dom_client.js?v=28091674 (15805)
+    [pid=3922] <gracefully close start>
+    Call log:
+      - waiting for getByTestId('host-panel').getByRole('button', { name: 'host open dialog', exact: true })
+        - locator resolved to <button type="button" data-size="md" data-state="closed" class="tds-button " aria-expanded="false" aria-haspopup="dialog" data-variant="secondary" data-control-source="tadazz" data-platform-component="button">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+          - waiting 100ms
+        82 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - element is outside of the viewport
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      166 |     .getByTestId("host-panel")
+      167 |     .getByRole("button", { name: "host open dialog", exact: true })
+    > 168 |     .click()
+          |      ^
+      169 |   const dialog = page.getByRole("dialog", { name: "host dialog", exact: true })
+      170 |   await expect(dialog).toBeVisible()
+      171 |   expect(
+        at /cleanup/extensions/qa/tds-components.spec.ts:168:6
+
+    Error Context: ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" getByTestId('site-panel').getByRole('tab', { name: 'site second tab' }) with timeout 5000ms
+      - waiting for getByTestId('site-panel').getByRole('tab', { name: 'site second tab' })
+        14 × locator resolved to <button role="tab" type="button" tabindex="-1" class="tds-tab" aria-selected="false" data-state="inactive" data-orientation="horizontal" data-radix-collection-item="" id="radix-_r_r_-trigger-second" aria-controls="radix-_r_r_-content-second">site second tab</button>
+           - unexpected value "false"
+
+
+      39 |     await expect(
+      40 |       panel.getByRole("tab", { name: `${name} second tab` }),
+    > 41 |     ).toHaveAttribute("aria-selected", "true")
+         |       ^
+      42 |     await panel.getByRole("button", { name: `${name} toggle RTL` }).click()
+      43 |     await panel.getByRole("tab", { name: `${name} second tab` }).focus()
+      44 |     await page.keyboard.press("ArrowRight")
+        at /cleanup/extensions/qa/tds-components.spec.ts:41:7
+
+    Error Context: ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-site-native-98237-bels-switch-and-roving-tabs-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [webkit] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return
+
+    Error: expect(locator).toBeFocused() failed
+
+    Locator:  getByRole('menuitem', { name: 'site first action', exact: true })
+    Expected: focused
+    Received: inactive
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toBeFocused" getByRole('menuitem', { name: 'site first action', exact: true }) with timeout 5000ms
+      - waiting for getByRole('menuitem', { name: 'site first action', exact: true })
+        14 × locator resolved to <div tabindex="-1" role="menuitem" class="tds-menu-item " data-orientation="vertical" data-radix-collection-item="">site first action</div>
+           - unexpected value "inactive"
+
+
+      58 |     await expect(
+      59 |       page.getByRole("menuitem", { name: `${name} first action`, exact: true }),
+    > 60 |     ).toBeFocused()
+         |       ^
+      61 |     await page.keyboard.press("Enter")
+      62 |     await expect(panel.getByTestId(`${name}-message`)).toHaveText(
+      63 |       "First action",
+        at /cleanup/extensions/qa/tds-components.spec.ts:60:7
+
+    Error Context: ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-site-keyboa-be021-ted-portal-and-focus-return-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [webkit] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen
+
+    Test timeout of 45000ms exceeded.
+
+    Error: locator.click: Test timeout of 45000ms exceeded.
+    Browser logs:
+
+    <launching> /root/.cache/ms-playwright/webkit-2370/pw_run.sh --inspector-pipe --headless --no-startup-window
+    <launched> pid=4342
+    [pid=4342][err]
+    [pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:37:56.576: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+    [pid=4342][err]
+    [pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:38:04.353: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+    [pid=4342][err]
+    [pid=4342][err] ** (MiniBrowser:4348): CRITICAL **: 21:38:07.347: WebKitWebView is-controlled-by-automation set but automation is not allowed in the context, falling back to default session.
+    [pid=4342] <gracefully close start>
+    Call log:
+      - waiting for getByTestId('host-panel').getByRole('button', { name: 'host open dialog', exact: true })
+        - locator resolved to <button type="button" data-size="md" data-state="closed" class="tds-button " aria-expanded="false" aria-haspopup="dialog" data-variant="secondary" data-control-source="tadazz" data-platform-component="button">…</button>
+      - attempting click action
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+        - waiting 20ms
+        2 × waiting for element to be visible, enabled and stable
+          - element is visible, enabled and stable
+          - scrolling into view if needed
+          - done scrolling
+          - element is outside of the viewport
+        - retrying click action
+          - waiting 100ms
+        77 × waiting for element to be visible, enabled and stable
+           - element is visible, enabled and stable
+           - scrolling into view if needed
+           - done scrolling
+           - element is outside of the viewport
+         - retrying click action
+           - waiting 500ms
+        - waiting for element to be visible, enabled and stable
+
+
+      166 |     .getByTestId("host-panel")
+      167 |     .getByRole("button", { name: "host open dialog", exact: true })
+    > 168 |     .click()
+          |      ^
+      169 |   const dialog = page.getByRole("dialog", { name: "host dialog", exact: true })
+      170 |   await expect(dialog).toBeVisible()
+      171 |   expect(
+        at /cleanup/extensions/qa/tds-components.spec.ts:168:6
+
+    Error Context: ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/component-traces/tds-components-host-Radix--ef120-de-actual-native-fullscreen-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [chromium] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs
+    [chromium] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return
+    [chromium] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen
+    [webkit] › qa/tds-components.spec.ts:4:3 › site: native pending/disabled, labels, switch and roving tabs
+    [webkit] › qa/tds-components.spec.ts:47:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return
+    [webkit] › qa/tds-components.spec.ts:153:1 › host Radix portal stays inside actual native fullscreen
+  12 passed (3.1m)

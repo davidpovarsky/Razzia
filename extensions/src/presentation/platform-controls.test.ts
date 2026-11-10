@@ -10,6 +10,7 @@ import {
   type PlatformButtonProps,
 } from "./platform-controls"
 import primitives from "./native-button-primitives.json"
+import canonicalPrimitives from "../platform-ui/native-primitives.json"
 
 const root = resolve(import.meta.dirname, "../../..")
 function sourceFiles(directory: string): string[] {
@@ -161,7 +162,10 @@ describe("native platform control contract", () => {
       const text = readFileSync(file, "utf8")
       const controls = inspectControls(text)
       const count = controls.raw
-      const original = (primitives as Record<string, number>)[name] ?? 0
+      const original =
+        (primitives as Record<string, number>)[name] ??
+        (canonicalPrimitives as Record<string, number>)[name] ??
+        0
 
       if (count > original) {
         unexpected.push(

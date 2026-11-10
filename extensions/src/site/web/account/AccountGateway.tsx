@@ -309,6 +309,7 @@ export function AccountGateway() {
                 </p>
               )}
               <SiteButton
+                type="submit"
                 className="account-button primary"
                 disabled={busy || available !== true}
               >

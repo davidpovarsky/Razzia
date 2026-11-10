@@ -1,0 +1,197 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-baseline.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-baseline.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/browser-results.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "none",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-baseline.spec.ts",
+      "file": "tds-baseline.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "synthetic site, Studio, package and frozen editor baseline",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 17354,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Six-digit code')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Six-digit code') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Six-digit code')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Six-digit code')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Six-digit code') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Six-digit code')\u001b[22m\n\n    at account (/cleanup/extensions/qa/tds-baseline.spec.ts:50:51)\n    at /cleanup/extensions/qa/tds-baseline.spec.ts:80:3",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-baseline.spec.ts",
+                      "column": 51,
+                      "line": 50
+                    },
+                    "snippet": "  48 |     .getByRole(\"button\", { name: \"Create account\", exact: true })\n  49 |     .click()\n> 50 |   await expect(page.getByLabel(\"Six-digit code\")).toBeVisible()\n     |                                                   ^\n  51 |   const mail = JSON.parse(\n  52 |     readFileSync(\n  53 |       new URL(\"../.site-test-config/test-mail.json\", import.meta.url),"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-baseline.spec.ts",
+                        "column": 51,
+                        "line": 50
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByLabel('Six-digit code')\nExpected: visible\nTimeout: 15000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByLabel('Six-digit code') with timeout 15000ms\u001b[22m\n\u001b[2m  - waiting for getByLabel('Six-digit code')\u001b[22m\n\n\n  48 |     .getByRole(\"button\", { name: \"Create account\", exact: true })\n  49 |     .click()\n> 50 |   await expect(page.getByLabel(\"Six-digit code\")).toBeVisible()\n     |                                                   ^\n  51 |   const mail = JSON.parse(\n  52 |     readFileSync(\n  53 |       new URL(\"../.site-test-config/test-mail.json\", import.meta.url),\n    at account (/cleanup/extensions/qa/tds-baseline.spec.ts:50:51)\n    at /cleanup/extensions/qa/tds-baseline.spec.ts:80:3"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-10T21:39:17.381Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-baseline.spec.ts",
+                    "column": 51,
+                    "line": 50
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "0a1b6e6a5557c97a615c-609d23d7cc11c95c53f4",
+          "file": "tds-baseline.spec.ts",
+          "line": 67,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-10T21:39:10.561Z",
+    "duration": 24541.953999999998,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}
