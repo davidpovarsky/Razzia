@@ -1,0 +1,58 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] 
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] 
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] 
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 1 test using 1 worker
+
+  ✘  1 [chromium] › qa/tds-baseline.spec.ts:33:1 › synthetic site, Studio, package and frozen editor baseline (36.7s)
+
+
+  1) [chromium] › qa/tds-baseline.spec.ts:33:1 › synthetic site, Studio, package and frozen editor baseline 
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Waiting for players')
+    Expected: visible
+    Timeout: 15000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Waiting for players') with timeout 15000ms
+      - waiting for getByText('Waiting for players')
+
+
+       at ../../packages/e2e/utils/player.ts:21
+
+      19 |   await page.getByPlaceholder(t("game:usernamePlaceholder")).fill(username)
+      20 |   await page.getByRole("button", { name: t("common:submit") }).click()
+    > 21 |   await expect(page.getByText(t("game:waitingForPlayers"))).toBeVisible()
+         |                                                             ^
+      22 | }
+      23 |
+      24 | export const answer = async (page: Page, label: string) => {
+        at joinGame (/cleanup/packages/e2e/utils/player.ts:21:61)
+        at /cleanup/extensions/qa/tds-baseline.spec.ts:115:3
+
+    Error Context: ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/traces/tds-baseline-synthetic-sit-a4cfd--and-frozen-editor-baseline-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [chromium] › qa/tds-baseline.spec.ts:33:1 › synthetic site, Studio, package and frozen editor baseline 

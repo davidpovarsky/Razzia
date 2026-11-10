@@ -1,0 +1,72 @@
+import { execFileSync } from "node:child_process"
+import { createHash } from "node:crypto"
+import { readFileSync, writeFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
+import { resolve, relative } from "node:path"
+
+const root = fileURLToPath(new URL("../../", import.meta.url))
+const manifestPath = resolve(root, "docs/extensions/plans/tds-freeze.json")
+const git = (...args) =>
+  execFileSync("git", args, { cwd: root, encoding: "utf8" }).trim()
+const digest = (path) =>
+  createHash("sha256")
+    .update(readFileSync(resolve(root, path)))
+    .digest("hex")
+const base = "fb6c7631999f33c8fb47638a99920e450f326fbf"
+const protectedPath = (path) =>
+  /^(?:packages\/|extensions\/src\/editor\/)/u.test(path)
+const allow =
+  /^(?:AGENTS\.md$|GEMINI\.md$|docs\/extensions\/|extensions\/(?:src\/(?:platform-ui|site)\/|qa\/tds[^/]*|tds[^/]*|package\.json$))/u
+
+if (process.argv.includes("--record")) {
+  if (git("rev-parse", "HEAD") !== base)
+    throw new Error("Freeze must be recorded at the inspected baseline")
+  const files = git("ls-files")
+    .split("\n")
+    .filter(
+      (path) => protectedPath(path) || /^extensions\/site-assets\//u.test(path),
+    )
+  writeFileSync(
+    manifestPath,
+    JSON.stringify(
+      {
+        base,
+        files: Object.fromEntries(files.map((path) => [path, digest(path)])),
+      },
+      null,
+      2,
+    ) + "\n",
+  )
+  console.log(`Recorded ${files.length} protected files`)
+} else {
+  const manifest = JSON.parse(readFileSync(manifestPath, "utf8"))
+  const changed = process.argv.includes("--files-only")
+    ? []
+    : [
+        ...new Set([
+          ...git("diff", "--name-only", manifest.base, "--").split("\n"),
+          ...git("ls-files", "--others", "--exclude-standard").split("\n"),
+        ]),
+      ].filter(Boolean)
+  const denied = changed.filter(
+    (path) => protectedPath(path) || !allow.test(path),
+  )
+  const mismatches = Object.entries(manifest.files)
+    .filter(([path, hash]) => digest(path) !== hash)
+    .map(([path]) => path)
+  if (denied.length || mismatches.length)
+    throw new Error(JSON.stringify({ denied, mismatches }))
+  console.log(
+    JSON.stringify(
+      {
+        status: "PASS",
+        base: manifest.base,
+        protectedFiles: Object.keys(manifest.files).length,
+        changedPaths: changed,
+        manifest: relative(root, manifestPath),
+      },
+      null,
+      2,
+    ),
+  )
+}
