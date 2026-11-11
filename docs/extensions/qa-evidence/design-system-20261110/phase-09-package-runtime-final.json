@@ -1,0 +1,823 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.package-runtime.config.ts"
+    ],
+    "configFile": "/cleanup/packages/e2e/playwright.package-runtime.config.ts",
+    "rootDir": "/cleanup/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      },
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "chromium",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "webkit",
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "isMobile": true,
+          "hasTouch": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/package-browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "package-runtime-load.spec.ts",
+      "file": "package-runtime-load.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "concurrent package displays keep authoritative pause, results and reconnect",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120476,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:22:21",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                      "column": 6,
+                      "line": 107
+                    },
+                    "snippet": "   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                        "column": 6,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:22:21"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:06:17.157Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-load-concu-63ed5-pause-results-and-reconnect-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                    "column": 6,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2933c72938e11d345719-e80774828537caaa71d1",
+          "file": "package-runtime-load.spec.ts",
+          "line": 14,
+          "column": 1
+        },
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120547,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                      "column": 6,
+                      "line": 107
+                    },
+                    "snippet": "   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                        "column": 6,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:08:18.430Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-load-bound-f1ef9-ack-without-losing-the-room-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                    "column": 6,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2933c72938e11d345719-98892625e74bc150a5ae",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "concurrent package displays keep authoritative pause, results and reconnect",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 420000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120948,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:22:21",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                      "column": 6,
+                      "line": 107
+                    },
+                    "snippet": "   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                        "column": 6,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:22:21"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:14:43.314Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-load-concu-63ed5-pause-results-and-reconnect-webkit/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                    "column": 6,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2933c72938e11d345719-a11a610ae89a4a964448",
+          "file": "package-runtime-load.spec.ts",
+          "line": 14,
+          "column": 1
+        },
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 6,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120954,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                      "column": 6,
+                      "line": 107
+                    },
+                    "snippet": "   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                        "column": 6,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:16:45.059Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-load-bound-f1ef9-ack-without-losing-the-room-webkit/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                    "column": 6,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2933c72938e11d345719-3b3c7a0abb7b2c156a18",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "package-runtime.spec.ts",
+      "file": "package-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120251,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 6,
+                      "line": 78
+                    },
+                    "snippet": "  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 6,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:10:19.814Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-declarativ-89e86--assets-before-installation-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 6,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-7b19b9f6167ca616d7aa",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 20834,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 66,
+                      "line": 166
+                    },
+                    "snippet": "  164 |     fixture = createPackageFixture(\"complete\", style, version)\n  165 |   await page.goto(\"/manager/config\")\n> 166 |   await page.getByRole(\"button\", { name: \"Quizz\", exact: true }).click()\n      |                                                                  ^\n  167 |   await page.getByTestId(\"package-file-input\").setInputFiles({\n  168 |     name: \"complete.tadazz\",\n  169 |     mimeType: \"application/zip\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 66,
+                        "line": 166
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n\n\n  164 |     fixture = createPackageFixture(\"complete\", style, version)\n  165 |   await page.goto(\"/manager/config\")\n> 166 |   await page.getByRole(\"button\", { name: \"Quizz\", exact: true }).click()\n      |                                                                  ^\n  167 |   await page.getByTestId(\"package-file-input\").setInputFiles({\n  168 |     name: \"complete.tadazz\",\n  169 |     mimeType: \"application/zip\",\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:12:20.898Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 66,
+                    "line": 166
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-583916747cee9b538977",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120078,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 8,
+                      "line": 625
+                    },
+                    "snippet": "  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 8,
+                        "line": 625
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:12:42.552Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-networkles-daf19-nd-executable-import-tricks-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 8,
+                    "line": 625
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-8174dbb82ba010e70d07",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        },
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 7,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120819,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 6,
+                      "line": 78
+                    },
+                    "snippet": "  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 6,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:18:46.837Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-declarativ-89e86--assets-before-installation-webkit/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 6,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-1f070bd31d80855a167f",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 8,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 21370,
+                  "error": {
+                    "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n",
+                    "stack": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 66,
+                      "line": 166
+                    },
+                    "snippet": "  164 |     fixture = createPackageFixture(\"complete\", style, version)\n  165 |   await page.goto(\"/manager/config\")\n> 166 |   await page.getByRole(\"button\", { name: \"Quizz\", exact: true }).click()\n      |                                                                  ^\n  167 |   await page.getByTestId(\"package-file-input\").setInputFiles({\n  168 |     name: \"complete.tadazz\",\n  169 |     mimeType: \"application/zip\","
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 66,
+                        "line": 166
+                      },
+                      "message": "TimeoutError: locator.click: Timeout 20000ms exceeded.\nCall log:\n\u001b[2m  - waiting for getByRole('button', { name: 'Quizz', exact: true })\u001b[22m\n\n\n  164 |     fixture = createPackageFixture(\"complete\", style, version)\n  165 |   await page.goto(\"/manager/config\")\n> 166 |   await page.getByRole(\"button\", { name: \"Quizz\", exact: true }).click()\n      |                                                                  ^\n  167 |   await page.getByTestId(\"package-file-input\").setInputFiles({\n  168 |     name: \"complete.tadazz\",\n  169 |     mimeType: \"application/zip\",\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:166:66"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:20:48.497Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-webkit/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 66,
+                    "line": 166
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-5a7504ab2c027c76dd44",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 9,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 119959,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 8,
+                      "line": 625
+                    },
+                    "snippet": "  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 8,
+                        "line": 625
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T09:21:10.718Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-networkles-daf19-nd-executable-import-tricks-webkit/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 8,
+                    "line": 625
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-d3899dec93e6daef181e",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T09:06:12.729Z",
+    "duration": 1018071.7309999999,
+    "expected": 0,
+    "skipped": 0,
+    "unexpected": 10,
+    "flaky": 0
+  }
+}

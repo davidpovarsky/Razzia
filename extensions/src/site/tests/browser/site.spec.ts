@@ -1,16 +1,16 @@
-import { readFileSync, mkdirSync, writeFileSync } from "node:fs"
+import { devices, expect, test, type Page } from "@playwright/test"
+import { mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { fileURLToPath } from "node:url"
-import { test, expect, devices, type Page } from "@playwright/test"
-import { swipePage } from "../../../../qa/site-touch"
-import { createPackageFixture } from "../../../../src/testkit/package-fixtures"
-import { packageSha } from "../../../../src/server/packages/archive"
-import {
-  startGame,
-  next as nextQuestion,
-} from "../../../../../packages/e2e/utils/manager"
-import { joinGame, answer } from "../../../../../packages/e2e/utils/player"
 import { t as hostText } from "../../../../../packages/e2e/utils/i18n"
+import {
+  next as nextQuestion,
+  startGame,
+} from "../../../../../packages/e2e/utils/manager"
+import { answer, joinGame } from "../../../../../packages/e2e/utils/player"
+import { swipePage } from "../../../../qa/site-touch"
+import { packageSha } from "../../../../src/server/packages/archive"
+import { createPackageFixture } from "../../../../src/testkit/package-fixtures"
 const evidence = fileURLToPath(
   new URL(
     "../../../../../docs/extensions/qa-evidence/unified-site-20261110/",
@@ -204,6 +204,7 @@ test("Studio keeps navigation warm, protects initial verification and styles act
     )
     const phone = await mobile.newPage()
     await phone.goto("/studio/games")
+    await phone.getByTestId("package-tools-toggle").click()
     await phone
       .getByTestId("package-manager")
       .locator("ul li")

@@ -1,0 +1,31 @@
+{
+  "threshold": 0,
+  "maxDiffPixels": 0,
+  "playwrightComparison": "PASS",
+  "files": [
+    {
+      "name": "editor-question.png",
+      "controlSha256": "f6ea941ae0bcb6152f576a6e3e86ad0fcc2b11389a4e1ef7638f55832e7bc19d",
+      "candidateSha256": "6b3eb5f8137b6ac95c91b0f22baac703cd1e5a1b81af41c1e78286bd08cc443c",
+      "byteIdentical": false
+    },
+    {
+      "name": "editor-media.png",
+      "controlSha256": "03b22c1d72bc642346e1e4bae562d544ec37d4c5c63699d47684cf43ebc37dbc",
+      "candidateSha256": "f19ce5c5515a1dbe059f8dd371fdb667628a58677e7198a397041029854784c0",
+      "byteIdentical": false
+    },
+    {
+      "name": "editor-scene-timeline.png",
+      "controlSha256": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530",
+      "candidateSha256": "7a2390b2b1e42e3f406ed86a6d63696b7ff25aac93ee4e2600d68fe8d1325530",
+      "byteIdentical": true
+    },
+    {
+      "name": "editor-theme-settings.png",
+      "controlSha256": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5",
+      "candidateSha256": "02928cf270fa6173dcef5620ef154079a90fb39cbd3c8accf0e5364c142d71b5",
+      "byteIdentical": true
+    }
+  ]
+}

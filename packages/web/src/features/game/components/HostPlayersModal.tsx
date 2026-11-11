@@ -1,5 +1,3 @@
-import NativeButton from "@razzia/web/components/Button"
-import { DialogPortal } from "@razzia/extensions/platform-ui"
 import {
   exportRosterToCsv,
   formatFullPhoneDisplay,
@@ -11,6 +9,12 @@ import {
   type HostPresenceSnapshot,
   type RosterImportResult,
 } from "@razzia/extensions/core"
+import {
+  DialogPortal,
+  HostRosterPolicy,
+  HostRosterRemove,
+  Button as NativeButton,
+} from "@razzia/extensions/platform-ui"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import {
   commitGameRosterParticipants,
@@ -30,7 +34,6 @@ import {
   Phone,
   Plus,
   Search,
-  Trash2,
   Upload,
   Users,
   X,
@@ -69,7 +72,8 @@ interface Props {
 
 const HostPlayersModal = ({ open, onOpenChange }: Props) => {
   const { t } = useTranslation()
-  const { gameId, players, hostPresence, updateManager } = useManagerStore()
+  const { gameId, players, settings, hostPresence, updateManager } =
+    useManagerStore()
 
   const [filterTab, setFilterTab] = useState<FilterTab>("all")
   const [searchQuery, setSearchQuery] = useState("")
@@ -121,14 +125,14 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
       v: 1,
       gameId: gameId ?? "",
       seq: 0,
-      phoneInviteOnly: false,
+      phoneInviteOnly: settings.phoneInviteOnly ?? false,
       registeredTotal: fallbackPlayers.length,
       connectedNow,
       disconnectedNow,
       notJoinedNow: 0,
       players: fallbackPlayers,
     }
-  }, [hostPresence, players, gameId])
+  }, [hostPresence, players, gameId, settings.phoneInviteOnly])
 
   const filteredPlayers = useMemo(
     () =>
@@ -179,8 +183,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
         phoneInviteOnly: nextVal,
       })
       updateManager({ hostPresence: presence })
-    } catch {
+    } catch (error) {
       toast.error(t("errors:route.description"))
+      throw error
     } finally {
       setIsBusy(false)
     }
@@ -262,8 +267,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
         setNameInput("")
         setPhoneInput("")
       }
-    } catch {
+    } catch (error) {
       toast.error(t("errors:route.description"))
+      throw error
     } finally {
       setIsBusy(false)
     }
@@ -332,7 +338,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
         <Dialog.Content
           aria-describedby={undefined}
           data-testid="host-players-modal"
-          className="bg-background data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 flex max-h-[88dvh] w-[95vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border border-neutral-200 p-6 shadow-2xl dark:border-neutral-800"
+          className="tds-roster-dialog bg-background data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 flex max-h-[88dvh] w-[95vw] max-w-4xl -translate-x-1/2 -translate-y-1/2 flex-col rounded-2xl border border-neutral-200 p-6 shadow-2xl dark:border-neutral-800"
         >
           <Dialog.Close
             data-testid="host-players-close-btn"
@@ -437,8 +443,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
             </div>
           </div>
 
-          {/* Summary KPI Strip + Invite Only Toggle */}
-          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-5">
+          {/* Live metrics; phone policy is a separate setting. */}
+          <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
             <div
               className="rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-900"
               data-testid="kpi-registered"
@@ -486,25 +492,12 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                 {snapshot.notJoinedNow}
               </div>
             </div>
-
-            <label className="flex cursor-pointer items-center justify-between rounded-xl border border-neutral-200 bg-neutral-50 p-3 dark:border-neutral-800 dark:bg-neutral-900">
-              <div className="flex flex-col">
-                <span className="text-xs font-bold text-neutral-900 dark:text-white">
-                  {t("extensions:roster.phoneInviteOnly", "Phone Invite Only")}
-                </span>
-                <span className="text-[10px] text-neutral-500">
-                  {snapshot.phoneInviteOnly ? "ON" : "OFF"}
-                </span>
-              </div>
-              <input
-                type="checkbox"
-                checked={snapshot.phoneInviteOnly}
-                onChange={(e) => handleToggleInviteOnly(e.target.checked)}
-                className="accent-primary size-4 rounded"
-                data-testid="host-modal-invite-only-toggle"
-              />
-            </label>
           </div>
+          <HostRosterPolicy
+            checked={snapshot.phoneInviteOnly}
+            disabled={isBusy || !gameId}
+            onChange={handleToggleInviteOnly}
+          />
 
           {/* Import Preview Box */}
           {importPreview && (
@@ -534,6 +527,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                       size="sm"
                       type="button"
                       onClick={handleApproveImport}
+                      variant="primary"
+                      disabled={isBusy}
                       className="bg-primary rounded px-3 py-1 text-xs font-bold text-white"
                       data-testid="host-modal-import-approve-btn"
                     >
@@ -620,6 +615,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               type="button"
               disabled={isBusy}
               onClick={handleSaveParticipant}
+              variant="primary"
               className="bg-primary flex items-center gap-1 rounded-lg px-3.5 py-1.5 text-xs font-bold text-white"
               data-testid="host-modal-save-participant-btn"
             >
@@ -679,6 +675,8 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                   key={tabId}
                   type="button"
                   onClick={() => setFilterTab(tabId)}
+                  variant={filterTab === tabId ? "primary" : "secondary"}
+                  aria-pressed={filterTab === tabId}
                   data-testid={`host-filter-${tabId}`}
                   className={clsx(
                     "rounded-lg px-2.5 py-1 text-xs font-bold transition-colors",
@@ -697,6 +695,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
               <input
                 type="text"
                 value={searchQuery}
+                aria-label={t("extensions:roster.searchPlaceholder")}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder={t(
                   "extensions:roster.searchPlaceholder",
@@ -709,7 +708,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
           </div>
 
           {/* Players Table */}
-          <div className="mt-3 min-h-0 flex-1 overflow-y-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
+          <div className="tds-roster-table-scroll mt-3 min-h-0 flex-1 overflow-auto rounded-xl border border-neutral-200 dark:border-neutral-800">
             {filteredPlayers.length === 0 ? (
               <div
                 className="p-8 text-center text-sm text-neutral-500"
@@ -745,7 +744,9 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                     <th className="px-3 py-2.5">
                       {t("extensions:roster.colPoints", "Points")}
                     </th>
-                    <th className="px-3 py-2.5 text-right">Actions</th>
+                    <th className="px-3 py-2.5 text-right">
+                      {t("extensions:roster.colActions")}
+                    </th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-neutral-200 dark:divide-neutral-800">
@@ -836,6 +837,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                             size="sm"
                             type="button"
                             onClick={() => handleEdit(p)}
+                            aria-label={t("extensions:roster.editParticipant")}
                             className="hover:bg-accent rounded p-1 text-neutral-600 hover:text-neutral-900 dark:text-neutral-400"
                             title={t(
                               "extensions:roster.editParticipant",
@@ -845,16 +847,12 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
                           >
                             <Edit2 className="size-3.5" />
                           </NativeButton>
-                          <NativeButton
-                            size="sm"
-                            type="button"
-                            onClick={() => handleRemove(p.rosterPlayerId)}
-                            className="hover:bg-accent rounded p-1 text-red-500 hover:text-red-700"
-                            title={t("extensions:roster.remove", "Remove")}
-                            data-testid={`host-player-remove-${p.rosterPlayerId}`}
-                          >
-                            <Trash2 className="size-3.5" />
-                          </NativeButton>
+                          <HostRosterRemove
+                            name={p.displayName}
+                            participantId={p.rosterPlayerId}
+                            disabled={isBusy || !gameId}
+                            onConfirm={() => handleRemove(p.rosterPlayerId)}
+                          />
                         </div>
                       </td>
                     </tr>

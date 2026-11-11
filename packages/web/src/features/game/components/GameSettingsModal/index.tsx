@@ -5,7 +5,7 @@ import {
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { GameSettings } from "@razzia/common/types/game"
 import { gameSettingsSchema } from "@razzia/common/validators/game"
-import { Button, DialogPortal } from "@razzia/extensions/platform-ui"
+import { Button, DialogPortal, hostRules } from "@razzia/extensions/platform-ui"
 import Tooltip from "@razzia/web/components/Tooltip"
 import AutoAdvance from "@razzia/web/features/game/components/GameSettingsModal/AutoAdvance"
 import GeneratedUsernames from "@razzia/web/features/game/components/GameSettingsModal/GeneratedUsernames"
@@ -26,13 +26,16 @@ interface Props {
 }
 
 const GameSettingsModal = ({ onOpenRoster }: Props) => {
-  const { gameId, settings, updateManager } = useManagerStore()
+  const manager = useManagerStore()
+  const { gameId, updateManager } = manager
+  const settings = hostRules(manager)
   const [open, setOpen] = useState(false)
   const { t } = useTranslation()
 
   const form = useForm<GameSettings>({
     resolver: zodResolver(gameSettingsSchema),
-    defaultValues: settings,
+    values: settings,
+    resetOptions: { keepDirtyValues: true },
   })
 
   const { mutate: save, isPending } = useMutation({

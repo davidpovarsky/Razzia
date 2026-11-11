@@ -44,6 +44,17 @@ describe("extensions/locales parity", () => {
     expect(referenceKeys).toContain("host.history")
     expect(referenceKeys).toContain("host.endTimer")
     expect(referenceKeys).toContain("host.skipQuestion")
+    expect(referenceKeys).toEqual(
+      expect.arrayContaining([
+        "roster.phoneInviteOnlyDesc",
+        "roster.saving",
+        "roster.saved",
+        "roster.removeTitle",
+        "roster.removeDescription",
+        "roster.removeError",
+        "roster.colActions",
+      ]),
+    )
   })
 
   for (const lang of SUPPORTED_EXTENSION_LANGUAGES) {

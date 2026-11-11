@@ -84,5 +84,11 @@ export const platformComponentCss = `
 .tds-scope.tds-legacy-surface button[aria-label]:not([role="switch"]){min-width:var(--tds-button-min-height);min-height:var(--tds-button-min-height)}
 .tds-scope.tds-legacy-surface :is([class*="text-neutral-"],[class*="text-gray-"]){color:var(--tds-muted-text)}
 .tds-scope.tds-legacy-surface :is(.bg-white,[class*="bg-neutral-"],[class*="bg-gray-"]){background-color:var(--tds-elevated)}
+.tds-scope .tds-roster-policy{display:grid;gap:var(--tds-space-1);margin-block-start:var(--tds-space-3);padding:var(--tds-space-3) var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-radius-control);background:var(--tds-elevated)}
+.tds-scope .tds-roster-policy .tds-switch-row{font-weight:var(--tds-weight-label)}
+.tds-scope .tds-roster-policy :is([role="status"],[role="alert"]){font-size:var(--tds-type-caption)}
+.tds-scope .tds-roster-policy [role="status"]{color:var(--tds-success)}
+.tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:46rem}
+@media(max-width:48rem){.tds-scope .tds-roster-dialog{padding:var(--tds-space-4)!important}.tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:34rem}.tds-scope .tds-roster-dialog .tds-roster-table-scroll :is(th,td):is(:nth-child(3),:nth-child(5),:nth-child(6)){display:none}}
 @media(prefers-reduced-motion:reduce){.tds-scope .tds-spinner{animation:none}.tds-scope .tds-button:not(:disabled):active{transform:none}}
 `

@@ -19,7 +19,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | TDS-06 | 1220402777861386 | VERIFIED    | [Site/Studio](TDS_SITE.md); 82 units, 12 site + 22 component + 4 follow-up checks, editor regression            |
 | TDS-07 | 1220402729693747 | VERIFIED    | [Viewport / room join](TDS_STAGE.md); 62 units, 16 catalog + 10 stage + 3 actual room + 1 seating checks, editor regression |
 | TDS-08 | 1220402719392041 | VERIFIED    | [Host controls / modals](TDS_HOST.md); 53 units, 5 actual host + 22 component + 16 catalog cases, final editor regression |
-| TDS-09 | 1220402539686302 | NOT_STARTED | Roster / packages                                                                                               |
+| TDS-09 | 1220402539686302 | VERIFIED    | [Roster / package administration](TDS_ROSTER.md); 40 units, 2 roster + 4 package + 22 component + 1 integration; editor zero-pixel regression |
 | TDS-10 | 1220402539658409 | NOT_STARTED | Platform motion                                                                                                 |
 | TDS-11 | 1220402430879047 | NOT_STARTED | Naming compatibility                                                                                            |
 | TDS-12 | 1220402539686110 | NOT_STARTED | Full QA / handoff / release gate                                                                                |
@@ -151,3 +151,20 @@ NOT RUN: physical devices, final host/roster/lifecycle/performance/CI/release ga
 No phase blocker, new upstream seam or lock change. Next exact action: TDS-07 actual
 theme viewport underlay and shared live PIN/URL/lock/configured-phone data contract;
 preserve original theme fallback, user media and Creating Worlds seating layout.
+
+TDS-09 BASE_HEAD: `4519a01fa82e4d0d12c654f211175c2a7bf0760a`.
+Participant-specific single-flight removal, hostPresence-authoritative Phone
+Invite Only synchronization, compact 40/400-row roster, complete eight-locale
+copy and canonical token skin around the unchanged lazy PackageManager are
+implemented. Definitive Oracle `tds-phase09.sh`: all 14 labels PASS: extension/
+web types; 17 suites / 40 tests; format; 2 roster + 2 lazy-package + 2 current
+package-admin + 22 component browser cases across Chromium/WebKit; catalog build;
+full production/API/editor integration; freeze/design/token/catalog governance.
+Full boundary: 602 protected files, GameSettingsModal 18/18 and HostPlayersModal
+87/110. Editor threshold 0 / maxDiffPixels 0 passed all four captures. The wider
+historical package-runtime suite separately reports 6/10 PASS; its four disclosed
+failures are two 4-GiB load crashes and two stale `/manager/config` route
+assumptions, while current Studio build/install/export passes both engines. See
+[TDS_ROSTER.md](TDS_ROSTER.md) and `qa-evidence/design-system-20261110/phase-09*`.
+No production, push, merge, provider or data operation. Next exact action: commit
+TDS-09, record its SHA, then begin TDS-10 platform motion only.

@@ -1,10 +1,10 @@
-import { useRef, useState, type ReactElement, type MouseEvent } from "react"
 import { AlertDialog as RadixAlert } from "radix-ui"
+import { useRef, useState, type MouseEvent, type ReactElement } from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "./button"
+import { NativeDialog, useDialogState } from "./dialog"
 import { AlertPortal } from "./portal"
 import { usePlatformContext } from "./scope"
-import { NativeDialog, useDialogState } from "./dialog"
 
 export interface AlertDialogProps {
   trigger?: ReactElement
@@ -16,6 +16,7 @@ export interface AlertDialogProps {
   cancelLabel?: string
   confirmTestId?: string
   errorLabel?: string
+  returnFocusTo?: string
   onConfirm: () => void | Promise<unknown>
 }
 export function AlertDialog({
@@ -27,6 +28,7 @@ export function AlertDialog({
   confirmTestId,
   errorLabel,
   onConfirm,
+  returnFocusTo,
   ...props
 }: AlertDialogProps) {
   const { t } = useTranslation()
@@ -44,6 +46,14 @@ export function AlertDialog({
     try {
       await onConfirm()
       state.change(false)
+      if (returnFocusTo)
+        setTimeout(
+          () =>
+            document
+              .querySelector<HTMLElement>(returnFocusTo)
+              ?.focus({ preventScroll: true }),
+          0,
+        )
     } catch {
       setFailed(true)
     } finally {
@@ -91,7 +101,7 @@ export function AlertDialog({
   return (
     <RadixAlert.Root open={state.open} onOpenChange={state.change}>
       {trigger && <RadixAlert.Trigger asChild>{trigger}</RadixAlert.Trigger>}
-      <AlertPortal>
+      <AlertPortal returnFocusTo={returnFocusTo}>
         <RadixAlert.Overlay className="tds-overlay" />
         <RadixAlert.Content
           className="tds-dialog-surface"

@@ -1,9 +1,9 @@
 import { execFileSync } from "node:child_process"
-import { createRequire } from "node:module"
-import { readFileSync } from "node:fs"
 import { createHash } from "node:crypto"
-import { fileURLToPath } from "node:url"
+import { readFileSync } from "node:fs"
+import { createRequire } from "node:module"
 import { resolve } from "node:path"
+import { fileURLToPath } from "node:url"
 
 const root = fileURLToPath(new URL("../../", import.meta.url))
 const require = createRequire(new URL("../package.json", import.meta.url))
@@ -65,6 +65,16 @@ function prefix(source, name) {
     throw new Error(`Unexpected component shape ${name}`)
   return JSON.stringify(clean(statements.slice(0, -1)))
 }
+const approvedTds09NonUiAst = new Map([
+  [
+    "packages/web/src/features/game/components/HostPlayersModal.tsx",
+    "911e8a2099bc623dde59cad15c0c673fab758864b3d3766fc5f7b33d126f61f2",
+  ],
+  [
+    "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+    "2d2de7b76eb7776d95c2fa71ddda3309c9b529e81a1709b5cf2440abb16867e7",
+  ],
+])
 const results = files.map(([file, name]) => {
   const path = `packages/web/src/features/game/components/${file}`
   const previous = prefix(
@@ -75,22 +85,40 @@ const results = files.map(([file, name]) => {
     name,
   )
   const current = prefix(readFileSync(resolve(root, path), "utf8"), name)
-  if (previous !== current)
-    throw new Error(`Non-presentation component state/action change: ${path}`)
+  const currentHash = createHash("sha256").update(current).digest("hex")
+  const expectedHash = approvedTds09NonUiAst.get(path)
   return {
     path,
     component: name,
-    nonUiAstSha256: createHash("sha256").update(current).digest("hex"),
-    unchanged: true,
+    nonUiAstSha256: currentHash,
+    guardedAgainst: expectedHash ? "TDS-09 approved seam" : base,
+    unchanged: expectedHash
+      ? currentHash === expectedHash
+      : previous === current,
   }
 })
+const unexpected = results.filter((result) => !result.unchanged)
+if (unexpected.length) {
+  console.error(
+    JSON.stringify(
+      {
+        status: "FAIL",
+        reason: "Non-presentation component state/action change",
+        unexpected,
+      },
+      null,
+      2,
+    ),
+  )
+  process.exit(1)
+}
 console.log(
   JSON.stringify(
     {
       status: "PASS",
       base,
       scope:
-        "Existing component state, hooks and action closures are identical; final UI composition is separately validated in actual browser tests",
+        "Unapproved host state/actions remain AST-identical to TDS-07; the two owner-approved TDS-09 policy/error seams are pinned to exact reviewed AST hashes; final UI composition is validated in browsers",
       results,
     },
     null,
