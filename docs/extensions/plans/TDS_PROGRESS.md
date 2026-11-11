@@ -166,5 +166,6 @@ historical package-runtime suite separately reports 6/10 PASS; its four disclose
 failures are two 4-GiB load crashes and two stale `/manager/config` route
 assumptions, while current Studio build/install/export passes both engines. See
 [TDS_ROSTER.md](TDS_ROSTER.md) and `qa-evidence/design-system-20261110/phase-09*`.
-No production, push, merge, provider or data operation. Next exact action: commit
-TDS-09, record its SHA, then begin TDS-10 platform motion only.
+No production, push, merge, provider or data operation. TDS-09 implementation
+commit: `ad0152866e0f84fbead6c2a32dca6ec7d0fa0c07`. Next exact action: begin
+TDS-10 platform motion only.

@@ -10,7 +10,8 @@ Working branch and worktree:
 `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
 
 BASE_HEAD: `4519a01fa82e4d0d12c654f211175c2a7bf0760a`.
-NEW_HEAD / commits: recorded in the immediate post-commit checkpoint.
+NEW_HEAD / implementation commit:
+`ad0152866e0f84fbead6c2a32dca6ec7d0fa0c07`.
 No push, merge or deployment occurred.
 
 ## Changed files
@@ -193,7 +194,7 @@ RTL-capable logical styling and reduced-motion package styling are retained.
 - Local ignored `node_modules` was removed while troubleshooting Windows Docker;
   restore with `pnpm install --frozen-lockfile` if local execution is needed.
 
-Next exact action: commit this verified TDS-09 implementation/evidence, record the
-commit hash in TDS_PROGRESS and this file, then begin TDS-10 platform-only motion.
-Owner approval required: no for the local phase commit and TDS-10; yes for any
-push, merge, deployment, production operation or destructive remote cleanup.
+Next exact action: begin TDS-10 platform-only motion from implementation commit
+`ad0152866e0f84fbead6c2a32dca6ec7d0fa0c07`. Owner approval required: no for
+the local checkpoint commit and TDS-10; yes for any push, merge, deployment,
+production operation or destructive remote cleanup.
