@@ -12,6 +12,15 @@ const variables = (value: string) =>
   [...value.matchAll(/\{\{(\w+)\}\}/gu)].map((match) => match[1]).sort()
 describe("site locale contract", () => {
   const en = read("en")
+  for (const language of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
+    it(`${language} keeps ordinary platform branding title-case while retaining legacy translation keys`, () => {
+      const dictionary = read(language)
+      for (const value of Object.values(dictionary))
+        expect(value).not.toMatch(/TADAZZ|\bTada\b/u)
+      expect(dictionary["TADAZZ JSON"]).toContain("Tadazz")
+      expect(dictionary["Your TADAZZ Studio"]).toContain("Tadazz")
+    })
+  }
   for (const language of ["fr", "de", "es", "it", "ja", "tr", "vi"]) {
     it(`${language} covers all site keys and preserves interpolation`, () => {
       const dictionary = read(language)
