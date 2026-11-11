@@ -2,6 +2,8 @@ import { LobbyTeamAssignmentAdapter } from "../tadazz-show/team-adapters"
 import {
   useRoomJoin,
   RoomJoinMetadata,
+  RoomQrPortal,
+  RoomQrLabels,
   RoomQrCode as QRCodeSVG,
 } from "@razzia/extensions/presentation/room-join"
 import { useExtensionState } from "@razzia/web/features/game/contexts/extension-state-context"
@@ -80,7 +82,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
   const handleCloseQrCode = () => setQrOpen(false)
 
   return (
-    <section className="relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-2">
+    <section className="tds-native-room relative mx-auto flex w-full max-w-7xl flex-1 flex-col items-center justify-center px-2">
       <div className="mb-10 flex flex-col-reverse items-center gap-3 md:flex-row md:items-stretch">
         <div className="flex flex-col gap-3 md:flex-row">
           <div className="flex flex-col items-center justify-center rounded-xl bg-white px-6 py-4 md:flex-row">
@@ -132,12 +134,13 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
               </div>
             </AlertDialog.Trigger>
 
-            <AlertDialog.Portal>
+            <RoomQrPortal>
               <AlertDialog.Overlay className="fixed inset-0 z-50 bg-black/70" />
               <AlertDialog.Content
                 ref={qrContentRef}
                 className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6"
               >
+                <RoomQrLabels join={join} />
                 <button
                   onClick={handleCloseQrCode}
                   aria-label={t("common:close")}
@@ -150,7 +153,7 @@ const Room = ({ data: { text, inviteCode }, readOnly = false }: Props) => {
                   value={join.qrUrl ?? webUrl}
                 />
               </AlertDialog.Content>
-            </AlertDialog.Portal>
+            </RoomQrPortal>
           </AlertDialog.Root>
         )}
       </div>

@@ -1,8 +1,47 @@
-import type { ComponentProps } from "react"
+import {
+  useLayoutEffect,
+  useRef,
+  type ComponentProps,
+  type ReactNode,
+} from "react"
 import { QRCodeSVG } from "qrcode.react"
 import { useTranslation } from "react-i18next"
+import { AlertDialog } from "radix-ui"
+import { AlertPortal } from "../../platform-ui/portal"
 import type { RoomJoin } from "./contract"
 import { useOptionalShowTheme } from "../show-themes/context"
+
+export function RoomQrPortal({ children }: { children: ReactNode }) {
+  return <AlertPortal legacy>{children}</AlertPortal>
+}
+export function RoomQrLabels({ join }: { join: RoomJoin }) {
+  const { t } = useTranslation()
+  const title = useRef<HTMLHeadingElement>(null)
+  useLayoutEffect(() => {
+    let mounted = true
+    queueMicrotask(() => {
+      if (mounted)
+        title.current
+          ?.closest('[role="alertdialog"]')
+          ?.querySelector<HTMLButtonElement>("button")
+          ?.focus()
+    })
+    return () => {
+      mounted = false
+    }
+  }, [])
+  return (
+    <>
+      <AlertDialog.Title ref={title} className="sr-only">
+        {t("game:showQrCode")}
+      </AlertDialog.Title>
+      <AlertDialog.Description className="sr-only">
+        {t("game:joinInstruction")} {join.webUrl} · {t("game:gamePinLabel")}{" "}
+        {join.displayPin}
+      </AlertDialog.Description>
+    </>
+  )
+}
 
 /** Same installed encoder; four-module quiet zone remains inside the SVG box. */
 export function RoomQrCode(props: ComponentProps<typeof QRCodeSVG>) {

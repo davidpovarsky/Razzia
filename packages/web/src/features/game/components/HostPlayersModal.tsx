@@ -1,4 +1,5 @@
 import NativeButton from "@razzia/web/components/Button"
+import { DialogPortal } from "@razzia/extensions/platform-ui"
 import {
   exportRosterToCsv,
   formatFullPhoneDisplay,
@@ -322,7 +323,10 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
 
   return (
     <Dialog.Root open={open} onOpenChange={onOpenChange}>
-      <Dialog.Portal>
+      <DialogPortal
+        legacy
+        returnFocusTo='[data-testid="host-bottom-players-btn"]'
+      >
         <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/60 backdrop-blur-xs" />
 
         <Dialog.Content
@@ -332,6 +336,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
         >
           <Dialog.Close
             data-testid="host-players-close-btn"
+            aria-label={t("common:close")}
             className="hover:bg-muted text-muted-foreground hover:text-foreground absolute top-5 right-5 rounded-md p-1.5"
           >
             <X className="size-5" />
@@ -859,7 +864,7 @@ const HostPlayersModal = ({ open, onOpenChange }: Props) => {
             )}
           </div>
         </Dialog.Content>
-      </Dialog.Portal>
+      </DialogPortal>
     </Dialog.Root>
   )
 }

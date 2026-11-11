@@ -132,3 +132,14 @@ Initial failures and intermediate diagnostics are retained in `phase04-r1`,
 those failure records. Broader role/device/performance matrix remains TDS-12.
 No push, merge, deployment, production writes or new authorization required.
 Next: TDS-05 internal live catalog and governance, using these exact components.
+# TDS-08 production host compositions
+
+Current host additions are documented in [TDS_HOST.md](TDS_HOST.md):
+`HostDisplayControls` forwards existing window/copy/presenter callbacks;
+`HostControlBar` scopes existing footer controls; `HostAudioControls` skins the
+original single audio component without owning its engine. `DialogPortal` accepts
+an optional `returnFocusTo` selector for controlled dialogs without Radix Trigger;
+it restores only otherwise-lost focus. Legacy host switches reuse canonical
+track/thumb declarations. All selectors stay explicitly scoped; stage/editor
+styles and state remain separate. The live catalog imports all three production
+compositions and contains 41 runtime exports across the same nine families.

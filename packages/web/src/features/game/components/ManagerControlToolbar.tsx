@@ -11,6 +11,7 @@ import {
   AlertDialog,
   Button,
   PlatformScope,
+  HostDisplayControls,
 } from "@razzia/extensions/platform-ui"
 import HistoryDialog from "@razzia/web/features/game/components/HistoryDialog"
 import HostShortcutsDialog from "@razzia/web/features/game/components/HostShortcutsDialog"
@@ -18,13 +19,10 @@ import RoomLockButton from "@razzia/web/features/game/components/RoomLockButton"
 import { useSocket } from "@razzia/web/features/game/contexts/socket-context"
 import clsx from "clsx"
 import {
-  Check,
   ChevronLeft,
   ChevronRight,
-  Copy,
   History,
   LogOut,
-  Monitor,
   Pause,
   Play,
   RotateCcw,
@@ -437,8 +435,9 @@ export const ManagerControlToolbar = ({
   return (
     <PlatformScope
       context="platform.host"
-      className="font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2"
+      className="tds-host-toolbar font-display relative z-50 box-border flex w-full max-w-full shrink-0 flex-wrap items-center justify-between gap-2 px-3 py-2"
       data-testid="manager-control-toolbar"
+      data-host-lobby={isLobby ? "true" : "false"}
     >
       {(
         extensionState?.extras.activeSceneData as ActiveSceneData | undefined
@@ -476,47 +475,13 @@ export const ManagerControlToolbar = ({
           <RoomLockButton className="hover:bg-accent shrink-0 rounded-lg bg-white px-3 py-2 font-semibold text-black shadow-md" />
         )}
 
-        {gameId && (
-          <div className="flex shrink-0 items-center gap-1 rounded-lg border border-white/10 bg-white/20 p-1 shadow-md backdrop-blur-md">
-            <Button
-              size="sm"
-              onClick={handleOpenDisplay}
-              className="flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-semibold text-white hover:bg-white/20 sm:px-3 sm:text-sm"
-              title={t("extensions:host.openDisplay")}
-              data-testid="host-open-display-btn"
-            >
-              <Monitor className="size-4 shrink-0" />
-              <span>{t("extensions:host.openDisplay")}</span>
-            </Button>
-            <Button
-              size="sm"
-              onClick={handleCopyDisplayUrl}
-              className="flex items-center rounded-md p-1.5 text-white hover:bg-white/20"
-              title={t("extensions:host.copyDisplayUrl")}
-              data-testid="host-copy-display-btn"
-            >
-              {copiedDisplay ? (
-                <Check className="size-4 shrink-0 text-emerald-400" />
-              ) : (
-                <Copy className="size-4 shrink-0" />
-              )}
-            </Button>
-          </div>
-        )}
-
-        {onPresent && (
-          <Button
-            size="sm"
-            onClick={onPresent}
-            className="bg-primary flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold text-white shadow-lg hover:brightness-105 sm:px-4 sm:py-2 sm:text-base"
-            data-testid="host-present-from-host-btn"
-          >
-            <Monitor className="size-5 shrink-0" />
-            <span>
-              {t("extensions:host.presentFromHost", "Present from Host")}
-            </span>
-          </Button>
-        )}
+        <HostDisplayControls
+          gameId={gameId}
+          onOpen={handleOpenDisplay}
+          onCopy={handleCopyDisplayUrl}
+          copied={copiedDisplay}
+          onPresent={onPresent}
+        />
 
         {/* Exit Button with confirmation when game in progress */}
         {isLobby || isFinished ? (
@@ -565,7 +530,7 @@ export const ManagerControlToolbar = ({
                   : t("extensions:host.previousScreen", "Previous Screen")
               }
               className={clsx(
-                "relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold shadow-md transition-all active:scale-95 sm:px-4 sm:py-2 sm:text-base",
+                "tds-host-previous relative flex shrink-0 items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-bold shadow-md transition-all active:scale-95 sm:px-4 sm:py-2 sm:text-base",
                 canPrevious && !isPending
                   ? "bg-white text-black hover:bg-white/90"
                   : "border border-white/10 bg-white/10 text-white/40 opacity-40",
@@ -648,6 +613,7 @@ export const ManagerControlToolbar = ({
         {/* Lobby Start Game */}
         {isLobby && onStartGame && (
           <Button
+            variant="primary"
             size="sm"
             onClick={onStartGame}
             className="hover:bg-accent flex shrink-0 items-center gap-2 rounded-lg bg-white px-5 py-2 text-base font-bold text-black shadow-lg sm:px-6 sm:py-2.5 sm:text-lg"
@@ -716,6 +682,7 @@ export const ManagerControlToolbar = ({
         {/* End Timer button during answering */}
         {canEndTimer && (
           <Button
+            variant="primary"
             size="sm"
             onClick={handleEndTimer}
             disabled={isPending}
@@ -733,6 +700,7 @@ export const ManagerControlToolbar = ({
         {/* Next Screen / Advance button during results, leaderboard, or interlude */}
         {canNextScreen && (
           <Button
+            variant="primary"
             size="sm"
             onClick={handleNextScreen}
             disabled={isPending}

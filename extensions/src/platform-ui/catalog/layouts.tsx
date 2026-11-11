@@ -5,7 +5,9 @@ import {
   Badge,
   Dialog,
   Toolbar,
-  ToolbarGroup,
+  HostDisplayControls,
+  HostControlBar,
+  HostAudioControls,
   Menu,
   MenuItem,
 } from "../index"
@@ -22,6 +24,9 @@ const exampleJoin = resolveRoomJoin({
   role: "spectator",
   locked: false,
 })
+function ExampleAudioSlot() {
+  return <Button disabled>Example audio controls slot</Button>
+}
 export function Layouts() {
   const [message, setMessage] = useState(
     "Synthetic examples, no live operations",
@@ -96,22 +101,24 @@ export function Layouts() {
         <p>{exampleJoin.joinUrl}</p>
         <RoomQrCode value={exampleJoin.qrUrl!} />
         <RoomJoinMetadata join={exampleJoin} />
-        <Toolbar label="Example display modes">
-          <ToolbarGroup label="Audience">
-            <Button
-              onClick={() => setMessage("Example audience display requested")}
-            >
-              Audience display
-            </Button>
-          </ToolbarGroup>
-          <ToolbarGroup label="Host">
-            <Button
-              onClick={() => setMessage("Example local presentation requested")}
-            >
-              Present from host
-            </Button>
-          </ToolbarGroup>
-        </Toolbar>
+        <HostDisplayControls
+          gameId="synthetic-example"
+          onOpen={() => setMessage("Example audience display requested")}
+          onCopy={() => setMessage("Example audience URL copy requested")}
+          onPresent={() => setMessage("Example local presentation requested")}
+        />
+        <p>
+          Host control scopes below use synthetic slots; no audio engine or live
+          room is created.
+        </p>
+        <HostControlBar>
+          <Button disabled>Example participants</Button>
+        </HostControlBar>
+        <HostAudioControls
+          component={ExampleAudioSlot}
+          manager
+          isHostPresenting={false}
+        />
       </Card>
     </section>
   )

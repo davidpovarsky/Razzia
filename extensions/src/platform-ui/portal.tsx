@@ -14,6 +14,30 @@ export interface PortalProps {
   container?: Element | DocumentFragment | null
   forceMount?: true
   legacy?: boolean
+  returnFocusTo?: string
+}
+
+/** Controlled host dialogs without a Radix Trigger retain their actual launcher. */
+function ReturnFocus({ selector }: { selector: string }) {
+  useEffect(
+    () => () => {
+      requestAnimationFrame(() => {
+        const active = document.activeElement
+        if (
+          !active ||
+          active === document.body ||
+          active === document.documentElement ||
+          !active.isConnected
+        ) {
+          document
+            .querySelector<HTMLElement>(selector)
+            ?.focus({ preventScroll: true })
+        }
+      })
+    },
+    [selector],
+  )
+  return null
 }
 
 function containsComposed(parent: Element, target: Node) {
@@ -33,6 +57,7 @@ function Portal({
   container,
   forceMount,
   legacy = false,
+  returnFocusTo,
 }: PortalProps & { kind: keyof typeof portals }) {
   const theme = usePlatformTheme()
   const scopedTarget = useScopePortalTarget()
@@ -58,6 +83,7 @@ function Portal({
         {...theme}
         className={`tds-portal-scope ${legacy ? "tds-legacy-surface" : ""}`}
       >
+        {returnFocusTo && <ReturnFocus selector={returnFocusTo} />}
         {children}
       </PlatformScope>
     </Primitive>

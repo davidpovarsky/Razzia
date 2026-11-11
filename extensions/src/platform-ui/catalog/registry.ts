@@ -37,8 +37,15 @@ export const CATALOG_COMPONENTS = {
     rule: "Announce meaningful state changes. Toast is a surface, not a notification store. Never invent presence or success.",
   },
   navigation: {
-    exports: ["Tabs", "Toolbar", "ToolbarGroup"],
-    modules: ["surfaces.tsx"],
+    exports: [
+      "Tabs",
+      "Toolbar",
+      "ToolbarGroup",
+      "HostDisplayControls",
+      "HostControlBar",
+      "HostAudioControls",
+    ],
+    modules: ["surfaces.tsx", "host-controls.tsx"],
     props: "Tabs items/value/onValueChange · required group labels",
     rule: "Arrow keys select tabs, direction follows RTL. Toolbars retain normal Tab order and original command handlers.",
   },

@@ -1,4 +1,4 @@
-import Button from "@razzia/web/components/Button"
+import { Button, DialogPortal } from "@razzia/extensions/platform-ui"
 import { Keyboard, X } from "lucide-react"
 import { Dialog } from "radix-ui"
 import { useState } from "react"
@@ -34,7 +34,7 @@ export default function HostShortcutsDialog({
           {!compact && t("extensions:host.keyboardShortcuts")}
         </Button>
       </Dialog.Trigger>
-      <Dialog.Portal container={document.fullscreenElement ?? undefined}>
+      <DialogPortal legacy>
         <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/40" />
         <Dialog.Content
           className="bg-background data-[state=open]:animate-fade fixed top-1/2 left-1/2 z-50 max-h-[85dvh] w-[calc(100%-2rem)] max-w-md -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl p-6 shadow-xl"
@@ -67,7 +67,7 @@ export default function HostShortcutsDialog({
             ))}
           </dl>
         </Dialog.Content>
-      </Dialog.Portal>
+      </DialogPortal>
     </Dialog.Root>
   )
 }

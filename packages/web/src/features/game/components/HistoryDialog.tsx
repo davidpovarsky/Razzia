@@ -1,6 +1,9 @@
 import type { FormattedHistoryItem } from "@razzia/extensions/presentation"
-import AlertDialog from "@razzia/web/components/AlertDialog"
-import Button from "@razzia/web/components/Button"
+import {
+  AlertDialog,
+  Button,
+  DialogPortal,
+} from "@razzia/extensions/platform-ui"
 import clsx from "clsx"
 import { ArrowLeft, History, RotateCcw, X } from "lucide-react"
 import { Dialog } from "radix-ui"
@@ -29,7 +32,7 @@ export const HistoryDialog = ({
 
   return (
     <Dialog.Root open={open} onOpenChange={(isOpen) => !isOpen && onClose()}>
-      <Dialog.Portal>
+      <DialogPortal legacy returnFocusTo='[data-testid="host-history-btn"]'>
         <Dialog.Overlay className="data-[state=open]:animate-fade fixed inset-0 z-50 bg-black/60 backdrop-blur-sm" />
         <Dialog.Content
           aria-describedby={undefined}
@@ -164,7 +167,7 @@ export const HistoryDialog = ({
             )}
           </div>
         </Dialog.Content>
-      </Dialog.Portal>
+      </DialogPortal>
     </Dialog.Root>
   )
 }

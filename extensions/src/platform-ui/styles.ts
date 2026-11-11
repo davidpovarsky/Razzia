@@ -1,16 +1,24 @@
 /** Production CSS. Every selector is bounded by the explicit platform scope. */
+const buttonBase =
+  "display:inline-flex;align-items:center;justify-content:center;gap:var(--tds-button-gap);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-button-radius);background:var(--tds-elevated);color:var(--tds-text);font:var(--tds-weight-label) var(--tds-type-label)/1.3 var(--tds-font-family);text-decoration:none;cursor:pointer;transition:background var(--tds-motion-fast) var(--tds-motion-easing),box-shadow var(--tds-motion-fast) var(--tds-motion-easing),transform var(--tds-motion-fast) var(--tds-motion-easing)"
 export const platformComponentCss = `
 .tds-scope{font-family:var(--tds-font-family);color:var(--tds-text)}
 .tds-scope[data-platform-appearance="dark"]{color-scheme:dark}
 .tds-scope[data-platform-appearance="light"]{color-scheme:light}
-.tds-scope .tds-button:not([data-variant="unstyled"]){display:inline-flex;align-items:center;justify-content:center;gap:var(--tds-button-gap);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-button-radius);background:var(--tds-elevated);color:var(--tds-text);font:var(--tds-weight-label) var(--tds-type-label)/1.3 var(--tds-font-family);text-decoration:none;cursor:pointer;transition:background var(--tds-motion-fast) var(--tds-motion-easing),box-shadow var(--tds-motion-fast) var(--tds-motion-easing),transform var(--tds-motion-fast) var(--tds-motion-easing)}
+.tds-scope .tds-button:not([data-variant="unstyled"]){${buttonBase};min-width:var(--tds-button-min-height)}
+.tds-scope.tds-host-control-bar > :where(button),.tds-scope.tds-host-control-bar > div > :where(button),.tds-scope.tds-host-toolbar > div > :where(button[aria-pressed]),.tds-scope.tds-host-audio-controls button{${buttonBase}}
+.tds-scope.tds-host-audio-controls input[type="range"]{accent-color:var(--tds-action);min-height:var(--tds-button-min-height);cursor:pointer}
+.tds-scope.tds-host-audio-controls{flex-shrink:0}
+.tds-scope.tds-host-control-bar :where(button):focus-visible,.tds-scope.tds-host-toolbar :where(button[aria-pressed]):focus-visible,.tds-scope.tds-host-audio-controls :where(button,input):focus-visible{outline:2px solid var(--tds-focus);outline-offset:var(--tds-space-1)}
+.tds-scope.tds-host-toolbar[data-host-lobby="true"] .tds-host-previous:disabled{display:none}
+@media(max-width:48rem){.tds-scope .tds-host-display-label{display:none}}
 .tds-scope .tds-button[data-variant="primary"]{background:var(--tds-action);color:var(--tds-action-text);border-color:transparent}
 .tds-scope .tds-button[data-variant="destructive"]{background:var(--tds-danger);color:var(--tds-danger-text);border-color:transparent}
 .tds-scope .tds-button[data-variant="ghost"]{background:transparent;border-color:transparent}
 .tds-scope .tds-button:not([data-variant="unstyled"]):not(:disabled):hover{box-shadow:var(--tds-shadow-raised);filter:brightness(1.08)}
 .tds-scope .tds-button:not([data-variant="unstyled"]):not(:disabled):active{transform:translateY(1px)}
 .tds-scope .tds-button:disabled{opacity:.55;cursor:not-allowed}
-.tds-scope :is(.tds-button,.tds-input,.tds-select,.tds-switch,.tds-tab,.tds-menu-item):focus-visible{outline:2px solid var(--tds-focus);outline-offset:var(--tds-space-1)}
+.tds-scope :is(.tds-button,.tds-input,.tds-select,.tds-switch,.tds-tab,.tds-menu-item,.tds-legacy-surface [role="switch"]):focus-visible{outline:2px solid var(--tds-focus);outline-offset:var(--tds-space-1)}
 .tds-scope .tds-button[data-size="sm"]{padding-inline:var(--tds-space-3)}
 .tds-scope .tds-button[data-size="lg"]{min-height:calc(var(--tds-button-min-height) + var(--tds-space-2));font-size:var(--tds-type-body)}
 .tds-scope .tds-button-content{display:inline-flex;align-items:center;justify-content:center;gap:inherit;min-width:0}
@@ -26,11 +34,12 @@ export const platformComponentCss = `
 .tds-scope .tds-description{color:var(--tds-muted-text);font-size:var(--tds-type-label);line-height:1.5}
 .tds-scope .tds-field-error{color:var(--tds-danger);font-size:var(--tds-type-label)}
 .tds-scope .tds-switch-row{display:flex;align-items:center;gap:var(--tds-space-3);min-height:var(--tds-button-min-height);cursor:pointer;font-size:var(--tds-type-label)}
-.tds-scope .tds-switch{position:relative;width:var(--tds-switch-width);height:var(--tds-switch-height);border:1px solid var(--tds-border);border-radius:var(--tds-radius-round);background:var(--tds-elevated);flex-shrink:0;cursor:pointer}
-.tds-scope .tds-switch[data-state="checked"]{background:var(--tds-action)}
-.tds-scope .tds-switch:disabled{opacity:.55;cursor:not-allowed}
-.tds-scope .tds-switch-thumb{display:block;position:absolute;inset-block-start:var(--tds-switch-offset);inset-inline-start:var(--tds-switch-offset);width:var(--tds-switch-thumb-size);height:var(--tds-switch-thumb-size);background:var(--tds-text);border-radius:var(--tds-radius-round);transition:inset-inline-start var(--tds-motion-fast) var(--tds-motion-easing)}
-.tds-scope .tds-switch[data-state="checked"] .tds-switch-thumb{inset-inline-start:calc(100% - var(--tds-switch-thumb-size) - var(--tds-switch-offset));background:var(--tds-action-text)}
+.tds-scope :is(.tds-switch,.tds-legacy-surface [role="switch"]){position:relative;width:var(--tds-switch-width);height:var(--tds-switch-height);border:1px solid var(--tds-border);border-radius:var(--tds-radius-round);background:var(--tds-elevated);flex-shrink:0;cursor:pointer}
+.tds-scope :is(.tds-switch,.tds-legacy-surface [role="switch"])[data-state="checked"]{background:var(--tds-action)}
+.tds-scope :is(.tds-switch,.tds-legacy-surface [role="switch"]):disabled{opacity:.55;cursor:not-allowed}
+.tds-scope :is(.tds-switch-thumb,.tds-legacy-surface [role="switch"] > span){display:block;position:absolute;inset-block-start:var(--tds-switch-offset);inset-inline-start:var(--tds-switch-offset);width:var(--tds-switch-thumb-size);height:var(--tds-switch-thumb-size);background:var(--tds-text);border-radius:var(--tds-radius-round);transform:none;translate:none;transition:inset-inline-start var(--tds-motion-fast) var(--tds-motion-easing)}
+.tds-scope :is(.tds-switch[data-state="checked"] .tds-switch-thumb,.tds-legacy-surface [role="switch"][data-state="checked"] > span){inset-inline-start:calc(100% - var(--tds-switch-thumb-size) - var(--tds-switch-offset));background:var(--tds-action-text)}
+.tds-scope.tds-legacy-surface [role="switch"]::after{content:"";position:absolute;inset-inline:0;inset-block-start:calc((var(--tds-switch-height) - var(--tds-button-min-height)) / 2);height:var(--tds-button-min-height)}
 .tds-scope .tds-tabs-list{display:flex;flex-wrap:wrap;gap:var(--tds-space-1);padding:var(--tds-space-1);border:1px solid var(--tds-border);border-radius:var(--tds-radius-control);background:var(--tds-surface)}
 .tds-scope .tds-tab{min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-4);background:transparent;color:var(--tds-muted-text);border:0;border-radius:var(--tds-radius-small);font:inherit;cursor:pointer}
 .tds-scope .tds-tab[data-state="active"]{background:var(--tds-action);color:var(--tds-action-text);font-weight:var(--tds-weight-label)}
@@ -72,6 +81,7 @@ export const platformComponentCss = `
 .tds-scope.tds-portal-scope{display:contents}
 .tds-scope.tds-legacy-surface{--color-primary:var(--tds-action);--color-secondary:var(--tds-action-text);--color-background:var(--tds-surface);--color-foreground:var(--tds-text);--color-muted:var(--tds-elevated);--color-muted-foreground:var(--tds-muted-text);--color-accent:var(--tds-elevated);--color-accent-foreground:var(--tds-text);--color-border:var(--tds-border)}
 .tds-scope.tds-legacy-surface :is([role="dialog"],[role="alertdialog"]){background:var(--tds-surface);color:var(--tds-text);font-family:var(--tds-font-family);border:1px solid var(--tds-border);border-radius:var(--tds-radius-dialog);box-shadow:var(--tds-shadow-dialog)}
+.tds-scope.tds-legacy-surface button[aria-label]:not([role="switch"]){min-width:var(--tds-button-min-height);min-height:var(--tds-button-min-height)}
 .tds-scope.tds-legacy-surface :is([class*="text-neutral-"],[class*="text-gray-"]){color:var(--tds-muted-text)}
 .tds-scope.tds-legacy-surface :is(.bg-white,[class*="bg-neutral-"],[class*="bg-gray-"]){background-color:var(--tds-elevated)}
 @media(prefers-reduced-motion:reduce){.tds-scope .tds-spinner{animation:none}.tds-scope .tds-button:not(:disabled):active{transform:none}}

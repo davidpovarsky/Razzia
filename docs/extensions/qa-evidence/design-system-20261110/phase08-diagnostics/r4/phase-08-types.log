@@ -1,0 +1,2 @@
+extensions/src/platform-ui/host-controls.tsx(118,45): error TS2352: Conversion of type 'Omit<Props & { component: ComponentType<Props>; }, "component">' to type 'Props' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  'Omit<Props & { component: ComponentType<Props>; }, "component">' is assignable to the constraint of type 'Props', but 'Props' could be instantiated with a different subtype of constraint '{ manager?: boolean | undefined; isHostPresenting: boolean; }'.

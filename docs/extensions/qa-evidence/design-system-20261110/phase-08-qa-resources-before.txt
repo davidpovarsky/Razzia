@@ -1,0 +1,15 @@
+616
+max 656
+838414336
+low 0
+high 0
+max 0
+oom 0
+oom_kill 0
+oom_group_kill 0
+sock_throttled 0
+      1 R
+      2 S
+      1 STAT
+      2 Ss
+    613 Z

@@ -1,0 +1,309 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.host.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.host.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-08-host-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-host.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-08-host-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-host.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "actionTimeout": 15000,
+          "navigationTimeout": 30000,
+          "baseURL": "http://127.0.0.1:4310",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-08-host.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-host.spec.ts",
+      "file": "tds-host.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 18719,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    },
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T00:21:41.373Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-620fc10431e286bba2fb",
+          "file": "tds-host.spec.ts",
+          "line": 118,
+          "column": 1
+        },
+        {
+          "title": "real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 16591,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T00:22:00.221Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-39f4ba31adb6916f14c2",
+          "file": "tds-host.spec.ts",
+          "line": 254,
+          "column": 1
+        },
+        {
+          "title": "restart and skip keep original confirmations and one command per explicit confirmation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 10446,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T00:22:16.833Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-3d7f3a699da736ca12e7",
+          "file": "tds-host.spec.ts",
+          "line": 338,
+          "column": 1
+        },
+        {
+          "title": "touch host controls and compact landscape dialogs keep named reachable close actions",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4934,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [
+                    {
+                      "text": "Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)\nConnection Null\n"
+                    }
+                  ],
+                  "retry": 0,
+                  "startTime": "2026-11-11T00:22:27.299Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-1ed4c49941e5a27c1a17",
+          "file": "tds-host.spec.ts",
+          "line": 378,
+          "column": 1
+        },
+        {
+          "title": "legacy settings switches use visible token thumbs and preserve a real confirmed server save",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4552,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T00:22:32.249Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "37cdd61538efb226fd6b-537bc5ef74615d5d9260",
+          "file": "tds-host.spec.ts",
+          "line": 429,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T00:21:34.292Z",
+    "duration": 62658.393,
+    "expected": 5,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

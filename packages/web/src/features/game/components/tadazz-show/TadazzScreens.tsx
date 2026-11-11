@@ -8,6 +8,8 @@ import {
   TADAZZ_LOGO_URL,
   useRoomJoin,
   RoomJoinMetadata,
+  RoomQrPortal,
+  RoomQrLabels,
   RoomQrCode as QRCodeSVG,
 } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
@@ -216,12 +218,13 @@ export function TadazzLobbyScreen({
             >
               <QRCodeSVG value={join.qrUrl ?? webUrl} />
             </AlertDialog.Trigger>
-            <AlertDialog.Portal>
+            <RoomQrPortal>
               <AlertDialog.Overlay
                 className="fixed inset-0 z-50 bg-black/70"
                 onClick={() => setQrOpen(false)}
               />
               <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6">
+                <RoomQrLabels join={join} />
                 <NativeButton
                   size="sm"
                   type="button"
@@ -236,7 +239,7 @@ export function TadazzLobbyScreen({
                   value={join.qrUrl ?? webUrl}
                 />
               </AlertDialog.Content>
-            </AlertDialog.Portal>
+            </RoomQrPortal>
           </AlertDialog.Root>
         )}
       </div>

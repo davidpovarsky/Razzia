@@ -1,0 +1,76 @@
+/* Native join reflow in short host windows only. Original Razzia and cinematic
+   Creating Worlds layouts, palettes, artwork and choreography remain independent. */
+@media (max-height: 37.5rem) {
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room {
+    min-height: 0;
+    overflow: auto;
+    justify-content: flex-start;
+    padding-block: 0.5rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    > div:first-child {
+    flex-direction: row;
+    flex-shrink: 0;
+    gap: 0.5rem;
+    margin-bottom: 0.5rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    > div:first-child
+    > div:first-child
+    > div {
+    flex-direction: row;
+    gap: 0.5rem;
+    padding: 0.5rem 0.75rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    > div:first-child
+    > div:first-child
+    > div
+    > div:nth-child(2) {
+    width: 1px;
+    height: auto;
+    align-self: stretch;
+    margin: 0 0.25rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    p.text-2xl {
+    font-size: 0.875rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    p.text-6xl {
+    font-size: 2rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    p.break-all {
+    max-width: clamp(7rem, 20vw, 12rem);
+    font-size: 0.75rem;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    > div:first-child
+    > :last-child {
+    width: clamp(4.5rem, 16vw, 6rem);
+    height: clamp(4.5rem, 16vw, 6rem);
+    flex-shrink: 0;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    svg[data-qr-url] {
+    width: 100%;
+    height: 100%;
+  }
+  [data-theme-viewport]:not([data-theme-viewport="razzia-original"])
+    .tds-native-room
+    > h2 {
+    font-size: 1rem;
+    line-height: 1.2;
+    margin-bottom: 0.5rem;
+  }
+}

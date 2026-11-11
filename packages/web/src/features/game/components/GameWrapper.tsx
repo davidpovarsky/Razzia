@@ -28,6 +28,11 @@ import {
   ViewportBackdropLayer,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
+import {
+  HostAudioControls,
+  HostControlBar,
+  IconButton,
+} from "@razzia/extensions/platform-ui"
 import GameBackground from "@razzia/web/components/GameBackground"
 import Loader from "@razzia/web/components/Loader"
 import Tooltip from "@razzia/web/components/Tooltip"
@@ -409,7 +414,8 @@ const GameWrapperView = ({
               {motionScene && <TadazzMotionStage scene={motionScene} />}
             </NativeGameSurface>
 
-            <LegacyStageAudio
+            <HostAudioControls
+              component={LegacyStageAudio}
               extensionState={extensionState}
               effectiveRole={effectiveRole}
               manager={manager}
@@ -429,7 +435,7 @@ const GameWrapperView = ({
                 }
 
                 return (
-                  <div
+                  <HostControlBar
                     className={clsx(
                       "z-50 box-border flex max-w-full flex-wrap items-center gap-2 p-2 sm:gap-3 sm:p-4",
                       {
@@ -477,9 +483,9 @@ const GameWrapperView = ({
                           : "common:fullscreen",
                       )}
                     >
-                      <button
+                      <IconButton
                         onClick={toggleFullscreen}
-                        aria-label={t(
+                        label={t(
                           isFullscreen
                             ? "common:exitFullscreen"
                             : "common:fullscreen",
@@ -491,9 +497,9 @@ const GameWrapperView = ({
                         ) : (
                           <Maximize className="size-5" />
                         )}
-                      </button>
+                      </IconButton>
                     </Tooltip>
-                  </div>
+                  </HostControlBar>
                 )
               }
 
