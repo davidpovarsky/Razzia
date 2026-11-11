@@ -20,7 +20,7 @@ BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 | TDS-07 | 1220402729693747 | VERIFIED    | [Viewport / room join](TDS_STAGE.md); 62 units, 16 catalog + 10 stage + 3 actual room + 1 seating checks, editor regression |
 | TDS-08 | 1220402719392041 | VERIFIED    | [Host controls / modals](TDS_HOST.md); 53 units, 5 actual host + 22 component + 16 catalog cases, final editor regression |
 | TDS-09 | 1220402539686302 | VERIFIED    | [Roster / package administration](TDS_ROSTER.md); 40 units, 2 roster + 4 package + 22 component + 1 integration; editor zero-pixel regression |
-| TDS-10 | 1220402539658409 | NOT_STARTED | Platform motion                                                                                                 |
+| TDS-10 | 1220402539658409 | VERIFIED | [Motion](TDS_MOTION.md); 22 units, 59 browser cases; all 16 gate labels pass; editor/stage PNG byte parity |
 | TDS-11 | 1220402430879047 | NOT_STARTED | Naming compatibility                                                                                            |
 | TDS-12 | 1220402539686110 | NOT_STARTED | Full QA / handoff / release gate                                                                                |
 

@@ -1,13 +1,14 @@
-import { SiteLink } from "../shared/SiteLink"
-import { SiteButton } from "../shared/SiteButton"
-import { useCallback, useRef, useState } from "react"
-import { EmptyState, Select } from "@razzia/extensions/platform-ui"
 import { CompositeApiClient } from "@razzia/extensions/editor"
-import { useShowFileActions } from "@razzia/web/features/manager/components/configurations/use-show-file-actions"
+import { EmptyState, Select } from "@razzia/extensions/platform-ui"
 import { ShowImportModal } from "@razzia/web/features/manager/components/configurations/ShowImportModal"
-import { PackageTools } from "./PackageTools"
-import { GameCard } from "./GameCard"
+import { useShowFileActions } from "@razzia/web/features/manager/components/configurations/use-show-file-actions"
+import { AnimatePresence } from "motion/react"
+import { useCallback, useRef, useState } from "react"
 import { useSiteText } from "../../locales"
+import { SiteButton } from "../shared/SiteButton"
+import { SiteLink } from "../shared/SiteLink"
+import { GameCard } from "./GameCard"
+import { PackageTools } from "./PackageTools"
 
 export interface QuizMeta {
   id: string
@@ -129,30 +130,33 @@ export function MyGames({
         className={`games-grid ${layout === "list" ? "site-game-list" : ""}`}
         aria-busy={busy}
       >
-        {filtered.slice(0, limit).map((game) => (
-          <GameCard
-            key={game.id}
-            game={game}
-            busy={busy}
-            showActions={!limit}
-            onDuplicate={() => void duplicate(game)}
-            onDelete={async () => {
-              const success = await run(() =>
-                new CompositeApiClient().deleteQuizComposite(game.id),
-              )
-              if (!success)
-                throw new Error("Composite deletion did not complete")
-              grid.current?.focus({ preventScroll: true })
-            }}
-            exports={{
-              legacy: () => void files.handleExportLegacy(game.id)(),
-              enhanced: () => void files.handleExportEnhanced(game.id)(),
-              xlsx: () => void files.handleExportXlsx(game.id, game.subject)(),
-              authored: () =>
-                void files.handleExportTadaJson(game.id, game.subject)(),
-            }}
-          />
-        ))}
+        <AnimatePresence initial={false}>
+          {filtered.slice(0, limit).map((game) => (
+            <GameCard
+              key={game.id}
+              game={game}
+              busy={busy}
+              showActions={!limit}
+              onDuplicate={() => void duplicate(game)}
+              onDelete={async () => {
+                const success = await run(() =>
+                  new CompositeApiClient().deleteQuizComposite(game.id),
+                )
+                if (!success)
+                  throw new Error("Composite deletion did not complete")
+                grid.current?.focus({ preventScroll: true })
+              }}
+              exports={{
+                legacy: () => void files.handleExportLegacy(game.id)(),
+                enhanced: () => void files.handleExportEnhanced(game.id)(),
+                xlsx: () =>
+                  void files.handleExportXlsx(game.id, game.subject)(),
+                authored: () =>
+                  void files.handleExportTadaJson(game.id, game.subject)(),
+              }}
+            />
+          ))}
+        </AnimatePresence>
         {filtered.length === 0 && (
           <div className="site-games-empty">
             <EmptyState

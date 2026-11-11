@@ -1,0 +1,12 @@
+Checking formatting...
+[warn] extensions/src/platform-ui/catalog/stories.tsx
+[warn] extensions/src/platform-ui/roster-controls.tsx
+[warn] extensions/src/platform-ui/surfaces.tsx
+[warn] extensions/src/platform-ui/tokens.test.ts
+[warn] extensions/src/site/web/studio/GameCard.tsx
+[warn] extensions/src/site/web/studio/MyGames.tsx
+[warn] extensions/qa/tds-components-fixture.tsx
+[warn] extensions/qa/tds-motion.spec.ts
+[warn] extensions/qa/tds-motion-site.spec.ts
+[error] No parser could be inferred for file "/cleanup/extensions/qa/tds-phase10.sh".
+Error occurred when checking code style in the above file.

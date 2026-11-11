@@ -1,0 +1,44 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 6 tests using 1 worker
+
+  ✓  1 [chromium] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (8.7s)
+  ✓  2 [chromium] › qa/tds-motion.spec.ts:130:1 › reopening during dialog exit cancels stale dismissal in both portal contexts (3.2s)
+  ✓  3 [chromium] › qa/tds-motion.spec.ts:157:1 › reduced motion removes platform animation without changing keyboard state (2.1s)
+  ✘  4 [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (20.5s)
+  ✓  5 [webkit] › qa/tds-motion.spec.ts:130:1 › reopening during dialog exit cancels stale dismissal in both portal contexts (6.5s)
+  ✓  6 [webkit] › qa/tds-motion.spec.ts:157:1 › reduced motion removes platform animation without changing keyboard state (4.7s)
+
+
+  1) [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+
+    Error: expect(received).toContain(expected) // indexOf
+
+    Expected value: "site:animationstart:tds-dialog-out"
+    Received array: ["start:tds-spin", "start:tds-selection-in", "end:tds-selection-in", "start:tds-feedback-in", "start:tds-feedback-in", "start:tds-feedback-in", "start:tds-feedback-in", "start:tds-feedback-in", "start:tds-feedback-in", "start:tds-spin", …]
+
+      121 |     )
+      122 |     .toBeGreaterThanOrEqual(1)
+    > 123 |   expect(await events(page)).toContain("site:animationstart:tds-dialog-out")
+          |                              ^
+      124 |   await page.screenshot({
+      125 |     path: `/evidence/phase-10-motion-components-${testInfo.project.name}.png`,
+      126 |     fullPage: true,
+        at /cleanup/extensions/qa/tds-motion.spec.ts:123:30
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+  5 passed (49.6s)

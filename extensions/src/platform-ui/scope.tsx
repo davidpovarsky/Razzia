@@ -5,6 +5,7 @@ import {
   useState,
   type HTMLAttributes,
   type PropsWithChildren,
+  type Ref,
 } from "react"
 import { Direction } from "radix-ui"
 import { platformComponentCss } from "./styles"
@@ -70,6 +71,7 @@ export function PlatformThemeProvider({
 }
 
 export interface PlatformScopeProps extends HTMLAttributes<HTMLDivElement> {
+  ref?: Ref<HTMLDivElement>
   context: PlatformContext
   appearance?: PlatformAppearance
   tokenOverrides?: TokenOverrides

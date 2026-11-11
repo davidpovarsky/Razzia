@@ -1,19 +1,26 @@
+import { Tabs as RadixTabs } from "radix-ui"
 import type {
   HTMLAttributes,
-  TableHTMLAttributes,
-  ThHTMLAttributes,
-  TdHTMLAttributes,
   ReactNode,
+  TableHTMLAttributes,
+  TdHTMLAttributes,
+  ThHTMLAttributes,
 } from "react"
-import { Tabs as RadixTabs } from "radix-ui"
 import { usePlatformTheme } from "./scope"
 import { shadowRovingFocus } from "./shadow-focus"
 
 export function Card({
+  interactive = false,
   className = "",
   ...props
-}: HTMLAttributes<HTMLElement>) {
-  return <section {...props} className={`tds-card ${className}`} />
+}: HTMLAttributes<HTMLElement> & { interactive?: boolean }) {
+  return (
+    <section
+      {...props}
+      className={`tds-card ${className}`}
+      data-interactive={interactive || undefined}
+    />
+  )
 }
 export type StatusTone = "neutral" | "success" | "warning" | "danger" | "info"
 export function Badge({
@@ -27,6 +34,7 @@ export function Badge({
       {...props}
       className={`tds-badge ${className}`}
       data-tone={tone}
+      data-platform-motion="feedback"
       role={live ? "status" : props.role}
     />
   )
@@ -35,7 +43,14 @@ export function Toast({
   className = "",
   ...props
 }: HTMLAttributes<HTMLDivElement>) {
-  return <div role="status" {...props} className={`tds-toast ${className}`} />
+  return (
+    <div
+      role="status"
+      data-platform-motion="feedback"
+      {...props}
+      className={`tds-toast ${className}`}
+    />
+  )
 }
 export interface StatusStateProps {
   kind: "empty" | "loading" | "error" | "success"
@@ -54,6 +69,7 @@ export function StatusState({
       className="tds-state"
       role={kind === "error" ? "alert" : "status"}
       aria-busy={kind === "loading" || undefined}
+      data-platform-motion="feedback"
       data-tone={
         kind === "error" ? "danger" : kind === "success" ? "success" : "neutral"
       }
@@ -182,6 +198,7 @@ export function Tabs({
         <RadixTabs.Content
           key={item.value}
           className="tds-tab-panel"
+          data-platform-motion="selection"
           value={item.value}
         >
           {item.content}

@@ -14,6 +14,7 @@ import { IconButton } from "./button"
 import { DialogPortal } from "./portal"
 import { usePlatformContext, PortalContainerProvider } from "./scope"
 import { trapDialogTab } from "./shadow-focus"
+import { PLATFORM_MOTION } from "./tokens"
 
 export interface DialogProps {
   title: string
@@ -69,6 +70,7 @@ export function NativeDialog({
   role?: "dialog" | "alertdialog"
 }) {
   const ref = useRef<HTMLDialogElement>(null)
+  const previousFocus = useRef<HTMLElement | null>(null)
   const [portalRoot, setPortalRoot] = useState<HTMLDialogElement | null>(null)
   const attach = useCallback((node: HTMLDialogElement | null) => {
     ref.current = node
@@ -77,16 +79,42 @@ export function NativeDialog({
   const id = useId()
   const { t } = useTranslation()
   const state = useDialogState({ ...props, trigger })
+  const finishClose = useCallback(() => {
+    ref.current?.close()
+    if (previousFocus.current?.isConnected)
+      previousFocus.current.focus({ preventScroll: true })
+    previousFocus.current = null
+  }, [])
   useLayoutEffect(() => {
     const dialog = ref.current
-    if (!dialog || !state.open) return
-    const previous = activeElement()
-    if (!dialog.open) dialog.showModal()
-    return () => {
-      dialog.close()
-      if (previous?.isConnected) previous.focus({ preventScroll: true })
+    if (!dialog) return
+    if (state.open) {
+      if (!dialog.open) {
+        previousFocus.current = activeElement()
+        dialog.showModal()
+      }
+      return
     }
-  }, [state.open])
+    if (!dialog.open) return
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      finishClose()
+      return
+    }
+    // A bounded fallback also closes when animation events are interrupted.
+    const timer = setTimeout(
+      finishClose,
+      PLATFORM_MOTION.duration.fast * 1000 + 50,
+    )
+    return () => clearTimeout(timer)
+  }, [state.open, finishClose])
+  useLayoutEffect(() => {
+    const dialog = ref.current
+    return () => {
+      dialog?.close()
+      if (previousFocus.current?.isConnected)
+        previousFocus.current.focus({ preventScroll: true })
+    }
+  }, [])
   return (
     <>
       {trigger && (
@@ -103,11 +131,21 @@ export function NativeDialog({
       <dialog
         ref={attach}
         role={role}
+        inert={!state.open}
+        data-state={state.open ? "open" : "closed"}
         className={`tds-dialog-surface ${className}`}
         data-testid={props["data-testid"]}
         aria-labelledby={`${id}-title`}
         aria-describedby={description ? `${id}-description` : undefined}
         onKeyDownCapture={trapDialogTab}
+        onAnimationEnd={(event) => {
+          if (
+            !state.open &&
+            event.target === ref.current &&
+            event.animationName === "tds-dialog-out"
+          )
+            finishClose()
+        }}
         onCancel={(event) => {
           event.preventDefault()
           event.stopPropagation()

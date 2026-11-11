@@ -1,0 +1,111 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 4 tests using 1 worker
+
+  ✘  1 [chromium] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (10.6s)
+  ✘  2 [chromium] › qa/tds-motion.spec.ts:110:1 › reduced motion removes platform animation without changing keyboard state (6.9s)
+  ✘  3 [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption (23.3s)
+  ✓  4 [webkit] › qa/tds-motion.spec.ts:110:1 › reduced motion removes platform animation without changing keyboard state (4.7s)
+
+
+  1) [chromium] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 2
+    Received:    0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      94 |           .length,
+      95 |     )
+    > 96 |     .toBeGreaterThanOrEqual(2)
+         |      ^
+      97 |   await expect
+      98 |     .poll(
+      99 |       async () =>
+        at /cleanup/extensions/qa/tds-motion.spec.ts:96:6
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-motion.spec.ts:110:1 › reduced motion removes platform animation without changing keyboard state
+
+    Error: expect(locator).toHaveCSS(expected) failed
+
+    Locator:  getByTestId('host-panel').getByTestId('host-interactive-card')
+    Expected: "0.000001s"
+    Received: "1e-06s"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveCSS" getByTestId('host-panel').getByTestId('host-interactive-card') with timeout 5000ms
+      - waiting for getByTestId('host-panel').getByTestId('host-interactive-card')
+        14 × locator resolved to <section class="tds-card " data-interactive="true" data-testid="host-interactive-card">…</section>
+           - unexpected value "1e-06s"
+
+
+      146 |     "none",
+      147 |   )
+    > 148 |   await expect(panel.getByTestId("host-interactive-card")).toHaveCSS(
+          |                                                            ^
+      149 |     "transition-duration",
+      150 |     "0.000001s",
+      151 |   )
+        at /cleanup/extensions/qa/tds-motion.spec.ts:148:60
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-reduced-motion--43d00-out-changing-keyboard-state-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-reduced-motion--43d00-out-changing-keyboard-state-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-reduced-motion--43d00-out-changing-keyboard-state-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+
+    Error: expect(received).toBeGreaterThanOrEqual(expected)
+
+    Expected: >= 2
+    Received:    0
+
+    Call Log:
+    - Timeout 5000ms exceeded while waiting on the predicate
+
+      94 |           .length,
+      95 |     )
+    > 96 |     .toBeGreaterThanOrEqual(2)
+         |      ^
+      97 |   await expect
+      98 |     .poll(
+      99 |       async () =>
+        at /cleanup/extensions/qa/tds-motion.spec.ts:96:6
+
+    Error Context: ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-traces/tds-motion-scoped-menus-po-3bdae-on-and-survive-interruption-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+    [chromium] › qa/tds-motion.spec.ts:110:1 › reduced motion removes platform animation without changing keyboard state
+    [webkit] › qa/tds-motion.spec.ts:25:1 › scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption
+  1 passed (50.3s)

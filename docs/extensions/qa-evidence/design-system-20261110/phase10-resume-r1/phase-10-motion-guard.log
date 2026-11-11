@@ -1,0 +1,26 @@
+{
+  "status": "PASS",
+  "scope": "Cinematic stage, WAAPI engine, show motion bridge and audio cue owner remain byte-identical to TDS-10 start",
+  "files": [
+    {
+      "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+      "sha256": "fcbca66b2200abae03cda5eef3aeebbbc0ef0027f9b1ba08d780a8823290257f",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "sha256": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/presentation/audio-cue-player.tsx",
+      "sha256": "4f8d964123a494c688ddf45947b0224e4efb3a1e8367f415bbab57198f681d9a",
+      "unchanged": true
+    },
+    {
+      "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "sha256": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+      "unchanged": true
+    }
+  ]
+}

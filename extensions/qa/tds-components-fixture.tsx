@@ -1,41 +1,41 @@
 import "@fontsource-variable/rubik/wght.css"
 import "@razzia/web/i18n"
 import "@razzia/web/index.css"
-import { createRoot } from "react-dom/client"
-import { useRef, useState } from "react"
 import { Plus } from "lucide-react"
-import { ReferenceCanvas } from "../src/site/web/shared/ReferenceCanvas"
+import { useRef, useState } from "react"
+import { createRoot } from "react-dom/client"
 import {
-  PlatformScope,
-  Button,
-  IconButton,
-  Dialog,
   AlertDialog,
+  Badge,
+  Button,
+  Card,
+  Dialog,
+  EmptyState,
+  ErrorState,
+  IconButton,
+  Input,
+  LoadingState,
   Menu,
   MenuItem,
   MenuSeparator,
-  SubMenu,
+  PlatformScope,
   Popover,
-  Tooltip,
-  Input,
   SearchInput,
   Select,
+  SubMenu,
   Switch,
-  Tabs,
-  Card,
-  Badge,
-  Toast,
-  EmptyState,
-  LoadingState,
-  ErrorState,
   Table,
-  TableHead,
   TableBody,
-  TableRow,
-  TableHeader,
   TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+  Tabs,
+  Toast,
+  Tooltip,
   type PlatformContext,
 } from "../src/platform-ui"
+import { ReferenceCanvas } from "../src/site/web/shared/ReferenceCanvas"
 
 function Panel({ name, context }: { name: string; context: PlatformContext }) {
   const [count, setCount] = useState(0),
@@ -171,7 +171,7 @@ function Panel({ name, context }: { name: string; context: PlatformContext }) {
       <Toast data-testid={`${name}-message`}>
         {message || "Fixture ready"}
       </Toast>
-      <Card>
+      <Card interactive data-testid={`${name}-interactive-card`}>
         <Badge tone="success">Fixture success</Badge>{" "}
         <Badge tone="warning">Fixture warning</Badge>{" "}
         <Badge tone="danger">Fixture error</Badge>

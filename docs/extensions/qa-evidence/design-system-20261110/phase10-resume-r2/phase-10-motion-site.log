@@ -1,0 +1,120 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 4 tests using 1 worker
+
+  ✘  1 [chromium] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards (3.8s)
+  ✘  2 [chromium] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested (3.1s)
+  ✘  3 [webkit] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards (7.2s)
+  ✘  4 [webkit] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested (7.5s)
+
+
+  1) [chromium] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards
+
+    Error: page.evaluate: Error: Missing My Games region
+        at eval (eval at evaluate (:370:30), <anonymous>:5:22)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:370:30), <anonymous>:5:22)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at watchLayout (/cleanup/extensions/qa/tds-motion-site.spec.ts:21:14)
+        at /cleanup/extensions/qa/tds-motion-site.spec.ts:43:9
+
+    Error Context: ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested
+
+    Error: page.evaluate: Error: Missing My Games region
+        at eval (eval at evaluate (:370:30), <anonymous>:5:22)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at eval (eval at evaluate (:370:30), <anonymous>:5:22)
+        at UtilityScript.evaluate (<anonymous>:372:16)
+        at UtilityScript.<anonymous> (<anonymous>:1:44)
+        at watchLayout (/cleanup/extensions/qa/tds-motion-site.spec.ts:21:14)
+        at /cleanup/extensions/qa/tds-motion-site.spec.ts:99:9
+
+    Error Context: ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards
+
+    Error: page.evaluate: Error: Missing My Games region
+
+      19 |
+      20 | async function watchLayout(page: Parameters<typeof registerSynthetic>[0]) {
+    > 21 |   await page.evaluate(() => {
+         |              ^
+      22 |     const win = window as LayoutWindow
+      23 |     win.__tdsLayoutMutations = 0
+      24 |     const grid = document.querySelector('[aria-label="My Games"]')
+        at watchLayout (/cleanup/extensions/qa/tds-motion-site.spec.ts:21:14)
+        at /cleanup/extensions/qa/tds-motion-site.spec.ts:43:9
+
+    Error Context: ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-sor-180e6-ut-stale-or-duplicate-cards-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested
+
+    Error: page.evaluate: Error: Missing My Games region
+
+      19 |
+      20 | async function watchLayout(page: Parameters<typeof registerSynthetic>[0]) {
+    > 21 |   await page.evaluate(() => {
+         |              ^
+      22 |     const win = window as LayoutWindow
+      23 |     win.__tdsLayoutMutations = 0
+      24 |     const grid = document.querySelector('[aria-label="My Games"]')
+        at watchLayout (/cleanup/extensions/qa/tds-motion-site.spec.ts:21:14)
+        at /cleanup/extensions/qa/tds-motion-site.spec.ts:99:9
+
+    Error Context: ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-10-motion-site-traces/tds-motion-site-Studio-lay-08121-reduced-motion-is-requested-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4 failed
+    [chromium] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards
+    [chromium] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested
+    [webkit] › qa/tds-motion-site.spec.ts:36:1 › Studio sort, filter and gallery/list changes animate layout without stale or duplicate cards
+    [webkit] › qa/tds-motion-site.spec.ts:94:1 › Studio layout settles immediately when reduced motion is requested

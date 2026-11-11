@@ -1,0 +1,26 @@
+[WebServer] $ node --experimental-strip-types node_modules/vite/bin/vite.js preview --config tds.catalog.vite.config.ts
+
+Running 16 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   1 [chromium] › qa/tds-catalog.spec.ts:5:1 › lobby composition imports the actual room contract and decodable QR without transport (894ms)
+  ✓   2 [chromium] › qa/tds-catalog.spec.ts:29:1 › all typed production component families have working state examples (2.3s)
+  ✓   3 [chromium] › qa/tds-catalog.spec.ts:79:3 › platform.marketing: live token edit reaches real button and modal portal (2.4s)
+  ✓   4 [chromium] › qa/tds-catalog.spec.ts:79:3 › platform.studio: live token edit reaches real button and modal portal (2.4s)
+  ✓   5 [chromium] › qa/tds-catalog.spec.ts:79:3 › platform.host: live token edit reaches real button and modal portal (2.4s)
+  ✓   6 [chromium] › qa/tds-catalog.spec.ts:120:1 › eight existing locales drive actual component content and dialog close labels (5.8s)
+  ✓   7 [chromium] › qa/tds-catalog.spec.ts:148:1 › layout dialog table keeps forty safe synthetic rows and scroll inside modal (1.2s)
+  ✓   8 [chromium] › qa/tds-catalog.spec.ts:175:1 › responsive widths, light preview, RTL, reduced motion and 200% CSS zoom (2.5s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   9 [webkit] › qa/tds-catalog.spec.ts:5:1 › lobby composition imports the actual room contract and decodable QR without transport (1.8s)
+  ✓  10 [webkit] › qa/tds-catalog.spec.ts:29:1 › all typed production component families have working state examples (7.5s)
+  ✓  11 [webkit] › qa/tds-catalog.spec.ts:79:3 › platform.marketing: live token edit reaches real button and modal portal (7.3s)
+  ✓  12 [webkit] › qa/tds-catalog.spec.ts:79:3 › platform.studio: live token edit reaches real button and modal portal (6.6s)
+  ✓  13 [webkit] › qa/tds-catalog.spec.ts:79:3 › platform.host: live token edit reaches real button and modal portal (6.3s)
+  ✓  14 [webkit] › qa/tds-catalog.spec.ts:120:1 › eight existing locales drive actual component content and dialog close labels (20.1s)
+  ✓  15 [webkit] › qa/tds-catalog.spec.ts:148:1 › layout dialog table keeps forty safe synthetic rows and scroll inside modal (3.5s)
+  ✓  16 [webkit] › qa/tds-catalog.spec.ts:175:1 › responsive widths, light preview, RTL, reduced motion and 200% CSS zoom (10.2s)
+
+  16 passed (1.4m)

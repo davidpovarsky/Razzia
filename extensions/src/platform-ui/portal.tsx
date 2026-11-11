@@ -1,6 +1,17 @@
-import { useEffect, useState, type ReactNode } from "react"
+import {
+  useCallback,
+  useEffect,
+  useState,
+  type ReactNode,
+  type Ref,
+} from "react"
 import { Dialog, AlertDialog, DropdownMenu, Popover, Tooltip } from "radix-ui"
-import { PlatformScope, usePlatformTheme, useScopePortalTarget } from "./scope"
+import {
+  PlatformScope,
+  usePlatformTheme,
+  useScopePortalTarget,
+  type PlatformScopeProps,
+} from "./scope"
 
 const portals = {
   dialog: Dialog.Portal,
@@ -8,6 +19,23 @@ const portals = {
   menu: DropdownMenu.Portal,
   popover: Popover.Portal,
   tooltip: Tooltip.Portal,
+}
+
+/** Radix Presence must observe the animated content, rather than its unanimated
+ * display:contents scope. Keep the original portal mount/ARIA/focus lifecycle. */
+function PortalScope({
+  ref,
+  ...props
+}: Omit<PlatformScopeProps, "ref"> & { ref?: Ref<HTMLElement> }) {
+  const attach = useCallback(
+    (scope: HTMLDivElement | null) => {
+      const content = scope?.querySelector<HTMLElement>("[data-state]") ?? scope
+      if (typeof ref === "function") ref(content)
+      else if (ref) ref.current = content
+    },
+    [ref],
+  )
+  return <PlatformScope {...props} ref={attach} />
 }
 export interface PortalProps {
   children?: ReactNode
@@ -79,13 +107,13 @@ function Portal({
   const Primitive = portals[kind]
   return (
     <Primitive container={target} forceMount={forceMount}>
-      <PlatformScope
+      <PortalScope
         {...theme}
         className={`tds-portal-scope ${legacy ? "tds-legacy-surface" : ""}`}
       >
         {returnFocusTo && <ReturnFocus selector={returnFocusTo} />}
         {children}
-      </PlatformScope>
+      </PortalScope>
     </Primitive>
   )
 }

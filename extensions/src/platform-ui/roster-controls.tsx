@@ -1,5 +1,5 @@
-import { useRef, useState } from "react"
 import { Trash2 } from "lucide-react"
+import { useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import { AlertDialog } from "./alert-dialog"
 import { IconButton } from "./button"
@@ -62,13 +62,21 @@ export function HostRosterPolicy({
         {t("extensions:roster.phoneInviteOnlyDesc")}
       </p>
       {status === "saved" && (
-        <span role="status">{t("extensions:roster.saved")}</span>
+        <span role="status" data-platform-motion="feedback">
+          {t("extensions:roster.saved")}
+        </span>
       )}
       {status === "pending" && (
-        <span role="status">{t("extensions:roster.saving")}</span>
+        <span role="status" data-platform-motion="feedback">
+          {t("extensions:roster.saving")}
+        </span>
       )}
       {status === "error" && (
-        <span role="alert" className="tds-field-error">
+        <span
+          role="alert"
+          className="tds-field-error"
+          data-platform-motion="feedback"
+        >
           {t("errors:route.description")}
         </span>
       )}

@@ -1,10 +1,12 @@
 import { describe, expect, it } from "vitest"
 import {
-  PLATFORM_CONTEXTS,
-  SEMANTIC_TOKENS,
   LIGHT_SEMANTIC_TOKENS,
-  platformVariables,
+  PLATFORM_CONTEXTS,
+  PLATFORM_MOTION,
+  PRIMITIVE_TOKENS,
+  SEMANTIC_TOKENS,
   platformTokenCss,
+  platformVariables,
   type PlatformContext,
 } from "./tokens"
 
@@ -57,6 +59,16 @@ describe("platform token boundaries and readable semantic pairs", () => {
       )
     })
   }
+  it("derives React motion values from the same versioned token source", () => {
+    expect(PLATFORM_MOTION.duration).toEqual({
+      fast: Number.parseFloat(PRIMITIVE_TOKENS.motion.fast) / 1000,
+      normal: Number.parseFloat(PRIMITIVE_TOKENS.motion.normal) / 1000,
+      layout: Number.parseFloat(PRIMITIVE_TOKENS.motion.layout) / 1000,
+    })
+    expect(PLATFORM_MOTION.spring).toMatchObject(PRIMITIVE_TOKENS.spring)
+    expect(PLATFORM_MOTION.reduced.duration).toBe(0)
+  })
+
   it("rejects accidental editor/show scope application", () => {
     for (const context of ["editor.current", "show.theme", "body"])
       expect(() => platformVariables(context as PlatformContext)).toThrow()

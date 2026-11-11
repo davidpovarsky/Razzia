@@ -161,6 +161,27 @@ export const COMPONENT_TOKENS = {
   table: { rowMinHeight: "2.75rem" },
 } as const
 
+const motionSeconds = (duration: string) => Number.parseFloat(duration) / 1000
+const motionBezier = (easing: string) =>
+  easing
+    .slice(easing.indexOf("(") + 1, -1)
+    .split(",")
+    .map(Number) as [number, number, number, number]
+/** React motion values generated from the same platform token source as CSS. */
+export const PLATFORM_MOTION = {
+  duration: {
+    fast: motionSeconds(PRIMITIVE_TOKENS.motion.fast),
+    normal: motionSeconds(PRIMITIVE_TOKENS.motion.normal),
+    layout: motionSeconds(PRIMITIVE_TOKENS.motion.layout),
+  },
+  ease: {
+    standard: motionBezier(PRIMITIVE_TOKENS.motion.easing),
+    exit: motionBezier(PRIMITIVE_TOKENS.motion.exit),
+  },
+  spring: { type: "spring" as const, ...PRIMITIVE_TOKENS.spring },
+  reduced: { duration: 0 },
+} as const
+
 /** Documentation only. Neither context is accepted by runtime platform scopes. */
 export const INDEPENDENT_CONTEXTS = {
   "editor.current":

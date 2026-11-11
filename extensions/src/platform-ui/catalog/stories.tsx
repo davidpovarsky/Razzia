@@ -1,31 +1,32 @@
+import { Check, Copy, Ellipsis, Plus, Search, Trash2 } from "lucide-react"
 import { useState } from "react"
 import { useTranslation } from "react-i18next"
-import { Check, Copy, Ellipsis, Plus, Search, Trash2 } from "lucide-react"
 import {
+  Badge,
   Button,
+  Card,
+  EmptyState,
+  ErrorState,
   IconButton,
   Input,
+  LoadingState,
   SearchInput,
   Select,
-  Switch,
-  Badge,
-  Toast,
-  EmptyState,
-  LoadingState,
-  ErrorState,
   StatusState,
+  Switch,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
   Tabs,
+  Toast,
   Toolbar,
   ToolbarGroup,
-  Table,
-  TableHead,
-  TableBody,
-  TableRow,
-  TableHeader,
-  TableCell,
 } from "../index"
-import { Story } from "./story"
 import { InteractionStories } from "./interaction-stories"
+import { Story } from "./story"
 
 export function ExampleTable({ count = 12 }: { count?: number }) {
   return (
@@ -134,6 +135,10 @@ export function ComponentStories({
             )}
           </div>
           <Toast>{message}</Toast>
+          <Card interactive data-testid="catalog-interactive-card">
+            <strong>Interactive platform card</strong>
+            <p>Hover, focus and reduced motion use the shared token timing.</p>
+          </Card>
           <EmptyState
             title="No example games"
             action={

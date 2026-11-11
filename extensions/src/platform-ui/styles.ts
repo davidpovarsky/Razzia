@@ -25,6 +25,14 @@ export const platformComponentCss = `
 .tds-scope .tds-icon-button:not([data-variant="unstyled"]){width:var(--tds-button-min-height);padding:var(--tds-space-2);flex-shrink:0}
 .tds-scope .tds-spinner{display:inline-block;width:var(--tds-icon-small);height:var(--tds-icon-small);border:2px solid currentColor;border-inline-end-color:transparent;border-radius:var(--tds-radius-round);animation:tds-spin var(--tds-motion-spinner) linear infinite}
 @keyframes tds-spin{to{transform:rotate(360deg)}}
+@keyframes tds-overlay-in{from{opacity:0}to{opacity:1}}
+@keyframes tds-overlay-out{from{opacity:1}to{opacity:0}}
+@keyframes tds-dialog-in{from{opacity:0;transform:translate(-50%,-48%) scale(.98)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes tds-dialog-out{from{opacity:1;transform:translate(-50%,-50%) scale(1)}to{opacity:0;transform:translate(-50%,-49%) scale(.985)}}
+@keyframes tds-menu-in{from{opacity:0;transform:translateY(-.25rem) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes tds-menu-out{from{opacity:1;transform:translateY(0) scale(1)}to{opacity:0;transform:translateY(-.125rem) scale(.99)}}
+@keyframes tds-feedback-in{from{opacity:0;transform:translateY(.25rem)}to{opacity:1;transform:translateY(0)}}
+@keyframes tds-selection-in{from{opacity:.35}to{opacity:1}}
 .tds-scope .tds-field{display:grid;gap:var(--tds-space-2);min-width:0}
 .tds-scope .tds-field-label{font-size:var(--tds-type-label);font-weight:var(--tds-weight-label)}
 .tds-scope :is(.tds-input,.tds-select){box-sizing:border-box;width:100%;min-width:0;min-height:var(--tds-input-min-height);padding:var(--tds-space-2) var(--tds-space-3);border:1px solid var(--tds-border);border-radius:var(--tds-input-radius);color:var(--tds-text);background:var(--tds-surface);font:inherit}
@@ -45,7 +53,10 @@ export const platformComponentCss = `
 .tds-scope .tds-tab[data-state="active"]{background:var(--tds-action);color:var(--tds-action-text);font-weight:var(--tds-weight-label)}
 .tds-scope .tds-tab:disabled{opacity:.55;cursor:not-allowed}
 .tds-scope .tds-tab-panel{padding-block:var(--tds-space-4)}
+.tds-scope .tds-tab-panel[data-state="active"]{animation:tds-selection-in var(--tds-motion-normal) var(--tds-motion-easing)}
 .tds-scope .tds-card{min-width:0;padding:var(--tds-space-6);border:1px solid var(--tds-border);border-radius:var(--tds-radius-card);background:var(--tds-surface);color:var(--tds-text)}
+.tds-scope .tds-card[data-interactive="true"]{transition:border-color var(--tds-motion-fast) var(--tds-motion-easing),box-shadow var(--tds-motion-normal) var(--tds-motion-easing),transform var(--tds-motion-fast) var(--tds-motion-easing)}
+@media(hover:hover){.tds-scope .tds-card[data-interactive="true"]:hover{border-color:var(--tds-focus);box-shadow:var(--tds-shadow-raised);transform:translateY(-2px)}}
 .tds-scope .tds-badge{display:inline-flex;align-items:center;gap:var(--tds-space-1);border:1px solid currentColor;border-radius:var(--tds-radius-round);padding:var(--tds-space-1) var(--tds-space-2);font-size:var(--tds-type-caption);font-weight:var(--tds-weight-label);color:var(--tds-muted-text)}
 .tds-scope [data-tone="success"]{color:var(--tds-success)}
 .tds-scope [data-tone="warning"]{color:var(--tds-warning)}
@@ -63,6 +74,10 @@ export const platformComponentCss = `
 .tds-scope .tds-table :is(th,td){padding:var(--tds-space-3);border-block-end:1px solid var(--tds-border);text-align:start;min-height:var(--tds-table-row-min-height)}
 .tds-scope .tds-overlay{position:fixed;inset:0;z-index:var(--tds-z-overlay);background:var(--tds-overlay);backdrop-filter:blur(5px)}
 .tds-scope .tds-dialog-surface{box-sizing:border-box;position:fixed;inset-block-start:50%;inset-inline-start:50%;transform:translate(-50%,-50%);z-index:var(--tds-z-dialog);width:min(var(--tds-dialog-width),calc(100vw - var(--tds-space-8)));max-height:var(--tds-dialog-max-height);overflow:auto;overscroll-behavior:contain;margin:0;border:1px solid var(--tds-border);border-radius:var(--tds-radius-dialog);padding:var(--tds-dialog-padding);background:var(--tds-surface);color:var(--tds-text);font-family:var(--tds-font-family);box-shadow:var(--tds-shadow-dialog)}
+.tds-scope .tds-overlay[data-state="open"]{animation:tds-overlay-in var(--tds-motion-normal) var(--tds-motion-easing)}
+.tds-scope .tds-overlay[data-state="closed"]{animation:tds-overlay-out var(--tds-motion-fast) var(--tds-motion-exit)}
+.tds-scope .tds-dialog-surface[data-state="open"]{animation:tds-dialog-in var(--tds-motion-normal) var(--tds-motion-easing)}
+.tds-scope .tds-dialog-surface[data-state="closed"]{animation:tds-dialog-out var(--tds-motion-fast) var(--tds-motion-exit)}
 .tds-scope[dir="rtl"] .tds-dialog-surface{inset-inline-start:auto;left:50%}
 .tds-scope dialog.tds-dialog-surface::backdrop{background:var(--tds-overlay);backdrop-filter:blur(5px)}
 .tds-scope .tds-dialog-title{margin:0;padding-inline-end:calc(var(--tds-button-min-height) + var(--tds-space-3));font-size:var(--tds-type-title);font-weight:var(--tds-weight-heading);line-height:1.3}
@@ -72,11 +87,14 @@ export const platformComponentCss = `
 .tds-scope .tds-dialog-body>.tds-button{justify-self:start}
 .tds-scope .tds-dialog-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:var(--tds-space-2);margin-block-start:var(--tds-space-6)}
 .tds-scope .tds-menu-surface{z-index:var(--tds-z-menu);min-width:12rem;max-width:calc(100vw - var(--tds-space-8));max-height:min(70dvh,var(--radix-dropdown-menu-content-available-height,70dvh));overflow:auto;padding:var(--tds-space-2);border:1px solid var(--tds-border);border-radius:var(--tds-radius-control);background:var(--tds-surface);color:var(--tds-text);font-family:var(--tds-font-family);box-shadow:var(--tds-shadow-raised)}
+.tds-scope .tds-menu-surface[data-state="open"]{transform-origin:var(--radix-dropdown-menu-content-transform-origin,var(--radix-popover-content-transform-origin,top right));animation:tds-menu-in var(--tds-motion-fast) var(--tds-motion-easing)}
+.tds-scope .tds-menu-surface[data-state="closed"]{animation:tds-menu-out var(--tds-motion-fast) var(--tds-motion-exit)}
 .tds-scope .tds-menu-item{display:flex;align-items:center;gap:var(--tds-space-2);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-3);border-radius:var(--tds-radius-small);font-size:var(--tds-type-label);cursor:pointer;outline:none}
 .tds-scope .tds-menu-item[data-highlighted]{background:var(--tds-elevated)}
 .tds-scope .tds-menu-item[data-disabled]{opacity:.55;cursor:not-allowed}
 .tds-scope .tds-menu-separator{height:1px;margin-block:var(--tds-space-2);background:var(--tds-border)}
 .tds-scope .tds-tooltip{z-index:var(--tds-z-tooltip);max-width:20rem;padding:var(--tds-space-2) var(--tds-space-3);border:1px solid var(--tds-border);border-radius:var(--tds-radius-small);background:var(--tds-elevated);color:var(--tds-text);font:var(--tds-type-label)/1.4 var(--tds-font-family);box-shadow:var(--tds-shadow-raised)}
+.tds-scope .tds-tooltip[data-state="delayed-open"],.tds-scope [data-platform-motion="feedback"]{animation:tds-feedback-in var(--tds-motion-normal) var(--tds-motion-easing)}
 .tds-scope .tds-toast{padding:var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-radius-control);background:var(--tds-elevated);color:var(--tds-text);box-shadow:var(--tds-shadow-raised)}
 .tds-scope.tds-portal-scope{display:contents}
 .tds-scope.tds-legacy-surface{--color-primary:var(--tds-action);--color-secondary:var(--tds-action-text);--color-background:var(--tds-surface);--color-foreground:var(--tds-text);--color-muted:var(--tds-elevated);--color-muted-foreground:var(--tds-muted-text);--color-accent:var(--tds-elevated);--color-accent-foreground:var(--tds-text);--color-border:var(--tds-border)}
@@ -90,5 +108,5 @@ export const platformComponentCss = `
 .tds-scope .tds-roster-policy [role="status"]{color:var(--tds-success)}
 .tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:46rem}
 @media(max-width:48rem){.tds-scope .tds-roster-dialog{padding:var(--tds-space-4)!important}.tds-scope .tds-roster-dialog .tds-roster-table-scroll table{min-width:34rem}.tds-scope .tds-roster-dialog .tds-roster-table-scroll :is(th,td):is(:nth-child(3),:nth-child(5),:nth-child(6)){display:none}}
-@media(prefers-reduced-motion:reduce){.tds-scope .tds-spinner{animation:none}.tds-scope .tds-button:not(:disabled):active{transform:none}}
+@media(prefers-reduced-motion:reduce){.tds-scope :is(.tds-spinner,.tds-overlay,.tds-dialog-surface,.tds-menu-surface,.tds-tooltip,[data-platform-motion="feedback"],[data-platform-motion="selection"]){animation:none!important}.tds-scope :is(.tds-button,.tds-switch-thumb,.tds-tab,.tds-card[data-interactive="true"]){transition-duration:.001ms!important}.tds-scope :is(.tds-button:not(:disabled):active,.tds-card[data-interactive="true"]:hover){transform:none}}
 `
