@@ -169,3 +169,16 @@ assumptions, while current Studio build/install/export passes both engines. See
 No production, push, merge, provider or data operation. TDS-09 implementation
 commit: `ad0152866e0f84fbead6c2a32dca6ec7d0fa0c07`. Next exact action: begin
 TDS-10 platform motion only.
+
+TDS-10 implementation commit: `537ccb8fd2762e02d0659a11e0ce61686ac2ddc9`.
+BASE_HEAD: `e756f619c015893462ae72f77f810889d2e32e70`.
+All 16 isolated gate labels PASS: 22 units, 59 distinct browser cases, and
+10 capture-only motion cases rerun after QA screenshot improvements. All four
+editor and all four accepted stage/QR captures are byte-identical to their
+independent controls. Full 602-file boundary, host AST and cinematic owners PASS;
+1,189 local/container build inputs match. No new upstream/editor source edit.
+See [TDS_MOTION.md](TDS_MOTION.md). The first staged whitespace check exposed
+CRLF in locally generated evidence; an evidence-only follow-up normalizes it to
+LF and passes the check without changing results or application source.
+Asana was not updated: [pending synchronization](ASANA_SYNC_PENDING.md).
+Next exact action: TDS-11 stable semantic aliases and compatibility verification.

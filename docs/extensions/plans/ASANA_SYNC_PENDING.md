@@ -9,7 +9,7 @@ authorize a push, merge, deployment, provider change or production migration.
 
 | Phase | Existing task | Pending description / checkbox |
 | --- | --- | --- |
-| TDS-10 | 1220402539658409 | VERIFIED locally. Synchronize TDS_MOTION.md, final implementation SHA, 16/16 gate labels, 22 units, 59 browser cases, editor/stage byte parity. Complete this subtask only after attaching this evidence. |
+| TDS-10 | 1220402539658409 | VERIFIED locally, implementation `537ccb8fd2762e02d0659a11e0ce61686ac2ddc9`. Synchronize TDS_MOTION.md, 16/16 gate labels, 22 units, 59 browser cases, editor/stage byte parity. Complete this subtask only after attaching this evidence. |
 | TDS-11 | 1220402430879047 | NOT_STARTED. Naming compatibility follows verified TDS-10. |
 | TDS-12 | 1220402539686110 | NOT_STARTED. Full acceptance and release handoff follow TDS-11. |
 
