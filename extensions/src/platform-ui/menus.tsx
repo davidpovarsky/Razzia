@@ -1,4 +1,10 @@
-import type { ComponentProps, ReactElement, ReactNode } from "react"
+import {
+  useRef,
+  useState,
+  type ComponentProps,
+  type ReactElement,
+  type ReactNode,
+} from "react"
 import {
   DropdownMenu,
   Popover as RadixPopover,
@@ -21,27 +27,65 @@ export function Menu({
   open?: boolean
   onOpenChange?: (open: boolean) => void
 }) {
+  const [internalOpen, setInternalOpen] = useState(false)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  const currentOpen = open ?? internalOpen
+  const latestOpen = useRef(currentOpen)
+  latestOpen.current = currentOpen
+
   return (
-    <DropdownMenu.Root modal={false} open={open} onOpenChange={onOpenChange}>
+    <DropdownMenu.Root
+      modal={false}
+      open={currentOpen}
+      onOpenChange={(next) => {
+        if (open === undefined) {
+          latestOpen.current = next
+          setInternalOpen(next)
+        }
+
+        onOpenChange?.(next)
+      }}
+    >
       <DropdownMenu.Trigger
         asChild
+        ref={triggerRef}
         onPointerDown={(event) => {
           // Radix suppresses default trigger focus on open. In a ShadowRoot the
           // first body-to-shadow focus can otherwise look like an outside event.
           const button = event.currentTarget
+
           if (
             !button.disabled &&
             event.button === 0 &&
             !event.ctrlKey &&
             button.getRootNode() instanceof ShadowRoot
-          )
+          ) {
             button.focus({ preventScroll: true })
+          }
         }}
       >
         {trigger}
       </DropdownMenu.Trigger>
       <MenuPortal>
         <DropdownMenu.Content
+          onInteractOutside={(event) => {
+            // The trigger owns its toggle. An exiting layer must not dismiss
+            // the menu again after that same pointer/focus event reopens it.
+            if (
+              triggerRef.current &&
+              event.detail.originalEvent
+                .composedPath()
+                .includes(triggerRef.current)
+            ) {
+              event.preventDefault()
+            }
+          }}
+          onCloseAutoFocus={(event) => {
+            // An interrupted exit must not steal focus from its reopened menu.
+            if (latestOpen.current) {
+              event.preventDefault()
+            }
+          }}
           onFocusCapture={shadowMenuEntry}
           onKeyDownCapture={(event) => shadowRovingFocus(event, "menuitem")}
           align="end"
@@ -55,6 +99,7 @@ export function Menu({
     </DropdownMenu.Root>
   )
 }
+
 export function MenuItem({
   tone,
   className = "",
@@ -69,9 +114,11 @@ export function MenuItem({
     />
   )
 }
+
 export function MenuSeparator() {
   return <DropdownMenu.Separator className="tds-menu-separator" />
 }
+
 export function MenuLabel(props: ComponentProps<typeof DropdownMenu.Label>) {
   return (
     <DropdownMenu.Label
@@ -80,6 +127,7 @@ export function MenuLabel(props: ComponentProps<typeof DropdownMenu.Label>) {
     />
   )
 }
+
 export function SubMenu({
   label,
   children,
@@ -105,6 +153,7 @@ export function SubMenu({
     </DropdownMenu.Sub>
   )
 }
+
 export function Popover({
   trigger,
   label,
@@ -133,6 +182,7 @@ export function Popover({
     </RadixPopover.Root>
   )
 }
+
 export function Tooltip({
   content,
   children,

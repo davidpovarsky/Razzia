@@ -14,6 +14,7 @@ import { showThemeStyle } from "../src/presentation/show-themes/context"
 function Fixture() {
   const [changed, setChanged] = useState(false)
   const action = changed ? SEMANTIC_TOKENS["platform.host"].info : undefined
+
   return (
     <PlatformControlsProvider Button={NativeButton}>
       <button data-testid="change-token" onClick={() => setChanged(!changed)}>
@@ -79,4 +80,10 @@ function Fixture() {
     </PlatformControlsProvider>
   )
 }
-createRoot(document.getElementById("root")!).render(<Fixture />)
+const rootElement = document.getElementById("root")
+
+if (!rootElement) {
+  throw new Error("Missing fixture root")
+}
+
+createRoot(rootElement).render(<Fixture />)

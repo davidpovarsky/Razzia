@@ -53,6 +53,7 @@ const importCsv = (count: number) =>
     "name,phone",
     ...Array.from({ length: count }, (_, index) => {
       const number = String(index + 1).padStart(3, "0")
+
       return `Synthetic participant ${number},+447700900${number}`
     }),
   ].join("\n")
@@ -66,6 +67,7 @@ async function fetchPresence(
     headers,
   })
   expect(response.ok(), await response.text()).toBe(true)
+
   return ((await response.json()) as { presence: HostPresenceSnapshot })
     .presence
 }
@@ -138,8 +140,9 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
         .endsWith(
           `/api/games/${room.gameId}/roster/${participant.rosterPlayerId}`,
         )
-    )
+    ) {
       deleteRequests += 1
+    }
   })
 
   await remove.click()
@@ -268,6 +271,7 @@ test("authoritative phone policy, confirmed deletion, imports, filtering and 40/
   expect(
     await page.getByTestId("host-modal-players-table").evaluate((table) => {
       const viewport = table.parentElement!
+
       return table.scrollWidth > viewport.clientWidth
     }),
   ).toBe(true)

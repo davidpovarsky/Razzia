@@ -34,6 +34,7 @@ function Join({ pin, manager }: { pin: string; manager: boolean }) {
     managerLocked: manager ? false : undefined,
     directory: { dialNumber: "TEST-NO-CALLS", phoneE164: "+10000000000" },
   })
+
   return (
     <>
       <output data-testid="join-contract">{JSON.stringify(join)}</output>
@@ -53,6 +54,7 @@ function Fixture() {
       ? { id: RAZZIA_THEME_ID, version: "1.0.0", overrides: {} }
       : undefined,
   })
+
   return (
     <ShowViewportFrame
       theme={theme}
@@ -87,4 +89,10 @@ function Fixture() {
     </ShowViewportFrame>
   )
 }
-createRoot(document.getElementById("root")!).render(<Fixture />)
+const rootElement = document.getElementById("root")
+
+if (!rootElement) {
+  throw new Error("Missing fixture root")
+}
+
+createRoot(rootElement).render(<Fixture />)

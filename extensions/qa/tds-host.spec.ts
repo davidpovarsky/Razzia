@@ -7,18 +7,6 @@ import {
 } from "../src/core"
 import { joinGame, answer } from "../../packages/e2e/utils/player"
 
-type WireEvent = {
-  name: string
-  payload?: { action?: string; payload?: Record<string, unknown> }
-}
-type ObservedWindow = Window & {
-  __tdsEvents: WireEvent[]
-  __socket: {
-    onAnyOutgoing: (
-      listener: (name: string, payload?: WireEvent["payload"]) => void,
-    ) => void
-  }
-}
 async function openHost(page: Page) {
   const headers = await registerSynthetic(page)
   const quizz = {
@@ -62,25 +50,26 @@ async function openHost(page: Page) {
     .getAttribute("data-qr-url")
   expect(url).toBeTruthy()
   await page.evaluate(() => {
-    const win = window as ObservedWindow
+    const win = window
     win.__tdsEvents = []
     win.__socket.onAnyOutgoing((name, payload) => {
       win.__tdsEvents.push({ name, payload })
     })
   })
+
   return {
     pin: new URL(url!).searchParams.get("pin")!,
     gameId: /manager\/([^/?#]+)/u.exec(page.url())![1],
     url: url!,
   }
 }
-async function commandCount(page: Page, action?: string) {
+function commandCount(page: Page, action?: string) {
   return page.evaluate(
-    (action) =>
-      (window as ObservedWindow).__tdsEvents.filter(
+    (requestedAction) =>
+      window.__tdsEvents.filter(
         (event) =>
           event.name === "extensions:command" &&
-          (!action || event.payload?.action === action),
+          (!requestedAction || event.payload?.action === requestedAction),
       ).length,
     action,
   )
@@ -455,8 +444,9 @@ test("legacy settings switches use visible token thumbs and preserve a real conf
     if (
       request.method() === "PATCH" &&
       request.url().endsWith(`/api/games/${room.gameId}/settings`)
-    )
+    ) {
       patches.push(request.postData()!)
+    }
   })
   const saved = page.waitForResponse(
     (response) =>
@@ -466,7 +456,10 @@ test("legacy settings switches use visible token thumbs and preserve a real conf
   await dialog.getByRole("button", { name: "Save", exact: true }).click()
   const response = await saved
   expect(response.ok()).toBe(true)
-  expect((await response.json()).settings.endOnAllAnswered).toBe(true)
+  const body = (await response.json()) as {
+    settings: { endOnAllAnswered: boolean }
+  }
+  expect(body.settings.endOnAllAnswered).toBe(true)
   expect(patches).toHaveLength(1)
   await expect(dialog).toHaveCount(0)
   await trigger.click()

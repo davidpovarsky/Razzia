@@ -1,6 +1,7 @@
 /** Production CSS. Every selector is bounded by the explicit platform scope. */
 const buttonBase =
   "display:inline-flex;align-items:center;justify-content:center;gap:var(--tds-button-gap);min-height:var(--tds-button-min-height);padding:var(--tds-space-2) var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-button-radius);background:var(--tds-elevated);color:var(--tds-text);font:var(--tds-weight-label) var(--tds-type-label)/1.3 var(--tds-font-family);text-decoration:none;cursor:pointer;transition:background var(--tds-motion-fast) var(--tds-motion-easing),box-shadow var(--tds-motion-fast) var(--tds-motion-easing),transform var(--tds-motion-fast) var(--tds-motion-easing)"
+
 export const platformComponentCss = `
 .tds-scope{font-family:var(--tds-font-family);color:var(--tds-text)}
 .tds-scope[data-platform-appearance="dark"]{color-scheme:dark}

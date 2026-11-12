@@ -8,6 +8,7 @@ type Input = Omit<RoomJoinInput, "origin" | "role" | "locked"> & {
   managerLocked?: boolean
   envelope?: ExtensionStateEnvelope | null
 }
+
 /** Existing public check only; no player join, manager command or accepted cookie. */
 export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
   const origin =
@@ -20,21 +21,32 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
     locked?: boolean
   }>({})
   useEffect(() => {
-    if (managerLocked !== undefined || !pin || !origin) return
+    if (managerLocked !== undefined || !pin || !origin) {
+      return
+    }
+
     let alive = true,
       inFlight = false
-    let timer: ReturnType<typeof setTimeout> | undefined
-    let controller: AbortController | undefined
+    // Cleanup may run during an awaited request; read current liveness again.
+    const isActive = (): boolean => alive
+    let timer: ReturnType<typeof setTimeout> | undefined = undefined
+    let controller: AbortController | undefined = undefined
     const probe = async () => {
-      if (!alive || inFlight) return
-      if (document.hidden) {
-        timer = setTimeout(() => void probe(), 3000)
+      if (!isActive() || inFlight) {
         return
       }
+
+      if (document.hidden) {
+        timer = setTimeout(() => void probe(), 3000)
+
+        return
+      }
+
       inFlight = true
       controller = new AbortController()
       const deadline = setTimeout(() => controller?.abort(), 8000)
-      let locked: boolean | undefined
+      let locked: boolean | undefined = undefined
+
       try {
         const response = await fetch(new URL("/api/games/check", origin), {
           method: "POST",
@@ -44,10 +56,15 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ inviteCode: pin }),
         })
-        if (response.ok) locked = false
-        else if (response.status === 403) {
+
+        if (response.ok) {
+          locked = false
+        } else if (response.status === 403) {
           const body = (await response.json()) as { error?: string }
-          if (body.error === "errors:game.locked") locked = true
+
+          if (body.error === "errors:game.locked") {
+            locked = true
+          }
         }
       } catch {
         /* Unknown is explicit and never reuses a previous room's QR. */
@@ -55,7 +72,8 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
         clearTimeout(deadline)
         inFlight = false
       }
-      if (alive) {
+
+      if (isActive()) {
         setObserved({ pin, origin, locked })
         timer = setTimeout(
           () => void probe(),
@@ -65,6 +83,7 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
     }
     const visible = () => {
       clearTimeout(timer)
+
       if (!document.hidden) {
         setObserved({ pin, origin })
         void probe()
@@ -73,6 +92,7 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
     document.addEventListener("visibilitychange", visible)
     setObserved({ pin, origin })
     void probe()
+
     return () => {
       alive = false
       controller?.abort()
@@ -82,6 +102,7 @@ export function useRoomJoin({ managerLocked, envelope, ...input }: Input) {
   }, [managerLocked, pin, origin])
   const participation = envelope?.extras.participation as
     { connected?: unknown } | undefined
+
   return resolveRoomJoin({
     ...input,
     origin,

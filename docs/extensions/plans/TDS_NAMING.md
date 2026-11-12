@@ -6,6 +6,7 @@ Subtask: `1220402430879047`.
 Branch: `codex/tadazz-design-system-20261110`.
 Worktree: `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
 BASE_HEAD: `5283ae47e8c7e17c74e8c0b666e280c986a3c267`.
+Implementation commit: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc`.
 
 ## Scope and compatibility map
 
@@ -13,11 +14,11 @@ The existing downstream presentation barrel gains semantic names for new imports
 They reference the exact existing components/types, with no wrapper, effect,
 provider, rendering branch or new dependency. Historical names remain exported.
 
-| New public name | Historical name / physical module | Compatibility |
-| --- | --- | --- |
-| `ShowStage` | `TadazzV4Stage`, `tadazz-v4/TadazzV4Stage.tsx` | Same component identity |
+| New public name        | Historical name / physical module                              | Compatibility                         |
+| ---------------------- | -------------------------------------------------------------- | ------------------------------------- |
+| `ShowStage`            | `TadazzV4Stage`, `tadazz-v4/TadazzV4Stage.tsx`                 | Same component identity               |
 | `StageRendererAdapter` | `TadazzV4StageAdapter`, `tadazz-show/TadazzV4StageAdapter.tsx` | Same forwarded-ref component identity |
-| `StageData` | `TadazzV4Data`, `tadazz-v4/types.ts` | Exact type alias |
+| `StageData`            | `TadazzV4Data`, `tadazz-v4/types.ts`                           | Exact type alias                      |
 
 Import from `@razzia/extensions/presentation`. The historical physical filenames
 remain: their cinematic owners and existing deep imports are outside this

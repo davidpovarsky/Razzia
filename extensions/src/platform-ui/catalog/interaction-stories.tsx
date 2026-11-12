@@ -17,6 +17,7 @@ import {
   AlertDialog,
 } from "../index"
 import { Story } from "./story"
+
 export function InteractionStories({
   changeSurface,
   setMessage,
@@ -26,6 +27,7 @@ export function InteractionStories({
 }) {
   const { t } = useTranslation()
   const [failure, setFailure] = useState(false)
+
   return (
     <>
       <Story id="menus">
@@ -99,8 +101,14 @@ export function InteractionStories({
           }
           errorLabel="The synthetic callback rejected. Cancel or retry."
           onConfirm={async () => {
-            await new Promise((resolve) => setTimeout(resolve, 350))
-            if (failure) throw new Error("Synthetic rejection")
+            await new Promise((resolve) => {
+              setTimeout(resolve, 350)
+            })
+
+            if (failure) {
+              throw new Error("Synthetic rejection")
+            }
+
             setMessage("Example removal confirmed")
           }}
         />

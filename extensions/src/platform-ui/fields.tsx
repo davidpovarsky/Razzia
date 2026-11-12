@@ -11,10 +11,15 @@ import { Switch as RadixSwitch } from "radix-ui"
 type Name =
   | { label: string; "aria-label"?: string }
   | { label?: never; "aria-label": string }
-type Details = { error?: string; description?: string }
+interface Details {
+  error?: string
+  description?: string
+}
+
 export type InputProps = InputHTMLAttributes<HTMLInputElement> &
   Name &
   Details & { ref?: Ref<HTMLInputElement> }
+
 export type SelectProps = SelectHTMLAttributes<HTMLSelectElement> &
   Name &
   Details
@@ -47,6 +52,7 @@ function FieldFrame({
     </div>
   )
 }
+
 export function Input({
   label,
   description,
@@ -62,6 +68,7 @@ export function Input({
     [described, description && `${id}-description`, error && `${id}-error`]
       .filter(Boolean)
       .join(" ") || undefined
+
   return (
     <FieldFrame {...{ id, label, description, error }}>
       <input
@@ -74,9 +81,11 @@ export function Input({
     </FieldFrame>
   )
 }
+
 export function SearchInput(props: InputProps) {
   return <Input {...props} type="search" />
 }
+
 export function Select({
   label,
   description,
@@ -93,6 +102,7 @@ export function Select({
     [described, description && `${id}-description`, error && `${id}-error`]
       .filter(Boolean)
       .join(" ") || undefined
+
   return (
     <FieldFrame {...{ id, label, description, error }}>
       <select
@@ -107,6 +117,7 @@ export function Select({
     </FieldFrame>
   )
 }
+
 export function Switch({
   label,
   id: provided,
@@ -114,6 +125,7 @@ export function Switch({
 }: ComponentProps<typeof RadixSwitch.Root> & { label: string }) {
   const generated = useId(),
     id = provided ?? generated
+
   return (
     <label className="tds-switch-row" htmlFor={id}>
       <RadixSwitch.Root

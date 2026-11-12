@@ -24,50 +24,66 @@ const paths = execFileSync("git", ["ls-files", "--", ...roots], {
   .filter((path) => /\.(?:tsx?|css|json)$/u.test(path))
 
 function disposition(path) {
-  if (/\/features\/quizz\/|extensions\/src\/editor\//u.test(path))
+  if (/\/features\/quizz\/|extensions\/src\/editor\//u.test(path)) {
     return ["editor-protected", "existing-editor", "none; frozen"]
-  if (/\.test\.ts$|\/tests?\//u.test(path))
+  }
+
+  if (/\.test\.ts$|\/tests?\//u.test(path)) {
     return [
       "not-in-scope",
       "existing-qa",
       "reuse regression coverage; do not rewrite historical assertions",
     ]
-  if (/packages\/web\/src\/components\//u.test(path))
+  }
+
+  if (/packages\/web\/src\/components\//u.test(path)) {
     return [
       "reuse-with-wrapper",
       "upstream-controls",
       "platform-only wrapper; upstream remains byte-identical",
     ]
-  if (/packages\/web\/src\/features\/(?:game|manager)\//u.test(path))
+  }
+
+  if (/packages\/web\/src\/features\/(?:game|manager)\//u.test(path)) {
     return [
       "replace-presentation-only",
       "existing-host-or-package",
       "extensions/src/platform-ui; exact owner-approved seam if unavoidable",
     ]
-  if (/extensions\/src\/core\/show-themes\//u.test(path))
+  }
+
+  if (/extensions\/src\/core\/show-themes\//u.test(path)) {
     return [
       "canonical",
       "show-theme-contract",
       "keep manifest/resolution and persisted IDs",
     ]
-  if (/extensions\/src\/site\/web\/shared\//u.test(path))
+  }
+
+  if (/extensions\/src\/site\/web\/shared\//u.test(path)) {
     return [
       "reuse-with-wrapper",
       "site-shell",
       "extensions/src/platform-ui; retain route/account contracts",
     ]
-  if (/extensions\/src\/site\//u.test(path))
+  }
+
+  if (/extensions\/src\/site\//u.test(path)) {
     return [
       "canonical",
       "site-feature",
       "site presentation adopts canonical platform UI incrementally",
     ]
-  if (/platform-controls|native-button-primitives/u.test(path))
+  }
+
+  if (/platform-controls|native-button-primitives/u.test(path)) {
     return [
       "legacy-compatibility-only",
       "shared-original-control-port",
       "leave existing editor consumers unchanged; new platform has a separate API",
     ]
+  }
+
   return [
     "not-in-scope",
     "show-presentation",
@@ -78,6 +94,7 @@ function disposition(path) {
 const files = paths.sort().map((path) => {
   const text = readFileSync(resolve(root, path), "utf8")
   const [classification, owner, migration] = disposition(path)
+
   return {
     path,
     classification,
@@ -117,6 +134,7 @@ const counts = files.reduce(
 const themes = ["classic", "razzia"].map((name) => {
   const path = `extensions/src/core/show-themes/${name}.manifest.json`
   const manifest = JSON.parse(readFileSync(resolve(root, path), "utf8"))
+
   return {
     path,
     id: manifest.id,
@@ -140,7 +158,7 @@ const report = {
 }
 writeFileSync(
   resolve(root, "docs/extensions/plans/tds-inventory.json"),
-  JSON.stringify(report, null, 2) + "\n",
+  `${JSON.stringify(report, null, 2)}\n`,
 )
 console.log(
   JSON.stringify(

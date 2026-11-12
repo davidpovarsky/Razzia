@@ -56,7 +56,9 @@ export * from "./tadazz-v4"
 
 // Semantic public names for new consumers; historical imports remain identical.
 export { TadazzV4Stage as ShowStage } from "./tadazz-v4/TadazzV4Stage"
+
 export { TadazzV4StageAdapter as StageRendererAdapter } from "./tadazz-show/TadazzV4StageAdapter"
+
 export type { TadazzV4Data as StageData } from "./tadazz-v4/types"
 
 export * from "./extension-stage-content"
@@ -72,7 +74,9 @@ export * from "./show-themes/timer-events"
 export * from "./question-underline"
 
 export * from "./platform-controls"
+
 export * from "./room-join"
+
 export * from "./show-themes/viewport"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"

@@ -47,6 +47,8 @@ export function ReferenceCanvas({
         fontFamily: PRIMITIVE_TOKENS.font.family,
       }}
     >
+      {/* React owns this scoped metadata; the frozen native document is unchanged. */}
+      <title>Tadazz</title>
       {root &&
         createPortal(
           <>

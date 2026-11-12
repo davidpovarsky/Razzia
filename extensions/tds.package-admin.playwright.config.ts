@@ -1,8 +1,9 @@
 import { defineConfig, devices } from "@playwright/test"
 import site from "./site.playwright.config"
 
-if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux")
+if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux") {
   throw new Error("Isolated remote QA only")
+}
 
 export default defineConfig({
   ...site,

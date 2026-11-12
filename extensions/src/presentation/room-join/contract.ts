@@ -1,5 +1,7 @@
 import { inviteCodeValidator } from "@razzia/common/validators/auth"
+
 export type JoinRole = "manager" | "player" | "spectator"
+
 export interface RoomJoinInput {
   origin: string
   inviteCode?: unknown
@@ -9,6 +11,7 @@ export interface RoomJoinInput {
   connectedCount?: number
   rosterCount?: number
 }
+
 export interface RoomJoin {
   role: JoinRole
   lockState: "checking" | "locked" | "open"
@@ -24,10 +27,13 @@ export interface RoomJoin {
   connectedCount?: number
   rosterCount?: number
 }
+
 export const validRoomPin = (value: unknown) => {
   const parsed = inviteCodeValidator.safeParse(value)
+
   return parsed.success ? parsed.data : undefined
 }
+
 const count = (value: unknown) =>
   typeof value === "number" && Number.isSafeInteger(value) && value >= 0
     ? value
@@ -38,12 +44,15 @@ export function resolveRoomJoin(input: RoomJoinInput): RoomJoin {
   const pin = validRoomPin(input.inviteCode)
   let webUrl = "",
     host = "",
-    joinUrl: string | undefined
+    joinUrl: string | undefined = undefined
+
   try {
     const url = new URL("/game", input.origin)
+
     if (url.protocol === "https:" || url.protocol === "http:") {
       webUrl = url.href
       host = `${url.host}${url.pathname}`
+
       if (pin) {
         url.searchParams.set("pin", pin)
         joinUrl = url.href
@@ -52,26 +61,37 @@ export function resolveRoomJoin(input: RoomJoinInput): RoomJoin {
   } catch {
     /* No URL or QR is fabricated before the browser origin is known. */
   }
+
   const pending = !pin || !webUrl || input.locked === undefined
   const locked = pending || input.locked === true
-  const lockState = pending ? "checking" : locked ? "locked" : "open"
+  let lockState: RoomJoin["lockState"] = "open"
+
+  if (pending) {
+    lockState = "checking"
+  } else if (locked) {
+    lockState = "locked"
+  }
+
+  let displayPin = "—"
+
+  if (pin && !pending) {
+    displayPin = locked ? Array.from(pin, () => "#").join("") : pin
+  }
+
   const directory =
     input.directory && typeof input.directory === "object"
       ? (input.directory as { dialNumber?: unknown })
       : undefined
   const dial =
     typeof directory?.dialNumber === "string" ? directory.dialNumber.trim() : ""
+
   return {
     role: input.role,
     lockState,
     pending,
     locked,
     pin: pending ? undefined : pin,
-    displayPin: pending
-      ? "—"
-      : locked
-        ? Array.from(pin!, () => "#").join("")
-        : pin!,
+    displayPin,
     webUrl,
     host,
     joinUrl: locked ? undefined : joinUrl,

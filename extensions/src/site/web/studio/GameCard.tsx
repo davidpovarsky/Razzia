@@ -41,6 +41,7 @@ export function GameCard({
   const reduceMotion = useReducedMotion()
   const [removal, setRemoval] = useState(false)
   const trigger = useRef<HTMLButtonElement>(null)
+
   return (
     <motion.article
       layout={reduceMotion ? false : "position"}
@@ -131,13 +132,8 @@ export function GameCard({
       </div>
       <AlertDialog
         open={removal}
-        onOpenChange={(open) => {
-          setRemoval(open)
-          if (!open)
-            queueMicrotask(() =>
-              trigger.current?.focus({ preventScroll: true }),
-            )
-        }}
+        onOpenChange={setRemoval}
+        returnFocusRef={trigger}
         title={t("Delete game?")}
         description={`${game.subject} — ${t("This permanently removes the game and its enhancements.")}`}
         confirmLabel={t("Confirm delete")}

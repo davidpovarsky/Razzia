@@ -1,0 +1,253 @@
+Private build diagnostic 1bf9ca99-9335-45e3-865f-0a0e532324fe 1 ✘ [ERROR] Dependency not allowed: node:fs [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:132:22:
+      132 │                 throw new Error(`Dependency not allowed: ${args.p...
+          ╵                       ^
+
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:132:23)
+    at requestCallbacks.on-resolve (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1502:28)
+    at handleRequest (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:911:17)
+    at handleIncomingPacket (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:936:7)
+    at Socket.readFromStdout (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+    at Readable.push (node:internal/streams/readable:400:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:194:23)
+
+  This error came from the "onResolve" callback registered here:
+
+    extensions/qa/package-builder.ts:118:18:
+      118 │             build.onResolve({ filter: /.*/, namespace: "tadazz" }...
+          ╵                   ~~~~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:118:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz:theme/src/entry.tsx:1:15:
+      1 │ import fs from "node:fs"; export default function Stage(){return <p...
+        ╵                ~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:132:22: ERROR: [plugin: tadazz-package-boundary] Dependency not allowed: node:fs
+
+Private build diagnostic c9e09c20-de1e-49d1-9b9c-fa54a6019b1f 1 ✘ [ERROR] Dynamic dependency not allowed [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:177:26:
+      177 │                     throw new Error("Dynamic dependency not allow...
+          ╵                           ^
+
+    at inspect (/cleanup/extensions/qa/package-builder.ts:177:27)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:161:27)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+
+  This error came from the "onLoad" callback registered here:
+
+    extensions/qa/package-builder.ts:149:18:
+      149 │             build.onLoad({ filter: /.*/, namespace: "tadazz" }, (...
+          ╵                   ~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:149:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz-bootstrap.tsx:1:102:
+      1 │ ....tsx"; import Theme from "tadazz-entry"; mount(Theme, {"shared/b...
+        ╵                             ~~~~~~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:177:26: ERROR: [plugin: tadazz-package-boundary] Dynamic dependency not allowed
+
+Private build diagnostic f7d6f075-5940-4618-b1e6-0d2ae5060d00 1 ✘ [ERROR] Dependency not allowed: https://example.invalid/external.css [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:132:22:
+      132 │                 throw new Error(`Dependency not allowed: ${args.p...
+          ╵                       ^
+
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:132:23)
+    at requestCallbacks.on-resolve (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1502:28)
+    at handleRequest (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:911:17)
+    at handleIncomingPacket (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:936:7)
+    at Socket.readFromStdout (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+    at Readable.push (node:internal/streams/readable:400:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:194:23)
+
+  This error came from the "onResolve" callback registered here:
+
+    extensions/qa/package-builder.ts:118:18:
+      118 │             build.onResolve({ filter: /.*/, namespace: "tadazz" }...
+          ╵                   ~~~~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:118:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz:theme/src/entry.tsx:1:7:
+      1 │ import "https://example.invalid/external.css"; export default funct...
+        ╵        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:132:22: ERROR: [plugin: tadazz-package-boundary] Dependency not allowed: https://example.invalid/external.css
+
+Private build diagnostic 7740ff3c-42bf-4979-8dc3-44a33955a289 1 ✘ [ERROR] Dependency not allowed: node:fs [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:132:22:
+      132 │                 throw new Error(`Dependency not allowed: ${args.p...
+          ╵                       ^
+
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:132:23)
+    at requestCallbacks.on-resolve (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1502:28)
+    at handleRequest (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:911:17)
+    at handleIncomingPacket (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:936:7)
+    at Socket.readFromStdout (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+    at Readable.push (node:internal/streams/readable:400:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:194:23)
+
+  This error came from the "onResolve" callback registered here:
+
+    extensions/qa/package-builder.ts:118:18:
+      118 │             build.onResolve({ filter: /.*/, namespace: "tadazz" }...
+          ╵                   ~~~~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:118:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz:theme/src/entry.tsx:1:15:
+      1 │ import fs from "node:fs"; export default function Stage(){return <p...
+        ╵                ~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:132:22: ERROR: [plugin: tadazz-package-boundary] Dependency not allowed: node:fs
+
+Private build diagnostic afea91ed-ad8c-42cf-9101-359b44d35e50 1 ✘ [ERROR] Dynamic dependency not allowed [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:177:26:
+      177 │                     throw new Error("Dynamic dependency not allow...
+          ╵                           ^
+
+    at inspect (/cleanup/extensions/qa/package-builder.ts:177:27)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:161:27)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+    at inspect (/cleanup/extensions/qa/package-builder.ts:191:39)
+    at Array.forEach (<anonymous>)
+
+  This error came from the "onLoad" callback registered here:
+
+    extensions/qa/package-builder.ts:149:18:
+      149 │             build.onLoad({ filter: /.*/, namespace: "tadazz" }, (...
+          ╵                   ~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:149:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz-bootstrap.tsx:1:102:
+      1 │ ....tsx"; import Theme from "tadazz-entry"; mount(Theme, {"shared/b...
+        ╵                             ~~~~~~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:177:26: ERROR: [plugin: tadazz-package-boundary] Dynamic dependency not allowed
+
+Private build diagnostic e78e7be1-9fd5-4943-9a18-cf9b8b90f26a 1 ✘ [ERROR] Dependency not allowed: https://example.invalid/external.css [plugin tadazz-package-boundary]
+
+    extensions/qa/package-builder.ts:132:22:
+      132 │                 throw new Error(`Dependency not allowed: ${args.p...
+          ╵                       ^
+
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:132:23)
+    at requestCallbacks.on-resolve (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1502:28)
+    at handleRequest (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:911:17)
+    at handleIncomingPacket (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:936:7)
+    at Socket.readFromStdout (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:864:7)
+    at Socket.emit (node:events:514:28)
+    at addChunk (node:internal/streams/readable:569:12)
+    at readableAddChunkPushByteMode (node:internal/streams/readable:520:3)
+    at Readable.push (node:internal/streams/readable:400:5)
+    at Pipe.onStreamRead (node:internal/stream_base_commons:194:23)
+
+  This error came from the "onResolve" callback registered here:
+
+    extensions/qa/package-builder.ts:118:18:
+      118 │             build.onResolve({ filter: /.*/, namespace: "tadazz" }...
+          ╵                   ~~~~~~~~~
+
+    at setup (/cleanup/extensions/qa/package-builder.ts:118:19)
+    at handlePlugins (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1426:21)
+    at buildOrContextImpl (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:1139:5)
+    at Object.buildOrContext (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:963:5)
+    at /cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2320:15
+    at new Promise (<anonymous>)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2319:25)
+    at Object.build (/cleanup/node_modules/.pnpm/esbuild@0.28.2/node_modules/esbuild/lib/main.js:2170:51)
+    at <anonymous> (/cleanup/extensions/qa/package-builder.ts:92:34)
+
+  The plugin "tadazz-package-boundary" was triggered by this import
+
+    tadazz:theme/src/entry.tsx:1:7:
+      1 │ import "https://example.invalid/external.css"; export default funct...
+        ╵        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TADAZZ_BUILD_REJECTED Build failed with 1 error:
+extensions/qa/package-builder.ts:132:22: ERROR: [plugin: tadazz-package-boundary] Dependency not allowed: https://example.invalid/external.css
+
+QA broker completed 20261112-package-r2fix deadline

@@ -6,6 +6,7 @@ const root = fileURLToPath(new URL("../../", import.meta.url))
 const walk = (directory) =>
   readdirSync(directory).flatMap((name) => {
     const path = resolve(directory, name)
+
     return statSync(path).isDirectory() ? walk(path) : [path]
   })
 const canonical = walk(resolve(root, "extensions/src/platform-ui")).filter(
@@ -20,14 +21,24 @@ const errors = []
 for (const path of files) {
   const text = readFileSync(path, "utf8")
   const name = relative(root, path).replaceAll("\\", "/")
-  if (!name.endsWith("/tokens.ts") && /#[0-9a-f]{3,8}\b/iu.test(text))
+
+  if (!name.endsWith("/tokens.ts") && /#[0-9a-f]{3,8}\b/iu.test(text)) {
     errors.push(`${name}: raw platform color outside token source`)
-  if (/from\s+["'][^"']*(?:\/features\/quizz|\/editor)[^"']*["']/u.test(text))
+  }
+
+  if (/from\s+["'][^"']*(?:\/features\/quizz|\/editor)[^"']*["']/u.test(text)) {
     errors.push(`${name}: canonical UI must not import frozen editor`)
-  if (/(?:^|[}"`])\s*(?:body|html|:root|\*)\s*\{/mu.test(text))
+  }
+
+  if (/(?:^|[}"`])\s*(?:body|html|:root|\*)\s*\{/mu.test(text)) {
     errors.push(`${name}: unbounded CSS selector`)
+  }
 }
-if (errors.length) throw new Error(errors.join("\n"))
+
+if (errors.length) {
+  throw new Error(errors.join("\n"))
+}
+
 console.log(
   JSON.stringify(
     {

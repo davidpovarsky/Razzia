@@ -1,0 +1,15 @@
+{
+  "nanoCpus": 2000000000,
+  "memoryBytes": 4294967296,
+  "pidsLimit": 768,
+  "publishedPorts": {},
+  "mounts": [
+    {
+      "source": "/home/ubuntu/tadazz-design-system-20261110/evidence",
+      "destination": "/evidence",
+      "readWrite": true
+    }
+  ],
+  "networkMode": "bridge",
+  "status": "PASS"
+}

@@ -8,21 +8,21 @@ Worktree: `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
 Branch: `codex/tadazz-design-system-20261110`.
 BASE_HEAD: `fb6c7631999f33c8fb47638a99920e450f326fbf`.
 
-| Phase  | Task             | Status      | Evidence / next action                                                                                          |
-| ------ | ---------------- | ----------- | --------------------------------------------------------------------------------------------------------------- |
-| TDS-00 | 1220402430946120 | VERIFIED    | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes                                 |
-| TDS-01 | 1220402455305251 | VERIFIED    | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed                                                 |
-| TDS-02 | 1220402647256448 | VERIFIED    | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md)             |
-| TDS-03 | 1220402777623967 | VERIFIED    | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed                   |
-| TDS-04 | 1220402719463680 | VERIFIED    | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario |
-| TDS-05 | 1220402777822480 | VERIFIED    | [Internal catalog](TDS_CATALOG.md); 14 catalog + 18 component + 6 token cases, original editor PNG parity       |
-| TDS-06 | 1220402777861386 | VERIFIED    | [Site/Studio](TDS_SITE.md); 82 units, 12 site + 22 component + 4 follow-up checks, editor regression            |
-| TDS-07 | 1220402729693747 | VERIFIED    | [Viewport / room join](TDS_STAGE.md); 62 units, 16 catalog + 10 stage + 3 actual room + 1 seating checks, editor regression |
-| TDS-08 | 1220402719392041 | VERIFIED    | [Host controls / modals](TDS_HOST.md); 53 units, 5 actual host + 22 component + 16 catalog cases, final editor regression |
-| TDS-09 | 1220402539686302 | VERIFIED    | [Roster / package administration](TDS_ROSTER.md); 40 units, 2 roster + 4 package + 22 component + 1 integration; editor zero-pixel regression |
-| TDS-10 | 1220402539658409 | VERIFIED | [Motion](TDS_MOTION.md); 22 units, 59 browser cases; all 16 gate labels pass; editor/stage PNG byte parity |
-| TDS-11 | 1220402430879047 | VERIFIED | [Naming compatibility](TDS_NAMING.md); 93 contracts, exact semantic aliases, historical IDs preserved |
-| TDS-12 | 1220402539686110 | NOT_STARTED | Full QA / handoff / release gate                                                                                |
+| Phase  | Task             | Status   | Evidence / next action                                                                                                                        |
+| ------ | ---------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| TDS-00 | 1220402430946120 | VERIFIED | [Baseline](TDS_BASELINE.md); 1 browser scenario passed, 20 captures, 602 hashes                                                               |
+| TDS-01 | 1220402455305251 | VERIFIED | [Policy](TDS_POLICY.md); 55 existing compatibility tests passed                                                                               |
+| TDS-02 | 1220402647256448 | VERIFIED | [327-file inventory and architecture](TDS_ARCHITECTURE.md), [proposed seams](TDS_UPSTREAM_SEAMS.md)                                           |
+| TDS-03 | 1220402777623967 | VERIFIED | [Tokens/scopes](TDS_TOKENS.md); 6 units, 6 browser checks, 4 editor visual comparisons passed                                                 |
+| TDS-04 | 1220402719463680 | VERIFIED | [Canonical components](TDS_COMPONENTS.md); 14 units, 18 interactions + 6 token checks, full API/editor scenario                               |
+| TDS-05 | 1220402777822480 | VERIFIED | [Internal catalog](TDS_CATALOG.md); 14 catalog + 18 component + 6 token cases, original editor PNG parity                                     |
+| TDS-06 | 1220402777861386 | VERIFIED | [Site/Studio](TDS_SITE.md); 82 units, 12 site + 22 component + 4 follow-up checks, editor regression                                          |
+| TDS-07 | 1220402729693747 | VERIFIED | [Viewport / room join](TDS_STAGE.md); 62 units, 16 catalog + 10 stage + 3 actual room + 1 seating checks, editor regression                   |
+| TDS-08 | 1220402719392041 | VERIFIED | [Host controls / modals](TDS_HOST.md); 53 units, 5 actual host + 22 component + 16 catalog cases, final editor regression                     |
+| TDS-09 | 1220402539686302 | VERIFIED | [Roster / package administration](TDS_ROSTER.md); 40 units, 2 roster + 4 package + 22 component + 1 integration; editor zero-pixel regression |
+| TDS-10 | 1220402539658409 | VERIFIED | [Motion](TDS_MOTION.md); 22 units, 59 browser cases; all 16 gate labels pass; editor/stage PNG byte parity                                    |
+| TDS-11 | 1220402430879047 | VERIFIED | [Naming compatibility](TDS_NAMING.md); 93 contracts, exact semantic aliases, historical IDs preserved                                         |
+| TDS-12 | 1220402539686110 | VERIFIED | [Full acceptance](TDS_ACCEPTANCE.md); 1,079 units / 147 browser cases, development only; external/release gates open                          |
 
 Run `node extensions/qa/tds-boundary.mjs` at every checkpoint. The guard rejects
 all `packages/**` and editor modifications and paths outside the locked allowlist.
@@ -182,3 +182,23 @@ CRLF in locally generated evidence; an evidence-only follow-up normalizes it to
 LF and passes the check without changing results or application source.
 Asana was not updated: [pending synchronization](ASANA_SYNC_PENDING.md).
 Next exact action: TDS-11 stable semantic aliases and compatibility verification.
+
+TDS-11 implementation commit: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc`.
+93 compatibility tests / nine gate labels PASS; 1,191 source inputs match the QA
+container. Semantic exports retain historical identities; editor/cinematic owners
+remain frozen. Next: TDS-12 full acceptance; Asana synchronization remains pending.
+
+TDS-12 BASE_HEAD: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc`.
+Development acceptance VERIFIED: 30 effective labels; 365 root + 714 extension
+units; 147 Chromium/WebKit browser cases. Primary r2 native QA deadline failure
+is retained; final 16/16 native follow-up plus format/types/plain lint passes.
+Full local ui:check / 602-file boundary / host AST / cinematic owners pass; 1,203
+source inputs match. Editor comparator remains zero-threshold, with exact prior
+TDS-06 9/2 raw-AA variant, scene/settings byte parity; all four accepted stage/QR
+frames byte-identical. All 18 original files remain preserved in their snapshot.
+See TDS_ACCEPTANCE.md for complete evidence, explicit NOT RUN, architecture/API/
+catalog/ledger/naming/rollback handoff. No new upstream/editor source, dependency
+or data/wire change in this resumed session. Asana unavailable: synchronize the
+existing tasks using ASANA_SYNC_PENDING.md; parent stays OPEN for release.
+Next exact action: commit this verified checkpoint and record its SHA. No push,
+merge, deployment, provider/billing change or customer-data migration.

@@ -1,5 +1,11 @@
 import { AlertDialog as RadixAlert } from "radix-ui"
-import { useRef, useState, type MouseEvent, type ReactElement } from "react"
+import {
+  useRef,
+  useState,
+  type MouseEvent,
+  type ReactElement,
+  type RefObject,
+} from "react"
 import { useTranslation } from "react-i18next"
 import { Button } from "./button"
 import { NativeDialog, useDialogState } from "./dialog"
@@ -17,8 +23,10 @@ export interface AlertDialogProps {
   confirmTestId?: string
   errorLabel?: string
   returnFocusTo?: string
-  onConfirm: () => void | Promise<unknown>
+  returnFocusRef?: RefObject<HTMLElement | null>
+  onConfirm: () => unknown
 }
+
 export function AlertDialog({
   title,
   description,
@@ -29,6 +37,7 @@ export function AlertDialog({
   errorLabel,
   onConfirm,
   returnFocusTo,
+  returnFocusRef,
   ...props
 }: AlertDialogProps) {
   const { t } = useTranslation()
@@ -39,14 +48,20 @@ export function AlertDialog({
   const [failed, setFailed] = useState(false)
   const confirm = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    if (pendingRef.current) return
+
+    if (pendingRef.current) {
+      return
+    }
+
     pendingRef.current = true
     setPending(true)
     setFailed(false)
+
     try {
       await onConfirm()
       state.change(false)
-      if (returnFocusTo)
+
+      if (returnFocusTo) {
         setTimeout(
           () =>
             document
@@ -54,6 +69,7 @@ export function AlertDialog({
               ?.focus({ preventScroll: true }),
           0,
         )
+      }
     } catch {
       setFailed(true)
     } finally {
@@ -76,7 +92,8 @@ export function AlertDialog({
       {errorLabel ?? t("errors:route.description")}
     </p>
   )
-  if (context !== "platform.host")
+
+  if (context !== "platform.host") {
     return (
       <NativeDialog
         title={title}
@@ -88,6 +105,7 @@ export function AlertDialog({
         role="alertdialog"
         dismissible={!pending}
         dismissOnOutside={false}
+        returnFocusRef={returnFocusRef}
       >
         {error}
         <div className="tds-dialog-actions">
@@ -98,6 +116,8 @@ export function AlertDialog({
         </div>
       </NativeDialog>
     )
+  }
+
   return (
     <RadixAlert.Root open={state.open} onOpenChange={state.change}>
       {trigger && <RadixAlert.Trigger asChild>{trigger}</RadixAlert.Trigger>}
@@ -107,7 +127,9 @@ export function AlertDialog({
           className="tds-dialog-surface"
           aria-busy={pending || undefined}
           onEscapeKeyDown={(event) => {
-            if (pending) event.preventDefault()
+            if (pending) {
+              event.preventDefault()
+            }
           }}
         >
           <RadixAlert.Title className="tds-dialog-title">

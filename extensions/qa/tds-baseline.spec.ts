@@ -22,19 +22,24 @@ const quizz = {
   })),
 }
 const shot = async (page: Page, name: string) => {
-  if (/^editor-/u.test(name)) await page.mouse.move(1, 1)
+  if (name.startsWith("editor-")) {
+    await page.mouse.move(1, 1)
+  }
+
   const bytes = await page.screenshot({
     path: `${out}/${name}.png`,
     fullPage: true,
     animations: "disabled",
     caret: "hide",
   })
-  if (process.env.TDS_COMPARE_EDITOR === "1" && /^editor-/u.test(name)) {
+
+  if (process.env.TDS_COMPARE_EDITOR === "1" && name.startsWith("editor-")) {
     expect(bytes).toMatchSnapshot(`${name}.png`, {
       threshold: 0,
       maxDiffPixels: 0,
     })
   }
+
   return bytes
 }
 test.beforeAll(() => mkdirSync(out, { recursive: true }))
@@ -166,7 +171,11 @@ test("synthetic site, Studio, package and frozen editor baseline", async ({
     .click()
   await expect(page.getByTestId("show-theme-preview")).toBeVisible()
   await shot(page, "theme-preview")
-  if (process.env.TDS_EDITOR_ONLY === "1") return
+
+  if (process.env.TDS_EDITOR_ONLY === "1") {
+    return
+  }
+
   await page.getByTestId("studio-tab-questions").click()
   // Read-only capture after loading the saved fixture. No editor implementation is modified.
   await page.getByTestId("editor-exit-btn").click()

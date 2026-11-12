@@ -38,7 +38,8 @@ async function openRoom(page: Page, phone = false, background?: string) {
     [crypto.randomUUID()],
     computeCanonicalBaseDigest(quizz),
   )
-  if (background)
+
+  if (background) {
     extras.perQuestion[extras.questionIds[0]] = {
       background: {
         url: background,
@@ -47,6 +48,8 @@ async function openRoom(page: Page, phone = false, background?: string) {
         overlayOpacity: 0.2,
       },
     }
+  }
+
   extras.roster.participants = [
     {
       rosterPlayerId: crypto.randomUUID(),
@@ -54,6 +57,7 @@ async function openRoom(page: Page, phone = false, background?: string) {
       phoneE164: "+10000000000",
     },
   ]
+
   if (phone) {
     const id = crypto.randomUUID()
     extras.scenes[id] = {
@@ -71,6 +75,7 @@ async function openRoom(page: Page, phone = false, background?: string) {
       })),
     }
   }
+
   expect(
     (
       await page.request.post("/api/extensions/quizzes", {
@@ -91,6 +96,7 @@ async function openRoom(page: Page, phone = false, background?: string) {
   const qr = page.locator("svg[data-qr-url]").first()
   await expect(qr).toBeVisible()
   const url = (await qr.getAttribute("data-qr-url"))!
+
   return {
     pin: new URL(url).searchParams.get("pin")!,
     url,
@@ -103,8 +109,9 @@ test("actual host fills toolbar edges, keeps live joining/lock/reconnect and aud
 }) => {
   const classroom: string[] = []
   page.on("request", (request) => {
-    if (/\/assets\/background[-.]/u.test(request.url()))
+    if (/\/assets\/background[-.]/u.test(request.url())) {
       classroom.push(request.url())
+    }
   })
   await page.route("**/media/tds-background.png", (route) =>
     route.fulfill({

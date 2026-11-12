@@ -16,9 +16,12 @@ test("public join fails closed, decodes current room QR, follows live lock and o
   await page.route("**/api/games/check", async (route) => {
     expect(route.request().headers().cookie).toBeUndefined()
     expect(route.request().headers().authorization).toBeUndefined()
-    pins.push(route.request().postDataJSON().inviteCode)
+    pins.push(
+      (route.request().postDataJSON() as { inviteCode: string }).inviteCode,
+    )
+    const successStatus = locked ? 403 : 200
     await route.fulfill({
-      status: unavailable ? 503 : locked ? 403 : 200,
+      status: unavailable ? 503 : successStatus,
       contentType: "application/json",
       body: JSON.stringify(
         locked ? { error: "errors:game.locked" } : { generatedUsernames: [] },
@@ -78,13 +81,14 @@ test("real HTTP credentials-omit neither sends nor accepts cookies", async ({
     },
   ])
   await page.goto("/")
-  const result = await page.evaluate(async () =>
-    (
-      await fetch("/__tds-credential-probe", {
-        credentials: "omit",
-        cache: "no-store",
-      })
-    ).json(),
+  const result = await page.evaluate(
+    async () =>
+      (
+        await fetch("/__tds-credential-probe", {
+          credentials: "omit",
+          cache: "no-store",
+        })
+      ).json() as Promise<{ cookie: string | null }>,
   )
   expect(result.cookie).toBeNull()
   expect(
@@ -96,15 +100,20 @@ test("real HTTP credentials-omit neither sends nor accepts cookies", async ({
 test("room navigation ignores a late response from the previous PIN; manager performs no public probe", async ({
   page,
 }) => {
-  let release: (() => void) | undefined
+  let release: (() => void) | undefined = undefined
   const delayed = new Promise<void>((resolve) => {
     release = resolve
   })
   const pins: string[] = []
   await page.route("**/api/games/check", async (route) => {
-    const pin = route.request().postDataJSON().inviteCode
+    const pin = (route.request().postDataJSON() as { inviteCode: string })
+      .inviteCode
     pins.push(pin)
-    if (pin === "246810") await delayed
+
+    if (pin === "246810") {
+      await delayed
+    }
+
     await route
       .fulfill({ status: 200, contentType: "application/json", body: "{}" })
       .catch(() => {})
@@ -136,13 +145,17 @@ test("a hanging public probe expires, hides the QR, and recovers on the next bou
 }) => {
   await page.clock.install()
   let calls = 0
-  let release: (() => void) | undefined
+  let release: (() => void) | undefined = undefined
   const stalled = new Promise<void>((resolve) => {
     release = resolve
   })
   await page.route("**/api/games/check", async (route) => {
-    calls++
-    if (calls === 2) await stalled
+    calls += 1
+
+    if (calls === 2) {
+      await stalled
+    }
+
     await route
       .fulfill({ status: 200, contentType: "application/json", body: "{}" })
       .catch(() => {})

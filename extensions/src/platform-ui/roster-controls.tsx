@@ -36,9 +36,13 @@ export function HostRosterPolicy({
     "idle",
   )
   const save = async (next: boolean) => {
-    if (disabled || pendingRef.current) return
+    if (disabled || pendingRef.current) {
+      return
+    }
+
     pendingRef.current = true
     setStatus("pending")
+
     try {
       await onChange(next)
       setStatus("saved")
@@ -48,6 +52,7 @@ export function HostRosterPolicy({
       pendingRef.current = false
     }
   }
+
   return (
     <section className="tds-roster-policy" aria-busy={status === "pending"}>
       <Switch
@@ -96,6 +101,7 @@ export function HostRosterRemove({
   onConfirm: () => Promise<unknown>
 }) {
   const { t } = useTranslation()
+
   return (
     <AlertDialog
       title={t("extensions:roster.removeTitle", { name })}

@@ -3,7 +3,9 @@ import { readFileSync } from "node:fs"
 import {
   createDefaultQuizExtrasV2,
   computeCanonicalBaseDigest,
+  type QuizExtrasV2,
 } from "../src/core"
+
 export async function registerSynthetic(page: Page) {
   const address = `tds-site-${Date.now()}-${Math.floor(Math.random() * 100000)}@example.invalid`
   const password = "Synthetic-site-2026-passphrase"
@@ -19,7 +21,7 @@ export async function registerSynthetic(page: Page) {
       new URL("../.site-test-config/test-mail.json", import.meta.url),
       "utf8",
     ),
-  )
+  ) as Record<string, { code: string }>
   await page.getByLabel("Six-digit code").fill(mail[address].code)
   await page.getByRole("button", { name: "Verify email", exact: true }).click()
   await expect(
@@ -28,15 +30,23 @@ export async function registerSynthetic(page: Page) {
   await page.getByLabel("Password", { exact: true }).fill(password)
   await page.getByRole("button", { name: "Log in", exact: true }).click()
   await expect(page.getByRole("heading", { name: "Your shows." })).toBeVisible()
+
   return {
     Authorization: `Bearer ${await page.evaluate(() => localStorage.getItem("token"))}`,
   }
 }
+
 export async function seedSynthetic(
   page: Page,
   headers: Record<string, string>,
-  subject = "Studio UI example",
+  options:
+    | string
+    | {
+        subject: string
+        configure: (extras: QuizExtrasV2) => void
+      } = "Studio UI example",
 ) {
+  const subject = typeof options === "string" ? options : options.subject
   const quizz = {
     subject,
     gameMode: "quiz",
@@ -61,6 +71,11 @@ export async function seedSynthetic(
       phoneE164: null,
     },
   ]
+
+  if (typeof options !== "string") {
+    options.configure(extras)
+  }
+
   expect(
     (
       await page.request.post("/api/extensions/quizzes", {
@@ -71,11 +86,17 @@ export async function seedSynthetic(
   ).toBe(true)
   const list = (await (
     await page.request.get("/api/quizz", { headers })
-  ).json()) as { quizz: { id: string; subject: string }[] }
-  const game = list.quizz.find((game) => game.subject === subject)
+  ).json()) as { quizz: Array<{ id: string; subject: string }> }
+  const game = list.quizz.find((candidate) => candidate.subject === subject)
   expect(game).toBeTruthy()
-  return game!
+
+  if (!game) {
+    throw new Error("Missing saved synthetic game")
+  }
+
+  return game
 }
+
 export async function openGameActions(card: Locator) {
   await card.getByRole("button", { name: /^More actions for /u }).click()
 }

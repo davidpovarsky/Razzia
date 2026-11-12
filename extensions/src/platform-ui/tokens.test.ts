@@ -18,10 +18,12 @@ function luminance(hex: string) {
     .map((value) =>
       value <= 0.04045 ? value / 12.92 : ((value + 0.055) / 1.055) ** 2.4,
     )
+
   return rgb[0] * 0.2126 + rgb[1] * 0.7152 + rgb[2] * 0.0722
 }
 function contrast(a: string, b: string) {
   const [light, dark] = [luminance(a), luminance(b)].sort((x, y) => y - x)
+
   return (light + 0.05) / (dark + 0.05)
 }
 
@@ -48,8 +50,9 @@ describe("platform token boundaries and readable semantic pairs", () => {
           tokens.success,
           tokens.warning,
           tokens.info,
-        ])
+        ]) {
           expect(contrast(status, surface)).toBeGreaterThanOrEqual(4.5)
+        }
       }
       expect(contrast(tokens.actionText, tokens.action)).toBeGreaterThanOrEqual(
         4.5,
@@ -70,8 +73,9 @@ describe("platform token boundaries and readable semantic pairs", () => {
   })
 
   it("rejects accidental editor/show scope application", () => {
-    for (const context of ["editor.current", "show.theme", "body"])
+    for (const context of ["editor.current", "show.theme", "body"]) {
       expect(() => platformVariables(context as PlatformContext)).toThrow()
+    }
     expect(platformTokenCss).not.toMatch(
       /(?:^|\})\s*(?:body|:root|button|\*)\s*\{/u,
     )

@@ -22,6 +22,7 @@ export function PackageTools(props: {
       setOpen(true)
     }
   }, [props.file])
+
   return (
     <div className="site-package-tools">
       <style>{packageStyle}</style>
@@ -30,7 +31,10 @@ export function PackageTools(props: {
         onToggle={(event) => {
           const next = event.currentTarget.open
           setOpen(next)
-          if (next) setLoaded(true)
+
+          if (next) {
+            setLoaded(true)
+          }
         }}
       >
         <summary data-testid="package-tools-toggle">

@@ -21,12 +21,14 @@ test("account config stays authoritative over cached capacity and exposes genuin
   }
   // Explicit synthetic response states; no provider/account/billing mutation.
   await page.route("**/api/billing/config", async (route) => {
-    if (unavailable)
+    if (unavailable) {
       await route.fulfill({
         status: 503,
         json: { error: "synthetic-config-unavailable" },
       })
-    else await route.fulfill({ status: 200, json: { enabled } })
+    } else {
+      await route.fulfill({ status: 200, json: { enabled } })
+    }
   })
   await page.route("**/api/billing", (route) =>
     route.fulfill({ status: 200, json: snapshot }),

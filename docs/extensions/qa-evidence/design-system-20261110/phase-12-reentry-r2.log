@@ -1,0 +1,12 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active (10.2s)
+  ✓  2 [webkit] › qa/tds-motion.spec.ts:23:1 › menu reentry during submenu exit keeps the newly opened menu active (20.1s)
+
+  2 passed (34.2s)
+exit=True

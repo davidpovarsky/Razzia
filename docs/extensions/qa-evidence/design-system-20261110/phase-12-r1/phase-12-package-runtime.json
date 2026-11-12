@@ -1,0 +1,583 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.package-runtime.config.ts",
+      "--grep-invert",
+      "concurrent package displays"
+    ],
+    "configFile": "/cleanup/packages/e2e/playwright.package-runtime.config.ts",
+    "rootDir": "/cleanup/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      },
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "chromium",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "webkit",
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "isMobile": true,
+          "hasTouch": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/package-browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "package-runtime-load.spec.ts",
+      "file": "package-runtime-load.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120482,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                      "column": 6,
+                      "line": 107
+                    },
+                    "snippet": "   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                        "column": 6,
+                        "line": 107
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n   at ../utils/package-install.ts:107\n\n  105 |       { timeout: 120_000 },\n  106 |     )\n> 107 |     .toBe(\"preview-ready\")\n      |      ^\n  108 |   const receipt = (await (await request.get(path, { headers })).json()) as {\n  109 |     revision: number\n  110 |     sourceDigest: string\n    at installRuntimeFixture (/cleanup/packages/e2e/utils/package-install.ts:107:6)\n    at /cleanup/packages/e2e/tests/package-runtime-load.spec.ts:171:21"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:32:39.481Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-load-bound-f1ef9-ack-without-losing-the-room-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/utils/package-install.ts",
+                    "column": 6,
+                    "line": 107
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "2933c72938e11d345719-98892625e74bc150a5ae",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 60364,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:40:45.400Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "runtime-watchdog-metrics",
+                      "contentType": "application/json",
+                      "body": "ewogICJicm93c2VyTmFtZSI6ICJ3ZWJraXQiLAogICJmYWxsYmFja01zIjogNTMzNywKICAiYm91bmRlZFdvcmtNcyI6IDYwLAogICJ3b3JrUGVyaW9kTXMiOiA1MDAsCiAgInJldGFpbmVkUm9vbSI6IHRydWUsCiAgInJlc3VtZWRBbmRDb21wbGV0ZWQiOiB0cnVlLAogICJyZW5kZXJlclJlY292ZXJlZEFmdGVyUmVsb2FkIjogdHJ1ZSwKICAic2NvcGUiOiAiQm91bmRlZCBDUFUgc3RyZXNzIGFuZCBzdG9wcGVkIGhlYWx0aCBjYWxsYmFja3M7IG5vdCBhIGhhcmQgQ1BVL0dQVSBpc29sYXRpb24gY2xhaW0iCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2933c72938e11d345719-3b3c7a0abb7b2c156a18",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "package-runtime.spec.ts",
+      "file": "package-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120307,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 6,
+                      "line": 78
+                    },
+                    "snippet": "  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 6,
+                        "line": 78
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"preview-ready\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  76 |       { timeout: 120_000 },\n  77 |     )\n> 78 |     .toBe(\"preview-ready\")\n     |      ^\n  79 |   expect(\n  80 |     (\n  81 |       await request.get(previewPath, {\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:78:6"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:34:40.785Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-declarativ-89e86--assets-before-installation-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 6,
+                    "line": 78
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-7b19b9f6167ca616d7aa",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 121576,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('package-preflight')\nExpected substring: \u001b[32m\"Ready for preview\"\u001b[39m\nReceived string:    \u001b[31m\"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('package-preflight') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('package-preflight')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBValidatedThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameBuild previewInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.Delete\"\u001b[22m\n\u001b[2m    241 × locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m        - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('package-preflight')\nExpected substring: \u001b[32m\"Ready for preview\"\u001b[39m\nReceived string:    \u001b[31m\"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('package-preflight') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('package-preflight')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBValidatedThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameBuild previewInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.Delete\"\u001b[22m\n\u001b[2m    241 × locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m        - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[22m\n\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:176:55",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 55,
+                      "line": 176
+                    },
+                    "snippet": "  174 |   )\n  175 |   await page.getByRole(\"button\", { name: \"Build preview\", exact: true }).click()\n> 176 |   await expect(page.getByTestId(\"package-preflight\")).toContainText(\n      |                                                       ^\n  177 |     \"Ready for preview\",\n  178 |     { timeout: 120_000 },\n  179 |   )"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 55,
+                        "line": 176
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoContainText\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m)\u001b[22m failed\n\nLocator: getByTestId('package-preflight')\nExpected substring: \u001b[32m\"Ready for preview\"\u001b[39m\nReceived string:    \u001b[31m\"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[39m\nTimeout: 120000ms\n\nCall log:\n\u001b[2m  - Expect \"toContainText\" getByTestId('package-preflight') with timeout 120000ms\u001b[22m\n\u001b[2m  - waiting for getByTestId('package-preflight')\u001b[22m\n\u001b[2m    - locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m    - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBValidatedThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameBuild previewInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.Delete\"\u001b[22m\n\u001b[2m    241 × locator resolved to <div class=\"space-y-3\" data-testid=\"package-preflight\">…</div>\u001b[22m\n\u001b[2m        - unexpected value \"Synthetic complete chromium-arcade · 1.0.1794436602TADAZZ QA fixture · 54 assets · 487.3 KBBuilding previewThis theme contains custom React components. It runs in a separate sandbox; game controls and audio stay in TADAZZ.fixture-chromium-arcade · Themedemo-game-1 · Gamedemo-game-2 · GameInstall selectedExport packageAn assigned independent reviewer must approve this exact version before installation.\"\u001b[22m\n\n\n  174 |   )\n  175 |   await page.getByRole(\"button\", { name: \"Build preview\", exact: true }).click()\n> 176 |   await expect(page.getByTestId(\"package-preflight\")).toContainText(\n      |                                                       ^\n  177 |     \"Ready for preview\",\n  178 |     { timeout: 120_000 },\n  179 |   )\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:176:55"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:36:41.960Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-one-file-c-20e4c-e-core-and-sandbox-boundary-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 55,
+                    "line": 176
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-583916747cee9b538977",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 120113,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8",
+                    "location": {
+                      "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                      "column": 8,
+                      "line": 625
+                    },
+                    "snippet": "  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                        "column": 8,
+                        "line": 625
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"failed\"\u001b[39m\nReceived: \u001b[31m\"building\"\u001b[39m\n\nCall Log:\n- Timeout 120000ms exceeded while waiting on the predicate\n\n  623 |         { timeout: 120_000 },\n  624 |       )\n> 625 |       .toBe(\"failed\")\n      |        ^\n  626 |   }\n  627 | })\n  628 |\n    at /cleanup/packages/e2e/tests/package-runtime.spec.ts:625:8"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:38:44.377Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/cleanup/packages/e2e/test-results/package-runtime/package-runtime-networkles-daf19-nd-executable-import-tricks-chromium/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/packages/e2e/tests/package-runtime.spec.ts",
+                    "column": 8,
+                    "line": 625
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-8174dbb82ba010e70d07",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        },
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 8813,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:41:45.984Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-1f070bd31d80855a167f",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 61875,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:41:54.846Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-5a7504ab2c027c76dd44",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11934,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T22:42:56.775Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-d3899dec93e6daef181e",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T22:32:35.038Z",
+    "duration": 633767.095,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 4,
+    "flaky": 0
+  }
+}

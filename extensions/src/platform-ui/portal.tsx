@@ -21,8 +21,8 @@ const portals = {
   tooltip: Tooltip.Portal,
 }
 
-/** Radix Presence must observe the animated content, rather than its unanimated
- * display:contents scope. Keep the original portal mount/ARIA/focus lifecycle. */
+// Radix Presence must observe the animated content, rather than its unanimated
+// display:contents scope. Keep the original portal mount/ARIA/focus lifecycle.
 function PortalScope({
   ref,
   ...props
@@ -30,13 +30,19 @@ function PortalScope({
   const attach = useCallback(
     (scope: HTMLDivElement | null) => {
       const content = scope?.querySelector<HTMLElement>("[data-state]") ?? scope
-      if (typeof ref === "function") ref(content)
-      else if (ref) ref.current = content
+
+      if (typeof ref === "function") {
+        ref(content)
+      } else if (ref) {
+        ref.current = content
+      }
     },
     [ref],
   )
+
   return <PlatformScope {...props} ref={attach} />
 }
+
 export interface PortalProps {
   children?: ReactNode
   container?: Element | DocumentFragment | null
@@ -51,6 +57,7 @@ function ReturnFocus({ selector }: { selector: string }) {
     () => () => {
       requestAnimationFrame(() => {
         const active = document.activeElement
+
         if (
           !active ||
           active === document.body ||
@@ -65,16 +72,22 @@ function ReturnFocus({ selector }: { selector: string }) {
     },
     [selector],
   )
+
   return null
 }
 
 function containsComposed(parent: Element, target: Node) {
   let node: Node | null = target
+
   while (node) {
-    if (parent.contains(node)) return true
+    if (parent.contains(node)) {
+      return true
+    }
+
     const root = node.getRootNode()
     node = root instanceof ShadowRoot ? root.host : null
   }
+
   return false
 }
 
@@ -95,16 +108,26 @@ function Portal({
   useEffect(() => {
     const update = () => setFullscreen(document.fullscreenElement)
     document.addEventListener("fullscreenchange", update)
+
     return () => document.removeEventListener("fullscreenchange", update)
   }, [])
-  if (typeof document === "undefined") return null
+
+  if (typeof document === "undefined") {
+    return null
+  }
+
   let target =
     container ??
     (theme.context === "platform.host"
       ? document.body
       : (scopedTarget ?? document.body))
-  if (fullscreen && !containsComposed(fullscreen, target)) target = fullscreen
+
+  if (fullscreen && !containsComposed(fullscreen, target)) {
+    target = fullscreen
+  }
+
   const Primitive = portals[kind]
+
   return (
     <Primitive container={target} forceMount={forceMount}>
       <PortalScope
@@ -117,18 +140,23 @@ function Portal({
     </Primitive>
   )
 }
+
 export const DialogPortal = (props: PortalProps) => (
   <Portal {...props} kind="dialog" />
 )
+
 export const AlertPortal = (props: PortalProps) => (
   <Portal {...props} kind="alert" />
 )
+
 export const MenuPortal = (props: PortalProps) => (
   <Portal {...props} kind="menu" />
 )
+
 export const PopoverPortal = (props: PortalProps) => (
   <Portal {...props} kind="popover" />
 )
+
 export const TooltipPortal = (props: PortalProps) => (
   <Portal {...props} kind="tooltip" />
 )

@@ -1,3 +1,5 @@
+import { PRIMITIVE_TOKENS } from "../../platform-ui/tokens"
+
 /** New platform refinements are scoped, token-based and never enter the editor. */
 export const sitePlatformStyle = `
 .tds-scope .site-game-media{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;align-self:start}
@@ -25,6 +27,9 @@ export const sitePlatformStyle = `
 .tds-scope .side-identity{display:flex;align-items:center;gap:var(--tds-space-3);padding:var(--tds-space-3);font-size:var(--tds-type-caption);color:var(--tds-muted-text);overflow-wrap:anywhere}
 .tds-scope .side-identity>span:last-child{min-width:0}
 .tds-scope .top-actions>.avatar{display:none}
+.tds-scope .main{container-name:tds-studio-main;container-type:inline-size}
+@container tds-studio-main (max-width:${PRIMITIVE_TOKENS.breakpoint.desktop}px){.tds-scope .top-actions .search-mini{display:none}}
+@container tds-studio-main (max-width:${PRIMITIVE_TOKENS.breakpoint.phone}px){.tds-scope .topbar{height:auto;min-height:4.25rem;flex-wrap:wrap;padding:var(--tds-space-4);gap:var(--tds-space-2)}.tds-scope .top-actions{flex-wrap:wrap;gap:var(--tds-space-2)}.tds-scope .games-grid,.tds-scope .site-account-grid,.tds-scope .site-game-list .game-card{grid-template-columns:minmax(0,1fr)}}
 .tds-scope .demo-choice-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--tds-space-4);margin-block:var(--tds-space-6)}
 .tds-scope .demo-choice{display:flex;align-items:center;gap:var(--tds-space-3);min-height:5rem;padding:var(--tds-space-4);border:1px solid var(--tds-border);border-radius:var(--tds-radius-card);background:var(--tds-surface);color:var(--tds-text);font-size:var(--tds-type-body);font-weight:var(--tds-weight-label);text-align:start;cursor:pointer}
 .tds-scope .demo-choice[aria-pressed="true"]{border-color:var(--tds-action);box-shadow:var(--tds-shadow-focus);background:var(--tds-elevated)}

@@ -15,8 +15,10 @@ test("real gallery/list covers retain 16:9 and one creation CTA across responsiv
   const card = page.locator(`article[data-game-id="${game.id}"]`)
   await expect(card.getByText("Default cover", { exact: true })).toBeVisible()
   for (const layout of ["gallery", "list"]) {
-    if (layout === "list")
+    if (layout === "list") {
       await page.getByRole("button", { name: "List view", exact: true }).click()
+    }
+
     for (const [width, height] of [
       [1920, 1080],
       [1366, 768],
@@ -64,7 +66,7 @@ test("all eight locale labels, compact account and real unavailable billing stat
         new URL(`../src/site/locales/${locale}.json`, import.meta.url),
         "utf8",
       ),
-    )
+    ) as Record<string, string>
     await page.getByRole("combobox").selectOption(locale)
     await expect(
       page.getByRole("heading", {

@@ -1,0 +1,469 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "playwright.package-runtime.config.ts",
+      "--grep-invert",
+      "concurrent package displays"
+    ],
+    "configFile": "/cleanup/packages/e2e/playwright.package-runtime.config.ts",
+    "rootDir": "/cleanup/packages/e2e/tests",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      },
+      {
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "chromium",
+          "viewport": {
+            "width": 1920,
+            "height": 1080
+          }
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/cleanup/packages/e2e/test-results/package-runtime",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/packages/e2e/tests",
+        "snapshotDir": "/cleanup/packages/e2e/tests",
+        "testIgnore": [],
+        "testMatch": [
+          "package-runtime.spec.ts",
+          "package-runtime-load.spec.ts"
+        ],
+        "timeout": 240000,
+        "use": {
+          "baseURL": "http://127.0.0.1:3190",
+          "actionTimeout": 20000,
+          "locale": "en-US",
+          "trace": "off",
+          "browserName": "webkit",
+          "viewport": {
+            "width": 1024,
+            "height": 768
+          },
+          "isMobile": true,
+          "hasTouch": true
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/package-browser-report.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "package-runtime-load.spec.ts",
+      "file": "package-runtime-load.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 136723,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:21:08.875Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "runtime-watchdog-metrics",
+                      "contentType": "application/json",
+                      "body": "ewogICJicm93c2VyTmFtZSI6ICJjaHJvbWl1bSIsCiAgImZhbGxiYWNrTXMiOiA1ODU1LAogICJib3VuZGVkV29ya01zIjogNjAsCiAgIndvcmtQZXJpb2RNcyI6IDUwMCwKICAicmV0YWluZWRSb29tIjogdHJ1ZSwKICAicmVzdW1lZEFuZENvbXBsZXRlZCI6IHRydWUsCiAgInJlbmRlcmVyUmVjb3ZlcmVkQWZ0ZXJSZWxvYWQiOiB0cnVlLAogICJzY29wZSI6ICJCb3VuZGVkIENQVSBzdHJlc3MgYW5kIHN0b3BwZWQgaGVhbHRoIGNhbGxiYWNrczsgbm90IGEgaGFyZCBDUFUvR1BVIGlzb2xhdGlvbiBjbGFpbSIKfQ=="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2933c72938e11d345719-98892625e74bc150a5ae",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        },
+        {
+          "title": "bounded heavy TSX stays responsive and missing renderer heartbeat falls back without losing the room",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 46074,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:24:35.277Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "runtime-watchdog-metrics",
+                      "contentType": "application/json",
+                      "body": "ewogICJicm93c2VyTmFtZSI6ICJ3ZWJraXQiLAogICJmYWxsYmFja01zIjogNTM4NywKICAiYm91bmRlZFdvcmtNcyI6IDYwLAogICJ3b3JrUGVyaW9kTXMiOiA1MDAsCiAgInJldGFpbmVkUm9vbSI6IHRydWUsCiAgInJlc3VtZWRBbmRDb21wbGV0ZWQiOiB0cnVlLAogICJyZW5kZXJlclJlY292ZXJlZEFmdGVyUmVsb2FkIjogdHJ1ZSwKICAic2NvcGUiOiAiQm91bmRlZCBDUFUgc3RyZXNzIGFuZCBzdG9wcGVkIGhlYWx0aCBjYWxsYmFja3M7IG5vdCBhIGhhcmQgQ1BVL0dQVSBpc29sYXRpb24gY2xhaW0iCn0="
+                    }
+                  ]
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "2933c72938e11d345719-3b3c7a0abb7b2c156a18",
+          "file": "package-runtime-load.spec.ts",
+          "line": 164,
+          "column": 1
+        }
+      ]
+    },
+    {
+      "title": "package-runtime.spec.ts",
+      "file": "package-runtime.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5266,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:23:25.783Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-7b19b9f6167ca616d7aa",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 51546,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:23:31.103Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-583916747cee9b538977",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 11919,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:24:22.670Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-8174dbb82ba010e70d07",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        },
+        {
+          "title": "declarative package previews decoded private assets before installation",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 9176,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:25:21.543Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-1f070bd31d80855a167f",
+          "file": "package-runtime.spec.ts",
+          "line": 33,
+          "column": 1
+        },
+        {
+          "title": "one-file complete React installation, independent layouts, live core and sandbox boundary",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 57195,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:25:30.763Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-5a7504ab2c027c76dd44",
+          "file": "package-runtime.spec.ts",
+          "line": 148,
+          "column": 1
+        },
+        {
+          "title": "networkless builder rejects unapproved dependencies and executable import tricks",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 240000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 12944,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:26:27.987Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6d590aabb0339f30f5fe-d3899dec93e6daef181e",
+          "file": "package-runtime.spec.ts",
+          "line": 570,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T23:21:04.439Z",
+    "duration": 336593.24199999997,
+    "expected": 8,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

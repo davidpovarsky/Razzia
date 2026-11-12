@@ -26,7 +26,11 @@ export function HostDisplayControls({
   copied?: boolean
 }) {
   const { t } = useTranslation()
-  if (!gameId && !onPresent) return null
+
+  if (!gameId && !onPresent) {
+    return null
+  }
+
   return (
     <ToolbarGroup
       label={`${t("extensions:host.openDisplay")} · ${t("extensions:host.presentFromHost")}`}
@@ -99,6 +103,7 @@ export function HostControlBar({
   ...props
 }: Omit<PlatformScopeProps, "context">) {
   const { t } = useTranslation()
+
   return (
     <PlatformScope
       context="platform.host"
@@ -121,6 +126,7 @@ export function HostAudioControls<Props extends object>({
   isHostPresenting: boolean
 }) {
   const children = createElement(component, props as Props)
+
   return props.manager && !props.isHostPresenting ? (
     <PlatformScope
       context="platform.host"

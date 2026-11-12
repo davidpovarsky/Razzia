@@ -1,11 +1,12 @@
 import type * as Controls from "../index"
 
-type Entry = {
-  exports: readonly (keyof typeof Controls)[]
+interface Entry {
+  exports: ReadonlyArray<keyof typeof Controls>
   modules: readonly string[]
   props: string
   rule: string
 }
+
 /** Names typecheck against production exports; modules are checked by ui:check. */
 export const CATALOG_COMPONENTS = {
   buttons: {
@@ -107,4 +108,5 @@ export const CATALOG_COMPONENTS = {
     rule: "Marketing/Studio/host only. Editor and show.theme remain independent. Scope never changes transport, persisted IDs or cinematic timing.",
   },
 } as const satisfies Record<string, Entry>
+
 export type StoryId = keyof typeof CATALOG_COMPONENTS

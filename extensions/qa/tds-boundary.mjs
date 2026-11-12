@@ -20,20 +20,25 @@ const approval = JSON.parse(
   ),
 )
 const approved = new Set(Object.keys(approval.files))
+
 if (
   [...approved].some(
     (path) => !path.startsWith("packages/web/src/features/game/components/"),
   )
-)
+) {
   throw new Error("Approval cannot include editor or non-host paths")
+}
+
 const protectedPath = (path) =>
   /^(?:packages\/|extensions\/src\/editor\/)/u.test(path)
 const allow =
-  /^(?:AGENTS\.md$|GEMINI\.md$|pnpm-lock\.yaml$|\.github\/workflows\/tadazz-platform-ui\.yml$|docs\/extensions\/|extensions\/(?:src\/(?:platform-ui|site|locales)\/|src\/presentation\/(?:platform-controls\.test\.ts$|index\.ts$|room-join\/|show-themes\/viewport[^/]*$)|qa\/tds[^/]*|tds[^/]*|package\.json$))/u
+  /^(?:AGENTS\.md$|GEMINI\.md$|pnpm-lock\.yaml$|\.github\/workflows\/tadazz-platform-ui\.yml$|docs\/extensions\/|extensions\/(?:src\/(?:platform-ui|site|locales)\/|src\/presentation\/(?:platform-controls\.test\.ts$|index\.ts$|room-join\/|show-themes\/viewport[^/]*$)|qa\/(?:tds[^/]*|tsconfig\.json$)|tds[^/]*|tsconfig\.json$|package\.json$))/u
 
 if (process.argv.includes("--record")) {
-  if (git("rev-parse", "HEAD") !== base)
+  if (git("rev-parse", "HEAD") !== base) {
     throw new Error("Freeze must be recorded at the inspected baseline")
+  }
+
   const files = git("ls-files")
     .split("\n")
     .filter(
@@ -41,14 +46,14 @@ if (process.argv.includes("--record")) {
     )
   writeFileSync(
     manifestPath,
-    JSON.stringify(
+    `${JSON.stringify(
       {
         base,
         files: Object.fromEntries(files.map((path) => [path, digest(path)])),
       },
       null,
       2,
-    ) + "\n",
+    )}\n`,
   )
   console.log(`Recorded ${files.length} protected files`)
 } else {
@@ -68,8 +73,11 @@ if (process.argv.includes("--record")) {
     .filter(([path, hash]) => digest(path) !== hash)
     .map(([path]) => path)
   const mismatches = hashChanges.filter((path) => !approved.has(path))
-  if (denied.length || mismatches.length)
+
+  if (denied.length || mismatches.length) {
     throw new Error(JSON.stringify({ denied, mismatches }))
+  }
+
   const upstreamChanges = process.argv.includes("--files-only")
     ? []
     : git("diff", "--numstat", manifest.base, "--", ...approved)
@@ -78,13 +86,16 @@ if (process.argv.includes("--record")) {
         .map((line) => {
           const [added, removed, path] = line.split("\t")
           const changedLines = Number(added) + Number(removed)
+
           if (
             !Number.isFinite(changedLines) ||
             changedLines > approval.files[path]
-          )
+          ) {
             throw new Error(
               `Approved seam exceeds review bound: ${path} (${changedLines} > ${approval.files[path]})`,
             )
+          }
+
           return { path, changedLines, limit: approval.files[path] }
         })
   console.log(

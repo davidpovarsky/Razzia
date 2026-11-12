@@ -31,19 +31,24 @@ const ThemeContext = createContext<{
   tokenOverrides: EMPTY_OVERRIDES,
 })
 const PortalTargetContext = createContext<HTMLElement | null>(null)
+
 export const useScopePortalTarget = () => useContext(PortalTargetContext)
+
 export function PortalContainerProvider({
   container,
   children,
 }: PropsWithChildren<{ container: HTMLElement | null }>) {
   const parent = useScopePortalTarget()
+
   return (
     <PortalTargetContext.Provider value={container ?? parent}>
       {children}
     </PortalTargetContext.Provider>
   )
 }
+
 export const usePlatformTheme = () => useContext(ThemeContext)
+
 export const usePlatformContext = () => usePlatformTheme().context
 
 /** Context only: it never applies platform typography/styles to a show stage. */
@@ -63,6 +68,7 @@ export function PlatformThemeProvider({
     () => ({ context, appearance, dir, tokenOverrides }),
     [context, appearance, dir, tokenOverrides],
   )
+
   return (
     <ThemeContext.Provider value={value}>
       <Direction.Provider dir={dir}>{children}</Direction.Provider>
@@ -90,6 +96,7 @@ export function PlatformScope({
   ...props
 }: PlatformScopeProps) {
   const [target, setTarget] = useState<HTMLDivElement | null>(null)
+
   return (
     <PlatformThemeProvider
       context={context}

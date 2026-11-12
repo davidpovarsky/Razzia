@@ -135,9 +135,12 @@ for (const name of ["host", "site"]) {
       expect(
         await dialog.evaluate((node) => {
           let active = document.activeElement
-          while (active?.shadowRoot?.activeElement)
+
+          while (active?.shadowRoot?.activeElement) {
             active = active.shadowRoot.activeElement
-          return !!active && node.contains(active)
+          }
+
+          return Boolean(active) && node.contains(active)
         }),
       ).toBe(true)
     }
@@ -204,7 +207,7 @@ test("host Radix portal stays inside actual native fullscreen", async ({
   )
   await page.getByRole("button", { name: "Enter fixture fullscreen" }).click()
   await expect
-    .poll(() => page.evaluate(() => !!document.fullscreenElement))
+    .poll(() => page.evaluate(() => Boolean(document.fullscreenElement)))
     .toBe(true)
   await page
     .getByTestId("host-panel")

@@ -14,22 +14,26 @@ import { useOptionalShowTheme } from "../show-themes/context"
 export function RoomQrPortal({ children }: { children: ReactNode }) {
   return <AlertPortal legacy>{children}</AlertPortal>
 }
+
 export function RoomQrLabels({ join }: { join: RoomJoin }) {
   const { t } = useTranslation()
   const title = useRef<HTMLHeadingElement>(null)
   useLayoutEffect(() => {
     let mounted = true
     queueMicrotask(() => {
-      if (mounted)
+      if (mounted) {
         title.current
           ?.closest('[role="alertdialog"]')
           ?.querySelector<HTMLButtonElement>("button")
           ?.focus()
+      }
     })
+
     return () => {
       mounted = false
     }
   }, [])
+
   return (
     <>
       <AlertDialog.Title ref={title} className="sr-only">
@@ -46,6 +50,7 @@ export function RoomQrLabels({ join }: { join: RoomJoin }) {
 /** Same installed encoder; four-module quiet zone remains inside the SVG box. */
 export function RoomQrCode(props: ComponentProps<typeof QRCodeSVG>) {
   const { t } = useTranslation()
+
   return (
     <QRCodeSVG
       role="img"
@@ -56,9 +61,12 @@ export function RoomQrCode(props: ComponentProps<typeof QRCodeSVG>) {
     />
   )
 }
+
 export function RoomJoinMetadata({ join }: { join: RoomJoin }) {
   const { t } = useTranslation()
   const theme = useOptionalShowTheme()
+  const status = join.pending ? t("common:connecting") : t("errors:game.locked")
+
   return (
     <div
       data-testid="room-join-metadata"
@@ -72,11 +80,7 @@ export function RoomJoinMetadata({ join }: { join: RoomJoin }) {
         color: theme?.definition.tokens.foreground ?? "inherit",
       }}
     >
-      {join.pending ? (
-        <span role="status">{t("common:connecting")}</span>
-      ) : join.locked ? (
-        <span role="status">{t("errors:game.locked")}</span>
-      ) : null}
+      {(join.pending || join.locked) && <span role="status">{status}</span>}
       {join.dialNumber && (
         <p>
           {t("extensions:roster.phoneLabel")}:{" "}

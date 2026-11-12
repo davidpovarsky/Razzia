@@ -1,0 +1,169 @@
+{
+  "status": "PASS",
+  "scope": "Development acceptance only; release and the listed external qualifications remain pending",
+  "generatedAtUTC": "2026-11-12T02:51:26.661934+00:00",
+  "primaryRunExit": 1,
+  "primaryRunFailedLabels": {
+    "native": 1
+  },
+  "finalFollowup": {
+    "native-format": 0,
+    "native-types": 0,
+    "lint": 0,
+    "native": 0
+  },
+  "effectiveChecks": {
+    "install": 0,
+    "types": 0,
+    "qa-types": 0,
+    "web-types": 0,
+    "socket-types": 0,
+    "lint": 0,
+    "format-target": 0,
+    "format-repository": 0,
+    "unit-root": 0,
+    "unit-extensions": 0,
+    "build": 0,
+    "package-broker": 0,
+    "package-runtime": 0,
+    "routes": 0,
+    "live": 0,
+    "site-regression": 0,
+    "native": 0,
+    "tokens": 0,
+    "components": 0,
+    "catalog-build": 0,
+    "catalog-browser": 0,
+    "motion": 0,
+    "motion-site": 0,
+    "stage": 0,
+    "integration": 0,
+    "freeze": 0,
+    "cinematic": 0,
+    "design": 0,
+    "registry": 0,
+    "catalog": 0
+  },
+  "browserCases": 147,
+  "browserSuites": [
+    {
+      "suite": "package-runtime",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 336593.24199999997
+    },
+    {
+      "suite": "routes",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 240436.913
+    },
+    {
+      "suite": "live",
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 474140.478
+    },
+    {
+      "suite": "site-regression",
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 198758.275
+    },
+    {
+      "suite": "native",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 404894.15
+    },
+    {
+      "suite": "tokens",
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 15813.760999999999
+    },
+    {
+      "suite": "components",
+      "passed": 22,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 103424.923
+    },
+    {
+      "suite": "catalog-browser",
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 87729.987
+    },
+    {
+      "suite": "motion",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 81992.18699999999
+    },
+    {
+      "suite": "motion-site",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 37758.33
+    },
+    {
+      "suite": "stage",
+      "passed": 10,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 63293.615
+    },
+    {
+      "suite": "integration",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0,
+      "durationMs": 35213.258
+    }
+  ],
+  "unitTests": 1079,
+  "unitSuites": [
+    {
+      "suite": "root",
+      "passed": 365,
+      "files": 37
+    },
+    {
+      "suite": "extensions",
+      "passed": 714,
+      "files": 86
+    }
+  ],
+  "sourceIdentity": {
+    "status": "PASS",
+    "base": "3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc",
+    "checked": 1203,
+    "mismatches": []
+  },
+  "notRun": [
+    "Physical iPhone/iPad/projector hardware",
+    "Native browser zoom UI (200% CSS zoom simulated)",
+    "WebKit compositor swipe using the Chromium-only CDP helper",
+    "Native clipboard permission scenario on WebKit",
+    "40 Chromium / 20 WebKit display capacity soak under the known 4-GiB quota",
+    "External CI execution",
+    "Real PSTN/provider/billing/customer data operations",
+    "Push, merge, deployment and production acceptance"
+  ],
+  "qualifications": [
+    "Untouched original / player-entry suite is incompatible with the preserved native /manager root; actual /game scenarios are tested downstream",
+    "Editor authoring is excluded: read-only source/pixel/route baseline is mandatory",
+    "Primary r2 native assertions expired at 20 seconds before the preserved 30-second vote; QA-only 45-second wait is verified in the final follow-up",
+    "The bounded broker job store path was corrected during package testing; no product source changed"
+  ]
+}

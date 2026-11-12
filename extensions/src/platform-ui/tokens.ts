@@ -1,12 +1,15 @@
 import type { CSSProperties } from "react"
 
 export const PLATFORM_TOKEN_VERSION = "1.0.0"
+
 export const PLATFORM_CONTEXTS = [
   "platform.marketing",
   "platform.studio",
   "platform.host",
 ] as const
+
 export type PlatformContext = (typeof PLATFORM_CONTEXTS)[number]
+
 export type PlatformAppearance = "dark" | "light"
 
 export const PRIMITIVE_TOKENS = {
@@ -117,8 +120,11 @@ export const SEMANTIC_TOKENS = {
   "platform.studio": { ...shared },
   "platform.host": { ...shared, background: c.aubergine },
 } as const satisfies Record<PlatformContext, Record<string, string>>
+
 export type SemanticToken = keyof typeof shared
+
 export type TokenOverrides = Partial<Record<SemanticToken, string>>
+
 /** Platform preview/accessibility variant; never applied to editor.current. */
 export const LIGHT_SEMANTIC_TOKENS: Record<SemanticToken, string> = {
   background: c.paper,
@@ -167,6 +173,7 @@ const motionBezier = (easing: string) =>
     .slice(easing.indexOf("(") + 1, -1)
     .split(",")
     .map(Number) as [number, number, number, number]
+
 /** React motion values generated from the same platform token source as CSS. */
 export const PLATFORM_MOTION = {
   duration: {
@@ -192,13 +199,16 @@ export const INDEPENDENT_CONTEXTS = {
 
 const kebab = (key: string) =>
   key.replace(/[A-Z]/gu, (letter) => `-${letter.toLowerCase()}`)
+
 export function platformVariables(
   context: PlatformContext,
   overrides: TokenOverrides = {},
   appearance: PlatformAppearance = "dark",
 ): Record<string, string> {
-  if (!PLATFORM_CONTEXTS.includes(context))
+  if (!PLATFORM_CONTEXTS.includes(context)) {
     throw new Error("Platform tokens cannot target editor or show contexts")
+  }
+
   const semantic = Object.fromEntries(
     Object.entries({
       ...(appearance === "light"
@@ -223,6 +233,7 @@ export function platformVariables(
       ]),
     ),
   )
+
   return { ...primitive, ...component, ...semantic }
 }
 
@@ -230,6 +241,7 @@ export const platformStyle = (
   context: PlatformContext,
   overrides?: TokenOverrides,
 ) => platformVariables(context, overrides) as CSSProperties
+
 export const platformOverrideStyle = (overrides: TokenOverrides = {}) =>
   Object.fromEntries(
     Object.entries(overrides).map(([key, value]) => [
@@ -240,7 +252,7 @@ export const platformOverrideStyle = (overrides: TokenOverrides = {}) =>
 
 /** All selectors require an owned scope. There are no root/body/preflight rules. */
 export const platformTokenCss =
-  PLATFORM_CONTEXTS.map((context) => {
+  `${PLATFORM_CONTEXTS.map((context) => {
     const declarations = Object.entries(platformVariables(context))
       .map(([key, value]) => `${key}:${value}`)
       .join(";")
@@ -248,9 +260,9 @@ export const platformTokenCss =
       context === "platform.host"
         ? ""
         : ";--bg:var(--tds-background);--text:var(--tds-text);--white:var(--tds-text);--lime:var(--tds-action);--muted:var(--tds-muted-text);--line:var(--tds-border);--line2:var(--tds-border);--font:var(--tds-font-family)"
+
     return `.tds-scope[data-platform-scope="${context}"]{${declarations}${bridge}}`
-  }).join("\n") +
-  `.tds-scope[data-platform-appearance="light"]{${Object.entries(
+  }).join("\n")}.tds-scope[data-platform-appearance="light"]{${Object.entries(
     LIGHT_SEMANTIC_TOKENS,
   )
     .map(([key, value]) => `--tds-${kebab(key)}:${value}`)

@@ -1,0 +1,118 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 16 tests using 1 worker
+
+  ✘   1 [chromium] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions (24.3s)
+  ✓   2 [chromium] › src/site/tests/browser/site.spec.ts:257:1 › split native entry reconnects a real host, display and PIN player and accepts answers (17.6s)
+  ✓   3 [chromium] › src/site/tests/browser/site.spec.ts:314:1 › touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact (17.2s)
+  ✓   4 [chromium] › src/site/tests/browser/site.spec.ts:389:1 › public routes, catalogue, demo, history, responsive navigation and screenshots (6.5s)
+  ✓   5 [chromium] › src/site/tests/browser/site.spec.ts:611:1 › localized routes and reduced motion keep the reference usable (3.2s)
+  ✓   6 [chromium] › src/site/tests/browser/site.spec.ts:656:1 › password reset, failed authentication, guest and cross-account isolation (6.4s)
+  ✓   7 [chromium] › src/site/tests/browser/site.spec.ts:733:1 › past events read real persisted results and confirm deletion (3.3s)
+  ✓   8 [chromium] › src/site/tests/browser/site.spec.ts:799:1 › failed deletion stays in the dialog and can be retried without a false success (3.6s)
+  ✘   9 [webkit] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions (35.0s)
+  ✓  10 [webkit] › src/site/tests/browser/site.spec.ts:257:1 › split native entry reconnects a real host, display and PIN player and accepts answers (29.1s)
+  ✘  11 [webkit] › src/site/tests/browser/site.spec.ts:314:1 › touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact (2.5s)
+  ✓  12 [webkit] › src/site/tests/browser/site.spec.ts:389:1 › public routes, catalogue, demo, history, responsive navigation and screenshots (31.2s)
+  ✓  13 [webkit] › src/site/tests/browser/site.spec.ts:611:1 › localized routes and reduced motion keep the reference usable (15.1s)
+  ✓  14 [webkit] › src/site/tests/browser/site.spec.ts:656:1 › password reset, failed authentication, guest and cross-account isolation (20.0s)
+  ✓  15 [webkit] › src/site/tests/browser/site.spec.ts:733:1 › past events read real persisted results and confirm deletion (8.7s)
+  ✓  16 [webkit] › src/site/tests/browser/site.spec.ts:799:1 › failed deletion stays in the dialog and can be retried without a false success (10.6s)
+
+
+  1) [chromium] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: 'My account', exact: true }).first()
+
+
+      232 |     .getByRole("link", { name: "My account", exact: true })
+      233 |     .first()
+    > 234 |     .click()
+          |      ^
+      235 |   await expect(
+      236 |     page.getByRole("heading", { name: "Account & licences", exact: true }),
+      237 |   ).toBeVisible()
+        at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6
+
+    Error Context: ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [webkit] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions
+
+    TimeoutError: locator.click: Timeout 15000ms exceeded.
+    Call log:
+      - waiting for getByRole('link', { name: 'My account', exact: true }).first()
+
+
+      232 |     .getByRole("link", { name: "My account", exact: true })
+      233 |     .first()
+    > 234 |     .click()
+          |      ^
+      235 |   await expect(
+      236 |     page.getByRole("heading", { name: "Account & licences", exact: true }),
+      237 |   ).toBeVisible()
+        at /cleanup/extensions/src/site/tests/browser/site.spec.ts:234:6
+
+    Error Context: ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-site-regression-traces/site-Studio-keeps-navigati-8364e-yles-actual-package-actions-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [webkit] › src/site/tests/browser/site.spec.ts:314:1 › touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact
+
+    Error: browserContext.newCDPSession: CDP session is only available in Chromium
+
+       at ../../../../qa/site-touch.ts:11
+
+       9 |   }
+      10 |
+    > 11 |   const session = await page.context().newCDPSession(page)
+         |                                        ^
+      12 |   const x = Math.round(viewport.width * 0.8)
+      13 |   const start = Math.round(viewport.height * 0.75)
+      14 |   const distance = Math.min(450, start - 100)
+        at swipePage (/cleanup/extensions/qa/site-touch.ts:11:40)
+        at /cleanup/extensions/src/site/tests/browser/site.spec.ts:327:13
+
+    Error Context: ../../evidence/phase-12-site-regression-traces/site-touch-scrolling-works-e9845-es-the-editor-policy-intact-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-site-regression-traces/site-touch-scrolling-works-e9845-es-the-editor-policy-intact-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-site-regression-traces/site-touch-scrolling-works-e9845-es-the-editor-policy-intact-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3 failed
+    [chromium] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions
+    [webkit] › src/site/tests/browser/site.spec.ts:54:1 › Studio keeps navigation warm, protects initial verification and styles actual package actions
+    [webkit] › src/site/tests/browser/site.spec.ts:314:1 › touch scrolling works on public/account/owned Studio pages and leaves the editor policy intact
+  13 passed (4.1m)

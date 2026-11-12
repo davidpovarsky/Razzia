@@ -163,8 +163,8 @@ describe("native platform control contract", () => {
       const controls = inspectControls(text)
       const count = controls.raw
       const original =
-        (primitives as Record<string, number>)[name] ??
-        (canonicalPrimitives as Record<string, number>)[name] ??
+        (primitives as Record<string, number | undefined>)[name] ??
+        (canonicalPrimitives as Record<string, number | undefined>)[name] ??
         0
 
       if (count > original) {

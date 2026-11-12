@@ -22,30 +22,52 @@ const Layers = createContext<{ target: HTMLElement | null; enabled: boolean }>({
   target: null,
   enabled: false,
 })
+
 export function viewportSlot(
   envelope: ExtensionStateEnvelope | null,
   status?: string,
 ): ShowThemeSlotId {
-  if (envelope?.phase === "scene") return "interlude"
-  if (status === STATUS.SHOW_ROOM || envelope?.phase === "lobby") return "lobby"
-  if (status === STATUS.SELECT_ANSWER) return "voting"
-  if (status === STATUS.SHOW_RESPONSES || status === STATUS.SHOW_RESULT)
+  if (envelope?.phase === "scene") {
+    return "interlude"
+  }
+
+  if (status === STATUS.SHOW_ROOM || envelope?.phase === "lobby") {
+    return "lobby"
+  }
+
+  if (status === STATUS.SELECT_ANSWER) {
+    return "voting"
+  }
+
+  if (status === STATUS.SHOW_RESPONSES || status === STATUS.SHOW_RESULT) {
     return "resultsReveal"
-  if (status === STATUS.SHOW_LEADERBOARD) return "leaderboard"
-  if (status === STATUS.FINISHED || status === STATUS.SUMMARY) return "closing"
+  }
+
+  if (status === STATUS.SHOW_LEADERBOARD) {
+    return "leaderboard"
+  }
+
+  if (status === STATUS.FINISHED || status === STATUS.SUMMARY) {
+    return "closing"
+  }
+
   return status ? "question" : "firstPaint"
 }
+
 /** Uses selected show tokens, never platform/editor variables or a video clone. */
 export function showViewportStyle(
   theme: ResolvedShowTheme,
   envelope: ExtensionStateEnvelope | null,
   status?: string,
 ): CSSProperties | undefined {
-  if (theme.definition.id === RAZZIA_THEME_ID) return undefined
+  if (theme.definition.id === RAZZIA_THEME_ID) {
+    return undefined
+  }
+
   const slotName = viewportSlot(envelope, status),
     slot = theme.slots[slotName]
   const asset = theme.definition.assets.find(
-    (asset) => asset.id === slot.backgroundAssetId,
+    (candidate) => candidate.id === slot.backgroundAssetId,
   )?.url
   const url =
     (theme.definition.slots[slotName].customMedia === "background"
@@ -54,6 +76,7 @@ export function showViewportStyle(
     asset ??
     themeAdapterAsset(theme, "showBackdrop") ??
     themeAdapterAsset(theme, "questionBackdrop")
+
   return {
     backgroundColor: theme.definition.tokens.background,
     backgroundImage: url ? `url(${JSON.stringify(url)})` : "none",
@@ -62,6 +85,7 @@ export function showViewportStyle(
     backgroundRepeat: "no-repeat",
   }
 }
+
 export function ShowViewportFrame({
   theme,
   envelope,
@@ -77,6 +101,7 @@ export function ShowViewportFrame({
   ref?: Ref<HTMLElement>
 }) {
   const [target, setTarget] = useState<HTMLDivElement | null>(null)
+
   return (
     <section
       {...props}
@@ -104,6 +129,7 @@ export function ShowViewportFrame({
     </section>
   )
 }
+
 /** Portal only decorative legacy backdrop children; original theme stays in place. */
 export function ViewportBackdropLayer<Props extends object>({
   component,
@@ -111,5 +137,10 @@ export function ViewportBackdropLayer<Props extends object>({
 }: Props & { component: ComponentType<Props> }) {
   const { target, enabled } = useContext(Layers)
   const children = createElement(component, props as Props)
-  return enabled ? (target ? createPortal(children, target) : null) : children
+
+  if (!enabled) {
+    return children
+  }
+
+  return target ? createPortal(children, target) : null
 }

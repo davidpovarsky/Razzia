@@ -22,7 +22,9 @@ export function Card({
     />
   )
 }
+
 export type StatusTone = "neutral" | "success" | "warning" | "danger" | "info"
+
 export function Badge({
   tone = "neutral",
   live = false,
@@ -39,6 +41,7 @@ export function Badge({
     />
   )
 }
+
 export function Toast({
   className = "",
   ...props
@@ -52,27 +55,34 @@ export function Toast({
     />
   )
 }
+
 export interface StatusStateProps {
   kind: "empty" | "loading" | "error" | "success"
   title: string
   description?: string
   action?: ReactNode
 }
+
 export function StatusState({
   kind,
   title,
   description,
   action,
 }: StatusStateProps) {
+  const tone = {
+    error: "danger",
+    success: "success",
+    empty: "neutral",
+    loading: "neutral",
+  }[kind]
+
   return (
     <section
       className="tds-state"
       role={kind === "error" ? "alert" : "status"}
       aria-busy={kind === "loading" || undefined}
       data-platform-motion="feedback"
-      data-tone={
-        kind === "error" ? "danger" : kind === "success" ? "success" : "neutral"
-      }
+      data-tone={tone}
     >
       {kind === "loading" && (
         <span aria-hidden="true" className="tds-spinner" />
@@ -83,15 +93,19 @@ export function StatusState({
     </section>
   )
 }
+
 export const EmptyState = (props: Omit<StatusStateProps, "kind">) => (
   <StatusState {...props} kind="empty" />
 )
+
 export const LoadingState = (props: Omit<StatusStateProps, "kind">) => (
   <StatusState {...props} kind="loading" />
 )
+
 export const ErrorState = (props: Omit<StatusStateProps, "kind">) => (
   <StatusState {...props} kind="error" />
 )
+
 export function Toolbar({
   label,
   className = "",
@@ -106,6 +120,7 @@ export function Toolbar({
     />
   )
 }
+
 export function ToolbarGroup({
   label,
   className = "",
@@ -120,6 +135,7 @@ export function ToolbarGroup({
     />
   )
 }
+
 export function Table({
   caption,
   children,
@@ -134,30 +150,37 @@ export function Table({
     </div>
   )
 }
+
 export function TableHead(props: HTMLAttributes<HTMLTableSectionElement>) {
   return <thead {...props} />
 }
+
 export function TableBody(props: HTMLAttributes<HTMLTableSectionElement>) {
   return <tbody {...props} />
 }
+
 export function TableRow(props: HTMLAttributes<HTMLTableRowElement>) {
   return <tr {...props} />
 }
+
 export function TableHeader({
   scope = "col",
   ...props
 }: ThHTMLAttributes<HTMLTableCellElement>) {
   return <th {...props} scope={scope} />
 }
+
 export function TableCell(props: TdHTMLAttributes<HTMLTableCellElement>) {
   return <td {...props} />
 }
+
 export interface TabItem {
   value: string
   label: string
   content: ReactNode
   disabled?: boolean
 }
+
 export function Tabs({
   items,
   label,
@@ -172,6 +195,7 @@ export function Tabs({
   onValueChange?: (value: string) => void
 }) {
   const { dir } = usePlatformTheme()
+
   return (
     <RadixTabs.Root
       value={value}

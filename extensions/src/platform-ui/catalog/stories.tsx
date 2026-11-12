@@ -50,6 +50,7 @@ export function ExampleTable({ count = 12 }: { count?: number }) {
     </Table>
   )
 }
+
 export function ComponentStories({
   changeSurface,
 }: {
@@ -59,6 +60,7 @@ export function ComponentStories({
   const [count, setCount] = useState(0),
     [checked, setChecked] = useState(false)
   const [message, setMessage] = useState("Ready")
+
   return (
     <section id="components" aria-labelledby="components-title">
       <h2 id="components-title">Production components</h2>

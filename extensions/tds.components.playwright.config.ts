@@ -1,6 +1,9 @@
 import { defineConfig, devices } from "@playwright/test"
-if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux")
+
+if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux") {
   throw new Error("Isolated remote QA only")
+}
+
 export default defineConfig({
   testDir: "qa",
   testMatch: "tds-components.spec.ts",

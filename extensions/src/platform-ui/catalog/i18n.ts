@@ -11,6 +11,7 @@ export const CATALOG_LOCALES = [
   "tr",
   "vi",
 ] as const
+
 // Read existing resources; the internal catalog never writes shared namespaces.
 const files = import.meta.glob<{ default: Record<string, unknown> }>(
   [
@@ -24,12 +25,18 @@ const files = import.meta.glob<{ default: Record<string, unknown> }>(
 const resources: Resource = {}
 for (const [path, resource] of Object.entries(files)) {
   const match = /\/locales\/(\w+)\/(\w+)\.json$/u.exec(path)
-  if (!match) continue
+
+  if (!match) {
+    continue
+  }
+
   const [, language, namespace] = match
   resources[language] ??= {}
   resources[language][namespace] = resource.default
 }
+
 export const catalogI18n = createInstance()
+
 export const catalogReady = catalogI18n.use(initReactI18next).init({
   lng: "en",
   fallbackLng: "en",

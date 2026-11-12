@@ -16,8 +16,9 @@ test("one semantic token updates actual site/host primitives while original/show
     (node) => getComputedStyle(node).backgroundColor,
   )
   await page.getByTestId("change-token").click()
-  for (const control of [site, host])
+  for (const control of [site, host]) {
     await expect(control).toHaveCSS("background-color", "rgb(183, 212, 255)")
+  }
   await expect(original).toHaveCSS("background-color", oldOriginal)
   await expect(show).toHaveCSS("background-color", oldShow)
   await page.screenshot({

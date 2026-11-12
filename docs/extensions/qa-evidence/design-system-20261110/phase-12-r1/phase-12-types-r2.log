@@ -1,0 +1,10 @@
+extensions/tds.fixture.vite.config.ts(25,25): error TS7006: Parameter 'server' implicitly has an 'any' type.
+extensions/tds.fixture.vite.config.ts(29,35): error TS7006: Parameter 'request' implicitly has an 'any' type.
+extensions/tds.fixture.vite.config.ts(29,44): error TS7006: Parameter 'response' implicitly has an 'any' type.
+extensions/tds.fixture.vite.config.ts(29,54): error TS7006: Parameter 'next' implicitly has an 'any' type.
+extensions/tds.stage.playwright.config.ts(34,3): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'TestConfigWebServer[] | TestConfigWebServer | { env: { TDS_FIXTURE: string; }; } | undefined' is not assignable to type 'TestConfigWebServer[] | TestConfigWebServer | undefined'.
+      Type '{ env: { TDS_FIXTURE: string; }; }' is not assignable to type 'TestConfigWebServer[] | TestConfigWebServer | undefined'.
+        Type '{ env: { TDS_FIXTURE: string; }; }' is not assignable to type 'undefined'.
+packages/web/vite.config.ts(1,38): error TS5097: An import path can only end with a '.ts' extension when 'allowImportingTsExtensions' is enabled.

@@ -1,0 +1,23 @@
+extensions/qa/tds-components-fixture.tsx(1,8): error TS2882: Cannot find module or type declarations for side-effect import of '@fontsource-variable/rubik/wght.css'.
+extensions/qa/tds-components-fixture.tsx(3,8): error TS2882: Cannot find module or type declarations for side-effect import of '@razzia/web/index.css'.
+extensions/qa/tds-fixture.tsx(1,8): error TS2882: Cannot find module or type declarations for side-effect import of '@fontsource-variable/rubik/wght.css'.
+extensions/qa/tds-fixture.tsx(2,8): error TS2882: Cannot find module or type declarations for side-effect import of '@razzia/web/index.css'.
+extensions/qa/tds-host.spec.ts(65,17): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'ObservedWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Window & typeof globalThis' is missing the following properties from type '{ __tdsEvents: WireEvent[]; __socket: { onAnyOutgoing: (listener: (name: string, payload?: { action?: string | undefined; payload?: Record<string, unknown> | undefined; } | undefined) => void) => void; }; }': __tdsEvents, __socket
+extensions/qa/tds-host.spec.ts(81,8): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'ObservedWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Type 'Window & typeof globalThis' is missing the following properties from type '{ __tdsEvents: WireEvent[]; __socket: { onAnyOutgoing: (listener: (name: string, payload?: { action?: string | undefined; payload?: Record<string, unknown> | undefined; } | undefined) => void) => void; }; }': __tdsEvents, __socket
+extensions/qa/tds-motion-site.spec.ts(22,17): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'LayoutWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property '__tdsLayoutMutations' is missing in type 'Window & typeof globalThis' but required in type '{ __tdsLayoutMutations: number; }'.
+extensions/qa/tds-motion-site.spec.ts(50,28): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'LayoutWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property '__tdsLayoutMutations' is missing in type 'Window & typeof globalThis' but required in type '{ __tdsLayoutMutations: number; }'.
+extensions/qa/tds-motion.spec.ts(7,17): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'MotionWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property '__tdsMotionEvents' is missing in type 'Window & typeof globalThis' but required in type '{ __tdsMotionEvents: string[]; }'.
+extensions/qa/tds-motion.spec.ts(22,31): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'MotionWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property '__tdsMotionEvents' is missing in type 'Window & typeof globalThis' but required in type '{ __tdsMotionEvents: string[]; }'.
+extensions/qa/tds-motion.spec.ts(34,11): error TS2352: Conversion of type 'Window & typeof globalThis' to type 'MotionWindow' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+  Property '__tdsMotionEvents' is missing in type 'Window & typeof globalThis' but required in type '{ __tdsMotionEvents: string[]; }'.
+extensions/qa/tds-stage-fixture.tsx(1,8): error TS2882: Cannot find module or type declarations for side-effect import of '@fontsource-variable/rubik/wght.css'.
+extensions/qa/tds-stage-fixture.tsx(3,8): error TS2882: Cannot find module or type declarations for side-effect import of '@razzia/web/index.css'.
+extensions/src/presentation/room-join/index.ts(7,8): error TS2882: Cannot find module or type declarations for side-effect import of './native-compact.css'.
+extensions/src/site/web/shared/ReferenceCanvas.tsx(3,20): error TS2307: Cannot find module '../../themes/native.css?inline' or its corresponding type declarations.
+packages/web/src/i18n.ts(9,29): error TS2339: Property 'glob' does not exist on type 'ImportMeta'.

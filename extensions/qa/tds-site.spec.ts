@@ -1,6 +1,10 @@
 import { test, expect } from "@playwright/test"
 import { readFileSync } from "node:fs"
-import { preflightShowImport } from "../src/core"
+import {
+  preflightShowImport,
+  enhancedBundleSchema,
+  tadaShowV1Schema,
+} from "../src/core"
 import { createPackageFixture } from "../src/testkit/package-fixtures"
 import {
   registerSynthetic,
@@ -21,14 +25,16 @@ test("real duplicate and all four export handlers retain formats and import pref
   const ids = await page
     .locator("article[data-game-id]")
     .evaluateAll((cards) =>
-      cards.map((card) => card.getAttribute("data-game-id")),
+      cards.map((node) => node.getAttribute("data-game-id")),
     )
   expect(new Set(ids).size).toBe(2)
   const copyId = ids.find((id) => id !== game.id)!
-  const copy = await (
-    await page.request.get(`/api/extensions/export/${copyId}`, { headers })
-  ).json()
-  expect(copy.extras.roster.participants[0].displayName).toBe(
+  const copy = enhancedBundleSchema.parse(
+    await (
+      await page.request.get(`/api/extensions/export/${copyId}`, { headers })
+    ).json(),
+  )
+  expect(copy.extras.roster?.participants.at(0)?.displayName).toBe(
     "Synthetic private example",
   )
   const formats = [
@@ -37,21 +43,28 @@ test("real duplicate and all four export handlers retain formats and import pref
     ["Excel workbook", "tada-xlsx"],
     ["Tadazz JSON", "tada-json"],
   ] as const
-  let enhanced: Buffer | undefined
+  let enhanced: Buffer | undefined = undefined
   for (const [label, format] of formats) {
     await openGameActions(card)
     await page.getByRole("menuitem", { name: "Export", exact: true }).click()
     const pending = page.waitForEvent("download")
     await page.getByRole("menuitem", { name: label, exact: true }).click()
     const download = await pending
-    const bytes = readFileSync((await download.path())!)
+    const bytes = readFileSync(await download.path())
     const result = preflightShowImport(bytes, download.suggestedFilename())
     expect(result.ok, JSON.stringify(result.issues)).toBe(true)
     expect(result.format).toBe(format)
     expect(result.summary?.questionCount).toBe(2)
-    if (format === "enhanced-bundle") enhanced = bytes
-    if (format === "tada-json")
-      expect(JSON.parse(bytes.toString()).format).toBe("tada-show")
+
+    if (format === "enhanced-bundle") {
+      enhanced = bytes
+    }
+
+    if (format === "tada-json") {
+      expect(tadaShowV1Schema.parse(JSON.parse(bytes.toString())).format).toBe(
+        "tada-show",
+      )
+    }
   }
   await page.getByLabel("Import game file", { exact: true }).setInputFiles({
     name: "roundtrip.bundle.json",
@@ -79,11 +92,17 @@ test("delete identifies the game, cancel sends nothing, genuine failure stays op
   let requests = 0,
     fail = true
   await page.route(`**/api/extensions/quizzes/${game.id}`, async (route) => {
-    if (route.request().method() !== "DELETE") return route.continue()
+    if (route.request().method() !== "DELETE") {
+      return route.continue()
+    }
+
     requests += 1
-    if (fail)
+
+    if (fail) {
       await route.fulfill({ status: 500, json: { error: "synthetic-failure" } })
-    else await route.continue()
+    } else {
+      await route.continue()
+    }
   })
   await openGameActions(card)
   await page.getByRole("menuitem", { name: "Delete", exact: true }).click()
@@ -120,6 +139,9 @@ test("delete identifies the game, cancel sends nothing, genuine failure stays op
   await expect(card).toHaveCount(0)
   await expect(dialog).toHaveCount(0)
   expect(requests).toBe(2)
+  await expect(
+    page.getByRole("region", { name: "My Games", exact: true }),
+  ).toBeFocused()
 })
 
 test("advanced packages stay lazy, auto-expand for actual import and preserve preflight when collapsed", async ({

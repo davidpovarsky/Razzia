@@ -19,7 +19,11 @@ const files = Object.entries(expected).map(([path, hash]) => {
   const actual = createHash("sha256")
     .update(readFileSync(resolve(root, path)))
     .digest("hex")
-  if (actual !== hash) throw new Error(`Cinematic owner changed: ${path}`)
+
+  if (actual !== hash) {
+    throw new Error(`Cinematic owner changed: ${path}`)
+  }
+
   return { path, sha256: actual, unchanged: true }
 })
 

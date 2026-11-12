@@ -1,16 +1,26 @@
 import { defineConfig, devices } from "@playwright/test"
 import site from "./site.playwright.config"
-if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux")
+
+if (process.env.TADAZZ_REMOTE_QA !== "1" || process.platform !== "linux") {
   throw new Error("Isolated remote QA only")
+}
+
+const slice = process.env.TDS_SITE_SLICE
+let testMatch: string | RegExp = /tds-site(?:-layout)?\.spec\.ts/u
+let outputFile = "/evidence/phase-06-browser.json"
+
+if (slice === "followup") {
+  testMatch = /tds-site-(?:layout|account)\.spec\.ts/u
+  outputFile = "/evidence/phase-06-followup-browser.json"
+} else if (slice === "account") {
+  testMatch = "tds-site-account.spec.ts"
+  outputFile = "/evidence/phase-06-account-browser.json"
+}
+
 export default defineConfig({
   ...site,
   testDir: "qa",
-  testMatch:
-    process.env.TDS_SITE_SLICE === "followup"
-      ? /tds-site-(?:layout|account)\.spec\.ts/u
-      : process.env.TDS_SITE_SLICE === "account"
-        ? "tds-site-account.spec.ts"
-        : /tds-site(?:-layout)?\.spec\.ts/u,
+  testMatch,
   grep:
     process.env.TDS_SITE_SLICE === "followup"
       ? /account config|marketing demo/u
@@ -22,12 +32,7 @@ export default defineConfig({
     [
       "json",
       {
-        outputFile:
-          process.env.TDS_SITE_SLICE === "followup"
-            ? "/evidence/phase-06-followup-browser.json"
-            : process.env.TDS_SITE_SLICE === "account"
-              ? "/evidence/phase-06-account-browser.json"
-              : "/evidence/phase-06-browser.json",
+        outputFile,
       },
     ],
   ],

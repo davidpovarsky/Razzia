@@ -1,10 +1,8 @@
 import { expect, test, type Page } from "@playwright/test"
 
-type MotionWindow = Window & { __tdsMotionEvents: string[] }
-
 async function recordAnimations(page: Page) {
   await page.addInitScript(() => {
-    const win = window as MotionWindow
+    const win = window
     win.__tdsMotionEvents = []
     document.addEventListener("animationstart", (event) => {
       win.__tdsMotionEvents.push(`start:${event.animationName}`)
@@ -18,9 +16,39 @@ async function recordAnimations(page: Page) {
   })
 }
 
-async function events(page: Page) {
-  return page.evaluate(() => (window as MotionWindow).__tdsMotionEvents)
+function events(page: Page) {
+  return page.evaluate(() => window.__tdsMotionEvents)
 }
+
+test("menu reentry during submenu exit keeps the newly opened menu active", async ({
+  page,
+}) => {
+  await page.goto("/")
+  for (const name of ["host", "site"]) {
+    const trigger = page
+      .getByTestId(`${name}-panel`)
+      .getByRole("button", { name: `${name} actions`, exact: true })
+    for (let cycle = 0; cycle < 4; cycle += 1) {
+      await trigger.click()
+      await page
+        .getByRole("menuitem", { name: `${name} export`, exact: true })
+        .click()
+      await page
+        .getByRole("menuitem", { name: `${name} export fixture`, exact: true })
+        .click()
+      await trigger.click()
+      await expect(
+        page.getByRole("menuitem", {
+          name: `${name} first action`,
+          exact: true,
+        }),
+      ).toBeVisible()
+      await page.keyboard.press("Escape")
+      await expect(page.getByRole("menu")).toHaveCount(0)
+      await expect(trigger).toBeFocused()
+    }
+  }
+})
 
 test("scoped menus, popovers, dialogs, tabs, cards and feedback use token motion and survive interruption", async ({
   page,
@@ -31,7 +59,7 @@ test("scoped menus, popovers, dialogs, tabs, cards and feedback use token motion
     const root = panel.getRootNode()
     for (const name of ["animationstart", "animationend", "animationcancel"]) {
       root.addEventListener(name, (event) => {
-        ;(window as MotionWindow).__tdsMotionEvents.push(
+        window.__tdsMotionEvents.push(
           `site:${name}:${(event as AnimationEvent).animationName}`,
         )
       })
@@ -74,6 +102,7 @@ test("scoped menus, popovers, dialogs, tabs, cards and feedback use token motion
       })
       await expect(dialog).toHaveCSS("animation-name", "tds-dialog-in")
       await expect(dialog).toHaveCSS("animation-duration", "0.18s")
+
       if (index === 0) {
         await dialog.evaluate((node) => {
           for (const animation of node.getAnimations()) {
@@ -86,10 +115,14 @@ test("scoped menus, popovers, dialogs, tabs, cards and feedback use token motion
           path: `/evidence/phase-10-motion-${name}-dialog-${testInfo.project.name}.png`,
         })
         await dialog.evaluate((node) =>
-          node.getAnimations().forEach((animation) => animation.play()),
+          node.getAnimations().forEach((animation) => {
+            animation.play()
+          }),
         )
       }
+
       await page.keyboard.press("Escape")
+
       if (name === "site" && index === 0) {
         // Reading the real CSSAnimation also works while WebKit makes the
         // closing native modal inert and suppresses its animation events.
@@ -104,6 +137,7 @@ test("scoped menus, popovers, dialogs, tabs, cards and feedback use token motion
             ),
         ).toContain("tds-dialog-out")
       }
+
       await expect(dialog).toHaveCount(0)
       await expect(dialogTrigger).toBeFocused()
     }

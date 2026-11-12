@@ -43,6 +43,7 @@ function Panel({ name, context }: { name: string; context: PlatformContext }) {
     [message, setMessage] = useState("")
   const [direction, setDirection] = useState<"ltr" | "rtl">("ltr")
   const [removed, setRemoved] = useState(0)
+
   return (
     <PlatformScope
       context={context}
@@ -153,7 +154,9 @@ function Panel({ name, context }: { name: string; context: PlatformContext }) {
         trigger={<Button variant="destructive">{name} remove</Button>}
         confirmLabel={`${name} confirm removal`}
         onConfirm={async () => {
-          await new Promise((resolve) => setTimeout(resolve, 80))
+          await new Promise((resolve) => {
+            setTimeout(resolve, 80)
+          })
           setRemoved((value) => value + 1)
         }}
       />
@@ -208,6 +211,7 @@ function Panel({ name, context }: { name: string; context: PlatformContext }) {
 function Fixture() {
   const fullscreen = useRef<HTMLDivElement>(null)
   const [unsupported, setUnsupported] = useState(false)
+
   return (
     <>
       <div
@@ -235,4 +239,10 @@ function Fixture() {
     </>
   )
 }
-createRoot(document.getElementById("root")!).render(<Fixture />)
+const rootElement = document.getElementById("root")
+
+if (!rootElement) {
+  throw new Error("Missing fixture root")
+}
+
+createRoot(rootElement).render(<Fixture />)

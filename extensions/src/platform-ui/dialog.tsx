@@ -6,6 +6,7 @@ import {
   useState,
   type ReactElement,
   type ReactNode,
+  type RefObject,
 } from "react"
 import { Dialog as RadixDialog, Slot } from "radix-ui"
 import { X } from "lucide-react"
@@ -28,6 +29,7 @@ export interface DialogProps {
   className?: string
   "data-testid"?: string
 }
+
 export function useDialogState({
   open,
   trigger,
@@ -35,18 +37,30 @@ export function useDialogState({
   onClose,
 }: Pick<DialogProps, "open" | "trigger" | "onOpenChange" | "onClose">) {
   const [internal, setInternal] = useState(!trigger)
+
   return {
     open: open ?? internal,
     change: (next: boolean) => {
-      if (open === undefined) setInternal(next)
+      if (open === undefined) {
+        setInternal(next)
+      }
+
       onOpenChange?.(next)
-      if (!next) onClose?.()
+
+      if (!next) {
+        onClose?.()
+      }
     },
   }
 }
+
 function activeElement() {
   let node = document.activeElement
-  while (node?.shadowRoot?.activeElement) node = node.shadowRoot.activeElement
+
+  while (node?.shadowRoot?.activeElement) {
+    node = node.shadowRoot.activeElement
+  }
+
   return node instanceof HTMLElement ? node : null
 }
 
@@ -62,12 +76,14 @@ export function NativeDialog({
   dismissible = true,
   dismissOnOutside = true,
   role = "dialog",
+  returnFocusRef,
   ...props
 }: DialogProps & {
   hideClose?: boolean
   dismissible?: boolean
   dismissOnOutside?: boolean
   role?: "dialog" | "alertdialog"
+  returnFocusRef?: RefObject<HTMLElement | null>
 }) {
   const ref = useRef<HTMLDialogElement>(null)
   const previousFocus = useRef<HTMLElement | null>(null)
@@ -81,40 +97,61 @@ export function NativeDialog({
   const state = useDialogState({ ...props, trigger })
   const finishClose = useCallback(() => {
     ref.current?.close()
-    if (previousFocus.current?.isConnected)
-      previousFocus.current.focus({ preventScroll: true })
+
+    const target = returnFocusRef?.current ?? previousFocus.current
+
+    if (target?.isConnected) {
+      target.focus({ preventScroll: true })
+    }
+
     previousFocus.current = null
-  }, [])
+  }, [returnFocusRef])
   useLayoutEffect(() => {
     const dialog = ref.current
-    if (!dialog) return
+
+    if (!dialog) {
+      return
+    }
+
     if (state.open) {
       if (!dialog.open) {
         previousFocus.current = activeElement()
         dialog.showModal()
       }
+
       return
     }
-    if (!dialog.open) return
+
+    if (!dialog.open) {
+      return
+    }
+
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       finishClose()
+
       return
     }
+
     // A bounded fallback also closes when animation events are interrupted.
     const timer = setTimeout(
       finishClose,
       PLATFORM_MOTION.duration.fast * 1000 + 50,
     )
+
     return () => clearTimeout(timer)
   }, [state.open, finishClose])
   useLayoutEffect(() => {
     const dialog = ref.current
+
     return () => {
       dialog?.close()
-      if (previousFocus.current?.isConnected)
+
+      if (previousFocus.current?.isConnected) {
         previousFocus.current.focus({ preventScroll: true })
+      }
     }
   }, [])
+
   return (
     <>
       {trigger && (
@@ -122,7 +159,9 @@ export function NativeDialog({
           aria-haspopup="dialog"
           aria-expanded={state.open}
           onClick={(event) => {
-            if (!event.defaultPrevented) state.change(true)
+            if (!event.defaultPrevented) {
+              state.change(true)
+            }
           }}
         >
           {trigger}
@@ -137,31 +176,64 @@ export function NativeDialog({
         data-testid={props["data-testid"]}
         aria-labelledby={`${id}-title`}
         aria-describedby={description ? `${id}-description` : undefined}
-        onKeyDownCapture={trapDialogTab}
+        onKeyDownCapture={(event) => {
+          trapDialogTab(event)
+
+          if (event.key !== "Escape" || !dismissible) {
+            return
+          }
+
+          const menuOwnsEscape = event.nativeEvent
+            .composedPath()
+            .some(
+              (node) =>
+                node instanceof Element && node.matches(".tds-menu-surface"),
+            )
+
+          if (menuOwnsEscape) {
+            return
+          }
+
+          event.preventDefault()
+          event.stopPropagation()
+          state.change(false)
+        }}
         onAnimationEnd={(event) => {
           if (
             !state.open &&
             event.target === ref.current &&
             event.animationName === "tds-dialog-out"
-          )
+          ) {
             finishClose()
+          }
         }}
         onCancel={(event) => {
           event.preventDefault()
           event.stopPropagation()
-          if (dismissible) state.change(false)
+
+          if (dismissible) {
+            state.change(false)
+          }
         }}
         onClick={(event) => {
-          if (!dismissible || !dismissOnOutside || event.target !== ref.current)
+          if (
+            !dismissible ||
+            !dismissOnOutside ||
+            event.target !== ref.current
+          ) {
             return
+          }
+
           const bounds = ref.current.getBoundingClientRect()
+
           if (
             event.clientX < bounds.left ||
             event.clientX > bounds.right ||
             event.clientY < bounds.top ||
             event.clientY > bounds.bottom
-          )
+          ) {
             state.change(false)
+          }
         }}
       >
         {!hideClose && (
@@ -201,6 +273,7 @@ function HostDialog({
 }: DialogProps) {
   const state = useDialogState({ ...props, trigger })
   const { t } = useTranslation()
+
   return (
     <RadixDialog.Root open={state.open} onOpenChange={state.change}>
       {trigger && <RadixDialog.Trigger asChild>{trigger}</RadixDialog.Trigger>}
@@ -234,8 +307,10 @@ function HostDialog({
     </RadixDialog.Root>
   )
 }
+
 export function Dialog(props: DialogProps) {
   const context = usePlatformContext()
+
   return context === "platform.host" ? (
     <HostDialog {...props} />
   ) : (

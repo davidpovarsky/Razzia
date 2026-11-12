@@ -7,7 +7,9 @@ test("lobby composition imports the actual room contract and decodable QR withou
 }, info) => {
   const probes: string[] = []
   page.on("request", (request) => {
-    if (request.url().includes("/api/")) probes.push(request.url())
+    if (request.url().includes("/api/")) {
+      probes.push(request.url())
+    }
   })
   await page.goto("/")
   const qr = page.locator("#layouts svg[data-qr-url]")
@@ -31,8 +33,9 @@ test("all typed production component families have working state examples", asyn
 }) => {
   const remote: string[] = []
   page.on("request", (request) => {
-    if (!request.url().startsWith("http://127.0.0.1:4340/"))
+    if (!request.url().startsWith("http://127.0.0.1:4340/")) {
       remote.push(request.url())
+    }
   })
   await page.goto("/")
   await expect(page.locator("[data-catalog-story]")).toHaveCount(9)
@@ -65,10 +68,11 @@ test("all typed production component families have working state examples", asyn
     "alerts",
     "tables",
     "scopes",
-  ])
+  ]) {
     await page.locator(`[data-catalog-story="${id}"]`).screenshot({
       path: `/evidence/phase-05-${id}-${test.info().project.name}.png`,
     })
+  }
   expect(remote).toEqual([])
 })
 for (const context of [
@@ -130,7 +134,7 @@ test("eight existing locales drive actual component content and dialog close lab
         ),
         "utf8",
       ),
-    )
+    ) as Record<string, string>
     await page
       .getByLabel("Content language", { exact: true })
       .selectOption(locale)

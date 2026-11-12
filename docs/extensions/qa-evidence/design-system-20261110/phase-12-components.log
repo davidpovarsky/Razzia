@@ -1,0 +1,31 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/tds.fixture.vite.config.ts:3:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 22 tests using 1 worker
+
+  ✓   1 [chromium] › qa/tds-components.spec.ts:4:3 › host: fresh pointer entry opens menu without prior keyboard focus (2.2s)
+  ✓   2 [chromium] › qa/tds-components.spec.ts:25:3 › host: native pending/disabled, labels, switch and roving tabs (2.1s)
+  ✓   3 [chromium] › qa/tds-components.spec.ts:68:3 › host: keyboard menu, native/Radix dialog trap, nested portal and focus return (4.9s)
+  ✓   4 [chromium] › qa/tds-components.spec.ts:155:3 › host: alert cancel, single async confirmation and visible failure (3.3s)
+  ✓   5 [chromium] › qa/tds-components.spec.ts:184:3 › host: popover Escape and keyboard tooltip (1.8s)
+  ✓   6 [chromium] › qa/tds-components.spec.ts:4:3 › site: fresh pointer entry opens menu without prior keyboard focus (2.0s)
+  ✓   7 [chromium] › qa/tds-components.spec.ts:25:3 › site: native pending/disabled, labels, switch and roving tabs (2.3s)
+  ✓   8 [chromium] › qa/tds-components.spec.ts:68:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return (4.9s)
+  ✓   9 [chromium] › qa/tds-components.spec.ts:155:3 › site: alert cancel, single async confirmation and visible failure (3.3s)
+  ✓  10 [chromium] › qa/tds-components.spec.ts:184:3 › site: popover Escape and keyboard tooltip (1.9s)
+  ✓  11 [chromium] › qa/tds-components.spec.ts:200:1 › host Radix portal stays inside actual native fullscreen (2.1s)
+  ✓  12 [webkit] › qa/tds-components.spec.ts:4:3 › host: fresh pointer entry opens menu without prior keyboard focus (3.4s)
+  ✓  13 [webkit] › qa/tds-components.spec.ts:25:3 › host: native pending/disabled, labels, switch and roving tabs (4.3s)
+  ✓  14 [webkit] › qa/tds-components.spec.ts:68:3 › host: keyboard menu, native/Radix dialog trap, nested portal and focus return (11.5s)
+  ✓  15 [webkit] › qa/tds-components.spec.ts:155:3 › host: alert cancel, single async confirmation and visible failure (8.8s)
+  ✓  16 [webkit] › qa/tds-components.spec.ts:184:3 › host: popover Escape and keyboard tooltip (4.2s)
+  ✓  17 [webkit] › qa/tds-components.spec.ts:4:3 › site: fresh pointer entry opens menu without prior keyboard focus (3.7s)
+  ✓  18 [webkit] › qa/tds-components.spec.ts:25:3 › site: native pending/disabled, labels, switch and roving tabs (3.9s)
+  ✓  19 [webkit] › qa/tds-components.spec.ts:68:3 › site: keyboard menu, native/Radix dialog trap, nested portal and focus return (12.8s)
+  ✓  20 [webkit] › qa/tds-components.spec.ts:155:3 › site: alert cancel, single async confirmation and visible failure (8.9s)
+  ✓  21 [webkit] › qa/tds-components.spec.ts:184:3 › site: popover Escape and keyboard tooltip (3.4s)
+  ✓  22 [webkit] › qa/tds-components.spec.ts:200:1 › host Radix portal stays inside actual native fullscreen (3.9s)
+
+  22 passed (1.7m)

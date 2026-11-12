@@ -1,0 +1,268 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer] [plugin builtin:vite-reporter]
+[WebServer] (!) Some chunks are larger than 2000 kB after minification. Consider:
+[WebServer] - Using dynamic import() to code-split the application
+[WebServer] - Use build.rolldownOptions.output.codeSplitting to improve chunking: https://rolldown.rs/reference/OutputOptions.codeSplitting
+[WebServer] - Adjust chunk size limit for this warning via build.chunkSizeWarningLimit.
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 16 tests using 1 worker
+
+[WebServer] 11:42:42 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:42:42 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✘   1 [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (37.7s)
+  ✓   2 [chromium] › qa/tds-native-game.spec.ts:96:1 › refuses players once the room is locked (2.5s)
+  ✓   3 [chromium] › qa/tds-native-game.spec.ts:111:1 › submits the PIN with the Enter key (2.2s)
+  ✓   4 [chromium] › qa/tds-native-game.spec.ts:126:1 › lets the manager kick a player (2.7s)
+[WebServer] 11:43:27 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:43:27 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✘   5 [chromium] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload (35.4s)
+[WebServer] 11:43:32 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:43:32 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:43:32 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:43:32 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   6 [chromium] › qa/tds-native-game.spec.ts:155:1 › sends players home when the manager exits the waiting room (2.8s)
+  ✓   7 [chromium] › qa/tds-native-game.spec.ts:173:1 › refuses to start a game without players (1.4s)
+[WebServer] 11:44:08 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 11:44:08 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✘   8 [chromium] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab (35.0s)
+  ✘   9 [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium (45.2s)
+  ✓  10 [webkit] › qa/tds-native-game.spec.ts:96:1 › refuses players once the room is locked (6.1s)
+  ✓  11 [webkit] › qa/tds-native-game.spec.ts:111:1 › submits the PIN with the Enter key (5.4s)
+  ✓  12 [webkit] › qa/tds-native-game.spec.ts:126:1 › lets the manager kick a player (6.5s)
+  ✘  13 [webkit] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload (40.1s)
+  ✓  14 [webkit] › qa/tds-native-game.spec.ts:155:1 › sends players home when the manager exits the waiting room (6.6s)
+  ✓  15 [webkit] › qa/tds-native-game.spec.ts:173:1 › refuses to start a game without players (4.1s)
+  ✘  16 [webkit] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab (40.0s)
+
+
+  1) [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ─
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      67 |   await answer(bob, "Lyon")
+      68 |
+    > 69 |   await expect(alice.getByText(t("game:correct"))).toBeVisible()
+         |                                                    ^
+      70 |   await expect(bob.getByText(t("game:wrong"))).toBeVisible()
+      71 |
+      72 |   await next(manager)
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [chromium] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      150 |
+      151 |   await answer(player, "Paris")
+    > 152 |   await expect(player.getByText(t("game:correct"))).toBeVisible()
+          |                                                     ^
+      153 | })
+      154 |
+      155 | test("sends players home when the manager exits the waiting room", async ({
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [chromium] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      202 |
+      203 |   await answer(home, "Paris")
+    > 204 |   await expect(home.getByText(t("game:correct"))).toBeVisible()
+          |                                                   ^
+      205 | })
+      206 |
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-chromium/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-chromium/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-chromium/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ───
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      67 |   await answer(bob, "Lyon")
+      68 |
+    > 69 |   await expect(alice.getByText(t("game:correct"))).toBeVisible()
+         |                                                    ^
+      70 |   await expect(bob.getByText(t("game:wrong"))).toBeVisible()
+      71 |
+      72 |   await next(manager)
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [webkit] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      150 |
+      151 |   await answer(player, "Paris")
+    > 152 |   await expect(player.getByText(t("game:correct"))).toBeVisible()
+          |                                                     ^
+      153 | })
+      154 |
+      155 | test("sends players home when the manager exits the waiting room", async ({
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [webkit] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab
+
+    Error: expect(locator).toBeVisible() failed
+
+    Locator: getByText('Nice!')
+    Expected: visible
+    Timeout: 20000ms
+    Error: element(s) not found
+
+    Call log:
+      - Expect "toBeVisible" getByText('Nice!') with timeout 20000ms
+      - waiting for getByText('Nice!')
+
+
+      202 |
+      203 |   await answer(home, "Paris")
+    > 204 |   await expect(home.getByText(t("game:correct"))).toBeVisible()
+          |                                                   ^
+      205 | })
+      206 |
+        at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51
+
+    Error Context: ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-webkit/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-webkit/trace.zip
+    Usage:
+
+        pnpm exec playwright show-trace ../../evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-webkit/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6 failed
+    [chromium] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ──
+    [chromium] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload
+    [chromium] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab
+    [webkit] › qa/tds-native-game.spec.ts:48:1 › plays a full quiz from the lobby to the podium ────
+    [webkit] › qa/tds-native-game.spec.ts:137:1 › brings a player back into the game after a reload
+    [webkit] › qa/tds-native-game.spec.ts:183:1 › lets a player rejoin from the home page after closing the tab
+  10 passed (4.9m)

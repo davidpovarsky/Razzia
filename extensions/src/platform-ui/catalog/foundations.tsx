@@ -5,6 +5,7 @@ import {
   LIGHT_SEMANTIC_TOKENS,
   type PlatformContext,
 } from "../index"
+
 export function Foundations({
   context,
   light,
@@ -13,6 +14,7 @@ export function Foundations({
   light: boolean
 }) {
   const palette = light ? LIGHT_SEMANTIC_TOKENS : SEMANTIC_TOKENS[context]
+
   return (
     <section id="foundations" aria-labelledby="foundations-title">
       <h2 id="foundations-title">Foundations from production tokens</h2>

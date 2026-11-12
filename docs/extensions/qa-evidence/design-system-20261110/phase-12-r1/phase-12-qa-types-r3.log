@@ -1,0 +1,1 @@
+extensions/qa/tds-site.spec.ts(37,10): error TS18048: 'copy.extras.roster' is possibly 'undefined'.

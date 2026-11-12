@@ -1,25 +1,24 @@
 import { expect, test } from "@playwright/test"
 import { registerSynthetic, seedSynthetic } from "./tds-site-fixture"
 
-type LayoutWindow = Window & { __tdsLayoutMutations: number }
-
 async function seedGames(page: Parameters<typeof registerSynthetic>[0]) {
   const headers = await registerSynthetic(page)
-  for (const subject of ["Alpha motion", "Beta motion", "Gamma motion"])
+  for (const subject of ["Alpha motion", "Beta motion", "Gamma motion"]) {
     await seedSynthetic(page, headers, subject)
+  }
   await page.goto("/studio/games")
   await expect(
     page.locator('article[data-platform-motion="layout"]'),
   ).toHaveCount(3)
 }
 
-async function titles(page: Parameters<typeof registerSynthetic>[0]) {
+function titles(page: Parameters<typeof registerSynthetic>[0]) {
   return page.locator("article .game-title").allTextContents()
 }
 
 async function watchLayout(page: Parameters<typeof registerSynthetic>[0]) {
   await page.locator('[aria-label="My Games"]').evaluate((grid) => {
-    const win = window as LayoutWindow
+    const win = window
     win.__tdsLayoutMutations = 0
     new MutationObserver((records) => {
       win.__tdsLayoutMutations += records.length
@@ -46,9 +45,7 @@ test("Studio sort, filter and gallery/list changes animate layout without stale 
     .poll(() => titles(page))
     .toEqual(["Gamma motion", "Beta motion", "Alpha motion"])
   await expect
-    .poll(() =>
-      page.evaluate(() => (window as LayoutWindow).__tdsLayoutMutations),
-    )
+    .poll(() => page.evaluate(() => window.__tdsLayoutMutations))
     .toBeGreaterThan(0)
 
   await sort.selectOption("asc")

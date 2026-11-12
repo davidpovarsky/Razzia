@@ -27,10 +27,12 @@ const exampleJoin = resolveRoomJoin({
 function ExampleAudioSlot() {
   return <Button disabled>Example audio controls slot</Button>
 }
+
 export function Layouts() {
   const [message, setMessage] = useState(
     "Synthetic examples, no live operations",
   )
+
   return (
     <section id="layouts" aria-labelledby="layouts-title">
       <h2 id="layouts-title">Composition templates</h2>
@@ -99,7 +101,7 @@ export function Layouts() {
           PIN <strong>{exampleJoin.displayPin}</strong>
         </p>
         <p>{exampleJoin.joinUrl}</p>
-        <RoomQrCode value={exampleJoin.qrUrl!} />
+        {exampleJoin.qrUrl && <RoomQrCode value={exampleJoin.qrUrl} />}
         <RoomJoinMetadata join={exampleJoin} />
         <HostDisplayControls
           gameId="synthetic-example"

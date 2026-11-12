@@ -1,0 +1,8 @@
+{
+  "node": "v24.22.2",
+  "pnpm": "12.18.0",
+  "architecture": "aarch64",
+  "system": "Linux",
+  "playwright": "1.64.0",
+  "verificationScope": "Dedicated headless Linux container; desktop Chromium/WebKit and simulated touch/tablet/zoom, no physical-device claim"
+}

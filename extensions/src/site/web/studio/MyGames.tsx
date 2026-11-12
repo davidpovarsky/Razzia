@@ -14,6 +14,7 @@ export interface QuizMeta {
   id: string
   subject: string
 }
+
 export function MyGames({
   games,
   search,
@@ -32,22 +33,29 @@ export function MyGames({
     [error, setError] = useState("")
   const busyRef = useRef(false),
     grid = useRef<HTMLDivElement>(null)
+  const focusAfterDeletion = useRef(false)
   const [packageFile, setPackageFile] = useState<File | null>(null)
   const consumeFile = useCallback(() => setPackageFile(null), [])
   const onError = () =>
     setError("Your request could not be completed. Please try again.")
   const files = useShowFileActions({ invalidate: refresh, onError })
   const run = async (action: () => Promise<unknown>) => {
-    if (busyRef.current) return false
+    if (busyRef.current) {
+      return false
+    }
+
     busyRef.current = true
     setBusy(true)
     setError("")
+
     try {
       await action()
       await refresh()
+
       return true
     } catch {
       onError()
+
       return false
     } finally {
       busyRef.current = false
@@ -68,6 +76,7 @@ export function MyGames({
       // Existing import remaps quiz/question IDs and preserves all extras.
       await client.importQuizBundle(bundle)
     })
+
   return (
     <>
       {!limit && (
@@ -111,10 +120,13 @@ export function MyGames({
         aria-label={t("Import game file")}
         onChange={(event) => {
           const file = event.target.files?.[0]
+
           if (file?.name.toLowerCase().endsWith(".tadazz")) {
             setPackageFile(file)
             event.target.value = ""
-          } else void files.handleImportFileSelect(event)
+          } else {
+            void files.handleImportFileSelect(event)
+          }
         }}
       />
       {error && (
@@ -130,7 +142,15 @@ export function MyGames({
         className={`games-grid ${layout === "list" ? "site-game-list" : ""}`}
         aria-busy={busy}
       >
-        <AnimatePresence initial={false}>
+        <AnimatePresence
+          initial={false}
+          onExitComplete={() => {
+            if (focusAfterDeletion.current) {
+              focusAfterDeletion.current = false
+              grid.current?.focus({ preventScroll: true })
+            }
+          }}
+        >
           {filtered.slice(0, limit).map((game) => (
             <GameCard
               key={game.id}
@@ -139,12 +159,15 @@ export function MyGames({
               showActions={!limit}
               onDuplicate={() => void duplicate(game)}
               onDelete={async () => {
+                focusAfterDeletion.current = true
                 const success = await run(() =>
                   new CompositeApiClient().deleteQuizComposite(game.id),
                 )
-                if (!success)
+
+                if (!success) {
+                  focusAfterDeletion.current = false
                   throw new Error("Composite deletion did not complete")
-                grid.current?.focus({ preventScroll: true })
+                }
               }}
               exports={{
                 legacy: () => void files.handleExportLegacy(game.id)(),

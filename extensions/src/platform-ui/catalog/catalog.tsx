@@ -24,6 +24,7 @@ export function Catalog() {
   const [rtl, setRtl] = useState(false),
     [action, setAction] = useState(false),
     [surface, setSurface] = useState(false)
+
   return (
     <PlatformScope
       context={context}

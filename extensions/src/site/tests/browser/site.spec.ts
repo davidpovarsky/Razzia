@@ -229,7 +229,7 @@ test("Studio keeps navigation warm, protects initial verification and styles act
   }
 
   await page
-    .getByRole("link", { name: "My account", exact: true })
+    .getByRole("link", { name: "Account & licences", exact: true })
     .first()
     .click()
   await expect(

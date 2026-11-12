@@ -1,0 +1,933 @@
+{
+  "config": {
+    "argv": [
+      "/usr/local/bin/node",
+      "/cleanup/node_modules/.pnpm/@playwright+test@1.64.0/node_modules/@playwright/test/cli.js",
+      "test",
+      "--config",
+      "tds.native-acceptance.playwright.config.ts"
+    ],
+    "configFile": "/cleanup/extensions/tds.native-acceptance.playwright.config.ts",
+    "rootDir": "/cleanup/extensions/qa",
+    "failOnFlakyTests": false,
+    "forbidOnly": false,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/evidence/phase-12-native-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "chromium",
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-native-game.spec.ts"
+        ],
+        "timeout": 150000
+      },
+      {
+        "outputDir": "/evidence/phase-12-native-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "webkit",
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": [
+          "tds-native-game.spec.ts"
+        ],
+        "timeout": 150000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-12-native-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "chromium",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-native-game.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4320",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "chromium"
+      },
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/evidence/phase-12-native-traces",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "webkit",
+        "testDir": "/cleanup/extensions/qa",
+        "snapshotDir": "/cleanup/extensions/qa",
+        "testIgnore": [],
+        "testMatch": "tds-native-game.spec.ts",
+        "timeout": 150000,
+        "use": {
+          "baseURL": "http://127.0.0.1:4320",
+          "locale": "en-US",
+          "trace": "retain-on-failure",
+          "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.2 Safari/605.1.15",
+          "viewport": {
+            "width": 1280,
+            "height": 720
+          },
+          "screen": {
+            "width": 1792,
+            "height": 1120
+          },
+          "deviceScaleFactor": 2,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "webkit"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": "webkit"
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/evidence/phase-12-native.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.0",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "tds-native-game.spec.ts",
+      "file": "tds-native-game.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "plays a full quiz from the lobby to the podium",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 37734,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 52,
+                      "line": 69
+                    },
+                    "snippet": "  67 |   await answer(bob, \"Lyon\")\n  68 |\n> 69 |   await expect(alice.getByText(t(\"game:correct\"))).toBeVisible()\n     |                                                    ^\n  70 |   await expect(bob.getByText(t(\"game:wrong\"))).toBeVisible()\n  71 |\n  72 |   await next(manager)"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 52,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  67 |   await answer(bob, \"Lyon\")\n  68 |\n> 69 |   await expect(alice.getByText(t(\"game:correct\"))).toBeVisible()\n     |                                                    ^\n  70 |   await expect(bob.getByText(t(\"game:wrong\"))).toBeVisible()\n  71 |\n  72 |   await next(manager)\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:42:05.041Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 52,
+                    "line": 69
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-f8416b8d881eab01e64d",
+          "file": "tds-native-game.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "refuses players once the room is locked",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2509,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:42:44.746Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-94ee78a05a29fde00a6f",
+          "file": "tds-native-game.spec.ts",
+          "line": 96,
+          "column": 1
+        },
+        {
+          "title": "submits the PIN with the Enter key",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2230,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:42:47.399Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-7fcb03c8971a470bbf2b",
+          "file": "tds-native-game.spec.ts",
+          "line": 111,
+          "column": 1
+        },
+        {
+          "title": "lets the manager kick a player",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2747,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:42:49.658Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-db3c0a06af149d8003fb",
+          "file": "tds-native-game.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "brings a player back into the game after a reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 1,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 35423,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 53,
+                      "line": 152
+                    },
+                    "snippet": "  150 |\n  151 |   await answer(player, \"Paris\")\n> 152 |   await expect(player.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                     ^\n  153 | })\n  154 |\n  155 | test(\"sends players home when the manager exits the waiting room\", async ({"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 53,
+                        "line": 152
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  150 |\n  151 |   await answer(player, \"Paris\")\n> 152 |   await expect(player.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                     ^\n  153 | })\n  154 |\n  155 | test(\"sends players home when the manager exits the waiting room\", async ({\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:42:52.424Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 53,
+                    "line": 152
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-58a85f6fd3f45ba507b0",
+          "file": "tds-native-game.spec.ts",
+          "line": 137,
+          "column": 1
+        },
+        {
+          "title": "sends players home when the manager exits the waiting room",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 2757,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:43:29.531Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-e592b1b4efb1bf297a91",
+          "file": "tds-native-game.spec.ts",
+          "line": 155,
+          "column": 1
+        },
+        {
+          "title": "refuses to start a game without players",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1423,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:43:32.450Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-9df0e9512c200aea1d58",
+          "file": "tds-native-game.spec.ts",
+          "line": 173,
+          "column": 1
+        },
+        {
+          "title": "lets a player rejoin from the home page after closing the tab",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "chromium",
+              "projectName": "chromium",
+              "results": [
+                {
+                  "workerIndex": 2,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 34982,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 51,
+                      "line": 204
+                    },
+                    "snippet": "  202 |\n  203 |   await answer(home, \"Paris\")\n> 204 |   await expect(home.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                   ^\n  205 | })\n  206 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 51,
+                        "line": 204
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  202 |\n  203 |   await answer(home, \"Paris\")\n> 204 |   await expect(home.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                   ^\n  205 | })\n  206 |\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:43:33.898Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-chromium/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-chromium/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 51,
+                    "line": 204
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-e4e02a7c71255cfc5192",
+          "file": "tds-native-game.spec.ts",
+          "line": 183,
+          "column": 1
+        },
+        {
+          "title": "plays a full quiz from the lobby to the podium",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 3,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 45159,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 52,
+                      "line": 69
+                    },
+                    "snippet": "  67 |   await answer(bob, \"Lyon\")\n  68 |\n> 69 |   await expect(alice.getByText(t(\"game:correct\"))).toBeVisible()\n     |                                                    ^\n  70 |   await expect(bob.getByText(t(\"game:wrong\"))).toBeVisible()\n  71 |\n  72 |   await next(manager)"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 52,
+                        "line": 69
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  67 |   await answer(bob, \"Lyon\")\n  68 |\n> 69 |   await expect(alice.getByText(t(\"game:correct\"))).toBeVisible()\n     |                                                    ^\n  70 |   await expect(bob.getByText(t(\"game:wrong\"))).toBeVisible()\n  71 |\n  72 |   await next(manager)\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:69:52"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:44:10.471Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-plays-a-fu-e4f4b-rom-the-lobby-to-the-podium-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 52,
+                    "line": 69
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-cb5d53ae6c0dabededf1",
+          "file": "tds-native-game.spec.ts",
+          "line": 48,
+          "column": 1
+        },
+        {
+          "title": "refuses players once the room is locked",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6101,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:44:57.490Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-a810ef44a7489f903d7e",
+          "file": "tds-native-game.spec.ts",
+          "line": 96,
+          "column": 1
+        },
+        {
+          "title": "submits the PIN with the Enter key",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 5397,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:45:03.734Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-ff51eb552f29e64921f6",
+          "file": "tds-native-game.spec.ts",
+          "line": 111,
+          "column": 1
+        },
+        {
+          "title": "lets the manager kick a player",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6510,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:45:09.163Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-5a75eeaaa1bd7f9435d2",
+          "file": "tds-native-game.spec.ts",
+          "line": 126,
+          "column": 1
+        },
+        {
+          "title": "brings a player back into the game after a reload",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 4,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 40109,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 53,
+                      "line": 152
+                    },
+                    "snippet": "  150 |\n  151 |   await answer(player, \"Paris\")\n> 152 |   await expect(player.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                     ^\n  153 | })\n  154 |\n  155 | test(\"sends players home when the manager exits the waiting room\", async ({"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 53,
+                        "line": 152
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  150 |\n  151 |   await answer(player, \"Paris\")\n> 152 |   await expect(player.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                     ^\n  153 | })\n  154 |\n  155 | test(\"sends players home when the manager exits the waiting room\", async ({\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:152:53"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:45:15.709Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-brings-a-p-3a27c-nto-the-game-after-a-reload-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 53,
+                    "line": 152
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-c36ad75e430070095c55",
+          "file": "tds-native-game.spec.ts",
+          "line": 137,
+          "column": 1
+        },
+        {
+          "title": "sends players home when the manager exits the waiting room",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 6607,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:45:57.368Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-cdecae11e24a519bd6d5",
+          "file": "tds-native-game.spec.ts",
+          "line": 155,
+          "column": 1
+        },
+        {
+          "title": "refuses to start a game without players",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 4071,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:46:04.133Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-57c153943757e47bcb01",
+          "file": "tds-native-game.spec.ts",
+          "line": 173,
+          "column": 1
+        },
+        {
+          "title": "lets a player rejoin from the home page after closing the tab",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 150000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "webkit",
+              "projectName": "webkit",
+              "results": [
+                {
+                  "workerIndex": 5,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 40040,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51",
+                    "location": {
+                      "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                      "column": 51,
+                      "line": 204
+                    },
+                    "snippet": "  202 |\n  203 |   await answer(home, \"Paris\")\n> 204 |   await expect(home.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                   ^\n  205 | })\n  206 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                        "column": 51,
+                        "line": 204
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mlocator\u001b[39m\u001b[2m).\u001b[22mtoBeVisible\u001b[2m(\u001b[22m\u001b[2m)\u001b[22m failed\n\nLocator: getByText('Nice!')\nExpected: visible\nTimeout: 20000ms\nError: element(s) not found\n\nCall log:\n\u001b[2m  - Expect \"toBeVisible\" getByText('Nice!') with timeout 20000ms\u001b[22m\n\u001b[2m  - waiting for getByText('Nice!')\u001b[22m\n\n\n  202 |\n  203 |   await answer(home, \"Paris\")\n> 204 |   await expect(home.getByText(t(\"game:correct\"))).toBeVisible()\n      |                                                   ^\n  205 | })\n  206 |\n    at /cleanup/extensions/qa/tds-native-game.spec.ts:204:51"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-11T23:46:08.252Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-webkit/error-context.md"
+                    },
+                    {
+                      "name": "trace",
+                      "contentType": "application/zip",
+                      "path": "/evidence/phase-12-native-traces/tds-native-game-lets-a-pla-4c50e--page-after-closing-the-tab-webkit/trace.zip"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/cleanup/extensions/qa/tds-native-game.spec.ts",
+                    "column": 51,
+                    "line": 204
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "6165400a503b3f65c6c6-c539527202518c0eb2c2",
+          "file": "tds-native-game.spec.ts",
+          "line": 183,
+          "column": 1
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-11T23:41:57.560Z",
+    "duration": 291748.518,
+    "expected": 10,
+    "skipped": 0,
+    "unexpected": 6,
+    "flaky": 0
+  }
+}

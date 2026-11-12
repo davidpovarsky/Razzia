@@ -98,9 +98,11 @@ test("current Studio package administration preserves build, install, export and
   ).toBe(true)
   const bounds = await page.getByTestId("package-manager").evaluate((panel) => {
     const parent = panel.getBoundingClientRect()
+
     return [...panel.querySelectorAll("h2,p,button,label,li")].every(
       (element) => {
         const rect = element.getBoundingClientRect()
+
         return rect.right <= parent.right + 1 && rect.left >= parent.left - 1
       },
     )
@@ -114,6 +116,7 @@ test("current Studio package administration preserves build, install, export and
     baseURL,
     viewport: { width: 390, height: 844 },
   })
+
   try {
     await mobile.addInitScript(
       (value) => localStorage.setItem("token", value),

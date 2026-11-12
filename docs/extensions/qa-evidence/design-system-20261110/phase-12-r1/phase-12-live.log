@@ -1,0 +1,72 @@
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer]
+[WebServer] /tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+[WebServer] (!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+[WebServer]   - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+[WebServer]   - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+[WebServer] Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+
+Running 19 tests using 1 worker
+
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   1 [chromium] › qa/tds-host.spec.ts:119:1 › display modes stay distinct; actual clipboard, clean audience/local presentation and fullscreen modal focus (18.9s)
+[WebServer] 10:48:33 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 10:48:33 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   2 [chromium] › qa/tds-host.spec.ts:255:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once (17.2s)
+  ✓   3 [chromium] › qa/tds-host.spec.ts:339:1 › restart and skip keep original confirmations and one command per explicit confirmation (11.7s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   4 [chromium] › qa/tds-host.spec.ts:379:1 › touch host controls and compact landscape dialogs keep named reachable close actions (4.8s)
+  ✓   5 [chromium] › qa/tds-host.spec.ts:430:1 › legacy settings switches use visible token thumbs and preserve a real confirmed server save (6.3s)
+  ✓   6 [chromium] › qa/tds-package-admin.spec.ts:8:1 › current Studio package administration preserves build, install, export and responsive controls (8.9s)
+  ✓   7 [chromium] › qa/tds-roster.spec.ts:75:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (16.3s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+[WebServer] 10:49:51 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 10:49:51 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓   8 [chromium] › qa/tds-stage-integration.spec.ts:105:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (32.4s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓   9 [chromium] › qa/tds-stage-integration.spec.ts:246:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (24.5s)
+[WebServer] 10:50:27 PM [vite] ws proxy error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+[WebServer] 10:50:27 PM [vite] ws proxy socket error:
+[WebServer] Error: read ECONNRESET
+[WebServer]     at TCP.onStreamRead (node:internal/stream_base_commons:221:20)
+  ✓  10 [chromium] › qa/tds-stage-integration.spec.ts:328:1 › a failed per-card image falls back to the selected full-window theme without classroom or duplicate media (9.4s)
+  ✓  11 [webkit] › qa/tds-host.spec.ts:255:1 › real game pause/audio/half-second shortcuts remain separate; end timer keeps submitted vote and history replay confirms once (48.6s)
+  ✓  12 [webkit] › qa/tds-host.spec.ts:339:1 › restart and skip keep original confirmations and one command per explicit confirmation (47.6s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  13 [webkit] › qa/tds-host.spec.ts:379:1 › touch host controls and compact landscape dialogs keep named reachable close actions (20.1s)
+  ✓  14 [webkit] › qa/tds-host.spec.ts:430:1 › legacy settings switches use visible token thumbs and preserve a real confirmed server save (13.9s)
+  ✓  15 [webkit] › qa/tds-package-admin.spec.ts:8:1 › current Studio package administration preserves build, install, export and responsive controls (17.8s)
+  ✓  16 [webkit] › qa/tds-roster.spec.ts:75:1 › authoritative phone policy, confirmed deletion, imports, filtering and 40/400-row responsive roster (50.8s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  17 [webkit] › qa/tds-stage-integration.spec.ts:105:1 › actual host fills toolbar edges, keeps live joining/lock/reconnect and audience permissions (53.9s)
+Connection Error (Failed to connect to socket /run/dbus/system_bus_socket: No such file or directory)
+Connection Null
+  ✓  18 [webkit] › qa/tds-stage-integration.spec.ts:246:1 › configured dial-in and Creating Worlds table layout share current PIN/QR without private roster data (1.4m)
+  ✓  19 [webkit] › qa/tds-stage-integration.spec.ts:328:1 › a failed per-card image falls back to the selected full-window theme without classroom or duplicate media (19.1s)
+
+  19 passed (8.6m)

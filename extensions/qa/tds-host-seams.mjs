@@ -29,12 +29,18 @@ const excluded = new Set([
   "innerComments",
 ])
 function clean(value) {
-  if (Array.isArray(value)) return value.map(clean)
-  if (!value || typeof value !== "object") return value
+  if (Array.isArray(value)) {
+    return value.map(clean)
+  }
+
+  if (!value || typeof value !== "object") {
+    return value
+  }
+
   return Object.fromEntries(
     Object.entries(value)
       .filter(([key]) => !excluded.has(key))
-      .map(([key, value]) => [key, clean(value)]),
+      .map(([key, child]) => [key, clean(child)]),
   )
 }
 function prefix(source, name) {
@@ -42,27 +48,44 @@ function prefix(source, name) {
     sourceType: "module",
     plugins: ["typescript", "jsx"],
   })
-  let component
+  let component = undefined
   function visit(value) {
-    if (!value || typeof value !== "object") return
-    if (value.type === "VariableDeclarator" && value.id?.name === name)
+    if (!value || typeof value !== "object") {
+      return
+    }
+
+    if (value.type === "VariableDeclarator" && value.id?.name === name) {
       component = value.init
-    if (value.type === "FunctionDeclaration" && value.id?.name === name)
+    }
+
+    if (value.type === "FunctionDeclaration" && value.id?.name === name) {
       component = value
-    for (const [key, child] of Object.entries(value))
+    }
+
+    for (const [key, child] of Object.entries(value)) {
       if (!excluded.has(key)) {
-        if (Array.isArray(child)) child.forEach(visit)
-        else visit(child)
+        if (Array.isArray(child)) {
+          child.forEach(visit)
+        } else {
+          visit(child)
+        }
       }
+    }
   }
   visit(ast)
-  if (!component || component.body?.type !== "BlockStatement")
+
+  if (!component || component.body?.type !== "BlockStatement") {
     throw new Error(`Missing component ${name}`)
+  }
+
   // Only the final UI return is excluded. Includes original hooks, all action
   // closures, pending state, validators, calculations and conditional early returns.
   const statements = component.body.body
-  if (statements.at(-1)?.type !== "ReturnStatement")
+
+  if (statements.at(-1)?.type !== "ReturnStatement") {
     throw new Error(`Unexpected component shape ${name}`)
+  }
+
   return JSON.stringify(clean(statements.slice(0, -1)))
 }
 const approvedTds09NonUiAst = new Map([
@@ -87,6 +110,7 @@ const results = files.map(([file, name]) => {
   const current = prefix(readFileSync(resolve(root, path), "utf8"), name)
   const currentHash = createHash("sha256").update(current).digest("hex")
   const expectedHash = approvedTds09NonUiAst.get(path)
+
   return {
     path,
     component: name,
@@ -98,6 +122,7 @@ const results = files.map(([file, name]) => {
   }
 })
 const unexpected = results.filter((result) => !result.unchanged)
+
 if (unexpected.length) {
   console.error(
     JSON.stringify(
@@ -112,6 +137,7 @@ if (unexpected.length) {
   )
   process.exit(1)
 }
+
 console.log(
   JSON.stringify(
     {

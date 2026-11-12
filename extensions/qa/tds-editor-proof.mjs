@@ -1,8 +1,7 @@
 import { readFileSync, writeFileSync } from "node:fs"
 import { createHash } from "node:crypto"
 import { fileURLToPath } from "node:url"
-import { resolve } from "node:path"
-import { dirname } from "node:path"
+import { resolve, dirname } from "node:path"
 import { createRequire } from "node:module"
 
 const require = createRequire(import.meta.url)
@@ -12,8 +11,11 @@ const coreIndex = playwrightRequire.resolve("playwright-core")
 const { PNG } = require(resolve(dirname(coreIndex), "lib/utilsBundle.js"))
 
 const phase = process.argv[2] ?? "phase-03"
-if (!/^(?:phase-\d{2}|editor-control-repeat)$/u.test(phase))
+
+if (!/^(?:phase-\d{2}|editor-control-repeat)$/u.test(phase)) {
   throw new Error("Invalid phase")
+}
+
 const root = fileURLToPath(
   new URL(
     "../../docs/extensions/qa-evidence/design-system-20261110/",
@@ -30,15 +32,18 @@ const pairs = [
   const candidate = readFileSync(resolve(root, phase, `${name}.png`))
   const a = PNG.sync.read(control),
     b = PNG.sync.read(candidate)
-  if (a.width !== b.width || a.height !== b.height)
+
+  if (a.width !== b.width || a.height !== b.height) {
     throw new Error("Editor capture dimensions changed")
+  }
+
   const changes = []
-  for (let offset = 0; offset < a.data.length; offset += 4)
+  for (let offset = 0; offset < a.data.length; offset += 4) {
     if (
       !a.data
         .subarray(offset, offset + 4)
         .equals(b.data.subarray(offset, offset + 4))
-    )
+    ) {
       changes.push({
         x: (offset / 4) % a.width,
         y: Math.floor(offset / 4 / a.width),
@@ -48,6 +53,9 @@ const pairs = [
           ),
         ),
       })
+    }
+  }
+
   return {
     name,
     byteIdentical: control.equals(candidate),
@@ -65,6 +73,6 @@ const proof = {
 }
 writeFileSync(
   resolve(root, `${phase}-editor-proof.json`),
-  JSON.stringify(proof, null, 2) + "\n",
+  `${JSON.stringify(proof, null, 2)}\n`,
 )
 console.log(JSON.stringify(proof, null, 2))

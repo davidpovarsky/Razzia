@@ -1,0 +1,98 @@
+{
+  "originalSnapshotDirectory": "C:/Users/DAVID/AppData/Local/Temp/tds-resume-20261111-bccb30dbb0f74b74ab84270a6ec68b68",
+  "count": 18,
+  "allPathsPresent": true,
+  "historicalTransportByteIdentical": true,
+  "files": [
+    {
+      "path": "docs/extensions/plans/TDS_PROGRESS.md",
+      "snapshotSha256": "31a8afa40dcf2c91b337f183b14aef76a135c9d51350a0745b00d9d60d884009",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/qa/tds-components-fixture.tsx",
+      "snapshotSha256": "efd2870931f613492a0645b01f3995c33b9ee751c0e2a5b046ab7398664d1f40",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/catalog/stories.tsx",
+      "snapshotSha256": "904bb3c369a71bf6e80df775da48209cbff4be1b1af1d06afa301d3d6a613452",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/roster-controls.tsx",
+      "snapshotSha256": "5fd451681291331ad75ffc7e7f330a817c935b10ec73fc6f4d9ba298a4199af5",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/styles.ts",
+      "snapshotSha256": "7516f6fdde90e83d91de814a25baa894b260e0f9a19fa2bda927f6a7356ef980",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/surfaces.tsx",
+      "snapshotSha256": "3acdfde6efe6869fe9d265a5f5a7b04737b14aeccef434f24f3b97672ed93dc2",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/tokens.test.ts",
+      "snapshotSha256": "73da060ab7011984a002881abde049cf5512e24185251419ab04fb0ae73fc97e",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/platform-ui/tokens.ts",
+      "snapshotSha256": "f2df4cb656bf630daacda7b43c7509f328fa3109e662b35847a6cc8b87f170d6",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/site/web/studio/GameCard.tsx",
+      "snapshotSha256": "e80f5308eb0f5d351f2502580afe6389d2b9f1aa6bda5e4eaac7cb50d100014e",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/src/site/web/studio/MyGames.tsx",
+      "snapshotSha256": "e0b02f676b07d6916706633c17d6668e6b1665b38aca12897aca569fd6d3de9d",
+      "currentPathPresent": true
+    },
+    {
+      "path": "docs/extensions/plans/TDS_MOTION.md",
+      "snapshotSha256": "e419e1542fcd359f709d6250877a115ae3e24b49716245184db3430ae8745e45",
+      "currentPathPresent": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/design-system-20261110/phase-10-source.tar.gz",
+      "snapshotSha256": "9077ebb7955c3a56d81dfda1e3e82300670d363f37721a0c99550a2db97ea0a1",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/qa/tds-motion-guard.mjs",
+      "snapshotSha256": "427a98a146145fe98e4416f0be165dcf69050e9854b95c6e349b3002c57810c4",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/qa/tds-motion-site.spec.ts",
+      "snapshotSha256": "526e373c1ff488c94f1e41aa1f26008dca9b5845f1c44990d273202e3381e342",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/qa/tds-motion.spec.ts",
+      "snapshotSha256": "33f8e8831024679cedd4de3fd55f585dfbf3a45098afea4ead8670885ced5d95",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/qa/tds-phase10.sh",
+      "snapshotSha256": "219115ac4ceeb60ab7456fc3589b3887a5d721268204e2c378538b995b0b06de",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/tds.motion-site.playwright.config.ts",
+      "snapshotSha256": "a5e0a6532520ba15a7bb228fc6cf21cc38d927e8a0b7eedfa2bd0b3650725ecf",
+      "currentPathPresent": true
+    },
+    {
+      "path": "extensions/tds.motion.playwright.config.ts",
+      "snapshotSha256": "54f481b474f67b7c464acd85d6dd66c4cdb700e1fe4a9415464a95b138b3b045",
+      "currentPathPresent": true
+    }
+  ]
+}

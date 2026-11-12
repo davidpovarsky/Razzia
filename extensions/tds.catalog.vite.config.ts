@@ -5,11 +5,14 @@ import { fileURLToPath } from "node:url"
 const localOnly: Plugin = {
   name: "tadazz-catalog-local-only",
   configResolved(config) {
-    for (const host of [config.server.host, config.preview.host])
-      if (host !== "127.0.0.1")
+    for (const host of [config.server.host, config.preview.host]) {
+      if (host !== "127.0.0.1") {
         throw new Error("Catalog must bind to loopback only")
+      }
+    }
   },
 }
+
 export default defineConfig({
   root: fileURLToPath(new URL("./src/platform-ui/catalog", import.meta.url)),
   envDir: false,
