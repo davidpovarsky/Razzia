@@ -1,5 +1,11 @@
 # Tadazz design system — sequential checkpoint
 
+> **Production addendum — 12 November 2026:** the owner subsequently authorized
+> push and deployment. Source `bff12a63ec3f69a58123c0299eea991901680b94` is live at
+> https://tadazz.com; four read-only public Chromium/WebKit cases pass.
+> See [release, data preservation and rollback evidence](TDS_RELEASE_20261112.md).
+> The development checkpoint and its earlier release hold below are historical.
+
 Canonical mandate: [full specification](TADAZZ_DESIGN_SYSTEM_UI_UNIFICATION_AGENT_PROMPT_2026-11-10.md).
 Asana parent: `1220402777392717` (OPEN). Account verified: requested owner account.
 Single primary coding session. No subagents, push, merge, deployment or production writes.

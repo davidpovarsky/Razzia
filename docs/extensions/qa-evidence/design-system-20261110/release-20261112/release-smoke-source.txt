@@ -1,0 +1,61 @@
+import { createRequire } from 'node:module';
+import fs from 'node:fs/promises';
+const require=createRequire('/cleanup/extensions/package.json');
+const { chromium, webkit, expect }=require('@playwright/test');
+const [baseURL, label]=process.argv.slice(2);
+if(!baseURL||!['candidate','production'].includes(label))throw Error('Expected explicit release target');
+const origin=new URL(baseURL).origin;
+const out=`/evidence/tds-release-bff12a6-${label}`;
+await fs.mkdir(out,{recursive:true});
+const result={target:origin,label,readOnly:true,accountCreated:false,mailSent:false,gameStarted:false,browserCases:[],success:false};
+try {
+ for(const [name,engine] of [['chromium',chromium],['webkit',webkit]]) {
+  const browser=await engine.launch({headless:true});
+  try {
+   for(const width of [1366,390]) {
+    const context=await browser.newContext({baseURL:origin,locale:'en-US',viewport:{width,height:width===390?844:768}});
+    const page=await context.newPage();
+    const errors=[],badAssets=[];
+    page.on('pageerror',e=>errors.push(e.message));
+    page.on('response',r=>{if(r.status()>=400&&/\/(assets|tadazz-design-reference)\//.test(r.url()))badAssets.push({status:r.status(),path:new URL(r.url()).pathname});});
+    try {
+     await page.goto('/');
+     await expect(page.getByRole('heading',{name:'Make it a show.',exact:true})).toBeVisible();
+     await expect(page).toHaveTitle('Tadazz');
+     await expect.poll(()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth)).toBe(true);
+     await expect(page.locator('[data-platform-scope="platform.marketing"]')).toBeVisible();
+     await page.evaluate(()=>document.fonts.ready);
+     await page.screenshot({path:`${out}/${name}-${width}.png`,fullPage:true,animations:'disabled'});
+     for(const route of ['/login','/signup','/forgot']) {
+      await page.goto(route);
+      await expect(page.getByLabel('Email address',{exact:true})).toBeVisible();
+      await expect(page).toHaveTitle('Tadazz');
+     }
+     await page.goto('/studio/games');
+     await expect(page.getByLabel('Email address',{exact:true})).toBeVisible();
+     expect(new URL(page.url()).origin).toBe(origin);
+     expect(new URL(page.url()).pathname).toBe('/login');
+     for(const route of ['/api/quizz','/api/results','/api/accounts/me','/api/packages/capabilities','/media/release-probe-missing.png']) {
+      expect((await context.request.get(route)).status(),route).toBe(401);
+     }
+     expect((await context.request.get('/__private_media/release-probe-missing')).status()).toBe(404);
+     const shell=await context.request.get('/');
+     expect(shell.headers()['cache-control']).toContain('no-store');
+     await page.goto('/');
+     const asset=await page.locator('script[type="module"][src]').first().getAttribute('src');
+     expect(asset).toMatch(/^\/assets\//);
+     const script=await context.request.get(asset);
+     expect(script.status()).toBe(200);
+     expect(script.headers()['cache-control']).toContain('immutable');
+     expect(await (await context.request.get('/api/health')).json()).toEqual({status:'ok'});
+     expect(await (await context.request.get('/api/auth/mode')).json()).toEqual({accountsEnabled:true});
+     expect(await (await context.request.get('/api/billing/config')).json()).toEqual({enabled:false});
+     expect(errors).toEqual([]);expect(badAssets).toEqual([]);
+     result.browserCases.push({browser:name,width,status:'PASS',entry:asset,pageErrors:errors,failedAssets:badAssets});
+    } finally { await context.close(); }
+   }
+  } finally { await browser.close(); }
+ }
+ result.success=true;
+} catch(error) {result.error=String(error);throw error;}
+finally {await fs.writeFile(`${out}/report.json`,JSON.stringify(result,null,2)+'\n');console.log(JSON.stringify(result,null,2));}

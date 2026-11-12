@@ -1,0 +1,76 @@
+$ pnpm --dir ../packages/web exec node --experimental-strip-types node_modules/vite/bin/vite.js build --config ../../extensions/site.vite.config.ts
+(!) Your Vite config uses features that are unsupported by `configLoader: 'native'`, which is planned to become the default in a future major version of Vite:
+  - import "../packages/web/vite.config" without a file extension (../../extensions/site.vite.config.ts:6:23). Add the file extension
+  - import "./vite/private-media" without a file extension (vite.config.ts:14:8). Add the file extension
+Set `VITE_CONFIG_NATIVE_IGNORE_WARNING=true` to suppress this warning.
+vite v8.3.4 building client environment for production...
+transforming...
+
+/tadazz-design-reference/studio-worlds.webp referenced in /tadazz-design-reference/studio-worlds.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-design-reference/studio-stage.webp referenced in /tadazz-design-reference/studio-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-design-reference/studio-questions.webp referenced in /tadazz-design-reference/studio-questions.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 3237 modules transformed.
+rendering chunks...
+computing gzip size...
+dist/index.html                                                2.25 kB │ gzip:   0.81 kB
+dist/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2            9.34 kB
+dist/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2     12.38 kB
+dist/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2         15.11 kB
+dist/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2        19.40 kB
+dist/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2           32.46 kB
+dist/assets/rubik-latin-wght-normal-CnQIisVs.woff2            35.34 kB
+dist/assets/tadazz-question-background-BnsH8I8M.png        1,610.33 kB
+dist/assets/background-CMjhDDHd.png                        2,777.38 kB
+dist/assets/index-DzSMiCNC.css                               123.54 kB │ gzip:  20.10 kB
+dist/assets/presentation-DYrgA-iG.css                        166.42 kB │ gzip:  35.86 kB
+dist/assets/PackageManager-DRqdJ8X3.js                         0.06 kB │ gzip:   0.07 kB
+dist/assets/arrow-left-BCBDgkUV.js                             0.19 kB │ gzip:   0.17 kB
+dist/assets/arrow-right-Dh3AYw-o.js                            0.19 kB │ gzip:   0.17 kB
+dist/assets/useRouterState-CRcphWwK.js                         0.20 kB │ gzip:   0.17 kB
+dist/assets/play-AxtTFEGx.js                                   0.21 kB │ gzip:   0.19 kB
+dist/assets/SiteButton-D7U2JlhM.js                             0.26 kB │ gzip:   0.20 kB
+dist/assets/search-DCeNwM9k.js                                 0.32 kB │ gzip:   0.23 kB
+dist/assets/Card-BqUtS-Rs.js                                   0.32 kB │ gzip:   0.25 kB
+dist/assets/LegacyTools-C7GYES3l.js                            0.45 kB │ gzip:   0.31 kB
+dist/assets/circle-x-CgcqYXpg.js                               0.47 kB │ gzip:   0.34 kB
+dist/assets/SiteLink-BWq3n_13.js                               0.50 kB │ gzip:   0.35 kB
+dist/assets/Dialog-CvUurOMj.js                                 0.65 kB │ gzip:   0.39 kB
+dist/assets/rolldown-runtime-hePW80VL.js                       0.71 kB │ gzip:   0.42 kB
+dist/assets/manager-Bwi3ztVt.js                                0.88 kB │ gzip:   0.53 kB
+dist/assets/client-67DcsxCg.js                                 1.14 kB │ gzip:   0.71 kB
+dist/assets/useMatch-LcmyB7GW.js                               1.59 kB │ gzip:   0.83 kB
+dist/assets/mutation-D5SS4KGD.js                               3.45 kB │ gzip:   1.15 kB
+dist/assets/dist-0pCdFrtN.js                                   4.29 kB │ gzip:   1.90 kB
+dist/assets/Events-C0SUB6MY.js                                 4.59 kB │ gzip:   1.81 kB
+dist/assets/platform-CBz8bJi0.js                               5.98 kB │ gzip:   1.80 kB
+dist/assets/query-sD_nJkaD.js                                  7.62 kB │ gzip:   2.65 kB
+dist/assets/useQuery-E1G9Su5D.js                               8.63 kB │ gzip:   3.26 kB
+dist/assets/preload-helper-C8O7Ckvh.js                         8.66 kB │ gzip:   3.38 kB
+dist/assets/AccountGateway-BtBiDgZv.js                         9.49 kB │ gzip:   3.83 kB
+dist/assets/MyGames-CW9asXlK.js                               11.60 kB │ gzip:   4.11 kB
+dist/assets/ShowImportModal-B0TpKc1L.js                       11.81 kB │ gzip:   3.65 kB
+dist/assets/QueryClientProvider-C29VtCNa.js                   11.92 kB │ gzip:   4.82 kB
+dist/assets/PackageManager-D28ZsFIl.js                        13.62 kB │ gzip:   4.82 kB
+dist/assets/platform-ui-9Yz_eW9D.js                           16.30 kB │ gzip:   5.36 kB
+dist/assets/ManagerAuthBackground-BVSFTg4G.js                 18.28 kB │ gzip:   5.93 kB
+dist/assets/__root-CKGw0rC2.js                                18.41 kB │ gzip:   6.10 kB
+dist/assets/howler-DvpfHRP7.js                                35.94 kB │ gzip:   9.60 kB
+dist/assets/socket-context-4LxhiTL1.js                        42.74 kB │ gzip:  13.47 kB
+dist/assets/api-BS6IFhuO.js                                   46.39 kB │ gzip:  14.66 kB
+dist/assets/link-RcbJT902.js                                  59.45 kB │ gzip:  21.43 kB
+dist/assets/Studio-CzCvyGZn.js                                73.77 kB │ gzip:  19.55 kB
+dist/assets/dist-DpBB8C-m.js                                  76.33 kB │ gzip:  27.37 kB
+dist/assets/portal-UbglCmEq.js                                79.34 kB │ gzip:  22.43 kB
+dist/assets/MarketingSite-D16z9pz2.js                         91.02 kB │ gzip:  24.20 kB
+dist/assets/ReferenceCanvas-BWF8RnMw.js                       93.65 kB │ gzip:  15.02 kB
+dist/assets/platform-controls-DfvR2BkG.js                    122.93 kB │ gzip:  35.44 kB
+dist/assets/react-CT8Wk0qK.js                                126.50 kB │ gzip:  41.27 kB
+dist/assets/index-D4sBj2w1.js                                218.34 kB │ gzip:  69.69 kB
+dist/assets/ResultModal-D3yDZFvR.js                          232.39 kB │ gzip:  69.15 kB
+dist/assets/route.gen-BDkAaLtc.js                            308.57 kB │ gzip:  84.03 kB
+dist/assets/locales-BJah7Ihm.js                              568.88 kB │ gzip: 178.58 kB
+dist/assets/presentation-_Ld4qFFE.js                       1,024.99 kB │ gzip: 186.73 kB
+
+✓ built in 2.23s

@@ -1,5 +1,10 @@
 # Final pending Asana synchronization — 12 November 2026
 
+> **Release update:** explicit owner approval was received and the verified
+> source `bff12a63ec3f69a58123c0299eea991901680b94` was pushed and deployed.
+> Public read-only smoke passes 4/4; see [release evidence](TDS_RELEASE_20261112.md).
+> Asana itself remains unread/unmodified because no connection is available.
+
 No Asana connection was available. No task description, status or checkbox was
 read or updated in this session. Git and the committed QA evidence are the
 checkpoint authority. Update the existing descriptions; do not create duplicate
@@ -75,3 +80,20 @@ historical transport, not a claim about the corrected final source.
 See [TDS_PROGRESS.md](TDS_PROGRESS.md), [TDS_MOTION.md](TDS_MOTION.md),
 [TDS_NAMING.md](TDS_NAMING.md), [TDS_ACCEPTANCE.md](TDS_ACCEPTANCE.md) and
 [phase-12 final report](../qa-evidence/design-system-20261110/phase-12-final-report.json).
+
+## Final release synchronization addendum
+
+Parent `1220402777392717` and TDS-12 `1220402539686110`: append the owner's
+explicit push/deploy authorization and [TDS_RELEASE_20261112.md](TDS_RELEASE_20261112.md).
+Release source `bff12a63ec3f69a58123c0299eea991901680b94`, image `sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346`,
+URL https://tadazz.com, public entry `/assets/index-D4sBj2w1.js`.
+
+PASS: guarded zero-room activation; 4 isolated candidate + 4 public browser
+cases; 154 artifact hashes; 337 unchanged private payload files; two read-only
+SQLite integrity checks; preserved backend/config/environment/mount/gateway.
+Rollback container `tadazz-pre-unified-site-bff12a6` and server-only private
+backup retained. Push and deployment are now DONE, superseding their earlier
+development-stage NOT RUN/unauthorized state. Main merge, physical devices,
+capacity soak, external CI and authenticated production workflows remain
+unperformed. Keep the parent proposed OPEN for the remaining acceptance items.
+Do not infer that the remote Asana state has been synchronized.

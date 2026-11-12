@@ -1,5 +1,11 @@
 # TDS-12 — final development acceptance and release handoff
 
+> **Production addendum — 12 November 2026:** the owner subsequently authorized
+> push and deployment. Source `bff12a63ec3f69a58123c0299eea991901680b94` is live at
+> https://tadazz.com; four read-only public Chromium/WebKit cases pass.
+> See [release, data preservation and rollback evidence](TDS_RELEASE_20261112.md).
+> The development checkpoint and its earlier release hold below are historical.
+
 PHASE: TDS-12 `VERIFIED — DEVELOPMENT` (external qualifications below remain open)
 Asana parent: `1220402777392717` (OPEN); subtask `1220402539686110`.
 BASE_HEAD: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc` (verified TDS-11).

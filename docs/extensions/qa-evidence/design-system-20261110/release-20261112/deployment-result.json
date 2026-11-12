@@ -1,0 +1,20 @@
+{
+  "revision": "bff12a63ec3f69a58123c0299eea991901680b94",
+  "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+  "previousImage": "sha256:6b08742f1758aee1dc60554bbec5b885148209b3eaa4e5020b6db5ada6d92ba8",
+  "previousContainer": "96e9a2b4c3f42edb6e4618309475b2893aa7e5d814fdb8527e5ed0220c554fb1",
+  "rollbackContainer": "tadazz-pre-unified-site-bff12a6",
+  "activeGamesBefore": 0,
+  "gatewayContainerUnchanged": true,
+  "success": true,
+  "privateBackupSha256": "de5c355dbaa1c6b105cf622e6c818561347a97d1ccb3a2f6de1fd58d6fadb423",
+  "privateBackupPath": "/home/ubuntu/tadazz-unified-site-20261112-bff12a6/production-data-private.tar.gz",
+  "container": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+  "privatePayloadFilesUnchanged": 337,
+  "environmentUnchanged": true,
+  "mountsUnchanged": true,
+  "hostConfigurationUnchanged": true,
+  "preflightHealth": {
+    "status": "ok"
+  }
+}

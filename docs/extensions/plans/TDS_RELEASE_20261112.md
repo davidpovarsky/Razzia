@@ -1,6 +1,6 @@
 # Tadazz design-system production release — 12 November 2026
 
-STATUS: CANDIDATE VERIFIED; production activation follows this checkpoint.
+STATUS: **DEPLOYED — READ-ONLY PUBLIC SMOKE VERIFIED**.
 
 The owner explicitly requested: **"בצע דחיפה ופרוס לשרת tadazz!"**.
 This authorizes pushing the verified feature branch and deploying that candidate
@@ -85,3 +85,38 @@ Asana has no connection; retain a pending synchronization report and OPEN parent
 Evidence: [preflight](../qa-evidence/design-system-20261110/release-20261112/production-before.json),
 [candidate](../qa-evidence/design-system-20261110/release-20261112/candidate-result.json),
 [artifact manifest](../qa-evidence/design-system-20261110/release-20261112/artifact-manifest.json).
+
+## Verified activation result
+
+Production activation succeeded on **12 November 2026 at 2026-11-12T03:38:48.157101207Z UTC**.
+Source `bff12a63ec3f69a58123c0299eea991901680b94`; immutable image `sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346`;
+running container `dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891`. Public entry is
+`/assets/index-D4sBj2w1.js`. Public HTTPS serves the exact approved HTML/artifact.
+
+PASS: the four post-deployment Chromium/WebKit desktop/phone cases, zero page
+exceptions and zero failed static assets, scoped Tadazz title/layout, account
+entry forms, guest Studio redirect, private API/media denial and correct caching.
+The earlier four isolated candidate cases also pass. No production account,
+game, email, checkout or telephone call was created by these probes.
+
+PASS: **154** deployed artifact hashes; exact preserved backend/Nginx/Supervisor
+bytes; full environment/mount/HostConfig equality; gateway ID/image/start equality.
+**337** private non-SQLite payload files remain hash-identical. Both SQLite
+databases pass read-only integrity checks. The full consistent private backup
+remains on the server with mode **0600**; its contents were never copied to Git.
+The original container `tadazz-pre-unified-site-bff12a6` is retained stopped,
+including its actual pre-release hotfixed web layer. Automatic rollback was not
+needed. Only the temporary synthetic candidate was stopped after verification.
+
+This release fulfills the explicit push/deploy request. Main was not merged.
+The earlier capacity, physical-device, external-CI and authenticated production
+workflow qualifications remain as stated; deployment smoke does not relabel them
+PASS. Asana could not be updated; its pending synchronization report now includes
+this successful release. The parent remains proposed OPEN for unresolved final
+acceptance/qualification, with no claim about its unread remote checkbox.
+
+Final evidence: [release summary](../qa-evidence/design-system-20261110/release-20261112/release-summary.json),
+[guarded activation](../qa-evidence/design-system-20261110/release-20261112/deployment-result.json),
+[post-deployment preservation proof](../qa-evidence/design-system-20261110/release-20261112/post-deployment-proof.json),
+[public browser report](../qa-evidence/design-system-20261110/release-20261112/tds-release-bff12a6-production/report.json).
+The read-only browser harness is retained as release-smoke-source.txt.
