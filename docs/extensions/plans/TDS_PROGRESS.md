@@ -200,5 +200,8 @@ See TDS_ACCEPTANCE.md for complete evidence, explicit NOT RUN, architecture/API/
 catalog/ledger/naming/rollback handoff. No new upstream/editor source, dependency
 or data/wire change in this resumed session. Asana unavailable: synchronize the
 existing tasks using ASANA_SYNC_PENDING.md; parent stays OPEN for release.
-Next exact action: commit this verified checkpoint and record its SHA. No push,
-merge, deployment, provider/billing change or customer-data migration.
+TDS-12 implementation commit: `3570689c073014cb78ec0b33a572d414594ce3a2`.
+All 1,203 committed Git blobs and working files match the exact verified QA bytes;
+see phase-12-git-checkpoint.json. Next exact action: synchronize the existing
+Asana descriptions when connected. External qualification/release gates remain
+OPEN. No push, merge, deployment, provider/billing or customer-data operation.

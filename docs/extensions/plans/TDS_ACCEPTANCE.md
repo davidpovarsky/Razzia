@@ -3,6 +3,7 @@
 PHASE: TDS-12 `VERIFIED — DEVELOPMENT` (external qualifications below remain open)
 Asana parent: `1220402777392717` (OPEN); subtask `1220402539686110`.
 BASE_HEAD: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc` (verified TDS-11).
+IMPLEMENTATION_COMMIT: `3570689c073014cb78ec0b33a572d414594ce3a2`.
 Branch/worktree: `codex/tadazz-design-system-20261110`,
 `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
 No push, merge, deployment, provider/billing operation or customer-data migration.
@@ -184,7 +185,7 @@ selected screenshots only. Original controls/tolerances are not overwritten.
 Release remains an owner-controlled later operation. The final candidate SHA is
 recorded in TDS_PROGRESS.md and ASANA_SYNC_PENDING.md after the local commit.
 For a source-only review rollback of this resumed TDS-10–12 range, create a clean
-isolated checkout and review `git revert --no-commit e756f619c015893462ae72f77f810889d2e32e70..CANDIDATE_SHA`.
+isolated checkout and review `git revert --no-commit e756f619c015893462ae72f77f810889d2e32e70..3570689c073014cb78ec0b33a572d414594ce3a2`.
 This is a documented proposal, not an executed command or a production/data
 rollback. Preserve existing customer data and obtain a separate release plan
 before any deployment. No release approval is requested in this session.
@@ -317,3 +318,8 @@ Production acceptance and release remain pending, with the Asana parent OPEN.
 No push, merge, deployment, billing/provider or customer-data operation occurred.
 [Final pending Asana synchronization](ASANA_SYNC_PENDING.md) carries the exact
 implementation SHA after the local checkpoint commit.
+
+Final Git proof: implementation `3570689c073014cb78ec0b33a572d414594ce3a2`; all 1,203
+committed Git blobs and working files are byte-identical to their verified QA
+inputs, with zero mismatches. The subsequent checkpoint changes documentation/
+evidence only. See [Git checkpoint proof](../qa-evidence/design-system-20261110/phase-12-git-checkpoint.json).

@@ -15,7 +15,7 @@ push/merge/deployment and provider/billing/customer-data gates open.
 | ------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | TDS-10 | 1220402539658409 | `537ccb8fd2762e02d0659a11e0ce61686ac2ddc9`; evidence normalization/checkpoint `5283ae47e8c7e17c74e8c0b666e280c986a3c267` | VERIFIED. Attach TDS_MOTION.md: 16/16 gate labels, 22 units, 59 browser cases; editor/stage byte parity for that run; failed Kiro/resume attempts retained.                                                                                |
 | TDS-11 | 1220402430879047 | `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc`                                                                               | VERIFIED. Attach TDS_NAMING.md: 93 contracts / eight files, nine gates; stable semantic aliases and eight-locale values, original JSON/XLSX/bundle/theme IDs preserved.                                                                    |
-| TDS-12 | 1220402539686110 | Implementation SHA recorded by the next Git checkpoint below                                                             | VERIFIED — DEVELOPMENT. Attach TDS_ACCEPTANCE.md and phase-12-final-report.json: 30 effective gates, 1,079 units and 147 browser cases. Preserve the explicit NOT RUN / release checklist; do not represent this as production acceptance. |
+| TDS-12 | 1220402539686110 | `3570689c073014cb78ec0b33a572d414594ce3a2`                                                                               | VERIFIED — DEVELOPMENT. Attach TDS_ACCEPTANCE.md and phase-12-final-report.json: 30 effective gates, 1,079 units and 147 browser cases. Preserve the explicit NOT RUN / release checklist; do not represent this as production acceptance. |
 
 TDS-00–09 retain their historical checkpoints in TDS_PROGRESS.md. Their current
 remote Asana state was not inspected. The final acceptance evidence covers the
@@ -26,7 +26,7 @@ current integrated development source; it does not assert remote task state.
 BASE_HEAD: `3812a1ab54ab5af9a7972ca4de8d9fbe377b21bc`.
 BRANCH: `codex/tadazz-design-system-20261110`.
 WORKTREE: `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110`.
-IMPLEMENTATION_COMMIT: recorded after the local implementation commit.
+IMPLEMENTATION_COMMIT: `3570689c073014cb78ec0b33a572d414594ce3a2`.
 STATUS: development implementation verified; not pushed, merged or deployed.
 
 PASS: frozen install; extension/QA/web/socket TypeScript; plain root lint with
