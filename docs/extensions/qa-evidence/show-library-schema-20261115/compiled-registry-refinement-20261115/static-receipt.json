@@ -1,0 +1,190 @@
+{
+  "mode": "LOCAL_STATIC_DOCUMENTATION_AND_RAW_BYTE_AUDIT_ONLY",
+  "createdUtc": "2026-11-15T10:05:39.685995+00:00",
+  "status": "PROPOSAL_READY_FOR_ROOT_REVIEW_NOT_EXECUTABLE_ACCEPTANCE",
+  "uiSourceCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+  "uiInventoryCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+  "uniqueGitSourceRecordsMatched": 20,
+  "fiveImageBytesAndCatalogHashesMatched": true,
+  "newDecodeOrBrowserEvidence": false,
+  "packageFilesRawReverifiedHere": false,
+  "packageObservationAuthority": "UI inventory60ec000",
+  "lockSha256AndResolutionChecked": true,
+  "packageFileArchiveBinding": "NOT_INDEPENDENTLY_ATTESTED",
+  "knownImagesBytes": 2554738,
+  "candidateJsCssBytes": 1753166,
+  "candidateJsCssRawBytesReverifiedHere": false,
+  "acceptedCoreFileHashesMatched": 26,
+  "historicalCed0ContractUnchanged": true,
+  "pins": 0,
+  "newRuntimeSchemasOrValidators": false,
+  "testsTypecheckBuildBrowserServerInstallDownload": "NOT_RUN",
+  "remainingApproval": [
+    "tagged-source-union-and-proposal-revision",
+    "trusted-rights-review-receipt-boundary",
+    "package-lock-to-file-attestation",
+    "fixture-only-root-url-map"
+  ],
+  "remainingEvidence": [
+    "actual-payload-module-and-request-graph",
+    "emitted-resource-license-bytes",
+    "independent-package-provenance",
+    "rights-for-executable-or-export-use",
+    "verified-byte-loader-and-export-SRI-CSP-binding",
+    "server-decode-and-browser-font-style-lifecycle-tamper-evidence"
+  ],
+  "sources": [
+    {
+      "kind": "git-tracked",
+      "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/INTRINSIC_RESOURCE_AND_BROWSER_PLAN.md",
+      "gitBlob": "7e6810ac7a08112e47cae184afcd95b658107031",
+      "sha256": "358d036809883672508b0d4c5b9e970a16a0e52047158a91fa5fe7ef4685a15c"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "60ec000bd88c5096fdb2009ab0d9f2ff013f15ce",
+      "path": "docs/extensions/qa-evidence/show-ui-20261115/artifact-index-d095.json",
+      "gitBlob": "100d5694be2c93a28789b07c2ac713191f69ee41",
+      "sha256": "07b72f09185b629c0aee8a73e1c0a523b8963c33af4b920bbfeb2c744d274d90"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "LICENSE",
+      "gitBlob": "4f4b8786a10f0a1946fa67fc3d7d8b203a16d4a1",
+      "sha256": "b851eb2bffdb9cf640bb16ce0e7c520143a6b862a803c032d5a8f8e3241534b9"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/package.json",
+      "gitBlob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "sha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/core/show-themes/classic.manifest.json",
+      "gitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/platform-ui/catalog/main.tsx",
+      "gitBlob": "e9862ffa82af86110c38d4e10c774f9de21973d3",
+      "sha256": "6922de530478f353d7177b6fa5bbe3efe44a269674d9f3e83efdfeee300a0970"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "gitBlob": "248220db357c5c2eb2cfdf1559fdd51921fa8a19",
+      "sha256": "22ef6d42f213f7ce46aca57f77686f8498ca70c2fc5c342050bc56c10a697b35"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/show-themes/context.tsx",
+      "gitBlob": "376d9a02f91944624a6e5fb27d48f650dc2f773a",
+      "sha256": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/motion-assets.provenance.json",
+      "gitBlob": "ad284096b480e42951a5dad65369b8129b451ad1",
+      "sha256": "c9ca6c05d84618f58e9e19bbf8f44b77082b7d0a9d2e9a9c97fa6f1d6c0594e1"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "gitBlob": "81eb5fecd834456f16063d6f51e5457d061c0287",
+      "sha256": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "gitBlob": "7abe9293ef476d7d63fee322f65c67e1db74e1fb",
+      "sha256": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "gitBlob": "7ea5c05d3ba6b446cbe1f446cec0ef7605cf85ef",
+      "sha256": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "extensions/src/site/bootstrap.tsx",
+      "gitBlob": "a13fe987f22e237c18b6724316722612d002ecc3",
+      "sha256": "c96034abc5d43554c67855bc1917a42452ca14a5cc56a9bead5a0b9236324a0a"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/package.json",
+      "gitBlob": "415997f404ead6574ce8fbed61d1cf4365eef827",
+      "sha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/public/tadazz-show/motion/backdrop.webp",
+      "gitBlob": "3b9c1176f617b79fce215d2c7ccf6f64bea279eb",
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/public/tadazz-show/story/84acdb923677d591.webp",
+      "gitBlob": "d4931fe81d28df401085c57d25de86e68b245170",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/public/tadazz-show/v4/question-bg.webp",
+      "gitBlob": "39e3e2c6a0e569a1e84c807e1af5e78134c0515f",
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/public/tadazz-show/v4/show-stage.webp",
+      "gitBlob": "15d0884fde20bdec61afe23bb8ad8210e8d3e52f",
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+      "gitBlob": "3100afcd466c060ea8de1c8d1f41665b897d952b",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+    },
+    {
+      "kind": "git-tracked",
+      "gitCommit": "d09529dc5c26bc71972d5e0809bc2dddd2849c60",
+      "path": "pnpm-lock.yaml",
+      "gitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+      "sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0"
+    }
+  ],
+  "files": [
+    {
+      "path": "CONTRACT_REFINEMENT.md",
+      "bytes": 16064,
+      "sha256": "c73edc909511bf7d020358c4d8c11ed5454b70f13787ac97c49d4df246bc59e0"
+    },
+    {
+      "path": "source-grounded-examples.json",
+      "bytes": 26136,
+      "sha256": "2e8d045e823d1eb36fd5a103a76e2d325e62a759a734300b9bbe1c55a9083320"
+    }
+  ]
+}
