@@ -1,0 +1,140 @@
+{
+  "status": "SOURCE_ONLY_DESIGN_NO_IMPLEMENTATION_OR_RUNTIME_PROOF",
+  "review_head": "8df71308d736b9347c05bf78189fb974201bf2b2",
+  "branch": "codex/tadazz-hq-telephony-fresh-20261115",
+  "source_files_changed": false,
+  "protected_hooks_applied": false,
+  "runner_started": false,
+  "credentials_config_or_customer_data_touched": false,
+  "m3a_work_in_progress_used": false,
+  "prior_v2a_tested_source": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "prior_v2a_evidence": "0fd3ac9fec7e5b8cc5745704f278a7736eb5cefe",
+  "new_tests_run": false,
+  "source_evidence": [
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "git_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "working_file_sha256": "d7ce6a8f26559598c4625d6a6d192cf2d85abd3c00f75526d89044e124b1b6b0"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "git_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "working_file_sha256": "b4c1fdd6843d122044ef46a1e192c42bdae79d742b6cbafe342e180537afa088"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "git_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "working_file_sha256": "5430ca64e15c4e01be961a338f75d290fe68cb7a5834048b96abab79045434ec"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "git_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "working_file_sha256": "bc365f05e6a3e0135322fc357a3c6c338e088c94f3ef9f48a736b1e4aa80239f"
+    },
+    {
+      "path": "packages/common/src/types/auth.ts",
+      "git_blob": "d46210c0e2a010bf45e2fb91e1e3e98cca65a03c",
+      "working_file_sha256": "d1b010e42264335a94a7c04cd16066b64291f1e60089d07ab0230a2a669e1673"
+    },
+    {
+      "path": "packages/common/src/validators/auth.ts",
+      "git_blob": "49f57df1c641ef220e9bf5999f068e34f2114e70",
+      "working_file_sha256": "33b7ece505e0c4a675740489942762a23f2c272e394066c0e960923a9dd48411"
+    },
+    {
+      "path": "packages/socket/src/api/accounts-isolation.test.ts",
+      "git_blob": "aecdc27a0844fa89503f879776bb93faa474497c",
+      "working_file_sha256": "c6537b57bacc7fee41270445975bc762d4c3ca4b40ef000af00d1b87dee6af51"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "git_blob": "4c4a806b15b2eace7f93d52c75ab53a09b48d783",
+      "working_file_sha256": "e25874d6f24a85ac7c2176f8ded0895cd706f266db5c3cf286970fb2d7b1ac37"
+    },
+    {
+      "path": "packages/socket/src/api/index.ts",
+      "git_blob": "c65e8e1ff2d4f55dd268382fd5af8bdc1a9d5e92",
+      "working_file_sha256": "898d4df334dde0ad187c994dc21c95178912bc4403f686c5727542ca5188e1d2"
+    },
+    {
+      "path": "packages/socket/src/api/middleware.ts",
+      "git_blob": "be93e9b357f86fcc39ce738fd0d7ca95be463d97",
+      "working_file_sha256": "0fa1d2b278a13d0cecb616a0c13bf597a0fe72f5f57cb2ca866df566ca66a496"
+    },
+    {
+      "path": "packages/socket/src/api/routes/accounts.ts",
+      "git_blob": "cba15394598a242a23b36483709b0bf5f44a71e0",
+      "working_file_sha256": "0070e6ab0ed454ae611c9ab41bb4bdff747e256f252c0874549fdeb1dbee84c6"
+    },
+    {
+      "path": "packages/socket/src/api/routes/auth.ts",
+      "git_blob": "db0d86a238d66c9a4f11397df30a755604b14811",
+      "working_file_sha256": "fc8621a4278f710f47db50c6d6d740bb9863b81301a1d3ef12d3f0173fb0658e"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "git_blob": "13d8a0de05d66853051fe9fbd915dbaa4e3fa80c",
+      "working_file_sha256": "ad8cf13ac31800447a076a2582748eee47cbd756f9b54d0fcc66a9d11b7dae3d"
+    },
+    {
+      "path": "packages/socket/src/app.ts",
+      "git_blob": "96021bb0f82a4e53422d849e00313b6dcb0c15c3",
+      "working_file_sha256": "eb9a859847fd79cf8aa43a5f31b31161a304d116c565c16094334ac96cf2cf83"
+    },
+    {
+      "path": "packages/socket/src/env.ts",
+      "git_blob": "e08cdb04ae1b5502f5a0211b2aa2cf553d97bc86",
+      "working_file_sha256": "c3d4fd0b62615ceacf67fd10430aa0e37a7efa6ee858940af3e80298d0be2a63"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.test.ts",
+      "git_blob": "ae426f8f02ac3352c7feeb235dc513f8c4721970",
+      "working_file_sha256": "7abe413335415e74d836f9074f90e8a8580043ddc2991a858ed34824f879f6cf"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.ts",
+      "git_blob": "04ccf52e64779ceb84bcc5116402895d1c34a1f0",
+      "working_file_sha256": "9f11e6c9eb3f4f8ffb2c75eaceaaa7c59555017e667a1575f8958b4d13f3c4ef"
+    },
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "git_blob": "262f6b5191e230e2a16802adf1f2758bb9117a55",
+      "working_file_sha256": "b2ab65884b7097a11250e453ac0feb940e7976eeb82f696c35fbc8f4b66587a2"
+    },
+    {
+      "path": "packages/socket/src/services/account-directory.ts",
+      "git_blob": "9d2bb55fa1a26daa94cdcc270d2b2af929a11d1c",
+      "working_file_sha256": "c2802148fa0badc25dda8f9a885a7480685577bcae440f0971039e311106643a"
+    },
+    {
+      "path": "packages/socket/src/services/account-mail.ts",
+      "git_blob": "f5336195971122d72a0bca7fb41ad756520ed018",
+      "working_file_sha256": "b97ac054dc13eb03be76615026592731bcdaaaefe1f5bbdbc68f42176e11209b"
+    },
+    {
+      "path": "packages/socket/src/services/account-scope.ts",
+      "git_blob": "b4694b1eaf4e6b613bd183a2ff8e8a565087f3b4",
+      "working_file_sha256": "aef9bf0d3a9357f954c16255f14d0abec5ff8c93cb1f6099dee88785b7d1d33e"
+    },
+    {
+      "path": "packages/socket/src/services/account-session-policy.ts",
+      "git_blob": "72eaa18296dd1506758ac286920fd3f64e0c1a97",
+      "working_file_sha256": "4cdbfa13db820f33744af57f1fc997b0db52578e18130477f5214f96e1a4492a"
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "git_blob": "c3bd5d455f28d3e6bb180ac1646a4cfe9d9b8f84",
+      "working_file_sha256": "ff586db579912ad16e5db544a4908671fa9bad7665eb46bfca4d32034bc59fbe"
+    },
+    {
+      "path": "packages/socket/src/services/config-scope.ts",
+      "git_blob": "c6f7f777d1f8ed9e17f4c5f9913a8e487b60f6dd",
+      "working_file_sha256": "b69bb60a74cfeb70c17d2769b7ef2734ec89757e35addd7494017a4be77f8e5f"
+    },
+    {
+      "path": "packages/socket/src/services/registry.ts",
+      "git_blob": "4f175d6c9e1c83f02684cd10cc0dbf0fbfeff6e9",
+      "working_file_sha256": "b3a05a1458fea796292d9a4073e24ac4e343845b62461b12c028a05a9f4afdae"
+    }
+  ]
+}
