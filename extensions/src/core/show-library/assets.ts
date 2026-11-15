@@ -36,7 +36,7 @@ export function resolveCompositionSections(
   scopeId?: string,
 ): Readonly<Sections> {
   assertBoundedJson(input)
-  role = previewRoleSchema.parse(role)
+  const selectedRole = previewRoleSchema.parse(role)
   const composition = themeCompositionSchema.parse(input)
   const scope = composition.scopes.find(
     (s) =>
@@ -44,11 +44,12 @@ export function resolveCompositionSections(
       s.theme.id === composition.baseTheme.id &&
       s.theme.version === composition.baseTheme.version,
   )
+
   return freeze(
     [
-      composition.roles[role],
+      composition.roles[selectedRole],
       scope?.sections,
-      scope?.roles[role],
+      scope?.roles[selectedRole],
     ].reduce<Sections>(
       (acc, value) => (value ? merge(acc, value) : acc),
       composition.sections,
@@ -62,8 +63,10 @@ export function resetCompositionSection(
 ): ThemeComposition {
   assertBoundedJson(input)
   const composition = themeCompositionSchema.parse(input)
-  delete composition.sections[section]
-  return composition
+  const selectedSection = sectionOverridesSchema.keyof().parse(section)
+  const { [selectedSection]: _removed, ...sections } = composition.sections
+
+  return { ...composition, sections }
 }
 
 export function checkAssetReference(
@@ -79,15 +82,22 @@ export function checkAssetReference(
     })
     .parse(contextInput)
   const asset = assetDescriptorSchema.parse(input)
+
   if (
     asset.owner.scope === "tenant" &&
     (!context.tenantId || context.tenantId !== asset.owner.tenantId)
-  )
+  ) {
     return { allowed: false, reason: "foreign-or-missing-tenant" }
-  if (context.operation === "export" && !asset.exportPermitted)
+  }
+
+  if (context.operation === "export" && !asset.exportPermitted) {
     return { allowed: false, reason: "export-rights" }
-  if (context.operation === "delete" && asset.referenceCount !== 0)
+  }
+
+  if (context.operation === "delete" && asset.referenceCount !== 0) {
     return { allowed: false, reason: "referenced-asset" }
+  }
+
   return {
     allowed: true,
     reason: "metadata-policy-only-requires-trusted-storage-authorization",

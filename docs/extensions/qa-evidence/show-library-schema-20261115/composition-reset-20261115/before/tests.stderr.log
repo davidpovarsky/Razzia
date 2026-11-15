@@ -1,0 +1,19 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects registry without returning a corrupted composition
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects roles without returning a corrupted composition
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects id without returning a corrupted composition
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects unknown without returning a corrupted composition
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects __proto__ without returning a corrupted composition
+ FAIL  src/core/show-library/composition-reset.test.ts > composition section reset validates the runtime command > rejects constructor without returning a corrupted composition
+AssertionError: expected [Function] to throw an error
+ ❯ src/core/show-library/composition-reset.test.ts:30:70
+     28|       const before = JSON.stringify(input)
+     29|
+     30|       expect(() => resetCompositionSection(input, section as never)).t…
+       |                                                                      ^
+     31|       expect(JSON.stringify(input)).toBe(before)
+     32|       expect(themeCompositionSchema.safeParse(input).success).toBe(tru…
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/6]⎯
