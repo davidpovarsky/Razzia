@@ -1,0 +1,13 @@
+{
+  "method": "Actual Prettier.check API with resolved repository options",
+  "checks": [
+    {
+      "name": "postcommit-tests.ts",
+      "pass": true
+    },
+    {
+      "name": "build-tests.mjs",
+      "pass": true
+    }
+  ]
+}
