@@ -1,56 +1,41 @@
-import ts from "typescript"
-import { resolve } from "node:path"
+import { spawnSync } from "node:child_process"
+import { createRequire } from "node:module"
+import { readFileSync } from "node:fs"
+import { resolve, dirname } from "node:path"
 
 const root = process.cwd()
-const config = ts.readConfigFile(
-  resolve(root, "tsconfig.json"),
-  ts.sys.readFile,
-)
-if (config.error)
-  throw new Error(
-    ts.flattenDiagnosticMessageText(config.error.messageText, "\n"),
-  )
-const parsed = ts.parseJsonConfigFileContent(config.config, ts.sys, root)
-const file = resolve(root, "packages/socket/src/api/extensions/game-routes.ts")
-const program = ts.createProgram([file], {
-  ...parsed.options,
-  noEmit: true,
-  target: ts.ScriptTarget.ESNext,
-  module: ts.ModuleKind.ESNext,
-  moduleResolution: ts.ModuleResolutionKind.Bundler,
-  jsx: ts.JsxEmit.ReactJSX,
-  skipLibCheck: true,
-  allowImportingTsExtensions: true,
-  types: ["node"],
-  typeRoots: [
-    resolve(root, "packages/socket/node_modules/@types"),
-    resolve(root, "extensions/node_modules/@types"),
+const require = createRequire(import.meta.url)
+const packagePath = require.resolve("typescript/package.json")
+const version = JSON.parse(readFileSync(packagePath, "utf8")).version
+// TypeScript 7's root export is version metadata, not the TS6 compiler API.
+// Use the installed CLI against a single-route project and its imports.
+const result = spawnSync(
+  process.execPath,
+  [
+    resolve(dirname(packagePath), "bin/tsc"),
+    "--noEmit",
+    "--pretty",
+    "false",
+    "-p",
+    resolve(
+      root,
+      "extensions/src/telephony/pilot-runtime/phone-route-typecheck.tsconfig.json",
+    ),
   ],
-})
-const source = program.getSourceFile(file)
-if (!source) throw new Error("Scoped route not loaded")
-const diagnostics = [
-  ...parsed.errors,
-  ...program.getOptionsDiagnostics(),
-  ...program.getGlobalDiagnostics(),
-  ...program.getSyntacticDiagnostics(source),
-  ...program.getSemanticDiagnostics(source),
-]
-for (const d of diagnostics)
-  console.error(
-    ts.formatDiagnostic(d, {
-      getCanonicalFileName: (name) => name,
-      getCurrentDirectory: () => root,
-      getNewLine: () => "\n",
-    }),
-  )
+  {
+    cwd: root,
+    stdio: "inherit",
+    env: { ...process.env, GOMEMLIMIT: "768MiB" },
+  },
+)
+if (result.error) throw result.error
 console.log(
   JSON.stringify({
-    scope: "game-routes.ts syntax/semantics plus global/options",
-    typescript: ts.version,
-    source_files_loaded: program.getSourceFiles().length,
-    diagnostics: diagnostics.length,
+    scope: "single route project and transitive imports",
+    typescript: version,
+    exit_code: result.status,
+    signal: result.signal,
     full_project_check: false,
   }),
 )
-if (diagnostics.length) process.exitCode = 1
+process.exitCode = result.status ?? 1
