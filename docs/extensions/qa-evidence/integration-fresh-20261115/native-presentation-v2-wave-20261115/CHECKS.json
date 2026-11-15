@@ -1,0 +1,105 @@
+{
+  "captured_utc": "2026-11-15T16:38:31.750924+00:00",
+  "testedSourceHead": "8efd26a52de41928a7ac1fadafb3315770858127",
+  "commands": [
+    {
+      "name": "versions",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "--input-type=module",
+        "-e",
+        "import fs from 'node:fs';console.log(process.version);console.log(JSON.parse(fs.readFileSync('extensions/node_modules/typescript/package.json')).version)"
+      ],
+      "exit": 0,
+      "seconds": 0.1,
+      "stdoutBytes": 15,
+      "stderrBytes": 0,
+      "stdoutSha256": "f99dc8795ec8784230a1b2b70269001b8b235b1f3256c24e3544dc3ed8fac29d",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "focused-types",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\typescript\\bin\\tsc",
+        "--project",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\src\\core\\show-library\\tsconfig.focused.json"
+      ],
+      "exit": 0,
+      "seconds": 1.28,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "focused-tests",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules\\vitest\\vitest.mjs",
+        "run",
+        "--root",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions",
+        "--config",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\vitest.config.ts",
+        "--configLoader",
+        "runner",
+        "src/core/show-library/composition-repository.test.ts",
+        "src/core/show-library/composition-validation.test.ts",
+        "src/core/show-library/native-preview-frame.test.ts",
+        "src/core/show-library/native-media-library.test.ts",
+        "src/core/show-library/native-motion-library.test.ts",
+        "src/core/show-library/composition-preview-v2.test.ts",
+        "src/core/show-library/consumer-contract.test.ts",
+        "src/core/show-library/preview-port.test.ts",
+        "--maxWorkers",
+        "1",
+        "--no-file-parallelism",
+        "--reporter=json",
+        "--outputFile=C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\native-presentation-v2-wave-20261115\\tests-integrated.json"
+      ],
+      "exit": 0,
+      "seconds": 7.522,
+      "stdoutBytes": 205,
+      "stderrBytes": 0,
+      "stdoutSha256": "8aa38aa6d833639ea08ae730a2d39bd66bb005df260bbe2f5eeed5a5c5c20c9a",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "name": "source-whitespace",
+      "command": [
+        "git",
+        "diff",
+        "b9bf83a",
+        "HEAD",
+        "--check",
+        "--",
+        "extensions/src/core/show-library"
+      ],
+      "exit": 0,
+      "seconds": 0.068,
+      "stdoutBytes": 0,
+      "stderrBytes": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "testCounts": {
+    "passed": 76,
+    "failed": 0,
+    "pending": 0,
+    "total": 76,
+    "files": 8
+  },
+  "expected": {
+    "passed": 76,
+    "failed": 0,
+    "pending": 0,
+    "files": 8
+  },
+  "source23Unchanged": true,
+  "allActualChecksPass": true,
+  "fullParentTypes": "NOT_RUN_PENDING_CORRECTED_F_COHERENT_HTTP_SOURCE",
+  "remoteJob": "NONE",
+  "dependencyInstall": "NONE_REUSED_EXISTING_GENUINE_LOCAL_GRAPH"
+}
