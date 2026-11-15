@@ -11,6 +11,7 @@ import { freeze } from "./primitives"
 /** Catalog metadata is not an executable preview pin or a media authorization. */
 const families = [classic, razzia].map((input) => {
   const definition = showThemeDefinitionSchema.parse(input)
+
   return {
     ref: { id: definition.id, version: definition.version },
     definitionSha256: sha256(canonicalJson(definition)),
@@ -44,11 +45,12 @@ const catalog = freeze({
 })
 
 export type NativeShowLibrary = typeof catalog
+
 export type NativeShowLibraryFamily = NativeShowLibrary["families"][number]
 
-/** Exact bundled Classic/Razzia manifests, preserving all stored IDs and defaults.
- * No caller definitions, code, URLs, clocks or audio players are registered here.
- */
+// Exact bundled Classic/Razzia manifests, preserving all stored IDs and defaults.
+// No caller definitions, code, URLs, clocks or audio players are registered here.
+//
 export function getNativeShowLibrary(): NativeShowLibrary {
   return catalog
 }

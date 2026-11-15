@@ -4,6 +4,7 @@ import { inspectCompositionReferences } from "./composition-validation"
 function fixture() {
   const ref = { id: "native-candidate", version: "1.0.0" }
   const templateRef = { id: "question-template", version: "1.0.0" }
+
   return {
     document: {
       format: "tadazz-show-composition",
@@ -216,13 +217,14 @@ describe("composition references never grant executable authority", () => {
       inspectCompositionReferences(f.document, f.registry, f.request),
     ).toThrow("system-content-lane")
     const other = fixture()
-    for (const answerCount of [0, 1, 65, null])
+    for (const answerCount of [0, 1, 65, null]) {
       expect(() =>
         inspectCompositionReferences(other.document, other.registry, {
           ...other.request,
           answerCount,
         }),
       ).toThrow()
+    }
     expect(() =>
       inspectCompositionReferences(other.document, other.registry, {
         ...other.request,

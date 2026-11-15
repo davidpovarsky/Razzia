@@ -6,7 +6,8 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path('C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115')
-OUT = Path(__file__).resolve().parent
+OUT = Path(__file__).resolve().parent / 'copy-isolation'
+OUT.mkdir(exist_ok=False)
 NODE = 'C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe'
 SOURCES = ['extensions/src/core/show-library/' + name for name in [
     'native-motion-library.ts', 'native-motion-library.test.ts', 'index.ts']]

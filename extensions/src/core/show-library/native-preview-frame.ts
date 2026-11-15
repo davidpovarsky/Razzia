@@ -14,10 +14,11 @@ import {
   type ValidatedPreviewStageMetadata,
 } from "./stage-metadata"
 
-/** Current-card-only adapter to E's actual native-stage ABI. It does not mount a
- * renderer, resolve assets, create outcomes, allocate a clock or enable readiness.
- * Revision is supplied by the trusted authoring host; seconds come from the card.
- */
+// Current-card-only adapter to E's actual native-stage ABI. It does not mount a
+// renderer, resolve assets, create outcomes, allocate a clock or enable readiness.
+// Revision is supplied by the trusted authoring host; seconds come from the card.
+//
+// oxlint-disable-next-line max-params -- Preserve the already-adopted five-argument V1 host ABI; V2 is separate.
 export function produceNativePreviewFrameV1(
   snapshot: unknown,
   context: unknown,
@@ -26,7 +27,8 @@ export function produceNativePreviewFrameV1(
   revision: number,
 ): Readonly<NativePreviewFrameV1> {
   const projection = projectShowBindings(snapshot, context, binding)
-  const question = projection.question
+  const { question } = projection
+
   if (
     !question ||
     projection.role === "player" ||
@@ -34,8 +36,10 @@ export function produceNativePreviewFrameV1(
     !["question", "answerCards", "voting", "voteLocked", "results"].includes(
       projection.phase,
     )
-  )
+  ) {
     throw new Error("show-preview:unsupported-projection")
+  }
+
   assertBoundPreviewStageMetadata(
     binding.draft,
     binding.plan,
@@ -46,7 +50,11 @@ export function produceNativePreviewFrameV1(
   const clock =
     projection.clock ??
     (projection.phase === "results" ? binding.clock : undefined)
-  if (!clock) throw new Error("show-preview:missing-clock")
+
+  if (!clock) {
+    throw new Error("show-preview:missing-clock")
+  }
+
   const card = binding.draft.show.cards.find(
     (entry) =>
       (entry.kind === "quiz" || entry.kind === "survey") &&
@@ -56,8 +64,11 @@ export function produceNativePreviewFrameV1(
         entry.key,
       ) === question.id,
   )
-  if (!card || (card.kind !== "quiz" && card.kind !== "survey"))
+
+  if (!card || (card.kind !== "quiz" && card.kind !== "survey")) {
     throw new Error("show-preview:missing-authored-card")
+  }
+
   return freeze(
     nativePreviewFrameV1Schema.parse({
       phase: projection.phase,

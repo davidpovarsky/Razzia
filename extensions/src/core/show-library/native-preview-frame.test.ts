@@ -33,8 +33,12 @@ function fixture(
   input.context.role = options.role ?? "spectator"
   const draft = normalizePreviewDraft(input),
     plan = resolvePreviewPlan(draft)
-  const card = draft.show.cards[2]
-  if (card.kind !== "quiz" && card.kind !== "survey") throw new Error("fixture")
+  const [, , card] = draft.show.cards
+
+  if (card.kind !== "quiz" && card.kind !== "survey") {
+    throw new Error("fixture")
+  }
+
   const questionId = getPreviewIdentityId(
     draft.input.identityMap,
     "questions",
@@ -78,6 +82,7 @@ function fixture(
   }
   const binding = { draft, plan, currentQuestionId: questionId, phase, clock }
   const metadata = derivePreviewStageMetadata(draft, plan, questionId)
+
   return { snapshot, binding, metadata, context: input.context }
 }
 
@@ -116,9 +121,9 @@ describe("exact current native-stage frame host seam", () => {
     },
   )
   it("preserves native2/5 single/multi quiz/survey and read-only roles", () => {
-    for (const count of [2, 5])
-      for (const type of ["single", "multi"] as const)
-        for (const survey of [false, true])
+    for (const count of [2, 5]) {
+      for (const type of ["single", "multi"] as const) {
+        for (const survey of [false, true]) {
           for (const role of ["manager", "spectator"] as const) {
             const f = fixture("answerCards", { count, type, survey, role })
             const frame = produceNativePreviewFrameV1(
@@ -133,6 +138,9 @@ describe("exact current native-stage frame host seam", () => {
             expect(frame.question.mode).toBe(survey ? "survey" : "quiz")
             expect(frame.role).toBe(role)
           }
+        }
+      }
+    }
   })
   it("derives unlimited from actual authored-1 and rejects unsupported0/oversized duration", () => {
     const f = fixture("voting", { seconds: -1 })
@@ -225,10 +233,11 @@ describe("exact current native-stage frame host seam", () => {
       { roomId: "real-room" },
       { audio: {} },
       { results: [] },
-    ])
+    ]) {
       expect(
         nativePreviewFrameV1Schema.safeParse({ ...frame, ...patch }).success,
       ).toBe(false)
+    }
     expect(
       nativePreviewFrameV1Schema.safeParse({
         ...frame,
@@ -270,7 +279,8 @@ describe("exact current native-stage frame host seam", () => {
       }).success,
     ).toBe(false)
     const duplicate = [...frame.results!]
-    duplicate[1] = duplicate[0]
+    const [firstResult] = duplicate
+    duplicate[1] = firstResult
     expect(
       nativePreviewFrameV1Schema.safeParse({ ...frame, results: duplicate })
         .success,
@@ -304,11 +314,12 @@ describe("exact current native-stage frame host seam", () => {
       { clock: { ...frame.clock, elapsedMs: Infinity } },
       { question: { ...frame.question, ordinal: 6 } },
       { question: { ...frame.question, id: "native-uuid" } },
-    ])
+    ]) {
       expect(
         nativePreviewFrameV1Schema.safeParse({ ...frame, ...patch }).success,
       ).toBe(false)
-    for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"])
+    }
+    for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"]) {
       expect(
         nativePreviewRendererInputV1Schema.safeParse({
           frame,
@@ -316,6 +327,7 @@ describe("exact current native-stage frame host seam", () => {
           reducedMotion: true,
         }).success,
       ).toBe(true)
+    }
     expect(
       nativePreviewRendererInputV1Schema.safeParse({
         frame,
@@ -334,8 +346,12 @@ describe("exact current native-stage frame host seam", () => {
     expect(parsed.module.dynamicImports).toEqual([])
     const imports: unknown[] = []
     const visit = (value: unknown): void => {
-      if (!value || typeof value !== "object") return
+      if (!value || typeof value !== "object") {
+        return
+      }
+
       const node = value as Record<string, unknown>
+
       if (
         [
           "ImportDeclaration",
@@ -344,17 +360,28 @@ describe("exact current native-stage frame host seam", () => {
         ].includes(String(node.type))
       ) {
         const dependency = node.source as { value?: unknown } | null
-        if (dependency) imports.push(dependency.value)
+
+        if (dependency) {
+          imports.push(dependency.value)
+        }
       }
+
       expect(node.type).not.toBe("TSImportEqualsDeclaration")
+
       if (node.type === "CallExpression") {
         const callee = node.callee as { type?: string; name?: string }
         expect(callee.type === "Identifier" && callee.name === "require").toBe(
           false,
         )
       }
-      for (const child of Object.values(node))
-        Array.isArray(child) ? child.forEach(visit) : visit(child)
+
+      for (const child of Object.values(node)) {
+        if (Array.isArray(child)) {
+          child.forEach(visit)
+        } else {
+          visit(child)
+        }
+      }
     }
     visit(parsed.program)
     expect(imports).toEqual(["zod", "./stage-metadata-schema"])

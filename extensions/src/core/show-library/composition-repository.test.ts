@@ -40,43 +40,59 @@ function document() {
   }
 }
 
+function storageKey(recordKey: CompositionDraftKey) {
+  return JSON.stringify([recordKey.tenantId, recordKey.draftId])
+}
+
 /** Synthetic storage implements the required atomic operations; no durability claim. */
 class MemoryStorage implements CompositionStorage {
   drafts = new Map<string, CompositionDraftRecord>()
   versions = new Map<string, CompositionPublication>()
   beforePublish: (() => void) | undefined
-  id(key: CompositionDraftKey) {
-    return JSON.stringify([key.tenantId, key.draftId])
+  readDraft(recordKey: CompositionDraftKey) {
+    return Promise.resolve(this.drafts.get(storageKey(recordKey)) ?? null)
   }
-  async readDraft(key: CompositionDraftKey) {
-    return this.drafts.get(this.id(key)) ?? null
-  }
-  async compareAndSwapDraft(
-    key: CompositionDraftKey,
+  compareAndSwapDraft(
+    recordKey: CompositionDraftKey,
     expected: number | null,
     next: CompositionDraftRecord,
   ) {
-    const id = this.id(key),
+    const id = storageKey(recordKey),
       current = this.drafts.get(id)
-    if ((current?.revision ?? null) !== expected) return false
+
+    if ((current?.revision ?? null) !== expected) {
+      return Promise.resolve(false)
+    }
+
     this.drafts.set(id, structuredClone(next))
-    return true
+
+    return Promise.resolve(true)
   }
-  async readVersion(key: CompositionDraftKey, version: string) {
-    return this.versions.get(`${this.id(key)}:${version}`) ?? null
+  readVersion(recordKey: CompositionDraftKey, version: string) {
+    return Promise.resolve(
+      this.versions.get(`${storageKey(recordKey)}:${version}`) ?? null,
+    )
   }
-  async publishIfRevision(
-    key: CompositionDraftKey,
+  publishIfRevision(
+    recordKey: CompositionDraftKey,
     expected: number,
     next: CompositionPublication,
   ) {
     this.beforePublish?.()
-    if (this.drafts.get(this.id(key))?.revision !== expected)
-      return "revision-conflict" as const
-    const id = `${this.id(key)}:${next.version}`
-    if (this.versions.has(id)) return "version-exists" as const
+
+    if (this.drafts.get(storageKey(recordKey))?.revision !== expected) {
+      return Promise.resolve("revision-conflict" as const)
+    }
+
+    const id = `${storageKey(recordKey)}:${next.version}`
+
+    if (this.versions.has(id)) {
+      return Promise.resolve("version-exists" as const)
+    }
+
     this.versions.set(id, structuredClone(next))
-    return "stored" as const
+
+    return Promise.resolve("stored" as const)
   }
 }
 
@@ -95,10 +111,11 @@ describe("real bundled native library discovery", () => {
           .update(canonicalJson(family.definition))
           .digest("hex"),
       )
-      for (const slot of family.visualSlots)
+      for (const slot of family.visualSlots) {
         expect(slot.variants).toEqual(
           family.definition.slots[slot.slot].variants,
         )
+      }
       expect(family.audioOwner).toBe("existing-audio-cue-player")
       expect(family.previewAcceptance).toBe(
         "unavailable-until-reviewed-renderer-pin",
@@ -112,7 +129,7 @@ describe("real bundled native library discovery", () => {
     expect(getCompiledPreviewManifest().pins).toEqual([])
   })
   it("uses actual native override fallback and preserves unknown saved IDs", () => {
-    const family = getNativeShowLibrary().families[0]
+    const [family] = getNativeShowLibrary().families
     const selection = {
       ...family.ref,
       overrides: { slots: { question: { variantId: "future.unknown" } } },
@@ -224,8 +241,8 @@ describe("separate composition document and atomic storage contract", () => {
     const foreign = { ...key, tenantId: "tenant-b" }
     expect(await repository.read(foreign)).toBeNull()
     storage.drafts.set(
-      storage.id(foreign),
-      storage.drafts.get(storage.id(key))!,
+      storageKey(foreign),
+      storage.drafts.get(storageKey(key))!,
     )
     await expect(repository.read(foreign)).rejects.toThrow(
       "foreign-draft-record",
@@ -266,7 +283,7 @@ describe("separate composition document and atomic storage contract", () => {
       repository = new CompositionRepository(storage)
     await repository.save(key, null, document())
     storage.beforePublish = () => {
-      const id = storage.id(key)
+      const id = storageKey(key)
       storage.drafts.set(id, { ...storage.drafts.get(id)!, revision: 2 })
     }
     await expect(repository.publish(key, 1, "1.0.0")).rejects.toThrow(
@@ -279,14 +296,14 @@ describe("separate composition document and atomic storage contract", () => {
       repository = new CompositionRepository(storage)
     await repository.save(key, null, document())
     const published = await repository.publish(key, 1, "1.0.0")
-    storage.versions.set(`${storage.id(key)}:1.0.0`, {
+    storage.versions.set(`${storageKey(key)}:1.0.0`, {
       ...published,
       version: "2.0.0",
     })
     await expect(repository.version(key, "1.0.0")).rejects.toThrow(
       "invalid-publication",
     )
-    const id = storage.id(key)
+    const id = storageKey(key)
     storage.drafts.set(id, {
       ...storage.drafts.get(id)!,
       documentSha256: "0".repeat(64),

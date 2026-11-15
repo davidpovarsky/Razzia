@@ -37,11 +37,11 @@ const library = freeze({
     source:
       "extensions/src/core/cinematic-overlays.ts#cinematicOverlayAnimationSchema",
     maxPerScene: MAX_CINEMATIC_OVERLAY_ANIMATIONS,
-    anchors: OVERLAY_ANCHORS,
-    fits: OVERLAY_FITS,
-    layers: OVERLAY_LAYERS,
-    timeBases: OVERLAY_TIME_BASES,
-    finishModes: OVERLAY_FINISH_MODES,
+    anchors: [...OVERLAY_ANCHORS],
+    fits: [...OVERLAY_FITS],
+    layers: [...OVERLAY_LAYERS],
+    timeBases: [...OVERLAY_TIME_BASES],
+    finishModes: [...OVERLAY_FINISH_MODES],
   },
   nativeChoreography: getNativeShowLibrary().families.map((family) => ({
     theme: family.ref,
@@ -72,13 +72,16 @@ const settingSchema = z.discriminatedUnion("kind", [
 ])
 
 export type NativeMotionSetting = z.infer<typeof settingSchema>
+
 /** Uses existing strict schemas; no new playback, timers, JS, CSS or Lottie grant. */
 export function parseNativeMotionSetting(
   input: unknown,
 ): Readonly<NativeMotionSetting> {
   assertBoundedJson(input)
+
   return freeze(settingSchema.parse(input))
 }
+
 /** Configuration discovery is distinct from proven generic replay/seek capability. */
 export function getNativeMotionLibrary(): typeof library {
   return library

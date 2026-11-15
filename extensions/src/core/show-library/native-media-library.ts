@@ -19,38 +19,57 @@ interface NativeAssetEntry {
   declarations: Declaration[]
   executionOrExportAuthorized: false
 }
-const families = getNativeShowLibrary().families
+const { families } = getNativeShowLibrary()
 const assets = new Map<string, NativeAssetEntry>()
 for (const family of families) {
-  const definition = family.definition
+  const { definition } = family
   for (const [index, asset] of definition.assets.entries()) {
     const references = [`/assets/${index}`]
-    if (definition.posterAssetId === asset.id) references.push("/posterAssetId")
-    for (const [name, id] of Object.entries(definition.adapterAssets))
-      if (id === asset.id) references.push(`/adapterAssets/${name}`)
-    for (const [slot, specification] of Object.entries(definition.slots))
-      for (const [variantIndex, variant] of specification.variants.entries())
+
+    if (definition.posterAssetId === asset.id) {
+      references.push("/posterAssetId")
+    }
+
+    for (const [name, id] of Object.entries(definition.adapterAssets)) {
+      if (id === asset.id) {
+        references.push(`/adapterAssets/${name}`)
+      }
+    }
+    for (const [slot, specification] of Object.entries(definition.slots)) {
+      for (const [variantIndex, variant] of specification.variants.entries()) {
         for (const field of [
           "backgroundAssetId",
           "logoAssetId",
           "mediaAssetId",
           "overlayAssetId",
-        ] as const)
-          if (variant[field] === asset.id)
+        ] as const) {
+          if (variant[field] === asset.id) {
             references.push(`/slots/${slot}/variants/${variantIndex}/${field}`)
-    for (const [event, specification] of Object.entries(definition.audioEvents))
-      for (const [variantIndex, variant] of specification.variants.entries())
-        if (variant.assetId === asset.id)
+          }
+        }
+      }
+    }
+    for (const [event, specification] of Object.entries(
+      definition.audioEvents,
+    )) {
+      for (const [variantIndex, variant] of specification.variants.entries()) {
+        if (variant.assetId === asset.id) {
           references.push(
             `/audioEvents/${event}/variants/${variantIndex}/assetId`,
           )
+        }
+      }
+    }
     const key = `${asset.id}/${asset.sha256}`
     const previous = assets.get(key)
+
     if (
       previous &&
       (previous.bytes !== asset.bytes || previous.kind !== asset.kind)
-    )
+    ) {
       throw new Error("show-library:native-asset-identity-conflict")
+    }
+
     const entry: NativeAssetEntry = previous ?? {
       ref: { assetId: asset.id, sha256: asset.sha256 },
       kind: asset.kind,
@@ -67,18 +86,25 @@ for (const family of families) {
     assets.set(key, entry)
   }
 }
-const compare = (a: string, b: string) => (a < b ? -1 : a > b ? 1 : 0)
+const compare = (a: string, b: string) => {
+  if (a === b) {
+    return 0
+  }
+
+  return a < b ? -1 : 1
+}
 const entries = [...assets.values()].sort(
   (a, b) =>
     compare(a.ref.assetId, b.ref.assetId) ||
     compare(a.ref.sha256, b.ref.sha256),
 )
 const byContent = new Map<string, string[]>()
-for (const entry of entries)
+for (const entry of entries) {
   byContent.set(entry.ref.sha256, [
     ...(byContent.get(entry.ref.sha256) ?? []),
     entry.ref.assetId,
   ])
+}
 
 const assetLibrary = freeze({
   format: "tadazz-native-asset-library" as const,
@@ -121,14 +147,17 @@ const audioLibrary = freeze({
 export function getNativeAssetLibrary(): typeof assetLibrary {
   return assetLibrary
 }
+
 /** Asset ID alone is ambiguous across bundled families; require the exact hash. */
 export function findNativeAssetLibraryEntry(
   input: unknown,
 ): NativeAssetEntry | undefined {
   assertBoundedJson(input)
   const ref = assetReferenceSchema.parse(input)
+
   return assets.get(`${ref.assetId}/${ref.sha256}`)
 }
+
 /** Reuses the actual existing cue/soundtrack/event mappings; never starts playback. */
 export function getNativeAudioLibrary(): typeof audioLibrary {
   return audioLibrary

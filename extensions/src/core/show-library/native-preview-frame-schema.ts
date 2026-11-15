@@ -8,7 +8,7 @@ const choice = z.strictObject({ id: z.string().min(1).max(256), label: text })
 const result = z.strictObject({
   answerId: z.string().min(1).max(256),
   count: safeInteger,
-  percent: z.number().finite().min(0).max(100),
+  percent: z.number().min(0).max(100),
   correct: z.boolean().optional(),
 })
 
@@ -36,15 +36,16 @@ export const nativePreviewFrameV1Schema = z
     choices: z.array(choice).max(5),
     results: z.array(result).max(5).optional(),
     clock: z.strictObject({
-      elapsedMs: z.number().finite().min(0),
-      deadlineMs: z.number().finite().nullable(),
+      elapsedMs: z.number().min(0),
+      deadlineMs: z.number().nullable(),
       paused: z.boolean(),
     }),
-    seconds: z.number().finite().positive().max(86400).nullable(),
+    seconds: z.number().positive().max(86400).nullable(),
   })
   .superRefine((frame, ctx) => {
     const fail = (message: string) =>
       ctx.addIssue({ code: "custom", message: `show-preview:${message}` })
+
     if (
       !previewStageMetadataSchema.safeParse({
         portVersion: 3,
@@ -53,25 +54,39 @@ export const nativePreviewFrameV1Schema = z
         ordinal: frame.question.ordinal,
         totalQuestions: frame.question.totalQuestions,
       }).success
-    )
+    ) {
       fail("invalid-stage-metadata")
+    }
+
     if (
       frame.phase === "question"
         ? frame.choices.length !== 0
         : frame.choices.length < 2
-    )
+    ) {
       fail("unsupported-cardinality")
+    }
+
     const ids = new Set(frame.choices.map((entry) => entry.id))
-    if (ids.size !== frame.choices.length) fail("duplicate-choice")
-    if (frame.phase !== "results" && frame.results !== undefined)
+
+    if (ids.size !== frame.choices.length) {
+      fail("duplicate-choice")
+    }
+
+    if (frame.phase !== "results" && frame.results !== undefined) {
       fail("early-results")
+    }
+
     if (frame.phase === "results") {
-      if (!frame.results || frame.results.length !== ids.size)
+      if (!frame.results || frame.results.length !== ids.size) {
         fail("missing-results")
+      }
+
       const seen = new Set<string>()
       for (const entry of frame.results ?? []) {
-        if (!ids.has(entry.answerId) || seen.has(entry.answerId))
+        if (!ids.has(entry.answerId) || seen.has(entry.answerId)) {
           fail("invalid-results")
+        }
+
         seen.add(entry.answerId)
       }
     }
@@ -82,10 +97,13 @@ export const nativePreviewRendererInputV1Schema = z.strictObject({
   locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
   reducedMotion: z.boolean(),
 })
+
 export type NativePreviewFrameV1 = z.infer<typeof nativePreviewFrameV1Schema>
+
 export type NativePreviewRendererInputV1 = z.infer<
   typeof nativePreviewRendererInputV1Schema
 >
+
 export type NativePreviewCandidateMountV1 = (
   element: HTMLElement,
   onUnavailable: () => void,

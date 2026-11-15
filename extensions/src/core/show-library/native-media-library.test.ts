@@ -47,8 +47,9 @@ describe("independent native asset/audio metadata without new playback authority
       expect(entries).toHaveLength(2)
       expect(new Set(entries.map((entry) => entry.ref.sha256)).size).toBe(2)
       expect(() => findNativeAssetLibraryEntry({ assetId: id })).toThrow()
-      for (const entry of entries)
+      for (const entry of entries) {
         expect(findNativeAssetLibraryEntry(entry.ref)).toBe(entry)
+      }
     }
     expect(
       findNativeAssetLibraryEntry({
@@ -58,7 +59,7 @@ describe("independent native asset/audio metadata without new playback authority
     ).toBeUndefined()
   })
   it("records exact source JSON pointers for every declared native media reference", () => {
-    for (const entry of getNativeAssetLibrary().entries)
+    for (const entry of getNativeAssetLibrary().entries) {
       for (const declaration of entry.declarations) {
         const family = getNativeShowLibrary().families.find(
           (value) =>
@@ -74,14 +75,18 @@ describe("independent native asset/audio metadata without new playback authority
               (value, key) => (value as Record<string, unknown>)[key],
               family.definition,
             )
-          if (pointer.startsWith("/assets/"))
+
+          if (pointer.startsWith("/assets/")) {
             expect(resolved).toEqual(declaration.asset)
-          else expect(resolved).toBe(entry.ref.assetId)
+          } else {
+            expect(resolved).toBe(entry.ref.assetId)
+          }
         }
       }
+    }
   })
   it("retains original per-family asset URL/provenance/rights metadata without treating it as a grant", () => {
-    for (const family of getNativeShowLibrary().families)
+    for (const family of getNativeShowLibrary().families) {
       for (const asset of family.definition.assets) {
         const entry = getNativeAssetLibrary().entries.find(
           (value) =>
@@ -93,6 +98,7 @@ describe("independent native asset/audio metadata without new playback authority
         expect(declaration.asset).toEqual(asset)
         expect(entry.executionOrExportAuthorized).toBe(false)
       }
+    }
   })
   it("groups the exact16events with native defaults, roles, volume/loop/fades and choreography", () => {
     const library = getNativeAudioLibrary()
@@ -111,10 +117,11 @@ describe("independent native asset/audio metadata without new playback authority
         expect(item.defaultVariantId).toBe(
           family.definition.audioEvents[event.event].defaultVariantId,
         )
-        for (const milestone of item.choreography)
+        for (const milestone of item.choreography) {
           expect(
             family.definition.choreographyCues[milestone.milestone],
           ).toEqual({ event: event.event, variantId: milestone.variantId })
+        }
       }
       expect(event.executionOrExportAuthorized).toBe(false)
     }

@@ -30,9 +30,9 @@ export const compositionInspectionRequestSchema = z
     "show-library:request-answer-kind",
   )
 
-/** Authoring inspection only. Authored-card validation remains the producer's job;
- * an inspected capability/record never supplies a renderer pin or media grant.
- */
+// Authoring inspection only. Authored-card validation remains the producer's job;
+// an inspected capability/record never supplies a renderer pin or media grant.
+//
 export function inspectCompositionReferences(
   documentInput: unknown,
   registryInput: unknown,
@@ -43,11 +43,14 @@ export function inspectCompositionReferences(
   assertBoundedJson(requestInput)
   const request = compositionInspectionRequestSchema.parse(requestInput)
   const issues: string[] = []
+
   if (
     registry.id !== document.composition.registry.id ||
     registry.version !== document.composition.registry.version
-  )
+  ) {
     issues.push("registry-ref-mismatch")
+  }
+
   const sections = resolveCompositionSections(
     document.composition,
     request.role,
@@ -59,46 +62,78 @@ export function inspectCompositionReferences(
     registry.templates.find(
       (entry) => entry.id === selected.id && entry.version === selected.version,
     )
-  if (selected && !template) issues.push("unknown-template")
+
+  if (selected && !template) {
+    issues.push("unknown-template")
+  }
+
   if (template) {
-    if (template.phase !== request.phase) issues.push("template-phase-mismatch")
-    if (!template.roles.includes(request.role))
+    if (template.phase !== request.phase) {
+      issues.push("template-phase-mismatch")
+    }
+
+    if (!template.roles.includes(request.role)) {
       issues.push("template-role-mismatch")
-    if (template.questionType && template.questionType !== request.questionType)
+    }
+
+    if (
+      template.questionType &&
+      template.questionType !== request.questionType
+    ) {
       issues.push("template-question-type-mismatch")
-    if (template.playMode && template.playMode !== request.playMode)
+    }
+
+    if (template.playMode && template.playMode !== request.playMode) {
       issues.push("template-play-mode-mismatch")
+    }
+
     for (const node of template.nodes) {
       const component = registry.components.find(
         (entry) =>
           entry.id === node.component.id &&
           entry.version === node.component.version,
-      )!
-      if (!inspectCandidateCapabilities(component, request).compatible)
+      )
+
+      if (!component) {
+        throw new Error("show-library:unknown-child-component")
+      }
+
+      if (!inspectCandidateCapabilities(component, request).compatible) {
         issues.push(`component-capability-mismatch:${node.nodeId}`)
+      }
     }
   }
-  for (const [binding, ref] of Object.entries(sections.motion ?? {}))
+
+  for (const [binding, ref] of Object.entries(sections.motion ?? {})) {
     if (
       !registry.motions.some(
         (entry) => entry.id === ref.id && entry.version === ref.version,
       )
-    )
+    ) {
       issues.push(`unknown-motion:${binding}`)
+    }
+  }
+
   // Assets/audio are intentionally not resolved against caller-supplied metadata.
   // A trusted storage owner must authorize actual current-slot refs separately.
   if (
     Object.keys(sections.assets ?? {}).length > 0 ||
     Object.values(sections.audio ?? {}).some((entry) => entry.mode === "asset")
-  )
+  ) {
     issues.push("asset-authorization-not-evaluated")
+  }
+
+  let status: "incompatible" | "candidate" | "inherit-native" = "inherit-native"
+
+  if (issues.length) {
+    status = "incompatible"
+  } else if (selected) {
+    status = "candidate"
+  }
+
   return freeze({
     schemaVersion: 1 as const,
-    status: issues.length
-      ? ("incompatible" as const)
-      : selected
-        ? ("candidate" as const)
-        : ("inherit-native" as const),
+    status,
     registry: { id: registry.id, version: registry.version },
     registrySha256: sha256(canonicalJson(registry)),
     requestedTemplate: selected ?? null,
@@ -112,6 +147,7 @@ export function inspectCompositionReferences(
 export type CompositionInspectionRequest = z.infer<
   typeof compositionInspectionRequestSchema
 >
+
 export type CompositionReferenceInspection = ReturnType<
   typeof inspectCompositionReferences
 >

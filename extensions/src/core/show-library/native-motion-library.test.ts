@@ -1,11 +1,33 @@
 import { describe, expect, it } from "vitest"
 import { resolveCardStageAnimations } from "../card-appearance"
 import {
+  OVERLAY_ANCHORS,
+  OVERLAY_FITS,
+  OVERLAY_LAYERS,
+  OVERLAY_TIME_BASES,
+  OVERLAY_FINISH_MODES,
+} from "../cinematic-overlays"
+import {
   getNativeMotionLibrary,
   parseNativeMotionSetting,
 } from "./native-motion-library"
 
 describe("native motion configuration with unchanged runtime ownership", () => {
+  it("owns immutable option copies without freezing the legacy module's arrays", () => {
+    const overlay = getNativeMotionLibrary().cinematicOverlay
+    for (const [catalog, original] of [
+      [overlay.anchors, OVERLAY_ANCHORS],
+      [overlay.fits, OVERLAY_FITS],
+      [overlay.layers, OVERLAY_LAYERS],
+      [overlay.timeBases, OVERLAY_TIME_BASES],
+      [overlay.finishModes, OVERLAY_FINISH_MODES],
+    ]) {
+      expect(catalog).toEqual(original)
+      expect(catalog).not.toBe(original)
+      expect(Object.isFrozen(catalog)).toBe(true)
+      expect(Object.isFrozen(original)).toBe(false)
+    }
+  })
   it("retains12stage presets/4slots and6decorations with native defaults", () => {
     const library = getNativeMotionLibrary()
     expect(library.stageEntrances).toHaveLength(12)
@@ -29,8 +51,8 @@ describe("native motion configuration with unchanged runtime ownership", () => {
     expect(Object.isFrozen(library.nativeChoreography[0].presets)).toBe(true)
   })
   it("validates actual250..2500 duration/0..300stagger and rejects arbitrary code/style", () => {
-    for (const durationMs of [250, 2500])
-      for (const staggerMs of [0, 300])
+    for (const durationMs of [250, 2500]) {
+      for (const staggerMs of [0, 300]) {
         expect(
           parseNativeMotionSetting({
             schemaVersion: 1,
@@ -43,6 +65,8 @@ describe("native motion configuration with unchanged runtime ownership", () => {
             },
           }).settings,
         ).toMatchObject({ durationMs, staggerMs })
+      }
+    }
     for (const settings of [
       { durationMs: 249 },
       { durationMs: 2501 },
@@ -50,7 +74,7 @@ describe("native motion configuration with unchanged runtime ownership", () => {
       { preset: "customer-js" },
       { style: "position:fixed" },
       { source: "alert(1)" },
-    ])
+    ]) {
       expect(() =>
         parseNativeMotionSetting({
           schemaVersion: 1,
@@ -58,6 +82,7 @@ describe("native motion configuration with unchanged runtime ownership", () => {
           settings,
         }),
       ).toThrow()
+    }
   })
   it("preserves explicit none override instead of reviving global entrance", () => {
     const parsed = parseNativeMotionSetting({
@@ -65,7 +90,11 @@ describe("native motion configuration with unchanged runtime ownership", () => {
       kind: "stage-entrance",
       settings: { preset: "none" },
     })
-    if (parsed.kind !== "stage-entrance") throw new Error("fixture")
+
+    if (parsed.kind !== "stage-entrance") {
+      throw new Error("fixture")
+    }
+
     const global = {
       preset: "cascade" as const,
       durationMs: 900,
@@ -144,7 +173,11 @@ describe("native motion configuration with unchanged runtime ownership", () => {
       parseNativeMotionSetting({
         schemaVersion: 1,
         kind: "stage-entrance",
-        settings: { onEnd() {} },
+        settings: {
+          onEnd() {
+            return "must-not-run"
+          },
+        },
       }),
     ).toThrow("non-json-value")
   })
