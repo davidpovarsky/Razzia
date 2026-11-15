@@ -1,0 +1,118 @@
+{
+  "sourceCommit": "5ef867db68d6d6ab371964990cf2b93b8248a59e",
+  "base": "dd18d31c8a54307394e66bbeb3b347f90a12c12d",
+  "sourcePaths": [
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "sha256": "ba830d98d49e5deeac3c6a4708f6f9b3200ad2cd943228b0c96b4dc884271289",
+      "lines": 587
+    },
+    {
+      "path": "packages/socket/src/index.ts",
+      "sha256": "bfd412dffec5bd5c335a084ce5f42ed16321269eae91628a5aec6acdc569385d",
+      "lines": 50
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "sha256": "269f78c00019dc7c71f725bcefd766f5a971aadc1122c06c84b1ebbe45ea8e92",
+      "lines": 66
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.ts",
+      "sha256": "98735cb43d77673ed9f149d11ff0a17c45e626c6805be4824986a5c57afb9e72",
+      "lines": 126
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.test.ts",
+      "sha256": "a9d2daf58ea1b40a3bc5b2036f335500999d5e712b960a584fa3f2b2f23f3687",
+      "lines": 588
+    }
+  ],
+  "approvedCodePathCount": 5,
+  "originalBootstrapAuthCloseByteIdentical": true,
+  "legacyR2FilesByteIdentical": 15,
+  "preservedInheritedUntracked": [
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/analyze-results.cjs",
+      "sha256": "dbd58d04ec3bc3cbba27f1c8fabdfcde56c725a90e540e691fae06d2938b2d2b",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/manifest.json",
+      "sha256": "e82b5b6bde3876107810f29502ee6aee56732c45be504cb9007a15d603ac8759",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/node-observer.delta.patch",
+      "sha256": "32345a2ae408198aa6120b6ade26a5bf2795937d198501242ba39b55414f6a68",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/overlay.tar.gz",
+      "sha256": "c27c9a47466cec7fca74273319215e653306080c8e616c0ef8be1af491a2155f",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/packet-hashes.json",
+      "sha256": "a58db59bc7b9d3439ff57ff171a1ed2d79031b0815f4124700b1dd74923773eb",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/pid_observer.py",
+      "sha256": "7f0b4c3d932d771d8c6ecbd72fda29e18fd9a58e58817d3808f4aebbd19b4745",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/plan.json",
+      "sha256": "881294fea6ce3ed83d69de01248b5a3b87f3aebfcc427716f1166bb55f9a6565",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/runner_base.py",
+      "sha256": "d6b908bb3ecb1b689cc46c0728f7c98c98d70d0e9752f867dc55aea76e7ca043",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/runner_host.py",
+      "sha256": "cb9985c332e7c1baec9fcebf1bdacf3bade8d32b90c7fb816df1a38af96d3b97",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/server-run.py",
+      "sha256": "95eccacf435c36737a9589c65a5bd15380fe76a5297963bc20b1970ce7a08548",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-server-packet4/verify-merged.cjs",
+      "sha256": "ec57985aeefc4695cdb6d02e35fd31eae5627ab0b48b9c061a83c78a954c28e7",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-transfer-packet4-receipt.json",
+      "sha256": "998b42d2d84407665f66e59dda3b970c29251194d0fa722ff276982518c64e19",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-transfer-packet4.py",
+      "sha256": "109b592b410b22d21e41339dd00edec4da8671f3daf80b0dd213e876adc43654",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/c1-transfer-packet4.stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/prepare-c1-owner-iteration.py",
+      "sha256": "4773697078689ef4e53f7a92e28cf6f85481fd651239bc4174fd328a29fcf0da",
+      "untracked": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/recovery-fresh-20261115/runtime-claim-recovery.ps1",
+      "sha256": "0cf2ce6735eb827f7203f50b3c76973fc53a4bf52fcf3646a0c5b8281943f342",
+      "untracked": true
+    }
+  ],
+  "noActiveLaneClaim": true,
+  "cumulativeServerDiskBytes": 23134208
+}

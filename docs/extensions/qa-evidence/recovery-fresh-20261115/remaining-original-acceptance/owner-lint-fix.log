@@ -1,0 +1,68 @@
+packages/socket/src/index.ts:3:45: error eslint(no-duplicate-imports): '@razzia/extensions/server' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/server/storage/startup-recovery.ts:23:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:28:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:35:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:66:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:68:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:71:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.ts:89:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:157:27: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+packages/socket/src/services/account-db.ts:262:15: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+packages/socket/src/services/account-db.ts:360:7: error eslint(no-unsafe-finally): Unsafe `finally` block. help: Control flow inside `try` or `catch` blocks will be overwritten by this statement.
+packages/socket/src/services/account-db.ts:5:16: error eslint(no-duplicate-imports): 'node:fs' import is duplicated help: Merge the duplicated import into a single import statement
+packages/socket/src/services/account-db.ts:20:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:32:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:38:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:46:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:57:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:74:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:81:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:84:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:87:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:91:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:110:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:113:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:121:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:132:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:142:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:178:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:184:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:212:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:225:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:227:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:237:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:244:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:246:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:248:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:261:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:308:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:310:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:320:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:338:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:361:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:375:64: error eslint(no-shadow): 'file' is already declared in the upper scope. help: Consider renaming 'file' to avoid shadowing the variable from the outer scope.
+extensions/src/server/storage/startup-recovery.test.ts:25:5: error eslint(init-declarations): Variable 'priorConfig' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:25:38: error eslint(init-declarations): Variable 'priorAccounts' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:37:13: error eslint(no-empty): Unexpected empty block statements help: Remove this block or add a comment inside it
+extensions/src/server/storage/startup-recovery.test.ts:174:26: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:303:26: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:411:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:420:11: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:445:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:453:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:478:5: error eslint(init-declarations): Variable 'afterWriter' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:484:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/startup-recovery.test.ts:175:42: error @stylistic(line-comment-position): Expected comment to be above code.
+extensions/src/server/storage/startup-recovery.test.ts:175:42: error eslint(no-inline-comments): Unexpected comment inline with code help: Move the comment to a separate line
+extensions/src/server/storage/startup-recovery.test.ts:24:5: error eslint(init-declarations): Variable 'fixture' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/startup-recovery.test.ts:42:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:49:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:52:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:78:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:94:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:97:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/startup-recovery.test.ts:378:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+packages/socket/src/services/account-db.ts:41:30: error typescript(no-unnecessary-condition): Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined. help: The checked value has type `number`.
+packages/socket/src/services/account-db.ts:125:30: error typescript(no-unnecessary-condition): Unnecessary conditional, expected left-hand side of `??` operator to be possibly null or undefined. help: The checked value has type `number`.
+packages/socket/src/services/account-db.ts:346:13: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+packages/socket/src/services/account-db.ts:346:23: error typescript(no-unsafe-member-access): Unsafe member access .id on an `any` value.

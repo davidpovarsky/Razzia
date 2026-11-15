@@ -1,0 +1,41 @@
+{
+  "samples": 24,
+  "minimumFreeBytes": 2565623808,
+  "peakAccountedBytes": 25231360,
+  "pidsPeak": 35,
+  "pidsMaxEvents": 0,
+  "observedZombies": 0,
+  "stopped": {
+    "id": "e42fde8cab3d4a4f748774a9eb3eef85ad872e64efe2863519fd799bf33d0b80",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 137,
+      "Error": "",
+      "StartedAt": "2026-11-15T16:41:52.367085346Z",
+      "FinishedAt": "2026-11-15T16:42:15.853971205Z"
+    },
+    "sizeRw": 32768
+  },
+  "mergedAudits": [
+    {
+      "file": "merged-before.json",
+      "effective": 1290,
+      "aux": 2,
+      "retained": 1391,
+      "mismatches": []
+    },
+    {
+      "file": "merged-startup-owners.json",
+      "effective": 1290,
+      "aux": 2,
+      "retained": 1391,
+      "mismatches": []
+    }
+  ]
+}

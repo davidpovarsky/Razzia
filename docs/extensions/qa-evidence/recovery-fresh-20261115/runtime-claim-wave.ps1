@@ -1,4 +1,4 @@
-param([ValidateSet('claim','release')][string]$Action, [long]$ConsumedBytes = 0, [string]$TerminalEvidence = '')
+param([ValidateSet('claim','release')][string]$Action, [long]$ConsumedBytes = 0, [string]$TerminalEvidence = '', [string]$Job = 'C1 wave witness then native11; init initially OFF')
 $ErrorActionPreference = 'Stop'
 $register = 'C:/Users/DAVID/Code/Codex-Agent-HQ/docs/tadazz/runtime-claims.json'
 $thread = $env:CODEX_THREAD_ID
@@ -12,7 +12,7 @@ try {
     if (-not $state.new_claims_authorized -or $own.Count) { throw 'New claims disabled or own claim already exists' }
     if (@($active | Where-Object { $_.role -eq 'recovery' }).Count) { throw 'Recovery already reserved' }
     if ((($active | Measure-Object cpu -Sum).Sum + 0.25) -gt $state.cpu_ceiling -or (($active | Measure-Object memory_mib -Sum).Sum + 2048) -gt $state.memory_mib_ceiling) { throw 'Shared capacity unavailable' }
-    $state.active_claims = @($state.active_claims) + [pscustomobject]@{role='recovery';thread_id=$thread;cpu=0.25;memory_mib=2048;job='C1 wave witness then native11; init initially OFF';terminal=$false;claimed_utc=[DateTime]::UtcNow.ToString('o');parent_authorization='SINGLE_MANAGER_WAVE_RESTART_20261115'}
+    $state.active_claims = @($state.active_claims) + [pscustomobject]@{role='recovery';thread_id=$thread;cpu=0.25;memory_mib=2048;job=$Job;terminal=$false;claimed_utc=[DateTime]::UtcNow.ToString('o');parent_authorization='SINGLE_MANAGER_WAVE_RESTART_20261115'}
   } else {
     if ($own.Count -ne 1 -or -not $TerminalEvidence) { throw 'Require own unique claim and terminal evidence' }
     if ($ConsumedBytes -lt $state.disk_budgets.recovery.new_consumed_bytes -or $ConsumedBytes -gt 64MB) { throw 'Invalid cumulative accounting' }

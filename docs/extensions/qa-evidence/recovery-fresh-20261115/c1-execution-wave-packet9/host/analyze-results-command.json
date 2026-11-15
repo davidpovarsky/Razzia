@@ -1,0 +1,12 @@
+{
+  "argv": [
+    "sudo",
+    "-n",
+    "docker",
+    "exec",
+    "cd3a99af8c74f4a9d2cd43ff74bb738a2033240423d1705c5ea99281d36eb4af",
+    "node",
+    "/inputs/analyze-results.cjs"
+  ],
+  "wallSeconds": 90
+}
