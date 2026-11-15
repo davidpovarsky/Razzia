@@ -1,0 +1,481 @@
+{
+  "status": "PASS",
+  "browserVersion": "156.0.8078.4",
+  "observations": [
+    {
+      "lang": "en",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "en",
+      "title": "Games | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "fr",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "fr",
+      "title": "Jeux | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "de",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "de",
+      "title": "Spiele | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "es",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "es",
+      "title": "Juegos | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "it",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "it",
+      "title": "Giochi | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "ja",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "ja",
+      "title": "ゲーム | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "tr",
+      "viewport": {
+        "width": 1366,
+        "height": 768
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "tr",
+      "title": "Oyunlar | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "vi",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "lang": "vi",
+      "title": "Trò chơi | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=store",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/",
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/?view=how",
+      "title": "How it works | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=how",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/?view=pricing",
+      "title": "Pricing | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=pricing",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/?view=demo",
+      "title": "Try a round | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=demo",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/login",
+      "title": "Log in | Tadazz",
+      "path": "/login",
+      "canonical": "http://127.0.0.1:3000/login",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/signup",
+      "title": "Create account | Tadazz",
+      "path": "/signup",
+      "canonical": "http://127.0.0.1:3000/signup",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/forgot",
+      "title": "Forgot password? | Tadazz",
+      "path": "/forgot",
+      "canonical": "http://127.0.0.1:3000/forgot",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/reset",
+      "title": "Reset password | Tadazz",
+      "path": "/reset",
+      "canonical": "http://127.0.0.1:3000/reset",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "route": "/game",
+      "title": "Join game | Tadazz",
+      "path": "/game",
+      "canonical": "http://127.0.0.1:3000/game",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "requested": "/studio",
+      "actual": "http://127.0.0.1:3000/login?returnTo=%2Fstudio",
+      "title": "Log in | Tadazz",
+      "scope": "accounts-disabled synthetic boundary"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "My Games | Tadazz",
+      "path": "/studio/games",
+      "canonical": "http://127.0.0.1:3000/studio/games",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Editor | Tadazz",
+      "path": "/manager/quizz",
+      "canonical": "http://127.0.0.1:3000/manager/quizz",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Dashboard | Tadazz",
+      "path": "/studio",
+      "canonical": "http://127.0.0.1:3000/studio",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "My Games | Tadazz",
+      "path": "/studio/games",
+      "canonical": "http://127.0.0.1:3000/studio/games",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Account & licences | Tadazz",
+      "path": "/studio/account",
+      "canonical": "http://127.0.0.1:3000/studio/account",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 1366,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Prepare show | Tadazz",
+      "path": "/studio/prepare",
+      "canonical": "http://127.0.0.1:3000/studio/prepare",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/",
+      "title": "Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/?view=how",
+      "title": "How it works | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=how",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/?view=pricing",
+      "title": "Pricing | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=pricing",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/?view=demo",
+      "title": "Try a round | Tadazz",
+      "path": "/",
+      "canonical": "http://127.0.0.1:3000/?view=demo",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/login",
+      "title": "Log in | Tadazz",
+      "path": "/login",
+      "canonical": "http://127.0.0.1:3000/login",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/signup",
+      "title": "Create account | Tadazz",
+      "path": "/signup",
+      "canonical": "http://127.0.0.1:3000/signup",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/forgot",
+      "title": "Forgot password? | Tadazz",
+      "path": "/forgot",
+      "canonical": "http://127.0.0.1:3000/forgot",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/reset",
+      "title": "Reset password | Tadazz",
+      "path": "/reset",
+      "canonical": "http://127.0.0.1:3000/reset",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "route": "/game",
+      "title": "Join game | Tadazz",
+      "path": "/game",
+      "canonical": "http://127.0.0.1:3000/game",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "requested": "/studio",
+      "actual": "http://127.0.0.1:3000/login?returnTo=%2Fstudio",
+      "title": "Log in | Tadazz",
+      "scope": "accounts-disabled synthetic boundary"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "My Games | Tadazz",
+      "path": "/studio/games",
+      "canonical": "http://127.0.0.1:3000/studio/games",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Editor | Tadazz",
+      "path": "/manager/quizz",
+      "canonical": "http://127.0.0.1:3000/manager/quizz",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Dashboard | Tadazz",
+      "path": "/studio",
+      "canonical": "http://127.0.0.1:3000/studio",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "My Games | Tadazz",
+      "path": "/studio/games",
+      "canonical": "http://127.0.0.1:3000/studio/games",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Account & licences | Tadazz",
+      "path": "/studio/account",
+      "canonical": "http://127.0.0.1:3000/studio/account",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    },
+    {
+      "width": 390,
+      "scope": "synthetic manager; accounts disabled",
+      "title": "Prepare show | Tadazz",
+      "path": "/studio/prepare",
+      "canonical": "http://127.0.0.1:3000/studio/prepare",
+      "lang": "en",
+      "manifest": null,
+      "favicon": "/tadazz-design-reference/favicon-z-64-20261110.png"
+    }
+  ],
+  "errors": []
+}

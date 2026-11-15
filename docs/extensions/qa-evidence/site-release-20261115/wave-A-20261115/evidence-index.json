@@ -1,0 +1,62 @@
+{
+  "scope": "fresh public GET-only baseline; no postdeploy acceptance",
+  "executed": {
+    "public_browser_observations": 26,
+    "navigation_errors": [],
+    "raw_shell": {
+      "status": 200,
+      "sha256": "81a5fbe942c74398e002a17205bba112b9e021cef416b83756aa8fd2e76fdf6e",
+      "staticTitle": "TADAZZ"
+    },
+    "candidate_metadata": {
+      "chromium": 48,
+      "webkit": 48,
+      "locale_flows": 16
+    },
+    "rollback": {
+      "exec": "83a6a79fc5a582aa7d805c92e4cd0476b5b6b46bb0e7b4c3d6035fcc82f081c9",
+      "running_observations": 79,
+      "total_observations": 87,
+      "exit_code": 0,
+      "live_hashes": 242,
+      "backup_hashes": 202
+    },
+    "game_continuity": {
+      "answers": 3,
+      "unchanged_pages": 5,
+      "http_samples": 291
+    },
+    "public_studio_390px_observations": 2,
+    "staged_whitespace_check": "2 blank-at-EOF warnings in preserved exact executed Python snapshots; no app-source formatting claim"
+  },
+  "source_unchanged": {
+    "application": "9b221bc0edabe449cdf27bc818ae77acbc676bae",
+    "test_selector_successor": "31b3cb084efeb50dced6952498e9703cb47dc45c",
+    "operator": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+  },
+  "reused_verified": [
+    {
+      "report": "site-locale-review-9b221bc.md",
+      "scope": "22 browser cases, immutable application/artifact; historical not current production"
+    },
+    {
+      "report": "site-locale-acceptance-31b.md",
+      "scope": "4 Turkish/German browser cases and one WebKit synthetic account-stage case; same app/artifact"
+    },
+    {
+      "report": "site-image-review-31b.md",
+      "scope": "5 passed/3 intentional skips on immutable candidate image; historical not current production"
+    },
+    {
+      "report": "SITE_TRANSPARENT_352734_ACTUAL_REVIEW_20261115.md",
+      "scope": "one original synthetic publish and finalization, 242 live/202 backup hashes; no game during that original publish"
+    }
+  ],
+  "not_run": [
+    "new app build/lint/full CI (app source unchanged)",
+    "production release/postdeploy",
+    "real customer/physical player/projector/call acceptance",
+    "hardware durability/lost-ACK/actual child EIO qualification"
+  ],
+  "pwa": "Application-name asserted in current candidate; favicon/theme-color retained in original image evidence. No manifest link implemented; no installability claim."
+}
