@@ -36,6 +36,7 @@ import { AccountPanel } from "./AccountPanel"
 import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
 import { OpenThemeBuilderLink } from "../../../components/theme-builder/OpenThemeBuilderLink"
+import { browserConsentLoginHandoff } from "../../../components/oauth-consent/login-handoff"
 
 const LegacyTools = lazy(() => import("./LegacyTools"))
 const OAuthConsentPage = lazy(() =>
@@ -73,6 +74,7 @@ export function Studio() {
   const router = useRouter()
   const path = useRouterState({ select: (state) => state.location.pathname })
   const search = useRouterState({ select: (state) => state.location.searchStr })
+  const hash = useRouterState({ select: (state) => state.location.hash })
   const queryClient = useQueryClient()
   const local = hasManagerSession()
   const profile = useQuery({
@@ -91,6 +93,11 @@ export function Studio() {
         "status" in profile.error &&
         profile.error.status === 401)
     ) {
+      browserConsentLoginHandoff().capture({
+        pathname: path,
+        searchStr: search,
+        hash,
+      })
       void queryClient.cancelQueries().then(() => {
         queryClient.clear()
         void router.navigate({
@@ -100,7 +107,7 @@ export function Studio() {
         })
       })
     }
-  }, [local, profile.isError, profile.error, queryClient, router, path])
+  }, [local, profile.isError, profile.error, queryClient, router, path, search, hash])
 
   if (!local || profile.isPending) {
     return <StudioLoading />

@@ -57,3 +57,55 @@ Actual browser click through the mounted real issuer, ChatGPT/Claude installatio
 production activation and native-save consent remain NOT RUN/unavailable here.
 SB08/SB09/SB10 remain OPEN. Native preview/WebKit evidence is independently scoped;
 the consent successes do not establish executable renderer pins or G readiness.
+
+## Pending login handoff (new, route execution still pending)
+
+`components/oauth-consent/login-handoff.ts` exposes a lazy
+`browserConsentLoginHandoff()` using one sessionStorage record: only a bounded
+base64url opaque ticket and a local five-minute `expiresAt`. No native token,
+proof, callback, grant, state, scopes or client identity is stored. The real issuer
+must still decrypt/validate the ticket and its own expiry. Identical capture never
+extends the deadline; a new request replaces the old one; malformed/expired data
+is cleared. `resume` is non-destructive so repeated guards/StrictMode do not consume
+the ticket before a URL and native profile are established. Authenticated page
+acknowledgement only clears the matching ticket; stale mounts cannot erase a newer
+replacement. Explicit cancel/session invalidation clears pending state.
+
+Root integration contract (root files remain manager-owned):
+
+1. In actual Studio `beforeLoad`, if unauthenticated call
+   `handoff.capture(location)` **before** the existing pathname-only login redirect.
+   Do not put a ticket in `returnTo` or change `safeReturnTo`. The exact query-free
+   `/studio/oauth-consent` allowlist addition already made by the manager is retained.
+2. In that same authenticated guard, `const resumed = handoff.resume(location)`;
+   if non-null redirect only to `/studio/oauth-consent`, `search: resumed`,
+   `replace:true`, `throw:true`. Existing query-bearing consent URLs bypass resume.
+   Pass `location.hash` as well as pathname/searchStr. This guard does not approve.
+3. Attach one actual bootstrap `storage` listener: if `event.key === "token"` or
+   `event.key === null`, clear the pending handoff. Cross-tab native session
+   replacement is unexpected, while the intentional same-tab AccountGateway
+   `setToken` followed immediately by navigation emits no storage event. Explicit
+   logout/abandoned consent login must also call `clear()`. Do not store a session
+   fingerprint in this record. Preserve existing session/query/socket semantics.
+4. E's Studio401 effect now captures the bounded request before its existing
+   pathname-only login redirect. The consent page acknowledges only after Studio's
+   actual native profile and local matching native session are present, and clears
+   on cancel/expiry/session change. Root does not need to modify AccountGateway's
+   native login success navigation or broaden its return URL handling.
+
+`site/tests/browser/oauth-login.spec.ts` is a new **actual site route** test packet,
+not the isolated consent component fixture. It uses the existing real isolated
+account register/verify/login API, actual AccountGateway form, actual bootstrap's
+React StrictMode and actual Studio profile/consent mount. Four cases cover login
+reload/repeated guards and cancel/no replay, expiry, replacement, and real cross-tab
+native storage change. Its opaque synthetic ticket is intentionally not valid at
+the issuer; it never approves. It proves login transport only, not real issuer,
+page headers, TLS or full consent acceptance. Execution is pending root wiring and
+the manager's retained root test surface; do not claim these four tests passed.
+
+Helper6 tests executed PASS in native16. Exact two executed source SHAs,
+AST-equal final formatting bridge and actual log/exit are retained in native16-evidence.
+Full native16 exit1 is preserved (four separate V2 TypeScript nullability errors);
+V2 browser4/4 passed. The subsequent page acknowledgement ordering change and
+Studio401 capture/hash hook await actual root route execution; they are not covered
+by the six helper unit tests. Existing client9f3cda2c remains byte-identical.

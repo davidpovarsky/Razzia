@@ -12,6 +12,7 @@ import { currentAccount, type Account } from "../../site/adapters/client"
 import type { PreviewLocale } from "../../presentation/show-library-preview/i18n"
 import { createOAuthConsentClient, type ConsentInspection } from "./client"
 import { consentText } from "./strings"
+import { browserConsentLoginHandoff } from "./login-handoff"
 
 /** Studio mounts this only after its actual authenticated native profile query.
  * The issuer path is trusted build configuration, never a request query parameter.
@@ -94,6 +95,7 @@ export function OAuthConsentPage({
         getClientId() === account.id,
       )
     const invalidate = () => {
+      browserConsentLoginHandoff().clear()
       client?.invalidate()
       proof.current = null
       setInspection(null)
@@ -103,12 +105,17 @@ export function OAuthConsentPage({
       approval.current = null
       inspectionRequest.current = null
     }
-    if (!client || !ticket || window.top !== window.self) {
-      setState("unavailable")
+    if (!validSession()) {
+      browserConsentLoginHandoff().clear()
+      setState("expired")
       return () => abort.abort()
     }
-    if (!validSession()) {
-      setState("expired")
+    // Studio has already resolved the real native profile. URL ownership is now
+    // established; StrictMode may remount without consuming the request twice.
+    if (ticket && window.top === window.self)
+      browserConsentLoginHandoff().acknowledge(ticket)
+    if (!client || !ticket || window.top !== window.self) {
+      setState("unavailable")
       return () => abort.abort()
     }
     // A meta frame-ancestors policy is ineffective. Require the actual mounted
@@ -232,6 +239,7 @@ export function OAuthConsentPage({
     }
   }
   const cancel = () => {
+    browserConsentLoginHandoff().clear()
     inspectionRequest.current?.abort()
     inspectionRequest.current = null
     client?.invalidate()
