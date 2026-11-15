@@ -1,0 +1,57 @@
+{
+  "containers": [
+    {
+      "id": "86e4b74b57f1696d97e0a4693f25be60f71a8b31773adb78a41e5479ee85a584",
+      "name": "/tadazz-site-public-baseline-A-20261115",
+      "exitCode": 0,
+      "running": false,
+      "sizeRw": 8192
+    },
+    {
+      "id": "cbfdc712a2ac975638ca872478c1a55d0e3afc7a7b28531f0df95464648cc672",
+      "name": "/tadazz-site-mount-probe-A-20261115",
+      "exitCode": 0,
+      "running": false,
+      "sizeRw": 8192
+    },
+    {
+      "id": "c1cfaf4034518c2c408afe6e0127a840dcf9df7b90c84cbb4eac334cca130f7a",
+      "name": "/tadazz-site-continuity-A-20261115",
+      "exitCode": 1,
+      "running": false,
+      "sizeRw": 16384
+    },
+    {
+      "id": "f063ce3fe25a4bd28d40c72166b7ebf12d7fe2db204d974bc817dbe5578512d9",
+      "name": "/tadazz-site-continuity-A-attempt02-20261115",
+      "exitCode": 1,
+      "running": false,
+      "sizeRw": 16384
+    },
+    {
+      "id": "feab2169238ec88adc021b34fe8e26abcb13692e5e9cb1015bfbb32931e11fb8",
+      "name": "/tadazz-site-continuity-A-attempt03-20261115",
+      "exitCode": 1,
+      "running": false,
+      "sizeRw": 16384
+    },
+    {
+      "id": "ddd3a599379f65fd9ab05529459ebd44f9d7f6b737bcc02b429ea06ebdb933d1",
+      "name": "/tadazz-site-continuity-A-attempt04-20261115",
+      "exitCode": 0,
+      "running": false,
+      "sizeRw": 16384
+    },
+    {
+      "id": "a44b28100974c2d8244fb45384dd937e3c2a5b7805feada415396e70583ca5d2",
+      "name": "/tadazz-site-public-studio-A-20261115",
+      "exitCode": 0,
+      "running": false,
+      "sizeRw": 8192
+    }
+  ],
+  "ownedHostAllocatedBytes": 3141632,
+  "sizeRwProxyBytes": 90112,
+  "allowanceBytes": 1048576,
+  "conservativeChargedBytes": 4280320
+}
