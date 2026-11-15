@@ -1,0 +1,13 @@
+{
+  "phases": {
+    "10-legacy-format": 0,
+    "11-legacy-typecheck": 0,
+    "12-legacy-first-party-oauth": 0,
+    "13-legacy-sdk": 0
+  },
+  "sourceInputs": 170,
+  "manifestSha256": "2cc91c71fff05d7d3a967b4a3212a4a563c4190a19459ff36835614ef8a8451b",
+  "originalAttemptPreserved": true,
+  "actualCustomerOrHostAccount": false,
+  "dependencyInstallRepeated": false
+}

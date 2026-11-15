@@ -1,0 +1,25 @@
+{
+  "job": "mcp-oauth-F-20261115-01a1dfaa",
+  "phases": {
+    "format": 0,
+    "typecheck": 2
+  },
+  "firstFailure": {
+    "phase": "03-oauth-typecheck",
+    "exit": 2
+  },
+  "sourceInputs": 170,
+  "resources": {
+    "newPhysicalUpperBoundBytes": 2748416,
+    "diskCapBytes": 4108288,
+    "dockerAllowanceBytes": 2097152,
+    "freeBytes": 2612490240,
+    "requiredRemainingReserveBytes": 2558697472,
+    "absoluteFloorBytes": 2147483648,
+    "ownTmpfsUsedBytes": 151478272,
+    "ownTmpfsCapBytes": 268435456
+  },
+  "nativeOrPublicMount": false,
+  "actualChatHostInstallation": false,
+  "sdkReused": false
+}

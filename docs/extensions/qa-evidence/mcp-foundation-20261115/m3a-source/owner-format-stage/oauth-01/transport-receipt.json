@@ -1,0 +1,123 @@
+{
+  "exit": 0,
+  "stdout": "{\"source\": \"/home/ubuntu/tadazz-hq-qa-20261115/source/mcp-oauth-F-20261115-01a1dfaa\", \"files\": 29, \"freeBefore\": 2614771712}\n{\"launchExit\": 0, \"container\": \"tadazz-hq-mcp-oauth-F-20261115-01a1dfaa\", \"stdout\": \"08d54e934a7c631034357bdf147e82d3721dd6cdcdbddf2d3c0c36f15fee2a3e\\n\", \"stderr\": \"\", \"freshFreeBytes\": 2614435840, \"freshAvailableRamBytes\": 10897313792}\n\n\n",
+  "stderr": "",
+  "members": {
+    "consumer.py": {
+      "bytes": 15189,
+      "sha256": "0d8499dbe7c109addb133a2b7902e198ded482658a5cc93b304ea73dc02069bb"
+    },
+    "format-and-compare.mjs": {
+      "bytes": 6002,
+      "sha256": "8d49bd3efeca406388475a3213e975cfbbcb3e881a7e3e1134619466fadd0289"
+    },
+    "run-phase.py": {
+      "bytes": 2006,
+      "sha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    "launch.py": {
+      "bytes": 5242,
+      "sha256": "6caa80add6c38540a2dc44bf080ab8ae294fc6f2b2c8d902bb4bbd33cb494bd7"
+    },
+    "activation.json": {
+      "bytes": 604,
+      "sha256": "5903c56a722796b9ee6cb764b279bf5aceff66b54771844d3cc17de3e8a88c5b"
+    },
+    "final-input-manifest.json": {
+      "bytes": 31953,
+      "sha256": "03145f2e1f6a2402178c1af87f687b85eb7a914c49460cef34580f7c00d17180"
+    },
+    "app/extensions/src/mcp-app/package.json": {
+      "bytes": 1133,
+      "sha256": "6c1590646e19397ff2dc3caa1a0731309314e03891944b8eac2483626d4e0d16"
+    },
+    "app/extensions/src/mcp-app/first-party/bindings.ts": {
+      "bytes": 6471,
+      "sha256": "d0e48d6bb9cdfcd2a1e693fd1943536a73dc307366f99d1ba90f62f4e3a5c836"
+    },
+    "app/extensions/src/mcp-app/first-party/oauth-grants.ts": {
+      "bytes": 22099,
+      "sha256": "87d5c12aa321e94852826fe8777fe42a622b4306a4654ca6c4d9b77cf1993385"
+    },
+    "app/extensions/src/mcp-app/first-party/oauth-protocol.ts": {
+      "bytes": 10658,
+      "sha256": "6a7ba38fef7da8bd0e6f65e57bf99f40942a5eb71ddb0a7dae630439d0cf7483"
+    },
+    "app/extensions/src/mcp-app/first-party/OAUTH.md": {
+      "bytes": 5840,
+      "sha256": "619aa3ec27d117dd3b7dada39d968340a8a8cfb86dc929ec526db6d40cdd1f38"
+    },
+    "app/extensions/src/mcp-app/first-party/oauth.ts": {
+      "bytes": 10329,
+      "sha256": "7d2def028342203fb7a1bd037faadd6a5298eae28c42bc1ccbb6a6679ce2c1dc"
+    },
+    "app/extensions/src/mcp-app/first-party/schema-manifest.ts": {
+      "bytes": 2523,
+      "sha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1"
+    },
+    "app/extensions/src/mcp-app/first-party/schema.ts": {
+      "bytes": 4202,
+      "sha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa"
+    },
+    "app/extensions/src/mcp-app/server/access-token.ts": {
+      "bytes": 6530,
+      "sha256": "40be69a84bdfd1f23ff69d3eb59ba82ab89ad783a8b500baf6711fbac26e4dac"
+    },
+    "app/extensions/src/mcp-app/server/authorization.ts": {
+      "bytes": 3053,
+      "sha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e"
+    },
+    "app/extensions/src/mcp-app/server/dependencies.ts": {
+      "bytes": 4722,
+      "sha256": "ec5ba9dc3b495bb6cc7d2cd4a8c330404d58fd364f37257fa6d6346c7c8008e3"
+    },
+    "app/extensions/src/mcp-app/server/factory.ts": {
+      "bytes": 6229,
+      "sha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14"
+    },
+    "app/extensions/src/mcp-app/server/http.ts": {
+      "bytes": 13014,
+      "sha256": "e2d8fbd55f83ab3e34572a18a516f54f454dc8676dd3455a9eae399201eaa50e"
+    },
+    "app/extensions/src/mcp-app/server/REMOTE_SERVICE.md": {
+      "bytes": 4159,
+      "sha256": "6e34bb728fc29409f96e17a0fce0b58cdca1a3c93b9fe2f3613c550ea8501dd3"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/abort.nodecheck.ts": {
+      "bytes": 5941,
+      "sha256": "16b43bfd57efe6247c284a534af36181029224e357514abf25bf592a2f8f9f6f"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/compatibility.observation.ts": {
+      "bytes": 6479,
+      "sha256": "0b41007c658dd1e0ff674aacb345efce8ec94dfd88bd12f918da2bac8190f18a"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/oauth.nodecheck.ts": {
+      "bytes": 13639,
+      "sha256": "0f49356015babc9b0114a59011aa7e228fece194c1f7873064403d945ef50c00"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/review-evidence.fixture.ts": {
+      "bytes": 1225,
+      "sha256": "55be6af19d6ca85883984f9d23524e4c5df36d6c2f30ed7e41590857b1366bef"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/schema-ad895.fixture.ts": {
+      "bytes": 1134,
+      "sha256": "05de36dbf288f9f95fa07b9d7ba582872cea13c2e52b30962eadcb8ec17dad3c"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/schema.nodecheck.ts": {
+      "bytes": 6313,
+      "sha256": "6ad7fb368c9139f79214e88d0b42cedb5cd741f6ce5ce1f3d4c18dbbd2936085"
+    },
+    "app/extensions/src/mcp-app/tests/first-party/store.nodecheck.ts": {
+      "bytes": 12265,
+      "sha256": "148de4c0c945a0aac6a5b11cdce5f873e427b52493cc132f7adfe9c242d4551a"
+    },
+    "app/extensions/src/mcp-app/tests/server/access-token.nodecheck.ts": {
+      "bytes": 5798,
+      "sha256": "9f0032f4fce9217f0574cb8fe2a6e4290f37bd378f6f593585f3280ecd063ea8"
+    },
+    "app/extensions/src/mcp-app/tests/server/http.nodecheck.ts": {
+      "bytes": 9467,
+      "sha256": "788ce7100897e93c58769e95a6a149e0d76175c38fb33b703fcbafd627b43f71"
+    }
+  }
+}

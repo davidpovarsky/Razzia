@@ -1,0 +1,21 @@
+{
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T16:06:23.988802455Z",
+    "FinishedAt": "2026-11-15T16:31:05.823534554Z"
+  },
+  "id": "08d54e934a7c631034357bdf147e82d3721dd6cdcdbddf2d3c0c36f15fee2a3e",
+  "sourcePhysicalBytes": 331776,
+  "evidencePhysicalBytes": 1355776,
+  "dockerAllowanceBytes": 2097152,
+  "freeBytes": 2582233088,
+  "initialAttemptExitIsNotFinalCandidateResult": true
+}

@@ -1,0 +1,22 @@
+{
+  "recordedUtc": "2026-11-15T16:00:51.5262403Z",
+  "kind": "OWN_TERMINAL_DOCKER_ALLOWANCE_RECONCILIATION",
+  "measurement": "docker inspect --size plus allocated du of exact /var/lib/docker/containers/ID; readonly/PID0 verified",
+  "containers": [
+    {
+      "id": "bf5588720effa0994f608ec11da28416e3d6a5a5104af47c411eb2727b406992",
+      "metadataAllocatedBytes": 49152,
+      "sizeRw": 53248
+    },
+    {
+      "id": "27867587094fada483225a6f5f115a64b67eeaadaf234ce7adc0fceeb6a3ed67",
+      "metadataAllocatedBytes": 53248,
+      "sizeRw": 57344
+    }
+  ],
+  "priorPerContainerAllowance": 2097152,
+  "retainedPerContainerAllowance": 1048576,
+  "releasedUnconsumedAllowance": 2097152,
+  "actualDeletion": false,
+  "note": "Measured each own terminal container below111KiB; retain1MiB per container conservatively including additional daemon bookkeeping. Original2MiB upper-bound receipts preserved."
+}

@@ -1,0 +1,27 @@
+? Verifying lockfile against supply-chain policies (72 entries)...
+✓ Lockfile passes supply-chain policies (72 entries in 814ms)
+Lockfile is up to date, resolution step is skipped
+Packages are copied from the content-addressable store to the virtual store.
+  Content-addressable store is at: /ram/store/v11
+  Virtual store is at:             node_modules/.pnpm
+Packages: +46
+++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 46, reused 46, downloaded 0, added 46, done
+
+dependencies:
++ @modelcontextprotocol/client 2.4.0
++ @modelcontextprotocol/core 2.4.0
++ @modelcontextprotocol/ext-apps 2.1.0
++ @modelcontextprotocol/server 2.4.0
++ hono 4.13.13
++ http-status-codes 2.3.0
++ socket.io 4.8.4
++ uuid 14.0.3
++ zod 4.6.6
+
+devDependencies:
++ @types/node 26.6.5
++ tsx 4.21.0
++ typescript 5.9.3
+
+Done in 1.6s using pnpm v12.18.0
