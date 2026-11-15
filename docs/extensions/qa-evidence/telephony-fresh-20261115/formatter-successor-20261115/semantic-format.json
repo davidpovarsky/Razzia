@@ -1,0 +1,76 @@
+{
+  "baseline": "6b82e051b5e6a208bb935b24c89d2676a5c90936",
+  "formatter": "3.9.10",
+  "config": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\.prettierrc.json",
+  "config_sha256": "1659852a5b2108a7aa3f898ea39e1f55455364a236cce62f81b8d50d82bc3f97",
+  "plugin_paths": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules\\.pnpm\\prettier-plugin-tailwindcss@0.8.1_prettier@3.9.10\\node_modules\\prettier-plugin-tailwindcss\\dist\\index.mjs"
+  ],
+  "normalization": "Ignore only positions/comments/raw spellings/parent links and empty statements; retain all typed executable AST fields.",
+  "accepted_four_core_files_unchanged": true,
+  "production_files": [
+    {
+      "path": "extensions/src/server/index.ts",
+      "original_sha256": "fc3d0fa1162ec819d8065b04d31d7f57ba154cd80501caae26ff56759a79cc78",
+      "successor_sha256": "294158b67785d1d75de54becd14be47842ab3b51c65e041bae49ba27dde2a4fb",
+      "normalized_ast_sha256": "c6e230c93e63b5354b50578d97d7c88c7eda8d65d944035ec74645bce83b2ba3",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "original_sha256": "e8b0403b30515b2974a38337e925f9d6624f0d77cd02f20f831ade41abe34d6d",
+      "successor_sha256": "58e36ff0d02673fb77456291a813cddfe77db4df1f1fbd8ca02d4d311ec5cc39",
+      "normalized_ast_sha256": "2d11326b53f7bb9403d51c41560c99e8aa97b57d7c5baa7973a24d9f08b9a4a2",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "original_sha256": "22a3f9fde891389cc72bd3dac52f4a617052faaab685fb7269fa44975e41ed85",
+      "successor_sha256": "831244cd581a24e78794c60d12839a24e798c5b411f112e43ffaa75b4f95927f",
+      "normalized_ast_sha256": "3db9aba5b202ad7b4d106a717b8f59166ba4e5d21217ad67b7e8761d8b2d0af4",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/native-adoption.ts",
+      "original_sha256": "e8096f884152d17a4da314bcedaa8c73aad323129c1b35ac28a4552f1344eb8f",
+      "successor_sha256": "ec98f77fd59bf99be1ec04d602d6e81e71eb0f5e0cd50066aae040b1a68ffbf3",
+      "normalized_ast_sha256": "913b5ec60e6c4143e8a4d929435b5de17aed4ccc932051639634ce2882d2afa1",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "original_sha256": "b2859a2cb656f5f03207187dbf777e45ff91dec7727e5b0167a4b7d211a43ef3",
+      "successor_sha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a",
+      "normalized_ast_sha256": "d174d538ba8fe0b8547ce352444501eba8c1053caf84101819772d827b98c1d6",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "original_sha256": "b18d6a78e54bff5d39dada10744fd199563eed101b947ff8e2f526b82976a956",
+      "successor_sha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411",
+      "normalized_ast_sha256": "3050b2353c45e19bb7858175dffcaea85701c238dabfeaad1b4182ebf111c5b6",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "original_sha256": "ea65eedf9ac3fb63fcac62ffdbde175b3e5595346841011774e19488d5a8c78a",
+      "successor_sha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07",
+      "normalized_ast_sha256": "aa4be015758f5073d7f442fb692d89675f850565f48ad32e8758682dad45bdc0",
+      "semantic_ast_equal": true,
+      "format_pass": true,
+      "bytes_changed": true
+    }
+  ]
+}
