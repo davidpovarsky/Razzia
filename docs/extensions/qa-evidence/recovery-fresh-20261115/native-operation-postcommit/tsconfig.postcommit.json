@@ -1,0 +1,7 @@
+{
+  "extends": "../native-operation-seam/tsconfig.operation.json",
+  "files": [
+    "./postcommit-tests.ts"
+  ],
+  "include": []
+}

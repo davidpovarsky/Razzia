@@ -1,0 +1,5 @@
+# Additional original C1 post-commit failure acceptance
+
+After manager source intake e444b48/evidence8786d8e accepted1909/30bd in scoped meaning, continue the owned original storage/recovery acceptance with three previously unexecuted I/O boundaries: operation outcome rename failure, outcome directory fence failure, and committed private-intent cleanup failure. Actual fresh-process lookup/retry/recovery must preserve committed public edits and historical outcome, or retain uncertainty and deny duplicate creation. No production source modification is planned.
+
+Only a new test entry/builder/raw proof under this owned evidence directory. Existing producer15 and original fixtures remain immutable and are not imported or executed. Real F605619c consumer/ledger review remains the manager/F owner's separate intake. No pinnedNode24/F-ledger/hardware, all-writer B/F1, provider/customer/production or broad coverage claim. Existing local WSL Linux/ext4/Node26 and installed esbuild only; no installation, Oracle job, new agent, polling or approval stage.

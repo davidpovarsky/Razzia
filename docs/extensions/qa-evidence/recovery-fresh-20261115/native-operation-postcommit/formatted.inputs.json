@@ -1,0 +1,947 @@
+{
+  "compiler": "esbuild0.28.2",
+  "options": {
+    "platform": "node",
+    "format": "esm",
+    "target": "node24",
+    "bundle": true
+  },
+  "bundleSha256": "a5348696c40dd738ee32b3f02b2fb513cb84b47315fe6d7b6bdf1c29c82b961a",
+  "inputs": [
+    {
+      "file": "packages/common/src/constants.ts",
+      "bytes": 4231,
+      "sha256": "efe3bce19f2b96e7cd9730735a341e4de64a10b6307f509f3e6f5f1de97a279f"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "bytes": 34840,
+      "sha256": "bb08133b11b478c8e715038fff26ebea204d7fd5443fba31fe138b142d202efb"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "bytes": 6642,
+      "sha256": "c7ce485c97263e42568d16b11bb4a90133221c7e807498a9273d70f41ba16ef6"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "bytes": 10871,
+      "sha256": "a0c95ef2f7085b5bc2931f7b566f524b26a0360c8df741e3f87f923745cf9792"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "bytes": 8267,
+      "sha256": "fb05b91ec260f3f484f7c00a177b6126ceb8fd1b09dc90b1200afdffd4d98efd"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "bytes": 11818,
+      "sha256": "24fc98f6fc9175e50ff29d28b040e3b4ac5650de19914d45ee27b853d367ecc6"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "bytes": 19491,
+      "sha256": "bc42543274218aa7ef72192b3218d2a4a399e53df8de240a04d9ff275096f563"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "bytes": 1290,
+      "sha256": "be4c1b1a1ad247cc70f360a572060edd7e0cea24252c3a319f33d247899c5643"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "bytes": 70,
+      "sha256": "c0f09e5bb7e9dd7712138a22096e0884bd2df3d5d8cfcd2a1bcad7086fc8dfc5"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "bytes": 107291,
+      "sha256": "0ee56e8afbae28eeb1060a162ad7e56f0675ee6fb83f0ae56bea2e088f6cdbc0"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "bytes": 12517,
+      "sha256": "18a3188c51229d9189a5408b0b7fbc3e121b55c2b4c3c406d79cb9b77e7ad964"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "bytes": 5404,
+      "sha256": "eec4016c2b3063ae929617d90ec609e4c425e60c97a954d3a24de0f457b6ec97"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "bytes": 4703,
+      "sha256": "5bd03646b9d18b73e71356cd28937e4e6413b806bb23e14689cc88f6f65ff3a6"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "bytes": 6998,
+      "sha256": "f969afea5d9800a71958a621658943b85a2576a2bfefdd5dea70afc4924d4af4"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "bytes": 6029,
+      "sha256": "96741333a790320e05aef7286b5b709a4a7c48cfffc50fc5e6acff5b505275e9"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "bytes": 5757,
+      "sha256": "6d8227b52a6864465b7c52a9ef7e09d261d904ec8a619932e15dd9f9f826e8dd"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "bytes": 4908,
+      "sha256": "67f6f38b59a6e3ee81cc5155480465331dd9a142b2471a495503a81dafba0684"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "bytes": 5948,
+      "sha256": "bdb9ef0cfda4009f8892585a1780fff863cd409931d6f89394c271042c131137"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "bytes": 4953,
+      "sha256": "4ffa0e484ad1842a2c0e5c7f2dfe9160155ff5be4b95ab6e524d3a30a2210488"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "bytes": 4987,
+      "sha256": "29addcd60e88422bed9ed78c6c864220a15c06b31fdb4ab7ad4f87be4098e6ae"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "bytes": 4774,
+      "sha256": "f344eb96ba18d9db907f3f9c95897ce2590ab0cde1553c023daffbb1cb5ef6f4"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "bytes": 5701,
+      "sha256": "fdea833aa0a8c381d26216db1521dd7fbc4dccb6d3aa50f9a585ffb975df91eb"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "bytes": 5302,
+      "sha256": "d5930e10d137b048b37823e168e4177947e1f696ada8419c71bb0d32da4333c0"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "bytes": 4784,
+      "sha256": "97797bd22319ecc3f2044da6c305f1114b851803697029ffce2b66644757da3a"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "bytes": 5591,
+      "sha256": "12e762b921b1e3fdb8e265d2b554de81ce9706ceb23a81527f48ae2dddf355db"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "bytes": 5343,
+      "sha256": "60e7eeff4c000c85f8420168374344305d3c2110a5f91a2fb672b2a2381eeddf"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "bytes": 5007,
+      "sha256": "1e72af4193e564cd37dce4a850dc18bc1bcd6ca280f29e9f5f8c6bbab6a2cad9"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "bytes": 5414,
+      "sha256": "477345d6401d0e4f07794b1a2cff8b78953723f1fc8cfaeb6b660c19be47125a"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "bytes": 4749,
+      "sha256": "a2ca0451ff943766bb6a88b392b25447462a1d3ed75c1adda5ddb0bc474bcd42"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "bytes": 5930,
+      "sha256": "b1921ac6b4158e6360a8da6099df8bbf2d7bce7c1cf381d5a5e47aa0c74874d2"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "bytes": 12411,
+      "sha256": "1cfff31fac19616d900d1f3febd9690ea87711e13b5be299326ebfd3f33aad4d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "bytes": 5940,
+      "sha256": "c31e466c2a31dc10ba6a288e1aebf429a6e9566a26918d0240aae058693f6329"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "bytes": 5184,
+      "sha256": "ff2bebef0761f2d6095103d58484e3b95551bc51d56770db8f161b8e0e0ec941"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "bytes": 4871,
+      "sha256": "9816c21ee0b3be9d973f9e033e9587a608f2d35dd1b984d415b88e03242b0189"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "bytes": 6720,
+      "sha256": "daf6d0c590d9b061759598ba9f7f97041e2874c7a58da2c64b86f152840d68fa"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "bytes": 4759,
+      "sha256": "e5c23bb0b6f696fa936bafd7969e64738504cf7a5be3ec04b24ae899d4912b58"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "bytes": 4822,
+      "sha256": "1cce1285bbf55c8a76303fea0be0fb6d39fbd0ece833137ea23a22f406ac1ae1"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "bytes": 4775,
+      "sha256": "096b497df6c5fe7de4422482b7733e764e4b344e8d7f768a7289556687acdb82"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "bytes": 5054,
+      "sha256": "2a6bbbd6dbd573687b22f35873a13cdf730c07423b4ab114e5a8b12d8777146d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "bytes": 6527,
+      "sha256": "baf3204123cf4246df654fd1948b6c8da6917e7a06e470aeeaf7c1eaa7003628"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "bytes": 6509,
+      "sha256": "e61079f14070dfa9c7b2047eb79f5bea6d4e845f192756d103c121bbd63ee18a"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "bytes": 111,
+      "sha256": "78c3d1991041bb8c8fc0f7c5d745aae422d4c2e4e8f30bae44f3fef4765900a8"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "bytes": 6512,
+      "sha256": "884b1b68a1ca02fe9a774b8de9cbfa3486892eea36192699120f57b31f0a1f42"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "bytes": 5109,
+      "sha256": "11fcef61a2f23e010bf0f569d71be0d49524afc97f3072cc03fdc6fe3ea2f14d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "bytes": 8223,
+      "sha256": "d2e67a35a3c6e7241a9eb9c5851e4b5b651ac8b23278854862e6055829946c48"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "bytes": 5399,
+      "sha256": "64ddd914c432ba5690d0686bff6603651ce886a891f84823d7dc766c9c980cd1"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "bytes": 4674,
+      "sha256": "94faf0d306ffa2a4f95e57f3e53060d27220a639b9cb529f00d1d01b6270f045"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "bytes": 5819,
+      "sha256": "6da69989b702ae15baa27b799b6b2b32fd011ba3980a190dd0eccfc9233083d6"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "bytes": 4939,
+      "sha256": "296ced8be508c5f9e82b562049d2974882029bcd5b2ab4ade14401b33ec99909"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "bytes": 4678,
+      "sha256": "bae9756817629db30841eb54a27ed9b3c71c2a4208314d8d070be624bd2e9359"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "bytes": 4693,
+      "sha256": "f358e5586940350ee25a05db184565d23eb1c66903e182ebec812172f31cb55a"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "bytes": 4723,
+      "sha256": "66ed8c3ce00b2e9971ed5a17f002937405d8cdfeb399ebe012db9d2317f42146"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "bytes": 5123,
+      "sha256": "1c15b81fcce0cdc59dbcca18df5c4ecf4e176fc3fb7668207b9ba54df43cce46"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "bytes": 5150,
+      "sha256": "b7f82cf9f747785beeec05cd31d3d7493c52bd3647598924141568f148c07222"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "bytes": 7024,
+      "sha256": "93a820f60d571607bf34b69198f5b24617475584c0b22c0f8d160fcdef096a46"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "bytes": 7024,
+      "sha256": "abc52db767b9dd938954776728ea7480cdcab569a5a17664f60e5a2c1d63e60b"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "bytes": 4883,
+      "sha256": "54751d2866171c9c7ce1a72868dec09efa54d1b2b67401767594c5b360aca38a"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "bytes": 7095,
+      "sha256": "40a019b53bd1684fd4b750db87021520dd5d710f714010c0a594e5bcf5787478"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "bytes": 4949,
+      "sha256": "ae7c49242e70149434c9051dd00209afbd517d98ba54c13692371a5340b616da"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "bytes": 4756,
+      "sha256": "490ca48f8aae3aed660758b32856d49a9fc5c7e255dad220e75abaef8c35140b"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "bytes": 4841,
+      "sha256": "448f36996bb0d159489b34ad7d86df03e520a13e43b1c98ea2fb18d7ed4a3c95"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "bytes": 6688,
+      "sha256": "8b6e1bc033fdaefb1acfc7edf88c9f53c3a50cc892066effdab306103e994d42"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "bytes": 5647,
+      "sha256": "9a5c9a3b18b8ccded28d66033575b22d823df17a7afa8bb9a733f31fe071462f"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "bytes": 6563,
+      "sha256": "913cc4962ddf5cb54ed694d04b7008493ef401d3333b26426b32f4890712574e"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "bytes": 4458,
+      "sha256": "445abfed18c5a9d79143b02c9cf9c171b41fb5dff8ffc2cb59b7aef7203e5a7f"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "bytes": 4642,
+      "sha256": "bca07607a27f518f19877dd9c2235fada9c73eb56896f0f6e274781fab71d64e"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "bytes": 5665,
+      "sha256": "1e59ba41296aeb5b6142a6e5ed84712931e33e54ab0b9ae5d83faf436fc3d968"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "bytes": 111,
+      "sha256": "9391169ffbc72f777a83230b6ffcc3f4cf46ab5945ec540de9ef4609dca1f4cc"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "bytes": 5491,
+      "sha256": "d37ed2c93408e0a6b6e1cd290117a6f0e9d7b2c83509cd34b502e1dd94899c87"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "bytes": 4844,
+      "sha256": "2cbe07635b03064ffad0bfcc98d2d570f3264b9cd3e22bbd5c160cd0343f7872"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "bytes": 4967,
+      "sha256": "15939adaf263e0869c602d4b34c206178a235b8bec11c8207ccd3fa50de3a141"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "bytes": 4622,
+      "sha256": "8fc02f2bd4d92f46b24b8d82da0ee95c962fc80c14dd7dd469500e14de08d320"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "bytes": 4672,
+      "sha256": "01d9b119e318d8b9f1a8fa720d06424457429425a61d0730984b750e6a5edf7d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "bytes": 4847,
+      "sha256": "88b33f6527c1a2faaf159568330cf727c448dc468eac72142a6fb24f8714ac1e"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "bytes": 2607,
+      "sha256": "7ea85250d1e7bd9459cda61f38c78757a410d561a5421bb3f08019bba79c9849"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "bytes": 1540,
+      "sha256": "f04d4b2c0bc5b4ac2d6610ea34edf2e5260eade18f20976b79916dcdbeb9fa4d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "bytes": 92003,
+      "sha256": "53fcf24821f50ecf42492ab7101abe8a50ead8286a53567d71648fe5ca346b99"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "bytes": 28953,
+      "sha256": "03ae6016abc9585e3f3481d6b8d775a95ae4ee65badbde73ca1ed953ff14c0e7"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "bytes": 29029,
+      "sha256": "85b883eb8f05e9f060c71a39fce7df9345b566af29d5bc9c8fa477fe616a051d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "bytes": 34985,
+      "sha256": "b6d2aee72212c076b9cde38da6333591c76a24eb049a4ee4e7bd2b7825d8b817"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "bytes": 3857,
+      "sha256": "beaeab6faa654e99e443b8a9f5d8a4adc08cd8226f92a0cd32477a58ecfa1807"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "bytes": 11,
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "bytes": 690,
+      "sha256": "2a0e452323aa5b75b7d7de4879289e2579b9dd2d6af291c0416ba6806ca2199d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "bytes": 690,
+      "sha256": "7543391a9ad5e7df287bbfecaa79844d46af44c75c1de0d43a411d65795d9dd1"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "bytes": 2532,
+      "sha256": "d32f7c1ef8e2c70072f6f0ec8ba7081bbc331353cc3a7cb4429e5ece91409543"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "bytes": 1057,
+      "sha256": "11941573401bbef138842c7a523dff554873343fccbf0e8b0a144259d2d703f1"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "bytes": 53354,
+      "sha256": "2bf4a631a18f734a9a7ab7fc11bcf919214774d2235a312dcec0dd53d0324c32"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "bytes": 1090,
+      "sha256": "0e948b101771cc0e7b753e54b3f5b486929d3db9bd4c09d98fe4ce86271bcf7b"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "bytes": 556,
+      "sha256": "deaa026b7c5302e59719f401248e7866691d8d8a892884dd2b6868b1cb7252d8"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "bytes": 38171,
+      "sha256": "31dc999a26cb6928f5e99ea564d648567e85cf9aa47565198fb6186dbd6c070e"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "bytes": 6643,
+      "sha256": "a804062900869e09ea0b975cfa569fd3c70dc33bad7fc30b63872d451cae29f7"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "bytes": 543,
+      "sha256": "0abffcc9838e04dc6f091229c1d522fbfd43aab9563316b52d3eb8ff2bacf26d"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "bytes": 2190,
+      "sha256": "34370913842ff02d14a9796b11c5ec2af160bdb35a7148edc286e9a9c6fb5c17"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "bytes": 550,
+      "sha256": "fb2efe3b6eacc475c77cbb571b5fb8650d92a10f316dc869e49b722973d83c3c"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "bytes": 1101,
+      "sha256": "c6b584ae70ba4e7132b2cd78c23ea4ecedc9828abf999edee312372e1fb453d6"
+    },
+    {
+      "file": "node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "bytes": 422,
+      "sha256": "32e7efd49a94a765f6d10a1a0a3c02c50c246def17c80c6f0225f85525d98505"
+    },
+    {
+      "file": "packages/common/src/validators/questions/choice.ts",
+      "bytes": 788,
+      "sha256": "eacaa560ef536901de065be4355365578a4131797f5679b00b8f5bd48af8127e"
+    },
+    {
+      "file": "packages/common/src/questions/options.ts",
+      "bytes": 447,
+      "sha256": "5478f57ce25ca226751d46fb530fab9ccef5f109cbebf68b5a9a53063e25cede"
+    },
+    {
+      "file": "packages/common/src/validators/questions/estimation.ts",
+      "bytes": 1253,
+      "sha256": "0080ddfc62fdb7d4410b097b89d2c8b3534adcf6e4c31169ce13f40c7f5329d4"
+    },
+    {
+      "file": "packages/common/src/validators/questions/index.ts",
+      "bytes": 713,
+      "sha256": "4ef73f27053887f2d29c884fec0a053f059a6934d13b86de0fae306859be44b9"
+    },
+    {
+      "file": "packages/common/src/validators/quizz.ts",
+      "bytes": 3967,
+      "sha256": "8cd1ff3ce886aab0fabae58557f8053102b318fdbddfac37a4275487ac61ecbf"
+    },
+    {
+      "file": "extensions/src/core/constants.ts",
+      "bytes": 2748,
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721"
+    },
+    {
+      "file": "extensions/src/core/audio-catalog.ts",
+      "bytes": 2711,
+      "sha256": "676f3e7070845cd95c05540457eaa5be4f0d05b7cdad5d2f1aefbf38b4e19f51"
+    },
+    {
+      "file": "extensions/src/core/show-themes/selection.ts",
+      "bytes": 6727,
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723"
+    },
+    {
+      "file": "extensions/src/core/packages/paths.ts",
+      "bytes": 1981,
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508"
+    },
+    {
+      "file": "extensions/src/core/packages/manifest.ts",
+      "bytes": 3577,
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a"
+    },
+    {
+      "file": "extensions/src/core/packages/protocol.ts",
+      "bytes": 5468,
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99"
+    },
+    {
+      "file": "extensions/src/core/show-themes/definition.ts",
+      "bytes": 13409,
+      "sha256": "babeb6762eeb80c70c4c54b98083ddcbe49239b04bfdc2faf05e9d2f01820134"
+    },
+    {
+      "file": "extensions/src/core/show-themes/razzia.manifest.json",
+      "bytes": 45192,
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51"
+    },
+    {
+      "file": "extensions/src/core/show-themes/classic.manifest.json",
+      "bytes": 41813,
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061"
+    },
+    {
+      "file": "extensions/src/core/show-themes/registry.ts",
+      "bytes": 2006,
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55"
+    },
+    {
+      "file": "extensions/src/core/product-branding.ts",
+      "bytes": 258,
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9"
+    },
+    {
+      "file": "extensions/src/core/show-themes/resolve.ts",
+      "bytes": 7201,
+      "sha256": "867529ee357fffdf315bcfba570ebf50ce1ccf0178b9131ff69197f11243ece5"
+    },
+    {
+      "file": "extensions/src/core/show-themes/media.ts",
+      "bytes": 2893,
+      "sha256": "0abb2c489cf8472b18980d4b1bb59ef7d85e84a3d30b4d16a878c566e8ff5295"
+    },
+    {
+      "file": "extensions/src/core/show-themes/audio.ts",
+      "bytes": 6254,
+      "sha256": "e2a323bc42ea729cfd8669cc9dd2b2d7eedc240ed8bb420f7df5e33de78e6c9e"
+    },
+    {
+      "file": "extensions/src/core/show-themes/index.ts",
+      "bytes": 163,
+      "sha256": "909454f8f9fc4c7e4e2c7c17f8838c19b7334ca9060a7a4e6120cf2efbfceb09"
+    },
+    {
+      "file": "extensions/src/core/lottie.ts",
+      "bytes": 43171,
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d"
+    },
+    {
+      "file": "extensions/src/core/media.ts",
+      "bytes": 11212,
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18"
+    },
+    {
+      "file": "extensions/src/core/card-appearance.ts",
+      "bytes": 20335,
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/max.js",
+      "bytes": 55,
+      "sha256": "8f81a7b2a5f8704ea1b4e8f83d36659856fdf3d122b2bd16fe1b5c47c97b6ffa"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/nil.js",
+      "bytes": 55,
+      "sha256": "a6f8ac293df0b75af2946e5190d8f00336b826bb1340b96d669a09beb8885ff8"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/regex.js",
+      "bytes": 171,
+      "sha256": "774bc4bc767a58458dfdd252430d96b71b3d380ac241b50df6cb757aaa1b4783"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/validate.js",
+      "bytes": 142,
+      "sha256": "78ba6a91a3c2d219e3a6980d7704c0998e8152cabcaece0f5a04989025d0e60c"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/parse.js",
+      "bytes": 612,
+      "sha256": "a383f50a691c05533a40bbb4a87f718daa050abbc96debc9715efdc74d8538b4"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/stringify.js",
+      "bytes": 1093,
+      "sha256": "bb592b599f2b00be6ca9fb2ac2fb7350abf3a6e6e274201cf6865c8c15e52b6a"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/rng.js",
+      "bytes": 110,
+      "sha256": "69d169609cd3f16d85b120b1d88e247216a59c7c5a27b321290c0604627db5c3"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v1.js",
+      "bytes": 2776,
+      "sha256": "d9b4e9be4baa72c35dcabe41be85dec482db18592278f5acc96b38d277be1e5d"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v1ToV6.js",
+      "bytes": 842,
+      "sha256": "f0a2d19ee0d4398607808fcfc3eebeb1ea7af08a0c17d71d42fc612f97241a3f"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/md5.js",
+      "bytes": 305,
+      "sha256": "9e143aad0b68e277fa3552a6f783052320bcd5d61d1d8c45fc64aac10113279c"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v35.js",
+      "bytes": 1503,
+      "sha256": "ce090c2ea41db958cff64383cdcd09de21b577d33a57fa281cad1dde2c87b02d"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v3.js",
+      "bytes": 259,
+      "sha256": "3b65ad31501886af057e13aeec03afedc54f1f85cc8d332b0eb89800b11fbce4"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v4.js",
+      "bytes": 926,
+      "sha256": "eb4b917bb2bfcb3e723fedf3c5d0256b83578a9285e85ebf4c60caa953aa3d39"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/sha1.js",
+      "bytes": 308,
+      "sha256": "445563946f94669cb7efb10fbfa6d24b825d466ee99faad3e58d939f3ee46c5e"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v5.js",
+      "bytes": 262,
+      "sha256": "daaf09616ea3b145ccd6a1dfea190b65d546267a9916c5741e026d4290c61ae9"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v6.js",
+      "bytes": 630,
+      "sha256": "32f4c875353e043cb8d790f2d63d46e7b23d592fa3d5d09ace6afcff1dd44e03"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v6ToV1.js",
+      "bytes": 842,
+      "sha256": "78475a282beaea6e8c45e5f2586134929be2e21728f159fb8559df06d7288475"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/v7.js",
+      "bytes": 2144,
+      "sha256": "3076cc79dd38200d1090d80bff1d3590729a66ace6578b510cf775b6b9cd0227"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/version.js",
+      "bytes": 208,
+      "sha256": "5a43d6eb8496806fd5e152f92edda603dbb1f77108045edcf034f22c9e320ce8"
+    },
+    {
+      "file": "node_modules/.pnpm/uuid@14.0.3/node_modules/uuid/dist-node/index.js",
+      "bytes": 636,
+      "sha256": "65e9fae8f22278e6c9ac5b016dbe1ead01b8014f66ce08a807741885d4bf01f1"
+    },
+    {
+      "file": "extensions/src/core/phone-roster.ts",
+      "bytes": 7405,
+      "sha256": "438a39f8cd9848c6c517a91cdb3cc2e8dc8f8875c5216b318973baa7cafe75f8"
+    },
+    {
+      "file": "extensions/src/core/quiz-extras.ts",
+      "bytes": 8612,
+      "sha256": "cff2c8bc7ec7f10f960a8b017f94e362c967de9c9f0646866f4353b471ce6e72"
+    },
+    {
+      "file": "extensions/src/core/cinematic-overlays.ts",
+      "bytes": 10293,
+      "sha256": "3799f40fd3fb9d5ca22bafdc3a71e93da4b144c6a60e3c6107497d5eab6e30a8"
+    },
+    {
+      "file": "extensions/src/core/tadazz-appearance.ts",
+      "bytes": 2670,
+      "sha256": "4f65c9a46d3fc3f23ab4efd11854d6ec85a85273ac92d30267679e449a9baa23"
+    },
+    {
+      "file": "extensions/src/core/studio-timeline-schema.ts",
+      "bytes": 21670,
+      "sha256": "082c17efbfbf4015b0c3983faf1fb25713208c9af4604aebc6bfbd0893dd666d"
+    },
+    {
+      "file": "extensions/src/core/bundle.ts",
+      "bytes": 1022,
+      "sha256": "f94d0a9c5ad4634d99bab4c3b865d0c6e1663e6fb4b2ec825474a89b6ffd76be"
+    },
+    {
+      "file": "extensions/src/core/card-media-references.ts",
+      "bytes": 17959,
+      "sha256": "3e3b6a5965d9a41d2068933daa7c8bd12feb45bdfe27683698b241cf143d50f0"
+    },
+    {
+      "file": "extensions/src/core/commands.ts",
+      "bytes": 7652,
+      "sha256": "e15614078494be232b1ae5c793350fecfe70c44b1e757fc0e0acf57e4ba58564"
+    },
+    {
+      "file": "extensions/src/core/digest.ts",
+      "bytes": 5232,
+      "sha256": "7f49ad1f3ee9eb3b13bb8064d11646a9120c32d925f396c87cc892d44df1df4d"
+    },
+    {
+      "file": "extensions/src/core/roster-import.ts",
+      "bytes": 35601,
+      "sha256": "0fae3dfabd1e1fb0860f3686ae4c0f5244b146075f9543e10a3331f0083822bc"
+    },
+    {
+      "file": "extensions/src/core/questions.ts",
+      "bytes": 5124,
+      "sha256": "dcf097bcdc2bd6329ae78a0a573f01856257881828097f530ee578422fc29c4f"
+    },
+    {
+      "file": "extensions/src/core/studio-migrate.ts",
+      "bytes": 4723,
+      "sha256": "a3bea50ed8642d4d098d6e2971122cb473a3e3d6ad028a96756d7e81b9730415"
+    },
+    {
+      "file": "extensions/src/core/reveal.ts",
+      "bytes": 1572,
+      "sha256": "02127c9af9376025312c354e6dbea93d8079c178c95e83c1a0796c166990a683"
+    },
+    {
+      "file": "extensions/src/core/revisions.ts",
+      "bytes": 2383,
+      "sha256": "76cb360eeaa7293348b3abff4597e30e406cf4b09835ff3704f0e59dca7197aa"
+    },
+    {
+      "file": "extensions/src/core/state.ts",
+      "bytes": 949,
+      "sha256": "a867f63167849ee012db75ba9dba802287caf2bf50b32fd0fea1291b069e37bb"
+    },
+    {
+      "file": "extensions/src/core/show-authoring-schema.ts",
+      "bytes": 26630,
+      "sha256": "04a193fce8b3a9a775f69d24ea255a0ad64e5a2e8b858e4e1e57b504190596df"
+    },
+    {
+      "file": "extensions/src/core/show-authoring-convert.ts",
+      "bytes": 40161,
+      "sha256": "6f3c81b9746835e9d2657d131df96df7d7e6ce6f460b87cffb4e875c493b3514"
+    },
+    {
+      "file": "extensions/src/core/show-workbook.ts",
+      "bytes": 85563,
+      "sha256": "02694f51ae2f4fa70589bf4d7f2c922f9c5ac35a30f6d9ce98b6d664023892ed"
+    },
+    {
+      "file": "extensions/src/core/packages/zip-detection.ts",
+      "bytes": 1311,
+      "sha256": "4b954b8c577538d11a43271afc340f1f032ad00312df8aba2f6693ec25f7756e"
+    },
+    {
+      "file": "extensions/src/core/show-import-preflight.ts",
+      "bytes": 16744,
+      "sha256": "9339ad52aefe61ae6c1bab9b303cfeccd03f56270316c8fe71722e3b6a769247"
+    },
+    {
+      "file": "extensions/src/core/creating-worlds-show.ts",
+      "bytes": 3485,
+      "sha256": "06aa99edae27e18d105e4c1dd4254cadc05ba8a2fba8123283cf261e74c416d0"
+    },
+    {
+      "file": "extensions/src/core/question-play-mode.ts",
+      "bytes": 467,
+      "sha256": "34602143c2dcd7f2c1b4c7c182a7b36a2b2cd43ebfae76004cc95d5c3586b793"
+    },
+    {
+      "file": "extensions/src/core/media-selection.ts",
+      "bytes": 1021,
+      "sha256": "7d4855d2e44fe83f8fc3f401b1610f03c3938372d7d28bedf631d480d607bcc0"
+    },
+    {
+      "file": "extensions/src/core/billing/contracts.ts",
+      "bytes": 2375,
+      "sha256": "6e9c60ce0047b2e12675508234d3fae576cc3d6b2b303fc0cc000d53c20cb779"
+    },
+    {
+      "file": "extensions/src/core/billing/index.ts",
+      "bytes": 28,
+      "sha256": "666a5d34ddac023960884c39a87373045a991c09e9796522637e8dffd0b725f0"
+    },
+    {
+      "file": "extensions/src/core/packages/index.ts",
+      "bytes": 80,
+      "sha256": "6e90c15cda228986114fb73c3397b5b0a3425c31b9a8b8cd3071966381a472b5"
+    },
+    {
+      "file": "extensions/src/core/index.ts",
+      "bytes": 1028,
+      "sha256": "4cf7c309942cb3eaa5c722e051e54343b9419a3ad81d18c52343b26dc9439535"
+    },
+    {
+      "file": "extensions/src/server/storage/durable-files.ts",
+      "bytes": 7708,
+      "sha256": "00a3f7474afc00c0f8409868e7f2b99ce261228d2150efed6b48dac2b6d1bec7"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-scope.ts",
+      "bytes": 5611,
+      "sha256": "7eba38e7fc319dcd2c7fc5ea57b62cc5f88601fea346129d01561837125293b1"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-operation-record.ts",
+      "bytes": 6255,
+      "sha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-operation-store.ts",
+      "bytes": 6585,
+      "sha256": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e"
+    },
+    {
+      "file": "extensions/src/server/storage/creation-reservation.ts",
+      "bytes": 32931,
+      "sha256": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/legacy.js",
+      "bytes": 9616,
+      "sha256": "10eb9ee52608ce541a36e2319e871081764cccd606d7576381b3fef845e211fd"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils.js",
+      "bytes": 3776,
+      "sha256": "476fbd50c4cf32a0dc55ef7031f9e714798a271870394ea0cb6240b1f633e7d5"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/utils-functions.js",
+      "bytes": 1649,
+      "sha256": "a070809ae327ad11ef6d9c3e8782958e3a792e319a8b9186f5c095cbd94775ba"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/status-codes.js",
+      "bytes": 21607,
+      "sha256": "3d5a45e45661376db3586191f0282adec547cbfc8f838d6ce792cc94b9b58981"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/reason-phrases.js",
+      "bytes": 20642,
+      "sha256": "a4c0c801793baa37b2a088816f6ca00e350ffd723420d898220e3919ea09a0fa"
+    },
+    {
+      "file": "node_modules/.pnpm/http-status-codes@2.3.0/node_modules/http-status-codes/build/cjs/index.js",
+      "bytes": 2218,
+      "sha256": "75ec9d0a0dbd724a24268c75537860046f8a5860c5355bf7bfca39e5c3b25256"
+    },
+    {
+      "file": "packages/socket/src/services/errors.ts",
+      "bytes": 827,
+      "sha256": "6589f4eabe2870a09ddbbb9666f98e5f872097f51dad283c6ef1d4df5b1ed003"
+    },
+    {
+      "file": "node_modules/.pnpm/nanoid@6.0.2/node_modules/nanoid/url-alphabet/index.js",
+      "bytes": 94,
+      "sha256": "33ea592bd475568d67c0fb4e1a78c9dea91cdaf66348d6f1d4bb278e55077f2c"
+    },
+    {
+      "file": "node_modules/.pnpm/nanoid@6.0.2/node_modules/nanoid/index.js",
+      "bytes": 3247,
+      "sha256": "6d92c5d40b3eecfeb072c3543be4e74e331d23984de552ec6eec6efb3f7eff19"
+    },
+    {
+      "file": "packages/socket/src/utils/file.ts",
+      "bytes": 491,
+      "sha256": "4859a60a6900f36cdf730d5adc76ecb1c0dbbf887ffd470a30be70386802185b"
+    },
+    {
+      "file": "packages/socket/src/services/account-scope.ts",
+      "bytes": 1311,
+      "sha256": "aef9bf0d3a9357f954c16255f14d0abec5ff8c93cb1f6099dee88785b7d1d33e"
+    },
+    {
+      "file": "packages/socket/src/services/config-scope.ts",
+      "bytes": 689,
+      "sha256": "b69bb60a74cfeb70c17d2769b7ef2734ec89757e35addd7494017a4be77f8e5f"
+    },
+    {
+      "file": "packages/socket/src/services/config.ts",
+      "bytes": 7628,
+      "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f"
+    },
+    {
+      "file": "extensions/src/server/storage/sidecar.ts",
+      "bytes": 3255,
+      "sha256": "182a573935f156d5b80d6f3a79e2a474bd80f7d331355e608c5eca7d6317ab92"
+    },
+    {
+      "file": "extensions/src/server/storage/native-binding-fixture.ts",
+      "bytes": 8555,
+      "sha256": "00d1638149dac733a248fc45630b026596c0354ba26ffa5a391e37e7d213aae0"
+    },
+    {
+      "file": "docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-postcommit/postcommit-tests.ts",
+      "bytes": 13932,
+      "sha256": "7c287e54d1de18ffc828be505630b6f54f8beee866293038867c7e487d419377"
+    }
+  ]
+}
