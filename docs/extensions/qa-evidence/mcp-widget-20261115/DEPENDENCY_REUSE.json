@@ -1,0 +1,28 @@
+{
+  "install": "NOT_RUN",
+  "mcpDonor": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\restart-20261115\\export-combined-local-01\\extensions\\src\\mcp-app\\node_modules",
+  "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "roots": [
+    {
+      "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\node_modules",
+      "path": "node_modules"
+    },
+    {
+      "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\extensions\\node_modules",
+      "path": "extensions\\node_modules"
+    },
+    {
+      "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\common\\node_modules",
+      "path": "packages\\common\\node_modules"
+    },
+    {
+      "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\socket\\node_modules",
+      "path": "packages\\socket\\node_modules"
+    },
+    {
+      "donor": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\packages\\web\\node_modules",
+      "path": "packages\\web\\node_modules"
+    }
+  ],
+  "workspaceSource": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-widget-20261115"
+}

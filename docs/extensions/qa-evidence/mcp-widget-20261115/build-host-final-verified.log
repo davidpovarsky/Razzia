@@ -1,0 +1,29 @@
+23:38:26 [vite] (inline) warning: 
+C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/vite.config.ts
+8  |  let entryName = "entry";
+9  |  const require = createRequire(new URL("../../../../packages/web/package.json", import.meta.url));
+10 |  const tailwindModule = await import(pathToFileURL(require.resolve("@tailwindcss/vite")).href);
+   |                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+11 |  const tailwind = tailwindModule.default;
+12 |  const root = fileURLToPath(new URL("../../../../", import.meta.url));
+The above dynamic import cannot be analyzed by Vite.
+See https://vite.dev/guide/features#dynamic-import for supported dynamic import formats. If this is intended to be left as-is, you can use the /* @vite-ignore */ comment inside the import() call to suppress this warning.
+
+  Plugin: vite:import-analysis
+  File: C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-widget-20261115/extensions/src/mcp-app/widget/vite.config.ts
+vite v8.3.4 building client environment for production...
+transforming...
+✓ 268 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/host-entry-inputs.json   74.08 kB │ gzip:  9.63 kB
+extensions/src/mcp-app/widget/dist/host.js                 338.72 kB │ gzip: 90.17 kB
+
+transforming...
+✓ 268 modules transformed.
+rendering chunks...
+computing gzip size...
+extensions/src/mcp-app/widget/dist/host-entry-inputs.json   74.08 kB │ gzip:  9.63 kB
+extensions/src/mcp-app/widget/dist/host.js                 338.72 kB │ gzip: 90.17 kB
+
+✓ built in 9.23s

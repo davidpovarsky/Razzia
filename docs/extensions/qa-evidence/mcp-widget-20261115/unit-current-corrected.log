@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: parses strict structured result; rejects text, unknown fields and contradictory error
+ok 1 - parses strict structured result; rejects text, unknown fields and contradictory error
+  ---
+  duration_ms: 73.3176
+  type: 'test'
+  ...
+# Subtest: sends original tools with revision CAS; acknowledges only after server response
+ok 2 - sends original tools with revision CAS; acknowledges only after server response
+  ---
+  duration_ms: 33.5899
+  type: 'test'
+  ...
+# Subtest: conflict retains prior content and exposes refresh requirement
+ok 3 - conflict retains prior content and exposes refresh requirement
+  ---
+  duration_ms: 17.2252
+  type: 'test'
+  ...
+# Subtest: cancel ignores late acknowledgement
+ok 4 - cancel ignores late acknowledgement
+  ---
+  duration_ms: 8.4665
+  type: 'test'
+  ...
+# Subtest: select ignores late acknowledgement
+ok 5 - select ignores late acknowledgement
+  ---
+  duration_ms: 7.5798
+  type: 'test'
+  ...
+# Subtest: close ignores late acknowledgement
+ok 6 - close ignores late acknowledgement
+  ---
+  duration_ms: 7.9975
+  type: 'test'
+  ...
+# Subtest: out-of-order host preview cannot lower revision or switch draft
+ok 7 - out-of-order host preview cannot lower revision or switch draft
+  ---
+  duration_ms: 21.5832
+  type: 'test'
+  ...
+# Subtest: wrong response identity or revision never acknowledges write
+ok 8 - wrong response identity or revision never acknowledges write
+  ---
+  duration_ms: 26.9927
+  type: 'test'
+  ...
+# Subtest: eight i18next locales have complete nonempty label sets
+ok 9 - eight i18next locales have complete nonempty label sets
+  ---
+  duration_ms: 103.0333
+  type: 'test'
+  ...
+# Subtest: an edit from an older base cannot overwrite a refreshed revision
+ok 10 - an edit from an older base cannot overwrite a refreshed revision
+  ---
+  duration_ms: 9.3859
+  type: 'test'
+  ...
+# Subtest: undo is a new server-acknowledged CAS write, never an optimistic rollback
+ok 11 - undo is a new server-acknowledged CAS write, never an optimistic rollback
+  ---
+  duration_ms: 14.5233
+  type: 'test'
+  ...
+# Subtest: a title edit preserves every unrelated card and setting
+ok 12 - a title edit preserves every unrelated card and setting
+  ---
+  duration_ms: 2.3524
+  type: 'test'
+  ...
+# Subtest: oversized server structured content fails the original MCP bound
+ok 13 - oversized server structured content fails the original MCP bound
+  ---
+  duration_ms: 5.2927
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 4677.9024

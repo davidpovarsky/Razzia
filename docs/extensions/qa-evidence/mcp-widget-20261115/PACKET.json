@@ -1,0 +1,186 @@
+{
+  "utc": "2026-11-15T21:43:04.649Z",
+  "sourceHead": "2bf5d2272396fffa826c94c605545d2211df8819",
+  "sourceState": "owned source hashes below are authoritative, including local WIP before its source commit",
+  "artifact": {
+    "resourceUri": "ui://tadazz/quiz-preview/v1.html",
+    "mimeType": "text/html;profile=mcp-app",
+    "sdk": "@modelcontextprotocol/ext-apps@2.1.0",
+    "bytes": 2039830,
+    "sha256": "f0ab3172c98c9e602c7a3ea01dc02bf14da5bdc822d58692e0a7390195135e4d",
+    "admission": "candidate-only; V1 unavailable unchanged",
+    "externalConnections": []
+  },
+  "serializedResourceResponseBytes": 2049549,
+  "receipts": [
+    {
+      "name": "entry",
+      "files": 2272,
+      "sha256": "3528845b49607751d4dcc7ec1feebe4c98145e874fcc3470ed262dc54db44e1b"
+    },
+    {
+      "name": "fixture-entry",
+      "files": 2203,
+      "sha256": "479830d51bec96006e9e35b2212602aaf3c23e51b9c5b63f239509e30c454c0c"
+    },
+    {
+      "name": "host-entry",
+      "files": 267,
+      "sha256": "703b6840a6d23ecbdf35756a9a546ad9c63e7bc725e450f042f9e53627b033ab"
+    }
+  ],
+  "sources": [
+    {
+      "path": "extensions/src/mcp-app/widget/.gitignore",
+      "bytes": 6,
+      "sha256": "ed19d3c9c8a5e34d0179e0b1a9c2907d2e657738733e4a432a8cf81c76ce56f1"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/bridge.ts",
+      "bytes": 6188,
+      "sha256": "4be15d47cada69692b27058435a902b226bfa52d6a95d93c574bb54eb81d74d3"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/build.mjs",
+      "bytes": 2652,
+      "sha256": "21da8e3a96c6598906ac8e22ef0c5c8e2abb7bb6e21bc6c8f3709084270754bd"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/controller.ts",
+      "bytes": 9140,
+      "sha256": "eee66b9de685e3d34ff860d66a75e29c46ab723da77022863239085d8dd52be0"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/draft-fields.ts",
+      "bytes": 848,
+      "sha256": "39292fc6df30d817a5ef85f8cd7fdf19e73df2ad0cbef4f96a2a1c67c7839d4d"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/entry.tsx",
+      "bytes": 1706,
+      "sha256": "c2129f6d2467c5d556c89e310b6d8d5a434fc9628aa972fb725b886f4d364775"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/i18n.ts",
+      "bytes": 14378,
+      "sha256": "66c15e8b1ca9fbbd68dfb4e548cd11f53db3fe3f465905b1fac839e32554d6cb"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/README.md",
+      "bytes": 6542,
+      "sha256": "00e147262974a53b2e9567db5a1b182a9620c7b9f0a25feea444c0d393ea1ae0"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/stage.tsx",
+      "bytes": 2089,
+      "sha256": "40f4b4af86ada0d36ae9ad561ebf0f38739c1ee891500b5ae7d928b2d2297d5b"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/tsconfig.json",
+      "bytes": 297,
+      "sha256": "b3babf8e01caf25f44cced528a9a09e48ec7c09ed5644f4f7d1a4a07e9fccb47"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/virtual.d.ts",
+      "bytes": 240,
+      "sha256": "20ea334b42d2e769fc4536b395e66aa7bb6d0ebdf134b3136ed051b4ca6d7d89"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/vite.config.ts",
+      "bytes": 3697,
+      "sha256": "3a0505cb45c4d1d686b98ea4a6f6669879caaa42aada6979d0ea054a9d8dee99"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/widget.css",
+      "bytes": 1191,
+      "sha256": "090fccbd3df4e0f8fd2ea95184c702f2fe61f1a268ee8522310207dcd9d758f3"
+    },
+    {
+      "path": "extensions/src/mcp-app/widget/Widget.tsx",
+      "bytes": 14138,
+      "sha256": "5718a6e2a54bbcc0f00a83fae498a506b94899dd3a46ed2cc54ebc84577a65b8"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/browser.mjs",
+      "bytes": 13699,
+      "sha256": "cd9ccfeb0182a082650568c11ad053365da6324f70d5907cf62e9fa7f1310022"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/controller.nodecheck.ts",
+      "bytes": 9042,
+      "sha256": "b6c093d10f89a173ca7531891f8f5b5895edb072590eedb3c9a78b77841e96ed"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/fixture-entry.tsx",
+      "bytes": 1265,
+      "sha256": "ad6602ffcd6cee6b2e91fcb11024cb8d42c7d37b1bdef547d7b5da02a0213c14"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/host-entry.tsx",
+      "bytes": 4582,
+      "sha256": "15f594c91c86d37bf2b91fbe7d3294e705279c006b16fc9447a160d82b4c52ca"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/packet.mjs",
+      "bytes": 4809,
+      "sha256": "37c3514180ce5d33ad6c7b8bad518d6bc6603c3cf0133c78dd3009030fcc17d4"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/retained-schema.ts",
+      "bytes": 637,
+      "sha256": "56baa8370b0c777424323ad3f9aa5c050d3e492e38c7bb36882147e4c2f4d5a6"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/server.ts",
+      "bytes": 3968,
+      "sha256": "e27ba2941af2d172dcc63d16e2f8148e429d57841a671c688a4c5d24f54fffef"
+    },
+    {
+      "path": "extensions/qa/mcp-widget/tsconfig.json",
+      "bytes": 181,
+      "sha256": "8b7db901284ca85862ab5c6c8868ede950eee2637f4c8f2c69c3bb0b2194b46b"
+    }
+  ],
+  "dependencies": [
+    {
+      "path": "package.json",
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "sha256": "3800f044abe28ace4d0480508ab3f081a1b20c5ff5dbd9e6153c5952b49e5952"
+    },
+    {
+      "path": "pnpm-workspace.yaml",
+      "sha256": "a7a9125e9b0bd614032e1c0df1b9dafc754788ac9bb6c6d3b84c10751626565a"
+    },
+    {
+      "path": "extensions/package.json",
+      "sha256": "83db9a166401c0a2fd1f9dfc5c1bf043226cf7fca8f70a5f797564e44b8f34f3"
+    },
+    {
+      "path": "packages/web/package.json",
+      "sha256": "b6f59de165d280fdc70c43498c53f324d2f7115cda8559f425cc638e01b81a02"
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "sha256": "6eb95ce747d27ac38497f8cc594bf922aa7a5586fe850dec8e3fe6666c229b8c"
+    },
+    {
+      "path": "extensions/src/mcp-app/pnpm-lock.yaml",
+      "sha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838"
+    }
+  ],
+  "peerConsumerSha256": "cab386194644a7185ff67b092af76b8a8bad4169398104f1daa4996a62b83318",
+  "installedSdk": "2.1.0",
+  "webkit": {
+    "executablePresent": false,
+    "test": "NOT_RUN; no installation/download"
+  },
+  "oracle": "NOT_USED; allocated existing 6MiB server pool remains unconsumed; no compute claim/service/deployment",
+  "retainedProducerResult": {
+    "pin": "7f0d4d89e0f77be49c6543411937d977212f132f",
+    "sha256": "694ac6874f0636effde7838a9442527ca2efd34482d2fdb7322747a24a362918",
+    "status": "REUSED exact result object; widget SDK/browser assertions executed anew"
+  }
+}

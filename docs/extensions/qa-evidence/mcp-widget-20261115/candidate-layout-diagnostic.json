@@ -1,0 +1,287 @@
+[
+  {
+    "class": "widget-stage-host",
+    "text": "",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "192.375px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "widget-native-stage",
+    "text": "ROUND 01 · QUESTION 01 / 5\nNEXT QUESTION\nQuestion 1\n1\nA\nAUDIENCE FAVOURITE\n01\n2\nB\nAUDIENCE FAVOURITE",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "192.375px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "",
+    "text": "ROUND 01 · QUESTION 01 / 5\nNEXT QUESTION\nQuestion 1\n1\nA\nAUDIENCE FAVOURITE\n01\n2\nB\nAUDIENCE FAVOURITE",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "192.375px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "tz-viewport tzv4-viewport",
+    "text": "ROUND 01 · QUESTION 01 / 5\nNEXT QUESTION\nQuestion 1\n1\nA\nAUDIENCE FAVOURITE\n01\n2\nB\nAUDIENCE FAVOURITE",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "192.375px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "tzv4-stage",
+    "text": "ROUND 01 · QUESTION 01 / 5\nNEXT QUESTION\nQuestion 1\n1\nA\nAUDIENCE FAVOURITE\n01\n2\nB\nAUDIENCE FAVOURITE",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "1080px",
+    "opacity": "1",
+    "transform": "matrix(0.178125, 0, 0, 0.178125, -960, -540)",
+    "visibility": "visible"
+  },
+  {
+    "class": "stage-bg",
+    "text": "",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "1080px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "veil",
+    "text": "",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "1080px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient",
+    "text": "",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "1080px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-beam",
+    "text": "",
+    "rect": {
+      "x": 41.828125,
+      "y": 168.6875,
+      "width": 69.46875,
+      "height": 178.125,
+      "top": 168.6875,
+      "right": 111.296875,
+      "bottom": 346.8125,
+      "left": 41.828125
+    },
+    "display": "block",
+    "height": "1000px",
+    "opacity": "0.14",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-beam",
+    "text": "",
+    "rect": {
+      "x": 116.640625,
+      "y": 168.6875,
+      "width": 69.46875,
+      "height": 178.125,
+      "top": 168.6875,
+      "right": 186.109375,
+      "bottom": 346.8125,
+      "left": 116.640625
+    },
+    "display": "block",
+    "height": "1000px",
+    "opacity": "0.14",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-beam",
+    "text": "",
+    "rect": {
+      "x": 206.59375,
+      "y": 168.6875,
+      "width": 69.46875,
+      "height": 178.125,
+      "top": 168.6875,
+      "right": 276.0625,
+      "bottom": 346.8125,
+      "left": 206.59375
+    },
+    "display": "block",
+    "height": "1000px",
+    "opacity": "0.14",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-beam",
+    "text": "",
+    "rect": {
+      "x": 260.03125,
+      "y": 168.6875,
+      "width": 69.46875,
+      "height": 178.125,
+      "top": 168.6875,
+      "right": 329.5,
+      "bottom": 346.8125,
+      "left": 260.03125
+    },
+    "display": "block",
+    "height": "1000px",
+    "opacity": "0.14",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-bulbs",
+    "text": "",
+    "rect": {
+      "x": 96.15625,
+      "y": 224.796875,
+      "width": 181.6875,
+      "height": 6.7687530517578125,
+      "top": 224.796875,
+      "right": 277.84375,
+      "bottom": 231.5656280517578,
+      "left": 96.15625
+    },
+    "display": "flex",
+    "height": "38px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  },
+  {
+    "class": "ambient-floor",
+    "text": "",
+    "rect": {
+      "x": 83.6875,
+      "y": 361.41876220703125,
+      "width": 206.625,
+      "height": 33.84375,
+      "top": 361.41876220703125,
+      "right": 290.3125,
+      "bottom": 395.26251220703125,
+      "left": 83.6875
+    },
+    "display": "block",
+    "height": "190px",
+    "opacity": "1",
+    "transform": "matrix(1, 0, 0, 1, 0, 0)",
+    "visibility": "visible"
+  },
+  {
+    "class": "tzv4-scene-root",
+    "text": "ROUND 01 · QUESTION 01 / 5\nNEXT QUESTION\nQuestion 1\n1\nA\nAUDIENCE FAVOURITE\n01\n2\nB\nAUDIENCE FAVOURITE",
+    "rect": {
+      "x": 16,
+      "y": 215,
+      "width": 342,
+      "height": 192.375,
+      "top": 215,
+      "right": 358,
+      "bottom": 407.375,
+      "left": 16
+    },
+    "display": "block",
+    "height": "1080px",
+    "opacity": "1",
+    "transform": "none",
+    "visibility": "visible"
+  }
+]

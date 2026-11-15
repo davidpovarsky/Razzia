@@ -1,0 +1,124 @@
+(node:3576) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+extensions/qa/mcp-widget/server.ts:8:24: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/qa/mcp-widget/server.ts:73:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/qa/mcp-widget/server.ts:94:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/entry.tsx:7:25: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/mcp-app/widget/entry.tsx:12:20: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/stage.tsx:26:7: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/stage.tsx:26:35: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/stage.tsx:47:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/fixture-entry.tsx:26:25: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/fixture-entry.tsx:20:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:11:14: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/build.mjs:36:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/build.mjs:47:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/packet.mjs:35:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:41:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/bridge.ts:28:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/bridge.ts:37:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:73:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:86:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:99:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:115:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:141:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:154:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:155:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:166:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/bridge.ts:172:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/i18n.ts:341:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:4:14: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/qa/mcp-widget/browser.mjs:373:62: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/browser.mjs:7:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/browser.mjs:400:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:9:52: error eslint(no-duplicate-imports): '../../core/show-library/native-preview-renderer-v2-schema' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:132:18: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:134:7: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/Widget.tsx:329:47: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:341:29: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:342:37: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/mcp-app/widget/Widget.tsx:2:32: error eslint(no-duplicate-imports): 'react' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/mcp-app/widget/Widget.tsx:97:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:110:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:117:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:328:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/Widget.tsx:330:19: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:55:7: error eslint(init-declarations): Variable 'resolve' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/qa/mcp-widget/controller.nodecheck.ts:79:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:108:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:137:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:153:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:170:13: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:197:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:198:51: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:199:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/controller.nodecheck.ts:215:11: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/qa/mcp-widget/controller.nodecheck.ts:244:16: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/controller.nodecheck.ts:144:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:144:30: error eslint(curly): Expected { after 'if' condition. help: Replace `controller.select(other)` with `{controller.select(other)}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:145:10: error eslint(curly): Expected { after 'else'. help: Replace `controller[action]()` with `{controller[action]()}`.
+extensions/qa/mcp-widget/controller.nodecheck.ts:146:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:199:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/controller.nodecheck.ts:217:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:91:20: error eslint(array-callback-return): Unexpected return value in callback for "Array.prototype.forEach" help: Expected the return expression to be started with `void`
+extensions/src/mcp-app/widget/controller.ts:109:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/mcp-app/widget/controller.ts:175:9: error eslint(no-nested-ternary): Do not nest ternary expressions. help: Refactor nested ternary expressions into if-else statements for better readability.
+extensions/src/mcp-app/widget/controller.ts:54:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:56:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:95:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:97:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:143:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:154:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:156:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:196:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:208:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:215:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:222:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:238:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:254:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:268:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:274:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/controller.ts:297:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:48:39: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/mcp-app/widget/vite.config.ts:47:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:50:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:20:3: error eslint(prefer-const): `calls` is never reassigned. help: Use `const` instead.
+extensions/qa/mcp-widget/host-entry.tsx:51:34: error eslint(no-promise-executor-return): Return statement should not be used in Promise executor. help: Use `resolve()` or `reject()` instead of returning a value.
+extensions/qa/mcp-widget/host-entry.tsx:60:5: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/host-entry.tsx:116:30: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/host-entry.tsx:116:53: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/qa/mcp-widget/host-entry.tsx:132:7: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/qa/mcp-widget/host-entry.tsx:54:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:86:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/host-entry.tsx:94:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/mcp-app/widget/vite.config.ts:12:7: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/src/mcp-app/widget/vite.config.ts:14:3: error typescript(no-unsafe-member-access): Unsafe member access .default on an `any` value.
+extensions/src/mcp-app/widget/vite.config.ts:39:40: error typescript(no-base-to-string): 'config.build.lib.entry' may use Object's default stringification format ('[object Object]') when stringified. help: Consider picking a property (e.g. `user.name`), using a formatter (or `JSON.stringify`), or implementing a custom `toString()`/`toLocaleString()` on the type.
+extensions/src/mcp-app/widget/vite.config.ts:80:5: error typescript(no-unsafe-call): Unsafe call of a(n) `any` typed value.
+extensions/src/mcp-app/widget/bridge.ts:52:7: error typescript(no-deprecated): `ontoolinput` is deprecated. Use `addEventListener("toolinput", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:75:7: error typescript(no-deprecated): `ontoolinputpartial` is deprecated. Use `addEventListener("toolinputpartial", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:79:7: error typescript(no-deprecated): `ontoolresult` is deprecated. Use `addEventListener("toolresult", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:89:7: error typescript(no-deprecated): `ontoolcancelled` is deprecated. Use `addEventListener("toolcancelled", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/bridge.ts:93:7: error typescript(no-deprecated): `onhostcontextchanged` is deprecated. Use `addEventListener("hostcontextchanged", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/src/mcp-app/widget/controller.ts:254:9: error typescript(no-unnecessary-condition): Unnecessary optional chain on a non-nullish value. help: The checked value has type `{ draftId: string; revision: number; before: string; }`. Remove the optional chain; the value cannot be `null` or `undefined`.
+extensions/src/mcp-app/widget/bridge.ts:187:13: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `false`.
+extensions/src/mcp-app/widget/bridge.ts:192:13: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always truthy. help: The checked value has type `false`.
+extensions/qa/mcp-widget/server.ts:8:7: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/server.ts:17:3: error typescript(no-unsafe-member-access): Unsafe member access .results on an `any` value.
+extensions/qa/mcp-widget/fixture-entry.tsx:21:5: error typescript(no-unsafe-return): Unsafe return of a value of type `Promise<any>`. help: Returned expression has type `Promise<any>`. Return a safely typed value or narrow the value before returning it.
+extensions/qa/mcp-widget/host-entry.tsx:82:33: error typescript(no-misused-promises): Promise-returning function provided to variable where a void return was expected.
+extensions/qa/mcp-widget/host-entry.tsx:82:8: error typescript(no-deprecated): `oninitialized` is deprecated. Use `addEventListener("initialized", handler)` instead — it composes with other listeners and supports cleanup via `removeEventListener`.
+extensions/qa/mcp-widget/host-entry.tsx:86:11: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`, so the target is also inferred as `any`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:89:17: error typescript(no-unsafe-member-access): Unsafe member access .result on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:91:34: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`; the target has type `Record<string, unknown> | undefined`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:91:54: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:95:9: error typescript(no-unsafe-assignment): Unsafe assignment of an any value. help: Assigned value has type `any`; the target has type `Record<string, unknown> | undefined`. Use a safely typed value or `unknown`, and narrow it before use.
+extensions/qa/mcp-widget/host-entry.tsx:96:23: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:97:29: error typescript(restrict-plus-operands): Invalid operand of type 'any' for a '+' operation. help: Operands must each be a number or string.
+extensions/qa/mcp-widget/host-entry.tsx:97:38: error typescript(no-unsafe-member-access): Unsafe member access .selection on an `any` value.
+extensions/qa/mcp-widget/host-entry.tsx:100:33: error typescript(no-unsafe-argument): Unsafe argument of type any assigned to a parameter of type { [x: string]: unknown; _meta?: { [x: string]: unknown; "io.modelcontextprotocol/serverInfo"?: { version: string; websiteUrl?: string | undefined; description?: string | undefined; icons?: { src: string; mimeType?: string | undefined; sizes?: string[] | undefined; theme?: "dark" | "light" | undefined; }[] | undefined; name: string; title?: string | undefined; } | undefined; } | undefined; content: ({ type: "text"; text: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { type: "image"; data: string; mimeType: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { type: "audio"; data: string; mimeType: string; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; } | { uri: string; description?: string | undefined; mimeType?: string | undefined; size?: number | undefined; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; icons?: { src: string; mimeType?: string | undefined; sizes?: string[] | undefined; theme?: "dark" | "light" | undefined; }[] | undefined; name: string; title?: string | undefined; type: "resource_link"; } | { type: "resource"; resource: { uri: string; mimeType?: string | undefined; _meta?: { [x: string]: unknown; } | undefined; text: string; } | { uri: string; mimeType?: string | undefined; _meta?: { [x: string]: unknown; } | undefined; blob: string; }; annotations?: { audience?: ("assistant" | "user")[] | undefined; priority?: number | undefined; lastModified?: string | undefined; } | undefined; _meta?: { [x: string]: unknown; } | undefined; })[]; structuredContent?: unknown; isError?: boolean | undefined; }.
+extensions/qa/mcp-widget/host-entry.tsx:100:42: error typescript(no-unsafe-member-access): Unsafe member access .result on an `any` value.
+extensions/qa/mcp-widget/controller.nodecheck.ts:110:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:155:5: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:172:7: error typescript(require-await): Function has no 'await' expression.
+extensions/qa/mcp-widget/controller.nodecheck.ts:199:5: error typescript(require-await): Function has no 'await' expression.

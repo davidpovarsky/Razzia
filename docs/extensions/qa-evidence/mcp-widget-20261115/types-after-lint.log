@@ -1,0 +1,1 @@
+extensions/src/mcp-app/widget/vite.config.ts(16,35): error TS2307: Cannot find module '../../../../packages/web/node_modules/@tailwindcss/vite' or its corresponding type declarations.
