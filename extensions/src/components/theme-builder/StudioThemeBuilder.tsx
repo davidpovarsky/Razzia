@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react"
+import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
   AlertDialog,
@@ -21,6 +21,12 @@ import { nativeBuilderText } from "./NativeLibraryPanel"
 
 /** Mounted only after Studio's real account check. Server grants remain authoritative. */
 export function StudioThemeBuilder({ accountId }: { accountId: string }) {
+  // Drafts, permissions and in-flight work belong to one verified account.
+  // A new account must never inherit the old account's editable document.
+  return <AccountThemeBuilder key={accountId} accountId={accountId} />
+}
+
+function AccountThemeBuilder({ accountId }: { accountId: string }) {
   const { i18n } = useTranslation()
   const language = i18n.language.split("-")[0]
   const locale: PreviewLocale = [
@@ -52,6 +58,8 @@ export function StudioThemeBuilder({ accountId }: { accountId: string }) {
   const [destination, setDestination] = useState<string | null>(null),
     [family, setFamily] = useState("razzia-original"),
     [name, setName] = useState(text("title"))
+  const openRequest = useRef<AbortController | null>(null)
+  useEffect(() => () => openRequest.current?.abort(), [])
   const changed = useCallback((value: boolean) => setDirty(value), [])
   const saved = useCallback(
     (receipt: BuilderReceipt) =>
@@ -94,7 +102,9 @@ export function StudioThemeBuilder({ accountId }: { accountId: string }) {
     return () => abort.abort()
   }, [accountId, client])
   const open = async (id: string) => {
-    if (pending) return
+    if (openRequest.current) return
+    const controller = new AbortController()
+    openRequest.current = controller
     setPending(true)
     try {
       const receipt =
@@ -104,15 +114,22 @@ export function StudioThemeBuilder({ accountId }: { accountId: string }) {
               revision: 0,
               digest: "",
             }
-          : await client.read(id, AbortSignal.timeout(15_000))
+          : await client.read(
+              id,
+              AbortSignal.any([controller.signal, AbortSignal.timeout(15_000)]),
+            )
+      if (controller.signal.aborted) return
       setOpened(receipt)
       setDirty(false)
       setFailed(false)
     } catch {
-      setFailed(true)
+      if (!controller.signal.aborted) setFailed(true)
     } finally {
-      setPending(false)
-      setDestination(null)
+      if (openRequest.current === controller) openRequest.current = null
+      if (!controller.signal.aborted) {
+        setPending(false)
+        setDestination(null)
+      }
     }
   }
   const choose = (id: string) => {
