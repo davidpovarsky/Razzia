@@ -188,6 +188,44 @@ describe("media-delete deterministic restart snapshots", () => {
       "quarantine-cleanup",
       "journal-cleanup",
     ].includes(boundary)
+    if (journals(snapshot.getPath).length > 0) {
+      // Copied roots/inodes are not restarts of the recorded files. Actual
+      // same-root SIGKILL positives remain in process-interruption.test.ts.
+      const copiedState = () =>
+        fs
+          .readdirSync(snapshot.root, { recursive: true })
+          .map(String)
+          .sort()
+          .map((relative) => {
+            const file = path.join(snapshot.root, relative)
+            const stat = fs.lstatSync(file)
+            return {
+              relative,
+              kind: stat.isDirectory() ? "directory" : "file",
+              ...(stat.isFile() ? { sha256: fileDigest(file) } : {}),
+            }
+          })
+      const beforeCopyRecovery = copiedState()
+      for (const attempt of [1, 2]) {
+        expect(() =>
+          recoverStartupJournals({ getPath: snapshot.getPath }),
+        ).toThrow(/startup blocked/i)
+        expect(copiedState(), `attempt ${attempt}`).toStrictEqual(
+          beforeCopyRecovery,
+        )
+      }
+      if (process.env.RECOVERY_RECEIPT_PATH)
+        fs.appendFileSync(
+          process.env.RECOVERY_RECEIPT_PATH,
+          JSON.stringify({
+            boundary,
+            recovery: "copied-identity-rejected",
+            before: beforeCopyRecovery,
+            after: copiedState(),
+          }) + "\n",
+        )
+      return
+    }
     expect(
       recoverStartupJournals({ getPath: snapshot.getPath }).status,
     ).not.toBe("failed")

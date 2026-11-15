@@ -8,6 +8,7 @@ import * as native from "../../../../packages/socket/src/services/config"
 import { quizzValidator } from "@razzia/common/validators/quizz"
 import { computeCanonicalBaseDigest } from "../../core/index"
 import { CompositeStorageService } from "./service"
+import { executeMediaDeleteTransaction } from "../media-library"
 import {
   byteHash,
   makeNativeFixture,
@@ -30,7 +31,6 @@ const cases: NativeBindingScenario[] = [
   "quiz-sidecar",
   "media-foreign",
   "quiz-foreign",
-  "media-sidecar-only",
 ]
 
 function child(
@@ -175,30 +175,14 @@ describe("R1 actual native storage bindings and logical digest", () => {
           if (descriptor.foreignName) {
             const sentinel = `quizz/${descriptor.foreignName}`
             expect(run.state.files[sentinel]).toEqual(before.files[sentinel])
-            expect(run.process.code).toBe(2)
-            expect(run.error).toMatch(/startup blocked/i)
-            expect(run.state.journals.length).toBeGreaterThan(0)
-          } else if (descriptor.sidecarOnlyId) {
-            expect(
-              run.state.files[`quizz/${descriptor.sidecarOnlyId}.json`],
-            ).toBeUndefined()
-            expect(
-              run.state.files[
-                `extensions/quizzes/${descriptor.sidecarOnlyId}.json`
-              ],
-            ).toEqual(
-              before.files[
-                `extensions/quizzes/${descriptor.sidecarOnlyId}.json`
-              ],
-            )
-            expect(run.process.code).toBe(2)
-            expect(run.state.journals.length).toBeGreaterThan(0)
-          } else {
+          }
+          {
             expect(run.process.code, run.process.stderr).toBe(0)
             expect(run.report.unresolvedCount).toBe(0)
-            expect(
-              run.state.files[`quizz/${descriptor.quizId}.json`],
-            ).toBeUndefined()
+            if (!descriptor.foreignName)
+              expect(
+                run.state.files[`quizz/${descriptor.quizId}.json`],
+              ).toBeUndefined()
             expect(run.state.files[baseKey]).toEqual(before.files[baseKey])
             expect(run.state.files[extrasKey]).toEqual(before.files[extrasKey])
             expect(run.state.files["media/r1-native.png"]).toEqual(
@@ -207,8 +191,7 @@ describe("R1 actual native storage bindings and logical digest", () => {
             expect(run.state.journals).toHaveLength(0)
           }
         }
-        if (!descriptor.foreignName && !descriptor.sidecarOnlyId)
-          expect(runs[1].report.status).toBe("clean")
+        expect(runs[1].report.status).toBe("clean")
         expect(runs[1].state.files).toEqual(runs[0].state.files)
         receipt.state = "PASS"
       } catch (error) {
@@ -278,6 +261,53 @@ describe("R1 actual native storage bindings and logical digest", () => {
       }
     },
   )
+
+  it("rejects sidecar-only detach before any filesystem mutation", () => {
+    const { root, descriptor } = makeNativeFixture("media-sidecar-only")
+    const tree = () =>
+      fs
+        .readdirSync(root, { recursive: true })
+        .map(String)
+        .sort()
+        .map((relative) => {
+          const file = path.join(root, relative)
+          const stat = fs.lstatSync(file)
+          return {
+            relative,
+            kind: stat.isDirectory() ? "directory" : "file",
+            ...(stat.isFile()
+              ? { sha256: byteHash(fs.readFileSync(file)) }
+              : {}),
+          }
+        })
+    const before = nativeFixtureState(root)
+    const beforeTree = tree()
+    try {
+      const result = executeMediaDeleteTransaction(
+        native.getPath,
+        "r1-native.png",
+        {
+          detach: true,
+          deleteMediaFn: () =>
+            fs.unlinkSync(native.getPath("media/r1-native.png")),
+        },
+      )
+      const after = nativeFixtureState(root)
+      retain("sidecar-only-preflight-r2", {
+        result,
+        before,
+        after,
+        beforeTree,
+        afterTree: tree(),
+      })
+      expect(result.allowed).toBe(false)
+      expect(result.error).toMatch(/preflight|physical base/i)
+      expect(after).toStrictEqual(before)
+      expect(tree()).toStrictEqual(beforeTree)
+    } finally {
+      removeNativeFixture(root, descriptor.token)
+    }
+  })
 
   it("native writer baseline strips extra input independently of ownership bytes", () => {
     const { root, descriptor } = makeNativeFixture("media")

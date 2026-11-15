@@ -12,6 +12,8 @@ import {
   assertNativeFixture,
   nativeFixtureState,
   NATIVE_MEDIA,
+  nativeInput,
+  richNativeExtras,
 } from "./native-binding-fixture"
 
 function main() {
@@ -66,7 +68,20 @@ function main() {
     process.kill(process.pid, "SIGKILL")
     process.exit(87)
   }
-  if (descriptor.scenario.startsWith("media")) {
+  if (descriptor.scenario === "create" || descriptor.scenario === "import") {
+    const rename = fs.renameSync.bind(fs)
+    fs.renameSync = (source, destination) => {
+      rename(source, destination)
+      if (String(destination).endsWith(".journal.json")) stop()
+    }
+    const input = nativeInput("R2 after-ID creation")
+    const extras = richNativeExtras("temporary", input)
+    const service = new CompositeStorageService({ ...native })
+    if (descriptor.scenario === "create")
+      service.createCompositeQuiz({ quizz: input, extras })
+    else
+      service.importEnhancedBundle({ bundleVersion: 1, quizz: input, extras })
+  } else if (descriptor.scenario.startsWith("media")) {
     executeMediaDeleteTransaction(native.getPath, NATIVE_MEDIA, {
       detach: true,
       deleteMediaFn: () => {

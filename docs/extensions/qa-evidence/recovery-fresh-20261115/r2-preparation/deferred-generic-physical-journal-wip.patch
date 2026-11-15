@@ -1,0 +1,391 @@
+diff --git a/extensions/src/server/storage/journal.ts b/extensions/src/server/storage/journal.ts
+index bbaa77f..a9c0c59 100644
+--- a/extensions/src/server/storage/journal.ts
++++ b/extensions/src/server/storage/journal.ts
+@@ -2,6 +2,16 @@ import fs from "node:fs"
+ import path from "node:path"
+ import { v7 as uuidv7 } from "uuid"
+ import { readRecoveryBase } from "./recovery-state"
++import {
++  assertPhysicalGroup,
++  assertPhysicalBinding,
++  cleanupPhysicalBindings,
++  preparePhysicalBinding,
++  resolvePhysicalBase,
++  readPhysicalFile,
++  restorePhysicalBinding,
++  type PhysicalBinding,
++} from "./physical-binding"
+ import {
+   deleteSidecar,
+   getSidecarDirectory,
+@@ -18,7 +28,7 @@ import {
+ } from "../../core/index"
+ 
+ export interface JournalEntry {
+-  version?: 1
++  version?: 1 | 2
+   kind?: "quiz-save"
+   id: string
+   quizId: string
+@@ -28,6 +38,7 @@ export interface JournalEntry {
+   backupExtras: unknown
+   targetBase: unknown
+   targetExtras: unknown
++  bindings?: { base: PhysicalBinding; sidecar: PhysicalBinding }
+ }
+ 
+ export const getJournalDirectory = (
+@@ -65,8 +76,29 @@ export const createStagedJournal = (
+     targetExtras: unknown
+   },
+ ): JournalEntry => {
++  getJournalDirectory(getPath)
++  const basePath = resolvePhysicalBase(getPath, params.quizId)
++  if (!basePath)
++    throw new Error("Cannot stage without an unambiguous physical base")
++  const base = preparePhysicalBinding(
++    getPath,
++    params.quizId,
++    "base",
++    basePath,
++    params.targetBase,
++  )
++  base.removeOnRollback = params.backupBase === null
++  const sidecar = preparePhysicalBinding(
++    getPath,
++    params.quizId,
++    "sidecar",
++    `extensions/quizzes/${params.quizId}.json`,
++    params.targetExtras,
++  )
++  if (params.backupBase !== null && (!base.original || computeCanonicalBaseDigest(JSON.parse(base.original.raw)) !== computeCanonicalBaseDigest(params.backupBase))) throw new Error("Base changed before journal staging")
++  if (params.backupExtras === null ? sidecar.original !== null : !sidecar.original || computeCanonicalBaseDigest(JSON.parse(sidecar.original.raw)) !== computeCanonicalBaseDigest(params.backupExtras)) throw new Error("Sidecar changed before journal staging")
+   const entry: JournalEntry = {
+-    version: 1,
++    version: 2,
+     kind: "quiz-save",
+     id: uuidv7(),
+     quizId: params.quizId,
+@@ -76,6 +108,7 @@ export const createStagedJournal = (
+     backupExtras: params.backupExtras,
+     targetBase: params.targetBase,
+     targetExtras: params.targetExtras,
++    bindings: { base, sidecar },
+   }
+   const filePath = getJournalFilePath(getPath, params.quizId)
+   const tmpPath = `${filePath}.tmp.${Date.now()}`
+@@ -92,6 +125,13 @@ export const removeJournal = (
+   const filePath = getJournalFilePath(getPath, quizId)
+ 
+   if (fs.existsSync(filePath)) {
++    const entry = JSON.parse(fs.readFileSync(filePath, "utf8")) as JournalEntry
++    if (entry.bindings) {
++      const bindings = [entry.bindings.base, entry.bindings.sidecar]
++      if (entry.bindings.base.kind !== "base" || entry.bindings.sidecar.kind !== "sidecar" || !!entry.bindings.base.removeOnRollback !== (entry.backupBase === null) || entry.bindings.sidecar.removeOnRollback || entry.backupBase === undefined || entry.backupExtras === undefined) throw new Error("Invalid journal binding roles")
++      assertPhysicalGroup(getPath, bindings)
++      cleanupPhysicalBindings(getPath, bindings)
++    }
+     fs.unlinkSync(filePath)
+   }
+ }
+@@ -190,7 +230,7 @@ export const recoverJournals = (
+         continue
+       }
+ 
+-      if (entry.version !== undefined && entry.version !== 1) {
++      if (entry.version !== 2 || !entry.bindings) {
+         console.warn(
+           `[Journal] Incompatible journal version "${entry.version}" in ${file}, preserving`,
+         )
+@@ -227,6 +267,26 @@ export const recoverJournals = (
+       if (file !== `${cleanId}.journal.json`) {
+         throw new Error(`Journal filename does not match quiz ${cleanId}`)
+       }
++      const bindings = [entry.bindings.base, entry.bindings.sidecar]
++      if (bindings.some((binding) => binding.quizId !== cleanId))
++        throw new Error("Journal binding identity mismatch")
++      assertPhysicalGroup(injections.getPath, bindings)
++      if (
++        entry.backupBase !== null &&
++        (!entry.bindings.base.original ||
++          computeCanonicalBaseDigest(
++            JSON.parse(entry.bindings.base.original.raw),
++          ) !== computeCanonicalBaseDigest(entry.backupBase))
++      )
++        throw new Error("Backup base differs from captured physical bytes")
++      if (
++        entry.backupExtras !== null &&
++        (!entry.bindings.sidecar.original ||
++          computeCanonicalBaseDigest(
++            JSON.parse(entry.bindings.sidecar.original.raw),
++          ) !== computeCanonicalBaseDigest(entry.backupExtras))
++      )
++        throw new Error("Backup sidecar differs from captured physical bytes")
+ 
+       // Check status: only "staged" requires active rollback. Unknown status is preserved.
+       if (entry.status !== "staged") {
+@@ -337,12 +397,20 @@ export const recoverJournals = (
+       // 5. Rollback base quiz without swallowing errors
+       if (entry.backupBase !== null && entry.backupBase !== undefined) {
+         injections.updateQuizz(cleanId, entry.backupBase)
++        assertPhysicalBinding(injections.getPath, entry.bindings.base)
++        restorePhysicalBinding(injections.getPath, entry.bindings.base)
+       } else {
+-        const currentBase = readRecoveryBase(injections, cleanId)
++        const currentBase = readPhysicalFile(
++          injections.getPath,
++          entry.bindings.base.relativePath,
++        )
+         if (currentBase) {
+           // A creation journal owns only the exact newly saved payload. Never
+           // delete a subsequently changed quiz during cleanup replay.
+-          const baseRecord = { ...(currentBase as Record<string, unknown>) }
++          const baseRecord = JSON.parse(currentBase.raw) as Record<
++            string,
++            unknown
++          >
+           const targetRecord = entry.targetBase as Record<string, unknown>
+           if (!("id" in targetRecord)) delete baseRecord.id
+           if (
+@@ -356,34 +424,17 @@ export const recoverJournals = (
+       }
+ 
+       // 6. Rollback sidecar
+-      if (parsedExtras) {
+-        writeSidecar(injections.getPath, cleanId, parsedExtras)
+-      } else {
+-        deleteSidecar(injections.getPath, cleanId)
+-      }
++      restorePhysicalBinding(injections.getPath, entry.bindings.sidecar)
+ 
+       // 7. Verification before removing journal
+       if (entry.backupBase !== null && entry.backupBase !== undefined) {
+-        let verifiedBase: unknown = null
+-
+-        try {
+-          verifiedBase = injections.getQuizzById(cleanId)
+-        } catch {
+-          // GetQuizzById may throw if unmocked or missing
+-        }
+-
+-        if (!verifiedBase) {
+-          const quizzDir = injections.getPath("quizz")
+-          const filePath = path.join(quizzDir, `${cleanId}.json`)
+-
+-          if (fs.existsSync(filePath)) {
+-            try {
+-              verifiedBase = JSON.parse(fs.readFileSync(filePath, "utf-8"))
+-            } catch {
+-              // Ignore
+-            }
+-          }
+-        }
++        const verifiedRaw = readPhysicalFile(
++          injections.getPath,
++          entry.bindings.base.relativePath,
++        )
++        const verifiedBase: unknown = verifiedRaw
++          ? JSON.parse(verifiedRaw.raw)
++          : null
+ 
+         if (
+           !verifiedBase ||
+@@ -393,12 +444,8 @@ export const recoverJournals = (
+           throw new Error(`Failed to verify rolled back base quiz ${cleanId}`)
+         }
+       } else {
+-        const remainingBase = readRecoveryBase(injections, cleanId)
+         if (
+-          remainingBase ||
+-          fs.existsSync(
+-            path.join(injections.getPath("quizz"), `${cleanId}.json`),
+-          )
++          readPhysicalFile(injections.getPath, entry.bindings.base.relativePath)
+         ) {
+           throw new Error(`Base quiz ${cleanId} survived rollback deletion`)
+         }
+@@ -428,6 +475,7 @@ export const recoverJournals = (
+       }
+ 
+       // 8. Remove journal only after verified restoration
++      cleanupPhysicalBindings(injections.getPath, bindings)
+       if (fs.existsSync(journalPath)) {
+         fs.unlinkSync(journalPath)
+       }
+diff --git a/extensions/src/server/storage/service.ts b/extensions/src/server/storage/service.ts
+index 9c21e30..15d504b 100644
+--- a/extensions/src/server/storage/service.ts
++++ b/extensions/src/server/storage/service.ts
+@@ -22,7 +22,17 @@ import {
+   type EnhancedBundle,
+ } from "../../core/index"
+ import { CompositeStorageError } from "./error"
+-import { createStagedJournal, removeJournal } from "./journal"
++import {
++  createStagedJournal,
++  removeJournal,
++  type JournalEntry,
++} from "./journal"
++import {
++  assertPhysicalGroup,
++  publishPhysicalTarget,
++  readPhysicalFile,
++  restorePhysicalBinding,
++} from "./physical-binding"
+ import { readRecoveryBase } from "./recovery-state"
+ import {
+   deleteSidecar,
+@@ -32,6 +42,30 @@ import {
+   type StorageInjections,
+ } from "./sidecar"
+ 
++function logicalPayload(record: Record<string, unknown>, quizId: string) {
++  if (!("id" in record)) return record
++  if (record.id !== quizId)
++    throw new CompositeStorageError(
++      "Stored quiz identity mismatch",
++      StatusCodes.CONFLICT,
++    )
++  const { id: _storageId, ...payload } = record
++  return payload
++}
++
++function writeJournalSidecar(
++  injections: StorageInjections,
++  entry: JournalEntry,
++  extras: AnyQuizExtras,
++) {
++  const bindings = entry.bindings!
++  assertPhysicalGroup(injections.getPath, [bindings.base, bindings.sidecar])
++  if (!bindings.sidecar.original)
++    publishPhysicalTarget(injections.getPath, bindings.sidecar)
++  writeSidecar(injections.getPath, entry.quizId, extras)
++  assertPhysicalGroup(injections.getPath, [bindings.base, bindings.sidecar])
++}
++
+ export class CompositeStorageService {
+   private readonly injections: StorageInjections
+ 
+@@ -49,6 +83,7 @@ export class CompositeStorageService {
+   } {
+     let quizId = ""
+     let journalCreated = false
++    let journal: JournalEntry | undefined
+     try {
+       quizId = this.injections.saveQuizz(quizz).id
+       const schema =
+@@ -56,7 +91,7 @@ export class CompositeStorageService {
+       const validated = schema.parse({ ...extras, quizId, revision: 1 })
+       // saveQuizz owns ID allocation. Once it returns, persist rollback intent
+       // before the sidecar write. A crash inside saveQuizz remains an adapter gate.
+-      createStagedJournal(this.injections.getPath, {
++      journal = createStagedJournal(this.injections.getPath, {
+         quizId,
+         backupBase: null,
+         backupExtras: null,
+@@ -64,24 +99,41 @@ export class CompositeStorageService {
+         targetExtras: validated,
+       })
+       journalCreated = true
+-      writeSidecar(this.injections.getPath, quizId, validated)
++      writeJournalSidecar(this.injections, journal, validated)
+       removeJournal(this.injections.getPath, quizId)
+       return { quizId, revision: 1, baseDigest: validated.baseDigest }
+     } catch (error) {
+       const cleanupErrors: unknown[] = []
+       if (quizId) {
++        if (!journal?.bindings)
++          throw new CompositeStorageError(
++            `Creation ownership intent unavailable; no guessed cleanup: ${error instanceof Error ? error.message : String(error)}`,
++            StatusCodes.INTERNAL_SERVER_ERROR,
++          )
++        try {
++          assertPhysicalGroup(this.injections.getPath, [
++            journal.bindings.base,
++            journal.bindings.sidecar,
++          ])
++        } catch (ownershipError) {
++          throw new CompositeStorageError(
++            `Creation rollback blocked; both siblings and recovery journal preserved: ${ownershipError instanceof Error ? ownershipError.message : String(ownershipError)}`,
++            StatusCodes.INTERNAL_SERVER_ERROR,
++          )
++        }
+         // Attempt both cleanups independently; a failed base deletion must not
+         // hide a sidecar cleanup error or destroy the recovery journal.
+         try {
+-          if (readRecoveryBase(this.injections, quizId))
+-            this.injections.deleteQuizz(quizId)
+-          if (readRecoveryBase(this.injections, quizId))
+-            throw new Error("Base survived creation rollback")
++          this.injections.deleteQuizz(quizId)
++          if (readPhysicalFile(this.injections.getPath, journal.bindings.base.relativePath)) throw new Error("Base survived creation rollback")
+         } catch (cleanupError) {
+           cleanupErrors.push(cleanupError)
+         }
+         try {
+-          deleteSidecar(this.injections.getPath, quizId)
++          restorePhysicalBinding(
++            this.injections.getPath,
++            journal.bindings.sidecar,
++          )
+           if (sidecarExists(this.injections.getPath, quizId))
+             throw new Error("Sidecar survived creation rollback")
+         } catch (cleanupError) {
+@@ -136,9 +188,14 @@ export class CompositeStorageService {
+     }
+ 
+     const baseRecord = quizz as Record<string, unknown>
+-    const baseDigest = computeCanonicalBaseDigest(baseRecord)
++    const logicalRecord = logicalPayload(baseRecord, quizId)
++    const baseDigest = computeCanonicalBaseDigest(logicalRecord)
+     const extras = readSidecar(this.injections.getPath, quizId)
+-    const digestMatches = extras ? extras.baseDigest === baseDigest : true
++    const digestMatches = extras
++      ? extras.quizId === quizId &&
++        (extras.baseDigest === baseDigest ||
++          extras.baseDigest === computeCanonicalBaseDigest(baseRecord))
++      : true
+ 
+     return {
+       quizId,
+@@ -203,9 +260,14 @@ export class CompositeStorageService {
+     }
+ 
+     // 3. Verify base digest matches submitted quizz
+-    const actualBaseDigest = computeCanonicalBaseDigest(quizz)
++    const actualBaseDigest = computeCanonicalBaseDigest(
++      logicalPayload(quizz, quizId),
++    )
+ 
+-    if (actualBaseDigest !== extras.baseDigest) {
++    if (
++      actualBaseDigest !== extras.baseDigest &&
++      computeCanonicalBaseDigest(quizz) !== extras.baseDigest
++    ) {
+       throw new CompositeStorageError(
+         `Digest conflict: base quiz digest (${actualBaseDigest}) does not match extras baseDigest (${extras.baseDigest})`,
+         StatusCodes.CONFLICT,
+@@ -242,7 +304,7 @@ export class CompositeStorageService {
+     }
+ 
+     // 5. Atomic-equivalent two-phase write with journal
+-    createStagedJournal(this.injections.getPath, {
++    const journal = createStagedJournal(this.injections.getPath, {
+       quizId,
+       backupBase: existingBase,
+       backupExtras: existingExtras,
+@@ -251,8 +313,12 @@ export class CompositeStorageService {
+     })
+ 
+     try {
++      assertPhysicalGroup(this.injections.getPath, [
++        journal.bindings!.base,
++        journal.bindings!.sidecar,
++      ])
+       this.injections.updateQuizz(quizId, quizz)
+-      writeSidecar(this.injections.getPath, quizId, updatedExtras)
++      writeJournalSidecar(this.injections, journal, updatedExtras)
+       removeJournal(this.injections.getPath, quizId)
+     } catch (writeError) {
+       // If error occurs, leave journal for crash recovery or rollback immediately

@@ -117,8 +117,10 @@ describe("Server-Side Composite Storage & Journals (CORE01-06, MEDIA02)", () => 
     const composite = service.getCompositeQuiz(id)
     expect(composite.exists).toBe(true)
     expect(composite.extras).toBeNull()
+    expect(composite.quizz.id).toBe(id)
+    const { id: _storageId, ...canonicalValidatedPayload } = composite.quizz
     expect(composite.baseDigest).toBe(
-      computeCanonicalBaseDigest(composite.quizz),
+      computeCanonicalBaseDigest(canonicalValidatedPayload),
     )
 
     // Ensure no sidecar file was created on disk
