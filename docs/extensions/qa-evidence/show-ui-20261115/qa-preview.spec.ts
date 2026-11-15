@@ -56,11 +56,24 @@ test("paused voting remains stable, resumes, and reuses the stage for q2", async
   expect(await page.evaluate(() => (window as any).__showPreviewQa.failures())).toBe(0)
 })
 
-test("the five current-card phases render with zero synthetic voters", async ({ page }) => {
+test("the five current-card phases render with zero synthetic voters", async ({ page }, info) => {
   test.setTimeout(60000)
   await page.goto("/")
   await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
   await page.evaluate(() => { (window as any).__qaSfx = 0; window.addEventListener("tadazz:sfx", () => { (window as any).__qaSfx += 1 }) })
+  const decoded = await page.evaluate(async () => {
+    const paths = ["/tadazz-show/motion/backdrop.webp", "/tadazz-show/v4/question-bg.webp", "/tadazz-show/v4/show-stage.webp", "/tadazz-show/story/84acdb923677d591.webp", "/tadazz-show/v4/tadazz-brand-logo.png"]
+    return Promise.all(paths.map(async (path) => {
+      const response = await fetch(path)
+      if (!response.ok) throw new Error(`decode fetch ${response.status}: ${path}`)
+      const blob = await response.blob(), image = await createImageBitmap(blob)
+      const result = { path, mime: blob.type, bytes: blob.size, width: image.width, height: image.height }
+      image.close()
+      return result
+    }))
+  })
+  expect(decoded.map((image) => [image.width, image.height])).toEqual([[1920,1080],[1920,1080],[1920,1080],[1920,1080],[1983,793]])
+  await info.attach("qa-decoded-images.json", { body: Buffer.from(JSON.stringify(decoded, null, 2)), contentType: "application/json" })
   await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "question", paused: false }))
   await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
   await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "answerCards", paused: false }))

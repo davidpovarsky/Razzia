@@ -19,7 +19,7 @@ No platform-only Rubik file is added to the native renderer fixture.
 | `qa-fixture-host.ts` | 2,760 | `4bc9f57da87d6186584a313facd166a86d7d63a45c5e94cf392da752ee5bf90d` |
 | `qa-fixture-server.ts` | 6,292 | `792d182242e614a024af697fc4f8eab28e397554845c748ed434a275ba6103ec` |
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
-| `qa-preview.spec.ts` | 8,889 | `4067738915ad1bb6d8c7390bcaf1ad773f99a15eb7bbd8dd03598534ada13118` |
+| `qa-preview.spec.ts` | 9,843 | `ef2d4e261960bdc4194dd9398886c892823c9d89c88079b61ab4bbec46250313` |
 | `qa-preview.config.ts` | 616 | `d3ef95e5125fd8032ed3c4a02331c162c9c3b7717743c07221e5a540ad9204a3` |
 
 The server verifies every allowlisted file SHA-256 before listening, rejects
@@ -64,7 +64,7 @@ QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
 In a new owned output root, place d095 `renderer.js` and `renderer.css`, copy
 `qa-browser.mjs` to `browser.mjs`, and copy the five inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-4,307,904 bytes; the five QA source files total 20,773 bytes. Existing source
+4,307,904 bytes; the five QA source files total 21,727 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.
