@@ -1,0 +1,24 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T18:41:03.895Z",
+    "exactPreservedNotesReadback": true
+  },
+  "deliveries": [
+    {
+      "lane": "E",
+      "delivered": true
+    },
+    {
+      "lane": "F",
+      "delivered": true
+    },
+    {
+      "lane": "A",
+      "delivered": true
+    }
+  ],
+  "GNotReady": true,
+  "actualLoginResumeAndHostMountOpen": true
+}
