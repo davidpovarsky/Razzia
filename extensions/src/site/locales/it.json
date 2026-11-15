@@ -230,5 +230,11 @@
   "More actions for {{name}}": "Altre azioni per {{name}}",
   "Advanced packages": "Pacchetti avanzati",
   "Install and manage game packages.": "Installa e gestisci pacchetti di gioco.",
-  "Try another search.": "Prova un’altra ricerca."
+  "Try another search.": "Prova un’altra ricerca.",
+  "Editor": "Editor",
+  "Host": "Conduttore",
+  "Player": "Giocatore",
+  "Display": "Schermo",
+  "Join game": "Partecipa a una partita",
+  "Manager": "Gestione"
 }

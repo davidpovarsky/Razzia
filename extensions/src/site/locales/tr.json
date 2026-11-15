@@ -230,5 +230,11 @@
   "More actions for {{name}}": "{{name}} için daha fazla işlem",
   "Advanced packages": "Gelişmiş paketler",
   "Install and manage game packages.": "Oyun paketlerini yükleyin ve yönetin.",
-  "Try another search.": "Başka bir arama deneyin."
+  "Try another search.": "Başka bir arama deneyin.",
+  "Editor": "Editör",
+  "Host": "Sunucu",
+  "Player": "Oyuncu",
+  "Display": "Gösterim",
+  "Join game": "Oyuna katıl",
+  "Manager": "Yönetim"
 }

@@ -230,5 +230,11 @@
   "More actions for {{name}}": "Thêm tác vụ cho {{name}}",
   "Advanced packages": "Gói nâng cao",
   "Install and manage game packages.": "Cài đặt và quản lý gói trò chơi.",
-  "Try another search.": "Thử tìm kiếm khác."
+  "Try another search.": "Thử tìm kiếm khác.",
+  "Editor": "Trình chỉnh sửa",
+  "Host": "Người dẫn",
+  "Player": "Người chơi",
+  "Display": "Màn hình trình chiếu",
+  "Join game": "Tham gia trò chơi",
+  "Manager": "Quản lý"
 }

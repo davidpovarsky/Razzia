@@ -17,8 +17,9 @@ import {
   redirect,
 } from "@tanstack/react-router"
 import { createRoot } from "react-dom/client"
-import { StrictMode, useEffect } from "react"
+import { StrictMode, useEffect, type ReactNode } from "react"
 import { SiteLoading } from "./web/shared/SiteLoading"
+import { SiteMetadata } from "./web/shared/SiteMetadata"
 import { hasManagerSession } from "./adapters/client"
 
 const MarketingSite = lazyRouteComponent(
@@ -36,6 +37,7 @@ const nativeEntry = /^\/(?:manager|party|display|game)(?:\/|$)/u.test(
   window.location.pathname,
 )
 const branding = loadBranding()
+const nativeTheme = nativeEntry ? await branding : null
 const routeTree: AnyRoute = nativeEntry
   ? (await import("@razzia/web/route.gen")).routeTree
   : rootRoute
@@ -166,6 +168,12 @@ const composedTree = routeTree.addChildren([
 const router = createRouter({
   routeTree: composedTree,
   context: { socket: socketClient },
+  InnerWrap: ({ children: contents }: { children: ReactNode }) => (
+    <>
+      <SiteMetadata tenantName={nativeTheme?.appName} />
+      {contents}
+    </>
+  ),
   defaultPendingComponent: SiteLoading,
   defaultPendingMs: 150,
   defaultPendingMinMs: 0,
@@ -177,9 +185,12 @@ if (!root) {
 }
 
 if (nativeEntry) {
-  applyBranding(await branding)
+  applyBranding(nativeTheme)
 } else {
-  void branding.then(applyBranding)
+  // Platform page titles are owned by SiteMetadata, not an optional tenant name.
+  void branding.then((theme) =>
+    applyBranding(theme && { ...theme, appName: undefined }),
+  )
 }
 
 createRoot(root).render(

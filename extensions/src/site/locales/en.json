@@ -230,5 +230,11 @@
   "More actions for {{name}}": "More actions for {{name}}",
   "Advanced packages": "Advanced packages",
   "Install and manage game packages.": "Install and manage game packages.",
-  "Try another search.": "Try another search."
+  "Try another search.": "Try another search.",
+  "Editor": "Editor",
+  "Host": "Host",
+  "Player": "Player",
+  "Display": "Display",
+  "Join game": "Join game",
+  "Manager": "Manager"
 }
