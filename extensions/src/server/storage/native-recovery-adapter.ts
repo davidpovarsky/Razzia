@@ -125,7 +125,8 @@ export function createNativeRecoveryAdapter(options: {
         throw new Error(
           "Current native sidecar differs from complete logical intent",
         )
-    }
+    } else if (entry.backupExtras !== null && entry.targetExtras !== null)
+      throw new Error("Missing native sidecar is not a recorded logical state")
     const intent = { entry, journal, baseRelative, base, sidecar }
     admitted.set(id, intent)
     return intent
@@ -204,12 +205,19 @@ export function createNativeRecoveryAdapter(options: {
         )
           throw new Error("Unbound native restore target")
         if (options.updateQuizz) options.updateQuizz(id, data)
-        else
+        else {
+          const stored = JSON.parse(intent.base!.raw) as Record<string, unknown>
+          const payload = data as Record<string, unknown>
+          const publication =
+            stored.id === id && !("id" in payload)
+              ? { id, ...payload }
+              : payload
           fs.writeFileSync(
             getPath(intent.baseRelative),
-            JSON.stringify(data, null, 2),
+            JSON.stringify(publication, null, 2),
             "utf8",
           )
+        }
         const relative = resolvePhysicalBase(getPath, id)
         const restored = relative ? readPhysicalFile(getPath, relative) : null
         if (

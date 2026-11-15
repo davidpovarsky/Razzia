@@ -160,7 +160,8 @@ export function resolvePhysicalBase(
     }
     if (
       record &&
-      (record.id === id || (!("id" in record) && name === `${id}.json`))
+      (record.id === id ||
+        (typeof record.id !== "string" && name === `${id}.json`))
     ) {
       validateKind(JSON.stringify(record), "base", id, relative)
       matches.push(relative)
@@ -315,6 +316,22 @@ export function assertPhysicalGroup(
   bindings: PhysicalBinding[],
 ) {
   for (const binding of bindings) assertPhysicalBinding(getPath, binding)
+}
+/** Check every private image still needed before restoring any public sibling.
+ * A sibling already restored to authenticated original bytes needs no image.
+ */
+export function assertPhysicalRestoreGroup(
+  getPath: GetPath,
+  bindings: PhysicalBinding[],
+) {
+  for (const binding of bindings) {
+    const current = assertPhysicalBinding(getPath, binding)
+    if (!binding.original || (current && sameImage(current, binding.original)))
+      continue
+    if (!binding.preparedBackup)
+      throw new Error("Missing original byte snapshot")
+    preparedPath(getPath, binding.preparedBackup)
+  }
 }
 function preparedPath(getPath: GetPath, prepared: Prepared) {
   if (

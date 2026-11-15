@@ -27,6 +27,7 @@ import { recoverJournals, type RecoveryReport } from "./storage/journal"
 import { createNativeRecoveryAdapter } from "./storage/native-recovery-adapter"
 import {
   assertPhysicalGroup,
+  assertPhysicalRestoreGroup,
   binaryFingerprint,
   binaryFingerprintOrMissing,
   cleanupPhysicalBindings,
@@ -499,7 +500,7 @@ export function executeMediaDeleteTransaction(
   const rollback = (): boolean => {
     let allSucceeded = true
     try {
-      assertPhysicalGroup(getPath, physicalBindings)
+      assertPhysicalRestoreGroup(getPath, physicalBindings)
     } catch (error) {
       console.error(
         "[MediaRollback] Ownership changed; preserving both siblings and journal",
@@ -612,7 +613,7 @@ export function executeMediaDeleteTransaction(
     if (options?.faultInjection?.failDuringRollback) return false
     for (const b of journalShows) {
       try {
-        assertPhysicalGroup(getPath, physicalBindings)
+        assertPhysicalRestoreGroup(getPath, physicalBindings)
         restorePhysicalBinding(getPath, b.bindings.base)
         restorePhysicalBinding(getPath, b.bindings.sidecar)
       } catch (error) {
@@ -1103,6 +1104,7 @@ export function recoverMediaDeleteJournals(
 
       // CASE 2: STAGED (Rollback to original references & binary)
       if (entry.status === "staged") {
+        assertPhysicalRestoreGroup(getPath, bindings)
         // INVARIANT CHECK: Can original binary be restored?
         const hadBinaryQuarantined = Boolean(entry.quarantinePath)
         const currentBinary = binaryFingerprintOrMissing(
@@ -1260,7 +1262,7 @@ export function recoverMediaDeleteJournals(
         // 2. Restore shows and sidecars
         for (const s of validatedShows) {
           try {
-            assertPhysicalGroup(getPath, bindings)
+            assertPhysicalRestoreGroup(getPath, bindings)
             restorePhysicalBinding(getPath, s.bindings.base)
             restorePhysicalBinding(getPath, s.bindings.sidecar)
 
