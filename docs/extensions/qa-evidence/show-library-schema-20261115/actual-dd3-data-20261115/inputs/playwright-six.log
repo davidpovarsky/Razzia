@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+(node:87) Warning: The 'NO_COLOR' env is ignored due to the 'FORCE_COLOR' env being set.
+(Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  1 ../docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts:61:1 › the five current-card phases render with zero synthetic voters (8.7s)
+  ✓  2 ../docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts:128:1 › browser rejects mismatched script and style integrity (2.0s)
+  ✓  3 ../docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts:147:1 › fixture denies normalized or encoded native paths (790ms)
+
+  3 passed (17.4s)

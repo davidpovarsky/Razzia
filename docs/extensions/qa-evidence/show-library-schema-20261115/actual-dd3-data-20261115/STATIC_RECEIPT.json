@@ -1,0 +1,140 @@
+{
+  "mode": "LOCAL_GIT_ZIP_DATA_HASH_AND_SERIALIZATION_ONLY_NOT_PROJECT_RUNTIME",
+  "status": "ACTUAL_DD3_DATA_PLAN_READY_INCOMPLETE_ARTIFACT_AUTHORITY_DENIED",
+  "uiSourceCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+  "uiBrowserEvidenceCommit": "a2625d3b9e9df3787edad4abf4d9bdb6ad890125",
+  "uiOutputProofCommit": "7240e858087008bed1293856c03c8c9a80dadd91",
+  "observedRuntimeFiles": 8,
+  "knownBytes": 4013430,
+  "sourceGitRecords": 67,
+  "resolvedGraphModules": 162,
+  "repoGraphModules": 56,
+  "packageGraphModules": 106,
+  "packageResolutionKeys": 5,
+  "packageFileByteRecordsMissing": 106,
+  "rendererRefMissing": true,
+  "actualRenderedContributionMissing": true,
+  "canonicalNativeResourceDataBytes": 5098,
+  "canonicalNativeResourceDataSha256": "30b0cc05466fa002232aaa02582cf51bb5f2692cc2d5e258b9913bef0f620ca9",
+  "candidateDataParsedByFrozenCore": "NOT_RUN_PENDING_NEXT_GRANT",
+  "completeArtifactIndexGenerated": false,
+  "coreC35FourFilesHashMatched": 4,
+  "oldAcceptedFilesHashMatched": 26,
+  "schemaOrRuntimeChanges": 0,
+  "newTestsTypecheckBuildBrowserSshDownloadKeeperChange": "NONE",
+  "sourcePackageAndRightsAuthority": "MISSING_DENIED",
+  "compiledPins": [],
+  "helperSyntax": "PYTHON_AST_PASS",
+  "files": [
+    {
+      "path": "ACTUAL_DATA_MAP.json",
+      "bytes": 12382,
+      "sha256": "9f31258c90eecf8c0313f338e19c95f25449e7bd0f0c82c672b5daa4437bb338"
+    },
+    {
+      "path": "ACTUAL_DATA_PLAN.md",
+      "bytes": 12727,
+      "sha256": "d07e9b9088b82d6bd900200d519adfb2fa300a5d56f5296330bffe620832d4be"
+    },
+    {
+      "path": "artifact-files.partial.json",
+      "bytes": 4755,
+      "sha256": "9f16a1d6e98860718fef282ed0386bd82ba1e7e8dee16ad439482b510182f3c1"
+    },
+    {
+      "path": "inputs/artifact-index-dd3.json",
+      "bytes": 422,
+      "sha256": "38d36c62b57b0e90c00feebebe9c66256a55b60ab617b65632ae1e75f07d586e"
+    },
+    {
+      "path": "inputs/BROWSER_D095_STARTUP.md",
+      "bytes": 1733,
+      "sha256": "dcdc1708938505928c7296e3d2fd53a9d898627da35a7673560aaa9da9f11204"
+    },
+    {
+      "path": "inputs/BROWSER_DD3_RESULTS.md",
+      "bytes": 6135,
+      "sha256": "d8877115d32047490d471aff2f474d3db917f60277babc9d878e59081a002b65"
+    },
+    {
+      "path": "inputs/BROWSER_SIX_RESULTS.md",
+      "bytes": 4037,
+      "sha256": "b0e0871aa01e1a6feb2f565c4c864cc09adb3bfdc3c5ecc6905a32572e7fe5ee"
+    },
+    {
+      "path": "inputs/build-dd3.log",
+      "bytes": 1058,
+      "sha256": "e8bad622ec7fb0c99aa0029640daad9742f8f477b1d2304d12792886c0f31b47"
+    },
+    {
+      "path": "inputs/build-dd3.log.raw.json",
+      "bytes": 1771,
+      "sha256": "fb0464f6fb91089535314093cfbd1a29f5cd0b7aca788ac6f69829de15c4b4c8"
+    },
+    {
+      "path": "inputs/fixture-six-before.json",
+      "bytes": 1441,
+      "sha256": "b63859cecdfea1b7e3bba2d76dd2ab0c9dff8354d3ce0d4b431b784e12c33e54"
+    },
+    {
+      "path": "inputs/OUTPUT_GRAPH_AND_PROOF_PLAN.md",
+      "bytes": 9435,
+      "sha256": "a5b4de7d67202293f65abeff2f60bea7cd8bbefbcc4cfdfeabb3297a2eeaec74"
+    },
+    {
+      "path": "inputs/playwright-six.log",
+      "bytes": 660,
+      "sha256": "adc6b76a571bc1c937a40c564c6d515370136a4bf7f8f44f0c826def5a1bb029"
+    },
+    {
+      "path": "inputs/playwright-six.log.raw.json",
+      "bytes": 1244,
+      "sha256": "ba53b68e5c1701c356f4a75d3512f1118ccbdd4ab3bf2cf5b3cc4bd5ffefec27"
+    },
+    {
+      "path": "inputs/private-fixture-resource-inventory.json",
+      "bytes": 4449,
+      "sha256": "df7d3cbce19e3827d89eb433195adf6c9583e66cd462908bfe76187a193049fb"
+    },
+    {
+      "path": "inputs/renderer-module-graph.json",
+      "bytes": 43818,
+      "sha256": "bbca71f4a14564980e5f91504a5eaad706995d9e1b4b64c5da13886427fce072"
+    },
+    {
+      "path": "inputs/requests-six.json",
+      "bytes": 4909,
+      "sha256": "bece0a0b699612e7920bd74eb1655943d2659d61eba06c2c0e32a0f02103c552"
+    },
+    {
+      "path": "map_actual_dd3_inventory.py",
+      "bytes": 15860,
+      "sha256": "064c3e6fe42bf7fb7bdbb673d08aae9cc919292f58c5a63f2f6f0d4f64cc42b1"
+    },
+    {
+      "path": "module-source-map.json",
+      "bytes": 178689,
+      "sha256": "0efaa8c5abc43506fbe114d694fe869f1dfcb89cbf53ae662a1205a74607b204"
+    },
+    {
+      "path": "NEXT_INPUTS.json",
+      "bytes": 2771,
+      "sha256": "8588eacf37361a202bbb26211a06b314e2ba41befb798ed153ac21d2bc99616a"
+    },
+    {
+      "path": "PACKAGE_READ_ALLOWLIST.json",
+      "bytes": 47926,
+      "sha256": "a729b2970e7fef31846eec32c85a56d52e5d2a0213546ee4561197c46003616f"
+    },
+    {
+      "path": "resource-index.diagnostic.json",
+      "bytes": 5098,
+      "sha256": "30b0cc05466fa002232aaa02582cf51bb5f2692cc2d5e258b9913bef0f620ca9"
+    },
+    {
+      "path": "tracked-sources.candidate.json",
+      "bytes": 18033,
+      "sha256": "7ab677bf7dc28db0a1a981fba5ef3d4c4464dd096586aa7a0c07a878c328611d"
+    }
+  ]
+}

@@ -1,0 +1,54 @@
+{
+  "status": "PENDING_EXACT_NEXT_DATA_SOURCE_PLAN_GRANT",
+  "sourceSchemaRevision": "UNCHANGED_C35_V2",
+  "completeArtifactIndex": false,
+  "reportedFrozenPaths": {
+    "rendererOutput": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-dc76-browser-c2/artifact-dd3",
+    "sixImageFixture": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/show-ui-dc76-browser-six",
+    "reportedDirectoryMode": "0555",
+    "reportedFileMode": "0444",
+    "independentlyReadByCoreThisPhase": false,
+    "rehashBeforeUse": true,
+    "protection": "ordinary-discretionary-not-immutable-filesystem"
+  },
+  "neededPhysicalByteMaps": {
+    "rendererAndImages": 8,
+    "packageGraphFiles": 106,
+    "packageResolutionKeys": 5,
+    "repoGraphInputs": 56,
+    "trackedRecordsPrepared": 67
+  },
+  "missing": [
+    "root-reviewed preview renderer Ref/ABI identity",
+    "actual raw package source bytes/sha256 and byte inventory",
+    "exact build command/overrides and complete toolchain including pnpm/platform/arch",
+    "raw byte rehash of reported frozen output/fixture paths under a separate grant",
+    "source/runtime contribution and license closure; explicit review of separate core/packages protocol+manifest dependency"
+  ],
+  "separateMissingAuthority": {
+    "sourcePackageMembership": "MISSING_DENIED_INDEPENDENT_ROOT_REVIEWED_CAFS_RECEIPTS",
+    "nativeImageRights": "UNKNOWN_ALL_SIX_DENY_EXECUTABLE_EXPORT",
+    "immutableLoaderBinding": "PRIVATE_CHECKED_BUFFER_FIXTURE_OBSERVED_PRODUCTION_UNACCEPTED",
+    "environmentFonts": "NO_EMITTED_FONT_RUBIK_ABSENT_COMPUTED_GLYPH_RECEIPT_MISSING_NON_HERMETIC",
+    "reviewedExecutableAuthority": "EMPTY_UNAVAILABLE_ZERO_PIN"
+  },
+  "doNotSubstitute": [
+    "native-theme-version-for-preview-renderer-ref",
+    "hash-of-module-id-for-actual-file-hash",
+    "archive-SRI-for-file-membership",
+    "Windows-cache-for-actual-build-cache",
+    "private-QA-permission-for-rights",
+    "computed-font-stack-for-rendered-glyph-font",
+    "discretionary-file-mode-for-privileged-immutability",
+    "split-browser-passes-for-complete-same-fixture-matrix"
+  ],
+  "noImplementationRequestedForFrozenCore": true,
+  "compiledPins": [],
+  "ownership": {
+    "UI": "Exact actual output/source byte inventory, build argv/toolchain/contribution and reported cache mount mapping",
+    "Core": "Canonical existingV2 data mapping; actual package-source observations only under next exact grant",
+    "IntegratorRoot": "Independent immutable CAFS source binding and reviewed host receipt authority; no automatic registry insertion",
+    "UIQA": "Font/glyph/environment, same-fixture coverage, native handle/lifecycle, production loader/SRI/CSP/TOCTOU",
+    "Root": "Preview renderer Ref/ABI identity and additional core/packages dependency scope review"
+  }
+}
