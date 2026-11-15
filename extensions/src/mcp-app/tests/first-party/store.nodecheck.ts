@@ -4,6 +4,7 @@ import { DatabaseSync } from "node:sqlite"
 import { existsSync, readFileSync, writeFileSync, unlinkSync } from "node:fs"
 import { spawn } from "node:child_process"
 import { fileURLToPath } from "node:url"
+import { tmpdir } from "node:os"
 import { fixture, createInput, key, snapshot } from "./fixtures.ts"
 import type { Session } from "./fixtures.ts"
 
@@ -239,14 +240,21 @@ test("real crashed hot journal is rejected without recovery or any private-famil
   const child = spawn(
     process.execPath,
     [fileURLToPath(new URL("./hot-journal-worker.mjs", import.meta.url)), file],
-    { env: {}, stdio: ["ignore", "pipe", "pipe"] },
+    {
+      env: { TMPDIR: tmpdir(), TMP: tmpdir(), TEMP: tmpdir() },
+      stdio: ["ignore", "pipe", "pipe"],
+    },
   )
+  let workerError = ""
+  child.stderr.on("data", (data: Buffer) => {
+    workerError = (workerError + data.toString()).slice(0, 4096)
+  })
   const closed = new Promise<void>((resolve, reject) => {
     child.once("error", reject)
     child.once("close", (_code, signal) =>
       signal === "SIGKILL"
         ? resolve()
-        : reject(new Error("Synthetic crash worker failed")),
+        : reject(new Error("Synthetic crash worker failed: " + workerError)),
     )
   })
   try {

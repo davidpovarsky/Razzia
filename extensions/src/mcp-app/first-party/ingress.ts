@@ -28,18 +28,19 @@ export function route(request: Request, origin: URL): Route {
   if (request.url.length > 2048) throw new HttpRejection(400)
   let headerCount = 0
   let headerBytes = 0
-  for (const [name, value] of request.headers) {
+  let forwarded = false
+  request.headers.forEach((value, name) => {
     if (++headerCount > 32 || name.length > 128 || value.length > 4096)
       throw new HttpRejection(400)
     headerBytes += new TextEncoder().encode(name + value).byteLength
     if (headerBytes > 8192) throw new HttpRejection(400)
-  }
+    if (name === "forwarded" || name.startsWith("x-forwarded-")) forwarded = true
+  })
   const url = new URL(request.url)
   if (
     url.origin !== origin.origin ||
     request.headers.get("host") !== origin.host ||
-    request.headers.has("forwarded") ||
-    [...request.headers.keys()].some((key) => key.startsWith("x-forwarded-"))
+    forwarded
   )
     throw new HttpRejection(403)
   const suppliedOrigin = request.headers.get("origin")
