@@ -26,23 +26,46 @@ const paths = [
 ]
 const hash = (bytes) => createHash("sha256").update(bytes).digest("hex")
 const reusedSource = "c1ed0216d64a2d9ebc713c8e7912e418b7b9d331"
-const testPath = "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts"
-const backendPath = "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/actual-gameplay-backend.ts"
+const testPath =
+  "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts"
+const backendPath =
+  "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/actual-gameplay-backend.ts"
 const prefix = (commit) => {
   const body = git("show", commit + ":" + testPath).toString()
   const marker = body.indexOf('test("INVITE-COMPOSED-01')
   if (marker < 0) throw Error("Reuse boundary missing")
   return Buffer.from(body.slice(0, marker))
 }
-if (!prefix(sha).equals(prefix(reusedSource)) ||
-  !git("show", sha + ":" + backendPath).equals(git("show", reusedSource + ":" + backendPath)) ||
-  String(git("diff", "--name-only", reusedSource, sha, "--", "extensions", "packages")).trim()) {
-  throw Error("Previously executed LIVE case/helpers/production changed; cannot reuse")
+if (
+  !prefix(sha).equals(prefix(reusedSource)) ||
+  !git("show", sha + ":" + backendPath).equals(
+    git("show", reusedSource + ":" + backendPath),
+  ) ||
+  String(
+    git(
+      "diff",
+      "--name-only",
+      reusedSource,
+      sha,
+      "--",
+      "extensions",
+      "packages",
+    ),
+  ).trim()
+) {
+  throw Error(
+    "Previously executed LIVE case/helpers/production changed; cannot reuse",
+  )
 }
-const reusedLive = { source: reusedSource, case: "LIVE-COMPOSED-01", actual_pass: true,
+const reusedLive = {
+  source: reusedSource,
+  case: "LIVE-COMPOSED-01",
+  actual_pass: true,
   test_and_shared_helper_prefix_sha256: hash(prefix(sha)),
   actual_backend_sha256: hash(git("show", sha + ":" + backendPath)),
-  production_unchanged: true, final_run_selects_invitation_only: true }
+  production_unchanged: true,
+  final_run_selects_invitation_only: true,
+}
 const files = String(git("ls-tree", "-r", sha, "--", ...paths))
   .trim()
   .split("\n")
