@@ -1,3 +1,4 @@
+import { estimationOptionsValidator } from "@razzia/common/validators/questions/estimation"
 import { z } from "zod"
 import { assetReferenceSchema } from "./schemas"
 import {
@@ -12,6 +13,18 @@ export const projectedChoiceSchema = z.strictObject({
   label: plainTextSchema,
   asset: assetReferenceSchema.optional(),
 })
+const projectedEstimationSchema = estimationOptionsValidator
+  .strict()
+  .refine(
+    (value) =>
+      Number.isFinite(value.min) &&
+      Number.isFinite(value.max) &&
+      Number.isFinite(value.step) &&
+      Number.isFinite(value.margin) &&
+      value.min < value.max &&
+      value.step > 0 &&
+      value.margin >= 0,
+  )
 const questionSchema = z.strictObject({
   id: identifierSchema,
   text: plainTextSchema,
@@ -19,6 +32,7 @@ const questionSchema = z.strictObject({
   playMode: z.enum(["quiz", "survey"]),
   choices: z.array(projectedChoiceSchema).max(64),
   solutionAnswerIds: z.array(identifierSchema).max(64),
+  estimation: projectedEstimationSchema.optional(),
   image: assetReferenceSchema.optional(),
 })
 const resultSchema = z.strictObject({
@@ -40,7 +54,8 @@ const personalSchema = z.strictObject({
 })
 export const demoPresentationSnapshotSchema = z
   .strictObject({
-    portVersion: z.literal(2),
+    portVersion: z.literal(3),
+    identityRuleVersion: z.literal(2),
     source: z.literal("deterministic-fixture"),
     phase: previewPhaseSchema,
     clock: demoClockSnapshotSchema,
@@ -82,19 +97,28 @@ export const demoPresentationSnapshotSchema = z
   })
 export const showProjectionSchema = z
   .strictObject({
-    portVersion: z.literal(2),
+    portVersion: z.literal(3),
+    identityRuleVersion: z.literal(2),
     mode: z.literal("demo"),
     synthetic: z.literal(true),
     role: z.enum(["manager", "player", "spectator"]),
     phase: previewPhaseSchema,
     join: z.literal("unavailable-demo"),
     canAnswer: z.boolean(),
+    answerReadiness: z.enum([
+      "missing-binding",
+      "missing-question",
+      "inactive",
+      "unavailable",
+      "ready",
+    ]),
     question: z
       .strictObject({
         id: identifierSchema,
         text: plainTextSchema,
         questionType: z.enum(["single", "multi", "estimation"]),
         playMode: z.enum(["quiz", "survey"]),
+        estimation: projectedEstimationSchema.optional(),
         image: assetReferenceSchema.optional(),
       })
       .optional(),
@@ -115,6 +139,8 @@ export const showProjectionSchema = z
   .superRefine((v, ctx) => {
     const deny = (message: string) =>
       ctx.addIssue({ code: "custom", message: `show-library:${message}` })
+    if (v.canAnswer !== (v.answerReadiness === "ready"))
+      deny("readiness-mismatch")
     if (v.results && v.phase !== "results") deny("results-before-reveal")
     if (
       v.personalResult &&
@@ -162,7 +188,14 @@ export const showProjectionSchema = z
       (v.role !== "player" ||
         v.phase !== "voting" ||
         !v.clock ||
-        v.clock.paused)
+        v.clock.paused ||
+        !v.question ||
+        v.answerReadiness !== "ready" ||
+        (v.question.questionType === "estimation"
+          ? !v.question.estimation || (v.choices?.length ?? 0) !== 0
+          : (v.choices?.length ?? 0) < 2) ||
+        (v.clock.deadlineMs !== null &&
+          v.clock.elapsedMs >= v.clock.deadlineMs))
     )
       deny("cannot-answer")
   })

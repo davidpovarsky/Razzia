@@ -1,9 +1,10 @@
+import { compareIdentityKeys, identityPreimage } from "./identity-rule"
 import {
   tadaShowV1Schema,
   type TadaShowV1Output,
 } from "../show-authoring-schema"
 import { showThemeRegistry } from "../show-themes/registry"
-import { assertBoundedJson, compareUtf8, freeze } from "./primitives"
+import { assertBoundedJson, freeze } from "./primitives"
 import { canonicalJson, sha256 } from "./digest"
 import {
   previewDraftInputSchema,
@@ -31,27 +32,32 @@ function identityFor(show: TadaShowV1Output): PreviewIdentityMap {
   for (const card of show.cards) {
     cards.push({
       authoredKey: card.key,
-      previewId: `preview-card-${sha256(`card\0${card.key}`)}`,
+      previewId: `preview-card-${sha256(identityPreimage("card", card.key))}`,
     })
     if (card.kind === "quiz" || card.kind === "survey")
       questions.push({
         authoredKey: card.key,
-        previewId: `preview-question-${sha256(`question\0${card.key}`)}`,
+        previewId: `preview-question-${sha256(identityPreimage("question", card.key))}`,
       })
     else
       scenes.push({
         authoredKey: card.key,
-        previewId: `preview-scene-${sha256(`scene\0${card.key}`)}`,
+        previewId: `preview-scene-${sha256(identityPreimage("scene", card.key))}`,
       })
   }
   for (const entries of [cards, questions, scenes])
-    entries.sort((a, b) => compareUtf8(a.authoredKey, b.authoredKey))
-  return previewIdentityMapSchema.parse({ cards, questions, scenes })
+    entries.sort((a, b) => compareIdentityKeys(a.authoredKey, b.authoredKey))
+  return previewIdentityMapSchema.parse({
+    identityRuleVersion: 2,
+    cards,
+    questions,
+    scenes,
+  })
 }
 
 export function getPreviewIdentityId(
   map: PreviewIdentityMap,
-  kind: keyof PreviewIdentityMap,
+  kind: "cards" | "questions" | "scenes",
   authoredKey: string,
 ): string {
   const entry = map[kind].find((item) => item.authoredKey === authoredKey)
@@ -114,6 +120,7 @@ export function normalizePreviewDraft(input: unknown): ValidatedPreviewDraft {
       if (
         /url$/iu.test(key) &&
         typeof child === "string" &&
+        child !== "" &&
         !permittedUrls.has(child)
       )
         throw new Error("show-library:undeclared-media")

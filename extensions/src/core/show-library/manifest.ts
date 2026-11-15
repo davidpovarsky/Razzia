@@ -7,7 +7,11 @@ import { canonicalJson, sha256 } from "./digest"
 
 /** No renderer is implemented under this lease. Candidate document IDs are not executable pins. */
 const compiledManifest = freeze(
-  compiledPreviewManifestSchema.parse({ portVersion: 2, pins: [] }),
+  compiledPreviewManifestSchema.parse({
+    portVersion: 3,
+    identityRuleVersion: 2 as const,
+    pins: [],
+  }),
 )
 export function getCompiledPreviewManifest(): Readonly<CompiledPreviewManifest> {
   return compiledManifest

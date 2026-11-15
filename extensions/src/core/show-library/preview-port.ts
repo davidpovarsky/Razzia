@@ -8,3 +8,6 @@ export * from "./preview-resolve"
 export * from "./projection-schema"
 export { projectShowBindings } from "./projection"
 export { canonicalJson, sha256 } from "./digest"
+
+export * from "./identity-rule"
+export type { PreviewProjectionBinding } from "./projection"

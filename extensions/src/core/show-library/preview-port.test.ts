@@ -1,3 +1,19 @@
+import {
+  SHOW_PREVIEW_PORT_VERSION,
+  SHOW_PREVIEW_IDENTITY_RULE_VERSION,
+} from "./identity-rule"
+import {
+  previewDraftInputSchema,
+  previewPlanSchema,
+  compiledPreviewPinSchema,
+  compiledPreviewManifestSchema,
+} from "./preview-schemas"
+import {
+  demoPresentationSnapshotSchema,
+  showProjectionSchema,
+} from "./projection-schema"
+import { snapshotFixture } from "./preview-fixtures"
+import { projectShowBindings } from "./projection"
 import { describe, expect, it } from "vitest"
 import { createHash } from "node:crypto"
 import fs from "node:fs"
@@ -17,7 +33,8 @@ import {
 import { canonicalJson, sha256 } from "./digest"
 
 const pin = {
-  portVersion: 2,
+  portVersion: 3,
+  identityRuleVersion: 2 as const,
   registry: { id: "compiled-preview", version: "1.0.0" },
   registrySha256: "a".repeat(64),
   renderer: { id: "compiled-stage", version: "1.0.0" },
@@ -70,7 +87,11 @@ describe("no forged executable preview readiness", () => {
       plan.capabilities.questions.every((q) => q.support === "unavailable"),
     ).toBe(true)
     expect(() =>
-      resolvePreviewPlan(draft, { portVersion: 2, pins: [pin] }),
+      resolvePreviewPlan(draft, {
+        portVersion: 3,
+        identityRuleVersion: 2 as const,
+        pins: [pin],
+      }),
     ).toThrow("unaccepted-compiled-manifest")
   })
   it("preserves unknown requested theme and reports actual resolver diagnostics", () => {
@@ -95,30 +116,44 @@ describe("no forged executable preview readiness", () => {
       "unbound-preview-plan",
     )
     expect(() =>
-      verifyCompiledPreviewManifest({ portVersion: 2, pins: [pin] }),
+      verifyCompiledPreviewManifest({
+        portVersion: 3,
+        identityRuleVersion: 2 as const,
+        pins: [pin],
+      }),
     ).toThrow()
   })
   it("enforces registry/renderer/manifest version immutability transactionally", () => {
     const catalog = new PreviewManifestCatalog()
-    catalog.register({ portVersion: 2, pins: [pin] })
+    catalog.register({
+      portVersion: 3,
+      identityRuleVersion: 2 as const,
+      pins: [pin],
+    })
     expect(() =>
       catalog.register({
-        portVersion: 2,
+        portVersion: 3,
+        identityRuleVersion: 2 as const,
         pins: [{ ...pin, registrySha256: "c".repeat(64) }],
       }),
     ).toThrow()
     expect(() =>
       catalog.register({
-        portVersion: 2,
+        portVersion: 3,
+        identityRuleVersion: 2 as const,
         pins: [
           pin,
           { ...pin, renderer: { id: "second-stage", version: "1.0.0" } },
         ],
       }),
     ).toThrow("immutable-manifest-version")
-    expect(catalog.register({ portVersion: 2, pins: [pin] }).pins).toHaveLength(
-      1,
-    )
+    expect(
+      catalog.register({
+        portVersion: 3,
+        identityRuleVersion: 2 as const,
+        pins: [pin],
+      }).pins,
+    ).toHaveLength(1)
   })
   it("provides deterministic producer digest-content vectors without an MCP serializer", () => {
     const draft = normalizePreviewDraft(previewInputFixture()),
@@ -126,7 +161,34 @@ describe("no forged executable preview readiness", () => {
     const bytes = canonicalJson(content)
     expect(sha256(bytes)).toBe(createHash("sha256").update(bytes).digest("hex"))
     expect(content.compiledPin).toBeNull()
-    expect(content.identityRuleVersion).toBe(1)
+    expect(content.identityRuleVersion).toBe(2)
     expect(sharedPreviewFixtures[0].checkpoints[0].clock.deadlineMs).toBe(20000)
   })
+})
+
+it("rejects all older/mixed internal versions while authored format stays v1", () => {
+  expect(SHOW_PREVIEW_PORT_VERSION).toBe(3)
+  expect(SHOW_PREVIEW_IDENTITY_RULE_VERSION).toBe(2)
+  const input = previewInputFixture(),
+    draft = normalizePreviewDraft(input)
+  const cases = [
+    [previewDraftInputSchema, input],
+    [previewPlanSchema, resolvePreviewPlan(draft)],
+    [compiledPreviewPinSchema, pin],
+    [compiledPreviewManifestSchema, getCompiledPreviewManifest()],
+    [demoPresentationSnapshotSchema, snapshotFixture()],
+    [
+      showProjectionSchema,
+      projectShowBindings(snapshotFixture(), input.context),
+    ],
+  ] as const
+  for (const [schema, value] of cases) {
+    expect(schema.safeParse(value).success).toBe(true)
+    for (const portVersion of [1, 2])
+      expect(schema.safeParse({ ...value, portVersion }).success).toBe(false)
+    expect(schema.safeParse({ ...value, identityRuleVersion: 1 }).success).toBe(
+      false,
+    )
+  }
+  expect(draft.show.version).toBe(1)
 })

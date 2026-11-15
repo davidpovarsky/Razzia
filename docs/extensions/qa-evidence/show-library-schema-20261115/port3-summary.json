@@ -1,0 +1,40 @@
+{
+  "status": "CORRECTED_PURE_FOUNDATION_READY_FOR_INDEPENDENT_REVIEW",
+  "portVersion": 3,
+  "identityRuleVersion": 2,
+  "overlaySha256": "6ccf88854cd972e3cf575064fa4361a8edcc38ff87ebeffeafd3f4cd2fb7093d",
+  "predecessorCommit": "e007daab58f748e2361b9717a9a129db29bb8c9d",
+  "e007Proof": "80-test predecessor retained unchanged; superseded API contract",
+  "finalEvidence": "server-port3-final-6ccf",
+  "initialEvidence": "server-port3-initial-e3b5",
+  "tests": {
+    "passed": 131,
+    "failed": 0,
+    "files": 4
+  },
+  "crossLanguageVectors": 42,
+  "focusedTypes": "PASS",
+  "scopedFormat": "PASS",
+  "designTokensCatalog": "PASS",
+  "fullUiCheck": "FAIL",
+  "freeze": "FAIL",
+  "freezeDeniedPaths": 22,
+  "freezeProtectedMismatches": [],
+  "beforeAfterSourceAudit": {
+    "status": "PASS",
+    "baselineGitBlobs": 3297,
+    "overlaySha256Files": 22
+  },
+  "compiledPins": 0,
+  "previewPlans": "UNAVAILABLE",
+  "resources": {
+    "cpu": 0.25,
+    "memoryGiB": 2,
+    "network": "none",
+    "ports": [],
+    "allocationReleasedUtc": "2026-11-15T05:28:39.151872+00:00"
+  },
+  "reviewAndIntegrationPending": true,
+  "originalSourceTasksCompleted": false,
+  "createdUtc": "2026-11-15T05:29:52.330968+00:00"
+}

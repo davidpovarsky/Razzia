@@ -42,7 +42,8 @@ export function resolvePreviewPlan(
   )
   const plan = freeze(
     previewPlanSchema.parse({
-      portVersion: 2,
+      portVersion: 3,
+      identityRuleVersion: 2 as const,
       resolution: {
         kind: "unavailable",
         requested: { id: theme.requested.id, version: theme.requested.version },
@@ -68,17 +69,24 @@ export function resolvePreviewPlan(
   return plan
 }
 
+export function assertBoundPreviewPlan(
+  draft: ValidatedPreviewDraft,
+  plan: Readonly<PreviewPlan>,
+): void {
+  assertValidatedPreviewDraft(draft)
+  if (plans.get(plan) !== draft)
+    throw new Error("show-library:unbound-preview-plan")
+}
+
 /** Content identity only. M2 supplies draft/revision and owns the sole MCP envelope digest. */
 export function getPreviewDigestContent(
   draft: ValidatedPreviewDraft,
   plan: Readonly<PreviewPlan>,
 ) {
-  assertValidatedPreviewDraft(draft)
-  if (plans.get(plan) !== draft)
-    throw new Error("show-library:unbound-preview-plan")
+  assertBoundPreviewPlan(draft, plan)
   return freeze({
-    portVersion: 2 as const,
-    identityRuleVersion: 1 as const,
+    portVersion: 3 as const,
+    identityRuleVersion: 2 as const,
     normalizedAuthoredContent: JSON.parse(
       draft.normalizedAuthoredShowJson,
     ) as unknown,

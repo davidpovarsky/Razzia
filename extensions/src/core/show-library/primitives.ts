@@ -2,19 +2,14 @@ import { z } from "zod"
 import { RUNTIME_PHASES } from "../packages/protocol"
 import { SHOW_THEME_ROLES, themeVersionSchema } from "../show-themes/selection"
 
-export const SHOW_PREVIEW_PORT_VERSION = 2 as const
+export {
+  SHOW_PREVIEW_PORT_VERSION,
+  SHOW_PREVIEW_IDENTITY_RULE_VERSION,
+} from "./identity-rule"
 export const previewPhaseSchema = z.enum(RUNTIME_PHASES)
 export const previewRoleSchema = z.enum(SHOW_THEME_ROLES)
 export type PreviewPhase = z.infer<typeof previewPhaseSchema>
 export type PreviewRole = z.infer<typeof previewRoleSchema>
-/** Stable byte ordering, independent of host locale and UTF-16 code-unit ordering. */
-export function compareUtf8(left: string, right: string): number {
-  const a = new TextEncoder().encode(left),
-    b = new TextEncoder().encode(right)
-  for (let i = 0; i < Math.min(a.length, b.length); i++)
-    if (a[i] !== b[i]) return a[i] - b[i]
-  return a.length - b.length
-}
 export const identifierSchema = z
   .string()
   .min(1)

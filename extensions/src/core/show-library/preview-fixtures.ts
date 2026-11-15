@@ -10,10 +10,10 @@ import { derivePreviewIdentityMap } from "./identity"
 
 export interface SharedPreviewFixture {
   readonly fixtureId: string
-  readonly portVersion: 2
+  readonly portVersion: 3
   readonly input: PreviewDraftInput
   readonly manifest: CompiledPreviewManifest
-  readonly identityRuleVersion: 1
+  readonly identityRuleVersion: 2
   readonly checkpoints: readonly Readonly<{
     phase: PreviewPhase
     clock: DemoClockSnapshot
@@ -50,7 +50,8 @@ export function previewInputFixture(
 ): PreviewDraftInput {
   const authoredShowJson = JSON.stringify(show)
   return {
-    portVersion: 2,
+    portVersion: 3,
+    identityRuleVersion: 2,
     authoredShowJson,
     identityMap: derivePreviewIdentityMap(authoredShowJson),
     assets: [],
@@ -67,10 +68,10 @@ export function previewInputFixture(
 export const sharedPreviewFixtures: readonly SharedPreviewFixture[] = [
   {
     fixtureId: "demo-5q-20s-foundation-unavailable",
-    portVersion: 2,
-    identityRuleVersion: 1,
+    portVersion: 3,
+    identityRuleVersion: 2,
     input: previewInputFixture(),
-    manifest: { portVersion: 2, pins: [] },
+    manifest: { portVersion: 3, identityRuleVersion: 2, pins: [] },
     checkpoints: [
       {
         phase: "voting",
@@ -100,7 +101,8 @@ export const sharedPreviewFixtures: readonly SharedPreviewFixture[] = [
 ]
 
 export const snapshotFixture = () => ({
-  portVersion: 2,
+  portVersion: 3,
+  identityRuleVersion: 2,
   source: "deterministic-fixture",
   phase: "voting",
   clock: {

@@ -1,7 +1,7 @@
+import { compareIdentityKeys } from "./identity-rule"
 import { z } from "zod"
 import { assetReferenceSchema } from "./schemas"
 import {
-  compareUtf8,
   digestSchema,
   exactRefSchema,
   identifierSchema,
@@ -35,7 +35,10 @@ const identityEntries = z
         })
       if (
         index > 0 &&
-        compareUtf8(entries[index - 1].authoredKey, entry.authoredKey) >= 0
+        compareIdentityKeys(
+          entries[index - 1].authoredKey,
+          entry.authoredKey,
+        ) >= 0
       )
         ctx.addIssue({ code: "custom", message: "show-library:identity-order" })
       keys.add(entry.authoredKey)
@@ -43,19 +46,22 @@ const identityEntries = z
     })
   })
 export const previewIdentityMapSchema = z.strictObject({
+  identityRuleVersion: z.literal(2),
   cards: identityEntries,
   questions: identityEntries,
   scenes: identityEntries,
 })
 export const previewDraftInputSchema = z.strictObject({
-  portVersion: z.literal(2),
+  portVersion: z.literal(3),
+  identityRuleVersion: z.literal(2),
   authoredShowJson: z.string().min(2).max(262144),
   identityMap: previewIdentityMapSchema,
   assets: z.array(assetReferenceSchema).max(256),
   context: previewContextSchema,
 })
 export const compiledPreviewPinSchema = z.strictObject({
-  portVersion: z.literal(2),
+  portVersion: z.literal(3),
+  identityRuleVersion: z.literal(2),
   registry: exactRefSchema,
   registrySha256: digestSchema,
   renderer: exactRefSchema,
@@ -63,7 +69,8 @@ export const compiledPreviewPinSchema = z.strictObject({
 })
 export const compiledPreviewManifestSchema = z
   .strictObject({
-    portVersion: z.literal(2),
+    portVersion: z.literal(3),
+    identityRuleVersion: z.literal(2),
     pins: z.array(compiledPreviewPinSchema).max(128),
   })
   .superRefine((manifest, ctx) => {
@@ -123,7 +130,8 @@ const resolutionSchema = z.discriminatedUnion("kind", [
   }),
 ])
 export const previewPlanSchema = z.strictObject({
-  portVersion: z.literal(2),
+  portVersion: z.literal(3),
+  identityRuleVersion: z.literal(2),
   resolution: resolutionSchema,
   capabilities: previewCapabilitiesSchema,
   diagnostics: z.array(diagnosticSchema).max(20),
