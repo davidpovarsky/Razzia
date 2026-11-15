@@ -1,0 +1,103 @@
+Scope: all 6 workspace projects
+✓ Lockfile passes supply-chain policies (verified 4d ago)
+..                                       | Progress: resolved 1, reused 0, downloaded 0, added 0
+..                                       | +354 ++++++++++++++++++++++++++++++++
+..                                       | Progress: resolved 354, reused 186, downloaded 0, added 0
+Packages are hard linked from the content-addressable store to the virtual store.
+  Content-addressable store is at: C:\Users\DAVID\AppData\Local\pnpm\store\v11
+  Virtual store is at:             ../node_modules/.pnpm
+..                                       | Progress: resolved 354, reused 352, downloaded 0, added 11
+..                                       | Progress: resolved 354, reused 353, downloaded 0, added 42
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 121
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 237
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 342
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 353
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 354
+..                                       | Progress: resolved 354, reused 354, downloaded 0, added 354, done
+
+dependencies:
++ @fontsource-variable/rubik 5.3.0
++ @hono/zod-validator 0.9.1
++ @lottiefiles/dotlottie-react 0.17.1
++ @razzia/common <- ..\packages\common
++ @tanstack/react-query 5.104.1
++ @tanstack/react-router 1.170.42
++ hono 4.13.13
++ http-status-codes 2.3.0
++ i18next 26.4.3
++ lucide-react 1.55.0
++ motion 14.1.0
++ qrcode.react 4.2.0
++ radix-ui 1.7.0
++ react 19.3.0
++ react-dom 19.3.0
++ react-i18next 17.0.16
++ uuid 14.0.3
++ zod 4.6.6
+
+devDependencies:
++ @babel/parser 7.29.9
++ @hono/node-server 2.1.4
++ @playwright/test 1.64.0
++ @types/node 26.6.5
++ @types/react 19.3.0
++ @types/react-dom 19.3.0
++ esbuild 0.28.2
++ socket.io-client 4.8.4
++ tailwindcss 4.3.3
++ tsx 4.23.15
++ typescript 7.0.2
++ vite 8.3.4
++ vitest 5.0.3
+
+Done in 13.2s using pnpm v11.24.0
+$ node qa/tds-design-check.mjs && node qa/tds-token-registry.mjs --check && node qa/tds-catalog-check.mjs && node qa/tds-boundary.mjs
+{
+  "status": "PASS",
+  "checked": [
+    "extensions\\src\\platform-ui\\alert-dialog.tsx",
+    "extensions\\src\\platform-ui\\button.tsx",
+    "extensions\\src\\platform-ui\\catalog\\catalog.tsx",
+    "extensions\\src\\platform-ui\\catalog\\foundations.tsx",
+    "extensions\\src\\platform-ui\\catalog\\i18n.ts",
+    "extensions\\src\\platform-ui\\catalog\\interaction-stories.tsx",
+    "extensions\\src\\platform-ui\\catalog\\layouts.tsx",
+    "extensions\\src\\platform-ui\\catalog\\main.tsx",
+    "extensions\\src\\platform-ui\\catalog\\registry.ts",
+    "extensions\\src\\platform-ui\\catalog\\stories.tsx",
+    "extensions\\src\\platform-ui\\catalog\\story.tsx",
+    "extensions\\src\\platform-ui\\catalog\\styles.ts",
+    "extensions\\src\\platform-ui\\dialog.tsx",
+    "extensions\\src\\platform-ui\\fields.tsx",
+    "extensions\\src\\platform-ui\\host-controls.tsx",
+    "extensions\\src\\platform-ui\\index.ts",
+    "extensions\\src\\platform-ui\\menus.tsx",
+    "extensions\\src\\platform-ui\\portal.tsx",
+    "extensions\\src\\platform-ui\\roster-controls.tsx",
+    "extensions\\src\\platform-ui\\scope.tsx",
+    "extensions\\src\\platform-ui\\shadow-focus.ts",
+    "extensions\\src\\platform-ui\\styles.ts",
+    "extensions\\src\\platform-ui\\surfaces.tsx",
+    "extensions\\src\\platform-ui\\tokens.ts",
+    "extensions\\src\\site\\web\\shared\\ReferenceCanvas.tsx",
+    "extensions\\src\\site\\themes\\platform.ts"
+  ],
+  "exceptions": [
+    "tokens.ts is the source of primitive values",
+    "immutable source artwork, legacy/site reference CSS, frozen editor/upstream, show-theme/cinematic runtime remain outside this incremental rule"
+  ]
+}
+node:internal/modules/esm/get_format:219
+  throw new ERR_UNKNOWN_FILE_EXTENSION(ext, filepath);
+        ^
+
+TypeError [ERR_UNKNOWN_FILE_EXTENSION]: Unknown file extension ".ts" for C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-show-library-20261115\extensions\src\platform-ui\tokens.ts
+    at Object.getFileProtocolModuleFormat [as file:] (node:internal/modules/esm/get_format:219:9)
+    at defaultGetFormat (node:internal/modules/esm/get_format:245:36)
+    at defaultLoad (node:internal/modules/esm/load:120:22)
+    at async ModuleLoader.loadAndTranslate (node:internal/modules/esm/loader:580:32) {
+  code: 'ERR_UNKNOWN_FILE_EXTENSION'
+}
+
+Node.js v22.17.0
+[ELIFECYCLE] Command failed with exit code 1.
