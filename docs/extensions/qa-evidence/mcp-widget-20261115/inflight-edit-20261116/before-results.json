@@ -1,0 +1,26 @@
+{
+  "artifactSha256": "f0ab3172c98c9e602c7a3ea01dc02bf14da5bdc822d58692e0a7390195135e4d",
+  "hostSha256": "a21acf24cfcc868d8fc06f5e4d743b2dff9b0cf478bd1f947c04b7ee2d87cba9",
+  "scope": "Actual Edge / opaque iframe / AppSDK; existing synthetic host draft handlers only",
+  "cases": [
+    {
+      "name": "Manager reproduction: later edit survives ACK and retains its original base",
+      "status": "FAIL",
+      "revisionBeforeAck": 1,
+      "afterAck": "ACK title A",
+      "calls": [
+        "get_game_draft",
+        "update_game_draft"
+      ],
+      "failure": "AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:\n+ actual - expected\n\n+ 'ACK title A'\n- 'UNSENT title B'\n"
+    },
+    {
+      "name": "No page errors or external requests",
+      "status": "PASS"
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "browser": "157.0.4341.46",
+  "ownBrowserAndLoopbackClosed": true
+}

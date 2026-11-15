@@ -1,0 +1,6 @@
+(node:30088) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+extensions/qa/mcp-widget/inflight-edit.mjs:69:5: error eslint(init-declarations): Variable 'browser' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/qa/mcp-widget/inflight-edit.mjs:45:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/inflight-edit.mjs:64:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/mcp-widget/inflight-edit.mjs:70:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
