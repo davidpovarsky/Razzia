@@ -378,6 +378,8 @@ test("NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/r
   const answer = await r.factory.operate(a, credential, op)
   assert.equal(answer.accepted, true)
   assert.deepEqual(await r.factory.operate(a, credential, op), answer)
+  const beforeReveal = await r.factory.operate(a, credential, { ...op, operationId: "native-poll-before-reveal", action: "poll" })
+  assert.equal(beforeReveal.answered, true)
   // The original round awards points on reveal. Exercise its real manager flow.
   const scoreDeadline = Date.now() + 8000
   while (r.game.players.find(player => player.clientId === joined.clientId)!.points <= 0) {
@@ -388,7 +390,7 @@ test("NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/r
   const points = r.game.players.find(player => player.clientId === joined.clientId)!.points
   assert.ok(points > 0)
   const poll = await r.factory.operate(a, credential, { ...op, operationId: "native-poll", action: "poll" })
-  assert.equal(poll.points, points); assert.equal(poll.answered, true)
+  assert.equal(poll.points, points)
   const hangup = await r.factory.operate(a, credential, { ...op, operationId: "native-hangup", action: "hangup" })
   assert.equal(hangup.ok, true)
   r.factory.close()
