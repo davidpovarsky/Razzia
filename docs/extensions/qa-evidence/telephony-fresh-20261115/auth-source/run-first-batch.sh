@@ -29,7 +29,7 @@ trap 'kill "$monitor_pid" 2>/dev/null || true;wait "$monitor_pid" 2>/dev/null ||
 set +e
 timeout --signal=TERM --kill-after=5 90 node --max-old-space-size=512 "$qa/typecheck.mjs" > "$evidence/typecheck.log" 2>&1
 types=$?
-timeout --signal=TERM --kill-after=5 120 node --max-old-space-size=512 /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-concurrency=1 "$qa/authority-first-batch.node.ts" > "$evidence/authority.tap" 2>&1
+timeout --signal=TERM --kill-after=5 120 node --max-old-space-size=512 /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-reporter=tap --test-concurrency=1 "$qa/authority-first-batch.node.ts" > "$evidence/authority.tap" 2>&1
 tests=$?
 set -e
 PHONE_REVIEW_SHA=003cf88b6cba19989388dca20efcfaa01cc8f9ad node extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs --links > "$evidence/base-after.json"

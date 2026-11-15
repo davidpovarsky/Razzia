@@ -41,6 +41,7 @@ const { ReadonlyServiceLeaseReader } = await import("../../../../../extensions/s
 const { NativeAccountAuthority } = await import("../../../../../extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority")
 checkAccountConfiguration(); initConfig()
 const server = createAdaptorServer(app), io = createSocketServer(server), registry = Registry.getInstance()
+await new Promise<void>(done => server.listen(0, "127.0.0.1", done))
 const factories: InstanceType<typeof UnmountedPhoneAuthority>[] = [], observations: unknown[] = []
 const secrets: string[] = [fixtureJwtSecret]
 const phoneActions: Action[] = ["register", "poll", "answer", "hangup"]
