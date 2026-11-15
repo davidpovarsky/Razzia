@@ -112,9 +112,9 @@
     },
     {
       "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
-      "index_blob": "d52734e69e0ef48cdfdbe4b544787f5e5bcc8e56",
-      "bytes": 11786,
-      "sha256": "c67ada998849a4e589bc8fc6e2b315abbae497c3590ae7b0b0bd8c336c03b82d"
+      "index_blob": "ee7339cb23c3e935b19f0f906c096197fdb7b440",
+      "bytes": 11945,
+      "sha256": "96b506c514a4adabee4352ced59f60b42b2c0e14df3d1256dd19d96c60e9dce3"
     },
     {
       "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",

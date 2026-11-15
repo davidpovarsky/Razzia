@@ -36,6 +36,7 @@ export class UnmountedPhoneAuthority {
   private readonly stores = new Set<PrototypeStore>()
   private readonly providers: readonly string[]
   private readonly rootResolver: UnmountedAuthorityOptions["lifecycleRoot"]
+  private closed = false
 
   constructor(options: UnmountedAuthorityOptions) {
     if (options.allowedProviders.length === 0 || typeof options.lifecycleRoot !== "function") serviceDenied()
@@ -50,6 +51,7 @@ export class UnmountedPhoneAuthority {
   }
 
   private provider(provider: string) {
+    if (this.closed) serviceDenied()
     identifier(provider)
     if (!this.providers.includes(provider)) serviceDenied()
   }
@@ -70,6 +72,7 @@ export class UnmountedPhoneAuthority {
   }
 
   async initializeAuthority(token: string, game: string): Promise<{ status: "ready" }> {
+    if (this.closed) serviceDenied()
     const prepared = await this.accounts.prepareManager(token, game)
     try {
       const live = this.accounts.revalidateManager(prepared)
@@ -208,5 +211,10 @@ export class UnmountedPhoneAuthority {
     if (!["poll", "answer", "hangup"].includes(input.action)) serviceDenied()
     return this.dispatch(address, capability, input.action, input)
   }
-  close() { for (const store of this.stores) store.close(); this.stores.clear() }
+  close() {
+    if (this.closed) return
+    this.closed = true
+    for (const store of this.stores) store.close()
+    this.stores.clear()
+  }
 }
