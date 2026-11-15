@@ -1,0 +1,5 @@
+{
+  "canonicalSha256": "ec41c957d7a0291e1bc74eb57a0eee9894ec44b8be454a06c01187e5658e17bc",
+  "adaptedSha256": "f006707d0cd833ff450d12e0d276e4da34477800c3a75233e7bb46f24639f285",
+  "meaning": "Only three import paths made absolute for the RAM correction view. First six-test run and failures preserved; rerun only two positive cases."
+}

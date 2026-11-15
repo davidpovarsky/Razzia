@@ -1,0 +1,1 @@
+{"extends":"/work/extensions/tsconfig.json","include":["/tmp/font26/qa-native-font.spec.ts"],"compilerOptions":{"typeRoots":["/work/extensions/node_modules/@types"]}}

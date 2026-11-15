@@ -1,0 +1,32 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › ../tmp/font25/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view (6.5s)
+  ✘  2 [webkit] › ../tmp/font25/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view (22.3s)
+
+
+  1) [webkit] › ../tmp/font25/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view 
+
+    Error: expect(received).toBeLessThan(expected)
+
+    Expected: < 0.15
+    Received:   0.465301513671875
+
+       96 |     await writeFile(partialPath, JSON.stringify({ decoded, observations }, null, 2))
+       97 |     expect(paint.family).toContain("Rubik Variable")
+    >  98 |     expect(Math.abs(paint.actualWidth - paint.aliasWidth)).toBeLessThan(0.15)
+          |                                                            ^
+       99 |     expect(paint.raster).toBe(paint.aliasRaster)
+      100 |     expect(paint.digitRaster).toBe(paint.aliasDigitRaster)
+      101 |     if (locale === "ja") expect(paint.fallbackRaster).toBe(paint.sansFallbackRaster)
+        at /tmp/font25/qa-native-font.spec.ts:98:60
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    ../out/font25-browser-results/qa-native-font-decoded-exa-2c8cd-he-native-eight-locale-view-webkit/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../out/font25-browser-results/qa-native-font-decoded-exa-2c8cd-he-native-eight-locale-view-webkit/error-context.md
+
+  1 failed
+    [webkit] › ../tmp/font25/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view 
+  1 passed (41.0s)

@@ -1,0 +1,7 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 [chromium] › ../tmp/font26/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view (6.5s)
+  ✓  2 [webkit] › ../tmp/font26/qa-native-font.spec.ts:8:1 › decoded exact Rubik bytes paint the native eight-locale view (37.8s)
+
+  2 passed (55.3s)

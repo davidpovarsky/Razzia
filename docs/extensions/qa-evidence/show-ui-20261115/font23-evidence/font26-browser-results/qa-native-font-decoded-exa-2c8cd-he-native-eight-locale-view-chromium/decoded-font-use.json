@@ -1,0 +1,551 @@
+{
+  "browserName": "chromium",
+  "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.8078.4 Safari/537.36",
+  "decoded": {
+    "faces": [
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+      }
+    ],
+    "aliases": [
+      {
+        "status": "loaded",
+        "unicodeRange": "U+600-6FF, U+750-77F, U+870-88E, U+890-891, U+897-8E1, U+8E3-8FF, U+200C-200E, U+2010-2011, U+204F, U+2E41, U+FB50-FDFF, U+FE70-FE74, U+FE76-FEFC, U+102E0-102FB, U+10E60-10E7E, U+10EC2-10EC4, U+10EFC-10EFF, U+1EE00-1EE03, U+1EE05-1EE1F, U+1EE21-1EE22, U+1EE24, U+1EE27, U+1EE29-1EE32, U+1EE34-1EE37, U+1EE39, U+1EE3B, U+1EE42, U+1EE47, U+1EE49, U+1EE4B, U+1EE4D-1EE4F, U+1EE51-1EE52, U+1EE54, U+1EE57, U+1EE59, U+1EE5B, U+1EE5D, U+1EE5F, U+1EE61-1EE62, U+1EE64, U+1EE67-1EE6A, U+1EE6C-1EE72, U+1EE74-1EE77, U+1EE79-1EE7C, U+1EE7E, U+1EE80-1EE89, U+1EE8B-1EE9B, U+1EEA1-1EEA3, U+1EEA5-1EEA9, U+1EEAB-1EEBB, U+1EEF0-1EEF1"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+460-52F, U+1C80-1C8A, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+301, U+400-45F, U+490-491, U+4B0-4B1, U+2116"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+307-308, U+590-5FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+100-2BA, U+2BD-2C5, U+2C7-2CC, U+2CE-2D7, U+2DD-2FF, U+304, U+308, U+329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+0-FF, U+131, U+152-153, U+2BB-2BC, U+2C6, U+2DA, U+2DC, U+304, U+308, U+329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD"
+      }
+    ],
+    "resources": [
+      {
+        "url": "/fonts/rubik-wght.css",
+        "status": 200,
+        "mime": "text/css",
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+      },
+      {
+        "url": "/fonts/files/rubik-arabic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+      },
+      {
+        "url": "/fonts/files/rubik-hebrew-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "locale": "en",
+      "paint": {
+        "text": "Which colour do you prefer? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 87,
+        "nativeCloneWidth": 87,
+        "aliasWidth": 87,
+        "raster": "8ce291b970edf52b4175764c2dd6359e76f2234945745dffca7584dd378289f8",
+        "aliasRaster": "8ce291b970edf52b4175764c2dd6359e76f2234945745dffca7584dd378289f8",
+        "monoRaster": "7df13822f7d282f1cedea6c1f71e7635c8a33107f47d4f775ee6f2ac904dfb74",
+        "sansRaster": "2ac584289de4244191c25181c63219b832195b7ac13902247bb7b3460033f375",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 29
+        }
+      ]
+    },
+    {
+      "locale": "fr",
+      "paint": {
+        "text": "Quelle couleur préférez-vous ? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 89,
+        "nativeCloneWidth": 89,
+        "aliasWidth": 89,
+        "raster": "337265b2cabc8fdf511f28d6508bdd0681c80f932666d5c390750306f1af33af",
+        "aliasRaster": "337265b2cabc8fdf511f28d6508bdd0681c80f932666d5c390750306f1af33af",
+        "monoRaster": "63ca3c4898e2d9ea34fb2e05a9a7c402e2228aeaa67d96d7d1ac3487d4afa9b2",
+        "sansRaster": "2d700af201a100a891d826456ed78f3cb6e24538d8763571570a13e6f6567f96",
+        "fallbackRaster": "779ca5aab6d87ce192138beab84e980a68043d375d7c51ebed2ebc4a93672d61",
+        "sansFallbackRaster": "d22b20586f83fc31b73456cd5ba7b58d653a04a40058ebe60b79c6bdf46b6399",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 32
+        }
+      ]
+    },
+    {
+      "locale": "de",
+      "paint": {
+        "text": "Welche Farbe bevorzugen Sie? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 101,
+        "nativeCloneWidth": 101,
+        "aliasWidth": 101,
+        "raster": "52b1950fc042350f66de40ed1e33474be3508ea2b0a23743a6021d3d497b37a5",
+        "aliasRaster": "52b1950fc042350f66de40ed1e33474be3508ea2b0a23743a6021d3d497b37a5",
+        "monoRaster": "717da7b9b01e40aa269bcfa77b27f1c74627023372bc7288c735558b67e7bad0",
+        "sansRaster": "6a25e40cd932dc2d46431a3f9dfec607d746f0866a55a1f67ab67115fa9fc575",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 30
+        }
+      ]
+    },
+    {
+      "locale": "es",
+      "paint": {
+        "text": "¿Qué color prefieres? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 72,
+        "nativeCloneWidth": 72,
+        "aliasWidth": 72,
+        "raster": "2cfd7863b186f47105c75c04d98050b4168fe152074abb096505c125fe25df50",
+        "aliasRaster": "2cfd7863b186f47105c75c04d98050b4168fe152074abb096505c125fe25df50",
+        "monoRaster": "0dd0a0e012c64b5641a2f561ff99d62ab7537c98cdfb49ae46d15241b3ec7cb4",
+        "sansRaster": "940f48d8ab342e71724ba47cf54634c80acb37a79a9b4487db4989c1448c36ab",
+        "fallbackRaster": "1d0c53ea2b07c6e11bb025387c03b4a27b95ce0a431de9c167bb7f208e4f8f0e",
+        "sansFallbackRaster": "414ecc7e193d8ae5d1729b7cdfc3533a62c393f24ff635b15f4378c856d085e3",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 22
+        }
+      ]
+    },
+    {
+      "locale": "it",
+      "paint": {
+        "text": "Quale colore preferisci? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 81,
+        "nativeCloneWidth": 81,
+        "aliasWidth": 81,
+        "raster": "1a3dd8fea684922d66a099b1ac7905703bb004795221e221cbbdbee5f5ee6ad5",
+        "aliasRaster": "1a3dd8fea684922d66a099b1ac7905703bb004795221e221cbbdbee5f5ee6ad5",
+        "monoRaster": "b357b26c871404d6362113907593ccb727eca737ab453f45ebb828a9505e4f8a",
+        "sansRaster": "5a2eff0f1fdebcc6ea1af4739aa915f038ff4df27ccb232093d7b617128e636b",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 26
+        }
+      ]
+    },
+    {
+      "locale": "ja",
+      "paint": {
+        "text": "どの色が好きですか？ 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 297,
+        "nativeCloneWidth": 297,
+        "aliasWidth": 297,
+        "raster": "e55ddaec44dee163418138b5cb4ef509011048fab8459f6d50ca22df9ee8209a",
+        "aliasRaster": "e55ddaec44dee163418138b5cb4ef509011048fab8459f6d50ca22df9ee8209a",
+        "monoRaster": "e9a0f69b2186026dc21fe9d811b58c0477eb8c784e93400479e293429c377e2a",
+        "sansRaster": "99e728e0d1264a4da0393b59e8d338c195b724f97d5b7dd2a8b7795e4aec0f46",
+        "fallbackRaster": "8eca003a5ea73dd9355934dbbfc3e7ac16128779d55cbb9149fd1cea744b6b24",
+        "sansFallbackRaster": "8eca003a5ea73dd9355934dbbfc3e7ac16128779d55cbb9149fd1cea744b6b24",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "WenQuanYi Zen Hei",
+          "postScriptName": "WenQuanYiZenHei",
+          "isCustomFont": false,
+          "glyphCount": 10
+        },
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 2
+        }
+      ]
+    },
+    {
+      "locale": "tr",
+      "paint": {
+        "text": "Hangi rengi tercih edersiniz? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 83,
+        "nativeCloneWidth": 83,
+        "aliasWidth": 83,
+        "raster": "99982ec1de0219ad6fc35bc5ad6edfcfbe7d2c8bc60f99f8b79c5ab4436dd7db",
+        "aliasRaster": "99982ec1de0219ad6fc35bc5ad6edfcfbe7d2c8bc60f99f8b79c5ab4436dd7db",
+        "monoRaster": "58abb28e91e8234aff008efbed0592377124592db9a27932024f9a12d030a81c",
+        "sansRaster": "81661708f0bc72bb39e8067c30417488647119ac78041f02b97ba48416a8e550",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 31
+        }
+      ]
+    },
+    {
+      "locale": "vi",
+      "paint": {
+        "text": "Bạn thích màu nào? 1",
+        "family": "\"Rubik Variable\", sans-serif",
+        "fontSize": "28.8px",
+        "weight": "700",
+        "actualWidth": 57,
+        "nativeCloneWidth": 57,
+        "aliasWidth": 57,
+        "raster": "99d1efe464c6951a099b394af73aea3b827d022d1d6bc39b0e6e4d406d3e2f16",
+        "aliasRaster": "99d1efe464c6951a099b394af73aea3b827d022d1d6bc39b0e6e4d406d3e2f16",
+        "monoRaster": "1b6cae2e383b2e3d730d2d03f1abfaa5055463d96221412e95b84a16b021bd39",
+        "sansRaster": "3173f6cbad08c703f406d4024a574e33b744091212cdd49804c72ba03ba49f2d",
+        "fallbackRaster": "f86ead3255a46be4a604659b078f0940042945fe81173659983db7c1f196a5c7",
+        "sansFallbackRaster": "559186524b6ea331d8ffe80f2a01eec270ce4b7610a36da467301fea46fafb95",
+        "digitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28",
+        "aliasDigitRaster": "cdc77122cf629df7da27cef27b831f5d594402d94d50b0e6425193ade6f77e28"
+      },
+      "platformFonts": [
+        {
+          "familyName": "DejaVu Sans",
+          "postScriptName": "DejaVuSans",
+          "isCustomFont": false,
+          "glyphCount": 1
+        },
+        {
+          "familyName": "Rubik Light",
+          "postScriptName": "Rubik-Light",
+          "isCustomFont": true,
+          "glyphCount": 19
+        }
+      ]
+    }
+  ],
+  "requests": [
+    {
+      "path": "/",
+      "status": 200,
+      "mime": "text/html",
+      "sha256": "eb593c2ff574663907fef8f1c7ed4acca3d3dae7b4ca025f5f4c0fc0ce1273ee"
+    },
+    {
+      "path": "/qa/browser.mjs",
+      "status": 200,
+      "mime": "text/javascript",
+      "sha256": "00a6c5bb406a2f6ac06fb9f8dce3b7ef1f9fb100504c02446e22c5bf73c44ca2"
+    },
+    {
+      "path": "/qa/config",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "5ff796d39a87788b9ff65e3d2ff8a7787ed8fbeed8623de7b1f0739348ef072b"
+    },
+    {
+      "path": "/fonts/rubik-wght.css",
+      "status": 200,
+      "mime": "text/css",
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+    },
+    {
+      "path": "/fonts/files/rubik-arabic-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+    },
+    {
+      "path": "/fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+    },
+    {
+      "path": "/fonts/files/rubik-cyrillic-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+    },
+    {
+      "path": "/fonts/files/rubik-hebrew-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+    },
+    {
+      "path": "/fonts/files/rubik-latin-ext-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+    },
+    {
+      "path": "/fonts/files/rubik-latin-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+    },
+    {
+      "path": "/renderer.css",
+      "status": 200,
+      "mime": "text/css",
+      "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+    },
+    {
+      "path": "/renderer.js",
+      "status": 200,
+      "mime": "text/javascript",
+      "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+    },
+    {
+      "path": "/fonts/rubik-wght.css",
+      "status": 200,
+      "mime": "text/css",
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+    },
+    {
+      "path": "/fonts/files/rubik-arabic-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+    },
+    {
+      "path": "/fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+    },
+    {
+      "path": "/fonts/files/rubik-cyrillic-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+    },
+    {
+      "path": "/fonts/files/rubik-hebrew-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+    },
+    {
+      "path": "/fonts/files/rubik-latin-ext-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+    },
+    {
+      "path": "/fonts/files/rubik-latin-wght-normal.woff2",
+      "status": 200,
+      "mime": "font/woff2",
+      "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+    },
+    {
+      "path": "/fonts/rubik-wght.css",
+      "status": 200,
+      "mime": "text/css",
+      "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+    },
+    {
+      "path": "/renderer.css",
+      "status": 200,
+      "mime": "text/css",
+      "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "3ca2bd62e294005b5d98a1d6130a41352747d68abb10e9a208462436a0315c88"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "199867861211fad499524ffafbc6df3ebe07e3bfc7c027f93fafac6be3ebe6ef"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "ff3e5419aaa48a0def75f3bab08b8d96c26b26bb601b1028de617c209d57e94e"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "e7662cdeb8b93f1996664d48c6e656b6b89535f5ccec72afbc2277ef5b023688"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "c5c3ad22f6c3a4734391992899e25e6ff98fac2c32b88c0631552e2ff18332c0"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "95c9eaef7cfc9c79cbac0c35a76630ec55337b2f101f28a62e67ec3680f4552d"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "4b8e79b56d5a2d1f7dda0837406c02e6195c08d30e28f727bb1f1da906ef1887"
+    },
+    {
+      "path": "/qa/input-v2",
+      "status": 200,
+      "mime": "application/json",
+      "sha256": "f64657855655c9b6ca75df509f08730b537274ac7d769ab1023d6a98f46cf52a"
+    },
+    {
+      "path": "/fonts/files/unregistered.woff2",
+      "status": 404,
+      "mime": "text/plain",
+      "sha256": "ba691ba042bcedd9a61a36f5969026bc95859dccdc7e47f24e6bce35673baf2f"
+    },
+    {
+      "path": "/fonts/files/rubik-latin-wght-normal.woff2",
+      "status": 404,
+      "mime": "text/plain",
+      "sha256": "ba691ba042bcedd9a61a36f5969026bc95859dccdc7e47f24e6bce35673baf2f"
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "csp": [],
+  "exactWebKitPlatformFamilyObserved": false
+}

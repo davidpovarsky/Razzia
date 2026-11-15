@@ -1,0 +1,8 @@
+{
+  "status": 1,
+  "signal": null,
+  "stdout": "",
+  "stderr": "file:///out/harness-server-build/qa-fixture-server.js:12741\n\t\tif (createHash(\"sha256\").update(content).digest(\"hex\") !== expected) throw new Error(`qa:hash-mismatch:${name}`);\n\t\t                                                                           ^\n\nError: qa:hash-mismatch:fonts/files/rubik-latin-wght-normal.woff2\n    at file:///out/harness-server-build/qa-fixture-server.js:12741:78\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n\nNode.js v24.22.2\n",
+  "originalSizeRetained": 35348,
+  "changedOnlyRamFixture": true
+}

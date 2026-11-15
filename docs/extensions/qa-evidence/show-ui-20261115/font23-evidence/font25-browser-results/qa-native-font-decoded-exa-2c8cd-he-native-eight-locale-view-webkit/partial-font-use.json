@@ -1,0 +1,140 @@
+{
+  "decoded": {
+    "faces": [
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+600-6ff, U+750-77f, U+870-88e, U+890-891, U+897-8e1, U+8e3-8ff, U+200c-200e, U+2010-2011, U+204f, U+2e41, U+fb50-fdff, U+fe70-fe74, U+fe76-fefc, U+102e0-102fb, U+10e60-10e7e, U+10ec2-10ec4, U+10efc-10eff, U+1ee00-1ee03, U+1ee05-1ee1f, U+1ee21-1ee22, U+1ee24, U+1ee27, U+1ee29-1ee32, U+1ee34-1ee37, U+1ee39, U+1ee3b, U+1ee42, U+1ee47, U+1ee49, U+1ee4b, U+1ee4d-1ee4f, U+1ee51-1ee52, U+1ee54, U+1ee57, U+1ee59, U+1ee5b, U+1ee5d, U+1ee5f, U+1ee61-1ee62, U+1ee64, U+1ee67-1ee6a, U+1ee6c-1ee72, U+1ee74-1ee77, U+1ee79-1ee7c, U+1ee7e, U+1ee80-1ee89, U+1ee8b-1ee9b, U+1eea1-1eea3, U+1eea5-1eea9, U+1eeab-1eebb, U+1eef0-1eef1"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+460-52f, U+1c80-1c8a, U+20b4, U+2de0-2dff, U+a640-a69f, U+fe2e-fe2f"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+301, U+400-45f, U+490-491, U+4b0-4b1, U+2116"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+307-308, U+590-5ff, U+200c-2010, U+20aa, U+25cc, U+fb1d-fb4f"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+100-2ba, U+2bd-2c5, U+2c7-2cc, U+2ce-2d7, U+2dd-2ff, U+304, U+308, U+329, U+1d00-1dbf, U+1e00-1e9f, U+1ef2-1eff, U+2020, U+20a0-20ab, U+20ad-20c0, U+2113, U+2c60-2c7f, U+a720-a7ff"
+      },
+      {
+        "family": "Rubik Variable",
+        "status": "loaded",
+        "weight": "300 900",
+        "unicodeRange": "U+0-ff, U+131, U+152-153, U+2bb-2bc, U+2c6, U+2da, U+2dc, U+304, U+308, U+329, U+2000-206f, U+20ac, U+2122, U+2191, U+2193, U+2212, U+2215, U+feff, U+fffd"
+      }
+    ],
+    "aliases": [
+      {
+        "status": "loaded",
+        "unicodeRange": "U+600-6ff, U+750-77f, U+870-88e, U+890-891, U+897-8e1, U+8e3-8ff, U+200c-200e, U+2010-2011, U+204f, U+2e41, U+fb50-fdff, U+fe70-fe74, U+fe76-fefc, U+102e0-102fb, U+10e60-10e7e, U+10ec2-10ec4, U+10efc-10eff, U+1ee00-1ee03, U+1ee05-1ee1f, U+1ee21-1ee22, U+1ee24, U+1ee27, U+1ee29-1ee32, U+1ee34-1ee37, U+1ee39, U+1ee3b, U+1ee42, U+1ee47, U+1ee49, U+1ee4b, U+1ee4d-1ee4f, U+1ee51-1ee52, U+1ee54, U+1ee57, U+1ee59, U+1ee5b, U+1ee5d, U+1ee5f, U+1ee61-1ee62, U+1ee64, U+1ee67-1ee6a, U+1ee6c-1ee72, U+1ee74-1ee77, U+1ee79-1ee7c, U+1ee7e, U+1ee80-1ee89, U+1ee8b-1ee9b, U+1eea1-1eea3, U+1eea5-1eea9, U+1eeab-1eebb, U+1eef0-1eef1"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+460-52f, U+1c80-1c8a, U+20b4, U+2de0-2dff, U+a640-a69f, U+fe2e-fe2f"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+301, U+400-45f, U+490-491, U+4b0-4b1, U+2116"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+307-308, U+590-5ff, U+200c-2010, U+20aa, U+25cc, U+fb1d-fb4f"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+100-2ba, U+2bd-2c5, U+2c7-2cc, U+2ce-2d7, U+2dd-2ff, U+304, U+308, U+329, U+1d00-1dbf, U+1e00-1e9f, U+1ef2-1eff, U+2020, U+20a0-20ab, U+20ad-20c0, U+2113, U+2c60-2c7f, U+a720-a7ff"
+      },
+      {
+        "status": "loaded",
+        "unicodeRange": "U+0-ff, U+131, U+152-153, U+2bb-2bc, U+2c6, U+2da, U+2dc, U+304, U+308, U+329, U+2000-206f, U+20ac, U+2122, U+2191, U+2193, U+2212, U+2215, U+feff, U+fffd"
+      }
+    ],
+    "resources": [
+      {
+        "url": "/fonts/rubik-wght.css",
+        "status": 200,
+        "mime": "text/css",
+        "bytes": 2581,
+        "sha256": "5c5ce7a83a10034b877db7b8f1080abbbf84329beb192163dbbf02419c442f8b"
+      },
+      {
+        "url": "/fonts/files/rubik-arabic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 32468,
+        "sha256": "f5052e4870bf211fc22df5b85e791a292a77b9baef8cef1dc5a8e62a783ea1e0"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 12388,
+        "sha256": "35e30483bb79be6fd8de0fec4e038fda9e637fc7337f6ff61418c7d08077878b"
+      },
+      {
+        "url": "/fonts/files/rubik-cyrillic-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 15112,
+        "sha256": "bdb2b33ab916e9e7b42edb61f8aea5f5dd83ad773d6ee4e9b55665daf8954ce8"
+      },
+      {
+        "url": "/fonts/files/rubik-hebrew-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 9348,
+        "sha256": "197b6dbe5c6bec7276c59b02d70a16ee6acd44322fc2f8d0226c07f8d57976c2"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-ext-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 19400,
+        "sha256": "09472f217ad1ebb61a7669cf532f9f2f80685e07652ee862fde9a79665aef479"
+      },
+      {
+        "url": "/fonts/files/rubik-latin-wght-normal.woff2",
+        "status": 200,
+        "mime": "font/woff2",
+        "bytes": 35348,
+        "sha256": "691cd1d9b4c0cdf31a1dcf04259c86f92c85e69f6622abab7964d81e36890691"
+      }
+    ]
+  },
+  "observations": [
+    {
+      "locale": "en",
+      "paint": {
+        "text": "Which colour do you prefer? 1",
+        "family": "Rubik Variable, sans-serif",
+        "fontSize": "28.799999px",
+        "weight": "700",
+        "actualWidth": 87,
+        "aliasWidth": 86.53469848632812,
+        "raster": "e337b509bf766d1e93a502aece844a223a2ac119c8a2f3a4d657ae216e3fc71b",
+        "aliasRaster": "e337b509bf766d1e93a502aece844a223a2ac119c8a2f3a4d657ae216e3fc71b",
+        "monoRaster": "8bfa22cac8abb473120b5c72eb2d01bbcec9a7e9d751558c873027f025114951",
+        "sansRaster": "3aed678adc551f896bf62342704e710d07ba9b0e58155a7504549479e99fe591",
+        "fallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "sansFallbackRaster": "943696a366338cdf1765680dd633ef600abb4a015c7c6bd3d41cd7d585bc98c8",
+        "digitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c",
+        "aliasDigitRaster": "51d3daf6b213e56b113580bb7064019fa92c200f73aeb7f6ba0092f21805f19c"
+      }
+    }
+  ]
+}
