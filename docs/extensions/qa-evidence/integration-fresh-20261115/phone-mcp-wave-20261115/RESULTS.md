@@ -19,3 +19,9 @@ B independently owns the demonstrated ownerless tenant startup omission; approve
 Existing manager integration task1220543600361181 was appended without replacing prior notes; exact readback verified OPEN at2026-11-15T16:09:41.129Z.
 
 The first generated-manifest whitespace check failed on Windows CRLF lines; normalized only this newly generated JSON to LF and corrected its generator. Manifest data, original lock bytes, producer raw logs and source/overlay hashes are unchanged. Corrected own prepared-evidence whitespace check exits0. This was a preparation-format issue, with no runtime attempt.
+
+## Subsequent shared HTTP defect finding
+
+F's actual native account-backed OAuth witness received legacy SSE even with SDK responseMode=json. In the integrated a7e/1ac HTTP source, returning the response reaches finally/server.close/work.drain/release before the returned SSE body is consumed; the modern53 evidence did not cover that legacy response path. F reports that the admission lifetime can end before the legacy SDK handler settles. Manager inspected that exact integrated response/finally boundary. This is a newly identified source defect, not an observed deployment/customer/host disclosure incident.
+
+F owns its bounded-buffering/lifetime correction and genuine32-pending legacy cancellation witness, with affected modern regression checks. Its in-progress native suite42PASS/1test-parser failure and production-codeTC receipt are not final acceptance. No correction source or new suite result has been integrated yet. Preserve original failures and exact prior53 scope; foundation remains partial. External activation/G remains unavailable under the existing incomplete acceptance conditions. Regenerate the prepared combined root view from the next corrected coherent F pin before spending its normal bootstrap; the old1005-file plan remains preserved and NOT_RUN. No new approval stage, resource claim, polling or deployment.
