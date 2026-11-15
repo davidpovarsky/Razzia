@@ -7,6 +7,7 @@
     "./server": "./server/factory.ts",
     "./remote": "./server/http.ts",
     "./access-token": "./server/access-token.ts",
+    "./oauth": "./first-party/oauth.ts",
     "./contracts": "./contracts/index.ts",
     "./first-party": "./first-party/index.ts"
   },

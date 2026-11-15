@@ -42,7 +42,10 @@ export interface AccessTokenOptions {
   /** Deployment-owned public keys. Token-supplied URLs/JWKs are never fetched. */
   keys: readonly { kid: string; algorithm: "RS256" | "EdDSA"; pem: string }[]
   /** Real durable authority checks, required on EVERY verification. */
-  activeGrant(grantId: string): Promise<ActiveOAuthGrant | undefined>
+  activeGrant(
+    grantId: string,
+    accountId: string,
+  ): Promise<ActiveOAuthGrant | undefined>
   activeAccount(accountId: string): Promise<boolean>
   /** Maximum issued lifetime, not a clock-skew/expiry bypass. */
   maxLifetimeSeconds?: number
@@ -156,12 +159,16 @@ export function createAccessTokenVerifier(options: AccessTokenOptions) {
           throw denied()
         return { ...grant, scopes: [...grant.scopes] }
       }
-      let grant = checkedGrant(await options.activeGrant(claims.grant_id))
+      let grant = checkedGrant(
+        await options.activeGrant(claims.grant_id, claims.account_id),
+      )
       if (!(await options.activeAccount(grant.accountId))) throw denied()
       current()
       // Do not return a stale grant across the separate asynchronous account check.
       // Atomic revocation still belongs to the authoritative backing service.
-      grant = checkedGrant(await options.activeGrant(claims.grant_id))
+      grant = checkedGrant(
+        await options.activeGrant(claims.grant_id, claims.account_id),
+      )
       if (claims.exp * 1000 <= Date.now() || grant.expiresAt <= Date.now())
         throw denied()
       return Object.freeze({

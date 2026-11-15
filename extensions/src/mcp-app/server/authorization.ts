@@ -80,7 +80,9 @@ export async function authorize(
     throw new ToolError("RATE_LIMITED", {}, true)
   if (name && !scopes[name].every((scope) => p.scopes.includes(scope)))
     throw new ToolError("SCOPE_REQUIRED")
-  return Object.freeze({ ...p, scopes: Object.freeze([...p.scopes]) })
+  const accepted = Object.freeze({ ...p, scopes: Object.freeze([...p.scopes]) })
+  deps.principalAccepted?.(raw, accepted)
+  return accepted
 }
 export function oauthChallenge(config: ServerConfig, name: ToolName): string {
   return (

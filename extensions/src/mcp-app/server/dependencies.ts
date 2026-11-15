@@ -76,6 +76,9 @@ export interface Dependencies {
   /** Trusted adapter owns cryptographic token verification, grant/revocation and
    * account lookup on EVERY request. Never populate from unverified tool arguments. */
   authorize?: (extra: MessageExtraInfo | undefined) => Promise<unknown>
+  /** Trusted issuer may bind its unforgeable raw capability to the validated
+   * copy. Synchronous, after issuer/audience/expiry/scope checks; never a wire field. */
+  principalAccepted?: (raw: unknown, accepted: VerifiedPrincipal) => void
   /** Required ingress budget, including unauthenticated/malformed tool calls.
    * Key only from trusted transport context; no model arguments are supplied. */
   prevalidationLimit?: (extra: MessageExtraInfo | undefined) => Promise<boolean>
