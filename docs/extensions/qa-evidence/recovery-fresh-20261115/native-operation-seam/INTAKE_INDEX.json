@@ -1,7 +1,7 @@
 {
   "productSource": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
   "completeProducerHandoff": "30bd603d0555446b8760fb54406b724512ac254b",
-  "status": "Separate source intake pending; not approved by roster acceptance",
+  "status": "Source accepted in scoped manager intake; pinned runtime and real F consumer acceptance remain separate",
   "sourceFiles": [
     {
       "path": "extensions/src/server/storage/creation-reservation.ts",
@@ -46,5 +46,20 @@
     "Hardware power loss/storage migration",
     "Production adoption"
   ],
-  "unchangedOriginalSourceTask": "1219882508725158 remainsOPEN"
+  "unchangedOriginalSourceTask": "1219882508725158 remainsOPEN",
+  "statusAtPreparation": "Separate source intake pending; not approved by roster acceptance",
+  "acceptedManagerIntake": {
+    "source": "e444b480aea76fee5bf17f1b96998432134c5ba6",
+    "evidence": "8786d8e6ea13b07084d9d576786e369dc4187331",
+    "meaning": "Source/15-case test review,187inputs/18rawreceipts/22children independently verified; current types/format0; original Node26 producer15 reused, not fresh pinned24/F-ledger proof"
+  },
+  "additionalOwnedAcceptance": {
+    "evidence": "9faa62dc1466f19ced59e6326226a3f68039dcda",
+    "entry": "../native-operation-postcommit/HANDOFF.md",
+    "newCases": 3,
+    "freshChildren": 13,
+    "sourceChanged": false,
+    "original15Rerun": false,
+    "FConsumerRun": false
+  }
 }
