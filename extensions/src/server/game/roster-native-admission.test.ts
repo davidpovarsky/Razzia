@@ -314,3 +314,30 @@ it("internal roster admission shares original socket and success-event path once
   } satisfies Partial<Player>)
   f.sentinelUnchanged()
 })
+
+it("preserves an unrelated native Player and its score during roster40 admission", () => {
+  const f = fixture()
+  expect(
+    f.players.join(f.fake.createSocket("sentinel-player"), "Sentinel"),
+  ).toBeNull()
+  const [sentinel] = f.players.getAll()
+  sentinel.points = 911
+  sentinel.streak = 4
+  const before = structuredClone(sentinel)
+  const row = f.roster.upsert({
+    displayName: "R".repeat(40),
+    phone: "+972502222222",
+  })
+  expect(
+    f.controller.joinOrRebindPhoneCaller({
+      rosterPlayerId: row.rosterPlayerId,
+      callId: "new-player",
+    }).ok,
+  ).toBe(true)
+  expect(f.players.count()).toBe(2)
+  expect(f.players.findByClientId("sentinel-player")).toBe(sentinel)
+  expect(sentinel).toEqual(before)
+  expect(f.fake.events("host", EVENTS.MANAGER.NEW_PLAYER)).toHaveLength(2)
+  expect(f.admit).toHaveBeenCalledTimes(1)
+  f.sentinelUnchanged()
+})
