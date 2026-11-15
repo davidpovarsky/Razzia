@@ -13,7 +13,7 @@ qa=/delta/docs/extensions/qa-evidence/telephony-fresh-20261115
 cd /work
 node "$qa/auth-source/verify-composed.mjs" > "$evidence/source-before.json"
 node "$qa/auth-source/verify-overlay.mjs" > "$evidence/overlay-before.json"
-node -e 'require("node:fs").writeFileSync(process.env.PHONE_REMAINING_EVIDENCE+"/run-started.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,node:process.version,scope:"only five new actual authorization cases",started:new Date().toISOString()}),{flag:"wx"})'
+node -e 'require("node:fs").writeFileSync(process.env.PHONE_REMAINING_EVIDENCE+"/run-started.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,node:process.version,scope:"only five new actual authorization cases; crash source prepared but NOT_RUN",started:new Date().toISOString()}),{flag:"wx"})'
 monitor(){
   while true;do
     free=$(df -B1 --output=avail /evidence | tail -1 | tr -d ' ')

@@ -3,12 +3,16 @@
   "typescript": "7.0.2",
   "authored_files": [
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\actual-auth-backend.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.child.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.node.ts",
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-negative.node.ts",
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\package.json",
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\prepare-overlay.mjs"
   ],
   "type_roots": [
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\actual-auth-backend.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.child.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-crash.node.ts",
     "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\remaining-source\\authority-negative.node.ts"
   ],
   "type_exit": 0,
