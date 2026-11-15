@@ -69,3 +69,9 @@ export * from "./billing"
 export * from "./show-themes/demo-catalog"
 
 export * from "./packages/index"
+
+export type {
+  NativeCreationOperationBinding,
+  NativeCreationOperationStatus,
+  NativeCreationOperationPort,
+} from "./storage/creation-operation-types"

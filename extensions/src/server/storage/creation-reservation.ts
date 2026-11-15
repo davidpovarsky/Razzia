@@ -35,12 +35,32 @@ import {
   type DurableImage,
 } from "./durable-files"
 
-export interface NativeCreationResult {
-  quizId: string
-  revision: number
-  baseDigest: string
-}
+import {
+  assertOperationReference,
+  NativeOperationConflict,
+  readOperation,
+  type CreationOperationReference,
+  type OperationState,
+} from "./creation-operation-record"
+import {
+  assertOperationRequest,
+  bindOperationTarget,
+  claimOperation,
+  freezeOperationInput,
+  operationReference,
+  operationStatus,
+  settleIntentOperation,
+} from "./creation-operation-store"
+import type {
+  NativeCreationOperationBinding,
+  NativeCreationOperationPort,
+  NativeCreationOperationStatus,
+  NativeCreationResult,
+} from "./creation-operation-types"
+
+export type { NativeCreationResult } from "./creation-operation-types"
 export interface NativeCreationPort {
+  readonly operations?: NativeCreationOperationPort
   assertScope(): void
   create(
     input: Record<string, unknown>,
@@ -53,6 +73,7 @@ interface PreparedNativeQuiz {
   normalizedBase: Record<string, unknown>
 }
 interface Intent {
+  operation?: CreationOperationReference
   version: 1
   kind: "quiz-create"
   phase: "preparing" | "ready" | "committed" | "rolled-back"
@@ -130,6 +151,11 @@ function validateIntent(
     !sameDurableIdentity(identity(slot), entry.slot)
   )
     throw new Error("Foreign, malformed or incompatible creation intent")
+
+  if (entry.operation !== undefined) {
+    assertOperationReference(entry.operation)
+  }
+
   creationFamily(scope)
   privateDirectory(slot)
   for (const phase of ["active", "resolved"] as const) {
@@ -329,6 +355,7 @@ function cleanupResolved(
   intent: Intent,
   record: DurableImage,
 ) {
+  settleIntentOperation(intent)
   privateDirectory(slot)
   if (!sameDurableIdentity(identity(slot), intent.slot))
     throw new Error("Resolved slot ownership changed")
@@ -384,6 +411,7 @@ function fenceResolvedMove(
   if (lstatOrMissing(old)) throw new Error("Old active creation name returned")
 }
 function resolveSlot(state: State) {
+  settleIntentOperation(state.intent)
   const family = creationFamily(state.intent.scope)
   const resolvedParent = path.join(family, "resolved")
   ensureDurableDirectory(resolvedParent)
@@ -433,6 +461,7 @@ function rollback(state: State) {
 export function createNativeCreationPort(
   environment: CreationEnvironment & {
     prepare: (input: unknown) => PreparedNativeQuiz
+    enableOperationBindings?: boolean
   },
 ) {
   const states = new WeakMap<object, State>()
@@ -440,9 +469,10 @@ export function createNativeCreationPort(
     requireLinuxFences()
     captureCreationScope(environment)
   }
-  const reserve = (
+  const reserveInternal = (
     input: Record<string, unknown>,
     extras: AnyQuizExtras | null,
+    operation?: OperationState,
   ) => {
     requireLinuxFences()
     const scope = captureCreationScope(environment)
@@ -520,6 +550,7 @@ export function createNativeCreationPort(
       const token = randomBytes(32).toString("hex")
       const createdAt = Date.now()
       const intent: Intent = {
+        ...(operation ? { operation: operationReference(operation) } : {}),
         version: 1,
         kind: "quiz-create",
         phase: "preparing",
@@ -567,6 +598,11 @@ export function createNativeCreationPort(
       validateIntent(state.intent, scope, slot, false)
       assertCreationScope(environment, scope)
       classifyPair(state.intent, slot, state.record)
+
+      if (operation) {
+        bindOperationTarget(operation, state.intent)
+      }
+
       const capability = Object.freeze({})
       states.set(capability, state)
       return capability
@@ -578,6 +614,10 @@ export function createNativeCreationPort(
       )
     }
   }
+  const reserve = (
+    input: Record<string, unknown>,
+    extras: AnyQuizExtras | null,
+  ) => reserveInternal(input, extras)
   const publish = (capability: object): NativeCreationResult => {
     const state = states.get(capability)
     if (
@@ -657,7 +697,123 @@ export function createNativeCreationPort(
       leases.delete(state.intent.scope.root)
     }
   }
+  const lookupOperation = (
+    binding: NativeCreationOperationBinding,
+  ): NativeCreationOperationStatus => {
+    requireLinuxFences()
+    const scope = captureCreationScope(environment)
+
+    try {
+      const stored = readOperation(scope, binding)
+
+      if (!stored) {
+        return { status: "absent" }
+      }
+
+      if (stored.value.phase !== "reserved" || leases.has(scope.root)) {
+        return operationStatus(stored)
+      }
+
+      const { target } = stored.value
+
+      if (!target) {
+        throw new Error("Native operation target missing")
+      }
+
+      const family = creationFamily(scope)
+      const candidates = [
+        path.join(family, "active", target.quizId),
+        path.join(family, "resolved", `${target.quizId}-${target.nonce}`),
+      ].filter((slot) => lstatOrMissing(slot))
+
+      if (candidates.length !== 1) {
+        return { status: "unresolved", quizId: target.quizId }
+      }
+
+      const [slot] = candidates
+      const { intent, record } = readIntent(
+        scope,
+        slot,
+        path.dirname(slot) === path.join(family, "resolved"),
+      )
+
+      if (
+        computeCanonicalBaseDigest(intent.operation) !==
+        computeCanonicalBaseDigest(operationReference(stored))
+      ) {
+        return { status: "unresolved", quizId: target.quizId }
+      }
+
+      if (intent.phase === "committed") {
+        // An original durable intent is proof; current public quiz bytes are not.
+        syncOwnedFile(recordPath(slot), record)
+        syncDirectory(slot)
+        syncDirectory(path.dirname(slot))
+        settleIntentOperation(intent)
+        const committed = readOperation(scope, binding)
+
+        if (!committed) {
+          throw new Error("Native operation disappeared")
+        }
+
+        return operationStatus(committed)
+      }
+
+      return {
+        status: intent.phase === "ready" ? "reserved" : "unresolved",
+        quizId: target.quizId,
+      }
+    } catch (error) {
+      if (error instanceof NativeOperationConflict) {
+        throw error
+      }
+
+      return { status: "unresolved", quizId: null }
+    }
+  }
+  const operations: NativeCreationOperationPort | undefined =
+    environment.enableOperationBindings
+      ? {
+          lookup: lookupOperation,
+          create: (binding, input, extras) => {
+            requireLinuxFences()
+            const scope = captureCreationScope(environment)
+            const frozen = freezeOperationInput(input, extras)
+            const status = lookupOperation(binding)
+            const stored = readOperation(scope, binding)
+
+            if (stored) {
+              assertOperationRequest(stored, frozen.requestDigest)
+            }
+
+            if (status.status === "committed") {
+              return status.result
+            }
+
+            if (status.status !== "absent") {
+              throw new Error(
+                "Native operation reserved or unresolved; no duplicate creation",
+              )
+            }
+
+            if (leases.has(scope.root) || blocked.has(scope.root)) {
+              throw new Error("C1 creation scope is busy or unresolved")
+            }
+
+            const operation = claimOperation(
+              scope,
+              binding,
+              frozen.requestDigest,
+            )
+
+            return publish(
+              reserveInternal(frozen.input, frozen.extras, operation),
+            )
+          },
+        }
+      : undefined
   return {
+    operations,
     assertScope,
     reserve,
     publish,
