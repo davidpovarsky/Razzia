@@ -1,0 +1,145 @@
+{
+  "sourceCommit": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "checks": {
+    "candidateFinalCases": 15,
+    "passed": 15,
+    "failed": 0,
+    "skipped": 0,
+    "genuineSIGKILL": 5,
+    "distinctObservedChildren": 20,
+    "scopedTypesWithTestSources": 0,
+    "format": 0,
+    "newModulesLint": 0,
+    "existingCoreLint": 1,
+    "diagnosticsOnUnchangedCoreLines": 193,
+    "diagnosticsOnChangedLines": 0
+  },
+  "baseline": "baseline-r2-results.log:1FAIL/0PASS; earlier async fixture failure retained separately",
+  "runtime": "Existing local WSL Ubuntu Linux6.18/ext4, Node26.11.1; not an Oracle/pinnedNode24 or hardware qualification claim",
+  "compiledTarget": "node24",
+  "bundleSha256": "23664177176db5a4a1e4fc0a5fb34a743711c96e3ff2106425c0066e1b93a7c5",
+  "actualBundledInputs": 187,
+  "productFiles": [
+    {
+      "path": "extensions/src/server/storage/creation-reservation.ts",
+      "sha256": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1",
+      "lines": 939
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-record.ts",
+      "sha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+      "lines": 238
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-store.ts",
+      "sha256": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e",
+      "lines": 249
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-types.ts",
+      "sha256": "c40464a399fe5a54bd867765cdc5eb8c18741fd61c9abf60be09100808eeffee",
+      "lines": 35
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "sha256": "99d70df1091431c9cead45c2d7e0a87207e0a6a571e5363e1650e8295f81011e",
+      "lines": 72
+    }
+  ],
+  "receiptFiles": [
+    {
+      "path": "candidate-tenant-final-receipts/after-f-outcome-checkpoint.json",
+      "sha256": "90c6652d5bd5ae9f99e5a67a448dbefa815a682335119aa2703eee89126fe748",
+      "bytes": 3076
+    },
+    {
+      "path": "candidate-tenant-final-receipts/after-f-outcome-replay.json",
+      "sha256": "f75d0cf9f508d1b0f03c709bddb4df70da244c2fe20d82ae51d9b1c6b97f9919",
+      "bytes": 5744
+    },
+    {
+      "path": "candidate-tenant-final-receipts/after-native-commit-checkpoint.json",
+      "sha256": "13eb1e7fd85aa1a05d19874dc297c31a2889df9bd039ee8600ae16af8691df1b",
+      "bytes": 2986
+    },
+    {
+      "path": "candidate-tenant-final-receipts/after-native-commit-replay.json",
+      "sha256": "a4f56e6e50792d22cd729547ced59f12388504c86c4f495640b6cd07f45d8de9",
+      "bytes": 5388
+    },
+    {
+      "path": "candidate-tenant-final-receipts/bound-before-public-checkpoint.json",
+      "sha256": "007f7e33672d8651d390219aaf6407fc75cba9a4dfddd041609eddd54e6dcbf0",
+      "bytes": 2900
+    },
+    {
+      "path": "candidate-tenant-final-receipts/bound-before-public-replay.json",
+      "sha256": "a1de8e0cc176542fecec89428cb46c31498a57886c537876d02dd35312fc4a36",
+      "bytes": 3824
+    },
+    {
+      "path": "candidate-tenant-final-receipts/claim-before-target-checkpoint.json",
+      "sha256": "5b998ade1d6bb1a7d91fcd4d721fddde22a9015329ab385c51fec00d50680d8d",
+      "bytes": 1985
+    },
+    {
+      "path": "candidate-tenant-final-receipts/claim-before-target-replay.json",
+      "sha256": "a2b9e0726d1cd7b7b3d40babc3a74893afe6d6a80db4a35aa6088219e60bdacd",
+      "bytes": 3947
+    },
+    {
+      "path": "candidate-tenant-final-receipts/commit-before-operation-checkpoint.json",
+      "sha256": "ce5ff76d0e75d6e4d3c742a1c2e1580e9c23c5c526db4fb15ed257d0ecb9d088",
+      "bytes": 3217
+    },
+    {
+      "path": "candidate-tenant-final-receipts/commit-before-operation-replay.json",
+      "sha256": "47994c009d797890c14d08467727493089fcd0330e31d8cbcec9f987346c6da2",
+      "bytes": 7560
+    },
+    {
+      "path": "candidate-tenant-final-receipts/default-compatible.json",
+      "sha256": "b74ee75d69843c1f6e32071ded1a7de087e235f4f20ed550d888a5f097e6afca",
+      "bytes": 1534
+    },
+    {
+      "path": "candidate-tenant-final-receipts/flag-change.json",
+      "sha256": "a17fe34fa5df9c837f68a71836c2d12784fa152d215457a2c2ae05911a522f79",
+      "bytes": 2534
+    },
+    {
+      "path": "candidate-tenant-final-receipts/later-edits.json",
+      "sha256": "6fc9dc6e2d1178cb04acd881d3cce2cfbba63198b57d25d148bbe0233081b3cd",
+      "bytes": 4773
+    },
+    {
+      "path": "candidate-tenant-final-receipts/lost-cas.json",
+      "sha256": "e7785e628a9ff50ed0ac512e4b7db043ced345504104f88fe2a5d0d0d7ab0e69",
+      "bytes": 1366
+    },
+    {
+      "path": "candidate-tenant-final-receipts/mismatch-preservation.json",
+      "sha256": "b0f2805a0d3aebc36332c3fff27445a1bbe688a68735513e0ee300dec914ff89",
+      "bytes": 2534
+    },
+    {
+      "path": "candidate-tenant-final-receipts/native-scope-required.json",
+      "sha256": "8bb2c5bd10b05896ea1f279d9cb5b8f566100717ad926d48376847b39bca309d",
+      "bytes": 1366
+    },
+    {
+      "path": "candidate-tenant-final-receipts/record-cas-loss.json",
+      "sha256": "6753b179acdee6aa27668b3076510cda3368d108faf9e82281da7e2b61f77a73",
+      "bytes": 3286
+    },
+    {
+      "path": "candidate-tenant-final-receipts/tamper.json",
+      "sha256": "84cf11e2103921edcbc4df48253a2c33d6caa437a6b407adf1b55f9536169f3d",
+      "bytes": 2536
+    }
+  ],
+  "preservedInheritedUntracked": 16,
+  "productionOperations": 0,
+  "oracleJobs": 0,
+  "fixturePolicy": "Disposable token/prefix/physical-root admitted private /tmp ext4 trees only; sentinels verified before owned cleanup"
+}

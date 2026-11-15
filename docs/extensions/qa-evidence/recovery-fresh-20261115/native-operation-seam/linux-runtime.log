@@ -1,0 +1,4 @@
+v26.11.1
+Linux 6.18.33.2-microsoft-standard-WSL2
+Filesystem     Type  1K-blocks     Used Available Use% Mounted on
+/dev/sdd       ext4 1055762868 15172000 986887396   2% /

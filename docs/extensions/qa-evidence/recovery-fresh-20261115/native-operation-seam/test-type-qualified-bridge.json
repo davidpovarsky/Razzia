@@ -1,0 +1,7 @@
+{
+  "change": "Narrow fixture callback to void|Promise<void> and flatten generic account helper typing; both changes are type-only",
+  "executableBundleIdentical": true,
+  "sha256": "476462dd3eff54e44081175c52f34098330cf56944e54bff465c6edcabe71fab",
+  "scopedTypesWithTestsExit": 0,
+  "rerunRequired": false
+}

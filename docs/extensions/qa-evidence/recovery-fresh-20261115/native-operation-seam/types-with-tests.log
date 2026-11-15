@@ -1,0 +1,30 @@
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(131,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"baseline: optional trusted seam is present only when selected"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(136,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"default C1 create remains compatible and creates no operation registry"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(149,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"binding, content and owner mismatches preserve result and all bytes"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(163,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"original outcome survives later native edits and deletion"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(179,10): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type 'string' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(221,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"tampered committed outcome remains unresolved and byte preserved"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(231,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"operation directory lost-CAS cannot allocate a native target"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(249,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"flag change cannot reinterpret an established tenant operation as global"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(260,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"record CAS loss retains private evidence without public publication"' has no properties in common with type 'TestOptions'.
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(282,8): error TS2769: No overload matches this call.
+  The last overload gave the following error.
+    Type '"live cooperating writer contention is rejected before binding allocation"' has no properties in common with type 'TestOptions'.

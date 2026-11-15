@@ -1,0 +1,312 @@
+extensions/src/server/storage/creation-operation-types.ts:9:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-operation-types.ts:24:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-operation-store.ts:3:36: error eslint(no-duplicate-imports): '../../core/index' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/server/storage/creation-operation-store.ts:45:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Native operation input exceeds bound")` with `{throw new Error("Native operation input exceeds bound")}`.
+extensions/src/server/storage/creation-operation-store.ts:117:16: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/server/storage/creation-operation-store.ts:145:26: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/server/storage/creation-operation-store.ts:181:10: error eslint(curly): Expected { after 'else'. help: Replace `throw new Error("Operation intent is not durably resolved")` with `{throw new Error("Operation intent is not durably resolved")}`.
+extensions/src/server/storage/creation-operation-store.ts:166:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unresolved native operation commit")` with `{throw new Error("Unresolved native operation commit")}`.
+extensions/src/server/storage/creation-operation-store.ts:174:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Committed operation cannot roll back")` with `{throw new Error("Committed operation cannot roll back")}`.
+extensions/src/server/storage/creation-operation-store.ts:184:16: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/server/storage/creation-operation-store.ts:206:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new NativeOperationConflict("Native operation content changed")` with `{throw new NativeOperationConflict("Native operation content changed")}`.
+extensions/src/server/storage/creation-operation-store.ts:39:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:44:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:46:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:50:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:52:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:86:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:88:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:93:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:104:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:109:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:117:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:125:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:138:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:144:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:146:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:149:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:152:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:153:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:160:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:163:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:165:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:167:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:175:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:183:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:189:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:194:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:196:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-store.ts:201:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:18:53: error eslint(no-duplicate-imports): './creation-operation-types' import is duplicated help: Merge the duplicated import into a single import statement
+extensions/src/server/storage/creation-operation-record.ts:102:40: error eslint(curly): Expected { after 'if' condition. help: Replace `return null` with `{return null}`.
+extensions/src/server/storage/creation-operation-record.ts:104:36: error eslint(curly): Expected { after 'if' condition. help: Replace `return null` with `{return null}`.
+extensions/src/server/storage/creation-operation-record.ts:120:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Missing native operation record")` with `{throw new Error("Missing native operation record")}`.
+extensions/src/server/storage/creation-operation-record.ts:159:18: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/server/storage/creation-operation-record.ts:21:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:26:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:29:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:36:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:52:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:57:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:71:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:75:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:78:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:86:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:88:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:97:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:102:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:103:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:104:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:105:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:106:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:109:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:110:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:119:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:120:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:121:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:122:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:130:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:131:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:141:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:154:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:159:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:160:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:170:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:181:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:123:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Missing creation byte image")` with `{throw new Error("Missing creation byte image")}`.
+extensions/src/server/storage/creation-reservation.ts:126:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid creation byte image")` with `{throw new Error("Invalid creation byte image")}`.
+extensions/src/server/storage/creation-reservation.ts:128:24: error eslint(max-params): Function 'validateIntent' has too many parameters (4). Maximum allowed is 3. help: This rule enforces a maximum number of parameters allowed in function definitions.
+extensions/src/server/storage/creation-reservation.ts:153:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Foreign, malformed or incompatible creation intent")` with `{throw new Error("Foreign, malformed or incompatible creation intent")}`.
+extensions/src/server/storage/creation-reservation.ts:154:38: error eslint(curly): Expected { after 'if' condition. help: Replace `assertOperationReference(entry.operation)` with `{assertOperationReference(entry.operation)}`.
+extensions/src/server/storage/creation-reservation.ts:163:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation phase parent identity changed")` with `{throw new Error("Creation phase parent identity changed")}`.
+extensions/src/server/storage/creation-reservation.ts:169:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation base identity mismatch")` with `{throw new Error("Creation base identity mismatch")}`.
+extensions/src/server/storage/creation-reservation.ts:178:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation logical payload/digest mismatch")` with `{throw new Error("Creation logical payload/digest mismatch")}`.
+extensions/src/server/storage/creation-reservation.ts:193:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation sidecar identity/content mismatch")` with `{throw new Error("Creation sidecar identity/content mismatch")}`.
+extensions/src/server/storage/creation-reservation.ts:200:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Missing pre-publication inode ownership")` with `{throw new Error("Missing pre-publication inode ownership")}`.
+extensions/src/server/storage/creation-reservation.ts:205:30: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/server/storage/creation-reservation.ts:215:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation witness differs from frozen target")` with `{throw new Error("Creation witness differs from frozen target")}`.
+extensions/src/server/storage/creation-reservation.ts:222:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Linked creation intent")` with `{throw new Error("Linked creation intent")}`.
+extensions/src/server/storage/creation-reservation.ts:224:16: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Missing creation intent")` with `{throw new Error("Missing creation intent")}`.
+extensions/src/server/storage/creation-reservation.ts:238:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation physical root identity changed")` with `{throw new Error("Creation physical root identity changed")}`.
+extensions/src/server/storage/creation-reservation.ts:252:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation parent identity/device changed")` with `{throw new Error("Creation parent identity/device changed")}`.
+extensions/src/server/storage/creation-reservation.ts:259:66: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/server/storage/creation-reservation.ts:264:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Ambiguous creation ID-named leaf")` with `{throw new Error("Ambiguous creation ID-named leaf")}`.
+extensions/src/server/storage/creation-reservation.ts:267:9: error eslint(init-declarations): Variable 'value' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/creation-reservation.ts:269:26: error typescript(no-non-null-assertion): Forbidden non-null assertion. help: Consider using the optional chain operator `?.` instead. `x!.y` is equivalent to `x.y` at runtime and will throw if `x` is `null` or `undefined`, but `x?.y` will return `undefined`.
+extensions/src/server/storage/creation-reservation.ts:274:45: error eslint(curly): Expected { after 'if' condition. help: Replace `throw error` with `{throw error}`.
+extensions/src/server/storage/creation-reservation.ts:281:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation native identity is no longer unambiguous")` with `{throw new Error("Creation native identity is no longer unambiguous")}`.
+extensions/src/server/storage/creation-reservation.ts:290:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation slot changed")` with `{throw new Error("Creation slot changed")}`.
+extensions/src/server/storage/creation-reservation.ts:297:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation intent changed before pair mutation")` with `{throw new Error("Creation intent changed before pair mutation")}`.
+extensions/src/server/storage/creation-reservation.ts:304:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unknown private creation evidence; retaining whole pair")` with `{throw new Error("Unknown private creation evidence; retaining whole pair")}`.
+extensions/src/server/storage/creation-reservation.ts:318:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error(`Missing or changed private ${name} witness`)` with `{throw new Error(`Missing or changed private ${name} witness`)}`.
+extensions/src/server/storage/creation-reservation.ts:324:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error(`Unrecorded ${name} hard link; retaining whole pair`)` with `{throw new Error(`Unrecorded ${name} hard link; retaining whole pair`)}`.
+extensions/src/server/storage/creation-reservation.ts:326:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error(`Foreign or changed public ${name}; retaining whole pair`)` with `{throw new Error(`Foreign or changed public ${name}; retaining whole pair`)}`.
+extensions/src/server/storage/creation-reservation.ts:348:25: error eslint(max-params): Function 'cleanupResolved' has too many parameters (4). Maximum allowed is 3. help: This rule enforces a maximum number of parameters allowed in function definitions.
+extensions/src/server/storage/creation-reservation.ts:357:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Resolved slot ownership changed")` with `{throw new Error("Resolved slot ownership changed")}`.
+extensions/src/server/storage/creation-reservation.ts:361:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unknown private creation residue")` with `{throw new Error("Unknown private creation residue")}`.
+extensions/src/server/storage/creation-reservation.ts:367:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Private cleanup ownership changed")` with `{throw new Error("Private cleanup ownership changed")}`.
+extensions/src/server/storage/creation-reservation.ts:368:18: error eslint(curly): Expected { after 'if' condition. help: Replace `syncOwnedFile(file, current)` with `{syncOwnedFile(file, current)}`.
+extensions/src/server/storage/creation-reservation.ts:386:27: error eslint(max-params): Function 'fenceResolvedMove' has too many parameters (4). Maximum allowed is 3. help: This rule enforces a maximum number of parameters allowed in function definitions.
+extensions/src/server/storage/creation-reservation.ts:396:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid resolved creation move")` with `{throw new Error("Invalid resolved creation move")}`.
+extensions/src/server/storage/creation-reservation.ts:401:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation move parent identity changed")` with `{throw new Error("Creation move parent identity changed")}`.
+extensions/src/server/storage/creation-reservation.ts:404:28: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Old active creation name remains")` with `{throw new Error("Old active creation name remains")}`.
+extensions/src/server/storage/creation-reservation.ts:407:28: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Old active creation name returned")` with `{throw new Error("Old active creation name returned")}`.
+extensions/src/server/storage/creation-reservation.ts:420:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Resolved creation slot collision")` with `{throw new Error("Resolved creation slot collision")}`.
+extensions/src/server/storage/creation-reservation.ts:429:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation is not rollback-ready")` with `{throw new Error("Creation is not rollback-ready")}`.
+extensions/src/server/storage/creation-reservation.ts:441:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation rollback absence not established")` with `{throw new Error("Creation rollback absence not established")}`.
+extensions/src/server/storage/creation-reservation.ts:448:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation rollback absence changed during fences")` with `{throw new Error("Creation rollback absence changed during fences")}`.
+extensions/src/server/storage/creation-reservation.ts:476:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("C1 creation scope is busy or unresolved")` with `{throw new Error("C1 creation scope is busy or unresolved")}`.
+extensions/src/server/storage/creation-reservation.ts:478:9: error eslint(init-declarations): Variable 'slot' should be initialized on declaration. help: Require or disallow initialization in variable declarations
+extensions/src/server/storage/creation-reservation.ts:486:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Invalid native preparation identity/basename")` with `{throw new Error("Invalid native preparation identity/basename")}`.
+extensions/src/server/storage/creation-reservation.ts:491:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error( "Prepared native payload unexpectedly contains storage ID", )` with `{throw new Error( "Prepared native payload unexpectedly contains storage ID", )}`.
+extensions/src/server/storage/creation-reservation.ts:524:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Pre-existing creation sibling collision")` with `{throw new Error("Pre-existing creation sibling collision")}`.
+extensions/src/server/storage/creation-reservation.ts:533:9: error eslint(curly): Expected { after 'for' condition. help: Replace `privateDirectory(directory)` with `{privateDirectory(directory)}`.
+extensions/src/server/storage/creation-reservation.ts:539:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error( "C1 requires one filesystem for private and public objects", )` with `{throw new Error( "C1 requires one filesystem for private and public objects", )}`.
+extensions/src/server/storage/creation-reservation.ts:597:22: error eslint(curly): Expected { after 'if' condition. help: Replace `bindOperationTarget(operation, state.intent)` with `{bindOperationTarget(operation, state.intent)}`.
+extensions/src/server/storage/creation-reservation.ts:602:17: error eslint(curly): Expected { after 'if' condition. help: Replace `blocked.add(scope.root)` with `{blocked.add(scope.root)}`.
+extensions/src/server/storage/creation-reservation.ts:620:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Foreign, consumed or restarted creation capability")` with `{throw new Error("Foreign, consumed or restarted creation capability")}`.
+extensions/src/server/storage/creation-reservation.ts:632:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation intent changed before publish")` with `{throw new Error("Creation intent changed before publish")}`.
+extensions/src/server/storage/creation-reservation.ts:640:11: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation capability expired before publication")` with `{throw new Error("Creation capability expired before publication")}`.
+extensions/src/server/storage/creation-reservation.ts:643:24: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/server/storage/creation-reservation.ts:644:25: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Public creation name already exists")` with `{throw new Error("Public creation name already exists")}`.
+extensions/src/server/storage/creation-reservation.ts:651:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Creation target publication incomplete")` with `{throw new Error("Creation target publication incomplete")}`.
+extensions/src/server/storage/creation-reservation.ts:652:33: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/server/storage/creation-reservation.ts:654:9: error eslint(curly): Expected { after 'if' condition. help: Replace `syncOwnedFile(paths.sidecar, state.intent.sidecar)` with `{syncOwnedFile(paths.sidecar, state.intent.sidecar)}`.
+extensions/src/server/storage/creation-reservation.ts:699:20: error eslint(curly): Expected { after 'if' condition. help: Replace `return { status: "absent" }` with `{return { status: "absent" }}`.
+extensions/src/server/storage/creation-reservation.ts:701:9: error eslint(curly): Expected { after 'if' condition. help: Replace `return operationStatus(stored)` with `{return operationStatus(stored)}`.
+extensions/src/server/storage/creation-reservation.ts:702:22: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/server/storage/creation-reservation.ts:709:9: error eslint(curly): Expected { after 'if' condition. help: Replace `return { status: "unresolved", quizId: target.quizId }` with `{return { status: "unresolved", quizId: target.quizId }}`.
+extensions/src/server/storage/creation-reservation.ts:710:20: error eslint(prefer-destructuring): Use Array destructuring. help: Use array destructuring rather than direct member access.
+extensions/src/server/storage/creation-reservation.ts:728:32: error typescript(no-non-null-assertion): Forbidden non-null assertion.
+extensions/src/server/storage/creation-reservation.ts:735:53: error eslint(curly): Expected { after 'if' condition. help: Replace `throw error` with `{throw error}`.
+extensions/src/server/storage/creation-reservation.ts:749:25: error eslint(curly): Expected { after 'if' condition. help: Replace `assertOperationRequest(stored, frozen.requestDigest)` with `{assertOperationRequest(stored, frozen.requestDigest)}`.
+extensions/src/server/storage/creation-reservation.ts:750:48: error eslint(curly): Expected { after 'if' condition. help: Replace `return status.result` with `{return status.result}`.
+extensions/src/server/storage/creation-reservation.ts:752:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error( "Native operation reserved or unresolved; no duplicate creation", )` with `{throw new Error( "Native operation reserved or unresolved; no duplicate creation", )}`.
+extensions/src/server/storage/creation-reservation.ts:756:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("C1 creation scope is busy or unresolved")` with `{throw new Error("C1 creation scope is busy or unresolved")}`.
+extensions/src/server/storage/creation-reservation.ts:790:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Pending C1 intents require qualified Linux recovery")` with `{throw new Error("Pending C1 intents require qualified Linux recovery")}`.
+extensions/src/server/storage/creation-reservation.ts:802:9: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unknown creation registry phase; startup blocked")` with `{throw new Error("Unknown creation registry phase; startup blocked")}`.
+extensions/src/server/storage/creation-reservation.ts:808:7: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Cannot replay a live creation scope")` with `{throw new Error("Cannot replay a live creation scope")}`.
+extensions/src/server/storage/creation-reservation.ts:813:36: error eslint(curly): Expected { after 'if' condition. help: Replace `continue` with `{continue}`.
+extensions/src/server/storage/creation-reservation.ts:824:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Ambiguous resolved creation residue")` with `{throw new Error("Ambiguous resolved creation residue")}`.
+extensions/src/server/storage/creation-reservation.ts:838:17: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error("Unresolved intent in resolved family")` with `{throw new Error("Unresolved intent in resolved family")}`.
+extensions/src/server/storage/creation-reservation.ts:852:45: error eslint(curly): Expected { after 'if' condition. help: Replace `rollback(state)` with `{rollback(state)}`.
+extensions/src/server/storage/creation-reservation.ts:857:17: error eslint(curly): Expected { after 'if' condition. help: Replace `resolveSlot(state)` with `{resolveSlot(state)}`.
+extensions/src/server/storage/creation-reservation.ts:859:17: error eslint(curly): Expected { after 'else'. help: Replace `throw new Error( "Incomplete pre-publication creation intent retained", )` with `{throw new Error( "Incomplete pre-publication creation intent retained", )}`.
+extensions/src/server/storage/creation-reservation.ts:864:11: error eslint(no-plusplus): Unary operator '++' used. help: Use the assignment operator `+=` instead.
+extensions/src/server/storage/creation-reservation.ts:878:7: error eslint(curly): Expected { after 'if' condition. help: Replace `blocked.delete(scope.root)` with `{blocked.delete(scope.root)}`.
+extensions/src/server/storage/creation-reservation.ts:881:5: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error(`C1 startup blocked; ${unresolved.join(" | ")}`)` with `{throw new Error(`C1 startup blocked; ${unresolved.join(" | ")}`)}`.
+extensions/src/server/storage/creation-reservation.ts:284:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-reservation.ts:344:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-reservation.ts:452:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-reservation.ts:781:1: error @stylistic(multiline-comment-style): Expected multiple line comments instead of a block comment.
+extensions/src/server/storage/creation-reservation.ts:62:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:70:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:105:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:106:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:114:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:124:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:125:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:135:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:154:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:155:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:159:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:168:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:170:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:172:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:179:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:185:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:195:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:201:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:206:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:207:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:218:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:223:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:224:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:225:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:239:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:248:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:254:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:260:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:262:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:265:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:267:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:268:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:275:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:277:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:289:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:291:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:292:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:298:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:303:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:305:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:313:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:319:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:325:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:329:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:356:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:358:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:360:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:362:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:366:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:368:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:375:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:395:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:397:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:400:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:404:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:405:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:407:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:419:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:421:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:430:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:434:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:440:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:444:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:447:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:449:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:457:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:475:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:477:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:479:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:482:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:487:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:490:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:494:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:523:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:525:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:535:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:542:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:597:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:598:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:600:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:603:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:615:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:621:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:627:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:628:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:631:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:633:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:639:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:641:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:643:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:644:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:645:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:650:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:652:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:653:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:655:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:664:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:670:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:673:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:684:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:697:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:699:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:700:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:702:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:708:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:710:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:716:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:722:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:728:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:730:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:736:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:749:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:750:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:751:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:755:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:757:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:762:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:768:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:791:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:793:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:803:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:809:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:813:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:814:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:817:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:819:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:825:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:836:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:839:15: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:852:15: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:864:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:873:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:880:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-reservation.ts:882:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/server/storage/creation-operation-record.ts:61:5: error typescript(prefer-optional-chain): Prefer using an optional chain expression instead, as it's more concise and easier to read.
+extensions/src/server/storage/creation-operation-record.ts:61:5: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `Readonly<{ version: 1; operationId: string; authorizationDigest: string; }>`.
+extensions/src/server/storage/creation-operation-record.ts:62:5: error typescript(no-unnecessary-condition): Unnecessary comparison between literal values. help: The left side has type `1`, and the right side has type `1`.
+extensions/src/server/storage/creation-operation-record.ts:72:7: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `CreationOperationReference`.
+extensions/src/server/storage/creation-reservation.ts:122:7: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `{ raw: string; sha256: string; length: number; }`.
+extensions/src/server/storage/creation-reservation.ts:136:5: error typescript(prefer-optional-chain): Prefer using an optional chain expression instead, as it's more concise and easier to read.
+extensions/src/server/storage/creation-reservation.ts:136:5: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `Intent`.
+extensions/src/server/storage/creation-reservation.ts:137:5: error typescript(no-unnecessary-condition): Unnecessary comparison between literal values. help: The left side has type `1`, and the right side has type `1`.
+extensions/src/server/storage/creation-reservation.ts:138:5: error typescript(no-unnecessary-condition): Unnecessary comparison between literal values. help: The left side has type `"quiz-create"`, and the right side has type `"quiz-create"`.
+extensions/src/server/storage/creation-operation-record.ts:123:5: error typescript(prefer-optional-chain): Prefer using an optional chain expression instead, as it's more concise and easier to read.
+extensions/src/server/storage/creation-operation-record.ts:123:5: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `OperationRecord`.
+extensions/src/server/storage/creation-operation-record.ts:124:5: error typescript(no-unnecessary-condition): Unnecessary comparison between literal values. help: The left side has type `1`, and the right side has type `1`.
+extensions/src/server/storage/creation-operation-record.ts:125:5: error typescript(no-unnecessary-condition): Unnecessary comparison between literal values. help: The left side has type `"native-create-operation"`, and the right side has type `"native-create-operation"`.
+extensions/src/server/storage/creation-operation-record.ts:148:7: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `DurableIdentity`.
+extensions/src/server/storage/creation-operation-record.ts:148:8: error typescript(no-unnecessary-condition): Unnecessary optional chain on a non-nullish value. help: The checked value has type `{ configured: DurableIdentity; root: DurableIdentity; registry: DurableIdentity; slot: DurableIdentity; }`. Remove the optional chain; the value cannot be `null` or `undefined`.
+extensions/src/server/storage/creation-reservation.ts:160:7: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `{ active: DurableIdentity; resolved: DurableIdentity; }`.
+extensions/src/server/storage/creation-reservation.ts:616:7: error typescript(prefer-optional-chain): Prefer using an optional chain expression instead, as it's more concise and easier to read.

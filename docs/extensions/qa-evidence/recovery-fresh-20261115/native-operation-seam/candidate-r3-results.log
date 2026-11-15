@@ -1,0 +1,88 @@
+TAP version 13
+# Subtest: baseline: optional trusted seam is present only when selected
+ok 1 - baseline: optional trusted seam is present only when selected
+  ---
+  duration_ms: 13.210973
+  type: 'test'
+  ...
+# Subtest: binding, content and owner mismatches preserve result and all bytes
+ok 2 - binding, content and owner mismatches preserve result and all bytes
+  ---
+  duration_ms: 258.681911
+  type: 'test'
+  ...
+# Subtest: original outcome survives later native edits and deletion
+ok 3 - original outcome survives later native edits and deletion
+  ---
+  duration_ms: 737.476887
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: claim-before-target
+ok 4 - fresh-process crash/reconcile: claim-before-target
+  ---
+  duration_ms: 861.027224
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: bound-before-public
+ok 5 - fresh-process crash/reconcile: bound-before-public
+  ---
+  duration_ms: 1196.598761
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: commit-before-operation
+ok 6 - fresh-process crash/reconcile: commit-before-operation
+  ---
+  duration_ms: 932.090356
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-native-commit
+ok 7 - fresh-process crash/reconcile: after-native-commit
+  ---
+  duration_ms: 882.02738
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-f-outcome
+ok 8 - fresh-process crash/reconcile: after-f-outcome
+  ---
+  duration_ms: 936.640984
+  type: 'test'
+  ...
+# Subtest: tampered committed outcome remains unresolved and byte preserved
+ok 9 - tampered committed outcome remains unresolved and byte preserved
+  ---
+  duration_ms: 194.518765
+  type: 'test'
+  ...
+# Subtest: operation directory lost-CAS cannot allocate a native target
+ok 10 - operation directory lost-CAS cannot allocate a native target
+  ---
+  duration_ms: 28.881106
+  type: 'test'
+  ...
+# Subtest: flag change cannot reinterpret an established tenant operation as global
+ok 11 - flag change cannot reinterpret an established tenant operation as global
+  ---
+  duration_ms: 181.722026
+  type: 'test'
+  ...
+# Subtest: record CAS loss retains private evidence without public publication
+ok 12 - record CAS loss retains private evidence without public publication
+  ---
+  duration_ms: 121.173666
+  type: 'test'
+  ...
+# Subtest: live cooperating writer contention is rejected before binding allocation
+ok 13 - live cooperating writer contention is rejected before binding allocation
+  ---
+  duration_ms: 125.445699
+  type: 'test'
+  ...
+1..13
+# tests 13
+# suites 0
+# pass 13
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 6938.980556
