@@ -1,0 +1,236 @@
+{
+  "kind": "offline-receipt-analysis-no-test-execution",
+  "reviewedCommit": "e58350423727ba1c5aadf4164a2b09ee25745839",
+  "sourceRoot": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-required-e58350423727ba1c5aadf4164a2b09ee25745839/",
+  "result": "All four retained V2 failures are exactly compact-to-two-space JSON serialization changes of the target base; complete decoded base and V2 sidecar data are equal. Second replay remains untested in these receipts.",
+  "analyses": [
+    {
+      "name": "process-focused-quiz-base-write.json",
+      "sourceSha256": "dce3c8bf41233cd4e6749d4e071657e6656c4537639427c80956b9a6ac9ad9c0",
+      "checks": {
+        "originalReceiptStillFail": true,
+        "killedBySigkill": true,
+        "distinctInterruptedAndRecoveryPid": true,
+        "firstRecoverySucceeded": true,
+        "fullDecodedTargetBaseStrictEqual": true,
+        "decodedTargetBaseInsertionOrderAlsoEqual": true,
+        "beforeHashExactlyCompactSerialization": true,
+        "afterHashExactlyPrettyTwoSpaceSerialization": true,
+        "targetBaseRawBytesChanged": true,
+        "fullDecodedV2ExtrasStrictEqual": true,
+        "targetSidecarRawHashUnchanged": true,
+        "showBIncludingRawHashesUnchanged": true,
+        "unrelatedShowIncludingRawHashesUnchanged": true,
+        "targetMediaRawHashUnchanged": true,
+        "unrelatedMediaRawHashUnchanged": true,
+        "journalsClearedAfterFirstRecovery": true,
+        "secondReplayWasNotReached": true
+      },
+      "boundary": "quiz-base-write",
+      "pids": {
+        "interrupted": 441,
+        "firstRecovery": 455
+      },
+      "targetBase": {
+        "beforeSha256": "6b8415950bb1337fa23b28ee14fdabb4df75063e265da0d93c0cd011ce82dce4",
+        "afterSha256": "e678d7988778e09b452bc17719a801e50c7db1e9a1106bcb41baf425f11720e8",
+        "compactBytes": 225,
+        "prettyBytes": 375,
+        "compactNewlines": 0,
+        "prettyNewlines": 22,
+        "completeTopLevelKeys": [
+          "gameMode",
+          "subject",
+          "questions"
+        ]
+      },
+      "completeV2TopLevelKeys": [
+        "schemaVersion",
+        "revision",
+        "quizId",
+        "baseDigest",
+        "questionIds",
+        "timeline",
+        "scenes",
+        "defaults",
+        "teams",
+        "audio",
+        "perQuestion",
+        "roster",
+        "authoring",
+        "mediaCatalog"
+      ]
+    },
+    {
+      "name": "process-focused-quiz-sidecar-write.json",
+      "sourceSha256": "efb2d63daf0bc162acb88e85bbcc56867ebfdfd7aa551ae9d1820de3f7c16ad3",
+      "checks": {
+        "originalReceiptStillFail": true,
+        "killedBySigkill": true,
+        "distinctInterruptedAndRecoveryPid": true,
+        "firstRecoverySucceeded": true,
+        "fullDecodedTargetBaseStrictEqual": true,
+        "decodedTargetBaseInsertionOrderAlsoEqual": true,
+        "beforeHashExactlyCompactSerialization": true,
+        "afterHashExactlyPrettyTwoSpaceSerialization": true,
+        "targetBaseRawBytesChanged": true,
+        "fullDecodedV2ExtrasStrictEqual": true,
+        "targetSidecarRawHashUnchanged": true,
+        "showBIncludingRawHashesUnchanged": true,
+        "unrelatedShowIncludingRawHashesUnchanged": true,
+        "targetMediaRawHashUnchanged": true,
+        "unrelatedMediaRawHashUnchanged": true,
+        "journalsClearedAfterFirstRecovery": true,
+        "secondReplayWasNotReached": true
+      },
+      "boundary": "quiz-sidecar-write",
+      "pids": {
+        "interrupted": 469,
+        "firstRecovery": 483
+      },
+      "targetBase": {
+        "beforeSha256": "6b8415950bb1337fa23b28ee14fdabb4df75063e265da0d93c0cd011ce82dce4",
+        "afterSha256": "e678d7988778e09b452bc17719a801e50c7db1e9a1106bcb41baf425f11720e8",
+        "compactBytes": 225,
+        "prettyBytes": 375,
+        "compactNewlines": 0,
+        "prettyNewlines": 22,
+        "completeTopLevelKeys": [
+          "gameMode",
+          "subject",
+          "questions"
+        ]
+      },
+      "completeV2TopLevelKeys": [
+        "schemaVersion",
+        "revision",
+        "quizId",
+        "baseDigest",
+        "questionIds",
+        "timeline",
+        "scenes",
+        "defaults",
+        "teams",
+        "audio",
+        "perQuestion",
+        "roster",
+        "authoring",
+        "mediaCatalog"
+      ]
+    },
+    {
+      "name": "process-full-quiz-base-write.json",
+      "sourceSha256": "9f3bd2278c70d666741ea5a052699606c03f21e7fba503d3e896945ddfa231b2",
+      "checks": {
+        "originalReceiptStillFail": true,
+        "killedBySigkill": true,
+        "distinctInterruptedAndRecoveryPid": true,
+        "firstRecoverySucceeded": true,
+        "fullDecodedTargetBaseStrictEqual": true,
+        "decodedTargetBaseInsertionOrderAlsoEqual": true,
+        "beforeHashExactlyCompactSerialization": true,
+        "afterHashExactlyPrettyTwoSpaceSerialization": true,
+        "targetBaseRawBytesChanged": true,
+        "fullDecodedV2ExtrasStrictEqual": true,
+        "targetSidecarRawHashUnchanged": true,
+        "showBIncludingRawHashesUnchanged": true,
+        "unrelatedShowIncludingRawHashesUnchanged": true,
+        "targetMediaRawHashUnchanged": true,
+        "unrelatedMediaRawHashUnchanged": true,
+        "journalsClearedAfterFirstRecovery": true,
+        "secondReplayWasNotReached": true
+      },
+      "boundary": "quiz-base-write",
+      "pids": {
+        "interrupted": 1021,
+        "firstRecovery": 1035
+      },
+      "targetBase": {
+        "beforeSha256": "6b8415950bb1337fa23b28ee14fdabb4df75063e265da0d93c0cd011ce82dce4",
+        "afterSha256": "e678d7988778e09b452bc17719a801e50c7db1e9a1106bcb41baf425f11720e8",
+        "compactBytes": 225,
+        "prettyBytes": 375,
+        "compactNewlines": 0,
+        "prettyNewlines": 22,
+        "completeTopLevelKeys": [
+          "gameMode",
+          "subject",
+          "questions"
+        ]
+      },
+      "completeV2TopLevelKeys": [
+        "schemaVersion",
+        "revision",
+        "quizId",
+        "baseDigest",
+        "questionIds",
+        "timeline",
+        "scenes",
+        "defaults",
+        "teams",
+        "audio",
+        "perQuestion",
+        "roster",
+        "authoring",
+        "mediaCatalog"
+      ]
+    },
+    {
+      "name": "process-full-quiz-sidecar-write.json",
+      "sourceSha256": "d564206d3fe66ef052744fca6b0a7816d953af73bb22ac73e202bb6321af3e2b",
+      "checks": {
+        "originalReceiptStillFail": true,
+        "killedBySigkill": true,
+        "distinctInterruptedAndRecoveryPid": true,
+        "firstRecoverySucceeded": true,
+        "fullDecodedTargetBaseStrictEqual": true,
+        "decodedTargetBaseInsertionOrderAlsoEqual": true,
+        "beforeHashExactlyCompactSerialization": true,
+        "afterHashExactlyPrettyTwoSpaceSerialization": true,
+        "targetBaseRawBytesChanged": true,
+        "fullDecodedV2ExtrasStrictEqual": true,
+        "targetSidecarRawHashUnchanged": true,
+        "showBIncludingRawHashesUnchanged": true,
+        "unrelatedShowIncludingRawHashesUnchanged": true,
+        "targetMediaRawHashUnchanged": true,
+        "unrelatedMediaRawHashUnchanged": true,
+        "journalsClearedAfterFirstRecovery": true,
+        "secondReplayWasNotReached": true
+      },
+      "boundary": "quiz-sidecar-write",
+      "pids": {
+        "interrupted": 1049,
+        "firstRecovery": 1063
+      },
+      "targetBase": {
+        "beforeSha256": "6b8415950bb1337fa23b28ee14fdabb4df75063e265da0d93c0cd011ce82dce4",
+        "afterSha256": "e678d7988778e09b452bc17719a801e50c7db1e9a1106bcb41baf425f11720e8",
+        "compactBytes": 225,
+        "prettyBytes": 375,
+        "compactNewlines": 0,
+        "prettyNewlines": 22,
+        "completeTopLevelKeys": [
+          "gameMode",
+          "subject",
+          "questions"
+        ]
+      },
+      "completeV2TopLevelKeys": [
+        "schemaVersion",
+        "revision",
+        "quizId",
+        "baseDigest",
+        "questionIds",
+        "timeline",
+        "scenes",
+        "defaults",
+        "teams",
+        "audio",
+        "perQuestion",
+        "roster",
+        "authoring",
+        "mediaCatalog"
+      ]
+    }
+  ]
+}
