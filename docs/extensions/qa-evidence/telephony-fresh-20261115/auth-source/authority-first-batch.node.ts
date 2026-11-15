@@ -1,4 +1,4 @@
-// Prepared only. Run after a new bounded grant, never by ordinary Vitest.
+// Isolated synthetic account/SQLite proof, never ordinary Vitest or production.
 import assert from "node:assert/strict"
 import { after, test } from "node:test"
 import { randomBytes } from "node:crypto"
@@ -38,6 +38,7 @@ const { createQuestion, createQuizz } = await import("@razzia/socket/test/fixtur
 const { UnmountedPhoneAuthority } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory")
 const { PrivateAuthorityFiles } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/auth/private-authority-files")
 const { ReadonlyServiceLeaseReader } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/auth/authority-store")
+const { NativeAccountAuthority } = await import("../../../../../extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority")
 checkAccountConfiguration(); initConfig()
 const server = createAdaptorServer(app), io = createSocketServer(server), registry = Registry.getInstance()
 const factories: InstanceType<typeof UnmountedPhoneAuthority>[] = [], observations: unknown[] = []
@@ -156,6 +157,108 @@ test("AUTH-02 hash-only lost/reordered delivery, expected-version rotation and r
   assert.deepEqual(r.counters, { root: 1, nativeJoin: 1 })
   observations.push({ case: "AUTH-02", oldVersionsDenied: 2, lostSecretRetryDidNotReveal: true,
     monotonicTerminalVersion: 4, actualCounters: r.counters })
+})
+
+test("AUTH-04 factory close during real manager preparation prevents initialization", async () => {
+  const r = await setup("close-preparation"), before = readdirSync(r.root)
+  const original = NativeAccountAuthority.prototype.prepareManager
+  try {
+    NativeAccountAuthority.prototype.prepareManager = async function (...args) {
+      const prepared = await original.apply(this, args)
+      r.factory.close()
+      return prepared
+    }
+    await assert.rejects(r.factory.initializeAuthority(session.token, r.game.gameId))
+  } finally { NativeAccountAuthority.prototype.prepareManager = original }
+  assert.deepEqual(readdirSync(r.root), before)
+  assert.deepEqual(r.counters, { root: 0, nativeJoin: 0 })
+  observations.push({ case: "AUTH-04", actualManagerPrepared: true, postCloseInitialization: false })
+})
+
+test("AUTH-05 factory close after committed issue/rotation/activation denies disclosure and preserves decisions", async () => {
+  for (const action of ["issue", "rotate", "activate", "register"] as const) {
+    const r = await setup("close-disclosure-" + action)
+    await r.factory.initializeAuthority(session.token, r.game.gameId)
+    let a: ServiceAddress | undefined, credential: string | undefined
+    if (action !== "issue") {
+      const issued = await r.factory.issue(session.token, r.issue)
+      credential = issued.credential!; secrets.push(credential)
+      a = address(r.game.gameId, issued.receipt.service)
+      if (action !== "activate") await r.factory.activate(a, credential, { requestId: "activate-before-close", expectedVersion: 1 })
+    }
+    const original = DatabaseSync.prototype.exec
+    let commits = 0
+    try {
+      DatabaseSync.prototype.exec = function (this: DatabaseSync, sql: string) {
+        const result = original.call(this, sql)
+        if (sql === "COMMIT") {
+          commits++
+          // Runs after the synchronous owning turn, before withAccount's caller resumes.
+          queueMicrotask(() => r.factory.close())
+        }
+        return result
+      }
+      await assert.rejects(action === "issue" ? r.factory.issue(session.token, r.issue) :
+        action === "rotate" ? r.factory.rotate(session.token, { game: a!.game, provider: a!.provider, service: a!.service },
+          { requestId: "rotate-before-close", expectedVersion: 1 }) :
+        action === "activate" ? r.factory.activate(a!, credential!, { requestId: "activate-before-close", expectedVersion: 1 }) :
+        r.factory.register(a!, credential!, call("register-before-close")))
+    } finally { DatabaseSync.prototype.exec = original }
+    assert.ok(commits > 0)
+    if (action === "issue") {
+      const db = new DatabaseSync(join(r.root, "phone-service-authority.sqlite"), { readOnly: true })
+      try { assert.equal((db.prepare("SELECT count(*) AS n FROM leases").get() as { n: number }).n, 1) }
+      finally { db.close() }
+    } else {
+      const current = r.reader.readCurrent(a!)
+      assert.equal(current?.version, action === "rotate" ? 2 : 1)
+      assert.equal(current?.state, action === "rotate" ? "PENDING_DELIVERY" : "ACTIVE")
+      if (action === "register") assert.equal(r.game.players.length, 1)
+    }
+    observations.push({ case: "AUTH-05", action, actualCommits: commits, disclosureDenied: true, decisionPreserved: true })
+  }
+})
+
+test("AUTH-06 uncertain SQLite close denies initializer/revoker and retains committed state plus reopen barrier", async () => {
+  for (const action of ["initialize", "revoke"] as const) {
+    const r = await setup("close-error-" + action)
+    let a: ServiceAddress | undefined
+    if (action === "revoke") {
+      await r.factory.initializeAuthority(session.token, r.game.gameId)
+      const issued = await r.factory.issue(session.token, r.issue)
+      secrets.push(issued.credential!)
+      a = address(r.game.gameId, issued.receipt.service)
+    }
+    const originalExec = DatabaseSync.prototype.exec, originalClose = DatabaseSync.prototype.close
+    const committed = new WeakSet<DatabaseSync>()
+    let closeErrors = 0
+    try {
+      DatabaseSync.prototype.exec = function (this: DatabaseSync, sql: string) {
+        const result = originalExec.call(this, sql)
+        if (sql === "COMMIT") committed.add(this)
+        return result
+      }
+      DatabaseSync.prototype.close = function (this: DatabaseSync) {
+        originalClose.call(this)
+        if (committed.has(this)) { closeErrors++; throw new Error("synthetic uncertain close after actual SQLite commit") }
+      }
+      await assert.rejects(action === "initialize" ? r.factory.initializeAuthority(session.token, r.game.gameId) :
+        r.factory.revoke(session.token, { game: a!.game, provider: a!.provider, service: a!.service },
+          { requestId: "revoke-close-error", expectedVersion: 1 }))
+    } finally { DatabaseSync.prototype.exec = originalExec; DatabaseSync.prototype.close = originalClose }
+    assert.equal(closeErrors, 1)
+    assert.ok(existsSync(join(r.root, "phone-service-authority.writer-lock")))
+    const reopened = new ReadonlyServiceLeaseReader(new PrivateAuthorityFiles(r.root))
+    assert.throws(() => reopened.readCurrent(a ?? address(r.game.gameId, "unknown")))
+    await assert.rejects(r.factory.initializeAuthority(session.token, r.game.gameId))
+    const db = new DatabaseSync(join(r.root, "phone-service-authority.sqlite"), { readOnly: true })
+    try {
+      assert.equal((db.prepare("SELECT count(*) AS n FROM authority_meta").get() as { n: number }).n, 1)
+      if (action === "revoke") assert.equal((db.prepare("SELECT state FROM leases").get() as { state: string }).state, "REVOKED")
+    } finally { db.close() }
+    observations.push({ case: "AUTH-06", action, closeErrors, callerDenied: true, markerPreserved: true,
+      reopenDenied: true, knownCommitPreserved: true })
+  }
 })
 
 test("AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure", { timeout: 30000 }, async (t) => {

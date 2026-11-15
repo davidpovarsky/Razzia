@@ -50,8 +50,11 @@ export class UnmountedPhoneAuthority {
     this.verifier = new RequestBoundServiceVerifier(this.reader)
   }
 
-  private provider(provider: string) {
+  private assertOpen() {
     if (this.closed) serviceDenied()
+  }
+  private provider(provider: string) {
+    this.assertOpen()
     identifier(provider)
     if (!this.providers.includes(provider)) serviceDenied()
   }
@@ -65,6 +68,7 @@ export class UnmountedPhoneAuthority {
   }
   private managerLive(prepared: PreparedManagerAuthority, game: Game, executorId?: string,
     issuerSid?: string): void {
+    this.assertOpen()
     const live = this.accounts.revalidateManager(prepared)
     if (live.nativeGame !== game || (issuerSid !== undefined && live.issuerSid !== issuerSid) ||
       (executorId !== undefined && this.facades.get(game)?.executorId !== executorId)) serviceDenied()
@@ -75,6 +79,7 @@ export class UnmountedPhoneAuthority {
     if (scopedAccount() !== this.accounts.revalidateManager(prepared).owner) serviceDenied()
   }
   private credentialDisclosure(result: SecretAttempt, address: ServiceAddress) {
+    this.assertOpen()
     if (result.credential === undefined) return
     const current = this.reader.readCurrent({ ...address, version: result.receipt.version })
     if (!current || current.version !== result.receipt.version || current.state !== "PENDING_DELIVERY" ||
@@ -176,6 +181,7 @@ export class UnmountedPhoneAuthority {
     this.provider(address.provider)
     const proof = this.verifier.authorizeActivation(address, capability, game => this.facades.get(game))
     const live = () => {
+      this.assertOpen()
       this.accounts.assertLiveOwner({ owner: proof.lease.owner, issuerSid: proof.lease.issuerSid,
         game: proof.lease.game, expiresAt: proof.lease.expiresAt }, proof.nativeGame)
       if (this.facades.get(proof.nativeGame) !== proof.facade ||
@@ -194,6 +200,7 @@ export class UnmountedPhoneAuthority {
   }
 
   private coordinator(context: VerifiedServiceContext) {
+    this.assertOpen()
     const live = this.accounts.assertLiveOwner({ owner: context.owner, issuerSid: context.issuerSid,
       game: context.game, expiresAt: context.expiresAt })
     const facade = this.facades.get(live.nativeGame)
@@ -220,16 +227,19 @@ export class UnmountedPhoneAuthority {
     const context = this.verifier.begin(address, capability, action, game => this.facades.get(game))
     try {
       const result = await withAccount(context.owner, () => {
+        this.assertOpen()
         if (scopedAccount() !== context.owner || !this.verifier.verifyCurrent(context, action)) serviceDenied()
         const coordinator = this.coordinator(context)
         // No await/Promise/native reconstruction inside this owning turn.
         const receipt = action === "register" ? coordinator.register(context, input as RegistrationInput) :
           coordinator.operate(context, input as OperationInput)
+        this.assertOpen()
         if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
         return receipt
       })
       // Async owner-scope completion is also a revalidation boundary before
       // returning a secret-free receipt. An earlier effect is never rolled back.
+      this.assertOpen()
       if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
       return result
     } finally { this.verifier.release(context) }

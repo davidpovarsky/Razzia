@@ -174,6 +174,9 @@ export class PrivateAuthorityFiles {
           authorityDenied()
         }
       }
+      // A pending return must not disclose success after an uncertain close.
+      // The committed decision and the on-disk writer barrier remain intact.
+      if (uncertain) authorityDenied()
     }
   }
 }

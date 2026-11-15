@@ -23,7 +23,7 @@ const output=resolve(root,"docs/extensions/qa-evidence/telephony-fresh-20261115/
 mkdirSync(output,{recursive:false})
 const archive=resolve(output,"source.tar")
 git("archive","--format=tar","--output="+archive,sha,"--",...paths)
-const manifest=JSON.stringify({schema:1,review_sha:sha,base_sha:"003cf88b6cba19989388dca20efcfaa01cc8f9ad",accepted_core:"0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",scope:"unmounted authority source and only first-batch tests; runtime NOT yet granted",files},null,2)+"\n"
+const manifest=JSON.stringify({schema:1,review_sha:sha,base_sha:"003cf88b6cba19989388dca20efcfaa01cc8f9ad",accepted_core:"0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",scope:"unmounted authority and actual auth/SQLite regression batch; owner-activated isolated synthetic execution",files},null,2)+"\n"
 writeFileSync(resolve(output,"source-manifest.json"),manifest,{flag:"wx"})
 const extractor=git("show",sha+":docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/safe-extract.py")
 writeFileSync(resolve(output,"safe-extract.py"),extractor,{flag:"wx"})
