@@ -1,0 +1,41 @@
+{
+  "consumer_sha": "21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d",
+  "producer_sha": "902412c347d39f38290fde2ef1307240cee7dc07",
+  "evidence_sha": "6cbfeed1f85929b813bb7480b281aea4928a916f",
+  "recorded_utc": "2026-11-15T19:35:10.641Z",
+  "summary": "Updated 4 of 4 tasks.",
+  "checks": [
+    {
+      "task": "1219846294963052",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 27300,
+      "append": "2026-11-15 Lane C independent actual B roster-admission consumer PASS. Explicit mixed composition: unchanged C test/foundation pin21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d plus ONLY B902412c347d39f38290fde2ef1307240cee7dc07 committed phone-controller.ts/player-manager.ts. No C production source edit/cherry-pick or B WIP copied. Evidence6cbfeed1f85929b813bb7480b281aea4928a916f, branch codex/tadazz-hq-telephony-fresh-20261115; handoff docs/extensions/qa-evidence/telephony-fresh-20261115/INVITATION_B902_CONSUMER_HANDOFF_20261115.md. Both unchanged actual INVITE-COMPOSED cases PASS, exit0: real account/JWT/session/fresh staged Game/service lease/ciphertext delivery/activation; short-name default/open/invite/refusal/removal controls retained; desired25-character invited admission now ok=true/active, native admission once, players1, original roster ID. Earlier25/29 assertion failures remain at original sources. Exact B source blobs hash-verified before/after through actual runtime projection;549 base/54 mixed overlay files verified. Archive30720B SHA256a6a7dea2a7644488cba128e7c943f97769b0ab44acd212f7a2c85a600907bf71. The old fixture's literal productionFixApplied=false annotation refers to unchanged C source; actual B provenance/dynamic successful receipt and assertions are recorded explicitly. No new combined-head TC or oldLIVE/7/10/18/100/auth5/187 acceptance claimed. Single own job terminal PID0/exit0/OOMfalse; claim RELEASED; cumulative disk14729216/16777216B. No provider/PSTN/customer/production operation.\nPartial OPEN: name-admission consumer regression is corrected for the exact B composition; physical DTMF/audio/two-question field acceptance remains outstanding."
+    },
+    {
+      "task": "1219881067977912",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 28954,
+      "append": "2026-11-15 Lane C independent actual B roster-admission consumer PASS. Explicit mixed composition: unchanged C test/foundation pin21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d plus ONLY B902412c347d39f38290fde2ef1307240cee7dc07 committed phone-controller.ts/player-manager.ts. No C production source edit/cherry-pick or B WIP copied. Evidence6cbfeed1f85929b813bb7480b281aea4928a916f, branch codex/tadazz-hq-telephony-fresh-20261115; handoff docs/extensions/qa-evidence/telephony-fresh-20261115/INVITATION_B902_CONSUMER_HANDOFF_20261115.md. Both unchanged actual INVITE-COMPOSED cases PASS, exit0: real account/JWT/session/fresh staged Game/service lease/ciphertext delivery/activation; short-name default/open/invite/refusal/removal controls retained; desired25-character invited admission now ok=true/active, native admission once, players1, original roster ID. Earlier25/29 assertion failures remain at original sources. Exact B source blobs hash-verified before/after through actual runtime projection;549 base/54 mixed overlay files verified. Archive30720B SHA256a6a7dea2a7644488cba128e7c943f97769b0ab44acd212f7a2c85a600907bf71. The old fixture's literal productionFixApplied=false annotation refers to unchanged C source; actual B provenance/dynamic successful receipt and assertions are recorded explicitly. No new combined-head TC or oldLIVE/7/10/18/100/auth5/187 acceptance claimed. Single own job terminal PID0/exit0/OOMfalse; claim RELEASED; cumulative disk14729216/16777216B. No provider/PSTN/customer/production operation.\nPartial OPEN: actual fresh-authority invitation/cached-receipt removal controls remain green with the narrow B admission fix. Callback identity/new-attempt/physical chronology and broader provider negatives remain separate."
+    },
+    {
+      "task": "1219999342715862",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 25731,
+      "append": "2026-11-15 Lane C independent actual B roster-admission consumer PASS. Explicit mixed composition: unchanged C test/foundation pin21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d plus ONLY B902412c347d39f38290fde2ef1307240cee7dc07 committed phone-controller.ts/player-manager.ts. No C production source edit/cherry-pick or B WIP copied. Evidence6cbfeed1f85929b813bb7480b281aea4928a916f, branch codex/tadazz-hq-telephony-fresh-20261115; handoff docs/extensions/qa-evidence/telephony-fresh-20261115/INVITATION_B902_CONSUMER_HANDOFF_20261115.md. Both unchanged actual INVITE-COMPOSED cases PASS, exit0: real account/JWT/session/fresh staged Game/service lease/ciphertext delivery/activation; short-name default/open/invite/refusal/removal controls retained; desired25-character invited admission now ok=true/active, native admission once, players1, original roster ID. Earlier25/29 assertion failures remain at original sources. Exact B source blobs hash-verified before/after through actual runtime projection;549 base/54 mixed overlay files verified. Archive30720B SHA256a6a7dea2a7644488cba128e7c943f97769b0ab44acd212f7a2c85a600907bf71. The old fixture's literal productionFixApplied=false annotation refers to unchanged C source; actual B provenance/dynamic successful receipt and assertions are recorded explicitly. No new combined-head TC or oldLIVE/7/10/18/100/auth5/187 acceptance claimed. Single own job terminal PID0/exit0/OOMfalse; claim RELEASED; cumulative disk14729216/16777216B. No provider/PSTN/customer/production operation.\nPartial OPEN: this is one-player invitation functional proof only, no new100-call capacity/load run or re-certification."
+    },
+    {
+      "task": "1219886202109096",
+      "completed": false,
+      "previous_notes_preserved": true,
+      "exact_append_readback": true,
+      "notes_characters": 24982,
+      "append": "2026-11-15 Lane C independent actual B roster-admission consumer PASS. Explicit mixed composition: unchanged C test/foundation pin21f7b2d96bb2143038adab6ef07e0cb0f74d1d2d plus ONLY B902412c347d39f38290fde2ef1307240cee7dc07 committed phone-controller.ts/player-manager.ts. No C production source edit/cherry-pick or B WIP copied. Evidence6cbfeed1f85929b813bb7480b281aea4928a916f, branch codex/tadazz-hq-telephony-fresh-20261115; handoff docs/extensions/qa-evidence/telephony-fresh-20261115/INVITATION_B902_CONSUMER_HANDOFF_20261115.md. Both unchanged actual INVITE-COMPOSED cases PASS, exit0: real account/JWT/session/fresh staged Game/service lease/ciphertext delivery/activation; short-name default/open/invite/refusal/removal controls retained; desired25-character invited admission now ok=true/active, native admission once, players1, original roster ID. Earlier25/29 assertion failures remain at original sources. Exact B source blobs hash-verified before/after through actual runtime projection;549 base/54 mixed overlay files verified. Archive30720B SHA256a6a7dea2a7644488cba128e7c943f97769b0ab44acd212f7a2c85a600907bf71. The old fixture's literal productionFixApplied=false annotation refers to unchanged C source; actual B provenance/dynamic successful receipt and assertions are recorded explicitly. No new combined-head TC or oldLIVE/7/10/18/100/auth5/187 acceptance claimed. Single own job terminal PID0/exit0/OOMfalse; claim RELEASED; cumulative disk14729216/16777216B. No provider/PSTN/customer/production operation.\nPartial OPEN: the reproduced25-character accepted-roster/native-admission defect now passes unchanged desired behavior with exact B902 files. Canonical roster40/common-web-joinTicket24 limits stay separate via narrow resolved-roster hook. Manager still owns integrating B and combined graph review; real provider invitation/field criteria remain unproven."
+    }
+  ]
+}
