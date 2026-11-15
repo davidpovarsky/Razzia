@@ -1,0 +1,16 @@
+{
+  "status": "SCOPED_SOURCE_OWNERSHIP_AND_UNMOUNTED_VERIFIED",
+  "baseline": "672d100c13a28b270e8e64e2d3d79209e7e83e3a",
+  "newSourceFiles": [
+    "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+    "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+    "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+    "extensions/src/server/phone-lifecycle-v2/store.ts"
+  ],
+  "existingSourceFilesUnchanged": 985,
+  "originalHarnessSHA256": "a69d126a5d9fdd471bc069835fd4dd903e978486d4de8a2cdb8b984f5028a79b",
+  "legacyApi09Api10Api11Unchanged": true,
+  "noExistingProductionImportOrMount": true,
+  "realAuthProvisioning": false,
+  "gatewayJournal": false
+}

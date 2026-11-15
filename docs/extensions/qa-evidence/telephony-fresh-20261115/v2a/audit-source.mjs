@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process"
+import { execFileSync, spawnSync } from "node:child_process"
 import { createHash } from "node:crypto"
 import { writeFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
@@ -36,7 +36,12 @@ const oldFiles = git(
 )
   .trim()
   .split("\n")
-const diff = git("diff", "--cached", baseline, "--", ...oldFiles)
+const oldPaths = [
+  "packages",
+  "extensions/src",
+  ":(exclude)extensions/src/server/phone-lifecycle-v2/**",
+]
+const diff = git("diff", "--cached", baseline, "--", ...oldPaths)
 if (diff) throw Error("existing source changed")
 const oldHarness = git(
   "show",
@@ -48,11 +53,17 @@ const indexedHarness = git(
   ":extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts",
 )
 if (oldHarness !== indexedHarness) throw Error("legacy harness changed")
-for (const file of oldFiles) {
-  const text = git("show", ":" + file)
-  if (/phone-lifecycle-v2/u.test(text))
-    throw Error("existing production import/mount found: " + file)
-}
+const mounted = spawnSync(
+  "git",
+  ["grep", "--cached", "-l", "phone-lifecycle-v2", "--", ...oldPaths],
+  { cwd: root, encoding: "utf8" },
+)
+if (mounted.status !== 1)
+  throw Error(
+    "existing production import/mount or grep failure: " +
+      mounted.stdout +
+      mounted.stderr,
+  )
 const result = {
   status: "SCOPED_SOURCE_OWNERSHIP_AND_UNMOUNTED_VERIFIED",
   baseline,
