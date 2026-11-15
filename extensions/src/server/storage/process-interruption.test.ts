@@ -4,7 +4,10 @@ import { fork } from "node:child_process"
 import { createRequire } from "node:module"
 import { fileURLToPath, pathToFileURL } from "node:url"
 import { describe, expect, it } from "vitest"
-import { findMediaReferencesAcrossShows } from "../../core/index"
+import {
+  computeCanonicalBaseDigest,
+  findMediaReferencesAcrossShows,
+} from "../../core/index"
 import {
   createRecoveryFixture,
   QUESTION_ID,
@@ -240,7 +243,27 @@ describe("real process interruption and fresh-process recovery", () => {
             expect(first.state.shows[id].extras).toEqual(expectedExtras)
           }
         } else {
-          expect(first.state.shows).toEqual(before.shows)
+          if (boundary.startsWith("quiz-")) {
+            // Quiz-save journals store the complete decoded base object. The
+            // startup adapter reserializes it using two-space native formatting.
+            // Compare all fields/types, with no schema parsing or ID stripping.
+            const original = before.shows["show-a"]
+            const restored = first.state.shows["show-a"]
+            expect(restored.base).toStrictEqual(original.base)
+            expect(computeCanonicalBaseDigest(restored.base)).toBe(
+              computeCanonicalBaseDigest(original.base),
+            )
+            expect(restored.extras).toStrictEqual(original.extras)
+            expect(restored.sidecarSha256).toBe(original.sidecarSha256)
+            expect(first.state.shows["show-b"]).toStrictEqual(
+              before.shows["show-b"],
+            )
+            expect(first.state.shows.unrelated).toStrictEqual(
+              before.shows.unrelated,
+            )
+          } else {
+            expect(first.state.shows).toEqual(before.shows)
+          }
           expect(first.state.mediaSha256).toBe(before.mediaSha256)
           expect(references(first.state)).toHaveLength(3)
         }
