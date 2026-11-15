@@ -1,4 +1,5 @@
 import { useCallback, useLayoutEffect, useMemo, useRef, useState } from "react"
+import { flushSync } from "react-dom"
 import {
   resolveShowTheme,
   type ResolvedShowTheme,
@@ -163,7 +164,9 @@ export function NativePreviewStage({
         if (!current()) return
         handle.pauseAnimations?.()
         pausedBootstrap.current = false
-        setHidden(false)
+        // Native reconstruction has completed across the await above. Commit the
+        // mask removal now rather than leaving it behind a deferred React paint.
+        flushSync(() => setHidden(false))
       }
       // With no unsafe transition to drain, start the native state update in
       // this layout effect, before painting the initial empty teaser surface.
