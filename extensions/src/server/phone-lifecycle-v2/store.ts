@@ -103,6 +103,7 @@ export class PrototypeStore {
           request_id TEXT NOT NULL, fingerprint TEXT NOT NULL, receipt TEXT NOT NULL,
           PRIMARY KEY(owner,game,provider,request_id));`)
       this.transaction(() => {
+        this.authorize(context, "register")
         // A game-wide authority UNIQUE key prevents independent provider/service
         // partitions from both projecting onto Game's one phone index.
         this.sql

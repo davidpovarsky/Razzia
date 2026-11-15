@@ -98,6 +98,52 @@ function fieldsAbsent(receipt: Receipt) {
 }
 const valid = () => true
 
+test("V2A-12 issuer revoked after initial storage authorization cannot adopt Game authority", async () => {
+  const r = await backend.room(),
+    root = backend.privateRoot()
+  let initial = true
+  const revokedAfterInitial = () => {
+    if (initial) {
+      initial = false
+      return true
+    }
+    return false
+  }
+  assert.throws(
+    () => new PrototypeStore(root, r.context, revokedAfterInitial),
+    /service_denied/,
+  )
+  let authorities = 0
+  if (existsSync(join(root, "phone-lifecycle-v2a.sqlite"))) {
+    const db = new DatabaseSync(join(root, "phone-lifecycle-v2a.sqlite"), {
+      readOnly: true,
+    })
+    try {
+      authorities = Number(
+        (
+          db
+            .prepare(
+              "SELECT COUNT(*) AS n FROM game_authorities WHERE owner=? AND game=? AND provider=?",
+            )
+            .get(r.context.owner, r.context.game, r.context.provider) as {
+            n: number
+          }
+        ).n,
+      )
+    } finally {
+      db.close()
+    }
+  }
+  assert.equal(authorities, 0)
+  assert.equal(r.game.players.length, 0)
+  observations.push({
+    case: "V2A-12",
+    adoptedAuthorities: authorities,
+    players: 0,
+    injectedRevocationOnly: true,
+  })
+})
+
 test("V2A-10 accepted B at zero wins server precedence; late A conflicts without touching Game", async () => {
   const r = await backend.room(),
     root = backend.privateRoot(),
