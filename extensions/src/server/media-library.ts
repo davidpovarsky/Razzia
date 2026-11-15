@@ -925,7 +925,10 @@ export function recoverMediaDeleteJournals(
       }
 
       // 1. Fail-closed invariant: ignore/preserve unknown or incompatible journals
-      if (entry.kind !== "media-delete" || entry.version !== 2) {
+      if (
+        entry.kind !== "media-delete" ||
+        (entry.version !== 1 && entry.version !== 2)
+      ) {
         console.warn(
           `[MediaJournal] Unknown or incompatible journal ${file}, preserving for manual inspection`,
         )

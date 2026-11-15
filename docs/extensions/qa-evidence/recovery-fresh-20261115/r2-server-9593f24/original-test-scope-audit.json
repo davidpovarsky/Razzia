@@ -1,0 +1,7 @@
+{
+  "status": "PASS",
+  "comparedAgainst": "9593f24f287f2e404f387f6359e89453cd8a971e",
+  "onlyTwoApprovedOriginalMediaCasesChanged": true,
+  "originalGate3Unchanged": true,
+  "gate3Sha256": "dbebcb231693a785067438ef9fba4ae43f676fe29e4eee7ccce240e1f81191d3"
+}

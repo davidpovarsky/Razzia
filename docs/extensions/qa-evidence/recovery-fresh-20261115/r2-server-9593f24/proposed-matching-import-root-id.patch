@@ -1,0 +1,31 @@
+--- a/extensions/src/server/storage/service.ts
++++ b/extensions/src/server/storage/service.ts
+@@ -426,6 +426,10 @@
+         )
+       }
+ 
++      // A source bundle's storage ID is not the new allocation's identity.
++      // Check it against the source sidecar before omitting only that root ID.
++      const importedPayload = logicalPayload(quizz as Record<string, unknown>, extras.quizId)
++
+       const questionsCount =
+         typeof quizz === "object" &&
+         quizz !== null &&
+@@ -441,7 +445,7 @@
+         freshQuestionIds,
+         questionsCount,
+       )
+-      const baseDigest = computeCanonicalBaseDigest(quizz)
++      const baseDigest = computeCanonicalBaseDigest(importedPayload)
+ 
+       const idMap = new Map<string, string>()
+       for (let i = 0; i < extras.questionIds.length; i += 1) {
+@@ -503,7 +507,7 @@
+       }
+ 
+       return this.createJournaledQuiz(
+-        quizz as Record<string, unknown>,
++        importedPayload,
+         preValidation.data,
+       )
+     }

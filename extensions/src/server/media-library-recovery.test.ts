@@ -14,10 +14,11 @@ import {
   createRecoveryFixture,
   fileDigest,
   MEDIA_NAME,
+  QUESTION_ID,
   removeSyntheticFixture,
 } from "./storage/recovery-fixture"
 import { createStagedJournal } from "./storage/journal"
-import { readSidecar } from "./storage/sidecar"
+import { readSidecar, writeSidecar } from "./storage/sidecar"
 
 describe("media-delete deterministic restart snapshots", () => {
   let fixture: ReturnType<typeof createRecoveryFixture>
@@ -41,6 +42,18 @@ describe("media-delete deterministic restart snapshots", () => {
     for (const root of extraRoots.splice(0)) removeSyntheticFixture(root)
   })
   const mediaPath = () => fixture.getPath(`media/${MEDIA_NAME}`)
+  function referenceSidecar(id: string) {
+    const extras = readSidecar(fixture.getPath, id)
+    if (!extras || extras.schemaVersion !== 2)
+      throw new Error("Expected V2 fixture")
+    extras.perQuestion[QUESTION_ID].background = {
+      url: `/media/${MEDIA_NAME}`,
+      fit: "cover",
+      position: "center",
+      overlayOpacity: 0.2,
+    }
+    writeSidecar(fixture.getPath, id, extras)
+  }
   function journals(getPath = fixture.getPath) {
     return fs
       .readdirSync(getMediaDeleteJournalDirectory(getPath))
@@ -84,12 +97,18 @@ describe("media-delete deterministic restart snapshots", () => {
     fault: string,
     before: ReturnType<typeof transactionState>,
     result: ReturnType<typeof transaction>,
+    evidence?: unknown,
   ) {
     if (process.env.RECOVERY_TRANSACTION_RECEIPT_PATH)
       fs.appendFileSync(
         process.env.RECOVERY_TRANSACTION_RECEIPT_PATH,
-        JSON.stringify({ fault, before, after: transactionState(), result }) +
-          "\n",
+        JSON.stringify({
+          fault,
+          before,
+          after: transactionState(),
+          result,
+          evidence,
+        }) + "\n",
       )
   }
   function staged() {
@@ -272,20 +291,25 @@ describe("media-delete deterministic restart snapshots", () => {
     }
   })
   it("retains staged journal and quarantine after partial restore and retries", () => {
+    referenceSidecar("show-b")
     const journal = staged()
     const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
     const rename = fs.renameSync.bind(fs)
+    let denied = 0
     const spy = vi
       .spyOn(fs, "renameSync")
       .mockImplementation((source, destination) => {
         if (
           String(destination) ===
           fixture.getPath("extensions/quizzes/show-b.json")
-        )
+        ) {
+          denied += 1
           throw new Error("EACCES injected restore")
+        }
         return rename(source, destination)
       })
     expect(recoverMediaDeleteJournals(fixture.getPath).unresolvedCount).toBe(1)
+    expect(denied).toBeGreaterThan(0)
     expect(fs.existsSync(journal)).toBe(true)
     expect(fs.existsSync(entry.quarantinePath)).toBe(true)
     spy.mockRestore()
@@ -361,14 +385,26 @@ describe("media-delete deterministic restart snapshots", () => {
   it.each(["staged", "committed"])(
     "retains %s journal when quarantine cleanup fails and replays safely",
     (status) => {
-      const journal = staged()
-      const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
-      if (status === "committed") {
-        const saved = { ...entry, status, shows: [] }
-        fs.unlinkSync(journal)
-        expect(transaction().allowed).toBe(true)
-        fs.writeFileSync(journal, JSON.stringify(saved))
+      let journal: string
+      if (status === "staged") journal = staged()
+      else {
+        const result = executeMediaDeleteTransaction(
+          fixture.getPath,
+          MEDIA_NAME,
+          {
+            detach: true,
+            deleteMediaFn: () => fs.unlinkSync(mediaPath()),
+            faultInjection: { failBeforeQuarantineUnlink: true },
+          },
+        )
+        expect(result.allowed).toBe(true)
+        expect(result.error).toMatch(/cleanup/i)
+        expect(journals()).toHaveLength(1)
+        journal = journals()[0]
       }
+      const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
+      expect(entry.status).toBe(status)
+      expect(entry.shows.length).toBeGreaterThan(0)
       const unlink = fs.unlinkSync.bind(fs)
       const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((file) => {
         if (String(file) === entry.quarantinePath)
@@ -387,9 +423,50 @@ describe("media-delete deterministic restart snapshots", () => {
       expect(recoverMediaDeleteJournals(fixture.getPath).recoveredCount).toBe(0)
     },
   )
+  it("preserves an insufficient committed empty-shows record and its last copy without mutation", () => {
+    const result = executeMediaDeleteTransaction(fixture.getPath, MEDIA_NAME, {
+      detach: true,
+      deleteMediaFn: () => fs.unlinkSync(mediaPath()),
+      faultInjection: { failBeforeQuarantineUnlink: true },
+    })
+    expect(result.allowed).toBe(true)
+    const journal = journals()[0]
+    const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
+    expect(entry.status).toBe("committed")
+    entry.shows = []
+    fs.writeFileSync(journal, JSON.stringify(entry))
+    const snapshot = () =>
+      fs
+        .readdirSync(fixture.root, { recursive: true })
+        .map(String)
+        .sort()
+        .map((relative) => {
+          const file = path.join(fixture.root, relative)
+          const stat = fs.lstatSync(file)
+          return {
+            relative,
+            kind: stat.isDirectory() ? "directory" : "file",
+            ...(stat.isFile() ? { sha256: fileDigest(file) } : {}),
+          }
+        })
+    const before = snapshot()
+    for (const attempt of [1, 2]) {
+      expect(
+        recoverMediaDeleteJournals(fixture.getPath).unresolvedCount,
+        `attempt ${attempt}`,
+      ).toBe(1)
+      expect(snapshot()).toStrictEqual(before)
+    }
+    expect(fs.existsSync(journal)).toBe(true)
+    expect(fs.existsSync(entry.quarantinePath)).toBe(true)
+  })
+
   it("preserves evidence when a restore rename silently changes valid sidecar content", () => {
+    referenceSidecar("show-b")
     const journal = staged()
+    const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
     const rename = fs.renameSync.bind(fs)
+    let injected = 0
     const spy = vi
       .spyOn(fs, "renameSync")
       .mockImplementation((source, destination) => {
@@ -398,14 +475,26 @@ describe("media-delete deterministic restart snapshots", () => {
           String(destination) ===
           fixture.getPath("extensions/quizzes/show-b.json")
         ) {
+          injected += 1
           const extras = JSON.parse(fs.readFileSync(destination, "utf8"))
           extras.authoring.showNote = "silently wrong"
           fs.writeFileSync(destination, JSON.stringify(extras))
         }
       })
     expect(recoverMediaDeleteJournals(fixture.getPath).unresolvedCount).toBe(1)
+    expect(injected).toBeGreaterThan(0)
     expect(fs.existsSync(journal)).toBe(true)
     spy.mockRestore()
+    const changed = transactionState()
+    expect(recoverMediaDeleteJournals(fixture.getPath).unresolvedCount).toBe(1)
+    expect(transactionState()).toStrictEqual(changed)
+    // Explicit repair of this disposable fixture; automatic recovery may not
+    // overwrite an unrecognized same-revision mutation.
+    fs.writeFileSync(
+      fixture.getPath("extensions/quizzes/show-b.json"),
+      entry.shows.find((show: { quizId: string }) => show.quizId === "show-b")
+        .originalSidecarRaw,
+    )
     expect(recoverMediaDeleteJournals(fixture.getPath).unresolvedCount).toBe(0)
   })
   it("recovers concurrent journal families with real matching base digest", () => {
@@ -474,15 +563,19 @@ describe("media-delete deterministic restart snapshots", () => {
   it.each(["base", "sidecar", "binary"])(
     "transaction rollback retains evidence after silent %s corruption",
     (fault) => {
+      if (fault === "sidecar") referenceSidecar("show-a")
       if (fault === "binary") {
         fs.writeFileSync(mediaPath(), Buffer.alloc(64 * 1024 + 3, 13))
       }
       const before = transactionState()
       let rollingBack = false
+      let injected = 0
       const write = fs.writeFileSync.bind(fs)
-      const writeSpy = vi
-        .spyOn(fs, "writeFileSync")
-        .mockImplementation((file, data, options) => {
+      const rename = fs.renameSync.bind(fs)
+      const renameSpy = vi
+        .spyOn(fs, "renameSync")
+        .mockImplementation((source, destination) => {
+          rename(source, destination)
           const target =
             fault === "base"
               ? fixture.basePath("show-a")
@@ -490,15 +583,15 @@ describe("media-delete deterministic restart snapshots", () => {
           if (
             fault !== "binary" &&
             rollingBack &&
-            String(file).startsWith(`${target}.tmp.`)
+            String(destination) === target
           ) {
-            const corrupted = JSON.parse(String(data))
+            injected += 1
+            const corrupted = JSON.parse(fs.readFileSync(destination, "utf8"))
             if (fault === "base")
               corrupted.subject = "Silent rollback corruption"
             else corrupted.authoring.showNote = "Silent rollback corruption"
-            return write(file, JSON.stringify(corrupted), options)
+            write(destination, JSON.stringify(corrupted))
           }
-          return write(file, data, options)
         })
       const copy = fs.copyFileSync.bind(fs)
       const copySpy = vi
@@ -510,6 +603,7 @@ describe("media-delete deterministic restart snapshots", () => {
             rollingBack &&
             String(destination) === mediaPath()
           ) {
+            injected += 1
             const corrupted = fs.readFileSync(destination)
             corrupted[corrupted.length - 1] ^= 255
             write(destination, corrupted)
@@ -533,7 +627,9 @@ describe("media-delete deterministic restart snapshots", () => {
         `immediate-rollback-silent-${fault}`,
         before,
         result,
+        { injected },
       )
+      expect(injected).toBeGreaterThan(0)
       expect(journals()).toHaveLength(1)
       expect(result.allowed).toBe(false)
       expect(result.journalId).toBeTruthy()
@@ -542,16 +638,31 @@ describe("media-delete deterministic restart snapshots", () => {
         before.files[`media/${MEDIA_NAME}`],
       ])
       expect(chmod).not.toHaveBeenCalled()
-      writeSpy.mockRestore()
+      renameSpy.mockRestore()
       copySpy.mockRestore()
       chmod.mockRestore()
+      const blocked = transactionState()
+      expect(() =>
+        recoverStartupJournals({ getPath: fixture.getPath }),
+      ).toThrow("startup blocked")
+      expect(transactionState()).toStrictEqual(blocked)
       if (fault === "binary") {
         // A present but different binary may be a concurrent replacement. Startup
         // preserves both copies until this disposable corrupted fixture is removed.
-        expect(() =>
-          recoverStartupJournals({ getPath: fixture.getPath }),
-        ).toThrow("startup blocked")
         fs.unlinkSync(mediaPath())
+      } else {
+        const entry = JSON.parse(fs.readFileSync(journals()[0], "utf8"))
+        const show = entry.shows.find(
+          (value: { quizId: string }) => value.quizId === "show-a",
+        )
+        // Explicit repair in the owned disposable fixture, never automatic
+        // adoption of an unknown current-content mutation.
+        fs.writeFileSync(
+          fault === "base"
+            ? fixture.basePath("show-a")
+            : fixture.getPath("extensions/quizzes/show-a.json"),
+          fault === "base" ? show.originalBaseRaw : show.originalSidecarRaw,
+        )
       }
       expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
         "recovered",

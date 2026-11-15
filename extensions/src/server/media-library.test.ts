@@ -520,7 +520,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
     expect(result.allowed).toBe(false)
     expect(result.error).toContain("Concurrent modification detected")
   })
-  it("restart recovery: recovers staged journals across simulated crash in isolated namespace", () => {
+  it("restart recovery: preserves insufficient legacy Media intent without mutating its namespace", () => {
     const quizId = "crashed-show"
     const originalShow = {
       id: quizId,
@@ -594,38 +594,42 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       "utf-8",
     )
 
-    // Execute journal recovery
-    const recovery = recoverMediaDeleteJournals(getPath)
-    expect(recovery.recoveredCount).toBe(1)
-    expect(recovery.recoveredQuizIds).toContain(quizId)
-    expect(recovery.restoredMediaNames).toContain("crash-media.png")
-
-    // Verify base quiz file was restored to originalShow
-    const restoredRaw = fs.readFileSync(
-      path.join(getPath("quizz"), `${quizId}.json`),
-      "utf-8",
-    )
-    const restored = JSON.parse(restoredRaw) as {
-      subject: string
-      questions: Array<{
-        media: {
-          url: string
-        }
-      }>
+    // This old Media intent has no physical ownership or allowed target plan.
+    const snapshot = () =>
+      fs
+        .readdirSync(tempDir, { recursive: true })
+        .map(String)
+        .sort()
+        .map((relative) => {
+          const file = path.join(tempDir, relative)
+          const stat = fs.lstatSync(file)
+          return {
+            relative,
+            kind: stat.isDirectory() ? "directory" : "file",
+            ...(stat.isFile() ? { bytes: fs.readFileSync(file, "hex") } : {}),
+          }
+        })
+    const beforeRecovery = snapshot()
+    for (const attempt of [1, 2]) {
+      const recovery = recoverMediaDeleteJournals(getPath)
+      expect(recovery.unresolvedCount, `attempt ${attempt}`).toBe(1)
+      expect(recovery.recoveredCount).toBe(0)
+      expect(recovery.recoveredQuizIds).toHaveLength(0)
+      expect(recovery.restoredMediaNames).toHaveLength(0)
+      expect(snapshot()).toStrictEqual(beforeRecovery)
     }
-    expect(restored.subject).toBe("Original Show Subject")
-    expect(restored.questions[0].media.url).toBe("/media/crash-media.png")
-
-    // Verify media binary was restored from quarantine
-    const restoredBinary = fs.readFileSync(
-      path.join(getPath("media"), "crash-media.png"),
-      "utf-8",
+    expect(
+      JSON.parse(
+        fs.readFileSync(path.join(getPath("quizz"), `${quizId}.json`), "utf8"),
+      ),
+    ).toStrictEqual(corruptedBase)
+    expect(fs.existsSync(path.join(getPath("media"), "crash-media.png"))).toBe(
+      false,
     )
-    expect(restoredBinary).toBe("RESTORED_BINARY_BYTES")
-
-    // Staged journal and quarantine files are removed
-    expect(fs.existsSync(journalPath)).toBe(false)
-    expect(fs.existsSync(quarantinePath)).toBe(false)
+    expect(fs.existsSync(journalPath)).toBe(true)
+    expect(fs.readFileSync(quarantinePath, "utf8")).toBe(
+      "RESTORED_BINARY_BYTES",
+    )
   })
   it("Gate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure", () => {
     const quizId = "delete-media-atomic"
@@ -819,6 +823,12 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       "utf-8",
     )
 
+    const retainedMediaPath = path.join(
+      mediaJournalDir,
+      "media-coexist-media-delete-uuid.media-journal.json",
+    )
+    const originalMediaIntentBytes = fs.readFileSync(retainedMediaPath, "hex")
+
     // Execute recoverJournals (composite-save only)
     const quizReport = recoverJournals({
       getPath,
@@ -846,15 +856,40 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       fs.readdirSync(mediaJournalDir).filter((f) => f.endsWith(".json")),
     ).toHaveLength(1)
 
-    // Now execute recoverMediaDeleteJournals
-    const mediaReport = recoverMediaDeleteJournals(getPath)
-    expect(mediaReport.recoveredQuizIds).toContain(mediaDeleteId)
-    expect(mediaReport.recoveredQuizIds).not.toContain(quizSaveId)
-
-    // Media journal is now recovered
+    expect(fs.readFileSync(retainedMediaPath, "hex")).toBe(
+      originalMediaIntentBytes,
+    )
+    const snapshot = () =>
+      fs
+        .readdirSync(tempDir, { recursive: true })
+        .map(String)
+        .sort()
+        .map((relative) => {
+          const file = path.join(tempDir, relative)
+          const stat = fs.lstatSync(file)
+          return {
+            relative,
+            kind: stat.isDirectory() ? "directory" : "file",
+            ...(stat.isFile() ? { bytes: fs.readFileSync(file, "hex") } : {}),
+          }
+        })
+    const beforeMediaRecovery = snapshot()
+    for (const attempt of [1, 2]) {
+      const mediaReport = recoverMediaDeleteJournals(getPath)
+      expect(mediaReport.unresolvedCount, `attempt ${attempt}`).toBe(1)
+      expect(mediaReport.recoveredQuizIds).not.toContain(mediaDeleteId)
+      expect(mediaReport.recoveredQuizIds).not.toContain(quizSaveId)
+      expect(mediaReport.recoveredCount).toBe(0)
+      expect(snapshot()).toStrictEqual(beforeMediaRecovery)
+    }
+    // Insufficient Media intent stays for explicit operator recovery. The
+    // generic quiz-save family neither adopts nor deletes that evidence.
     expect(
       fs.readdirSync(mediaJournalDir).filter((f) => f.endsWith(".json")),
-    ).toHaveLength(0)
+    ).toHaveLength(1)
+    expect(fs.readFileSync(retainedMediaPath, "hex")).toBe(
+      originalMediaIntentBytes,
+    )
   })
   it("Gate A4 (10): recoverStartupJournals is idempotent across multiple calls", () => {
     // Calling startup recovery on a clean directory produces zero recovered

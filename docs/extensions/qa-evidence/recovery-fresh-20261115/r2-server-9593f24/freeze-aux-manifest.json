@@ -1,0 +1,17 @@
+{
+  "commit": "9593f24f287f2e404f387f6359e89453cd8a971e",
+  "purpose": "Two exact Git policy inputs required by the unmodified official files-only freeze guard; not unit-test source changes",
+  "archiveSha256": "091898e6181cf5012b810cac665a3cd7d7b552f661b8a47e11e139642b1aa4e8",
+  "files": [
+    {
+      "path": "docs/extensions/plans/tds-freeze.json",
+      "size": 77040,
+      "sha256": "09342e16b2c4161f9d77d138af192c15fa1c4f340a23b9de10c26195da02a4fe"
+    },
+    {
+      "path": "docs/extensions/plans/tds-approved-seams.json",
+      "size": 960,
+      "sha256": "1a7fe1bd063a2b9a70b7582245b2ee0bf242140165da5b8830a11595f7b58411"
+    }
+  ]
+}

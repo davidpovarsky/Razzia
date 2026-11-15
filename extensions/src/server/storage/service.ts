@@ -426,6 +426,13 @@ export class CompositeStorageService {
         )
       }
 
+      // A source bundle's storage ID is not the new allocation's identity.
+      // Check it against the source sidecar before omitting only that root ID.
+      const importedPayload = logicalPayload(
+        quizz as Record<string, unknown>,
+        extras.quizId,
+      )
+
       const questionsCount =
         typeof quizz === "object" &&
         quizz !== null &&
@@ -441,7 +448,7 @@ export class CompositeStorageService {
         freshQuestionIds,
         questionsCount,
       )
-      const baseDigest = computeCanonicalBaseDigest(quizz)
+      const baseDigest = computeCanonicalBaseDigest(importedPayload)
 
       const idMap = new Map<string, string>()
       for (let i = 0; i < extras.questionIds.length; i += 1) {
@@ -502,10 +509,7 @@ export class CompositeStorageService {
         )
       }
 
-      return this.createJournaledQuiz(
-        quizz as Record<string, unknown>,
-        preValidation.data,
-      )
+      return this.createJournaledQuiz(importedPayload, preValidation.data)
     }
 
     // Legacy quiz format

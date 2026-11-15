@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ESNext", "module": "ESNext", "moduleResolution": "bundler",
+    "strict": true, "skipLibCheck": true, "noEmit": true, "esModuleInterop": true,
+    "allowImportingTsExtensions": true, "resolveJsonModule": true,
+    "types": ["node"], "typeRoots": ["/work/extensions/node_modules/@types", "/work/node_modules/@types"],
+    "paths": {
+      "@razzia/common/*": ["/work/packages/common/src/*"],
+      "@razzia/socket/*": ["/work/packages/socket/src/*"],
+      "zod": ["/work/extensions/node_modules/zod"],
+      "uuid": ["/work/extensions/node_modules/uuid"],
+      "http-status-codes": ["/work/extensions/node_modules/http-status-codes"],
+      "vitest": ["/work/extensions/node_modules/vitest"],
+      "nanoid": ["/work/packages/socket/node_modules/nanoid"]
+    }
+  },
+  "include": ["/work/extensions/src/server/storage/**/*.ts", "/work/extensions/src/server/storage.test.ts", "/work/extensions/src/server/media-library.test.ts", "/work/extensions/src/server/media-library-recovery.test.ts"]
+}
