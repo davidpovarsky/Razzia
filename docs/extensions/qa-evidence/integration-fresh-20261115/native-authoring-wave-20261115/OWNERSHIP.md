@@ -1,0 +1,9 @@
+# Manager-owned authoring integration
+
+Sole current manager01a1dfa1-57d8-7223-a965-2f4f31fe8b23 integrates D's coherent authoring/data handoff into this existing clean integration worktree, basece04c562e7952f01029847e8d2e47e17026b69c1. Owner's explicit wave restart authorizes local role commits and reviewed integration; no main merge/push/deployment.
+
+Reviewed producer sourcec1cabd878a1bcde51ac7da05d8c72ded3e8125cc: new native-library.ts, composition-document.ts, composition-repository.ts, composition-repository.test.ts; existing core/show-library/index.ts adds only their three exports. Dependencies in core/show-library, core/show-themes and core/packages otherwise match target exactly. Read all changed source+tests and AUTHORING_CONTRACT. No auth route, persisted adapter, clock, executable pin or runtime grant. Repo composition publication explicitly not-evaluated and injected storage contract trusted/atomic. D owns these schemas; E binds existing installer and F consumes same producer. Old untracked producer WIP untouched.
+
+Batch source+matching provenance commits54ef55c/e95e0ca/c1cabd only. Vendor observations close116 actual package-file observations, not build-to-cache/rendered contribution or image rights. D's summary claims focusedTC pass but types.log retains initial TS2540; requested distinct final log without rewriting failure. Manager will run actual integrated targeted Vitest+focused/parent TypeScript and record outcomes at integrated source SHA. Earlier53/149/41 retain only matching historical scope. Existing boundary guard remains unchanged and its denied-path result is not relabeled.
+
+No server mutation or additional disk reservation is required for local integration. Reuse existing exact-lock dependency directories through documented local ignored links if available; no dependency download, resolution, full build or broad819 suite.
