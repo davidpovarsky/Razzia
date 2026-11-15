@@ -34,7 +34,8 @@ export function route(request: Request, origin: URL): Route {
       throw new HttpRejection(400)
     headerBytes += new TextEncoder().encode(name + value).byteLength
     if (headerBytes > 8192) throw new HttpRejection(400)
-    if (name === "forwarded" || name.startsWith("x-forwarded-")) forwarded = true
+    if (name === "forwarded" || name.startsWith("x-forwarded-"))
+      forwarded = true
   })
   const url = new URL(request.url)
   if (
