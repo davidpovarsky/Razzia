@@ -1,0 +1,11 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+
+ Test Files  3 passed (3)
+      Tests  30 passed (30)
+   Start at  18:42:18
+   Duration  1.48s (import 67%, transform 21%, tests 10%, worker 2%)
+
+    Isolate  3 workers spawned · ~175ms startup each (spawn + environment, per file)
+             at least ~349ms faster with isolate: false — reuses workers across files instead of one per file
