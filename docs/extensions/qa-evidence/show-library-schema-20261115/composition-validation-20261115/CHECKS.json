@@ -1,0 +1,70 @@
+{
+  "sourceBaseCommit": "addc224a058a6c0a8c9baa20fab780e9ed7d2aeb",
+  "sourceSha256": {
+    "extensions/src/core/show-library/composition-validation.ts": "f3cdafaac9a5d63974973d4d82d805a32cfa947fe4a6bfac2efc4e47c2775ce1",
+    "extensions/src/core/show-library/composition-validation.test.ts": "5ce2365bdee5755f203a69b9d893c6f52ed15f6d8c0b0a90c2cebfca9098926a",
+    "extensions/src/core/show-library/index.ts": "eb38bd97cc0801880c2ca6b253734abebbfc92aac6783bdab56a2a16301eed6f"
+  },
+  "checks": [
+    {
+      "label": "tests-final",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-validation.test.ts",
+        "--maxWorkers",
+        "1",
+        "--reporter=default",
+        "--reporter=json",
+        "--outputFile=C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115\\docs\\extensions\\qa-evidence\\show-library-schema-20261115\\composition-validation-20261115\\tests-final.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:07:46.905190+00:00",
+      "finishedUtc": "2026-11-15T15:07:48.973819+00:00",
+      "exitCode": 0,
+      "stdoutSha256": "865bc491c00f762e927e07f59a421daed95587ee1f50173c2c03263098683292",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "types-final",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:07:48.991094+00:00",
+      "finishedUtc": "2026-11-15T15:07:50.606110+00:00",
+      "exitCode": 0,
+      "stdoutSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "format-final",
+      "executable": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+      "argv": [
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/composition-validation.ts",
+        "extensions/src/core/show-library/composition-validation.test.ts",
+        "extensions/src/core/show-library/index.ts"
+      ],
+      "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+      "startedUtc": "2026-11-15T15:07:50.607122+00:00",
+      "finishedUtc": "2026-11-15T15:07:52.040718+00:00",
+      "exitCode": 0,
+      "stdoutSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+      "stderrSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "unchangedDuringChecks": true,
+  "executableAcceptance": false,
+  "c35Rerun": false,
+  "browserRun": false
+}
