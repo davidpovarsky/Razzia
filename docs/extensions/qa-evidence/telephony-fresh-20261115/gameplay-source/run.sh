@@ -13,13 +13,13 @@ qa=/delta/docs/extensions/qa-evidence/telephony-fresh-20261115
 cd /work
 node "$qa/auth-source/verify-composed.mjs" > "$evidence/source-before.json"
 node "$qa/auth-source/verify-overlay.mjs" > "$evidence/overlay-before.json"
-node -e 'require("node:fs").writeFileSync(process.env.PHONE_REMAINING_EVIDENCE+"/run-started.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,node:process.version,scope:"two new actual fresh-composition gameplay and invitation cases; no provider or production host",started:new Date().toISOString()}),{flag:"wx"})'
+node -e 'require("node:fs").writeFileSync(process.env.PHONE_REMAINING_EVIDENCE+"/run-started.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,node:process.version,scope:"two selected actual invitation controls including retained desired-success name-boundary repro; LIVE case deselected/reused",started:new Date().toISOString()}),{flag:"wx"})'
 monitor(){
   while true;do
     free=$(df -B1 --output=avail /evidence | tail -1 | tr -d ' ')
     allocated=$(du -sB1 /delta /input-auth /evidence | awk '{n+=$1}END{print n}')
     printf '%s %s %s\n' "$(date -u +%FT%TZ)" "$free" "$allocated" >> "$evidence/disk-budget.log"
-    if ((free<2147483648||allocated+524288>6291456));then touch "$evidence/DISK_BUDGET_ABORT";kill -TERM "$main_pid";return;fi
+    if ((free<2147483648||allocated+524288>3145728));then touch "$evidence/DISK_BUDGET_ABORT";kill -TERM "$main_pid";return;fi
     sleep 3
   done
 }
@@ -27,7 +27,7 @@ main_pid=$$
 monitor & monitor_pid=$!
 trap 'kill "$monitor_pid" 2>/dev/null || true;wait "$monitor_pid" 2>/dev/null || true' EXIT
 set +e
-timeout --signal=TERM --kill-after=5 240 node --max-old-space-size=512 /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-reporter=tap --test-concurrency=1 "$qa/gameplay-source/gameplay.node.ts" > "$evidence/remaining.tap" 2>&1
+timeout --signal=TERM --kill-after=5 240 node --max-old-space-size=512 /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-reporter=tap --test-concurrency=1 --test-name-pattern="^INVITE-COMPOSED-" "$qa/gameplay-source/gameplay.node.ts" > "$evidence/remaining.tap" 2>&1
 tests=$?
 set -e
 node "$qa/auth-source/verify-composed.mjs" > "$evidence/source-after.json"

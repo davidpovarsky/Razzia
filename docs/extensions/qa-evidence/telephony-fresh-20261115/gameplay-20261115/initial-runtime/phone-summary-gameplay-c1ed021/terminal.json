@@ -1,0 +1,23 @@
+{
+  "name": "phone-gameplay-c1ed021-attempt01",
+  "id": "d0546bf83c63b22b340f622bc34361e72d27274c6ce81a650fcbe6454e71cfca",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T19:08:46.252414157Z",
+    "FinishedAt": "2026-11-15T19:09:29.176719135Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}

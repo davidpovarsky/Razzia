@@ -362,7 +362,7 @@ test("INVITE-COMPOSED-01 default admission and actual invite-only refusal/remova
     p = await provision(r)
   r.game.setPhoneInviteOnly(true)
   const invited = r.game.upsertRosterParticipant({
-    displayName: "Synthetic invited participant",
+    displayName: "Invited Phone",
     phone: "+447700900883",
   })
   const unknown = precommit(r, p, "+447700900884")
@@ -392,7 +392,7 @@ test("INVITE-COMPOSED-01 default admission and actual invite-only refusal/remova
     (await r.factory.operate(p.address, p.credential, op)).status,
     "game_binding_changed",
   )
-  assert.equal(r.game.getRosterEntry(invited.rosterPlayerId), undefined)
+  assert.equal(r.game.getRosterEntry(invited.rosterPlayerId), null)
   real.record({
     test: "INVITE-COMPOSED-01",
     defaultOpenControl: true,
@@ -402,4 +402,44 @@ test("INVITE-COMPOSED-01 default admission and actual invite-only refusal/remova
     removedRosterCachedReceiptsDenied: 2,
     providerInvitationOrPSTN: false,
   })
+})
+
+test("INVITE-COMPOSED-02 accepted25-character roster name must admit the actual invited caller", async () => {
+  const r = await real.room(),
+    p = await provision(r)
+  r.game.setPhoneInviteOnly(true)
+  const displayName = "N".repeat(25)
+  const invited = r.game.upsertRosterParticipant({
+    displayName,
+    phone: "+447700900885",
+  })
+  assert.equal(
+    r.game.getRosterEntry(invited.rosterPlayerId)?.displayName,
+    displayName,
+  )
+  let nativeError: string | undefined
+  const native = r.game.joinOrRebindPhoneCaller.bind(r.game)
+  r.game.joinOrRebindPhoneCaller = (...args) => {
+    const result = native(...args)
+    nativeError = result.error
+    return result
+  }
+  const input = precommit(r, p, "+447700900885"),
+    joined = await r.factory.register(p.address, p.credential, input)
+  real.record({
+    test: "INVITE-COMPOSED-02",
+    acceptedRosterNameLength: displayName.length,
+    expectedInvitedAdmission: true,
+    actualReceiptOK: joined.ok,
+    actualStatus: joined.status,
+    actualNativeError: nativeError,
+    nativeJoinCalls: r.counters.nativeJoin,
+    players: r.game.players.length,
+    sourceContractMismatch: "roster maximum40 versus username maximum24",
+    productionFixApplied: false,
+  })
+  // Desired original invitation behavior. Keep this failing until the existing
+  // roster/name owner resolves the accepted-input/native-admission contract.
+  assert.equal(joined.ok, true)
+  assert.equal(joined.rosterPlayerId, invited.rosterPlayerId)
 })

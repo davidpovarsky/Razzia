@@ -1,0 +1,53 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 422634 subject: Test quizz
+# Game 01a1e09c-e118-7025-b260-d753e91edd24 added. Total games: 1
+# A user connected: socketId: NU7-UdYtrBO2cMD2AAAA, clientId: 91ee3a32-208c-440e-8cff-7c6717e4c819
+# Manager reconnected to game 422634
+# Subtest: LIVE-COMPOSED-01 actual fifth choice scores two questions once, then survey preserves score
+ok 1 - LIVE-COMPOSED-01 actual fifth choice scores two questions once, then survey preserves score
+  ---
+  duration_ms: 26737.978939
+  type: 'test'
+  ...
+# New game created: 104699 subject: Test quizz
+# Game 01a1e09d-4779-75e1-b2e9-2b1a5c06aafe added. Total games: 2
+# New game created: 761870 subject: Test quizz
+# Game 01a1e09d-4c93-729d-86c4-146bfadcdb76 added. Total games: 3
+# Game 01a1e09c-e118-7025-b260-d753e91edd24 removed. Total games: 2
+# Game 01a1e09d-4779-75e1-b2e9-2b1a5c06aafe removed. Total games: 1
+# Game 01a1e09d-4c93-729d-86c4-146bfadcdb76 removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# A user disconnected : NU7-UdYtrBO2cMD2AAAA
+# Subtest: INVITE-COMPOSED-01 default admission and actual invite-only refusal/removal preserve fail-closed receipts
+not ok 2 - INVITE-COMPOSED-01 default admission and actual invite-only refusal/removal preserve fail-closed receipts
+  ---
+  duration_ms: 2659.297664
+  type: 'test'
+  location: '/delta/docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts:1:8347'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (/delta/docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts:375:10)
+    async Test.run (node:internal/test_runner/test:1409:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+  ...
+1..2
+# tests 2
+# suites 0
+# pass 1
+# fail 1
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40513.975315

@@ -1,0 +1,29 @@
+{
+  "scope": "new actual isolated fresh-composition gameplay acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "test": "LIVE-COMPOSED-01",
+      "actualGatewayActivation": true,
+      "actualManagerSocket": true,
+      "fullScopedFixturePrecommitReadback": true,
+      "fifthChoice": 4,
+      "epochs": [
+        1,
+        2,
+        3
+      ],
+      "points": [
+        1000,
+        1999,
+        1999
+      ],
+      "nativeAnswers": 3,
+      "ledgerAnswersPerQuestion": [
+        1,
+        1,
+        1
+      ],
+      "physicalDTMF": false
+    }
+  ]
+}
