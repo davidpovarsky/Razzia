@@ -1,0 +1,6 @@
+{
+  "path": "extensions/qa/theme-builder/oauth-consent.spec.ts",
+  "before": "3d1761e56cbf92aa69414369b66c042350e892f3627174fe8db0f647f9117878",
+  "after": "d82839576a5c3792d4101b8412c0ec7450d4163f32d05471004147837759cc23",
+  "sameAst": true
+}

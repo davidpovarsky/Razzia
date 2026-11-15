@@ -106,6 +106,26 @@ test("native session change invalidates inspected proof before approval", async 
   await expect(page.getByRole("alert")).toContainText("session has expired")
   expect(await stats(request, ticket)).toEqual({ inspect: 1, approve: 0 })
 })
+test("real cross-tab token replacement revokes consent despite the native memory token", async ({
+  page,
+  context,
+  request,
+}) => {
+  const ticket = newTicket()
+  await open(page, ticket)
+  const other = await context.newPage()
+  await other.goto("/qa/session")
+  await other.evaluate(() =>
+    localStorage.setItem("token", "unexpected-cross-tab-session"),
+  )
+  await expect(
+    page.getByRole("button", { name: "Allow access", exact: true }),
+  ).toBeDisabled()
+  await expect(page.getByRole("alert")).toContainText("session has expired")
+  expect(await stats(request, ticket)).toEqual({ inspect: 1, approve: 0 })
+  await other.close()
+})
+
 test("expired ticket and missing actual page headers fail closed", async ({
   page,
   request,

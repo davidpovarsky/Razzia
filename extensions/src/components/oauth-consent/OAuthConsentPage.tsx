@@ -171,7 +171,13 @@ export function OAuthConsentPage({
         invalidate()
     }
     const interval = window.setInterval(check, 1000)
-    window.addEventListener("storage", check)
+    const onStorage = (event: StorageEvent) => {
+      // Native session.ts may still hold its same-tab memory token after another
+      // tab replaces localStorage. The storage event itself revokes this proof.
+      if (event.key === "token" || event.key === null) invalidate()
+      else check()
+    }
+    window.addEventListener("storage", onStorage)
     window.addEventListener("focus", check)
     return () => {
       abort.abort()
@@ -181,7 +187,7 @@ export function OAuthConsentPage({
       client.invalidate()
       proof.current = null
       clearInterval(interval)
-      window.removeEventListener("storage", check)
+      window.removeEventListener("storage", onStorage)
       window.removeEventListener("focus", check)
     }
   }, [account.id, account.email, client, ticket])

@@ -259,6 +259,7 @@ function StudioWorkspace({ account }: { account: Account }) {
     } catch {
       /* Always remove the local credential, including offline sign-out. */
     } finally {
+      browserConsentLoginHandoff().clear()
       clearToken()
       socketClient.disconnect()
       useManagerStore.getState().resetManager()

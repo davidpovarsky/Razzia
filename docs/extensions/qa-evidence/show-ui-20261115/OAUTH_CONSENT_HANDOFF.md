@@ -116,3 +116,13 @@ replay effects. The first actual-route case now requires two actual initial
 AccountGateway auth/mode requests before any reload, observing its initial effect
 replay instead of assuming it from the JSX wrapper. This is an execution condition,
 not a new router or a production deployment.
+
+Consent19 follow-up: direct token/null storage events revoke the inspected proof
+even while native session.ts retains its old in-memory token. The one new actual
+cross-tab browser regression passed in Chromium and WebKit (2/2); focused TC0.
+Raw archive f08bbf638ceca5e9584cdcdc665bfcb6d47460550523ab2ffbeb8185be2b5841,
+34files validated before exited0/PID0/noOOM. Test-only final formatting has a
+same-AST bridge. Studio explicit logout now clears pending state before the
+existing native clearToken in its unchanged finally block. The isolated component
+proof does not replace the actual root development StrictMode route4 or real issuer
+browser acceptance. Existing createOAuthConsentClient stays byte-identical9f3cda2c.
