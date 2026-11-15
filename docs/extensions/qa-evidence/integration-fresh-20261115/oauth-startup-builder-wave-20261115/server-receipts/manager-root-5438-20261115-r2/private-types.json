@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/src/mcp-app/node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "tsconfig.json"
+  ],
+  "cwd": "/work/project/extensions/src/mcp-app",
+  "exit": 2,
+  "log_sha256": "fe8814dfbbb0d66698b26b0e90ea032ad107e910c3db33470114cdea67077b52",
+  "seconds": 26.691
+}

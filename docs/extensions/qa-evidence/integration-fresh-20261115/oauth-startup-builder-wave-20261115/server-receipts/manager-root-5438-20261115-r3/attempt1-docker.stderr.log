@@ -1,0 +1,44 @@
+Traceback (most recent call last):
+  File "/evidence/root-runner.py", line 248, in <module>
+    save('source-before.json',source_check(pathlib.Path('/input'),manifest))
+  File "/evidence/root-runner.py", line 9, in save
+    (E/name).write_text(json.dumps(value, indent=2, sort_keys=True)+'\n')
+  File "/usr/lib/python3.11/pathlib.py", line 1079, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1045, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/evidence/source-before.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/evidence/root-runner.py", line 282, in <module>
+    save('failure.json',{'error':str(exc),'traceback':traceback.format_exc()});print(traceback.format_exc(),flush=True)
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/evidence/root-runner.py", line 9, in save
+    (E/name).write_text(json.dumps(value, indent=2, sort_keys=True)+'\n')
+  File "/usr/lib/python3.11/pathlib.py", line 1079, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1045, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/evidence/failure.json'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/evidence/root-runner.py", line 286, in <module>
+    save('source-after.json',source_check(pathlib.Path('/input'),manifest));save('work-source-after.json',source_check(W/'project',manifest))
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/evidence/root-runner.py", line 9, in save
+    (E/name).write_text(json.dumps(value, indent=2, sort_keys=True)+'\n')
+  File "/usr/lib/python3.11/pathlib.py", line 1079, in write_text
+    with self.open(mode='w', encoding=encoding, errors=errors, newline=newline) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.11/pathlib.py", line 1045, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+PermissionError: [Errno 13] Permission denied: '/evidence/source-after.json'

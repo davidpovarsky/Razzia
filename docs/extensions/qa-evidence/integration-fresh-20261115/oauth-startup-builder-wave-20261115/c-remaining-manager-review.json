@@ -1,0 +1,62 @@
+{
+  "utc": "2026-11-15T17:56:41.748938+00:00",
+  "producer": "d3098ae0e205290e2173c8ab3365b84414931e6d",
+  "evidenceOnlyPaths": 58,
+  "productionDiff": [],
+  "verified": [
+    {
+      "phase": "auth5",
+      "actualCases": 5,
+      "overlayFiles": 34,
+      "baseFiles": 549,
+      "source": "2a888de9c832670ca657a5774a85f70f9a38e3ad",
+      "archiveSha256": "4caf1232d2c5bf887999426a360a14e76f00bfca0b0b18a1521081ab45a81422",
+      "publicArchiveFilesByteVerified": [
+        "overlay-after.json",
+        "overlay-before.json",
+        "remaining-observations.json",
+        "remaining.tap",
+        "run-finished.json",
+        "run-started.json",
+        "source-after.json",
+        "source-before.json",
+        "terminal.json"
+      ],
+      "container": "509ca42c3a803ad5ccf334cb8ee53f804999ea274a5e3d681004ddb9854eaf5f",
+      "terminalExit": 0,
+      "PID": 0,
+      "OOM": false
+    },
+    {
+      "phase": "crash",
+      "actualCases": 1,
+      "overlayFiles": 35,
+      "baseFiles": 549,
+      "source": "66d794a4c7947af355de7dc27217e03b72b1a759",
+      "archiveSha256": "8b158ca79404fbf419c78ae9376b41e65ecc3fbea37cc664f4442786faa3396d",
+      "publicArchiveFilesByteVerified": [
+        "crash-initialize-after.log",
+        "crash-initialize-before.log",
+        "crash-issue-after.log",
+        "crash-issue-before.log",
+        "crash-rotate-after.log",
+        "crash-rotate-before.log",
+        "crash.tap",
+        "fixture-filesystem.json",
+        "overlay-after.json",
+        "overlay-before.json",
+        "remaining-observations.json",
+        "run-finished.json",
+        "run-started.json",
+        "source-after.json",
+        "source-before.json",
+        "terminal.json"
+      ],
+      "container": "8ad80a9532afe5878c9d654d63728a7101ca12befb8fca5f289af93002e220b3",
+      "terminalExit": 0,
+      "PID": 0,
+      "OOM": false
+    }
+  ],
+  "limits": "No physical capacity, provider/PSTN, hardware power-loss, gateway key custody, publication, or automatic recovery acceptance; original legacy 15/3 remains."
+}

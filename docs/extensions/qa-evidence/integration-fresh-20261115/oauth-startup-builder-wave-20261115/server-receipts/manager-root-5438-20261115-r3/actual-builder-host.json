@@ -1,0 +1,23 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/node_modules/vitest/vitest.mjs",
+    "run",
+    "--root",
+    "/work/project/extensions",
+    "--config",
+    "/work/project/extensions/vitest.config.ts",
+    "--configLoader",
+    "runner",
+    "src/server/show-themes/builder-host.test.ts",
+    "--maxWorkers",
+    "1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/actual-builder-host.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "e0564ad8b986f822486e39e55e79ca0f42f96050bddbff5ade88435af7661d7d",
+  "seconds": 6.541
+}

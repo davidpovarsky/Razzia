@@ -1,0 +1,25 @@
+{
+  "command": [
+    "node",
+    "/work/project/extensions/node_modules/vitest/vitest.mjs",
+    "run",
+    "--root",
+    "/work/project/extensions",
+    "--config",
+    "/work/project/extensions/vitest.config.ts",
+    "--configLoader",
+    "runner",
+    "src/core/show-library/composition-reset.test.ts",
+    "src/core/show-library/registry.test.ts",
+    "src/core/show-library/composition-validation.test.ts",
+    "--maxWorkers",
+    "1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/composition-reset.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "dedf06be82f19c965da20b846ca618465b10e0bed7d59aaca9d7dcd5628e44b2",
+  "seconds": 3.788
+}

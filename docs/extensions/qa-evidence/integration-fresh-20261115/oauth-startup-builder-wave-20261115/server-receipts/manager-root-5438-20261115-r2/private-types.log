@@ -1,0 +1,2 @@
+../server/phone-lifecycle-v2/native-adoption.ts(1,23): error TS2307: Cannot find module '@razzia/socket/services/game' or its corresponding type declarations.
+../telephony/index.ts(22,15): error TS6142: Module './KeypadSimulator' was resolved to '/work/project/extensions/src/telephony/KeypadSimulator.tsx', but '--jsx' is not set.

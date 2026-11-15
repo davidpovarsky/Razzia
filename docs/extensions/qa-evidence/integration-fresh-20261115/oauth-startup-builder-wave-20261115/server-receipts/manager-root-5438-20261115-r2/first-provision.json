@@ -1,0 +1,22 @@
+{
+  "id": "54f193cd9121b0fb67f79f1beb448a349ca9597a12862c9b1a37d922578b788f",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T17:23:10.208015701Z",
+    "FinishedAt": "2026-11-15T17:23:10.546858466Z"
+  },
+  "user": "",
+  "evidenceMode": "0o750",
+  "hostUid": 1001,
+  "hostGid": 1001,
+  "status": "PROVISIONING_ERROR before normal install/compiler/tests; evidence write permission",
+  "oldInputsAndContainerPreserved": true
+}

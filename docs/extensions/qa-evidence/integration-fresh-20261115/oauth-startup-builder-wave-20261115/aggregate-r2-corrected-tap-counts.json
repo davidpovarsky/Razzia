@@ -1,0 +1,26 @@
+{
+  "sdk-server": {
+    "log_sha256": "ecfad4988a25c8c8850795dfb417ac18724c507830be9ee23a797291ea94c37e",
+    "counts": {
+      "tests": 63,
+      "pass": 63,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tail": " progress keeps its parent reserved: settled reuse reauthorizes (5.617015ms)\n\u2139 tests 63\n\u2139 suites 0\n\u2139 pass 63\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 42395.781102\n"
+  },
+  "first-party": {
+    "log_sha256": "11f39a58d26b9c71aaf215091fa0f800710aff08eaeea3f3e317736ab4949bf1",
+    "counts": {
+      "tests": 43,
+      "pass": 43,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0
+    },
+    "tail": "er, orphan SHM and corrupt private DB are preserved and denied (25.062646ms)\n\u2139 tests 43\n\u2139 suites 0\n\u2139 pass 43\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 25199.539337\n"
+  }
+}

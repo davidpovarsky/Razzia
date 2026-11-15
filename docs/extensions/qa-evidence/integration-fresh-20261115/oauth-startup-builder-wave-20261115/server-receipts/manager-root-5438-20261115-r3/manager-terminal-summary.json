@@ -1,0 +1,106 @@
+{
+  "source": "abd4dcb7573807cb2a15e75c2383be463b7cbace",
+  "actualCompilerExits": {
+    "parent": 0,
+    "private": 0,
+    "socket": 0
+  },
+  "newHostPassed": 1,
+  "reusedUnchangedCases": 186,
+  "priorActualCases": 187,
+  "priorSource": "543841486e7c2c3007b41ef73c0a7072eff19d52",
+  "sameInstalledGraphLogHash": true,
+  "all1066SourceBytesModesUnchanged": true,
+  "originalCacheMetadataBodiesUnchanged": true,
+  "metadata459Unchanged": true,
+  "resource": {
+    "aggregate_tmpfs_cap": 1610612736,
+    "aggregate_used": 947073024,
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "memory_peak": "2406432768",
+    "mounts": {
+      "/fake": {
+        "capacity_bytes": 16777216,
+        "used_bytes": 0
+      },
+      "/snapshot": {
+        "capacity_bytes": 805306368,
+        "used_bytes": 435142656
+      },
+      "/work": {
+        "capacity_bytes": 788529152,
+        "used_bytes": 511930368
+      }
+    },
+    "shared_pages": "Allocated once; exited writer pages may be charged to ancestor, not duplicated by readonly reader."
+  },
+  "containers": [
+    {
+      "id": "54f193cd9121b0fb67f79f1beb448a349ca9597a12862c9b1a37d922578b788f",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-11-15T17:23:10.208015701Z",
+        "FinishedAt": "2026-11-15T17:23:10.546858466Z"
+      },
+      "user": "",
+      "sizeRw": 32768
+    },
+    {
+      "id": "eb034fbaf4cb6001b4fb52771186180b2c0d5f25181bd96fe7d1aa6628cf2945",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 1,
+        "Error": "",
+        "StartedAt": "2026-11-15T17:28:02.90482488Z",
+        "FinishedAt": "2026-11-15T17:31:08.842261024Z"
+      },
+      "user": "1001:1001",
+      "sizeRw": 32768
+    },
+    {
+      "id": "330053ef0166981cd396e7ba38e5c0be971f01832882e63a4d18e3c616c57445",
+      "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+      "state": {
+        "Status": "exited",
+        "Running": false,
+        "Paused": false,
+        "Restarting": false,
+        "OOMKilled": false,
+        "Dead": false,
+        "Pid": 0,
+        "ExitCode": 0,
+        "Error": "",
+        "StartedAt": "2026-11-15T17:44:54.932218057Z",
+        "FinishedAt": "2026-11-15T17:46:25.756293267Z"
+      },
+      "user": "1001:1001",
+      "sizeRw": 36864
+    }
+  ],
+  "accounting": {
+    "allocatedOwnedUniqueBytes": 13340672,
+    "priorSourceInodesNotDoubleCharged": 887,
+    "containerBookkeepingAllowanceBytes": 6291456,
+    "cumulativeChargedBytes": 19632128,
+    "ceilingBytes": 33554432,
+    "freeBytes": 2524958720,
+    "method": "own directory/file blocks deduplicated by inode; proven preexisting source hardlink bodies excluded; three2MiB retained Docker allowances; sampled conservative not physical peak"
+  },
+  "noCleanupOrServiceMutation": true
+}

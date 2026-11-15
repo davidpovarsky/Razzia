@@ -1,0 +1,4 @@
+{
+  "error": "one or more actual combined checks failed; preserve each log/exit",
+  "traceback": "Traceback (most recent call last):\n  File \"/evidence/root-runner.py\", line 280, in <module>\n    if any(results):raise RuntimeError('one or more actual combined checks failed; preserve each log/exit')\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: one or more actual combined checks failed; preserve each log/exit\n"
+}

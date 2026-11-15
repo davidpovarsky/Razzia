@@ -1,0 +1,10 @@
+{
+  "all_file_sha256_match_hydration_receipt": true,
+  "expanded_bytes": 400260954,
+  "files": 459,
+  "hydration_receipt_sha256": "3b571703dcfdb4f4248fc21ab8cd08418c8ab85e9660737d903e5f468942cf77",
+  "inventory_sha256": "6f2126891ed74af76c8b6644a25e0faec29e438d248107010d808bbd49649c80",
+  "metadata_mount_readonly": true,
+  "prior_verification_verdicts_copied": false,
+  "raw_https_response_bodies_verified": 412
+}
