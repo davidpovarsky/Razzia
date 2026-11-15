@@ -3,27 +3,51 @@
   "root": "/home/ubuntu/tadazz-hq-qa-20261115",
   "base": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
   "lower": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-991f38f216ad265e06aec53313db8928437da248",
-  "src": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
-  "fixture": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
-  "evidence": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
-  "runner": "tadazz-hq-recovery-c1-e1fb1b2-20261115",
+  "src": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "fixture": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "evidence": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
+  "runner": "tadazz-hq-recovery-c1-e1fb1b2-packet2-20261115",
+  "identity": {
+    "uid": 1001,
+    "gid": 1001
+  },
   "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
   "prospectiveOnly": true,
   "cpu": 0.25,
   "memoryBytes": 2147483648,
   "newPhysicalBytesCap": 67108864,
   "absoluteDiskFloorBytes": 2147483648,
-  "initialFreeGateMiB": 2568,
   "maximumWallSeconds": 1800,
   "sampleSeconds": 2,
   "perLogBytesCap": 16777216,
-  "retainedSharedMetadataMiBOnce": 435,
-  "prospectiveAggregateCpu": 1.25,
-  "prospectiveAggregateGiB": 9,
+  "resourceAdmission": {
+    "rootThreadId": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+    "ownLaneId": "Recovery-C1",
+    "directory": "/home/ubuntu/tadazz-hq-qa-20261115/admissions",
+    "maximumAgeSeconds": 300,
+    "rootLedgerRequired": true
+  },
+  "historicalPlanningOnly": {
+    "initialFreeGateMiB": 2568,
+    "retainedSharedMetadataMiBOnce": 435,
+    "prospectiveAggregateCpu": 1.25,
+    "prospectiveAggregateGiB": 9,
+    "suppliesNoRuntimeAuthority": true
+  },
   "mounts": [
     {
       "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
       "destination": "/work",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/work",
+      "destination": "/retained-base",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-r2-9593f24f287f2e404f387f6359e89453cd8a971e/source-manifest.json",
+      "destination": "/retained-inputs/source-manifest.json",
       "readonly": true
     },
     {
@@ -42,12 +66,12 @@
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage",
       "destination": "/work/extensions/src/server/storage",
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/services",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/services",
       "destination": "/work/packages/socket/src/services",
       "readonly": true
     },
@@ -267,52 +291,62 @@
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/index.ts",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/index.ts",
       "destination": "/work/extensions/src/server/index.ts",
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/api/index.ts",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/api/index.ts",
       "destination": "/work/packages/socket/src/api/index.ts",
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/index.ts",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/index.ts",
       "destination": "/work/packages/socket/src/index.ts",
       "readonly": true
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/cache-0",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-0",
       "destination": "/work/extensions/node_modules/.vite",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/cache-1",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-1",
       "destination": "/work/extensions/node_modules/.vite-temp",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/cache-2",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-2",
       "destination": "/work/node_modules/.vite",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/cache-3",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/cache-3",
       "destination": "/work/node_modules/.vite-temp",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/scratch",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/scratch",
       "destination": "/scratch",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-output-root",
       "destination": "/qa",
+      "readonly": true
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-results",
+      "destination": "/qa/results",
       "readonly": false
     },
     {
-      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/child-receipts",
+      "destination": "/qa/receipts",
+      "readonly": false
+    },
+    {
+      "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2",
       "destination": "/inputs",
       "readonly": true
     }
@@ -335,7 +369,7 @@
         "--no-file-parallelism",
         "--reporter=verbose",
         "--reporter=json",
-        "--outputFile=/qa/primitives-scope.results.json"
+        "--outputFile=/qa/results/primitives-scope.results.json"
       ]
     },
     {
@@ -354,7 +388,7 @@
         "--no-file-parallelism",
         "--reporter=verbose",
         "--reporter=json",
-        "--outputFile=/qa/reservation.results.json"
+        "--outputFile=/qa/results/reservation.results.json"
       ]
     },
     {
@@ -373,7 +407,7 @@
         "--no-file-parallelism",
         "--reporter=verbose",
         "--reporter=json",
-        "--outputFile=/qa/review-regressions.results.json"
+        "--outputFile=/qa/results/review-regressions.results.json"
       ]
     },
     {
@@ -392,7 +426,7 @@
         "--no-file-parallelism",
         "--reporter=verbose",
         "--reporter=json",
-        "--outputFile=/qa/actual-native.results.json"
+        "--outputFile=/qa/results/actual-native.results.json"
       ]
     }
   ],

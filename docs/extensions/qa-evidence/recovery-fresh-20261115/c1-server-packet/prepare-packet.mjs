@@ -13,9 +13,9 @@ const prior = "9593f24f287f2e404f387f6359e89453cd8a971e"
 const root = "/home/ubuntu/tadazz-hq-qa-20261115"
 const base = `${root}/fixtures/recovery-r2-${prior}/work`
 const lower = `${root}/source/recovery-r2-${r2}`
-const src = `${root}/source/recovery-c1-${sourceCommit}`
-const fixture = `${root}/fixtures/recovery-c1-${sourceCommit}`
-const evidence = `${root}/evidence/recovery-c1-${sourceCommit}`
+const src = `${root}/source/recovery-c1-${sourceCommit}-packet2`
+const fixture = `${root}/fixtures/recovery-c1-${sourceCommit}-packet2`
+const evidence = `${root}/evidence/recovery-c1-${sourceCommit}-packet2`
 const sha = bytes => createHash("sha256").update(bytes).digest("hex")
 const git = (...args) => execFileSync("git", args, { cwd: repo, maxBuffer: 8 * 1024 * 1024 })
 const json = (name, value) => fs.writeFileSync(path.join(here, name), JSON.stringify(value, null, 2) + "\n")
@@ -52,13 +52,17 @@ for (const directory of roots) {
 }
 const mounts = [
   { source: base, destination: "/work", readonly: true },
+  { source: base, destination: "/retained-base", readonly: true },
+  { source: `${root}/source/recovery-r2-${prior}/source-manifest.json`, destination: "/retained-inputs/source-manifest.json", readonly: true },
   ...before.changed.filter(p => !roots.some(d => p.startsWith(d + "/"))).map(p => ({ source: `${lower}/overlay/${p}`, destination: `/work/${p}`, readonly: true })),
   ...roots.map(p => ({ source: `${src}/namespace/${p}`, destination: `/work/${p}`, readonly: true })),
   ...pass,
   ...changed.filter(p => !roots.some(d => p.startsWith(d + "/"))).map(p => ({ source: `${src}/namespace/${p}`, destination: `/work/${p}`, readonly: true })),
   ...["extensions/node_modules/.vite", "extensions/node_modules/.vite-temp", "node_modules/.vite", "node_modules/.vite-temp"].map((p, i) => ({ source: `${fixture}/cache-${i}`, destination: `/work/${p}`, readonly: false })),
   { source: `${fixture}/scratch`, destination: "/scratch", readonly: false },
-  { source: evidence, destination: "/qa", readonly: false },
+  { source: `${fixture}/child-output-root`, destination: "/qa", readonly: true },
+  { source: `${fixture}/child-results`, destination: "/qa/results", readonly: false },
+  { source: `${fixture}/child-receipts`, destination: "/qa/receipts", readonly: false },
   { source: src, destination: "/inputs", readonly: true },
 ]
 const effective = new Map(before.files.map(f => [f.path, { ...f, physicalSource: lowerPath(f) }]))
@@ -77,14 +81,16 @@ const tests = [
   { name: "reservation", cwd: "/work/extensions", expectedCases: 16, wallSeconds: 600, args: [...ext, "src/server/storage/creation-reservation.test.ts", ...flags] },
   { name: "review-regressions", cwd: "/work/extensions", expectedCases: 12, wallSeconds: 900, args: [...ext, "src/server/storage/creation-review.test.ts", ...flags] },
   { name: "actual-native", cwd: "/work", expectedCases: 11, wallSeconds: 600, args: ["node", "node_modules/vitest/vitest.mjs", "run", "--project", "socket", "packages/socket/src/services/quiz-creation-reservation.test.ts", ...flags] },
-].map(j => ({ ...j, args: [...j.args, `--outputFile=/qa/${j.name}.results.json`] }))
+].map(j => ({ ...j, args: [...j.args, `--outputFile=/qa/results/${j.name}.results.json`] }))
 json("plan.json", {
   sourceCommit, root, base, lower, src, fixture, evidence,
-  runner: "tadazz-hq-recovery-c1-e1fb1b2-20261115",
+  runner: "tadazz-hq-recovery-c1-e1fb1b2-packet2-20261115",
+  identity: { uid: 1001, gid: 1001 },
   image: "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
   prospectiveOnly: true, cpu: 0.25, memoryBytes: 2147483648, newPhysicalBytesCap: 67108864, absoluteDiskFloorBytes: 2147483648,
-  initialFreeGateMiB: 2568, maximumWallSeconds: 1800, sampleSeconds: 2, perLogBytesCap: 16777216,
-  retainedSharedMetadataMiBOnce: 435, prospectiveAggregateCpu: 1.25, prospectiveAggregateGiB: 9,
+  maximumWallSeconds: 1800, sampleSeconds: 2, perLogBytesCap: 16777216,
+  resourceAdmission: { rootThreadId: "01a1dd10-2ef0-73c2-9c65-569a843f44da", ownLaneId: "Recovery-C1", directory: `${root}/admissions`, maximumAgeSeconds: 300, rootLedgerRequired: true },
+  historicalPlanningOnly: { initialFreeGateMiB: 2568, retainedSharedMetadataMiBOnce: 435, prospectiveAggregateCpu: 1.25, prospectiveAggregateGiB: 9, suppliesNoRuntimeAuthority: true },
   mounts, tests,
   env: {
     PATH: "/usr/local/bin:/usr/bin:/bin", HOME: "/scratch/home", TMPDIR: "/scratch/tmp", CONFIG_PATH: "/scratch/unused-initial-config",

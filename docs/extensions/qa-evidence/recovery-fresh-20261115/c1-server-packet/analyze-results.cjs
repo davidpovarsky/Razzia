@@ -3,7 +3,7 @@ const plan = JSON.parse(fs.readFileSync("/inputs/plan.json", "utf8"))
 const json = name => JSON.parse(fs.readFileSync("/qa/receipts/" + name + ".json", "utf8"))
 const summaries = []
 for (const job of plan.tests) {
-  const result = JSON.parse(fs.readFileSync("/qa/" + job.name + ".results.json", "utf8"))
+  const result = JSON.parse(fs.readFileSync("/qa/results/" + job.name + ".results.json", "utf8"))
   assert.equal(result.success, true, job.name)
   assert.equal(result.numTotalTests, job.expectedCases, job.name)
   assert.equal(result.numPassedTests, job.expectedCases, job.name)

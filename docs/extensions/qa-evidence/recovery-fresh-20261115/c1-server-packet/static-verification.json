@@ -1,5 +1,11 @@
 {
   "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "packetRevision": 2,
+  "followupReviewSha256": "95dc7796abec1473bbf42fce35c4d5afd43af04edd4476c2da14cc8ad45b9c6d",
+  "applicationSourceAcceptedForCooperatingWriterScope": true,
+  "applicationSourceDiffAgainstAcceptedCommit": [],
+  "applicationChecksOrTestsRepeated": false,
+  "archiveUnchangedFromE41Packet": true,
   "applicationSourceCasesPrepared": 48,
   "archiveFilesVerifiedAgainstFrozenSourceManifest": 19,
   "archiveSourceHashMismatches": [],
@@ -10,8 +16,13 @@
     "verify-merged.cjs": 0,
     "analyze-results.cjs": 0
   },
-  "python312AstParse": "PASS; server-run.py parsed, never executed",
+  "python312AstParse": "PASS; server-run.py and runner_host.py parsed, neither executed",
   "uniqueMountDestinations": true,
+  "hostEvidenceMounted": false,
+  "childWritableQaMounts": ["/qa/receipts", "/qa/results"],
+  "pinnedUidGid": "1001:1001",
+  "actualContainerAccessPreflightExecuted": false,
+  "actualRootLaneLedgerSupplied": false,
   "runtimeTestsExecuted": false,
   "serverOperations": 0,
   "executionAuthorized": false

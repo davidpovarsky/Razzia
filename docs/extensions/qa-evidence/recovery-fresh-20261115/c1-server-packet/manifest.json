@@ -5000,7 +5000,7 @@
       "sha256": "0a2d299f7d06445236121a31f6ac345afc580c2f308ec0a32299fefaba85bb38",
       "blob": "6c1a2f9747fc46dde148583da7b30157fdcd2656",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/index.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/index.ts"
     },
     {
       "path": "extensions/src/server/integration.test.ts",
@@ -5431,7 +5431,7 @@
       "sha256": "33e119afc937d5677eea3900ebe3401cb277bc428b6cd431816fd152621b688e",
       "blob": "c73db2e6f505561f326bbbb025b38cf26a045f1a",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/service.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/service.ts"
     },
     {
       "path": "extensions/src/server/storage/sidecar.ts",
@@ -5439,7 +5439,7 @@
       "sha256": "182a573935f156d5b80d6f3a79e2a474bd80f7d331355e608c5eca7d6317ab92",
       "blob": "934cf052ff8de46e3cb5d59c6117785ae60e7a7f",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/sidecar.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/sidecar.ts"
     },
     {
       "path": "extensions/src/site/adapters/client.ts",
@@ -7355,7 +7355,7 @@
       "sha256": "5cc5edff0c9d03063b21f738de6ef069285c3e5fb11601297169c1ff624c1e19",
       "blob": "0ebe4ed58da4b4e2320bc273624c949bbe1910ea",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/api/index.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/api/index.ts"
     },
     {
       "path": "packages/socket/src/api/middleware.ts",
@@ -7498,7 +7498,7 @@
       "sha256": "66cceb2e09fe1169085a1509ecc314b0a1783ee607f377a0d6b135003e4e9ef6",
       "blob": "1ae986af9243121155b024732e168a1c57cd5922",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/index.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/index.ts"
     },
     {
       "path": "packages/socket/src/services/account-auth.test.ts",
@@ -7614,7 +7614,7 @@
       "sha256": "cdb070c0c5978c02ef7ef8d0e03652fa18a005af42f86939f3158c33a7e37b9f",
       "blob": "537496a89909f30f9419d7eeb058e3a0cd1f0eaf",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/services/config.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/services/config.ts"
     },
     {
       "path": "packages/socket/src/services/errors.ts",
@@ -11591,7 +11591,7 @@
       "sha256": "1b1551fd766e12b60f29639cbc5bfda60d7bc5d8d205a4e34bbbfc8fac8a372c",
       "blob": "129681aec9603bb2403264a4f76613e4ca6dbed7",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-child.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-child.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-fixture-root.ts",
@@ -11599,7 +11599,7 @@
       "sha256": "376248cf75bc403b7a0ae1e1c657d519aa002b629b0818f5cf68d3500988ee28",
       "blob": "e0ef9579c0412a8f2c7ed73b8eef0530ec331c59",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-fixture-root.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-fixture-root.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-fixture.ts",
@@ -11607,7 +11607,7 @@
       "sha256": "75d240a968ee2c4606bd58edd45f8d1ffe9bf80387dd6c59d7938fe7c7496a2f",
       "blob": "daee7df60bfd06dbe23f7852bc9ebd2bf43331d2",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-fixture.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-fixture.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-native-review-fixture.ts",
@@ -11615,7 +11615,7 @@
       "sha256": "3bdebe912cc68c95e30087b9fc863801c8830fe0bbdddc2acb7c154c99b20853",
       "blob": "d8daafddf458c90e0075d01d230c1be869f6d515",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-native-review-fixture.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-native-review-fixture.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-process.ts",
@@ -11623,7 +11623,7 @@
       "sha256": "ecb08a06c5c73219143bf42206eaff1ef64bd618aa245988d8764f9abeb1608f",
       "blob": "1f53e75d64077080cbea6cb7155e7fa62ba0d9bb",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-process.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-process.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-reservation.test.ts",
@@ -11631,7 +11631,7 @@
       "sha256": "b4de60c9a87c348d9f1a918f1b475a71409828871b252aa3454741f7ca21c5fe",
       "blob": "4cad9685430a41122bf8a3ccd16ad9173f91d9cd",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-reservation.test.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-reservation.test.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-reservation.ts",
@@ -11639,7 +11639,7 @@
       "sha256": "f976afc4e4e3e9b08f172e580867989bec24af5dfe56777ecf599813499539a8",
       "blob": "63ce2fb8fe887cd818bd2f40ea89a2fdc585680c",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-reservation.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-reservation.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-review.test.ts",
@@ -11647,7 +11647,7 @@
       "sha256": "31f50189c711656dd282422b2b7c1c27bf65cc99ade13301841adec48ea05ed2",
       "blob": "c3384064be949b6c32f1479ce64c40435e760121",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-review.test.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-review.test.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-scope.test.ts",
@@ -11655,7 +11655,7 @@
       "sha256": "e89d0d710d757ea0f96a62a4422a9dbba44c678657a636e33b3bcc369cfdfe60",
       "blob": "b6f4905f61bd1f957b4a70f9f898d58349f8f3cb",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-scope.test.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-scope.test.ts"
     },
     {
       "path": "extensions/src/server/storage/creation-scope.ts",
@@ -11663,7 +11663,7 @@
       "sha256": "7eba38e7fc319dcd2c7fc5ea57b62cc5f88601fea346129d01561837125293b1",
       "blob": "8f2e806338a4981be397ff60049d14455bbaff53",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/creation-scope.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/creation-scope.ts"
     },
     {
       "path": "extensions/src/server/storage/durable-files.test.ts",
@@ -11671,7 +11671,7 @@
       "sha256": "6614b6b44e5beb1704c77b22a2a28b49957ce7f6f19202318826f337d79965ae",
       "blob": "0f0f17c40689fda6f26c5826f95918bd2c989ed8",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/durable-files.test.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/durable-files.test.ts"
     },
     {
       "path": "extensions/src/server/storage/durable-files.ts",
@@ -11679,7 +11679,7 @@
       "sha256": "00a3f7474afc00c0f8409868e7f2b99ce261228d2150efed6b48dac2b6d1bec7",
       "blob": "0724bb0ed0ce6e2c2c44cf28b1428b889d4b7ccf",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/extensions/src/server/storage/durable-files.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/extensions/src/server/storage/durable-files.ts"
     },
     {
       "path": "packages/socket/src/services/quiz-creation-reservation.test.ts",
@@ -11687,7 +11687,7 @@
       "sha256": "5ffde110654bec01805040f01dad9b1738d03bfb641374e1cabb9b424c588e13",
       "blob": "fb3dd6d4a538a122270bcc06d252916d5ca510f7",
       "source": "c1-overlay",
-      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907/namespace/packages/socket/src/services/quiz-creation-reservation.test.ts"
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/recovery-c1-e1fb1b28420a62acca17ddd69f1e72b3a9d27907-packet2/namespace/packages/socket/src/services/quiz-creation-reservation.test.ts"
     }
   ],
   "aux": [
