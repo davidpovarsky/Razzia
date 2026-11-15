@@ -39,6 +39,21 @@ import {
   serviceDenied,
 } from "./credential-codec"
 import type { ControlRequest, SecretAttempt, ServiceAddress } from "./contracts"
+import type { ServiceLeaseRecord } from "./contracts"
+import {
+  GATEWAY_DELIVERY_PURPOSE,
+  type GatewayAuthorityPort,
+  type GatewayBinding,
+  type GatewayDeliveryDestination,
+  type GatewayDeliveryAck,
+} from "../../../telephony/pilot-runtime/gateway-v2/contracts"
+import {
+  acknowledgement,
+  binding as gatewayBinding,
+  bindingText,
+  digest,
+  integer,
+} from "../../../telephony/pilot-runtime/gateway-v2/codec"
 
 const MAX_LEASE_MS = 15 * 60 * 1000
 interface ControlTarget {
@@ -58,6 +73,7 @@ export interface UnmountedAuthorityOptions {
   readonly allowedProviders: readonly string[]
   // Explicit synthetic/server composition opt-in; no environment/public mount.
   readonly nativeAdoption?: boolean
+  readonly gatewayDelivery?: boolean
   // Called ONLY after ACTIVE service proof/live owner/executor verification.
   // First batch supplies exact pre-created private synthetic roots, no fallback.
   readonly lifecycleRoot: (owner: string, game: string) => string
@@ -77,6 +93,12 @@ export class UnmountedPhoneAuthority {
   private readonly providers: readonly string[]
   private readonly rootResolver: UnmountedAuthorityOptions["lifecycleRoot"]
   private readonly adoption?: NativePhoneAdoption
+  private readonly gatewayEnabled: boolean
+  private readonly staged = new WeakSet<Game>()
+  private readonly deliveries = new WeakMap<
+    SecretAttempt,
+    { game: Game; binding: GatewayBinding; requestId: string }
+  >()
   private closed = false
 
   constructor(options: UnmountedAuthorityOptions) {
@@ -88,6 +110,8 @@ export class UnmountedPhoneAuthority {
     for (const provider of options.allowedProviders) identifier(provider)
     this.providers = Object.freeze([...new Set(options.allowedProviders)])
     this.rootResolver = options.lifecycleRoot
+    this.gatewayEnabled = options.gatewayDelivery === true
+    if (this.gatewayEnabled && options.nativeAdoption !== true) serviceDenied()
     if (options.nativeAdoption === true)
       this.adoption = new NativePhoneAdoption()
     // Constructors only capture fixed paths. No SQL/file creation at assembly.
@@ -106,6 +130,7 @@ export class UnmountedPhoneAuthority {
     if (!this.providers.includes(provider)) serviceDenied()
   }
   private pin(game: Game) {
+    if (this.gatewayEnabled && !this.staged.has(game)) serviceDenied()
     if (this.adoption) this.adoption.adopt(game)
     else if (isPhoneLifecycleV2Adopted(game)) serviceDenied()
     let facade = this.facades.get(game)
@@ -116,6 +141,228 @@ export class UnmountedPhoneAuthority {
       this.facades.set(game, facade)
     }
     return facade
+  }
+  // Trusted host calls immediately after a genuine new Game constructor and
+  // before publishing it. An empty roster alone cannot prove freshness.
+  stageFreshGatewayGame(game: Game): void {
+    this.assertOpen()
+    if (
+      !this.gatewayEnabled ||
+      this.staged.has(game) ||
+      this.facades.has(game) ||
+      Registry.getInstance().getGameById(game.gameId) ||
+      game.started ||
+      game.players.length !== 0 ||
+      !game.canAdoptPhoneLifecycleV2()
+    )
+      serviceDenied()
+    this.adoption!.adopt(game)
+    this.staged.add(game)
+    this.pin(game)
+  }
+  private gatewayRecord(
+    game: Game,
+    address: ServiceAddress,
+    issuerSid: string,
+  ): ServiceLeaseRecord {
+    this.assertOpen()
+    this.provider(address.provider)
+    if (!this.gatewayEnabled || !this.staged.has(game)) serviceDenied()
+    const record = this.reader.readCurrent(address)
+    if (
+      !record ||
+      record.state === "REVOKED" ||
+      record.revokedAt !== null ||
+      record.issuerSid !== issuerSid ||
+      record.executorId !== this.facades.get(game)?.executorId
+    )
+      serviceDenied()
+    this.accounts.assertLiveOwner(record, game)
+    return record
+  }
+  private gatewayDescriptor(record: ServiceLeaseRecord): GatewayBinding {
+    return gatewayBinding({
+      protocol: 1,
+      purpose: GATEWAY_DELIVERY_PURPOSE,
+      owner: record.owner,
+      game: record.game,
+      provider: record.provider,
+      service: record.service,
+      version: record.version,
+      issuerSid: record.issuerSid,
+      executorId: record.executorId,
+      expiresAt: record.expiresAt,
+      initialActions: record.initialActions,
+    })
+  }
+  private ticket(
+    result: SecretAttempt,
+    game: Game,
+    address: ServiceAddress,
+    requestId: string,
+    issuerSid: string,
+  ) {
+    if (!this.gatewayEnabled || result.credential === undefined) return
+    const record = this.gatewayRecord(game, address, issuerSid)
+    if (record.version !== result.receipt.version) serviceDenied()
+    this.deliveries.set(result, {
+      game,
+      binding: this.gatewayDescriptor(record),
+      requestId,
+    })
+  }
+
+  async openGatewayAuthority(
+    token: string,
+    target: ControlTarget,
+  ): Promise<GatewayAuthorityPort> {
+    this.assertOpen()
+    const prepared = await this.accounts.prepareManager(token, target.game)
+    try {
+      const live = this.accounts.revalidateManager(prepared)
+      const address = Object.freeze({
+        owner: live.owner,
+        game: live.game,
+        provider: target.provider,
+        service: target.service,
+        version: 1,
+      })
+      const current = () =>
+        this.gatewayRecord(live.nativeGame, address, live.issuerSid)
+      current()
+      const assertCredential = (
+        input: GatewayBinding,
+        capability: string,
+        action?: Action,
+      ) => {
+        const expected = this.gatewayDescriptor(current())
+        if (bindingText(gatewayBinding(input)) !== bindingText(expected))
+          serviceDenied()
+        const proof = this.verifier.authorizeActivation(
+          expected,
+          capability,
+          (game) => this.facades.get(game),
+        )
+        if (
+          proof.nativeGame !== live.nativeGame ||
+          bindingText(this.gatewayDescriptor(proof.lease)) !==
+            bindingText(expected)
+        )
+          serviceDenied()
+        if (action !== undefined) {
+          const context = this.verifier.begin(
+            expected,
+            capability,
+            action,
+            (game) => this.facades.get(game),
+          )
+          try {
+            if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
+          } finally {
+            this.verifier.release(context)
+          }
+        }
+      }
+      return Object.freeze({
+        current: () => {
+          const record = current()
+          if (record.state !== "PENDING_DELIVERY" && record.state !== "ACTIVE")
+            serviceDenied()
+          return Object.freeze({
+            binding: this.gatewayDescriptor(record),
+            state: record.state,
+            allowedActions: canonicalActions(record.currentActions),
+          })
+        },
+        assertCredential,
+        activate: async (
+          input: GatewayBinding,
+          capability: string,
+          requestId: string,
+        ) => {
+          assertCredential(input, capability)
+          const result = await this.activate(input, capability, {
+            requestId,
+            expectedVersion: input.version,
+          })
+          assertCredential(input, capability)
+          return result.receipt
+        },
+      })
+    } finally {
+      this.accounts.releaseManager(prepared)
+    }
+  }
+
+  async deliverGatewayAttempt(
+    token: string,
+    attempt: SecretAttempt,
+    destination: GatewayDeliveryDestination,
+    expectedStoredVersion: number,
+  ): Promise<GatewayDeliveryAck> {
+    const ticket = this.deliveries.get(attempt)
+    this.deliveries.delete(attempt) // Consume before the first await, including failures.
+    this.assertOpen()
+    if (!ticket || attempt.credential === undefined) serviceDenied()
+    integer(expectedStoredVersion)
+    const capability = attempt.credential
+    const prepared = await this.accounts.prepareManager(
+      token,
+      ticket.binding.game,
+    )
+    try {
+      const check = () => {
+        this.managerLive(
+          prepared,
+          ticket.game,
+          ticket.binding.executorId,
+          ticket.binding.issuerSid,
+        )
+        const record = this.gatewayRecord(
+          ticket.game,
+          ticket.binding,
+          ticket.binding.issuerSid,
+        )
+        if (
+          bindingText(this.gatewayDescriptor(record)) !==
+            bindingText(ticket.binding) ||
+          !sameHash(
+            serviceCapabilityHash(record, capability),
+            record.capabilityHash,
+          )
+        )
+          serviceDenied()
+      }
+      check()
+      const deliveryId = digest(
+        JSON.stringify([
+          "gateway-delivery-v1",
+          ticket.requestId,
+          bindingText(ticket.binding),
+        ]),
+      )
+      const result = await destination.acceptDelivery(
+        Object.freeze({
+          protocol: 1,
+          purpose: GATEWAY_DELIVERY_PURPOSE,
+          deliveryId,
+          expectedStoredVersion,
+          binding: ticket.binding,
+          credential: capability,
+        }),
+      )
+      check()
+      const ack = acknowledgement(result)
+      if (
+        ack.deliveryId !== deliveryId ||
+        ack.service !== ticket.binding.service ||
+        ack.storedVersion !== ticket.binding.version
+      )
+        serviceDenied()
+      return ack
+    } finally {
+      this.accounts.releaseManager(prepared)
+    }
   }
   private managerLive(
     prepared: PreparedManagerAuthority,
@@ -248,6 +495,13 @@ export class UnmountedPhoneAuthority {
         live.issuerSid,
       )
       this.credentialDisclosure(result, binding)
+      this.ticket(
+        result,
+        live.nativeGame,
+        binding,
+        input.requestId,
+        live.issuerSid,
+      )
       return result
     } finally {
       this.accounts.releaseManager(prepared)
@@ -321,6 +575,13 @@ export class UnmountedPhoneAuthority {
         record.issuerSid,
       )
       this.credentialDisclosure(result, record)
+      this.ticket(
+        result,
+        live.nativeGame,
+        record,
+        input.requestId,
+        record.issuerSid,
+      )
       return result
     } finally {
       this.accounts.releaseManager(prepared)
