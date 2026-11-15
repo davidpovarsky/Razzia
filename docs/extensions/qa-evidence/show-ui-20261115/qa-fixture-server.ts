@@ -44,13 +44,15 @@ const requests: Array<{ path: string; status: number; mime: string; sha256: stri
 const locales = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
 const phases = ["question", "answerCards", "voting", "voteLocked", "results"] as const
 const server = createServer((req, res) => {
-  const raw = req.url ?? "", url = new URL(raw, "http://127.0.0.1")
+  const raw = req.url ?? ""
+  let url: URL
+  try { url = new URL(raw, "http://127.0.0.1") } catch { res.writeHead(400); res.end("bad request"); return }
   const send = (status: number, mime: string, body: Buffer | string) => {
     if (requests.length < 10000) requests.push({ path: url.pathname, status, mime, sha256: createHash("sha256").update(body).digest("hex") })
     res.writeHead(status, { "Content-Type": mime, "Cache-Control": "no-store", "X-Content-Type-Options": "nosniff", "Content-Security-Policy": "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self'; connect-src 'self'; font-src 'self'; base-uri 'none'; object-src 'none'" })
     res.end(body)
   }
-  if (req.method !== "GET" || raw.includes("%") || raw.includes("\\")) return send(400, "text/plain", "bad request")
+  if (req.method !== "GET" || raw.includes("%") || raw.includes("\\") || raw.includes("#") || raw.split("?")[0] !== url.pathname) return send(400, "text/plain", "bad request")
   if (url.pathname === "/" && !url.search) return send(200, "text/html", `<!doctype html><html><head><meta charset="utf-8"></head><body><div id="host"></div><script type="module" src="/qa/browser.mjs" integrity="${sri(harnessSha)}" crossorigin="anonymous"></script></body></html>`)
   if (url.pathname === "/qa/config" && !url.search) return send(200, "application/json", JSON.stringify({ jsIntegrity: sri(entries["/renderer.js"][2]), cssIntegrity: sri(entries["/renderer.css"][2]) }))
   if (url.pathname === "/qa/requests" && !url.search) return send(200, "application/json", JSON.stringify(requests))

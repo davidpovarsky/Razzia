@@ -1,4 +1,5 @@
 import { expect, test } from "../../../../extensions/node_modules/@playwright/test/index.mjs"
+import { request as httpRequest } from "node:http"
 
 const events = new WeakMap<object, Array<Record<string, unknown>>>()
 test.beforeEach(async ({ page }) => {
@@ -126,4 +127,16 @@ test("browser rejects mismatched script and style integrity", async ({ page }) =
     return Promise.all([check(script, document.head), check(link, (window as any).__showPreviewQa.shadow())])
   })
   expect(result).toEqual([true, true])
+})
+
+test("fixture denies normalized or encoded native paths", async () => {
+  const address = new URL(process.env.TADAZZ_QA_BASE ?? "")
+  const get = (path: string) => new Promise<number>((resolve, reject) => {
+    const req = httpRequest({ hostname: "127.0.0.1", port: Number(address.port), path, method: "GET" }, (res) => { res.resume(); resolve(res.statusCode ?? 0) })
+    req.on("error", reject)
+    req.end()
+  })
+  expect(await get("/tadazz-show/v4/../v4/question-bg.webp")).toBe(400)
+  expect(await get("/tadazz-show/v4/%71uestion-bg.webp")).toBe(400)
+  expect(await get("/tadazz-show/v4/question-bg.webp?alternate=1")).toBe(404)
 })
