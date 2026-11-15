@@ -1,4 +1,4 @@
-import { defineConfig } from "../../../../extensions/node_modules/@playwright/test/index.mjs"
+import { defineConfig } from "../../../../extensions/node_modules/@playwright/test/index.js"
 
 const address = new URL(process.env.TADAZZ_QA_BASE ?? "")
 if (address.protocol !== "http:" || address.hostname !== "127.0.0.1" || !address.port || address.username || address.password) {
