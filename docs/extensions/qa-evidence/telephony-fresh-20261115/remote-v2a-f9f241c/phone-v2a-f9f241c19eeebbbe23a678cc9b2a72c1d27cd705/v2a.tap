@@ -1,0 +1,219 @@
+Game cleanup task started
+New game created: 144436 subject: Synthetic unmounted V2-A
+Game 01a1de2e-edae-7528-8408-b47d41c06716 added. Total games: 1
+Game 01a1de2e-edae-7528-8408-b47d41c06716 marked as empty. Total empty games: 1
+A user connected: socketId: Za5eY1dle2srCfuAAAAA, clientId: 01a1de2e-ece9-7714-a680-12395f0b9598
+Game 01a1de2e-edae-7528-8408-b47d41c06716 reactivated. Remaining empty games: 0
+Manager reconnected to game 144436
+✔ V2A-10 accepted B at zero wins server precedence; late A conflicts without touching Game (1192.038676ms)
+New game created: 999124 subject: Synthetic unmounted V2-A
+Game 01a1de2e-effc-74f7-83f6-4d42dce34fc7 added. Total games: 2
+Game 01a1de2e-effc-74f7-83f6-4d42dce34fc7 marked as empty. Total empty games: 1
+A user connected: socketId: eFjVEKuCHWaj7HoZAAAB, clientId: 01a1de2e-efa0-703e-861d-717a31201a0d
+Game 01a1de2e-effc-74f7-83f6-4d42dce34fc7 reactivated. Remaining empty games: 0
+Manager reconnected to game 999124
+✔ V2A-11 removed real roster denies cached registration and poll receipts (298.276512ms)
+New game created: 034660 subject: Synthetic unmounted V2-A
+Game 01a1de2e-f0cf-73ee-aa7f-921e8bb43ba3 added. Total games: 3
+Game 01a1de2e-f0cf-73ee-aa7f-921e8bb43ba3 marked as empty. Total empty games: 1
+A user connected: socketId: T4jO_KPF_5IFXhjLAAAC, clientId: 01a1de2e-f0cb-76c6-9da1-e55059d0f636
+Game 01a1de2e-f0cf-73ee-aa7f-921e8bb43ba3 reactivated. Remaining empty games: 0
+Manager reconnected to game 034660
+✔ V2A-01 mandatory authority denies before filesystem; live revocation/action/scope gates include cached receipts (131.3475ms)
+New game created: 552649 subject: Synthetic unmounted V2-A
+Game 01a1de2e-f150-73de-8760-8553e4b93baa added. Total games: 4
+Game 01a1de2e-f150-73de-8760-8553e4b93baa marked as empty. Total empty games: 1
+A user connected: socketId: zbRZCbWR12NnfmMaAAAD, clientId: 01a1de2e-f14d-77e7-8c9c-04b085c2d6a0
+Game 01a1de2e-f150-73de-8760-8553e4b93baa reactivated. Remaining empty games: 0
+Manager reconnected to game 552649
+✔ V2A-02 actual score and roster survive explicit B CAS; late A never invokes disconnect or changes billing (17227.970939ms)
+New game created: 249360 subject: Synthetic unmounted V2-A
+Game 01a1de2f-34bf-74bd-badc-84fa331385bf added. Total games: 5
+Game 01a1de2f-34bf-74bd-badc-84fa331385bf marked as empty. Total empty games: 1
+A user connected: socketId: r3CqfFajoGeLs4qTAAAE, clientId: 01a1de2f-349c-74a2-a9f7-04d4c83c3169
+Game 01a1de2f-34bf-74bd-badc-84fa331385bf reactivated. Remaining empty games: 0
+Manager reconnected to game 249360
+✔ V2A-03 one adopted provider/service/issuer/executor per actual Game; legacy active binding denied at zero (144.475309ms)
+New game created: 103033 subject: Synthetic unmounted V2-A
+Game 01a1de2f-352c-757c-81f0-312e9289ffe0 added. Total games: 6
+Game 01a1de2f-352c-757c-81f0-312e9289ffe0 marked as empty. Total empty games: 1
+A user connected: socketId: 0H1A873pTgVJAWRqAAAF, clientId: 01a1de2f-3529-738f-81bc-18c653953b55
+Game 01a1de2f-352c-757c-81f0-312e9289ffe0 reactivated. Remaining empty games: 0
+Manager reconnected to game 103033
+✖ V2A-04 revocation after durable reservation denies projection and leaves barrier (96.591195ms)
+New game created: 395804 subject: Synthetic unmounted V2-A
+Game 01a1de2f-35e7-77d4-bd1c-bf52095161af added. Total games: 7
+Game 01a1de2f-35e7-77d4-bd1c-bf52095161af marked as empty. Total empty games: 1
+A user connected: socketId: fev8_LYXnfH2kc15AAAG, clientId: 01a1de2f-358b-76bb-9399-18227964184b
+Game 01a1de2f-35e7-77d4-bd1c-bf52095161af reactivated. Remaining empty games: 0
+Manager reconnected to game 395804
+✔ V2A-05 actual admission refusal publishes no ACTIVE credential; generic error remains unknown (131.496901ms)
+New game created: 148510 subject: Synthetic unmounted V2-A
+Game 01a1de2f-360f-7485-803d-aa149eb268bb added. Total games: 8
+Game 01a1de2f-360f-7485-803d-aa149eb268bb marked as empty. Total empty games: 1
+A user connected: socketId: 6nGHgk-KSlC4ShBfAAAH, clientId: 01a1de2f-360d-74b4-8d70-ddda5a815305
+Game 01a1de2f-360f-7485-803d-aa149eb268bb reactivated. Remaining empty games: 0
+Manager reconnected to game 148510
+✔ V2A-06 actual SQLite receipt-finalization failure preserves UNKNOWN answer and blocks replacement/replay (11141.548257ms)
+New game created: 895017 subject: Synthetic unmounted V2-A
+Game 01a1de2f-61a7-7101-8f46-635072d991cb added. Total games: 9
+Game 01a1de2f-61a7-7101-8f46-635072d991cb marked as empty. Total empty games: 1
+A user connected: socketId: AzJpPWa8I38WrEYwAAAI, clientId: 01a1de2f-619b-7345-a34b-37f98a731621
+Game 01a1de2f-61a7-7101-8f46-635072d991cb reactivated. Remaining empty games: 0
+Manager reconnected to game 895017
+✔ V2A-07 independent SQLite contenders select exactly one expected-zero reservation (2434.551161ms)
+Game cleanup task started
+New game created: 973829 subject: Synthetic unmounted V2-A
+Game 01a1de2f-8855-74f5-b422-e92a35b5e332 added. Total games: 1
+Game 01a1de2f-8855-74f5-b422-e92a35b5e332 marked as empty. Total empty games: 1
+A user connected: socketId: qcX4sFJlmcl_fYx6AAAA, clientId: 01a1de2f-879c-710a-ba6f-8a8bdce426ee
+Game 01a1de2f-8855-74f5-b422-e92a35b5e332 reactivated. Remaining empty games: 0
+Manager reconnected to game 973829
+New game created: 454114 subject: Synthetic unmounted V2-A
+Game 01a1de2f-8a4b-73c8-9302-24df639df6df added. Total games: 10
+Game 01a1de2f-8a4b-73c8-9302-24df639df6df marked as empty. Total empty games: 1
+A user connected: socketId: LFx7ZdSeW7nRZASXAAAJ, clientId: 01a1de2f-89f3-76cc-9e6f-03e0c32c22e6
+Game 01a1de2f-8a4b-73c8-9302-24df639df6df reactivated. Remaining empty games: 0
+Manager reconnected to game 454114
+✔ V2A-08 actual SIGKILL/reopen at register-reserved (8002.090307ms)
+Game cleanup task started
+New game created: 173267 subject: Synthetic unmounted V2-A
+Game 01a1de2f-a66c-70a8-abc1-63fe2b85afd1 added. Total games: 1
+Game 01a1de2f-a66c-70a8-abc1-63fe2b85afd1 marked as empty. Total empty games: 1
+A user connected: socketId: irsNOfLg4wDqTNOsAAAA, clientId: 01a1de2f-a548-71f8-bb48-f184006396af
+Game 01a1de2f-a66c-70a8-abc1-63fe2b85afd1 reactivated. Remaining empty games: 0
+Manager reconnected to game 173267
+New game created: 007122 subject: Synthetic unmounted V2-A
+Game 01a1de2f-a936-739b-93ec-e5864cca70df added. Total games: 11
+Game 01a1de2f-a936-739b-93ec-e5864cca70df marked as empty. Total empty games: 1
+A user connected: socketId: FYFi0re-d8L00HWaAAAK, clientId: 01a1de2f-a932-74d7-bc94-51c9c514520c
+Game 01a1de2f-a936-739b-93ec-e5864cca70df reactivated. Remaining empty games: 0
+Manager reconnected to game 007122
+✔ V2A-08 actual SIGKILL/reopen at register-projected (7992.412843ms)
+Game cleanup task started
+New game created: 300665 subject: Synthetic unmounted V2-A
+Game 01a1de2f-c4e6-705e-be8e-c145b38edbf9 added. Total games: 1
+Game 01a1de2f-c4e6-705e-be8e-c145b38edbf9 marked as empty. Total empty games: 1
+A user connected: socketId: dy6TggBv_3BcHZ8aAAAA, clientId: 01a1de2f-c41d-77fd-9710-9674ed9177fd
+Game 01a1de2f-c4e6-705e-be8e-c145b38edbf9 reactivated. Remaining empty games: 0
+Manager reconnected to game 300665
+New game created: 497808 subject: Synthetic unmounted V2-A
+Game 01a1de2f-c748-71d1-a7c0-877a8f75b793 added. Total games: 12
+Game 01a1de2f-c748-71d1-a7c0-877a8f75b793 marked as empty. Total empty games: 1
+A user connected: socketId: XQa9VTB7Hk5vKmPEAAAL, clientId: 01a1de2f-c745-74e4-95cb-87750b2cab88
+Game 01a1de2f-c748-71d1-a7c0-877a8f75b793 reactivated. Remaining empty games: 0
+Manager reconnected to game 497808
+✔ V2A-08 actual SIGKILL/reopen at register-committed (7698.754891ms)
+Game cleanup task started
+New game created: 706417 subject: Synthetic unmounted V2-A
+Game 01a1de2f-e361-7434-b6a8-0b0246d9022d added. Total games: 1
+Game 01a1de2f-e361-7434-b6a8-0b0246d9022d marked as empty. Total empty games: 1
+A user connected: socketId: gEMQ2BfO4RK6JOvjAAAA, clientId: 01a1de2f-e2f3-764e-85f2-645f13cccc12
+Game 01a1de2f-e361-7434-b6a8-0b0246d9022d reactivated. Remaining empty games: 0
+Manager reconnected to game 706417
+New game created: 847370 subject: Synthetic unmounted V2-A
+Game 01a1de30-1061-7700-8a91-535ecb4ea5c1 added. Total games: 13
+Game 01a1de30-1061-7700-8a91-535ecb4ea5c1 marked as empty. Total empty games: 1
+A user connected: socketId: D-GbxpA1pIZqEp7_AAAM, clientId: 01a1de30-105e-75bb-8d10-d17d91914be1
+Game 01a1de30-1061-7700-8a91-535ecb4ea5c1 reactivated. Remaining empty games: 0
+Manager reconnected to game 847370
+✔ V2A-08 actual SIGKILL/reopen at answer-reserved (18699.15168ms)
+Game cleanup task started
+New game created: 703397 subject: Synthetic unmounted V2-A
+Game 01a1de30-2c69-7476-9f94-b37f7ad9fda4 added. Total games: 1
+Game 01a1de30-2c69-7476-9f94-b37f7ad9fda4 marked as empty. Total empty games: 1
+A user connected: socketId: zYegyAxA6-kgR0UaAAAA, clientId: 01a1de30-2c03-76fe-b151-b28b9ae9dd70
+Game 01a1de30-2c69-7476-9f94-b37f7ad9fda4 reactivated. Remaining empty games: 0
+Manager reconnected to game 703397
+New game created: 508320 subject: Synthetic unmounted V2-A
+Game 01a1de30-594e-7420-b984-7d922153604e added. Total games: 14
+Game 01a1de30-594e-7420-b984-7d922153604e marked as empty. Total empty games: 1
+A user connected: socketId: I_ZC4MQh3r8PPbePAAAN, clientId: 01a1de30-5914-747a-b51f-5f3e800f3897
+Game 01a1de30-594e-7420-b984-7d922153604e reactivated. Remaining empty games: 0
+Manager reconnected to game 508320
+✔ V2A-08 actual SIGKILL/reopen at answer-projected (18702.215108ms)
+Game cleanup task started
+New game created: 515387 subject: Synthetic unmounted V2-A
+Game 01a1de30-76a2-726c-a15d-0593bc2d8395 added. Total games: 1
+Game 01a1de30-76a2-726c-a15d-0593bc2d8395 marked as empty. Total empty games: 1
+A user connected: socketId: mNrGLWZ3hN2No1K-AAAA, clientId: 01a1de30-75d9-777b-9c82-2ad475226bfe
+Game 01a1de30-76a2-726c-a15d-0593bc2d8395 reactivated. Remaining empty games: 0
+Manager reconnected to game 515387
+New game created: 523848 subject: Synthetic unmounted V2-A
+Game 01a1de30-a3ed-7690-b4b7-b1de6893f9e8 added. Total games: 15
+Game 01a1de30-a3ed-7690-b4b7-b1de6893f9e8 marked as empty. Total empty games: 1
+A user connected: socketId: vV1WOGHzHGSMYfUwAAAO, clientId: 01a1de30-a3b0-76a3-ac8a-f7436d51975b
+Game 01a1de30-a3ed-7690-b4b7-b1de6893f9e8 reactivated. Remaining empty games: 0
+Manager reconnected to game 523848
+✔ V2A-08 actual SIGKILL/reopen at answer-committed (19003.990049ms)
+New game created: 734035 subject: Synthetic unmounted V2-A
+Game 01a1de30-a3fb-73b8-a8e7-68a35e33f698 added. Total games: 16
+Game 01a1de30-a3fb-73b8-a8e7-68a35e33f698 marked as empty. Total empty games: 1
+A user connected: socketId: 957jY2f10mGJIbvkAAAP, clientId: 01a1de30-a3f9-709c-8fda-b96f46404bbc
+Game 01a1de30-a3fb-73b8-a8e7-68a35e33f698 reactivated. Remaining empty games: 0
+Manager reconnected to game 734035
+Game 01a1de2e-edae-7528-8408-b47d41c06716 removed. Total games: 15
+Game 01a1de2e-effc-74f7-83f6-4d42dce34fc7 removed. Total games: 14
+Game 01a1de2e-f0cf-73ee-aa7f-921e8bb43ba3 removed. Total games: 13
+Game 01a1de2e-f150-73de-8760-8553e4b93baa removed. Total games: 12
+Game 01a1de2f-34bf-74bd-badc-84fa331385bf removed. Total games: 11
+Game 01a1de2f-352c-757c-81f0-312e9289ffe0 removed. Total games: 10
+Game 01a1de2f-35e7-77d4-bd1c-bf52095161af removed. Total games: 9
+Game 01a1de2f-360f-7485-803d-aa149eb268bb removed. Total games: 8
+Game 01a1de2f-61a7-7101-8f46-635072d991cb removed. Total games: 7
+Game 01a1de2f-8a4b-73c8-9302-24df639df6df removed. Total games: 6
+Game 01a1de2f-a936-739b-93ec-e5864cca70df removed. Total games: 5
+Game 01a1de2f-c748-71d1-a7c0-877a8f75b793 removed. Total games: 4
+Game 01a1de30-1061-7700-8a91-535ecb4ea5c1 removed. Total games: 3
+Game 01a1de30-594e-7420-b984-7d922153604e removed. Total games: 2
+Game 01a1de30-a3ed-7690-b4b7-b1de6893f9e8 removed. Total games: 1
+Game 01a1de30-a3fb-73b8-a8e7-68a35e33f698 removed. Total games: 0
+Game cleanup task stopped
+Registry cleaned up
+A user disconnected : Za5eY1dle2srCfuAAAAA
+A user disconnected : eFjVEKuCHWaj7HoZAAAB
+A user disconnected : T4jO_KPF_5IFXhjLAAAC
+A user disconnected : zbRZCbWR12NnfmMaAAAD
+A user disconnected : r3CqfFajoGeLs4qTAAAE
+A user disconnected : 0H1A873pTgVJAWRqAAAF
+A user disconnected : fev8_LYXnfH2kc15AAAG
+A user disconnected : 6nGHgk-KSlC4ShBfAAAH
+A user disconnected : AzJpPWa8I38WrEYwAAAI
+A user disconnected : LFx7ZdSeW7nRZASXAAAJ
+A user disconnected : FYFi0re-d8L00HWaAAAK
+A user disconnected : XQa9VTB7Hk5vKmPEAAAL
+A user disconnected : D-GbxpA1pIZqEp7_AAAM
+A user disconnected : I_ZC4MQh3r8PPbePAAAN
+A user disconnected : vV1WOGHzHGSMYfUwAAAO
+A user disconnected : 957jY2f10mGJIbvkAAAP
+✔ V2A-09 terminal generation survives reopen; hash-only DB and private fixture proof (119.374179ms)
+ℹ tests 16
+ℹ suites 0
+ℹ pass 15
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 126015.850436
+
+✖ failing tests:
+
+test at ../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/phone-v2a.node.ts:1:10941
+✖ V2A-04 revocation after durable reservation denies projection and leaves barrier (96.591195ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly equal:
+  + actual - expected
+  
+  + 'service_denied'
+  - 'registration_pending_unknown'
+  
+      at TestContext.<anonymous> (/delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/phone-v2a.node.ts:431:12)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'service_denied',
+    expected: 'registration_pending_unknown',
+    operator: 'strictEqual',
+    diff: 'simple'
+  }
