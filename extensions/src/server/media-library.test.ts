@@ -1295,6 +1295,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
         },
       ],
     }
+    writeSidecar(getPath, quizId, v2Extras)
     createStagedJournal(getPath, {
       quizId,
       backupBase: baseQuiz,
