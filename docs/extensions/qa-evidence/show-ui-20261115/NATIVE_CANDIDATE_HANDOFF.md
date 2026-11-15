@@ -1,5 +1,11 @@
 # Lane E native candidate source handoff — 15 Nov 2026
 
+LATEST SCOPED RESULT: native21 TypeScript0, format0, fresh both-ABI builds and
+physical receipts0; full V1 current-card40/40, original clock1/1 and fresh V2
+4/4 PASS across Chromium/WebKit. The two-file correction is described below.
+This supersedes the earlier native readiness failures only for this scoped
+current-card matrix. Full15-scene/release/pin/rights/Native Save gates stay open.
+
 This is a private candidate source packet with scoped evidence. Executable pins,
 production activation and SB08/SB09/SB10 completion remain unavailable/OPEN.
 Consume D's final V2 source5f6d45/evidencebbc83ce1 alongside this packet; no D core
@@ -137,3 +143,35 @@ genuine awaited native reconstruction completes. This alters both ABI payloads;
 fresh both builds and40+clock1+V2four are running21, not yet accepted. At20release
 measured cumulative93184000B within existing89MiB; forecast131072B for21 fits the
 remaining139264B. No budget increase, deletion or external dependency copy.
+
+## Coherent native21 completed source and evidence
+
+V1 external host update/resize now commits synchronously. The shared paused
+bootstrap removes its mask synchronously ONLY after genuine awaited native
+reconstruction finishes. Stage choreography, generation, authored clock and data
+authority are unchanged. Fresh both artifacts were compiled and tested; no old16
+browser proof was reused after changing the shared component.
+
+Actual full V1 current-card40/40 + clock1/1 + V2four4/4 PASS. Both engines passed
+all8 current-card locales, q2/resize/disposal, quiz/survey answercounts2..5, three
+sizes and strict ready/opacity checks. V2 retains its exact admission rejection,
+real family switching, disposal, JA2/VI5 and hostclock checks. No timeouts widened.
+FocusedTypeScript0, finalStageformatter unchanged/sameASTtrue, fresh graphs/physical
+receipts0 with emptyforbidden lists. All current owned payload files match the
+actual21 build receipts byte-for-byte; see native21-current-source-comparison.json.
+
+native: 164graph modules/164physical inputs; renderer.css=3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064 (148376B); renderer.js=a6c7246db2fd11d6d76a92d2946e231fdad966c6f2aec7d318fd3ee8f3719b2f (1044107B)
+native-v2: 2072graph modules/2071physical inputs; renderer-v2.css=1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9 (166501B); renderer-v2.js=10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340 (1068185B)
+
+Raw89546df75f7f7ae29dc80e5756d49488776c48a6a7997808e46bcd4169482b6b
+archive167files validated before exited0/PID0/noOOM. All15/16/17/18/20 failures
+remain preserved. Cumulative93306880B within89MiB93323264B, free2513133568B;
+compute released, no deletion. Only16384B remain; any Native Save QA requires
+new admission/reallocation from the existing manager pool.
+
+The separate actual root development StrictMode login4 remain NOT RUN by E;
+root guard/native storage/logout/abandon route policy is manager-owned. Separate
+Native Save consumer/client/page is ongoing from the original plan, currently
+awaiting F pureDTO leaf and real B/F/page/host acceptance. No positive Native Save,
+full15scene/font/asset/audio/Classic-settings certification, executable pin or G
+claim follows from this45-check success.

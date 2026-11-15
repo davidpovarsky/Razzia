@@ -1,5 +1,6 @@
 import { restoreNativeCspConfiguration } from "./renderer-csp-admission"
 import { createRoot } from "react-dom/client"
+import { flushSync } from "react-dom"
 import { NativePreviewStage } from "./NativePreviewStage"
 import {
   nativePreviewRendererInputV1Schema,
@@ -47,16 +48,19 @@ export function mountPreviewCandidate(
   const render = () => {
     if (disposed || !current) return
     const { frame, locale, reducedMotion } = current
-    root.render(
-      <NativePreviewStage
-        key={`${frame.role}:${frame.revision}:${frame.epoch}`}
-        frame={frame}
-        locale={locale}
-        reducedMotion={reducedMotion}
-        fitRevision={revision}
-        onUnavailable={onUnavailable}
-        onStageHandle={observeHandle}
-      />,
+    // Commit this admitted snapshot at the existing imperative host boundary.
+    flushSync(() =>
+      root.render(
+        <NativePreviewStage
+          key={`${frame.role}:${frame.revision}:${frame.epoch}`}
+          frame={frame}
+          locale={locale}
+          reducedMotion={reducedMotion}
+          fitRevision={revision}
+          onUnavailable={onUnavailable}
+          onStageHandle={observeHandle}
+        />,
+      ),
     )
   }
   const resize = new ResizeObserver(() => {

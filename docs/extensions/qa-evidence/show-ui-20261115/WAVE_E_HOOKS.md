@@ -80,3 +80,18 @@ the existing imperative update/ResizeObserver boundary with React flushSync.
 WebKit15 showed deferred root commits (stale Japanese DOM after VI update) and
 paused Classic mask never cleared within unchanged5s. No clock/timer or native
 phase authority changes; rerun exact V2 assertions, preserve old failures.
+
+Before V1 external renderer follow-up: native18 full40 uses exact15 bytes and
+stronger mask assertions. WebKit JA rendered the right current card but retained
+data-preview-ready=false within the unchanged5s assertion. Apply the same external
+React flushSync admitted-frame update/resize boundary already proven in V2. Keep
+native stage choreography, request generation and clocks unchanged. Build a fresh
+V1 artifact and rerun the actual full40; retain native18 failures.
+
+Before shared preview mask follow-up: native20's V1 host flush is insufficient;
+WebKit en still has a correctly rendered native card with ready=false. Native
+paused reconstruction completes through async stage promises, then schedules the
+React mask-state update. Commit only that final paused-bootstrap unmask with
+flushSync after the awaited native completion, outside React's layout effect.
+Do not unmask earlier or invent a timer/clock. Because this shared component is
+used by both ABIs, fresh V1/V2 builds and the changed40+4 runtime matrix are needed.
