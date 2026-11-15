@@ -1,0 +1,23 @@
+{
+  "name": "phone-invite-21f7b2d-attempt01",
+  "id": "267cc505ef6ba4a6ada9bd0079c6bf30fb40df00f7665f32d32cb459d46feebc",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T19:31:20.706534854Z",
+    "FinishedAt": "2026-11-15T19:31:39.165702326Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}
