@@ -1,0 +1,9 @@
+file:///work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-smoke.mjs:6
+  if (response.status !== 200) throw new Error(`qa:frame-smoke-${playMode}-${questionType}-${answerCount}:${response.status}`)
+                                     ^
+
+Error: qa:frame-smoke-survey-single-2:500
+    at file:///work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-smoke.mjs:6:38
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+
+Node.js v24.22.2

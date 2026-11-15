@@ -1,0 +1,23 @@
+
+Running 18 tests using 1 worker
+
+  ✓   1 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: en (3.1s)
+  ✓   2 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: fr (2.9s)
+  ✓   3 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: de (2.6s)
+  ✓   4 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: es (3.0s)
+  ✓   5 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: it (2.8s)
+  ✓   6 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: ja (2.8s)
+  ✓   7 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: tr (2.7s)
+  ✓   8 [chromium] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: vi (2.8s)
+  ✓   9 [chromium] › qa/theme-builder/theme-builder.spec.ts:209:3 › responsive keyboard RTL reduced motion: 1920 (6.8s)
+  ✓  10 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: en (7.1s)
+  ✓  11 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: fr (10.1s)
+  ✓  12 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: de (11.4s)
+  ✓  13 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: es (9.8s)
+  ✓  14 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: it (10.5s)
+  ✓  15 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: ja (10.8s)
+  ✓  16 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: tr (11.2s)
+  ✓  17 [webkit] › qa/theme-builder/theme-builder.spec.ts:44:3 › authored UI and 15 slots/16 events: vi (10.4s)
+  ✓  18 [webkit] › qa/theme-builder/theme-builder.spec.ts:209:3 › responsive keyboard RTL reduced motion: 1920 (15.6s)
+
+  18 passed (2.4m)

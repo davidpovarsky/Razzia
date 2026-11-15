@@ -1,0 +1,22 @@
+[
+  {
+    "path": "extensions/src/server/show-themes/builder-host.test.ts",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/format.mjs",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+    "sameAst": true,
+    "changed": true
+  },
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-fixture-host.ts",
+    "sameAst": true,
+    "changed": true
+  }
+]

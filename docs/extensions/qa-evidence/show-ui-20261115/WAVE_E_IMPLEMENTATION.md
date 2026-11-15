@@ -76,7 +76,21 @@ database, signing secret, release or credentials are used.
   empty solutionAnswerIds. That failure is retained and the fixture was corrected.
 - Run7: TypeScript exit0;20/20 focused tests with the source-preserving public
   Hono host mount; retained dd3 font1/1; actual producer preflight8/8. Native
-  browser/lifecycle/CSP/current-candidate cases are still running at this checkpoint.
+  browser matrix completed28/40 (Chromium20/20, WebKit8/20). WebKit's eight
+  locale cases checked text only and did not establish visibility. Twelve actual
+  visibility/transition cases failed; native WebKit is not accepted. Original
+  Chromium matrix on the new candidate passed26/26, separate UI follow-up4/4.
+  All failed raw evidence is preserved in run7-evidence. Two isolated WebKit
+  diagnostics traced hidden bootstrap completion to suspended finite animations.
+  Webkit-fix8 finished: TypeScript0, two source files30tests passed, native36/40
+  (all Chromium20 plus WebKit16; four visibility/q2 cases still failed). Original
+  Chromium matrix on fix8 passed26/26. Its JS SHA256 is
+  `3ce86b2753a47b93283ce8d862099f85755260e331d0e0cfab056d49e509df7c`;
+  CSS remains `3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064`.
+  Do not claim full WebKit acceptance or relabel old builds. Additional uncommitted
+  correction removes waiting for decorative finish notifications after explicit
+  reduced-motion finishing; real countdown is still awaited. Diagnostics3/4 are
+  investigating live WebKit timelines that stayed at0 after10seconds.
 
 Earlier provisioning failures and initial timeouts remain in retained receipts.
 The installer roundtrip took33.1seconds under the0.25-CPU quota; the original
@@ -93,7 +107,7 @@ does not confer customer image rights.
 
 ## Current native renderer work and next contract
 
-Future V1 candidate adopts D's shared current-card frame schema/host producer,
+Uncommitted V1 candidate adopts D's shared current-card frame schema/host producer,
 keeps only the payload leaf in its bundle, derives seconds from the actual card,
 and rejects an inconsistent legacy assertion argument. Read-only diagnostics
 observe the actual React imperative ref; no native commands escape. A bounded
@@ -108,6 +122,24 @@ E owns actual renderer/build/loader/UI admission; F owns its existing canonical
 MCP digest/tool protocol. The old V1 paths and digests remain unchanged, saved
 documents are not silently upgraded, raw definitions/code/URLs are not a frame
 input, and unsupported custom graphs/media stay unavailable. E awaits D's exact
-committed V2 seam while continuing its independent source and tests.
+committed V2 seam while continuing its independent source and tests. D subsequently
+delivered source a8c87655447b6efe21f18c6233b5c686361e27f9 and evidence aae0680;
+the next integration uses only that explicit V2 schema/producer contract.
+Final core correction5f6d45/bbc83ce supersedes that initial V2 source pin.
+
+The authoring source batch is committed as
+`dae8156c5cd7c8fafa6125c3e2e6fb00e6c2d474`; renderer/QA follow-up remains separate.
+
+All E runners were verified terminal/PID0 after fix8 and diagnostic4. Measured
+cumulative allocated blocks73,224,192B exceed the64MiB lane allowance by6,115,328B.
+The final raw screenshots grew beyond the earlier estimate. No data was deleted;
+the ledger records actual usage and a manager reallocation request precedes another
+remote runner. The actual floor plus all other remaining budgets and64MiB margin
+was2,327,613,440B versus2,566,606,848B free at that checkpoint.
+
+Raw local run directories are preserved separately from curated Git receipts;
+`*-local-sha256.json` records their actual bytes. Native output, image copies and
+screenshots are excluded from Git by the local evidence `.gitignore`; that is not
+deletion, rights approval or an assertion of independent remote rehash.
 
 Actual executable pins remain empty. G's executable Preview prerequisite is unmet.
