@@ -1,0 +1,13 @@
+{
+  "command": [
+    "node",
+    "/evidence/format-legacy.mjs"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 12.595,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 159,
+  "logSha256": "9b66f4d20cf217e2cac0d70c9471907db4b16cb9b334b3a499f1bac779c09365"
+}

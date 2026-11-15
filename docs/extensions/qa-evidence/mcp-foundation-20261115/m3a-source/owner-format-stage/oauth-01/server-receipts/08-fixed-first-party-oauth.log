@@ -1,0 +1,63 @@
+✔ post-body abort retains pending real authentication work and creates no private store (887.105292ms)
+✔ abort at the verified-principal promise handoff prevents private work (106.320682ms)
+✔ postcommit abort withholds disclosure without claiming rollback (198.525305ms)
+✔ caller-built identity and missing actual ALS owner cannot access the store (695.537695ms)
+✔ accounts-off and persistent key/root drift deny before private store I/O (6.821107ms)
+✔ Context claims cannot substitute for the actual cryptographic verifier (1.314532ms)
+✔ actual player, malformed JWT, expired JWT and invalid sid are rejected (201.350053ms)
+✔ real session revoke and account disable/unverify deny previously issued capabilities (90.547328ms)
+✔ closed startup account handle fails GET without reinitializing account sidecars (4.966449ms)
+✔ symlink, hardlink and cross-owner DB substitutions cannot read borrowed private data (1187.276434ms)
+✔ an unsafe existing ancestor is denied without creating or repairing directories (8.271801ms)
+✔ missing manager credentials reject before consuming body or allocating a draft family (791.748158ms)
+✔ wrong Host/Origin, forwarded headers, routes, methods and body types are rejected before storage (8.329322ms)
+✔ malformed JSON and native/enhanced envelopes are rejected before private/native allocation (195.402674ms)
+✔ create/read/replace use actual auth and SQLite; pending save has no success/consent/native URL (394.166862ms)
+✔ actual streamed bytes override an underreported Content-Length and invalid UTF8 is rejected (5.656975ms)
+✔ revocation during the body await is reverified before parsing or store allocation (5.396533ms)
+✔ a public cancel promise that stalls keeps body work unresolved (1.751978ms)
+✔ 32 real authenticated body lifetimes exhaust anonymous admission until they finish (1500.2713ms)
+✔ discovery and JWKS expose public configuration without creating a tenant grant store (809.28689ms)
+✔ exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests (91.106933ms)
+✔ consent requires real manager identity, same origin and the exact account/session/ticket proof (107.354652ms)
+✔ real account PKCE flow stores only token digests and survives a fresh issuer instance (200.508565ms)
+✔ wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant (102.662126ms)
+✔ refresh rotates once, and replay durably revokes both old and newly issued access (191.240074ms)
+✔ client revocation and actual native-session logout revoke OAuth access (110.914286ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✖ real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes (589.317334ms)
+✔ hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure (102.00416ms)
+✔ exact old producer schema1 remains readable and mutable without a migration (1105.442232ms)
+✔ same columns/version/owner without the operations PK are preserved and denied (195.164112ms)
+✔ same columns/version/owner without native_id IS NULL are preserved and denied (113.784355ms)
+✔ unexpected mutating trigger is rejected before it can delete a private draft (188.80877ms)
+✔ unexpected view or index is preserved and rejected as an unknown object (298.925769ms)
+✔ absent GET does not create a private family (885.058992ms)
+✔ real create persists canonical content, outcome and audit; another owner cannot read it (311.309691ms)
+✔ durable create replay survives a fresh repository instance and rejects a reused key/digest (194.301184ms)
+✔ two competing expected revisions have exactly one CAS winner and one durable mutation (300.322263ms)
+✔ replace and pending save replay precede current revision; pending never contains a native target (405.15649ms)
+✔ SQLite audit failure rolls draft and operation back together (92.268864ms)
+✔ revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows (14.019537ms)
+✔ ordinary GET changes no private-family or native sentinel bytes/mtime/directory membership (94.667727ms)
+✔ real crashed hot journal is rejected without recovery or any private-family write (205.18357ms)
+✔ WAL-mode header, orphan SHM and corrupt private DB are preserved and denied (187.913241ms)
+ℹ tests 43
+ℹ suites 0
+ℹ pass 42
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 44110.266863
+
+✖ failing tests:
+
+test at tests/first-party/oauth.nodecheck.ts:1:9288
+✖ real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes (589.317334ms)
+  SyntaxError [Error]: Unexpected token 'e', "event: mes"... is not valid JSON
+      at JSON.parse (<anonymous>)
+      at parseJSONFromBytes (node:internal/deps/undici/undici:4432:19)
+      at successSteps (node:internal/deps/undici/undici:7087:27)
+      at readAllBytes (node:internal/deps/undici/undici:6004:13)
+      at process.processTicksAndRejections (node:internal/process/task_queues:104:5)

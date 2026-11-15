@@ -1,0 +1,16 @@
+{
+  "command": [
+    "node",
+    "/ram/work/extensions/src/mcp-app/node_modules/typescript/lib/tsc.js",
+    "--noEmit",
+    "-p",
+    "tsconfig.json"
+  ],
+  "actualReturnCode": 2,
+  "shellExit": 2,
+  "seconds": 41.545,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 2195,
+  "logSha256": "10a5edfab5cc31dc2870f3c86848d739d32efe87e8b555af7af50df0b794c03a"
+}
