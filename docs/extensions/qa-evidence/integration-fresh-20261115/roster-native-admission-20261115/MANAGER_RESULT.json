@@ -1,0 +1,90 @@
+{
+  "utc": "2026-11-15T19:57:17.675672+00:00",
+  "managerSource": "d2bd26815bfb7b9a306beb67288f2b775a6b3a30",
+  "producerSource": "902412c347d39f38290fde2ef1307240cee7dc07",
+  "producer19SourceAndRawReportVerified": true,
+  "nativeCreationBodyAndWarmRebindByteEqual": true,
+  "sourceHashesUnchanged": {
+    "extensions/src/server/game/phone-controller.ts": "cca0a646744a87616dff86a2b830cf296ac10d0508393b3efecb78843f2e25ad",
+    "packages/socket/src/services/game/player-manager.ts": "3790f2d512a533bcd2059560779a353fd955a16818497611a537590889343d7f",
+    "extensions/src/server/game/roster-native-admission.test.ts": "d4cba58898832a0723b79a0f39b113c121bf48604825bc3ddd680f91dedabf5a"
+  },
+  "checks": [
+    {
+      "label": "tests",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/server/game/roster-native-admission.test.ts",
+        "--maxWorkers",
+        "1",
+        "--no-file-parallelism"
+      ],
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 495,
+          "sha256": "9eddd96923c6ef5fbee09250b70ae9290c7af5062e6048302e88aa565e34dc0d"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "types",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--noEmit",
+        "-p",
+        "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\roster-native-admission-20261115\\affected.tsconfig.json"
+      ],
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    },
+    {
+      "label": "format",
+      "command": [
+        "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/server/game/phone-controller.ts",
+        "packages/socket/src/services/game/player-manager.ts",
+        "extensions/src/server/game/roster-native-admission.test.ts"
+      ],
+      "exit": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "protectedManagerDifferences": [
+    "packages/socket/src/services/game/index.ts"
+  ],
+  "protectedCurrentManagerBytesPreserved": true,
+  "initialReviewGuard": "Stopped before mutation on expected accepted C native Game hook difference from older B baseline; narrowed to two actual source paths, preserving current Game and package bytes.",
+  "limits": "Current19 uses actual classes with isolated SocketIO/admission ports; C real authority/invitation2 is separate; no provider/customer/billing entitlement/physical/no-broad-rerun claim."
+}
