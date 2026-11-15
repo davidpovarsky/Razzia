@@ -4,7 +4,7 @@ import {
   AnswerVisualContent,
   AnswerPercentageBar,
   AnswerPercentageLabel,
-} from "@razzia/extensions/media"
+} from "@razzia/extensions/media/answer-button"
 import clsx from "clsx"
 import { Check, X } from "lucide-react"
 import type { ButtonHTMLAttributes, PropsWithChildren } from "react"

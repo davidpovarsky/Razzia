@@ -54,3 +54,29 @@ branch after its existing verified profile check. Trusted build configuration
 unavailable. The current `/studio/$section` route already mounts the path. Root
 host owns actual HTTPS/OAuth mounting and must apply the additive consent headers
 from `site/oauth-consent-headers.ts` to the actual HTML/HEAD route before activation.
+
+Preview-only mask correction before editing: keep the paused bootstrap painted
+with opacity0 instead of inherited visibility:hidden, which can suspend WebKit
+effect startup. `aria-hidden` suppresses incomplete content. A dedicated ready
+attribute and computed opacity assertion must prove the mask was removed; locator
+visibility alone would incorrectly accept opacity0. No native timeout is widened.
+
+`NativePreviewStage`: a new projected question ID reconstructs the current native
+phase through existing `pausedPreviewSteps` (which does not itself pause clocks),
+instead of replaying a full-game wipe with the previous question still displayed.
+The shared stage/ref, existing transition owner, authored clock and native scenes
+remain. The frame is a current-card snapshot, not an approved full-show playback
+controller. Validate q2 identity, old-callback disposal and real voting timing.
+
+Before the next native hook edit: WebKit's remaining Spanish failure is now
+`question-panel` absent, with only the initial teaser rendered. Native owner setup
+and frame bootstrap currently run in passive effects after that expensive first
+paint. Move those two preview-only effects to layout effects, preserving their
+order and invalidation-before-child-disposal, so actual frame reconstruction is
+scheduled before the first paint. Keep the same strict assertions/time budgets.
+
+V2 external renderer update, before edit: commit admitted frames synchronously at
+the existing imperative update/ResizeObserver boundary with React flushSync.
+WebKit15 showed deferred root commits (stale Japanese DOM after VI update) and
+paused Classic mask never cleared within unchanged5s. No clock/timer or native
+phase authority changes; rerun exact V2 assertions, preserve old failures.

@@ -390,4 +390,57 @@ describe("TadazzV4Motion: WAAPI Cue Emission & Reduced Motion Lifecycle", () => 
     expect(() => motion.pause()).not.toThrow()
     expect(() => motion.resume()).not.toThrow()
   })
+  it("settles suspended finite CSS decoration only when reduced motion is enabled", async () => {
+    for (const reducedMotion of [false, true]) {
+      let complete!: () => void
+      const finished = new Promise<void>((resolve) => {
+        complete = resolve
+      })
+      const finite = {
+        effect: { getTiming: () => ({ iterations: 1 }) },
+        finished,
+        // WebKit can defer finished notification on a hidden decorative target.
+        finish: vi.fn(),
+      }
+      const ambient = {
+        effect: { getTiming: () => ({ iterations: Infinity }) },
+        finish: vi.fn(),
+      }
+      const stage = fakeElement()
+      stage.getAnimations = () => [finite, ambient] as unknown as Animation[]
+      const motion = new TadazzV4Motion(stage, { reducedMotion })
+      const playing = motion.play("question", {})
+      expect(finite.finish).toHaveBeenCalledTimes(reducedMotion ? 1 : 0)
+      expect(ambient.finish).not.toHaveBeenCalled()
+      if (!reducedMotion) complete()
+      await expect(playing).resolves.toBe(true)
+    }
+  })
+  it("does not replay an already finished entrance while resuming the stage", () => {
+    let state: AnimationPlayState = "running"
+    const animation = {
+      effect: { getTiming: () => ({ iterations: 1 }) },
+      get playState() {
+        return state
+      },
+      pause: vi.fn(() => {
+        state = "paused"
+      }),
+      play: vi.fn(() => {
+        state = "running"
+      }),
+      finish: vi.fn(() => {
+        state = "finished"
+      }),
+    }
+    const stage = fakeElement()
+    stage.getAnimations = () => [animation] as unknown as Animation[]
+    const motion = new TadazzV4Motion(stage)
+    motion.pause()
+    motion.resume()
+    expect(animation.play).toHaveBeenCalledTimes(1)
+    motion.finishAll()
+    motion.resume()
+    expect(animation.play).toHaveBeenCalledTimes(1)
+  })
 })

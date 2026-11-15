@@ -1,0 +1,4 @@
+@import "tailwindcss" source(none);
+@source "../../../../packages/web/src/features/game/components/AnswerButton.tsx";
+@source "../../../../packages/web/src/features/game/components/QuestionEntrance.tsx";
+@source "../../media/answer-button-presentation.tsx";
