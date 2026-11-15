@@ -1,0 +1,591 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op 76ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op 12ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups 11ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw 11ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content 16ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision 11ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2 9ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch 16ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision 21ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id 20ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename 9ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely 12ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ × src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration 13ms
+   → [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+
+⎯⎯⎯⎯⎯⎯ Failed Tests 13 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:26:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:42:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:50:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:61:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:78:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[5/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:94:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[6/13]⎯
+
+ FAIL  src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration
+ZodError: [
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]
+ ❯ Object.seed src/server/storage/recovery-fixture.ts:65:42
+     63|     extras.mediaCatalog = [{ name: "cue.mp3", url: "/media/cue.mp3", t…
+     64|     extras.audio.cues.start = { source: "media", url: "/media/cue.mp3"…
+     65|     const validated = quizExtrasV2Schema.parse(extras)
+       |                                          ^
+     66|     injections.updateQuizz(id, base)
+     67|     writeSidecar(getPath, id, validated)
+ ❯ stage src/server/storage/journal-recovery.test.ts:17:30
+ ❯ src/server/storage/journal-recovery.test.ts:107:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯
+Serialized Error: { _zod: { def: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], constr: 'Function<ZodError>', traits: { constructor: 'Function<Set>', has: 'Function<has>', add: 'Function<add>', delete: 'Function<delete>', difference: 'Function<difference>', clear: 'Function<clear>', entries: 'Function<entries>', forEach: 'Function<forEach>', intersection: 'Function<intersection>', isSubsetOf: 'Function<isSubsetOf>', isSupersetOf: 'Function<isSupersetOf>', isDisjointFrom: 'Function<isDisjointFrom>', size: 2, symmetricDifference: 'Function<symmetricDifference>', union: 'Function<union>', values: 'Function<values>', keys: 'Function<values>' }, message: '[
+  {
+    "code": "invalid_value",
+    "values": [
+      "inherit",
+      "mute",
+      "custom"
+    ],
+    "path": [
+      "scenes",
+      "00000000-0000-4000-8000-000000000002",
+      "audio",
+      "mode"
+    ],
+    "message": "Invalid option: expected one of \"inherit\"|\"mute\"|\"custom\""
+  }
+]' }, issues: [ { code: 'invalid_value', values: [ 'inherit', 'mute', 'custom' ], path: [ 'scenes', '00000000-0000-4000-8000-000000000002', 'audio', 'mode' ], message: 'Invalid option: expected one of "inherit"|"mute"|"custom"' } ], format: 'Function<anonymous>', flatten: 'Function<anonymous>', addIssue: 'Function<anonymous>', addIssues: 'Function<anonymous>', isEmpty: false }
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[7/13]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  13 failed (13)
+   Start at  04:58:24
+   Duration  9.43s (import 66%, transform 29%, tests 3%, worker 1%)
+
+  Transform  transforming modules took 2.27s · 29% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

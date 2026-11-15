@@ -1,0 +1,33 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/extensions
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+[MediaRollback] Rollback failed or was partial; PRESERVING journal C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-zhTtY0\extensions\quizzes\.journal\media-delete\media-concurrent-delete.png-01a1dd2a-e7ec-706b-a12d-9d0328967622.media-journal.json for crash recovery
+
+stdout | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+[StartupRecovery] Recovered 1 quiz journals and 1 media delete journals
+
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > blocks deletion when media is referenced by another show or card, and allows deletion when unreferenced or explicitly detached
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > associates uploaded media with a show catalog so it remains in 'Used in This Show' even when unassigned from a card
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any show file in quizz/ is malformed or unreadable
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > catalog-only reference: blocks deletion without detach, and cleanly detaches with detach: true
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > write-failure injection: rolls back all show and sidecar files to previous state on error
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > concurrency protection: detects concurrent modification of show file during detach and rolls back
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > restart recovery: recovers staged journals across simulated crash in isolated namespace
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (10): recoverStartupJournals is idempotent across multiple calls
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: point-of-no-return ordering - crash after physical delete before committed write rolls back binary and references from quarantine
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: point-of-no-return ordering - crash after committed marker cleans up forward without rolling back
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: path traversal and forged paths in journal are rejected without touching files
+ ↓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: recoverStartupJournals halts server startup when critical recovery fails
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss 136ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations 206ms
+
+ Test Files  1 passed (1)
+      Tests  2 passed | 17 skipped (19)
+   Start at  05:05:35
+   Duration  4.27s (import 49%, transform 42%, tests 9%)

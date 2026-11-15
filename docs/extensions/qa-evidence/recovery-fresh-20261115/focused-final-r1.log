@@ -1,0 +1,201 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy 216ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal 158ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write 174ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write 184ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete 187ms
+stdout | src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal 224ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup 215ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup 247ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries 117ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing 74ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show 122ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present 124ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit 82ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths 79ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal when quarantine cleanup fails and replays safely 107ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains committed journal when quarantine cleanup fails and replays safely 133ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves evidence when a restore rename silently changes valid sidecar content 113ms
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > recovers concurrent journal families with real matching base digest 143ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at base-written and replay is a no-op 87ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > restores complete V2 at sidecar-written and replay is a no-op 64ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > preserves V1 backups 53ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is throw 31ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal when base restoration is silent-wrong-content 47ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > retains journal on valid sidecar content corruption with the same revision 49ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for invalid-v2 35ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for digest-mismatch 35ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for newer-revision 34ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-quiz-id 30ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > fails closed before writes for wrong-filename 26ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal after partial sidecar write and retries safely 36ms
+ ✓ src/server/storage/journal-recovery.test.ts > quiz-save deterministic recovery > keeps journal if cleanup fails after exact restoration 30ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE01: reads legacy quiz with no sidecar and never auto-creates sidecar 9ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE02: preserves question associations during reorder (no swapped answers) 61ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE03: duplicates question with fresh ID and removes question without orphans 32ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE04: concurrent writes with expectedRevision detect conflict (409) 40ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE05: recovers consistent pair from staged journal on simulated power-loss 25ms
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure
+[Journal] Non-null backupExtras for quiz quiz-1794712100407-826i failed schema parsing; preserving sidecar and journal for manual recovery
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: rejects bogus kind/version and path traversal quizIds without deleting files
+[Journal] Incompatible journal kind "unknown-alien-kind" in bogus-kind.journal.json, preserving
+[Journal] Invalid or unsafe quizId in journal traversal.journal.json: "../../etc/passwd", preserving
+
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: recovers valid V2 extras from staged journal without stripping timeline, scenes, audio, backgrounds, authoring, and media catalog 56ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure 35ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: crash after sidecar write before cleanup is idempotent and preserves consistent state 45ms
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: failed base restore preserves journal and reports failure
+[Journal] Failed to recover journal quiz-1794712100509-0ij1.journal.json: Error: Disk full or permission denied on base quiz update
+    at Object.updateQuizz (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage.test.ts:695:15)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:317:20)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage.test.ts:698:20
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+
+stderr | src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: does not blindly restore over a newer concurrent revision
+[Journal] Quiz quiz-1794712100542-3ze7 has current sidecar revision 3 > target revision 2; skipping rollback to prevent overwriting newer revision
+
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: rejects bogus kind/version and path traversal quizIds without deleting files 23ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: failed base restore preserves journal and reports failure 33ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Bug A: does not blindly restore over a newer concurrent revision 23ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > CORE06: enhanced bundle import/export remaps question IDs and preserves metadata 46ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > MEDIA02: rejects unsafe media URL or missing alt in answerVisuals 4ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > createCompositeQuiz: pre-validation prevents base quiz creation on invalid extras 3ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > createCompositeQuiz: rolls back base quiz if sidecar write throws 2ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > importEnhancedBundle: rolls back base quiz if bundle sidecar write fails 2ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > importEnhancedBundle: remaps leaderboard.afterQuestionIds and imports V2 bundle cleanly 24ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > importEnhancedBundle: directly imports friendly authored Tada show payload 29ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > importEnhancedBundle: strictly rejects legacy quiz payload containing unsafe media URL 3ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > exportEnhancedBundle: synthesizes valid V2 extras on-the-fly without sidecar on disk 6ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Gate C01, C02, C05: imports friendly show with note and interlude, preserves metadata through reload and revision increment 52ms
+ ✓ src/server/storage.test.ts > Server-Side Composite Storage & Journals (CORE01-06, MEDIA02) > Gate C03 & C05: invalid targetKey direct server import returns 400 and performs zero writes 6ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > blocks deletion when media is referenced by another show or card, and allows deletion when unreferenced or explicitly detached 128ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-x7rSV1\extensions\quizzes\show-with-bad-sidecar.json: SyntaxError: Unexpected token 'I', "INVALID SIDECAR JSON" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/sidecar.ts:63:25)
+    at loadAllShowsHealth (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:101:20)
+    at executeMediaDeleteTransaction (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:305:18)
+    at checkMediaDeleteSafety (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:665:10)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.test.ts:311:20
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > associates uploaded media with a show catalog so it remains in 'Used in This Show' even when unassigned from a card 149ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any show file in quizz/ is malformed or unreadable 50ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > fail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid 58ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > catalog-only reference: blocks deletion without detach, and cleanly detaches with detach: true 133ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > write-failure injection: rolls back all show and sidecar files to previous state on error 74ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > concurrency protection: detects concurrent modification of show file during detach and rolls back 69ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > restart recovery: recovers staged journals across simulated crash in isolated namespace 88ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation
+[MediaRollback] Rollback failed or was partial; PRESERVING journal C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-O41QD8\extensions\quizzes\.journal\media-delete\media-fault-target.png-01a1dd2d-67fe-7534-8807-dcd045a02eb9.media-journal.json for crash recovery
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure 137ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary
+[MediaJournal] Critical data integrity failure in media-lost-media.png-lost-journal-uuid.media-journal.json: media "lost-media.png" was quarantined but is missing from both media directory and quarantine! Rollback blocked to prevent dangling references.
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation 140ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other 58ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate A4 (10): recoverStartupJournals is idempotent across multiple calls 17ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: point-of-no-return ordering - crash after physical delete before committed write rolls back binary and references from quarantine
+[MediaRollback] Rollback failed or was partial; PRESERVING journal C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-QOOwiz\extensions\quizzes\.journal\media-delete\media-pnr-target.png-01a1dd2d-68de-732f-a5fc-7e729c1d443c.media-journal.json for crash recovery
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary 38ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: point-of-no-return ordering - crash after physical delete before committed write rolls back binary and references from quarantine 184ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: path traversal and forged paths in journal are rejected without touching files
+[MediaJournal] Invalid or unsafe cleanMediaName in journal traversal.media-journal.json: "../../secret.txt", preserving
+
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: recoverStartupJournals halts server startup when critical recovery fails
+[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-kaXmev\extensions\quizzes\.journal\media-delete\quarantine\nonexistent", preserving
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-kaXmev\extensions\quizzes\.journal\media-delete\quarantine\nonexistent", preserving
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: point-of-no-return ordering - crash after committed marker cleans up forward without rolling back 144ms
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: path traversal and forged paths in journal are rejected without touching files 69ms
+stderr | src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+[MediaRollback] Rollback failed or was partial; PRESERVING journal C:\Users\DAVID\AppData\Local\Temp\razzia-media-lib-U9wJzV\extensions\quizzes\.journal\media-delete\media-concurrent-delete.png-01a1dd2d-6ade-71c0-8765-750026ef0cb8.media-journal.json for crash recovery
+[Journal] Failed to recover journal concurrent-v2-show.journal.json: Error: Backup identity or base digest mismatch for quiz concurrent-v2-show
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:310:15)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1135:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.test.ts:1326:27
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Bug B: recoverStartupJournals halts server startup when critical recovery fails 57ms
+ × src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss 491ms
+   → [StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+ ✓ src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations 339ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if create sidecar write and base cleanup fail 313ms
+stderr | src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-cSwIzc\extensions\quizzes\7232a707-4928-4126-a279-fd9afc9c8928.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/sidecar.ts:63:25)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:242:30)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/create-recovery.test.ts:104:12
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-design-system-20261110/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if import sidecar write and base cleanup fail 248ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base 193ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > replays interrupted create after ID return and journal stage 625ms
+ ✓ src/server/storage/create-recovery.test.ts > create/import rollback recovery > replays interrupted import after ID return and journal stage 192ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/media-library.test.ts > Gate C: Persistent Media Catalog & Reference-Safe Deletion > Gate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+Error: [StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+ ❯ recoverStartupJournals src/server/media-library.ts:1154:11
+    1152|     const errorMsg = `[StartupRecovery] Server startup blocked: ${tota…
+    1153|     console.error(errorMsg)
+    1154|     throw new Error(errorMsg)
+       |           ^
+    1155|   }
+    1156|
+ ❯ src/server/media-library.test.ts:1326:27
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 4 passed (5)
+      Tests  1 failed | 76 passed (77)
+   Start at  05:08:12
+   Duration  16.22s (tests 58%, import 33%, transform 9%)
