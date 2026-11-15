@@ -116,6 +116,7 @@ export class ServiceAuthorityWriter {
       !Number.isSafeInteger(binding.expiresAt) || binding.expiresAt <= Date.now() || actorSid !== binding.issuerSid) serviceDenied()
     const fp = fingerprint(["issue-v1", input.requestId, input.expectedVersion, actorSid, immutable(binding)])
     return this.files.mutate(check, db => {
+      if (binding.expiresAt <= Date.now()) serviceDenied()
       const current = row(db, address)
       if (current && !sameBinding(current, binding)) serviceDenied()
       const cached = prior(db, address, input, fp)

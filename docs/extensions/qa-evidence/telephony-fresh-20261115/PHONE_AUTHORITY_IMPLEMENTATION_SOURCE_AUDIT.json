@@ -88,9 +88,9 @@
     },
     {
       "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
-      "index_blob": "3f63e6a7e8c637729f6c8658403b0177a315b90d",
-      "bytes": 13073,
-      "sha256": "f73b129d1318db230b54b3247bdf875bd2afc7786023323db41ab9d47f0f366f"
+      "index_blob": "5308ae6472201a9eecf4d355e6fb23c566c0c543",
+      "bytes": 13132,
+      "sha256": "22186133c2af777367c37288d33f09acd53531bf54661bfa67d9cfd153cbd5b2"
     },
     {
       "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
@@ -112,9 +112,9 @@
     },
     {
       "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
-      "index_blob": "ee7339cb23c3e935b19f0f906c096197fdb7b440",
-      "bytes": 11945,
-      "sha256": "96b506c514a4adabee4352ced59f60b42b2c0e14df3d1256dd19d96c60e9dce3"
+      "index_blob": "0ffcf7e363dc89baf881df98225e204801d121fc",
+      "bytes": 13746,
+      "sha256": "730ca12b792f6a4603b47e9563320cedc4f353e8b08f7dda60750467bc4b7259"
     },
     {
       "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
