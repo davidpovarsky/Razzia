@@ -1,0 +1,302 @@
+{
+  "product": "b49e847e79fa01ba45fb9b0b5551b77433a03205",
+  "integratedSourcePin": "36d0e1d3466c53c0fabb168fb58cd67475588aaa",
+  "actualRuntime": "Windows Node22.17.0",
+  "actualNodeRun": "candidate-07/run.log",
+  "actualNodePass": 17,
+  "actualNodeFail": 0,
+  "actualNodeSkip": 0,
+  "actualBrowserRun": "candidate-07/browser-result.json",
+  "browser": "157.0.4341.46",
+  "browserPass": 8,
+  "compiler": "5.9.3",
+  "typeDiagnostics": 0,
+  "typeInputs": 466,
+  "finalSourceByteEmissionBridge": {
+    "reason": "Explicit number annotation fixes literal-inferred resource limit; erased from executable output",
+    "actualTests": "candidate-07/run.log",
+    "actualBrowser": "candidate-07/browser-result.json",
+    "newRuntimeRun": false,
+    "rows": [
+      {
+        "name": "producer",
+        "identical": true,
+        "sha256": "f109abfbe4fdbb3d6865352e5c8894ea0b7a9276d38658057458bbba3036a705"
+      },
+      {
+        "name": "protocol",
+        "identical": true,
+        "sha256": "ce57c0f74ae9185d53b337ab6b58119573dbc401977e6936e5239b411f95e897"
+      },
+      {
+        "name": "http",
+        "identical": true,
+        "sha256": "7ff7fc60a3f27af879ed733ff1802e6229eded19448cef1b0f49588a0780684a"
+      },
+      {
+        "name": "consumer",
+        "identical": true,
+        "sha256": "9ca959e2d370093a4b397516938160a6ba295c16d3af4abfb02ae43986baf6a1"
+      }
+    ]
+  },
+  "ownedSource": [
+    {
+      "file": "extensions/src/mcp-app/contracts/schemas.ts",
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/tools.ts",
+      "sha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/errors.ts",
+      "sha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/authorization.ts",
+      "sha256": "a08edcf94ec5f8912a4895c958b906144ff34d7735706b787468ec674ac1a09e",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/access-token.ts",
+      "sha256": "a0c04e49e06d797523a2e4f4191cc9bb3fd85a15b2ad6daad4b614aca52132f7",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/canonical.ts",
+      "sha256": "2d5128d0c38a38ff094c0daf2631d60c5bd5218655558b7b17366dc12bd82318",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/authoring.ts",
+      "sha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview.ts",
+      "sha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/drafts.ts",
+      "sha256": "3a15de742e0baf6fb4747d916b133dec567e168ba257be706d8281b106e709cc",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/results.ts",
+      "sha256": "ab1eb5393a693c431688d2e2f0d4f69cc7d99c1d81f9bf5d4fafb14b68009263",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/preview-candidate-v2.ts",
+      "sha256": "3f1a720319fadf39e7b648e28ab499bad8b93e860ad0bbb8caef2fedbab5277d",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/dispatch.ts",
+      "sha256": "63d76c3c96b2ab18d7abbb6f23af3bbb0da2fe82c2560b5e527da065710e2998",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/request-boundary.ts",
+      "sha256": "da91ea678062064bea298655a48ba36178f9b13cc1987980b863b8f883219f1c",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/connection.ts",
+      "sha256": "d67b8a49653561f0746e9cb7d4bd6f1f907676fbaefd638c7a714c4074b69923",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview-resource.ts",
+      "sha256": "db5465471124ac6f38026c607b1eca7ea2a2289c804940113e87da016ee2bf58",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/factory.ts",
+      "sha256": "cbc685526d7756952eb1ddafdeaac70096d96143d894e3182edef13492aedf1c",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/ingress.ts",
+      "sha256": "ad74dfb63f1055fa3cde26b44d30bb3aaacea4a7f9aeed921eb27bd2b4cb9531",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/http.ts",
+      "sha256": "d4d76dc4c85d4bcb7b8b4cb56ee4c4e10e7bb34cc5e15ede0d8aced454c0d800",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/bindings.ts",
+      "sha256": "3f6bbaa991715a14df56344431506e6e5bb67ea8e76746487b55b0fb828fdd2a",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-protocol.ts",
+      "sha256": "fbfa235720773d0fc6b318f10ef933f90dd5b42154d7bb63f510f8c697b0264d",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-export.ts",
+      "sha256": "cd2bd30a7d9316fe3ab99ff50d83205deb8525f33991a1cbb82d93053431e3a8",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/contracts/native-save.ts",
+      "sha256": "ce672e956524b2fe7487d778a1a1a88abf6c45b55f99bd255db4bf0e139b3b8c",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-native-save.ts",
+      "sha256": "a61f64b34a459d19878b57e6d1ce1f832c45700eb44cc0eb312ff42b992a6687",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth-grants.ts",
+      "sha256": "20ddc521ba68690cccf6f07b94589326f1e5541e6d12960918a0893a6ef1f8ce",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/oauth.ts",
+      "sha256": "b8eba7d39697a13bc0052d05c0f8ad3d04d032863e9b06fd057322ed3ae2d044",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/composition-preview-v2.ts",
+      "sha256": "376adb3bc723375898d30cd01e759219344c52d884945fe393f9c66bbc01af4d",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/server/preview-candidate-v2.ts",
+      "sha256": "09a4597db3d447c21512dfc42022d340dee1b90bf2224ba321cca11569371ddb",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/owner.ts",
+      "sha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/schema-manifest.ts",
+      "sha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/schema.ts",
+      "sha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/store.ts",
+      "sha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/first-party/http.ts",
+      "sha256": "ab27d868c1ace79cb71487738c0d6e74551c9b79c5840889fad30ee845a2a7fc",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+      "sha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/first-party/preview-candidate.nodecheck.ts",
+      "sha256": "ff77c22a7f6ee1bd6056385f9a85e3b93f4d0a7126b0c202b92a7dbe95382d0a",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/server/fixtures.ts",
+      "sha256": "b30f33d4b9f7e188f7d60d5b44e94ba3fe0d53c779c0c4857137600ba7303395",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "sha256": "117aa7e8d6f65aec86450819f7f6a76b9b5e68749f0e0f57ac6bdb65817d18ca",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+      "sha256": "5513115efad83d04dd70db8393cf5e98a7a3a4f55ac949dbb82fe286d09df9a4",
+      "committedAndWorkingAndBuiltMatch": true
+    },
+    {
+      "file": "extensions/src/mcp-app/client/preview-candidate-v2.ts",
+      "sha256": "cab386194644a7185ff67b092af76b8a8bad4169398104f1daa4996a62b83318",
+      "committedAndWorkingAndBuiltMatch": true
+    }
+  ],
+  "bundles": [
+    {
+      "name": "producer",
+      "sha256": "f109abfbe4fdbb3d6865352e5c8894ea0b7a9276d38658057458bbba3036a705",
+      "inputs": 115
+    },
+    {
+      "name": "protocol",
+      "sha256": "ce57c0f74ae9185d53b337ab6b58119573dbc401977e6936e5239b411f95e897",
+      "inputs": 71
+    },
+    {
+      "name": "http",
+      "sha256": "7ff7fc60a3f27af879ed733ff1802e6229eded19448cef1b0f49588a0780684a",
+      "inputs": 73
+    },
+    {
+      "name": "consumer",
+      "sha256": "9ca959e2d370093a4b397516938160a6ba295c16d3af4abfb02ae43986baf6a1",
+      "inputs": 109
+    }
+  ],
+  "dependenciesUnchanged": 2580,
+  "sharedEPhysicalInputs": [
+    {
+      "path": "extensions/src/core/lottie.ts",
+      "sha256": "69b3c742384732717b1679dcc488d1c4e77d8a8dccb7dbbed502388af51fe69d"
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723"
+    },
+    {
+      "path": "extensions/src/core/constants.ts",
+      "sha256": "bbeeb26c8d6f8a12da3621c9ab3cb5f7e2eadfd589471142918e2d1da3e7b721"
+    },
+    {
+      "path": "extensions/src/core/media.ts",
+      "sha256": "a328fc4168bed2a84e11350aca48905de1f301865c375367c671814f77924f18"
+    },
+    {
+      "path": "extensions/src/core/card-appearance.ts",
+      "sha256": "1e84151840bb664826c449ec2c993a9fa46f8a12441c31baf8d940ba28b4c744"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts",
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "sha256": "6a02749e4e75e5355bcaae386d188752af31a699e149cb3c3862bb843cf1ee63"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts",
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    }
+  ],
+  "toolResultsSha256": "694ac6874f0636effde7838a9442527ca2efd34482d2fdb7322747a24a362918",
+  "resourceArtifact": "synthetic static QA shell only; G actual widget absent",
+  "externalMediaRequestsDenied": [
+    "/tadazz-show/v4/show-stage.webp",
+    "/tadazz-show/v4/question-bg.webp",
+    "/tadazz-show/v4/tadazz-brand-logo.png",
+    "/tadazz-show/second-library/teaser-screen-source.jpg"
+  ],
+  "actualInstalledHost": false,
+  "executableAcceptance": false
+}

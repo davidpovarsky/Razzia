@@ -1,0 +1,28 @@
+{
+  "reason": "Explicit number annotation fixes literal-inferred resource limit; erased from executable output",
+  "actualTests": "candidate-07/run.log",
+  "actualBrowser": "candidate-07/browser-result.json",
+  "newRuntimeRun": false,
+  "rows": [
+    {
+      "name": "producer",
+      "identical": true,
+      "sha256": "f109abfbe4fdbb3d6865352e5c8894ea0b7a9276d38658057458bbba3036a705"
+    },
+    {
+      "name": "protocol",
+      "identical": true,
+      "sha256": "ce57c0f74ae9185d53b337ab6b58119573dbc401977e6936e5239b411f95e897"
+    },
+    {
+      "name": "http",
+      "identical": true,
+      "sha256": "7ff7fc60a3f27af879ed733ff1802e6229eded19448cef1b0f49588a0780684a"
+    },
+    {
+      "name": "consumer",
+      "identical": true,
+      "sha256": "9ca959e2d370093a4b397516938160a6ba295c16d3af4abfb02ae43986baf6a1"
+    }
+  ]
+}

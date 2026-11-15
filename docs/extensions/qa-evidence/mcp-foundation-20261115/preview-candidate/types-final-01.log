@@ -1,0 +1,12 @@
+[96mextensions/src/mcp-app/server/preview-candidate-v2.ts[0m:[93m80[0m:[93m18[0m - [91merror[0m[90m TS7006: [0mParameter 'p' implicitly has an 'any' type.
+
+[7m80[0m     async render(p, draft, locale) {
+[7m  [0m [91m                 ~[0m
+[96mextensions/src/mcp-app/server/preview-candidate-v2.ts[0m:[93m80[0m:[93m21[0m - [91merror[0m[90m TS7006: [0mParameter 'draft' implicitly has an 'any' type.
+
+[7m80[0m     async render(p, draft, locale) {
+[7m  [0m [91m                    ~~~~~[0m
+[96mextensions/src/mcp-app/server/preview-candidate-v2.ts[0m:[93m80[0m:[93m28[0m - [91merror[0m[90m TS7006: [0mParameter 'locale' implicitly has an 'any' type.
+
+[7m80[0m     async render(p, draft, locale) {
+[7m  [0m [91m                           ~~~~~~[0m
