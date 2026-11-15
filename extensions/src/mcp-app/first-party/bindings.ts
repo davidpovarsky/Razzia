@@ -163,6 +163,26 @@ export async function loadFirstPartyBindings(configRoot: string) {
       return p
     },
     assertActive,
+    delegatedAccountActive(accountId: string) {
+      configured()
+      if (!liveDb || !z.uuid().safeParse(accountId).success) throw unavailable()
+      checkDatabase(liveDb)
+      return !!accounts.activeAccount(accountId)
+    },
+    delegatedSessionActive(accountId: string, sid: string) {
+      configured()
+      if (
+        !liveDb ||
+        !z.uuid().safeParse(accountId).success ||
+        !z.uuid().safeParse(sid).success
+      )
+        throw unavailable()
+      checkDatabase(liveDb)
+      return (
+        !!accounts.activeAccount(accountId) &&
+        accounts.isAccountSessionValid(accountId, sid)
+      )
+    },
   })
   trustedBindings.add(bindings)
   return bindings

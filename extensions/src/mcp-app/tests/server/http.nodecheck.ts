@@ -22,7 +22,7 @@ import type {
 
 const tokenA = "synthetic-oauth-access-token-A"
 const tokenB = "synthetic-oauth-access-token-B"
-function setup(overrides: Dependencies = {}) {
+function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
   const a = principal()
   const b = principal()
   const tokens = new Map([
@@ -31,6 +31,7 @@ function setup(overrides: Dependencies = {}) {
   ])
   const app = createRemoteMcpApp({
     config,
+    ...(responseTimeoutMs === undefined ? {} : { responseTimeoutMs }),
     allowedOrigins: ["https://chat.example.invalid"],
     verifyAccessToken: async (token) => {
       const p = tokens.get(token)
@@ -304,5 +305,108 @@ test("aborted unsettled authorization keeps all 32 HTTP slots occupied until rea
     (await Promise.all(pending)).map((r) => r.status),
     Array(32).fill(400),
   )
+  await app.drain()
   assert.equal((await app.fetch(request())).status, 200)
 })
+
+test("legacy SSE retains all32 cancelled handler admissions until actual dependency work settles", async () => {
+  let release!: (value: unknown) => void
+  let entered!: () => void
+  let started = 0
+  const allEntered = new Promise<void>((resolve) => {
+    entered = resolve
+  })
+  const held = new Promise<unknown>((resolve) => {
+    release = resolve
+  })
+  const h = setup({
+    catalog: {
+      listThemes: async () => ({ items: [] }),
+      listTemplates: async () => {
+        if (++started === 32) entered()
+        return held
+      },
+    },
+  })
+  const controllers = Array.from({ length: 32 }, () => new AbortController())
+  const calls = controllers.map((controller, id) =>
+    h.app.fetch(
+      h.request(
+        {
+          jsonrpc: "2.0",
+          id,
+          method: "tools/call",
+          params: {
+            name: "list_game_templates",
+            arguments: { contractVersion: "0.1.0" },
+          },
+        },
+        {},
+        config.resource,
+        "POST",
+        controller.signal,
+      ),
+    ),
+  )
+  await allEntered
+  controllers.forEach((controller) => controller.abort())
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  assert.equal((await h.app.fetch(h.request(list))).status, 429)
+  release({ items: [] })
+  assert.deepEqual(
+    (await Promise.all(calls)).map((response) => response.status),
+    Array(32).fill(400),
+  )
+  await h.app.drain()
+  assert.equal((await h.app.fetch(h.request(list))).status, 200)
+})
+
+test(
+  "HTTP deadline responds while shutdown still waits for actual legacy dependency settlement",
+  { timeout: 5000 },
+  async () => {
+    let release!: (value: unknown) => void
+    let entered!: () => void
+    const started = new Promise<void>((resolve) => {
+      entered = resolve
+    })
+    const held = new Promise<unknown>((resolve) => {
+      release = resolve
+    })
+    const h = setup(
+      {
+        catalog: {
+          listThemes: async () => ({ items: [] }),
+          listTemplates: async () => {
+            entered()
+            return held
+          },
+        },
+      },
+      100,
+    )
+    const call = h.app.fetch(
+      h.request({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "list_game_templates",
+          arguments: { contractVersion: "0.1.0" },
+        },
+      }),
+    )
+    await started
+    assert.equal((await call).status, 504)
+    let closed = false
+    const closing = h.app.close().then(() => {
+      closed = true
+    })
+    await new Promise<void>((resolve) => setImmediate(resolve))
+    assert.equal(closed, false)
+    release({ items: [] })
+    await closing
+    assert.equal(closed, true)
+    assert.equal((await h.app.fetch(h.request(list))).status, 503)
+  },
+)
