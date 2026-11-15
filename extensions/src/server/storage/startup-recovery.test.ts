@@ -21,8 +21,12 @@ import {
 
 const OWNER = "00000000-0000-4000-8000-0000000000A1"
 const SECOND = "00000000-0000-4000-8000-0000000000B2"
-let fixture: ReturnType<typeof createCreationFixture>
-let priorConfig: string | undefined, priorAccounts: string | undefined
+let fixture: Pick<
+  ReturnType<typeof createCreationFixture>,
+  "root" | "token"
+> = { root: "", token: "00000000-0000-4000-8000-000000000000" }
+let priorConfig: string | undefined = undefined,
+  priorAccounts: string | undefined = undefined
 const handles: DatabaseSync[] = []
 beforeEach(() => {
   priorConfig = process.env.CONFIG_PATH
@@ -34,21 +38,38 @@ afterEach(() => {
   for (const db of handles.splice(0)) {
     try {
       db.close()
-    } catch {}
+    } catch {
+      // Some cases explicitly close their synthetic writer before recovery.
+    }
   }
   removeCreationFixture(fixture.root, fixture.token)
-  if (priorConfig === undefined) delete process.env.CONFIG_PATH
-  else process.env.CONFIG_PATH = priorConfig
-  if (priorAccounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
-  else process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts
+
+  if (priorConfig === undefined) {
+    delete process.env.CONFIG_PATH
+  } else {
+    process.env.CONFIG_PATH = priorConfig
+  }
+
+  if (priorAccounts === undefined) {
+    delete process.env.TADAZZ_ACCOUNTS_ENABLED
+  } else {
+    process.env.TADAZZ_ACCOUNTS_ENABLED = priorAccounts
+  }
 })
 function database(ids: unknown[] = [OWNER], wal = false) {
   const db = new DatabaseSync(path.join(fixture.root, "tadazz-accounts.sqlite"))
   handles.push(db)
-  if (wal) db.exec("PRAGMA journal_mode=WAL")
+
+  if (wal) {
+    db.exec("PRAGMA journal_mode=WAL")
+  }
+
   db.exec("CREATE TABLE accounts(id,disabled INTEGER,verified_at INTEGER)")
-  for (const id of ids)
+
+  for (const id of ids) {
     db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(id as string)
+  }
+
   return db
 }
 function pending(family: string, owner = OWNER) {
@@ -62,6 +83,7 @@ function pending(family: string, owner = OWNER) {
   fs.mkdirSync(directory, { recursive: true, mode: 0o700 })
   const file = path.join(directory, "synthetic.journal.json")
   fs.writeFileSync(file, "{malformed synthetic", { flag: "wx" })
+
   return file
 }
 function files() {
@@ -71,11 +93,17 @@ function files() {
     "tadazz-accounts.sqlite-shm",
     "tadazz-accounts.sqlite-journal",
   ]
+
   return Object.fromEntries(
     entries.map((name) => {
       const file = path.join(fixture.root, name)
-      if (!fs.existsSync(file)) return [name, null]
+
+      if (!fs.existsSync(file)) {
+        return [name, null]
+      }
+
       const stat = fs.statSync(file, { bigint: true })
+
       return [
         name,
         {
@@ -88,15 +116,23 @@ function files() {
     }),
   )
 }
+
 function retainOwnerProof(name: string, value: unknown) {
   const selected = process.env.RECOVERY_OWNER_RECEIPT_ROOT
-  if (!selected) return
+
+  if (!selected) {
+    return
+  }
+
   fs.mkdirSync(selected, { recursive: true, mode: 0o700 })
-  if (fs.realpathSync(selected) !== path.resolve(selected))
+
+  if (fs.realpathSync(selected) !== path.resolve(selected)) {
     throw new Error("Linked owner proof root")
+  }
+
   fs.writeFileSync(
     path.join(selected, `${name}.json`),
-    JSON.stringify(value, null, 2) + "\n",
+    `${JSON.stringify(value, null, 2)}\n`,
     { flag: "wx", mode: 0o600 },
   )
 }
@@ -171,8 +207,11 @@ it("reads a cleanly closed WAL DB without creating source sidecars", () => {
 })
 it("accepts native WAL reset with retained older-generation tail frames without source writes", () => {
   const db = database([OWNER], true)
-  for (let i = 0; i < 6; i++) db.exec("UPDATE accounts SET disabled=disabled+1")
-  db.exec("PRAGMA wal_checkpoint(FULL)") // Synthetic writer behavior only.
+  for (let i = 0; i < 6; i += 1) {
+    db.exec("UPDATE accounts SET disabled=disabled+1")
+  }
+  // Synthetic writer behavior only.
+  db.exec("PRAGMA wal_checkpoint(FULL)")
   db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(SECOND)
   const before = files(),
     entriesBefore = fs.readdirSync(fixture.root).sort()
@@ -297,15 +336,17 @@ it("keeps a linked known tenant root out of recovery", () => {
 it("replays clean known roots twice without ambient native CRUD or account changes", () => {
   const db = database([OWNER, SECOND])
   db.close()
-  for (const owner of [OWNER, SECOND])
+  for (const owner of [OWNER, SECOND]) {
     fs.mkdirSync(path.join(fixture.root, "tenants", owner), { recursive: true })
+  }
   const before = files()
-  for (let i = 0; i < 2; i++)
+  for (let i = 0; i < 2; i += 1) {
     expect(
       recoverStartupOwnerJournals(readStartupOwnerSnapshot()).map(
         (v) => v.report.status,
       ),
     ).toEqual(["clean", "clean", "clean"])
+  }
   expect(files()).toEqual(before)
 })
 it("restores full tenant V2 and native basename through bound-root adapters with the account flag OFF", async () => {
@@ -329,6 +370,7 @@ it("restores full tenant V2 and native basename through bound-root adapters with
     })
     native.updateQuizz(id, target)
     writeSidecar(native.getPath, id, { ...extras, revision: 2 })
+
     return {
       base,
       extras,
@@ -372,10 +414,12 @@ it("finishes committed tenant Media cleanup through explicit roots after the acc
     fs.writeFileSync(file, Buffer.alloc(4096, 7))
     const unlink = fs.unlinkSync.bind(fs),
       quarantine = getMediaQuarantineDirectory(native.getPath)
-    const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((file) => {
-      if (String(file).startsWith(quarantine))
+    const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((target) => {
+      if (String(target).startsWith(quarantine)) {
         throw new Error("EACCES synthetic tenant quarantine cleanup")
-      unlink(file)
+      }
+
+      unlink(target)
     })
     const result = executeMediaDeleteTransaction(
       native.getPath,
@@ -385,6 +429,7 @@ it("finishes committed tenant Media cleanup through explicit roots after the acc
     spy.mockRestore()
     expect(result.allowed).toBe(true)
     expect(result.error).toMatch(/cleanup.*warning/i)
+
     return { file, quarantine }
   })
   process.env.TADAZZ_ACCOUNTS_ENABLED = "false"
@@ -408,16 +453,18 @@ it("retries a changed live source and publishes only the revalidated owner set",
   const db = database([OWNER], true),
     write = fs.writeFileSync.bind(fs)
   let copies = 0,
-    afterWriter: ReturnType<typeof files> | undefined
+    afterWriter: ReturnType<typeof files> | undefined = undefined
   const privateRoots = new Set<string>()
   vi.spyOn(fs, "writeFileSync").mockImplementation((file, data, options) => {
     write(file, data, options)
+
     if (
       String(file).includes("tadazz-owner-snapshot-") &&
       path.basename(String(file)) === "accounts.sqlite"
     ) {
       privateRoots.add(path.dirname(String(file)))
-      if (++copies === 1) {
+
+      if ((copies += 1) === 1) {
         db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(SECOND)
         afterWriter = files()
       }
@@ -426,7 +473,9 @@ it("retries a changed live source and publishes only the revalidated owner set",
   expect(readStartupOwnerSnapshot().ownerIds).toEqual([OWNER, SECOND])
   expect(copies).toBe(2)
   expect(files()).toEqual(afterWriter)
-  for (const root of privateRoots) expect(fs.existsSync(root)).toBe(false)
+  for (const root of privateRoots) {
+    expect(fs.existsSync(root)).toBe(false)
+  }
   retainOwnerProof("changed-source-retry", {
     copies,
     afterWriter,
@@ -442,15 +491,16 @@ it("bounds churn to three captures, cleans private copies and preserves journals
   const journal = pending("quiz-save"),
     bytes = fs.readFileSync(journal)
   let copies = 0,
-    afterWriter: ReturnType<typeof files> | undefined
+    afterWriter: ReturnType<typeof files> | undefined = undefined
   const privateRoots = new Set<string>()
   vi.spyOn(fs, "writeFileSync").mockImplementation((file, data, options) => {
     write(file, data, options)
+
     if (
       String(file).includes("tadazz-owner-snapshot-") &&
       path.basename(String(file)) === "accounts.sqlite"
     ) {
-      copies++
+      copies += 1
       privateRoots.add(path.dirname(String(file)))
       db.exec("UPDATE accounts SET disabled=disabled+1")
       afterWriter = files()
@@ -460,7 +510,9 @@ it("bounds churn to three captures, cleans private copies and preserves journals
   expect(copies).toBe(3)
   expect(files()).toEqual(afterWriter)
   expect(fs.readFileSync(journal)).toEqual(bytes)
-  for (const root of privateRoots) expect(fs.existsSync(root)).toBe(false)
+  for (const root of privateRoots) {
+    expect(fs.existsSync(root)).toBe(false)
+  }
   retainOwnerProof("bounded-source-churn", {
     copies,
     afterWriter,
@@ -475,13 +527,14 @@ it("retries a WAL/SHM disappearance and accepts the complete closed source witho
   const db = database([OWNER], true),
     write = fs.writeFileSync.bind(fs)
   let copies = 0,
-    afterWriter: ReturnType<typeof files> | undefined
+    afterWriter: ReturnType<typeof files> | undefined = undefined
   vi.spyOn(fs, "writeFileSync").mockImplementation((file, data, options) => {
     write(file, data, options)
+
     if (
       String(file).includes("tadazz-owner-snapshot-") &&
       path.basename(String(file)) === "accounts.sqlite" &&
-      ++copies === 1
+      (copies += 1) === 1
     ) {
       db.close()
       afterWriter = files()
@@ -512,6 +565,7 @@ it.runIf(process.platform === "linux")(
     const store = path.join(fixture.root, "tadazz-accounts.sqlite"),
       mode = fs.statSync(store).mode & 0o777
     fs.chmodSync(store, 0)
+
     try {
       expect(() => readStartupOwnerSnapshot()).toThrow()
       expect(fs.statSync(store).mode & 0o777).toBe(0)

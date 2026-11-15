@@ -1,6 +1,8 @@
 import { createAdaptorServer } from "@hono/node-server"
-import { recoverStartupOwnerJournals } from "@razzia/extensions/server"
-import { recoverCreationReservations } from "@razzia/extensions/server"
+import {
+  recoverStartupOwnerJournals,
+  recoverCreationReservations,
+} from "@razzia/extensions/server"
 import { resolveConfigRoot } from "@razzia/socket/services/config-scope"
 import { app, createSocketServer } from "@razzia/socket/app"
 import { initConfig } from "@razzia/socket/services/config"
