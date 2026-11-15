@@ -1,0 +1,39 @@
+{
+  "mode": "STATIC_FORMAT_AND_FREEZE_GUARD_ONLY_NOT_FUNCTIONAL_TESTS",
+  "createdUtc": "2026-11-15T10:19:16.705799+00:00",
+  "commands": [
+    {
+      "label": "source-format",
+      "command": [
+        "node",
+        "node_modules/.pnpm/prettier@3.9.10/node_modules/prettier/bin/prettier.cjs",
+        "--write",
+        "--no-config",
+        "--no-semi",
+        "--tab-width",
+        "2",
+        "--single-quote",
+        "false",
+        "--print-width",
+        "80",
+        "--trailing-comma",
+        "all",
+        "extensions/src/core/show-library/compiled-index-schema.ts",
+        "extensions/src/core/show-library/compiled-index-authority.ts",
+        "extensions/src/core/show-library/compiled-index-validation.ts",
+        "extensions/src/core/show-library/compiled-index.test.ts"
+      ],
+      "exitCode": 0,
+      "logSha256": "e6643fd913a2207f742253ddaa99b805932db0296298275043f12675c6a9412c"
+    },
+    {
+      "label": "freeze-guard",
+      "command": [
+        "node",
+        "extensions/qa/tds-boundary.mjs"
+      ],
+      "exitCode": 1,
+      "logSha256": "f97b8c1da4098c12a2688354a98c100b0193021c1eaad8a779e03c358efa55e2"
+    }
+  ]
+}

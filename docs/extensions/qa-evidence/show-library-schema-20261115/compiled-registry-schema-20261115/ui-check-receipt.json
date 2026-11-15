@@ -1,0 +1,12 @@
+{
+  "mode": "LOCAL_STATIC_UI_GUARD_ONLY_NO_TEST_BUILD_OR_SERVER",
+  "command": [
+    "C:/Users/DAVID/AppData/Roaming/npm/pnpm.cmd",
+    "--dir",
+    "extensions",
+    "ui:check"
+  ],
+  "exitCode": 1,
+  "logSha256": "b09929faa1c1b0a5c08a8299611f6f4a32a250674fb8b72ac30b87ec5eafcad3",
+  "createdUtc": "2026-11-15T10:18:27.842400+00:00"
+}

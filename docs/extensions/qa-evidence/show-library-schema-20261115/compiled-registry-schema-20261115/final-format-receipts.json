@@ -1,0 +1,50 @@
+[
+  {
+    "label": "final-format",
+    "command": [
+      "node",
+      "node_modules/.pnpm/prettier@3.9.10/node_modules/prettier/bin/prettier.cjs",
+      "--write",
+      "--no-config",
+      "--no-semi",
+      "--tab-width",
+      "2",
+      "--single-quote",
+      "false",
+      "--print-width",
+      "80",
+      "--trailing-comma",
+      "all",
+      "extensions/src/core/show-library/compiled-index-schema.ts",
+      "extensions/src/core/show-library/compiled-index-authority.ts",
+      "extensions/src/core/show-library/compiled-index-validation.ts",
+      "extensions/src/core/show-library/compiled-index.test.ts"
+    ],
+    "exitCode": 0,
+    "logSha256": "792a2018166e5aeadeeb2f3809c1e5503a33da6eb5a6504c7604c363ef3edec9"
+  },
+  {
+    "label": "final-format-check",
+    "command": [
+      "node",
+      "node_modules/.pnpm/prettier@3.9.10/node_modules/prettier/bin/prettier.cjs",
+      "--check",
+      "--no-config",
+      "--no-semi",
+      "--tab-width",
+      "2",
+      "--single-quote",
+      "false",
+      "--print-width",
+      "80",
+      "--trailing-comma",
+      "all",
+      "extensions/src/core/show-library/compiled-index-schema.ts",
+      "extensions/src/core/show-library/compiled-index-authority.ts",
+      "extensions/src/core/show-library/compiled-index-validation.ts",
+      "extensions/src/core/show-library/compiled-index.test.ts"
+    ],
+    "exitCode": 0,
+    "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+  }
+]
