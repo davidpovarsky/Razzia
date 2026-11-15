@@ -1,0 +1,44 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T17:58:19.917Z",
+    "exactPreservedNotesReadback": true,
+    "noteChars": 25387
+  },
+  "handoffs": [
+    {
+      "lane": "A",
+      "delivered": true,
+      "threadId": "01a1dfa9-3316-7a02-afef-3dccd5939e79"
+    },
+    {
+      "lane": "B",
+      "delivered": true,
+      "threadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892"
+    },
+    {
+      "lane": "C",
+      "delivered": true,
+      "threadId": "01a1dfa9-87af-79f3-a855-8a93c517b4f5"
+    },
+    {
+      "lane": "D",
+      "delivered": true,
+      "threadId": "01a1dfa9-ad07-7df0-88dc-9c11a9e14fe9"
+    },
+    {
+      "lane": "E",
+      "delivered": true,
+      "threadId": "01a1dfa9-d401-77f3-a539-82c918b393f4"
+    },
+    {
+      "lane": "F",
+      "delivered": true,
+      "threadId": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90"
+    }
+  ],
+  "periodicPolling": false,
+  "newChatsSinceAF": 0,
+  "G": "not started; actual MCP+Preview readiness pending"
+}
