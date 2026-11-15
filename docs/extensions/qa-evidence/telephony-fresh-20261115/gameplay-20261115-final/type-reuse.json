@@ -1,0 +1,19 @@
+{
+  "actual_type_exit": 0,
+  "typed_source": "15729f2ecd994e3b8266b6d8f76bcd1cce5d2e85",
+  "final_source": "ccb0c5c2add55b7ba13bff2f56f04a4295dfc867",
+  "root_files": [
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/actual-gameplay-backend.ts",
+      "git_blob": "0f250752dc8ecb3e55a099af134d9ca7ff66d5f5",
+      "unchanged": true
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/gameplay.node.ts",
+      "git_blob": "003466f38ca4fc77094046f47bd7b78622bf15f7",
+      "unchanged": true
+    }
+  ],
+  "production_unchanged": true,
+  "later_changes": "packager formatting and operational evidence only; no new TypeScript"
+}
