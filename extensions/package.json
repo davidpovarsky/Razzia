@@ -20,6 +20,7 @@
     "./core": "./src/core/index.ts",
     "./gameplay": "./src/gameplay/index.ts",
     "./media": "./src/media/index.ts",
+    "./media/answer-button": "./src/media/answer-button.tsx",
     "./presentation": "./src/presentation/index.ts",
     "./presentation/platform-controls": "./src/presentation/platform-controls.tsx",
     "./presentation/room-join": "./src/presentation/room-join/index.ts",

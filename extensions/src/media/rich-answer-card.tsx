@@ -3,7 +3,7 @@ import {
   answerVisualSchema,
   isSafeMediaUrl,
   type AnswerVisual,
-} from "@razzia/extensions/core"
+} from "../core/media"
 import { Check, X } from "lucide-react"
 import type { ButtonHTMLAttributes } from "react"
 

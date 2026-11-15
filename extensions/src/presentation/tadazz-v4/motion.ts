@@ -129,7 +129,7 @@ export class TadazzV4Motion {
   resume() {
     this.active.forEach((a) => {
       try {
-        a.play()
+        if (a.playState === "paused") a.play()
       } catch {
         /* Stale */
       }
@@ -210,6 +210,10 @@ export class TadazzV4Motion {
       iterations: options.iterations || 1,
     })
     this.active.push(a)
+    // A visible WebKit shadow stage can leave new effects play-pending until a
+    // costly paint. Use this animation's native timeline as its start authority.
+    const timelineTime = a.timeline?.currentTime
+    if (typeof timelineTime === "number") a.startTime = timelineTime
     void a.finished.catch(() => undefined)
 
     return a
@@ -1849,7 +1853,30 @@ export class TadazzV4Motion {
       }
     }
 
-    return Promise.allSettled(this.active.map((a) => a.finished)).then(
+    if (this.config.reducedMotion) {
+      // Hidden preview bootstraps can suspend WebKit timelines even at 1 ms.
+      // Settle decoration explicitly; the authored clock keeps its real timing.
+      for (const animation of this.active) {
+        if (
+          animation === this.countdownSweep ||
+          animation.effect?.getTiming().iterations === Infinity
+        )
+          continue
+        try {
+          animation.finish()
+        } catch {
+          // A canceled or detached decorative effect is already unavailable.
+        }
+      }
+    }
+
+    // A reduced-motion frame is already at its final decorative state. Waiting
+    // for a browser's hidden-element finish notification would reintroduce a
+    // rendering dependency; only the genuine countdown may still be pending.
+    const pending = this.config.reducedMotion
+      ? this.active.filter((animation) => animation === this.countdownSweep)
+      : this.active
+    return Promise.allSettled(pending.map((a) => a.finished)).then(
       () => token === this.token,
     )
   }
