@@ -7,7 +7,7 @@ export PHONE_AUTHORITY_FIXTURES="/fixtures/phone-auth-$PHONE_REVIEW_SHA"
 export PHONE_AUTHORITY_EVIDENCE="/evidence/phone-auth-$PHONE_REVIEW_SHA"
 export TSX_TSCONFIG_PATH=/work/tsconfig.json
 mkdir -p "$PHONE_AUTHORITY_FIXTURES" "$PHONE_AUTHORITY_EVIDENCE"
-qa=/work/docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source
+qa=/delta/docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source
 evidence="$PHONE_AUTHORITY_EVIDENCE"
 [[ ! -e "$evidence/run-started.json" ]]
 cd /work
