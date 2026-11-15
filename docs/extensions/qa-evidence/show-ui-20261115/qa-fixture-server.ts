@@ -16,6 +16,7 @@ const entries = {
   "/tadazz-show/v4/question-bg.webp": ["tadazz-show/v4/question-bg.webp", "image/webp", "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"],
   "/tadazz-show/v4/show-stage.webp": ["tadazz-show/v4/show-stage.webp", "image/webp", "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"],
   "/tadazz-show/story/84acdb923677d591.webp": ["tadazz-show/story/84acdb923677d591.webp", "image/webp", "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"],
+  "/tadazz-show/second-library/teaser-screen-source.jpg": ["tadazz-show/second-library/teaser-screen-source.jpg", "image/jpeg", "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"],
   "/tadazz-show/v4/tadazz-brand-logo.png": ["tadazz-show/v4/tadazz-brand-logo.png", "image/png", "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"],
 } as const
 const bytes = new Map<string, { content: Buffer; mime: string; sha: string }>()

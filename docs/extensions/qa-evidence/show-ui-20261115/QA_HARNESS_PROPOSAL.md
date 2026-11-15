@@ -1,8 +1,8 @@
-# Private browser harness candidate — not run
+# Private browser harness and fixture scope
 
-This QA-only candidate now targets the exact dd3 renderer JS/CSS, five existing
+This QA-only candidate now targets the exact dd3 renderer JS/CSS, six existing
 native image files and the genuine producer host APIs. The user authorized
-these image bytes for **private isolated synthetic QA only**. Redistribution
+the original five images and the discovered teaser for **private isolated synthetic QA only**. Redistribution
 rights remain unknown and export is denied; this is not an accepted registry
 entry, customer-package grant, production loader or pin.
 
@@ -17,9 +17,9 @@ No platform-only Rubik file is added to the native renderer fixture.
 | File in this directory | Bytes | SHA-256 |
 | --- | ---: | --- |
 | `qa-fixture-host.ts` | 2,760 | `4bc9f57da87d6186584a313facd166a86d7d63a45c5e94cf392da752ee5bf90d` |
-| `qa-fixture-server.ts` | 6,292 | `bcad1819d93b85850a0da926a6df645307b38387a343dc17815037f8399f5f9f` |
+| `qa-fixture-server.ts` | 6,489 | `ab03337bb877ae51c19b250e8d485c7545144cf9e605d8a2086c6f52c51abd38` |
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
-| `qa-preview.spec.ts` | 10,039 | `53493fe9f5a9a7c19ebe93c6efaf2877bd7467ce7955cfa455f51818d74877f3` |
+| `qa-preview.spec.ts` | 10,107 | `585aea777f25800fcc4aa58defa103537ca8a1467701f744334e6b0c618a48fd` |
 | `qa-preview.config.ts` | 812 | `ce23bf3d4303ed7c4512beda8337501549f239944d29c5823041d6d590d5374e` |
 | `qa-server.vite.config.ts` | 549 | `665904d21b063a7e5eb228403ecbc8a74eb05242fe3bd8822fba1d7568c96233` |
 
@@ -55,17 +55,18 @@ or prove the private native handle identity. Live race timing, wipe-covered
 timing, late disposal, request closure, computed fonts, responsive layouts,
 quiz/survey and 2–5 option coverage, actual CSP rejection cases, resource
 tampering/rights, negative metadata, editor comparison and additional browser
-engines still require further harness work and browser evidence. Nothing here
-has been executed or typechecked; these are test intentions, not passes.
+engines still require further harness work and browser evidence. The five-image
+run is recorded in `BROWSER_DD3_RESULTS.md`; this six-image revision has not
+yet been run. Test descriptions alone are not passes.
 
 ## Proposed exact fixture overlay and budget
 
 On the verified source/dependency baseline plus the dd3 renderer config, add only these six
 QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
 In a new owned output root, place dd3 `renderer.js` and `renderer.css`, copy
-`qa-browser.mjs` to `browser.mjs`, and copy the five inventoried image bytes
+`qa-browser.mjs` to `browser.mjs`, and copy the six inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-3,746,799 bytes; the six QA source files total 22,668 bytes. Existing source
+4,013,430 bytes; the six QA source files total 22,933 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.
@@ -87,5 +88,5 @@ Capture the emitted `QA_PORT`; run the existing Playwright CLI with
 `qa-preview.config.ts` and `TADAZZ_QA_BASE=http://127.0.0.1:<QA_PORT>`. Capture
 exit codes, server request log, browser console/CSP events, source/baseline
 hashes, screenshots and real resource/elapsed usage. These proposed commands
-and test fixtures still need review and actual server execution; no browser,
-build, runner, source overlay or test was started for this checkpoint.
+and test fixtures still need review and actual server execution for this new
+six-image revision.

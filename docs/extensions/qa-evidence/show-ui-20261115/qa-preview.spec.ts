@@ -64,7 +64,7 @@ test("the five current-card phases render with zero synthetic voters", async ({ 
   await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
   await page.evaluate(() => { (window as any).__qaSfx = 0; window.addEventListener("tadazz:sfx", () => { (window as any).__qaSfx += 1 }) })
   const decoded = await page.evaluate(async () => {
-    const paths = ["/tadazz-show/motion/backdrop.webp", "/tadazz-show/v4/question-bg.webp", "/tadazz-show/v4/show-stage.webp", "/tadazz-show/story/84acdb923677d591.webp", "/tadazz-show/v4/tadazz-brand-logo.png"]
+    const paths = ["/tadazz-show/motion/backdrop.webp", "/tadazz-show/v4/question-bg.webp", "/tadazz-show/v4/show-stage.webp", "/tadazz-show/story/84acdb923677d591.webp", "/tadazz-show/v4/tadazz-brand-logo.png", "/tadazz-show/second-library/teaser-screen-source.jpg"]
     return Promise.all(paths.map(async (path) => {
       const response = await fetch(path)
       if (!response.ok) throw new Error(`decode fetch ${response.status}: ${path}`)
@@ -74,7 +74,7 @@ test("the five current-card phases render with zero synthetic voters", async ({ 
       return result
     }))
   })
-  expect(decoded.map((image) => [image.width, image.height])).toEqual([[1920,1080],[1920,1080],[1920,1080],[1920,1080],[1983,793]])
+  expect(decoded.map((image) => [image.width, image.height])).toEqual([[1920,1080],[1920,1080],[1920,1080],[1920,1080],[1983,793],[2048,1152]])
   await info.attach("qa-decoded-images.json", { body: Buffer.from(JSON.stringify(decoded, null, 2)), contentType: "application/json" })
   await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "question", paused: false }))
   await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
