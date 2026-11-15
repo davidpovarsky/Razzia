@@ -30,6 +30,7 @@ export interface PhoneRoundPort {
 export interface PhonePlayerPort {
   findByClientId(id: string): Player | undefined
   join(socket: Socket, name: string): string | null
+  joinResolvedRoster(socket: Socket, displayName: string): string | null
   updateSocketId(previous: string, next: string): void
   broadcastCount(): void
 }
@@ -507,9 +508,22 @@ export class GamePhoneController {
       emit: (_event: string) => false,
     } as unknown as Socket
 
-    const joinErr = this.ports.admitPhone(`roster:${rId}`, input.callId, () =>
-      this.playerManager.join(fakeSocket, displayName),
-    )
+    const joinErr = this.ports.admitPhone(`roster:${rId}`, input.callId, () => {
+      if (!rosterEntry) {
+        return this.playerManager.join(fakeSocket, displayName)
+      }
+
+      // Only the actual resolved row can use the roster-specific native limit.
+      // Recheck inside the existing admission callback, before any Player event.
+      if (
+        this.roster.entries.get(rId) !== rosterEntry ||
+        rosterEntry.displayName !== displayName
+      ) {
+        return "errors:invalidRequest"
+      }
+
+      return this.playerManager.joinResolvedRoster(fakeSocket, displayName)
+    })
 
     if (joinErr) {
       return { ok: false, error: joinErr }
