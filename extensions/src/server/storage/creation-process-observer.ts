@@ -3,6 +3,10 @@ import path from "node:path"
 import { createHash, randomUUID } from "node:crypto"
 import type { ChildProcess } from "node:child_process"
 
+// Observation fences are outside application fault injection. Capture this
+// reference before tests install fsync selectors, including late close/error.
+const fenceObservation = fs.fsyncSync.bind(fs)
+
 /** Node fixture observation only. No app imports, global hooks or import-time IO.
  * Disabled unless the runner supplies an exact receipt subdirectory. The raw
  * stream files and result precede the caller's checkpoint read on close/error.
@@ -62,7 +66,7 @@ export function createCreationProcessObserver(context: {
       const fd = open(name)
       try {
         fs.writeFileSync(fd, JSON.stringify(value, null, 2) + "\n")
-        fs.fsyncSync(fd)
+        fenceObservation(fd)
       } finally {
         fs.closeSync(fd)
       }
@@ -71,7 +75,7 @@ export function createCreationProcessObserver(context: {
         fs.constants.O_RDONLY | fs.constants.O_DIRECTORY,
       )
       try {
-        fs.fsyncSync(parent)
+        fenceObservation(parent)
       } finally {
         fs.closeSync(parent)
       }
@@ -122,7 +126,7 @@ export function createCreationProcessObserver(context: {
         const images = Object.fromEntries(
           Object.entries(streams).map(([name, stream]) => {
             try {
-              fs.fsyncSync(stream.fd)
+              fenceObservation(stream.fd)
             } catch (error) {
               failure(error)
             }
