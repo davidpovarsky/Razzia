@@ -1,0 +1,26 @@
+{
+  "downloadedFiles": 48,
+  "serverDataBytes": 211478,
+  "allDownloadedSha256Matched": true,
+  "frozenPacketInputHashesUnchanged": 11,
+  "collectionReadOnly": true,
+  "accounting": {
+    "priorLeasePhysicalBytes": 8400896,
+    "thisIterationPhysicalBytes": 3584000,
+    "cumulativeConsumedBytes": 11984896,
+    "controls": [
+      {
+        "path": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/recovery-wave-packet7-wave.admission.json",
+        "physicalBytes": 4096
+      },
+      {
+        "path": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/recovery-wave-packet7-wave.ledger.json",
+        "physicalBytes": 4096
+      }
+    ],
+    "containerMetadataReserveBytes": 2097152,
+    "stoppedContainerSizeRw": 32768
+  },
+  "archiveBytes": 22696,
+  "archiveSha256": "1eaf3c26d825daeb44f7a8cb7c18bcdc82ff94d35e0c718e2f5e7144f5d6a530"
+}

@@ -1,0 +1,71 @@
+{
+  "time": 1794755580.092537,
+  "freeBytes": 2658643968,
+  "ownPhysicalBytes": 4108288,
+  "requiredAdmissionFreeBytes": 2571042816,
+  "availableRamBytes": 10869399552,
+  "laneLedgerSnapshotId": "recovery-wave-packet5-wave-1794755574",
+  "laneLedgerSha256": "988d3cb7cc038a2cc7b325d40d77d8f585624879114f4ff7a74c1bd02a4028dd",
+  "pidMetrics": {
+    "available": true,
+    "capturedEpoch": 1794755580.0931027,
+    "durationNs": 547006,
+    "scope": "/sys/fs/cgroup/system.slice/docker-ef108b100c81b4a340f4d6998f1a0fa6e189c9fc19520110969b87890eb563e7.scope",
+    "pidsCurrent": 7,
+    "pidsMax": 96,
+    "pidsPeak": 7,
+    "pidsEvents": {
+      "max": 0
+    },
+    "pidsEventsLocal": {
+      "max": 0
+    },
+    "maxEventsSinceBaseline": 0,
+    "processes": [
+      {
+        "hostPid": 1244133,
+        "startTicks": "99606318",
+        "ppid": 1244110,
+        "name": "MainThread",
+        "state": "S (sleeping)",
+        "threads": 7,
+        "namespacePids": [
+          1244133,
+          1
+        ],
+        "uid": [
+          "1001",
+          "1001",
+          "1001",
+          "1001"
+        ],
+        "gid": [
+          "1001",
+          "1001",
+          "1001",
+          "1001"
+        ],
+        "limits": [
+          "Max processes             unlimited            unlimited            processes ",
+          "Max open files            524288               524288               files     "
+        ]
+      }
+    ],
+    "exitedOrMovedDuringRead": [],
+    "parentTransitions": [],
+    "processCountObserved": 1,
+    "sumThreadsObserved": 7,
+    "zombiesObserved": 0,
+    "ancestorControllerLimitsOnly": [
+      {
+        "path": "/sys/fs/cgroup/system.slice",
+        "pidsMax": "max",
+        "events": {
+          "max": 1490
+        }
+      }
+    ],
+    "snapshotIsRacy": true,
+    "spawnedInContainerToObserve": false
+  }
+}

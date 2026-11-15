@@ -1,0 +1,17 @@
+{
+  "id": "0a2905259bf922c51df87a00bfeb82b147aa1ce868b3aab4c6a988f0b405ede9",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 137,
+    "Error": "",
+    "StartedAt": "2026-11-15T15:18:41.245880527Z",
+    "FinishedAt": "2026-11-15T15:19:18.867847715Z"
+  },
+  "sizeRw": 32768
+}

@@ -1,0 +1,28 @@
+{
+  "id": "c4eb6e7c-9c35-446c-a6df-cd084b575505",
+  "context": {
+    "mode": "recover",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-pEmAJo",
+    "sequence": "1",
+    "owner": ""
+  },
+  "pid": 72,
+  "event": "close",
+  "code": 0,
+  "signal": null,
+  "observedNs": "996434526570800",
+  "startedNs": "996430106727374",
+  "streams": {
+    "stdout": {
+      "file": "c4eb6e7c-9c35-446c-a6df-cd084b575505.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "c4eb6e7c-9c35-446c-a6df-cd084b575505.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

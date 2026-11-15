@@ -1,0 +1,137 @@
+{
+  "ledgerSha256": "95c006286e4b1c55634d042e75a664b217c69252298e7e515a6310ab846fd3c6",
+  "snapshot": {
+    "schemaVersion": 1,
+    "snapshotId": "recovery-wave-packet7-wave-1794755920",
+    "issuerThreadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+    "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+    "packetHashesSha256": "f81ab7c12556e8d94403c75454f66339366a919bf4dc74e084068f7cbfc1e6e3",
+    "capturedAtEpochSeconds": 1794755920.6642375,
+    "expiresAtEpochSeconds": 1794756220.6642375,
+    "exampleOnly": false,
+    "lanes": [
+      {
+        "laneId": "qa:01a1dfa9-3316-7a02-afef-3dccd5939e79",
+        "cpuGrant": 0.5,
+        "memoryGrantBytes": 2080374784,
+        "newPhysicalBudgetBytes": 209715200,
+        "consumedPhysicalBytes": 0
+      },
+      {
+        "laneId": "show_ui:01a1dfa9-d401-77f3-a539-82c918b393f4",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 0
+      },
+      {
+        "laneId": "telephony:01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 1073741824,
+        "newPhysicalBudgetBytes": 16777216,
+        "consumedPhysicalBytes": 151552
+      },
+      {
+        "laneId": "mcp_server:01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 1073741824,
+        "newPhysicalBudgetBytes": 8388608,
+        "consumedPhysicalBytes": 3063808
+      },
+      {
+        "laneId": "Recovery-C1",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 8400896
+      }
+    ],
+    "aggregate": {
+      "approvedCpu": 1.5,
+      "approvedMemoryBytes": 8589934592,
+      "retainedSharedMetadataBytesOnce": 456130560
+    },
+    "disk": {
+      "floorBytes": 2147483648,
+      "futureReserveBytes": 0,
+      "marginBytes": 67108864
+    },
+    "ram": {
+      "minimumHostAvailableBytes": 8522825728
+    },
+    "runtimeRegisterSha256": "d0692f2a844a1fddf8ba5d7f563500eb65ad2c2c1440aed7e28ab5a701ed07f9",
+    "authority": "Owner-activated developer claim; no independent packet review claimed"
+  },
+  "measured": {
+    "time": 1794755923.4703057,
+    "freeBytes": 2652381184,
+    "ownPhysicalBytes": 11718656,
+    "requiredAdmissionFreeBytes": 2568757248,
+    "availableRamBytes": 10234195968,
+    "laneLedgerSnapshotId": "recovery-wave-packet7-wave-1794755920",
+    "laneLedgerSha256": "95c006286e4b1c55634d042e75a664b217c69252298e7e515a6310ab846fd3c6",
+    "pidMetrics": {
+      "available": true,
+      "capturedEpoch": 1794755923.4708264,
+      "durationNs": 503085,
+      "scope": "/sys/fs/cgroup/system.slice/docker-0a2905259bf922c51df87a00bfeb82b147aa1ce868b3aab4c6a988f0b405ede9.scope",
+      "pidsCurrent": 7,
+      "pidsMax": 96,
+      "pidsPeak": 14,
+      "pidsEvents": {
+        "max": 0
+      },
+      "pidsEventsLocal": {
+        "max": 0
+      },
+      "maxEventsSinceBaseline": 0,
+      "processes": [
+        {
+          "hostPid": 1248965,
+          "startTicks": "99640965",
+          "ppid": 1248940,
+          "name": "MainThread",
+          "state": "S (sleeping)",
+          "threads": 7,
+          "namespacePids": [
+            1248965,
+            1
+          ],
+          "uid": [
+            "1001",
+            "1001",
+            "1001",
+            "1001"
+          ],
+          "gid": [
+            "1001",
+            "1001",
+            "1001",
+            "1001"
+          ],
+          "limits": [
+            "Max processes             unlimited            unlimited            processes ",
+            "Max open files            524288               524288               files     "
+          ]
+        }
+      ],
+      "exitedOrMovedDuringRead": [],
+      "parentTransitions": [],
+      "processCountObserved": 1,
+      "sumThreadsObserved": 7,
+      "zombiesObserved": 0,
+      "ancestorControllerLimitsOnly": [
+        {
+          "path": "/sys/fs/cgroup/system.slice",
+          "pidsMax": "max",
+          "events": {
+            "max": 1490
+          }
+        }
+      ],
+      "snapshotIsRacy": true,
+      "spawnedInContainerToObserve": false
+    }
+  },
+  "historicalPlanningValuesUsedAsAuthority": false
+}
