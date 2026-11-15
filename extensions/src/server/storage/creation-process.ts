@@ -3,6 +3,7 @@ import path from "node:path"
 import { fork } from "node:child_process"
 import { createRequire } from "node:module"
 import { fileURLToPath, pathToFileURL } from "node:url"
+import { createCreationProcessObserver } from "./creation-process-observer"
 
 const repository = fileURLToPath(new URL("../../../../", import.meta.url))
 const installed = createRequire(import.meta.url)
@@ -34,6 +35,12 @@ export function creationChild(
     timedOut: boolean
     stderr: string
   }>((resolve, reject) => {
+    const observer = createCreationProcessObserver({
+      mode,
+      root,
+      sequence,
+      owner,
+    })
     const child = fork(
       fileURLToPath(new URL("./creation-child.ts", import.meta.url)),
       [mode, root, token, sequence, owner],
@@ -46,9 +53,10 @@ export function creationChild(
           TSX_DISABLE_CACHE: "1",
           TSX_TSCONFIG_PATH: path.join(repository, "tsconfig.json"),
         },
-        stdio: ["ignore", "ignore", "pipe", "ipc"],
+        stdio: ["ignore", observer ? "pipe" : "ignore", "pipe", "ipc"],
       },
     )
+    observer?.attach(child)
     let timedOut = false,
       stderr = ""
     const timer = setTimeout(() => {
