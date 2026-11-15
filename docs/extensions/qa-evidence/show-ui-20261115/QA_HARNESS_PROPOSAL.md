@@ -19,7 +19,7 @@ No platform-only Rubik file is added to the native renderer fixture.
 | `qa-fixture-host.ts` | 2,760 | `4bc9f57da87d6186584a313facd166a86d7d63a45c5e94cf392da752ee5bf90d` |
 | `qa-fixture-server.ts` | 6,489 | `ab03337bb877ae51c19b250e8d485c7545144cf9e605d8a2086c6f52c51abd38` |
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
-| `qa-preview.spec.ts` | 10,107 | `585aea777f25800fcc4aa58defa103537ca8a1467701f744334e6b0c618a48fd` |
+| `qa-preview.spec.ts` | 13,363 | `c47079aa0b191c636c5a4011603d79ddc999b6196732e2e72c16f1cc313e1a44` |
 | `qa-preview.config.ts` | 812 | `ce23bf3d4303ed7c4512beda8337501549f239944d29c5823041d6d590d5374e` |
 | `qa-server.vite.config.ts` | 549 | `665904d21b063a7e5eb228403ecbc8a74eb05242fe3bd8822fba1d7568c96233` |
 
@@ -45,7 +45,7 @@ Its content is English synthetic five-question, single-choice quiz with five
 choices and zero audience/votes. The selected UI locale varies across all eight
 supported locales, but the authored fixture itself is **not localized**.
 
-The authored 23 Playwright cases cover first-paused question/results for both
+The original 23 Playwright cases cover first-paused question/results for both
 roles and eight locales; first-paused answer cards, voting and vote lock;
 five phases; pause during entry; lock supersession; q1→q2 DOM-stage continuity;
 browser rejection of mismatched script/style integrity, and raw-path denial. They also record
@@ -57,7 +57,9 @@ quiz/survey and 2–5 option coverage, actual CSP rejection cases, resource
 tampering/rights, negative metadata, editor comparison and additional browser
 engines still require further harness work and browser evidence. The five-image
 run is recorded in `BROWSER_DD3_RESULTS.md`; this six-image revision has not
-yet been run. Test descriptions alone are not passes.
+been run as one unified matrix. Three new diagnostic cases add disposal, CSP
+denial and native font observation; they are not yet executed. The reporter now
+persists browser event attachments to files. Test descriptions alone are not passes.
 
 ## Proposed exact fixture overlay and budget
 
@@ -66,7 +68,7 @@ QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
 In a new owned output root, place dd3 `renderer.js` and `renderer.css`, copy
 `qa-browser.mjs` to `browser.mjs`, and copy the six inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-4,013,430 bytes; the six QA source files total 22,933 bytes. Existing source
+4,013,430 bytes; the six QA source files total 26,189 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.

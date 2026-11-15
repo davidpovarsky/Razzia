@@ -1,6 +1,7 @@
 import playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import type * as Playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { request as httpRequest } from "node:http"
+import { writeFile } from "node:fs/promises"
 const { expect, test } = playwright as unknown as typeof Playwright
 
 const events = new WeakMap<object, Array<Record<string, unknown>>>()
@@ -8,6 +9,7 @@ test.beforeEach(async ({ page }) => {
   const log: Array<Record<string, unknown>> = []
   events.set(page, log)
   page.on("console", (message) => { if (log.length < 2000) log.push({ type: "console", level: message.type(), text: message.text() }) })
+  page.on("pageerror", (error) => { if (log.length < 2000) log.push({ type: "pageerror", message: error.message, stack: error.stack }) })
   page.on("request", (request) => { if (log.length < 2000) log.push({ type: "request", url: request.url(), resourceType: request.resourceType() }) })
   page.on("requestfailed", (request) => { if (log.length < 2000) log.push({ type: "requestfailed", url: request.url(), error: request.failure()?.errorText }) })
   await page.addInitScript(() => {
@@ -18,7 +20,9 @@ test.beforeEach(async ({ page }) => {
 test.afterEach(async ({ page }, info) => {
   const csp = await page.evaluate(() => (window as any).__qaCsp ?? []).catch(() => [])
   const requests = await page.evaluate(async () => (await fetch("/qa/requests")).json()).catch(() => [])
-  await info.attach("qa-browser-events.json", { body: Buffer.from(JSON.stringify({ events: events.get(page) ?? [], csp, requests }, null, 2)), contentType: "application/json" })
+  const path = info.outputPath("qa-browser-events.json")
+  await writeFile(path, JSON.stringify({ events: events.get(page) ?? [], csp, requests }, null, 2))
+  await info.attach("qa-browser-events.json", { path, contentType: "application/json" })
 })
 
 const locales = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
@@ -154,4 +158,53 @@ test("fixture denies normalized or encoded native paths", async () => {
   expect(await get("/tadazz-show/v4/../v4/question-bg.webp")).toBe(400)
   expect(await get("/tadazz-show/v4/%71uestion-bg.webp")).toBe(400)
   expect(await get("/tadazz-show/v4/question-bg.webp?alternate=1")).toBe(404)
+})
+
+test("diagnostic: disposal stops the mounted stage and emits no global SFX", async ({ page }, info) => {
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(async () => {
+    ;(window as any).__qaSfxCount = 0
+    window.addEventListener("tadazz:sfx", () => { (window as any).__qaSfxCount += 1 })
+    await (window as any).__showPreviewQa.show({ phase: "voting", paused: false, elapsed: 5000 })
+  })
+  await expect(page.getByTestId("tadazz-timer").first()).toBeVisible()
+  const screenshot = info.outputPath("before-disposal.png")
+  await page.screenshot({ path: screenshot })
+  await info.attach("before-disposal.png", { path: screenshot, contentType: "image/png" })
+  await page.evaluate(() => (window as any).__showPreviewQa.dispose())
+  await expect(page.getByTestId("tadazz-stage")).toHaveCount(0)
+  await page.waitForTimeout(1500)
+  expect(await page.evaluate(() => (window as any).__qaSfxCount)).toBe(0)
+  await expect(page.getByTestId("tadazz-stage")).toHaveCount(0)
+})
+
+test("diagnostic: CSP blocks a data image", async ({ page }) => {
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(() => {
+    const img = document.createElement("img")
+    img.src = "data:image/png;base64,iVBORw0KGgo="
+    document.body.append(img)
+  })
+  await expect.poll(() => page.evaluate(() => (window as any).__qaCsp.some((e: { directive: string; blocked: string }) => e.directive.startsWith("img-src") && e.blocked === "data"))).toBe(true)
+})
+
+test("diagnostic: native rendered font evidence for Japanese UI", async ({ page }, info) => {
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ locale: "ja", phase: "question", paused: true }))
+  await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
+  const cdp = await page.context().newCDPSession(page)
+  await cdp.send("DOM.enable")
+  await cdp.send("CSS.enable")
+  const document = await cdp.send("DOM.getFlattenedDocument", { depth: -1, pierce: true })
+  const node = document.nodes.find((n) => n.attributes?.some((v, i, a) => v === "data-testid" && a[i + 1] === "tadazz-question-panel"))
+  if (!node) throw new Error("qa:font-node-not-found")
+  const fonts = await cdp.send("CSS.getPlatformFontsForNode", { nodeId: node.nodeId })
+  const computed = await page.getByTestId("tadazz-question-panel").evaluate((el) => ({ family: getComputedStyle(el).fontFamily, text: el.textContent }))
+  const report = info.outputPath("native-font-evidence.json")
+  await writeFile(report, JSON.stringify({ computed, fonts, locale: "ja", fixtureLanguage: "en", userAgent: await page.evaluate(() => navigator.userAgent) }, null, 2))
+  await info.attach("native-font-evidence.json", { path: report, contentType: "application/json" })
+  expect(fonts.fonts.length).toBeGreaterThan(0)
 })
