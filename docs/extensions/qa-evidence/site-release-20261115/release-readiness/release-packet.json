@@ -112,7 +112,7 @@
   "remaining_release_gaps": [
     "No current live production authorization/control provisioning",
     "Legacy/manual writers and in-flight descendants require existing release exclusion; advisory flock does not fence noncooperating root/restart",
-    "Actual lost-ACK and child write/fence fault qualification remains open; positive synthetic results do not substitute",
+    "Exact-helper native fault witnesses now supplied for ACK loss, backup write/file-fence EIO and kernel EROFS; manager review of this scoped qualification and its residual limits remains pending",
     "No active-game-during-352734-publish or fresh WebKit-active-game-rollback proof",
     "Live authenticated route/game/account acceptance and physical evidence remain open"
   ],
@@ -121,7 +121,15 @@
     "manager_acceptance": "b208609a3005c5e03db12556f5ded3285a33e44a",
     "synthetic": "../wave-A-20261115/RESULTS.md",
     "fresh_readonly": "production-readonly-inputs.json",
-    "source_delta": "source-integration-delta.json"
+    "source_delta": "source-integration-delta.json",
+    "native_fault_qualification": "../fault-qualification/RESULTS.md"
   },
-  "execution_performed": false
+  "execution_performed": false,
+  "native_fault_qualification_update": {
+    "summary": "../fault-qualification/qualification-summary.json",
+    "scoped_qualified_modes": 4,
+    "retained_inconclusive_attempts": 1,
+    "remaining_limits": "Induced transport loss/native EIO injections and native kernel EROFS; no physical disk/powerloss or post-index-replacement fault proof. Existing manager review/exclusive live-release decision still required."
+  },
+  "selected_vehicle": "Sole manager retained narrowly pinned Site-only candidate; newer integrated features excluded. Actual production action/control installation remains HOLD."
 }

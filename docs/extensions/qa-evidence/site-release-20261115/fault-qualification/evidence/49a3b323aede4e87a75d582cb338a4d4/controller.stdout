@@ -1,0 +1,1 @@
+{"coordinator": {"classification": null, "error": "ValueError", "filesystemPhase": "stage-create-uncertain", "identity": "verified", "recoveryOf": null, "requestedAction": "publish", "status": "indeterminate"}, "independentPostcheck": "verified", "invocationPid": 8}

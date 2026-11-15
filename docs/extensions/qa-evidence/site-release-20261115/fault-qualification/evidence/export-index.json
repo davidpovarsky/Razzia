@@ -1,0 +1,653 @@
+{
+  "status": "FOUR_SCOPED_FAULT_WITNESSES_AND_ONE_RETAINED_INCONCLUSIVE",
+  "results": [
+    {
+      "controller": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+      "controllerExitCode": 1,
+      "execId": "33e1c99d7921db41bfac0ba935d9e9e2144c67b2fbb71951f12c233daf16193b",
+      "growthAfter": {
+        "allocatedOwnedBytesExcludingExistingArtifactInodes": 892928,
+        "conservativeChargedBytes": 5124096,
+        "containers": [
+          {
+            "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+            "sizeRwProxyBytes": 24576
+          }
+        ],
+        "dockerSizeRwProxyBytes": 36864,
+        "freeBytes": 2630660096,
+        "metadataFinalExportAllowanceBytes": 4194304,
+        "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+      },
+      "holdSha256": "9e647faf19565f291f3281d2a82f63ebba26a6c9e0a3be0113864b7fd9bc72f5",
+      "limitations": "Lost ACK transport drop and EIO ptrace injections are induced, not spontaneous network/disk/hardware faults. Early backup-write/file-fence scope only; no post-index-replace failure or physical powerloss proof.",
+      "mode": "drop-start-ack",
+      "nativeTraceSha256": null,
+      "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "target": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+      "terminalChildExitCode": 1,
+      "transcriptSha256": "ca6c5694b3223b2c36be7445a29eee5f5fc5149981e58a56a8fabb52897d48b8"
+    },
+    {
+      "controller": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+      "execId": "6ec085a5b83363be557e965b6614a96fcd3d9a43e7ae99562b6ff73ab82a3f2e",
+      "growthAfter": {
+        "allocatedOwnedBytesExcludingExistingArtifactInodes": 1712128,
+        "conservativeChargedBytes": 5996544,
+        "containers": [
+          {
+            "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+            "sizeRwProxyBytes": 28672
+          },
+          {
+            "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+            "sizeRwProxyBytes": 24576
+          }
+        ],
+        "dockerSizeRwProxyBytes": 90112,
+        "freeBytes": 2629853184,
+        "metadataFinalExportAllowanceBytes": 4194304,
+        "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+      },
+      "holdSha256": "b9b348598c6c31d22d8a888ffd8fd55f3e534b3c0491a7924b2076b3a8ccb9f2",
+      "limitations": "Ptrace-injected native syscall EIO; not physical disk EIO or post-index-replace durability evidence.",
+      "mode": "native-write-eio",
+      "nativeTraceSha256": "eae5344326fb535ecf649779939c0a854e45eff681efd82f6643e8d75df6d414",
+      "nonce": "f8e1688d4d504cddbf90113c70c26998",
+      "readbackCorrection": "Original verifier expected EIO (INJECTED); actual strace emits EIO (Input/output error) (INJECTED). Corrected regex validates original native failure. No helper action replayed.",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "status": "PASS_SCOPED_NATIVE_WRITE_EIO_READBACK",
+      "target": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+      "terminalChildExitCode": 1,
+      "transcriptSha256": "4f705c2bece431dde850530d7f6de94e3a43aabdcab775c3430aeb47412a362b"
+    },
+    {
+      "controller": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+      "controllerExitCode": 1,
+      "execId": "0ec446735db892fe4b3d39cc7f340e347e27601a712b4e7d9ca80f03f0ad1177",
+      "growthAfter": {
+        "allocatedOwnedBytesExcludingExistingArtifactInodes": 2514944,
+        "conservativeChargedBytes": 6864896,
+        "containers": [
+          {
+            "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+            "sizeRwProxyBytes": 28672
+          },
+          {
+            "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+            "sizeRwProxyBytes": 40960
+          },
+          {
+            "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+            "sizeRwProxyBytes": 24576
+          }
+        ],
+        "dockerSizeRwProxyBytes": 155648,
+        "freeBytes": 2629206016,
+        "metadataFinalExportAllowanceBytes": 4194304,
+        "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+      },
+      "holdSha256": "5d7395457e76e52d97b3bfc2246e68b0c5ff39dac29cd5795ade2ecc3389fcee",
+      "limitations": "Lost ACK transport drop and EIO ptrace injections are induced, not spontaneous network/disk/hardware faults. Early backup-write/file-fence scope only; no post-index-replace failure or physical powerloss proof.",
+      "mode": "native-fsync-eio",
+      "nativeTraceSha256": "71d19a36aa6c7d36115e4602bf737f7c63a071e16aaefa0b61517ee93bb317f5",
+      "nonce": "83e631a8f8b94f469665beef772b02b8",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "target": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+      "terminalChildExitCode": 1,
+      "transcriptSha256": "a39b7c6485bacfa5b43618e00d5e6adc2f0514b312e094f5d656b9bf24bebd6c"
+    },
+    {
+      "controller": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+      "diagnostic": "One separate read-only Python standard-library import/version probe succeeded; it was not a publisher retry and made no release-control change.",
+      "execId": "cdccc5bcc786aa28733115267b3e03257dbea699b5a32c08122a908ff131a735",
+      "growthAfter": {
+        "allocatedOwnedBytesExcludingExistingArtifactInodes": 3444736,
+        "conservativeChargedBytes": 7831552,
+        "containers": [
+          {
+            "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+            "sizeRwProxyBytes": 28672
+          },
+          {
+            "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+            "sizeRwProxyBytes": 40960
+          },
+          {
+            "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+            "sizeRwProxyBytes": 24576
+          }
+        ],
+        "dockerSizeRwProxyBytes": 192512,
+        "freeBytes": 2617798656,
+        "metadataFinalExportAllowanceBytes": 4194304,
+        "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+      },
+      "holdSha256": "8e6f8dc2101b0bcf3b3efa091a5ed5596c7e50caf7dca438797cca060827e13e",
+      "mode": "native-readonly-erofs",
+      "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+      "reason": "Pre-ACK native child identity gate failed without raw PID-state logging. No ACK/payload delivered; no native syscall trace. No EROFS qualification claimed; future attempt uses a fresh nonce with bounded read-only PID observations.",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "status": "INCONCLUSIVE_NATIVE_INSTRUMENTATION_BEFORE_STDIN",
+      "target": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+      "terminal": {
+        "containerId": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+        "execId": "cdccc5bcc786aa28733115267b3e03257dbea699b5a32c08122a908ff131a735",
+        "exitCode": 1,
+        "running": false
+      },
+      "transcriptSha256": "e5c665932b828aeba14afcfab64999dc0cc9b2af3f8aad08d8c0dd30eca43a45"
+    },
+    {
+      "controller": "c5b4dbe77c23d0323db8cc8b174e01a1d446713516e5571753533de8b45558bc",
+      "controllerExitCode": 1,
+      "execId": "25fccf2112a4e74ce0d2241be6ac39ecabd2c20056e245ca30caf4fd97b33295",
+      "growthAfter": {
+        "allocatedOwnedBytesExcludingExistingArtifactInodes": 4243456,
+        "conservativeChargedBytes": 8667136,
+        "containers": [
+          {
+            "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+            "sizeRwProxyBytes": 28672
+          },
+          {
+            "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+            "sizeRwProxyBytes": 40960
+          },
+          {
+            "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+            "sizeRwProxyBytes": 24576
+          },
+          {
+            "id": "6406e3e27cf473993b901c47a437e850d9c6aabf3d5361abf99d29541722dd01",
+            "sizeRwProxyBytes": 12288
+          },
+          {
+            "id": "c5b4dbe77c23d0323db8cc8b174e01a1d446713516e5571753533de8b45558bc",
+            "sizeRwProxyBytes": 24576
+          }
+        ],
+        "dockerSizeRwProxyBytes": 229376,
+        "freeBytes": 2617229312,
+        "metadataFinalExportAllowanceBytes": 4194304,
+        "method": "inode dedup; existing artifact hard-link bodies excluded with inode identity proof; container logical SizeRw proxy plus4MiB allowance; sampled, not hard physical quota"
+      },
+      "holdSha256": "ef9dcd7a4aa7773114815a990aaae9ae951469ad1fdd15d2dab6cdb86290ea8a",
+      "limitations": "Lost ACK transport drop and EIO ptrace injections are induced, not spontaneous network/disk/hardware faults. Early backup-write/file-fence scope only; no post-index-replace failure or physical powerloss proof.",
+      "mode": "native-readonly-erofs",
+      "nativeTraceSha256": "e18af3c5201dde8f3cfcdfa91e68dc9363eb354cc01245c1fb66c9f3afa30fb1",
+      "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+      "sourceEligibilityOnly_noRetry": {
+        "publish": false,
+        "reconcile": false,
+        "rollback": false
+      },
+      "status": "PASS_SCOPED_FAULT_WITNESS",
+      "target": "6406e3e27cf473993b901c47a437e850d9c6aabf3d5361abf99d29541722dd01",
+      "terminalChildExitCode": 1,
+      "transcriptSha256": "61a30f99a4c4becb72c7a2a46856886b22582ca1539023bec3d535170bfff328"
+    }
+  ],
+  "hold_no_retry": "All holds retained unchanged; only source eligibility evaluated after faults, no helper replay",
+  "receipts": {
+    "e56ad13c4b404aa7a752e0c6e822a61d/identity.json": {
+      "bytes": 814,
+      "sha256": "6489ee8b9174c3d8cb3a1b4de81184149be9bcbdcf2b3a36643e1dfea2d8af26"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/created.json": {
+      "bytes": 232,
+      "sha256": "196bcd4349e390b42d5a092bcfd5173fd4b1e9a733bdf549b2571ff182dca7e2"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/before.json": {
+      "bytes": 22402,
+      "sha256": "f0bfe381b53b88c7d07ef401f12c1dcdbfddd1e8f943f1ed567a4034fd753078"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/growth-before.json": {
+      "bytes": 607,
+      "sha256": "6bf4780e5baf1dd6f451aac87c8529604ebc9c886f32518658a807fc3dea58b7"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/dispatch-intent.json": {
+      "bytes": 403,
+      "sha256": "3ae5af34e0a6472476f7dc159ecc835673fa65f044f55f930a8fb33aeb173edf"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/controller.stdout": {
+      "bytes": 249,
+      "sha256": "21525c67ae658e7f49a8f3005d64a363fe700cd15272688653bcafa8e55d104a"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/controller.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/transcript.jsonl": {
+      "bytes": 33091,
+      "sha256": "ca6c5694b3223b2c36be7445a29eee5f5fc5149981e58a56a8fabb52897d48b8"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/transcript.sha256": {
+      "bytes": 65,
+      "sha256": "18bff25c95ad1456dcfa2f32d04a3c4916929a21048e111082fa174ae7c8600b"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/result.json": {
+      "bytes": 25570,
+      "sha256": "a5489d9ec53bc44006f9b2373cde7311be8ec727deb87390010a137441a40c79"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/fault-proxy.py": {
+      "bytes": 25571,
+      "sha256": "e67cdd506f67fb8f93dcefe6c2a615a6862b532132ceeb4362f57658ea86d3cc"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/atomic-web-publish.py": {
+      "bytes": 59026,
+      "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/production-operation-hold.json": {
+      "bytes": 1309,
+      "sha256": "9e647faf19565f291f3281d2a82f63ebba26a6c9e0a3be0113864b7fd9bc72f5"
+    },
+    "e56ad13c4b404aa7a752e0c6e822a61d/hq-lease.json": {
+      "bytes": 625,
+      "sha256": "74b7eaee63e2142befc20e16016068978194e42dec05816df5e556f807b96655"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/identity.json": {
+      "bytes": 816,
+      "sha256": "dd0d29f8f616847d0135bce926126c2df06e69668605942024f6293529f6bda7"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/created.json": {
+      "bytes": 234,
+      "sha256": "bb7692c64bf437f24ac55b161b1e698e3e1ee5884e34065e69eb5e56a8c3ac04"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/before.json": {
+      "bytes": 22402,
+      "sha256": "f0bfe381b53b88c7d07ef401f12c1dcdbfddd1e8f943f1ed567a4034fd753078"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/growth-before.json": {
+      "bytes": 814,
+      "sha256": "b35767c44155e145a166fc0d5b97b0e638f6eb99514e27a04fcfafe9fc11edc6"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/dispatch-intent.json": {
+      "bytes": 403,
+      "sha256": "847cb3de62db1bd5c56f8acf7873a4b69513966b3aaca37c9a1f3a795ec87220"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/controller.stdout": {
+      "bytes": 251,
+      "sha256": "40f88fd14b3386bbceda76d24d9da034d49063501eceb8c7199f703ce3664937"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/controller.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/transcript.jsonl": {
+      "bytes": 43020,
+      "sha256": "4f705c2bece431dde850530d7f6de94e3a43aabdcab775c3430aeb47412a362b"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/transcript.sha256": {
+      "bytes": 65,
+      "sha256": "b882e1c760f739babd9fe61c76fbcd5289201407e1b8eac6cd27e8056ef2a3dc"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/native.strace": {
+      "bytes": 66417,
+      "sha256": "eae5344326fb535ecf649779939c0a854e45eff681efd82f6643e8d75df6d414"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/strace.stderr": {
+      "bytes": 42,
+      "sha256": "a065a87a0482bb194f8cd7be9f7bbb243beaf833350addc92bb5e54f70709f32"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/trace-ready.json": {
+      "bytes": 227,
+      "sha256": "494e09a64b35fb22fdffcea2953ccbc276cf26cb17ea0ec3a6db0d7f69514297"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/result.json": {
+      "bytes": 26146,
+      "sha256": "5bc582158e56dc00b81d7c8b2ff3bdd93ba063593d8585cffda7afbc5aee0369"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/fault-proxy.py": {
+      "bytes": 25571,
+      "sha256": "e67cdd506f67fb8f93dcefe6c2a615a6862b532132ceeb4362f57658ea86d3cc"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/atomic-web-publish.py": {
+      "bytes": 59026,
+      "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/production-operation-hold.json": {
+      "bytes": 1512,
+      "sha256": "b9b348598c6c31d22d8a888ffd8fd55f3e534b3c0491a7924b2076b3a8ccb9f2"
+    },
+    "f8e1688d4d504cddbf90113c70c26998/hq-lease.json": {
+      "bytes": 625,
+      "sha256": "fdb2b954bfbbf601c6bc4923a3db77e4a5fbd7da3167afe223045bb36020b223"
+    },
+    "83e631a8f8b94f469665beef772b02b8/identity.json": {
+      "bytes": 815,
+      "sha256": "8784bba6ed3e3afa340c2895ac4a5ec97bc523c306e2a20b501a083fc24375ee"
+    },
+    "83e631a8f8b94f469665beef772b02b8/created.json": {
+      "bytes": 234,
+      "sha256": "9b6c229e370db93c85ab2045104bf3db0be29e3772065c7a8b57d06482b8f1c1"
+    },
+    "83e631a8f8b94f469665beef772b02b8/before.json": {
+      "bytes": 22402,
+      "sha256": "f0bfe381b53b88c7d07ef401f12c1dcdbfddd1e8f943f1ed567a4034fd753078"
+    },
+    "83e631a8f8b94f469665beef772b02b8/growth-before.json": {
+      "bytes": 1021,
+      "sha256": "90d6ecd82034f54114504dc936b00293f490cabac27f29635c4db7131347ead6"
+    },
+    "83e631a8f8b94f469665beef772b02b8/dispatch-intent.json": {
+      "bytes": 403,
+      "sha256": "654540583df9434522b0eee7a535c21a9fdcd248592abd423dc5be846fabc530"
+    },
+    "83e631a8f8b94f469665beef772b02b8/controller.stdout": {
+      "bytes": 251,
+      "sha256": "40f88fd14b3386bbceda76d24d9da034d49063501eceb8c7199f703ce3664937"
+    },
+    "83e631a8f8b94f469665beef772b02b8/controller.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "83e631a8f8b94f469665beef772b02b8/transcript.jsonl": {
+      "bytes": 43024,
+      "sha256": "a39b7c6485bacfa5b43618e00d5e6adc2f0514b312e094f5d656b9bf24bebd6c"
+    },
+    "83e631a8f8b94f469665beef772b02b8/transcript.sha256": {
+      "bytes": 65,
+      "sha256": "c5c2ae86d95a047e37bfe1ec97ef586be69483383741972ea0b7e6991476b000"
+    },
+    "83e631a8f8b94f469665beef772b02b8/native.strace": {
+      "bytes": 85682,
+      "sha256": "71d19a36aa6c7d36115e4602bf737f7c63a071e16aaefa0b61517ee93bb317f5"
+    },
+    "83e631a8f8b94f469665beef772b02b8/strace.stderr": {
+      "bytes": 42,
+      "sha256": "519491d68a7a870c32489864f2c7c3258d43790793ad2871ff4d8a6a68c3d38a"
+    },
+    "83e631a8f8b94f469665beef772b02b8/trace-ready.json": {
+      "bytes": 227,
+      "sha256": "116e3d4b5238035736e72183acaff344d0f612995558ef5cdd223f49d26ec8e4"
+    },
+    "83e631a8f8b94f469665beef772b02b8/result.json": {
+      "bytes": 26271,
+      "sha256": "ae03721ff9c6fbb9d99953311f65f8e322a41a8cd00218d80fe11c9f6fac8256"
+    },
+    "83e631a8f8b94f469665beef772b02b8/fault-proxy.py": {
+      "bytes": 25571,
+      "sha256": "e67cdd506f67fb8f93dcefe6c2a615a6862b532132ceeb4362f57658ea86d3cc"
+    },
+    "83e631a8f8b94f469665beef772b02b8/atomic-web-publish.py": {
+      "bytes": 59026,
+      "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+    },
+    "83e631a8f8b94f469665beef772b02b8/production-operation-hold.json": {
+      "bytes": 1511,
+      "sha256": "5d7395457e76e52d97b3bfc2246e68b0c5ff39dac29cd5795ade2ecc3389fcee"
+    },
+    "83e631a8f8b94f469665beef772b02b8/hq-lease.json": {
+      "bytes": 624,
+      "sha256": "33107cf4613b5a381d20879fc7c8c252cc7a6b916f58009e7f83421626e9af6c"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/identity.json": {
+      "bytes": 821,
+      "sha256": "652d9dc2714d1349171515759f9576f2a780b5708c07c8565d712796b7408e9f"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/created.json": {
+      "bytes": 239,
+      "sha256": "ee2d38fca27dc213b9eea5f56be477138b1dabdd2cd5ee280d0fa636f7476540"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/before.json": {
+      "bytes": 22402,
+      "sha256": "f0bfe381b53b88c7d07ef401f12c1dcdbfddd1e8f943f1ed567a4034fd753078"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/growth-before.json": {
+      "bytes": 1227,
+      "sha256": "a0453da994972eec499bdd899b41f6539c66bc78cce5724d356de57817009ada"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/dispatch-intent.json": {
+      "bytes": 403,
+      "sha256": "33826d1cfc0b18e4e2f38ba8e11dc4adb7531120cfbf602d05e0e75f7253fda6"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/controller.stdout": {
+      "bytes": 249,
+      "sha256": "21525c67ae658e7f49a8f3005d64a363fe700cd15272688653bcafa8e55d104a"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/controller.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/transcript.jsonl": {
+      "bytes": 32221,
+      "sha256": "e5c665932b828aeba14afcfab64999dc0cc9b2af3f8aad08d8c0dd30eca43a45"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/transcript.sha256": {
+      "bytes": 65,
+      "sha256": "21a8fe756b7450b6cfdaf0dd8cf60de2200e30639fd037128f2eb87465f9c009"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/result.json": {
+      "bytes": 26260,
+      "sha256": "5c13d486b9d8ba247042dd02cb45a299d656c40fa4fe5042388c7385757b694c"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/fault-proxy.py": {
+      "bytes": 25571,
+      "sha256": "e67cdd506f67fb8f93dcefe6c2a615a6862b532132ceeb4362f57658ea86d3cc"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/atomic-web-publish.py": {
+      "bytes": 59026,
+      "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/production-operation-hold.json": {
+      "bytes": 1309,
+      "sha256": "8e6f8dc2101b0bcf3b3efa091a5ed5596c7e50caf7dca438797cca060827e13e"
+    },
+    "2a3e9f85a62f40bfa452c29028d174da/hq-lease.json": {
+      "bytes": 625,
+      "sha256": "042a7ac7dd3fd2f32e56aa1f54995ca26a770094488103f6e7fb30b9e5d87db5"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/identity.json": {
+      "bytes": 817,
+      "sha256": "48122981494231288716ff4e7160c6f7c45f86f9f36b0037e594890711ee0a2a"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/created.json": {
+      "bytes": 239,
+      "sha256": "fbaad1c4b8ffce3c8bdf24316c8f890803ca318cc07603684843ea226ddc7e3e"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/before.json": {
+      "bytes": 22402,
+      "sha256": "f0bfe381b53b88c7d07ef401f12c1dcdbfddd1e8f943f1ed567a4034fd753078"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/growth-before.json": {
+      "bytes": 1433,
+      "sha256": "0c2ee4bf372b617d7ada6f7aaf856c82f25e33a76146da8640a0552f221c4f30"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/dispatch-intent.json": {
+      "bytes": 403,
+      "sha256": "d8131327dac5e841482371bc54182244fb0925422d622a7f0d4fc0e7e9c8d1e6"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/controller.stdout": {
+      "bytes": 267,
+      "sha256": "6f454edc34c50f0c39d76ae8259639bf705fe8f4e0b7e49fa4b3ae3f8ec01766"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/controller.stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/transcript.jsonl": {
+      "bytes": 43823,
+      "sha256": "61a30f99a4c4becb72c7a2a46856886b22582ca1539023bec3d535170bfff328"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/transcript.sha256": {
+      "bytes": 65,
+      "sha256": "1c49fe3015900be8a577ebd77857705abcf35bf1f39959336755d76fb75c6d8b"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/native.strace": {
+      "bytes": 80078,
+      "sha256": "e18af3c5201dde8f3cfcdfa91e68dc9363eb354cc01245c1fb66c9f3afa30fb1"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/strace.stderr": {
+      "bytes": 42,
+      "sha256": "03413914a480e6fa40031a2a0516c3e4bd8b07c1ee14b3e61701ac3db962574e"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/trace-ready.json": {
+      "bytes": 232,
+      "sha256": "04f0be7bcfd31cfad53022bd20f5e5adc1269f57734787898c0dc449d2bcced1"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/result.json": {
+      "bytes": 26698,
+      "sha256": "115cac9ab9e0cc5e3cb569016f0ef2298b7b533cc784cd51d3997dbb9668245a"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/fault-proxy.py": {
+      "bytes": 25838,
+      "sha256": "07804330b009fd71cea7e394f4d1237fa0f17d604a11af8445ac6c7c9e804648"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/atomic-web-publish.py": {
+      "bytes": 59026,
+      "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/production-operation-hold.json": {
+      "bytes": 1505,
+      "sha256": "ef9dcd7a4aa7773114815a990aaae9ae951469ad1fdd15d2dab6cdb86290ea8a"
+    },
+    "49a3b323aede4e87a75d582cb338a4d4/hq-lease.json": {
+      "bytes": 623,
+      "sha256": "7fa4ffdeb4c3f05245877696b29e742a11eedec53db85aef74e1c39f1e4d61da"
+    },
+    "run.log": {
+      "bytes": 791,
+      "sha256": "ca6a8205e1cce2654f06f2b5b246e2ec2f63e8ae2dbe95f2a6028f5d24372440"
+    },
+    "run.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "readback-write.log": {
+      "bytes": 166,
+      "sha256": "d115180b7e9e7afc31ae25413f3135e4420bc0cc68703b20369abcc73d68a3b2"
+    },
+    "readback-write.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "continuation.log": {
+      "bytes": 807,
+      "sha256": "9be57fd362978e09e7c7cac92ef33103ff566a37f1a40650680a3a1089b352e8"
+    },
+    "continuation.exit": {
+      "bytes": 2,
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865"
+    },
+    "readback-inconclusive-rofs.log": {
+      "bytes": 349,
+      "sha256": "beb6de82ed5cf9ecb943d5801eb1ae9650f66a56198f9e8f03822252ad78f573"
+    },
+    "readback-inconclusive-rofs.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "kernel-rofs-run.log": {
+      "bytes": 229,
+      "sha256": "5316d7dd72f94ca28d0d521959bb7c0f7f0799ea35c094eb5edaf9b3ad31ad85"
+    },
+    "kernel-rofs-run.exit": {
+      "bytes": 2,
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    "tadazz-site-fault-wave-A-20261115-run-fault-qualification.py": {
+      "bytes": 24061,
+      "sha256": "e61cb021fa9019a9d86948880a683647faaa93472733eae89f78dbb2c2d39b5c"
+    },
+    "tadazz-site-fault-wave-A-20261115-finalize-write-witness.py": {
+      "bytes": 4225,
+      "sha256": "95dc0a0e60f32a5d3b5e2e271f86a1ba5a75b939be0fa4c784083d74494ce278"
+    },
+    "tadazz-site-fault-wave-A-20261115-finalize-inconclusive-rofs.py": {
+      "bytes": 3354,
+      "sha256": "ff416054f3c8b6007ffc97e249928a753dbb8ff1ff24cbcd0dffbae75fb5b467"
+    },
+    "tadazz-site-fault-cont-wave-A-20261115-run-fault-qualification.py": {
+      "bytes": 24109,
+      "sha256": "6b1e955e7a865d41c1bd9037914764e138116c33c7b08687c95c7f364dedc3ed"
+    },
+    "tadazz-site-fault-rofs-wave-A-20261115-run-fault-qualification.py": {
+      "bytes": 24195,
+      "sha256": "ec6078ad5f68bb9fd88589cd8d0d3bc9ca65f3b2b259d178ffba1bcc615675d5"
+    }
+  }
+}

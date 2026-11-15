@@ -1,0 +1,10 @@
+{"mode": "native-fsync-eio", "status": "PASS_SCOPED_FAULT_WITNESS", "execId": "0ec446735db892fe4b3d39cc7f340e347e27601a712b4e7d9ca80f03f0ad1177", "holdPhase": "stopped", "failureKind": "storage-or-unknown", "webFiles": 202}
+Traceback (most recent call last):
+  File "/run/tadazz-site-fault-cont-wave-A-20261115/run-fault-qualification.py", line 440, in <module>
+    main()
+  File "/run/tadazz-site-fault-cont-wave-A-20261115/run-fault-qualification.py", line 431, in main
+    results = [case(nonce, mode, sources, protected) for nonce, mode in CASES[2:]]
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/run/tadazz-site-fault-cont-wave-A-20261115/run-fault-qualification.py", line 377, in case
+    raise ValueError('native failure hold disposition')
+ValueError: native failure hold disposition
