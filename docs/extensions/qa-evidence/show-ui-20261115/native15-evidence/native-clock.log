@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 ../docs/extensions/qa-evidence/show-ui-20261115/qa-preview.spec.ts:102:1 › paused voting remains stable, resumes, and reuses the stage for q2 (6.7s)
+
+  1 passed (12.2s)

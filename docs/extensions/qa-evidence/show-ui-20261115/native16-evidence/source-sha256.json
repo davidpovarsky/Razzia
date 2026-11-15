@@ -1,0 +1,10 @@
+{
+  "extensions/src/components/oauth-consent/client.test.ts": "1f3e12860b516c934357b6e21681296bc0c9983563d5401c0bf260b3b06fbea8",
+  "extensions/src/components/oauth-consent/client.ts": "9f3cda2cbaacf9191eab30f30da34a9f564491a0f39e25bd00027600d6aac07b",
+  "extensions/src/components/oauth-consent/login-handoff.test.ts": "926d33f7fcae6352a247ee471d45d9e09cf89ae2ceba3251d28ad185eb73b096",
+  "extensions/src/components/oauth-consent/login-handoff.ts": "debf0034b8e026565cc65043c3286d40c9626795913b3a56b5b123a55f77eebd",
+  "extensions/src/components/oauth-consent/OAuthConsentPage.tsx": "2686bcafa6a75f603d6e410778493c348c4b1bcf08ea36f145bb66fd9b72c0fc",
+  "extensions/src/components/oauth-consent/strings.ts": "e4b3c8390b30614d109eb3bfca27c09ac8b4f8de0b3a2581c0f509907001436d",
+  "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx": "21de9536fece162c4651682bbb2400721464f9925c83c8b240c2c5ca2ab0e0ec",
+  "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx": "4cd18d629a593c7d318ff143ced7655127b9c97045a494d8a6d460f2224d595b"
+}

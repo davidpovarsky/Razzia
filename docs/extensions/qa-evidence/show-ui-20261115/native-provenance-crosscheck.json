@@ -1,0 +1,86 @@
+{
+  "producerEvidence": "54235b49d08184d920d6e996d47f05c3096e6bd8",
+  "managerReviewSha256": "9f996f5983db4bcdea11ca551c522bce575d1887ba60afc26edde32e58c3f4e4",
+  "sourceObservationSha256": "3159d4d2fbd32976db24cc16680495639e722f07e6afe2bf57a06ecd3b5f5688",
+  "matches": [
+    {
+      "path": "tadazz-show/motion/backdrop.webp",
+      "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e",
+      "declarations": [
+        {
+          "id": "classic-backdrop",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    },
+    {
+      "path": "tadazz-show/v4/question-bg.webp",
+      "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321",
+      "declarations": [
+        {
+          "id": "classic-adapter-a27be4883ee9",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    },
+    {
+      "path": "tadazz-show/v4/show-stage.webp",
+      "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20",
+      "declarations": [
+        {
+          "id": "classic-poster",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    },
+    {
+      "path": "tadazz-show/story/84acdb923677d591.webp",
+      "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6",
+      "declarations": [
+        {
+          "id": "classic-adapter-5ebee0b89664",
+          "rights": "repository-existing"
+        },
+        {
+          "id": "classic-adapter-5ebee0b89664",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    },
+    {
+      "path": "tadazz-show/v4/tadazz-brand-logo.png",
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "declarations": [
+        {
+          "id": "classic-logo",
+          "rights": "repository-existing"
+        },
+        {
+          "id": "classic-logo",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    },
+    {
+      "path": "tadazz-show/second-library/teaser-screen-source.jpg",
+      "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17",
+      "declarations": [
+        {
+          "id": "classic-adapter-7af6b5041525",
+          "rights": "repository-existing"
+        },
+        {
+          "id": "classic-adapter-7af6b5041525",
+          "rights": "repository-existing"
+        }
+      ],
+      "matches": true
+    }
+  ],
+  "limits": "Six immutable private QA fixture image hashes match declarations independently reviewed by root. No loader/font/glyph/full-scene certification, new rights, redistribution grant, renderer/pin or G authority."
+}

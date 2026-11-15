@@ -1,0 +1,24 @@
+{
+  "originalPhysicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native16/input/extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+  "beforeSourceSha256": "4cd18d629a593c7d318ff143ced7655127b9c97045a494d8a6d460f2224d595b",
+  "afterSourceSha256": "87d8a779c2fcade1bfc93b2bb455c5e081e3915b13e0a2320b8308ac08533a79",
+  "beforeEmittedJsSha256": "003efad6a45cf3237d73e425d9aab3528072958e0e5ff63e535353e6ba38cbb5",
+  "afterEmittedJsSha256": "003efad6a45cf3237d73e425d9aab3528072958e0e5ff63e535353e6ba38cbb5",
+  "sameEmittedAst": true,
+  "vite": "8.3.4",
+  "babel": "7.29.9",
+  "checkedInputs": 2071,
+  "outputs": [
+    {
+      "path": "renderer-v2.css",
+      "bytes": 166501,
+      "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+    },
+    {
+      "path": "renderer-v2.js",
+      "bytes": 1068160,
+      "sha256": "34fa9222660ea651b25689048ecc238086c820d47ba538b5286818c5a583ad04"
+    }
+  ],
+  "meaning": "Exact native16 browser4 artifact retained after all-input/output hashes and type-only/formatting executable-AST equivalence. No browser rerun or new renderer pin."
+}
