@@ -1,5 +1,7 @@
 # P3_NEXT — actual backend negative API preparation
 
+Execution update: the granted isolated server run is now complete; see [REMOTE_API_RESULTS.md](REMOTE_API_RESULTS.md). The preparation details below remain historical readiness evidence, not the current result summary.
+
 Preparation only, following independent `phone-review-30280fa.md`. Baseline producer commit: `30280fa18398b8608d5800eb160726f027042eef`. Source lease remains pilot-runtime and this evidence directory. `packages/socket/**` and all other backend sources remain read-only. The remote runner currently belongs to QA for Site browser work; this lane has not started a local backend, browser, remote container, install, test or competing remote job.
 
 The new `phone-real-backend.test.ts` imports the delivered actual Hono app, creates its actual Socket.IO server on loopback, authenticates a synthetic manager, creates synthetic quizzes/games over HTTP and reads actual Registry/Game/controller roster, binding, answer and score state. There is no backend model. `phone-gateway-qa-child.cjs` starts the actual gateway in separate real child processes. It can hold a request before forwarding, drop a selected hangup before forwarding, and offset only the gateway child's Date.now. All non-dropped backend requests use real loopback HTTP. A request abort is never treated as rolling back an action already processed by the backend.
