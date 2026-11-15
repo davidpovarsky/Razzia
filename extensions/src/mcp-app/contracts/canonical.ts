@@ -1,4 +1,4 @@
-import { canonicalJsonStringify, sha256Hex } from "@razzia/extensions/core"
+import { canonicalJsonStringify, sha256Hex } from "../../core/digest.ts"
 
 export function finiteJson(
   value: unknown,
@@ -48,19 +48,49 @@ export interface PreviewIdentityEnvelope {
   compiledPin: unknown
   assetDigests: readonly Readonly<{ assetId: string; sha256: string }>[]
 }
+
+/** Host-only successor. Never accepted by the version-1 MCP Preview port. */
+export interface CompositionPreviewIdentityEnvelopeV2 {
+  version: 2
+  draftId: string
+  revision: number
+  compositionPreviewContent: unknown
+  previewContext: unknown
+  assetDigests: readonly Readonly<{ assetId: string; sha256: string }>[]
+}
+export type PreviewIdentityDigestInput =
+  | PreviewIdentityEnvelope
+  | CompositionPreviewIdentityEnvelopeV2
+
 export function serializePreviewIdentity(
-  input: PreviewIdentityEnvelope,
+  input: PreviewIdentityDigestInput,
 ): string {
+  if (input.version !== 1 && input.version !== 2)
+    throw new Error("Unsupported preview identity version")
   const ids = new Set<string>()
   for (const asset of input.assetDigests) {
-    if (ids.has(asset.assetId) || !/^[a-f0-9]{64}$/u.test(asset.sha256)) {
+    const key = input.version === 1
+      ? asset.assetId
+      : JSON.stringify([asset.assetId, asset.sha256])
+    if (ids.has(key) || !/^[a-f0-9]{64}$/u.test(asset.sha256)) {
       throw new Error("Invalid or duplicate asset digest")
     }
-    ids.add(asset.assetId)
+    ids.add(key)
   }
-  const assetDigests = [...input.assetDigests].sort((a, b) =>
-    a.assetId < b.assetId ? -1 : a.assetId > b.assetId ? 1 : 0,
-  )
+  const assetDigests = [...input.assetDigests].sort((a, b) => {
+    if (a.assetId !== b.assetId) return a.assetId < b.assetId ? -1 : 1
+    return a.sha256 < b.sha256 ? -1 : a.sha256 > b.sha256 ? 1 : 0
+  })
+  if (input.version === 2) {
+    return canonicalJson({
+      version: input.version,
+      draftId: input.draftId,
+      revision: input.revision,
+      compositionPreviewContent: input.compositionPreviewContent,
+      previewContext: input.previewContext,
+      assetDigests,
+    })
+  }
   return canonicalJson({
     version: input.version,
     draftId: input.draftId,
@@ -71,5 +101,5 @@ export function serializePreviewIdentity(
     assetDigests,
   })
 }
-export const previewIdentityDigest = (input: PreviewIdentityEnvelope) =>
+export const previewIdentityDigest = (input: PreviewIdentityDigestInput) =>
   sha256Hex(serializePreviewIdentity(input))
