@@ -1,0 +1,25 @@
+{
+  "samples": 87,
+  "minFreeBytes": 2649329664,
+  "maxAccountedBytes": 13770752,
+  "maxPidsCurrent": 66,
+  "maxPidsPeak": 66,
+  "maxPidLimitEvents": 0,
+  "maxZombiesObserved": 0,
+  "supervisorTransitions": 0,
+  "drainSamples": {
+    "after-actual-native-drain.jsonl": 1,
+    "after-analyze-results-drain.jsonl": 1,
+    "after-failed-startup-witness-drain.jsonl": 1,
+    "after-verify-actual-native-drain.jsonl": 1,
+    "after-verify-before-drain.jsonl": 1,
+    "after-verify-failed-startup-witness-drain.jsonl": 1,
+    "before-actual-native-drain.jsonl": 1,
+    "before-analyze-results-drain.jsonl": 1,
+    "before-failed-startup-witness-drain.jsonl": 1,
+    "before-verify-actual-native-drain.jsonl": 1,
+    "before-verify-before-drain.jsonl": 1,
+    "before-verify-failed-startup-witness-drain.jsonl": 1
+  },
+  "runnerStopped": true
+}

@@ -1,0 +1,28 @@
+{
+  "id": "beaee543-9332-4cf6-915f-24334f7e88fd",
+  "context": {
+    "mode": "recover",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-UX25gd",
+    "sequence": "1",
+    "owner": ""
+  },
+  "pid": 387,
+  "event": "close",
+  "code": 0,
+  "signal": null,
+  "observedNs": "996280640937200",
+  "startedNs": "996276447350911",
+  "streams": {
+    "stdout": {
+      "file": "beaee543-9332-4cf6-915f-24334f7e88fd.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "beaee543-9332-4cf6-915f-24334f7e88fd.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

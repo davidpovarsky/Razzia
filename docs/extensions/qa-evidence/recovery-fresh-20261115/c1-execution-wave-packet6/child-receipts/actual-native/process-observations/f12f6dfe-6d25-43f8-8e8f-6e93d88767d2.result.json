@@ -1,0 +1,28 @@
+{
+  "id": "f12f6dfe-6d25-43f8-8e8f-6e93d88767d2",
+  "context": {
+    "mode": "before-public",
+    "root": "/scratch/c1/tadazz-c1-native-synthetic-VQ583k",
+    "sequence": "",
+    "owner": ""
+  },
+  "pid": 180,
+  "event": "close",
+  "code": null,
+  "signal": "SIGKILL",
+  "observedNs": "996213016686033",
+  "startedNs": "996208957676464",
+  "streams": {
+    "stdout": {
+      "file": "f12f6dfe-6d25-43f8-8e8f-6e93d88767d2.stdout.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "file": "f12f6dfe-6d25-43f8-8e8f-6e93d88767d2.stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "observationErrors": []
+}

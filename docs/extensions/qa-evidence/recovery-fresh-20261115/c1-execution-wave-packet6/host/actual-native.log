@@ -1,0 +1,24 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work[39m
+
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22muses the actual validator, one preparer and independent random8 native basename without opaque save[33m 412[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mkeeps idless legacy bytes unchanged during pure preparation and rejects missing enabled owner before allocation[32m 70[2mms[22m[39m
+[90mstdout[2m | packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22m[2mC1 actual native creation composition[2m > [22m[2muses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change
+[22m[39mGame cleanup task started
+
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22muses real manager JWT/session middleware in two tenants and discovers the dedicated roots after a flag change[33m 18936[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mkeeps actual HTTP create/import failures private before durable intent[33m 396[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22mretains explicit accounts-off legacy import with no sidecar publication[32m 203[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-public SIGKILL and two fresh startup replays[33m 12870[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native after-sidecar SIGKILL and two fresh startup replays[33m 12603[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-id-return SIGKILL and two fresh startup replays[33m 12794[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native committed-visible SIGKILL and two fresh startup replays[33m 12600[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native private-cleanup SIGKILL and two fresh startup replays[33m 12508[2mms[22m[39m
+ [32m✓[39m [30m[43m socket [49m[39m packages/socket/src/services/quiz-creation-reservation.test.ts[2m > [22mC1 actual native creation composition[2m > [22msurvives actual native before-slot-removal SIGKILL and two fresh startup replays[33m 12313[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m11 passed[39m[22m[90m (11)[39m
+[2m   Start at [22m 15:14:54
+[2m   Duration [22m 101.60s[2m (tests 95%, transform 4%, import 1%)[22m
+
+JSON report written to /qa/results/actual-native.results.json

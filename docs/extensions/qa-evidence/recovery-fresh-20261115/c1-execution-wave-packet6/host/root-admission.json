@@ -1,0 +1,82 @@
+{
+  "admissionSha256": "88e51b65be9cfd47ee1637ecfdabca912951b6de94e341ffc7612b109133c259",
+  "admission": {
+    "issuerThreadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+    "executionAuthorized": true,
+    "sourceDisposition": "APPROVE_WITH_EXACT_GATES",
+    "packetDisposition": "OWNER_AUTHORIZED_ISOLATED_ITERATION",
+    "parentAuthorization": {
+      "id": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+      "issuedByThreadId": "01a1dfa1-57d8-7223-a965-2f4f31fe8b23",
+      "activationSha256": "82ae4417da0af01cbffca6cb2d8d1ee79e93cd3a8b48a313484e8b3b29cf3f3c",
+      "waveSha256": "ba6b9812d6f1a4d8cbcdb25421f547f64b7b2c68f16c7bab733442d7215a37b8",
+      "lane": "B",
+      "developerThreadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892"
+    },
+    "syntheticFixtureOnly": true,
+    "independentReviewClaimed": false,
+    "admittedAtEpochSeconds": 1794755661.1994967,
+    "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+    "packetManifestSha256": "9e9d1ca96626d904a7449bd18a11bf62ddf69d510bcf0459ed48314ee305b465",
+    "packetHashesSha256": "8c60a8ce3c5d5f233eea4c4f6c8b570c93255590680f280a6b183be4a8ec099e",
+    "laneLedgerPath": "/home/ubuntu/tadazz-hq-qa-20261115/admissions/recovery-wave-packet6-wave.ledger.json",
+    "laneLedgerSha256": "a106282621308e44cf9ed213cf0d6e7fd1712eaf046d65473d2f4caf13e6290c",
+    "laneLedgerSnapshotId": "recovery-wave-packet6-wave-1794755661"
+  },
+  "laneLedgerSha256": "a106282621308e44cf9ed213cf0d6e7fd1712eaf046d65473d2f4caf13e6290c",
+  "ledger": {
+    "schemaVersion": 1,
+    "snapshotId": "recovery-wave-packet6-wave-1794755661",
+    "issuerThreadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+    "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+    "packetHashesSha256": "8c60a8ce3c5d5f233eea4c4f6c8b570c93255590680f280a6b183be4a8ec099e",
+    "capturedAtEpochSeconds": 1794755661.1994967,
+    "expiresAtEpochSeconds": 1794755961.1994967,
+    "exampleOnly": false,
+    "lanes": [
+      {
+        "laneId": "qa:01a1dfa9-3316-7a02-afef-3dccd5939e79",
+        "cpuGrant": 0.5,
+        "memoryGrantBytes": 2080374784,
+        "newPhysicalBudgetBytes": 209715200,
+        "consumedPhysicalBytes": 0
+      },
+      {
+        "laneId": "show_ui:01a1dfa9-d401-77f3-a539-82c918b393f4",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 0
+      },
+      {
+        "laneId": "telephony:01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 1073741824,
+        "newPhysicalBudgetBytes": 16777216,
+        "consumedPhysicalBytes": 151552
+      },
+      {
+        "laneId": "Recovery-C1",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 4124672
+      }
+    ],
+    "aggregate": {
+      "approvedCpu": 1.5,
+      "approvedMemoryBytes": 8589934592,
+      "retainedSharedMetadataBytesOnce": 456130560
+    },
+    "disk": {
+      "floorBytes": 2147483648,
+      "futureReserveBytes": 0,
+      "marginBytes": 67108864
+    },
+    "ram": {
+      "minimumHostAvailableBytes": 7449083904
+    },
+    "runtimeRegisterSha256": "07d05bddb92fdca270ce7c865aca666fdea94e7f16b64688c5facd8943606fa5",
+    "authority": "Owner-activated developer claim; no independent packet review claimed"
+  }
+}
