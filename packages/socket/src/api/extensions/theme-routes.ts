@@ -14,6 +14,7 @@ import { apiFactory, type ApiEnv } from "@razzia/socket/api/factory"
 import { requireManager } from "@razzia/socket/api/middleware"
 import {
   ThemeInstallationError,
+  createThemeBuilderRoutes,
   themeApprovalSchema,
 } from "@razzia/extensions/server"
 import { showThemeDefinitionSchema } from "@razzia/extensions/core"
@@ -359,4 +360,13 @@ export const themeRoutes = apiFactory
         ),
     })
   })
+  .route(
+    "/builder",
+    createThemeBuilderRoutes({
+      enabled: themeInstallerEnabled,
+      principal: (claims, tenantId) =>
+        themeWorkspacePrincipal(claims.sub, tenantId),
+      store: themeInstallationStore,
+    }),
+  )
   .route("/workspaces/:tenantId", workspace)

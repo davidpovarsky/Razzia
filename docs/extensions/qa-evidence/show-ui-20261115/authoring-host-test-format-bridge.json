@@ -1,0 +1,9 @@
+{
+  "path": "extensions/src/server/show-themes/builder-host.test.ts",
+  "run7InputSha256": "53af464824c41bd08605949794de16c5fc9fb20c87836625bd4edea3b491dbe7",
+  "formattedOutputSha256": "7f1780d7a352c4c058d5201dd88e1668211cb43fad54a44602db5043e205a92c",
+  "committedDaeSha256": "7f1780d7a352c4c058d5201dd88e1668211cb43fad54a44602db5043e205a92c",
+  "sameAst": true,
+  "receipt": "run7-evidence/format-receipts.json",
+  "meaning": "Only formatting after run7; same Babel AST recorded by the retained formatter; actual executed input remains the unformatted source hash. No rerun or broader claim."
+}

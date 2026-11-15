@@ -60,6 +60,7 @@ export * from "./game/round-checkpoints"
 export * from "./game/authored-coordinator"
 
 export * from "./show-themes/installation"
+export * from "./show-themes/builder-routes"
 
 export type { ThemePrincipal } from "./show-themes/review"
 

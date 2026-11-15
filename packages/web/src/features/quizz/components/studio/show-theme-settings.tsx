@@ -20,6 +20,7 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { ShowThemePreview } from "./show-theme-preview"
+import { OpenThemeBuilderLink } from "@razzia/extensions/presentation"
 import {
   useInstalledThemeCatalog,
   useAvailableShowThemes,
@@ -81,6 +82,7 @@ export function ShowThemeSettings() {
         <h2 className="text-foreground text-lg font-bold">
           {t("extensions:themes.title")}
         </h2>
+        <OpenThemeBuilderLink className="text-primary text-sm underline" />
         {theme.diagnostics.length > 0 && (
           <p role="status" className="text-muted-foreground text-sm">
             {t("extensions:themes.unknownTheme")}
