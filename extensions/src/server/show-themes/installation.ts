@@ -23,6 +23,16 @@ import {
 import { showThemeRegistry } from "../../core/show-themes/registry"
 import { validateThemeAssetBytes } from "./validate-package"
 import type { ThemePrincipal } from "./review"
+import {
+  parseBuilderDocument,
+  builderDigest,
+  type BuilderDocument,
+} from "../../components/theme-builder/document"
+import {
+  CompositionRepository,
+  type CompositionDraftRecord,
+  type CompositionStorage,
+} from "../../core/show-library/composition-repository"
 
 const sha = (value: string | Buffer) =>
   createHash("sha256").update(value).digest("hex")
@@ -125,9 +135,201 @@ export class ThemeInstallationStore {
       CREATE TABLE IF NOT EXISTS theme_audit (
         sequence INTEGER PRIMARY KEY AUTOINCREMENT, tenant_id TEXT NOT NULL,
         actor_id TEXT NOT NULL, artifact_id TEXT, action TEXT NOT NULL, at INTEGER NOT NULL, detail TEXT NOT NULL);`)
+    this.db.exec(`CREATE TABLE IF NOT EXISTS theme_builder_documents (
+      tenant_id TEXT NOT NULL, document_id TEXT NOT NULL, document TEXT NOT NULL,
+      revision INTEGER NOT NULL, document_sha256 TEXT NOT NULL, updated_by TEXT NOT NULL,
+      PRIMARY KEY(tenant_id,document_id));`)
+    this.db.exec(`CREATE TABLE IF NOT EXISTS theme_builder_versions (
+      tenant_id TEXT NOT NULL, document_id TEXT NOT NULL, version TEXT NOT NULL,
+      publication TEXT NOT NULL, PRIMARY KEY(tenant_id,document_id,version));`)
   }
   close() {
     this.db.close()
+  }
+  /** Authoring persistence only; a saved composition grants no install or preview pin. */
+  private builderRepository(
+    p: ThemePrincipal,
+    envelope?: BuilderDocument,
+    onRead?: (document: BuilderDocument) => void,
+  ) {
+    this.require(p, "author")
+    const owned = (key: { tenantId: string }) => {
+      if (key.tenantId !== p.tenantId)
+        throw new ThemeInstallationError("Not found", 404)
+    }
+    const storage: CompositionStorage = {
+      readDraft: async (key) => {
+        owned(key)
+        const row = this.db
+          .prepare(
+            "SELECT * FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+          )
+          .get(key.tenantId, key.draftId)
+        if (!row) return null
+        const document = parseBuilderDocument(
+          JSON.parse(row.document as string),
+        )
+        onRead?.(document)
+        return {
+          key,
+          revision: row.revision as number,
+          document: document.content,
+          documentSha256: row.document_sha256 as string,
+        }
+      },
+      compareAndSwapDraft: async (
+        key,
+        expected,
+        next: CompositionDraftRecord,
+      ) => {
+        owned(key)
+        if (!envelope || envelope.id !== key.draftId)
+          throw new ThemeInstallationError("Invalid draft")
+        return this.transaction(() => {
+          const row = this.db
+            .prepare(
+              "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+            )
+            .get(key.tenantId, key.draftId)
+          if ((row?.revision ?? null) !== expected) return false
+          if (!row) {
+            const count = this.db
+              .prepare(
+                "SELECT COUNT(*) AS count FROM theme_builder_documents WHERE tenant_id=?",
+              )
+              .get(p.tenantId)!.count as number
+            if (count >= 128)
+              throw new ThemeInstallationError(
+                "Theme draft quota exceeded",
+                409,
+              )
+          }
+          const document = parseBuilderDocument({
+            ...envelope,
+            content: next.document,
+          })
+          this.db
+            .prepare(
+              "INSERT INTO theme_builder_documents(tenant_id,document_id,document,revision,document_sha256,updated_by) VALUES (?,?,?,?,?,?) ON CONFLICT(tenant_id,document_id) DO UPDATE SET document=excluded.document,revision=excluded.revision,document_sha256=excluded.document_sha256,updated_by=excluded.updated_by",
+            )
+            .run(
+              p.tenantId,
+              key.draftId,
+              JSON.stringify(document),
+              next.revision,
+              next.documentSha256,
+              p.userId,
+            )
+          this.audit(p, "builder-save", null, {
+            documentId: key.draftId,
+            revision: next.revision,
+            digest: builderDigest(document),
+          })
+          return true
+        })
+      },
+      readVersion: async (key, version) => {
+        owned(key)
+        const row = this.db
+          .prepare(
+            "SELECT publication FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
+          )
+          .get(key.tenantId, key.draftId, version)
+        return row ? JSON.parse(row.publication as string) : null
+      },
+      publishIfRevision: async (key, expected, publication) => {
+        owned(key)
+        return this.transaction(() => {
+          const current = this.db
+            .prepare(
+              "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+            )
+            .get(key.tenantId, key.draftId)
+          if (current?.revision !== expected) return "revision-conflict"
+          if (
+            this.db
+              .prepare(
+                "SELECT 1 FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
+              )
+              .get(key.tenantId, key.draftId, publication.version)
+          )
+            return "version-exists"
+          this.db
+            .prepare(
+              "INSERT INTO theme_builder_versions(tenant_id,document_id,version,publication) VALUES (?,?,?,?)",
+            )
+            .run(
+              key.tenantId,
+              key.draftId,
+              publication.version,
+              JSON.stringify(publication),
+            )
+          this.audit(p, "builder-content-version", null, {
+            documentId: key.draftId,
+            version: publication.version,
+            runtimeAcceptance: publication.runtimeAcceptance,
+          })
+          return "stored"
+        })
+      },
+    }
+    return new CompositionRepository(storage)
+  }
+  async saveBuilderDocument(
+    p: ThemePrincipal,
+    expectedRevision: number,
+    input: unknown,
+  ) {
+    this.require(p, "author")
+    if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0)
+      throw new ThemeInstallationError("Invalid draft revision")
+    const document = parseBuilderDocument(input)
+    try {
+      const record = await this.builderRepository(p, document).save(
+        { tenantId: p.tenantId, draftId: document.id },
+        expectedRevision === 0 ? null : expectedRevision,
+        document.content,
+      )
+      return {
+        document,
+        revision: record.revision,
+        digest: builderDigest(document),
+      }
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        error.message === "show-library:draft-revision-conflict"
+      )
+        throw new ThemeInstallationError("Draft revision conflict", 409)
+      throw error
+    }
+  }
+  async readBuilderDocument(p: ThemePrincipal, id: string) {
+    this.require(p, "author")
+    let snapshot: BuilderDocument | undefined
+    const record = await this.builderRepository(p, undefined, (document) => {
+      snapshot = document
+    }).read({ tenantId: p.tenantId, draftId: id })
+    if (!record) throw new ThemeInstallationError("Not found", 404)
+    if (!snapshot) throw new ThemeInstallationError("Not found", 404)
+    return {
+      document: snapshot,
+      revision: record.revision,
+      digest: builderDigest(snapshot),
+    }
+  }
+  listBuilderDocuments(p: ThemePrincipal) {
+    this.require(p, "author")
+    return this.db
+      .prepare(
+        "SELECT document_id,revision,document FROM theme_builder_documents WHERE tenant_id=? ORDER BY document_id",
+      )
+      .all(p.tenantId)
+      .map((row) => ({
+        id: row.document_id as string,
+        revision: row.revision as number,
+        name: parseBuilderDocument(JSON.parse(row.document as string)).name,
+      }))
   }
   private require(p: ThemePrincipal, grant: ThemePrincipal["grants"][number]) {
     if (

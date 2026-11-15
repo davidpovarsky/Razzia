@@ -35,8 +35,14 @@ import { useSiteText } from "../../locales"
 import { AccountPanel } from "./AccountPanel"
 import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
+import { OpenThemeBuilderLink } from "../../../components/theme-builder/OpenThemeBuilderLink"
 
 const LegacyTools = lazy(() => import("./LegacyTools"))
+const StudioThemeBuilder = lazy(() =>
+  import("../../../components/theme-builder/StudioThemeBuilder").then(
+    (module) => ({ default: module.StudioThemeBuilder }),
+  ),
+)
 const MyGames = lazy(() =>
   import("./MyGames").then((module) => ({ default: module.MyGames })),
 )
@@ -121,6 +127,13 @@ export function Studio() {
     )
   }
 
+  if (path === "/studio/themes") {
+    return (
+      <Suspense fallback={<StudioLoading />}>
+        <StudioThemeBuilder key={profile.data.id} accountId={profile.data.id} />
+      </Suspense>
+    )
+  }
   return <StudioWorkspace key={profile.data.id} account={profile.data} />
 }
 
@@ -255,6 +268,7 @@ function StudioWorkspace({ account }: { account: Account }) {
             />
           </SiteLink>
           <nav className="side-nav">
+            <OpenThemeBuilderLink className="nav-btn" />
             {navigation.map(([id, label, Icon]) => (
               <SiteLink
                 key={id}

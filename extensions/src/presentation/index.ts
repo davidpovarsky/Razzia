@@ -80,3 +80,4 @@ export * from "./room-join"
 export * from "./show-themes/viewport"
 
 export { ThemeSandboxHost } from "./package-runtime/ThemeSandboxHost"
+export { OpenThemeBuilderLink } from "../components/theme-builder/OpenThemeBuilderLink"
