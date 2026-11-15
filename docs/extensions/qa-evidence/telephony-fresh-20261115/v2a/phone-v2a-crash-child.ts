@@ -61,6 +61,8 @@ class CrashStore extends PrototypeStore {
     const result = super.reserveOperation(...args)
     if (result.kind === "pending" && args[1].action === "answer")
       boundary("answer-reserved")
+    if (result.kind === "pending" && args[1].action === "hangup")
+      boundary("hangup-reserved")
     return result
   }
   override completeOperation(
@@ -69,8 +71,10 @@ class CrashStore extends PrototypeStore {
     result: Receipt,
   ) {
     if (input.action === "answer") boundary("answer-projected", result)
+    if (input.action === "hangup") boundary("hangup-projected", result)
     const receipt = super.completeOperation(context, input, result)
     if (input.action === "answer") boundary("answer-committed", receipt)
+    if (input.action === "hangup") boundary("hangup-committed", receipt)
     return receipt
   }
 }
@@ -79,15 +83,15 @@ const prototype = new LifecyclePrototype(store, r.facade, () => true)
 const registration = prototype.register(r.context, request)
 assert.equal(registration.ok, true)
 rosterId = registration.rosterPlayerId!
-if (window.startsWith("answer-")) {
-  await r.start()
+if (window.startsWith("answer-") || window.startsWith("hangup-")) {
+  if (window.startsWith("answer-")) await r.start()
   const input: OperationInput = {
-    action: "answer",
+    action: window.startsWith("answer-") ? "answer" : "hangup",
     requestId: request.requestId,
     registrationId: registration.registrationId!,
     generation: registration.generation!,
     capability: request.capability,
-    operationId: "kill-answer",
+    operationId: "kill-operation",
     epoch: r.game.getQuestionStateForGateway().epoch,
     answerIndex: 4,
   }

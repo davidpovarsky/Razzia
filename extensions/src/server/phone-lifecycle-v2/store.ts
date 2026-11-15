@@ -67,8 +67,9 @@ export class PrototypeStore {
       }
     }
     const prior = process.umask(0o077)
+    let opened: DatabaseSync | undefined
     try {
-      this.sql = new DatabaseSync(path, { timeout: 2000 })
+      this.sql = opened = new DatabaseSync(path, { timeout: 2000 })
       this.sql.exec(`PRAGMA journal_mode=WAL; PRAGMA synchronous=FULL;
         PRAGMA foreign_keys=ON;
         CREATE TABLE IF NOT EXISTS game_authorities (
@@ -139,7 +140,7 @@ export class PrototypeStore {
         }
       }
     } catch (error) {
-      this.sql?.close()
+      opened?.close()
       throw error
     } finally {
       process.umask(prior)

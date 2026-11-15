@@ -11,6 +11,7 @@ import {
   writeSync,
 } from "node:fs"
 import { join, resolve } from "node:path"
+import { Server as HttpServer } from "node:http"
 import type { VerifiedServiceContext } from "../../../../../extensions/src/server/phone-lifecycle-v2/contracts"
 import { RealGameFacade } from "../../../../../extensions/src/server/phone-lifecycle-v2/game-facade"
 
@@ -202,7 +203,7 @@ export async function bootActualBackend() {
     registry.cleanup()
     io.disconnectSockets(true)
     await new Promise<void>((done) => io.close(() => done()))
-    server.closeAllConnections?.()
+    if (server instanceof HttpServer) server.closeAllConnections()
     if (server.listening)
       await new Promise<void>((done) => server.close(() => done()))
   }

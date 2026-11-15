@@ -415,7 +415,7 @@ test("V2A-04 revocation after durable reservation denies projection and leaves b
       ...args: Parameters<PrototypeStore["reserveRegistration"]>
     ) {
       const result = super.reserveRegistration(...args)
-      live = false
+      if (result.kind === "reserved") live = false
       return result
     }
   }
@@ -671,6 +671,9 @@ for (const window of [
   "answer-reserved",
   "answer-projected",
   "answer-committed",
+  "hangup-reserved",
+  "hangup-projected",
+  "hangup-committed",
 ]) {
   test(
     "V2A-08 actual SIGKILL/reopen at " + window,
@@ -746,12 +749,20 @@ for (const window of [
                 first.receipt.status,
                 window === "answer-committed"
                   ? "accepted"
-                  : "operation_pending_unknown",
+                  : window === "hangup-committed"
+                    ? "registration_retired"
+                    : "operation_pending_unknown",
               )
-            assert.equal(
-              boundary.snapshot.answered,
-              window !== "answer-reserved",
-            )
+            if (window.startsWith("answer-"))
+              assert.equal(
+                boundary.snapshot.answered,
+                window !== "answer-reserved",
+              )
+            else
+              assert.equal(
+                boundary.snapshot.status,
+                window === "hangup-reserved" ? "connected" : "disconnected",
+              )
           }
           const unrelated = await backend.room(),
             p = new LifecyclePrototype(reopened, unrelated.facade, valid)
