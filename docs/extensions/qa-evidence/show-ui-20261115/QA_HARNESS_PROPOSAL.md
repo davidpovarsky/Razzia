@@ -1,6 +1,6 @@
 # Private browser harness candidate — not run
 
-This QA-only candidate targets the exact d095 renderer JS/CSS, five existing
+This QA-only candidate now targets the exact dd3 renderer JS/CSS, five existing
 native image files and the genuine producer host APIs. The user authorized
 these image bytes for **private isolated synthetic QA only**. Redistribution
 rights remain unknown and export is denied; this is not an accepted registry
@@ -17,7 +17,7 @@ No platform-only Rubik file is added to the native renderer fixture.
 | File in this directory | Bytes | SHA-256 |
 | --- | ---: | --- |
 | `qa-fixture-host.ts` | 2,760 | `4bc9f57da87d6186584a313facd166a86d7d63a45c5e94cf392da752ee5bf90d` |
-| `qa-fixture-server.ts` | 6,292 | `792d182242e614a024af697fc4f8eab28e397554845c748ed434a275ba6103ec` |
+| `qa-fixture-server.ts` | 6,292 | `bcad1819d93b85850a0da926a6df645307b38387a343dc17815037f8399f5f9f` |
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
 | `qa-preview.spec.ts` | 10,039 | `53493fe9f5a9a7c19ebe93c6efaf2877bd7467ce7955cfa455f51818d74877f3` |
 | `qa-preview.config.ts` | 812 | `ce23bf3d4303ed7c4512beda8337501549f239944d29c5823041d6d590d5374e` |
@@ -60,12 +60,12 @@ has been executed or typechecked; these are test intentions, not passes.
 
 ## Proposed exact fixture overlay and budget
 
-On the already verified d095 source/dependency baseline, add only these six
+On the verified source/dependency baseline plus the dd3 renderer config, add only these six
 QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
-In a new owned output root, place d095 `renderer.js` and `renderer.css`, copy
+In a new owned output root, place dd3 `renderer.js` and `renderer.css`, copy
 `qa-browser.mjs` to `browser.mjs`, and copy the five inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-4,307,904 bytes; the six QA source files total 22,668 bytes. Existing source
+3,746,799 bytes; the six QA source files total 22,668 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.

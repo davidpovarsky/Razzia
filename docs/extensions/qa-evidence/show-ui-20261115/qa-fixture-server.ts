@@ -9,7 +9,7 @@ const root = realpathSync(process.argv[2] ?? "")
 const harnessSha = process.argv[3] ?? ""
 if (!/^[a-f0-9]{64}$/u.test(harnessSha)) throw new Error("qa:expected-harness-sha-required")
 const entries = {
-  "/renderer.js": ["renderer.js", "text/javascript", "1fa5ca2b9f163ecc52b61ad54faf2656bbca612b3a67ab26ffbc6d375b6503eb"],
+  "/renderer.js": ["renderer.js", "text/javascript", "9024a0bef2cfbe3d8868d9fc3c6657269abd84d45c00bee0c95b02934f9763b1"],
   "/renderer.css": ["renderer.css", "text/css", "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"],
   "/qa/browser.mjs": ["browser.mjs", "text/javascript", harnessSha],
   "/tadazz-show/motion/backdrop.webp": ["tadazz-show/motion/backdrop.webp", "image/webp", "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"],
