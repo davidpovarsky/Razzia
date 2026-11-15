@@ -1,10 +1,16 @@
-import type { Action } from "../../../server/phone-lifecycle-v2/contracts"
+import type {
+  Action,
+  Receipt,
+  RegistrationInput,
+} from "../../../server/phone-lifecycle-v2/contracts"
 import type { ControlReceipt } from "../../../server/phone-lifecycle-v2/auth/contracts"
 import type {
   GatewayCustodyOptions,
   GatewayDelivery,
   GatewayDeliveryAck,
   GatewayLeaseView,
+  GatewayRegistrationAuthorityPort,
+  GatewayRegistrationDispatcher,
 } from "./contracts"
 import { bindingText, delivery, deny, id, lease, target } from "./codec"
 import { PrivateGatewayCustody } from "./private-custody"
@@ -62,6 +68,49 @@ export class PrivateGatewayAdapter {
   }
   inspect(): GatewayDeliveryAck {
     return this.authorize()
+  }
+  // Private typed host port: no raw service credential getter or generic work callback.
+  registrationDispatcher(): GatewayRegistrationDispatcher {
+    const authority = this.options.authority as GatewayRegistrationAuthorityPort
+    if (typeof authority.register !== "function") deny()
+    const current = () => {
+      this.authorize("register")
+      return this.current().binding
+    }
+    return Object.freeze({
+      current,
+      register: async (input: RegistrationInput): Promise<Receipt> => {
+        try {
+          const request = Object.freeze({ ...input })
+          const expected = current(),
+            sealed = this.files.read(expected)
+          if (sealed.credential === null) deny()
+          this.options.authority.assertCredential(
+            expected,
+            sealed.credential,
+            "register",
+          )
+          const result = await authority.register(
+            expected,
+            sealed.credential,
+            request,
+          )
+          this.options.authority.assertCredential(
+            expected,
+            sealed.credential,
+            "register",
+          )
+          if (bindingText(current()) !== bindingText(expected)) deny()
+          this.files.assertUnchanged(sealed)
+          return registrationReceipt(result, [
+            sealed.credential,
+            request.capability,
+          ])
+        } catch {
+          return deny()
+        }
+      },
+    })
   }
   authorization(action: Action): GatewayDeliveryAck {
     return this.authorize(action)
@@ -142,4 +191,56 @@ export class PrivateGatewayAdapter {
       return deny()
     }
   }
+}
+
+export function registrationReceipt(
+  input: Receipt,
+  secrets: readonly string[] = [],
+): Receipt {
+  const keys = [
+    "ok",
+    "status",
+    "registrationId",
+    "generation",
+    "rosterPlayerId",
+    "clientId",
+  ]
+  if (
+    !input ||
+    typeof input !== "object" ||
+    "then" in input ||
+    Object.keys(input).some((key) => !keys.includes(key)) ||
+    typeof input.ok !== "boolean" ||
+    typeof input.status !== "string" ||
+    !/^[a-z][a-z_]{0,63}$/u.test(input.status)
+  )
+    deny()
+  const result: Receipt = { ok: input.ok, status: input.status }
+  for (const key of ["registrationId", "rosterPlayerId", "clientId"] as const) {
+    if (input[key] !== undefined) {
+      id(input[key])
+      result[key] = input[key]
+    }
+  }
+  if (input.generation !== undefined) {
+    if (!Number.isSafeInteger(input.generation) || input.generation < 1) deny()
+    result.generation = input.generation
+  }
+  if (
+    result.ok &&
+    (!result.registrationId ||
+      !result.rosterPlayerId ||
+      !result.clientId ||
+      !result.generation)
+  )
+    deny()
+  if (
+    Object.values(result).some(
+      (value) =>
+        typeof value === "string" &&
+        secrets.some((secret) => value.includes(secret)),
+    )
+  )
+    deny()
+  return Object.freeze(result)
 }

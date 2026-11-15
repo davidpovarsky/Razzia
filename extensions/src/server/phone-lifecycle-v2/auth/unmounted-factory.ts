@@ -42,7 +42,7 @@ import type { ControlRequest, SecretAttempt, ServiceAddress } from "./contracts"
 import type { ServiceLeaseRecord } from "./contracts"
 import {
   GATEWAY_DELIVERY_PURPOSE,
-  type GatewayAuthorityPort,
+  type GatewayRegistrationAuthorityPort,
   type GatewayBinding,
   type GatewayDeliveryDestination,
   type GatewayDeliveryAck,
@@ -215,7 +215,7 @@ export class UnmountedPhoneAuthority {
   async openGatewayAuthority(
     token: string,
     target: ControlTarget,
-  ): Promise<GatewayAuthorityPort> {
+  ): Promise<GatewayRegistrationAuthorityPort> {
     this.assertOpen()
     const prepared = await this.accounts.prepareManager(token, target.game)
     try {
@@ -275,6 +275,16 @@ export class UnmountedPhoneAuthority {
           })
         },
         assertCredential,
+        register: async (
+          input: GatewayBinding,
+          capability: string,
+          registration: RegistrationInput,
+        ) => {
+          assertCredential(input, capability, "register")
+          const receipt = await this.register(input, capability, registration)
+          assertCredential(input, capability, "register")
+          return receipt
+        },
         activate: async (
           input: GatewayBinding,
           capability: string,

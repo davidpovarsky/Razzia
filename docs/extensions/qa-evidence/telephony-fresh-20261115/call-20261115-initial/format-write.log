@@ -1,0 +1,6 @@
+docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/call.node.ts 289ms
+docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/prepare-overlay.mjs 37ms (unchanged)
+extensions/src/telephony/pilot-runtime/gateway-v2/contracts.ts 83ms
+extensions/src/telephony/pilot-runtime/gateway-v2/adapter.ts 69ms
+extensions/src/telephony/pilot-runtime/gateway-v2/call-precommit.ts 110ms
+extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts 127ms
