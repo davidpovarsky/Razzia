@@ -1,0 +1,5 @@
+[96mextensions/src/mcp-app/server/http.ts[0m:[93m431[0m:[93m13[0m - [91merror[0m[90m TS2345: [0mArgument of type '327680 | 4194304' is not assignable to parameter of type '327680 | undefined'.
+  Type '4194304' is not assignable to type '327680'.
+
+[7m431[0m             uiRead ? PREVIEW_UI_RESPONSE_LIMIT : LIMITS.response,
+[7m   [0m [91m            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
