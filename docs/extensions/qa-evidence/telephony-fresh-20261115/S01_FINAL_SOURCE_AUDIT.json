@@ -1,0 +1,13 @@
+{
+  "head_source_sha": "422eae307ee44135cd5bcb0d8ff996bf8ab7bf7e",
+  "approved_s01_diff_exact": true,
+  "protected_changed_paths": [
+    "packages/socket/src/api/extensions/game-routes.ts"
+  ],
+  "global_config_changes": [],
+  "all_original_13_bodies_unchanged": true,
+  "all_15_bodies_identical_to_19cb057": true,
+  "all_15_body_sha256": "8eb33c54feb5ecfe4d20e3a6690f5df8aa80109dc8bd7f2955277472d3b2d49e",
+  "vitest_discovery_excludes_explicit_node_name": true,
+  "s02_applied": false
+}

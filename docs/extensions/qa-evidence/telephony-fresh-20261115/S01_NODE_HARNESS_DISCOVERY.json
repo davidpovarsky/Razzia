@@ -1,0 +1,7 @@
+{
+  "old_vitest_include": "src/**/*.test.ts",
+  "explicit_node_filename": "phone-real-backend.node.ts",
+  "all_15_case_body_bytes_unchanged": true,
+  "original_13_body_unchanged": true,
+  "all_15_body_sha256": "8eb33c54feb5ecfe4d20e3a6690f5df8aa80109dc8bd7f2955277472d3b2d49e"
+}

@@ -1,0 +1,19 @@
+{
+  "extends": "../../../../tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "types": ["node"],
+    "typeRoots": [
+      "../../../../packages/socket/node_modules/@types",
+      "../../../node_modules/@types"
+    ]
+  },
+  "files": ["../../../../packages/socket/src/api/extensions/game-routes.ts"],
+  "include": []
+}

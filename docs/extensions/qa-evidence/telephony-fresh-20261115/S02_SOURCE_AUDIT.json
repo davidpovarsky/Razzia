@@ -1,0 +1,12 @@
+{
+  "base": "b083c4691960dcee124f5a5c8ec661cd2294d637",
+  "s02_import_and_two_hunks_only": true,
+  "format_only_new_condition_wrapped": true,
+  "approved_patch_sha256": "81fdec956eaa229a3d01da901dd27e513cb73f2b7b4adcd93050603da5c96c1b",
+  "protected_changed_paths": [
+    "packages/socket/src/api/extensions/game-routes.ts"
+  ],
+  "all_original_15_bodies_unchanged": true,
+  "prior_15_body_sha256": "8eb33c54feb5ecfe4d20e3a6690f5df8aa80109dc8bd7f2955277472d3b2d49e",
+  "total_cases": 18
+}

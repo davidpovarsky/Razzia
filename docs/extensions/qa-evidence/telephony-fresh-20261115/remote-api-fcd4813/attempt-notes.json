@@ -1,0 +1,8 @@
+{
+  "preflight": "Unprivileged docker denied; existing sudo -n docker authorized and used. No trust/settings changes.",
+  "attempt_01": "exit126 before setup: cap-drop ALL root could not traverse newly extracted ubuntu-owned mode700 source. Changed ownership only in exclusive new source/fixture/evidence paths.",
+  "attempt_02": "exit1 before tests: pnpm automatically selected new empty cross-filesystem store; ERR_PNPM_NO_OFFLINE_TARBALL.",
+  "attempt_03": "Explicit image cache and copy import succeeded. Direct installed Node/tsx executed all13 original cases; no assertion/timeout changes.",
+  "control_script": "One read-only stat ended with a CR suffix from Windows stdin and failed; subsequent SSH stdin strips CR. No app/test impact.",
+  "source_mutations": "None; 544 source hashes verified before and after tests."
+}

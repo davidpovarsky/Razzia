@@ -1,0 +1,30 @@
+Scope: all 6 workspace projects
+? Verifying lockfile against supply-chain policies (467 entries)...
+Progress: resolved 1, reused 0, downloaded 0, added 0
+Packages are copied from the content-addressable store to the virtual store.
+  Content-addressable store is at: /root/.local/share/pnpm/store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 120, reused 120, downloaded 0, added 117
+Progress: resolved 248, reused 248, downloaded 0, added 245
+Progress: resolved 307, reused 307, downloaded 0, added 304
+Progress: resolved 352, reused 352, downloaded 0, added 351
+✓ Lockfile passes supply-chain policies (467 entries in 13.6s)
+Lockfile is up to date, resolution step is skipped
+Packages: +354
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 354, reused 354, downloaded 0, added 354, done
+Agent skills awaiting approval: @tanstack/router-plugin.
+Run "pnpm approve" to review them.
+
+devDependencies:
++ @stylistic/eslint-plugin 5.10.0
++ @vitest/coverage-v8 5.0.3
++ dotenv-cli 11.0.0
++ oxlint 1.90.0
++ oxlint-tsgolint 7.0.2004
++ prettier 3.9.10
++ prettier-plugin-tailwindcss 0.8.1
++ typescript 7.0.2
++ vitest 5.0.3
+
+Done in 15.1s using pnpm v12.18.0

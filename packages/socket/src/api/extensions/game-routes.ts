@@ -1,6 +1,7 @@
 /** Downstream HTTP adapters. These routes are not part of Razzia upstream. */
 import { zValidator } from "@hono/zod-validator"
 import {
+  normalizePhoneE164,
   parseRosterImportFile,
   rosterParticipantSchema,
 } from "@razzia/extensions/core"
@@ -264,16 +265,13 @@ export const gameExtensionRoutes = apiFactory
     zValidator("json", pilotPhoneBodySchema, i18nHook),
     (c) => {
       const expectedSecret = process.env.TADA_PILOT_SECRET
+      const providedSecret = c.req.header("x-tada-pilot-secret") ?? ""
 
-      if (expectedSecret) {
-        const providedSecret = c.req.header("x-tada-pilot-secret") ?? ""
-
-        if (providedSecret !== expectedSecret) {
-          return c.json(
-            { error: "errors:auth.unauthorized" },
-            StatusCodes.UNAUTHORIZED,
-          )
-        }
+      if (!expectedSecret || providedSecret !== expectedSecret) {
+        return c.json(
+          { error: "errors:auth.unauthorized" },
+          StatusCodes.UNAUTHORIZED,
+        )
       }
 
       const body = c.req.valid("json")
@@ -291,6 +289,22 @@ export const gameExtensionRoutes = apiFactory
       }
 
       const { game } = resolved
+
+      if (body.rosterPlayerId) {
+        const claimedEntry = game.getRosterEntry(body.rosterPlayerId)
+        const callerPhone = normalizePhoneE164(body.phone)
+
+        if (
+          !claimedEntry ||
+          !callerPhone ||
+          callerPhone !== claimedEntry.phoneE164
+        ) {
+          return c.json(
+            { ok: false, reason: "caller_binding_mismatch" },
+            StatusCodes.FORBIDDEN,
+          )
+        }
+      }
 
       if (body.action === "join_or_poll") {
         let rosterId = body.rosterPlayerId
@@ -320,12 +334,29 @@ export const gameExtensionRoutes = apiFactory
           // Ensure connected if polling after a brief drop or rebind
           const existingEntry = game.getRosterEntry(rosterId)
 
+          if (
+            existingEntry?.status === "connected" &&
+            existingEntry.activeCallId !== body.callId
+          ) {
+            return c.json(
+              { ok: false, joined: false, reason: "stale_call" },
+              StatusCodes.FORBIDDEN,
+            )
+          }
+
           if (existingEntry && existingEntry.status !== "connected") {
             joinRes = game.joinOrRebindPhoneCaller({
               phoneRaw: body.phone ?? existingEntry.phoneE164,
               callId: body.callId,
               rosterPlayerId: rosterId,
             })
+
+            if (!joinRes.ok || !joinRes.rosterPlayerId) {
+              return c.json(
+                { ok: false, reason: "caller_admission_denied" },
+                StatusCodes.FORBIDDEN,
+              )
+            }
           }
         }
 
