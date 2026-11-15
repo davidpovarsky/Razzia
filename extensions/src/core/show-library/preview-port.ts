@@ -11,3 +11,6 @@ export { canonicalJson, sha256 } from "./digest"
 
 export * from "./identity-rule"
 export type { PreviewProjectionBinding } from "./projection"
+
+export * from "./stage-metadata-schema"
+export * from "./stage-metadata"

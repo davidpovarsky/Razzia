@@ -1,0 +1,2 @@
+extensions/src/core/show-library/stage-metadata.test.ts(206,10): error TS2339: Property 'preProcessFile' does not exist on type 'typeof import("/workspace/node_modules/.pnpm/typescript@7.0.2/node_modules/typescript/lib/version")'.
+extensions/src/core/show-library/stage-metadata.test.ts(206,52): error TS7006: Parameter 'file' implicitly has an 'any' type.

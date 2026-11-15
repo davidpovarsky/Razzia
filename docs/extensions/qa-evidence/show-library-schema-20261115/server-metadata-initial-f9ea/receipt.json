@@ -1,0 +1,359 @@
+{
+  "overlaySha": "f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+  "base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "portVersion": 3,
+  "identityRuleVersion": 2,
+  "commands": [
+    {
+      "label": "git-init",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "init",
+        "-q"
+      ],
+      "exitCode": 0,
+      "seconds": 0.021,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "git-import-git-reference-objects.pack",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "index-pack",
+        "--stdin"
+      ],
+      "exitCode": 0,
+      "seconds": 0.024,
+      "logSha256": "6c2af57a00345937ac71dad14b8634f4575a613a1d32a94f5b68f4126574f267"
+    },
+    {
+      "label": "git-import-git-freeze-blobs.pack",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "index-pack",
+        "--stdin"
+      ],
+      "exitCode": 0,
+      "seconds": 0.018,
+      "logSha256": "2cf9a4dfc0f6034fb4f3368be817cdf3578ba17ff6ea27d0d140ca00e5ab0777"
+    },
+    {
+      "label": "git-ref",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "update-ref",
+        "refs/heads/sb3-validation",
+        "8a43c99c65d8923bd23d8c57ac3607e9a09b5764"
+      ],
+      "exitCode": 0,
+      "seconds": 0.002,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "git-head",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "symbolic-ref",
+        "HEAD",
+        "refs/heads/sb3-validation"
+      ],
+      "exitCode": 0,
+      "seconds": 0.002,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "git-index",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "read-tree",
+        "8a43c99c65d8923bd23d8c57ac3607e9a09b5764"
+      ],
+      "exitCode": 0,
+      "seconds": 0.008,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "git-stage",
+      "args": [
+        "git",
+        "-C",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+        "add",
+        "--",
+        "extensions/src/core/show-library"
+      ],
+      "exitCode": 0,
+      "seconds": 0.012,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "container-create",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "run",
+        "-d",
+        "--name",
+        "tadazz-hq-sb-metadata-20261115",
+        "--cpus=0.25",
+        "--memory=2g",
+        "--pids-limit=256",
+        "--network=none",
+        "--workdir=/workspace",
+        "--env",
+        "GIT_CONFIG_COUNT=1",
+        "--env",
+        "GIT_CONFIG_KEY_0=safe.directory",
+        "--env",
+        "GIT_CONFIG_VALUE_0=/workspace",
+        "--env",
+        "PATH=/fixtures/git-runtime/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin",
+        "-v",
+        "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0:/workspace",
+        "-v",
+        "/home/ubuntu/tadazz-hq-qa-20261115/evidence/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0:/evidence",
+        "-v",
+        "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0:/fixtures",
+        "--entrypoint=sleep",
+        "tadazz:design-system-qa-20261110",
+        "infinity"
+      ],
+      "exitCode": 0,
+      "seconds": 16.856,
+      "logSha256": "5a8b28c0b38cf85addc65f22dfeee3a7bd9f2c690d3572b217e3741b545603a1"
+    },
+    {
+      "label": "toolchain",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "sh",
+        "-c",
+        "node --version && pnpm --version && git --version"
+      ],
+      "exitCode": 0,
+      "seconds": 0.123,
+      "logSha256": "8cd0d93631206925103a3dfa297265d8617ac549c56c2f3684094badd9ff6e7d"
+    },
+    {
+      "label": "dependencies-frozen-offline",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "pnpm",
+        "install",
+        "--offline",
+        "--frozen-lockfile",
+        "--ignore-scripts",
+        "--store-dir=/fixtures/pnpm-store"
+      ],
+      "exitCode": 0,
+      "seconds": 12.773,
+      "logSha256": "dbdd35d6e2552d36c41b6917a9a34c434e46cfb21260a5c980671184e4aaec5a"
+    },
+    {
+      "label": "git-baseline-blobs",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "-i",
+        "tadazz-hq-sb-metadata-20261115",
+        "git",
+        "-c",
+        "core.compression=1",
+        "hash-object",
+        "-w",
+        "--no-filters",
+        "--stdin-paths"
+      ],
+      "exitCode": 0,
+      "seconds": 58.292,
+      "logSha256": "697c7fe9360a61e234a51030542f12bb5e7f24b3333be7e9dbe9d050618ef0fb"
+    },
+    {
+      "label": "focused-tests",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "-w",
+        "/workspace/extensions",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/core/show-library/stage-metadata.test.ts",
+        "src/core/show-library/projection-assets.test.ts",
+        "src/core/show-library/projection.test.ts",
+        "src/core/show-library/preview-port.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--reporter=json",
+        "--outputFile=/evidence/focused-tests.json"
+      ],
+      "exitCode": 1,
+      "seconds": 14.9,
+      "logSha256": "2326169433718593fcd18e813b9e6028a0fff4aebedf32617523b132b1c89c66"
+    },
+    {
+      "label": "focused-types",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 1,
+      "seconds": 5.71,
+      "logSha256": "d1ad216fa31f31297a498f0cdc39b2d3e440c177b07ad196f9a3b0a6eddd54db"
+    },
+    {
+      "label": "scoped-format",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "--no-config",
+        "--no-semi",
+        "--tab-width",
+        "2",
+        "--single-quote",
+        "false",
+        "--print-width",
+        "80",
+        "--trailing-comma",
+        "all",
+        "extensions/src/core/show-library"
+      ],
+      "exitCode": 0,
+      "seconds": 7.59,
+      "logSha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20"
+    },
+    {
+      "label": "design",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "extensions/qa/tds-design-check.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.207,
+      "logSha256": "9d3f1d6e5bac2e7e96a76f1e63e7cea9304ef1da98d41d8b74cb62dc40cc4982"
+    },
+    {
+      "label": "tokens",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "extensions/qa/tds-token-registry.mjs",
+        "--check"
+      ],
+      "exitCode": 0,
+      "seconds": 0.618,
+      "logSha256": "fea2b31a7e67f901620a92c3865ff4eacddf4f1f94a9c34172c75985c694e2ac"
+    },
+    {
+      "label": "catalog",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "extensions/qa/tds-catalog-check.mjs"
+      ],
+      "exitCode": 0,
+      "seconds": 0.58,
+      "logSha256": "81edefa611d579b21b9433daac02059f1c1b9855db78e8e6f2e3241e95c805e0"
+    },
+    {
+      "label": "freeze",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "node",
+        "extensions/qa/tds-boundary.mjs"
+      ],
+      "exitCode": 1,
+      "seconds": 12.294,
+      "logSha256": "9e64556204bd3d5b053e54be2ee4861f8e79677584265d445b04f3d074a993dc"
+    },
+    {
+      "label": "lease-diff",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-sb-metadata-20261115",
+        "git",
+        "diff",
+        "--name-status",
+        "8a43c99c65d8923bd23d8c57ac3607e9a09b5764"
+      ],
+      "exitCode": 0,
+      "seconds": 0.1,
+      "logSha256": "d052059e2e611f7f4fb7dac3248d95fea5604656157428715d90b320162288e2"
+    },
+    {
+      "label": "network-state",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "inspect",
+        "--format",
+        "{{json .NetworkSettings.Networks}}",
+        "tadazz-hq-sb-metadata-20261115"
+      ],
+      "exitCode": 0,
+      "seconds": 0.024,
+      "logSha256": "8d84f5567ed0de42e725d0067357ea898c053beea451d70d0d86d9a734a167a2"
+    }
+  ],
+  "status": "FINISHED_CHECK_RECEIPTS"
+}

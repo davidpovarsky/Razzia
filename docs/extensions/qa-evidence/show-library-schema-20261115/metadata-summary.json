@@ -1,0 +1,69 @@
+{
+  "status": "B1_METADATA_COMPANION_TARGETED_VERIFIED_REVIEW_PENDING",
+  "portVersion": 3,
+  "identityRuleVersion": 2,
+  "deltaSourcePin": "b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418",
+  "baseOverlaySha256": "f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+  "deltaManifestSha256": "8073147f5bfcfae207b6810a1124aff674a54b47ec44dbf9b5ba04f18c0ae3ba",
+  "initialMetadataTests": {
+    "passed": 98,
+    "failed": 1,
+    "cause": "Unsupported TypeScript7 test compiler API; raw evidence retained"
+  },
+  "finalMetadataTests": {
+    "passed": 26,
+    "failed": 0,
+    "files": 1,
+    "graphParser": "Existing Vite/Rolldown AST with static re-export/dynamic import/require negative checks"
+  },
+  "relatedRegressionTests": {
+    "passed": 73,
+    "evidence": "server-metadata-initial-f9ea",
+    "notRepeated": "Only test harness changed;25 other effective module hashes unchanged"
+  },
+  "focusedTypes": {
+    "status": "PASS",
+    "evidence": "server-metadata-delta-b59c",
+    "sameEffective26FileHashesAsFinal": true
+  },
+  "initialScopedServerFormat": "PASS",
+  "correctedTestLocalFormat": "PASS",
+  "initialMetadataFreeze": {
+    "status": "FAIL",
+    "deniedPaths": 26,
+    "protectedMismatches": []
+  },
+  "fullUiCheck": "NOT_RUN_B1_DELTA_RENEWAL_ONLY_METADATA_TESTS_AND_TC_HISTORICAL_FAIL_RETAINED",
+  "finalSourceAudit": {
+    "status": "PASS",
+    "baselineGitBlobs": 3297,
+    "effectiveModuleSha256Files": 26,
+    "oldFailedFixture26HashesPreserved": true
+  },
+  "unchangedAccepted81d5Modules": 22,
+  "acceptedModuleChange": "preview-port.ts additive metadata exports only",
+  "compiledPins": 0,
+  "visualAssets": "STRICT_DENY_UNCHANGED",
+  "actions": "UNAVAILABLE_UNCHANGED",
+  "deltaFootprint": [
+    {
+      "evidence": "server-metadata-delta-b59c",
+      "containerWritableBytes": 16384,
+      "measuredEvidenceAndOverlayBytes": 29624,
+      "diskFreeBefore": 2825543680,
+      "diskFreeAfter": 2825506816,
+      "allocationReleased": true,
+      "finishedUtc": "2026-11-15T07:42:21.677718+00:00"
+    },
+    {
+      "evidence": "server-metadata-final-b59c-xdg",
+      "containerWritableBytes": 16384,
+      "measuredEvidenceAndOverlayBytes": 37141,
+      "diskFreeBefore": 2825453568,
+      "diskFreeAfter": 2825404416,
+      "allocationReleased": true,
+      "finishedUtc": "2026-11-15T07:43:36.946442+00:00"
+    }
+  ],
+  "createdUtc": "2026-11-15T07:46:42.379390+00:00"
+}
