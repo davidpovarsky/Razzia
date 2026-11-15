@@ -1,0 +1,3 @@
+# Original C1 physical outcome-witness admission
+
+Continue original trusted-owner/foreign-evidence acceptance on unchanged accepted1909 source: committed outcome file mode, size bound, hard-link alias and linked slot. New isolated test entry only; genuine fresh-process lookup/retry must reject unsafe private authority without duplicate creation or public/foreign sentinel mutation. Also exercise the actual null-sidecar creation/result path before injecting each fault. No producer15, postcommit3, F consumer, provider/customer/production, Oracle job, new agent, polling, or shared contract/source change. Ordinary completion/evidence goes to original task1219882508725158, not a new manager handoff.
