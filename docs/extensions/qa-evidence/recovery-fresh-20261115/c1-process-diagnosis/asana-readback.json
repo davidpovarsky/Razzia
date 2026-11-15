@@ -1,0 +1,33 @@
+{
+  "priorTrial": "41 PASS / 7 FAIL unchanged",
+  "newTrialExecuted": false,
+  "nodeOnlyCandidate": "a4bd884db05a3368a1842d357cd9f173600bcf11",
+  "proposalOnly": true,
+  "executionGranted": false,
+  "readback": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 28729
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 27916
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 24367
+    },
+    {
+      "gid": "1220541793835278",
+      "completed": false,
+      "checkpointSuffixVerified": true,
+      "noteLength": 23362
+    }
+  ]
+}
