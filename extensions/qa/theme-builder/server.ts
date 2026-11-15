@@ -2,6 +2,8 @@
 import { readFileSync } from "node:fs"
 import { resolve, extname } from "node:path"
 import { createServer } from "node:http"
+import { createHash } from "node:crypto"
+import { oauthConsentSecurityHeaders } from "../../src/site/oauth-consent-headers"
 import { Hono } from "hono"
 import { sign, verify } from "hono/jwt"
 import { getRequestListener } from "@hono/node-server"
@@ -23,7 +25,7 @@ app.get("/qa/session", async (c) =>
   c.json({
     token: await sign(
       {
-        sub: "author-a",
+        sub: c.req.query("owner") === "b" ? "author-b" : "author-a",
         role: "manager",
         iat: Math.floor(Date.now() / 1000),
         exp: Math.floor(Date.now() / 1000) + 900,
@@ -65,8 +67,78 @@ app.route(
     store: () => store,
   }),
 )
+// Only this isolated component fixture emulates inspect/approve. Real F issuer
+// account/session/PKCE/grant integration remains an independently labeled check.
+const consentRequests = new Map<
+  string,
+  { proof: string; expiresAt: number; inspect: number; approve: number }
+>()
+app.get("/api/accounts/me", (c) =>
+  c.json({
+    id: "author-a",
+    email: "synthetic-author@example.invalid",
+    verified: true,
+  }),
+)
+app.post("/api/qa/oauth/inspect", async (c) => {
+  if (c.req.header("Origin") !== new URL(c.req.url).origin)
+    return c.json({ error: "origin" }, 403)
+  const body = await c.req.json()
+  if (
+    typeof body.ticket !== "string" ||
+    body.ticket.length < 40 ||
+    body.ticket.length > 8192 ||
+    consentRequests.size >= 128
+  )
+    return c.json({ error: "invalid" }, 400)
+  const current = consentRequests.get(body.ticket)
+  const value = {
+    proof: createHash("sha256")
+      .update(body.ticket + String(c.req.header("Authorization")))
+      .digest("hex"),
+    expiresAt: Date.now() + (body.ticket.startsWith("short-") ? 5000 : 300000),
+    inspect: (current?.inspect ?? 0) + 1,
+    approve: current?.approve ?? 0,
+  }
+  consentRequests.set(body.ticket, value)
+  return c.json({
+    clientId: "synthetic-registered-client",
+    scopes: ["tadazz.catalog.read", "tadazz.drafts.read"],
+    expiresAt: value.expiresAt,
+    proof: value.proof,
+  })
+})
+app.post("/api/qa/oauth/approve", async (c) => {
+  if (c.req.header("Origin") !== new URL(c.req.url).origin)
+    return c.json({ error: "origin" }, 403)
+  const body = await c.req.json(),
+    record = consentRequests.get(body.ticket)
+  if (
+    !record ||
+    record.approve ||
+    record.expiresAt <= Date.now() ||
+    body.decision !== "allow" ||
+    body.proof !== record.proof
+  )
+    return c.json({ error: "invalid" }, 400)
+  record.approve++
+  return c.json({
+    grantId: "synthetic-ui-only-grant",
+    redirectUrl:
+      "https://consent-callback.example.invalid/callback?code=synthetic-code&state=original",
+  })
+})
+app.get("/qa/oauth-stats", (c) => {
+  const record = consentRequests.get(c.req.query("ticket") ?? "")
+  return c.json({
+    inspect: record?.inspect ?? 0,
+    approve: record?.approve ?? 0,
+  })
+})
 app.get("*", (c) => {
-  const path = c.req.path === "/" ? "index.html" : c.req.path.slice(1)
+  const consent = c.req.path === "/studio/oauth-consent"
+  const path =
+    c.req.path === "/" || consent ? "index.html" : c.req.path.slice(1)
   if (!/^(index\.html|assets\/[A-Za-z0-9._-]+)$/u.test(path))
     return c.notFound()
   try {
@@ -85,8 +157,22 @@ app.get("*", (c) => {
     c.header("X-Content-Type-Options", "nosniff")
     c.header(
       "Content-Security-Policy",
-      "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'",
+      "default-src 'none'; script-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self'; connect-src 'self'; base-uri 'none'; object-src 'none'" +
+        (consent
+          ? `; ${oauthConsentSecurityHeaders["Content-Security-Policy"]}`
+          : ""),
     )
+    if (consent) {
+      c.header(
+        "X-Frame-Options",
+        oauthConsentSecurityHeaders["X-Frame-Options"],
+      )
+      c.header(
+        "Referrer-Policy",
+        oauthConsentSecurityHeaders["Referrer-Policy"],
+      )
+      c.header("Cache-Control", oauthConsentSecurityHeaders["Cache-Control"])
+    }
     return c.body(bytes)
   } catch {
     return c.notFound()

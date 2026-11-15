@@ -1,0 +1,38 @@
+[
+  {
+    "artifact": "native",
+    "actualCheckedInputs": 164,
+    "outputs": [
+      {
+        "path": "renderer.css",
+        "bytes": 148376,
+        "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+      },
+      {
+        "path": "renderer.js",
+        "bytes": 1043991,
+        "sha256": "7ebc947463fab7fc4ef6fc606655171eeb85ded7bee74c6494abcb7f1d705df2"
+      }
+    ],
+    "changes": [],
+    "meaning": "Unchanged actual source/dependencies and exact build11 output; not a new build14 or executable pin"
+  },
+  {
+    "artifact": "native-v2",
+    "actualCheckedInputs": 2071,
+    "outputs": [
+      {
+        "path": "renderer-v2.css",
+        "bytes": 166501,
+        "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+      },
+      {
+        "path": "renderer-v2.js",
+        "bytes": 1068059,
+        "sha256": "01f91e6b14e3d31bf7ae0c5dcc999006af57e56be547ff4bad6c3f55a190c24e"
+      }
+    ],
+    "changes": [],
+    "meaning": "Unchanged actual source/dependencies and exact build11 output; not a new build14 or executable pin"
+  }
+]
