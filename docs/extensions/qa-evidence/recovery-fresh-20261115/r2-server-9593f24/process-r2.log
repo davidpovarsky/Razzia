@@ -1,0 +1,19 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quarantine-copy without transaction unwind[33m 12608[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at staged-journal without transaction unwind[33m 12693[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at first-base-write without transaction unwind[33m 12303[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at last-sidecar-write without transaction unwind[33m 12616[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at binary-delete without transaction unwind[33m 12680[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at committed-journal without transaction unwind[33m 12500[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quarantine-cleanup without transaction unwind[33m 12604[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at journal-cleanup without transaction unwind[33m 12810[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quiz-base-write without transaction unwind[33m 12386[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quiz-sidecar-write without transaction unwind[33m 12498[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m10 passed[39m[22m[90m (10)[39m
+[2m   Start at [22m 06:44:20
+[2m   Duration [22m 130.70s[2m (tests 97%, transform 2%, import 1%)[22m
+

@@ -1,0 +1,9 @@
+{
+  "formatExit": 0,
+  "typesExit": 0,
+  "freezeFilesOnlyExit": 0,
+  "sourceWhitespaceExit": 0,
+  "originalTestScopeExit": 0,
+  "runtimeTestsRun": false,
+  "node": "24.22.1"
+}

@@ -11,6 +11,8 @@ import {
   byteHash,
   makeNativeFixture,
   nativeFixtureState,
+  nativeInput,
+  richNativeExtras,
   removeNativeFixture,
 } from "./native-binding-fixture"
 import { CompositeStorageService } from "./service"
@@ -156,6 +158,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           3,
         )
         for (const run of runs) {
+          expect(run.pid).toBe(run.process.pid)
           expect(run.process.code, run.process.stderr).toBe(0)
           expect(run.process.timedOut).toBe(false)
           expect(run.state.files).toStrictEqual(expectedFiles)
@@ -175,9 +178,54 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
     70000,
   )
 
+  it("recovers a legacy-tagged Media record only with unchanged complete pre-mutation physical proof", async () => {
+    const { root, descriptor } = makeNativeFixture("media")
+    const receipt: Record<string, unknown> = { state: "STARTED" }
+    try {
+      const before = nativeFixtureState(root)
+      const killed = await child("interrupt", root, descriptor.token)
+      receipt.interrupted = killed
+      expect(killed.timedOut).toBe(false)
+      if (process.platform === "win32") expect(killed.code).toBe(86)
+      else expect(killed.signal).toBe("SIGKILL")
+      const staged = nativeFixtureState(root)
+      const journal = path.join(root, staged.journals[0].path)
+      const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
+      const capturedProof = structuredClone(
+        entry.shows.map((show: { bindings: unknown }) => show.bindings),
+      )
+      entry.version = 1 // protocol tag only; never fabricate or rebind ownership
+      fs.writeFileSync(journal, JSON.stringify(entry, null, 2))
+      expect(
+        entry.shows.map((show: { bindings: unknown }) => show.bindings),
+      ).toStrictEqual(capturedProof)
+      receipt.recordedBeforeTagChange = staged
+      const runs = await recoverTwice(root, descriptor.token)
+      receipt.recoveries = runs
+      expect(new Set([killed.pid, ...runs.map((run) => run.pid)]).size).toBe(3)
+      for (const run of runs) {
+        expect(run.pid).toBe(run.process.pid)
+        expect(run.process.timedOut).toBe(false)
+        expect(run.process.code, run.process.stderr).toBe(0)
+        expect(run.state.files).toStrictEqual(before.files)
+        expect(run.state.journals).toHaveLength(0)
+      }
+      expect(runs[1].report.status).toBe("clean")
+      receipt.state = "PASS"
+    } catch (error) {
+      receipt.state = "FAIL"
+      receipt.error = error instanceof Error ? error.stack : String(error)
+      throw error
+    } finally {
+      retain("legacy-tagged-proven-media", receipt)
+      removeNativeFixture(root, descriptor.token)
+    }
+  }, 70000)
+
   it.each([
     "base-inode",
     "base-content",
+    "base-whitespace",
     "sidecar-inode",
     "sidecar-content",
     "base-symlink",
@@ -211,9 +259,27 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         const journal = path.join(root, before.journals[0].path)
         if (fault.endsWith("inode")) {
           const target = fault.includes("base") ? base : sidecar
+          const originalIdentity = fs.lstatSync(target, { bigint: true })
+          const originalBytes = byteHash(fs.readFileSync(target))
           const replacement = `${target}.foreign-r2`
           fs.copyFileSync(target, replacement)
           fs.renameSync(replacement, target) // identical bytes, distinct inode
+          const replacementIdentity = fs.lstatSync(target, { bigint: true })
+          receipt.replacement = {
+            relativePath: path.relative(root, target),
+            before: {
+              dev: String(originalIdentity.dev),
+              ino: String(originalIdentity.ino),
+            },
+            after: {
+              dev: String(replacementIdentity.dev),
+              ino: String(replacementIdentity.ino),
+            },
+            beforeSha256: originalBytes,
+            afterSha256: byteHash(fs.readFileSync(target)),
+          }
+          expect(replacementIdentity.ino).not.toBe(originalIdentity.ino)
+          expect(byteHash(fs.readFileSync(target))).toBe(originalBytes)
         } else if (fault === "base-symlink") {
           const foreign = path.join(root, "quizz/foreign-r2.json")
           fs.writeFileSync(
@@ -229,6 +295,16 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           )
           fs.unlinkSync(base)
           fs.symlinkSync(foreign, base)
+        } else if (fault === "base-whitespace") {
+          const current = fs.readFileSync(base, "utf8")
+          const compact = JSON.stringify(JSON.parse(current))
+          expect(byteHash(compact)).not.toBe(byteHash(current))
+          fs.writeFileSync(base, compact)
+          receipt.representationChange = {
+            beforeSha256: byteHash(current),
+            afterSha256: byteHash(compact),
+            decodedDataUnchanged: true,
+          }
         } else if (fault.endsWith("content") || fault === "newer-sidecar") {
           const target = fault.includes("base") ? base : sidecar
           const data = JSON.parse(fs.readFileSync(target, "utf8"))
@@ -258,6 +334,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
           3,
         )
         for (const run of runs) {
+          expect(run.pid).toBe(run.process.pid)
           expect(run.process.timedOut).toBe(false)
           expect(run.process.code, run.process.stderr).toBe(2)
           expect(run.error).toMatch(/startup blocked/i)
@@ -324,6 +401,7 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
       )
       const runs = await recoverTwice(root, descriptor.token)
       receipt.recoveries = runs
+      expect(new Set(runs.map((run) => run.pid)).size).toBe(2)
       expect(runs[0].process.code).toBe(0)
       expect(runs[1].report.status).toBe("clean")
       for (const run of runs)
@@ -395,6 +473,125 @@ describe("R2 recorded physical ownership and logical digest controls", () => {
         ["payload", "id-bearing"].includes(representation),
       )
       expect(fs.readFileSync(sidecar)).toEqual(sidecarBytes)
+    } finally {
+      removeNativeFixture(root, descriptor.token)
+    }
+  })
+
+  it("imports an actual native exported bundle with a fresh ID and consistent logical digest", () => {
+    const { root, descriptor } = makeNativeFixture("media")
+    const receipt: Record<string, unknown> = { state: "STARTED" }
+    try {
+      const service = new CompositeStorageService({ ...native })
+      const input = nativeInput("R2 actual native enhanced roundtrip")
+      const created = service.createCompositeQuiz({
+        quizz: input,
+        extras: richNativeExtras("temporary", input),
+      })
+      const exported = service.exportEnhancedBundle(created.quizId)
+      const unchanged = structuredClone(exported)
+      const before = nativeFixtureState(root)
+      const imported = service.importEnhancedBundle(exported)
+      const fetched = service.getCompositeQuiz(imported.quizId)
+      const reExported = service.exportEnhancedBundle(imported.quizId)
+      const { id, ...completePayload } = fetched.quizz
+      const after = nativeFixtureState(root)
+      Object.assign(receipt, {
+        created,
+        exported,
+        imported,
+        fetched,
+        reExported,
+        before,
+        after,
+      })
+      if (
+        fetched.extras?.schemaVersion !== 2 ||
+        exported.extras.schemaVersion !== 2
+      )
+        throw new Error("Expected complete V2 roundtrip fixtures")
+      expect(imported.quizId).not.toBe(created.quizId)
+      expect(id).toBe(imported.quizId)
+      expect(completePayload).toStrictEqual(input)
+      expect(imported.baseDigest).toBe(
+        computeCanonicalBaseDigest(completePayload),
+      )
+      expect(fetched.baseDigest).toBe(imported.baseDigest)
+      expect(fetched.digestMatches).toBe(true)
+      expect(reExported.quizz).toStrictEqual(fetched.quizz)
+      expect(reExported.extras).toStrictEqual(fetched.extras)
+      expect(reExported.extras.baseDigest).toBe(imported.baseDigest)
+      expect(exported).toStrictEqual(unchanged)
+      for (const [relative, file] of Object.entries(before.files))
+        expect(after.files[relative]).toStrictEqual(file)
+      for (const key of [
+        "scenes",
+        "defaults",
+        "teams",
+        "audio",
+        "roster",
+        "authoring",
+        "mediaCatalog",
+      ] as const)
+        expect(fetched.extras[key]).toStrictEqual(exported.extras[key])
+      expect(Object.values(fetched.extras?.perQuestion ?? {})).toStrictEqual(
+        Object.values(exported.extras.perQuestion),
+      )
+      expect(fetched.extras.questionIds).not.toEqual(
+        exported.extras.questionIds,
+      )
+      expect(fetched.extras.timeline.map((item) => item.kind)).toStrictEqual(
+        exported.extras.timeline.map((item) => item.kind),
+      )
+      expect(
+        fetched.extras.timeline
+          .filter((item) => item.kind === "question")
+          .map((item) => item.questionId),
+      ).toStrictEqual(fetched.extras.questionIds)
+      receipt.state = "PASS"
+    } catch (error) {
+      receipt.state = "FAIL"
+      receipt.error = error instanceof Error ? error.stack : String(error)
+      throw error
+    } finally {
+      retain("native-enhanced-roundtrip", receipt)
+      removeNativeFixture(root, descriptor.token)
+    }
+  })
+
+  it("rejects an imported root ID that does not match its source sidecar before allocation", () => {
+    const { root, descriptor } = makeNativeFixture("media")
+    try {
+      const service = new CompositeStorageService({ ...native })
+      const input = nativeInput("R2 source identity denial")
+      const created = service.createCompositeQuiz({
+        quizz: input,
+        extras: richNativeExtras("temporary", input),
+      })
+      const exported = service.exportEnhancedBundle(created.quizId)
+      const mismatched = structuredClone(exported)
+      const mismatchedRecord = mismatched.quizz as Record<string, unknown>
+      mismatchedRecord.id = "foreign-source-id"
+      const before = nativeFixtureState(root)
+      let allocationCalls = 0
+      const guarded = new CompositeStorageService({
+        ...native,
+        saveQuizz: (data) => {
+          allocationCalls += 1
+          return native.saveQuizz(data)
+        },
+      })
+      expect(() => guarded.importEnhancedBundle(mismatched)).toThrow(
+        /identity mismatch/i,
+      )
+      expect(nativeFixtureState(root)).toStrictEqual(before)
+      expect(allocationCalls).toBe(0)
+      retain("import-source-id-mismatch", {
+        before,
+        after: nativeFixtureState(root),
+        rejected: true,
+        allocationCalls,
+      })
     } finally {
       removeNativeFixture(root, descriptor.token)
     }

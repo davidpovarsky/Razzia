@@ -197,14 +197,9 @@ export function preparePhysicalBinding(
       physicalTarget = { id: quizId, ...target }
   }
   const rawTargets =
-    physicalTarget === null
-      ? []
-      : [
-          ...new Set([
-            JSON.stringify(physicalTarget),
-            JSON.stringify(physicalTarget, null, 2),
-          ]),
-        ]
+    physicalTarget === null ? [] : [JSON.stringify(physicalTarget, null, 2)]
+  if (kind === "base" && rawTargets.length !== 1)
+    throw new Error("Missing exact base publication plan")
   for (const raw of rawTargets) validateKind(raw, kind, quizId, relativePath)
   const privateDir = getPath("extensions/quizzes/.journal/.bindings")
   fs.mkdirSync(privateDir, { recursive: true, mode: 0o700 })
@@ -234,6 +229,13 @@ export function assertPhysicalBinding(
   getPath: GetPath,
   binding: PhysicalBinding,
 ) {
+  if (
+    !binding ||
+    !Array.isArray(binding.targets) ||
+    binding.targets.length > 1 ||
+    (binding.kind === "base" && binding.targets.length !== 1)
+  )
+    throw new Error("Ambiguous physical byte publication plan")
   if (
     !binding ||
     binding.version !== 1 ||
@@ -294,13 +296,7 @@ export function assertPhysicalBinding(
   ].filter((value): value is Image & Identity => value !== null)
   if (!identities.some((value) => sameIdentity(value, current)))
     throw new Error("Recorded target inode changed")
-  const originalForms = binding.original
-    ? [
-        binding.original,
-        image(JSON.stringify(JSON.parse(binding.original.raw))),
-        image(JSON.stringify(JSON.parse(binding.original.raw), null, 2)),
-      ]
-    : []
+  const originalForms = binding.original ? [binding.original] : []
   if (
     ![...binding.targets, ...originalForms].some((value) =>
       sameImage(value, current),
@@ -342,6 +338,8 @@ export function publishPhysicalTarget(
   binding: PhysicalBinding,
 ) {
   assertPhysicalBinding(getPath, binding)
+  if (binding.targets.length !== 1)
+    throw new Error("No exact target bytes to publish")
   const prepared = preparedPath(getPath, binding.preparedTarget)
   const target = safePath(getPath, binding.relativePath)
   fs.renameSync(prepared, target)

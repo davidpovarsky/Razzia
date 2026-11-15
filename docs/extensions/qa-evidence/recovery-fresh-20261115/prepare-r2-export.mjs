@@ -76,7 +76,7 @@ async function digest(file) {
   return hash.digest("hex")
 }
 const previous = JSON.parse(fs.readFileSync(path.join(repository, "docs/extensions/qa-evidence/recovery-fresh-20261115/review-scope-audit.json"), "utf8"))
-const permittedDeltas = new Set(["extensions/src/server/media-library.ts", "extensions/src/server/storage/journal.ts", "extensions/src/server/storage/service.ts", "extensions/src/server/storage/recovery-state.ts", "extensions/src/server/storage/journal-recovery.test.ts", "extensions/src/server/storage/create-recovery.test.ts", "extensions/src/server/media-library-recovery.test.ts"])
+const permittedDeltas = new Set(["extensions/src/server/media-library.ts", "extensions/src/server/media-library.test.ts", "extensions/src/server/storage/journal.ts", "extensions/src/server/storage/service.ts", "extensions/src/server/storage/recovery-state.ts", "extensions/src/server/storage/journal-recovery.test.ts", "extensions/src/server/storage/create-recovery.test.ts", "extensions/src/server/media-library-recovery.test.ts"])
 if (git("diff", "--name-only", "be73927216fb89d743d208ccfad7a632953ec10b", sha, "--", "packages").toString().trim()) throw new Error("Protected packages changed")
 const reviewedBlobs = Object.entries(previous.hashes).map(([name, sha256]) => {
   const current = files.find((file) => file.path === name)
