@@ -264,16 +264,13 @@ export const gameExtensionRoutes = apiFactory
     zValidator("json", pilotPhoneBodySchema, i18nHook),
     (c) => {
       const expectedSecret = process.env.TADA_PILOT_SECRET
+      const providedSecret = c.req.header("x-tada-pilot-secret") ?? ""
 
-      if (expectedSecret) {
-        const providedSecret = c.req.header("x-tada-pilot-secret") ?? ""
-
-        if (providedSecret !== expectedSecret) {
-          return c.json(
-            { error: "errors:auth.unauthorized" },
-            StatusCodes.UNAUTHORIZED,
-          )
-        }
+      if (!expectedSecret || providedSecret !== expectedSecret) {
+        return c.json(
+          { error: "errors:auth.unauthorized" },
+          StatusCodes.UNAUTHORIZED,
+        )
       }
 
       const body = c.req.valid("json")
@@ -319,6 +316,16 @@ export const gameExtensionRoutes = apiFactory
         } else {
           // Ensure connected if polling after a brief drop or rebind
           const existingEntry = game.getRosterEntry(rosterId)
+
+          if (
+            existingEntry?.status === "connected" &&
+            existingEntry.activeCallId !== body.callId
+          ) {
+            return c.json(
+              { ok: false, joined: false, reason: "stale_call" },
+              StatusCodes.FORBIDDEN,
+            )
+          }
 
           if (existingEntry && existingEntry.status !== "connected") {
             joinRes = game.joinOrRebindPhoneCaller({

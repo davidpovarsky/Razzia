@@ -27,6 +27,8 @@ const selections = [
   "extensions/tsconfig.json",
   "docs/extensions/qa-evidence/telephony-fresh-20261115/NEXT_API_READINESS.md",
   "docs/extensions/qa-evidence/telephony-fresh-20261115/BACKEND_SEAM_REQUEST.md",
+  "docs/extensions/qa-evidence/telephony-fresh-20261115/UPSTREAM_TOUCHES.md",
+  "docs/extensions/qa-evidence/telephony-fresh-20261115/S01_SOURCE_AUDIT.json",
 ]
 const selected = (path) =>
   selections.includes(path) ||
@@ -81,6 +83,7 @@ for (const required of [
   "extensions/src/telephony/pilot-runtime/phone-real-backend.test.ts",
   "extensions/src/telephony/pilot-runtime/phone-gateway-qa-child.cjs",
   "extensions/src/telephony/pilot-runtime/run-phone-api-qa.sh",
+  "extensions/src/telephony/pilot-runtime/phone-route-typecheck.mjs",
 ])
   if (!entries.some((e) => e.path === required))
     throw new Error("Missing delivered dependency: " + required)

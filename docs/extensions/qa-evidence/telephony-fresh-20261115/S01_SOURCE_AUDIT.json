@@ -1,0 +1,8 @@
+{
+  "approved_s01_hunks_exact": true,
+  "protected_changed_paths": [
+    "packages/socket/src/api/extensions/game-routes.ts"
+  ],
+  "original_13_cases_unchanged": true,
+  "original_case_body_sha256": "8e2195f0628b79a9c89aca9957f7aa84fb81b524cad3e4324b14f36b452ad707"
+}

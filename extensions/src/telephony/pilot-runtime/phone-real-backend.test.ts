@@ -894,3 +894,138 @@ test(
     assert.equal(r.game.getHostPresenceSnapshot().connectedNow, 1)
   },
 )
+
+test(
+  "S01-C1 configured current poll and fresh redial work; stale cached poll denies all private fields",
+  { timeout: 15000 },
+  async (t) => {
+    const r = await room(t),
+      identity = phone()
+    const initial = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-current-A",
+      phone: identity,
+    })
+    assert.equal(initial.status, 200)
+    assert.equal(initial.data.joined, true)
+    const rosterId = initial.data.rosterPlayerId
+    const current = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-current-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(current.status, 200)
+    assert.equal(current.data.rosterPlayerId, rosterId)
+    assert.equal(current.data.joined, true)
+    // New call without a supplied cached roster is legitimate registration under
+    // the current contract; S01 must not turn this into a stale-poll denial.
+    const redial = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-current-B",
+      phone: identity,
+    })
+    assert.equal(redial.status, 200)
+    assert.equal(redial.data.joined, true)
+    assert.equal(redial.data.rosterPlayerId, rosterId)
+    const before = r.snapshot(rosterId)
+    assert.equal(before.activeCallId, "s01-current-B")
+    const stale = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-current-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(stale.status, 403)
+    assert.equal(stale.data.joined, false)
+    for (const key of ["phoneE164", "displayName", "rosterPlayerId", "state"])
+      assert.equal(stale.data[key], undefined)
+    assert.deepEqual(r.snapshot(rosterId), before)
+    const poll = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-current-B",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(poll.status, 200)
+    assert.equal(poll.data.joined, true)
+    assert.deepEqual(r.snapshot(rosterId), before)
+    record("S01-C1", {
+      initial: initial.status,
+      current: current.status,
+      freshRedial: redial.status,
+      stale: stale.status,
+      privateFieldsAbsent: true,
+      before,
+      after: r.snapshot(rosterId),
+    })
+  },
+)
+
+test(
+  "S01-C2 legitimate disconnected rebind preserves roster identity and earned authoritative score",
+  { timeout: 30000 },
+  async (t) => {
+    const r = await room(t),
+      identity = phone()
+    const initial = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-score-A",
+      phone: identity,
+    })
+    const rosterId = initial.data.rosterPlayerId
+    await r.start()
+    const epoch = r.snapshot(rosterId).epoch
+    assert.equal(
+      (
+        await r.pilot({
+          action: "answer",
+          callId: "s01-score-A",
+          phone: identity,
+          rosterPlayerId: rosterId,
+          epoch,
+          answerIndex: 4,
+        })
+      ).data.accepted,
+      true,
+    )
+    await r.advanceUntil(() => r.snapshot(rosterId).points > 0)
+    const earned = r.snapshot(rosterId)
+    await r.pilot({
+      action: "hangup",
+      callId: "s01-score-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(r.snapshot(rosterId).status, "disconnected")
+    const rebind = await r.pilot({
+      action: "join_or_poll",
+      callId: "s01-score-C",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(rebind.status, 200)
+    assert.equal(rebind.data.joined, true)
+    assert.equal(rebind.data.reconnected, true)
+    const after = r.snapshot(rosterId)
+    assert.equal(after.activeCallId, "s01-score-C")
+    assert.equal(after.clientId, earned.clientId)
+    assert.equal(after.points, earned.points)
+    assert.equal(after.status, "connected")
+    assert.equal(after.players, 1)
+    assert.equal(after.registered, 1)
+    await r.pilot({
+      action: "hangup",
+      callId: "s01-score-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    assert.deepEqual(r.snapshot(rosterId), after)
+    record("S01-C2", {
+      earned,
+      after,
+      rebind: rebind.status,
+      reconnected: rebind.data.reconnected,
+    })
+  },
+)
