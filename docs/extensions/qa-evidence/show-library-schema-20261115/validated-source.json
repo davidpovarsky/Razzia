@@ -1,0 +1,120 @@
+{
+  "schemaVersion": 1,
+  "portVersion": 2,
+  "identityRuleVersion": 1,
+  "base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "overlaySha": "28ea054180312e7acf39cc34861ed3f604f0e357bedfdc05924aae7bf95bb2b8",
+  "fullIgnoredManifest": {
+    "name": "port2-manifest-28ea054180312e7acf39cc34861ed3f604f0e357bedfdc05924aae7bf95bb2b8.json",
+    "sha256": "67bc53c7ab4149b86bc0d743017ee6e2f29ba931f2175f36984204564d9dc979"
+  },
+  "baselineArchive": {
+    "name": "base-8a43c99.tar.gz",
+    "bytes": 486555895,
+    "sha256": "dbb7939f7bb60a25462b996c56f3e340ed4ebc6d666ffb10642a0c6fca644f0e"
+  },
+  "newSourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "bytes": 2776,
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0"
+    },
+    {
+      "path": "extensions/src/core/show-library/binding-policy.ts",
+      "bytes": 1935,
+      "sha256": "cb9c08771331e16c13c8a265d98b378dbc26b5474c7428695d5be580ae9e7a4f"
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "bytes": 3614,
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.test.ts",
+      "bytes": 6634,
+      "sha256": "9810734ab8f071bb31bff3bcf98c4129525b9ee8066f2dcd6105b1bf9758cf0e"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.ts",
+      "bytes": 4703,
+      "sha256": "1af30e26a1c0ba81bdee1b70ab23482478398eb799af8d44df8e64f0e8db4102"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "bytes": 109,
+      "sha256": "c264b552da1fc7f682fd2c7538265a0b693fdaf0a51a7700fc4dd13123490957"
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "bytes": 3312,
+      "sha256": "0ccf0ee00df403f492dc140e665419c3b82958cc63c8f62aeea400a5353d82b1"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3746,
+      "sha256": "7a6c2cb689b9b0e2f7e5327438f0f2090db071f2706a3b1b724debcf0948c9a5"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.test.ts",
+      "bytes": 4763,
+      "sha256": "7e0b2afb67db05aa154227a6b72b0194b7dac5df647a1cd345d4551a0ce78064"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.ts",
+      "bytes": 439,
+      "sha256": "79bb56daec64861342bbcd8017c4adb0fc2cb40ab677512edd0e746ac69a5ff7"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 2839,
+      "sha256": "003c2f42e7f285350bc79910d6a56cbb5536ca33bfda57545b98f8db68899bcf"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 5893,
+      "sha256": "a6884030d5b46f9d944e045aff0b5a7fe40ecd8e65f4866925595be13161cf12"
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "bytes": 3968,
+      "sha256": "480dd0a95b3f11b90ef3a6ed836118da780c78145b76dc0391eaa33bfb013c8c"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-schema.ts",
+      "bytes": 5625,
+      "sha256": "31aa4c41db4c9e6b061e64bbcca3f2c56c3511bbff146c8ebea0f61be1bf4a38"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.test.ts",
+      "bytes": 4873,
+      "sha256": "30e233f3ae734e6643af256e8f7e7c33ef3e09abcf15f1f8f200510a1d4bbef4"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.ts",
+      "bytes": 3039,
+      "sha256": "41e86b267a707b298130f4b463e486f2da61ada244ee47f1fc005e7cb460db98"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.test.ts",
+      "bytes": 10121,
+      "sha256": "13c0b25ab14bcecbe5a89bda49c15b6f3c12cc9f84f5158acb8d1fa729b4326f"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.ts",
+      "bytes": 8643,
+      "sha256": "612bc5fb912fc733eb688cd6b6e8978cc6514d8e7e11cd785e0bf41c8dd7a5c4"
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "bytes": 7174,
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18"
+    },
+    {
+      "path": "extensions/src/core/show-library/tsconfig.focused.json",
+      "bytes": 108,
+      "sha256": "0b04857751cf84529a4f853865f5e5ffbcfbaebddb7736fe8c2a775f0ad69222"
+    }
+  ],
+  "serverEvidence": "server-validated-28ea",
+  "remoteEvidence": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/sb2-port2-28ea054180312e7acf39cc34861ed3f604f0e357bedfdc05924aae7bf95bb2b8"
+}

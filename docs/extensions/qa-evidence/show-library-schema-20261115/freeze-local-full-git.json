@@ -1,0 +1,8 @@
+{
+  "command": "node extensions/qa/tds-boundary.mjs",
+  "scope": "authorized local static audit only",
+  "exitCode": 1,
+  "signal": null,
+  "logSha256": "d0a7d14438e3cad03d9489e6e625aa0223bb44f5755c5273bcf358c429d94df8",
+  "checkedUtc": "2026-11-15T04:23:29.681Z"
+}

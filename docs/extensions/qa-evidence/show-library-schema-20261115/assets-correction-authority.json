@@ -1,0 +1,29 @@
+{
+  "createdUtc": "2026-11-15T05:55:01.289544+00:00",
+  "predecessorCommit": "29289933f9f71126d561507c9dd95a182737a2e8",
+  "review": {
+    "path": "C:/Users/DAVID/Code/Codex-Agent-HQ/docs/tadazz/reviews/SB_PORT3_REVIEW_292899_20261115.md",
+    "actualSha256": "99472348bab8a90998fe12f24e1fc37e5f0cf3eccbcb1ac2b2b7a0a31e76f03f",
+    "managerMessageDigest": "99472348bab8a90998fe12f24e1fc37e5f0cf3eccb1ac2b2b7a0a31e76f03f",
+    "messageDigestLength": 62,
+    "note": "Message digest omits two characters; actual review path/content agrees with the explicit bounded correction. Exact independent script/log digests match the review."
+  },
+  "beforeWitness": {
+    "source": "Independent actual-source review; retained without rerunning unchanged predecessor",
+    "files": [
+      {
+        "path": "assets-before-review292899/adversarial.ts",
+        "sha256": "cc5e4a7c11e04a3d963b84a833fa6d18d2eb3e74b57deabc31e0a095a46622f1"
+      },
+      {
+        "path": "assets-before-review292899/run.log",
+        "sha256": "7a17a6ae0c2298d1913688bfa8c239ceb8a77e49971ce7daabe02e097bedbbef"
+      },
+      {
+        "path": "assets-before-review292899/source-and-release.json",
+        "sha256": "c551303c6685d5f5e0be0c405c372f695d16b3de225b19db30fdb9218c658dd3"
+      }
+    ]
+  },
+  "fix": "Reject all snapshot visual refs until an authored-slot compiled asset path is implemented and accepted; no asset resolution, metadata grant, or new engine."
+}

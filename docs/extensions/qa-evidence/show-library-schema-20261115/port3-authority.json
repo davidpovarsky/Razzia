@@ -1,0 +1,32 @@
+{
+  "utc": "2026-11-15T05:27:52.954811+00:00",
+  "authority": "Manager explicit port3/rule2 successor; review evidence is immutable",
+  "files": [
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\contracts\\SB1_CONTRACT_20261115.md",
+      "sha256": "a7fca68e07168a08a2199403a4c4f06add59dfcc84614acc0216d18a9ff2ddf0"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\contracts\\SB1_REGISTRY_20261115.json",
+      "sha256": "b770575318e20b3263830447d8135e736df911d58dc4c318ff49cbcf390ffb63"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\reviews\\SB_MCP_PORT_REVIEW_20261115.md",
+      "sha256": "1fdba75f575a174d8de6c8270920c08053b34d8b0987e8e9e10d1bc0390d87e8"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\decisions\\SB_IDENTITY_RULE2_PORT3_20261115.md",
+      "sha256": "79a8282b9b5554eff69148e83660cc8674bd8303342834aa5fec4c96cee1480e"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\contracts\\M1_CONTRACT_20261115.md",
+      "sha256": "6a9ceb8d867422fa07386b70a55b55a2344bdd841be476feece29f86ceefc399",
+      "frozenResearchMatch": true
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\contracts\\M1_SECURITY_ACCEPTANCE_20261115.json",
+      "sha256": "811a2febcfb74d0025c1a0d1848d1a439dd72d5d96451158249fa832623a23ff",
+      "frozenResearchMatch": true
+    }
+  ]
+}

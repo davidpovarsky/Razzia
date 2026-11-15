@@ -1,0 +1,27 @@
+[
+  {
+    "source": "/usr/bin/git",
+    "target": "git",
+    "sha256": "068c11a6747b848c3ed35599f714250864d2bd94b4165d27770ce5c36e83894f"
+  },
+  {
+    "source": "/lib/ld-linux-aarch64.so.1",
+    "target": "ld-linux-aarch64.so.1",
+    "sha256": "124e3f166bdc0be365eaa6dc59e415b876b0841a40463edd1b0e084b518bb7cd"
+  },
+  {
+    "source": "/lib/aarch64-linux-gnu/libc.so.6",
+    "target": "libc.so.6",
+    "sha256": "2544e7902ec1bd3a68b526b6af427c34d2a98e56b9dbf8395b4b498dd2112cd6"
+  },
+  {
+    "source": "/lib/aarch64-linux-gnu/libpcre2-8.so.0",
+    "target": "libpcre2-8.so.0",
+    "sha256": "127de4a771344c3fe17cfe896007d618e1fd904dd322a364698fea2d79d363a8"
+  },
+  {
+    "source": "/lib/aarch64-linux-gnu/libz.so.1",
+    "target": "libz.so.1",
+    "sha256": "52a1d5c0cbffb3596c7f0636cb1af8e131e00eb77ff92d1353057d5161d420d3"
+  }
+]

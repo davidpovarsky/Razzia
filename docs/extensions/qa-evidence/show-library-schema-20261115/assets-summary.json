@@ -1,0 +1,41 @@
+{
+  "status": "RESOURCE_FREE_PROJECTION_CORRECTION_READY_FOR_INDEPENDENT_REVIEW",
+  "portVersion": 3,
+  "identityRuleVersion": 2,
+  "predecessorCommit": "29289933f9f71126d561507c9dd95a182737a2e8",
+  "overlaySha256": "755faf0f2e2719e20f9711231a0bf84da95b6b4a3a618e2a07827ffd78cf8aa9",
+  "tests": {
+    "passed": 155,
+    "failed": 0,
+    "files": 5,
+    "newAssetCases": 24
+  },
+  "crossLanguageVectors": 42,
+  "focusedTypes": "PASS",
+  "scopedFormat": "PASS",
+  "designTokensCatalog": "PASS",
+  "fullUiCheck": "FAIL",
+  "freeze": "FAIL",
+  "freezeDeniedPaths": 23,
+  "freezeProtectedMismatches": [],
+  "beforeAfterSourceAudit": {
+    "status": "PASS",
+    "baselineGitBlobs": 3297,
+    "overlaySha256Files": 23
+  },
+  "compiledPins": 0,
+  "visualResourceProjection": "REJECT_ALL_UNTIL_VERIFIED_AUTHORED_SLOT_COMPILED_ASSET_PATH_EXISTS",
+  "actionReadiness": "UNAVAILABLE",
+  "resources": {
+    "cpu": 0.25,
+    "memoryGiB": 2,
+    "network": "none",
+    "ports": [],
+    "allocationReleasedUtc": "2026-11-15T05:56:35.791944+00:00"
+  },
+  "finalEvidence": "server-assets-755f",
+  "beforeFailureEvidence": "assets-before-review292899",
+  "reviewAndIntegrationPending": true,
+  "originalSourceTasksCompleted": false,
+  "createdUtc": "2026-11-15T05:57:25.620261+00:00"
+}
