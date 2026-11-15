@@ -4,6 +4,8 @@ import { createDemoClock } from "./demo-clock"
 import { prepareDemoFixture } from "./demo-fixture"
 import { assertBoundPreviewStageMetadata, derivePreviewStageMetadata } from "../../core/show-library/stage-metadata"
 import { projectedFrame } from "./projected-frame"
+import { previewNativeLabels, type PreviewLocale } from "./i18n"
+import { previewText } from "./ui-strings"
 import { createPreviewTransitionOwner } from "./preview-transition-owner"
 import { pausedPreviewSteps, previewSteps, validatePreviewFrame, type PreviewFrame } from "./stage-scene-adapter"
 
@@ -15,6 +17,12 @@ const frame = (): PreviewFrame => ({
 })
 
 describe("silent preview candidate", () => {
+  it("initializes all eight isolated locales synchronously", () => {
+    for (const locale of ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as PreviewLocale[]) {
+      expect(previewText(locale)("unavailable")).not.toBe("unavailable")
+      expect(previewNativeLabels(locale).v4Labels.noVotes).not.toBe("v4.noVotes")
+    }
+  })
   it("uses one elapsed clock through pause, resume and replay", () => {
     let now = 1000
     const clock = createDemoClock(() => now)

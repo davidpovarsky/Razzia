@@ -19,7 +19,7 @@ export function previewNativeLabels(locale: PreviewLocale): { labels: TadazzStag
   const data = localeData[locale]
   if (!data) throw new Error("show-preview:unsupported-locale")
   const i18n = createInstance()
-  void i18n.init({ lng: locale, fallbackLng: false, initImmediate: false, interpolation: { escapeValue: false }, resources: { [locale]: { translation: data.tadazzShow } } })
+  void i18n.init({ lng: locale, fallbackLng: false, initAsync: false, interpolation: { escapeValue: false }, resources: { [locale]: { translation: data.tadazzShow } } })
   const t = (key: string, vars?: Record<string, unknown>) => String(i18n.t(key, vars))
   const labels: TadazzStageLabels = {
     questionReady: t("questionReady"), votingOpen: t("votingOpen"), votesLocked: t("votesLocked"),

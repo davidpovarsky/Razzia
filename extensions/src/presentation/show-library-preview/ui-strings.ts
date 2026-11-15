@@ -16,6 +16,6 @@ export type PreviewTextKey = keyof typeof resources.en
 export function previewText(locale: PreviewLocale) {
   if (!resources[locale]) throw new Error("show-preview:unsupported-locale")
   const instance = createInstance()
-  void instance.init({ lng: locale, fallbackLng: false, initImmediate: false, resources: { [locale]: { translation: resources[locale] } } })
+  void instance.init({ lng: locale, fallbackLng: false, initAsync: false, resources: { [locale]: { translation: resources[locale] } } })
   return (key: PreviewTextKey) => String(instance.t(key))
 }
