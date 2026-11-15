@@ -1,0 +1,1 @@
+strace unavailable; precise watch/snapshot observations only, NO syscall-proof claim

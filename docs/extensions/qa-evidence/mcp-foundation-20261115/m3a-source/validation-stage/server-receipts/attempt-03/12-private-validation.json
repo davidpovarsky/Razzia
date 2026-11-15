@@ -1,0 +1,18 @@
+{
+  "command": [
+    "bash",
+    "/delivery/validate-private.sh"
+  ],
+  "exit": 1,
+  "seconds": 154.726,
+  "logSha256": "a86a784db53c288d27fb80467c697a8f5851f06556c68ba85b6aab7dd495c7a0",
+  "resources": {
+    "newPhysicalBytes": 1720320,
+    "capBytes": 67108864,
+    "hostFreeBytes": 2875867136,
+    "dockerStateAndCappedLogAllowanceBytes": 2097152,
+    "newPhysicalUpperBoundBytes": 3817472,
+    "requiredRemainingReserveBytes": 2514862080,
+    "ownTmpfsUsedBytes": 155840512
+  }
+}

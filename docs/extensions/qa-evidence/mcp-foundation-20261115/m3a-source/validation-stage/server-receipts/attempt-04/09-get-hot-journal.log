@@ -1,0 +1,3 @@
+{"phase":"GET_BEGIN","mode":"hot-journal","root":"/ram/tmp/tadazz-m3a-synthetic-KpVDhj","expected":503}
+{"phase":"GET_END","mode":"hot-journal","status":503,"expected":503,"errorCode":"DEPENDENCY_UNAVAILABLE","snapshotEqual":true,"controlEvents":3,"watcherError":null,"overflow":false,"observedMutationEvents":[],"observation":"NO_OBSERVED_MUTATION","syscallNoWriteProof":"REQUIRES_SEPARATE_ACTUAL_TRACER_ANALYSIS","scope":"PRIVATE_DRAFT_AND_NATIVE_ONLY; ACTUAL_AUTH_DB_WAL_SHM_SEPARATE; OS_ATIME_EXCLUDED"}
+{"phase":"ARTIFACTS_CAPTURED","mode":"hot-journal","destination":"/evidence/get-hot-journal-preserved","beforeFixtureTeardown":true}

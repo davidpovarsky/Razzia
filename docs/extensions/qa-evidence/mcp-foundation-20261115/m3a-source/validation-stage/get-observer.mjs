@@ -13,6 +13,7 @@ import {
 import { join } from "node:path"
 import { setTimeout as delay } from "node:timers/promises"
 import { fileURLToPath } from "node:url"
+import { tmpdir } from "node:os"
 
 const mode = process.argv[2]
 if (!["absent", "regular", "hot-journal"].includes(mode))
@@ -39,15 +40,19 @@ try {
       ),
     )
     const child = spawn(process.execPath, [worker, f.file(session.owner)], {
-      env: {},
+      env: { TMPDIR: tmpdir(), TMP: tmpdir(), TEMP: tmpdir() },
       stdio: ["ignore", "pipe", "pipe"],
+    })
+    let workerError = ""
+    child.stderr.on("data", (data) => {
+      workerError = (workerError + data.toString()).slice(0, 4096)
     })
     const closed = new Promise((resolve, reject) => {
       child.once("error", reject)
       child.once("close", (_code, signal) =>
         signal === "SIGKILL"
           ? resolve()
-          : reject(new Error("Synthetic crash worker failed")),
+          : reject(new Error("Synthetic crash worker failed: " + workerError)),
       )
     })
     try {

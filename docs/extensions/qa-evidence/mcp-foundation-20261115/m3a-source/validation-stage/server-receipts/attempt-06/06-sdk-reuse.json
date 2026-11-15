@@ -1,0 +1,13 @@
+{
+  "command": [
+    "python3",
+    "/delivery/reuse-sdk.py"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 0.189,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 697,
+  "logSha256": "436f8dd68f12d8fe5fcdd43aa2d704fd7f91bf4b54cf6c9f1ac6d205ec201e25"
+}

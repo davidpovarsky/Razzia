@@ -17,13 +17,14 @@ test -f "$MCP_FORMATTER_CLI" || exit 78
 export HOME=/ram/home TMPDIR=/ram/tmp
 export XDG_CACHE_HOME=/ram/home/.cache XDG_DATA_HOME=/ram/home/.local/share
 export XDG_STATE_HOME=/ram/home/.local/state PNPM_HOME=/ram/pnpm
+export XDG_RUNTIME_DIR=/ram/runtime
 export npm_config_cache=/ram/npm-cache
 export NODE_OPTIONS= NODE_PATH=
 export NPM_CONFIG_USERCONFIG=/ram/empty-user.npmrc
 export NPM_CONFIG_GLOBALCONFIG=/ram/empty-global.npmrc
 export NPM_CONFIG_REGISTRY=https://registry.npmjs.org/
 export NO_UPDATE_NOTIFIER=1
-mkdir -p "$HOME" "$TMPDIR"
+mkdir -p "$HOME" "$TMPDIR" "$XDG_RUNTIME_DIR"
 : > "$NPM_CONFIG_USERCONFIG"
 : > "$NPM_CONFIG_GLOBALCONFIG"
 private=/ram/work/extensions/src/mcp-app
@@ -31,28 +32,20 @@ test -d "$private"
 test ! -L "$private"
 cd "$private"
 
-# Logs have individual 1MiB caps; enclosing launcher must meter ALL new disk,
-# including metadata/evidence, against64MiB. Source/dependencies live in tmpfs.
+# Logs have individual 1MiB streaming caps, without limiting dependency files.
+# Enclosing launcher meters ALL new disk against64MiB; modules live in tmpfs.
 run_phase() {
-  local name=$1
-  shift
-  local result
-  set +e
-  (ulimit -f 1024; "$@") > "/evidence/$name.log" 2>&1
-  result=$?
-  set -e
-  printf '%s\n' "$result" > "/evidence/$name.exit"
-  return "$result"
+  python3 /delivery/run-phase.py "$@"
 }
 
 node --version > /evidence/node.version
 pnpm --version > /evidence/pnpm.version
 run_phase 01-resolve pnpm install --ignore-workspace --lockfile-only --offline --ignore-scripts \
-  --store-dir="$MCP_OWN_OFFLINE_STORE" --reporter=append-only
+  --store-dir="$MCP_OWN_OFFLINE_STORE" --package-import-method=copy --verify-store-integrity=true --reporter=append-only
 cp pnpm-lock.yaml /evidence/generated-private-pnpm-lock.yaml
 sha256sum pnpm-lock.yaml > /evidence/generated-private-lock.sha256
 run_phase 02-install pnpm install --ignore-workspace --frozen-lockfile --offline --ignore-scripts \
-  --store-dir="$MCP_OWN_OFFLINE_STORE" --reporter=append-only
+  --store-dir="$MCP_OWN_OFFLINE_STORE" --package-import-method=copy --verify-store-integrity=true --reporter=append-only
 
 # Reinstall only this new RAM directory, never a shared/cache node_modules.
 test -d "$private/node_modules"
@@ -60,7 +53,7 @@ test ! -L "$private/node_modules"
 test "$(realpath "$private/node_modules")" = "$private/node_modules"
 rm -rf -- "$private/node_modules"
 run_phase 03-reinstall pnpm install --ignore-workspace --frozen-lockfile --offline --ignore-scripts \
-  --store-dir="$MCP_OWN_OFFLINE_STORE" --reporter=append-only
+  --store-dir="$MCP_OWN_OFFLINE_STORE" --package-import-method=copy --verify-store-integrity=true --reporter=append-only
 test ! -e /ram/work/node_modules
 test ! -L /ram/work/node_modules
 ln -s /ram/work/extensions/src/mcp-app/node_modules /ram/work/node_modules
@@ -73,7 +66,11 @@ format=0
 run_phase 04-typecheck node node_modules/typescript/bin/tsc --noEmit -p tsconfig.json || types=$?
 run_phase 05-first-party node node_modules/tsx/dist/cli.mjs --tsconfig tsconfig.json \
   --test --test-concurrency=1 tests/first-party/*.nodecheck.ts || first_party=$?
-run_phase 06-sdk pnpm run test || sdk=$?
+if [ -f /prior-sdk/06-sdk.json ]; then
+  run_phase 06-sdk-reuse python3 /delivery/reuse-sdk.py || sdk=$?
+else
+  run_phase 06-sdk pnpm run test || sdk=$?
+fi
 run_phase 07-format node "$MCP_FORMATTER_CLI" --config /evidence/format-options.json --check \
   'first-party/**/*.ts' 'first-party/**/*.md' 'tests/first-party/**/*.ts' \
   'tests/first-party/**/*.mjs' package.json tsconfig.json || format=$?

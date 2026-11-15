@@ -1,0 +1,9 @@
+{
+  "kind": "EXACT_SOURCE_RAM_MATERIALIZATION",
+  "sourceCommit": "ad8955327a56213b3a437379fcc7ccc6e05a261a",
+  "manifestSha256": "d758084a11829061530a123dfdc6e371396b348196392dd8b8893b8e33303d4c",
+  "files": 150,
+  "bytes": 1395313,
+  "unexpectedChanges": [],
+  "applicationAliasesOutsideDeliveredSource": false
+}

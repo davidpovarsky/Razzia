@@ -1,0 +1,23 @@
+{
+  "command": [
+    "node",
+    "/delivery/materialize-source.mjs",
+    "/accepted-source",
+    "/delivery/app",
+    "/evidence/full-input-manifest.json",
+    "/ram/work",
+    "/evidence/source-before.json"
+  ],
+  "exit": 0,
+  "seconds": 0.32,
+  "logSha256": "d5dc3b8c5654275efed643d96076734d50a8ad75bfa964ded07f985664c00768",
+  "resources": {
+    "newPhysicalBytes": 1507328,
+    "capBytes": 67108864,
+    "hostFreeBytes": 2886381568,
+    "dockerStateAndCappedLogAllowanceBytes": 2097152,
+    "newPhysicalUpperBoundBytes": 3604480,
+    "requiredRemainingReserveBytes": 2515075072,
+    "ownTmpfsUsedBytes": 77598720
+  }
+}

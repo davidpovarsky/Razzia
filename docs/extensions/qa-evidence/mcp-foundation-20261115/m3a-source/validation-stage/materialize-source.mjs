@@ -11,7 +11,7 @@ if (
 )
   throw new Error("Fresh allocated Linux /ram/work required")
 const expected =
-  "e538db2b931fa6c223facffa9a7e0b0ac31b6270d8f629d8bf8e8d72245bc1f6"
+  "d758084a11829061530a123dfdc6e371396b348196392dd8b8893b8e33303d4c"
 const sha = (bytes) => createHash("sha256").update(bytes).digest("hex")
 const manifestBytes = fs.readFileSync(manifestFile)
 if (sha(manifestBytes) !== expected)

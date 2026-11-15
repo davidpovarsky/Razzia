@@ -1,0 +1,72 @@
+{
+  "tenants": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738187292131524"
+  },
+  "tenants/52018cde-2b1b-4e4e-a869-ad88c80b2db7": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738186542124193"
+  },
+  "tenants/52018cde-2b1b-4e4e-a869-ad88c80b2db7/native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738186542124193"
+  },
+  "tenants/52018cde-2b1b-4e4e-a869-ad88c80b2db7/native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738186542124193",
+    "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738187028128944"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/extensions": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738187029170754"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/extensions/mcp-first-party": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738187229130908"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/extensions/mcp-first-party/drafts.sqlite": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738187229470232",
+    "sha256": "67131d2a137ddc1e7339426f80f924425a1716749b122f23e55c434a3a20f83f"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/extensions/mcp-first-party/drafts.sqlite-journal": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738187229470232",
+    "sha256": "1a6f5aaee43e83e9fdb48c8d0d0016e2cd083dd27dfa30dbf11ff609b50593a2"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738186534124115"
+  },
+  "tenants/bbec36ae-a79c-495b-9fb5-de084c46e874/native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738186534124115",
+    "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+  },
+  "native-sentinels": {
+    "kind": "directory",
+    "mode": 16832,
+    "mtime": "1794738186542124193"
+  },
+  "native-sentinels/quiz.json": {
+    "kind": "file",
+    "mode": 33152,
+    "mtime": "1794738186542124193",
+    "sha256": "0ddcd7929fbfd542aa0f670b270d6051a4094670f785e7e7bab1706d244bfb86"
+  }
+}

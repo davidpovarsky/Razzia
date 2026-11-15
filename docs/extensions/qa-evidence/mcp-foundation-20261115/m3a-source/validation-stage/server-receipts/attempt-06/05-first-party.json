@@ -1,0 +1,21 @@
+{
+  "command": [
+    "node",
+    "node_modules/tsx/dist/cli.mjs",
+    "--tsconfig",
+    "tsconfig.json",
+    "--test",
+    "--test-concurrency=1",
+    "tests/first-party/auth.nodecheck.ts",
+    "tests/first-party/filesystem.nodecheck.ts",
+    "tests/first-party/http.nodecheck.ts",
+    "tests/first-party/store.nodecheck.ts"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 25.79,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 2711,
+  "logSha256": "dae6218005f02636d4ccc72af3c60d68f1cf8009dee3ccab9def8c12b7929fba"
+}

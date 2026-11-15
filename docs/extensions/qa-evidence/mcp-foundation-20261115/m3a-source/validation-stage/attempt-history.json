@@ -1,0 +1,20 @@
+{
+  "kind": "RETAINED_ATTEMPTS_WITH_SEPARATE_EXIT_MEANINGS",
+  "runtimeAttempts": [
+    {"attempt":"01","containerExit":1,"failure":"Offline metadata mirror path missing; no compiler/tests ran."},
+    {"attempt":"02","containerExit":1,"resolveExit":0,"installShellExit":153,"failure":"Harness file-size limit affected dependency files; no compiler/tests ran."},
+    {"attempt":"03","containerExit":1,"resolveInstallReinstall":[0,0,0],"typecheck":2,"newPass":25,"newFail":1,"sdkPass":41,"sdkFail":0,"format":0,"getAbsentRegular":[0,0],"getHotJournal":1},
+    {"attempt":"04","containerExit":1,"typecheck":0,"newPass":26,"newFail":0,"sdk":"Verified reuse of actual attempt03","format":1,"getCases":[0,0,0]},
+    {"attempt":"05-format","containerExit":0,"kindOfWork":"Source formatting only; no application import"},
+    {"attempt":"06","containerExit":0,"resolveInstallReinstall":[0,0,0],"typecheck":0,"newPass":26,"newFail":0,"sdk":"Verified reuse of actual attempt03","format":0,"getCases":[0,0,0],"sourceRecheck":0}
+  ],
+  "preparationFailures": [
+    "Read-only inventory encountered unrelated worker permissions; corrected to exact approved integrator paths.",
+    "Image inspect optional Config.User absent; corrected to Id plus explicit own UID.",
+    "Previously available local formatter module absent; no local install/application execution.",
+    "Formatting bootstrap quoting failed before container start; format-bootstrap-failed.json retained.",
+    "Default whitespace check flagged raw Windows CRLF receipts; command-scoped cr-at-eol preserves raw evidence without Git config change."
+  ],
+  "rawFreezeGuard":"Original exit1 with46 leased MCP allowlist denials and mismatches[] retained.",
+  "syscallTracer":"Absent. Notifications/snapshots do not become syscall proof."
+}
