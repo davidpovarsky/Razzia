@@ -1,0 +1,34 @@
+{
+  "executedCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "runnerStopped": true,
+  "generatedArtifacts": [
+    {
+      "relative": "output-0/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 8465,
+      "sha256": "35fc4c64f0ac579ee933445c42a5a2da64a9d9d89990d6af2fb1763318bdf496"
+    },
+    {
+      "relative": "output-2/vitest/da39a3ee5e6b4b0d3255bfef95601890afd80709/results.json",
+      "bytes": 233,
+      "sha256": "6b6664a2197a36bb3c4cf7b15950426172f0645b48563d3c75d2087515880305"
+    },
+    {
+      "relative": "output-4/index.cjs",
+      "bytes": 1206428,
+      "sha256": "d7abed61e0c5921867f1e196fc4d68a173c571d44b1208f60ea044efb9285d2d"
+    },
+    {
+      "relative": "output-4/index.cjs.map",
+      "bytes": 3792606,
+      "sha256": "f1ddc7fc3270b9430633406c1c866fa2bafebbcf8b323a80296e0337c24faf45"
+    },
+    {
+      "relative": "output-5/native_scenes_harness.html",
+      "bytes": 140921,
+      "sha256": "5b8d5140a29f4cc72a67dee32e9b8d200b6da4adeac1a6830ec5f1e811553409"
+    }
+  ],
+  "stagedManifestSha256": "d67a1041f7c43392ad83d4e6812e597fa05a391683766ab6a46112a2c67b2f54",
+  "overlayArchiveSha256": "c16d90d69a6b030f2f4a58e21e1238a7ded7096bfbc9a527bebfee376ad27286",
+  "overlayArchiveBytes": 169148
+}

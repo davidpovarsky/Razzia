@@ -3,15 +3,18 @@ import path from "node:path"
 import { isDeepStrictEqual as equal } from "node:util"
 const directory = process.argv[2]
 const focusedOnly = process.argv.includes("--focused")
+const retainFullFailure = process.argv.includes("--retain-full-failure")
+const finalPacket = fs.existsSync(path.join(directory, "full", "native-r2"))
+const proofPrefix = finalPacket ? "full/" : ""
 const read = (relative) =>
   JSON.parse(fs.readFileSync(path.join(directory, relative), "utf8"))
 const files = (subdir) =>
-  fs.readdirSync(path.join(directory, subdir)).filter((f) => f.endsWith(".json"))
+  fs.readdirSync(path.join(directory, proofPrefix, subdir)).filter((f) => f.endsWith(".json"))
 const requireProof = (condition, name) => {
   if (!condition) throw new Error(`Incomplete proof: ${name}`)
 }
 const processProofs = files("process-r2").map((file) => {
-  const r = read(`process-r2/${file}`)
+  const r = read(`${proofPrefix}process-r2/${file}`)
   const pids = [r.interrupted.pid, r.recovery1Process.pid, r.recovery2Process.pid]
   requireProof(
     r.state === "PASS" &&
@@ -23,7 +26,7 @@ const processProofs = files("process-r2").map((file) => {
   return { file, pids, state: r.state, signal: r.interrupted.signal }
 })
 const nativeProofs = files("native-r2").map((file) => {
-  const r = read(`native-r2/${file}`)
+  const r = read(`${proofPrefix}native-r2/${file}`)
   if (r.state) requireProof(r.state === "PASS", file)
   const runs = r.recoveries
   const pids = runs?.map((run) => run.pid)
@@ -56,7 +59,7 @@ const nativeProofs = files("native-r2").map((file) => {
   return { file, state: r.state, pids, exits: runs?.map((run) => run.process.code) }
 })
 const reviewProofs = files("review-after").map((file) => {
-  const r = read(`review-after/${file}`)
+  const r = read(`${proofPrefix}review-after/${file}`)
   requireProof(
     r.state === "PASS" &&
       r.runs.length === 2 &&
@@ -94,8 +97,7 @@ const reviewProofs = files("review-after").map((file) => {
 })
 const names = [
   "review-after",
-  "native-r2",
-  "process-r2",
+  ...(finalPacket ? ["native-media-targeted", "package-stage-targeted", "process-media-targeted"] : ["native-r2", "process-r2"]),
   "original-focused-r2",
   "types-r2",
   "format-r2",
@@ -105,9 +107,17 @@ const names = [
 const exits = Object.fromEntries(
   names.map((name) => [name, fs.readFileSync(path.join(directory, `${name}.exit`), "utf8").trim()]),
 )
+const commandSummaries = Object.fromEntries(names.map((name) => {
+  const log = fs.readFileSync(path.join(directory, `${name}.log`), "utf8").replace(/\u001b\[[0-9;]*m/g, "")
+  const line = log.split(/\r?\n/).filter((line) => /^\s*Tests\s+/.test(line)).at(-1)
+  return [name, line ? {
+    summary: line.trim(), passed: Number(/(\d+) passed/.exec(line)?.[1] ?? 0),
+    failed: Number(/(\d+) failed/.exec(line)?.[1] ?? 0), skipped: Number(/(\d+) skipped/.exec(line)?.[1] ?? 0),
+  } : { exit: exits[name] }]
+}))
 requireProof(
-  Object.entries(exits).every(([name, exit]) => exit === "0" || (focusedOnly && name === "original-focused-r2")),
-  "command exits other than explicitly retained original focused failures",
+  Object.entries(exits).every(([name, exit]) => exit === "0" || (focusedOnly && name === "original-focused-r2") || (retainFullFailure && name === "extensions-full")),
+  "command exits other than explicitly retained raw failures",
 )
 const runner = read("runner-identity.json")
 requireProof(
@@ -124,13 +134,20 @@ requireProof(
 )
 const inputChecks = fs.readdirSync(directory).filter((f) => /^(base|merged)-.*\.json$/.test(f))
 for (const file of inputChecks) requireProof(read(file).mismatches.length === 0, file)
+const resourceRows = fs.readdirSync(directory).filter((f) => f.endsWith("-resources.jsonl")).flatMap((file) => fs.readFileSync(path.join(directory, file), "utf8").trim().split("\n").map((line) => JSON.parse(line)))
+const minFreeBytes = Math.min(...resourceRows.map((row) => row.freeBytes))
+const maxNewBytes = Math.max(...resourceRows.map((row) => row.newBytes))
+requireProof(minFreeBytes >= 2 * 1024 ** 3 && maxNewBytes <= 96 * 1024 ** 2, "resource floor/budget")
 console.log(JSON.stringify({
   kind: "producer-runtime-receipt-analysis",
   executedCommit: read("staged-manifest.json").commit,
   exits,
+  commandSummaries,
   unresolvedFailedCommands: Object.entries(exits).filter(([, exit]) => exit !== "0").map(([name]) => name),
   broadRun: !focusedOnly,
+  retainedFullFailure: retainFullFailure,
   rawReceipts: nativeProofs.length + processProofs.length + reviewProofs.length,
+  fullSuiteReceiptDirectory: finalPacket ? "full" : null,
   processProofs,
   nativeProofs,
   reviewProofs,
@@ -138,5 +155,6 @@ console.log(JSON.stringify({
   source: read("merged-final.json"),
   retainedPriorSource: read("base-final.json"),
   resources: read("resources-final.json"),
+  resourceSampleCount: resourceRows.length, minFreeBytes, maxNewBytes,
   runnerStopped: true,
 }, null, 2))

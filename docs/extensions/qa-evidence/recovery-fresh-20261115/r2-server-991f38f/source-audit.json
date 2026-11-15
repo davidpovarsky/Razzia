@@ -1,0 +1,19 @@
+{
+  "executedCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "sourceGraphFiles": 1274,
+  "freezePolicyAuxiliaryFiles": 2,
+  "retained9593DeliveredFilesCheckedSeparately": 1391,
+  "insideContainerSourceMismatchesBeforeAfter": [],
+  "sourceChangesAfterExecution": [],
+  "comparedSourcePaths": ["extensions/src", "packages"],
+  "sourceWhitespaceCheckExit": 0,
+  "postExecutionChanges": "QA evidence, offline receipt analysis and handoff only",
+  "originalGate3Audit": "../ORIGINAL_GATE3_APPROVED_INSERTION.json proves sole approved setup write and unchanged assertions/rest of original file",
+  "apiTestSourceEdited": false,
+  "themeSourceOrTimeoutEdited": false,
+  "actualApiFixtureKind": "OWNED HOST SCRATCH BIND",
+  "tmpfsPlanExecuted": false,
+  "originalFullSuiteStatus": "813 PASS / 6 FAIL (819), exit 1",
+  "independentFullRuntimeAcceptanceClaimed": false,
+  "allOriginalSourceTasksCompleted": false
+}
