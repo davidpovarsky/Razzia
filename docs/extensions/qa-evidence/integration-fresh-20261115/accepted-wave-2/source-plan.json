@@ -1,0 +1,203 @@
+{
+  "pre_edit_utc": "2026-11-15T09:52:13.120208+00:00",
+  "before_head": "9f7bfdef45cfe87b9edb99eb9082f479d1c51f09",
+  "prior_frozen_product_pin": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "metadata_commit": "19a2e83060e78fa4505647b88eca762113cb1ca8",
+  "recovery_tested_source": "991f38f216ad265e06aec53313db8928437da248",
+  "recovery_evidence_commit": "96767de6d40b594324687e15b0f386b87dd7ef19",
+  "recovery_cherry_pick_commits": [
+    "1f33047cc7baec3e958ff54089c894887604c6bf",
+    "66b4535632ee6cd4bbc4515e7d3ab9004fe1915e",
+    "e58350423727ba1c5aadf4164a2b09ee25745839",
+    "bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+    "be73927216fb89d743d208ccfad7a632953ec10b",
+    "9593f24f287f2e404f387f6359e89453cd8a971e",
+    "4138cccbb0f234fd4eb4a426c5d12413cddc6535",
+    "3f92ffca1f35029d1d5a7e9180151545e15ef8c7",
+    "8b9593787e88ccad37e924a45b820e353074864a",
+    "d076fd703459cb94d8cb17601981a349248e7ca0",
+    "991f38f216ad265e06aec53313db8928437da248",
+    "96767de6d40b594324687e15b0f386b87dd7ef19"
+  ],
+  "theme_single_commit": "f1344dbb28776c97e06ccb417237b0c50763d2c0",
+  "excluded_unaccepted_c1": "3b73fc1b589bee26a70b9f941e3033c91a2d0f58",
+  "protected_packages_tree_before": "a349087af926330bb800f1cd935b4d97389e62fe",
+  "all_source_paths": {
+    "extensions/src/server/media-library-recovery.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob efd190e3b288c86641a8c072922c23e801a38a84\textensions/src/server/media-library-recovery.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/media-library.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob 0984e7230e403362a0dd3bfc1d64667195c004cb\textensions/src/server/media-library.test.ts",
+      "approved_after_ls_tree": "100644 blob 6e1ce616d6f2e7b6904a618140d2e9b0406edff8\textensions/src/server/media-library.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/media-library.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob a30fbe7ef86edbf843faebdfbf13bb1ec8e2ae58\textensions/src/server/media-library.ts",
+      "approved_after_ls_tree": "100644 blob d5d0ed9652828dbb1e3db0568e0d8132ee24e0d3\textensions/src/server/media-library.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob d56924f7d2e5e18dff9feb6f2d988757976c150a\textensions/src/server/storage.test.ts",
+      "approved_after_ls_tree": "100644 blob fc5b609b449b8b942acdfa3787460864d043f3cd\textensions/src/server/storage.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/create-recovery.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 71a74895fe6c6465a863ef4dc7aef762a91b5748\textensions/src/server/storage/create-recovery.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/journal-recovery.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 8a1d628c9882b666409d9d8a1d51432711d3a842\textensions/src/server/storage/journal-recovery.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/journal.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob 79f3160df3108febc0177899be3f70d643b357b5\textensions/src/server/storage/journal.ts",
+      "approved_after_ls_tree": "100644 blob d3afe86d1880e223aac4ff625e52ce0915193f64\textensions/src/server/storage/journal.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/native-binding-child.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 9a5a24f9d5844545b7bdcc33aed0970733d98bfc\textensions/src/server/storage/native-binding-child.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/native-binding-fixture.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 437960f962b367f7bc2a99117a949f5e9e68f178\textensions/src/server/storage/native-binding-fixture.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/native-binding-r2.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 221d3916d8cf4b0cd7abd560aed77b28b3607eaf\textensions/src/server/storage/native-binding-r2.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/native-binding.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 29f2d113f8c9b402c001958ee380d849663a8b97\textensions/src/server/storage/native-binding.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/native-recovery-adapter.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob f235f4bdb6e6d0442a977b04c5bc5700632762ad\textensions/src/server/storage/native-recovery-adapter.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/package-stage-r2.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob e0f9c09ca291b9a7c8742b79ae439420f9ad3654\textensions/src/server/storage/package-stage-r2.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/physical-binding.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 28624a3788d01de148cf002abf6ada426299562c\textensions/src/server/storage/physical-binding.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/process-interruption-child.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 74fb3e95dd23b08d11052a59b8012d26525084c3\textensions/src/server/storage/process-interruption-child.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/process-interruption-state.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob f28867731fd5f654a3e19fc83eec56d5dcef3912\textensions/src/server/storage/process-interruption-state.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/process-interruption.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 92c578427260a0a8d0160aa6d2a4206653092254\textensions/src/server/storage/process-interruption.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/recovery-fixture.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob d0477ba3764b1d9c3fd7816786e595bf40060bfd\textensions/src/server/storage/recovery-fixture.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/recovery-state.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 8c84e97eb835401ccaac70b63800b584398117d0\textensions/src/server/storage/recovery-state.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/review-binding-child.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob cea3724c5a114d8aeb09cd2db9008dc3c4cc73ff\textensions/src/server/storage/review-binding-child.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/review-binding-state.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 89893fe78ef5ef73345b85f6cf7823188c191cdd\textensions/src/server/storage/review-binding-state.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/review-binding.test.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 048857b1bc46fa68d781143ee901241e4094240e\textensions/src/server/storage/review-binding.test.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/service.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob 8a5303338bac9d2157ce0666892be561f7b822b0\textensions/src/server/storage/service.ts",
+      "approved_after_ls_tree": "100644 blob 53f927db5cc14eec0ec08977361e45abb3936eea\textensions/src/server/storage/service.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/server/storage/sidecar.ts": {
+      "lane": "recovery",
+      "before_ls_tree": "100644 blob 12e2ee8be092133d792e0173c096c29d9b481ab1\textensions/src/server/storage/sidecar.ts",
+      "approved_after_ls_tree": "100644 blob 262a0974ce2befdb262c8ed5565beefecc04a3a0\textensions/src/server/storage/sidecar.ts",
+      "approved_source_ref": "96767de6d40b594324687e15b0f386b87dd7ef19"
+    },
+    "extensions/src/core/show-library/preview-port.ts": {
+      "lane": "metadata",
+      "before_ls_tree": "100644 blob d3da5e7baf17a33b5b16e97e6a47471a98e2accc\textensions/src/core/show-library/preview-port.ts",
+      "approved_after_ls_tree": "100644 blob d660f9fa165105086f80c646ef6e7fe4a4bcb4af\textensions/src/core/show-library/preview-port.ts",
+      "approved_source_ref": "19a2e83060e78fa4505647b88eca762113cb1ca8"
+    },
+    "extensions/src/core/show-library/stage-metadata-schema.ts": {
+      "lane": "metadata",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 9b379a992d9bd2b9f69bc7d43fec9d77fab311be\textensions/src/core/show-library/stage-metadata-schema.ts",
+      "approved_source_ref": "19a2e83060e78fa4505647b88eca762113cb1ca8"
+    },
+    "extensions/src/core/show-library/stage-metadata.test.ts": {
+      "lane": "metadata",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 0911e7fc564bb4380f3b06772e8c61acc15484fd\textensions/src/core/show-library/stage-metadata.test.ts",
+      "approved_source_ref": "19a2e83060e78fa4505647b88eca762113cb1ca8"
+    },
+    "extensions/src/core/show-library/stage-metadata.ts": {
+      "lane": "metadata",
+      "before_ls_tree": "",
+      "approved_after_ls_tree": "100644 blob 3596890bed38b6581b922fee4381bd887f9f2eba\textensions/src/core/show-library/stage-metadata.ts",
+      "approved_source_ref": "19a2e83060e78fa4505647b88eca762113cb1ca8"
+    },
+    "extensions/src/server/show-themes/installation.test.ts": {
+      "lane": "theme_assertion",
+      "before_ls_tree": "100644 blob 477080ba7e3853547da82a167ec9b42d9fb20be1\textensions/src/server/show-themes/installation.test.ts",
+      "approved_after_ls_tree": "100644 blob 1855fe5692b8d3cba7a6cb57fa2e06987a2be4be\textensions/src/server/show-themes/installation.test.ts",
+      "approved_source_ref": "f1344dbb28776c97e06ccb417237b0c50763d2c0"
+    }
+  },
+  "authorization": "Manager native directive15Nov2026: eligible after85e frozen proof; accepted19a metadata, Recovery991/evidence967, single f1344 only. Sole integration Git writer; no main/push/deploy.",
+  "planned_validation": "New combined product pin; bounded server normal frozen graph and parent TypeScript; metadata26, Recovery113 prerequisite scopes, unchanged API5 on owned RAM fixture, theme5 original-timeout tests. No rerun of819 full suite; prior813/6 retained. SDK41 may be repeated only if dependency/source coupling warrants."
+}
