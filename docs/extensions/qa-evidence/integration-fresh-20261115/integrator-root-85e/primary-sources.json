@@ -1,0 +1,57 @@
+[
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/store-dir/src/store_index.rs",
+    "sha256": "a55bdedd4a1b486b4ac2d33e6642801aabc99c13a9737a067c8aca828e9b35f7",
+    "bytes": 22130
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/store-dir/src/msgpackr_records.rs",
+    "sha256": "fe76858dfe886a3cba8d6b00171969a3ab9c289c5c977b1d02779b5f8a52a73f",
+    "bytes": 21593
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/store-dir/src/cas_file.rs",
+    "sha256": "f62968a1a7bef0d18a5d7573a7def90e5454d4430242b8af049cc1f1711707e9",
+    "bytes": 14527
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/store-dir/src/check_pkg_files_integrity.rs",
+    "sha256": "7587352806298884d5ffb76813bb5bd7e3072fb47212b300844bc191c80aa3a1",
+    "bytes": 28187
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/cli/src/cli_args/view.rs",
+    "sha256": "b756e2cc3ea3467454bdb164c16380358fcd0430edc4745d6475979f4bc6a22e",
+    "bytes": 12975
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/resolving-npm-resolver/src/mirror.rs",
+    "sha256": "f295fdf18b27be18f4d98ad283e4b164b528d25e2a2eab6840eb22c24f6952f9",
+    "bytes": 23940
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/resolving-npm-resolver/src/mirror/read_records.rs",
+    "sha256": "e4983e6dc3b3b9beec9b181ecd82a18ae5e7472be510c3176203371033e00ed3",
+    "bytes": 8414
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/resolving-npm-resolver/src/mirror/headers.rs",
+    "sha256": "f4a893854ecf41d078635a4345e0896ef920777264daf17018a2d96e9322207a",
+    "bytes": 2142
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/resolving-npm-resolver/src/mirror/registry_key.rs",
+    "sha256": "dabc9f5d5f49daa4aeb83d3354bff89e9d536609c88431ba4856f3f789d88866",
+    "bytes": 12203
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/registry/src/package.rs",
+    "sha256": "defd0c6f578f82f54ef464a7685d9a394652ce353a26a904baa9364b9e8960a6",
+    "bytes": 11930
+  },
+  {
+    "url": "https://raw.githubusercontent.com/pnpm/pnpm/v12.18.0/pnpm/crates/resolving-npm-resolver/src/fetch_full_metadata_cached.rs",
+    "sha256": "0601327b33b5ff85c265048bb4856eeba94c34c11aa312c2f69cf4b9c53cb5f0",
+    "bytes": 20938
+  }
+]

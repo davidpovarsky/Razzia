@@ -1,0 +1,14 @@
+{
+  "all_root_rows_retained_verbatim": true,
+  "copied_body_bytes": 0,
+  "derived_db_sha256": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+  "referenced_files_verified": 20031,
+  "root_rows": 354,
+  "sdk_only_rows": 17,
+  "sdk_rows": 44,
+  "shared_aliases_identical": 27,
+  "shared_differences_allowed_only": "files or sideEffects.added file checkedAt, per pinned pnpm primary source; no field rewritten",
+  "shared_rows": 27,
+  "symlink_body_files": 17412,
+  "union_rows": 371
+}

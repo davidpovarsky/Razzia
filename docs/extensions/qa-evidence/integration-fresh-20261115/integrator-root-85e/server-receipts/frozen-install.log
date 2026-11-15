@@ -1,0 +1,22 @@
+Scope: all 7 workspace projects
+? Verifying lockfile against supply-chain policies (509 entries)...
+Packages are copied from the content-addressable store to the virtual store.
+  Content-addressable store is at: /work/store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 186, reused 186, downloaded 0, added 183
+Progress: resolved 266, reused 266, downloaded 0, added 263
+Progress: resolved 278, reused 278, downloaded 0, added 275
+Progress: resolved 288, reused 288, downloaded 0, added 285
+Progress: resolved 296, reused 296, downloaded 0, added 293
+Progress: resolved 303, reused 303, downloaded 0, added 300
+Progress: resolved 356, reused 356, downloaded 0, added 353
+Progress: resolved 371, reused 371, downloaded 0, added 371
+✗ Lockfile failed supply-chain policy check (509 entries in 11.8s)
+Lockfile is up to date, resolution step is skipped
+Error: ERR_PNPM_META_FETCH_FAIL
+
+  × installing dependencies
+  ╰─▶ ERR_PNPM_NO_OFFLINE_META: Failed to resolve @babel/code-frame in package
+      mirror /work/home/.cache/pnpm/v12/metadata-full/
+      https%3A+registry.npmjs.org/@babel/code-frame.jsonl
+

@@ -1,0 +1,122 @@
+{
+  "head": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+  "status": "BLOCKED_REGISTRY_METADATA_OFFLINE",
+  "installer": {
+    "command": [
+      "pnpm",
+      "install",
+      "--offline",
+      "--frozen-lockfile",
+      "--store-dir=/work/store",
+      "--package-import-method=copy",
+      "--verify-store-integrity=true",
+      "--reporter=append-only"
+    ],
+    "cwd": "/work/project",
+    "exit": 1,
+    "log_sha256": "90d5258c798cbdc74e5d8733de30a0c0778007360070238018fef4db54fbc32e",
+    "seconds": 11.97
+  },
+  "parent_types": "NOT_RUN_INCOMPLETE_INSTALL",
+  "private_types": "NOT_RUN_INCOMPLETE_INSTALL",
+  "private_tests": "NOT_RUN_INCOMPLETE_INSTALL",
+  "union": {
+    "all_root_rows_retained_verbatim": true,
+    "copied_body_bytes": 0,
+    "derived_db_sha256": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+    "referenced_files_verified": 20031,
+    "root_rows": 354,
+    "sdk_only_rows": 17,
+    "sdk_rows": 44,
+    "shared_aliases_identical": 27,
+    "shared_differences_allowed_only": "files or sideEffects.added file checkedAt, per pinned pnpm primary source; no field rewritten",
+    "shared_rows": 27,
+    "symlink_body_files": 17412,
+    "union_rows": 371
+  },
+  "shared_timestamp_differences": 1178,
+  "difference_paths": [
+    "files.*.checkedAt"
+  ],
+  "cache_preserved": {
+    "exact_hash_size_mode_mtime_inode_equality": true
+  },
+  "source_before": {
+    "entries": 913,
+    "mismatches": []
+  },
+  "source_after": {
+    "entries": 913,
+    "mismatches": []
+  },
+  "work_source_after": {
+    "entries": 913,
+    "mismatches": []
+  },
+  "resources": {
+    "memory_events": "low 0\nhigh 0\nmax 0\noom 0\noom_kill 0\noom_group_kill 0\nsock_throttled 0\n",
+    "memory_peak": "760221696",
+    "tmpfs_used_bytes": 486547456
+  },
+  "registry_metadata": {
+    "locked_entries": 509,
+    "locked_names": 459,
+    "missing_names": 412,
+    "image_files": 20,
+    "sdk_files": 27
+  },
+  "pinned_descriptor": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+  "pinned_index_bytes": 4530176,
+  "pinned_index_sha256": "5bc40fd7f9bd80f0594e69661a41ab64f1d3aa546824f1f5ea6d61313585c4ad",
+  "raw_hashes": {
+    "cache-after.json": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+    "cache-before.json": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+    "cache-preserved.json": "b8e80775c2cd91617203d86f1eeee379e5d4752c311c03b2fbcc703b0cb4be77",
+    "failure.json": "aa92897f8f886f22e80cdcd21de991e9202921d92bade57a78137a81725a6b4a",
+    "frozen-install.json": "d25fd93c83274d21792e30969e51d5e0b3a77434a4e347241a33b6bc361ffa12",
+    "frozen-install.log": "bef76891908c8ca8fed6ce84cf2dfbabae07e2135b222e83b1cfc8532de09b53",
+    "initial-container-state.json": "3d831a84b0d02de7a70bc8324658d22e68f3302b8ffbfd5286acde32668b5a24",
+    "initial-container.log": "bfb6a26285da3d2887c281afed34b5a7ba757ddf39ebeebd230a91e0a4c3d926",
+    "launch-r2.json": "b6b0cf1c21b7a5f8d1456554869a3ddbdf3b9dbd59748bbd76065c5a1d627a02",
+    "launch-r2.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "launch-r2.stdout": "af440729776db6cb7d3d866f224c37e4bc13f44abbfb99ccde93bacf93cda1f5",
+    "launch.json": "000b8f0d1efd31bd5b870a9947cb8350584cd865bd6600752b06b2e9053fa5f9",
+    "launch.py": "cae1cee382b8eb7546972b2f01b9fd02a754aa77a54139c1850762b6582e2569",
+    "launch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "launch.stdout": "8d58fe43e9d6a376648597d8262b33ee1dc62ebfb28430eaafac94779dbba6be",
+    "manifest.json": "638239526baa724a0d8b32834e7ccd3e6196847a0c74c566bb3c65ac8b341f75",
+    "metadata-pin-first-attempt-failure.json": "ba3a0f3e314970607b7bb18cc012071254582d2ff3183a0f659f291f8de2d1ce",
+    "primary-sources.json": "c1c0aa5f5e7404b38f24044b90dfda614f7ecebbb07ef2e7d25fa75d012902aa",
+    "registry-metadata-inventory.json": "d42f6428c709711374d73d9fdecbc74c46da330543e1eb01e5108a0ee47209bf",
+    "resource-end.json": "f2ce5aa3c5b08b10c454733993c794bea18c29cbe9987fd6689dc058919aa865",
+    "run-r3/cache-after.json": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+    "run-r3/cache-before.json": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+    "run-r3/cache-preserved.json": "b8e80775c2cd91617203d86f1eeee379e5d4752c311c03b2fbcc703b0cb4be77",
+    "run-r3/failure.json": "00fca92a8d468cf4420aac31c547ce3ab75518b5372ae5fc2bffb3c475273773",
+    "run-r3/frozen-install.json": "9c6543a346cb38af10eede98d6f448af27883a75bb4dbe6172c02205861ee339",
+    "run-r3/frozen-install.log": "90d5258c798cbdc74e5d8733de30a0c0778007360070238018fef4db54fbc32e",
+    "run-r3/launch.json": "88c51e65ea93e16392eecf0134f11b957ff93f244aab88bc2b3d6ed50fec840a",
+    "run-r3/launch.stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "run-r3/launch.stdout": "0b2518ef9c95ad5a89d3607917b2fc8c02b885f384f26f425d833af99e27a8b6",
+    "run-r3/manifest.json": "638239526baa724a0d8b32834e7ccd3e6196847a0c74c566bb3c65ac8b341f75",
+    "run-r3/resource-end.json": "f3fd9bc81aafe0ba63101c6721eac710d16ba15afffc65f48a8b9dc185e7d739",
+    "run-r3/runner.py": "3577717c04f154b72b411967ed31114f32dae841f1ec6ef98488221ff7273d6a",
+    "run-r3/shared-row-comparison.json": "d4e99ee46e75b608626196d0d7b90013535e6f5d9dffb82edd198a6efbf4d9ef",
+    "run-r3/source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r3/source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r3/union-result.json": "e1e2f40b02deb0e942954b2ea23bee2be10d13706d38d03cd5321cd913ed2db9",
+    "run-r3/versions.json": "888fb2dfaebdd318966d08a05a91d2b3212156fa7bf60a609876da4aabc09c5d",
+    "run-r3/versions.log": "3928bb08fa91162b41a3a7b42feb865fd9f95c158050e915223662c5932a8e42",
+    "run-r3/work-source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "run-r3/work-source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "runner.py": "846ec3a4ad3d8b7b38a0c120e95d420a01d79f2da668cd6e0745238651cc889d",
+    "shared-row-comparison.json": "d4e99ee46e75b608626196d0d7b90013535e6f5d9dffb82edd198a6efbf4d9ef",
+    "source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "union-result.json": "e1e2f40b02deb0e942954b2ea23bee2be10d13706d38d03cd5321cd913ed2db9",
+    "versions.json": "0f51dd85129ae58419492b04fbb849e782b12969e46018b8f7c4bca4fa679f0c",
+    "versions.log": "3928bb08fa91162b41a3a7b42feb865fd9f95c158050e915223662c5932a8e42",
+    "work-source-after.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480",
+    "work-source-before.json": "b3cf5ad28c2614435836d0249ea5aa28b05bca214ee8d2a8fb125f6de9eb6480"
+  }
+}
