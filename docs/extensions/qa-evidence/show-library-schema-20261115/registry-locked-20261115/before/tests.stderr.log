@@ -1,0 +1,42 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/show-library/registry-locked.test.ts > locked-phase single template preserves required answer information > rejects a template with no bound answer information
+ FAIL  src/core/show-library/registry-locked.test.ts > locked-phase estimation template preserves required answer information > rejects a template with no bound answer information
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/core/show-library/registry-locked.test.ts:104:54
+    102|       input.templates[0].nodes[0].bindings = {}
+    103|
+    104|       expect(() => createShowLibraryRegistry(input)).toThrow(
+       |                                                      ^
+    105|         "missing-system-binding",
+    106|       )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/core/show-library/registry-locked.test.ts > locked-phase single template preserves required answer information > rejects omitted answer completeness capability
+ FAIL  src/core/show-library/registry-locked.test.ts > locked-phase estimation template preserves required answer information > rejects omitted answer completeness capability
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/core/show-library/registry-locked.test.ts:112:54
+    110|       input.templates[0].requiredSystemCapabilities = []
+    111|
+    112|       expect(() => createShowLibraryRegistry(input)).toThrow(
+       |                                                      ^
+    113|         "missing-system-capability",
+    114|       )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯

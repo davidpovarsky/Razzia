@@ -1,0 +1,15 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ❯ src/core/show-library/registry-locked.test.ts (8 tests | 4 failed) 46ms
+   ❯ locked-phase single template preserves required answer information (4)
+     × rejects a template with no bound answer information 9ms
+     × rejects omitted answer completeness capability 2ms
+   ❯ locked-phase estimation template preserves required answer information (4)
+     × rejects a template with no bound answer information 2ms
+     × rejects omitted answer completeness capability 1ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 4 passed (8)
+   Start at  20:02:01
+   Duration  3.08s (import 84%, transform 12%, worker 2%, tests 2%)
