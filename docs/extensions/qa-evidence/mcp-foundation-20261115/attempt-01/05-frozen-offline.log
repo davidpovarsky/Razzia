@@ -1,0 +1,4 @@
+✓ Lockfile passes supply-chain policies (verified 45s ago)
+Lockfile is up to date, resolution step is skipped
+Done in 97ms using pnpm v12.18.0
+dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe  pnpm-lock.yaml

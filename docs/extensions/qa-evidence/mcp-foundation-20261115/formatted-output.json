@@ -1,0 +1,119 @@
+{
+  "formatter": "Prettier3.9.10, image-installed tooling only, no stale app source",
+  "options": {
+    "semi": false,
+    "tabWidth": 2,
+    "singleQuote": false,
+    "printWidth": 80,
+    "trailingComma": "all"
+  },
+  "tailwindPlugin": "Not needed for TS/JSON/Markdown package without TSX/Tailwind classes",
+  "files": [
+    {
+      "path": "docs/extensions/plans/MCP_APP_ADOPTION_20261115.md",
+      "sha256": "1645fe91bec9fb3632a34f0fd64f4f8402952d067e1b5e63685dfcabf611d7d4",
+      "lines": 144
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/canonical.ts",
+      "sha256": "4c77e968c2225df6064acb85027816fb8b2495da70ce48175292cb40ae86d4da",
+      "lines": 75
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/index.ts",
+      "sha256": "e5a8fda9b4ae401e48d6d7c538d997bf8b0848d7ae9f6724375df5103110fa02",
+      "lines": 3
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/schemas.ts",
+      "sha256": "8d2ab36da1292c178e0a974e9c331eed05e59adb97f530df11ae3ad3de812656",
+      "lines": 119
+    },
+    {
+      "path": "extensions/src/mcp-app/contracts/tools.ts",
+      "sha256": "08e1c22ef58141f46b1377b8554a0e7a3e847eb1ae9b9e78551ec99348eb84c6",
+      "lines": 140
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "sha256": "7c476764609fe0e12a3485d7fc3b4b31f2c832fb623ba237dd816932f7c2ef65",
+      "lines": 31
+    },
+    {
+      "path": "extensions/src/mcp-app/server/README.md",
+      "sha256": "7c2e8537ee052c6301be56e6e826b625205080d75a44135a178b817bbc454151",
+      "lines": 65
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authoring.ts",
+      "sha256": "ac2399912320c3f073dd967e9cf02fcf81aba6ffe0a1e0cd4e24e24192aba895",
+      "lines": 134
+    },
+    {
+      "path": "extensions/src/mcp-app/server/authorization.ts",
+      "sha256": "d2a5f7bdf6a754a7a632250ad05b15447b61359da485f0d6f98c58b05a566ffa",
+      "lines": 90
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dependencies.ts",
+      "sha256": "0971e6d28e2b6cc245d70b2f5c56df658e8c627bd13cdbb047d98f6e93952c4d",
+      "lines": 120
+    },
+    {
+      "path": "extensions/src/mcp-app/server/dispatch.ts",
+      "sha256": "d103cbefe8af58568e61ef3eb4bac1480a40b1e0a354573e40f5b0345de2856e",
+      "lines": 264
+    },
+    {
+      "path": "extensions/src/mcp-app/server/errors.ts",
+      "sha256": "9bdef8a34a50ff204d87cff417cac7475fa34ac349da363ab318f585713a4657",
+      "lines": 34
+    },
+    {
+      "path": "extensions/src/mcp-app/server/factory.ts",
+      "sha256": "8da41acc3d832b7f31098db3a623fad087706d5b367c9e6c9c139b8b0d0e4861",
+      "lines": 140
+    },
+    {
+      "path": "extensions/src/mcp-app/server/preview.ts",
+      "sha256": "c00835db267c2e3bdfca971df096fd9d788c04dd028799b70f22a6e78bfd381e",
+      "lines": 79
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/authorization.test.ts",
+      "sha256": "363d1f4bf2c5401a17fd576a3daaadf3686e25b6784e6ed1174f5aeb723b778a",
+      "lines": 175
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/boundaries.test.ts",
+      "sha256": "9fdb9871b76fa32268f243fb0c4e5930b9f59a72dd9a4a142a87a077bed30598",
+      "lines": 87
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/canonical.test.ts",
+      "sha256": "2a782e417312a7ccc0d7a2525046505104d148aa9029bc094ee503e0c6d8a44c",
+      "lines": 70
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/drafts.test.ts",
+      "sha256": "9a90571e0923340db3dfbe901900460e62dbe71b2dece405c4d0917479827dbc",
+      "lines": 112
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/fixtures.ts",
+      "sha256": "171af15f8e9370d9514749a1fed5de48f316f9f6ea3787d63576aef8c7f56091",
+      "lines": 189
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/protocol.test.ts",
+      "sha256": "ce048dd8ca1a95304a7820a54a29818c8ba04c1d67f54828596be54a67fc3fd8",
+      "lines": 35
+    },
+    {
+      "path": "extensions/src/mcp-app/tsconfig.json",
+      "sha256": "5809a3ff0ad270f8e20a920110efe7edad1edf17cc09f14c6b39dd1ff42dd3e3",
+      "lines": 22
+    }
+  ],
+  "zipSha256": "882604bb817f64478b9d2a8a676ec23f1aab640ade86ca520a2538e1e2908c0c"
+}

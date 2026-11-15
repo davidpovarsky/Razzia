@@ -1,0 +1,11 @@
+file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/extensions/qa/tds-boundary.mjs:78
+    throw new Error(JSON.stringify({ denied, mismatches }))
+          ^
+
+Error: {"denied":["extensions/src/mcp-app/contracts/canonical.ts","extensions/src/mcp-app/contracts/index.ts","extensions/src/mcp-app/contracts/schemas.ts","extensions/src/mcp-app/contracts/tools.ts","extensions/src/mcp-app/package.json","extensions/src/mcp-app/server/README.md","extensions/src/mcp-app/server/authoring.ts","extensions/src/mcp-app/server/authorization.ts","extensions/src/mcp-app/server/dependencies.ts","extensions/src/mcp-app/server/dispatch.ts","extensions/src/mcp-app/server/errors.ts","extensions/src/mcp-app/server/factory.ts","extensions/src/mcp-app/tests/server/canonical.test.ts","extensions/src/mcp-app/tests/server/fixtures.ts","extensions/src/mcp-app/tsconfig.json","extensions/src/mcp-app/pnpm-lock.yaml","extensions/src/mcp-app/server/preview.ts","extensions/src/mcp-app/tests/server/authorization.test.ts","extensions/src/mcp-app/tests/server/boundaries.test.ts","extensions/src/mcp-app/tests/server/drafts.test.ts","extensions/src/mcp-app/tests/server/protocol.test.ts"],"mismatches":[]}
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/extensions/qa/tds-boundary.mjs:78:11
+    at ModuleJob.run (node:internal/modules/esm/module_job:329:25)
+    at async onImport.tracePromise.__proto__ (node:internal/modules/esm/loader:644:26)
+    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:117:5)
+
+Node.js v22.17.0

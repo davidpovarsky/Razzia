@@ -13,13 +13,13 @@ Decision: HQ `docs/tadazz/decisions/SB_MCP_ADOPTION_20261115.md`.
 Reviewer/source conversations are recorded in that decision. Original research
 task: MCP-01 `1220539611687955`; original MCP parent stays open.
 
-| Frozen HQ artifact | SHA-256 |
-| --- | --- |
-| M1_CONTRACT_20261115.md | 6a9ceb8d867422fa07386b70a55b55a2344bdd841be476feece29f86ceefc399 |
+| Frozen HQ artifact                   | SHA-256                                                          |
+| ------------------------------------ | ---------------------------------------------------------------- |
+| M1_CONTRACT_20261115.md              | 6a9ceb8d867422fa07386b70a55b55a2344bdd841be476feece29f86ceefc399 |
 | M1_SECURITY_ACCEPTANCE_20261115.json | 811a2febcfb74d0025c1a0d1848d1a439dd72d5d96451158249fa832623a23ff |
-| SB1_CONTRACT_20261115.md | a7fca68e07168a08a2199403a4c4f06add59dfcc84614acc0216d18a9ff2ddf0 |
-| SB1_REGISTRY_20261115.json | b770575318e20b3263830447d8135e736df911d58dc4c318ff49cbcf390ffb63 |
-| SB_MCP_PORT_REVIEW_20261115.md | 1fdba75f575a174d8de6c8270920c08053b34d8b0987e8e9e10d1bc0390d87e8 |
+| SB1_CONTRACT_20261115.md             | a7fca68e07168a08a2199403a4c4f06add59dfcc84614acc0216d18a9ff2ddf0 |
+| SB1_REGISTRY_20261115.json           | b770575318e20b3263830447d8135e736df911d58dc4c318ff49cbcf390ffb63 |
+| SB_MCP_PORT_REVIEW_20261115.md       | 1fdba75f575a174d8de6c8270920c08053b34d8b0987e8e9e10d1bc0390d87e8 |
 | MCP_SB_DEPENDENCY_REVIEW_20261115.md | ee8454285cb271ededc8b0a19acc662ea7bb6c883c03220c099bcf0df7bc3535 |
 
 These immutable documents remain in the HQ evidence tree. Canonical ADR delivery
@@ -86,6 +86,22 @@ used. This identifies the live image; health is not authenticated/event/UI proof
 
 ## SDK provenance correction for implementation
 
+### Internal preview port successor (same-day manager decision)
+
+HQ decision `SB_PORT_V2_IDENTITY_20261115.md` supersedes the unshipped internal
+portVersion 1 with **portVersion 2** before executable interface freeze. Identity
+maps are bounded strict arrays of {authoredKey,previewId}, with exact byte-derived
+IDs, unique correspondence and deterministic UTF8 byte-order sorting. Valid
+prototype-sensitive authored key values remain data; never reconstruct ordinary
+dynamic-key dictionaries. Reject old internal port1 payloads; no silent migration.
+Identity-rule1, authored tada-show1, MCP0.1.0 and UI metadata1 remain unchanged;
+the complete port2 compiled pin participates in the existing identity digest.
+M2/M3 import accepted SB exports, without copied mapping/schema code. Existing
+authored MAX_ANSWERS5 stays authoritative; invalid6/64 are rejected, never truncated.
+Executable SB schema/fixture validation and real renderer acceptance remain gates.
+
+### Patched MCP SDK pins
+
 The frozen M1 source example used ext-apps 2.1.0 with MCP 2.0.0 peers. During
 implementation signature verification, official advisories established that
 MCP server 2.0.0–2.2.0 had shared-connection routing and input-validation
@@ -107,17 +123,17 @@ assumed passes. Primary opened sources:
 
 ## Exact MCP-01 research acceptance mapping
 
-| Original research requirement | Delivered evidence / remaining uncertainty |
-| --- | --- |
-| Current official ChatGPT/Claude/MCP UI/auth/SDK contracts | ADR official references opened 15 November; host matrix labels documented/unknown/test-required; current SDK correction above |
-| One shared service/widget, no duplicate engine | ADR diagram, eight strict tool contracts, resources, authoring/preview separation and adopted SB port ownership |
-| Actual paths/APIs/validators/auth | ADR source table at approved SHA, existing account-session/requireManager and composite API review, generated-source-schema requirement; fail-closed global-fallback finding |
-| Existing authoring skill/package/runtime/stage audit | ADR observations and original source hashes, portable sandbox/installer-off rules, no editor migration or false skill-as-plugin claim |
-| Host surface compatibility/capabilities/install | Matrix for ChatGPT web/iPad, Claude web/desktop, tools-only; actual account/device/capability tests explicitly unknown/unrun |
-| Security/privacy/license/data prerequisites | Strict scopes/account isolation, PKCE/redirect/revoke, asset rights, CSP, save consent, 39 runtime acceptance rows; no test PASS fabricated |
-| Current source/branch/live provenance | Current remote refs and manager's actual image/revision/health receipt above; health does not imply authenticated acceptance |
-| Canonical ADR, diagram, API/path specs, risks/handoff | This canonical three-document package plus frozen peer reviews and manager adoption |
-| No production changes / no false Claude API UI assertion | No production mutation; tool-only API is explicitly not an MCP UI proof; runtime/host tasks remain open |
+| Original research requirement                             | Delivered evidence / remaining uncertainty                                                                                                                                   |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Current official ChatGPT/Claude/MCP UI/auth/SDK contracts | ADR official references opened 15 November; host matrix labels documented/unknown/test-required; current SDK correction above                                                |
+| One shared service/widget, no duplicate engine            | ADR diagram, eight strict tool contracts, resources, authoring/preview separation and adopted SB port ownership                                                              |
+| Actual paths/APIs/validators/auth                         | ADR source table at approved SHA, existing account-session/requireManager and composite API review, generated-source-schema requirement; fail-closed global-fallback finding |
+| Existing authoring skill/package/runtime/stage audit      | ADR observations and original source hashes, portable sandbox/installer-off rules, no editor migration or false skill-as-plugin claim                                        |
+| Host surface compatibility/capabilities/install           | Matrix for ChatGPT web/iPad, Claude web/desktop, tools-only; actual account/device/capability tests explicitly unknown/unrun                                                 |
+| Security/privacy/license/data prerequisites               | Strict scopes/account isolation, PKCE/redirect/revoke, asset rights, CSP, save consent, 39 runtime acceptance rows; no test PASS fabricated                                  |
+| Current source/branch/live provenance                     | Current remote refs and manager's actual image/revision/health receipt above; health does not imply authenticated acceptance                                                 |
+| Canonical ADR, diagram, API/path specs, risks/handoff     | This canonical three-document package plus frozen peer reviews and manager adoption                                                                                          |
+| No production changes / no false Claude API UI assertion  | No production mutation; tool-only API is explicitly not an MCP UI proof; runtime/host tasks remain open                                                                      |
 
 MCP-01 is research acceptance, not server/identity/preview implementation. After
 canonical documents and their readback/links/hash evidence are committed,

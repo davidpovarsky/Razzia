@@ -1,0 +1,49 @@
+{
+  "kind": "READ_ONLY_STATIC_SOURCE_PRESERVATION_INSPECTION_NOT_FUNCTIONAL_WINDOWS_TEST",
+  "protectedFiles": 602,
+  "unchangedHashes": 593,
+  "existingApprovedModifiedHashes": [
+    "packages/web/src/features/game/components/GameSettingsModal/index.tsx",
+    "packages/web/src/features/game/components/GameWrapper.tsx",
+    "packages/web/src/features/game/components/HistoryDialog.tsx",
+    "packages/web/src/features/game/components/HostPlayersModal.tsx",
+    "packages/web/src/features/game/components/HostShortcutsDialog.tsx",
+    "packages/web/src/features/game/components/ManagerControlToolbar.tsx",
+    "packages/web/src/features/game/components/states/Room.tsx",
+    "packages/web/src/features/game/components/tadazz-show/NativeGameLayout.tsx",
+    "packages/web/src/features/game/components/tadazz-show/TadazzScreens.tsx"
+  ],
+  "unexpectedProtectedMismatches": [],
+  "unleasedTrackedChanges": [],
+  "rootLockUnchanged": true,
+  "legacyGuard": {
+    "command": "node extensions/qa/tds-boundary.mjs",
+    "exitCode": 1,
+    "result": "FAIL: historical TDS scope allowlist rejects the new manager-leased mcp-app module; retained unchanged",
+    "actualDeniedPaths": [
+      "extensions/src/mcp-app/contracts/canonical.ts",
+      "extensions/src/mcp-app/contracts/index.ts",
+      "extensions/src/mcp-app/contracts/schemas.ts",
+      "extensions/src/mcp-app/contracts/tools.ts",
+      "extensions/src/mcp-app/package.json",
+      "extensions/src/mcp-app/server/README.md",
+      "extensions/src/mcp-app/server/authoring.ts",
+      "extensions/src/mcp-app/server/authorization.ts",
+      "extensions/src/mcp-app/server/dependencies.ts",
+      "extensions/src/mcp-app/server/dispatch.ts",
+      "extensions/src/mcp-app/server/errors.ts",
+      "extensions/src/mcp-app/server/factory.ts",
+      "extensions/src/mcp-app/tests/server/canonical.test.ts",
+      "extensions/src/mcp-app/tests/server/fixtures.ts",
+      "extensions/src/mcp-app/tsconfig.json",
+      "extensions/src/mcp-app/pnpm-lock.yaml",
+      "extensions/src/mcp-app/server/preview.ts",
+      "extensions/src/mcp-app/tests/server/authorization.test.ts",
+      "extensions/src/mcp-app/tests/server/boundaries.test.ts",
+      "extensions/src/mcp-app/tests/server/drafts.test.ts",
+      "extensions/src/mcp-app/tests/server/protocol.test.ts"
+    ],
+    "actualMismatches": []
+  },
+  "guardWasNotEdited": true
+}

@@ -1,0 +1,72 @@
+[
+  {
+    "name": "@tadazz/mcp-foundation",
+    "version": "0.1.0",
+    "path": "/work/extensions/src/mcp-app",
+    "private": true,
+    "dependencies": {
+      "@modelcontextprotocol/client": {
+        "from": "@modelcontextprotocol/client",
+        "version": "2.4.0",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/client/-/client-2.4.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+client@2.4.0/node_modules/@modelcontextprotocol/client"
+      },
+      "@modelcontextprotocol/core": {
+        "from": "@modelcontextprotocol/core",
+        "version": "2.4.0",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/core/-/core-2.4.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+core@2.4.0/node_modules/@modelcontextprotocol/core"
+      },
+      "@modelcontextprotocol/ext-apps": {
+        "from": "@modelcontextprotocol/ext-apps",
+        "version": "2.1.0",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/ext-apps/-/ext-apps-2.1.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+ext-apps@2.1.0_@modelcontextprotocol+client@2.4.0_@modelcontextpr_a3a71b0a1bfc7f994bd03a92d4b4ed40/node_modules/@modelcontextprotocol/ext-apps"
+      },
+      "@modelcontextprotocol/server": {
+        "from": "@modelcontextprotocol/server",
+        "version": "2.4.0",
+        "resolved": "https://registry.npmjs.org/@modelcontextprotocol/server/-/server-2.4.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/@modelcontextprotocol+server@2.4.0/node_modules/@modelcontextprotocol/server"
+      },
+      "socket.io": {
+        "from": "socket.io",
+        "version": "4.8.4",
+        "resolved": "https://registry.npmjs.org/socket.io/-/socket.io-4.8.4.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/socket.io@4.8.4/node_modules/socket.io"
+      },
+      "uuid": {
+        "from": "uuid",
+        "version": "14.0.3",
+        "resolved": "https://registry.npmjs.org/uuid/-/uuid-14.0.3.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/uuid@14.0.3/node_modules/uuid"
+      },
+      "zod": {
+        "from": "zod",
+        "version": "4.6.6",
+        "resolved": "https://registry.npmjs.org/zod/-/zod-4.6.6.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/zod@4.6.6/node_modules/zod"
+      }
+    },
+    "devDependencies": {
+      "@types/node": {
+        "from": "@types/node",
+        "version": "22.10.0",
+        "resolved": "https://registry.npmjs.org/@types/node/-/node-22.10.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/@types+node@22.10.0/node_modules/@types/node"
+      },
+      "tsx": {
+        "from": "tsx",
+        "version": "4.21.0",
+        "resolved": "https://registry.npmjs.org/tsx/-/tsx-4.21.0.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/tsx@4.21.0/node_modules/tsx"
+      },
+      "typescript": {
+        "from": "typescript",
+        "version": "5.9.3",
+        "resolved": "https://registry.npmjs.org/typescript/-/typescript-5.9.3.tgz",
+        "path": "/work/extensions/src/mcp-app/node_modules/.pnpm/typescript@5.9.3/node_modules/typescript"
+      }
+    }
+  }
+]

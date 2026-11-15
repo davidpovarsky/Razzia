@@ -1,0 +1,7 @@
+{
+  "status": "PASS_FINAL_SOURCE_EXTRACTION",
+  "manifestSha256": "c4dc04deb2d80953e13fe1771686c1e00e293048c66f8b7a0365879643ee8d68",
+  "archiveSha256": "6d73388846e5bec32d0b0e1147078db9b0d50f469b2d9234ca07cb3c5d309897",
+  "files": 118,
+  "allActualSourceHashesMatched": true
+}

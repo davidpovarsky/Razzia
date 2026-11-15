@@ -1,0 +1,22 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "allowImportingTsExtensions": true,
+    "verbatimModuleSyntax": true,
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "lib": ["ES2022", "DOM"],
+    "baseUrl": "../../..",
+    "paths": {
+      "@razzia/common/*": ["packages/common/src/*"],
+      "@razzia/extensions/core": ["extensions/src/core/index.ts"]
+    }
+  },
+  "include": ["contracts/**/*.ts", "server/**/*.ts", "tests/server/**/*.ts"]
+}

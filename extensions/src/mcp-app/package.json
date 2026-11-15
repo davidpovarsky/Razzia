@@ -1,0 +1,31 @@
+{
+  "name": "@tadazz/mcp-foundation",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./server": "./server/factory.ts",
+    "./contracts": "./contracts/index.ts"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit -p tsconfig.json",
+    "test": "tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.test.ts"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "2.4.0",
+    "@modelcontextprotocol/client": "2.4.0",
+    "@modelcontextprotocol/core": "2.4.0",
+    "@modelcontextprotocol/ext-apps": "2.1.0",
+    "zod": "4.6.6",
+    "uuid": "14.0.3",
+    "socket.io": "4.8.4"
+  },
+  "devDependencies": {
+    "@types/node": "22.10.0",
+    "tsx": "4.21.0",
+    "typescript": "5.9.3"
+  }
+}

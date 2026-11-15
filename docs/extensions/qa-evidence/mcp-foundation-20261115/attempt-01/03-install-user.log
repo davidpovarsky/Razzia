@@ -1,0 +1,30 @@
+v24.22.2
+12.18.0
+Update available! 12.18.0 → 12.21.0.
+Changelog: https://pnpm.io/v/12.21.0
+To update, run: curl -fsSL https://get.pnpm.io/install.sh | sh -
+Progress: resolved 0, reused 0, downloaded 23, added 0
+Progress: resolved 0, reused 0, downloaded 42, added 0
+Packages are copied from the content-addressable store to the virtual store.
+  Content-addressable store is at: /fixtures/pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Progress: resolved 43, reused 0, downloaded 43, added 43
+Packages: +44
+++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 44, reused 0, downloaded 44, added 44, done
+
+dependencies:
++ @modelcontextprotocol/client 2.4.0
++ @modelcontextprotocol/core 2.4.0
++ @modelcontextprotocol/ext-apps 2.1.0
++ @modelcontextprotocol/server 2.4.0
++ socket.io 4.8.4
++ uuid 14.0.3
++ zod 4.6.6
+
+devDependencies:
++ @types/node 22.10.0
++ tsx 4.21.0
++ typescript 5.9.3
+
+Done in 5.3s using pnpm v12.18.0

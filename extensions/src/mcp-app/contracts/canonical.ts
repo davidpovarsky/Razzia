@@ -1,0 +1,75 @@
+import { canonicalJsonStringify, sha256Hex } from "@razzia/extensions/core"
+
+export function finiteJson(
+  value: unknown,
+  depth = 0,
+  seen = new Set<object>(),
+): void {
+  if (depth > 40) throw new Error("JSON depth limit")
+  if (value === null || typeof value === "boolean" || typeof value === "string")
+    return
+  if (typeof value === "number" && Number.isFinite(value)) return
+  if (!value || typeof value !== "object" || seen.has(value))
+    throw new Error("Not finite JSON")
+  if (
+    !Array.isArray(value) &&
+    Object.getPrototypeOf(value) !== Object.prototype &&
+    Object.getPrototypeOf(value) !== null
+  )
+    throw new Error("Not plain JSON")
+  seen.add(value)
+  if (Array.isArray(value)) {
+    for (let i = 0; i < value.length; i++) {
+      if (!Object.hasOwn(value, i)) throw new Error("Sparse JSON array")
+    }
+  }
+  for (const [key, child] of Object.entries(value)) {
+    if (["__proto__", "prototype", "constructor"].includes(key))
+      throw new Error("Unsafe JSON key")
+    finiteJson(child, depth + 1, seen)
+  }
+  seen.delete(value)
+}
+export function canonicalJson(value: unknown): string {
+  finiteJson(value)
+  return canonicalJsonStringify(value)
+}
+export const hashJson = (value: unknown) => sha256Hex(canonicalJson(value))
+export const utf8Bytes = (value: string) =>
+  new TextEncoder().encode(value).byteLength
+
+/** SB owns validation/identity/pin types; these are only M2's adopted JSON envelope fields. */
+export interface PreviewIdentityEnvelope {
+  version: 1
+  draftId: string
+  revision: number
+  normalizedAuthoredContent: unknown
+  identityMap: unknown
+  compiledPin: unknown
+  assetDigests: readonly Readonly<{ assetId: string; sha256: string }>[]
+}
+export function serializePreviewIdentity(
+  input: PreviewIdentityEnvelope,
+): string {
+  const ids = new Set<string>()
+  for (const asset of input.assetDigests) {
+    if (ids.has(asset.assetId) || !/^[a-f0-9]{64}$/u.test(asset.sha256)) {
+      throw new Error("Invalid or duplicate asset digest")
+    }
+    ids.add(asset.assetId)
+  }
+  const assetDigests = [...input.assetDigests].sort((a, b) =>
+    a.assetId < b.assetId ? -1 : a.assetId > b.assetId ? 1 : 0,
+  )
+  return canonicalJson({
+    version: input.version,
+    draftId: input.draftId,
+    revision: input.revision,
+    normalizedAuthoredContent: input.normalizedAuthoredContent,
+    identityMap: input.identityMap,
+    compiledPin: input.compiledPin,
+    assetDigests,
+  })
+}
+export const previewIdentityDigest = (input: PreviewIdentityEnvelope) =>
+  sha256Hex(serializePreviewIdentity(input))
