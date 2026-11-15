@@ -18,7 +18,7 @@ import {
   nativeInput,
   NATIVE_MEDIA,
 } from "./native-binding-fixture"
-import { resolvePhysicalBase } from "./physical-binding"
+import { resolvePhysicalBase, restorePhysicalBinding } from "./physical-binding"
 import { readSidecar, writeSidecar } from "./sidecar"
 import { reviewBindingState } from "./review-binding-state"
 
@@ -90,7 +90,12 @@ function assertFresh(runs: Awaited<ReturnType<typeof replays>>) {
     expect(run.pid).toBe(run.process.pid)
   }
 }
-function stageQuiz(root: string, id: string, wrapperFree = false) {
+function stageQuiz(
+  root: string,
+  id: string,
+  wrapperFree = false,
+  firstSidecar = false,
+) {
   const relative = resolvePhysicalBase(native.getPath, id)!
   const original = JSON.parse(
     fs.readFileSync(path.join(root, relative), "utf8"),
@@ -98,6 +103,8 @@ function stageQuiz(root: string, id: string, wrapperFree = false) {
   const { id: _storageId, ...payload } = original
   const backup = wrapperFree ? payload : original
   const extras = readSidecar(native.getPath, id)!
+  if (firstSidecar)
+    fs.unlinkSync(native.getPath(`extensions/quizzes/${id}.json`))
   const target = { ...original, subject: "Review interrupted target" }
   const targetExtras = {
     ...extras,
@@ -107,12 +114,12 @@ function stageQuiz(root: string, id: string, wrapperFree = false) {
   createStagedJournal(native.getPath, {
     quizId: id,
     backupBase: backup,
-    backupExtras: extras,
+    backupExtras: firstSidecar ? null : extras,
     targetBase: target,
     targetExtras,
   })
   native.updateQuizz(id, target)
-  writeSidecar(native.getPath, id, targetExtras)
+  if (!firstSidecar) writeSidecar(native.getPath, id, targetExtras)
   return { relative, original, extras }
 }
 
@@ -171,9 +178,14 @@ describe("R2 independent review native replay regressions", () => {
       },
     )
   }, 70000)
-  it.each([null, 7, false, {}, []])(
-    "denies ID-named non-string ID %j before either native callback",
-    async (idValue) => {
+  it.each(
+    [null, 7, false, {}, []].map((idValue) => ({
+      idValue,
+      label: JSON.stringify(idValue),
+    })),
+  )(
+    "denies ID-named non-string ID $label before either native callback",
+    async ({ idValue }) => {
       await fixtureCase(
         `ambiguous-${JSON.stringify(idValue)}`,
         async ({ root, descriptor }, receipt) => {
@@ -235,16 +247,7 @@ describe("R2 independent review native replay regressions", () => {
     await fixtureCase(
       "null-sidecar-backup-positive",
       async ({ root, descriptor }, receipt) => {
-        const staged = stageQuiz(root, descriptor.quizId)
-        const journal = native.getPath(
-          `extensions/quizzes/.journal/${descriptor.quizId}.journal.json`,
-        )
-        const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
-        entry.backupExtras = null
-        fs.writeFileSync(journal, JSON.stringify(entry))
-        fs.unlinkSync(
-          native.getPath(`extensions/quizzes/${descriptor.quizId}.json`),
-        )
+        const staged = stageQuiz(root, descriptor.quizId, false, true)
         const runs = await replays(root, descriptor.token)
         receipt.runs = runs
         assertFresh(runs)
@@ -353,4 +356,61 @@ describe("R2 independent review native replay regressions", () => {
     },
     70000,
   )
+  it("retries an already restored sibling without its consumed private backup", async () => {
+    await fixtureCase(
+      "already-restored-positive",
+      async ({ root, descriptor }, receipt) => {
+        writeSidecar(
+          native.getPath,
+          descriptor.quizId,
+          richNativeExtras(descriptor.quizId, nativeInput(), true),
+        )
+        const originalBase = fs.readFileSync(
+          native.getPath(`quizz/${descriptor.baseName}`),
+          "utf8",
+        )
+        const originalSidecar = fs.readFileSync(
+          native.getPath(`extensions/quizzes/${descriptor.quizId}.json`),
+          "utf8",
+        )
+        executeMediaDeleteTransaction(native.getPath, NATIVE_MEDIA, {
+          detach: true,
+          faultInjection: { failDuringRollback: true },
+          deleteMediaFn: () => {
+            throw new Error("Pause actual rollback before public restoration")
+          },
+        })
+        const dir = getMediaDeleteJournalDirectory(native.getPath)
+        const journal = path.join(
+          dir,
+          fs.readdirSync(dir).find((name) => name.endsWith(".json"))!,
+        )
+        const entry = JSON.parse(fs.readFileSync(journal, "utf8"))
+        const binding = entry.shows.find(
+          (show: { quizId: string }) => show.quizId === descriptor.quizId,
+        ).bindings.base
+        restorePhysicalBinding(native.getPath, binding)
+        expect(
+          fs.existsSync(native.getPath(binding.preparedBackup.relativePath)),
+        ).toBe(false)
+        const runs = await replays(root, descriptor.token)
+        receipt.runs = runs
+        assertFresh(runs)
+        expect(runs[0].report.status).toBe("recovered")
+        expect(runs[1].report.status).toBe("clean")
+        expect(
+          fs.readFileSync(
+            native.getPath(`quizz/${descriptor.baseName}`),
+            "utf8",
+          ),
+        ).toBe(originalBase)
+        expect(
+          fs.readFileSync(
+            native.getPath(`extensions/quizzes/${descriptor.quizId}.json`),
+            "utf8",
+          ),
+        ).toBe(originalSidecar)
+      },
+    )
+  }, 70000)
 })
