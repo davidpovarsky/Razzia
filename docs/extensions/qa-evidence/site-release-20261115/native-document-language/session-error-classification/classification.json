@@ -1,0 +1,92 @@
+{
+  "classification": "FIXTURE_STARTUP_READINESS_RACE",
+  "newTestsOrProbe": false,
+  "originalFailingSamplePreserved": true,
+  "session": [
+    {
+      "time": "15/Nov/2026:18:35:00 +0000",
+      "status": 502,
+      "referrer": "http://127.0.0.1:3000/game?lng=ja"
+    },
+    {
+      "time": "15/Nov/2026:18:35:03 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=tr"
+    },
+    {
+      "time": "15/Nov/2026:18:35:08 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=ja"
+    },
+    {
+      "time": "15/Nov/2026:18:35:14 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=tr"
+    },
+    {
+      "time": "15/Nov/2026:18:36:54 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=ja"
+    },
+    {
+      "time": "15/Nov/2026:18:36:56 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=tr"
+    },
+    {
+      "time": "15/Nov/2026:18:37:04 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=ja"
+    },
+    {
+      "time": "15/Nov/2026:18:37:11 +0000",
+      "status": 200,
+      "referrer": "http://127.0.0.1:3000/game?lng=tr"
+    }
+  ],
+  "failedUpstream": [
+    "2026/11/15 18:35:00 [error] 9#9: *3 connect() failed (111: Connection refused) while connecting to upstream, client: 127.0.0.1, server: , request: \"POST /api/auth/session HTTP/1.1\", upstream: \"http://127.0.0.1:3001/api/auth/session\", host: \"127.0.0.1:3000\", referrer: \"http://127.0.0.1:3000/game?lng=ja\""
+  ],
+  "backendListening": "2026-11-15T18:35:01.203019059Z Server running on port 3001",
+  "source": [
+    {
+      "path": "packages/web/src/lib/session.ts",
+      "sha256": "b5011f21d4a9a2672b7d34995d92c41c99a17a6d8472fd7b9cd4506015c1e2fb",
+      "identicalToRetainedCandidateAndCurrentSource": true
+    },
+    {
+      "path": "packages/web/src/features/game/contexts/socket-context.tsx",
+      "sha256": "b595191d4358d9e50c29dd0ea94790a0e95c4ff03abd5c791b7d880e31080d25",
+      "identicalToRetainedCandidateAndCurrentSource": true
+    },
+    {
+      "path": "packages/web/src/branding.ts",
+      "sha256": "f53cdcfaf3fbd421dea79da9e3cb993b68e07957a372a9f48382f240159f444e",
+      "identicalToRetainedCandidateAndCurrentSource": true
+    }
+  ],
+  "rawReceipts": [
+    {
+      "path": "access.log",
+      "bytes": 81456,
+      "sha256": "6dd0e5462ae924f0ac43fb325cf0e2c34e87b18cddfaefa05348d43eb27a0ba7"
+    },
+    {
+      "path": "error.log",
+      "bytes": 2349,
+      "sha256": "20e43a7a1d9a4e8d7fb34643a4dea6cbf1ed13ccf06ea4a0facc93c9bde40b55"
+    },
+    {
+      "path": "supervisor-stdout.log",
+      "bytes": 1440,
+      "sha256": "6d7ad3d1f2b0c6b8be9b53d4626ee3716d445539e30cd5986799a2d1b7b564ce"
+    },
+    {
+      "path": "supervisor-stderr.log",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "separateBranding403Count": 8,
+  "limits": "Existing upstream uncaught initial ensureSession rejection is visible; no new auth source change or full authentication health claim. Native tenant-branding override was not exercised because this synthetic config tmpfs mode0700 denies nginx traversal."
+}

@@ -15,6 +15,8 @@ The retained 9b221bc/31b Site candidate has a reproducible native-route metadata
 
 One captured `errors:auth.sessionFailed` page error occurs in the first corrected Chromium/Japanese harness sample; the other three have no captured errors. Its cause is unclassified. Language/title assertions still pass. This is **not** a zero-console-error or authentication-health claim; no account submission or customer data was created. The synthetic backend has accounts disabled.
 
+Follow-up classification: the cause was subsequently established from the same stopped fixture's existing Nginx/supervisor logs as an API-readiness race: the first session POST received 502/connection refused before the backend began listening, followed by seven recorded session 200s. See [the classification addendum](session-error-classification/RESULTS.md) and exact raw/hash receipts there. No test or probe was rerun. It also records the distinct optional tenant-branding fixture boundary (config-mode0700 causes branding403); the default-brand language proof is not tenant-override acceptance. The original sample and error remain preserved.
+
 The first source-spec runner failed before discovering tests because its fixture lacked the repository module package context (`spec-loader-failure.log`). The corrected fixture preserves the real extensions package.json and resolves retained dependencies. An intervening invalid dependency mount exited 125 without creating a container (`spec2.log`). All failed receipts remain. The local optional legacy TypeScript transpile API probe was unavailable; the bridge uses exact nonblank source equality and makes no emitted-JavaScript claim.
 
 ## Source and artifact custody
