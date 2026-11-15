@@ -1,7 +1,7 @@
 // Isolated synthetic account/SQLite proof, never ordinary Vitest or production.
 import assert from "node:assert/strict"
 import { after, test } from "node:test"
-import { randomBytes } from "node:crypto"
+import { randomBytes, randomUUID } from "node:crypto"
 import { fork } from "node:child_process"
 import { once } from "node:events"
 import { DatabaseSync } from "node:sqlite"
@@ -27,7 +27,7 @@ process.env.TADAZZ_AUTH_EMAIL_FROM = "phone-auth@example.invalid"
 const { checkAccountConfiguration, closeAccountDb } = await import("@razzia/socket/services/account-db")
 const account = await import("@razzia/socket/services/account-auth")
 const auth = await import("@razzia/socket/services/auth")
-const { SESSION_ROLES } = await import("@razzia/common/constants")
+const { SESSION_ROLES, EVENTS } = await import("@razzia/common/constants")
 const { withAccount } = await import("@razzia/socket/services/account-scope")
 const { initConfig } = await import("@razzia/socket/services/config")
 const { createAdaptorServer } = await import("@hono/node-server")
@@ -39,9 +39,15 @@ const { UnmountedPhoneAuthority } = await import("../../../../../extensions/src/
 const { PrivateAuthorityFiles } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/auth/private-authority-files")
 const { ReadonlyServiceLeaseReader } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/auth/authority-store")
 const { NativeAccountAuthority } = await import("../../../../../extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority")
+const { isPhoneLifecycleV2Adopted } = await import("../../../../../extensions/src/server/phone-lifecycle-v2/native-adoption")
+const { io: connect } = await import("socket.io-client")
 checkAccountConfiguration(); initConfig()
 const server = createAdaptorServer(app), io = createSocketServer(server), registry = Registry.getInstance()
 await new Promise<void>(done => server.listen(0, "127.0.0.1", done))
+const serverAddress = server.address()
+assert.ok(serverAddress && typeof serverAddress !== "string")
+const base = "http://127.0.0.1:" + serverAddress.port
+const sockets: ReturnType<typeof connect>[] = []
 const factories: InstanceType<typeof UnmountedPhoneAuthority>[] = [], observations: unknown[] = []
 const secrets: string[] = [fixtureJwtSecret]
 const phoneActions: Action[] = ["register", "poll", "answer", "hangup"]
@@ -60,13 +66,14 @@ function privateRoot() {
   writeFileSync(join(root, "PHONE_V2A_SYNTHETIC_ONLY"), "synthetic-v2a-only\n", { mode: 0o600 })
   return root
 }
-async function setup(id: string) {
+async function setup(id: string, nativeAdoption = false) {
   const game = await withAccount(owner.id, () => new Game(io, owner.id, createQuizz([createQuestion()])))
   registry.addGame(game)
   const root = privateRoot(), lifecycle = privateRoot(), counters = { root: 0, nativeJoin: 0 }
   const joinPhone = game.joinOrRebindPhoneCaller.bind(game)
   game.joinOrRebindPhoneCaller = (...args) => { counters.nativeJoin++; return joinPhone(...args) }
   const factory = new UnmountedPhoneAuthority({ authorityRoot: root, allowedProviders: ["synthetic-provider"],
+    nativeAdoption,
     lifecycleRoot: (verifiedOwner, verifiedGame) => {
       assert.equal(verifiedOwner, owner.id); assert.equal(verifiedGame, game.gameId)
       counters.root++; return lifecycle
@@ -85,7 +92,31 @@ function call(id: string): RegistrationInput {
   return { requestId: id, providerReference: id, expectedPredecessor: 0, phone: "+447700900851", capability }
 }
 function authorityBytes(root: string) { return readFileSync(join(root, "phone-service-authority.sqlite")) }
+async function httpJoin(game: InstanceType<typeof Game>, token: string, identity: object) {
+  const response = await fetch(base + "/api/games/join", { method: "POST",
+    headers: { "content-type": "application/json", authorization: "Bearer " + token },
+    body: JSON.stringify({ inviteCode: game.inviteCode, ...identity }), signal: AbortSignal.timeout(8000) })
+  return { status: response.status, body: await response.json() as Record<string, unknown> }
+}
+async function client(token: string) {
+  const socket = connect(base, { path: "/ws", auth: { token }, transports: ["websocket"], reconnection: false })
+  sockets.push(socket)
+  await new Promise<void>((done, reject) => {
+    const timer = setTimeout(() => reject(new Error("Private socket connection timeout")), 8000)
+    socket.once("connect", () => { clearTimeout(timer); done() })
+    socket.once("connect_error", () => { clearTimeout(timer); reject(new Error("Private socket connection denied")) })
+  })
+  return socket
+}
+async function event(socket: ReturnType<typeof connect>, name: string, send: () => void) {
+  return new Promise<unknown>((done, reject) => {
+    const timer = setTimeout(() => reject(new Error("Missing private event: " + name)), 8000)
+    socket.once(name, value => { clearTimeout(timer); done(value) })
+    send()
+  })
+}
 after(async () => {
+  for (const socket of sockets) socket.disconnect()
   for (const factory of factories) factory.close()
   for (const game of registry.getAllGames()) registry.removeGame(game.gameId)
   registry.cleanup(); io.disconnectSockets(true)
@@ -263,6 +294,123 @@ test("AUTH-06 uncertain SQLite close denies initializer/revoker and retains comm
     observations.push({ case: "AUTH-06", action, closeErrors, callerDenied: true, markerPreserved: true,
       reopenDenied: true, knownCommitPreserved: true })
   }
+})
+
+test("NATIVE-01 default-off delegates remain usable; existing phone binding cannot be adopted", async () => {
+  for (const enabled of [false, true]) {
+    const r = await setup("existing-phone-" + enabled, enabled)
+    const joined = r.game.joinOrRebindPhoneCaller({ phoneRaw: "+447700900852", callId: "legacy-call" })
+    assert.equal(joined.ok, true)
+    await r.factory.initializeAuthority(session.token, r.game.gameId)
+    if (enabled) await assert.rejects(r.factory.issue(session.token, r.issue))
+    else assert.ok((await r.factory.issue(session.token, r.issue)).receipt.ok)
+    assert.equal(isPhoneLifecycleV2Adopted(r.game), false)
+    assert.equal(r.game.players.length, 1)
+  }
+  observations.push({ case: "NATIVE-01", defaultOff: true, activeLegacyMigrationDenied: true })
+})
+
+test("NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/reconnect/answer while real v2 scores", { timeout: 30000 }, async () => {
+  const r = await setup("native-seams", true), input = call("native-call")
+  const row = r.game.upsertRosterParticipant({ displayName: "Reserved Phone", phone: input.phone })
+  const playerSession = await auth.mintToken(randomUUID(), SESSION_ROLES.PLAYER)
+  secrets.push(playerSession.token)
+  const oldTicket = await auth.mintJoinTicket(playerSession.clientId, r.game.gameId,
+    { username: "Reserved Phone", rosterPlayerId: row.rosterPlayerId, phoneE164: input.phone, source: "phone" })
+  secrets.push(oldTicket)
+  await r.factory.initializeAuthority(session.token, r.game.gameId)
+  const issued = await r.factory.issue(session.token, r.issue), credential = issued.credential!
+  secrets.push(credential)
+  assert.equal(isPhoneLifecycleV2Adopted(r.game), true)
+  const a = address(r.game.gameId, issued.receipt.service)
+  await r.factory.activate(a, credential, { requestId: "native-activate", expectedVersion: 1 })
+  const joined = await r.factory.register(a, credential, input)
+  assert.ok(joined.ok && joined.registrationId && joined.generation && joined.rosterPlayerId && joined.clientId)
+  const before = JSON.stringify({ entry: r.game.getRosterEntry(joined.rosterPlayerId), players: r.game.players })
+  const pilotSecret = randomBytes(32).toString("hex"); secrets.push(pilotSecret)
+  process.env.TADA_PILOT_SECRET = pilotSecret
+  for (const action of ["join_or_poll", "answer", "hangup"]) {
+    const response = await fetch(base + "/api/games/pilot-phone", { method: "POST",
+      headers: { "content-type": "application/json", "x-tada-pilot-secret": pilotSecret },
+      body: JSON.stringify({ gameId: r.game.gameId, action, callId: "legacy-bypass", phone: input.phone,
+        rosterPlayerId: joined.rosterPlayerId, answerIndex: 0 }), signal: AbortSignal.timeout(8000) })
+    assert.equal(response.status, 403)
+    assert.deepEqual(await response.json(), { ok: false, reason: "phone_protocol_required" })
+  }
+  for (const identity of [
+    { username: "Reserved Phone" }, { username: "Other", phone: "07700900851", source: "web" },
+    { username: "Other", phone: input.phone }, { username: "Other", source: "phone" },
+  ]) {
+    const denied = await httpJoin(r.game, playerSession.token, identity)
+    assert.equal(denied.status, 403); assert.equal("ticket" in denied.body, false)
+  }
+  const attacker = await client(playerSession.token)
+  assert.equal(await event(attacker, EVENTS.GAME.RESET, () => attacker.emit(EVENTS.PLAYER.LOGIN, { ticket: oldTicket })),
+    "errors:auth.unauthorized")
+  const fake = { id: "browser-phone-copy", data: { clientId: joined.clientId },
+    emit: () => false } as unknown as Parameters<InstanceType<typeof Game>["join"]>[0]
+  assert.equal(r.game.join(fake, "Other"), "errors:auth.unauthorized")
+  r.game.reconnect(fake)
+  assert.deepEqual(r.game.selectAnswer(fake, [0]), { accepted: false, reason: "phone_protocol_required" })
+  assert.equal(r.game.joinOrRebindPhoneCaller({ phoneRaw: input.phone, callId: "direct-bypass" }).ok, false)
+  assert.equal(r.game.submitPhoneAnswerByRosterId(joined.rosterPlayerId, 0, joined.registrationId).accepted, false)
+  assert.equal(r.game.disconnectPhoneCallerByRosterId(joined.rosterPlayerId, false, joined.registrationId), false)
+  assert.equal(JSON.stringify({ entry: r.game.getRosterEntry(joined.rosterPlayerId), players: r.game.players }), before)
+  // A normal browser participant and manager still use the original authenticated flow.
+  const web = await httpJoin(r.game, playerSession.token, { username: "Ordinary Web", source: "web" })
+  assert.equal(web.status, 200); assert.equal(typeof web.body.ticket, "string"); secrets.push(web.body.ticket as string)
+  await event(attacker, EVENTS.GAME.SUCCESS_JOIN, () => attacker.emit(EVENTS.PLAYER.LOGIN, { ticket: web.body.ticket }))
+  const manager = await client(session.token)
+  await event(manager, EVENTS.MANAGER.SUCCESS_RECONNECT, () => manager.emit(EVENTS.MANAGER.RECONNECT, { gameId: r.game.gameId }))
+  r.game.updateSettings({ endOnAllAnswered: false })
+  manager.emit(EVENTS.MANAGER.START_GAME, { gameId: r.game.gameId })
+  const deadline = Date.now() + 15000
+  while (!r.game.getQuestionStateForGateway(joined.rosterPlayerId).acceptingAnswers) {
+    if (Date.now() > deadline) throw new Error("Actual native question did not open")
+    await new Promise(done => setTimeout(done, 20))
+  }
+  const epoch = r.game.getQuestionStateForGateway(joined.rosterPlayerId).epoch
+  const op = { requestId: input.requestId, registrationId: joined.registrationId, generation: joined.generation,
+    capability: input.capability, operationId: "native-answer", action: "answer" as const, epoch, answerIndex: 0 }
+  const answer = await r.factory.operate(a, credential, op)
+  assert.equal(answer.accepted, true)
+  assert.deepEqual(await r.factory.operate(a, credential, op), answer)
+  const points = r.game.players.find(player => player.clientId === joined.clientId)!.points
+  assert.ok(points > 0)
+  const poll = await r.factory.operate(a, credential, { ...op, operationId: "native-poll", action: "poll" })
+  assert.equal(poll.points, points); assert.equal(poll.answered, true)
+  const hangup = await r.factory.operate(a, credential, { ...op, operationId: "native-hangup", action: "hangup" })
+  assert.equal(hangup.ok, true)
+  r.factory.close()
+  assert.equal(isPhoneLifecycleV2Adopted(r.game), true)
+  assert.equal(r.game.joinOrRebindPhoneCaller({ phoneRaw: input.phone, callId: "after-close" }).ok, false)
+  assert.equal(r.game.players.find(player => player.clientId === joined.clientId)!.points, points)
+  observations.push({ case: "NATIVE-02", legacyActionsDenied: 3, phoneBrowserIdentitiesDenied: 4,
+    oldTicketDenied: true, reconnectAnswerDirectDelegatesDenied: true, webAndManagerControl: true,
+    nativeAnswerAccepted: true, replaySameReceipt: true, actualPoints: points, hangup: true, closeRetainedFence: true })
+})
+
+test("NATIVE-03 adoption during actual asynchronous join-ticket signing denies result disclosure", async () => {
+  const r = await setup("native-async-ticket", true)
+  await r.factory.initializeAuthority(session.token, r.game.gameId)
+  const playerSession = await auth.mintToken(randomUUID(), SESSION_ROLES.PLAYER)
+  secrets.push(playerSession.token)
+  const subtle = crypto.subtle, original = subtle.sign
+  let signed = 0
+  try {
+    subtle.sign = async function (...args: Parameters<SubtleCrypto["sign"]>) {
+      const result = await original.apply(this, args)
+      signed++
+      const issued = await r.factory.issue(session.token, r.issue)
+      secrets.push(issued.credential!)
+      return result
+    }
+    const result = await httpJoin(r.game, playerSession.token, { username: "Async Phone", phone: "+447700900853", source: "phone" })
+    assert.equal(result.status, 403); assert.equal("ticket" in result.body, false)
+  } finally { subtle.sign = original }
+  assert.equal(signed, 1); assert.equal(isPhoneLifecycleV2Adopted(r.game), true)
+  assert.equal(r.game.players.length, 0)
+  observations.push({ case: "NATIVE-03", actualTicketSigned: true, postAwaitAdoptionDeniedDisclosure: true, players: 0 })
 })
 
 test("AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure", { timeout: 30000 }, async (t) => {

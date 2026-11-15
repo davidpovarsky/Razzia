@@ -98,6 +98,13 @@ const routes = apiFactory
       }
 
       const { sub } = c.get("claims")
+      const identity = { username, phoneE164: phone, source }
+      const phoneAllowed = () => game.allowsBrowserPhoneIdentity(sub, identity)
+      const phoneDenied = () => c.json(
+        { error: "errors:auth.unauthorized", reason: "phone_protocol_required" },
+        StatusCodes.FORBIDDEN,
+      )
+      if (!phoneAllowed()) return phoneDenied()
 
       if (game.manager.clientId === sub) {
         return c.json(
@@ -115,6 +122,7 @@ const routes = apiFactory
 
       if (resolution.kind === "existing") {
         await grantMediaForGuest(c, game.gameId)
+        if (!phoneAllowed()) return phoneDenied()
 
         return c.json({
           gameId: game.gameId,
@@ -134,10 +142,13 @@ const routes = apiFactory
       }
 
       await grantMediaForGuest(c, game.gameId)
+      if (!phoneAllowed()) return phoneDenied()
+      const ticket = await mintJoinTicket(sub, game.gameId, resolution.identity)
+      if (!phoneAllowed()) return phoneDenied()
 
       return c.json({
         gameId: game.gameId,
-        ticket: await mintJoinTicket(sub, game.gameId, resolution.identity),
+        ticket,
         username: resolution.identity.username ?? null,
         rosterPlayerId: resolution.identity.rosterPlayerId ?? null,
       })

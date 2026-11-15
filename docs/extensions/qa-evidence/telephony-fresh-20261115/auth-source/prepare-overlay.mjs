@@ -7,7 +7,8 @@ const root=fileURLToPath(new URL("../../../../../",import.meta.url))
 const git=(...args)=>execFileSync("git",args,{cwd:root,maxBuffer:8*1024*1024})
 const sha=String(git("rev-parse",(process.argv[2]??"HEAD")+"^{commit}")).trim()
 if(!/^[0-9a-f]{40}$/u.test(sha))throw Error("Immutable candidate SHA required")
-const paths=["extensions/src/server/phone-lifecycle-v2","extensions/src/telephony/pilot-runtime/service-auth-v2","docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source"]
+const paths=["extensions/src/server/phone-lifecycle-v2","extensions/src/telephony/pilot-runtime/service-auth-v2","docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source",
+  "extensions/src/server/index.ts","packages/socket/src/services/game/index.ts","packages/socket/src/api/routes/games.ts","packages/socket/src/api/extensions/game-routes.ts"]
 const hash=bytes=>createHash("sha256").update(bytes).digest("hex")
 const files=String(git("ls-tree","-r",sha,"--",...paths)).trim().split("\n").map(line=>{
   const [meta,path]=line.split("\t"),[mode,type,blob]=meta.split(" ")

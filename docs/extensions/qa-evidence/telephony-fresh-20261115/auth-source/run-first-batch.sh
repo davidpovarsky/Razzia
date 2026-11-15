@@ -7,12 +7,12 @@ export PHONE_AUTHORITY_FIXTURES="/fixtures/phone-auth-$PHONE_REVIEW_SHA"
 export PHONE_AUTHORITY_EVIDENCE="/evidence/phone-auth-$PHONE_REVIEW_SHA"
 export TSX_TSCONFIG_PATH=/work/tsconfig.json
 mkdir -p "$PHONE_AUTHORITY_FIXTURES" "$PHONE_AUTHORITY_EVIDENCE"
-qa=/delta/docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source
+qa=/work/docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source
 evidence="$PHONE_AUTHORITY_EVIDENCE"
 [[ ! -e "$evidence/run-started.json" ]]
 cd /work
 node -e 'require("node:fs").writeFileSync(process.env.PHONE_AUTHORITY_EVIDENCE+"/run-started.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,node:process.version,started:new Date().toISOString(),scope:"new authority batch only"}),{flag:"wx"})'
-PHONE_REVIEW_SHA=003cf88b6cba19989388dca20efcfaa01cc8f9ad node extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs --links > "$evidence/base-before.json"
+node "$qa/verify-composed.mjs" > "$evidence/base-before.json"
 node "$qa/verify-overlay.mjs" > "$evidence/overlay-before.json"
 monitor(){
   while true;do
@@ -32,7 +32,7 @@ types=$?
 timeout --signal=TERM --kill-after=5 120 node --max-old-space-size=512 /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-reporter=tap --test-concurrency=1 "$qa/authority-first-batch.node.ts" > "$evidence/authority.tap" 2>&1
 tests=$?
 set -e
-PHONE_REVIEW_SHA=003cf88b6cba19989388dca20efcfaa01cc8f9ad node extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs --links > "$evidence/base-after.json"
+node "$qa/verify-composed.mjs" > "$evidence/base-after.json"
 node "$qa/verify-overlay.mjs" > "$evidence/overlay-after.json"
 export AUTH_TYPES="$types" AUTH_TESTS="$tests"
 node -e 'require("node:fs").writeFileSync(process.env.PHONE_AUTHORITY_EVIDENCE+"/run-finished.json",JSON.stringify({sha:process.env.PHONE_REVIEW_SHA,finished:new Date().toISOString(),type_exit:Number(process.env.AUTH_TYPES),test_exit:Number(process.env.AUTH_TESTS),prior20_or3_rerun:false}),{flag:"wx"})'

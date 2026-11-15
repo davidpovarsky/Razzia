@@ -9,6 +9,7 @@ import { identifier, type Action, type OperationInput, type Receipt, type Regist
 import { RealGameFacade } from "../game-facade"
 import { PrototypeStore } from "../store"
 import { LifecyclePrototype } from "../prototype"
+import { NativePhoneAdoption, isPhoneLifecycleV2Adopted } from "../native-adoption"
 import { PrivateAuthorityFiles } from "./private-authority-files"
 import { ReadonlyServiceLeaseReader, ServiceAuthorityWriter } from "./authority-store"
 import { canonicalActions, deriveServiceId, PHONE_ACTIONS, sameHash, serviceCapabilityHash, serviceDenied } from "./credential-codec"
@@ -21,6 +22,8 @@ interface IssueInput { readonly game: string; readonly provider: string; readonl
 export interface UnmountedAuthorityOptions {
   readonly authorityRoot: string
   readonly allowedProviders: readonly string[]
+  // Explicit synthetic/server composition opt-in; no environment/public mount.
+  readonly nativeAdoption?: boolean
   // Called ONLY after ACTIVE service proof/live owner/executor verification.
   // First batch supplies exact pre-created private synthetic roots, no fallback.
   readonly lifecycleRoot: (owner: string, game: string) => string
@@ -36,6 +39,7 @@ export class UnmountedPhoneAuthority {
   private readonly stores = new Set<PrototypeStore>()
   private readonly providers: readonly string[]
   private readonly rootResolver: UnmountedAuthorityOptions["lifecycleRoot"]
+  private readonly adoption?: NativePhoneAdoption
   private closed = false
 
   constructor(options: UnmountedAuthorityOptions) {
@@ -43,6 +47,7 @@ export class UnmountedPhoneAuthority {
     for (const provider of options.allowedProviders) identifier(provider)
     this.providers = Object.freeze([...new Set(options.allowedProviders)])
     this.rootResolver = options.lifecycleRoot
+    if (options.nativeAdoption === true) this.adoption = new NativePhoneAdoption()
     // Constructors only capture fixed paths. No SQL/file creation at assembly.
     const files = new PrivateAuthorityFiles(options.authorityRoot)
     this.reader = new ReadonlyServiceLeaseReader(files)
@@ -59,6 +64,8 @@ export class UnmountedPhoneAuthority {
     if (!this.providers.includes(provider)) serviceDenied()
   }
   private pin(game: Game) {
+    if (this.adoption) this.adoption.adopt(game)
+    else if (isPhoneLifecycleV2Adopted(game)) serviceDenied()
     let facade = this.facades.get(game)
     if (!facade) {
       facade = new RealGameFacade(game, (id, owner) => Registry.getInstance().getManagerGame(id, owner))
@@ -231,8 +238,14 @@ export class UnmountedPhoneAuthority {
         if (scopedAccount() !== context.owner || !this.verifier.verifyCurrent(context, action)) serviceDenied()
         const coordinator = this.coordinator(context)
         // No await/Promise/native reconstruction inside this owning turn.
-        const receipt = action === "register" ? coordinator.register(context, input as RegistrationInput) :
+        const work = () => action === "register" ? coordinator.register(context, input as RegistrationInput) :
           coordinator.operate(context, input as OperationInput)
+        const receipt = this.adoption ? this.adoption.run(
+          this.accounts.assertLiveOwner(context).nativeGame,
+          () => {
+            this.assertOpen()
+            if (scopedAccount() !== context.owner || !this.verifier.verifyCurrent(context, action)) serviceDenied()
+          }, work) : work()
         this.assertOpen()
         if (!this.verifier.verifyCurrent(context, action)) serviceDenied()
         return receipt
@@ -254,6 +267,7 @@ export class UnmountedPhoneAuthority {
   close() {
     if (this.closed) return
     this.closed = true
+    this.adoption?.close()
     for (const store of this.stores) store.close()
     this.stores.clear()
   }
