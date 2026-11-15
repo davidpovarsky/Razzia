@@ -54,12 +54,10 @@ describe("lazy session lifecycle (no accepted renderer fixture)", () => {
 
   it("captures a validated selection so later tile-object mutation cannot switch the source", async () => {
     const selected: { kind: "account-owned"; quizId: string } = { ...selection }
-    const open = vi
-      .fn<GamePreviewProvider["open"]>()
-      .mockResolvedValue({
-        status: "unavailable",
-        reason: "source-unavailable",
-      })
+    const open = vi.fn<GamePreviewProvider["open"]>().mockResolvedValue({
+      status: "unavailable",
+      reason: "source-unavailable",
+    })
     const owner = createPreviewSessionOwner({
       coordinator: createPreviewCoordinator(),
       provider: { open },
