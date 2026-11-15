@@ -1,0 +1,54 @@
+{
+  "sourceSha": "c1cabd878a1bcde51ac7da05d8c72ded3e8125cc",
+  "tasks": [
+    {
+      "gid": "1220486196096692",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.891Z"
+    },
+    {
+      "gid": "1220486252116561",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.742Z"
+    },
+    {
+      "gid": "1220486371597727",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.746Z"
+    },
+    {
+      "gid": "1220486063247574",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.885Z"
+    },
+    {
+      "gid": "1220486046776515",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.725Z"
+    },
+    {
+      "gid": "1220486195897808",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:22.091Z"
+    },
+    {
+      "gid": "1220486371528730",
+      "notesExact": true,
+      "priorNotesPreserved": true,
+      "completed": false,
+      "modifiedAt": "2026-11-15T15:01:21.738Z"
+    }
+  ]
+}
