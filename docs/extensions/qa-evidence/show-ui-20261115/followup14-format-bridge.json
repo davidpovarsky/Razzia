@@ -1,0 +1,26 @@
+[
+  {
+    "path": "docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts",
+    "executedInputSha256": "440c2997f7dd2273f5b834ae5297da9200097a1ae2cd8a16f5ac16a6167c9969",
+    "finalFormattedSha256": "440c2997f7dd2273f5b834ae5297da9200097a1ae2cd8a16f5ac16a6167c9969",
+    "sameAst": true
+  },
+  {
+    "path": "extensions/qa/theme-builder/oauth-consent.spec.ts",
+    "executedInputSha256": "b7c3b120572d921a4256517deaf86bb852fbc549ffbc65d164fd5cb762ba5ece",
+    "finalFormattedSha256": "66141a1f39e00960c3cd6d6c98f9e94bedf89546459262504d27c8898df3f08a",
+    "sameAst": true
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/client.test.ts",
+    "executedInputSha256": "6222c8a53a45315b47ba9cae70ef718cf103514d2848736746a07d4ccaf59d22",
+    "finalFormattedSha256": "1f3e12860b516c934357b6e21681296bc0c9983563d5401c0bf260b3b06fbea8",
+    "sameAst": true
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/OAuthConsentPage.tsx",
+    "executedInputSha256": "4f3be0450726fe4e9a6c6b3c26dc447b177b7463cb0c14cfc0138c48c7661bba",
+    "finalFormattedSha256": "4f3be0450726fe4e9a6c6b3c26dc447b177b7463cb0c14cfc0138c48c7661bba",
+    "sameAst": true
+  }
+]

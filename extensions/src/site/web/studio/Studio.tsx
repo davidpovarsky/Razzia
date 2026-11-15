@@ -38,6 +38,11 @@ import type { ResultMeta } from "./Events"
 import { OpenThemeBuilderLink } from "../../../components/theme-builder/OpenThemeBuilderLink"
 
 const LegacyTools = lazy(() => import("./LegacyTools"))
+const OAuthConsentPage = lazy(() =>
+  import("../../../components/oauth-consent/OAuthConsentPage").then(
+    (module) => ({ default: module.OAuthConsentPage }),
+  ),
+)
 const StudioThemeBuilder = lazy(() =>
   import("../../../components/theme-builder/StudioThemeBuilder").then(
     (module) => ({ default: module.StudioThemeBuilder }),
@@ -67,6 +72,7 @@ export function Studio() {
   const t = useSiteText()
   const router = useRouter()
   const path = useRouterState({ select: (state) => state.location.pathname })
+  const search = useRouterState({ select: (state) => state.location.searchStr })
   const queryClient = useQueryClient()
   const local = hasManagerSession()
   const profile = useQuery({
@@ -131,6 +137,18 @@ export function Studio() {
     return (
       <Suspense fallback={<StudioLoading />}>
         <StudioThemeBuilder key={profile.data.id} accountId={profile.data.id} />
+      </Suspense>
+    )
+  }
+  if (path === "/studio/oauth-consent") {
+    return (
+      <Suspense fallback={<StudioLoading />}>
+        <OAuthConsentPage
+          key={`${profile.data.id}:${search}`}
+          account={profile.data}
+          search={search}
+          issuerBasePath={import.meta.env.VITE_TADAZZ_OAUTH_ISSUER_PATH ?? ""}
+        />
       </Suspense>
     )
   }
