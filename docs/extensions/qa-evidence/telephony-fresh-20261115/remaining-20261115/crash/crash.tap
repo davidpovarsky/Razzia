@@ -1,0 +1,19 @@
+TAP version 13
+# Game cleanup task started
+# Game cleanup task stopped
+# Registry cleaned up
+# Subtest: R-CRASH-01 real authenticated initialize/issue/rotate SIGKILL preserves uncertainty and committed metadata
+ok 1 - R-CRASH-01 real authenticated initialize/issue/rotate SIGKILL preserves uncertainty and committed metadata
+  ---
+  duration_ms: 48919.672713
+  type: 'test'
+  ...
+1..1
+# tests 1
+# suites 0
+# pass 1
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 59804.619241
