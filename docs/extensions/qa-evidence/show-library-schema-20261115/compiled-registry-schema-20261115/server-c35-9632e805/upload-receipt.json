@@ -1,0 +1,18 @@
+{
+  "status": "NINE_PINNED_FILES_TRANSFERRED",
+  "fileCount": 9,
+  "logicalFileBytes": 122189,
+  "sourceCommit": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "planSha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1",
+  "transferManifestSha256": "6d19fcafdad7374dac2dcbd31225ee96ea8fcd624417ff11b4d36d6144cc7f6d",
+  "destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "uploadsExcluded": [
+    "old26",
+    "dependencies",
+    "store",
+    "git",
+    "fullClone",
+    "images",
+    "fonts"
+  ]
+}
