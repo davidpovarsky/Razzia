@@ -1,0 +1,79 @@
+{
+  "status": "PASS_READ_ONLY_OBSERVATION",
+  "moduleFiles": 106,
+  "additionalPackageMetadataAndLicenses": 10,
+  "packageSources": 116,
+  "sourceCommit": "dd3cd1347981ac6fd934f90d870ff57bba82d470",
+  "lockfileSha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+  "packages": [
+    {
+      "key": "i18next@26.4.3",
+      "lockedIntegrity": "sha512-QIIueUYS2giFVIY3hu/X5Dz7/qTzwcXE06H29m1DKVhUGVPCyT0wnsh14wEn/cTy9nZ/B6VhbDItdXotOKSO8A==",
+      "observedTarIntegrity": "sha512-fiCdmP2QmdoF+j2jWy7abMAZ4EMEBm69qwUYvEu/e/UmNJBxzCIvVZmd+UNXnFGhy2Id/fw7Bk1105DYHwEAew==",
+      "aliasTargetMatchesLockedIndex": true,
+      "moduleFiles": 1,
+      "observedFiles": 3,
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "key": "react-dom@19.3.0",
+      "lockedIntegrity": "sha512-JDk8dgif51OjFoDE70+OT9ICyYr+69HlmihNwp1+Nsfbna3t5sIiCa9ZJktDmQ4/1b/rn26hIAR2uYXDMr5r0Q==",
+      "observedTarIntegrity": "sha512-i6FVqiyUWGo27YFOO8vbsQR8O9oygGfe5opPBoBdlBTiqtewyCYeCPTfJN5Q6PjsyHIGI8vgWZRcQKaLV9J5Zg==",
+      "aliasTargetMatchesLockedIndex": true,
+      "moduleFiles": 4,
+      "observedFiles": 6,
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "key": "react@19.3.0",
+      "lockedIntegrity": "sha512-E8LUcbtBWt20bbl2YoHfx4ZDBdxVTfOKtCZn9cDSJ4l6/nuoApcpIBcj47t2wZoVX8g2ZHuMHbiShgCR1T5Sog==",
+      "observedTarIntegrity": "sha512-gjC63Z+t93C1rZ8CkymUfNhUJzz6DKi32sDp8zT1loba1PakPoFTi2MOYE7/8D68CgckSboC2n7V85Rm5wTPEQ==",
+      "aliasTargetMatchesLockedIndex": true,
+      "moduleFiles": 4,
+      "observedFiles": 6,
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "key": "scheduler@0.28.0",
+      "lockedIntegrity": "sha512-juorfCmIkIw8tT+p5BXSm6PJjQF/ycEYmKyzURCIt/RaZIhL+PulbQ9Yu2z1HdOJDdqDTlxA1+xKBmHXJsczAw==",
+      "observedTarIntegrity": "sha512-zrpLnkJp9SgX1Wr08R5sJ9NQHSdOUXekmAGf98mEclbPE8j6mKG1gRUU4l4WhLMpHPggF7nuJvedGik5YR4bQA==",
+      "aliasTargetMatchesLockedIndex": true,
+      "moduleFiles": 2,
+      "observedFiles": 4,
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    },
+    {
+      "key": "zod@4.6.6",
+      "lockedIntegrity": "sha512-4UmzQUF5fxvfcYHlbjBmejU+w+hbDnWFx4aS8kBx7nPBHcO2SqPbpAG8snbdg+Xse4pRefR98hgjFgIMCI/UhA==",
+      "observedTarIntegrity": "sha512-RTYnXrHut8R24UmKCJ79FDVIQfZpDjqg2a78BQUGMEp4Nzi2WAMVspVjl5krzwV3MY+WbHpf01WgLxenP4MOcQ==",
+      "aliasTargetMatchesLockedIndex": true,
+      "moduleFiles": 95,
+      "observedFiles": 97,
+      "declaredLicense": "MIT",
+      "licenseFiles": [
+        "LICENSE"
+      ]
+    }
+  ],
+  "indexUnchanged": true,
+  "remoteFilesWritten": 0,
+  "rawBytesVerifiedBySha512AndSize": true,
+  "physicalBuildCacheBinding": "UNPROVEN_REQUIRE_EXACT_DD3_BUILD_MOUNT_PROVENANCE",
+  "trustedStoreReceiptsInstalled": false,
+  "imageRights": "UNKNOWN",
+  "executableAcceptance": false,
+  "compiledPins": [],
+  "c35Rerun": false
+}
