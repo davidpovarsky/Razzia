@@ -123,3 +123,17 @@ The following V1-only external flushSync update/resize correction is awaiting
 fresh20 full40 execution; no native stage/choreography/clock or V2 entry changes.
 Original37/40 remains independently retained. Consent19 is separately committed
 asfd38676 withTC0/new actual cross-tab native-memory regression2PASS and terminal0.
+
+## Full V1 follow-up20 (failure preserved; shared fix21 pending)
+
+Native20 fresh V1 build7cba1b04647b0b00120677012ac67d36d86436506cf8d6a130398ccb1f92a4e8
+(JS1044082B; CSS unchanged3b220b02) had focusedTC0, format0 and physical receipt0.
+The same full40 produced39PASS/1WebKitFAIL (en ready=false); host flush alone is
+insufficient. Raw24b47b5a5ab6a517ea2b420f7768db3d9358a2f7142e5e682108971101cca198
+archive127files verified before exited1/PID0/noOOM. All failure logs remain.
+
+The next shared component change commits mask removal synchronously only after
+genuine awaited native reconstruction completes. This alters both ABI payloads;
+fresh both builds and40+clock1+V2four are running21, not yet accepted. At20release
+measured cumulative93184000B within existing89MiB; forecast131072B for21 fits the
+remaining139264B. No budget increase, deletion or external dependency copy.
