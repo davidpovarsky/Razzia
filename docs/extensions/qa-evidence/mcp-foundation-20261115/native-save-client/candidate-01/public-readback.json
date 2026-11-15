@@ -1,0 +1,146 @@
+{
+  "root": "/home/david/tadazz-f-native-save-evidence-20261115/tadazz-m3a-synthetic-WXBAZS",
+  "runtime": "v26.11.1",
+  "platform": "linux",
+  "kernel": "6.18.33.2-microsoft-standard-WSL2",
+  "filesystemMagic": 61267,
+  "markerSha256": "0873d96fbac4e4f8181626bded824a62c14a52b9e0180a417ffba83f33cc9a22",
+  "publicReceiptSha256": "74484deed89baee8d9efb3a3b634042ce684e43dfd48f11b9e8ae76a5a32506e",
+  "publicReceipt": {
+    "runtime": "v26.11.1",
+    "platform": "linux",
+    "filesystemMagic": 61267,
+    "retainedRoot": "/home/david/tadazz-f-native-save-evidence-20261115/tadazz-m3a-synthetic-WXBAZS",
+    "nativeGames": 2,
+    "receipts": [
+      {
+        "case": "real E inspect/approve and original MCP save/replay",
+        "calls": [
+          "/oauth/native-save/inspect",
+          "/oauth/native-save/approve"
+        ],
+        "nativeBefore": 0,
+        "nativeAfter": 1,
+        "result": {
+          "draftId": "bowTDmNVJHpDxCQeBPDQvkU2C5ca9n6Q",
+          "revision": 1,
+          "quizId": "MnyTX-rDSR4xFMA55kM8o",
+          "savedRevision": 1,
+          "studioUrl": "https://studio.example.invalid/manager/quizz/MnyTX-rDSR4xFMA55kM8o"
+        }
+      },
+      {
+        "case": "delayed genuine response/session switch and actual other-owner denial",
+        "calls": [
+          "/oauth/native-save/inspect"
+        ],
+        "foreignCalls": [
+          "/oauth/native-save/inspect"
+        ],
+        "nativeBefore": 1,
+        "nativeAfter": 1
+      },
+      {
+        "case": "real E/F stale revision denial/no approval retry",
+        "calls": [
+          "/oauth/native-save/inspect",
+          "/oauth/native-save/approve"
+        ],
+        "nativeBefore": 1,
+        "nativeAfter": 1
+      },
+      {
+        "case": "lost real F approval ACK/no automatic E retry/fresh inspect/original MCP key",
+        "calls": [
+          "/oauth/native-save/inspect",
+          "/oauth/native-save/approve"
+        ],
+        "reconciledState": "approved",
+        "nativeBefore": 1,
+        "nativeAfter": 2,
+        "result": {
+          "draftId": "ZyorU1ReJwSnvR-dRXCvgCz2uQlDfaAr",
+          "revision": 1,
+          "quizId": "OPq65MSAfAl5mqS0JcVq0",
+          "savedRevision": 1,
+          "studioUrl": "https://studio.example.invalid/manager/quizz/OPq65MSAfAl5mqS0JcVq0"
+        }
+      },
+      {
+        "case": "actual native session revocation at E/F approval boundary",
+        "calls": [
+          "/oauth/native-save/inspect",
+          "/oauth/native-save/approve"
+        ],
+        "nativeBefore": 2,
+        "nativeAfter": 2
+      }
+    ],
+    "sentinelsUnchanged": true,
+    "otherOwnerNativeDirectoryEmpty": true,
+    "globalNativeRootAbsent": true
+  },
+  "files": [
+    {
+      "path": "tenants/0b25e7f6-28e3-4f50-b73d-880484e570c8/native-sentinels/quiz.json",
+      "bytes": 45,
+      "mode": 420,
+      "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/quizz/e-client-e-9Q44lkJX.json",
+      "bytes": 1469,
+      "mode": 384,
+      "sha256": "6665fbe71bbe311e8b08c845410e11c1a25bc54350e09a76ca22dd76fe337a23"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/quizz/e-lost-app-alQXvLkf.json",
+      "bytes": 1474,
+      "mode": 384,
+      "sha256": "6c48ada89ccc4a209c360d6e5249589b7f94be10dd1667d7a222f6cee7b1289b"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/native-sentinels/quiz.json",
+      "bytes": 45,
+      "mode": 420,
+      "sha256": "ece1abc083267c75a477718d7c0ae48e49b6856a1a7a245124706887b44ab71a"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/extensions/quizzes/MnyTX-rDSR4xFMA55kM8o.json",
+      "bytes": 2794,
+      "mode": 384,
+      "sha256": "3a004523dd463762187dac269e588b666eff6f33f32148cf96edac43418e1429"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/extensions/quizzes/OPq65MSAfAl5mqS0JcVq0.json",
+      "bytes": 2794,
+      "mode": 384,
+      "sha256": "c9d6dcd037742de21796f5f69f5b1b9917105eafbefdd11a59ac6ea6503ff64e"
+    },
+    {
+      "path": "tenants/819e4c7f-f935-4c24-9f52-1a9981d3d9fc/extensions/mcp-oauth/grants.sqlite",
+      "bytes": 126976,
+      "mode": 384,
+      "sha256": "dd438d5aa1f4623e4e6a92e8dc37594949ab05e263f8e584f6e13b7110264605"
+    },
+    {
+      "path": "native-sentinels/quiz.json",
+      "bytes": 45,
+      "mode": 420,
+      "sha256": "0ddcd7929fbfd542aa0f670b270d6051a4094670f785e7e7bab1706d244bfb86"
+    },
+    {
+      "path": ".tadazz-creation-operations-v1/3abf25819bafe870bdd1eef66ba5a6f2b4d016422859daa81d7cb99af43eb391/operation.json",
+      "bytes": 1609,
+      "mode": 384,
+      "sha256": "9cc3265df4c558216f5db64610550a67b1bf08a428f2149407211bdd4616d4be"
+    },
+    {
+      "path": ".tadazz-creation-operations-v1/f7e4e0feba2a7082bf5b3911cb43f3b9f240e513ae2fac950c5a7a995b99f92c/operation.json",
+      "bytes": 1609,
+      "mode": 384,
+      "sha256": "8db0ef126539206163653cbe6b2178b9b035af6f46cd8650dce752b319c18297"
+    }
+  ],
+  "privateKeysTokensAndAccountDatabaseExcluded": true
+}
