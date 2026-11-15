@@ -6,7 +6,8 @@ import type {
 import { authorize, validateConfig } from "./authorization.ts"
 import { createTadazzMcpHttpHandler } from "./factory.ts"
 import { inputs, toolNames } from "../contracts/tools.ts"
-import { LIMITS } from "../contracts/schemas.ts"
+import { LIMITS, PREVIEW_RESOURCE } from "../contracts/schemas.ts"
+import { PREVIEW_UI_RESPONSE_LIMIT } from "./preview-resource.ts"
 import { scopes } from "../contracts/tools.ts"
 import {
   IngressBudget,
@@ -50,7 +51,11 @@ function rejectResponse(status: number, challenge?: string) {
  * calls can return an SSE Response before handler work settles. Buffer that
  * bounded exchange through EOF so HTTP admission still owns the whole call.
  * Preserve SDK framing; this does not parse or implement the MCP protocol. */
-async function completeLegacyResponse(response: Response, signal: AbortSignal) {
+async function completeLegacyResponse(
+  response: Response,
+  signal: AbortSignal,
+  limit: number = LIMITS.response,
+) {
   if (!response.body) return response
   const reader = response.body.getReader()
   const chunks: Uint8Array[] = []
@@ -74,8 +79,7 @@ async function completeLegacyResponse(response: Response, signal: AbortSignal) {
         break
       }
       size += part.value.byteLength
-      if (size > LIMITS.response + 4096)
-        throw new Error("Response limit exceeded")
+      if (size > limit + 4096) throw new Error("Response limit exceeded")
       chunks.push(part.value.slice())
     }
     return new Response(Buffer.concat(chunks), {
@@ -401,13 +405,31 @@ export function createRemoteMcpApp(options: RemoteMcpOptions) {
             ...(deps.drafts ? { drafts: work.wrap(deps.drafts) } : {}),
             ...(deps.catalog ? { catalog: work.wrap(deps.catalog) } : {}),
             ...(deps.preview ? { preview: work.wrap(deps.preview) } : {}),
+            ...(deps.previewCandidateV2
+              ? { previewCandidateV2: work.wrap(deps.previewCandidateV2) }
+              : {}),
             ...(deps.storage ? { storage: work.wrap(deps.storage) } : {}),
             ...(deps.exports ? { exports: work.wrap(deps.exports) } : {}),
           }
           server = createTadazzMcpHttpHandler(config, dependencies)
           work.check()
           let response = await server.fetch(request, { parsedBody })
-          response = await completeLegacyResponse(response, request.signal)
+          const uiRead =
+            deps.previewUiResource &&
+            parsedBody &&
+            typeof parsedBody === "object" &&
+            "method" in parsedBody &&
+            parsedBody.method === "resources/read" &&
+            "params" in parsedBody &&
+            parsedBody.params &&
+            typeof parsedBody.params === "object" &&
+            "uri" in parsedBody.params &&
+            parsedBody.params.uri === PREVIEW_RESOURCE
+          response = await completeLegacyResponse(
+            response,
+            request.signal,
+            uiRead ? PREVIEW_UI_RESPONSE_LIMIT : LIMITS.response,
+          )
           work.check()
           if (response.status >= 400) return rejected(response.status)
           for (const [name, value] of Object.entries(responseHeaders))

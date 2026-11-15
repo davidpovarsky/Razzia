@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import test from "node:test"
 import { harness } from "./fixtures.ts"
 
-test("real SDK initialize/discovery, strict schemas and three static resources", async () => {
+test("real SDK discovery keeps UI absent without an actual reviewed artifact", async () => {
   const h = await harness()
   try {
     const listing = await h.client.listTools()
@@ -15,7 +15,7 @@ test("real SDK initialize/discovery, strict schemas and three static resources",
     )
     assert.deepEqual(
       linked.map((tool) => tool.name),
-      ["preview_game"],
+      [],
     )
     for (const tool of listing.tools) {
       assert.equal(tool.inputSchema.additionalProperties, false)
@@ -23,12 +23,10 @@ test("real SDK initialize/discovery, strict schemas and three static resources",
       assert.ok(tool._meta?.securitySchemes)
     }
     const resources = await h.client.listResources()
-    assert.equal(resources.resources.length, 3)
-    const resource = await h.client.readResource({
-      uri: "ui://tadazz/quiz-preview/v1.html",
-    })
-    assert.equal(resource.contents[0]?.mimeType, "text/html;profile=mcp-app")
-    assert.equal(JSON.stringify(resource).includes(h.account.accountId), false)
+    assert.equal(resources.resources.length, 2)
+    await assert.rejects(
+      h.client.readResource({ uri: "ui://tadazz/quiz-preview/v1.html" }),
+    )
   } finally {
     await h.close()
   }

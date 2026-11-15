@@ -31,6 +31,7 @@ import { authorize, validateConfig } from "./authorization.ts"
 import { dispatch } from "./dispatch.ts"
 import { guardedConnection } from "./connection.ts"
 import { failureResult } from "./results.ts"
+import { preparePreviewUiResource } from "./preview-resource.ts"
 
 /** Creates ONE independent SDK server per session/request, never a shared
  * singleton transport. No HTTP listener, route mount, env, account or disk access. */
@@ -81,6 +82,9 @@ function registeredServer(
     handler: (principal: VerifiedPrincipal) => Promise<CallToolResult>,
   ) => Promise<CallToolResult>,
 ) {
+  const previewResource = deps.previewUiResource
+    ? preparePreviewUiResource(deps.previewUiResource)
+    : undefined
   const server = new McpServer(
     { name: "tadazz", version: CONTRACT_VERSION },
     {
@@ -96,7 +100,9 @@ function registeredServer(
       ? ["model", "app"]
       : ["model"]
     const ui = {
-      ...(name === "preview_game" ? { resourceUri: PREVIEW_RESOURCE } : {}),
+      ...(name === "preview_game" && previewResource
+        ? { resourceUri: PREVIEW_RESOURCE }
+        : {}),
       visibility,
     }
     const settings = {
@@ -125,39 +131,36 @@ function registeredServer(
         ),
     )
   }
-  // Placeholder static resource contains no simulated game, credentials or user data.
-  // preview_game fails closed until an accepted SB adapter is injected.
-  registerAppResource(
-    server,
-    "tadazz-preview",
-    PREVIEW_RESOURCE,
-    {
-      mimeType: RESOURCE_MIME_TYPE,
-      _meta: {
-        ui: {
-          csp: { connectDomains: [], resourceDomains: [], frameDomains: [] },
+  // No placeholder executable/UI resource is advertised without G's real static
+  // artifact. Candidate data does not manufacture an artifact or its rights.
+  if (previewResource)
+    registerAppResource(
+      server,
+      "tadazz-preview",
+      PREVIEW_RESOURCE,
+      {
+        mimeType: RESOURCE_MIME_TYPE,
+        _meta: {
+          ui: {
+            csp: previewResource.csp,
+          },
         },
       },
-    },
-    async () => ({
-      contents: [
-        {
-          uri: PREVIEW_RESOURCE,
-          mimeType: RESOURCE_MIME_TYPE,
-          text: '<!doctype html><html><head><meta charset="utf-8"></head><body></body></html>',
-          _meta: {
-            ui: {
-              csp: {
-                connectDomains: [],
-                resourceDomains: [],
-                frameDomains: [],
+      async () => ({
+        contents: [
+          {
+            uri: PREVIEW_RESOURCE,
+            mimeType: RESOURCE_MIME_TYPE,
+            text: previewResource.read(),
+            _meta: {
+              ui: {
+                csp: previewResource.csp,
               },
             },
           },
-        },
-      ],
-    }),
-  )
+        ],
+      }),
+    )
   server.registerResource(
     "tadazz-authoring-schema",
     "tadazz://authoring/v1/schema.json",
