@@ -1,0 +1,1031 @@
+{
+  "status": "PLAN_NOT_RUN_POSTDEPLOY",
+  "public_origin": "https://tadazz.com",
+  "browsers": [
+    "Chromium",
+    "WebKit"
+  ],
+  "viewports": [
+    {
+      "width": 1366,
+      "height": 768
+    },
+    {
+      "width": 390,
+      "height": 844
+    }
+  ],
+  "public_cases": [
+    {
+      "locale": "en",
+      "url": "/?lng=en",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=store&lng=en",
+      "hydrated_title": "Games | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=how&lng=en",
+      "hydrated_title": "How it works | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=pricing&lng=en",
+      "hydrated_title": "Pricing | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=custom&lng=en",
+      "hydrated_title": "Custom shows | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=demo&lng=en",
+      "hydrated_title": "Try a round | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/?view=product&game=crowd&lng=en",
+      "hydrated_title": "The Crowd Decides | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/login?lng=en",
+      "hydrated_title": "Log in | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/signup?lng=en",
+      "hydrated_title": "Create account | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/verify?lng=en",
+      "hydrated_title": "Email verified | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/forgot?lng=en",
+      "hydrated_title": "Forgot password? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "en",
+      "url": "/reset?lng=en",
+      "hydrated_title": "Reset password | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "en",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?lng=fr",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=store&lng=fr",
+      "hydrated_title": "Jeux | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=how&lng=fr",
+      "hydrated_title": "Comment ça marche | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=pricing&lng=fr",
+      "hydrated_title": "Tarifs | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=custom&lng=fr",
+      "hydrated_title": "Spectacles sur mesure | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=demo&lng=fr",
+      "hydrated_title": "Essayer un tour | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/?view=product&game=crowd&lng=fr",
+      "hydrated_title": "Le public décide | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/login?lng=fr",
+      "hydrated_title": "Se connecter | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/signup?lng=fr",
+      "hydrated_title": "Créer un compte | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/verify?lng=fr",
+      "hydrated_title": "E-mail vérifié | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/forgot?lng=fr",
+      "hydrated_title": "Mot de passe oublié ? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "fr",
+      "url": "/reset?lng=fr",
+      "hydrated_title": "Réinitialiser le mot de passe | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "fr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?lng=de",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=store&lng=de",
+      "hydrated_title": "Spiele | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=how&lng=de",
+      "hydrated_title": "So funktioniert es | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=pricing&lng=de",
+      "hydrated_title": "Preise | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=custom&lng=de",
+      "hydrated_title": "Individuelle Shows | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=demo&lng=de",
+      "hydrated_title": "Eine Runde testen | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/?view=product&game=crowd&lng=de",
+      "hydrated_title": "Das Publikum entscheidet | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/login?lng=de",
+      "hydrated_title": "Anmelden | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/signup?lng=de",
+      "hydrated_title": "Konto erstellen | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/verify?lng=de",
+      "hydrated_title": "E-Mail bestätigt | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/forgot?lng=de",
+      "hydrated_title": "Passwort vergessen? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "de",
+      "url": "/reset?lng=de",
+      "hydrated_title": "Passwort zurücksetzen | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "de",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?lng=es",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=store&lng=es",
+      "hydrated_title": "Juegos | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=how&lng=es",
+      "hydrated_title": "Cómo funciona | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=pricing&lng=es",
+      "hydrated_title": "Precios | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=custom&lng=es",
+      "hydrated_title": "Espectáculos a medida | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=demo&lng=es",
+      "hydrated_title": "Probar una ronda | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/?view=product&game=crowd&lng=es",
+      "hydrated_title": "El público decide | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/login?lng=es",
+      "hydrated_title": "Iniciar sesión | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/signup?lng=es",
+      "hydrated_title": "Crear cuenta | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/verify?lng=es",
+      "hydrated_title": "Correo verificado | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/forgot?lng=es",
+      "hydrated_title": "¿Olvidaste la contraseña? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "es",
+      "url": "/reset?lng=es",
+      "hydrated_title": "Restablecer contraseña | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "es",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?lng=it",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=store&lng=it",
+      "hydrated_title": "Giochi | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=how&lng=it",
+      "hydrated_title": "Come funziona | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=pricing&lng=it",
+      "hydrated_title": "Prezzi | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=custom&lng=it",
+      "hydrated_title": "Spettacoli su misura | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=demo&lng=it",
+      "hydrated_title": "Prova un turno | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/?view=product&game=crowd&lng=it",
+      "hydrated_title": "Il pubblico decide | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/login?lng=it",
+      "hydrated_title": "Accedi | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/signup?lng=it",
+      "hydrated_title": "Crea account | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/verify?lng=it",
+      "hydrated_title": "Email verificata | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/forgot?lng=it",
+      "hydrated_title": "Password dimenticata? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "it",
+      "url": "/reset?lng=it",
+      "hydrated_title": "Reimposta password | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "it",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?lng=ja",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=store&lng=ja",
+      "hydrated_title": "ゲーム | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=how&lng=ja",
+      "hydrated_title": "使い方 | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=pricing&lng=ja",
+      "hydrated_title": "料金 | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=custom&lng=ja",
+      "hydrated_title": "オーダーメイドのショー | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=demo&lng=ja",
+      "hydrated_title": "ラウンドを体験 | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/?view=product&game=crowd&lng=ja",
+      "hydrated_title": "みんなで決める | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/login?lng=ja",
+      "hydrated_title": "ログイン | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/signup?lng=ja",
+      "hydrated_title": "アカウント作成 | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/verify?lng=ja",
+      "hydrated_title": "メール認証済み | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/forgot?lng=ja",
+      "hydrated_title": "パスワードをお忘れですか？ | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "ja",
+      "url": "/reset?lng=ja",
+      "hydrated_title": "パスワードを再設定 | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "ja",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?lng=tr",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=store&lng=tr",
+      "hydrated_title": "Oyunlar | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=how&lng=tr",
+      "hydrated_title": "Nasıl çalışır | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=pricing&lng=tr",
+      "hydrated_title": "Fiyatlar | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=custom&lng=tr",
+      "hydrated_title": "Özel gösteriler | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=demo&lng=tr",
+      "hydrated_title": "Bir tur dene | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/?view=product&game=crowd&lng=tr",
+      "hydrated_title": "Kararı kalabalık verir | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/login?lng=tr",
+      "hydrated_title": "Giriş yap | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/signup?lng=tr",
+      "hydrated_title": "Hesap oluştur | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/verify?lng=tr",
+      "hydrated_title": "E-posta doğrulandı | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/forgot?lng=tr",
+      "hydrated_title": "Parolanızı mı unuttunuz? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "tr",
+      "url": "/reset?lng=tr",
+      "hydrated_title": "Parolayı sıfırla | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "tr",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?lng=vi",
+      "hydrated_title": "Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=store&lng=vi",
+      "hydrated_title": "Trò chơi | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=how&lng=vi",
+      "hydrated_title": "Cách hoạt động | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=pricing&lng=vi",
+      "hydrated_title": "Giá | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=custom&lng=vi",
+      "hydrated_title": "Chương trình tùy chỉnh | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=demo&lng=vi",
+      "hydrated_title": "Thử một vòng | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/?view=product&game=crowd&lng=vi",
+      "hydrated_title": "Khán giả quyết định | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/login?lng=vi",
+      "hydrated_title": "Đăng nhập | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/signup?lng=vi",
+      "hydrated_title": "Tạo tài khoản | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/verify?lng=vi",
+      "hydrated_title": "Email đã xác minh | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/forgot?lng=vi",
+      "hydrated_title": "Quên mật khẩu? | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    },
+    {
+      "locale": "vi",
+      "url": "/reset?lng=vi",
+      "hydrated_title": "Đặt lại mật khẩu | Tadazz",
+      "application_name": "Tadazz",
+      "og_title_equals_document_title": true,
+      "twitter_title_equals_document_title": true,
+      "lang": "vi",
+      "dir": "ltr"
+    }
+  ],
+  "raw_html_expected": {
+    "sha256": "9a9edaf33fbcdddc569b66fb1044c2280eb83732c958653019fb499c05681f71",
+    "title": "Tadazz",
+    "application-name": "Tadazz",
+    "cache-control": "no-store"
+  },
+  "private_scope_required": [
+    {
+      "route": "/studio",
+      "title": "Dashboard | Tadazz"
+    },
+    {
+      "route": "/studio/games",
+      "title": "My Games | Tadazz"
+    },
+    {
+      "route": "/studio/account",
+      "title": "Account & licences | Tadazz"
+    },
+    {
+      "route": "/studio/prepare",
+      "title": "Prepare show | Tadazz"
+    },
+    {
+      "route": "/manager",
+      "expected_final_route": "/studio/games",
+      "title": "My Games | Tadazz"
+    },
+    {
+      "route": "/manager/quizz/:ownedQuizId",
+      "title": "Editor | Tadazz"
+    },
+    {
+      "route": "/party/manager/:ownedGameId",
+      "title": "Host | Tadazz"
+    },
+    {
+      "route": "/party/:ownedGameId",
+      "title": "Player | Tadazz"
+    },
+    {
+      "route": "/display/:ownedGameId",
+      "title": "Display | Tadazz"
+    }
+  ],
+  "public_boundary": "Fresh guest context; abort non-GET/cross-origin requests and WS for public head audit. Guest /studio redirects /login. Record pages requiring auth/actual room; do not fake valid room IDs as acceptance.",
+  "private_boundary": "Use existing authorized private pilot/account scope and actual owned game; no real customer data, account mail, licence/provider spend or global writes merely for smoke. No authentication or game proof from HTTP200.",
+  "metadata": "Compare descriptions to exact locale value; canonical only public view/game identifier, never token/PIN/lng/private queries. Verify OG/Twitter descriptions, favicon MIME/hash, theme-color; no implemented manifest/installability claim.",
+  "continuity": "Original Razzia/Creating Worlds/TDS game, host/player/display, fullscreen, join/answer/score/previous/reconnect where permitted; single audio clock. Physical/live gates stay open until genuine evidence.",
+  "audit": "Record source/artifact/entry hash, browser build, route-before/after, timeOrigin, screenshots after fonts ready, console/pageerror/failed assets. SPA navigation/reload/back, eight localized searches (uppercase Turkish/German), empty state, logo unchanged, no body title.",
+  "release_decision": "Existing manager/user release authority only; no new approval stage; this plan does not authorize execution."
+}

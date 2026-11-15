@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "status": "PREPARED_FOR_EXISTING_MANAGER_RELEASE_DECISION_NOT_AUTHORIZATION",
+  "source_gids": [
+    "1220482524632790",
+    "1220482471684895"
+  ],
+  "completed_locale_gid_unchanged": "1220482735946993",
+  "scope": "Only immutable Site web bytes; no backend/gateway/Recovery/Phone/Show/MCP publication",
+  "application_commit": "9b221bc0edabe449cdf27bc818ae77acbc676bae",
+  "test_selector_commit": "31b3cb084efeb50dced6952498e9703cb47dc45c",
+  "integration_checkpoint": "b208609a3005c5e03db12556f5ded3285a33e44a",
+  "target": {
+    "container_id": "dd1401638311a15212e52dcf0153b759003feb83fbce89c6b2756c9ff6732891",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-12T03:38:48.157101207Z",
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/var/lib/tadazz-release-5312660/config",
+        "Destination": "/app/config",
+        "RW": true
+      }
+    ],
+    "tmpfs": {},
+    "name": "tadazz"
+  },
+  "candidate_inventory_reference_image": "sha256:54d162faae23681b56279d85b8dfa1243c6a9fb8fd62f5bb87c91479f7f4a79d",
+  "manifest_pins": {
+    "base-web-inventory.json": "f79f270e5be9662e3f5b36c7de9bebb7077da387d92cfd37ddceaac7e1817ca9",
+    "candidate-web-inventory.json": "3f7b3942cca983f09a6fd15d335ac7b01895fc5c9530dd339ac0721a59a20b57",
+    "artifact.sha256": "406a22eadb840f0ac0c8fd269ed2444287157eadbbf15f1779c4a967d2507730"
+  },
+  "helper": {
+    "git_commit": "a5682df071c39f7c35639936d96fb656da5c3711",
+    "repo_path": "docs/extensions/qa-evidence/site-release-20261115/production-entry-v1/atomic-web-publish.py",
+    "sha256": "352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2",
+    "future_root_owned_path": "/var/lib/tadazz-release-code/352734823777d3397ebea2515323f6565c22a22437e8cde6392526534b7003a2/atomic-web-publish.py",
+    "installed_legacy_sha256_preserve": "9b0355750016e69b480827ea16e15fa4cc2a4a82b0f05ca5fd833375b7307b0a"
+  },
+  "operator": "/home/ubuntu/tadazz-unified-site-20261115-31b3cb0",
+  "control": {
+    "directory": "/home/ubuntu/tadazz-release-control",
+    "uid": 1001,
+    "directory_mode": "0700",
+    "lock": "production-release.lock",
+    "lock_mode": "0600",
+    "approved_helper": "approved-helper.sha256",
+    "lease": "hq-lease.json",
+    "hold": "production-operation-hold.json",
+    "present_at_audit": false
+  },
+  "input_receipt": {
+    "name": "public-file-sizes-and-controls.json",
+    "sha256": "ff28b4363b86e3f7430ccc895872d0390c5943c6955f8f5e9003b83232ab99d9",
+    "future_destinations": [
+      "operator",
+      "control"
+    ],
+    "present_at_operator_audit": false
+  },
+  "payload": {
+    "sha256": "da1144d4c78ce7b1d377c56302074e60135ee9755ce03c7c34cf2e9cbf504827",
+    "bytes": 3502080
+  },
+  "lease_at_release": {
+    "issuer": "01a1dfa1-57d8-7223-a965-2f4f31fe8b23",
+    "fresh_nonce_format": "32 lowercase hexadecimal digits",
+    "actions": [
+      "publish",
+      "rollback",
+      "reconcile"
+    ],
+    "immutable_for_rollback_window": true,
+    "provisioned_now": false
+  },
+  "publish": {
+    "action": "publish",
+    "calls": 1,
+    "expected_status": "verified",
+    "expected_classification": "new-entry-complete",
+    "expected_phase": "journal-fenced",
+    "expected_live_map": "candidate-web-inventory.json files",
+    "files": 242,
+    "index_sha256": "9a9edaf33fbcdddc569b66fb1044c2280eb83732c958653019fb499c05681f71",
+    "backup_map": "base-web-inventory.json files",
+    "backup_files": 202
+  },
+  "rollback": {
+    "action": "rollback",
+    "automatic": false,
+    "only_after_verified_closed_publish_and_current_matching_inputs": true,
+    "calls": 1,
+    "expected_status": "verified",
+    "expected_classification": "old-entry-full-additions",
+    "expected_phase": "journal-fenced",
+    "expected_live_map_file": "expected-rollback-web-inventory.json",
+    "files": 242,
+    "index_sha256": "81a5fbe942c74398e002a17205bba112b9e021cef416b83756aa8fd2e76fdf6e",
+    "retained_added_assets": 40,
+    "backup_files": 202
+  },
+  "on_indeterminate": "Preserve hold, child ID, stage, backup, lease and exact inputs; no retry/republication/lifecycle/data restore or unqualified reconcile.",
+  "space": {
+    "observed_free_bytes": 2649296896,
+    "minimum_free_bytes": 2147483648,
+    "public_backup_bytes": 80969610,
+    "incoming_changed_bodies_bytes": 3315539,
+    "proposed_release_allocation_bytes": 134217728,
+    "source_accounting_note": "Prospective production web-write allocation; not a test reservation or proof of actual peak. Confirm actual free space at execution; preserve all existing data/fixtures."
+  },
+  "remaining_release_gaps": [
+    "No current live production authorization/control provisioning",
+    "Legacy/manual writers and in-flight descendants require existing release exclusion; advisory flock does not fence noncooperating root/restart",
+    "Actual lost-ACK and child write/fence fault qualification remains open; positive synthetic results do not substitute",
+    "No active-game-during-352734-publish or fresh WebKit-active-game-rollback proof",
+    "Live authenticated route/game/account acceptance and physical evidence remain open"
+  ],
+  "pwa_disposition": "application-name/theme-color/favicon; no manifest or installability implemented",
+  "evidence": {
+    "manager_acceptance": "b208609a3005c5e03db12556f5ded3285a33e44a",
+    "synthetic": "../wave-A-20261115/RESULTS.md",
+    "fresh_readonly": "production-readonly-inputs.json",
+    "source_delta": "source-integration-delta.json"
+  },
+  "execution_performed": false
+}
