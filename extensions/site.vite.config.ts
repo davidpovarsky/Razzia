@@ -23,90 +23,97 @@ const referenceImages = new Map(
 )
 
 /** Supported Vite composition, never a source/generated-router rewrite. */
-const siteComposition = (): Plugin => ({
-  name: "tadazz-downstream-site",
-  enforce: "pre",
-  transform(code, id) {
-    if (
-      id.split("?")[0].replaceAll("\\", "/") !==
-      join(assets, "studio.css").replaceAll("\\", "/")
-    ) {
-      return
-    }
+const siteComposition = (): Plugin => {
+  let outputDirectory = resolve(web, "dist")
 
-    // The immutable reference repeats ~1.9 MB of base64 images that already
-    // exist byte-for-byte in site-assets. Production uses those same files.
-    return code.replace(
-      /data:image\/webp;base64,([A-Za-z0-9+/=]+)/gu,
-      (original, base64: string) =>
-        referenceImages.get(
-          createHash("sha256")
-            .update(Buffer.from(base64, "base64"))
-            .digest("hex"),
-        ) ?? original,
-    )
-  },
-  transformIndexHtml: {
-    order: "pre",
-    handler: (html: string) => ({
-      html: html.replace(
-        'src="/src/main.tsx"',
-        `src="/@fs/${entry.replaceAll("\\", "/")}"`,
-      ),
-      tags: [
-        {
-          tag: "link",
-          attrs: {
-            rel: "preload",
-            as: "font",
-            type: "font/woff2",
-            crossorigin: "anonymous",
-            href: "/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+  return {
+    name: "tadazz-downstream-site",
+    enforce: "pre",
+    configResolved(config) {
+      outputDirectory = resolve(config.root, config.build.outDir)
+    },
+    transform(code, id) {
+      if (
+        id.split("?")[0].replaceAll("\\", "/") !==
+        join(assets, "studio.css").replaceAll("\\", "/")
+      ) {
+        return
+      }
+
+      // The immutable reference repeats ~1.9 MB of base64 images that already
+      // exist byte-for-byte in site-assets. Production uses those same files.
+      return code.replace(
+        /data:image\/webp;base64,([A-Za-z0-9+/=]+)/gu,
+        (original, base64: string) =>
+          referenceImages.get(
+            createHash("sha256")
+              .update(Buffer.from(base64, "base64"))
+              .digest("hex"),
+          ) ?? original,
+      )
+    },
+    transformIndexHtml: {
+      order: "pre",
+      handler: (html: string) => ({
+        html: html.replace(
+          'src="/src/main.tsx"',
+          `src="/@fs/${entry.replaceAll("\\", "/")}"`,
+        ),
+        tags: [
+          {
+            tag: "link",
+            attrs: {
+              rel: "preload",
+              as: "font",
+              type: "font/woff2",
+              crossorigin: "anonymous",
+              href: "/node_modules/@fontsource-variable/rubik/files/rubik-latin-wght-normal.woff2",
+            },
+            injectTo: "head",
           },
-          injectTo: "head",
-        },
-      ],
-    }),
-  },
-  configureServer(server) {
-    server.middlewares.use("/tadazz-design-reference", (req, res, next) => {
-      const filename = (req.url ?? "").split("?")[0].slice(1)
+        ],
+      }),
+    },
+    configureServer(server) {
+      server.middlewares.use("/tadazz-design-reference", (req, res, next) => {
+        const filename = (req.url ?? "").split("?")[0].slice(1)
 
-      if (!/^[a-z0-9-]+\.(?:css|webp|svg|png)$/u.test(filename)) {
-        return next()
-      }
+        if (!/^[a-z0-9-]+\.(?:css|webp|svg|png)$/u.test(filename)) {
+          return next()
+        }
 
-      try {
-        res.setHeader(
-          "Content-Type",
-          (() => {
-            if (filename.endsWith(".css")) {
-              return "text/css"
-            }
+        try {
+          res.setHeader(
+            "Content-Type",
+            (() => {
+              if (filename.endsWith(".css")) {
+                return "text/css"
+              }
 
-            if (filename.endsWith(".svg")) {
-              return "image/svg+xml"
-            }
+              if (filename.endsWith(".svg")) {
+                return "image/svg+xml"
+              }
 
-            if (filename.endsWith(".png")) {
-              return "image/png"
-            }
+              if (filename.endsWith(".png")) {
+                return "image/png"
+              }
 
-            return "image/webp"
-          })(),
-        )
-        res.end(readFileSync(join(assets, filename)))
-      } catch {
-        next()
-      }
-    })
-  },
-  closeBundle() {
-    const target = resolve(web, "dist/tadazz-design-reference")
-    mkdirSync(target, { recursive: true })
-    cpSync(assets, target, { recursive: true })
-  },
-})
+              return "image/webp"
+            })(),
+          )
+          res.end(readFileSync(join(assets, filename)))
+        } catch {
+          next()
+        }
+      })
+    },
+    closeBundle() {
+      const target = resolve(outputDirectory, "tadazz-design-reference")
+      mkdirSync(target, { recursive: true })
+      cpSync(assets, target, { recursive: true })
+    },
+  }
+}
 
 export default defineConfig(
   mergeConfig(webConfig, {

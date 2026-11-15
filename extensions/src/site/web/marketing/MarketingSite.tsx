@@ -52,6 +52,11 @@ export function MarketingSite() {
   const [choice, setChoice] = useState<string | null>(null)
   const [showSampleResults, setShowSampleResults] = useState(false)
   const [notice, setNotice] = useState("")
+  const visibleGames = catalogue.filter(
+    (game) =>
+      (filter === "All" || game.category === filter) &&
+      t(game.title).toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+  )
   useEffect(() => {
     const onBack = () => {
       const requested = new URLSearchParams(searchString).get("view")
@@ -292,7 +297,7 @@ export function MarketingSite() {
                       <span className="route-icon">
                         {typeof Icon !== "string" && <Icon size={32} />}
                       </span>
-                      <h3 className="route-name">{String(title)}</h3>
+                      <h3 className="route-name">{t(String(title))}</h3>
                       <p>{t(String(description))}</p>
                       <span className="route-arrow">
                         <ArrowRight />
@@ -383,20 +388,10 @@ export function MarketingSite() {
               </label>
             </div>
             <div className="store-grid">
-              {cards(
-                catalogue.filter(
-                  (g) =>
-                    (filter === "All" || g.category === filter) &&
-                    t(g.title)
-                      .toLocaleLowerCase()
-                      .includes(search.toLocaleLowerCase()),
-                ),
+              {cards(visibleGames)}
+              {visibleGames.length === 0 && (
+                <p className="empty-results">{t("No games found")}</p>
               )}
-              {!catalogue.some(
-                (g) =>
-                  (filter === "All" || g.category === filter) &&
-                  g.title.toLowerCase().includes(search.toLowerCase()),
-              ) && <p className="empty-results">{t("No games found")}</p>}
             </div>
           </div>
         )}

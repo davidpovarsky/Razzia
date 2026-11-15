@@ -230,5 +230,11 @@
   "More actions for {{name}}": "{{name}} のその他の操作",
   "Advanced packages": "詳細なパッケージ管理",
   "Install and manage game packages.": "ゲームパッケージをインストール・管理します。",
-  "Try another search.": "別のキーワードで検索してください。"
+  "Try another search.": "別のキーワードで検索してください。",
+  "Editor": "エディター",
+  "Host": "司会者",
+  "Player": "プレイヤー",
+  "Display": "表示画面",
+  "Join game": "ゲームに参加",
+  "Manager": "管理"
 }
