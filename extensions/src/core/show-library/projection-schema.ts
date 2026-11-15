@@ -139,6 +139,10 @@ export const showProjectionSchema = z
   .superRefine((v, ctx) => {
     const deny = (message: string) =>
       ctx.addIssue({ code: "custom", message: `show-library:${message}` })
+    // The producer currently emits no resource-ready references. Schema branding
+    // cannot turn caller asset metadata into a trusted visual/resource grant.
+    if (v.question?.image || v.choices?.some((choice) => choice.asset))
+      deny("visual-assets-unavailable")
     if (v.canAnswer !== (v.answerReadiness === "ready"))
       deny("readiness-mismatch")
     if (v.results && v.phase !== "results") deny("results-before-reveal")

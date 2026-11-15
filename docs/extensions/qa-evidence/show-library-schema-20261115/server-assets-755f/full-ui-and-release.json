@@ -1,0 +1,30 @@
+{
+  "utc": "2026-11-15T05:56:33.027068+00:00",
+  "command": [
+    "sudo",
+    "-n",
+    "docker",
+    "exec",
+    "tadazz-hq-sb3-assets-20261115",
+    "pnpm",
+    "--dir",
+    "extensions",
+    "ui:check"
+  ],
+  "exitCode": 1,
+  "seconds": 2.187,
+  "logSha256": "8aa960335bdaf6a52b6327bedd4a7b6af468fb52c1ca610797ab54b072176b99",
+  "nanoCpus": 250000000,
+  "memoryBytes": 2147483648,
+  "network": "none",
+  "ports": {},
+  "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "sourceAfterFullUi": {
+    "status": "PASS",
+    "baselineFiles": 3297,
+    "overlayFiles": 23,
+    "errors": []
+  },
+  "allocationReleased": true,
+  "releasedUtc": "2026-11-15T05:56:35.791944+00:00"
+}

@@ -149,6 +149,13 @@ export function projectShowBindings(
     context = previewContextSchema.parse(contextInput)
   const { phase } = snapshot,
     question = snapshot.question
+  // No compiled visual-asset binding is implemented or accepted in this port.
+  // Reject caller references even for genuine drafts/plans and declared assets.
+  // A future resource path must derive current authored slots against a verified
+  // immutable compiled manifest and asset policy before resolving any resource;
+  // adding renderer pins alone must never lift this gate.
+  if (question?.image || question?.choices.some((choice) => choice.asset))
+    throw new Error("show-library:visual-assets-unavailable")
   const readiness = answerReadiness(snapshot, context, binding)
   const ownSelection =
     context.role === "player" && (phase === "voting" || phase === "voteLocked")

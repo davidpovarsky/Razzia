@@ -1,0 +1,5 @@
+{"case":"keys","count":11,"unique":11,"consistent":true,"normalized":true,"deepFrozen":true}
+{"case":"foreign-assets-in-genuine-binding","declaredAssetCount":0,"accepted":true,"questionAsset":{"assetId":"foreign-asset","sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},"choiceAsset":{"assetId":"foreign-asset","sha256":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"},"canAnswer":false,"readiness":"unavailable"}
+{"case":"no-question","canAnswer":false,"reason":"missing-question","plan":"unavailable","normalCanAnswer":false}
+{"case":"blank-media","accepted":true}
+{"case":"foreign-url","denied":true}
