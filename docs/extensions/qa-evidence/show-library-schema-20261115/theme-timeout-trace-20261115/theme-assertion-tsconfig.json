@@ -1,0 +1,9 @@
+{
+  "extends": "/workspace/extensions/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true
+  },
+  "include": [
+    "/workspace/extensions/src/server/show-themes/installation.test.ts"
+  ]
+}

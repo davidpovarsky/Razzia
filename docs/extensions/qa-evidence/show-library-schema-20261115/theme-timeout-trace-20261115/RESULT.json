@@ -1,0 +1,71 @@
+{
+  "status": "MEASURED_MATCHER_TIMEOUT_AND_CONDITIONAL_TEST_ONLY_FIX_VERIFIED",
+  "traceDiagnosticNotOriginalPass": true,
+  "originalBudgetMs": 30000,
+  "traceRetainedTimeout": true,
+  "bodyComplete": true,
+  "bodyWallMs": 32797.982859,
+  "matcherWallMs": 32012.032441,
+  "matcherShare": 0.9760366233076333,
+  "matcherCpuUserUs": 7678690,
+  "matcherCpuSystemUs": 325948,
+  "matcherHeapBefore": 23943136,
+  "matcherHeapAfter": 640627672,
+  "matcherRssBefore": 111198208,
+  "matcherRssAfter": 907522048,
+  "matcherCgroupThrottleDeltaUs": 29369043,
+  "readAssetWallMs": 8.328002,
+  "slowestNonMatcherStepMs": 90.170213,
+  "unexpectedThrows": 0,
+  "fixedOriginalCases": {
+    "pass": 5,
+    "fail": 0,
+    "durationsMs": [
+      796.955125,
+      204.19249000000036,
+      579.0224200000002,
+      200.45061400000031,
+      309.28900499999963
+    ]
+  },
+  "semanticStrengthCases": 7,
+  "focusedTypes": "PASS_AFTER_CONFIG_TYPE_ROOT_PATH_REPAIR",
+  "format": "PASS",
+  "originalFiveNotRepeatedForTypeRetry": true,
+  "changedTestSha256": "e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095",
+  "exactAssertionOnlyDiff": true,
+  "acceptedCore26ModuleHashesUnchanged": true,
+  "full819": "NOT_RERUN_OR_RELABELED_ORIGINAL_813PASS_6FAIL_RETAINED",
+  "source27BeforeAfter": "PASS_IN_OWN_READONLY_SOURCE_EQUIVALENT_8a43_991",
+  "causeScope": "Large generic Buffer deep matcher dominated this test; not a production/R2 storage bug claim",
+  "allocations": [
+    {
+      "evidence": "server-public-step-trace",
+      "allocationReleased": true,
+      "finishedUtc": "2026-11-15T09:20:29.964791+00:00",
+      "fixtureEvidenceBytes": 75381,
+      "containerWritableBytes": 16384,
+      "freeBefore": 2662154240,
+      "freeAfter": 2661220352
+    },
+    {
+      "evidence": "server-assertion-fix",
+      "allocationReleased": true,
+      "finishedUtc": "2026-11-15T09:25:05.413788+00:00",
+      "fixtureEvidenceBytes": 37676,
+      "containerWritableBytes": 20480,
+      "freeBefore": 2650112000,
+      "freeAfter": 2650054656
+    },
+    {
+      "evidence": "server-assertion-types",
+      "allocationReleased": true,
+      "finishedUtc": "2026-11-15T09:27:39.482490+00:00",
+      "fixtureEvidenceBytes": 21134,
+      "containerWritableBytes": 20480,
+      "freeBefore": 2647629824,
+      "freeAfter": 2647597056
+    }
+  ],
+  "createdUtc": "2026-11-15T09:29:08.885213+00:00"
+}

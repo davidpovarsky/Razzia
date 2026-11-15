@@ -1,0 +1,123 @@
+{
+  "mode": "FOCUSED_TYPES_ONLY_HARNESS_PATH_REPAIR",
+  "originalTimeoutMs": 30000,
+  "fixedTestSha256": "e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095",
+  "commands": [
+    {
+      "label": "container-create",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "run",
+        "-d",
+        "--pull=never",
+        "--name",
+        "tadazz-hq-theme-assertion-fix-20261115",
+        "--read-only",
+        "--cpus=0.25",
+        "--memory=2g",
+        "--pids-limit=128",
+        "--network=none",
+        "--workdir=/workspace/extensions",
+        "--env",
+        "XDG_DATA_HOME=/tmp/vitest-private",
+        "--tmpfs",
+        "/tmp:rw,nosuid,nodev,size=128m",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0,dst=/workspace,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/theme-byte-assertion-fix-e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095/installation.fixed.test.ts,dst=/workspace/extensions/src/server/show-themes/installation.test.ts,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/theme-byte-assertion-types-e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095,dst=/fixture,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/evidence/theme-byte-assertion-types-e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095,dst=/evidence",
+        "--entrypoint=sleep",
+        "tadazz:design-system-qa-20261110",
+        "infinity"
+      ],
+      "exitCode": 0,
+      "seconds": 0.239,
+      "logSha256": "183e25f7d8e99e0307231c7fe4957b72128355725d3ebf8b9e71ae1cf97c812d"
+    },
+    {
+      "label": "effective-before",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-theme-assertion-fix-20261115",
+        "node",
+        "-e",
+        "const fs=require('fs'),c=require('crypto');const b=fs.readFileSync('/workspace/extensions/src/server/show-themes/installation.test.ts');const h=c.createHash('sha256').update(b).digest('hex');console.log(JSON.stringify({sha256:h,expected:'e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095',match:h==='e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095'}));if(h!=='e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095')process.exit(1)"
+      ],
+      "exitCode": 0,
+      "seconds": 0.24,
+      "logSha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    },
+    {
+      "label": "focused-types",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-theme-assertion-fix-20261115",
+        "node",
+        "node_modules/typescript/bin/tsc",
+        "--project",
+        "/fixture/theme-assertion-types-retry.json"
+      ],
+      "exitCode": 0,
+      "seconds": 3.219,
+      "logSha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "label": "effective-after",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-theme-assertion-fix-20261115",
+        "node",
+        "-e",
+        "const fs=require('fs'),c=require('crypto');const b=fs.readFileSync('/workspace/extensions/src/server/show-themes/installation.test.ts');const h=c.createHash('sha256').update(b).digest('hex');console.log(JSON.stringify({sha256:h,expected:'e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095',match:h==='e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095'}));if(h!=='e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095')process.exit(1)"
+      ],
+      "exitCode": 0,
+      "seconds": 0.2,
+      "logSha256": "42b8d6041395b42dbadab6b7deb8fe355612c4aba861f4ec56ea1e0a74f4e2ee"
+    }
+  ],
+  "status": "FINISHED_CHECK_RECEIPTS",
+  "freeBefore": 2647629824,
+  "full819": "NOT_RUN",
+  "baseBefore": {
+    "status": "PASS",
+    "baseFiles": 27,
+    "executedVitestFiles": 3
+  },
+  "allocation": {
+    "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "nanoCpus": 250000000,
+    "memoryBytes": 2147483648,
+    "network": "none",
+    "readonlyRootfs": true,
+    "tmpfs": {
+      "/tmp": "rw,nosuid,nodev,size=128m"
+    },
+    "ports": {}
+  },
+  "baseAfter": {
+    "status": "PASS",
+    "baseFiles": 27,
+    "executedVitestFiles": 3
+  },
+  "measuredFixtureEvidenceBytes": 21134,
+  "containerWritableBytes": 20480,
+  "oomKilled": false,
+  "allocationReleased": true,
+  "finishedUtc": "2026-11-15T09:27:39.482490+00:00",
+  "freeAfter": 2647597056
+}
