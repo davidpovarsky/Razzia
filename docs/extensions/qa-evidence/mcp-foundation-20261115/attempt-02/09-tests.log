@@ -1,0 +1,26 @@
+✔ two real SDK sessions retain account isolation and revoked replay is denied (403.81352ms)
+✔ invalid principal fails before account store: issuer (93.494437ms)
+✔ invalid principal fails before account store: audience (3.376393ms)
+✔ invalid principal fails before account store: accountId (3.09207ms)
+✔ invalid principal fails before account store: active (2.469704ms)
+✔ invalid principal fails before account store: accountsEnabled (2.473864ms)
+✔ invalid principal fails before account store: expiresAt (85.670041ms)
+✔ invalid principal fails before account store: scopes (3.548114ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (110.712006ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (91.319176ms)
+✔ invalid authored/schema/settings/media rejected without mutation (387.928404ms)
+✔ scoped ordinary export delegates without adding a new consent stage (202.326624ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (4.047ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.250892ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (592.802013ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (94.87505ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (100.95047ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (298.216485ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 26486.462376

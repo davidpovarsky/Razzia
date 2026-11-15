@@ -1,0 +1,45 @@
+{
+  "status": "LIFECYCLE_CORRECTION_VALIDATED_PENDING_INDEPENDENT_REVIEW",
+  "sourceCommit": "Commit containing this receipt",
+  "reviewedModule": "14faea86a7c22a16cb4ff5391e4e3c70aaea62ec",
+  "documentationPrecision": "d46a0cacfc52c42d96034c1f9a529275bf8b2a6c",
+  "manifestSha256": "96c4d3c9aa5187c1dd164876f0483bc28dc8d22b6eee4103e3202aae1b252623",
+  "inputs": 128,
+  "moduleFiles": 31,
+  "archiveSha256": "676249c5a6ed05ddd3b1a5e566fa81c88d25a991198a0ceb5554e2a4a9d5e3fa",
+  "isolatedLockSha256": "dc7d7a9c51674163dd26326a9d7f6b58e5978a8eaeb24ed293aad72a5dc6befe",
+  "checks": {
+    "frozenOfflineInstall": 0,
+    "typecheck": 0,
+    "privateTests": {
+      "exit": 0,
+      "pass": 35,
+      "fail": 0,
+      "skipped": 0,
+      "cancelled": 0,
+      "originalCases": 27,
+      "newLifecycleCases": 8
+    },
+    "format": 0,
+    "inputHashes": "128 unchanged",
+    "originalRenamedFiles": "8 byte-identical",
+    "parentIntersection": 0,
+    "originalPrivateCoverage": 8,
+    "totalPrivateCoverage": 9,
+    "sourcePreservation": "602 files,593 unchanged+9 approved seams,0 unexpected",
+    "historicalGuard": "FAIL exit1,31 leased MCP paths,mismatches=[]; not edited or waived"
+  },
+  "allocation": {
+    "name": "tadazz-hq-mcp-lifecycle-20261115",
+    "cpu": 0.25,
+    "memoryBytes": 2147483648,
+    "network": "none",
+    "running": false,
+    "oomKilled": false,
+    "released": true,
+    "exit137": "Explicit idle-container stop after checks",
+    "preRunMemAvailableMiB": 10974
+  },
+  "scope": "Read-only synthetic SDK lifecycle cases. Real HTTP/OAuth/storage/renderer/host remain gated; original implementation/security/HQ tasks OPEN",
+  "priorEvidence": "Frozen14fa/125-input/27-test evidence and d46 precision preserved unchanged"
+}

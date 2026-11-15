@@ -1,0 +1,27 @@
+$ tsx --tsconfig tsconfig.json --test tests/server/*.test.ts
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (4.09708ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.265092ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (383.576479ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (404.411323ms)
+✔ two real SDK sessions retain account isolation and revoked replay is denied (92.641028ms)
+✔ invalid principal fails before account store: issuer (3.924799ms)
+✔ invalid principal fails before account store: audience (3.320513ms)
+✔ invalid principal fails before account store: accountId (3.212791ms)
+✔ invalid principal fails before account store: active (2.439504ms)
+✔ invalid principal fails before account store: accountsEnabled (86.425207ms)
+✔ invalid principal fails before account store: expiresAt (3.647115ms)
+✔ invalid principal fails before account store: scopes (2.767187ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (201.624576ms)
+✔ invalid authored/schema/settings/media rejected without mutation (101.230912ms)
+✔ scoped ordinary export delegates without adding a new consent stage (191.938361ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (98.214403ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (5.961138ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (9.061929ms)
+ℹ tests 18
+ℹ suites 0
+ℹ pass 18
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 11395.642792

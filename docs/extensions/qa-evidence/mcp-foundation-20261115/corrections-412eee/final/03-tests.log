@@ -1,0 +1,35 @@
+✔ two real SDK sessions retain account isolation and revoked replay is denied (587.238634ms)
+✔ invalid principal fails before account store: issuer (2.678866ms)
+✔ invalid principal fails before account store: audience (2.139101ms)
+✔ invalid principal fails before account store: accountId (2.314062ms)
+✔ invalid principal fails before account store: active (1.792378ms)
+✔ invalid principal fails before account store: accountsEnabled (2.267543ms)
+✔ invalid principal fails before account store: expiresAt (1.766817ms)
+✔ invalid principal fails before account store: scopes (84.879112ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (112.562423ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (86.492007ms)
+✔ invalid authored/schema/settings/media rejected without mutation (398.256422ms)
+✔ scoped ordinary export delegates without adding a new consent stage (281.565519ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (5.464773ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (89.892041ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (686.306804ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (102.431164ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (107.609575ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (1002.919867ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (6.493063ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (94.362444ms)
+✔ inconsistent repository summary fails closed on read (497.143391ms)
+✔ inconsistent repository summary fails closed on create (91.82746ms)
+✔ inconsistent repository summary fails closed on replace (100.188621ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (298.292163ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (691.384374ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (199.073711ms)
+✔ new save still requires exact-revision consent; ordinary export does not (207.792836ms)
+ℹ tests 27
+ℹ suites 0
+ℹ pass 27
+ℹ fail 0
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 43805.61735

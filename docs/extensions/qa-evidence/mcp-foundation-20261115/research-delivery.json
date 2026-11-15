@@ -1,0 +1,40 @@
+{
+  "status": "PASS_DOCUMENT_DELIVERY_ONLY",
+  "date": "2026-11-15T03:52:32.186Z",
+  "sourceBase": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "task": "1220539611687955",
+  "managerDesignAdopted": true,
+  "localLinksChecked": 4,
+  "officialReferenceCount": 19,
+  "runtimeRows": 39,
+  "runtimeTests": "NOT_RUN",
+  "sourceRuntimeCode": "UNVALIDATED_AND_EXCLUDED_FROM_DOC_COMMIT",
+  "remoteRefs": {
+    "tds": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+    "main": "5161eb7022144ee26d46a5f94cdbc714ec8b560d"
+  },
+  "liveImageEvidence": {
+    "managerReceipt": "HQ preservation/fresh-manager-20261115-044120/production-image-readonly-20261115.json",
+    "ociRevision": "bff12a63ec3f69a58123c0299eea991901680b94",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "health": "ok; health only"
+  },
+  "files": [
+    {
+      "path": "docs/extensions/plans/MCP_APP_ADR.md",
+      "sha256": "c03d2f69ca682beab0ba3cc64d559c453d9a11abaa1300bedd3ca95c69d179b8",
+      "bytes": 43325
+    },
+    {
+      "path": "docs/extensions/plans/M1_SECURITY_ACCEPTANCE_20261115.json",
+      "sha256": "811a2febcfb74d0025c1a0d1848d1a439dd72d5d96451158249fa832623a23ff",
+      "bytes": 90940
+    },
+    {
+      "path": "docs/extensions/plans/MCP_APP_ADOPTION_20261115.md",
+      "sha256": "7e1a7143814a3fb8804fb24fb669742c846dcf8e12206ed83830242bb7f8b382",
+      "bytes": 9437
+    }
+  ],
+  "whitespace": "Initial staged check found two trailing blank lines; trimmed documentation EOF before commit"
+}

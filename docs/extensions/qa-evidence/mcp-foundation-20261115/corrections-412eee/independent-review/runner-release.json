@@ -1,0 +1,10 @@
+{
+  "status": "released",
+  "recorded_utc": "2026-11-15T04:50:10.461383+00:00",
+  "network": "none",
+  "cpu": 0.25,
+  "memory_bytes": 2147483648,
+  "container": "tadazz-hq-mcp-review-20261115",
+  "state": "exited 0",
+  "source": "read-only, 118 hashes verified unchanged"
+}
