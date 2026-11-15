@@ -13,6 +13,7 @@ import { z } from "zod"
 import type { ActiveOAuthGrant } from "../server/access-token.ts"
 import type {
   AuthoringPolicy,
+  Dependencies,
   DraftRecord,
   DraftRepository,
   MutationIdentity,
@@ -21,7 +22,8 @@ import type {
 } from "../server/dependencies.ts"
 import { normalizeDraft } from "../server/authoring.ts"
 import { checkedDraft } from "../server/drafts.ts"
-import { canonicalJson, hashJson } from "../contracts/canonical.ts"
+import { canonicalJson, hashJson, utf8Bytes } from "../contracts/canonical.ts"
+import { inputs } from "../contracts/tools.ts"
 import { CONTRACT_VERSION, digest, opaqueId } from "../contracts/schemas.ts"
 import { ToolError } from "../server/errors.ts"
 import {
@@ -36,6 +38,12 @@ import {
   tokenDigest,
   type OAuthProtocol,
 } from "./oauth-protocol.ts"
+import {
+  createExportBody,
+  exportReceiptSchema,
+  type FirstPartyExportPolicy,
+  type ExportFormat,
+} from "./oauth-export.ts"
 
 const TABLES = {
   metadata:
@@ -521,6 +529,281 @@ export class FirstPartyOAuthGrants {
     })
     this.auth.assertActive(p)
   }
+  private checkedExport(
+    raw: unknown,
+    accountId: string,
+    grantId: string,
+    requestKey: string,
+    policy: FirstPartyExportPolicy,
+  ) {
+    const receipt = exportReceiptSchema.parse(raw)
+    const draft = checkedDraft(receipt.draft, { authoring: policy.authoring })
+    const data = receipt.data
+    const issuer = new URL(this.protocol.config.issuer)
+    const prefix = issuer.pathname.replace(/\/$/u, "") + "/downloads/"
+    const url = new URL(data.downloadUrl)
+    if (
+      url.origin !== issuer.origin ||
+      url.username ||
+      url.password ||
+      url.search ||
+      url.hash ||
+      !url.pathname.startsWith(prefix)
+    )
+      throw unavailable()
+    const ticket = this.protocol.readDownloadTicket(
+      url.pathname.slice(prefix.length),
+      false,
+    )
+    if (
+      ticket.accountId !== accountId ||
+      ticket.grantId !== grantId ||
+      ticket.requestKey !== requestKey ||
+      ticket.exportId !== data.exportId ||
+      ticket.draftId !== draft.draftId ||
+      ticket.revision !== draft.revision ||
+      data.draftId !== draft.draftId ||
+      data.revision !== draft.revision ||
+      data.format !== ticket.format ||
+      ticket.authoredSha256 !== tokenDigest(draft.authoredShowJson) ||
+      ticket.sha256 !== data.sha256 ||
+      data.sha256 !== tokenDigest(receipt.body) ||
+      data.bytes !== utf8Bytes(receipt.body) ||
+      data.expiresAt !== new Date(ticket.expiresAt).toISOString() ||
+      (data.format === "tada-json" && receipt.body !== draft.authoredShowJson)
+    )
+      throw unavailable()
+    return { ...receipt, draft, ticket }
+  }
+
+  private exportRights(
+    grant: StoredGrant,
+    draft: DraftRecord,
+    format: ExportFormat,
+    policy: FirstPartyExportPolicy,
+  ) {
+    const context = Object.freeze({
+      accountId: grant.accountId,
+      grantId: grant.grantId,
+      clientId: grant.clientId,
+    })
+    if (
+      !grant.scopes.includes("tadazz.drafts.read") ||
+      !grant.scopes.includes("tadazz.exports.read") ||
+      policy.canExport(context, draft, format) !== true
+    )
+      throw new ToolError("EXPORT_UNAVAILABLE")
+  }
+
+  /** Same tenant operations ledger; no schema/migration, native allocation or new consent. */
+  exports(
+    policy: FirstPartyExportPolicy,
+    assertIssued: (p: VerifiedPrincipal) => void,
+  ): NonNullable<Dependencies["exports"]> {
+    return {
+      createAuthorizedDownload: async (p, selected, format, mutation) => {
+        try {
+          assertIssued(p)
+          const parsed = inputs.export_game.safeParse({
+            contractVersion: CONTRACT_VERSION,
+            ...selected,
+            format,
+            idempotencyKey: mutation.idempotencyKey,
+          })
+          if (
+            !parsed.success ||
+            !digest.safeParse(mutation.inputDigest).success ||
+            hashJson(parsed.data) !== mutation.inputDigest ||
+            !z.string().min(1).max(128).safeParse(mutation.correlationId)
+              .success
+          )
+            throw new ToolError("VALIDATION_FAILED")
+          return this.transaction(p.accountId, false, (db) => {
+            const authority = () => {
+              assertIssued(p)
+              const grant = this.row(db, p.accountId, p.grantId)
+              if (
+                p.issuer !== this.protocol.config.issuer ||
+                p.audience !== this.protocol.config.resource ||
+                p.subject !== grant.subject ||
+                p.clientId !== grant.clientId ||
+                p.expiresAt <= Date.now() ||
+                !["tadazz.drafts.read", "tadazz.exports.read"].every(
+                  (scope) =>
+                    p.scopes.includes(scope) && grant.scopes.includes(scope),
+                )
+              )
+                throw new ToolError("SCOPE_REQUIRED")
+              return grant
+            }
+            let grant = authority()
+            const prior = db
+              .prepare(
+                "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='export' AND request_key=?",
+              )
+              .get(p.grantId, mutation.idempotencyKey)
+            if (prior) {
+              if (prior.digest !== mutation.inputDigest)
+                throw new ToolError("REQUEST_KEY_REUSED")
+              if (typeof prior.outcome !== "string") throw unavailable()
+              const receipt = this.checkedExport(
+                JSON.parse(prior.outcome),
+                p.accountId,
+                p.grantId,
+                mutation.idempotencyKey,
+                policy,
+              )
+              if (
+                receipt.data.draftId !== selected.draftId ||
+                receipt.data.revision !== selected.expectedRevision ||
+                receipt.data.format !== format
+              )
+                throw unavailable()
+              this.exportRights(grant, receipt.draft, format, policy)
+              authority()
+              return receipt.data
+            }
+            const count = db
+              .prepare("SELECT count(*) AS n FROM operations")
+              .get()?.n
+            if (typeof count !== "number" || count >= 5000)
+              throw new ToolError("QUOTA_EXCEEDED")
+            const row = db
+              .prepare(
+                "SELECT id,revision,authored,summary,locale FROM drafts WHERE owner=? AND id=?",
+              )
+              .get(p.accountId, selected.draftId)
+            if (!row || typeof row.summary !== "string")
+              throw new ToolError("NOT_FOUND")
+            const draft = checkedDraft(
+              {
+                draftId: row.id,
+                revision: row.revision,
+                authoredShowJson: row.authored,
+                summary: JSON.parse(row.summary),
+                ...(row.locale === null ? {} : { locale: row.locale }),
+              },
+              { authoring: policy.authoring },
+            )
+            if (draft.revision !== selected.expectedRevision)
+              throw new ToolError("REVISION_CONFLICT", {
+                currentRevision: draft.revision,
+              })
+            this.exportRights(grant, draft, format, policy)
+            const body = createExportBody(draft, format)
+            const exportId = randomOpaque()
+            const expiresAt = Math.min(
+              Date.now() + 60_000,
+              p.expiresAt,
+              grant.expiresAt,
+            )
+            if (expiresAt <= Date.now()) throw new ToolError("SCOPE_REQUIRED")
+            const sha256 = tokenDigest(body)
+            const ticket = this.protocol.downloadTicket({
+              accountId: p.accountId,
+              grantId: p.grantId,
+              requestKey: mutation.idempotencyKey,
+              exportId,
+              draftId: draft.draftId,
+              revision: draft.revision,
+              format,
+              authoredSha256: tokenDigest(draft.authoredShowJson),
+              sha256,
+              expiresAt,
+            })
+            const issuer = new URL(this.protocol.config.issuer)
+            const data = {
+              exportId,
+              draftId: draft.draftId,
+              revision: draft.revision,
+              format,
+              downloadUrl: new URL(
+                issuer.pathname.replace(/\/$/u, "") + "/downloads/" + ticket,
+                issuer.origin,
+              ).href,
+              expiresAt: new Date(expiresAt).toISOString(),
+              sha256,
+              bytes: utf8Bytes(body),
+            }
+            const receipt = this.checkedExport(
+              { version: 1, data, draft, body },
+              p.accountId,
+              p.grantId,
+              mutation.idempotencyKey,
+              policy,
+            )
+            grant = authority()
+            this.exportRights(grant, draft, format, policy)
+            db.prepare(
+              "INSERT INTO operations(grant_id,kind,request_key,digest,outcome) VALUES(?,'export',?,?,?)",
+            ).run(
+              p.grantId,
+              mutation.idempotencyKey,
+              mutation.inputDigest,
+              canonicalJson({ version: 1, data: receipt.data, draft, body }),
+            )
+            this.audit(db, p.grantId, "export-created", mutation)
+            authority()
+            return receipt.data
+          })
+        } catch (error) {
+          if (error instanceof ToolError) throw error
+          throw new ToolError(
+            error instanceof OAuthError && error.code === "invalid_grant"
+              ? "SCOPE_REQUIRED"
+              : "EXPORT_UNAVAILABLE",
+          )
+        }
+      },
+    }
+  }
+
+  /** A short-lived encrypted capability identifies one immutable export outcome.
+   * Every delivery still checks actual account/session/grant and current rights.
+   */
+  download(encoded: string, policy: FirstPartyExportPolicy) {
+    const ticket = this.protocol.readDownloadTicket(encoded)
+    let db: DatabaseSync | undefined
+    try {
+      db = this.open(ticket.accountId, false)
+      if (!db) throw invalid()
+      const grant = this.row(db, ticket.accountId, ticket.grantId)
+      const row = db
+        .prepare(
+          "SELECT outcome FROM operations WHERE grant_id=? AND kind='export' AND request_key=?",
+        )
+        .get(ticket.grantId, ticket.requestKey)
+      if (!row || typeof row.outcome !== "string") throw invalid()
+      const receipt = this.checkedExport(
+        JSON.parse(row.outcome),
+        ticket.accountId,
+        ticket.grantId,
+        ticket.requestKey,
+        policy,
+      )
+      if (
+        receipt.data.downloadUrl !==
+        new URL(
+          new URL(this.protocol.config.issuer).pathname.replace(/\/$/u, "") +
+            "/downloads/" +
+            encoded,
+          new URL(this.protocol.config.issuer).origin,
+        ).href
+      )
+        throw invalid()
+      this.exportRights(grant, receipt.draft, receipt.data.format, policy)
+      this.row(db, ticket.accountId, ticket.grantId)
+      this.protocol.readDownloadTicket(encoded)
+      return { body: receipt.body, data: receipt.data }
+    } finally {
+      try {
+        db?.close()
+      } catch {
+        throw unavailable()
+      }
+    }
+  }
+
   drafts(
     policy: AuthoringPolicy,
     assertIssued: (p: VerifiedPrincipal) => void,
