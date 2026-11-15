@@ -5,6 +5,8 @@
   "type": "module",
   "exports": {
     "./server": "./server/factory.ts",
+    "./remote": "./server/http.ts",
+    "./access-token": "./server/access-token.ts",
     "./contracts": "./contracts/index.ts",
     "./first-party": "./first-party/index.ts"
   },

@@ -1,4 +1,9 @@
-import { McpServer, type ServerContext } from "@modelcontextprotocol/server"
+import {
+  McpServer,
+  createMcpHandler,
+  type ServerContext,
+  type CallToolResult,
+} from "@modelcontextprotocol/server"
 import {
   registerAppResource,
   registerAppTool,
@@ -16,10 +21,16 @@ import {
   toolNames,
   widgetTools,
 } from "../contracts/tools.ts"
-import type { Dependencies, ServerConfig } from "./dependencies.ts"
-import { validateConfig } from "./authorization.ts"
+import type {
+  Dependencies,
+  ServerConfig,
+  VerifiedPrincipal,
+} from "./dependencies.ts"
+import type { ToolName } from "../contracts/tools.ts"
+import { authorize, validateConfig } from "./authorization.ts"
 import { dispatch } from "./dispatch.ts"
 import { guardedConnection } from "./connection.ts"
+import { failureResult } from "./results.ts"
 
 /** Creates ONE independent SDK server per session/request, never a shared
  * singleton transport. No HTTP listener, route mount, env, account or disk access. */
@@ -29,6 +40,47 @@ export function createTadazzMcpServer(
 ) {
   const config = validateConfig(configInput)
   const deps = Object.freeze({ ...dependencies })
+  let connection: ReturnType<typeof guardedConnection>
+  const server = registeredServer(config, deps, (_name, context, handler) =>
+    connection.run(context, handler),
+  )
+  connection = guardedConnection(server, deps, config)
+  return { connect: connection.connect, close: connection.close }
+}
+
+/** Official SDK HTTP entry owns protocol-era negotiation and per-request
+ * transport lifetime. The enclosing HTTP boundary authenticates before parsing;
+ * this callback independently verifies live authority/scopes before dispatch.
+ * Only a handler is exposed, never the underlying unguarded SDK instance. */
+export function createTadazzMcpHttpHandler(
+  configInput: ServerConfig,
+  dependencies: Dependencies,
+) {
+  const config = validateConfig(configInput)
+  const deps = Object.freeze({ ...dependencies })
+  return createMcpHandler(
+    () =>
+      registeredServer(config, deps, async (name, _context, handler) => {
+        try {
+          const principal = await authorize(name, undefined, deps, config)
+          return await handler(principal)
+        } catch (error) {
+          return failureResult(name, error, config)
+        }
+      }),
+    { legacy: "stateless", responseMode: "json", maxRequestBodySize: 65_536 },
+  )
+}
+
+function registeredServer(
+  config: ServerConfig,
+  deps: Dependencies,
+  run: (
+    name: ToolName,
+    context: ServerContext,
+    handler: (principal: VerifiedPrincipal) => Promise<CallToolResult>,
+  ) => Promise<CallToolResult>,
+) {
   const server = new McpServer(
     { name: "tadazz", version: CONTRACT_VERSION },
     {
@@ -39,7 +91,6 @@ export function createTadazzMcpServer(
       maxToolInputElements: 100,
     },
   )
-  const connection = guardedConnection(server, deps, config)
   for (const name of toolNames) {
     const visibility: Array<"model" | "app"> = widgetTools.has(name)
       ? ["model", "app"]
@@ -69,7 +120,7 @@ export function createTadazzMcpServer(
       name,
       settings,
       async (args: unknown, context: ServerContext) =>
-        connection.run(context, (principal) =>
+        run(name, context, (principal) =>
           dispatch(name, args, principal, deps, config),
         ),
     )
@@ -140,5 +191,5 @@ export function createTadazzMcpServer(
       ],
     }),
   )
-  return { connect: connection.connect, close: connection.close }
+  return server
 }
