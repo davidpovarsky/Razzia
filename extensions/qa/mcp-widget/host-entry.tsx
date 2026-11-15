@@ -19,6 +19,8 @@ let revision = 1,
   conflict = false,
   delay = 0
 const calls: string[] = []
+let updatesHeld = false
+const heldUpdates = new Set<() => void>()
 const result = (data: Record<string, unknown>) => ({
   content: [],
   structuredContent: {
@@ -52,6 +54,12 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
   await new Promise((resolve) => {
     setTimeout(resolve, delay)
   })
+
+  if (name === "update_game_draft" && updatesHeld) {
+    await new Promise<void>((resolve) => {
+      heldUpdates.add(resolve)
+    })
+  }
 
   if (name === "get_game_draft") {
     return result({ draftId: id, revision, summary, authoredShowJson: text })
@@ -145,6 +153,16 @@ void bridge
   })
 Object.assign(window, {
   __host: {
+    holdUpdates: (value: boolean) => {
+      updatesHeld = value
+
+      if (!value) {
+        heldUpdates.forEach((resolve) => {
+          resolve()
+        })
+        heldUpdates.clear()
+      }
+    },
     revision: () => revision,
     toolChange: () =>
       bridge.setHostContext({

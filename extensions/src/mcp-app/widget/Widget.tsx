@@ -87,10 +87,12 @@ function WidgetContent({
   const [dirty, setDirty] = useState(false)
   const [editRevision, setEditRevision] = useState<number | null>(null)
   const editDraft = useRef<string | null>(null)
+  const editVersion = useRef(0)
   useEffect(() => {
     const id = state.selectedDraftId
 
     if (id !== editDraft.current) {
+      editVersion.current += 1
       editDraft.current = id
       setText("")
       setDirty(false)
@@ -361,6 +363,7 @@ function WidgetContent({
                     return
                   }
 
+                  editVersion.current += 1
                   setText(next)
 
                   if (!dirty) {
@@ -378,6 +381,7 @@ function WidgetContent({
                 <Button
                   size="sm"
                   onClick={() => {
+                    editVersion.current += 1
                     setText(draft.authoredShowJson)
                     setEditRevision(draft.revision)
                     setDirty(false)
@@ -399,15 +403,36 @@ function WidgetContent({
                   state.status === "cancelled" ||
                   state.status === "error"
                 }
-                onClick={() =>
+                onClick={() => {
+                  if (editRevision === null) {
+                    return
+                  }
+
+                  const submittedDraftId = draft.draftId
+                  const submittedRevision = editRevision
+                  const submittedText = text
+                  editVersion.current += 1
+                  const submittedVersion = editVersion.current
                   void controller
-                    .update(text, editRevision ?? undefined)
+                    .update(submittedText, submittedRevision)
                     .then(() => {
-                      if (controller.snapshot().status === "acknowledged") {
+                      const current = controller.snapshot()
+                      const acknowledged = current.draft
+
+                      // The ACK belongs to this submission, not a later local
+                      // edit. Preserve that edit and its original CAS base.
+                      if (
+                        editVersion.current === submittedVersion &&
+                        current.status === "acknowledged" &&
+                        current.selectedDraftId === submittedDraftId &&
+                        acknowledged?.draftId === submittedDraftId &&
+                        acknowledged.revision === submittedRevision + 1 &&
+                        acknowledged.authoredShowJson === submittedText
+                      ) {
                         setDirty(false)
                       }
                     })
-                }
+                }}
               >
                 {t("apply")}
               </Button>
