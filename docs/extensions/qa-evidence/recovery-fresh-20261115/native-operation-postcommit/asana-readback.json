@@ -1,0 +1,12 @@
+{
+  "gid": "1219882508725158",
+  "completed": false,
+  "oldNotesLength": 37618,
+  "newNotesLength": 39701,
+  "priorNotesPreservedExactly": true,
+  "exactAppendReadback": true,
+  "evidenceCommit": "9faa62dc1466f19ced59e6326226a3f68039dcda",
+  "productSource": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "modifiedAt": "2026-11-15T20:41:38.695Z",
+  "append": "\n\n[2026-11-15 — ADDITIONAL C1 POST-COMMIT I/O ACCEPTANCE / EVIDENCE ONLY]\nProduct1909da2f653377c545923b2e91dd2f4b1a2cf802 remains unchanged; manager scoped intake integrated e444b480aea76fee5bf17f1b96998432134c5ba6, evidence8786d8e6ea13b07084d9d576786e369dc4187331. New owned evidence9faa62dc1466f19ced59e6326226a3f68039dcda in docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-postcommit/HANDOFF.md and FINAL_VERIFICATION.json.\nACTUAL three new tests3/3PASS,0skip,13distinct fresh child processes all exit0: injected ENOSPC outcome rename preserves native committed intent/reserved receipt/unknown.next, lookup remains unresolved and retry/startup explicitly deny without duplicate target or byte changes; injected EIO outcome directory fence and EACCES committed private cleanup preserve original historical result, then fresh lookup/retry and two new startup processes finish private cleanup while retaining later native+sidecar edits, original outcome bytes and both-tenant sentinels. Two expected logical denials are explicit child payloads, not process failures. No uncertainty auto-repair.\nFinal actual existing local WSL Ubuntu Linux6.18/Node26.11.1/ext4 fixtures, installed esbuild0.28.2 targetnode24.187 final input hashes verified,186 non-entry bodies exactly match the accepted producer; new isolated test entry only. Original15 and real F605619c consumer were neither imported nor run. Source/test TS0 and actual Prettier.check true. First3PASS run retained; formatting changed emitted layout so byte-bridge assertion stopped, and final formatted new3 cases were directly rerun3PASS; all attempts/raw receipts preserved.\nNo production source change, Oracle job/claim, install, provider/customer/production action, polling, new agent or completed-task reopening. All16 inherited untracked files preserved. This advances original storage/recovery I/O acceptance only; real F session/grant/exact-consent ledger, integrated pinnedNode24 qualification, all-writer B/F1/hardware/storage migration/production remain distinct OPEN criteria. Task remainsOPEN.\n"
+}
