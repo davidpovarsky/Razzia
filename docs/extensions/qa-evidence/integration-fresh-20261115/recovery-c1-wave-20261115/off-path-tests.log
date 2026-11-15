@@ -1,0 +1,36 @@
+COMMAND: ["C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe", "node_modules/vitest/vitest.mjs", "run", "--config", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\vitest.config.ts", "--root", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions", "src/server/storage/create-recovery.test.ts", "--maxWorkers", "1", "--reporter", "default", "--reporter", "json", "--outputFile", "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\recovery-c1-wave-20261115\\off-path-tests.json"]
+CWD: C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-integration-20261115
+SOURCE: b02cc572564b001c735c121e393148ce73febdb1
+START: 2026-11-15T15:30:55.767799+00:00
+EXIT: 0
+STDOUT:
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions
+
+ ✓ src/server/storage/create-recovery.test.ts (5 tests) 422ms
+
+ Test Files  1 passed (1)
+      Tests  5 passed (5)
+   Start at  17:30:56
+   Duration  5.52s (transform 50%, import 42%, tests 8%)
+
+  Transform  transforming modules took 2.55s · 50% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/docs/extensions/qa-evidence/integration-fresh-20261115/recovery-c1-wave-20261115/off-path-tests.json
+
+STDERR:
+stderr | src/server/storage/create-recovery.test.ts > create/import rollback recovery > retains recovery intent if sidecar cleanup fails after deleting base
+[Sidecar] Failed to read sidecar at C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-eu542D\extensions\quizzes\55928b82-2449-43ce-b5b2-59e9f571f47a.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions/src/server/storage/sidecar.ts:71:25)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions/src/server/storage/journal.ts:246:30)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions/src/server/storage/create-recovery.test.ts:104:12
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/run.BTlFXlnv.js:3301:20
+
