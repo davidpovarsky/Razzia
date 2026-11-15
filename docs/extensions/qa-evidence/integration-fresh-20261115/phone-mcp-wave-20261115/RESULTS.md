@@ -17,3 +17,5 @@ Actual admission attempt failed before ledger mutation: existing retained pair+A
 B independently owns the demonstrated ownerless tenant startup omission; approved additive native account snapshot and startup seam is not yet integrated. Native presentation V2 remains a separately versioned D/E/F contract; G remains unstarted until real usable MCP and Preview ports. Historical819=813PASS/6FAIL stays unchanged. Original product/release tasks remain OPEN. No production/customer/provider action, push or main merge.
 
 Existing manager integration task1220543600361181 was appended without replacing prior notes; exact readback verified OPEN at2026-11-15T16:09:41.129Z.
+
+The first generated-manifest whitespace check failed on Windows CRLF lines; normalized only this newly generated JSON to LF and corrected its generator. Manifest data, original lock bytes, producer raw logs and source/overlay hashes are unchanged. Corrected own prepared-evidence whitespace check exits0. This was a preparation-format issue, with no runtime attempt.
