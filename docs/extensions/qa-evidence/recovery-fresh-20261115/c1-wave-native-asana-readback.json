@@ -1,0 +1,23 @@
+{
+  "qualificationCommit": "4f13e672b0680999565b10fbf5b44c2c070d2475",
+  "tasks": [
+    {
+      "gid": "1220109925694179",
+      "completed": false,
+      "exactAppendMatched": true,
+      "priorNotesPreserved": true
+    },
+    {
+      "gid": "1220111293723790",
+      "completed": false,
+      "exactAppendMatched": true,
+      "priorNotesPreserved": true
+    },
+    {
+      "gid": "1219882508725158",
+      "completed": false,
+      "exactAppendMatched": true,
+      "priorNotesPreserved": true
+    }
+  ]
+}
