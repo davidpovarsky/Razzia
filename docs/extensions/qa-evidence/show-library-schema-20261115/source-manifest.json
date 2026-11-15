@@ -1,0 +1,119 @@
+{
+  "schemaVersion": 1,
+  "kind": "source-export-validation-request",
+  "createdUtc": "2026-11-15T03:51:39.768Z",
+  "base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "branch": "codex/tadazz-hq-show-library-20261115",
+  "sourceFiles": [
+    {
+      "path": "docs/extensions/qa-evidence/show-library-schema-20261115/README.md",
+      "bytes": 5595,
+      "sha256": "bdaed71aba872356d086740c39c3100686861a38263784ed2d7f9e2a95fc1f7a"
+    },
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "bytes": 2197,
+      "sha256": "88293718b10252901e03749c0bc8a0522692cb4aca27cb79202ea45577f98a1e"
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "bytes": 3187,
+      "sha256": "80b6a28ed3f488beada570ed3890c7ff0163bc2329ed7449315ece5130950108"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.test.ts",
+      "bytes": 4074,
+      "sha256": "1291c30ac08b33ec407daff8df8eea500f2c4ce957f15ac31e9777be8fa2b681"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.ts",
+      "bytes": 3909,
+      "sha256": "86dcec719785cfb5e4d37d029594701c7ded3edb4cab75b3dc4568dd65219ec1"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "bytes": 109,
+      "sha256": "c264b552da1fc7f682fd2c7538265a0b693fdaf0a51a7700fc4dd13123490957"
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "bytes": 2976,
+      "sha256": "b6148f1ab0b20e777cdfe35b75f9dbe8e5f330c2accd1c652973e0d6199aafd4"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3021,
+      "sha256": "c05c9bb819fd947e869a90ad7e43c8dabaac148c176a077049d8cd62c47d7773"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.test.ts",
+      "bytes": 3341,
+      "sha256": "2f21688074aff312030c26c79702f286a833dc725708f36bdac2dad1586f84f6"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.ts",
+      "bytes": 439,
+      "sha256": "79bb56daec64861342bbcd8017c4adb0fc2cb40ab677512edd0e746ac69a5ff7"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 2274,
+      "sha256": "34d20b3c54f8a8133ea72f4a59705b0762755f0837fe1e8117e1eb7757d3f968"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 4586,
+      "sha256": "66e62f23833cc3fd91ab428147bf6b91658b43bdadfda81a022b276a23285410"
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "bytes": 3376,
+      "sha256": "ad76d3364fa3aeb4fef62cf7e781f64fd17c99473e0465063401819fcdade713"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-schema.ts",
+      "bytes": 4618,
+      "sha256": "3df4302fd41d39daff8749fa4c024de2eac7ae46fc8fba5ec74737f67beb4c55"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.test.ts",
+      "bytes": 4027,
+      "sha256": "c46e225142da0c2a5efd3c03149c2238eebc7c54e58fcd61af3b6e1fcbb160d1"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.ts",
+      "bytes": 2347,
+      "sha256": "a39e20b5b841bfd92a75b0ce9c9433fda08abdc65df0f4790c58d0d2249800f9"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.test.ts",
+      "bytes": 7719,
+      "sha256": "3deab20cf436e5855ea403255fb1c006433235d13e6e1bb5d694bd94f3702396"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.ts",
+      "bytes": 8786,
+      "sha256": "6d89d56aa144cd32f6f23726d6a2c3d6dcede70e84dca19c82f533109c96e3b8"
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "bytes": 6449,
+      "sha256": "e419bc497b6ffff908d8b04eabf59a6ea9bdc019e48008b6a03f881c60bcd953"
+    },
+    {
+      "path": "extensions/src/core/show-library/tsconfig.focused.json",
+      "bytes": 108,
+      "sha256": "0b04857751cf84529a4f853865f5e5ffbcfbaebddb7736fe8c2a775f0ad69222"
+    }
+  ],
+  "archive": {
+    "path": "docs/extensions/qa-evidence/show-library-schema-20261115/source-overlay.tar.gz",
+    "bytes": 21079,
+    "sha256": "1fff92d101410c658474f1fff552043ed6fd9537082a6548957520fd58238b56"
+  },
+  "existingTrackedPathsModified": [],
+  "tests": "NOT_RUN",
+  "typecheck": "NOT_RUN",
+  "runtimeRenderersImplemented": false,
+  "compiledPinCount": 0
+}
