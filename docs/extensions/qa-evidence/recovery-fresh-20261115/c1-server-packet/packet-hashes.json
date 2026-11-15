@@ -1,0 +1,37 @@
+{
+  "sourceCommit": "e1fb1b28420a62acca17ddd69f1e72b3a9d27907",
+  "executionAuthorized": false,
+  "files": [
+    {
+      "path": "manifest.json",
+      "size": 629955,
+      "sha256": "9a8689691c66ff8e77dc2925ceab566a949672569c307932c4ac41f1dab95d75"
+    },
+    {
+      "path": "plan.json",
+      "size": 19681,
+      "sha256": "4b617808a6ed7a1bd4cbbc2da7f4cf0129011be93a45cc53052b5a6429863055"
+    },
+    {
+      "path": "overlay.tar.gz",
+      "size": 34242,
+      "sha256": "2d89ba70f0d023dc5871fd2bed12a0c8994840bbe3d9049435120839c042ecf2"
+    },
+    {
+      "path": "server-run.py",
+      "size": 12336,
+      "sha256": "11c8a06b44601d04f607b18ed60d0858db73bc0ac865815ad3600e2368bde8aa"
+    },
+    {
+      "path": "verify-merged.cjs",
+      "size": 2529,
+      "sha256": "f36a6a013f4c60832efaa9def499547eed45329cff26e81b72edfd24691f6e65"
+    },
+    {
+      "path": "analyze-results.cjs",
+      "size": 5609,
+      "sha256": "4e8a4ce267a30948b9dc9ba73653decc56c61b473d640eb75f77b26ae99eb636"
+    }
+  ],
+  "totalTransferBytesExcludingThisHashFileAndActualAdmission": 704352
+}
