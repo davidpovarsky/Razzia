@@ -13,6 +13,11 @@ export class HttpRejection extends Error {
     super("HTTP_REJECTED")
   }
 }
+/** Observe cancellation at explicit request/authorization boundaries. This
+ * neither interrupts synchronous SQLite nor rolls back committed rows. */
+export function assertRequestActive(signal: AbortSignal) {
+  if (signal.aborted) throw new HttpRejection(400)
+}
 export function trustedOrigin(raw: string) {
   const url = new URL(raw)
   if (
@@ -121,7 +126,8 @@ export class IngressBudget {
  * Cancellation is awaited; a nonsettling stream cannot free an occupied slot.
  */
 export async function bodyText(request: Request): Promise<string> {
-  if (!request.body || request.signal.aborted) throw new HttpRejection(400)
+  assertRequestActive(request.signal)
+  if (!request.body) throw new HttpRejection(400)
   const reader = request.body.getReader()
   const chunks: Uint8Array[] = []
   let size = 0

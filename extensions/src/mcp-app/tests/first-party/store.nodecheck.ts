@@ -180,21 +180,28 @@ test("replace and pending save replay precede current revision; pending never co
 })
 test("SQLite audit failure rolls draft and operation back together", async () => {
   const before = rows(f.sessions[0].owner)
-  const db = new DatabaseSync(f.file(f.sessions[0].owner))
-  db.exec(
-    "CREATE TRIGGER synthetic_fail BEFORE INSERT ON audit BEGIN SELECT RAISE(ABORT,'synthetic'); END",
-  )
-  db.close()
+  const original = DatabaseSync.prototype.prepare
+  let attemptedAfterDraftAndOperation = false
+  DatabaseSync.prototype.prepare = function (this: DatabaseSync, sql: string) {
+    if (sql.startsWith("INSERT INTO audit(")) {
+      const drafts = original.call(this, "SELECT count(*) AS n FROM drafts").get()?.n
+      const operations = original.call(this, "SELECT count(*) AS n FROM operations").get()?.n
+      assert.equal(drafts, before.drafts.length + 1)
+      assert.equal(operations, before.operations.length + 1)
+      attemptedAfterDraftAndOperation = true
+      throw new Error("Synthetic in-transaction audit preparation failure")
+    }
+    return original.call(this, sql)
+  }
   try {
     await assert.rejects(
       f.as(f.sessions[0], (p) => f.store().create(p, createInput())),
       /DEPENDENCY_UNAVAILABLE/,
     )
+    assert.equal(attemptedAfterDraftAndOperation, true)
     assert.deepEqual(rows(f.sessions[0].owner), before)
   } finally {
-    const cleanup = new DatabaseSync(f.file(f.sessions[0].owner))
-    cleanup.exec("DROP TRIGGER synthetic_fail")
-    cleanup.close()
+    DatabaseSync.prototype.prepare = original
   }
 })
 test("revoke between precommit check and COMMIT hides outcome but honestly preserves committed rows", async () => {

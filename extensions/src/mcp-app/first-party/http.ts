@@ -12,6 +12,7 @@ import type { FirstPartyBindings } from "./bindings.ts"
 import { FirstPartyDraftStore } from "./store.ts"
 import {
   bodyText,
+  assertRequestActive,
   HttpRejection,
   IngressBudget,
   route,
@@ -65,13 +66,21 @@ async function dispatch(
   selected: Route,
   policy: AuthoringPolicy,
 ) {
+  const signal = c.req.raw.signal
+  assertRequestActive(signal)
   // requireManager's real withAccount scope remains active across body awaits.
   const raw = selected.kind === "get" ? undefined : await bodyText(c.req.raw)
+  // Post-body: an observed abort cannot begin final auth/private-store work.
+  assertRequestActive(signal)
   const p = await auth.principal(c)
+  // Post-principal: do not issue private work after that asynchronous gap.
+  assertRequestActive(signal)
   auth.assertActive(p)
   const store = new FirstPartyDraftStore(auth, policy)
   if (selected.kind === "get") {
+    assertRequestActive(signal)
     const data = store.get(p, selected.id)
+    assertRequestActive(signal)
     auth.assertActive(p)
     return c.json({ contractVersion: CONTRACT_VERSION, ok: true, data })
   }
@@ -85,7 +94,9 @@ async function dispatch(
   if (selected.kind === "create") {
     const input = inputs.create_game_draft.safeParse(body)
     if (!input.success) throw new ToolError("VALIDATION_FAILED")
+    assertRequestActive(signal)
     const data = store.create(p, input.data)
+    assertRequestActive(signal)
     auth.assertActive(p)
     return c.json({ contractVersion: CONTRACT_VERSION, ok: true, data }, 201)
   }
@@ -93,14 +104,18 @@ async function dispatch(
     const input = inputs.update_game_draft.safeParse(body)
     if (!input.success || input.data.draftId !== selected.id)
       throw new ToolError("VALIDATION_FAILED")
+    assertRequestActive(signal)
     const data = store.replace(p, input.data)
+    assertRequestActive(signal)
     auth.assertActive(p)
     return c.json({ contractVersion: CONTRACT_VERSION, ok: true, data })
   }
   const input = inputs.save_game.safeParse(body)
   if (!input.success || input.data.draftId !== selected.id)
     throw new ToolError("VALIDATION_FAILED")
+  assertRequestActive(signal)
   const preparation = store.prepareSave(p, input.data)
+  assertRequestActive(signal)
   auth.assertActive(p)
   // A recorded preparation is NOT save_game success, consent or native allocation.
   return c.json(
@@ -135,6 +150,7 @@ export async function createFirstPartyApp(options: FirstPartyAppOptions) {
       let release: (() => void) | undefined
       try {
         release = budget.enter()
+        assertRequestActive(request.signal)
         const selected = route(request, origin)
         auth.configured()
         const app = new Hono<ApiEnv>()
@@ -142,6 +158,8 @@ export async function createFirstPartyApp(options: FirstPartyAppOptions) {
         app.all("*", (c) => dispatch(c, auth, selected, policy))
         app.onError((error) => failure(error))
         const response = await app.fetch(request)
+        // Withhold disclosure after completion; committed effects may remain.
+        assertRequestActive(request.signal)
         response.headers.set("cache-control", "no-store")
         response.headers.set("x-content-type-options", "nosniff")
         return response

@@ -5,6 +5,7 @@ import type { Context, Next } from "hono"
 import type { ApiEnv } from "@razzia/socket/api/factory"
 import { z } from "zod"
 import { ToolError } from "../server/errors.ts"
+import { assertRequestActive } from "./ingress.ts"
 
 export interface FirstPartySessionPrincipal {
   readonly kind: "first-party-session"
@@ -123,12 +124,21 @@ export async function loadFirstPartyBindings(configRoot: string) {
     configured,
     prepareRuntime,
     async requireManager(c: Context<ApiEnv>, next: Next) {
+      assertRequestActive(c.req.raw.signal)
       configured()
       if (!liveDb) throw unavailable()
       checkDatabase(liveDb)
-      return middleware.requireManager(c, next)
+      const response = await middleware.requireManager(c, async () => {
+        // Actual middleware's async JWT/session verification has settled.
+        assertRequestActive(c.req.raw.signal)
+        await next()
+        assertRequestActive(c.req.raw.signal)
+      })
+      assertRequestActive(c.req.raw.signal)
+      return response
     },
     async principal(c: Context<ApiEnv>): Promise<FirstPartySessionPrincipal> {
+      assertRequestActive(c.req.raw.signal)
       configured()
       if (!scope.activeAccount()) throw new ToolError("SCOPE_REQUIRED")
       if (!liveDb) throw unavailable()
@@ -136,6 +146,8 @@ export async function loadFirstPartyBindings(configRoot: string) {
       // Actual cryptographic/session verifier again after the HTTP await boundary;
       // caller-created Context claims alone cannot issue an authority capability.
       const raw = await middleware.readClaims(c)
+      // Keep awaiting real auth work even after abort, then deny before issue.
+      assertRequestActive(c.req.raw.signal)
       configured()
       const parsed = claimsSchema.safeParse(raw)
       if (!parsed.success) throw new ToolError("SCOPE_REQUIRED")

@@ -47,6 +47,11 @@ automatic eviction or recovery. New session IDs have independent mutation keys.
 GET does not mkdir, initialize, migrate, repair, call native storage or set
 immutable mode. It rejects symlinks/hardlinks, unsafe ancestors, every journal/
 WAL/SHM sidecar, non-rollback headers, corrupt schemas and inconsistent content.
+Schema1 admission binds the exact original producer DDL/object SHA256, declared
+columns/defaults/nullability/PK positions and complete unique PK index structure.
+Unexpected triggers, views, tables or indexes are unavailable. Equivalent but
+unapproved DDL is not normalized into trust; existing data is preserved. The
+original producer1 schema remains the supported definition without a migration.
 Readonly SQLite uses query_only and closes on every call. A damaged/new partial
 store remains preserved and unavailable. These are private draft-family/native
 file guarantees: real session verification reads the existing account DB, whose
@@ -60,6 +65,12 @@ outcome. Account/session and draft DBs are separate: revocation is not
 linearizable across their transactions. Revocation after the precommit check
 can leave committed draft/operation/audit rows; the postcommit check denies
 the private response. Request cancellation also does not undo committed rows.
+An already observed abort is checked at request entry, after each awaited
+authentication/body boundary, immediately before private store operations and
+before disclosure. It denies before new private work at those boundaries.
+Pending authentication/body cancellation still stays counted until it settles.
+Blocking SQLite cannot be instantaneously interrupted by this policy; a
+postcommit abort may hide the response while committed rows remain.
 
 Save preparations contain only state/draft/revision/authored digest; SQL requires
 native_id NULL. They confer no consent and allocate/publish no native game.
@@ -72,5 +83,7 @@ Fixture sources set synthetic env/root before lazy actual auth imports, use real
 manager mint/sid/revoke logic, two synthetic accounts and native sentinels.
 They include real SQLite replay/CAS/rollback, a killed-process hot journal,
 WAL/corruption preservation, unsafe paths, revocation and bounded HTTP streams.
-They have NOT RUN. Dependency resolution and all functional/type checks require
-a separately granted server runner. See the owned M3A source evidence folder.
+The ad895 producer suite26 and SDK41 results are retained in the owned M3A
+evidence folder. This independent-review correction adds schema and controlled
+abort witnesses; the corrected source has NOT RUN and requires a fresh bounded
+server grant. No OAuth/host/native acceptance follows from the prior producer26.
