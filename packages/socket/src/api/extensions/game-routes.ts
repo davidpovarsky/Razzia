@@ -1,6 +1,7 @@
 /** Downstream HTTP adapters. These routes are not part of Razzia upstream. */
 import { zValidator } from "@hono/zod-validator"
 import {
+  normalizePhoneE164,
   parseRosterImportFile,
   rosterParticipantSchema,
 } from "@razzia/extensions/core"
@@ -289,6 +290,22 @@ export const gameExtensionRoutes = apiFactory
 
       const { game } = resolved
 
+      if (body.rosterPlayerId) {
+        const claimedEntry = game.getRosterEntry(body.rosterPlayerId)
+        const callerPhone = normalizePhoneE164(body.phone)
+
+        if (
+          !claimedEntry ||
+          !callerPhone ||
+          callerPhone !== claimedEntry.phoneE164
+        ) {
+          return c.json(
+            { ok: false, reason: "caller_binding_mismatch" },
+            StatusCodes.FORBIDDEN,
+          )
+        }
+      }
+
       if (body.action === "join_or_poll") {
         let rosterId = body.rosterPlayerId
         let joinRes: ReturnType<Game["joinOrRebindPhoneCaller"]> | null = null
@@ -333,6 +350,13 @@ export const gameExtensionRoutes = apiFactory
               callId: body.callId,
               rosterPlayerId: rosterId,
             })
+
+            if (!joinRes.ok || !joinRes.rosterPlayerId) {
+              return c.json(
+                { ok: false, reason: "caller_admission_denied" },
+                StatusCodes.FORBIDDEN,
+              )
+            }
           }
         }
 

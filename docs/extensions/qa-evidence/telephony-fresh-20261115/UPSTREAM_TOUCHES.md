@@ -16,3 +16,13 @@ Validation planned: compare protected diff to this exact patch; scoped syntax/ty
 Rollback: reverse only this approved patch on this branch after preserving evidence, if directed. No push/merge/deploy/provider operation is authorized.
 
 Verified follow-up: S01_RESULTS.md records final source 422eae307ee44135cd5bcb0d8ff996bf8ab7bf7e: native scoped type exit0, fifteen actual backend cases 10PASS/5 retained residual failures, exact approved protected diff and unchanged original thirteen bodies. No additional protected hunk was applied. All source acceptance tasks remain open; S02/lifecycle proposals are unapplied and require disposition.
+
+## S02 pre-edit ledger — 15 November 2026
+
+Recorded before S02 source mutation. Starting HEAD b083c4691960dcee124f5a5c8ec661cd2294d637; route pre-edit blob c0df0a032bc35b8f108764d1e98f0772d2970acc. Explicit manager approval is `C:/Users/DAVID/Code/Codex-Agent-HQ/docs/tadazz/decisions/PHONE_S02_CALLER_CORRELATION_20261115.md` plus current ASSIGN. Approved review artifact: S02_CALLER_CORRELATION_PROPOSED.patch, SHA256 81fdec956eaa229a3d01da901dd27e513cb73f2b7b4adcd93050603da5c96c1b.
+
+Only path packages/socket/src/api/extensions/game-routes.ts: add the existing public normalizePhoneE164 import; before action dispatch reject missing/invalid/mismatched caller phone or unknown supplied roster with a generic private-field-free 403; propagate failed disconnected cached admission instead of reporting joined. New registration without supplied roster remains on its existing path. Existing stale-call, epoch, first-answer, scoring and invitation checks are retained. Formatting may wrap only the newly introduced long condition inside its approved hunk; no other semantic or protected edit is covered.
+
+Cause evidence: original actual API07/08 failures and S01's five retained failures. Gateway-only composition cannot secure direct supplied-roster requests. This is phone correlation under configured gateway service authentication, not cryptographic provider identity. No controller/storage/schema/lifecycle wire/global config implementation is authorized.
+
+Validation: preserve all fifteen existing cases byte-for-byte; add actual-route connected/disconnected missing/invalid/mismatched/unknown roster denial with full victim-state/private-field assertions, canonical alias positive controls, and a synthetic real admission-refusal fixture without provider credentials. Scoped native types/format/exact approved diff audit; fresh immutable server run at 0.25CPU/1GiB. Preserve API09/10/11 failures, all prior receipts and original source task OPEN statuses. Generic UI freeze remains unchanged and will report the separately approved route seam. Rollback only the S02 hunks if directed; no deployment.

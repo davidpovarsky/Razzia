@@ -29,6 +29,7 @@ const selections = [
   "docs/extensions/qa-evidence/telephony-fresh-20261115/BACKEND_SEAM_REQUEST.md",
   "docs/extensions/qa-evidence/telephony-fresh-20261115/UPSTREAM_TOUCHES.md",
   "docs/extensions/qa-evidence/telephony-fresh-20261115/S01_SOURCE_AUDIT.json",
+  "docs/extensions/qa-evidence/telephony-fresh-20261115/S02_SOURCE_AUDIT.json",
 ]
 const selected = (path) =>
   selections.includes(path) ||

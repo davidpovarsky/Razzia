@@ -52,7 +52,7 @@ def main():
     )
     allowed_root = pathlib.Path("/home/ubuntu/tadazz-hq-qa-20261115/source").resolve(strict=True)
     target = pathlib.Path(destination)
-    assert target in (allowed_root / ("phone-" + sha), allowed_root / ("phone-s01-" + sha))
+    assert target in (allowed_root / ("phone-" + sha), allowed_root / ("phone-s01-" + sha), allowed_root / ("phone-s02-" + sha))
     assert target.parent.resolve(strict=True) == allowed_root
     assert not target.exists() and not target.is_symlink()
     target.mkdir(mode=0o700)

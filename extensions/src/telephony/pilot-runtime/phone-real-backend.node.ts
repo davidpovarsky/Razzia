@@ -1029,3 +1029,349 @@ test(
     })
   },
 )
+
+function s02State(r: any, rosterId: string) {
+  const entry = r.game.getRosterEntry(rosterId)
+  const question = r.game.getQuestionStateForGateway(rosterId)
+  const digest = (value: string | undefined | null) =>
+    createHash("sha256")
+      .update(value || "")
+      .digest("hex")
+  return {
+    ...r.snapshot(rosterId),
+    lastSeenAt: entry?.lastSeenAt,
+    timedOut: entry?.timedOut,
+    source: entry?.source,
+    canonicalPhoneDigest: digest(entry?.phoneE164),
+    rawPhoneDigest: digest(entry?.phoneRaw),
+    acceptingAnswers: question.acceptingAnswers,
+    questionIndex: question.questionIndex,
+  }
+}
+function s02PrivateFieldsAbsent(data: any) {
+  for (const key of [
+    "phone",
+    "phoneE164",
+    "displayName",
+    "rosterPlayerId",
+    "clientId",
+    "state",
+  ]) {
+    assert.equal(
+      key in data,
+      false,
+      "Denial must not contain private field " + key,
+    )
+  }
+  assert.notEqual(data.joined, true)
+  assert.notEqual(data.accepted, true)
+  assert.notEqual(data.disconnected, true)
+}
+
+test(
+  "S02-C1 connected caller denies missing invalid mismatched and unknown roster across actions without victim mutation",
+  { timeout: 45000 },
+  async (t) => {
+    const r = await room(t),
+      identity = phone()
+    const joined = await r.pilot({
+      action: "join_or_poll",
+      callId: "s02-connected-A",
+      phone: identity,
+    })
+    const rosterId = joined.data.rosterPlayerId
+    await r.start()
+    const firstEpoch = r.snapshot(rosterId).epoch
+    assert.equal(
+      (
+        await r.pilot({
+          action: "answer",
+          callId: "s02-connected-A",
+          phone: identity,
+          rosterPlayerId: rosterId,
+          epoch: firstEpoch,
+          answerIndex: 4,
+        })
+      ).data.accepted,
+      true,
+    )
+    await r.advanceUntil(() => r.snapshot(rosterId).points > 0)
+    await r.advanceUntil((s) => s.epoch > firstEpoch && s.acceptingAnswers)
+    const before = s02State(r, rosterId)
+    assert.ok(before.points > 0)
+    assert.equal(before.answered, false)
+    let denied = 0
+    for (const action of ["join_or_poll", "answer", "hangup"]) {
+      for (const caller of [undefined, null, "", "anonymous", phone()]) {
+        const response = await r.pilot({
+          action,
+          callId: "s02-connected-A",
+          phone: caller,
+          rosterPlayerId: rosterId,
+          epoch: before.epoch,
+          answerIndex: 4,
+        })
+        assert.equal(response.status, 403)
+        assert.equal(response.data.reason, "caller_binding_mismatch")
+        s02PrivateFieldsAbsent(response.data)
+        assert.deepEqual(s02State(r, rosterId), before)
+        denied++
+      }
+      const unknown = await r.pilot({
+        action,
+        callId: "s02-connected-A",
+        phone: identity,
+        rosterPlayerId: "s02-unknown-roster",
+        epoch: before.epoch,
+        answerIndex: 4,
+      })
+      assert.equal(unknown.status, 403)
+      assert.equal(unknown.data.reason, "caller_binding_mismatch")
+      s02PrivateFieldsAbsent(unknown.data)
+      assert.deepEqual(s02State(r, rosterId), before)
+      denied++
+    }
+    const valid = await r.pilot({
+      action: "answer",
+      callId: "s02-connected-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+      epoch: before.epoch,
+      answerIndex: 4,
+    })
+    assert.equal(valid.data.accepted, true)
+    assert.equal(r.snapshot(rosterId).answered, true)
+    record("S02-C1", {
+      deniedRequests: denied,
+      before,
+      validCallerStillAccepted: true,
+      privateFieldsAbsent: true,
+    })
+  },
+)
+
+test(
+  "S02-C2 disconnected correlation denies unsafe inputs and canonical aliases preserve legitimate score rebind poll and hangup",
+  { timeout: 45000 },
+  async (t) => {
+    const r = await room(t),
+      identity = phone()
+    const joined = await r.pilot({
+      action: "join_or_poll",
+      callId: "s02-disconnected-A",
+      phone: identity,
+    })
+    const rosterId = joined.data.rosterPlayerId
+    await r.start()
+    const epoch = r.snapshot(rosterId).epoch
+    assert.equal(
+      (
+        await r.pilot({
+          action: "answer",
+          callId: "s02-disconnected-A",
+          phone: identity,
+          rosterPlayerId: rosterId,
+          epoch,
+          answerIndex: 4,
+        })
+      ).data.accepted,
+      true,
+    )
+    await r.advanceUntil(() => r.snapshot(rosterId).points > 0)
+    await r.pilot({
+      action: "hangup",
+      callId: "s02-disconnected-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    const before = s02State(r, rosterId)
+    assert.equal(before.status, "disconnected")
+    assert.ok(before.points > 0)
+    let denied = 0
+    for (const action of ["join_or_poll", "answer", "hangup"]) {
+      for (const caller of [undefined, "", "invalid", phone()]) {
+        const response = await r.pilot({
+          action,
+          callId: "s02-disconnected-A",
+          phone: caller,
+          rosterPlayerId: rosterId,
+          epoch: before.epoch,
+          answerIndex: 4,
+        })
+        assert.equal(response.status, 403)
+        assert.equal(response.data.reason, "caller_binding_mismatch")
+        s02PrivateFieldsAbsent(response.data)
+        assert.deepEqual(s02State(r, rosterId), before)
+        denied++
+      }
+    }
+    const national = "0" + identity.slice(3),
+      international = "00" + identity.slice(1)
+    assert.equal(normalizePhoneE164(national), normalizePhoneE164(identity))
+    assert.equal(
+      normalizePhoneE164(international),
+      normalizePhoneE164(identity),
+    )
+    const rebound = await r.pilot({
+      action: "join_or_poll",
+      callId: "s02-disconnected-B",
+      phone: national,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(rebound.status, 200)
+    assert.equal(rebound.data.joined, true)
+    assert.equal(rebound.data.reconnected, true)
+    const after = s02State(r, rosterId)
+    assert.equal(after.activeCallId, "s02-disconnected-B")
+    assert.equal(after.clientId, before.clientId)
+    assert.equal(after.points, before.points)
+    assert.equal(after.canonicalPhoneDigest, before.canonicalPhoneDigest)
+    assert.equal(after.status, "connected")
+    const poll = await r.pilot({
+      action: "join_or_poll",
+      callId: "s02-disconnected-B",
+      phone: international,
+      rosterPlayerId: rosterId,
+    })
+    assert.equal(poll.status, 200)
+    assert.equal(poll.data.joined, true)
+    assert.deepEqual(s02State(r, rosterId), after)
+    assert.equal(
+      (
+        await r.pilot({
+          action: "hangup",
+          callId: "s02-disconnected-B",
+          phone: international,
+          rosterPlayerId: rosterId,
+        })
+      ).status,
+      200,
+    )
+    assert.equal(r.snapshot(rosterId).status, "disconnected")
+    record("S02-C2", {
+      deniedRequests: denied,
+      before,
+      after,
+      nationalAndInternationalAliasesAccepted: true,
+      correctAliasHangupAccepted: true,
+    })
+  },
+)
+
+test(
+  "S02-C3 actual disconnected admission refusal is propagated without joined or private state",
+  { timeout: 35000 },
+  async (t) => {
+    const r = await room(t),
+      identity = phone()
+    const joined = await r.pilot({
+      action: "join_or_poll",
+      callId: "s02-admission-A",
+      phone: identity,
+    })
+    const rosterId = joined.data.rosterPlayerId
+    await r.start()
+    const epoch = r.snapshot(rosterId).epoch
+    assert.equal(
+      (
+        await r.pilot({
+          action: "answer",
+          callId: "s02-admission-A",
+          phone: identity,
+          rosterPlayerId: rosterId,
+          epoch,
+          answerIndex: 4,
+        })
+      ).data.accepted,
+      true,
+    )
+    await r.advanceUntil(() => r.snapshot(rosterId).points > 0)
+    await r.pilot({
+      action: "hangup",
+      callId: "s02-admission-A",
+      phone: identity,
+      rosterPlayerId: rosterId,
+    })
+    const before = s02State(r, rosterId)
+    const { requireBilling, closeBilling } =
+      await import("@razzia/socket/services/billing")
+    const previousBilling = process.env.TADAZZ_BILLING_ENABLED
+    const previousAccounts = process.env.TADAZZ_ACCOUNTS_ENABLED
+    const previousFetch = globalThis.fetch
+    let externalRequests = 0
+    globalThis.fetch = (input, init) => {
+      const url = new URL(
+        typeof input === "string"
+          ? input
+          : input instanceof URL
+            ? input.href
+            : input.url,
+      )
+      if (url.hostname !== "127.0.0.1") {
+        externalRequests++
+        return Promise.reject(
+          new Error("Synthetic admission case forbids external requests"),
+        )
+      }
+      return previousFetch(input, init)
+    }
+    // A synthetic profile transition intentionally leaves this actual game with
+    // no billing reservation. Real beginPhoneCall rejects it; no method is mocked,
+    // no grants/purchases are seeded, and no provider request/credential is used.
+    process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
+    process.env.TADAZZ_BILLING_ENABLED = "true"
+    try {
+      const billing = requireBilling()
+      const count = () =>
+        Number(
+          (
+            billing.database.sql
+              .prepare(
+                "SELECT COUNT(*) AS n FROM billing_games WHERE game_id=?",
+              )
+              .get(r.gameId) as { n: number }
+          ).n,
+        )
+      const calls = () =>
+        Number(
+          (
+            billing.database.sql
+              .prepare(
+                "SELECT COUNT(*) AS n FROM billing_phone_calls WHERE game_id=?",
+              )
+              .get(r.gameId) as { n: number }
+          ).n,
+        )
+      assert.equal(count(), 0)
+      assert.equal(calls(), 0)
+      const response = await r.pilot({
+        action: "join_or_poll",
+        callId: "s02-admission-B",
+        phone: identity,
+        rosterPlayerId: rosterId,
+      })
+      assert.equal(response.status, 403)
+      assert.equal(response.data.reason, "caller_admission_denied")
+      s02PrivateFieldsAbsent(response.data)
+      assert.deepEqual(s02State(r, rosterId), before)
+      assert.equal(count(), 0)
+      assert.equal(calls(), 0)
+      record("S02-C3", {
+        before,
+        after: s02State(r, rosterId),
+        status: response.status,
+        reason: response.data.reason,
+        actualBillingReservationAbsent: true,
+        billingRows: count(),
+        phoneCallRows: calls(),
+        externalRequests,
+      })
+      assert.equal(externalRequests, 0)
+    } finally {
+      closeBilling()
+      globalThis.fetch = previousFetch
+      process.env.TADAZZ_BILLING_ENABLED = previousBilling
+      process.env.TADAZZ_ACCOUNTS_ENABLED = previousAccounts
+    }
+  },
+)
