@@ -19,6 +19,10 @@ import type {
 import { ToolError, unavailable } from "./errors.ts"
 import { checkedDraft, readDraft } from "./drafts.ts"
 import { firstPartyUrl, failureResult } from "./results.ts"
+import {
+  PREVIEW_CANDIDATE_META_V2,
+  previewCandidateV2Schema,
+} from "../contracts/preview-candidate-v2.ts"
 
 function publicDraft(record: DraftRecord) {
   return {
@@ -134,6 +138,30 @@ export async function dispatch(
       case "preview_game": {
         const a = inputs[name].parse(raw)
         const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
+        if (!deps.preview && deps.previewCandidateV2) {
+          const candidate = previewCandidateV2Schema.parse(
+            await deps.previewCandidateV2.render(p, record, a.locale),
+          )
+          if (
+            candidate.draftId !== record.draftId ||
+            candidate.revision !== record.revision ||
+            utf8Bytes(JSON.stringify(candidate)) > LIMITS.preview
+          )
+            throw new ToolError("PREVIEW_UNAVAILABLE")
+          const failure = failureResult(
+            name,
+            new ToolError("PREVIEW_UNAVAILABLE"),
+            config,
+            correlationId,
+          )
+          const result = {
+            ...failure,
+            _meta: { [PREVIEW_CANDIDATE_META_V2]: candidate },
+          }
+          if (utf8Bytes(JSON.stringify(result)) > LIMITS.response)
+            throw new ToolError("PREVIEW_UNAVAILABLE")
+          return result
+        }
         const result = await renderPreview(deps, p, record, a.locale)
         data = result.data
         meta = result.meta

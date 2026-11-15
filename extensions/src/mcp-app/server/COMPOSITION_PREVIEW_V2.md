@@ -11,7 +11,10 @@ policy) and exact draft revision. Pass the result to the existing
 This explicit version-2 content envelope is distinct from the existing version-1
 envelope. Version-1 serialization and duplicate-ID rejection remain unchanged.
 The MCP0.1 tool schemas, metadata and injected Preview dependency still accept
-only version1. This helper does not connect version2 to those tools.
+only version1 for accepted renderer success. This identity helper itself does
+not connect version2 to those tools. The separate optional development candidate
+adapter documented in `PREVIEW_CANDIDATE_V2.md` retains the unchanged unavailable
+failure and adds its own versioned metadata, without accepted executable status.
 
 Optional assets come from a trusted host's real resolved manifest. The helper
 unions exact `(assetId, sha256)` pairs with D's declared preview assets, retaining
