@@ -1,0 +1,22 @@
+{
+  "claim": {
+    "role": "show_ui",
+    "thread_id": "01a1dfa9-d401-77f3-a539-82c918b393f4",
+    "claim_id": "show-ui-E-boundary27-20261116",
+    "cpu": 0.25,
+    "memory_mib": 2048,
+    "job": "E-owned StudioThemeBuilder account/draft isolation; exact baseline2 expected failures then actual fixed component6 both-engine cases and focusedTC",
+    "terminal": false,
+    "claimed_utc": "2026-11-15T22:36:17.9105067Z",
+    "parent_authorization": "Existing resumed Lane E SB08-SB10 ownership; manager root integration explicitly independent, no root edits",
+    "disk_projection_bytes": 229376
+  },
+  "currentOwnerBytes": 94126080,
+  "actualFree": 2522886144,
+  "allRemainingGrowth": 119271424,
+  "unassignedPoolBytes": 6291456,
+  "diskFloor": 2147483648,
+  "marginBytes": 67108864,
+  "sourceTarBytes": 23040,
+  "estimate": "Existing QA flat hardlinks only; one Studio overlay plus baseline snapshot + own source tar/allocated rounding + bounded Docker metadata <=224KiB; both builds/outputs/browser screenshots only tmpfs. No install/retained-cache copy."
+}

@@ -1,0 +1,247 @@
+{
+  "mode": "saving",
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-a/documents",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-a/documents/private-tenant-a",
+      "body": null
+    },
+    {
+      "method": "PUT",
+      "path": "/api/themes/builder/tenant-a/documents/private-tenant-a",
+      "body": {
+        "expectedRevision": 1,
+        "document": {
+          "format": "tadazz-theme-builder-draft",
+          "formatVersion": 1,
+          "id": "private-tenant-a",
+          "name": "Private tenant-a edited",
+          "registry": {
+            "schemaVersion": 1,
+            "id": "test-registry",
+            "version": "1.0.0",
+            "components": [
+              {
+                "id": "root-view",
+                "version": "1.0.0",
+                "adapterId": "unimplemented",
+                "availability": "candidate",
+                "propsProfile": "bounded-view-v1",
+                "capabilities": {
+                  "questionTypes": [
+                    "single"
+                  ],
+                  "playModes": [
+                    "quiz"
+                  ],
+                  "minAnswers": 2,
+                  "maxAnswers": 5,
+                  "roles": [
+                    "spectator"
+                  ],
+                  "phases": [
+                    "voting"
+                  ]
+                },
+                "allowedPorts": [
+                  "stage-root"
+                ],
+                "childPorts": [
+                  {
+                    "id": "decoration",
+                    "allowedComponents": [
+                      {
+                        "id": "decoration-view",
+                        "version": "1.0.0"
+                      }
+                    ],
+                    "maxChildren": 4
+                  }
+                ],
+                "bindings": [
+                  "choices",
+                  "clock"
+                ],
+                "motions": [],
+                "fallback": "safe-hold",
+                "reducedMotion": "same-theme-static",
+                "a11yLabelKey": "builder.root-view",
+                "provenance": "Synthetic isolated authoring test"
+              },
+              {
+                "id": "decoration-view",
+                "version": "1.0.0",
+                "adapterId": "unimplemented",
+                "availability": "candidate",
+                "propsProfile": "bounded-view-v1",
+                "capabilities": {
+                  "questionTypes": [
+                    "single"
+                  ],
+                  "playModes": [
+                    "quiz"
+                  ],
+                  "minAnswers": 2,
+                  "maxAnswers": 5,
+                  "roles": [
+                    "spectator"
+                  ],
+                  "phases": [
+                    "voting"
+                  ]
+                },
+                "allowedPorts": [
+                  "decoration"
+                ],
+                "childPorts": [],
+                "bindings": [],
+                "motions": [],
+                "fallback": "safe-hold",
+                "reducedMotion": "same-theme-static",
+                "a11yLabelKey": "builder.decoration-view",
+                "provenance": "Synthetic isolated authoring test"
+              }
+            ],
+            "templates": [
+              {
+                "id": "test-template",
+                "version": "1.0.0",
+                "availability": "candidate",
+                "phase": "voting",
+                "roles": [
+                  "spectator"
+                ],
+                "rootNodeId": "root",
+                "nodes": [
+                  {
+                    "nodeId": "root",
+                    "component": {
+                      "id": "root-view",
+                      "version": "1.0.0"
+                    },
+                    "port": "stage-root",
+                    "props": {},
+                    "bindings": {
+                      "choices": "choices",
+                      "clock": "clock"
+                    },
+                    "layout": {
+                      "preset": "flow",
+                      "alignment": "center",
+                      "gap": "small",
+                      "lane": "content"
+                    },
+                    "motions": [],
+                    "children": {
+                      "decoration": [
+                        "first",
+                        "second"
+                      ]
+                    }
+                  },
+                  {
+                    "nodeId": "first",
+                    "component": {
+                      "id": "decoration-view",
+                      "version": "1.0.0"
+                    },
+                    "port": "decoration",
+                    "props": {},
+                    "bindings": {},
+                    "layout": {
+                      "preset": "flow",
+                      "alignment": "center",
+                      "gap": "small",
+                      "lane": "decoration"
+                    },
+                    "motions": [],
+                    "children": {}
+                  },
+                  {
+                    "nodeId": "second",
+                    "component": {
+                      "id": "decoration-view",
+                      "version": "1.0.0"
+                    },
+                    "port": "decoration",
+                    "props": {},
+                    "bindings": {},
+                    "layout": {
+                      "preset": "flow",
+                      "alignment": "center",
+                      "gap": "small",
+                      "lane": "decoration"
+                    },
+                    "motions": [],
+                    "children": {}
+                  }
+                ],
+                "requiredSystemCapabilities": [
+                  "complete-answer-set",
+                  "server-clock"
+                ],
+                "layouts": [
+                  "stage-16-9",
+                  "safe-4-3",
+                  "narrow-player"
+                ],
+                "fallback": "safe-hold"
+              }
+            ],
+            "motions": []
+          },
+          "content": {
+            "format": "tadazz-show-composition",
+            "schemaVersion": 1,
+            "selection": {
+              "id": "razzia-original",
+              "version": "1.0.0",
+              "overrides": {}
+            },
+            "composition": {
+              "schemaVersion": 1,
+              "id": "test-composition",
+              "version": "1.0.0",
+              "baseTheme": {
+                "id": "razzia-original",
+                "version": "1.0.0"
+              },
+              "registry": {
+                "id": "test-registry",
+                "version": "1.0.0"
+              },
+              "sections": {
+                "templates": {
+                  "voting": {
+                    "id": "test-template",
+                    "version": "1.0.0"
+                  }
+                }
+              },
+              "roles": {},
+              "scopes": []
+            },
+            "scopes": []
+          }
+        }
+      }
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-b/documents",
+      "body": null
+    },
+    {
+      "method": "GET",
+      "path": "/api/themes/builder/tenant-b/documents/private-tenant-b",
+      "body": null
+    }
+  ],
+  "errors": [],
+  "limits": "Actual E component, synthetic native token and intercepted API; root login/RBAC/persistence/StrictMode development replay not established."
+}

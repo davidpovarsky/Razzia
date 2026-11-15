@@ -1,0 +1,20 @@
+{
+  "terminal": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 1,
+    "Error": "",
+    "StartedAt": "2026-11-15T22:36:59.125523714Z",
+    "FinishedAt": "2026-11-15T22:42:42.625047334Z"
+  },
+  "ownerBytes": 94322688,
+  "ceilingBytes": 94371840,
+  "remainingBytes": 49152,
+  "diskAvailable": 2522492928,
+  "claimReleased": "2026-11-15T22:43:53.5139241Z"
+}
