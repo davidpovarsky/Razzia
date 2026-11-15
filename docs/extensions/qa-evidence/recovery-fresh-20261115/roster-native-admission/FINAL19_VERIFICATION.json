@@ -1,0 +1,47 @@
+{
+  "base": "30bd603d0555446b8760fb54406b724512ac254b",
+  "sourceFiles": [
+    {
+      "path": "packages/socket/src/services/game/player-manager.ts",
+      "sha256": "3790f2d512a533bcd2059560779a353fd955a16818497611a537590889343d7f",
+      "lines": 189
+    },
+    {
+      "path": "extensions/src/server/game/phone-controller.ts",
+      "sha256": "cca0a646744a87616dff86a2b830cf296ac10d0508393b3efecb78843f2e25ad",
+      "lines": 617
+    },
+    {
+      "path": "extensions/src/server/game/roster-native-admission.test.ts",
+      "sha256": "d4cba58898832a0723b79a0f39b113c121bf48604825bc3ddd680f91dedabf5a",
+      "lines": 343
+    }
+  ],
+  "baseline": {
+    "passed": 2,
+    "failed": 3,
+    "deselected": 11
+  },
+  "final": {
+    "passed": 19,
+    "failed": 0,
+    "pending": 0
+  },
+  "checks": {
+    "scopedTypesWithRealGameComposition": 0,
+    "lint": 0,
+    "format": 0,
+    "sourceWhitespace": 0
+  },
+  "actualRuntime": "Local Windows Node24.22.1/Vitest5.0.3",
+  "actualRosterAndNativePlayerManager": true,
+  "billingProofBoundary": "Existing admission callback count/refusal tested with isolated injected port; real authority/billing/freshGame/invitation proof owned by C",
+  "billingAndPlayerCreationBodiesUnchanged": true,
+  "originalInheritedUntrackedPreserved": 16,
+  "customerOrProductionOperations": 0,
+  "oracleJobs": 0,
+  "noCommonRosterSchemaFourcoreOrWebJoinEdits": true,
+  "productionSourceCommit": "902412c347d39f38290fde2ef1307240cee7dc07",
+  "sourceAndTestCommit": "f11ef92fc9aff1e6f9e4574a94c92810c26972e3",
+  "prior18ResultRetained": "final.json/FINAL_VERIFICATION.json at 902412c; new nineteenth case adds a real unrelated Player sentinel; production bodies unchanged"
+}

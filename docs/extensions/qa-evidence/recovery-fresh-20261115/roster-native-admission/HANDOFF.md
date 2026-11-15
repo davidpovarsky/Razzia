@@ -1,6 +1,7 @@
-# Resolved roster40 native admission — narrow source handoff
+# Resolved roster40 native admission â€” narrow source handoff
 
-Product/source+test commit `902412c347d39f38290fde2ef1307240cee7dc07`.
+Production source commit `902412c347d39f38290fde2ef1307240cee7dc07`.
+Final source+test successor `f11ef92fc9aff1e6f9e4574a94c92810c26972e3` adds only a native Player sentinel test.
 Delta base `30bd603d0555446b8760fb54406b724512ac254b`.
 This commit can be reviewed/integrated independently of the separate optional
 C1 native-operation handoff under manager review. C received the exact source
@@ -36,15 +37,15 @@ join, billing implementation, fourcore, Phone authority, constructor routing,
 startup-owner pure leaf/export or package dependency changes.
 
 PlayerManager is189 lines. The existing phone controller remains its cohesive
-617-line module with a narrow callback change; the new316-line test keeps its
-shared actual roster/native fixture and18 boundary assertions together. These
+617-line module with a narrow callback change; the new343-line test keeps its
+shared actual roster/native fixture and19 boundary cases together. These
 are explicit exceptions to the250-line target; unrelated code was not split.
 
 ## Actual evidence
 
 Corrected original-path baseline: **2PASS/3FAIL/11deselected**, with actual native
 admission failing lengths25/29/40 while1/24 pass. Raw baseline.json/log/exit are
-retained. First patched run:16/16PASS. Final extended run: **18/18PASS**, no skips,
+retained. First patched run:16/16PASS. Extended run:18/18PASS. Final sentinel-expanded run: **19/19PASS**, no skips,
 actual existing local Node24.22.1 / Vitest5.0.3 on Windows, existing extensions
 config, explicit single file, one worker and no file parallelism.
 
@@ -67,7 +68,7 @@ format all exit0. Initial test-only type failures and style diagnostics are
 preserved in their labelled attempts. SOURCE_BOUNDARY_AUDIT.json proves the
 original native creation/event body and warm rebind block byte-identical and
 records unchanged common, roster, billing, Game web join and startup leaf bytes.
-FINAL_VERIFICATION.json binds the tested source/test hashes, actual counts,
+FINAL19_VERIFICATION.json binds the tested source/test hashes, actual counts,
 checks and unchanged16 inherited untracked files. Source whitespace check passes.
 
 C's real authority, freshGame/invitation and actual billing integration are its
