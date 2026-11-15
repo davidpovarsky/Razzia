@@ -1,13 +1,9 @@
 import fs from "node:fs"
 import path from "node:path"
 import { recoverStartupJournals } from "../media-library"
+import type { StartupOwnerSnapshot } from "./startup-owner-snapshot"
 
-export interface StartupOwnerSnapshot {
-  readonly configuredRoot: string
-  readonly ownerIds: readonly string[]
-  readonly mode: "legacy-global-only" | "accounts"
-  readonly assertUnchanged: () => void
-}
+export type { StartupOwnerSnapshot } from "./startup-owner-snapshot"
 
 // Internal startup composition. Snapshot comes only from the native owner
 // provider, never request input. Admit every known root before journal writes.
