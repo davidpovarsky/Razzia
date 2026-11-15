@@ -1,7 +1,7 @@
 $ErrorActionPreference = 'Stop'
 $root = 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-telephony-fresh-20261115'
 $integration = 'C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115'
-$evidence = Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-20261115'
+$evidence = Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-20261115-final'
 $source = Join-Path $root 'docs/extensions/qa-evidence/telephony-fresh-20261115/gateway-source'
 New-Item -ItemType Directory -Path $evidence -Force | Out-Null
 $targets = @('node_modules','extensions/node_modules','packages/socket/node_modules','packages/common/node_modules','packages/web/node_modules','docs/extensions/qa-evidence/telephony-fresh-20261115/node_modules')

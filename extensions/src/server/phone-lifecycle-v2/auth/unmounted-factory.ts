@@ -360,6 +360,9 @@ export class UnmountedPhoneAuthority {
       )
         serviceDenied()
       return ack
+    } catch {
+      // A destination exception is untrusted and may echo the in-flight secret.
+      return serviceDenied()
     } finally {
       this.accounts.releaseManager(prepared)
     }
