@@ -1,0 +1,22 @@
+{
+  "kind": "SOURCE_PREPARATION_ONLY",
+  "applicationRuntime": "NOT_RUN",
+  "attempts": [
+    {
+      "result": "Static scope inspection exit1",
+      "cause": "Used product ad895 for documentation scope comparison, so already accepted e199 evidence was classified as unleased.",
+      "correction": "Retain product ad895 for source identity and use evidence e199 as this phase's change-scope base.",
+      "artifact": "static-attempt-01.json"
+    },
+    {
+      "result": "Preparation script exit1 before inspection",
+      "cause": "Repository-parent depth pointed at docs/docs.",
+      "correction": "Use the actual workspace root; no application code or DB opened."
+    },
+    {
+      "result": "10 TypeScript source syntax checks exit0",
+      "method": "Node --experimental-transform-types --check; no application imports/execution.",
+      "formatter": "No installed formatter in the bounded checked locations; no install or server job."
+    }
+  ]
+}
