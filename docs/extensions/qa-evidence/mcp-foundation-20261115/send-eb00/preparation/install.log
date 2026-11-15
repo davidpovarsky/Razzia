@@ -1,0 +1,26 @@
+v24.22.2
+12.18.0
+✓ Lockfile passes supply-chain policies (verified 2h ago)
+Lockfile is up to date, resolution step is skipped
+Packages are copied from the content-addressable store to the virtual store.
+  Content-addressable store is at: /fixtures/pnpm-store/v11
+  Virtual store is at:             node_modules/.pnpm
+Packages: +44
+++++++++++++++++++++++++++++++++++++++++++++
+Progress: resolved 44, reused 44, downloaded 0, added 44, done
+
+dependencies:
++ @modelcontextprotocol/client 2.4.0
++ @modelcontextprotocol/core 2.4.0
++ @modelcontextprotocol/ext-apps 2.1.0
++ @modelcontextprotocol/server 2.4.0
++ socket.io 4.8.4
++ uuid 14.0.3
++ zod 4.6.6
+
+devDependencies:
++ @types/node 22.10.0
++ tsx 4.21.0
++ typescript 5.9.3
+
+Done in 814ms using pnpm v12.18.0

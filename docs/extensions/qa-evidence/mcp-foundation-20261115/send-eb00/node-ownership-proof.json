@@ -1,0 +1,57 @@
+{
+  "originalCases": 35,
+  "originalPrivateSuites": 9,
+  "originalTestBytesUnchanged": true,
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/tests/server/authorization.nodecheck.ts",
+      "bytes": 4700,
+      "sha256": "363d1f4bf2c5401a17fd576a3daaadf3686e25b6784e6ed1174f5aeb723b778a"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/boundaries.nodecheck.ts",
+      "bytes": 2374,
+      "sha256": "2406fbb92db3204faef1dc9236bd7bc93589e7cdb02920fcd22016bfda9a6302"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/canonical.nodecheck.ts",
+      "bytes": 2447,
+      "sha256": "2a782e417312a7ccc0d7a2525046505104d148aa9029bc094ee503e0c6d8a44c"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/drafts.nodecheck.ts",
+      "bytes": 3479,
+      "sha256": "9a90571e0923340db3dfbe901900460e62dbe71b2dece405c4d0917479827dbc"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/ingress.nodecheck.ts",
+      "bytes": 4046,
+      "sha256": "d3f41a29f36519c1e17ef7117ae10ec10445e559223ce264613ce94d547f0934"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/integrity.nodecheck.ts",
+      "bytes": 1920,
+      "sha256": "2a5ef1c323e13d14e88cf1c7c2b361511a675cc7dbe52b0a3651af2b029deb75"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/lifecycle.nodecheck.ts",
+      "bytes": 9069,
+      "sha256": "20632188a27dcc4529710c9093b284191255a40466f0b59a2a528069ce6832e3"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/protocol.nodecheck.ts",
+      "bytes": 1191,
+      "sha256": "ce048dd8ca1a95304a7820a54a29818c8ba04c1d67f54828596be54a67fc3fd8"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/replay.nodecheck.ts",
+      "bytes": 3625,
+      "sha256": "992195429728d625fe59fe4d5a12d9f759ba193465759c5233c0d3a03e1781ba"
+    }
+  ],
+  "parentPattern": "src/**/*.test.ts",
+  "parentIntersection": 0,
+  "privatePattern": "tests/server/*.nodecheck.ts",
+  "privateCoverage": 10,
+  "newSendSuite": "tests/server/send.nodecheck.ts"
+}

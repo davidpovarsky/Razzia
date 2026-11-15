@@ -5,6 +5,7 @@ import {
   type JSONRPCMessage,
   type ServerContext,
   type Transport,
+  type TransportSendOptions,
 } from "@modelcontextprotocol/server"
 import type { Dependencies } from "../../server/dependencies.ts"
 import { createTadazzMcpServer } from "../../server/factory.ts"
@@ -38,6 +39,10 @@ export async function until(check: () => boolean) {
 export async function lifecycleHarness(
   overrides: Dependencies = {},
   work?: (context: ServerContext) => Promise<CallToolResult>,
+  beforeSend?: (
+    message: JSONRPCMessage,
+    options?: TransportSendOptions,
+  ) => Promise<void>,
 ) {
   const p = principal()
   const deps: Dependencies = {
@@ -98,9 +103,10 @@ export async function lifecycleHarness(
   }
   const st: Transport = {
     start: async () => {},
-    send: async (message) => {
+    send: async (message, options) => {
       flags.sends++
       if (flags.failSend) throw new Error("synthetic-secret-send")
+      await beforeSend?.(message, options)
       serverMessages.push(structuredClone(message))
       queueMicrotask(() => ct.onmessage?.(structuredClone(message)))
     },
@@ -129,14 +135,21 @@ export async function lifecycleHarness(
         { signal },
       )
     },
-    injectRead(id: string | number) {
+    injectRead(
+      id: string | number,
+      extraArguments: Record<string, unknown> = {},
+    ) {
       return ct.send({
         jsonrpc: "2.0",
         id,
         method: "tools/call",
         params: {
           name: "get_game_draft",
-          arguments: { contractVersion: "0.1.0", draftId: newKey() },
+          arguments: {
+            contractVersion: "0.1.0",
+            draftId: newKey(),
+            ...extraArguments,
+          },
         },
       })
     },

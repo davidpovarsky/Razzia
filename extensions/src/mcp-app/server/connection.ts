@@ -126,6 +126,7 @@ export function guardedConnection(
           if (related !== undefined && lives.isInternal(related) && !parent)
             return
           if (parent && (!lives.current(parent) || parent.cancelled)) return
+          const releaseSend = lives.retainSend(op, parent)
           try {
             await inner.send(
               op ? { ...message, id: op.wireId } : message,
@@ -139,6 +140,7 @@ export function guardedConnection(
             throw new Error("Transport send failed")
           } finally {
             if (op) lives.replied(op)
+            releaseSend()
           }
         },
         close: () => closeInner!(),
