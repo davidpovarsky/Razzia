@@ -3,6 +3,7 @@ import type { TadazzStageHandle } from "../tadazz-show/TadazzStage"
 import { createDemoClock } from "./demo-clock"
 import { prepareDemoFixture } from "./demo-fixture"
 import { assertBoundPreviewStageMetadata, derivePreviewStageMetadata } from "../../core/show-library/stage-metadata"
+import { projectedFrame } from "./projected-frame"
 import { createPreviewTransitionOwner } from "./preview-transition-owner"
 import { pausedPreviewSteps, previewSteps, validatePreviewFrame, type PreviewFrame } from "./stage-scene-adapter"
 
@@ -57,13 +58,73 @@ describe("silent preview candidate", () => {
     const next = previewSteps(second, prior.scene, { mode: "question", questionKey: first.question.id }, 2000)
     expect(next.steps.map((step) => step.op)).toEqual(["nextQuestion"])
     const showQuestion = vi.fn(async () => {})
-    const wipe = vi.fn(async (covered?: () => void | Promise<void>) => { await covered?.() })
+    const wipe = vi.fn((covered?: () => void | Promise<void>) => { void Promise.resolve(covered?.()).catch(() => undefined); return Promise.resolve() })
     const stage = { showQuestion, playZZWipe: wipe } as unknown as TadazzStageHandle
     const owner = createPreviewTransitionOwner(stage)
     expect(await owner.run(prior.steps)).toBe(true)
     expect(await owner.run(next.steps)).toBe(true)
     expect(wipe).toHaveBeenCalledTimes(1)
     expect(showQuestion).toHaveBeenLastCalledWith(expect.objectContaining({ key: second.question.id }))
+  })
+
+  it("waits for a covered entrance even when the native wipe finishes first", async () => {
+    let rejectEntrance: (error: Error) => void = () => {}
+    const entrance = new Promise<void>((_, reject) => { rejectEntrance = reject })
+    const stage = { showQuestion: () => entrance, playZZWipe: (covered?: () => void | Promise<void>) => {
+      void Promise.resolve(covered?.()).catch(() => undefined)
+      return Promise.resolve()
+    } } as unknown as TadazzStageHandle
+    const owner = createPreviewTransitionOwner(stage)
+    let settled = false
+    const run = owner.run([{ op: "nextQuestion", question: { key: "q", question: "Q", number: 1, totalQuestions: 1, options: [] } }])
+    void run.then(() => { settled = true }, () => { settled = true })
+    await Promise.resolve(); await Promise.resolve()
+    expect(settled).toBe(false)
+    rejectEntrance(new Error("entrance failed"))
+    await expect(run).rejects.toThrow("entrance failed")
+  })
+
+  it("invalidates voting entry during pause and derives the deadline at the call", async () => {
+    let release: () => void = () => {}
+    const entry = new Promise<void>((resolve) => { release = resolve })
+    const openVoting = vi.fn(async () => {})
+    let paused = false
+    let wallNow = 1000
+    const stage = { presentOptions: () => entry, openVoting } as unknown as TadazzStageHandle
+    const owner = createPreviewTransitionOwner(stage, () => paused ? null : { seconds: 20, deadlineMs: wallNow + 15000 })
+    const q = { key: "q", question: "Q", number: 1, totalQuestions: 1, options: [] }
+    const old = owner.run([{ op: "presentOptions", question: q }, { op: "openVoting", seconds: 20, deadlineMs: 16000 }])
+    paused = true; owner.invalidate(); wallNow += 60000
+    release()
+    expect(await old).toBe(false)
+    expect(openVoting).not.toHaveBeenCalled()
+    paused = false
+    expect(await owner.run([{ op: "openVoting", seconds: 20, deadlineMs: 16000 }])).toBe(true)
+    expect(openVoting).toHaveBeenLastCalledWith(20, 76000)
+    // Re-anchoring an already-visible countdown uses the same latest clock path.
+    wallNow += 10000
+    expect(await owner.run([{ op: "openVoting", seconds: 20, deadlineMs: 16000 }])).toBe(true)
+    expect(openVoting).toHaveBeenLastCalledWith(20, 86000)
+  })
+
+  it("drains a native lock before admitting only the latest question", async () => {
+    let release: () => void = () => {}
+    const lock = new Promise<void>((resolve) => { release = resolve })
+    const showQuestion = vi.fn(async () => {})
+    const stage = { lockVoting: () => lock, showQuestion } as unknown as TadazzStageHandle
+    const owner = createPreviewTransitionOwner(stage)
+    const old = owner.run([{ op: "lockVoting" }])
+    owner.invalidate()
+    const q = { key: "q", question: "Q", number: 1, totalQuestions: 1, options: [] }
+    const superseded = owner.run([{ op: "showQuestion", question: { ...q, key: "middle" } }])
+    const latest = owner.run([{ op: "showQuestion", question: { ...q, key: "latest" } }])
+    expect(showQuestion).not.toHaveBeenCalled()
+    release()
+    expect(await old).toBe(false)
+    expect(await superseded).toBe(false)
+    expect(await latest).toBe(true)
+    expect(showQuestion).toHaveBeenCalledTimes(1)
+    expect(showQuestion).toHaveBeenCalledWith(expect.objectContaining({ key: "latest" }))
   })
 
   it("plans paused answer cards and locked state without opening voting", () => {
@@ -82,5 +143,28 @@ describe("silent preview candidate", () => {
     const metadata = derivePreviewStageMetadata(draft, plan, questionId)
     expect(metadata).toMatchObject({ ordinal: 1, totalQuestions: 5 })
     expect(() => assertBoundPreviewStageMetadata(draft, plan, questionId, structuredClone(metadata))).toThrow()
+  })
+
+  it("projects genuine paused results using the bound controller clock", () => {
+    const { draft, plan } = prepareDemoFixture("spectator", "en", false)
+    const card = draft.show.cards[0]
+    if (card.kind !== "quiz") throw new Error("unexpected fixture")
+    const questionId = draft.input.identityMap.questions.find((q) => q.authoredKey === card.key)!.previewId
+    const choices = card.answers.map((answer, index) => ({ id: `${questionId}.choice.${index + 1}`, label: answer.text }))
+    const clock = { epoch: 1, sequence: 2, elapsedMs: 20000, deadlineMs: 20000, paused: true }
+    const binding = { draft, plan, currentQuestionId: questionId, phase: "results" as const, clock }
+    const metadata = derivePreviewStageMetadata(draft, plan, questionId)
+    const snapshot = { portVersion: 3, identityRuleVersion: 2, source: "deterministic-fixture", phase: "results", clock,
+      question: { id: questionId, text: card.question, questionType: card.questionType, playMode: card.kind, choices, solutionAnswerIds: [choices[0].id] },
+      results: choices.map((choice, index) => ({ answerId: choice.id, count: 0, percent: 0, correct: index === 0 })), canAnswer: false, responders: 0, eligible: 0 }
+    const output = projectedFrame(snapshot, draft.input.context, binding, metadata, 1, 20)
+    expect(output.clock).toMatchObject({ elapsedMs: 20000, paused: true })
+    expect(output.question).toMatchObject({ id: questionId, ordinal: 1, totalQuestions: 5 })
+    expect(output.results?.map((r) => r.answerId)).toEqual(choices.map((c) => c.id))
+    expect(() => projectedFrame({ ...snapshot, clock: { ...clock, elapsedMs: 1 } }, draft.input.context, binding, metadata, 1, 20)).toThrow()
+    expect(() => projectedFrame(snapshot, draft.input.context, binding, structuredClone(metadata), 1, 20)).toThrow()
+    const otherId = draft.input.identityMap.questions.find((q) => q.authoredKey !== card.key)!.previewId
+    const other = derivePreviewStageMetadata(draft, plan, otherId)
+    expect(() => projectedFrame(snapshot, draft.input.context, binding, other, 1, 20)).toThrow()
   })
 })
