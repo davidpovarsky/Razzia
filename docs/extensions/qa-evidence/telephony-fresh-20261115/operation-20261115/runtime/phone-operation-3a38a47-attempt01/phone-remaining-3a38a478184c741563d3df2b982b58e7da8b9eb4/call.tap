@@ -1,0 +1,43 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 927854 subject: Test quizz
+# Game 01a1e130-8ff7-76c6-abf3-9b5ef73b6c20 added. Total games: 1
+# Subtest: CALL-01 complete encrypted tuple precedes real REGISTER; lost ACK/reopen/rotation retry never mint a new call
+ok 1 - CALL-01 complete encrypted tuple precedes real REGISTER; lost ACK/reopen/rotation retry never mint a new call
+  ---
+  duration_ms: 3205.017012
+  type: 'test'
+  ...
+# New game created: 255646 subject: Test quizz
+# Game 01a1e130-9a7d-762b-ab86-842250309d63 added. Total games: 2
+# Subtest: CALL-02 malformed/missing/corrupt/wrong-scope/key records never register or initialize implicitly
+ok 2 - CALL-02 malformed/missing/corrupt/wrong-scope/key records never register or initialize implicitly
+  ---
+  duration_ms: 2010.503935
+  type: 'test'
+  ...
+# New game created: 667678 subject: Test quizz
+# Game 01a1e130-a25b-7473-9b6c-07c86f7585cc added. Total games: 3
+# New game created: 630660 subject: Test quizz
+# Game 01a1e130-a76c-7741-97a9-b3f5fe333c9a added. Total games: 4
+# Game 01a1e130-8ff7-76c6-abf3-9b5ef73b6c20 removed. Total games: 3
+# Game 01a1e130-9a7d-762b-ab86-842250309d63 removed. Total games: 2
+# Game 01a1e130-a25b-7473-9b6c-07c86f7585cc removed. Total games: 1
+# Game 01a1e130-a76c-7741-97a9-b3f5fe333c9a removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# Subtest: CALL-03 actual file-close uncertainty bars reopen; real post-commit issuer revocation denies receipt without compensation
+ok 3 - CALL-03 actual file-close uncertainty bars reopen; real post-commit issuer revocation denies receipt without compensation
+  ---
+  duration_ms: 2883.120742
+  type: 'test'
+  ...
+1..3
+# tests 3
+# suites 0
+# pass 3
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 19199.944565

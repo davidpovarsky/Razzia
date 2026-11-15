@@ -1,0 +1,55 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 346714 subject: Test quizz
+# Game 01a1e130-ce70-73e5-9978-be2f8c65e66a added. Total games: 1
+# Subtest: OP-01 full immutable poll intent precedes send; lost ACK/reopen/service rotation reuse exact backend receipt
+ok 1 - OP-01 full immutable poll intent precedes send; lost ACK/reopen/service rotation reuse exact backend receipt
+  ---
+  duration_ms: 6097.257869
+  type: 'test'
+  ...
+# New game created: 260393 subject: Test quizz
+# Game 01a1e130-e5e0-7676-941f-7bab10e16f98 added. Total games: 2
+# A user connected: socketId: HNMO0uZ3LxBRNQTbAAAA, clientId: 389372df-d055-48f8-9dcf-02819ab277f6
+# Manager reconnected to game 260393
+# Subtest: OP-02 actual answer scores once through lost ACK; conflicting payload denied and hangup keeps terminal generation
+ok 2 - OP-02 actual answer scores once through lost ACK; conflicting payload denied and hangup keeps terminal generation
+  ---
+  duration_ms: 20512.889868
+  type: 'test'
+  ...
+# New game created: 585196 subject: Test quizz
+# Game 01a1e131-3603-76ea-8445-b20a78f73aad added. Total games: 3
+# Subtest: OP-03 missing/corrupt/substituted/foreign intent and actual temp-close uncertainty never project or auto-register
+ok 3 - OP-03 missing/corrupt/substituted/foreign intent and actual temp-close uncertainty never project or auto-register
+  ---
+  duration_ms: 4804.409427
+  type: 'test'
+  ...
+# New game created: 492685 subject: Test quizz
+# Game 01a1e131-48ba-7284-a1f2-9b909f52d3fc added. Total games: 4
+# New game created: 512253 subject: Test quizz
+# Game 01a1e131-5ea4-74f3-bcf6-9a43831cf346 added. Total games: 5
+# Game 01a1e130-ce70-73e5-9978-be2f8c65e66a removed. Total games: 4
+# Game 01a1e130-e5e0-7676-941f-7bab10e16f98 removed. Total games: 3
+# Game 01a1e131-3603-76ea-8445-b20a78f73aad removed. Total games: 2
+# Game 01a1e131-48ba-7284-a1f2-9b909f52d3fc removed. Total games: 1
+# Game 01a1e131-5ea4-74f3-bcf6-9a43831cf346 removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# A user disconnected : HNMO0uZ3LxBRNQTbAAAA
+# Subtest: OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit revoke denies result without compensation
+ok 4 - OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit revoke denies result without compensation
+  ---
+  duration_ms: 8485.159544
+  type: 'test'
+  ...
+1..4
+# tests 4
+# suites 0
+# pass 4
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 47510.459739
