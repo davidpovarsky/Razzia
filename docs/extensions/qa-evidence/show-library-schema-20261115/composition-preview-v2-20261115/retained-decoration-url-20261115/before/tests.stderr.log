@@ -1,0 +1,24 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/show-library/composition-preview-v2.test.ts > bound V2 renderer input with the existing asset-free frame > handles retained decoration URL with enabled=true/preset=shimmer-line as unavailable
+ZodError: [
+  {
+    "code": "custom",
+    "message": "show-preview:native-media-binding-unavailable",
+    "path": [
+      "themeBinding",
+      "settings"
+    ]
+  }
+]
+ ❯ produceCompositionNativePreviewInputV2 src/core/show-library/native-preview-renderer-v2.ts:193:40
+    191|
+    192|   const input = freeze(
+    193|     nativePreviewRendererInputV2Schema.parse({
+       |                                        ^
+    194|       inputVersion: 2,
+    195|       frame,
+ ❯ src/core/show-library/composition-preview-v2.test.ts:538:22
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

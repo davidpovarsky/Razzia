@@ -520,6 +520,65 @@ describe("bound V2 renderer input with the existing asset-free frame", () => {
     ).toHaveLength(1)
     expect(getCompiledPreviewManifest().pins).toEqual([])
   })
+  it.each([
+    { enabled: false, preset: "lottie", expected: "candidate" },
+    { enabled: false, preset: "shimmer-line", expected: "candidate" },
+    { enabled: true, preset: "shimmer-line", expected: "unavailable" },
+    { enabled: true, preset: "lottie", expected: "unavailable" },
+  ] as const)(
+    "handles retained decoration URL with enabled=$enabled/preset=$preset as $expected",
+    ({ enabled, preset, expected }) => {
+      const lottieUrl = "/media/retained-decoration.lottie"
+      const document = withNativePresentationV2(v1("razzia-original"), {
+        ...presentation(),
+        defaults: { questionDecoration: { enabled, preset, lottieUrl } },
+      })
+      const saved = canonicalJson(document)
+      const f = fixture("razzia-original", authoredFixture(2, 5), { document })
+      const result = produceCompositionNativePreviewInputV2(
+        f.preview,
+        f.snapshot,
+        f.binding,
+      )
+
+      expect(result.kind).toBe(expected)
+      expect(canonicalJson(document)).toBe(saved)
+      expect(canonicalJson(f.preview.document)).toBe(saved)
+      expect(
+        document.nativePresentation.defaults.questionDecoration?.lottieUrl,
+      ).toBe(lottieUrl)
+      expect(JSON.stringify(result)).not.toContain(lottieUrl)
+
+      if (result.kind === "candidate") {
+        expect(result.input.themeBinding.settings.questionDecoration).toEqual({
+          enabled: false,
+          preset: "none",
+        })
+        expect(
+          nativePreviewRendererInputV2Schema.safeParse({
+            ...result.input,
+            themeBinding: {
+              ...result.input.themeBinding,
+              settings: {
+                ...result.input.themeBinding.settings,
+                questionDecoration: {
+                  ...result.input.themeBinding.settings.questionDecoration,
+                  lottieUrl,
+                },
+              },
+            },
+          }).success,
+        ).toBe(false)
+      } else {
+        expect(result).toEqual({
+          kind: "unavailable",
+          input: null,
+          diagnostics: ["native-media-binding-unavailable"],
+          executableAcceptance: false,
+        })
+      }
+    },
+  )
   it("returns exact versioned composition content for F's existing canonical digest path", () => {
     const f = fixture(),
       content = getCompositionPreviewDigestContentV2(f.preview)

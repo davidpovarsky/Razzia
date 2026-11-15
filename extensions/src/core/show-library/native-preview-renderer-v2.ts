@@ -170,6 +170,7 @@ export function produceCompositionNativePreviewInputV2(
   })
 
   if (
+    decoration.lottieUrl !== undefined ||
     (decoration.enabled && decoration.preset === "lottie") ||
     (
       layers.card.overlayAnimations ??
