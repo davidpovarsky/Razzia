@@ -697,11 +697,20 @@ export function createNativeCreationPort(
       leases.delete(state.intent.scope.root)
     }
   }
+  const captureOperationScope = () => {
+    const scope = captureCreationScope(environment)
+
+    if (scope.mode !== "tenant" || !scope.owner) {
+      throw new Error("Native operation requires authenticated tenant scope")
+    }
+
+    return scope
+  }
   const lookupOperation = (
     binding: NativeCreationOperationBinding,
   ): NativeCreationOperationStatus => {
     requireLinuxFences()
-    const scope = captureCreationScope(environment)
+    const scope = captureOperationScope()
 
     try {
       const stored = readOperation(scope, binding)
@@ -777,7 +786,7 @@ export function createNativeCreationPort(
           lookup: lookupOperation,
           create: (binding, input, extras) => {
             requireLinuxFences()
-            const scope = captureCreationScope(environment)
+            const scope = captureOperationScope()
             const frozen = freezeOperationInput(input, extras)
             const status = lookupOperation(binding)
             const stored = readOperation(scope, binding)
