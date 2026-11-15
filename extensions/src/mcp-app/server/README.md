@@ -2,15 +2,23 @@
 
 Unpublished, unmounted, feature-off by composition. Create a fresh
 createTadazzMcpServer(config, dependencies) for each request/session. It returns
-the actual pinned MCP SDK McpServer; it opens no socket/HTTP port and reads no
+only a guarded connect/close handle around the actual pinned MCP SDK McpServer.
+The bare server is not exposed. It opens no socket/HTTP port and reads no
 environment/account/global filesystem. A later authorized transport must enforce
 HTTPS, Origin policy, authentication before dispatch and <=64 KiB body size.
 Tool-level OAuth metadata/errors alone are not an HTTP OAuth implementation.
 
 Eight adopted MCP0.1 tool/result schemas and three static resources are registered.
-The exhaustive eight-tool dispatcher stays in one file (264 formatted lines)
-to keep authorization/error/output enforcement visible; preview verification
-is a separate module. This is the scoped exception to the 250-line target.
+The public SDK Transport interface wraps decoded tools/call messages before SDK
+schema evaluation. A required trusted-context ingress budget runs even for invalid
+or unauthenticated calls; verified principals receive one tool budget charge.
+Bounded input checks and strict schemas reject invalid tool names/arguments with
+safe contract errors. Discovery retains strict schemas; valid calls then execute
+the SDK's own validation/dispatch. Public projectCallToolResult retains wire-era
+projection for intercepted errors. No SDK private method is replaced or modified.
+Each connection holds at most32 pending tool calls and binds authorization to its
+request ID, clearing it on response/close. Duplicate IDs close the connection.
+This decoded-message boundary does not implement HTTP body/Origin/TLS validation.
 The ui resource is an empty noninteractive placeholder, not a fake game preview.
 No real identity, private draft repository, account storage, renderer or download
 adapter is provided. Missing dependencies fail closed. The only synthetic
@@ -19,8 +27,13 @@ principal/store are under tests/server and never imported by production modules.
 Trusted dependencies must verify issuer/audience/signature/time/active
 grant/account on every request, implement rate limits, and use explicit principal
 ownership. DraftRepository requires atomic CAS/idempotency/outcome/audit; it has
-no default persistence. createNewWithConsent requires the original exact-save
-consent, durable unique target/reservation/recovery guarantees. Exports use
+no default persistence. Read/create/replace results are independently validated
+against canonical authored content and its recomputed summary. Save/export pass
+selection+revision+mutation identity to an authoritative replay-or-new adapter;
+a prior authorized outcome is reachable before any fresh-draft revision check.
+A NEW operation requires exact revision/content validation and, for save, original
+exact-save consent plus durable unique target/reservation/recovery guarantees.
+The test-only volatile replay model establishes none of those durable guarantees. Exports use
 ordinary scope/ownership/rights checks, with no added per-action consent.
 Injected test export delivery is not actual account or download acceptance.
 
@@ -40,8 +53,9 @@ Ready cannot be inferred from the candidate source registry.
 The isolated package pins ext-apps2.1.0 and MCP server/client/core2.4.0, replacing
 the historical example's vulnerable2.0 pin after official signature/security
 verification. maxToolInputElements100 is explicit; SDK instances are not shared.
-The isolated lock must be generated and verified on the assigned server runner;
-there is no hand-written/fake frozen lock.
+The isolated lock was generated and verified on the assigned server runner;
+public-registry dist/integrities are recorded. Corrected validation reuses the
+same frozen lock and this job's own public-registry offline store/cache.
 
 Validation must use this branch's exact application source, root frozen
 dependencies, and the isolated package's own resolved/frozen dependency graph.
@@ -49,7 +63,7 @@ Do not use a stale Docker image's source or another worktree's source to satisfy
 imports. tsconfig reuses the repository's public source aliases. No root/shared
 manifest/lock or protected source edit is necessary.
 
-After the manager grants a separate server namespace/runner:
+On the separately allocated server namespace/runner:
 
 - resolve the isolated lock with scripts disabled; record registries/integrities;
 - reinstall with the new isolated frozen lock and explicit approved build scripts;

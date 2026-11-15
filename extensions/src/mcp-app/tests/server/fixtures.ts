@@ -149,6 +149,7 @@ export async function harness(
   const store = new MemoryDrafts()
   const deps: Dependencies = {
     authorize: async () => account,
+    prevalidationLimit: async () => true,
     rateLimit: async () => true,
     authoring: { allowedPublicAssetUrls: new Set() },
     drafts: store,

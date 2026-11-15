@@ -1,0 +1,3 @@
+{"case":"retry-after-edit","firstSaveOK":true,"firstExportOK":true,"editOK":true,"replaySave":"REVISION_CONFLICT","replayExport":"REVISION_CONFLICT","saveAdapterCalls":1,"exportAdapterCalls":1}
+{"case":"nested-unknown","isError":true,"error":"VALIDATION_FAILED"}
+{"case":"sdk-invalid-before-auth","authorizerCalls":0,"reflectedCanaryKey":true,"reflectedCanaryValue":false,"reply":{"content":[{"type":"text","text":"Input validation error: Invalid arguments for tool get_game_draft: Unrecognized key: \"synthetic_secret_key\""}],"isError":true}}

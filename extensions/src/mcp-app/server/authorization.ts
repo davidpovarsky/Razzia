@@ -1,5 +1,5 @@
 import { z } from "zod"
-import type { ServerContext } from "@modelcontextprotocol/server"
+import type { MessageExtraInfo } from "@modelcontextprotocol/server"
 import { scopes, type ToolName } from "../contracts/tools.ts"
 import type {
   Dependencies,
@@ -51,15 +51,18 @@ export function validateConfig(config: ServerConfig): ServerConfig {
   })
 }
 export async function authorize(
-  name: ToolName,
-  context: ServerContext,
+  name: ToolName | undefined,
+  extra: MessageExtraInfo | undefined,
   deps: Dependencies,
   config: ServerConfig,
 ): Promise<VerifiedPrincipal> {
+  if (!deps.prevalidationLimit) throw new ToolError("DEPENDENCY_UNAVAILABLE")
+  if (!(await deps.prevalidationLimit(extra)))
+    throw new ToolError("RATE_LIMITED", {}, true)
   if (!deps.authorize) throw new ToolError("ACCOUNT_UNAVAILABLE")
   let raw: unknown
   try {
-    raw = await deps.authorize(context)
+    raw = await deps.authorize(extra)
   } catch {
     throw new ToolError("SCOPE_REQUIRED")
   }
@@ -72,11 +75,11 @@ export async function authorize(
     p.expiresAt <= Date.now()
   )
     throw new ToolError("SCOPE_REQUIRED")
-  if (!scopes[name].every((scope) => p.scopes.includes(scope)))
-    throw new ToolError("SCOPE_REQUIRED")
   if (!deps.rateLimit) throw new ToolError("DEPENDENCY_UNAVAILABLE")
   if (!(await deps.rateLimit(p, name)))
     throw new ToolError("RATE_LIMITED", {}, true)
+  if (name && !scopes[name].every((scope) => p.scopes.includes(scope)))
+    throw new ToolError("SCOPE_REQUIRED")
   return Object.freeze({ ...p, scopes: Object.freeze([...p.scopes]) })
 }
 export function oauthChallenge(config: ServerConfig, name: ToolName): string {

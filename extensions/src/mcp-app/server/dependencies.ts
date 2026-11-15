@@ -1,4 +1,4 @@
-import type { ServerContext } from "@modelcontextprotocol/server"
+import type { MessageExtraInfo } from "@modelcontextprotocol/server"
 import type { z } from "zod"
 import type {
   DraftSummary,
@@ -33,6 +33,10 @@ export interface MutationIdentity {
   idempotencyKey: string
   inputDigest: string
   correlationId: string
+}
+export interface DraftSelection {
+  draftId: string
+  expectedRevision: number
 }
 /** Implementations MUST use explicit account ownership and atomic CAS/key/outcome/audit.
  * There is intentionally no default filesystem/global/session adapter. */
@@ -71,8 +75,14 @@ export interface Catalog {
 export interface Dependencies {
   /** Trusted adapter owns cryptographic token verification, grant/revocation and
    * account lookup on EVERY request. Never populate from unverified tool arguments. */
-  authorize?: (context: ServerContext) => Promise<unknown>
-  rateLimit?: (principal: VerifiedPrincipal, tool: ToolName) => Promise<boolean>
+  authorize?: (extra: MessageExtraInfo | undefined) => Promise<unknown>
+  /** Required ingress budget, including unauthenticated/malformed tool calls.
+   * Key only from trusted transport context; no model arguments are supplied. */
+  prevalidationLimit?: (extra: MessageExtraInfo | undefined) => Promise<boolean>
+  rateLimit?: (
+    principal: VerifiedPrincipal,
+    tool: ToolName | undefined,
+  ) => Promise<boolean>
   drafts?: DraftRepository
   authoring?: AuthoringPolicy
   catalog?: Catalog
@@ -93,19 +103,24 @@ export interface Dependencies {
       identity: PreviewIdentityEnvelope
     }>
   }
-  /** Sole real implementation must atomically enforce exact-revision consent,
-   * durable key mapping, collision-safe create and composite crash reconciliation. */
+  /** Authoritative atomic replay-or-new decision: recheck owner/grant/tool/key/
+   * digest and return a prior authorized outcome BEFORE current-draft lookup.
+   * NEW operation must read/validate canonical content+summary, exact revision and
+   * consent in the same durable decision, reserve one collision-safe target and
+   * reconcile crashes. Missing real adapter remains unavailable. */
   storage?: {
     createNewWithConsent(
       principal: VerifiedPrincipal,
-      draft: DraftRecord,
+      selection: DraftSelection,
       mutation: MutationIdentity,
     ): Promise<unknown>
   }
   exports?: {
+    /** Same authoritative replay-or-new rules; new export validates exact draft
+     * revision/content/rights. Ordinary export adds no consent requirement. */
     createAuthorizedDownload(
       principal: VerifiedPrincipal,
-      draft: DraftRecord,
+      selection: DraftSelection,
       format: "tada-json" | "enhanced-bundle",
       mutation: MutationIdentity,
     ): Promise<unknown>

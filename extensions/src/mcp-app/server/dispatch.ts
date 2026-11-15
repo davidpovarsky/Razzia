@@ -1,8 +1,5 @@
 import { randomUUID } from "node:crypto"
-import type {
-  CallToolResult,
-  ServerContext,
-} from "@modelcontextprotocol/server"
+import type { CallToolResult } from "@modelcontextprotocol/server"
 import { canonicalJson, hashJson, utf8Bytes } from "../contracts/canonical.ts"
 import { CONTRACT_VERSION, LIMITS, jsonObject } from "../contracts/schemas.ts"
 import {
@@ -11,7 +8,6 @@ import {
   outputs,
   type ToolName,
 } from "../contracts/tools.ts"
-import { authorize, oauthChallenge } from "./authorization.ts"
 import { normalizeDraft } from "./authoring.ts"
 import { renderPreview } from "./preview.ts"
 import type {
@@ -20,7 +16,9 @@ import type {
   ServerConfig,
   VerifiedPrincipal,
 } from "./dependencies.ts"
-import { ToolError, safeError, unavailable } from "./errors.ts"
+import { ToolError, unavailable } from "./errors.ts"
+import { checkedDraft, readDraft } from "./drafts.ts"
+import { firstPartyUrl, failureResult } from "./results.ts"
 
 function publicDraft(record: DraftRecord) {
   return {
@@ -29,46 +27,10 @@ function publicDraft(record: DraftRecord) {
     summary: record.summary,
   }
 }
-async function readDraft(
-  deps: Dependencies,
-  p: VerifiedPrincipal,
-  id: string,
-  expected?: number,
-) {
-  if (!deps.drafts) throw unavailable()
-  const record = await deps.drafts.get(p, id)
-  if (!record || record.draftId !== id) throw new ToolError("NOT_FOUND")
-  if (!deps.authoring) throw unavailable()
-  try {
-    const checked = normalizeDraft(record.authoredShowJson, deps.authoring)
-    if (checked.authoredShowJson !== record.authoredShowJson)
-      throw new Error("Noncanonical stored draft")
-  } catch {
-    throw new ToolError("INTERNAL")
-  }
-  if (expected !== undefined && record.revision !== expected) {
-    throw new ToolError("REVISION_CONFLICT", {
-      currentRevision: record.revision,
-    })
-  }
-  return record
-}
-function firstPartyUrl(value: string, config: ServerConfig) {
-  const u = new URL(value)
-  if (
-    u.protocol !== "https:" ||
-    u.username ||
-    u.password ||
-    u.hash ||
-    u.search ||
-    !config.firstPartyOrigins?.includes(u.origin)
-  )
-    throw new ToolError("INTERNAL")
-}
 export async function dispatch(
   name: ToolName,
   raw: unknown,
-  context: ServerContext,
+  p: VerifiedPrincipal,
   deps: Dependencies,
   config: ServerConfig,
 ): Promise<CallToolResult> {
@@ -78,7 +40,6 @@ export async function dispatch(
       throw new ToolError("VALIDATION_FAILED")
     if (!inputs[name].safeParse(raw).success)
       throw new ToolError("VALIDATION_FAILED")
-    const p = await authorize(name, context, deps, config)
     let data: unknown
     let meta: Record<string, unknown> | undefined
     switch (name) {
@@ -103,7 +64,7 @@ export async function dispatch(
         if (!deps.drafts || !deps.authoring) throw unavailable()
         const a = inputs[name].parse(raw)
         const normalized = normalizeDraft(a.authoredShowJson, deps.authoring)
-        data = publicDraft(
+        const record = checkedDraft(
           await deps.drafts.create(
             p,
             {
@@ -119,7 +80,14 @@ export async function dispatch(
               }),
             },
           ),
+          deps,
         )
+        if (
+          record.revision !== 1 ||
+          record.authoredShowJson !== normalized.authoredShowJson
+        )
+          throw new ToolError("INTERNAL")
+        data = publicDraft(record)
         break
       }
       case "get_game_draft": {
@@ -137,7 +105,7 @@ export async function dispatch(
         if (!deps.drafts || !deps.authoring) throw unavailable()
         const a = inputs[name].parse(raw)
         const normalized = normalizeDraft(a.authoredShowJson, deps.authoring)
-        data = publicDraft(
+        const record = checkedDraft(
           await deps.drafts.replace(
             p,
             a.draftId,
@@ -152,7 +120,15 @@ export async function dispatch(
               }),
             },
           ),
+          deps,
         )
+        if (
+          record.draftId !== a.draftId ||
+          record.revision !== a.expectedRevision + 1 ||
+          record.authoredShowJson !== normalized.authoredShowJson
+        )
+          throw new ToolError("INTERNAL")
+        data = publicDraft(record)
         break
       }
       case "preview_game": {
@@ -166,17 +142,20 @@ export async function dispatch(
       case "save_game": {
         const a = inputs[name].parse(raw)
         if (!deps.storage) throw unavailable()
-        const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
         const saved = dataSchemas[name].parse(
-          await deps.storage.createNewWithConsent(p, record, {
-            idempotencyKey: a.idempotencyKey,
-            inputDigest: hashJson(a),
-            correlationId,
-          }),
+          await deps.storage.createNewWithConsent(
+            p,
+            { draftId: a.draftId, expectedRevision: a.expectedRevision },
+            {
+              idempotencyKey: a.idempotencyKey,
+              inputDigest: hashJson(a),
+              correlationId,
+            },
+          ),
         )
         if (
-          saved.draftId !== record.draftId ||
-          saved.revision !== record.revision
+          saved.draftId !== a.draftId ||
+          saved.revision !== a.expectedRevision
         )
           throw new ToolError("INTERNAL")
         firstPartyUrl(saved.studioUrl, config)
@@ -186,17 +165,21 @@ export async function dispatch(
       case "export_game": {
         const a = inputs[name].parse(raw)
         if (!deps.exports) throw new ToolError("EXPORT_UNAVAILABLE")
-        const record = await readDraft(deps, p, a.draftId, a.expectedRevision)
         const exported = dataSchemas[name].parse(
-          await deps.exports.createAuthorizedDownload(p, record, a.format, {
-            idempotencyKey: a.idempotencyKey,
-            inputDigest: hashJson(a),
-            correlationId,
-          }),
+          await deps.exports.createAuthorizedDownload(
+            p,
+            { draftId: a.draftId, expectedRevision: a.expectedRevision },
+            a.format,
+            {
+              idempotencyKey: a.idempotencyKey,
+              inputDigest: hashJson(a),
+              correlationId,
+            },
+          ),
         )
         if (
-          exported.draftId !== record.draftId ||
-          exported.revision !== record.revision ||
+          exported.draftId !== a.draftId ||
+          exported.revision !== a.expectedRevision ||
           exported.format !== a.format
         )
           throw new ToolError("INTERNAL")
@@ -226,39 +209,6 @@ export async function dispatch(
       throw new ToolError("INTERNAL")
     return result
   } catch (error) {
-    const failure = safeError(error)
-    if (failure.consentUrl) {
-      try {
-        firstPartyUrl(failure.consentUrl, config)
-      } catch {
-        delete failure.consentUrl
-        delete failure.consentRequestId
-        failure.code = "INTERNAL"
-        failure.messageKey = "extensions:mcp.INTERNAL"
-        failure.retryable = false
-      }
-    }
-    const structuredContent = jsonObject.parse(
-      outputs[name].parse({
-        contractVersion: CONTRACT_VERSION,
-        ok: false,
-        correlationId,
-        error: failure,
-      }),
-    )
-    return {
-      isError: true,
-      content: [
-        {
-          type: "text",
-          text: JSON.stringify({ ok: false, code: failure.code }),
-        },
-      ],
-      structuredContent,
-      ...(failure.code === "SCOPE_REQUIRED" ||
-      failure.code === "ACCOUNT_UNAVAILABLE"
-        ? { _meta: { "mcp/www_authenticate": [oauthChallenge(config, name)] } }
-        : {}),
-    }
+    return failureResult(name, error, config, correlationId)
   }
 }

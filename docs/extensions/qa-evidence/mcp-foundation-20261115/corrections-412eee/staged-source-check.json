@@ -1,0 +1,9 @@
+{
+  "status": "PASS",
+  "testedInputs": 125,
+  "gitIndexBytesMatchTestedManifest": true,
+  "unleasedPaths": [],
+  "frozen412eeeReceiptsUnchanged": true,
+  "sourceWhitespace": "PASS scoped git diff --cached --check",
+  "rawEvidence": "Original failed/successful logs and scripts retained byte-for-byte; whitespace warnings do not represent source changes"
+}

@@ -19,6 +19,7 @@ import {
 import type { Dependencies, ServerConfig } from "./dependencies.ts"
 import { validateConfig } from "./authorization.ts"
 import { dispatch } from "./dispatch.ts"
+import { guardedConnection } from "./connection.ts"
 
 /** Creates ONE independent SDK server per session/request, never a shared
  * singleton transport. No HTTP listener, route mount, env, account or disk access. */
@@ -38,6 +39,7 @@ export function createTadazzMcpServer(
       maxToolInputElements: 100,
     },
   )
+  const connection = guardedConnection(server, deps, config)
   for (const name of toolNames) {
     const visibility: Array<"model" | "app"> = widgetTools.has(name)
       ? ["model", "app"]
@@ -67,7 +69,13 @@ export function createTadazzMcpServer(
       name,
       settings,
       async (args: unknown, context: ServerContext) =>
-        dispatch(name, args, context, deps, config),
+        dispatch(
+          name,
+          args,
+          connection.principal(context.mcpReq.id),
+          deps,
+          config,
+        ),
     )
   }
   // Placeholder static resource contains no simulated game, credentials or user data.
@@ -136,5 +144,5 @@ export function createTadazzMcpServer(
       ],
     }),
   )
-  return server
+  return { connect: connection.connect, close: connection.close }
 }

@@ -1,0 +1,44 @@
+{
+  "package": "@modelcontextprotocol/server",
+  "version": "2.4.0",
+  "basis": "Actual isolated installed package, frozen public-registry lock. Uses public Transport composition and projectCallToolResult, not private APIs or SDK mutations.",
+  "sources": [
+    {
+      "path": "dist/mcp-BCJHyo7l.d.mts",
+      "sha256": "e69a8b3811163e31e8f328fbab63b25cbabd8eb3ea67b4bf4c0ee9d2075d4801",
+      "excerpts": [
+        {
+          "startLine": 1924,
+          "endLine": 1989,
+          "text": "interface Transport {\n  /**\n   * Starts processing messages on the transport, including any connection steps that might need to be taken.\n   *\n   * This method should only be called after callbacks are installed, or else messages may be lost.\n   *\n   * NOTE: This method should not be called explicitly when using {@linkcode @modelcontextprotocol/client!client/client.Client | Client} or {@linkcode @modelcontextprotocol/server!server/server.Server | Server} classes, as they will implicitly call {@linkcode Transport.start | start()}.\n   */\n  start(): Promise<void>;\n  /**\n   * Sends a JSON-RPC message (request or response).\n   *\n   * If present, `relatedRequestId` is used to indicate to the transport which incoming request to associate this outgoing message with.\n   */\n  send(message: JSONRPCMessage, options?: TransportSendOptions): Promise<void>;\n  /**\n   * Closes the connection.\n   */\n  close(): Promise<void>;\n  /**\n   * `true` when this transport opens one underlying request per outbound\n   * JSON-RPC request (the Streamable HTTP POST-per-request model) and\n   * therefore honors {@linkcode TransportSendOptions.requestSignal}. The\n   * 2026-07-28 spec makes closing that per-request stream the cancellation\n   * signal \u2014 the protocol layer aborts `requestSignal` instead of POSTing\n   * `notifications/cancelled` when this flag is set on a 2026-era\n   * connection. Transports that share a single channel (stdio, in-memory)\n   * leave it `undefined`.\n   */\n  readonly hasPerRequestStream?: boolean;\n  /**\n   * Callback for when the connection is closed for any reason.\n   *\n   * This should be invoked when {@linkcode Transport.close | close()} is called as well.\n   */\n  onclose?: (() => void) | undefined;\n  /**\n   * Callback for when an error occurs.\n   *\n   * Note that errors are not necessarily fatal; they are used for reporting any kind of exceptional condition out of band.\n   */\n  onerror?: ((error: Error) => void) | undefined;\n  /**\n   * Callback for when a message (request or response) is received over the connection.\n   *\n   * Includes the {@linkcode MessageExtraInfo.request | request} and {@linkcode MessageExtraInfo.authInfo | authInfo} if the transport is authenticated.\n   *\n   * The {@linkcode MessageExtraInfo.request | request} can be used to get the original request information (headers, etc.)\n   */\n  onmessage?: (<T$1 extends JSONRPCMessage>(message: T$1, extra?: MessageExtraInfo) => void) | undefined;\n  /**\n   * The session ID generated for this connection.\n   */\n  sessionId?: string | undefined;\n  /**\n   * Sets the protocol version used for the connection (called when the initialize response is received).\n   */\n  setProtocolVersion?: ((version: string) => void) | undefined;\n  /**\n   * Sets the supported protocol versions for header validation (called during connect).\n   * This allows the server to pass its supported versions to the transport.\n   */\n  setSupportedProtocolVersions?: ((versions: string[]) => void) | undefined;\n}\n//#endregion\n//#region ../core-internal/src/shared/protocol.d.ts"
+        },
+        {
+          "startLine": 3098,
+          "endLine": 3118,
+          "text": "  /**\n   * Project a `tools/call` result through this instance's negotiated wire\n   * codec \u2014 the era-agnostic SEP-2106 \u00a74.3 TextContent auto-append, plus on\n   * the 2025 era the `{result:\u2026}` wrap when `structuredContent` is a\n   * non-object value or the advertised `outputSchema` had a non-object root.\n   * Identity for object-shaped `structuredContent` on the 2026 era.\n   *\n   * `McpServer`'s built-in `tools/call` handler routes through this method.\n   * Low-level `setRequestHandler('tools/call', \u2026)` authors call it\n   * themselves so the projection lives in one place (the codec) and the\n   * server-side handler stays era-blind.\n   *\n   * This is the only codec function exposed on `Server` \u2014 the full\n   * `WireCodec` is intentionally not part of the public surface.\n   */\n  projectCallToolResult(result: CallToolResult, advertisedOutputSchema: Readonly<Record<string, unknown>> | undefined): CallToolResult;\n  /**\n   * Returns the current server capabilities.\n   */\n  getCapabilities(): ServerCapabilities;\n  /**"
+        },
+        {
+          "startLine": 3246,
+          "endLine": 3252,
+          "text": "declare class McpServer {\n  /**\n   * The underlying {@linkcode Server} instance, useful for advanced operations like sending notifications.\n   */\n  readonly server: Server;\n  private readonly _maxToolInputElements;\n  private _registeredResources;"
+        }
+      ]
+    },
+    {
+      "path": "dist/mcp-oHn3ureC.mjs",
+      "sha256": "c542c2e9e84767827ca9ac561946ec25a7f10b9aa48e84acca12f48bf1123ea2",
+      "excerpts": [
+        {
+          "startLine": 1242,
+          "endLine": 1258,
+          "text": "\t* codec \u2014 the era-agnostic SEP-2106 \u00a74.3 TextContent auto-append, plus on\n\t* the 2025 era the `{result:\u2026}` wrap when `structuredContent` is a\n\t* non-object value or the advertised `outputSchema` had a non-object root.\n\t* Identity for object-shaped `structuredContent` on the 2026 era.\n\t*\n\t* `McpServer`'s built-in `tools/call` handler routes through this method.\n\t* Low-level `setRequestHandler('tools/call', \u2026)` authors call it\n\t* themselves so the projection lives in one place (the codec) and the\n\t* server-side handler stays era-blind.\n\t*\n\t* This is the only codec function exposed on `Server` \u2014 the full\n\t* `WireCodec` is intentionally not part of the public surface.\n\t*/\n\tprojectCallToolResult(result, advertisedOutputSchema) {\n\t\treturn this._wireCodec().projectCallToolResult(result, advertisedOutputSchema);\n\t}\n\t/**"
+        },
+        {
+          "startLine": 1589,
+          "endLine": 1623,
+          "text": "\t\tthis.server.setRequestHandler(\"tools/list\", () => ({ tools: Object.entries(this._registeredTools).filter(([, tool]) => tool.enabled).map(([name, tool]) => {\n\t\t\tconst toolDefinition = {\n\t\t\t\tname,\n\t\t\t\ttitle: tool.title,\n\t\t\t\tdescription: tool.description,\n\t\t\t\tinputSchema: tool.inputSchema ? convertListedInputSchema(name, tool.inputSchema) : EMPTY_OBJECT_JSON_SCHEMA,\n\t\t\t\tannotations: tool.annotations,\n\t\t\t\ticons: tool.icons,\n\t\t\t\texecution: tool.execution,\n\t\t\t\t_meta: tool._meta\n\t\t\t};\n\t\t\tif (tool.outputSchema) toolDefinition.outputSchema = standardSchemaToJsonSchema(tool.outputSchema, \"output\");\n\t\t\treturn toolDefinition;\n\t\t}) }));\n\t\tthis.server.setRequestHandler(\"tools/call\", async (request, ctx) => {\n\t\t\tconst tool = this._registeredTools[request.params.name];\n\t\t\tif (!tool) throw new ProtocolError(ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} not found`);\n\t\t\tif (!tool.enabled) throw new ProtocolError(ProtocolErrorCode.InvalidParams, `Tool ${request.params.name} disabled`);\n\t\t\ttry {\n\t\t\t\tconst args = await this.validateToolInput(tool, request.params.arguments, request.params.name);\n\t\t\t\tconst result = await this.executeToolHandler(tool, args, ctx);\n\t\t\t\tawait this.validateToolOutput(tool, result, request.params.name);\n\t\t\t\tif (isInputRequiredResult(result)) return result;\n\t\t\t\treturn this.server.projectCallToolResult(result, tool.outputSchemaJson);\n\t\t\t} catch (error) {\n\t\t\t\tif (error instanceof ProtocolError && error.code === ProtocolErrorCode.UrlElicitationRequired) throw error;\n\t\t\t\treturn this.createToolError(error instanceof Error ? error.message : String(error));\n\t\t\t}\n\t\t});\n\t\tthis._toolHandlersInitialized = true;\n\t}\n\t/**\n\t* Creates a tool error result.\n\t*\n\t* @param errorMessage - The error message."
+        }
+      ]
+    }
+  ]
+}

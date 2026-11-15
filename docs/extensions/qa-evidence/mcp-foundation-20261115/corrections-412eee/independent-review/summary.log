@@ -1,0 +1,2 @@
+{"case":"inconsistent-stored-summary","ok":true,"summaryTitle":"Different stored summary","contentTitle":"Synthetic test"}
+{"case":"malformed-rate","limiterCalls":0,"isError":true,"hasStructured":false}

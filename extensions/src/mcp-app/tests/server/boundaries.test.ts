@@ -50,12 +50,12 @@ test("scoped ordinary export delegates without adding a new consent stage", asyn
   let exports = 0
   const h = await harness({
     exports: {
-      async createAuthorizedDownload(_p, draft, format) {
+      async createAuthorizedDownload(_p, selection, format) {
         exports++
         return {
           exportId: newKey(),
-          draftId: draft.draftId,
-          revision: draft.revision,
+          draftId: selection.draftId,
+          revision: selection.expectedRevision,
           format,
           downloadUrl: "https://studio.example.invalid/download/" + newKey(),
           expiresAt: new Date(Date.now() + 60_000).toISOString(),
