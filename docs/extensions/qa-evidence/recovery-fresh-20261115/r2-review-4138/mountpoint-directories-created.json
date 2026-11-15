@@ -1,0 +1,9 @@
+{
+  "emptyIgnoredDirectoriesOnly": [
+    "node_modules/.vite",
+    "node_modules/.vite-temp",
+    "packages/socket/dist",
+    "docs/extensions/qa-evidence/tadazz-next-source-parity-20261106"
+  ],
+  "priorTrackedFilesUnchanged": true
+}
