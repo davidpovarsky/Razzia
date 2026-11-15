@@ -1,0 +1,277 @@
+{
+  "mode": "ORIGINAL_FIVE_CASES_CONDITIONAL_ASSERTION_FIX",
+  "sourceEquivalentCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "baseSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+  "changedPath": "extensions/src/server/show-themes/installation.test.ts",
+  "fixedTestSha256": "e5f5b110eaf36415a8fa2d5080efe6f101025b4ea2e6e5f8e50497b3abbbb095",
+  "fixedTestBytes": 9816,
+  "records": [
+    {
+      "path": "extensions/src/server/show-themes/installation.ts",
+      "baseGitBlob": "fbe937b354291404c1eb039f687ae4ec3d8b8e11",
+      "targetGitBlob": "fbe937b354291404c1eb039f687ae4ec3d8b8e11",
+      "bytes": 24158,
+      "sha256": "ef354a86bfa72faccfeb1c525ddffa45335207400b808f69807ac9cf0a14c7f1",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.fixture.ts",
+      "baseGitBlob": "135646d3034bc5f4bd9829b3daaed7c873c2d588",
+      "targetGitBlob": "135646d3034bc5f4bd9829b3daaed7c873c2d588",
+      "bytes": 5205,
+      "sha256": "9a3f907fd06c57babef7d58e7d4ee7a670e0c263feff5cfe6d1b7eaa72e72fe7",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/validate-package.ts",
+      "baseGitBlob": "b2f2b8f948c591ad9dd408a03cfa5efdbbbbbbe4",
+      "targetGitBlob": "b2f2b8f948c591ad9dd408a03cfa5efdbbbbbbe4",
+      "bytes": 13170,
+      "sha256": "1ea9806673243691dad5f7171323835d7e5c82fda5d34d96f91526f36940b070",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/show-themes/definition.ts",
+      "baseGitBlob": "c4ce9bf15dc62a9869b66b02a0106b19f58250bf",
+      "targetGitBlob": "c4ce9bf15dc62a9869b66b02a0106b19f58250bf",
+      "bytes": 13409,
+      "sha256": "babeb6762eeb80c70c4c54b98083ddcbe49239b04bfdc2faf05e9d2f01820134",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/show-themes/registry.ts",
+      "baseGitBlob": "48f63a96dfb581d04ea403224f58896167d7ab49",
+      "targetGitBlob": "48f63a96dfb581d04ea403224f58896167d7ab49",
+      "bytes": 2006,
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "baseGitBlob": "7d64d663dcc99568d6e0e70f04bb8c38e9d2649e",
+      "targetGitBlob": "7d64d663dcc99568d6e0e70f04bb8c38e9d2649e",
+      "bytes": 6727,
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/packages/protocol.ts",
+      "baseGitBlob": "2318a6e797c34299363ce344871a7120135a0048",
+      "targetGitBlob": "2318a6e797c34299363ce344871a7120135a0048",
+      "bytes": 5468,
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/packages/manifest.ts",
+      "baseGitBlob": "14c0ad865349abb6e3be48c07410a42b6675cf5d",
+      "targetGitBlob": "14c0ad865349abb6e3be48c07410a42b6675cf5d",
+      "bytes": 3577,
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/core/packages/paths.ts",
+      "baseGitBlob": "4e8618d4fccdbbd547e63da20bbc4f0b0c8654e7",
+      "targetGitBlob": "4e8618d4fccdbbd547e63da20bbc4f0b0c8654e7",
+      "bytes": 1981,
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508",
+      "unchanged": true,
+      "runtimeSource": true
+    },
+    {
+      "path": "extensions/src/server/show-themes/installation.test.ts",
+      "baseGitBlob": "477080ba7e3853547da82a167ec9b42d9fb20be1",
+      "targetGitBlob": "477080ba7e3853547da82a167ec9b42d9fb20be1",
+      "bytes": 9608,
+      "sha256": "ed8a2e78732cb4150c3d64f3e346ee6017f0d68d2e2e083401bb4ba3610bc92e",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/server/show-themes/review.ts",
+      "baseGitBlob": "ae418532119b0ed99cc92d07721d9b40842e2b24",
+      "targetGitBlob": "ae418532119b0ed99cc92d07721d9b40842e2b24",
+      "bytes": 5680,
+      "sha256": "7dfd3327901f5e43d15eac845b601a53ea403788f1a9a27f2a425f859ae0de0b",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/core/show-themes/classic.manifest.json",
+      "baseGitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+      "targetGitBlob": "8b98663682dd71bab628ec481e39b1abfd460ee0",
+      "bytes": 41813,
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/core/show-themes/razzia.manifest.json",
+      "baseGitBlob": "fb43db8e115f42d751b111520fc0e1ae7caedca8",
+      "targetGitBlob": "fb43db8e115f42d751b111520fc0e1ae7caedca8",
+      "bytes": 45192,
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/vitest.config.ts",
+      "baseGitBlob": "a74fe7bea654c873a3682ab2588ee088965250bb",
+      "targetGitBlob": "a74fe7bea654c873a3682ab2588ee088965250bb",
+      "bytes": 718,
+      "sha256": "73742e609bb01e7567e054e7b0c3475d6ec973e1bb4a51f4b131374198db0d30",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "baseGitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+      "targetGitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+      "bytes": 225022,
+      "sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "package.json",
+      "baseGitBlob": "a321e255775dcddf9237f6ebe4d04215341e1bef",
+      "targetGitBlob": "a321e255775dcddf9237f6ebe4d04215341e1bef",
+      "bytes": 1284,
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/package.json",
+      "baseGitBlob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "targetGitBlob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "bytes": 3427,
+      "sha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "packages/web/public/tadazz-show/v4/tadazz-brand-logo.png",
+      "baseGitBlob": "3100afcd466c060ea8de1c8d1f41665b897d952b",
+      "targetGitBlob": "3100afcd466c060ea8de1c8d1f41665b897d952b",
+      "bytes": 1976726,
+      "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "packages/web/public/sounds/answersMusic.mp3",
+      "baseGitBlob": "c182028b7a55428da9684539c4926cd6cf6cd963",
+      "targetGitBlob": "c182028b7a55428da9684539c4926cd6cf6cd963",
+      "bytes": 1246763,
+      "sha256": "d1ebc0f3046aa0916ba5f2604df4f1f8f4087402d4d237ce75fa21f0a1de3cc6",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/en/extensions.json",
+      "baseGitBlob": "1ff1497eadfebaa5b7ad4a69c2e6ddbcba9b983a",
+      "targetGitBlob": "1ff1497eadfebaa5b7ad4a69c2e6ddbcba9b983a",
+      "bytes": 36896,
+      "sha256": "72853aaf313c8011a875ab0db78768215274f6c8d82970d03af6e3ef16b77695",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/fr/extensions.json",
+      "baseGitBlob": "bc4aea4c7001e9f4faf8fc49b1d4fec4816f6a8d",
+      "targetGitBlob": "bc4aea4c7001e9f4faf8fc49b1d4fec4816f6a8d",
+      "bytes": 40135,
+      "sha256": "b644c6ede9e8350d3fe287e7148493ffd21ca5261a904032c082b20fdcb3a13c",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/de/extensions.json",
+      "baseGitBlob": "0ccc1abb42f3fbd0c610e0f00c5a88865114d372",
+      "targetGitBlob": "0ccc1abb42f3fbd0c610e0f00c5a88865114d372",
+      "bytes": 38351,
+      "sha256": "f5fd2ca682d4d2396b2e0897410c5d25706c49bc5fe54c9ec631ff4643003309",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/es/extensions.json",
+      "baseGitBlob": "351bb79760bfbb98fefb2ec88088e022a25320a4",
+      "targetGitBlob": "351bb79760bfbb98fefb2ec88088e022a25320a4",
+      "bytes": 39655,
+      "sha256": "34f57fefbbb3c7d6e34ecd7d27c070ce9ded45610f0ea723f4854833076a1fbd",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/it/extensions.json",
+      "baseGitBlob": "b70bfda970b51b1e34e8f3198349b61c7905fdaa",
+      "targetGitBlob": "b70bfda970b51b1e34e8f3198349b61c7905fdaa",
+      "bytes": 38862,
+      "sha256": "0df3f2b7f49777767627f393ea6e0d04871d715da7a47a4303a967e26ac88c30",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/ja/extensions.json",
+      "baseGitBlob": "1d5de2b0b11defee1d8411e1d2f912aeb2d38a39",
+      "targetGitBlob": "1d5de2b0b11defee1d8411e1d2f912aeb2d38a39",
+      "bytes": 42956,
+      "sha256": "641342621669089085e86ffa8602cce0adeefe96784e36b9ca5ee5b3e1375267",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/tr/extensions.json",
+      "baseGitBlob": "350e771782220ef9b4a153f20c7d48bc8b46c877",
+      "targetGitBlob": "350e771782220ef9b4a153f20c7d48bc8b46c877",
+      "bytes": 38715,
+      "sha256": "d775834876613c057b0ff70db3325060cf3db820de28e1ac71d7e11cdcc2a018",
+      "unchanged": true,
+      "runtimeSource": false
+    },
+    {
+      "path": "extensions/src/locales/vi/extensions.json",
+      "baseGitBlob": "ccab4f47c2f119850cd77d914915d315cbe92373",
+      "targetGitBlob": "ccab4f47c2f119850cd77d914915d315cbe92373",
+      "bytes": 43549,
+      "sha256": "d07c5d71431c08f65609f4545ff89e31249ec6ea7315cfa0783e7c6e702f9ace",
+      "unchanged": true,
+      "runtimeSource": false
+    }
+  ],
+  "dependencyHashes": [
+    {
+      "path": "package.json",
+      "bytes": 5709,
+      "sha256": "df72ec137c86d8454d129967ed88c640012fa8db7950d58f79cee8a94df437f1",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    },
+    {
+      "path": "dist/chunks/index.C4tKZ0yW.js",
+      "bytes": 321013,
+      "sha256": "82c2b55e5dd5245c0c5e9eccd73fa6d7ade2694644175967e27a28b67932cb9d",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    },
+    {
+      "path": "dist/chunks/run.BTlFXlnv.js",
+      "bytes": 165869,
+      "sha256": "950469eb28cec3faa51f30c3203e1ab3099b54a52e3282b05f388930e7769717",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    }
+  ],
+  "traceSha256": "4667925643ab0f18d97c646b0faf5520e7757cf8a55f7c1f30186f6f5405b01d",
+  "preeditLedgerSha256": "103a6739ecdaf37d0cf057aac84049cc9675be1da75318ab6b40b90488a81353",
+  "originalTimeoutMs": 30000,
+  "fullSuite": "NOT_RUN"
+}

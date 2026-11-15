@@ -1,0 +1,13 @@
+{
+  "extends": "/workspace/extensions/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "typeRoots": [
+      "/workspace/extensions/node_modules/@types",
+      "/workspace/node_modules/@types"
+    ]
+  },
+  "include": [
+    "/workspace/extensions/src/server/show-themes/installation.test.ts"
+  ]
+}

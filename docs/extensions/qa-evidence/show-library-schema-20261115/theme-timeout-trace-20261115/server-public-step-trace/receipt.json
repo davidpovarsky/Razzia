@@ -1,0 +1,95 @@
+{
+  "mode": "DIAGNOSTIC_VARIANT_NOT_ORIGINAL_ACCEPTANCE",
+  "harnessSha256": "30380d83f5b6cc9f7492b1e12c24653b1b28af58aff4b9674201ab3f7d57e7c0",
+  "originalTimeoutMs": 30000,
+  "commands": [
+    {
+      "label": "container-create",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "run",
+        "-d",
+        "--pull=never",
+        "--name",
+        "tadazz-hq-theme-installation-trace-20261115",
+        "--read-only",
+        "--cpus=0.25",
+        "--memory=2g",
+        "--pids-limit=128",
+        "--network=none",
+        "--workdir=/workspace/extensions",
+        "--env",
+        "XDG_DATA_HOME=/tmp/vitest-private",
+        "--tmpfs",
+        "/tmp:rw,nosuid,nodev,size=128m",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0,dst=/workspace,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/fixtures/theme-installation-trace-30380d83f5b6cc9f7492b1e12c24653b1b28af58aff4b9674201ab3f7d57e7c0/installation.public-step-trace.test.ts,dst=/workspace/extensions/src/server/show-themes/installation.test.ts,readonly",
+        "--mount",
+        "type=bind,src=/home/ubuntu/tadazz-hq-qa-20261115/evidence/theme-installation-trace-30380d83f5b6cc9f7492b1e12c24653b1b28af58aff4b9674201ab3f7d57e7c0,dst=/evidence",
+        "--entrypoint=sleep",
+        "tadazz:design-system-qa-20261110",
+        "infinity"
+      ],
+      "exitCode": 0,
+      "seconds": 0.211,
+      "logSha256": "c4b412f1606097582af2fe1a2967328ea02184f214e4fc6e6a541e52899fca52"
+    },
+    {
+      "label": "vitest-diagnostic",
+      "args": [
+        "sudo",
+        "-n",
+        "docker",
+        "exec",
+        "tadazz-hq-theme-installation-trace-20261115",
+        "node",
+        "node_modules/vitest/vitest.mjs",
+        "run",
+        "src/server/show-themes/installation.test.ts",
+        "--maxWorkers=1",
+        "--no-file-parallelism",
+        "--no-cache",
+        "--configLoader=runner",
+        "--reporter=json",
+        "--outputFile=/evidence/vitest-diagnostic.json"
+      ],
+      "exitCode": 1,
+      "seconds": 39.019,
+      "logSha256": "9b1f66a38fa32b71965f41f134316bf5da47377e57085ee6effd8826b2d05301"
+    }
+  ],
+  "status": "FINISHED_DIAGNOSTIC_NOT_ORIGINAL_ACCEPTANCE",
+  "freeBefore": 2662154240,
+  "processWatchdogSeconds": 45,
+  "watchdogIsNotTestTimeoutOverride": true,
+  "inputBefore": {
+    "status": "PASS",
+    "unchangedSourceDataAndConfigFiles": 27,
+    "executedVitestFiles": 3
+  },
+  "allocation": {
+    "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "nanoCpus": 250000000,
+    "memoryBytes": 2147483648,
+    "network": "none",
+    "readonlyRootfs": true,
+    "tmpfs": {
+      "/tmp": "rw,nosuid,nodev,size=128m"
+    },
+    "ports": {}
+  },
+  "inputAfter": {
+    "status": "PASS",
+    "unchangedSourceDataAndConfigFiles": 27,
+    "executedVitestFiles": 3
+  },
+  "measuredFixtureEvidenceBytes": 75381,
+  "containerWritableBytes": 16384,
+  "allocationReleased": true,
+  "finishedUtc": "2026-11-15T09:20:29.964791+00:00",
+  "freeAfter": 2661220352
+}

@@ -99,9 +99,15 @@ describe("durable theme installation", () => {
     expect(() => store.publish(reviewer, first)).toThrow("staged")
     publish(store, first)
     expect(store.catalog(stranger.tenantId)).toEqual([])
-    expect(store.readAsset(author, first, "picture", true).bytes).toEqual(
-      picture,
-    )
+    const publishedPictureBytes = store.readAsset(
+      author,
+      first,
+      "picture",
+      true,
+    ).bytes
+    expect(Buffer.isBuffer(publishedPictureBytes)).toBe(true)
+    expect(publishedPictureBytes.length).toBe(picture.length)
+    expect(publishedPictureBytes.equals(picture)).toBe(true)
     const second = prepare(store, "2.0.0")
     publish(store, second)
     expect(store.active(author.tenantId, "qa-independent")).toBe(second)
