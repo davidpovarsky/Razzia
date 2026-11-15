@@ -1,9 +1,18 @@
 import fs from "node:fs"
 import path from "node:path"
-import { assertDirectoryChain, lstatOrMissing } from "./durable-files"
+import {
+  assertDirectoryChain,
+  lstatOrMissing,
+  sameDurableIdentity,
+  type DurableIdentity,
+} from "./durable-files"
 
 export const CREATION_FAMILY = ".tadazz-creation-v1"
 const OWNER = /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/iu
+const capturedRoots = new WeakMap<
+  CreationScope,
+  { configured: DurableIdentity | null; root: DurableIdentity | null }
+>()
 export interface CreationScope {
   configuredRoot: string
   root: string
@@ -30,14 +39,23 @@ export function captureCreationScope(
   const root = owner
     ? path.join(configuredRoot, "tenants", owner)
     : configuredRoot
+  existingDirectory(configuredRoot)
+  existingDirectory(root)
   if (path.resolve(environment.getPath()) !== root)
     throw new Error("Native creation root does not match trusted owner")
-  return {
+  const scope: CreationScope = {
     configuredRoot,
     root,
     mode: enabled ? "tenant" : "legacy-global",
     owner: owner ?? null,
   }
+  capturedRoots.set(scope, {
+    configured: lstatOrMissing(configuredRoot)
+      ? assertDirectoryChain(configuredRoot)
+      : null,
+    root: lstatOrMissing(root) ? assertDirectoryChain(root) : null,
+  })
+  return scope
 }
 export function assertCreationScope(
   environment: CreationEnvironment,
@@ -51,6 +69,18 @@ export function assertCreationScope(
     current.owner !== expected.owner
   )
     throw new Error("Native creation scope changed during operation")
+  const before = capturedRoots.get(expected),
+    after = capturedRoots.get(current)
+  if (
+    before &&
+    after &&
+    ((before.configured &&
+      (!after.configured ||
+        !sameDurableIdentity(before.configured, after.configured))) ||
+      (before.root &&
+        (!after.root || !sameDurableIdentity(before.root, after.root))))
+  )
+    throw new Error("Native creation physical root changed during operation")
 }
 export function creationFamily(scope: CreationScope) {
   if (

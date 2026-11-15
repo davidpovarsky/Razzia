@@ -1,5 +1,4 @@
 import fs from "node:fs"
-import os from "node:os"
 import path from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
@@ -9,6 +8,7 @@ import {
   syncOwnedFile,
   writeDurableExclusive,
 } from "./durable-files"
+import { creationFixtureParent } from "./creation-fixture-root"
 
 describe.runIf(process.platform === "linux")(
   "C1 real Linux fence primitives",
@@ -16,13 +16,13 @@ describe.runIf(process.platform === "linux")(
     let root: string
     beforeEach(() => {
       root = fs.mkdtempSync(
-        path.join(os.tmpdir(), "tadazz-c1-durable-synthetic-"),
+        path.join(creationFixtureParent(), "tadazz-c1-durable-synthetic-"),
       )
     })
     afterEach(() => {
       vi.restoreAllMocks()
       if (
-        path.dirname(fs.realpathSync(root)) !== fs.realpathSync(os.tmpdir()) ||
+        path.dirname(fs.realpathSync(root)) !== creationFixtureParent() ||
         !path.basename(root).startsWith("tadazz-c1-durable-synthetic-")
       )
         throw new Error("Refusing non-synthetic C1 cleanup")

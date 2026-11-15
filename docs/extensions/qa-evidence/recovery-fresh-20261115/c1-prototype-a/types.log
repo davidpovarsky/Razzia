@@ -1,0 +1,5 @@
+extensions/src/server/storage/creation-child.ts(83,3): error TS2322: Type '(directory: any, options: any) => void' is not assignable to type '(path: PathLike) => void'.
+  Target signature provides too few arguments. Expected 2 or more, but got 1.
+extensions/src/server/storage/creation-child.ts(83,19): error TS7006: Parameter 'directory' implicitly has an 'any' type.
+extensions/src/server/storage/creation-child.ts(83,30): error TS7006: Parameter 'options' implicitly has an 'any' type.
+extensions/src/server/storage/creation-child.ts(89,32): error TS2554: Expected 1 arguments, but got 2.

@@ -1,4 +1,7 @@
 import { createExtensionRoutes } from "@razzia/extensions/server"
+import { createNativeCreationPort } from "@razzia/extensions/server"
+import { accountsEnabled, activeAccount } from "../services/account-scope"
+import { resolveConfigRoot } from "../services/config-scope"
 import { auth } from "@razzia/socket/api/routes/auth"
 import { accounts } from "@razzia/socket/api/routes/accounts"
 import { games } from "@razzia/socket/api/routes/games"
@@ -12,6 +15,7 @@ import {
   deleteQuizz,
   getPath,
   getQuizzById,
+  prepareNativeQuizCreation,
   saveQuizz,
   updateQuizz,
 } from "@razzia/socket/services/config"
@@ -27,6 +31,17 @@ const extensionRoutes = createExtensionRoutes(
     saveQuizz,
     deleteQuizz,
     listMedia,
+    creation:
+      process.env.TADAZZ_C1_CREATION_PROTOTYPE === "true" &&
+      process.platform === "linux"
+        ? createNativeCreationPort({
+            configuredRoot: resolveConfigRoot,
+            accountsEnabled,
+            activeOwner: activeAccount,
+            getPath,
+            prepare: prepareNativeQuizCreation,
+          })
+        : undefined,
   },
   requireManager,
 )

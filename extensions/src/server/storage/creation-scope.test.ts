@@ -1,5 +1,4 @@
 import fs from "node:fs"
-import os from "node:os"
 import path from "node:path"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import {
@@ -8,6 +7,7 @@ import {
   CREATION_FAMILY,
   discoverCreationScopes,
 } from "./creation-scope"
+import { creationFixtureParent } from "./creation-fixture-root"
 
 const OWNER = "00000000-0000-4000-8000-0000000000AF"
 describe.runIf(process.platform === "linux")(
@@ -16,13 +16,13 @@ describe.runIf(process.platform === "linux")(
     let root: string
     beforeEach(() => {
       root = fs.mkdtempSync(
-        path.join(os.tmpdir(), "tadazz-c1-scope-synthetic-"),
+        path.join(creationFixtureParent(), "tadazz-c1-scope-synthetic-"),
       )
     })
     afterEach(() => {
       vi.restoreAllMocks()
       if (
-        path.dirname(fs.realpathSync(root)) !== fs.realpathSync(os.tmpdir()) ||
+        path.dirname(fs.realpathSync(root)) !== creationFixtureParent() ||
         !path.basename(root).startsWith("tadazz-c1-scope-synthetic-")
       )
         throw new Error("Refusing non-synthetic scope cleanup")

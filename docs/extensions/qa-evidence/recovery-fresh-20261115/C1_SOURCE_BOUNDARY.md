@@ -1,5 +1,7 @@
 # C1 source preparation and exact writer boundary
 
+**Historical foundation checkpoint `3b73fc1`.** The manager subsequently selected prototype A and the source wiring below was implemented. Current candidate, static evidence and remaining gates are recorded in [C1_PROTOTYPE_A_HANDOFF.md](C1_PROTOTYPE_A_HANDOFF.md). The implementation-not-wired statements in this foundation record describe that earlier checkpoint only.
+
 Base: R2 evidence HEAD `96767de6d40b594324687e15b0f386b87dd7ef19`. Status: **source foundations prepared; C1 reservation/publication/service/startup wiring NOT implemented or tested**. There is no C1 runtime pass or durability qualification.
 
 Completed authorized source work:

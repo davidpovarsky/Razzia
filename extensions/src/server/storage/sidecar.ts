@@ -7,6 +7,7 @@ import {
 } from "../../core/index"
 
 import type { UploadedMedia } from "@razzia/common/types/game"
+import type { NativeCreationPort } from "./creation-reservation"
 
 export interface StorageInjections {
   getPath: (subPath?: string) => string
@@ -15,6 +16,8 @@ export interface StorageInjections {
   updateQuizz: (id: string, data: unknown) => { id: string }
   deleteQuizz: (id: string) => void
   listMedia?: () => UploadedMedia[]
+  /** Physical creation is opt-in at actual native composition; Map stagers omit it. */
+  creation?: NativeCreationPort
   /** Explicit native startup guard; opaque callback-backed adapters omit it. */
   recoveryBoundary?: (
     quizId: string,

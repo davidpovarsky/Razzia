@@ -185,6 +185,7 @@ export function writeDurableExclusive(file: string, raw: string) {
   if (
     !result ||
     !created ||
+    fs.lstatSync(file, { bigint: true }).nlink !== 1n ||
     !sameDurableIdentity(result, created) ||
     result.raw !== raw ||
     result.length !== Buffer.byteLength(raw)
@@ -192,7 +193,11 @@ export function writeDurableExclusive(file: string, raw: string) {
     throw new Error("Creation write verification failed")
   syncDirectory(path.dirname(file))
   const fenced = readDurableFile(file)
-  if (!fenced || !sameDurableImage(fenced, result))
+  if (
+    !fenced ||
+    !sameDurableImage(fenced, result) ||
+    fs.lstatSync(file, { bigint: true }).nlink !== 1n
+  )
     throw new Error("Creation file changed during namespace fence")
   return fenced
 }
