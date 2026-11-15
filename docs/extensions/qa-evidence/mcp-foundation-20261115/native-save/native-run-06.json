@@ -1,0 +1,22 @@
+{
+  "command": [
+    "wsl.exe",
+    "-d",
+    "Ubuntu",
+    "--exec",
+    "env",
+    "TMPDIR=/home/david/tadazz-f-native-save-evidence-20261115",
+    "/home/david/.local/bin/node",
+    "--test",
+    "--test-reporter=tap",
+    "/mnt/c/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-mcp-20261115/docs/extensions/qa-evidence/mcp-foundation-20261115/native-save/native-candidate-06.mjs"
+  ],
+  "started": "2026-11-15T20:16:17.916Z",
+  "ended": "2026-11-15T20:16:26.136Z",
+  "exit": 0,
+  "signal": null,
+  "bundleSha256": "6ed1b801f66d47c676a7ee049c661cd5f6157f60f2b5f2a4fc5ce0f4ea701897",
+  "logSha256": "066dbe337296f84a617f02a12205ab8b7abfa6f2c25042b397127ccfd5cc542d",
+  "oracleJob": false,
+  "actualBrowser": false
+}
