@@ -1,0 +1,9 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal (6.5s)
+  ✓  2 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections (2.9s)
+  ✓  3 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:42:1 › distinct native family switch, exact built admission and disposal (47.4s)
+  ✓  4 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2.spec.ts:133:1 › native current-card locale/count/mode/phase and host clock projections (25.5s)
+
+  4 passed (1.6m)

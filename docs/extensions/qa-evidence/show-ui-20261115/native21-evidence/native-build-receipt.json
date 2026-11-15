@@ -1,0 +1,1168 @@
+{
+  "node": "v24.22.2",
+  "arch": "arm64",
+  "platform": "linux",
+  "inputs": [
+    {
+      "id": "/work/extensions/src/core/packages/manifest.ts",
+      "observedRealpath": "/work/extensions/src/core/packages/manifest.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/packages/manifest.ts",
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a",
+      "bytes": 3577
+    },
+    {
+      "id": "/work/extensions/src/core/packages/paths.ts",
+      "observedRealpath": "/work/extensions/src/core/packages/paths.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/packages/paths.ts",
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508",
+      "bytes": 1981
+    },
+    {
+      "id": "/work/extensions/src/core/packages/protocol.ts",
+      "observedRealpath": "/work/extensions/src/core/packages/protocol.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/packages/protocol.ts",
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99",
+      "bytes": 5468
+    },
+    {
+      "id": "/work/extensions/src/core/product-branding.ts",
+      "observedRealpath": "/work/extensions/src/core/product-branding.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/product-branding.ts",
+      "sha256": "f6a8447cd41a2d81b5d25968455dea9ad119b10dfa77ba38cbae87cd8110fad9",
+      "bytes": 258
+    },
+    {
+      "id": "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "observedRealpath": "/work/extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "sha256": "6a02749e4e75e5355bcaae386d188752af31a699e149cb3c3862bb843cf1ee63",
+      "bytes": 3298
+    },
+    {
+      "id": "/work/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "observedRealpath": "/work/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261",
+      "bytes": 720
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/audio.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/audio.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/audio.ts",
+      "sha256": "e2a323bc42ea729cfd8669cc9dd2b2d7eedc240ed8bb420f7df5e33de78e6c9e",
+      "bytes": 6254
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/classic.manifest.json",
+      "observedRealpath": "/work/extensions/src/core/show-themes/classic.manifest.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/classic.manifest.json",
+      "sha256": "b7158ed1aaaee800972ec66bd6bcd9cbbe6de48a48912aa53d56a4af1ba8c061",
+      "bytes": 41813
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/definition.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/definition.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/definition.ts",
+      "sha256": "babeb6762eeb80c70c4c54b98083ddcbe49239b04bfdc2faf05e9d2f01820134",
+      "bytes": 13409
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/index.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/index.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/index.ts",
+      "sha256": "909454f8f9fc4c7e4e2c7c17f8838c19b7334ca9060a7a4e6120cf2efbfceb09",
+      "bytes": 163
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/media.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/media.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/media.ts",
+      "sha256": "0abb2c489cf8472b18980d4b1bb59ef7d85e84a3d30b4d16a878c566e8ff5295",
+      "bytes": 2893
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/razzia.manifest.json",
+      "observedRealpath": "/work/extensions/src/core/show-themes/razzia.manifest.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/razzia.manifest.json",
+      "sha256": "ff910bf226e39af78de8240b81671c089ec0c81c48a57538708d0c0caf93eb51",
+      "bytes": 45192
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/registry.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/registry.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/registry.ts",
+      "sha256": "6f980606571688cb3e2fc653d77f047d7043ca1a06488edd0d3464afcd3e2e55",
+      "bytes": 2006
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/resolve.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/resolve.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/resolve.ts",
+      "sha256": "867529ee357fffdf315bcfba570ebf50ce1ccf0178b9131ff69197f11243ece5",
+      "bytes": 7201
+    },
+    {
+      "id": "/work/extensions/src/core/show-themes/selection.ts",
+      "observedRealpath": "/work/extensions/src/core/show-themes/selection.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/core/show-themes/selection.ts",
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723",
+      "bytes": 6727
+    },
+    {
+      "id": "/work/extensions/src/locales/de/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/de/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/de/extensions.json",
+      "sha256": "f5fd2ca682d4d2396b2e0897410c5d25706c49bc5fe54c9ec631ff4643003309",
+      "bytes": 38351
+    },
+    {
+      "id": "/work/extensions/src/locales/en/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/en/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/en/extensions.json",
+      "sha256": "72853aaf313c8011a875ab0db78768215274f6c8d82970d03af6e3ef16b77695",
+      "bytes": 36896
+    },
+    {
+      "id": "/work/extensions/src/locales/es/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/es/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/es/extensions.json",
+      "sha256": "34f57fefbbb3c7d6e34ecd7d27c070ce9ded45610f0ea723f4854833076a1fbd",
+      "bytes": 39655
+    },
+    {
+      "id": "/work/extensions/src/locales/fr/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/fr/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/fr/extensions.json",
+      "sha256": "b644c6ede9e8350d3fe287e7148493ffd21ca5261a904032c082b20fdcb3a13c",
+      "bytes": 40135
+    },
+    {
+      "id": "/work/extensions/src/locales/it/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/it/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/it/extensions.json",
+      "sha256": "0df3f2b7f49777767627f393ea6e0d04871d715da7a47a4303a967e26ac88c30",
+      "bytes": 38862
+    },
+    {
+      "id": "/work/extensions/src/locales/ja/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/ja/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/ja/extensions.json",
+      "sha256": "641342621669089085e86ffa8602cce0adeefe96784e36b9ca5ee5b3e1375267",
+      "bytes": 42956
+    },
+    {
+      "id": "/work/extensions/src/locales/tr/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/tr/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/tr/extensions.json",
+      "sha256": "d775834876613c057b0ff70db3325060cf3db820de28e1ac71d7e11cdcc2a018",
+      "bytes": 38715
+    },
+    {
+      "id": "/work/extensions/src/locales/vi/extensions.json",
+      "observedRealpath": "/work/extensions/src/locales/vi/extensions.json",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/locales/vi/extensions.json",
+      "sha256": "d07c5d71431c08f65609f4545ff89e31249ec6ea7315cfa0783e7c6e702f9ace",
+      "bytes": 43549
+    },
+    {
+      "id": "/work/extensions/src/presentation/platform-controls.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/platform-controls.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/platform-controls.tsx",
+      "sha256": "29e505427d5270f620f7e6772114a197606368f1360fba01faceb29cd72a8f27",
+      "bytes": 1496
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native21/NativePreviewStage.tsx",
+      "sha256": "7d2859b5fa4c21062e1e369f055c7f36c4538283a2fb7e0ffcdb75ec51bcdd23",
+      "bytes": 7372
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/i18n.ts",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/i18n.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-library-preview/i18n.ts",
+      "sha256": "ba3253e298022e57f0267a7d84040591f81acf1e0fb979ac5a2c69f385fcaceb",
+      "bytes": 2855
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/preview-clock.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-library-preview/preview-clock.ts",
+      "sha256": "6b50f4afe1f4dfa61b2cdebf314bc4d4e2552d17f48f1da7bad7a2c8a827cc42",
+      "bytes": 687
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+      "sha256": "8ddb726f735822698bf669456e18eb17a40a988bd900b8dc436699d173dfd379",
+      "bytes": 3466
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+      "sha256": "da39fda95e34bd27c8a7e7a85b50874f65a56b2a696318c28d4f8693deaab191",
+      "bytes": 582
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native20/renderer-entry.tsx",
+      "sha256": "0c976ae6987a9a76381251f10728374949697cc60dee7e47acbd12e1fedf13aa",
+      "bytes": 3117
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+      "observedRealpath": "/work/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+      "sha256": "107dc19549234760d8e1314acda9294fcee78183fda8ba9a47a68eba8436f1b4",
+      "bytes": 3895
+    },
+    {
+      "id": "/work/extensions/src/presentation/show-themes/context.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/show-themes/context.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/show-themes/context.tsx",
+      "sha256": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+      "bytes": 3894
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+      "sha256": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+      "bytes": 46683
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+      "sha256": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+      "bytes": 24899
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/labels.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/labels.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/labels.ts",
+      "sha256": "ec87f8e919c533b753260754f0effafd7e8b9a38fe8e01c47266650fc2e69abd",
+      "bytes": 1887
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/motion-engine.ts",
+      "sha256": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+      "bytes": 6885
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/motion-spec.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/motion-spec.ts",
+      "sha256": "e1609a71560061fb92031efa460bd1fcb5ab09e7986435e43b36fc79892ce3d9",
+      "bytes": 9652
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/show-director.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/show-director.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/show-director.ts",
+      "sha256": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+      "bytes": 25414
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+      "sha256": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+      "bytes": 14120
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+      "sha256": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1",
+      "bytes": 15581
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-show/voting-presentation.ts",
+      "sha256": "4e363ebce559ad089bd4be0af9a630ef1de862a25de81bed8a5c0980609a04ec",
+      "bytes": 282
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+      "sha256": "647e599d090afa6079414cc071a064a7eec846b274a9a43fa10bd903b0e7712d",
+      "bytes": 20999
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+      "sha256": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+      "bytes": 12839
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/components.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/components.tsx",
+      "sha256": "687a4c7df31020ebac2bfbe6a9656ab8859b88c44c4f2e6f57ed760e2ad43fee",
+      "bytes": 22511
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/full-show.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/full-show.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/full-show.css",
+      "sha256": "b50f72f81f0e5d1d6cea3bc9c095091483f7cfa948b0feda77cb2bc085e8fb38",
+      "bytes": 30400
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/index.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/index.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/index.ts",
+      "sha256": "13df4ed6997762c92d66c8f52023834a7a7cc8dac6bd486673b801df5b01d0d8",
+      "bytes": 873
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/motion.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/motion.ts",
+      "sha256": "988e450093c5ac5900e4229030b0a553f915d80ccec97db762837aac0993d501",
+      "bytes": 43863
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/presentation-note.ts",
+      "sha256": "8e861aec8421972d7ffbaf7e37666df52eb7bf6e0d13c804acf90cec8a1b9a58",
+      "bytes": 354
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+      "sha256": "fef1b90ba6e06084eb741b1e1bf5e6e8cafc84252d757b184fa9fdabd47537f3",
+      "bytes": 4593
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+      "sha256": "c25cb9636e981c74dc419c38e17d8fcaed0273a18a52bd35a69af9786d97cbc9",
+      "bytes": 2647
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+      "sha256": "eb55464d8ab185c8d8dad3d93f5440099914aaa4617450aa148b4a4a42650890",
+      "bytes": 17472
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+      "sha256": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89",
+      "bytes": 71198
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+      "sha256": "f148e7402f2512efe7b703c16134c590cbc405e72867f21069b9b0f53e5637f5",
+      "bytes": 9459
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+      "sha256": "8158534cdf75d9e69fc2ea086a08a1342c88d857d841c174f22f79a7221db980",
+      "bytes": 7062
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+      "sha256": "b871cb6a909446873857cbdc495dba9ff4e0fd9c66a471a046c48da12bed8143",
+      "bytes": 553
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/source-layout.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/source-layout.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/source-layout.css",
+      "sha256": "0cbda768b1a54c078b3ce82880ddf41a2d19db67137881133736e1185ab1de8f",
+      "bytes": 17342
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+      "sha256": "0574cd74db486d693866bfabc5ed48e9fef62c889dcf408afff30dcc75016b44",
+      "bytes": 35840
+    },
+    {
+      "id": "/work/extensions/src/presentation/tadazz-v4/types.ts",
+      "observedRealpath": "/work/extensions/src/presentation/tadazz-v4/types.ts",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11/extensions/src/presentation/tadazz-v4/types.ts",
+      "sha256": "8c3457ba85cf9b3d511907c0961928362d3594178e3cfea8c1e44a9cdee24dc9",
+      "bytes": 8093
+    },
+    {
+      "id": "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "observedRealpath": "/work/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/i18next@26.4.3_typescript@7.0.2/node_modules/i18next/dist/esm/i18next.js",
+      "sha256": "4fb2e0c4dfd13dda4f6cb292ae0f9c5260a13b28bab05ee723915351bdaf00a1",
+      "bytes": 83433
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom-client.production.js",
+      "sha256": "8a8147c1cebdb19d82fd11bdb76391be9b20d00edf67cc8e8b30f44e850ce693",
+      "bytes": 625168
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/cjs/react-dom.production.js",
+      "sha256": "fd016e2c887f97b82f466ca435ae259d08cf7d4e7fef37e087963336d4770c01",
+      "bytes": 7326
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/client.js",
+      "sha256": "00e348ab3d6bc2eef908345d0bc4e008c95bcfecec060dfda5c4967953761396",
+      "bytes": 1373
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react-dom@19.3.0_react@19.3.0/node_modules/react-dom/index.js",
+      "sha256": "ba1a3e33489f868371561777607e3ee5091df0f7ea3f1a10f789d6b86e4c1505",
+      "bytes": 1359
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react-jsx-runtime.production.js",
+      "sha256": "1e46f15002696985e80c61d47aaa30dabb03c954270a690f5f7dfbbacfa9002b",
+      "bytes": 976
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react@19.3.0/node_modules/react/cjs/react.production.js",
+      "sha256": "6b28feb9dbe9781ab1e1b64dea7b29a7c70f03d2dc10eaa966363053d8a9b4e5",
+      "bytes": 18040
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react@19.3.0/node_modules/react/index.js",
+      "sha256": "60caffdecbdc5db3bc4ec4e83df9488345ccb271d07533b9210bf5750918d97e",
+      "bytes": 186
+    },
+    {
+      "id": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "observedRealpath": "/work/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/react@19.3.0/node_modules/react/jsx-runtime.js",
+      "sha256": "b392951a77d0a2e6a6bd017e49d768481ae5b63c4109c6c31f622cf7b2433edc",
+      "bytes": 210
+    },
+    {
+      "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "observedRealpath": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/cjs/scheduler.production.js",
+      "sha256": "679adff761d31e9426604f80c0e99be44a3e6f4c6834b0218ecf0312a67c171f",
+      "bytes": 10181
+    },
+    {
+      "id": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/scheduler@0.28.0/node_modules/scheduler/index.js",
+      "sha256": "145965504d60007bc25486ab930b0367867dcd5d579ccd343c148d69349a7cfb",
+      "bytes": 194
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/index.js",
+      "sha256": "32e7efd49a94a765f6d10a1a0a3c02c50c246def17c80c6f0225f85525d98505",
+      "bytes": 422
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/checks.js",
+      "sha256": "7543391a9ad5e7df287bbfecaa79844d46af44c75c1de0d43a411d65795d9dd1",
+      "bytes": 690
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/coerce.js",
+      "sha256": "fb2efe3b6eacc475c77cbb571b5fb8650d92a10f316dc869e49b722973d83c3c",
+      "bytes": 550
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/compat.js",
+      "sha256": "0e948b101771cc0e7b753e54b3f5b486929d3db9bd4c09d98fe4ce86271bcf7b",
+      "bytes": 1090
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/deep-partial.js",
+      "sha256": "0abffcc9838e04dc6f091229c1d522fbfd43aab9563316b52d3eb8ff2bacf26d",
+      "bytes": 543
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/errors.js",
+      "sha256": "d32f7c1ef8e2c70072f6f0ec8ba7081bbc331353cc3a7cb4429e5ece91409543",
+      "bytes": 2532
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/external.js",
+      "sha256": "c6b584ae70ba4e7132b2cd78c23ea4ecedc9828abf999edee312372e1fb453d6",
+      "bytes": 1101
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/from-json-schema.js",
+      "sha256": "31dc999a26cb6928f5e99ea564d648567e85cf9aa47565198fb6186dbd6c070e",
+      "bytes": 38171
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/in-out.js",
+      "sha256": "34370913842ff02d14a9796b11c5ec2af160bdb35a7148edc286e9a9c6fb5c17",
+      "bytes": 2190
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/iso.js",
+      "sha256": "deaa026b7c5302e59719f401248e7866691d8d8a892884dd2b6868b1cb7252d8",
+      "bytes": 556
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/parse.js",
+      "sha256": "11941573401bbef138842c7a523dff554873343fccbf0e8b0a144259d2d703f1",
+      "bytes": 1057
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/classic/schemas.js",
+      "sha256": "2bf4a631a18f734a9a7ab7fc11bcf919214774d2235a312dcec0dd53d0324c32",
+      "bytes": 53354
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/api.js",
+      "sha256": "03ae6016abc9585e3f3481d6b8d775a95ae4ee65badbde73ca1ed953ff14c0e7",
+      "bytes": 28953
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/checks.js",
+      "sha256": "bc42543274218aa7ef72192b3218d2a4a399e53df8de240a04d9ff275096f563",
+      "bytes": 19491
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/compile.js",
+      "sha256": "53fcf24821f50ecf42492ab7101abe8a50ead8286a53567d71648fe5ca346b99",
+      "bytes": 92003
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/core.js",
+      "sha256": "c7ce485c97263e42568d16b11bb4a90133221c7e807498a9273d70f41ba16ef6",
+      "bytes": 6642
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/doc.js",
+      "sha256": "be4c1b1a1ad247cc70f360a572060edd7e0cea24252c3a319f33d247899c5643",
+      "bytes": 1290
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/errors.js",
+      "sha256": "a0c95ef2f7085b5bc2931f7b566f524b26a0360c8df741e3f87f923745cf9792",
+      "bytes": 10871
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/index.js",
+      "sha256": "2a0e452323aa5b75b7d7de4879289e2579b9dd2d6af291c0416ba6806ca2199d",
+      "bytes": 690
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-generator.js",
+      "sha256": "beaeab6faa654e99e443b8a9f5d8a4adc08cd8226f92a0cd32477a58ecfa1807",
+      "bytes": 3857
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema-processors.js",
+      "sha256": "b6d2aee72212c076b9cde38da6333591c76a24eb049a4ee4e7bd2b7825d8b817",
+      "bytes": 34985
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/json-schema.js",
+      "sha256": "8e609bb71c20b858c77f0e9f90bb1319db8477b13f9f965f1a1e18524bf50881",
+      "bytes": 11
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/memoizer.js",
+      "sha256": "18a3188c51229d9189a5408b0b7fbc3e121b55c2b4c3c406d79cb9b77e7ad964",
+      "bytes": 12517
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/parse.js",
+      "sha256": "fb05b91ec260f3f484f7c00a177b6126ceb8fd1b09dc90b1200afdffd4d98efd",
+      "bytes": 8267
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/regexes.js",
+      "sha256": "24fc98f6fc9175e50ff29d28b040e3b4ac5650de19914d45ee27b853d367ecc6",
+      "bytes": 11818
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/registries.js",
+      "sha256": "f04d4b2c0bc5b4ac2d6610ea34edf2e5260eade18f20976b79916dcdbeb9fa4d",
+      "bytes": 1540
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/schemas.js",
+      "sha256": "0ee56e8afbae28eeb1060a162ad7e56f0675ee6fb83f0ae56bea2e088f6cdbc0",
+      "bytes": 107291
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/to-json-schema.js",
+      "sha256": "85b883eb8f05e9f060c71a39fce7df9345b566af29d5bc9c8fa477fe616a051d",
+      "bytes": 29029
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/util.js",
+      "sha256": "bb08133b11b478c8e715038fff26ebea204d7fd5443fba31fe138b142d202efb",
+      "bytes": 34840
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/versions.js",
+      "sha256": "c0f09e5bb7e9dd7712138a22096e0884bd2df3d5d8cfcd2a1bcad7086fc8dfc5",
+      "bytes": 70
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/core/visit.js",
+      "sha256": "a804062900869e09ea0b975cfa569fd3c70dc33bad7fc30b63872d451cae29f7",
+      "bytes": 6643
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ar.js",
+      "sha256": "eec4016c2b3063ae929617d90ec609e4c425e60c97a954d3a24de0f457b6ec97",
+      "bytes": 5404
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/az.js",
+      "sha256": "5bd03646b9d18b73e71356cd28937e4e6413b806bb23e14689cc88f6f65ff3a6",
+      "bytes": 4703
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/be.js",
+      "sha256": "f969afea5d9800a71958a621658943b85a2576a2bfefdd5dea70afc4924d4af4",
+      "bytes": 6998
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bg.js",
+      "sha256": "96741333a790320e05aef7286b5b709a4a7c48cfffc50fc5e6acff5b505275e9",
+      "bytes": 6029
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/bn.js",
+      "sha256": "6d8227b52a6864465b7c52a9ef7e09d261d904ec8a619932e15dd9f9f826e8dd",
+      "bytes": 5757
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ca.js",
+      "sha256": "67f6f38b59a6e3ee81cc5155480465331dd9a142b2471a495503a81dafba0684",
+      "bytes": 4908
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ckb.js",
+      "sha256": "bdb9ef0cfda4009f8892585a1780fff863cd409931d6f89394c271042c131137",
+      "bytes": 5948
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/cs.js",
+      "sha256": "4ffa0e484ad1842a2c0e5c7f2dfe9160155ff5be4b95ab6e524d3a30a2210488",
+      "bytes": 4953
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/da.js",
+      "sha256": "29addcd60e88422bed9ed78c6c864220a15c06b31fdb4ab7ad4f87be4098e6ae",
+      "bytes": 4987
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/de.js",
+      "sha256": "f344eb96ba18d9db907f3f9c95897ce2590ab0cde1553c023daffbb1cb5ef6f4",
+      "bytes": 4774
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/el.js",
+      "sha256": "fdea833aa0a8c381d26216db1521dd7fbc4dccb6d3aa50f9a585ffb975df91eb",
+      "bytes": 5701
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/en.js",
+      "sha256": "d5930e10d137b048b37823e168e4177947e1f696ada8419c71bb0d32da4333c0",
+      "bytes": 5302
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/eo.js",
+      "sha256": "97797bd22319ecc3f2044da6c305f1114b851803697029ffce2b66644757da3a",
+      "bytes": 4784
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/es.js",
+      "sha256": "12e762b921b1e3fdb8e265d2b554de81ce9706ceb23a81527f48ae2dddf355db",
+      "bytes": 5591
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fa.js",
+      "sha256": "60e7eeff4c000c85f8420168374344305d3c2110a5f91a2fb672b2a2381eeddf",
+      "bytes": 5343
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fi.js",
+      "sha256": "1e72af4193e564cd37dce4a850dc18bc1bcd6ca280f29e9f5f8c6bbab6a2cad9",
+      "bytes": 5007
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr-CA.js",
+      "sha256": "a2ca0451ff943766bb6a88b392b25447462a1d3ed75c1adda5ddb0bc474bcd42",
+      "bytes": 4749
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/fr.js",
+      "sha256": "477345d6401d0e4f07794b1a2cff8b78953723f1fc8cfaeb6b660c19be47125a",
+      "bytes": 5414
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/gu.js",
+      "sha256": "b1921ac6b4158e6360a8da6099df8bbf2d7bce7c1cf381d5a5e47aa0c74874d2",
+      "bytes": 5930
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/he.js",
+      "sha256": "1cfff31fac19616d900d1f3febd9690ea87711e13b5be299326ebfd3f33aad4d",
+      "bytes": 12411
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hi.js",
+      "sha256": "c31e466c2a31dc10ba6a288e1aebf429a6e9566a26918d0240aae058693f6329",
+      "bytes": 5940
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hr.js",
+      "sha256": "ff2bebef0761f2d6095103d58484e3b95551bc51d56770db8f161b8e0e0ec941",
+      "bytes": 5184
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hu.js",
+      "sha256": "9816c21ee0b3be9d973f9e033e9587a608f2d35dd1b984d415b88e03242b0189",
+      "bytes": 4871
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/hy.js",
+      "sha256": "daf6d0c590d9b061759598ba9f7f97041e2874c7a58da2c64b86f152840d68fa",
+      "bytes": 6720
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/id.js",
+      "sha256": "e5c23bb0b6f696fa936bafd7969e64738504cf7a5be3ec04b24ae899d4912b58",
+      "bytes": 4759
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/index.js",
+      "sha256": "7ea85250d1e7bd9459cda61f38c78757a410d561a5421bb3f08019bba79c9849",
+      "bytes": 2607
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/is.js",
+      "sha256": "1cce1285bbf55c8a76303fea0be0fb6d39fbd0ece833137ea23a22f406ac1ae1",
+      "bytes": 4822
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/it.js",
+      "sha256": "096b497df6c5fe7de4422482b7733e764e4b344e8d7f768a7289556687acdb82",
+      "bytes": 4775
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ja.js",
+      "sha256": "2a6bbbd6dbd573687b22f35873a13cdf730c07423b4ab114e5a8b12d8777146d",
+      "bytes": 5054
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ka.js",
+      "sha256": "baf3204123cf4246df654fd1948b6c8da6917e7a06e470aeeaf7c1eaa7003628",
+      "bytes": 6527
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kh.js",
+      "sha256": "78c3d1991041bb8c8fc0f7c5d745aae422d4c2e4e8f30bae44f3fef4765900a8",
+      "bytes": 111
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/km.js",
+      "sha256": "e61079f14070dfa9c7b2047eb79f5bea6d4e845f192756d103c121bbd63ee18a",
+      "bytes": 6509
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/kn.js",
+      "sha256": "884b1b68a1ca02fe9a774b8de9cbfa3486892eea36192699120f57b31f0a1f42",
+      "bytes": 6512
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ko.js",
+      "sha256": "11fcef61a2f23e010bf0f569d71be0d49524afc97f3072cc03fdc6fe3ea2f14d",
+      "bytes": 5109
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/lt.js",
+      "sha256": "d2e67a35a3c6e7241a9eb9c5851e4b5b651ac8b23278854862e6055829946c48",
+      "bytes": 8223
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/mk.js",
+      "sha256": "64ddd914c432ba5690d0686bff6603651ce886a891f84823d7dc766c9c980cd1",
+      "bytes": 5399
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ms.js",
+      "sha256": "94faf0d306ffa2a4f95e57f3e53060d27220a639b9cb529f00d1d01b6270f045",
+      "bytes": 4674
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ne.js",
+      "sha256": "6da69989b702ae15baa27b799b6b2b32fd011ba3980a190dd0eccfc9233083d6",
+      "bytes": 5819
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nl.js",
+      "sha256": "296ced8be508c5f9e82b562049d2974882029bcd5b2ab4ade14401b33ec99909",
+      "bytes": 4939
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/nn.js",
+      "sha256": "bae9756817629db30841eb54a27ed9b3c71c2a4208314d8d070be624bd2e9359",
+      "bytes": 4678
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/no.js",
+      "sha256": "f358e5586940350ee25a05db184565d23eb1c66903e182ebec812172f31cb55a",
+      "bytes": 4693
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ota.js",
+      "sha256": "66ed8c3ce00b2e9971ed5a17f002937405d8cdfeb399ebe012db9d2317f42146",
+      "bytes": 4723
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pl.js",
+      "sha256": "b7f82cf9f747785beeec05cd31d3d7493c52bd3647598924141568f148c07222",
+      "bytes": 5150
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ps.js",
+      "sha256": "1c15b81fcce0cdc59dbcca18df5c4ecf4e176fc3fb7668207b9ba54df43cce46",
+      "bytes": 5123
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt-BR.js",
+      "sha256": "abc52db767b9dd938954776728ea7480cdcab569a5a17664f60e5a2c1d63e60b",
+      "bytes": 7024
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/pt.js",
+      "sha256": "93a820f60d571607bf34b69198f5b24617475584c0b22c0f8d160fcdef096a46",
+      "bytes": 7024
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ro.js",
+      "sha256": "54751d2866171c9c7ce1a72868dec09efa54d1b2b67401767594c5b360aca38a",
+      "bytes": 4883
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ru.js",
+      "sha256": "40a019b53bd1684fd4b750db87021520dd5d710f714010c0a594e5bcf5787478",
+      "bytes": 7095
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sk.js",
+      "sha256": "ae7c49242e70149434c9051dd00209afbd517d98ba54c13692371a5340b616da",
+      "bytes": 4949
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sl.js",
+      "sha256": "490ca48f8aae3aed660758b32856d49a9fc5c7e255dad220e75abaef8c35140b",
+      "bytes": 4756
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/sv.js",
+      "sha256": "448f36996bb0d159489b34ad7d86df03e520a13e43b1c98ea2fb18d7ed4a3c95",
+      "bytes": 4841
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ta.js",
+      "sha256": "8b6e1bc033fdaefb1acfc7edf88c9f53c3a50cc892066effdab306103e994d42",
+      "bytes": 6688
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tg.js",
+      "sha256": "9a5c9a3b18b8ccded28d66033575b22d823df17a7afa8bb9a733f31fe071462f",
+      "bytes": 5647
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/th.js",
+      "sha256": "913cc4962ddf5cb54ed694d04b7008493ef401d3333b26426b32f4890712574e",
+      "bytes": 6563
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tk.js",
+      "sha256": "445abfed18c5a9d79143b02c9cf9c171b41fb5dff8ffc2cb59b7aef7203e5a7f",
+      "bytes": 4458
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/tr.js",
+      "sha256": "bca07607a27f518f19877dd9c2235fada9c73eb56896f0f6e274781fab71d64e",
+      "bytes": 4642
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ua.js",
+      "sha256": "9391169ffbc72f777a83230b6ffcc3f4cf46ab5945ec540de9ef4609dca1f4cc",
+      "bytes": 111
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uk.js",
+      "sha256": "1e59ba41296aeb5b6142a6e5ed84712931e33e54ab0b9ae5d83faf436fc3d968",
+      "bytes": 5665
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/ur.js",
+      "sha256": "d37ed2c93408e0a6b6e1cd290117a6f0e9d7b2c83509cd34b502e1dd94899c87",
+      "bytes": 5491
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/uz.js",
+      "sha256": "2cbe07635b03064ffad0bfcc98d2d570f3264b9cd3e22bbd5c160cd0343f7872",
+      "bytes": 4844
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/vi.js",
+      "sha256": "15939adaf263e0869c602d4b34c206178a235b8bec11c8207ccd3fa50de3a141",
+      "bytes": 4967
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/yo.js",
+      "sha256": "88b33f6527c1a2faaf159568330cf727c448dc468eac72142a6fb24f8714ac1e",
+      "bytes": 4847
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-CN.js",
+      "sha256": "8fc02f2bd4d92f46b24b8d82da0ee95c962fc80c14dd7dd469500e14de08d320",
+      "bytes": 4622
+    },
+    {
+      "id": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "observedRealpath": "/work/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "physicalSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules/.pnpm/zod@4.6.6/node_modules/zod/v4/locales/zh-TW.js",
+      "sha256": "01d9b119e318d8b9f1a8fa720d06424457429425a61d0730984b750e6a5edf7d",
+      "bytes": 4672
+    }
+  ],
+  "outputs": [
+    {
+      "path": "renderer.css",
+      "bytes": 148376,
+      "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+    },
+    {
+      "path": "renderer.js",
+      "bytes": 1044107,
+      "sha256": "a6c7246db2fd11d6d76a92d2946e231fdad966c6f2aec7d318fd3ee8f3719b2f"
+    }
+  ],
+  "forbiddenPayloadModules": []
+}

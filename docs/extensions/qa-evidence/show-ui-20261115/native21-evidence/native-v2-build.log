@@ -1,0 +1,38 @@
+vite v8.3.4 building client environment for production...
+transforming...
+
+/tadazz-show/motion/backdrop.webp referenced in /tadazz-show/motion/backdrop.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/v4/question-bg.webp referenced in /tadazz-show/v4/question-bg.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/v4/show-stage.webp referenced in /tadazz-show/v4/show-stage.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+
+/tadazz-show/story/84acdb923677d591.webp referenced in /tadazz-show/story/84acdb923677d591.webp didn't resolve at build time, it will remain unchanged to be resolved at runtime
+✓ 2073 modules transformed.
+rendering chunks...
+computing gzip size...
+../../out/native-v2-candidate/.vite/manifest.json      0.30 kB │ gzip:   0.15 kB
+../../out/native-v2-candidate/renderer-v2.css        166.50 kB │ gzip:  35.80 kB
+../../out/native-v2-candidate/renderer-v2.js       1,068.18 kB │ gzip: 285.72 kB
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "../node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/Icon.mjs:2:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+[33m[MODULE_LEVEL_DIRECTIVE] [0mThe semantics of the module level directive "use client" in "../node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs" may not be preserved when bundling.
+   [38;5;246m╭[0m[38;5;246m─[0m[38;5;246m[[0m ../node_modules/.pnpm/lucide-react@1.55.0_@types+react@19.3.0_react@19.3.0/node_modules/lucide-react/dist/esm/context.mjs:2:1 [38;5;246m][0m
+   [38;5;246m│[0m
+ [38;5;246m2 │[0m "use client";
+ [38;5;240m  │[0m ──────┬──────  
+ [38;5;240m  │[0m       ╰──────── module level directive may not be preserved
+ [38;5;240m  │[0m 
+ [38;5;240m  │[0m [38;5;115mHelp[0m: For more information, see https://rolldown.rs/in-depth/directives#other-directives
+[38;5;246m───╯[0m
+
+✓ built in 5.30s
