@@ -1,0 +1,82 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 351811 subject: Test quizz
+# Game 01a1e075-6ca9-7158-af5f-8fd5de2b0c01 added. Total games: 1
+# Subtest: actual first-attempt binding delivery, explicit activation and a fresh adapter/key handle
+ok 1 - actual first-attempt binding delivery, explicit activation and a fresh adapter/key handle
+  ---
+  duration_ms: 1894.131235
+  type: 'test'
+  ...
+# New game created: 455642 subject: Test quizz
+# Game 01a1e075-71bf-74b9-b102-6274750ac565 added. Total games: 2
+# Subtest: lost ACK stays committed; exact duplicate, explicit version skip and stale/CAS denial
+ok 2 - lost ACK stays committed; exact duplicate, explicit version skip and stale/CAS denial
+  ---
+  duration_ms: 1307.347034
+  type: 'test'
+  ...
+# New game created: 892186 subject: Test quizz
+# Game 01a1e075-7731-745d-b16d-e9afb254666b added. Total games: 3
+# New game created: 943275 subject: Test quizz
+# Game 01a1e075-7b19-753e-a482-2500c1045485 added. Total games: 4
+# Subtest: default OFF and actual fresh Game publication fence; caller/session revocation before key access
+ok 3 - default OFF and actual fresh Game publication fence; caller/session revocation before key access
+  ---
+  duration_ms: 2190.05954
+  type: 'test'
+  ...
+# New game created: 322536 subject: Test quizz
+# Game 01a1e075-7f69-7007-8f8d-9fc8bca6babb added. Total games: 5
+# Subtest: key/purpose/scope/ciphertext/missing/lock/temp/link/root substitution all deny without native work
+ok 4 - key/purpose/scope/ciphertext/missing/lock/temp/link/root substitution all deny without native work
+  ---
+  duration_ms: 1194.503247
+  type: 'test'
+  ...
+# New game created: 940303 subject: Test quizz
+# Game 01a1e075-841b-765f-8930-0062b75fd00a added. Total games: 6
+# Subtest: sender closes after actual receiver COMMIT; receiver keeps ciphertext and denies ACK/read
+ok 5 - sender closes after actual receiver COMMIT; receiver keeps ciphertext and denies ACK/read
+  ---
+  duration_ms: 1106.20978
+  type: 'test'
+  ...
+# New game created: 105005 subject: Test quizz
+# Game 01a1e075-8861-7230-beb6-6bc38e820663 added. Total games: 7
+# Subtest: real activation COMMIT then issuer revocation across await denies receipt without rollback
+ok 6 - real activation COMMIT then issuer revocation across await denies receipt without rollback
+  ---
+  duration_ms: 1108.659604
+  type: 'test'
+  ...
+# New game created: 777440 subject: Test quizz
+# Game 01a1e075-8cc1-767e-9e76-80f244bb0d35 added. Total games: 8
+# New game created: 902260 subject: Test quizz
+# Game 01a1e075-915d-73c9-bd42-8b80d9306a14 added. Total games: 9
+# Game 01a1e075-6ca9-7158-af5f-8fd5de2b0c01 removed. Total games: 8
+# Game 01a1e075-71bf-74b9-b102-6274750ac565 removed. Total games: 7
+# Game 01a1e075-7731-745d-b16d-e9afb254666b removed. Total games: 6
+# Game 01a1e075-7b19-753e-a482-2500c1045485 removed. Total games: 5
+# Game 01a1e075-7f69-7007-8f8d-9fc8bca6babb removed. Total games: 4
+# Game 01a1e075-841b-765f-8930-0062b75fd00a removed. Total games: 3
+# Game 01a1e075-8861-7230-beb6-6bc38e820663 removed. Total games: 2
+# Game 01a1e075-8cc1-767e-9e76-80f244bb0d35 removed. Total games: 1
+# Game 01a1e075-915d-73c9-bd42-8b80d9306a14 removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# Subtest: actual temp close and post-rename uncertainty retain barriers and deny fresh reopen
+ok 7 - actual temp close and post-rename uncertainty retain barriers and deny fresh reopen
+  ---
+  duration_ms: 2290.385165
+  type: 'test'
+  ...
+1..7
+# tests 7
+# suites 0
+# pass 7
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 22100.227723

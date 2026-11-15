@@ -1,0 +1,61 @@
+{
+  "scope": "new actual unmounted authority acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "test": "gateway-delivery-activation-fresh-adapter",
+      "opens": 6,
+      "closes": 6,
+      "storedVersion": 1,
+      "nativePlayers": 0,
+      "fresh_process": false,
+      "raw_secret_fields_in_ack": false
+    },
+    {
+      "test": "lost-ACK-and-CAS",
+      "committed_after_lost_ack": true,
+      "exact_duplicate_no_overwrite": true,
+      "skipped_to": 3,
+      "stale_and_wrong_CAS_denied": true,
+      "consumed_failed_attempt": true
+    },
+    {
+      "test": "fresh-composition-and-revocation",
+      "published_Game_denied": true,
+      "disabled_denied": true,
+      "keys_opened_after_revoke": 0
+    },
+    {
+      "test": "custody-negative-files-and-keys",
+      "checks": 12,
+      "nativePlayers": 0,
+      "controlled_fixture_restoration_only": true,
+      "automatic_repair": false
+    },
+    {
+      "test": "sender-close-after-receiver-commit",
+      "ciphertext_preserved": true,
+      "ACK_denied": true,
+      "compensation": false
+    },
+    {
+      "test": "post-await-revocation",
+      "committed_state": "ACTIVE",
+      "receipt_denied": true,
+      "compensation": false
+    },
+    {
+      "test": "actual-file-uncertainty",
+      "fault": "close",
+      "barrier_retained": true,
+      "fresh_reopen_denied": true,
+      "automatic_repair": false
+    },
+    {
+      "test": "actual-file-uncertainty",
+      "fault": "rename",
+      "barrier_retained": true,
+      "fresh_reopen_denied": true,
+      "automatic_repair": false
+    }
+  ]
+}

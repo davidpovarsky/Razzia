@@ -178,15 +178,20 @@ test("actual first-attempt binding delivery, explicit activation and a fresh ada
 test("lost ACK stays committed; exact duplicate, explicit version skip and stale/CAS denial", async () => {
   const f = await fixture()
   let captured: GatewayDelivery | undefined
-  await assert.rejects(
-    f.deliver({
+  let destinationErrorWasSafe = false
+  try {
+    await f.deliver({
       async acceptDelivery(value) {
         captured = value
         await f.adapter.acceptDelivery(value)
-        throw Error("synthetic lost ACK")
+        throw Error(value.credential) // Hostile receiver echo; never print it.
       },
-    }),
-  )
+    })
+  } catch (error) {
+    destinationErrorWasSafe =
+      error instanceof Error && error.message === "service_denied"
+  }
+  assert.equal(destinationErrorWasSafe, true)
   assert.ok(captured)
   assert.equal(new PrivateGatewayAdapter(f.options).inspect().storedVersion, 1)
   const before = readFileSync(join(f.custodyRoot, "credential.enc"))
@@ -224,6 +229,7 @@ test("lost ACK stays committed; exact duplicate, explicit version skip and stale
     skipped_to: 3,
     stale_and_wrong_CAS_denied: true,
     consumed_failed_attempt: true,
+    destination_secret_echo_sanitized: destinationErrorWasSafe,
   })
 })
 
