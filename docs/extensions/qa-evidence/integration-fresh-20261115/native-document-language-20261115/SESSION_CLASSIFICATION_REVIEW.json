@@ -1,0 +1,26 @@
+{
+  "utc": "2026-11-15T19:30:34.307192+00:00",
+  "evidenceSource": "13ae967157a7e82613a3904c5b66fefee9a7a725",
+  "raw4LogsHashesBytesVerified": true,
+  "independentExistingLogParse": {
+    "sessionStatuses": [
+      502,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200,
+      200
+    ],
+    "connectionRefused": 1,
+    "backendListeningUtc": "2026-11-15T18:35:01.203019059Z",
+    "optionalBranding403": 8
+  },
+  "unchangedFrontendAuthBrandingSources3": true,
+  "classification": "fixture startup API-readiness race; no introduced auth implementation regression evidenced",
+  "originalErrorPreserved": true,
+  "configuredTenantBrandingNotExercised": true,
+  "noNewProbeBuildBrowserOrServerWrite": true,
+  "releaseArtifact": "proposed only; future writer scope includes152 aliases; no selection/control installation/publication"
+}
