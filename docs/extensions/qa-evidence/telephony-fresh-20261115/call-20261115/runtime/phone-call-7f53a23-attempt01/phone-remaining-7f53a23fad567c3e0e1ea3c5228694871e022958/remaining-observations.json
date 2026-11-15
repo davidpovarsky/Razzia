@@ -1,0 +1,29 @@
+{
+  "scope": "new actual isolated fresh-composition gameplay acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "test": "CALL-01",
+      "encryptedCompleteTupleReadback": true,
+      "lostACKPreservedJoin": true,
+      "exactRetryDigestCount": 1,
+      "nativeJoin": 1,
+      "serviceVersion": 2,
+      "rawSecretGetter": false
+    },
+    {
+      "test": "CALL-02",
+      "negativeCasesNoNative": true,
+      "missingRecordNotReinitialized": true,
+      "controlledFixtureRestoreOnly": true,
+      "validControlNative": 1
+    },
+    {
+      "test": "CALL-03",
+      "actualCloseFaultBarrierRetained": true,
+      "freshReopenDenied": true,
+      "actualNativeJoinBeforeRevocation": 1,
+      "postAwaitDisclosureDenied": true,
+      "compensation": false
+    }
+  ]
+}

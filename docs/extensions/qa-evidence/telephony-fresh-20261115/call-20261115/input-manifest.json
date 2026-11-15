@@ -1,0 +1,183 @@
+{
+  "schema": 1,
+  "review_sha": "7f53a23fad567c3e0e1ea3c5228694871e022958",
+  "base_sha": "003cf88b6cba19989388dca20efcfaa01cc8f9ad",
+  "accepted_core": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "scope": "New isolated per-call precommit and actual explicit registration; no old suites selected",
+  "files": [
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/safe-extract.py",
+      "mode": "100644",
+      "bytes": 3162,
+      "sha256": "7d144aced19491e6ae914700acd961d4f288c8d1f225bb623b54c4b6d77766a6"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-composed.mjs",
+      "mode": "100644",
+      "bytes": 2217,
+      "sha256": "389cc20ec31a44074dc0ca60adf671bf28b5bd393da0fe9ef225649b7b7b9379"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/auth-source/verify-overlay.mjs",
+      "mode": "100644",
+      "bytes": 1130,
+      "sha256": "9634ba939777b31f0d2ae875cac8e69213ae52c0f5e89004664bc2a4db12b876"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/call.node.ts",
+      "mode": "100644",
+      "bytes": 11910,
+      "sha256": "3eb9077617f2251705e37eade48f3983f610fda2b263c7ed324ebfc9b9619830"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/check-local.ps1",
+      "mode": "100644",
+      "bytes": 4335,
+      "sha256": "7f3b7bd39b0a3469547089da7c85f7dea843cf7b9d37ae6002bf4cce1a5cb757"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/prepare-overlay.mjs",
+      "mode": "100644",
+      "bytes": 3624,
+      "sha256": "6b4bcaded77b67e20119b4bd9365873005f7f368b88f1d56d669bcf52ae94127"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/call-source/run.sh",
+      "mode": "100644",
+      "bytes": 2359,
+      "sha256": "633d19c663fbce16d67f04b8b45a78e18a38dfca6f4b214dc4d8a47258e13a80"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/telephony-fresh-20261115/gameplay-source/actual-gameplay-backend.ts",
+      "mode": "100644",
+      "bytes": 10661,
+      "sha256": "01363f7cf374efc651d096984ef1c34160ca3a8430b67816acdbca197a00264f"
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "mode": "100644",
+      "bytes": 1369,
+      "sha256": "294158b67785d1d75de54becd14be47842ab3b51c65e041bae49ba27dde2a4fb"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/authority-store.ts",
+      "mode": "100644",
+      "bytes": 13132,
+      "sha256": "22186133c2af777367c37288d33f09acd53531bf54661bfa67d9cfd153cbd5b2"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/contracts.ts",
+      "mode": "100644",
+      "bytes": 1408,
+      "sha256": "2d57f8ca1d51c125818b9940e1a78d4028dfb0c79410f4be89c54303fbd422ff"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/credential-codec.ts",
+      "mode": "100644",
+      "bytes": 2612,
+      "sha256": "1705535650977ba5985e975810aff7f4ca82edf45e381b8f70fe4ba22cd24c5d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "mode": "100644",
+      "bytes": 9082,
+      "sha256": "58e36ff0d02673fb77456291a813cddfe77db4df1f1fbd8ca02d4d311ec5cc39"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "mode": "100644",
+      "bytes": 24830,
+      "sha256": "3b278550692608f7605e2c806620d9e91e2dda4cc05f62e3e644480e96be7fe3"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "mode": "100644",
+      "bytes": 3221,
+      "sha256": "d7ce6a8f26559598c4625d6a6d192cf2d85abd3c00f75526d89044e124b1b6b0"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "mode": "100644",
+      "bytes": 4450,
+      "sha256": "b4c1fdd6843d122044ef46a1e192c42bdae79d742b6cbafe342e180537afa088"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/native-adoption.ts",
+      "mode": "100644",
+      "bytes": 2444,
+      "sha256": "ec98f77fd59bf99be1ec04d602d6e81e71eb0f5e0cd50066aae040b1a68ffbf3"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "mode": "100644",
+      "bytes": 4892,
+      "sha256": "5430ca64e15c4e01be961a338f75d290fe68cb7a5834048b96abab79045434ec"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "mode": "100644",
+      "bytes": 18476,
+      "sha256": "bc365f05e6a3e0135322fc357a3c6c338e088c94f3ef9f48a736b1e4aa80239f"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/adapter.ts",
+      "mode": "100644",
+      "bytes": 7191,
+      "sha256": "b32caaa1ef9de121273977dcd5d4bd96f01b781a4cec737027c89da26092e488"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/call-precommit.ts",
+      "mode": "100644",
+      "bytes": 13533,
+      "sha256": "5c00c71812c80d99ac226f4db78a42a8f81e40dfeb2f2b5a505871e65ff25ba3"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/codec.ts",
+      "mode": "100644",
+      "bytes": 5125,
+      "sha256": "6c0fb25dca55f8c125c7ab0f6ec3c1fb9e8ac7c9841935f8e9785da6369fbbb5"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/contracts.ts",
+      "mode": "100644",
+      "bytes": 3087,
+      "sha256": "6bfb7c40fda1ce82cbd40f4725ef0c1079a4dcccadf0a71b262aa55aa77ba5c7"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/gateway-v2/private-custody.ts",
+      "mode": "100644",
+      "bytes": 13775,
+      "sha256": "79e7699e3ded4e73ca04b9ca4f6810d09c5fb748d1d4bc5132ae5bab5f13458c"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/native-account-authority.ts",
+      "mode": "100644",
+      "bytes": 4124,
+      "sha256": "acb3c038caa5b1899020a00fca4f44d1f88344d3f390f330ef4d6ba9aaebaae0"
+    },
+    {
+      "path": "extensions/src/telephony/pilot-runtime/service-auth-v2/request-bound-verifier.ts",
+      "mode": "100644",
+      "bytes": 7136,
+      "sha256": "7a67361869eb67d4d48438bc441f6af3d2b5418c2e74b728a9ae0434f1d6dc01"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "mode": "100644",
+      "bytes": 14649,
+      "sha256": "7ea07761f84468820e0eb1679ab0d36601e4fe5671f528ae4190c0c2f14caf1a"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "mode": "100644",
+      "bytes": 4932,
+      "sha256": "eac9cb37379a15c562d89aca4813350f3139aef90dcc6902eb124f06759ef411"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "mode": "100644",
+      "bytes": 33509,
+      "sha256": "ef9f3b5e3c9dd810ea878b25f6eea089d11f8c2b3d0e28a897f82a101164ff07"
+    }
+  ]
+}
