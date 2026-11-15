@@ -184,8 +184,12 @@ test("SQLite audit failure rolls draft and operation back together", async () =>
   let attemptedAfterDraftAndOperation = false
   DatabaseSync.prototype.prepare = function (this: DatabaseSync, sql: string) {
     if (sql.startsWith("INSERT INTO audit(")) {
-      const drafts = original.call(this, "SELECT count(*) AS n FROM drafts").get()?.n
-      const operations = original.call(this, "SELECT count(*) AS n FROM operations").get()?.n
+      const drafts = original
+        .call(this, "SELECT count(*) AS n FROM drafts")
+        .get()?.n
+      const operations = original
+        .call(this, "SELECT count(*) AS n FROM operations")
+        .get()?.n
       assert.equal(drafts, before.drafts.length + 1)
       assert.equal(operations, before.operations.length + 1)
       attemptedAfterDraftAndOperation = true

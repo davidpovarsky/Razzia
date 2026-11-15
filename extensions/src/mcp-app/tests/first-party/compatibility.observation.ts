@@ -71,7 +71,9 @@ try {
   }
   const nativeOnly = (state: ReturnType<typeof snapshot>) =>
     Object.fromEntries(
-      Object.entries(state).filter(([name]) => name.includes("native-sentinels")),
+      Object.entries(state).filter(([name]) =>
+        name.includes("native-sentinels"),
+      ),
     )
   const nativeBefore = nativeOnly(snapshot(f.root))
   mkdirSync(dirname(file), { recursive: true, mode: 0o700 })
@@ -98,15 +100,17 @@ try {
   const id = key()
   const seed = new DatabaseSync(file)
   try {
-    seed.prepare(
-      "INSERT INTO drafts(id,owner,revision,authored,summary,locale) VALUES(?,?,1,?,?,?)",
-    ).run(
-      id,
-      session.owner,
-      normalized.authoredShowJson,
-      canonicalJson(normalized.summary),
-      "en",
-    )
+    seed
+      .prepare(
+        "INSERT INTO drafts(id,owner,revision,authored,summary,locale) VALUES(?,?,1,?,?,?)",
+      )
+      .run(
+        id,
+        session.owner,
+        normalized.authoredShowJson,
+        canonicalJson(normalized.summary),
+        "en",
+      )
   } finally {
     seed.close()
   }
