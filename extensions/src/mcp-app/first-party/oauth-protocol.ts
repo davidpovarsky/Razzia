@@ -72,6 +72,19 @@ export const authorizationCodeSchema = z.strictObject({
 })
 export const refreshTokenSchema = authorizationCodeSchema
 export type OAuthCode = z.infer<typeof authorizationCodeSchema>
+const downloadTicketSchema = z.strictObject({
+  accountId: z.uuid(),
+  grantId: opaque,
+  requestKey: opaque,
+  exportId: opaque,
+  draftId: opaque,
+  revision: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+  format: z.enum(["tada-json", "enhanced-bundle"]),
+  authoredSha256: z.string().regex(/^[a-f0-9]{64}$/u),
+  sha256: z.string().regex(/^[a-f0-9]{64}$/u),
+  expiresAt: z.number().int().positive().max(Number.MAX_SAFE_INTEGER),
+})
+export type OAuthDownloadTicket = z.infer<typeof downloadTicketSchema>
 const fail = (code: ConstructorParameters<typeof OAuthError>[0]): never => {
   throw new OAuthError(code)
 }
@@ -133,7 +146,10 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     )
   }
   const client = (id: string) => clients.get(id) ?? fail("invalid_client")
-  const seal = (purpose: "request" | "code" | "refresh", value: unknown) => {
+  const seal = (
+    purpose: "request" | "code" | "refresh" | "download",
+    value: unknown,
+  ) => {
     const iv = randomBytes(12)
     const cipher = createCipheriv("aes-256-gcm", encryptionKey, iv)
     cipher.setAAD(Buffer.from("tadazz-oauth-v1:" + purpose))
@@ -144,7 +160,7 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     return Buffer.concat([iv, body, cipher.getAuthTag()]).toString("base64url")
   }
   const open = (
-    purpose: "request" | "code" | "refresh",
+    purpose: "request" | "code" | "refresh" | "download",
     value: string,
   ): unknown => {
     try {
@@ -218,6 +234,21 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     config,
     client,
     readTicket,
+    downloadTicket(value: OAuthDownloadTicket) {
+      return seal("download", downloadTicketSchema.parse(value))
+    },
+    readDownloadTicket(
+      encoded: string,
+      requireFresh = true,
+    ): OAuthDownloadTicket {
+      const parsed = downloadTicketSchema.safeParse(open("download", encoded))
+      if (
+        !parsed.success ||
+        (requireFresh && parsed.data.expiresAt <= Date.now())
+      )
+        return fail("invalid_grant")
+      return parsed.data
+    },
     consentProof(accountId: string, sid: string, ticket: string) {
       readTicket(ticket)
       return createHmac("sha256", encryptionKey)

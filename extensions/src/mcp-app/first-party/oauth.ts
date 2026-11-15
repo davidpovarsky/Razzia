@@ -17,12 +17,20 @@ import {
   type OAuthCryptoOptions,
 } from "./oauth-protocol.ts"
 import { IngressBudget, bodyText, HttpRejection } from "./ingress.ts"
+import type { FirstPartyExportPolicy } from "./oauth-export.ts"
+export type {
+  FirstPartyExportPolicy,
+  ExportRightsContext,
+} from "./oauth-export.ts"
 
 export interface FirstPartyOAuthOptions extends OAuthCryptoOptions {
   configRoot: string
   /** Existing first-party UI must inspect/display scopes and require a click.
    * No missing consent page is silently invented or replaced by auto-approval. */
   consentPageUrl: string
+  /** Explicit deployment-owned authoring/rights policy. Missing means no export
+   * adapter and no download route; native Save consent is unrelated. */
+  exportPolicy?: FirstPartyExportPolicy
 }
 const ticketBody = z.strictObject({ ticket: z.string().min(40).max(8192) })
 const approvalBody = ticketBody.extend({
@@ -96,6 +104,11 @@ function failure(error: unknown) {
 export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
   const protocol = createOAuthProtocol(options)
   const issuer = new URL(protocol.config.issuer)
+  if (
+    options.exportPolicy &&
+    !protocol.config.firstPartyOrigins?.includes(issuer.origin)
+  )
+    throw new Error("Export delivery origin must be explicitly allowed")
   const consentPage = new URL(options.consentPageUrl)
   if (
     consentPage.protocol !== "https:" ||
@@ -148,6 +161,9 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
     verifyAccessToken,
     draftRepository: (policy: AuthoringPolicy) =>
       grants.drafts(policy, assertIssued),
+    exports: options.exportPolicy
+      ? grants.exports(options.exportPolicy, assertIssued)
+      : undefined,
     remote(options: Omit<RemoteMcpOptions, "verifyAccessToken" | "config">) {
       return createRemoteMcpApp({
         ...options,
@@ -196,6 +212,28 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
           throw new OAuthError("access_denied")
         const publicJson = (value: unknown) => Response.json(value, { headers })
         if (request.method === "GET" && !url.search && !request.body) {
+          const downloadPrefix = endpoint("downloads/")
+          if (url.pathname.startsWith(downloadPrefix)) {
+            if (!options.exportPolicy)
+              return new Response(null, { status: 404, headers })
+            try {
+              const file = grants.download(
+                url.pathname.slice(downloadPrefix.length),
+                options.exportPolicy,
+              )
+              active(request.signal)
+              return new Response(file.body, {
+                headers: {
+                  ...headers,
+                  "content-type": "application/json; charset=utf-8",
+                  "content-length": String(file.data.bytes),
+                  "content-disposition": `attachment; filename="tadazz-${file.data.exportId}.${file.data.format === "tada-json" ? "tada" : "enhanced"}.json"`,
+                },
+              })
+            } catch {
+              return new Response(null, { status: 404, headers })
+            }
+          }
           if (url.pathname === metadataPath)
             return publicJson(protocol.metadata())
           if (url.pathname === endpoint("jwks.json"))
