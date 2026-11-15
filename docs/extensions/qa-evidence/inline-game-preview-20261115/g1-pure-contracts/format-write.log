@@ -1,0 +1,11 @@
+extensions/src/site/components/game-preview/activation.ts 2055ms
+extensions/src/site/components/game-preview/contracts.ts 503ms
+extensions/src/site/components/game-preview/coordinator.ts 107ms (unchanged)
+extensions/src/site/components/game-preview/request-owner.ts 59ms
+extensions/src/site/components/game-preview/timeline-input.ts 80ms
+extensions/src/site/tests/inline-game-preview-activation.test.ts 153ms
+extensions/src/site/tests/inline-game-preview-ownership.test.ts 199ms
+extensions/src/site/tests/inline-game-preview-contracts.test.ts 86ms
+extensions/src/site/tests/inline-game-preview-timeline-input.test.ts 78ms
+extensions/qa/inline-game-preview/vitest.config.ts 37ms (unchanged)
+extensions/qa/inline-game-preview/tsconfig.json 39ms (unchanged)
