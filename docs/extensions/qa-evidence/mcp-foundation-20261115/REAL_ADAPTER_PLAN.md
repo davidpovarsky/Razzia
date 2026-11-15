@@ -197,3 +197,14 @@ identity preimage/ordering). Authored1/nativeUUID/MCP0.1/UI metadata1 stay fixed
 No SB mapping, global key normalization or persisted migration is proposed here.
 Independent review412eee also requires transport prevalidation auth/limits and
 consistent stored summaries; both are assigned corrections, not waived by this plan.
+
+Current checkpoint: the scoped public-send correction at
+`60d289821df631d55c91d48f4f753197d85d0041` is accepted after independent6/6
+targeted SDK cases and129 unchanged source hashes. The review's actual test exit0
+and outer SSH final-assertion syntax exit1 remain distinct; neither remote
+consumption nor real HTTP/OAuth/store/host acceptance follows. See the
+[one bounded M3A stage proposal](REAL_INTEGRATION_M1_PROPOSAL_20261115.md).
+It uses actual first-party session auth and a real private draft/operation store,
+keeps host OAuth and native publication gated, and identifies C1/accepted-R2
+integration dependencies. Accepted SB81d5 port3/rule2 replaces the earlier pending
+producer status, with zero compiled pins and no renderer integration claimed.

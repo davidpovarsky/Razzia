@@ -1,0 +1,29 @@
+{
+  "source": "Exact manager-accepted commit objects; no WIP/worktree alias, source copy or integration performed",
+  "files": [
+    {
+      "commit": "81d5b8f7c0bd3931982c2b0d5a3a13b86e523a8c",
+      "path": "extensions/src/core/show-library/preview-port.ts",
+      "sha256": "06f030c5b8889cce48c261a91ded91cf389e69d24333e08bd67dec29044edd07",
+      "startLine": 1,
+      "endLine": 13,
+      "excerpt": "// Sole producer entry point for the new pure preview foundation.\n// No presentation runtime, socket, transport, filesystem or audio owner is exported.\nexport * from \"./primitives\"\nexport * from \"./preview-schemas\"\nexport * from \"./identity\"\nexport * from \"./manifest\"\nexport * from \"./preview-resolve\"\nexport * from \"./projection-schema\"\nexport { projectShowBindings } from \"./projection\"\nexport { canonicalJson, sha256 } from \"./digest\"\n\nexport * from \"./identity-rule\"\nexport type { PreviewProjectionBinding } from \"./projection\""
+    },
+    {
+      "commit": "81d5b8f7c0bd3931982c2b0d5a3a13b86e523a8c",
+      "path": "extensions/src/core/show-library/identity-rule.ts",
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4",
+      "startLine": 1,
+      "endLine": 4,
+      "excerpt": "/** Internal preview identity successor. Authored keys are never migrated. */\nexport const SHOW_PREVIEW_PORT_VERSION = 3 as const\nexport const SHOW_PREVIEW_IDENTITY_RULE_VERSION = 2 as const\nexport const SHOW_PREVIEW_IDENTITY_ENCODING = \"utf16-hex-v2\" as const"
+    },
+    {
+      "commit": "81d5b8f7c0bd3931982c2b0d5a3a13b86e523a8c",
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3",
+      "startLine": 8,
+      "endLine": 18,
+      "excerpt": "/** No renderer is implemented under this lease. Candidate document IDs are not executable pins. */\nconst compiledManifest = freeze(\n  compiledPreviewManifestSchema.parse({\n    portVersion: 3,\n    identityRuleVersion: 2 as const,\n    pins: [],\n  }),\n)\nexport function getCompiledPreviewManifest(): Readonly<CompiledPreviewManifest> {\n  return compiledManifest\n}"
+    }
+  ]
+}
