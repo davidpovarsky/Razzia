@@ -1,0 +1,32 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [31m×[39m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22mruns actual bytes through validation, independent approval, staging, publishing, restart and rollback[33m 33084[2mms[22m[39m
+[31m   → Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+ [32m✓[39m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22mdenies other tenants, self-approval, unpublished rollback and forged asset digests[32m 208[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22mrejects imported code-backed themes until an exact committed build AND platform review exist[33m 401[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22mfails closed after persisted signature, manifest or media tampering[32m 200[2mms[22m[39m
+ [32m✓[39m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22msupports review rejection and CAS draft revision, rejects stale approval and every contributor's self-review[33m 399[2mms[22m[39m
+
+[31m⎯⎯⎯⎯⎯⎯⎯[39m[1m[41m Failed Tests 1 [49m[22m[31m⎯⎯⎯⎯⎯⎯⎯[39m
+
+[41m[1m FAIL [22m[49m src/server/show-themes/installation.test.ts[2m > [22mdurable theme installation[2m > [22mruns actual bytes through validation, independent approval, staging, publishing, restart and rollback
+[31m[1mError[22m: Test timed out in 30000ms.
+If this is a long-running test, pass a timeout value as the last argument or configure it globally with "testTimeout".[39m
+[36m [2m❯[22m src/server/show-themes/installation.test.ts:[2m92:3[22m[39m
+    [90m 90|[39m
+    [90m 91|[39m describe("durable theme installation", () => {
+    [90m 92|[39m   it("runs actual bytes through validation, independent approval, stag…
+    [90m   |[39m   [31m^[39m
+    [90m 93|[39m     const { store, file, key } = workspace()
+    [90m 94|[39m     const first = prepare(store)
+
+[31m[2m⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m4 passed[39m[22m[90m (5)[39m
+[2m   Start at [22m 08:34:31
+[2m   Duration [22m 37.20s[2m (tests 94%, transform 4%, import 2%)[22m
+

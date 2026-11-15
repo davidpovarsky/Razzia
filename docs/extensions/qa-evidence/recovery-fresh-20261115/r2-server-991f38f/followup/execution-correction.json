@@ -1,0 +1,11 @@
+{
+  "sourceCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "applicationChanges": false,
+  "productionConfigChanges": false,
+  "rootStillReadOnly": true,
+  "additionalWritableFixtureOnly": "/fake",
+  "mapBaseDiskMirror": false,
+  "timeoutMs": 30000,
+  "freshCachesAndOutputs": true,
+  "priorFullRunnerId": "a56f8c95f700bee44b0398e200f93189a93bce2bf5ade4bf8aa664716fc52498"
+}

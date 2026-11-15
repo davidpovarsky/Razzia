@@ -1,0 +1,829 @@
+{
+  "kind": "producer-runtime-receipt-analysis",
+  "executedCommit": "991f38f216ad265e06aec53313db8928437da248",
+  "exits": {
+    "review-after": "0",
+    "native-media-targeted": "0",
+    "package-stage-targeted": "0",
+    "process-media-targeted": "0",
+    "original-focused-r2": "0",
+    "types-r2": "0",
+    "format-r2": "0",
+    "freeze-r2": "0",
+    "extensions-full": "1",
+    "socket-build": "0",
+    "root-socket-targeted": "0"
+  },
+  "commandSummaries": {
+    "review-after": {
+      "summary": "Tests  14 passed (14)",
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0
+    },
+    "native-media-targeted": {
+      "summary": "Tests  4 passed | 31 skipped (35)",
+      "passed": 4,
+      "failed": 0,
+      "skipped": 31
+    },
+    "package-stage-targeted": {
+      "summary": "Tests  1 passed (1)",
+      "passed": 1,
+      "failed": 0,
+      "skipped": 0
+    },
+    "process-media-targeted": {
+      "summary": "Tests  8 passed | 2 skipped (10)",
+      "passed": 8,
+      "failed": 0,
+      "skipped": 2
+    },
+    "original-focused-r2": {
+      "summary": "Tests  86 passed (86)",
+      "passed": 86,
+      "failed": 0,
+      "skipped": 0
+    },
+    "types-r2": {
+      "exit": "0"
+    },
+    "format-r2": {
+      "exit": "0"
+    },
+    "freeze-r2": {
+      "exit": "0"
+    },
+    "extensions-full": {
+      "summary": "Tests  6 failed | 813 passed (819)",
+      "passed": 813,
+      "failed": 6,
+      "skipped": 0
+    },
+    "socket-build": {
+      "exit": "0"
+    },
+    "root-socket-targeted": {
+      "summary": "Tests  17 passed (17)",
+      "passed": 17,
+      "failed": 0,
+      "skipped": 0
+    }
+  },
+  "unresolvedFailedCommands": [
+    "extensions-full"
+  ],
+  "broadRun": true,
+  "retainedFullFailure": true,
+  "rawReceipts": 59,
+  "fullSuiteReceiptDirectory": "full",
+  "processProofs": [
+    {
+      "file": "binary-delete.json",
+      "pids": [
+        2805,
+        2818,
+        2832
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "committed-journal.json",
+      "pids": [
+        2846,
+        2860,
+        2874
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "first-base-write.json",
+      "pids": [
+        2722,
+        2735,
+        2749
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "journal-cleanup.json",
+      "pids": [
+        2930,
+        2944,
+        2958
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "last-sidecar-write.json",
+      "pids": [
+        2763,
+        2777,
+        2791
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "quarantine-cleanup.json",
+      "pids": [
+        2888,
+        2902,
+        2916
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "quarantine-copy.json",
+      "pids": [
+        2638,
+        2652,
+        2666
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "quiz-base-write.json",
+      "pids": [
+        2972,
+        2985,
+        2999
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "quiz-sidecar-write.json",
+      "pids": [
+        3013,
+        3027,
+        3041
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    },
+    {
+      "file": "staged-journal.json",
+      "pids": [
+        2680,
+        2694,
+        2708
+      ],
+      "state": "PASS",
+      "signal": "SIGKILL"
+    }
+  ],
+  "nativeProofs": [
+    {
+      "file": "binding-media-foreign.json",
+      "state": "PASS",
+      "pids": [
+        2547,
+        2561
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "binding-media.json",
+      "state": "PASS",
+      "pids": [
+        2422,
+        2435
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "binding-quiz-base.json",
+      "state": "PASS",
+      "pids": [
+        2463,
+        2477
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "binding-quiz-foreign.json",
+      "state": "PASS",
+      "pids": [
+        2589,
+        2603
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "binding-quiz-sidecar.json",
+      "state": "PASS",
+      "pids": [
+        2505,
+        2519
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "logical-digest-ordinary.json",
+      "state": "PASS"
+    },
+    {
+      "file": "logical-digest-stripped.json",
+      "state": "PASS"
+    },
+    {
+      "file": "native-stripped-baseline.json"
+    },
+    {
+      "file": "r2-after-id-create.json",
+      "state": "PASS",
+      "pids": [
+        1283,
+        1297
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "r2-after-id-import.json",
+      "state": "PASS",
+      "pids": [
+        1325,
+        1339
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "r2-binary-rollback-copy-failure.json",
+      "state": "PASS",
+      "pids": [
+        1898,
+        1912
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "r2-digest-changed-content.json"
+    },
+    {
+      "file": "r2-digest-extra-field.json"
+    },
+    {
+      "file": "r2-digest-id-bearing.json"
+    },
+    {
+      "file": "r2-digest-mismatched-id.json"
+    },
+    {
+      "file": "r2-digest-payload.json"
+    },
+    {
+      "file": "r2-digest-question-id-type.json"
+    },
+    {
+      "file": "r2-digest-returned-storage-id-mismatch.json"
+    },
+    {
+      "file": "r2-digest-sidecar-id-mismatch.json"
+    },
+    {
+      "file": "r2-import-source-id-mismatch.json"
+    },
+    {
+      "file": "r2-legacy-tagged-proven-media.json",
+      "state": "PASS",
+      "pids": [
+        1367,
+        1381
+      ],
+      "exits": [
+        0,
+        0
+      ]
+    },
+    {
+      "file": "r2-native-enhanced-roundtrip.json",
+      "state": "PASS"
+    },
+    {
+      "file": "r2-ownership-base-content.json",
+      "state": "PASS",
+      "pids": [
+        1451,
+        1465
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-base-inode.json",
+      "state": "PASS",
+      "pids": [
+        1409,
+        1423
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-base-symlink.json",
+      "state": "PASS",
+      "pids": [
+        1619,
+        1633
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-base-whitespace.json",
+      "state": "PASS",
+      "pids": [
+        1493,
+        1507
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-legacy-sidecar-as-base.json",
+      "state": "PASS",
+      "pids": [
+        1787,
+        1801
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-newer-sidecar.json",
+      "state": "PASS",
+      "pids": [
+        1661,
+        1675
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-old-media-record.json",
+      "state": "PASS",
+      "pids": [
+        1745,
+        1759
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-old-quiz-record.json",
+      "state": "PASS",
+      "pids": [
+        1703,
+        1717
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-quiz-base-content.json",
+      "state": "PASS",
+      "pids": [
+        1829,
+        1843
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-quiz-sidecar-content.json",
+      "state": "PASS",
+      "pids": [
+        1871,
+        1884
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-sidecar-content.json",
+      "state": "PASS",
+      "pids": [
+        1577,
+        1591
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "r2-ownership-sidecar-inode.json",
+      "state": "PASS",
+      "pids": [
+        1535,
+        1549
+      ],
+      "exits": [
+        2,
+        2
+      ]
+    },
+    {
+      "file": "sidecar-only-preflight-r2.json"
+    }
+  ],
+  "reviewProofs": [
+    {
+      "file": "already-restored-positive.json",
+      "state": "PASS",
+      "pids": [
+        2366,
+        2380
+      ],
+      "exits": [
+        0,
+        0
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "ambiguous-7.json",
+      "state": "PASS",
+      "pids": [
+        2060,
+        2074
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "ambiguous-false.json",
+      "state": "PASS",
+      "pids": [
+        2088,
+        2102
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "ambiguous-null.json",
+      "state": "PASS",
+      "pids": [
+        2032,
+        2046
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "ambiguous-[].json",
+      "state": "PASS",
+      "pids": [
+        2144,
+        2158
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "ambiguous-{}.json",
+      "state": "PASS",
+      "pids": [
+        2116,
+        2130
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "default-wrapper-positive.json",
+      "state": "PASS",
+      "pids": [
+        2227,
+        2241
+      ],
+      "exits": [
+        0,
+        0
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "missing-nonnull-sidecar.json",
+      "state": "PASS",
+      "pids": [
+        2004,
+        2018
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "null-sidecar-backup-positive.json",
+      "state": "PASS",
+      "pids": [
+        2199,
+        2213
+      ],
+      "exits": [
+        0,
+        0
+      ],
+      "callbacks": [
+        {
+          "writes": 1,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "private-immediate-corrupt.json",
+      "state": "PASS",
+      "pids": [
+        2283,
+        2297
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "private-immediate-missing.json",
+      "state": "PASS",
+      "pids": [
+        2255,
+        2269
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "private-startup-corrupt.json",
+      "state": "PASS",
+      "pids": [
+        2338,
+        2352
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "private-startup-missing.json",
+      "state": "PASS",
+      "pids": [
+        2311,
+        2325
+      ],
+      "exits": [
+        2,
+        2
+      ],
+      "callbacks": [
+        {
+          "writes": 0,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    },
+    {
+      "file": "string-foreign-positive.json",
+      "state": "PASS",
+      "pids": [
+        2172,
+        2185
+      ],
+      "exits": [
+        0,
+        0
+      ],
+      "callbacks": [
+        {
+          "writes": 1,
+          "deletes": 0
+        },
+        {
+          "writes": 0,
+          "deletes": 0
+        }
+      ]
+    }
+  ],
+  "inputChecks": [
+    "base-after-broad.json",
+    "base-after-checks.json",
+    "base-after-focused.json",
+    "base-before.json",
+    "base-final.json",
+    "merged-after-broad.json",
+    "merged-after-checks.json",
+    "merged-after-focused.json",
+    "merged-before-broad.json",
+    "merged-before-focused.json",
+    "merged-before.json",
+    "merged-final.json"
+  ],
+  "source": {
+    "commit": "991f38f216ad265e06aec53313db8928437da248",
+    "verifiedFiles": 1274,
+    "auxFiles": 2,
+    "mismatches": [],
+    "at": "2026-11-15T08:31:32.865Z"
+  },
+  "retainedPriorSource": {
+    "priorCommit": "9593f24f287f2e404f387f6359e89453cd8a971e",
+    "verifiedFiles": 1391,
+    "mismatches": []
+  },
+  "resources": {
+    "time": 1794731493.0846448,
+    "freeBytes": 2754838528,
+    "newBytes": 53685125,
+    "retainedPredecessorBytes": 23988893,
+    "sizeRw": 16384,
+    "running": true
+  },
+  "resourceSampleCount": 120,
+  "minFreeBytes": 2754895872,
+  "maxNewBytes": 53680334,
+  "runnerStopped": true
+}

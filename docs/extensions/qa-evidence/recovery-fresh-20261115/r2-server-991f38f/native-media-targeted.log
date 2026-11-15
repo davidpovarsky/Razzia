@@ -1,0 +1,57 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mrecovers actual native create after ID return and journal stage
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mrecovers actual native import after ID return and journal stage
+[90mstderr[2m | src/server/storage/native-binding-r2.test.ts[2m > [22m[2mR2 recorded physical ownership and logical digest controls[2m > [22m[2mdoes not reattach references when actual rollback binary restoration fails
+[22m[39m[MediaRollback] Failed to restore media from quarantine: Error: EIO actual binary rollback copy failure
+    at Object.<anonymous> [90m(/work/extensions/[39msrc/server/storage/native-binding-r2.test.ts:368:19[90m)[39m
+    at Object.copyFileSync (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/spy.DgMTfhrK.js:323:40)
+    at rollback [90m(/work/extensions/[39msrc/server/media-library.ts:529:14[90m)[39m
+    at executeMediaDeleteTransaction [90m(/work/extensions/[39msrc/server/media-library.ts:812:29[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/native-binding-r2.test.ts:372:22
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+
+ [32m✓[39m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mrecovers a legacy-tagged Media record only with unchanged complete pre-mutation physical proof[33m 12502[2mms[22m[39m
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on base-inode
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on base-content
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on base-whitespace
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on sidecar-inode
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on sidecar-content
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on base-symlink
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on newer-sidecar
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on old-quiz-record
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on old-media-record
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on legacy-sidecar-as-base
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on quiz-base-content
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mpreserves BOTH siblings and journal on quiz-sidecar-content
+ [32m✓[39m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mdoes not reattach references when actual rollback binary restoration fails[33m 8804[2mms[22m[39m
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: payload
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: id-bearing
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: changed-content
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: mismatched-id
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: sidecar-id-mismatch
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: extra-field
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mGET digest compatibility preserves every field: question-id-type
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mimports an actual native exported bundle with a fresh ID and consistent logical digest
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mrejects an imported root ID that does not match its source sidecar before allocation
+ [2m[90m↓[39m[22m src/server/storage/native-binding-r2.test.ts[2m > [22mR2 recorded physical ownership and logical digest controls[2m > [22mrejects a returned storage ID that does not match the requested identity
+ [32m✓[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media[33m 13198[2mms[22m[39m
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-base
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-sidecar
+ [32m✓[39m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: media-foreign[33m 12501[2mms[22m[39m
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mproduction-equivalent startup preserves native binding: quiz-foreign
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=false)
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative composite create→GET→export uses the logical normalized digest (stripped input=true)
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mrejects sidecar-only detach before any filesystem mutation
+ [2m[90m↓[39m[22m src/server/storage/native-binding.test.ts[2m > [22mR1 actual native storage bindings and logical digest[2m > [22mnative writer baseline strips extra input independently of ownership bytes
+
+[2m Test Files [22m [1m[32m2 passed[39m[22m[90m (2)[39m
+[2m      Tests [22m [1m[32m4 passed[39m[22m[2m | [22m[33m31 skipped[39m[90m (35)[39m
+[2m   Start at [22m 08:14:37
+[2m   Duration [22m 54.70s[2m (tests 88%, transform 7%, import 5%)[22m
+

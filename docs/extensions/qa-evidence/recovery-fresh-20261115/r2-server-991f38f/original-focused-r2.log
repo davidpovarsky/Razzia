@@ -1,0 +1,375 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mblocks deletion when media is referenced by another show or card, and allows deletion when unreferenced or explicitly detached[32m 207[2mms[22m[39m
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mfail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid
+[22m[39m[Sidecar] Failed to read sidecar at /tmp/razzia-media-lib-CyylKc/extensions/quizzes/show-with-bad-sidecar.json: SyntaxError: Unexpected token 'I', "INVALID SIDECAR JSON" is not valid JSON
+    at JSON.parse (<anonymous>)
+    at readSidecar [90m(/work/extensions/[39msrc/server/storage/sidecar.ts:68:25[90m)[39m
+    at loadAllShowsHealth [90m(/work/extensions/[39msrc/server/media-library.ts:132:20[90m)[39m
+    at executeMediaDeleteTransaction [90m(/work/extensions/[39msrc/server/media-library.ts:343:18[90m)[39m
+    at checkMediaDeleteSafety [90m(/work/extensions/[39msrc/server/media-library.ts:842:10[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:312:20
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22massociates uploaded media with a show catalog so it remains in 'Used in This Show' even when unassigned from a card[32m 199[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mfail-closed: blocks deletion when any show file in quizz/ is malformed or unreadable[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mfail-closed: blocks deletion when any sidecar file in extensions/quizzes/ is invalid[32m 96[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mcatalog-only reference: blocks deletion without detach, and cleanly detaches with detach: true[32m 98[2mms[22m[39m
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mrestart recovery: preserves insufficient legacy Media intent without mutating its namespace
+[22m[39m[MediaJournal] Failed reading journal media-crash-media-journal-crash-1.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1020:19[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:614:24
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3259:10)
+[MediaJournal] Failed reading journal media-crash-media-journal-crash-1.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1020:19[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:614:24
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mwrite-failure injection: rolls back all show and sidecar files to previous state on error[32m 110[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mconcurrency protection: detects concurrent modification of show file during detach and rolls back[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mrestart recovery: preserves insufficient legacy Media intent without mutating its namespace[32m 87[2mms[22m[39m
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mGate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other
+[22m[39m[MediaJournal] Failed reading journal media-coexist-media-delete-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1020:19[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:878:27
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3259:10)
+[MediaJournal] Failed reading journal media-coexist-media-delete-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1020:19[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:878:27
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate A4 (1 & 9): physical media deletion integration - deletes media binary atomically on success and rolls back on failure[32m 98[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate A4 (4 & 5): deterministic fault injection during write and rollback failure preservation[32m 100[2mms[22m[39m
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mBug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary
+[22m[39m[MediaJournal] Failed reading journal media-lost-media.png-lost-journal-uuid.media-journal.json: Error: Missing or inconsistent physical media bindings
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1020:19[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library.test.ts:990:22
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+    at runWithTimeout (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3259:10)
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate A4 (7): isolated coexistence - composite-save and media-delete journals do not misinterpret or delete each other[32m 7[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate A4 (10): recoverStartupJournals is idempotent across multiple calls[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mBug B negative gap: crash between quarantine unlink and journal unlink does NOT restore dangling references to missing binary[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mBug B: point-of-no-return ordering - crash after physical delete before committed write rolls back binary and references from quarantine[32m 96[2mms[22m[39m
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mBug B: path traversal and forged paths in journal are rejected without touching files
+[22m[39m[MediaJournal] Invalid or unsafe cleanMediaName in journal traversal.media-journal.json: "../../secret.txt", preserving
+
+[90mstderr[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mBug B: recoverStartupJournals halts server startup when critical recovery fails
+[22m[39m[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "/tmp/razzia-media-lib-WN3npt/extensions/quizzes/.journal/media-delete/quarantine/nonexistent", preserving
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Invalid or unsafe quarantinePath in journal broken-startup.media-journal.json: "/tmp/razzia-media-lib-WN3npt/extensions/quizzes/.journal/media-delete/quarantine/nonexistent", preserving
+
+[90mstdout[2m | src/server/media-library.test.ts[2m > [22m[2mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22m[2mGate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss
+[22m[39m[StartupRecovery] Recovered 1 quiz journals and 1 media delete journals
+
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mBug B: point-of-no-return ordering - crash after committed marker cleans up forward without rolling back[32m 10[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mBug B: path traversal and forged paths in journal are rejected without touching files[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mBug B: recoverStartupJournals halts server startup when critical recovery fails[32m 79[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate 3: concurrent cross-family recovery (staged V2 save + media-delete) restores deterministically without data loss[32m 205[2mms[22m[39m
+ [32m✓[39m src/server/media-library.test.ts[2m > [22mGate C: Persistent Media Catalog & Reference-Safe Deletion[2m > [22mGate 2 & 3: serves self-hosted dotlottie WASM, uploads .lottie/JSON animations, lists lottieAssets in catalog, and enforces reference-safe deletion on overlayAnimations[32m 113[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE01: reads legacy quiz with no sidecar and never auto-creates sidecar[32m 94[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE02: preserves question associations during reorder (no swapped answers)[32m 109[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE03: duplicates question with fresh ID and removes question without orphans[32m 91[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE04: concurrent writes with expectedRevision detect conflict (409)[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE05: recovers consistent pair from staged journal on simulated power-loss[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: recovers valid V2 extras from staged journal without stripping timeline, scenes, audio, backgrounds, authoring, and media catalog[32m 99[2mms[22m[39m
+[90mstderr[2m | src/server/storage.test.ts[2m > [22m[2mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22m[2mBug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure
+[22m[39m[Journal] Non-null backupExtras for quiz quiz-1794730335364-vqen failed schema parsing; preserving sidecar and journal for manual recovery
+
+[90mstderr[2m | src/server/storage.test.ts[2m > [22m[2mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22m[2mBug A: rejects bogus kind/version and path traversal quizIds without deleting files
+[22m[39m[Journal] Incompatible journal kind "unknown-alien-kind" in bogus-kind.journal.json, preserving
+[Journal] Invalid or unsafe quizId in journal traversal.journal.json: "../../etc/passwd", preserving
+
+[90mstderr[2m | src/server/storage.test.ts[2m > [22m[2mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22m[2mBug A: failed base restore preserves journal and reports failure
+[22m[39m[Journal] Failed to recover journal quiz-1794730335373-7m6x.journal.json: Error: Disk full or permission denied on base quiz update
+    at Object.updateQuizz [90m(/work/extensions/[39msrc/server/storage.test.ts:697:15[90m)[39m
+    at recoverJournals [90m(/work/extensions/[39msrc/server/storage/journal.ts:348:20[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage.test.ts:700:20
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+    at new Promise (<anonymous>)
+
+[90mstderr[2m | src/server/storage.test.ts[2m > [22m[2mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22m[2mBug A: does not blindly restore over a newer concurrent revision
+[22m[39m[Journal] Quiz quiz-1794730335464-0tjq has current sidecar revision 3 > target revision 2; skipping rollback to prevent overwriting newer revision
+
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: corrupt non-null backup extras fails closed, PRESERVES journal, does NOT delete sidecar, and reports failure[32m 4[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: crash after sidecar write before cleanup is idempotent and preserves consistent state[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: rejects bogus kind/version and path traversal quizIds without deleting files[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: failed base restore preserves journal and reports failure[32m 90[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mBug A: does not blindly restore over a newer concurrent revision[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mCORE06: enhanced bundle import/export remaps question IDs and preserves metadata[32m 92[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mMEDIA02: rejects unsafe media URL or missing alt in answerVisuals[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mcreateCompositeQuiz: pre-validation prevents base quiz creation on invalid extras[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mcreateCompositeQuiz: rolls back base quiz if sidecar write throws[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mimportEnhancedBundle: rolls back base quiz if bundle sidecar write fails[32m 1[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mimportEnhancedBundle: remaps leaderboard.afterQuestionIds and imports V2 bundle cleanly[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mimportEnhancedBundle: directly imports friendly authored Tada show payload[32m 92[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mimportEnhancedBundle: strictly rejects legacy quiz payload containing unsafe media URL[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mexportEnhancedBundle: synthesizes valid V2 extras on-the-fly without sidecar on disk[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mGate C01, C02, C05: imports friendly show with note and interlude, preserves metadata through reload and revision increment[32m 6[2mms[22m[39m
+ [32m✓[39m src/server/storage.test.ts[2m > [22mServer-Side Composite Storage & Journals (CORE01-06, MEDIA02)[2m > [22mGate C03 & C05: invalid targetKey direct server import returns 400 and performs zero writes[32m 86[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at quarantine-copy[33m 391[2mms[22m[39m
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at staged-journal
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a775-7639-8dd1-f9e3c2acf2e5.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a775-7639-8dd1-f9e3c2acf2e5.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at first-base-write
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a8a2-727c-a752-b42fe006d5cd.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a8a2-727c-a752-b42fe006d5cd.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at staged-journal[33m 304[2mms[22m[39m
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at last-sidecar-write
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a9c3-72af-bde4-b8fde7f9327d.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-a9c3-72af-bde4-b8fde7f9327d.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at first-base-write[32m 205[2mms[22m[39m
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at binary-delete
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-aa34-7774-932c-46d4fe1b8ce9.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-aa34-7774-932c-46d4fe1b8ce9.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at last-sidecar-write[32m 199[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at binary-delete[32m 192[2mms[22m[39m
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at committed-journal
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-aaf5-70d0-86f1-a22909e4129f.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-aaf5-70d0-86f1-a22909e4129f.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+[90mstderr[2m | src/server/media-library-recovery.test.ts[2m > [22m[2mmedia-delete deterministic restart snapshots[2m > [22m[2mrestarts twice from actual disk snapshot at quarantine-cleanup
+[22m[39m[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-ab66-72ea-9a78-25aa53188f9e.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+[MediaJournal] Failed reading journal media-synthetic.png-01a1de43-ab66-72ea-9a78-25aa53188f9e.media-journal.json: Error: Conflicting physical journal paths
+    at recoverMediaDeleteJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1024:19[90m)[39m
+    at recoverStartupJournals [90m(/work/extensions/[39msrc/server/media-library.ts:1399:25[90m)[39m
+    at [90m/work/extensions/[39msrc/server/media-library-recovery.test.ts:230:11
+    at Proxy.assertThrows (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:2877:5)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1990:12)
+    at Proxy.overwritingMethodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1796:33)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:2287:114)
+    at Proxy.<anonymous> (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/index.C4tKZ0yW.js:1944:14)
+    at Proxy.methodWrapper (file:///work/node_modules/[4m.pnpm[24m/chai@6.3.0/node_modules/[4mchai[24m/index.js:1737:25)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at committed-journal[32m 114[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at quarantine-cleanup[32m 199[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrestarts twice from actual disk snapshot at journal-cleanup[32m 187[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mretains staged journal and quarantine after partial restore and retries[32m 205[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mblocks startup rather than restoring refs when original and quarantine are missing[32m 106[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mpreserves committed journal and quarantine on unreadable-show[32m 104[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mpreserves committed journal and quarantine on binary-present[32m 189[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mdoes not treat failed committed-marker rename as a durable commit[32m 111[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrejects unsafe journal IDs without writing outside authorized paths[32m 103[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mretains staged journal when quarantine cleanup fails and replays safely[32m 202[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mretains committed journal when quarantine cleanup fails and replays safely[32m 186[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mpreserves an insufficient committed empty-shows record and its last copy without mutation[32m 102[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mpreserves evidence when a restore rename silently changes valid sidecar content[32m 211[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mrecovers concurrent journal families with real matching base digest[32m 289[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction committed cleanup retains its journal after quarantine unlink EACCES[32m 196[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback retains evidence after silent base corruption[32m 119[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback retains evidence after silent sidecar corruption[32m 193[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback retains evidence after silent binary corruption[32m 201[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback preserves permission-denied restores without chmod[32m 191[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback reports pending quarantine cleanup and replays[32m 114[2mms[22m[39m
+ [32m✓[39m src/server/media-library-recovery.test.ts[2m > [22mmedia-delete deterministic restart snapshots[2m > [22mtransaction rollback reports pending journal cleanup and replays[32m 197[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mrestores complete V2 at base-written and replay is a no-op[33m 303[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mrestores complete V2 at sidecar-written and replay is a no-op[32m 9[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mpreserves V1 backups[32m 88[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22maccepts a payload digest when the original adapter adds its matching storage ID[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mretains journal when base restoration is throw[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mretains journal when base restoration is silent-wrong-content[32m 90[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mretains journal on valid sidecar content corruption with the same revision[32m 6[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mfails closed before writes for invalid-v2[32m 4[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mfails closed before writes for digest-mismatch[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mfails closed before writes for newer-revision[32m 85[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mfails closed before writes for wrong-quiz-id[32m 3[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mfails closed before writes for wrong-filename[32m 2[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mkeeps journal after partial sidecar write and retries safely[32m 5[2mms[22m[39m
+ [32m✓[39m src/server/storage/journal-recovery.test.ts[2m > [22mquiz-save deterministic recovery[2m > [22mkeeps journal if cleanup fails after exact restoration[32m 89[2mms[22m[39m
+[90mstderr[2m | src/server/storage/create-recovery.test.ts[2m > [22m[2mcreate/import rollback recovery[2m > [22m[2mretains recovery intent if sidecar cleanup fails after deleting base
+[22m[39m[Sidecar] Failed to read sidecar at /tmp/tadazz-recovery-synthetic-85ds4K/extensions/quizzes/5b8568e8-454b-49ed-a6d5-c93c7a852bc6.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at readSidecar [90m(/work/extensions/[39msrc/server/storage/sidecar.ts:68:25[90m)[39m
+    at recoverJournals [90m(/work/extensions/[39msrc/server/storage/journal.ts:246:30[90m)[39m
+    at [90m/work/extensions/[39msrc/server/storage/create-recovery.test.ts:104:12
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:1628:35
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:2783:26
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3321:20
+    at new Promise (<anonymous>)
+    at runWithCancel (file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3316:10)
+    at file:///work/node_modules/[4m.pnpm[24m/vitest@5.0.3_@types+node@26.6.5_@vitest+coverage-v8@5.0.3_vite@8.3.4_@types+node@26.6.5_affc8359b79ad34843a9fe8364129462/node_modules/[4mvitest[24m/dist/chunks/run.BTlFXlnv.js:3301:20
+
+ [32m✓[39m src/server/storage/create-recovery.test.ts[2m > [22mcreate/import rollback recovery[2m > [22mretains recovery intent if create sidecar write and base cleanup fail[32m 295[2mms[22m[39m
+ [32m✓[39m src/server/storage/create-recovery.test.ts[2m > [22mcreate/import rollback recovery[2m > [22mretains recovery intent if import sidecar write and base cleanup fail[32m 10[2mms[22m[39m
+ [32m✓[39m src/server/storage/create-recovery.test.ts[2m > [22mcreate/import rollback recovery[2m > [22mretains recovery intent if sidecar cleanup fails after deleting base[32m 96[2mms[22m[39m
+ [32m✓[39m src/server/storage/create-recovery.test.ts[2m > [22mcreate/import rollback recovery[2m > [22mreplays interrupted create after ID return and journal stage[32m 93[2mms[22m[39m
+ [32m✓[39m src/server/storage/create-recovery.test.ts[2m > [22mcreate/import rollback recovery[2m > [22mreplays interrupted import after ID return and journal stage[32m 6[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m5 passed[39m[22m[90m (5)[39m
+[2m      Tests [22m [1m[32m86 passed[39m[22m[90m (86)[39m
+[2m   Start at [22m 08:12:05
+[2m   Duration [22m 22.30s[2m (tests 44%, import 31%, transform 24%, worker 1%)[22m
+
+[2m    Isolate [22m [33m5 workers spawned[39m[2m · ~603ms startup each (spawn + environment, per file)[22m
+[2m            [22m [2mat least ~2.41s faster with [22m[33misolate: false[39m[2m — reuses workers across files instead of one per file[22m
+
