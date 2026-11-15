@@ -1,0 +1,69 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF
+[Journal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/journal.ts:174:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1398:24)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:93:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:91:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.test.ts:114:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+stderr | src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF
+[MediaJournal] Malformed JSON in journal synthetic.journal.json: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at recoverMediaDeleteJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:917:22)
+    at recoverStartupJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/media-library.ts:1399:25)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:93:28
+    at Array.map (<anonymous>)
+    at recoverStartupOwnerJournals (C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.ts:91:19)
+    at C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions/src/server/storage/startup-recovery.test.ts:114:18
+    at Proxy.assertThrows (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:2877:5)
+    at Proxy.methodWrapper (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/chai@6.3.0/node_modules/chai/index.js:1737:25)
+    at Proxy.<anonymous> (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/vitest@5.0.3_@types+node@26_affc8359b79ad34843a9fe8364129462/node_modules/vitest/dist/chunks/index.C4tKZ0yW.js:1990:12)
+[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/
+
+ ✓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant quiz-save before listen, including accounts OFF 167ms
+ ✓ src/server/storage/startup-recovery.test.ts > blocks unresolved tenant media-delete before listen, including accounts OFF 131ms
+ ✓ src/server/storage/startup-recovery.test.ts > selects all exact disabled and unverified owner IDs independent of the current flag 221ms
+ ✓ src/server/storage/startup-recovery.test.ts > reads owners committed only in a live WAL without changing source files 159ms
+ ✓ src/server/storage/startup-recovery.test.ts > reads a cleanly closed WAL DB without creating source sidecars 137ms
+ ✓ src/server/storage/startup-recovery.test.ts > accepts structural never-account absence without creating an account store 22ms
+ ✓ src/server/storage/startup-recovery.test.ts > denies missing DB with even an empty tenant namespace 16ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":[null]} before recovery 129ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["not-an-owner"]} before recovery 134ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000A1"]} before recovery 107ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects invalid/duplicate/conflicting owner rows {"ids":["00000000-0000-4000-8000-0000000000A1","00000000-0000-4000-8000-0000000000a1"]} before recovery 122ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects corrupt committed WAL bytes without journal mutation 67ms
+ ✓ src/server/storage/startup-recovery.test.ts > rejects corrupt DB and missing owner table without source or journal writes 110ms
+ ✓ src/server/storage/startup-recovery.test.ts > checks the complete owner list before touching a valid earlier root 116ms
+ ✓ src/server/storage/startup-recovery.test.ts > refuses changed owner metadata after snapshot and preserves journal bytes 118ms
+ ✓ src/server/storage/startup-recovery.test.ts > keeps a linked known tenant root out of recovery 120ms
+stdout | src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF
+[StartupRecovery] Recovered 1 quiz journals and 0 media delete journals
+
+ ✓ src/server/storage/startup-recovery.test.ts > replays clean known roots twice without ambient native CRUD or account changes 294ms
+stdout | src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes
+[StartupRecovery] Recovered 0 quiz journals and 1 media delete journals
+
+ ✓ src/server/storage/startup-recovery.test.ts > restores full tenant V2 and native basename through bound-root adapters with the account flag OFF 365ms
+ ✓ src/server/storage/startup-recovery.test.ts > finishes committed tenant Media cleanup through explicit roots after the accounts flag changes 362ms
+ ✓ src/server/storage/startup-recovery.test.ts > retries a changed live source and publishes only the revalidated owner set 182ms
+ ✓ src/server/storage/startup-recovery.test.ts > bounds churn to three captures, cleans private copies and preserves journals 146ms
+ ✓ src/server/storage/startup-recovery.test.ts > retries a WAL/SHM disappearance and accepts the complete closed source without creating source sidecars 142ms
+ ✓ src/server/storage/startup-recovery.test.ts > refuses oversized metadata before private copying or journal changes 30ms
+ ↓ src/server/storage/startup-recovery.test.ts > fails closed on unreadable canonical metadata without changing permissions
+ ✓ src/server/storage/startup-recovery.test.ts > rejects a linked canonical DB without following or rewriting its target 57ms
+
+ Test Files  1 passed (1)
+      Tests  24 passed | 1 skipped (25)
+   Start at  18:20:48
+   Duration  5.98s (tests 60%, import 22%, transform 17%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/snapshot-private-copy-proof.json

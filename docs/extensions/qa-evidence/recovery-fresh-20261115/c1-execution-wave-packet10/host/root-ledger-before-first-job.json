@@ -1,0 +1,123 @@
+{
+  "ledgerSha256": "9aeaa08e50f3f80a0303ac6bc68dbe3fc92e6a290983800a395e0d001b9e7d0c",
+  "snapshot": {
+    "schemaVersion": 1,
+    "snapshotId": "recovery-wave-packet10-wave-1794760911",
+    "issuerThreadId": "01a1dfa9-5c5a-7723-8993-110f2dfe4892",
+    "sourceCommit": "5ef867db68d6d6ab371964990cf2b93b8248a59e",
+    "packetHashesSha256": "751833379c4965cb499ea5be03016d6accc0343d566ae4a8c04b2db01defa371",
+    "capturedAtEpochSeconds": 1794760911.463102,
+    "expiresAtEpochSeconds": 1794761211.463102,
+    "exampleOnly": false,
+    "lanes": [
+      {
+        "laneId": "qa:01a1dfa9-3316-7a02-afef-3dccd5939e79",
+        "cpuGrant": 0.5,
+        "memoryGrantBytes": 2080374784,
+        "newPhysicalBudgetBytes": 209715200,
+        "consumedPhysicalBytes": 171864064
+      },
+      {
+        "laneId": "show_ui:01a1dfa9-d401-77f3-a539-82c918b393f4",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 57196544
+      },
+      {
+        "laneId": "Recovery-C1",
+        "cpuGrant": 0.25,
+        "memoryGrantBytes": 2147483648,
+        "newPhysicalBudgetBytes": 67108864,
+        "consumedPhysicalBytes": 18382848
+      }
+    ],
+    "aggregate": {
+      "approvedCpu": 1.5,
+      "approvedMemoryBytes": 8589934592,
+      "retainedSharedMetadataBytesOnce": 456130560
+    },
+    "disk": {
+      "floorBytes": 2147483648,
+      "futureReserveBytes": 0,
+      "marginBytes": 67108864
+    },
+    "ram": {
+      "minimumHostAvailableBytes": 6375342080
+    },
+    "runtimeRegisterSha256": "f9413996cfb667e76128b0ace01b188ba7bc25dde15f173fb7f46c762887f09e",
+    "authority": "Owner-activated developer claim; no independent packet review claimed"
+  },
+  "measured": {
+    "time": 1794760914.6058173,
+    "freeBytes": 2569142272,
+    "ownPhysicalBytes": 21753856,
+    "requiredAdmissionFreeBytes": 2307710976,
+    "availableRamBytes": 10439036928,
+    "laneLedgerSnapshotId": "recovery-wave-packet10-wave-1794760911",
+    "laneLedgerSha256": "9aeaa08e50f3f80a0303ac6bc68dbe3fc92e6a290983800a395e0d001b9e7d0c",
+    "pidMetrics": {
+      "available": true,
+      "capturedEpoch": 1794760914.6063657,
+      "durationNs": 528325,
+      "scope": "/sys/fs/cgroup/system.slice/docker-e42fde8cab3d4a4f748774a9eb3eef85ad872e64efe2863519fd799bf33d0b80.scope",
+      "pidsCurrent": 7,
+      "pidsMax": 96,
+      "pidsPeak": 14,
+      "pidsEvents": {
+        "max": 0
+      },
+      "pidsEventsLocal": {
+        "max": 0
+      },
+      "maxEventsSinceBaseline": 0,
+      "processes": [
+        {
+          "hostPid": 1278631,
+          "startTicks": "100140078",
+          "ppid": 1278607,
+          "name": "MainThread",
+          "state": "S (sleeping)",
+          "threads": 7,
+          "namespacePids": [
+            1278631,
+            1
+          ],
+          "uid": [
+            "1001",
+            "1001",
+            "1001",
+            "1001"
+          ],
+          "gid": [
+            "1001",
+            "1001",
+            "1001",
+            "1001"
+          ],
+          "limits": [
+            "Max processes             unlimited            unlimited            processes ",
+            "Max open files            524288               524288               files     "
+          ]
+        }
+      ],
+      "exitedOrMovedDuringRead": [],
+      "parentTransitions": [],
+      "processCountObserved": 1,
+      "sumThreadsObserved": 7,
+      "zombiesObserved": 0,
+      "ancestorControllerLimitsOnly": [
+        {
+          "path": "/sys/fs/cgroup/system.slice",
+          "pidsMax": "max",
+          "events": {
+            "max": 1490
+          }
+        }
+      ],
+      "snapshotIsRacy": true,
+      "spawnedInContainerToObserve": false
+    }
+  },
+  "historicalPlanningValuesUsedAsAuthority": false
+}

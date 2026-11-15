@@ -1,30 +1,27 @@
 import { createAdaptorServer } from "@hono/node-server"
-import { recoverStartupJournals } from "@razzia/extensions/server"
-import { recoverCreationReservations } from "@razzia/extensions/server"
+import {
+  recoverStartupOwnerJournals,
+  recoverCreationReservations,
+} from "@razzia/extensions/server"
 import { resolveConfigRoot } from "@razzia/socket/services/config-scope"
 import { app, createSocketServer } from "@razzia/socket/app"
-import {
-  deleteQuizz,
-  getPath,
-  initConfig,
-  updateQuizz,
-} from "@razzia/socket/services/config"
+import { initConfig } from "@razzia/socket/services/config"
 import Registry from "@razzia/socket/services/registry"
-import { checkAccountConfiguration } from "@razzia/socket/services/account-db"
+import {
+  checkAccountConfiguration,
+  readStartupOwnerSnapshot,
+} from "@razzia/socket/services/account-db"
 
 const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
 
 // C1 reads only its trusted private registry, including explicit tenant roots.
+readStartupOwnerSnapshot()
 recoverCreationReservations(resolveConfigRoot())
 initConfig()
 checkAccountConfiguration()
 
 // Startup journal recovery: recover pending composite-save and media-delete transactions before accepting requests
-recoverStartupJournals({
-  getPath,
-  updateQuizz,
-  deleteQuizz,
-})
+recoverStartupOwnerJournals(readStartupOwnerSnapshot())
 
 process.on("uncaughtException", (error) => {
   console.error("Uncaught exception:", error)

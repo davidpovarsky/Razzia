@@ -1,0 +1,14 @@
+Failed to parse oxlint configuration file.
+
+  x Failed to load config: C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-recovery-fresh-20261115\oxlint.config.ts
+  | 
+  | Error: Unknown file extension ".ts" for C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-recovery-fresh-20261115\oxlint.config.ts
+  | 
+  | TypeScript config files require Node.js >=22.18.0.
+  | Detected Node.js v22.17.0.
+  | Please upgrade Node.js or use a JSON config file instead.
+  |     at importJsConfig (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/oxlint@1.90.0_oxlint-tsgolint@7.0.2004/node_modules/oxlint/dist/js_config.js:61:16)
+  |     at async resolveJsConfig (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/oxlint@1.90.0_oxlint-tsgolint@7.0.2004/node_modules/oxlint/dist/js_config.js:126:15)
+  |     at async Promise.allSettled (index 0)
+  |     at async loadConfigs (file:///C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/node_modules/.pnpm/oxlint@1.90.0_oxlint-tsgolint@7.0.2004/node_modules/oxlint/dist/js_config.js:151:17)
+

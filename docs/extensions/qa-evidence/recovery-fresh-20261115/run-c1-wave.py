@@ -74,7 +74,7 @@ def write_new(path,data):
  finally:os.close(fd)
 write_new(ledger_path,data)
 grant={'issuerThreadId':c['thread'],'executionAuthorized':True,
-       'sourceDisposition':'APPROVE_WITH_EXACT_GATES','packetDisposition':'OWNER_AUTHORIZED_ISOLATED_ITERATION',
+       'sourceDisposition':('OWNER_AUTHORIZED_SOURCE_QUALIFICATION' if plan.get('qualificationScope')=='startup-owners' else 'APPROVE_WITH_EXACT_GATES'),'packetDisposition':'OWNER_AUTHORIZED_ISOLATED_ITERATION',
        'parentAuthorization':plan['parentAuthorization'],'syntheticFixtureOnly':True,'independentReviewClaimed':False,
        'admittedAtEpochSeconds':now,'sourceCommit':plan['sourceCommit'],
        'packetManifestSha256':sha((source/'manifest.json').read_bytes()),'packetHashesSha256':packet_hash,
