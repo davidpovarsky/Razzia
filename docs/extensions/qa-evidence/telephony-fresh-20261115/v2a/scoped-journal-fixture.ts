@@ -35,7 +35,7 @@ export class ScopedFixtureError extends Error {
     super(reason)
   }
 }
-const deny = (reason: string): never => {
+function deny(reason: string): never {
   throw new ScopedFixtureError(reason)
 }
 
@@ -63,10 +63,10 @@ function expectedScope(
       expiresAt: context.expiresAt,
     }
   } catch {
-    deny("expected_context_denied")
+    return deny("expected_context_denied")
   }
 }
-function validateAttempt(attempt: ExpectedAttempt) {
+function validateAttempt(attempt: ExpectedAttempt): ExpectedAttempt {
   try {
     identifier(attempt.requestId)
     identifier(attempt.providerReference)
@@ -85,7 +85,7 @@ function validateAttempt(attempt: ExpectedAttempt) {
       expectedPredecessor: attempt.expectedPredecessor,
     }
   } catch {
-    deny("expected_attempt_invalid")
+    return deny("expected_attempt_invalid")
   }
 }
 function privatePath(root: string, requestId: string) {
@@ -187,7 +187,7 @@ export function reopenScopedPrecommit(
   } catch (error) {
     // JSON/parser/filesystem diagnostics must never echo raw capability bytes.
     if (error instanceof ScopedFixtureError) throw error
-    deny("scoped_record_unavailable")
+    return deny("scoped_record_unavailable")
   }
 }
 
