@@ -1,0 +1,31 @@
+{
+  "extends": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "skipLibCheck": true,
+    "allowImportingTsExtensions": true,
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\packages\\socket\\node_modules\\@types",
+      "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\node_modules\\@types"
+    ]
+  },
+  "files": [
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\operation-source\\actual-operation-backend.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\operation-source\\operation.node.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\contracts.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\adapter.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\call-precommit.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\private-immutable-record.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\gateway-v2\\operation-precommit.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\call-source\\call.node.ts",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\server\\phone-lifecycle-v2\\auth\\unmounted-factory.ts"
+  ],
+  "include": []
+}

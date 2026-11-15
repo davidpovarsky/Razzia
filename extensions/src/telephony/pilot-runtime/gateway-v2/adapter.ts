@@ -1,5 +1,6 @@
 import type {
   Action,
+  OperationInput,
   Receipt,
   RegistrationInput,
 } from "../../../server/phone-lifecycle-v2/contracts"
@@ -11,6 +12,8 @@ import type {
   GatewayLeaseView,
   GatewayRegistrationAuthorityPort,
   GatewayRegistrationDispatcher,
+  GatewayCallAuthorityPort,
+  GatewayOperationDispatcher,
 } from "./contracts"
 import { bindingText, delivery, deny, id, lease, target } from "./codec"
 import { PrivateGatewayCustody } from "./private-custody"
@@ -74,8 +77,16 @@ export class PrivateGatewayAdapter {
     const authority = this.options.authority as GatewayRegistrationAuthorityPort
     if (typeof authority.register !== "function") deny()
     const current = () => {
+      const before = this.current()
       this.authorize("register")
-      return this.current().binding
+      const after = this.current()
+      if (
+        bindingText(before.binding) !== bindingText(after.binding) ||
+        after.state !== "ACTIVE" ||
+        !after.allowedActions.includes("register")
+      )
+        deny()
+      return after.binding
     }
     return Object.freeze({
       current,
@@ -114,6 +125,58 @@ export class PrivateGatewayAdapter {
   }
   authorization(action: Action): GatewayDeliveryAck {
     return this.authorize(action)
+  }
+  operationDispatcher(): GatewayOperationDispatcher {
+    const authority = this.options.authority as GatewayCallAuthorityPort
+    if (typeof authority.operate !== "function") deny()
+    const current = (action: OperationInput["action"]) => {
+      if (!["poll", "answer", "hangup"].includes(action)) deny()
+      const before = this.current()
+      this.authorize(action)
+      const after = this.current()
+      if (
+        bindingText(before.binding) !== bindingText(after.binding) ||
+        after.state !== "ACTIVE" ||
+        !after.allowedActions.includes(action)
+      )
+        deny()
+      return after.binding
+    }
+    return Object.freeze({
+      current,
+      operate: async (input: OperationInput): Promise<Receipt> => {
+        try {
+          const request = Object.freeze({ ...input }),
+            expected = current(request.action),
+            sealed = this.files.read(expected)
+          if (sealed.credential === null) deny()
+          this.options.authority.assertCredential(
+            expected,
+            sealed.credential,
+            request.action,
+          )
+          const receipt = await authority.operate(
+            expected,
+            sealed.credential,
+            request,
+          )
+          this.options.authority.assertCredential(
+            expected,
+            sealed.credential,
+            request.action,
+          )
+          if (bindingText(current(request.action)) !== bindingText(expected))
+            deny()
+          this.files.assertUnchanged(sealed)
+          return operationReceipt(receipt, [
+            sealed.credential,
+            request.capability,
+          ])
+        } catch {
+          return deny()
+        }
+      },
+    })
   }
   private authorize(action?: Action): GatewayDeliveryAck {
     try {
@@ -242,5 +305,43 @@ export function registrationReceipt(
     )
   )
     deny()
+  return Object.freeze(result)
+}
+
+export function operationReceipt(
+  input: Receipt,
+  secrets: readonly string[] = [],
+): Receipt {
+  const keys = ["ok", "status", "accepted", "epoch", "points", "answered"]
+  if (
+    !input ||
+    typeof input !== "object" ||
+    "then" in input ||
+    Object.keys(input).some((key) => !keys.includes(key)) ||
+    typeof input.ok !== "boolean" ||
+    typeof input.status !== "string" ||
+    !/^[a-z][a-z_]{0,63}$/u.test(input.status) ||
+    secrets.some((secret) => input.status.includes(secret))
+  )
+    deny()
+  const result: Receipt = { ok: input.ok, status: input.status }
+  for (const key of ["accepted", "answered"] as const) {
+    if (input[key] !== undefined) {
+      if (typeof input[key] !== "boolean") deny()
+      result[key] = input[key]
+    }
+  }
+  if (input.epoch !== undefined) {
+    if (!Number.isSafeInteger(input.epoch) || input.epoch < 0) deny()
+    result.epoch = input.epoch
+  }
+  if (input.points !== undefined) {
+    if (
+      !Number.isFinite(input.points) ||
+      Math.abs(input.points) > Number.MAX_SAFE_INTEGER
+    )
+      deny()
+    result.points = input.points
+  }
   return Object.freeze(result)
 }

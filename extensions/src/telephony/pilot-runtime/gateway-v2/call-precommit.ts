@@ -1,42 +1,23 @@
-import {
-  createCipheriv,
-  createDecipheriv,
-  hkdfSync,
-  randomBytes,
-} from "node:crypto"
-import {
-  constants,
-  closeSync,
-  existsSync,
-  fstatSync,
-  fsyncSync,
-  lstatSync,
-  openSync,
-  readFileSync,
-  realpathSync,
-  renameSync,
-  unlinkSync,
-  writeFileSync,
-} from "node:fs"
-import { isAbsolute, join, resolve } from "node:path"
+import { randomBytes } from "node:crypto"
 import { normalizePhoneE164 } from "@razzia/extensions/core"
 import type {
+  Action,
+  OperationInput,
   Receipt,
   RegistrationInput,
 } from "../../../server/phone-lifecycle-v2/contracts"
-import { registrationReceipt } from "./adapter"
-import {
-  GATEWAY_KEY_PURPOSE,
-  type GatewayBinding,
-  type GatewayPrivateKeyPort,
-  type GatewayRegistrationDispatcher,
-  type GatewayTarget,
+import { registrationReceipt, operationReceipt } from "./adapter"
+import type {
+  GatewayBinding,
+  GatewayPrivateKeyPort,
+  GatewayRegistrationDispatcher,
+  GatewayOperationDispatcher,
+  GatewayTarget,
 } from "./contracts"
 import {
   binding,
   credential,
   deny,
-  digest,
   exact,
   id,
   immutableText,
@@ -44,10 +25,21 @@ import {
   scopeText,
   target,
 } from "./codec"
+import {
+  PRIVATE_RECORD_SPEC,
+  PrivateImmutableRecord,
+  type ImmutableRecord,
+} from "./private-immutable-record"
+import {
+  PrivateOperationPrecommit,
+  operationIntent,
+  type GatewayOperationIntent,
+  type GatewayOperationPrecommitOptions,
+} from "./operation-precommit"
 
-export const CALL_PRECOMMIT_PURPOSE = "tadazz-phone-call-precommit-v1"
-export const CALL_PRECOMMIT_MARKER = "TADAZZ_PHONE_CALL_PRECOMMIT_V1"
-export const CALL_PRECOMMIT_CONTENT = "private-call-precommit-v1\n"
+export const CALL_PRECOMMIT_PURPOSE = PRIVATE_RECORD_SPEC.call.purpose
+export const CALL_PRECOMMIT_MARKER = PRIVATE_RECORD_SPEC.call.marker
+export const CALL_PRECOMMIT_CONTENT = PRIVATE_RECORD_SPEC.call.content
 export interface GatewayCallAttempt {
   readonly requestId: string
   readonly providerReference: string
@@ -63,15 +55,13 @@ export interface GatewayCallPrecommitOptions {
   readonly key: GatewayPrivateKeyPort
   readonly dispatcher: GatewayRegistrationDispatcher
   readonly attempt: GatewayCallAttempt
+  readonly operations?: GatewayOperationDispatcher
 }
-type Stamp = { dev: number; ino: number }
 interface StoredCall {
   binding: GatewayBinding
   input: RegistrationInput
-  stamp: Stamp
-  ciphertextHash: string
+  record: ImmutableRecord
 }
-const sameStamp = (a: Stamp, b: Stamp) => a.dev === b.dev && a.ino === b.ino
 const attemptText = (value: GatewayCallAttempt) =>
   JSON.stringify([
     value.requestId,
@@ -99,34 +89,27 @@ function attempt(input: unknown): GatewayCallAttempt {
   })
 }
 
-// One immutable call tuple per separately injected root. This is not a provider
-// identity verifier, operation executor or recovery/permission cache.
+// One immutable call tuple per independently injected root. File/key mechanics
+// are shared with immutable operations; neither file creates authority.
 export class PrivateCallPrecommit {
-  private readonly root: string
-  private readonly installation: string
-  private readonly keyId: string
   private readonly scope: GatewayTarget
   private readonly expected: GatewayCallAttempt
-  private rootStamp?: Stamp
-  private poisoned = false
+  private readonly files: PrivateImmutableRecord
   constructor(private readonly options: GatewayCallPrecommitOptions) {
-    if (
-      options.enabled !== true ||
-      !isAbsolute(options.root) ||
-      resolve(options.root) !== options.root
-    )
-      deny()
-    this.root = options.root
-    this.installation = id(options.installationId)
-    this.keyId = id(options.keyId)
     this.scope = target(options.target)
     this.expected = attempt(options.attempt)
+    this.files = new PrivateImmutableRecord({
+      ...options,
+      kind: "call",
+      expectedText: attemptText(this.expected),
+    })
   }
-  private path(name: string) {
-    return join(this.root, name)
-  }
-  private current(): GatewayBinding {
-    const value = binding(this.options.dispatcher.current())
+  private current(action: Action = "register"): GatewayBinding {
+    const value = binding(
+      action === "register"
+        ? this.options.dispatcher.current()
+        : this.options.operations?.current(action),
+    )
     if (
       scopeText(value) !== scopeText(this.scope) ||
       value.expiresAt <= Date.now()
@@ -134,8 +117,8 @@ export class PrivateCallPrecommit {
       deny()
     return value
   }
-  private matches(stored: GatewayBinding): GatewayBinding {
-    const current = this.current()
+  private matches(stored: GatewayBinding, action: Action = "register") {
+    const current = this.current(action)
     if (
       immutableText(stored) !== immutableText(current) ||
       stored.version > current.version
@@ -143,349 +126,116 @@ export class PrivateCallPrecommit {
       deny()
     return current
   }
-  private stat(path: string) {
-    const stat = lstatSync(path)
+  private read(action: Action = "register"): StoredCall {
+    const record = this.files.read(() => {
+        this.current(action)
+      }),
+      body = exact(record.body, ["schema", "binding", "input"])
+    if (body.schema !== 1) deny()
+    const value = binding(body.binding),
+      row = exact(body.input, [
+        "requestId",
+        "providerReference",
+        "phone",
+        "expectedPredecessor",
+        "capability",
+      ])
+    const canonical = attempt({
+      requestId: row.requestId,
+      providerReference: row.providerReference,
+      phone: row.phone,
+      expectedPredecessor: row.expectedPredecessor,
+    })
     if (
-      !stat.isFile() ||
-      stat.isSymbolicLink() ||
-      stat.nlink !== 1 ||
-      (stat.mode & 0o077) !== 0 ||
-      stat.size > 16384
+      canonical.phone !== row.phone ||
+      attemptText(canonical) !== attemptText(this.expected)
     )
       deny()
-    return stat
-  }
-  private readFile(name: string) {
-    const path = this.path(name),
-      before = this.stat(path)
-    const fd = openSync(path, constants.O_RDONLY | constants.O_NOFOLLOW)
-    try {
-      if (!sameStamp(before, fstatSync(fd))) deny()
-      const bytes = readFileSync(fd)
-      if (bytes.length > 16384 || !sameStamp(before, this.stat(path))) {
-        bytes.fill(0)
-        deny()
-      }
-      return { bytes, stamp: { dev: before.dev, ino: before.ino } }
-    } finally {
-      try {
-        closeSync(fd)
-      } catch {
-        this.poisoned = true
-        deny()
-      }
-    }
-  }
-  private checkRoot() {
-    if (this.poisoned || !constants.O_NOFOLLOW) deny()
-    const stat = lstatSync(this.root)
-    if (
-      !stat.isDirectory() ||
-      stat.isSymbolicLink() ||
-      (stat.mode & 0o077) !== 0 ||
-      realpathSync(this.root) !== this.root ||
-      (this.rootStamp && !sameStamp(stat, this.rootStamp))
-    )
-      deny()
-    this.rootStamp = { dev: stat.dev, ino: stat.ino }
-    const marker = this.readFile(CALL_PRECOMMIT_MARKER)
-    try {
-      if (marker.bytes.toString() !== CALL_PRECOMMIT_CONTENT) deny()
-    } finally {
-      marker.bytes.fill(0)
-    }
-  }
-  private syncDir() {
-    const fd = openSync(
-      this.root,
-      constants.O_RDONLY | constants.O_DIRECTORY | constants.O_NOFOLLOW,
-    )
-    try {
-      fsyncSync(fd)
-    } finally {
-      try {
-        closeSync(fd)
-      } catch {
-        this.poisoned = true
-        deny()
-      }
-    }
-  }
-  private noUncertainty() {
-    if (
-      existsSync(this.path("call.writer-lock")) ||
-      existsSync(this.path("call.next"))
-    )
-      deny()
-  }
-  private withKey<T>(work: (key: Buffer) => T): T {
-    const handle = this.options.key.open()
-    let key: Buffer | undefined
-    try {
-      if (
-        !handle ||
-        "then" in handle ||
-        handle.purpose !== GATEWAY_KEY_PURPOSE ||
-        handle.installationId !== this.installation ||
-        handle.keyId !== this.keyId ||
-        !Buffer.isBuffer(handle.bytes) ||
-        handle.bytes.length !== 32 ||
-        typeof handle.close !== "function"
-      )
-        deny()
-      key = Buffer.from(
-        hkdfSync(
-          "sha256",
-          handle.bytes,
-          Buffer.from(digest(scopeText(this.scope))),
-          Buffer.from(
-            JSON.stringify([
-              CALL_PRECOMMIT_PURPOSE,
-              this.installation,
-              this.keyId,
-              attemptText(this.expected),
-            ]),
-          ),
-          32,
-        ),
-      )
-      return work(key)
-    } finally {
-      key?.fill(0)
-      try {
-        if (
-          typeof handle?.close !== "function" ||
-          (handle.close() as unknown) !== undefined
-        )
-          deny()
-      } catch {
-        this.poisoned = true
-        deny()
-      } finally {
-        if (Buffer.isBuffer(handle?.bytes)) handle.bytes.fill(0)
-      }
-    }
-  }
-  private aad() {
-    return Buffer.from(
-      JSON.stringify([
-        CALL_PRECOMMIT_PURPOSE,
-        this.installation,
-        this.keyId,
-        scopeText(this.scope),
-        attemptText(this.expected),
-      ]),
-    )
-  }
-  private seal(key: Buffer, value: GatewayBinding, input: RegistrationInput) {
-    const iv = randomBytes(12),
-      cipher = createCipheriv("aes-256-gcm", key, iv)
-    cipher.setAAD(this.aad())
-    const plain = Buffer.from(
-      JSON.stringify({ schema: 1, binding: value, input }),
-    )
-    try {
-      const data = Buffer.concat([cipher.update(plain), cipher.final()])
-      return Buffer.from(
-        JSON.stringify({
-          schema: 1,
-          iv: iv.toString("hex"),
-          tag: cipher.getAuthTag().toString("hex"),
-          data: data.toString("hex"),
-        }) + "\n",
-      )
-    } finally {
-      plain.fill(0)
-    }
-  }
-  private decode(key: Buffer): StoredCall {
-    const installed = this.readFile("call.initialized")
-    try {
-      if (installed.bytes.toString() !== CALL_PRECOMMIT_CONTENT) deny()
-    } finally {
-      installed.bytes.fill(0)
-    }
-    const file = this.readFile("call.enc")
-    let plain: Buffer | undefined
-    try {
-      const row = exact(JSON.parse(file.bytes.toString()), [
-        "schema",
-        "iv",
-        "tag",
-        "data",
-      ])
-      if (
-        row.schema !== 1 ||
-        typeof row.iv !== "string" ||
-        !/^[a-f0-9]{24}$/u.test(row.iv) ||
-        typeof row.tag !== "string" ||
-        !/^[a-f0-9]{32}$/u.test(row.tag) ||
-        typeof row.data !== "string" ||
-        !/^(?:[a-f0-9]{2})+$/u.test(row.data)
-      )
-        deny()
-      const decipher = createDecipheriv(
-        "aes-256-gcm",
-        key,
-        Buffer.from(row.iv, "hex"),
-      )
-      decipher.setAAD(this.aad())
-      decipher.setAuthTag(Buffer.from(row.tag, "hex"))
-      plain = Buffer.concat([
-        decipher.update(Buffer.from(row.data, "hex")),
-        decipher.final(),
-      ])
-      const payload = exact(JSON.parse(plain.toString()), [
-        "schema",
-        "binding",
-        "input",
-      ])
-      if (payload.schema !== 1) deny()
-      const value = binding(payload.binding),
-        body = exact(payload.input, [
-          "requestId",
-          "providerReference",
-          "phone",
-          "expectedPredecessor",
-          "capability",
-        ])
-      const input = Object.freeze({
-        ...attempt({
-          requestId: body.requestId,
-          providerReference: body.providerReference,
-          phone: body.phone,
-          expectedPredecessor: body.expectedPredecessor,
-        }),
-        capability: credential(body.capability),
-      })
-      if (input.phone !== body.phone) deny() // Stored canonical identity must not silently change on reopen.
-      if (attemptText(input) !== attemptText(this.expected)) deny()
-      this.matches(value)
-      return {
-        binding: value,
-        input,
-        stamp: file.stamp,
-        ciphertextHash: digest(file.bytes.toString()),
-      }
-    } finally {
-      file.bytes.fill(0)
-      plain?.fill(0)
-    }
-  }
-  private barrier() {
-    this.poisoned = true
-    try {
-      if (!existsSync(this.path("call.writer-lock"))) {
-        const fd = openSync(this.path("call.writer-lock"), "wx", 0o600)
-        try {
-          writeFileSync(fd, "uncertain call precommit\n")
-          fsyncSync(fd)
-        } finally {
-          closeSync(fd)
-        }
-        this.syncDir()
-      }
-    } catch {
-      /* No automatic reconciliation; poisoned instance denies. */
-    }
+    const input = Object.freeze({
+      ...canonical,
+      capability: credential(row.capability),
+    })
+    this.matches(value, action)
+    return { binding: value, input, record }
   }
   prepare(
     input: GatewayCallAttempt,
   ): Readonly<{ requestId: string; precommitted: true }> {
-    let lock: number | undefined,
-      started = false,
-      committed = false
     try {
       const expected = this.current(),
         canonical = attempt(input)
       if (attemptText(canonical) !== attemptText(this.expected)) deny()
-      this.checkRoot()
-      this.noUncertainty()
-      if (
-        existsSync(this.path("call.initialized")) ||
-        existsSync(this.path("call.enc"))
+      this.files.prepare(
+        () => ({
+          schema: 1,
+          binding: expected,
+          input: { ...canonical, capability: randomBytes(32).toString("hex") },
+        }),
+        () => {
+          this.matches(expected)
+        },
       )
-        deny()
-      lock = openSync(this.path("call.writer-lock"), "wx", 0o600)
-      started = true
-      writeFileSync(lock, "explicit call precommit\n")
-      fsyncSync(lock)
-      this.syncDir()
-      this.withKey((key) => {
-        this.matches(expected)
-        const marker = openSync(this.path("call.initialized"), "wx", 0o600)
-        try {
-          writeFileSync(marker, CALL_PRECOMMIT_CONTENT)
-          fsyncSync(marker)
-        } finally {
-          closeSync(marker)
-        }
-        this.syncDir()
-        const request = Object.freeze({
-          ...canonical,
-          capability: randomBytes(32).toString("hex"),
-        })
-        const bytes = this.seal(key, expected, request),
-          fd = openSync(this.path("call.next"), "wx", 0o600)
-        try {
-          writeFileSync(fd, bytes)
-          fsyncSync(fd)
-        } finally {
-          bytes.fill(0)
-          closeSync(fd)
-        }
-        this.matches(expected)
-        renameSync(this.path("call.next"), this.path("call.enc"))
-        this.syncDir()
-        committed = true
-        this.matches(expected)
-      })
       return Object.freeze({
         requestId: canonical.requestId,
         precommitted: true,
       })
     } catch {
       return deny()
-    } finally {
-      if (lock !== undefined) {
-        try {
-          closeSync(lock)
-          if (committed && !this.poisoned) {
-            unlinkSync(this.path("call.writer-lock"))
-            this.syncDir()
-          }
-        } catch {
-          this.barrier()
-          deny()
-        }
-        if ((started && !committed) || this.poisoned) {
-          this.barrier()
-          deny()
-        }
-      }
     }
   }
   async register(): Promise<Receipt> {
     try {
-      this.current() // Actual ACTIVE register proof before call key/files.
-      this.checkRoot()
-      this.noUncertainty()
-      const stored = this.withKey((key) => this.decode(key))
+      const stored = this.read()
       const result = await this.options.dispatcher.register(stored.input)
       this.matches(stored.binding)
-      this.checkRoot()
-      this.noUncertainty()
-      const after = this.readFile("call.enc")
-      try {
-        if (
-          !sameStamp(after.stamp, stored.stamp) ||
-          digest(after.bytes.toString()) !== stored.ciphertextHash
-        )
-          deny()
-      } finally {
-        after.bytes.fill(0)
-      }
+      this.files.assertUnchanged(stored.record, () => {
+        this.current()
+      })
       return registrationReceipt(result, [stored.input.capability])
+    } catch {
+      return deny()
+    }
+  }
+  operation(
+    options: GatewayOperationPrecommitOptions,
+  ): PrivateOperationPrecommit {
+    if (
+      typeof this.options.operations?.current !== "function" ||
+      typeof this.options.operations.operate !== "function"
+    )
+      deny()
+    return new PrivateOperationPrecommit(
+      options,
+      Object.freeze({
+        target: this.scope,
+        call: this.expected,
+        callText: attemptText(this.expected),
+        current: (action: OperationInput["action"]) => {
+          this.read(action)
+          return this.current(action)
+        },
+        execute: (intent: GatewayOperationIntent) =>
+          this.executeOperation(intent),
+      }),
+    )
+  }
+  private async executeOperation(
+    input: GatewayOperationIntent,
+  ): Promise<Receipt> {
+    try {
+      const intent = operationIntent(input),
+        stored = this.read(intent.action)
+      const request: OperationInput = Object.freeze({
+        requestId: stored.input.requestId,
+        capability: stored.input.capability,
+        ...intent,
+      })
+      const result = await this.options.operations!.operate(request)
+      this.matches(stored.binding, intent.action)
+      this.files.assertUnchanged(stored.record, () => {
+        this.current(intent.action)
+      })
+      return operationReceipt(result, [stored.input.capability])
     } catch {
       return deny()
     }

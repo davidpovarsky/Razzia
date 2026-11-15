@@ -1,5 +1,6 @@
 import type {
   Action,
+  OperationInput,
   Receipt,
   RegistrationInput,
 } from "../../../server/phone-lifecycle-v2/contracts"
@@ -81,6 +82,17 @@ export interface GatewayRegistrationAuthorityPort extends GatewayAuthorityPort {
 export interface GatewayRegistrationDispatcher {
   current(): GatewayBinding
   register(input: RegistrationInput): Promise<Receipt>
+}
+export interface GatewayCallAuthorityPort extends GatewayRegistrationAuthorityPort {
+  operate(
+    binding: GatewayBinding,
+    credential: string,
+    input: OperationInput,
+  ): Promise<Receipt>
+}
+export interface GatewayOperationDispatcher {
+  current(action: OperationInput["action"]): GatewayBinding
+  operate(input: OperationInput): Promise<Receipt>
 }
 export interface GatewayPrivateKeyPort {
   open(): GatewayPrivateKeyHandle
