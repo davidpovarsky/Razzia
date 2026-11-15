@@ -1,0 +1,33 @@
+{
+  "asana": {
+    "gid": "1220543600361181",
+    "completed": false,
+    "modified_at": "2026-11-15T19:00:18.273Z",
+    "exactPreservedNotesReadback": true
+  },
+  "deliveries": [
+    {
+      "lane": "C",
+      "delivered": true
+    },
+    {
+      "lane": "D",
+      "delivered": true
+    },
+    {
+      "lane": "E/F",
+      "delivered": true
+    },
+    {
+      "lane": "F",
+      "delivered": true
+    }
+  ],
+  "finalCurrentTypes": 0,
+  "finalFormatFiles": 7,
+  "formatExit": 0,
+  "producerActualRuntimeCasesVerified": 7,
+  "actualNewManagerRuntimeCases": 0,
+  "defaultOffAndUnmounted": true,
+  "oldFailureRetained": true
+}
