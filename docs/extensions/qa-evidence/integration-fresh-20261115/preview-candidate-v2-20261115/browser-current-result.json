@@ -1,0 +1,95 @@
+{
+  "started": "2026-11-15T21:13:44.410Z",
+  "ended": "2026-11-15T21:13:47.712Z",
+  "pass": 8,
+  "fail": 0,
+  "browser": "157.0.4341.46",
+  "platform": "win32",
+  "actualRenderer": "E native21 candidate only",
+  "executableAcceptance": false,
+  "noMediaRightsGrant": true,
+  "syntheticQaShellOnly": true,
+  "productionGArtifactNotSupplied": true,
+  "resourceShellSha256": "53e6378ddb9f275593a32c2c1238f95bb358f558acbad24a26be6c09857ed37e",
+  "artifacts": [
+    {
+      "url": "/consumer.mjs",
+      "bytes": 802905,
+      "sha256": "1c0260b964e69212a47d8ae7072129c64737de7d4ab9044cd34454f13576aa37"
+    },
+    {
+      "url": "/renderer.mjs",
+      "bytes": 1068185,
+      "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+    },
+    {
+      "url": "/renderer.css",
+      "bytes": 166501,
+      "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+    },
+    {
+      "url": "/bootstrap.mjs",
+      "bytes": 1194,
+      "sha256": "0711b2a46b3d6a744e5710e003b392af730f124aad966ff122c31ea726ae901f"
+    }
+  ],
+  "eBuildReceiptSha256": "5a5d95b5c52fdd735d1c94f7b607995e23c7ba7e455038a2138a2313f717f2b1",
+  "checks": [
+    {
+      "case": "real HTTP candidate to genuine E Razzia/JA paused15 frame",
+      "pass": true
+    },
+    {
+      "case": "real HTTP candidate to genuine E Classic ready and opacity1",
+      "pass": true
+    },
+    {
+      "case": "reject acceptance and dispose stale stage",
+      "pass": true
+    },
+    {
+      "case": "reject input-digest and dispose stale stage",
+      "pass": true
+    },
+    {
+      "case": "reject exact-definition and dispose stale stage",
+      "pass": true
+    },
+    {
+      "case": "old selection ticket rejected; latest selection rendered",
+      "pass": true
+    },
+    {
+      "case": "invalid new selection invalidates previous ticket",
+      "pass": true
+    },
+    {
+      "case": "actual E renderer disposed on consumer teardown",
+      "pass": true
+    }
+  ],
+  "pageErrors": [],
+  "deniedRequests": [
+    "/tadazz-show/v4/show-stage.webp",
+    "/tadazz-show/v4/question-bg.webp",
+    "/tadazz-show/v4/tadazz-brand-logo.png",
+    "/tadazz-show/second-library/teaser-screen-source.jpg"
+  ],
+  "status": {
+    "failures": 3,
+    "diagnostics": {
+      "disposed": true,
+      "handleId": null,
+      "lifecycle": [
+        {
+          "event": "mounted",
+          "handleId": 3
+        },
+        {
+          "event": "disposed",
+          "handleId": 3
+        }
+      ]
+    }
+  }
+}
