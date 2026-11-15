@@ -4,6 +4,7 @@ import { z } from "zod"
 import { canonicalJson } from "./digest"
 import { freeze } from "./primitives"
 import {
+  compiledArtifactPathSchema,
   diagnosticCompiledRegistryV2Schema,
   nativeResourceIndexV2Schema,
   rendererArtifactIndexV2Schema,
@@ -31,7 +32,10 @@ export function parseCanonicalCompiledIndex<T>(
   return parsed
 }
 
-/** Explicit evidence map; no IO, URL resolution, mutation, import or execution. */
+/** Host-owned ordinary Uint8Array/Buffer evidence, not a renderer/caller JSON API.
+ * Map brand, keys and iteration are hardened; byte arrays must be host snapshots.
+ * No IO/URL/module execution or claim of production byte immutability is made.
+ */
 export function diagnoseCompiledArtifactBytes(
   artifactInput: unknown,
   resourceInput: unknown,
@@ -40,21 +44,40 @@ export function diagnoseCompiledArtifactBytes(
 ) {
   const artifact = rendererArtifactIndexV2Schema.parse(artifactInput)
   const resources = nativeResourceIndexV2Schema.parse(resourceInput)
-  if (!(evidence instanceof Map) || evidence.size > 256)
+  // Use intrinsic Map operations: subclass getters/iterators/get cannot run.
+  let entries: IterableIterator<[unknown, unknown]>
+  try {
+    const size = Object.getOwnPropertyDescriptor(
+      Map.prototype,
+      "size",
+    )!.get!.call(evidence) as number
+    if (size > 256) throw new Error("budget")
+    entries = Map.prototype.entries.call(evidence)
+  } catch {
     throw new Error("show-library:byte-evidence-budget")
+  }
   const issues: string[] = [],
     expected = new Map(artifact.files.map((f) => [f.path, f]))
+  const snapshot = new Map<string, Uint8Array>()
   let totalBytes = 0
-  for (const [path, data] of evidence) {
-    if (!expected.has(path)) issues.push(`unexpected-file:${path}`)
+  for (const [path, data] of entries) {
+    // Check strings before formatting diagnostic output or invoking conversion.
+    if (
+      typeof path !== "string" ||
+      path.length > 240 ||
+      !compiledArtifactPathSchema.safeParse(path).success
+    )
+      throw new Error("show-library:invalid-evidence-path")
     if (
       !(data instanceof Uint8Array) ||
       (totalBytes += data.byteLength) > 100_000_000
     )
       throw new Error("show-library:byte-evidence-budget")
+    if (!expected.has(path)) issues.push(`unexpected-file:${path}`)
+    snapshot.set(path, data)
   }
   for (const file of artifact.files) {
-    const data = evidence.get(file.path)
+    const data = snapshot.get(file.path)
     if (!data) {
       issues.push(`missing-file:${file.path}`)
       continue

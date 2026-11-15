@@ -123,7 +123,11 @@ const fixture = () => {
     entryExport: "candidate",
     resourceIndexPath: "resource-index.json",
     files,
-    source: { gitCommit: git, lockfileSha256: digest, files: [source] },
+    source: {
+      gitCommit: git,
+      lockfileSha256: digest,
+      files: [source, tracked("qa/build.ts")],
+    },
     toolchain: {
       node: "test-source",
       pnpm: "test-source",
@@ -474,7 +478,10 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
       diagnoseCompiledArtifactBytes(
         {
           ...artifact,
-          source: { ...artifact.source, files: [tracked("other.ts")] },
+          source: {
+            ...artifact.source,
+            files: [tracked("other.ts"), artifact.toolchain.buildRecipe],
+          },
         },
         resources,
         data,
@@ -719,5 +726,263 @@ describe("revision-2 diagnostic compiled indexes, never executable acceptance", 
         entryExport: "mountPreviewCandidate",
       }).success,
     ).toBe(true)
+  })
+  it.each([
+    "Artifact-Index.json",
+    "REGISTRY.JSON",
+    "Accepted-Pin.JSON",
+    "Artifact-Index.json/child",
+  ])("rejects reserved root output %s in isolation", (path) => {
+    const { artifact } = fixture()
+    const extra = {
+      ...artifact.files[0],
+      path,
+      kind: "metadata",
+      mime: "application/json",
+    }
+    const result = rendererArtifactIndexV2Schema.safeParse({
+      ...artifact,
+      files: [...artifact.files, extra].sort((a, b) =>
+        a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
+      ),
+    })
+    expect(result.success).toBe(false)
+    if (!result.success)
+      expect(
+        result.error.issues.some(
+          (i) => i.message === "show-library:index-hash-cycle",
+        ),
+      ).toBe(true)
+  })
+  it.each([
+    ["a", "a/b"],
+    ["A", "a/b"],
+    ["A/B", "a"],
+    ["a/b", "a"],
+  ])("rejects regular-file ancestor collision %s / %s", (first, second) => {
+    const { artifact } = fixture()
+    const files = [
+      ...artifact.files,
+      ...[first, second].map((path) => ({ ...artifact.files[0], path })),
+    ].sort((a, b) => (a.path < b.path ? -1 : a.path > b.path ? 1 : 0))
+    const result = rendererArtifactIndexV2Schema.safeParse({
+      ...artifact,
+      files,
+    })
+    expect(result.success).toBe(false)
+    if (!result.success)
+      expect(
+        result.error.issues.some(
+          (i) => i.message === "show-library:index-file-ancestor-collision",
+        ),
+      ).toBe(true)
+  })
+  it.each([
+    "declared",
+    "tracked",
+    "recipe-commit",
+    "recipe-membership",
+    "recipe-hash",
+  ])("binds single revision and exact recipe: %s", (caseName) => {
+    const { artifact } = fixture(),
+      other = "c".repeat(40)
+    let changed: unknown = artifact
+    if (caseName === "declared")
+      changed = {
+        ...artifact,
+        source: { ...artifact.source, gitCommit: other },
+      }
+    if (caseName === "tracked")
+      changed = {
+        ...artifact,
+        source: {
+          ...artifact.source,
+          files: artifact.source.files.map((f, i) =>
+            i === 0 ? { ...f, gitCommit: other } : f,
+          ),
+        },
+      }
+    if (caseName === "recipe-commit")
+      changed = {
+        ...artifact,
+        toolchain: {
+          ...artifact.toolchain,
+          buildRecipe: { ...artifact.toolchain.buildRecipe, gitCommit: other },
+        },
+      }
+    if (caseName === "recipe-membership")
+      changed = {
+        ...artifact,
+        source: {
+          ...artifact.source,
+          files: artifact.source.files.slice(0, 1),
+        },
+      }
+    if (caseName === "recipe-hash")
+      changed = {
+        ...artifact,
+        toolchain: {
+          ...artifact.toolchain,
+          buildRecipe: {
+            ...artifact.toolchain.buildRecipe,
+            sha256: "c".repeat(64),
+          },
+        },
+      }
+    const result = rendererArtifactIndexV2Schema.safeParse(changed)
+    expect(result.success).toBe(false)
+    const message =
+      caseName.startsWith("recipe-") && caseName !== "recipe-commit"
+        ? "show-library:index-recipe-membership"
+        : "show-library:index-source-commit"
+    if (!result.success)
+      expect(result.error.issues.some((i) => i.message === message)).toBe(true)
+  })
+  it.each(["QA/build.ts", "qa"])(
+    "rejects aliased or ancestor tracked input %s",
+    (path) => {
+      const { artifact } = fixture()
+      const files = [...artifact.source.files, tracked(path)].sort((a, b) =>
+        a.path < b.path ? -1 : a.path > b.path ? 1 : 0,
+      )
+      const result = rendererArtifactIndexV2Schema.safeParse({
+        ...artifact,
+        source: { ...artifact.source, files },
+      })
+      expect(result.success).toBe(false)
+      if (!result.success)
+        expect(
+          result.error.issues.some(
+            (i) =>
+              i.message ===
+              (path === "qa"
+                ? "show-library:index-file-ancestor-collision"
+                : "show-library:index-case-collision"),
+          ),
+        ).toBe(true)
+    },
+  )
+  it("applies file-tree collision rules to package, resource and license collections", () => {
+    const { artifact, resources } = fixture()
+    const packages = [packageFile("A"), packageFile("a/b")]
+    const packageResult = rendererArtifactIndexV2Schema.safeParse({
+      ...artifact,
+      source: {
+        ...artifact.source,
+        files: [...artifact.source.files, ...packages],
+      },
+    })
+    expect(packageResult.success).toBe(false)
+    const first = resources.resources[0]
+    const resourceResult = nativeResourceIndexV2Schema.safeParse({
+      ...resources,
+      resources: [
+        { ...first, artifactPath: "a", requestPath: "/a" },
+        { ...first, artifactPath: "a/b", requestPath: "/a/b" },
+      ],
+    })
+    expect(resourceResult.success).toBe(false)
+    const licenseResult = nativeResourceIndexV2Schema.safeParse({
+      ...resources,
+      resources: [
+        {
+          ...first,
+          licenses: [
+            { artifactPath: "A", sha256: digest },
+            { artifactPath: "a/b", sha256: digest },
+          ],
+        },
+      ],
+    })
+    expect(licenseResult.success).toBe(false)
+    for (const result of [packageResult, resourceResult, licenseResult])
+      if (!result.success)
+        expect(
+          result.error.issues.some(
+            (i) => i.message === "show-library:index-file-ancestor-collision",
+          ),
+        ).toBe(true)
+  })
+  it.each(["long", "object", "symbol", "traversal", "control", "absolute"])(
+    "rejects unbounded/untyped evidence key before formatting: %s",
+    (caseName) => {
+      const { artifact, resources, data } = fixture()
+      let conversions = 0
+      const object = {
+        [Symbol.toPrimitive]() {
+          conversions++
+          throw new Error("must-not-coerce")
+        },
+      }
+      const bad =
+        caseName === "long"
+          ? "x".repeat(241)
+          : caseName === "object"
+            ? object
+            : caseName === "symbol"
+              ? Symbol("bad")
+              : caseName === "traversal"
+                ? "../bad"
+                : caseName === "control"
+                  ? "a\nlog"
+                  : "/absolute"
+      const evidence = new Map<unknown, Uint8Array>(data)
+      evidence.set(bad, new Uint8Array([1]))
+      expect(() =>
+        diagnoseCompiledArtifactBytes(
+          artifact,
+          resources,
+          evidence as ReadonlyMap<string, Uint8Array>,
+        ),
+      ).toThrow("show-library:invalid-evidence-path")
+      expect(conversions).toBe(0)
+    },
+  )
+  it("uses intrinsic Map size/entries and an owned map instead of overridable getters", () => {
+    const { artifact, resources, data } = fixture()
+    let calls = 0
+    class PoisonMap extends Map<string, Uint8Array> {}
+    const poison = () => {
+      calls++
+      throw new Error("must-not-call-override")
+    }
+    Object.defineProperties(PoisonMap.prototype, {
+      size: { get: poison },
+      entries: { value: poison },
+      get: { value: poison },
+      [Symbol.iterator]: { value: poison },
+    })
+    const result = diagnoseCompiledArtifactBytes(
+      artifact,
+      resources,
+      new PoisonMap(data),
+    )
+    expect(result.issues).toEqual([
+      "execution-scope-unregistered",
+      "rights-unknown:native/image.png",
+    ])
+    expect(result.executableAcceptance).toBe(false)
+    expect(calls).toBe(0)
+  })
+  it("rejects proxy/non-Map evidence without invoking caller getters", () => {
+    const { artifact, resources, data } = fixture()
+    let calls = 0
+    const poison = () => {
+      calls++
+      throw new Error("must-not-call-proxy")
+    }
+    const proxy = new Proxy(data, { get: poison, getPrototypeOf: poison })
+    expect(() =>
+      diagnoseCompiledArtifactBytes(artifact, resources, proxy),
+    ).toThrow("show-library:byte-evidence-budget")
+    const object = Object.defineProperty({}, "size", { get: poison })
+    expect(() =>
+      diagnoseCompiledArtifactBytes(
+        artifact,
+        resources,
+        object as ReadonlyMap<string, Uint8Array>,
+      ),
+    ).toThrow("show-library:byte-evidence-budget")
+    expect(calls).toBe(0)
   })
 })
