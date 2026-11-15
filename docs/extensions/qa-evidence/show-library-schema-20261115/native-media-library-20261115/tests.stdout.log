@@ -1,0 +1,17 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ❯ src/core/show-library/native-media-library.test.ts (5 tests | 1 failed) 48ms
+   ❯ independent native asset/audio metadata without new playback authority (5)
+     × deduplicates67 manifest declarations to36 stable refs while preserving35 content hashes 19ms
+     ✓ records exact source JSON pointers for every declared native media reference 9ms
+     ✓ retains original per-family asset URL/provenance/rights metadata without treating it as a grant 6ms
+     ✓ groups the exact16events with native defaults, roles, volume/loop/fades and choreography 8ms
+     ✓ preserves actual legacy cue and soundtrack mapping rather than inventing another event clock 1ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 4 passed (5)
+   Start at  17:26:34
+   Duration  1.43s (import 65%, transform 30%, tests 4%, worker 1%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/docs/extensions/qa-evidence/show-library-schema-20261115/native-media-library-20261115/tests.json

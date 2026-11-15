@@ -27,19 +27,22 @@ export const compositionDocumentSchema = z
     if (
       document.selection.id !== document.composition.baseTheme.id ||
       document.selection.version !== document.composition.baseTheme.version
-    )
+    ) {
       ctx.addIssue({
         code: "custom",
         message: "show-library:base-theme-mismatch",
       })
+    }
+
     if (
       new Set(document.scopes.map((scope) => scope.scopeId)).size !==
       document.scopes.length
-    )
+    ) {
       ctx.addIssue({
         code: "custom",
         message: "show-library:duplicate-document-scope",
       })
+    }
   })
 
 export type CompositionDocument = z.infer<typeof compositionDocumentSchema>
@@ -50,8 +53,11 @@ export function parseCompositionDocument(
   assertBoundedJson(input)
   const document = compositionDocumentSchema.parse(input)
   const json = canonicalJson(document)
-  if (new TextEncoder().encode(json).length > 262144)
+
+  if (new TextEncoder().encode(json).length > 262144) {
     throw new Error("show-library:composition-byte-budget")
+  }
+
   return freeze(document)
 }
 

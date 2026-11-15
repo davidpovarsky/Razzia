@@ -1,0 +1,82 @@
+{
+  "stage": "before",
+  "startedUtc": "2026-11-15T16:33:12.505676+00:00",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBaseCommit": "aae068050e6859d4b0c75d739239ab624e1d35ee",
+  "sourceBefore": {
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "bytes": 8015,
+      "sha256": "7d7a9c5cea787a29850d365e0017602fa5e52fd55eb6d9aed4c25692e4c1bb93"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "bytes": 19329,
+      "sha256": "a066bff54fd5bd3b4346af5ca765e6e73700e9ed6ff13320fadb1c055381ec08"
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "bytes": 3514,
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "bytes": 4803,
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730"
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "bytes": 3222,
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603"
+    }
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-preview-v2.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 496,
+          "sha256": "0270d69d82353585591dd2b598a833a016c4703efac880c38b5a685f47b37957",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgog4p2vIHNyYy9jb3JlL3Nob3ctbGlicmFyeS9jb21wb3NpdGlvbi1wcmV2aWV3LXYyLnRlc3QudHMgKDE1IHRlc3RzIHwgMSBmYWlsZWQpIDMyNG1zCiAgIOKdryBib3VuZCBWMiByZW5kZXJlciBpbnB1dCB3aXRoIHRoZSBleGlzdGluZyBhc3NldC1mcmVlIGZyYW1lICgxMSkKICAgICDDlyBoYW5kbGVzIHJldGFpbmVkIGRlY29yYXRpb24gVVJMIHdpdGggZW5hYmxlZD10cnVlL3ByZXNldD1zaGltbWVyLWxpbmUgYXMgdW5hdmFpbGFibGUgMjltcwoKIFRlc3QgRmlsZXMgIDEgZmFpbGVkICgxKQogICAgICBUZXN0cyAgMSBmYWlsZWQgfCAxNCBwYXNzZWQgKDE1KQogICBTdGFydCBhdCAgMTg6MzM6MTMKICAgRHVyYXRpb24gIDMuOTNzIChpbXBvcnQgNDYlLCB0cmFuc2Zvcm0gNDUlLCB0ZXN0cyA5JSkKCg=="
+        },
+        "stderr": {
+          "bytes": 889,
+          "sha256": "5121b3a18f5600766482b41f924d6b7de9170734fb3adf4baac5afebc3eaef1f",
+          "rawBase64": "CuKOr+KOr+KOr+KOr+KOr+KOr+KOryBGYWlsZWQgVGVzdHMgMSDijq/ijq/ijq/ijq/ijq/ijq/ijq8KCiBGQUlMICBzcmMvY29yZS9zaG93LWxpYnJhcnkvY29tcG9zaXRpb24tcHJldmlldy12Mi50ZXN0LnRzID4gYm91bmQgVjIgcmVuZGVyZXIgaW5wdXQgd2l0aCB0aGUgZXhpc3RpbmcgYXNzZXQtZnJlZSBmcmFtZSA+IGhhbmRsZXMgcmV0YWluZWQgZGVjb3JhdGlvbiBVUkwgd2l0aCBlbmFibGVkPXRydWUvcHJlc2V0PXNoaW1tZXItbGluZSBhcyB1bmF2YWlsYWJsZQpab2RFcnJvcjogWwogIHsKICAgICJjb2RlIjogImN1c3RvbSIsCiAgICAibWVzc2FnZSI6ICJzaG93LXByZXZpZXc6bmF0aXZlLW1lZGlhLWJpbmRpbmctdW5hdmFpbGFibGUiLAogICAgInBhdGgiOiBbCiAgICAgICJ0aGVtZUJpbmRpbmciLAogICAgICAic2V0dGluZ3MiCiAgICBdCiAgfQpdCiDina8gcHJvZHVjZUNvbXBvc2l0aW9uTmF0aXZlUHJldmlld0lucHV0VjIgc3JjL2NvcmUvc2hvdy1saWJyYXJ5L25hdGl2ZS1wcmV2aWV3LXJlbmRlcmVyLXYyLnRzOjE5Mzo0MAogICAgMTkxfAogICAgMTkyfCAgIGNvbnN0IGlucHV0ID0gZnJlZXplKAogICAgMTkzfCAgICAgbmF0aXZlUHJldmlld1JlbmRlcmVySW5wdXRWMlNjaGVtYS5wYXJzZSh7CiAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIF4KICAgIDE5NHwgICAgICAgaW5wdXRWZXJzaW9uOiAyLAogICAgMTk1fCAgICAgICBmcmFtZSwKIOKdryBzcmMvY29yZS9zaG93LWxpYnJhcnkvY29tcG9zaXRpb24tcHJldmlldy12Mi50ZXN0LnRzOjUzODoyMgoK4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6v4o6vWzEvMV3ijq8KCg=="
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/native-preview-renderer-v2.ts": {
+      "bytes": 8015,
+      "sha256": "7d7a9c5cea787a29850d365e0017602fa5e52fd55eb6d9aed4c25692e4c1bb93"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.test.ts": {
+      "bytes": 19329,
+      "sha256": "a066bff54fd5bd3b4346af5ca765e6e73700e9ed6ff13320fadb1c055381ec08"
+    },
+    "extensions/src/core/show-library/native-preview-renderer-v2-schema.ts": {
+      "bytes": 3514,
+      "sha256": "01a1f0b8a33724463019bcd985076fc3b10bbfac4a2fb681a569c56eac2df2ff"
+    },
+    "extensions/src/core/show-library/composition-preview-v2.ts": {
+      "bytes": 4803,
+      "sha256": "4088248307ac51920bb2e3f72877734d1d4a540e08a0b07427fc074630e4f730"
+    },
+    "extensions/src/core/show-library/native-presentation-settings.ts": {
+      "bytes": 3222,
+      "sha256": "814696951bce66197cf2a9ebd30b1fc62adaeb3fb80e5d2969106f46b4c5b603"
+    }
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T16:33:17.895091+00:00"
+}

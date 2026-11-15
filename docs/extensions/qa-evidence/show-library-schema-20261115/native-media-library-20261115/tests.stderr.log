@@ -1,0 +1,21 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/show-library/native-media-library.test.ts > independent native asset/audio metadata without new playback authority > deduplicates67 manifest declarations to36 stable refs while preserving35 content hashes
+AssertionError: expected [ { ref: { …(2) }, …(4) }, …(38) ] to have a length of 36 but got 39
+
+- Expected
++ Received
+
+- 36
++ 39
+
+ ❯ src/core/show-library/native-media-library.test.ts:11:29
+      9|   it("deduplicates67 manifest declarations to36 stable refs while pres…
+     10|     const library = getNativeAssetLibrary()
+     11|     expect(library.entries).toHaveLength(36)
+       |                             ^
+     12|     expect(
+     13|       library.entries.reduce(
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯

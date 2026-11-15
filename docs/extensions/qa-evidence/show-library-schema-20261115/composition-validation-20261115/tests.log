@@ -1,0 +1,11 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ✓ src/core/show-library/composition-validation.test.ts (7 tests) 102ms
+
+ Test Files  1 passed (1)
+      Tests  7 passed (7)
+   Start at  17:06:30
+   Duration  1.41s (import 58%, transform 30%, tests 10%, worker 1%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/docs/extensions/qa-evidence/show-library-schema-20261115/composition-validation-20261115/tests.json
