@@ -1,0 +1,681 @@
+{
+  "utc": "2026-11-15T20:40:50.945747+00:00",
+  "managerSource": "b9204872a9fca309b82fff23c5b9d42b9d990fc6",
+  "source": "ecfe9ba4777c8854df00a0b4401fe5dcab719aa3",
+  "evidence": "69b6caa4bf7fd984fde311ae515e3b2531ae8bbc",
+  "fullArchiveSha256": "89546df75f7f7ae29dc80e5756d49488776c48a6a7997808e46bcd4169482b6b",
+  "archiveFilesByteVerified": 168,
+  "manifestRowsVerified": 167,
+  "committedRawFilesByteVerified": 96,
+  "sourceChecks80": {
+    "matches": [
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/platform-controls.tsx",
+        "executed": "29e505427d5270f620f7e6772114a197606368f1360fba01faceb29cd72a8f27",
+        "current": "29e505427d5270f620f7e6772114a197606368f1360fba01faceb29cd72a8f27",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+        "executed": "7d2859b5fa4c21062e1e369f055c7f36c4538283a2fb7e0ffcdb75ec51bcdd23",
+        "current": "7d2859b5fa4c21062e1e369f055c7f36c4538283a2fb7e0ffcdb75ec51bcdd23",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/i18n.ts",
+        "executed": "ba3253e298022e57f0267a7d84040591f81acf1e0fb979ac5a2c69f385fcaceb",
+        "current": "ba3253e298022e57f0267a7d84040591f81acf1e0fb979ac5a2c69f385fcaceb",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/preview-clock.ts",
+        "executed": "6b50f4afe1f4dfa61b2cdebf314bc4d4e2552d17f48f1da7bad7a2c8a827cc42",
+        "current": "6b50f4afe1f4dfa61b2cdebf314bc4d4e2552d17f48f1da7bad7a2c8a827cc42",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+        "executed": "8ddb726f735822698bf669456e18eb17a40a988bd900b8dc436699d173dfd379",
+        "current": "8ddb726f735822698bf669456e18eb17a40a988bd900b8dc436699d173dfd379",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+        "executed": "da39fda95e34bd27c8a7e7a85b50874f65a56b2a696318c28d4f8693deaab191",
+        "current": "da39fda95e34bd27c8a7e7a85b50874f65a56b2a696318c28d4f8693deaab191",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+        "executed": "0c976ae6987a9a76381251f10728374949697cc60dee7e47acbd12e1fedf13aa",
+        "current": "0c976ae6987a9a76381251f10728374949697cc60dee7e47acbd12e1fedf13aa",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+        "executed": "107dc19549234760d8e1314acda9294fcee78183fda8ba9a47a68eba8436f1b4",
+        "current": "107dc19549234760d8e1314acda9294fcee78183fda8ba9a47a68eba8436f1b4",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/show-themes/context.tsx",
+        "executed": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+        "current": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+        "executed": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+        "current": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+        "executed": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+        "current": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/labels.ts",
+        "executed": "ec87f8e919c533b753260754f0effafd7e8b9a38fe8e01c47266650fc2e69abd",
+        "current": "ec87f8e919c533b753260754f0effafd7e8b9a38fe8e01c47266650fc2e69abd",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/motion-engine.ts",
+        "executed": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+        "current": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/motion-spec.ts",
+        "executed": "e1609a71560061fb92031efa460bd1fcb5ab09e7986435e43b36fc79892ce3d9",
+        "current": "e1609a71560061fb92031efa460bd1fcb5ab09e7986435e43b36fc79892ce3d9",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/show-director.ts",
+        "executed": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+        "current": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+        "executed": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+        "current": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+        "executed": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1",
+        "current": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-show/voting-presentation.ts",
+        "executed": "4e363ebce559ad089bd4be0af9a630ef1de862a25de81bed8a5c0980609a04ec",
+        "current": "4e363ebce559ad089bd4be0af9a630ef1de862a25de81bed8a5c0980609a04ec",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+        "executed": "647e599d090afa6079414cc071a064a7eec846b274a9a43fa10bd903b0e7712d",
+        "current": "647e599d090afa6079414cc071a064a7eec846b274a9a43fa10bd903b0e7712d",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+        "executed": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+        "current": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/components.tsx",
+        "executed": "687a4c7df31020ebac2bfbe6a9656ab8859b88c44c4f2e6f57ed760e2ad43fee",
+        "current": "687a4c7df31020ebac2bfbe6a9656ab8859b88c44c4f2e6f57ed760e2ad43fee",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/full-show.css",
+        "executed": "b50f72f81f0e5d1d6cea3bc9c095091483f7cfa948b0feda77cb2bc085e8fb38",
+        "current": "b50f72f81f0e5d1d6cea3bc9c095091483f7cfa948b0feda77cb2bc085e8fb38",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/index.ts",
+        "executed": "13df4ed6997762c92d66c8f52023834a7a7cc8dac6bd486673b801df5b01d0d8",
+        "current": "13df4ed6997762c92d66c8f52023834a7a7cc8dac6bd486673b801df5b01d0d8",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+        "executed": "988e450093c5ac5900e4229030b0a553f915d80ccec97db762837aac0993d501",
+        "current": "988e450093c5ac5900e4229030b0a553f915d80ccec97db762837aac0993d501",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/presentation-note.ts",
+        "executed": "8e861aec8421972d7ffbaf7e37666df52eb7bf6e0d13c804acf90cec8a1b9a58",
+        "current": "8e861aec8421972d7ffbaf7e37666df52eb7bf6e0d13c804acf90cec8a1b9a58",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+        "executed": "fef1b90ba6e06084eb741b1e1bf5e6e8cafc84252d757b184fa9fdabd47537f3",
+        "current": "fef1b90ba6e06084eb741b1e1bf5e6e8cafc84252d757b184fa9fdabd47537f3",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+        "executed": "c25cb9636e981c74dc419c38e17d8fcaed0273a18a52bd35a69af9786d97cbc9",
+        "current": "c25cb9636e981c74dc419c38e17d8fcaed0273a18a52bd35a69af9786d97cbc9",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+        "executed": "eb55464d8ab185c8d8dad3d93f5440099914aaa4617450aa148b4a4a42650890",
+        "current": "eb55464d8ab185c8d8dad3d93f5440099914aaa4617450aa148b4a4a42650890",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+        "executed": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89",
+        "current": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+        "executed": "f148e7402f2512efe7b703c16134c590cbc405e72867f21069b9b0f53e5637f5",
+        "current": "f148e7402f2512efe7b703c16134c590cbc405e72867f21069b9b0f53e5637f5",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+        "executed": "8158534cdf75d9e69fc2ea086a08a1342c88d857d841c174f22f79a7221db980",
+        "current": "8158534cdf75d9e69fc2ea086a08a1342c88d857d841c174f22f79a7221db980",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+        "executed": "b871cb6a909446873857cbdc495dba9ff4e0fd9c66a471a046c48da12bed8143",
+        "current": "b871cb6a909446873857cbdc495dba9ff4e0fd9c66a471a046c48da12bed8143",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/source-layout.css",
+        "executed": "0cbda768b1a54c078b3ce82880ddf41a2d19db67137881133736e1185ab1de8f",
+        "current": "0cbda768b1a54c078b3ce82880ddf41a2d19db67137881133736e1185ab1de8f",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+        "executed": "0574cd74db486d693866bfabc5ed48e9fef62c889dcf408afff30dcc75016b44",
+        "current": "0574cd74db486d693866bfabc5ed48e9fef62c889dcf408afff30dcc75016b44",
+        "same": true
+      },
+      {
+        "artifact": "native",
+        "path": "extensions/src/presentation/tadazz-v4/types.ts",
+        "executed": "8c3457ba85cf9b3d511907c0961928362d3594178e3cfea8c1e44a9cdee24dc9",
+        "current": "8c3457ba85cf9b3d511907c0961928362d3594178e3cfea8c1e44a9cdee24dc9",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/media/answer-button-presentation.tsx",
+        "executed": "0913003f3358a6cf350deb3e4c09129b8bce898f7b6493231ff9de9bffbdbb85",
+        "current": "0913003f3358a6cf350deb3e4c09129b8bce898f7b6493231ff9de9bffbdbb85",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/media/answer-button.tsx",
+        "executed": "59bbce54ae1e7184ce3062b761ccc7edbd56a56c8bd515633b66072d0259d496",
+        "current": "59bbce54ae1e7184ce3062b761ccc7edbd56a56c8bd515633b66072d0259d496",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/media/rich-answer-card.tsx",
+        "executed": "23336a2fd8d27970a6507c85b8d4e7f9e8911aa95668510f86cc1fc3ab8e050b",
+        "current": "23336a2fd8d27970a6507c85b8d4e7f9e8911aa95668510f86cc1fc3ab8e050b",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/legacy-effects.css",
+        "executed": "302e5ba91b41ab64bc74ba70638cc9c954d529a38ff4af195f8aff11c30c7987",
+        "current": "302e5ba91b41ab64bc74ba70638cc9c954d529a38ff4af195f8aff11c30c7987",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/platform-controls.tsx",
+        "executed": "29e505427d5270f620f7e6772114a197606368f1360fba01faceb29cd72a8f27",
+        "current": "29e505427d5270f620f7e6772114a197606368f1360fba01faceb29cd72a8f27",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+        "executed": "7d2859b5fa4c21062e1e369f055c7f36c4538283a2fb7e0ffcdb75ec51bcdd23",
+        "current": "7d2859b5fa4c21062e1e369f055c7f36c4538283a2fb7e0ffcdb75ec51bcdd23",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/NativeRazziaPreviewV2.tsx",
+        "executed": "f469bdfc7a77f062be305842d3195a137a320b7968b17690dc09b7d985a3f485",
+        "current": "f469bdfc7a77f062be305842d3195a137a320b7968b17690dc09b7d985a3f485",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/i18n.ts",
+        "executed": "ba3253e298022e57f0267a7d84040591f81acf1e0fb979ac5a2c69f385fcaceb",
+        "current": "ba3253e298022e57f0267a7d84040591f81acf1e0fb979ac5a2c69f385fcaceb",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/native-razzia-preview-v2.css",
+        "executed": "edefb97055562ffc1c6db47fc44b961aeba8aff344f67fa62f65e64608e2b560",
+        "current": "edefb97055562ffc1c6db47fc44b961aeba8aff344f67fa62f65e64608e2b560",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/native-razzia-utilities-v2.css",
+        "executed": "8212dc0355701c7ed2d29a4fab5a18eda1092b277cefaf08f23b5b0b98c0445f",
+        "current": "8212dc0355701c7ed2d29a4fab5a18eda1092b277cefaf08f23b5b0b98c0445f",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/native-theme-admission-v2.ts",
+        "executed": "6fe7238570d130d4b64f2183b7ee54d3e29846b5707aa10e7a46d849d5553321",
+        "current": "6fe7238570d130d4b64f2183b7ee54d3e29846b5707aa10e7a46d849d5553321",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/preview-clock.ts",
+        "executed": "6b50f4afe1f4dfa61b2cdebf314bc4d4e2552d17f48f1da7bad7a2c8a827cc42",
+        "current": "6b50f4afe1f4dfa61b2cdebf314bc4d4e2552d17f48f1da7bad7a2c8a827cc42",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/preview-transition-owner.ts",
+        "executed": "8ddb726f735822698bf669456e18eb17a40a988bd900b8dc436699d173dfd379",
+        "current": "8ddb726f735822698bf669456e18eb17a40a988bd900b8dc436699d173dfd379",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/renderer-csp-admission.ts",
+        "executed": "da39fda95e34bd27c8a7e7a85b50874f65a56b2a696318c28d4f8693deaab191",
+        "current": "da39fda95e34bd27c8a7e7a85b50874f65a56b2a696318c28d4f8693deaab191",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+        "executed": "87d8a779c2fcade1bfc93b2bb455c5e081e3915b13e0a2320b8308ac08533a79",
+        "current": "87d8a779c2fcade1bfc93b2bb455c5e081e3915b13e0a2320b8308ac08533a79",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-library-preview/stage-scene-adapter.ts",
+        "executed": "107dc19549234760d8e1314acda9294fcee78183fda8ba9a47a68eba8436f1b4",
+        "current": "107dc19549234760d8e1314acda9294fcee78183fda8ba9a47a68eba8436f1b4",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/show-themes/context.tsx",
+        "executed": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+        "current": "04dba6711e3d3aba83a43848aaef0e426196bd0dac8886f335c432afec7f3424",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/TadazzStage.tsx",
+        "executed": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+        "current": "e1a640bfef6bde4d6f06331d9a409e204fd75a02db1fc7ad4c3e0db99ef5f23d",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/TadazzV4StageAdapter.tsx",
+        "executed": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+        "current": "3d0a105f3fdc7e9fd8752868f044101592fdfdd712e88e145d3deb08c2e17baa",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/labels.ts",
+        "executed": "ec87f8e919c533b753260754f0effafd7e8b9a38fe8e01c47266650fc2e69abd",
+        "current": "ec87f8e919c533b753260754f0effafd7e8b9a38fe8e01c47266650fc2e69abd",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/motion-engine.ts",
+        "executed": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+        "current": "e45bc640bba10e8acfac6bbf9059b3e7a247b8d4d5cb23a16f1e5f8bb005da24",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/motion-spec.ts",
+        "executed": "e1609a71560061fb92031efa460bd1fcb5ab09e7986435e43b36fc79892ce3d9",
+        "current": "e1609a71560061fb92031efa460bd1fcb5ab09e7986435e43b36fc79892ce3d9",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/show-director.ts",
+        "executed": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+        "current": "361a7d69bf5ee6f8270aaf420010324f2e6abdd96856340e9fd7fa944b278e78",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/tadazz-motion-kit.css",
+        "executed": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+        "current": "2ddc7a17179f7d353a8440f9e6745d4a52f20de57edf9cdd0e7e6182c5298fa8",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/tadazz-show-adaptations.css",
+        "executed": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1",
+        "current": "5f7378b972e82ec71fbb833ea94cfa7298aba1794fd2cdbab413c328e2b3c4b1",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-show/voting-presentation.ts",
+        "executed": "4e363ebce559ad089bd4be0af9a630ef1de862a25de81bed8a5c0980609a04ec",
+        "current": "4e363ebce559ad089bd4be0af9a630ef1de862a25de81bed8a5c0980609a04ec",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/FullShowScenes.tsx",
+        "executed": "647e599d090afa6079414cc071a064a7eec846b274a9a43fa10bd903b0e7712d",
+        "current": "647e599d090afa6079414cc071a064a7eec846b274a9a43fa10bd903b0e7712d",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/TadazzV4Stage.tsx",
+        "executed": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+        "current": "5c3879c93825f6fa948d93500a5abbe370a0180777735d5229f0eb02f0cbe05d",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/components.tsx",
+        "executed": "687a4c7df31020ebac2bfbe6a9656ab8859b88c44c4f2e6f57ed760e2ad43fee",
+        "current": "687a4c7df31020ebac2bfbe6a9656ab8859b88c44c4f2e6f57ed760e2ad43fee",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/full-show.css",
+        "executed": "b50f72f81f0e5d1d6cea3bc9c095091483f7cfa948b0feda77cb2bc085e8fb38",
+        "current": "b50f72f81f0e5d1d6cea3bc9c095091483f7cfa948b0feda77cb2bc085e8fb38",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/index.ts",
+        "executed": "13df4ed6997762c92d66c8f52023834a7a7cc8dac6bd486673b801df5b01d0d8",
+        "current": "13df4ed6997762c92d66c8f52023834a7a7cc8dac6bd486673b801df5b01d0d8",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/motion.ts",
+        "executed": "988e450093c5ac5900e4229030b0a553f915d80ccec97db762837aac0993d501",
+        "current": "988e450093c5ac5900e4229030b0a553f915d80ccec97db762837aac0993d501",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/presentation-note.ts",
+        "executed": "8e861aec8421972d7ffbaf7e37666df52eb7bf6e0d13c804acf90cec8a1b9a58",
+        "current": "8e861aec8421972d7ffbaf7e37666df52eb7bf6e0d13c804acf90cec8a1b9a58",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/ReferenceStoryScene.tsx",
+        "executed": "fef1b90ba6e06084eb741b1e1bf5e6e8cafc84252d757b184fa9fdabd47537f3",
+        "current": "fef1b90ba6e06084eb741b1e1bf5e6e8cafc84252d757b184fa9fdabd47537f3",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-markup.tsx",
+        "executed": "c25cb9636e981c74dc419c38e17d8fcaed0273a18a52bd35a69af9786d97cbc9",
+        "current": "c25cb9636e981c74dc419c38e17d8fcaed0273a18a52bd35a69af9786d97cbc9",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/mixer-renderer.ts",
+        "executed": "eb55464d8ab185c8d8dad3d93f5440099914aaa4617450aa148b4a4a42650890",
+        "current": "eb55464d8ab185c8d8dad3d93f5440099914aaa4617450aa148b4a4a42650890",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reference-stages.css",
+        "executed": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89",
+        "current": "313ba1fae5da739895c1fe2eb0f65e698782052e93314ba7b8e56b0f52bf7e89",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-markup.tsx",
+        "executed": "f148e7402f2512efe7b703c16134c590cbc405e72867f21069b9b0f53e5637f5",
+        "current": "f148e7402f2512efe7b703c16134c590cbc405e72867f21069b9b0f53e5637f5",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/reveal-renderer.ts",
+        "executed": "8158534cdf75d9e69fc2ea086a08a1342c88d857d841c174f22f79a7221db980",
+        "current": "8158534cdf75d9e69fc2ea086a08a1342c88d857d841c174f22f79a7221db980",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/reference-story/story-clock.ts",
+        "executed": "b871cb6a909446873857cbdc495dba9ff4e0fd9c66a471a046c48da12bed8143",
+        "current": "b871cb6a909446873857cbdc495dba9ff4e0fd9c66a471a046c48da12bed8143",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/source-layout.css",
+        "executed": "0cbda768b1a54c078b3ce82880ddf41a2d19db67137881133736e1185ab1de8f",
+        "current": "0cbda768b1a54c078b3ce82880ddf41a2d19db67137881133736e1185ab1de8f",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/tadazz-v4.css",
+        "executed": "0574cd74db486d693866bfabc5ed48e9fef62c889dcf408afff30dcc75016b44",
+        "current": "0574cd74db486d693866bfabc5ed48e9fef62c889dcf408afff30dcc75016b44",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "extensions/src/presentation/tadazz-v4/types.ts",
+        "executed": "8c3457ba85cf9b3d511907c0961928362d3594178e3cfea8c1e44a9cdee24dc9",
+        "current": "8c3457ba85cf9b3d511907c0961928362d3594178e3cfea8c1e44a9cdee24dc9",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "packages/web/src/features/game/components/AnswerButton.tsx",
+        "executed": "5472a32090c3cdfdc5b3a247f83096247b1b8b3cf2ffedc8f50d56945ff93bce",
+        "current": "5472a32090c3cdfdc5b3a247f83096247b1b8b3cf2ffedc8f50d56945ff93bce",
+        "same": true
+      },
+      {
+        "artifact": "native-v2",
+        "path": "packages/web/src/features/game/components/QuestionEntrance.tsx",
+        "executed": "419655907a4d3c424df764a506b37e188b327f6a73fdc5992185cd9b206686aa",
+        "current": "419655907a4d3c424df764a506b37e188b327f6a73fdc5992185cd9b206686aa",
+        "same": true
+      }
+    ],
+    "summary": [
+      {
+        "artifact": "native",
+        "graphModules": 164,
+        "physicalInputs": 164,
+        "forbidden": [],
+        "outputs": [
+          {
+            "path": "renderer.css",
+            "bytes": 148376,
+            "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+          },
+          {
+            "path": "renderer.js",
+            "bytes": 1044107,
+            "sha256": "a6c7246db2fd11d6d76a92d2946e231fdad966c6f2aec7d318fd3ee8f3719b2f"
+          }
+        ]
+      },
+      {
+        "artifact": "native-v2",
+        "graphModules": 2072,
+        "physicalInputs": 2071,
+        "forbidden": [],
+        "outputs": [
+          {
+            "path": "renderer-v2.css",
+            "bytes": 166501,
+            "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+          },
+          {
+            "path": "renderer-v2.js",
+            "bytes": 1068185,
+            "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+          }
+        ]
+      }
+    ]
+  },
+  "artifacts": [
+    {
+      "abi": "native",
+      "graphModules": 164,
+      "physicalInputs": 164,
+      "outputs": [
+        {
+          "path": "renderer.css",
+          "bytes": 148376,
+          "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+        },
+        {
+          "path": "renderer.js",
+          "bytes": 1044107,
+          "sha256": "a6c7246db2fd11d6d76a92d2946e231fdad966c6f2aec7d318fd3ee8f3719b2f"
+        }
+      ],
+      "forbidden": []
+    },
+    {
+      "abi": "native-v2",
+      "graphModules": 2072,
+      "physicalInputs": 2071,
+      "outputs": [
+        {
+          "path": "renderer-v2.css",
+          "bytes": 166501,
+          "sha256": "1aa026a06d84117e23d8a04ef038a5260691b982796e057c39906ff6d66259d9"
+        },
+        {
+          "path": "renderer-v2.js",
+          "bytes": 1068185,
+          "sha256": "10b39d3e1a16b279f2b587a51fa777d7f5875ce2b88f88092f45acec29783340"
+        }
+      ],
+      "forbidden": []
+    }
+  ],
+  "serverPhysicalReadback": {
+    "physicalSourceFilesRehashed": 2072,
+    "unchangedDuringRead": true
+  },
+  "terminal": {
+    "id": "f2b914c6f8f5d98631e3ab8bb0a1dd10fabd26209ad2d40ce30c042e20b305fe",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-15T19:27:27.354484941Z",
+      "FinishedAt": "2026-11-15T19:37:55.954446771Z"
+    }
+  },
+  "actualProducerPass": {
+    "v1CurrentCard": 40,
+    "originalClock": 1,
+    "v2CurrentCard": 4
+  },
+  "sourcePackageOnlyAdditiveExport": true,
+  "barrelPreserved": true,
+  "oldFailuresPreserved": true,
+  "noNewRemoteJob": true,
+  "limits": "Actual producer fresh both-ABI native21 matrix, not a manager rerun. Candidate/current-card only, no full15scene/Classicoptionalsettings/fontloader/glyph/audio/assetrights/export/pin/host/G acceptance. Prior15/16/17/18/20 raw failures retained, not recertified."
+}
