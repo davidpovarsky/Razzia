@@ -364,7 +364,12 @@ after(async () => {
   registry.cleanup()
   io.disconnectSockets(true)
   await new Promise<void>((done) => io.close(() => done()))
-  server.closeAllConnections?.()
+  if (
+    "closeAllConnections" in server &&
+    typeof server.closeAllConnections === "function"
+  ) {
+    server.closeAllConnections()
+  }
   if (server.listening)
     await new Promise<void>((done) => server.close(() => done()))
 })
