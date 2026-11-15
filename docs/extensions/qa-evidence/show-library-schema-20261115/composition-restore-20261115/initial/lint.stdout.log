@@ -1,0 +1,7 @@
+{ "diagnostics": [{"message": "Unary operator '++' used.","code": "eslint(no-plusplus)","severity": "error","url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-plusplus.html","help": "Use the assignment operator `+=` instead.","filename": "extensions/src/core/show-library/composition-restore.test.ts","labels": [{"span": {"offset": 1784,"length": 12,"line": 54,"column": 7}}]},
+{"message": "Unary operator '++' used.","code": "eslint(no-plusplus)","severity": "error","url": "https://oxc.rs/docs/guide/usage/linter/rules/eslint/no-plusplus.html","help": "Use the assignment operator `+=` instead.","filename": "extensions/src/core/show-library/composition-restore.test.ts","labels": [{"span": {"offset": 2797,"length": 21,"line": 88,"column": 7}}]}],
+              "number_of_files": 2,
+              "number_of_rules": 233,
+              "threads_count": 1,
+              "start_time": 7.9216678
+            }

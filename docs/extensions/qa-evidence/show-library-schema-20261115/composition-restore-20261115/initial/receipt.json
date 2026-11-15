@@ -1,0 +1,122 @@
+{
+  "stage": "initial",
+  "startedUtc": "2026-11-15T18:09:02.923961+00:00",
+  "sourceBaseCommit": "30d1ba883ca6a3b94f7324036ecf873e01645837",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "sourceBefore": {
+    "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+    "extensions/src/core/show-library/composition-restore.test.ts": "2a944ab22ca94593e6cf408df526e138849784eac72c829b78ea72cbd416ceec",
+    "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+    "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+  },
+  "checks": [
+    {
+      "name": "tests",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/vitest/vitest.mjs",
+        "run",
+        "--root",
+        "extensions",
+        "--config",
+        "vitest.config.ts",
+        "src/core/show-library/composition-restore.test.ts",
+        "src/core/show-library/composition-repository.test.ts",
+        "--maxWorkers",
+        "1"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 241,
+          "sha256": "3d999d197979b44a0a32c982972887427587fa51cdb9a87a4be3d36d6d244ee1",
+          "rawBase64": "CiBSVU4gIHY1LjAuMyBDOi9Vc2Vycy9EQVZJRC9Db2RlL1JhenppYS13b3JrdHJlZXMvdGFkYXp6LWhxLXNob3ctbGlicmFyeS0yMDI2MTExNS9leHRlbnNpb25zCgoKIFRlc3QgRmlsZXMgIDIgcGFzc2VkICgyKQogICAgICBUZXN0cyAgMjUgcGFzc2VkICgyNSkKICAgU3RhcnQgYXQgIDIwOjA5OjAzCiAgIER1cmF0aW9uICAyLjMzcyAoaW1wb3J0IDU1JSwgdHJhbnNmb3JtIDM3JSwgdGVzdHMgNyUsIHdvcmtlciAxJSkKCg=="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "types",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "extensions/node_modules/typescript/bin/tsc",
+        "--project",
+        "extensions/src/core/show-library/tsconfig.focused.json"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "format",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/prettier/bin/prettier.cjs",
+        "--check",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-restore.test.ts"
+      ],
+      "exitCode": 0,
+      "streams": {
+        "stdout": {
+          "bytes": 66,
+          "sha256": "17aa973d3f004560237d9a95171210b0671deff23d61628eecf7322ff5938f20",
+          "rawBase64": "Q2hlY2tpbmcgZm9ybWF0dGluZy4uLgpBbGwgbWF0Y2hlZCBmaWxlcyB1c2UgUHJldHRpZXIgY29kZSBzdHlsZSEK"
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    },
+    {
+      "name": "lint",
+      "command": [
+        "C:\\Users\\DAVID\\.local\\tools\\node-v24.22.1-win-x64\\node.exe",
+        "node_modules/oxlint/bin/oxlint",
+        "--threads",
+        "1",
+        "--format",
+        "json",
+        "extensions/src/core/show-library/composition-repository-base.ts",
+        "extensions/src/core/show-library/composition-restore.test.ts"
+      ],
+      "exitCode": 1,
+      "streams": {
+        "stdout": {
+          "bytes": 935,
+          "sha256": "f930f375c730c4aa1d3fd1b22ef82ff90fc837b58fafd7c0fd20c273cec24fd0",
+          "rawBase64": "eyAiZGlhZ25vc3RpY3MiOiBbeyJtZXNzYWdlIjogIlVuYXJ5IG9wZXJhdG9yICcrKycgdXNlZC4iLCJjb2RlIjogImVzbGludChuby1wbHVzcGx1cykiLCJzZXZlcml0eSI6ICJlcnJvciIsInVybCI6ICJodHRwczovL294Yy5ycy9kb2NzL2d1aWRlL3VzYWdlL2xpbnRlci9ydWxlcy9lc2xpbnQvbm8tcGx1c3BsdXMuaHRtbCIsImhlbHAiOiAiVXNlIHRoZSBhc3NpZ25tZW50IG9wZXJhdG9yIGArPWAgaW5zdGVhZC4iLCJmaWxlbmFtZSI6ICJleHRlbnNpb25zL3NyYy9jb3JlL3Nob3ctbGlicmFyeS9jb21wb3NpdGlvbi1yZXN0b3JlLnRlc3QudHMiLCJsYWJlbHMiOiBbeyJzcGFuIjogeyJvZmZzZXQiOiAxNzg0LCJsZW5ndGgiOiAxMiwibGluZSI6IDU0LCJjb2x1bW4iOiA3fX1dfSwKeyJtZXNzYWdlIjogIlVuYXJ5IG9wZXJhdG9yICcrKycgdXNlZC4iLCJjb2RlIjogImVzbGludChuby1wbHVzcGx1cykiLCJzZXZlcml0eSI6ICJlcnJvciIsInVybCI6ICJodHRwczovL294Yy5ycy9kb2NzL2d1aWRlL3VzYWdlL2xpbnRlci9ydWxlcy9lc2xpbnQvbm8tcGx1c3BsdXMuaHRtbCIsImhlbHAiOiAiVXNlIHRoZSBhc3NpZ25tZW50IG9wZXJhdG9yIGArPWAgaW5zdGVhZC4iLCJmaWxlbmFtZSI6ICJleHRlbnNpb25zL3NyYy9jb3JlL3Nob3ctbGlicmFyeS9jb21wb3NpdGlvbi1yZXN0b3JlLnRlc3QudHMiLCJsYWJlbHMiOiBbeyJzcGFuIjogeyJvZmZzZXQiOiAyNzk3LCJsZW5ndGgiOiAyMSwibGluZSI6IDg4LCJjb2x1bW4iOiA3fX1dfV0sCiAgICAgICAgICAgICAgIm51bWJlcl9vZl9maWxlcyI6IDIsCiAgICAgICAgICAgICAgIm51bWJlcl9vZl9ydWxlcyI6IDIzMywKICAgICAgICAgICAgICAidGhyZWFkc19jb3VudCI6IDEsCiAgICAgICAgICAgICAgInN0YXJ0X3RpbWUiOiA3LjkyMTY2NzgKICAgICAgICAgICAgfQogICAgICAgICAgICA="
+        },
+        "stderr": {
+          "bytes": 0,
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "rawBase64": ""
+        }
+      }
+    }
+  ],
+  "sourceAfter": {
+    "extensions/src/core/show-library/composition-repository-base.ts": "d576a35a42ad8dbe494c58878bc30e743bc8937f9a7bcd9e9b7d6cfb847eed30",
+    "extensions/src/core/show-library/composition-restore.test.ts": "2a944ab22ca94593e6cf408df526e138849784eac72c829b78ea72cbd416ceec",
+    "extensions/src/core/show-library/composition-repository.ts": "d8ad981d7226b1862dc9f2f8ece7c79107d1b37dcaa348133dc0eef7e2060853",
+    "extensions/src/core/show-library/composition-repository-v2.ts": "ed00ca452e793c674e0b6c4d066220ab3c60f08d92b1384b5523f9ba562f5057"
+  },
+  "sourceUnchangedDuringChecks": true,
+  "finishedUtc": "2026-11-15T18:09:17.041583+00:00"
+}
