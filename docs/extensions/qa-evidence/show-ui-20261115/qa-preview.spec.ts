@@ -1,4 +1,4 @@
-import { expect, test } from "../../../../extensions/node_modules/@playwright/test/index.js"
+import { expect, test } from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { request as httpRequest } from "node:http"
 
 const events = new WeakMap<object, Array<Record<string, unknown>>>()
