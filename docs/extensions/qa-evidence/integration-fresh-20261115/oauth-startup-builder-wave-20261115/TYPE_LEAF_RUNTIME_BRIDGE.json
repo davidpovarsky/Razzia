@@ -1,0 +1,23 @@
+{
+  "esbuild": "0.28.2",
+  "originalSource": "543841486e7c2c3007b41ef73c0a7072eff19d52",
+  "files": [
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "beforeSha256": "ba830d98d49e5deeac3c6a4708f6f9b3200ad2cd943228b0c96b4dc884271289",
+      "afterSha256": "5c7ebb622d80da07a6dcfa6d536669a32f19879208a5b1a0d5f2758e71491ec8",
+      "emittedJavaScriptIdentical": true,
+      "emittedSha256": "74c37721798a775c1beceb5d391e1130f2b1c014617ca491c3c48d0355150970"
+    },
+    {
+      "path": "extensions/src/server/storage/startup-recovery.ts",
+      "beforeSha256": "98735cb43d77673ed9f149d11ff0a17c45e626c6805be4824986a5c57afb9e72",
+      "afterSha256": "07e4e86532e74b0deeb74044ec5224066f8b018e347afd2a151009189e2189cc",
+      "emittedJavaScriptIdentical": true,
+      "emittedSha256": "4b5999223b5d55582482de1e91f69307893c513fd6d2852165f2663e848b2a00"
+    }
+  ],
+  "allExistingPackageFieldsAndExportsUnchanged": true,
+  "pureTypeLeafOnly": true,
+  "otherRuntimeChange": "Test-only feature guard for the actual HTTP1 server; same host assertions rerun separately"
+}

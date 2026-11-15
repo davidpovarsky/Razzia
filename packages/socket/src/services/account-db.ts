@@ -6,7 +6,7 @@ import { spawnSync } from "node:child_process"
 import { createHash, randomUUID } from "node:crypto"
 import { tmpdir } from "node:os"
 import { resolveConfigRoot } from "./config-scope"
-import type { StartupOwnerSnapshot } from "@razzia/extensions/server"
+import type { StartupOwnerSnapshot } from "@razzia/extensions/server/startup-owner-snapshot"
 
 function recoveryStat(file: string) {
   try {

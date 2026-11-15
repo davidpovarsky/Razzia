@@ -14,9 +14,7 @@ import {
 } from "@razzia/socket/services/account-auth"
 import { closeAccountDb } from "@razzia/socket/services/account-db"
 import { mintToken } from "@razzia/socket/services/auth"
-import {
-  closeThemeInstallationStore,
-} from "@razzia/socket/services/theme-installation"
+import { closeThemeInstallationStore } from "@razzia/socket/services/theme-installation"
 import { themeRoutes } from "@razzia/socket/api/extensions/theme-routes"
 import { builderDocumentFixture } from "../../components/theme-builder/document.fixture"
 
@@ -70,7 +68,7 @@ beforeAll(async () => {
   playerToken = (await mintToken("builder-player", SESSION_ROLES.PLAYER)).token
   const app = new Hono().route("/api/themes", themeRoutes)
   server = serve({ fetch: app.fetch, hostname: "127.0.0.1", port: 0 })
-  server.keepAliveTimeout = 60_000
+  if ("keepAliveTimeout" in server) server.keepAliveTimeout = 60_000
   if (!server.listening) await once(server, "listening")
   const address = server.address()
   if (!address || typeof address === "string")

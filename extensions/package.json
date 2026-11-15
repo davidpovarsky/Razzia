@@ -29,6 +29,7 @@
     "./editor": "./src/editor/index.ts",
     "./locales": "./src/locales/index.ts",
     "./server": "./src/server/index.ts",
+    "./server/startup-owner-snapshot": "./src/server/storage/startup-owner-snapshot.ts",
     "./site": "./src/site/index.ts",
     "./platform-ui": "./src/platform-ui/index.ts"
   },
