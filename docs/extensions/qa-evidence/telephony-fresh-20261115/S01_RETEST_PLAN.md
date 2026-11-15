@@ -1,5 +1,7 @@
 # S01 approved implementation and retest snapshot
 
+Execution update: see [S01_RESULTS.md](S01_RESULTS.md) for the final measured 10PASS/5FAIL, native type-check PASS and Node-only harness filename. This plan is retained as pre-execution evidence.
+
 Implemented only the manager-approved two hunks in `packages/socket/src/api/extensions/game-routes.ts`, from the exact reviewed S01 patch. Pre-edit authority, baseline blob and rationale are recorded in UPSTREAM_TOUCHES.md. No controller/storage/schema/global configuration source changed.
 
 `S01_SOURCE_AUDIT.json` proves the protected diff equals the approved artifact exactly and all thirteen original actual-backend test bodies are unchanged. Two additional actual-route controls cover configured initial/current polling, a fresh different call without supplied roster, cached stale denial with no private fields or roster mutation, and valid disconnected rebind preserving earned authoritative score and stable client/roster count.
