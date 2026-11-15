@@ -1,0 +1,32 @@
+[
+  {
+    "path": "extensions/src/core/show-library/native-library.ts",
+    "integration_blob": "ab128c4a76a2e5ccdb1af86b701ca3ede1e8ddce",
+    "producer_blob": "ab128c4a76a2e5ccdb1af86b701ca3ede1e8ddce",
+    "match": true
+  },
+  {
+    "path": "extensions/src/core/show-library/composition-document.ts",
+    "integration_blob": "9e48153490ddbb7005dcaef134bb008312df1a2c",
+    "producer_blob": "9e48153490ddbb7005dcaef134bb008312df1a2c",
+    "match": true
+  },
+  {
+    "path": "extensions/src/core/show-library/composition-repository.ts",
+    "integration_blob": "ea759ba963018d813beb4ece492441ba001bef9c",
+    "producer_blob": "ea759ba963018d813beb4ece492441ba001bef9c",
+    "match": true
+  },
+  {
+    "path": "extensions/src/core/show-library/composition-repository.test.ts",
+    "integration_blob": "aef238c9b6ca118e7c273f8f435117bf8dd0f229",
+    "producer_blob": "aef238c9b6ca118e7c273f8f435117bf8dd0f229",
+    "match": true
+  },
+  {
+    "path": "extensions/src/core/show-library/index.ts",
+    "integration_blob": "1aa04622d14b0420f4349798ac3a452a6b24e0ac",
+    "producer_blob": "1aa04622d14b0420f4349798ac3a452a6b24e0ac",
+    "match": true
+  }
+]
