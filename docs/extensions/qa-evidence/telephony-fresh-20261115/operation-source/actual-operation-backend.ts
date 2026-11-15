@@ -23,6 +23,7 @@ import {
   GATEWAY_ROOT_CONTENT,
   type GatewayCallAuthorityPort,
 } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/contracts"
+import { PrivateCallOperationHost } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/call-operation-host"
 import * as real from "../gameplay-source/actual-gameplay-backend"
 export { real }
 const sockets: ReturnType<typeof connect>[] = []
@@ -122,12 +123,15 @@ export async function fixture(
     target,
     key: keyPort(),
     dispatcher: service.registrationDispatcher(),
-    operations: service.operationDispatcher(),
     attempt: input,
   }
   const call = new PrivateCallPrecommit(callOptions)
   call.prepare(input)
   const joined = await call.register()
+  const operator = new PrivateCallOperationHost({
+    ...callOptions,
+    dispatcher: service.operationDispatcher(),
+  })
   assert.ok(
     joined.ok &&
       joined.registrationId &&
@@ -182,6 +186,7 @@ export async function fixture(
     input,
     callOptions,
     call,
+    operator,
     joined,
     native,
     intent,

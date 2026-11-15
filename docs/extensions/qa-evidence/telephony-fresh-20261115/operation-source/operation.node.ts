@@ -5,7 +5,7 @@ import { existsSync, readFileSync, renameSync, writeFileSync } from "node:fs"
 import { join } from "node:path"
 import { DatabaseSync } from "node:sqlite"
 import { after, test } from "node:test"
-import { PrivateCallPrecommit } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/call-precommit"
+import { PrivateCallOperationHost } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/call-operation-host"
 import {
   OPERATION_PRECOMMIT_PURPOSE,
   operationText,
@@ -90,7 +90,11 @@ test("OP-01 full immutable poll intent precedes send; lost ACK/reopen/service ro
   const f = await fixture("lost-poll"),
     intent = f.intent("poll"),
     options = f.options(intent),
-    op = f.call.operation(options)
+    op = f.operator.operation(options)
+  assert.equal("operation" in f.call, false)
+  assert.equal("executeOperation" in f.call, false)
+  assert.equal("register" in f.operator, false)
+  assert.equal("prepare" in f.operator, false)
   assert.deepEqual(op.prepare(), {
     operationId: intent.operationId,
     precommitted: true,
@@ -104,11 +108,11 @@ test("OP-01 full immutable poll intent precedes send; lost ACK/reopen/service ro
   const before = readFileSync(join(options.root, "operation.enc"))
   await deniedWithoutSecret(() => op.execute())
   assert.deepEqual(f.native, ["poll"])
-  const receipt = await f.call.operation(options).execute()
+  const receipt = await f.operator.operation(options).execute()
   assert.equal(receipt.ok, true)
   assert.equal(receipt.status, "observed")
   assert.deepEqual(f.native, ["poll"])
-  assert.throws(() => f.call.operation(options).prepare())
+  assert.throws(() => f.operator.operation(options).prepare())
   const rotated = await f.r.factory.rotate(f.r.subject.token, f.target, {
     requestId: randomUUID(),
     expectedVersion: 1,
@@ -152,7 +156,7 @@ test(
     const epoch = f.r.game.getQuestionStateForGateway().epoch
     const intent = f.intent("answer", { epoch, answerIndex: 0 }),
       options = f.options(intent),
-      answer = f.call.operation(options)
+      answer = f.operator.operation(options)
     answer.prepare()
     await deniedWithoutSecret(() => answer.execute())
     assert.deepEqual(f.native, ["answer"])
@@ -161,10 +165,10 @@ test(
         .answeredCurrentQuestion,
       true,
     )
-    const receipt = await f.call.operation(options).execute()
+    const receipt = await f.operator.operation(options).execute()
     assert.equal(receipt.accepted, true)
     assert.deepEqual(f.native, ["answer"])
-    const conflicting = f.call.operation(
+    const conflicting = f.operator.operation(
       f.options({ ...intent, answerIndex: 1 }),
     )
     conflicting.prepare()
@@ -176,11 +180,11 @@ test(
     assert.deepEqual(ledger.answers[0].answerIds, [0])
     const points = f.r.game.players[0].points
     const hangupOptions = f.options(f.intent("hangup")),
-      hangup = f.call.operation(hangupOptions)
+      hangup = f.operator.operation(hangupOptions)
     hangup.prepare()
     assert.equal((await hangup.execute()).ok, true)
     assert.equal(
-      (await f.call.operation(hangupOptions).execute()).status,
+      (await f.operator.operation(hangupOptions).execute()).status,
       "registration_retired",
     )
     assert.equal((await f.call.register()).status, "registration_retired")
@@ -205,10 +209,10 @@ test("OP-03 missing/corrupt/substituted/foreign intent and actual temp-close unc
   const f = await fixture(),
     intent = f.intent("poll"),
     options = f.options(intent),
-    op = f.call.operation(options)
-  assert.throws(() => f.call.operation({ ...options, enabled: false }))
+    op = f.operator.operation(options)
+  assert.throws(() => f.operator.operation({ ...options, enabled: false }))
   assert.throws(() =>
-    f.call.operation({
+    f.operator.operation({
       ...options,
       intent: { ...intent, action: "answer", epoch: 0, answerIndex: 5 },
     }),
@@ -228,19 +232,20 @@ test("OP-03 missing/corrupt/substituted/foreign intent and actual temp-close unc
   await deniedWithoutSecret(() => op.execute())
   writeFileSync(file, before)
   await deniedWithoutSecret(() =>
-    f.call
+    f.operator
       .operation({
         ...options,
         intent: { ...intent, operationId: randomUUID() },
       })
       .execute(),
   )
-  const otherCall = new PrivateCallPrecommit({
+  const otherCall = new PrivateCallOperationHost({
     ...f.callOptions,
+    dispatcher: f.service.operationDispatcher(),
     attempt: { ...f.input, requestId: randomUUID() },
   })
   await deniedWithoutSecret(() => otherCall.operation(options).execute())
-  const foreign = f.call.operation(
+  const foreign = f.operator.operation(
     f.options({ ...intent, registrationId: randomUUID() }),
   )
   foreign.prepare()
@@ -248,7 +253,7 @@ test("OP-03 missing/corrupt/substituted/foreign intent and actual temp-close unc
   assert.equal(f.native.length, 0)
   assert.equal(f.r.counters.nativeJoin, 1)
   const uncertainOptions = f.options(f.intent("poll")),
-    uncertain = f.call.operation(uncertainOptions)
+    uncertain = f.operator.operation(uncertainOptions)
   const require = createRequire(import.meta.url),
     fs = require("node:fs") as typeof import("node:fs")
   const originalOpen = fs.openSync,
@@ -278,7 +283,9 @@ test("OP-03 missing/corrupt/substituted/foreign intent and actual temp-close unc
   }
   assert.equal(triggered, true)
   assert.ok(existsSync(join(uncertainOptions.root, "operation.writer-lock")))
-  await deniedWithoutSecret(() => f.call.operation(uncertainOptions).execute())
+  await deniedWithoutSecret(() =>
+    f.operator.operation(uncertainOptions).execute(),
+  )
   assert.equal(f.native.length, 0)
   real.record({
     test: "OP-03",
@@ -294,7 +301,7 @@ test("OP-03 missing/corrupt/substituted/foreign intent and actual temp-close unc
 test("OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit revoke denies result without compensation", async () => {
   const f = await fixture(),
     options = f.options(f.intent("poll")),
-    op = f.call.operation(options)
+    op = f.operator.operation(options)
   op.prepare()
   const db = new DatabaseSync(join(f.r.lifecycle, "phone-lifecycle-v2a.sqlite"))
   db.exec(
@@ -303,10 +310,10 @@ test("OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit re
   try {
     assert.equal((await op.execute()).status, "outcome_unknown")
     assert.equal(
-      (await f.call.operation(options).execute()).status,
+      (await f.operator.operation(options).execute()).status,
       "operation_pending_unknown",
     )
-    const later = f.call.operation(f.options(f.intent("poll")))
+    const later = f.operator.operation(f.options(f.intent("poll")))
     later.prepare()
     assert.equal((await later.execute()).status, "binding_pending_unknown")
     assert.equal(
@@ -321,7 +328,7 @@ test("OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit re
   }
   const revoked = await fixture("revoke-poll"),
     revokedOptions = revoked.options(revoked.intent("poll")),
-    revokedOp = revoked.call.operation(revokedOptions)
+    revokedOp = revoked.operator.operation(revokedOptions)
   revokedOp.prepare()
   const before = readFileSync(join(revokedOptions.root, "operation.enc"))
   await deniedWithoutSecret(() => revokedOp.execute())
@@ -346,7 +353,7 @@ test("OP-04 actual SQL finalization failure stays UNKNOWN; actual post-commit re
   )
   const count = revoked.opKeys()
   await deniedWithoutSecret(() =>
-    revoked.call.operation(revokedOptions).execute(),
+    revoked.operator.operation(revokedOptions).execute(),
   )
   assert.equal(revoked.opKeys(), count)
   assert.equal(revoked.r.game.players.length, 1)
