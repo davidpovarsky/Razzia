@@ -1,0 +1,53 @@
+{
+  "sourceBaseCommit": "b93d89585825392cc6b7cbabd779ea7abce97d20",
+  "sourceHashObservation": "After the actual execution; no before-run independent audit claimed",
+  "sourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/native-preview-frame-schema.ts",
+      "sha256": "be678f66bb5c32b9c17c08ffb8510ef2ca8c7aaf10c0dfb40184a6babfce633d"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-frame.ts",
+      "sha256": "b94332f424765c2dce942642109a878629b7c4dd0055c6c554df018cde362391"
+    },
+    {
+      "path": "extensions/src/core/show-library/native-preview-frame.test.ts",
+      "sha256": "c4b86a332386dbefbbfe34ca0c5d8b6f9b5eff554dc01cec08eefae6fba45106"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "sha256": "9881342c9896added0d6c8993809e16a87df8191821701dc4059b29682446d4e"
+    }
+  ],
+  "node": "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+  "cwd": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-show-library-20261115",
+  "testArgv": [
+    "extensions/node_modules/vitest/vitest.mjs",
+    "run",
+    "--root",
+    "extensions",
+    "--config",
+    "vitest.config.ts",
+    "src/core/show-library/native-preview-frame.test.ts",
+    "--maxWorkers",
+    "1"
+  ],
+  "testExit": 0,
+  "testPassed": 12,
+  "testFailed": 0,
+  "testDurationSeconds": 8.84,
+  "testTranscript": "RUN v5.0.3; Test Files1passed(1); Tests12passed(12); Start17:20:29; Duration8.84s; TEST_EXIT=0. Captured from actual exec/write_stdin output, not raw redirected stdout",
+  "typecheckArgv": [
+    "extensions/node_modules/typescript/bin/tsc",
+    "--project",
+    "extensions/src/core/show-library/tsconfig.focused.json"
+  ],
+  "typecheckExit": 0,
+  "typecheckTranscript": "TSC_EXIT=0, empty stdout. Captured in same actual command after tests",
+  "formatExit": 0,
+  "rendererBuildRun": false,
+  "browserRun": false,
+  "newServerJobs": 0,
+  "compiledPins": [],
+  "runtimeAcceptance": "unavailable"
+}
