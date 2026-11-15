@@ -1,0 +1,1 @@
+extensions/src/server/game/roster-native-admission.test.ts(272,24): error TS2502: 'socket' is referenced directly or indirectly in its own type annotation.

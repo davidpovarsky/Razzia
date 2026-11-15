@@ -1,0 +1,26 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 1-character roster name with one native Player 16ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 24-character roster name with one native Player 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 25-character roster name with one native Player 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 29-character roster name with one native Player 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 40-character roster name with one native Player 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > resolves the real roster row by phone without using caller fallback text 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > keeps unknown-roster and fallback names at the ordinary 24-character rule (25) 4ms
+ ✓ src/server/game/roster-native-admission.test.ts > keeps unknown-roster and fallback names at the ordinary 24-character rule (40) 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > retains ordinary web and join-ticket maximum24 exactly 4ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: "" 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: " " 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > does not join or mutate roster after the existing billing/capacity gate refuses 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > revalidates actual roster identity inside the existing admission callback 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > warm rebind preserves points/name and creates no second Player or new-player event 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > internal roster admission shares original socket and success-event path once 2ms
+
+ Test Files  1 passed (1)
+      Tests  16 passed (16)
+   Start at  21:22:45
+   Duration  3.17s (import 53%, transform 44%, tests 2%, worker 1%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/roster-native-admission/after.json
