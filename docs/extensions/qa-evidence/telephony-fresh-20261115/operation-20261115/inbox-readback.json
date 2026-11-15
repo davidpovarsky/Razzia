@@ -1,0 +1,29 @@
+{
+  "task": "1220548327759900",
+  "parent": "1220547779792791",
+  "permalink_url": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220548327759900",
+  "completed": false,
+  "created_once": true,
+  "exact_notes_readback": true,
+  "source_sha": "3a38a478184c741563d3df2b982b58e7da8b9eb4",
+  "source_evidence": "1c643916792955f41ab7dd533486d888ea73d417",
+  "original_source_readback": "dd003d50abdd4a45e1d3481a693207c701269844",
+  "call_prerequisite_task": "1220548031315833",
+  "cross_context_comment_success": true,
+  "comment": {
+    "data": {
+      "gid": "1220548380338566",
+      "created_at": "2026-11-15T22:10:32.812Z",
+      "is_pinned": false,
+      "text": "הקשר לחוזה ההרשמה: successor3a38a478184c741563d3df2b982b58e7da8b9eb4 מוסיף יומן כוונת פעולה ומחלץ את מנגנון הקובץ הפנימי המשותף. שלוש בדיקות ההרשמה המושפעות נבדקו מחדש, ופורמט/מפתחות/סמנים של call נשמרו. אפשר לסקור את01dfd58+7f53a23 ואת successor3a38a47 כשרשרת תואמת; אין כאן צורך בהרחבת ספק/הרשאות או שינוי schema. נושא הרחבת הפעולות והמיזוג מרוכז בנפרד: https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220548327759900 . תגובות על חוזה REGISTER נשארות כאן; דיון על operation intent בתת־המשימה המקושרת.",
+      "created_by": {
+        "gid": "1219597879016933",
+        "resource_type": "user",
+        "name": "דוד פוברסקי"
+      },
+      "html_text": "<body>הקשר לחוזה ההרשמה: successor3a38a478184c741563d3df2b982b58e7da8b9eb4 מוסיף יומן כוונת פעולה ומחלץ את מנגנון הקובץ הפנימי המשותף. שלוש בדיקות ההרשמה המושפעות נבדקו מחדש, ופורמט/מפתחות/סמנים של call נשמרו. אפשר לסקור את01dfd58+7f53a23 ואת successor3a38a47 כשרשרת תואמת; אין כאן צורך בהרחבת ספק/הרשאות או שינוי schema. נושא הרחבת הפעולות והמיזוג מרוכז בנפרד: <a href=\"https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220548327759900\" data-asana-gid=\"1220548327759900\" data-asana-accessible=\"true\" data-asana-type=\"task\" data-asana-project=\"1219846276680200\" data-asana-dynamic=\"true\">[HANDOFF] סוכן C — יומן כוונת פעולה ו־poll/answer/hangup</a> . תגובות על חוזה REGISTER נשארות כאן; דיון על operation intent בתת־המשימה המקושרת.</body>"
+    }
+  },
+  "recorded_utc": "2026-11-15T22:10:34.358Z",
+  "normal_direct_manager_message_sent": false
+}
