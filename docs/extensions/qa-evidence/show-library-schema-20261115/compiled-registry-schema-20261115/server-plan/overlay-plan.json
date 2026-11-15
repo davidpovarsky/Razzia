@@ -1,0 +1,734 @@
+{
+  "format": "tadazz-compiled-index-focused-server-run-plan",
+  "schemaVersion": 1,
+  "authorization": "PREPARED_NOT_GRANTED_DO_NOT_EXECUTE",
+  "sourceCommit": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "diagnosticSourceBundleSha256": "4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "serverRoot": "/home/ubuntu/tadazz-hq-qa-20261115",
+  "baseSource": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0",
+  "baseManifest": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/port3-manifest-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0.json",
+  "fixturePath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "evidencePath": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "image": "tadazz:design-system-qa-20261110",
+  "imageId": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "container": "tadazz-hq-compiled-index-4966fda3751f",
+  "resourceProposalNotGrant": {
+    "nanoCpus": 250000000,
+    "memoryBytes": 2147483648,
+    "pidsLimit": 128,
+    "startFreeBytes": 2457862144,
+    "reserveFreeBytes": 2147483648,
+    "maxNewDiskBytes": 8388608,
+    "tmpBytes": 134217728,
+    "coreTmpfsBytes": 2097152,
+    "jobWatchdogSeconds": 450,
+    "testsWatchdogSeconds": 120,
+    "typesWatchdogSeconds": 180,
+    "logLimitBytes": 524288,
+    "maxUploadedBytes": 262144
+  },
+  "newSourceFiles": [
+    {
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "bytes": 4381,
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "bytes": 22530,
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "bytes": 6046,
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index.test.ts",
+      "bytes": 31259,
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207"
+    }
+  ],
+  "newSourceBytes": 64216,
+  "lowerCoreFiles": [
+    {
+      "path": "extensions/src/core/show-library/assets.ts",
+      "bytes": 2776,
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0"
+    },
+    {
+      "path": "extensions/src/core/show-library/binding-policy.ts",
+      "bytes": 1935,
+      "sha256": "cb9c08771331e16c13c8a265d98b378dbc26b5474c7428695d5be580ae9e7a4f"
+    },
+    {
+      "path": "extensions/src/core/show-library/digest.ts",
+      "bytes": 3614,
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity-rule.ts",
+      "bytes": 824,
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity-rule2-vectors.json",
+      "bytes": 11193,
+      "sha256": "7a08fc3794059dccf5ab9e82405865ba235514cdc43453fca756641277c39788"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.test.ts",
+      "bytes": 10252,
+      "sha256": "c77cf57aa7a26a62126ee0aa783f7ec098a0b7842e1e1a541108db02bf043c13"
+    },
+    {
+      "path": "extensions/src/core/show-library/identity.ts",
+      "bytes": 4890,
+      "sha256": "3687dbfa8e1d7e9a9ad938ca0818f1606d42c73f1605214be33c5cec95d8d501"
+    },
+    {
+      "path": "extensions/src/core/show-library/index.ts",
+      "bytes": 109,
+      "sha256": "c264b552da1fc7f682fd2c7538265a0b693fdaf0a51a7700fc4dd13123490957"
+    },
+    {
+      "path": "extensions/src/core/show-library/manifest.ts",
+      "bytes": 3360,
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3824,
+      "sha256": "e1150d837215e16650260e2c484c8972edebf70d416182870e5da5c12b385a09"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.test.ts",
+      "bytes": 6579,
+      "sha256": "a26b95b59413242fe403a0bf78ff8a4357274bd817dff79b1dd7c830550aec1a"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-port.ts",
+      "bytes": 607,
+      "sha256": "5d8d97472e072178a11b9adaf4f3a7d22aabfa4e072c6de74b2378173b9a2a2e"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 3032,
+      "sha256": "e90aebcedfb22a4814a616f4ecfebc76677f6a0bd0d213b39a17537d1c41d80d"
+    },
+    {
+      "path": "extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 6158,
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095"
+    },
+    {
+      "path": "extensions/src/core/show-library/primitives.ts",
+      "bytes": 3649,
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-assets.test.ts",
+      "bytes": 9026,
+      "sha256": "4e5266450ee2fa436c92593d25085390c05e7b2402735bec1b1d4fcf1b41f15d"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection-schema.ts",
+      "bytes": 7064,
+      "sha256": "56fe9139e45c4868adbe0633bdecdd311067186ba763b54f1c3c74e42d477467"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.test.ts",
+      "bytes": 9904,
+      "sha256": "2e98e1318927da153d23bcebbfd545d2237bf5e42d86d3e4dab8f342039ad6ef"
+    },
+    {
+      "path": "extensions/src/core/show-library/projection.ts",
+      "bytes": 7491,
+      "sha256": "f328e0e7d1976052c7daf9affbbc488b41845b0ec0d54dd0557c6524e6367c60"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.test.ts",
+      "bytes": 10121,
+      "sha256": "13c0b25ab14bcecbe5a89bda49c15b6f3c12cc9f84f5158acb8d1fa729b4326f"
+    },
+    {
+      "path": "extensions/src/core/show-library/registry.ts",
+      "bytes": 8643,
+      "sha256": "612bc5fb912fc733eb688cd6b6e8978cc6514d8e7e11cd785e0bf41c8dd7a5c4"
+    },
+    {
+      "path": "extensions/src/core/show-library/schemas.ts",
+      "bytes": 7174,
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata-schema.ts",
+      "bytes": 720,
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata.test.ts",
+      "bytes": 8371,
+      "sha256": "522d6cec99bd2d32ad067c8db73d37e8c5f55517ed0cc31354cd64c06b40b139"
+    },
+    {
+      "path": "extensions/src/core/show-library/stage-metadata.ts",
+      "bytes": 2199,
+      "sha256": "67e1aa9d8e2097a7cefc87fb212e4458d32a13bbfe5ee61605fe3bd86a4e719f"
+    },
+    {
+      "path": "extensions/src/core/show-library/tsconfig.focused.json",
+      "bytes": 108,
+      "sha256": "0b04857751cf84529a4f853865f5e5ffbcfbaebddb7736fe8c2a775f0ad69222"
+    }
+  ],
+  "acceptedCoreFileMounts": [
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/assets.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/assets.ts",
+      "bytes": 2776,
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/binding-policy.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/binding-policy.ts",
+      "bytes": 1935,
+      "sha256": "cb9c08771331e16c13c8a265d98b378dbc26b5474c7428695d5be580ae9e7a4f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/digest.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/digest.ts",
+      "bytes": 3614,
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity-rule.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity-rule.ts",
+      "bytes": 824,
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity-rule2-vectors.json",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity-rule2-vectors.json",
+      "bytes": 11193,
+      "sha256": "7a08fc3794059dccf5ab9e82405865ba235514cdc43453fca756641277c39788",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity.test.ts",
+      "bytes": 10252,
+      "sha256": "c77cf57aa7a26a62126ee0aa783f7ec098a0b7842e1e1a541108db02bf043c13",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity.ts",
+      "bytes": 4890,
+      "sha256": "3687dbfa8e1d7e9a9ad938ca0818f1606d42c73f1605214be33c5cec95d8d501",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/index.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/index.ts",
+      "bytes": 109,
+      "sha256": "c264b552da1fc7f682fd2c7538265a0b693fdaf0a51a7700fc4dd13123490957",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/manifest.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/manifest.ts",
+      "bytes": 3360,
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-fixtures.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3824,
+      "sha256": "e1150d837215e16650260e2c484c8972edebf70d416182870e5da5c12b385a09",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-port.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-port.test.ts",
+      "bytes": 6579,
+      "sha256": "a26b95b59413242fe403a0bf78ff8a4357274bd817dff79b1dd7c830550aec1a",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-port.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-port.ts",
+      "bytes": 607,
+      "sha256": "5d8d97472e072178a11b9adaf4f3a7d22aabfa4e072c6de74b2378173b9a2a2e",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-resolve.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 3032,
+      "sha256": "e90aebcedfb22a4814a616f4ecfebc76677f6a0bd0d213b39a17537d1c41d80d",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-schemas.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 6158,
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/primitives.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/primitives.ts",
+      "bytes": 3649,
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection-assets.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection-assets.test.ts",
+      "bytes": 9026,
+      "sha256": "4e5266450ee2fa436c92593d25085390c05e7b2402735bec1b1d4fcf1b41f15d",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection-schema.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection-schema.ts",
+      "bytes": 7064,
+      "sha256": "56fe9139e45c4868adbe0633bdecdd311067186ba763b54f1c3c74e42d477467",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection.test.ts",
+      "bytes": 9904,
+      "sha256": "2e98e1318927da153d23bcebbfd545d2237bf5e42d86d3e4dab8f342039ad6ef",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection.ts",
+      "bytes": 7491,
+      "sha256": "f328e0e7d1976052c7daf9affbbc488b41845b0ec0d54dd0557c6524e6367c60",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/registry.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/registry.test.ts",
+      "bytes": 10121,
+      "sha256": "13c0b25ab14bcecbe5a89bda49c15b6f3c12cc9f84f5158acb8d1fa729b4326f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/registry.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/registry.ts",
+      "bytes": 8643,
+      "sha256": "612bc5fb912fc733eb688cd6b6e8978cc6514d8e7e11cd785e0bf41c8dd7a5c4",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/schemas.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/schemas.ts",
+      "bytes": 7174,
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "bytes": 720,
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418-xdg/stage-metadata.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata.test.ts",
+      "bytes": 9820,
+      "sha256": "3a5dbe27bfbc2eb660cd1fa92e63481145fe363e43f7fa53b59022cce248072e",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/stage-metadata.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata.ts",
+      "bytes": 2199,
+      "sha256": "67e1aa9d8e2097a7cefc87fb212e4458d32a13bbfe5ee61605fe3bd86a4e719f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/tsconfig.focused.json",
+      "containerPath": "/workspace/extensions/src/core/show-library/tsconfig.focused.json",
+      "bytes": 108,
+      "sha256": "0b04857751cf84529a4f853865f5e5ffbcfbaebddb7736fe8c2a775f0ad69222",
+      "kind": "existing-accepted-file"
+    }
+  ],
+  "allCoreFileMounts": [
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/assets.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/assets.ts",
+      "bytes": 2776,
+      "sha256": "d8b50b13328c6df1e026ec26879e275d837b289d83411240fcbdec533afbaaa0",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/binding-policy.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/binding-policy.ts",
+      "bytes": 1935,
+      "sha256": "cb9c08771331e16c13c8a265d98b378dbc26b5474c7428695d5be580ae9e7a4f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/digest.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/digest.ts",
+      "bytes": 3614,
+      "sha256": "48da5947c15856d8f71f9ecff1542f20c661e2c583a690090817560e72c82021",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity-rule.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity-rule.ts",
+      "bytes": 824,
+      "sha256": "2ff70d052ba199a44a9e7c2c1b2a04d7bdbcfa7193d597da14f14e3fcf6532f4",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity-rule2-vectors.json",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity-rule2-vectors.json",
+      "bytes": 11193,
+      "sha256": "7a08fc3794059dccf5ab9e82405865ba235514cdc43453fca756641277c39788",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity.test.ts",
+      "bytes": 10252,
+      "sha256": "c77cf57aa7a26a62126ee0aa783f7ec098a0b7842e1e1a541108db02bf043c13",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/identity.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/identity.ts",
+      "bytes": 4890,
+      "sha256": "3687dbfa8e1d7e9a9ad938ca0818f1606d42c73f1605214be33c5cec95d8d501",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/index.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/index.ts",
+      "bytes": 109,
+      "sha256": "c264b552da1fc7f682fd2c7538265a0b693fdaf0a51a7700fc4dd13123490957",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/manifest.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/manifest.ts",
+      "bytes": 3360,
+      "sha256": "76e97c2343a36681a4c8a64af383c6989bd2040abbc60e3c8ff9a19a252324a3",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-fixtures.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-fixtures.ts",
+      "bytes": 3824,
+      "sha256": "e1150d837215e16650260e2c484c8972edebf70d416182870e5da5c12b385a09",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-port.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-port.test.ts",
+      "bytes": 6579,
+      "sha256": "a26b95b59413242fe403a0bf78ff8a4357274bd817dff79b1dd7c830550aec1a",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-port.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-port.ts",
+      "bytes": 607,
+      "sha256": "5d8d97472e072178a11b9adaf4f3a7d22aabfa4e072c6de74b2378173b9a2a2e",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-resolve.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-resolve.ts",
+      "bytes": 3032,
+      "sha256": "e90aebcedfb22a4814a616f4ecfebc76677f6a0bd0d213b39a17537d1c41d80d",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/preview-schemas.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/preview-schemas.ts",
+      "bytes": 6158,
+      "sha256": "42fc1d5411b60626bec1a9022b64b21c1dba34eccff0973762b7dc9a89bc7095",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/primitives.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/primitives.ts",
+      "bytes": 3649,
+      "sha256": "60fcf76917d34f7e73257638fa7b1c33e2ec6c1e12bacc27c133ebe437fff5c5",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection-assets.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection-assets.test.ts",
+      "bytes": 9026,
+      "sha256": "4e5266450ee2fa436c92593d25085390c05e7b2402735bec1b1d4fcf1b41f15d",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection-schema.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection-schema.ts",
+      "bytes": 7064,
+      "sha256": "56fe9139e45c4868adbe0633bdecdd311067186ba763b54f1c3c74e42d477467",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection.test.ts",
+      "bytes": 9904,
+      "sha256": "2e98e1318927da153d23bcebbfd545d2237bf5e42d86d3e4dab8f342039ad6ef",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/projection.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/projection.ts",
+      "bytes": 7491,
+      "sha256": "f328e0e7d1976052c7daf9affbbc488b41845b0ec0d54dd0557c6524e6367c60",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/registry.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/registry.test.ts",
+      "bytes": 10121,
+      "sha256": "13c0b25ab14bcecbe5a89bda49c15b6f3c12cc9f84f5158acb8d1fa729b4326f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/registry.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/registry.ts",
+      "bytes": 8643,
+      "sha256": "612bc5fb912fc733eb688cd6b6e8978cc6514d8e7e11cd785e0bf41c8dd7a5c4",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/schemas.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/schemas.ts",
+      "bytes": 7174,
+      "sha256": "a2728c29c81ef4f6d88d25338bf357e1a08fe3867d41a5c445a833366bdebf18",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata-schema.ts",
+      "bytes": 720,
+      "sha256": "facb6dc06f84047eb4402e6e237da7919658b155533041e1ff515edbbd893261",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/sb-metadata-delta-b59cb6cf523773f3189a7fd9937c8e0000d0565c6d68ed18c88d8c00f8b1a418-xdg/stage-metadata.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata.test.ts",
+      "bytes": 9820,
+      "sha256": "3a5dbe27bfbc2eb660cd1fa92e63481145fe363e43f7fa53b59022cce248072e",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/stage-metadata.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/stage-metadata.ts",
+      "bytes": 2199,
+      "sha256": "67e1aa9d8e2097a7cefc87fb212e4458d32a13bbfe5ee61605fe3bd86a4e719f",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/src/core/show-library/tsconfig.focused.json",
+      "containerPath": "/workspace/extensions/src/core/show-library/tsconfig.focused.json",
+      "bytes": 108,
+      "sha256": "0b04857751cf84529a4f853865f5e5ffbcfbaebddb7736fe8c2a775f0ad69222",
+      "kind": "existing-accepted-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425/compiled-index-authority.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/compiled-index-authority.ts",
+      "bytes": 4381,
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55",
+      "kind": "new-source-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425/compiled-index-schema.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/compiled-index-schema.ts",
+      "bytes": 22530,
+      "sha256": "a6bad0c603af33508a8b157c541490a9b9e113b7a1c4c080de517b63852034e9",
+      "kind": "new-source-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425/compiled-index-validation.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/compiled-index-validation.ts",
+      "bytes": 6046,
+      "sha256": "bf11b1ea664d13ef8038e4649351195a8c528a703f79933f03d210f6322ad0ec",
+      "kind": "new-source-file"
+    },
+    {
+      "hostPath": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/compiled-index-schema-4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425/compiled-index.test.ts",
+      "containerPath": "/workspace/extensions/src/core/show-library/compiled-index.test.ts",
+      "bytes": 31259,
+      "sha256": "8fcdbddd5d2dc21199edc3760995189cff38270dbd6ae16259f9572b8f767207",
+      "kind": "new-source-file"
+    }
+  ],
+  "vitestDependencyHashes": [
+    {
+      "path": "package.json",
+      "bytes": 5709,
+      "sha256": "df72ec137c86d8454d129967ed88c640012fa8db7950d58f79cee8a94df437f1",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    },
+    {
+      "path": "dist/chunks/index.C4tKZ0yW.js",
+      "bytes": 321013,
+      "sha256": "82c2b55e5dd5245c0c5e9eccd73fa6d7ade2694644175967e27a28b67932cb9d",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    },
+    {
+      "path": "dist/chunks/run.BTlFXlnv.js",
+      "bytes": 165869,
+      "sha256": "950469eb28cec3faa51f30c3203e1ab3099b54a52e3282b05f388930e7769717",
+      "matchesReadonlyExecutedServerDependencyFile": true
+    }
+  ],
+  "toolchainExpected": {
+    "node": "v24.22.2",
+    "vitest": "5.0.3",
+    "typescript": "7.0.2",
+    "zod": "4.6.6"
+  },
+  "testsCommand": [
+    "node",
+    "node_modules/vitest/vitest.mjs",
+    "run",
+    "src/core/show-library/compiled-index.test.ts",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--no-cache",
+    "--configLoader=runner",
+    "--reporter=json",
+    "--outputFile=/evidence/compiled-index-tests.json"
+  ],
+  "typesCommand": [
+    "node",
+    "node_modules/typescript/bin/tsc",
+    "--project",
+    "/plan/compiled-index.tsconfig.json"
+  ],
+  "expectedTests": 53,
+  "testTimeoutMs": 30000,
+  "excludedExecution": [
+    "old26-metadata-cases",
+    "theme-installation5",
+    "byte-strength7",
+    "full819",
+    "project-build",
+    "browser",
+    "pnpm-script",
+    "install",
+    "clone",
+    "image-pull"
+  ],
+  "d095Runtime": "FAILED_PENDING_REPLACEMENT",
+  "compiledPins": [],
+  "scopedBaselineWitnesses": [
+    {
+      "path": "extensions/package.json",
+      "bytes": 3427,
+      "gitBlob": "83a03c2818c3ad1d018d551da9b7c45e6e1aa726",
+      "sha256": "bc22399bfe10c8b6f892d715362b805c1fb7d3735e2e718b1fcecaf2fbf4c2cf"
+    },
+    {
+      "path": "extensions/src/core/packages/manifest.ts",
+      "bytes": 3577,
+      "gitBlob": "14c0ad865349abb6e3be48c07410a42b6675cf5d",
+      "sha256": "a57ca7a30837756ba5ca5a9d7ec03fc3c64c7a0f3d9c519a72d42e1bd34c327a"
+    },
+    {
+      "path": "extensions/src/core/packages/paths.ts",
+      "bytes": 1981,
+      "gitBlob": "4e8618d4fccdbbd547e63da20bbc4f0b0c8654e7",
+      "sha256": "6edd30a1b784db72be98cf760a557b1a55b6eda895e20e4fac25a984c6ab8508"
+    },
+    {
+      "path": "extensions/src/core/packages/protocol.ts",
+      "bytes": 5468,
+      "gitBlob": "2318a6e797c34299363ce344871a7120135a0048",
+      "sha256": "92aaef0a758fed85a6bb3e117ffda36c445eb26db13824416e57097004f69d99"
+    },
+    {
+      "path": "extensions/src/core/show-themes/selection.ts",
+      "bytes": 6727,
+      "gitBlob": "7d64d663dcc99568d6e0e70f04bb8c38e9d2649e",
+      "sha256": "c685af57e72ef60992666e052fd5bf5243cb6e8c528227ac87971530f704a723"
+    },
+    {
+      "path": "extensions/tsconfig.json",
+      "bytes": 371,
+      "gitBlob": "97a17997cf271eb078d6c58b13538f622e2ad5b4",
+      "sha256": "c966b1ce64de54a731ff593857364c4c9a5f7a1dfd89098629c8843137b1f4df"
+    },
+    {
+      "path": "extensions/vitest.config.ts",
+      "bytes": 718,
+      "gitBlob": "a74fe7bea654c873a3682ab2588ee088965250bb",
+      "sha256": "73742e609bb01e7567e054e7b0c3475d6ec973e1bb4a51f4b131374198db0d30"
+    },
+    {
+      "path": "package.json",
+      "bytes": 1284,
+      "gitBlob": "a321e255775dcddf9237f6ebe4d04215341e1bef",
+      "sha256": "6657d16b6c1ca197dd95026b84f80df0cb0655697d89003af9ab23e73c7101fd"
+    },
+    {
+      "path": "pnpm-lock.yaml",
+      "bytes": 225022,
+      "gitBlob": "b75087466384ce2e404bbd794d985622b51f0ad8",
+      "sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0"
+    },
+    {
+      "path": "tsconfig.json",
+      "bytes": 498,
+      "gitBlob": "a75970d4b605bf6975cae3a5f9ac0bde86b533a9",
+      "sha256": "d56ba48424503b6b02f99f8eb319e9ec7c1036c5cc0d31cc8a0795391937c474"
+    }
+  ],
+  "scopedImportClosure": [
+    "extensions/package.json",
+    "extensions/src/core/packages/manifest.ts",
+    "extensions/src/core/packages/paths.ts",
+    "extensions/src/core/packages/protocol.ts",
+    "extensions/src/core/show-library/compiled-index-authority.ts",
+    "extensions/src/core/show-library/compiled-index-schema.ts",
+    "extensions/src/core/show-library/compiled-index-validation.ts",
+    "extensions/src/core/show-library/compiled-index.test.ts",
+    "extensions/src/core/show-library/digest.ts",
+    "extensions/src/core/show-library/identity-rule.ts",
+    "extensions/src/core/show-library/primitives.ts",
+    "extensions/src/core/show-themes/selection.ts",
+    "extensions/tsconfig.json",
+    "extensions/vitest.config.ts",
+    "package.json",
+    "pnpm-lock.yaml",
+    "tsconfig.json"
+  ],
+  "auditScope": "All26 effective accepted files plus original26 lower hashes, four new hashes, and only the actual static import/config baseline witnesses. Full3297 audit not repeated.",
+  "reviewCorrectionSource": "53 cases: prior29 plus24 review negatives; none executed",
+  "securityProposal": {
+    "containerUser": "invoking approved runner uid:gid (not root)",
+    "capDrop": [
+      "ALL"
+    ],
+    "noNewPrivileges": true,
+    "coreTmpfsMode": "0555",
+    "coreFileMounts": "30 individually read-only file binds; no source copy/rewrite",
+    "noHostPort": true
+  }
+}

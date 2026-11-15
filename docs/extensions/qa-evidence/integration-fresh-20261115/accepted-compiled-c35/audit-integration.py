@@ -35,7 +35,7 @@ def digest(data):
     return hashlib.sha256(data).hexdigest()
 
 def write(name, data):
-    (OUT / name).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8")
+    (OUT / name).write_text(json.dumps(data, indent=2) + "\n", encoding="utf-8", newline="\n")
 
 def evidence_paths(ref):
     names = txt("diff-tree", "--no-commit-id", "--name-only", "-r", ref).splitlines()
