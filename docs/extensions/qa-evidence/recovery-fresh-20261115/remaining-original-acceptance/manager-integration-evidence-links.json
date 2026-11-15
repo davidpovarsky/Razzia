@@ -1,0 +1,29 @@
+{
+  "scope": "Pinned read-only manager evidence references; no new test run or duplicate raw archive verification claimed",
+  "files": [
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/oauth-startup-builder-wave-20261115/RESULTS.md",
+      "sha256": "9119341a2482787d746bb9c9ddccb752d1029b61b6be9b2b4d825d11bb05b878",
+      "bytes": 4580,
+      "evidenceCommit": "c30c8dce8ef70b166a1800a09eda82177ff7dcde"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/oauth-startup-builder-wave-20261115/TYPE_LEAF_RUNTIME_BRIDGE.json",
+      "sha256": "7c46957d2c8fec0e2ad290633812d6d72baced623266a4dd2fad1ec0500c6e40",
+      "bytes": 1083,
+      "evidenceCommit": "c30c8dce8ef70b166a1800a09eda82177ff7dcde"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/oauth-startup-builder-wave-20261115/ROOT_FINAL_READBACK.json",
+      "sha256": "996bed8c47f808fe8bca1992ce2a2fa7e1015f6918d164826926a4721aca3139",
+      "bytes": 3868,
+      "evidenceCommit": "c30c8dce8ef70b166a1800a09eda82177ff7dcde"
+    },
+    {
+      "path": "docs/extensions/qa-evidence/integration-fresh-20261115/oauth-startup-builder-wave-20261115/server-receipts/manager-root-5438-20261115-r2/startup-owners-counts.json",
+      "sha256": "d5a953c428f3916843354075ee917700238dc8de86efb8dc223a648f28463f12",
+      "bytes": 132,
+      "evidenceCommit": "c30c8dce8ef70b166a1800a09eda82177ff7dcde"
+    }
+  ]
+}
