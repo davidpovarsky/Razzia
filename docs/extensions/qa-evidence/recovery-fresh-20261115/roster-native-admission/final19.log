@@ -1,0 +1,29 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 1-character roster name with one native Player 8ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 24-character roster name with one native Player 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 25-character roster name with one native Player 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 29-character roster name with one native Player 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > admits a resolved 40-character roster name with one native Player 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > resolves the real roster row by phone without using caller fallback text 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > keeps unknown-roster and fallback names at the ordinary 24-character rule (25) 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > keeps unknown-roster and fallback names at the ordinary 24-character rule (40) 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > retains ordinary web and join-ticket maximum24 exactly 2ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: "" 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: " " 0ms
+ ✓ src/server/game/roster-native-admission.test.ts > rejects an invalid resolved stored name without native side effects: "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX" 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > does not join or mutate roster after the existing billing/capacity gate refuses 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > revalidates actual roster identity inside admission when removed 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > revalidates actual roster identity inside admission when replaced 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > revalidates actual roster identity inside admission when renamed 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > warm rebind preserves points/name and creates no second Player or new-player event 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > internal roster admission shares original socket and success-event path once 1ms
+ ✓ src/server/game/roster-native-admission.test.ts > preserves an unrelated native Player and its score during roster40 admission 1ms
+
+ Test Files  1 passed (1)
+      Tests  19 passed (19)
+   Start at  21:28:38
+   Duration  2.24s (import 54%, transform 44%, tests 1%)
+
+JSON report written to C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/docs/extensions/qa-evidence/recovery-fresh-20261115/roster-native-admission/final19.json
