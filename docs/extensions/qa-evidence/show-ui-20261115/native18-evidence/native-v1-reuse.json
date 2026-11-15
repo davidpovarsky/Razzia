@@ -1,0 +1,23 @@
+{
+  "beforeSourceSha256": "f684cb39f448da93431e008828c5c1f3109f8731e6d0c121f36ba7f8175f59e7",
+  "afterSourceSha256": "21de9536fece162c4651682bbb2400721464f9925c83c8b240c2c5ca2ab0e0ec",
+  "beforeEmittedJsSha256": "bb272f2ee8446a7872aef092e897f4236ec60bd5093b6e9fc84f333b9ffd6272",
+  "afterEmittedJsSha256": "bb272f2ee8446a7872aef092e897f4236ec60bd5093b6e9fc84f333b9ffd6272",
+  "sameEmittedAst": true,
+  "vite": "8.3.4",
+  "babel": "7.29.9",
+  "checkedInputs": 164,
+  "outputs": [
+    {
+      "path": "renderer.css",
+      "bytes": 148376,
+      "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+    },
+    {
+      "path": "renderer.js",
+      "bytes": 1044044,
+      "sha256": "afa5a0548cb74c89ddf601fdbfa3d8f44e02d0089c54ccab6eb2166f7f2ff2dc"
+    }
+  ],
+  "meaning": "Exact native15 artifacts admitted after all physical inputs/output hashes and executable-AST check of sole stage formatting change; no new pin."
+}

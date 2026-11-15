@@ -108,3 +108,18 @@ real F issuer/client3 are separate manager evidence. Real mounted issuer browser
 HTML/HEAD/TLS, native Save/Preview, full native scenes/settings, executable pins and
 G remain open. No frozen0.1 contract, canonical MCP digest or live installation
 authority is widened by this candidate packet.
+
+## Full V1 follow-up18 (failure preserved; successor20 pending)
+
+Native18 rechecked all164physical15inputs and exact outputs; the sole stage
+formatting bridge produced byte-identical Vite/Oxc JS and equal Babel AST. The full
+strengthened40 current-card matrix then produced37PASS/3WebKitFAIL (JA locale,
+358x202 and992x744 ready=false while correct card DOM was present). New count/size
+cases require ready=true and opacity1 as locale/identity already did. No timeout
+was widened. Raw54c59fdb355a34271a4b0924b1a59159a836c70b55194a4497c313a8f0164f30
+archive113files verified before exited1/PID0/noOOM. No new V1green claim.
+
+The following V1-only external flushSync update/resize correction is awaiting
+fresh20 full40 execution; no native stage/choreography/clock or V2 entry changes.
+Original37/40 remains independently retained. Consent19 is separately committed
+asfd38676 withTC0/new actual cross-tab native-memory regression2PASS and terminal0.

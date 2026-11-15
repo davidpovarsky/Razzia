@@ -174,6 +174,10 @@ for (const answerCount of [2, 3, 4, 5])
         await expect(page.getByTestId(`tadazz-card-${index}`)).toBeVisible()
       for (let index = answerCount; index < 5; index++)
         await expect(page.getByTestId(`tadazz-card-${index}`)).not.toBeVisible()
+      await expect(page.getByTestId("native-preview-surface")).toHaveAttribute(
+        "data-preview-ready", "true",
+      )
+      await expect(page.getByTestId("native-preview-surface")).toHaveCSS("opacity", "1")
       expect(
         await page.evaluate(() => (window as any).__showPreviewQa.failures()),
       ).toBe(0)
@@ -202,6 +206,10 @@ for (const size of [
       })
     }, size)
     await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+    await expect(page.getByTestId("native-preview-surface")).toHaveAttribute(
+      "data-preview-ready", "true",
+    )
+    await expect(page.getByTestId("native-preview-surface")).toHaveCSS("opacity", "1")
     const path = info.outputPath("native-stage.png")
     await page.screenshot({ path })
     await info.attach("native-stage.png", { path, contentType: "image/png" })
