@@ -21,6 +21,7 @@ No platform-only Rubik file is added to the native renderer fixture.
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
 | `qa-preview.spec.ts` | 9,861 | `d481e33c992e23bb7e998fe5ea4efff6f96a5e0e21e298f5833f4508f6eb2cd3` |
 | `qa-preview.config.ts` | 634 | `b0c0b523f1f342c70b5fe5d6080b78f14551e0b625155f4496a3cd8dad88a0fe` |
+| `qa-server.vite.config.ts` | 549 | `665904d21b063a7e5eb228403ecbc8a74eb05242fe3bd8822fba1d7568c96233` |
 
 The server verifies every allowlisted file SHA-256 before listening, rejects
 symlinks/path escapes, bounds each file to 4 MiB, reads via an opened file
@@ -59,12 +60,12 @@ has been executed or typechecked; these are test intentions, not passes.
 
 ## Proposed exact fixture overlay and budget
 
-On the already verified d095 source/dependency baseline, add only these five
+On the already verified d095 source/dependency baseline, add only these six
 QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
 In a new owned output root, place d095 `renderer.js` and `renderer.css`, copy
 `qa-browser.mjs` to `browser.mjs`, and copy the five inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-4,307,904 bytes; the five QA source files total 21,763 bytes. Existing source
+4,307,904 bytes; the six QA source files total 22,312 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.
@@ -77,10 +78,12 @@ Use the existing cached toolchain and a fresh owned output directory. Stop if
 the disk cap or reserve would be crossed. This is a requested budget, not a
 resource grant or a claim that browser binaries are present.
 
-After approval, inside that same isolated container launch the existing
-`extensions/node_modules/tsx/dist/cli.mjs` with the parent extension tsconfig,
-`qa-fixture-server.ts`, the owned fixture root and the exact `qa-browser.mjs`
-SHA above. Capture the emitted `QA_PORT`; run the existing Playwright CLI with
+The first direct Node/tsx server attempt failed on a native CSS import reached
+through the real host mapping. The scoped QA-only Vite SSR config builds the
+host separately using the parent tsconfig paths and normal CSS handling; it
+does not alter or rebuild the renderer payload. After approval, launch that
+host bundle with the owned fixture root and exact `qa-browser.mjs` SHA above.
+Capture the emitted `QA_PORT`; run the existing Playwright CLI with
 `qa-preview.config.ts` and `TADAZZ_QA_BASE=http://127.0.0.1:<QA_PORT>`. Capture
 exit codes, server request log, browser console/CSP events, source/baseline
 hashes, screenshots and real resource/elapsed usage. These proposed commands
