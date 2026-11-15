@@ -1,0 +1,43 @@
+{
+  "evidence": "ac94c06723d6fb31eea52ce80c2be2e34fb3daa8",
+  "auth5_source": "2a888de9c832670ca657a5774a85f70f9a38e3ad",
+  "crash_source": "66d794a4c7947af355de7dc27217e03b72b1a759",
+  "common": "2026-11-15 — Remaining actual unmounted authority acceptance; task remains OPEN.\nEvidence ac94c06723d6fb31eea52ce80c2be2e34fb3daa8. New five-case source2a888de9c832670ca657a5774a85f70f9a38e3ad:5/5 PASS,0skip/fail/cancel. Covers8 invalid manager proof variants plus unverified/disabled/profile/account-mode denial;6 service scope/version variants,3 wrong capabilities,copied/released real proof contexts; actual session revocation and password reset fencing cached register/poll; fresh-owner emergency revoke; missing/reincarnated Game and new-factory executor denial; actual lease and persisted-session expiry. No fake verifier or account predicates.\nNew crash source66d794a4c7947af355de7dc27217e03b72b1a759:1 case PASS with6 actual self-SIGKILL windows immediately before/after real authority SQLite COMMIT for initialize/issue/rotate. Private persistent ext4 fixtures; markers remain, fresh public readers deny without repair; known post-commit issue/rotation retain PENDING_DELIVERY metadata, versions1/2; issuer/executor/expiry retained. cgroup oom_kill delta0. Process-crash/fsync evidence, not hardware power loss, gateway key custody or Game recovery.\nActual affected TypeScript7.0.2 exit0; authored Prettier check explicitly bypasses evidence-tree ignore and passes.549 base+34/35 immutable overlay inputs verified. Application production files unchanged from formatter successordbf7906; no old10/100/18 rerun or changed old fixtures/negative-f541 controls. B account-db/startup source untouched.\n",
+  "details": {
+    "1219846294963052": "Live two-question1..5 DTMF/audio/host visibility and authentic provider callbacks remain external acceptance. No new PSTN call occurred; historical2 calls remain distinct from synthetic and process-crash witnesses.",
+    "1219881067977912": "These close additional unmounted auth/issuer/incarnation/crash witnesses, not the remaining legacy API09/10/11 or actual provider identity/new-attempt chronology. Gateway credential/key/root delivery and before-publication fresh-Game composition remain a versioned contract boundary. Keep incomplete.",
+    "1219999342715862": "No repeated100-client/load run was performed. Retain the prior actual100-synthetic-participant scoring result at88a6450 with its CPU/latency qualifications; no physical carrier capacity or historical failure root cause is newly claimed.",
+    "1219886202109096": "No new field invitation or browser-settings persistence run occurred. Actual verified/unverified/disabled account and issuer-session denial are now independently exercised, but they do not substitute for real-provider unknown-caller rejection or UI/field acceptance."
+  },
+  "ending": "\nFixed only Lane C runtime helper: terminal history excluded from live/own capacity checks, shared435MiB metadata counted once, exact own release preserves terminal/peer history. Original incorrect BLOCKED receipt retained. Both new jobs exited0/Pid0/noOOM, claims RELEASED; cumulative9150464B accounted below16MiB, private fixtures/failed receipts retained, metadata keeper/backups/production/gateway/peers untouched. No install, provider/customer/credential settings change, spend or production mount/deploy. Handoff docs/extensions/qa-evidence/telephony-fresh-20261115/REMAINING_AUTHORITY_HANDOFF_20261115.md.",
+  "receipts": [
+    {
+      "gid": "1219846294963052",
+      "completed": false,
+      "modified_at": "2026-11-15T16:54:08.932Z",
+      "prior_notes_preserved": true,
+      "exact_append_readback": true
+    },
+    {
+      "gid": "1219881067977912",
+      "completed": false,
+      "modified_at": "2026-11-15T16:54:08.853Z",
+      "prior_notes_preserved": true,
+      "exact_append_readback": true
+    },
+    {
+      "gid": "1219999342715862",
+      "completed": false,
+      "modified_at": "2026-11-15T16:54:08.867Z",
+      "prior_notes_preserved": true,
+      "exact_append_readback": true
+    },
+    {
+      "gid": "1219886202109096",
+      "completed": false,
+      "modified_at": "2026-11-15T16:54:08.860Z",
+      "prior_notes_preserved": true,
+      "exact_append_readback": true
+    }
+  ]
+}
