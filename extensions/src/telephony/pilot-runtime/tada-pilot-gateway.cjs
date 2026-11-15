@@ -26,9 +26,9 @@ const reply = (res, code, body) => {
 }
 
 async function callRazziaBackend(payload) {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), 3500)
   try {
-    const controller = new AbortController()
-    const timer = setTimeout(() => controller.abort(), 3500)
     const res = await fetch(RAZZIA_API_URL, {
       method: "POST",
       headers: {
@@ -42,12 +42,38 @@ async function callRazziaBackend(payload) {
       }),
       signal: controller.signal,
     })
-    clearTimeout(timer)
-    const data = await res.json().catch(() => null)
+    const data = await res.json().catch((error) => {
+      if (controller.signal.aborted) throw error
+      return null
+    })
     return { status: res.status, ok: res.ok, data }
   } catch {
     return { status: 0, ok: false, data: null }
+  } finally {
+    clearTimeout(timer)
   }
+}
+
+// Serialize one call's callbacks across backend awaits. A hangup closes the call
+// immediately, then waits for any in-flight join before disconnecting it.
+const callbackQueues = new Map()
+const identityQueues = new Map()
+const closedCalls = new Map()
+const rosterBindings = new Map()
+const REPLAY_TTL_MS = 10 * 60 * 1000
+
+function forgetSession(id) {
+  const session = live.get(id)
+  if (session?.bindingKey && rosterBindings.get(session.bindingKey) === id) {
+    rosterBindings.delete(session.bindingKey)
+  }
+  live.delete(id)
+}
+
+function closeCall(id) {
+  if (!closedCalls.has(id)) closedCalls.set(id, { closedAt: Date.now() })
+  const gate = callbackQueues.get(id)
+  if (gate) gate.closed = true
 }
 
 const server = http.createServer((req, res) => {
@@ -91,6 +117,7 @@ const server = http.createServer((req, res) => {
   })
 
   req.on("end", async () => {
+    let releaseCall
     try {
       const params = new URLSearchParams(url.search)
       for (const [k, v] of new URLSearchParams(
@@ -109,23 +136,83 @@ const server = http.createServer((req, res) => {
         (params.get("ApiDID") || "").replace(/\D/g, "") || undefined
       const id = crypto.createHash("sha256").update(rawId).digest("hex")
 
-      if (params.has("ApiHangupExtension") || params.get("hangup") === "yes") {
+      const isHangup =
+        params.has("ApiHangupExtension") || params.get("hangup") === "yes"
+      for (const [callId, closed] of closedCalls) {
+        if (!closed.cleaning && Date.now() - closed.closedAt >= REPLAY_TTL_MS) {
+          closedCalls.delete(callId)
+        }
+      }
+      const closed = closedCalls.get(id)
+      if (closed && !(isHangup && closed.retry && !closed.cleaning)) {
+        reply(res, 200, "hangup")
+        return
+      }
+      let gate = callbackQueues.get(id)
+      if (!gate) {
+        gate = { tail: Promise.resolve(), closed: false }
+        callbackQueues.set(id, gate)
+      }
+      // The provider repeats its phone identity on callbacks. Serialize redials
+      // of that identity too, so an earlier slow join cannot overtake the rebind.
+      // Keep queue keys hashed; canonical roster binding below handles aliases
+      // once the backend has confirmed their identity.
+      const queuePhone = (
+        rawPhone ||
+        live.get(id)?.phoneRaw ||
+        closed?.retry?.phone ||
+        ""
+      ).replace(/[\s()+-]/g, "")
+      const identityKey = queuePhone
+        ? "phone:" +
+          crypto.createHash("sha256").update(queuePhone).digest("hex")
+        : "call:" + id
+      const previous = Promise.all([
+        gate.tail,
+        identityQueues.get(identityKey) || Promise.resolve(),
+      ])
+      let release
+      const completion = new Promise((resolve) => (release = resolve))
+      gate.tail = completion
+      identityQueues.set(identityKey, completion)
+      releaseCall = () => {
+        release()
+        if (gate.tail === completion) callbackQueues.delete(id)
+        if (identityQueues.get(identityKey) === completion) {
+          identityQueues.delete(identityKey)
+        }
+      }
+      if (isHangup) {
+        closeCall(id)
+        closedCalls.get(id).cleaning = true
+      }
+      await previous
+      if (gate.closed && !isHangup) {
+        reply(res, 200, "hangup")
+        return
+      }
+
+      if (isHangup) {
         const existing = live.get(id)
-        live.delete(id)
-        await callRazziaBackend({
+        forgetSession(id)
+        const closure = closedCalls.get(id)
+        const payload = closure.retry || {
           action: "hangup",
           dialedNumber,
           callId: id.slice(0, 24),
           phone: rawPhone || existing?.phoneRaw || null,
           rosterPlayerId: existing?.rosterPlayerId || undefined,
-        })
+        }
+        const cleanup = await callRazziaBackend(payload)
+        closure.retry = cleanup.ok && cleanup.data?.ok === true ? null : payload
+        closure.cleaning = false
         reply(res, 200, "hangup")
         return
       }
 
       if (live.size > 500) {
         for (const [k, v] of live) {
-          if (Date.now() - v.lastSeen > 7200000) live.delete(k)
+          if (Date.now() - v.lastSeen > 7200000) forgetSession(k)
         }
       }
 
@@ -145,6 +232,15 @@ const server = http.createServer((req, res) => {
         phone: s.phoneRaw,
         rosterPlayerId: s.rosterPlayerId || undefined,
       })
+      if (gate.closed) {
+        // Preserve the join identity for the queued hangup, but emit no digit
+        // or audio from a callback that completed after the disconnect arrived.
+        if (pollRes.data?.rosterPlayerId) {
+          s.rosterPlayerId = pollRes.data.rosterPlayerId
+        }
+        reply(res, 200, "hangup")
+        return
+      }
 
       // If server explicitly rejects caller (e.g., phone_invite_only or locked), hang up cleanly
       if (
@@ -153,7 +249,8 @@ const server = http.createServer((req, res) => {
         (pollRes.data.reason === "phone_invite_only" ||
           pollRes.data.error === "errors:game.locked")
       ) {
-        live.delete(id)
+        forgetSession(id)
+        closeCall(id)
         console.log(
           "TADA_PHONE_CALLBACK",
           new Date().toISOString(),
@@ -183,8 +280,25 @@ const server = http.createServer((req, res) => {
         s.joinedConfirmed = false
         s.pendingVerdictCue = null
         s.lastDeliveredVerdictEpoch = 0
+        if (rosterBindings.get(s.bindingKey) === id) {
+          rosterBindings.delete(s.bindingKey)
+        }
+        s.bindingKey = null
       }
       if (targetGameId) s.gameId = targetGameId
+      if (joinedConfirmed && targetGameId && serverData.rosterPlayerId) {
+        const bindingKey = JSON.stringify([
+          targetGameId,
+          serverData.rosterPlayerId,
+        ])
+        const previousCall = rosterBindings.get(bindingKey)
+        if (previousCall && previousCall !== id) {
+          closeCall(previousCall)
+          forgetSession(previousCall)
+        }
+        s.bindingKey = bindingKey
+        rosterBindings.set(bindingKey, id)
+      }
 
       // The generic keypad read can span multiple questions (provider timeout is 30s).
       // Bind each arriving digit to the fresh poll, never the previous read's epoch.
@@ -229,6 +343,10 @@ const server = http.createServer((req, res) => {
           answerIndex: zeroIdx,
           epoch: serverData?.state?.epoch,
         })
+        if (gate.closed) {
+          reply(res, 200, "hangup")
+          return
+        }
         console.log(
           "TADA_PHONE_ANSWER",
           new Date().toISOString(),
@@ -273,6 +391,8 @@ const server = http.createServer((req, res) => {
     } catch (e) {
       console.error("TADA_PHONE_EXCEPTION", e?.name)
       reply(res, 200, "hangup")
+    } finally {
+      releaseCall?.()
     }
   })
 })

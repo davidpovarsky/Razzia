@@ -1,0 +1,162 @@
+TAP version 13
+# Subtest: gateway maps 1..5 across two questions and rejects invalid, duplicate and closed-window input
+ok 1 - gateway maps 1..5 across two questions and rejects invalid, duplicate and closed-window input
+  ---
+  duration_ms: 25.8825
+  type: 'test'
+  ...
+# Subtest: A to B redial survives late A hangup and rejects closed/reused A callbacks
+not ok 2 - A to B redial survives late A hangup and rejects closed/reused A callbacks
+  ---
+  duration_ms: 8.026
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:134:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    + actual - expected
+
+    + 'read=f-/9/000.f-/9/001.f-/9/005=td1,,1,1,30,No,no,no,,,,Ok,None,,no'
+    - 'hangup'
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 'hangup'
+  actual: 'read=f-/9/000.f-/9/001.f-/9/005=td1,,1,1,30,No,no,no,,,,Ok,None,,no'
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:143:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: overlapping duplicate provider callbacks issue only one answer request
+not ok 3 - overlapping duplicate provider callbacks issue only one answer request
+  ---
+  duration_ms: 4.6044
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:150:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    2 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 2
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:163:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: hangup during an in-flight poll prevents a later answer and cleans the joined session
+not ok 4 - hangup during an in-flight poll prevents a later answer and cleans the joined session
+  ---
+  duration_ms: 5.3297
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:167:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    1 !== 0
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:180:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: out-of-order poll delivery cannot roll the local epoch back
+not ok 5 - out-of-order poll delivery cannot roll the local epoch back
+  ---
+  duration_ms: 4.0128
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:185:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    1 !== 2
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 2
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:202:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: epoch advance between poll and answer stays rejected without a guessed verdict
+ok 6 - epoch advance between poll and answer stays rejected without a guessed verdict
+  ---
+  duration_ms: 3.561
+  type: 'test'
+  ...
+# Subtest: invitation-only rejection removes the local session without a join cue
+ok 7 - invitation-only rejection removes the local session without a join cue
+  ---
+  duration_ms: 2.978
+  type: 'test'
+  ...
+# Subtest: failed backend fetch always disposes its deadline timer
+not ok 8 - failed backend fetch always disposes its deadline timer
+  ---
+  duration_ms: 2.4143
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:224:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+
+    1 !== 0
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 0
+  actual: 1
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:228:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: backend deadline covers a stalled response body, not just headers
+not ok 9 - backend deadline covers a stalled response body, not just headers
+  ---
+  duration_ms: 5.1309
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\src\\telephony\\pilot-runtime\\tada-pilot-gateway.faults.test.cjs:231:1'
+  failureType: 'testCodeFailure'
+  error: |-
+    deadline remains armed until body has completed
+
+    0 !== 1
+
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 1
+  actual: 0
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-telephony-fresh-20261115\extensions\src\telephony\pilot-runtime\tada-pilot-gateway.faults.test.cjs:245:12)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+1..9
+# tests 9
+# suites 0
+# pass 3
+# fail 6
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 232.8089
