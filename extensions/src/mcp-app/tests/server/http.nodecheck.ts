@@ -86,7 +86,7 @@ function setup(overrides: Dependencies = {}, responseTimeoutMs?: number) {
   return { app, a, b, tokens, request, connect }
 }
 const list = { jsonrpc: "2.0", id: 1, method: "tools/list", params: {} }
-test("official HTTP client negotiates, discovers eight strict tools and reads the honest placeholder", async () => {
+test("official HTTP client discovers eight strict tools without a missing UI artifact", async () => {
   const h = setup()
   const client = await h.connect()
   try {
@@ -96,16 +96,10 @@ test("official HTTP client negotiates, discovers eight strict tools and reads th
       tools.tools.filter(
         (t) => (t._meta?.ui as { resourceUri?: string })?.resourceUri,
       ).length,
-      1,
+      0,
     )
-    assert.equal((await client.listResources()).resources.length, 3)
-    const resource = await client.readResource({ uri: PREVIEW_RESOURCE })
-    assert.equal(resource.contents.length, 1)
-    assert.equal(
-      "text" in resource.contents[0]! &&
-        resource.contents[0]!.text.includes("<body></body>"),
-      true,
-    )
+    assert.equal((await client.listResources()).resources.length, 2)
+    await assert.rejects(client.readResource({ uri: PREVIEW_RESOURCE }))
   } finally {
     await client.close()
   }
@@ -410,3 +404,61 @@ test(
     assert.equal((await h.app.fetch(h.request(list))).status, 503)
   },
 )
+
+test("cancelled V2 candidate work retains admission and shutdown until its real host promise settles", async () => {
+  let release!: () => void, entered!: () => void
+  const held = new Promise<void>((resolve) => (release = resolve)),
+    started = new Promise<void>((resolve) => (entered = resolve))
+  const store = new MemoryDrafts()
+  const h = setup(
+    {
+      drafts: store,
+      previewCandidateV2: {
+        render: async () => {
+          entered()
+          await held
+          throw new Error("synthetic cancelled host")
+        },
+      },
+    },
+    100,
+  )
+  const client = await h.connect()
+  const draft = data(
+    await client.callTool({
+      name: "create_game_draft",
+      arguments: {
+        contractVersion: "0.1.0",
+        authoredShowJson: JSON.stringify(show()),
+        idempotencyKey: newKey(),
+      },
+    }),
+  )
+  await client.close()
+  const call = h.app.fetch(
+    h.request({
+      jsonrpc: "2.0",
+      id: 1,
+      method: "tools/call",
+      params: {
+        name: "preview_game",
+        arguments: {
+          contractVersion: "0.1.0",
+          draftId: draft.draftId,
+          expectedRevision: 1,
+        },
+      },
+    }),
+  )
+  await started
+  assert.equal((await call).status, 504)
+  let closed = false
+  const closing = h.app.close().then(() => {
+    closed = true
+  })
+  await new Promise<void>((resolve) => setImmediate(resolve))
+  assert.equal(closed, false)
+  release()
+  await closing
+  assert.equal(closed, true)
+})

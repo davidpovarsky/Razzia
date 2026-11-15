@@ -7,6 +7,8 @@ import type {
 } from "../contracts/schemas.ts"
 import type { ToolName } from "../contracts/tools.ts"
 import type { PreviewIdentityEnvelope } from "../contracts/canonical.ts"
+import type { CandidatePreviewPortV2 } from "./preview-candidate-v2.ts"
+import type { PreviewUiResource } from "./preview-resource.ts"
 
 export interface VerifiedPrincipal {
   issuer: string
@@ -89,6 +91,10 @@ export interface Dependencies {
   drafts?: DraftRepository
   authoring?: AuthoringPolicy
   catalog?: Catalog
+  /** Optional data-only V2 development seam. Never an accepted V1 renderer. */
+  previewCandidateV2?: CandidatePreviewPortV2
+  /** G's reviewed static widget artifact + explicit host CSP/permission. */
+  previewUiResource?: PreviewUiResource
   /** M2-specific projection adapter; future implementation imports accepted SB
    * exports. No SB schema/type/projection engine is duplicated here. */
   preview?: {

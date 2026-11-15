@@ -11,6 +11,10 @@
     "./oauth": "./first-party/oauth.ts",
     "./contracts": "./contracts/index.ts",
     "./native-save-contracts": "./contracts/native-save.ts",
+    "./preview-candidate-v2": "./server/preview-candidate-v2.ts",
+    "./preview-candidate-contracts": "./contracts/preview-candidate-v2.ts",
+    "./preview-candidate-consumer": "./client/preview-candidate-v2.ts",
+    "./preview-resource": "./server/preview-resource.ts",
     "./first-party": "./first-party/index.ts"
   },
   "engines": {
