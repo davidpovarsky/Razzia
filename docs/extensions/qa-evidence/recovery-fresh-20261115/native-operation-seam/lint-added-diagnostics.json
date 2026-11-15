@@ -1,0 +1,27 @@
+{
+  "newOrChangedDiagnostics": [
+    "extensions/src/server/storage/creation-reservation.ts:778:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error( \"Native operation reserved or unresolved; no duplicate creation\", )` with `{throw new Error( \"Native operation reserved or unresolved; no duplicate creation\", )}`.",
+    "extensions/src/server/storage/creation-reservation.ts:782:15: error eslint(curly): Expected { after 'if' condition. help: Replace `throw new Error(\"C1 creation scope is busy or unresolved\")` with `{throw new Error(\"C1 creation scope is busy or unresolved\")}`.",
+    "extensions/src/server/storage/creation-reservation.ts:154:3: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:600:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:703:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:705:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:708:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:711:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:716:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:721:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:724:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:730:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:736:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:750:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:758:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:771:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:774:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:777:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:781:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:783:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement.",
+    "extensions/src/server/storage/creation-reservation.ts:788:13: error @stylistic(padding-line-between-statements): Expected blank line before this statement."
+  ],
+  "unchangedLineDiagnostics": 193,
+  "method": "Diff line mapping vs f11b29d; existing diagnostics not suppressed"
+}

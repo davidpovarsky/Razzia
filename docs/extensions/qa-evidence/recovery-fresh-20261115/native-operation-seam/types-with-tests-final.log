@@ -1,0 +1,3 @@
+docs/extensions/qa-evidence/recovery-fresh-20261115/native-operation-seam/operation-tests.ts(149,101): error TS2322: Type 'Promise<Promise<void>>' is not assignable to type 'void | Promise<void>'.
+  Type 'Promise<Promise<void>>' is not assignable to type 'Promise<void>'.
+    Type 'Promise<void>' is not assignable to type 'void'.

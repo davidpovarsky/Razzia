@@ -1,0 +1,100 @@
+TAP version 13
+# Subtest: baseline: optional trusted seam is present only when selected
+ok 1 - baseline: optional trusted seam is present only when selected
+  ---
+  duration_ms: 10.381372
+  type: 'test'
+  ...
+# Subtest: default C1 create remains compatible and creates no operation registry
+ok 2 - default C1 create remains compatible and creates no operation registry
+  ---
+  duration_ms: 881.177805
+  type: 'test'
+  ...
+# Subtest: missing native owner and accounts OFF refuse before operation writes
+ok 3 - missing native owner and accounts OFF refuse before operation writes
+  ---
+  duration_ms: 28.178319
+  type: 'test'
+  ...
+# Subtest: binding, content and owner mismatches preserve result and all bytes
+ok 4 - binding, content and owner mismatches preserve result and all bytes
+  ---
+  duration_ms: 262.800949
+  type: 'test'
+  ...
+# Subtest: original outcome survives later native edits and deletion
+ok 5 - original outcome survives later native edits and deletion
+  ---
+  duration_ms: 1453.982836
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: claim-before-target
+ok 6 - fresh-process crash/reconcile: claim-before-target
+  ---
+  duration_ms: 855.464834
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: bound-before-public
+ok 7 - fresh-process crash/reconcile: bound-before-public
+  ---
+  duration_ms: 2344.85285
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: commit-before-operation
+ok 8 - fresh-process crash/reconcile: commit-before-operation
+  ---
+  duration_ms: 1421.412071
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-native-commit
+ok 9 - fresh-process crash/reconcile: after-native-commit
+  ---
+  duration_ms: 1591.690899
+  type: 'test'
+  ...
+# Subtest: fresh-process crash/reconcile: after-f-outcome
+ok 10 - fresh-process crash/reconcile: after-f-outcome
+  ---
+  duration_ms: 2338.149252
+  type: 'test'
+  ...
+# Subtest: tampered committed outcome remains unresolved and byte preserved
+ok 11 - tampered committed outcome remains unresolved and byte preserved
+  ---
+  duration_ms: 287.062543
+  type: 'test'
+  ...
+# Subtest: operation directory lost-CAS cannot allocate a native target
+ok 12 - operation directory lost-CAS cannot allocate a native target
+  ---
+  duration_ms: 35.65411
+  type: 'test'
+  ...
+# Subtest: flag change cannot reinterpret an established tenant operation as global
+ok 13 - flag change cannot reinterpret an established tenant operation as global
+  ---
+  duration_ms: 268.657171
+  type: 'test'
+  ...
+# Subtest: record CAS loss retains private evidence without public publication
+ok 14 - record CAS loss retains private evidence without public publication
+  ---
+  duration_ms: 185.686554
+  type: 'test'
+  ...
+# Subtest: live cooperating writer contention is rejected before binding allocation
+ok 15 - live cooperating writer contention is rejected before binding allocation
+  ---
+  duration_ms: 192.86645
+  type: 'test'
+  ...
+1..15
+# tests 15
+# suites 0
+# pass 15
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 12926.672872

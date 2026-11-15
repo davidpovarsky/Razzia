@@ -1,0 +1,146 @@
+{
+  "sourceCommit": "1909da2f653377c545923b2e91dd2f4b1a2cf802",
+  "cases": 15,
+  "passed": 15,
+  "failed": 0,
+  "skipped": 0,
+  "genuineSIGKILL": 5,
+  "distinctObservedChildren": 22,
+  "exitedZero": 17,
+  "actualBundledInputs": 187,
+  "bundleSha256": "df9cf4da24a5507d548dcbc8a2a6cb2c1409d0746745c685a91e9e75a4d43b0d",
+  "runtime": "Local existing WSL Ubuntu, Linux6.18, Node26.11.1, /tmp persistent ext4",
+  "compilerTarget": "node24; this is not pinned Node24 execution",
+  "checks": {
+    "scopedTypesWithTests": 0,
+    "sourceFormat": 0,
+    "newModulesLint": 0,
+    "wholeExistingCoreLint": 1,
+    "unchangedLineDiagnostics": 193,
+    "changedLineDiagnostics": 0
+  },
+  "productFiles": [
+    {
+      "path": "extensions/src/server/storage/creation-reservation.ts",
+      "sha256": "58d38c6cccbf2dc7a1d7d65ea7263d7f1b1d16ddb32ddb05c1f1565d573ca8e1",
+      "lines": 939
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-record.ts",
+      "sha256": "e9847ef7ec7cde5e03daaa7a6b94cffc0407d00557d23f173633a58e7c5e324c",
+      "lines": 238
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-store.ts",
+      "sha256": "e850e4c1f4482cea1d54a7d7340af81d9e14e0e06577e2ac316054e0c687c51e",
+      "lines": 249
+    },
+    {
+      "path": "extensions/src/server/storage/creation-operation-types.ts",
+      "sha256": "c40464a399fe5a54bd867765cdc5eb8c18741fd61c9abf60be09100808eeffee",
+      "lines": 35
+    },
+    {
+      "path": "extensions/src/server/index.ts",
+      "sha256": "99d70df1091431c9cead45c2d7e0a87207e0a6a571e5363e1650e8295f81011e",
+      "lines": 72
+    }
+  ],
+  "receipts": [
+    {
+      "path": "candidate-complete-final-receipts/after-f-outcome-checkpoint.json",
+      "sha256": "7b591caca37da6e8b5f8a326852d525f487bcab76e278b848455dfce85770545",
+      "bytes": 3076
+    },
+    {
+      "path": "candidate-complete-final-receipts/after-f-outcome-replay.json",
+      "sha256": "81920be129f3f4995b138c814c81e05b848dc9d6cbf3301bc098ac071fa3fce0",
+      "bytes": 5744
+    },
+    {
+      "path": "candidate-complete-final-receipts/after-native-commit-checkpoint.json",
+      "sha256": "5df1c518bdae3778bae988a7431d9c3b1360cefc3372162560a84b3fabdfdc99",
+      "bytes": 2986
+    },
+    {
+      "path": "candidate-complete-final-receipts/after-native-commit-replay.json",
+      "sha256": "23df7bc2f82cbd1a0f825373d888704f0c47086a0a8574ae8e51f6b1bc56ba95",
+      "bytes": 5388
+    },
+    {
+      "path": "candidate-complete-final-receipts/bound-before-public-checkpoint.json",
+      "sha256": "878667b89db0dd66dc29b486163d9bcfca98ca59ac4c7ec43ac169a63c08e95b",
+      "bytes": 2900
+    },
+    {
+      "path": "candidate-complete-final-receipts/bound-before-public-replay.json",
+      "sha256": "f8384b5fbae79f1970e3cdb8b659378a39a62f7fa44d07d49fbcd94f66fbb79c",
+      "bytes": 3824
+    },
+    {
+      "path": "candidate-complete-final-receipts/claim-before-target-checkpoint.json",
+      "sha256": "efb8bfa6b0ef0a7331959f724a73bc877a92b878ab00a1cd174b504505840ca6",
+      "bytes": 1985
+    },
+    {
+      "path": "candidate-complete-final-receipts/claim-before-target-replay.json",
+      "sha256": "a300ba20fab875dca9a712ac6c0c8c4afd0030aa84178ad53783e7d319214377",
+      "bytes": 3947
+    },
+    {
+      "path": "candidate-complete-final-receipts/commit-before-operation-checkpoint.json",
+      "sha256": "32cf229aa8e31e6df01ecaca377a4adaf6563a3a91ab90c4007107188dd3d836",
+      "bytes": 3217
+    },
+    {
+      "path": "candidate-complete-final-receipts/commit-before-operation-replay.json",
+      "sha256": "2b5e1d0a83718854c21ab21b661400dacaf48fec0050d35eab2c20e5fdba0d07",
+      "bytes": 7560
+    },
+    {
+      "path": "candidate-complete-final-receipts/default-compatible.json",
+      "sha256": "6f6e0633eef12a416a9146ffe60bb2f7a357f99970080fe180708f03d152f01b",
+      "bytes": 1534
+    },
+    {
+      "path": "candidate-complete-final-receipts/flag-change.json",
+      "sha256": "e934ebd7df631208673669baab40a8487284461d3220e82562649373d890a3b2",
+      "bytes": 2534
+    },
+    {
+      "path": "candidate-complete-final-receipts/later-edits.json",
+      "sha256": "7959fffde096d3da36f2560cb723527456e28f7858a9d05873831610149bddbe",
+      "bytes": 8811
+    },
+    {
+      "path": "candidate-complete-final-receipts/lost-cas.json",
+      "sha256": "e5806abc9852ae0fffdc1ddd120599b72249c04f0b3699ee589de8c8178a6b38",
+      "bytes": 1366
+    },
+    {
+      "path": "candidate-complete-final-receipts/mismatch-preservation.json",
+      "sha256": "e1d7410d8a75859667aa7bdab8f061a6cd1cb00b6fd589648829ee517ee01883",
+      "bytes": 2534
+    },
+    {
+      "path": "candidate-complete-final-receipts/native-scope-required.json",
+      "sha256": "b8770c44d847b27b8cc71f67e9d3a919584e273d440e009ba896b950bebd59b3",
+      "bytes": 1366
+    },
+    {
+      "path": "candidate-complete-final-receipts/record-cas-loss.json",
+      "sha256": "6e3bd5c14cfaac71eb63109a34f50db9e7ba71f1253dbb6935bfcf759cf7bb61",
+      "bytes": 3286
+    },
+    {
+      "path": "candidate-complete-final-receipts/tamper.json",
+      "sha256": "9110b240a0bd9509d7127904bf35237ba3562c5ff12c499bfd8925604755d94f",
+      "bytes": 2536
+    }
+  ],
+  "inheritedUntrackedPreserved": 16,
+  "oracleJobs": 0,
+  "installations": 0,
+  "customerOrProductionOperations": 0,
+  "boundary": "F auth/consent ledger and real host composition, independent integrated qualification and hardware durability remain separate"
+}
