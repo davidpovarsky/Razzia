@@ -1,0 +1,12 @@
+{
+  "commit": "bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+  "files": 1332,
+  "bytes": 121758976,
+  "archiveBytes": 112727387,
+  "archiveSha256": "f97c79c377c3e7f1c4670c9d14518ccc0ce8bbf0e41bbf95028d089aaf7dabfc",
+  "manifestSha256": "5528d18ebb39d806c6ea22ec215df0c6b4017459042d78332ad15d5a4d2218f3",
+  "unchangedReviewedBlobs": 12,
+  "testsRun": false,
+  "buildsRun": false,
+  "installsRun": false
+}

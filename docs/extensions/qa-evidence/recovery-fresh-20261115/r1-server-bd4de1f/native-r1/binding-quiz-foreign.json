@@ -1,0 +1,2288 @@
+{
+  "scenario": "quiz-foreign",
+  "state": "PASS",
+  "nativeId": "IrFmto7LfwK9BgbryLKtG",
+  "actualBaseName": "native-r1-u0NMzAAL.json",
+  "before": {
+    "files": {
+      "quizz/IrFmto7LfwK9BgbryLKtG.json": {
+        "sha256": "15fddb657703a5d244ac7960f72286ce3b5d19430655c9d20cb62098b8d1e306",
+        "length": 326,
+        "json": {
+          "id": "kCqk1oXLRT7LJ8szjw7L5",
+          "gameMode": "quiz",
+          "subject": "Foreign sentinel",
+          "questions": [
+            {
+              "type": "single",
+              "question": "Synthetic native question",
+              "answers": [
+                "A",
+                "B"
+              ],
+              "solutions": [
+                0
+              ],
+              "cooldown": 3,
+              "time": 20
+            }
+          ]
+        }
+      },
+      "quizz/native-r1-u0NMzAAL.json": {
+        "sha256": "1b8339382283187c4f67a109c439dcf9d5e533f6b2715ec63914a7889706e633",
+        "length": 408,
+        "json": {
+          "id": "IrFmto7LfwK9BgbryLKtG",
+          "gameMode": "quiz",
+          "subject": "Native R1",
+          "questions": [
+            {
+              "type": "single",
+              "question": "Synthetic native question",
+              "media": {
+                "type": "image",
+                "url": "/media/r1-native.png"
+              },
+              "answers": [
+                "A",
+                "B"
+              ],
+              "solutions": [
+                0
+              ],
+              "cooldown": 3,
+              "time": 20
+            }
+          ]
+        }
+      },
+      "quizz/unrelated-8CVh447E.json": {
+        "sha256": "d743117fc597e8373906abf7cad2ea3257ff7fcb43a95d6cf48fb86405666b46",
+        "length": 322,
+        "json": {
+          "id": "gIfOUG73Ay6JM7hk7Fv2t",
+          "gameMode": "quiz",
+          "subject": "Unrelated R1",
+          "questions": [
+            {
+              "type": "single",
+              "question": "Synthetic native question",
+              "answers": [
+                "A",
+                "B"
+              ],
+              "solutions": [
+                0
+              ],
+              "cooldown": 3,
+              "time": 20
+            }
+          ]
+        }
+      },
+      "extensions/quizzes/IrFmto7LfwK9BgbryLKtG.json": {
+        "sha256": "eb81cf463a0dd73dfdf0619712f7ddb387bc9b58d4827325c2bee0ad96c59cf4",
+        "length": 3755,
+        "json": {
+          "schemaVersion": 2,
+          "revision": 1,
+          "quizId": "IrFmto7LfwK9BgbryLKtG",
+          "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+          "questionIds": [
+            "00000000-0000-4000-8000-000000000081"
+          ],
+          "timeline": [
+            {
+              "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+              "kind": "opening",
+              "sceneId": "00000000-0000-4000-8000-000000000082"
+            },
+            {
+              "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+              "kind": "question",
+              "questionId": "00000000-0000-4000-8000-000000000081"
+            }
+          ],
+          "scenes": {
+            "00000000-0000-4000-8000-000000000082": {
+              "id": "00000000-0000-4000-8000-000000000082",
+              "kind": "opening",
+              "title": "Native scene",
+              "durationMs": 2000,
+              "advance": "manual",
+              "stageLayout": "cinema",
+              "mediaFit": "cover",
+              "logoPosition": "center",
+              "textOverlay": true,
+              "endBehavior": "holdFrame",
+              "volume": 0.8,
+              "loop": false,
+              "muted": false,
+              "showControls": false,
+              "lottieFit": "contain",
+              "lottieLoop": true,
+              "lottieSpeed": 1,
+              "background": {
+                "url": "/media/other-background.png",
+                "fit": "cover",
+                "position": "center",
+                "overlayOpacity": 0.2
+              },
+              "audio": {
+                "mode": "custom",
+                "url": "/media/other-audio.mp3",
+                "volume": 0.4,
+                "loop": false
+              }
+            }
+          },
+          "defaults": {
+            "showTheme": {
+              "id": "tadazz-classic",
+              "version": "1.0.0",
+              "overrides": {}
+            },
+            "newQuestionMode": "quiz",
+            "leaderboardPolicy": "cardOnly",
+            "advanceMode": "auto"
+          },
+          "teams": {
+            "enabled": false,
+            "teams": [],
+            "autoAssign": "roundRobin"
+          },
+          "audio": {
+            "cues": {
+              "start": {
+                "source": "media",
+                "url": "/media/other-audio.mp3",
+                "volume": 0.6,
+                "enabled": true,
+                "loop": false
+              },
+              "showQuestion": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "answersMusic": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": true
+              },
+              "answerPressed": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "revealResults": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "leaderboard": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium1": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium2": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              },
+              "podium3": {
+                "source": "default",
+                "volume": 0.8,
+                "enabled": true,
+                "loop": false
+              }
+            }
+          },
+          "perQuestion": {
+            "00000000-0000-4000-8000-000000000081": {
+              "answerVisuals": [
+                {
+                  "answerIndex": 0,
+                  "display": "both",
+                  "url": "/media/other-answer.png",
+                  "alt": "R1 answer"
+                }
+              ],
+              "questionEntrance": {
+                "preset": "fade",
+                "durationMs": 800
+              },
+              "background": {
+                "url": "/media/other-background.png",
+                "fit": "contain",
+                "position": "center",
+                "overlayOpacity": 0.3
+              }
+            }
+          },
+          "roster": {
+            "phoneInviteOnly": false,
+            "participants": []
+          },
+          "authoring": {
+            "showNote": "R1 native full V2\nretained note"
+          },
+          "mediaCatalog": [
+            {
+              "name": "other-audio.mp3",
+              "url": "/media/other-audio.mp3",
+              "type": "audio",
+              "addedAt": 1
+            }
+          ]
+        }
+      },
+      "media/r1-native.png": {
+        "sha256": "f1c4b64457bf0ce11c96067cda6889e49733234c741877854ce5bf2eb49786e0",
+        "length": 65539
+      }
+    },
+    "journals": []
+  },
+  "interruptedProcess": {
+    "pid": 379,
+    "code": null,
+    "signal": "SIGKILL",
+    "timedOut": false,
+    "stdout": "",
+    "stderr": ""
+  },
+  "interrupted": {
+    "pid": 379,
+    "scenario": "quiz-foreign",
+    "state": {
+      "files": {
+        "quizz/IrFmto7LfwK9BgbryLKtG.json": {
+          "sha256": "15fddb657703a5d244ac7960f72286ce3b5d19430655c9d20cb62098b8d1e306",
+          "length": 326,
+          "json": {
+            "id": "kCqk1oXLRT7LJ8szjw7L5",
+            "gameMode": "quiz",
+            "subject": "Foreign sentinel",
+            "questions": [
+              {
+                "type": "single",
+                "question": "Synthetic native question",
+                "answers": [
+                  "A",
+                  "B"
+                ],
+                "solutions": [
+                  0
+                ],
+                "cooldown": 3,
+                "time": 20
+              }
+            ]
+          }
+        },
+        "quizz/native-r1-u0NMzAAL.json": {
+          "sha256": "d0c2f520190d082fc54376186acc00742e4eb632c2898b14d623461f1dfc02d6",
+          "length": 422,
+          "json": {
+            "id": "IrFmto7LfwK9BgbryLKtG",
+            "gameMode": "quiz",
+            "subject": "Interrupted native save",
+            "questions": [
+              {
+                "type": "single",
+                "question": "Synthetic native question",
+                "media": {
+                  "type": "image",
+                  "url": "/media/r1-native.png"
+                },
+                "answers": [
+                  "A",
+                  "B"
+                ],
+                "solutions": [
+                  0
+                ],
+                "cooldown": 3,
+                "time": 20
+              }
+            ]
+          }
+        },
+        "quizz/unrelated-8CVh447E.json": {
+          "sha256": "d743117fc597e8373906abf7cad2ea3257ff7fcb43a95d6cf48fb86405666b46",
+          "length": 322,
+          "json": {
+            "id": "gIfOUG73Ay6JM7hk7Fv2t",
+            "gameMode": "quiz",
+            "subject": "Unrelated R1",
+            "questions": [
+              {
+                "type": "single",
+                "question": "Synthetic native question",
+                "answers": [
+                  "A",
+                  "B"
+                ],
+                "solutions": [
+                  0
+                ],
+                "cooldown": 3,
+                "time": 20
+              }
+            ]
+          }
+        },
+        "extensions/quizzes/IrFmto7LfwK9BgbryLKtG.json": {
+          "sha256": "eb81cf463a0dd73dfdf0619712f7ddb387bc9b58d4827325c2bee0ad96c59cf4",
+          "length": 3755,
+          "json": {
+            "schemaVersion": 2,
+            "revision": 1,
+            "quizId": "IrFmto7LfwK9BgbryLKtG",
+            "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+            "questionIds": [
+              "00000000-0000-4000-8000-000000000081"
+            ],
+            "timeline": [
+              {
+                "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                "kind": "opening",
+                "sceneId": "00000000-0000-4000-8000-000000000082"
+              },
+              {
+                "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                "kind": "question",
+                "questionId": "00000000-0000-4000-8000-000000000081"
+              }
+            ],
+            "scenes": {
+              "00000000-0000-4000-8000-000000000082": {
+                "id": "00000000-0000-4000-8000-000000000082",
+                "kind": "opening",
+                "title": "Native scene",
+                "durationMs": 2000,
+                "advance": "manual",
+                "stageLayout": "cinema",
+                "mediaFit": "cover",
+                "logoPosition": "center",
+                "textOverlay": true,
+                "endBehavior": "holdFrame",
+                "volume": 0.8,
+                "loop": false,
+                "muted": false,
+                "showControls": false,
+                "lottieFit": "contain",
+                "lottieLoop": true,
+                "lottieSpeed": 1,
+                "background": {
+                  "url": "/media/other-background.png",
+                  "fit": "cover",
+                  "position": "center",
+                  "overlayOpacity": 0.2
+                },
+                "audio": {
+                  "mode": "custom",
+                  "url": "/media/other-audio.mp3",
+                  "volume": 0.4,
+                  "loop": false
+                }
+              }
+            },
+            "defaults": {
+              "showTheme": {
+                "id": "tadazz-classic",
+                "version": "1.0.0",
+                "overrides": {}
+              },
+              "newQuestionMode": "quiz",
+              "leaderboardPolicy": "cardOnly",
+              "advanceMode": "auto"
+            },
+            "teams": {
+              "enabled": false,
+              "teams": [],
+              "autoAssign": "roundRobin"
+            },
+            "audio": {
+              "cues": {
+                "start": {
+                  "source": "media",
+                  "url": "/media/other-audio.mp3",
+                  "volume": 0.6,
+                  "enabled": true,
+                  "loop": false
+                },
+                "showQuestion": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "answersMusic": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": true
+                },
+                "answerPressed": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "revealResults": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "leaderboard": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "podium1": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "podium2": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                },
+                "podium3": {
+                  "source": "default",
+                  "volume": 0.8,
+                  "enabled": true,
+                  "loop": false
+                }
+              }
+            },
+            "perQuestion": {
+              "00000000-0000-4000-8000-000000000081": {
+                "answerVisuals": [
+                  {
+                    "answerIndex": 0,
+                    "display": "both",
+                    "url": "/media/other-answer.png",
+                    "alt": "R1 answer"
+                  }
+                ],
+                "questionEntrance": {
+                  "preset": "fade",
+                  "durationMs": 800
+                },
+                "background": {
+                  "url": "/media/other-background.png",
+                  "fit": "contain",
+                  "position": "center",
+                  "overlayOpacity": 0.3
+                }
+              }
+            },
+            "roster": {
+              "phoneInviteOnly": false,
+              "participants": []
+            },
+            "authoring": {
+              "showNote": "R1 native full V2\nretained note"
+            },
+            "mediaCatalog": [
+              {
+                "name": "other-audio.mp3",
+                "url": "/media/other-audio.mp3",
+                "type": "audio",
+                "addedAt": 1
+              }
+            ]
+          }
+        },
+        "media/r1-native.png": {
+          "sha256": "f1c4b64457bf0ce11c96067cda6889e49733234c741877854ce5bf2eb49786e0",
+          "length": 65539
+        }
+      },
+      "journals": [
+        {
+          "path": "extensions/quizzes/.journal/IrFmto7LfwK9BgbryLKtG.journal.json",
+          "sha256": "0322bafcf67bc9ed1f55cba2e1d77978428822a7ecc97a91cde3ffbceec64f50",
+          "entry": {
+            "version": 1,
+            "kind": "quiz-save",
+            "id": "01a1ddac-86c3-728d-a05e-3ad644aa5821",
+            "quizId": "IrFmto7LfwK9BgbryLKtG",
+            "createdAt": 1794720433860,
+            "status": "staged",
+            "backupBase": {
+              "id": "IrFmto7LfwK9BgbryLKtG",
+              "gameMode": "quiz",
+              "subject": "Native R1",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            },
+            "backupExtras": {
+              "schemaVersion": 2,
+              "revision": 1,
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+              "questionIds": [
+                "00000000-0000-4000-8000-000000000081"
+              ],
+              "timeline": [
+                {
+                  "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                  "kind": "opening",
+                  "sceneId": "00000000-0000-4000-8000-000000000082"
+                },
+                {
+                  "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                  "kind": "question",
+                  "questionId": "00000000-0000-4000-8000-000000000081"
+                }
+              ],
+              "scenes": {
+                "00000000-0000-4000-8000-000000000082": {
+                  "id": "00000000-0000-4000-8000-000000000082",
+                  "kind": "opening",
+                  "title": "Native scene",
+                  "durationMs": 2000,
+                  "advance": "manual",
+                  "stageLayout": "cinema",
+                  "mediaFit": "cover",
+                  "logoPosition": "center",
+                  "textOverlay": true,
+                  "endBehavior": "holdFrame",
+                  "volume": 0.8,
+                  "loop": false,
+                  "muted": false,
+                  "showControls": false,
+                  "lottieFit": "contain",
+                  "lottieLoop": true,
+                  "lottieSpeed": 1,
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "cover",
+                    "position": "center",
+                    "overlayOpacity": 0.2
+                  },
+                  "audio": {
+                    "mode": "custom",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.4,
+                    "loop": false
+                  }
+                }
+              },
+              "defaults": {
+                "showTheme": {
+                  "id": "tadazz-classic",
+                  "version": "1.0.0",
+                  "overrides": {}
+                },
+                "newQuestionMode": "quiz",
+                "leaderboardPolicy": "cardOnly",
+                "advanceMode": "auto"
+              },
+              "teams": {
+                "enabled": false,
+                "teams": [],
+                "autoAssign": "roundRobin"
+              },
+              "audio": {
+                "cues": {
+                  "start": {
+                    "source": "media",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.6,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "showQuestion": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "answersMusic": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": true
+                  },
+                  "answerPressed": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "revealResults": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "leaderboard": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium1": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium2": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium3": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  }
+                }
+              },
+              "perQuestion": {
+                "00000000-0000-4000-8000-000000000081": {
+                  "answerVisuals": [
+                    {
+                      "answerIndex": 0,
+                      "display": "both",
+                      "url": "/media/other-answer.png",
+                      "alt": "R1 answer"
+                    }
+                  ],
+                  "questionEntrance": {
+                    "preset": "fade",
+                    "durationMs": 800
+                  },
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "contain",
+                    "position": "center",
+                    "overlayOpacity": 0.3
+                  }
+                }
+              },
+              "roster": {
+                "phoneInviteOnly": false,
+                "participants": []
+              },
+              "authoring": {
+                "showNote": "R1 native full V2\nretained note"
+              },
+              "mediaCatalog": [
+                {
+                  "name": "other-audio.mp3",
+                  "url": "/media/other-audio.mp3",
+                  "type": "audio",
+                  "addedAt": 1
+                }
+              ]
+            },
+            "targetBase": {
+              "id": "IrFmto7LfwK9BgbryLKtG",
+              "gameMode": "quiz",
+              "subject": "Interrupted native save",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            },
+            "targetExtras": {
+              "schemaVersion": 2,
+              "revision": 2,
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "baseDigest": "bca691d1cfb68fef9b573df2ae8dc8afc1f8139966a4fda27a63768a07d8d6fb",
+              "questionIds": [
+                "00000000-0000-4000-8000-000000000081"
+              ],
+              "timeline": [
+                {
+                  "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                  "kind": "opening",
+                  "sceneId": "00000000-0000-4000-8000-000000000082"
+                },
+                {
+                  "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                  "kind": "question",
+                  "questionId": "00000000-0000-4000-8000-000000000081"
+                }
+              ],
+              "scenes": {
+                "00000000-0000-4000-8000-000000000082": {
+                  "id": "00000000-0000-4000-8000-000000000082",
+                  "kind": "opening",
+                  "title": "Native scene",
+                  "durationMs": 2000,
+                  "advance": "manual",
+                  "stageLayout": "cinema",
+                  "mediaFit": "cover",
+                  "logoPosition": "center",
+                  "textOverlay": true,
+                  "endBehavior": "holdFrame",
+                  "volume": 0.8,
+                  "loop": false,
+                  "muted": false,
+                  "showControls": false,
+                  "lottieFit": "contain",
+                  "lottieLoop": true,
+                  "lottieSpeed": 1,
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "cover",
+                    "position": "center",
+                    "overlayOpacity": 0.2
+                  },
+                  "audio": {
+                    "mode": "custom",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.4,
+                    "loop": false
+                  }
+                }
+              },
+              "defaults": {
+                "showTheme": {
+                  "id": "tadazz-classic",
+                  "version": "1.0.0",
+                  "overrides": {}
+                },
+                "newQuestionMode": "quiz",
+                "leaderboardPolicy": "cardOnly",
+                "advanceMode": "auto"
+              },
+              "teams": {
+                "enabled": false,
+                "teams": [],
+                "autoAssign": "roundRobin"
+              },
+              "audio": {
+                "cues": {
+                  "start": {
+                    "source": "media",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.6,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "showQuestion": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "answersMusic": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": true
+                  },
+                  "answerPressed": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "revealResults": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "leaderboard": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium1": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium2": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium3": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  }
+                }
+              },
+              "perQuestion": {
+                "00000000-0000-4000-8000-000000000081": {
+                  "answerVisuals": [
+                    {
+                      "answerIndex": 0,
+                      "display": "both",
+                      "url": "/media/other-answer.png",
+                      "alt": "R1 answer"
+                    }
+                  ],
+                  "questionEntrance": {
+                    "preset": "fade",
+                    "durationMs": 800
+                  },
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "contain",
+                    "position": "center",
+                    "overlayOpacity": 0.3
+                  }
+                }
+              },
+              "roster": {
+                "phoneInviteOnly": false,
+                "participants": []
+              },
+              "authoring": {
+                "showNote": "Interrupted new native note"
+              },
+              "mediaCatalog": [
+                {
+                  "name": "other-audio.mp3",
+                  "url": "/media/other-audio.mp3",
+                  "type": "audio",
+                  "addedAt": 1
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    "signal": "SIGKILL"
+  },
+  "recoveries": [
+    {
+      "process": {
+        "pid": 393,
+        "code": 2,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "",
+        "stderr": "[Journal] Failed to recover journal IrFmto7LfwK9BgbryLKtG.journal.json: Error: Failed to verify rolled back base quiz IrFmto7LfwK9BgbryLKtG\n    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)\n    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)\n    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)\n    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/\n"
+      },
+      "pid": 393,
+      "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+      "state": {
+        "files": {
+          "quizz/IrFmto7LfwK9BgbryLKtG.json": {
+            "sha256": "15fddb657703a5d244ac7960f72286ce3b5d19430655c9d20cb62098b8d1e306",
+            "length": 326,
+            "json": {
+              "id": "kCqk1oXLRT7LJ8szjw7L5",
+              "gameMode": "quiz",
+              "subject": "Foreign sentinel",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/idless-r1-sentinel.json": {
+            "sha256": "7d5ed6f3eb4234024c7db2d30209bbe49d038e33f376b494abd0921a5f279af9",
+            "length": 382,
+            "json": {
+              "gameMode": "quiz",
+              "subject": "Idless preserved",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/native-r1-u0NMzAAL.json": {
+            "sha256": "1b8339382283187c4f67a109c439dcf9d5e533f6b2715ec63914a7889706e633",
+            "length": 408,
+            "json": {
+              "id": "IrFmto7LfwK9BgbryLKtG",
+              "gameMode": "quiz",
+              "subject": "Native R1",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/unrelated-8CVh447E.json": {
+            "sha256": "d743117fc597e8373906abf7cad2ea3257ff7fcb43a95d6cf48fb86405666b46",
+            "length": 322,
+            "json": {
+              "id": "gIfOUG73Ay6JM7hk7Fv2t",
+              "gameMode": "quiz",
+              "subject": "Unrelated R1",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "extensions/quizzes/IrFmto7LfwK9BgbryLKtG.json": {
+            "sha256": "eb81cf463a0dd73dfdf0619712f7ddb387bc9b58d4827325c2bee0ad96c59cf4",
+            "length": 3755,
+            "json": {
+              "schemaVersion": 2,
+              "revision": 1,
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+              "questionIds": [
+                "00000000-0000-4000-8000-000000000081"
+              ],
+              "timeline": [
+                {
+                  "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                  "kind": "opening",
+                  "sceneId": "00000000-0000-4000-8000-000000000082"
+                },
+                {
+                  "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                  "kind": "question",
+                  "questionId": "00000000-0000-4000-8000-000000000081"
+                }
+              ],
+              "scenes": {
+                "00000000-0000-4000-8000-000000000082": {
+                  "id": "00000000-0000-4000-8000-000000000082",
+                  "kind": "opening",
+                  "title": "Native scene",
+                  "durationMs": 2000,
+                  "advance": "manual",
+                  "stageLayout": "cinema",
+                  "mediaFit": "cover",
+                  "logoPosition": "center",
+                  "textOverlay": true,
+                  "endBehavior": "holdFrame",
+                  "volume": 0.8,
+                  "loop": false,
+                  "muted": false,
+                  "showControls": false,
+                  "lottieFit": "contain",
+                  "lottieLoop": true,
+                  "lottieSpeed": 1,
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "cover",
+                    "position": "center",
+                    "overlayOpacity": 0.2
+                  },
+                  "audio": {
+                    "mode": "custom",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.4,
+                    "loop": false
+                  }
+                }
+              },
+              "defaults": {
+                "showTheme": {
+                  "id": "tadazz-classic",
+                  "version": "1.0.0",
+                  "overrides": {}
+                },
+                "newQuestionMode": "quiz",
+                "leaderboardPolicy": "cardOnly",
+                "advanceMode": "auto"
+              },
+              "teams": {
+                "enabled": false,
+                "teams": [],
+                "autoAssign": "roundRobin"
+              },
+              "audio": {
+                "cues": {
+                  "start": {
+                    "source": "media",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.6,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "showQuestion": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "answersMusic": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": true
+                  },
+                  "answerPressed": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "revealResults": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "leaderboard": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium1": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium2": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium3": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  }
+                }
+              },
+              "perQuestion": {
+                "00000000-0000-4000-8000-000000000081": {
+                  "answerVisuals": [
+                    {
+                      "answerIndex": 0,
+                      "display": "both",
+                      "url": "/media/other-answer.png",
+                      "alt": "R1 answer"
+                    }
+                  ],
+                  "questionEntrance": {
+                    "preset": "fade",
+                    "durationMs": 800
+                  },
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "contain",
+                    "position": "center",
+                    "overlayOpacity": 0.3
+                  }
+                }
+              },
+              "roster": {
+                "phoneInviteOnly": false,
+                "participants": []
+              },
+              "authoring": {
+                "showNote": "R1 native full V2\nretained note"
+              },
+              "mediaCatalog": [
+                {
+                  "name": "other-audio.mp3",
+                  "url": "/media/other-audio.mp3",
+                  "type": "audio",
+                  "addedAt": 1
+                }
+              ]
+            }
+          },
+          "media/r1-native.png": {
+            "sha256": "f1c4b64457bf0ce11c96067cda6889e49733234c741877854ce5bf2eb49786e0",
+            "length": 65539
+          }
+        },
+        "journals": [
+          {
+            "path": "extensions/quizzes/.journal/IrFmto7LfwK9BgbryLKtG.journal.json",
+            "sha256": "0322bafcf67bc9ed1f55cba2e1d77978428822a7ecc97a91cde3ffbceec64f50",
+            "entry": {
+              "version": 1,
+              "kind": "quiz-save",
+              "id": "01a1ddac-86c3-728d-a05e-3ad644aa5821",
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "createdAt": 1794720433860,
+              "status": "staged",
+              "backupBase": {
+                "id": "IrFmto7LfwK9BgbryLKtG",
+                "gameMode": "quiz",
+                "subject": "Native R1",
+                "questions": [
+                  {
+                    "type": "single",
+                    "question": "Synthetic native question",
+                    "media": {
+                      "type": "image",
+                      "url": "/media/r1-native.png"
+                    },
+                    "answers": [
+                      "A",
+                      "B"
+                    ],
+                    "solutions": [
+                      0
+                    ],
+                    "cooldown": 3,
+                    "time": 20
+                  }
+                ]
+              },
+              "backupExtras": {
+                "schemaVersion": 2,
+                "revision": 1,
+                "quizId": "IrFmto7LfwK9BgbryLKtG",
+                "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+                "questionIds": [
+                  "00000000-0000-4000-8000-000000000081"
+                ],
+                "timeline": [
+                  {
+                    "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                    "kind": "opening",
+                    "sceneId": "00000000-0000-4000-8000-000000000082"
+                  },
+                  {
+                    "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                    "kind": "question",
+                    "questionId": "00000000-0000-4000-8000-000000000081"
+                  }
+                ],
+                "scenes": {
+                  "00000000-0000-4000-8000-000000000082": {
+                    "id": "00000000-0000-4000-8000-000000000082",
+                    "kind": "opening",
+                    "title": "Native scene",
+                    "durationMs": 2000,
+                    "advance": "manual",
+                    "stageLayout": "cinema",
+                    "mediaFit": "cover",
+                    "logoPosition": "center",
+                    "textOverlay": true,
+                    "endBehavior": "holdFrame",
+                    "volume": 0.8,
+                    "loop": false,
+                    "muted": false,
+                    "showControls": false,
+                    "lottieFit": "contain",
+                    "lottieLoop": true,
+                    "lottieSpeed": 1,
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "cover",
+                      "position": "center",
+                      "overlayOpacity": 0.2
+                    },
+                    "audio": {
+                      "mode": "custom",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.4,
+                      "loop": false
+                    }
+                  }
+                },
+                "defaults": {
+                  "showTheme": {
+                    "id": "tadazz-classic",
+                    "version": "1.0.0",
+                    "overrides": {}
+                  },
+                  "newQuestionMode": "quiz",
+                  "leaderboardPolicy": "cardOnly",
+                  "advanceMode": "auto"
+                },
+                "teams": {
+                  "enabled": false,
+                  "teams": [],
+                  "autoAssign": "roundRobin"
+                },
+                "audio": {
+                  "cues": {
+                    "start": {
+                      "source": "media",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.6,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "showQuestion": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "answersMusic": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": true
+                    },
+                    "answerPressed": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "revealResults": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "leaderboard": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium1": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium2": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium3": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    }
+                  }
+                },
+                "perQuestion": {
+                  "00000000-0000-4000-8000-000000000081": {
+                    "answerVisuals": [
+                      {
+                        "answerIndex": 0,
+                        "display": "both",
+                        "url": "/media/other-answer.png",
+                        "alt": "R1 answer"
+                      }
+                    ],
+                    "questionEntrance": {
+                      "preset": "fade",
+                      "durationMs": 800
+                    },
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "contain",
+                      "position": "center",
+                      "overlayOpacity": 0.3
+                    }
+                  }
+                },
+                "roster": {
+                  "phoneInviteOnly": false,
+                  "participants": []
+                },
+                "authoring": {
+                  "showNote": "R1 native full V2\nretained note"
+                },
+                "mediaCatalog": [
+                  {
+                    "name": "other-audio.mp3",
+                    "url": "/media/other-audio.mp3",
+                    "type": "audio",
+                    "addedAt": 1
+                  }
+                ]
+              },
+              "targetBase": {
+                "id": "IrFmto7LfwK9BgbryLKtG",
+                "gameMode": "quiz",
+                "subject": "Interrupted native save",
+                "questions": [
+                  {
+                    "type": "single",
+                    "question": "Synthetic native question",
+                    "media": {
+                      "type": "image",
+                      "url": "/media/r1-native.png"
+                    },
+                    "answers": [
+                      "A",
+                      "B"
+                    ],
+                    "solutions": [
+                      0
+                    ],
+                    "cooldown": 3,
+                    "time": 20
+                  }
+                ]
+              },
+              "targetExtras": {
+                "schemaVersion": 2,
+                "revision": 2,
+                "quizId": "IrFmto7LfwK9BgbryLKtG",
+                "baseDigest": "bca691d1cfb68fef9b573df2ae8dc8afc1f8139966a4fda27a63768a07d8d6fb",
+                "questionIds": [
+                  "00000000-0000-4000-8000-000000000081"
+                ],
+                "timeline": [
+                  {
+                    "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                    "kind": "opening",
+                    "sceneId": "00000000-0000-4000-8000-000000000082"
+                  },
+                  {
+                    "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                    "kind": "question",
+                    "questionId": "00000000-0000-4000-8000-000000000081"
+                  }
+                ],
+                "scenes": {
+                  "00000000-0000-4000-8000-000000000082": {
+                    "id": "00000000-0000-4000-8000-000000000082",
+                    "kind": "opening",
+                    "title": "Native scene",
+                    "durationMs": 2000,
+                    "advance": "manual",
+                    "stageLayout": "cinema",
+                    "mediaFit": "cover",
+                    "logoPosition": "center",
+                    "textOverlay": true,
+                    "endBehavior": "holdFrame",
+                    "volume": 0.8,
+                    "loop": false,
+                    "muted": false,
+                    "showControls": false,
+                    "lottieFit": "contain",
+                    "lottieLoop": true,
+                    "lottieSpeed": 1,
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "cover",
+                      "position": "center",
+                      "overlayOpacity": 0.2
+                    },
+                    "audio": {
+                      "mode": "custom",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.4,
+                      "loop": false
+                    }
+                  }
+                },
+                "defaults": {
+                  "showTheme": {
+                    "id": "tadazz-classic",
+                    "version": "1.0.0",
+                    "overrides": {}
+                  },
+                  "newQuestionMode": "quiz",
+                  "leaderboardPolicy": "cardOnly",
+                  "advanceMode": "auto"
+                },
+                "teams": {
+                  "enabled": false,
+                  "teams": [],
+                  "autoAssign": "roundRobin"
+                },
+                "audio": {
+                  "cues": {
+                    "start": {
+                      "source": "media",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.6,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "showQuestion": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "answersMusic": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": true
+                    },
+                    "answerPressed": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "revealResults": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "leaderboard": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium1": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium2": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium3": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    }
+                  }
+                },
+                "perQuestion": {
+                  "00000000-0000-4000-8000-000000000081": {
+                    "answerVisuals": [
+                      {
+                        "answerIndex": 0,
+                        "display": "both",
+                        "url": "/media/other-answer.png",
+                        "alt": "R1 answer"
+                      }
+                    ],
+                    "questionEntrance": {
+                      "preset": "fade",
+                      "durationMs": 800
+                    },
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "contain",
+                      "position": "center",
+                      "overlayOpacity": 0.3
+                    }
+                  }
+                },
+                "roster": {
+                  "phoneInviteOnly": false,
+                  "participants": []
+                },
+                "authoring": {
+                  "showNote": "Interrupted new native note"
+                },
+                "mediaCatalog": [
+                  {
+                    "name": "other-audio.mp3",
+                    "url": "/media/other-audio.mp3",
+                    "type": "audio",
+                    "addedAt": 1
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "process": {
+        "pid": 407,
+        "code": 2,
+        "signal": null,
+        "timedOut": false,
+        "stdout": "",
+        "stderr": "[Journal] Failed to recover journal IrFmto7LfwK9BgbryLKtG.journal.json: Error: Failed to verify rolled back base quiz IrFmto7LfwK9BgbryLKtG\n    at recoverJournals (/work/extensions/src/server/storage/journal.ts:393:17)\n    at recoverStartupJournals (/work/extensions/src/server/media-library.ts:1214:24)\n    at main (/work/extensions/src/server/storage/native-binding-child.ts:34:16)\n    at <anonymous> (/work/extensions/src/server/storage/native-binding-child.ts:110:3)\n    at ModuleJob.run (node:internal/modules/esm/module_job:561:25)\n    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)\n    at async node:internal/modules/esm/loader:647:26\n    at async asyncRunEntryPointWithESMLoader (node:internal/modules/run_main:101:5)\n[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/\n"
+      },
+      "pid": 407,
+      "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+      "state": {
+        "files": {
+          "quizz/IrFmto7LfwK9BgbryLKtG.json": {
+            "sha256": "15fddb657703a5d244ac7960f72286ce3b5d19430655c9d20cb62098b8d1e306",
+            "length": 326,
+            "json": {
+              "id": "kCqk1oXLRT7LJ8szjw7L5",
+              "gameMode": "quiz",
+              "subject": "Foreign sentinel",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/idless-r1-sentinel.json": {
+            "sha256": "7d5ed6f3eb4234024c7db2d30209bbe49d038e33f376b494abd0921a5f279af9",
+            "length": 382,
+            "json": {
+              "gameMode": "quiz",
+              "subject": "Idless preserved",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/native-r1-u0NMzAAL.json": {
+            "sha256": "1b8339382283187c4f67a109c439dcf9d5e533f6b2715ec63914a7889706e633",
+            "length": 408,
+            "json": {
+              "id": "IrFmto7LfwK9BgbryLKtG",
+              "gameMode": "quiz",
+              "subject": "Native R1",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "media": {
+                    "type": "image",
+                    "url": "/media/r1-native.png"
+                  },
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "quizz/unrelated-8CVh447E.json": {
+            "sha256": "d743117fc597e8373906abf7cad2ea3257ff7fcb43a95d6cf48fb86405666b46",
+            "length": 322,
+            "json": {
+              "id": "gIfOUG73Ay6JM7hk7Fv2t",
+              "gameMode": "quiz",
+              "subject": "Unrelated R1",
+              "questions": [
+                {
+                  "type": "single",
+                  "question": "Synthetic native question",
+                  "answers": [
+                    "A",
+                    "B"
+                  ],
+                  "solutions": [
+                    0
+                  ],
+                  "cooldown": 3,
+                  "time": 20
+                }
+              ]
+            }
+          },
+          "extensions/quizzes/IrFmto7LfwK9BgbryLKtG.json": {
+            "sha256": "eb81cf463a0dd73dfdf0619712f7ddb387bc9b58d4827325c2bee0ad96c59cf4",
+            "length": 3755,
+            "json": {
+              "schemaVersion": 2,
+              "revision": 1,
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+              "questionIds": [
+                "00000000-0000-4000-8000-000000000081"
+              ],
+              "timeline": [
+                {
+                  "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                  "kind": "opening",
+                  "sceneId": "00000000-0000-4000-8000-000000000082"
+                },
+                {
+                  "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                  "kind": "question",
+                  "questionId": "00000000-0000-4000-8000-000000000081"
+                }
+              ],
+              "scenes": {
+                "00000000-0000-4000-8000-000000000082": {
+                  "id": "00000000-0000-4000-8000-000000000082",
+                  "kind": "opening",
+                  "title": "Native scene",
+                  "durationMs": 2000,
+                  "advance": "manual",
+                  "stageLayout": "cinema",
+                  "mediaFit": "cover",
+                  "logoPosition": "center",
+                  "textOverlay": true,
+                  "endBehavior": "holdFrame",
+                  "volume": 0.8,
+                  "loop": false,
+                  "muted": false,
+                  "showControls": false,
+                  "lottieFit": "contain",
+                  "lottieLoop": true,
+                  "lottieSpeed": 1,
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "cover",
+                    "position": "center",
+                    "overlayOpacity": 0.2
+                  },
+                  "audio": {
+                    "mode": "custom",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.4,
+                    "loop": false
+                  }
+                }
+              },
+              "defaults": {
+                "showTheme": {
+                  "id": "tadazz-classic",
+                  "version": "1.0.0",
+                  "overrides": {}
+                },
+                "newQuestionMode": "quiz",
+                "leaderboardPolicy": "cardOnly",
+                "advanceMode": "auto"
+              },
+              "teams": {
+                "enabled": false,
+                "teams": [],
+                "autoAssign": "roundRobin"
+              },
+              "audio": {
+                "cues": {
+                  "start": {
+                    "source": "media",
+                    "url": "/media/other-audio.mp3",
+                    "volume": 0.6,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "showQuestion": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "answersMusic": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": true
+                  },
+                  "answerPressed": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "revealResults": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "leaderboard": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium1": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium2": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  },
+                  "podium3": {
+                    "source": "default",
+                    "volume": 0.8,
+                    "enabled": true,
+                    "loop": false
+                  }
+                }
+              },
+              "perQuestion": {
+                "00000000-0000-4000-8000-000000000081": {
+                  "answerVisuals": [
+                    {
+                      "answerIndex": 0,
+                      "display": "both",
+                      "url": "/media/other-answer.png",
+                      "alt": "R1 answer"
+                    }
+                  ],
+                  "questionEntrance": {
+                    "preset": "fade",
+                    "durationMs": 800
+                  },
+                  "background": {
+                    "url": "/media/other-background.png",
+                    "fit": "contain",
+                    "position": "center",
+                    "overlayOpacity": 0.3
+                  }
+                }
+              },
+              "roster": {
+                "phoneInviteOnly": false,
+                "participants": []
+              },
+              "authoring": {
+                "showNote": "R1 native full V2\nretained note"
+              },
+              "mediaCatalog": [
+                {
+                  "name": "other-audio.mp3",
+                  "url": "/media/other-audio.mp3",
+                  "type": "audio",
+                  "addedAt": 1
+                }
+              ]
+            }
+          },
+          "media/r1-native.png": {
+            "sha256": "f1c4b64457bf0ce11c96067cda6889e49733234c741877854ce5bf2eb49786e0",
+            "length": 65539
+          }
+        },
+        "journals": [
+          {
+            "path": "extensions/quizzes/.journal/IrFmto7LfwK9BgbryLKtG.journal.json",
+            "sha256": "0322bafcf67bc9ed1f55cba2e1d77978428822a7ecc97a91cde3ffbceec64f50",
+            "entry": {
+              "version": 1,
+              "kind": "quiz-save",
+              "id": "01a1ddac-86c3-728d-a05e-3ad644aa5821",
+              "quizId": "IrFmto7LfwK9BgbryLKtG",
+              "createdAt": 1794720433860,
+              "status": "staged",
+              "backupBase": {
+                "id": "IrFmto7LfwK9BgbryLKtG",
+                "gameMode": "quiz",
+                "subject": "Native R1",
+                "questions": [
+                  {
+                    "type": "single",
+                    "question": "Synthetic native question",
+                    "media": {
+                      "type": "image",
+                      "url": "/media/r1-native.png"
+                    },
+                    "answers": [
+                      "A",
+                      "B"
+                    ],
+                    "solutions": [
+                      0
+                    ],
+                    "cooldown": 3,
+                    "time": 20
+                  }
+                ]
+              },
+              "backupExtras": {
+                "schemaVersion": 2,
+                "revision": 1,
+                "quizId": "IrFmto7LfwK9BgbryLKtG",
+                "baseDigest": "7edfc11f6264bdd9c650521b05dcbb786f99d12d7794dff758c55a4c162b4937",
+                "questionIds": [
+                  "00000000-0000-4000-8000-000000000081"
+                ],
+                "timeline": [
+                  {
+                    "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                    "kind": "opening",
+                    "sceneId": "00000000-0000-4000-8000-000000000082"
+                  },
+                  {
+                    "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                    "kind": "question",
+                    "questionId": "00000000-0000-4000-8000-000000000081"
+                  }
+                ],
+                "scenes": {
+                  "00000000-0000-4000-8000-000000000082": {
+                    "id": "00000000-0000-4000-8000-000000000082",
+                    "kind": "opening",
+                    "title": "Native scene",
+                    "durationMs": 2000,
+                    "advance": "manual",
+                    "stageLayout": "cinema",
+                    "mediaFit": "cover",
+                    "logoPosition": "center",
+                    "textOverlay": true,
+                    "endBehavior": "holdFrame",
+                    "volume": 0.8,
+                    "loop": false,
+                    "muted": false,
+                    "showControls": false,
+                    "lottieFit": "contain",
+                    "lottieLoop": true,
+                    "lottieSpeed": 1,
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "cover",
+                      "position": "center",
+                      "overlayOpacity": 0.2
+                    },
+                    "audio": {
+                      "mode": "custom",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.4,
+                      "loop": false
+                    }
+                  }
+                },
+                "defaults": {
+                  "showTheme": {
+                    "id": "tadazz-classic",
+                    "version": "1.0.0",
+                    "overrides": {}
+                  },
+                  "newQuestionMode": "quiz",
+                  "leaderboardPolicy": "cardOnly",
+                  "advanceMode": "auto"
+                },
+                "teams": {
+                  "enabled": false,
+                  "teams": [],
+                  "autoAssign": "roundRobin"
+                },
+                "audio": {
+                  "cues": {
+                    "start": {
+                      "source": "media",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.6,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "showQuestion": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "answersMusic": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": true
+                    },
+                    "answerPressed": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "revealResults": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "leaderboard": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium1": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium2": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium3": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    }
+                  }
+                },
+                "perQuestion": {
+                  "00000000-0000-4000-8000-000000000081": {
+                    "answerVisuals": [
+                      {
+                        "answerIndex": 0,
+                        "display": "both",
+                        "url": "/media/other-answer.png",
+                        "alt": "R1 answer"
+                      }
+                    ],
+                    "questionEntrance": {
+                      "preset": "fade",
+                      "durationMs": 800
+                    },
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "contain",
+                      "position": "center",
+                      "overlayOpacity": 0.3
+                    }
+                  }
+                },
+                "roster": {
+                  "phoneInviteOnly": false,
+                  "participants": []
+                },
+                "authoring": {
+                  "showNote": "R1 native full V2\nretained note"
+                },
+                "mediaCatalog": [
+                  {
+                    "name": "other-audio.mp3",
+                    "url": "/media/other-audio.mp3",
+                    "type": "audio",
+                    "addedAt": 1
+                  }
+                ]
+              },
+              "targetBase": {
+                "id": "IrFmto7LfwK9BgbryLKtG",
+                "gameMode": "quiz",
+                "subject": "Interrupted native save",
+                "questions": [
+                  {
+                    "type": "single",
+                    "question": "Synthetic native question",
+                    "media": {
+                      "type": "image",
+                      "url": "/media/r1-native.png"
+                    },
+                    "answers": [
+                      "A",
+                      "B"
+                    ],
+                    "solutions": [
+                      0
+                    ],
+                    "cooldown": 3,
+                    "time": 20
+                  }
+                ]
+              },
+              "targetExtras": {
+                "schemaVersion": 2,
+                "revision": 2,
+                "quizId": "IrFmto7LfwK9BgbryLKtG",
+                "baseDigest": "bca691d1cfb68fef9b573df2ae8dc8afc1f8139966a4fda27a63768a07d8d6fb",
+                "questionIds": [
+                  "00000000-0000-4000-8000-000000000081"
+                ],
+                "timeline": [
+                  {
+                    "id": "a721e4f0-a45d-44ed-bd3b-0b46e45ab218",
+                    "kind": "opening",
+                    "sceneId": "00000000-0000-4000-8000-000000000082"
+                  },
+                  {
+                    "id": "da06dc5e-1219-448e-894e-4bd9555f1ab6",
+                    "kind": "question",
+                    "questionId": "00000000-0000-4000-8000-000000000081"
+                  }
+                ],
+                "scenes": {
+                  "00000000-0000-4000-8000-000000000082": {
+                    "id": "00000000-0000-4000-8000-000000000082",
+                    "kind": "opening",
+                    "title": "Native scene",
+                    "durationMs": 2000,
+                    "advance": "manual",
+                    "stageLayout": "cinema",
+                    "mediaFit": "cover",
+                    "logoPosition": "center",
+                    "textOverlay": true,
+                    "endBehavior": "holdFrame",
+                    "volume": 0.8,
+                    "loop": false,
+                    "muted": false,
+                    "showControls": false,
+                    "lottieFit": "contain",
+                    "lottieLoop": true,
+                    "lottieSpeed": 1,
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "cover",
+                      "position": "center",
+                      "overlayOpacity": 0.2
+                    },
+                    "audio": {
+                      "mode": "custom",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.4,
+                      "loop": false
+                    }
+                  }
+                },
+                "defaults": {
+                  "showTheme": {
+                    "id": "tadazz-classic",
+                    "version": "1.0.0",
+                    "overrides": {}
+                  },
+                  "newQuestionMode": "quiz",
+                  "leaderboardPolicy": "cardOnly",
+                  "advanceMode": "auto"
+                },
+                "teams": {
+                  "enabled": false,
+                  "teams": [],
+                  "autoAssign": "roundRobin"
+                },
+                "audio": {
+                  "cues": {
+                    "start": {
+                      "source": "media",
+                      "url": "/media/other-audio.mp3",
+                      "volume": 0.6,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "showQuestion": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "answersMusic": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": true
+                    },
+                    "answerPressed": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "revealResults": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "leaderboard": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium1": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium2": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    },
+                    "podium3": {
+                      "source": "default",
+                      "volume": 0.8,
+                      "enabled": true,
+                      "loop": false
+                    }
+                  }
+                },
+                "perQuestion": {
+                  "00000000-0000-4000-8000-000000000081": {
+                    "answerVisuals": [
+                      {
+                        "answerIndex": 0,
+                        "display": "both",
+                        "url": "/media/other-answer.png",
+                        "alt": "R1 answer"
+                      }
+                    ],
+                    "questionEntrance": {
+                      "preset": "fade",
+                      "durationMs": 800
+                    },
+                    "background": {
+                      "url": "/media/other-background.png",
+                      "fit": "contain",
+                      "position": "center",
+                      "overlayOpacity": 0.3
+                    }
+                  }
+                },
+                "roster": {
+                  "phoneInviteOnly": false,
+                  "participants": []
+                },
+                "authoring": {
+                  "showNote": "Interrupted new native note"
+                },
+                "mediaCatalog": [
+                  {
+                    "name": "other-audio.mp3",
+                    "url": "/media/other-audio.mp3",
+                    "type": "audio",
+                    "addedAt": 1
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    }
+  ]
+}

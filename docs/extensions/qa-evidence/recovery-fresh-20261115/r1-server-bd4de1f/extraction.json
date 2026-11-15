@@ -1,0 +1,8 @@
+{
+  "status": "VERIFIED_WRITABLE_QA_COPY_ONLY",
+  "commit": "bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+  "files": 1332,
+  "destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/work",
+  "testsRun": false,
+  "buildsRun": false
+}

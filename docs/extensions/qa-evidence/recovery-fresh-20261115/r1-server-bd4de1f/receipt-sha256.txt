@@ -1,0 +1,11 @@
+da9e0642cb5d45e679004237ba6825b2235144bbdf3e5476f4654aa1bc2ee585  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-media-foreign.json
+97564ccf325fbe9f9cd9bcc9589dd2a606d3a4f5158542aa653f19aad262ff3c  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-media-sidecar-only.json
+0adc1664b2c1f48fa506b83571a78dd29cd5c60ba622f95d1edbe132aff8ddea  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-media.json
+84ad3c15add6803daa6bdbd49b3b88036be490e026e4a71fb487ed0c27d60fea  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-quiz-base.json
+35debeccd1481e79fb972b5818a90a6b1bd110f641322790e501bce3fbb6e9f8  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-quiz-foreign.json
+4052d00586743b3007b7c13afe2a6887fb226483c2a1526292663bbda17d3cd3  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/binding-quiz-sidecar.json
+67afe22c18e3a7ec16a535d89235227db12803586bd5c93eef725d2ef11a33dc  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/logical-digest-ordinary.json
+fabaf345d706e0a4c11054f5f2f26b3fc1d0046af5d3820c7bc4e61f1dd80f69  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/logical-digest-stripped.json
+de6279a5c0860373dda9fddc58589c1c1ef503b10da28a23be0b2ed40c9291ec  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/native-r1/native-stripped-baseline.json
+1846a53c6c4ccd216ea80556a2d409952df941552717ca951894c59e4d173a7a  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/process-v2/quiz-base-write.json
+dcaa37ef557105cac99de8790abf5448a364afd50ea7a3a32db4b63b28dd03c7  /home/ubuntu/tadazz-hq-qa-20261115/evidence/recovery-r1-bd4de1fb9b94548973c79f2f710bbec7f438e3e2/process-v2/quiz-sidecar-write.json
