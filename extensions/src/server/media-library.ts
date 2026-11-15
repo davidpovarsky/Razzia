@@ -888,7 +888,7 @@ export function recoverMediaDeleteJournals(
   const unresolvedJournals: string[] = []
   let recoveredCount = 0
   const authorizedMediaDir = getPath("media")
-  const authorizedQuarantineDir = getMediaQuarantineDirectory(getPath)
+  const authorizedQuarantineDir = path.join(journalDir, "quarantine")
   for (const file of files) {
     const journalPath = path.join(journalDir, file)
 
