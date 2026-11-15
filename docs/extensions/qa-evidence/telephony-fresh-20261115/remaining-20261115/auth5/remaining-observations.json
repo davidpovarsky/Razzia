@@ -1,0 +1,69 @@
+{
+  "scope": "new actual unmounted authority acceptance; no provider/PSTN or production mount",
+  "observations": [
+    {
+      "case": "R-AUTH-01",
+      "managerProofDenials": 8,
+      "unverifiedOwnedGameDenied": true,
+      "disabledAccountDenied": true,
+      "secretProfileMismatchDenied": true,
+      "accountModeOffDenied": true,
+      "noAuthorityInitializationOnDenial": true,
+      "positiveControlReady": true
+    },
+    {
+      "case": "R-AUTH-02",
+      "wrongScopeVersionsDenied": 6,
+      "wrongCapabilitiesDenied": 3,
+      "copiedAndReleasedContextsDenied": 2,
+      "zeroLifecycleAccessBeforeControl": true,
+      "repeatedDenialsPreservedVictim": true,
+      "actualCounters": {
+        "lifecycleRoots": 1,
+        "nativeJoin": 1
+      }
+    },
+    {
+      "case": "R-AUTH-03",
+      "mode": "session-revoke",
+      "staleManagerDenied": true,
+      "cachedRegisterAndPollDenied": true,
+      "separateSessionDistinguished": true,
+      "freshOwnerRevocation": true,
+      "noNativeCompensation": true,
+      "actualCounters": {
+        "lifecycleRoots": 1,
+        "nativeJoin": 1
+      }
+    },
+    {
+      "case": "R-AUTH-03",
+      "mode": "password-reset",
+      "staleManagerDenied": true,
+      "cachedRegisterAndPollDenied": true,
+      "separateSessionDistinguished": true,
+      "freshOwnerRevocation": true,
+      "noNativeCompensation": true,
+      "actualCounters": {
+        "lifecycleRoots": 1,
+        "nativeJoin": 1
+      }
+    },
+    {
+      "case": "R-AUTH-04",
+      "missingGameDenied": true,
+      "sameIdNewObjectDenied": true,
+      "restartedFactoryDeniedOldCredentials": true,
+      "noAutomaticAuthorityOverwrite": true,
+      "newLifecycleAccess": 0,
+      "replacementPlayers": 0
+    },
+    {
+      "case": "R-AUTH-05",
+      "wallClockLeaseExpired": true,
+      "activationAfterExpiryDenied": true,
+      "shortenedRealSessionExpiryDenied": true,
+      "noLifecycleOrNativeAccess": true
+    }
+  ]
+}

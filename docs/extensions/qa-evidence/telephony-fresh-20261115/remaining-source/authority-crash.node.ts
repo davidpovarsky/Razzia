@@ -91,17 +91,11 @@ test(
             clearTimeout(timer)
             reject(error)
           })
-          child.once("exit", (code, signal) => {
+          child.once("close", (code, signal) => {
             clearTimeout(timer)
             done({ code, signal })
           })
         })
-        assert.equal(result.code, null)
-        assert.equal(result.signal, "SIGKILL")
-        assert.ok(
-          existsSync(output),
-          "Must prove the selected actual COMMIT edge before counting a kill",
-        )
         assert.equal(
           /[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}\.[A-Za-z0-9_-]{15,}/u.test(
             transcript,
@@ -115,6 +109,12 @@ test(
             "crash-" + action + "-" + edge + ".log",
           ),
           transcript,
+        )
+        assert.equal(result.code, null)
+        assert.equal(result.signal, "SIGKILL")
+        assert.ok(
+          existsSync(output),
+          "Must prove the selected actual COMMIT edge before counting a kill",
         )
         const witness = JSON.parse(readFileSync(output, "utf8")) as Witness
         assert.equal(witness.action, action)
