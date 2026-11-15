@@ -1,5 +1,7 @@
 import { createAdaptorServer } from "@hono/node-server"
 import { recoverStartupJournals } from "@razzia/extensions/server"
+import { recoverCreationReservations } from "@razzia/extensions/server"
+import { resolveConfigRoot } from "@razzia/socket/services/config-scope"
 import { app, createSocketServer } from "@razzia/socket/app"
 import {
   deleteQuizz,
@@ -12,6 +14,8 @@ import { checkAccountConfiguration } from "@razzia/socket/services/account-db"
 
 const WS_PORT = Number(process.env.SOCKET_PORT) || 3001
 
+// C1 reads only its trusted private registry, including explicit tenant roots.
+recoverCreationReservations(resolveConfigRoot())
 initConfig()
 checkAccountConfiguration()
 

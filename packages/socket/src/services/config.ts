@@ -12,6 +12,7 @@ import {
 import { invalidInput, notFound } from "@razzia/socket/services/errors"
 import { normalizeFilename } from "@razzia/socket/utils/file"
 import { resolveConfigFile } from "@razzia/socket/services/config-scope"
+import { accountsEnabled, activeAccount } from "./account-scope"
 import fs from "fs"
 import { nanoid } from "nanoid"
 import { join } from "path"
@@ -261,6 +262,23 @@ export const deleteResult = (id: string): void => {
   const file = requireFileById("results", id, "errors:result.notFound")
 
   fs.unlinkSync(join(getPath("results"), file))
+}
+
+/** C1 allocation only. The scoped creation port owns all physical publication. */
+export const prepareNativeQuizCreation = (data: unknown) => {
+  const owner = activeAccount()
+  if (
+    accountsEnabled() &&
+    (!owner || !/^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/iu.test(owner))
+  )
+    throw invalidInput("Missing or invalid native creation account scope")
+  const result = quizzValidator.safeParse(data)
+  if (!result.success) throw invalidInput(result.error.issues[0].message)
+  const id = nanoid()
+  const baseFileName = `${normalizeFilename(result.data.subject, { fallback: "quizz" })}.json`
+  if (findFileById("quizz", id))
+    throw invalidInput("Native creation ID collision")
+  return { id, baseFileName, normalizedBase: result.data }
 }
 
 export const saveQuizz = (data: unknown): { id: string } => {

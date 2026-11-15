@@ -50,6 +50,35 @@ export class CompositeStorageService {
     this.injections = injections
   }
 
+  private assertNativeCreationScope() {
+    try {
+      this.injections.creation?.assertScope()
+    } catch (error) {
+      throw new CompositeStorageError(
+        `Native creation scope denied: ${error instanceof Error ? error.message : String(error)}`,
+        StatusCodes.FORBIDDEN,
+      )
+    }
+  }
+
+  private createReservedQuiz(
+    quizz: Record<string, unknown>,
+    extras: AnyQuizExtras | null,
+  ) {
+    try {
+      return this.injections.creation!.create(quizz, extras)
+    } catch (error) {
+      const failure = new CompositeStorageError(
+        "errors:server.internal",
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
+      // Trusted in-process diagnostics retain the exact cause. Routes serialize
+      // only the stable message, never a pre-intent allocated ID or fs path.
+      Object.defineProperty(failure, "cause", { value: error })
+      throw failure
+    }
+  }
+
   private createJournaledQuiz(
     quizz: Record<string, unknown>,
     extras: AnyQuizExtras,
@@ -58,6 +87,7 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
+    if (this.injections.creation) return this.createReservedQuiz(quizz, extras)
     let quizId = ""
     let journalCreated = false
     try {
@@ -299,6 +329,7 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
+    this.assertNativeCreationScope()
     const { quizz, extras } = params
     const baseDigest = computeCanonicalBaseDigest(quizz)
 
@@ -370,6 +401,7 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
+    this.assertNativeCreationScope()
     let effectivePayload = payload
 
     // Accept friendly Tada Show format and normalize to enhanced bundle
@@ -545,6 +577,8 @@ export class CompositeStorageService {
       }
     }
 
+    if (this.injections.creation)
+      return this.createReservedQuiz(validatedQuizz, null)
     const saveResult = this.injections.saveQuizz(validatedQuizz)
     const baseDigest = computeCanonicalBaseDigest(validatedQuizz)
 
