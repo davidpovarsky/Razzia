@@ -1,0 +1,14 @@
+[
+  {
+    "path": "extensions/src/server/game/phone-controller.ts",
+    "tested_902_git_blob": "92dbcea646acb9d1bd1e24536a532c004d379fcb",
+    "successor_f11_git_blob": "92dbcea646acb9d1bd1e24536a532c004d379fcb",
+    "identical": true
+  },
+  {
+    "path": "packages/socket/src/services/game/player-manager.ts",
+    "tested_902_git_blob": "47ebb12fdf6ab8fd87124c203c66fb6b27fde12a",
+    "successor_f11_git_blob": "47ebb12fdf6ab8fd87124c203c66fb6b27fde12a",
+    "identical": true
+  }
+]
