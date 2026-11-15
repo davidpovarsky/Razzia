@@ -7,7 +7,9 @@ import { Pricing } from "./Pricing"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState } from "react"
 import { useRouter, useRouterState } from "@tanstack/react-router"
-import { siteText as t, useSiteText } from "../../locales"
+import { siteText as t, siteLanguages } from "../../locales"
+import { useTranslation } from "react-i18next"
+import { matchesCatalogueSearch } from "./catalogue-search"
 import { SESSION_ROLES } from "@razzia/common/constants"
 import { getRole } from "@razzia/web/lib/session"
 import { ReferenceCanvas } from "../shared/ReferenceCanvas"
@@ -24,7 +26,10 @@ import {
 } from "lucide-react"
 
 export function MarketingSite() {
-  useSiteText()
+  const { i18n } = useTranslation("tadazzSite")
+  const resolvedLanguage = i18n.resolvedLanguage?.split("-")[0] ?? "en"
+  const language =
+    siteLanguages.find((item) => item === resolvedLanguage) ?? "en"
   const router = useRouter()
   const searchString = useRouterState({
     select: (state) => state.location.searchStr,
@@ -55,7 +60,7 @@ export function MarketingSite() {
   const visibleGames = catalogue.filter(
     (game) =>
       (filter === "All" || game.category === filter) &&
-      t(game.title).toLocaleLowerCase().includes(search.toLocaleLowerCase()),
+      matchesCatalogueSearch(t(game.title), search, language),
   )
   useEffect(() => {
     const onBack = () => {
