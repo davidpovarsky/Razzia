@@ -1,0 +1,26 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mpreserves native create/export/enhanced-import semantics for V1 with fresh question/timeline IDs[33m 615[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mpreserves native create/export/enhanced-import semantics for V2 with fresh question/timeline IDs[33m 477[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mpreserves authored-show note and opening metadata through the native reservation path[32m 222[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mpublishes zero public files when the first intent file fence fails[33m 8765[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mfails EXDEV without publication and reports a verified complete rollback[32m 203[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mcatches an enhanced sidecar EEXIST race before base publication and retains foreign bytes plus intent[33m 8417[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mfreezes one actual preparation and full V2 bytes and rejects foreign/reentrant/consumed capabilities[33m 401[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mrejects root storage-ID mismatch before preparation, allocation or filesystem changes[32m 4[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mdenies a pre-existing orphan sidecar before legacy base publication and retains exact foreign bytes[32m 83[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mexpiry rejects publication and preserves intent without using the timer as cleanup authority[33m 8809[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mretains BOTH siblings and complete evidence on base-replacement in two fresh replays[33m 12893[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mretains BOTH siblings and complete evidence on sidecar-in-place in two fresh replays[33m 13012[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mretains BOTH siblings and complete evidence on missing-witness in two fresh replays[33m 12795[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mretains BOTH siblings and complete evidence on newer-intent in two fresh replays[33m 12589[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mqualifies null-sidecar external interference honestly: an uncontrolled insertion can race a base link, and then the WHOLE pair is retained[33m 8294[2mms[22m[39m
+ [32m✓[39m src/server/storage/creation-reservation.test.ts[2m > [22mC1 private creation ownership and uncertainty[2m > [22mre-fences warm-visible committed intent and retains all witnesses when a fresh process repeats the fence failure[33m 17312[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m16 passed[39m[22m[90m (16)[39m
+[2m   Start at [22m 11:29:43
+[2m   Duration [22m 110.51s[2m (tests 96%, transform 3%, import 1%)[22m
+
+JSON report written to /qa/results/reservation.results.json
