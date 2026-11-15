@@ -59,8 +59,7 @@ export interface CompositionPreviewIdentityEnvelopeV2 {
   assetDigests: readonly Readonly<{ assetId: string; sha256: string }>[]
 }
 export type PreviewIdentityDigestInput =
-  | PreviewIdentityEnvelope
-  | CompositionPreviewIdentityEnvelopeV2
+  PreviewIdentityEnvelope | CompositionPreviewIdentityEnvelopeV2
 
 export function serializePreviewIdentity(
   input: PreviewIdentityDigestInput,
@@ -69,9 +68,10 @@ export function serializePreviewIdentity(
     throw new Error("Unsupported preview identity version")
   const ids = new Set<string>()
   for (const asset of input.assetDigests) {
-    const key = input.version === 1
-      ? asset.assetId
-      : JSON.stringify([asset.assetId, asset.sha256])
+    const key =
+      input.version === 1
+        ? asset.assetId
+        : JSON.stringify([asset.assetId, asset.sha256])
     if (ids.has(key) || !/^[a-f0-9]{64}$/u.test(asset.sha256)) {
       throw new Error("Invalid or duplicate asset digest")
     }

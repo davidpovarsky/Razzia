@@ -1,0 +1,4 @@
+[warn] extensions/src/mcp-app/contracts/canonical.ts
+[warn] extensions/src/mcp-app/tests/server/canonical-v2.nodecheck.ts
+[warn] extensions/src/mcp-app/tests/server/composition-preview-v2.nodecheck.ts
+[warn] Code style issues found in 3 files. Run Prettier with --write to fix.

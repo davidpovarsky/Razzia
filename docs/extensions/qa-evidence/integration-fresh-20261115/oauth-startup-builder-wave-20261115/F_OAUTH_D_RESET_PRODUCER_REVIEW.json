@@ -1,0 +1,66 @@
+{
+  "captured_utc": "2026-11-15T16:56:04.398574+00:00",
+  "F": {
+    "source": "51946e1aca2935219e8dc639cba8197ad54c1e7e",
+    "evidence": "5cc1356d0505ce044b7d5a986d82079e286084b9",
+    "exactGitInputs": 170,
+    "rawFinalLogsVerified": 3,
+    "privateTC": 0,
+    "firstparty": 43,
+    "sdkHTTP": 55,
+    "dependencies": 12,
+    "locksUnchanged": true,
+    "terminalExit1InitialFailureNotRelabeled": true,
+    "realConsentHostAndPreview": "NOT_RUN"
+  },
+  "Dreset": {
+    "source": "26f00fa67928864e0e510d2aef7c45cdb10a1794",
+    "evidence": "e12de0028c0c3bf28d537e662ef92b6ff7b8aadc",
+    "checks": {
+      "before": [
+        {
+          "name": "tests",
+          "exit": 1
+        }
+      ],
+      "after": [
+        {
+          "name": "tests",
+          "exit": 0
+        },
+        {
+          "name": "types",
+          "exit": 0
+        },
+        {
+          "name": "format",
+          "exit": 0
+        },
+        {
+          "name": "lint",
+          "exit": 1
+        }
+      ],
+      "final": [
+        {
+          "name": "tests",
+          "exit": 0
+        },
+        {
+          "name": "types",
+          "exit": 0
+        },
+        {
+          "name": "format",
+          "exit": 0
+        },
+        {
+          "name": "lint",
+          "exit": 0
+        }
+      ]
+    },
+    "actualBug": "invalid section silent acceptance, not corruption"
+  },
+  "managerCombinedRuntime": "NOT_RUN"
+}

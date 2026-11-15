@@ -1,0 +1,3 @@
+extensions/src/mcp-app/contracts/canonical.ts 226ms
+extensions/src/mcp-app/tests/server/canonical-v2.nodecheck.ts 43ms
+extensions/src/mcp-app/tests/server/composition-preview-v2.nodecheck.ts 51ms

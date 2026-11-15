@@ -21,24 +21,41 @@ test("V1 bytes stay frozen when the explicit V2 digest input is added", () => {
       { assetId: "a", sha256: "a".repeat(64) },
     ],
   }
-  const expected = '{"assetDigests":[{"assetId":"a","sha256":"' + "a".repeat(64) +
-    '"},{"assetId":"z","sha256":"' + "f".repeat(64) +
+  const expected =
+    '{"assetDigests":[{"assetId":"a","sha256":"' +
+    "a".repeat(64) +
+    '"},{"assetId":"z","sha256":"' +
+    "f".repeat(64) +
     '"}],"compiledPin":null,"draftId":"draft-v1","identityMap":[],"normalizedAuthoredContent":{"cards":["b","a"]},"revision":2,"version":1}'
   assert.equal(serializePreviewIdentity(identity), expected)
-  assert.equal(previewIdentityDigest(identity), createHash("sha256").update(expected).digest("hex"))
-  assert.throws(() => serializePreviewIdentity({ ...identity, assetDigests: [
-    { assetId: "classic-poster", sha256: "a".repeat(64) },
-    { assetId: "classic-poster", sha256: "f".repeat(64) },
-  ] }), /duplicate/)
+  assert.equal(
+    previewIdentityDigest(identity),
+    createHash("sha256").update(expected).digest("hex"),
+  )
+  assert.throws(
+    () =>
+      serializePreviewIdentity({
+        ...identity,
+        assetDigests: [
+          { assetId: "classic-poster", sha256: "a".repeat(64) },
+          { assetId: "classic-poster", sha256: "f".repeat(64) },
+        ],
+      }),
+    /duplicate/,
+  )
 })
 
 function identity(): CompositionPreviewIdentityEnvelopeV2 {
   return {
-    version: 2, draftId: "draft-v2", revision: 4,
+    version: 2,
+    draftId: "draft-v2",
+    revision: 4,
     compositionPreviewContent: {
       preview: { authored: ["question-1", "question-2"], compiledPin: null },
       compositionDocumentSha256: "d".repeat(64),
-      scopeBindings: [{ scopeId: "scope-current", authoredCardKey: "constructor" }],
+      scopeBindings: [
+        { scopeId: "scope-current", authoredCardKey: "constructor" },
+      ],
     },
     previewContext: { role: "spectator", locale: "en", reducedMotion: false },
     assetDigests: [
@@ -52,11 +69,38 @@ test("V2 identity preserves same-ID/different-SHA pairs and rejects duplicate ex
   const input = identity()
   const original = structuredClone(input)
   const encoded = serializePreviewIdentity(input)
-  assert.equal(previewIdentityDigest(input), createHash("sha256").update(encoded).digest("hex"))
-  assert.equal(previewIdentityDigest(input), previewIdentityDigest({ ...input, assetDigests: [...input.assetDigests].reverse() }))
-  assert.notEqual(previewIdentityDigest(input), previewIdentityDigest({ ...input, assetDigests: input.assetDigests.slice(1) }))
-  assert.throws(() => serializePreviewIdentity({ ...input, assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!] }), /duplicate/)
-  assert.throws(() => serializePreviewIdentity({ ...input, assetDigests: [{ assetId: "bad", sha256: "BAD" }] }))
+  assert.equal(
+    previewIdentityDigest(input),
+    createHash("sha256").update(encoded).digest("hex"),
+  )
+  assert.equal(
+    previewIdentityDigest(input),
+    previewIdentityDigest({
+      ...input,
+      assetDigests: [...input.assetDigests].reverse(),
+    }),
+  )
+  assert.notEqual(
+    previewIdentityDigest(input),
+    previewIdentityDigest({
+      ...input,
+      assetDigests: input.assetDigests.slice(1),
+    }),
+  )
+  assert.throws(
+    () =>
+      serializePreviewIdentity({
+        ...input,
+        assetDigests: [input.assetDigests[0]!, input.assetDigests[0]!],
+      }),
+    /duplicate/,
+  )
+  assert.throws(() =>
+    serializePreviewIdentity({
+      ...input,
+      assetDigests: [{ assetId: "bad", sha256: "BAD" }],
+    }),
+  )
   assert.deepEqual(input, original)
 })
 
@@ -68,9 +112,28 @@ test("V2 binds the full returned content, context and revision through the exist
     { revision: 5 },
     { previewContext: { role: "manager", locale: "en", reducedMotion: false } },
     { compositionPreviewContent: "d".repeat(64) },
-    { compositionPreviewContent: { extra: "changed", original: input.compositionPreviewContent } },
-  ]) assert.notEqual(previewIdentityDigest({ ...input, ...change }), expected)
-  assert.deepEqual(JSON.parse(serializePreviewIdentity(input)).compositionPreviewContent, input.compositionPreviewContent)
-  assert.throws(() => serializePreviewIdentity({ ...input, compositionPreviewContent: { n: Infinity } }))
-  assert.throws(() => serializePreviewIdentity({ ...input, compositionPreviewContent: JSON.parse('{"__proto__":{}}') }))
+    {
+      compositionPreviewContent: {
+        extra: "changed",
+        original: input.compositionPreviewContent,
+      },
+    },
+  ])
+    assert.notEqual(previewIdentityDigest({ ...input, ...change }), expected)
+  assert.deepEqual(
+    JSON.parse(serializePreviewIdentity(input)).compositionPreviewContent,
+    input.compositionPreviewContent,
+  )
+  assert.throws(() =>
+    serializePreviewIdentity({
+      ...input,
+      compositionPreviewContent: { n: Infinity },
+    }),
+  )
+  assert.throws(() =>
+    serializePreviewIdentity({
+      ...input,
+      compositionPreviewContent: JSON.parse('{"__proto__":{}}'),
+    }),
+  )
 })
