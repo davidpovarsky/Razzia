@@ -17,6 +17,8 @@ Independent reviewer acceptance is required before source tasks are DONE. Full C
 
 ## Verified local checkpoint
 
+Successor review correction: see `REVIEW_CORRECTION.md`. Independent QA returned REQUEST_CHANGES on the initial commit; seven new transaction-path faults reproduce before the correction and pass afterwards. Final successor focused regression is 85/85 (44 new + 41 original), including full immediate rollback byte verification, committed cleanup retention and removal of forced chmod. Independent QA and the pre-ID creation gate remain OPEN. The 78-case run below is retained as the earlier checkpoint.
+
 `focused-final-r2.log`: **78/78 PASS**, five files: 37 new recovery cases plus 41 original focused regressions. The extra case beyond the manager's earlier 77-case count proves compatibility with the real adapter's matching top-level storage ID and payload digest. `types-final.log`: scoped TypeScript exit 0. `scope-audit.json`: no protected source/manifest changes, media edits confined to approved symbols, original media test confined to the two approved fixture lines. `freeze-files-only.log`: all 602 protected paths verified, with only nine previously approved historical seams.
 
 The initial valid-fixture baseline was 19 PASS / 8 FAIL; fixes cover the five failed quiz-save checks and three failed media checks. `baseline-create.log` separately records three failing cleanup cases before after-ID journal hardening. The first `baseline-storage.log` had an invalid test fixture (`scene.audio.mode=media` instead of the real schema's `custom`); it is retained and is **not** evidence of a production failure.

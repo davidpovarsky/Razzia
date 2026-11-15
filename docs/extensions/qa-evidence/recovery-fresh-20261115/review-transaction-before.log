@@ -1,0 +1,169 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal when quarantine cleanup fails and replays safely
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains committed journal when quarantine cleanup fails and replays safely
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves evidence when a restore rename silently changes valid sidecar content
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > recovers concurrent journal families with real matching base digest
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction committed cleanup retains its journal after quarantine unlink EACCES 220ms
+   → expected [] to have a length of 1 but got +0
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent base corruption 167ms
+   → expected [] to have a length of 1 but got +0
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent sidecar corruption 272ms
+   → expected [] to have a length of 1 but got +0
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent binary corruption 184ms
+   → expected [] to have a length of 1 but got +0
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback preserves permission-denied restores without chmod 151ms
+   → expected "chmodSync" to not be called at all, but actually been called 3 times
+
+Received:
+
+  1st chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\quizz\show-a.json",
+      438,
+    ]
+
+  2nd chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\quizz\show-b.json",
+      438,
+    ]
+
+  3rd chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\extensions\quizzes\show-b.json",
+      438,
+    ]
+
+
+Number of calls: 3
+
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending quarantine cleanup and replays 140ms
+   → expected undefined to be truthy
+ × src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending journal cleanup and replays 147ms
+   → expected undefined to be truthy
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 7 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction committed cleanup retains its journal after quarantine unlink EACCES
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/media-library-recovery.test.ts:378:24
+    376|     const result = transaction()
+    377|     recordTransactionFault("committed-quarantine-unlink-EACCES", befor…
+    378|     expect(journals()).toHaveLength(1)
+       |                        ^
+    379|     expect(result.allowed).toBe(true)
+    380|     expect(result.journalId).toBeTruthy()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/7]⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent base corruption
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent sidecar corruption
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent binary corruption
+AssertionError: expected [] to have a length of 1 but got +0
+
+- Expected
++ Received
+
+- 1
++ 0
+
+ ❯ src/server/media-library-recovery.test.ts:423:24
+    421|     })
+    422|     recordTransactionFault(`immediate-rollback-silent-${fault}`, befor…
+    423|     expect(journals()).toHaveLength(1)
+       |                        ^
+    424|     expect(result.allowed).toBe(false)
+    425|     expect(result.journalId).toBeTruthy()
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/7]⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback preserves permission-denied restores without chmod
+AssertionError: expected "chmodSync" to not be called at all, but actually been called 3 times
+
+Received:
+
+  1st chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\quizz\show-a.json",
+      438,
+    ]
+
+  2nd chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\quizz\show-b.json",
+      438,
+    ]
+
+  3rd chmodSync call:
+
+    Array [
+      "C:\Users\DAVID\AppData\Local\Temp\tadazz-recovery-synthetic-lDbzXX\extensions\quizzes\show-b.json",
+      438,
+    ]
+
+
+Number of calls: 3
+
+ ❯ src/server/media-library-recovery.test.ts:457:23
+    455|     })
+    456|     recordTransactionFault("immediate-rollback-permission-denied", bef…
+    457|     expect(chmod).not.toHaveBeenCalled()
+       |                       ^
+    458|     expect(journals()).toHaveLength(1)
+    459|     expect(result.error).toMatch(/journal preserved/i)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/7]⎯
+
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending quarantine cleanup and replays
+ FAIL  src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending journal cleanup and replays
+AssertionError: expected undefined to be truthy
+
+- Expected:
+true
+
++ Received:
+undefined
+
+ ❯ src/server/media-library-recovery.test.ts:479:30
+    477|     })
+    478|     recordTransactionFault(`immediate-rollback-${fault}-cleanup`, befo…
+    479|     expect(result.journalId).toBeTruthy()
+       |                              ^
+    480|     expect(result.error).toMatch(/journal preserved/i)
+    481|     expect(journals()).toHaveLength(1)
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[4/7]⎯
+
+
+ Test Files  1 failed (1)
+      Tests  7 failed | 18 skipped (25)
+   Start at  05:19:37
+   Duration  5.73s (import 44%, transform 31%, tests 25%)

@@ -1,0 +1,33 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115/extensions
+
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-copy
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at staged-journal
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at first-base-write
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at last-sidecar-write
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at binary-delete
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at committed-journal
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at quarantine-cleanup
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > restarts twice from actual disk snapshot at journal-cleanup
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal and quarantine after partial restore and retries
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > blocks startup rather than restoring refs when original and quarantine are missing
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on unreadable-show
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves committed journal and quarantine on binary-present
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > does not treat failed committed-marker rename as a durable commit
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > rejects unsafe journal IDs without writing outside authorized paths
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains staged journal when quarantine cleanup fails and replays safely
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > retains committed journal when quarantine cleanup fails and replays safely
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > preserves evidence when a restore rename silently changes valid sidecar content
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > recovers concurrent journal families with real matching base digest
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction committed cleanup retains its journal after quarantine unlink EACCES
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent base corruption
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent sidecar corruption
+ ✓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback retains evidence after silent binary corruption 382ms
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback preserves permission-denied restores without chmod
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending quarantine cleanup and replays
+ ↓ src/server/media-library-recovery.test.ts > media-delete deterministic restart snapshots > transaction rollback reports pending journal cleanup and replays
+
+ Test Files  1 passed (1)
+      Tests  1 passed | 24 skipped (25)
+   Start at  05:22:14
+   Duration  2.93s (import 47%, transform 38%, tests 15%)
