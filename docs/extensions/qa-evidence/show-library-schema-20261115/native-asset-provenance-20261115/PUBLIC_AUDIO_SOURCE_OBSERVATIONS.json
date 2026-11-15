@@ -1,0 +1,32 @@
+{
+  "observedDate": "2026-11-15",
+  "method": "Web tool read of three specific primary source pages; summarized facts only",
+  "pages": [
+    {
+      "url": "https://sfxmint.com/license",
+      "observations": {
+        "publicLibraryLabel": "CC0 1.0",
+        "currentCreditGenerationIsSeparate": true,
+        "privateCreditGenerationNotBlanketPublicLibraryGrant": true,
+        "downloadLicenseSpecificityMentioned": true
+      }
+    },
+    {
+      "url": "https://sfxmint.com/sounds/transition-swoosh-49",
+      "sound": "Light Silky Fabric Swoosh 49",
+      "licenseLabelObserved": "CC0 1.0",
+      "directMp3UrlObserved": "https://sfxmint.com/dl/transition-swoosh-49.mp3"
+    },
+    {
+      "url": "https://sfxmint.com/sounds/ui-chime-46",
+      "sound": "Soft Bell-Like Notification Chime 46",
+      "licenseLabelObserved": "CC0 1.0",
+      "directMp3UrlObserved": "https://sfxmint.com/dl/ui-chime-46.mp3"
+    }
+  ],
+  "scope": "Current source-page assertions for these two public sounds only",
+  "historicalLicenseArchiveVerified": false,
+  "adaptationTransformationReproduced": false,
+  "otherMediaOrFontGrantInferred": false,
+  "runtimeOrExportAuthorityInstalled": false
+}
