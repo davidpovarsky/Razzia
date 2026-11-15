@@ -59,7 +59,9 @@ for (const [language, key] of [
     await search.fill(title.toLocaleUpperCase(language))
     await expect(page.locator("article.game-card")).toHaveCount(1)
     await expect(
-      page.locator("article.game-card").getByText(title, { exact: true }),
+      page
+        .locator("article.game-card")
+        .getByRole("heading", { name: title, exact: true }),
     ).toBeVisible()
     await expect(
       page.getByText(dictionary["No games found"], { exact: true }),
