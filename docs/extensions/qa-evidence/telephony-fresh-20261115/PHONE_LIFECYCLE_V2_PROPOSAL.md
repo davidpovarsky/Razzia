@@ -1,5 +1,7 @@
 # Phone lifecycle v2 — proposed contract 0.1, NOT IMPLEMENTED
 
+Design follow-up: [PHONE_LIFECYCLE_V2_SOURCE_SEAMS.md](PHONE_LIFECYCLE_V2_SOURCE_SEAMS.md) is source-bound draft0.2 after manager selects server-registration precedence with predecessor CAS/fail-closed ambiguity. Neither draft authorizes or implements lifecycle hooks; original API11 physical chronology remains unmet.
+
 Addresses measured API09/10/11 gaps: a retired A call can replace B after gateway tombstone expiry or a real gateway process restart; an earlier request arriving late can replace B when the backend has no trusted registration order. No opaque CallId comparison, provider timestamp guess, longer in-memory TTL or assumption that abort rolled back a mutation can solve these guarantees.
 
 This is a versioned design for manager review, not a wire/schema/storage lease. Keep existing legacy acceptance failures and receipts. Do not change the original thirteen assertions or describe v2 as accepted before its semantics and migration gates are approved.
