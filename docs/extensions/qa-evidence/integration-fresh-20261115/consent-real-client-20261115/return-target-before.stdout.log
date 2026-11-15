@@ -1,0 +1,12 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions
+
+ ❯ src/site/adapters/client-return.test.ts (8 tests | 1 failed) 12ms
+   ❯ consent sign-in return target (8)
+     × allows the exact query-free first-party consent page 8ms
+
+ Test Files  1 failed (1)
+      Tests  1 failed | 7 passed (8)
+   Start at  20:35:32
+   Duration  1.03s (transform 52%, import 31%, worker 13%, tests 4%)
+

@@ -1,0 +1,22 @@
+{
+  "parser": "Actual installed Babel TypeScript parser",
+  "version": "7.29.9",
+  "rows": [
+    {
+      "path": "extensions/qa/theme-builder/oauth-consent.spec.ts",
+      "executedSha256": "b7c3b120572d921a4256517deaf86bb852fbc549ffbc65d164fd5cb762ba5ece",
+      "integratedSha256": "66141a1f39e00960c3cd6d6c98f9e94bedf89546459262504d27c8898df3f08a",
+      "normalizedAstEqual": true,
+      "normalizedAstSha256": "a271c9713a7bcede305443b40564dbcc9f2a3c36c1decf420a7afbfe86202464"
+    },
+    {
+      "path": "extensions/src/components/oauth-consent/client.test.ts",
+      "executedSha256": "6222c8a53a45315b47ba9cae70ef718cf103514d2848736746a07d4ccaf59d22",
+      "integratedSha256": "1f3e12860b516c934357b6e21681296bc0c9983563d5401c0bf260b3b06fbea8",
+      "normalizedAstEqual": true,
+      "normalizedAstSha256": "489ab211c00f1c8f9cf4a76f6626ac1066a6a3f01acb9432bdf278389faa7d26"
+    }
+  ],
+  "positionsTriviaAndRawSpellingOmitted": true,
+  "decodedValuesFlagsAndChildOrderRetained": true
+}

@@ -1,0 +1,22 @@
+{
+  "command": [
+    "C:/Users/DAVID/.local/tools/node-v24.22.1-win-x64/node.exe",
+    "extensions/node_modules/typescript/bin/tsc",
+    "--noEmit",
+    "-p",
+    "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\docs\\extensions\\qa-evidence\\integration-fresh-20261115\\consent-real-client-20261115\\tsconfig.studio-focused-r2.json"
+  ],
+  "exit": 0,
+  "streams": {
+    "stdout": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "genuineTypeRootAndExistingAmbientDeclarations": true,
+  "noNewShimOrWeakenedCompilerOptions": true
+}

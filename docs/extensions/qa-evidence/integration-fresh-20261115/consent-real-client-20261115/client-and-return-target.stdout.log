@@ -1,0 +1,9 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-integration-20261115/extensions
+
+
+ Test Files  2 passed (2)
+      Tests  14 passed (14)
+   Start at  20:35:34
+   Duration  777ms (import 55%, transform 29%, tests 12%, worker 3%)
+

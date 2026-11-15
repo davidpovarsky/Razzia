@@ -1,0 +1,15 @@
+{
+  "utc": "2026-11-15T18:25:39.8302488Z",
+  "show_ui_before_mib": 88,
+  "show_ui_after_mib": 89,
+  "actual_consumed_preserved_bytes": 92155904,
+  "remaining_show_ui_bytes": 1167360,
+  "unassigned_pool_before_mib": 8,
+  "unassigned_pool_after_mib": 7,
+  "manager_ceiling_unchanged_mib": 32,
+  "observed_free_bytes": 2522624000,
+  "floor_margin_all_remaining_and_pool_bytes": 2345349120,
+  "all_peer_history_claims_preserved": true,
+  "no_compute_claim_created": true,
+  "no_cleanup_or_service_change": true
+}
