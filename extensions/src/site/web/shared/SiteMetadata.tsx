@@ -25,10 +25,6 @@ export function SiteMetadata({ tenantName }: { tenantName?: string }) {
   )
 
   useEffect(() => {
-    if (metadata.native) {
-      return
-    }
-
     const html = document.documentElement
     const previousLang = html.lang
     const previousDir = html.dir
@@ -37,11 +33,17 @@ export function SiteMetadata({ tenantName }: { tenantName?: string }) {
     )
       ? language
       : "en"
-    html.dir = "ltr"
+
+    if (!metadata.native) {
+      html.dir = "ltr"
+    }
 
     return () => {
       html.lang = previousLang
-      html.dir = previousDir
+
+      if (!metadata.native) {
+        html.dir = previousDir
+      }
     }
   }, [language, metadata.native])
 
