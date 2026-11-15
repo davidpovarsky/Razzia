@@ -180,6 +180,23 @@ export class CompositionRepositoryBase<Document> {
     return this.save(to, null, original.document)
   }
 
+  /** Restore content into a new draft revision; never republish or mutate room pins. */
+  async restoreDraft(
+    input: CompositionDraftKey,
+    expectedRevision: number,
+    version: string,
+  ): Promise<CompositionDraftRecord<Document>> {
+    const requested = key(input)
+    revisionSchema.parse(expectedRevision)
+    const publication = await this.version(requested, version)
+
+    if (!publication) {
+      throw new Error("show-library:composition-version-not-found")
+    }
+
+    return this.save(requested, expectedRevision, publication.document)
+  }
+
   async publish(
     input: CompositionDraftKey,
     expectedRevision: number,
