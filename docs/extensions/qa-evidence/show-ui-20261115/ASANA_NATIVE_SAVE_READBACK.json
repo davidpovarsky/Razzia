@@ -1,0 +1,35 @@
+{
+  "observedUtc": "2026-11-15T20:55:51.022Z",
+  "nativeSaveProduct": "0a7cdbf3b939f10e15d7c35ef1a482a6bb4a3f6e",
+  "nativeSaveEvidence": "c0de19097a623fc2fe0f215de4a0c3d4222a268f",
+  "nativeProduct": "ecfe9ba4777c8854df00a0b4401fe5dcab719aa3",
+  "nativeEvidence": "69b6caa4bf7fd984fde311ae515e3b2531ae8bbc",
+  "checks": [
+    {
+      "task": "1220486196056865",
+      "completed": false,
+      "sourceAndExecutedEvidenceCheckpoint": true
+    },
+    {
+      "task": "1220486371643814",
+      "completed": false,
+      "sourceAndExecutedEvidenceCheckpoint": true
+    },
+    {
+      "task": "1220486398573830",
+      "completed": false,
+      "sourceAndExecutedEvidenceCheckpoint": true
+    }
+  ],
+  "limits": "Only own three task notes updated; no task completed. Native Save client/page proof is synthetic DTO fixture, actual B/F+host/native Save acceptance remains OPEN.",
+  "managerNativeIntake": {
+    "product": "b920487",
+    "evidence": "9bca3e007b3ba2774f6a4dcfa0e2f80772579056",
+    "reportedSelectedTests": 36,
+    "reportedTypeScript": 0,
+    "reportedFormatterFiles": 20,
+    "reportedBrowserProofReuse": "Exact native21 45 checks, not rerun by manager.",
+    "developmentWidgetThread": "01a1e0f6-ed87-7cd0-ba3b-b1cb80b1e046",
+    "productionOrNativeSaveAcceptance": false
+  }
+}
