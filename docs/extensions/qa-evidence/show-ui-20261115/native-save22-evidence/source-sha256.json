@@ -1,0 +1,15 @@
+{
+  "extensions/src/components/native-save-consent/client.test.ts": "05bd6d703029c7168df0f968332b83e2530c429af352524576ad5ef3cc8a614b",
+  "extensions/src/components/native-save-consent/client.ts": "6f198f2cdb08ecfdf34a34afe414305f011fe37f9f462f2e3d4a5a96e73736d8",
+  "extensions/src/components/native-save-consent/csp-admission.ts": "256497b78ca04a43542874fbba709c41394bf27af3fcea8eb2e11f979f6fbeec",
+  "extensions/src/components/native-save-consent/NativeSaveConsentPage.tsx": "6844044ead51b13055e4b274faf2903bdcfb3119170a146fad1785b9679e7bb3",
+  "extensions/src/components/native-save-consent/strings.ts": "10aaa4f08a49b928f8822da1322e7973b45bfb773f5300707088a1b563d34a94",
+  "extensions/qa/theme-builder/native-save-build-receipt.mjs": "a2b198a8d7101876e1fd07b6dc11bdf2152200fb3b931f0914601d26f8305555",
+  "extensions/qa/theme-builder/native-save-fixture.tsx": "1f88ca8eafa2a3470d56ad14b0993d17d388ff4fa0d37d30d0d224008b258ead",
+  "extensions/qa/theme-builder/native-save-playwright.config.ts": "ea8ec5121469392ba7108a966ab379b3a42435b54e3e3506d9a8bb39d1e8f06a",
+  "extensions/qa/theme-builder/native-save-server.ts": "1fcf96c01cd60aa0fea641b548505dce2c0fa7ea2c6eaba8cf19400a01538fff",
+  "extensions/qa/theme-builder/native-save-server.vite.config.ts": "9d1012e63b1f2d3c3ce116162e8904ed68e7b22288de52caa6003d5c69b5df0e",
+  "extensions/qa/theme-builder/native-save-ui.vite.config.ts": "d3563e7f64ea185578d4014f56d0d3be79c301461fc7ce37c38ee6253f24a5dd",
+  "extensions/qa/theme-builder/native-save.html": "2a01721c9103bf21f86e6078f411d9022e10d503aee5f469715b408487d68939",
+  "extensions/qa/theme-builder/native-save.spec.ts": "6a366623f061b270b666dc6af165a04786e3a30a7d7a806ff60db61b5f140e77"
+}

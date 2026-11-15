@@ -1,0 +1,1 @@
+{"extends": "/work/extensions/tsconfig.json", "include": ["/work/extensions/src/components/native-save-consent/**/*", "/work/extensions/qa/theme-builder/native-save*.ts", "/work/extensions/qa/theme-builder/native-save*.tsx", "/work/extensions/src/site/env.d.ts"], "compilerOptions": {"typeRoots": ["/work/extensions/node_modules/@types"]}}
