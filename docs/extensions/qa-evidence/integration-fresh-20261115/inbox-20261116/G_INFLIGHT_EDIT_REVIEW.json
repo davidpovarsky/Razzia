@@ -1,0 +1,20 @@
+{
+  "case": "Typing a new unsent title during an in-flight SDK update preserves that new edit after ACK",
+  "artifactSha256": "f0ab3172c98c9e602c7a3ea01dc02bf14da5bdc822d58692e0a7390195135e4d",
+  "source": "2bf5d2272396fffa826c94c605545d2211df8819",
+  "scope": "NEW local actual Edge/opaque iframe/AppSDK, exact G artifact; synthetic host draft responses only",
+  "errors": [],
+  "external": [],
+  "status": "FAIL",
+  "browser": "157.0.4341.46",
+  "editEnabledDuringWrite": true,
+  "beforeAck": "UNSENT title B",
+  "afterAck": "ACK title A",
+  "revision": 2,
+  "calls": [
+    "get_game_draft",
+    "update_game_draft"
+  ],
+  "failure": "AssertionError [ERR_ASSERTION]: Acknowledgement for A must not replace unsent title B\n+ actual - expected\n\n+ 'ACK title A'\n- 'UNSENT title B'\n",
+  "ownBrowserAndLoopbackClosed": true
+}

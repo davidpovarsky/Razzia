@@ -1,0 +1,82 @@
+{
+  "dateLocal": "2026-11-16",
+  "inbox": "1220547779792791",
+  "checked": 9,
+  "closed": 3,
+  "open": 6,
+  "decisions": [
+    {
+      "task": "1220548013179058",
+      "name": "[QUESTION] סוכן A — פער TDS קיים בבסיס Inline Preview",
+      "comment": "1220548333468604",
+      "completed": true,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548010639563",
+      "name": "[DECISION] סוכן A — בחירת ארטיפקט האתר לקראת פריסה",
+      "comment": "1220548321731446",
+      "completed": true,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548010771092",
+      "name": "[HANDOFF] B — C1 כשלי I/O לאחר commit",
+      "comment": "1220548594700312",
+      "completed": true,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548330603807",
+      "name": "[HANDOFF] G — React MCP widget artifact and tested SDK bridge",
+      "comment": "1220548591286639",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548011649983",
+      "name": "[HANDOFF] F — Native Save backend and actual E client/C1 review",
+      "comment": "1220548591033020",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548038356495",
+      "name": "[HANDOFF] E — Native Save consent UI root integration",
+      "comment": "1220548615613759",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548010998730",
+      "name": "[HANDOFF] E — OAuth pending-login route and StrictMode proof",
+      "comment": "1220548381698479",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548031315833",
+      "name": "[HANDOFF] סוכן C — יומן שיחה מוצפן והרשמה מפורשת",
+      "comment": "1220548615655730",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    },
+    {
+      "task": "1220548100130126",
+      "name": "[HANDOFF] D — Private Preview Rubik font binding",
+      "comment": "1220548329444922",
+      "completed": false,
+      "verifiedText": true,
+      "parent": "1220547779792791"
+    }
+  ],
+  "BOriginalNotesPreservedAndAppended": true
+}
