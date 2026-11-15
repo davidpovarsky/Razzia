@@ -303,7 +303,10 @@ test("NATIVE-01 default-off delegates remain usable; existing phone binding cann
     assert.equal(joined.ok, true)
     await r.factory.initializeAuthority(session.token, r.game.gameId)
     if (enabled) await assert.rejects(r.factory.issue(session.token, r.issue))
-    else assert.ok((await r.factory.issue(session.token, r.issue)).receipt.ok)
+    else {
+      const issued = await r.factory.issue(session.token, r.issue)
+      secrets.push(issued.credential!); assert.ok(issued.receipt.ok)
+    }
     assert.equal(isPhoneLifecycleV2Adopted(r.game), false)
     assert.equal(r.game.players.length, 1)
   }
@@ -330,7 +333,7 @@ test("NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/r
   const pilotSecret = randomBytes(32).toString("hex"); secrets.push(pilotSecret)
   process.env.TADA_PILOT_SECRET = pilotSecret
   for (const action of ["join_or_poll", "answer", "hangup"]) {
-    const response = await fetch(base + "/api/games/pilot-phone", { method: "POST",
+    const response: Response = await fetch(base + "/api/games/pilot-phone", { method: "POST",
       headers: { "content-type": "application/json", "x-tada-pilot-secret": pilotSecret },
       body: JSON.stringify({ gameId: r.game.gameId, action, callId: "legacy-bypass", phone: input.phone,
         rosterPlayerId: joined.rosterPlayerId, answerIndex: 0 }), signal: AbortSignal.timeout(8000) })
@@ -375,6 +378,13 @@ test("NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/r
   const answer = await r.factory.operate(a, credential, op)
   assert.equal(answer.accepted, true)
   assert.deepEqual(await r.factory.operate(a, credential, op), answer)
+  // The original round awards points on reveal. Exercise its real manager flow.
+  const scoreDeadline = Date.now() + 8000
+  while (r.game.players.find(player => player.clientId === joined.clientId)!.points <= 0) {
+    if (Date.now() > scoreDeadline) throw new Error("Actual native score was not revealed")
+    manager.emit(EVENTS.MANAGER.ADVANCE, { gameId: r.game.gameId })
+    await new Promise(done => setTimeout(done, 150))
+  }
   const points = r.game.players.find(player => player.clientId === joined.clientId)!.points
   assert.ok(points > 0)
   const poll = await r.factory.operate(a, credential, { ...op, operationId: "native-poll", action: "poll" })
@@ -414,7 +424,7 @@ test("NATIVE-03 adoption during actual asynchronous join-ticket signing denies r
 })
 
 test("AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure", { timeout: 30000 }, async (t) => {
-  const r = await setup("issue-three")
+  const r = await setup("issue-three", true)
   await r.factory.initializeAuthority(session.token, r.game.gameId)
   const issued = await r.factory.issue(session.token, r.issue), credential = issued.credential!; secrets.push(credential)
   const a = address(r.game.gameId, issued.receipt.service)
