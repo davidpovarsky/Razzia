@@ -1,0 +1,19 @@
+
+[1m[30m[46m RUN [49m[39m[22m [36mv5.0.3 [39m[90m/work/extensions[39m
+
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quarantine-copy without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at staged-journal without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at first-base-write without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at last-sidecar-write without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at binary-delete without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at committed-journal without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quarantine-cleanup without transaction unwind
+ [2m[90m↓[39m[22m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at journal-cleanup without transaction unwind
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quiz-base-write without transaction unwind[33m 12411[2mms[22m[39m
+ [32m✓[39m src/server/storage/process-interruption.test.ts[2m > [22mreal process interruption and fresh-process recovery[2m > [22minterrupts at quiz-sidecar-write without transaction unwind[33m 11801[2mms[22m[39m
+
+[2m Test Files [22m [1m[32m1 passed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[32m2 passed[39m[22m[2m | [22m[33m8 skipped[39m[90m (10)[39m
+[2m   Start at [22m 05:24:18
+[2m   Duration [22m 29.49s[2m (tests 84%, transform 12%, import 4%)[22m
+

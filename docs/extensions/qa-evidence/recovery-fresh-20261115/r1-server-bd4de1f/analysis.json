@@ -1,0 +1,725 @@
+{
+  "kind": "offline-producer-run-receipt-analysis",
+  "executedCommit": "bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+  "rawReceiptsMatchedToServerHashes": [
+    {
+      "path": "native-r1/binding-media-foreign.json",
+      "sha256": "da9e0642cb5d45e679004237ba6825b2235144bbdf3e5476f4654aa1bc2ee585"
+    },
+    {
+      "path": "native-r1/binding-media-sidecar-only.json",
+      "sha256": "97564ccf325fbe9f9cd9bcc9589dd2a606d3a4f5158542aa653f19aad262ff3c"
+    },
+    {
+      "path": "native-r1/binding-media.json",
+      "sha256": "0adc1664b2c1f48fa506b83571a78dd29cd5c60ba622f95d1edbe132aff8ddea"
+    },
+    {
+      "path": "native-r1/binding-quiz-base.json",
+      "sha256": "84ad3c15add6803daa6bdbd49b3b88036be490e026e4a71fb487ed0c27d60fea"
+    },
+    {
+      "path": "native-r1/binding-quiz-foreign.json",
+      "sha256": "35debeccd1481e79fb972b5818a90a6b1bd110f641322790e501bce3fbb6e9f8"
+    },
+    {
+      "path": "native-r1/binding-quiz-sidecar.json",
+      "sha256": "4052d00586743b3007b7c13afe2a6887fb226483c2a1526292663bbda17d3cd3"
+    },
+    {
+      "path": "native-r1/logical-digest-ordinary.json",
+      "sha256": "67afe22c18e3a7ec16a535d89235227db12803586bd5c93eef725d2ef11a33dc"
+    },
+    {
+      "path": "native-r1/logical-digest-stripped.json",
+      "sha256": "fabaf345d706e0a4c11054f5f2f26b3fc1d0046af5d3820c7bc4e61f1dd80f69"
+    },
+    {
+      "path": "native-r1/native-stripped-baseline.json",
+      "sha256": "de6279a5c0860373dda9fddc58589c1c1ef503b10da28a23be0b2ed40c9291ec"
+    },
+    {
+      "path": "process-v2/quiz-base-write.json",
+      "sha256": "1846a53c6c4ccd216ea80556a2d409952df941552717ca951894c59e4d173a7a"
+    },
+    {
+      "path": "process-v2/quiz-sidecar-write.json",
+      "sha256": "dcaa37ef557105cac99de8790abf5448a364afd50ea7a3a32db4b63b28dd03c7"
+    }
+  ],
+  "runtime": {
+    "processV2Exit": 0,
+    "nativeExit": 1,
+    "nativePassed": 2,
+    "nativeFailed": 7
+  },
+  "inputsAfterNative": {
+    "commit": "bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+    "inputs": 1332,
+    "mismatches": [],
+    "status": "PASS"
+  },
+  "runnerStopped": true,
+  "v2": [
+    {
+      "name": "quiz-base-write",
+      "state": "PASS",
+      "pids": [
+        99,
+        113,
+        127
+      ],
+      "signal": "SIGKILL",
+      "firstStatus": "recovered",
+      "secondStatus": "clean"
+    },
+    {
+      "name": "quiz-sidecar-write",
+      "state": "PASS",
+      "pids": [
+        141,
+        155,
+        169
+      ],
+      "signal": "SIGKILL",
+      "firstStatus": "recovered",
+      "secondStatus": "clean"
+    }
+  ],
+  "bindings": [
+    {
+      "name": "media",
+      "state": "FAIL",
+      "nativeId": "Rftedyw2vLwUMn_1KWq0d",
+      "actualBaseName": "native-r1-69VN1kgZ.json",
+      "pids": [
+        211,
+        225,
+        239
+      ],
+      "signal": "SIGKILL",
+      "firstFailure": "AssertionError: expected { …(3) } to be undefined",
+      "attempts": [
+        {
+          "pid": 225,
+          "processExit": 0,
+          "report": {
+            "status": "recovered",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 1,
+              "recoveredQuizIds": [
+                "Rftedyw2vLwUMn_1KWq0d"
+              ],
+              "restoredMediaNames": [
+                "r1-native.png"
+              ],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": true,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-69VN1kgZ.json",
+              "beforeSha256": "a507d0a521b4471d97a35220be8c1816a86da6090ab0719af64c3046e0f5b11b",
+              "afterSha256": "ad383493d98c39f2afab161d7a3b5a07f8836f75bfb3d669beda8bf2615a423c",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/Rftedyw2vLwUMn_1KWq0d.json",
+              "afterSha256": "a507d0a521b4471d97a35220be8c1816a86da6090ab0719af64c3046e0f5b11b",
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            }
+          ]
+        },
+        {
+          "pid": 239,
+          "processExit": 0,
+          "report": {
+            "status": "clean",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "restoredMediaNames": [],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": true,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-69VN1kgZ.json",
+              "beforeSha256": "a507d0a521b4471d97a35220be8c1816a86da6090ab0719af64c3046e0f5b11b",
+              "afterSha256": "ad383493d98c39f2afab161d7a3b5a07f8836f75bfb3d669beda8bf2615a423c",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/Rftedyw2vLwUMn_1KWq0d.json",
+              "afterSha256": "a507d0a521b4471d97a35220be8c1816a86da6090ab0719af64c3046e0f5b11b",
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            }
+          ]
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    },
+    {
+      "name": "quiz-base",
+      "state": "FAIL",
+      "nativeId": "SMJcc2_8TaDiiqCiH7KuR",
+      "actualBaseName": "native-r1-Oiws1tj-.json",
+      "pids": [
+        253,
+        267,
+        281
+      ],
+      "signal": "SIGKILL",
+      "firstFailure": "AssertionError: [Journal] Failed to recover journal SMJcc2_8TaDiiqCiH7KuR.journal.json: Error: Failed to verify rolled back base quiz SMJcc2_8TaDiiqCiH7KuR",
+      "attempts": [
+        {
+          "pid": 267,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": false,
+          "changedFiles": []
+        },
+        {
+          "pid": 281,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": false,
+          "changedFiles": []
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    },
+    {
+      "name": "quiz-sidecar",
+      "state": "FAIL",
+      "nativeId": "retybs487WV_CycfPKHeR",
+      "actualBaseName": "native-r1-I1CYHcjB.json",
+      "pids": [
+        295,
+        309,
+        323
+      ],
+      "signal": "SIGKILL",
+      "firstFailure": "AssertionError: [Journal] Failed to recover journal retybs487WV_CycfPKHeR.journal.json: Error: Failed to verify rolled back base quiz retybs487WV_CycfPKHeR",
+      "attempts": [
+        {
+          "pid": 309,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": false,
+          "changedFiles": []
+        },
+        {
+          "pid": 323,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": false,
+          "changedFiles": []
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    },
+    {
+      "name": "media-foreign",
+      "state": "FAIL",
+      "nativeId": "xvp3R4A97aVt5_EIz3HEg",
+      "actualBaseName": "native-r1-p5xKoXCP.json",
+      "pids": [
+        337,
+        351,
+        365
+      ],
+      "signal": "SIGKILL",
+      "firstFailure": "AssertionError: expected { …(3) } to deeply equal { …(3) }",
+      "attempts": [
+        {
+          "pid": 351,
+          "processExit": 0,
+          "report": {
+            "status": "recovered",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 1,
+              "recoveredQuizIds": [
+                "xvp3R4A97aVt5_EIz3HEg"
+              ],
+              "restoredMediaNames": [
+                "r1-native.png"
+              ],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": true,
+          "idDerivedFileExistsAfter": true,
+          "foreignBytesEqual": false,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-p5xKoXCP.json",
+              "beforeSha256": "c27e21f8188a5cb02dc1cda395699172d97acf739e6e526ffd8d2efedec4d0bb",
+              "afterSha256": "6264f7515613c27cb63537f7d8316924d949d17fedb929d4e0ec5a3a1ae56607",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/xvp3R4A97aVt5_EIz3HEg.json",
+              "beforeSha256": "07c5f6348054deaec7c3418af987e1964715a0b964ef6ebf03b97c56bc196fca",
+              "afterSha256": "c27e21f8188a5cb02dc1cda395699172d97acf739e6e526ffd8d2efedec4d0bb",
+              "beforeLength": 326,
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            }
+          ]
+        },
+        {
+          "pid": 365,
+          "processExit": 0,
+          "report": {
+            "status": "clean",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "restoredMediaNames": [],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": true,
+          "idDerivedFileExistsAfter": true,
+          "foreignBytesEqual": false,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-p5xKoXCP.json",
+              "beforeSha256": "c27e21f8188a5cb02dc1cda395699172d97acf739e6e526ffd8d2efedec4d0bb",
+              "afterSha256": "6264f7515613c27cb63537f7d8316924d949d17fedb929d4e0ec5a3a1ae56607",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/xvp3R4A97aVt5_EIz3HEg.json",
+              "beforeSha256": "07c5f6348054deaec7c3418af987e1964715a0b964ef6ebf03b97c56bc196fca",
+              "afterSha256": "c27e21f8188a5cb02dc1cda395699172d97acf739e6e526ffd8d2efedec4d0bb",
+              "beforeLength": 326,
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            }
+          ]
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    },
+    {
+      "name": "quiz-foreign",
+      "state": "PASS",
+      "nativeId": "IrFmto7LfwK9BgbryLKtG",
+      "actualBaseName": "native-r1-u0NMzAAL.json",
+      "pids": [
+        379,
+        393,
+        407
+      ],
+      "signal": "SIGKILL",
+      "attempts": [
+        {
+          "pid": 393,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": true,
+          "idDerivedFileExistsAfter": true,
+          "foreignBytesEqual": true,
+          "changedFiles": []
+        },
+        {
+          "pid": 407,
+          "processExit": 2,
+          "error": "[StartupRecovery] Server startup blocked: 1 critical journal(s) unresolved. Check journal files in .journal/",
+          "retainedJournals": 1,
+          "actualBaseByteEqual": true,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": true,
+          "idDerivedFileExistsAfter": true,
+          "foreignBytesEqual": true,
+          "changedFiles": []
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    },
+    {
+      "name": "media-sidecar-only",
+      "state": "FAIL",
+      "nativeId": "fj4a7gyYrv0PSev0HpYEj",
+      "actualBaseName": "native-r1-g5ImGB31.json",
+      "pids": [
+        422,
+        436,
+        450
+      ],
+      "signal": "SIGKILL",
+      "firstFailure": "AssertionError: expected { …(3) } to be undefined",
+      "attempts": [
+        {
+          "pid": 436,
+          "processExit": 0,
+          "report": {
+            "status": "recovered",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 1,
+              "recoveredQuizIds": [
+                "fj4a7gyYrv0PSev0HpYEj",
+                "wY8l7sFqvehPswtVRaM0V"
+              ],
+              "restoredMediaNames": [
+                "r1-native.png"
+              ],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": true,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-g5ImGB31.json",
+              "beforeSha256": "5b22c5728de711e9c6038b1f5514e9b71723b79ba7cefd3ea796ce3ed8ea1034",
+              "afterSha256": "887dae209f6612219ce8bfebb7d3e578913a8d7af4dccfa9f6be13ad7af90c05",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/fj4a7gyYrv0PSev0HpYEj.json",
+              "afterSha256": "5b22c5728de711e9c6038b1f5514e9b71723b79ba7cefd3ea796ce3ed8ea1034",
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/wY8l7sFqvehPswtVRaM0V.json",
+              "afterSha256": "c97a59e75dba6fdbc1efb5875ec3a80553df49e4640a7e3297a1cc8ef1081d77",
+              "afterLength": 3748,
+              "completeAfterJsonKeys": [
+                "schemaVersion",
+                "revision",
+                "quizId",
+                "baseDigest",
+                "questionIds",
+                "timeline",
+                "scenes",
+                "defaults",
+                "teams",
+                "audio",
+                "perQuestion",
+                "roster",
+                "authoring",
+                "mediaCatalog"
+              ]
+            }
+          ]
+        },
+        {
+          "pid": 450,
+          "processExit": 0,
+          "report": {
+            "status": "clean",
+            "unresolvedCount": 0,
+            "quizRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "unresolvedCount": 0,
+              "unresolvedQuizIds": []
+            },
+            "mediaRecovery": {
+              "recoveredCount": 0,
+              "recoveredQuizIds": [],
+              "restoredMediaNames": [],
+              "unresolvedCount": 0,
+              "unresolvedJournals": []
+            }
+          },
+          "retainedJournals": 0,
+          "actualBaseByteEqual": false,
+          "fullV2SidecarByteEqual": true,
+          "mediaBytesEqual": true,
+          "unrelatedBytesEqual": true,
+          "idlessSentinelStillIdless": true,
+          "idDerivedFileExistedBefore": false,
+          "idDerivedFileExistsAfter": true,
+          "changedFiles": [
+            {
+              "path": "quizz/native-r1-g5ImGB31.json",
+              "beforeSha256": "5b22c5728de711e9c6038b1f5514e9b71723b79ba7cefd3ea796ce3ed8ea1034",
+              "afterSha256": "887dae209f6612219ce8bfebb7d3e578913a8d7af4dccfa9f6be13ad7af90c05",
+              "beforeLength": 408,
+              "afterLength": 319,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/fj4a7gyYrv0PSev0HpYEj.json",
+              "afterSha256": "5b22c5728de711e9c6038b1f5514e9b71723b79ba7cefd3ea796ce3ed8ea1034",
+              "afterLength": 408,
+              "completeAfterJsonKeys": [
+                "id",
+                "gameMode",
+                "subject",
+                "questions"
+              ]
+            },
+            {
+              "path": "quizz/wY8l7sFqvehPswtVRaM0V.json",
+              "afterSha256": "c97a59e75dba6fdbc1efb5875ec3a80553df49e4640a7e3297a1cc8ef1081d77",
+              "afterLength": 3748,
+              "completeAfterJsonKeys": [
+                "schemaVersion",
+                "revision",
+                "quizId",
+                "baseDigest",
+                "questionIds",
+                "timeline",
+                "scenes",
+                "defaults",
+                "teams",
+                "audio",
+                "perQuestion",
+                "roster",
+                "authoring",
+                "mediaCatalog"
+              ]
+            }
+          ]
+        }
+      ],
+      "publicFilesStableAcrossBothAttempts": true
+    }
+  ],
+  "digests": [
+    {
+      "name": "ordinary",
+      "state": "FAIL",
+      "inputDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9",
+      "normalizedLogicalDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9",
+      "ownershipBytesSha256": "39b8f5eb539b75e9353fd68f8bc84e22a8d6298d1d75096b47f8de75bb9e31ce",
+      "storedRecordCanonicalDigest": "891633be8481a74ab75cb2d63af0044c5439e322977da7b0eff31ad10d6fa2e3",
+      "createDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9",
+      "getDigest": "891633be8481a74ab75cb2d63af0044c5439e322977da7b0eff31ad10d6fa2e3",
+      "getDigestMatches": false,
+      "exportExtrasDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9"
+    },
+    {
+      "name": "stripped",
+      "state": "FAIL",
+      "inputDigest": "0f71992aa9138248552867b214e1487ba05cec20f25ba07ac577a1e3721bb32e",
+      "normalizedLogicalDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9",
+      "ownershipBytesSha256": "946cc2e89fad9eb438c2dc0da4017dabddaeb6bb4b7111588a070cc4159b0064",
+      "storedRecordCanonicalDigest": "21224ccf1d64326efe5156fac1c582a43618131123a413df49b130f649d5747e",
+      "createDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9",
+      "getDigest": "21224ccf1d64326efe5156fac1c582a43618131123a413df49b130f649d5747e",
+      "getDigestMatches": false,
+      "exportExtrasDigest": "6b26da92fdaccc4f0d610b620ceaeddaf5bd2cf76569a38b4c3de85dc4c3a1f9"
+    }
+  ],
+  "nativeStrippedFieldBaseline": {
+    "inputDigest": "7e8d01d4f3cdfd96ba502d5bb6dbd731fbb3d5d96d10d117c6c7449eab1fb762",
+    "normalizedLogicalDigest": "926c7ba25183c8a258ec2b85eb5d9dd5c7c72231c99b80febb4accbf31710fbd",
+    "storedRecordCanonicalDigest": "83ba9c6eb510aeb032d83b63271ba07acc47a848a5347d43443462ba6c88b356",
+    "ownershipBytesSha256": "81056ba2ac0cfb21da64aa703d78293dc78ddb4c8d7f990c722067f85a1da030",
+    "stored": {
+      "id": "BFRbwrxQz10EgDCxDuHQR",
+      "gameMode": "quiz",
+      "subject": "Raw stripped witness",
+      "questions": [
+        {
+          "type": "single",
+          "question": "Synthetic native question",
+          "media": {
+            "type": "image",
+            "url": "/media/r1-native.png"
+          },
+          "answers": [
+            "A",
+            "B"
+          ],
+          "solutions": [
+            0
+          ],
+          "cooldown": 3,
+          "time": 20
+        }
+      ]
+    }
+  },
+  "limits": [
+    "Synthetic accounts-disabled fixtures only",
+    "Producer-run, no independent acceptance yet",
+    "No fsync/power-loss proof",
+    "No production changes or full-suite rerun"
+  ]
+}

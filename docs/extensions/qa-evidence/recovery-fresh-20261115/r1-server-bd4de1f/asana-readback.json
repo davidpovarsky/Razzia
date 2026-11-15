@@ -1,0 +1,33 @@
+{
+  "checkpoint": "Recovery R1 producer-run, bd4de1fb9b94548973c79f2f710bbec7f438e3e2",
+  "tasks": [
+    {
+      "taskId": "1220109925694179",
+      "completed": false,
+      "exactNotesReadback": true,
+      "previousNotesPreserved": true,
+      "notesLength": 11147
+    },
+    {
+      "taskId": "1220111293723790",
+      "completed": false,
+      "exactNotesReadback": true,
+      "previousNotesPreserved": true,
+      "notesLength": 10334
+    },
+    {
+      "taskId": "1219882508725158",
+      "completed": false,
+      "exactNotesReadback": true,
+      "previousNotesPreserved": true,
+      "notesLength": 6785
+    },
+    {
+      "taskId": "1220541793835278",
+      "completed": false,
+      "exactNotesReadback": true,
+      "previousNotesPreserved": true,
+      "notesLength": 5780
+    }
+  ]
+}
