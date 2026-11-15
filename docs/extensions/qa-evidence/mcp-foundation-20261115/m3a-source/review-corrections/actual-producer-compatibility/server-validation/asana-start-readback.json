@@ -1,0 +1,9 @@
+{
+  "grant": "hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d",
+  "task": "1220541793845448",
+  "completed": false,
+  "exactReadback": true,
+  "priorNotesPreserved": true,
+  "phase": "execution preparation",
+  "functionalTests": "NOT_RUN"
+}

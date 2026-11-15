@@ -1,0 +1,42 @@
+{
+  "grant_id": "hq-mcp-bfb-87ffbfdbe45d43fdbe5e7f799c18036d",
+  "issued_utc": "2026-11-15T12:08:12.270848+00:00",
+  "issuer_thread": "01a1dd10-2ef0-73c2-9c65-569a843f44da",
+  "worker_thread": "01a1dd19-f64c-7193-8a74-9ad7b2c66e2d",
+  "execution_authorized": true,
+  "product_source": "bfb796c72495f0f9d99442066f825a74ebd054d4",
+  "evidence_head": "1e22259bc768fbb8bd600f54569d33515ca894ea",
+  "application_correction": "c3226b6683c4d12b45fd553e090928092e1881b9",
+  "manifest160_sha256": "4c02c37421191cd8ea2fe46e35c0b8a37467a7d89708a11bf8cd68047bac29ab",
+  "overlay_sha256": "4b7d492161100582dfd2b0871554c73f63d8d54eeb6e03856e7586db2d6060a6",
+  "minimal_commands_sha256": "964aab0df5adf6c3b4545c98dc84f19dae3dd17e45a41d9e2739676b02f721fc",
+  "witness_handoff_sha256": "d75f678be32c5e1f0dc1409cf710fa871949d69c5c01d813518a713b71a1a39d",
+  "private_lock_sha256": "e0bcdd5163a144d53ed743c57e526866083cf7500d4e2cfdfea88b88fbe09838",
+  "independent_review_sha256": "f212c3d76e216c339a17a5a624091343fca0cb5ef44533f2c5fce75dceafeef3",
+  "scope": [
+    "one fresh private frozen offline bootstrap if required",
+    "full private TypeScript",
+    "34 declared first-party tests once",
+    "ONE additional genuine ad895 initialize compatibility observation",
+    "scoped format/source/cache/resource readbacks",
+    "SDK41 actual earlier result reuse only"
+  ],
+  "cpu": 0.25,
+  "memory_gib": 2,
+  "modules_ram_mib_max": 256,
+  "new_additional_physical_mib_max": 8,
+  "phase_log_mib_max": 1,
+  "network": "none",
+  "host_ports": false,
+  "fresh_gate_mib": 2320,
+  "absolute_floor_mib": 2048,
+  "root_fresh_free_bytes": 2698297344,
+  "root_available_ram_mib": 10431,
+  "other_reserved_growth_mib": {
+    "qa_phase200_total_including_spent_conservatively_uncredited": 200,
+    "margin": 64
+  },
+  "fresh_operator_df_ram_before_launch_required": true,
+  "production_native_or_oauth_mount_authorized": false,
+  "no_new_resolution_reinstall_or_sdk41_repeat": true
+}

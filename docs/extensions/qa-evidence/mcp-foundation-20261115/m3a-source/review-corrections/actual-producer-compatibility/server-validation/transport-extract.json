@@ -1,0 +1,5 @@
+{
+  "exit": 0,
+  "stdout": "{\"transportSha256\": \"52fe6a8649605ce780adef4d07ae635441be2af24b3f72889d4aa431cc4f5913\", \"sourceManifestSha256\": \"4c02c37421191cd8ea2fe46e35c0b8a37467a7d89708a11bf8cd68047bac29ab\", \"files\": 160, \"delta\": 16, \"ownPhysicalUpperBound\": 2404352, \"freeBytes\": 2697814016}\n",
+  "stderr": ""
+}

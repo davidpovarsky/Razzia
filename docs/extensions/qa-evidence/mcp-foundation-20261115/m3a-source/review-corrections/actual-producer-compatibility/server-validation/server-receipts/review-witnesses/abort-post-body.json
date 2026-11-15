@@ -1,0 +1,7 @@
+{
+  "status": 400,
+  "realVerifyCalls": 2,
+  "responsePendingUntilAuthSettled": true,
+  "privateStoreCreated": false,
+  "snapshotEqual": true
+}
