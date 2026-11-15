@@ -1,0 +1,20 @@
+{
+  "commit": "9b221bc0edabe449cdf27bc818ae77acbc676bae",
+  "base": "8a43c99c65d8923bd23d8c57ac3607e9a09b5764",
+  "parent_review": "1ab878a46ae0e95bb126043ab8362b92fdea8963",
+  "input_count": 1234,
+  "changed_inputs": [],
+  "extra_non_dependency_files": [],
+  "output_count": 152,
+  "output_symlinks": [],
+  "output_manifest_sha256": "406a22eadb840f0ac0c8fd269ed2444287157eadbbf15f1779c4a967d2507730",
+  "artifact": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/site-9b221bc0edabe449cdf27bc818ae77acbc676bae",
+  "node": "24.22.2",
+  "pnpm": "12.18.0",
+  "lockfile_sha256": "f2e3f2183bc308e7e113a23f2ae901d98aade9a173c6b16019d014072684b9a0",
+  "status": "review build; browser and independent QA pending",
+  "raw_ui_check": "failed: image has no git executable and source archive has no git history",
+  "freeze_files_only": "failed: packages/web/index.html mismatch, approved 3-line substitution",
+  "prior_attempt": "retained; missing lint/format project config, not valid format result",
+  "source_assembly": "verified 1ab archive plus exact 4-file commit overlay and tracked config/docs archive; see input-provenance.json and archives"
+}
