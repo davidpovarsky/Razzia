@@ -405,33 +405,33 @@ export function executeMediaDeleteTransaction(
     for (const b of journalShows) {
       try {
         if (b.originalBaseRaw !== null) {
-          try {
-            if (fs.existsSync(b.filePath)) {
-              fs.chmodSync(b.filePath, 0o666)
-            }
-          } catch {
-            // Ignore
-          }
-
           const tmpBase = `${b.filePath}.tmp.${Date.now()}`
           fs.writeFileSync(tmpBase, b.originalBaseRaw, "utf-8")
           fs.renameSync(tmpBase, b.filePath)
         }
 
         if (b.originalSidecarRaw !== null) {
-          try {
-            if (fs.existsSync(b.sidecarPath)) {
-              fs.chmodSync(b.sidecarPath, 0o666)
-            }
-          } catch {
-            // Ignore
-          }
-
           const tmpSidecar = `${b.sidecarPath}.tmp.${Date.now()}`
           fs.writeFileSync(tmpSidecar, b.originalSidecarRaw, "utf-8")
           fs.renameSync(tmpSidecar, b.sidecarPath)
         } else if (fs.existsSync(b.sidecarPath)) {
           fs.unlinkSync(b.sidecarPath)
+        }
+
+        if (
+          b.originalBaseRaw !== null &&
+          fs.readFileSync(b.filePath, "utf-8") !== b.originalBaseRaw
+        ) {
+          throw new Error(`Rollback base content mismatch for ${b.quizId}`)
+        }
+        if (b.originalSidecarRaw !== null) {
+          if (
+            fs.readFileSync(b.sidecarPath, "utf-8") !== b.originalSidecarRaw
+          ) {
+            throw new Error(`Rollback sidecar content mismatch for ${b.quizId}`)
+          }
+        } else if (fs.existsSync(b.sidecarPath)) {
+          throw new Error(`Sidecar survived rollback for ${b.quizId}`)
         }
       } catch (rbErr) {
         allSucceeded = false
@@ -442,10 +442,57 @@ export function executeMediaDeleteTransaction(
       }
     }
 
-    if (mediaExists && quarantinePath && fs.existsSync(quarantinePath)) {
+    if (mediaExists) {
       try {
+        if (!quarantinePath || !fs.existsSync(quarantinePath)) {
+          throw new Error(
+            "Quarantine copy missing during rollback verification",
+          )
+        }
         if (!fs.existsSync(mediaFilePath)) {
           fs.copyFileSync(quarantinePath, mediaFilePath)
+        }
+
+        // Check the restored binary in bounded chunks before releasing its
+        // recovery copy. A nonthrowing copy/write is not proof of correct bytes.
+        const mediaFd = fs.openSync(mediaFilePath, "r")
+        try {
+          const quarantineFd = fs.openSync(quarantinePath, "r")
+          try {
+            const mediaChunk = Buffer.alloc(64 * 1024)
+            const quarantineChunk = Buffer.alloc(64 * 1024)
+            let position = 0
+            while (true) {
+              const mediaBytes = fs.readSync(
+                mediaFd,
+                mediaChunk,
+                0,
+                mediaChunk.length,
+                position,
+              )
+              const quarantineBytes = fs.readSync(
+                quarantineFd,
+                quarantineChunk,
+                0,
+                quarantineChunk.length,
+                position,
+              )
+              if (
+                mediaBytes !== quarantineBytes ||
+                !mediaChunk
+                  .subarray(0, mediaBytes)
+                  .equals(quarantineChunk.subarray(0, quarantineBytes))
+              ) {
+                throw new Error("Rollback binary content mismatch")
+              }
+              if (mediaBytes === 0) break
+              position += mediaBytes
+            }
+          } finally {
+            fs.closeSync(quarantineFd)
+          }
+        } finally {
+          fs.closeSync(mediaFd)
         }
       } catch (qErr) {
         allSucceeded = false
@@ -469,10 +516,15 @@ export function executeMediaDeleteTransaction(
         if (fs.existsSync(journalFilePath)) {
           fs.unlinkSync(journalFilePath)
         }
-      } catch {
-        // Ignore
+      } catch (cleanupError) {
+        allSucceeded = false
+        console.warn(
+          `[MediaRollback] Cleanup incomplete; preserving journal ${journalFilePath}:`,
+          cleanupError,
+        )
       }
-    } else {
+    }
+    if (!allSucceeded) {
       console.warn(
         `[MediaRollback] Rollback failed or was partial; PRESERVING journal ${journalFilePath} for crash recovery`,
       )
@@ -588,11 +640,7 @@ export function executeMediaDeleteTransaction(
     }
 
     if (quarantinePath && fs.existsSync(quarantinePath)) {
-      try {
-        fs.unlinkSync(quarantinePath)
-      } catch {
-        // Ignore
-      }
+      fs.unlinkSync(quarantinePath)
     }
 
     if (options?.faultInjection?.failAfterQuarantineUnlink) {
@@ -615,13 +663,8 @@ export function executeMediaDeleteTransaction(
   } catch (error) {
     if (journalEntry.status === "committed") {
       // Point of no return already reached. Do NOT roll back to old references!
-      if (quarantinePath && fs.existsSync(quarantinePath)) {
-        try {
-          fs.unlinkSync(quarantinePath)
-        } catch {
-          // Ignore
-        }
-      }
+      // Preserve the committed journal and any remaining quarantine on cleanup
+      // failure so startup recovery can verify state and retry safely.
 
       return {
         allowed: true,

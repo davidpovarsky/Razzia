@@ -53,6 +53,45 @@ describe("media-delete deterministic restart snapshots", () => {
       deleteMediaFn: () => fs.unlinkSync(mediaPath()),
     })
   }
+  function transactionState() {
+    const files = [
+      "quizz/show-a.json",
+      "extensions/quizzes/show-a.json",
+      `media/${MEDIA_NAME}`,
+    ]
+    return {
+      files: Object.fromEntries(
+        files.map((file) => [
+          file,
+          fs.existsSync(fixture.getPath(file))
+            ? fileDigest(fixture.getPath(file))
+            : null,
+        ]),
+      ),
+      journals: journals().map((file) => ({
+        status: JSON.parse(fs.readFileSync(file, "utf8")).status,
+      })),
+      quarantine: fs
+        .readdirSync(getMediaQuarantineDirectory(fixture.getPath))
+        .map((file) =>
+          fileDigest(
+            path.join(getMediaQuarantineDirectory(fixture.getPath), file),
+          ),
+        ),
+    }
+  }
+  function recordTransactionFault(
+    fault: string,
+    before: ReturnType<typeof transactionState>,
+    result: ReturnType<typeof transaction>,
+  ) {
+    if (process.env.RECOVERY_TRANSACTION_RECEIPT_PATH)
+      fs.appendFileSync(
+        process.env.RECOVERY_TRANSACTION_RECEIPT_PATH,
+        JSON.stringify({ fault, before, after: transactionState(), result }) +
+          "\n",
+      )
+  }
   function staged() {
     const result = executeMediaDeleteTransaction(fixture.getPath, MEDIA_NAME, {
       detach: true,
@@ -355,4 +394,218 @@ describe("media-delete deterministic restart snapshots", () => {
       "clean",
     )
   })
+  it("transaction committed cleanup retains its journal after quarantine unlink EACCES", () => {
+    const before = transactionState()
+    const unlink = fs.unlinkSync.bind(fs)
+    const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((file) => {
+      if (String(file).startsWith(getMediaQuarantineDirectory(fixture.getPath)))
+        throw new Error("EACCES injected transaction quarantine unlink")
+      unlink(file)
+    })
+    const result = transaction()
+    recordTransactionFault("committed-quarantine-unlink-EACCES", before, result)
+    expect(journals()).toHaveLength(1)
+    expect(result.allowed).toBe(true)
+    expect(result.journalId).toBeTruthy()
+    expect(result.error).toMatch(/cleanup.*warning/i)
+    expect(JSON.parse(fs.readFileSync(journals()[0], "utf8")).status).toBe(
+      "committed",
+    )
+    expect(transactionState().quarantine).toEqual([
+      before.files[`media/${MEDIA_NAME}`],
+    ])
+    expect(fs.existsSync(mediaPath())).toBe(false)
+    expect(
+      findMediaReferencesAcrossShows(
+        MEDIA_NAME,
+        loadAllShowsHealth(fixture.getPath).records,
+      ),
+    ).toHaveLength(0)
+    expect(() => recoverStartupJournals({ getPath: fixture.getPath })).toThrow(
+      "startup blocked",
+    )
+    spy.mockRestore()
+    expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+      "recovered",
+    )
+    expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+      "clean",
+    )
+    expect(transactionState().quarantine).toHaveLength(0)
+  })
+  it.each(["base", "sidecar", "binary"])(
+    "transaction rollback retains evidence after silent %s corruption",
+    (fault) => {
+      if (fault === "binary") {
+        fs.writeFileSync(mediaPath(), Buffer.alloc(64 * 1024 + 3, 13))
+      }
+      const before = transactionState()
+      let rollingBack = false
+      const write = fs.writeFileSync.bind(fs)
+      const writeSpy = vi
+        .spyOn(fs, "writeFileSync")
+        .mockImplementation((file, data, options) => {
+          const target =
+            fault === "base"
+              ? fixture.basePath("show-a")
+              : fixture.getPath("extensions/quizzes/show-a.json")
+          if (
+            fault !== "binary" &&
+            rollingBack &&
+            String(file).startsWith(`${target}.tmp.`)
+          ) {
+            const corrupted = JSON.parse(String(data))
+            if (fault === "base")
+              corrupted.subject = "Silent rollback corruption"
+            else corrupted.authoring.showNote = "Silent rollback corruption"
+            return write(file, JSON.stringify(corrupted), options)
+          }
+          return write(file, data, options)
+        })
+      const copy = fs.copyFileSync.bind(fs)
+      const copySpy = vi
+        .spyOn(fs, "copyFileSync")
+        .mockImplementation((source, destination, mode) => {
+          copy(source, destination, mode)
+          if (
+            fault === "binary" &&
+            rollingBack &&
+            String(destination) === mediaPath()
+          ) {
+            const corrupted = fs.readFileSync(destination)
+            corrupted[corrupted.length - 1] ^= 255
+            write(destination, corrupted)
+          }
+        })
+      // Legacy rollback chmod is intercepted so the reproduction itself never widens permissions.
+      const chmod = vi.spyOn(fs, "chmodSync").mockImplementation(() => {})
+      const result = executeMediaDeleteTransaction(
+        fixture.getPath,
+        MEDIA_NAME,
+        {
+          detach: true,
+          deleteMediaFn: () => {
+            fs.unlinkSync(mediaPath())
+            rollingBack = true
+          },
+          faultInjection: { failBeforeCommittedWrite: true },
+        },
+      )
+      recordTransactionFault(
+        `immediate-rollback-silent-${fault}`,
+        before,
+        result,
+      )
+      expect(journals()).toHaveLength(1)
+      expect(result.allowed).toBe(false)
+      expect(result.journalId).toBeTruthy()
+      expect(result.error).toMatch(/journal preserved/i)
+      expect(transactionState().quarantine).toEqual([
+        before.files[`media/${MEDIA_NAME}`],
+      ])
+      expect(chmod).not.toHaveBeenCalled()
+      writeSpy.mockRestore()
+      copySpy.mockRestore()
+      chmod.mockRestore()
+      if (fault === "binary") {
+        // A present but different binary may be a concurrent replacement. Startup
+        // preserves both copies until this disposable corrupted fixture is removed.
+        expect(() =>
+          recoverStartupJournals({ getPath: fixture.getPath }),
+        ).toThrow("startup blocked")
+        fs.unlinkSync(mediaPath())
+      }
+      expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+        "recovered",
+      )
+      expect(transactionState().files).toEqual(before.files)
+      expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+        "clean",
+      )
+    },
+  )
+  it("transaction rollback preserves permission-denied restores without chmod", () => {
+    const before = transactionState()
+    let rollingBack = false
+    const rename = fs.renameSync.bind(fs)
+    const spy = vi
+      .spyOn(fs, "renameSync")
+      .mockImplementation((source, destination) => {
+        if (rollingBack && String(destination) === fixture.basePath("show-a"))
+          throw new Error("EACCES injected rollback base rename")
+        rename(source, destination)
+      })
+    const chmod = vi.spyOn(fs, "chmodSync").mockImplementation(() => {})
+    const result = executeMediaDeleteTransaction(fixture.getPath, MEDIA_NAME, {
+      detach: true,
+      deleteMediaFn: () => {
+        fs.unlinkSync(mediaPath())
+        rollingBack = true
+      },
+      faultInjection: { failBeforeCommittedWrite: true },
+    })
+    recordTransactionFault(
+      "immediate-rollback-permission-denied",
+      before,
+      result,
+    )
+    expect(chmod).not.toHaveBeenCalled()
+    expect(journals()).toHaveLength(1)
+    expect(result.error).toMatch(/journal preserved/i)
+    expect(transactionState().quarantine).toEqual([
+      before.files[`media/${MEDIA_NAME}`],
+    ])
+    spy.mockRestore()
+    chmod.mockRestore()
+    expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+      "recovered",
+    )
+    expect(transactionState().files).toEqual(before.files)
+  })
+  it.each(["quarantine", "journal"])(
+    "transaction rollback reports pending %s cleanup and replays",
+    (fault) => {
+      const before = transactionState()
+      const unlink = fs.unlinkSync.bind(fs)
+      const spy = vi.spyOn(fs, "unlinkSync").mockImplementation((file) => {
+        if (
+          (fault === "quarantine" &&
+            String(file).startsWith(
+              getMediaQuarantineDirectory(fixture.getPath),
+            )) ||
+          (fault === "journal" && String(file).endsWith(".media-journal.json"))
+        )
+          throw new Error(`EACCES injected rollback ${fault} cleanup`)
+        unlink(file)
+      })
+      const chmod = vi.spyOn(fs, "chmodSync").mockImplementation(() => {})
+      const result = executeMediaDeleteTransaction(
+        fixture.getPath,
+        MEDIA_NAME,
+        {
+          detach: true,
+          deleteMediaFn: () => fs.unlinkSync(mediaPath()),
+          faultInjection: { failBeforeCommittedWrite: true },
+        },
+      )
+      recordTransactionFault(
+        `immediate-rollback-${fault}-cleanup`,
+        before,
+        result,
+      )
+      expect(result.journalId).toBeTruthy()
+      expect(result.error).toMatch(/journal preserved/i)
+      expect(journals()).toHaveLength(1)
+      expect(transactionState().files).toEqual(before.files)
+      expect(chmod).not.toHaveBeenCalled()
+      spy.mockRestore()
+      chmod.mockRestore()
+      expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+        "recovered",
+      )
+      expect(recoverStartupJournals({ getPath: fixture.getPath }).status).toBe(
+        "clean",
+      )
+    },
+  )
 })

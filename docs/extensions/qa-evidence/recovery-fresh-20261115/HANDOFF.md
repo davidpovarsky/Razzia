@@ -1,5 +1,7 @@
 # P2 recovery local review handoff
 
+Latest checkpoint: independent QA requested changes on `1f33047cc7baec3e958ff54089c894887604c6bf`. The targeted transaction corrections and new fault receipts are documented in `REVIEW_CORRECTION.md`; the earlier 78-case checkpoint below is historical and does not represent QA acceptance. All source tasks remain OPEN.
+
 Worker UUID `01a1dd18-8818-7573-b311-f54bbe0b811f`; reviewer `01a1dd1a-0c70-7b02-a179-c8c2b7c11755`.
 Tree `C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-recovery-fresh-20261115`, branch `codex/tadazz-hq-recovery-fresh-20261115`, verified clean assignment base `8a43c99c65d8923bd23d8c57ac3607e9a09b5764`.
 Result commit is the review commit containing this document; its exact SHA is included in the manager handoff and original Asana updates.
