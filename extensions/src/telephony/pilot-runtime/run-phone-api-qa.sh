@@ -6,7 +6,7 @@ set -euo pipefail
 [[ "${PHONE_REMOTE_RUNNER_GRANTED:-}" == "P3_PHONE_API" ]]
 [[ -f /.dockerenv ]]
 cd /work
-[[ -f extensions/src/telephony/pilot-runtime/phone-real-backend.test.ts ]]
+[[ -f extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts ]]
 fixture="/fixtures/phone-$PHONE_REVIEW_SHA"
 evidence="/evidence/phone-api-$PHONE_REVIEW_SHA"
 mkdir -p "$fixture" "$evidence"
@@ -34,7 +34,7 @@ type_exit=$?
 set -e
 export TADAZZ_PHONE_QA_RUN=isolated-actual-backend
 set +e
-node /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-concurrency=1 /work/extensions/src/telephony/pilot-runtime/phone-real-backend.test.ts > "$evidence/actual-api.tap" 2>&1
+node /work/extensions/node_modules/tsx/dist/cli.mjs --tsconfig /work/tsconfig.json --test --test-concurrency=1 /work/extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts > "$evidence/actual-api.tap" 2>&1
 test_exit=$?
 set -e
 node extensions/src/telephony/pilot-runtime/verify-phone-api-source.mjs --links > "$evidence/source-after.json"

@@ -80,7 +80,7 @@ for (const required of [
   "packages/socket/src/api/extensions/game-routes.ts",
   "extensions/src/server/game/phone-controller.ts",
   "extensions/src/core/phone-roster.ts",
-  "extensions/src/telephony/pilot-runtime/phone-real-backend.test.ts",
+  "extensions/src/telephony/pilot-runtime/phone-real-backend.node.ts",
   "extensions/src/telephony/pilot-runtime/phone-gateway-qa-child.cjs",
   "extensions/src/telephony/pilot-runtime/run-phone-api-qa.sh",
   "extensions/src/telephony/pilot-runtime/phone-route-typecheck.mjs",

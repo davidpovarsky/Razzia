@@ -8,6 +8,7 @@ This directory contains the sanitized, version-controlled source code and unit t
 - `tada-audio-logic.test.cjs`: Comprehensive Node 22 test suite covering intro cues, silent polling, invalid keys, authoritative verdicts (`002` right, `003` wrong, `004` neutral), survey mode, delayed verdicts, concurrent sessions, and the window-close race condition.
 - `tada-pilot-gateway.cjs`: Minimal HTTP audio callback server interfacing with Yemot and proxying events to the Razzia backend via `/api/games/pilot-phone`. Requires `TADA_PILOT_SECRET` environment variable.
 - `tada-pilot-gateway.faults.test.cjs`: Deterministic gateway-handler fault tests with injected backend I/O and timers; no provider or real game server.
+- `phone-real-backend.node.ts`: Explicit isolated-server Node harness for actual API/controller security cases. Its Node-only filename keeps it out of the ordinary Vitest suite; run only through the reserved remote workflow.
 
 ## Running Unit Tests
 
