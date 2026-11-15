@@ -1,0 +1,42 @@
+[
+  {
+    "path": "extensions/src/components/oauth-consent/client.test.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/client.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/login-handoff.test.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/login-handoff.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/OAuthConsentPage.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/components/oauth-consent/strings.ts",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+    "sameAst": true,
+    "changed": false
+  },
+  {
+    "path": "extensions/qa/theme-builder/oauth-fixture.tsx",
+    "sameAst": false,
+    "changed": true
+  }
+]

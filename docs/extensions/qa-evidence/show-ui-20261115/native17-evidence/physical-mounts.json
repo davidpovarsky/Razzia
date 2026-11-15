@@ -1,0 +1,70 @@
+[
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-followup14/input/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts",
+    "destination": "/work/docs/extensions/qa-evidence/show-ui-20261115/qa-native-v2-host.ts"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/web/node_modules",
+    "destination": "/work/packages/web/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native16/input/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx",
+    "destination": "/work/extensions/src/presentation/show-library-preview/NativePreviewStage.tsx"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/extensions/node_modules",
+    "destination": "/work/extensions/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/e2e/node_modules",
+    "destination": "/work/packages/e2e/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-followup14/input/extensions/qa/theme-builder/oauth-consent.spec.ts",
+    "destination": "/work/extensions/qa/theme-builder/oauth-consent.spec.ts"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-dc76-browser-c2/harness-server-build-six",
+    "destination": "/retained-old-host"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/show-ui-dc76-browser-six",
+    "destination": "/fixture-base"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/node_modules",
+    "destination": "/work/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/web/public",
+    "destination": "/work/packages/web/public"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/common/node_modules",
+    "destination": "/work/packages/common/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-acceptance-view11",
+    "destination": "/work"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/show-ui-E-authoring-run7",
+    "destination": "/run7"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/sb-metadata-f9eaba0259c24a98394d4b61aa783e24c39beff1ca801c24c573d88852c96bf0/packages/socket/node_modules",
+    "destination": "/work/packages/socket/node_modules"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native17/input/extensions/src/components/oauth-consent",
+    "destination": "/work/extensions/src/components/oauth-consent"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native17/input/extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx",
+    "destination": "/work/extensions/src/presentation/show-library-preview/renderer-entry-v2.tsx"
+  },
+  {
+    "source": "/home/ubuntu/tadazz-hq-qa-20261115/source/show-ui-E-native17/input/extensions/qa/theme-builder/oauth-fixture.tsx",
+    "destination": "/work/extensions/qa/theme-builder/oauth-fixture.tsx"
+  }
+]

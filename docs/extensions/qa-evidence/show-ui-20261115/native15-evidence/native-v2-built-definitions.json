@@ -1,0 +1,14 @@
+[
+  {
+    "id": "tadazz-classic",
+    "version": "1.0.0",
+    "rendererId": "tadazz-classic-stage",
+    "definitionSha256": "e75af05a88dbf7bb243f387b27f5a95a23c6545219aaf7ea93432508bf63a10e"
+  },
+  {
+    "id": "razzia-original",
+    "version": "1.0.0",
+    "rendererId": "razzia-native-stage",
+    "definitionSha256": "5456810883fc87e885f4194516bfec65c2818a9354c8f5a4f186a80a7404c033"
+  }
+]

@@ -1,5 +1,6 @@
 // Component-only synthetic consent fixture; not the account-backed F issuer.
 import { createRoot } from "react-dom/client"
+import { StrictMode } from "react"
 import { createInstance } from "i18next"
 import { I18nextProvider } from "react-i18next"
 import { setToken } from "@razzia/web/lib/session"
@@ -24,6 +25,7 @@ document.documentElement.lang = locale
   },
 })
 createRoot(document.getElementById("root")!).render(
+  <StrictMode>
   <I18nextProvider i18n={instance}>
     <OAuthConsentPage
       account={{
@@ -34,5 +36,6 @@ createRoot(document.getElementById("root")!).render(
       issuerBasePath="/api/qa/oauth"
       search={location.search}
     />
-  </I18nextProvider>,
+  </I18nextProvider>
+  </StrictMode>,
 )
