@@ -74,12 +74,16 @@ function validateOwnerWal(file: string, walSize: number) {
     const frame = Buffer.alloc(page + 24)
     let committed = true
     for (let offset = 32; offset < walSize; offset += frame.length) {
-      if (
-        fs.readSync(fd, frame, 0, frame.length, offset) !== frame.length ||
-        !frame.subarray(8, 16).equals(header.subarray(16, 24)) ||
-        frame.readUInt32BE(0) === 0
-      )
-        throw new Error("Owner WAL frame is unavailable or stale")
+      if (fs.readSync(fd, frame, 0, frame.length, offset) !== frame.length)
+        throw new Error("Owner WAL frame is unavailable")
+      // SQLite WAL reset retains older-generation tail frames. Only the
+      // current salt/checksum chain is active (sqlite.org/fileformat2.html).
+      if (!frame.subarray(8, 16).equals(header.subarray(16, 24))) {
+        if (!committed)
+          throw new Error("Owner WAL has an incomplete transaction")
+        return
+      }
+      if (frame.readUInt32BE(0) === 0) throw new Error("Invalid owner WAL page")
       checksum(frame.subarray(0, 8))
       checksum(frame.subarray(24))
       if (a !== frame.readUInt32BE(16) || b !== frame.readUInt32BE(20))
@@ -293,7 +297,7 @@ function captureStartupOwners(): StartupOwnerSnapshot {
       ],
       {
         encoding: "utf8",
-        env: {},
+        env: { TMPDIR: privateRoot, TMP: privateRoot, TEMP: privateRoot },
         timeout: 10000,
         maxBuffer: 16 * 1024 * 1024,
       },

@@ -130,14 +130,19 @@ it("selects all exact disabled and unverified owner IDs independent of the curre
 })
 it("reads owners committed only in a live WAL without changing source files", () => {
   database([OWNER, SECOND], true)
-  const before = files()
+  const before = files(),
+    entriesBefore = fs.readdirSync(fixture.root).sort()
   const snapshot = readStartupOwnerSnapshot(),
     after = files()
   expect(snapshot.ownerIds).toEqual([OWNER, SECOND])
   expect(after).toEqual(before)
+  const entriesAfter = fs.readdirSync(fixture.root).sort()
+  expect(entriesAfter).toEqual(entriesBefore)
   retainOwnerProof("live-wal", {
     before,
     after,
+    entriesBefore,
+    entriesAfter,
     owners: snapshot.ownerIds,
     node: process.version,
     sqlite: process.versions.sqlite,
@@ -146,14 +151,43 @@ it("reads owners committed only in a live WAL without changing source files", ()
 it("reads a cleanly closed WAL DB without creating source sidecars", () => {
   const db = database([OWNER], true)
   db.close()
-  const before = files()
+  const before = files(),
+    entriesBefore = fs.readdirSync(fixture.root).sort()
   const snapshot = readStartupOwnerSnapshot(),
     after = files()
   expect(snapshot.ownerIds).toEqual([OWNER])
   expect(after).toEqual(before)
+  const entriesAfter = fs.readdirSync(fixture.root).sort()
+  expect(entriesAfter).toEqual(entriesBefore)
   retainOwnerProof("clean-closed-wal", {
     before,
     after,
+    entriesBefore,
+    entriesAfter,
+    owners: snapshot.ownerIds,
+    node: process.version,
+    sqlite: process.versions.sqlite,
+  })
+})
+it("accepts native WAL reset with retained older-generation tail frames without source writes", () => {
+  const db = database([OWNER], true)
+  for (let i = 0; i < 6; i++) db.exec("UPDATE accounts SET disabled=disabled+1")
+  db.exec("PRAGMA wal_checkpoint(FULL)") // Synthetic writer behavior only.
+  db.prepare("INSERT INTO accounts VALUES(?,1,NULL)").run(SECOND)
+  const before = files(),
+    entriesBefore = fs.readdirSync(fixture.root).sort()
+  retainOwnerProof("recycled-wal-before", { before, entriesBefore })
+  const snapshot = readStartupOwnerSnapshot(),
+    after = files(),
+    entriesAfter = fs.readdirSync(fixture.root).sort()
+  expect(snapshot.ownerIds).toEqual([OWNER, SECOND])
+  expect(after).toEqual(before)
+  expect(entriesAfter).toEqual(entriesBefore)
+  retainOwnerProof("recycled-wal", {
+    before,
+    after,
+    entriesBefore,
+    entriesAfter,
     owners: snapshot.ownerIds,
     node: process.version,
     sqlite: process.versions.sqlite,
