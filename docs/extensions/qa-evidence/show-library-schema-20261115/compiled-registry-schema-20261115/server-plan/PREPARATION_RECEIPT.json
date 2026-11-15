@@ -1,0 +1,55 @@
+{
+  "status": "PREPARED_NOT_GRANTED_NOT_EXECUTED",
+  "sourceCommit": "c35a65d97132f64c1ebd0112ebd7ae0a82273fda",
+  "sourceBundleSha256": "4966fda3751f7de8bc92f80ed830493bb8190c9b7e37be44e4f94c807833e425",
+  "planSha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1",
+  "transferManifestSha256": "6d19fcafdad7374dac2dcbd31225ee96ea8fcd624417ff11b4d36d6144cc7f6d",
+  "authoredCases": 53,
+  "testsExecuted": 0,
+  "typecheck": "NOT_RUN",
+  "serverProbeUploadAllocation": "NONE",
+  "newSourceFiles": 4,
+  "newSourceBytes": 64216,
+  "acceptedReadonlySourceFiles": 26,
+  "totalReadonlyCoreFileBinds": 30,
+  "baselineWitnesses": 10,
+  "transferFilesIncludingManifest": 9,
+  "transferBytes": 122189,
+  "pythonRunner": "AST_PARSED_NOT_EXECUTED",
+  "javascriptAudit": "STATIC_SYNTAX_FORMAT_NOT_EXECUTED",
+  "sourceAndAccepted26Hashes": "MATCHED_LOCAL_COMMIT_AND_ACCEPTED_MANIFEST",
+  "compiledPins": [],
+  "d095": "FAILED_PENDING_REPLACEMENT",
+  "files": [
+    {
+      "path": "audit-view.cjs",
+      "bytes": 2896,
+      "sha256": "201ec1337ebea59cda27c597884b981ad89cfd59fcd0f6028bdfcb76abdf3e94"
+    },
+    {
+      "path": "compiled-index.tsconfig.json",
+      "bytes": 604,
+      "sha256": "d9e26fb3ee96dd9f33f05494c0abcf45d6029046b02f619a890b5bd9f4b4ea20"
+    },
+    {
+      "path": "overlay-plan.json",
+      "bytes": 36869,
+      "sha256": "123093f622de1e5055b83e3e4a31793f75a9c01be4c199e8a4ed7ff5d93dc8e1"
+    },
+    {
+      "path": "run-compiled-index.py",
+      "bytes": 14847,
+      "sha256": "3e492e8f72d958910239508c6e858b5407f5c1cfb68d85ca43127a72369bb7eb"
+    },
+    {
+      "path": "RUN_PLAN.md",
+      "bytes": 7348,
+      "sha256": "ce9573671e1aaa7009db115e089d43b0d797418521996a2171968f9f80276715"
+    },
+    {
+      "path": "transfer-manifest.json",
+      "bytes": 2757,
+      "sha256": "6d19fcafdad7374dac2dcbd31225ee96ea8fcd624417ff11b4d36d6144cc7f6d"
+    }
+  ]
+}
