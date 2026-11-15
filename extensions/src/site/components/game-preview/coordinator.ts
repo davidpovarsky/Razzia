@@ -20,27 +20,37 @@ export function createPreviewCoordinator() {
     }
 
     previous.abort.abort()
-
-    try {
-      const released = previous.close()
-      drained = Promise.all([drained, released]).then(() => undefined)
-    } catch {
-      failed = true
-    }
-
-    // A failed disposal cannot silently admit the next stage.
+    const barrier = Promise.withResolvers<undefined>()
+    drained = Promise.all([drained, barrier.promise]).then(() => undefined)
+    // Publish the barrier before callbacks: a reentrant claim must also wait.
     void drained.catch(() => {
       failed = true
     })
+
+    try {
+      void Promise.resolve(previous.close()).then(
+        () => barrier.resolve(undefined),
+        barrier.reject,
+      )
+    } catch (error) {
+      barrier.reject(error)
+    }
   }
 
   return {
     claim(close: () => void | Promise<void>) {
-      revoke()
       generation += 1
       const id = generation
       const abort = new AbortController()
-      current = { id, abort, close }
+      revoke()
+
+      if (id === generation) {
+        current = { id, abort, close }
+      } else {
+        // A newer claim made by a close callback wins over the outer request.
+        abort.abort()
+      }
+
       const isCurrent = () => current?.id === id && !abort.signal.aborted
 
       return {

@@ -61,13 +61,18 @@ export interface PreviewSnapshot {
   }>
 }
 
-export type PreviewUnavailableReason =
-  | "source-unavailable"
-  | "access-denied"
-  | "stale-revision"
-  | "renderer-unavailable"
-  | "assets-unavailable"
-  | "playback-unavailable"
+export const previewUnavailableReasonSchema = z.enum([
+  "source-unavailable",
+  "access-denied",
+  "stale-revision",
+  "renderer-unavailable",
+  "assets-unavailable",
+  "playback-unavailable",
+])
+
+export type PreviewUnavailableReason = z.infer<
+  typeof previewUnavailableReasonSchema
+>
 
 /**
  * Integration port for the original D/E provider, NOT an alternate controller.

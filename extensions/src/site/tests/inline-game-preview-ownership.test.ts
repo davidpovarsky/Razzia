@@ -71,6 +71,34 @@ describe("inline UI resource ownership (synthetic ports, no renderer parity clai
     owner.dispose()
   })
 
+  it("a reentrant claim during cleanup wins and still waits for the old resource", async () => {
+    const owner = createPreviewCoordinator()
+    const drain = Promise.withResolvers<undefined>()
+    const state: { lease: ReturnType<typeof owner.claim> | null } = {
+      lease: null,
+    }
+    owner.claim(() => {
+      state.lease = owner.claim(vi.fn())
+
+      return drain.promise
+    })
+    const superseded = owner.claim(vi.fn())
+    expect(superseded.isCurrent()).toBe(false)
+    expect(superseded.signal.aborted).toBe(true)
+    const winning = state.lease!
+    let admitted = false
+    const ready = winning.ready().then((value) => {
+      admitted = value
+    })
+    await Promise.resolve()
+    expect(admitted).toBe(false)
+    drain.resolve(undefined)
+    await ready
+    expect(admitted).toBe(true)
+    expect(winning.isCurrent()).toBe(true)
+    owner.dispose()
+  })
+
   it("20 out-of-order UI seek results cannot replace the final request", async () => {
     const owner = createPreviewRequestOwner()
     const operations = Array.from({ length: 20 }, () => deferred<number>())

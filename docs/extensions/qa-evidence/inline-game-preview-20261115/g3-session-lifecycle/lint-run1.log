@@ -1,0 +1,53 @@
+extensions/src/site/components/game-preview/coordinator.ts:23:43: error typescript(no-invalid-void-type): Use `void` only as a return type or generic type argument. help: Replace this `void` type with an allowed type, or keep `void` only in a valid return position.
+extensions/src/site/components/game-preview/coordinator.ts:29:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/coordinator.ts:45:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/coordinator.ts:51:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/inline-game-preview/reentrancy-baseline.mjs:16:27: error eslint(curly): Expected { after 'if' condition. help: Replace `writeFileSync(fixture, input, { flag: "wx" })` with `{writeFileSync(fixture, input, { flag: "wx" })}`.
+extensions/qa/inline-game-preview/reentrancy-baseline.mjs:18:3: error eslint(curly): Expected { after 'if' condition. help: Replace `throw Error("Baseline input mismatch")` with `{throw Error("Baseline input mismatch")}`.
+extensions/qa/inline-game-preview/reentrancy-baseline.mjs:16:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/inline-game-preview/reentrancy-baseline.mjs:17:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/qa/inline-game-preview/reentrancy-baseline.mjs:19:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/contracts.ts:72:1: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:120:11: error eslint(capitalized-comments): Comments should not begin with a lowercase letter help: Change the first letter of the comment to uppercase
+extensions/src/site/components/game-preview/session-owner.ts:44:20: error eslint(curly): Expected { after 'if' condition. help: Replace `onState(state)` with `{onState(state)}`.
+extensions/src/site/components/game-preview/session-owner.ts:52:29: error eslint(curly): Expected { after 'if' condition. help: Replace `return activation.drained` with `{return activation.drained}`.
+extensions/src/site/components/game-preview/session-owner.ts:55:25: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/site/components/game-preview/session-owner.ts:56:21: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/site/components/game-preview/session-owner.ts:59:43: error typescript(no-invalid-void-type): Use `void` only as a return type or generic type argument. help: Replace this `void` type with an allowed type, or keep `void` only in a valid return position.
+extensions/src/site/components/game-preview/session-owner.ts:75:20: error eslint(curly): Expected { after 'if' condition. help: Replace `throw failure` with `{throw failure}`.
+extensions/src/site/components/game-preview/session-owner.ts:84:21: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/site/components/game-preview/session-owner.ts:102:42: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/site/components/game-preview/session-owner.ts:121:42: error eslint(curly): Expected { after 'if' condition. help: Replace `await result.session.dispose()` with `{await result.session.dispose()}`.
+extensions/src/site/components/game-preview/session-owner.ts:143:25: error eslint(prefer-destructuring): Use Object destructuring. help: Use object destructuring rather than direct member access.
+extensions/src/site/components/game-preview/session-owner.ts:150:55: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/site/components/game-preview/session-owner.ts:153:57: error eslint(curly): Expected { after 'if' condition. help: Replace `return` with `{return}`.
+extensions/src/site/components/game-preview/session-owner.ts:53:5: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:64:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:69:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:74:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:75:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:85:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:102:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:103:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:105:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:112:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:117:7: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:119:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:125:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:134:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:135:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:137:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:143:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:150:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:151:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:154:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:170:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:175:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:179:9: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/tests/inline-game-preview-session-owner.test.ts:13:32: error eslint(no-inline-comments): Unexpected comment inline with code help: Move the comment to a separate line
+extensions/src/site/tests/inline-game-preview-session-owner.test.ts:77:15: error eslint(require-await): Async function has no `await` expression. help: Consider removing the `async` keyword.
+extensions/src/site/tests/inline-game-preview-session-owner.test.ts:13:32: error @stylistic(line-comment-position): Expected comment to be above code.
+extensions/src/site/tests/inline-game-preview-session-owner.test.ts:106:11: error @stylistic(padding-line-between-statements): Expected blank line before this statement.
+extensions/src/site/components/game-preview/session-owner.ts:75:26: error typescript(only-throw-error): Expected an error object to be thrown.
+extensions/src/site/components/game-preview/session-owner.ts:170:13: error typescript(no-unnecessary-condition): Unnecessary conditional, value is always falsy. help: The checked value has type `false`.
+extensions/src/site/tests/inline-game-preview-session-owner.test.ts:77:23: error typescript(require-await): Function has no 'await' expression.
