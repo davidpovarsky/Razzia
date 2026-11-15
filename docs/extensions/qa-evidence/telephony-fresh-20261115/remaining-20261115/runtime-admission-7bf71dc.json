@@ -1,0 +1,11 @@
+{
+  "job": "phone-remaining-7bf71dc-attempt01",
+  "source": "7bf71dc512534441a277f06240dde60c5c0de30b",
+  "recorded_utc": "2026-11-15T16:27:00.3677222Z",
+  "status": "BLOCKED_CAPACITY",
+  "reason": "Shared capacity unavailable",
+  "cpu_ceiling": 1.5,
+  "memory_mib_ceiling": 8192,
+  "active_cpu": 2.0,
+  "active_memory_mib": 13248.0
+}
