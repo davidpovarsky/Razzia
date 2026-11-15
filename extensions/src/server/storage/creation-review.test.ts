@@ -49,15 +49,18 @@ describe.runIf(process.platform === "linux")(
   "C1 independent review regressions",
   () => {
     let fixture: ReturnType<typeof createCreationFixture>
+    let outside: ReturnType<typeof createCreationFixture> | undefined
     let config: string | undefined, accounts: string | undefined
     beforeEach(() => {
       config = process.env.CONFIG_PATH
       accounts = process.env.TADAZZ_ACCOUNTS_ENABLED
+      outside = undefined
       fixture = createCreationFixture()
     })
     afterEach(() => {
       vi.restoreAllMocks()
       removeCreationFixture(fixture.root, fixture.token)
+      if (outside) removeCreationFixture(outside.root, outside.token)
       if (config === undefined) delete process.env.CONFIG_PATH
       else process.env.CONFIG_PATH = config
       if (accounts === undefined) delete process.env.TADAZZ_ACCOUNTS_ENABLED
@@ -258,9 +261,10 @@ describe.runIf(process.platform === "linux")(
       )
     })
     it("denies a linked quiz lookup before preparation and performs zero target reads", () => {
-      const foreign = path.join(fixture.root, "outside-quiz-lookup")
+      outside = createCreationFixture()
+      process.env.CONFIG_PATH = fixture.root
+      const foreign = outside.root
       const quizz = path.join(fixture.root, "quizz")
-      fs.mkdirSync(foreign)
       fs.writeFileSync(
         path.join(foreign, "sentinel.json"),
         JSON.stringify(creationInput()),
@@ -305,7 +309,10 @@ describe.runIf(process.platform === "linux")(
       expect(prepare).not.toHaveBeenCalled()
       expect(reads).toEqual([])
       vi.restoreAllMocks()
-      expect(fs.readdirSync(foreign)).toEqual(["sentinel.json"])
+      expect(fs.readdirSync(foreign).sort()).toEqual([
+        ".c1-fixture.json",
+        "sentinel.json",
+      ])
       expect(
         JSON.parse(
           fs.readFileSync(path.join(foreign, "sentinel.json"), "utf8"),
