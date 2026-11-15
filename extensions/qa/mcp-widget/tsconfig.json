@@ -1,0 +1,9 @@
+{
+  "extends": "../../src/mcp-app/widget/tsconfig.json",
+  "include": [
+    "../../src/mcp-app/widget/*.ts",
+    "../../src/mcp-app/widget/*.tsx",
+    "./*.ts",
+    "./*.tsx"
+  ]
+}

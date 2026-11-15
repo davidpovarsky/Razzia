@@ -1,0 +1,14 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node"],
+    "lib": ["ESNext", "DOM", "DOM.Iterable"],
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./*.ts",
+    "./*.tsx",
+    "../../../presentation/show-library-preview/*.d.ts"
+  ],
+  "exclude": ["dist"]
+}
