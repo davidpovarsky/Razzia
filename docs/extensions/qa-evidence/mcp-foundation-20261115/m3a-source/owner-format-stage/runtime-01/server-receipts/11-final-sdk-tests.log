@@ -1,0 +1,84 @@
+$ tsx --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts
+✔ real signature and exact resource-bound grant produce an immutable principal (88.813911ms)
+✔ signed wrong issuer/audience, expiry, lifetime, nbf and scope are rejected (10.577664ms)
+✔ algorithm, kid, token key references and forged signature never reach grant storage (4.734887ms)
+✔ revocation and account disable are rechecked for every access, with no token cache (2.377463ms)
+✔ signed account/client/subject substitution and changed stored grant are denied (82.372369ms)
+✔ cancellation and private storage errors yield a fixed safe error (0.924369ms)
+✔ two real SDK sessions retain account isolation and revoked replay is denied (599.414603ms)
+✔ invalid principal fails before account store: issuer (2.971389ms)
+✔ invalid principal fails before account store: audience (2.519025ms)
+✔ invalid principal fails before account store: accountId (3.331713ms)
+✔ invalid principal fails before account store: active (2.132301ms)
+✔ invalid principal fails before account store: accountsEnabled (2.247542ms)
+✔ invalid principal fails before account store: expiresAt (2.706867ms)
+✔ invalid principal fails before account store: scopes (89.309317ms)
+✔ missing real authorizer/rate limiter/repository and preview/save/download fail closed (110.876808ms)
+✔ rate denials and unexpected dependency failures expose no raw secret or mutation (92.265425ms)
+✔ invalid authored/schema/settings/media rejected without mutation (410.662151ms)
+✔ scoped ordinary export delegates without adding a new consent stage (194.155265ms)
+✔ one browser-compatible serializer binds exact adopted envelope and preserves arrays/content (85.830763ms)
+✔ concrete native-ID boundary: preview-prefixed identities are not persisted UUIDs (1.401733ms)
+✔ validated same-draft content edit, CAS conflict, key replay and no read writes (610.540713ms)
+✔ concurrent CAS produces one winner without silently replacing another revision (181.654023ms)
+✔ actual authoring answer bounds are preserved without a renderer-support claim (101.579757ms)
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+✔ official HTTP client negotiates, discovers eight strict tools and reads the honest placeholder (1006.521439ms)
+✖ HTTP draft CAS preserves tenant boundaries, revoked token denial and safe missing preview (193.56474ms)
+✔ metadata advertises the exact protected resource and least initial scope without a private token (1.880178ms)
+✔ origin/host/TLS/query/proxy/session/body and method attacks fail before private tool dispatch (5.157691ms)
+✔ allowed browser origins can read OAuth challenge, while arbitrary preflight headers are rejected (1.305413ms)
+✔ aborted unsettled authorization keeps all 32 HTTP slots occupied until real work settles (97.751999ms)
+✔ real SDK malformed tool calls are authenticated, limited once and sanitized before strict validation (1186.796569ms)
+✔ unauthenticated malformed call consumes ingress budget and cannot reflect schema issues (4.446283ms)
+✔ denied or missing ingress guard fails closed before token verification and schema work (190.405948ms)
+✔ inconsistent repository summary fails closed on read (594.781238ms)
+✔ inconsistent repository summary fails closed on create (96.130304ms)
+✔ inconsistent repository summary fails closed on replace (98.480687ms)
+✔ SDK cancellation during pending authorization restores capacity only after real work settles (597.0227ms)
+✔ cancelled unsettled admission stays bounded at32; another factory remains unaffected (96.393906ms)
+✔ normal SDK running-handler cancellation releases all32 slots after handlers settle (207.188154ms)
+✔ duplicate tool/public active IDs close only their owning connection (6.374383ms)
+✔ close while authorization is pending suppresses late rejection, dispatch and send (86.183326ms)
+✔ same wire ID reuse is independently authorized after a cancelled lifetime settles (4.935408ms)
+✔ supported SDK abort signal is preserved; cancellation does not roll back settled work (3.214952ms)
+✔ rejected send/close reports safe errors and makes the connection terminal (3.938798ms)
+✔ real SDK initialize/discovery, strict schemas and three static resources (217.966019ms)
+✔ save_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (614.385991ms)
+✔ export_game replays authorized success after edit/deletion; new stale mutation and bad replays denied (193.964424ms)
+✔ new save still requires exact-revision consent; ordinary export does not (97.367476ms)
+✔ 32 cancelled response writes retain the budget until public send promises settle (508.000667ms)
+✔ a cancelled in-flight response reserves its wire ID before public send completion (7.484993ms)
+✔ overlapping response/related owner releases once after send settles and reuse reauthorizes (190.354229ms)
+✔ rejected delayed response write terminates only its connection with safe errors (93.947242ms)
+✔ pending related progress keeps its parent reserved: duplicate denied (5.026089ms)
+✔ pending related progress keeps its parent reserved: settled reuse reauthorizes (3.453234ms)
+ℹ tests 53
+ℹ suites 0
+ℹ pass 52
+ℹ fail 1
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 67516.855502
+
+✖ failing tests:
+
+test at tests/server/http.nodecheck.ts:1:2583
+✖ HTTP draft CAS preserves tenant boundaries, revoked token denial and safe missing preview (193.56474ms)
+  Error: Expected success: {"code":"SCOPE_REQUIRED","messageKey":"extensions:mcp.SCOPE_REQUIRED","retryable":false}
+      at data (/ram/work-final/extensions/src/mcp-app/tests/server/fixtures.ts:184:11)
+      at TestContext.<anonymous> (/ram/work-final/extensions/src/mcp-app/tests/server/http.nodecheck.ts:122:21)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7)
+[ELIFECYCLE] Test failed. See above for more details.

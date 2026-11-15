@@ -1,0 +1,12 @@
+{
+  "phases": {
+    "09-final-format": 0,
+    "10-final-typecheck": 0,
+    "11-final-sdk-tests": 1
+  },
+  "sourceInputs": 165,
+  "finalManifestSha256": "85342e6e460d959b2be5b63a6c63a0ebb9ea2965e7984b7e052760f78bbd8a94",
+  "originalAttemptSourcePreserved": true,
+  "dependencyInstallRepeated": false,
+  "actualHostOrOAuthPkce": false
+}

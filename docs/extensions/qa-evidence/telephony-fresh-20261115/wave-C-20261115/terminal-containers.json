@@ -1,0 +1,460 @@
+[
+  {
+    "name": "phone-auth-wave-bec562f-attempt01",
+    "id": "cd3daa46dbc476fe3b20403c445f8dfc39ff7439b749a419e30d464a7091f0f9",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 126,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:48:14.359694713Z",
+      "FinishedAt": "2026-11-15T14:48:14.466046036Z"
+    },
+    "size_rw": 24576,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": null
+  },
+  {
+    "name": "phone-auth-wave-bec562f-attempt02",
+    "id": "7c589921385e6f3c022f2d08a755df1bd818e1e5cd04fea7ce4fe39f8927782c",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:48:40.581504878Z",
+      "FinishedAt": "2026-11-15T14:48:40.666505192Z"
+    },
+    "size_rw": 24576,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": null
+  },
+  {
+    "name": "phone-auth-wave-bec562f-attempt03",
+    "id": "1bee500830046f4347ab0951eeff8f0e322bcaf8ad2ddae0a9ae1b94eb1a059e",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:49:19.667996755Z",
+      "FinishedAt": "2026-11-15T14:49:19.766801524Z"
+    },
+    "size_rw": 24576,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": null
+  },
+  {
+    "name": "phone-auth-wave-bec562f-attempt04",
+    "id": "2aba33f76a6cdfa2f9cd5beb918f8422b9d06890bbaa8804359448f8f0bc5cdb",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:49:53.360051601Z",
+      "FinishedAt": "2026-11-15T14:49:53.65755324Z"
+    },
+    "size_rw": 24576,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-auth-wave-bec562f-attempt05",
+    "id": "6ac461c9ca6f0b82387bc77eaef0d1dc1a7704af119aad9beb8a136ecad8fadf",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 124,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:50:14.412080223Z",
+      "FinishedAt": "2026-11-15T14:52:35.028181727Z"
+    },
+    "size_rw": 28672,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-auth-wave-5421852-attempt01",
+    "id": "59b76a7bdb4c87d129d050955bb34f2c3c9187b8c199f70ddab546a2c9f859e2",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 124,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:52:45.200978917Z",
+      "FinishedAt": "2026-11-15T14:55:04.332486858Z"
+    },
+    "size_rw": 28672,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-auth-wave-6f02f4b-attempt01",
+    "id": "e0b5c5588a4f4350d17185a88d0824ff9e4d3b9f957d16be8ec7a14d4f54e796",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:55:32.618591216Z",
+      "FinishedAt": "2026-11-15T14:56:04.783072982Z"
+    },
+    "size_rw": 28672,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-s02-wave-recheck",
+    "id": "282830f164f962da65e5670f160ae20f7fa8612436c2e3fe34c114513134645a",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T14:57:13.486487709Z",
+      "FinishedAt": "2026-11-15T14:57:52.423026512Z"
+    },
+    "size_rw": 24576,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-native-wave-0f48d00-attempt02",
+    "id": "54c97f5a9c0c2756bd03467a5656c58286fe914333aeabac07baacf5884011b3",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:06:42.412840134Z",
+      "FinishedAt": "2026-11-15T15:07:28.774618448Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-native-wave-1dff0c4-attempt01",
+    "id": "216a3708fa8cc30384c38be5b97bab83129e3abb2cf524f8182e443566934717",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:08:54.451052072Z",
+      "FinishedAt": "2026-11-15T15:09:40.48139347Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-native-wave-88a6450-attempt01",
+    "id": "1fc53c0b5ab82128dc61a8269c5cf42b87250e313e999776710593a6dcdc7c3b",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:11:44.986463334Z",
+      "FinishedAt": "2026-11-15T15:12:31.230415174Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-load100-wave-88a6450-attempt02",
+    "id": "c53a46978f0e5cd94e8a1caf5034e7f7d60a4d590f8b266535c06d634bf8252a",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:13:09.748482575Z",
+      "FinishedAt": "2026-11-15T15:13:12.859328359Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-load100-wave-88a6450-attempt03",
+    "id": "2ab3f1f9f8a2a1dee8b531badf8fc31ffaaf8b5feb47a08697e30d869b9ee100",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:13:55.377354217Z",
+      "FinishedAt": "2026-11-15T15:14:25.777268606Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-baseline-wave-f541246-attempt01",
+    "id": "8273140f129e452eef2f883b45b63840e1445484b768f20dfd53890e4aa5a40d",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:15:40.67725127Z",
+      "FinishedAt": "2026-11-15T15:15:54.398027292Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-legacy18-wave-88a6450-attempt01",
+    "id": "10c16b8c4abfa587fa756dda9b62cabcb1ebbcf3b839b975d29a94b5069f88cf",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 1,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:16:45.135741912Z",
+      "FinishedAt": "2026-11-15T15:18:49.646823633Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  },
+  {
+    "name": "phone-native-wave-9d54b2d-attempt01",
+    "id": "7fa617ccf7d15201e21d123c647455ff89683ec96a2b5091214dc95cc482d85c",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "state": {
+      "Status": "exited",
+      "Running": false,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 0,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-11-15T15:19:14.351100657Z",
+      "FinishedAt": "2026-11-15T15:20:12.794730905Z"
+    },
+    "size_rw": 32768,
+    "memory_bytes": 1073741824,
+    "nano_cpus": 250000000,
+    "network_mode": "none",
+    "readonly_rootfs": true,
+    "cap_drop": [
+      "ALL"
+    ],
+    "cap_add": [
+      "CAP_DAC_OVERRIDE"
+    ]
+  }
+]

@@ -1,0 +1,34 @@
+{
+  "scope": "Seven formatter production roots plus existing actual-auth two-file test project and transitive imports",
+  "compiler": "TypeScript 7.0.2 native installed in manager integration",
+  "type_exit": 0,
+  "no_install": true,
+  "local_memory_limit": "Go640MiB plus Node256MiB; GOMAXPROCS1",
+  "temporary_dependency_links": [
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\node_modules"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\extensions\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\extensions\\node_modules"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\packages\\socket\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\packages\\common\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\common\\node_modules"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\packages\\web\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\web\\node_modules"
+    },
+    {
+      "path": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-telephony-fresh-20261115\\docs\\extensions\\qa-evidence\\telephony-fresh-20261115\\node_modules",
+      "target": "C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-integration-20261115\\packages\\socket\\node_modules"
+    }
+  ],
+  "all_temporary_links_removed": true
+}

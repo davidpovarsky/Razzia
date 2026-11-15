@@ -1,0 +1,99 @@
+{
+  "kind": "FORMAT_ONLY_SEMANTIC_AST_EQUIVALENCE",
+  "typescriptVersion": "5.9.3",
+  "prettierVersion": "3.9.10",
+  "normalization": "Ignore source positions/trivia; unwrap grouping parentheses; normalize noncomputed static property-name spelling; preserve node kind/children/decoded text/type-only and declaration/optional-chain flags/raw template text.",
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/first-party/schema-manifest.ts",
+      "beforeSha256": "af7addecc1ce5eb37f6a73012c1ea26a0ed761a964ddd4e3714ff25586b559c6",
+      "afterSha256": "0a9f68f83aff260b865b353f2c9ab74ba266c8136d5495a515e60483328293e1",
+      "beforeBytes": 3572,
+      "afterBytes": 2523,
+      "canonicalAstSha256": "2803f9f3ed978e5eefcb7e211c20bc8a06c0d8b01d288db11530dede5c33f2d1",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/schema.ts",
+      "beforeSha256": "d4df62b9750f465e5e9285312a823cba1094b8129fe8b3d09524c0b7b440db11",
+      "afterSha256": "af1c67d0b02de0fe3c0320accce74f488c7c5512d475bc2aeb3a1f3f894cd1fa",
+      "beforeBytes": 3894,
+      "afterBytes": 4202,
+      "canonicalAstSha256": "fa55426280e709fd065bd5d0b96164d33e2e6889c6a77ffb87cbeeb0b8134ff9",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/abort.nodecheck.ts",
+      "beforeSha256": "0d9d516898b4cf9915df9dd916782e730891db68702bc2492e914842a0daa450",
+      "afterSha256": "16b43bfd57efe6247c284a534af36181029224e357514abf25bf592a2f8f9f6f",
+      "beforeBytes": 5640,
+      "afterBytes": 5941,
+      "canonicalAstSha256": "767975b566e9f262ff7212fb230f058dabf3a1a608af48bea0e9b6e393310532",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/compatibility.observation.ts",
+      "beforeSha256": "da0671e8a6bc3df89d8387fd43fd7a56012903ab8511524a6957b05b76ee9079",
+      "afterSha256": "0b41007c658dd1e0ff674aacb345efce8ec94dfd88bd12f918da2bac8190f18a",
+      "beforeBytes": 6433,
+      "afterBytes": 6479,
+      "canonicalAstSha256": "0bdc9efa33882e903f72fa903af06fef58908c189edc96e0d4b47373522dcbcb",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/review-evidence.fixture.ts",
+      "beforeSha256": "642a22b7928a6e03c843a5692c7a3ce489ad3d47c36530dd679bc4404e7fc28f",
+      "afterSha256": "55be6af19d6ca85883984f9d23524e4c5df36d6c2f30ed7e41590857b1366bef",
+      "beforeBytes": 1154,
+      "afterBytes": 1225,
+      "canonicalAstSha256": "7ebf17fc9a4ba19aceac93f88be890963e5f7fd0b8f4ca4c27ba34e45b8b6cc3",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/schema-ad895.fixture.ts",
+      "beforeSha256": "92de1321d21b94bf629973eed76d12e5e1d76f91be5e7c3881e2f1c0bbc6c28a",
+      "afterSha256": "05de36dbf288f9f95fa07b9d7ba582872cea13c2e52b30962eadcb8ec17dad3c",
+      "beforeBytes": 1133,
+      "afterBytes": 1134,
+      "canonicalAstSha256": "46873e0c5173e91a1af01caab84c89e31dbd145700d31e461696181dcb347c71",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/schema.nodecheck.ts",
+      "beforeSha256": "3b9f9ae5dadd2e42c6c8c036b8f85d58263467c09383bfca801e9afb36e7ab33",
+      "afterSha256": "6ad7fb368c9139f79214e88d0b42cedb5cd741f6ce5ce1f3d4c18dbbd2936085",
+      "beforeBytes": 5884,
+      "afterBytes": 6313,
+      "canonicalAstSha256": "ea5d7b80479236c8dfe0d861a9de85f3e62d65b7a3da79b473400b7c99edb03d",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/store.nodecheck.ts",
+      "beforeSha256": "eb6bac0a5b8843950257e0682f5d7a8768af264536b0692c03897d878376762e",
+      "afterSha256": "148de4c0c945a0aac6a5b11cdce5f873e427b52493cc132f7adfe9c242d4551a",
+      "beforeBytes": 12229,
+      "afterBytes": 12265,
+      "canonicalAstSha256": "dc939b54a4c9591f3404a2b408e4e69e06a6ea10a79cdd3c6d783a4f274ddd24",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    }
+  ],
+  "changedFiles": 8,
+  "unchangedOtherInputs": 152,
+  "applicationImported": false
+}

@@ -1,0 +1,14 @@
+{
+  "command": [
+    "pnpm",
+    "run",
+    "test:first-party"
+  ],
+  "actualReturnCode": 0,
+  "shellExit": 0,
+  "seconds": 36.694,
+  "outputLimitBytes": 1048576,
+  "logTruncated": false,
+  "observedOutputBytes": 3556,
+  "logSha256": "d6febbc61ca6890a60f48588e1262577ed798964dd86e3c7caa288388255ee58"
+}

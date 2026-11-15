@@ -1,0 +1,8 @@
+{
+  "threadId": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+  "job": "mcp-format-F-20261115-01a1dfaa",
+  "preservedOldDraftSha256": "54f4c09860c4d15078c76896e57ed9c896f8ee06d508cef97a09ac5f6fdd89f0",
+  "consumerSha256": "11e584e88f35b6ab497318e590cdf133bed52f27dd5be54bce9d4c34348bef9e",
+  "pythonSyntax": "PASS",
+  "scope": "Eight authored files only; immutable ad895 snapshots excluded; TC+34+compat executed fresh; SDK41 matched reuse"
+}

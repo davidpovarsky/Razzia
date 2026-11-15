@@ -1,0 +1,66 @@
+{
+  "kind": "FORMAT_ONLY_SEMANTIC_AST_EQUIVALENCE",
+  "typescriptVersion": "5.9.3",
+  "prettierVersion": "3.9.10",
+  "normalization": "Ignore source positions/trivia; unwrap grouping parentheses; normalize noncomputed static property-name spelling; preserve node kind/children/decoded text/type-only and declaration/optional-chain flags/raw template text.",
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/server/access-token.ts",
+      "beforeSha256": "1fda501aaa18483a076854fa63f74da7f0cffa16814ebe9bc437ce1cbe031d5c",
+      "afterSha256": "d41ed8b5602132e53ee837696c35053d5503fc9f9b9855e0df7cdffe77afc74b",
+      "beforeBytes": 6117,
+      "afterBytes": 6473,
+      "canonicalAstSha256": "a2ab15d86724b028bde5a679ae6d990902315d6d7024624118ecacc7b9bc4917",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/http.ts",
+      "beforeSha256": "cc6e1e3fa1b0f9d0ed02d83f8364b32ce8efe6dc3f33f6306e950150bb7ffcfd",
+      "afterSha256": "bd9523839d9378a3d8bd9403e913783d651a70488862535d36b807b121892170",
+      "beforeBytes": 11473,
+      "afterBytes": 12920,
+      "canonicalAstSha256": "eb6173442260fc8a12d56cc2f8ee861a6c99de7234f8a0fdc2832d170ac58268",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/server/factory.ts",
+      "beforeSha256": "0a21eeec1cfdab450856da9146e959c7e1249cd57ea70e9c7cc63f32b75d2c2b",
+      "afterSha256": "4f4b49c9fab39d5ab465539b53e620db69e25301d7c8fcfa784588a1c14a9b14",
+      "beforeBytes": 6160,
+      "afterBytes": 6229,
+      "canonicalAstSha256": "f6500639dbe59b1c500b99037f6ddd09865974d361161dfc8682ec0f6ec4943a",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/access-token.nodecheck.ts",
+      "beforeSha256": "1d24f4e55c937e8544e764475df08f9b1d43b81bdbad50f0b21c2dafe7c36566",
+      "afterSha256": "9f0032f4fce9217f0574cb8fe2a6e4290f37bd378f6f593585f3280ecd063ea8",
+      "beforeBytes": 5479,
+      "afterBytes": 5798,
+      "canonicalAstSha256": "2eb4e7c17122a8981baf4a36f5eadea11913fd7f52142f87fb0f00a1755bf554",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/server/http.nodecheck.ts",
+      "beforeSha256": "c5b232ce6b86a5e6b427f0cf4f9089672f974dc42cc5d0507853375f7a2fcbb8",
+      "afterSha256": "788ce7100897e93c58769e95a6a149e0d76175c38fb33b703fcbafd627b43f71",
+      "beforeBytes": 8543,
+      "afterBytes": 9467,
+      "canonicalAstSha256": "098cb9a440730f21502155f4e15e95b497ec23eb4bd7ee4dc6be9e0ffafae73f",
+      "equalSemanticAst": true,
+      "syntaxDiagnostics": 0,
+      "prettierCheck": true
+    }
+  ],
+  "comparedTypeScriptFiles": 5,
+  "unchangedOtherInputs": 160,
+  "applicationImported": false
+}

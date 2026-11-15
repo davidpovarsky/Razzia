@@ -29,6 +29,8 @@ import {
   ExtensionGameSession,
   GameRoster,
   GamePhoneController,
+  isPhoneLifecycleV2Adopted,
+  allowsNativePhoneMutation,
   createShowRoundHooks,
   createSessionDelegate,
   createAuthoredCoordinator,
@@ -371,6 +373,37 @@ class Game {
     return Boolean(this._settings.phoneInviteOnly)
   }
 
+  canAdoptPhoneLifecycleV2(): boolean {
+    return ![...this.roster.entries.values()].some(
+      (entry) =>
+        (entry.phoneE164 || entry.source === "phone") &&
+        (entry.clientId || entry.activeCallId),
+    )
+  }
+
+  allowsBrowserPhoneIdentity(
+    clientId: string,
+    identity: {
+      username?: string
+      rosterPlayerId?: string
+      phoneE164?: string
+      source?: "web" | "phone"
+    } = {},
+  ): boolean {
+    if (!isPhoneLifecycleV2Adopted(this)) return true
+    if (identity.source === "phone" || identity.phoneE164) return false
+    const name = identity.username?.trim().toLocaleLowerCase()
+    return ![...this.roster.entries.values()].some(
+      (entry) =>
+        (entry.phoneE164 || entry.source === "phone") &&
+        (entry.clientId === clientId ||
+          entry.rosterPlayerId === identity.rosterPlayerId ||
+          (name &&
+            entry.preRegistered &&
+            entry.displayName.trim().toLocaleLowerCase() === name)),
+    )
+  }
+
   setPhoneInviteOnly(enabled: boolean): void {
     this._settings = { ...this._settings, phoneInviteOnly: enabled }
     this.broadcastHostPresence()
@@ -398,7 +431,14 @@ class Game {
 
   submitPhoneAnswerByRosterId(
     ...args: Parameters<GamePhoneController["submitPhoneAnswerByRosterId"]>
-  ) {
+  ): ReturnType<GamePhoneController["submitPhoneAnswerByRosterId"]> {
+    if (!allowsNativePhoneMutation(this)) {
+      return {
+        accepted: false,
+        epoch: this.phone.getCurrentQuestionPstnSupport().epoch,
+        reason: "phone_protocol_required",
+      }
+    }
     return this.phone.submitPhoneAnswerByRosterId(...args)
   }
 
@@ -599,6 +639,11 @@ class Game {
     },
   ): string | null {
     const clientId = getClientId(socket)
+    if (
+      !this.allowsBrowserPhoneIdentity(clientId, { ...claimsExtra, username })
+    ) {
+      return "errors:auth.unauthorized"
+    }
     const {
       entry: rosterEntry,
       normalizedPhone,
@@ -780,13 +825,16 @@ class Game {
    */
   joinOrRebindPhoneCaller(
     ...args: Parameters<GamePhoneController["joinOrRebindPhoneCaller"]>
-  ) {
+  ): ReturnType<GamePhoneController["joinOrRebindPhoneCaller"]> {
+    if (!allowsNativePhoneMutation(this))
+      return { ok: false, error: "errors:auth.unauthorized" }
     return this.phone.joinOrRebindPhoneCaller(...args)
   }
 
   disconnectPhoneCallerByRosterId(
     ...args: Parameters<GamePhoneController["disconnectPhoneCallerByRosterId"]>
   ) {
+    if (!allowsNativePhoneMutation(this)) return false
     return this.phone.disconnectPhoneCallerByRosterId(...args)
   }
 
@@ -908,6 +956,10 @@ class Game {
 
   private reconnectPlayer(socket: Socket) {
     const clientId = getClientId(socket)
+    if (!this.allowsBrowserPhoneIdentity(clientId)) {
+      socket.emit(EVENTS.GAME.RESET, "errors:auth.unauthorized")
+      return
+    }
     const player = this.playerManager.findByClientId(clientId)
 
     if (!player) {
@@ -1080,6 +1132,9 @@ class Game {
   }
 
   selectAnswer(socket: Socket, answerIds: number[]) {
+    if (!this.allowsBrowserPhoneIdentity(getClientId(socket))) {
+      return { accepted: false, reason: "phone_protocol_required" }
+    }
     if (this.showCoordinator?.isSceneActive()) {
       return { accepted: false, reason: "scene_active" as const }
     }

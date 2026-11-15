@@ -7,6 +7,7 @@ import {
 } from "@razzia/extensions/core"
 import { apiFactory } from "@razzia/socket/api/factory"
 import { requireManager } from "@razzia/socket/api/middleware"
+import { isPhoneLifecycleV2Adopted } from "@razzia/extensions/server"
 import { i18nHook } from "@razzia/socket/api/validation"
 import { grantMediaForGuest } from "@razzia/socket/services/media-access"
 import Game from "@razzia/socket/services/game"
@@ -289,6 +290,13 @@ export const gameExtensionRoutes = apiFactory
       }
 
       const { game } = resolved
+
+      if (isPhoneLifecycleV2Adopted(game)) {
+        return c.json(
+          { ok: false, reason: "phone_protocol_required" },
+          StatusCodes.FORBIDDEN,
+        )
+      }
 
       if (body.rosterPlayerId) {
         const claimedEntry = game.getRosterEntry(body.rosterPlayerId)

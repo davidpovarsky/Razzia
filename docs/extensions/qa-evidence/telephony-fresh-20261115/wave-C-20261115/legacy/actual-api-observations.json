@@ -1,0 +1,519 @@
+{
+  "review_sha": "88a64501e622a9db072f3f7d89a989feef6a182d",
+  "fixture": "/fixtures/phone-native-legacy18/actual-api-Yo8IEM",
+  "scope": "actual Hono/Socket.IO/Game with synthetic identities; no provider",
+  "observations": [
+    {
+      "name": "API01",
+      "observed": {
+        "missing": 401,
+        "wrong": 401,
+        "registered": 0
+      }
+    },
+    {
+      "name": "API02",
+      "observed": {
+        "status": 401,
+        "joined": false,
+        "registered": 0
+      }
+    },
+    {
+      "name": "API03",
+      "observed": {
+        "status": 403,
+        "joined": false,
+        "returnsPhone": false,
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-poll-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-73c3-7522-bf4c-98e93c5126d5",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-poll-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-73c3-7522-bf4c-98e93c5126d5",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "API04-rejection",
+      "observed": {
+        "accepted": false,
+        "reason": "stale_call",
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-bound-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-74e7-710c-ace3-1913eff714e9",
+          "points": 0,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-bound-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-74e7-710c-ace3-1913eff714e9",
+          "points": 0,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "API04-score",
+      "observed": {
+        "exists": true,
+        "activeCallId": "direct-bound-B",
+        "status": "connected",
+        "clientId": "phone-client-01a1dfc8-74e7-710c-ace3-1913eff714e9",
+        "points": 1000,
+        "epoch": 1,
+        "answered": false,
+        "connected": 1,
+        "players": 1,
+        "registered": 1
+      }
+    },
+    {
+      "name": "API05-stale",
+      "observed": {
+        "accepted": false,
+        "reason": "stale_question_epoch",
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-epoch-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-a401-7454-a6a7-c1f0e26dd007",
+          "points": 0,
+          "epoch": 2,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-epoch-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-a401-7454-a6a7-c1f0e26dd007",
+          "points": 0,
+          "epoch": 2,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "API06",
+      "observed": {
+        "status": 403,
+        "joined": false,
+        "returnsPhone": false,
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-victim-A",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-e6e5-70ae-8b49-a5bddb96821d",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-victim-A",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-e6e5-70ae-8b49-a5bddb96821d",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "API07",
+      "observed": {
+        "status": 403,
+        "joined": false,
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-away-A",
+          "status": "disconnected",
+          "clientId": "phone-client-01a1dfc8-e763-72f8-9d56-8a49cf3539b2",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 0,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-away-A",
+          "status": "disconnected",
+          "clientId": "phone-client-01a1dfc8-e763-72f8-9d56-8a49cf3539b2",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 0,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "API08",
+      "observed": {
+        "before": {
+          "exists": true,
+          "activeCallId": "direct-answer-victim",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-e7ca-7793-a9d7-59b0b2acb0ea",
+          "points": 0,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "direct-answer-victim",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc8-e7ca-7793-a9d7-59b0b2acb0ea",
+          "points": 0,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "threat": "trusted gateway key present, copied caller identifiers, mismatched phone"
+      }
+    },
+    {
+      "name": "API09",
+      "observed": {
+        "before": {
+          "exists": true,
+          "activeCallId": "30aedafe02aad4e91b06fd42",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-151e-70fc-817a-9a320c4a552a",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "04e1b4965fe7092d0691efb3",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-151e-70fc-817a-9a320c4a552a",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "oldCallbackHungUp": false,
+        "gatewayClockOnly": true
+      }
+    },
+    {
+      "name": "API10",
+      "observed": {
+        "before": {
+          "exists": true,
+          "activeCallId": "e2719f718e3649a980fa4f32",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-190a-7195-b9a3-9d0da6c10916",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "3cd2960f3aa89decdf7ade80",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-190a-7195-b9a3-9d0da6c10916",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "oldCallbackHungUp": false,
+        "actualChildRestart": true
+      }
+    },
+    {
+      "name": "API11",
+      "observed": {
+        "observed": {
+          "exists": true,
+          "activeCallId": "aef90ec10f44779186fa595c",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-1d7e-7780-a77e-f859b7585698",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "aliasesCanonicalizeEqually": true,
+        "lateNetworkDelivery": "A after B"
+      }
+    },
+    {
+      "name": "API12",
+      "observed": {
+        "exists": true,
+        "activeCallId": "2cc82788f8b2cbec41cb1422",
+        "status": "connected",
+        "clientId": "phone-client-01a1dfc9-20c3-75d8-b7fe-11f44833d889",
+        "points": 0,
+        "epoch": 1,
+        "answered": true,
+        "connected": 1,
+        "players": 1,
+        "registered": 1,
+        "answerRequests": 1
+      }
+    },
+    {
+      "name": "API13",
+      "observed": {
+        "status": 403,
+        "reason": "phone_invite_only",
+        "registeredBefore": 1,
+        "registeredAfter": 1,
+        "connected": 0
+      }
+    },
+    {
+      "name": "S01-C1",
+      "observed": {
+        "initial": 200,
+        "current": 200,
+        "freshRedial": 200,
+        "stale": 403,
+        "privateFieldsAbsent": true,
+        "before": {
+          "exists": true,
+          "activeCallId": "s01-current-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-50d8-738c-9d79-62288e2a4585",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "s01-current-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-50d8-738c-9d79-62288e2a4585",
+          "points": 0,
+          "epoch": 0,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        }
+      }
+    },
+    {
+      "name": "S01-C2",
+      "observed": {
+        "earned": {
+          "exists": true,
+          "activeCallId": "s01-score-A",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-513f-7072-b61c-3e23b30f7ad0",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "s01-score-C",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-513f-7072-b61c-3e23b30f7ad0",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1
+        },
+        "rebind": 200,
+        "reconnected": true
+      }
+    },
+    {
+      "name": "S02-C1",
+      "observed": {
+        "deniedRequests": 18,
+        "before": {
+          "exists": true,
+          "activeCallId": "s02-connected-A",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-8050-71db-b09c-575c60fbe65b",
+          "points": 1000,
+          "epoch": 2,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1,
+          "lastSeenAt": 1794755898191,
+          "timedOut": false,
+          "source": "phone",
+          "canonicalPhoneDigest": "28cce9c34800c21bc5b9ea2d01a57db34da850950542429ae9e0aa01d88792d1",
+          "rawPhoneDigest": "28cce9c34800c21bc5b9ea2d01a57db34da850950542429ae9e0aa01d88792d1",
+          "acceptingAnswers": true,
+          "questionIndex": 1
+        },
+        "validCallerStillAccepted": true,
+        "privateFieldsAbsent": true
+      }
+    },
+    {
+      "name": "S02-C2",
+      "observed": {
+        "deniedRequests": 12,
+        "before": {
+          "exists": true,
+          "activeCallId": "s02-disconnected-A",
+          "status": "disconnected",
+          "clientId": "phone-client-01a1dfc9-c3a9-73d5-8e14-80aeca616502",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 0,
+          "players": 1,
+          "registered": 1,
+          "lastSeenAt": 1794755916460,
+          "timedOut": false,
+          "source": "phone",
+          "canonicalPhoneDigest": "db0cfc69ddd109bcb6a3fbc917070e246e6a793906516649fe4e1bcce1f3ee90",
+          "rawPhoneDigest": "db0cfc69ddd109bcb6a3fbc917070e246e6a793906516649fe4e1bcce1f3ee90",
+          "acceptingAnswers": false,
+          "questionIndex": 0
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "s02-disconnected-B",
+          "status": "connected",
+          "clientId": "phone-client-01a1dfc9-c3a9-73d5-8e14-80aeca616502",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 1,
+          "players": 1,
+          "registered": 1,
+          "lastSeenAt": 1794755916480,
+          "timedOut": false,
+          "source": "phone",
+          "canonicalPhoneDigest": "db0cfc69ddd109bcb6a3fbc917070e246e6a793906516649fe4e1bcce1f3ee90",
+          "rawPhoneDigest": "db0cfc69ddd109bcb6a3fbc917070e246e6a793906516649fe4e1bcce1f3ee90",
+          "acceptingAnswers": false,
+          "questionIndex": 0
+        },
+        "nationalAndInternationalAliasesAccepted": true,
+        "correctAliasHangupAccepted": true
+      }
+    },
+    {
+      "name": "S02-C3",
+      "observed": {
+        "before": {
+          "exists": true,
+          "activeCallId": "s02-admission-A",
+          "status": "disconnected",
+          "clientId": "phone-client-01a1dfc9-f2fd-7043-911c-43032c3aa2d5",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 0,
+          "players": 1,
+          "registered": 1,
+          "lastSeenAt": 1794755928584,
+          "timedOut": false,
+          "source": "phone",
+          "canonicalPhoneDigest": "2ff3f3057ab157036c5e14c263fed057a8ece1d62d4918cc1a3ace02c964b57a",
+          "rawPhoneDigest": "2ff3f3057ab157036c5e14c263fed057a8ece1d62d4918cc1a3ace02c964b57a",
+          "acceptingAnswers": false,
+          "questionIndex": 0
+        },
+        "after": {
+          "exists": true,
+          "activeCallId": "s02-admission-A",
+          "status": "disconnected",
+          "clientId": "phone-client-01a1dfc9-f2fd-7043-911c-43032c3aa2d5",
+          "points": 1000,
+          "epoch": 1,
+          "answered": false,
+          "connected": 0,
+          "players": 1,
+          "registered": 1,
+          "lastSeenAt": 1794755928584,
+          "timedOut": false,
+          "source": "phone",
+          "canonicalPhoneDigest": "2ff3f3057ab157036c5e14c263fed057a8ece1d62d4918cc1a3ace02c964b57a",
+          "rawPhoneDigest": "2ff3f3057ab157036c5e14c263fed057a8ece1d62d4918cc1a3ace02c964b57a",
+          "acceptingAnswers": false,
+          "questionIndex": 0
+        },
+        "status": 403,
+        "reason": "caller_admission_denied",
+        "actualBillingReservationAbsent": true,
+        "billingRows": 0,
+        "phoneCallRows": 0,
+        "externalRequests": 0
+      }
+    }
+  ]
+}

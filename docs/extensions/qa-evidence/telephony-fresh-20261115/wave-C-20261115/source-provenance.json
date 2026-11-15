@@ -1,0 +1,77 @@
+{
+  "schema": 1,
+  "thread_id": "01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+  "worktree": "C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-telephony-fresh-20261115",
+  "branch": "codex/tadazz-hq-telephony-fresh-20261115",
+  "activation_head": "d191fbc6406a06164e860b1c550d232c82f0a0ca",
+  "latest_tested_source": "9d54b2d6f15722b5c1e4dedfa4d81646284d65ee",
+  "legacy_and_load_executed_source": "88a64501e622a9db072f3f7d89a989feef6a182d",
+  "production_files": [
+    {
+      "path": "extensions/src/server/index.ts",
+      "blob_at_88a6450": "baab27e849e79734d37681d854fdfb89058c3104",
+      "blob_at_9d54b2d": "baab27e849e79734d37681d854fdfb89058c3104",
+      "sha256": "fc3d0fa1162ec819d8065b04d31d7f57ba154cd80501caae26ff56759a79cc78"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/private-authority-files.ts",
+      "blob_at_88a6450": "726d4c7cebd70e721c72a0936d8c63f7ed9d4522",
+      "blob_at_9d54b2d": "726d4c7cebd70e721c72a0936d8c63f7ed9d4522",
+      "sha256": "e8b0403b30515b2974a38337e925f9d6624f0d77cd02f20f831ade41abe34d6d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+      "blob_at_88a6450": "442779f66180c12284391b21cc8e47aaca7558d0",
+      "blob_at_9d54b2d": "442779f66180c12284391b21cc8e47aaca7558d0",
+      "sha256": "22a3f9fde891389cc72bd3dac52f4a617052faaab685fb7269fa44975e41ed85"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/native-adoption.ts",
+      "blob_at_88a6450": "7778f5eebeb664e2309a39a0deefafabcf6b513c",
+      "blob_at_9d54b2d": "7778f5eebeb664e2309a39a0deefafabcf6b513c",
+      "sha256": "e8096f884152d17a4da314bcedaa8c73aad323129c1b35ac28a4552f1344eb8f"
+    },
+    {
+      "path": "packages/socket/src/api/extensions/game-routes.ts",
+      "blob_at_88a6450": "cad2bee2773e36a9ce0a9b968fcbffe004eb923a",
+      "blob_at_9d54b2d": "cad2bee2773e36a9ce0a9b968fcbffe004eb923a",
+      "sha256": "b2859a2cb656f5f03207187dbf777e45ff91dec7727e5b0167a4b7d211a43ef3"
+    },
+    {
+      "path": "packages/socket/src/api/routes/games.ts",
+      "blob_at_88a6450": "0ca5016d76acb489d878edd76fa73f49e32e8758",
+      "blob_at_9d54b2d": "0ca5016d76acb489d878edd76fa73f49e32e8758",
+      "sha256": "b18d6a78e54bff5d39dada10744fd199563eed101b947ff8e2f526b82976a956"
+    },
+    {
+      "path": "packages/socket/src/services/game/index.ts",
+      "blob_at_88a6450": "46d7774e6b523305d0b160839319f84eed282bdd",
+      "blob_at_9d54b2d": "46d7774e6b523305d0b160839319f84eed282bdd",
+      "sha256": "ea65eedf9ac3fb63fcac62ffdbde175b3e5595346841011774e19488d5a8c78a"
+    }
+  ],
+  "unchanged_accepted_core": [
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "accepted_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "current_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "accepted_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "current_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "accepted_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "current_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "accepted_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "current_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8"
+    }
+  ],
+  "old20_status": "Historical 20/20 only; current helper/test input differs from 0ad2. Core hashes match, transitive native hooks changed; not rerun/reclaimed for new composition.",
+  "old3_status": "Historical a129 3/3 only; test/helper files match but transitive Game hooks changed. Not rerun/reclaimed for new composition."
+}

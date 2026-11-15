@@ -1,0 +1,27 @@
+{
+  "exit": 1,
+  "stdout": "",
+  "stderr": "Traceback (most recent call last):\n  File \"<stdin>\", line 8, in <module>\nAssertionError: 2666004480\n",
+  "members": {
+    "consumer.py": {
+      "bytes": 15486,
+      "sha256": "11e584e88f35b6ab497318e590cdf133bed52f27dd5be54bce9d4c34348bef9e"
+    },
+    "format-and-compare.mjs": {
+      "bytes": 6173,
+      "sha256": "f5932899607153f7b6150afde0a92a7793a46a55f63bf5feba1a2b1acf710b8c"
+    },
+    "run-phase.py": {
+      "bytes": 2006,
+      "sha256": "02f6aed97feb7eb40fb31a323810d8208594185d223193cdfd4675b9a92eee1e"
+    },
+    "launch.py": {
+      "bytes": 5231,
+      "sha256": "8d42b609421cbbb2971a7d668b3961e27d7987e908c1532e436fcf5869bb82fe"
+    },
+    "activation.json": {
+      "bytes": 573,
+      "sha256": "e39ae2d8d2343c3a9dfc1d5bc802c10884565e96133994548bdd5810925a9ca6"
+    }
+  }
+}

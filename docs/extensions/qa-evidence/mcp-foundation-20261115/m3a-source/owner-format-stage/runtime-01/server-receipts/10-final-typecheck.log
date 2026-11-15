@@ -1,0 +1,29 @@
+✓ Lockfile passes supply-chain policies (verified 4m ago)
+Lockfile is up to date, resolution step is skipped
+Already up to date
+
+dependencies:
++ @modelcontextprotocol/client 2.4.0
++ @modelcontextprotocol/core 2.4.0
++ @modelcontextprotocol/ext-apps 2.1.0
++ @modelcontextprotocol/server 2.4.0
++ hono 4.13.13
++ http-status-codes 2.3.0
++ socket.io 4.8.4
++ uuid 14.0.3
++ zod 4.6.6
+
+devDependencies:
++ @types/node 26.6.5
++ tsx 4.21.0
++ typescript 5.9.3
+
+Error: ERR_PNPM_IGNORED_BUILDS
+
+  × installing dependencies
+  ╰─▶ Ignored build scripts: esbuild@0.27.7
+  help: Run "pnpm approve-builds" to pick which dependencies should be allowed
+        to run scripts.
+
+[WARN] The install that runs before scripts failed, so your node_modules may be out of sync with your lockfile. Set "verifyDepsBeforeRun: false" to skip this install.
+$ tsc --noEmit -p tsconfig.json
