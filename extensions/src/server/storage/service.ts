@@ -23,9 +23,11 @@ import {
 } from "../../core/index"
 import { CompositeStorageError } from "./error"
 import { createStagedJournal, removeJournal } from "./journal"
+import { readRecoveryBase } from "./recovery-state"
 import {
   deleteSidecar,
   readSidecar,
+  sidecarExists,
   writeSidecar,
   type StorageInjections,
 } from "./sidecar"
@@ -35,6 +37,74 @@ export class CompositeStorageService {
 
   constructor(injections: StorageInjections) {
     this.injections = injections
+  }
+
+  private createJournaledQuiz(
+    quizz: Record<string, unknown>,
+    extras: AnyQuizExtras,
+  ): {
+    quizId: string
+    revision: number
+    baseDigest: string
+  } {
+    let quizId = ""
+    let journalCreated = false
+    try {
+      quizId = this.injections.saveQuizz(quizz).id
+      const schema =
+        extras.schemaVersion === 2 ? quizExtrasV2Schema : quizExtrasV1Schema
+      const validated = schema.parse({ ...extras, quizId, revision: 1 })
+      // saveQuizz owns ID allocation. Once it returns, persist rollback intent
+      // before the sidecar write. A crash inside saveQuizz remains an adapter gate.
+      createStagedJournal(this.injections.getPath, {
+        quizId,
+        backupBase: null,
+        backupExtras: null,
+        targetBase: quizz,
+        targetExtras: validated,
+      })
+      journalCreated = true
+      writeSidecar(this.injections.getPath, quizId, validated)
+      removeJournal(this.injections.getPath, quizId)
+      return { quizId, revision: 1, baseDigest: validated.baseDigest }
+    } catch (error) {
+      const cleanupErrors: unknown[] = []
+      if (quizId) {
+        // Attempt both cleanups independently; a failed base deletion must not
+        // hide a sidecar cleanup error or destroy the recovery journal.
+        try {
+          if (readRecoveryBase(this.injections, quizId))
+            this.injections.deleteQuizz(quizId)
+          if (readRecoveryBase(this.injections, quizId))
+            throw new Error("Base survived creation rollback")
+        } catch (cleanupError) {
+          cleanupErrors.push(cleanupError)
+        }
+        try {
+          deleteSidecar(this.injections.getPath, quizId)
+          if (sidecarExists(this.injections.getPath, quizId))
+            throw new Error("Sidecar survived creation rollback")
+        } catch (cleanupError) {
+          cleanupErrors.push(cleanupError)
+        }
+        if (cleanupErrors.length === 0 && journalCreated) {
+          try {
+            removeJournal(this.injections.getPath, quizId)
+          } catch (cleanupError) {
+            cleanupErrors.push(cleanupError)
+          }
+        }
+      }
+      const reason = error instanceof Error ? error.message : String(error)
+      const recovery =
+        cleanupErrors.length > 0
+          ? `; rollback incomplete (${cleanupErrors.map((item) => (item instanceof Error ? item.message : String(item))).join("; ")}); ${journalCreated ? "recovery journal preserved" : "no durable recovery journal could be established"}`
+          : ""
+      throw new CompositeStorageError(
+        `Failed to create composite quiz: ${reason}${recovery}`,
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
+    }
   }
 
   /**
@@ -243,50 +313,7 @@ export class CompositeStorageService {
       )
     }
 
-    // Save base quiz with atomic rollback recovery if sidecar write fails
-    let quizId = ""
-
-    try {
-      const saveResult = this.injections.saveQuizz(quizz)
-      quizId = saveResult.id
-
-      const initialExtras: AnyQuizExtras = {
-        ...extras,
-        quizId,
-        baseDigest,
-        revision: 1,
-        questionIds: alignedQuestionIds,
-      }
-
-      const validatedExtras = schemaToUse.parse(initialExtras)
-
-      writeSidecar(this.injections.getPath, quizId, validatedExtras)
-
-      return {
-        quizId,
-        revision: 1,
-        baseDigest,
-      }
-    } catch (writeError) {
-      // Safe rollback so an invalid sidecar or write failure cannot leave an unintended partial quiz
-      if (quizId) {
-        try {
-          this.injections.deleteQuizz(quizId)
-          deleteSidecar(this.injections.getPath, quizId)
-        } catch {
-          // Ignore secondary cleanup error
-        }
-      }
-
-      if (writeError instanceof CompositeStorageError) {
-        throw writeError
-      }
-
-      throw new CompositeStorageError(
-        `Failed to create composite quiz: ${writeError instanceof Error ? writeError.message : String(writeError)}`,
-        StatusCodes.INTERNAL_SERVER_ERROR,
-      )
-    }
+    return this.createJournaledQuiz(quizz, preValidation.data)
   }
 
   /**
@@ -458,52 +485,10 @@ export class CompositeStorageService {
         )
       }
 
-      // Mint new quiz ID by saving base quiz with atomic rollback recovery
-      let newQuizId = ""
-
-      try {
-        const saveResult = this.injections.saveQuizz(quizz)
-        newQuizId = saveResult.id
-
-        const importedExtras: AnyQuizExtras = {
-          ...extras,
-          quizId: newQuizId,
-          revision: 1,
-          baseDigest,
-          questionIds: ensuredFreshIds,
-          perQuestion: freshPerQuestion,
-          ...(freshLeaderboard ? { leaderboard: freshLeaderboard } : {}),
-          ...(freshTimeline ? { timeline: freshTimeline } : {}),
-        }
-
-        const validated = schemaToUse.parse(importedExtras)
-
-        writeSidecar(this.injections.getPath, newQuizId, validated)
-
-        return {
-          quizId: newQuizId,
-          revision: 1,
-          baseDigest,
-        }
-      } catch (writeError) {
-        if (newQuizId) {
-          try {
-            this.injections.deleteQuizz(newQuizId)
-            deleteSidecar(this.injections.getPath, newQuizId)
-          } catch {
-            // Ignore secondary cleanup error
-          }
-        }
-
-        if (writeError instanceof CompositeStorageError) {
-          throw writeError
-        }
-
-        throw new CompositeStorageError(
-          `Failed to import enhanced bundle: ${writeError instanceof Error ? writeError.message : String(writeError)}`,
-          StatusCodes.INTERNAL_SERVER_ERROR,
-        )
-      }
+      return this.createJournaledQuiz(
+        quizz as Record<string, unknown>,
+        preValidation.data,
+      )
     }
 
     // Legacy quiz format

@@ -3,6 +3,7 @@ import {
   createDefaultAudioExtras,
   createDefaultRosterExtras,
   createDotLottieArchive,
+  computeCanonicalBaseDigest,
 } from "../core/index"
 import {
   type MediaCatalogResponse,
@@ -1195,7 +1196,7 @@ describe("Gate C: Persistent Media Catalog & Reference-Safe Deletion", () => {
       schemaVersion: 2 as const,
       revision: 1,
       quizId,
-      baseDigest: "b".repeat(64),
+      baseDigest: computeCanonicalBaseDigest(baseQuiz),
       questionIds: qIds,
       timeline: [
         {

@@ -569,14 +569,14 @@ export function executeMediaDeleteTransaction(
       throw new Error("Simulated failure before committed marker write")
     }
 
-    journalEntry.status = "committed"
     const tmpCommitted = `${journalFilePath}.tmp.${Date.now()}`
     fs.writeFileSync(
       tmpCommitted,
-      JSON.stringify(journalEntry, null, 2),
+      JSON.stringify({ ...journalEntry, status: "committed" }, null, 2),
       "utf-8",
     )
     fs.renameSync(tmpCommitted, journalFilePath)
+    journalEntry.status = "committed"
 
     if (options?.faultInjection?.failAfterCommittedWrite) {
       throw new Error("Simulated failure after committed marker write")
@@ -860,9 +860,13 @@ export function recoverMediaDeleteJournals(
           health.records,
         )
 
-        if (activeRefs.length > 0) {
+        if (
+          health.unreadableFiles.length > 0 ||
+          activeRefs.length > 0 ||
+          fs.existsSync(targetMediaFilePath)
+        ) {
           console.error(
-            `[MediaJournal] Committed delete in journal ${file} still has ${activeRefs.length} active references; preserving journal`,
+            `[MediaJournal] Committed delete in journal ${file} has unreadable shows, surviving references or a present binary; preserving journal and quarantine`,
           )
           unresolvedJournals.push(file)
 
@@ -871,14 +875,7 @@ export function recoverMediaDeleteJournals(
 
         // Unlink quarantine binary if still present
         if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
-          try {
-            fs.unlinkSync(targetQuarantinePath)
-          } catch (qUnlinkErr) {
-            console.warn(
-              `[MediaJournal] Could not unlink quarantine binary:`,
-              qUnlinkErr,
-            )
-          }
+          fs.unlinkSync(targetQuarantinePath)
         }
 
         // Unlink journal
@@ -939,6 +936,52 @@ export function recoverMediaDeleteJournals(
           continue
         }
 
+        if (quarantineExists && targetQuarantinePath) {
+          // Media may be a large video. Compare in bounded chunks so recovery
+          // does not allocate two entire binaries under memory pressure.
+          const mediaFd = fs.openSync(targetMediaFilePath, "r")
+          try {
+            const quarantineFd = fs.openSync(targetQuarantinePath, "r")
+            try {
+              const mediaChunk = Buffer.alloc(64 * 1024)
+              const quarantineChunk = Buffer.alloc(64 * 1024)
+              let position = 0
+              while (true) {
+                const mediaBytes = fs.readSync(
+                  mediaFd,
+                  mediaChunk,
+                  0,
+                  mediaChunk.length,
+                  position,
+                )
+                const quarantineBytes = fs.readSync(
+                  quarantineFd,
+                  quarantineChunk,
+                  0,
+                  quarantineChunk.length,
+                  position,
+                )
+                if (
+                  mediaBytes !== quarantineBytes ||
+                  !mediaChunk
+                    .subarray(0, mediaBytes)
+                    .equals(quarantineChunk.subarray(0, quarantineBytes))
+                ) {
+                  throw new Error(
+                    `Restored binary differs from quarantine in ${file}`,
+                  )
+                }
+                if (mediaBytes === 0) break
+                position += mediaBytes
+              }
+            } finally {
+              fs.closeSync(quarantineFd)
+            }
+          } finally {
+            fs.closeSync(mediaFd)
+          }
+        }
+
         // 2. Restore shows and sidecars
         for (const s of validatedShows) {
           try {
@@ -958,11 +1001,27 @@ export function recoverMediaDeleteJournals(
 
             // Verify restored show and sidecar
             if (s.originalBaseRaw !== null) {
-              JSON.parse(fs.readFileSync(s.filePath, "utf-8"))
+              const restoredBase = fs.readFileSync(s.filePath, "utf-8")
+              JSON.parse(restoredBase)
+              if (restoredBase !== s.originalBaseRaw) {
+                throw new Error(
+                  `Restored base content mismatch for ${s.quizId}`,
+                )
+              }
             }
 
             if (s.originalSidecarRaw !== null) {
-              readSidecar(getPath, s.quizId)
+              if (
+                fs.readFileSync(s.sidecarPath, "utf-8") !==
+                  s.originalSidecarRaw ||
+                !readSidecar(getPath, s.quizId)
+              ) {
+                throw new Error(
+                  `Restored sidecar content mismatch for ${s.quizId}`,
+                )
+              }
+            } else if (fs.existsSync(s.sidecarPath)) {
+              throw new Error(`Sidecar survived rollback for ${s.quizId}`)
             }
 
             if (!recoveredQuizIds.includes(s.quizId)) {
@@ -988,11 +1047,7 @@ export function recoverMediaDeleteJournals(
 
         // 3. Unlink quarantine and journal ONLY after verified rollback
         if (targetQuarantinePath && fs.existsSync(targetQuarantinePath)) {
-          try {
-            fs.unlinkSync(targetQuarantinePath)
-          } catch (qErr) {
-            console.warn(`[MediaJournal] Failed unlinking quarantine:`, qErr)
-          }
+          fs.unlinkSync(targetQuarantinePath)
         }
 
         if (fs.existsSync(journalPath)) {
