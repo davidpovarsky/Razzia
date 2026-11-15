@@ -1,0 +1,283 @@
+{
+  "observed": [
+    {
+      "browser": "chromium",
+      "transition": "initial",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames&lng=en",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "login button -> signup",
+      "expectedPath": "/signup",
+      "expectedTitle": "Create account | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/signup?returnTo=%2Fstudio%2Fgames",
+        "title": "Create account | Tadazz",
+        "canonical": "http://127.0.0.1:3000/signup"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "signup button -> login",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "login button -> forgot",
+      "expectedPath": "/forgot",
+      "expectedTitle": "Forgot password? | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/forgot?returnTo=%2Fstudio%2Fgames",
+        "title": "Forgot password? | Tadazz",
+        "canonical": "http://127.0.0.1:3000/forgot"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "history back",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "history forward",
+      "expectedPath": "/forgot",
+      "expectedTitle": "Forgot password? | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/forgot?returnTo=%2Fstudio%2Fgames",
+        "title": "Forgot password? | Tadazz",
+        "canonical": "http://127.0.0.1:3000/forgot"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "history back before verification",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "login button -> verify",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "verification reload",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "back after reload",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "transition": "forward after reload",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "chromium",
+      "width": 1366,
+      "browserVersion": "156.0.8078.4",
+      "status": "FLOW_PASS",
+      "note": "accounts-disabled synthetic server; UI metadata/history only, no account submission or email"
+    },
+    {
+      "browser": "webkit",
+      "transition": "initial",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames&lng=en",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "login button -> signup",
+      "expectedPath": "/signup",
+      "expectedTitle": "Create account | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/signup?returnTo=%2Fstudio%2Fgames",
+        "title": "Create account | Tadazz",
+        "canonical": "http://127.0.0.1:3000/signup"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "signup button -> login",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "login button -> forgot",
+      "expectedPath": "/forgot",
+      "expectedTitle": "Forgot password? | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/forgot?returnTo=%2Fstudio%2Fgames",
+        "title": "Forgot password? | Tadazz",
+        "canonical": "http://127.0.0.1:3000/forgot"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "history back",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "history forward",
+      "expectedPath": "/forgot",
+      "expectedTitle": "Forgot password? | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/forgot?returnTo=%2Fstudio%2Fgames",
+        "title": "Forgot password? | Tadazz",
+        "canonical": "http://127.0.0.1:3000/forgot"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "history back before verification",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "login button -> verify",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "verification reload",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "back after reload",
+      "expectedPath": "/login",
+      "expectedTitle": "Log in | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/login?returnTo=%2Fstudio%2Fgames",
+        "title": "Log in | Tadazz",
+        "canonical": "http://127.0.0.1:3000/login"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "transition": "forward after reload",
+      "expectedPath": "/verify",
+      "expectedTitle": "Email verified | Tadazz",
+      "immediate": {
+        "url": "http://127.0.0.1:3000/verify?returnTo=%2Fstudio%2Fgames",
+        "title": "Email verified | Tadazz",
+        "canonical": "http://127.0.0.1:3000/verify"
+      },
+      "status": "PASS"
+    },
+    {
+      "browser": "webkit",
+      "width": 390,
+      "browserVersion": "27.2",
+      "status": "FLOW_PASS",
+      "note": "accounts-disabled synthetic server; UI metadata/history only, no account submission or email"
+    }
+  ],
+  "pageErrors": []
+}

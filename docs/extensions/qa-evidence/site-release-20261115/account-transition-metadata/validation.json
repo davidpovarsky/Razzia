@@ -1,0 +1,30 @@
+{
+  "status": "PASS_NEW_ACCOUNT_BUTTON_HISTORY_METADATA_SEAM",
+  "application_source": "9b221bc0edabe449cdf27bc818ae77acbc676bae",
+  "selector_successor": "31b3cb084efeb50dced6952498e9703cb47dc45c",
+  "artifact_manifest_sha256": "406a22eadb840f0ac0c8fd269ed2444287157eadbbf15f1779c4a967d2507730",
+  "served_index_sha256": "9a9edaf33fbcdddc569b66fb1044c2280eb83732c958653019fb499c05681f71",
+  "harness_sha256": "1f294388fcd9e3d9312798cd0969be78a39521042f15b6954fa73834e3dec06d",
+  "observations": 22,
+  "flows": [
+    {
+      "browser": "chromium",
+      "width": 1366,
+      "browserVersion": "156.0.8078.4",
+      "status": "FLOW_PASS",
+      "note": "accounts-disabled synthetic server; UI metadata/history only, no account submission or email"
+    },
+    {
+      "browser": "webkit",
+      "width": 390,
+      "browserVersion": "27.2",
+      "status": "FLOW_PASS",
+      "note": "accounts-disabled synthetic server; UI metadata/history only, no account submission or email"
+    }
+  ],
+  "application_source_modified": false,
+  "no_production_action": true,
+  "no_account_submissions_or_mail": true,
+  "artifact_build": "REUSED immutable matching artifact, no new build",
+  "scope": "Account navigation buttons/history only; not previous96 route matrix, locale/recovery/fault/game suites or parent integration coverage"
+}
