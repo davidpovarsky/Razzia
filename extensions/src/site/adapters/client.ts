@@ -83,7 +83,7 @@ export function safeReturnTo(value: string | null): string {
     return "/studio"
   }
 
-  return /^\/(?:studio(?:\/(?:games|events|account|explore|prepare))?|manager\/quizz(?:\/[a-zA-Z0-9_-]+)?)\/?$/u.test(
+  return /^\/(?:studio(?:\/(?:games|events|account|explore|prepare|oauth-consent))?|manager\/quizz(?:\/[a-zA-Z0-9_-]+)?)\/?$/u.test(
     url.pathname,
   )
     ? url.pathname
