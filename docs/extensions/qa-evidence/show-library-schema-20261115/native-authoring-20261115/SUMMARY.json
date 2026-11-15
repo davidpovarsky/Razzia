@@ -64,5 +64,7 @@
   "compiledPins": [],
   "executedNode": "24.22.1 Windows x64",
   "executedVitest": "5.0.3",
-  "productionCustomerActions": 0
+  "productionCustomerActions": 0,
+  "focusedTypecheckEvidence": "types-verified-c1.json + types-verified-c1.log (executed 15:04UTC on c1cabd878a1bcde51ac7da05d8c72ded3e8125cc, exit0)",
+  "preservedInitialTypecheckFailure": "types.log: initial two readonly test fixture TS2540 errors, not final acceptance"
 }
