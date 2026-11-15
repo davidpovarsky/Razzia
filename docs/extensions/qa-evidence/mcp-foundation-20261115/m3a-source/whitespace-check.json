@@ -1,0 +1,21 @@
+{
+  "kind": "SOURCE_WHITESPACE_CHECK_ONLY",
+  "initial": {
+    "command": "git diff --cached --check",
+    "exit": 2,
+    "affectedPaths": [
+      "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/raw-freeze.stderr",
+      "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/source-overlay-manifest.json",
+      "docs/extensions/qa-evidence/mcp-foundation-20261115/m3a-source/static-source-inspection.json"
+    ],
+    "reason": "Raw Windows CRLF stderr and Python-generated JSON records; no application source was affected."
+  },
+  "final": {
+    "command": "git -c core.whitespace=cr-at-eol diff --cached --check",
+    "exit": 0,
+    "stdout": "",
+    "stderr": ""
+  },
+  "repositoryOrGlobalConfigurationChanged": false,
+  "rawReceiptsPreserved": true
+}

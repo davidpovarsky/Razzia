@@ -1,0 +1,146 @@
+{
+  "status": "SOURCE_ONLY_NOT_RUN",
+  "acceptedBase": "60d289821df631d55c91d48f4f753197d85d0041",
+  "acceptedManifestSha256": "ce021e537e31af7cbc989d4b2c3e5abb0966de41413f994e2803276b31dec7d9",
+  "baselineInputs": 129,
+  "fullGraphInputs": 150,
+  "overlayFiles": 23,
+  "overlayBytes": 96578,
+  "files": [
+    {
+      "path": "extensions/src/mcp-app/first-party/README.md",
+      "bytes": 5371,
+      "sha256": "696ffb84efc2031ad6a84a92dda195c78aa73714b28f20b221b54d5b048a545a"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/bindings.ts",
+      "bytes": 5350,
+      "sha256": "c4855dc25a66b6fe4fd1e40fb61923c43a1f8f2e30fdd730f7c1f6d9deb509c5"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/http.ts",
+      "bytes": 5056,
+      "sha256": "8eb258c3f63f2f2f42537acbe78d451d9f02a8d8c89612c02b0b29da008b738e"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/index.ts",
+      "bytes": 348,
+      "sha256": "8e6478aed9de8e63707b849093c44129af8070a889d05ca56884591b0e8880d8"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/ingress.ts",
+      "bytes": 5536,
+      "sha256": "5126585ff5d5cfd701171f7cd10ce0e8802b0e5a2ee718f06a9895981c493ca7"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/owner.ts",
+      "bytes": 3505,
+      "sha256": "6cf7a2cc2e2d15e710e32f9f66919506655be398f011d4c7e5b69f9a040c06ae"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/schema.ts",
+      "bytes": 2420,
+      "sha256": "19c73e2a850515bb5bbef078aafbad4185306f7741f78a194a365716de929986"
+    },
+    {
+      "path": "extensions/src/mcp-app/first-party/store.ts",
+      "bytes": 10429,
+      "sha256": "43c5881dc2da0d837cdfa2d8168545d8cf777da7ce939bb5b17f50eb57b921d9"
+    },
+    {
+      "path": "extensions/src/mcp-app/package.json",
+      "bytes": 1006,
+      "sha256": "b3ed080d6dabdca6f845724b990a7e23206df58dbb3160d92debaa12f84fe4a2"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/auth.nodecheck.ts",
+      "bytes": 5579,
+      "sha256": "c68e4d302ec66580999e66a6ec634e8865d542afcb7eea296f3f9fbb5d3413ea"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/filesystem.nodecheck.ts",
+      "bytes": 2245,
+      "sha256": "806c68086d943ba1fdc02c41d127602c18398c2f196489010f8b1d39251ac729"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/fixtures.ts",
+      "bytes": 7280,
+      "sha256": "70416c93ddb5f1c93698fa1947bf40a176edbb1943f3dbf0300b0e092e14bf98"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/hot-journal-worker.mjs",
+      "bytes": 717,
+      "sha256": "eb08820ff6e323ad6be85f324a6a756fa7e18046a1573e39adadb9a8a6c0f818"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/http.nodecheck.ts",
+      "bytes": 10160,
+      "sha256": "b87357dccd000ce9b85ae5f9571bf2a080f2d7f81035fa3f78a1e602a70955da"
+    },
+    {
+      "path": "extensions/src/mcp-app/tests/first-party/store.nodecheck.ts",
+      "bytes": 11512,
+      "sha256": "7ecf7c9fe88cda572aa4c9fc77172d809de4176cd3d4e69ef85ed76f0a051fef"
+    },
+    {
+      "path": "extensions/src/mcp-app/tsconfig.json",
+      "bytes": 1346,
+      "sha256": "7bbb3e351f4edd22dedaa5011a117b4fb9d9667aed24eb115f38bb86bd37f68d"
+    },
+    {
+      "path": "packages/socket/src/api/factory.ts",
+      "bytes": 233,
+      "sha256": "c0a7052fc15c903b0e2f5af25051f08c57fd0a7ee162b407e322a080ddc6a2d4"
+    },
+    {
+      "path": "packages/socket/src/api/middleware.ts",
+      "bytes": 1519,
+      "sha256": "0fa1d2b278a13d0cecb616a0c13bf597a0fe72f5f57cb2ca866df566ca66a496"
+    },
+    {
+      "path": "packages/socket/src/env.ts",
+      "bytes": 1106,
+      "sha256": "c3d4fd0b62615ceacf67fd10430aa0e37a7efa6ee858940af3e80298d0be2a63"
+    },
+    {
+      "path": "packages/socket/src/services/account-auth.ts",
+      "bytes": 8376,
+      "sha256": "9f11e6c9eb3f4f8ffb2c75eaceaaa7c59555017e667a1575f8958b4d13f3c4ef"
+    },
+    {
+      "path": "packages/socket/src/services/account-db.ts",
+      "bytes": 2817,
+      "sha256": "b2ab65884b7097a11250e453ac0feb940e7976eeb82f696c35fbc8f4b66587a2"
+    },
+    {
+      "path": "packages/socket/src/services/account-scope.ts",
+      "bytes": 1311,
+      "sha256": "aef9bf0d3a9357f954c16255f14d0abec5ff8c93cb1f6099dee88785b7d1d33e"
+    },
+    {
+      "path": "packages/socket/src/services/auth.ts",
+      "bytes": 3356,
+      "sha256": "ff586db579912ad16e5db544a4908671fa9bad7665eb46bfca4d32034bc59fbe"
+    }
+  ],
+  "externalImportsFromAdditionalGraph": [
+    "crypto",
+    "hono",
+    "hono/factory",
+    "hono/jwt",
+    "http-status-codes",
+    "node:assert/strict",
+    "node:async_hooks",
+    "node:child_process",
+    "node:crypto",
+    "node:fs",
+    "node:os",
+    "node:path",
+    "node:sqlite",
+    "node:test",
+    "node:url",
+    "uuid",
+    "zod"
+  ],
+  "unresolvedInternalImports": []
+}
