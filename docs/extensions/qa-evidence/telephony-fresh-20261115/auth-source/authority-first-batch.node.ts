@@ -425,6 +425,58 @@ test("NATIVE-03 adoption during actual asynchronous join-ticket signing denies r
   observations.push({ case: "NATIVE-03", actualTicketSigned: true, postAwaitAdoptionDeniedDisclosure: true, players: 0 })
 })
 
+test("NATIVE-04 actual authenticated A/B redial preserves score and rejects retired A operations/re-registration", { timeout: 30000 }, async () => {
+  const r = await setup("native-redial", true)
+  await r.factory.initializeAuthority(session.token, r.game.gameId)
+  const issued = await r.factory.issue(session.token, r.issue), credential = issued.credential!
+  secrets.push(credential)
+  const a = address(r.game.gameId, issued.receipt.service)
+  await r.factory.activate(a, credential, { requestId: "redial-activate", expectedVersion: 1 })
+  const inputA = call("redial-A"), joinedA = await r.factory.register(a, credential, inputA)
+  assert.ok(joinedA.ok && joinedA.registrationId && joinedA.generation && joinedA.rosterPlayerId && joinedA.clientId)
+  const manager = await client(session.token)
+  await event(manager, EVENTS.MANAGER.SUCCESS_RECONNECT, () => manager.emit(EVENTS.MANAGER.RECONNECT, { gameId: r.game.gameId }))
+  r.game.updateSettings({ endOnAllAnswered: false })
+  manager.emit(EVENTS.MANAGER.START_GAME, { gameId: r.game.gameId })
+  const startDeadline = Date.now() + 15000
+  while (!r.game.getQuestionStateForGateway(joinedA.rosterPlayerId).acceptingAnswers) {
+    if (Date.now() > startDeadline) throw new Error("Actual redial question did not open")
+    await new Promise(done => setTimeout(done, 20))
+  }
+  const old = { requestId: inputA.requestId, registrationId: joinedA.registrationId,
+    generation: joinedA.generation, capability: inputA.capability, operationId: "redial-answer-A",
+    action: "answer" as const, epoch: r.game.getQuestionStateForGateway(joinedA.rosterPlayerId).epoch, answerIndex: 0 }
+  assert.equal((await r.factory.operate(a, credential, old)).accepted, true)
+  const scoreDeadline = Date.now() + 8000
+  while (r.game.players.find(player => player.clientId === joinedA.clientId)!.points <= 0) {
+    if (Date.now() > scoreDeadline) throw new Error("Actual redial score was not revealed")
+    manager.emit(EVENTS.MANAGER.ADVANCE, { gameId: r.game.gameId })
+    await new Promise(done => setTimeout(done, 150))
+  }
+  const points = r.game.players.find(player => player.clientId === joinedA.clientId)!.points
+  const inputB = { ...call("redial-B"), expectedPredecessor: joinedA.generation }
+  const joinedB = await r.factory.register(a, credential, inputB)
+  assert.equal(joinedB.ok, true); assert.equal(joinedB.generation, joinedA.generation + 1)
+  assert.equal(joinedB.clientId, joinedA.clientId); assert.equal(joinedB.rosterPlayerId, joinedA.rosterPlayerId)
+  const snapshot = () => JSON.stringify({ entry: r.game.getRosterEntry(joinedA.rosterPlayerId!), players: r.game.players })
+  const before = snapshot()
+  for (const action of ["poll", "answer", "hangup"] as const) {
+    const denied = await r.factory.operate(a, credential, { ...old, operationId: "retired-A-" + action, action })
+    assert.equal(denied.ok, false); assert.equal(snapshot(), before)
+  }
+  assert.equal((await r.factory.register(a, credential, inputA)).ok, false)
+  assert.equal((await r.factory.register(a, credential, { ...inputA, requestId: "retired-A-new-request",
+    expectedPredecessor: joinedB.generation! })).ok, false)
+  assert.equal(snapshot(), before)
+  const current = await r.factory.operate(a, credential, { requestId: inputB.requestId,
+    registrationId: joinedB.registrationId!, generation: joinedB.generation!, capability: inputB.capability,
+    operationId: "current-B-poll", action: "poll" })
+  assert.equal(current.ok, true); assert.equal(current.points, points)
+  assert.equal(r.game.players.length, 1); assert.deepEqual(r.counters, { root: 1, nativeJoin: 2 })
+  observations.push({ case: "NATIVE-04", actualRedialGeneration: joinedB.generation, stableClientAndRoster: true,
+    actualPoints: points, retiredOperationsDenied: 3, retiredRegistrationRetriesDenied: 2, activePlayers: 1 })
+})
+
 test("AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure", { timeout: 30000 }, async (t) => {
   const r = await setup("issue-three", true)
   await r.factory.initializeAuthority(session.token, r.game.gameId)
