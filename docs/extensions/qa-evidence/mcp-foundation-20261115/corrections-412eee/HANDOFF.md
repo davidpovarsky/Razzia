@@ -99,9 +99,15 @@ key normalization or persisted migration performed. MCP0.1/UI metadata1/native U
 contracts remain unchanged. A corrected SB producer needs separate interface review.
 
 The bounded `../REAL_ADAPTER_PLAN.md` records exact current auth/account/storage
-seams, read migrations/title collisions/recovery gaps, first-party confirmation,
+seams, read migrations/non-exclusive publication/recovery gaps, first-party confirmation,
 authoritative operation persistence, minimal possible future protected hooks and
 acceptance negatives. It grants no source/release permission or task completion.
+
+Documentation precision: `normalizeFilename` appends a fresh random8 suffix;
+native ID and basename are independent. No same-title collision, overwrite or
+customer failure was proved. The remaining source observations are lack of an
+exclusive-create flag/pre-write durable intent and absent tenant startup traversal.
+See `DOCUMENTATION_PRECISION_20261115.md`; no reviewed module/test receipt changed.
 
 Next: independent exact correction-commit review, then manager disposition.
 MCP02/03/04/05 and HQ remain OPEN. MCP01 research remains DONE. No push, merge,
