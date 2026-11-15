@@ -1,0 +1,34 @@
+{
+  "mode": "PRE_EDIT_EXACT_ROOT_AUTHORIZED_REVIEW_CORRECTIONS",
+  "recordedUtc": "2026-11-15T10:42:50.012381+00:00",
+  "reviewPath": "C:\\Users\\DAVID\\Code\\Codex-Agent-HQ\\docs\\tadazz\\reviews\\COMPILED_REGISTRY_155C_REVIEW_20261115.md",
+  "reviewSha256": "14070018f834d4ed15fd69627b46378fc3f260bf3c5dc3368cd7d45a227b1dea",
+  "predecessorSourceCommit": "155c6b84df84c900872162e2a8c0267c90641153",
+  "scope": [
+    "case-insensitive-reserved-root-paths-and-file-ancestor-collisions",
+    "single-source-commit-and-exact-recipe-membership",
+    "bounded-string-evidence-keys-and-intrinsic-Map-snapshot",
+    "isolated-negative-source-cases-and-updated-unrun-server-plan"
+  ],
+  "filesBefore": [
+    {
+      "path": "extensions/src/core/show-library/compiled-index-schema.ts",
+      "sha256": "3f95cf37b37564aca83aaf852a005870a49ce6c716ff5895018de63fb9f19f31"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-validation.ts",
+      "sha256": "c9b1f7c3bd3c6e9747cb8e06df6ddd291abe535ef0d277fd1dcbc84a7b85a345"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index.test.ts",
+      "sha256": "54d4de52dbe0cc694cc7718a56e3c091bec61a29e433443811bee57adbbc5896"
+    },
+    {
+      "path": "extensions/src/core/show-library/compiled-index-authority.ts",
+      "sha256": "003e082833bc09c4ad92abd7fd106ed625e9cdd4459b9dc439aa0c9d7e76db55"
+    }
+  ],
+  "accepted26AndBarrels": "MUST_REMAIN_UNCHANGED",
+  "testsTypecheckServer": "NO_GRANT_NOT_RUN",
+  "authority": "EMPTY_UNAVAILABLE_ZERO_PIN"
+}

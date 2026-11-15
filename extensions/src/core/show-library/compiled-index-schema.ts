@@ -51,6 +51,7 @@ const requestPath = z
   .refine(
     (s) => s.startsWith("/") && artifactPath.safeParse(s.slice(1)).success,
   )
+export const compiledArtifactPathSchema = bounded(artifactPath)
 const mode = z.number().int().min(0).max(0o7777)
 const exportName = z
   .string()
@@ -112,12 +113,31 @@ function ordered<T>(
       message: "show-library:index-order-or-duplicate",
     })
 }
-function noCaseCollision(paths: readonly string[], ctx: z.RefinementCtx): void {
-  if (new Set(paths.map((path) => path.toLowerCase())).size !== paths.length)
+function noFilePathCollision(
+  paths: readonly string[],
+  ctx: z.RefinementCtx,
+): void {
+  const folded = paths.map((path) => path.toLowerCase()),
+    seen = new Set(folded)
+  if (seen.size !== paths.length)
     ctx.addIssue({
       code: "custom",
       message: "show-library:index-case-collision",
     })
+  for (const path of seen)
+    for (
+      let slash = path.indexOf("/");
+      slash >= 0;
+      slash = path.indexOf("/", slash + 1)
+    ) {
+      if (seen.has(path.slice(0, slash))) {
+        ctx.addIssue({
+          code: "custom",
+          message: "show-library:index-file-ancestor-collision",
+        })
+        return
+      }
+    }
 }
 
 const gitSource = z.strictObject({
@@ -174,7 +194,7 @@ const licenses = z
   .max(32)
   .superRefine((a, ctx) => {
     ordered(a, (v) => v.artifactPath, ctx)
-    noCaseCollision(
+    noFilePathCollision(
       a.map((v) => v.artifactPath),
       ctx,
     )
@@ -242,11 +262,11 @@ export const nativeResourceIndexV2Schema = bounded(
     })
     .superRefine((v, ctx) => {
       ordered(v.resources, (r) => `${r.artifactPath}\0${r.requestPath}`, ctx)
-      noCaseCollision(
+      noFilePathCollision(
         v.resources.map((r) => r.artifactPath),
         ctx,
       )
-      noCaseCollision(
+      noFilePathCollision(
         v.resources.map((r) => r.requestPath),
         ctx,
       )
@@ -319,7 +339,7 @@ export const rendererArtifactIndexV2Schema = bounded(
     })
     .superRefine((v, ctx) => {
       ordered(v.files, (f) => f.path, ctx)
-      noCaseCollision(
+      noFilePathCollision(
         v.files.map((f) => f.path),
         ctx,
       )
@@ -329,6 +349,49 @@ export const rendererArtifactIndexV2Schema = bounded(
           message: "show-library:diagnostic-byte-budget",
         })
       ordered(v.source.files, sourceKey, ctx)
+      const tracked = v.source.files.filter((f) => f.kind === "git-tracked")
+      noFilePathCollision(
+        tracked.map((f) => f.path),
+        ctx,
+      )
+      if (
+        tracked.some((f) => f.gitCommit !== v.source.gitCommit) ||
+        v.toolchain.buildRecipe.gitCommit !== v.source.gitCommit
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "show-library:index-source-commit",
+        })
+      if (
+        !tracked.some(
+          (f) => canonicalJson(f) === canonicalJson(v.toolchain.buildRecipe),
+        )
+      )
+        ctx.addIssue({
+          code: "custom",
+          message: "show-library:index-recipe-membership",
+        })
+      const packages = new Map<string, { paths: string[]; integrity: string }>()
+      for (const f of v.source.files)
+        if (f.kind === "pnpm-package-file") {
+          const key = `${f.packageName}\0${f.packageVersion}\0${f.lockfileSha256}`
+          const group = packages.get(key)
+          if (group) {
+            group.paths.push(f.packagePath)
+            if (group.integrity !== f.resolutionIntegrity)
+              ctx.addIssue({
+                code: "custom",
+                message: "show-library:index-package-integrity-conflict",
+              })
+          } else
+            packages.set(key, {
+              paths: [f.packagePath],
+              integrity: f.resolutionIntegrity,
+            })
+        }
+      for (const group of packages.values())
+        noFilePathCollision(group.paths, ctx)
+
       if (
         !v.files.some((f) => f.path === v.entryModule && f.kind === "module") ||
         !v.files.some(
@@ -345,7 +408,7 @@ export const rendererArtifactIndexV2Schema = bounded(
             "artifact-index.json",
             "registry.json",
             "accepted-pin.json",
-          ].includes(f.path),
+          ].includes(f.path.split("/")[0].toLowerCase()),
         )
       )
         ctx.addIssue({
@@ -460,11 +523,15 @@ export const pnpmStoreMembershipReceiptV2Schema = bounded(
       if (v.snapshotKey !== `${v.packageName}@${v.packageVersion}`)
         ctx.addIssue({ code: "custom", message: "show-library:package-key" })
       ordered(v.inputs, (f) => f.path, ctx)
-      noCaseCollision(
+      noFilePathCollision(
         v.inputs.map((f) => f.path),
         ctx,
       )
       ordered(v.files, (f) => f.packagePath, ctx)
+      noFilePathCollision(
+        v.files.map((f) => f.packagePath),
+        ctx,
+      )
       for (const f of v.files)
         if (
           !v.inputs.some(
@@ -517,6 +584,10 @@ export const dependencyProvenanceV2Schema = bounded(
         ctx.addIssue({ code: "custom", message: "show-library:package-key" })
       ordered(v.importers, (f) => f.path, ctx)
       ordered(v.files, (f) => f.packagePath, ctx)
+      noFilePathCollision(
+        v.files.map((f) => f.packagePath),
+        ctx,
+      )
       if (
         v.importers.some((f) => f.resolvedVersion !== v.packageVersion) ||
         v.files.some(
@@ -602,6 +673,14 @@ export const platformTypographyDependencyV2Schema = bounded(
     })
     .superRefine((v, ctx) => {
       ordered(v.files, (f) => f.packagePath, ctx)
+      noFilePathCollision(
+        v.files.map((f) => f.packagePath),
+        ctx,
+      )
+      noFilePathCollision(
+        [v.css, v.license, ...v.files].map((f) => f.packagePath),
+        ctx,
+      )
       if (
         [v.license, ...v.files].some(
           (f) =>
