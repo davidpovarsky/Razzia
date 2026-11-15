@@ -292,7 +292,10 @@ export const gameExtensionRoutes = apiFactory
       const { game } = resolved
 
       if (isPhoneLifecycleV2Adopted(game)) {
-        return c.json({ ok: false, reason: "phone_protocol_required" }, StatusCodes.FORBIDDEN)
+        return c.json(
+          { ok: false, reason: "phone_protocol_required" },
+          StatusCodes.FORBIDDEN,
+        )
       }
 
       if (body.rosterPlayerId) {

@@ -375,24 +375,32 @@ class Game {
 
   canAdoptPhoneLifecycleV2(): boolean {
     return ![...this.roster.entries.values()].some(
-      (entry) => (entry.phoneE164 || entry.source === "phone") &&
+      (entry) =>
+        (entry.phoneE164 || entry.source === "phone") &&
         (entry.clientId || entry.activeCallId),
     )
   }
 
-  allowsBrowserPhoneIdentity(clientId: string, identity: {
-    username?: string
-    rosterPlayerId?: string
-    phoneE164?: string
-    source?: "web" | "phone"
-  } = {}): boolean {
+  allowsBrowserPhoneIdentity(
+    clientId: string,
+    identity: {
+      username?: string
+      rosterPlayerId?: string
+      phoneE164?: string
+      source?: "web" | "phone"
+    } = {},
+  ): boolean {
     if (!isPhoneLifecycleV2Adopted(this)) return true
     if (identity.source === "phone" || identity.phoneE164) return false
     const name = identity.username?.trim().toLocaleLowerCase()
     return ![...this.roster.entries.values()].some(
-      (entry) => (entry.phoneE164 || entry.source === "phone") &&
-        (entry.clientId === clientId || entry.rosterPlayerId === identity.rosterPlayerId ||
-          (name && entry.preRegistered && entry.displayName.trim().toLocaleLowerCase() === name)),
+      (entry) =>
+        (entry.phoneE164 || entry.source === "phone") &&
+        (entry.clientId === clientId ||
+          entry.rosterPlayerId === identity.rosterPlayerId ||
+          (name &&
+            entry.preRegistered &&
+            entry.displayName.trim().toLocaleLowerCase() === name)),
     )
   }
 
@@ -425,8 +433,11 @@ class Game {
     ...args: Parameters<GamePhoneController["submitPhoneAnswerByRosterId"]>
   ): ReturnType<GamePhoneController["submitPhoneAnswerByRosterId"]> {
     if (!allowsNativePhoneMutation(this)) {
-      return { accepted: false, epoch: this.phone.getCurrentQuestionPstnSupport().epoch,
-        reason: "phone_protocol_required" }
+      return {
+        accepted: false,
+        epoch: this.phone.getCurrentQuestionPstnSupport().epoch,
+        reason: "phone_protocol_required",
+      }
     }
     return this.phone.submitPhoneAnswerByRosterId(...args)
   }
@@ -628,7 +639,9 @@ class Game {
     },
   ): string | null {
     const clientId = getClientId(socket)
-    if (!this.allowsBrowserPhoneIdentity(clientId, { ...claimsExtra, username })) {
+    if (
+      !this.allowsBrowserPhoneIdentity(clientId, { ...claimsExtra, username })
+    ) {
       return "errors:auth.unauthorized"
     }
     const {
@@ -813,7 +826,8 @@ class Game {
   joinOrRebindPhoneCaller(
     ...args: Parameters<GamePhoneController["joinOrRebindPhoneCaller"]>
   ): ReturnType<GamePhoneController["joinOrRebindPhoneCaller"]> {
-    if (!allowsNativePhoneMutation(this)) return { ok: false, error: "errors:auth.unauthorized" }
+    if (!allowsNativePhoneMutation(this))
+      return { ok: false, error: "errors:auth.unauthorized" }
     return this.phone.joinOrRebindPhoneCaller(...args)
   }
 

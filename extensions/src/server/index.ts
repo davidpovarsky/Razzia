@@ -32,7 +32,10 @@ export * from "./game/score-ledger"
 
 export * from "./game/phone-controller"
 
-export { isPhoneLifecycleV2Adopted, allowsNativePhoneMutation } from "./phone-lifecycle-v2/native-adoption"
+export {
+  isPhoneLifecycleV2Adopted,
+  allowsNativePhoneMutation,
+} from "./phone-lifecycle-v2/native-adoption"
 
 export * from "./game/round-scheduling"
 

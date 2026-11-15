@@ -100,10 +100,14 @@ const routes = apiFactory
       const { sub } = c.get("claims")
       const identity = { username, phoneE164: phone, source }
       const phoneAllowed = () => game.allowsBrowserPhoneIdentity(sub, identity)
-      const phoneDenied = () => c.json(
-        { error: "errors:auth.unauthorized", reason: "phone_protocol_required" },
-        StatusCodes.FORBIDDEN,
-      )
+      const phoneDenied = () =>
+        c.json(
+          {
+            error: "errors:auth.unauthorized",
+            reason: "phone_protocol_required",
+          },
+          StatusCodes.FORBIDDEN,
+        )
       if (!phoneAllowed()) return phoneDenied()
 
       if (game.manager.clientId === sub) {

@@ -18,7 +18,11 @@ export function allowsNativePhoneMutation(game: object): boolean {
   const fence = fences.get(game)
   if (!fence) return true
   if (fence.closed || !fence.turn) return false
-  try { return fence.turn() === undefined } catch { return false }
+  try {
+    return fence.turn() === undefined
+  } catch {
+    return false
+  }
 }
 
 // Internal server composition only; intentionally absent from the public barrel.
@@ -41,9 +45,17 @@ export class NativePhoneAdoption {
 
   run<T>(game: Game, check: () => void, work: () => T): T {
     const fence = fences.get(game)
-    if (this.closed || !fence || fence.owner !== this || fence.closed || fence.turn) serviceDenied()
+    if (
+      this.closed ||
+      !fence ||
+      fence.owner !== this ||
+      fence.closed ||
+      fence.turn
+    )
+      serviceDenied()
     const live = () => {
-      if (this.closed || fence.closed || fences.get(game) !== fence) serviceDenied()
+      if (this.closed || fence.closed || fences.get(game) !== fence)
+        serviceDenied()
       const result: unknown = check()
       if (result !== undefined) serviceDenied()
     }
@@ -51,17 +63,27 @@ export class NativePhoneAdoption {
     fence.turn = live
     try {
       const result = work()
-      if (result && (typeof result === "object" || typeof result === "function") && "then" in result) serviceDenied()
+      if (
+        result &&
+        (typeof result === "object" || typeof result === "function") &&
+        "then" in result
+      )
+        serviceDenied()
       live()
       return result
-    } finally { fence.turn = undefined }
+    } finally {
+      fence.turn = undefined
+    }
   }
 
   close(): void {
     this.closed = true
     for (const game of this.games) {
       const fence = fences.get(game)
-      if (fence?.owner === this) { fence.closed = true; fence.turn = undefined }
+      if (fence?.owner === this) {
+        fence.closed = true
+        fence.turn = undefined
+      }
     }
     this.games.clear() // WeakMap retains the fence; never downgrade a live Game.
   }
