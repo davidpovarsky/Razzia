@@ -109,3 +109,10 @@ Full native16 exit1 is preserved (four separate V2 TypeScript nullability errors
 V2 browser4/4 passed. The subsequent page acknowledgement ordering change and
 Studio401 capture/hash hook await actual root route execution; they are not covered
 by the six helper unit tests. Existing client9f3cda2c remains byte-identical.
+
+Actual StrictMode route execution must use the site Vite DEVELOPMENT server.
+The existing site-preview-server.mjs builds production, where StrictMode does not
+replay effects. The first actual-route case now requires two actual initial
+AccountGateway auth/mode requests before any reload, observing its initial effect
+replay instead of assuming it from the JSX wrapper. This is an execution condition,
+not a new router or a production deployment.

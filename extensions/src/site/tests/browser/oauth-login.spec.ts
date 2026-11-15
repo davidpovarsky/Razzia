@@ -1,6 +1,8 @@
 // Actual site bootstrap (React StrictMode), route guards, AccountGateway login,
 // native account API/profile and Studio consent mount. No synthetic router or
 // automatic approval; the bounded test request is intentionally not issuer-valid.
+// Run with the actual site Vite DEVELOPMENT server: production StrictMode does
+// not replay effects. The first case observes AccountGateway's effect replay.
 import { expect, test, type Page } from "@playwright/test"
 import { readFileSync } from "node:fs"
 import { fileURLToPath } from "node:url"
@@ -33,8 +35,13 @@ test.beforeAll(async ({ request }) => {
 })
 test("logged-out consent survives actual login and repeated guards without extending its deadline", async ({ page }) => {
   const approvals: string[] = []
-  page.on("request", req => { if (req.url().endsWith("/approve")) approvals.push(req.url()) })
+  let modeRequests = 0
+  page.on("request", req => {
+    if (req.url().endsWith("/approve")) approvals.push(req.url())
+    if (new URL(req.url()).pathname === "/api/auth/mode") modeRequests++
+  })
   await openLogin(page)
+  await expect.poll(() => modeRequests).toBeGreaterThanOrEqual(2)
   const captured = await pending(page)
   expect(JSON.parse(captured!)).toMatchObject({ ticket })
   expect(Object.keys(JSON.parse(captured!)).sort()).toEqual(["expiresAt", "ticket"])
