@@ -1,0 +1,17 @@
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(45,4): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(121,34): error TS18048: 'attempt' is possibly 'undefined'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(123,72): error TS2322: Type '{ requestId?: string | undefined; providerReference?: string | undefined; phone?: string | undefined; expectedPredecessor?: number | undefined; capability: string; }' is not assignable to type 'RegistrationInput'.
+  Types of property 'requestId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(143,3): error TS2322: Type '{ requestId?: string | undefined; providerReference?: string | undefined; phone?: string | undefined; expectedPredecessor?: number | undefined; capability: string; }' is not assignable to type 'RegistrationInput'.
+  Types of property 'requestId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(151,4): error TS2366: Function lacks ending return statement and return type does not include 'undefined'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(156,36): error TS18048: 'attempt' is possibly 'undefined'.
+../delta/docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts(180,7): error TS2322: Type '{ requestId?: string | undefined; providerReference?: string | undefined; phone?: string | undefined; expectedPredecessor?: number | undefined; capability: string; }' is not assignable to type 'RegistrationInput'.
+  Types of property 'requestId' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+{"scope":"new scoped-journal tests and corrected existing fixture callers; compile only","typescript":"7.0.2","exit_code":1,"signal":null,"full_project_check":false}
