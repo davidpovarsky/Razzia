@@ -1,0 +1,29 @@
+{
+  "receipts": [
+    {
+      "gid": "1220109925694179",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220109925694179",
+      "completed": false,
+      "previousNotesLength": 38225,
+      "currentNotesLength": 40164,
+      "priorNotesPreservedExactly": true,
+      "exactAppendReadback": true,
+      "sourceCommit": "5ef867db68d6d6ab371964990cf2b93b8248a59e",
+      "evidenceCheckpoint": "f32f5cd3086ff2105fb535c93235a59ac2bf3086",
+      "modifiedAt": "2026-11-15T16:45:29.410Z"
+    },
+    {
+      "gid": "1220111293723790",
+      "permalink": "https://app.asana.com/1/1219597879016953/project/1219846276680200/task/1220111293723790",
+      "completed": false,
+      "previousNotesLength": 37412,
+      "currentNotesLength": 39351,
+      "priorNotesPreservedExactly": true,
+      "exactAppendReadback": true,
+      "sourceCommit": "5ef867db68d6d6ab371964990cf2b93b8248a59e",
+      "evidenceCheckpoint": "f32f5cd3086ff2105fb535c93235a59ac2bf3086",
+      "modifiedAt": "2026-11-15T16:45:29.400Z"
+    }
+  ],
+  "append": "\n\n[2026-11-15 Lane B original startup acceptance — READY FOR INDEPENDENT REVIEW]\nCandidate source 5ef867db68d6d6ab371964990cf2b93b8248a59e; evidence/handoff checkpoint f32f5cd3086ff2105fb535c93235a59ac2bf3086, branch codex/tadazz-hq-recovery-fresh-20261115. Manager-approved exact canonical account-db snapshot + socket startup seams implemented. All exact account IDs (including disabled/unverified, flag independent); explicit global/known tenant roots; fail closed before listen on invalid metadata or unresolved journals. SQLite opens a bounded private DB/WAL copy only; no source SQLite sidecars or SHM authority/immutable fallback. Limits: 16MiB aggregate, 3 captures, 10s child. Native retained-WAL reset behavior fixed and tested.\nFinal exact source: Windows Node24.22.1 25 PASS/1 Linux-only SKIP; Linux Node24.22.2/SQLite3.53.4 uid1001 26/26 PASS (packet10). Types, scoped oxlint and formatting exit0. Packet10 44 raw file SHA matches and 11 frozen inputs unchanged; 1290 effective+2 auxiliary/1391 retained source audit before/after, zero mismatches. Live WAL, clean closed/no-sidecar and recycled-WAL full source bytes/modes/mtime/ctime/directory entries unchanged; retry/churn cleanup witnessed. Peak35/96 PIDs, zero limit events/observed zombies; stopped PID0/OOMfalse, lane claim released, cumulative disk23134208/67108864 bytes.\nEvidence: docs/extensions/qa-evidence/recovery-fresh-20261115/remaining-original-acceptance/STARTUP_OWNER_SNAPSHOT_HANDOFF.md and ../c1-execution-wave-packet10/. Original account bootstrap/auth/close byte-identical; 15 legacy R2 files unchanged; all16 inherited untracked inputs preserved. Prior scoped legacy45/45 and auth4/4 are not reruns at final source. Earlier broad local68PASS/1FAIL/1SKIP and baseline ownerless two failures retained; no full819 rerun, no customer/provider/deploy action. Source task remains OPEN pending manager independent review/integration and aggregate acceptance.\n"
+}
