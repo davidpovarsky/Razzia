@@ -95,3 +95,13 @@ React mask-state update. Commit only that final paused-bootstrap unmask with
 flushSync after the awaited native completion, outside React's layout effect.
 Do not unmask earlier or invent a timer/clock. Because this shared component is
 used by both ABIs, fresh V1/V2 builds and the changed40+4 runtime matrix are needed.
+
+Native Save consent, before editing Studio: add a separate lazy child for the
+exact native-save-consent path family after the existing actual native profile
+query. Its client/page import only F's pure contracts/native-save leaf, never
+OAuth-scope proof or server/auth/key code. Root owns the exact nested route,
+query/hash-free54-ID returnTo allowlist and real HTML/HEAD policies. Page validates
+the exact pathname itself, requires the actual native account/session + headers,
+shows the untouched authored snapshot and summary as escaped plaintext, and only
+records an explicit trusted-click exact-revision approval. No game allocation,
+save_game retry, callback authority or positive Native Save/G claim is introduced.
