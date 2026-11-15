@@ -1,0 +1,237 @@
+TAP version 13
+# (node:35136) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: real export RPC delivers exact authored bytes with bounded private attachment headers and no GET writes
+not ok 1 - real export RPC delivers exact authored bytes with bounded private attachment headers and no GET writes
+  ---
+  duration_ms: 1092.0928
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:4938'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:223:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async startSubtestAfterBootstrap (node:internal/test_runner/harness:296:3)
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: export replay returns the same exact old snapshot before current draft lookup; changed key payload is denied
+not ok 2 - export replay returns the same exact old snapshot before current draft lookup; changed key payload is denied
+  ---
+  duration_ms: 288.3824
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:6540'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:263:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: ordinary export needs scopes/owner/rights, with no new per-export consent
+ok 3 - ordinary export needs scopes/owner/rights, with no new per-export consent
+  ---
+  duration_ms: 423.7871
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: enhanced export uses the existing converter/importer and does not allocate native storage
+not ok 4 - enhanced export uses the existing converter/importer and does not allocate native storage
+  ---
+  duration_ms: 202.6029
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:8322'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:330:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: capability delivery rechecks current rights and actual native revocation after the rights callback
+not ok 5 - capability delivery rechecks current rights and actual native revocation after the rights callback
+  ---
+  duration_ms: 182.2631
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:9021'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:356:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: tampered/purpose-confused/expired capabilities disclose no file; default export remains absent
+not ok 6 - tampered/purpose-confused/expired capabilities disclose no file; default export remains absent
+  ---
+  duration_ms: 170.5308
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:9892'
+  failureType: 'testCodeFailure'
+  error: "Cannot read properties of undefined (reading 'downloadUrl')"
+  code: 'ERR_TEST_FAILURE'
+  name: 'TypeError'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:379:35)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: same persistent issuer can deliver after restart; structural principals and changed stored bytes are denied
+not ok 7 - same persistent issuer can deliver after restart; structural principals and changed stored bytes are denied
+  ---
+  duration_ms: 156.6218
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth-export.nodecheck.ts:1:10989'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    false !== true
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: true
+  actual: false
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth-export.nodecheck.ts:406:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# (node:18760) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: discovery and JWKS expose public configuration without creating a tenant grant store
+ok 8 - discovery and JWKS expose public configuration without creating a tenant grant store
+  ---
+  duration_ms: 407.6947
+  type: 'test'
+  ...
+# Subtest: exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+ok 9 - exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+  ---
+  duration_ms: 19.2357
+  type: 'test'
+  ...
+# Subtest: consent requires real manager identity, same origin and the exact account/session/ticket proof
+ok 10 - consent requires real manager identity, same origin and the exact account/session/ticket proof
+  ---
+  duration_ms: 56.2503
+  type: 'test'
+  ...
+# Subtest: real account PKCE flow stores only token digests and survives a fresh issuer instance
+not ok 11 - real account PKCE flow stores only token digests and survives a fresh issuer instance
+  ---
+  duration_ms: 92.8281
+  type: 'test'
+  location: 'C:\\Users\\DAVID\\Code\\Razzia-worktrees\\tadazz-hq-mcp-20261115\\docs\\extensions\\qa-evidence\\mcp-foundation-20261115\\export-delivery\\local-overlay-01\\extensions\\src\\mcp-app\\tests\\first-party\\oauth.nodecheck.ts:1:6070'
+  failureType: 'testCodeFailure'
+  error: |-
+    Expected values to be strictly equal:
+    
+    438 !== 384
+    
+  code: 'ERR_ASSERTION'
+  name: 'AssertionError'
+  expected: 384
+  actual: 438
+  operator: 'strictEqual'
+  stack: |-
+    TestContext.<anonymous> (C:\Users\DAVID\Code\Razzia-worktrees\tadazz-hq-mcp-20261115\docs\extensions\qa-evidence\mcp-foundation-20261115\export-delivery\local-overlay-01\extensions\src\mcp-app\tests\first-party\oauth.nodecheck.ts:270:10)
+    async Test.run (node:internal/test_runner/test:1054:7)
+    async Test.processPendingSubtests (node:internal/test_runner/test:744:7)
+  ...
+# Subtest: wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+ok 12 - wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+  ---
+  duration_ms: 109.6617
+  type: 'test'
+  ...
+# Subtest: refresh rotates once, and replay durably revokes both old and newly issued access
+ok 13 - refresh rotates once, and replay durably revokes both old and newly issued access
+  ---
+  duration_ms: 167.2993
+  type: 'test'
+  ...
+# Subtest: client revocation and actual native-session logout revoke OAuth access
+ok 14 - client revocation and actual native-session logout revoke OAuth access
+  ---
+  duration_ms: 122.3627
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+ok 15 - real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+  ---
+  duration_ms: 648.8821
+  type: 'test'
+  ...
+# Subtest: hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+ok 16 - hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+  ---
+  duration_ms: 58.4845
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 9
+# fail 7
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 9591.3599

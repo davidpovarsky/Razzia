@@ -1,0 +1,66 @@
+TAP version 13
+# (node:45020) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: discovery and JWKS expose public configuration without creating a tenant grant store
+ok 1 - discovery and JWKS expose public configuration without creating a tenant grant store
+  ---
+  duration_ms: 304.7845
+  type: 'test'
+  ...
+# Subtest: exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+ok 2 - exact client/redirect/resource/PKCE/scope admission rejects unsafe authorization requests
+  ---
+  duration_ms: 11.6425
+  type: 'test'
+  ...
+# Subtest: consent requires real manager identity, same origin and the exact account/session/ticket proof
+ok 3 - consent requires real manager identity, same origin and the exact account/session/ticket proof
+  ---
+  duration_ms: 32.2638
+  type: 'test'
+  ...
+# Subtest: wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+ok 4 - wrong PKCE/client/resource/redirect cannot consume a valid code; correct code replay revokes its grant
+  ---
+  duration_ms: 129.6972
+  type: 'test'
+  ...
+# Subtest: refresh rotates once, and replay durably revokes both old and newly issued access
+ok 5 - refresh rotates once, and replay durably revokes both old and newly issued access
+  ---
+  duration_ms: 128.3405
+  type: 'test'
+  ...
+# Subtest: client revocation and actual native-session logout revoke OAuth access
+ok 6 - client revocation and actual native-session logout revoke OAuth access
+  ---
+  duration_ms: 124.0826
+  type: 'test'
+  ...
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# responseMode: 'json' drops mid-call notifications. subscriptions/listen streams are always served over SSE regardless; other notifications emitted before a result are dropped.
+# Subtest: real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+ok 7 - real OAuth HTTP tools persist tenant drafts, atomic CAS and durable idempotency without native writes
+  ---
+  duration_ms: 521.3034
+  type: 'test'
+  ...
+# Subtest: hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+ok 8 - hostile headers, oversized bodies and grant journals are rejected without recovery or disclosure
+  ---
+  duration_ms: 54.5965
+  type: 'test'
+  ...
+1..8
+# tests 8
+# suites 0
+# pass 8
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 3208.3099
