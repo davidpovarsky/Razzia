@@ -1,0 +1,23 @@
+{
+  "name": "phone-gateway-b764b38-attempt01",
+  "id": "5902b7fe19f0928b6a3903ab95635ed9f400a423fb72276e9659c2d51b1202aa",
+  "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+  "state": {
+    "Status": "exited",
+    "Running": false,
+    "Paused": false,
+    "Restarting": false,
+    "OOMKilled": false,
+    "Dead": false,
+    "Pid": 0,
+    "ExitCode": 0,
+    "Error": "",
+    "StartedAt": "2026-11-15T18:29:48.73010537Z",
+    "FinishedAt": "2026-11-15T18:30:13.683528788Z"
+  },
+  "size_rw": 32768,
+  "memory_bytes": 1073741824,
+  "nano_cpus": 250000000,
+  "network": "none",
+  "readonly_rootfs": true
+}
