@@ -15,6 +15,8 @@ export const NATIVE_MEDIA = "r1-native.png"
 export const NATIVE_QUESTION = "00000000-0000-4000-8000-000000000081"
 const SCENE = "00000000-0000-4000-8000-000000000082"
 export type NativeBindingScenario =
+  | "create"
+  | "import"
   | "media"
   | "quiz-base"
   | "quiz-sidecar"
@@ -223,6 +225,15 @@ export function nativeFixtureState(root: string) {
       const file = path.join(directory, name)
       const stat = fs.lstatSync(file)
       if (stat.isDirectory()) continue
+      if (stat.isSymbolicLink()) {
+        const linkTarget = fs.readlinkSync(file)
+        files[`${subPath}/${name}`] = {
+          sha256: byteHash(linkTarget),
+          length: Buffer.byteLength(linkTarget),
+          json: { fixtureEntryKind: "symlink", linkTarget },
+        }
+        continue
+      }
       if (!stat.isFile())
         throw new Error("Unexpected non-regular fixture entry")
       const bytes = fs.readFileSync(file)

@@ -32,6 +32,17 @@ import {
   type StorageInjections,
 } from "./sidecar"
 
+function logicalPayload(record: Record<string, unknown>, quizId: string) {
+  if (!("id" in record)) return record
+  if (record.id !== quizId)
+    throw new CompositeStorageError(
+      "Stored quiz identity mismatch",
+      StatusCodes.CONFLICT,
+    )
+  const { id: _storageId, ...payload } = record
+  return payload
+}
+
 export class CompositeStorageService {
   private readonly injections: StorageInjections
 
@@ -136,9 +147,15 @@ export class CompositeStorageService {
     }
 
     const baseRecord = quizz as Record<string, unknown>
-    const baseDigest = computeCanonicalBaseDigest(baseRecord)
+    const baseDigest = computeCanonicalBaseDigest(
+      logicalPayload(baseRecord, quizId),
+    )
     const extras = readSidecar(this.injections.getPath, quizId)
-    const digestMatches = extras ? extras.baseDigest === baseDigest : true
+    const digestMatches = extras
+      ? extras.quizId === quizId &&
+        (extras.baseDigest === baseDigest ||
+          extras.baseDigest === computeCanonicalBaseDigest(baseRecord))
+      : true
 
     return {
       quizId,

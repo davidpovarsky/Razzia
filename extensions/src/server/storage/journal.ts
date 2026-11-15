@@ -1,7 +1,11 @@
 import fs from "node:fs"
 import path from "node:path"
 import { v7 as uuidv7 } from "uuid"
-import { readRecoveryBase } from "./recovery-state"
+import {
+  readRecoveryBase,
+  recoveryBasePayload,
+  sameRecoveryBase,
+} from "./recovery-state"
 import {
   deleteSidecar,
   getSidecarDirectory,
@@ -335,6 +339,11 @@ export const recoverJournals = (
       }
 
       // 5. Rollback base quiz without swallowing errors
+      if (entry.backupBase !== null && entry.backupBase !== undefined)
+        recoveryBasePayload(entry.backupBase, cleanId)
+      if (entry.targetBase !== null && entry.targetBase !== undefined)
+        recoveryBasePayload(entry.targetBase, cleanId)
+      injections.recoveryBoundary?.(cleanId, "before-base")
       if (entry.backupBase !== null && entry.backupBase !== undefined) {
         injections.updateQuizz(cleanId, entry.backupBase)
       } else {
@@ -356,11 +365,19 @@ export const recoverJournals = (
       }
 
       // 6. Rollback sidecar
+      injections.recoveryBoundary?.(cleanId, "before-sidecar")
       if (parsedExtras) {
-        writeSidecar(injections.getPath, cleanId, parsedExtras)
+        writeSidecar(
+          injections.getPath,
+          cleanId,
+          injections.recoveryBoundary
+            ? (entry.backupExtras as AnyQuizExtras)
+            : parsedExtras,
+        )
       } else {
         deleteSidecar(injections.getPath, cleanId)
       }
+      injections.recoveryBoundary?.(cleanId, "after-sidecar")
 
       // 7. Verification before removing journal
       if (entry.backupBase !== null && entry.backupBase !== undefined) {
@@ -368,7 +385,12 @@ export const recoverJournals = (
 
         try {
           verifiedBase = injections.getQuizzById(cleanId)
-        } catch {
+        } catch (error) {
+          if (
+            (error as { code?: string }).code ===
+            "TADAZZ_NATIVE_RECOVERY_BINDING"
+          )
+            throw error
           // GetQuizzById may throw if unmocked or missing
         }
 
@@ -387,19 +409,13 @@ export const recoverJournals = (
 
         if (
           !verifiedBase ||
-          computeCanonicalBaseDigest(verifiedBase) !==
-            computeCanonicalBaseDigest(entry.backupBase)
+          !sameRecoveryBase(verifiedBase, entry.backupBase, cleanId)
         ) {
           throw new Error(`Failed to verify rolled back base quiz ${cleanId}`)
         }
       } else {
         const remainingBase = readRecoveryBase(injections, cleanId)
-        if (
-          remainingBase ||
-          fs.existsSync(
-            path.join(injections.getPath("quizz"), `${cleanId}.json`),
-          )
-        ) {
+        if (remainingBase) {
           throw new Error(`Base quiz ${cleanId} survived rollback deletion`)
         }
       }

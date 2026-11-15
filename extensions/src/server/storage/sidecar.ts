@@ -15,6 +15,11 @@ export interface StorageInjections {
   updateQuizz: (id: string, data: unknown) => { id: string }
   deleteQuizz: (id: string) => void
   listMedia?: () => UploadedMedia[]
+  /** Explicit native startup guard; opaque callback-backed adapters omit it. */
+  recoveryBoundary?: (
+    quizId: string,
+    phase: "before-base" | "before-sidecar" | "after-sidecar",
+  ) => void
 }
 
 export const getSidecarDirectory = (
