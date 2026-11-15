@@ -1,0 +1,10 @@
+{
+  "newPhysicalUpperBoundBytes": 3055616,
+  "diskCapBytes": 8388608,
+  "dockerAllowanceBytes": 2097152,
+  "freeBytes": 2666213376,
+  "requiredRemainingReserveBytes": 2604867584,
+  "absoluteFloorBytes": 2147483648,
+  "ownTmpfsUsedBytes": 154193920,
+  "ownTmpfsCapBytes": 268435456
+}

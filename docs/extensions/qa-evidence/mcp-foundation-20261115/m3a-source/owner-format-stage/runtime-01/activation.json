@@ -1,0 +1,18 @@
+{
+  "threadId": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+  "job": "mcp-runtime-F-20261115-01a1dfaa",
+  "ownerActivation": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+  "otherReserveBytes": 2587635712,
+  "diskRemainingBytes": 5324800,
+  "claim": {
+    "role": "mcp_server",
+    "thread_id": "01a1dfaa-0f10-77b2-aa65-462ca5fe0a90",
+    "cpu": 0.25,
+    "memory_mib": 1024,
+    "job": "mcp-runtime-F-20261115-01a1dfaa",
+    "claim_id": "mcp-runtime-F-20261115-01a1dfaa",
+    "claimed_utc": "2026-11-15T15:17:24.9986706Z",
+    "parent_authorization": "SINGLE_MANAGER_WAVE_RESTART_20261115",
+    "terminal": false
+  }
+}
