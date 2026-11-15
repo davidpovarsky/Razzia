@@ -1,0 +1,10 @@
+{
+  "extends": "../remaining-original-acceptance/tsconfig.owner.json",
+  "files": [
+    "../../../../../packages/socket/src/services/game/player-manager.ts",
+    "../../../../../extensions/src/server/game/phone-controller.ts",
+    "../../../../../extensions/src/server/game/roster-native-admission.test.ts",
+    "../../../../../packages/socket/src/services/game/index.ts"
+  ],
+  "include": []
+}
