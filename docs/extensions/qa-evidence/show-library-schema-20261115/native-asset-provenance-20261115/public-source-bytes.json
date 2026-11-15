@@ -1,0 +1,41 @@
+{
+  "capturedUtc": "2026-11-15T18:25:02.184005+00:00",
+  "method": "Bounded anonymous HTTPS GET, hash in memory only",
+  "sources": [
+    {
+      "url": "https://sfxmint.com/dl/transition-swoosh-49.mp3",
+      "sourcePage": "https://sfxmint.com/sounds/transition-swoosh-49",
+      "notice": "docs/extensions/TADAZZ_AUDIO_REFRESH_LICENSE.md",
+      "expectedSourceSha256": "702b837540b02bb7c6e4ec544f465a7da9d0f56cec1aaebc31b0925e88c78bdb",
+      "attemptedUtc": "2026-11-15T18:24:56.428657+00:00",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "bytes": 33061,
+      "sha256": "702b837540b02bb7c6e4ec544f465a7da9d0f56cec1aaebc31b0925e88c78bdb",
+      "etag": "\"c558472840507e6123f643ad7e035fb0\"",
+      "lastModified": null,
+      "matchesDocumentedSourceSha256": true,
+      "looksLikeMp3": true
+    },
+    {
+      "url": "https://sfxmint.com/dl/ui-chime-46.mp3",
+      "sourcePage": "https://sfxmint.com/sounds/ui-chime-46",
+      "notice": "docs/extensions/TADAZZ_REVEAL_SFX_LICENSE.md",
+      "expectedSourceSha256": "0b72fb267433cd114d24dadbe661c731fa4d5c94d99c7d2dd3c63e6c8dcc5e3d",
+      "attemptedUtc": "2026-11-15T18:25:00.115927+00:00",
+      "status": 200,
+      "contentType": "audio/mpeg",
+      "bytes": 17179,
+      "sha256": "0b72fb267433cd114d24dadbe661c731fa4d5c94d99c7d2dd3c63e6c8dcc5e3d",
+      "etag": "\"01e15ef0b7bfa34da6e201ec370aaab3\"",
+      "lastModified": null,
+      "matchesDocumentedSourceSha256": true,
+      "looksLikeMp3": true
+    }
+  ],
+  "remoteMediaFilesSaved": 0,
+  "audioPlayed": false,
+  "credentialsUsed": false,
+  "runtimeOrExportAuthorityInstalled": false,
+  "adaptationTransformationReproduced": false
+}
