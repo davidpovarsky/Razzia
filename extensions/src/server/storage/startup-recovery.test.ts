@@ -88,6 +88,18 @@ function files() {
     }),
   )
 }
+function retainOwnerProof(name: string, value: unknown) {
+  const selected = process.env.RECOVERY_OWNER_RECEIPT_ROOT
+  if (!selected) return
+  fs.mkdirSync(selected, { recursive: true, mode: 0o700 })
+  if (fs.realpathSync(selected) !== path.resolve(selected))
+    throw new Error("Linked owner proof root")
+  fs.writeFileSync(
+    path.join(selected, `${name}.json`),
+    JSON.stringify(value, null, 2) + "\n",
+    { flag: "wx", mode: 0o600 },
+  )
+}
 
 it.each(["quiz-save", "media-delete"])(
   "blocks unresolved tenant %s before listen, including accounts OFF",
@@ -119,15 +131,33 @@ it("selects all exact disabled and unverified owner IDs independent of the curre
 it("reads owners committed only in a live WAL without changing source files", () => {
   database([OWNER, SECOND], true)
   const before = files()
-  expect(readStartupOwnerSnapshot().ownerIds).toEqual([OWNER, SECOND])
-  expect(files()).toEqual(before)
+  const snapshot = readStartupOwnerSnapshot(),
+    after = files()
+  expect(snapshot.ownerIds).toEqual([OWNER, SECOND])
+  expect(after).toEqual(before)
+  retainOwnerProof("live-wal", {
+    before,
+    after,
+    owners: snapshot.ownerIds,
+    node: process.version,
+    sqlite: process.versions.sqlite,
+  })
 })
 it("reads a cleanly closed WAL DB without creating source sidecars", () => {
   const db = database([OWNER], true)
   db.close()
   const before = files()
-  expect(readStartupOwnerSnapshot().ownerIds).toEqual([OWNER])
-  expect(files()).toEqual(before)
+  const snapshot = readStartupOwnerSnapshot(),
+    after = files()
+  expect(snapshot.ownerIds).toEqual([OWNER])
+  expect(after).toEqual(before)
+  retainOwnerProof("clean-closed-wal", {
+    before,
+    after,
+    owners: snapshot.ownerIds,
+    node: process.version,
+    sqlite: process.versions.sqlite,
+  })
 })
 it("accepts structural never-account absence without creating an account store", () => {
   const before = files(),
@@ -363,6 +393,14 @@ it("retries a changed live source and publishes only the revalidated owner set",
   expect(copies).toBe(2)
   expect(files()).toEqual(afterWriter)
   for (const root of privateRoots) expect(fs.existsSync(root)).toBe(false)
+  retainOwnerProof("changed-source-retry", {
+    copies,
+    afterWriter,
+    after: files(),
+    allPrivateCopiesRemoved: [...privateRoots].every(
+      (root) => !fs.existsSync(root),
+    ),
+  })
 })
 it("bounds churn to three captures, cleans private copies and preserves journals", () => {
   const db = database([OWNER], true),
@@ -389,6 +427,15 @@ it("bounds churn to three captures, cleans private copies and preserves journals
   expect(files()).toEqual(afterWriter)
   expect(fs.readFileSync(journal)).toEqual(bytes)
   for (const root of privateRoots) expect(fs.existsSync(root)).toBe(false)
+  retainOwnerProof("bounded-source-churn", {
+    copies,
+    afterWriter,
+    after: files(),
+    preservedJournal: fs.readFileSync(journal, "utf8"),
+    allPrivateCopiesRemoved: [...privateRoots].every(
+      (root) => !fs.existsSync(root),
+    ),
+  })
 })
 it("retries a WAL/SHM disappearance and accepts the complete closed source without creating source sidecars", () => {
   const db = database([OWNER], true),
