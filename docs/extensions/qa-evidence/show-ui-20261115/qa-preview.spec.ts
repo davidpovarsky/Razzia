@@ -1,0 +1,129 @@
+import { expect, test } from "../../../../extensions/node_modules/@playwright/test/index.mjs"
+
+const events = new WeakMap<object, Array<Record<string, unknown>>>()
+test.beforeEach(async ({ page }) => {
+  const log: Array<Record<string, unknown>> = []
+  events.set(page, log)
+  page.on("console", (message) => { if (log.length < 2000) log.push({ type: "console", level: message.type(), text: message.text() }) })
+  page.on("request", (request) => { if (log.length < 2000) log.push({ type: "request", url: request.url(), resourceType: request.resourceType() }) })
+  page.on("requestfailed", (request) => { if (log.length < 2000) log.push({ type: "requestfailed", url: request.url(), error: request.failure()?.errorText }) })
+  await page.addInitScript(() => {
+    ;(window as any).__qaCsp = []
+    window.addEventListener("securitypolicyviolation", (event) => { if ((window as any).__qaCsp.length < 2000) (window as any).__qaCsp.push({ directive: event.effectiveDirective, blocked: event.blockedURI }) })
+  })
+})
+test.afterEach(async ({ page }, info) => {
+  const csp = await page.evaluate(() => (window as any).__qaCsp ?? []).catch(() => [])
+  const requests = await page.evaluate(async () => (await fetch("/qa/requests")).json()).catch(() => [])
+  await info.attach("qa-browser-events.json", { body: Buffer.from(JSON.stringify({ events: events.get(page) ?? [], csp, requests }, null, 2)), contentType: "application/json" })
+})
+
+const locales = ["en", "fr", "de", "es", "it", "ja", "tr", "vi"] as const
+for (const role of ["manager", "spectator"] as const) {
+  for (const locale of locales) {
+    test(`paused question and results: ${role}/${locale}`, async ({ page }) => {
+      await page.goto("/")
+      await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+      for (const phase of ["question", "results"] as const) {
+        await page.evaluate(({ role, locale, phase }) => (window as any).__showPreviewQa.show({ role, locale, phase, paused: true, elapsed: phase === "results" ? 20000 : 5000 }), { role, locale, phase })
+        await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
+        if (phase === "results") await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+      }
+      expect(await page.evaluate(() => (window as any).__showPreviewQa.failures())).toBe(0)
+    })
+  }
+}
+
+test("paused voting remains stable, resumes, and reuses the stage for q2", async ({ page }) => {
+  test.setTimeout(60000)
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "voting", paused: true, elapsed: 5000 }))
+  const timer = page.getByTestId("tadazz-timer").first()
+  await expect(timer).toBeVisible()
+  const before = await timer.textContent()
+  await page.waitForTimeout(1200)
+  expect(await timer.textContent()).toBe(before)
+  await page.evaluate(() => {
+    ;(window as any).__initialPreviewStage = (window as any).__showPreviewQa.stage()
+    return (window as any).__showPreviewQa.show({ phase: "voting", paused: false, elapsed: 5000 })
+  })
+  await expect.poll(async () => timer.textContent(), { timeout: 5000 }).not.toBe(before)
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "question", question: 1, paused: false, elapsed: 6000 }))
+  await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 2", { timeout: 15000 })
+  expect(await page.evaluate(() => (window as any).__initialPreviewStage === (window as any).__showPreviewQa.stage())).toBe(true)
+  expect(await page.evaluate(() => (window as any).__showPreviewQa.failures())).toBe(0)
+})
+
+test("the five current-card phases render with zero synthetic voters", async ({ page }) => {
+  test.setTimeout(60000)
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(() => { (window as any).__qaSfx = 0; window.addEventListener("tadazz:sfx", () => { (window as any).__qaSfx += 1 }) })
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "question", paused: false }))
+  await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "answerCards", paused: false }))
+  await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "voting", paused: false }))
+  await expect(page.getByTestId("tadazz-timer").first()).toBeVisible()
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "voteLocked", paused: false, elapsed: 20000 }))
+  await expect(page.getByTestId("tadazz-status").first()).toContainText(/locked/i)
+  await page.evaluate(() => (window as any).__showPreviewQa.show({ phase: "results", paused: false, elapsed: 20000 }))
+  await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+  expect(await page.evaluate(() => (window as any).__showPreviewQa.failures())).toBe(0)
+  expect(await page.evaluate(() => (window as any).__qaSfx)).toBe(0)
+  const requests = await page.evaluate(async () => (await fetch("/qa/requests")).json())
+  expect(requests.filter((entry: { status: number }) => entry.status !== 200)).toEqual([])
+})
+
+for (const phase of ["answerCards", "voteLocked"] as const) {
+  test(`initial paused ${phase} renders current card`, async ({ page }) => {
+    await page.goto("/")
+    await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+    await page.evaluate((phase) => (window as any).__showPreviewQa.show({ phase, paused: true }), phase)
+    await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 1")
+    await expect(page.getByTestId("tadazz-card-0")).toBeVisible()
+  })
+}
+
+test("pause during voting entry and supersede a lock with q2", async ({ page }) => {
+  test.setTimeout(60000)
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  await page.evaluate(async () => {
+    await (window as any).__showPreviewQa.show({ phase: "voting", paused: false, elapsed: 5000 })
+    await (window as any).__showPreviewQa.show({ phase: "voting", paused: true, elapsed: 5000 })
+  })
+  const timer = page.getByTestId("tadazz-timer").first()
+  await expect(timer).toBeVisible()
+  const stopped = await timer.textContent()
+  await page.waitForTimeout(1200)
+  expect(await timer.textContent()).toBe(stopped)
+  await page.evaluate(async () => {
+    await (window as any).__showPreviewQa.show({ phase: "voteLocked", paused: false, elapsed: 20000 })
+    await (window as any).__showPreviewQa.show({ phase: "question", question: 1, paused: false, elapsed: 6000 })
+  })
+  await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 2", { timeout: 15000 })
+  await page.waitForTimeout(500)
+  await expect(page.getByTestId("tadazz-question-panel")).toContainText("Synthetic question 2")
+  expect(await page.evaluate(() => (window as any).__showPreviewQa.failures())).toBe(0)
+})
+
+test("browser rejects mismatched script and style integrity", async ({ page }) => {
+  await page.goto("/")
+  await expect(page.locator("html")).toHaveAttribute("data-qa-ready", "true")
+  const result = await page.evaluate(async () => {
+    const config = await (await fetch("/qa/config")).json()
+    const check = (element: HTMLScriptElement | HTMLLinkElement, parent: HTMLElement | ShadowRoot) => new Promise<boolean>((resolve) => {
+      element.onload = () => resolve(false)
+      element.onerror = () => resolve(true)
+      parent.append(element)
+    })
+    const script = document.createElement("script")
+    script.type = "module"; script.src = "/qa/integrity-decoy.js"; script.integrity = config.jsIntegrity; script.crossOrigin = "anonymous"
+    const link = document.createElement("link")
+    link.rel = "stylesheet"; link.href = "/qa/integrity-decoy.css"; link.integrity = config.cssIntegrity; link.crossOrigin = "anonymous"
+    return Promise.all([check(script, document.head), check(link, (window as any).__showPreviewQa.shadow())])
+  })
+  expect(result).toEqual([true, true])
+})
