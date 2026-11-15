@@ -1,5 +1,30 @@
 // QA page only. The private server owns all URLs and response bytes.
 const config = await (await fetch("/qa/config")).json()
+// The isolated host supplies the same upstream font CSS as the main app.
+// Decode every admitted face before exposing a renderer; failures stay closed.
+if (config.fontCssIntegrity) {
+  const fonts = document.createElement("link")
+  fonts.rel = "stylesheet"
+  fonts.href = "/fonts/rubik-wght.css"
+  fonts.integrity = config.fontCssIntegrity
+  fonts.crossOrigin = "anonymous"
+  const ready = new Promise((resolve, reject) => {
+    fonts.onload = resolve
+    fonts.onerror = () => reject(new Error("qa:font-css-integrity"))
+  })
+  document.head.append(fonts)
+  await ready
+  const faces = [...document.fonts].filter(
+    (face) => face.family.replaceAll(/["']/gu, "") === "Rubik Variable",
+  )
+  if (faces.length !== 6) throw new Error("qa:font-face-count")
+  try {
+    await Promise.all(faces.map((face) => face.load()))
+  } catch {
+    throw new Error("qa:font-decode")
+  }
+}
+
 const host = document.querySelector("#host")
 const shadow = host.attachShadow({ mode: "open" })
 const sheet = document.createElement("link")

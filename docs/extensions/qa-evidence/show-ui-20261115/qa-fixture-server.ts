@@ -12,6 +12,7 @@ import { createServer } from "node:http"
 import { isAbsolute, relative, resolve, sep } from "node:path"
 import { qaFrame } from "./qa-fixture-host"
 import { qaNativeV2Input, qaNativeV2Query } from "./qa-native-v2-host"
+import { rubikResourceEntries } from "./qa-rubik-resources"
 
 const root = realpathSync(process.argv[2] ?? "")
 const harnessSha = process.argv[3] ?? ""
@@ -28,7 +29,10 @@ if (
   ![artifact.js, artifact.css].every((digest) => /^[a-f0-9]{64}$/u.test(digest))
 )
   throw new Error("qa:invalid-private-artifact-index")
-const entries = {
+const fontsEnabled = process.argv[6] === "rubik"
+if (process.argv[6] && !fontsEnabled) throw new Error("qa:unknown-font-mode")
+const entries: Record<string, readonly [string, string, string, number?]> = {
+  ...(fontsEnabled ? rubikResourceEntries : {}),
   "/renderer.js": ["renderer.js", "text/javascript", artifact.js],
   "/renderer.css": ["renderer.css", "text/css", artifact.css],
   "/qa/browser.mjs": ["browser.mjs", "text/javascript", harnessSha],
@@ -64,7 +68,9 @@ const entries = {
   ],
 } as const
 const bytes = new Map<string, { content: Buffer; mime: string; sha: string }>()
-for (const [url, [name, mime, expected]] of Object.entries(entries)) {
+for (const [url, [name, mime, expected, expectedSize]] of Object.entries(
+  entries,
+)) {
   const path = resolve(root, name),
     actual = realpathSync(path),
     rel = relative(root, actual)
@@ -81,6 +87,8 @@ for (const [url, [name, mime, expected]] of Object.entries(entries)) {
     if (!info.isFile() || info.size <= 0 || info.size > 4 * 1024 * 1024)
       throw new Error(`qa:invalid-file:${name}`)
     const content = readFileSync(fd)
+    if (expectedSize !== undefined && content.length !== expectedSize)
+      throw new Error(`qa:size-mismatch:${name}`)
     if (createHash("sha256").update(content).digest("hex") !== expected)
       throw new Error(`qa:hash-mismatch:${name}`)
     bytes.set(url, { content, mime, sha: expected })
@@ -164,6 +172,13 @@ const server = createServer((req, res) => {
       JSON.stringify({
         jsIntegrity: sri(entries["/renderer.js"][2]),
         cssIntegrity: sri(entries["/renderer.css"][2]),
+        ...(fontsEnabled
+          ? {
+              fontCssIntegrity: sri(
+                rubikResourceEntries["/fonts/rubik-wght.css"][2],
+              ),
+            }
+          : {}),
       }),
     )
   if (url.pathname === "/qa/requests" && !url.search)
