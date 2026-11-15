@@ -1,0 +1,226 @@
+{
+  "recorded_utc": "2026-11-15T15:21:37.606541+00:00",
+  "thread_id": "01a1dfa9-87af-79f3-a855-8a93c517b4f5",
+  "source_sha": "9d54b2d6f15722b5c1e4dedfa4d81646284d65ee",
+  "archive": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-wave-C-receipts-9d54b2d.tar",
+  "archive_sha256": "51174dfd4874949203082c43c1d4051c7529ffb348316ca4285c94961f8018f2",
+  "archive_bytes": 471040,
+  "components": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-0f48d008b39a06197a4a0cc98637df3ebefee7bd",
+      "allocated_bytes": 249856
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-1dff0c4a140f3bbcfd31da6e4b71f93db757c52f",
+      "allocated_bytes": 245760
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-54218525a58a32bc9ac145c29c531e60559147d8",
+      "allocated_bytes": 163840
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-6f02f4bd28256c8cf061a6003a6f61a30fb61dff",
+      "allocated_bytes": 167936
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-88a64501e622a9db072f3f7d89a989feef6a182d",
+      "allocated_bytes": 315392
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-9d54b2d6f15722b5c1e4dedfa4d81646284d65ee",
+      "allocated_bytes": 253952
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-bec562fb88577a462172e6e260e99b5ffe9f6720",
+      "allocated_bytes": 180224
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-auth-f5412461c6d41ed263ec23d85cc3366e360c23ad",
+      "allocated_bytes": 151552
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-0f48d008b39a06197a4a0cc98637df3ebefee7bd",
+      "allocated_bytes": 344064
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-1dff0c4a140f3bbcfd31da6e4b71f93db757c52f",
+      "allocated_bytes": 344064
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-54218525a58a32bc9ac145c29c531e60559147d8",
+      "allocated_bytes": 221184
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-6f02f4bd28256c8cf061a6003a6f61a30fb61dff",
+      "allocated_bytes": 221184
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-88a64501e622a9db072f3f7d89a989feef6a182d",
+      "allocated_bytes": 344064
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-9d54b2d6f15722b5c1e4dedfa4d81646284d65ee",
+      "allocated_bytes": 348160
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/source/phone-auth-bec562fb88577a462172e6e260e99b5ffe9f6720",
+      "allocated_bytes": 221184
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-5421852-attempt01",
+      "allocated_bytes": 73728
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-6f02f4b-attempt01",
+      "allocated_bytes": 69632
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-bec562f-attempt01",
+      "allocated_bytes": 24576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-bec562f-attempt02",
+      "allocated_bytes": 24576
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-bec562f-attempt03",
+      "allocated_bytes": 28672
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-bec562f-attempt04",
+      "allocated_bytes": 32768
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-auth-wave-bec562f-attempt05",
+      "allocated_bytes": 94208
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-baseline-wave-f541246-attempt01",
+      "allocated_bytes": 49152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-legacy18-wave-88a6450-attempt01",
+      "allocated_bytes": 81920
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-load100-wave-88a6450-attempt01",
+      "allocated_bytes": 4096
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-load100-wave-88a6450-attempt02",
+      "allocated_bytes": 49152
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-load100-wave-88a6450-attempt03",
+      "allocated_bytes": 90112
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-native-wave-0f48d00-attempt01",
+      "allocated_bytes": 8192
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-native-wave-0f48d00-attempt02",
+      "allocated_bytes": 69632
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-native-wave-1dff0c4-attempt01",
+      "allocated_bytes": 73728
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-native-wave-88a6450-attempt01",
+      "allocated_bytes": 73728
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-native-wave-9d54b2d-attempt01",
+      "allocated_bytes": 73728
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-s02-wave-recheck",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/phone-wave-C-summary-9d54b2d",
+      "allocated_bytes": 32768
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/artifacts/phone-wave-C-receipts-9d54b2d.tar",
+      "allocated_bytes": 471040
+    },
+    {
+      "path": "/var/lib/docker/containers/cd3daa46dbc476fe3b20403c445f8dfc39ff7439b749a419e30d464a7091f0f9",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/7c589921385e6f3c022f2d08a755df1bd818e1e5cd04fea7ce4fe39f8927782c",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/1bee500830046f4347ab0951eeff8f0e322bcaf8ad2ddae0a9ae1b94eb1a059e",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/2aba33f76a6cdfa2f9cd5beb918f8422b9d06890bbaa8804359448f8f0bc5cdb",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/6ac461c9ca6f0b82387bc77eaef0d1dc1a7704af119aad9beb8a136ecad8fadf",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/59b76a7bdb4c87d129d050955bb34f2c3c9187b8c199f70ddab546a2c9f859e2",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/e0b5c5588a4f4350d17185a88d0824ff9e4d3b9f957d16be8ec7a14d4f54e796",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/282830f164f962da65e5670f160ae20f7fa8612436c2e3fe34c114513134645a",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/54c97f5a9c0c2756bd03467a5656c58286fe914333aeabac07baacf5884011b3",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/216a3708fa8cc30384c38be5b97bab83129e3abb2cf524f8182e443566934717",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/1fc53c0b5ab82128dc61a8269c5cf42b87250e313e999776710593a6dcdc7c3b",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/c53a46978f0e5cd94e8a1caf5034e7f7d60a4d590f8b266535c06d634bf8252a",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/2ab3f1f9f8a2a1dee8b531badf8fc31ffaaf8b5feb47a08697e30d869b9ee100",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/8273140f129e452eef2f883b45b63840e1445484b768f20dfd53890e4aa5a40d",
+      "allocated_bytes": 45056
+    },
+    {
+      "path": "/var/lib/docker/containers/10c16b8c4abfa587fa756dda9b62cabcb1ebbcf3b839b975d29a94b5069f88cf",
+      "allocated_bytes": 40960
+    },
+    {
+      "path": "/var/lib/docker/containers/7fa617ccf7d15201e21d123c647455ff89683ec96a2b5091214dc95cc482d85c",
+      "allocated_bytes": 40960
+    }
+  ],
+  "total_allocated_bytes": 5898240,
+  "includes_retained_partial_input_bytes": 151552,
+  "all_own_jobs_terminal": true,
+  "containers": 16,
+  "preserved_original_containers": [
+    "dd1401638311",
+    "c29ea46f10ff",
+    "501244784d54",
+    "505772e38a7c",
+    "701c07ef1fab",
+    "06144b291083"
+  ]
+}

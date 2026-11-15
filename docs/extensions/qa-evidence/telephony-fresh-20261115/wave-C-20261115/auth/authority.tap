@@ -1,0 +1,126 @@
+TAP version 13
+# Game cleanup task started
+# New game created: 662577 subject: Test quizz
+# Game 01a1dfca-f87c-763d-953b-2b04a3259746 added. Total games: 1
+# New game created: 588283 subject: Test quizz
+# Game 01a1dfca-f9a6-7213-ac1b-780617191a72 added. Total games: 2
+# Subtest: AUTH-01 readonly missing/corrupt/uncertain roots never initialize; ACTIVE proof precedes lifecycle access
+ok 1 - AUTH-01 readonly missing/corrupt/uncertain roots never initialize; ACTIVE proof precedes lifecycle access
+  ---
+  duration_ms: 297.684082
+  type: 'test'
+  ...
+# New game created: 653383 subject: Test quizz
+# Game 01a1dfca-fa76-71fb-818b-de2b42f08ed0 added. Total games: 3
+# Subtest: AUTH-02 hash-only lost/reordered delivery, expected-version rotation and revoke preserve one authority
+ok 2 - AUTH-02 hash-only lost/reordered delivery, expected-version rotation and revoke preserve one authority
+  ---
+  duration_ms: 208.363045
+  type: 'test'
+  ...
+# New game created: 195899 subject: Test quizz
+# Game 01a1dfca-fa79-71dd-9e9b-ff55ae42b727 added. Total games: 4
+# Subtest: AUTH-04 factory close during real manager preparation prevents initialization
+ok 3 - AUTH-04 factory close during real manager preparation prevents initialization
+  ---
+  duration_ms: 2.635786
+  type: 'test'
+  ...
+# New game created: 125873 subject: Test quizz
+# Game 01a1dfca-fad0-705d-9327-ca78d2818a93 added. Total games: 5
+# New game created: 960602 subject: Test quizz
+# Game 01a1dfca-fb2f-76ee-a09c-6e2859dd6416 added. Total games: 6
+# New game created: 640261 subject: Test quizz
+# Game 01a1dfca-fb39-74cb-b1af-25d19bb7fb90 added. Total games: 7
+# New game created: 627188 subject: Test quizz
+# Game 01a1dfca-fba0-778a-b9ef-3ce15abf01a6 added. Total games: 8
+# Subtest: AUTH-05 factory close after committed issue/rotation/activation denies disclosure and preserves decisions
+ok 4 - AUTH-05 factory close after committed issue/rotation/activation denies disclosure and preserves decisions
+  ---
+  duration_ms: 295.089977
+  type: 'test'
+  ...
+# New game created: 595704 subject: Test quizz
+# Game 01a1dfca-fba5-77e7-b47e-a7f28d4f7f14 added. Total games: 9
+# New game created: 778996 subject: Test quizz
+# Game 01a1dfca-fc00-714a-8573-f840fa94d054 added. Total games: 10
+# Subtest: AUTH-06 uncertain SQLite close denies initializer/revoker and retains committed state plus reopen barrier
+ok 5 - AUTH-06 uncertain SQLite close denies initializer/revoker and retains committed state plus reopen barrier
+  ---
+  duration_ms: 95.497857
+  type: 'test'
+  ...
+# New game created: 676246 subject: Test quizz
+# Game 01a1dfca-fc08-759c-b334-b657f91fe990 added. Total games: 11
+# New game created: 174466 subject: Test quizz
+# Game 01a1dfca-fc5c-7086-9426-7b962580c645 added. Total games: 12
+# Subtest: NATIVE-01 default-off delegates remain usable; existing phone binding cannot be adopted
+ok 6 - NATIVE-01 default-off delegates remain usable; existing phone binding cannot be adopted
+  ---
+  duration_ms: 91.797981
+  type: 'test'
+  ...
+# A user connected: socketId: gOylsY8sQYc8p9kBAAAA, clientId: 9e297ed9-e5a7-417f-89b5-f8cb6773c49d
+# A user connected: socketId: MrBX7yfnWViBnY_cAAAB, clientId: cd32ed2a-654b-456f-8b4d-766ae9d0454f
+# Manager reconnected to game 174466
+# New game created: 185671 subject: Test quizz
+# Game 01a1dfcb-2fef-7368-9257-efcfb0466143 added. Total games: 13
+# Subtest: NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/reconnect/answer while real v2 scores
+ok 7 - NATIVE-02 adopted Game closes legacy HTTP, old tickets, browser identity/reconnect/answer while real v2 scores
+  ---
+  duration_ms: 13202.674599
+  type: 'test'
+  ...
+# New game created: 495483 subject: Test quizz
+# Game 01a1dfcb-3052-74ee-915a-bdb2104403ba added. Total games: 14
+# Subtest: NATIVE-03 adoption during actual asynchronous join-ticket signing denies result disclosure
+ok 8 - NATIVE-03 adoption during actual asynchronous join-ticket signing denies result disclosure
+  ---
+  duration_ms: 98.967971
+  type: 'test'
+  ...
+# A user connected: socketId: -2fCg4rRALFwcyAWAAAC, clientId: cd32ed2a-654b-456f-8b4d-766ae9d0454f
+# Manager reconnected to game 495483
+# New game created: 486569 subject: Test quizz
+# Game 01a1dfcb-618d-729f-9ab0-d0f4a42f7ae7 added. Total games: 15
+# Subtest: NATIVE-04 actual authenticated A/B redial preserves score and rejects retired A operations/re-registration
+ok 9 - NATIVE-04 actual authenticated A/B redial preserves score and rejects retired A operations/re-registration
+  ---
+  duration_ms: 12602.766948
+  type: 'test'
+  ...
+# Game 01a1dfca-f87c-763d-953b-2b04a3259746 removed. Total games: 14
+# Game 01a1dfca-f9a6-7213-ac1b-780617191a72 removed. Total games: 13
+# Game 01a1dfca-fa76-71fb-818b-de2b42f08ed0 removed. Total games: 12
+# Game 01a1dfca-fa79-71dd-9e9b-ff55ae42b727 removed. Total games: 11
+# Game 01a1dfca-fad0-705d-9327-ca78d2818a93 removed. Total games: 10
+# Game 01a1dfca-fb2f-76ee-a09c-6e2859dd6416 removed. Total games: 9
+# Game 01a1dfca-fb39-74cb-b1af-25d19bb7fb90 removed. Total games: 8
+# Game 01a1dfca-fba0-778a-b9ef-3ce15abf01a6 removed. Total games: 7
+# Game 01a1dfca-fba5-77e7-b47e-a7f28d4f7f14 removed. Total games: 6
+# Game 01a1dfca-fc00-714a-8573-f840fa94d054 removed. Total games: 5
+# Game 01a1dfca-fc08-759c-b334-b657f91fe990 removed. Total games: 4
+# Game 01a1dfca-fc5c-7086-9426-7b962580c645 removed. Total games: 3
+# Game 01a1dfcb-2fef-7368-9257-efcfb0466143 removed. Total games: 2
+# Game 01a1dfcb-3052-74ee-915a-bdb2104403ba removed. Total games: 1
+# Game 01a1dfcb-618d-729f-9ab0-d0f4a42f7ae7 removed. Total games: 0
+# Game cleanup task stopped
+# Registry cleaned up
+# A user disconnected : gOylsY8sQYc8p9kBAAAA
+# A user disconnected : MrBX7yfnWViBnY_cAAAB
+# A user disconnected : -2fCg4rRALFwcyAWAAAC
+# Subtest: AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure
+ok 10 - AUTH-03 actual session revocation while SQLite BEGIN waits blocks control effect and disclosure
+  ---
+  duration_ms: 1102.721545
+  type: 'test'
+  ...
+1..10
+# tests 10
+# suites 0
+# pass 10
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 40709.401445
