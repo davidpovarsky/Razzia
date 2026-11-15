@@ -1,4 +1,6 @@
-import { defineConfig } from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+import playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+import type * as Playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+const { defineConfig } = playwright as unknown as typeof Playwright
 
 const address = new URL(process.env.TADAZZ_QA_BASE ?? "")
 if (address.protocol !== "http:" || address.hostname !== "127.0.0.1" || !address.port || address.username || address.password) {

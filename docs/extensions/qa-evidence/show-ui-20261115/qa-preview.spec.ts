@@ -1,5 +1,7 @@
-import { expect, test } from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+import playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
+import type * as Playwright from "../../../../node_modules/.pnpm/playwright@1.64.0/node_modules/playwright/test.js"
 import { request as httpRequest } from "node:http"
+const { expect, test } = playwright as unknown as typeof Playwright
 
 const events = new WeakMap<object, Array<Record<string, unknown>>>()
 test.beforeEach(async ({ page }) => {

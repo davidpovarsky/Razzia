@@ -19,8 +19,8 @@ No platform-only Rubik file is added to the native renderer fixture.
 | `qa-fixture-host.ts` | 2,760 | `4bc9f57da87d6186584a313facd166a86d7d63a45c5e94cf392da752ee5bf90d` |
 | `qa-fixture-server.ts` | 6,292 | `792d182242e614a024af697fc4f8eab28e397554845c748ed434a275ba6103ec` |
 | `qa-browser.mjs` | 2,216 | `8d84a5f2b4bc38d6f4df5143afde9373c7eadd2b1b79d1e43f152281575f6505` |
-| `qa-preview.spec.ts` | 9,861 | `d481e33c992e23bb7e998fe5ea4efff6f96a5e0e21e298f5833f4508f6eb2cd3` |
-| `qa-preview.config.ts` | 634 | `b0c0b523f1f342c70b5fe5d6080b78f14551e0b625155f4496a3cd8dad88a0fe` |
+| `qa-preview.spec.ts` | 10,039 | `53493fe9f5a9a7c19ebe93c6efaf2877bd7467ce7955cfa455f51818d74877f3` |
+| `qa-preview.config.ts` | 812 | `ce23bf3d4303ed7c4512beda8337501549f239944d29c5823041d6d590d5374e` |
 | `qa-server.vite.config.ts` | 549 | `665904d21b063a7e5eb228403ecbc8a74eb05242fe3bd8822fba1d7568c96233` |
 
 The server verifies every allowlisted file SHA-256 before listening, rejects
@@ -65,7 +65,7 @@ QA files at their exact `docs/extensions/qa-evidence/show-ui-20261115/` paths.
 In a new owned output root, place d095 `renderer.js` and `renderer.css`, copy
 `qa-browser.mjs` to `browser.mjs`, and copy the five inventoried image bytes
 under their unchanged `tadazz-show/...` paths. The renderer and images total
-4,307,904 bytes; the six QA source files total 22,312 bytes. Existing source
+4,307,904 bytes; the six QA source files total 22,668 bytes. Existing source
 and dependency mounts stay read-only; no full docs, `.git`, install, clone,
 production mount or host port. The six optional Rubik WOFF2 files are **not**
 needed for this stage-only harness, which does not mount platform chrome.
