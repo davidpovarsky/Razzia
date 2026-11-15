@@ -201,11 +201,14 @@ test("CALL-01 complete encrypted tuple precedes real REGISTER; lost ACK/reopen/r
   )
   assert.match(stored.input.capability, /^[a-f0-9]{64}$/u)
   const before = readFileSync(join(f.root, "call.enc"))
-  await assert.rejects(
-    f.journal.register(),
-    (error) =>
-      error instanceof Error && error.message === "gateway_custody_denied",
-  )
+  let safeLostAck = false
+  try {
+    await f.journal.register()
+  } catch (error) {
+    safeLostAck =
+      error instanceof Error && error.message === "gateway_custody_denied"
+  }
+  assert.equal(safeLostAck, true)
   assert.equal(f.r.game.players.length, 1)
   const receipt = await new PrivateCallPrecommit(f.options).register()
   assert.equal(receipt.ok, true)
@@ -351,6 +354,20 @@ test("CALL-03 actual file-close uncertainty bars reopen; real post-commit issuer
   const before = readFileSync(join(revoked.root, "call.enc"))
   await assert.rejects(revoked.journal.register())
   assert.equal(revoked.r.game.players.length, 1)
+  const db = new DatabaseSync(
+    join(revoked.r.lifecycle, "phone-lifecycle-v2a.sqlite"),
+    { readOnly: true },
+  )
+  try {
+    assert.equal(
+      db
+        .prepare("SELECT state FROM registrations WHERE request_id=?")
+        .get(revoked.input.requestId)?.state,
+      "ACTIVE",
+    )
+  } finally {
+    db.close()
+  }
   assert.equal(
     before.equals(readFileSync(join(revoked.root, "call.enc"))),
     true,
