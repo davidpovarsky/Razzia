@@ -1,0 +1,38 @@
+[
+  {
+    "path": "tadazz-show/motion/backdrop.webp",
+    "sha256": "a76a50432f43313d29e78f625302a256e7e7b71db322612c4b66ee3aef0cf37e"
+  },
+  {
+    "path": "tadazz-show/v4/question-bg.webp",
+    "sha256": "2f6912d851d8600e08d9a47d58e73dd40144fe30a908b82d10b3ba4036554321"
+  },
+  {
+    "path": "tadazz-show/v4/show-stage.webp",
+    "sha256": "9f3d1fe8d4458e98441303e728bba996b9a314295bbf5108f581c229f6db2d20"
+  },
+  {
+    "path": "tadazz-show/story/84acdb923677d591.webp",
+    "sha256": "84acdb923677d591d7641d8452eb185aad360b4b990d6e0879905ad0494dbdc6"
+  },
+  {
+    "path": "tadazz-show/v4/tadazz-brand-logo.png",
+    "sha256": "e50aaf5f62f60a83b5a84ea1d55a8068c2e754df5c917681da553771756ebabd"
+  },
+  {
+    "path": "tadazz-show/second-library/teaser-screen-source.jpg",
+    "sha256": "eaef71e6f2b59595eca49a5fb72df70e45f47a80351ea4d35e03d91f28851c17"
+  },
+  {
+    "path": "renderer.js",
+    "sha256": "7cba1b04647b0b00120677012ac67d36d86436506cf8d6a130398ccb1f92a4e8"
+  },
+  {
+    "path": "renderer.css",
+    "sha256": "3b220b024863d1e4a58b86b0b14a74e94be7b3da0c07e9921c2fb17430b67064"
+  },
+  {
+    "path": "browser.mjs",
+    "sha256": "2843ba1857a00f6608b9ebb9d454bb5180a13d09146befced68e5e019b16cb18"
+  }
+]

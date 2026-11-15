@@ -1,0 +1,77 @@
+
+Running 40 tests using 1 worker
+
+  ✓   1 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (3.3s)
+  ✓   2 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: fr (2.4s)
+  ✓   3 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: de (2.4s)
+  ✓   4 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (2.3s)
+  ✓   5 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it (2.3s)
+  ✓   6 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: ja (2.5s)
+  ✓   7 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: tr (2.3s)
+  ✓   8 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: vi (2.3s)
+  ✓   9 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:93:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (4.4s)
+  ✓  10 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/2 (2.3s)
+  ✓  11 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/2 (2.3s)
+  ✓  12 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/3 (2.1s)
+  ✓  13 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/3 (2.0s)
+  ✓  14 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/4 (2.3s)
+  ✓  15 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/4 (2.1s)
+  ✓  16 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/5 (2.2s)
+  ✓  17 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/5 (2.1s)
+  ✓  18 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 358x202 (2.6s)
+  ✓  19 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 992x744 (4.9s)
+  ✓  20 [chromium] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 1888x1062 (8.6s)
+  ✘  21 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en (12.0s)
+  ✓  22 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: fr (12.0s)
+  ✓  23 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: de (16.6s)
+  ✓  24 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: es (15.8s)
+  ✓  25 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: it (15.4s)
+  ✓  26 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: ja (15.6s)
+  ✓  27 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: tr (16.5s)
+  ✓  28 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: vi (16.2s)
+  ✓  29 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:93:1 › actual ref identity survives q2/resize, pending transitions cannot resurrect after disposal (15.5s)
+  ✓  30 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/2 (16.1s)
+  ✓  31 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/2 (15.2s)
+  ✓  32 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/3 (15.9s)
+  ✓  33 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/3 (15.4s)
+  ✓  34 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/4 (15.7s)
+  ✓  35 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/4 (15.9s)
+  ✓  36 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset quiz/5 (15.3s)
+  ✓  37 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:157:5 › bounded current-card subset survey/5 (15.4s)
+  ✓  38 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 358x202 (18.1s)
+  ✓  39 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 992x744 (18.7s)
+  ✓  40 [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:192:3 › actual stage responsive 1888x1062 (24.9s)
+
+
+  1) [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en 
+
+    Error: expect(locator).toHaveAttribute(expected) failed
+
+    Locator:  getByTestId('native-preview-surface')
+    Expected: "true"
+    Received: "false"
+    Timeout:  5000ms
+
+    Call log:
+      - Expect "toHaveAttribute" getByTestId('native-preview-surface') with timeout 5000ms
+      - waiting for getByTestId('native-preview-surface')
+
+
+      69 |     )
+      70 |     await expect(page.getByTestId("tadazz-question-panel")).toBeVisible()
+    > 71 |     await expect(page.getByTestId("native-preview-surface")).toHaveAttribute(
+         |                                                              ^
+      72 |       "data-preview-ready",
+      73 |       "true",
+      74 |     )
+        at /work/docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:71:62
+
+    attachment #1: native-events.json (application/json) ───────────────────────────────────────────
+    ../../out/native-browser-results/qa-native-actual-localized-authored-question-choices-en-webkit/attachments/native-events-json-03f9b3c56d8421e7d6f23978d55e67d198297c46.json
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: ../../out/native-browser-results/qa-native-actual-localized-authored-question-choices-en-webkit/error-context.md
+
+  1 failed
+    [webkit] › ../docs/extensions/qa-evidence/show-ui-20261115/qa-native.spec.ts:52:3 › actual localized authored question/choices: en 
+  39 passed (7.0m)

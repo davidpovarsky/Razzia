@@ -1,0 +1,7 @@
+[
+  {
+    "path": "extensions/src/presentation/show-library-preview/renderer-entry.tsx",
+    "sameAst": true,
+    "changed": false
+  }
+]
