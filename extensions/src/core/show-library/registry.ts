@@ -31,6 +31,13 @@ export function createShowLibraryRegistry(
   }
   const components = new Map(registry.components.map((c) => [key(c), c]))
   const motions = new Map(registry.motions.map((m) => [key(m), m]))
+  for (const motion of registry.motions) {
+    for (const ref of motion.components) {
+      if (!components.has(key(ref))) {
+        throw new Error("show-library:unknown-motion-component")
+      }
+    }
+  }
   for (const component of registry.components) {
     for (const port of component.childPorts)
       for (const ref of port.allowedComponents) {

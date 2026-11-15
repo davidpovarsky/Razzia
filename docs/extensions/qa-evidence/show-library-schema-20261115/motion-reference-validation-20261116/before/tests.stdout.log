@@ -1,0 +1,18 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-hq-show-library-20261115/extensions
+
+ ❯ src/core/show-library/registry-motion-references.test.ts (7 tests | 4 failed) 448ms
+   ❯ motion compatibility references form a closed candidate registry (7)
+     × rejects an unregistered exact motion component missing-component@1.0.0 92ms
+     × rejects an unregistered exact motion component answer-candidate@9.0.0 30ms
+     × checks unselected motions rather than waiting for a template to use them 51ms
+     × rejects a motion-only registry claiming an absent component 76ms
+
+ Test Files  1 failed (1)
+      Tests  4 failed | 3 passed (7)
+   Start at  00:30:12
+   Duration  12.85s (transform 52%, import 43%, tests 5%, worker 1%)
+
+  Transform  transforming modules took 5.06s · 52% of tracked time, re-done on every run
+             persist transforms across runs with fsModuleCache: true
+             learn more: https://vitest.dev/guide/improving-performance#caching-between-reruns

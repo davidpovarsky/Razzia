@@ -1,0 +1,60 @@
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  src/core/show-library/registry-motion-references.test.ts > motion compatibility references form a closed candidate registry > rejects an unregistered exact motion component missing-component@1.0.0
+ FAIL  src/core/show-library/registry-motion-references.test.ts > motion compatibility references form a closed candidate registry > rejects an unregistered exact motion component answer-candidate@9.0.0
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/core/show-library/registry-motion-references.test.ts:81:54
+     79|       input.motions[0].components.push(missing)
+     80|
+     81|       expect(() => createShowLibraryRegistry(input)).toThrow(
+       |                                                      ^
+     82|         "unknown-motion-component",
+     83|       )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/4]⎯
+
+ FAIL  src/core/show-library/registry-motion-references.test.ts > motion compatibility references form a closed candidate registry > checks unselected motions rather than waiting for a template to use them
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/core/show-library/registry-motion-references.test.ts:91:52
+     89|     input.motions[0].components = [{ id: "future-missing", version: "1…
+     90|
+     91|     expect(() => createShowLibraryRegistry(input)).toThrow(
+       |                                                    ^
+     92|       "unknown-motion-component",
+     93|     )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[2/4]⎯
+
+ FAIL  src/core/show-library/registry-motion-references.test.ts > motion compatibility references form a closed candidate registry > rejects a motion-only registry claiming an absent component
+AssertionError: expected [Function] to throw an error
+
+- Expected:
+null
+
++ Received:
+undefined
+
+ ❯ src/core/show-library/registry-motion-references.test.ts:99:52
+     97|     input.components = []
+     98|
+     99|     expect(() => createShowLibraryRegistry(input)).toThrow(
+       |                                                    ^
+    100|       "unknown-motion-component",
+    101|     )
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[3/4]⎯
