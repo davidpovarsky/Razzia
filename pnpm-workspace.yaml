@@ -1,6 +1,7 @@
 packages:
   - "packages/*"
   - "extensions"
+  - "extensions/src/mcp-app"
 
 catalog:
   "@types/node": "^26.6.5"
