@@ -1,0 +1,447 @@
+[
+  {
+    "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+    "mode": "drop-start-ack",
+    "role": "target",
+    "id": "5a2737dd38421d45df6e7e5e4c39ecbff46e082acd335953669d20a1b7e59315",
+    "name": "/tadazz-atomic-qa-e56ad13c4b404aa7a752e0c6e822a61d",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-15T15:48:36.367561152Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": false,
+      "NanoCpus": 250000000,
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": null,
+      "Tmpfs": {
+        "/app/config": "rw,nosuid,nodev,size=128m,mode=0700"
+      },
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "e56ad13c4b404aa7a752e0c6e822a61d",
+    "mode": "drop-start-ack",
+    "role": "controller",
+    "id": "4ff0d1167c6ea683d26595b5d7c09951331ddf78b6d5ed61f3f015844830a990",
+    "name": "/tadazz-atomic-controller-e56ad13c4b404aa7a752e0c6e822a61d",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "started": "2026-11-15T15:48:36.765537365Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-e56ad13c4b404aa7a752e0c6e822a61d",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-e56ad13c4b404aa7a752e0c6e822a61d",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-e56ad13c4b404aa7a752e0c6e822a61d/control",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-e56ad13c4b404aa7a752e0c6e822a61d/control",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/run/tadazz-atomic-qa/e56ad13c4b404aa7a752e0c6e822a61d/s",
+        "Destination": "/var/run",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 62500000,
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Tmpfs": null,
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "f8e1688d4d504cddbf90113c70c26998",
+    "mode": "native-write-eio",
+    "role": "target",
+    "id": "7bdb17a7596a8a9023c723c0e383081b9f9123c8f59465645021195a209ba453",
+    "name": "/tadazz-atomic-qa-f8e1688d4d504cddbf90113c70c26998",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-15T15:49:16.364368534Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": false,
+      "NanoCpus": 250000000,
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": null,
+      "Tmpfs": {
+        "/app/config": "rw,nosuid,nodev,size=128m,mode=0700"
+      },
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "f8e1688d4d504cddbf90113c70c26998",
+    "mode": "native-write-eio",
+    "role": "controller",
+    "id": "169a9917307644965f4455a293d1e3f89bda11aef1f312d1b1c403ba9188bb07",
+    "name": "/tadazz-atomic-controller-f8e1688d4d504cddbf90113c70c26998",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "started": "2026-11-15T15:49:16.567739324Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-f8e1688d4d504cddbf90113c70c26998",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-f8e1688d4d504cddbf90113c70c26998",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-f8e1688d4d504cddbf90113c70c26998/control",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-f8e1688d4d504cddbf90113c70c26998/control",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/run/tadazz-atomic-qa/f8e1688d4d504cddbf90113c70c26998/s",
+        "Destination": "/var/run",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 62500000,
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Tmpfs": null,
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "83e631a8f8b94f469665beef772b02b8",
+    "mode": "native-fsync-eio",
+    "role": "target",
+    "id": "4c182fb67560f7746930c177a1f333ce3f935f8f5d4bfab6ccf6d6dc0a1772f1",
+    "name": "/tadazz-atomic-qa-83e631a8f8b94f469665beef772b02b8",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-15T15:53:00.06934516Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": false,
+      "NanoCpus": 250000000,
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": null,
+      "Tmpfs": {
+        "/app/config": "rw,nosuid,nodev,size=128m,mode=0700"
+      },
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "83e631a8f8b94f469665beef772b02b8",
+    "mode": "native-fsync-eio",
+    "role": "controller",
+    "id": "d25ee11ef4a54faaf6cf039bd6611bcc7f94e89c529bbeb6044928c952da0770",
+    "name": "/tadazz-atomic-controller-83e631a8f8b94f469665beef772b02b8",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "started": "2026-11-15T15:53:00.369982582Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/run/tadazz-atomic-qa/83e631a8f8b94f469665beef772b02b8/s",
+        "Destination": "/var/run",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-83e631a8f8b94f469665beef772b02b8",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-83e631a8f8b94f469665beef772b02b8",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-83e631a8f8b94f469665beef772b02b8/control",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-83e631a8f8b94f469665beef772b02b8/control",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      }
+    ],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 62500000,
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Tmpfs": null,
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+    "mode": "native-readonly-erofs",
+    "role": "target",
+    "id": "92aef495576b5ee8fd8e703396df48994151874b9b988176392df44c4d51d8b2",
+    "name": "/tadazz-atomic-qa-2a3e9f85a62f40bfa452c29028d174da",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-15T15:53:44.068585451Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 250000000,
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": null,
+      "Tmpfs": {
+        "/app/config": "rw,nosuid,nodev,size=128m,mode=0700"
+      },
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "2a3e9f85a62f40bfa452c29028d174da",
+    "mode": "native-readonly-erofs",
+    "role": "controller",
+    "id": "c9c2be46a520372596a218bb583555a9fa7d0de5b5caa1ad2d5932c6a63eeb82",
+    "name": "/tadazz-atomic-controller-2a3e9f85a62f40bfa452c29028d174da",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "started": "2026-11-15T15:53:44.370309725Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-2a3e9f85a62f40bfa452c29028d174da",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-2a3e9f85a62f40bfa452c29028d174da",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-2a3e9f85a62f40bfa452c29028d174da/control",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-2a3e9f85a62f40bfa452c29028d174da/control",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/run/tadazz-atomic-qa/2a3e9f85a62f40bfa452c29028d174da/s",
+        "Destination": "/var/run",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 62500000,
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Tmpfs": null,
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+    "mode": "native-readonly-erofs",
+    "role": "target",
+    "id": "6406e3e27cf473993b901c47a437e850d9c6aabf3d5361abf99d29541722dd01",
+    "name": "/tadazz-atomic-qa-49a3b323aede4e87a75d582cb338a4d4",
+    "image": "sha256:417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346",
+    "started": "2026-11-15T15:59:47.7873352Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 250000000,
+      "Memory": 268435456,
+      "MemorySwap": 268435456,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": null,
+      "Tmpfs": {
+        "/app/config": "rw,nosuid,nodev,size=128m,mode=0700"
+      },
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  },
+  {
+    "nonce": "49a3b323aede4e87a75d582cb338a4d4",
+    "mode": "native-readonly-erofs",
+    "role": "controller",
+    "id": "c5b4dbe77c23d0323db8cc8b174e01a1d446713516e5571753533de8b45558bc",
+    "name": "/tadazz-atomic-controller-49a3b323aede4e87a75d582cb338a4d4",
+    "image": "sha256:612033cbc08ff303d04e2e7f9782a67bc03acfbcbe6141316296f0c056daf647",
+    "started": "2026-11-15T15:59:48.0834919Z",
+    "running": false,
+    "cmd": [
+      "sleep",
+      "infinity"
+    ],
+    "mounts": [
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-49a3b323aede4e87a75d582cb338a4d4/control",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-49a3b323aede4e87a75d582cb338a4d4/control",
+        "Mode": "",
+        "RW": true,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/run/tadazz-atomic-qa/49a3b323aede4e87a75d582cb338a4d4/s",
+        "Destination": "/var/run",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      },
+      {
+        "Type": "bind",
+        "Source": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-49a3b323aede4e87a75d582cb338a4d4",
+        "Destination": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/atomic-3527-fault-49a3b323aede4e87a75d582cb338a4d4",
+        "Mode": "",
+        "RW": false,
+        "Propagation": "rprivate"
+      }
+    ],
+    "hostConfig": {
+      "NetworkMode": "none",
+      "PortBindings": {},
+      "ReadonlyRootfs": true,
+      "NanoCpus": 62500000,
+      "Memory": 536870912,
+      "MemorySwap": 536870912,
+      "Privileged": false,
+      "CapAdd": null,
+      "CapDrop": null,
+      "SecurityOpt": [
+        "no-new-privileges:true"
+      ],
+      "Tmpfs": null,
+      "IpcMode": "private",
+      "CgroupnsMode": "private"
+    }
+  }
+]

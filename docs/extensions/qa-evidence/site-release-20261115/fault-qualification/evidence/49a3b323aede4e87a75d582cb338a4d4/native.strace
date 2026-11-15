@@ -1,0 +1,590 @@
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/shutil.py", {st_mode=S_IFREG|0644, st_size=60684, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/shutil.py", {st_mode=S_IFREG|0644, st_size=60684, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/shutil.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/shutil.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/shutil.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/shutil.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/fnmatch.py", {st_mode=S_IFREG|0644, st_size=6791, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/fnmatch.py", {st_mode=S_IFREG|0644, st_size=6791, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/fnmatch.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/fnmatch.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/fnmatch.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/fnmatch.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/zlib.cpython-314-aarch64-linux-musl.so", {st_mode=S_IFREG|0755, st_size=69928, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/zlib.cpython-314-aarch64-linux-musl.so", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lib-dynload/zlib.cpython-314-aarch64-linux-musl.so>
+openat(AT_FDCWD</>, "/lib/libz.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/local/lib/libz.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/lib/libz.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/libz.so.1.3.2>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/bz2.py", {st_mode=S_IFREG|0644, st_size=11978, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/bz2.py", {st_mode=S_IFREG|0644, st_size=11978, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/bz2.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/bz2.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/bz2.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/bz2.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.cpython-314-aarch64-linux-musl.so", 0xfffff5e6b780, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.abi3.so", 0xfffff5e6b780, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.so", 0xfffff5e6b780, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.py", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.py", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__pycache__/__init__.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/__pycache__/__init__.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/__init__.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/__init__.py>
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression", O_RDONLY|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.14/compression>
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.cpython-314-aarch64-linux-musl.so", 0xfffff5e6bf30, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.abi3.so", 0xfffff5e6bf30, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.so", 0xfffff5e6bf30, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.py", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.py", {st_mode=S_IFREG|0644, st_size=0, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__pycache__/__init__.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/_common/__pycache__/__init__.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__init__.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/_common/__init__.py>
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common", O_RDONLY|O_LARGEFILE|O_CLOEXEC|O_DIRECTORY) = 3</usr/lib/python3.14/compression/_common>
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/_streams.py", {st_mode=S_IFREG|0644, st_size=5670, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/_streams.py", {st_mode=S_IFREG|0644, st_size=5670, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/__pycache__/_streams.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/_common/__pycache__/_streams.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/_common/_streams.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/_common/_streams.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_bz2.cpython-314-aarch64-linux-musl.so", {st_mode=S_IFREG|0755, st_size=68264, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_bz2.cpython-314-aarch64-linux-musl.so", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lib-dynload/_bz2.cpython-314-aarch64-linux-musl.so>
+openat(AT_FDCWD</>, "/lib/libbz2.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/local/lib/libbz2.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/lib/libbz2.so.1", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/libbz2.so.1.0.8>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lzma.py", {st_mode=S_IFREG|0644, st_size=13426, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lzma.py", {st_mode=S_IFREG|0644, st_size=13426, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/lzma.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/lzma.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lzma.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lzma.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_lzma.cpython-314-aarch64-linux-musl.so", {st_mode=S_IFREG|0755, st_size=68720, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_lzma.cpython-314-aarch64-linux-musl.so", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lib-dynload/_lzma.cpython-314-aarch64-linux-musl.so>
+openat(AT_FDCWD</>, "/lib/liblzma.so.5", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/local/lib/liblzma.so.5", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = -1 ENOENT (No such file or directory)
+openat(AT_FDCWD</>, "/usr/lib/liblzma.so.5", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/liblzma.so.5.8.4>
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.cpython-314-aarch64-linux-musl.so", 0xfffff5e6c550, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.abi3.so", 0xfffff5e6c550, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.so", 0xfffff5e6c550, 0) = -1 ENOENT (No such file or directory)
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.py", {st_mode=S_IFREG|0644, st_size=8769, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.py", {st_mode=S_IFREG|0644, st_size=8769, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__pycache__/__init__.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/zstd/__pycache__/__init__.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/compression/zstd/__init__.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/compression/zstd/__init__.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/site-packages", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/struct.py", {st_mode=S_IFREG|0644, st_size=285, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/struct.py", {st_mode=S_IFREG|0644, st_size=285, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/struct.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/struct.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/struct.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/struct.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_struct.cpython-314-aarch64-linux-musl.so", {st_mode=S_IFREG|0755, st_size=70656, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/_struct.cpython-314-aarch64-linux-musl.so", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lib-dynload/_struct.cpython-314-aarch64-linux-musl.so>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/copy.py", {st_mode=S_IFREG|0644, st_size=8582, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/copy.py", {st_mode=S_IFREG|0644, st_size=8582, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/copy.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/copy.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/copy.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/copy.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/weakref.py", {st_mode=S_IFREG|0644, st_size=17771, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/weakref.py", {st_mode=S_IFREG|0644, st_size=17771, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/weakref.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/weakref.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/weakref.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/weakref.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/_weakrefset.py", {st_mode=S_IFREG|0644, st_size=3962, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/_weakrefset.py", {st_mode=S_IFREG|0644, st_size=3962, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/__pycache__/_weakrefset.cpython-314.pyc", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/__pycache__/_weakrefset.cpython-314.pyc>
+openat(AT_FDCWD</>, "/usr/lib/python3.14/_weakrefset.py", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/_weakrefset.py>
+getcwd("/", 1024)                       = 2
+newfstatat(AT_FDCWD</>, "/", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload", {st_mode=S_IFDIR|0755, st_size=4096, ...}, 0) = 0
+newfstatat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/grp.cpython-314-aarch64-linux-musl.so", {st_mode=S_IFREG|0755, st_size=67976, ...}, 0) = 0
+openat(AT_FDCWD</>, "/usr/lib/python3.14/lib-dynload/grp.cpython-314-aarch64-linux-musl.so", O_RDONLY|O_LARGEFILE|O_CLOEXEC) = 3</usr/lib/python3.14/lib-dynload/grp.cpython-314-aarch64-linux-musl.so>
+openat(AT_FDCWD</>, "/app", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 3</app>
+openat(3</app>, "web", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 4</app/web>
+newfstatat(4</app/web>, "sounds", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "sounds", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/sounds>
+newfstatat(6</app/web/sounds>, "tadazz-timer-end-368edc1d9522.mp3", {st_mode=S_IFREG|0664, st_size=25974, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-timer-end-368edc1d9522.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-timer-end-368edc1d9522.mp3>
+newfstatat(6</app/web/sounds>, "results.mp3", {st_mode=S_IFREG|0664, st_size=52845, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "results.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/results.mp3>
+newfstatat(6</app/web/sounds>, "boump.mp3", {st_mode=S_IFREG|0664, st_size=5878, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "boump.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/boump.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-timer-final-20261108.mp3", {st_mode=S_IFREG|0664, st_size=9447, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-timer-final-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-timer-final-20261108.mp3>
+newfstatat(6</app/web/sounds>, "second.mp3", {st_mode=S_IFREG|0664, st_size=77750, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "second.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/second.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-timer-tick-20261108.mp3", {st_mode=S_IFREG|0664, st_size=5058, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-timer-tick-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-timer-tick-20261108.mp3>
+newfstatat(6</app/web/sounds>, "first.mp3", {st_mode=S_IFREG|0664, st_size=164093, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "first.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/first.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-reveal-bright-20261108.mp3", {st_mode=S_IFREG|0664, st_size=28255, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-reveal-bright-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-reveal-bright-20261108.mp3>
+newfstatat(6</app/web/sounds>, "answersSound.mp3", {st_mode=S_IFREG|0664, st_size=28212, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "answersSound.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/answersSound.mp3>
+newfstatat(6</app/web/sounds>, "snearRoll.mp3", {st_mode=S_IFREG|0664, st_size=390765, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "snearRoll.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/snearRoll.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-silky-transition-20261108.mp3", {st_mode=S_IFREG|0664, st_size=18476, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-silky-transition-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-silky-transition-20261108.mp3>
+newfstatat(6</app/web/sounds>, "three.mp3", {st_mode=S_IFREG|0664, st_size=61238, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "three.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/three.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-confirm-20261108.mp3", {st_mode=S_IFREG|0664, st_size=8193, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-confirm-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-confirm-20261108.mp3>
+newfstatat(6</app/web/sounds>, "show.mp3", {st_mode=S_IFREG|0664, st_size=7941, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "show.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/show.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-timer-urgent-20261108.mp3", {st_mode=S_IFREG|0664, st_size=5685, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-timer-urgent-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-timer-urgent-20261108.mp3>
+newfstatat(6</app/web/sounds>, "tadazz-soft-reveal-20261108.mp3", {st_mode=S_IFREG|0664, st_size=17647, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "tadazz-soft-reveal-20261108.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/tadazz-soft-reveal-20261108.mp3>
+newfstatat(6</app/web/sounds>, "answersMusic.mp3", {st_mode=S_IFREG|0664, st_size=1246763, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/sounds>, "answersMusic.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/sounds/answersMusic.mp3>
+newfstatat(4</app/web>, "tadazz-show", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "tadazz-show", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/tadazz-show>
+newfstatat(6</app/web/tadazz-show>, "music", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "music", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/music>
+newfstatat(8</app/web/tadazz-show/music>, "credits.html", {st_mode=S_IFREG|0664, st_size=1125, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/music>, "credits.html", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/music/credits.html>
+newfstatat(8</app/web/tadazz-show/music>, "epic-main-menu.mp3", {st_mode=S_IFREG|0664, st_size=839514, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/music>, "epic-main-menu.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/music/epic-main-menu.mp3>
+newfstatat(8</app/web/tadazz-show/music>, "balloons-forever.ogg", {st_mode=S_IFREG|0664, st_size=2962473, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/music>, "balloons-forever.ogg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/music/balloons-forever.ogg>
+newfstatat(8</app/web/tadazz-show/music>, "cutie-patootie.mp3", {st_mode=S_IFREG|0664, st_size=784914, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/music>, "cutie-patootie.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/music/cutie-patootie.mp3>
+newfstatat(6</app/web/tadazz-show>, "story", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "story", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/story>
+newfstatat(8</app/web/tadazz-show/story>, "9db4acdc6c4e411c.mp3", {st_mode=S_IFREG|0664, st_size=91052, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "9db4acdc6c4e411c.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/9db4acdc6c4e411c.mp3>
+newfstatat(8</app/web/tadazz-show/story>, "672dd07f229b8c36.mp3", {st_mode=S_IFREG|0664, st_size=1222052, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "672dd07f229b8c36.mp3", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/672dd07f229b8c36.mp3>
+newfstatat(8</app/web/tadazz-show/story>, "fef87578b7d57eae.webp", {st_mode=S_IFREG|0664, st_size=178706, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "fef87578b7d57eae.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/fef87578b7d57eae.webp>
+newfstatat(8</app/web/tadazz-show/story>, "7ff12046cb1aac7b.png", {st_mode=S_IFREG|0664, st_size=412633, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "7ff12046cb1aac7b.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/7ff12046cb1aac7b.png>
+newfstatat(8</app/web/tadazz-show/story>, "b789ffb48c74e55d.webp", {st_mode=S_IFREG|0664, st_size=60174, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "b789ffb48c74e55d.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/b789ffb48c74e55d.webp>
+newfstatat(8</app/web/tadazz-show/story>, "84acdb923677d591.webp", {st_mode=S_IFREG|0664, st_size=134540, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/story>, "84acdb923677d591.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/story/84acdb923677d591.webp>
+newfstatat(6</app/web/tadazz-show>, "v4", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "v4", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/v4>
+newfstatat(8</app/web/tadazz-show/v4>, "tadazz-brand-logo.png", {st_mode=S_IFREG|0664, st_size=1976726, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "tadazz-brand-logo.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/tadazz-brand-logo.png>
+newfstatat(8</app/web/tadazz-show/v4>, "teaser-screen.jpg", {st_mode=S_IFREG|0664, st_size=3780431, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "teaser-screen.jpg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/teaser-screen.jpg>
+newfstatat(8</app/web/tadazz-show/v4>, "question-bg.webp", {st_mode=S_IFREG|0664, st_size=87904, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "question-bg.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/question-bg.webp>
+newfstatat(8</app/web/tadazz-show/v4>, "curtain-left.png", {st_mode=S_IFREG|0664, st_size=1132717, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "curtain-left.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/curtain-left.png>
+newfstatat(8</app/web/tadazz-show/v4>, "show-stage.webp", {st_mode=S_IFREG|0664, st_size=261066, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "show-stage.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/show-stage.webp>
+newfstatat(8</app/web/tadazz-show/v4>, "cards", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "cards", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 10</app/web/tadazz-show/v4/cards>
+newfstatat(10</app/web/tadazz-show/v4/cards>, "shadchan.svg", {st_mode=S_IFREG|0664, st_size=1932, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/v4/cards>, "shadchan.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/v4/cards/shadchan.svg>
+newfstatat(10</app/web/tadazz-show/v4/cards>, "pirate.svg", {st_mode=S_IFREG|0664, st_size=1923, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/v4/cards>, "pirate.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/v4/cards/pirate.svg>
+newfstatat(10</app/web/tadazz-show/v4/cards>, "lamplighter.svg", {st_mode=S_IFREG|0664, st_size=2039, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/v4/cards>, "lamplighter.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/v4/cards/lamplighter.svg>
+newfstatat(10</app/web/tadazz-show/v4/cards>, "dog.svg", {st_mode=S_IFREG|0664, st_size=1962, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/v4/cards>, "dog.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/v4/cards/dog.svg>
+newfstatat(10</app/web/tadazz-show/v4/cards>, "therapist.svg", {st_mode=S_IFREG|0664, st_size=1847, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/v4/cards>, "therapist.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/v4/cards/therapist.svg>
+newfstatat(8</app/web/tadazz-show/v4>, "creating-worlds-intro.png", {st_mode=S_IFREG|0664, st_size=2410686, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "creating-worlds-intro.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/creating-worlds-intro.png>
+newfstatat(8</app/web/tadazz-show/v4>, "curtain-right.png", {st_mode=S_IFREG|0664, st_size=1132143, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "curtain-right.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/curtain-right.png>
+newfstatat(8</app/web/tadazz-show/v4>, "teaser-screen-source.jpg", {st_mode=S_IFREG|0664, st_size=266631, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/v4>, "teaser-screen-source.jpg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/v4/teaser-screen-source.jpg>
+newfstatat(6</app/web/tadazz-show>, "razzia-original", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "razzia-original", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/razzia-original>
+newfstatat(8</app/web/tadazz-show/razzia-original>, "background.png", {st_mode=S_IFREG|0664, st_size=2777381, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/razzia-original>, "background.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/razzia-original/background.png>
+newfstatat(6</app/web/tadazz-show>, "opening", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "opening", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/opening>
+newfstatat(8</app/web/tadazz-show/opening>, "TADAZZ-Opening-4-5s.json", {st_mode=S_IFREG|0664, st_size=1212173, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/opening>, "TADAZZ-Opening-4-5s.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/opening/TADAZZ-Opening-4-5s.json>
+newfstatat(8</app/web/tadazz-show/opening>, "Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4", {st_mode=S_IFREG|0664, st_size=5028530, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/opening>, "Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/opening/Animate_gameshow_stage_loop_c01e8a8a_1080p.mp4>
+newfstatat(8</app/web/tadazz-show/opening>, "Scene-1.json", {st_mode=S_IFREG|0664, st_size=1354334, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/opening>, "Scene-1.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/opening/Scene-1.json>
+newfstatat(6</app/web/tadazz-show>, "motion", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "motion", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/motion>
+newfstatat(8</app/web/tadazz-show/motion>, "logo.webp", {st_mode=S_IFREG|0664, st_size=151654, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/motion>, "logo.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/motion/logo.webp>
+newfstatat(8</app/web/tadazz-show/motion>, "backdrop.webp", {st_mode=S_IFREG|0664, st_size=94502, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/motion>, "backdrop.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/motion/backdrop.webp>
+newfstatat(6</app/web/tadazz-show>, "second-library", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "second-library", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/second-library>
+newfstatat(8</app/web/tadazz-show/second-library>, "tadazz-brand-logo.png", {st_mode=S_IFREG|0664, st_size=1976726, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "tadazz-brand-logo.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/tadazz-brand-logo.png>
+newfstatat(8</app/web/tadazz-show/second-library>, "teaser-screen.jpg", {st_mode=S_IFREG|0664, st_size=3780431, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "teaser-screen.jpg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/teaser-screen.jpg>
+newfstatat(8</app/web/tadazz-show/second-library>, "question-bg.webp", {st_mode=S_IFREG|0664, st_size=87904, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "question-bg.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/question-bg.webp>
+newfstatat(8</app/web/tadazz-show/second-library>, "curtain-left.png", {st_mode=S_IFREG|0664, st_size=1132717, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "curtain-left.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/curtain-left.png>
+newfstatat(8</app/web/tadazz-show/second-library>, "show-stage.webp", {st_mode=S_IFREG|0664, st_size=261066, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "show-stage.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/show-stage.webp>
+newfstatat(8</app/web/tadazz-show/second-library>, "cards", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "cards", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 10</app/web/tadazz-show/second-library/cards>
+newfstatat(10</app/web/tadazz-show/second-library/cards>, "shadchan.svg", {st_mode=S_IFREG|0664, st_size=1932, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/second-library/cards>, "shadchan.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/second-library/cards/shadchan.svg>
+newfstatat(10</app/web/tadazz-show/second-library/cards>, "pirate.svg", {st_mode=S_IFREG|0664, st_size=1923, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/second-library/cards>, "pirate.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/second-library/cards/pirate.svg>
+newfstatat(10</app/web/tadazz-show/second-library/cards>, "lamplighter.svg", {st_mode=S_IFREG|0664, st_size=2039, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/second-library/cards>, "lamplighter.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/second-library/cards/lamplighter.svg>
+newfstatat(10</app/web/tadazz-show/second-library/cards>, "dog.svg", {st_mode=S_IFREG|0664, st_size=1962, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/second-library/cards>, "dog.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/second-library/cards/dog.svg>
+newfstatat(10</app/web/tadazz-show/second-library/cards>, "therapist.svg", {st_mode=S_IFREG|0664, st_size=1847, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/second-library/cards>, "therapist.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 12</app/web/tadazz-show/second-library/cards/therapist.svg>
+newfstatat(8</app/web/tadazz-show/second-library>, "creating-worlds-intro.png", {st_mode=S_IFREG|0664, st_size=2410686, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "creating-worlds-intro.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/creating-worlds-intro.png>
+newfstatat(8</app/web/tadazz-show/second-library>, "curtain-right.png", {st_mode=S_IFREG|0664, st_size=1132143, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "curtain-right.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/curtain-right.png>
+newfstatat(8</app/web/tadazz-show/second-library>, "teaser-screen-source.jpg", {st_mode=S_IFREG|0664, st_size=266631, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/second-library>, "teaser-screen-source.jpg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 10</app/web/tadazz-show/second-library/teaser-screen-source.jpg>
+newfstatat(6</app/web/tadazz-show>, "demos", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-show>, "demos", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 8</app/web/tadazz-show/demos>
+newfstatat(8</app/web/tadazz-show/demos>, "cosmic", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/demos>, "cosmic", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 10</app/web/tadazz-show/demos/cosmic>
+newfstatat(10</app/web/tadazz-show/demos/cosmic>, "v2", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/demos/cosmic>, "v2", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 12</app/web/tadazz-show/demos/cosmic/v2>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v2>, "backdrop.png", {st_mode=S_IFREG|0664, st_size=2228060, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v2>, "backdrop.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v2/backdrop.png>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v2>, "opening.json", {st_mode=S_IFREG|0664, st_size=574, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v2>, "opening.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v2/opening.json>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v2>, "opening.webm", {st_mode=S_IFREG|0664, st_size=151150, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v2>, "opening.webm", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v2/opening.webm>
+newfstatat(10</app/web/tadazz-show/demos/cosmic>, "v1", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/demos/cosmic>, "v1", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 12</app/web/tadazz-show/demos/cosmic/v1>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v1>, "backdrop.png", {st_mode=S_IFREG|0664, st_size=2228060, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v1>, "backdrop.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v1/backdrop.png>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v1>, "opening.json", {st_mode=S_IFREG|0664, st_size=1121, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v1>, "opening.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v1/opening.json>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v1>, "logo.png", {st_mode=S_IFREG|0664, st_size=11791, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v1>, "logo.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v1/logo.png>
+newfstatat(12</app/web/tadazz-show/demos/cosmic/v1>, "opening.webm", {st_mode=S_IFREG|0664, st_size=145492, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/cosmic/v1>, "opening.webm", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/cosmic/v1/opening.webm>
+newfstatat(8</app/web/tadazz-show/demos>, "jade", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(8</app/web/tadazz-show/demos>, "jade", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 10</app/web/tadazz-show/demos/jade>
+newfstatat(10</app/web/tadazz-show/demos/jade>, "v2", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/demos/jade>, "v2", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 12</app/web/tadazz-show/demos/jade/v2>
+newfstatat(12</app/web/tadazz-show/demos/jade/v2>, "backdrop.png", {st_mode=S_IFREG|0664, st_size=2183148, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v2>, "backdrop.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v2/backdrop.png>
+newfstatat(12</app/web/tadazz-show/demos/jade/v2>, "opening.json", {st_mode=S_IFREG|0664, st_size=573, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v2>, "opening.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v2/opening.json>
+newfstatat(12</app/web/tadazz-show/demos/jade/v2>, "opening.webm", {st_mode=S_IFREG|0664, st_size=157352, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v2>, "opening.webm", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v2/opening.webm>
+newfstatat(10</app/web/tadazz-show/demos/jade>, "v1", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(10</app/web/tadazz-show/demos/jade>, "v1", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 12</app/web/tadazz-show/demos/jade/v1>
+newfstatat(12</app/web/tadazz-show/demos/jade/v1>, "backdrop.png", {st_mode=S_IFREG|0664, st_size=2183148, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v1>, "backdrop.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v1/backdrop.png>
+newfstatat(12</app/web/tadazz-show/demos/jade/v1>, "opening.json", {st_mode=S_IFREG|0664, st_size=1120, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v1>, "opening.json", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v1/opening.json>
+newfstatat(12</app/web/tadazz-show/demos/jade/v1>, "logo.png", {st_mode=S_IFREG|0664, st_size=11217, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v1>, "logo.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v1/logo.png>
+newfstatat(12</app/web/tadazz-show/demos/jade/v1>, "opening.webm", {st_mode=S_IFREG|0664, st_size=158881, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(12</app/web/tadazz-show/demos/jade/v1>, "opening.webm", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 14</app/web/tadazz-show/demos/jade/v1/opening.webm>
+newfstatat(4</app/web>, "icon.svg", {st_mode=S_IFREG|0664, st_size=988, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "icon.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 6</app/web/icon.svg>
+newfstatat(4</app/web>, "tadazz-favicon-z-20261108.png", {st_mode=S_IFREG|0664, st_size=1223522, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "tadazz-favicon-z-20261108.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 6</app/web/tadazz-favicon-z-20261108.png>
+newfstatat(4</app/web>, "assets", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "assets", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/assets>
+newfstatat(6</app/web/assets>, "rubik-hebrew-wght-normal-BIkpbuMU.woff2", {st_mode=S_IFREG|0644, st_size=9348, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-hebrew-wght-normal-BIkpbuMU.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-hebrew-wght-normal-BIkpbuMU.woff2>
+newfstatat(6</app/web/assets>, "rubik-latin-ext-wght-normal-OacczzuJ.woff2", {st_mode=S_IFREG|0644, st_size=19400, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-latin-ext-wght-normal-OacczzuJ.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-latin-ext-wght-normal-OacczzuJ.woff2>
+newfstatat(6</app/web/assets>, "rubik-arabic-wght-normal-CGnJ-sf6.woff2", {st_mode=S_IFREG|0644, st_size=32468, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-arabic-wght-normal-CGnJ-sf6.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-arabic-wght-normal-CGnJ-sf6.woff2>
+newfstatat(6</app/web/assets>, "tadazz-question-background-BnsH8I8M.png", {st_mode=S_IFREG|0644, st_size=1610338, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "tadazz-question-background-BnsH8I8M.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/tadazz-question-background-BnsH8I8M.png>
+newfstatat(6</app/web/assets>, "rolldown-runtime-hePW80VL.js", {st_mode=S_IFREG|0644, st_size=716, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rolldown-runtime-hePW80VL.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rolldown-runtime-hePW80VL.js>
+newfstatat(6</app/web/assets>, "background-CMjhDDHd.png", {st_mode=S_IFREG|0644, st_size=2777381, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "background-CMjhDDHd.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/background-CMjhDDHd.png>
+newfstatat(6</app/web/assets>, "howler-DvpfHRP7.js", {st_mode=S_IFREG|0644, st_size=35943, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "howler-DvpfHRP7.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/howler-DvpfHRP7.js>
+newfstatat(6</app/web/assets>, "rubik-cyrillic-wght-normal-DveCct9I.woff2", {st_mode=S_IFREG|0644, st_size=15112, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-cyrillic-wght-normal-DveCct9I.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-cyrillic-wght-normal-DveCct9I.woff2>
+newfstatat(6</app/web/assets>, "index-DwYnkhyX.js", {st_mode=S_IFREG|0644, st_size=2840068, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-DwYnkhyX.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-DwYnkhyX.js>
+newfstatat(6</app/web/assets>, "index-C26jGOUc.css", {st_mode=S_IFREG|0644, st_size=286918, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-C26jGOUc.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-C26jGOUc.css>
+newfstatat(6</app/web/assets>, "rubik-cyrillic-ext-wght-normal-BjodpZir.woff2", {st_mode=S_IFREG|0644, st_size=12388, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-cyrillic-ext-wght-normal-BjodpZir.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-cyrillic-ext-wght-normal-BjodpZir.woff2>
+newfstatat(6</app/web/assets>, "rubik-latin-wght-normal-CnQIisVs.woff2", {st_mode=S_IFREG|0644, st_size=35348, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "rubik-latin-wght-normal-CnQIisVs.woff2", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/rubik-latin-wght-normal-CnQIisVs.woff2>
+newfstatat(6</app/web/assets>, "Card-BqUtS-Rs.js", {st_mode=S_IFREG|0644, st_size=328, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Card-BqUtS-Rs.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Card-BqUtS-Rs.js>
+newfstatat(6</app/web/assets>, "preload-helper-C8O7Ckvh.js", {st_mode=S_IFREG|0644, st_size=8666, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "preload-helper-C8O7Ckvh.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/preload-helper-C8O7Ckvh.js>
+newfstatat(6</app/web/assets>, "Events-C0SUB6MY.js", {st_mode=S_IFREG|0644, st_size=4594, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Events-C0SUB6MY.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Events-C0SUB6MY.js>
+newfstatat(6</app/web/assets>, "MyGames-CW9asXlK.js", {st_mode=S_IFREG|0644, st_size=11604, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "MyGames-CW9asXlK.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/MyGames-CW9asXlK.js>
+newfstatat(6</app/web/assets>, "socket-context-4LxhiTL1.js", {st_mode=S_IFREG|0644, st_size=42743, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "socket-context-4LxhiTL1.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/socket-context-4LxhiTL1.js>
+newfstatat(6</app/web/assets>, "ReferenceCanvas-BWF8RnMw.js", {st_mode=S_IFREG|0644, st_size=93653, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ReferenceCanvas-BWF8RnMw.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ReferenceCanvas-BWF8RnMw.js>
+newfstatat(6</app/web/assets>, "MarketingSite-D16z9pz2.js", {st_mode=S_IFREG|0644, st_size=91023, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "MarketingSite-D16z9pz2.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/MarketingSite-D16z9pz2.js>
+newfstatat(6</app/web/assets>, "AccountGateway-BtBiDgZv.js", {st_mode=S_IFREG|0644, st_size=9498, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "AccountGateway-BtBiDgZv.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/AccountGateway-BtBiDgZv.js>
+newfstatat(6</app/web/assets>, "index-D4sBj2w1.js", {st_mode=S_IFREG|0644, st_size=218349, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-D4sBj2w1.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-D4sBj2w1.js>
+newfstatat(6</app/web/assets>, "__root-CKGw0rC2.js", {st_mode=S_IFREG|0644, st_size=18415, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "__root-CKGw0rC2.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/__root-CKGw0rC2.js>
+newfstatat(6</app/web/assets>, "platform-controls-DfvR2BkG.js", {st_mode=S_IFREG|0644, st_size=122934, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "platform-controls-DfvR2BkG.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/platform-controls-DfvR2BkG.js>
+newfstatat(6</app/web/assets>, "platform-CBz8bJi0.js", {st_mode=S_IFREG|0644, st_size=5987, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "platform-CBz8bJi0.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/platform-CBz8bJi0.js>
+newfstatat(6</app/web/assets>, "circle-x-CgcqYXpg.js", {st_mode=S_IFREG|0644, st_size=477, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "circle-x-CgcqYXpg.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/circle-x-CgcqYXpg.js>
+newfstatat(6</app/web/assets>, "Studio-CzCvyGZn.js", {st_mode=S_IFREG|0644, st_size=73775, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Studio-CzCvyGZn.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Studio-CzCvyGZn.js>
+newfstatat(6</app/web/assets>, "client-67DcsxCg.js", {st_mode=S_IFREG|0644, st_size=1140, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "client-67DcsxCg.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/client-67DcsxCg.js>
+newfstatat(6</app/web/assets>, "useQuery-E1G9Su5D.js", {st_mode=S_IFREG|0644, st_size=8635, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useQuery-E1G9Su5D.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useQuery-E1G9Su5D.js>
+newfstatat(6</app/web/assets>, "useRouterState-CRcphWwK.js", {st_mode=S_IFREG|0644, st_size=202, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useRouterState-CRcphWwK.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useRouterState-CRcphWwK.js>
+newfstatat(6</app/web/assets>, "play-AxtTFEGx.js", {st_mode=S_IFREG|0644, st_size=218, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "play-AxtTFEGx.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/play-AxtTFEGx.js>
+newfstatat(6</app/web/assets>, "search-DCeNwM9k.js", {st_mode=S_IFREG|0644, st_size=327, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "search-DCeNwM9k.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/search-DCeNwM9k.js>
+newfstatat(6</app/web/assets>, "portal-UbglCmEq.js", {st_mode=S_IFREG|0644, st_size=79346, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "portal-UbglCmEq.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/portal-UbglCmEq.js>
+newfstatat(6</app/web/assets>, "locales-BJah7Ihm.js", {st_mode=S_IFREG|0644, st_size=568880, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "locales-BJah7Ihm.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/locales-BJah7Ihm.js>
+newfstatat(6</app/web/assets>, "SiteButton-D7U2JlhM.js", {st_mode=S_IFREG|0644, st_size=265, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "SiteButton-D7U2JlhM.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/SiteButton-D7U2JlhM.js>
+newfstatat(6</app/web/assets>, "dist-0pCdFrtN.js", {st_mode=S_IFREG|0644, st_size=4297, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "dist-0pCdFrtN.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/dist-0pCdFrtN.js>
+newfstatat(6</app/web/assets>, "route.gen-BDkAaLtc.js", {st_mode=S_IFREG|0644, st_size=308579, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "route.gen-BDkAaLtc.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/route.gen-BDkAaLtc.js>
+newfstatat(6</app/web/assets>, "ShowImportModal-B0TpKc1L.js", {st_mode=S_IFREG|0644, st_size=11814, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ShowImportModal-B0TpKc1L.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ShowImportModal-B0TpKc1L.js>
+newfstatat(6</app/web/assets>, "QueryClientProvider-C29VtCNa.js", {st_mode=S_IFREG|0644, st_size=11923, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "QueryClientProvider-C29VtCNa.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/QueryClientProvider-C29VtCNa.js>
+newfstatat(6</app/web/assets>, "ResultModal-D3yDZFvR.js", {st_mode=S_IFREG|0644, st_size=232398, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ResultModal-D3yDZFvR.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ResultModal-D3yDZFvR.js>
+newfstatat(6</app/web/assets>, "PackageManager-DRqdJ8X3.js", {st_mode=S_IFREG|0644, st_size=62, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "PackageManager-DRqdJ8X3.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/PackageManager-DRqdJ8X3.js>
+newfstatat(6</app/web/assets>, "index-DzSMiCNC.css", {st_mode=S_IFREG|0644, st_size=123543, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-DzSMiCNC.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-DzSMiCNC.css>
+newfstatat(6</app/web/assets>, "manager-Bwi3ztVt.js", {st_mode=S_IFREG|0644, st_size=880, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "manager-Bwi3ztVt.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/manager-Bwi3ztVt.js>
+newfstatat(6</app/web/assets>, "link-RcbJT902.js", {st_mode=S_IFREG|0644, st_size=59456, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "link-RcbJT902.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/link-RcbJT902.js>
+newfstatat(6</app/web/assets>, "SiteLink-BWq3n_13.js", {st_mode=S_IFREG|0644, st_size=505, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "SiteLink-BWq3n_13.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/SiteLink-BWq3n_13.js>
+newfstatat(6</app/web/assets>, "presentation-_Ld4qFFE.js", {st_mode=S_IFREG|0644, st_size=1024996, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "presentation-_Ld4qFFE.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/presentation-_Ld4qFFE.js>
+newfstatat(6</app/web/assets>, "arrow-right-Dh3AYw-o.js", {st_mode=S_IFREG|0644, st_size=193, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "arrow-right-Dh3AYw-o.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/arrow-right-Dh3AYw-o.js>
+newfstatat(6</app/web/assets>, "Dialog-CvUurOMj.js", {st_mode=S_IFREG|0644, st_size=653, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Dialog-CvUurOMj.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Dialog-CvUurOMj.js>
+newfstatat(6</app/web/assets>, "PackageManager-D28ZsFIl.js", {st_mode=S_IFREG|0644, st_size=13627, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "PackageManager-D28ZsFIl.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/PackageManager-D28ZsFIl.js>
+newfstatat(6</app/web/assets>, "arrow-left-BCBDgkUV.js", {st_mode=S_IFREG|0644, st_size=193, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "arrow-left-BCBDgkUV.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/arrow-left-BCBDgkUV.js>
+newfstatat(6</app/web/assets>, "ManagerAuthBackground-BVSFTg4G.js", {st_mode=S_IFREG|0644, st_size=18286, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ManagerAuthBackground-BVSFTg4G.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ManagerAuthBackground-BVSFTg4G.js>
+newfstatat(6</app/web/assets>, "react-CT8Wk0qK.js", {st_mode=S_IFREG|0644, st_size=126505, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "react-CT8Wk0qK.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/react-CT8Wk0qK.js>
+newfstatat(6</app/web/assets>, "api-BS6IFhuO.js", {st_mode=S_IFREG|0644, st_size=46392, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "api-BS6IFhuO.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/api-BS6IFhuO.js>
+newfstatat(6</app/web/assets>, "presentation-DYrgA-iG.css", {st_mode=S_IFREG|0644, st_size=166422, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "presentation-DYrgA-iG.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/presentation-DYrgA-iG.css>
+newfstatat(6</app/web/assets>, "query-sD_nJkaD.js", {st_mode=S_IFREG|0644, st_size=7622, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "query-sD_nJkaD.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/query-sD_nJkaD.js>
+newfstatat(6</app/web/assets>, "platform-ui-9Yz_eW9D.js", {st_mode=S_IFREG|0644, st_size=16303, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "platform-ui-9Yz_eW9D.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/platform-ui-9Yz_eW9D.js>
+newfstatat(6</app/web/assets>, "mutation-D5SS4KGD.js", {st_mode=S_IFREG|0644, st_size=3450, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "mutation-D5SS4KGD.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/mutation-D5SS4KGD.js>
+newfstatat(6</app/web/assets>, "useMatch-LcmyB7GW.js", {st_mode=S_IFREG|0644, st_size=1592, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useMatch-LcmyB7GW.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useMatch-LcmyB7GW.js>
+newfstatat(6</app/web/assets>, "LegacyTools-C7GYES3l.js", {st_mode=S_IFREG|0644, st_size=450, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "LegacyTools-C7GYES3l.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/LegacyTools-C7GYES3l.js>
+newfstatat(6</app/web/assets>, "dist-DpBB8C-m.js", {st_mode=S_IFREG|0644, st_size=76334, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "dist-DpBB8C-m.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/dist-DpBB8C-m.js>
+newfstatat(6</app/web/assets>, "PackageManager-Cv79aZxo.js", {st_mode=S_IFREG|0644, st_size=62, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "PackageManager-Cv79aZxo.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/PackageManager-Cv79aZxo.js>
+newfstatat(6</app/web/assets>, "Studio-CQEE1BWx.js", {st_mode=S_IFREG|0644, st_size=73753, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Studio-CQEE1BWx.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Studio-CQEE1BWx.js>
+newfstatat(6</app/web/assets>, "react-Cxpz1Ypv.js", {st_mode=S_IFREG|0644, st_size=126516, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "react-Cxpz1Ypv.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/react-Cxpz1Ypv.js>
+newfstatat(6</app/web/assets>, "presentation-BgEh0jZQ.js", {st_mode=S_IFREG|0644, st_size=1003002, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "presentation-BgEh0jZQ.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/presentation-BgEh0jZQ.js>
+newfstatat(6</app/web/assets>, "locales-l2oncJal.js", {st_mode=S_IFREG|0644, st_size=564780, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "locales-l2oncJal.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/locales-l2oncJal.js>
+newfstatat(6</app/web/assets>, "search-C2sY3YU-.js", {st_mode=S_IFREG|0644, st_size=339, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "search-C2sY3YU-.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/search-C2sY3YU-.js>
+newfstatat(6</app/web/assets>, "socket-context-B_dt4V0t.js", {st_mode=S_IFREG|0644, st_size=42754, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "socket-context-B_dt4V0t.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/socket-context-B_dt4V0t.js>
+newfstatat(6</app/web/assets>, "arrow-right-CHL9Baz1.js", {st_mode=S_IFREG|0644, st_size=205, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "arrow-right-CHL9Baz1.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/arrow-right-CHL9Baz1.js>
+newfstatat(6</app/web/assets>, "route.gen-D2YdMbrB.js", {st_mode=S_IFREG|0644, st_size=315471, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "route.gen-D2YdMbrB.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/route.gen-D2YdMbrB.js>
+newfstatat(6</app/web/assets>, "arrow-left-HE-n_rub.js", {st_mode=S_IFREG|0644, st_size=205, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "arrow-left-HE-n_rub.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/arrow-left-HE-n_rub.js>
+newfstatat(6</app/web/assets>, "useQuery-C4iSrNxx.js", {st_mode=S_IFREG|0644, st_size=8646, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useQuery-C4iSrNxx.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useQuery-C4iSrNxx.js>
+newfstatat(6</app/web/assets>, "react-dom-BmcGZysk.js", {st_mode=S_IFREG|0644, st_size=63280, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "react-dom-BmcGZysk.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/react-dom-BmcGZysk.js>
+newfstatat(6</app/web/assets>, "manager-D_TgYV0Z.js", {st_mode=S_IFREG|0644, st_size=891, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "manager-D_TgYV0Z.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/manager-D_TgYV0Z.js>
+newfstatat(6</app/web/assets>, "useRouterState-BjqFf0H7.js", {st_mode=S_IFREG|0644, st_size=207, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useRouterState-BjqFf0H7.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useRouterState-BjqFf0H7.js>
+newfstatat(6</app/web/assets>, "index-I6QCz3Vn.js", {st_mode=S_IFREG|0644, st_size=218257, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-I6QCz3Vn.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-I6QCz3Vn.js>
+newfstatat(6</app/web/assets>, "createLucideIcon-Dl_l28jn.js", {st_mode=S_IFREG|0644, st_size=20558, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "createLucideIcon-Dl_l28jn.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/createLucideIcon-Dl_l28jn.js>
+newfstatat(6</app/web/assets>, "circle-x-DXctpfUq.js", {st_mode=S_IFREG|0644, st_size=493, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "circle-x-DXctpfUq.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/circle-x-DXctpfUq.js>
+newfstatat(6</app/web/assets>, "index-_GVNxlLJ.css", {st_mode=S_IFREG|0644, st_size=123566, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-_GVNxlLJ.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-_GVNxlLJ.css>
+newfstatat(6</app/web/assets>, "dist-CpE0MYYZ.js", {st_mode=S_IFREG|0644, st_size=20112, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "dist-CpE0MYYZ.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/dist-CpE0MYYZ.js>
+newfstatat(6</app/web/assets>, "play-D48Xr4me.js", {st_mode=S_IFREG|0644, st_size=230, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "play-D48Xr4me.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/play-D48Xr4me.js>
+newfstatat(6</app/web/assets>, "Button-D8V7jXyY.js", {st_mode=S_IFREG|0644, st_size=122464, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Button-D8V7jXyY.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Button-D8V7jXyY.js>
+newfstatat(6</app/web/assets>, "ResultModal-BEI45lZn.js", {st_mode=S_IFREG|0644, st_size=263411, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ResultModal-BEI45lZn.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ResultModal-BEI45lZn.js>
+newfstatat(6</app/web/assets>, "api-lcBKHecz.js", {st_mode=S_IFREG|0644, st_size=71360, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "api-lcBKHecz.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/api-lcBKHecz.js>
+newfstatat(6</app/web/assets>, "PackageManager-DeJ4Lali.js", {st_mode=S_IFREG|0644, st_size=13622, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "PackageManager-DeJ4Lali.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/PackageManager-DeJ4Lali.js>
+newfstatat(6</app/web/assets>, "ManagerAuthBackground-DE4UpwMX.js", {st_mode=S_IFREG|0644, st_size=18257, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ManagerAuthBackground-DE4UpwMX.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ManagerAuthBackground-DE4UpwMX.js>
+newfstatat(6</app/web/assets>, "ShowImportModal-B9Lyo5lw.js", {st_mode=S_IFREG|0644, st_size=11777, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ShowImportModal-B9Lyo5lw.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ShowImportModal-B9Lyo5lw.js>
+newfstatat(6</app/web/assets>, "corrections-Bo_5Q__U.js", {st_mode=S_IFREG|0644, st_size=1392, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "corrections-Bo_5Q__U.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/corrections-Bo_5Q__U.js>
+newfstatat(6</app/web/assets>, "Events-QRBlu3Kh.js", {st_mode=S_IFREG|0644, st_size=4565, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Events-QRBlu3Kh.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Events-QRBlu3Kh.js>
+newfstatat(6</app/web/assets>, "presentation-0IiP9t3i.css", {st_mode=S_IFREG|0644, st_size=164913, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "presentation-0IiP9t3i.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/presentation-0IiP9t3i.css>
+newfstatat(6</app/web/assets>, "Card-CMV3Dz_B.js", {st_mode=S_IFREG|0644, st_size=318, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Card-CMV3Dz_B.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Card-CMV3Dz_B.js>
+newfstatat(6</app/web/assets>, "__root-CrodrDQo.js", {st_mode=S_IFREG|0644, st_size=18443, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "__root-CrodrDQo.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/__root-CrodrDQo.js>
+newfstatat(6</app/web/assets>, "SiteButton-D5qBUtf2.js", {st_mode=S_IFREG|0644, st_size=207, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "SiteButton-D5qBUtf2.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/SiteButton-D5qBUtf2.js>
+newfstatat(6</app/web/assets>, "MyGames-BgY5RyR0.js", {st_mode=S_IFREG|0644, st_size=8709, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "MyGames-BgY5RyR0.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/MyGames-BgY5RyR0.js>
+newfstatat(6</app/web/assets>, "dist-DPUW9B6B.js", {st_mode=S_IFREG|0644, st_size=35824, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "dist-DPUW9B6B.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/dist-DPUW9B6B.js>
+newfstatat(6</app/web/assets>, "LegacyTools-DN-NFivX.js", {st_mode=S_IFREG|0644, st_size=462, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "LegacyTools-DN-NFivX.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/LegacyTools-DN-NFivX.js>
+newfstatat(6</app/web/assets>, "AccountGateway-DJajLtKc.js", {st_mode=S_IFREG|0644, st_size=9496, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "AccountGateway-DJajLtKc.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/AccountGateway-DJajLtKc.js>
+newfstatat(6</app/web/assets>, "ReferenceCanvas-C7vnOfVQ.js", {st_mode=S_IFREG|0644, st_size=93973, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "ReferenceCanvas-C7vnOfVQ.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/ReferenceCanvas-C7vnOfVQ.js>
+newfstatat(6</app/web/assets>, "useMatch-C_Zr_GOS.js", {st_mode=S_IFREG|0644, st_size=1603, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "useMatch-C_Zr_GOS.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/useMatch-C_Zr_GOS.js>
+newfstatat(6</app/web/assets>, "SiteLink-DXBceSda.js", {st_mode=S_IFREG|0644, st_size=527, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "SiteLink-DXBceSda.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/SiteLink-DXBceSda.js>
+newfstatat(6</app/web/assets>, "client-C48MGrC7.js", {st_mode=S_IFREG|0644, st_size=1147, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "client-C48MGrC7.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/client-C48MGrC7.js>
+newfstatat(6</app/web/assets>, "Dialog-Cv2mwnv3.js", {st_mode=S_IFREG|0644, st_size=1064, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "Dialog-Cv2mwnv3.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/Dialog-Cv2mwnv3.js>
+newfstatat(6</app/web/assets>, "MarketingSite-CJiVA6qK.js", {st_mode=S_IFREG|0644, st_size=90879, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "MarketingSite-CJiVA6qK.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/MarketingSite-CJiVA6qK.js>
+newfstatat(6</app/web/assets>, "QueryClientProvider-Dkr_17v5.js", {st_mode=S_IFREG|0644, st_size=11934, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "QueryClientProvider-Dkr_17v5.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/QueryClientProvider-Dkr_17v5.js>
+newfstatat(6</app/web/assets>, "index-Ce9j7yUX.js", {st_mode=S_IFREG|0644, st_size=4597761, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-Ce9j7yUX.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-Ce9j7yUX.js>
+newfstatat(6</app/web/assets>, "index-DpoUs08e.css", {st_mode=S_IFREG|0644, st_size=288478, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-DpoUs08e.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-DpoUs08e.css>
+newfstatat(6</app/web/assets>, "index-utt8Akjm.js", {st_mode=S_IFREG|0644, st_size=4597607, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/assets>, "index-utt8Akjm.js", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/assets/index-utt8Akjm.js>
+newfstatat(4</app/web>, "index.html", {st_mode=S_IFREG|0644, st_size=2254, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "index.html", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 6</app/web/index.html>
+newfstatat(4</app/web>, "media", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "media", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/media>
+newfstatat(6</app/web/media>, "blue-sky.png", {st_mode=S_IFREG|0664, st_size=70, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/media>, "blue-sky.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/media/blue-sky.png>
+newfstatat(4</app/web>, "motion", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "motion", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/motion>
+newfstatat(6</app/web/motion>, "tadazz-motion-runtime.html", {st_mode=S_IFREG|0664, st_size=992496, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/motion>, "tadazz-motion-runtime.html", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/motion/tadazz-motion-runtime.html>
+newfstatat(4</app/web>, "tadazz-design-reference", {st_mode=S_IFDIR|0755, st_size=4096, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(4</app/web>, "tadazz-design-reference", O_RDONLY|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC|O_DIRECTORY) = 6</app/web/tadazz-design-reference>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-questions.webp", {st_mode=S_IFREG|0664, st_size=79910, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-questions.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-questions.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio.css", {st_mode=S_IFREG|0664, st_size=1927702, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio.css>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-stage.webp", {st_mode=S_IFREG|0664, st_size=242306, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-stage.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-stage.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-logo.webp", {st_mode=S_IFREG|0664, st_size=187692, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-logo.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-logo.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-worlds.webp", {st_mode=S_IFREG|0664, st_size=56520, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-worlds.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-worlds.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-icons.svg", {st_mode=S_IFREG|0664, st_size=3571, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-icons.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-icons.svg>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-zl.webp", {st_mode=S_IFREG|0664, st_size=48894, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-zl.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-zl.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-stage.webp", {st_mode=S_IFREG|0664, st_size=242306, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-stage.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-stage.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing.css", {st_mode=S_IFREG|0664, st_size=72036, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing.css", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing.css>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-logo.webp", {st_mode=S_IFREG|0664, st_size=187692, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-logo.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-logo.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-zb.webp", {st_mode=S_IFREG|0664, st_size=53972, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-zb.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-zb.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-lime.webp", {st_mode=S_IFREG|0664, st_size=48894, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-lime.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-lime.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-rays.webp", {st_mode=S_IFREG|0664, st_size=35080, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-rays.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-rays.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-blue.webp", {st_mode=S_IFREG|0664, st_size=53972, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-blue.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-blue.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-exclaim.webp", {st_mode=S_IFREG|0664, st_size=19460, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-exclaim.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-exclaim.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-worlds.webp", {st_mode=S_IFREG|0664, st_size=56520, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-worlds.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-worlds.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "studio-icons.svg", {st_mode=S_IFREG|0664, st_size=3352, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "studio-icons.svg", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/studio-icons.svg>
+newfstatat(6</app/web/tadazz-design-reference>, "marketing-questions.webp", {st_mode=S_IFREG|0664, st_size=79910, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "marketing-questions.webp", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/marketing-questions.webp>
+newfstatat(6</app/web/tadazz-design-reference>, "favicon-z-64-20261110.png", {st_mode=S_IFREG|0664, st_size=6331, ...}, AT_SYMLINK_NOFOLLOW) = 0
+openat(6</app/web/tadazz-design-reference>, "favicon-z-64-20261110.png", O_RDONLY|O_NONBLOCK|O_LARGEFILE|O_NOFOLLOW|O_CLOEXEC) = 8</app/web/tadazz-design-reference/favicon-z-64-20261110.png>
+mkdirat(3</app>, ".tadazz-web-release-31b3cb0", 0700) = -1 EROFS (Read-only file system)
+write(2<pipe:[6374934]>, "{\"observation\": \"failed\", \"phase\": \"stage-create-uncertain\", \"operation\": \"stage-create\", \"error\": \"OSError\", \"errno\": 30, \"chai"..., 190) = 190
++++ exited with 1 +++
