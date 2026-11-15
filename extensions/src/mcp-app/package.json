@@ -10,6 +10,7 @@
     "./composition-preview-v2": "./server/composition-preview-v2.ts",
     "./oauth": "./first-party/oauth.ts",
     "./contracts": "./contracts/index.ts",
+    "./native-save-contracts": "./contracts/native-save.ts",
     "./first-party": "./first-party/index.ts"
   },
   "engines": {
