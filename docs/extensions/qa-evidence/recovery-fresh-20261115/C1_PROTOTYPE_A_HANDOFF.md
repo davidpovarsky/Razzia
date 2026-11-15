@@ -1,5 +1,7 @@
 # C1 prototype A — source candidate and B handoff
 
+Historical candidate `4f4825e` / evidence `00eb930`: independent review returned this source for revision. The 35 prepared, unexecuted cases and raw static receipts below are preserved. Current correction status is [C1_A_REVISION_HANDOFF.md](C1_A_REVISION_HANDOFF.md).
+
 Recovery chat: `01a1dd18-8818-7573-b311-f54bbe0b811f`. Branch: `codex/tadazz-hq-recovery-fresh-20261115`. Base R2 handoff: `96767de6d40b594324687e15b0f386b87dd7ef19`; foundation checkpoint: `3b73fc1b589bee26a70b9f941e3033c91a2d0f58`.
 
 **Source candidate only. No C1 functional test, server/build job, browser session, installation, power-cut qualification or production enablement ran.** Manager chose A: one synchronous cooperating writer with a C1 scope reentrancy lease. It excludes neither other native writers nor other processes. The Linux-only native composite creation/import port is OFF by default and requires the explicit `TADAZZ_C1_CREATION_PROTOTYPE=true` composition flag. No environment/settings change was made. Startup always reads existing C1 evidence before initialization/listen, including after this flag or the accounts flag changes.

@@ -115,3 +115,13 @@ export function creationIntents(root: string) {
   walk(path.join(root, ".tadazz-creation-v1"))
   return result
 }
+/** Synthetic review receipts include empty slots, which the byte tree omits. */
+export function creationRegistryState(root: string) {
+  const family = path.join(root, ".tadazz-creation-v1", "legacy-global")
+  return Object.fromEntries(
+    ["active", "resolved"].map((phase) => {
+      const parent = path.join(family, phase)
+      return [phase, fs.existsSync(parent) ? fs.readdirSync(parent).sort() : []]
+    }),
+  ) as { active: string[]; resolved: string[] }
+}

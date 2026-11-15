@@ -6,6 +6,7 @@ import {
   assertCreationFixture,
   creationExtras,
   creationInput,
+  creationRegistryState,
   creationTree,
   nativeCreationComposition,
 } from "./creation-fixture"
@@ -14,14 +15,37 @@ const [mode, root, token, sequence, owner] = process.argv.slice(2)
 assertCreationFixture(root, token)
 if (process.env.CONFIG_PATH !== root) throw new Error("C1 child root mismatch")
 const write = fs.writeFileSync.bind(fs)
-if (mode === "recover" || mode === "recover-fence-fails") {
+if (mode.startsWith("recover")) {
   if (!["1", "2"].includes(sequence)) throw new Error("Bad C1 replay sequence")
   let report: unknown, error: string | undefined
-  if (mode === "recover-fence-fails") {
+  let faultActivations = 0
+  if (mode !== "recover") {
+    const family = path.join(root, ".tadazz-creation-v1", "legacy-global")
+    const targets: Record<string, string> = {
+      "recover-base-fence-fails": path.join(root, "quizz"),
+      "recover-sidecar-fence-fails": path.join(root, "extensions/quizzes"),
+      "recover-active-move-fence-fails": path.join(family, "active"),
+      "recover-resolved-move-fence-fails": path.join(family, "resolved"),
+    }
+    if (mode !== "recover-fence-fails" && !targets[mode])
+      throw new Error("Bad C1 recovery fault")
     const sync = fs.fsyncSync.bind(fs)
     fs.fsyncSync = (fd) => {
-      if (fs.fstatSync(fd).isDirectory())
+      const opened = fs.fstatSync(fd, { bigint: true })
+      const target =
+        targets[mode] && fs.statSync(targets[mode], { bigint: true })
+      const moved =
+        !mode.includes("-move-") ||
+        creationRegistryState(root).resolved.length > 0
+      if (
+        opened.isDirectory() &&
+        moved &&
+        (mode === "recover-fence-fails" ||
+          (target && target.dev === opened.dev && target.ino === opened.ino))
+      ) {
+        faultActivations++
         throw new Error("EIO repeated warm directory fence")
+      }
       sync(fd)
     }
   }
@@ -37,6 +61,8 @@ if (mode === "recover" || mode === "recover-fence-fails") {
       pid: process.pid,
       report,
       error,
+      faultActivations,
+      phases: creationRegistryState(root),
       state: creationTree(root),
     }),
   )
@@ -44,7 +70,12 @@ if (mode === "recover" || mode === "recover-fence-fails") {
   const stop = () => {
     write(
       path.join(root, ".c1-interrupted.json"),
-      JSON.stringify({ pid: process.pid, mode, state: creationTree(root) }),
+      JSON.stringify({
+        pid: process.pid,
+        mode,
+        state: creationTree(root),
+        phases: creationRegistryState(root),
+      }),
     )
     process.kill(process.pid, "SIGKILL")
     process.exit(87)

@@ -41,6 +41,7 @@ export function captureCreationScope(
     : configuredRoot
   existingDirectory(configuredRoot)
   existingDirectory(root)
+  existingDirectory(path.join(root, "quizz"))
   if (path.resolve(environment.getPath()) !== root)
     throw new Error("Native creation root does not match trusted owner")
   const scope: CreationScope = {
@@ -108,6 +109,12 @@ function existingDirectory(directory: string): boolean {
   assertDirectoryChain(directory)
   return true
 }
+export function assertPrivateCreationDirectory(directory: string) {
+  const result = assertDirectoryChain(directory)
+  if ((result.mode & 0o077) !== 0)
+    throw new Error("Creation registry is not private")
+  return result
+}
 /** Enumerates ONLY the service-owned creation registry. It never scans public
  * quizzes, customer tenant data or a real server to guess ownership. Registry
  * owner spelling must match persisted scope exactly; feature-flag changes do
@@ -118,11 +125,14 @@ export function discoverCreationScopes(
 ): CreationScope[] {
   const configuredRoot = path.resolve(configuredRootInput)
   const registry = path.join(configuredRoot, CREATION_FAMILY)
-  if (!existingDirectory(registry)) return []
+  // The OFF path must not impose C1 ancestry rules on an unrelated legacy root.
+  // Once evidence exists, every private intermediate component is admitted.
+  if (!lstatOrMissing(registry)) return []
+  assertPrivateCreationDirectory(registry)
   const scopes: CreationScope[] = []
   for (const entry of fs.readdirSync(registry).sort()) {
     const family = path.join(registry, entry)
-    assertDirectoryChain(family)
+    assertPrivateCreationDirectory(family)
     if (entry === "legacy-global") {
       scopes.push({
         configuredRoot,
@@ -134,7 +144,7 @@ export function discoverCreationScopes(
       for (const owner of fs.readdirSync(family).sort()) {
         if (!OWNER.test(owner))
           throw new Error("Untrusted creation registry owner")
-        assertDirectoryChain(path.join(family, owner))
+        assertPrivateCreationDirectory(path.join(family, owner))
         scopes.push({
           configuredRoot,
           root: path.join(configuredRoot, "tenants", owner),

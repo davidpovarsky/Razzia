@@ -68,10 +68,14 @@ export class CompositeStorageService {
     try {
       return this.injections.creation!.create(quizz, extras)
     } catch (error) {
-      throw new CompositeStorageError(
-        `Failed native creation: ${error instanceof Error ? error.message : String(error)}`,
+      const failure = new CompositeStorageError(
+        "errors:server.internal",
         StatusCodes.INTERNAL_SERVER_ERROR,
       )
+      // Trusted in-process diagnostics retain the exact cause. Routes serialize
+      // only the stable message, never a pre-intent allocated ID or fs path.
+      Object.defineProperty(failure, "cause", { value: error })
+      throw failure
     }
   }
 

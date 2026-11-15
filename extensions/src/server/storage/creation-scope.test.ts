@@ -69,8 +69,11 @@ describe.runIf(process.platform === "linux")(
     })
     it("discovers only explicit private families without scanning customer tenant directories", () => {
       const registry = path.join(root, CREATION_FAMILY)
-      fs.mkdirSync(path.join(registry, "tenants", OWNER), { recursive: true })
-      fs.mkdirSync(path.join(registry, "legacy-global"))
+      fs.mkdirSync(path.join(registry, "tenants", OWNER), {
+        recursive: true,
+        mode: 0o700,
+      })
+      fs.mkdirSync(path.join(registry, "legacy-global"), { mode: 0o700 })
       fs.mkdirSync(path.join(root, "tenants"))
       fs.writeFileSync(
         path.join(root, "tenants", "customer-sentinel"),

@@ -8,6 +8,7 @@ import * as native from "./config"
 import { withAccount } from "./account-scope"
 import { getAccountDb, closeAccountDb } from "./account-db"
 import { mintToken } from "./auth"
+import { assertCreationPrivateHttpErrors } from "../../../../extensions/src/server/storage/creation-native-review-fixture"
 import {
   createCreationFixture,
   creationExtras,
@@ -182,6 +183,14 @@ describe.runIf(process.platform === "linux")(
           fs.readdirSync(path.join(fixture.root, "tenants", owner, "quizz")),
         ).toHaveLength(1)
     }, 85000)
+    it("keeps actual HTTP create/import failures private before durable intent", async () => {
+      process.env.TADAZZ_C1_CREATION_PROTOTYPE = "true"
+      const { api } = await import("../api/index")
+      await assertCreationPrivateHttpErrors(
+        async (url, init) => api.request(url, init),
+        () => mintToken("c1-synthetic-manager", SESSION_ROLES.MANAGER),
+      )
+    })
     it("retains explicit accounts-off legacy import with no sidecar publication", () => {
       const result = fixture.service.importEnhancedBundle(creationInput())
       expect(result.quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)

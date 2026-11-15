@@ -10,6 +10,7 @@ import {
 } from "../../core/index"
 import {
   assertCreationScope,
+  assertPrivateCreationDirectory as privateDirectory,
   captureCreationScope,
   CREATION_FAMILY,
   creationFamily,
@@ -18,7 +19,6 @@ import {
   type CreationScope,
 } from "./creation-scope"
 import {
-  assertDirectoryChain,
   durablePath,
   ensureDurableDirectory,
   lstatOrMissing,
@@ -72,6 +72,7 @@ interface Intent {
   configuredRootIdentity: DurableIdentity
   rootIdentity: DurableIdentity
   parentIdentities: { base: DurableIdentity; sidecar: DurableIdentity }
+  phaseParents: { active: DurableIdentity; resolved: DurableIdentity }
 }
 interface State {
   intent: Intent
@@ -96,12 +97,6 @@ const identity = (directory: string): DurableIdentity => {
   }
 }
 const recordPath = (slot: string) => path.join(slot, "intent.json")
-function privateDirectory(directory: string) {
-  const result = assertDirectoryChain(directory)
-  if ((result.mode & 0o077) !== 0)
-    throw new Error("Creation registry is not private")
-  return result
-}
 function imageValid(image: ReturnType<typeof utf8Image>) {
   if (!image || typeof image.raw !== "string")
     throw new Error("Missing creation byte image")
@@ -137,6 +132,14 @@ function validateIntent(
     throw new Error("Foreign, malformed or incompatible creation intent")
   creationFamily(scope)
   privateDirectory(slot)
+  for (const phase of ["active", "resolved"] as const) {
+    const current = privateDirectory(path.join(creationFamily(scope), phase))
+    if (
+      !entry.phaseParents ||
+      !sameDurableIdentity(current, entry.phaseParents[phase])
+    )
+      throw new Error("Creation phase parent identity changed")
+  }
   publicPaths(entry)
   imageValid(entry.targetBase)
   const base = JSON.parse(entry.targetBase.raw) as Record<string, unknown>
@@ -329,6 +332,7 @@ function cleanupResolved(
   privateDirectory(slot)
   if (!sameDurableIdentity(identity(slot), intent.slot))
     throw new Error("Resolved slot ownership changed")
+  fenceResolvedMove(scope, slot, intent.quizId, intent.phaseParents)
   const allowed = new Set(["intent.json", "base.record", "sidecar.record"])
   if (fs.readdirSync(slot).some((name) => !allowed.has(name)))
     throw new Error("Unknown private creation residue")
@@ -355,6 +359,29 @@ function cleanupResolved(
   fs.rmdirSync(slot)
   syncDirectory(path.dirname(slot))
   creationFamily(scope)
+}
+function fenceResolvedMove(
+  scope: CreationScope,
+  slot: string,
+  quizId: string,
+  expected?: Intent["phaseParents"],
+) {
+  const family = creationFamily(scope)
+  const active = path.join(family, "active")
+  const resolved = path.join(family, "resolved")
+  if (!ID.test(quizId) || path.dirname(slot) !== resolved)
+    throw new Error("Invalid resolved creation move")
+  for (const phase of ["active", "resolved"] as const) {
+    const parent = path.join(family, phase)
+    const current = privateDirectory(parent)
+    if (expected && !sameDurableIdentity(current, expected[phase]))
+      throw new Error("Creation move parent identity changed")
+  }
+  const old = path.join(active, quizId)
+  if (lstatOrMissing(old)) throw new Error("Old active creation name remains")
+  syncDirectory(active)
+  syncDirectory(resolved)
+  if (lstatOrMissing(old)) throw new Error("Old active creation name returned")
 }
 function resolveSlot(state: State) {
   const family = creationFamily(state.intent.scope)
@@ -388,6 +415,13 @@ function rollback(state: State) {
   const absent = classifyPair(state.intent, state.slot, state.record)
   if (absent.base || absent.sidecar)
     throw new Error("Creation rollback absence not established")
+  // A warm absence may follow an unlink whose parent fsync failed. Fence BOTH
+  // pinned public parents even if this invocation did not remove either name.
+  syncDirectory(path.dirname(absent.paths.base))
+  syncDirectory(path.dirname(absent.paths.sidecar))
+  const fenced = classifyPair(state.intent, state.slot, state.record)
+  if (fenced.base || fenced.sidecar)
+    throw new Error("Creation rollback absence changed during fences")
   updateIntent(state, { phase: "rolled-back" })
   resolveSlot(state)
 }
@@ -464,6 +498,7 @@ export function createNativeCreationPort(
         throw new Error("Pre-existing creation sibling collision")
       const family = creationFamily(scope)
       ensureDurableDirectory(path.join(family, "active"))
+      ensureDurableDirectory(path.join(family, "resolved"))
       for (
         let directory = path.join(family, "active");
         directory !== scope.configuredRoot;
@@ -506,6 +541,10 @@ export function createNativeCreationPort(
         parentIdentities: {
           base: identity(path.dirname(paths.base)),
           sidecar: identity(path.dirname(paths.sidecar)),
+        },
+        phaseParents: {
+          active: privateDirectory(path.join(family, "active")),
+          resolved: privateDirectory(path.join(family, "resolved")),
         },
       }
       publicPaths(intent)
@@ -644,7 +683,18 @@ export function recoverCreationReservations(configuredRoot: string) {
   }
   const unresolved: string[] = []
   let recovered = 0
-  for (const scope of discoverCreationScopes(configuredRoot)) {
+  const scopes = discoverCreationScopes(configuredRoot)
+  // Admit the complete dedicated hierarchy before any scope releases evidence.
+  for (const scope of scopes) {
+    const family = creationFamily(scope)
+    privateDirectory(family)
+    for (const phase of fs.readdirSync(family)) {
+      if (phase !== "active" && phase !== "resolved")
+        throw new Error("Unknown creation registry phase; startup blocked")
+      privateDirectory(path.join(family, phase))
+    }
+  }
+  for (const scope of scopes) {
     if (leases.has(scope.root))
       throw new Error("Cannot replay a live creation scope")
     const family = creationFamily(scope)
@@ -663,6 +713,7 @@ export function recoverCreationReservations(configuredRoot: string) {
               fs.readdirSync(slot).length
             )
               throw new Error("Ambiguous resolved creation residue")
+            fenceResolvedMove(scope, slot, name.slice(0, 21))
             syncDirectory(slot)
             syncDirectory(parent)
             fs.rmdirSync(slot)

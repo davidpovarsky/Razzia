@@ -6,6 +6,13 @@ import { fileURLToPath, pathToFileURL } from "node:url"
 
 const repository = fileURLToPath(new URL("../../../../", import.meta.url))
 const installed = createRequire(import.meta.url)
+export type CreationRecoveryMode =
+  | "recover"
+  | "recover-fence-fails"
+  | "recover-base-fence-fails"
+  | "recover-sidecar-fence-fails"
+  | "recover-active-move-fence-fails"
+  | "recover-resolved-move-fence-fails"
 export function creationChild(
   mode:
     | "before-public"
@@ -14,8 +21,7 @@ export function creationChild(
     | "committed-visible"
     | "private-cleanup"
     | "before-slot-removal"
-    | "recover"
-    | "recover-fence-fails",
+    | CreationRecoveryMode,
   root: string,
   token: string,
   sequence = "",
@@ -65,12 +71,16 @@ export function creationChild(
 export async function creationReplayTwice(
   root: string,
   token: string,
-  fenceFails = false,
+  fenceFails: boolean | CreationRecoveryMode = false,
 ) {
   const runs = []
   for (const sequence of ["1", "2"]) {
     const result = await creationChild(
-      fenceFails ? "recover-fence-fails" : "recover",
+      typeof fenceFails === "string"
+        ? fenceFails
+        : fenceFails
+          ? "recover-fence-fails"
+          : "recover",
       root,
       token,
       sequence,
