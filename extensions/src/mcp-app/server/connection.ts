@@ -1,11 +1,13 @@
 import type {
   McpServer,
-  RequestId,
+  ServerContext,
+  CallToolResult,
   Transport,
 } from "@modelcontextprotocol/server"
-import { CallToolRequestSchema } from "@modelcontextprotocol/core"
-import { canonicalJson, utf8Bytes } from "../contracts/canonical.ts"
-import { LIMITS } from "../contracts/schemas.ts"
+import {
+  CallToolRequestSchema,
+  CancelledNotificationSchema,
+} from "@modelcontextprotocol/core"
 import { inputs, toolNames } from "../contracts/tools.ts"
 import type {
   Dependencies,
@@ -15,54 +17,91 @@ import type {
 import { authorize } from "./authorization.ts"
 import { failureResult } from "./results.ts"
 import { ToolError } from "./errors.ts"
+import {
+  RequestLifetimes,
+  boundedInput,
+  type Operation,
+} from "./request-boundary.ts"
 
-/** Bounded walk BEFORE canonicalization/schema diagnostics. No arbitrary keys,
- * values, validation issues or exception text are returned to the caller. */
-function boundedInput(value: unknown) {
-  let elements = 0
-  let textUnits = 0
-  const seen = new Set<object>()
-  const walk = (v: unknown, depth: number) => {
-    if (++elements > 100 || depth > 16) throw new ToolError("VALIDATION_FAILED")
-    if (typeof v === "string") {
-      textUnits += v.length
-      if (textUnits > LIMITS.request) throw new ToolError("VALIDATION_FAILED")
-    } else if (v && typeof v === "object") {
-      if (seen.has(v)) throw new ToolError("VALIDATION_FAILED")
-      seen.add(v)
-      for (const key of Object.keys(v)) {
-        textUnits += key.length
-        if (textUnits > LIMITS.request) throw new ToolError("VALIDATION_FAILED")
-        walk((v as Record<string, unknown>)[key], depth + 1)
-      }
-    }
-  }
-  walk(value, 0)
-  if (utf8Bytes(canonicalJson(value)) > LIMITS.request)
-    throw new ToolError("VALIDATION_FAILED")
-}
-
-/** Supported SDK Transport composition, not mutation of McpServer/SDK methods.
- * The bare SDK is deliberately not returned: every connection uses this guard.
- * This guards decoded MCP messages, NOT HTTP parsing/TLS/Origin or OAuth itself. */
+/** Public Transport composition. Internal SDK IDs never repeat; original client
+ * request IDs are restored on the wire. No business/data IDs change. */
 export function guardedConnection(
   server: McpServer,
   deps: Dependencies,
   config: ServerConfig,
 ) {
-  const authorized = new Map<RequestId, VerifiedPrincipal>()
-  const pending = new Set<RequestId>()
+  const lives = new RequestLifetimes()
   let connected = false
+  let closeInner: (() => Promise<void>) | undefined
+  let cancelSdk: ((op: Operation) => void) | undefined
   return {
-    principal(id: RequestId) {
-      const p = authorized.get(id)
-      if (!p) throw new ToolError("SCOPE_REQUIRED")
-      return p
+    async run(
+      context: ServerContext,
+      handler: (p: VerifiedPrincipal) => Promise<CallToolResult>,
+    ) {
+      const op = lives.bySdk.get(String(context.mcpReq.id))
+      if (!op || !op.tool || !lives.current(op))
+        throw new ToolError("SCOPE_REQUIRED")
+      op.work++
+      const aborted = () => lives.cancel(op)
+      context.mcpReq.signal.addEventListener("abort", aborted, { once: true })
+      op.dispose.push(() =>
+        context.mcpReq.signal.removeEventListener("abort", aborted),
+      )
+      try {
+        if (op.cancelled || context.mcpReq.signal.aborted) {
+          lives.cancel(op)
+          cancelSdk?.(op) // Admission-time cancellation may predate the SDK controller.
+          throw new ToolError("SCOPE_REQUIRED")
+        }
+        const principal = op.principal
+        if (!principal) throw new ToolError("SCOPE_REQUIRED")
+        return await handler(principal)
+      } finally {
+        op.sdkPending = false
+        lives.settledWork(op) // Cancel does not release still-running dependency work.
+      }
     },
     async connect(inner: Transport) {
-      if (connected) throw new Error("One guarded connection per factory")
+      if (connected || lives.closed)
+        throw new Error("One guarded connection per factory")
       connected = true
-      const transport: Transport = {
+      let closePromise: Promise<void> | undefined
+      let transport: Transport
+      const report = (message: string) =>
+        transport.onerror?.(new Error(message))
+      const end = () => {
+        if (lives.closed) return
+        lives.close()
+        transport.onclose?.() // Also abort SDK controllers if inner.close rejects.
+      }
+      closeInner = () => {
+        end() // Terminal BEFORE awaiting the underlying transport.
+        closePromise ??= Promise.resolve()
+          .then(() => inner.close())
+          .catch(() => {
+            report("Transport close failed")
+            throw new Error("Transport close failed")
+          })
+        return closePromise
+      }
+      const terminate = (message: string) => {
+        report(message)
+        void closeInner!().catch(() => {}) // Failure is already reported safely.
+      }
+      cancelSdk = (op) => {
+        if (!lives.closed && op.forwarded)
+          transport.onmessage?.({
+            jsonrpc: "2.0",
+            method: "notifications/cancelled",
+            params: { requestId: op.sdkId, reason: "Request cancelled" },
+          })
+      }
+      const cancel = (op: Operation) => {
+        lives.cancel(op)
+        cancelSdk?.(op)
+      }
+      transport = {
         get sessionId() {
           return inner.sessionId
         },
@@ -73,57 +112,91 @@ export function guardedConnection(
         setSupportedProtocolVersions: (versions) =>
           inner.setSupportedProtocolVersions?.(versions),
         async send(message, options) {
-          if (
-            !("method" in message) &&
-            "id" in message &&
-            message.id !== null &&
-            message.id !== undefined
-          ) {
-            authorized.delete(message.id)
-            pending.delete(message.id)
+          if (lives.closed) throw new Error("Transport closed")
+          const response = !("method" in message) && "id" in message
+          const op = response ? lives.bySdk.get(String(message.id)) : undefined
+          if (response && !op && lives.isInternal(message.id)) return // Retired late completion.
+          if (op && (!lives.current(op) || op.cancelled)) {
+            lives.replied(op)
+            return
           }
-          await inner.send(message, options)
+          const related = options?.relatedRequestId
+          const parent =
+            related === undefined ? undefined : lives.bySdk.get(String(related))
+          if (related !== undefined && lives.isInternal(related) && !parent)
+            return
+          if (parent && (!lives.current(parent) || parent.cancelled)) return
+          try {
+            await inner.send(
+              op ? { ...message, id: op.wireId } : message,
+              parent
+                ? { ...options, relatedRequestId: parent.wireId }
+                : options,
+            )
+          } catch {
+            report("Transport send failed")
+            await closeInner!().catch(() => {})
+            throw new Error("Transport send failed")
+          } finally {
+            if (op) lives.replied(op)
+          }
         },
-        async close() {
-          pending.clear()
-          authorized.clear()
-          await inner.close()
-        },
+        close: () => closeInner!(),
         async start() {
-          inner.onclose = () => {
-            pending.clear()
-            authorized.clear()
-            transport.onclose?.()
-          }
-          inner.onerror = () =>
-            transport.onerror?.(new Error("Transport failure"))
+          inner.onclose = end
+          inner.onerror = () => terminate("Transport failure")
           inner.onmessage = (message, extra) => {
-            if (!("method" in message) || message.method !== "tools/call") {
+            if (lives.closed) return
+            if (!("method" in message)) {
               transport.onmessage?.(message, extra)
               return
             }
-            const id = "id" in message ? message.id : undefined
-            if (
-              (typeof id !== "string" && typeof id !== "number") ||
-              (typeof id === "string" && id.length > 128) ||
-              (typeof id === "number" && !Number.isSafeInteger(id)) ||
-              pending.has(id) ||
-              pending.size >= 32
-            ) {
-              // Bound in-flight work before any async dependency; no reflected ID/input.
-              void transport
-                .close()
-                .catch(() => transport.onerror?.(new Error("Transport closed")))
+            if (message.method === "notifications/cancelled") {
+              const parsed = CancelledNotificationSchema.safeParse(message)
+              if (
+                parsed.success &&
+                parsed.data.params.requestId !== undefined
+              ) {
+                const op = lives.byWire.get(parsed.data.params.requestId)
+                if (op) cancel(op)
+              }
               return
             }
-            pending.add(id)
+            if (!("id" in message)) {
+              transport.onmessage?.(message, extra)
+              return
+            }
+            const tool = message.method === "tools/call"
+            let op: Operation
+            try {
+              op = lives.admit(message.id, tool)
+            } catch {
+              terminate("Invalid request lifetime")
+              return
+            }
+            const forward = () => {
+              op.forwarded = true
+              op.sdkPending = tool
+              transport.onmessage?.({ ...message, id: op.sdkId }, extra)
+            }
+            if (!tool) {
+              forward()
+              return
+            } // Current public resources have no private dependency work.
+            const signal = extra?.request?.signal
+            const aborted = () => cancel(op)
+            signal?.addEventListener("abort", aborted, { once: true })
+            op.dispose.push(() => signal?.removeEventListener("abort", aborted))
+            if (signal?.aborted) cancel(op)
             const incoming = message as unknown as {
               params?: { name?: unknown }
             }
             const name = toolNames.find((n) => n === incoming.params?.name)
             void (async () => {
               try {
-                const p = await authorize(name, extra, deps, config)
+                if (!lives.current(op) || op.cancelled) return
+                const principal = await authorize(name, extra, deps, config)
+                if (!lives.current(op) || op.cancelled) return
                 boundedInput(message)
                 const request = CallToolRequestSchema.safeParse(message)
                 if (
@@ -133,35 +206,45 @@ export function guardedConnection(
                     .success
                 )
                   throw new ToolError("VALIDATION_FAILED")
-                if (!pending.has(id)) return // Connection closed during authorization.
-                authorized.set(id, p)
-                transport.onmessage?.(message, extra)
+                op.principal = principal
+                forward()
               } catch (error) {
-                pending.delete(id)
-                authorized.delete(id)
+                if (!lives.current(op) || op.cancelled) return
                 const result = server.server.projectCallToolResult(
                   failureResult(name, error, config),
-                  // The failure branch is always an object. This direct transport
-                  // response has not passed Protocol's encodeResult path; do not
-                  // apply the success union's non-object-root compatibility wrap.
                   undefined,
                 )
-                await inner.send(
-                  { jsonrpc: "2.0", id, result },
-                  { relatedRequestId: id },
+                await transport.send(
+                  { jsonrpc: "2.0", id: op.sdkId, result },
+                  { relatedRequestId: op.sdkId },
                 )
+              } finally {
+                if (!op.forwarded) lives.replied(op)
+                lives.settledWork(op)
               }
-            })().catch(() =>
-              transport.onerror?.(new Error("Tool request failed")),
-            )
+            })().catch(() => terminate("Tool request failed"))
           }
-          await inner.start()
+          try {
+            await inner.start()
+          } catch {
+            terminate("Transport start failed")
+            throw new Error("Transport start failed")
+          }
         },
       }
-      await server.connect(transport)
+      try {
+        await server.connect(transport)
+      } catch {
+        await closeInner().catch(() => {})
+        throw new Error("Transport connection failed")
+      }
     },
     async close() {
-      await server.close()
+      if (closeInner) await closeInner()
+      else {
+        lives.close()
+        await server.close()
+      }
     },
   }
 }

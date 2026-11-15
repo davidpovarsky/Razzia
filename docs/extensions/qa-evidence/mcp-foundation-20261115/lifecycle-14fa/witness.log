@@ -1,0 +1,2 @@
+PASS public surface and reentry; two overlapping valid reads, reverse authorization completion, exact trusted contexts, owner pairing and one charge per read
+PASS overlapping authorized identical save requests, one synthetic adapter effect and equal delivery data

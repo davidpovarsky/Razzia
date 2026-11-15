@@ -69,12 +69,8 @@ export function createTadazzMcpServer(
       name,
       settings,
       async (args: unknown, context: ServerContext) =>
-        dispatch(
-          name,
-          args,
-          connection.principal(context.mcpReq.id),
-          deps,
-          config,
+        connection.run(context, (principal) =>
+          dispatch(name, args, principal, deps, config),
         ),
     )
   }

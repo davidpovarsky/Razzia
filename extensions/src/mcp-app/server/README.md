@@ -16,8 +16,12 @@ Bounded input checks and strict schemas reject invalid tool names/arguments with
 safe contract errors. Discovery retains strict schemas; valid calls then execute
 the SDK's own validation/dispatch. Public projectCallToolResult retains wire-era
 projection for intercepted errors. No SDK private method is replaced or modified.
-Each connection holds at most32 pending tool calls and binds authorization to its
-request ID, clearing it on response/close. Duplicate IDs close the connection.
+Each connection holds at most32 request lifetimes. Cancelled verification/handler
+work stays counted until settled. SDK abort signals and admission-time cancellation
+retire authority without rolling back side effects. Close is terminal before the
+underlying transport settles, including failure. Unique internal SDK request IDs
+isolate late completions from reused client IDs; original client IDs are restored
+on the wire. Duplicate active IDs close only their owning connection.
 This decoded-message boundary does not implement HTTP body/Origin/TLS validation.
 The ui resource is an empty noninteractive placeholder, not a fake game preview.
 No real identity, private draft repository, account storage, renderer or download
@@ -40,7 +44,7 @@ Injected test export delivery is not actual account or download acceptance.
 Authoring calls actual public core tadaShowV1Schema/preflight converters, with
 narrower UTF8/card/question/text/media/settings/default policy. Conversion is
 validation only; freshly random native IDs are not persisted or advertised as
-stable. SB owns preview identity-rule1 and the executable port; native timeline
+stable. SB owns preview identity and the executable port; native timeline
 UUID validation stays unchanged. The counterexample test illustrates that boundary.
 
 M2 owns the one canonical preview identity-envelope serializer; SB normalization,
@@ -77,6 +81,12 @@ acceptance. Focused cases cover discovery/resources, validated5Q draft/Q3 edit,
 CAS conflict, duplicate keys, A/B isolation/revoked replay, invalid identity,
 missing real adapters, schema/settings/media denial, ordinary export delegation,
 canonical envelope and preview-prefix/native-UUID incompatibility.
+
+Private Node checks use tests/server/_.nodecheck.ts. The original8 suites retain
+their exact bytes across rename, and the parent Vitest src/\**/_.test.ts glob no
+longer selects them. Lifecycle checks add cancellation, close/send failure,
+bounded unsettled work, duplicate/reused IDs and independent factory cases.
+Shared Vitest configuration and parent test scripts remain unchanged.
 
 Current commands, failed attempts and final validation results are retained in
 docs/extensions/qa-evidence/mcp-foundation-20261115. Foundation test results do
