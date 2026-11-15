@@ -8,4 +8,5 @@ for(const item of manifest.files){
   if(!path.startsWith(root+sep)||!lstatSync(path).isFile()||realpathSync(path)!==path||bytes.length!==item.bytes||createHash("sha256").update(bytes).digest("hex")!==item.sha256)throw Error("Changed authority overlay input")
 }
 if(realpathSync("/delta/node_modules")!=="/work/extensions/node_modules")throw Error("Dependencies must be verified S02 read-only workspace")
+if(realpathSync("/delta/package.json")!=="/work/package.json")throw Error("Overlay must retain the verified ESM package boundary; no split account/Registry instances")
 console.log(JSON.stringify({status:"AUTHORITY_OVERLAY_HASHES_VERIFIED",sha:manifest.review_sha,files:manifest.files.length,accepted_core:manifest.accepted_core}))

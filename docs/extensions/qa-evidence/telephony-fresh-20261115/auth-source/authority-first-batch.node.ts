@@ -163,14 +163,17 @@ test("AUTH-02 hash-only lost/reordered delivery, expected-version rotation and r
 test("AUTH-04 factory close during real manager preparation prevents initialization", async () => {
   const r = await setup("close-preparation"), before = readdirSync(r.root)
   const original = NativeAccountAuthority.prototype.prepareManager
+  let preparedCount = 0
   try {
     NativeAccountAuthority.prototype.prepareManager = async function (...args) {
       const prepared = await original.apply(this, args)
+      preparedCount++
       r.factory.close()
       return prepared
     }
     await assert.rejects(r.factory.initializeAuthority(session.token, r.game.gameId))
   } finally { NativeAccountAuthority.prototype.prepareManager = original }
+  assert.equal(preparedCount, 1)
   assert.deepEqual(readdirSync(r.root), before)
   assert.deepEqual(r.counters, { root: 0, nativeJoin: 0 })
   observations.push({ case: "AUTH-04", actualManagerPrepared: true, postCloseInitialization: false })
