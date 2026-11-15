@@ -1,0 +1,11 @@
+{
+  "command": [
+    "sh",
+    "-c",
+    "node --version; pnpm --version; uname -m; cat /proc/net/route; cat /sys/fs/cgroup/memory.max; cat /sys/fs/cgroup/cpu.max"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "f582efcb9f65f4bb9fa22b2550b80877ed5da0858e4753e00eb1a2d004fcca6e",
+  "seconds": 0.018
+}

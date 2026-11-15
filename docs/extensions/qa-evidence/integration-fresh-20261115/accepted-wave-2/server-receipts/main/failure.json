@@ -1,0 +1,4 @@
+{
+  "error": "one or more combined scoped checks failed; preserve every separate exit/report",
+  "traceback": "Traceback (most recent call last):\n  File \"/evidence/wave-runner.py\", line 265, in <module>\n    if any(results):raise RuntimeError('one or more combined scoped checks failed; preserve every separate exit/report')\n                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: one or more combined scoped checks failed; preserve every separate exit/report\n"
+}

@@ -1,0 +1,82 @@
+[
+  {
+    "assertion_results": 26,
+    "deselected_or_pending": 0,
+    "exit": 0,
+    "expected_deselected": 0,
+    "expected_passed": 26,
+    "failed": 0,
+    "label": "stage-metadata",
+    "passed": 26
+  },
+  {
+    "assertion_results": 86,
+    "deselected_or_pending": 0,
+    "exit": 0,
+    "expected_deselected": 0,
+    "expected_passed": 86,
+    "failed": 0,
+    "label": "recovery-original",
+    "passed": 86
+  },
+  {
+    "assertion_results": 14,
+    "deselected_or_pending": 0,
+    "exit": 0,
+    "expected_deselected": 0,
+    "expected_passed": 14,
+    "failed": 0,
+    "label": "recovery-review",
+    "passed": 14
+  },
+  {
+    "assertion_results": 35,
+    "deselected_or_pending": 31,
+    "exit": 0,
+    "expected_deselected": 31,
+    "expected_passed": 4,
+    "failed": 0,
+    "label": "recovery-native-media",
+    "passed": 4
+  },
+  {
+    "assertion_results": 1,
+    "deselected_or_pending": 0,
+    "exit": 0,
+    "expected_deselected": 0,
+    "expected_passed": 1,
+    "failed": 0,
+    "label": "recovery-package-stage",
+    "passed": 1
+  },
+  {
+    "assertion_results": 10,
+    "deselected_or_pending": 2,
+    "exit": 0,
+    "expected_deselected": 2,
+    "expected_passed": 8,
+    "failed": 0,
+    "label": "recovery-process-media",
+    "passed": 8
+  },
+  {
+    "assertion_results": 0,
+    "deselected_or_pending": 0,
+    "exit": 1,
+    "expected_deselected": 0,
+    "expected_passed": 5,
+    "failed": 0,
+    "label": "api-routes",
+    "passed": 0
+  },
+  {
+    "assertion_results": 5,
+    "deselected_or_pending": 0,
+    "exit": 0,
+    "expected_deselected": 0,
+    "expected_passed": 5,
+    "failed": 0,
+    "label": "theme-installation",
+    "passed": 5
+  }
+]

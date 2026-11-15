@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/core/show-library/stage-metadata.test.ts",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/stage-metadata.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "98385da13b2d3d6a90771678111e222501a8934bdccaf5bffc3af477566d983b",
+  "seconds": 3.928
+}

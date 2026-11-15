@@ -1,0 +1,21 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions",
+    "exec",
+    "vitest",
+    "run",
+    "src/server/api/routes.test.ts",
+    "--configLoader",
+    "runner",
+    "--maxWorkers=1",
+    "--no-file-parallelism",
+    "--reporter=json",
+    "--outputFile=/evidence/api-routes.vitest.json"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "9a78334d59271624fe86eeda9eefb9916e1d67a22f4f53a1f41c2aa7c77f6f72",
+  "seconds": 4.0
+}

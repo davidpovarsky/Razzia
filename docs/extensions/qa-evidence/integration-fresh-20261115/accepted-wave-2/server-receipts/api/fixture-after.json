@@ -1,0 +1,9 @@
+{
+  "files": [
+    "extensions/quizzes/quiz-2.json",
+    "extensions/quizzes/quiz-1.json"
+  ],
+  "kind": "new owned16MiB RAM tmpfs fixture, not historical host scratch",
+  "not_a_durability_proof": true,
+  "quizzDirectoryExists": false
+}
