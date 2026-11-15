@@ -105,9 +105,9 @@
     "@types/cors@2.8.19",
     "@types/ws@8.18.2"
   ],
-  "standardInstallerValidation": "BLOCKED_OFFLINE_REGISTRY_METADATA_85e8f0d",
-  "parentTypes": "NOT_RUN_AFTER_INCOMPLETE_FROZEN_INSTALL",
-  "privateSdkChecks": "NOT_RUN_AFTER_INCOMPLETE_FROZEN_INSTALL",
+  "standardInstallerValidation": "PASS_NORMAL_FROZEN_OFFLINE_ROOT_85e8f0d",
+  "parentTypes": "PASS_TS7_COMPLETE_918_FILE_VIEW",
+  "privateSdkChecks": "PASS_PRIVATE_TYPES_AND_41_CASES_REAL_ROOT_GRAPH",
   "checkedUtc": "2026-11-15T08:13:15.586979+00:00",
   "installerAttempt85e": {
     "productHead": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
@@ -122,5 +122,33 @@
     "originalCachesPreserved": true,
     "evidence": "integrator-root-85e/RESULTS.md",
     "rawLogSha256": "90d5258c798cbdc74e5d8733de30a0c0778007360070238018fef4db54fbc32e"
+  },
+  "finalInstallerValidation85e": {
+    "productHead": "85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0",
+    "checkedUtc": "2026-11-15T09:34:40.226426+00:00",
+    "normalFrozenOfflineInstallerExit": 0,
+    "lifecycleScripts": "unchanged allowBuilds; esbuild0.27.7 and0.28.2 completed; no ignore-scripts",
+    "policyEntriesPassed": 509,
+    "packagesReusedCopied": 371,
+    "downloaded": 0,
+    "parentTypeScript": "7.0.2",
+    "parentTypesExit": 0,
+    "privateTypeScript": "5.9.3",
+    "privateTypesExit": 0,
+    "privateSdkTests": {
+      "tests": 41,
+      "pass": 41,
+      "fail": 0,
+      "skipped": 0
+    },
+    "privateReceiptReuse": "run-r6 successful fresh graph reused for run-r7 after exact installed-graph log SHA equality;5 unmodified natural parent imports added only to QA view",
+    "installedGraphLogSha256": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+    "allSourceBlobsModesUnchanged": 918,
+    "originalCachesAndFrozenMetadataUnchanged": true,
+    "validatedIndexSha256": "ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89",
+    "readonlyCacheDescriptor": "/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json",
+    "evidence": "integrator-root-85e/RESULTS.md",
+    "productionDockerBuildAndRelease": "NOT_RUN",
+    "existingFreezeGuard": "Existing raw failures preserved; not rerun"
   }
 }

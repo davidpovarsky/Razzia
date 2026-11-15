@@ -1,0 +1,12 @@
+{
+  "command": [
+    "node",
+    "--input-type=module",
+    "-e",
+    "import {createRequire} from 'node:module';import fs from 'node:fs';const expected={'@modelcontextprotocol/server':'2.4.0','@modelcontextprotocol/client':'2.4.0','@modelcontextprotocol/core':'2.4.0','@modelcontextprotocol/ext-apps':'2.1.0','@types/node':'22.10.0','typescript':'5.9.3','tsx':'4.21.0'};for(const [p,want] of Object.entries(expected)){const file=fs.realpathSync(process.cwd()+'/extensions/src/mcp-app/node_modules/'+p+'/package.json');const version=JSON.parse(fs.readFileSync(file)).version;if(version!==want)throw Error(p+' version mismatch');if(!file.startsWith(process.cwd()+'/node_modules/.pnpm/'))throw Error('package outside actual root graph');console.log(JSON.stringify({package:p,path:file,version}));}const q=createRequire(process.cwd()+'/extensions/package.json');console.log('parent-typescript',q('typescript/package.json').version);console.log('parent-node-types',q('@types/node/package.json').version);"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805",
+  "seconds": 0.093
+}

@@ -1,6 +1,23 @@
-# Frozen root installer: blocked on registry metadata
+# Frozen root installer, parent types and SDK checks: passed
 
-15 November 2026. Tested product snapshot `85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0`, branch `codex/tadazz-hq-integration-20261115`. **The ordinary frozen offline root install exited 1. Parent TypeScript, private TypeScript and the 41-case SDK suite were not run after that incomplete install.** No installed dependency graph was substituted to obtain a pass.
+15 November 2026. Tested product snapshot `85e8f0d2d8dfcacccf9b36bfe899d15c74c8a0a0`, branch `codex/tadazz-hq-integration-20261115`. **The normal frozen offline root install, parent TypeScript and private SDK checks passed on the QA server.** Node `v24.22.2`, pnpm `12.18.0`, and the existing QA image were used. No cached installed graph was substituted.
+
+| Check | Actual result |
+| --- | --- |
+| Normal root `pnpm install --offline --frozen-lockfile`, integrity enabled, unchanged policies and lifecycle allowlist | Exit 0; all 509 policy entries passed; 371 packages reused/copied, zero downloads; esbuild lifecycle scripts completed |
+| Parent TypeScript 7.0.2, complete 918-file Git source/config view | Exit 0; zero diagnostics |
+| Private TypeScript 5.9.3 on the freshly installed root workspace graph | Exit 0 |
+| Private SDK suite on that fresh graph | 41 passed; zero failures, skips or cancellations |
+
+Private SDK results from `run-r6` were reused for `run-r7` after verifying identical product SHA, root/private locks and the exact installed-graph log hash `1763021b8cbfb0ef20d952864a9cd528caa87db981955ccc377a8ef1a08f9805`. The final parent retry added five unchanged natural imports omitted from the original QA view, outside the private package. It did not change product source, dependencies, test scope or compiler settings. Both installs were ordinary fresh root installs, with empty temporary workspaces.
+
+All 918 selected Git blobs/modes, original package-cache hashes/sizes/modes/mtime/inodes and 459 frozen metadata mirrors matched after execution. The final consumer exited 0 with no OOM events. Peak active consumer memory was 2,198,347,776 bytes under 3 GiB; work tmpfs used 508,715,008 bytes and the shared metadata tmpfs used 435,142,656 bytes under their combined 1.5 GiB caps. Measured owned source/evidence/fixture blocks plus exact owned container bookkeeping totaled 22,622,208 bytes, under 64 MiB with ample headroom for small volume-option metadata; free host disk was 2,960,637,952 bytes, above the 2 GiB reserve.
+
+The read-only follow-on cache descriptor is `/home/ubuntu/tadazz-hq-qa-20261115/fixtures/integrator-root-85e-20261115-public-union/descriptor.json`. Its validated `runtime-v12/v11/index.db` SHA-256 is `ab1feb01feab44b1d2dc7c58eb6299dd24919753dd25dc16893cd5451dcdee89`, exactly matching the successfully consumed starting index. The keeper retains frozen metadata RAM for manager-assigned consumers. A 459-file, 62,574,556-byte archive streamed directly to an ignored private Windows artifact, with matching endpoint SHA-256 `6f1d6c6a60e2f7de3f11d2bf1b85ac1f6003c78f74aae8351195a2bbe896ed98`; no full metadata archive was staged on the server or committed to Git.
+
+This proves the scoped dependency/install/compiler/SDK boundary under the stated QA image. The production Dockerfile uses a different base; no full Docker build, production publish, browser/provider/device check or new freeze-guard run was performed. Existing guard failures and original product/release acceptance gates remain open. HQ Asana `1220543600361181` records the verified milestone with exact notes readback and remains open for manager disposition.
+
+The following sections preserve earlier failed attempts and their then-current blockers. `server-receipts/final-summary.json` and the `run-r6` / `run-r7` receipts are the final result.
 
 The final command was:
 
@@ -8,7 +25,7 @@ The final command was:
 pnpm install --offline --frozen-lockfile --store-dir=/work/store --package-import-method=copy --verify-store-integrity=true --reporter=append-only
 ```
 
-It recognized all seven workspace projects and reported 371 resolved, reused and added packages, with zero downloads. The unchanged supply-chain gate then failed with `ERR_PNPM_NO_OFFLINE_META` for `@babel/code-frame`. The locked manifest contains 509 package entries / 459 distinct names. A subsequent filename inventory found only 20 public registry metadata files in the existing QA image and 27 in the existing SDK fixture; 412 locked package names lack a metadata file in their combined inventory. Presence alone would still need validation against the locked version and policies. No metadata, verification provenance, timestamp or registry response was fabricated; minimum release age, integrity verification and the existing `allowBuilds` configuration were not disabled or broadened. Lifecycle completion and Docker builder parity remain unproven.
+The first attempted command recognized all seven workspace projects and reported 371 resolved, reused and added packages, with zero downloads. Its unchanged supply-chain gate failed with `ERR_PNPM_NO_OFFLINE_META` for `@babel/code-frame`. The locked manifest contains 509 package entries / 459 distinct names. A filename inventory then found only 20 public registry metadata files in the existing QA image and 27 in the existing SDK fixture; 412 locked package names lacked a metadata file in their combined inventory. Presence alone still needed validation against the locked version and policies. No metadata, verification provenance, timestamp or registry response was fabricated; minimum release age, integrity verification and the existing `allowBuilds` configuration were not disabled or broadened. Lifecycle completion was subsequently proven below; full Docker builder parity remains unproven.
 
 ## Cache comparison and source integrity
 
@@ -40,3 +57,21 @@ It reused 47 original metadata files (43,588,068 bytes) and completed 211 of 459
 The ordinary installer requests the full metadata mirror. pnpm's separate supported filtered mirror has a different key and strips version fields; this audit does not relabel filtered data as full data or change normal installer settings to obtain a pass.
 
 Next prerequisite: a revised bounded metadata capacity/representation decision, followed by the same normal frozen offline installer with all policies unchanged. Only a successful installer can unlock the actual parent TS7 and private SDK checks. No product acceptance, release, provider, browser, physical-device or existing guard gate is closed by this audit. HQ Asana `1220543600361181` was updated with both measured blockers and exact notes readback, remaining open on 15 November 2026.
+
+## Revised RAM allowance and retained partial snapshot
+
+The manager authorized one further full-metadata run with a 768 MiB metadata ceiling, a 1.5 GiB aggregate tmpfs file-data ceiling and the unchanged 3 GiB active runner limit / 0.5 CPU / 64 MiB new physical disk ceiling. A Docker-managed local-driver tmpfs volume, `integrator-root-85e-20261115-metadata-ram`, is capped at 768 MiB. Its network-none keeper, `integrator-root-85e-20261115-metadata-keeper`, stays running to retain the mount; the future consumer's separate work tmpfs is capped at another 768 MiB. No direct host system mount or global setting was changed. Shared tmpfs pages are allocated once and initially charged to the writing cgroup; charges may move to its parent when the writer exits. The keeper and later reader do not each account a second physical copy. Mount-size caps and measured host RAM margin bound data independently of that attribution.
+
+The further run retained 458 of 459 genuine mirrors. It failed only because the harness's defensive 32 MiB per-response limit rejected Vite's larger full packument, although the manager's larger aggregate limit still had room. This was an unnecessarily restrictive harness guard. Actual expanded accounting was 394,777,882 bytes; tmpfs use was 395,710,464 bytes; peak writer memory was 656,449,536 bytes, with zero OOM events. The old incomplete Vite fragment and failure receipt remain preserved. All 458 complete files remain available in RAM, with their original response hashes and receipts; no third network process was started under the two existing grants. A Vite-only repair was prepared and submitted to the manager for the explicit process-count exception. No offline consumer, archive or success is claimed for this partial snapshot.
+
+## Final completion and retained setup failures
+
+The manager authorized the exact Vite-only repair and clarified that routine retries of that already approved URL did not require a repeated permission loop. It verified and reused the 458 complete RAM files, fetched the genuine 39,037,456-byte Vite response once, and froze all 459 mirrors at 400,260,954 bytes. All 412 newly fetched response bodies retain their exact bytes, URL, receipt UTC, status, ETag and SHA-256; 47 original mirror files retain their original hashes. The reader verified those complete response-body hashes again. The old incomplete fragment remains outside the 459-file inventory and is included in measured RAM usage, not in the archive or policy input.
+
+The first archive exporter hit Python 3.11's streaming-tar API incompatibility; its 21-byte private partial and failure receipt were retained. Explicit `gzip.GzipFile` around the tar stream corrected the transport without any metadata change or server archive. The complete private archive's endpoint hashes match. The keeper retains the RAM snapshot after all network-enabled hydrators have stopped.
+
+The first consumer with complete metadata passed all 509 policy checks but failed esbuild lifecycle execution. A mode-0755 `/bin/true` copy under identical tmpfs options independently reproduced `EACCES`; mountinfo proved `noexec`. The corrected work tmpfs explicitly permits executable package binaries while retaining `nosuid`, `nodev`, no capabilities, no network and read-only roots/inputs. The subsequent normal install completed both esbuild postinstalls with the unchanged allowlist; it did not use `--ignore-scripts` or approval/policy overrides.
+
+That fresh graph passed the private compiler and all 41 SDK cases. Its parent check exposed only missing QA-view imports: `extensions/qa/site-touch.ts`, the Site/baseline Playwright configs, and the web Vite config/private-media helper. The final 918-file view adds those five unmodified Git blobs. Parent compilation then passed, with the exact same installed-graph hash; the already successful private receipts were reused rather than rerunning the 41 cases. Both the failed 913-file view and final complete-view evidence remain available.
+
+Finally, the original host-created logical index backup was preserved, and an additional backup/union made by the actual image's SQLite 3.40.1 reproduced the successful consumer's starting database hash exactly. Every original root row and SDK-only row/alias was checked verbatim, with SQLite integrity checking enabled. The runtime-matching pin is the descriptor's validated index for follow-on consumers; no original cache database/body was modified.

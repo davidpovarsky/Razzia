@@ -1,0 +1,23 @@
+{
+  "scope": "only four own byte-identical raw JSON receipts; every named raw path/content retained",
+  "events": [
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/cache-after.json",
+      "identical_content_source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/cache-before.json",
+      "sha256": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+      "bytes_preserved": 7622144
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r3/cache-before.json",
+      "identical_content_source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/cache-before.json",
+      "sha256": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+      "bytes_preserved": 7622144
+    },
+    {
+      "path": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/run-r3/cache-after.json",
+      "identical_content_source": "/home/ubuntu/tadazz-hq-qa-20261115/evidence/integrator-root-85e-20261115/cache-before.json",
+      "sha256": "d6c0776133426b9e6aa3b8f6922222324577fcd68fd79fc228b7f10e06541da2",
+      "bytes_preserved": 7622144
+    }
+  ]
+}

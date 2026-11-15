@@ -1,0 +1,29 @@
+{
+  "command": [
+    "sudo",
+    "-n",
+    "docker",
+    "run",
+    "--name",
+    "integrator-root-85e-native-exec-profile",
+    "--network",
+    "none",
+    "--cpus",
+    ".5",
+    "--memory",
+    "3g",
+    "--read-only",
+    "--cap-drop",
+    "ALL",
+    "--tmpfs",
+    "/work:rw,nosuid,nodev,size=16777216,mode=1777",
+    "--entrypoint",
+    "python3",
+    "tadazz:design-system-qa-20261110",
+    "-c",
+    "import pathlib,shutil,stat,subprocess;shutil.copy2('/bin/true','/work/probe');print('MODE',oct(pathlib.Path('/work/probe').stat().st_mode&511),flush=True);print('MOUNT',[x for x in pathlib.Path('/proc/self/mountinfo').read_text().splitlines() if ' /work ' in x],flush=True);subprocess.run(['/work/probe'],check=True)"
+  ],
+  "exit": 1,
+  "stdout": "MODE 0o755\nMOUNT ['951 942 0:115 / /work rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,size=16384k,inode64']\n",
+  "stderr": "Traceback (most recent call last):\n  File \"<string>\", line 1, in <module>\n  File \"/usr/lib/python3.11/subprocess.py\", line 548, in run\n    with Popen(*popenargs, **kwargs) as process:\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/usr/lib/python3.11/subprocess.py\", line 1024, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/usr/lib/python3.11/subprocess.py\", line 1901, in _execute_child\n    raise child_exception_type(errno_num, err_msg, err_filename)\nPermissionError: [Errno 13] Permission denied: '/work/probe'\n"
+}

@@ -1,0 +1,11 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "import shutil,subprocess,pathlib;shutil.copy2('/bin/true','/work/tmp/native-probe');print([line for line in pathlib.Path('/proc/self/mountinfo').read_text().splitlines() if ' /work ' in line]);subprocess.run(['/work/tmp/native-probe'],check=True)"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "0c55317d08fb0a195c34f82536e8fc6ccc267a33850d18135cd7fd17e869eafa",
+  "seconds": 0.084
+}

@@ -27,6 +27,34 @@ def hydrated_metadata():
             assert digest(p)==entries[m.name]['cache_sha256'];os.chmod(p,0o444)
     save('hydrated-metadata.json',{'archive_sha256':digest(archive),'files':len(entries),'expanded_bytes':expanded,'all_file_sha256_match_hydration_receipt':True,'input_archive_readonly_mount':'/metadata-input.tar.gz','prior_verification_verdicts_copied':False})
 
+def ram_metadata():
+    root=pathlib.Path('/snapshot');ready=json.loads((root/'ready.json').read_text())
+    receipt=json.loads(pathlib.Path('/metadata-receipt.json').read_text())
+    inventory=json.loads((root/'inventory.json').read_text())
+    assert ready['complete'] and receipt['complete'] and not receipt['failures']
+    assert ready['inventory_sha256']==digest(root/'inventory.json')
+    assert ready['hydration_receipt_sha256']==digest(pathlib.Path('/metadata-receipt.json'))==inventory['receipt_sha256']
+    assert receipt['allowlist_lock_sha256']==digest(pathlib.Path('/input/pnpm-lock.yaml'))
+    entries={x['cache_relative_path']:x for x in receipt['results']}
+    assert len(entries)==459 and entries=={x['cache_relative_path']:x for x in inventory['files']}
+    expanded=0;genuine_bodies=0
+    for name,entry in entries.items():
+        assert name=='https%3A+registry.npmjs.org/'+entry['package']+'.jsonl'
+        p=root/'metadata'/name;assert p.is_file() and not p.is_symlink()
+        assert digest(p)==entry['cache_sha256'] and p.stat().st_size==entry['cache_bytes']
+        if entry['source']=='https_public_registry':
+            with p.open('rb') as f:
+                header=json.loads(f.readline());h=hashlib.sha256();length=0
+                for block in iter(lambda:f.read(1024*1024),b''):h.update(block);length+=len(block)
+            assert h.hexdigest()==entry['response_sha256'] and length==entry['response_bytes'] and header.get('etag')==entry['etag']
+            genuine_bodies+=1
+        expanded+=entry['cache_bytes']
+    assert expanded<=768*1024**2 and expanded==ready['expanded_bytes']
+    cache=W/'home/.cache/pnpm/v12';cache.mkdir(parents=True)
+    (cache/'metadata-full').symlink_to(root/'metadata',target_is_directory=True)
+    save('hydrated-metadata.json',{'files':459,'expanded_bytes':expanded,'raw_https_response_bodies_verified':genuine_bodies,'inventory_sha256':digest(root/'inventory.json'),'hydration_receipt_sha256':digest(pathlib.Path('/metadata-receipt.json')),'all_file_sha256_match_hydration_receipt':True,'metadata_mount_readonly':True,'prior_verification_verdicts_copied':False})
+    return entries
+
 def digest(path, algorithm='sha256'):
     h = hashlib.new(algorithm)
     with path.open('rb') as f:
@@ -198,7 +226,7 @@ def command(label,args,cwd):
     print(label,json.dumps(result),flush=True)
     return p.returncode
 
-before=None
+before=None;ram_entries=None
 try:
     manifest=json.loads((E/'manifest.json').read_text())
     save('source-before.json',source_check(pathlib.Path('/input'),manifest))
@@ -214,14 +242,29 @@ try:
     else:save('cache-before.json',before)
     cache_union(before)
     if pathlib.Path('/metadata-input.tar.gz').exists():hydrated_metadata()
+    if pathlib.Path('/snapshot/ready.json').exists():ram_entries=ram_metadata()
+    native=command('native-work-execution',['python3','-c',"import shutil,subprocess,pathlib;shutil.copy2('/bin/true','/work/tmp/native-probe');print([line for line in pathlib.Path('/proc/self/mountinfo').read_text().splitlines() if ' /work ' in line]);subprocess.run(['/work/tmp/native-probe'],check=True)"],W/'project')
+    assert native==0,'work tmpfs cannot execute the approved native package binaries'
     assert command('versions',['sh','-c','node --version; pnpm --version; uname -m; cat /proc/net/route; cat /sys/fs/cgroup/memory.max; cat /sys/fs/cgroup/cpu.max; df -B1 /work'],W/'project')==0
     install=command('frozen-install',['pnpm','install','--offline','--frozen-lockfile','--store-dir=/work/store','--package-import-method=copy','--verify-store-integrity=true','--reporter=append-only'],W/'project')
     if install: raise RuntimeError('normal frozen offline installer failed; stop before compiler/tests')
-    command('installed-graph',['node','--input-type=module','-e',"import {createRequire} from 'node:module';import fs from 'node:fs';const expected={'@modelcontextprotocol/server':'2.4.0','@modelcontextprotocol/client':'2.4.0','@modelcontextprotocol/core':'2.4.0','@modelcontextprotocol/ext-apps':'2.1.0','@types/node':'22.10.0','typescript':'5.9.3','tsx':'4.21.0'};for(const [p,want] of Object.entries(expected)){const file=fs.realpathSync(process.cwd()+'/extensions/src/mcp-app/node_modules/'+p+'/package.json');const version=JSON.parse(fs.readFileSync(file)).version;if(version!==want)throw Error(p+' version mismatch');if(!file.startsWith(process.cwd()+'/node_modules/.pnpm/'))throw Error('package outside actual root graph');console.log(JSON.stringify({package:p,path:file,version}));}const q=createRequire(process.cwd()+'/extensions/package.json');console.log('parent-typescript',q('typescript/package.json').version);console.log('parent-node-types',q('@types/node/package.json').version);"],W/'project')
+    graph=command('installed-graph',['node','--input-type=module','-e',"import {createRequire} from 'node:module';import fs from 'node:fs';const expected={'@modelcontextprotocol/server':'2.4.0','@modelcontextprotocol/client':'2.4.0','@modelcontextprotocol/core':'2.4.0','@modelcontextprotocol/ext-apps':'2.1.0','@types/node':'22.10.0','typescript':'5.9.3','tsx':'4.21.0'};for(const [p,want] of Object.entries(expected)){const file=fs.realpathSync(process.cwd()+'/extensions/src/mcp-app/node_modules/'+p+'/package.json');const version=JSON.parse(fs.readFileSync(file)).version;if(version!==want)throw Error(p+' version mismatch');if(!file.startsWith(process.cwd()+'/node_modules/.pnpm/'))throw Error('package outside actual root graph');console.log(JSON.stringify({package:p,path:file,version}));}const q=createRequire(process.cwd()+'/extensions/package.json');console.log('parent-typescript',q('typescript/package.json').version);console.log('parent-node-types',q('@types/node/package.json').version);"],W/'project')
     save('import-inodes.json',{'installed_node_modules_device':(W/'project/node_modules').stat().st_dev,'original_cache_devices':[p.stat().st_dev for p in CACHES],'copied_into_different_filesystem':all((W/'project/node_modules').stat().st_dev!=p.stat().st_dev for p in CACHES)})
-    command('parent-types',['pnpm','--dir','extensions','exec','tsc','--noEmit','-p','tsconfig.json'],W/'project')
-    command('private-types',['pnpm','--dir','extensions/src/mcp-app','run','typecheck'],W/'project')
-    command('private-tests',['pnpm','--dir','extensions/src/mcp-app','test'],W/'project')
+    parent=command('parent-types',['pnpm','--dir','extensions','exec','tsc','--noEmit','-p','tsconfig.json'],W/'project')
+    if pathlib.Path('/prior-private/installed-graph.json').exists():
+        prior_graph=json.loads(pathlib.Path('/prior-private/installed-graph.json').read_text())
+        assert prior_graph['exit']==0 and prior_graph['log_sha256']==digest(E/'installed-graph.log')
+        reused={}
+        for label in ('private-types','private-tests'):
+            prior=json.loads((pathlib.Path('/prior-private')/(label+'.json')).read_text())
+            assert prior['exit']==0 and prior['log_sha256']==digest(pathlib.Path('/prior-private')/(label+'.log'))
+            reused[label]=prior
+        save('reused-private-results.json',{'source':'run-r6 actual freshly installed root graph','product_head':manifest['head'],'reason':'Same85e product source, unchanged root/private locks and exact installed-graph log hash. Only5 previously omitted natural parent-config imports were added to the QA view; private sources and graph unchanged. Reuse identical-SHA receipts; do not rerun41 cases.','installed_graph_sha256':digest(E/'installed-graph.log'),'results':reused})
+        private=tests=0
+    else:
+        private=command('private-types',['pnpm','--dir','extensions/src/mcp-app','run','typecheck'],W/'project')
+        tests=command('private-tests',['pnpm','--dir','extensions/src/mcp-app','test'],W/'project')
+    if any([graph,parent,private,tests]):raise RuntimeError('one or more installed-graph/compiler/private-test checks failed; see separate exits')
 except Exception as exc:
     save('failure.json',{'error':str(exc),'traceback':traceback.format_exc()})
     print(traceback.format_exc(),flush=True)
@@ -234,5 +277,11 @@ finally:
     if 'manifest' in globals():
         save('source-after.json',source_check(pathlib.Path('/input'),manifest))
         save('work-source-after.json',source_check(W/'project',manifest))
+    if ram_entries is not None:
+        changed=[name for name,entry in ram_entries.items() if digest(pathlib.Path('/snapshot/metadata')/name)!=entry['cache_sha256']]
+        save('metadata-after.json',{'files':len(ram_entries),'changed':changed});assert not changed,'FROZEN METADATA CHANGED'
     save('resource-end.json',{'tmpfs_used_bytes':(os.statvfs(W).f_blocks-os.statvfs(W).f_bfree)*os.statvfs(W).f_frsize,'memory_peak':pathlib.Path('/sys/fs/cgroup/memory.peak').read_text().strip(),'memory_events':pathlib.Path('/sys/fs/cgroup/memory.events').read_text()})
+    if pathlib.Path('/snapshot/ready.json').exists():
+        metadata=os.statvfs('/snapshot');work=os.statvfs(W)
+        save('shared-ram-accounting.json',{'metadata_tmpfs_capacity':metadata.f_blocks*metadata.f_frsize,'metadata_tmpfs_used':(metadata.f_blocks-metadata.f_bfree)*metadata.f_frsize,'work_tmpfs_capacity':work.f_blocks*work.f_frsize,'work_tmpfs_used':(work.f_blocks-work.f_bfree)*work.f_frsize,'aggregate_mount_cap':(metadata.f_blocks*metadata.f_frsize)+(work.f_blocks*work.f_frsize),'cgroup_memory_current':pathlib.Path('/sys/fs/cgroup/memory.current').read_text().strip(),'note':'Shared tmpfs pages from the exited hydrator may be charged to ancestor cgroup; not duplicated by this read-only mount. Work tmpfs is charged to this consumer; the two physical mount limits bound all file data.'})
 if (E/'failure.json').exists(): raise SystemExit(1)

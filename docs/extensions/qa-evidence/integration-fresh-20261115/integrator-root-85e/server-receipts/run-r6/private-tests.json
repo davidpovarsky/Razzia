@@ -1,0 +1,12 @@
+{
+  "command": [
+    "pnpm",
+    "--dir",
+    "extensions/src/mcp-app",
+    "test"
+  ],
+  "cwd": "/work/project",
+  "exit": 0,
+  "log_sha256": "7e3d68ef4bdbc788e315a812f1470cafc14da77f3a505a6d0eca5a353a69b62f",
+  "seconds": 27.52
+}
