@@ -1,0 +1,47 @@
+{
+  "status": "FIXTURE_ONLY_PRODUCTION_HASHES_UNCHANGED",
+  "accepted_source": "0ad2f09e25daf56dee3fa3c17d7b67b3b8407894",
+  "phase_baseline": "0754357958b52be3313b089184b5d741b2a62d29",
+  "files": [
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/contracts.ts",
+      "accepted_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "current_blob": "4f3791a501497519ba5d58a20140b29a42dbd96d",
+      "accepted_sha256": "d7ce6a8f26559598c4625d6a6d192cf2d85abd3c00f75526d89044e124b1b6b0"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/store.ts",
+      "accepted_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "current_blob": "588eaaa3b2b5750c0d0c5af7a61f8c95c9ef27b9",
+      "accepted_sha256": "bc365f05e6a3e0135322fc357a3c6c338e088c94f3ef9f48a736b1e4aa80239f"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/prototype.ts",
+      "accepted_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "current_blob": "2040cd449d86ea675a3941f8eeba31a9b7b04352",
+      "accepted_sha256": "5430ca64e15c4e01be961a338f75d290fe68cb7a5834048b96abab79045434ec"
+    },
+    {
+      "path": "extensions/src/server/phone-lifecycle-v2/game-facade.ts",
+      "accepted_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "current_blob": "a9463970319f74cb2a2e323d69454a561d6d99f8",
+      "accepted_sha256": "b4c1fdd6843d122044ef46a1e192c42bdae79d742b6cbafe342e180537afa088"
+    }
+  ],
+  "changed_paths": [
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/V2A_RESULTS.md",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/V2A_SCOPED_JOURNAL_PRE_EDIT.md",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/actual-game.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/phone-v2a-crash-child.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/phone-v2a-scoped-journal.node.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/phone-v2a.node.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/run-scoped-journal.sh",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scan-scoped-private.mjs",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-fixture.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-journal-writer-child.ts",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-tsconfig.json",
+    "docs/extensions/qa-evidence/telephony-fresh-20261115/v2a/scoped-typecheck.mjs"
+  ],
+  "old20_runtime_repeated": false,
+  "real_gateway_or_auth_implementation": false
+}

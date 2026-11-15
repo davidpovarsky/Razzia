@@ -16,12 +16,7 @@ const root = process.env.PHONE_V2A_CASE_ROOT!,
   window = process.env.PHONE_V2A_KILL_WINDOW!
 const backend = await bootActualBackend(),
   r = await backend.room()
-const request = precommit(root, "kill-registration", "+447700900901")
-writeFileSync(
-  join(root, "synthetic-case.json"),
-  JSON.stringify({ context: r.context, request }),
-  { flag: "wx", mode: 0o600 },
-)
+const request = precommit(root, r.context, "kill-registration", "+447700900901")
 let rosterId = ""
 function boundary(stage: string, result?: Receipt) {
   if (stage !== window) return

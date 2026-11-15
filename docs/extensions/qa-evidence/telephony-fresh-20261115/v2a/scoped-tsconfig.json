@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "files": [
+    "phone-v2a-scoped-journal.node.ts",
+    "scoped-journal-writer-child.ts",
+    "phone-v2a.node.ts",
+    "phone-v2a-crash-child.ts",
+    "sqlite-cas-child.ts"
+  ],
+  "include": []
+}

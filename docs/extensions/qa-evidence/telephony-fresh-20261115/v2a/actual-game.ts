@@ -1,19 +1,12 @@
 // Node-only QA helper. Not discovered by Vitest or imported by production.
 import assert from "node:assert/strict"
 import { randomBytes } from "node:crypto"
-import {
-  fsyncSync,
-  closeSync,
-  openSync,
-  mkdirSync,
-  mkdtempSync,
-  writeFileSync,
-  writeSync,
-} from "node:fs"
+import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs"
 import { join, resolve } from "node:path"
 import { Server as HttpServer } from "node:http"
 import type { VerifiedServiceContext } from "../../../../../extensions/src/server/phone-lifecycle-v2/contracts"
 import { RealGameFacade } from "../../../../../extensions/src/server/phone-lifecycle-v2/game-facade"
+import { writeScopedPrecommit } from "./scoped-journal-fixture"
 
 export async function bootActualBackend() {
   assert.equal(process.env.PHONE_V2A_GRANTED, "unmounted-synthetic-prototype")
@@ -213,30 +206,21 @@ export async function bootActualBackend() {
 // Fixture-only precommit. Actual gateway journal/provisioning is NOT implemented.
 export function precommit(
   root: string,
+  context: VerifiedServiceContext,
   requestId: string,
   phone: string,
   predecessor = 0,
   reference = requestId,
 ) {
-  const request = {
-    requestId,
-    providerReference: reference,
-    phone,
-    expectedPredecessor: predecessor,
-    capability: randomBytes(32).toString("hex"),
-  }
-  const fd = openSync(join(root, requestId + ".synthetic-journal"), "wx", 0o600)
-  try {
-    writeSync(fd, JSON.stringify(request))
-    fsyncSync(fd)
-  } finally {
-    closeSync(fd)
-  }
-  const directory = openSync(root, "r")
-  try {
-    fsyncSync(directory)
-  } finally {
-    closeSync(directory)
-  }
-  return request
+  return writeScopedPrecommit(
+    root,
+    context,
+    {
+      requestId,
+      providerReference: reference,
+      phone,
+      expectedPredecessor: predecessor,
+    },
+    (candidate) => candidate === context,
+  )
 }

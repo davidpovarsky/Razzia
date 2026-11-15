@@ -18,6 +18,7 @@ import {
   type VerifiedServiceContext,
 } from "../../../../../extensions/src/server/phone-lifecycle-v2/contracts"
 import { bootActualBackend, precommit } from "./actual-game"
+import { reopenScopedPrecommit } from "./scoped-journal-fixture"
 
 const backend = await bootActualBackend(),
   observations: unknown[] = []
@@ -150,8 +151,8 @@ test("V2A-10 accepted B at zero wins server precedence; late A conflicts without
     store = new PrototypeStore(root, r.context, valid)
   try {
     const p = new LifecyclePrototype(store, r.facade, valid)
-    const a = precommit(root, "delayed-A", "+447700900110"),
-      b = precommit(root, "winner-B", "+447700900110")
+    const a = precommit(root, r.context, "delayed-A", "+447700900110"),
+      b = precommit(root, r.context, "winner-B", "+447700900110")
     const B = p.register(r.context, b)
     assert.equal(B.ok, true)
     const before = r.snapshot(B.rosterPlayerId!)
@@ -181,7 +182,7 @@ test("V2A-11 removed real roster denies cached registration and poll receipts", 
     store = new PrototypeStore(root, r.context, valid)
   try {
     const p = new LifecyclePrototype(store, r.facade, valid),
-      a = precommit(root, "removed-A", "+447700900112")
+      a = precommit(root, r.context, "removed-A", "+447700900112")
     const A = p.register(r.context, a)
     assert.equal(A.ok, true)
     const poll = op(a, A, "poll", "cached-poll")
@@ -236,7 +237,7 @@ test("V2A-01 mandatory authority denies before filesystem; live revocation/actio
   const store = new PrototypeStore(root, r.context, verify)
   try {
     const p = new LifecyclePrototype(store, r.facade, verify),
-      a = precommit(root, "authority-A", "+447700900101")
+      a = precommit(root, r.context, "authority-A", "+447700900101")
     const receipt = p.register(r.context, a)
     assert.equal(receipt.ok, true)
     const before = r.snapshot(receipt.rosterPlayerId!)
@@ -300,7 +301,7 @@ test(
     }
     try {
       const p = new LifecyclePrototype(store, r.facade, valid),
-        a = precommit(root, "score-A", "+447700900102")
+        a = precommit(root, r.context, "score-A", "+447700900102")
       const A = p.register(r.context, a)
       assert.equal(A.ok, true)
       assert.deepEqual(p.register(r.context, a), A)
@@ -338,7 +339,7 @@ test(
       )
       const before = r.snapshot(A.rosterPlayerId!)
       assert.equal(before.points, 1000)
-      const b = precommit(root, "score-B", "+447700900102", 1)
+      const b = precommit(root, r.context, "score-B", "+447700900102", 1)
       const B = p.register(r.context, b)
       assert.equal(B.ok, true)
       assert.equal(B.generation, 2)
@@ -435,7 +436,7 @@ test("V2A-03 one adopted provider/service/issuer/executor per actual Game; legac
     assert.equal(legacy.ok, true)
     const before = r.snapshot(legacy.rosterPlayerId!)
     const p = new LifecyclePrototype(store, r.facade, valid),
-      a = precommit(root, "foreign-blocked", "+447700900103")
+      a = precommit(root, r.context, "foreign-blocked", "+447700900103")
     const result = p.register(r.context, a)
     assert.equal(result.status, "untracked_existing_binding")
     fieldsAbsent(result)
@@ -469,7 +470,7 @@ test("V2A-04 revocation after durable reservation denies projection and leaves b
     store = new RevokeAfterReservation(root, r.context, verify)
   try {
     const p = new LifecyclePrototype(store, r.facade, verify),
-      a = precommit(root, "revoke-in-wait", "+447700900104")
+      a = precommit(root, r.context, "revoke-in-wait", "+447700900104")
     const result = p.register(r.context, a)
     assert.equal(result.status, "service_denied")
     assert.equal(r.game.players.length, 0)
@@ -507,7 +508,12 @@ test("V2A-05 actual admission refusal publishes no ACTIVE credential; generic er
   try {
     const billing = billingModule.requireBilling(),
       p = new LifecyclePrototype(store, r.facade, valid)
-    const a = precommit(root, "real-admission-denied", "+447700900105")
+    const a = precommit(
+      root,
+      r.context,
+      "real-admission-denied",
+      "+447700900105",
+    )
     const result = p.register(r.context, a)
     assert.equal(result.status, "admission_outcome_unknown")
     fieldsAbsent(result)
@@ -560,7 +566,7 @@ test(
     }
     try {
       let p = new LifecyclePrototype(store, r.facade, valid),
-        a = precommit(root, "unknown-answer-A", "+447700900106")
+        a = precommit(root, r.context, "unknown-answer-A", "+447700900106")
       const A = p.register(r.context, a)
       assert.equal(A.ok, true)
       await r.start()
@@ -589,6 +595,7 @@ test(
         )
       const replacement = precommit(
         root,
+        r.context,
         "unknown-answer-B",
         "+447700900106",
         1,
@@ -672,7 +679,7 @@ test(
     const children: ChildProcess[] = [],
       ready: Promise<any>[] = []
     for (const id of ["CAS-A", "CAS-B"]) {
-      const input = precommit(root, id, "+447700900107"),
+      const input = precommit(root, r.context, id, "+447700900107"),
         file = join(root, id + ".json")
       writeFileSync(file, JSON.stringify({ root, context: r.context, input }), {
         flag: "wx",
@@ -737,9 +744,20 @@ for (const window of [
         const [code, signal] = await exited
         assert.equal(code, null)
         assert.equal(signal, "SIGKILL")
-        const { context, request } = JSON.parse(
-          readFileSync(join(root, "synthetic-case.json"), "utf8"),
-        ) as { context: VerifiedServiceContext; request: RegistrationInput }
+        // Independent expected scope came from the actual child fixture over
+        // IPC, not an omitted journal field or a secondary case JSON fallback.
+        const context = boundary.context as VerifiedServiceContext
+        const { request } = reopenScopedPrecommit(
+          root,
+          context,
+          {
+            requestId: "kill-registration",
+            providerReference: "kill-registration",
+            phone: "+447700900901",
+            expectedPredecessor: 0,
+          },
+          (candidate) => candidate === context,
+        )
         const reopened = new PrototypeStore(root, context, valid)
         try {
           const snapshot = inspect(root, context)
@@ -839,7 +857,7 @@ test("V2A-09 terminal generation survives reopen; hash-only DB and private fixtu
   const r = await backend.room(),
     root = backend.privateRoot()
   let store = new PrototypeStore(root, r.context, valid)
-  const a = precommit(root, "terminal-A", "+447700900109")
+  const a = precommit(root, r.context, "terminal-A", "+447700900109")
   try {
     let p = new LifecyclePrototype(store, r.facade, valid)
     const A = p.register(r.context, a)
@@ -850,7 +868,7 @@ test("V2A-09 terminal generation survives reopen; hash-only DB and private fixtu
     store = new PrototypeStore(root, r.context, valid)
     p = new LifecyclePrototype(store, r.facade, valid)
     assert.equal(p.register(r.context, a).status, "registration_retired")
-    const b = precommit(root, "terminal-B", "+447700900109", 1)
+    const b = precommit(root, r.context, "terminal-B", "+447700900109", 1)
     assert.equal(p.register(r.context, b).status, "binding_pending_unknown")
     const noSecret = p.register(r.context, { ...a, capability: "" })
     assert.equal(noSecret.status, "invalid_capability")
