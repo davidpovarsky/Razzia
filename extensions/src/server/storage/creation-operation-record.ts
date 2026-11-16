@@ -213,11 +213,17 @@ export function readOperation(
   if (
     target !== null &&
     (!target ||
+      typeof target.quizId !== "string" ||
       !ID.test(target.quizId) ||
+      typeof target.nonce !== "string" ||
       !NONCE.test(target.nonce) ||
+      typeof target.logicalDigest !== "string" ||
       !HASH.test(target.logicalDigest) ||
+      typeof target.baseSha256 !== "string" ||
       !HASH.test(target.baseSha256) ||
-      (target.sidecarSha256 !== null && !HASH.test(target.sidecarSha256)))
+      (target.sidecarSha256 !== null &&
+        (typeof target.sidecarSha256 !== "string" ||
+          !HASH.test(target.sidecarSha256))))
   ) {
     throw new Error("Invalid native operation target")
   }
