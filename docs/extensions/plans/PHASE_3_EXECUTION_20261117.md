@@ -149,8 +149,13 @@ the next suite. Production PID949376/start12November/OOMfalse is unchanged.
 Host free disk is 1,358,176,256 bytes; approximately10 GiB RAM available.
 Existing `/evidence` is a writable QA-only ext4 bind; `/tmp` remains tmpfs.
 No new container/mount/privilege/service is needed for a tiny synthetic ext4
-fixture. Baseline recovery regression has been launched sequentially with
-nice19/one CPU/1024 MiB heap/150s timeout; its result is pending.
+fixture. Baseline recovery regression ran sequentially with
+nice19/one CPU/1024 MiB heap/150s timeout: **44/44 PASS** (three files, exit0).
+Receipt `server-recovery-baseline.json`; three local test-file SHA256 hashes
+match the remote receipt. Correction to its broad qualification label: only
+creation-scope fixtures select `C1_FIXTURE_ROOT`; journal fixtures use
+`os.tmpdir()` (tmpfs). This is mixed-filesystem functional regression, NOT proof
+that all 44 cases ran on ext4 or any power-loss/durability acceptance.
 
 ### Remaining queue and independence
 
