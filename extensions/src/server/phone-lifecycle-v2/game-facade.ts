@@ -10,6 +10,42 @@ import {
   type VerifiedServiceContext,
 } from "./contracts"
 
+// Non-mutating guard reasons returned before RoundManager.selectAnswer runs.
+// Everything else (including "rejected_by_engine") stays answer_outcome_unknown
+// so post-mutation ambiguity fails closed rather than falsely settling.
+const DETERMINISTIC_ANSWER_REJECTIONS = new Set([
+  "phone_protocol_required",
+  "scene_active",
+  "game_paused",
+  "no_active_question",
+  "unsupported_question_type",
+  "invalid_answer_index",
+  "not_accepting_answers",
+  "player_not_joined",
+  "stale_call",
+  "player_not_found",
+  "duplicate_answer",
+])
+
+function answerStatus(
+  answer: ReturnType<PublicPhoneGame["submitPhoneAnswerByRosterId"]>,
+  isSupportedOnPstn: boolean,
+): string {
+  if (answer.accepted) {
+    return "accepted"
+  }
+
+  if (answer.reason && DETERMINISTIC_ANSWER_REJECTIONS.has(answer.reason)) {
+    return answer.reason
+  }
+
+  if (!isSupportedOnPstn && answer.reason !== "rejected_by_engine") {
+    return "unsupported_question_type"
+  }
+
+  return "answer_outcome_unknown"
+}
+
 export type PublicPhoneGame = Pick<
   Game,
   | "gameId"
@@ -130,7 +166,7 @@ export class RealGameFacade {
       )
       return {
         ok: answer.accepted,
-        status: answer.accepted ? "accepted" : "answer_outcome_unknown",
+        status: answerStatus(answer, state.isSupportedOnPstn),
         accepted: answer.accepted,
         epoch: answer.epoch,
       }
