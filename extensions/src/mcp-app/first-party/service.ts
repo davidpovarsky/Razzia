@@ -627,24 +627,24 @@ async function runOAuthWithDeadline(params: {
 }> {
   const { oauthFetch, scopedRequest, controller, timeoutMs } = params
   let timedOut = false
-  let removeAbort: (() => void) | null = null
+  let resolveInterrupt: ((value: Response) => void) | null = null
+  const onAbort = () => {
+    resolveInterrupt?.(
+      timedOut
+        ? securityJson(504, "HTTP_REJECTED")
+        : securityJson(400, "REQUEST_ABORTED"),
+    )
+  }
 
   const interrupted = new Promise<Response>((resolve) => {
-    const onAbort = () => {
-      resolve(
-        timedOut
-          ? securityJson(504, "HTTP_REJECTED")
-          : securityJson(400, "REQUEST_ABORTED"),
-      )
-    }
-
-    controller.signal.addEventListener("abort", onAbort, { once: true })
-    removeAbort = () => controller.signal.removeEventListener("abort", onAbort)
-
-    if (controller.signal.aborted) {
-      onAbort()
-    }
+    resolveInterrupt = resolve
   })
+
+  controller.signal.addEventListener("abort", onAbort, { once: true })
+
+  if (controller.signal.aborted) {
+    onAbort()
+  }
 
   const timer = setTimeout(() => {
     timedOut = true
@@ -659,7 +659,7 @@ async function runOAuthWithDeadline(params: {
     return { response, settled, timedOut }
   } finally {
     clearTimeout(timer)
-    removeAbort?.()
+    controller.signal.removeEventListener("abort", onAbort)
   }
 }
 
