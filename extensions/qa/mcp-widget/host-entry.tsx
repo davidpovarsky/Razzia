@@ -4,8 +4,16 @@ import {
   AppBridge,
   PostMessageTransport,
 } from "../../src/mcp-app/node_modules/@modelcontextprotocol/ext-apps/dist/src/app-bridge.js"
-import { retainedSelection } from "./retained-schema.ts"
-const id = "widget_draft_A_123456789012"
+import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
+import { retainedPacket, retainedSelection } from "./retained-schema.ts"
+
+type PreviewMode = "retained" | "tampered" | "stale" | "unavailable"
+type RetainedEntry = ReturnType<typeof retainedPacket.parse>["results"][number]
+
+const searchParams = new URL(window.location.href).searchParams
+const candidateParam = searchParams.get("candidate")
+const previewParam = searchParams.get("preview")
+let id = "widget_draft_A_123456789012"
 const summary = {
   title: "Private example",
   cardCount: 1,
@@ -21,6 +29,55 @@ let revision = 1,
 const calls: string[] = []
 let updatesHeld = false
 const heldUpdates = new Set<() => void>()
+let previewsHeld = false
+const heldPreviews = new Set<() => void>()
+let previewMode: PreviewMode =
+  previewParam === "tampered" ||
+  previewParam === "stale" ||
+  previewParam === "unavailable"
+    ? previewParam
+    : "retained"
+let retainedEntries: RetainedEntry[] | null = null
+
+async function loadRetainedEntries() {
+  if (retainedEntries) {
+    return retainedEntries
+  }
+
+  const response = await fetch("/qa/retained-tool-packet")
+
+  if (!response.ok) {
+    return null
+  }
+
+  const raw: unknown = await response.json()
+  retainedEntries = retainedPacket.parse(raw).results
+
+  return retainedEntries
+}
+
+function candidateForRevision(
+  entry: RetainedEntry,
+  targetRevision: number,
+): RetainedEntry["result"] {
+  const cloned = structuredClone(entry.result)
+  const candidate = cloned._meta["tadazz/preview-candidate-v2"]
+
+  if (
+    targetRevision === entry.selection.expectedRevision &&
+    candidate.revision === targetRevision
+  ) {
+    return cloned
+  }
+
+  candidate.revision = targetRevision
+  candidate.input.frame.revision = targetRevision
+  candidate.input.themeBinding.draftRevision = targetRevision
+  candidate.inputDigest = hashJson(candidate.input)
+
+  return cloned
+}
+
 const result = (data: Record<string, unknown>) => ({
   content: [],
   structuredContent: {
@@ -28,6 +85,24 @@ const result = (data: Record<string, unknown>) => ({
     ok: true,
     correlationId: "widget_result_123456789012",
     data,
+  },
+})
+const errorResult = (
+  code: "REVISION_CONFLICT" | "PREVIEW_UNAVAILABLE",
+  extra: Record<string, unknown> = {},
+) => ({
+  content: [],
+  isError: true,
+  structuredContent: {
+    contractVersion: "0.1.0",
+    ok: false,
+    correlationId: "widget_result_123456789012",
+    error: {
+      code,
+      messageKey: `extensions:mcp.${code}`,
+      retryable: code === "REVISION_CONFLICT",
+      ...extra,
+    },
   },
 })
 const iframe = document.createElement("iframe")
@@ -38,9 +113,7 @@ document.body.append(iframe)
 const bridge = new AppBridge(
   null,
   { name: "private-test-host", version: "0.1.0" },
-  new URL(window.location.href).searchParams.has("noTools")
-    ? {}
-    : { serverTools: {} },
+  searchParams.has("noTools") ? {} : { serverTools: {} },
   {
     hostContext: {
       locale: "en",
@@ -61,12 +134,19 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
     })
   }
 
+  if (name === "preview_game" && previewsHeld) {
+    await new Promise<void>((resolve) => {
+      heldPreviews.add(resolve)
+    })
+  }
+
   if (name === "get_game_draft") {
     return result({ draftId: id, revision, summary, authoredShowJson: text })
   }
 
   if (
     name === "update_game_draft" &&
+    args?.draftId === id &&
     args?.expectedRevision === revision &&
     !conflict
   ) {
@@ -76,37 +156,68 @@ bridge.oncalltool = async ({ name, arguments: args }) => {
     return result({ draftId: id, revision, summary })
   }
 
-  return {
-    content: [],
-    isError: true,
-    structuredContent: {
-      contractVersion: "0.1.0",
-      ok: false,
-      correlationId: "widget_result_123456789012",
-      error: {
-        code: "REVISION_CONFLICT",
-        messageKey: "extensions:mcp.REVISION_CONFLICT",
-        retryable: true,
-        currentRevision: revision + 1,
-      },
-    },
+  if (name === "preview_game") {
+    if (
+      args?.contractVersion !== "0.1.0" ||
+      args?.draftId !== id ||
+      args?.expectedRevision !== revision ||
+      conflict
+    ) {
+      return errorResult("REVISION_CONFLICT", { currentRevision: revision })
+    }
+
+    if (previewMode === "unavailable") {
+      return errorResult("PREVIEW_UNAVAILABLE")
+    }
+
+    const entries = await loadRetainedEntries()
+    const locale = typeof args?.locale === "string" ? args.locale : "en"
+    const entry = entries?.find(
+      (item) => (item.selection.locale ?? "en") === locale,
+    )
+
+    if (!entry || args.draftId !== entry.selection.draftId) {
+      return errorResult("PREVIEW_UNAVAILABLE")
+    }
+
+    if (previewMode === "tampered") {
+      const tampered = candidateForRevision(entry, revision)
+      tampered._meta["tadazz/preview-candidate-v2"].inputDigest = "0".repeat(64)
+
+      return tampered
+    }
+
+    if (previewMode === "stale") {
+      const mismatchedRevision = revision === 1 ? 2 : 1
+
+      return candidateForRevision(entry, mismatchedRevision)
+    }
+
+    if (
+      revision === entry.selection.expectedRevision &&
+      locale === (entry.selection.locale ?? "en")
+    ) {
+      return structuredClone(entry.result)
+    }
+
+    return candidateForRevision(entry, revision)
   }
+
+  return errorResult("REVISION_CONFLICT", { currentRevision: revision + 1 })
 }
 async function initialized() {
-  const candidate = new URL(window.location.href).searchParams.get("candidate")
-
-  if (candidate) {
+  if (candidateParam) {
     const raw: unknown = await (await fetch("/qa/retained-tool-result")).json()
     const retained = retainedSelection.parse(raw)
 
-    if (candidate === "tampered") {
+    if (candidateParam === "tampered") {
       retained.result._meta["tadazz/preview-candidate-v2"].inputDigest =
         "0".repeat(64)
     }
 
     await bridge.sendToolInput({ arguments: retained.selection })
 
-    if (candidate === "repeated") {
+    if (candidateParam === "repeated") {
       await bridge.sendToolInput({
         arguments: {
           ...retained.selection,
@@ -119,6 +230,18 @@ async function initialized() {
     document.documentElement.dataset.hostReady = "true"
 
     return
+  }
+
+  if (previewParam) {
+    const entries = await loadRetainedEntries()
+    const first = entries?.[0]
+
+    if (!first) {
+      throw new Error("qa:missing-retained-packet")
+    }
+
+    id = first.selection.draftId
+    revision = first.selection.expectedRevision
   }
 
   await bridge.sendToolInput({
@@ -162,6 +285,19 @@ Object.assign(window, {
         })
         heldUpdates.clear()
       }
+    },
+    holdPreviews: (value: boolean) => {
+      previewsHeld = value
+
+      if (!value) {
+        heldPreviews.forEach((resolve) => {
+          resolve()
+        })
+        heldPreviews.clear()
+      }
+    },
+    previewMode: (value: PreviewMode) => {
+      previewMode = value
     },
     revision: () => revision,
     toolChange: () =>

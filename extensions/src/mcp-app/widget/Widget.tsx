@@ -88,6 +88,17 @@ function WidgetContent({
   const [editRevision, setEditRevision] = useState<number | null>(null)
   const editDraft = useRef<string | null>(null)
   const editVersion = useRef(0)
+  const previewVersion = useRef(0)
+  const [previewPending, setPreviewPending] = useState(false)
+  const previewReset =
+    state.status === "loading" ||
+    state.status === "cancelled" ||
+    state.status === "closed"
+  const previewKey = `${state.selectedDraftId ?? ""}:${draft?.revision ?? ""}:${hostLocale(context?.locale)}`
+  useEffect(() => {
+    previewVersion.current += 1
+    setPreviewPending(false)
+  }, [previewKey, previewReset])
   useEffect(() => {
     const id = state.selectedDraftId
 
@@ -220,8 +231,22 @@ function WidgetContent({
       {!privateFixture && draft && requestPreview && (
         <Button
           size="sm"
-          disabled={!toolsAvailable || state.status === "loading" || dirty}
-          onClick={() => void requestPreview()}
+          disabled={
+            !toolsAvailable ||
+            state.status === "loading" ||
+            dirty ||
+            previewPending
+          }
+          onClick={() => {
+            previewVersion.current += 1
+            const version = previewVersion.current
+            setPreviewPending(true)
+            void requestPreview().finally(() => {
+              if (previewVersion.current === version) {
+                setPreviewPending(false)
+              }
+            })
+          }}
         >
           {t("title")}
         </Button>

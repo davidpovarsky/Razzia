@@ -146,7 +146,11 @@ export class WidgetController {
   }
   candidate() {
     if (this.state.status !== "closed") {
-      this.publish({ status: "candidate" })
+      this.publish({
+        status: "candidate",
+        preview: null,
+        currentRevision: undefined,
+      })
     }
   }
   close() {

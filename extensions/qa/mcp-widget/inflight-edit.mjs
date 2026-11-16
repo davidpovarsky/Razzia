@@ -2,12 +2,19 @@ import { createServer } from "node:http"
 import { readFile, mkdir, writeFile } from "node:fs/promises"
 import { createHash } from "node:crypto"
 import assert from "node:assert/strict"
+import { resolve } from "node:path"
+import { pathToFileURL } from "node:url"
 import { chromium, webkit } from "../../node_modules/@playwright/test/index.mjs"
 
 const baseline = process.argv.includes("--baseline")
 const name = baseline ? "before" : "after"
-const evidence = process.env.TADAZZ_WIDGET_EVIDENCE
-  ? new URL(process.env.TADAZZ_WIDGET_EVIDENCE)
+const rawEvidence = process.env.TADAZZ_WIDGET_EVIDENCE
+const evidence = rawEvidence
+  ? rawEvidence.startsWith("file://")
+    ? new URL(rawEvidence.endsWith("/") ? rawEvidence : `${rawEvidence}/`)
+    : new URL(
+        pathToFileURL(resolve(rawEvidence)).href.replace(/\/?$/u, "/"),
+      )
   : new URL(
       "../../../docs/extensions/qa-evidence/mcp-widget-20261115/inflight-edit-20261116/",
       import.meta.url,
@@ -82,8 +89,12 @@ try {
   const origin = `http://127.0.0.1:${address.port}`
   const engine =
     process.env.TADAZZ_WIDGET_BROWSER === "webkit" ? webkit : chromium
+  const useMsedge =
+    engine === chromium &&
+    process.platform === "win32" &&
+    process.env.TADAZZ_WIDGET_CHROMIUM !== "bundled"
   browser = await engine.launch({
-    ...(engine === chromium ? { channel: "msedge" } : {}),
+    ...(useMsedge ? { channel: "msedge" } : {}),
     headless: true,
   })
   report.browser = browser.version()
