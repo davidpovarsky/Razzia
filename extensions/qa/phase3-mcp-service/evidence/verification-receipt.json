@@ -1,0 +1,104 @@
+{
+  "unit": "Phase 3 Unit A - Protected MCP/OAuth/Native-Save Downstream Service Composition",
+  "baseCommitSha": "fd3048402fb66cc22867635ea1fdbe39e08d1fa0",
+  "productBaselineSha": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
+  "branch": "cez/e0c87b17",
+  "platform": {
+    "os": "win32",
+    "node": "v22.17.0"
+  },
+  "ownedFiles": [
+    "extensions/src/mcp-app/first-party/index.ts",
+    "extensions/src/mcp-app/first-party/service.ts",
+    "extensions/qa/phase3-mcp-service/tsconfig.json",
+    "extensions/qa/phase3-mcp-service/mcp-client.ts",
+    "extensions/qa/phase3-mcp-service/service.nodecheck.ts",
+    "extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
+    "extensions/qa/phase3-mcp-service/evidence/verification-receipt.json"
+  ],
+  "checks": {
+    "tddRedBeforeService": {
+      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs --tsconfig .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json --test --test-concurrency=1 .\\extensions\\qa\\phase3-mcp-service\\service.nodecheck.ts .\\extensions\\qa\\phase3-mcp-service\\http-listener.nodecheck.ts",
+      "exitCode": 1,
+      "pass": 0,
+      "fail": 2,
+      "reason": "Expected SyntaxError before service implementation: first-party/index.ts lacked service exports"
+    },
+    "prettierCheck": {
+      "command": "node .\\node_modules\\prettier\\bin\\prettier.cjs --check extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/tsconfig.json extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
+      "exitCode": 0
+    },
+    "oxlint": {
+      "command": "node --experimental-strip-types .\\node_modules\\oxlint\\bin\\oxlint -c .\\oxlint.config.ts extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
+      "exitCode": 0,
+      "warnings": 0,
+      "errors": 0,
+      "rulesEvaluated": 233
+    },
+    "typecheckMcpApp": {
+      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\typescript\\bin\\tsc --noEmit -p .\\extensions\\src\\mcp-app\\tsconfig.json",
+      "exitCode": 0
+    },
+    "typecheckPhase3Qa": {
+      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\typescript\\bin\\tsc --noEmit -p .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json",
+      "exitCode": 0
+    },
+    "phase3QaSuite": {
+      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs --tsconfig .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json --test --test-concurrency=1 .\\extensions\\qa\\phase3-mcp-service\\service.nodecheck.ts .\\extensions\\qa\\phase3-mcp-service\\http-listener.nodecheck.ts",
+      "exitCode": 0,
+      "tests": 9,
+      "pass": 9,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "mcpAppServerRegression": {
+      "command": "node .\\node_modules\\tsx\\dist\\cli.mjs --tsconfig tsconfig.json --test --test-concurrency=1 tests/server/*.nodecheck.ts",
+      "cwd": "extensions/src/mcp-app",
+      "exitCode": 0,
+      "tests": 64,
+      "pass": 64,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0
+    },
+    "mcpAppFirstPartyRegressionWindows": {
+      "command": "node .\\node_modules\\tsx\\dist\\cli.mjs --tsconfig tsconfig.json --test --test-concurrency=1 tests/first-party/abort.nodecheck.ts tests/first-party/auth.nodecheck.ts tests/first-party/catalog.nodecheck.ts tests/first-party/consent-client.nodecheck.ts tests/first-party/filesystem.nodecheck.ts tests/first-party/http.nodecheck.ts tests/first-party/oauth.nodecheck.ts tests/first-party/oauth-export.nodecheck.ts tests/first-party/preview-candidate.nodecheck.ts tests/first-party/schema.nodecheck.ts tests/first-party/store.nodecheck.ts",
+      "cwd": "extensions/src/mcp-app",
+      "exitCode": 1,
+      "tests": 68,
+      "pass": 66,
+      "fail": 2,
+      "excluded": [
+        "tests/first-party/native-save-client.nodecheck.ts (requires Linux ext4)"
+      ],
+      "failuresExplained": [
+        "oauth.nodecheck.ts:270 asserts POSIX 0o600 mode (384) vs Windows NTFS 0o666 (438)",
+        "store.nodecheck.ts:323 hits Windows EBUSY file lock reading SQLite WAL/SHM during fixtures snapshot()"
+      ]
+    }
+  },
+  "realVsSyntheticBoundary": {
+    "genuineVerifiedInProcess": [
+      "createFirstPartyOAuth metadata/JWKS/authorize/inspect/approve/token/revoke/downloads/native-save routes",
+      "Real SQLite account DB + signed manager JWT/session checks + per-tenant SQLite grant/draft stores",
+      "Official @modelcontextprotocol/client StreamableHTTPClientTransport & @modelcontextprotocol/server createMcpHandler",
+      "Official createOAuthConsentClient and createNativeSaveConsentClient",
+      "Real 8-locale catalog adapter translation via i18next locales JSON + draft exports + download SHA-256 verification",
+      "Loopback 127.0.0.1 Node TCP HTTP listener pre-Request rawHeader/Host/URL/Content-Length bounds, socket abort cancellation, and close",
+      "Real createNativeCreationPort failure closed on Windows (DEPENDENCY_UNAVAILABLE without committing native quiz files)"
+    ],
+    "syntheticTestDoublesUsed": [
+      "Synthetic ephemeral temp fixture (CONFIG_PATH, Ed25519 keypair, HMAC ticket key, client registration)",
+      "Synthetic in-memory NativeCreationOperationPort for end-to-end save_game allow/replay flow on Windows",
+      "Synthetic previewCandidateV2 factory test double with V2 composition selection/projection",
+      "In-memory principal rate limiter test hooks for 32-slot overflow, slow-abort, and drain checks"
+    ],
+    "openGatesOutsideUnitAScope": [
+      "Linux ext4 C1 real native-save commit verification (native-save-client.nodecheck.ts / physical ext4 publish)",
+      "Expressive consent GET/HEAD HTML routes & Studio UI /studio/native-save-consent route mount and Playwright browser E2E",
+      "Studio reopen/reload after saved MCP quiz & human browser OAuth click",
+      "External HTTPS ChatGPT/Claude host interoperability"
+    ]
+  }
+}
