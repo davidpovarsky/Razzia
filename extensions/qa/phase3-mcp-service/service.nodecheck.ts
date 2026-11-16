@@ -1,6 +1,6 @@
 import assert from "node:assert/strict"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
-import { existsSync, readFileSync, statSync } from "node:fs"
+import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
 import { join } from "node:path"
 import { after, before, test } from "node:test"
 import i18next from "i18next"
@@ -668,7 +668,7 @@ test("routes OAuth metadata, PKCE, remote SDK tools, catalog, export and native-
   }
 })
 
-test("real C1 createNativeCreationPort on Windows fails closed after native-save approval without fake commit", async () => {
+test("real C1 createNativeCreationPort commits tenant save/reopen/replay on Linux and fails closed on non-Linux", async () => {
   const f = getFixture()
   const ops = await createFirstPartyNativeSaveOperations(f.root)
   const service = await buildService({
@@ -679,15 +679,30 @@ test("real C1 createNativeCreationPort on Windows fails closed after native-save
   })
   const tokens = await authorizeAndToken(service, f.sessions[0])
   const client = await connectMcp(service, tokens.access_token)
+  const tokensB = await authorizeAndToken(service, f.sessions[1])
+  const clientB = await connectMcp(service, tokensB.access_token)
 
   try {
+    const draftTitle = "Real C1 fence check"
     const created = (
       await client.callTool({
         name: "create_game_draft",
-        arguments: createInput("Real C1 fence check"),
+        arguments: createInput(draftTitle),
       })
     ).structuredContent as { ok: boolean; data: { draftId: string } }
     assert.equal(created.ok, true)
+
+    const foreignDraft = (
+      await clientB.callTool({
+        name: "get_game_draft",
+        arguments: {
+          contractVersion: "0.1.0",
+          draftId: created.data.draftId,
+        },
+      })
+    ).structuredContent as { ok: boolean; error: { code: string } }
+    assert.equal(foreignDraft.ok, false)
+    assert.equal(foreignDraft.error.code, "NOT_FOUND")
 
     const saveArgs = {
       contractVersion: "0.1.0",
@@ -703,6 +718,25 @@ test("real C1 createNativeCreationPort on Windows fails closed after native-save
       error: { code: string; consentRequestId: string }
     }
     assert.equal(pending.error.code, "CONSENT_REQUIRED")
+
+    const foreignSaveClient = createNativeSaveConsentClient({
+      issuerBasePath: "/oauth",
+      accountId: f.sessions[1].owner,
+      getNativeToken: () => f.sessions[1].token,
+      request: (input, init) => {
+        const headers = new Headers(init?.headers)
+        headers.set("host", new URL(origin).host)
+        headers.set("origin", origin)
+
+        return service.fetch(
+          new Request(firstPartyRequestUrl(input), { ...init, headers }),
+        )
+      },
+    })
+    await assert.rejects(
+      foreignSaveClient.inspect(pending.error.consentRequestId),
+      (err) => err instanceof NativeSaveConsentError,
+    )
 
     const saveClient = createNativeSaveConsentClient({
       issuerBasePath: "/oauth",
@@ -723,12 +757,107 @@ test("real C1 createNativeCreationPort on Windows fails closed after native-save
 
     const outcome = (
       await client.callTool({ name: "save_game", arguments: saveArgs })
-    ).structuredContent as { ok: boolean; error: { code: string } }
-    assert.equal(outcome.ok, false)
-    assert.equal(outcome.error.code, "DEPENDENCY_UNAVAILABLE")
+    ).structuredContent as {
+      ok: boolean
+      data?: { quizId: string; savedRevision: number; studioUrl: string }
+      error?: { code: string }
+    }
+
+    if (process.platform !== "linux") {
+      assert.equal(outcome.ok, false)
+      assert.equal(outcome.error?.code, "DEPENDENCY_UNAVAILABLE")
+      assert.equal(existsSync(join(f.root, "quizz")), false)
+      assert.equal(
+        existsSync(join(f.root, "tenants", f.sessions[0].owner, "quizz")),
+        false,
+      )
+
+      return
+    }
+
+    assert.equal(outcome.ok, true)
+    assert.ok(outcome.data)
+    const savedQuizId = outcome.data.quizId
+    assert.match(savedQuizId, /^[A-Za-z0-9_-]{21}$/u)
+    assert.equal(outcome.data.savedRevision, 1)
+    assert.equal(
+      outcome.data.studioUrl,
+      `${origin}/manager/quizz/${savedQuizId}`,
+    )
+
+    const tenantAQuizzDir = join(
+      f.root,
+      "tenants",
+      f.sessions[0].owner,
+      "quizz",
+    )
+    const tenantBQuizzDir = join(
+      f.root,
+      "tenants",
+      f.sessions[1].owner,
+      "quizz",
+    )
+    const sidecarPath = join(
+      f.root,
+      "tenants",
+      f.sessions[0].owner,
+      "extensions",
+      "quizzes",
+      `${savedQuizId}.json`,
+    )
     assert.equal(existsSync(join(f.root, "quizz")), false)
+    assert.equal(existsSync(tenantBQuizzDir), false)
+    assert.equal(existsSync(sidecarPath), true)
+    const nativeFiles = readdirSync(tenantAQuizzDir).filter((name) =>
+      name.endsWith(".json"),
+    )
+    assert.equal(nativeFiles.length, 1)
+    const persistedBase = JSON.parse(
+      readFileSync(join(tenantAQuizzDir, nativeFiles[0]), "utf8"),
+    ) as { id: string; subject: string }
+    assert.equal(persistedBase.id, savedQuizId)
+    assert.equal(persistedBase.subject, draftTitle)
+    const persistedSidecar = JSON.parse(readFileSync(sidecarPath, "utf8")) as {
+      quizId: string
+      revision: number
+    }
+    assert.equal(persistedSidecar.quizId, savedQuizId)
+    assert.equal(persistedSidecar.revision, 1)
+
+    const nativeConfig = await import("@razzia/socket/services/config")
+    const reopened = await f.scope.withAccount(f.sessions[0].owner, () =>
+      nativeConfig.getQuizzById(savedQuizId),
+    )
+    assert.equal(reopened.id, savedQuizId)
+    assert.equal(reopened.subject, draftTitle)
+    const foreignNativeQuizzes = await f.scope.withAccount(
+      f.sessions[1].owner,
+      () => nativeConfig.getQuizz(),
+    )
+    assert.deepEqual(foreignNativeQuizzes, [])
+
+    const replayed = (
+      await client.callTool({ name: "save_game", arguments: saveArgs })
+    ).structuredContent as { ok: boolean; data: unknown }
+    assert.equal(replayed.ok, true)
+    assert.deepEqual(replayed.data, outcome.data)
+    assert.equal(
+      readdirSync(tenantAQuizzDir).filter((name) => name.endsWith(".json"))
+        .length,
+      1,
+    )
+
+    const reused = (
+      await client.callTool({
+        name: "save_game",
+        arguments: { ...saveArgs, expectedRevision: 2 },
+      })
+    ).structuredContent as { ok: boolean; error: { code: string } }
+    assert.equal(reused.ok, false)
+    assert.equal(reused.error.code, "REQUEST_KEY_REUSED")
   } finally {
     await client.close()
+    await clientB.close()
   }
 })
 
@@ -1035,19 +1164,85 @@ test("enforces bounded principal rate limits, unified 32-slot admission, drain a
   }
   assert.equal(await boundedLimiter(principalA, "list_themes"), true)
   assert.equal(await boundedLimiter(principalA, "list_themes"), false)
-  assert.equal(await boundedLimiter(principalB, "list_themes"), true)
-  assert.equal(await boundedLimiter(principalA, "list_themes"), true)
+  assert.equal(await boundedLimiter(principalB, "list_themes"), false)
+  assert.equal(await boundedLimiter(principalA, "list_themes"), false)
+
+  const rotationLimiter = createPrincipalRateLimiter({
+    readsPerMinute: 1,
+    maxEntries: 2,
+    windowMs: 60_000,
+  })
+  const rotationResults: boolean[] = []
+
+  for (const grantId of [
+    "g1",
+    "g2",
+    "g3",
+    "g1",
+    "g2",
+    "g3",
+    "g1",
+    "g2",
+    "g3",
+  ]) {
+    rotationResults.push(
+      await rotationLimiter(
+        {
+          ...principalA,
+          grantId,
+        },
+        "list_themes",
+      ),
+    )
+  }
+
+  assert.deepEqual(rotationResults, [
+    true,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+    false,
+  ])
 
   const limiter = createPrincipalRateLimiter({
-    readsPerMinute: 2,
+    readsPerMinute: 1,
     mutationsPerMinute: 1,
     maxEntries: 64,
   })
-  const serviceA = await buildService({ rateLimit: limiter })
+  const serviceA = await buildService({
+    rateLimit: limiter,
+    catalog: {
+      locale: () => "en",
+      translate: (name, lang) => translator.t(name, { lng: lang }),
+    },
+  })
   const tokensA = await authorizeAndToken(serviceA, f.sessions[0])
+  const tokensA2 = await authorizeAndToken(serviceA, f.sessions[0])
   const clientA = await connectMcp(serviceA, tokensA.access_token)
+  const clientA2 = await connectMcp(serviceA, tokensA2.access_token)
 
   try {
+    const r1 = (
+      await clientA.callTool({
+        name: "list_themes",
+        arguments: { contractVersion: "0.1.0" },
+      })
+    ).structuredContent as { ok: boolean }
+    assert.equal(r1.ok, true)
+
+    const r2CrossGrant = (
+      await clientA2.callTool({
+        name: "list_themes",
+        arguments: { contractVersion: "0.1.0" },
+      })
+    ).structuredContent as { ok: boolean; error: { code: string } }
+    assert.equal(r2CrossGrant.ok, false)
+    assert.equal(r2CrossGrant.error.code, "RATE_LIMITED")
+
     const c1 = (
       await clientA.callTool({
         name: "create_game_draft",
@@ -1066,6 +1261,7 @@ test("enforces bounded principal rate limits, unified 32-slot admission, drain a
     assert.equal(c2.error.code, "RATE_LIMITED")
   } finally {
     await clientA.close()
+    await clientA2.close()
   }
 
   const gate: {
@@ -1130,6 +1326,38 @@ test("enforces bounded principal rate limits, unified 32-slot admission, drain a
   )
   assert.equal(overflow.status, 429)
 
+  for (const controller of controllers) {
+    controller.abort()
+  }
+
+  const abortedResponses = await Promise.all(pending)
+  assert.ok(abortedResponses.every((res) => res.status === 400))
+
+  const overflowWhileRetiring = await boundedService.fetch(
+    new Request(`${origin}/.well-known/oauth-authorization-server/oauth`, {
+      headers: { host: new URL(origin).host },
+    }),
+  )
+  assert.equal(overflowWhileRetiring.status, 429)
+
+  const mcpOverflowWhileRetiring = await boundedService.fetch(
+    new Request(config.resource, {
+      method: "POST",
+      headers: {
+        host: new URL(origin).host,
+        authorization: `Bearer ${tokens.access_token}`,
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 99,
+        method: "tools/list",
+      }),
+    }),
+  )
+  assert.equal(mcpOverflowWhileRetiring.status, 429)
+
   let drained = false
   const draining = boundedService.drain().then(() => {
     drained = true
@@ -1140,10 +1368,15 @@ test("enforces bounded principal rate limits, unified 32-slot admission, drain a
   assert.equal(drained, false)
 
   gate.releaseSlow()
-  const settled = await Promise.all(pending)
-  assert.ok(settled.every((res) => res.status === 200))
   await draining
   assert.equal(drained, true)
+
+  const afterRetire = await boundedService.fetch(
+    new Request(`${origin}/.well-known/oauth-authorization-server/oauth`, {
+      headers: { host: new URL(origin).host },
+    }),
+  )
+  assert.equal(afterRetire.status, 200)
 
   await boundedService.close()
   const afterClose = await boundedService.fetch(
@@ -1152,4 +1385,117 @@ test("enforces bounded principal rate limits, unified 32-slot admission, drain a
     }),
   )
   assert.equal(afterClose.status, 503)
+})
+
+test("holds unified 32-slot admission across remote responseTimeoutMs and enforces timeout on OAuth routes", async () => {
+  const f = getFixture()
+  let entered = 0
+  let releaseGate: () => void = () => undefined
+  let notifyAllEntered: () => void = () => undefined
+  const allEntered = new Promise<void>((resolve) => {
+    notifyAllEntered = resolve
+  })
+  const held = new Promise<void>((resolve) => {
+    releaseGate = resolve
+  })
+
+  const service = await buildService({
+    responseTimeoutMs: 50,
+    rateLimit: async () => {
+      entered += 1
+
+      if (entered === 32) {
+        notifyAllEntered()
+      }
+
+      await held
+
+      return true
+    },
+  })
+  const tokens = await authorizeAndToken(service, f.sessions[0])
+
+  const timedOutPending = Array.from({ length: 32 }, (_, index) =>
+    service.fetch(
+      new Request(config.resource, {
+        method: "POST",
+        headers: {
+          host: new URL(origin).host,
+          authorization: `Bearer ${tokens.access_token}`,
+          "content-type": "application/json",
+          accept: "application/json, text/event-stream",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: index + 1,
+          method: "tools/call",
+          params: {
+            name: "list_themes",
+            arguments: { contractVersion: "0.1.0" },
+          },
+        }),
+      }),
+    ),
+  )
+
+  await allEntered
+  const timedOutResponses = await Promise.all(timedOutPending)
+  assert.ok(timedOutResponses.every((res) => res.status === 504))
+
+  const overflowAfterTimeout = await service.fetch(
+    new Request(`${origin}/oauth/jwks.json`, {
+      headers: { host: new URL(origin).host },
+    }),
+  )
+  assert.equal(overflowAfterTimeout.status, 429)
+
+  let drained = false
+  const draining = service.drain().then(() => {
+    drained = true
+  })
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
+  assert.equal(drained, false)
+
+  releaseGate()
+  await draining
+  assert.equal(drained, true)
+
+  const jwksAfterDrain = await service.fetch(
+    new Request(`${origin}/oauth/jwks.json`, {
+      headers: { host: new URL(origin).host },
+    }),
+  )
+  assert.equal(jwksAfterDrain.status, 200)
+
+  let stalledCancelled = false
+  const stalledBodyStream = new ReadableStream<Uint8Array>({
+    start() {
+      return undefined
+    },
+    cancel() {
+      stalledCancelled = true
+    },
+  })
+  const startedAt = Date.now()
+  const oauthTimedOut = await service.fetch(
+    new Request(`${origin}/oauth/token`, {
+      method: "POST",
+      headers: {
+        host: new URL(origin).host,
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: stalledBodyStream,
+      duplex: "half",
+    } as RequestInit),
+  )
+  const elapsedMs = Date.now() - startedAt
+  assert.equal(oauthTimedOut.status, 504)
+  assert.ok(
+    elapsedMs < 1000,
+    `Expected < 1000ms OAuth timeout, got ${elapsedMs}ms`,
+  )
+  await service.drain()
+  assert.equal(stalledCancelled, true)
 })
