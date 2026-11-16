@@ -21,6 +21,10 @@ import { StrictMode, useEffect, type ReactNode } from "react"
 import { SiteLoading } from "./web/shared/SiteLoading"
 import { SiteMetadata } from "./web/shared/SiteMetadata"
 import { hasManagerSession } from "./adapters/client"
+import {
+  browserConsentLoginHandoff,
+  CONSENT_PATH,
+} from "../components/oauth-consent/login-handoff"
 
 const MarketingSite = lazyRouteComponent(
   () => import("./web/marketing/MarketingSite"),
@@ -85,6 +89,7 @@ const home = createRoute({
   path: "/",
   component: MarketingSite,
   beforeLoad: ({ location }) => {
+    browserConsentLoginHandoff().clear()
     const pin = new URLSearchParams(location.searchStr).get("pin")
 
     if (pin) {
@@ -109,18 +114,31 @@ const routes = pages.map((path) =>
   createRoute({
     getParentRoute: () => routeTree,
     path,
-    beforeLoad: path.includes("studio")
-      ? ({ location }) => {
-          if (!hasManagerSession()) {
-            return redirect({
-              to: "/login",
-              search: () => ({ returnTo: location.pathname }),
-              replace: true,
-              throw: true,
-            })
-          }
+    beforeLoad: ({ location }) => {
+      if (
+        location.pathname !== CONSENT_PATH &&
+        !(
+          location.pathname === "/login" &&
+          new URLSearchParams(location.searchStr).get("returnTo") ===
+            CONSENT_PATH
+        )
+      ) {
+        browserConsentLoginHandoff().clear()
+      }
+
+      if (path.includes("studio")) {
+        if (!hasManagerSession()) {
+          browserConsentLoginHandoff().capture(location)
+
+          return redirect({
+            to: "/login",
+            search: () => ({ returnTo: location.pathname }),
+            replace: true,
+            throw: true,
+          })
         }
-      : undefined,
+      }
+    },
     component: (() => {
       if (path.includes("studio")) {
         return Studio
@@ -154,6 +172,7 @@ const nativeBridges = nativeEntry
         getParentRoute: () => routeTree,
         path,
         beforeLoad: ({ location }) => {
+          browserConsentLoginHandoff().clear()
           window.location.replace(location.href)
         },
         component: SiteLoading,

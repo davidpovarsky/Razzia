@@ -12,6 +12,7 @@ import { currentAccount, type Account } from "../../site/adapters/client"
 import type { PreviewLocale } from "../../presentation/show-library-preview/i18n"
 import { createOAuthConsentClient, type ConsentInspection } from "./client"
 import { consentText } from "./strings"
+import { browserConsentLoginHandoff } from "./login-handoff"
 
 /** Studio mounts this only after its actual authenticated native profile query.
  * The issuer path is trusted build configuration, never a request query parameter.
@@ -77,6 +78,7 @@ export function OAuthConsentPage({
   } | null>(null)
   const approval = useRef<AbortController | null>(null)
   const inspectionRequest = useRef<AbortController | null>(null)
+  const canceled = useRef(false)
   useEffect(() => {
     const abort = new AbortController()
     inspectionRequest.current = abort
@@ -85,6 +87,16 @@ export function OAuthConsentPage({
     setState("loading")
     client?.invalidate()
     const token = getToken()
+
+    // Removing the canceled ticket updates the real router search. Keep the
+    // cancellation visible while that same account component owns the page.
+    if (!ticket && canceled.current) {
+      setState("canceled")
+
+      return () => abort.abort()
+    }
+
+    canceled.current = false
     const validSession = () =>
       Boolean(
         token &&
@@ -94,6 +106,7 @@ export function OAuthConsentPage({
         getClientId() === account.id,
       )
     const invalidate = () => {
+      browserConsentLoginHandoff().clear()
       client?.invalidate()
       proof.current = null
       setInspection(null)
@@ -103,12 +116,22 @@ export function OAuthConsentPage({
       approval.current = null
       inspectionRequest.current = null
     }
-    if (!client || !ticket || window.top !== window.self) {
-      setState("unavailable")
+
+    if (!validSession()) {
+      browserConsentLoginHandoff().clear()
+      setState("expired")
+
       return () => abort.abort()
     }
-    if (!validSession()) {
-      setState("expired")
+
+    // Studio has already resolved the real native profile. URL ownership is now
+    // established; StrictMode may remount without consuming the request twice.
+    if (ticket && window.top === window.self) {
+      browserConsentLoginHandoff().acknowledge(ticket)
+    }
+    if (!client || !ticket || window.top !== window.self) {
+      setState("unavailable")
+
       return () => abort.abort()
     }
     // A meta frame-ancestors policy is ineffective. Require the actual mounted
@@ -164,7 +187,16 @@ export function OAuthConsentPage({
         invalidate()
     }
     const interval = window.setInterval(check, 1000)
-    window.addEventListener("storage", check)
+    const onStorage = (event: StorageEvent) => {
+      // Native session.ts may still hold its same-tab memory token after another
+      // tab replaces localStorage. The storage event itself revokes this proof.
+      if (event.key === "token" || event.key === null) {
+        invalidate()
+      } else {
+        check()
+      }
+    }
+    window.addEventListener("storage", onStorage)
     window.addEventListener("focus", check)
     return () => {
       abort.abort()
@@ -174,7 +206,7 @@ export function OAuthConsentPage({
       client.invalidate()
       proof.current = null
       clearInterval(interval)
-      window.removeEventListener("storage", check)
+      window.removeEventListener("storage", onStorage)
       window.removeEventListener("focus", check)
     }
   }, [account.id, account.email, client, ticket])
@@ -232,6 +264,8 @@ export function OAuthConsentPage({
     }
   }
   const cancel = () => {
+    canceled.current = true
+    browserConsentLoginHandoff().clear()
     inspectionRequest.current?.abort()
     inspectionRequest.current = null
     client?.invalidate()

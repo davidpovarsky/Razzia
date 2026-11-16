@@ -10,6 +10,10 @@ import { ReferenceCanvas } from "../shared/ReferenceCanvas"
 import { accountStyle } from "../../themes/account"
 import { safeReturnTo, SiteApiError } from "../../adapters/client"
 import { useSiteText } from "../../locales"
+import {
+  browserConsentLoginHandoff,
+  CONSENT_PATH,
+} from "../../../components/oauth-consent/login-handoff"
 
 type Step = "login" | "register" | "verify" | "forgot" | "reset"
 const routeStep = (): Step => {
@@ -73,6 +77,21 @@ export function AccountGateway() {
   )
 
   useEffect(() => {
+    const handoff = browserConsentLoginHandoff()
+
+    if (returnTo !== CONSENT_PATH) {
+      handoff.clear()
+    }
+
+    const onSessionChange = (event: StorageEvent) => {
+      if (
+        event.storageArea === window.localStorage &&
+        (!event.key || event.key === "token")
+      ) {
+        handoff.clear()
+      }
+    }
+    window.addEventListener("storage", onSessionChange)
     const controller = new AbortController()
     void fetch("/api/auth/mode", {
       signal: controller.signal,
@@ -102,6 +121,7 @@ export function AccountGateway() {
     return () => {
       controller.abort()
       window.removeEventListener("popstate", onBack)
+      window.removeEventListener("storage", onSessionChange)
     }
   }, [])
 
@@ -174,7 +194,13 @@ export function AccountGateway() {
         socketClient.disconnect()
         useManagerStore.getState().resetManager()
         setToken(result.token)
-        window.location.assign(returnTo)
+        const pending = browserConsentLoginHandoff().resume({
+          pathname: returnTo,
+          searchStr: "",
+        })
+        window.location.assign(
+          pending ? `${returnTo}?${new URLSearchParams(pending)}` : returnTo,
+        )
       } else if (step === "register") {
         switchTo("verify", "Check your email for a six-digit code.")
       } else if (step === "verify") {
