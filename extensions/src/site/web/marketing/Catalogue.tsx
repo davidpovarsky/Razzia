@@ -2,6 +2,8 @@ import { SiteButton } from "../shared/SiteButton"
 import { siteText as t } from "../../locales"
 import { HoverDevTiltCard } from "../../components/HoverDevTiltCard"
 import { ArrowRight, Play } from "lucide-react"
+import { useState } from "react"
+import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
 
 // Local TADAZZ React implementation of the supplied frozen prototypes.
 export const asset = (name: string) =>
@@ -136,21 +138,18 @@ export function GameCard({
   open: () => void
   preview: () => void
 }) {
+  const [active, setActive] = useState(false)
+
   return (
-    <HoverDevTiltCard>
-      <SiteButton
-        onClick={open}
-        style={{
-          padding: 0,
-          border: 0,
-          width: "100%",
-          textAlign: "left",
-          color: "inherit",
-        }}
-        aria-label={t("View {{name}}", { name: t(game.title) })}
+    <HoverDevTiltCard suspended={active}>
+      <GamePreviewSurface
+        selection={{ kind: "published-demo", catalogueId: game.id }}
+        label={t("View {{name}}", { name: t(game.title) })}
+        onOpen={open}
+        onActiveChange={setActive}
       >
         <Cover game={game} />
-      </SiteButton>
+      </GamePreviewSurface>
       <div className="game-card-body">
         <h3>{t(game.title)}</h3>
         <p>{t(game.desc)}</p>

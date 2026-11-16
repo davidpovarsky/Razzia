@@ -66,6 +66,7 @@ export interface StageFitContainerProps extends PropsWithChildren {
    * are constrained externally.
    */
   heightOverride?: number
+  widthOverride?: number
   "data-testid"?: string
 }
 
@@ -73,6 +74,7 @@ export const StageFitContainer = ({
   children,
   className,
   heightOverride,
+  widthOverride,
   "data-testid": testId = "stage-fit-container",
 }: StageFitContainerProps) => {
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -82,12 +84,12 @@ export const StageFitContainer = ({
   }>(() => {
     if (typeof window !== "undefined") {
       return {
-        width: window.innerWidth,
+        width: widthOverride ?? window.innerWidth,
         height: heightOverride ?? window.innerHeight,
       }
     }
 
-    return { width: 1280, height: heightOverride ?? 800 }
+    return { width: widthOverride ?? 1280, height: heightOverride ?? 800 }
   })
 
   useEffect(() => {
@@ -97,7 +99,7 @@ export const StageFitContainer = ({
 
     const updateFromNode = (node: HTMLElement) => {
       const rect = node.getBoundingClientRect()
-      const w = Math.round(rect.width) || window.innerWidth
+      const w = widthOverride ?? (Math.round(rect.width) || window.innerWidth)
       const h =
         heightOverride ?? (Math.round(rect.height) || window.innerHeight)
 
@@ -132,7 +134,7 @@ export const StageFitContainer = ({
         updateFromNode(containerRef.current)
       } else {
         setDimensions({
-          width: window.innerWidth,
+          width: widthOverride ?? window.innerWidth,
           height: heightOverride ?? window.innerHeight,
         })
       }
@@ -141,7 +143,7 @@ export const StageFitContainer = ({
     window.addEventListener("resize", onResize)
 
     return () => window.removeEventListener("resize", onResize)
-  }, [heightOverride])
+  }, [heightOverride, widthOverride])
 
   const { width, height } = dimensions
   const isPortrait = height > width

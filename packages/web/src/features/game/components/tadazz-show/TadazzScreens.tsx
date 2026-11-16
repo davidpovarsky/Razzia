@@ -1,16 +1,11 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
-import NativeButton from "@razzia/web/components/Button"
 import { EVENTS } from "@razzia/common/constants"
 import {
   TADAZZ_BACKDROP_URL,
+  NativeClassicLobbyPanel,
   type SceneDescriptor,
-  SeatingPlan,
   TADAZZ_LOGO_URL,
   useRoomJoin,
-  RoomJoinMetadata,
-  RoomQrPortal,
-  RoomQrLabels,
-  RoomQrCode as QRCodeSVG,
 } from "@razzia/extensions/presentation"
 import type { Player } from "@razzia/common/types/game"
 import type { ActiveSceneData, Interlude } from "@razzia/extensions/core"
@@ -21,8 +16,6 @@ import {
 } from "@razzia/web/features/game/contexts/socket-context"
 import { useManagerStore } from "@razzia/web/features/game/stores/manager"
 import { SFX } from "@razzia/web/features/game/utils/constants"
-import { Lock, X } from "lucide-react"
-import { AlertDialog } from "radix-ui"
 import { useEffect, useState } from "react"
 import { useTranslation } from "react-i18next"
 import useSound from "use-sound"
@@ -75,19 +68,16 @@ export function TadazzLobbyScreen({
   }
   text?: string
 }) {
-  const { t } = useTranslation()
   const tx = useTadazzShellText()
   const { gameId, players, locked } = useManagerStore()
   const { socket } = useSocket()
   const [list, setList] =
     useState<Array<Player & { timedOut?: boolean }>>(players)
-  const [qrOpen, setQrOpen] = useState(false)
   const join = useRoomJoin({
     inviteCode: rawInviteCode,
     managerLocked: isManager ? locked : undefined,
     directory: fullShowData,
   })
-  const { pin: inviteCode, locked: isLocked, webUrl, host } = join
 
   // Same live roster events as the legacy Room screen (manager only).
   useEvent(EVENTS.MANAGER.NEW_PLAYER, (player) =>
@@ -113,170 +103,16 @@ export function TadazzLobbyScreen({
     socket.emit(EVENTS.MANAGER.KICK_PLAYER, { gameId, playerId })
   }
 
-  // Creating Worlds is a hosted table show: show join code AND the full live
-  // 40-representative roster in ONE public screen, without four follow-up pages.
-  const representatives = fullShowData?.representatives
-
-  if (representatives?.length) {
-    const tables = [
-      ...new Set(
-        representatives
-          .map((rep) => rep.table)
-          .filter((table) => table >= 1 && table <= 31),
-      ),
-    ].sort((a, b) => a - b)
-    const connected = (fullShowData?.connectedTables ?? []).filter((table) =>
-      tables.includes(table),
-    )
-
-    return (
-      <SeatingPlan
-        representatives={representatives}
-        connectedTables={connected}
-        dialNumber={join.dialNumber}
-        pin={(() => {
-          if (inviteCode) {
-            if (isLocked) {
-              return inviteCode.replace(/./g, "#")
-            }
-
-            return inviteCode
-          }
-
-          return "—"
-        })()}
-        qr={
-          inviteCode && !isLocked ? (
-            <QRCodeSVG value={join.qrUrl ?? webUrl} />
-          ) : (
-            <Lock />
-          )
-        }
-        labels={{
-          call: tx("seating.call", "CALL TO JOIN"),
-          pin: tx("seating.pin", "GAME PIN"),
-          stage: tx("seating.stage", "STAGE"),
-          production: tx("seating.production", "PRODUCTIONS TEAM"),
-          entrance: tx("seating.entrance", "ENTRANCE"),
-          table: tx("seating.table", "Table"),
-          noPhone: tx("seating.noPhone", "NUMBER NOT CONFIGURED"),
-          connected: tx(
-            "seating.connected",
-            "{{connected}} / {{total}} TABLES CONNECTED",
-            { connected: new Set(connected).size, total: tables.length },
-          ),
-        }}
-      />
-    )
-  }
-
   return (
-    <div className="tz-x-fill" data-testid="tadazz-screen-lobby">
-      <div className="tz-x-eyebrow">{tx("lobbyEyebrow", "JOIN THE SHOW")}</div>
-      <div className="tz-x-title">
-        TADA<span>ZZ!</span>
-      </div>
-      <div className="tz-x-underline" />
-      <div className="tz-lobby-join tz-x-panel">
-        <div>
-          <div className="tz-lobby-label">{t("game:joinInstruction")}</div>
-          <div className="tz-lobby-url" data-testid="tadazz-lobby-url">
-            {host || webUrl}
-          </div>
-        </div>
-        <div className="tz-lobby-divider" />
-        <div>
-          <div className="tz-lobby-label">{t("game:gamePinLabel")}</div>
-          <div className="tz-lobby-pin" data-testid="tadazz-lobby-pin">
-            {(() => {
-              if (inviteCode) {
-                if (isLocked) {
-                  return inviteCode.replace(/./g, "#")
-                }
-
-                return inviteCode
-              }
-
-              return "—"
-            })()}
-          </div>
-        </div>
-        {isLocked || !inviteCode ? (
-          <div
-            className="tz-lobby-qr tz-lobby-lock"
-            aria-hidden="true"
-            style={{ background: "transparent", border: 0, boxShadow: "none" }}
-          >
-            {isLocked ? <Lock className="size-28" /> : null}
-          </div>
-        ) : (
-          <AlertDialog.Root open={qrOpen} onOpenChange={setQrOpen}>
-            <AlertDialog.Trigger
-              aria-label={t("game:showQrCode")}
-              className="tz-lobby-qr cursor-pointer"
-              data-testid="tadazz-lobby-qr"
-            >
-              <QRCodeSVG value={join.qrUrl ?? webUrl} />
-            </AlertDialog.Trigger>
-            <RoomQrPortal>
-              <AlertDialog.Overlay
-                className="fixed inset-0 z-50 bg-black/70"
-                onClick={() => setQrOpen(false)}
-              />
-              <AlertDialog.Content className="fixed top-1/2 left-1/2 z-50 -translate-x-1/2 -translate-y-1/2 rounded-2xl bg-white p-6">
-                <RoomQrLabels join={join} />
-                <NativeButton
-                  size="sm"
-                  type="button"
-                  onClick={() => setQrOpen(false)}
-                  aria-label={t("common:close")}
-                  className="hover:bg-muted absolute -top-3 -right-3 rounded-full bg-white p-1.5 shadow-md"
-                >
-                  <X className="text-foreground size-6" />
-                </NativeButton>
-                <QRCodeSVG
-                  className="size-56 md:size-70 lg:size-95"
-                  value={join.qrUrl ?? webUrl}
-                />
-              </AlertDialog.Content>
-            </RoomQrPortal>
-          </AlertDialog.Root>
-        )}
-      </div>
-      <RoomJoinMetadata join={join} />
-      {isManager && (
-        <>
-          <div className="tz-lobby-count" data-testid="tadazz-lobby-count">
-            <span>{t(text || "game:waitingForPlayers")}</span>{" "}
-            <span>· {list.length}</span>
-          </div>
-          <div className="tz-lobby-players">
-            {list.map((player) => (
-              <NativeButton
-                size="sm"
-                type="button"
-                key={player.id}
-                className={[
-                  "hover:bg-accent font-display bg-white text-black",
-                  !player.connected && "is-lost",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                title={tx("kickPlayer", "Remove player")}
-                onClick={() => kick(player.id)}
-              >
-                {player.username}
-              </NativeButton>
-            ))}
-          </div>
-        </>
-      )}
-      {!isManager && (
-        <div className="tz-lobby-count">
-          {t(text || "game:waitingForPlayers")}
-        </div>
-      )}
-    </div>
+    <NativeClassicLobbyPanel
+      join={join}
+      isManager={isManager}
+      fullShowData={fullShowData}
+      text={text}
+      players={list}
+      onKick={kick}
+      tx={tx}
+    />
   )
 }
 
@@ -406,50 +242,7 @@ export function TadazzSummaryScreen({
   )
 }
 
-export function TadazzPlayerResultScreen({
-  correct,
-  message,
-  points,
-  rank,
-  aheadOfMe,
-  survey,
-}: {
-  correct: boolean
-  message: string
-  points: number
-  rank: number
-  aheadOfMe: string | null
-  survey: boolean
-}) {
-  const { t } = useTranslation()
-
-  return (
-    <div className="tz-x-center" data-testid="tadazz-screen-player-result">
-      {!survey && (
-        <div
-          className={["tz-result-badge", !correct && "is-wrong"]
-            .filter(Boolean)
-            .join(" ")}
-        >
-          {correct ? "✓" : "✕"}
-        </div>
-      )}
-      <div className="tz-x-headline">{t(message)}</div>
-      {!survey && (
-        <div className="tz-x-sub" style={{ letterSpacing: ".12em" }}>
-          {t("game:resultTop")}
-          {t("game:rank", { count: rank, ordinal: true })}
-          {aheadOfMe ? `${t("game:resultBehind")}${aheadOfMe}` : ""}
-        </div>
-      )}
-      {!survey && correct && (
-        <div className="tz-x-big" style={{ fontSize: 120 }}>
-          +{points}
-        </div>
-      )}
-    </div>
-  )
-}
+export { NativeClassicPlayerResult as TadazzPlayerResultScreen } from "@razzia/extensions/presentation"
 
 export function TadazzPlayerFinishedScreen({
   rank,

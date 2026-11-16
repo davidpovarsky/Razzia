@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Abort state may change across asynchronous catalogue callbacks.
 import { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { useTranslation } from "react-i18next"
 import {
@@ -18,6 +19,11 @@ import {
 } from "./ThemeBuilderShell"
 import { builderText } from "./strings"
 import { nativeBuilderText } from "./NativeLibraryPanel"
+import { InlineGamePreviewBoundary } from "../../site/components/game-preview/boundary"
+import {
+  createAccountPreviewProvider,
+  createAccountPreviewAccess,
+} from "../../site/components/game-preview/account-provider"
 
 /** Mounted only after Studio's real account check. Server grants remain authoritative. */
 export function StudioThemeBuilder({ accountId }: { accountId: string }) {
@@ -27,8 +33,10 @@ export function StudioThemeBuilder({ accountId }: { accountId: string }) {
 }
 
 function AccountThemeBuilder({ accountId }: { accountId: string }) {
+  const [workspaceId, setWorkspaceId] = useState(accountId)
+  const [workspaces, setWorkspaces] = useState<string[]>([accountId])
   const { i18n } = useTranslation()
-  const language = i18n.language.split("-")[0]
+  const [language] = i18n.language.split("-")
   const locale: PreviewLocale = [
     "en",
     "fr",
@@ -43,12 +51,65 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
     : "en"
   const text = builderText(locale),
     client = useMemo(
-      () => createBuilderClient(accountId, async () => getToken() ?? ""),
-      [accountId],
+      () =>
+        createBuilderClient(workspaceId, () =>
+          Promise.resolve(getToken() ?? ""),
+        ),
+      [workspaceId],
     )
   const [catalog, setCatalog] = useState<
     Array<{ id: string; name: string; revision: number }>
   >([])
+  const provider = useMemo(
+    () => createAccountPreviewProvider(accountId),
+    [accountId],
+  )
+  const [games, setGames] = useState<Array<{ id: string; title: string }>>([])
+  const [quizId, setQuizId] = useState("")
+  const [cardScopes, setCardScopes] = useState<
+    Array<{ id: string; key: string; label: string }>
+  >([])
+  const [gameScopeId, setGameScopeId] = useState("")
+  useEffect(() => {
+    const controller = new AbortController()
+    setGameScopeId("")
+    setCardScopes([])
+
+    if (quizId) {
+      void createAccountPreviewAccess(accountId)
+        .readSource(quizId, controller.signal)
+        .then((source) => {
+          if (!controller.signal.aborted) {
+            setCardScopes(
+              source.show.cards.map((card, index) => ({
+                id: source.scopeIds[card.key],
+                key: card.key,
+                label: `${index + 1}. ${card.kind === "quiz" || card.kind === "survey" ? card.question : (card.title ?? card.kind)}`,
+              })),
+            )
+          }
+        })
+        .catch(() => undefined)
+    }
+
+    return () => controller.abort()
+  }, [accountId, quizId])
+  useEffect(() => {
+    const controller = new AbortController()
+    void siteRequest<{ games: Array<{ id: string; title: string }> }>(
+      "/api/extensions/preview/catalogue",
+      { signal: controller.signal },
+    )
+      .then((value) => {
+        if (!controller.signal.aborted && Array.isArray(value.games)) {
+          setGames(value.games)
+          setQuizId(value.games[0]?.id ?? "")
+        }
+      })
+      .catch(() => undefined)
+
+    return () => controller.abort()
+  }, [accountId])
   const [loaded, setLoaded] = useState(false),
     [failed, setFailed] = useState(false),
     [canAuthor, setCanAuthor] = useState(false)
@@ -77,30 +138,59 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
     const abort = new AbortController()
     setLoaded(false)
     setFailed(false)
+    setCanAuthor(false)
     void siteRequest<{ workspaces: Record<string, string[]> }>(
       "/api/themes/workspaces",
       { signal: abort.signal },
     )
       .then(async (result) => {
-        if (abort.signal.aborted) return
-        if (!result.workspaces[accountId]?.includes("author")) {
-          setCanAuthor(false)
+        if (abort.signal.aborted) {
           return
         }
+
+        setWorkspaces(
+          Object.keys(result.workspaces).filter((id) =>
+            result.workspaces[id]?.includes("author"),
+          ),
+        )
+
+        if (!result.workspaces[workspaceId]?.includes("author")) {
+          setCanAuthor(false)
+
+          return
+        }
+
         const documents = await client.list(abort.signal)
+
         if (!abort.signal.aborted) {
           setCanAuthor(true)
           setCatalog(documents)
         }
       })
       .catch(() => {
-        if (!abort.signal.aborted) setFailed(true)
+        if (!abort.signal.aborted) {
+          setFailed(true)
+        }
       })
       .finally(() => {
-        if (!abort.signal.aborted) setLoaded(true)
+        if (!abort.signal.aborted) {
+          setLoaded(true)
+        }
       })
+
     return () => abort.abort()
-  }, [accountId, client])
+  }, [workspaceId, client])
+  const switchWorkspace = (id: string) => {
+    if (!workspaces.includes(id) || pending) {
+      return
+    }
+
+    setOpened(null)
+    setCatalog([])
+    setDirty(false)
+    setWorkspaceId(id)
+    setDestination(null)
+  }
   const open = async (id: string) => {
     if (openRequest.current) {
       return
@@ -109,6 +199,7 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
     const controller = new AbortController()
     openRequest.current = controller
     setPending(true)
+
     try {
       const receipt =
         id === "new"
@@ -125,6 +216,7 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
       if (controller.signal.aborted) {
         return
       }
+
       setOpened(receipt)
       setDirty(false)
       setFailed(false)
@@ -144,13 +236,45 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
     }
   }
   const choose = (id: string) => {
-    if (dirty) setDestination(id)
-    else void open(id)
+    if (dirty) {
+      setDestination(id)
+    } else {
+      void open(id)
+    }
   }
+
   return (
-    <>
-      <PlatformScope context="platform.studio" appearance="light">
+    <InlineGamePreviewBoundary
+      enabled
+      provider={provider}
+      routeKey={`${accountId}:${workspaceId}`}
+    >
+      <PlatformScope
+        context="platform.studio"
+        appearance="light"
+        style={{ background: "var(--tds-background)" }}
+      >
         <div className="theme-builder-toolbar" style={{ padding: "1rem" }}>
+          {workspaces.length > 1 && (
+            <Select
+              label={text("workspace")}
+              value={workspaceId}
+              disabled={pending}
+              onChange={(event) => {
+                if (dirty) {
+                  setDestination(`workspace:${event.target.value}`)
+                } else {
+                  switchWorkspace(event.target.value)
+                }
+              }}
+            >
+              {workspaces.map((id) => (
+                <option key={id} value={id}>
+                  {id === accountId ? text("personalWorkspace") : id}
+                </option>
+              ))}
+            </Select>
+          )}
           <a
             href="/studio"
             onClick={(event) => {
@@ -171,7 +295,9 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
                 value={opened?.document.id ?? ""}
                 disabled={pending || !canAuthor}
                 onChange={(event) => {
-                  if (event.target.value) choose(event.target.value)
+                  if (event.target.value) {
+                    choose(event.target.value)
+                  }
                 }}
               >
                 <option value="">{text("select")}</option>
@@ -189,13 +315,7 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
               >
                 {getNativeShowLibrary().families.map((item) => (
                   <option key={item.ref.id} value={item.ref.id}>
-                    {nativeBuilderText(
-                      locale,
-                      item.definition.nameKey.replace(
-                        /^extensions:themes\./u,
-                        "",
-                      ),
-                    )}
+                    {nativeBuilderText(locale, item.definition.nameKey)}
                   </option>
                 ))}
               </Select>
@@ -215,11 +335,38 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
             </>
           )}
           {failed && <p role="alert">{text("unavailable")}</p>}
+          <Select
+            label={text("previewGame")}
+            value={quizId}
+            onChange={(event) => setQuizId(event.target.value)}
+          >
+            <option value="">{text("select")}</option>
+            {games.map((game) => (
+              <option key={game.id} value={game.id}>
+                {game.title}
+              </option>
+            ))}
+          </Select>
+          <Select
+            label={text("cardScope")}
+            value={gameScopeId}
+            disabled={!cardScopes.length || pending}
+            onChange={(event) => setGameScopeId(event.target.value)}
+          >
+            <option value="">{text("allCards")}</option>
+            {cardScopes.map((card) => (
+              <option key={card.id} value={card.id}>
+                {card.label}
+              </option>
+            ))}
+          </Select>
         </div>
         <AlertDialog
           open={Boolean(destination)}
           onOpenChange={(value) => {
-            if (!value) setDestination(null)
+            if (!value) {
+              setDestination(null)
+            }
           }}
           title={text("discard")}
           description={text("unsaved")}
@@ -227,23 +374,33 @@ function AccountThemeBuilder({ accountId }: { accountId: string }) {
           cancelLabel={text("cancel")}
           errorLabel={text("error")}
           onConfirm={() => {
-            if (destination === "back") window.location.assign("/studio")
-            else if (destination) return open(destination)
+            if (destination === "back") {
+              window.location.assign("/studio")
+            } else if (destination?.startsWith("workspace:")) {
+              switchWorkspace(destination.slice(10))
+            } else if (destination) {
+              return open(destination)
+            }
           }}
         />
       </PlatformScope>
       <ThemeBuilderShell
-        key={opened?.document.id ?? "empty"}
+        key={`${workspaceId}:${opened?.document.id ?? "empty"}`}
         locale={locale}
         initialDocument={opened?.document}
         initialRevision={opened?.revision}
         client={client}
         canAuthor={canAuthor}
-        tenantId={accountId}
+        tenantId={workspaceId}
         appearance="light"
         onDirtyChange={changed}
         onSaved={saved}
+        previewQuizId={quizId}
+        gameScopeId={gameScopeId || undefined}
+        previewAuthoredKey={
+          cardScopes.find((card) => card.id === gameScopeId)?.key
+        }
       />
-    </>
+    </InlineGamePreviewBoundary>
   )
 }

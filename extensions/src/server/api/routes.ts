@@ -7,6 +7,7 @@ import { Hono, type MiddlewareHandler } from "hono"
 import type { ContentfulStatusCode } from "hono/utils/http-status"
 import { StatusCodes } from "http-status-codes"
 import { z } from "zod"
+import { bodyLimit } from "hono/body-limit"
 import {
   quizExtrasV1Schema,
   quizExtrasV2Schema,
@@ -23,6 +24,14 @@ import {
 import { CompositeStorageService } from "../storage/service"
 import { CompositeStorageError } from "../storage/error"
 import type { StorageInjections } from "../storage/sidecar"
+import {
+  readAccountPreviewSource,
+  readAccountPreviewAssets,
+  listAccountPreviewSources,
+  PreviewSourceError,
+} from "./account-preview-source"
+import { readApplicationPreviewRuntime } from "./application-preview-runtime"
+import { readPublicPreviewSource } from "./public-preview-source"
 
 let cachedDotLottieWasmBytes: Uint8Array | null = null
 
@@ -125,9 +134,128 @@ export const createExtensionRoutes = (
     })
   })
 
+  app.get("/preview/public/:id", (c) => {
+    c.header("Cache-Control", "no-store")
+
+    if (process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true") {
+      return c.json({ error: "Preview unavailable" }, 404)
+    }
+
+    const source = readPublicPreviewSource(c.req.param("id"))
+
+    return source
+      ? c.json(source)
+      : c.json({ error: "Preview unavailable" }, 404)
+  })
+  app.get("/preview/public-runtime/:digest/:name", (c) => {
+    c.header("Cache-Control", "no-store")
+    c.header("X-Content-Type-Options", "nosniff")
+
+    if (
+      process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true" ||
+      process.env.TADAZZ_PUBLIC_GAME_PREVIEW_ENABLED !== "true"
+    ) {
+      return c.json({ error: "Preview unavailable" }, 404)
+    }
+
+    const runtime = readApplicationPreviewRuntime(
+      c.req.param("digest"),
+      c.req.param("name"),
+    )
+
+    return runtime
+      ? c.body(runtime.bytes as unknown as ArrayBuffer, 200, {
+          "Content-Type": runtime.type,
+        })
+      : c.json({ error: "Preview unavailable" }, 404)
+  })
+
   if (requireManagerMiddleware) {
     app.use("*", requireManagerMiddleware)
   }
+
+  app.get("/preview/quizzes/:id", (c) => {
+    c.header("Cache-Control", "private, no-store")
+
+    if (
+      !requireManagerMiddleware ||
+      process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true"
+    ) {
+      return c.json({ error: "Preview unavailable" }, 404)
+    }
+
+    try {
+      return c.json(readAccountPreviewSource(injections, c.req.param("id")))
+    } catch (error) {
+      return c.json(
+        { error: "Preview unavailable" },
+        error instanceof PreviewSourceError ? error.status : 422,
+      )
+    }
+  })
+  app.get("/preview/catalogue", (c) => {
+    c.header("Cache-Control", "private, no-store")
+
+    if (
+      !requireManagerMiddleware ||
+      process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true"
+    ) {
+      return c.json({ error: "Preview unavailable" }, 404)
+    }
+
+    return c.json({ games: listAccountPreviewSources(injections) })
+  })
+  app.post(
+    "/preview/assets",
+    bodyLimit({ maxSize: 40_000 }),
+    zValidator(
+      "json",
+      z.strictObject({ urls: z.array(z.string().max(160)).max(256) }),
+    ),
+    (c) => {
+      c.header("Cache-Control", "private, no-store")
+
+      if (
+        !requireManagerMiddleware ||
+        process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true"
+      ) {
+        return c.json({ error: "Preview unavailable" }, 404)
+      }
+
+      try {
+        return c.json({
+          assets: readAccountPreviewAssets(
+            injections,
+            c.req.valid("json").urls,
+          ),
+        })
+      } catch {
+        return c.json({ error: "Preview unavailable" }, 422)
+      }
+    },
+  )
+  app.get("/preview/runtime/:digest/:name", (c) => {
+    c.header("Cache-Control", "private, no-store")
+    c.header("X-Content-Type-Options", "nosniff")
+
+    if (
+      !requireManagerMiddleware ||
+      process.env.TADAZZ_INLINE_GAME_PREVIEW_ENABLED !== "true"
+    ) {
+      return c.json({ error: "Preview unavailable" }, 404)
+    }
+
+    const runtime = readApplicationPreviewRuntime(
+      c.req.param("digest"),
+      c.req.param("name"),
+    )
+
+    return runtime
+      ? c.body(runtime.bytes as unknown as ArrayBuffer, 200, {
+          "Content-Type": runtime.type,
+        })
+      : c.json({ error: "Preview unavailable" }, 404)
+  })
 
   // GET /quizzes/:id -> 200 { quizId, exists, extras: QuizExtrasV1 | null, baseDigest } or 404
   app.get("/quizzes/:id", (c) => {

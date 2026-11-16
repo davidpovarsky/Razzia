@@ -33,13 +33,19 @@ import {
 } from "./sidecar"
 
 function logicalPayload(record: Record<string, unknown>, quizId: string) {
-  if (!("id" in record)) return record
-  if (record.id !== quizId)
+  if (!("id" in record)) {
+    return record
+  }
+
+  if (record.id !== quizId) {
     throw new CompositeStorageError(
       "Stored quiz identity mismatch",
       StatusCodes.CONFLICT,
     )
+  }
+
   const { id: _storageId, ...payload } = record
+
   return payload
 }
 
@@ -66,7 +72,13 @@ export class CompositeStorageService {
     extras: AnyQuizExtras | null,
   ) {
     try {
-      return this.injections.creation!.create(quizz, extras)
+      const { creation } = this.injections
+
+      if (!creation) {
+        throw new Error("Creation storage adapter unavailable")
+      }
+
+      return creation.create(quizz, extras)
     } catch (error) {
       const failure = new CompositeStorageError(
         "errors:server.internal",
@@ -87,15 +99,19 @@ export class CompositeStorageService {
     revision: number
     baseDigest: string
   } {
-    if (this.injections.creation) return this.createReservedQuiz(quizz, extras)
+    if (this.injections.creation) {
+      return this.createReservedQuiz(quizz, extras)
+    }
+
     let quizId = ""
     let journalCreated = false
+
     try {
       quizId = this.injections.saveQuizz(quizz).id
       const schema =
         extras.schemaVersion === 2 ? quizExtrasV2Schema : quizExtrasV1Schema
       const validated = schema.parse({ ...extras, quizId, revision: 1 })
-      // saveQuizz owns ID allocation. Once it returns, persist rollback intent
+      // SaveQuizz owns ID allocation. Once it returns, persist rollback intent
       // before the sidecar write. A crash inside saveQuizz remains an adapter gate.
       createStagedJournal(this.injections.getPath, {
         quizId,
@@ -107,27 +123,36 @@ export class CompositeStorageService {
       journalCreated = true
       writeSidecar(this.injections.getPath, quizId, validated)
       removeJournal(this.injections.getPath, quizId)
+
       return { quizId, revision: 1, baseDigest: validated.baseDigest }
     } catch (error) {
       const cleanupErrors: unknown[] = []
+
       if (quizId) {
         // Attempt both cleanups independently; a failed base deletion must not
         // hide a sidecar cleanup error or destroy the recovery journal.
         try {
-          if (readRecoveryBase(this.injections, quizId))
+          if (readRecoveryBase(this.injections, quizId)) {
             this.injections.deleteQuizz(quizId)
-          if (readRecoveryBase(this.injections, quizId))
+          }
+
+          if (readRecoveryBase(this.injections, quizId)) {
             throw new Error("Base survived creation rollback")
+          }
         } catch (cleanupError) {
           cleanupErrors.push(cleanupError)
         }
+
         try {
           deleteSidecar(this.injections.getPath, quizId)
-          if (sidecarExists(this.injections.getPath, quizId))
+
+          if (sidecarExists(this.injections.getPath, quizId)) {
             throw new Error("Sidecar survived creation rollback")
+          }
         } catch (cleanupError) {
           cleanupErrors.push(cleanupError)
         }
+
         if (cleanupErrors.length === 0 && journalCreated) {
           try {
             removeJournal(this.injections.getPath, quizId)
@@ -136,6 +161,7 @@ export class CompositeStorageService {
           }
         }
       }
+
       const reason = error instanceof Error ? error.message : String(error)
       const recovery =
         cleanupErrors.length > 0
@@ -522,6 +548,46 @@ export class CompositeStorageService {
       const schemaToUse =
         extras.schemaVersion === 2 ? quizExtrasV2Schema : quizExtrasV1Schema
 
+      const freshScenes =
+        extras.schemaVersion === 2
+          ? Object.fromEntries(
+              Object.entries(extras.scenes).map(([id, scene]) => [
+                id,
+                scene.kind === "answerRecap" && scene.startQuestionId
+                  ? {
+                      ...scene,
+                      startQuestionId:
+                        idMap.get(scene.startQuestionId) ??
+                        scene.startQuestionId,
+                    }
+                  : scene,
+              ]),
+            )
+          : undefined
+      // A cloned game's new question UUIDs still address the original immutable
+      // publication's card scopes. Flatten aliases when cloning an earlier clone.
+      const scopeAliases =
+        extras.schemaVersion === 2
+          ? quizExtrasV2Schema.shape.defaults.shape.showCompositionScopeAliases.parse(
+              extras.defaults.showCompositionScopeAliases,
+            )
+          : undefined
+      const freshDefaults =
+        extras.schemaVersion === 2 && extras.defaults.showComposition
+          ? {
+              ...extras.defaults,
+              showCompositionScopeAliases: Object.fromEntries([
+                ...Object.entries(scopeAliases ?? {}).filter(
+                  ([id]) => !idMap.has(id),
+                ),
+                ...[...idMap].map(([oldId, newId]): [string, string] => [
+                  newId,
+                  scopeAliases?.[oldId] ?? oldId,
+                ]),
+              ]),
+            }
+          : undefined
+
       // Pre-validate extras payload before touching disk or saving base quiz
       const preValidation = schemaToUse.safeParse({
         ...extras,
@@ -532,6 +598,8 @@ export class CompositeStorageService {
         perQuestion: freshPerQuestion,
         ...(freshLeaderboard ? { leaderboard: freshLeaderboard } : {}),
         ...(freshTimeline ? { timeline: freshTimeline } : {}),
+        ...(freshScenes ? { scenes: freshScenes } : {}),
+        ...(freshDefaults ? { defaults: freshDefaults } : {}),
       })
 
       if (!preValidation.success) {
@@ -577,8 +645,10 @@ export class CompositeStorageService {
       }
     }
 
-    if (this.injections.creation)
+    if (this.injections.creation) {
       return this.createReservedQuiz(validatedQuizz, null)
+    }
+
     const saveResult = this.injections.saveQuizz(validatedQuizz)
     const baseDigest = computeCanonicalBaseDigest(validatedQuizz)
 

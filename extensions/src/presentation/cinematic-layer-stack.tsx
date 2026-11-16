@@ -206,7 +206,17 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
     }
 
     if (controlledTimeMs !== undefined) {
-      const targetSec = Math.max(0, controlledTimeMs / 1000)
+      const elapsed = Math.max(0, controlledTimeMs / 1000)
+      let targetSec = elapsed
+
+      if (Number.isFinite(vid.duration) && vid.duration > 0) {
+        targetSec = vid.loop
+          ? elapsed % vid.duration
+          : Math.min(elapsed, vid.duration)
+      }
+
+      vid.volume = Math.max(0, Math.min(1, volume))
+      vid.muted = muted
 
       if (Math.abs(vid.currentTime - targetSec) > 0.08) {
         try {
@@ -237,13 +247,18 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         }
       }
     }
-  }, [controlledTimeMs, controlledPaused, hasVideoBackdrop])
+  }, [controlledTimeMs, controlledPaused, hasVideoBackdrop, volume, muted])
 
   // Attempt live video playback and handle browser autoplay-with-sound policies gracefully
   useEffect(() => {
     const vid = videoRef.current
 
-    if (!vid || !hasVideoBackdrop || interactiveEditorMode) {
+    if (
+      !vid ||
+      !hasVideoBackdrop ||
+      interactiveEditorMode ||
+      controlledPaused !== undefined
+    ) {
       return
     }
 
@@ -265,7 +280,14 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
         }
       })
     }
-  }, [stageIdentityKey, hasVideoBackdrop, interactiveEditorMode, muted, volume])
+  }, [
+    stageIdentityKey,
+    hasVideoBackdrop,
+    interactiveEditorMode,
+    muted,
+    volume,
+    controlledPaused,
+  ])
 
   // Track video.currentTime smoothly via requestAnimationFrame while video is playing
   useEffect(() => {
@@ -576,7 +598,9 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
                 data-testid="scene-video"
                 data-scene-video-kind={sceneKind}
                 src={trimmedMediaUrl}
-                autoPlay={!interactiveEditorMode}
+                autoPlay={
+                  !interactiveEditorMode && !(controlledPaused ?? false)
+                }
                 playsInline
                 loop={loop}
                 muted={muted}
@@ -696,7 +720,7 @@ export const CinematicLayerStack: React.FC<CinematicLayerStackProps> = ({
               onClick={handleActivateAudio}
               className="hover:bg-accent mb-3 bg-white text-black"
             >
-              <span>🔊</span>
+              <span>ðŸ”Š</span>
               <span>{activateAudioLabel}</span>
             </PlatformButton>
           )}

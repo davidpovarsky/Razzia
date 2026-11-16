@@ -1,6 +1,13 @@
 import { defineConfig, mergeConfig, type Plugin } from "vite"
 import { fileURLToPath } from "node:url"
-import { readFileSync, readdirSync, mkdirSync, cpSync } from "node:fs"
+import {
+  readFileSync,
+  readdirSync,
+  mkdirSync,
+  cpSync,
+  writeFileSync,
+  existsSync,
+} from "node:fs"
 import { createHash } from "node:crypto"
 import { join, resolve } from "node:path"
 import webConfig from "../packages/web/vite.config"
@@ -111,6 +118,45 @@ const siteComposition = (): Plugin => {
       const target = resolve(outputDirectory, "tadazz-design-reference")
       mkdirSync(target, { recursive: true })
       cpSync(assets, target, { recursive: true })
+      const buildPath = fileURLToPath(
+        new URL(
+          "./src/core/show-library/application-preview-build.json",
+          import.meta.url,
+        ),
+      )
+
+      if (!existsSync(buildPath)) {
+        return
+      }
+
+      const preview = JSON.parse(readFileSync(buildPath, "utf8")) as {
+        available: boolean
+        files: Array<{ name: string; bytes: number; sha256: string }>
+      }
+
+      if (!preview.available) {
+        return
+      }
+
+      const runtime = fileURLToPath(
+        new URL("./dist/application-preview/", import.meta.url),
+      )
+      const destination = resolve(outputDirectory, "tadazz-application-runtime")
+      mkdirSync(destination, { recursive: true })
+      for (const name of ["renderer.mjs", "renderer.css"]) {
+        const expected = preview.files.find((file) => file.name === name)
+        const bytes = readFileSync(join(runtime, name))
+
+        if (
+          !expected ||
+          bytes.length !== expected.bytes ||
+          createHash("sha256").update(bytes).digest("hex") !== expected.sha256
+        ) {
+          throw new Error("Application preview build changed before packaging")
+        }
+
+        writeFileSync(join(destination, name), bytes)
+      }
     },
   }
 }

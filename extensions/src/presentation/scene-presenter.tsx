@@ -256,6 +256,10 @@ export const ScenePresenter = ({
   )
   const [remainingMs, setRemainingMs] = useState(initialRemaining)
   useEffect(() => {
+    if (controlledTimeMs !== undefined) {
+      return
+    }
+
     const interval = setInterval(() => {
       const remaining = calculateInterludeRemainingMs(
         effectiveServerStartedAt,
@@ -265,7 +269,60 @@ export const ScenePresenter = ({
     }, 100)
 
     return () => clearInterval(interval)
-  }, [effectiveServerStartedAt, durationMs])
+  }, [effectiveServerStartedAt, durationMs, controlledTimeMs])
+
+  // A readonly preview supplies its existing sole clock. Legacy foreground
+  // media follows it just as the cinematic layer already does.
+  useEffect(() => {
+    if (controlledTimeMs === undefined) {
+      return
+    }
+
+    const synchronize = () => {
+      for (const media of [videoRef.current, audioRef.current]) {
+        if (!media) {
+          continue
+        }
+
+        const elapsed = Math.max(0, controlledTimeMs / 1000)
+        let target = elapsed
+
+        if (Number.isFinite(media.duration) && media.duration > 0) {
+          target = media.loop
+            ? elapsed % media.duration
+            : Math.min(elapsed, media.duration)
+        }
+
+        if (
+          Number.isFinite(media.duration) &&
+          media.duration > 0 &&
+          Math.abs(media.currentTime - target) > 0.25
+        ) {
+          media.currentTime = target
+        }
+
+        if (controlledPaused ?? true) {
+          media.pause()
+        } else if (media.paused && !media.ended) {
+          void media.play().catch(() => setMediaError(true))
+        }
+      }
+    }
+    synchronize()
+    const elements: HTMLMediaElement[] = [
+      videoRef.current,
+      audioRef.current,
+    ].flatMap((media) => (media ? [media] : []))
+    for (const media of elements) {
+      media.addEventListener("loadedmetadata", synchronize)
+    }
+
+    return () => {
+      for (const media of elements) {
+        media.removeEventListener("loadedmetadata", synchronize)
+      }
+    }
+  }, [controlledTimeMs, controlledPaused, activeScene?.id])
 
   // Stop video/audio media on unmount
   useEffect(() => {
@@ -319,10 +376,14 @@ export const ScenePresenter = ({
     isPortrait,
     availableHeight,
   } = useStageFit()
-  const remainingSeconds = Math.max(0, Math.ceil(remainingMs / 1000))
+  const displayedRemaining =
+    controlledTimeMs === undefined
+      ? remainingMs
+      : Math.max(0, durationMs - controlledTimeMs)
+  const remainingSeconds = Math.max(0, Math.ceil(displayedRemaining / 1000))
   const progressRatio = Math.max(
     0,
-    Math.min(1, remainingMs / (durationMs || 1)),
+    Math.min(1, displayedRemaining / (durationMs || 1)),
   )
   const advanceMode =
     (activeScene && "advance" in activeScene
@@ -410,13 +471,24 @@ export const ScenePresenter = ({
     1,
     Math.ceil(recapItems.length / effectivePerPage),
   )
-  const clampedRecapPage = Math.min(recapPage, totalRecapPages - 1)
+  const controlledRecapPage =
+    controlledTimeMs === undefined
+      ? recapPage
+      : Math.floor(
+          controlledTimeMs /
+            Math.max(2000, Math.floor(durationMs / totalRecapPages)),
+        ) % totalRecapPages
+  const clampedRecapPage = Math.min(controlledRecapPage, totalRecapPages - 1)
   const visibleRecapItems = recapItems.slice(
     clampedRecapPage * effectivePerPage,
     (clampedRecapPage + 1) * effectivePerPage,
   )
   useEffect(() => {
-    if (kind !== "answerRecap" || totalRecapPages <= 1) {
+    if (
+      kind !== "answerRecap" ||
+      totalRecapPages <= 1 ||
+      controlledTimeMs !== undefined
+    ) {
       return
     }
 
@@ -429,7 +501,7 @@ export const ScenePresenter = ({
     }, pageDuration)
 
     return () => clearInterval(timer)
-  }, [kind, totalRecapPages, durationMs])
+  }, [kind, totalRecapPages, durationMs, controlledTimeMs])
   const getKindLabel = (k: string, defaultLabel: string): string =>
     labels?.kinds?.[k] ?? defaultLabel
   const showHeaderOverlay =
@@ -636,7 +708,13 @@ export const ScenePresenter = ({
         containerPreset !== "none" && `tada-entrance-${containerPreset}`,
         className,
       )}
-      style={buildSceneSlotStyle(stageAnimations.questionEntrance, 0)}
+      style={{
+        ...buildSceneSlotStyle(stageAnimations.questionEntrance, 0),
+        ...(controlledPaused === undefined
+          ? {}
+          : { animationPlayState: controlledPaused ? "paused" : "running" }),
+      }}
+      data-preview-scene-paused={controlledPaused === true || undefined}
       data-tada-entrance={
         containerPreset !== "none" ? containerPreset : undefined
       }
@@ -655,6 +733,13 @@ export const ScenePresenter = ({
       })()}
       data-remaining={remainingSeconds}
     >
+      {controlledPaused !== undefined && (
+        <style>
+          {
+            "[data-preview-scene-paused] *{animation-play-state:paused!important}"
+          }
+        </style>
+      )}
       {/* Unified 6-Layer Stage Compositor for Cinema Mode (Opening, Closing, or Opt-in Media) */}
       {isCinemaScene &&
         (kind === "opening" || kind === "closing" || kind === "media") && (
@@ -1051,6 +1136,8 @@ export const ScenePresenter = ({
                     speed={ov.speed}
                     fit={ov.fit}
                     finish={ov.finish}
+                    paused={controlledPaused}
+                    seekTimeMs={controlledTimeMs}
                     onComplete={() => onOverlayCompleted?.(ov.id)}
                     className="h-36 w-56 sm:h-48 sm:w-72"
                     dataTestId={
@@ -1076,6 +1163,8 @@ export const ScenePresenter = ({
                   loop={activeScene.lottieLoop ?? true}
                   speed={activeScene.lottieSpeed ?? 1}
                   fit={activeScene.lottieFit ?? "contain"}
+                  paused={controlledPaused}
+                  seekTimeMs={controlledTimeMs}
                   onComplete={() => onOverlayCompleted?.("animation-lottie")}
                   className="h-40 w-64 sm:h-52 sm:w-80"
                   dataTestId="scene-lottie-player"
@@ -1972,7 +2061,11 @@ export const ScenePresenter = ({
                     <audio
                       ref={audioRef}
                       src={mediaUrl}
-                      autoPlay
+                      autoPlay={
+                        controlledPaused === undefined
+                          ? true
+                          : !controlledPaused
+                      }
                       loop={loop}
                       muted={muted}
                       controls={showControls}
@@ -1991,7 +2084,11 @@ export const ScenePresenter = ({
                     <video
                       ref={videoRef}
                       src={mediaUrl}
-                      autoPlay
+                      autoPlay={
+                        controlledPaused === undefined
+                          ? true
+                          : !controlledPaused
+                      }
                       loop={loop}
                       muted={muted}
                       controls={showControls}

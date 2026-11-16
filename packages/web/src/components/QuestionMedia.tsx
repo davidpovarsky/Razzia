@@ -12,6 +12,7 @@ interface Props {
   currentEpoch?: number
   isManager?: boolean
   isManuallyRevealed?: boolean
+  controlledTimeMs?: number
 }
 
 const QuestionMedia = ({
@@ -23,6 +24,7 @@ const QuestionMedia = ({
   currentEpoch,
   isManager,
   isManuallyRevealed,
+  controlledTimeMs,
 }: Props) => {
   if (media?.type === MEDIA_TYPES.IMAGE) {
     if (reveal && reveal.effect !== "none") {
@@ -35,6 +37,7 @@ const QuestionMedia = ({
           currentEpoch={currentEpoch}
           isManager={isManager}
           isManuallyRevealed={isManuallyRevealed}
+          controlledTimeMs={controlledTimeMs}
         />
       )
     }

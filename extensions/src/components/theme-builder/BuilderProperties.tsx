@@ -9,6 +9,7 @@ export function BuilderProperties({
   edit,
   readOnly,
   text,
+  referenceLabel = (id: string) => id,
 }: {
   node: BuilderNode
   templateId: string
@@ -16,10 +17,11 @@ export function BuilderProperties({
   edit: (edit: BuilderEdit) => void
   readOnly: boolean
   text: (key: BuilderTextKey) => string
+  referenceLabel?: (id: string) => string
 }) {
   const layout = <K extends keyof BuilderNode["layout"]>(
     key: K,
-    values: BuilderNode["layout"][K][],
+    values: Array<BuilderNode["layout"][K]>,
     label: BuilderTextKey,
   ) => (
     <Select
@@ -43,29 +45,42 @@ export function BuilderProperties({
       ))}
     </Select>
   )
+
   return (
     <div className="theme-builder-properties">
       <p>
-        <bdi>{node.component.id}</bdi>
+        <bdi>{referenceLabel(node.component.id)}</bdi>
       </p>
-      {layout("preset", ["flow", "grid", "safe-overlay"], "layout")}
+      {root && layout("preset", ["flow", "grid", "safe-overlay"], "layout")}
       {layout("alignment", ["start", "center", "end"], "alignment")}
       {layout("gap", ["none", "small", "medium", "large"], "gap")}
-      <Select
-        label={text("fit")}
-        value={node.props.fit ?? "inherit"}
-        disabled={readOnly}
-        onChange={(event) => {
-          const props = { ...node.props }
-          if (event.target.value === "inherit") delete props.fit
-          else props.fit = event.target.value as "contain" | "cover"
-          edit({ type: "props", templateId, nodeId: node.nodeId, value: props })
-        }}
-      >
-        <option value="inherit">{text("inherited")}</option>
-        <option value="contain">{text("contain")}</option>
-        <option value="cover">{text("cover")}</option>
-      </Select>
+      {root && (
+        <Select
+          label={text("fit")}
+          value={node.props.fit ?? "inherit"}
+          disabled={readOnly}
+          onChange={(event) => {
+            const props = { ...node.props }
+
+            if (event.target.value === "inherit") {
+              delete props.fit
+            } else {
+              props.fit = event.target.value as "contain" | "cover"
+            }
+
+            edit({
+              type: "props",
+              templateId,
+              nodeId: node.nodeId,
+              value: props,
+            })
+          }}
+        >
+          <option value="inherit">{text("inherited")}</option>
+          <option value="contain">{text("contain")}</option>
+          <option value="cover">{text("cover")}</option>
+        </Select>
+      )}
       <Button
         disabled={readOnly}
         onClick={() =>

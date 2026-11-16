@@ -2,11 +2,13 @@ import {
   sessionMatchesSelection,
   previewUnavailableReasonSchema,
   previewSelectionSchema,
+  previewPreferencesSchema,
   type GamePreviewProvider,
   type GamePreviewSession,
   type PreviewSelection,
   type PreviewSnapshot,
   type PreviewUnavailableReason,
+  type PreviewPreferences,
 } from "./contracts"
 import type { createPreviewCoordinator } from "./coordinator"
 
@@ -32,11 +34,13 @@ export function createPreviewSessionOwner({
   coordinator,
   provider,
   selection,
+  preferences,
   onState,
 }: {
   coordinator: Coordinator
   provider?: GamePreviewProvider
   selection: PreviewSelection
+  preferences?: Readonly<PreviewPreferences>
   onState: (state: PreviewConsumerState) => void
 }) {
   let current: Activation | null = null
@@ -45,6 +49,10 @@ export function createPreviewSessionOwner({
   const selected = parsedSelection.success
     ? Object.freeze(parsedSelection.data)
     : null
+  const parsedPreferences =
+    preferences === undefined
+      ? undefined
+      : previewPreferencesSchema.safeParse(preferences)
   const emit = (state: PreviewConsumerState) => {
     if (!disposed) {
       onState(state)
@@ -96,6 +104,14 @@ export function createPreviewSessionOwner({
     return activation.drained
   }
 
+  async function fail(activation: Activation) {
+    await release(activation).catch(() => undefined)
+
+    if (owns(activation)) {
+      emit({ status: "unavailable", reason: "playback-unavailable" })
+    }
+  }
+
   return {
     async open(element: HTMLElement) {
       if (disposed) {
@@ -135,16 +151,22 @@ export function createPreviewSessionOwner({
         return
       }
 
-      if (!provider || !selected) {
+      if (!provider || !selected || parsedPreferences?.success === false) {
         emit({ status: "unavailable", reason: "source-unavailable" })
 
         return
       }
 
       try {
-        const result = await provider.open(selected, activation.lease.signal)
+        const result = parsedPreferences?.success
+          ? await provider.open(
+              selected,
+              activation.lease.signal,
+              Object.freeze(parsedPreferences.data),
+            )
+          : await provider.open(selected, activation.lease.signal)
 
-        if (!owns(activation)) {
+        if (!usable(activation)) {
           // Open is projection-only. A late result never gets a stage mount.
           if (result.status === "ready") {
             await result.session.dispose()
@@ -196,16 +218,7 @@ export function createPreviewSessionOwner({
           try {
             emit({ status: "ready", snapshot: session.snapshot() })
           } catch {
-            void release(activation)
-              .finally(() => {
-                if (owns(activation)) {
-                  emit({
-                    status: "unavailable",
-                    reason: "playback-unavailable",
-                  })
-                }
-              })
-              .catch(() => undefined)
+            void fail(activation)
           }
         }
         const unsubscribe = session.subscribe(publish)
@@ -219,11 +232,7 @@ export function createPreviewSessionOwner({
         publish()
       } catch {
         // Do not forward provider errors, tokens, private titles or paths to DOM.
-        await release(activation).catch(() => undefined)
-
-        if (owns(activation)) {
-          emit({ status: "unavailable", reason: "playback-unavailable" })
-        }
+        await fail(activation)
       }
     },
     session() {
@@ -233,6 +242,13 @@ export function createPreviewSessionOwner({
     },
     close() {
       current?.lease?.release()
+    },
+    fail() {
+      if (current && owns(current)) {
+        return fail(current)
+      }
+
+      return Promise.resolve()
     },
     dispose() {
       disposed = true

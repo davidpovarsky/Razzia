@@ -1,10 +1,10 @@
+import { builderSections } from "./builder-sections"
 import { Button, Select } from "../../platform-ui"
 import {
   sectionOverridesSchema,
   type assetDescriptorSchema,
 } from "../../core/show-library/schemas"
 import { checkAssetReference } from "../../core/show-library/assets"
-import { getNativeAssetLibrary } from "../../core/show-library/native-media-library"
 import type { z } from "zod"
 import type { BuilderDocument, BuilderEdit, BuilderNode } from "./document"
 import type { BuilderTextKey } from "./strings"
@@ -21,6 +21,7 @@ export function BuilderLibrary({
   edit,
   selectTemplate,
   text,
+  referenceLabel = (id: string) => id,
 }: {
   document: BuilderDocument
   node?: BuilderNode
@@ -33,22 +34,10 @@ export function BuilderLibrary({
   edit: (command: BuilderEdit) => void
   selectTemplate: (id: string) => void
   text: (key: BuilderTextKey) => string
+  referenceLabel?: (id: string) => string
 }) {
-  const composition = document.content.composition
-  const scope = composition.scopes.find(
-    (s) =>
-      s.scopeId === scopeId &&
-      s.theme.id === composition.baseTheme.id &&
-      s.theme.version === composition.baseTheme.version,
-  )
-  const sections =
-    (scopeId
-      ? role === "all"
-        ? scope?.sections
-        : scope?.roles[role]
-      : role === "all"
-        ? composition.sections
-        : composition.roles[role]) ?? {}
+  const { composition } = document.content
+  const sections = builderSections(composition, role, scopeId) ?? {}
   const change = (value: unknown) =>
     edit({
       type: "sections",
@@ -59,6 +48,7 @@ export function BuilderLibrary({
   const component = document.registry.components.find(
     (c) => c.id === node?.component.id && c.version === node.component.version,
   )
+
   return (
     <div className="theme-builder-library">
       <Select
@@ -69,7 +59,7 @@ export function BuilderLibrary({
         <option value="">{text("select")}</option>
         {document.registry.templates.map((screen) => (
           <option key={`${screen.id}@${screen.version}`} value={screen.id}>
-            {screen.id}
+            {referenceLabel(screen.id)}
           </option>
         ))}
       </Select>
@@ -82,12 +72,13 @@ export function BuilderLibrary({
                 (c) => c.id === candidate.id && c.version === candidate.version,
               ) && (node?.children[p.id]?.length ?? 0) < p.maxChildren,
           )
+
           return (
             <Button
               key={`${candidate.id}@${candidate.version}`}
               disabled={readOnly || !port || !node}
               onClick={() => {
-                if (port && node)
+                if (port && node) {
                   edit({
                     type: "add",
                     templateId,
@@ -96,10 +87,11 @@ export function BuilderLibrary({
                     nodeId: `node-${crypto.randomUUID()}`,
                     component: { id: candidate.id, version: candidate.version },
                   })
+                }
               }}
               title={text("add")}
             >
-              <bdi>{candidate.id}</bdi>
+              <bdi>{referenceLabel(candidate.id)}</bdi>
             </Button>
           )
         })}
@@ -109,13 +101,14 @@ export function BuilderLibrary({
         <Button
           disabled={readOnly || !node}
           onClick={() => {
-            if (node)
+            if (node) {
               edit({
                 type: "motion",
                 templateId,
                 nodeId: node.nodeId,
                 motion: null,
               })
+            }
           }}
         >
           {text("none")}
@@ -132,47 +125,45 @@ export function BuilderLibrary({
               )
             }
             onClick={() => {
-              if (node)
+              if (node) {
                 edit({
                   type: "motion",
                   templateId,
                   nodeId: node.nodeId,
                   motion: { id: motion.id, version: motion.version },
                 })
+              }
             }}
           >
-            <bdi>{motion.id}</bdi>
+            <bdi>{referenceLabel(motion.id)}</bdi>
           </Button>
         ))}
       </details>
       <details>
         <summary>{text("assets")}</summary>
-        {getNativeAssetLibrary()
-          .entries.filter((entry) =>
-            entry.declarations.some(
-              (declaration) =>
-                declaration.theme.id === document.content.selection.id &&
-                declaration.theme.version ===
-                  document.content.selection.version,
-            ),
-          )
-          .map((entry) => (
-            <Button
-              key={`${entry.ref.assetId}/${entry.ref.sha256}`}
-              disabled
-              title={text("unavailable")}
-            >
-              <bdi>
-                {entry.ref.assetId} · {entry.ref.sha256.slice(0, 12)}
-              </bdi>
-            </Button>
-          ))}
+        <Button
+          onClick={(event) => {
+            const panel = event.currentTarget
+              .closest(".theme-builder")
+              ?.querySelector<HTMLDetailsElement>(
+                "[data-testid=builder-media-library]",
+              )
+
+            if (panel) {
+              panel.open = true
+              panel.scrollIntoView({ block: "nearest" })
+              panel.querySelector<HTMLSelectElement>("select")?.focus()
+            }
+          }}
+        >
+          {text("assets")}
+        </Button>
         <Button
           disabled={readOnly || !node}
           onClick={() => {
             if (node) {
               const next = { ...sections, assets: { ...sections.assets } }
-              delete next.assets[node.nodeId]
+              Reflect.deleteProperty(next.assets, node.nodeId)
               change(next)
             }
           }}
@@ -193,7 +184,7 @@ export function BuilderLibrary({
               key={`${asset.assetId}/${asset.sha256}`}
               disabled={readOnly || !node}
               onClick={() => {
-                if (node)
+                if (node) {
                   change({
                     ...sections,
                     assets: {
@@ -204,6 +195,7 @@ export function BuilderLibrary({
                       },
                     },
                   })
+                }
               }}
             >
               <bdi>

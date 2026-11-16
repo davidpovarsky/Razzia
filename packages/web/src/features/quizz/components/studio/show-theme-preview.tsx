@@ -4,16 +4,36 @@ import {
   TadazzV4Stage,
   showThemeStyle,
   type TadazzV4Scene,
+  EditorReadonlyPreview,
 } from "@razzia/extensions/presentation"
 import { resolveShowTheme } from "@razzia/extensions/core"
 import { useReducedMotion } from "motion/react"
-import { useQuizzEditor } from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import {
+  useQuizzEditor,
+  type QuizzFormValues,
+} from "@razzia/web/features/quizz/contexts/quizz-editor-context"
+import { useFormContext, useWatch } from "react-hook-form"
 import { useStudioEditor } from "./studio-editor-context"
 import Button from "@razzia/web/components/Button"
 import { useInstalledThemeCatalog } from "./installed-theme-catalog"
 
 /** Native stage preview only: no socket, live game, timers or audio owner. */
 export function ShowThemePreview() {
+  return import.meta.env.VITE_TADAZZ_THEME_BUILDER_ENABLED === "true" ? (
+    <DraftShowThemePreview />
+  ) : (
+    <LegacyShowThemePreview />
+  )
+}
+
+function DraftShowThemePreview() {
+  const { control, getValues } = useFormContext<QuizzFormValues>()
+  const subject = useWatch({ control, name: "subject" })
+
+  return <EditorReadonlyPreview subject={subject} readQuizz={getValues} />
+}
+
+function LegacyShowThemePreview() {
   const { t } = useTranslation()
   const { questions, currentIndex, questionIds, extras } = useQuizzEditor()
   const { defaults } = useStudioEditor()

@@ -4,6 +4,7 @@ import type { Question } from "@razzia/common/types/game"
 import {
   createDefaultRosterExtras,
   createDefaultQuizExtrasV2,
+  cloneApplicationCardScope,
   isQuestionCardBlankForConversion,
   type AnyQuizExtras,
   type QuizExtrasV2,
@@ -458,6 +459,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
     nextSelectedId: string
     nextCurrentIndex: number
     nextPerQuestion?: QuizExtrasV2["perQuestion"]
+    nextDefaults?: StudioDefaults
   }
   const normalizeRecapSceneStartRefs = useCallback(
     (
@@ -524,12 +526,16 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       setScenes(normalizedScenes)
       setSelectedTimelineId(result.nextSelectedId)
 
+      if (result.nextDefaults) {
+        setDefaults(result.nextDefaults)
+      }
+
       if (result.nextCurrentIndex >= 0) {
         setCurrentIndex(result.nextCurrentIndex)
       }
 
       syncToExtras(result.nextTimeline, normalizedScenes, {
-        defaults,
+        defaults: result.nextDefaults ?? defaults,
         targetQuestionIds: result.nextQuestionIds,
         targetPerQuestion: result.nextPerQuestion,
       })
@@ -1078,6 +1084,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
             nextSelectedId: newItem.id,
             nextCurrentIndex: qIndex + 1,
             nextPerQuestion,
+            nextDefaults: cloneApplicationCardScope(
+              defaults,
+              item.questionId,
+              newQId,
+            ),
           })
         }
       } else if ("sceneId" in item) {
@@ -1134,6 +1145,11 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
           nextScenes,
           nextSelectedId: newItem.id,
           nextCurrentIndex: currentIndex,
+          nextDefaults: cloneApplicationCardScope(
+            defaults,
+            item.sceneId,
+            newSceneId,
+          ),
         })
       }
     },
@@ -1145,6 +1161,7 @@ export const StudioEditorProvider = ({ children }: PropsWithChildren) => {
       extras,
       currentIndex,
       applyStudioMutation,
+      defaults,
     ],
   )
 

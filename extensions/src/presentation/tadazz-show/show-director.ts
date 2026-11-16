@@ -551,6 +551,12 @@ function planScene(
         preset?: string
       }
 
+      // The existing ScenePresenter owns an explicitly authored Lottie. Keep
+      // Creating Worlds' full-show choreography on its original native path.
+      if (scene.lottieUrl && !(preset && isFullShowScene(preset))) {
+        return [{ op: "custom" }]
+      }
+
       if (preset && isFullShowScene(preset)) {
         const authored = scene as typeof scene & {
           round?: number

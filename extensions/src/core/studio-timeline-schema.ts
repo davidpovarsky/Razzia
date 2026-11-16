@@ -1,4 +1,5 @@
 import { z } from "zod"
+import { applicationCompositionPinSchema } from "./show-library/application-composition-pin"
 import {
   createDefaultShowTheme,
   isLegacyShowRollback,
@@ -461,6 +462,12 @@ export interface ActiveSceneData {
 
 export const studioDefaultsSchema = z.strictObject({
   showTheme: showThemeSelectionSchema.optional(),
+  showComposition: applicationCompositionPinSchema.optional(),
+  /** Native UUIDs in storage; authored card keys during friendly show export. */
+  showCompositionScopeAliases: z
+    .record(z.string().min(1).max(160), z.uuid())
+    .refine((value) => Object.keys(value).length <= 1024)
+    .optional(),
   themeHistory: z.array(showThemeSelectionSchema).max(32).optional(),
   newQuestionMode: z.enum(["quiz", "survey"]).default("quiz"),
   leaderboardPolicy: z

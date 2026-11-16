@@ -14,6 +14,7 @@ import type {
   SolutionPickerProps,
 } from "@razzia/web/features/questions/types"
 import type { ComponentType } from "react"
+import { QUESTION_PRESENTATIONS } from "./presentation"
 
 interface QuestionRegistryEntry {
   labelKey: string
@@ -29,9 +30,9 @@ interface QuestionRegistryEntry {
 }
 
 export const QUESTION_REGISTRY: Record<QuestionType, QuestionRegistryEntry> = {
-  single,
-  multi,
-  estimation,
+  single: { ...single, ...QUESTION_PRESENTATIONS.single },
+  multi: { ...multi, ...QUESTION_PRESENTATIONS.multi },
+  estimation: { ...estimation, ...QUESTION_PRESENTATIONS.estimation },
 }
 
 export const QUESTION_TYPE_LIST = Object.keys(

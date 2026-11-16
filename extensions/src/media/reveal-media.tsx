@@ -12,6 +12,8 @@ export interface RevealMediaProps {
   reducedMotion?: boolean
   className?: string
   mediaClassName?: string
+  /** Optional external presentation clock; no local animation loop in this mode. */
+  controlledTimeMs?: number
 }
 
 const clsx = (...classes: unknown[]): string =>
@@ -83,6 +85,7 @@ export const RevealMedia = ({
   reducedMotion = false,
   className,
   mediaClassName,
+  controlledTimeMs,
 }: RevealMediaProps) => {
   const effect: RevealEffect = reveal?.effect ?? "none"
   const durationMs = reveal?.durationMs ?? 0
@@ -132,9 +135,24 @@ export const RevealMedia = ({
     currentEpoch,
   ])
 
-  const [progress, setProgress] = useState<number>(initialProgress)
+  const [localProgress, setProgress] = useState<number>(initialProgress)
+  let progress = localProgress
+
+  if (controlledTimeMs !== undefined) {
+    if (!isTriggered) {
+      progress = 0
+    } else if (shouldSkipAnimation) {
+      progress = 1
+    } else {
+      progress = Math.max(0, Math.min(1, controlledTimeMs / durationMs))
+    }
+  }
 
   useEffect(() => {
+    if (controlledTimeMs !== undefined) {
+      return
+    }
+
     // If not triggered yet or animation skipped, snap to target
     if (!isTriggered) {
       setProgress(0.0)
@@ -192,6 +210,7 @@ export const RevealMedia = ({
     serverStartedAt,
     durationMs,
     currentEpoch,
+    controlledTimeMs,
   ])
 
   if (!isAudienceAllowed) {

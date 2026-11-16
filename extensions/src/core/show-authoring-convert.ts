@@ -78,6 +78,7 @@ export function authoredShowToNativeBundleDraft(
   const perQuestion: Record<string, PerQuestionItem> = {}
   const baseQuestions: QuizzValidated["questions"] = []
   const keyToQuestionId = new Map<string, string>()
+  const keyToScopeId = new Map<string, string>()
   for (const _entry of show.cards) {
     const card = _entry
 
@@ -85,6 +86,7 @@ export function authoredShowToNativeBundleDraft(
       const qId = crypto.randomUUID()
       const timelineItemId = crypto.randomUUID()
       keyToQuestionId.set(card.key, qId)
+      keyToScopeId.set(card.key, qId)
       questionIds.push(qId)
       const solutions =
         card.kind === "quiz" && card.correctAnswers
@@ -170,6 +172,7 @@ export function authoredShowToNativeBundleDraft(
       })
     } else {
       const sceneId = crypto.randomUUID()
+      keyToScopeId.set(card.key, sceneId)
       const timelineItemId = crypto.randomUUID()
       const sceneAppearance = {
         ...(card.background
@@ -609,6 +612,14 @@ export function authoredShowToNativeBundleDraft(
   const baseDigest = computeCanonicalBaseDigest(quizz)
   const defaults = createStudioDefaults(show.defaults)
 
+  if (defaults.showCompositionScopeAliases) {
+    defaults.showCompositionScopeAliases = Object.fromEntries(
+      Object.entries(defaults.showCompositionScopeAliases).map(
+        ([key, scopeId]) => [keyToScopeId.get(key) ?? key, scopeId],
+      ),
+    )
+  }
+
   // Apply settings channel overrides if present
   const settingExtras: Pick<QuizExtrasV2, "leaderboard"> = {}
   let teamsExtras: QuizExtrasV2["teams"] = {
@@ -780,6 +791,7 @@ export function nativeBundleToAuthoredShow(
   const cards: AuthoredCard[] = []
   const questionMap = new Map<string, Record<string, unknown>>()
   const questionIdToCardKey = new Map<string, string>()
+  const sceneIdToCardKey = new Map<string, string>()
   for (let i = 0; i < extrasV2.questionIds.length; i += 1) {
     const qId = extrasV2.questionIds[i]
 
@@ -884,6 +896,8 @@ export function nativeBundleToAuthoredShow(
       if (!scene) {
         continue
       }
+
+      sceneIdToCardKey.set(item.sceneId, sKey)
 
       const sceneAppearance = {
         ...(scene.background
@@ -1400,7 +1414,17 @@ export function nativeBundleToAuthoredShow(
     title: legacyText(quizz.subject ?? "Untitled Show"),
     note: showNote,
     baseGameMode: (quizz.gameMode as "quiz" | "survey") ?? "quiz",
-    defaults: extrasV2.defaults,
+    defaults: extrasV2.defaults?.showComposition
+      ? {
+          ...extrasV2.defaults,
+          showCompositionScopeAliases: Object.fromEntries(
+            [...questionIdToCardKey, ...sceneIdToCardKey].map(([id, key]) => [
+              key,
+              extrasV2.defaults.showCompositionScopeAliases?.[id] ?? id,
+            ]),
+          ),
+        }
+      : extrasV2.defaults,
     cards,
     settings,
   }

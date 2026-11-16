@@ -10,6 +10,7 @@ import {
   showThemeText,
   type ShowThemeSelection,
   type ThemeOverrides,
+  type ApplicationCompositionPin,
 } from "@razzia/extensions/core"
 import Button from "@razzia/web/components/Button"
 import Card from "@razzia/web/components/Card"
@@ -20,7 +21,10 @@ import { useStudioEditor } from "./studio-editor-context"
 import { StudioSelect } from "./studio-select"
 import { ThemeAudioOptions } from "./theme-audio-options"
 import { ShowThemePreview } from "./show-theme-preview"
-import { OpenThemeBuilderLink } from "@razzia/extensions/presentation"
+import {
+  OpenThemeBuilderLink,
+  PublishedCompositionSelect,
+} from "@razzia/extensions/presentation"
 import {
   useInstalledThemeCatalog,
   useAvailableShowThemes,
@@ -52,7 +56,10 @@ export function ShowThemeSettings() {
     : [...available, theme.definition]
   const update = (overrides: ThemeOverrides) =>
     updateDefaults({ showTheme: { ...selected, overrides } })
-  const choose = (next: ShowThemeSelection) => {
+  const choose = (
+    next: ShowThemeSelection,
+    composition?: ApplicationCompositionPin,
+  ) => {
     const history = defaults.themeHistory ?? []
     const archived = history.filter(
       (item) =>
@@ -63,17 +70,21 @@ export function ShowThemeSettings() {
     if (archived.length >= 32) {
       setArchiveFull(true)
 
-      return
+      return false
     }
 
     updateDefaults({
       showTheme: { ...next, legacyPolicy: "theme-defaults" },
+      showComposition: composition,
+      showCompositionScopeAliases: undefined,
       motionKit: undefined,
       themeHistory: defaults.showTheme
         ? [...archived, structuredClone(selected)]
         : history,
     })
     setPending(null)
+
+    return true
   }
 
   return (
@@ -83,6 +94,16 @@ export function ShowThemeSettings() {
           {t("extensions:themes.title")}
         </h2>
         <OpenThemeBuilderLink className="text-primary text-sm underline" />
+        <PublishedCompositionSelect
+          pin={defaults.showComposition}
+          onSelect={(value) => {
+            if (!value) {
+              updateDefaults({ showComposition: undefined })
+            } else {
+              choose(value.selection, value.pin)
+            }
+          }}
+        />
         {theme.diagnostics.length > 0 && (
           <p role="status" className="text-muted-foreground text-sm">
             {t("extensions:themes.unknownTheme")}

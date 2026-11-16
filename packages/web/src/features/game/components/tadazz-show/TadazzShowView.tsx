@@ -13,6 +13,7 @@ import {
   type CueId,
   type ExtensionStateEnvelope,
   type QuizExtrasV1,
+  type QuestionReveal,
   type TeamDefinition,
 } from "@razzia/extensions/core"
 import {
@@ -36,6 +37,9 @@ import {
   themeTimerTransition,
   type ThemeTimerEndState,
   runSteps,
+  NativeCompositionBoundary,
+  NativeQuestionMedia,
+  useNativeCompositionResolution,
   type CinematicLayerStackProps,
   type SceneDescriptor,
   type ShowScene,
@@ -264,6 +268,8 @@ export function TadazzShowView(props: TadazzShowViewProps) {
 
     return null
   }, [manager, managerState.status, rawStatus, playerStatus])
+  const questionReveal = extensionState?.extras.reveal as
+    (QuestionReveal & { isRevealed?: boolean }) | undefined
   const scene = useMemo(() => {
     const next = reconcileThemeScene(
       computeShowScene({
@@ -286,6 +292,17 @@ export function TadazzShowView(props: TadazzShowViewProps) {
       }
     }
 
+    // Configured image effects use the shared native media layer, including
+    // voting layouts whose original photo panel otherwise paints an unmasked image.
+    if (
+      (next.kind === "question" || next.kind === "voting") &&
+      questionReveal &&
+      questionReveal.effect !== "none"
+    ) {
+      const { questionImage: _questionImage, ...question } = next.question
+      next.question = question
+    }
+
     if (next.kind === "scene" && next.startedAt !== undefined) {
       next.startedAt -= serverClockOffset
     }
@@ -299,6 +316,7 @@ export function TadazzShowView(props: TadazzShowViewProps) {
     questionStates,
     serverClockOffset,
     theme,
+    questionReveal,
   ])
   const sceneIdentity = useMemo(
     () =>
@@ -318,21 +336,41 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   )
   const showGameId =
     managerState.gameId ?? extensionState?.gameId ?? playerGameId ?? "show"
+  const composition = useNativeCompositionResolution(
+    extensionState,
+    role,
+    props.statusName,
+  )
+  const compositionRoot =
+    composition.kind === "ready"
+      ? composition.template.nodes.find(
+          (node) => node.nodeId === composition.template.rootNodeId,
+        )
+      : undefined
   const authoredBackdrop = resolveStageBackdrop(extensionState)
   const themeSlot = themeSlotForScene(scene)
   const scopedBackground =
     theme.scopeOverrides.roles?.[role]?.slots?.[themeSlot]?.mediaUrl ??
     theme.scopeOverrides.slots?.[themeSlot]?.mediaUrl
   const themeBackground = theme.slots[themeSlot]
-  const backdrop =
-    (!authoredBackdrop || scopedBackground) && themeBackground.mediaUrl
-      ? {
-          url: themeBackground.mediaUrl,
-          fit: themeBackground.fit ?? "cover",
-        }
-      : authoredBackdrop
+  let backdrop = authoredBackdrop
+
+  if ((!authoredBackdrop || scopedBackground) && themeBackground.mediaUrl) {
+    backdrop = {
+      url: themeBackground.mediaUrl,
+      fit: compositionRoot?.props.fit ?? themeBackground.fit ?? "cover",
+    }
+  } else if (authoredBackdrop) {
+    backdrop = {
+      ...authoredBackdrop,
+      fit: compositionRoot?.props.fit ?? authoredBackdrop.fit,
+    }
+  }
+
   // TADAZZ v4 design kit is the default stage; goldy-20261105 / legacy stay available as rollback.
-  const useV4 = isTadazzV4Active(extensionState)
+  const useV4 =
+    compositionRoot?.component.id === "native.cinematic-stage" ||
+    isTadazzV4Active(extensionState)
   const v4Labels = useTadazzV4Labels()
 
   if (typeof document !== "undefined") {
@@ -1401,37 +1439,49 @@ export function TadazzShowView(props: TadazzShowViewProps) {
   // V4 question-image layout paints the question photo itself (left panel), so no full-stage underlay.
   const v4PhotoQuestion =
     useV4 && scene.kind === "voting" && Boolean(scene.question.questionImage)
+  const statusCooldown = (status?.data as { cooldown?: unknown } | undefined)
+    ?.cooldown
+  let questionDurationMs: number | null = null
+
+  if (typeof statusCooldown === "number" && Number.isFinite(statusCooldown)) {
+    questionDurationMs = Math.max(0, statusCooldown * 1000)
+  } else if (props.countdown) {
+    questionDurationMs = props.countdown.total * 1000
+  }
+
+  const questionElapsed =
+    scene.kind === "question" &&
+    questionDurationMs !== null &&
+    (runtimeDeadline !== null ||
+      (isPaused && typeof extensionState?.pause?.remainingMs === "number"))
+      ? Math.max(0, questionDurationMs - runtimeRemainingMs)
+      : undefined
+  const questionStartedAt =
+    questionElapsed === undefined
+      ? extensionState?.startedAt
+      : Date.now() - questionElapsed
   const underlay =
     isPopupMedia &&
     questionMedia &&
     !playerAnswersOnly &&
     !showMediaInPopup &&
     !v4PhotoQuestion ? (
-      <div className="tz-scene-media" data-testid="tadazz-question-media">
-        {questionMedia.type === MEDIA_TYPES.VIDEO ? (
-          <video
-            src={questionMedia.url}
-            autoPlay
-            playsInline
-            muted={scene.kind === "voting"}
-            style={{
-              objectFit: "contain",
-            }}
-          />
-        ) : (
-          <img
-            src={questionMedia.url}
-            alt={
-              scene.kind === "question" || scene.kind === "voting"
-                ? scene.question.question
-                : ""
-            }
-            style={{
-              objectFit: "contain",
-            }}
-          />
-        )}
-      </div>
+      <NativeQuestionMedia
+        media={questionMedia}
+        alt={
+          scene.kind === "question" || scene.kind === "voting"
+            ? scene.question.question
+            : ""
+        }
+        muted={scene.kind === "voting"}
+        reveal={questionReveal}
+        serverStartedAt={questionStartedAt}
+        currentEpoch={extensionState?.epoch}
+        isManager={manager}
+        isManuallyRevealed={questionReveal?.isRevealed}
+        reducedMotion={prefersReducedMotion()}
+        controlledTimeMs={isPaused ? questionElapsed : undefined}
+      />
     ) : null
   const questionAudio =
     questionMedia && questionMedia.type === MEDIA_TYPES.AUDIO
@@ -1595,100 +1645,106 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               overflow: "hidden",
             }}
           >
-            <PackageStage
-              scene={scene}
-              roomId={extensionState?.gameId ?? ""}
-              backgroundUrl={backdrop?.url}
-              trustedOverlay={overlay}
-              questionId={extensionState?.questionId ?? ""}
-              epoch={extensionState?.epoch ?? 0}
-              sequence={extensionState?.seq ?? 0}
+            <NativeCompositionBoundary
+              envelope={extensionState}
               role={role}
-              paused={isPaused}
-              canAnswer={
-                isPlayer &&
-                scene.kind === "voting" &&
-                votingOpen &&
-                !submitted &&
-                !answerPending &&
-                !isPaused
-              }
-              voteLocked={
-                isPlayer &&
-                (submitted ||
-                  (scene.kind === "wait" &&
-                    scene.key !== "wait:question-content" &&
-                    scene.text === "game:waitingForAnswers"))
-              }
-              remainingMs={runtimeRemainingMs}
-              serverTime={Date.now() + serverClockOffset}
-              deadline={
-                isPaused || runtimeDeadline === null
-                  ? null
-                  : runtimeDeadline + serverClockOffset
-              }
-              onSubmit={submit}
-              onFallback={() => {
-                prevSceneRef.current = null
-                resumeRef.current = true
-                pendingRef.current = scene
-                void pump()
-              }}
+              statusName={props.statusName}
             >
-              {useV4 ? (
-                <TadazzV4StageAdapter
-                  ref={stageRef}
-                  labels={labels}
-                  v4Labels={v4Labels}
-                  onCue={handleStageCue}
-                  onResolveStoryTie={
-                    role === "manager" ? resolveStoryTie : undefined
-                  }
-                  backdropUrl={backdrop?.url}
-                  backdropFit={backdrop?.fit}
-                  interactive={
-                    isPlayer &&
-                    scene.kind === "voting" &&
-                    !submitted &&
-                    !answerPending &&
-                    !isPaused &&
-                    !showPad
-                  }
-                  multiSelect={
-                    scene.kind === "voting" && scene.questionType === "multi"
-                  }
-                  onSelectOption={onSelectOption}
-                  customScreen={customScreen}
-                  underlay={underlay}
-                  overlay={overlay}
-                  reducedMotion={reduced}
-                  fitRevision={isHostPresenting ? 1 : 0}
-                />
-              ) : (
-                <TadazzStage
-                  ref={stageRef}
-                  labels={labels}
-                  backdropUrl={backdrop?.url}
-                  backdropFit={backdrop?.fit}
-                  interactive={
-                    isPlayer &&
-                    scene.kind === "voting" &&
-                    !submitted &&
-                    !answerPending &&
-                    !isPaused &&
-                    !showPad
-                  }
-                  multiSelect={
-                    scene.kind === "voting" && scene.questionType === "multi"
-                  }
-                  onSelectOption={onSelectOption}
-                  customScreen={customScreen}
-                  underlay={underlay}
-                  overlay={overlay}
-                  reducedMotion={reduced}
-                />
-              )}
-            </PackageStage>
+              <PackageStage
+                scene={scene}
+                roomId={extensionState?.gameId ?? ""}
+                backgroundUrl={backdrop?.url}
+                trustedOverlay={overlay}
+                questionId={extensionState?.questionId ?? ""}
+                epoch={extensionState?.epoch ?? 0}
+                sequence={extensionState?.seq ?? 0}
+                role={role}
+                paused={isPaused}
+                canAnswer={
+                  isPlayer &&
+                  scene.kind === "voting" &&
+                  votingOpen &&
+                  !submitted &&
+                  !answerPending &&
+                  !isPaused
+                }
+                voteLocked={
+                  isPlayer &&
+                  (submitted ||
+                    (scene.kind === "wait" &&
+                      scene.key !== "wait:question-content" &&
+                      scene.text === "game:waitingForAnswers"))
+                }
+                remainingMs={runtimeRemainingMs}
+                serverTime={Date.now() + serverClockOffset}
+                deadline={
+                  isPaused || runtimeDeadline === null
+                    ? null
+                    : runtimeDeadline + serverClockOffset
+                }
+                onSubmit={submit}
+                onFallback={() => {
+                  prevSceneRef.current = null
+                  resumeRef.current = true
+                  pendingRef.current = scene
+                  void pump()
+                }}
+              >
+                {useV4 ? (
+                  <TadazzV4StageAdapter
+                    ref={stageRef}
+                    labels={labels}
+                    v4Labels={v4Labels}
+                    onCue={handleStageCue}
+                    onResolveStoryTie={
+                      role === "manager" ? resolveStoryTie : undefined
+                    }
+                    backdropUrl={backdrop?.url}
+                    backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    interactive={
+                      isPlayer &&
+                      scene.kind === "voting" &&
+                      !submitted &&
+                      !answerPending &&
+                      !isPaused &&
+                      !showPad
+                    }
+                    multiSelect={
+                      scene.kind === "voting" && scene.questionType === "multi"
+                    }
+                    onSelectOption={onSelectOption}
+                    customScreen={customScreen}
+                    underlay={underlay}
+                    overlay={overlay}
+                    reducedMotion={reduced}
+                    fitRevision={isHostPresenting ? 1 : 0}
+                  />
+                ) : (
+                  <TadazzStage
+                    ref={stageRef}
+                    labels={labels}
+                    backdropUrl={backdrop?.url}
+                    backdropFit={compositionRoot?.props.fit ?? backdrop?.fit}
+                    interactive={
+                      isPlayer &&
+                      scene.kind === "voting" &&
+                      !submitted &&
+                      !answerPending &&
+                      !isPaused &&
+                      !showPad
+                    }
+                    multiSelect={
+                      scene.kind === "voting" && scene.questionType === "multi"
+                    }
+                    onSelectOption={onSelectOption}
+                    customScreen={customScreen}
+                    underlay={underlay}
+                    overlay={overlay}
+                    reducedMotion={reduced}
+                  />
+                )}
+              </PackageStage>
+            </NativeCompositionBoundary>
             {role !== "player" && !isStandby && (
               <LiveParticipation
                 connected={publicConnected}
@@ -1726,12 +1782,10 @@ export function TadazzShowView(props: TadazzShowViewProps) {
               </QuestionDialog>
             )}
             {questionAudio && (
-              <audio
-                src={questionAudio}
-                autoPlay
+              <NativeQuestionMedia
+                media={{ type: "audio", url: questionAudio }}
+                alt=""
                 controls={!manager || !isHostPresenting}
-                className="absolute bottom-3 left-1/2 z-30 w-full max-w-md -translate-x-1/2 rounded-md"
-                data-testid="tadazz-question-audio"
               />
             )}
           </div>

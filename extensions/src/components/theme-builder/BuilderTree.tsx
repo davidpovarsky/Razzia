@@ -1,3 +1,5 @@
+import { requireLibraryValue } from "../../core/show-library/required"
+// oxlint-disable typescript/no-unnecessary-condition -- Keyboard navigation can reach an array boundary; preserve runtime guards.
 import type { BuilderNode, BuilderTemplate } from "./document"
 import { useRef } from "react"
 
@@ -8,6 +10,7 @@ export function BuilderTree({
   move,
   readOnly,
   label,
+  referenceLabel = (id: string) => id,
 }: {
   template: BuilderTemplate
   selected: string
@@ -15,13 +18,18 @@ export function BuilderTree({
   move: (nodeId: string, targetId: string) => void
   readOnly: boolean
   label: string
+  referenceLabel?: (id: string) => string
 }) {
   const items = useRef(new Map<string, HTMLDivElement>())
   const ordered: BuilderNode[] = []
   const visit = (id: string) => {
-    const node = template.nodes.find((n) => n.nodeId === id)!
+    const node = requireLibraryValue(
+      template.nodes.find((n) => n.nodeId === id),
+    )
     ordered.push(node)
-    for (const child of Object.values(node.children).flat()) visit(child)
+    for (const child of Object.values(node.children).flat()) {
+      visit(child)
+    }
   }
   visit(template.rootNodeId)
   const focus = (id: string) => {
@@ -29,14 +37,20 @@ export function BuilderTree({
     items.current.get(id)?.focus({ preventScroll: true })
   }
   const render = (id: string, level: number) => {
-    const node = template.nodes.find((n) => n.nodeId === id)!,
+    const node = requireLibraryValue(
+        template.nodes.find((n) => n.nodeId === id),
+      ),
       children = Object.values(node.children).flat()
+
     return (
       <li key={id} role="none">
         <div
           ref={(element) => {
-            if (element) items.current.set(id, element)
-            else items.current.delete(id)
+            if (element) {
+              items.current.set(id, element)
+            } else {
+              items.current.delete(id)
+            }
           }}
           id={`builder-tree-${id}`}
           role="treeitem"
@@ -58,8 +72,9 @@ export function BuilderTree({
               event.dataTransfer.types.includes(
                 "application/x-tadazz-builder-node",
               )
-            )
+            ) {
               event.preventDefault()
+            }
           }}
           onDrop={(event) => {
             event.preventDefault()
@@ -67,10 +82,14 @@ export function BuilderTree({
             const source = event.dataTransfer.getData(
               "application/x-tadazz-builder-node",
             )
-            if (!readOnly && source) move(source, id)
+
+            if (!readOnly && source) {
+              move(source, id)
+            }
           }}
           onKeyDown={(event) => {
             const index = ordered.findIndex((n) => n.nodeId === id)
+
             if (
               event.altKey &&
               !readOnly &&
@@ -78,33 +97,43 @@ export function BuilderTree({
             ) {
               event.preventDefault()
               const target = ordered[index + (event.key === "ArrowUp" ? -1 : 1)]
-              if (target) move(id, target.nodeId)
+
+              if (target) {
+                move(id, target.nodeId)
+              }
+
               return
             }
+
             if (["ArrowUp", "ArrowDown", "Home", "End"].includes(event.key)) {
               event.preventDefault()
-              const next =
-                event.key === "Home"
-                  ? 0
-                  : event.key === "End"
-                    ? ordered.length - 1
-                    : Math.max(
-                        0,
-                        Math.min(
-                          ordered.length - 1,
-                          index + (event.key === "ArrowUp" ? -1 : 1),
-                        ),
-                      )
+              let next = Math.max(
+                0,
+                Math.min(
+                  ordered.length - 1,
+                  index + (event.key === "ArrowUp" ? -1 : 1),
+                ),
+              )
+
+              if (event.key === "Home") {
+                next = 0
+              } else if (event.key === "End") {
+                next = ordered.length - 1
+              }
+
               focus(ordered[next].nodeId)
             }
+
             if (event.key === "ArrowRight" && children.length) {
               event.preventDefault()
               focus(children[0])
             }
+
             if (event.key === "ArrowLeft") {
               const parent = ordered.find((n) =>
                 Object.values(n.children).flat().includes(id),
               )
+
               if (parent) {
                 event.preventDefault()
                 focus(parent.nodeId)
@@ -112,7 +141,7 @@ export function BuilderTree({
             }
           }}
         >
-          <bdi>{node.component.id}</bdi>
+          <bdi>{referenceLabel(node.component.id)}</bdi>
         </div>
         {children.length > 0 && (
           <ul role="group">
@@ -122,6 +151,7 @@ export function BuilderTree({
       </li>
     )
   }
+
   return (
     <ul role="tree" aria-label={label} className="theme-builder-tree">
       {render(template.rootNodeId, 1)}

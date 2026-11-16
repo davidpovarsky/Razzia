@@ -1,3 +1,4 @@
+// oxlint-disable eslint/max-params -- Preserve the existing explicit identity, revision, role and abort arguments at this adapter boundary.
 import { buildLobbyDirectory } from "./public-directory"
 import {
   extensionCommandSchema,
@@ -24,6 +25,10 @@ import {
   type TeamScoreProjection,
 } from "../../gameplay/index"
 import type { StudioShowCoordinator } from "./studio-show-coordinator"
+import {
+  projectApplicationComposition,
+  type ApplicationCompositionAppearance,
+} from "../../core/show-library/application-composition-pin"
 
 export interface ExtensionSessionDelegate {
   getVoteCompletionReason?: () => "elapsed" | "manual" | "allAnswered" | null
@@ -81,6 +86,9 @@ export class ExtensionGameSession {
   readonly extras: AnyQuizExtras | null
   readonly themeDefinition: ShowThemeDefinition | null
   private readonly themeDefinitionJson: string | null
+  private readonly compositionDefinitionJson: string | null
+  private readonly publicCompositionDefinitionJson: string | null
+  private readonly compositionTitle: string
 
   private seq = 0
   private epoch = 0
@@ -101,8 +109,20 @@ export class ExtensionGameSession {
     gameId: string,
     extras: AnyQuizExtras | null,
     themeDefinition: ShowThemeDefinition | null = null,
+    composition:
+      (ApplicationCompositionAppearance & { showTitle?: string }) | null = null,
   ) {
     this.gameId = gameId
+    const appearance = composition
+      ? { registry: composition.registry, document: composition.document }
+      : null
+    this.compositionDefinitionJson = appearance
+      ? JSON.stringify(appearance)
+      : null
+    this.publicCompositionDefinitionJson = appearance
+      ? JSON.stringify(projectApplicationComposition(appearance, false))
+      : null
+    this.compositionTitle = composition?.showTitle?.slice(0, 240) ?? ""
     this.extras = extras
     this.themeDefinition = themeDefinition
       ? (createShowThemeRegistry([themeDefinition]).get(
@@ -339,6 +359,22 @@ export class ExtensionGameSession {
 
     if (this.themeDefinitionJson) {
       extrasPayload.themeDefinitionJson = this.themeDefinitionJson
+    }
+
+    const compositionJson =
+      forRole === "manager"
+        ? this.compositionDefinitionJson
+        : this.publicCompositionDefinitionJson
+
+    if (compositionJson) {
+      extrasPayload.applicationCompositionJson = compositionJson
+      extrasPayload.applicationCompositionTitle = this.compositionTitle
+    } else if (
+      this.extras &&
+      isQuizExtrasV2(this.extras) &&
+      this.extras.defaults.showComposition
+    ) {
+      extrasPayload.applicationCompositionUnavailable = true
     }
 
     const launch = this.delegate?.getPresentationLaunch?.()

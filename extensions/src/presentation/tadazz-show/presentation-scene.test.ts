@@ -341,6 +341,29 @@ describe("activation and backdrop priority", () => {
 })
 
 describe("planTransition — the ten reference methods are driven by real events", () => {
+  it("shows an authored Lottie instead of the generic spotlight without replacing Creating Worlds", () => {
+    const stage = { mode: "idle" as const, questionKey: null }
+    const scene = {
+      kind: "animation" as const,
+      id: "scene",
+      preset: "spotlight",
+      lottieUrl: "/media/owned.json",
+    }
+    expect(
+      planTransition(null, { kind: "scene", key: "lottie", scene }, stage),
+    ).toEqual([{ op: "custom" }])
+    expect(
+      planTransition(
+        null,
+        {
+          kind: "scene",
+          key: "native",
+          scene: { ...scene, preset: "round-one" },
+        },
+        stage,
+      )[0].op,
+    ).toBe("showFullShowScene")
+  })
   const q = (key: string, n = 5) => ({
     key,
     question: "Q",

@@ -3,6 +3,7 @@ import type {
   PreviewPlan,
 } from "../../../core/show-library/preview-schemas"
 import { z } from "zod"
+import type { ShowThemeAudioEvent } from "../../../core/show-themes/selection"
 
 const selectionId = z
   .string()
@@ -53,6 +54,8 @@ export interface PreviewSnapshot {
   readonly chapterId: string | null
   readonly clock: Readonly<DemoClockSnapshot>
   readonly ended: boolean
+  readonly manualImageReveal?: boolean
+  readonly screenPhase?: "lobby"
   /** Absent until the original media owner has measured real seekable ranges. */
   readonly media?: Readonly<{
     timeSeconds: number
@@ -74,6 +77,13 @@ export type PreviewUnavailableReason = z.infer<
   typeof previewUnavailableReasonSchema
 >
 
+export const previewPreferencesSchema = z.strictObject({
+  locale: z.enum(["en", "fr", "de", "es", "it", "ja", "tr", "vi"]),
+  reducedMotion: z.boolean(),
+})
+
+export type PreviewPreferences = z.infer<typeof previewPreferencesSchema>
+
 /**
  * Integration port for the original D/E provider, NOT an alternate controller.
  * open performs lazy read-only source resolution using its authenticated closure;
@@ -87,6 +97,7 @@ export interface GamePreviewProvider {
   open(
     selection: PreviewSelection,
     signal: AbortSignal,
+    preferences?: Readonly<PreviewPreferences>,
   ): Promise<
     | { status: "unavailable"; reason: PreviewUnavailableReason }
     | { status: "ready"; session: GamePreviewSession }
@@ -94,6 +105,11 @@ export interface GamePreviewProvider {
 }
 
 export interface GamePreviewSession {
+  previewLobby?: (signal: AbortSignal) => Promise<void>
+  auditionAudioEvent?: (
+    event: ShowThemeAudioEvent | null,
+    signal: AbortSignal,
+  ) => Promise<void>
   readonly source: PreviewSource
   readonly plan: Readonly<PreviewPlan>
   readonly coverage: "current-card" | "full-show"
@@ -103,12 +119,20 @@ export interface GamePreviewSession {
   mount(element: HTMLElement, options: { muted: true }): void | Promise<void>
   snapshot(): PreviewSnapshot
   subscribe(listener: () => void): () => void
-  play(): void | Promise<void>
+  play(signal?: AbortSignal): void | Promise<void>
   pause(): void | Promise<void>
-  replay(): void | Promise<void>
+  replay(signal?: AbortSignal): void | Promise<void>
   /** Accepted seek reconstructs a paused real stage and resolves after commit. */
   seekChapter(id: string, signal: AbortSignal): Promise<void>
   seekMedia?(seconds: number, signal: AbortSignal): Promise<void>
+  /** Local bounded composition authoring only; never saves or grants asset access. */
+  setAppearance?(appearance: unknown, signal: AbortSignal): Promise<void>
+  setRole?(
+    role: "manager" | "player" | "spectator",
+    signal: AbortSignal,
+  ): Promise<void>
+  setSoundEnabled?(enabled: boolean, signal: AbortSignal): Promise<void>
+  setMediaRevealed?: (revealed: boolean, signal: AbortSignal) => Promise<void>
   /** Revokes transitions/audio immediately; resolves after resource teardown. */
   dispose(): void | Promise<void>
 }

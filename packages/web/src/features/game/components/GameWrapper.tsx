@@ -26,6 +26,8 @@ import {
   createScenePresenterLabels,
   isTadazzShowActive,
   ViewportBackdropLayer,
+  NativeCompositionBoundary,
+  useNativeCompositionResolution,
 } from "@razzia/extensions/presentation"
 import Button from "@razzia/web/components/Button"
 import {
@@ -109,6 +111,24 @@ const GameWrapperView = ({
   const { socket, clientId } = useSocket()
   const { extensionState, roomMediaReady } = useGameExtensionConnection(manager)
   const theme = useResolvedShowTheme(extensionState, effectiveRole)
+  const composition = useNativeCompositionResolution(
+    extensionState,
+    effectiveRole,
+    statusName,
+  )
+  const rootComponent =
+    composition.kind === "ready"
+      ? composition.template.nodes.find(
+          (node) => node.nodeId === composition.template.rootNodeId,
+        )?.component.id
+      : undefined
+  const renderers: Partial<
+    Record<string, "razzia-native-stage" | "tadazz-classic-stage">
+  > = {
+    "native.original-stage": "razzia-native-stage",
+    "native.cinematic-stage": "tadazz-classic-stage",
+  }
+  const forcedRenderer = renderers[rootComponent ?? ""]
   const isEnhancedQuiz = Boolean(extensionState?.gameId)
   const {
     isPresenting: isHostPresentingConfirmed,
@@ -321,14 +341,21 @@ const GameWrapperView = ({
   const cinematicSurface =
     effectiveRole === "spectator" ||
     isHostPresenting ||
-    Boolean(theme.definition.runtime)
+    Boolean(theme.definition.runtime) ||
+    forcedRenderer === "tadazz-classic-stage"
 
-  if (cinematicSurface && isTadazzShowActive(extensionState)) {
+  if (
+    cinematicSurface &&
+    (forcedRenderer === "tadazz-classic-stage" ||
+      (forcedRenderer !== "razzia-native-stage" &&
+        isTadazzShowActive(extensionState)))
+  ) {
     return (
       <ShowThemeRenderer
         envelope={extensionState}
         role={effectiveRole}
         renderers={SHOW_THEME_ADAPTERS}
+        rendererId={forcedRenderer}
         viewProps={{
           nativeContent: renderStageContent(),
           manager: Boolean(manager),
@@ -386,33 +413,41 @@ const GameWrapperView = ({
               </p>
             )}
 
-            <NativeGameSurface theme={theme}>
-              <ViewportBackdropLayer
-                component={LegacyStageBackdrops}
-                contained
-                showBase={
-                  theme.requested.id === "tadazz-classic" &&
-                  theme.diagnostics.length > 0
-                }
-                tadazzBackdrop={tadazzBackdrop}
-                setTadazzImageUnavailable={setTadazzImageUnavailable}
-                showCustomCardBackground={showCustomCardBackground}
-                effectiveBackground={effectiveBackground}
-                setCardBgErrorUrl={setCardBgErrorUrl}
-              />
+            <NativeCompositionBoundary
+              envelope={extensionState}
+              role={effectiveRole}
+              statusName={statusName}
+            >
+              <NativeGameSurface theme={theme}>
+                <ViewportBackdropLayer
+                  component={LegacyStageBackdrops}
+                  contained
+                  showBase={
+                    theme.requested.id === "tadazz-classic" &&
+                    theme.diagnostics.length > 0
+                  }
+                  tadazzBackdrop={tadazzBackdrop}
+                  setTadazzImageUnavailable={setTadazzImageUnavailable}
+                  showCustomCardBackground={showCustomCardBackground}
+                  effectiveBackground={effectiveBackground}
+                  setCardBgErrorUrl={setCardBgErrorUrl}
+                />
 
-              <div
-                key={
-                  manager && roomMediaReady
-                    ? "media-authorized"
-                    : "media-pending"
-                }
-                className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col"
-              >
-                {renderStageContent()}
-              </div>
-              {motionScene && <TadazzMotionStage scene={motionScene} />}
-            </NativeGameSurface>
+                <div
+                  key={
+                    manager && roomMediaReady
+                      ? "media-authorized"
+                      : "media-pending"
+                  }
+                  className="relative z-10 flex h-full min-h-0 w-full flex-1 flex-col"
+                >
+                  {renderStageContent()}
+                </div>
+                {motionScene && forcedRenderer !== "razzia-native-stage" && (
+                  <TadazzMotionStage scene={motionScene} />
+                )}
+              </NativeGameSurface>
+            </NativeCompositionBoundary>
 
             <HostAudioControls
               component={LegacyStageAudio}

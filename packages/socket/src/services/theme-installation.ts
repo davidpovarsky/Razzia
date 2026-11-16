@@ -1,7 +1,7 @@
 /* oxlint-disable eslint/max-params -- Preview tickets explicitly bind claims, workspace, artifact and revision. */
 /** Server-owned installation policy. Nothing here trusts tenant/grants from JSON. */
 import { createHmac } from "node:crypto"
-import { resolve } from "node:path"
+import { join, resolve } from "node:path"
 import { z } from "zod"
 import {
   installedPackageThemes,
@@ -16,8 +16,12 @@ import {
   readRuntimeAccess,
   type TrustedThemeBuild,
   type ThemePrincipal,
+  admitApplicationComposition,
 } from "@razzia/extensions/server"
-import type { ShowThemeDefinition } from "@razzia/extensions/core"
+import {
+  applicationCompositionPinSchema,
+  type ShowThemeDefinition,
+} from "@razzia/extensions/core"
 import { resolveConfigRoot } from "./config-scope"
 import { accountsEnabled } from "./account-scope"
 import { sign, verify } from "hono/jwt"
@@ -36,6 +40,57 @@ const assignmentSchema = z.record(
 // source-controlled renderer registration. HTTP uploads cannot populate this map.
 const TRUSTED_THEME_BUILDS: ReadonlyMap<string, TrustedThemeBuild> = new Map()
 let store: ThemeInstallationStore | undefined = undefined
+
+/** Resolve once at room creation. Updating a workspace head never changes a game pin. */
+export function publishedCompositionForPin(
+  userId: string,
+  input: unknown,
+  title = "",
+) {
+  if (input === undefined || !themeInstallerEnabled()) {
+    return null
+  }
+
+  try {
+    const pin = applicationCompositionPinSchema.parse(input)
+    const principal = themeWorkspacePrincipal(userId, pin.workspaceId)
+    const publication = themeInstallationStore().readPublishedBuilderVersion(
+      principal,
+      pin.documentId,
+      pin.version,
+    )
+
+    if (
+      publication.digest !== pin.digest ||
+      publication.admission.rendererBuildSha256 !== pin.rendererBuildSha256
+    ) {
+      return null
+    }
+
+    const root = join(resolveConfigRoot(), "tenants", pin.workspaceId)
+    const admission = admitApplicationComposition(publication.document, {
+      getPath: (relative = "") => join(root, relative),
+    })
+
+    if (JSON.stringify(admission) !== JSON.stringify(publication.admission)) {
+      return null
+    }
+
+    // Shared configuration grants do not grant another tenant's private media.
+    if (pin.workspaceId !== userId && admission.assets.length) {
+      return null
+    }
+
+    return {
+      registry: publication.document.registry,
+      document: publication.document.content,
+      showTitle: title.slice(0, 240),
+    }
+  } catch {
+    return null
+  }
+}
+
 let storeRoot: string | undefined = undefined
 
 /** Operator-owned demo catalog, deliberately independent of customer publication. */

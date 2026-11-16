@@ -26,7 +26,10 @@ export function ChoiceResultsView({
   reveal,
 }: {
   data: ManagerStatusDataMap["SHOW_RESPONSES"]
-  extensionState: ExtensionStateEnvelope | null
+  extensionState: Pick<
+    ExtensionStateEnvelope,
+    "extras" | "questionId" | "epoch"
+  > | null
   reveal: ReturnType<typeof useResponseReveal>
 }) {
   const { question, answers, responses, solutions, type } = data

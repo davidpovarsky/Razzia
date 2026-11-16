@@ -13,6 +13,7 @@ import { useRef, useState } from "react"
 import { useSiteText } from "../../locales"
 import { SiteLink } from "../shared/SiteLink"
 import type { QuizMeta } from "./MyGames"
+import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
 
 export interface GameCardProps {
   game: QuizMeta
@@ -62,13 +63,19 @@ export function GameCard({
       data-platform-motion="layout"
     >
       <div className="site-game-media">
-        <img
-          className="site-game-cover"
-          data-cover-source="fallback"
-          src="/tadazz-design-reference/marketing-stage.webp"
-          alt=""
-        />
-        <span className="site-cover-label">{t("Default cover")}</span>
+        <GamePreviewSurface
+          selection={{ kind: "account-owned", quizId: game.id }}
+          label={game.subject}
+          disabled={busy}
+        >
+          <img
+            className="site-game-cover"
+            data-cover-source="fallback"
+            src="/tadazz-design-reference/marketing-stage.webp"
+            alt=""
+          />
+          <span className="site-cover-label">{t("Default cover")}</span>
+        </GamePreviewSurface>
       </div>
       <div className="site-game-body">
         <div className="site-game-heading">

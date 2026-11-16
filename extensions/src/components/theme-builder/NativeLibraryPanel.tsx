@@ -1,3 +1,4 @@
+// oxlint-disable typescript/no-unnecessary-condition -- Manifest localizations are sparse JSON maps at runtime.
 import { Button, Select } from "../../platform-ui"
 import { getNativeShowLibrary } from "../../core/show-library/native-library"
 import { getNativeAudioLibrary } from "../../core/show-library/native-media-library"
@@ -7,6 +8,7 @@ import type { PreviewLocale } from "../../presentation/show-library-preview/i18n
 import type { BuilderDocument, BuilderEdit } from "./document"
 import type { BuilderTextKey } from "./strings"
 import type { ThemeOverrides } from "../../core/show-themes/selection"
+import { NativeMediaPanel } from "./native-media-panel"
 
 const labels = createInstance()
 void labels.init({
@@ -15,8 +17,24 @@ void labels.init({
   defaultNS: "extensions",
   resources: getExtensionResources(),
 })
+
 export function nativeBuilderText(locale: PreviewLocale, key: string) {
-  return String(labels.t(`themes.${key}`, { lng: locale }))
+  const normalized = key.replace(/^extensions:/u, "")
+  const lookup = normalized.startsWith("themes.")
+    ? normalized
+    : `themes.${normalized}`
+  // Bundled manifests may carry their own flat localized names/variant labels.
+  for (const family of getNativeShowLibrary().families) {
+    const value =
+      family.definition.localizations?.[locale]?.[key] ??
+      family.definition.localizations?.[locale]?.[lookup]
+
+    if (value) {
+      return value
+    }
+  }
+
+  return labels.t(lookup, { lng: locale })
 }
 
 /** Exact native variants and one existing audio owner; no additional audio clock. */
@@ -42,23 +60,30 @@ export function NativeLibraryPanel({
       f.ref.id === document.content.selection.id &&
       f.ref.version === document.content.selection.version,
   )
-  if (!family) return <p>{text("unavailable")}</p>
+
+  if (!family) {
+    return <p>{text("unavailable")}</p>
+  }
+
   const audioEvents = getNativeAudioLibrary().events.flatMap((entry) => {
     const specification = entry.families.find(
       (value) =>
         value.theme.id === family.ref.id &&
         value.theme.version === family.ref.version,
     )
+
     return specification ? [{ event: entry.event, ...specification }] : []
   })
   const local = document.content.scopes.find(
     (s) => s.scopeId === scopeId,
   )?.selection
-  const overrides = scopeId
-    ? local?.themeId === family.ref.id &&
-      local.themeVersion === family.ref.version
+  const localOverrides =
+    local?.themeId === family.ref.id &&
+    local.themeVersion === family.ref.version
       ? local.overrides
       : {}
+  const overrides = scopeId
+    ? localOverrides
     : document.content.selection.overrides
   const section = role === "all" ? overrides : (overrides.roles?.[role] ?? {})
   const change = (next: Pick<ThemeOverrides, "slots" | "audio">) =>
@@ -73,6 +98,7 @@ export function NativeLibraryPanel({
               roles: { ...overrides.roles, [role]: { ...section, ...next } },
             },
     })
+
   return (
     <details open data-testid="native-theme-library">
       <summary>
@@ -89,29 +115,36 @@ export function NativeLibraryPanel({
               disabled={readOnly}
               onChange={(event) => {
                 const slots = { ...section.slots }
-                if (event.target.value === "inherit") delete slots[slot.slot]
-                else
+
+                if (event.target.value === "inherit") {
+                  Reflect.deleteProperty(slots, slot.slot)
+                } else {
                   slots[slot.slot] = {
-                    ...slots[slot.slot],
                     variantId: event.target.value,
                   }
+                }
+
                 change({ slots })
               }}
             >
               <option value="inherit">{text("inherited")}</option>
               {slot.variants.map((variant) => (
                 <option key={variant.id} value={variant.id}>
-                  {String(
-                    labels.t(variant.labelKey.replace(/^extensions:/u, ""), {
-                      lng: locale,
-                    }),
-                  )}
+                  {nativeBuilderText(locale, variant.labelKey)}
                 </option>
               ))}
             </Select>
           ))}
         </div>
       </fieldset>
+      <NativeMediaPanel
+        family={family}
+        section={section}
+        change={change}
+        readOnly={readOnly}
+        text={text}
+        label={(key) => nativeBuilderText(locale, key)}
+      />
       <fieldset className="theme-builder-native-group">
         <legend>{text("audio")}</legend>
         <div className="theme-builder-native-grid">
@@ -127,13 +160,16 @@ export function NativeLibraryPanel({
               disabled={readOnly}
               onChange={(event) => {
                 const choices = { ...section.audio }
-                if (event.target.value === "inherit")
-                  delete choices[audio.event]
-                else
+
+                if (event.target.value === "inherit") {
+                  Reflect.deleteProperty(choices, audio.event)
+                } else {
                   choices[audio.event] =
                     event.target.value === "mute"
                       ? { muted: true }
                       : { variantId: event.target.value, muted: false }
+                }
+
                 change({ audio: choices })
               }}
             >
@@ -141,11 +177,7 @@ export function NativeLibraryPanel({
               <option value="mute">{text("mute")}</option>
               {audio.variants.map((variant) => (
                 <option key={variant.id} value={variant.id}>
-                  {String(
-                    labels.t(variant.labelKey.replace(/^extensions:/u, ""), {
-                      lng: locale,
-                    }),
-                  )}
+                  {nativeBuilderText(locale, variant.labelKey)}
                 </option>
               ))}
             </Select>

@@ -15,6 +15,7 @@ import { requireManager } from "@razzia/socket/api/middleware"
 import {
   ThemeInstallationError,
   createThemeBuilderRoutes,
+  admitApplicationComposition,
   themeApprovalSchema,
 } from "@razzia/extensions/server"
 import { showThemeDefinitionSchema } from "@razzia/extensions/core"
@@ -27,6 +28,8 @@ import {
   themeWorkspacePrincipal,
   createThemePreviewTicket,
 } from "@razzia/socket/services/theme-installation"
+import { withAccount } from "@razzia/socket/services/account-scope"
+import { getPath } from "@razzia/socket/services/config"
 
 const actionSchema = z.strictObject({
   action: z.enum([
@@ -367,6 +370,10 @@ export const themeRoutes = apiFactory
       principal: (claims, tenantId) =>
         themeWorkspacePrincipal(claims.sub, tenantId),
       store: themeInstallationStore,
+      admitPublication: (principal, document) =>
+        withAccount(principal.tenantId, () =>
+          admitApplicationComposition(document, { getPath }),
+        ),
     }),
   )
   .route("/workspaces/:tenantId", workspace)

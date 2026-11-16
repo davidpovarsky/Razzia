@@ -232,4 +232,30 @@ describe("lazy session lifecycle (no accepted renderer fixture)", () => {
     expect(JSON.stringify(onState.mock.calls)).not.toContain("fixture-private")
     owner.dispose()
   })
+
+  it("disposes a late provider result after playback failure during source resolution", async () => {
+    const pending =
+      Promise.withResolvers<Awaited<ReturnType<GamePreviewProvider["open"]>>>()
+    const fixture = unavailableSession(),
+      onState = vi.fn()
+    const owner = createPreviewSessionOwner({
+      coordinator: createPreviewCoordinator(),
+      selection,
+      provider: { open: () => pending.promise },
+      onState,
+    })
+    const opening = owner.open(host)
+    await Promise.resolve()
+    await Promise.resolve()
+    await owner.fail()
+    pending.resolve({ status: "ready", session: fixture.session })
+    await opening
+    expect(fixture.mount).not.toHaveBeenCalled()
+    expect(fixture.dispose).toHaveBeenCalledTimes(1)
+    expect(onState).toHaveBeenLastCalledWith({
+      status: "unavailable",
+      reason: "playback-unavailable",
+    })
+    owner.dispose()
+  })
 })

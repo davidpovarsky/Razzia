@@ -17,6 +17,7 @@ export * from "./storage/service"
 export * from "./storage/sidecar"
 
 export * from "./storage/startup-recovery"
+
 export {
   createNativeCreationPort,
   recoverCreationReservations,
@@ -60,7 +61,10 @@ export * from "./game/round-checkpoints"
 export * from "./game/authored-coordinator"
 
 export * from "./show-themes/installation"
+
 export * from "./show-themes/builder-routes"
+
+export * from "./show-themes/application-composition-admission"
 
 export type { ThemePrincipal } from "./show-themes/review"
 

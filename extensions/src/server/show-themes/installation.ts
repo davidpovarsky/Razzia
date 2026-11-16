@@ -1,3 +1,4 @@
+// oxlint-disable eslint/require-await, typescript/require-await -- Synchronous SQLite adapters implement the existing Promise-based composition storage contract.
 /* oxlint-disable eslint/max-classes-per-file, eslint/class-methods-use-this, eslint/max-params, typescript/no-non-null-assertion -- The store and its domain error share one module; principal/artifact/revision/bytes stay explicit, and COUNT/owned-row lookups have guaranteed SQL results. */
 import {
   createHash,
@@ -31,8 +32,13 @@ import {
 import {
   CompositionRepository,
   type CompositionDraftRecord,
+  type CompositionPublication,
   type CompositionStorage,
 } from "../../core/show-library/composition-repository"
+import {
+  builderPublicationAdmissionSchema,
+  type BuilderPublicationAdmission,
+} from "./application-composition-admission"
 
 const sha = (value: string | Buffer) =>
   createHash("sha256").update(value).digest("hex")
@@ -142,6 +148,14 @@ export class ThemeInstallationStore {
     this.db.exec(`CREATE TABLE IF NOT EXISTS theme_builder_versions (
       tenant_id TEXT NOT NULL, document_id TEXT NOT NULL, version TEXT NOT NULL,
       publication TEXT NOT NULL, PRIMARY KEY(tenant_id,document_id,version));`)
+    this.db.exec(`CREATE TABLE IF NOT EXISTS theme_builder_publications (
+      tenant_id TEXT NOT NULL, document_id TEXT NOT NULL, version TEXT NOT NULL,
+      digest TEXT NOT NULL, admission TEXT NOT NULL,
+      PRIMARY KEY(tenant_id,document_id,version));
+      CREATE TABLE IF NOT EXISTS theme_builder_heads (
+      tenant_id TEXT NOT NULL, document_id TEXT NOT NULL, version TEXT,
+      revision INTEGER NOT NULL, archived INTEGER NOT NULL DEFAULT 0,
+      PRIMARY KEY(tenant_id,document_id));`)
   }
   close() {
     this.db.close()
@@ -154,8 +168,9 @@ export class ThemeInstallationStore {
   ) {
     this.require(p, "author")
     const owned = (key: { tenantId: string }) => {
-      if (key.tenantId !== p.tenantId)
+      if (key.tenantId !== p.tenantId) {
         throw new ThemeInstallationError("Not found", 404)
+      }
     }
     const storage: CompositionStorage = {
       readDraft: async (key) => {
@@ -165,11 +180,16 @@ export class ThemeInstallationStore {
             "SELECT * FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
           )
           .get(key.tenantId, key.draftId)
-        if (!row) return null
+
+        if (!row) {
+          return null
+        }
+
         const document = parseBuilderDocument(
           JSON.parse(row.document as string),
         )
         onRead?.(document)
+
         return {
           key,
           revision: row.revision as number,
@@ -183,27 +203,37 @@ export class ThemeInstallationStore {
         next: CompositionDraftRecord,
       ) => {
         owned(key)
-        if (!envelope || envelope.id !== key.draftId)
+
+        if (!envelope || envelope.id !== key.draftId) {
           throw new ThemeInstallationError("Invalid draft")
+        }
+
         return this.transaction(() => {
           const row = this.db
             .prepare(
               "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
             )
             .get(key.tenantId, key.draftId)
-          if ((row?.revision ?? null) !== expected) return false
+
+          if ((row?.revision ?? null) !== expected) {
+            return false
+          }
+
           if (!row) {
             const count = this.db
               .prepare(
                 "SELECT COUNT(*) AS count FROM theme_builder_documents WHERE tenant_id=?",
               )
               .get(p.tenantId)!.count as number
-            if (count >= 128)
+
+            if (count >= 128) {
               throw new ThemeInstallationError(
                 "Theme draft quota exceeded",
                 409,
               )
+            }
           }
+
           const document = parseBuilderDocument({
             ...envelope,
             content: next.document,
@@ -225,6 +255,7 @@ export class ThemeInstallationStore {
             revision: next.revision,
             digest: builderDigest(document),
           })
+
           return true
         })
       },
@@ -235,25 +266,55 @@ export class ThemeInstallationStore {
             "SELECT publication FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
           )
           .get(key.tenantId, key.draftId, version)
-        return row ? JSON.parse(row.publication as string) : null
+
+        if (!row) {
+          return null
+        }
+
+        const stored = JSON.parse(row.publication as string) as Record<
+          string,
+          unknown
+        >
+
+        return (stored.publication ?? stored) as CompositionPublication
       },
       publishIfRevision: async (key, expected, publication) => {
         owned(key)
+
         return this.transaction(() => {
           const current = this.db
             .prepare(
               "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
             )
             .get(key.tenantId, key.draftId)
-          if (current?.revision !== expected) return "revision-conflict"
+
+          if (current?.revision !== expected) {
+            return "revision-conflict"
+          }
+
           if (
             this.db
               .prepare(
                 "SELECT 1 FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
               )
               .get(key.tenantId, key.draftId, publication.version)
-          )
+          ) {
             return "version-exists"
+          }
+
+          const count = this.db
+            .prepare(
+              "SELECT COUNT(*) AS count FROM theme_builder_versions WHERE tenant_id=? AND document_id=?",
+            )
+            .get(key.tenantId, key.draftId)!.count as number
+
+          if (count >= 256) {
+            throw new ThemeInstallationError(
+              "Theme version quota exceeded",
+              409,
+            )
+          }
+
           this.db
             .prepare(
               "INSERT INTO theme_builder_versions(tenant_id,document_id,version,publication) VALUES (?,?,?,?)",
@@ -262,17 +323,19 @@ export class ThemeInstallationStore {
               key.tenantId,
               key.draftId,
               publication.version,
-              JSON.stringify(publication),
+              JSON.stringify({ publication, builderDocument: envelope }),
             )
           this.audit(p, "builder-content-version", null, {
             documentId: key.draftId,
             version: publication.version,
             runtimeAcceptance: publication.runtimeAcceptance,
           })
+
           return "stored"
         })
       },
     }
+
     return new CompositionRepository(storage)
   }
   async saveBuilderDocument(
@@ -281,15 +344,20 @@ export class ThemeInstallationStore {
     input: unknown,
   ) {
     this.require(p, "author")
-    if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0)
+
+    if (!Number.isSafeInteger(expectedRevision) || expectedRevision < 0) {
       throw new ThemeInstallationError("Invalid draft revision")
+    }
+
     const document = parseBuilderDocument(input)
+
     try {
       const record = await this.builderRepository(p, document).save(
         { tenantId: p.tenantId, draftId: document.id },
         expectedRevision === 0 ? null : expectedRevision,
         document.content,
       )
+
       return {
         document,
         revision: record.revision,
@@ -299,27 +367,37 @@ export class ThemeInstallationStore {
       if (
         error instanceof Error &&
         error.message === "show-library:draft-revision-conflict"
-      )
+      ) {
         throw new ThemeInstallationError("Draft revision conflict", 409)
+      }
+
       throw error
     }
   }
   async readBuilderDocument(p: ThemePrincipal, id: string) {
     this.require(p, "author")
-    let snapshot: BuilderDocument | undefined
+    const captured: { document?: BuilderDocument } = {}
     const record = await this.builderRepository(p, undefined, (document) => {
-      snapshot = document
+      captured.document = document
     }).read({ tenantId: p.tenantId, draftId: id })
-    if (!record) throw new ThemeInstallationError("Not found", 404)
-    if (!snapshot) throw new ThemeInstallationError("Not found", 404)
+
+    if (!record) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    if (!captured.document) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
     return {
-      document: snapshot,
+      document: captured.document,
       revision: record.revision,
-      digest: builderDigest(snapshot),
+      digest: builderDigest(captured.document),
     }
   }
   listBuilderDocuments(p: ThemePrincipal) {
     this.require(p, "author")
+
     return this.db
       .prepare(
         "SELECT document_id,revision,document FROM theme_builder_documents WHERE tenant_id=? ORDER BY document_id",
@@ -330,6 +408,382 @@ export class ThemeInstallationStore {
         revision: row.revision as number,
         name: parseBuilderDocument(JSON.parse(row.document as string)).name,
       }))
+  }
+  /** Immutable authoring versions only. This never approves/installs a renderer. */
+  async createBuilderVersion(
+    p: ThemePrincipal,
+    id: string,
+    revision: number,
+    version: string,
+  ) {
+    const current = await this.readBuilderDocument(p, id)
+
+    try {
+      await this.builderRepository(p, current.document).publish(
+        { tenantId: p.tenantId, draftId: id },
+        revision,
+        version,
+      )
+    } catch (error) {
+      if (
+        error instanceof Error &&
+        /^show-library:(draft-revision-conflict|revision-conflict|version-exists)$/u.test(
+          error.message,
+        )
+      ) {
+        throw new ThemeInstallationError("Draft revision conflict", 409)
+      }
+
+      throw error
+    }
+
+    return {
+      version,
+      revision,
+      digest: current.digest,
+      runtimeAcceptance: "not-evaluated" as const,
+    }
+  }
+  listBuilderVersions(p: ThemePrincipal, id: string) {
+    this.require(p, "author")
+    const exists = this.db
+      .prepare(
+        "SELECT 1 FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+      )
+      .get(p.tenantId, id)
+
+    if (!exists) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    return this.db
+      .prepare(
+        "SELECT version,publication FROM theme_builder_versions WHERE tenant_id=? AND document_id=? ORDER BY rowid DESC",
+      )
+      .all(p.tenantId, id)
+      .map((row) => {
+        const stored = JSON.parse(row.publication as string) as Record<
+          string,
+          unknown
+        >
+        const publication = (stored.publication ?? stored) as Record<
+          string,
+          unknown
+        >
+
+        return {
+          version: row.version as string,
+          revision: publication.draftRevision as number,
+          restorable: Boolean(stored.builderDocument),
+          runtimeAcceptance: "not-evaluated" as const,
+        }
+      })
+  }
+  async restoreBuilderVersion(
+    p: ThemePrincipal,
+    id: string,
+    revision: number,
+    version: string,
+  ) {
+    this.require(p, "author")
+    const row = this.db
+      .prepare(
+        "SELECT publication FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
+      )
+      .get(p.tenantId, id, version)
+
+    if (!row) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    const stored = JSON.parse(row.publication as string) as Record<
+      string,
+      unknown
+    >
+
+    // Old content-only versions cannot reconstruct their former component graph.
+    if (!stored.builderDocument) {
+      throw new ThemeInstallationError(
+        "Version has no complete authoring envelope",
+        409,
+      )
+    }
+
+    const document = parseBuilderDocument(stored.builderDocument)
+
+    if (document.id !== id) {
+      throw new ThemeInstallationError("Invalid draft identity")
+    }
+
+    return await this.saveBuilderDocument(p, revision, document)
+  }
+  builderPublicationState(p: ThemePrincipal, id: string) {
+    this.require(p, "author")
+
+    if (
+      !this.db
+        .prepare(
+          "SELECT 1 FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+        )
+        .get(p.tenantId, id)
+    ) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    const head = this.db
+      .prepare(
+        "SELECT * FROM theme_builder_heads WHERE tenant_id=? AND document_id=?",
+      )
+      .get(p.tenantId, id)
+
+    return {
+      revision: (head?.revision as number | undefined) ?? 0,
+      activeVersion: (head?.version as string | undefined) ?? null,
+      archived: head?.archived === 1,
+      canPublish: p.grants.includes("publish"),
+      versions: this.db
+        .prepare(
+          "SELECT version,digest FROM theme_builder_publications WHERE tenant_id=? AND document_id=? ORDER BY rowid DESC",
+        )
+        .all(p.tenantId, id)
+        .map((row) => ({
+          version: row.version as string,
+          digest: row.digest as string,
+        })),
+    }
+  }
+  private builderVersionEnvelope(
+    p: ThemePrincipal,
+    id: string,
+    version: string,
+  ) {
+    this.require(p, "author")
+    const row = this.db
+      .prepare(
+        "SELECT publication FROM theme_builder_versions WHERE tenant_id=? AND document_id=? AND version=?",
+      )
+      .get(p.tenantId, id, version)
+
+    if (!row) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    const stored = JSON.parse(row.publication as string) as Record<
+      string,
+      unknown
+    >
+
+    if (!stored.builderDocument) {
+      throw new ThemeInstallationError(
+        "Complete authoring version required",
+        409,
+      )
+    }
+
+    const document = parseBuilderDocument(stored.builderDocument)
+
+    if (document.id !== id) {
+      throw new ThemeInstallationError("Invalid draft identity")
+    }
+
+    return document
+  }
+  readPublishedBuilderVersion(p: ThemePrincipal, id: string, version: string) {
+    this.require(p, "author")
+    const row = this.db
+      .prepare(
+        "SELECT digest,admission FROM theme_builder_publications WHERE tenant_id=? AND document_id=? AND version=?",
+      )
+      .get(p.tenantId, id, version)
+
+    if (!row) {
+      throw new ThemeInstallationError("Not found", 404)
+    }
+
+    const document = this.builderVersionEnvelope(p, id, version)
+
+    if (builderDigest(document) !== row.digest) {
+      throw new ThemeInstallationError("Publication integrity mismatch", 409)
+    }
+
+    return {
+      document,
+      digest: row.digest,
+      version,
+      admission: builderPublicationAdmissionSchema.parse(
+        JSON.parse(row.admission as string),
+      ),
+    }
+  }
+  listPublishedBuilderDocuments(p: ThemePrincipal) {
+    this.require(p, "author")
+
+    return this.db
+      .prepare(
+        "SELECT h.document_id,h.version,v.digest FROM theme_builder_heads h JOIN theme_builder_publications v ON v.tenant_id=h.tenant_id AND v.document_id=h.document_id AND v.version=h.version WHERE h.tenant_id=? AND h.archived=0 ORDER BY h.document_id",
+      )
+      .all(p.tenantId)
+      .map((row) => ({
+        id: row.document_id as string,
+        version: row.version as string,
+        digest: row.digest as string,
+        name: this.builderVersionEnvelope(
+          p,
+          row.document_id as string,
+          row.version as string,
+        ).name,
+      }))
+  }
+  async publishBuilderVersion(
+    p: ThemePrincipal,
+    id: string,
+    revision: number,
+    headRevision: number,
+    version: string,
+    admit: (
+      document: BuilderDocument,
+    ) => BuilderPublicationAdmission | Promise<BuilderPublicationAdmission>,
+    rollback = false,
+  ) {
+    this.require(p, "publish")
+    const current = await this.readBuilderDocument(p, id)
+
+    if (current.revision !== revision) {
+      throw new ThemeInstallationError("Draft revision conflict", 409)
+    }
+
+    const state = this.builderPublicationState(p, id)
+
+    if (state.revision !== headRevision || state.archived) {
+      throw new ThemeInstallationError("Publication revision conflict", 409)
+    }
+
+    let document: BuilderDocument = current.document,
+      needsVersion = false
+
+    if (rollback) {
+      ;({ document } = this.readPublishedBuilderVersion(p, id, version))
+    } else {
+      needsVersion = !this.listBuilderVersions(p, id).some(
+        (row) => row.version === version,
+      )
+      document = needsVersion
+        ? current.document
+        : this.builderVersionEnvelope(p, id, version)
+
+      if (builderDigest(document) !== current.digest) {
+        throw new ThemeInstallationError("Immutable version conflict", 409)
+      }
+    }
+
+    const admission = builderPublicationAdmissionSchema.parse(
+        await admit(document),
+      ),
+      digest = builderDigest(document)
+
+    if (needsVersion) {
+      await this.createBuilderVersion(p, id, revision, version)
+    }
+
+    return this.transaction(() => {
+      const now = this.builderPublicationState(p, id)
+      const draft = this.db
+        .prepare(
+          "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+        )
+        .get(p.tenantId, id)
+
+      if (
+        now.revision !== headRevision ||
+        now.archived ||
+        draft?.revision !== revision
+      ) {
+        throw new ThemeInstallationError("Publication revision conflict", 409)
+      }
+
+      const previous = this.db
+        .prepare(
+          "SELECT digest,admission FROM theme_builder_publications WHERE tenant_id=? AND document_id=? AND version=?",
+        )
+        .get(p.tenantId, id, version)
+
+      if (
+        previous &&
+        (previous.digest !== digest ||
+          previous.admission !== JSON.stringify(admission))
+      ) {
+        throw new ThemeInstallationError("Publication integrity mismatch", 409)
+      }
+
+      if (rollback && !previous) {
+        throw new ThemeInstallationError("Not found", 404)
+      }
+
+      this.db
+        .prepare(
+          "INSERT OR IGNORE INTO theme_builder_publications(tenant_id,document_id,version,digest,admission) VALUES (?,?,?,?,?)",
+        )
+        .run(p.tenantId, id, version, digest, JSON.stringify(admission))
+      this.db
+        .prepare(
+          "INSERT INTO theme_builder_heads(tenant_id,document_id,version,revision,archived) VALUES (?,?,?,?,0) ON CONFLICT(tenant_id,document_id) DO UPDATE SET version=excluded.version,revision=excluded.revision",
+        )
+        .run(p.tenantId, id, version, headRevision + 1)
+      this.audit(p, rollback ? "builder-rollback" : "builder-publish", null, {
+        documentId: id,
+        version,
+        digest,
+        headRevision: headRevision + 1,
+        rendererBuildSha256: admission.rendererBuildSha256,
+      })
+
+      return this.builderPublicationState(p, id)
+    })
+  }
+  async archiveBuilderDocument(
+    p: ThemePrincipal,
+    id: string,
+    revision: number,
+    headRevision: number,
+    archived: boolean,
+  ) {
+    this.require(p, "publish")
+    const current = await this.readBuilderDocument(p, id)
+
+    return this.transaction(() => {
+      const state = this.builderPublicationState(p, id)
+      const draft = this.db
+        .prepare(
+          "SELECT revision FROM theme_builder_documents WHERE tenant_id=? AND document_id=?",
+        )
+        .get(p.tenantId, id)
+
+      if (
+        current.revision !== revision ||
+        draft?.revision !== revision ||
+        state.revision !== headRevision
+      ) {
+        throw new ThemeInstallationError("Publication revision conflict", 409)
+      }
+
+      this.db
+        .prepare(
+          "INSERT INTO theme_builder_heads(tenant_id,document_id,version,revision,archived) VALUES (?,?,?,?,?) ON CONFLICT(tenant_id,document_id) DO UPDATE SET revision=excluded.revision,archived=excluded.archived",
+        )
+        .run(
+          p.tenantId,
+          id,
+          state.activeVersion,
+          headRevision + 1,
+          Number(archived),
+        )
+      this.audit(p, archived ? "builder-archive" : "builder-unarchive", null, {
+        documentId: id,
+        headRevision: headRevision + 1,
+      })
+
+      return this.builderPublicationState(p, id)
+    })
   }
   private require(p: ThemePrincipal, grant: ThemePrincipal["grants"][number]) {
     if (

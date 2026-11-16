@@ -12,6 +12,7 @@ import { diagnostic, freeze } from "./primitives"
 import { previewPlanSchema, type PreviewPlan } from "./preview-schemas"
 
 const plans = new WeakMap<object, ValidatedPreviewDraft>()
+
 export function resolvePreviewPlan(
   draft: ValidatedPreviewDraft,
   manifest: unknown = getCompiledPreviewManifest(),
@@ -66,6 +67,7 @@ export function resolvePreviewPlan(
     }),
   )
   plans.set(plan, draft)
+
   return plan
 }
 
@@ -74,8 +76,10 @@ export function assertBoundPreviewPlan(
   plan: Readonly<PreviewPlan>,
 ): void {
   assertValidatedPreviewDraft(draft)
-  if (plans.get(plan) !== draft)
+
+  if (plans.get(plan) !== draft) {
     throw new Error("show-library:unbound-preview-plan")
+  }
 }
 
 /** Content identity only. M2 supplies draft/revision and owns the sole MCP envelope digest. */
@@ -84,6 +88,7 @@ export function getPreviewDigestContent(
   plan: Readonly<PreviewPlan>,
 ) {
   assertBoundPreviewPlan(draft, plan)
+
   return freeze({
     portVersion: 3 as const,
     identityRuleVersion: 2 as const,
@@ -92,9 +97,18 @@ export function getPreviewDigestContent(
     ) as unknown,
     identityMap: draft.input.identityMap,
     compiledPin: plan.resolution.pin,
-    assetDigests: [...draft.input.assets].sort((a, b) =>
-      a.assetId < b.assetId ? -1 : a.assetId > b.assetId ? 1 : 0,
-    ),
+    assetDigests: [...draft.input.assets].sort((a, b) => {
+      if (a.assetId < b.assetId) {
+        return -1
+      }
+
+      if (a.assetId > b.assetId) {
+        return 1
+      }
+
+      return 0
+    }),
   })
 }
+
 export type PreviewDigestContent = ReturnType<typeof getPreviewDigestContent>

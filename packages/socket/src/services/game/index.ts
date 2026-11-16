@@ -51,7 +51,10 @@ import {
   withAccount,
 } from "@razzia/socket/services/account-scope"
 import { getPath, saveResult } from "@razzia/socket/services/config"
-import { installedThemeForSelection } from "@razzia/socket/services/theme-installation"
+import {
+  installedThemeForSelection,
+  publishedCompositionForPin,
+} from "@razzia/socket/services/theme-installation"
 import { CooldownTimer } from "@razzia/socket/services/game/cooldown-timer"
 import { PlayerManager } from "@razzia/socket/services/game/player-manager"
 import { RoundManager } from "@razzia/socket/services/game/round-manager"
@@ -152,6 +155,13 @@ class Game {
           installedThemeForSelection(
             managerClientId,
             "defaults" in sidecar ? sidecar.defaults.showTheme : undefined,
+          ),
+          publishedCompositionForPin(
+            managerClientId,
+            "defaults" in sidecar
+              ? sidecar.defaults.showComposition
+              : undefined,
+            quizz.subject,
           ),
         )
       : null
@@ -390,9 +400,16 @@ class Game {
       source?: "web" | "phone"
     } = {},
   ): boolean {
-    if (!isPhoneLifecycleV2Adopted(this)) return true
-    if (identity.source === "phone" || identity.phoneE164) return false
+    if (!isPhoneLifecycleV2Adopted(this)) {
+      return true
+    }
+
+    if (identity.source === "phone" || identity.phoneE164) {
+      return false
+    }
+
     const name = identity.username?.trim().toLocaleLowerCase()
+
     return ![...this.roster.entries.values()].some(
       (entry) =>
         (entry.phoneE164 || entry.source === "phone") &&
@@ -439,6 +456,7 @@ class Game {
         reason: "phone_protocol_required",
       }
     }
+
     return this.phone.submitPhoneAnswerByRosterId(...args)
   }
 
@@ -639,11 +657,13 @@ class Game {
     },
   ): string | null {
     const clientId = getClientId(socket)
+
     if (
       !this.allowsBrowserPhoneIdentity(clientId, { ...claimsExtra, username })
     ) {
       return "errors:auth.unauthorized"
     }
+
     const {
       entry: rosterEntry,
       normalizedPhone,
@@ -826,15 +846,20 @@ class Game {
   joinOrRebindPhoneCaller(
     ...args: Parameters<GamePhoneController["joinOrRebindPhoneCaller"]>
   ): ReturnType<GamePhoneController["joinOrRebindPhoneCaller"]> {
-    if (!allowsNativePhoneMutation(this))
+    if (!allowsNativePhoneMutation(this)) {
       return { ok: false, error: "errors:auth.unauthorized" }
+    }
+
     return this.phone.joinOrRebindPhoneCaller(...args)
   }
 
   disconnectPhoneCallerByRosterId(
     ...args: Parameters<GamePhoneController["disconnectPhoneCallerByRosterId"]>
   ) {
-    if (!allowsNativePhoneMutation(this)) return false
+    if (!allowsNativePhoneMutation(this)) {
+      return false
+    }
+
     return this.phone.disconnectPhoneCallerByRosterId(...args)
   }
 
@@ -956,10 +981,13 @@ class Game {
 
   private reconnectPlayer(socket: Socket) {
     const clientId = getClientId(socket)
+
     if (!this.allowsBrowserPhoneIdentity(clientId)) {
       socket.emit(EVENTS.GAME.RESET, "errors:auth.unauthorized")
+
       return
     }
+
     const player = this.playerManager.findByClientId(clientId)
 
     if (!player) {
@@ -1135,6 +1163,7 @@ class Game {
     if (!this.allowsBrowserPhoneIdentity(getClientId(socket))) {
       return { accepted: false, reason: "phone_protocol_required" }
     }
+
     if (this.showCoordinator?.isSceneActive()) {
       return { accepted: false, reason: "scene_active" as const }
     }

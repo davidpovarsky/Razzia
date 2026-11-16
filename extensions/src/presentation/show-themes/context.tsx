@@ -16,6 +16,11 @@ import {
 } from "../../core/show-themes/index"
 
 import { TADAZZ_PRODUCT_LOGO_URL } from "../../core/product-branding"
+import { applicationAppearanceSchema } from "../../core/show-library/application-preview-schema"
+import {
+  applicationCardThemeScope,
+  applicationCardScopeId,
+} from "../../core/show-library/application-composition-pin"
 
 const ShowThemeContext = createContext<ResolvedShowTheme | null>(null)
 
@@ -31,6 +36,8 @@ export function useShowTheme(
 
 interface ThemeEnvelope {
   extras: Record<string, unknown>
+  phase?: string
+  questionId?: string | null
 }
 
 /** A room-scoped value, shared by cinematic and native Razzia surfaces. */
@@ -39,10 +46,34 @@ export function useResolvedShowTheme(
   role: ShowThemeRole,
 ) {
   const defaults = envelope?.extras.defaults as
-    { showTheme?: unknown } | undefined
+    { showTheme?: unknown; showCompositionScopeAliases?: unknown } | undefined
   const scene = envelope?.extras.currentScene as
-    { themeOverrides?: unknown } | undefined
-  const scope = scene?.themeOverrides ?? envelope?.extras.themeOverrides
+    { id?: string; themeOverrides?: unknown } | undefined
+  const authoredScope = scene?.themeOverrides ?? envelope?.extras.themeOverrides
+  const compositionJson = envelope?.extras.applicationCompositionJson
+  const composition = useMemo(() => {
+    try {
+      return typeof compositionJson === "string" &&
+        compositionJson.length <= 500_000
+        ? applicationAppearanceSchema.parse(JSON.parse(compositionJson))
+        : undefined
+    } catch {
+      return undefined
+    }
+  }, [compositionJson])
+  const scopeId = applicationCardScopeId(
+    envelope?.phase === "scene"
+      ? scene?.id
+      : (envelope?.questionId ?? undefined),
+    defaults?.showCompositionScopeAliases,
+  )
+  const scope = useMemo(
+    () =>
+      composition
+        ? applicationCardThemeScope(composition, scopeId, authoredScope)
+        : authoredScope,
+    [composition, scopeId, authoredScope],
+  )
   // A value-stable immutable manifest avoids reparsing/freezing on each clock snapshot.
   const installedDefinition = envelope?.extras.themeDefinitionJson
   const registry = useMemo(() => {
@@ -88,6 +119,7 @@ export function ShowThemeRenderer<Props extends object>({
   role,
   renderers,
   viewProps,
+  rendererId,
 }: {
   envelope: ThemeEnvelope | null
   role: ShowThemeRole
@@ -95,9 +127,10 @@ export function ShowThemeRenderer<Props extends object>({
     Record<ResolvedShowTheme["definition"]["rendererId"], ComponentType<Props>>
   >
   viewProps: Props
+  rendererId?: ResolvedShowTheme["definition"]["rendererId"]
 }) {
   const theme = useResolvedShowTheme(envelope, role)
-  const Renderer = renderers[theme.definition.rendererId]
+  const Renderer = renderers[rendererId ?? theme.definition.rendererId]
 
   return (
     <ShowThemeContext.Provider value={theme}>

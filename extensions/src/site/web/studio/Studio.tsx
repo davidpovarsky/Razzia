@@ -1,6 +1,6 @@
 import { SiteLink } from "../shared/SiteLink"
 import { SiteButton } from "../shared/SiteButton"
-import { lazy, Suspense, useEffect, useState } from "react"
+import { lazy, Suspense, useEffect, useMemo, useState } from "react"
 import studio from "../../../../site-assets/studio.css?inline"
 import { StudioLoading } from "./StudioLoading"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
@@ -37,6 +37,8 @@ import type { QuizMeta } from "./MyGames"
 import type { ResultMeta } from "./Events"
 import { OpenThemeBuilderLink } from "../../../components/theme-builder/OpenThemeBuilderLink"
 import { browserConsentLoginHandoff } from "../../../components/oauth-consent/login-handoff"
+import { InlineGamePreviewBoundary } from "../../components/game-preview/boundary"
+import { createAccountPreviewProvider } from "../../components/game-preview/account-provider"
 
 const LegacyTools = lazy(() => import("./LegacyTools"))
 const OAuthConsentPage = lazy(() =>
@@ -156,6 +158,7 @@ export function Studio() {
       </Suspense>
     )
   }
+
   if (path === "/studio/oauth-consent") {
     return (
       <Suspense fallback={<StudioLoading />}>
@@ -163,15 +166,23 @@ export function Studio() {
           key={profile.data.id}
           account={profile.data}
           search={search}
-          issuerBasePath={import.meta.env.VITE_TADAZZ_OAUTH_ISSUER_PATH ?? ""}
+          issuerBasePath={
+            (import.meta.env.VITE_TADAZZ_OAUTH_ISSUER_PATH as
+              string | undefined) ?? ""
+          }
         />
       </Suspense>
     )
   }
+
   return <StudioWorkspace key={profile.data.id} account={profile.data} />
 }
 
 function StudioWorkspace({ account }: { account: Account }) {
+  const previewProvider = useMemo(
+    () => createAccountPreviewProvider(account.id),
+    [account.id],
+  )
   const t = useSiteText()
   const queryClient = useQueryClient()
   const path = useRouterState({ select: (state) => state.location.pathname })
@@ -285,214 +296,260 @@ function StudioWorkspace({ account }: { account: Account }) {
   const title = navigation.find(([id]) => id === section)?.[1] ?? "Prepare show"
 
   return (
-    <ReferenceCanvas variant="studio" styles={studio}>
-      <style>
-        {corrections}
-        {studioStyle}
-        {sitePlatformStyle}
-      </style>
-      <div className="workspace">
-        <aside
-          className={`sidebar ${menu ? "open" : ""}`}
-          aria-label={t("Studio navigation")}
-        >
-          <SiteLink className="side-brand" href="/">
-            <img
-              src="/tadazz-design-reference/marketing-logo.webp"
-              alt="Tadazz"
+    <InlineGamePreviewBoundary
+      routeKey={`${account.id}:${section}`}
+      provider={previewProvider}
+    >
+      <ReferenceCanvas variant="studio" styles={studio}>
+        <style>
+          {corrections}
+          {studioStyle}
+          {sitePlatformStyle}
+        </style>
+        <div className="workspace">
+          <aside
+            className={`sidebar ${menu ? "open" : ""}`}
+            aria-label={t("Studio navigation")}
+          >
+            <SiteLink className="side-brand" href="/">
+              <img
+                src="/tadazz-design-reference/marketing-logo.webp"
+                alt="Tadazz"
+              />
+            </SiteLink>
+            <nav className="side-nav">
+              <OpenThemeBuilderLink className="nav-btn" />
+              {navigation.map(([id, label, Icon]) => (
+                <SiteLink
+                  key={id}
+                  href={studioPath(id)}
+                  onClick={() => setMenu(false)}
+                  className={`nav-btn ${section === id ? "active" : ""}`}
+                  aria-current={section === id ? "page" : undefined}
+                >
+                  <Icon size={18} />
+                  {t(label)}
+                </SiteLink>
+              ))}
+            </nav>
+            <div className="side-bottom">
+              <div className="side-identity">
+                <span className="avatar">
+                  {account.email.slice(0, 2).toUpperCase()}
+                </span>
+                <span>{account.email}</span>
+              </div>
+              <SiteButton
+                className="side-account"
+                onClick={() => void logout()}
+              >
+                <span className="who">{t("Sign out")}</span>
+              </SiteButton>
+            </div>
+          </aside>
+          {menu && (
+            <SiteButton
+              className="sidebar-shade"
+              aria-label={t("Close navigation")}
+              onClick={() => setMenu(false)}
             />
-          </SiteLink>
-          <nav className="side-nav">
-            <OpenThemeBuilderLink className="nav-btn" />
-            {navigation.map(([id, label, Icon]) => (
-              <SiteLink
-                key={id}
-                href={studioPath(id)}
-                onClick={() => setMenu(false)}
-                className={`nav-btn ${section === id ? "active" : ""}`}
-                aria-current={section === id ? "page" : undefined}
+          )}
+          <div className="main">
+            <header className="topbar">
+              <div className="top-left">
+                <SiteButton
+                  className="circle-btn mobile-menu"
+                  aria-label={t("Toggle navigation")}
+                  aria-expanded={menu}
+                  onClick={() => setMenu(!menu)}
+                >
+                  <Menu />
+                </SiteButton>
+                <strong>{t(title)}</strong>
+              </div>
+              <div className="top-actions">
+                <label className="search-mini">
+                  <Search size={16} />
+                  <input
+                    type="search"
+                    placeholder={t("Search games")}
+                    aria-label={t("Search games")}
+                    value={search}
+                    onChange={(event) => setSearch(event.target.value)}
+                  />
+                </label>
+                <SiteButton
+                  className="circle-btn"
+                  aria-label={t("Help")}
+                  onClick={() => setHelp(true)}
+                >
+                  <HelpCircle size={18} />
+                </SiteButton>
+                <SiteLink className="btn primary" href="/manager/quizz">
+                  <Plus size={16} />
+                  {t("Create game")}
+                </SiteLink>
+                <SiteLink
+                  className="avatar"
+                  href="/studio/account"
+                  aria-label={t("My account")}
+                >
+                  {account.email.slice(0, 2).toUpperCase()}
+                </SiteLink>
+              </div>
+            </header>
+            <main className="content">
+              <Suspense
+                fallback={
+                  <div
+                    className="site-skeleton site-skeleton-hero"
+                    role="status"
+                    aria-label={t("Loading your studio…")}
+                  />
+                }
               >
-                <Icon size={18} />
-                {t(label)}
-              </SiteLink>
-            ))}
-          </nav>
-          <div className="side-bottom">
-            <div className="side-identity">
-              <span className="avatar">
-                {account.email.slice(0, 2).toUpperCase()}
-              </span>
-              <span>{account.email}</span>
-            </div>
-            <SiteButton className="side-account" onClick={() => void logout()}>
-              <span className="who">{t("Sign out")}</span>
-            </SiteButton>
-          </div>
-        </aside>
-        {menu && (
-          <SiteButton
-            className="sidebar-shade"
-            aria-label={t("Close navigation")}
-            onClick={() => setMenu(false)}
-          />
-        )}
-        <div className="main">
-          <header className="topbar">
-            <div className="top-left">
-              <SiteButton
-                className="circle-btn mobile-menu"
-                aria-label={t("Toggle navigation")}
-                aria-expanded={menu}
-                onClick={() => setMenu(!menu)}
-              >
-                <Menu />
-              </SiteButton>
-              <strong>{t(title)}</strong>
-            </div>
-            <div className="top-actions">
-              <label className="search-mini">
-                <Search size={16} />
-                <input
-                  type="search"
-                  placeholder={t("Search games")}
-                  aria-label={t("Search games")}
-                  value={search}
-                  onChange={(event) => setSearch(event.target.value)}
-                />
-              </label>
-              <SiteButton
-                className="circle-btn"
-                aria-label={t("Help")}
-                onClick={() => setHelp(true)}
-              >
-                <HelpCircle size={18} />
-              </SiteButton>
-              <SiteLink className="btn primary" href="/manager/quizz">
-                <Plus size={16} />
-                {t("Create game")}
-              </SiteLink>
-              <SiteLink
-                className="avatar"
-                href="/studio/account"
-                aria-label={t("My account")}
-              >
-                {account.email.slice(0, 2).toUpperCase()}
-              </SiteLink>
-            </div>
-          </header>
-          <main className="content">
-            <Suspense
-              fallback={
-                <div
-                  className="site-skeleton site-skeleton-hero"
-                  role="status"
-                  aria-label={t("Loading your studio…")}
-                />
-              }
-            >
-              {section === "dashboard" && (
-                <>
-                  <section className="welcome">
-                    <div className="welcome-copy">
-                      <h1>
-                        {t("Your")} <span>{t("shows.")}</span>
-                      </h1>
-                      <SiteLink className="welcome-link" href="/studio/explore">
-                        {t("Explore Games")} →
-                      </SiteLink>
-                    </div>
-                    <div className="welcome-art" aria-hidden="true">
-                      <div className="zz-floor" />
-                      <img
-                        className="blue"
-                        src="/tadazz-design-reference/marketing-zb.webp"
-                        alt=""
-                      />
-                      <img
-                        className="lime"
-                        src="/tadazz-design-reference/marketing-zl.webp"
-                        alt=""
-                      />
-                    </div>
-                  </section>
-                  <section className="spotlight-grid">
-                    <article className="spotlight">
-                      <div className="thumb">
+                {section === "dashboard" && (
+                  <>
+                    <section className="welcome">
+                      <div className="welcome-copy">
+                        <h1>
+                          {t("Your")} <span>{t("shows.")}</span>
+                        </h1>
+                        <SiteLink
+                          className="welcome-link"
+                          href="/studio/explore"
+                        >
+                          {t("Explore Games")} →
+                        </SiteLink>
+                      </div>
+                      <div className="welcome-art" aria-hidden="true">
+                        <div className="zz-floor" />
                         <img
-                          src="/tadazz-design-reference/marketing-worlds.webp"
+                          className="blue"
+                          src="/tadazz-design-reference/marketing-zb.webp"
+                          alt=""
+                        />
+                        <img
+                          className="lime"
+                          src="/tadazz-design-reference/marketing-zl.webp"
                           alt=""
                         />
                       </div>
-                      <div className="spotlight-info">
-                        <h3>
-                          {t("Welcome, {{name}}", {
-                            name: account.email.split("@")[0],
-                          })}
-                        </h3>
-                        <p>
-                          {t("{{games}} games · {{events}} past events", {
-                            games: quizzes.isSuccess ? games.length : "—",
-                            events: results.isSuccess
-                              ? results.data.results.length
-                              : "—",
-                          })}
-                        </p>
-                        <SiteLink
-                          className="spotlight-action"
-                          href="/studio/prepare"
-                        >
-                          {t("Prepare show")} →
-                        </SiteLink>
-                      </div>
-                    </article>
-                    {games[0] && (
-                      <article className="spotlight editing">
+                    </section>
+                    <section className="spotlight-grid">
+                      <article className="spotlight">
                         <div className="thumb">
                           <img
-                            src="/tadazz-design-reference/marketing-stage.webp"
+                            src="/tadazz-design-reference/marketing-worlds.webp"
                             alt=""
                           />
                         </div>
                         <div className="spotlight-info">
-                          <h3>{games[0].subject}</h3>
-                          <p>{t("Pick up where you left off")}</p>
+                          <h3>
+                            {t("Welcome, {{name}}", {
+                              name: account.email.split("@")[0],
+                            })}
+                          </h3>
+                          <p>
+                            {t("{{games}} games · {{events}} past events", {
+                              games: quizzes.isSuccess ? games.length : "—",
+                              events: results.isSuccess
+                                ? results.data.results.length
+                                : "—",
+                            })}
+                          </p>
                           <SiteLink
                             className="spotlight-action"
-                            href={`/manager/quizz/${encodeURIComponent(games[0].id)}`}
+                            href="/studio/prepare"
                           >
-                            {t("Continue editing")} →
+                            {t("Prepare show")} →
                           </SiteLink>
                         </div>
                       </article>
-                    )}
-                  </section>
-                  <div className="section-head">
-                    <h2>{t("My Games")}</h2>
-                    <SiteLink className="text-link" href="/studio/games">
-                      {t("View all")} →
-                    </SiteLink>
-                  </div>
-                </>
-              )}
-              {(section === "games" || section === "dashboard") && (
-                <>
-                  {section === "games" && (
-                    <div className="pagehead">
-                      <h1>{t("My Games")}</h1>
+                      {games[0] && (
+                        <article className="spotlight editing">
+                          <div className="thumb">
+                            <img
+                              src="/tadazz-design-reference/marketing-stage.webp"
+                              alt=""
+                            />
+                          </div>
+                          <div className="spotlight-info">
+                            <h3>{games[0].subject}</h3>
+                            <p>{t("Pick up where you left off")}</p>
+                            <SiteLink
+                              className="spotlight-action"
+                              href={`/manager/quizz/${encodeURIComponent(games[0].id)}`}
+                            >
+                              {t("Continue editing")} →
+                            </SiteLink>
+                          </div>
+                        </article>
+                      )}
+                    </section>
+                    <div className="section-head">
+                      <h2>{t("My Games")}</h2>
+                      <SiteLink className="text-link" href="/studio/games">
+                        {t("View all")} →
+                      </SiteLink>
                     </div>
-                  )}
-                  {(() => {
-                    if (quizzes.isPending) {
-                      return <p role="status">{t("Loading your games…")}</p>
+                  </>
+                )}
+                {(section === "games" || section === "dashboard") && (
+                  <>
+                    {section === "games" && (
+                      <div className="pagehead">
+                        <h1>{t("My Games")}</h1>
+                      </div>
+                    )}
+                    {(() => {
+                      if (quizzes.isPending) {
+                        return <p role="status">{t("Loading your games…")}</p>
+                      }
+
+                      if (quizzes.isError) {
+                        return (
+                          <div className="empty" role="alert">
+                            <p>{t("Could not load your games")}</p>
+                            <SiteButton
+                              className="btn ghost"
+                              onClick={() => void quizzes.refetch()}
+                            >
+                              {t("Retry")}
+                            </SiteButton>
+                          </div>
+                        )
+                      }
+
+                      return (
+                        <MyGames
+                          key={section}
+                          games={games}
+                          search={search}
+                          limit={section === "dashboard" ? 3 : undefined}
+                          refresh={refreshGames}
+                        />
+                      )
+                    })()}
+                  </>
+                )}
+                {section === "events" &&
+                  (() => {
+                    if (results.isPending) {
+                      return <p role="status">{t("Please wait…")}</p>
                     }
 
-                    if (quizzes.isError) {
+                    if (results.isError) {
                       return (
-                        <div className="empty" role="alert">
-                          <p>{t("Could not load your games")}</p>
+                        <div role="alert">
+                          <p>
+                            {t(
+                              "Your request could not be completed. Please try again.",
+                            )}
+                          </p>
                           <SiteButton
                             className="btn ghost"
-                            onClick={() => void quizzes.refetch()}
+                            onClick={() => void results.refetch()}
                           >
                             {t("Retry")}
                           </SiteButton>
@@ -501,121 +558,90 @@ function StudioWorkspace({ account }: { account: Account }) {
                     }
 
                     return (
-                      <MyGames
-                        key={section}
-                        games={games}
-                        search={search}
-                        limit={section === "dashboard" ? 3 : undefined}
-                        refresh={refreshGames}
+                      <Events
+                        accountId={account.id}
+                        results={results.data.results}
+                        refresh={refreshResults}
                       />
                     )
                   })()}
-                </>
-              )}
-              {section === "events" &&
-                (() => {
-                  if (results.isPending) {
-                    return <p role="status">{t("Please wait…")}</p>
-                  }
+                {section === "prepare" &&
+                  (() => {
+                    if (quizzes.isPending) {
+                      return <p role="status">{t("Loading your games…")}</p>
+                    }
 
-                  if (results.isError) {
-                    return (
-                      <div role="alert">
-                        <p>
-                          {t(
-                            "Your request could not be completed. Please try again.",
-                          )}
-                        </p>
-                        <SiteButton
-                          className="btn ghost"
-                          onClick={() => void results.refetch()}
-                        >
-                          {t("Retry")}
-                        </SiteButton>
-                      </div>
-                    )
-                  }
+                    if (quizzes.isError) {
+                      return (
+                        <p role="alert">{t("Could not load your games")}</p>
+                      )
+                    }
 
-                  return (
-                    <Events
-                      accountId={account.id}
-                      results={results.data.results}
-                      refresh={refreshResults}
-                    />
-                  )
-                })()}
-              {section === "prepare" &&
-                (() => {
-                  if (quizzes.isPending) {
-                    return <p role="status">{t("Loading your games…")}</p>
-                  }
-
-                  if (quizzes.isError) {
-                    return <p role="alert">{t("Could not load your games")}</p>
-                  }
-
-                  return <Prepare games={games} />
-                })()}
-              {section === "explore" && (
-                <>
-                  <div className="pagehead">
-                    <h1>{t("Explore Games")}</h1>
-                  </div>
-                  <p className="muted">
-                    {t(
-                      "Illustrative catalogue. Template installation is unavailable.",
-                    )}
-                  </p>
-                  <div className="games-grid">
-                    {["Ready to play", "Make it yours", "Start fresh"].map(
-                      (label, index) => (
-                        <article className="game-card" key={label}>
-                          <img
-                            className="site-game-cover"
-                            src={`/tadazz-design-reference/marketing-${index === 1 ? "worlds" : "stage"}.webp`}
-                            alt=""
-                          />
-                          <div className="site-game-body">
-                            <h3>{t(label)}</h3>
-                            <SiteLink
-                              className="btn ghost"
-                              href={
-                                index === 2 ? "/manager/quizz" : "/?view=store"
-                              }
-                            >
-                              {t(
-                                index === 2
-                                  ? "Create game"
-                                  : "Explore collection",
-                              )}
-                            </SiteLink>
-                          </div>
-                        </article>
-                      ),
-                    )}
-                  </div>
-                </>
-              )}
-              {section === "account" && <AccountPanel account={account} />}
-            </Suspense>
-          </main>
+                    return <Prepare games={games} />
+                  })()}
+                {section === "explore" && (
+                  <>
+                    <div className="pagehead">
+                      <h1>{t("Explore Games")}</h1>
+                    </div>
+                    <p className="muted">
+                      {t(
+                        "Illustrative catalogue. Template installation is unavailable.",
+                      )}
+                    </p>
+                    <div className="games-grid">
+                      {["Ready to play", "Make it yours", "Start fresh"].map(
+                        (label, index) => (
+                          <article className="game-card" key={label}>
+                            <img
+                              className="site-game-cover"
+                              src={`/tadazz-design-reference/marketing-${index === 1 ? "worlds" : "stage"}.webp`}
+                              alt=""
+                            />
+                            <div className="site-game-body">
+                              <h3>{t(label)}</h3>
+                              <SiteLink
+                                className="btn ghost"
+                                href={
+                                  index === 2
+                                    ? "/manager/quizz"
+                                    : "/?view=store"
+                                }
+                              >
+                                {t(
+                                  index === 2
+                                    ? "Create game"
+                                    : "Explore collection",
+                                )}
+                              </SiteLink>
+                            </div>
+                          </article>
+                        ),
+                      )}
+                    </div>
+                  </>
+                )}
+                {section === "account" && <AccountPanel account={account} />}
+              </Suspense>
+            </main>
+          </div>
+          {help && (
+            <SiteDialog title={t("Help")} onClose={() => setHelp(false)}>
+              <p>
+                {t(
+                  "Create or import a game in My Games. Edit it in the original editor, then open Prepare show to start a room.",
+                )}
+              </p>
+              <SiteLink className="btn ghost" href="/studio/legacy">
+                {t("Existing management tools")}
+              </SiteLink>
+              <SiteLink className="btn ghost" href="/game">
+                {t("Join a game")}
+              </SiteLink>
+            </SiteDialog>
+          )}
         </div>
-        {help && (
-          <SiteDialog title={t("Help")} onClose={() => setHelp(false)}>
-            <p>
-              {t(
-                "Create or import a game in My Games. Edit it in the original editor, then open Prepare show to start a room.",
-              )}
-            </p>
-            <SiteLink className="btn ghost" href="/studio/legacy">
-              {t("Existing management tools")}
-            </SiteLink>
-            <SiteLink className="btn ghost" href="/game">
-              {t("Join a game")}
-            </SiteLink>
-          </SiteDialog>
-        )}
-      </div>
-    </ReferenceCanvas>
+      </ReferenceCanvas>
+    </InlineGamePreviewBoundary>
   )
 }

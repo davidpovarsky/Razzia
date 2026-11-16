@@ -11,7 +11,7 @@
  * Exact attribution and commercial-license verification status:
  * docs/extensions/UNIFIED_SITE_SOURCES_20261110.md.
  */
-import { useRef, type MouseEvent, type ReactNode } from "react"
+import { useEffect, useRef, type MouseEvent, type ReactNode } from "react"
 import {
   motion,
   useMotionTemplate,
@@ -23,7 +23,13 @@ import {
 const ROTATION_RANGE = 8
 const HALF_ROTATION_RANGE = ROTATION_RANGE / 2
 
-export function HoverDevTiltCard({ children }: { children: ReactNode }) {
+export function HoverDevTiltCard({
+  children,
+  suspended = false,
+}: {
+  children: ReactNode
+  suspended?: boolean
+}) {
   const ref = useRef<HTMLElement | null>(null)
   const prefersReducedMotion = useReducedMotion()
   const x = useMotionValue(0)
@@ -31,9 +37,15 @@ export function HoverDevTiltCard({ children }: { children: ReactNode }) {
   const xSpring = useSpring(x)
   const ySpring = useSpring(y)
   const transform = useMotionTemplate`rotateX(${xSpring}deg) rotateY(${ySpring}deg)`
+  useEffect(() => {
+    if (suspended) {
+      x.set(0)
+      y.set(0)
+    }
+  }, [suspended, x, y])
 
   const handleMouseMove = (event: MouseEvent<HTMLElement>) => {
-    if (!ref.current || prefersReducedMotion) {
+    if (!ref.current || prefersReducedMotion || suspended) {
       return
     }
 
@@ -64,7 +76,7 @@ export function HoverDevTiltCard({ children }: { children: ReactNode }) {
       onMouseLeave={handleMouseLeave}
       style={{
         transformStyle: "preserve-3d",
-        transform: prefersReducedMotion ? "none" : transform,
+        transform: prefersReducedMotion || suspended ? "none" : transform,
       }}
       className="game-card"
     >
