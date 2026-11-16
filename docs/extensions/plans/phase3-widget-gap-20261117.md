@@ -1,5 +1,17 @@
 # Phase 3 Unit B Compatibility Probe: MCP Widget vs. Phase 2 Full-Show Preview & `ScenePresenter`
 
+> **Manager acceptance correction (17 November):** This is a static compatibility
+> probe, not reproduced defect evidence. The claimed stale-generation defect
+> below is **not accepted**: existing `bridge.ts:28-31` already increments
+> `generation` in `cancelPreview()`, and `214-215` checks it after awaiting the
+> tool. The missing `preview_game` fixture branch and candidate fallback ordering
+> are confirmed by source; their observable effects require failing tests before
+> any fix. Adding two historical bundle sizes does not prove the size of a
+> deduplicated future bundle: the 4 MiB point is a packaging risk, not a measured
+> impossibility. Full-show reuse is nevertheless not compatible with the current
+> strict single-frame DTO/producer/renderer boundary. Preserve these distinctions
+> when using the original worker analysis below.
+
 - **Date**: 2026-11-17
 - **Branch / Worktree**: `cez/c76cfcf7` (`c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db`)
 - **Baseline HEAD**: `fd3048402fb66cc22867635ea1fdbe39e08d1fa0` (baseline product commit `12ba2f4`)
