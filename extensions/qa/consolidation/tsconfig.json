@@ -1,0 +1,26 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "types": ["node", "vite/client"],
+    "resolveJsonModule": true,
+    "lib": ["ESNext", "DOM", "DOM.Iterable"]
+  },
+  "include": [
+    "../../src/site/bootstrap.tsx",
+    "../../src/site/web/account/AccountGateway.tsx",
+    "../../src/site/web/studio/Studio.tsx",
+    "../../src/site/components/game-preview/*.ts",
+    "../../src/site/tests/inline-game-preview-*.test.ts",
+    "../../src/components/oauth-consent/*.ts",
+    "../../src/components/oauth-consent/*.tsx",
+    "../../src/components/native-save-consent/*.ts",
+    "../../src/components/native-save-consent/*.tsx",
+    "../../src/components/theme-builder/StudioThemeBuilder.tsx",
+    "../../src/core/show-library/*.ts",
+    "../../src/server/storage/creation-operation-record.ts",
+    "../../src/server/phone-lifecycle-v2/auth/unmounted-factory.ts",
+    "../../src/telephony/pilot-runtime/gateway-v2/*.ts",
+    "../../src/presentation/show-library-preview/*.d.ts",
+    "../theme-builder/account-boundary-fixture.tsx"
+  ]
+}

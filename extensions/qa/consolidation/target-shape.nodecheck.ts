@@ -49,14 +49,18 @@ function snapshot(root: string) {
   function walk(directory: string) {
     for (const name of fs.readdirSync(directory).sort()) {
       const file = path.join(directory, name)
-      if (fs.lstatSync(file).isDirectory()) walk(file)
-      else
+
+      if (fs.lstatSync(file).isDirectory()) {
+        walk(file)
+      } else {
         result[path.relative(root, file)] = createHash("sha256")
           .update(fs.readFileSync(file))
           .digest("hex")
+      }
     }
   }
   walk(root)
+
   return result
 }
 function validateFixture(root: string, token: string) {
@@ -77,6 +81,7 @@ function fresh(root: string, token: string, mode: string) {
   const body = JSON.parse(child.stdout)
   assert.equal(body.pid, child.pid)
   assert.notEqual(body.pid, process.pid)
+
   return {
     pid: child.pid,
     exit: child.status,
@@ -86,23 +91,29 @@ function fresh(root: string, token: string, mode: string) {
     body,
   }
 }
+
 if (process.argv[2] === "child") {
   const [, , , mode, root, token] = process.argv
   validateFixture(root, token)
   process.env.CONFIG_PATH = root
   process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
   let outcome: unknown
+
   try {
-    if (mode === "lookup") outcome = await scoped(() => port().lookup(binding))
-    else if (mode === "retry") {
+    if (mode === "lookup") {
+      outcome = await scoped(() => port().lookup(binding))
+    } else if (mode === "retry") {
       const request = read(path.join(root, "request.json"))
       outcome = await scoped(() =>
         port().create(binding, request.input, request.extras),
       )
-    } else throw Error("Unknown target fixture command")
+    } else {
+      throw Error("Unknown target fixture command")
+    }
   } catch (error) {
     outcome = { rejected: String(error) }
   }
+
   process.stdout.write(
     JSON.stringify({ pid: process.pid, outcome, state: snapshot(root) }),
   )
@@ -116,7 +127,7 @@ if (process.argv[2] === "child") {
     "baseSha256",
     "sidecarSha256",
   ]) {
-    test("target scalar shape: " + field, async () => {
+    test(`target scalar shape: ${field}`, async () => {
       const root = fs.mkdtempSync(
           path.join(os.tmpdir(), "tadazz-target-shape-owned-"),
         ),
@@ -136,6 +147,7 @@ if (process.argv[2] === "child") {
         "sentinel.txt",
       )
       fs.writeFileSync(sentinel, "Unrelated native sentinel", { flag: "wx" })
+
       try {
         const input = nativeInput("Scalar target fixture"),
           extras =
@@ -150,15 +162,20 @@ if (process.argv[2] === "child") {
         const result = await scoped(() => port().create(binding, input, extras))
         const original = read(record(root)),
           changed = structuredClone(original)
+
         if (!field.startsWith("valid-")) {
           assert.equal(typeof changed.target[field], "string")
           changed.target[field] = [changed.target[field]]
-          if (field === "quizId")
+
+          if (field === "quizId") {
             changed.result.quizId = [changed.result.quizId]
-          if (field === "logicalDigest")
+          }
+          if (field === "logicalDigest") {
             changed.result.baseDigest = [changed.result.baseDigest]
+          }
           fs.writeFileSync(record(root), JSON.stringify(changed, null, 2))
         }
+
         const before = snapshot(root)
         const lookup = fresh(root, token, "lookup"),
           retry = fresh(root, token, "retry")
@@ -174,10 +191,11 @@ if (process.argv[2] === "child") {
         }
         // Preserve observed outcomes even for baseline assertion failures.
         fs.writeFileSync(
-          path.join(folder, field + ".json"),
-          JSON.stringify(evidence, null, 2) + "\n",
+          path.join(folder, `${field}.json`),
+          `${JSON.stringify(evidence, null, 2)}\n`,
           { flag: "wx", mode: 0o600 },
         )
+
         if (field.startsWith("valid-")) {
           assert.deepEqual(lookup.body.outcome, { status: "committed", result })
           assert.deepEqual(retry.body.outcome, result)
@@ -188,6 +206,7 @@ if (process.argv[2] === "child") {
           })
           assert.equal(typeof retry.body.outcome.rejected, "string")
         }
+
         assert.deepEqual(snapshot(root), before)
         assert.equal(
           fs

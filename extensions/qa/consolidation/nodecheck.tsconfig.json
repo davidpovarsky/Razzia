@@ -1,0 +1,7 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [
+    "./*.nodecheck.ts",
+    "../../src/presentation/show-library-preview/*.d.ts"
+  ]
+}

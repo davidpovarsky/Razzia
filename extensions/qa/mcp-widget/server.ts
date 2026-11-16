@@ -16,14 +16,16 @@ const mime = new Map([
 ])
 const root = new URL("../../src/mcp-app/widget/dist/", import.meta.url)
 const raw: unknown = JSON.parse(
-  execFileSync(
-    "git",
-    [
-      "show",
-      "7f0d4d89e0f77be49c6543411937d977212f132f:docs/extensions/qa-evidence/mcp-foundation-20261115/preview-candidate/candidate-07/tool-results.json",
-    ],
-    { encoding: "utf8" },
-  ),
+  process.env.TADAZZ_WIDGET_PREVIEW_PACKET
+    ? readFileSync(process.env.TADAZZ_WIDGET_PREVIEW_PACKET, "utf8")
+    : execFileSync(
+        "git",
+        [
+          "show",
+          "7f0d4d89e0f77be49c6543411937d977212f132f:docs/extensions/qa-evidence/mcp-foundation-20261115/preview-candidate/candidate-07/tool-results.json",
+        ],
+        { encoding: "utf8" },
+      ),
 )
 const [retainedResult] = retainedPacket.parse(raw).results
 

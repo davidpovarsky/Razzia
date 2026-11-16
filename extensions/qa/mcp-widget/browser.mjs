@@ -1,4 +1,4 @@
-import { chromium } from "../../node_modules/@playwright/test/index.mjs"
+import { chromium, webkit } from "../../node_modules/@playwright/test/index.mjs"
 import assert from "node:assert/strict"
 import { writeFile } from "node:fs/promises"
 const [, , base] = process.argv
@@ -7,11 +7,18 @@ if (!/^http:\/\/127\.0\.0\.1:\d+$/u.test(base ?? "")) {
   throw new Error("qa:local-origin-required")
 }
 
-const evidence = new URL(
-  "../../../docs/extensions/qa-evidence/mcp-widget-20261115/",
-  import.meta.url,
-)
-const browser = await chromium.launch({ channel: "msedge", headless: true })
+const evidence = process.env.TADAZZ_WIDGET_EVIDENCE
+  ? new URL(process.env.TADAZZ_WIDGET_EVIDENCE)
+  : new URL(
+      "../../../docs/extensions/qa-evidence/mcp-widget-20261115/",
+      import.meta.url,
+    )
+const engine =
+  process.env.TADAZZ_WIDGET_BROWSER === "webkit" ? webkit : chromium
+const browser = await engine.launch({
+  ...(engine === chromium ? { channel: "msedge" } : {}),
+  headless: true,
+})
 const cases = [],
   errors = [],
   requests = []
@@ -392,7 +399,10 @@ try {
     JSON.stringify(
       {
         surface:
-          "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation",
+          process.env.TADAZZ_WIDGET_BROWSER === "webkit"
+            ? "local WebKit; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation"
+            : "local Edge Chromium; genuine SDK AppBridge synthetic host, not ChatGPT/Claude installation",
+        browserVersion: browser.version(),
         cases,
         errors,
         requests,

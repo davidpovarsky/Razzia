@@ -284,6 +284,7 @@ export class UnmountedPhoneAuthority {
           assertCredential(input, capability, request.action)
           const receipt = await this.operate(input, capability, request)
           assertCredential(input, capability, request.action)
+
           return receipt
         },
         register: async (
@@ -294,6 +295,7 @@ export class UnmountedPhoneAuthority {
           assertCredential(input, capability, "register")
           const receipt = await this.register(input, capability, registration)
           assertCredential(input, capability, "register")
+
           return receipt
         },
         activate: async (

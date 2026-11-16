@@ -7,6 +7,11 @@ import { DatabaseSync } from "node:sqlite"
 import { after, test } from "node:test"
 import { PrivateCallOperationHost } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/call-operation-host"
 import {
+  PrivateCallPrecommit,
+  CALL_PRECOMMIT_MARKER,
+  CALL_PRECOMMIT_CONTENT,
+} from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/call-precommit"
+import {
   OPERATION_PRECOMMIT_PURPOSE,
   operationText,
 } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/operation-precommit"
@@ -16,6 +21,37 @@ import {
 } from "../../../../../extensions/src/telephony/pilot-runtime/gateway-v2/codec"
 import { fixture, manager, close, real } from "./actual-operation-backend"
 after(close)
+
+test("OP-05 a delayed old hangup cannot disconnect an explicitly registered redial", async () => {
+  const f = await fixture()
+  const late = f.operator.operation(f.options(f.intent("hangup")))
+  late.prepare()
+  // The old callback is delayed until after the explicit replacement call.
+  // A retired/uncertain binding intentionally has no automatic recovery path.
+  assert.equal(f.r.game.players[0].connected, true)
+  const input = { ...f.input, requestId: randomUUID(), providerReference: randomUUID(), expectedPredecessor: f.joined.generation! }
+  const root = real.privateRoot("explicit-redial")
+  writeFileSync(join(root, CALL_PRECOMMIT_MARKER), CALL_PRECOMMIT_CONTENT, { mode: 0o600 })
+  const callOptions = { ...f.callOptions, root, attempt: input }
+  const redial = new PrivateCallPrecommit(callOptions)
+  redial.prepare(input)
+  const joined = await redial.register()
+  assert.equal(joined.ok, true)
+  assert.equal(joined.generation, f.joined.generation! + 1)
+  assert.equal(joined.rosterPlayerId, f.joined.rosterPlayerId)
+  assert.equal(f.r.game.players[0].connected, true)
+  const projected = [...f.native]
+  const delayed = await late.execute()
+  assert.equal(delayed.ok, false)
+  assert.deepEqual(f.native, projected)
+  assert.equal(f.r.game.players[0].connected, true)
+  const operator = new PrivateCallOperationHost({ ...callOptions, dispatcher: f.service.operationDispatcher() })
+  const poll = operator.operation(f.options(f.intent("poll", { registrationId: joined.registrationId!, generation: joined.generation! })))
+  poll.prepare()
+  assert.equal((await poll.execute()).ok, true)
+  assert.equal(f.r.counters.nativeJoin, 2)
+  real.record({ test: "OP-05", explicitPredecessor: input.expectedPredecessor, generation: joined.generation, delayedStatus: delayed.status, connected: true, physicalProvider: false })
+})
 type Fixture = Awaited<ReturnType<typeof fixture>>
 function readPrivateIntent(
   f: Fixture,
