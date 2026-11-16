@@ -46,6 +46,7 @@ export interface FirstPartyNativeSaveOptions {
   /** A real same-origin human exact-revision consent page. Request ID is a path segment. */
   consentPageUrl: string
 }
+
 export interface NativeSaveLedgerAccess {
   auth: FirstPartyBindings
   protocol: OAuthProtocol
@@ -60,6 +61,7 @@ export interface NativeSaveLedgerAccess {
     mutation?: MutationIdentity,
   ): void
 }
+
 const requestId = nativeSaveConsentRequestId
 const approvalSchema = z.strictObject({
   sid: z.uuid(),
@@ -102,9 +104,9 @@ type SaveRecord = Omit<z.infer<typeof saveRecordSchema>, "draft"> & {
 }
 const unavailable = () => new ToolError("DEPENDENCY_UNAVAILABLE")
 
-/** Private ledger consumer only. It cannot mint OAuth principals, bypass native
- * first-party consent, allocate an alternate native target, or repair a journal.
- */
+// Private ledger consumer only. It cannot mint OAuth principals, bypass native
+// first-party consent, allocate an alternate native target, or repair a journal.
+//
 export function createNativeSaveAdapter(
   ledger: NativeSaveLedgerAccess,
   options: FirstPartyNativeSaveOptions,
@@ -112,6 +114,7 @@ export function createNativeSaveAdapter(
   const { auth, protocol } = ledger
   const issuer = new URL(protocol.config.issuer)
   const page = new URL(options.consentPageUrl)
+
   if (
     page.origin !== issuer.origin ||
     page.protocol !== "https:" ||
@@ -122,10 +125,12 @@ export function createNativeSaveAdapter(
     !protocol.config.firstPartyOrigins?.includes(issuer.origin) ||
     typeof options.operations.lookup !== "function" ||
     typeof options.operations.create !== "function"
-  )
+  ) {
     throw new Error(
       "Real same-origin native-save consent page and durable native port required",
     )
+  }
+
   const selectedScopes = ["tadazz.drafts.read", "tadazz.library.write"]
   const operationId = (p: VerifiedPrincipal, mutation: MutationIdentity) =>
     hashJson({
@@ -151,12 +156,19 @@ export function createNativeSaveAdapter(
     expiresAt: record.expiresAt,
   })
   const approvalValue = (record: SaveRecord) => {
-    if (!record.approved) throw unavailable()
+    if (!record.approved) {
+      throw unavailable()
+    }
+
     const { approvalMac: _mac, ...approved } = record.approved
+
     return { intentMac: record.intentMac, ...approved }
   }
   const binding = (record: SaveRecord): NativeCreationOperationBinding => {
-    if (!record.approved) throw unavailable()
+    if (!record.approved) {
+      throw unavailable()
+    }
+
     return Object.freeze({
       version: 1,
       operationId: record.operationId,
@@ -182,12 +194,17 @@ export function createNativeSaveAdapter(
   const nativeBundle = (record: SaveRecord) => {
     const bundle = enhancedBundleSchema.parse(JSON.parse(record.nativeSnapshot))
     const base = quizzValidator.parse(bundle.quizz)
-    const normalized = JSON.parse(JSON.stringify({ ...bundle, quizz: base }))
+    const normalized: unknown = JSON.parse(
+      JSON.stringify({ ...bundle, quizz: base }),
+    )
+
     if (
       canonicalJson(normalized) !== record.nativeSnapshot ||
       tokenDigest(record.nativeSnapshot) !== record.nativeDigest
-    )
+    ) {
       throw unavailable()
+    }
+
     return { base, extras: bundle.extras }
   }
   const checked = (value: unknown): SaveRecord => {
@@ -198,42 +215,52 @@ export function createNativeSaveAdapter(
     }
     protocol.checkNativeSaveMac("intent", intentValue(record), record.intentMac)
     nativeBundle(record)
+
     if (record.state === "pending") {
       if (
         record.approved ||
         record.result ||
         record.outcome ||
         record.outcomeMac
-      )
+      ) {
         throw unavailable()
+      }
     } else {
       if (
         !record.approved ||
         record.approved.expiresAt > record.expiresAt ||
         record.approved.approvedAt > record.approved.expiresAt
-      )
+      ) {
         throw unavailable()
+      }
+
       protocol.checkNativeSaveMac(
         "approval",
         approvalValue(record),
         record.approved.approvalMac,
       )
+
       if (record.state === "saved") {
-        if (!record.result || !record.outcome || !record.outcomeMac)
+        if (!record.result || !record.outcome || !record.outcomeMac) {
           throw unavailable()
+        }
+
         protocol.checkNativeSaveMac(
           "outcome",
           outcomeValue(record),
           record.outcomeMac,
         )
-      } else if (record.result || record.outcome || record.outcomeMac)
+      } else if (record.result || record.outcome || record.outcomeMac) {
         throw unavailable()
+      }
     }
+
     return record
   }
   const authority = (db: DatabaseSync, p: VerifiedPrincipal) => {
     ledger.assertIssued(p)
     const grant = ledger.grant(db, p.accountId, p.grantId)
+
     if (
       p.issuer !== protocol.config.issuer ||
       p.audience !== protocol.config.resource ||
@@ -243,8 +270,10 @@ export function createNativeSaveAdapter(
       !selectedScopes.every(
         (scope) => p.scopes.includes(scope) && grant.scopes.includes(scope),
       )
-    )
+    ) {
       throw new ToolError("SCOPE_REQUIRED")
+    }
+
     return grant
   }
   const currentDraft = (db: DatabaseSync, owner: string, id: string) => {
@@ -253,19 +282,25 @@ export function createNativeSaveAdapter(
         "SELECT id,revision,authored,summary,locale FROM drafts WHERE owner=? AND id=?",
       )
       .get(owner, id)
-    if (!raw || typeof raw.summary !== "string")
+
+    if (!raw || typeof raw.summary !== "string") {
       throw new ToolError("NOT_FOUND")
+    }
+
+    const summary: unknown = JSON.parse(raw.summary)
+
     return checkedDraft(
       {
         draftId: raw.id,
         revision: raw.revision,
         authoredShowJson: raw.authored,
-        summary: JSON.parse(raw.summary),
+        summary,
         ...(raw.locale === null ? {} : { locale: raw.locale }),
       },
       { authoring: options.authoring },
     )
   }
+  // eslint-disable-next-line max-params -- The lookup binds one SQL transaction to the exact grant, request key and digest.
   const readOperation = (
     db: DatabaseSync,
     grantId: string,
@@ -277,16 +312,29 @@ export function createNativeSaveAdapter(
         "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='save' AND request_key=?",
       )
       .get(grantId, key)
-    if (!row) return undefined
-    if (row.digest !== inputDigest) throw new ToolError("REQUEST_KEY_REUSED")
-    if (typeof row.outcome !== "string") throw unavailable()
+
+    if (!row) {
+      return undefined
+    }
+
+    if (row.digest !== inputDigest) {
+      throw new ToolError("REQUEST_KEY_REUSED")
+    }
+
+    if (typeof row.outcome !== "string") {
+      throw unavailable()
+    }
+
     const record = checked(JSON.parse(row.outcome))
+
     if (
       record.requestKey !== key ||
       record.inputDigest !== inputDigest ||
       !record.requestId.startsWith(grantId)
-    )
+    ) {
       throw unavailable()
+    }
+
     return record
   }
   const store = (db: DatabaseSync, grantId: string, record: SaveRecord) => {
@@ -300,7 +348,10 @@ export function createNativeSaveAdapter(
         record.requestKey,
         record.inputDigest,
       )
-    if (updated.changes !== 1) throw unavailable()
+
+    if (updated.changes !== 1) {
+      throw unavailable()
+    }
   }
   const freshConsent = (
     db: DatabaseSync,
@@ -312,16 +363,23 @@ export function createNativeSaveAdapter(
       record.approved.expiresAt <= Date.now() ||
       record.expiresAt <= Date.now() ||
       !auth.delegatedSessionActive(p.accountId, record.approved.sid)
-    )
+    ) {
       throw new ToolError("CONSENT_REQUIRED")
+    }
+
     const current = currentDraft(db, p.accountId, record.draft.draftId)
-    if (current.revision !== record.draft.revision)
+
+    if (current.revision !== record.draft.revision) {
       throw new ToolError("REVISION_CONFLICT", {
         currentRevision: current.revision,
       })
-    if (canonicalJson(current) !== canonicalJson(record.draft))
+    }
+
+    if (canonicalJson(current) !== canonicalJson(record.draft)) {
       throw unavailable()
+    }
   }
+  // eslint-disable-next-line max-params -- Commit the exact native result under the same transaction, principal and mutation.
   const complete = (
     db: DatabaseSync,
     p: VerifiedPrincipal,
@@ -330,17 +388,20 @@ export function createNativeSaveAdapter(
     mutation: MutationIdentity,
   ) => {
     const result = nativeResultSchema.parse(raw)
+
     if (
       result.baseDigest !==
       computeCanonicalBaseDigest(nativeBundle(record).base)
-    )
+    ) {
       throw unavailable()
+    }
+
     const outcome = dataSchemas.save_game.parse({
       draftId: record.draft.draftId,
       revision: record.draft.revision,
       quizId: result.quizId,
       savedRevision: result.revision,
-      studioUrl: new URL("/manager/quizz/" + result.quizId, issuer.origin).href,
+      studioUrl: new URL(`/manager/quizz/${result.quizId}`, issuer.origin).href,
     })
     const saved: SaveRecord = {
       ...record,
@@ -353,13 +414,14 @@ export function createNativeSaveAdapter(
     store(db, p.grantId, checked(saved))
     ledger.audit(db, p.grantId, "save-native-completed", mutation)
     authority(db, p)
+
     return outcome
   }
   const consentRequired = (record: SaveRecord) =>
     new ToolError("CONSENT_REQUIRED", {
       consentRequestId: record.requestId,
       consentUrl: new URL(
-        page.pathname.replace(/\/$/u, "") + "/" + record.requestId,
+        `${page.pathname.replace(/\/$/u, "")}/${record.requestId}`,
         page.origin,
       ).href,
     })
@@ -367,7 +429,10 @@ export function createNativeSaveAdapter(
     try {
       return await action()
     } catch (error) {
-      if (error instanceof ToolError) throw error
+      if (error instanceof ToolError) {
+        throw error
+      }
+
       throw new ToolError(
         error instanceof OAuthError && error.code === "invalid_grant"
           ? "SCOPE_REQUIRED"
@@ -385,12 +450,15 @@ export function createNativeSaveAdapter(
           intent: "createNew",
           idempotencyKey: mutation.idempotencyKey,
         })
+
         if (
           !parsed.success ||
           hashJson(parsed.data) !== mutation.inputDigest ||
           !z.string().min(1).max(128).safeParse(mutation.correlationId).success
-        )
+        ) {
           throw new ToolError("VALIDATION_FAILED")
+        }
+
         const decision = await auth.withDelegatedAccount(p.accountId, () => {
           const prepared = ledger.atomic(p.accountId, (db) => {
             const grant = authority(db, p)
@@ -400,25 +468,35 @@ export function createNativeSaveAdapter(
               mutation.idempotencyKey,
               mutation.inputDigest,
             )
+
             if (existing) {
               if (
                 existing.operationId !== operationId(p, mutation) ||
                 existing.draft.draftId !== selection.draftId ||
                 existing.draft.revision !== selection.expectedRevision
-              )
+              ) {
                 throw unavailable()
+              }
+
               return existing
             }
+
             const count = db
               .prepare("SELECT count(*) AS n FROM operations")
               .get()?.n
-            if (typeof count !== "number" || count + 2 > 5000)
+
+            if (typeof count !== "number" || count + 2 > 5000) {
               throw new ToolError("QUOTA_EXCEEDED")
+            }
+
             const draft = currentDraft(db, p.accountId, selection.draftId)
-            if (draft.revision !== selection.expectedRevision)
+
+            if (draft.revision !== selection.expectedRevision) {
               throw new ToolError("REVISION_CONFLICT", {
                 currentRevision: draft.revision,
               })
+            }
+
             const id = p.grantId + randomBytes(16).toString("base64url")
             const nativeSnapshot = createExportBody(draft, "enhanced-bundle")
             const record: SaveRecord = {
@@ -467,13 +545,23 @@ export function createNativeSaveAdapter(
             )
             ledger.audit(db, p.grantId, "save-consent-requested", mutation)
             authority(db, p)
+
             return record
           })
-          if (prepared.state === "pending")
+
+          if (prepared.state === "pending") {
             return { consent: prepared, outcome: null }
-          if (prepared.state === "saved")
-            return { consent: null, outcome: prepared.outcome! }
+          }
+
+          if (prepared.state === "saved") {
+            if (!prepared.outcome) {
+              throw unavailable()
+            }
+
+            return { consent: null, outcome: prepared.outcome }
+          }
           // Both transactions make their native lookup before a mutable draft read.
+
           const first = ledger.atomic(p.accountId, (db) => {
             authority(db, p)
             const record = readOperation(
@@ -481,22 +569,40 @@ export function createNativeSaveAdapter(
               p.grantId,
               mutation.idempotencyKey,
               mutation.inputDigest,
-            )!
+            )
+
+            if (!record) {
+              throw unavailable()
+            }
+
             const status = options.operations.lookup(binding(record))
-            if (status.status === "committed")
+
+            if (status.status === "committed") {
               return {
                 outcome: complete(db, p, record, status.result, mutation),
               }
-            if (status.status !== "absent") throw unavailable()
+            }
+
+            if (status.status !== "absent") {
+              throw unavailable()
+            }
+
             freshConsent(db, p, record)
+
             if (record.state !== "publishing") {
               store(db, p.grantId, { ...record, state: "publishing" })
               ledger.audit(db, p.grantId, "save-native-started", mutation)
             }
+
             authority(db, p)
+
             return { outcome: null }
           })
-          if (first.outcome) return { consent: null, outcome: first.outcome }
+
+          if (first.outcome) {
+            return { consent: null, outcome: first.outcome }
+          }
+
           const outcome = ledger.atomic(p.accountId, (db) => {
             authority(db, p)
             const record = readOperation(
@@ -504,12 +610,30 @@ export function createNativeSaveAdapter(
               p.grantId,
               mutation.idempotencyKey,
               mutation.inputDigest,
-            )!
-            if (record.state === "saved") return record.outcome!
+            )
+
+            if (!record) {
+              throw unavailable()
+            }
+
+            if (record.state === "saved") {
+              if (!record.outcome) {
+                throw unavailable()
+              }
+
+              return record.outcome
+            }
+
             const status = options.operations.lookup(binding(record))
-            if (status.status === "committed")
+
+            if (status.status === "committed") {
               return complete(db, p, record, status.result, mutation)
-            if (status.status !== "absent") throw unavailable()
+            }
+
+            if (status.status !== "absent") {
+              throw unavailable()
+            }
+
             freshConsent(db, p, record)
             const bundle = nativeBundle(record)
             authority(db, p)
@@ -520,14 +644,24 @@ export function createNativeSaveAdapter(
               { ...bundle.base },
               bundle.extras,
             )
+
             return complete(db, p, record, result, mutation)
           })
+
           return { consent: null, outcome }
         })
         ledger.assertIssued(p)
         ledger.read(p.accountId, (db) => authority(db, p))
-        if (decision.consent) throw consentRequired(decision.consent)
-        if (!decision.outcome) throw unavailable()
+
+        if (decision.consent) {
+          throw consentRequired(decision.consent)
+        }
+
+        // eslint-disable-next-line typescript/no-unnecessary-condition -- Fail closed on an unexpected internal adapter outcome before disclosure.
+        if (!decision.outcome) {
+          throw unavailable()
+        }
+
         return decision.outcome
       }),
   }
@@ -540,15 +674,21 @@ export function createNativeSaveAdapter(
     requestId.parse(id)
     const grantId = id.slice(0, 32)
     const grant = ledger.grant(db, p.accountId, grantId)
-    if (!selectedScopes.every((scope) => grant.scopes.includes(scope)))
+
+    if (!selectedScopes.every((scope) => grant.scopes.includes(scope))) {
       throw new ToolError("SCOPE_REQUIRED")
+    }
+
     const raw = db
       .prepare(
         "SELECT digest,outcome FROM operations WHERE grant_id=? AND kind='save-consent' AND request_key=?",
       )
       .get(grantId, id.slice(32))
-    if (!raw || typeof raw.outcome !== "string")
+
+    if (!raw || typeof raw.outcome !== "string") {
       throw new ToolError("NOT_FOUND")
+    }
+
     const mapping = mappingSchema.parse(JSON.parse(raw.outcome))
     const record = readOperation(
       db,
@@ -556,31 +696,42 @@ export function createNativeSaveAdapter(
       mapping.requestKey,
       mapping.inputDigest,
     )
+
     if (
       !record ||
       mapping.requestId !== id ||
       record.requestId !== id ||
       record.intentMac !== mapping.intentMac ||
       raw.digest !== record.inputDigest
-    )
+    ) {
       throw unavailable()
+    }
+
     return { grant, record }
   }
+
   return {
     storage,
     inspect(p: FirstPartySessionPrincipal, id: string) {
       auth.assertActive(p)
+
       return ledger.read(p.accountId, (db) => {
         const { grant, record } = nativeSelection(db, p, id)
+
         if (record.state === "pending" || record.state === "approved") {
           const current = currentDraft(db, p.accountId, record.draft.draftId)
-          if (current.revision !== record.draft.revision)
+
+          if (current.revision !== record.draft.revision) {
             throw new ToolError("REVISION_CONFLICT", {
               currentRevision: current.revision,
             })
-          if (canonicalJson(current) !== canonicalJson(record.draft))
+          }
+
+          if (canonicalJson(current) !== canonicalJson(record.draft)) {
             throw unavailable()
+          }
         }
+
         auth.assertActive(p)
         const expiresAt = Math.min(
           record.expiresAt,
@@ -591,6 +742,7 @@ export function createNativeSaveAdapter(
           (expiresAt <= Date.now() ||
             (record.approved !== null &&
               !auth.delegatedSessionActive(p.accountId, record.approved.sid)))
+
         return nativeSaveInspection.parse({
           version: 1,
           consentRequestId: id,
@@ -616,17 +768,26 @@ export function createNativeSaveAdapter(
     },
     approve(p: FirstPartySessionPrincipal, id: string, proof: string) {
       auth.assertActive(p)
+
       return ledger.atomic(p.accountId, (db) => {
         const { record } = nativeSelection(db, p, id)
-        if (record.state !== "pending" || record.expiresAt <= Date.now())
+
+        if (record.state !== "pending" || record.expiresAt <= Date.now()) {
           throw new ToolError("CONSENT_REQUIRED")
+        }
+
         const current = currentDraft(db, p.accountId, record.draft.draftId)
-        if (current.revision !== record.draft.revision)
+
+        if (current.revision !== record.draft.revision) {
           throw new ToolError("REVISION_CONFLICT", {
             currentRevision: current.revision,
           })
-        if (canonicalJson(current) !== canonicalJson(record.draft))
+        }
+
+        if (canonicalJson(current) !== canonicalJson(record.draft)) {
           throw unavailable()
+        }
+
         protocol.checkNativeSaveMac("consent", consentValue(record, p), proof)
         record.approved = {
           sid: p.sid,
@@ -647,6 +808,7 @@ export function createNativeSaveAdapter(
           correlationId: record.requestId,
         })
         auth.assertActive(p)
+
         return nativeSaveApproval.parse({
           version: 1,
           state: "approved",

@@ -24,9 +24,9 @@ let issuer: Awaited<ReturnType<typeof createFirstPartyOAuth>>
 let remote: ReturnType<typeof issuer.remote>
 let native: typeof import("@razzia/socket/services/config")
 const config = {
-  issuer: origin + "/oauth",
-  resource: origin + "/mcp",
-  resourceMetadataUrl: origin + "/.well-known/oauth-protected-resource/mcp",
+  issuer: `${origin}/oauth`,
+  resource: `${origin}/mcp`,
+  resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
   firstPartyOrigins: [origin],
 }
 const clientId = "synthetic-native-save-real-E",
@@ -45,10 +45,7 @@ const count = () =>
 before(async () => {
   assert.equal(process.platform, "linux")
   f = await fixture()
-  assert.equal(
-    path.dirname(f.root),
-    "/home/david/tadazz-phase1-20261116",
-  )
+  assert.equal(path.dirname(f.root), "/home/david/tadazz-phase1-20261116")
   assert.equal(fs.statfsSync(f.root).type, 0xef53)
   fs.writeFileSync(
     path.join(f.root, ".f-native-save-client-fixture.json"),
@@ -59,10 +56,11 @@ before(async () => {
     }),
     { flag: "wx", mode: 0o600 },
   )
-  for (const s of f.sessions)
+  for (const s of f.sessions) {
     fs.mkdirSync(path.join(f.root, "tenants", s.owner, "quizz"), {
       recursive: true,
     })
+  }
   native = await f.scope.withAccount(
     f.sessions[0].owner,
     () => import("@razzia/socket/services/config"),
@@ -85,12 +83,12 @@ before(async () => {
       .export({ type: "pkcs8", format: "pem" })
       .toString(),
     ticketEncryptionKey: randomBytes(32),
-    consentPageUrl: origin + "/studio/oauth-consent",
+    consentPageUrl: `${origin}/studio/oauth-consent`,
     clients: [{ clientId, redirectUris: [callback], scopes }],
     nativeSave: {
       authoring: policy,
       operations: port.operations,
-      consentPageUrl: origin + "/studio/native-save-consent",
+      consentPageUrl: `${origin}/studio/native-save-consent`,
     },
   })
   remote = issuer.remote({
@@ -112,11 +110,12 @@ before(async () => {
 })
 after(async () => {
   await remote?.close()
+
   if (f) {
     for (const prefix of [
       f.root,
       ...f.sessions.map((s) => path.join(f.root, "tenants", s.owner)),
-    ])
+    ]) {
       assert.equal(
         fs.readFileSync(
           path.join(prefix, "native-sentinels/quiz.json"),
@@ -129,6 +128,7 @@ after(async () => {
               : "synthetic-native-do-not-touch",
         }) + "\n",
       )
+    }
     assert.equal(fs.existsSync(path.join(f.root, "quizz")), false)
     assert.deepEqual(
       fs.readdirSync(
@@ -138,7 +138,7 @@ after(async () => {
     )
     fs.writeFileSync(
       path.join(f.root, "public-native-client-results.json"),
-      JSON.stringify(
+      `${JSON.stringify(
         {
           runtime: process.version,
           platform: process.platform,
@@ -152,7 +152,7 @@ after(async () => {
         },
         null,
         2,
-      ) + "\n",
+      )}\n`,
       { flag: "wx", mode: 0o600 },
     )
     f.db.close()
@@ -170,12 +170,13 @@ async function api(
   session?: Session,
 ) {
   const json = route === "/oauth/inspect" || route === "/oauth/approve"
+
   return issuer.fetch(
     new Request(origin + route, {
       method: body ? "POST" : "GET",
       headers: {
         host: new URL(origin).host,
-        ...(session ? { authorization: "Bearer " + session.token } : {}),
+        ...(session ? { authorization: `Bearer ${session.token}` } : {}),
         ...(body
           ? {
               "content-type": json
@@ -194,19 +195,18 @@ async function api(
 async function linked() {
   const verifier = randomBytes(32).toString("base64url"),
     started = await api(
-      "/oauth/authorize?" +
-        new URLSearchParams({
-          response_type: "code",
-          client_id: clientId,
-          redirect_uri: callback,
-          resource: config.resource,
-          scope: scopes.join(" "),
-          state: key(),
-          code_challenge: createHash("sha256")
-            .update(verifier)
-            .digest("base64url"),
-          code_challenge_method: "S256",
-        }),
+      `/oauth/authorize?${new URLSearchParams({
+        response_type: "code",
+        client_id: clientId,
+        redirect_uri: callback,
+        resource: config.resource,
+        scope: scopes.join(" "),
+        state: key(),
+        code_challenge: createHash("sha256")
+          .update(verifier)
+          .digest("base64url"),
+        code_challenge_method: "S256",
+      })}`,
     )
   assert.equal(started.status, 302)
   const ticket = new URL(started.headers.get("location")!).searchParams.get(
@@ -231,6 +231,7 @@ async function linked() {
     code_verifier: verifier,
   })
   assert.equal(token.status, 200)
+
   return (await token.json()).access_token as string
 }
 async function rpc(token: string, name: string, args: unknown) {
@@ -239,7 +240,7 @@ async function rpc(token: string, name: string, args: unknown) {
       method: "POST",
       headers: {
         host: new URL(origin).host,
-        authorization: "Bearer " + token,
+        authorization: `Bearer ${token}`,
         "content-type": "application/json",
         accept: "application/json, text/event-stream",
       },
@@ -253,6 +254,7 @@ async function rpc(token: string, name: string, args: unknown) {
   )
   assert.equal(response.status, 200)
   const text = await response.text()
+
   return (
     response.headers.get("content-type")?.startsWith("text/event-stream")
       ? JSON.parse(
@@ -282,10 +284,11 @@ async function pending(token: string, title: string) {
   assert.equal(url.hash, "")
   const id = nativeSaveRequestIdFromPath(url.pathname, url.search, url.hash)
   assert.equal(id, result.error.consentRequestId)
+
   return { input, id: id! }
 }
-/** Actual E fetch client; only browser-added Host/Origin are supplied. No auth,
- * DTO, issuer, grant/session/SQLite or native creation implementation is mocked. */
+// Actual E fetch client; only browser-added Host/Origin are supplied. No auth,
+// DTO, issuer, grant/session/SQLite or native creation implementation is mocked.
 function bridge(
   session = f.sessions[0],
   getToken = () => session.token as string | null,
@@ -309,8 +312,10 @@ function bridge(
       new Request(origin + input, { ...init, headers }),
     )
     assert.equal(response.headers.get("cache-control"), "no-store")
+
     return receive ? receive(response) : response
   }
+
   return {
     calls,
     client: createNativeSaveConsentClient({
@@ -386,6 +391,7 @@ test("real E client discards a genuine inspect response after native session cha
     async (response) => {
       real = response
       entered()
+
       return held
     },
   )
@@ -453,6 +459,7 @@ test("lost approval ACK from actual F commit is uncertain to E and never auto-re
         lost = true
         throw new Error("synthetic-network-loss-after-real-approval")
       }
+
       return response
     },
   )

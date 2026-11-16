@@ -12,25 +12,32 @@
     "resolveJsonModule": true,
     "types": ["node"],
     "lib": ["ES2022", "DOM"],
-    "baseUrl": "../../..",
     "paths": {
-      "@razzia/common/*": ["packages/common/src/*"],
-      "@razzia/extensions/core": ["extensions/src/core/index.ts"],
-      "@razzia/socket/api/factory": ["packages/socket/src/api/factory.ts"],
-      "@razzia/socket/api/middleware": [
-        "packages/socket/src/api/middleware.ts"
+      "@razzia/socket/*": ["../../../packages/socket/src/*"],
+      "@razzia/common/*": ["../../../packages/common/src/*"],
+      "@razzia/extensions/core": ["../../../extensions/src/core/index.ts"],
+      "@razzia/socket/api/factory": [
+        "../../../packages/socket/src/api/factory.ts"
       ],
-      "@razzia/socket/services/auth": ["packages/socket/src/services/auth.ts"],
+      "@razzia/socket/api/middleware": [
+        "../../../packages/socket/src/api/middleware.ts"
+      ],
+      "@razzia/socket/services/auth": [
+        "../../../packages/socket/src/services/auth.ts"
+      ],
       "@razzia/socket/services/account-scope": [
-        "packages/socket/src/services/account-scope.ts"
+        "../../../packages/socket/src/services/account-scope.ts"
       ],
       "@razzia/socket/services/account-auth": [
-        "packages/socket/src/services/account-auth.ts"
+        "../../../packages/socket/src/services/account-auth.ts"
       ],
       "@razzia/socket/services/account-db": [
-        "packages/socket/src/services/account-db.ts"
+        "../../../packages/socket/src/services/account-db.ts"
       ],
-      "@razzia/socket/env": ["packages/socket/src/env.ts"]
+      "@razzia/socket/services/config": [
+        "../../../packages/socket/src/services/config.ts"
+      ],
+      "@razzia/socket/env": ["../../../packages/socket/src/env.ts"]
     }
   },
   "include": [

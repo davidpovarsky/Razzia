@@ -235,13 +235,47 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     config,
     client,
     readTicket,
+    catalogCursorProof(value: unknown) {
+      return createHmac("sha256", encryptionKey)
+        .update(
+          canonicalJson({
+            domain: "tadazz-mcp-native-catalog-cursor-v1",
+            value,
+          }),
+        )
+        .digest("base64url")
+    },
+    checkCatalogCursorProof(value: unknown, proof: string) {
+      if (!/^[A-Za-z0-9_-]{43}$/u.test(proof)) {
+        return fail("access_denied")
+      }
+
+      const actual = Buffer.from(proof, "base64url")
+
+      if (actual.length !== 32 || actual.toString("base64url") !== proof) {
+        return fail("access_denied")
+      }
+
+      const expected = createHmac("sha256", encryptionKey)
+        .update(
+          canonicalJson({
+            domain: "tadazz-mcp-native-catalog-cursor-v1",
+            value,
+          }),
+        )
+        .digest()
+
+      if (!timingSafeEqual(expected, actual)) {
+        return fail("access_denied")
+      }
+    },
     nativeSaveMac(
       purpose: "intent" | "consent" | "approval" | "outcome",
       value: unknown,
     ) {
       return createHmac("sha256", encryptionKey)
         .update(
-          canonicalJson({ domain: "tadazz-native-save-v1:" + purpose, value }),
+          canonicalJson({ domain: `tadazz-native-save-v1:${purpose}`, value }),
         )
         .digest("hex")
     },
@@ -250,14 +284,19 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
       value: unknown,
       proof: string,
     ) {
-      if (!/^[a-f0-9]{64}$/u.test(proof)) return fail("access_denied")
+      if (!/^[a-f0-9]{64}$/u.test(proof)) {
+        return fail("access_denied")
+      }
+
       const expected = createHmac("sha256", encryptionKey)
         .update(
-          canonicalJson({ domain: "tadazz-native-save-v1:" + purpose, value }),
+          canonicalJson({ domain: `tadazz-native-save-v1:${purpose}`, value }),
         )
         .digest()
-      if (!timingSafeEqual(expected, Buffer.from(proof, "hex")))
+
+      if (!timingSafeEqual(expected, Buffer.from(proof, "hex"))) {
         return fail("access_denied")
+      }
     },
     downloadTicket(value: OAuthDownloadTicket) {
       return seal("download", downloadTicketSchema.parse(value))

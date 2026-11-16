@@ -19,17 +19,22 @@ import {
 import { IngressBudget, bodyText, HttpRejection } from "./ingress.ts"
 import type { FirstPartyExportPolicy } from "./oauth-export.ts"
 import type { FirstPartyNativeSaveOptions } from "./oauth-native-save.ts"
+import type { FirstPartyCatalogOptions } from "./oauth-catalog.ts"
 import { safeError, ToolError } from "../server/errors.ts"
 import { CONTRACT_VERSION } from "../contracts/schemas.ts"
 import {
   nativeSaveInspectInput,
   nativeSaveApproveInput,
 } from "../contracts/native-save.ts"
+
 export type {
   FirstPartyExportPolicy,
   ExportRightsContext,
 } from "./oauth-export.ts"
+
 export type { FirstPartyNativeSaveOptions } from "./oauth-native-save.ts"
+
+export type { FirstPartyCatalogOptions } from "./oauth-catalog.ts"
 
 export interface FirstPartyOAuthOptions extends OAuthCryptoOptions {
   configRoot: string
@@ -39,8 +44,8 @@ export interface FirstPartyOAuthOptions extends OAuthCryptoOptions {
   /** Explicit deployment-owned authoring/rights policy. Missing means no export
    * adapter and no download route; native Save consent is unrelated. */
   exportPolicy?: FirstPartyExportPolicy
-  /** Separate exact-revision native consent and actual C1 durable operation port.
-   * Missing means no storage adapter or native-consent machine endpoints. */
+  // Separate exact-revision native consent and actual C1 durable operation port.
+  // Missing means no storage adapter or native-consent machine endpoints.
   nativeSave?: FirstPartyNativeSaveOptions
 }
 const ticketBody = z.strictObject({ ticket: z.string().min(40).max(8192) })
@@ -171,8 +176,11 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
   const nativeSave = options.nativeSave
     ? grants.nativeSave(options.nativeSave, assertIssued)
     : undefined
+
   return Object.freeze({
     verifyAccessToken,
+    catalog: (catalogOptions: FirstPartyCatalogOptions) =>
+      grants.catalog(catalogOptions, assertIssued),
     draftRepository: (policy: AuthoringPolicy) =>
       grants.drafts(policy, assertIssued),
     exports: options.exportPolicy
@@ -277,13 +285,15 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
         const isNativeConsent =
           url.pathname === endpoint("native-save/inspect") ||
           url.pathname === endpoint("native-save/approve")
+
         if (
           url.pathname === endpoint("inspect") ||
           url.pathname === endpoint("approve") ||
           isNativeConsent
         ) {
-          if (isNativeConsent && !nativeSave)
+          if (isNativeConsent && !nativeSave) {
             return new Response(null, { status: 404, headers })
+          }
           if (
             origin !== issuer.origin ||
             !/^application\/json(?:\s*;\s*charset=utf-8)?$/iu.test(contentType)
@@ -296,8 +306,12 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
             active(request.signal)
             const p = await auth.principal(c)
             active(request.signal)
+
             if (isNativeConsent) {
-              if (!nativeSave) throw new ToolError("DEPENDENCY_UNAVAILABLE")
+              if (!nativeSave) {
+                throw new ToolError("DEPENDENCY_UNAVAILABLE")
+              }
+
               const data =
                 url.pathname === endpoint("native-save/inspect")
                   ? nativeSave.inspect(
@@ -306,6 +320,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
                     )
                   : (() => {
                       const body = nativeSaveApproveInput.parse(raw)
+
                       return nativeSave.approve(
                         p,
                         body.consentRequestId,
@@ -314,12 +329,14 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
                     })()
               active(request.signal)
               auth.assertActive(p)
+
               return publicJson({
                 contractVersion: CONTRACT_VERSION,
                 ok: true,
                 data,
               })
             }
+
             if (url.pathname === endpoint("inspect")) {
               const body = ticketBody.parse(raw)
               const ticket = protocol.readTicket(body.ticket)
@@ -356,19 +373,18 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
                         ? "VALIDATION_FAILED"
                         : "DEPENDENCY_UNAVAILABLE",
                     )
+              const statuses: Partial<Record<typeof safe.code, number>> = {
+                SCOPE_REQUIRED: 403,
+                NOT_FOUND: 404,
+                REVISION_CONFLICT: 409,
+                CONSENT_REQUIRED: 409,
+                VALIDATION_FAILED: 400,
+              }
               const status =
                 error instanceof HttpRejection
                   ? error.status
-                  : safe.code === "SCOPE_REQUIRED"
-                    ? 403
-                    : safe.code === "NOT_FOUND"
-                      ? 404
-                      : safe.code === "REVISION_CONFLICT" ||
-                          safe.code === "CONSENT_REQUIRED"
-                        ? 409
-                        : safe.code === "VALIDATION_FAILED"
-                          ? 400
-                          : 503
+                  : (statuses[safe.code] ?? 503)
+
               return Response.json(
                 {
                   contractVersion: CONTRACT_VERSION,
@@ -378,6 +394,7 @@ export async function createFirstPartyOAuth(options: FirstPartyOAuthOptions) {
                 { status, headers },
               )
             }
+
             return failure(
               error instanceof z.ZodError || error instanceof SyntaxError
                 ? new OAuthError("invalid_request")

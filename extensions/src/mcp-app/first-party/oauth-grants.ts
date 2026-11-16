@@ -48,6 +48,10 @@ import {
   createNativeSaveAdapter,
   type FirstPartyNativeSaveOptions,
 } from "./oauth-native-save.ts"
+import {
+  createNativeCatalog,
+  type FirstPartyCatalogOptions,
+} from "./oauth-catalog.ts"
 
 const TABLES = {
   metadata:
@@ -77,7 +81,9 @@ const grantSchema = z.strictObject({
   expiresAt: z.number().int().positive(),
   active: z.literal(true),
 })
+
 export type StoredOAuthGrant = z.infer<typeof grantSchema>
+
 type StoredGrant = StoredOAuthGrant
 const unavailable = () => new OAuthError("temporarily_unavailable")
 const invalid = () => new OAuthError("invalid_grant")
@@ -534,6 +540,67 @@ export class FirstPartyOAuthGrants {
     })
     this.auth.assertActive(p)
   }
+  catalog(
+    options: FirstPartyCatalogOptions,
+    assertIssued: (p: VerifiedPrincipal) => void,
+  ) {
+    return createNativeCatalog(
+      {
+        protocol: this.protocol,
+        read: (p, action) => {
+          let db: DatabaseSync | undefined = undefined
+          const authority = () => {
+            assertIssued(p)
+
+            if (!db) {
+              throw invalid()
+            }
+
+            const grant = this.row(db, p.accountId, p.grantId)
+
+            if (
+              p.issuer !== this.protocol.config.issuer ||
+              p.audience !== this.protocol.config.resource ||
+              p.subject !== grant.subject ||
+              p.clientId !== grant.clientId ||
+              !p.scopes.includes("tadazz.catalog.read") ||
+              !grant.scopes.includes("tadazz.catalog.read")
+            ) {
+              throw new ToolError("SCOPE_REQUIRED")
+            }
+          }
+
+          try {
+            assertIssued(p)
+            db = this.open(p.accountId, false)
+            authority()
+            const result = action()
+            authority()
+
+            return result
+          } catch (error) {
+            if (error instanceof ToolError) {
+              throw error
+            }
+
+            throw new ToolError(
+              error instanceof OAuthError && error.code === "invalid_grant"
+                ? "SCOPE_REQUIRED"
+                : "DEPENDENCY_UNAVAILABLE",
+            )
+          } finally {
+            try {
+              db?.close()
+            } catch {
+              // eslint-disable-next-line no-unsafe-finally -- An uncertain SQLite close must prevent successful data disclosure.
+              throw new ToolError("DEPENDENCY_UNAVAILABLE")
+            }
+          }
+        },
+      },
+      options,
+    )
+  }
   nativeSave(
     options: FirstPartyNativeSaveOptions,
     assertIssued: (p: VerifiedPrincipal) => void,
@@ -546,19 +613,26 @@ export class FirstPartyOAuthGrants {
         grant: (db, owner, grantId) => this.row(db, owner, grantId),
         atomic: (owner, action) => this.transaction(owner, false, action),
         read: (owner, action) => {
-          let db: DatabaseSync | undefined
+          let db: DatabaseSync | undefined = undefined
+
           try {
             db = this.open(owner, false)
-            if (!db) throw invalid()
+
+            if (!db) {
+              throw invalid()
+            }
+
             return action(db)
           } finally {
             try {
               db?.close()
             } catch {
+              // eslint-disable-next-line no-unsafe-finally -- An uncertain SQLite close must prevent successful data disclosure.
               throw unavailable()
             }
           }
         },
+        // eslint-disable-next-line max-params -- Preserve the existing ledger audit port's transaction and mutation binding.
         audit: (db, grantId, kind, mutation) =>
           this.audit(db, grantId, kind, mutation),
       },

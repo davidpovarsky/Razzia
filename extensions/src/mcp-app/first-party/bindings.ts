@@ -168,23 +168,36 @@ export async function loadFirstPartyBindings(configRoot: string) {
       operation: () => T,
     ): Promise<T> {
       configured()
-      if (!liveDb || !z.uuid().safeParse(accountId).success) throw unavailable()
+
+      if (!liveDb || !z.uuid().safeParse(accountId).success) {
+        throw unavailable()
+      }
+
       checkDatabase(liveDb)
-      if (!accounts.activeAccount(accountId))
+
+      if (!accounts.activeAccount(accountId)) {
         throw new ToolError("SCOPE_REQUIRED")
+      }
+
       const result = await scope.withAccount(accountId, () => {
         configured()
+
         if (
           scope.activeAccount() !== accountId ||
           !accounts.activeAccount(accountId)
-        )
+        ) {
           throw new ToolError("SCOPE_REQUIRED")
+        }
+
         return operation()
       })
       configured()
       checkDatabase(liveDb)
-      if (!accounts.activeAccount(accountId))
+
+      if (!accounts.activeAccount(accountId)) {
         throw new ToolError("SCOPE_REQUIRED")
+      }
+
       return result
     },
     delegatedAccountActive(accountId: string) {
