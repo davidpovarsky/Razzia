@@ -70,3 +70,45 @@ Read-only SSH succeeded with existing pinned host key. Host is `tadazz-quiz-serv
 Existing approved `tadazz-phase2-20261116` is running, network NONE, no published ports, CPU1.5 / memory5GiB / PIDs384, approximately27MiB working memory at preflight. Chromium1248 and WebKit2370 caches exist; Node24.22.2. Its source cwd is `/cleanup` (not `/work`). It also retains a read-only approved-input customer mount: Phase3 tests MUST NOT use that mount or its customer fixtures. Existing browser processes require ownership/state inspection before reuse; no restart/kill was performed.
 
 Production `tadazz`, phone gateway, metadata keeper and all other containers were inspected via selected metadata only and left untouched. No credentials, customer DB contents, live assets or production logs read. No remote mutation/provisioning yet. Detailed host/container and browser dependency probe receipts are in Cezar Assets.
+
+## Qualified remote scratch and first real Phase 3 results
+
+RAM-only scratch `/tmp/phase3-999ed90c` was created inside the existing approved
+test container, whose `/tmp` is already a bounded 512 MiB tmpfs. No new container,
+mount, service, port, capability, package install or production change. The
+source packet (1467 initial tracked files, then exact root tsconfig) and existing
+MCP dependency graph (2042 entries) were copied into scratch; all initial source
+bytes and dependency bytes/symlink targets independently verified.
+
+Initial dependency tar returned an ownership-preservation error in the
+capability-restricted container. No privilege was added; copied content and
+symlink integrity were verified instead. One test setup omitted root tsconfig,
+then the old copied tsx tried a binary on noexec tmpfs. Exact root tsconfig and
+the existing supported `/cleanup` tsx loader resolved those setup failures
+without changing permissions or application source. All attempts retained.
+
+Manager remote baseline Widget controller: **13/13 PASS**.
+A delivered `8e13d00a7c36dd1b130018ca59499acf6fc1fa83`, seven allowed paths,
+**not yet merged**. Cezar marked A DONE but no structured task report arrived;
+notes and committed receipt are available. Manager independent Linux results:
+
+- New service/listener suite: **8 PASS / 1 FAIL**. Windows-specific C1 rejection
+  test is unconditional and expects false on Linux, where actual synthetic
+  consented C1 Save succeeds. This is a reproduced QA portability defect, not
+  evidence of an unauthorized native save. Tmpfs success is not ext4 durability.
+- Existing SDK/server regression: **64/64 PASS**.
+- Existing first-party regression (excluding native-save-client process suite):
+  **68/68 PASS**, resolving the two Windows-only failures on this Linux runtime.
+- All commands execute sequentially under nice19, one allowed CPU affinity,
+  1024 MiB Node heap and bounded timeout. Counts are separate overlapping suites,
+  not a sum of unique product acceptance.
+
+Fresh source-pinned A review dispatched to `17edc638-3eae-492f-adde-76373a73db3e`.
+Widget regression implementation `df544d57` is the other active task.
+Four children issued of twelve. No code acceptance until review and repaired
+Linux tests. Remaining Phone/Recovery/Site/final-security work still pending.
+
+After these tests, production remains PID949376, started12November, no restart
+or OOM; approximately68MiB/0.01% CPU at readback. Host disk1.36GB and available
+RAM10GiB; no live owned test processes remain (only existing/test orphan zombies
+under the old test container's sleep PID1; no restart/kill performed).
