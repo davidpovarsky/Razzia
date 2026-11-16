@@ -1608,6 +1608,76 @@ test("real account Builder draft survives reopen; immutable content version rest
   expect(errors).toEqual([])
 })
 
+test("publication version typing survives a delayed state refresh after saving the draft", async ({
+  page,
+}) => {
+  await loginWorkspaceFixture(page, "publisher")
+  await page.goto("/studio/themes")
+  await expect(
+    page.getByRole("combobox", { name: "Theme Builder", exact: true }),
+  ).toBeVisible()
+  await page
+    .getByRole("button", { name: "Create blank", exact: true })
+    .first()
+    .click()
+  await page.getByRole("button", { name: "Save draft", exact: true }).click()
+  await expect(page.getByText("Draft saved", { exact: true })).toBeVisible()
+  const publication = page.getByTestId("builder-publication")
+  const version = publication.getByRole("textbox", {
+    name: "Publication version",
+    exact: true,
+  })
+  await expect(version).toBeEnabled()
+  const gate = Promise.withResolvers<undefined>()
+  const reached = Promise.withResolvers<undefined>()
+  const pattern = "**/api/themes/builder/*/documents/*/publication"
+  await page.route(pattern, async (route) => {
+    if (route.request().method() !== "GET") {
+      await route.continue()
+
+      return
+    }
+
+    const response = await route.fetch()
+    reached.resolve(undefined)
+    await gate.promise
+    await route.fulfill({ response })
+  })
+
+  try {
+    await page
+      .getByRole("textbox", { name: "Theme name", exact: true })
+      .last()
+      .fill("Keep my publication version")
+    await version.fill("2.0.0")
+    await page.getByRole("button", { name: "Save draft", exact: true }).click()
+    await reached.promise
+    await expect(version).toBeEnabled()
+    await version.fill("2.1.0")
+    await expect(
+      publication.getByRole("button", { name: "Publish", exact: true }),
+    ).toBeDisabled()
+    gate.resolve(undefined)
+    await expect(
+      publication.getByRole("button", { name: "Publish", exact: true }),
+    ).toBeEnabled()
+    await expect(version).toHaveValue("2.1.0")
+    const request = page.waitForRequest(
+      (value) =>
+        value.method() === "POST" &&
+        new URL(value.url()).pathname.endsWith("/publish"),
+    )
+    await publication
+      .getByRole("button", { name: "Publish", exact: true })
+      .click()
+    expect((await request).postDataJSON().version).toBe("2.1.0")
+    await expect(publication.getByRole("status")).toHaveText("Published")
+  } finally {
+    gate.resolve(undefined)
+    await page.unroute(pattern)
+  }
+})
+
 test("authorized workspace publication rolls back and archives immutable versions; shared author cannot publish", async ({
   page,
   browser,

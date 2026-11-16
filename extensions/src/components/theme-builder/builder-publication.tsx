@@ -31,15 +31,18 @@ export function BuilderPublication({
   const versionInput = useRef<HTMLInputElement>(null)
   const [busy, setBusy] = useState(false),
     [status, setStatus] = useState<BuilderTextKey | null>(null)
+  const [loading, setLoading] = useState(false)
   const abort = useRef<AbortController | null>(null)
   useEffect(() => () => abort.current?.abort(), [])
   useEffect(() => {
-    setState(null)
-
     if (!revision || !client?.publication) {
+      setState(null)
+      setLoading(false)
+
       return
     }
 
+    setLoading(true)
     const controller = new AbortController()
     abort.current = controller
     void client
@@ -51,14 +54,20 @@ export function BuilderPublication({
       })
       .catch(() => {
         if (!controller.signal.aborted) {
+          setState(null)
           setStatus("unavailable")
+        }
+      })
+      .finally(() => {
+        if (!controller.signal.aborted) {
+          setLoading(false)
         }
       })
 
     return () => controller.abort()
   }, [client, id, revision])
   const act = async (operation: "publish" | "rollback" | "archive") => {
-    if (!state?.canPublish || !client || busy || disabled) {
+    if (!state?.canPublish || !client || busy || loading || disabled) {
       return
     }
 
@@ -132,7 +141,7 @@ export function BuilderPublication({
 
   const archived = state?.archived ?? false
 
-  const blocked = disabled || busy || !state?.canPublish
+  const blocked = disabled || busy || loading || !state?.canPublish
 
   return (
     <fieldset
@@ -143,8 +152,8 @@ export function BuilderPublication({
       <Input
         ref={versionInput}
         label={text("publicationVersion")}
-        defaultValue={version}
-        disabled={blocked || archived}
+        value={version}
+        disabled={busy || !state?.canPublish || archived}
         onInput={(event) => setVersion(event.currentTarget.value)}
         onChange={(event) => setVersion(event.currentTarget.value)}
       />
