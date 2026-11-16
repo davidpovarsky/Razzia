@@ -1,4 +1,9 @@
-import type { Action } from "../../../server/phone-lifecycle-v2/contracts"
+import type {
+  Action,
+  OperationInput,
+  Receipt,
+  RegistrationInput,
+} from "../../../server/phone-lifecycle-v2/contracts"
 import type {
   ControlReceipt,
   ServiceCredentialBinding,
@@ -66,6 +71,28 @@ export interface GatewayPrivateKeyHandle {
   readonly bytes: Buffer
   // Synchronous close owns/clears the temporary key handle. No key-path fallback.
   close(): void
+}
+export interface GatewayRegistrationAuthorityPort extends GatewayAuthorityPort {
+  register(
+    binding: GatewayBinding,
+    credential: string,
+    input: RegistrationInput,
+  ): Promise<Receipt>
+}
+export interface GatewayRegistrationDispatcher {
+  current(): GatewayBinding
+  register(input: RegistrationInput): Promise<Receipt>
+}
+export interface GatewayCallAuthorityPort extends GatewayRegistrationAuthorityPort {
+  operate(
+    binding: GatewayBinding,
+    credential: string,
+    input: OperationInput,
+  ): Promise<Receipt>
+}
+export interface GatewayOperationDispatcher {
+  current(action: OperationInput["action"]): GatewayBinding
+  operate(input: OperationInput): Promise<Receipt>
 }
 export interface GatewayPrivateKeyPort {
   open(): GatewayPrivateKeyHandle
