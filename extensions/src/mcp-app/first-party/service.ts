@@ -1,10 +1,12 @@
+import { AsyncLocalStorage } from "node:async_hooks"
 import {
   createServer,
   type IncomingMessage,
+  type RequestListener,
   type Server,
   type ServerResponse,
 } from "node:http"
-import { isAbsolute, resolve } from "node:path"
+import { isAbsolute, resolve as resolvePath } from "node:path"
 import type { NativeCreationOperationPort } from "../../server/storage/creation-operation-types.ts"
 import { validateConfig } from "../server/authorization.ts"
 import { mutations } from "../contracts/tools.ts"
@@ -72,11 +74,16 @@ export interface ProtectedMcpService {
   close(): Promise<void>
 }
 
+export interface ProtectedMcpNodeListenerOptions {
+  readonly responseTimeoutMs?: number
+}
+
 export interface ProtectedMcpHttpServerOptions {
   readonly host?: string
   readonly port: number
   readonly allowNonLoopback?: boolean
   readonly responseTimeoutMs?: number
+  readonly maxConnections?: number
 }
 
 export interface ProtectedMcpHttpServer {
@@ -84,7 +91,23 @@ export interface ProtectedMcpHttpServer {
   readonly host: string
   readonly port: number
   readonly address: string
+  drain(): Promise<void>
   close(): Promise<void>
+}
+
+interface AccountRateBucket {
+  reads: number
+  readsResetAt: number
+  mutations: number
+  mutationsResetAt: number
+}
+
+interface ServiceListenerBridge {
+  readonly responseTimeoutMs: number
+  runWithResponse<T>(
+    request: Request,
+    respond: (response: Response, signal: AbortSignal) => Promise<T>,
+  ): Promise<T>
 }
 
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"])
@@ -94,7 +117,11 @@ const MAX_HEADER_COUNT = 32
 const MAX_HEADER_NAME_LENGTH = 128
 const MAX_HEADER_VALUE_LENGTH = 8192
 const MAX_HEADER_BYTES = 16_384
+const RESPONSE_WRITE_CHUNK_BYTES = 65_536
+const DEFAULT_MAX_CONNECTIONS = 64
+const MAX_CONNECTIONS_CAP = 256
 const POSITIVE_INT = /^(0|[1-9][0-9]{0,8})$/u
+const HTTP_TOKEN = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/u
 
 const STRICT_RESPONSE_HEADERS = Object.freeze({
   "cache-control": "no-store",
@@ -103,6 +130,9 @@ const STRICT_RESPONSE_HEADERS = Object.freeze({
   "x-frame-options": "DENY",
   "content-security-policy": "frame-ancestors 'none'",
 })
+
+const serviceBridges = new WeakMap<ProtectedMcpService, ServiceListenerBridge>()
+const listenerDrainers = new WeakMap<RequestListener, () => Promise<void>>()
 
 function hasInvalidUrlChar(value: string): boolean {
   for (let index = 0; index < value.length; index += 1) {
@@ -135,19 +165,7 @@ function hasInvalidHeaderValueChar(value: string): boolean {
 }
 
 function isTokenString(value: string): boolean {
-  if (value.length === 0) {
-    return false
-  }
-
-  for (let index = 0; index < value.length; index += 1) {
-    const code = value.charCodeAt(index)
-
-    if (code < 0x21 || code > 0x7e) {
-      return false
-    }
-  }
-
-  return true
+  return value.length > 0 && HTTP_TOKEN.test(value)
 }
 
 function parseUrlSafely(raw: string): URL | null {
@@ -187,6 +205,146 @@ function assertPositiveBound(name: string, value: number, max: number): number {
   return value
 }
 
+function assertTimeoutMs(value: number | undefined): number {
+  const resolved = value ?? 30_000
+
+  if (!Number.isSafeInteger(resolved) || resolved < 1 || resolved > 120_000) {
+    throw new Error("Bounded HTTP response deadline required")
+  }
+
+  return resolved
+}
+
+function cloneAuthoringPolicy(policy: AuthoringPolicy): AuthoringPolicy {
+  return {
+    allowedPublicAssetUrls: new Set(policy.allowedPublicAssetUrls),
+    ...(policy.trustedDefaults === undefined
+      ? {}
+      : { trustedDefaults: structuredClone(policy.trustedDefaults) }),
+  }
+}
+
+async function yieldMicrotasks(hops: number): Promise<void> {
+  if (hops <= 0) {
+    return
+  }
+
+  await Promise.resolve()
+  await yieldMicrotasks(hops - 1)
+}
+
+class RequestWorkTracker {
+  private readonly pending = new Set<Promise<unknown>>()
+
+  hasPending(): boolean {
+    return this.pending.size > 0
+  }
+
+  track<T>(promise: Promise<T>): Promise<T> {
+    this.pending.add(promise)
+    void promise.then(
+      () => {
+        this.pending.delete(promise)
+      },
+      () => {
+        this.pending.delete(promise)
+      },
+    )
+
+    return promise
+  }
+
+  async drain(): Promise<void> {
+    if (this.pending.size === 0) {
+      return
+    }
+
+    await Promise.allSettled([...this.pending])
+    await this.drain()
+  }
+}
+
+const requestWorkScope = new AsyncLocalStorage<RequestWorkTracker>()
+
+function wrapTrackedObject<T extends object>(
+  target: T,
+  unscopedTracker: RequestWorkTracker,
+): T {
+  return new Proxy(Object.create(null) as T, {
+    get(_obj, prop) {
+      const member: unknown = Reflect.get(target, prop)
+
+      if (typeof member !== "function") {
+        return member
+      }
+
+      return (...args: unknown[]) => {
+        const result: unknown = Reflect.apply(
+          member as (...fnArgs: unknown[]) => unknown,
+          target,
+          args,
+        )
+
+        if (result instanceof Promise) {
+          const tracker = requestWorkScope.getStore() ?? unscopedTracker
+
+          return tracker.track(result)
+        }
+
+        return result
+      }
+    },
+  })
+}
+
+function trackRequestBody(
+  body: ReadableStream<Uint8Array>,
+  tracker: RequestWorkTracker,
+): ReadableStream<Uint8Array> {
+  const reader = body.getReader()
+  const deferred = createDeferred()
+  void tracker.track(deferred.promise)
+
+  return new ReadableStream<Uint8Array>(
+    {
+      async pull(controller) {
+        try {
+          const part = await reader.read()
+
+          if (part.done) {
+            controller.close()
+            reader.releaseLock()
+            deferred.resolve()
+
+            return
+          }
+
+          controller.enqueue(part.value)
+        } catch (error) {
+          controller.error(error)
+          reader.releaseLock()
+          deferred.resolve()
+        }
+      },
+      async cancel(reason) {
+        try {
+          await reader.cancel(reason)
+        } finally {
+          reader.releaseLock()
+          deferred.resolve()
+        }
+      },
+    },
+    { highWaterMark: 0 },
+  )
+}
+
+async function cancelUnreadBody(request: Request): Promise<void> {
+  if (request.body && !request.bodyUsed && !request.body.locked) {
+    await request.body.cancel().catch(() => undefined)
+  }
+}
+
 export function isProtectedMcpServiceEnabled(
   env: NodeJS.ProcessEnv = process.env,
 ): boolean {
@@ -216,46 +374,69 @@ export function createPrincipalRateLimiter(
     options.windowMs ?? 60_000,
     3_600_000,
   )
-  const buckets = new Map<string, { count: number; resetAt: number }>()
+  const buckets = new Map<string, AccountRateBucket>()
 
   return (principal: VerifiedPrincipal, toolName) => {
+    if (
+      typeof principal.accountId !== "string" ||
+      principal.accountId.length === 0
+    ) {
+      return Promise.resolve(false)
+    }
+
     const now = Date.now()
     const isMutation = toolName !== undefined && mutations.has(toolName)
-    const limit = isMutation ? mutationsPerMinute : readsPerMinute
-    const bucketKey = `${principal.accountId}:${principal.grantId}:${isMutation ? "w" : "r"}`
-    const existing = buckets.get(bucketKey)
+    let bucket = buckets.get(principal.accountId)
 
-    if (existing && now < existing.resetAt) {
-      buckets.delete(bucketKey)
-      buckets.set(bucketKey, existing)
-      existing.count += 1
-
-      return Promise.resolve(existing.count <= limit)
-    }
-
-    if (existing) {
-      buckets.delete(bucketKey)
-    }
-
-    if (buckets.size >= maxEntries) {
-      for (const [key, entry] of buckets) {
-        if (now >= entry.resetAt) {
-          buckets.delete(key)
+    if (!bucket) {
+      if (buckets.size >= maxEntries) {
+        for (const [key, entry] of buckets) {
+          if (now >= entry.readsResetAt && now >= entry.mutationsResetAt) {
+            buckets.delete(key)
+          }
         }
       }
-    }
 
-    if (buckets.size >= maxEntries) {
-      const oldest = buckets.keys().next()
-
-      if (!oldest.done) {
-        buckets.delete(oldest.value)
+      if (buckets.size >= maxEntries) {
+        return Promise.resolve(false)
       }
+
+      bucket = {
+        reads: 0,
+        readsResetAt: 0,
+        mutations: 0,
+        mutationsResetAt: 0,
+      }
+      buckets.set(principal.accountId, bucket)
     }
 
-    buckets.set(bucketKey, { count: 1, resetAt: now + windowMs })
+    if (isMutation) {
+      if (now >= bucket.mutationsResetAt) {
+        bucket.mutations = 0
+        bucket.mutationsResetAt = now + windowMs
+      }
 
-    return Promise.resolve(limit >= 1)
+      if (bucket.mutations >= mutationsPerMinute) {
+        return Promise.resolve(false)
+      }
+
+      bucket.mutations += 1
+
+      return Promise.resolve(true)
+    }
+
+    if (now >= bucket.readsResetAt) {
+      bucket.reads = 0
+      bucket.readsResetAt = now + windowMs
+    }
+
+    if (bucket.reads >= readsPerMinute) {
+      return Promise.resolve(false)
+    }
+
+    bucket.reads += 1
+
+    return Promise.resolve(true)
   }
 }
 
@@ -266,10 +447,10 @@ export async function createFirstPartyNativeSaveOperations(
     throw new ToolError("ACCOUNT_UNAVAILABLE")
   }
 
-  const root = resolve(configRoot)
+  const root = resolvePath(configRoot)
   const envRoot = process.env.CONFIG_PATH
 
-  if (!envRoot || resolve(envRoot) !== root) {
+  if (!envRoot || resolvePath(envRoot) !== root) {
     throw new ToolError("ACCOUNT_UNAVAILABLE")
   }
 
@@ -434,6 +615,54 @@ function validateHeaderSurface(
   }
 }
 
+async function runOAuthWithDeadline(params: {
+  oauthFetch: (req: Request) => Promise<Response>
+  scopedRequest: Request
+  controller: AbortController
+  timeoutMs: number
+}): Promise<{
+  response: Response
+  settled: Promise<unknown>
+  timedOut: boolean
+}> {
+  const { oauthFetch, scopedRequest, controller, timeoutMs } = params
+  let timedOut = false
+  let removeAbort: (() => void) | null = null
+
+  const interrupted = new Promise<Response>((resolve) => {
+    const onAbort = () => {
+      resolve(
+        timedOut
+          ? securityJson(504, "HTTP_REJECTED")
+          : securityJson(400, "REQUEST_ABORTED"),
+      )
+    }
+
+    controller.signal.addEventListener("abort", onAbort, { once: true })
+    removeAbort = () => controller.signal.removeEventListener("abort", onAbort)
+
+    if (controller.signal.aborted) {
+      onAbort()
+    }
+  })
+
+  const timer = setTimeout(() => {
+    timedOut = true
+    controller.abort()
+  }, timeoutMs)
+
+  const settled = oauthFetch(scopedRequest)
+
+  try {
+    const response = await Promise.race([settled, interrupted])
+
+    return { response, settled, timedOut }
+  } finally {
+    clearTimeout(timer)
+    removeAbort?.()
+  }
+}
+
 export async function createProtectedMcpService(
   options: ProtectedMcpServiceOptions,
 ): Promise<ProtectedMcpService> {
@@ -469,6 +698,8 @@ export async function createProtectedMcpService(
     throw new Error("Invalid preview adapter")
   }
 
+  const responseTimeoutMs = assertTimeoutMs(options.responseTimeoutMs)
+  const authoring = cloneAuthoringPolicy(options.authoring)
   const routes = validateServiceRoutes(
     config,
     options.consentPageUrl,
@@ -477,7 +708,9 @@ export async function createProtectedMcpService(
 
   const nativeSaveOptions = options.nativeSave
     ? {
-        authoring: options.nativeSave.authoring ?? options.authoring,
+        authoring: options.nativeSave.authoring
+          ? cloneAuthoringPolicy(options.nativeSave.authoring)
+          : authoring,
         consentPageUrl: options.nativeSave.consentPageUrl,
         operations:
           options.nativeSave.operations ??
@@ -497,21 +730,49 @@ export async function createProtectedMcpService(
     ...(nativeSaveOptions ? { nativeSave: nativeSaveOptions } : {}),
   })
 
-  const drafts = oauth.draftRepository(options.authoring)
-  const previewCandidateV2 =
+  const unscopedTracker = new RequestWorkTracker()
+  const rawDrafts = oauth.draftRepository(authoring)
+  const rawPreviewCandidateV2 =
     typeof options.previewCandidateV2 === "function"
-      ? options.previewCandidateV2(drafts)
+      ? options.previewCandidateV2(rawDrafts)
       : options.previewCandidateV2
+  const rawCatalog = options.catalog
+    ? oauth.catalog(options.catalog)
+    : undefined
+
+  const trackedRateLimit: NonNullable<Dependencies["rateLimit"]> = (
+    principal,
+    tool,
+  ) => {
+    const tracker = requestWorkScope.getStore() ?? unscopedTracker
+
+    return tracker.track(Promise.resolve(options.rateLimit(principal, tool)))
+  }
 
   const dependencies: Omit<Dependencies, "authorize" | "prevalidationLimit"> = {
-    authoring: options.authoring,
-    drafts,
-    rateLimit: options.rateLimit,
-    ...(options.catalog ? { catalog: oauth.catalog(options.catalog) } : {}),
-    ...(oauth.exports ? { exports: oauth.exports } : {}),
-    ...(oauth.storage ? { storage: oauth.storage } : {}),
-    ...(options.preview ? { preview: options.preview } : {}),
-    ...(previewCandidateV2 ? { previewCandidateV2 } : {}),
+    authoring,
+    drafts: wrapTrackedObject(rawDrafts, unscopedTracker),
+    rateLimit: trackedRateLimit,
+    ...(rawCatalog
+      ? { catalog: wrapTrackedObject(rawCatalog, unscopedTracker) }
+      : {}),
+    ...(oauth.exports
+      ? { exports: wrapTrackedObject(oauth.exports, unscopedTracker) }
+      : {}),
+    ...(oauth.storage
+      ? { storage: wrapTrackedObject(oauth.storage, unscopedTracker) }
+      : {}),
+    ...(options.preview
+      ? { preview: wrapTrackedObject(options.preview, unscopedTracker) }
+      : {}),
+    ...(rawPreviewCandidateV2
+      ? {
+          previewCandidateV2: wrapTrackedObject(
+            rawPreviewCandidateV2,
+            unscopedTracker,
+          ),
+        }
+      : {}),
     ...(options.previewUiResource
       ? { previewUiResource: options.previewUiResource }
       : {}),
@@ -519,9 +780,7 @@ export async function createProtectedMcpService(
 
   const remote = oauth.remote({
     allowedOrigins: options.allowedOrigins,
-    ...(options.responseTimeoutMs !== undefined
-      ? { responseTimeoutMs: options.responseTimeoutMs }
-      : {}),
+    responseTimeoutMs,
     dependencies,
   })
 
@@ -533,61 +792,289 @@ export async function createProtectedMcpService(
     routes.metadata.host,
   ])
 
-  const executeFetch = (
+  const executeFetch = async (
     request: Request,
     controller: AbortController,
-  ): Promise<Response> => {
+    tracker: RequestWorkTracker,
+  ): Promise<{
+    response: Response
+    underlyingSettled: Promise<unknown>
+    isMcp: boolean
+    timedOut: boolean
+    scopedRequest?: Request
+  }> => {
     if (controller.signal.aborted) {
-      return Promise.resolve(securityJson(400, "REQUEST_ABORTED"))
+      await cancelUnreadBody(request)
+
+      return {
+        response: securityJson(400, "REQUEST_ABORTED"),
+        underlyingSettled: Promise.resolve(undefined),
+        isMcp: false,
+        timedOut: false,
+      }
     }
 
     if (request.url.length > MAX_URL_LENGTH) {
-      return Promise.resolve(securityJson(400, "INVALID_URL"))
+      await cancelUnreadBody(request)
+
+      return {
+        response: securityJson(400, "INVALID_URL"),
+        underlyingSettled: Promise.resolve(undefined),
+        isMcp: false,
+        timedOut: false,
+      }
     }
 
     const url = parseUrlSafely(request.url)
 
-    if (!url || url.hash) {
-      return Promise.resolve(securityJson(400, "INVALID_URL"))
+    if (!url || url.hash || url.username || url.password) {
+      await cancelUnreadBody(request)
+
+      return {
+        response: securityJson(400, "INVALID_URL"),
+        underlyingSettled: Promise.resolve(undefined),
+        isMcp: false,
+        timedOut: false,
+      }
     }
 
     const headerCheck = validateHeaderSurface(request.headers, allowedHosts)
 
     if ("status" in headerCheck) {
-      return Promise.resolve(
-        securityJson(
+      await cancelUnreadBody(request)
+
+      return {
+        response: securityJson(
           headerCheck.status,
           headerCheck.status === 403 ? "FORBIDDEN_HOST" : "INVALID_HEADERS",
         ),
-      )
+        underlyingSettled: Promise.resolve(undefined),
+        isMcp: false,
+        timedOut: false,
+      }
     }
 
-    const scopedRequest = new Request(request, { signal: controller.signal })
+    const trackedBody = request.body
+      ? trackRequestBody(request.body, tracker)
+      : null
+    const scopedRequest = trackedBody
+      ? new Request(request.url, {
+          method: request.method,
+          headers: request.headers,
+          signal: controller.signal,
+          body: trackedBody,
+          duplex: "half",
+        } as RequestInit)
+      : new Request(request, { signal: controller.signal })
 
     if (routes.isMcpRoute(url)) {
       if (headerCheck.host !== routes.resource.host) {
-        return Promise.resolve(securityJson(403, "FORBIDDEN_HOST"))
+        await cancelUnreadBody(scopedRequest)
+
+        return {
+          response: securityJson(403, "FORBIDDEN_HOST"),
+          underlyingSettled: Promise.resolve(undefined),
+          isMcp: false,
+          timedOut: false,
+          scopedRequest,
+        }
       }
 
-      return remote.fetch(scopedRequest)
+      const fetchCall = remote.fetch(scopedRequest)
+      const response = await fetchCall
+
+      return {
+        response,
+        underlyingSettled: fetchCall,
+        isMcp: true,
+        timedOut: response.status === 504,
+        scopedRequest,
+      }
     }
 
     if (routes.isOAuthRoute(url)) {
       if (headerCheck.host !== routes.issuer.host) {
-        return Promise.resolve(securityJson(403, "FORBIDDEN_HOST"))
+        await cancelUnreadBody(scopedRequest)
+
+        return {
+          response: securityJson(403, "FORBIDDEN_HOST"),
+          underlyingSettled: Promise.resolve(undefined),
+          isMcp: false,
+          timedOut: false,
+          scopedRequest,
+        }
       }
 
       if (
         headerCheck.origin !== null &&
         headerCheck.origin !== routes.issuer.origin
       ) {
-        return Promise.resolve(securityJson(403, "FORBIDDEN_ORIGIN"))
+        await cancelUnreadBody(scopedRequest)
+
+        return {
+          response: securityJson(403, "FORBIDDEN_ORIGIN"),
+          underlyingSettled: Promise.resolve(undefined),
+          isMcp: false,
+          timedOut: false,
+          scopedRequest,
+        }
       }
 
-      return oauth.fetch(scopedRequest)
+      const oauthResult = await runOAuthWithDeadline({
+        oauthFetch: (req) => oauth.fetch(req),
+        scopedRequest,
+        controller,
+        timeoutMs: responseTimeoutMs,
+      })
+
+      return {
+        response: oauthResult.response,
+        underlyingSettled: oauthResult.settled,
+        isMcp: false,
+        timedOut: oauthResult.timedOut,
+        scopedRequest,
+      }
     }
 
-    return Promise.resolve(securityJson(404, "NOT_FOUND"))
+    await cancelUnreadBody(scopedRequest)
+
+    return {
+      response: securityJson(404, "NOT_FOUND"),
+      underlyingSettled: Promise.resolve(undefined),
+      isMcp: false,
+      timedOut: false,
+      scopedRequest,
+    }
+  }
+
+  const runAdmitted = async <T>(
+    request: Request,
+    respond: (response: Response, signal: AbortSignal) => Promise<T>,
+  ): Promise<T> => {
+    if (closed) {
+      await cancelUnreadBody(request)
+
+      return respond(securityJson(503, "SERVICE_CLOSED"), request.signal)
+    }
+
+    let release: (() => void) | null = null
+
+    try {
+      release = outerBudget.enter()
+    } catch (error) {
+      await cancelUnreadBody(request)
+
+      if (error instanceof HttpRejection) {
+        return respond(
+          securityJson(error.status, "HTTP_REJECTED"),
+          request.signal,
+        )
+      }
+
+      throw error
+    }
+
+    const controller = new AbortController()
+    const onExternalAbort = () => controller.abort()
+    request.signal.addEventListener("abort", onExternalAbort, { once: true })
+
+    if (request.signal.aborted) {
+      controller.abort()
+    }
+
+    const deferred = createDeferred()
+    active.set(controller, deferred.promise)
+    const tracker = new RequestWorkTracker()
+    let fetchPromise: ReturnType<typeof executeFetch> | null = null
+    let retired = false
+
+    const finalizeSlot = async (
+      isMcp: boolean,
+      underlyingSettled: Promise<unknown>,
+      scopedRequest?: Request,
+    ): Promise<void> => {
+      try {
+        await Promise.allSettled([underlyingSettled])
+
+        if (scopedRequest) {
+          await cancelUnreadBody(scopedRequest)
+        } else {
+          await cancelUnreadBody(request)
+        }
+
+        await tracker.drain()
+        await unscopedTracker.drain()
+
+        if (isMcp) {
+          if (active.size === 1) {
+            await remote.drain()
+          } else {
+            await yieldMicrotasks(8)
+          }
+        }
+      } finally {
+        request.signal.removeEventListener("abort", onExternalAbort)
+        active.delete(controller)
+        release()
+        deferred.resolve()
+      }
+    }
+
+    try {
+      fetchPromise = requestWorkScope.run(tracker, () =>
+        executeFetch(request, controller, tracker),
+      )
+      const outcome = await fetchPromise
+
+      if (outcome.scopedRequest) {
+        await cancelUnreadBody(outcome.scopedRequest)
+      }
+
+      const result = await respond(outcome.response, controller.signal)
+      const hasPendingWork =
+        controller.signal.aborted ||
+        outcome.timedOut ||
+        tracker.hasPending() ||
+        unscopedTracker.hasPending()
+
+      retired = true
+
+      if (hasPendingWork) {
+        void finalizeSlot(
+          outcome.isMcp,
+          outcome.underlyingSettled,
+          outcome.scopedRequest,
+        )
+      } else {
+        await finalizeSlot(
+          outcome.isMcp,
+          outcome.underlyingSettled,
+          outcome.scopedRequest,
+        )
+      }
+
+      return result
+    } finally {
+      if (!retired) {
+        void Promise.allSettled([fetchPromise ?? Promise.resolve(undefined)])
+          .then(([settled]) => {
+            const outcome =
+              settled.status === "fulfilled" ? settled.value : undefined
+
+            return finalizeSlot(
+              outcome?.isMcp ?? false,
+              outcome?.underlyingSettled ?? Promise.resolve(undefined),
+              outcome?.scopedRequest,
+            )
+          })
+          .catch(() => {
+            request.signal.removeEventListener("abort", onExternalAbort)
+            active.delete(controller)
+            release()
+            deferred.resolve()
+          })
+      }
+    }
   }
 
   const waitForActiveRequests = (): Promise<void> => {
@@ -598,50 +1085,16 @@ export async function createProtectedMcpService(
     return Promise.allSettled([...active.values()]).then(waitForActiveRequests)
   }
 
-  return Object.freeze({
+  const service: ProtectedMcpService = Object.freeze({
     enabled: true,
     config,
     supportedScopes: remote.supportedScopes,
     isClosed: () => closed,
-    async fetch(request: Request): Promise<Response> {
-      if (closed) {
-        return securityJson(503, "SERVICE_CLOSED")
-      }
-
-      let release: (() => void) | null = null
-
-      try {
-        release = outerBudget.enter()
-      } catch (error) {
-        if (error instanceof HttpRejection) {
-          return securityJson(error.status, "HTTP_REJECTED")
-        }
-
-        throw error
-      }
-
-      const controller = new AbortController()
-      const onExternalAbort = () => controller.abort()
-      request.signal.addEventListener("abort", onExternalAbort, { once: true })
-
-      if (request.signal.aborted) {
-        controller.abort()
-      }
-
-      const deferred = createDeferred()
-      active.set(controller, deferred.promise)
-
-      try {
-        return await executeFetch(request, controller)
-      } finally {
-        request.signal.removeEventListener("abort", onExternalAbort)
-        active.delete(controller)
-        release()
-        deferred.resolve()
-      }
-    },
+    fetch: (request: Request) =>
+      runAdmitted(request, (response) => Promise.resolve(response)),
     async drain(): Promise<void> {
       await waitForActiveRequests()
+      await unscopedTracker.drain()
       await remote.drain()
     },
     async close(): Promise<void> {
@@ -658,6 +1111,13 @@ export async function createProtectedMcpService(
       ])
     },
   })
+
+  serviceBridges.set(service, {
+    responseTimeoutMs,
+    runWithResponse: runAdmitted,
+  })
+
+  return service
 }
 
 interface ParsedNodeHeaders {
@@ -736,7 +1196,10 @@ function inspectRawNodeHeaders(
     return { status: 403, code: "FORBIDDEN_HOST" }
   }
 
-  if (contentLengthCount > 1) {
+  if (
+    contentLengthCount > 1 ||
+    (hasTransferEncoding && contentLengthCount > 0)
+  ) {
     return { status: 400, code: "INVALID_CONTENT_LENGTH" }
   }
 
@@ -764,89 +1227,268 @@ function inspectRawNodeHeaders(
   }
 }
 
-function createBoundedNodeBodyStream(
+interface BoundedNodeBodyHandle {
+  readonly stream: ReadableStream<Uint8Array>
+  cleanup(): void
+}
+
+function createBoundedNodeBodyHandle(
   req: IncomingMessage,
-): ReadableStream<Uint8Array> {
+): BoundedNodeBodyHandle {
   let bytesRead = 0
   let settled = false
+  let cleanupListeners: (() => void) | null = null
 
-  return new ReadableStream<Uint8Array>({
-    start(controller) {
-      const cleanup = () => {
-        req.off("data", onData)
-        req.off("end", onEnd)
-        req.off("error", onError)
-        req.off("aborted", onAborted)
-      }
+  const stream = new ReadableStream<Uint8Array>(
+    {
+      start(controller) {
+        const cleanup = () => {
+          req.off("data", onData)
+          req.off("end", onEnd)
+          req.off("error", onError)
+          req.off("aborted", onAborted)
+        }
 
-      const fail = (error: unknown) => {
+        cleanupListeners = cleanup
+
+        const fail = (error: unknown) => {
+          if (settled) {
+            return
+          }
+
+          settled = true
+          cleanup()
+          req.pause()
+          controller.error(error)
+        }
+
+        const onData = (chunk: Buffer | string) => {
+          if (settled) {
+            return
+          }
+
+          const part = typeof chunk === "string" ? Buffer.from(chunk) : chunk
+          bytesRead += part.byteLength
+
+          if (bytesRead > HTTP_LIMITS.bytes) {
+            fail(new HttpRejection(413))
+
+            return
+          }
+
+          controller.enqueue(new Uint8Array(part))
+
+          if ((controller.desiredSize ?? 0) <= 0) {
+            req.pause()
+          }
+        }
+
+        const onEnd = () => {
+          if (settled) {
+            return
+          }
+
+          settled = true
+          cleanup()
+          controller.close()
+        }
+
+        const onError = (error: Error) => fail(error)
+        const onAborted = () => fail(new HttpRejection(400))
+
+        req.on("data", onData)
+        req.on("end", onEnd)
+        req.on("error", onError)
+        req.on("aborted", onAborted)
+        req.pause()
+      },
+      pull(controller) {
         if (settled) {
           return
         }
 
+        if (req.readableEnded) {
+          settled = true
+          cleanupListeners?.()
+          controller.close()
+
+          return
+        }
+
+        if (req.destroyed) {
+          settled = true
+          cleanupListeners?.()
+          controller.error(new HttpRejection(400))
+
+          return
+        }
+
+        req.resume()
+      },
+      cancel() {
         settled = true
-        cleanup()
-        controller.error(error)
-      }
-
-      const onData = (chunk: Buffer | string) => {
-        if (settled) {
-          return
-        }
-
-        const part = typeof chunk === "string" ? Buffer.from(chunk) : chunk
-        bytesRead += part.byteLength
-
-        if (bytesRead > HTTP_LIMITS.bytes) {
-          const rejection = new HttpRejection(413)
-          req.destroy(rejection)
-          fail(rejection)
-
-          return
-        }
-
-        controller.enqueue(new Uint8Array(part))
-      }
-
-      const onEnd = () => {
-        if (settled) {
-          return
-        }
-
-        settled = true
-        cleanup()
-        controller.close()
-      }
-
-      const onError = (error: Error) => fail(error)
-      const onAborted = () => fail(new HttpRejection(400))
-
-      req.on("data", onData)
-      req.on("end", onEnd)
-      req.on("error", onError)
-      req.on("aborted", onAborted)
+        cleanupListeners?.()
+        req.pause()
+      },
     },
-    cancel() {
+    { highWaterMark: 0 },
+  )
+
+  return {
+    stream,
+    cleanup() {
       settled = true
-      req.removeAllListeners("data")
-      req.removeAllListeners("end")
+      cleanupListeners?.()
+      req.pause()
     },
-  })
+  }
 }
 
 function canWriteNodeResponse(res: ServerResponse): boolean {
   return !res.writableEnded && !res.destroyed
 }
 
-function writeNodeError(
+function waitForResponseSettle(
   res: ServerResponse,
-  status: number,
-  code: string,
-): void {
+  signal: AbortSignal,
+): Promise<void> {
+  if (res.writableFinished || res.destroyed || res.closed) {
+    return Promise.resolve()
+  }
+
+  return new Promise<void>((resolve) => {
+    const onAbort = () => {
+      if (!res.writableFinished && !res.destroyed) {
+        res.destroy()
+      }
+
+      done()
+    }
+
+    const done = () => {
+      res.off("finish", done)
+      res.off("close", done)
+      res.off("error", done)
+      signal.removeEventListener("abort", onAbort)
+      resolve()
+    }
+
+    res.once("finish", done)
+    res.once("close", done)
+    res.once("error", done)
+    signal.addEventListener("abort", onAbort, { once: true })
+  })
+}
+
+function waitForResponseDrain(
+  res: ServerResponse,
+  signal: AbortSignal,
+): Promise<boolean> {
+  if (signal.aborted || !canWriteNodeResponse(res)) {
+    return Promise.resolve(false)
+  }
+
+  return new Promise<boolean>((resolve) => {
+    const finish = (canContinue: boolean) => {
+      res.off("drain", onDrain)
+      res.off("close", onStop)
+      res.off("error", onStop)
+      signal.removeEventListener("abort", onStop)
+      resolve(canContinue)
+    }
+
+    const onDrain = () => finish(true)
+    const onStop = () => finish(false)
+
+    res.once("drain", onDrain)
+    res.once("close", onStop)
+    res.once("error", onStop)
+    signal.addEventListener("abort", onStop, { once: true })
+  })
+}
+
+function writeResponseBody(
+  res: ServerResponse,
+  bodyBytes: Buffer,
+  signal: AbortSignal,
+): Promise<boolean> {
+  const writeChunk = async (offset: number): Promise<boolean> => {
+    if (signal.aborted || !canWriteNodeResponse(res)) {
+      return false
+    }
+
+    if (offset >= bodyBytes.byteLength) {
+      return true
+    }
+
+    const nextOffset = Math.min(
+      offset + RESPONSE_WRITE_CHUNK_BYTES,
+      bodyBytes.byteLength,
+    )
+    const slice = bodyBytes.subarray(offset, nextOffset)
+    const ok = res.write(slice)
+
+    if (!ok) {
+      const drained = await waitForResponseDrain(res, signal)
+
+      if (!drained) {
+        return false
+      }
+    }
+
+    return writeChunk(nextOffset)
+  }
+
+  return writeChunk(0)
+}
+
+async function readWebResponseBytes(
+  webResponse: Response,
+  signal: AbortSignal,
+): Promise<Buffer> {
+  if (signal.aborted) {
+    if (webResponse.body && !webResponse.body.locked) {
+      await webResponse.body.cancel().catch(() => undefined)
+    }
+
+    throw new HttpRejection(400)
+  }
+
+  let rejectAborted: ((reason?: unknown) => void) | null = null
+  const onAbort = () => {
+    rejectAborted?.(new HttpRejection(400))
+  }
+  const aborted = new Promise<never>((_resolve, reject) => {
+    rejectAborted = reject
+  })
+
+  signal.addEventListener("abort", onAbort, { once: true })
+
+  try {
+    const buffer = await Promise.race([webResponse.arrayBuffer(), aborted])
+
+    return Buffer.from(buffer)
+  } catch (error) {
+    if (webResponse.body && !webResponse.body.locked) {
+      await webResponse.body.cancel().catch(() => undefined)
+    }
+
+    throw error
+  } finally {
+    signal.removeEventListener("abort", onAbort)
+  }
+}
+
+async function writeAndSettleNodeError(
+  res: ServerResponse,
+  details: { status: number; code: string },
+  timeoutMs: number,
+): Promise<void> {
   if (!canWriteNodeResponse(res)) {
     return
   }
 
+  const { status, code } = details
   const body = Buffer.from(JSON.stringify({ error: code, status }), "utf8")
   res.statusCode = status
 
@@ -858,79 +1500,160 @@ function writeNodeError(
   res.setHeader("content-length", String(body.byteLength))
   res.setHeader("connection", "close")
   res.end(body)
+
+  const flushController = new AbortController()
+  const flushTimer = setTimeout(
+    () => flushController.abort(),
+    Math.min(timeoutMs, 2000),
+  )
+
+  try {
+    await waitForResponseSettle(res, flushController.signal)
+  } finally {
+    clearTimeout(flushTimer)
+  }
 }
 
-export function createProtectedMcpNodeListener(service: ProtectedMcpService) {
+function isStatusWithoutLength(status: number): boolean {
+  return status === 204 || status === 304 || (status >= 100 && status < 200)
+}
+
+export function createProtectedMcpNodeListener(
+  service: ProtectedMcpService,
+  options: ProtectedMcpNodeListenerOptions = {},
+): RequestListener {
+  const bridge = serviceBridges.get(service)
+  const responseTimeoutMs = assertTimeoutMs(
+    options.responseTimeoutMs ?? bridge?.responseTimeoutMs,
+  )
   const issuerUrl = new URL(service.config.issuer)
   const resourceUrl = new URL(service.config.resource)
   const expectedHosts = new Set([issuerUrl.host, resourceUrl.host])
+  const listenerActive = new Set<Promise<void>>()
 
-  return (req: IncomingMessage, res: ServerResponse) => {
+  const drainListener = async (): Promise<void> => {
+    if (listenerActive.size === 0) {
+      return
+    }
+
+    await Promise.allSettled([...listenerActive])
+    await drainListener()
+  }
+
+  const listener: RequestListener = (
+    req: IncomingMessage,
+    res: ServerResponse,
+  ) => {
+    const requestDone = createDeferred()
+    listenerActive.add(requestDone.promise)
+
     void (async () => {
-      if (!service.enabled || service.isClosed()) {
-        writeNodeError(res, 503, "SERVICE_UNAVAILABLE")
+      let bodyHandle: BoundedNodeBodyHandle | undefined = undefined
+      let webRequest: Request | undefined = undefined
+      let deadlineTimer: ReturnType<typeof setTimeout> | undefined = undefined
+      let abortRequest: (() => void) | null = null
+      let onResClose: (() => void) | null = null
 
-        return
-      }
-
-      const rawUrl = req.url ?? ""
-
-      if (
-        rawUrl.length === 0 ||
-        rawUrl.length > MAX_URL_LENGTH ||
-        !rawUrl.startsWith("/") ||
-        rawUrl.startsWith("//") ||
-        hasInvalidUrlChar(rawUrl)
-      ) {
-        writeNodeError(res, 400, "INVALID_URL")
-
-        return
-      }
-
-      const headerResult = inspectRawNodeHeaders(req.rawHeaders, expectedHosts)
-
-      if ("status" in headerResult) {
-        writeNodeError(res, headerResult.status, headerResult.code)
-
-        return
-      }
-
-      const method = (req.method ?? "").toUpperCase()
-
-      if (!isTokenString(method)) {
-        writeNodeError(res, 400, "INVALID_METHOD")
-
-        return
-      }
-
-      if (BODY_LESS_METHODS.has(method)) {
-        if (
-          (headerResult.contentLength !== undefined &&
-            headerResult.contentLength !== "0") ||
-          headerResult.hasTransferEncoding
-        ) {
-          writeNodeError(res, 400, "UNEXPECTED_BODY")
+      try {
+        if (!service.enabled || service.isClosed()) {
+          await writeAndSettleNodeError(
+            res,
+            { status: 503, code: "SERVICE_UNAVAILABLE" },
+            responseTimeoutMs,
+          )
 
           return
         }
-      }
 
-      const baseOrigin =
-        headerResult.host === issuerUrl.host
-          ? issuerUrl.origin
-          : resourceUrl.origin
-      const controller = new AbortController()
-      const abortRequest = () => controller.abort()
-      const onResClose = () => {
-        if (!res.writableFinished) {
-          controller.abort()
+        const rawUrl = req.url ?? ""
+
+        if (
+          rawUrl.length === 0 ||
+          rawUrl.length > MAX_URL_LENGTH ||
+          !rawUrl.startsWith("/") ||
+          rawUrl.startsWith("//") ||
+          hasInvalidUrlChar(rawUrl)
+        ) {
+          await writeAndSettleNodeError(
+            res,
+            { status: 400, code: "INVALID_URL" },
+            responseTimeoutMs,
+          )
+
+          return
         }
-      }
 
-      req.once("aborted", abortRequest)
-      res.once("close", onResClose)
+        const headerResult = inspectRawNodeHeaders(
+          req.rawHeaders,
+          expectedHosts,
+        )
 
-      try {
+        if ("status" in headerResult) {
+          await writeAndSettleNodeError(
+            res,
+            { status: headerResult.status, code: headerResult.code },
+            responseTimeoutMs,
+          )
+
+          return
+        }
+
+        const method = (req.method ?? "").toUpperCase()
+
+        if (!isTokenString(method)) {
+          await writeAndSettleNodeError(
+            res,
+            { status: 400, code: "INVALID_METHOD" },
+            responseTimeoutMs,
+          )
+
+          return
+        }
+
+        if (BODY_LESS_METHODS.has(method)) {
+          if (
+            (headerResult.contentLength !== undefined &&
+              headerResult.contentLength !== "0") ||
+            headerResult.hasTransferEncoding
+          ) {
+            await writeAndSettleNodeError(
+              res,
+              { status: 400, code: "UNEXPECTED_BODY" },
+              responseTimeoutMs,
+            )
+
+            return
+          }
+        }
+
+        const baseOrigin =
+          headerResult.host === issuerUrl.host
+            ? issuerUrl.origin
+            : resourceUrl.origin
+        const requestController = new AbortController()
+        let timedOut = false
+        let writingStarted = false
+
+        abortRequest = () => requestController.abort()
+        onResClose = () => {
+          if (!res.writableFinished) {
+            requestController.abort()
+          }
+        }
+
+        req.once("aborted", abortRequest)
+        res.once("close", onResClose)
+
+        deadlineTimer = setTimeout(() => {
+          timedOut = true
+          requestController.abort()
+
+          if (writingStarted && !res.writableFinished && !res.destroyed) {
+            res.destroy()
+            req.destroy()
+          }
+        }, responseTimeoutMs)
+
         const hasBody =
           !BODY_LESS_METHODS.has(method) &&
           (headerResult.hasTransferEncoding ||
@@ -939,54 +1662,146 @@ export function createProtectedMcpNodeListener(service: ProtectedMcpService) {
         const requestInit: RequestInit & { duplex?: "half" } = {
           method,
           headers: headerResult.headers,
-          signal: controller.signal,
+          signal: requestController.signal,
         }
 
         if (hasBody) {
-          requestInit.body = createBoundedNodeBodyStream(req)
+          bodyHandle = createBoundedNodeBodyHandle(req)
+          requestInit.body = bodyHandle.stream
           requestInit.duplex = "half"
         }
 
-        const webRequest = new Request(`${baseOrigin}${rawUrl}`, requestInit)
-        const webResponse = await service.fetch(webRequest)
+        const builtRequest = new Request(`${baseOrigin}${rawUrl}`, requestInit)
+        webRequest = builtRequest
 
-        if (!canWriteNodeResponse(res)) {
-          return
-        }
+        const sendResponse = async (
+          webResponse: Response,
+          signal: AbortSignal,
+        ): Promise<void> => {
+          if (timedOut && !res.headersSent) {
+            if (webResponse.body && !webResponse.body.locked) {
+              await webResponse.body.cancel().catch(() => undefined)
+            }
 
-        const bodyBytes = Buffer.from(await webResponse.arrayBuffer())
+            await writeAndSettleNodeError(
+              res,
+              { status: 504, code: "GATEWAY_TIMEOUT" },
+              responseTimeoutMs,
+            )
 
-        if (!canWriteNodeResponse(res)) {
-          return
-        }
-
-        res.statusCode = webResponse.status
-        webResponse.headers.forEach((value, name) => {
-          if (name.toLowerCase() !== "content-length") {
-            res.setHeader(name, value)
+            return
           }
-        })
-        res.setHeader("content-length", String(bodyBytes.byteLength))
 
-        if (!req.complete) {
-          res.setHeader("connection", "close")
+          if (!canWriteNodeResponse(res)) {
+            if (webResponse.body && !webResponse.body.locked) {
+              await webResponse.body.cancel().catch(() => undefined)
+            }
+
+            return
+          }
+
+          const bodyBytes = await readWebResponseBytes(webResponse, signal)
+
+          if (timedOut && !res.headersSent) {
+            await writeAndSettleNodeError(
+              res,
+              { status: 504, code: "GATEWAY_TIMEOUT" },
+              responseTimeoutMs,
+            )
+
+            return
+          }
+
+          if (!canWriteNodeResponse(res)) {
+            return
+          }
+
+          writingStarted = true
+          const omitLengthAndBody = isStatusWithoutLength(webResponse.status)
+          res.statusCode = webResponse.status
+          webResponse.headers.forEach((value, name) => {
+            if (name.toLowerCase() !== "content-length") {
+              res.setHeader(name, value)
+            }
+          })
+
+          if (!omitLengthAndBody) {
+            res.setHeader("content-length", String(bodyBytes.byteLength))
+          }
+
+          if (!req.complete) {
+            res.setHeader("connection", "close")
+          }
+
+          if (omitLengthAndBody || bodyBytes.byteLength === 0) {
+            res.end()
+          } else {
+            const wroteAll = await writeResponseBody(res, bodyBytes, signal)
+
+            if (wroteAll && canWriteNodeResponse(res)) {
+              res.end()
+            } else if (!res.destroyed && !res.writableFinished) {
+              res.destroy()
+            }
+          }
+
+          await waitForResponseSettle(res, signal)
         }
 
-        res.end(bodyBytes)
+        if (bridge) {
+          await bridge.runWithResponse(builtRequest, sendResponse)
+        } else {
+          const webResponse = await service.fetch(builtRequest)
+          await sendResponse(webResponse, requestController.signal)
+        }
       } catch (error) {
         if (error instanceof HttpRejection) {
-          writeNodeError(res, error.status, "HTTP_REJECTED")
+          await writeAndSettleNodeError(
+            res,
+            { status: error.status, code: "HTTP_REJECTED" },
+            responseTimeoutMs,
+          )
 
           return
         }
 
-        writeNodeError(res, 500, "INTERNAL")
+        await writeAndSettleNodeError(
+          res,
+          { status: 500, code: "INTERNAL" },
+          responseTimeoutMs,
+        )
       } finally {
-        req.off("aborted", abortRequest)
-        res.off("close", onResClose)
+        if (deadlineTimer) {
+          clearTimeout(deadlineTimer)
+        }
+
+        if (abortRequest) {
+          req.off("aborted", abortRequest)
+        }
+
+        if (onResClose) {
+          res.off("close", onResClose)
+        }
+
+        bodyHandle?.cleanup()
+
+        if (webRequest) {
+          await cancelUnreadBody(webRequest)
+        }
+
+        if (!req.complete && !req.destroyed && res.destroyed) {
+          req.destroy()
+        }
+
+        listenerActive.delete(requestDone.promise)
+        requestDone.resolve()
       }
     })()
   }
+
+  listenerDrainers.set(listener, drainListener)
+
+  return listener
 }
 
 export async function listenProtectedMcpHttpServer(
@@ -1003,21 +1818,28 @@ export async function listenProtectedMcpHttpServer(
     throw new Error("Refusing non-loopback bind without allowNonLoopback: true")
   }
 
-  const responseTimeoutMs = options.responseTimeoutMs ?? 30_000
+  const responseTimeoutMs = assertTimeoutMs(options.responseTimeoutMs)
+  const maxConnections = options.maxConnections ?? DEFAULT_MAX_CONNECTIONS
 
   if (
-    !Number.isSafeInteger(responseTimeoutMs) ||
-    responseTimeoutMs < 1 ||
-    responseTimeoutMs > 120_000
+    !Number.isSafeInteger(maxConnections) ||
+    maxConnections < 1 ||
+    maxConnections > MAX_CONNECTIONS_CAP
   ) {
-    throw new Error("Bounded HTTP listener responseTimeoutMs required")
+    throw new Error("Bounded HTTP listener maxConnections required")
   }
 
-  const server = createServer(createProtectedMcpNodeListener(service))
+  const listener = createProtectedMcpNodeListener(service, {
+    responseTimeoutMs,
+  })
+  const drainListener = listenerDrainers.get(listener)
+  const server = createServer(listener)
+  server.maxConnections = maxConnections
   server.maxHeadersCount = 64
-  server.headersTimeout = 10_000
+  server.headersTimeout = Math.min(10_000, responseTimeoutMs)
   server.requestTimeout = responseTimeoutMs
-  server.keepAliveTimeout = 5000
+  server.timeout = responseTimeoutMs
+  server.keepAliveTimeout = Math.min(5000, responseTimeoutMs)
 
   await new Promise<void>((resolveListen, rejectListen) => {
     const onError = (error: Error) => {
@@ -1055,6 +1877,13 @@ export async function listenProtectedMcpHttpServer(
     host: bound.address,
     port: bound.port,
     address,
+    async drain(): Promise<void> {
+      await service.drain()
+
+      if (drainListener) {
+        await drainListener()
+      }
+    },
     close(): Promise<void> {
       if (closing) {
         return closing
@@ -1067,6 +1896,11 @@ export async function listenProtectedMcpHttpServer(
         })
         await service.close()
         server.closeAllConnections()
+
+        if (drainListener) {
+          await drainListener()
+        }
+
         await closedServer
       })()
 

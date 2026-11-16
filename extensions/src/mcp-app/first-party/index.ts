@@ -28,6 +28,7 @@ export type {
   PreviewCandidateV2Factory,
   ProtectedMcpHttpServer,
   ProtectedMcpHttpServerOptions,
+  ProtectedMcpNodeListenerOptions,
   ProtectedMcpService,
   ProtectedMcpServiceNativeSaveOptions,
   ProtectedMcpServiceOptions,
