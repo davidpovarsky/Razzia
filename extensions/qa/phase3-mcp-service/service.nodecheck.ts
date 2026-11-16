@@ -1,6 +1,13 @@
 import assert from "node:assert/strict"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
-import { existsSync, readdirSync, readFileSync, statSync } from "node:fs"
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statfsSync,
+  statSync,
+} from "node:fs"
+import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { after, before, test } from "node:test"
 import i18next from "i18next"
@@ -777,6 +784,15 @@ test("real C1 createNativeCreationPort commits tenant save/reopen/replay on Linu
 
     assert.equal(outcome.ok, true)
     assert.ok(outcome.data)
+    const fsMagic = statfsSync(f.root).type
+    console.log(
+      JSON.stringify({
+        linuxRealC1FixtureRoot: f.root,
+        tmpdir: tmpdir(),
+        filesystemMagic: `0x${fsMagic.toString(16)}`,
+        isExt4: fsMagic === 0xef53,
+      }),
+    )
     const savedQuizId = outcome.data.quizId
     assert.match(savedQuizId, /^[A-Za-z0-9_-]{21}$/u)
     assert.equal(outcome.data.savedRevision, 1)
@@ -1498,4 +1514,91 @@ test("holds unified 32-slot admission across remote responseTimeoutMs and enforc
   )
   await service.drain()
   assert.equal(stalledCancelled, true)
+
+  let previewEntered = false
+  let notifyPreviewEntered: () => void = () => undefined
+  let releasePreview: () => void = () => undefined
+  const previewGateEntered = new Promise<void>((resolve) => {
+    notifyPreviewEntered = resolve
+  })
+  const previewGateHeld = new Promise<void>((resolve) => {
+    releasePreview = resolve
+  })
+  const previewAbortService = await buildService({
+    previewCandidateV2: () => ({
+      async render() {
+        previewEntered = true
+        notifyPreviewEntered()
+        await previewGateHeld
+
+        throw new Error("preview released after abort")
+      },
+    }),
+  })
+  const previewTokens = await authorizeAndToken(
+    previewAbortService,
+    f.sessions[0],
+  )
+  const previewClient = await connectMcp(
+    previewAbortService,
+    previewTokens.access_token,
+  )
+  let previewDraftId = ""
+
+  try {
+    const createdPreviewDraft = (
+      await previewClient.callTool({
+        name: "create_game_draft",
+        arguments: createInput("Preview abort retirement"),
+      })
+    ).structuredContent as { ok: boolean; data: { draftId: string } }
+    assert.equal(createdPreviewDraft.ok, true)
+    previewDraftId = createdPreviewDraft.data.draftId
+  } finally {
+    await previewClient.close()
+  }
+
+  const abortPreviewController = new AbortController()
+  const abortedPreviewCall = previewAbortService.fetch(
+    new Request(config.resource, {
+      method: "POST",
+      signal: abortPreviewController.signal,
+      headers: {
+        host: new URL(origin).host,
+        authorization: `Bearer ${previewTokens.access_token}`,
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 700,
+        method: "tools/call",
+        params: {
+          name: "preview_game",
+          arguments: {
+            contractVersion: "0.1.0",
+            draftId: previewDraftId,
+            expectedRevision: 1,
+          },
+        },
+      }),
+    }),
+  )
+  await previewGateEntered
+  assert.equal(previewEntered, true)
+  abortPreviewController.abort()
+  const abortedPreviewRes = await abortedPreviewCall
+  assert.equal(abortedPreviewRes.status, 400)
+
+  let previewDrained = false
+  const previewDraining = previewAbortService.drain().then(() => {
+    previewDrained = true
+  })
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
+  assert.equal(previewDrained, false)
+  releasePreview()
+  await previewDraining
+  assert.equal(previewDrained, true)
 })

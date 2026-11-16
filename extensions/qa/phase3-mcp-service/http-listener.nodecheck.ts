@@ -330,18 +330,6 @@ test("loopback TCP listener enforces pre-Request header/Host/URL limits and exec
       "oauth_request",
     ) ?? ""
 
-  const resolveRequestUrl = (input: Parameters<typeof fetch>[0]): URL => {
-    if (typeof input === "string") {
-      return new URL(input, origin)
-    }
-
-    if (input instanceof URL) {
-      return input
-    }
-
-    return new URL(input.url)
-  }
-
   const resolveBodyText = (
     input: Parameters<typeof fetch>[0],
     init?: RequestInit,
@@ -699,7 +687,7 @@ test("enforces bounded body pull, clean 413 on chunked >64KiB, listener teardown
     res.once("finish", () => resolve())
     res.once("close", () => resolve())
   })
-  socketIn.push(Buffer.from('{"hello":"world"}'))
+  req.push(Buffer.from('{"hello":"world"}'))
   nodeListener(req, res)
   await resDone
   await new Promise<void>((resolve) => {
@@ -755,8 +743,9 @@ test("enforces bounded body pull, clean 413 on chunked >64KiB, listener teardown
     resPull.once("finish", () => resolve())
     resPull.once("close", () => resolve())
   })
-  pullIn.push(Buffer.from('{"a":1}'))
-  pullIn.push(Buffer.from('{"b":2}'))
+  reqPull.push(Buffer.from('{"a":1}'))
+  reqPull.push(Buffer.from('{"b":2}'))
+  reqPull.push(null)
   customListener(reqPull, resPull)
   await pullResDone
   await new Promise<void>((resolve) => {

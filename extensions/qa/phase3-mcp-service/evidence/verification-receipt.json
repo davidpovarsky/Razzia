@@ -1,8 +1,13 @@
 {
-  "unit": "Phase 3 Unit A - Protected MCP/OAuth/Native-Save Downstream Service Composition",
-  "baseCommitSha": "fd3048402fb66cc22867635ea1fdbe39e08d1fa0",
-  "productBaselineSha": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
-  "branch": "cez/e0c87b17",
+  "unit": "Phase 3 Unit A - Protected MCP/OAuth/Native-Save Downstream Service Composition (Security/QA Repair Pass)",
+  "baseCommitSha": "3e29270f9ee64a1d3a33b0b90704dfaec973200c",
+  "cherryPickedUpstreamCommitSha": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83",
+  "cherryPickedLocalCommitSha": "2ca0f77ae1aeae6491eb46aec6d5028588b49c0d",
+  "branch": "cez/e17507c7",
+  "runner": {
+    "tool": "antigravity",
+    "model": "Gemini 4 Hydrogen (XHigh)"
+  },
   "platform": {
     "os": "win32",
     "node": "v22.17.0"
@@ -17,19 +22,25 @@
     "extensions/qa/phase3-mcp-service/evidence/verification-receipt.json"
   ],
   "checks": {
-    "tddRedBeforeService": {
+    "tddRedOnCherryPick2ca0f77": {
       "command": "node .\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs --tsconfig .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json --test --test-concurrency=1 .\\extensions\\qa\\phase3-mcp-service\\service.nodecheck.ts .\\extensions\\qa\\phase3-mcp-service\\http-listener.nodecheck.ts",
       "exitCode": 1,
-      "pass": 0,
-      "fail": 2,
-      "reason": "Expected SyntaxError before service implementation: first-party/index.ts lacked service exports"
+      "tests": 12,
+      "pass": 8,
+      "fail": 4,
+      "reproducedDefects": [
+        "Test 3: HTTP 204 response emitted Content-Length header",
+        "Test 4: server.maxConnections === undefined and missing TCP response/slow-reader deadline bounds",
+        "Test 11: createPrincipalRateLimiter LRU eviction reset exhausted/active bucket under capacity pressure",
+        "Test 12: outerBudget released early on remote responseTimeoutMs while in-flight work remained active (200 !== 429)"
+      ]
     },
     "prettierCheck": {
-      "command": "node .\\node_modules\\prettier\\bin\\prettier.cjs --check extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/tsconfig.json extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
+      "command": "node .\\node_modules\\prettier\\bin\\prettier.cjs --check extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/tsconfig.json extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts extensions/qa/phase3-mcp-service/evidence/verification-receipt.json",
       "exitCode": 0
     },
     "oxlint": {
-      "command": "node --experimental-strip-types .\\node_modules\\oxlint\\bin\\oxlint -c .\\oxlint.config.ts extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
+      "command": "node --experimental-strip-types .\\node_modules\\oxlint\\bin\\oxlint -c .\\oxlint.config.ts extensions/src/mcp-app/first-party/service.ts extensions/src/mcp-app/first-party/index.ts extensions/qa/phase3-mcp-service/tsconfig.json extensions/qa/phase3-mcp-service/mcp-client.ts extensions/qa/phase3-mcp-service/service.nodecheck.ts extensions/qa/phase3-mcp-service/http-listener.nodecheck.ts",
       "exitCode": 0,
       "warnings": 0,
       "errors": 0,
@@ -44,10 +55,10 @@
       "exitCode": 0
     },
     "phase3QaSuite": {
-      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs --tsconfig .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json --test --test-concurrency=1 .\\extensions\\qa\\phase3-mcp-service\\service.nodecheck.ts .\\extensions\\qa\\phase3-mcp-service\\http-listener.nodecheck.ts",
+      "command": "node .\\extensions\\src\\mcp-app\\node_modules\\tsx\\dist\\cli.mjs --tsconfig .\\extensions\\qa\\phase3-mcp-service\\tsconfig.json --test --test-concurrency=1 .\\extensions\\qa\\phase3-mcp-service\\http-listener.nodecheck.ts .\\extensions\\qa\\phase3-mcp-service\\service.nodecheck.ts",
       "exitCode": 0,
-      "tests": 9,
-      "pass": 9,
+      "tests": 12,
+      "pass": 12,
       "fail": 0,
       "cancelled": 0,
       "skipped": 0
@@ -78,25 +89,31 @@
       ]
     }
   },
+  "repairedScopeNotes": {
+    "downstreamCompositionProof": "server/http.ts remains untouched; service.ts uses AsyncLocalStorage<RequestWorkTracker>, Proxy wrapping over Object.create(null) for frozen dependency ports, paused highWaterMark: 0 request-body tracking, runOAuthWithDeadline(), cloned authoringPolicy, userinfo URL rejection, and WeakMap serviceBridges between createProtectedMcpService and createProtectedMcpNodeListener. Residual seam boundary: server/http.ts does not expose a per-request retirement hook if a slow/async oauth.verifyAccessToken implementation were ever supplied (real createFirstPartyOAuth uses synchronous Ed25519 + SQLite).",
+    "linuxFixtureRootSelection": "service.nodecheck.ts uses tests/first-party/fixtures.ts fixture(), which calls mkdtempSync(join(os.tmpdir(), 'tadazz-m3a-synthetic-')). On Linux it honors TMPDIR (not C1_FIXTURE_ROOT) and logs { root, fsType, isExt4 } from statfsSync(f.root). tmpfs (0x01021994) tests Linux runtime behavior; TMPDIR=/evidence/phase3-999ed90c-fixtures targets admitted ext4 (0xef53) without claiming physical power-loss fsync proof."
+  },
   "realVsSyntheticBoundary": {
     "genuineVerifiedInProcess": [
-      "createFirstPartyOAuth metadata/JWKS/authorize/inspect/approve/token/revoke/downloads/native-save routes",
+      "createFirstPartyOAuth metadata/JWKS/authorize/inspect/approve/token/revoke/downloads/native-save routes with responseTimeoutMs deadline enforcement",
       "Real SQLite account DB + signed manager JWT/session checks + per-tenant SQLite grant/draft stores",
       "Official @modelcontextprotocol/client StreamableHTTPClientTransport & @modelcontextprotocol/server createMcpHandler",
       "Official createOAuthConsentClient and createNativeSaveConsentClient",
       "Real 8-locale catalog adapter translation via i18next locales JSON + draft exports + download SHA-256 verification",
-      "Loopback 127.0.0.1 Node TCP HTTP listener pre-Request rawHeader/Host/URL/Content-Length bounds, socket abort cancellation, and close",
-      "Real createNativeCreationPort failure closed on Windows (DEPENDENCY_UNAVAILABLE without committing native quiz files)"
+      "Loopback 127.0.0.1 Node TCP HTTP listener RFC 9110 header validation, CL+TE smuggling rejection, paused highWaterMark: 0 body pull, clean 413 on chunked >64KiB, 204/304/1xx empty-body without Content-Length, 64KiB backpressured response slicing under unified 32-slot drain(), per-request deadlineTimer (504/socket teardown), maxConnections (64 default, 1..256), headersTimeout, and inactivity timeout",
+      "Account-scoped fail-closed createPrincipalRateLimiter with independent read/mutation windows",
+      "Real createNativeCreationPort fail-closed on Windows (DEPENDENCY_UNAVAILABLE without committing native quiz files)"
     ],
     "syntheticTestDoublesUsed": [
       "Synthetic ephemeral temp fixture (CONFIG_PATH, Ed25519 keypair, HMAC ticket key, client registration)",
-      "Synthetic in-memory NativeCreationOperationPort for end-to-end save_game allow/replay flow on Windows",
+      "Synthetic in-memory NativeCreationOperationPort for end-to-end save_game allow/replay flow on non-Linux hosts",
       "Synthetic previewCandidateV2 factory test double with V2 composition selection/projection",
-      "In-memory principal rate limiter test hooks for 32-slot overflow, slow-abort, and drain checks"
+      "In-process slow/aborted dependency test hooks verifying unified 32-slot retention and background drain()"
     ],
     "openGatesOutsideUnitAScope": [
-      "Linux ext4 C1 real native-save commit verification (native-save-client.nodecheck.ts / physical ext4 publish)",
-      "Expressive consent GET/HEAD HTML routes & Studio UI /studio/native-save-consent route mount and Playwright browser E2E",
+      "Manager-executed Linux remote verification in disposable container (/tmp tmpfs and TMPDIR=/evidence/phase3-999ed90c-fixtures ext4)",
+      "Physical ext4 power-loss durability / hardware fsync testing",
+      "Expressive consent GET/HEAD HTML routes, Studio UI /studio/native-save-consent route mount, and Playwright browser E2E",
       "Studio reopen/reload after saved MCP quiz & human browser OAuth click",
       "External HTTPS ChatGPT/Claude host interoperability"
     ]
