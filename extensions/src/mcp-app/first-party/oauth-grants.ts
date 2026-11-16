@@ -44,6 +44,10 @@ import {
   type FirstPartyExportPolicy,
   type ExportFormat,
 } from "./oauth-export.ts"
+import {
+  createNativeSaveAdapter,
+  type FirstPartyNativeSaveOptions,
+} from "./oauth-native-save.ts"
 
 const TABLES = {
   metadata:
@@ -73,7 +77,8 @@ const grantSchema = z.strictObject({
   expiresAt: z.number().int().positive(),
   active: z.literal(true),
 })
-type StoredGrant = z.infer<typeof grantSchema>
+export type StoredOAuthGrant = z.infer<typeof grantSchema>
+type StoredGrant = StoredOAuthGrant
 const unavailable = () => new OAuthError("temporarily_unavailable")
 const invalid = () => new OAuthError("invalid_grant")
 const missing = (error: unknown) =>
@@ -528,6 +533,37 @@ export class FirstPartyOAuthGrants {
       this.auth.assertActive(p)
     })
     this.auth.assertActive(p)
+  }
+  nativeSave(
+    options: FirstPartyNativeSaveOptions,
+    assertIssued: (p: VerifiedPrincipal) => void,
+  ) {
+    return createNativeSaveAdapter(
+      {
+        auth: this.auth,
+        protocol: this.protocol,
+        assertIssued,
+        grant: (db, owner, grantId) => this.row(db, owner, grantId),
+        atomic: (owner, action) => this.transaction(owner, false, action),
+        read: (owner, action) => {
+          let db: DatabaseSync | undefined
+          try {
+            db = this.open(owner, false)
+            if (!db) throw invalid()
+            return action(db)
+          } finally {
+            try {
+              db?.close()
+            } catch {
+              throw unavailable()
+            }
+          }
+        },
+        audit: (db, grantId, kind, mutation) =>
+          this.audit(db, grantId, kind, mutation),
+      },
+      options,
+    )
   }
   private checkedExport(
     raw: unknown,

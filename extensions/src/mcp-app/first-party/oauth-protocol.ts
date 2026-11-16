@@ -14,6 +14,7 @@ import { z } from "zod"
 import { scopes as toolScopes } from "../contracts/tools.ts"
 import { validateConfig } from "../server/authorization.ts"
 import type { ServerConfig } from "../server/dependencies.ts"
+import { canonicalJson } from "../contracts/canonical.ts"
 
 export class OAuthError extends Error {
   constructor(
@@ -234,6 +235,30 @@ export function createOAuthProtocol(options: OAuthCryptoOptions) {
     config,
     client,
     readTicket,
+    nativeSaveMac(
+      purpose: "intent" | "consent" | "approval" | "outcome",
+      value: unknown,
+    ) {
+      return createHmac("sha256", encryptionKey)
+        .update(
+          canonicalJson({ domain: "tadazz-native-save-v1:" + purpose, value }),
+        )
+        .digest("hex")
+    },
+    checkNativeSaveMac(
+      purpose: "intent" | "consent" | "approval" | "outcome",
+      value: unknown,
+      proof: string,
+    ) {
+      if (!/^[a-f0-9]{64}$/u.test(proof)) return fail("access_denied")
+      const expected = createHmac("sha256", encryptionKey)
+        .update(
+          canonicalJson({ domain: "tadazz-native-save-v1:" + purpose, value }),
+        )
+        .digest()
+      if (!timingSafeEqual(expected, Buffer.from(proof, "hex")))
+        return fail("access_denied")
+    },
     downloadTicket(value: OAuthDownloadTicket) {
       return seal("download", downloadTicketSchema.parse(value))
     },
