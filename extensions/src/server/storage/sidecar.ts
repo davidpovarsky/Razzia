@@ -16,6 +16,8 @@ export interface StorageInjections {
   updateQuizz: (id: string, data: unknown) => { id: string }
   deleteQuizz: (id: string) => void
   listMedia?: () => UploadedMedia[]
+  /** Trusted owner-bound retained-theme check, shared with native media deletion. */
+  isThemeMediaReferenced?: (name: string) => boolean
   /** Physical creation is opt-in at actual native composition; Map stagers omit it. */
   creation?: NativeCreationPort
   /** Explicit native startup guard; opaque callback-backed adapters omit it. */

@@ -1,5 +1,7 @@
-import { createExtensionRoutes } from "@razzia/extensions/server"
-import { createNativeCreationPort } from "@razzia/extensions/server"
+import {
+  createExtensionRoutes,
+  createNativeCreationPort,
+} from "@razzia/extensions/server"
 import { accountsEnabled, activeAccount } from "../services/account-scope"
 import { resolveConfigRoot } from "../services/config-scope"
 import { auth } from "@razzia/socket/api/routes/auth"
@@ -22,6 +24,7 @@ import {
 import { listMedia } from "@razzia/socket/services/media"
 import { Hono } from "hono"
 import { billingRoutes } from "@razzia/socket/api/extensions/billing-routes"
+import { isSavedThemeMediaReferenced } from "@razzia/socket/services/theme-installation"
 
 const extensionRoutes = createExtensionRoutes(
   {
@@ -31,6 +34,11 @@ const extensionRoutes = createExtensionRoutes(
     saveQuizz,
     deleteQuizz,
     listMedia,
+    isThemeMediaReferenced: (name) => {
+      const owner = activeAccount()
+
+      return owner ? isSavedThemeMediaReferenced(owner, name) : false
+    },
     creation:
       process.env.TADAZZ_C1_CREATION_PROTOTYPE === "true" &&
       process.platform === "linux"

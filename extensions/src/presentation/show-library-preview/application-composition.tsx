@@ -9,6 +9,32 @@ import type { ApplicationPreviewFrame } from "../../core/show-library/applicatio
 import type { PreviewPhase } from "../../core/show-library/primitives"
 import type { QuestionEntrance as QuestionEntranceConfig } from "../../core/quiz-extras"
 
+function CompositionBrand({
+  url,
+  fit,
+  title,
+}: {
+  url?: string
+  fit?: "contain" | "cover"
+  title: string
+}) {
+  return url ? (
+    <img
+      data-testid="show-brand-image"
+      src={url}
+      alt={title}
+      style={{
+        display: "block",
+        maxHeight: "100%",
+        maxWidth: "100%",
+        objectFit: fit ?? "contain",
+      }}
+    />
+  ) : (
+    <BrandLogo className="max-h-full max-w-full" />
+  )
+}
+
 export function admittedApplicationTemplate(
   frame: ApplicationPreviewFrame,
   phase: PreviewPhase,
@@ -188,7 +214,11 @@ export function NativeComposition({
                 }}
               >
                 {node.component.id === "native.brand" ? (
-                  <BrandLogo className="max-h-full max-w-full" />
+                  <CompositionBrand
+                    url={node.props.imageUrl}
+                    fit={node.props.fit}
+                    title={title}
+                  />
                 ) : (
                   <strong
                     style={{

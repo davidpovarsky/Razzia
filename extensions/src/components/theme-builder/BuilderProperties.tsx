@@ -54,7 +54,7 @@ export function BuilderProperties({
       {root && layout("preset", ["flow", "grid", "safe-overlay"], "layout")}
       {layout("alignment", ["start", "center", "end"], "alignment")}
       {layout("gap", ["none", "small", "medium", "large"], "gap")}
-      {root && (
+      {(root || node.component.id === "native.brand") && (
         <Select
           label={text("fit")}
           value={node.props.fit ?? "inherit"}

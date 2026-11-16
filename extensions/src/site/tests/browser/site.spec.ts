@@ -431,16 +431,18 @@ test("public routes, catalogue, demo, history, responsive navigation and screens
     .click()
   await page.getByRole("searchbox", { name: "Search games" }).fill("not-a-game")
   await expect(page.getByText("No games found", { exact: true })).toBeVisible()
-  await page.goto("/?view=demo")
-  await page.getByRole("button", { name: "A secret", exact: true }).click()
-  await page.getByRole("button", { name: "Reveal sample results" }).click()
+  await page.goto("/?view=demo&game=quiz")
+  await expect(page.getByTestId("marketing-native-demo")).toBeVisible()
   await expect(
-    page.getByRole("heading", { name: "The big reveal!" }),
+    page.getByText("Demonstration only. No audience or votes.", {
+      exact: true,
+    }),
   ).toBeVisible()
+  await expect(page.locator(".demo-choice-grid,.sample-results")).toHaveCount(0)
   await page.getByRole("button", { name: "Back to home" }).click()
   await page.goBack()
   await expect(
-    page.getByRole("heading", { name: "Which twist would change everything?" }),
+    page.getByRole("heading", { name: "The Big Quiz", exact: true }),
   ).toBeVisible()
   await page.goto("/?view=product&game=story")
   await page.reload()

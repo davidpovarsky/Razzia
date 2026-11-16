@@ -183,7 +183,8 @@
     "invalidMediaType": "ここでは{{expected}}ファイルのみが許可されています",
     "onlyImageAllowed": "回答の選択肢には画像ファイルのみ使用できます",
     "loadQuizFailed": "クイズの再読み込みに失敗しました",
-    "loadQuizSuccess": "最新のクイズをサーバーから読み込みました"
+    "loadQuizSuccess": "最新のクイズをサーバーから読み込みました",
+    "themeMediaInUse": "このメディアは保存済みのテーマまたはバージョンで使用されているため、削除できません。"
   },
   "host": {
     "endTimer": "タイマー終了",

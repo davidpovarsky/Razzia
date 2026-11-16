@@ -2,6 +2,7 @@ import { mkdtempSync, rmSync } from "node:fs"
 import { tmpdir } from "node:os"
 import { join } from "node:path"
 import { randomBytes } from "node:crypto"
+import { DatabaseSync } from "node:sqlite"
 import { afterEach, describe, expect, it } from "vitest"
 import { ThemeInstallationStore } from "./installation"
 import { createThemeBuilderRoutes } from "./builder-routes"
@@ -30,6 +31,56 @@ function fixture() {
   return { store, file, key }
 }
 describe("existing installer Theme Builder persistence", () => {
+  it("retains version media after removing the current binding and archiving the head", async () => {
+    const { store } = fixture()
+    const p: ThemePrincipal = { ...principal(), grants: ["author", "publish"] }
+    const document = structuredClone(builderDocumentFixture())
+    document.registry.templates[0].nodes[0].props.imageUrl =
+      "/media/retained.png"
+    await store.saveBuilderDocument(p, 0, document)
+    expect(store.builderMediaReferences(p, "/media/retained.png")).toHaveLength(
+      1,
+    )
+    // Storage seam only; real media admission is covered by the browser room test.
+    await store.publishBuilderVersion(p, document.id, 1, 0, "1.0.0", () => ({
+      kind: "first-party-composition",
+      rendererBuildSha256: "1".repeat(64),
+      assets: [],
+    }))
+    Reflect.deleteProperty(
+      document.registry.templates[0].nodes[0].props,
+      "imageUrl",
+    )
+    await store.saveBuilderDocument(p, 1, document)
+    await store.archiveBuilderDocument(p, document.id, 2, 1, true)
+    expect(store.builderMediaReferences(p, "/media/retained.png")).toEqual([
+      { documentId: document.id, version: "1.0.0" },
+    ])
+    expect(
+      store.builderMediaReferences(
+        principal("tenant-b"),
+        "/media/retained.png",
+      ),
+    ).toEqual([])
+    expect(() =>
+      store.builderMediaReferences({ ...p, grants: [] }, "/media/retained.png"),
+    ).toThrow("Forbidden")
+  })
+  it("blocks media safety inspection when retained metadata is malformed", async () => {
+    const { store, file } = fixture()
+    const p = principal()
+    await store.saveBuilderDocument(p, 0, builderDocumentFixture())
+    const corrupt = new DatabaseSync(file)
+    corrupt
+      .prepare(
+        "UPDATE theme_builder_documents SET document=? WHERE tenant_id=?",
+      )
+      .run("not-json", p.tenantId)
+    corrupt.close()
+    expect(() =>
+      store.builderMediaReferences(p, "/media/anything.png"),
+    ).toThrow()
+  })
   it("publishes only with the existing publish grant and keeps immutable pins through rollback/archive/reopen", async () => {
     const { store, file, key } = fixture(),
       author = principal(),

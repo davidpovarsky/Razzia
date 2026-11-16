@@ -8,7 +8,7 @@ import type { PreviewLocale } from "../../presentation/show-library-preview/i18n
 import type { BuilderDocument, BuilderEdit } from "./document"
 import type { BuilderTextKey } from "./strings"
 import type { ThemeOverrides } from "../../core/show-themes/selection"
-import { NativeMediaPanel } from "./native-media-panel"
+import { NativeMediaPanel, type BuilderBrandMedia } from "./native-media-panel"
 
 const labels = createInstance()
 void labels.init({
@@ -46,6 +46,7 @@ export function NativeLibraryPanel({
   edit,
   readOnly,
   text,
+  brand,
 }: {
   document: BuilderDocument
   locale: PreviewLocale
@@ -54,6 +55,7 @@ export function NativeLibraryPanel({
   edit: (edit: BuilderEdit) => void
   readOnly: boolean
   text: (key: BuilderTextKey) => string
+  brand?: BuilderBrandMedia
 }) {
   const family = getNativeShowLibrary().families.find(
     (f) =>
@@ -138,6 +140,7 @@ export function NativeLibraryPanel({
         </div>
       </fieldset>
       <NativeMediaPanel
+        brand={brand}
         family={family}
         section={section}
         change={change}

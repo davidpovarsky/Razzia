@@ -6,6 +6,7 @@ import {
 import { RUNTIME_PHASES } from "../packages/protocol"
 import type { applicationAppearanceSchema } from "./application-preview-schema"
 import type { z } from "zod"
+import { propsSchema } from "./schemas"
 
 function appearance(): z.infer<typeof applicationAppearanceSchema> {
   const registry = structuredClone(getApplicationShowLibrary())
@@ -32,6 +33,20 @@ function appearance(): z.infer<typeof applicationAppearanceSchema> {
   }
 }
 describe("compiled first-party application composition", () => {
+  it("admits only local raster references for the optional show brand", () => {
+    expect(
+      propsSchema.parse({ imageUrl: "/media/owned-logo.png", fit: "contain" }),
+    ).toEqual({ imageUrl: "/media/owned-logo.png", fit: "contain" })
+    for (const imageUrl of [
+      "https://external.invalid/logo.png",
+      "/media/../foreign.png",
+      "/media/code.svg",
+      "data:image/png;base64,AA==",
+      "/media/movie.mp4",
+    ]) {
+      expect(() => propsSchema.parse({ imageUrl })).toThrow()
+    }
+  })
   it("has both original renderers and two structural layouts without losing system bindings", () => {
     const a = appearance()
     for (const phase of RUNTIME_PHASES) {

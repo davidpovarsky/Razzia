@@ -479,6 +479,62 @@ export class ThemeInstallationStore {
         }
       })
   }
+  /** Retained drafts and versions own their media even after head rollback/archive. */
+  builderMediaReferences(
+    p: ThemePrincipal,
+    url: string,
+  ): Array<{ documentId: string; version: string | null }> {
+    this.require(p, "author")
+    const result: Array<{ documentId: string; version: string | null }> = []
+    const rows = this.db
+      .prepare(
+        "SELECT document_id,NULL AS version,document AS payload FROM theme_builder_documents WHERE tenant_id=? UNION ALL SELECT document_id,version,publication AS payload FROM theme_builder_versions WHERE tenant_id=?",
+      )
+      .iterate(p.tenantId, p.tenantId)
+    for (const row of rows) {
+      if (typeof row.payload !== "string" || row.payload.length > 1_048_576) {
+        throw new ThemeInstallationError(
+          "Cannot inspect saved theme media",
+          409,
+        )
+      }
+
+      const pending: unknown[] = [JSON.parse(row.payload) as unknown]
+      let nodes = 0
+      let referenced = false
+
+      while (pending.length) {
+        nodes += 1
+
+        if (nodes > 30_000) {
+          throw new ThemeInstallationError(
+            "Cannot inspect saved theme media",
+            409,
+          )
+        }
+
+        const value = pending.pop()
+
+        if (value === url) {
+          referenced = true
+        } else if (Array.isArray(value)) {
+          const entries: unknown[] = value
+          pending.push(...entries)
+        } else if (value && typeof value === "object") {
+          pending.push(...Object.values(value as Record<string, unknown>))
+        }
+      }
+
+      if (referenced) {
+        result.push({
+          documentId: String(row.document_id),
+          version: typeof row.version === "string" ? row.version : null,
+        })
+      }
+    }
+
+    return result
+  }
   async restoreBuilderVersion(
     p: ThemePrincipal,
     id: string,

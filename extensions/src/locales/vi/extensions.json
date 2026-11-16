@@ -183,7 +183,8 @@
     "invalidMediaType": "Chỉ cho phép tệp {{expected}} ở đây",
     "onlyImageAllowed": "Chỉ cho phép tệp hình ảnh cho các lựa chọn câu trả lời",
     "loadQuizFailed": "Không thể tải lại bài kiểm tra",
-    "loadQuizSuccess": "Đã tải bài kiểm tra mới nhất từ máy chủ"
+    "loadQuizSuccess": "Đã tải bài kiểm tra mới nhất từ máy chủ",
+    "themeMediaInUse": "Tài nguyên này được một chủ đề hoặc phiên bản đã lưu sử dụng nên không thể xóa."
   },
   "host": {
     "endTimer": "Dừng thời gian",

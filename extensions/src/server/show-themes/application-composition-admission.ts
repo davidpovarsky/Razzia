@@ -112,7 +112,7 @@ export function admitApplicationComposition(
       })
     }
   }
-  visit(document.content)
+  visit(document)
 
   return builderPublicationAdmissionSchema.parse({
     kind: "first-party-composition",

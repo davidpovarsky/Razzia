@@ -1452,6 +1452,31 @@ test("Builder uploads account media, saves its real background and denies cross-
     }, asset.url),
   ).toEqual([600, 400])
   await library.getByRole("button", { name: asset.name, exact: true }).click()
+  await page
+    .getByRole("main")
+    .getByRole("combobox", { name: "Screens", exact: true })
+    .selectOption("native.question.grid")
+  await page.getByRole("treeitem", { name: "Brand logo", exact: true }).click()
+  await expect(
+    library.getByRole("combobox", { name: "Media destination", exact: true }),
+  ).toHaveValue("brand:show")
+  await library.getByRole("button", { name: asset.name, exact: true }).click()
+  await expect(surface.getByTestId("show-brand-image")).toHaveAttribute(
+    "src",
+    asset.url,
+  )
+  await expect
+    .poll(() =>
+      surface
+        .getByTestId("show-brand-image")
+        .evaluate((image: HTMLImageElement) => image.naturalWidth),
+    )
+    .toBe(600)
+  await library
+    .getByRole("button", { name: "Reset to inherited", exact: true })
+    .click()
+  await expect(surface.getByTestId("show-brand-image")).toHaveCount(0)
+  await library.getByRole("button", { name: asset.name, exact: true }).click()
   await expect(stage).toBeVisible()
   await expect
     .poll(() =>
@@ -1501,6 +1526,10 @@ test("Builder uploads account media, saves its real background and denies cross-
       .getAttribute("value"),
   )
   await surface.getByRole("button", { name: /^Preview:/u }).click()
+  await expect(surface.getByTestId("show-brand-image")).toHaveAttribute(
+    "src",
+    asset.url,
+  )
   await expect(stage).toBeVisible({ timeout: 30_000 })
   await expect
     .poll(() =>
@@ -1676,6 +1705,39 @@ test("authorized workspace publication rolls back and archives immutable version
     .getByRole("main")
     .getByRole("combobox", { name: "Screens", exact: true })
     .selectOption("native.question.grid")
+  await page.getByRole("treeitem", { name: "Brand logo", exact: true }).click()
+  const brandLibrary = page.getByTestId("builder-media-library")
+  await brandLibrary.locator("summary").click()
+  await expect(
+    brandLibrary.getByRole("combobox", {
+      name: "Media destination",
+      exact: true,
+    }),
+  ).toHaveValue("brand:show")
+  const brandUploaded = page.waitForResponse(
+    (response) =>
+      response.url().endsWith("/api/media") &&
+      response.request().method() === "POST",
+  )
+  await brandLibrary.getByLabel("Upload media", { exact: true }).setInputFiles({
+    name: "published-brand-only.png",
+    mimeType: "image/png",
+    buffer: readFileSync("/input/approved-placeholder.png"),
+  })
+  const brandUploadResponse = await brandUploaded
+  expect(brandUploadResponse.status()).toBe(201)
+  const brandAsset = await brandUploadResponse.json()
+  const sourceBeforeBrand = await (
+    await page.request.get(`/api/extensions/preview/quizzes/${quizId}`, {
+      headers,
+    })
+  ).json()
+  expect(
+    sourceBeforeBrand.assets.map((asset: { url: string }) => asset.url),
+  ).not.toContain(brandAsset.url)
+  await brandLibrary
+    .getByRole("button", { name: brandAsset.name, exact: true })
+    .click()
   await page.getByRole("button", { name: "Save draft", exact: true }).click()
   await expect(
     page.getByRole("button", { name: "Save draft", exact: true }),
@@ -1704,6 +1766,19 @@ test("authorized workspace publication rolls back and archives immutable version
     ).nodes,
   ).toHaveLength(3)
   expect(first.admission.kind).toBe("first-party-composition")
+  expect(
+    first.admission.assets.map((asset: { url: string }) => asset.url),
+  ).toContain(brandAsset.url)
+  for (const suffix of ["", "?detach=true"]) {
+    const deletion = await page.request.delete(
+      `/api/media/${encodeURIComponent(brandAsset.name)}${suffix}`,
+      { headers },
+    )
+    expect(deletion.status()).toBe(409)
+    expect((await deletion.json()).error).toBe(
+      "extensions:errors.themeMediaInUse",
+    )
+  }
   expect(first.admission.rendererBuildSha256).toMatch(/^[a-f0-9]{64}$/u)
   const roomContext = await browser.newContext(),
     playerContext = await browser.newContext()
@@ -1823,6 +1898,22 @@ test("authorized workspace publication rolls back and archives immutable version
       ),
     ).toBeVisible()
     await page.keyboard.press("Escape")
+    const publishedRoute = `**${base}/published/1.0.0`
+    await page.route(publishedRoute, async (route) => {
+      const response = await route.fetch()
+      const value = await response.json()
+      value.admission.assets[0].sha256 = "0".repeat(64)
+      await route.fulfill({ response, json: value })
+    })
+    await inline.getByRole("button", { name: /^Preview:/u }).click()
+    await expect(inline.getByRole("status")).toContainText(
+      "Preview unavailable",
+    )
+    await expect(
+      inline.locator("[data-native-application-preview]"),
+    ).toHaveCount(0)
+    await page.keyboard.press("Escape")
+    await page.unroute(publishedRoute)
     const created = await page.request.post("/api/games", {
       headers,
       data: { quizzId: copiedId },
@@ -1852,6 +1943,13 @@ test("authorized workspace publication rolls back and archives immutable version
       "true",
     )
     await expect(roomComposition).toHaveCSS("gap", "16px")
+    await expect
+      .poll(() =>
+        roomComposition
+          .getByTestId("show-brand-image")
+          .evaluate((image: HTMLImageElement) => image.naturalWidth),
+      )
+      .toBe(600)
     const liveReveal = display.getByTestId("reveal-media-container")
     await expect(liveReveal).toHaveAttribute("data-effect", "blur")
     const frozenProgress = await liveReveal.getAttribute("data-progress")
@@ -1947,6 +2045,14 @@ test("authorized workspace publication rolls back and archives immutable version
       .getByRole("button", { name: "Archive", exact: true })
       .click()
     await expect(publication.getByRole("status")).toHaveText("Archived")
+    expect(
+      (
+        await page.request.delete(
+          `/api/media/${encodeURIComponent(brandAsset.name)}?detach=true`,
+          { headers },
+        )
+      ).status(),
+    ).toBe(409)
     await expect(roomComposition).toHaveCSS("gap", "16px")
     expect(
       (
@@ -2265,6 +2371,60 @@ test("remote preview performance records real transitions and bounded resources 
     ),
   )
   await cdp?.detach()
+})
+
+test("marketing demo entry points and reload use the same native public preview instead of illustrative voting", async ({
+  page,
+}, info) => {
+  const writes: string[] = []
+  page.on("request", (request) => {
+    if (
+      request.method() !== "GET" &&
+      /^\/api\/(?:games|accounts|themes)(?:\/|$)/u.test(
+        new URL(request.url()).pathname,
+      )
+    ) {
+      writes.push(request.url())
+    }
+  })
+  await page.goto("/")
+  await page.locator(".header-demo").click()
+  await expect(page).toHaveURL(/view=demo.*game=quiz/u)
+  const demo = page.getByTestId("marketing-native-demo")
+  await expect(
+    demo.locator("[data-native-application-preview][data-preview-ready=true]"),
+  ).toBeVisible({ timeout: 30_000 })
+  await expect(demo.locator("[data-original-razzia-preview]")).toBeVisible()
+  await expect(
+    page.getByText("Demonstration only. No audience or votes.", {
+      exact: true,
+    }),
+  ).toBeVisible()
+  await expect(page.locator(".demo-choice-grid,.sample-results")).toHaveCount(0)
+  const chapters = demo.getByRole("slider", { name: "Chapters", exact: true })
+  await expect(chapters).toHaveAttribute("max", "19")
+  await demo.getByRole("button", { name: "Play", exact: true }).click()
+  await demo.getByRole("button", { name: "Pause", exact: true }).click()
+  await chapters.focus()
+  await page.keyboard.press("ArrowRight")
+  await expect(chapters).toHaveValue("1")
+  await expect(chapters).toHaveAttribute("aria-busy", "false")
+  await demo.screenshot({
+    path: info.outputPath("marketing-native-demo-desktop.png"),
+  })
+  await page.setViewportSize({ width: 390, height: 844 })
+  expect((await demo.boundingBox())!.width).toBeLessThanOrEqual(390)
+  await demo.screenshot({
+    path: info.outputPath("marketing-native-demo-mobile.png"),
+  })
+  await page.reload()
+  await expect(
+    demo.locator("[data-native-application-preview][data-preview-ready=true]"),
+  ).toBeVisible({ timeout: 30_000 })
+  await expect(chapters).toHaveValue("0")
+  await page.getByRole("button", { name: "Back to home", exact: true }).click()
+  await expect(page.locator("[data-native-application-preview]")).toHaveCount(0)
+  expect(writes).toEqual([])
 })
 
 test("owner-approved public quiz opens the real original engine on hold without an account or room", async ({

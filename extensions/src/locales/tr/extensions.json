@@ -183,7 +183,8 @@
     "invalidMediaType": "Burada yalnızca {{expected}} dosyalarına izin verilir",
     "onlyImageAllowed": "Cevap seçenekleri için yalnızca görsel dosyalarına izin verilir",
     "loadQuizFailed": "Test yeniden yüklenemedi",
-    "loadQuizSuccess": "En son test sunucudan yüklendi"
+    "loadQuizSuccess": "En son test sunucudan yüklendi",
+    "themeMediaInUse": "Bu medya kayıtlı bir tema veya sürüm tarafından kullanıldığı için silinemez."
   },
   "host": {
     "endTimer": "Süreyi Bitir",

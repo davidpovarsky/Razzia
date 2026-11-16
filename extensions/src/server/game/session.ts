@@ -27,6 +27,7 @@ import {
 import type { StudioShowCoordinator } from "./studio-show-coordinator"
 import {
   projectApplicationComposition,
+  publicApplicationCompositionMediaNames,
   type ApplicationCompositionAppearance,
 } from "../../core/show-library/application-composition-pin"
 
@@ -89,6 +90,7 @@ export class ExtensionGameSession {
   private readonly compositionDefinitionJson: string | null
   private readonly publicCompositionDefinitionJson: string | null
   private readonly compositionTitle: string
+  private readonly compositionMediaNames: ReadonlySet<string>
 
   private seq = 0
   private epoch = 0
@@ -123,6 +125,9 @@ export class ExtensionGameSession {
       ? JSON.stringify(projectApplicationComposition(appearance, false))
       : null
     this.compositionTitle = composition?.showTitle?.slice(0, 240) ?? ""
+    this.compositionMediaNames = new Set(
+      appearance ? publicApplicationCompositionMediaNames(appearance) : [],
+    )
     this.extras = extras
     this.themeDefinition = themeDefinition
       ? (createShowThemeRegistry([themeDefinition]).get(
@@ -137,6 +142,10 @@ export class ExtensionGameSession {
 
   setDelegate(delegate: ExtensionSessionDelegate | null): void {
     this.delegate = delegate
+  }
+
+  canViewCompositionMedia(name: string): boolean {
+    return this.compositionMediaNames.has(name)
   }
 
   setShowCoordinator(coordinator: StudioShowCoordinator | null): void {

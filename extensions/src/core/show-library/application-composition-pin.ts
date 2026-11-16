@@ -142,3 +142,30 @@ export function projectApplicationComposition(
 
   return copy
 }
+
+/** Exact room assets from the audience projection; manager-only templates grant nothing. */
+export function publicApplicationCompositionMediaNames(
+  appearance: ApplicationCompositionAppearance,
+): readonly string[] {
+  const names = new Set<string>()
+  const visit = (value: unknown, key = "") => {
+    if (typeof value === "string" && /url$/iu.test(key)) {
+      const match = /^\/media\/([A-Za-z0-9_-]+\.[a-z0-9]+)$/u.exec(value)
+
+      if (match) {
+        names.add(match[1])
+      }
+    } else if (Array.isArray(value)) {
+      value.forEach((item) => {
+        visit(item)
+      })
+    } else if (value && typeof value === "object") {
+      Object.entries(value).forEach(([name, item]) => {
+        visit(item, name)
+      })
+    }
+  }
+  visit(projectApplicationComposition(appearance, false))
+
+  return [...names].sort()
+}

@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import {
   applicationCompositionPinSchema,
   projectApplicationComposition,
+  publicApplicationCompositionMediaNames,
   applicationCardThemeScope,
   cloneApplicationCardScope,
   type ApplicationCompositionAppearance,
@@ -70,6 +71,21 @@ function appearance(): ApplicationCompositionAppearance {
   }
 }
 describe("private immutable composition pins", () => {
+  it("grants room media only from the audience projection of an admitted composition", () => {
+    const a = appearance()
+    const publicTemplate = a.registry.templates.find(
+      (template) => template.id === "native.question.grid",
+    )!
+    publicTemplate.nodes.find(
+      (node) => node.component.id === "native.brand",
+    )!.props.imageUrl = "/media/public-brand.png"
+    a.registry.templates.find(
+      (template) => template.id === "host-only",
+    )!.nodes[0].props.imageUrl = "/media/manager-only.png"
+    expect(publicApplicationCompositionMediaNames(a)).toEqual([
+      "public-brand.png",
+    ])
+  })
   it("duplicates an immutable visual scope without mutating its source or losing an earlier alias", () => {
     const first = "00000000-0000-4000-8000-000000000001",
       second = "00000000-0000-4000-8000-000000000002",

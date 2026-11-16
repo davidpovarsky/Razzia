@@ -183,7 +183,8 @@
     "invalidMediaType": "Aquí solo se permiten archivos de tipo {{expected}}",
     "onlyImageAllowed": "Solo se permiten imágenes para las opciones de respuesta",
     "loadQuizFailed": "Error al recargar el cuestionario",
-    "loadQuizSuccess": "Última versión del cuestionario cargada desde el servidor"
+    "loadQuizSuccess": "Última versión del cuestionario cargada desde el servidor",
+    "themeMediaInUse": "Este archivo está vinculado a un tema o una versión guardada y no se puede eliminar."
   },
   "host": {
     "endTimer": "Finalizar temporizador",

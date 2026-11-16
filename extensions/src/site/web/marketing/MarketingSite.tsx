@@ -7,6 +7,9 @@ import { Pricing } from "./Pricing"
 import { SiteButton } from "../shared/SiteButton"
 import { useEffect, useState, useMemo } from "react"
 import { createPublicPreviewProvider } from "../../components/game-preview/public-provider"
+import { GamePreviewSurface } from "../../components/game-preview/game-preview-surface"
+import { previewText } from "../../../presentation/show-library-preview/ui-strings"
+import { previewLocale } from "../../components/game-preview/i18n"
 import { useRouter, useRouterState } from "@tanstack/react-router"
 import { siteText as t, siteLanguages } from "../../locales"
 import { useTranslation } from "react-i18next"
@@ -26,6 +29,15 @@ import {
   Search,
   House,
 } from "lucide-react"
+
+function selectedCatalogueGame(search: string): Game {
+  const params = new URLSearchParams(search)
+
+  return (
+    catalogue.find((game) => game.id === params.get("game")) ??
+    catalogue[params.get("view") === "demo" ? 1 : 0]
+  )
+}
 
 export function MarketingSite() {
   const previewProvider = useMemo(createPublicPreviewProvider, [])
@@ -47,18 +59,12 @@ export function MarketingSite() {
       ? requested
       : "home"
   })
-  const [selected, setSelected] = useState(
-    () =>
-      catalogue.find(
-        (game) =>
-          game.id === new URLSearchParams(window.location.search).get("game"),
-      ) ?? catalogue[0],
+  const [selected, setSelected] = useState(() =>
+    selectedCatalogueGame(window.location.search),
   )
   const [filter, setFilter] = useState("All")
   const [search, setSearch] = useState("")
   const [menu, setMenu] = useState(false)
-  const [choice, setChoice] = useState<string | null>(null)
-  const [showSampleResults, setShowSampleResults] = useState(false)
   const [notice, setNotice] = useState("")
   const visibleGames = catalogue.filter(
     (game) =>
@@ -76,12 +82,7 @@ export function MarketingSite() {
           ? requested
           : "home",
       )
-      setSelected(
-        catalogue.find(
-          (game) => game.id === new URLSearchParams(searchString).get("game"),
-        ) ?? catalogue[0],
-      )
-      window.scrollTo(0, 0)
+      setSelected(selectedCatalogueGame(searchString))
     }
     onBack()
   }, [searchString])
@@ -90,8 +91,6 @@ export function MarketingSite() {
     setView(page)
     setMenu(false)
     setNotice("")
-    setChoice(null)
-    setShowSampleResults(false)
     void router.navigate({
       to: "/",
       search:
@@ -105,6 +104,11 @@ export function MarketingSite() {
     setSelected(game)
     go("product", game.id)
   }
+  const openDemo = (game: Game = catalogue[1]) => {
+    setSelected(game)
+    go("demo", game.id)
+  }
+  const demonstration = previewText(previewLocale(i18n))
   const nav = (
     <>
       {[
@@ -125,10 +129,7 @@ export function MarketingSite() {
         key={game.id}
         game={game}
         open={() => open(game)}
-        preview={() => {
-          setSelected(game)
-          go("demo")
-        }}
+        preview={() => openDemo(game)}
       />
     ))
 
@@ -148,7 +149,7 @@ export function MarketingSite() {
             <div className="header-actions">
               <SiteButton
                 className="text-btn header-demo"
-                onClick={() => go("demo")}
+                onClick={() => openDemo()}
               >
                 <Play size={14} />
                 {t("Try a round")}
@@ -184,7 +185,7 @@ export function MarketingSite() {
               aria-label={t("Mobile navigation")}
             >
               {nav}
-              <SiteButton className="text-btn" onClick={() => go("demo")}>
+              <SiteButton className="text-btn" onClick={() => openDemo()}>
                 {t("Try a round")}
               </SiteButton>
               {getRole() === SESSION_ROLES.MANAGER ? (
@@ -223,7 +224,7 @@ export function MarketingSite() {
                     <div className="button-row cinema-buttons">
                       <SiteButton
                         className="btn btn-primary btn-lg"
-                        onClick={() => go("demo")}
+                        onClick={() => openDemo()}
                       >
                         <Play size={15} />
                         {t("Try a round")}
@@ -446,7 +447,7 @@ export function MarketingSite() {
                     </SiteButton>
                     <SiteButton
                       className="btn btn-quiet"
-                      onClick={() => go("demo")}
+                      onClick={() => openDemo(selected)}
                     >
                       <Play />
                       {t("Preview")}
@@ -485,139 +486,30 @@ export function MarketingSite() {
               <div className="eyebrow">
                 {t("TRY A ROUND · INTERACTIVE SAMPLE")}
               </div>
-              <h1 className="h1">
-                {t("Which twist would change everything?")}
-              </h1>
-              <p className="prose">
-                {t(
-                  "Choose an answer and reveal the results. This is a design demo, not a live audience vote.",
-                )}
-              </p>
-              <div className="demo-stage">
-                <img src={asset("logo")} alt="Tadazz" style={{ width: 180 }} />
-                {!showSampleResults ? (
-                  <div
-                    className="demo-choice-grid"
-                    role="group"
-                    aria-label={t("Choose an answer")}
-                  >
-                    {[
-                      "A secret",
-                      "An unexpected guest",
-                      "A wrong turn",
-                      "A lost letter",
-                      "A ticking clock",
-                    ].map((answer, index) => (
-                      <SiteButton
-                        className="demo-choice"
-                        key={t(answer)}
-                        onClick={() => setChoice(answer)}
-                        aria-pressed={choice === answer}
-                      >
-                        <span className="demo-choice-number" aria-hidden="true">
-                          {index + 1}
-                        </span>
-                        <span>{t(answer)}</span>
-                      </SiteButton>
-                    ))}
-                  </div>
-                ) : (
-                  <section
-                    className="sample-results"
-                    aria-label={t("Illustrative voting results")}
-                  >
-                    <h2 style={{ fontSize: 26, margin: "24px 0 4px" }}>
-                      {t("The big reveal!")}
-                    </h2>
-                    <p style={{ color: "#c5b0dc", margin: "0 0 20px" }}>
-                      {t(
-                        "Illustrative results only — these percentages are not real votes.",
-                      )}
-                    </p>
-                    {[
-                      ["A secret", 42],
-                      ["An unexpected guest", 24],
-                      ["A wrong turn", 18],
-                      ["A lost letter", 11],
-                      ["A ticking clock", 5],
-                    ].map(([label, share]) => (
-                      <div key={t(String(label))}>
-                        <div
-                          style={{
-                            display: "flex",
-                            justifyContent: "space-between",
-                            gap: 16,
-                            fontWeight: 650,
-                          }}
-                        >
-                          <span>{t(String(label))}</span>
-                          <span>{share}%</span>
-                        </div>
-                        <div
-                          style={{
-                            height: 10,
-                            background: "#332047",
-                            borderRadius: 20,
-                            overflow: "hidden",
-                            margin: "7px 0 14px",
-                          }}
-                        >
-                          <div
-                            style={{
-                              height: "100%",
-                              width: `${share}%`,
-                              background:
-                                String(label) === choice
-                                  ? "#e7ff37"
-                                  : "#9567d4",
-                              borderRadius: 20,
-                            }}
-                          />
-                        </div>
-                      </div>
-                    ))}
-                    <p style={{ color: "#e7ff37", fontWeight: 800 }}>
-                      {choice === "A secret"
-                        ? t("You picked the crowd's favourite!")
-                        : t("You chose {{choice}}. Try a different answer!", {
-                            choice: t(choice ?? ""),
-                          })}
-                    </p>
-                  </section>
-                )}
-                {!showSampleResults && (
-                  <p role="status">
-                    {choice
-                      ? t(
-                          "Your choice is in! {{choice}}. Reveal the example results.",
-                          { choice: t(choice) },
-                        )
-                      : t("Pick one to continue")}
-                  </p>
-                )}
-                {choice && !showSampleResults && (
-                  <SiteButton
-                    className="btn btn-primary"
-                    onClick={() => setShowSampleResults(true)}
-                  >
-                    {t("Reveal sample results")}
-                    <ArrowRight size={17} />
-                  </SiteButton>
-                )}
+              <h1 className="h1">{t(selected.title)}</h1>
+              <p className="prose">{demonstration("demo")}</p>
+              <div
+                className="demo-stage marketing-native-demo"
+                data-testid="marketing-native-demo"
+                style={{ padding: 0, overflow: "hidden", position: "relative" }}
+              >
+                <style>
+                  {
+                    ".marketing-native-demo{aspect-ratio:16/9}.marketing-native-demo>.game-preview-surface,.marketing-native-demo .game-preview-poster,.marketing-native-demo .game-cover{width:100%;height:100%}@media(max-width:640px){.marketing-native-demo{aspect-ratio:3/4}}"
+                  }
+                </style>
+                <GamePreviewSurface
+                  selection={{
+                    kind: "published-demo",
+                    catalogueId: selected.id,
+                  }}
+                  label={t("Preview")}
+                  initiallyOpen
+                >
+                  <Cover game={selected} />
+                </GamePreviewSurface>
               </div>
               <div className="button-row" style={{ marginTop: 24 }}>
-                {showSampleResults && (
-                  <SiteButton
-                    className="btn btn-outline"
-                    onClick={() => {
-                      setChoice(null)
-                      setShowSampleResults(false)
-                      window.scrollTo(0, 0)
-                    }}
-                  >
-                    {t("Try again")}
-                  </SiteButton>
-                )}
                 <SiteButton
                   className="btn btn-outline"
                   onClick={() => go("home")}
@@ -672,7 +564,7 @@ export function MarketingSite() {
                 <h3>{t("One round tells the whole story.")}</h3>
                 <SiteButton
                   className="btn btn-primary"
-                  onClick={() => go("demo")}
+                  onClick={() => openDemo()}
                 >
                   {t("Try the free round")}
                 </SiteButton>
@@ -743,7 +635,7 @@ export function MarketingSite() {
             </div>
             <div className="footer-links">{nav}</div>
             <div className="footer-links">
-              <SiteButton className="text-btn" onClick={() => go("demo")}>
+              <SiteButton className="text-btn" onClick={() => openDemo()}>
                 {t("Try a round")}
               </SiteButton>
               <SiteLink href="/studio">{t("My Studio")}</SiteLink>

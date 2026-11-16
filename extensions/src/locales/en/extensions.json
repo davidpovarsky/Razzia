@@ -183,7 +183,8 @@
     "invalidMediaType": "Only {{expected}} files are allowed here",
     "onlyImageAllowed": "Only image files are allowed for answer choices",
     "loadQuizFailed": "Failed to reload quiz",
-    "loadQuizSuccess": "Loaded latest quiz from server"
+    "loadQuizSuccess": "Loaded latest quiz from server",
+    "themeMediaInUse": "This media is retained by a saved theme or version and cannot be deleted."
   },
   "host": {
     "endTimer": "End Timer",

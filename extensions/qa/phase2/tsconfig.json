@@ -3,6 +3,7 @@
   "files": [
     "../../src/presentation/show-library-preview/application-runtime-entry.tsx",
     "../../src/server/api/account-preview-source.test.ts",
+    "../../src/server/api/theme-media-references.test.ts",
     "../../src/server/storage/import-show-references.test.ts",
     "../../src/core/show-library/application-library.test.ts",
     "../../src/core/show-library/application-preview-input.test.ts",

@@ -183,7 +183,8 @@
     "invalidMediaType": "Seuls les fichiers {{expected}} sont autorisés ici",
     "onlyImageAllowed": "Seules les images sont autorisées pour les choix de réponse",
     "loadQuizFailed": "Échec du rechargement du quiz",
-    "loadQuizSuccess": "Dernière version du quiz chargée depuis le serveur"
+    "loadQuizSuccess": "Dernière version du quiz chargée depuis le serveur",
+    "themeMediaInUse": "Ce média est conservé par un thème ou une version enregistrée et ne peut pas être supprimé."
   },
   "host": {
     "endTimer": "Arrêter le chronomètre",

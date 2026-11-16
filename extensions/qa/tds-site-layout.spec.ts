@@ -126,53 +126,17 @@ test("all eight locale labels, compact account and real unavailable billing stat
   }
 })
 
-test("marketing demo exposes choose then reveal then replay with explicit synthetic disclosure", async ({
+test("marketing demo uses the native preview frame with explicit demonstration disclosure", async ({
   page,
 }) => {
-  await page.goto("/?view=demo")
+  await page.goto("/?view=demo&game=quiz")
+  await expect(page.getByTestId("marketing-native-demo")).toBeVisible()
   await expect(
-    page.getByRole("button", { name: "Try again", exact: true }),
-  ).toHaveCount(0)
-  await expect(
-    page.getByRole("button", { name: "Reveal sample results", exact: true }),
-  ).toHaveCount(0)
-  await expect(
-    page.getByText(
-      "Choose an answer and reveal the results. This is a design demo, not a live audience vote.",
-      { exact: true },
-    ),
+    page.getByText("Demonstration only. No audience or votes.", {
+      exact: true,
+    }),
   ).toBeVisible()
-  const group = page.getByRole("group", {
-    name: "Choose an answer",
-    exact: true,
-  })
-  await expect(group.getByRole("button")).toHaveCount(5)
-  await group.getByRole("button", { name: "A secret", exact: true }).focus()
-  await page.keyboard.press("Enter")
-  await expect(
-    group.getByRole("button", { name: "A secret", exact: true }),
-  ).toHaveAttribute("aria-pressed", "true")
-  await expect(
-    page.getByRole("button", { name: "Try again", exact: true }),
-  ).toHaveCount(0)
-  await page
-    .getByRole("button", { name: "Reveal sample results", exact: true })
-    .click()
-  await expect(
-    page.getByRole("heading", { name: "The big reveal!", exact: true }),
-  ).toBeVisible()
-  await expect(
-    page.getByText(
-      "Illustrative results only — these percentages are not real votes.",
-      { exact: true },
-    ),
-  ).toBeVisible()
-  await page.getByRole("button", { name: "Try again", exact: true }).click()
-  await expect(group).toBeVisible()
-  await expect(
-    group.getByRole("button", { name: "A secret", exact: true }),
-  ).toBeInViewport()
-  await expect(group.locator('[aria-pressed="true"]')).toHaveCount(0)
+  await expect(page.locator(".demo-choice-grid,.sample-results")).toHaveCount(0)
   for (const [width, height] of [
     [1440, 900],
     [768, 1024],

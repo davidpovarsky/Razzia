@@ -519,7 +519,7 @@ export function createApplicationPreviewSession(options: {
           })
         }
       }
-      check(next.document)
+      check(next)
       for (const template of next.registry.templates) {
         if (template.roles.includes("spectator")) {
           resolveApplicationTemplate(next, "spectator", template.phase)

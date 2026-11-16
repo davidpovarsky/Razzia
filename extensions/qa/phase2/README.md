@@ -1,4 +1,4 @@
-# Phase 2 private native product QA
+# Phase 2 native product QA
 
 Run every build, browser, runtime and lint command on the Tadazz server in the isolated `tadazz-phase2-20261116` container. The owner's workstation is for source edits, Git inspection, transport and reading server-generated artifacts only.
 
@@ -11,3 +11,5 @@ Use `TADAZZ_REMOTE_QA=1` with `product.config.ts`; the browser config rejects an
 `product.spec.ts` checks actual rendered/decoded content, authoring persistence and immutable publication, source/asset/account failures, all audio event policies, mixed media clocks, original editor drag/duplicate, both renderer families, eight locales, responsive/reduced-motion behavior, long-press/cancel/click rules, rapid seek and repeated cleanup. Chromium CDP measurements are controlled laboratory observations, not field Core Web Vitals. Linux WebKit is not a physical Safari/iPad certification.
 
 Keep source manifests, failed results, successful results and artifact SHA-256 receipts. Private projections and raw traces stay on the server. Download only sanitized result summaries and screenshots needed for review. Final acceptance must identify one committed source HEAD and its derived artifact receipt; earlier partial runs are supporting evidence only.
+
+The public marketing demo and its entry points use that same native Preview surface; the former illustrative voting implementation has been removed. An optional show-brand image is selected from the existing account Media Library, independently of the platform mark. Immutable saved theme references block physical media deletion, including forced detach and archived versions. Guest room media access is restricted to the audience projection of the admitted composition.

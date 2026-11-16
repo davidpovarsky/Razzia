@@ -2,6 +2,7 @@
 /** Server-owned installation policy. Nothing here trusts tenant/grants from JSON. */
 import { createHmac } from "node:crypto"
 import { join, resolve } from "node:path"
+import { existsSync } from "node:fs"
 import { z } from "zod"
 import {
   installedPackageThemes,
@@ -103,11 +104,7 @@ export const enabledDemoThemes = () =>
 export const themeInstallerEnabled = () =>
   process.env.TADAZZ_THEME_INSTALLER_ENABLED === "true" && accountsEnabled()
 
-export function themeInstallationStore() {
-  if (!themeInstallerEnabled()) {
-    throw new ThemeInstallationError("Not found", 404)
-  }
-
+function persistentThemeInstallationStore() {
   const secret = process.env.JWT_SECRET
 
   if (!secret || secret.length < 32) {
@@ -129,6 +126,35 @@ export function themeInstallationStore() {
   }
 
   return store
+}
+
+export function themeInstallationStore() {
+  if (!themeInstallerEnabled()) {
+    throw new ThemeInstallationError("Not found", 404)
+  }
+
+  return persistentThemeInstallationStore()
+}
+
+/** Disabling the installer cannot release media retained by existing versions. */
+export function isSavedThemeMediaReferenced(
+  userId: string,
+  name: string,
+): boolean {
+  if (
+    !existsSync(
+      resolve(resolveConfigRoot(), "extensions/theme-installation.sqlite"),
+    )
+  ) {
+    return false
+  }
+
+  return (
+    persistentThemeInstallationStore().builderMediaReferences(
+      themeWorkspacePrincipal(userId, userId),
+      `/media/${name}`,
+    ).length > 0
+  )
 }
 
 export function themeWorkspaceAssignments(

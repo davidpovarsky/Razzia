@@ -325,6 +325,10 @@ class Game {
 
   /** Authorize only files referenced by this room's actual content. */
   canViewMedia(name: string): boolean {
+    if (this.extensionSession?.canViewCompositionMedia(name)) {
+      return true
+    }
+
     if (
       this.extensionSession?.themeDefinition?.assets.some(
         (asset) => asset.url === `/media/${name}`,

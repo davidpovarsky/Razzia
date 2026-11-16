@@ -631,6 +631,29 @@ export function ThemeBuilderShell({
             </div>
             <Card>
               <NativeLibraryPanel
+                brand={
+                  node?.component.id === "native.brand" && template
+                    ? {
+                        url: node.props.imageUrl,
+                        change: (url) => {
+                          const props = { ...node.props }
+
+                          if (url) {
+                            props.imageUrl = url
+                          } else {
+                            Reflect.deleteProperty(props, "imageUrl")
+                          }
+
+                          edit({
+                            type: "props",
+                            templateId: template.id,
+                            nodeId: node.nodeId,
+                            value: props,
+                          })
+                        },
+                      }
+                    : undefined
+                }
                 document={document}
                 locale={locale}
                 role={role}

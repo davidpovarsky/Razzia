@@ -28,6 +28,7 @@ export const bindingIdSchema = z.enum([
   "selected-choices",
   "estimation",
 ])
+
 export const capabilitiesSchema = z
   .strictObject({
     questionTypes: z.array(z.enum(["single", "multi", "estimation"])).max(3),
@@ -38,13 +39,20 @@ export const capabilitiesSchema = z
     phases: z.array(previewPhaseSchema).min(1).max(11),
   })
   .refine((v) => v.minAnswers <= v.maxAnswers, "show-library:answer-range")
+
 export const propsSchema = z.strictObject({
+  imageUrl: z
+    .string()
+    .max(160)
+    .regex(/^\/media\/[A-Za-z0-9_-]+\.(?:png|jpg|jpeg|webp|gif)$/u)
+    .optional(),
   labelKey: localizedKeySchema.optional(),
   titleKey: localizedKeySchema.optional(),
   fit: z.enum(["contain", "cover"]).optional(),
   showNumber: z.boolean().optional(),
   alignment: z.enum(["start", "center", "end"]).optional(),
 })
+
 export const componentDefinitionSchema = z
   .strictObject({
     ...exactRefSchema.shape,
@@ -70,10 +78,13 @@ export const componentDefinitionSchema = z
     provenance: z.string().min(1).max(1000),
   })
   .superRefine((v, ctx) => {
-    if (new Set(v.childPorts.map((p) => p.id)).size !== v.childPorts.length)
+    if (new Set(v.childPorts.map((p) => p.id)).size !== v.childPorts.length) {
       ctx.addIssue({ code: "custom", message: "show-library:duplicate-port" })
+    }
   })
+
 export type ShowComponentDefinition = z.infer<typeof componentDefinitionSchema>
+
 export const motionDefinitionSchema = z.strictObject({
   ...exactRefSchema.shape,
   kind: z.enum(["element", "screen", "transition"]),
@@ -85,12 +96,14 @@ export const motionDefinitionSchema = z.strictObject({
   seek: z.literal("unavailable"),
   reducedMotion: z.literal("same-theme-static"),
 })
+
 export const layoutSchema = z.strictObject({
   preset: z.enum(["flow", "grid", "safe-overlay"]),
   alignment: z.enum(["start", "center", "end"]),
   gap: z.enum(["none", "small", "medium", "large"]),
   lane: z.enum(["background", "content", "decoration"]),
 })
+
 export const compositionNodeSchema = z.strictObject({
   nodeId: identifierSchema,
   component: exactRefSchema,
@@ -101,6 +114,7 @@ export const compositionNodeSchema = z.strictObject({
   motions: z.array(exactRefSchema).max(8),
   children: z.partialRecord(portSchema, z.array(identifierSchema).max(32)),
 })
+
 export const screenTemplateSchema = z.strictObject({
   ...exactRefSchema.shape,
   availability: z.literal("candidate"),
@@ -131,6 +145,7 @@ export const screenTemplateSchema = z.strictObject({
     .max(3),
   fallback: z.enum(["whole-template", "safe-hold"]),
 })
+
 export const libraryRegistrySchema = z.strictObject({
   schemaVersion: z.literal(1),
   ...exactRefSchema.shape,
@@ -138,10 +153,12 @@ export const libraryRegistrySchema = z.strictObject({
   templates: z.array(screenTemplateSchema).max(128),
   motions: z.array(motionDefinitionSchema).max(64),
 })
+
 export const assetReferenceSchema = z.strictObject({
   assetId: identifierSchema,
   sha256: digestSchema,
 })
+
 export const assetDescriptorSchema = z.strictObject({
   ...assetReferenceSchema.shape,
   version: exactRefSchema.shape.version,
@@ -156,6 +173,7 @@ export const assetDescriptorSchema = z.strictObject({
   exportPermitted: z.boolean(),
   referenceCount: z.number().int().nonnegative(),
 })
+
 export const sectionOverridesSchema = z.strictObject({
   assets: z.record(identifierSchema, assetReferenceSchema).optional(),
   audio: z
@@ -177,6 +195,7 @@ export const sectionOverridesSchema = z.strictObject({
   templates: z.partialRecord(previewPhaseSchema, exactRefSchema).optional(),
   motion: z.record(identifierSchema, exactRefSchema).optional(),
 })
+
 export const themeCompositionSchema = z
   .strictObject({
     schemaVersion: z.literal(1),
@@ -200,12 +219,16 @@ export const themeCompositionSchema = z
     const seen = new Set<string>()
     for (const scope of composition.scopes) {
       const key = `${scope.scopeId}/${scope.theme.id}@${scope.theme.version}`
-      if (seen.has(key))
+
+      if (seen.has(key)) {
         ctx.addIssue({
           code: "custom",
           message: "show-library:duplicate-scope",
         })
+      }
+
       seen.add(key)
     }
   })
+
 export type ThemeComposition = z.infer<typeof themeCompositionSchema>

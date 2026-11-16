@@ -643,6 +643,20 @@ export const createExtensionRoutes = (
       )
     }
 
+    try {
+      if (injections.isThemeMediaReferenced?.(name)) {
+        return c.json(
+          { error: "extensions:errors.themeMediaInUse", references: [] },
+          StatusCodes.CONFLICT,
+        )
+      }
+    } catch {
+      return c.json(
+        { error: "errors:server.internal" },
+        StatusCodes.INTERNAL_SERVER_ERROR,
+      )
+    }
+
     const detach = c.req.query("detach") === "true"
     const mediaDir = injections.getPath("media")
     const filePath = path.join(mediaDir, name)

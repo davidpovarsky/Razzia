@@ -14,6 +14,11 @@ import type {
 } from "../../core/show-themes/selection"
 import type { BuilderTextKey } from "./strings"
 
+export interface BuilderBrandMedia {
+  url?: string
+  change: (url?: string) => void
+}
+
 const uploadedSchema = z.object({
   name: z.string().max(240),
   url: z.string().regex(/^\/media\/[A-Za-z0-9_-]+\.[a-z0-9]+$/u),
@@ -28,6 +33,7 @@ export function NativeMediaPanel({
   readOnly,
   text,
   label,
+  brand,
 }: {
   family: NativeShowLibraryFamily
   section: ThemeOverrides
@@ -35,12 +41,17 @@ export function NativeMediaPanel({
   readOnly: boolean
   text: (key: BuilderTextKey) => string
   label: (key: string) => string
+  brand?: BuilderBrandMedia
 }) {
   const [media, setMedia] = useState<UploadedMedia[]>([]),
     [target, setTarget] = useState("slot:question")
   const [failed, setFailed] = useState(false),
     [pending, setPending] = useState(false)
   const abort = useRef<AbortController | null>(null)
+  const editingBrand = Boolean(brand)
+  useEffect(() => {
+    setTarget(editingBrand ? "brand:show" : "slot:question")
+  }, [editingBrand])
   useEffect(() => {
     if (readOnly) {
       return
@@ -68,6 +79,7 @@ export function NativeMediaPanel({
 
     return () => controller.abort()
   }, [readOnly])
+  const brandTarget = target === "brand:show" && Boolean(brand)
   const audio = target.startsWith("audio:"),
     key = target.slice(target.indexOf(":") + 1)
   const slotSpec = family.definition.slots[key as ShowThemeSlotId],
@@ -81,10 +93,17 @@ export function NativeMediaPanel({
     : slotSpec?.variants.find(
         (variant) => variant.id === selectedSlot?.variantId,
       )?.backgroundAssetId
-  const selected =
+  const nativeSelected =
     (audio ? selectedAudio?.mediaUrl : selectedSlot?.mediaUrl) ??
     family.definition.assets.find((asset) => asset.id === selectedVariant)?.url
+  const selected = brandTarget ? brand?.url : nativeSelected
   const choose = (url?: string) => {
+    if (brandTarget && brand) {
+      brand.change(url)
+
+      return
+    }
+
     const builtin = family.definition.assets.find((asset) => asset.url === url)
 
     if (audio) {
@@ -155,6 +174,7 @@ export function NativeMediaPanel({
         disabled={readOnly || pending}
         onChange={(event) => setTarget(event.target.value)}
       >
+        {brand && <option value="brand:show">{text("brandComponent")}</option>}
         {family.visualSlots
           .filter((slot) => slot.customMedia === "background")
           .map((slot) => (

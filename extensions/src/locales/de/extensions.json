@@ -183,7 +183,8 @@
     "invalidMediaType": "Hier sind nur {{expected}}-Dateien erlaubt",
     "onlyImageAllowed": "Für Antwortoptionen sind nur Bilddateien erlaubt",
     "loadQuizFailed": "Quiz konnte nicht neu geladen werden",
-    "loadQuizSuccess": "Neueste Quizversion vom Server geladen"
+    "loadQuizSuccess": "Neueste Quizversion vom Server geladen",
+    "themeMediaInUse": "Diese Mediendatei wird von einem gespeicherten Theme oder einer Version verwendet und kann nicht gelöscht werden."
   },
   "host": {
     "endTimer": "Timer beenden",

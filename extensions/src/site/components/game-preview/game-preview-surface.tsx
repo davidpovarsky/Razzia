@@ -28,6 +28,7 @@ export function GamePreviewSurface({
   initialScreenId,
   audioAudition,
   dismissOnOutside = true,
+  initiallyOpen = false,
 }: {
   selection: PreviewSelection
   children: ReactNode
@@ -47,6 +48,7 @@ export function GamePreviewSurface({
     events: Array<{ id: ShowThemeAudioEvent; label: string }>
   }
   dismissOnOutside?: boolean
+  initiallyOpen?: boolean
 }) {
   const controller = useGamePreview(selection, disabled)
   const root = useRef<HTMLDivElement>(null)
@@ -58,6 +60,12 @@ export function GamePreviewSurface({
   })
   const { text, active, state } = controller
   const { session } = controller
+  const initialSelectionKey = JSON.stringify(selection)
+  useEffect(() => {
+    if (initiallyOpen && controller.enabled) {
+      controller.open()
+    }
+  }, [initiallyOpen, initialSelectionKey, controller.enabled, controller.open])
   const [soundEnabled, setSoundEnabled] = useState(false)
   const [auditionEvent, setAuditionEvent] =
     useState<ShowThemeAudioEvent>("opening")

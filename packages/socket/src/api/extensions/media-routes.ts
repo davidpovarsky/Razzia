@@ -21,6 +21,7 @@ import { deleteMedia } from "@razzia/socket/services/media"
 import {
   readInstalledThemeMedia,
   readThemePreviewMedia,
+  isSavedThemeMediaReferenced,
 } from "@razzia/socket/services/theme-installation"
 import { themeMediaResponse } from "./theme-media-response"
 import { StatusCodes } from "http-status-codes"
@@ -132,6 +133,21 @@ export const readRoomMedia = async (c: Context<ApiEnv, "/raw/:name">) => {
 
 export const deleteReferencedMedia = (c: Context<ApiEnv, "/:name">) => {
   const name = c.req.param("name")
+
+  try {
+    if (isSavedThemeMediaReferenced(c.get("claims").sub, name)) {
+      return c.json(
+        { error: "extensions:errors.themeMediaInUse", references: [] },
+        StatusCodes.CONFLICT,
+      )
+    }
+  } catch {
+    return c.json(
+      { error: "errors:server.internal" },
+      StatusCodes.INTERNAL_SERVER_ERROR,
+    )
+  }
+
   const detach = c.req.query("detach") === "true"
   const safety = checkMediaDeleteSafety(getPath, name, {
     detach,

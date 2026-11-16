@@ -80,7 +80,7 @@ export function createAccountPreviewAccess(accountId: string) {
       document: unknown
       digest: string
       version: string
-      admission: { rendererBuildSha256: string }
+      admission: { rendererBuildSha256: string; assets: unknown }
     }>(
       `/api/themes/builder/${encodeURIComponent(pin.workspaceId)}/documents/${encodeURIComponent(pin.documentId)}/published/${encodeURIComponent(pin.version)}`,
       { signal },
@@ -96,6 +96,33 @@ export function createAccountPreviewAccess(accountId: string) {
       result.admission.rendererBuildSha256 !== pin.rendererBuildSha256
     ) {
       throw new SiteApiError(409, "preview-composition-changed")
+    }
+
+    const retainedAssets = mediaBindingsSchema.parse(result.admission.assets)
+
+    if (retainedAssets.length) {
+      if (pin.workspaceId !== accountId) {
+        throw new SiteApiError(403, "preview-workspace-media-denied")
+      }
+
+      const response = await siteRequest<{ assets: unknown }>(
+        "/api/extensions/preview/assets",
+        {
+          method: "POST",
+          body: JSON.stringify({
+            urls: retainedAssets.map((asset) => asset.url),
+          }),
+          signal,
+        },
+      )
+      const actual = mediaBindingsSchema.parse(response.assets)
+
+      if (
+        getClientId() !== accountId ||
+        JSON.stringify(actual) !== JSON.stringify(retainedAssets)
+      ) {
+        throw new SiteApiError(409, "preview-composition-assets-changed")
+      }
     }
 
     return { registry: document.registry, document: document.content }
