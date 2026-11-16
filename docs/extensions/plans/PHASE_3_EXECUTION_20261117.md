@@ -58,3 +58,15 @@ Final release verdict remains NOT READY unless all required gates are met.
 ## Progress
 
 - Intake complete; independent bounded work packets being prepared.
+- A dispatched: `e0c87b17-8d33-415c-811a-1370aa05654a`; B read-only probe: `c76cfcf7-a3d2-4bf5-98a7-ee98ba0001db`. Both Hydrogen XHigh, disjoint write scopes.
+- Manager direct Node24 checks: design/token/catalog exit0; historical boundary exit1, 23 known protected mismatches. `git diff 12ba2f4 -- packages extensions/src/editor` empty. Raw receipts in Cezar Assets. Initial pnpm invocation automatically bootstrapped its own package-manager version and timed out; no application lock/config changes; remaining owned guard PID stopped.
+
+## Owner testing-location update and remote preflight
+
+Owner reaffirmed on 17 November: heavy browser/UI testing belongs on the existing Tadazz host only where safely isolated. No production service/data/DNS/Caddy/asset/secret changes; synthetic disposable state, localhost/internal-only ports, strict resource bounds. Ask before uncertain/risky provisioning. Both current workers notified through their Cezar inboxes.
+
+Read-only SSH succeeded with existing pinned host key. Host is `tadazz-quiz-server`, Linux aarch64, 2 CPUs, approximately 10 GiB available RAM, load 0.31/0.15/0.10. Disk is only 1,360,257,024 bytes free: no installs/images/source-tree duplication/cleanup or substantial artifact writes admitted.
+
+Existing approved `tadazz-phase2-20261116` is running, network NONE, no published ports, CPU1.5 / memory5GiB / PIDs384, approximately27MiB working memory at preflight. Chromium1248 and WebKit2370 caches exist; Node24.22.2. Its source cwd is `/cleanup` (not `/work`). It also retains a read-only approved-input customer mount: Phase3 tests MUST NOT use that mount or its customer fixtures. Existing browser processes require ownership/state inspection before reuse; no restart/kill was performed.
+
+Production `tadazz`, phone gateway, metadata keeper and all other containers were inspected via selected metadata only and left untouched. No credentials, customer DB contents, live assets or production logs read. No remote mutation/provisioning yet. Detailed host/container and browser dependency probe receipts are in Cezar Assets.
