@@ -11,6 +11,7 @@ import { quizzValidator } from "@razzia/common/validators/quizz"
 import {
   computeCanonicalBaseDigest,
   createDefaultQuizExtrasV2,
+  quizExtrasV2Schema,
   type AnyQuizExtras,
 } from "@razzia/extensions/core"
 import type { NativeCreationOperationBinding } from "../../src/server/storage/creation-operation-types"
@@ -181,14 +182,37 @@ function spawnRecoveryChild(options: SpawnChildOptions): ChildExecution {
   }
 }
 
-async function allocateSyntheticRoot(): Promise<RecoveryFixtureHandle> {
+async function allocateSyntheticRoot(options?: {
+  activate?: boolean
+}): Promise<RecoveryFixtureHandle> {
+  const activate = options?.activate ?? true
+  const parent = fixtureParentDir()
+
+  process.env.C1_FIXTURE_ROOT = parent
+
+  if (!activate) {
+    const root = fs.mkdtempSync(
+      path.join(parent, "tadazz-c1-native-synthetic-"),
+    )
+    const token = randomUUID()
+
+    fs.writeFileSync(
+      path.join(root, ".c1-fixture.json"),
+      JSON.stringify({ kind: "c1-synthetic", token }),
+    )
+    const handle = { root, token }
+
+    ownedRoots.push(handle)
+
+    return handle
+  }
+
   const { closeAccountDb } =
     await import("../../../packages/socket/src/services/account-db")
   const { createCreationFixture } =
     await import("../../src/server/storage/creation-fixture")
 
   closeAccountDb()
-  process.env.C1_FIXTURE_ROOT = fixtureParentDir()
   const created = createCreationFixture()
 
   process.env.CONFIG_PATH = created.root
@@ -309,7 +333,7 @@ function buildV2Extras(options: {
         name: options.mediaName,
         url: mediaUrl,
         type: "image",
-        addedAt: Date.now(),
+        addedAt: 1700000000000,
       },
     ]
     extras.perQuestion[questionId] = {
@@ -325,7 +349,7 @@ function buildV2Extras(options: {
     }
   }
 
-  return extras
+  return quizExtrasV2Schema.parse(extras)
 }
 
 async function createTenantQuizWithV2(options: {
@@ -845,6 +869,10 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
   // SIGKILL at intent committed before operation.json settles
   const bindingCommitted = makeBinding("sigkill-committed")
   const inputCommitted = buildSampleInput("Op Committed Crash")
+  const extrasCommitted = buildV2Extras({
+    quizId: "placeholder",
+    baseDigest: computeCanonicalBaseDigest(inputCommitted),
+  })
 
   const killedCommitted = spawnRecoveryChild({
     mode: "interrupt-op-committed",
@@ -855,10 +883,7 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
       ownerId: tenantA.id,
       binding: bindingCommitted,
       input: inputCommitted,
-      extras: buildV2Extras({
-        quizId: "placeholder",
-        baseDigest: computeCanonicalBaseDigest(inputCommitted),
-      }),
+      extras: extrasCommitted,
     },
   })
 
@@ -923,7 +948,7 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
       sequence: "retry-committed",
       binding: bindingCommitted,
       input: inputCommitted,
-      extras: null,
+      extras: extrasCommitted,
     },
   })
 
@@ -931,6 +956,26 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
   assert.deepStrictEqual(
     readOperationFile(root, "retry-committed").outcome,
     committedOutcome.result,
+  )
+
+  const conflictCommitted = spawnRecoveryChild({
+    mode: "op-create",
+    root,
+    token,
+    accountsEnabled: "true",
+    payload: {
+      ownerId: tenantA.id,
+      sequence: "conflict-committed",
+      binding: bindingCommitted,
+      input: inputCommitted,
+      extras: null,
+    },
+  })
+
+  assert.equal(conflictCommitted.status, 2)
+  assert.match(
+    String(readOperationFile(root, "conflict-committed").error),
+    /changed/iu,
   )
 
   // Tampered operation.json target fails lookup safely without throwing NativeOperationConflict
@@ -1210,8 +1255,18 @@ test("3. composite rev-2->rev-3 save & media-delete SIGKILL recovery preserving 
 
   await withAccount(tenantA.id, () => {
     const detached = service.getCompositeQuiz(createdA.quizId)
+    const detachedQuestions = detached.quizz.questions as Array<{
+      media?: unknown
+    }>
 
-    assert.equal(detached.digestMatches, true)
+    assert.equal(detached.exists, true)
+    assert.equal(detachedQuestions[0].media, undefined)
+    assert(detached.extras !== null)
+    assert.equal(quizExtrasV2Schema.safeParse(detached.extras).success, true)
+    assert.equal(
+      JSON.stringify(detached.extras).includes("pilot-hero.png"),
+      false,
+    )
   })
 
   receiptChecks.push({
@@ -1306,7 +1361,7 @@ test("4. checksum-verified backup capture, tamper refusal, disposable restore, a
   )
 
   // Negative check: tampered manifest digest and tampered payload fail with zero target mutation
-  const restoreRoot = await allocateSyntheticRoot()
+  const restoreRoot = await allocateSyntheticRoot({ activate: false })
   const manifestPath = path.join(backupDir, "backup-manifest.json")
   const originalManifestRaw = fs.readFileSync(manifestPath, "utf8")
   const badManifest = JSON.parse(originalManifestRaw) as Record<string, unknown>
@@ -1379,6 +1434,9 @@ test("4. checksum-verified backup capture, tamper refusal, disposable restore, a
 
   // Mutate sourceRoot to rev 3 + extra stray quiz, then roll back via verified backup
   process.env.CONFIG_PATH = root
+  process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
+  assert.equal(process.env.CONFIG_PATH, root)
+  assert.equal(process.env.TADAZZ_ACCOUNTS_ENABLED, "true")
   const rev3Input = buildSampleInput("Unwanted Rev 3 Mutation")
   const rev3Digest = computeCanonicalBaseDigest(rev3Input)
 
@@ -1452,9 +1510,26 @@ test("4. checksum-verified backup capture, tamper refusal, disposable restore, a
   ) as {
     composite: { extras: { revision: number }; quizz: { subject: string } }
   }
+  const afterRollbackB = JSON.parse(
+    fs.readFileSync(
+      path.join(root, ".recovery-verify-rollback-b.json"),
+      "utf8",
+    ),
+  ) as {
+    composite: {
+      digestMatches: boolean
+      extras: { revision: number }
+      quizz: { subject: string }
+    }
+  }
 
   assert.equal(afterRollbackA.composite.extras.revision, 2)
   assert.equal(afterRollbackA.composite.quizz.subject, "Backup Stable Rev 2")
+  assert.equal(afterRollbackB.composite.digestMatches, true)
+  assert.equal(
+    afterRollbackB.composite.quizz.subject,
+    "TenantB Backup Sentinel",
+  )
 
   receiptChecks.push({
     id: "test-4-backup-restore-rollback",
@@ -1596,10 +1671,11 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
   fs.unlinkSync(traversalJournal)
 
   // 5c. Symlinked tenant and symlinked SQLite DB refusal
-  const symlinkTarget = await allocateSyntheticRoot()
+  const symlinkTarget = await allocateSyntheticRoot({ activate: false })
   const tenantBId = randomUUID()
   const linkedTenantPath = path.join(root, "tenants", tenantBId)
 
+  assert.equal(process.env.CONFIG_PATH, root)
   fs.symlinkSync(symlinkTarget.root, linkedTenantPath)
   const dbWithLinkedTenant = new DatabaseSync(
     path.join(root, "tadazz-accounts.sqlite"),
@@ -1632,7 +1708,7 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
   cleanupDb.close()
 
   // Symlinked DB check on a dedicated root
-  const symDbRoot = await allocateSyntheticRoot()
+  const symDbRoot = await allocateSyntheticRoot({ activate: false })
   const realExternalDb = path.join(symlinkTarget.root, "external.sqlite")
 
   fs.copyFileSync(path.join(root, "tadazz-accounts.sqlite"), realExternalDb)

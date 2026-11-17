@@ -313,6 +313,13 @@ async function runInterruptMode(
       await withAccount(payload.ownerId, () =>
         executeMediaDeleteTransaction(native.getPath, mediaName, {
           detach: true,
+          deleteMediaFn: () => {
+            const target = native.getPath(`media/${path.basename(mediaName)}`)
+
+            if (fs.existsSync(target)) {
+              fs.unlinkSync(target)
+            }
+          },
         }),
       )
     } finally {
