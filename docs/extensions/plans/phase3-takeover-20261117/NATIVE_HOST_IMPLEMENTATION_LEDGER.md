@@ -97,3 +97,12 @@ wait for the authenticated email in the real Studio before starting OAuth.
 These are pending QA repairs, not claimed passes. Preserve both failed receipts.
 Reuse only hash-identical task-owned SDK cache copies, mounted read-only, to
 avoid copying66 MiB on every bounded browser run. Record SDK hashes before/after.
+
+163cb92 immutable Linux again passes HTTP16/16, types/lint/format/build, all1671
+hashes. Fresh browsers167.454s:4/6 PASS; both engines pass the negative security
+packet and all8 locales. Both positive flows performed trusted approval, MCP
+retry/native save and Studio navigation, then failed because a title text
+locator also matched a hidden delete-dialog description. Require the actual
+game heading by exact accessible name; the editor and B-account reopen checks
+remain mandatory afterward. SDK cache hashes before/after match. Not yet a full
+browser acceptance and not production/ChatGPT evidence.

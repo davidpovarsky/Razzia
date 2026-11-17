@@ -11,8 +11,9 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
-assert sys.argv[1:] in ([], ["--apply"], ["--failed-native-c412"], ["--failed-native-c412", "--apply"])
-RUNS = (["tadazz-codex-c4125d58a746-2fea79ad"] if "--failed-native-c412" in sys.argv else
+assert sys.argv[1:] in ([], ["--apply"], ["--failed-native-c412"], ["--failed-native-c412", "--apply"], ["--failed-native-714"], ["--failed-native-714", "--apply"])
+RUNS = (["tadazz-codex-7141211d6932-e5d56c61"] if "--failed-native-714" in sys.argv else
+        ["tadazz-codex-c4125d58a746-2fea79ad"] if "--failed-native-c412" in sys.argv else
         ["tadazz-codex-45b266bd74ae-6f7c237d", "tadazz-codex-a9a3fe2d68aa-da23916f"])
 inputs = {}
 for run in RUNS:
@@ -32,7 +33,7 @@ targets=[]
 proofs=[]
 preserve=[]
 for run,item in c['inputs'].items():
-    assert run in ('tadazz-codex-45b266bd74ae-6f7c237d','tadazz-codex-a9a3fe2d68aa-da23916f','tadazz-codex-c4125d58a746-2fea79ad')
+    assert run in ('tadazz-codex-45b266bd74ae-6f7c237d','tadazz-codex-a9a3fe2d68aa-da23916f','tadazz-codex-c4125d58a746-2fea79ad','tadazz-codex-7141211d6932-e5d56c61')
     source=base/run/'source'
     assert source.resolve()==source and source.is_dir() and not source.is_symlink()
     manifest=item['files']
@@ -43,7 +44,7 @@ for run,item in c['inputs'].items():
         assert file.resolve()==file and file.is_file()
         assert hashlib.sha256(file.read_bytes()).hexdigest()==expected,name
     extra=[p.relative_to(source).as_posix() for p in source.rglob('*') if p.is_file() and not p.is_symlink() and p.relative_to(source).as_posix() not in manifest]
-    assert all(run=='tadazz-codex-c4125d58a746-2fea79ad' and name.startswith(('packages/web/dist/','extensions/test-results/')) for name in extra),extra
+    assert all(run in ('tadazz-codex-c4125d58a746-2fea79ad','tadazz-codex-7141211d6932-e5d56c61') and name.startswith(('packages/web/dist/','extensions/test-results/')) for name in extra),extra
     generated={name:hashlib.sha256((source/name).read_bytes()).hexdigest() for name in extra}
     traces=source/'extensions/test-results'
     if traces.exists():
@@ -79,7 +80,8 @@ print(json.dumps({'apply':c['apply'],'preservedEvidenceCommit':c['evidenceCommit
 '''
 remote = REMOTE.replace("c=CONFIG", "c=" + repr(config))
 result = subprocess.run(["ssh", "-i", str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "ubuntu@132.145.25.168", "sudo -n python3 -"], input=remote, capture_output=True, text=True, encoding="utf8", timeout=90)
-prefix = "cleanup-owned-native-c412" if "--failed-native-c412" in sys.argv else "cleanup-owned"
+prefix = ("cleanup-owned-native-714" if "--failed-native-714" in sys.argv else
+          "cleanup-owned-native-c412" if "--failed-native-c412" in sys.argv else "cleanup-owned")
 output = BASE / (prefix + ("-applied.json" if config["apply"] else "-dry-run.json"))
 if result.returncode:
     print(result.stderr)

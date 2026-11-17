@@ -498,7 +498,9 @@ test.describe("phase 3 native consent Studio integration", () => {
         expect(quizId).toMatch(/^[A-Za-z0-9_-]{21}$/u)
 
         await page.goto("/studio/games")
-        await expect(page.getByText(showTitle)).toBeVisible()
+        await expect(
+          page.getByRole("heading", { name: showTitle, exact: true }),
+        ).toBeVisible()
         await page.goto(`/manager/quizz/${quizId}`)
         expect(editorDocHeaders["x-frame-options"]).toBeUndefined()
         expect(editorDocHeaders["cache-control"]).toBeUndefined()
