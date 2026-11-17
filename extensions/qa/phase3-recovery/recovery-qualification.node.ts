@@ -349,7 +349,9 @@ function buildV2Extras(options: {
     }
   }
 
-  return quizExtrasV2Schema.parse(extras)
+  // Return raw valid V2 extras omitting optional Zod defaults so saveCompositeQuiz
+  // schema-normalization invariants are exercised end-to-end across crash replay.
+  return extras
 }
 
 async function createTenantQuizWithV2(options: {
@@ -524,6 +526,11 @@ after(async () => {
         fs.readFileSync(path.resolve(import.meta.dirname, "backup-restore.ts")),
       ),
       "recovery-child.ts": sha256Hex(fs.readFileSync(CHILD_SCRIPT)),
+      "recovery-invariants.node.ts": sha256Hex(
+        fs.readFileSync(
+          path.resolve(import.meta.dirname, "recovery-invariants.node.ts"),
+        ),
+      ),
       "recovery-qualification.node.ts": sha256Hex(
         fs.readFileSync(import.meta.filename),
       ),
@@ -687,12 +694,14 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
     native,
     { accountsEnabled, activeAccount, withAccount },
     { closeAccountDb },
+    { creationTree },
     { NativeOperationConflict },
     { createNativeCreationPort },
   ] = await Promise.all([
     import("../../../packages/socket/src/services/config"),
     import("../../../packages/socket/src/services/account-scope"),
     import("../../../packages/socket/src/services/account-db"),
+    import("../../src/server/storage/creation-fixture"),
     import("../../src/server/storage/creation-operation-record"),
     import("../../src/server/storage/creation-reservation"),
   ])
@@ -978,7 +987,23 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
     /changed/iu,
   )
 
-  // Tampered operation.json target fails lookup safely without throwing NativeOperationConflict
+  // Real in-process conflict throws NativeOperationConflict without mutating tree
+  const treeBeforeConflict = creationTree(root)
+
+  await withAccount(tenantA.id, () => {
+    assert.throws(
+      () =>
+        operations.create(
+          binding1,
+          buildSampleInput("In-Process Conflict"),
+          null,
+        ),
+      NativeOperationConflict,
+    )
+  })
+  assert.deepStrictEqual(creationTree(root), treeBeforeConflict)
+
+  // Tampered operation.json target fails lookup safely as unresolved without mutating tenants
   const opFile = path.join(
     root,
     ".tadazz-creation-operations-v1",
@@ -988,6 +1013,7 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
   const tamperedOp = JSON.parse(fs.readFileSync(opFile, "utf8")) as {
     target: { quizId: string }
   }
+  const treeBeforeTamper = creationTree(root)
 
   tamperedOp.target.quizId = "../../bad"
   fs.writeFileSync(opFile, JSON.stringify(tamperedOp), { mode: 0o600 })
@@ -995,11 +1021,25 @@ test("2. native C1 operation journal idempotency, conflict, SIGKILL replay, and 
     const status = operations.lookup(binding1)
 
     assert.equal(status.status, "unresolved")
+    assert.equal(status.quizId, null)
     assert.throws(
-      () => new NativeOperationConflict("sentinel"),
-      NativeOperationConflict,
+      () => operations.create(binding1, input1, null),
+      /unresolved|Invalid native operation target/iu,
     )
   })
+
+  const tenantStateAfterTamper = Object.fromEntries(
+    Object.entries(creationTree(root)).filter(([key]) =>
+      key.startsWith("tenants/"),
+    ),
+  )
+  const tenantStateBeforeTamper = Object.fromEntries(
+    Object.entries(treeBeforeTamper).filter(([key]) =>
+      key.startsWith("tenants/"),
+    ),
+  )
+
+  assert.deepStrictEqual(tenantStateAfterTamper, tenantStateBeforeTamper)
 
   receiptChecks.push({
     id: "test-2-c1-operation-journal",
@@ -1260,6 +1300,7 @@ test("3. composite rev-2->rev-3 save & media-delete SIGKILL recovery preserving 
     }>
 
     assert.equal(detached.exists, true)
+    assert.equal(detached.digestMatches, true)
     assert.equal(detachedQuestions[0].media, undefined)
     assert(detached.extras !== null)
     assert.equal(quizExtrasV2Schema.safeParse(detached.extras).success, true)
@@ -1670,8 +1711,16 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
   )
   fs.unlinkSync(traversalJournal)
 
-  // 5c. Symlinked tenant and symlinked SQLite DB refusal
+  // 5c. Symlinked tenant and symlinked SQLite DB refusal (precise deny + untouched target)
   const symlinkTarget = await allocateSyntheticRoot({ activate: false })
+  const targetSentinelPath = path.join(
+    symlinkTarget.root,
+    "target-sentinel.json",
+  )
+  const targetSentinelBytes = JSON.stringify({ keep: "untouched-target" })
+
+  fs.writeFileSync(targetSentinelPath, targetSentinelBytes, "utf8")
+  const beforeTargetEntries = fs.readdirSync(symlinkTarget.root).sort()
   const tenantBId = randomUUID()
   const linkedTenantPath = path.join(root, "tenants", tenantBId)
 
@@ -1697,8 +1746,17 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
 
   assert.throws(
     () => recoverStartupOwnerJournals(readStartupOwnerSnapshot()),
-    /Unsafe known recovery root/u,
+    /^Unsafe startup owner metadata path$/u,
   )
+  assert.throws(
+    () => readStartupOwnerSnapshot(),
+    /^Unsafe startup owner metadata path$/u,
+  )
+  assert.deepStrictEqual(
+    fs.readdirSync(symlinkTarget.root).sort(),
+    beforeTargetEntries,
+  )
+  assert.equal(fs.readFileSync(targetSentinelPath, "utf8"), targetSentinelBytes)
   closeAccountDb()
   fs.unlinkSync(linkedTenantPath)
 
@@ -1712,6 +1770,8 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
   const realExternalDb = path.join(symlinkTarget.root, "external.sqlite")
 
   fs.copyFileSync(path.join(root, "tadazz-accounts.sqlite"), realExternalDb)
+  const externalDbDigestBefore = sha256Hex(fs.readFileSync(realExternalDb))
+
   fs.symlinkSync(
     realExternalDb,
     path.join(symDbRoot.root, "tadazz-accounts.sqlite"),
@@ -1719,7 +1779,11 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
   process.env.CONFIG_PATH = symDbRoot.root
   assert.throws(
     () => readStartupOwnerSnapshot(),
-    /Owner snapshot|Unsafe|regular/iu,
+    /^Unsafe startup owner metadata path$/u,
+  )
+  assert.equal(
+    sha256Hex(fs.readFileSync(realExternalDb)),
+    externalDbDigestBefore,
   )
   closeAccountDb()
   process.env.CONFIG_PATH = root

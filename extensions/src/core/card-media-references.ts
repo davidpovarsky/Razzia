@@ -1,4 +1,5 @@
 // oxlint-disable typescript/no-unnecessary-condition -- Keep runtime guards for sparse legacy maps, optional browser APIs, and asynchronous snapshots; indexed types are optimistic without noUncheckedIndexedAccess.
+import { computeCanonicalBaseDigest } from "./digest"
 import type { QuizExtrasV2 } from "./studio-timeline-schema"
 import {
   collectThemeMediaUrls,
@@ -483,6 +484,49 @@ export const findMediaReferencesAcrossShows = (
  * Pure helper that detaches all references to `urlOrName` from a single show's
  * quiz and extras (used only when an explicit force-detach delete is requested).
  */
+function stripStorageId(
+  record: Record<string, unknown>,
+): Record<string, unknown> {
+  const { id: _storageId, ...payload } = record
+
+  return payload
+}
+
+function resolvePostDetachBaseDigest(params: {
+  beforeQuizz: object
+  afterQuizz: object
+  extras: MediaExtras
+}): string | null {
+  const { beforeQuizz, afterQuizz, extras } = params
+  const beforeRecord = beforeQuizz as Record<string, unknown>
+  const afterRecord = afterQuizz as Record<string, unknown>
+
+  if (
+    (extras.schemaVersion !== 1 && extras.schemaVersion !== 2) ||
+    typeof extras.quizId !== "string" ||
+    extras.quizId.length === 0 ||
+    typeof extras.baseDigest !== "string" ||
+    !/^[a-f0-9]{64}$/u.test(extras.baseDigest)
+  ) {
+    return null
+  }
+
+  if (computeCanonicalBaseDigest(beforeRecord) === extras.baseDigest) {
+    return computeCanonicalBaseDigest(afterRecord)
+  }
+
+  if (
+    "id" in beforeRecord &&
+    beforeRecord.id === extras.quizId &&
+    computeCanonicalBaseDigest(stripStorageId(beforeRecord)) ===
+      extras.baseDigest
+  ) {
+    return computeCanonicalBaseDigest(stripStorageId(afterRecord))
+  }
+
+  return null
+}
+
 export const detachMediaFromShowData = <
   TQuizz extends {
     questions?: Array<{
@@ -504,6 +548,7 @@ export const detachMediaFromShowData = <
 } => {
   const target = normalizeMediaTarget(urlOrName)
   let modified = false
+  let baseModified = false
   const matchesTarget = (u?: string | null): boolean => {
     if (!u) {
       return false
@@ -521,6 +566,7 @@ export const detachMediaFromShowData = <
     nextQuizz.questions = nextQuizz.questions.map((q) => {
       if (q.media?.url && matchesTarget(q.media.url)) {
         modified = true
+        baseModified = true
         const nextQ = {
           ...q,
         }
@@ -726,6 +772,18 @@ export const detachMediaFromShowData = <
 
     if (nextExtras.mediaCatalog.length !== before) {
       modified = true
+    }
+  }
+
+  if (baseModified) {
+    const nextDigest = resolvePostDetachBaseDigest({
+      beforeQuizz: quizz,
+      afterQuizz: nextQuizz,
+      extras,
+    })
+
+    if (nextDigest !== null) {
+      Object.assign(nextExtras, { baseDigest: nextDigest })
     }
   }
 
