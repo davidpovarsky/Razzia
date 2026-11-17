@@ -6,6 +6,12 @@ import { createFirstPartyOAuth } from "../../src/mcp-app/first-party/oauth.ts"
 import { createFullShowSelectionPortV3 } from "../../src/mcp-app/server/full-show-selection.ts"
 import { normalizeDraft } from "../../src/mcp-app/server/authoring.ts"
 import { hashJson } from "../../src/mcp-app/contracts/canonical.ts"
+import { PREVIEW_RESOURCE } from "../../src/mcp-app/contracts/schemas.ts"
+import { sha256Hex } from "../../src/core/digest.ts"
+import {
+  Client,
+  StreamableHTTPClientTransport,
+} from "../phase3-mcp-service/mcp-client.ts"
 import { fullShowInventoryV3Schema } from "../../src/mcp-app/contracts/full-show-selection.ts"
 import { compileFullShowPreviewTimeline } from "../../src/core/show-library/full-show-preview-timeline.ts"
 import {
@@ -90,7 +96,10 @@ async function linked(
   index: 0 | 1,
   scopes: readonly string[] = ["tadazz.drafts.read", "tadazz.drafts.write"],
 ) {
-  const grant = await authorizePkceGrant({
+  return issuer.verifyAccessToken((await grantFor(index, scopes)).accessToken)
+}
+function grantFor(index: 0 | 1, scopes: readonly string[]) {
+  return authorizePkceGrant({
     origin,
     nativeToken: f.sessions[index].token,
     scopes,
@@ -103,8 +112,6 @@ async function linked(
       return issuer.fetch(request)
     },
   })
-
-  return issuer.verifyAccessToken(grant.accessToken)
 }
 function authored() {
   const original = show("Selection-only full show")
@@ -412,6 +419,62 @@ test("abort and a mutable principal during an asynchronous repository read fail 
   await assert.rejects(() =>
     port.getHostSource(a, prepared, AbortSignal.abort()),
   )
+})
+test("actual issuer and official MCP SDK deliver the reviewed base CSP on the HTML content", async () => {
+  const html =
+    '<!doctype html><html><head><base href="https://tadazz.com/"></head><body></body></html>'
+  const csp = {
+    connectDomains: [],
+    frameDomains: [],
+    resourceDomains: ["https://tadazz.com"],
+    baseUriDomains: ["https://tadazz.com"],
+  }
+  const instance = issuer.remote({
+    allowedOrigins: [],
+    dependencies: {
+      rateLimit: () => Promise.resolve(true),
+      previewUiResource: {
+        html,
+        sha256: sha256Hex(html),
+        csp,
+        canServe: () => true,
+      },
+    },
+  })
+  const grant = await grantFor(0, ["tadazz.drafts.read"])
+  const client = new Client({
+    name: "full-show-base-csp-local-qa",
+    version: "1",
+  })
+
+  try {
+    await client.connect(
+      new StreamableHTTPClientTransport(new URL(`${origin}/mcp`), {
+        authProvider: { token: () => Promise.resolve(grant.accessToken) },
+        fetch: (input, init) => {
+          const request = new Request(input, init)
+          assert.equal(new URL(request.url).origin, origin)
+          request.headers.set("host", new URL(origin).host)
+
+          return instance.fetch(request)
+        },
+      }),
+    )
+    const result = await client.readResource({ uri: PREVIEW_RESOURCE })
+    const [content] = result.contents
+    // oxlint-disable-next-line typescript/no-unnecessary-condition -- The remote resource may be empty despite optimistic indexed typing.
+    assert(content && "text" in content)
+    assert.equal(content.text, html)
+    const ui = content._meta?.ui as { csp: unknown } | undefined
+    assert.deepEqual(ui?.csp, csp)
+    assert.doesNotMatch(
+      JSON.stringify(result),
+      new RegExp(grant.accessToken, "u"),
+    )
+  } finally {
+    await client.close()
+    await instance.close()
+  }
 })
 test("revoking the actual underlying first-party session invalidates an already prepared frame", async () => {
   const record = await created(b)

@@ -84,3 +84,29 @@ adapter. Real repository tests then exposed the canonical bookend defect above.
 Windows focused regression was26/28 before fixing the trusted-default fixture:
 one new fixture comparison error now fixed; the unchanged OAuth Unix mode check
 expected0600 but Windows reported0666. Actual Linux gate remains required.
+
+65bf41f7c47bfa58bbf5c313e0f6b3e72c51224e Linux/ext4 qualification now PASS:
+11/11 selection +15/15 asset reader +24/24 original authoring/OAuth/preview
+regressions, focused types/lint/format. All1681 archived source hashes unchanged.
+The unchanged0600 OAuth test passes on Linux. No skipped tests. Receipt:
+tadazz-codex-65bf41f7c47b-f2258c12/receipt.json. No full-show rendering or live
+host connection is claimed. Original Asana parent/MCP02..11 checkpoint appended
+with11/11 exact readbacks, all OPEN (ASANA_FULL_SHOW_SELECTION_READBACK.json).
+
+Pre-edit next scope: server/preview-resource.ts accepts optional standard MCP
+Apps baseUriDomains with the existing exact HTTPS-origin validation, preserving
+the old three-field default CSP. Fix wildcard host admission in the shared origin
+validator; no wildcard, credentials, path, query or fragment. A reviewed static
+full-show artifact may later declare a fixed public base for original relative
+native asset URLs, without changing source renderers/providers or injecting
+customer HTML/JS. CSP metadata alone grants no asset/renderer acceptance. Prove
+optional metadata retention, legacy shape, unsafe origins, immutable descriptor
+checks and official SDK resource delivery with focused QA before wiring a build.
+
+CSP local proof:3/3 resource checks +12/12 actual issuer selection/SDK checks
+PASS, focused types/lint/format PASS. Official MCP client reads exact static
+HTML and baseUriDomains from content._meta.ui.csp over the actual OAuth-backed
+remote service; no browser full-show/production install proof. Legacy resources
+retain their original three-field CSP. Wildcards now fail all four lists and a
+runtime callback returning a truthy non-boolean is denied (literal true required).
+No inline script permission, wasm-unsafe-eval, blob origin or customer JS added.

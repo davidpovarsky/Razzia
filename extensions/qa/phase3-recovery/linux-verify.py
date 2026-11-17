@@ -158,8 +158,8 @@ if c["suite"] in ("full-show-assets", "full-show-selection"):
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
     check("full-show-assets", 60, tsx + [scope[1]])
     if c["suite"] == "full-show-selection":
-        scope += ["extensions/src/mcp-app/contracts/full-show-selection.ts", "extensions/src/mcp-app/server/full-show-selection.ts", "extensions/src/mcp-app/server/authoring.ts", "extensions/qa/phase3-full-show/selection.nodecheck.ts"]
-        check("full-show-selection", 90, tsx + [scope[-1]])
+        scope += ["extensions/src/mcp-app/contracts/full-show-selection.ts", "extensions/src/mcp-app/server/full-show-selection.ts", "extensions/src/mcp-app/server/authoring.ts", "extensions/src/mcp-app/server/preview-resource.ts", "extensions/qa/phase3-full-show/selection.nodecheck.ts", "extensions/qa/phase3-full-show/resource-csp.nodecheck.ts"]
+        check("full-show-selection", 90, tsx + scope[-2:])
         regression = "extensions/src/mcp-app/tests/"
         check("selection-authoring-regressions", 120, tsx + [regression + p for p in ["server/drafts.nodecheck.ts", "server/integrity.nodecheck.ts", "server/boundaries.nodecheck.ts", "first-party/oauth.nodecheck.ts", "first-party/preview-candidate.nodecheck.ts"]])
     check("assets-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-full-show/tsconfig.json"])
