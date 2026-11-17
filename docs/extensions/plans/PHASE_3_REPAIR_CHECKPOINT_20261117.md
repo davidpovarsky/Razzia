@@ -164,3 +164,30 @@ qualify disposable recovery; complete downstream browser consent/Studio reopen
 and Widget full-show seams without protected edits; final independent security
 review and single-source acceptance. Site checks stay affected-first. All
 external hosts/PSTN/deployments remain separately gated. Release **NOT READY**.
+
+## 09:40 UTC capacity and queue recovery
+
+Repeated e17507c7 deliveries were deduplicated without rerunning settled tests,
+remerging source or creating workers. Its new postturn note alleges a
+tools=0 closeout quota loop; manager's live API independently confirms original
+task plus continue1..17 all FAILED with the same quota error. No clean lifecycle
+is inferred. No Cezar/tooling/configuration repair or account fallback attempted.
+
+The same project-scoped read now shows existing phone8de82781 **RUNNING**,
+first iteration, no queue hold. This is actual task state, not a model-list
+quota claim. The separate D qualification packet was therefore dispatched as
+child9of12: `1e96bb6f-0451-4568-aeab-c14c0fb708cd`, Antigravity Hydrogen XHigh,
+retry-limit0. Exclusive new QA scope `extensions/qa/phase3-recovery/**`;
+storage/product/protected sources read-only. It must reuse existing C1,
+journal/Sidecar/process witnesses and add only the missing coherent synthetic
+restart/backup/restore/rollback qualification. Manager owns all remote tests.
+Quota refusal checkpoints/stops; no automatic closeout retry requests.
+
+Three slots remain for downstream consent/Studio, Widget full-show and final
+independent security review. Site verification remains deterministic manager
+work. Both original service repair lifecycles remain FAILED; source acceptance
+and recovery ACK decisions are unchanged.
+
+All five required HQ Phase3 files now exist as clearly marked **rolling**
+checkpoints, not completed delivery. Parent Asana checkpoint1220598431410135
+was readback verified. Original parent/tasks stay OPEN; release NOT READY.
