@@ -264,13 +264,14 @@ export class CompositeStorageService {
       )
     }
 
+    const validatedExtras = extrasValidation.data
     const questionsCount = Array.isArray(quizz.questions)
       ? quizz.questions.length
       : 0
 
-    if (extras.questionIds.length !== questionsCount) {
+    if (validatedExtras.questionIds.length !== questionsCount) {
       throw new CompositeStorageError(
-        `Question IDs count mismatch: extras has ${extras.questionIds.length} IDs but base quiz has ${questionsCount} questions`,
+        `Question IDs count mismatch: extras has ${validatedExtras.questionIds.length} IDs but base quiz has ${questionsCount} questions`,
         StatusCodes.BAD_REQUEST,
       )
     }
@@ -278,9 +279,9 @@ export class CompositeStorageService {
     // 3. Verify base digest matches submitted quizz
     const actualBaseDigest = computeCanonicalBaseDigest(quizz)
 
-    if (actualBaseDigest !== extras.baseDigest) {
+    if (actualBaseDigest !== validatedExtras.baseDigest) {
       throw new CompositeStorageError(
-        `Digest conflict: base quiz digest (${actualBaseDigest}) does not match extras baseDigest (${extras.baseDigest})`,
+        `Digest conflict: base quiz digest (${actualBaseDigest}) does not match extras baseDigest (${validatedExtras.baseDigest})`,
         StatusCodes.CONFLICT,
       )
     }
@@ -308,7 +309,7 @@ export class CompositeStorageService {
     }
 
     const updatedExtras: AnyQuizExtras = {
-      ...extras,
+      ...validatedExtras,
       quizId,
       baseDigest: actualBaseDigest,
       revision: newRevision,

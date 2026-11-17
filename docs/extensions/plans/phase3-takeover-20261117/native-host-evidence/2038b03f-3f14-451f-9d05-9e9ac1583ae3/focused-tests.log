@@ -1,0 +1,108 @@
+TAP version 13
+# Subtest: valid public metadata passes without claiming host installation
+ok 1 - valid public metadata passes without claiming host installation
+  ---
+  duration_ms: 36.5532
+  type: 'test'
+  ...
+# Subtest: SPA HTML on every route fails every public gate
+ok 2 - SPA HTML on every route fails every public gate
+  ---
+  duration_ms: 2.1663
+  type: 'test'
+  ...
+# Subtest: rejects wrong issuer
+ok 3 - rejects wrong issuer
+  ---
+  duration_ms: 3.0158
+  type: 'test'
+  ...
+# Subtest: rejects foreign token endpoint
+ok 4 - rejects foreign token endpoint
+  ---
+  duration_ms: 2.7967
+  type: 'test'
+  ...
+# Subtest: rejects PKCE plain only
+ok 5 - rejects PKCE plain only
+  ---
+  duration_ms: 2.0877
+  type: 'test'
+  ...
+# Subtest: rejects malformed PKCE type
+ok 6 - rejects malformed PKCE type
+  ---
+  duration_ms: 1.1189
+  type: 'test'
+  ...
+# Subtest: rejects wrong audience
+ok 7 - rejects wrong audience
+  ---
+  duration_ms: 1.3645
+  type: 'test'
+  ...
+# Subtest: rejects private signing key
+ok 8 - rejects private signing key
+  ---
+  duration_ms: 1.705
+  type: 'test'
+  ...
+# Subtest: oversized and redirected documents fail without following locations
+ok 9 - oversized and redirected documents fail without following locations
+  ---
+  duration_ms: 3.4733
+  type: 'test'
+  ...
+# Subtest: invalid configuration cannot issue network requests
+ok 10 - invalid configuration cannot issue network requests
+  ---
+  duration_ms: 1.1535
+  type: 'test'
+  ...
+# (node:5116) ExperimentalWarning: Type Stripping is an experimental feature and might change at any time
+# (Use `node --trace-warnings ...` to show where the warning was created)
+# Subtest: machine/discovery GET and HEAD cannot fall through to SPA or static bytes
+ok 11 - machine/discovery GET and HEAD cannot fall through to SPA or static bytes
+  ---
+  duration_ms: 48.1855
+  type: 'test'
+  ...
+# Subtest: configured machine paths are denied before SPA and asset resolution
+ok 12 - configured machine paths are denied before SPA and asset resolution
+  ---
+  duration_ms: 11.0567
+  type: 'test'
+  ...
+# Subtest: Studio GET and HEAD retain identical HTML headers and HEAD has no body
+ok 13 - Studio GET and HEAD retain identical HTML headers and HEAD has no body
+  ---
+  duration_ms: 2.4051
+  type: 'test'
+  ...
+# Subtest: OAuth consent and configured consent HTML use the existing root security policy
+ok 14 - OAuth consent and configured consent HTML use the existing root security policy
+  ---
+  duration_ms: 11.3966
+  type: 'test'
+  ...
+# Subtest: assets retain content types and missing assets do not become HTML
+ok 15 - assets retain content types and missing assets do not become HTML
+  ---
+  duration_ms: 4.5125
+  type: 'test'
+  ...
+# Subtest: unsafe encoded segments and unsupported methods fail closed
+ok 16 - unsafe encoded segments and unsupported methods fail closed
+  ---
+  duration_ms: 0.8556
+  type: 'test'
+  ...
+1..16
+# tests 16
+# suites 0
+# pass 16
+# fail 0
+# cancelled 0
+# skipped 0
+# todo 0
+# duration_ms 389.211

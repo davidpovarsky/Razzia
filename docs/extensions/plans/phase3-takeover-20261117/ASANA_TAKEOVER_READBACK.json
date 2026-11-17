@@ -1,0 +1,46 @@
+{
+  "activeConversation": "01a1e9e9-ad5b-77a3-bafe-bcedce32246a",
+  "sourceHead": "34cfd464ac0bba432701b87f10f4f8388d665066",
+  "sourceState": "UNCOMMITTED",
+  "updatedTasks": 7,
+  "readbacks": [
+    {
+      "task": "1220539632193783",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539638955304",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539632251971",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539638965463",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220539769107140",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220109925694179",
+      "verified": true,
+      "completed": false
+    },
+    {
+      "task": "1220111293723790",
+      "verified": true,
+      "completed": false
+    }
+  ],
+  "allVerifiedOpen": true,
+  "evidence": "native-host-evidence/51e33c1f-4ce9-4010-b91f-d2bf781a7a57/receipt.json",
+  "note": "\n\n=== Codex takeover checkpoint — 2026-11-17 — 01a1e9e9-ad5b-77a3-bafe-bcedce32246a ===\nOwner authorized safe production deployment, remote HTTPS/MCP/OAuth routing and PRIVATE ChatGPT connection in this conversation. Old Cezar manager remains stopped. NOT_READY; no deployment or real host connection performed.\nBase/HEAD 34cfd464ac0bba432701b87f10f4f8388d665066 on codex/tadazz-phase3-takeover-20261117. Changes are UNCOMMITTED: sandbox denies shared Git index.lock; no new immutable SHA is claimed.\nReviewed static fallback from preserved consent WIP: machine/discovery paths now fail JSON instead of successful SPA HTML; actual consent HTML GET/HEAD receives existing root security headers. Added read-only bounded endpoint preflight. Focused host/preflight16/16, real schema/storage recovery invariants3/3, original caller regressions52/52 PASS on Windows Node24.22.1; counts overlap, not full-product acceptance. Focused types/lint/configured format PASS. ui design/tokens/catalog PASS; historical freeze FAIL23 plus old allowlist denials. packages/editor delta from handoff EMPTY.\nExact commands, output and before/after source hashes: docs/extensions/plans/phase3-takeover-20261117/native-host-evidence/51e33c1f-4ce9-4010-b91f-d2bf781a7a57/receipt.json. Source bytes unchanged during verification. Other takeover conversation stopped after preserving its Recovery work.\nOpen gates: real isolated Linux/ext4 8/8, human browser consent + same-account Studio reopen, full-show Widget/redacted contract/assets/CSP, final independent security/combined-SHA matrix, actual production backup/rollback and genuine installed ChatGPT E2E. Broad TS147 remains historical unclosed. Execution blocks: Git metadata write denied; Docker unavailable/WSL denied; SSH/network unavailable; app stop/remote execution tools require approval while policy is never. Current domain could not be re-verified; no endpoint readiness claimed. All tasks remain OPEN.\n"
+}

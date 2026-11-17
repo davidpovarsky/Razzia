@@ -1,0 +1,12 @@
+
+ RUN  v5.0.3 C:/Users/DAVID/Code/Razzia-worktrees/tadazz-phase3-codex-takeover-20261117/extensions
+
+
+ Test Files  5 passed (5)
+      Tests  52 passed (52)
+   Start at  16:49:40
+   Duration  6.82s (import 47%, transform 30%, tests 22%, worker 1%)
+
+    Isolate  5 workers spawned · ~285ms startup each (spawn + environment, per file)
+             at least ~1.14s faster with isolate: false — reuses workers across files instead of one per file
+
