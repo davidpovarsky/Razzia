@@ -269,3 +269,45 @@ renderer as documented in the accepted probe; do not dispatch a pretend
 widget-only completion or change redaction/rights/CSP without an explicit
 manager-owned contract revision. Native host and final security sequencing
 must preserve that boundary. No production/customer/provider actions.
+
+## 11:16 UTC exact downstream recovery correction authorization
+
+Rework `2ede51d6dc311c32d0bcdee66e57730c144682e7` is still NOT ACCEPTED:
+manager actual Linux ext4 **3/5 PASS,2 FAIL**, QA types/lint/format PASS.
+Test2's remaining failure expects an Error constructor to throw by itself
+(line998), not an actual operation boundary; preserve the real tampered-lookup
+`unresolved` assertion and strengthen no-mutation checks instead. Test5 now
+correctly rejects earlier at native owner metadata snapshot, but its regex only
+recognizes the later recovery-root rejection; assert the exact earlier deny and
+unchanged linked target, not an arbitrary exception. Raw
+`server-recovery-2ede51d-verification.json`; worker receipt hashes now computed.
+
+**Do not accept removed post-detach digest assertion as a repair.** Manager
+independently executed the actual `detachMediaFromShowData` and canonical digest
+functions without filesystem/customer mutation. After question media removal,
+the stored base digest stays old while the recomputed changed-base digest
+differs; assertion fails. Receipt `server-media-detach-digest-red-stdin.json`.
+Initial tsx `--eval` emitted no witness and is NOT proof; retained separately.
+This confirms a real downstream invariant defect, not merely a QA premise.
+
+The existing service failure is also source-pinned: `saveCompositeQuiz`
+validates a Zod-normalized V2 value but stages raw extras; next read adds defaults
+and fails the complete-intent recovery comparison. Original ext4 crash failure
+and worker's isolated reproduction are retained. Normalizing only the new QA
+input avoids the bug but does not qualify this internal service boundary.
+
+### Manager-owned pre-edit ledger — this task's authorized D correction
+
+| Exact file / symbol | Minimal authorized change | Required proof |
+|---|---|---|
+| `extensions/src/server/storage/service.ts` / `CompositeStorageService.saveCompositeQuiz` updated-extras construction | Persist the already successfully validated canonical `extrasValidation.data`, consistent with create path; preserve revision/CAS/digest/account/journal APIs | Failing valid-raw-V2/defaulted-scene regression before fix; persisted canonical sidecar, original crash/replay witness, invalid payload/CAS rejection unchanged |
+| `extensions/src/core/card-media-references.ts` / `detachMediaFromShowData` | Preserve correct base/sidecar binding when actual native question media is removed; do not manufacture a digest on partial legacy extras or launder an already mismatched original binding | Manager actual-helper RED above; V1/V2 digest-after-detach GREEN, unrelated/sidecar-only refs unchanged, original input immutable, stale-original binding fails closed |
+| `extensions/qa/phase3-recovery/**` | Exact regressions, remaining invalid QA assertions/root guards, restore post-detach `digestMatches === true`, programmatic receipts | Full new ext4 suite and focused media/storage regressions, raw RED/GREEN, real source hashes |
+
+This is an explicit narrow downstream scope revision within the owner's Phase3
+Recovery/Media mandate, not permission for `packages/**`, original editor,
+schemas/contracts, runtime rewrites, new storage engines, deployments or customer
+data access. No other runtime files may change. Native-host worker owns disjoint
+paths; API/DTO/IDs stay frozen. Existing same D worker only; no new child slot.
+If the two exact changes cannot satisfy the demonstrated invariants, stop and
+report the exact blocker rather than widening scope or weakening tests.
