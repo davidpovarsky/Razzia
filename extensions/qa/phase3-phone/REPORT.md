@@ -71,3 +71,23 @@ nice -n 19 timeout 120s \
 
 - Run [phone-v2-live-fixture.node.ts](phone-v2-live-fixture.node.ts) in the isolated Linux `tadazz-phase2-20261116` runtime container (`/tmp/phase3-999ed90c/source`) to obtain Linux POSIX custody execution receipts (`LIVE-FULL-CHAIN`).
 - Any owner/manager review of `cez/44fdfcc0` before merge; feature flags remain default-OFF; real PSTN/provider telephony remains gated outside Phase 3 Unit C.
+
+## 6. Phase 3 Unit C Fixture Startup Repair (`8de82781`)
+
+- **Candidate base**: Cherry-picked `4a1d92b03d734d96717c26873686c68d6c76735c` onto `cez/999ed90c` (`5dc99be8a61418cc0ab899b4a6d1857a22b44bed`). Runtime auth/game code unchanged (`extensions/src/server/phone-lifecycle-v2/game-facade.ts` inherited untouched; zero edits to `packages/**`, `MCP/**`, `storage/**`, or `extensions/src/editor/**`).
+- **Confirmed RED root causes in [phone-v2-live-fixture.node.ts](phone-v2-live-fixture.node.ts)**:
+  1. **Module evaluation order (`owner_authority_denied` at line 191 + frozen `GAME_SPEED=1`)**: Static `import { UnmountedPhoneAuthority }` loaded `native-account-authority.ts` (`import { jwtSecret as existingVerificationSecret } from "@razzia/socket/env"`) before lines 64-88 cleared inherited env vars and set synthetic `JWT_SECRET` and `GAME_SPEED="10"`. `NativeAccountAuthority.prepareManager` -> `assertStrictProfile()` rejected `process.env.JWT_SECRET !== existingVerificationSecret` with `owner_authority_denied`, and `@razzia/socket/env` captured default `gameSpeed=1` (`SECOND_MS=1000`). Fixed by converting static `unmounted-factory` / `gateway-v2` / `@razzia/socket/test/fixtures` imports to type-only imports + dynamic `await import(...)` after `process.env` initialization, plus startup assertions verifying `env.jwtSecret === fixtureJwtSecret` (no secret printed) and `env.gameSpeed === Number(process.env.GAME_SPEED)`.
+  2. **Missing `authorityRoot` synthetic marker (`PrivateAuthorityFiles.assertRoot()`)**: `setupRoom` omitted `{ name: "PHONE_V2A_SYNTHETIC_ONLY", content: "synthetic-v2a-only\n" }` when creating `authorityRoot`, which `PrivateAuthorityFiles.assertRoot()` requires on Linux (`lstatSync` would fail with `ENOENT`). Added the marker to `authorityRoot` matching `lifecycleRoot`.
+  3. **20s window assertion event (`STATUS.SHOW_QUESTION` vs `STATUS.SELECT_ANSWER`)**: `RoundManager` emits `cooldown` (no `time` field) on `STATUS.SHOW_QUESTION` and emits `time: 20` on `STATUS.SELECT_ANSWER`. Updated the Q1 assertion to wait for and assert `STATUS.SELECT_ANSWER` `.data.time === 20`.
+- **Added startup/contract regression suite**: [phone-v2-authority-startup.test.ts](phone-v2-authority-startup.test.ts) proves the static-import RED witness (`owner_authority_denied`, `gameSpeed=1`), dynamic-import real `NativeAccountAuthority` preparation + unverified rejection + `GAME_SPEED=10`, and real Socket.IO `STATUS.SELECT_ANSWER` `time: 20` contract.
+- **Prepared Linux container verification command** (manager-owned `tadazz-phase2-20261116` / `/tmp/phase3-999ed90c/source`; **NOT RUN LOCALLY** on `win32` due to POSIX `0o600`/`0o700` + `O_NOFOLLOW` custody):
+
+```bash
+PHASE3_PHONE_TEMP_ROOT=/tmp/phase3-999ed90c \
+NODE_OPTIONS="--max-old-space-size=1024" \
+nice -n 19 taskset -c 0 timeout -k 5 120 \
+node /cleanup/extensions/node_modules/tsx/dist/cli.mjs \
+  --tsconfig /tmp/phase3-999ed90c/source/tsconfig.json \
+  --test --test-concurrency=1 \
+  extensions/qa/phase3-phone/phone-v2-live-fixture.node.ts
+```

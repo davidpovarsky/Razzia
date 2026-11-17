@@ -15,36 +15,18 @@ import { after, test } from "node:test"
 import { io as connect } from "socket.io-client"
 import { EVENTS, QUIZZ_MODES, SESSION_ROLES } from "@razzia/common/constants"
 import { STATUS } from "@razzia/common/types/game/status"
-import {
-  createEstimationQuestion,
-  createQuestion,
-  createQuizz,
-} from "@razzia/socket/test/fixtures"
 import type {
   Action,
   Receipt,
 } from "../../src/server/phone-lifecycle-v2/contracts"
-import { UnmountedPhoneAuthority } from "../../src/server/phone-lifecycle-v2/auth/unmounted-factory"
-import { PrivateGatewayAdapter } from "../../src/telephony/pilot-runtime/gateway-v2/adapter"
-import { PrivateCallOperationHost } from "../../src/telephony/pilot-runtime/gateway-v2/call-operation-host"
-import {
-  CALL_PRECOMMIT_CONTENT,
-  CALL_PRECOMMIT_MARKER,
-  PrivateCallPrecommit,
-  type GatewayCallAttempt,
-} from "../../src/telephony/pilot-runtime/gateway-v2/call-precommit"
-import {
-  GATEWAY_KEY_PURPOSE,
-  GATEWAY_ROOT_CONTENT,
-  GATEWAY_ROOT_MARKER,
-  type GatewayPrivateKeyPort,
-  type GatewayTarget,
+import type { UnmountedPhoneAuthority as UnmountedPhoneAuthorityInstance } from "../../src/server/phone-lifecycle-v2/auth/unmounted-factory"
+import type { PrivateCallOperationHost as PrivateCallOperationHostInstance } from "../../src/telephony/pilot-runtime/gateway-v2/call-operation-host"
+import type { GatewayCallAttempt } from "../../src/telephony/pilot-runtime/gateway-v2/call-precommit"
+import type {
+  GatewayPrivateKeyPort,
+  GatewayTarget,
 } from "../../src/telephony/pilot-runtime/gateway-v2/contracts"
-import {
-  OPERATION_PRECOMMIT_CONTENT,
-  OPERATION_PRECOMMIT_MARKER,
-  type GatewayOperationIntent,
-} from "../../src/telephony/pilot-runtime/gateway-v2/operation-precommit"
+import type { GatewayOperationIntent } from "../../src/telephony/pilot-runtime/gateway-v2/operation-precommit"
 
 // POSIX 0o600/0o700 + O_NOFOLLOW custody modules require the Linux runtime container.
 assert.notEqual(
@@ -87,6 +69,34 @@ process.env.TADAZZ_BILLING_ENABLED = "false"
 process.env.RESEND_API_KEY = "synthetic-never-sent"
 process.env.TADAZZ_AUTH_EMAIL_FROM = "phase3-phone-qa@example.invalid"
 
+// Import runtime modules only AFTER process.env is configured so @razzia/socket/env
+// binds the fixture's JWT_SECRET and GAME_SPEED instead of capturing pre-setup values.
+const { createEstimationQuestion, createQuestion, createQuizz } =
+  await import("@razzia/socket/test/fixtures")
+const { UnmountedPhoneAuthority } =
+  await import("../../src/server/phone-lifecycle-v2/auth/unmounted-factory")
+const { PrivateGatewayAdapter } =
+  await import("../../src/telephony/pilot-runtime/gateway-v2/adapter")
+const { PrivateCallOperationHost } =
+  await import("../../src/telephony/pilot-runtime/gateway-v2/call-operation-host")
+const { CALL_PRECOMMIT_CONTENT, CALL_PRECOMMIT_MARKER, PrivateCallPrecommit } =
+  await import("../../src/telephony/pilot-runtime/gateway-v2/call-precommit")
+const { GATEWAY_KEY_PURPOSE, GATEWAY_ROOT_CONTENT, GATEWAY_ROOT_MARKER } =
+  await import("../../src/telephony/pilot-runtime/gateway-v2/contracts")
+const { OPERATION_PRECOMMIT_CONTENT, OPERATION_PRECOMMIT_MARKER } =
+  await import("../../src/telephony/pilot-runtime/gateway-v2/operation-precommit")
+const { jwtSecret: envJwtSecret, gameSpeed: envGameSpeed } =
+  await import("@razzia/socket/env")
+assert.ok(
+  envJwtSecret === fixtureJwtSecret,
+  "@razzia/socket/env loaded before fixture JWT_SECRET initialization",
+)
+assert.equal(
+  envGameSpeed,
+  Number(process.env.GAME_SPEED),
+  "@razzia/socket/env loaded before fixture GAME_SPEED initialization",
+)
+
 const accountDb = await import("@razzia/socket/services/account-db")
 const account = await import("@razzia/socket/services/account-auth")
 const auth = await import("@razzia/socket/services/auth")
@@ -113,7 +123,7 @@ const socketAddress = server.address()
 assert.ok(socketAddress && typeof socketAddress !== "string")
 const baseUrl = `http://127.0.0.1:${socketAddress.port}`
 
-const factories: UnmountedPhoneAuthority[] = []
+const factories: UnmountedPhoneAuthorityInstance[] = []
 const sockets: Array<ReturnType<typeof connect>> = []
 const observations: unknown[] = []
 const ALL_ACTIONS: readonly Action[] = ["register", "poll", "answer", "hangup"]
@@ -172,7 +182,10 @@ async function setupRoom(quizz: ReturnType<typeof createQuizz>) {
     subject.user.id,
     () => new Game(io, subject.user.id, quizz),
   )
-  const authorityRoot = privateDir("authority")
+  const authorityRoot = privateDir("authority", {
+    name: "PHONE_V2A_SYNTHETIC_ONLY",
+    content: "synthetic-v2a-only\n",
+  })
   const lifecycleRoot = privateDir("lifecycle", {
     name: "PHONE_V2A_SYNTHETIC_ONLY",
     content: "synthetic-v2a-only\n",
@@ -280,7 +293,7 @@ function makeCallPrecommit(
 
 function makeOperation(
   room: Awaited<ReturnType<typeof setupRoom>>,
-  host: PrivateCallOperationHost,
+  host: PrivateCallOperationHostInstance,
   intent: GatewayOperationIntent,
 ) {
   const opRoot = privateDir("op", {
@@ -626,8 +639,15 @@ test(
 
     const host = await connectManager(room)
     await host.start()
+    await waitFor(
+      () =>
+        host.statusPayloads.some(
+          (s) => s.name === STATUS.SELECT_ANSWER && s.data.time === 20,
+        ),
+      "Q1 SELECT_ANSWER time=20",
+    )
     const questionStatus = host.statusPayloads
-      .filter((s) => s.name === STATUS.SHOW_QUESTION)
+      .filter((s) => s.name === STATUS.SELECT_ANSWER)
       .at(-1)
     assert.equal(questionStatus?.data.time, 20)
 
