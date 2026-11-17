@@ -21,8 +21,8 @@ SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
 CONTAINER = "tadazz-phase2-20261116"
 SHA = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 SUITE = sys.argv[1] if len(sys.argv) > 1 else "recovery"
-if SUITE not in ("recovery", "native-consent"):
-    raise SystemExit("Expected recovery or native-consent")
+if SUITE not in ("recovery", "native-consent", "native-proxy"):
+    raise SystemExit("Expected recovery, native-consent or native-proxy")
 REUSE = len(sys.argv) == 4 and sys.argv[2] == "--reuse-run"
 RUN = sys.argv[3] if REUSE else f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
 if not re.fullmatch(r"tadazz-codex-" + SHA[:12] + r"-[a-f0-9]{8}", RUN):
@@ -161,11 +161,12 @@ if c["suite"] == "recovery":
 else:
     native = "extensions/qa/phase3-native-consent/"
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
-    http_ok = check("native-http", 180, tsx + [native + "host-lifetime.nodecheck.ts", native + "consent-routes.nodecheck.ts", native + "native-host-e2e.nodecheck.ts"])
+    cases = [native + "host-lifetime.nodecheck.ts", native + "consent-routes.nodecheck.ts", native + "native-host-e2e.nodecheck.ts"]
+    http_ok = check("native-http", 180, tsx + cases)
     check("native-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", native + "tsconfig.json"])
     check("native-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "extensions/src/mcp-app/native-host", native])
     check("native-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", "extensions/src/mcp-app/native-host", native, "extensions/src/site/web/studio/Studio.tsx"])
-    if http_ok:
+    if http_ok and c["suite"] == "native-consent":
         prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
         # Consent/browser qualification does not manufacture a full-show pin or
         # rewrite the tracked preview-build manifest. Full-show is a later gate.
@@ -189,9 +190,12 @@ if result.returncode != 0:
 receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
-required_gate = "ext4-full8" if SUITE == "recovery" else "native-site-build"
+required_gate = "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-site-build"
 passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
 if passed and SUITE == "native-consent":
     browser = ROOT / "extensions/qa/phase3-native-consent/browser-verify.py"
     sys.exit(subprocess.run([sys.executable, str(browser), RUN], cwd=ROOT).returncode)
+if passed and SUITE == "native-proxy":
+    proxy = ROOT / "extensions/qa/phase3-native-consent/proxy-verify.py"
+    sys.exit(subprocess.run([sys.executable, str(proxy), "--source-run", RUN, "--immutable"], cwd=ROOT).returncode)
 sys.exit(0 if passed else 1)

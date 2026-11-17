@@ -7,6 +7,12 @@ must remain stopped. This document is not evidence of deployment or installation
 
 ## Current verified result, resumed execution
 
+Latest native consent qualification: [3741f5f scoped evidence](NATIVE_CONSENT_QUALIFICATION.md),
+Linux HTTP16/16 and actual Chromium/WebKit6/6 PASS with unchanged source/SDK
+hashes. This supersedes the earlier7141211 browser failures below. Separate
+opt-in proxy proof passed against the existing production Nginx image; immutable
+proxy qualification and actual deployment are still pending.
+
 Shared Git metadata and existing SSH/Linux QA access now work under effective
 danger-full-access / approval_policy=never. No duplicate chat was created.
 Runtime repairs are committed at ec061f7bbb2cc74cf27a9a8d78ed2fe7d0ae15be.

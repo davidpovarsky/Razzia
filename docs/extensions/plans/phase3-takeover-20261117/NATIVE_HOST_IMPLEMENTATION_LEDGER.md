@@ -106,3 +106,14 @@ locator also matched a hidden delete-dialog description. Require the actual
 game heading by exact accessible name; the editor and B-account reopen checks
 remain mandatory afterward. SDK cache hashes before/after match. Not yet a full
 browser acceptance and not production/ChatGPT evidence.
+
+Before proxy implementation: add only an opt-in downstream
+extensions/deployment/nginx-mcp-routes.conf and a focused real-Nginx QA test.
+No existing include, production proxy, DNS, credential, protected source or editor
+change. Proxy /mcp, /oauth, /.well-known and the two consent route namespaces
+before SPA fallback. Preserve raw URI, authorization and Origin, remove ordinary
+forwarding headers, disable buffering/cache and retain the service's64 KiB cap
+and deadlines. An explicitly declared tadazz_native_mcp upstream is required.
+Prove actual protected service metadata/JWKS/401/JSON failures and real consent
+GET/HEAD policy through isolated TLS Nginx. No mock issuer, installed-host claim
+or automatic production activation is allowed from this proxy test.
