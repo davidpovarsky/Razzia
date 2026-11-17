@@ -70,7 +70,10 @@ with tarfile.open(archive_path, "r:gz") as archive:
         p = pathlib.PurePosixPath(member.name)
         assert not p.is_absolute() and ".." not in p.parts
         assert member.isfile() or member.isdir()
-    archive.extractall(source, filter="data")
+    # This QA image's Python predates extractall(filter=...). Every member was
+    # checked above: only regular files/directories, no absolute/traversal paths,
+    # links or special files, into a newly-created private source directory.
+    archive.extractall(source)
 for directory in ["", "extensions", "packages/common", "packages/socket", "packages/web", "extensions/src/mcp-app"]:
     target = pathlib.Path(source) / directory / "node_modules"
     dependency = pathlib.Path("/cleanup") / directory / "node_modules"
