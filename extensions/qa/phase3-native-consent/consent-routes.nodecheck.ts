@@ -237,6 +237,8 @@ describe("native-host consent routes and security headers", () => {
     process.env.TADAZZ_ACCOUNTS_ENABLED = "true"
     process.env.JWT_SECRET = `test-jwt-${"k".repeat(48)}`
 
+    const accountDb = await import("@razzia/socket/services/account-db")
+    accountDb.getAccountDb()
     const tls = createLoopbackTlsCertificate()
     const keys = createEphemeralOAuthKeys()
     let serverOrigin = "https://127.0.0.1:1"
@@ -463,6 +465,7 @@ describe("native-host consent routes and security headers", () => {
         process.env.JWT_SECRET = prevJwt
       }
 
+      accountDb.closeAccountDb()
       rmSync(root, { recursive: true, force: true })
     }
   })

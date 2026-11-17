@@ -6,6 +6,7 @@ No service restart, installation, image build, customer operation or cleanup.
 import hashlib
 import json
 import pathlib
+import re
 import shlex
 import subprocess
 import sys
@@ -22,28 +23,63 @@ SHA = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True)
 SUITE = sys.argv[1] if len(sys.argv) > 1 else "recovery"
 if SUITE not in ("recovery", "native-consent"):
     raise SystemExit("Expected recovery or native-consent")
-RUN = f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
-EVIDENCE = ROOT / "docs/extensions/plans/phase3-takeover-20261117" / RUN
+REUSE = len(sys.argv) == 4 and sys.argv[2] == "--reuse-run"
+RUN = sys.argv[3] if REUSE else f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
+if not re.fullmatch(r"tadazz-codex-" + SHA[:12] + r"-[a-f0-9]{8}", RUN):
+    raise SystemExit("Reuse source must belong to this exact immutable SHA")
+EVIDENCE_BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
+EVIDENCE = EVIDENCE_BASE / (RUN + "-retry-" + uuid.uuid4().hex[:8] if REUSE else RUN)
 EVIDENCE.mkdir()
 ARCHIVE = pathlib.Path(tempfile.mkdtemp(prefix=RUN)) / "source.tar.gz"
 SOURCE_PATHS = ["extensions", "packages", "package.json", "tsconfig.json",
                 "pnpm-workspace.yaml", "pnpm-lock.yaml", "oxlint.config.ts",
                 ".prettierrc.json", ".prettierrc", "prettier.config.mjs"]
 tracked = subprocess.check_output(["git", "ls-files", *SOURCE_PATHS], cwd=ROOT, text=True).splitlines()
-subprocess.run(["git", "archive", "--format=tar.gz", "-o", str(ARCHIVE), SHA,
-                "--", *sorted({p.split('/')[0] for p in tracked})], cwd=ROOT, check=True)
-with tarfile.open(ARCHIVE, "r:gz") as archive:
-    manifest = {}
-    for member in archive.getmembers():
-        if member.isfile():
-            manifest[member.name] = hashlib.sha256(archive.extractfile(member).read()).hexdigest()
-        elif not member.isdir():
-            raise RuntimeError(f"Unexpected archive member: {member.name}")
+if REUSE:
+    previous_input = json.loads((EVIDENCE_BASE / RUN / "input-manifest.json").read_text(encoding="utf8"))
+    assert previous_input["sha"] == SHA
+    manifest = previous_input["files"]
+else:
+    subprocess.run(["git", "archive", "--format=tar.gz", "-o", str(ARCHIVE), SHA,
+                    "--", *sorted({p.split('/')[0] for p in tracked})], cwd=ROOT, check=True)
+    with tarfile.open(ARCHIVE, "r:gz") as archive:
+        manifest = {}
+        for member in archive.getmembers():
+            if member.isfile():
+                manifest[member.name] = hashlib.sha256(archive.extractfile(member).read()).hexdigest()
+            elif not member.isdir():
+                raise RuntimeError(f"Unexpected archive member: {member.name}")
 (EVIDENCE / "input-manifest.json").write_text(json.dumps({"sha": SHA, "files": manifest}, indent=2) + "\n", encoding="utf8", newline="\n")
-remote_archive = f"/tmp/{RUN}.tar.gz"
-subprocess.run(["scp", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
-                "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes",
-                str(ARCHIVE), f"ubuntu@132.145.25.168:{remote_archive}"], check=True)
+if not REUSE:
+    inspected = json.loads(subprocess.check_output([*SSH, "sudo -n docker inspect " + CONTAINER]))[0]
+    assert inspected["State"]["Running"] and inspected["HostConfig"]["NetworkMode"] == "none"
+    assert not inspected["HostConfig"].get("PortBindings")
+    extract_stream = r"""
+import os,pathlib,shutil,sys,tarfile
+source=pathlib.Path(sys.argv[1]);fixture=pathlib.Path(sys.argv[2])
+source.parent.mkdir(mode=0o700,exist_ok=False)
+source.mkdir(mode=0o700);fixture.mkdir(mode=0o700)
+assert os.statvfs(fixture).f_bavail * os.statvfs(fixture).f_frsize > 512*1024*1024
+with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
+    for member in archive:
+        relative=pathlib.PurePosixPath(member.name)
+        assert not relative.is_absolute() and ".." not in relative.parts
+        assert member.isfile() or member.isdir()
+        destination=source.joinpath(*relative.parts)
+        if member.isdir(): destination.mkdir(parents=True,exist_ok=True)
+        else:
+            destination.parent.mkdir(parents=True,exist_ok=True)
+            with destination.open("xb") as output: shutil.copyfileobj(archive.extractfile(member),output)
+            destination.chmod(member.mode & 0o777)
+"""
+    extraction = shlex.join(["sudo", "-n", "docker", "exec", "-i", CONTAINER,
+                              "python3", "-c", extract_stream,
+                              f"/evidence/{RUN}/source", f"/evidence/{RUN}/fixtures"])
+    with ARCHIVE.open("rb") as archive_stream:
+        transferred = subprocess.run([*SSH, extraction], stdin=archive_stream, capture_output=True, timeout=120)
+    if transferred.returncode:
+        (EVIDENCE / "transfer.stderr.log").write_bytes(transferred.stderr)
+        raise SystemExit(transferred.stderr.decode(errors="replace"))
 
 # The remote controller uses argv arrays and writes only fresh paths. Embedded
 # configuration contains synthetic locations and SHA256 values, not credentials.
@@ -63,20 +99,8 @@ base = "/evidence/" + c["run"]
 source = base + "/source"
 fixture = "/evidence/" + c["run"] + "/fixtures"
 setup = r"""
-import hashlib, json, os, pathlib, sys, tarfile
-source, fixture, archive_path = sys.argv[1:]
-pathlib.Path(source).mkdir(parents=True, mode=0o700, exist_ok=False)
-pathlib.Path(fixture).mkdir(parents=True, mode=0o700, exist_ok=False)
-assert os.statvfs(fixture).f_bavail * os.statvfs(fixture).f_frsize > 512 * 1024 * 1024
-with tarfile.open(archive_path, "r:gz") as archive:
-    for member in archive.getmembers():
-        p = pathlib.PurePosixPath(member.name)
-        assert not p.is_absolute() and ".." not in p.parts
-        assert member.isfile() or member.isdir()
-    # This QA image's Python predates extractall(filter=...). Every member was
-    # checked above: only regular files/directories, no absolute/traversal paths,
-    # links or special files, into a newly-created private source directory.
-    archive.extractall(source)
+import json,pathlib,sys
+source,fixture=sys.argv[1:]
 for directory in ["", "extensions", "packages/common", "packages/socket", "packages/web", "extensions/src/mcp-app"]:
     target = pathlib.Path(source) / directory / "node_modules"
     dependency = pathlib.Path("/cleanup") / directory / "node_modules"
@@ -85,14 +109,28 @@ for directory in ["", "extensions", "packages/common", "packages/socket", "packa
         target.symlink_to(dependency, target_is_directory=True)
 print(json.dumps({"source": source, "fixture": fixture}))
 """
-subprocess.run(["docker", "exec", container, "mkdir", "-m", "700", base], check=True)
-# docker cp resolves tmpfs paths outside the exec mount namespace on this host.
-# Stream into an exclusive file through exec, which sees the actual QA tmpfs.
-copy_script = "import shutil,sys;f=open(sys.argv[1],'xb');shutil.copyfileobj(sys.stdin.buffer,f);f.close()"
-with open(c["archive"], "rb") as archive_stream:
-    subprocess.run(["docker", "exec", "-i", container, "python3", "-c", copy_script, base + "/source.tar.gz"], stdin=archive_stream, check=True, stdout=subprocess.DEVNULL)
-initialized = execute(["docker", "exec", "-i", container, "python3", "-c", setup, source, fixture, base + "/source.tar.gz"], timeout=60)
-assert initialized.returncode == 0, initialized.stderr
+if not c["reuse"]:
+    initialized = execute(["docker", "exec", "-i", container, "python3", "-c", setup, source, fixture], timeout=60)
+    assert initialized.returncode == 0, initialized.stderr
+sdk_setup = r"""
+import json,os,pathlib,sys
+source = pathlib.Path(sys.argv[1])
+dependency = pathlib.Path("/tmp/phase3-999ed90c/deps/node_modules")
+versions = {}
+for package, expected in [("server", "2.4.0"), ("client", "2.4.0"), ("core", "2.4.0")]:
+    value=json.loads((dependency / "@modelcontextprotocol" / package / "package.json").read_text())["version"]
+    assert value == expected
+    versions[package]=value
+target=source / "extensions/src/mcp-app/node_modules"
+if os.path.lexists(target):
+    assert target.is_symlink() and target.resolve() == dependency.resolve()
+else:
+    target.symlink_to(dependency, target_is_directory=True)
+print(json.dumps(versions))
+"""
+sdk_result=execute(["docker", "exec", container, "python3", "-c", sdk_setup, source], timeout=15)
+assert sdk_result.returncode == 0, sdk_result.stderr
+sdk_versions=json.loads(sdk_result.stdout)
 hashscript = "import hashlib,json,pathlib,sys;root=pathlib.Path(sys.argv[1]);paths=json.load(sys.stdin);print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}))"
 def hashes():
     result = execute(["docker", "exec", "-i", container, "python3", "-c", hashscript, source], input=json.dumps(list(c["manifest"])), timeout=30)
@@ -136,9 +174,9 @@ else:
             check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
 after = hashes()
 assert after == before, "Source changed during qualification"
-print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
+print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
 '''
-configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "archive": remote_archive, "manifest": manifest}
+configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
 result = subprocess.run([*SSH, "sudo -n python3 -"], input=script, text=True, encoding="utf8", capture_output=True, timeout=650)
 (EVIDENCE / "controller.stdout.log").write_text(result.stdout, encoding="utf8")

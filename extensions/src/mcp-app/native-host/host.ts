@@ -436,6 +436,8 @@ export async function createNativeConsentHost(
 
     if (options.initializeNativeRuntime === true) {
       const accountDb = await import("@razzia/socket/services/account-db")
+      const registry = await import("@razzia/socket/services/registry")
+      registry.default.getInstance().stopCleanupTask()
       accountDb.closeAccountDb()
     }
   }
@@ -472,12 +474,11 @@ async function closeServerCleanly(options: {
   readonly sockets: Set<Socket>
   readonly closeIo?: () => Promise<void>
 }): Promise<void> {
-  if (options.closeIo) {
-    await options.closeIo().catch(() => undefined)
-  }
+  const ioClosed =
+    options.closeIo?.().catch(() => undefined) ?? Promise.resolve()
 
   options.server.closeIdleConnections()
-  await new Promise<void>((resolve, reject) => {
+  const httpClosed = new Promise<void>((resolve, reject) => {
     options.server.close((error) => {
       if (
         error &&
@@ -505,6 +506,8 @@ async function closeServerCleanly(options: {
       timer.unref()
     }
   })
+
+  await Promise.all([httpClosed, ioClosed])
 }
 
 export async function listenNativeConsentHost(

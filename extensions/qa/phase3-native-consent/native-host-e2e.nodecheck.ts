@@ -37,7 +37,20 @@ async function listUserQuizzes(options: {
 
   assert.equal(res.status, 200)
 
-  return (await res.json()) as ReadonlyArray<{ readonly id: string }>
+  const payload: unknown = await res.json()
+  assert(payload !== null && typeof payload === "object" && "quizz" in payload)
+  assert(Array.isArray(payload.quizz))
+  assert(
+    payload.quizz.every(
+      (entry: unknown) =>
+        entry !== null &&
+        typeof entry === "object" &&
+        "id" in entry &&
+        typeof entry.id === "string",
+    ),
+  )
+
+  return payload.quizz as ReadonlyArray<{ readonly id: string }>
 }
 
 function assertNoLeakedSecrets(options: {

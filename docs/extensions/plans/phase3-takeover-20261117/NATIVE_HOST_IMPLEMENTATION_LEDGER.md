@@ -38,3 +38,22 @@ product tests. Preserved all scratch/evidence and switched new task-owned source
 to ext4 with a minimum free-space check. No filesystem cleanup was performed.
 The consent-only site build keeps the tracked preview-build manifest unchanged;
 it does not qualify the separately pending full-show runtime.
+
+Linux45b266b with the exact existing SDK linked produced10 PASS,2 FAIL,
+1 interrupted/timeout in the HTTP packet; types/lint/format PASS. Preserved
+receipt: `tadazz-codex-45b266bd74ae-6f7c237d-retry-02713f83/receipt.json`.
+The WIP header fixture lacked explicit account DB bootstrap, and the native
+quiz-list fixture incorrectly assumed an array instead of the actual `{quizz}`
+wire response. Both fixture repairs preserve strict product auth/contracts.
+
+The real Socket.IO shutdown also stalled with an idle non-HTTP socket. A local
+TCP regression failed before repair and passed afterwards. Root shutdown now
+closes sockets concurrently with Socket.IO instead of waiting for Socket.IO
+first, and explicitly stops the existing Registry cleanup timer only when this
+host owns initializeNativeRuntime. No protected Registry source was changed.
+Local TCP5/5 now passes. Linux/native-save/browser rerun remains required.
+
+The QA transfer now streams a validated immutable Git archive directly into a
+fresh ext4 source directory. It avoids additional host/container archive copies
+and preserves old evidence. Task-owned scratch cleanup remains pending the
+owner's answer to the explicit narrow cleanup question.

@@ -1,6 +1,9 @@
 import assert from "node:assert/strict"
 import { once } from "node:events"
 import { connect } from "node:net"
+import { mkdtempSync, rmSync } from "node:fs"
+import { tmpdir } from "node:os"
+import { join } from "node:path"
 import { test } from "node:test"
 import {
   createNativeConsentHost,
@@ -129,5 +132,60 @@ test("client disconnect aborts the same native Request and settles tracked work"
   } finally {
     socket.destroy()
     await listener.close()
+  }
+})
+
+test("Socket.IO shutdown settles with an idle non-HTTP socket", async () => {
+  const root = mkdtempSync(join(tmpdir(), "tadazz-host-close-synthetic-"))
+  const previous = {
+    CONFIG_PATH: process.env.CONFIG_PATH,
+    JWT_SECRET: process.env.JWT_SECRET,
+    TADAZZ_ACCOUNTS_ENABLED: process.env.TADAZZ_ACCOUNTS_ENABLED,
+  }
+  process.env.CONFIG_PATH = root
+  process.env.JWT_SECRET =
+    "synthetic-close-test-secret-with-at-least-32-characters"
+  process.env.TADAZZ_ACCOUNTS_ENABLED = "false"
+  const host = await createNativeConsentHost({ enabled: false })
+  const listener = await listenNativeConsentHost(host, {
+    port: 0,
+    attachSocketServer: true,
+  })
+  const socket = connect(listener.port, "127.0.0.1")
+  socket.on("error", () => undefined)
+  let shuttingDown: Promise<void> | null = null
+  const cleanup: { deadline: ReturnType<typeof setTimeout> | null } = {
+    deadline: null,
+  }
+
+  try {
+    await once(socket, "connect")
+    shuttingDown = listener.close()
+    await Promise.race([
+      shuttingDown,
+      new Promise<never>((_resolve, reject) => {
+        cleanup.deadline = setTimeout(
+          () => reject(new Error("Shutdown blocked on idle socket")),
+          1000,
+        )
+      }),
+    ])
+  } finally {
+    if (cleanup.deadline) {
+      clearTimeout(cleanup.deadline)
+    }
+
+    socket.destroy()
+    await shuttingDown
+    const registry = await import("@razzia/socket/services/registry")
+    registry.default.getInstance().stopCleanupTask()
+    for (const [key, value] of Object.entries(previous)) {
+      if (value === undefined) {
+        Reflect.deleteProperty(process.env, key)
+      } else {
+        process.env[key] = value
+      }
+    }
+    rmSync(root, { recursive: true, force: true })
   }
 })
