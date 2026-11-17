@@ -108,6 +108,9 @@ const pages = [
   "/site/signup",
   "/studio",
   "/studio/$section",
+  ...(import.meta.env.VITE_TADAZZ_NATIVE_CONSENT_ENABLED === "true"
+    ? ["/studio/native-save-consent/$requestId" as const]
+    : []),
   "/site/studio",
 ] as const
 const routes = pages.map((path) =>

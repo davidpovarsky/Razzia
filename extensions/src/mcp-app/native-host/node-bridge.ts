@@ -1,9 +1,12 @@
 import type { IncomingMessage, ServerResponse } from "node:http"
 import { Readable } from "node:stream"
 import { pipeline } from "node:stream/promises"
+import { MAX_MEDIA_SIZE } from "@razzia/common/constants"
 import { extractRawPathname } from "./consent-routes.ts"
 
 const DEFAULT_MAX_NON_MCP_BODY_BYTES = 16 * 1024 * 1024
+const MAX_NATIVE_MEDIA_BODY_BYTES = MAX_MEDIA_SIZE + 64 * 1024
+const mediaRequests = new WeakMap<Set<Promise<void>>, number>()
 const HOP_BY_HOP = new Set(["connection", "keep-alive", "transfer-encoding"])
 
 export function writeSimpleNodeError(
@@ -63,29 +66,6 @@ function parseNodeHeaders(
   return { host, headers }
 }
 
-async function readNodeRequestBody(
-  req: IncomingMessage,
-  maxBytes: number,
-): Promise<Uint8Array> {
-  const chunks: Buffer[] = []
-  let total = 0
-
-  for await (const chunk of req as AsyncIterable<
-    Buffer | Uint8Array | string
-  >) {
-    const buf = Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk)
-    total += buf.byteLength
-
-    if (total > maxBytes) {
-      throw new Error("PAYLOAD_TOO_LARGE")
-    }
-
-    chunks.push(buf)
-  }
-
-  return chunks.length === 0 ? new Uint8Array(0) : Buffer.concat(chunks, total)
-}
-
 function parseTargetUrl(rawTarget: string): URL | null {
   try {
     return new URL(rawTarget)
@@ -94,37 +74,17 @@ function parseTargetUrl(rawTarget: string): URL | null {
   }
 }
 
-async function tryReadBody(options: {
-  readonly req: IncomingMessage
-  readonly maxBodyBytes: number
-}): Promise<
-  | { readonly ok: true; readonly bytes: Uint8Array }
-  | { readonly ok: false; readonly status: 400 | 413; readonly code: string }
-> {
-  try {
-    const bytes = await readNodeRequestBody(options.req, options.maxBodyBytes)
-
-    return { ok: true, bytes }
-  } catch (error) {
-    const isTooLarge =
-      error instanceof Error && error.message === "PAYLOAD_TOO_LARGE"
-
-    return {
-      ok: false,
-      status: isTooLarge ? 413 : 400,
-      code: isTooLarge ? "PAYLOAD_TOO_LARGE" : "INVALID_BODY",
-    }
-  }
-}
-
-export async function nodeRequestToWebRequest(
+export function nodeRequestToWebRequest(
   req: IncomingMessage,
   maxBodyBytes: number = DEFAULT_MAX_NON_MCP_BODY_BYTES,
   signal?: AbortSignal,
-): Promise<
-  | { readonly request: Request; readonly method: string }
-  | { readonly status: 400 | 413; readonly code: string }
-> {
+):
+  | {
+      readonly request: Request
+      readonly method: string
+      readonly bodyLimitExceeded?: () => boolean
+    }
+  | { readonly status: 400 | 413; readonly code: string } {
   const rawUrl = req.url ?? ""
   const rawPath = extractRawPathname(rawUrl)
 
@@ -165,24 +125,46 @@ export async function nodeRequestToWebRequest(
     }
   }
 
-  const bodyResult = await tryReadBody({ req, maxBodyBytes })
+  const declaredLength = parsedHeaders.headers.get("content-length")
 
-  if (!bodyResult.ok) {
-    return { status: bodyResult.status, code: bodyResult.code }
+  if (declaredLength !== null && Number(declaredLength) > maxBodyBytes) {
+    return { status: 413, code: "PAYLOAD_TOO_LARGE" }
   }
 
-  const requestInit: RequestInit =
-    bodyResult.bytes.byteLength > 0
-      ? {
-          method,
-          headers: parsedHeaders.headers,
-          body: Uint8Array.from(bodyResult.bytes),
+  let total = 0
+  let exceeded = false
+  // Node's stream/web declarations and lib.dom use different BYOB view types;
+  // IncomingMessage is a byte stream and both implement the same Web API.
+  const incoming = Readable.toWeb(req) as unknown as ReadableStream<Uint8Array>
+  const body = incoming.pipeThrough(
+    new TransformStream<Uint8Array, Uint8Array>({
+      transform(chunk, controller) {
+        total += chunk.byteLength
+
+        if (total > maxBodyBytes) {
+          exceeded = true
+          controller.error(new Error("PAYLOAD_TOO_LARGE"))
+
+          return
         }
-      : { method, headers: parsedHeaders.headers }
+
+        controller.enqueue(chunk)
+      },
+    }),
+    { preventCancel: true },
+  )
+  const requestInit: RequestInit & { duplex: "half" } = {
+    method,
+    headers: parsedHeaders.headers,
+    body,
+    duplex: "half",
+    signal,
+  }
 
   return {
     method,
-    request: new Request(targetUrl, { ...requestInit, signal }),
+    request: new Request(targetUrl, requestInit),
+    bodyLimitExceeded: () => exceeded,
   }
 }
 
@@ -246,11 +228,20 @@ export function runNativeNodeRequest(options: {
   readonly timeoutMs: number
 }): void {
   const { req, res, dispatch, inFlight, timeoutMs } = options
+  const pathname = extractRawPathname(req.url ?? "")
+  const isMediaUpload =
+    req.method === "POST" &&
+    (pathname === "/api/media" || pathname === "/api/media/")
+  const activeMedia = mediaRequests.get(inFlight) ?? 0
 
-  if (inFlight.size >= 16) {
+  if (inFlight.size >= 16 || (isMediaUpload && activeMedia >= 2)) {
     writeSimpleNodeError(res, 503, "SERVICE_BUSY")
 
     return
+  }
+
+  if (isMediaUpload) {
+    mediaRequests.set(inFlight, activeMedia + 1)
   }
 
   const controller = new AbortController()
@@ -277,9 +268,9 @@ export function runNativeNodeRequest(options: {
   }, timeoutMs)
   timer.unref()
   const exchange = async () => {
-    const converted = await nodeRequestToWebRequest(
+    const converted = nodeRequestToWebRequest(
       req,
-      undefined,
+      isMediaUpload ? MAX_NATIVE_MEDIA_BODY_BYTES : undefined,
       controller.signal,
     )
     controller.signal.throwIfAborted()
@@ -290,11 +281,30 @@ export function runNativeNodeRequest(options: {
       return
     }
 
-    const response = await dispatch(converted.request)
+    const response = await dispatch(converted.request).catch(
+      (error: unknown) => {
+        if (!converted.bodyLimitExceeded?.()) {
+          throw error
+        }
+
+        return null
+      },
+    )
+
+    if (!response || converted.bodyLimitExceeded?.()) {
+      await response?.body?.cancel().catch(() => undefined)
+      writeSimpleNodeError(res, 413, "PAYLOAD_TOO_LARGE")
+
+      return
+    }
 
     if (controller.signal.aborted) {
       await response.body?.cancel().catch(() => undefined)
       controller.signal.throwIfAborted()
+    }
+
+    if (!req.complete) {
+      res.setHeader("Connection", "close")
     }
 
     await writeWebResponseToNode({ method: converted.method, res, response })
@@ -306,6 +316,19 @@ export function runNativeNodeRequest(options: {
     .finally(() => {
       clearTimeout(timer)
       res.off("close", disconnected)
+
+      if (!req.complete) {
+        // Flush a refusal before terminating an upload that is still arriving.
+        // Immediate req.destroy() can reset TCP before the peer sees the 413.
+        req.socket.end()
+        const terminate = setTimeout(() => req.destroy(), 250)
+        terminate.unref()
+      }
+
+      if (isMediaUpload) {
+        mediaRequests.set(inFlight, (mediaRequests.get(inFlight) ?? 1) - 1)
+      }
+
       inFlight.delete(work)
     })
   inFlight.add(work)

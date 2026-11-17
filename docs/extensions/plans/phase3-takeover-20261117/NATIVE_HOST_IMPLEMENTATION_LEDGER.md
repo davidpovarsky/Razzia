@@ -68,3 +68,20 @@ DEPENDENCY_UNAVAILABLE refusal plus no leaked snapshot. A's valid inspection
 and approval must succeed afterward, so generic service failure cannot pass.
 Windows passes the HTTP flow while explicitly requiring POSIX/C1 denial; Linux
 still must prove actual save, drift409 and idempotent reopen before acceptance.
+
+Before the next bridge edit: preserve the existing native POST /api/media cap
+(MAX_MEDIA_SIZE + 64 KiB multipart overhead) instead of imposing the new generic
+16 MiB cap on uploads. Scope: native-host/node-bridge.ts and focused TCP QA only.
+Stream bounded bodies with backpressure so native authorization can run before
+upload completion; limit concurrent media requests separately to two. Keep the
+generic cap, machine raw listener, native authorization and media validator
+unchanged. Verify large upload compatibility, declared/chunked overflow,
+pre-body refusal, concurrency and disconnect/timeout behavior before acceptance.
+
+Fresh no-network browser QA on c4125d58a746 verified all1669 source hashes and
+ran Chromium/WebKit successfully, but all six scenarios failed: the top-level
+downstream site router omitted /studio/native-save-consent/$requestId and showed
+404. Before editing: add that one feature-gated route in site/bootstrap.tsx,
+and allow only the exact 54-character query/hash-free local consent destination
+after login in site/adapters/client.ts, with focused security regression cases.
+No generated/native editor route, provider, typography or package changes.

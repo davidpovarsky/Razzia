@@ -170,8 +170,9 @@ else:
         # Consent/browser qualification does not manufacture a full-show pin or
         # rewrite the tracked preview-build manifest. Full-show is a later gate.
         site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts"])
-        if site_ok:
-            check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
+        # Browser QA runs separately in a fresh bounded container with read-only
+        # source and caches. The preserved old container has a full /tmp and
+        # unreaped historical browser processes; do not restart or clean it.
 after = hashes()
 changed_source = [p for p in before if before[p] != after[p]]
 print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
@@ -188,5 +189,9 @@ if result.returncode != 0:
 receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
-required_gate = "ext4-full8" if SUITE == "recovery" else "native-browser"
-sys.exit(0 if receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"]) else 1)
+required_gate = "ext4-full8" if SUITE == "recovery" else "native-site-build"
+passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
+if passed and SUITE == "native-consent":
+    browser = ROOT / "extensions/qa/phase3-native-consent/browser-verify.py"
+    sys.exit(subprocess.run([sys.executable, str(browser), RUN], cwd=ROOT).returncode)
+sys.exit(0 if passed else 1)

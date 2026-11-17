@@ -83,6 +83,13 @@ export function safeReturnTo(value: string | null): string {
     return "/studio"
   }
 
+  if (
+    import.meta.env.VITE_TADAZZ_NATIVE_CONSENT_ENABLED === "true" &&
+    /^\/studio\/native-save-consent\/[A-Za-z0-9_-]{54}$/u.test(value)
+  ) {
+    return value
+  }
+
   return /^\/(?:studio(?:\/(?:games|events|account|explore|prepare|oauth-consent))?|manager\/quizz(?:\/[a-zA-Z0-9_-]+)?)\/?$/u.test(
     url.pathname,
   )
