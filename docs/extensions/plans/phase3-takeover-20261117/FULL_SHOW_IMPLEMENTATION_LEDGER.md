@@ -45,3 +45,42 @@ The Linux runner adds a focused asset suite. Its admission requires actual
 archive bytes plus128 MiB reserve; the prior512 MiB threshold stays for the
 larger recovery/browser packets. This scoped suite performs no Site build or
 image installation. Linux qualification still requires the next exact commit.
+
+77d211873e1329f783459334ad758d1678c976af now passes the same15 checks on real
+isolated Linux/ext4, plus focused types/lint/format, with all1678 source hashes
+unchanged. This remains bundled-reader unit evidence with controlled authority
+callbacks, not actual asset delivery or a full-show renderer acceptance.
+
+Before next edit: add contracts/full-show-selection.ts and server/full-show-
+selection.ts with focused QA. Use the actual native timeline compiler, existing
+authoring validator/converter and the existing D identity rule. Read via the
+real issuer-owned DraftRepository and checkedDraft path; recheck revision and
+canonical content after async work. Public inventory must contain only generic
+chapter kinds/order/durations and hashed card identities, never future question
+text, authored private keys, notes or solutions. Host-only selected source stays
+behind a process-local capability. It grants no renderer/media/write authority
+and cannot be reconstructed by JSON or a cloned principal. V1/V2 stay unchanged.
+
+Pre-edit discovery: real issuer repository revalidation rejects valid opening/
+closing cards because Zod materializes their omitted optional volume default;
+the second normalizeDraft sees the generated forbidden field. Fix only
+server/authoring.ts canonical serialization to omit parser-generated forbidden
+fields absent from the already policy-checked input, preserving explicit field
+denials and trusted defaults. Validate round-trip, actual issuer selection,
+and existing authoring/security regressions. No contract or permission expansion.
+
+Selection local qualification:11/11 PASS with actual account/session SQLite,
+PKCE consent protocol and issuer-owned repository. Controlled QA account rows and
+consent POSTs are not a user click or ChatGPT installation. All28 chapters of a
+five-question/opening/transition/closing show select the actual converter's
+current question/scene. Inventory withholds future content, notes and authored
+keys; clones, foreign accounts/grants, missing scope, stale revision, abort and
+real session revocation are denied. assertCurrent returns void, never the private
+source. getHostSource remains host-only and unregistered/unrenderable until a
+strict frame projector, native renderer, pin and media delivery are qualified.
+Types/lint/format pass locally. Earlier QA setup used service-only nativeSave
+options against the raw issuer and failed; corrected fixture supplies no save
+adapter. Real repository tests then exposed the canonical bookend defect above.
+Windows focused regression was26/28 before fixing the trusted-default fixture:
+one new fixture comparison error now fixed; the unchanged OAuth Unix mode check
+expected0600 but Windows reported0666. Actual Linux gate remains required.

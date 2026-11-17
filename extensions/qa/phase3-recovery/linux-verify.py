@@ -21,8 +21,8 @@ SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
 CONTAINER = "tadazz-phase2-20261116"
 SHA = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 SUITE = sys.argv[1] if len(sys.argv) > 1 else "recovery"
-if SUITE not in ("recovery", "native-consent", "native-proxy", "full-show-assets"):
-    raise SystemExit("Expected recovery, native-consent, native-proxy or full-show-assets")
+if SUITE not in ("recovery", "native-consent", "native-proxy", "full-show-assets", "full-show-selection"):
+    raise SystemExit("Expected recovery, native-consent, native-proxy, full-show-assets or full-show-selection")
 REUSE = len(sys.argv) == 4 and sys.argv[2] == "--reuse-run"
 RUN = sys.argv[3] if REUSE else f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
 if not re.fullmatch(r"tadazz-codex-" + SHA[:12] + r"-[a-f0-9]{8}", RUN):
@@ -77,7 +77,7 @@ with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
     extraction = shlex.join(["sudo", "-n", "docker", "exec", "-i", CONTAINER,
                               "python3", "-c", extract_stream,
                               f"/evidence/{RUN}/source", f"/evidence/{RUN}/fixtures",
-                              str(source_bytes + 128*1024*1024 if SUITE == "full-show-assets" else 512*1024*1024)])
+                              str(source_bytes + 128*1024*1024 if SUITE.startswith("full-show-") else 512*1024*1024)])
     with ARCHIVE.open("rb") as archive_stream:
         transferred = subprocess.run([*SSH, extraction], stdin=archive_stream, capture_output=True, timeout=120)
     if transferred.returncode:
@@ -153,10 +153,15 @@ def check(label, seconds, argv):
     record = {"label": label, "command": command, "exit": result.returncode, "seconds": round(time.time()-started, 3), "stdout": result.stdout, "stderr": result.stderr}
     checks.append(record)
     return result.returncode == 0
-if c["suite"] == "full-show-assets":
+if c["suite"] in ("full-show-assets", "full-show-selection"):
     scope = ["extensions/src/mcp-app/server/full-show-assets.ts", "extensions/qa/phase3-full-show/assets.nodecheck.ts"]
     prefix[4:4] = ["-e", "TMPDIR=" + fixture]
     check("full-show-assets", 60, tsx + [scope[1]])
+    if c["suite"] == "full-show-selection":
+        scope += ["extensions/src/mcp-app/contracts/full-show-selection.ts", "extensions/src/mcp-app/server/full-show-selection.ts", "extensions/src/mcp-app/server/authoring.ts", "extensions/qa/phase3-full-show/selection.nodecheck.ts"]
+        check("full-show-selection", 90, tsx + [scope[-1]])
+        regression = "extensions/src/mcp-app/tests/"
+        check("selection-authoring-regressions", 120, tsx + [regression + p for p in ["server/drafts.nodecheck.ts", "server/integrity.nodecheck.ts", "server/boundaries.nodecheck.ts", "first-party/oauth.nodecheck.ts", "first-party/preview-candidate.nodecheck.ts"]])
     check("assets-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-full-show/tsconfig.json"])
     check("assets-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", *scope])
     check("assets-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", *scope])
@@ -200,7 +205,7 @@ if result.returncode != 0:
 receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
-required_gate = "full-show-assets" if SUITE == "full-show-assets" else "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-site-build"
+required_gate = SUITE if SUITE.startswith("full-show-") else "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-site-build"
 passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
 if passed and SUITE == "native-consent":
     browser = ROOT / "extensions/qa/phase3-native-consent/browser-verify.py"

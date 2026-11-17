@@ -1,4 +1,9 @@
 {
   "extends": "../phase3-native-consent/tsconfig.json",
-  "include": ["./**/*.ts", "../../src/mcp-app/server/full-show-assets.ts"]
+  "include": [
+    "./**/*.ts",
+    "../../src/mcp-app/server/full-show-assets.ts",
+    "../../src/mcp-app/server/full-show-selection.ts",
+    "../../src/mcp-app/contracts/full-show-selection.ts"
+  ]
 }

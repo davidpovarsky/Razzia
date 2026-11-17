@@ -28,22 +28,31 @@ const forbidden = new Set([
   "audioEvents",
   "showTheme",
 ])
+// oxlint-disable-next-line max-params -- Existing recursive policy tracks the field name and bounded depth separately.
 function policyCheck(
   value: unknown,
   policy: AuthoringPolicy,
   key = "",
   depth = 0,
 ): void {
-  if (depth > 40) throw new ToolError("VALIDATION_FAILED")
+  if (depth > 40) {
+    throw new ToolError("VALIDATION_FAILED")
+  }
+
   if (typeof value === "string") {
     const urlField = /(?:url|image|src)$/iu.test(key)
-    if (value.length > (urlField ? 2048 : 1000))
+
+    if (value.length > (urlField ? 2048 : 1000)) {
       throw new ToolError("VALIDATION_FAILED")
+    }
+
     if (urlField && value && !policy.allowedPublicAssetUrls.has(value)) {
       throw new ToolError("VALIDATION_FAILED")
     }
+
     if (urlField && value) {
       const url = new URL(value)
+
       if (
         url.protocol !== "https:" ||
         url.username ||
@@ -54,15 +63,67 @@ function policyCheck(
         throw new ToolError("VALIDATION_FAILED")
       }
     }
+
     return
   }
-  if (!value || typeof value !== "object") return
+
+  if (!value || typeof value !== "object") {
+    return
+  }
+
   for (const [k, child] of Object.entries(value)) {
-    if (depth === 0 && k === "defaults") continue // Already matched trusted defaults.
-    if (forbidden.has(k)) throw new ToolError("VALIDATION_FAILED")
+    // Already matched trusted defaults.
+    if (depth === 0 && k === "defaults") {
+      continue
+    }
+
+    if (forbidden.has(k)) {
+      throw new ToolError("VALIDATION_FAILED")
+    }
+
     policyCheck(child, policy, k, depth + 1)
   }
 }
+// Schema defaults must not introduce fields that the same policy rejects on
+// the next read. Explicit forbidden input has already been denied by policyCheck.
+// Keep trusted root defaults intact; native parsing still applies its defaults.
+function omitGeneratedForbiddenFields(
+  value: unknown,
+  input: unknown,
+  depth = 0,
+): unknown {
+  if (Array.isArray(value)) {
+    return value.map((child, index) =>
+      omitGeneratedForbiddenFields(
+        child,
+        Array.isArray(input) ? input[index] : undefined,
+        depth + 1,
+      ),
+    )
+  }
+
+  if (!value || typeof value !== "object") {
+    return value
+  }
+
+  const original = input && typeof input === "object" ? input : {}
+
+  return Object.fromEntries(
+    Object.entries(value)
+      .filter(([k]) => !(forbidden.has(k) && !Object.hasOwn(original, k)))
+      .map(([k, child]) => [
+        k,
+        depth === 0 && k === "defaults"
+          ? child
+          : omitGeneratedForbiddenFields(
+              child,
+              Reflect.get(original, k),
+              depth + 1,
+            ),
+      ]),
+  )
+}
+
 export function normalizeDraft(
   raw: string,
   policy: AuthoringPolicy,
@@ -71,9 +132,11 @@ export function normalizeDraft(
     if (raw.length > LIMITS.authored || utf8Bytes(raw) > LIMITS.authored) {
       throw new ToolError("VALIDATION_FAILED")
     }
+
     const input: unknown = JSON.parse(raw)
     finiteJson(input)
     const show = tadaShowV1Schema.parse(input)
+
     if (
       show.settings.length ||
       show.title.length > 160 ||
@@ -81,10 +144,15 @@ export function normalizeDraft(
     ) {
       throw new ToolError("VALIDATION_FAILED")
     }
+
     const questions = show.cards.filter(
       (card) => card.kind === "quiz" || card.kind === "survey",
     )
-    if (questions.length > 25) throw new ToolError("VALIDATION_FAILED")
+
+    if (questions.length > 25) {
+      throw new ToolError("VALIDATION_FAILED")
+    }
+
     // Defaults are trusted template inheritance, not a theme/audio mutation input.
     if (
       show.defaults !== undefined &&
@@ -93,6 +161,7 @@ export function normalizeDraft(
     ) {
       throw new ToolError("VALIDATION_FAILED")
     }
+
     policyCheck(input, policy)
     const normalized = tadaShowV1Schema.parse({
       ...show,
@@ -100,19 +169,31 @@ export function normalizeDraft(
         ? {}
         : { defaults: policy.trustedDefaults }),
     })
-    const authoredShowJson = canonicalJson(normalized)
-    if (utf8Bytes(authoredShowJson) > LIMITS.authored)
+    const authoredShowJson = canonicalJson(
+      omitGeneratedForbiddenFields(normalized, input),
+    )
+
+    if (utf8Bytes(authoredShowJson) > LIMITS.authored) {
       throw new ToolError("VALIDATION_FAILED")
+    }
+
     // Real existing validator/converter path; validation output is not persisted as
     // freshly-randomized native IDs. Stable native persistence is a separate gate.
     const inspected = preflightShowImport(authoredShowJson, "draft.tada.json")
-    if (!inspected.ok || !inspected.normalizedBundleDraft)
+
+    if (!inspected.ok || !inspected.normalizedBundleDraft) {
       throw new ToolError("VALIDATION_FAILED")
+    }
+
     const theme = resolveShowTheme({
       selection: normalized.defaults?.showTheme,
       role: "manager",
     })
-    if (theme.diagnostics.length > 20) throw new ToolError("VALIDATION_FAILED")
+
+    if (theme.diagnostics.length > 20) {
+      throw new ToolError("VALIDATION_FAILED")
+    }
+
     const summary = summarySchema.parse({
       title: normalized.title,
       cardCount: normalized.cards.length,
@@ -126,9 +207,13 @@ export function normalizeDraft(
         severity: "warning",
       })),
     })
+
     return Object.freeze({ authoredShowJson, summary })
   } catch (error) {
-    if (error instanceof ToolError) throw error
+    if (error instanceof ToolError) {
+      throw error
+    }
+
     throw new ToolError("VALIDATION_FAILED")
   }
 }
