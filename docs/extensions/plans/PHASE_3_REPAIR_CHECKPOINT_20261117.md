@@ -1,4 +1,13 @@
-# Phase 3 — capacity-safe acceptance checkpoint
+# Phase 3 - capacity-safe acceptance checkpoint
+
+> **OWNER STOP / FINAL HANDOFF — 17 November 2026.**
+> No development, tests, dispatch, retries, reviews, remote jobs, merges or
+> deployments may continue under this manager. All chronological continuation
+> instructions below are superseded. Read
+> `phase3-handoff-20261117/PHASE_3_HANDOFF_20261117.md`.
+> D latest f6fc339 is CLEAN/UNMERGED, latest Linux check NOT_RUN; native-consent
+> is CANCELLED/DIRTY and preserved. Per-task auto-resume disabled for this
+> manager and ten children. Phase3 NOT_READY/NOT_DONE; different agent required.
 
 ## Capacity and existing work
 

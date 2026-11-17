@@ -1,4 +1,9 @@
-# Phase 3 execution ledger — 17 November 2026
+# Phase 3 execution ledger - 17 November 2026
+
+> **OWNER STOP:** this execution plan is historical, not authorization to
+> continue. Final owner-requested handoff:
+> `phase3-handoff-20261117/PHASE_3_HANDOFF_20261117.md`.
+> Phase3 remains NOT_READY. This manager ends; no automatic resumption.
 
 ## Authority and immutable input
 

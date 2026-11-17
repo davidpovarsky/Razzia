@@ -1,0 +1,85 @@
+{
+  "schemaVersion": 1,
+  "phase": 3,
+  "status": "OWNER_STOP_HANDOFF_NOT_READY",
+  "checkpointUtc": "2026-11-17T12:10:12Z",
+  "releaseDecision": "NOT_READY",
+  "baseline": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab",
+  "managerHeadBeforeHandoffDocs": "1b9f77cd2d61b46cefe419a30fd643ff6c86e46a",
+  "latestAcceptedRuntimeMerge": "be93cd8310818387733c88658e46f06d66cb6ad7",
+  "handoff": "PHASE_3_HANDOFF_20261117.md",
+  "ownerStop": {"developmentStopped": true, "newTestsAfterStop": false, "newReviewsAfterStop": false, "remoteJobsAfterStop": false, "mergesAfterStop": false, "perTaskAutoResumeDisabled": "manager and all ten children, supported API readback acknowledged", "resumeAuthority": "Different owner-assigned agent only; this manager must end"},
+  "sourceCheckoutAtStop": {"head": "12ba2f4f4a0185762cf43944aacafe2b5bc31dab", "tracked": "CLEAN", "untracked": [".ai/"]},
+  "liveEndpointOwnerObservation": {"mcp": "https://tadazz.com/mcp serves HTML SPA, not ready MCP", "oauthWellKnown": "HTML SPA, not ready OAuth discovery", "verification": "Owner-provided current observation; no new live probe after STOP", "realChatGPTInstallation": "NOT_VERIFIED"},
+  "branch": "cez/999ed90c",
+  "managerRunId": "999ed90c-ed4e-4af6-aa93-bbb250334c05",
+  "accepted": [
+    {
+      "unit": "Phone real-authority gateway game fixture",
+      "source": "62a9cbea2846711a8392d695be02f9f82f635536",
+      "merge": "be93cd8310818387733c88658e46f06d66cb6ad7",
+      "managerExecuted": {"linuxPortable": "7/7 PASS", "linuxPosixFullChain": "2/2 PASS", "phoneTypes": "PASS", "configuredPrettier": "PASS", "fullFileOxlint": "FAIL 38 unchanged-line diagnostics; zero changed-line diagnostics", "uiCheck": "FAIL old boundary/allowlist; protected delta EMPTY"},
+      "evidence": ["server-phone-62a9cbe-verification.json", "server-phone-62a9cbe-quality.json", "server-phone-62a9cbe-lint-changed-lines.json", "merged-c-ui-receipt.json"],
+      "workerLifecycle": "DONE",
+      "limits": ["Simulated provider only", "No real PSTN or new provider-load acceptance", "Scoped source hashes, not whole final-product acceptance"]
+    },
+    {
+      "unit": "Widget scoped SDK roundtrip",
+      "source": "95e892e80a1bb85c1d118d221a5dfcd7d3b74d19",
+      "merge": "ee846f2ed1ebbdcec07501d429bf31b323e83d52",
+      "scope": ["extensions/src/mcp-app/widget", "extensions/qa/mcp-widget"],
+      "evidence": ["server-unit-b-unit.json", "server-unit-b-build-types.json", "server-unit-b-browser-matrix.json"],
+      "limits": ["Synthetic SDK host", "Not full-show acceptance", "Not external host installation"]
+    },
+    {
+      "unit": "Protected MCP composition and response lifetime",
+      "source": "dd6fd4392d44932fd63a80837abadece416e5ade",
+      "merge": "30fab7f63a5208e9c2b95e023aa399ece623bb21",
+      "scope": ["extensions/src/mcp-app/first-party/service.ts", "extensions/src/mcp-app/first-party/index.ts", "extensions/qa/phase3-mcp-service"],
+      "managerExecuted": {
+        "serviceTmpfs": "14/14 PASS",
+        "serviceExt4": "14/14 PASS",
+        "serverRegression": "64/64 PASS",
+        "firstPartyRegression": "68/68 PASS excluding historical path-bound native-save-client",
+        "qaTypecheck": "PASS",
+        "oxlint": "PASS 0 warnings/errors",
+        "repositoryConfiguredLocalPrettier": "PASS",
+        "broadMcpTypecheck": "FAIL 147 identical baseline/candidate diagnostics, zero new",
+        "uiCheck": "FAIL 23 historical protected mismatches and old allowlist denials",
+        "protectedSourceDelta": "EMPTY"
+      },
+      "evidence": ["server-service-dd6fd43-verification.json", "server-service-dd6fd43-types-baseline-comparison-corrected.json", "server-service-dd6fd43-quality.json", "merged-a-ui-strip-types-receipt.json"],
+      "workerLifecycle": "FAILED",
+      "supervisorAck": "accepted_source_only",
+      "limits": ["Scoped hashes, not complete integrated-SHA acceptance", "No browser Studio human consent proof", "No hardware power-loss proof"]
+    }
+  ],
+  "rejectedOrSuperseded": [
+    {"source": "8e13d00a7c36dd1b130018ca59499acf6fc1fa83", "reason": "Independent review required limiter/lifetime/body/deadline/portability repairs", "directlyMerged": false},
+    {"source": "02d752c04a5d9bef1d670d3f613ea9e921f0506a", "reason": "Manager Linux11/12 on tmpfs/ext4, superseded by verified dd6fd439 lineage", "directlyMerged": false}
+  ],
+  "unmerged": [
+    {"unit": "Recovery qualification", "source": "f6fc33969bd59ca59cc030cd32d9fda4a801be79", "gitState": "CLEAN", "workerStatus": "DONE", "managerLatestLinux": "NOT_RUN after latest QA matcher commit due owner STOP", "lastExecutedSource": "d85a7fb756e33f9fe2334b14712504fedd6b980a", "lastExecutedExt4": "7/8 PASS,1 FAIL solely Error.toString anchored regex mismatch; all three product invariants PASS", "existingCallers": "52/52 PASS on d85", "history": {"f2e20424": "1/5 PASS,4 FAIL", "2ede51d": "3/5 PASS,2 FAIL"}, "typesLintFormat": "PASS on d85", "acceptance": "SCOPED_PASS_ONLY_UNMERGED_LATEST_NOT_RUN", "workerRun": "1e96bb6f-0451-4568-aeab-c14c0fb708cd", "evidence": ["server-recovery-f2e2042-verification.json", "server-recovery-2ede51d-verification.json", "server-recovery-d85a7fb-verification.json", "server-media-detach-digest-red-stdin.json"], "receiptHashCaveat": "Initial two malformed hashes retained; d85 manager independently verified24 source/runtime hashes", "managerScopeRevision": {"ledgerCommit": "1b9f77cd2d61b46cefe419a30fd643ff6c86e46a", "exactRuntimePaths": ["extensions/src/server/storage/service.ts", "extensions/src/core/card-media-references.ts"], "reason": "Canonical save normalization and independently reproduced post-media-detach stale base digest; full digest invariant restored in candidate, not manager runtime"}}
+  ],
+  "nativeConsentStart": {"run": "fd341b34-dbd2-436d-a3fd-afe9e140fba3", "head": "a7c7c8f531fee3ad32416e8edf0b33ef01886b63", "initialOutcome": "FAILED empty backend conversation id", "recovery": "One supported idempotent same-run continue, then owner cancellation", "statusAtStop": "CANCELLED", "gitState": "DIRTY", "preservedPaths": ["modified extensions/src/site/web/studio/Studio.tsx", "nine untracked files extensions/qa/phase3-native-consent/", "five untracked files extensions/src/mcp-app/native-host/"], "acceptance": "UNREVIEWED_UNTESTED_UNMERGED_WIP"},
+  "supersededPhoneCandidate": {"source": "4a1d92b03d734d96717c26873686c68d6c76735c", "priorResult": "liveGame4/4 PASS, fullchain0/2 FAIL", "replacedByAcceptedSource": "62a9cbea2846711a8392d695be02f9f82f635536"},
+  "unfinishedForNextOwnerAssignedAgent": ["Review latest D and verify affected negative case5 before any acceptance/merge", "Review preserved native-consent WIP and complete real human approval/model retry/Studio reopen", "Explicit full-show redacted contract/renderer/asset/CSP design and integration", "Final independent security review", "One final combined source-SHA matrix", "Separately approved deployed HTTPS MCP/OAuth route readiness and real host installation"],
+  "finalAsanaReceipt": "ASANA_STOP_HANDOFF_READBACK.json",
+  "reusedScopedEvidence": {"recovery": "44/44 PASS earlier, mixed filesystem and unchanged source", "siteMetadataLocales": "42/42 PASS earlier, unchanged relevant source", "phase1Phase2": "Historical accepted scope only"},
+  "asanaReadbackVerified": [
+    {"task": "1220109925694179", "comment": "1220605711845785"},
+    {"task": "1220111293723790", "comment": "1220604758652630"},
+    {"task": "1219881067977912", "comment": "1220603683086966"},
+    {"task": "1219846294963052", "comment": "1220603588097769"},
+    {"task": "1220539632193783", "comment": "1220598431410135"},
+    {"task": "1220539638955304", "comment": "1220598003080149"},
+    {"task": "1220539638965463", "comment": "1220598197357728"},
+    {"task": "1220539638965463", "comment": "1220598208632524"}
+  ],
+  "productionChanged": false,
+  "pushPerformed": false,
+  "baseBranchMerged": false,
+  "providerCalls": false,
+  "customerDataChanged": false,
+  "emailsSent": false
+}
