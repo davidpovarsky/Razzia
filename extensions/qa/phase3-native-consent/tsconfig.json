@@ -1,0 +1,15 @@
+{
+  "extends": "../../src/mcp-app/tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "paths": {
+      "@razzia/common/*": ["../../../packages/common/src/*"],
+      "@razzia/socket/*": ["../../../packages/socket/src/*"],
+      "@razzia/web/*": ["../../../packages/web/src/*"],
+      "@razzia/extensions": ["../../src/index.ts"],
+      "@razzia/extensions/*": ["../../src/*"]
+    }
+  },
+  "include": ["../../src/mcp-app/native-host/**/*.ts", "./**/*.ts"]
+}

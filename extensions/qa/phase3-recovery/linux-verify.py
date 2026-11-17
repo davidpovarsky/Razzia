@@ -19,6 +19,9 @@ SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
        "-o", "ConnectTimeout=10", "ubuntu@132.145.25.168"]
 CONTAINER = "tadazz-phase2-20261116"
 SHA = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+SUITE = sys.argv[1] if len(sys.argv) > 1 else "recovery"
+if SUITE not in ("recovery", "native-consent"):
+    raise SystemExit("Expected recovery or native-consent")
 RUN = f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
 EVIDENCE = ROOT / "docs/extensions/plans/phase3-takeover-20261117" / RUN
 EVIDENCE.mkdir()
@@ -109,18 +112,33 @@ def check(label, seconds, argv):
     record = {"label": label, "command": command, "exit": result.returncode, "seconds": round(time.time()-started, 3), "stdout": result.stdout, "stderr": result.stderr}
     checks.append(record)
     return result.returncode == 0
-case5 = check("ext4-case5", 60, tsx + ["--test-name-pattern=^5[.]", qualification])
-if case5:
-    check("ext4-full8", 300, tsx + [qualification, invariants])
-scope = ["extensions/qa/phase3-recovery/backup-restore.ts", "extensions/qa/phase3-recovery/recovery-child.ts", qualification, invariants, "extensions/src/core/card-media-references.ts", "extensions/src/server/storage/service.ts"]
-check("recovery-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-recovery/tsconfig.json"])
-check("recovery-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", *scope])
-check("recovery-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", *scope])
+if c["suite"] == "recovery":
+    case5 = check("ext4-case5", 60, tsx + ["--test-name-pattern=^5[.]", qualification])
+    if case5:
+        check("ext4-full8", 300, tsx + [qualification, invariants])
+    scope = ["extensions/qa/phase3-recovery/backup-restore.ts", "extensions/qa/phase3-recovery/recovery-child.ts", qualification, invariants, "extensions/src/core/card-media-references.ts", "extensions/src/server/storage/service.ts"]
+    check("recovery-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-recovery/tsconfig.json"])
+    check("recovery-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", *scope])
+    check("recovery-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", *scope])
+else:
+    native = "extensions/qa/phase3-native-consent/"
+    prefix[4:4] = ["-e", "TMPDIR=" + fixture]
+    http_ok = check("native-http", 180, tsx + [native + "host-lifetime.nodecheck.ts", native + "consent-routes.nodecheck.ts", native + "native-host-e2e.nodecheck.ts"])
+    check("native-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", native + "tsconfig.json"])
+    check("native-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", "extensions/src/mcp-app/native-host", native])
+    check("native-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", "extensions/src/mcp-app/native-host", native, "extensions/src/site/web/studio/Studio.tsx"])
+    if http_ok:
+        prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
+        preview_ok = check("native-preview-build", 120, ["node", "extensions/qa/build-application-preview.mjs"])
+        if preview_ok:
+            site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts"])
+            if site_ok:
+                check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
 after = hashes()
 assert after == before, "Source changed during qualification"
-print(json.dumps({"sha": c["sha"], "run": c["run"], "source": source, "fixture": fixture, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
+print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
 '''
-configuration = {"sha": SHA, "run": RUN, "archive": remote_archive, "manifest": manifest}
+configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "archive": remote_archive, "manifest": manifest}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
 result = subprocess.run([*SSH, "sudo -n python3 -"], input=script, text=True, encoding="utf8", capture_output=True, timeout=650)
 (EVIDENCE / "controller.stdout.log").write_text(result.stdout, encoding="utf8")
@@ -132,4 +150,5 @@ if result.returncode != 0:
 receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
-sys.exit(0 if all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == "ext4-full8" for item in receipt["checks"]) else 1)
+required_gate = "ext4-full8" if SUITE == "recovery" else "native-browser"
+sys.exit(0 if all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"]) else 1)

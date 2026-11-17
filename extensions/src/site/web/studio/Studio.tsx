@@ -46,6 +46,11 @@ const OAuthConsentPage = lazy(() =>
     (module) => ({ default: module.OAuthConsentPage }),
   ),
 )
+const NativeSaveConsentPage = lazy(() =>
+  import("../../../components/native-save-consent/NativeSaveConsentPage").then(
+    (module) => ({ default: module.NativeSaveConsentPage }),
+  ),
+)
 const StudioThemeBuilder = lazy(() =>
   import("../../../components/theme-builder/StudioThemeBuilder").then(
     (module) => ({ default: module.StudioThemeBuilder }),
@@ -170,6 +175,28 @@ export function Studio() {
             (import.meta.env.VITE_TADAZZ_OAUTH_ISSUER_PATH as
               string | undefined) ?? ""
           }
+        />
+      </Suspense>
+    )
+  }
+
+  if (
+    import.meta.env.VITE_TADAZZ_NATIVE_CONSENT_ENABLED === "true" &&
+    (path === "/studio/native-save-consent" ||
+      path.startsWith("/studio/native-save-consent/"))
+  ) {
+    return (
+      <Suspense fallback={<StudioLoading />}>
+        <NativeSaveConsentPage
+          key={`${profile.data.id}:${path}:${search}:${hash}`}
+          account={profile.data}
+          issuerBasePath={
+            (import.meta.env.VITE_TADAZZ_OAUTH_ISSUER_PATH as
+              string | undefined) ?? ""
+          }
+          pathname={path}
+          search={search}
+          hash={hash}
         />
       </Suspense>
     )
