@@ -4,7 +4,6 @@ Uses new task-owned paths; never reads the customer mount or edits old QA trees.
 No service restart, installation, image build, customer operation or cleanup.
 """
 import hashlib
-import io
 import json
 import pathlib
 import shlex
@@ -37,7 +36,7 @@ with tarfile.open(ARCHIVE, "r:gz") as archive:
             manifest[member.name] = hashlib.sha256(archive.extractfile(member).read()).hexdigest()
         elif not member.isdir():
             raise RuntimeError(f"Unexpected archive member: {member.name}")
-(EVIDENCE / "input-manifest.json").write_text(json.dumps({"sha": SHA, "files": manifest}, indent=2) + "\n", encoding="utf8")
+(EVIDENCE / "input-manifest.json").write_text(json.dumps({"sha": SHA, "files": manifest}, indent=2) + "\n", encoding="utf8", newline="\n")
 remote_archive = f"/tmp/{RUN}.tar.gz"
 subprocess.run(["scp", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
                 "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes",
@@ -81,7 +80,11 @@ for directory in ["", "extensions", "packages/common", "packages/socket", "packa
 print(json.dumps({"source": source, "fixture": fixture}))
 """
 subprocess.run(["docker", "exec", container, "mkdir", "-m", "700", base], check=True)
-subprocess.run(["docker", "cp", c["archive"], container + ":" + base + "/source.tar.gz"], check=True, stdout=subprocess.DEVNULL)
+# docker cp resolves tmpfs paths outside the exec mount namespace on this host.
+# Stream into an exclusive file through exec, which sees the actual QA tmpfs.
+copy_script = "import shutil,sys;f=open(sys.argv[1],'xb');shutil.copyfileobj(sys.stdin.buffer,f);f.close()"
+with open(c["archive"], "rb") as archive_stream:
+    subprocess.run(["docker", "exec", "-i", container, "python3", "-c", copy_script, base + "/source.tar.gz"], stdin=archive_stream, check=True, stdout=subprocess.DEVNULL)
 initialized = execute(["docker", "exec", "-i", container, "python3", "-c", setup, source, fixture, base + "/source.tar.gz"], timeout=60)
 assert initialized.returncode == 0, initialized.stderr
 hashscript = "import hashlib,json,pathlib,sys;root=pathlib.Path(sys.argv[1]);paths=json.load(sys.stdin);print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}))"
@@ -124,6 +127,6 @@ if result.returncode != 0:
     print(f"Controller failed; preserved evidence: {EVIDENCE}")
     sys.exit(result.returncode)
 receipt = json.loads(result.stdout)
-(EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8")
+(EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
 sys.exit(0 if all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == "ext4-full8" for item in receipt["checks"]) else 1)
