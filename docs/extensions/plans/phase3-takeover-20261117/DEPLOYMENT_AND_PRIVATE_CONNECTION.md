@@ -136,3 +136,39 @@ redact tokens and account details in retained logs.
 Claude uses its own supported connector/account flow and must have a separate
 real-host result. No API harness or synthetic SDK host substitutes for either.
 Phase 3 remains **NOT_READY** until the required gates are actually satisfied.
+# Production launcher preparation — 2026-11-18, pre-edit
+
+The tested route include/native host currently have no production entry/config
+loader. Add an opt-in downstream launcher and private bounded config loader under
+extensions/src/mcp-app/native-host, with focused QA. OFF must start the original
+socket entry unchanged. ON requires explicit persistent Ed25519/ticket keys and
+exact preregistered HTTPS clients, read only from a no-link owner-only file at
+CONFIG_PATH/extensions/mcp-service/runtime.json. No generated/default keys,
+credential logs, dynamic JS/plugin loading, install, public listener or production
+mutation. Enabled host reuses the already tested native startup/API/SocketIO and
+consent adapter on loopback. Artifact/preview activation remains a separate gate;
+no full-show pin or deployment acceptance is granted by a config file.
+
+Local launcher/config qualification:5/5 Windows checks PASS,1 POSIX permission
+case correctly SKIP on Windows; types/lint/format PASS. Build uses installed
+rolldown1.2.13, the actual root tsconfig/package sources and no source aliases or
+rewrites, producing one1.8MB CJS backend with606 hashed physical inputs. Native
+ws/debug optional color/performance helpers remain optional as upstream; required
+modules are bundled or Node built-ins. Initial physical-input receipt attempts
+wrongly tried to hash built-ins/optional externals as files, now corrected. No
+live/private keys were generated or read, no listener was started by the build.
+
+Next exact-source test uses a fresh offline/read-only instance of the actual
+current production image417cc204 with only own synthetic config/fixtures, no
+customer mount or published ports. It must prove enabled startup, actual native
+API/metadata/401, persistent JWKS across restart, graceful shutdown, unchanged
+OFF entry and private-mode rejection before native bootstrap. This is still an
+internal gate; full-show, independent security, final combined SHA, backup/
+rollback, real production routing and installed-host E2E remain incomplete.
+
+Owner-authorized temporary cleanup reclaimed207683584B by removing only obsolete
+Codex77d211/65bf41 source copies after rechecking all1678/1681 hashes against
+already committed manifests and ensuring no direct running mounts/process cwd.
+Latest475926 source, logs, receipts, fixtures and all Cezar/customer state remain.
+Receipts:cleanup-owned-full-show-{dry-run,applied}.json.
+

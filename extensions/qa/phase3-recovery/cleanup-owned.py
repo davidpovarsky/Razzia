@@ -1,6 +1,6 @@
-"""Owner-authorized cleanup of two exact failed Codex source copies only.
+"""Owner-authorized cleanup of exact redundant Codex temporary source copies.
 
-Dry-run by default. Preserve fixtures, logs, all accepted source and old workers.
+Dry-run by default. Preserve fixtures, logs, latest qualified source and old workers.
 Validate every source/archive byte against the already committed input manifest
 before any deletion. Never follow dependency links or delete a run directory.
 """
@@ -11,8 +11,9 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 BASE = ROOT / "docs/extensions/plans/phase3-takeover-20261117"
-assert sys.argv[1:] in ([], ["--apply"], ["--failed-native-c412"], ["--failed-native-c412", "--apply"], ["--failed-native-714"], ["--failed-native-714", "--apply"], ["--failed-native-163"], ["--failed-native-163", "--apply"])
-RUNS = (["tadazz-codex-163cb92e7a93-7e32e936"] if "--failed-native-163" in sys.argv else
+assert sys.argv[1:] in ([], ["--apply"], ["--failed-native-c412"], ["--failed-native-c412", "--apply"], ["--failed-native-714"], ["--failed-native-714", "--apply"], ["--failed-native-163"], ["--failed-native-163", "--apply"], ["--qualified-full-show"], ["--qualified-full-show", "--apply"])
+RUNS = (["tadazz-codex-77d211873e13-9ccc472c", "tadazz-codex-65bf41f7c47b-f2258c12"] if "--qualified-full-show" in sys.argv else
+        ["tadazz-codex-163cb92e7a93-7e32e936"] if "--failed-native-163" in sys.argv else
         ["tadazz-codex-7141211d6932-e5d56c61"] if "--failed-native-714" in sys.argv else
         ["tadazz-codex-c4125d58a746-2fea79ad"] if "--failed-native-c412" in sys.argv else
         ["tadazz-codex-45b266bd74ae-6f7c237d", "tadazz-codex-a9a3fe2d68aa-da23916f"])
@@ -26,7 +27,7 @@ for run in RUNS:
 config = {"apply": "--apply" in sys.argv, "inputs": inputs,
           "evidenceCommit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()}
 REMOTE = r'''
-import hashlib,json,pathlib,shutil,tarfile
+import hashlib,json,pathlib,shutil,tarfile,subprocess
 c=CONFIG
 base=pathlib.Path('/home/ubuntu/tadazz-phase2-20261116/evidence')
 assert base.resolve()==base and shutil.rmtree.avoids_symlink_attacks
@@ -34,9 +35,17 @@ targets=[]
 proofs=[]
 preserve=[]
 for run,item in c['inputs'].items():
-    assert run in ('tadazz-codex-45b266bd74ae-6f7c237d','tadazz-codex-a9a3fe2d68aa-da23916f','tadazz-codex-c4125d58a746-2fea79ad','tadazz-codex-7141211d6932-e5d56c61','tadazz-codex-163cb92e7a93-7e32e936')
+    assert run in ('tadazz-codex-45b266bd74ae-6f7c237d','tadazz-codex-a9a3fe2d68aa-da23916f','tadazz-codex-c4125d58a746-2fea79ad','tadazz-codex-7141211d6932-e5d56c61','tadazz-codex-163cb92e7a93-7e32e936','tadazz-codex-77d211873e13-9ccc472c','tadazz-codex-65bf41f7c47b-f2258c12')
     source=base/run/'source'
     assert source.resolve()==source and source.is_dir() and not source.is_symlink()
+    for proc in pathlib.Path('/proc').iterdir():
+        if not proc.name.isdigit(): continue
+        try: cwd=str((proc/'cwd').readlink())
+        except (OSError,PermissionError): continue
+        assert not any(cwd==prefix or cwd.startswith(prefix+'/') for prefix in (str(source),'/evidence/'+run+'/source')), 'Temporary source is still a process working directory'
+    for ident in subprocess.check_output(['docker','ps','-q'],text=True).split():
+        container=json.loads(subprocess.check_output(['docker','inspect',ident]))[0]
+        assert not any(m['Source']==str(source) or m['Source'].startswith(str(source)+'/') for m in container['Mounts']), 'Temporary source is still directly mounted by a running container'
     manifest=item['files']
     for name,expected in manifest.items():
         relative=pathlib.PurePosixPath(name)
@@ -81,7 +90,8 @@ print(json.dumps({'apply':c['apply'],'preservedEvidenceCommit':c['evidenceCommit
 '''
 remote = REMOTE.replace("c=CONFIG", "c=" + repr(config))
 result = subprocess.run(["ssh", "-i", str(pathlib.Path.home()/".ssh/tadazz_oracle_2026"), "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=yes", "ubuntu@132.145.25.168", "sudo -n python3 -"], input=remote, capture_output=True, text=True, encoding="utf8", timeout=90)
-prefix = ("cleanup-owned-native-163" if "--failed-native-163" in sys.argv else
+prefix = ("cleanup-owned-full-show" if "--qualified-full-show" in sys.argv else
+          "cleanup-owned-native-163" if "--failed-native-163" in sys.argv else
           "cleanup-owned-native-714" if "--failed-native-714" in sys.argv else
           "cleanup-owned-native-c412" if "--failed-native-c412" in sys.argv else "cleanup-owned")
 output = BASE / (prefix + ("-applied.json" if config["apply"] else "-dry-run.json"))
