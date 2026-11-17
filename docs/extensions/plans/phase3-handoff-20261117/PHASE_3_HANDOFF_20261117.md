@@ -209,6 +209,8 @@ was authorized. Do not confuse task-owned synthetic `/evidence` with production.
 
 Original Asana tasks are updated with STOP/NOT_READY and this handoff; readback
 receipts are saved as `ASANA_STOP_HANDOFF_READBACK.json` beside the tracked mirror.
-If any update fails, its exact GID/error is recorded there, not claimed synced.
+**15/15 final comments independently read back; all fifteen tasks confirmed OPEN,
+zero pending updates, no duplicated tasks or false completion.** Exact comment
+GIDs and per-task links are recorded in that receipt.
 This manager ends after handoff documentation and Asana readback. **No automatic
 resumption, further tasks or Phase3 development.**

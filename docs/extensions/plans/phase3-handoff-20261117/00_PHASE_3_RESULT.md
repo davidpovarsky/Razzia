@@ -4,6 +4,8 @@
 and historical checkpoints below. Phase3 is NOT DONE and NOT READY.**
 
 Authoritative current state: `PHASE_3_HANDOFF_20261117.md`.
+Final STOP comments **15/15 readback verified**, all original tasks OPEN;
+exact GIDs/receipts in `ASANA_STOP_HANDOFF_READBACK.json`. No pending sync.
 Manager pre-handoff checkpoint1b9f77cd2d61b46cefe419a30fd643ff6c86e46a,
 latest accepted runtime mergebe93cd8310818387733c88658e46f06d66cb6ad7.
 Accepted scoped merges: Widget95e892e, service dd6fd439, phone62a9cbea.

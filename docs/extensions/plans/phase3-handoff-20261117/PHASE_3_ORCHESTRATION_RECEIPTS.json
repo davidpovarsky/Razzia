@@ -33,5 +33,8 @@
   "productionActions": [],
   "finalParentLifecycle": "Manager ends after owner-requested handoff; Phase3 remains STOPPED_NOT_READY, not accepted complete",
   "handoff": "PHASE_3_HANDOFF_20261117.md",
-  "finalAsanaReceipt": "ASANA_STOP_HANDOFF_READBACK.json"
+  "finalAsanaReceipt": "ASANA_STOP_HANDOFF_READBACK.json",
+  "finalAsanaStatus": "VERIFIED_15_OF_15_ALL_OPEN_NO_PENDING",
+  "handoffDocumentationCheckpoint": "b17ed9c30efe76af35d69a7465f0741a0d577f16",
+  "phase3CompletionClaimed": false
 }

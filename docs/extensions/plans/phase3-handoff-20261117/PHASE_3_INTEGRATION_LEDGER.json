@@ -65,6 +65,7 @@
   "supersededPhoneCandidate": {"source": "4a1d92b03d734d96717c26873686c68d6c76735c", "priorResult": "liveGame4/4 PASS, fullchain0/2 FAIL", "replacedByAcceptedSource": "62a9cbea2846711a8392d695be02f9f82f635536"},
   "unfinishedForNextOwnerAssignedAgent": ["Review latest D and verify affected negative case5 before any acceptance/merge", "Review preserved native-consent WIP and complete real human approval/model retry/Studio reopen", "Explicit full-show redacted contract/renderer/asset/CSP design and integration", "Final independent security review", "One final combined source-SHA matrix", "Separately approved deployed HTTPS MCP/OAuth route readiness and real host installation"],
   "finalAsanaReceipt": "ASANA_STOP_HANDOFF_READBACK.json",
+  "finalAsanaStatus": "VERIFIED_15_OF_15_ALL_OPEN_NO_PENDING",
   "reusedScopedEvidence": {"recovery": "44/44 PASS earlier, mixed filesystem and unchanged source", "siteMetadataLocales": "42/42 PASS earlier, unchanged relevant source", "phase1Phase2": "Historical accepted scope only"},
   "asanaReadbackVerified": [
     {"task": "1220109925694179", "comment": "1220605711845785"},
