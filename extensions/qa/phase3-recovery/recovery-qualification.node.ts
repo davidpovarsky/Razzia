@@ -1744,14 +1744,14 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
     )
   dbWithLinkedTenant.close()
 
-  assert.throws(
-    () => recoverStartupOwnerJournals(readStartupOwnerSnapshot()),
-    /^Unsafe startup owner metadata path$/u,
-  )
-  assert.throws(
-    () => readStartupOwnerSnapshot(),
-    /^Unsafe startup owner metadata path$/u,
-  )
+  assert.throws(() => recoverStartupOwnerJournals(readStartupOwnerSnapshot()), {
+    name: "Error",
+    message: "Unsafe startup owner metadata path",
+  })
+  assert.throws(() => readStartupOwnerSnapshot(), {
+    name: "Error",
+    message: "Unsafe startup owner metadata path",
+  })
   assert.deepStrictEqual(
     fs.readdirSync(symlinkTarget.root).sort(),
     beforeTargetEntries,
@@ -1777,10 +1777,10 @@ test("5. negative boundary suite: no client/unowned scan, symlink refusal, path-
     path.join(symDbRoot.root, "tadazz-accounts.sqlite"),
   )
   process.env.CONFIG_PATH = symDbRoot.root
-  assert.throws(
-    () => readStartupOwnerSnapshot(),
-    /^Unsafe startup owner metadata path$/u,
-  )
+  assert.throws(() => readStartupOwnerSnapshot(), {
+    name: "Error",
+    message: "Unsafe startup owner metadata path",
+  })
   assert.equal(
     sha256Hex(fs.readFileSync(realExternalDb)),
     externalDbDigestBefore,
