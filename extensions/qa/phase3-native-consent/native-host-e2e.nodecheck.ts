@@ -149,6 +149,15 @@ describe("native-host end-to-end consent integration", () => {
           nativeToken: accountA.token,
           scopes: ALL_MCP_SCOPES,
         })
+        // Give B a real active OAuth ledger too; a cold/unavailable store is not
+        // evidence that an otherwise-authorized B cannot inspect A's consent.
+        const grantFullB = await oauthFlowMod.authorizePkceGrant({
+          origin,
+          fetchImpl: tlsFetch,
+          nativeToken: accountB.token,
+          scopes: ALL_MCP_SCOPES,
+        })
+        assert(grantFullB.accessToken.length > 0)
 
         const connectMcp = async (accessToken: string) => {
           const client = new mcpClientMod.Client({
@@ -296,13 +305,19 @@ describe("native-host end-to-end consent integration", () => {
                 Origin: origin,
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ requestId: requestId1 }),
+              body: JSON.stringify({ consentRequestId: requestId1 }),
             },
           )
 
-          assert.equal(bobInspect.status >= 400, true)
+          // The accepted ledger deliberately maps a foreign grant lookup to
+          // DEPENDENCY_UNAVAILABLE, avoiding a cross-tenant existence oracle.
+          assert.equal(bobInspect.status, 503)
 
           const bobBody = await bobInspect.text()
+          assert.equal(
+            (JSON.parse(bobBody) as { error: { code: string } }).error.code,
+            "DEPENDENCY_UNAVAILABLE",
+          )
 
           assert.equal(bobBody.includes("Primary Consent Show"), false)
 
@@ -314,7 +329,7 @@ describe("native-host end-to-end consent integration", () => {
                 Authorization: `Bearer ${accountA.token}`,
                 "Content-Type": "application/json",
               },
-              body: JSON.stringify({ requestId: requestId1 }),
+              body: JSON.stringify({ consentRequestId: requestId1 }),
             },
           )
 
@@ -326,7 +341,10 @@ describe("native-host end-to-end consent integration", () => {
                 ? `${origin}${input}`
                 : input
 
-            return tlsFetch(target, init)
+            const headers = new Headers(init?.headers)
+            headers.set("Origin", origin)
+
+            return tlsFetch(target, { ...init, headers })
           }
           const consentClientA = consentClientMod.createNativeSaveConsentClient(
             {
@@ -464,7 +482,14 @@ describe("native-host end-to-end consent integration", () => {
           ).structuredContent as ToolOutcome
 
           assert.equal(retryDrift.ok, false)
-          assert.equal(retryDrift.error?.code, "REVISION_CONFLICT")
+          // C1 lookup precedes the mutable draft check. Windows cannot admit
+          // that POSIX lookup; only Linux qualifies the actual revision gate.
+          assert.equal(
+            retryDrift.error?.code,
+            process.platform === "linux"
+              ? "REVISION_CONFLICT"
+              : "DEPENDENCY_UNAVAILABLE",
+          )
 
           const reusedKey = (
             await connA.client.callTool({

@@ -57,3 +57,14 @@ The QA transfer now streams a validated immutable Git archive directly into a
 fresh ext4 source directory. It avoids additional host/container archive copies
 and preserves old evidence. Task-owned scratch cleanup remains pending the
 owner's answer to the explicit narrow cleanup question.
+
+The next Linux packet on a9a3fe2 completed in9.455s (12 PASS,1 FAIL), with
+types/lint/format PASS and no shutdown timeout. The remaining failure was the
+Node-only browser-client fixture not supplying the Origin a real browser adds.
+It now supplies that exact origin; the separate missing-Origin negative remains
+403. The B-account negative now sends the actual consentRequestId DTO, uses B's
+real OAuth ledger, and asserts the accepted ledger's exact uniform503 /
+DEPENDENCY_UNAVAILABLE refusal plus no leaked snapshot. A's valid inspection
+and approval must succeed afterward, so generic service failure cannot pass.
+Windows passes the HTTP flow while explicitly requiring POSIX/C1 denial; Linux
+still must prove actual save, drift409 and idempotent reopen before acceptance.

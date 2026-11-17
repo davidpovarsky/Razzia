@@ -173,8 +173,8 @@ else:
         if site_ok:
             check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
 after = hashes()
-assert after == before, "Source changed during qualification"
-print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
+changed_source = [p for p in before if before[p] != after[p]]
+print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
 '''
 configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
@@ -189,4 +189,4 @@ receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
 required_gate = "ext4-full8" if SUITE == "recovery" else "native-browser"
-sys.exit(0 if all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"]) else 1)
+sys.exit(0 if receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"]) else 1)
