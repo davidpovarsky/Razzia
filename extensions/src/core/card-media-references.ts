@@ -480,7 +480,9 @@ export const findMediaReferencesAcrossShows = (
   return matches
 }
 
-function stripStorageId(record: Record<string, unknown>): Record<string, unknown> {
+function stripStorageId(
+  record: Record<string, unknown>,
+): Record<string, unknown> {
   const { id: _storageId, ...payload } = record
 
   return payload
@@ -516,7 +518,8 @@ function resolvePostDetachBaseDigest(params: {
   if (
     "id" in beforeRecord &&
     beforeRecord.id === extras.quizId &&
-    computeCanonicalBaseDigest(stripStorageId(beforeRecord)) === extras.baseDigest
+    computeCanonicalBaseDigest(stripStorageId(beforeRecord)) ===
+      extras.baseDigest
   ) {
     return computeCanonicalBaseDigest(stripStorageId(afterRecord))
   }
