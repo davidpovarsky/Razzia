@@ -101,3 +101,66 @@ request, account switch, replacement manager, or automatic paid fallback.
 
 No candidate above is release-ready. Feature gates stay off; original Asana
 tasks and release parent remain open.
+
+## Recovered A source accepted independently — 17 November 04:32 UTC
+
+Child `482771e7` lifecycle is **FAILED**, confirmed by the project-scoped live
+Cockpit API. Its report is not lifecycle success. Exact committed source
+`dd6fd4392d44932fd63a80837abadece416e5ade` was independently reviewed and
+accepted into manager branch only, merge
+`30fab7f63a5208e9c2b95e023aa399ece623bb21`.
+
+- Exactly seven allowed files; clean child tree; no protected package/editor
+  changes. No source rerun, duplicate task, account switch or paid fallback.
+- Manager exact seven-file hashes verified before/after Linux execution:
+  service **14/14 PASS on tmpfs**, **14/14 PASS on ext4**, SDK/server
+  **64/64 PASS**, first-party **68/68 PASS**, QA TypeScript **PASS**.
+  These are separate overlapping suites, not a unique acceptance total.
+- New deterministic `Duplex` barriers exercise the actual listener and real
+  `ServerResponse`, without pretending paused peer reads must exhaust kernel
+  buffers. TCP protocol tests remain real loopback tests. Response deadline,
+  cancellation, 32-slot response lifetime and non-last retirement cases pass.
+- Real C1 consent/save/reopen/replay/cross-account passes on synthetic ext4
+  state, **not** actual human browser/Studio or hardware power-loss proof.
+  Historical `native-save-client.nodecheck.ts` remains **NOT_RUN** in this
+  environment because it hardcodes the Phase1 ext4 parent path.
+- Scoped oxlint **PASS**. Repository-configured local Prettier on all seven
+  files **PASS**. Remote Prettier without full formatting setup **FAIL** is
+  retained, not silently relabeled as a product-formatting failure.
+- Broad MCP TypeScript still **FAIL** with 147 diagnostics. Corrected read-only
+  compilerHost baseline overlay independently produces **the identical 147
+  diagnostics**, zero new. Neither choosing the MCP compiler alone nor a
+  `--typeRoots` override repaired the existing dependency graph. Initial invalid
+  comparison without `configFilePath` is retained as a runner error; only the
+  corrected comparison is acceptance evidence.
+- Postmerge `pnpm --dir extensions run ui:check`: initial **exit1** was Node22
+  TypeScript-import setup failure, not freeze execution. Process-only
+  `NODE_OPTIONS=--experimental-strip-types` retry executes the guards:
+  **exit1**, 23 historical protected-hash mismatches and old-allowlist denied
+  paths (including this new scoped service/QA). Protected delta against
+  `12ba2f4` is empty; neither guard attempt is claimed green.
+- Recovery supervisor ACK written `accepted` at its requested external path.
+  ACK acceptance applies to source, not the FAILED child lifecycle or release.
+- Asana MCP02 comment `1220598003080149` and MCP10 comment `1220598197357728`
+  both **readback verified**. Both tasks and the parent remain OPEN.
+
+Evidence is retained in task999ed90c Assets:
+`server-service-dd6fd43-verification.json`,
+`server-service-dd6fd43-types-baseline-comparison-corrected.json`,
+`server-service-dd6fd43-quality.json`, `merged-a-ui-receipt.json`,
+`merged-a-ui-strip-types-receipt.json`.
+The remote source scratch contains layered candidate files, so this is
+source-pinned **scoped A acceptance**, not a claim of full integrated-SHA QA.
+
+Existing phone repair `8de82781` remains queued; live API wait reason is
+`usage-reset` until `2026-11-17T04:37:28.122Z`. Respect that hold; do not duplicate
+or restart it. Eight children issued, four remaining. No renewed quota probe.
+The shared multi-project Cockpit boot project is Maktabah; all task operations
+and reads use explicit Tadazz project ID and the same existing manager/worktree.
+No second Cockpit or project migration was started.
+
+Next independent work after provider availability: accept repaired phone;
+qualify disposable recovery; complete downstream browser consent/Studio reopen
+and Widget full-show seams without protected edits; final independent security
+review and single-source acceptance. Site checks stay affected-first. All
+external hosts/PSTN/deployments remain separately gated. Release **NOT READY**.
