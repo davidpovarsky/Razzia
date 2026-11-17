@@ -59,7 +59,7 @@ assert inspection["HostConfig"]["NetworkMode"] == "none"
 assert not inspection["HostConfig"].get("PortBindings")
 assert inspection["HostConfig"]["Memory"] > 0, "Existing QA memory quota required"
 assert inspection["HostConfig"].get("NanoCpus", 0) > 0 or inspection["HostConfig"].get("CpuQuota", 0) > 0, "Existing CPU quota required"
-base = "/tmp/" + c["run"]
+base = "/evidence/" + c["run"]
 source = base + "/source"
 fixture = "/evidence/" + c["run"] + "/fixtures"
 setup = r"""
@@ -67,7 +67,7 @@ import hashlib, json, os, pathlib, sys, tarfile
 source, fixture, archive_path = sys.argv[1:]
 pathlib.Path(source).mkdir(parents=True, mode=0o700, exist_ok=False)
 pathlib.Path(fixture).mkdir(parents=True, mode=0o700, exist_ok=False)
-assert os.statvfs(fixture).f_bavail * os.statvfs(fixture).f_frsize > 128 * 1024 * 1024
+assert os.statvfs(fixture).f_bavail * os.statvfs(fixture).f_frsize > 512 * 1024 * 1024
 with tarfile.open(archive_path, "r:gz") as archive:
     for member in archive.getmembers():
         p = pathlib.PurePosixPath(member.name)
@@ -129,11 +129,11 @@ else:
     check("native-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", "extensions/src/mcp-app/native-host", native, "extensions/src/site/web/studio/Studio.tsx"])
     if http_ok:
         prefix[4:4] = ["-e", "TADAZZ_SITE_ENABLED=true", "-e", "VITE_TADAZZ_OAUTH_ISSUER_PATH=/oauth", "-e", "VITE_TADAZZ_NATIVE_CONSENT_ENABLED=true", "-e", "TADAZZ_SITE_DIST_DIR=" + source + "/packages/web/dist", "-e", "TADAZZ_QA_RUN_DIR=" + fixture + "/browser", "-e", "TADAZZ_QA_OWNED_RUN_DIR=1"]
-        preview_ok = check("native-preview-build", 120, ["node", "extensions/qa/build-application-preview.mjs"])
-        if preview_ok:
-            site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts"])
-            if site_ok:
-                check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
+        # Consent/browser qualification does not manufacture a full-show pin or
+        # rewrite the tracked preview-build manifest. Full-show is a later gate.
+        site_ok = check("native-site-build", 180, ["node", "/cleanup/packages/web/node_modules/vite/bin/vite.js", "build", "--config", "extensions/site.vite.config.ts"])
+        if site_ok:
+            check("native-browser", 300, ["node", "/cleanup/extensions/node_modules/@playwright/test/cli.js", "test", "--config", native + "native-consent.playwright.config.ts", "--reporter=list"])
 after = hashes()
 assert after == before, "Source changed during qualification"
 print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": True, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))

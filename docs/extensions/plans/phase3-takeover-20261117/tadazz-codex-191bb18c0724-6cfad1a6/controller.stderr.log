@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "<string>", line 1, in <module>
+  File "/usr/lib/python3.11/shutil.py", line 200, in copyfileobj
+    fdst_write(buf)
+OSError: [Errno 28] No space left on device
+Traceback (most recent call last):
+  File "<stdin>", line 44, in <module>
+  File "/usr/lib/python3.12/subprocess.py", line 571, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['docker', 'exec', '-i', 'tadazz-phase2-20261116', 'python3', '-c', "import shutil,sys;f=open(sys.argv[1],'xb');shutil.copyfileobj(sys.stdin.buffer,f);f.close()", '/tmp/tadazz-codex-191bb18c0724-6cfad1a6/source.tar.gz']' returned non-zero exit status 1.
