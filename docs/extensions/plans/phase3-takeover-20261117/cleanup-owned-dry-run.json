@@ -1,0 +1,25 @@
+{
+  "apply": false,
+  "preservedEvidenceCommit": "ec061f7bbb2cc74cf27a9a8d78ed2fe7d0ae15be",
+  "targets": [
+    {
+      "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-45b266bd74ae-6f7c237d/source",
+      "sourceSha": "45b266bd74aea00e549b0e986817cb49c110c543",
+      "verifiedFiles": 1669
+    },
+    {
+      "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-45b266bd74ae-6f7c237d/source.tar.gz",
+      "sha256": "bb8a25ea33f48f590436555e722b808994c5d92ca33287bb07eaa066c470ec1c",
+      "verifiedFiles": 1669
+    },
+    {
+      "target": "/home/ubuntu/tadazz-phase2-20261116/evidence/tadazz-codex-a9a3fe2d68aa-da23916f/source",
+      "sourceSha": "a9a3fe2d68aa10e88e779a2bb52742cb088963de",
+      "verifiedFiles": 1669
+    }
+  ],
+  "freeBefore": 337072128,
+  "freeAfter": 337072128,
+  "fixturesAndLogsPreserved": true,
+  "oldWorkersAndCustomerDataAccessed": false
+}
