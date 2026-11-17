@@ -235,3 +235,37 @@ routes and prove real human approval/model retry/Studio reopen without mocking
 authority. No source rewrites or protected seam without separate approval.
 D remains independently assigned QA-only. Two slots remain for Widget full-show
 and final independent security. Manager alone performs remote QA. NOT READY.
+
+## 11:01 UTC D failed acceptance; bounded same-worker rework
+
+D delivered clean `f2e20424a954c44b44fce67aba714f6a01befb0b`, four QA-only
+files, lifecycle DONE. Manager actual ext4 qualification **1/5 PASS,4 FAIL**;
+QA types/oxlint/configured format **PASS**. Candidate **NOT ACCEPTED/NOT MERGED**.
+Test1 passes all six genuine C1 SIGKILL/replay checkpoints and tenantB sentinel.
+Remaining failures: committed-operation retry child exits2 at930; native
+sidecar logical-intent mismatch during startup recovery at1089; restored quiz
+404 at1386; expected linked-tenant exception absent at1622. Differentiate QA
+root/env/checkpoint errors from actual runtime faults before proposing changes.
+Storage/packages/runtime remain read-only; original assertions cannot be skipped.
+
+Two malformed hashes in worker receipt were detected before remote execution;
+manager recomputed Git and actual child bytes, then verified21 source/runtime
+hashes before/after. Original receipt retained, not silently trusted/corrected.
+Raw Assets `server-recovery-f2e2042-verification.json` and
+`recovery-f2e2042-child-hash-errors.json`. Supervisor ACK D now needs_rework.
+One bounded SAME-worker rework via supported Continue; no additional child/slot.
+Asana Sidecar comment1220604758652630 readback verified, task OPEN.
+
+Native-consent initial start failed empty conversation ID, zero source delta at
+actual fork a7c7c8f. Verified no exact-run AGY process; ONE supported idempotent
+same-run start recovery was accepted (receipt
+`native-consent-start-recovery.json`). No implementation/test acceptance yet.
+Supervisor ACK remains blocked; do not repeat startup retry on another failure.
+Original D silence warning was checked against a live AGY process and preserved.
+
+Ten children issued; two slots remain, no replacement worker/model/account.
+Widget full-show is not compatible with frozen single-frame DTO/producer/
+renderer as documented in the accepted probe; do not dispatch a pretend
+widget-only completion or change redaction/rights/CSP without an explicit
+manager-owned contract revision. Native host and final security sequencing
+must preserve that boundary. No production/customer/provider actions.
