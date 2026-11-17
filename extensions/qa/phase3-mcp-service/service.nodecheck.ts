@@ -1602,3 +1602,162 @@ test("holds unified 32-slot admission across remote responseTimeoutMs and enforc
   await previewDraining
   assert.equal(previewDrained, true)
 })
+
+test("retires aborted multi-request slots via non-last finalizeSlot path while a keeper slot remains active", async () => {
+  const f = getFixture()
+  let keeperEntered: () => void = () => undefined
+  let releaseKeeper: () => void = () => undefined
+  const keeperReady = new Promise<void>((resolve) => {
+    keeperEntered = resolve
+  })
+  const keeperHeld = new Promise<void>((resolve) => {
+    releaseKeeper = resolve
+  })
+
+  let batchStarted = 0
+  let batchReadyNotify: () => void = () => undefined
+  let releaseBatch: () => void = () => undefined
+  const batchReady = new Promise<void>((resolve) => {
+    batchReadyNotify = resolve
+  })
+  const batchHeld = new Promise<void>((resolve) => {
+    releaseBatch = resolve
+  })
+
+  let mode: "keeper" | "batch" | "fast" = "keeper"
+  const baseLimiter = createPrincipalRateLimiter({ readsPerMinute: 120 })
+  const multiService = await buildService({
+    rateLimit: async (principal, toolName) => {
+      if (mode === "keeper") {
+        keeperEntered()
+        await keeperHeld
+      } else if (mode === "batch") {
+        batchStarted += 1
+
+        if (batchStarted === 31) {
+          batchReadyNotify()
+        }
+
+        await batchHeld
+      }
+
+      return baseLimiter(principal, toolName)
+    },
+  })
+  const tokens = await authorizeAndToken(multiService, f.sessions[0])
+
+  const keeperPromise = multiService.fetch(
+    new Request(config.resource, {
+      method: "POST",
+      headers: {
+        host: new URL(origin).host,
+        authorization: `Bearer ${tokens.access_token}`,
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({
+        jsonrpc: "2.0",
+        id: 1,
+        method: "tools/call",
+        params: {
+          name: "list_themes",
+          arguments: { contractVersion: "0.1.0" },
+        },
+      }),
+    }),
+  )
+  await keeperReady
+
+  mode = "batch"
+  const batchControllers = Array.from(
+    { length: 31 },
+    () => new AbortController(),
+  )
+  const batchPromises = batchControllers.map((controller, index) =>
+    multiService.fetch(
+      new Request(config.resource, {
+        method: "POST",
+        signal: controller.signal,
+        headers: {
+          host: new URL(origin).host,
+          authorization: `Bearer ${tokens.access_token}`,
+          "content-type": "application/json",
+          accept: "application/json, text/event-stream",
+        },
+        body: JSON.stringify({
+          jsonrpc: "2.0",
+          id: 10 + index,
+          method: "tools/call",
+          params: {
+            name: "list_themes",
+            arguments: { contractVersion: "0.1.0" },
+          },
+        }),
+      }),
+    ),
+  )
+  await batchReady
+
+  const saturated = await multiService.fetch(
+    new Request(config.resource, {
+      method: "POST",
+      headers: {
+        host: new URL(origin).host,
+        authorization: `Bearer ${tokens.access_token}`,
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 999, method: "tools/list" }),
+    }),
+  )
+  assert.equal(saturated.status, 429)
+
+  for (const controller of batchControllers) {
+    controller.abort()
+  }
+
+  const batchResponses = await Promise.all(batchPromises)
+  assert.ok(batchResponses.every((res) => res.status === 400))
+
+  mode = "fast"
+  releaseBatch()
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
+
+  const reclaimedOAuth = await multiService.fetch(
+    new Request(`${origin}/oauth/jwks.json`, {
+      headers: { host: new URL(origin).host },
+    }),
+  )
+  assert.equal(reclaimedOAuth.status, 200)
+
+  const reclaimedMcp = await multiService.fetch(
+    new Request(config.resource, {
+      method: "POST",
+      headers: {
+        host: new URL(origin).host,
+        authorization: `Bearer ${tokens.access_token}`,
+        "content-type": "application/json",
+        accept: "application/json, text/event-stream",
+      },
+      body: JSON.stringify({ jsonrpc: "2.0", id: 1000, method: "tools/list" }),
+    }),
+  )
+  assert.equal(reclaimedMcp.status, 200)
+
+  let drainedWhileKeeperHeld = false
+  const draining = multiService.drain().then(() => {
+    drainedWhileKeeperHeld = true
+  })
+  await new Promise<void>((resolve) => {
+    setImmediate(resolve)
+  })
+  assert.equal(drainedWhileKeeperHeld, false)
+
+  releaseKeeper()
+  const keeperRes = await keeperPromise
+  assert.equal(keeperRes.status, 200)
+  await draining
+  assert.equal(drainedWhileKeeperHeld, true)
+})

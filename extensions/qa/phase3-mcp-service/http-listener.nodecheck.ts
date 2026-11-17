@@ -2,7 +2,7 @@ import assert from "node:assert/strict"
 import { createHash, generateKeyPairSync, randomBytes } from "node:crypto"
 import http from "node:http"
 import net from "node:net"
-import { PassThrough } from "node:stream"
+import { Duplex, PassThrough } from "node:stream"
 import { after, before, test } from "node:test"
 import { Client, StreamableHTTPClientTransport } from "./mcp-client.ts"
 import { createOAuthConsentClient } from "../../src/components/oauth-consent/client.ts"
@@ -510,6 +510,57 @@ function resolveRequestUrl(input: Parameters<typeof fetch>[0]): URL {
   return new URL(input.url)
 }
 
+function createBackpressureSocket(holdAfterBytes = 1) {
+  const chunks: Buffer[] = []
+  let writtenBytes = 0
+  let paused = false
+  let pendingCallback: ((error?: Error | null) => void) | null = null
+  let notifyPaused: (() => void) | null = null
+  const pausedPromise = new Promise<void>((resolve) => {
+    notifyPaused = resolve
+  })
+
+  const socket = new Duplex({
+    highWaterMark: 16,
+    read() {
+      return undefined
+    },
+    write(chunk: Buffer | string, _encoding, callback) {
+      const part = typeof chunk === "string" ? Buffer.from(chunk) : chunk
+      chunks.push(part)
+      writtenBytes += part.byteLength
+
+      if (!paused && writtenBytes >= holdAfterBytes) {
+        paused = true
+        pendingCallback = callback
+        notifyPaused?.()
+
+        return
+      }
+
+      callback()
+    },
+    destroy(error, callback) {
+      const pending = pendingCallback
+      pendingCallback = null
+      pending?.(error ?? undefined)
+      callback(error)
+    },
+  })
+  socket.on("error", () => undefined)
+
+  return {
+    socket,
+    pausedPromise,
+    getBytes: () => Buffer.concat(chunks).byteLength,
+    release() {
+      const pending = pendingCallback
+      pendingCallback = null
+      pending?.()
+    },
+  }
+}
+
 function sendRawTcpAndRead(port: number, payload: string, timeoutMs = 2000) {
   return new Promise<{ raw: string; closed: boolean; errorCode?: string }>(
     (resolve) => {
@@ -882,47 +933,72 @@ test("bounds TCP response deadlines, slow readers in drain(), pre-header sockets
     method: "resources/read",
     params: { uri: "ui://tadazz/quiz-preview/v1.html" },
   })
-  const slowReaderResult = await new Promise<{
-    drainedWhilePaused: boolean
-    bytesReceived: number
-    drainedAfterResume: boolean
-  }>((resolve, reject) => {
-    const socket = net.createConnection(
-      { host: "127.0.0.1", port: listener.port },
-      () => {
-        socket.pause()
-        socket.write(
-          `POST /mcp HTTP/1.1\r\nHost: ${hostHeader}\r\nAuthorization: Bearer ${accessToken}\r\nContent-Type: application/json\r\nAccept: application/json, text/event-stream\r\nContent-Length: ${Buffer.byteLength(largeReqBody)}\r\nConnection: close\r\n\r\n${largeReqBody}`,
-        )
-      },
-    )
-    const chunks: Buffer[] = []
-    socket.on("data", (chunk: Buffer) => chunks.push(chunk))
-    socket.on("error", reject)
+  const tcpCloseStart = Date.now()
+  const tcpCloseRaw = await sendRawTcpAndRead(
+    listener.port,
+    `POST /mcp HTTP/1.1\r\nHost: ${hostHeader}\r\nAuthorization: Bearer ${accessToken}\r\nContent-Type: application/json\r\nAccept: application/json, text/event-stream\r\nContent-Length: ${Buffer.byteLength(largeReqBody)}\r\nConnection: close\r\n\r\n${largeReqBody}`,
+    1500,
+  )
+  const tcpCloseMs = Date.now() - tcpCloseStart
+  const [tcpCloseHeaders] = tcpCloseRaw.raw.split("\r\n\r\n")
+  assert.equal(tcpCloseRaw.closed, true)
+  assert.equal(tcpCloseRaw.errorCode, undefined)
+  assert.match(tcpCloseHeaders, /^HTTP\/1\.1 200 /u)
+  assert.equal(/^connection:\s*keep-alive/imu.test(tcpCloseHeaders), false)
+  assert.ok(
+    tcpCloseMs < 1200,
+    `Expected prompt Connection: close EOF, got ${tcpCloseMs}ms`,
+  )
+  assert.ok(Buffer.byteLength(tcpCloseRaw.raw, "utf8") > 1_500_000)
 
-    setTimeout(() => {
-      let drained = false
-      const draining = service.drain().then(() => {
-        drained = true
-      })
-      setTimeout(() => {
-        const drainedWhilePaused = drained
-        socket.resume()
-        socket.once("end", () => {
-          void draining.then(() => {
-            resolve({
-              drainedWhilePaused,
-              bytesReceived: Buffer.concat(chunks).byteLength,
-              drainedAfterResume: drained,
-            })
-          })
-        })
-      }, 100)
-    }, 150)
+  const directNodeListener = createProtectedMcpNodeListener(service)
+  const barrier = createBackpressureSocket()
+  const slowReqIn = new PassThrough()
+  const slowReq = new http.IncomingMessage(slowReqIn as unknown as net.Socket)
+  slowReq.method = "POST"
+  slowReq.url = "/mcp"
+  slowReq.rawHeaders = [
+    "Host",
+    hostHeader,
+    "Authorization",
+    `Bearer ${accessToken}`,
+    "Content-Type",
+    "application/json",
+    "Accept",
+    "application/json, text/event-stream",
+    "Content-Length",
+    String(Buffer.byteLength(largeReqBody)),
+    "Connection",
+    "close",
+  ]
+  const slowRes = new http.ServerResponse(slowReq)
+  slowRes.assignSocket(barrier.socket as unknown as net.Socket)
+  const slowResSettled = new Promise<void>((resolve) => {
+    slowRes.once("finish", () => resolve())
+    slowRes.once("close", () => resolve())
   })
-  assert.equal(slowReaderResult.drainedWhilePaused, false)
-  assert.equal(slowReaderResult.drainedAfterResume, true)
-  assert.ok(slowReaderResult.bytesReceived > 1_500_000)
+  slowReq.complete = true
+  slowReq.push(Buffer.from(largeReqBody))
+  slowReq.push(null)
+  directNodeListener(slowReq, slowRes)
+  await barrier.pausedPromise
+
+  let drainedWhilePaused = false
+  const draining = service.drain().then(() => {
+    drainedWhilePaused = true
+  })
+  await new Promise<void>((resolve) => {
+    setTimeout(resolve, 60)
+  })
+  assert.equal(drainedWhilePaused, false)
+  assert.equal(slowRes.writableFinished, false)
+  assert.equal(slowRes.statusCode, 200)
+
+  barrier.release()
+  await slowResSettled
+  await draining
+  assert.equal(drainedWhilePaused, true)
+  assert.ok(barrier.getBytes() > 1_500_000)
 
   const tightListener = await listenProtectedMcpHttpServer(service, {
     port: 0,
@@ -996,46 +1072,56 @@ test("bounds TCP response deadlines, slow readers in drain(), pre-header sockets
   })
   assert.ok(partialClosedMs < 450)
 
-  const slowWriteStart = Date.now()
-  const slowWriteOutcome = await new Promise<{
-    drainedMs: number
-    bytesReceived: number
-  }>((resolve, reject) => {
-    const chunks: Buffer[] = []
-    const socket = net.createConnection(
-      { host: "127.0.0.1", port: tightListener.port },
-      () => {
-        socket.pause()
-        socket.write(
-          `POST /mcp HTTP/1.1\r\nHost: ${hostHeader}\r\nAuthorization: Bearer ${accessToken}\r\nContent-Type: application/json\r\nAccept: application/json, text/event-stream\r\nContent-Length: ${Buffer.byteLength(largeReqBody)}\r\nConnection: close\r\n\r\n${largeReqBody}`,
-        )
-      },
-    )
-    socket.on("data", (chunk: Buffer) => chunks.push(chunk))
-    socket.on("error", () => undefined)
-    const timer = setTimeout(() => {
-      socket.destroy()
-      reject(new Error("Slow reader response write did not time out"))
-    }, 1000)
-
-    void (async () => {
-      await new Promise<void>((r) => {
-        setTimeout(r, 250)
-      })
-      await tightListener.drain()
-      const drainedMs = Date.now() - slowWriteStart
-      socket.resume()
-      socket.once("close", () => {
-        clearTimeout(timer)
-        resolve({
-          drainedMs,
-          bytesReceived: Buffer.concat(chunks).byteLength,
-        })
-      })
-    })()
+  const tightDirectListener = createProtectedMcpNodeListener(service, {
+    responseTimeoutMs: 150,
   })
-  assert.ok(slowWriteOutcome.drainedMs < 500)
-  assert.ok(slowWriteOutcome.bytesReceived < 1_500_000)
+  const stalledWriteBarrier = createBackpressureSocket()
+  const stalledWriteIn = new PassThrough()
+  const stalledWriteReq = new http.IncomingMessage(
+    stalledWriteIn as unknown as net.Socket,
+  )
+  stalledWriteReq.method = "POST"
+  stalledWriteReq.url = "/mcp"
+  stalledWriteReq.rawHeaders = [
+    "Host",
+    hostHeader,
+    "Authorization",
+    `Bearer ${accessToken}`,
+    "Content-Type",
+    "application/json",
+    "Accept",
+    "application/json, text/event-stream",
+    "Content-Length",
+    String(Buffer.byteLength(largeReqBody)),
+    "Connection",
+    "close",
+  ]
+  const stalledWriteRes = new http.ServerResponse(stalledWriteReq)
+  stalledWriteRes.assignSocket(
+    stalledWriteBarrier.socket as unknown as net.Socket,
+  )
+  const stalledWriteSettled = new Promise<void>((resolve) => {
+    stalledWriteRes.once("finish", () => resolve())
+    stalledWriteRes.once("close", () => resolve())
+  })
+  const stalledWriteStart = Date.now()
+  stalledWriteReq.complete = true
+  stalledWriteReq.push(Buffer.from(largeReqBody))
+  stalledWriteReq.push(null)
+  tightDirectListener(stalledWriteReq, stalledWriteRes)
+  await stalledWriteBarrier.pausedPromise
+  await stalledWriteSettled
+  await service.drain()
+  const stalledWriteMs = Date.now() - stalledWriteStart
+  stalledWriteBarrier.release()
+  assert.equal(stalledWriteRes.statusCode, 200)
+  assert.ok(
+    stalledWriteMs >= 100 && stalledWriteMs < 500,
+    `Expected ~150ms write timeout drain, got ${stalledWriteMs}ms`,
+  )
+  assert.equal(stalledWriteRes.writableFinished, false)
+  assert.equal(stalledWriteRes.destroyed, true)
+  assert.ok(stalledWriteBarrier.getBytes() < 1_500_000)
 
   const cappedListener = await listenProtectedMcpHttpServer(service, {
     port: 0,
@@ -1067,4 +1153,211 @@ test("bounds TCP response deadlines, slow readers in drain(), pre-header sockets
   assert.equal(thirdAttempt.raw.includes("200 OK"), false)
   held1.destroy()
   held2.destroy()
+})
+
+test("enforces 32-slot admission across backpressured writes and returns 504 on response-stream deadline", async () => {
+  const f = getFixture()
+  const hostHeader = new URL(origin).host
+  const largeHtml = `<!doctype html><html><body>${"y".repeat(1_500_000)}</body></html>`
+  const service = await createProtectedMcpService({
+    enabled: true,
+    config: {
+      issuer: `${origin}/oauth`,
+      resource: `${origin}/mcp`,
+      resourceMetadataUrl: `${origin}/.well-known/oauth-protected-resource/mcp`,
+      firstPartyOrigins: [origin],
+    },
+    configRoot: f.root,
+    consentPageUrl: `${origin}/studio/oauth-consent`,
+    keyId: "backpressure-budget-key",
+    signingPrivateKeyPem: signingPem,
+    ticketEncryptionKey: ticketKey,
+    clients: [{ clientId, redirectUris: [redirectUri], scopes }],
+    allowedOrigins: [],
+    authoring: policy,
+    rateLimit: createPrincipalRateLimiter({ readsPerMinute: 120 }),
+    previewUiResource: {
+      html: largeHtml,
+      sha256: createHash("sha256").update(largeHtml).digest("hex"),
+      csp: { connectDomains: [], resourceDomains: [], frameDomains: [] },
+      canServe: () => true,
+    },
+  })
+  activeClosers.push(() => service.close())
+
+  const verifier = randomBytes(32).toString("base64url")
+  const authorize = await service.fetch(
+    new Request(
+      `${origin}/oauth/authorize?${new URLSearchParams({
+        response_type: "code",
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        resource: `${origin}/mcp`,
+        scope: scopes.join(" "),
+        state: randomBytes(24).toString("base64url"),
+        code_challenge: createHash("sha256")
+          .update(verifier)
+          .digest("base64url"),
+        code_challenge_method: "S256",
+      }).toString()}`,
+      { headers: { host: hostHeader } },
+    ),
+  )
+  const ticket =
+    new URL(authorize.headers.get("location") ?? "").searchParams.get(
+      "oauth_request",
+    ) ?? ""
+  const consentClient = createOAuthConsentClient({
+    issuerBasePath: "/oauth",
+    getNativeToken: () => f.sessions[0].token,
+    request: (path, init) => {
+      const headers = new Headers(init?.headers)
+      headers.set("host", hostHeader)
+      headers.set("origin", origin)
+
+      return service.fetch(
+        new Request(resolveRequestUrl(path).href, { ...init, headers }),
+      )
+    },
+  })
+  const inspected = await consentClient.inspect(ticket)
+  const redirect = new URL(await consentClient.approve(ticket, inspected))
+  const tokenRes = await service.fetch(
+    new Request(`${origin}/oauth/token`, {
+      method: "POST",
+      headers: {
+        host: hostHeader,
+        "content-type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: clientId,
+        code: redirect.searchParams.get("code") ?? "",
+        code_verifier: verifier,
+        redirect_uri: redirectUri,
+        resource: `${origin}/mcp`,
+      }).toString(),
+    }),
+  )
+  const accessToken = ((await tokenRes.json()) as { access_token: string })
+    .access_token
+
+  const directListener = createProtectedMcpNodeListener(service)
+  const reqBody = JSON.stringify({
+    jsonrpc: "2.0",
+    id: 1,
+    method: "resources/read",
+    params: { uri: "ui://tadazz/quiz-preview/v1.html" },
+  })
+  const barriers = Array.from({ length: 32 }, () => createBackpressureSocket())
+  const barrierResponses: http.ServerResponse[] = []
+  const settledAll = barriers.map((barrier) => {
+    const reqIn = new PassThrough()
+    const req = new http.IncomingMessage(reqIn as unknown as net.Socket)
+    req.method = "POST"
+    req.url = "/mcp"
+    req.rawHeaders = [
+      "Host",
+      hostHeader,
+      "Authorization",
+      `Bearer ${accessToken}`,
+      "Content-Type",
+      "application/json",
+      "Accept",
+      "application/json, text/event-stream",
+      "Content-Length",
+      String(Buffer.byteLength(reqBody)),
+    ]
+    const res = new http.ServerResponse(req)
+    barrierResponses.push(res)
+    res.assignSocket(barrier.socket as unknown as net.Socket)
+    const done = new Promise<void>((resolve) => {
+      res.once("finish", () => resolve())
+      res.once("close", () => resolve())
+    })
+    req.complete = true
+    req.push(Buffer.from(reqBody))
+    req.push(null)
+    directListener(req, res)
+
+    return done
+  })
+  await Promise.all(barriers.map((barrier) => barrier.pausedPromise))
+
+  const overflowWhileWriting = await service.fetch(
+    new Request(`${origin}/oauth/jwks.json`, {
+      headers: { host: hostHeader },
+    }),
+  )
+  assert.equal(overflowWhileWriting.status, 429)
+
+  for (const barrier of barriers) {
+    barrier.release()
+  }
+
+  await Promise.all(settledAll)
+  await service.drain()
+
+  for (const res of barrierResponses) {
+    assert.equal(res.statusCode, 200)
+  }
+
+  const admittedAfterWrites = await service.fetch(
+    new Request(`${origin}/oauth/jwks.json`, {
+      headers: { host: hostHeader },
+    }),
+  )
+  assert.equal(admittedAfterWrites.status, 200)
+
+  let streamCancelled = false
+  const streamTimeoutService: ProtectedMcpService = {
+    enabled: true,
+    config: service.config,
+    supportedScopes: service.supportedScopes,
+    isClosed: () => false,
+    fetch: () =>
+      Promise.resolve(
+        new Response(
+          new ReadableStream<Uint8Array>({
+            start(controller) {
+              controller.enqueue(new TextEncoder().encode("partial"))
+            },
+            cancel() {
+              streamCancelled = true
+            },
+          }),
+          { status: 200 },
+        ),
+      ),
+    drain: () => Promise.resolve(undefined),
+    close: () => Promise.resolve(undefined),
+  }
+  const streamTimeoutListener = createProtectedMcpNodeListener(
+    streamTimeoutService,
+    { responseTimeoutMs: 100 },
+  )
+  const streamOutChunks: Buffer[] = []
+  const streamIn = new PassThrough()
+  const streamOut = new PassThrough()
+  streamOut.on("data", (chunk: Buffer) => streamOutChunks.push(chunk))
+  const streamReq = new http.IncomingMessage(streamIn as unknown as net.Socket)
+  streamReq.method = "GET"
+  streamReq.url = "/oauth/jwks.json"
+  streamReq.rawHeaders = ["Host", hostHeader]
+  const streamRes = new http.ServerResponse(streamReq)
+  streamRes.assignSocket(streamOut as unknown as net.Socket)
+  const streamResDone = new Promise<void>((resolve) => {
+    streamRes.once("finish", () => resolve())
+    streamRes.once("close", () => resolve())
+  })
+  streamReq.complete = true
+  streamReq.push(null)
+  streamTimeoutListener(streamReq, streamRes)
+  await streamResDone
+  assert.equal(streamRes.statusCode, 504)
+  assert.equal(streamCancelled, true)
+  assert.match(
+    Buffer.concat(streamOutChunks).toString("utf8"),
+    /^HTTP\/1\.1 504 /u,
+  )
 })

@@ -112,6 +112,16 @@ interface ServiceListenerBridge {
 
 const LOOPBACK_HOSTS = new Set(["127.0.0.1", "::1", "localhost"])
 const BODY_LESS_METHODS = new Set(["GET", "HEAD", "OPTIONS"])
+const HOP_BY_HOP_RESPONSE_HEADERS = new Set([
+  "content-length",
+  "connection",
+  "keep-alive",
+  "proxy-connection",
+  "transfer-encoding",
+  "upgrade",
+  "te",
+  "trailer",
+])
 const MAX_URL_LENGTH = 16_384
 const MAX_HEADER_COUNT = 32
 const MAX_HEADER_NAME_LENGTH = 128
@@ -1388,11 +1398,24 @@ function waitForResponseDrain(
     return Promise.resolve(false)
   }
 
+  const sock = res.socket
+
+  if (sock && (sock.destroyed || sock.writableEnded)) {
+    return Promise.resolve(false)
+  }
+
+  if ((sock && !sock.writableNeedDrain) || (!sock && !res.writableNeedDrain)) {
+    return Promise.resolve(true)
+  }
+
   return new Promise<boolean>((resolve) => {
     const finish = (canContinue: boolean) => {
       res.off("drain", onDrain)
       res.off("close", onStop)
       res.off("error", onStop)
+      sock?.off("drain", onDrain)
+      sock?.off("close", onStop)
+      sock?.off("error", onStop)
       signal.removeEventListener("abort", onStop)
       resolve(canContinue)
     }
@@ -1403,6 +1426,9 @@ function waitForResponseDrain(
     res.once("drain", onDrain)
     res.once("close", onStop)
     res.once("error", onStop)
+    sock?.once("drain", onDrain)
+    sock?.once("close", onStop)
+    sock?.once("error", onStop)
     signal.addEventListener("abort", onStop, { once: true })
   })
 }
@@ -1454,6 +1480,10 @@ async function readWebResponseBytes(
     throw new HttpRejection(400)
   }
 
+  if (!webResponse.body) {
+    return Buffer.alloc(0)
+  }
+
   let rejectAborted: ((reason?: unknown) => void) | null = null
   const onAbort = () => {
     rejectAborted?.(new HttpRejection(400))
@@ -1461,21 +1491,46 @@ async function readWebResponseBytes(
   const aborted = new Promise<never>((_resolve, reject) => {
     rejectAborted = reject
   })
+  void aborted.catch(() => undefined)
 
   signal.addEventListener("abort", onAbort, { once: true })
 
-  try {
-    const buffer = await Promise.race([webResponse.arrayBuffer(), aborted])
+  const reader = webResponse.body.getReader()
+  const chunks: Buffer[] = []
+  const readNextChunk = async (): Promise<Buffer> => {
+    const step = await Promise.race([reader.read(), aborted])
 
-    return Buffer.from(buffer)
-  } catch (error) {
-    if (webResponse.body && !webResponse.body.locked) {
-      await webResponse.body.cancel().catch(() => undefined)
+    if (step.done) {
+      return Buffer.concat(chunks)
     }
+
+    if (step.value.byteLength > 0) {
+      chunks.push(
+        Buffer.from(
+          step.value.buffer,
+          step.value.byteOffset,
+          step.value.byteLength,
+        ),
+      )
+    }
+
+    return readNextChunk()
+  }
+
+  try {
+    return await readNextChunk()
+  } catch (error) {
+    await reader.cancel().catch(() => undefined)
 
     throw error
   } finally {
     signal.removeEventListener("abort", onAbort)
+
+    try {
+      reader.releaseLock()
+    } catch {
+      // Lock may already be released after stream cancellation or completion.
+    }
   }
 }
 
@@ -1484,6 +1539,14 @@ async function writeAndSettleNodeError(
   details: { status: number; code: string },
   timeoutMs: number,
 ): Promise<void> {
+  if (res.headersSent) {
+    if (!res.destroyed && !res.writableFinished) {
+      res.destroy()
+    }
+
+    return
+  }
+
   if (!canWriteNodeResponse(res)) {
     return
   }
@@ -1553,6 +1616,7 @@ export function createProtectedMcpNodeListener(
       let deadlineTimer: ReturnType<typeof setTimeout> | undefined = undefined
       let abortRequest: (() => void) | null = null
       let onResClose: (() => void) | null = null
+      const deadlineState = { timedOut: false }
 
       try {
         if (!service.enabled || service.isClosed()) {
@@ -1631,7 +1695,6 @@ export function createProtectedMcpNodeListener(
             ? issuerUrl.origin
             : resourceUrl.origin
         const requestController = new AbortController()
-        let timedOut = false
         let writingStarted = false
 
         abortRequest = () => requestController.abort()
@@ -1645,7 +1708,7 @@ export function createProtectedMcpNodeListener(
         res.once("close", onResClose)
 
         deadlineTimer = setTimeout(() => {
-          timedOut = true
+          deadlineState.timedOut = true
           requestController.abort()
 
           if (writingStarted && !res.writableFinished && !res.destroyed) {
@@ -1678,7 +1741,7 @@ export function createProtectedMcpNodeListener(
           webResponse: Response,
           signal: AbortSignal,
         ): Promise<void> => {
-          if (timedOut && !res.headersSent) {
+          if (deadlineState.timedOut && !res.headersSent) {
             if (webResponse.body && !webResponse.body.locked) {
               await webResponse.body.cancel().catch(() => undefined)
             }
@@ -1702,7 +1765,7 @@ export function createProtectedMcpNodeListener(
 
           const bodyBytes = await readWebResponseBytes(webResponse, signal)
 
-          if (timedOut && !res.headersSent) {
+          if (deadlineState.timedOut && !res.headersSent) {
             await writeAndSettleNodeError(
               res,
               { status: 504, code: "GATEWAY_TIMEOUT" },
@@ -1720,7 +1783,7 @@ export function createProtectedMcpNodeListener(
           const omitLengthAndBody = isStatusWithoutLength(webResponse.status)
           res.statusCode = webResponse.status
           webResponse.headers.forEach((value, name) => {
-            if (name.toLowerCase() !== "content-length") {
+            if (!HOP_BY_HOP_RESPONSE_HEADERS.has(name.toLowerCase())) {
               res.setHeader(name, value)
             }
           })
@@ -1755,6 +1818,16 @@ export function createProtectedMcpNodeListener(
           await sendResponse(webResponse, requestController.signal)
         }
       } catch (error) {
+        if (deadlineState.timedOut) {
+          await writeAndSettleNodeError(
+            res,
+            { status: 504, code: "GATEWAY_TIMEOUT" },
+            responseTimeoutMs,
+          )
+
+          return
+        }
+
         if (error instanceof HttpRejection) {
           await writeAndSettleNodeError(
             res,
