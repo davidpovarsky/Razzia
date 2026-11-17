@@ -41,8 +41,15 @@ assert (rootfs/"cleanup").is_dir() and (rootfs/"root/.cache/ms-playwright").is_d
 # runc refuses magic /proc links as bind sources. Read the small SDK cache into
 # this run's owned evidence, and bind the real existing overlay root read-only.
 assert shutil.disk_usage(owned).free > 160*1024*1024
-deps=owned/"mcp-deps"
-shutil.copytree(pathlib.Path(old_root)/"tmp/phase3-999ed90c/deps",deps,symlinks=True)
+original_deps=pathlib.Path(old_root)/"tmp/phase3-999ed90c/deps"
+def dependency_hashes(root):
+    return {p.relative_to(root).as_posix(): ('link:'+p.readlink().as_posix() if p.is_symlink() else hashlib.sha256(p.read_bytes()).hexdigest()) for p in root.rglob('*') if p.is_symlink() or p.is_file()}
+expected_deps=dependency_hashes(original_deps)
+deps=next((p for p in sorted(host_evidence.glob('tadazz-codex-browser-*/mcp-deps')) if p.is_dir() and not p.is_symlink() and dependency_hashes(p)==expected_deps),None)
+if deps is None:
+    deps=owned/"mcp-deps"
+    shutil.copytree(original_deps,deps,symlinks=True)
+assert dependency_hashes(deps)==expected_deps
 command=["docker","run","--detach","--pull=never","--init","--read-only","--name",c["run"],"--network","none","--cpus","1","--memory","2g","--memory-swap","2g","--pids-limit","512","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912", "--label","codex.thread=01a1e9e9-ad5b-77a3-bafe-bcedce32246a"]
 for origin,target,readonly in [(str(source),"/source",True),(str(owned),"/evidence",False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True),(str(rootfs/"root/.cache/ms-playwright"),"/root/.cache/ms-playwright",True)]:
     command += ["--mount",f"type=bind,source={origin},target={target}" + (",readonly" if readonly else "")]
@@ -62,7 +69,7 @@ try:
     started=time.time()
     result=subprocess.run(argv,capture_output=True,text=True,timeout=375)
     after=hashes()
-    receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
+    receipt={"sha":c["sha"],"container":container,"network":"none","sourceReadOnly":True,"sourceFileCount":len(before),"allSourceHashesVerifiedBeforeAfter":before==after==c["manifest"],"sdkCacheFileCount":len(expected_deps),"sdkCacheHashesVerifiedBeforeAfter":dependency_hashes(deps)==expected_deps,"sdkCacheManifestSha256":hashlib.sha256(json.dumps(expected_deps,sort_keys=True).encode()).hexdigest(),"command":argv,"exit":result.returncode,"seconds":round(time.time()-started,3),"stdout":result.stdout,"stderr":result.stderr,"evidenceHostDirectory":str(owned),"customerMountAccessed":False,"productionChanged":False}
     print(json.dumps(receipt,indent=2))
 finally:
     subprocess.run(["docker","stop","--time","10",container],capture_output=True,check=True)
@@ -77,4 +84,4 @@ if result.returncode:
 receipt=json.loads(result.stdout)
 (evidence / "receipt.json").write_text(json.dumps(receipt,indent=2)+"\n",encoding="utf8",newline="\n")
 print(json.dumps({"sha":receipt["sha"],"evidence":str(evidence),"exit":receipt["exit"],"seconds":receipt["seconds"],"allSourceHashesVerifiedBeforeAfter":receipt["allSourceHashesVerifiedBeforeAfter"]},indent=2))
-raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] else 1)
+raise SystemExit(0 if receipt["exit"]==0 and receipt["allSourceHashesVerifiedBeforeAfter"] and receipt["sdkCacheHashesVerifiedBeforeAfter"] else 1)

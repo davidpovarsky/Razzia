@@ -1,0 +1,37 @@
+{
+  "date": "2026-11-17",
+  "qualifiedSourceSha": "7141211d693208415edcf28a4e4c0a9e04142fc7",
+  "checkpoint": "CODEX TAKEOVER CHECKPOINT 2026-11-17 — native host / real Linux browser QA\nRuntime fix ec061f7bbb2cc74cf27a9a8d78ed2fe7d0ae15be; immutable source packet 7141211d693208415edcf28a4e4c0a9e04142fc7. Linux native HTTP16/16 PASS, focused types/lint/format/site-build PASS, all1671 source hashes unchanged. Includes real isolated C1 save/reopen and PKCE/native account boundaries, bounded100 MiB media streaming, early refusal/concurrency; Windows evidence remains separately scoped. Missing feature-gated Studio native-save route was repaired after real browsers showed404. Fresh Chromium/WebKit packet:1/6 PASS,5 FAIL; strict locator, denial expectation and navigation-wait corrections are undergoing requalification. No installed ChatGPT/Claude result or production deployment is claimed.\nRecovery Linux8/8 remains qualified at60472d05aa14cfdc0fd07b9fe43a003ba42bdd8f (not yet the final combined SHA). Historical TS147 and freeze23 remain open; protected packages/editor delta from34cfd464 is empty. Owner-authorized cleanup removed only hash-verified failed Codex temporary copies after preserving source/manifests/logs in Git; old Cezar and customer state preserved. Effective danger-full-access supports Git and SSH; approval policy remains never. Owner authorized safe deployment/private hookup, but full-show Widget, independent security review, one combined immutable-SHA gate, verified backup/rollback and actual live E2E still pending. Keep this task and release parent OPEN / NOT_READY. Evidence: docs/extensions/plans/phase3-takeover-20261117 on codex/tadazz-phase3-takeover-20261117.",
+  "readback": [
+    {
+      "taskId": "1220539632193783",
+      "name": "P1 | Tadazz MCP App — Plugin ל־ChatGPT ול־Claude עם משחק אינטראקטיבי בתוך הצ'אט",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539638955304",
+      "name": "MCP-02 | שרת MCP מרוחק: Tools, Schemas, UI Resources ו־SDK",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539632251971",
+      "name": "MCP-03 | OAuth, account/workspace isolation, consent and permissions",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539638965463",
+      "name": "MCP-10 | QA אוטומטי + אינטראקטיבי בשתי הפלטפורמות, אבטחה וביצועים",
+      "completed": false,
+      "notesExactMatch": true
+    },
+    {
+      "taskId": "1220539769107140",
+      "name": "MCP-11 | תיעוד, handoff, staging, versioning ו־release gate",
+      "completed": false,
+      "notesExactMatch": true
+    }
+  ]
+}

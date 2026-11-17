@@ -5,7 +5,33 @@ remote MCP/HTTPS/OAuth routing and PRIVATE connection in the authorized ChatGPT
 account. No renewed authorization is needed for those actions. The old manager
 must remain stopped. This document is not evidence of deployment or installation.
 
-## Current verified result
+## Current verified result, resumed execution
+
+Shared Git metadata and existing SSH/Linux QA access now work under effective
+danger-full-access / approval_policy=never. No duplicate chat was created.
+Runtime repairs are committed at ec061f7bbb2cc74cf27a9a8d78ed2fe7d0ae15be.
+Immutable7141211d693208415edcf28a4e4c0a9e04142fc7 passed Linux native HTTP16/16,
+types/lint/format and site build, with all1671 source hashes unchanged. Fresh
+Chromium/WebKit:1/6 PASS,5 FAIL. The first missing-route404 is fixed; remaining
+QA corrections require a new immutable run. Recovery8/8 is separately qualified
+at60472d05aa14cfdc0fd07b9fe43a003ba42bdd8f. Neither is a final combined gate.
+
+The native root host is implemented and locally mounted in isolated QA; the
+production route remains unchanged. A read-only production inspection confirmed
+running image417cc204da575626fb32c9a74435802e5222c3ef86fbce1578414bfa61ab4346,
+Node24.22.1, Nginx1.30.6 and127.0.0.1:3000 binding. It did not inspect customer
+content, create a backup or change production. A verified backup/rollback and
+adequate disk space still precede any cutover.
+
+The supported Plugin Creator tool can package an existing remote MCP server
+without replacing its hosting/authentication. Plugin search for Tadazz returned
+no results (search is not exhaustive). No placeholder plugin was created.
+Preserve or update a verified existing identity if later discovered. A package
+upload is not installation/authentication/E2E; each must be verified separately.
+Full-show, combined independent security, production and actual private-host
+acceptance remain pending. Historical TS147 and freeze23 are still open.
+
+## Initial restricted checkpoint (historical)
 
 Base/HEAD: `34cfd464ac0bba432701b87f10f4f8388d665066`; changes are uncommitted.
 The duplicate takeover conversation has finished with a final stopped-writer
@@ -30,7 +56,7 @@ paths from SPA fallback, supports trusted configured machine predicates, and
 uses the existing root consent policy on actual consent HTML GET/HEAD. It does
 not implement an OAuth issuer or complete the preserved host WIP.
 
-## Execution access required
+## Initial execution block (historical, now resolved above)
 
 Current sandbox cannot write the shared Git metadata at
 `C:/Users/DAVID/Code/Razzia/.git`; staging failed creating the worktree

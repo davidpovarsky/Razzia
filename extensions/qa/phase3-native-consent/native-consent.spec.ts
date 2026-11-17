@@ -112,6 +112,7 @@ async function signupVerifyAndLoginUi(options: {
   await page.getByLabel("Password", { exact: true }).fill(password)
   await page.getByRole("button", { name: "Log in", exact: true }).click()
   await expect(page).toHaveURL(/\/studio\/?$/u)
+  await expect(page.getByText(email, { exact: true })).toBeVisible()
 
   const token = await page.evaluate(() => localStorage.getItem("token"))
 
@@ -136,6 +137,9 @@ async function loginUi(options: {
     .getByRole("button", { name: "Log in", exact: true })
     .click()
   await expect(options.page).toHaveURL(/\/studio\/?$/u)
+  await expect(
+    options.page.getByText(options.email, { exact: true }),
+  ).toBeVisible()
 }
 
 async function signupViaApi(options: {
@@ -455,16 +459,18 @@ test.describe("phase 3 native consent Studio integration", () => {
         })
         await expect(approveButton).toBeVisible()
         await expect(
-          page.getByText(
-            "Approval recorded. Return to the connected application to finish saving.",
-          ),
+          page.getByRole("status").filter({
+            hasText:
+              "Approval recorded. Return to the connected application to finish saving.",
+          }),
         ).toHaveCount(0)
 
         await approveButton.click()
         await expect(
-          page.getByText(
-            "Approval recorded. Return to the connected application to finish saving.",
-          ),
+          page.getByRole("status").filter({
+            hasText:
+              "Approval recorded. Return to the connected application to finish saving.",
+          }),
         ).toBeVisible()
 
         // Browser approval alone never creates a game before MCP retry.
@@ -587,10 +593,30 @@ test.describe("phase 3 native consent Studio integration", () => {
         const pageB = await contextB.newPage()
 
         await loginUi({ page: pageB, email: emailB, password })
+        const deniedInspection = pageB.waitForResponse(
+          (response) =>
+            new URL(response.url()).pathname === "/oauth/native-save/inspect" &&
+            response.request().method() === "POST",
+        )
         await pageB.goto(consentUrl)
+        const denied = await deniedInspection
+        expect(denied.status()).toBe(503)
+        const denial: unknown = await denied.json()
+        expect(denial).toMatchObject({
+          ok: false,
+          error: { code: "DEPENDENCY_UNAVAILABLE" },
+        })
+        expect(JSON.stringify(denial)).not.toContain(title)
+        await expect(pageB.getByRole("alert")).toHaveText(
+          "This revision could not be approved. Reopen the save request.",
+        )
         await expect(
-          pageB.getByText("Save approval is unavailable on this page."),
-        ).toBeVisible()
+          pageB.getByRole("button", {
+            name: "Approve this revision",
+            exact: true,
+          }),
+        ).toBeDisabled()
+        await expect(pageB.getByTestId("native-save-snapshot")).toHaveCount(0)
         await expect(pageB.getByText(title)).toHaveCount(0)
       } finally {
         await contextB.close()
@@ -676,9 +702,10 @@ test.describe("phase 3 native consent Studio integration", () => {
       await page.bringToFront()
       await approveBtn.click({ timeout: 2_000 }).catch(() => undefined)
       await expect(
-        page.getByText(
-          "Approval recorded. Return to the connected application to finish saving.",
-        ),
+        page.getByRole("status").filter({
+          hasText:
+            "Approval recorded. Return to the connected application to finish saving.",
+        }),
       ).toHaveCount(0)
 
       const afterCrossTab = (
@@ -704,9 +731,10 @@ test.describe("phase 3 native consent Studio integration", () => {
         .getByRole("button", { name: "Approve this revision", exact: true })
         .click()
       await expect(
-        page.getByText(
-          "Approval recorded. Return to the connected application to finish saving.",
-        ),
+        page.getByRole("status").filter({
+          hasText:
+            "Approval recorded. Return to the connected application to finish saving.",
+        }),
       ).toBeVisible()
 
       const edited = (

@@ -85,3 +85,15 @@ downstream site router omitted /studio/native-save-consent/$requestId and showed
 and allow only the exact 54-character query/hash-free local consent destination
 after login in site/adapters/client.ts, with focused security regression cases.
 No generated/native editor route, provider, typography or package changes.
+
+7141211 immutable Linux: HTTP16/16, types/lint/format/site-build PASS; all1671
+source hashes unchanged. Fresh browser127.315s:1/6 PASS (Chromium all8 locales),
+5 FAIL. Positive flows reached a recorded real browser approval but the QA text
+locator matched both the definition and live status; use the semantic status
+region. B's generic failed alert is correct for the accepted uniform503 refusal;
+the QA now also requires the exact API status/error, disabled approval and no
+snapshot. WebKit navigation waited for URL before Studio finished mounting;
+wait for the authenticated email in the real Studio before starting OAuth.
+These are pending QA repairs, not claimed passes. Preserve both failed receipts.
+Reuse only hash-identical task-owned SDK cache copies, mounted read-only, to
+avoid copying66 MiB on every bounded browser run. Record SDK hashes before/after.
