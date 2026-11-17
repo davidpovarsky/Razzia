@@ -21,8 +21,8 @@ SSH = ["ssh", "-i", str(pathlib.Path.home() / ".ssh/tadazz_oracle_2026"),
 CONTAINER = "tadazz-phase2-20261116"
 SHA = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
 SUITE = sys.argv[1] if len(sys.argv) > 1 else "recovery"
-if SUITE not in ("recovery", "native-consent", "native-proxy"):
-    raise SystemExit("Expected recovery, native-consent or native-proxy")
+if SUITE not in ("recovery", "native-consent", "native-proxy", "full-show-assets"):
+    raise SystemExit("Expected recovery, native-consent, native-proxy or full-show-assets")
 REUSE = len(sys.argv) == 4 and sys.argv[2] == "--reuse-run"
 RUN = sys.argv[3] if REUSE else f"tadazz-codex-{SHA[:12]}-{uuid.uuid4().hex[:8]}"
 if not re.fullmatch(r"tadazz-codex-" + SHA[:12] + r"-[a-f0-9]{8}", RUN):
@@ -44,9 +44,11 @@ else:
                     "--", *sorted({p.split('/')[0] for p in tracked})], cwd=ROOT, check=True)
     with tarfile.open(ARCHIVE, "r:gz") as archive:
         manifest = {}
+        source_bytes = 0
         for member in archive.getmembers():
             if member.isfile():
                 manifest[member.name] = hashlib.sha256(archive.extractfile(member).read()).hexdigest()
+                source_bytes += member.size
             elif not member.isdir():
                 raise RuntimeError(f"Unexpected archive member: {member.name}")
 (EVIDENCE / "input-manifest.json").write_text(json.dumps({"sha": SHA, "files": manifest}, indent=2) + "\n", encoding="utf8", newline="\n")
@@ -57,9 +59,9 @@ if not REUSE:
     extract_stream = r"""
 import os,pathlib,shutil,sys,tarfile
 source=pathlib.Path(sys.argv[1]);fixture=pathlib.Path(sys.argv[2])
+assert os.statvfs(source.parent.parent).f_bavail * os.statvfs(source.parent.parent).f_frsize > int(sys.argv[3])
 source.parent.mkdir(mode=0o700,exist_ok=False)
 source.mkdir(mode=0o700);fixture.mkdir(mode=0o700)
-assert os.statvfs(fixture).f_bavail * os.statvfs(fixture).f_frsize > 512*1024*1024
 with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
     for member in archive:
         relative=pathlib.PurePosixPath(member.name)
@@ -74,7 +76,8 @@ with tarfile.open(fileobj=sys.stdin.buffer,mode="r|gz") as archive:
 """
     extraction = shlex.join(["sudo", "-n", "docker", "exec", "-i", CONTAINER,
                               "python3", "-c", extract_stream,
-                              f"/evidence/{RUN}/source", f"/evidence/{RUN}/fixtures"])
+                              f"/evidence/{RUN}/source", f"/evidence/{RUN}/fixtures",
+                              str(source_bytes + 128*1024*1024 if SUITE == "full-show-assets" else 512*1024*1024)])
     with ARCHIVE.open("rb") as archive_stream:
         transferred = subprocess.run([*SSH, extraction], stdin=archive_stream, capture_output=True, timeout=120)
     if transferred.returncode:
@@ -150,7 +153,14 @@ def check(label, seconds, argv):
     record = {"label": label, "command": command, "exit": result.returncode, "seconds": round(time.time()-started, 3), "stdout": result.stdout, "stderr": result.stderr}
     checks.append(record)
     return result.returncode == 0
-if c["suite"] == "recovery":
+if c["suite"] == "full-show-assets":
+    scope = ["extensions/src/mcp-app/server/full-show-assets.ts", "extensions/qa/phase3-full-show/assets.nodecheck.ts"]
+    prefix[4:4] = ["-e", "TMPDIR=" + fixture]
+    check("full-show-assets", 60, tsx + [scope[1]])
+    check("assets-types", 120, ["node", "/cleanup/node_modules/typescript/bin/tsc", "--noEmit", "-p", "extensions/qa/phase3-full-show/tsconfig.json"])
+    check("assets-lint", 120, ["node", "--experimental-strip-types", "/cleanup/node_modules/oxlint/bin/oxlint", "-c", "oxlint.config.ts", *scope])
+    check("assets-format", 60, ["node", "/cleanup/node_modules/prettier/bin/prettier.cjs", "--check", *scope])
+elif c["suite"] == "recovery":
     case5 = check("ext4-case5", 60, tsx + ["--test-name-pattern=^5[.]", qualification])
     if case5:
         check("ext4-full8", 300, tsx + [qualification, invariants])
@@ -190,7 +200,7 @@ if result.returncode != 0:
 receipt = json.loads(result.stdout)
 (EVIDENCE / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n", encoding="utf8", newline="\n")
 print(json.dumps({"sha": SHA, "evidence": str(EVIDENCE), "sourceFilesVerified": receipt["sourceFileCount"], "checks": [{"label": item["label"], "exit": item["exit"], "seconds": item["seconds"]} for item in receipt["checks"]]}, indent=2))
-required_gate = "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-site-build"
+required_gate = "full-show-assets" if SUITE == "full-show-assets" else "ext4-full8" if SUITE == "recovery" else "native-http" if SUITE == "native-proxy" else "native-site-build"
 passed = receipt["allHashesVerifiedBeforeAfter"] and all(item["exit"] == 0 for item in receipt["checks"]) and any(item["label"] == required_gate for item in receipt["checks"])
 if passed and SUITE == "native-consent":
     browser = ROOT / "extensions/qa/phase3-native-consent/browser-verify.py"

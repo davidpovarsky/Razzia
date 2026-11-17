@@ -1,0 +1,4 @@
+{
+  "extends": "../phase3-native-consent/tsconfig.json",
+  "include": ["./**/*.ts", "../../src/mcp-app/server/full-show-assets.ts"]
+}
