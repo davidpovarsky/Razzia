@@ -134,6 +134,40 @@ print(json.dumps(versions))
 sdk_result=execute(["docker", "exec", container, "python3", "-c", sdk_setup, source], timeout=15)
 assert sdk_result.returncode == 0, sdk_result.stderr
 sdk_versions=json.loads(sdk_result.stdout)
+# The preserved historical QA container is an extraction/cache source only.
+# Its unreaped older browser/build processes must not consume this run's PID budget.
+import atexit,shutil,uuid
+host_evidence=pathlib.Path(next(m["Source"] for m in inspection["Mounts"] if m["Destination"]=="/evidence"))
+owned=host_evidence/c["run"]
+assert owned.is_dir() and not owned.is_symlink()
+rootfs=pathlib.Path("/var/lib/docker/rootfs/overlayfs")/inspection["Id"]
+assert (rootfs/"cleanup").is_dir()
+original_deps=pathlib.Path("/proc")/str(inspection["State"]["Pid"])/"root/tmp/phase3-999ed90c/deps"
+def dependency_hashes(root):
+    return {p.relative_to(root).as_posix():("link:"+p.readlink().as_posix() if p.is_symlink() else hashlib.sha256(p.read_bytes()).hexdigest()) for p in root.rglob("*") if p.is_symlink() or p.is_file()}
+expected_deps=dependency_hashes(original_deps)
+assert expected_deps
+deps=next((p for p in sorted(host_evidence.glob("tadazz-codex-browser-*/mcp-deps")) if p.is_dir() and not p.is_symlink() and dependency_hashes(p)==expected_deps),None)
+if deps is None:
+    deps=owned/("matrix-deps-"+uuid.uuid4().hex[:8])
+    shutil.copytree(original_deps,deps,symlinks=True)
+assert dependency_hashes(deps)==expected_deps
+matrix=c["run"]+"-matrix-"+uuid.uuid4().hex[:8]
+docker=["docker","run","--detach","--pull=never","--init","--read-only","--name",matrix,"--network","none","--cpus","1","--memory","2g","--memory-swap","2g","--pids-limit","384","--shm-size","256m","--tmpfs","/tmp:rw,nosuid,nodev,size=536870912","--label","com.tadazz.qa=immutable-matrix"]
+for origin,target,readonly in [(str(owned),base,False),(str(rootfs/"cleanup"),"/cleanup",True),(str(deps),"/tmp/phase3-999ed90c/deps",True)]:
+    docker+=["--mount","type=bind,source="+origin+",target="+target+(",readonly" if readonly else "")]
+docker+=["--entrypoint","/bin/sleep",inspection["Image"],"infinity"]
+created=execute(docker,timeout=30)
+assert created.returncode==0,created.stderr
+container=matrix
+def stop_matrix():
+    subprocess.run(["docker","stop","--time","10",matrix],capture_output=True,timeout=25,check=True)
+atexit.register(stop_matrix)
+fresh=json.loads(subprocess.check_output(["docker","inspect",matrix]))[0]
+assert fresh["State"]["Running"] and fresh["HostConfig"]["NetworkMode"]=="none" and not fresh["HostConfig"].get("PortBindings")
+assert fresh["HostConfig"]["Init"] is True and fresh["HostConfig"]["ReadonlyRootfs"] is True
+assert {(m["Source"],m["Destination"],m["RW"]) for m in fresh["Mounts"] if m["Type"]=="bind"}=={(str(owned),base,True),(str(rootfs/"cleanup"),"/cleanup",False),(str(deps),"/tmp/phase3-999ed90c/deps",False)}
+
 hashscript = "import hashlib,json,pathlib,sys;root=pathlib.Path(sys.argv[1]);paths=json.load(sys.stdin);print(json.dumps({p:hashlib.sha256((root/p).read_bytes()).hexdigest() for p in paths}))"
 def hashes():
     result = execute(["docker", "exec", "-i", container, "python3", "-c", hashscript, source], input=json.dumps(list(c["manifest"])), timeout=30)
@@ -198,7 +232,7 @@ else:
         # unreaped historical browser processes; do not restart or clean it.
 after = hashes()
 changed_source = [p for p in before if before[p] != after[p]]
-print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
+print(json.dumps({"sha": c["sha"], "suite": c["suite"], "run": c["run"], "source": source, "fixture": fixture, "sdkVersions": sdk_versions, "matrixContainer": matrix, "runnerImage": inspection["Image"], "network": "none", "sourceWriteScope": base, "sourceFileCount": len(before), "allHashesVerifiedBeforeAfter": not changed_source, "changedSourcePaths": changed_source, "hashesBefore": before, "hashesAfter": after, "checks": checks, "customerMountAccessed": False, "productionChanged": False}, indent=2))
 '''
 configuration = {"sha": SHA, "suite": SUITE, "run": RUN, "reuse": REUSE, "manifest": manifest}
 script = REMOTE.replace("c = CONFIG", "c = " + repr(configuration))
